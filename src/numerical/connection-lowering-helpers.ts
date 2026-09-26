@@ -311,15 +311,20 @@ export function contractChristoffelWithOperand(
   const outStrides = buildStrides(outShape);
 
   // Iterate over all output indices
-  forEachMultiIndex(outShape, (outIdx) => {
+  const outIdx = new Array<number>(outShape.length).fill(0);
+  const tIdxBase = new Array<number>(rank).fill(0);
+
+  for (let n = 0; n < outSize; n++) {
     const mu = outIdx[rank]; // last axis of output is μ
     // The other axes map to T's indices, with freeIdxPos being the α/result axis
     const alpha = outIdx[freeIdxPos]; // the "free" index value (α for upper, α for lower)
 
     let sum = 0;
 
-    // Hoist array allocations and flatIndex out of the inner loop
-    const tIdxBase = outIdx.slice(0, rank);
+    // Map back to tIdxBase
+    for (let k = 0; k < rank; k++) {
+      tIdxBase[k] = outIdx[k];
+    }
     tIdxBase[freeIdxPos] = 0;
     let tFlat = flatIndex(tIdxBase, ofStrides);
     const tStride = ofStrides[freeIdxPos];
@@ -345,34 +350,16 @@ export function contractChristoffelWithOperand(
       tFlat += tStride;
     }
 
-    out[flatIndex(outIdx, outStrides)] = sum;
-  });
+    out[n] = sum;
 
-  return engine.fromNested(flatToNestedImpl(out, outShape), outShape);
-}
-
-// ---------------------------------------------------------------------------
-// Internal utilities
-// ---------------------------------------------------------------------------
-
-// INVARIANT: The visitor MUST NOT mutate the `idx` array. If mutation is needed,
-// the visitor must call `idx.slice()` first.
-// Current callers (confirmed by Step 1 audit): contractChristoffelWithOperand
-// uses outIdx.slice(0, rank) to take its own copy — safe.
-function forEachMultiIndex(
-  shape: ReadonlyArray<number>,
-  visit: (idx: number[]) => void,
-): void {
-  if (shape.length === 0) { visit([]); return; }
-  const idx = new Array<number>(shape.length).fill(0);
-  const total = shape.reduce((a, b) => a * b, 1);
-  for (let n = 0; n < total; n++) {
-    visit(idx);  // Visitor must not mutate idx — use .slice() if a copy is needed.
-    for (let k = shape.length - 1; k >= 0; k--) {
-      if (++idx[k] < shape[k]) break;
-      idx[k] = 0;
+    // Increment multi-index odometer
+    for (let k = outShape.length - 1; k >= 0; k--) {
+      if (++outIdx[k] < outShape[k]) break;
+      outIdx[k] = 0;
     }
   }
+
+  return engine.fromNested(flatToNestedImpl(out, outShape), outShape);
 }
 
 // ---------------------------------------------------------------------------
