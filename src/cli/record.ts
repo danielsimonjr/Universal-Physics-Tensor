@@ -18,11 +18,12 @@ import { appendFileSync, closeSync, existsSync, openSync, readFileSync } from 'n
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import type * as cliApi from '../cli-api.js';
-import * as coreConstants from '../core/constants.js';
 import { parseArgs } from './args.js';
 import { resolveCommand } from './command.js';
 import { CliError } from './errors.js';
 import { emitJson } from './output.js';
+import { staticReach, type Attribution } from './record-reach.js';
+import { constantTables, tableFingerprint, type ConstantTable } from './record-tables.js';
 import { packageVersion } from './version.js';
 
 export type Io = {
@@ -33,7 +34,8 @@ export type Io = {
 
 export type Dispatch = (argv: string[], io: Io) => Promise<number>;
 
-export const RECORD_SCHEMA = 'upt-record/1';
+export const RECORD_SCHEMA = 'upt-record/2';
+const SUPERSEDED_SCHEMA = 'upt-record/1';
 
 export interface RecordEnvironment {
   uptVersion: string;
@@ -41,8 +43,7 @@ export interface RecordEnvironment {
   formulaParser: string;
   simplifier: boolean;
   peers: Record<string, string | null>;
-  constants: Record<string, number>;
-  constantsSha256: string;
+  constantTables: Record<string, ConstantTable>;
 }
 
 export interface RecordResult {
@@ -58,26 +59,38 @@ export interface RecordEntry {
   schema: typeof RECORD_SCHEMA;
   recordedAt: string;
   argv: string[];
+  argvSha256: string;
   parsed: { command: string; flags: Record<string, string[]>; positionals: string[] } | null;
+  attribution: Attribution | null;
   environment: RecordEnvironment;
   result: RecordResult;
   artifacts: { path: string; sha256: string }[];
+  /** SHA-256 of every other field, serialised by {@link canonicalJson}. */
+  entrySha256: string;
 }
 
 export const sha256 = (s: string | Buffer): string => createHash('sha256').update(s).digest('hex');
 
-/** Flat numeric table, serialised with sorted keys so the fingerprint does not depend on export order. */
-function canonicalJson(table: Record<string, number>): string {
-  return JSON.stringify(Object.fromEntries(Object.keys(table).sort().map((k) => [k, table[k]])));
+/** JSON with object keys sorted at every depth, so a hash does not depend on key order. */
+export function canonicalJson(v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map(canonicalJson).join(',')}]`;
+  if (typeof v === 'object' && v !== null) {
+    const o = v as Record<string, unknown>;
+    return `{${Object.keys(o)
+      .filter((k) => o[k] !== undefined)
+      .sort()
+      .map((k) => `${JSON.stringify(k)}:${canonicalJson(o[k])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(v);
 }
 
-export function constantsTable(): Record<string, number> {
-  const table: Record<string, number> = {};
-  for (const [k, v] of Object.entries(coreConstants)) if (typeof v === 'number') table[k] = v;
-  return table;
-}
+export const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv));
 
-export const constantsFingerprint = (table: Record<string, number>): string => sha256(canonicalJson(table));
+export function entryFingerprint(entry: Partial<RecordEntry>): string {
+  const { entrySha256: _, ...rest } = entry;
+  return sha256(canonicalJson(rest));
+}
 
 /** Installed version of each optional peer the package declares, `null` when absent. Reads the
  * peer's own package.json from the resolution paths, because a peer's `exports` may not expose it. */
@@ -101,16 +114,21 @@ function peerVersions(): Record<string, string | null> {
 }
 
 export async function captureEnvironment(api: typeof cliApi): Promise<RecordEnvironment> {
-  const constants = constantsTable();
   return {
     uptVersion: packageVersion(),
     node: process.version,
     formulaParser: await api.getFormulaParserKind(),
     simplifier: await api.isSimplifierAvailable(),
     peers: peerVersions(),
-    constants,
-    constantsSha256: constantsFingerprint(constants),
+    constantTables: (await constantTables()).tables,
   };
+}
+
+async function attribute(argv: string[]): Promise<Attribution | null> {
+  const command = argv[0] === undefined ? undefined : resolveCommand(argv[0]);
+  if (!command) return null;
+  const { tables, kinds } = await constantTables();
+  return staticReach(command.name, tables, kinds);
 }
 
 function parseInvocation(argv: string[]): RecordEntry['parsed'] {
@@ -192,11 +210,13 @@ export async function recordInvocation(
   const artifacts: RecordEntry['artifacts'] = [];
   const outPath = parsed?.flags.out?.[0] ?? '';
   if (outPath !== '' && existsSync(outPath)) artifacts.push({ path: outPath, sha256: sha256(readFileSync(outPath)) });
-  const entry: RecordEntry = {
+  const entry: Omit<RecordEntry, 'entrySha256'> = {
     schema: RECORD_SCHEMA,
     recordedAt,
     argv,
+    argvSha256: argvFingerprint(argv),
     parsed,
+    attribution: await attribute(argv),
     environment: await captureEnvironment(api),
     result: {
       exitCode: run.exitCode,
@@ -208,7 +228,7 @@ export async function recordInvocation(
     },
     artifacts,
   };
-  appendFileSync(file, JSON.stringify(entry) + '\n');
+  appendFileSync(file, JSON.stringify({ ...entry, entrySha256: entryFingerprint(entry) }) + '\n');
   if (run.error !== undefined) throw run.error;
   return run.exitCode as number;
 }
@@ -251,7 +271,12 @@ function readRecord(file: string): Line[] {
       return;
     }
     if (isEntry(v)) lines.push({ line: i + 1, entry: v });
-    else lines.push({ line: i + 1, error: `line ${i + 1} is not a ${RECORD_SCHEMA} entry` });
+    else if ((v as { schema?: unknown } | null)?.schema === SUPERSEDED_SCHEMA) {
+      lines.push({
+        line: i + 1,
+        error: `line ${i + 1} is a ${SUPERSEDED_SCHEMA} entry, written before its arguments, the entry and each constant table were hashed; record it again`,
+      });
+    } else lines.push({ line: i + 1, error: `line ${i + 1} is not a ${RECORD_SCHEMA} entry` });
   });
   if (lines.length === 0) throw new CliError(`upt: record '${file}' holds no entries`);
   return lines;
@@ -261,16 +286,34 @@ const SAFE_TOKEN = /^[A-Za-z0-9_\-=.,:/+@%]+$/;
 const shellQuote = (t: string): string => (SAFE_TOKEN.test(t) ? t : `'${t.replace(/'/g, `'\\''`)}'`);
 const commandLine = (argv: string[]): string => ['$ upt', ...argv.map(shellQuote)].join(' ');
 
+/**
+ * Whether the recorded command's code could read a changed constant, by the entry's static
+ * attribution: an upper bound derived from the import graph at recording, not an observed read.
+ */
+export type Reach = 'reachable' | 'not-reachable' | 'unattributed';
+
 export interface EnvironmentChange {
   fact: string;
   recorded: unknown;
   current: unknown;
+  reach?: Reach;
 }
 
-function environmentChanges(recorded: Partial<RecordEnvironment>, live: RecordEnvironment): EnvironmentChange[] {
+function reachOf(attribution: Attribution | null | undefined, table: string, key?: string): Reach {
+  if (!attribution || typeof attribution.tables !== 'object' || attribution.tables === null) return 'unattributed';
+  const keys = attribution.tables[table];
+  if (!Array.isArray(keys)) return 'not-reachable';
+  return key === undefined || keys.includes('*') || keys.includes(key) ? 'reachable' : 'not-reachable';
+}
+
+function environmentChanges(
+  recorded: Partial<RecordEnvironment>,
+  live: RecordEnvironment,
+  attribution: Attribution | null | undefined,
+): EnvironmentChange[] {
   const changes: EnvironmentChange[] = [];
-  const cmp = (fact: string, a: unknown, b: unknown): void => {
-    if (a !== b) changes.push({ fact, recorded: a ?? null, current: b ?? null });
+  const cmp = (fact: string, a: unknown, b: unknown, reach?: Reach): void => {
+    if (a !== b) changes.push({ fact, recorded: a ?? null, current: b ?? null, ...(reach ? { reach } : {}) });
   };
   cmp('uptVersion', recorded.uptVersion, live.uptVersion);
   cmp('node', recorded.node, live.node);
@@ -280,23 +323,44 @@ function environmentChanges(recorded: Partial<RecordEnvironment>, live: RecordEn
   for (const k of [...new Set([...Object.keys(recPeers), ...Object.keys(live.peers)])].sort()) {
     cmp(`peer ${k}`, recPeers[k], live.peers[k]);
   }
-  const recConstants = recorded.constants ?? {};
-  for (const k of [...new Set([...Object.keys(recConstants), ...Object.keys(live.constants)])].sort()) {
-    cmp(`constant ${k}`, recConstants[k], live.constants[k]);
+  const recTables = (typeof recorded.constantTables === 'object' && recorded.constantTables) || {};
+  for (const name of [...new Set([...Object.keys(recTables), ...Object.keys(live.constantTables)])].sort()) {
+    const a = recTables[name];
+    const b = live.constantTables[name];
+    if (!a || !b) {
+      cmp(`table ${name}`, a ? 'present' : null, b ? 'present' : null, reachOf(attribution, name));
+      continue;
+    }
+    const av = (typeof a.values === 'object' && a.values) || {};
+    for (const k of [...new Set([...Object.keys(av), ...Object.keys(b.values)])].sort()) {
+      cmp(`constant ${name} ${k}`, av[k], b.values[k], reachOf(attribution, name, k));
+    }
+    cmp(`table ${name} sha256`, a.sha256, b.sha256, reachOf(attribution, name));
   }
-  cmp('constantsSha256', recorded.constantsSha256, live.constantsSha256);
   return changes;
 }
 
 function integrityFindings(entry: RecordEntry): string[] {
   const findings: string[] = [];
+  const hashOf = (field: string, recordedHash: unknown, actual: string): void => {
+    if (typeof recordedHash !== 'string') findings.push(`entry has no ${field}`);
+    else if (recordedHash !== actual) findings.push(`recorded ${field.replace(/Sha256$/, '')} does not match its recorded ${field}`);
+  };
+  hashOf('argvSha256', entry.argvSha256, argvFingerprint(entry.argv));
   const r = entry.result;
   if (sha256(r.stdout) !== r.stdoutSha256) findings.push('recorded stdout does not match its recorded stdoutSha256');
   if (sha256(r.stderr) !== r.stderrSha256) findings.push('recorded stderr does not match its recorded stderrSha256');
-  const table = entry.environment.constants;
-  if (typeof table !== 'object' || table === null || constantsFingerprint(table) !== entry.environment.constantsSha256) {
-    findings.push('recorded constants table does not match its recorded constantsSha256');
+  const tables = entry.environment.constantTables;
+  if (typeof tables !== 'object' || tables === null) findings.push('entry has no constantTables');
+  else {
+    for (const [name, t] of Object.entries(tables)) {
+      const values = (t as Partial<ConstantTable> | null)?.values;
+      if (typeof values !== 'object' || values === null || tableFingerprint(values) !== t.sha256) {
+        findings.push(`recorded table ${name} does not match its recorded sha256`);
+      }
+    }
   }
+  hashOf('entrySha256', entry.entrySha256, entryFingerprint(entry));
   return findings;
 }
 
@@ -339,6 +403,7 @@ export interface ReplayEntryReport {
   reason?: string;
   exit?: { recorded: string; replayed: string };
   differences: StreamDifference[];
+  attribution: Attribution | null;
   environmentChanges: EnvironmentChange[];
   integrity: string[];
 }
@@ -355,14 +420,24 @@ export async function replayRecord(
   const reports: ReplayEntryReport[] = [];
   for (const l of lines) {
     if ('error' in l) {
-      reports.push({ line: l.line, argv: null, outcome: 'not-replayable', reason: l.error, differences: [], environmentChanges: [], integrity: [] });
+      reports.push({
+        line: l.line,
+        argv: null,
+        outcome: 'not-replayable',
+        reason: l.error,
+        differences: [],
+        attribution: null,
+        environmentChanges: [],
+        integrity: [],
+      });
       continue;
     }
     const { entry } = l;
     const base = {
       line: l.line,
       argv: entry.argv,
-      environmentChanges: environmentChanges(entry.environment, live),
+      attribution: entry.attribution ?? null,
+      environmentChanges: environmentChanges(entry.environment, live, entry.attribution),
       integrity: integrityFindings(entry),
     };
     const reason = notReplayableReason(entry.argv);
@@ -429,7 +504,9 @@ export async function replayRecord(
     }
     if (r.environmentChanges.length > 0) {
       out('    environment changed since recording:');
-      for (const c of r.environmentChanges) out(`      ${c.fact}: ${JSON.stringify(c.recorded)} -> ${JSON.stringify(c.current)}`);
+      for (const c of r.environmentChanges) {
+        out(`      ${c.fact}: ${JSON.stringify(c.recorded)} -> ${JSON.stringify(c.current)}${reachNote(c.reach, r.attribution?.command)}`);
+      }
     }
     for (const f of r.integrity) out(`    record integrity: ${f} (the record was edited after it was written)`);
   }
@@ -441,13 +518,23 @@ export async function replayRecord(
   return status;
 }
 
+function reachNote(reach: Reach | undefined, command: string | undefined): string {
+  if (reach === 'reachable') return ` — reachable from '${command}' (static upper bound, not an observed read)`;
+  if (reach === 'not-reachable') return ` — not reachable from '${command}' by static import analysis`;
+  if (reach === 'unattributed') return ' — no attribution (the entry ran no command module)';
+  return '';
+}
+
 function describeEnvironment(env: Partial<RecordEnvironment>): string {
   const peers = Object.entries(env.peers ?? {})
     .map(([k, v]) => `${k} ${v ?? 'absent'}`)
     .join(', ');
+  const tables = (typeof env.constantTables === 'object' && env.constantTables) || {};
+  const combined = sha256(canonicalJson(Object.fromEntries(Object.entries(tables).map(([k, t]) => [k, t?.sha256]))));
   return (
     `upt ${env.uptVersion}, node ${env.node}, formula parser ${env.formulaParser}, ` +
-    `simplifier ${env.simplifier ? 'available' : 'unavailable'}, constants sha256 ${String(env.constantsSha256).slice(0, 12)}…` +
+    `simplifier ${env.simplifier ? 'available' : 'unavailable'}, ` +
+    `${Object.keys(tables).length} constant tables (sha256 of their fingerprints ${combined.slice(0, 12)}…)` +
     (peers ? `\n  peers: ${peers}` : '')
   );
 }

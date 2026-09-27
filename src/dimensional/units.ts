@@ -69,6 +69,8 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   ['Msun', [M_SUN_SI, D({ M: 1 }), false]],
 ]);
 
+const CELSIUS_OFFSET_K = 273.15;
+
 const PREFIXES: ReadonlyMap<string, number> = new Map([
   ['Y', 1e24], ['Z', 1e21], ['E', 1e18], ['P', 1e15], ['T', 1e12], ['G', 1e9], ['M', 1e6], ['k', 1e3],
   ['h', 1e2], ['da', 1e1], ['d', 1e-1], ['c', 1e-2], ['m', 1e-3], ['u', 1e-6], ['µ', 1e-6], ['μ', 1e-6],
@@ -142,11 +144,20 @@ export function convertValue(
   if (!equals(from.dim, to.dim)) {
     throw new UnitError(`'${given}' is ${format(from.dim)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`);
   }
-  const offset = from.affine === 'celsius' && reading === 'absolute' ? 273.15 : 0;
+  const offset = from.affine === 'celsius' && reading === 'absolute' ? CELSIUS_OFFSET_K : 0;
   return { value: (v * from.scale + offset) / to.scale, given };
 }
 
 /** The dimension of a declared unit expression. @internal */
 export function unitDimension(unit: string): Dimension {
   return parseUnit(unit).dim;
+}
+
+/** The tables conversion reads, for the CLI record's fingerprint (`src/cli/record-tables.ts`). @internal */
+export function unitTables(): {
+  units: ReadonlyMap<string, readonly [number, Dimension, boolean]>;
+  prefixes: ReadonlyMap<string, number>;
+  celsiusOffsetK: number;
+} {
+  return { units: UNITS, prefixes: PREFIXES, celsiusOffsetK: CELSIUS_OFFSET_K };
 }
