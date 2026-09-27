@@ -134,10 +134,12 @@ Usage:
         Pass the --source (and --anchor/--max-orders) of the discover run that
         listed the pair.
 
-  upt regime <family> [--at group=value ...]
+  upt regime <family> [--at group=value ...] [--assume premise] [--deny premise]
         Where in parameter space a family's models are claimed to apply. Each
         model reads valid, VIOLATED (naming the failed inequality), or UNKNOWN
-        — a coordinate --at never supplied is NOT a pass. Also prints the
+        — a coordinate --at never supplied is NOT a pass. Prose premises are
+        never evaluated: --assume records your declaration (not evidence),
+        --deny marks one contradicted, the rest stay unspecified. Also prints the
         pairwise regime overlap and, over the box --at states, the uncovered
         points. A group can be given by name (spaces ignored, * for ·) or
         through its parameters (--at tau=1 D=1 q=1 gives tau · D · q^2 = 1);

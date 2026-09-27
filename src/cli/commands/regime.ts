@@ -24,6 +24,8 @@ import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--at', valueStyle: 'either', repeatable: true },
+  { name: '--assume', valueStyle: 'either', repeatable: true },
+  { name: '--deny', valueStyle: 'either', repeatable: true },
   { name: '--json', valueStyle: 'none' },
 ];
 
@@ -34,15 +36,21 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
         bridge is reported as valid, violated (naming the failed inequality),
         or UNKNOWN — a coordinate the point never supplied is NOT a pass, and a
         regime that states no inequality is marked VACUOUS rather than passed.
-        A bridge's prose side conditions (lossless, no-slip, ...) are listed
-        as premises not machine-checked: only the inequalities are evaluated.
+        Each inequality is listed as satisfied, violated or unchecked. A
+        bridge's prose side conditions (lossless, no-slip, ...) are never
+        evaluated: they are listed as premises not machine-checked unless you
+        --assume one (recorded as your declaration, not as evidence) or --deny
+        one (the record then does not apply as stated). Both match a side
+        condition by case-insensitive substring and never change the
+        inequality verdict.
         A group can be given by its formula (spaces ignored, * read as ·, so
         --at "tau*D*q^2=1" works) or through its parameters: --at tau=1 D=1
         q=1 derives tau · D · q^2 = 1. A key that no record uses is named, and
         ignored.
         Also prints the pairwise overlap of the regimes and, over the box --at
         states, the points no CONSTRAINING regime covers.
-        e.g.  upt regime oscillators --at theta0=0.2`;
+        e.g.  upt regime oscillators --at theta0=0.2
+              upt regime oscillators --deny lossless`;
 
 /**
  * Collect `group=value` assignments from `--at` values and from bare
@@ -149,6 +157,15 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const point = parseAt(assignments, 'regime');
   const stated = Object.keys(point);
+  const assume = args.flags.get('assume') ?? [];
+  const deny = args.flags.get('deny') ?? [];
+  for (const a of assume) {
+    if (deny.some((d) => d.toLowerCase() === a.toLowerCase())) {
+      throw new CliError(`upt regime: '${a}' is both assumed and denied`);
+    }
+  }
+  const matches = (declaration: string, premise: string) =>
+    declaration !== '' && premise.toLowerCase().includes(declaration.toLowerCase());
 
   // Models AND bridges, because in this family every MODEL regime states zero
   // inequalities and only the BRIDGES carry real ones. A models-only report
@@ -171,16 +188,38 @@ async function run(ctx: CommandCtx): Promise<number> {
   ];
 
   const { values: resolved, unknown } = resolveAtPoint(point, records.map((r) => r.regime));
+  const unmatched = [
+    ...assume.map((d) => ({ flag: '--assume', d })),
+    ...deny.map((d) => ({ flag: '--deny', d })),
+  ].filter(({ d }) => !records.some((r) => (r.sideConditions ?? []).some((p) => matches(d, p))));
 
   const verdicts = records.map((r) => {
     const check = api.regimeHolds(r.regime, resolved);
+    const violated = check.violated.map(showInequality);
+    const unchecked = check.unchecked.map(showInequality);
+    const satisfied = r.regime.inequalities
+      .map(showInequality)
+      .filter((s) => !violated.includes(s) && !unchecked.includes(s));
+    const prose = r.sideConditions ?? [];
+    const deniedByUser = prose.filter((p) => deny.some((d) => matches(d, p)));
+    const declaredByUser = prose.filter((p) => !deniedByUser.includes(p) && assume.some((a) => matches(a, p)));
+    const unspecified = prose.filter((p) => !deniedByUser.includes(p) && !declaredByUser.includes(p));
     return {
       id: r.id,
       kind: r.kind,
       ok: check.ok,
       vacuous: r.regime.inequalities.length === 0,
-      violated: check.violated.map(showInequality),
-      unchecked: check.unchecked.map(showInequality),
+      violated,
+      unchecked,
+      // The two bases never mix: `machine` is what this command evaluated at
+      // the point; the rest is prose, and a user's word about it is recorded
+      // as a declaration, never promoted to a check.
+      premises: {
+        machine: { satisfied, violated, unchecked },
+        declaredByUser,
+        deniedByUser,
+        unspecified,
+      },
       // Prose side conditions are premises this command cannot evaluate; only
       // the inequalities above were checked. A premise with a machine form is
       // checked only through its inequality.
@@ -229,10 +268,11 @@ async function run(ctx: CommandCtx): Promise<number> {
           "an 'unknown' verdict is a failure to confirm validity, NEVER validity: a coordinate the " +
           'point did not supply was not checked, and an unchecked inequality is not a satisfied one. ' +
           'Uncovered regions are reported only over the box --at states; none is synthesized.',
-        options: { family: family.family, at: point },
+        options: { family: family.family, at: point, assume, deny },
         result: {
           resolvedPoint: resolved,
           unknownCoordinates: unknown,
+          unmatchedDeclarations: unmatched.map(({ flag, d }) => ({ flag, declaration: d })),
           records: verdicts,
           overlaps,
           uncovered:
@@ -258,6 +298,9 @@ async function run(ctx: CommandCtx): Promise<number> {
         `${unknown.length === 1 ? 'it' : 'them'}; ignored`,
     );
   }
+  for (const { flag, d } of unmatched) {
+    out(`${flag} '${d}' matches no side condition in family '${family.family}'; ignored`);
+  }
   out('');
   for (const m of verdicts) {
     const verdict = m.ok === true ? 'valid' : m.ok === false ? 'VIOLATED' : 'unknown';
@@ -267,11 +310,19 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  [${m.kind}] ${m.id}: ${verdict}${note}`);
     for (const v of m.violated) out(`    violated: ${v}`);
     for (const u of m.unchecked) out(`    unchecked (no value supplied): ${u}`);
+    for (const s of m.premises.machine.satisfied) out(`    satisfied: ${s}`);
     if (!m.vacuous && m.violated.length === 0 && m.unchecked.length === 0) {
       out('    every inequality checked and satisfied');
     }
-    if (m.premisesNotChecked !== undefined) {
-      out(`    premises not machine-checked: ${m.premisesNotChecked.join('; ')}`);
+    const p = m.premises;
+    if (p.declaredByUser.length > 0) {
+      out(`    declared by you (a declaration, not evidence): ${p.declaredByUser.join('; ')}`);
+    }
+    if (p.deniedByUser.length > 0) {
+      out(`    CONTRADICTED by your --deny: ${p.deniedByUser.join('; ')} — this record does not apply as stated`);
+    }
+    if (p.unspecified.length > 0) {
+      out(`    premises not machine-checked: ${p.unspecified.join('; ')}`);
     }
   }
 
