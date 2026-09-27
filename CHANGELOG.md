@@ -10,6 +10,41 @@ from v0.1.0 onward.
 
 ### Added
 
+- **CLI audit §14 improvements** (2026-09-27), from `docs/audit/Universal_Physics_Tensor_CLI_Audit.md`
+  §14. Each has tests in `tests/cli/audit-improvements.test.ts`, shown RED before the change.
+  - **I5** — `upt search <word> …` finds a catalog bridge, canonical equation, atlas model, atlas
+    bridge or quantity by the words of its name, id, symbol, genuine alias or bridge description,
+    and prints the command that inspects it. An equal dimension is never a match. No match exits 1
+    and names the registries searched.
+  - **I7** — `upt regime --assume/--deny` records premises the user declares or denies, kept apart
+    from machine-checked inequalities and from premises left unspecified. A declaration is not
+    evidence, and a denied premise marks the record as not applying.
+  - **I8 (partial)** — `upt path --tolerance=EPS`: ADEQUATE only when every regime and horizon holds
+    and the closed-form point error is ≤ EPS, INADEQUATE (exit 3) otherwise, and UNDETERMINED when the
+    point does not settle it. EPS is in the bound's own norm; no phase or trajectory translation is
+    encoded, and the output says so.
+  - **I9** — `upt evaluate --sigma/--corr`: first-order (GUM) propagation with correlations and a
+    positive-semidefinite check. The sensitivity is kept apart from the contribution, a curvature
+    check flags an unreliable linearization, inputs without σ are named as treated-exact, and
+    numerical error and model discrepancy are stated as not included.
+  - **I11** — `discover` prints each promising row's readiness by dimension (structure, kind,
+    falsifiers survived vs abstained, mechanism, data) and what would make it testable.
+    `--require-falsifier` hides the rows that no independent falsifier ran on and survived.
+  - **I12** — `discover --derive` carries each derived relation's premise, status, symbol meaning,
+    assumptions and the scope of its canonical match in the text and in `--json`.
+  - **I14 (partial)** — `confront` names each record's statistical object, criterion and data origin,
+    plus its notes, and tallies σ-residual tests, limits and consistency ratios separately.
+    Preprocessing and independence are not recorded fields yet.
+  - **I15** — `upt atlas <id>` shows evidence by claim (correspondence, regime, bound, horizon,
+    preserves), each citing only what the record links to it. Every witness shows its execution
+    status. `--run` executes the in-process registered witnesses and counts checked, refuted and
+    unresolved separately (exit 3 on a refutation).
+  - **I16 (partial)** — `upt map --around=Q [--depth=N]` focuses on one quantity's neighbourhood in
+    every output form and prints how many of the source's edges it kept.
+  - **I18** — `upt path --sweep name=lo:hi:n[:log]` (2–200 samples, `--csv`) evaluates the point
+    verdict per row. A row outside a regime or past a horizon carries no error.
+  - A closed stdout (`upt … | head`) ends the run quietly instead of crashing with `EPIPE`.
+
 - **CLI-only applied-physics audit archive** (2026-09-26): preserve the model-persona report,
   original command evidence and maps under `docs/audit/`, including prioritized improvement
   recommendations for applied users. This makes the user-requested audit reproducible and

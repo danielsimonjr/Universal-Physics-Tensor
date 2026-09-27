@@ -12,9 +12,17 @@ nothing validates prose and the next reader cannot tell.
 ## As of 2026-09-27
 
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
-  findings are fixed (F10 was already correct and is now pinned by a test). The §14 improvements they
-  do not cover are open in `todo.md` (I2, I5–I9, I11, I12, I14–I20). I2 needs a reviewed widening of
-  the composition table and is Mothership's call.
+  findings are fixed (F10 was already correct and is now pinned by a test). Of the §14 improvements,
+  I5, I7, I9, I11, I12, I15 and I18 have landed. I8, I14 and I16 are partial, and I2, I6, I17, I19
+  and I20 are open; `todo.md` says what each still needs. I2 needs a reviewed widening of the
+  composition table and is Mothership's call.
+- `discover --require-falsifier` hides **49 of 49** promising rows on `--source=canonical` and 4 of 7
+  on the catalog: no independent falsifier ran and survived on them (negative result).
+- `confront` by statistic: 6 σ-residual tests, 2 limits and 11 consistency ratios (no σ). The
+  ratios are not precision tests and are never counted as such.
+- `atlas --run`: 17 of the 20 atlas bridges have an entry in `WITNESS_REGISTRY` and can run
+  witnesses in-process. `ab-pendulum-linear` is one of the three without, so `--run` on it reports
+  "none" rather than a pass.
 - F02 as measured on `discover --source=canonical`: 49 promising, 0 mechanism-tested, 0 data-tested,
   49 without magnitude evidence, 49 with the axis unresolved, 0 with an entailed consequence.
   So nothing in the promising set is evidence yet (negative result).

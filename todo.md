@@ -24,21 +24,38 @@
 ### Audit improvements (§14) not covered by the F-ledger fixes — open
 
 - [ ] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
-- [ ] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
+- [x] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
 - [ ] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
-- [ ] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
+  Still open: evaluators carry units only as key suffixes (`T_K`, `d_m`), and no evaluator states a
+  geometry (radius vs diameter) or a frequency convention. That needs a per-evaluator parameter schema
+  in the registry first; a unit parser alone would guess at it.
+- [x] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
 - [ ] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
-- [ ] **I9** Uncertainty propagation with covariance, distinct from sensitivity.
-- [ ] **I11** Discovery ranking by evidential readiness dimensions.
-- [ ] **I12** Premise and novelty status inseparable from every exported derived relation.
+  Partial: `path --tolerance` judges adequacy in the bound's OWN norm, after regime and horizon.
+  Open: a tolerance in ANOTHER observable (pendulum phase from the period error) needs a reviewed
+  per-bridge translation in the atlas record; the CLI says none is encoded rather than inventing one.
+- [x] **I9** Uncertainty propagation with covariance, distinct from sensitivity.
+- [x] **I11** Discovery ranking by evidential readiness dimensions.
+- [x] **I12** Premise and novelty status inseparable from every exported derived relation.
 - [ ] **I14** Confrontation records expose the statistical object, preprocessing and independence for every record.
-- [ ] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
+  Partial: every record names its statistical object, criterion and data origin, plus its notes.
+  Open: preprocessing and independence are not recorded fields of a confrontation outcome, so they
+  cannot be printed without first being encoded per record, with sources.
+- [x] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
+  The record attributes no witness to a claim, so none is cited under one; attributing witnesses to
+  claims is atlas data and needs review.
 - [ ] **I16** Focused (neighborhood/route/family) map exports.
+  Partial: `map --around=Q --depth=N` gives the neighbourhood view with its denominator. Open: route and
+  family views, and a map that joins the atlas models to the equation graph.
 - [ ] **I17** Session export and replay.
-- [ ] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
+  Still open: needs a design for the record (inputs, versions, parser, constants) and for what a replay
+  diff means. `probe reproduce` covers only the probe workflow.
+- [x] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
+  The comparison is the closed-form exact error per row. A sweep of the telegraph family showing where
+  NEITHER limit applies needs two paths side by side, which is not done.
 - [ ] **I19** Real-data, falsification-oriented probe workflow.
 - [ ] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
-- [ ] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
+- [x] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
 
 ## TypeScript-on-Bun migration (in flight)
 
