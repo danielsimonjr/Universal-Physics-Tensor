@@ -14,8 +14,10 @@ export interface JsonEnvelope {
    * The graph a command read. `'poster'` is `upt map --source=poster` only —
    * the Atlas Phase 3 poster index, which is not a `BridgeEdge` graph and is
    * therefore not a value `resolveGraph` (or any other command) accepts.
+   * `'atlas'` is `upt map --route` / `--family`, which read the atlas
+   * families rather than an equation graph.
    */
-  source?: 'catalog' | 'canonical' | 'both' | 'poster';
+  source?: 'catalog' | 'canonical' | 'both' | 'poster' | 'atlas';
   options?: Record<string, unknown>;
   epistemics?: string;
   /** `upt confront` — count of confrontations by rigor tier (stringent/moderate/loose). */

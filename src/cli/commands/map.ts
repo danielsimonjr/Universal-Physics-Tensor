@@ -19,6 +19,7 @@ import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
+import * as atlasMap from './_atlas-map.js';
 import type { BridgeEdge } from '../../composition/edge.js';
 import type { VizJunction, VizModel } from '../../composition/graph-viz.js';
 import type { EvidenceTag, RelationType } from '../../atlas/types.js';
@@ -37,6 +38,8 @@ const FLAGS: FlagSpec[] = [
   { name: '--evidence', valueStyle: 'attached' },
   { name: '--around', valueStyle: 'either' },
   { name: '--depth', valueStyle: 'attached' },
+  { name: '--route', valueStyle: 'either' },
+  { name: '--family', valueStyle: 'either' },
   // optionalValue: a bare trailing --equation stores '' so the empty-check in
   // run() owns the diagnostic (old-CLI fidelity: bin/upt.mjs did `a[i+1] ?? ''`
   // and let mapCmd emit `upt: --equation requires "TARGET = EXPR"`, exit 2).
@@ -85,8 +88,23 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         shared-quantity hops of QUANTITY (default 1: the edges that use it),
         in every output form, and prints how many of the source's edges it
         kept: the others are omitted from the view, not absent from the graph.
+        --route=FROM,TO and --family=NAME map the ATLAS instead: models and
+        the recorded bridges between them, not shared quantities. --route
+        shows the route \`upt path\` reports, each bridge's relation,
+        assumptions, regime, bound and derived evidence, the composition
+        step by step (and where the table yields no composite claim), and
+        the equations each model records. --family shows one family's
+        models, its bridges, the bridges from other families that touch it,
+        and its rejections; --relation/--evidence filter its bridges, and a
+        bridge whose tag depends on witness results is counted as undecided,
+        not as a mismatch. A model's equations are only those its
+        canonicalRefs record; nothing is inferred from shared quantities.
+        Both views state how many of the atlas's models and bridges they show,
+        in text, --json and --format=mermaid|dot|svg.
         e.g.  upt map --relation=derivation --source=both
-              upt map --around=temperature --depth=2 --source=catalog`;
+              upt map --around=temperature --depth=2 --source=catalog
+              upt map --route=model-pendulum,model-lc
+              upt map --family=oscillators --evidence=formally-proved`;
 
 /**
  * The edges within `depth` shared-quantity hops of `quantity`: hop 1 is every
@@ -245,8 +263,78 @@ function printEquationReport(
   }
 }
 
+/** Flags that shape the equation graph, and so mean nothing on an atlas view. */
+const GRAPH_ONLY_FLAGS = ['source', 'around', 'depth', 'equation', 'proposed', 'max-orders', 'anchor'] as const;
+
+async function runAtlasView(ctx: CommandCtx, route: string | undefined, family: string | undefined): Promise<number> {
+  const { args, api, err, write } = ctx;
+  if (route !== undefined && family !== undefined) throw new CliError('upt map: pick one atlas view: --route or --family');
+  const view = route !== undefined ? '--route' : '--family';
+  const stray = GRAPH_ONLY_FLAGS.filter((f) => args.flags.has(f));
+  if (stray.length > 0) {
+    throw new CliError(
+      `upt map: ${view} maps the atlas, not the equation graph; ${stray.map((f) => `--${f}`).join(', ')} do${stray.length === 1 ? 'es' : ''} not apply`,
+    );
+  }
+  const relation = parseFilter(lastValue(args.flags, 'relation'), RELATION_TYPES, '--relation');
+  const evidence = parseFilter(lastValue(args.flags, 'evidence'), EVIDENCE_TAGS, '--evidence');
+  if (route !== undefined && (relation !== undefined || evidence !== undefined)) {
+    throw new CliError('upt map: a route is composed whole, so --relation/--evidence do not filter it; filter a family view instead (--family=NAME)');
+  }
+  const fmt = lastValue(args.flags, 'format') ?? 'text';
+  const isJson = args.flags.has('json');
+  if (isJson && fmt !== 'text') throw new UsageError('upt: pick one output form: --json or --format');
+  if (!['text', 'mermaid', 'dot', 'svg'].includes(fmt)) {
+    throw new CliError(`upt: unknown --format='${fmt}' (expected: text | mermaid | dot | svg)`);
+  }
+
+  const v =
+    route !== undefined
+      ? atlasMap.buildRouteView(api, ...atlasMap.parseRoute(route))
+      : atlasMap.buildFamilyView(api, family!, {
+          ...(relation !== undefined ? { relation } : {}),
+          ...(evidence !== undefined ? { evidence } : {}),
+        });
+
+  if (isJson) {
+    emitJson({ command: 'map', source: 'atlas', result: v }, write);
+    return 0;
+  }
+  if (fmt === 'text') {
+    for (const line of v.view === 'route' ? atlasMap.routeText(v) : atlasMap.familyText(v)) ctx.out(line);
+    return 0;
+  }
+  let src: string;
+  if (fmt === 'svg') {
+    try {
+      src = await api.renderDotToSvg(atlasMap.toDot(v));
+    } catch (e) {
+      throw new CliError(e && (e as Error).message ? (e as Error).message : String(e));
+    }
+  } else {
+    src = fmt === 'mermaid' ? atlasMap.toMermaid(v) : atlasMap.toDot(v);
+  }
+  const path = lastValue(args.flags, 'out');
+  if (path !== undefined) {
+    if (!path) throw new CliError('upt: --out= requires a non-empty PATH');
+    try {
+      writeFileSync(path, src);
+    } catch (e) {
+      throw new CliError((e as Error).message);
+    }
+    err(`upt: wrote ${fmt} to ${path}`);
+  } else {
+    write(src);
+  }
+  err(`upt: ${atlasMap.viewLegend(v)}`);
+  return 0;
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err, write } = ctx;
+  const route = lastValue(args.flags, 'route');
+  const family = lastValue(args.flags, 'family');
+  if (route !== undefined || family !== undefined) return runAtlasView(ctx, route, family);
   // map asks a pure connectivity question, so it defaults to --source=both
   // (catalog + canonical) rather than graphs.ts's catalog fallback used by
   // the other --source commands (e.g. discover, which keeps catalog).
