@@ -5,6 +5,7 @@
  */
 import { BROWNIAN_SPHERE_CASE } from './brownian-sphere.js';
 import { DAMPED_RESONATOR_CASE } from './damped-resonator.js';
+import { KEPLER_RV_CASE } from './kepler-rv.js';
 import { LUMPED_COOLING_CASE } from './lumped-cooling.js';
 import { RESISTOR_NOISE_CASE } from './resistor-noise.js';
 import { SKIN_DEPTH_CASE } from './skin-depth.js';
@@ -14,7 +15,7 @@ export type { AppliedCase, CaseCheck, CaseComparison, CaseExample, CaseOutput, C
 
 /** Case id → case. @internal */
 export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = new Map(
-  [RESISTOR_NOISE_CASE, BROWNIAN_SPHERE_CASE, DAMPED_RESONATOR_CASE, SKIN_DEPTH_CASE, LUMPED_COOLING_CASE].map((c) => [c.id, c]),
+  [RESISTOR_NOISE_CASE, BROWNIAN_SPHERE_CASE, DAMPED_RESONATOR_CASE, SKIN_DEPTH_CASE, LUMPED_COOLING_CASE, KEPLER_RV_CASE].map((c) => [c.id, c]),
 );
 
 /**
