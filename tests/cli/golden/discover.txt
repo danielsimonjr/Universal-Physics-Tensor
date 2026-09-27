@@ -12,30 +12,51 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         unlocks: dark-fermion-mass
         [consequence: novel-consequence]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and dark-fermion-mass are the same physical quantity, not only both [energy] · needs a representative magnitude for: dark-fermion-mass · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and dark-fermion-mass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     landauer-erasure-energy ≟ barrier-height             [[energy]]  score 6
         unlocks: barrier-height
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency, magnitude (1.0 orders) · gaps: axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: magnitude (abstained: axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and barrier-height are the same physical quantity, not only both [energy] · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy, barrier-height · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and barrier-height in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     landauer-erasure-energy ≟ inflation-hubble-energy    [[energy]]  score 7
         unlocks: inflation-hubble-energy
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and inflation-hubble-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: inflation-hubble-energy · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and inflation-hubble-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     mass ≟ scalar-field-reference                        [[mass]]  score 6
         unlocks: scalar-field-reference
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: mass and scalar-field-reference are the same physical quantity, not only both [mass] · needs a representative magnitude for: scalar-field-reference · needs a stated scale regime for: mass · needs a stated force regime for: mass, scalar-field-reference · needs a consequence that re-derives a known law]
+        [observation: measure mass and scalar-field-reference in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     mass ≟ scalar-field-value                            [[mass]]  score 6
         unlocks: scalar-field-value
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: mass and scalar-field-value are the same physical quantity, not only both [mass] · needs a representative magnitude for: scalar-field-value · needs a stated scale regime for: mass · needs a stated force regime for: mass, scalar-field-value · needs a consequence that re-derives a known law]
+        [observation: measure mass and scalar-field-value in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ boundary-length                 [[length]]  score 6
         unlocks: boundary-length
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency, axis-compatible (≥1 regime axis) · gaps: magnitude (no representative value), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: axis (abstained: magnitude, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and boundary-length are the same physical quantity, not only both [length] · needs a representative magnitude for: boundary-length · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and boundary-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ planck-length                   [[length]]  score 6
         unlocks: planck-length
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency, axis-compatible (≥1 regime axis) · gaps: magnitude (anchor-invariant: the graph fixes this ratio at every anchor, so the match is an identity, not evidence), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: axis (abstained: magnitude, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and planck-length are the same physical quantity, not only both [length] · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and planck-length in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):
     attempt-frequency ≟ hubble-rate                      ~30.7 orders apart

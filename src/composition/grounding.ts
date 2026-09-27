@@ -115,3 +115,78 @@ export function describeGrounding(
 
   return { passed, gaps, mechanismTested: false, dataTested: false };
 }
+
+/** An independent falsifier: a gate that can reject an identification the anchored graph cannot. */
+export type IndependentFalsifier = 'magnitude' | 'axis' | 'consequence';
+
+/**
+ * How far one candidate is from being a testable claim, dimension by dimension.
+ * Deliberately NOT a score: the dimensions are orthogonal and are never summed.
+ * @internal
+ */
+export interface CandidateReadiness {
+  /** Connectivity. It makes a candidate worth a look; it is never evidence. */
+  readonly structure: { readonly mergesComponents: boolean; readonly unlocks: number };
+  /** `same-kind`: the names share a kind token. `dimension-only`: nothing but the dimension is shared. */
+  readonly kind: 'same-kind' | 'dimension-only';
+  /**
+   * Independent falsifiers that ran and the candidate survived, and those that
+   * abstained. An abstention is a missing test, never a pass. Numerical
+   * consistency is not listed: it runs from a single anchor and cannot reach
+   * the quantities an identification unlocks.
+   */
+  readonly falsifiers: {
+    readonly survived: readonly IndependentFalsifier[];
+    readonly abstained: readonly IndependentFalsifier[];
+  };
+  readonly mechanismTested: false;
+  readonly dataTested: false;
+  /** What would make the identification testable, each item derived from why a gate abstained. */
+  readonly needs: {
+    /** The premise every literal identification a≡b rests on. */
+    readonly premise: string;
+    /** Endpoints that need a representative magnitude for the magnitude falsifier to run. */
+    readonly magnitudeFor: readonly string[];
+    /** Axes and endpoints that need a stated regime for the axis falsifier to run. */
+    readonly regimeFor: readonly { readonly axis: string; readonly endpoints: readonly string[] }[];
+    /** The consequence check could not re-derive a known law. */
+    readonly derivableConsequence: boolean;
+  };
+  /** The independent observation that would test the premise. */
+  readonly observation: string;
+}
+
+/**
+ * Derive a candidate's readiness from its falsifier fields.
+ * @internal
+ */
+export function describeReadiness(c: VettedCandidate, consequence?: ConsequenceSignal): CandidateReadiness {
+  const survived: IndependentFalsifier[] = [];
+  const abstained: IndependentFalsifier[] = [];
+  if (c.magnitudeChecked && c.magnitudeAnchorInvariant !== true) survived.push('magnitude');
+  else abstained.push('magnitude');
+  if (c.axisChecked && c.axisClashes.length === 0) survived.push('axis');
+  else if (!c.axisChecked) abstained.push('axis');
+  if (consequence === 'entailed') survived.push('consequence');
+  else abstained.push('consequence');
+  const kind = c.sameKind ? 'same-kind' : 'dimension-only';
+  return {
+    structure: { mergesComponents: c.mergesComponents, unlocks: c.unlocksFromAnchor.length },
+    kind,
+    falsifiers: { survived, abstained },
+    mechanismTested: false,
+    dataTested: false,
+    needs: {
+      premise:
+        kind === 'same-kind'
+          ? `${c.a} and ${c.b} are the same physical quantity, not two quantities of one kind`
+          : `${c.a} and ${c.b} are the same physical quantity, not only both ${c.dim}`,
+      magnitudeFor: c.magnitudeChecked ? [] : [...(c.magnitudeMissing ?? [])],
+      regimeFor: c.axisChecked ? [] : (c.axisUnstated ?? []).map((u) => ({ axis: u.axis, endpoints: [...u.endpoints] })),
+      derivableConsequence: consequence !== 'entailed',
+    },
+    observation:
+      `measure ${c.a} and ${c.b} in one system that defines both: the identification predicts equal values ` +
+      'within uncertainty. If no system defines both, it has no observable content yet.',
+  };
+}

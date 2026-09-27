@@ -26,3 +26,4 @@ import './probe.js';
 import './regime.js';
 import './path.js';
 import './atlas.js';
+import './search.js';

@@ -96,7 +96,7 @@ describe('upt regime', () => {
     const parsed = JSON.parse(cap.lines.join(''));
     expect(parsed.command).toBe('regime');
     expect(typeof parsed.epistemics).toBe('string');
-    expect(parsed.options).toEqual({ family: 'oscillators', at: { theta0: 0.9 } });
+    expect(parsed.options).toEqual({ family: 'oscillators', at: { theta0: 0.9 }, assume: [], deny: [] });
     const byId = new Map<string, { ok: unknown; vacuous: boolean }>(
       parsed.result.records.map((r: { id: string }) => [r.id, r] as const),
     );

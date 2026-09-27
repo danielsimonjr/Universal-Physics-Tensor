@@ -82,6 +82,78 @@ export function classifyProposal(
 }
 
 /**
+ * What a derived proposal claims, in a form that travels with it: the premise,
+ * whether it is a known law or a conditional identity, what the solved-for
+ * symbol means, the source equations' assumptions, and the exact scope of the
+ * canonical-match check.
+ * @internal
+ */
+export interface DerivedClaim {
+  /** The unadjudicated identification the relation rests on. */
+  readonly premise: string;
+  /** `known-law`: re-derives a registry equation. `conditional-identity`: holds only if the premise does. */
+  readonly relation: 'known-law' | 'conditional-identity';
+  /** No derived proposal has been confronted with a measurement. */
+  readonly tested: false;
+  readonly symbol: { readonly name: string; readonly fromEquation: string; readonly meaning: string };
+  readonly assumptions: readonly { readonly equation: string; readonly assumptions: readonly string[] }[];
+  readonly canonicalMatch: {
+    readonly id: string | null;
+    readonly sameTarget: number;
+    readonly sameTargetAndGoverning: number;
+    readonly scope: 'the canonical registry only';
+  };
+}
+
+type ClaimEquation = Pick<CanonicalEquation, 'id' | 'name' | 'assumptions' | 'scalarAst'> & {
+  readonly dimensional: Pick<CanonicalEquation['dimensional'], 'target' | 'governing'>;
+};
+
+/**
+ * Describe the claim a derived proposal makes. Pure; the proposal is unchanged.
+ * @internal
+ */
+export function describeDerivedClaim(
+  proposal: Pick<ProposedBridge, 'target' | 'governing' | 'scalarAst' | 'derivedFrom'>,
+  canonical: readonly ClaimEquation[] = CANONICAL_EQUATIONS,
+): DerivedClaim {
+  const { identification, sourceEquationIds, solvedFor } = proposal.derivedFrom;
+  const sources = sourceEquationIds
+    .map((id) => canonical.find((e) => e.id === id))
+    .filter((e): e is ClaimEquation => e !== undefined);
+  const home = sources.find((e) => e.dimensional.governing.some((g) => g.name === solvedFor)) ?? sources[0];
+  const other = sources.find((e) => e !== home);
+  const homeTarget = home?.dimensional.target.name ?? '?';
+  const otherTarget = other?.dimensional.target.name ?? '?';
+
+  const derivedNF = normalForm(proposal.scalarAst);
+  const sameTarget = canonical.filter((e) => e.scalarAst && e.dimensional.target.name === proposal.target.name);
+  const sameGov = sameTarget.filter((e) => sameGoverning(e.dimensional.governing, proposal.governing));
+  const match = sameGov.find((e) => normalForm(e.scalarAst!) === derivedNF);
+
+  return {
+    premise: `${identification.a} ≡ ${identification.b}`,
+    relation: match ? 'known-law' : 'conditional-identity',
+    tested: false,
+    symbol: {
+      name: solvedFor,
+      fromEquation: home?.id ?? sourceEquationIds[0],
+      meaning:
+        `${solvedFor} is the ${solvedFor} of ${home?.id} (${home?.name}): the ${solvedFor} for which ` +
+        `${homeTarget} equals ${otherTarget} (${other?.id}) — an equal-${identification.dim} scale; ` +
+        `the ${otherTarget} side is not given a ${solvedFor}`,
+    },
+    assumptions: sources.map((e) => ({ equation: e.id, assumptions: [...e.assumptions] })),
+    canonicalMatch: {
+      id: match?.id ?? null,
+      sameTarget: sameTarget.length,
+      sameTargetAndGoverning: sameGov.length,
+      scope: 'the canonical registry only',
+    },
+  };
+}
+
+/**
  * Annotate ranked candidates with their consequence signal. Order-preserving,
  * 1:1 with the input; only `promising` candidates are classified (they are the
  * only ones `deriveProposedBridges` processes). A promising candidate with no

@@ -39,7 +39,7 @@ The codebase is organized into the following modules:
 - **atlas**: 54 files
 - **bridges**: 89 files
 - **canonical**: 18 files
-- **cli**: 31 files
+- **cli**: 32 files
 - **root**: 1 file
 - **composition**: 73 files
 - **core**: 11 files
@@ -2892,10 +2892,11 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../errors.js` | `CliError` | Import |
+| `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
+- Functions: `summarizeWitnessRuns`
 - Constants: `command`
 
 ---
@@ -3064,6 +3065,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError` | Import |
 
 **Exports:**
+- Functions: `propagateUncertainty`
 - Constants: `command`
 
 ---
@@ -3128,6 +3130,7 @@ The codebase is organized into the following modules:
 | `./regime.js` | `*` | Import |
 | `./path.js` | `*` | Import |
 | `./atlas.js` | `*` | Import |
+| `./search.js` | `*` | Import |
 
 ---
 
@@ -3155,6 +3158,7 @@ The codebase is organized into the following modules:
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 
 **Exports:**
+- Functions: `neighbourhood`
 - Constants: `command`
 
 ---
@@ -3171,6 +3175,7 @@ The codebase is organized into the following modules:
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
 
 **Exports:**
+- Functions: `parseSweep`, `judgeTolerance`, `parseTolerance`
 - Constants: `command`
 
 ---
@@ -3252,6 +3257,21 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `parseAt`, `resolveAtPoint`, `showInequality`
+- Constants: `command`
+
+---
+
+### `src/cli/commands/search.ts` - `upt search <word> ...` — find a law, model, bridge or quantity by the words
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../errors.js` | `CliError, UsageError` | Import |
+| `../output.js` | `emitJson` | Import |
+
+**Exports:**
 - Constants: `command`
 
 ---
@@ -3361,6 +3381,7 @@ The codebase is organized into the following modules:
 | `./canonical/registry.js` | `CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner` | Re-export |
 | `./canonical/linkage.js` | `scanLinkages` | Re-export |
 | `./composition/proposed-bridges.js` | `deriveProposedBridges` | Re-export |
+| `./composition/consequence.js` | `describeDerivedClaim` | Re-export |
 | `./composition/graph-viz.js` | `filterEdges, deriveEdgeEvidence, formatFilterLegend` | Re-export |
 | `./composition/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
 | `./composition/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
@@ -3371,15 +3392,17 @@ The codebase is organized into the following modules:
 | `./composition/consequence.js` | `ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence` | Re-export |
 | `./atlas/conventions.js` | `checkConventions, unknownConventionKeys` | Re-export |
 | `./atlas/conventions.js` | `ConventionKey` | Re-export |
-| `./composition/grounding.js` | `describeGrounding` | Re-export |
+| `./composition/grounding.js` | `describeGrounding, describeReadiness` | Re-export |
 | `./composition/representative-values.js` | `REPRESENTATIVE_VALUES` | Re-export |
 | `./composition/canonical-compare.js` | `compareWithCanonical, compareUserEquation, describeComparison, describeComparisons` | Re-export |
 | `./composition/canonical-compare.js` | `CanonicalComparison` | Re-export |
 | `./composition/symbolic-constants.js` | `CONSTANTS` | Re-export |
-| `./composition/grounding.js` | `CandidateGrounding` | Re-export |
+| `./composition/grounding.js` | `CandidateGrounding, CandidateReadiness` | Re-export |
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
 | `./atlas/families.js` | `ATLAS_FAMILIES` | Re-export |
 | `./atlas/derive-evidence.js` | `deriveEvidence, NO_PASSING_WITNESSES` | Re-export |
+| `./atlas/witness-artifact.js` | `runWitnessRegistry` | Re-export |
+| `./atlas/witness-specs.js` | `WITNESS_REGISTRY` | Re-export |
 | `./atlas/oscillators/index.js` | `AtlasFamily` | Re-export |
 | `./atlas/regime.js` | `regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
@@ -3404,21 +3427,22 @@ The codebase is organized into the following modules:
   confrontationRigor, rigorDistribution, ConfrontationEntry, RigorTier, ConfrontationOutcome,
   decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec, auditAxisDiscrimination,
   AxisDiscrimination, AXES, AxisSpec, simplifyObservable, CANONICAL_EQUATIONS,
-  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, filterEdges,
-  deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
+  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
+  filterEdges, deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
   describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
   findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, parseExprJson,
   runProbeSearch, formatProbeReport, formatFrontierScan, formatFrontierGap,
   suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto, annotateAdjudications,
   adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication,
   annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
-  checkConventions, unknownConventionKeys, ConventionKey, describeGrounding, REPRESENTATIVE_VALUES,
-  compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
-  CanonicalComparison, CONSTANTS, CandidateGrounding, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
-  deriveEvidence, NO_PASSING_WITNESSES, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
-  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, boundPath, composeRelation,
-  PathBoundResult, PathBoundClaim, PathNoClaim, AtlasBridge, RegimeInequality, MissingLipschitzError,
-  AtlasModel, ModelId
+  checkConventions, unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness,
+  REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation, describeComparison,
+  describeComparisons, CanonicalComparison, CONSTANTS, CandidateGrounding, CandidateReadiness,
+  OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, NO_PASSING_WITNESSES, runWitnessRegistry,
+  WITNESS_REGISTRY, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck,
+  RegimeOverlap, RegionSample, findPath, findAtlasPath, boundPath, composeRelation, PathBoundResult,
+  PathBoundClaim, PathNoClaim, AtlasBridge, RegimeInequality, MissingLipschitzError, AtlasModel,
+  ModelId
   ```
 
 
@@ -3644,8 +3668,8 @@ The codebase is organized into the following modules:
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `ConsequenceEvidence`
-- Functions: `classifyProposal`, `annotateConsequences`
+- Interfaces: `ConsequenceEvidence`, `DerivedClaim`
+- Functions: `classifyProposal`, `describeDerivedClaim`, `annotateConsequences`
 
 ---
 
@@ -4020,8 +4044,8 @@ The codebase is organized into the following modules:
 | `./consequence.js` | `ConsequenceSignal` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `CandidateGrounding`
-- Functions: `describeGrounding`
+- Interfaces: `CandidateGrounding`, `CandidateReadiness`
+- Functions: `describeGrounding`, `describeReadiness`
 
 ---
 
@@ -6534,7 +6558,7 @@ graph TD
         N20[_discovery-opts]
         N21[atlas]
         N22[audit]
-        N23[...26 more]
+        N23[...27 more]
     end
 
     subgraph Root
@@ -6625,17 +6649,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 351 |
+| Total TypeScript Files | 352 |
 | Total Modules | 11 |
-| Total Lines of Code | 70867 |
-| Total Exports | 2482 |
-| Total Re-exports | 1246 |
+| Total Lines of Code | 72079 |
+| Total Exports | 2496 |
+| Total Re-exports | 1251 |
 | Total Classes | 58 |
-| Total Interfaces | 362 |
-| Total Functions | 568 |
+| Total Interfaces | 364 |
+| Total Functions | 576 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 490 |
+| Type-only Imports | 491 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

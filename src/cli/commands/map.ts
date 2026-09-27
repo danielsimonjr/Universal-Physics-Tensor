@@ -35,6 +35,8 @@ const FLAGS: FlagSpec[] = [
   { name: '--proposed', valueStyle: 'none' },
   { name: '--relation', valueStyle: 'attached' },
   { name: '--evidence', valueStyle: 'attached' },
+  { name: '--around', valueStyle: 'either' },
+  { name: '--depth', valueStyle: 'attached' },
   // optionalValue: a bare trailing --equation stores '' so the empty-check in
   // run() owns the diagnostic (old-CLI fidelity: bin/upt.mjs did `a[i+1] ?? ''`
   // and let mapCmd emit `upt: --equation requires "TARGET = EXPR"`, exit 2).
@@ -79,7 +81,33 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         it satisfies the filter. Those drops are counted and printed separately
         from the edges that simply did not match — an unaudited graph must not
         render as a complete answer.
-        e.g.  upt map --relation=derivation --source=both`;
+        --around=QUANTITY [--depth=N] keeps only the edges within N
+        shared-quantity hops of QUANTITY (default 1: the edges that use it),
+        in every output form, and prints how many of the source's edges it
+        kept: the others are omitted from the view, not absent from the graph.
+        e.g.  upt map --relation=derivation --source=both
+              upt map --around=temperature --depth=2 --source=catalog`;
+
+/**
+ * The edges within `depth` shared-quantity hops of `quantity`: hop 1 is every
+ * edge that has it as a source or target, and each further hop adds the edges
+ * sharing a quantity with one already kept.
+ * @internal
+ */
+export function neighbourhood(graph: readonly BridgeEdge[], quantity: string, depth: number): BridgeEdge[] {
+  const names = (e: BridgeEdge): string[] => [...e.sources.map((q) => q.name), e.target.name];
+  const reached = new Set([quantity]);
+  const kept = new Set<BridgeEdge>();
+  for (let hop = 0; hop < depth; hop++) {
+    const frontier = graph.filter((e) => !kept.has(e) && names(e).some((n) => reached.has(n)));
+    if (frontier.length === 0) break;
+    for (const e of frontier) {
+      kept.add(e);
+      for (const n of names(e)) reached.add(n);
+    }
+  }
+  return graph.filter((e) => kept.has(e));
+}
 
 const RELATION_TYPES: readonly RelationType[] = [
   'derivation',
@@ -233,7 +261,33 @@ async function run(ctx: CommandCtx): Promise<number> {
   const resolved: { graph: BridgeEdge[]; label: string; source: SourceName | 'poster' } = posterMode
     ? { graph: [], label: 'poster (Atlas Phase 3 index)', source: 'poster' }
     : resolveGraph(api, sourceFlags);
-  const { graph: fullGraph, label, source } = resolved;
+  const { graph: wholeGraph, label, source } = resolved;
+
+  const around = lastValue(args.flags, 'around');
+  const depthRaw = lastValue(args.flags, 'depth');
+  if (depthRaw !== undefined && around === undefined) throw new CliError('upt map: --depth needs --around');
+  let focus: { around: string; depth: number; kept: number; of: number } | null = null;
+  let fullGraph = wholeGraph;
+  if (around !== undefined) {
+    if (posterMode) throw new CliError('upt map: --around focuses a quantity graph; the poster index has statements, not quantities');
+    const depth = depthRaw === undefined ? 1 : Number(depthRaw);
+    if (!Number.isInteger(depth) || depth < 1 || depth > 10) throw new CliError(`upt map: --depth=${depthRaw} must be an integer from 1 to 10`);
+    const known = new Set(wholeGraph.flatMap((e) => [...e.sources.map((q) => q.name), e.target.name]));
+    const name = api.resolveToCatalogName(around, known);
+    if (name === null) {
+      const near = api.suggestQuantities(around, known);
+      throw new CliError(
+        `upt map: '${around}' is not a quantity of the ${label} graph` + (near.length > 0 ? `; did you mean: ${near.join(', ')}?` : ''),
+      );
+    }
+    fullGraph = neighbourhood(wholeGraph, name, depth);
+    focus = { around: name, depth, kept: fullGraph.length, of: wholeGraph.length };
+  }
+  const focusLine =
+    focus === null
+      ? null
+      : `focused: ${focus.kept} of ${focus.of} edges within ${focus.depth} hop(s) of '${focus.around}' [${label}]; ` +
+        'the rest are omitted from this view, not absent from the graph';
   // The poster's own report line: what it contributed, or why it contributed
   // nothing (design note §6). Computed once; printed by every output form.
   const posterValidation = posterMode ? api.validatePoster(api.POSTER_GRAPH) : null;
@@ -300,7 +354,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     // Ranked from the UNFILTERED graph: the proposal set is a property of the
     // whole catalog, and the model then judges each overlay junction under the
     // same filter as every other junction.
-    ...(args.flags.has('proposed') ? proposedJunctions(api, fullGraph, args.flags) : []),
+    ...(args.flags.has('proposed') ? proposedJunctions(api, wholeGraph, args.flags) : []),
     // The poster enters as an overlay for exactly the reason the design note
     // gives: an overlay is FILTERED, clustered and legended like every other
     // junction, so a poster source cannot quietly bypass --relation/--evidence.
@@ -336,6 +390,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           linkage,
           ...(posterMode ? { poster: { note: posterNote, ...posterValidation! } } : {}),
           ...(edgeLegend !== null ? { filter: edgeStats } : {}),
+          ...(focus !== null ? { focus } : {}),
           ...(user ? { landing, userEquation } : {}),
         },
       },
@@ -380,6 +435,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     // Legend and landing report go to stderr so stdout/--out stays pure diagram
     // source. The diagram itself also carries the legend (see `buildVizModel`).
     if (posterNote !== null) err(`upt: ${posterNote}`);
+    if (focusLine !== null) err(`upt: ${focusLine}`);
     if (model.filterLegend !== null) err(`upt: ${model.filterLegend}`);
     if (user) printEquationReport(api, model, user, err, comparisons);
     return exitCode;
@@ -433,6 +489,7 @@ Your equation:  ${user.junction.label}`);
       .join(', ');
   out(`\nLinkage map — how the equations connect via shared quantities  [source: ${label}]`);
   out(`(${m.componentCount} components over ${graph.length} edges; ${m.compositions} compose into chains)\n`);
+  if (focusLine !== null) out(`  ${focusLine}`);
   if (edgeLegend !== null) out(`  ${edgeLegend}`);
   for (const c of m.clusters.filter((x) => x.size > 1)) {
     out(`  ● cluster of ${c.size}${c.anchored ? '  [ANCHORED to known physics]' : ''}`);

@@ -82,7 +82,7 @@ describe('F08 — checked inequalities are kept apart from prose premises', () =
   it('Stokes–Einstein: the Reynolds and overdamped checks pass, and no-slip is still a declaration', async () => {
     const { text } = await run(['regime', 'diffusion', '--at', 'Re=0.05', 'm=1e-15', 'gamma=1e-8', 't=1']);
     const block = text.slice(text.indexOf('[bridge] ab-stokes-einstein'));
-    expect(block).toMatch(/^\[bridge\] ab-stokes-einstein: valid\n {4}every inequality checked and satisfied\n {4}premises not machine-checked: .*no-slip boundary/);
+    expect(block).toMatch(/^\[bridge\] ab-stokes-einstein: valid\n( {4}satisfied: .*\n){2} {4}every inequality checked and satisfied\n {4}premises not machine-checked: .*no-slip boundary/);
   });
 
   it('--json carries premisesNotChecked for a bridge and none for a model', async () => {

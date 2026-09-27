@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 351
+  totalFiles: 352
   totalModules: 11
-  totalExports: 2482
+  totalExports: 2496
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6437,11 +6437,15 @@ modules:
         - file: ../errors.js
           imports:
             - CliError
+            - EXIT_CHECK_FAILED
         - file: ../output.js
           imports:
             - emitJson
       exports:
         - command
+        - summarizeWitnessRuns
+      functions:
+        - summarizeWitnessRuns
       constants:
         - command
     src/cli/commands/audit.ts:
@@ -6722,6 +6726,9 @@ modules:
             - CliError
       exports:
         - command
+        - propagateUncertainty
+      functions:
+        - propagateUncertainty
       constants:
         - command
     src/cli/commands/explain.ts:
@@ -6855,6 +6862,9 @@ modules:
         - file: ./atlas.js
           imports:
             - "*"
+        - file: ./search.js
+          imports:
+            - "*"
       exports: []
     src/cli/commands/map.ts:
       description: "`upt map` — how the equations LINK: the text linkage map, the visual"
@@ -6916,6 +6926,9 @@ modules:
           typeOnly: true
       exports:
         - command
+        - neighbourhood
+      functions:
+        - neighbourhood
       constants:
         - command
     src/cli/commands/path.ts:
@@ -6946,6 +6959,13 @@ modules:
             - showInequality
       exports:
         - command
+        - parseSweep
+        - judgeTolerance
+        - parseTolerance
+      functions:
+        - parseSweep
+        - judgeTolerance
+        - parseTolerance
       constants:
         - command
     src/cli/commands/predict.ts:
@@ -7078,6 +7098,31 @@ modules:
         - parseAt
         - resolveAtPoint
         - showInequality
+      constants:
+        - command
+    src/cli/commands/search.ts:
+      description: "`upt search <word> ...` — find a law, model, bridge or quantity by the words"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../args.js
+          imports:
+            - FlagSpec
+          typeOnly: true
+        - file: ../command.js
+          imports:
+            - registerCommand
+            - Command
+            - CommandCtx
+        - file: ../errors.js
+          imports:
+            - CliError
+            - UsageError
+        - file: ../output.js
+          imports:
+            - emitJson
+      exports:
+        - command
       constants:
         - command
     src/cli/commands/symbolic.ts:
@@ -7326,6 +7371,10 @@ modules:
           imports:
             - deriveProposedBridges
           reExport: true
+        - file: ./composition/consequence.js
+          imports:
+            - describeDerivedClaim
+          reExport: true
         - file: ./composition/graph-viz.js
           imports:
             - filterEdges
@@ -7396,6 +7445,7 @@ modules:
         - file: ./composition/grounding.js
           imports:
             - describeGrounding
+            - describeReadiness
           reExport: true
         - file: ./composition/representative-values.js
           imports:
@@ -7419,6 +7469,7 @@ modules:
         - file: ./composition/grounding.js
           imports:
             - CandidateGrounding
+            - CandidateReadiness
           reExport: true
         - file: ./atlas/oscillators/index.js
           imports:
@@ -7432,6 +7483,14 @@ modules:
           imports:
             - deriveEvidence
             - NO_PASSING_WITNESSES
+          reExport: true
+        - file: ./atlas/witness-artifact.js
+          imports:
+            - runWitnessRegistry
+          reExport: true
+        - file: ./atlas/witness-specs.js
+          imports:
+            - WITNESS_REGISTRY
           reExport: true
         - file: ./atlas/oscillators/index.js
           imports:
@@ -7528,6 +7587,7 @@ modules:
         - bridgesWithoutCanonicalPartner
         - scanLinkages
         - deriveProposedBridges
+        - describeDerivedClaim
         - filterEdges
         - deriveEdgeEvidence
         - formatFilterLegend
@@ -7558,6 +7618,7 @@ modules:
         - checkConventions
         - unknownConventionKeys
         - describeGrounding
+        - describeReadiness
         - REPRESENTATIVE_VALUES
         - compareWithCanonical
         - compareUserEquation
@@ -7568,6 +7629,8 @@ modules:
         - ATLAS_FAMILIES
         - deriveEvidence
         - NO_PASSING_WITNESSES
+        - runWitnessRegistry
+        - WITNESS_REGISTRY
         - regimeHolds
         - regimeOverlap
         - uncoveredRegions
@@ -7592,6 +7655,7 @@ modules:
         - ConventionKey
         - CanonicalComparison
         - CandidateGrounding
+        - CandidateReadiness
         - AtlasFamily
         - RegimeCheck
         - RegimeOverlap
@@ -7658,6 +7722,7 @@ modules:
         - bridgesWithoutCanonicalPartner
         - scanLinkages
         - deriveProposedBridges
+        - describeDerivedClaim
         - filterEdges
         - deriveEdgeEvidence
         - formatFilterLegend
@@ -7696,6 +7761,7 @@ modules:
         - unknownConventionKeys
         - ConventionKey
         - describeGrounding
+        - describeReadiness
         - REPRESENTATIVE_VALUES
         - compareWithCanonical
         - compareUserEquation
@@ -7704,10 +7770,13 @@ modules:
         - CanonicalComparison
         - CONSTANTS
         - CandidateGrounding
+        - CandidateReadiness
         - OSCILLATOR_FAMILY
         - ATLAS_FAMILIES
         - deriveEvidence
         - NO_PASSING_WITNESSES
+        - runWitnessRegistry
+        - WITNESS_REGISTRY
         - AtlasFamily
         - regimeHolds
         - regimeOverlap
@@ -8212,11 +8281,14 @@ modules:
           typeOnly: true
       exports:
         - classifyProposal
+        - describeDerivedClaim
         - annotateConsequences
       interfaces:
         - ConsequenceEvidence
+        - DerivedClaim
       functions:
         - classifyProposal
+        - describeDerivedClaim
         - annotateConsequences
     src/composition/consistency.ts:
       description: Composition graph — shared-source consistency relations (v0.8.0
@@ -9243,10 +9315,13 @@ modules:
           typeOnly: true
       exports:
         - describeGrounding
+        - describeReadiness
       interfaces:
         - CandidateGrounding
+        - CandidateReadiness
       functions:
         - describeGrounding
+        - describeReadiness
     src/composition/identifiability.ts:
       description: Identifiability classifier (Consequence 1 of
       externalDependencies: []
@@ -16778,6 +16853,7 @@ dependencyGraph:
         - src/cli/commands/probe.ts
         - src/cli/commands/recover.ts
         - src/cli/commands/regime.ts
+        - src/cli/commands/search.ts
         - src/cli/commands/symbolic.ts
         - src/cli/errors.ts
         - src/cli/graphs.ts
@@ -16958,18 +17034,18 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 351
+  totalTypeScriptFiles: 352
   totalModules: 11
-  totalLinesOfCode: 70867
-  totalExports: 2482
+  totalLinesOfCode: 72079
+  totalExports: 2496
   totalClasses: 58
-  totalInterfaces: 362
-  totalFunctions: 568
+  totalInterfaces: 364
+  totalFunctions: 576
   totalTypeGuards: 4
   totalEnums: 0
-  totalConstants: 609
-  totalReExports: 1246
-  totalTypeOnlyImports: 490
+  totalConstants: 610
+  totalReExports: 1251
+  totalTypeOnlyImports: 491
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

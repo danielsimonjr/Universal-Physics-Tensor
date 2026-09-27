@@ -74,6 +74,7 @@ Usage:
 
   upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
           [--proposed] [--out=PATH] [--equation "TARGET = EXPR"]
+          [--around=QUANTITY [--depth=N]]
         Map how the equations LINK: connected components (clusters) of the
         graph by shared quantities, the anchored core, the link hubs, and
         the isolated tail.
@@ -88,6 +89,8 @@ Usage:
         node and reports where it lands (which cluster / shared quantities), with
         a "did you mean?" hint for names that miss the catalog vocabulary. Use
         underscores for multi-word quantities (photon_energy -> photon-energy).
+        --around=QUANTITY [--depth=N] focuses on the edges within N hops of one
+        quantity and states how many of the source's edges it kept.
         e.g.  upt map --equation "period = 2*pi*sqrt(length/gravity)"
 
   upt candidates [--source=catalog|canonical|both]
@@ -117,6 +120,9 @@ Usage:
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
         --derive consumes.
+        Each promising row states which independent falsifiers ran and which
+        abstained, and what would make it testable; --require-falsifier lists
+        only rows one of them ran on and survived.
 
   upt connectors [--source=catalog|canonical|both]
         Of the graph's ISOLATED bridges (how many depends on --source, default
@@ -170,15 +176,19 @@ Usage:
         ranks the σ-tests by margin to the 1σ acceptance threshold (a software
         criterion, not a scientific exclusion level; tightest = most at-risk under
         new data); --sensitivity ranks the prediction's input elasticities.
+        Each record names its statistical object, criterion and data origin;
+        consistency ratios (no σ) are counted apart from the σ-tests.
 
   upt axes
         Axis-discrimination audit — which tensor classification axes GATE the
         discovery funnel (an axis gates only when it MEASURABLY fires). Reproduces
         the rank-7 result (topology/statistics/symmetry classify but do not gate).
 
-  upt evaluate <be-NN> key=value ...
+  upt evaluate <be-NN> key=value ... [--sigma key=u ...] [--corr a,b=rho ...]
         Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65).
         With no bridge id, lists the evaluable bridges and their input keys.
+        --sigma/--corr propagate input uncertainties to first order, with a
+        curvature check that flags an unreliable linearization.
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_sun
               (ideal degenerate gas, with m_u and M_sun = 1.989e30 kg)
 
@@ -188,32 +198,48 @@ Usage:
         Pass the --source (and --anchor/--max-orders) of the discover run that
         listed the pair.
 
-  upt regime <family> [--at group=value ...]
+  upt regime <family> [--at group=value ...] [--assume premise] [--deny premise]
         Where in parameter space a family's models are claimed to apply. Each
         model reads valid, VIOLATED (naming the failed inequality), or UNKNOWN
-        — a coordinate --at never supplied is NOT a pass. Also prints the
+        — a coordinate --at never supplied is NOT a pass. Prose premises are
+        never evaluated: --assume records your declaration (not evidence),
+        --deny marks one contradicted, the rest stay unspecified. Also prints the
         pairwise regime overlap and, over the box --at states, the uncovered
         points. A group can be given by name (spaces ignored, * for ·) or
         through its parameters (--at tau=1 D=1 q=1 gives tau · D · q^2 = 1);
         a key no record uses is named and ignored.
         e.g.  upt regime oscillators --at theta0=0.2
 
-  upt path <from> <to> [--at group=value ...]
+  upt path <from> <to> [--at group=value ...] [--tolerance=EPS]
+           [--sweep name=lo:hi:n[:log]] [--csv]
         The chain of bridges between two models (across families when a
         bridge ends in another family's model), the relation it composes to,
         the composed (K, delta) with its norm, and whether every bridge's regime
         and every horizon still holds at --at (a bound outside its regime is
         not claimed). When the composition table declines to compose, the path
         carries no bound: it prints 'no composite claim', names what composing
-        would need, and exits 0.
+        would need, and exits 0. --sweep evaluates the same verdict at 2–200
+        samples of one parameter (a row outside a regime or past a horizon
+        carries no error); --csv writes the rows as CSV. --tolerance=EPS judges
+        adequacy in the bound's own norm (exit 3 if inadequate); no translation
+        to another observable, such as phase, is encoded.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
+              upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
 
-  upt atlas [<bridge-id>]
+  upt atlas [<bridge-id>] [--run]
         One atlas bridge with EVERY qualification visible: relation, side
         conditions, regime, bound and horizon, witnesses, counterexamples and
-        formal reference. Empty sections print as "none stated". With no id,
-        lists every bridge of every family.
+        formal reference. Empty sections print as "none stated". Evidence is
+        shown by claim, and each witness with its execution status; --run
+        executes the in-process registered witnesses (exit 3 if refuted).
+        With no id, lists every bridge of every family.
         e.g.  upt atlas ab-pendulum-linear
+
+  upt search <word> ...
+        Find a catalog bridge, canonical equation, atlas model or bridge, or
+        quantity by name, id, symbol, alias or description, with the command
+        that inspects each. An equal dimension is never a match.
+        e.g.  upt search thermal noise
 
   upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>
         Experimental expression/residual search (Product B). Orthogonal to

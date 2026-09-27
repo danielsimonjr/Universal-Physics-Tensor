@@ -154,6 +154,17 @@ export interface VettedCandidate {
    */
   readonly magnitudeAnchorInvariant?: boolean;
   /**
+   * The endpoints with no representative magnitude (neither in the sourced
+   * table nor valued at the anchor) — why the magnitude gate abstained. Empty
+   * when it ran. Optional on the type; the funnel always sets it.
+   */
+  readonly magnitudeMissing?: readonly string[];
+  /**
+   * Per gate axis that abstained, the endpoints that state no value on it —
+   * why the axis gate had nothing to compare. Optional; the funnel always sets it.
+   */
+  readonly axisUnstated?: readonly { readonly axis: string; readonly endpoints: readonly string[] }[];
+  /**
    * One endpoint name's hyphen-token set is a strict subset of the other's
    * (`mass` ⊂ `reference-mass`) — a generic↔specific identification of the
    * same KIND. Near-tautological (identifying a generic quantity with one of
@@ -461,6 +472,7 @@ function vetInContext(
   const attrsB = effectiveAttributes(candidate.b, attributesByName, baseIdents);
   const checkedAxes: string[] = [];
   const axisClashes: string[] = [];
+  const axisUnstated: { axis: string; endpoints: string[] }[] = [];
   // GATE_AXES is registry-derived (string[]); every registry axis name is a
   // RegimeAttributes key whose value is a string union — read via a string record.
   const recA = attrsA as Record<string, string | undefined>;
@@ -468,7 +480,15 @@ function vetInContext(
   for (const axis of GATE_AXES) {
     const av = recA[axis];
     const bv = recB[axis];
-    if (av === undefined || bv === undefined) continue; // abstain
+    if (av === undefined || bv === undefined) {
+      axisUnstated.push({
+        axis,
+        endpoints: [av === undefined ? candidate.a : null, bv === undefined ? candidate.b : null].filter(
+          (e): e is string => e !== null,
+        ),
+      });
+      continue; // abstain
+    }
     checkedAxes.push(axis);
     if (av !== bv) axisClashes.push(`${axis}: ${av} ≠ ${bv}`);
   }
@@ -552,6 +572,10 @@ function vetInContext(
     magnitudeChecked,
     magnitudeUsedAnchor,
     magnitudeAnchorInvariant,
+    magnitudeMissing: [va === undefined ? candidate.a : null, vb === undefined ? candidate.b : null].filter(
+      (e): e is string => e !== null,
+    ),
+    axisUnstated,
     subsuming,
     verdict,
     score,

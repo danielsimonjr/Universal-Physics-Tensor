@@ -8,17 +8,37 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       nu = \frac{k_B \cdot ln2 \cdot temperature}{h}      [frequency]  ≈ 4.33e+12 (temperature=300 [room temperature, 300 K])
       from: erasure-energy ≟ photon-energy  (CE-landauer = CE-planck-einstein); solved for nu
       also derivable from: landauer-erasure-energy ≡ photon-energy
+      status: conditional identity — holds only if erasure-energy ≡ photon-energy (unadjudicated); untested
+      meaning: nu is the nu of CE-planck-einstein (Planck–Einstein relation): the nu for which photon-energy equals erasure-energy (CE-landauer) — an equal-[energy] scale; the erasure-energy side is not given a nu
+      assumptions carried: CE-landauer: isothermal, quasi-static erasure; CE-planck-einstein: none stated
+      canonical match: none — 0 registry equation(s) target nu, 0 with governing {temperature}; scope: this registry only, not physics at large
   IC-photon-energy--rest-energy--mass
       mass = \frac{h \cdot nu}{c^{2}}      [mass]  (no sourced sample value for nu; not evaluated)
       from: rest-energy ≟ photon-energy  (CE-planck-einstein = CE-mass-energy); solved for mass
+      status: conditional identity — holds only if rest-energy ≡ photon-energy (unadjudicated); untested
+      meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals photon-energy (CE-planck-einstein) — an equal-[energy] scale; the photon-energy side is not given a mass
+      assumptions carried: CE-planck-einstein: none stated; CE-mass-energy: rest energy of a massive body
+      canonical match: none — 0 registry equation(s) target mass, 0 with governing {nu}; scope: this registry only, not physics at large
   IC-dark-fermion-mass--erasure-energy--temperature
       temperature = \frac{vacuum-expectation-value \cdot yukawa-coupling}{k_B \cdot ln2}      [temperature]  (no sourced sample value for yukawa-coupling; not evaluated)
       from: dark-fermion-mass ≟ erasure-energy  (BE-18 = CE-landauer); solved for temperature
       also derivable from: landauer-erasure-energy ≡ dark-fermion-mass
+      status: conditional identity — holds only if dark-fermion-mass ≡ erasure-energy (unadjudicated); untested
+      meaning: temperature is the temperature of CE-landauer (Landauer erasure bound): the temperature for which erasure-energy equals ? (undefined) — an equal-[energy] scale; the ? side is not given a temperature
+      assumptions carried: CE-landauer: isothermal, quasi-static erasure
+      canonical match: none — 0 registry equation(s) target temperature, 0 with governing {yukawa-coupling, vacuum-expectation-value}; scope: this registry only, not physics at large
   IC-dark-fermion-mass--rest-energy--mass
       mass = \frac{vacuum-expectation-value \cdot yukawa-coupling}{c^{2}}      [mass]  (no sourced sample value for yukawa-coupling; not evaluated)
       from: dark-fermion-mass ≟ rest-energy  (BE-18 = CE-mass-energy); solved for mass
+      status: conditional identity — holds only if dark-fermion-mass ≡ rest-energy (unadjudicated); untested
+      meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals ? (undefined) — an equal-[energy] scale; the ? side is not given a mass
+      assumptions carried: CE-mass-energy: rest energy of a massive body
+      canonical match: none — 0 registry equation(s) target mass, 0 with governing {yukawa-coupling, vacuum-expectation-value}; scope: this registry only, not physics at large
   IC-hubble-distance--peak-wavelength--temperature
       temperature = \frac{b \cdot hubble-rate}{c}      [temperature]  ≈ 2.13e-29 (hubble-rate=2.2e-18 [H0 ≈ 67 km/s/Mpc (Planck 2018)])
       from: hubble-distance ≟ peak-wavelength  (CE-hubble-distance = CE-wien); solved for temperature
+      status: conditional identity — holds only if hubble-distance ≡ peak-wavelength (unadjudicated); untested
+      meaning: temperature is the temperature of CE-wien (Wien's displacement law): the temperature for which peak-wavelength equals hubble-distance (CE-hubble-distance) — an equal-[length] scale; the hubble-distance side is not given a temperature
+      assumptions carried: CE-hubble-distance: present-epoch Hubble parameter; CE-wien: blackbody, thermal equilibrium
+      canonical match: none — 0 registry equation(s) target temperature, 0 with governing {hubble-rate}; scope: this registry only, not physics at large
 
