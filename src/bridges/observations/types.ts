@@ -122,7 +122,16 @@ export type ConfrontationOutcome = ConfrontationDataHandling & (
       readonly kind: 'consistency';
       readonly predicted: number;
       readonly approaches: number;
+      /** Holds what `fractionalGapIs` says; the name predates that split. */
       readonly fractionalGap: number;
+      /**
+       * `'agreement-bound'`: `fractionalGap` is the record's stated tolerance
+       * on |observed − predicted|/|predicted|, NOT a measured difference.
+       * `'observed-difference'`: it is the difference itself, and the outcome
+       * carries no agreement bound. `consistencyComparison` computes the
+       * difference either way.
+       */
+      readonly fractionalGapIs: 'agreement-bound' | 'observed-difference';
       readonly units: string;
       readonly provenance: ObservationProvenance;
     }
@@ -146,6 +155,40 @@ export function residualInSigma(predicted: number, observed: number, sigma: numb
     throw new RangeError('residualInSigma: sigma must be finite and > 0');
   }
   return Math.abs(predicted - observed) / sigma;
+}
+
+/** A consistency outcome's actual difference, kept apart from its agreement bound. @public */
+export interface ConsistencyComparison {
+  /** (observed − predicted) / predicted, signed; "observed" is the outcome's `approaches`. */
+  readonly relativeDifference: number;
+  readonly definition: '(observed − predicted) / predicted';
+  /** The record's stated tolerance on |relativeDifference|; null when the outcome carries none. */
+  readonly agreementBound: number | null;
+  /** |relativeDifference| ≤ agreementBound; null when there is no bound to decide against. */
+  readonly withinBound: boolean | null;
+}
+
+/**
+ * The actual difference of a consistency outcome, computed from its own
+ * predicted and observed values, and the compatibility decision against its
+ * agreement bound when it has one.
+ *
+ * @public
+ */
+export function consistencyComparison(
+  o: Extract<ConfrontationOutcome, { kind: 'consistency' }>,
+): ConsistencyComparison {
+  if (!(Number.isFinite(o.predicted) && o.predicted !== 0)) {
+    throw new RangeError('consistencyComparison: predicted must be finite and nonzero');
+  }
+  const relativeDifference = (o.approaches - o.predicted) / o.predicted;
+  const agreementBound = o.fractionalGapIs === 'agreement-bound' ? o.fractionalGap : null;
+  return {
+    relativeDifference,
+    definition: '(observed − predicted) / predicted',
+    agreementBound,
+    withinBound: agreementBound === null ? null : Math.abs(relativeDifference) <= agreementBound,
+  };
 }
 
 /** Combined 1σ from named components (root-sum-square). @public */

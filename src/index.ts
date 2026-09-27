@@ -772,8 +772,13 @@ export type { VettedCandidate } from './composition/discovery.js';
 // observations + a normalized ConfrontationOutcome (discriminated on `kind`)
 // wrap the per-bridge confrontation modules (be-23/36/37/48/52) behind one
 // registry, plus deciding-measurement elasticity for value-kind entries.
-export { residualInSigma, combineInQuadrature } from './bridges/observations/types.js';
+export {
+  residualInSigma,
+  combineInQuadrature,
+  consistencyComparison,
+} from './bridges/observations/types.js';
 export type {
+  ConsistencyComparison,
   ObservationProvenance,
   SigmaComponent,
   ObservationKind,

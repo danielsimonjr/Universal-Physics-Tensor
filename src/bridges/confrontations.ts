@@ -297,6 +297,7 @@ const be21Entry: ConfrontationEntry = {
       predicted: r.predicted_bound,
       approaches: r.observed_eta_over_s,
       fractionalGap: r.fractional_gap,
+      fractionalGapIs: 'observed-difference',
       units: 'η/s (ℏ/k_B units); KSS lower bound 1/(4π), observed satisfies + nearly saturates',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -357,6 +358,7 @@ const be11Entry: ConfrontationEntry = {
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
       fractionalGap: r.fractional_gap,
+      fractionalGapIs: 'observed-difference',
       units:
         'p₀(theory)/p₀(exp) ratio; parameter-free 9-gas agreement within 15% experimental error',
       provenance: r.observation.provenance,
@@ -387,6 +389,7 @@ const be55Entry: ConfrontationEntry = {
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
       fractionalGap: r.relative_uncertainty,
+      fractionalGapIs: 'agreement-bound',
       units: 'R_H(graphene)/R_H(GaAs) ratio; topological universality to 8.6e-11',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -416,6 +419,7 @@ const be56Entry: ConfrontationEntry = {
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
       fractionalGap: r.agreement,
+      fractionalGapIs: 'agreement-bound',
       units: 'measured/theory force ratio; ~1% agreement (corrected theory, systematics-dominated)',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -467,6 +471,7 @@ const be59Entry: ConfrontationEntry = {
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
       fractionalGap: r.relative_uncertainty,
+      fractionalGapIs: 'agreement-bound',
       units: 'V(junction A)/V(junction B) ratio; Josephson-volt universality to ~1e-9',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -496,6 +501,7 @@ const be60Entry: ConfrontationEntry = {
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
       fractionalGap: r.relative_uncertainty,
+      fractionalGapIs: 'agreement-bound',
       units: 'R_xy(plateau)/(3·R_K) ratio; the ⅓ fraction (topological order) to ~1e-5',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -525,6 +531,7 @@ const be61Entry: ConfrontationEntry = {
       predicted: r.predicted_L0,
       approaches: r.observed_L,
       fractionalGap: r.agreement,
+      fractionalGapIs: 'agreement-bound',
       units: 'Lorenz number L (W·Ω·K⁻²); degenerate-limit consistency, material spread ~10% (caveat)',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -555,6 +562,7 @@ const be62Entry: ConfrontationEntry = {
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
       fractionalGap: r.agreement,
+      fractionalGapIs: 'agreement-bound',
       units: '2Δ(0)/k_BT_c; weak-coupling class ~3.5, strong-coupling to ~4.3 (caveat)',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -584,6 +592,7 @@ const be63Entry: ConfrontationEntry = {
       predicted: r.predicted_solar,
       approaches: r.observed_solar,
       fractionalGap: r.agreement,
+      fractionalGapIs: 'agreement-bound',
       units: 'M_⊙; WD max ~1.35 vs M_Ch~1.44 (upper-bound; super-Chandrasekhar SNe caveat)',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -613,6 +622,7 @@ const be64Entry: ConfrontationEntry = {
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
       fractionalGap: r.agreement,
+      fractionalGapIs: 'agreement-bound',
       units: 'peak L/L_Edd (order unity; super-Eddington ULX caveat)',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -637,6 +647,7 @@ const be65Entry: ConfrontationEntry = {
       predicted: r.predicted_solar,
       approaches: r.observed_solar,
       fractionalGap: r.agreement,
+      fractionalGapIs: 'agreement-bound',
       units: 'M_⊙; order-of-magnitude collapse scale (convention-dependent prefactor caveat)',
       provenance: r.observation.provenance,
       preprocessing: {

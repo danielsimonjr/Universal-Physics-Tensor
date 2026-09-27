@@ -68,6 +68,7 @@ export {
   rigorDistribution,
 } from './bridges/confrontations.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
+export { consistencyComparison } from './bridges/observations/types.js';
 export type { ConfrontationOutcome } from './bridges/observations/types.js';
 export { decidingMeasurement } from './bridges/sensitivity.js';
 // Bridge-evaluator dispatch (`upt evaluate`) + axis-discrimination audit (`upt axes`).
