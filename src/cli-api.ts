@@ -181,7 +181,7 @@ export type { ObservableTranslation } from './atlas/translation.js';
 export type { AtlasFamily } from './atlas/oscillators/index.js';
 export { regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
-export { findPath, findAtlasPath, boundPath } from './atlas/path-bound.js';
+export { findPath, findAtlasPath, enumerateAtlasRoutes, boundPath } from './atlas/path-bound.js';
 export { composeRelation } from './atlas/composition-table.js';
 export type { PathBoundResult, PathBoundClaim, PathNoClaim } from './atlas/path-bound.js';
 export type { AtlasBridge, RegimeInequality } from './atlas/types.js';
