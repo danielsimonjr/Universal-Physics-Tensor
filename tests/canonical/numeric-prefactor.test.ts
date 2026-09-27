@@ -63,9 +63,9 @@ describe('canonical universal-constant resolution (h, b register correctly)', ()
     expect(rel(got, H_SI / 1e-24)).toBeLessThan(1e-12);
   });
 
-  it('Wien λ_max = b/temperature resolves b from CONSTANTS (~501 nm at the Sun)', () => {
+  it('Wien λ_max = b/T resolves b from CONSTANTS (~501 nm at the Sun)', () => {
     const ast = canonicalById('CE-wien')!.scalarAst!;
-    const got = evalExpr(ast, { temperature: 5778 });
+    const got = evalExpr(ast, { T: 5778 });
     expect(rel(got, B_WIEN_SI / 5778)).toBeLessThan(1e-12);
     expect(got).toBeGreaterThan(4.9e-7);
     expect(got).toBeLessThan(5.1e-7);
