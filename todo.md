@@ -31,31 +31,47 @@
   (1 µm radius ≡ 2 µm diameter) is shown on the resolver, not the CLI. `CE-stokes-einstein` is encoded
   only up to its 6π, so it cannot back an evaluator as it stands.
 - [x] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
-- [ ] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
-  Partial: `path --tolerance` judges adequacy in the bound's OWN norm, after regime and horizon.
-  Open: a tolerance in ANOTHER observable (pendulum phase from the period error) needs a reviewed
-  per-bridge translation in the atlas record; the CLI says none is encoded rather than inventing one.
+- [x] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
+  `path --tolerance=EPS` judges in the bound's own norm; `--tolerance=phase:EPS` gives a phase
+  horizon through the one declared translation (`ab-pendulum-linear`), witnessed by W7p. Not encoded:
+  the pointwise position error, amplitude, multi-bridge paths and every other bridge. W7p runs at its
+  fixture θ0 = 0.2, not at the user's point.
 - [x] **I9** Uncertainty propagation with covariance, distinct from sensitivity.
 - [x] **I11** Discovery ranking by evidential readiness dimensions.
 - [x] **I12** Premise and novelty status inseparable from every exported derived relation.
-- [ ] **I14** Confrontation records expose the statistical object, preprocessing and independence for every record.
-  Partial: every record names its statistical object, criterion and data origin, plus its notes.
-  Open: preprocessing and independence are not recorded fields of a confrontation outcome, so they
-  cannot be printed without first being encoded per record, with sources.
+- [x] **I14** Confrontation records expose the statistical object, preprocessing and independence for every record.
+  Preprocessing and independence are required fields, each sourced or explicitly not recorded (counts
+  in `NOTES.md`). The `source` of a recorded statement is free text: a test checks it is present,
+  not that it is accurate.
+- [ ] **Confrontation gap label** — for be-56 and be-61…be-65, `confront` prints the agreement
+  tolerance as the "gap". Relabel it or add the actual observed−predicted difference; the frozen
+  confrontation-numbers golden pins the current values, so this needs review.
+- [ ] **Atlas equation links** — 17 of 24 atlas models record no `canonicalRefs` (e.g. `model-pendulum`
+  lacks `CE-pendulum-period`). Adding links is atlas data and needs review.
 - [x] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
   The record attributes no witness to a claim, so none is cited under one; attributing witnesses to
   claims is atlas data and needs review.
-- [ ] **I16** Focused (neighborhood/route/family) map exports.
-  Partial: `map --around=Q --depth=N` gives the neighbourhood view with its denominator. Open: route and
-  family views, and a map that joins the atlas models to the equation graph.
-- [ ] **I17** Session export and replay.
-  Still open: needs a design for the record (inputs, versions, parser, constants) and for what a replay
-  diff means. `probe reproduce` covers only the probe workflow.
+- [x] **I16** Focused (neighborhood/route/family) map exports.
+  `map --around`, `--route=FROM,TO` and `--family=NAME`; models join the equation graph only through
+  their recorded `canonicalRefs`. The route view shows only the shortest route by bridge count, and
+  evidence tags that need a passing witness are always "undecided" there.
+- [x] **I17** Session export and replay (`--record`, `--show-record`, `--replay`).
+  Limits: only `src/core/constants.ts` is fingerprinted; replay names what changed but cannot say
+  whether it caused a difference; recorded arguments carry no hash, so an edited argument shows as
+  "differs" with no integrity finding; `map --out` and the timed `probe` subverbs are not replayable;
+  the builtin-parser path was not exercised.
 - [x] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
   The comparison is the closed-form exact error per row. A sweep of the telegraph family showing where
   NEITHER limit applies needs two paths side by side, which is not done.
-- [ ] **I19** Real-data, falsification-oriented probe workflow.
-- [ ] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
+- [x] **I19** Real-data, falsification-oriented probe workflow (`probe study --data=FILE`).
+  The pendulum controls are positive controls whose law was chosen knowing the answer: they show the
+  workflow can recover and refute a law, not that it finds an unknown one. Open: CSV input, σ on the
+  inputs, and a search beyond monomials of the dimensioned inputs. Replication independence is
+  checked only by the `source` string within one file.
+- [x] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
+  `upt evaluate case-<id>`. Open: the hydrodynamic-memory coefficient (only its order is checked),
+  amplifier noise, Faxén wall corrections, and cases for the electromagnetic, thermodynamic and
+  astrophysical models the audit also names.
 - [x] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
 
 ## TypeScript-on-Bun migration (in flight)

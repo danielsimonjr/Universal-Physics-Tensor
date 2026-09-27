@@ -51,6 +51,45 @@ from v0.1.0 onward.
     A σ in degC is a difference and takes no offset. An undeclared key now exits 1; before this it was
     ignored. `major_axis_m` is a declared, exact alternate of `a_m`. A test checks every declared unit
     against the unit named by its key's suffix.
+  - **I8 (rest)** — `upt path … --tolerance=phase:EPS` judges a phase tolerance through a declared
+    per-bridge observable translation (`src/atlas/translation.ts`; `ab-pendulum-linear` only):
+    Δφ(t) = 2π(t/T0)·ε/(1+ε), exact in the bound's ε, giving a phase horizon t* = Δ·T0·(1+ε)/(2πε).
+    ADEQUATE iff t ≤ t* (inclusive), INADEQUATE (exit 3) beyond it. The period error at the point,
+    the domain supremum, the accumulated phase, t* and the threshold's origin are reported apart;
+    regime and the bridge's own horizon still gate the verdict. The translation's evidence is derived
+    per call by running witness W7p (RK4 of both motions), is kept apart from the bound's, and carries
+    no formal reference. Any other observable, bridge or multi-bridge path answers UNDETERMINED,
+    "no translation … is encoded".
+  - **I14 (rest)** — every confrontation outcome requires `preprocessing` (recorded | not-recorded)
+    and `independence` (no-fitted-parameter | shares-input | not-recorded). Each recorded state names
+    the record note, citation, module doc or code it restates; nothing was added from outside the
+    repo. `confront` prints both for all 19 records, the not-recorded state included, and counts them
+    apart.
+  - **I16 (rest)** — `upt map --route=FROM,TO` shows the route `upt path` reports: each bridge's
+    relation, assumptions, regime, bound and derived evidence, the composition folded step by step
+    with the silent cell named, and each model's equations as recorded in its `canonicalRefs`.
+    `upt map --family=NAME` shows a family's models, filed and touching bridges (counted apart) and
+    rejections; its `--evidence` filter counts "undecided" (depends on witness results) apart from
+    "did not match". Both state their denominator and source in text, JSON and diagrams.
+  - **I17** — `upt --record=FILE <command>` appends each invocation, failures included, to a JSONL
+    session record: arguments, streams and their SHA-256, exit code, package/Node/parser/peer
+    versions and the constant table with its fingerprint. `--show-record` prints it; `--replay`
+    re-runs it and reports each entry reproduced / differs (naming the stream and first differing
+    line) / not replayable, with changed environment facts and record-integrity findings beside it.
+    Design in `docs/planning/Experiment-Record-Replay-Design-Note.md`.
+  - **I19** — `upt probe study --data=FILE [--alpha=X]`: calibrated observations with units, σ,
+    exploratory / holdout / replication roles and required `synthetic` provenance; leakage refusals;
+    the search sees only exploratory rows; χ² verdicts at a stated α against a constant null model and
+    declared baselines, kept apart as no-credible-candidate / refuted-on-holdout / survives-holdout /
+    untested-on-holdout; replication reported separately; a discriminating-measurement suggestion
+    from exploratory fits only. `rad` and `deg` added to the unit parser.
+  - **I20** — three applied cases through `upt evaluate case-<id>`: resistor thermal noise over a band
+    with instrument loading, a Brownian sphere by radius or diameter in a stated fluid, and a damped
+    resonator read from a finite record. Each states its parent and scalar equations, observable,
+    conditions, regime checks (a violation exits 3, outputs marked NOT QUALIFIED), effects not
+    included, and a route to measurement; every number is checked by a second method in its tests.
+    The farad added to the unit parser. `CE-stokes-einstein` stays encoded up to its 6π; the case
+    takes the 6π from Stokes drag and says so.
 
 - **CLI-only applied-physics audit archive** (2026-09-26): preserve the model-persona report,
   original command evidence and maps under `docs/audit/`, including prioritized improvement
