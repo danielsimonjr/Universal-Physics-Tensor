@@ -76,7 +76,7 @@ function escapeRegExp(s: string): string {
  * `hawking-temperature` wins over `temperature`. Names without a hyphen are
  * left alone. Pure.
  *
- * @public
+ * @internal
  */
 export function rewriteCatalogHyphens(
   text: string,
