@@ -198,9 +198,7 @@ export const THERMO_NUCLEAR_COSMO: readonly CanonicalEquation[] = [
     domain: 'thermodynamics',
     formula_latex: '\\lambda_{max} = b/T',
     epistemicStatus: 'fully-quantitative',
-    // Governing name is `temperature`; keep the AST symbol identical so latex `T`
-    // is only a display alias (persona L4 — users type T, resolve maps it here).
-    scalarAst: op('/', [sym('b', WIEN_B), sym('temperature', dim(0, 0, 0, 0, 1))]),
+    scalarAst: op('/', [sym('b', WIEN_B), sym('T', dim(0, 0, 0, 0, 1))]),
     regime: { scale: 'classical', force: 'electromagnetic' },
     assumptions: ['blackbody', 'thermal equilibrium'],
     references: ['Wien 1893'],
