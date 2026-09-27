@@ -132,6 +132,34 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
   });
 });
 
+describe('F12 — symbolic output groups every denominator and round-trips through eval', () => {
+  it('CT-1b shows its whole denominator grouped', async () => {
+    const { text } = await run(['symbolic']);
+    expect(text).toMatch(/hawking-temperature\(mass\) = hbar·c \/ \(4pi·k_B·\(2·G·mass \/ c\^2\)\)/);
+    expect(text).not.toMatch(/hbar·c \/ 4pi·/);
+  });
+
+  for (const simplify of [false, true]) {
+    it(`every printed eval form reproduces its value${simplify ? ' (--simplify)' : ''}`, async () => {
+      const c = capture();
+      await runCli(['symbolic', '--json', ...(simplify ? ['--simplify'] : [])], c.io);
+      const rows = JSON.parse(c.lines.join('')).result as { value: number; evalForm: { formula: string; bindings: string[] } }[];
+      expect(rows).toHaveLength(2);
+      for (const row of rows) {
+        const e = capture();
+        expect(await runCli(['eval', row.evalForm.formula, ...row.evalForm.bindings, '--json'], e.io)).toBe(0);
+        const value = JSON.parse(e.lines.join('')).result.value as number;
+        expect(Math.abs(value / row.value - 1)).toBeLessThan(1e-12);
+      }
+    });
+  }
+
+  it('the text view prints the eval form as a runnable command', async () => {
+    const { text } = await run(['symbolic']);
+    expect(text).toMatch(/eval form: {2}upt eval "hbar\*c\/\(\(4\*pi\)\*k_B\*\(2\*G\*mass\/c\^2\)\)" .*mass=1\.989e\+?30/);
+  });
+});
+
 describe('top-level help agrees with the commands it summarizes', () => {
   it('confront: margin to the acceptance threshold, not "to exclusion" (F07)', async () => {
     const { text } = await run(['help']);

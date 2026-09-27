@@ -19,23 +19,93 @@ const HELP = `upt symbolic [--simplify]
         evaluators (the Observable contract). Shows the CT-1 / CT-1b chains
         composed by substitution, dimensionally validated and evaluable.
         With --simplify, folds the composed AST via MathTS (k_B cancels),
-        re-validated dimensionally + numerically.`;
+        re-validated dimensionally + numerically. Each chain also prints an
+        'eval form': a runnable \`upt eval\` command, fully grouped, that
+        reproduces the printed value.`;
+
+interface PrintStyle {
+  readonly times: string;
+  readonly divide: string;
+  readonly symbol: (name: string) => string;
+}
+
+const DISPLAY: PrintStyle = { times: '·', divide: ' / ', symbol: (name) => name };
+
+/** Named numeric stubs spelled so `upt eval` parses them. */
+const EVAL_STUBS: Readonly<Record<string, string>> = {
+  '8pi': '(8*pi)',
+  '4pi': '(4*pi)',
+  '2pi': '(2*pi)',
+  ln2: 'ln(2)',
+};
+const EVAL: PrintStyle = { times: '*', divide: '/', symbol: (name) => EVAL_STUBS[name] ?? name };
+
+/**
+ * Precedence-aware printing. Every divisor that is not a bare power is
+ * grouped, so `a / (b·c)` never prints as `a / b·c` (audit F12); a quotient
+ * inside a product or as a dividend is grouped too, for the reader.
+ */
+function printExpr(n: ExprNode, style: PrintStyle): string | null {
+  if (n.kind === 'symbol') return style.symbol(n.name);
+  if (n.kind !== 'op') return null;
+  const parts: string[] = [];
+  for (let i = 0; i < n.args.length; i++) {
+    const a = n.args[i]!;
+    const s = printExpr(a, style);
+    if (s === null) return null;
+    const aOp = a.kind === 'op' ? a.op : null;
+    const group =
+      aOp !== null &&
+      (n.op === '^'
+        ? true
+        : n.op === '/'
+          ? i === 0
+            ? aOp === '+' || aOp === '-' || aOp === '/'
+            : aOp !== '^'
+          : n.op === '*'
+            ? aOp === '+' || aOp === '-' || aOp === '/'
+            : n.op === '-' && i > 0 && (aOp === '+' || aOp === '-'));
+    parts.push(group ? `(${s})` : s);
+  }
+  const sep = n.op === '*' ? style.times : n.op === '/' ? style.divide : n.op === '^' ? '^' : ` ${n.op} `;
+  return parts.join(sep);
+}
 
 function exprToString(n: ExprNode): string {
-  if (n.kind === 'symbol') return n.name;
-  if (n.kind === 'op') {
-    if (n.op === '^') return `${exprToString(n.args[0])}^${exprToString(n.args[1])}`;
-    const sep = n.op === '*' ? '·' : ` ${n.op} `;
-    const inner = n.args
-      .map((a) => {
-        const s = exprToString(a);
-        return a.kind === 'op' && (a.op === '+' || a.op === '-' || a.op === '/') ? `(${s})` : s;
-      })
-      .join(sep);
-    return inner;
-  }
-  return `⟨${n.kind}⟩`;
+  return printExpr(n, DISPLAY) ?? `⟨${n.kind}⟩`;
 }
+
+/**
+ * The composed formula as a runnable `upt eval` input, with every constant
+ * and leaf bound, so copying it reproduces the printed value. `null` when the
+ * AST holds a node the scalar evaluator cannot take.
+ */
+function evalFormOf(
+  n: ExprNode,
+  constants: CommandCtx['api']['CONSTANTS'],
+  point: Readonly<Record<string, number>>,
+): { formula: string; bindings: string[] } | null {
+  const formula = printExpr(n, EVAL);
+  if (formula === null) return null;
+  const names: string[] = [];
+  const collect = (e: ExprNode): void => {
+    if (e.kind === 'symbol') {
+      if (!names.includes(e.name)) names.push(e.name);
+    } else if (e.kind === 'op') e.args.forEach(collect);
+  };
+  collect(n);
+  const bindings: string[] = [];
+  for (const name of names) {
+    if (name in EVAL_STUBS || Number.isFinite(Number(name))) continue;
+    const value = constants[name]?.value ?? point[name];
+    if (value === undefined) return null;
+    bindings.push(`${name}=${value}`);
+  }
+  return { formula, bindings };
+}
+
+const showEvalForm = (f: { formula: string; bindings: string[] } | null): string =>
+  f === null ? 'none (a node the scalar evaluator cannot take)' : `upt eval "${f.formula}" ${f.bindings.join(' ')}`;
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -59,7 +129,8 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   for (const { first, second, label } of chains) {
     const obs = api.composeSymbolic(first, second);
-    const num = obs.evaluate({ mass: api.M_SUN_KG });
+    const point = { mass: api.M_SUN_KG };
+    const num = obs.evaluate(point);
 
     if (!isJson) {
       out(`  ● ${label}`);
@@ -75,6 +146,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           name: s.name,
           leaves: s.leaves,
           expr: exprToString(s.expr),
+          evalForm: evalFormOf(s.expr, api.CONSTANTS, point),
           dim: api.format(s.dim),
           value: sNum,
           simplified: true,
@@ -82,6 +154,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       } else {
         const tag = s.expr === obs.expr ? '  (unchanged — minimal, MathTS absent, or not reducible here)' : '';
         out(`      simplified: ${s.name}(${s.leaves.join(',')}) = ${exprToString(s.expr)}${tag}`);
+        out(`      eval form:  ${showEvalForm(evalFormOf(s.expr, api.CONSTANTS, point))}`);
         out(`      value @ mass = M_sun:  ${sNum.toExponential(4)}  (= composed, ${api.format(s.dim)})`);
       }
     } else if (isJson) {
@@ -90,10 +163,12 @@ async function run(ctx: CommandCtx): Promise<number> {
         name: obs.name,
         leaves: obs.leaves,
         expr: exprToString(obs.expr),
+        evalForm: evalFormOf(obs.expr, api.CONSTANTS, point),
         dim: api.format(obs.dim),
         value: num,
       });
     } else {
+      out(`      eval form:  ${showEvalForm(evalFormOf(obs.expr, api.CONSTANTS, point))}`);
       out(`      dimension: ${api.format(obs.dim)}   (validated on the composed AST)`);
       out(`      value @ mass = M_sun:  ${num.toExponential(4)}`);
     }
