@@ -342,6 +342,7 @@ describe('I8 — a phase tolerance gets a phase-based horizon through the declar
     const ev = env.result.tolerance.evidence;
     expect(ev.tags).toEqual(['numerically-supported']);
     expect(ev.witnesses).toEqual([expect.objectContaining({ id: 'W7p', status: 'checked' })]);
+    expect(ev.carriages).toEqual([]);
     expect(ev.note).toMatch(/distinct from the bound's; it carries no formal reference/);
   });
 
@@ -360,11 +361,14 @@ describe('I8 — a phase tolerance gets a phase-based horizon through the declar
     expect(env.result.tolerance.horizon).toBeUndefined();
   });
 
-  it('a multi-bridge path and an undeclared observable refuse the same way', async () => {
-    const lc = await run(['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.3', 'T0=2', 't=1', '--tolerance=phase:0.1']);
-    expect(lc.text).toMatch(/UNDETERMINED — no translation into 'phase' is encoded for a path of 2 bridges/);
+  it('a later bridge without a carriage of the observable, and an undeclared observable, refuse the same way', async () => {
+    const lc = await run(['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.3', 'T0=2', 't=1', '--tolerance=position:0.1']);
+    expect(lc.code).toBe(0);
+    expect(lc.text).toMatch(
+      /UNDETERMINED — ab-pendulum-linear's translation into 'position' does not reach the end of this path: 'ab-spring-lc' declares no carriage of 'position' through its map/,
+    );
     const amp = await run([...PHASE_AT, 't=1', '--tolerance=amplitude:0.1']);
-    expect(amp.text).toMatch(/UNDETERMINED — no translation from 'relative period error, normalized by the value of the reduced model' into 'amplitude' is encoded for ab-pendulum-linear \(it declares: phase\)/);
+    expect(amp.text).toMatch(/UNDETERMINED — no translation from 'relative period error, normalized by the value of the reduced model' into 'amplitude' is encoded for ab-pendulum-linear \(it declares: phase, position\)/);
   });
 
   it('a sweep judges each row through the translation', async () => {
@@ -381,6 +385,186 @@ describe('I8 — a phase tolerance gets a phase-based horizon through the declar
     const r = await run([...PHASE_AT, '--tolerance=phase:']);
     expect(r.code).toBe(1);
     expect(r.text).toMatch(/--tolerance=phase: must be a finite number > 0/);
+  });
+});
+
+const LC_AT = ['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.3', 'T0=2'];
+
+describe("I8 — the translation's witness runs at the caller's point as well as the fixture", () => {
+  it('both are reported: W7p at the fixture θ0 = 0.2, W7p@point at θ0 = 0.3, with a control refuted there', async () => {
+    const tol = (await json([...PHASE_AT, 't=1', '--tolerance=phase:0.1'])).result.tolerance;
+    expect(tol.evidence.witnesses[0]).toMatchObject({ id: 'W7p', status: 'checked', claim: expect.stringMatching(/θ0 = 0\.2 /) });
+    expect(tol.pointWitness).toMatchObject({ id: 'W7p@point', status: 'checked', claim: expect.stringMatching(/θ0 = 0\.3 \(recovered from ε\)/) });
+    expect(tol.pointWitness.control).toMatchObject({ status: 'refuted', discriminates: true });
+  });
+
+  it('where the control cannot fail at this point, the text says so rather than implying it can', async () => {
+    const r = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.01', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    expect(r.text).toMatch(/control W7p@point-control \[.*\]: checked — NOT refuted: at this point the witness cannot tell the wrong map from the declared one/);
+    const tiny = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.001', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    expect(tiny.text).toMatch(/witness at this point: not run — the drift within 512 T0 at θ0 = 0\.001 is [\d.e-]+ rad, below the 0\.01 rad this witness resolves/);
+  });
+
+  it('a sweep reports the point witness per judged row', async () => {
+    const env = await json(['path', 'model-pendulum', 'model-spring', '--at', 'T0=1', 't=10', '--sweep', 'theta0=0.1:0.8:3', '--tolerance=phase:0.5']);
+    expect(env.result.rows.map((r: any) => r.pointWitness?.status ?? null)).toEqual(['checked', 'checked', null]);
+  });
+
+  it('a point witness refuted at this point withdraws the verdict to undetermined', async () => {
+    const api = await import('../../dist/cli-api.js');
+    const { judgeAtPoint } = await import('../../dist/cli/commands/path.js');
+    const [phase] = api.translationsOf('ab-pendulum-linear');
+    const broken = {
+      ...phase,
+      pointCheck: (eps: number) => {
+        const pc = phase.pointCheck(eps);
+        return 'unavailable' in pc ? pc : { ...pc, check: pc.control };
+      },
+    };
+    const fake = { ...api, translationsOf: () => [broken] };
+    const bridge = api.ATLAS_FAMILIES.flatMap((f: any) => f.bridges).find((b: any) => b.id === 'ab-pendulum-linear');
+    const e = { allRegimesHold: true, horizons: [], allHold: true, pointBound: null, pointBoundReason: null };
+    const at = { theta0: 0.3, T0: 2, t: 1 };
+    const honest = judgeAtPoint(api, { observable: 'phase', value: 0.1 }, [bridge], e, at, false);
+    expect(honest.verdict).toBe('adequate');
+    const j = judgeAtPoint(fake, { observable: 'phase', value: 0.1 }, [bridge], e, at, false);
+    expect(j.verdict).toBe('undetermined');
+    expect(j.reason).toMatch(/the translation's witness at this point \(W7p@point-control\) is refuted/);
+  });
+});
+
+describe('I8 — a position tolerance through a declared UPPER BOUND on |θ − θ_lin|', () => {
+  const POS_AT = ['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.3', 'T0=2'];
+
+  it('ADEQUATE up to t*; just past t* UNDETERMINED (exit 0), because only the bound exceeds the tolerance', async () => {
+    const tStar = (await json([...POS_AT, '--tolerance=position:0.05'])).result.tolerance.horizon;
+    const at = await run([...POS_AT, `t=${tStar}`, '--tolerance=position:0.05']);
+    expect(at.code).toBe(0);
+    expect(at.text).toMatch(/tolerance position:0\.05 rad: ADEQUATE — t = [\d.]+ <= t\* = [\d.]+: bound on the position error [\d.]+ rad <= 0\.05/);
+    const beyond = await run([...POS_AT, `t=${tStar * 1.001}`, '--tolerance=position:0.05']);
+    expect(beyond.code).toBe(0);
+    expect(beyond.text).toMatch(/UNDETERMINED — t = [\d.]+ > t\* = [\d.]+: the bound on the position error is [\d.]+ rad, above 0\.05; the error itself may still be within it/);
+  });
+
+  it('the bound and its horizon agree with an independent RK4 of both motions', async () => {
+    // t = 2.55 T0/2 is just past the zero crossing at 2.5, where the drift envelope is attained.
+    const tol = (await json([...POS_AT, 't=2.55', '--tolerance=position:0.05'])).result.tolerance;
+    const theta0 = 0.3;
+    const w2 = Math.PI ** 2;
+    const { rk4 } = await import('../atlas/_ode.js');
+    const { samples } = rk4((_t, y) => [y[1]!, -w2 * Math.sin(y[0]!), y[3]!, -w2 * y[2]!], [theta0, 0, theta0, 0], 0, 2.55, 5100);
+    const worst = samples.reduce((m, s) => Math.max(m, Math.abs(s.y[0]! - s.y[2]!)), 0);
+    expect(worst).toBeLessThanOrEqual(tol.observableErrorAt);
+    expect(worst).toBeGreaterThan(0.95 * tol.observableErrorAt);
+    expect(tol.translation.errorKind).toBe('upper-bound');
+    expect(tol.pointWitness).toMatchObject({ id: 'W7x@point', status: 'checked', control: { status: 'refuted' } });
+    expect(tol.evidence.tags).toEqual(['numerically-supported']);
+    expect(tol.evidence.witnesses.map((w: any) => [w.id, w.status])).toEqual([['W7x', 'checked'], ['W7xa', 'checked']]);
+  });
+
+  it('a tolerance below the waveform floor W̄ is UNDETERMINED, not inadequate: the bound certifies no t', async () => {
+    const r = await run([...POS_AT, 't=0.1', '--tolerance=position:1e-4']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/UNDETERMINED — the translation's time-independent term is [\d.e-]+ rad at this point, above the tolerance: this bound certifies no t, which is not a finding that the error exceeds the tolerance/);
+  });
+});
+
+describe('I8 — a translation composes across a bridge only through its declared carriage', () => {
+  it('pendulum → spring → LC: the phase horizon is the pendulum → spring one, carried by ab-spring-lc', async () => {
+    const direct = (await json([...PHASE_AT, 't=1', '--tolerance=phase:0.1'])).result.tolerance;
+    const env = await json([...LC_AT, 't=1', '--tolerance=phase:0.1']);
+    const tol = env.result.tolerance;
+    expect(env.result.kind).toBe('no-claim');
+    expect(env.result).not.toHaveProperty('bound');
+    expect(tol.verdict).toBe('adequate');
+    expect(tol.horizon).toBe(direct.horizon);
+    expect(tol.translation.carriedBy).toEqual(['ab-spring-lc']);
+    expect(tol.evidence.carriages[0]).toMatchObject({ bridgeId: 'ab-spring-lc', tags: ['numerically-supported'] });
+    expect(tol.evidence.carriages[0].witnesses).toEqual([expect.objectContaining({ id: 'W1φ', status: 'checked' })]);
+  });
+
+  it('the composite bound stays no composite claim, and past t* the carried phase is INADEQUATE (exit 3)', async () => {
+    const tStar = (await json([...LC_AT, '--tolerance=phase:0.1'])).result.tolerance.horizon;
+    const r = await run([...LC_AT, `t=${tStar * 1.001}`, '--tolerance=phase:0.1']);
+    expect(r.code).toBe(3);
+    expect(r.text).toMatch(/\n {2}composite relation: no composite claim\n/);
+    expect(r.text).toMatch(/the composite bound is still 'no composite claim': the composition table is not consulted or widened/);
+    expect(r.text).toMatch(/carried by ab-spring-lc \(its declared carriage of phase\)/);
+  });
+});
+
+const TELEGRAPH = ['path', 'model-telegraph', 'model-fick', '--compare=model-wave-1d', '--at', 'D=1', 'q=1', 't=1', '--sweep', 'tau=0.001:1000:13:log'];
+
+describe('I18 — two limits swept side by side; where NEITHER applies there is no number', () => {
+  it('telegraph: each row matches the regimes and horizons computed independently, and NEITHER rows carry no error', async () => {
+    const env = await json(TELEGRAPH);
+    const t = 1;
+    for (const row of env.result.rows) {
+      const eps = row.value;
+      const [fick, wave] = row.paths;
+      const slow = (1 - Math.sqrt(1 - 4 * eps)) / (2 * eps) - 1;
+      const fickClaimed = eps <= 0.05 && t > 5 * eps && t < 0.1 / slow;
+      const waveClaimed = eps >= 25 && t < 2 * eps * Math.log(10 / 9);
+      expect(fick.state === 'claimed').toBe(fickClaimed);
+      expect(wave.state === 'claimed').toBe(waveClaimed);
+      if (fickClaimed) expect(fick.error).toBeCloseTo(slow, 12);
+      if (waveClaimed) expect(wave.error).toBeCloseTo(1 - Math.sqrt(1 - 1 / (4 * eps)), 12);
+      expect(row.coverage).toBe(fickClaimed || waveClaimed ? 'covered' : 'neither');
+      if (row.coverage === 'neither') expect(row.paths.every((p: any) => p.error === null)).toBe(true);
+    }
+    expect(env.result.tally).toMatchObject({ covered: 8, neither: 5, unsettled: 0, claimedByAll: 0 });
+    expect(env.result.rows.find((r: any) => Math.abs(r.value - 1) < 1e-9).coverage).toBe('neither');
+  });
+
+  it('the text marks NEITHER rows with no number and says the two norms are not compared', async () => {
+    const r = await run(TELEGRAPH);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/the two errors are different quantities and are not compared with each other/);
+    expect(r.text).toMatch(/\n {2}1 +violated\/violated — +violated\/violated — +NEITHER — no encoded limit applies: the parent model-telegraph is the model to use there/);
+    expect(r.text).toMatch(/NEITHER: 5 · unsettled: 0 of 13/);
+  });
+
+  it('without t the in-regime rows are UNSETTLED, not covered; rows outside both regimes are still NEITHER', async () => {
+    const env = await json(['path', 'model-telegraph', 'model-fick', '--compare=model-wave-1d', '--at', 'D=1', 'q=1', '--sweep', 'tau=0.01:100:3:log']);
+    expect(env.result.rows.map((r: any) => r.coverage)).toEqual(['unsettled', 'neither', 'unsettled']);
+    expect(env.result.rows[0].paths[0]).toMatchObject({ state: 'unsettled', error: null });
+  });
+
+  it('Klein–Gordon across low-x, transition and high-x: Schrödinger, NEITHER, massless wave', async () => {
+    const env = await json(['path', 'model-klein-gordon', 'model-schrodinger-free', '--compare=model-wave-1d', '--at', 'c=1', 'omega0=1', 't=1', '--sweep', 'k=0.01:100:9:log']);
+    for (const row of env.result.rows) {
+      const x = row.value;
+      const [nr, wave] = row.paths;
+      if (nr.state === 'claimed') expect(nr.error).toBeCloseTo((x * x / 2 - (Math.sqrt(1 + x * x) - 1)) / (x * x / 2), 12);
+      if (wave.state === 'claimed') expect(wave.error).toBeCloseTo(Math.sqrt(1 + 1 / (x * x)) - 1, 12);
+      expect(nr.state === 'claimed').toBe(x <= 0.1 + 1e-12);
+      expect(wave.state === 'claimed').toBe(x >= 10 - 1e-9);
+    }
+    expect(env.result.rows.map((r: any) => (r.coverage === 'covered' ? r.claimedBy[0] : r.coverage))).toEqual([
+      'model-schrodinger-free', 'model-schrodinger-free', 'model-schrodinger-free',
+      'neither', 'neither', 'neither',
+      'model-wave-1d', 'model-wave-1d', 'model-wave-1d',
+    ]);
+  });
+
+  it('--csv writes each route\'s columns and the coverage', async () => {
+    const r = await run([...TELEGRAPH, '--csv']);
+    const lines = r.text.trim().split('\n');
+    expect(lines[0]).toBe('tau,model-fick_regime,model-fick_horizon,model-fick_state,model-fick_error,model-wave-1d_regime,model-wave-1d_horizon,model-wave-1d_state,model-wave-1d_error,coverage');
+    expect(lines).toHaveLength(14);
+    expect(lines[7]).toBe('1,violated,violated,not-claimed,,violated,violated,not-claimed,,neither');
+  });
+
+  it('unsupported comparisons are refused, not fabricated', async () => {
+    const bad = async (args: string[], msg: RegExp) => {
+      const r = await run(['path', 'model-telegraph', 'model-fick', ...args]);
+      expect(r.code).toBe(1);
+      expect(r.text).toMatch(msg);
+    };
+    await bad(['--compare=model-wave-1d'], /--compare needs --sweep/);
+    await bad(['--compare=model-wave-1d', '--sweep', 'tau=0.1:1:3', '--tolerance=0.1'], /--compare does not take --tolerance/);
+    await bad(['--compare=model-fick', '--sweep', 'tau=0.1:1:3'], /is the same target as the path/);
+    await bad(['--compare=model-pendulum', '--sweep', 'tau=0.1:1:3'], /no chain of bridges connects model-telegraph to model-pendulum; there is nothing to compare/);
   });
 });
 
