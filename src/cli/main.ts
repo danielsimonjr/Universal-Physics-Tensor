@@ -74,6 +74,7 @@ Usage:
 
   upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
           [--proposed] [--out=PATH] [--equation "TARGET = EXPR"]
+          [--around=QUANTITY [--depth=N]]
         Map how the equations LINK: connected components (clusters) of the
         graph by shared quantities, the anchored core, the link hubs, and
         the isolated tail.
@@ -88,6 +89,8 @@ Usage:
         node and reports where it lands (which cluster / shared quantities), with
         a "did you mean?" hint for names that miss the catalog vocabulary. Use
         underscores for multi-word quantities (photon_energy -> photon-energy).
+        --around=QUANTITY [--depth=N] focuses on the edges within N hops of one
+        quantity and states how many of the source's edges it kept.
         e.g.  upt map --equation "period = 2*pi*sqrt(length/gravity)"
 
   upt candidates [--source=catalog|canonical|both]

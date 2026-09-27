@@ -211,6 +211,39 @@ describe('I9 — uncertainty propagation, kept apart from sensitivity', () => {
   });
 });
 
+describe('I16 — a focused map states its denominator', () => {
+  it('--around keeps exactly the edges that use the quantity, counted against the whole source', async () => {
+    const { CATALOG_GRAPH } = await import('../../dist/cli-api.js');
+    const uses = CATALOG_GRAPH.filter((e: any) => [...e.sources.map((q: any) => q.name), e.target.name].includes('temperature'));
+    const env = await json(['map', '--around=temperature', '--source=catalog']);
+    expect(env.result.focus).toEqual({ around: 'temperature', depth: 1, kept: uses.length, of: CATALOG_GRAPH.length });
+    const shown = env.result.linkage.clusters.flatMap((c: any) => c.edges).concat(env.result.linkage.isolated);
+    expect(new Set(shown)).toEqual(new Set(uses.map((e: any) => e.id)));
+  });
+
+  it('a deeper focus contains the shallower one', async () => {
+    const d1 = (await json(['map', '--around=temperature', '--source=catalog'])).result.focus.kept;
+    const d2 = (await json(['map', '--around=temperature', '--depth=2', '--source=catalog'])).result.focus.kept;
+    expect(d2).toBeGreaterThan(d1);
+  });
+
+  it('the text and the visual forms both print the focus with its denominator', async () => {
+    const t = await run(['map', '--around=temperature', '--source=catalog']);
+    expect(t.text).toMatch(/focused: \d+ of \d+ edges within 1 hop\(s\) of 'temperature' \[catalog \(\d+-bridge\)\]; the rest are omitted from this view, not absent from the graph/);
+    const v = await run(['map', '--around=temperature', '--source=catalog', '--format=mermaid']);
+    expect(v.text).toMatch(/upt: focused: \d+ of \d+ edges/);
+  });
+
+  it('an unknown quantity, a stray --depth and a poster focus are refused', async () => {
+    const a = await run(['map', '--around=temprature']);
+    expect(a.code).toBe(1);
+    expect(a.text).toMatch(/'temprature' is not a quantity of the .* graph; did you mean: temperature/);
+    expect((await run(['map', '--depth=2'])).text).toMatch(/--depth needs --around/);
+    expect((await run(['map', '--around=temperature', '--depth=0'])).text).toMatch(/--depth=0 must be an integer from 1 to 10/);
+    expect((await run(['map', '--source=poster', '--around=temperature'])).text).toMatch(/the poster index has statements, not quantities/);
+  });
+});
+
 describe('I11 — discovery readiness by dimension; connectivity alone is not evidence', () => {
   it('the audit example (a ≟ classical-electron-radius) states its premise, its missing inputs and an observation', async () => {
     const { text } = await run(['discover', '--source=canonical']);
