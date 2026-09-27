@@ -238,10 +238,12 @@ Usage:
         that inspects each. An equal dimension is never a match.
         e.g.  upt search thermal noise
 
-  upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>
+  upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
         Experimental expression/residual search (Product B). Orthogonal to
         \`upt discover\`, which vets quantity identifications a≡b and is frozen.
         Relation-link gaps are not searchable here — use \`upt discover\`.
+        \`study --data=FILE\` fits calibrated observations (units, σ) on
+        exploratory rows only and tests on withheld holdout/replication rows.
 
   upt help        Show this message.
 
