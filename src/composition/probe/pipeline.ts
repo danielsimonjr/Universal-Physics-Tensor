@@ -462,7 +462,11 @@ export async function runProbeSearch(
     )
   ) {
     stopReason = 'no-credible-candidate';
-    wording.push('no candidate survived holdout / falsification');
+    wording.push(
+      (problem.holdout?.rows.length ?? 0) > 0
+        ? 'no candidate survived holdout / falsification'
+        : 'no holdout observations: no candidate was tested on withheld data',
+    );
   } else {
     stopReason = 'exhausted-space';
   }
