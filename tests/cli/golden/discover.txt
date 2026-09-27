@@ -4,6 +4,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
   funnel:  132 candidates  →  7 promising  ·  35 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  70 axis-clash
+  readiness of the 7 promising: 0 mechanism-tested · 0 data-tested · 6 without magnitude evidence · 5 with axis unresolved · 0 with an entailed consequence
+  promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   PROMISING (merges disconnected physics, unlocks quantities, stays consistent):
     landauer-erasure-energy ≟ dark-fermion-mass          [[energy]]  score 6

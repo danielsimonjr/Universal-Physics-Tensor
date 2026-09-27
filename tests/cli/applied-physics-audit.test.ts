@@ -42,6 +42,35 @@ describe('F14 — help states no fixed isolated-bridge count', () => {
   });
 });
 
+describe('F02 — the PROMISING count carries its evidential readiness', () => {
+  it('discover states how many promising candidates have any mechanism or data test', async () => {
+    const { text } = await run(['discover', '--source=canonical']);
+    const promising = Number(/→ {2}(\d+) promising/.exec(text)![1]);
+    const m = /readiness of the (\d+) promising: 0 mechanism-tested · 0 data-tested · (\d+) without magnitude evidence · (\d+) with axis unresolved · (\d+) with an entailed consequence/.exec(text);
+    expect(m).not.toBeNull();
+    expect(Number(m![1])).toBe(promising);
+    for (const k of [2, 3, 4]) expect(Number(m![k])).toBeLessThanOrEqual(promising);
+    expect(text).toMatch(/promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction/);
+  });
+
+  it('--json carries the same readiness, recounted from the candidates', async () => {
+    const c = capture();
+    await runCli(['discover', '--source=canonical', '--json'], c.io);
+    const env = JSON.parse(c.lines.join(''));
+    type Row = { verdict: string; magnitudeChecked: boolean; magnitudeAnchorInvariant?: boolean; axisChecked: boolean; consequence?: { signal: string }; grounding: { mechanismTested: boolean; dataTested: boolean } };
+    const p = (env.result as Row[]).filter((r) => r.verdict === 'promising');
+    expect(env.readiness).toEqual({
+      promising: p.length,
+      mechanismTested: p.filter((r) => r.grounding.mechanismTested).length,
+      dataTested: p.filter((r) => r.grounding.dataTested).length,
+      withoutMagnitudeEvidence: p.filter((r) => !r.magnitudeChecked || r.magnitudeAnchorInvariant === true).length,
+      axisUnresolved: p.filter((r) => !r.axisChecked).length,
+      entailedConsequence: p.filter((r) => r.consequence?.signal === 'entailed').length,
+    });
+    expect(env.readiness.withoutMagnitudeEvidence).toBeGreaterThan(0);
+  });
+});
+
 describe('F08 — checked inequalities are kept apart from prose premises', () => {
   it('a VACUOUS exact analogy lists its premises as not machine-checked (regime)', async () => {
     const { text } = await run(['regime', 'oscillators']);

@@ -158,6 +158,29 @@ function adjudicationSummaryLine(promising: readonly AnnotatedCandidate[], promi
   return `  adjudicated: ${total} of the ${promisingCount} promising ${verb} ${noun} (${parts.join(', ')}) ${foldNote}; --show-adjudicated to list`;
 }
 
+interface Readiness {
+  promising: number;
+  mechanismTested: number;
+  dataTested: number;
+  withoutMagnitudeEvidence: number;
+  axisUnresolved: number;
+  entailedConsequence: number;
+}
+
+/** How far the `promising` set is from evidence, counted from candidate fields. */
+function readinessOf(api: CommandCtx['api'], candidates: readonly FullyAnnotatedCandidate[]): Readiness {
+  const p = candidates.filter((c) => c.verdict === 'promising');
+  const g = p.map((c) => api.describeGrounding(c, c.consequence?.signal));
+  return {
+    promising: p.length,
+    mechanismTested: g.filter((x) => x.mechanismTested).length,
+    dataTested: g.filter((x) => x.dataTested).length,
+    withoutMagnitudeEvidence: p.filter((c) => !c.magnitudeChecked || c.magnitudeAnchorInvariant === true).length,
+    axisUnresolved: p.filter((c) => !c.axisChecked).length,
+    entailedConsequence: p.filter((c) => c.consequence?.signal === 'entailed').length,
+  };
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, label, source } = resolveGraph(api, args.flags);
@@ -183,7 +206,12 @@ async function run(ctx: CommandCtx): Promise<number> {
       options: opts as Record<string, unknown>,
       epistemics: EPISTEMICS,
       result,
-      ...(isDerive ? {} : { adjudicationSummary: summarizeAdjudications(withConsequence) }),
+      ...(isDerive
+        ? {}
+        : {
+            readiness: readinessOf(api, withConsequence),
+            adjudicationSummary: summarizeAdjudications(withConsequence),
+          }),
     };
     emitJson(envelope, ctx.write);
     return 0;
@@ -227,8 +255,15 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(
     `  funnel:  ${withConsequence.length} candidates  →  ${promising.length} promising  ` +
       `·  ${inert.length} inert  ·  ${clash.length} magnitude-clash  ` +
-      `·  ${contra.length} contradictory (numerically falsified)  ·  ${axisClash.length} axis-clash\n`
+      `·  ${contra.length} contradictory (numerically falsified)  ·  ${axisClash.length} axis-clash`
   );
+  const rd = readinessOf(api, withConsequence);
+  out(
+    `  readiness of the ${rd.promising} promising: ${rd.mechanismTested} mechanism-tested · ` +
+      `${rd.dataTested} data-tested · ${rd.withoutMagnitudeEvidence} without magnitude evidence · ` +
+      `${rd.axisUnresolved} with axis unresolved · ${rd.entailedConsequence} with an entailed consequence`,
+  );
+  out('  promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.\n');
   if (promising.length) {
     out('  PROMISING (merges disconnected physics, unlocks quantities, stays consistent):');
     for (const r of promising) {
