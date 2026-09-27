@@ -55,7 +55,7 @@ export type {
 } from './derive-evidence.js';
 export { composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM } from './composition-table.js';
 export type { CompositionResult, NoCompositeClaim } from './composition-table.js';
-export { boundPath, findPath } from './path-bound.js';
+export { boundPath, findAtlasPath, findPath } from './path-bound.js';
 export type { NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim } from './path-bound.js';
 
 export type { AtlasModel, ModelId } from './model.js';
