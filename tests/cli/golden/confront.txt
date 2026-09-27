@@ -16,13 +16,13 @@ rigor: 7 stringent · 3 moderate · 9 loose — NOT 19 equal confirmations
     predicted 0.629971 · observed 0.63 ± 0.002 ν (3D-Ising correlation-length exponent, dimensionless) · residual 0.01σ · within 1σ ✓
     source: Pelissetto & Vicari 2002, Phys. Rep. 368:549 ("Critical phenomena and renormalization-group theory"); experimental average over liquid-vapor / binary-fluid critical points (3D Ising universality class). Bootstrap prediction: Kos, Poland, Simmons-Duffin & Vichi 2016, JHEP 08:036 (arXiv:1603.04436), Delta_epsilon = 1.412625(10)
   be-36 [loose]: GW speed vs GW170817 bound
-    predicted 1e-15 |c_GW − c| / c (dimensionless) · bound 6.501939179989081e-16 · not excluded ✓ · one-sided: +side only (GW170817 −side -3.1e-15 exceeds the symmetric encoded ±1e-15)
+    encoded bound |x| ≤ 1e-15, x = |c_GW − c| / c (dimensionless) (a range, not a point prediction) · observed upper limit 6.501939179989081e-16 · rule: observed limit ≤ encoded bound · compatible ✓ · one-sided: +side only (GW170817 −side -3.1e-15 exceeds the symmetric encoded ±1e-15)
     source: Abbott et al. 2017 ApJ Lett. 848:L13 (arXiv:1710.05832), §3 "Speed of Gravity"
   be-37 [stringent]: GR Shapiro delay (PPN γ) vs Cassini (Bertotti 2003)
     predicted 1 · observed 1.000021 ± 0.000023 PPN γ (dimensionless) · residual 0.91σ · within 1σ ✓
     source: Bertotti, Iess & Tortora 2003, Nature 425:374-376 (Cassini radio-link Shapiro delay, June 2002 solar conjunction)
   be-48 [loose]: GRW collapse rate vs LISA-Pathfinder bound (Carlesso 2016)
-    predicted 1e-16 s⁻¹ (collapse rate) · bound 2.96e-8 · not excluded ✓
+    predicted 1e-16 s⁻¹ (collapse rate) · observed upper limit 2.96e-8 · rule: predicted ≤ limit · not excluded ✓
     source: Carlesso, Bassi, Falferi & Vinante 2016, arXiv:1606.03637 / Phys. Rev. D 95:084054 (2017); LISA-Pathfinder data Armano et al. 2016, PRL 116:231101
   be-51 [stringent]: GR light deflection (PPN γ) vs VLBI (Lambert 2009)
     predicted 1.751190325559984 · derived (1+γ)/2 × predicted = 1.7511202779469617 ± 0.00010507141953359905 arcsec (solar-limb deflection) · residual 0.67σ · within 1σ ✓

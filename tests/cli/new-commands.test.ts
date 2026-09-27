@@ -69,11 +69,15 @@ describe('upt confront --rigor / --frontier', () => {
     const c = capture();
     expect(await runCli(['confront', '--rigor=tight'], c.io)).toBe(1);
   });
-  it('--frontier ranks value-tests by margin to exclusion (Shapiro first)', async () => {
+  // Audit F07 (2026-09-26): "margin 0.09σ to exclusion" read as GR being 0.09σ from scientific
+  // exclusion; the margin is to this tool's configured 1σ acceptance threshold.
+  it('--frontier ranks value-tests by margin to the configured acceptance threshold (Shapiro first)', async () => {
     const c = capture();
     expect(await runCli(['confront', '--frontier'], c.io)).toBe(0);
     const t = text(c);
-    expect(t).toMatch(/margin .*σ to exclusion/);
+    expect(t).toMatch(/margin 0\.09σ to the 1σ acceptance threshold/);
+    expect(t).toMatch(/a software criterion, not a scientific exclusion level/);
+    expect(t).not.toMatch(/to exclusion/);
     // be-37 (0.91σ, margin 0.09) must precede be-52 (0.26σ, margin 0.74)
     expect(t.indexOf('be-37')).toBeLessThan(t.indexOf('be-52'));
   });

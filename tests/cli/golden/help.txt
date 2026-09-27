@@ -63,10 +63,12 @@ Usage:
         for the consistency/closure check. Both reshape the candidate pool that
         --derive consumes.
 
-  upt connectors
-        Of the 20 ISOLATED bridges, which could connect to the anchored
-        core via a same-dimension identification? The structural frontier —
-        same-kind connectors are the motivated set for physicist review.
+  upt connectors [--source=catalog|canonical|both]
+        Of the graph's ISOLATED bridges (how many depends on --source, default
+        both; the command prints the count), which could connect to the
+        anchored core via a same-dimension identification? The structural
+        frontier — same-kind connectors are the motivated set for physicist
+        review.
 
   upt coverage
         Audit the catalog's empirical grounding — which bridges are
@@ -110,8 +112,9 @@ Usage:
         Run the catalog's committed real-data confrontations (predicted vs
         observed), each tagged with its RIGOR tier. --rigor filters to one tier
         (the precision core, or the loose tail that needs better data); --frontier
-        ranks the σ-tests by margin to exclusion (tightest = most at-risk under new
-        data); --sensitivity ranks the prediction's input elasticities.
+        ranks the σ-tests by margin to the 1σ acceptance threshold (a software
+        criterion, not a scientific exclusion level; tightest = most at-risk under
+        new data); --sensitivity ranks the prediction's input elasticities.
 
   upt axes
         Axis-discrimination audit — which tensor classification axes GATE the
@@ -124,9 +127,11 @@ Usage:
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_sun
               (ideal degenerate gas, with m_u and M_sun = 1.989e30 kg)
 
-  upt ground <quantityA> <quantityB>
+  upt ground <quantityA> <quantityB> [--source=catalog|canonical|both]
         The epistemic-grounding ledger for one discovery candidate a=b: which
         falsifiers passed, which abstained (gaps), and the honest ceiling.
+        Pass the --source (and --anchor/--max-orders) of the discover run that
+        listed the pair.
 
   upt regime <family> [--at group=value ...]
         Where in parameter space a family's models are claimed to apply. Each
@@ -139,11 +144,13 @@ Usage:
         e.g.  upt regime oscillators --at theta0=0.2
 
   upt path <from> <to> [--at group=value ...]
-        The chain of bridges between two models, the relation it composes to,
+        The chain of bridges between two models (across families when a
+        bridge ends in another family's model), the relation it composes to,
         the composed (K, delta) with its norm, and whether every bridge's regime
         and every horizon still holds at --at (a bound outside its regime is
         not claimed). When the composition table declines to compose, the path
-        carries no bound: it prints 'no composite claim' and exits 0.
+        carries no bound: it prints 'no composite claim', names what composing
+        would need, and exits 0.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
 
   upt atlas [<bridge-id>]

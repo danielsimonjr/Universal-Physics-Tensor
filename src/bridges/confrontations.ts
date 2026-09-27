@@ -151,6 +151,7 @@ const be36Entry: ConfrontationEntry = {
       predicted: r.encodedBound,
       bound: r.upperBound,
       satisfied: r.passesEncodedBound,
+      predictedIs: 'encoded-bound',
       caveat: `one-sided: +side only (GW170817 −side ${r.lowerBound.toExponential(1)} exceeds the symmetric encoded ±${r.encodedBound.toExponential(0)})`,
       units: '|c_GW − c| / c (dimensionless)',
       provenance: {
@@ -193,6 +194,7 @@ const be48Entry: ConfrontationEntry = {
       predicted: r.predicted_rate_per_s,
       bound: r.bound_rate_per_s,
       satisfied: r.satisfied,
+      predictedIs: 'point',
       units: 's⁻¹ (collapse rate)',
       provenance: r.observation.provenance,
     };

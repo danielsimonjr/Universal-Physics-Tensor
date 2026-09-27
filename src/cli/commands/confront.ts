@@ -21,12 +21,14 @@ const HELP = `upt confront [--bridge=be-XX] [--rigor=stringent|moderate|loose] [
         observed), each tagged with its RIGOR tier. --bridge runs one;
         --rigor=<tier> shows only that tier (the precision core, or the loose
         tail that needs better data); --frontier ranks the σ-tests by margin to
-        exclusion (the tightest tests are the most at-risk under new data);
+        this tool's 1σ acceptance threshold (a software criterion, not a
+        scientific exclusion level; the smallest margin is the most at-risk
+        under new data);
         --sensitivity adds an input-elasticity ranking (value-kind only).`;
 
 const RIGOR_TIERS = new Set(['stringent', 'moderate', 'loose']);
 
-/** σ-headroom to the 1σ exclusion edge for a value outcome; null for others. */
+/** σ-headroom to the 1σ acceptance threshold for a value outcome; null for others. */
 function frontierMarginSigma(
   outcome: { kind: string; residualInSigma?: number } | undefined,
 ): number | null {
@@ -84,7 +86,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }));
 
   if (wantFrontier) {
-    // Frontier = closest to exclusion: value-kind by σ-headroom ASCENDING (smallest
+    // Frontier = closest to the threshold: value-kind by σ-headroom ASCENDING (smallest
     // margin = most at-risk under new data); non-σ outcomes (bounds/consistency) after.
     results.sort((a, b) => {
       const ma = frontierMarginSigma(a.outcome);
@@ -122,7 +124,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       `rigor: ${d.stringent} stringent · ${d.moderate} moderate · ${d.loose} loose — NOT ${results.length} equal confirmations`,
     );
     if (wantFrontier) {
-      out('frontier: σ-tests ordered by margin to exclusion (smallest = most at-risk under new data)');
+      out(
+        'frontier: σ-tests ordered by margin to the 1σ acceptance threshold (residual ≤ 1σ passes; a software ' +
+          'criterion, not a scientific exclusion level; smallest = most at-risk under new data)',
+      );
     }
     out('');
   } else {
@@ -132,7 +137,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  be-${bridgeId} [${rigor}]: ${title}`);
     switch (outcome.kind) {
       case 'value': {
-        const margin = wantFrontier ? ` · margin ${(1 - outcome.residualInSigma).toFixed(2)}σ to exclusion` : '';
+        const margin = wantFrontier ? ` · margin ${(1 - outcome.residualInSigma).toFixed(2)}σ to the 1σ acceptance threshold` : '';
         // A derived "observed" value is labelled derived, and the quantity that
         // was actually measured is shown beside it (persona finding L6).
         const m = outcome.measured;
@@ -156,12 +161,19 @@ async function run(ctx: CommandCtx): Promise<number> {
         }
         break;
       }
-      case 'upper-bound':
+      case 'upper-bound': {
+        const caveat = outcome.caveat ? ` · ${outcome.caveat}` : '';
         out(
-          `    predicted ${outcome.predicted} ${outcome.units} · bound ${outcome.bound} · ${outcome.satisfied ? 'not excluded ✓' : 'EXCLUDED'}${outcome.caveat ? ` · ${outcome.caveat}` : ''}`
+          outcome.predictedIs === 'encoded-bound'
+            ? `    encoded bound |x| ≤ ${outcome.predicted}, x = ${outcome.units} (a range, not a point prediction) · ` +
+                `observed upper limit ${outcome.bound} · rule: observed limit ≤ encoded bound · ` +
+                `${outcome.satisfied ? 'compatible ✓' : 'INCOMPATIBLE'}${caveat}`
+            : `    predicted ${outcome.predicted} ${outcome.units} · observed upper limit ${outcome.bound} · ` +
+                `rule: predicted ≤ limit · ${outcome.satisfied ? 'not excluded ✓' : 'EXCLUDED'}${caveat}`,
         );
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);
         break;
+      }
       case 'consistency':
         out(
           `    predicted ${outcome.predicted} approaches ${outcome.approaches} ${outcome.units} · gap ${(outcome.fractionalGap * 100).toFixed(1)}%`
