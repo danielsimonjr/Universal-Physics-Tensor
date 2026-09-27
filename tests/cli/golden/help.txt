@@ -63,6 +63,9 @@ Usage:
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
         --derive consumes.
+        Each promising row states which independent falsifiers ran and which
+        abstained, and what would make it testable; --require-falsifier lists
+        only rows one of them ran on and survived.
 
   upt connectors [--source=catalog|canonical|both]
         Of the graph's ISOLATED bridges (how many depends on --source, default

@@ -30,6 +30,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--anchor', valueStyle: 'attached', repeatable: true },
   { name: '--derive', valueStyle: 'none' },
   { name: '--show-adjudicated', valueStyle: 'none' },
+  { name: '--require-falsifier', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
 ];
 
@@ -52,7 +53,14 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         Candidates a physicist has already adjudicated (docs/research/*-adjudication.md)
         fold out of the PROMISING list by default (decoy/entailed verdicts only —
         review memory, not a re-litigation prompt); --show-adjudicated lists them
-        again with their recorded verdict.`;
+        again with their recorded verdict.
+        Each PROMISING row states its readiness dimension by dimension —
+        structure, kind, which independent falsifiers (magnitude, axis,
+        consequence) ran and survived or abstained — and what would make it
+        testable: the identity premise, the missing magnitudes and regimes,
+        and the observation that would test it. An abstention is a missing
+        test, never a pass. --require-falsifier lists only rows at least one
+        independent falsifier ran on and survived, and counts the rest.`;
 
 const EPISTEMICS =
   '⚠ a REVIEW SURFACE: `promising` means "worth a physicist\'s minute", not "true".\n' +
@@ -199,6 +207,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       : withConsequence.map((c) => ({
           ...c,
           grounding: api.describeGrounding(c, c.consequence?.signal),
+          readiness: api.describeReadiness(c, c.consequence?.signal),
         }));
     const envelope = {
       command: 'discover',
@@ -264,10 +273,20 @@ async function run(ctx: CommandCtx): Promise<number> {
       `${rd.axisUnresolved} with axis unresolved · ${rd.entailedConsequence} with an entailed consequence`,
   );
   out('  promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.\n');
+  const requireFalsifier = args.flags.has('require-falsifier');
+  const untested = (r: FullyAnnotatedCandidate) =>
+    api.describeReadiness(r, r.consequence?.signal).falsifiers.survived.length === 0;
+  if (requireFalsifier) {
+    out(
+      `  --require-falsifier: ${promising.filter(untested).length} of the ${promising.length} promising hidden — ` +
+        'no independent falsifier ran and survived (connectivity alone is not evidence)\n',
+    );
+  }
   if (promising.length) {
     out('  PROMISING (merges disconnected physics, unlocks quantities, stays consistent):');
     for (const r of promising) {
       if (r.adjudication && foldsOut(r.adjudication.verdict) && !showAdjudicated) continue;
+      if (requireFalsifier && untested(r)) continue;
       out(`    ${(r.a + ' ≟ ' + r.b).padEnd(52)} [${r.dim}]  score ${r.score}`);
       out(`        unlocks: ${r.unlocksFromAnchor.join(', ') || '—'}`);
       if (r.consequence) {
@@ -278,6 +297,21 @@ async function run(ctx: CommandCtx): Promise<number> {
         `        [grounding — passed: ${g.passed.join(', ') || '—'}` +
           ` · gaps: ${g.gaps.join(', ') || '—'} · ceiling: no mechanism/data test]`,
       );
+      const rd = api.describeReadiness(r, r.consequence?.signal);
+      const f = rd.falsifiers;
+      out(
+        `        [readiness — structure: ${rd.structure.mergesComponents ? 'merges components' : 'no merge'}, ` +
+          `unlocks ${rd.structure.unlocks} · kind: ${rd.kind} · independent falsifiers survived: ` +
+          `${f.survived.join(', ') || 'none'}${f.abstained.length ? ` (abstained: ${f.abstained.join(', ')})` : ''}` +
+          ' · mechanism: none · data: none]',
+      );
+      const needs = [
+        ...(rd.needs.magnitudeFor.length ? [`needs a representative magnitude for: ${rd.needs.magnitudeFor.join(', ')}`] : []),
+        ...rd.needs.regimeFor.map((u) => `needs a stated ${u.axis} regime for: ${u.endpoints.join(', ')}`),
+        ...(rd.needs.derivableConsequence ? ['needs a consequence that re-derives a known law'] : []),
+      ];
+      out(`        [to make it testable — premise: ${rd.needs.premise}${needs.map((n) => ` · ${n}`).join('')}]`);
+      out(`        [observation: ${rd.observation}]`);
       if (r.adjudication) {
         out(`        [adjudicated: ${r.adjudication.verdict} — ${r.adjudication.grounds}]`);
       }

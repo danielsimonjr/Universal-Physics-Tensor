@@ -31,6 +31,53 @@ function block(text: string, id: string): string {
   return end === -1 ? rest : rest.slice(0, end);
 }
 
+describe('I11 — discovery readiness by dimension; connectivity alone is not evidence', () => {
+  it('the audit example (a ≟ classical-electron-radius) states its premise, its missing inputs and an observation', async () => {
+    const { text } = await run(['discover', '--source=canonical']);
+    const row = text.slice(text.indexOf('    a ≟ classical-electron-radius'));
+    const r = row.slice(0, row.slice(1).search(/\n {4}\S/) + 1);
+    expect(r).toMatch(/^ {4}a ≟ classical-electron-radius .*\n {8}unlocks: a, perihelion-precession\n/);
+    expect(r).toMatch(/\[readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none \(abstained: magnitude, axis, consequence\) · mechanism: none · data: none\]/);
+    expect(r).toMatch(/\[to make it testable — premise: a and classical-electron-radius are the same physical quantity, not only both \[length\]/);
+    expect(r).toMatch(/needs a representative magnitude for: a\b/);
+    expect(r).toMatch(/observation: measure a and classical-electron-radius in one system that defines both/);
+  });
+
+  it('--json readiness agrees with the gate fields, and magnitudeMissing agrees with the sourced table', async () => {
+    const { REPRESENTATIVE_VALUES } = await import('../../dist/cli-api.js');
+    const env = await json(['discover', '--source=catalog']);
+    const promising = env.result.filter((c: any) => c.verdict === 'promising');
+    expect(promising.length).toBeGreaterThan(0);
+    let survivedAny = 0;
+    for (const c of promising) {
+      const s = c.readiness.falsifiers.survived as string[];
+      expect(s.includes('magnitude')).toBe(c.magnitudeChecked && c.magnitudeAnchorInvariant !== true);
+      expect(s.includes('axis')).toBe(c.axisChecked && c.axisClashes.length === 0);
+      expect(s.includes('consequence')).toBe(c.consequence?.signal === 'entailed');
+      expect(c.readiness.falsifiers.abstained.filter((f: string) => s.includes(f))).toEqual([]);
+      for (const e of c.magnitudeMissing) expect(REPRESENTATIVE_VALUES[e]).toBeUndefined();
+      expect(c.readiness.mechanismTested).toBe(false);
+      if (s.length > 0) survivedAny++;
+    }
+    expect(survivedAny).toBeGreaterThan(0);
+  });
+
+  it('--require-falsifier hides a row that only connectivity supports, and says how many', async () => {
+    const all = await json(['discover', '--source=catalog']);
+    const p = all.result.filter((c: any) => c.verdict === 'promising');
+    const kept = p.filter((c: any) => c.readiness.falsifiers.survived.length > 0);
+    const { text } = await run(['discover', '--source=catalog', '--require-falsifier']);
+    const section = text.slice(text.indexOf('  PROMISING ('));
+    const listed = (section.slice(0, section.indexOf('\n\n')).match(/^ {4}\S+ ≟ \S+/gm) ?? []).length;
+    expect(text).toMatch(new RegExp(`--require-falsifier: ${p.length - kept.length} of the ${p.length} promising hidden — no independent falsifier ran and survived \\(connectivity alone is not evidence\\)`));
+    expect(listed).toBeLessThanOrEqual(kept.length);
+    expect(listed).toBeGreaterThan(0);
+    const canonical = await run(['discover', '--source=canonical', '--require-falsifier']);
+    const n = /→ {2}(\d+) promising/.exec(canonical.text)![1];
+    expect(canonical.text).toContain(`--require-falsifier: ${n} of the ${n} promising hidden`);
+  });
+});
+
 const STOKES_AT = ['--at', 'Re=0.05', 'm=1e-15', 'gamma=1e-8', 't=1'];
 
 describe('I7 — a premise checklist: machine-checked, declared by you, denied by you, unspecified', () => {
