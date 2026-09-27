@@ -25,10 +25,11 @@
 
 - [ ] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
 - [x] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
-- [ ] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
-  Still open: evaluators carry units only as key suffixes (`T_K`, `d_m`), and no evaluator states a
-  geometry (radius vs diameter) or a frequency convention. That needs a per-evaluator parameter schema
-  in the registry first; a unit parser alone would guess at it.
+- [x] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
+  Every evaluator declares each input's unit, meaning and geometry role, and `evaluate` converts
+  units against the declarations. No evaluator takes a radius yet: the audit's Stokes–Einstein example
+  (1 µm radius ≡ 2 µm diameter) is shown on the resolver, not the CLI. `CE-stokes-einstein` is encoded
+  only up to its 6π, so it cannot back an evaluator as it stands.
 - [x] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
 - [ ] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
   Partial: `path --tolerance` judges adequacy in the bound's OWN norm, after regime and horizon.

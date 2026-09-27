@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 352
   totalModules: 11
-  totalExports: 2496
+  totalExports: 2503
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5256,6 +5256,8 @@ modules:
         - BRIDGE_EVALUATORS
         - evaluateBridge
       interfaces:
+        - ParameterAlternate
+        - EvaluatorParameter
         - EvaluatorSpec
       functions:
         - evaluateBridge
@@ -6724,6 +6726,11 @@ modules:
         - file: ../errors.js
           imports:
             - CliError
+        - file: ../../cli-api.js
+          imports:
+            - EvaluatorParameter
+            - EvaluatorSpec
+          typeOnly: true
       exports:
         - command
         - propagateUncertainty
@@ -7337,6 +7344,16 @@ modules:
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
+            - EvaluatorParameter
+          reExport: true
+        - file: ./bridges/evaluator-inputs.js
+          imports:
+            - resolveEvaluatorInputs
+          reExport: true
+        - file: ./dimensional/units.js
+          imports:
+            - convertValue
+            - UnitError
           reExport: true
         - file: ./composition/axis-audit.js
           imports:
@@ -7580,6 +7597,9 @@ modules:
         - decidingMeasurement
         - BRIDGE_EVALUATORS
         - evaluateBridge
+        - resolveEvaluatorInputs
+        - convertValue
+        - UnitError
         - auditAxisDiscrimination
         - AXES
         - simplifyObservable
@@ -7643,6 +7663,7 @@ modules:
         - RigorTier
         - ConfrontationOutcome
         - EvaluatorSpec
+        - EvaluatorParameter
         - AxisDiscrimination
         - AxisSpec
         - PosterGraph
@@ -7713,6 +7734,10 @@ modules:
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - EvaluatorSpec
+        - EvaluatorParameter
+        - resolveEvaluatorInputs
+        - convertValue
+        - UnitError
         - auditAxisDiscrimination
         - AxisDiscrimination
         - AXES
@@ -13652,6 +13677,9 @@ modules:
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
+            - EvaluatorParameter
+            - ParameterAlternate
+            - GeometryRole
           reExport: true
         - file: ./bridges/bridge-equations.js
           imports:
@@ -14778,6 +14806,9 @@ modules:
         - BridgeIssueFixable
         - KnownIssue
         - EvaluatorSpec
+        - EvaluatorParameter
+        - ParameterAlternate
+        - GeometryRole
         - CovariantDerivativeNode
         - RicciTensorNode
         - EinsteinTensorNode
@@ -15083,6 +15114,9 @@ modules:
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - EvaluatorSpec
+        - EvaluatorParameter
+        - ParameterAlternate
+        - GeometryRole
         - BridgeEquations
         - christoffel
         - CovariantDerivativeNode
@@ -17036,16 +17070,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 352
   totalModules: 11
-  totalLinesOfCode: 72079
-  totalExports: 2496
+  totalLinesOfCode: 72252
+  totalExports: 2503
   totalClasses: 58
-  totalInterfaces: 364
+  totalInterfaces: 366
   totalFunctions: 576
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 610
-  totalReExports: 1251
-  totalTypeOnlyImports: 491
+  totalReExports: 1258
+  totalTypeOnlyImports: 492
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
