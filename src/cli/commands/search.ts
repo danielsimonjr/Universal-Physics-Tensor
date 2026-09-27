@@ -54,6 +54,7 @@ interface Entry {
   readonly line: string;
   readonly command: string;
   readonly commandLabel: string;
+  readonly note?: string;
   readonly fields: readonly Field[];
   readonly aliasOf?: string;
 }
@@ -88,6 +89,9 @@ function buildIndex(api: CommandCtx['api']): Entry[] {
       line: `be-${b.id} ${b.name} [${b.status}]`,
       command: ev === undefined ? `upt explain be-${b.id}` : `upt evaluate be-${b.id} ${ev.inputKeys.map((k) => `${k}=…`).join(' ')}`,
       commandLabel: ev === undefined ? 'no evaluator; route' : 'evaluate',
+      ...(ev === undefined
+        ? {}
+        : { note: `units: ${ev.parameters.map((p) => `${p.key} in ${p.unit || 'dimensionless'}`).join(', ')}; a value may carry its own unit` }),
       fields: [
         { label: 'id', text: `be ${b.id}`, exact: [`be-${b.id}`] },
         { label: 'name', text: b.name },
@@ -248,7 +252,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`\n${title}:`);
     for (const m of inKind.slice(0, PER_SECTION)) {
       out(`  ${m.entry.line}${m.alias === undefined ? '' : ` (alias ${m.alias})`}  [words in: ${m.matchedIn.join(', ')}]`);
-      out(`      ${m.entry.commandLabel}: ${m.entry.command}${m.entry.kind === 'catalog-bridge' && m.entry.commandLabel === 'evaluate' ? " (the unit is the key's suffix)" : ''}`);
+      out(`      ${m.entry.commandLabel}: ${m.entry.command}${m.entry.note === undefined ? '' : ` (${m.entry.note})`}`);
     }
     if (inKind.length > PER_SECTION) out(`  … and ${inKind.length - PER_SECTION} more (--json lists every match)`);
   }
