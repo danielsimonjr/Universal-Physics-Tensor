@@ -332,10 +332,16 @@ function environmentChanges(
       continue;
     }
     const av = (typeof a.values === 'object' && a.values) || {};
+    const changedReach: Reach[] = [];
     for (const k of [...new Set([...Object.keys(av), ...Object.keys(b.values)])].sort()) {
-      cmp(`constant ${name} ${k}`, av[k], b.values[k], reachOf(attribution, name, k));
+      if (av[k] === b.values[k]) continue;
+      changedReach.push(reachOf(attribution, name, k));
+      cmp(`constant ${name} ${k}`, av[k], b.values[k], changedReach[changedReach.length - 1]);
     }
-    cmp(`table ${name} sha256`, a.sha256, b.sha256, reachOf(attribution, name));
+    // A fingerprint change is reachable when a changed value is; with no changed value it is the table's.
+    const tableReach =
+      changedReach.length === 0 ? reachOf(attribution, name) : changedReach.includes('reachable') ? 'reachable' : changedReach[0];
+    cmp(`table ${name} sha256`, a.sha256, b.sha256, tableReach);
   }
   return changes;
 }

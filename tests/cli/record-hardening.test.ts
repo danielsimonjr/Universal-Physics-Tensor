@@ -232,6 +232,10 @@ describe('static attribution', () => {
     expect(kb(thermal)).toMatchObject({ recorded: 1.380649e-23, current: 1.38e-23, reach: 'reachable' });
     expect(formula.outcome).toBe('reproduced');
     expect(kb(formula)).toMatchObject({ reach: 'not-reachable' });
+    const tableSha = (e: { environmentChanges: { fact: string; reach?: string }[] }) =>
+      e.environmentChanges.find((c) => c.fact === 'table core/constants sha256')?.reach;
+    expect(tableSha(thermal)).toBe('reachable');
+    expect(tableSha(formula)).toBe('not-reachable');
     expect(thermal.integrity).toEqual([]);
     expect(formula.integrity).toEqual([]);
   });

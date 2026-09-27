@@ -120,7 +120,9 @@ so nothing here says which constants a run actually read. The derivation:
 - an object table is reachable whole (`*`) when any export of its module is read.
 
 Replay marks each changed constant (and each changed or missing table) `reachable`,
-`not-reachable` or `unattributed` (no command, so no attribution). `not-reachable` says the
+`not-reachable` or `unattributed` (no command, so no attribution). A changed table fingerprint
+takes the reach of the values that changed with it — reachable if any of them is — and the table's
+own reach only when no value changed (an edited fingerprint). `not-reachable` says the
 command's code has no import path to that constant. `reachable` says only that it has one: an
 `evaluate` entry reaches every bridge evaluator's constants whichever bridge it evaluated.
 
