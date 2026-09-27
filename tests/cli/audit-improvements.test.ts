@@ -499,7 +499,22 @@ describe('I18 — two limits swept side by side; where NEITHER applies there is 
   it('telegraph: each row matches the regimes and horizons computed independently, and NEITHER rows carry no error', async () => {
     const env = await json(TELEGRAPH);
     const t = 1;
-    for (const row of env.result.rows) {
+    checkTelegraphRows(env.result.rows, t);
+    expect(env.result.tally).toMatchObject({ covered: 8, neither: 5, unsettled: 0, claimedByAll: 0 });
+    expect(env.result.rows.find((r: any) => Math.abs(r.value - 1) < 1e-9).coverage).toBe('neither');
+  });
+
+  it('control: at t = 1000 rows inside a regime but past its horizon are not claimed, and every row is NEITHER', async () => {
+    const env = await json(TELEGRAPH.map((a) => (a === 't=1' ? 't=1000' : a)));
+    checkTelegraphRows(env.result.rows, 1000);
+    const pastHorizonInRegime = env.result.rows.flatMap((r: any) => r.paths).filter((p: any) => p.regime === 'holds' && p.horizon === 'violated');
+    expect(pastHorizonInRegime.length).toBeGreaterThan(0);
+    expect(pastHorizonInRegime.every((p: any) => p.state === 'not-claimed' && p.error === null)).toBe(true);
+    expect(env.result.tally).toMatchObject({ covered: 0, neither: 13 });
+  });
+
+  function checkTelegraphRows(rows: any[], t: number): void {
+    for (const row of rows) {
       const eps = row.value;
       const [fick, wave] = row.paths;
       const slow = (1 - Math.sqrt(1 - 4 * eps)) / (2 * eps) - 1;
@@ -512,9 +527,7 @@ describe('I18 — two limits swept side by side; where NEITHER applies there is 
       expect(row.coverage).toBe(fickClaimed || waveClaimed ? 'covered' : 'neither');
       if (row.coverage === 'neither') expect(row.paths.every((p: any) => p.error === null)).toBe(true);
     }
-    expect(env.result.tally).toMatchObject({ covered: 8, neither: 5, unsettled: 0, claimedByAll: 0 });
-    expect(env.result.rows.find((r: any) => Math.abs(r.value - 1) < 1e-9).coverage).toBe('neither');
-  });
+  }
 
   it('the text marks NEITHER rows with no number and says the two norms are not compared', async () => {
     const r = await run(TELEGRAPH);
