@@ -42,6 +42,40 @@ describe('F14 — help states no fixed isolated-bridge count', () => {
   });
 });
 
+describe('F08 — checked inequalities are kept apart from prose premises', () => {
+  it('a VACUOUS exact analogy lists its premises as not machine-checked (regime)', async () => {
+    const { text } = await run(['regime', 'oscillators']);
+    expect(text).toMatch(
+      /\[bridge\] ab-spring-lc: valid \(VACUOUS — states no inequality; nothing was checked\)\n {4}premises not machine-checked: m, k, L, C > 0; lossless; unforced; x0, q0 nonzero/,
+    );
+  });
+
+  it('Stokes–Einstein: the Reynolds and overdamped checks pass, and no-slip is still a declaration', async () => {
+    const { text } = await run(['regime', 'diffusion', '--at', 'Re=0.05', 'm=1e-15', 'gamma=1e-8', 't=1']);
+    const block = text.slice(text.indexOf('[bridge] ab-stokes-einstein'));
+    expect(block).toMatch(/^\[bridge\] ab-stokes-einstein: valid\n {4}every inequality checked and satisfied\n {4}premises not machine-checked: .*no-slip boundary/);
+  });
+
+  it('--json carries premisesNotChecked for a bridge and none for a model', async () => {
+    const c = capture();
+    await runCli(['regime', 'oscillators', '--json'], c.io);
+    const records = JSON.parse(c.lines.join('')).result.records as { id: string; premisesNotChecked?: string[] }[];
+    expect(records.find((r) => r.id === 'ab-spring-lc')!.premisesNotChecked).toEqual([
+      'm, k, L, C > 0',
+      'lossless',
+      'unforced',
+      'x0, q0 nonzero',
+    ]);
+    expect(records.find((r) => r.id === 'model-spring')!.premisesNotChecked).toBeUndefined();
+  });
+
+  it('path lists each step\'s prose premises beside the regime verdict', async () => {
+    const { text } = await run(['path', 'model-spring', 'model-lc', '--at', 't=1']);
+    expect(text).toMatch(/regimes: VACUOUS/);
+    expect(text).toMatch(/premises not machine-checked \(your judgment or measurement\):\n {4}ab-spring-lc: m, k, L, C > 0; lossless; unforced; x0, q0 nonzero/);
+  });
+});
+
 describe('top-level help agrees with the commands it summarizes', () => {
   it('confront: margin to the acceptance threshold, not "to exclusion" (F07)', async () => {
     const { text } = await run(['help']);

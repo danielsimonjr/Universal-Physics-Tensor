@@ -88,7 +88,13 @@ describe('upt path', () => {
     const outside = await run('0.8');
     expect(outside.allRegimesHold).toBe(false);
     expect(outside.regimes).toEqual([
-      { bridgeId: 'ab-pendulum-linear', ok: false, violated: ['theta0 <= 0.5 (θ0 ≤ 0.5 rad)'], unchecked: [] },
+      {
+        bridgeId: 'ab-pendulum-linear',
+        ok: false,
+        violated: ['theta0 <= 0.5 (θ0 ≤ 0.5 rad)'],
+        unchecked: [],
+        premisesNotChecked: ['θ0 ≤ 0.5 rad', 'the bound is a PERIOD error and is not uniform in time'],
+      },
     ]);
     const inside = await run('0.2');
     expect(inside.allRegimesHold).toBe(true);

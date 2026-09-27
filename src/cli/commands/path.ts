@@ -59,6 +59,8 @@ interface RegimeReport {
   ok: boolean | 'unknown';
   violated: string[];
   unchecked: string[];
+  /** The bridge's prose side conditions: stated, never evaluated here. */
+  premisesNotChecked?: string[];
 }
 
 interface HorizonReport {
@@ -213,6 +215,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       ok: check.ok,
       violated: check.violated.map(showInequality),
       unchecked: check.unchecked.map(showInequality),
+      ...(b.sideConditions.length > 0 ? { premisesNotChecked: [...b.sideConditions] } : {}),
     };
   });
   const allRegimesHold: boolean | 'unknown' = regimes.some((r) => r.ok === false)
@@ -346,6 +349,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const r of regimes) {
     if (r.ok === false) out(`    ${r.bridgeId}: VIOLATED — ${r.violated.join('; ')}`);
     else if (r.ok === 'unknown') out(`    ${r.bridgeId}: unknown — unchecked: ${r.unchecked.join('; ')}`);
+  }
+  if (regimes.some((r) => r.premisesNotChecked !== undefined)) {
+    out('  premises not machine-checked (your judgment or measurement):');
+    for (const r of regimes) {
+      if (r.premisesNotChecked !== undefined) out(`    ${r.bridgeId}: ${r.premisesNotChecked.join('; ')}`);
+    }
   }
   if (horizons.length === 0) {
     out('  horizons: none on this path (no step carries a bound)');
