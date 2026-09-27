@@ -119,6 +119,8 @@ Usage:
         ranks the σ-tests by margin to the 1σ acceptance threshold (a software
         criterion, not a scientific exclusion level; tightest = most at-risk under
         new data); --sensitivity ranks the prediction's input elasticities.
+        Each record names its statistical object, criterion and data origin;
+        consistency ratios (no σ) are counted apart from the σ-tests.
 
   upt axes
         Axis-discrimination audit — which tensor classification axes GATE the

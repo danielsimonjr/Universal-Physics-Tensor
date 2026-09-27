@@ -116,6 +116,43 @@ describe('I12 — a derived relation carries its premise, meaning and status whe
   });
 });
 
+describe('I14 — each confrontation names its statistical object, criterion and data origin', () => {
+  it('a σ-test, a limit and a consistency ratio each state what kind of comparison they are', async () => {
+    const { text } = await run(['confront']);
+    const rec = (id: string) => {
+      const s = text.slice(text.indexOf(`  ${id} [`));
+      return s.slice(0, s.indexOf('\n  be-', 3) === -1 ? undefined : s.indexOf('\n  be-', 3));
+    };
+    expect(rec('be-37')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: as reported by the source \(no derivation recorded\)/);
+    expect(rec('be-51')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: derived from PPN γ/);
+    expect(rec('be-48')).toMatch(/\n {4}statistic: one-sided upper limit · criterion: predicted ≤ limit/);
+    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: none — the gap is a fractional difference, not a σ-residual; not a precision test/);
+  });
+
+  it('the notes (preprocessing, independence, circularity) are printed, not left in the JSON only', async () => {
+    const { text } = await run(['confront', '--bridge=be-58']);
+    expect(text).toMatch(/\n {4}notes: k_B measured via S_V=4k_BTR .*NON-CIRCULAR/);
+    const none = await run(['confront', '--bridge=be-23']);
+    expect(none.text).not.toMatch(/\n {4}notes:/);
+  });
+
+  it('the summary counts σ-tests apart from limits and consistency ratios, recounted from --json', async () => {
+    const env = await json(['confront']);
+    const count = (k: string) => env.result.filter((r: any) => r.kind === k).length;
+    expect(env.statisticDistribution).toEqual({
+      sigmaTests: count('value'),
+      limits: count('upper-bound'),
+      consistencyRatios: count('consistency'),
+      tables: count('table'),
+    });
+    for (const r of env.result) expect(typeof r.statistic.object).toBe('string');
+    const { text } = await run(['confront']);
+    expect(text).toContain(
+      `by statistic: ${count('value')} σ-residual tests · ${count('upper-bound')} limits · ${count('consistency')} consistency ratios (no σ; never counted as precision tests)`,
+    );
+  });
+});
+
 const STOKES_AT = ['--at', 'Re=0.05', 'm=1e-15', 'gamma=1e-8', 't=1'];
 
 describe('I7 — a premise checklist: machine-checked, declared by you, denied by you, unspecified', () => {

@@ -20,6 +20,8 @@ export interface JsonEnvelope {
   epistemics?: string;
   /** `upt confront` — count of confrontations by rigor tier (stringent/moderate/loose). */
   rigorDistribution?: Record<string, number>;
+  /** `upt confront` — count of confrontations by statistical object (σ-test, limit, consistency ratio, table). */
+  statisticDistribution?: Record<string, number>;
   result: unknown;
 }
 

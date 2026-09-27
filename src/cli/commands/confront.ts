@@ -24,7 +24,12 @@ const HELP = `upt confront [--bridge=be-XX] [--rigor=stringent|moderate|loose] [
         this tool's 1σ acceptance threshold (a software criterion, not a
         scientific exclusion level; the smallest margin is the most at-risk
         under new data);
-        --sensitivity adds an input-elasticity ranking (value-kind only).`;
+        --sensitivity adds an input-elasticity ranking (value-kind only).
+        Each record states its statistical object (point estimate ± 1σ,
+        one-sided limit, or a consistency ratio with no σ), the criterion
+        applied, whether the observed number is derived, and the record's
+        notes (preprocessing, independence, caveats). Consistency ratios are
+        counted apart and never as precision tests.`;
 
 const RIGOR_TIERS = new Set(['stringent', 'moderate', 'loose']);
 
@@ -51,6 +56,42 @@ function parseBridgeId(raw: string): number {
 }
 
 const SENSITIVITY_NOTE = 'strongest dependence, not uncertainty budget';
+
+type Outcome = ReturnType<CommandCtx['api']['listConfrontations']>[number]['run'] extends () => infer O ? O : never;
+
+/**
+ * The statistical object a confrontation compares, the criterion it applies,
+ * and where its observed number comes from — read from the outcome's kind and
+ * fields only.
+ */
+function statisticOf(o: Outcome): { object: string; criterion: string; observed: string } {
+  const reported = 'as reported by the source (no derivation recorded)';
+  switch (o.kind) {
+    case 'value':
+      return {
+        object: 'point estimate ± 1σ',
+        criterion: 'residual ≤ 1σ',
+        observed: o.measured ? `derived from ${o.measured.quantity} by ${o.measured.derivation}` : reported,
+      };
+    case 'upper-bound':
+      return o.predictedIs === 'encoded-bound'
+        ? { object: 'one-sided upper limit against an encoded range', criterion: 'observed limit ≤ encoded bound', observed: reported }
+        : { object: 'one-sided upper limit', criterion: 'predicted ≤ limit', observed: reported };
+    case 'consistency':
+      return {
+        object: 'reference value with no σ',
+        criterion: 'none — the gap is a fractional difference, not a σ-residual; not a precision test',
+        observed: reported,
+      };
+    case 'table':
+      return { object: 'per-row point estimate ± 1σ', criterion: 'residual per row, reported not thresholded', observed: reported };
+  }
+}
+
+function statisticDistribution(outcomes: readonly Outcome[]) {
+  const n = (k: Outcome['kind']) => outcomes.filter((o) => o.kind === k).length;
+  return { sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'), tables: n('table') };
+}
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -105,10 +146,17 @@ async function run(ctx: CommandCtx): Promise<number> {
       ...(wantSensitivity && r.outcome.kind === 'value'
         ? { ...r.outcome, sensitivity: api.decidingMeasurement(r.bridgeId) }
         : r.outcome),
+      statistic: statisticOf(r.outcome),
     }));
     const epistemics = wantSensitivity ? EPISTEMICS + SENSITIVITY_EPISTEMICS : EPISTEMICS;
     emitJson(
-      { command: 'confront', epistemics, rigorDistribution: api.rigorDistribution(), result: jsonResults },
+      {
+        command: 'confront',
+        epistemics,
+        rigorDistribution: api.rigorDistribution(),
+        statisticDistribution: statisticDistribution(results.map((r) => r.outcome)),
+        result: jsonResults,
+      },
       ctx.write,
     );
     return 0;
@@ -122,6 +170,11 @@ async function run(ctx: CommandCtx): Promise<number> {
     for (const r of results) d[r.rigor]++;
     out(
       `rigor: ${d.stringent} stringent · ${d.moderate} moderate · ${d.loose} loose — NOT ${results.length} equal confirmations`,
+    );
+    const s = statisticDistribution(results.map((r) => r.outcome));
+    out(
+      `by statistic: ${s.sigmaTests} σ-residual tests · ${s.limits} limits · ${s.consistencyRatios} consistency ratios ` +
+        `(no σ; never counted as precision tests)${s.tables ? ` · ${s.tables} tables` : ''}`,
     );
     if (wantFrontier) {
       out(
@@ -190,6 +243,9 @@ async function run(ctx: CommandCtx): Promise<number> {
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);
         break;
     }
+    const st = statisticOf(outcome);
+    out(`    statistic: ${st.object} · criterion: ${st.criterion} · observed: ${st.observed}`);
+    if (outcome.provenance.note) out(`    notes: ${outcome.provenance.note}`);
     out(`    source: ${outcome.provenance.citation}`);
   }
   return 0;
