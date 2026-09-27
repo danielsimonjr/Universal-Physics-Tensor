@@ -54,7 +54,7 @@ export function makeApproximation(bound: ApproximationBound): ApproximationBound
 }
 
 /** Arithmetic–geometric mean, the standard evaluation route for `K`. @internal */
-function agm(a0: number, b0: number): number {
+export function agm(a0: number, b0: number): number {
   let a = a0;
   let b = b0;
   for (let i = 0; i < 60 && a !== b; i++) {

@@ -266,7 +266,7 @@ export function judgeObservable(
 
 /** The translation's evidence, DERIVED by running its witnesses now; never the bound's. */
 function translationEvidence(api: CommandCtx['api'], tr: Translation) {
-  const runs = tr.checks.map((c) => api.runNumericWitness(c));
+  const runs = tr.checks.map((c) => api.runTranslationCheck(c));
   const passing = new Set(runs.filter((r) => r.status === 'checked').map((r) => r.witnessId));
   return {
     tags: [...api.deriveEvidence({ witnesses: tr.witnesses }, passing)].sort(),
