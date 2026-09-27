@@ -90,6 +90,40 @@ from v0.1.0 onward.
     included, and a route to measurement; every number is checked by a second method in its tests.
     The farad added to the unit parser. `CE-stokes-einstein` stays encoded up to its 6π; the case
     takes the 6π from Stokes drag and says so.
+  - **I8 / I18 (limits)** — the phase translation's witness also runs at the user's θ0 (`W7p@point`,
+    bounded, with a (1+ε) control); a second translation, `--tolerance=position:EPS`, is an upper bound
+    B(t) = W̄ + 2θ0·sin(min(Δφ, π)/2) given the quoted pendulum Fourier series (witnesses W7x, W7xa),
+    UNDETERMINED past t*; `ab-spring-lc` declares a phase carriage (witness W1φ), so a phase tolerance
+    composes pendulum → spring → LC while the composite bound stays "no composite claim".
+    `path --sweep … --compare=<to2>` sweeps two limits side by side and marks NEITHER rows with no
+    number (telegraph: τ from 0.1 to 10 at D = q = t = 1; Klein–Gordon: x from 0.316 to 3.16).
+  - **I14 (limits)** — `confront` prints the actual difference (observed − predicted)/predicted beside
+    the agreement bound for every consistency record, labelled apart (`fractionalGapIs`,
+    `consistencyComparison()`); no pinned number changed. Each preprocessing/independence statement
+    cites checkable references (file + verbatim quote or declared symbol), resolved by a test.
+  - **I15 (limits)** — five witnesses are attributed to the bound they test, each checked against its
+    spec, and `upt atlas <id>` lists them under `bound`. Two atlas models gain a canonical-equation
+    link (`model-pendulum` → CE-pendulum-period, `model-dalembert` → CE-wave-speed), each by a numeric
+    check; a ratchet test fails any new link without one.
+  - **I16 (limits)** — `map --all-routes`, `map --observable=NAME`, and `--stored`/`--run` evidence from
+    committed or run-now witness results. Fixed: `map --route` listed models out of route order across
+    a backwards exact equivalence.
+  - **I17 (limits)** — `upt-record/2`: argument and entry hashes (an edited argument is an integrity
+    finding), 18 named constant tables fingerprinted apart, each changed constant marked reachable or
+    not from the command (static import reach, labelled as such), and the builtin-parser path tested.
+  - **I19 (limits)** — `probe study` reads CSV (identical results to JSON), propagates input σ by
+    effective variance, searches a declared correction family in one dimensionless input (F test), and
+    takes `--replication=FILE` with independent provenance. Reports state that every shipped control was
+    designed knowing its law.
+  - **I20 (limits)** — the Brownian sphere computes the Langevin–Basset memory correction and optional
+    Faxén/Brenner wall corrections; resistor noise takes amplifier e_n², i_n²; the resonator takes a
+    thermal floor. New cases `case-skin-depth`, `case-lumped-cooling` and `case-kepler-rv`. Applied
+    cases accept optional inputs.
+  - **I2 proposal** — `docs/planning/ADR-proposal-transported-norm-composition.md` and a test-only
+    demonstration (relative period error survives `ab-spring-lc` unchanged; absolute period and
+    trajectory errors do not). The composition table is not changed; the decision is Mothership's.
+  - `path`'s "to compose, this path would need" list also names an exact map before a bound (e.g.
+    `ab-damped-rlc` before `ab-damped-massless`), which must state how it acts on that bound's norm.
 
 - **CLI-only applied-physics audit archive** (2026-09-26): preserve the model-persona report,
   original command evidence and maps under `docs/audit/`, including prioritized improvement
