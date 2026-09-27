@@ -66,6 +66,11 @@ const EPISTEMICS =
   '⚠ a REVIEW SURFACE: `promising` means "worth a physicist\'s minute", not "true".\n' +
   '  Each candidate hypothesises an identification a≡b and tests its consequences.';
 
+const DERIVE_EPISTEMICS =
+  '⚠ Each is the ALGEBRAIC CONSEQUENCE of an unadjudicated identification — NOT a new\n' +
+  '  relation and NOT a bridge. No mechanism asserted. Promotion to the catalog needs\n' +
+  '  adversarial + literature review (Part-VI §XXVII-B). The enumerator proposes; humans dispose.';
+
 // ── discover --derive (identity-consequence proposals) ────────────────────
 
 /**
@@ -85,9 +90,7 @@ function deriveReport(
 ): void {
   const proposals = api.deriveProposedBridges(ranked);
   out(`\nDerived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ${label}]`);
-  out('⚠ Each is the ALGEBRAIC CONSEQUENCE of an unadjudicated identification — NOT a new');
-  out('  relation and NOT a bridge. No mechanism asserted. Promotion to the catalog needs');
-  out('  adversarial + literature review (Part-VI §XXVII-B). The enumerator proposes; humans dispose.\n');
+  out(DERIVE_EPISTEMICS + '\n');
   if (!proposals.length) {
     out('  no admissible proposal (need two fully-quantitative, monomial canonical targets).');
     return;
@@ -119,6 +122,22 @@ function deriveReport(
     if (p.alsoDerivableFrom && p.alsoDerivableFrom.length) {
       out(`      also derivable from: ${p.alsoDerivableFrom.join('; ')}`);
     }
+    const c = api.describeDerivedClaim(p);
+    out(
+      c.relation === 'known-law'
+        ? `      status: known law — re-derives ${c.canonicalMatch.id}; the identification ${c.premise} is still unadjudicated`
+        : `      status: conditional identity — holds only if ${c.premise} (unadjudicated); untested`,
+    );
+    out(`      meaning: ${c.symbol.meaning}`);
+    out(
+      `      assumptions carried: ${c.assumptions.map((a) => `${a.equation}: ${a.assumptions.join(', ') || 'none stated'}`).join('; ')}`,
+    );
+    const governingSet = `{${p.governing.map((g) => g.name).join(', ')}}`;
+    out(
+      `      canonical match: ${c.canonicalMatch.id ?? 'none'} — ${c.canonicalMatch.sameTarget} registry equation(s) target ` +
+        `${p.target.name}, ${c.canonicalMatch.sameTargetAndGoverning} with governing ${governingSet}; ` +
+        'scope: this registry only, not physics at large',
+    );
   }
   out('');
 }
@@ -203,7 +222,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   if (args.flags.has('json')) {
     const result = isDerive
-      ? api.deriveProposedBridges(ranked)
+      ? api.deriveProposedBridges(ranked).map((p) => ({ ...p, claim: api.describeDerivedClaim(p) }))
       : withConsequence.map((c) => ({
           ...c,
           grounding: api.describeGrounding(c, c.consequence?.signal),
@@ -213,7 +232,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       command: 'discover',
       source,
       options: opts as Record<string, unknown>,
-      epistemics: EPISTEMICS,
+      epistemics: isDerive ? DERIVE_EPISTEMICS : EPISTEMICS,
       result,
       ...(isDerive
         ? {}

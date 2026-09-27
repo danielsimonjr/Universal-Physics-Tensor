@@ -78,6 +78,44 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
   });
 });
 
+describe('I12 — a derived relation carries its premise, meaning and status wherever it goes', () => {
+  it('m = hν/c² names mass as an equal-energy scale, not a photon rest mass', async () => {
+    const { text } = await run(['discover', '--source=canonical', '--derive']);
+    const p = text.slice(text.indexOf('  IC-photon-energy--rest-energy--mass'));
+    const r = p.slice(0, p.indexOf('\n  IC-', 5) === -1 ? undefined : p.indexOf('\n  IC-', 5));
+    expect(r).toMatch(/status: conditional identity — holds only if rest-energy ≡ photon-energy \(unadjudicated\); untested/);
+    expect(r).toMatch(/meaning: mass is the mass of CE-mass-energy .*: the mass for which rest-energy equals photon-energy \(CE-planck-einstein\) — an equal-\[energy\] scale; the photon-energy side is not given a mass/);
+    expect(r).toMatch(/canonical match: none — \d+ registry equation\(s\) target mass, \d+ with governing \{.*\}; scope: this registry only, not physics at large/);
+    expect(r).toMatch(/assumptions carried: CE-planck-einstein: .*; CE-mass-energy: /);
+  });
+
+  it('--json carries the claim per proposal and the derive warning in the envelope, not the discover banner', async () => {
+    const env = await json(['discover', '--source=canonical', '--derive']);
+    expect(env.epistemics).toMatch(/ALGEBRAIC CONSEQUENCE of an unadjudicated identification/);
+    expect(env.epistemics).not.toMatch(/`promising` means/);
+    for (const p of env.result) {
+      expect(p.claim.premise).toBe(`${p.derivedFrom.identification.a} ≡ ${p.derivedFrom.identification.b}`);
+      expect(['known-law', 'conditional-identity']).toContain(p.claim.relation);
+      expect(p.claim.tested).toBe(false);
+      expect(p.claim.canonicalMatch.scope).toBe('the canonical registry only');
+      expect(p.claim.symbol.name).toBe(p.derivedFrom.solvedFor);
+      expect(p.derivedFrom.sourceEquationIds).toContain(p.claim.symbol.fromEquation);
+    }
+  });
+
+  it('control: a proposal whose normal form is a registry entry is labelled a known law', async () => {
+    const api = await import('../../dist/cli-api.js');
+    const [p] = api.deriveProposedBridges(
+      api.rankDiscoveries(api.CANONICAL_GRAPH).filter((c: any) => c.verdict === 'promising'),
+    );
+    const planted = { id: 'CE-planted', name: 'planted', assumptions: [], dimensional: { target: p.target, governing: p.governing }, scalarAst: p.scalarAst };
+    const known = api.describeDerivedClaim(p, [...api.CANONICAL_EQUATIONS, planted]);
+    expect(known.relation).toBe('known-law');
+    expect(known.canonicalMatch.id).toBe('CE-planted');
+    expect(api.describeDerivedClaim(p).relation).toBe('conditional-identity');
+  });
+});
+
 const STOKES_AT = ['--at', 'Re=0.05', 'm=1e-15', 'gamma=1e-8', 't=1'];
 
 describe('I7 — a premise checklist: machine-checked, declared by you, denied by you, unspecified', () => {
