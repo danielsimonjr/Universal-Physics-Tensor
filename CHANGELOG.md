@@ -44,6 +44,13 @@ from v0.1.0 onward.
   - **I18** — `upt path --sweep name=lo:hi:n[:log]` (2–200 samples, `--csv`) evaluates the point
     verdict per row. A row outside a regime or past a horizon carries no error.
   - A closed stdout (`upt … | head`) ends the run quietly instead of crashing with `EPIPE`.
+  - **I6** — every bridge evaluator declares its inputs (`EvaluatorSpec.parameters`): unit, quantity,
+    symbol, meaning, geometry role (`radius` / `diameter` / `separation` / `impact-parameter` /
+    `semi-major-axis`) and, for temperatures, that they are absolute. `upt evaluate` accepts a value with
+    a unit (`d_m=1um`, `T_K=25degC`, `M_kg=1Msun`) and converts it only when the dimensions agree.
+    A σ in degC is a difference and takes no offset. An undeclared key now exits 1; before this it was
+    ignored. `major_axis_m` is a declared, exact alternate of `a_m`. A test checks every declared unit
+    against the unit named by its key's suffix.
 
 - **CLI-only applied-physics audit archive** (2026-09-26): preserve the model-persona report,
   original command evidence and maps under `docs/audit/`, including prioritized improvement
