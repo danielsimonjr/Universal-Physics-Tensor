@@ -107,6 +107,13 @@ const be52Entry: ConfrontationEntry = {
       withinObserved: r.withinObserved,
       units: 'arcsec/century',
       provenance: { citation: r.observation.citation, year: 1947, retrieved: '2026-07-02' },
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'observed is the ANOMALOUS advance: the residual left after subtracting the Newtonian planetary perturbations (Le Verrier / Newcomb / Clemence)',
+        source: 'module doc and MERCURY field doc, be52-mercury-confrontation.ts',
+      },
+      independence: { state: 'not-recorded' },
     };
   },
 };
@@ -130,6 +137,18 @@ const be23Entry: ConfrontationEntry = {
       withinObserved: residualInSigma(1.0, r.alphaAggregate, r.alphaAggregateErr) <= 1,
       units: 'dimensionless (α)',
       provenance: { citation: r.observation.citation, year: 2019, retrieved: '2026-07-02' },
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          "the source converts the T-linear resistivity slope to α via the Drude relation ρ = m*/(n e² τ); only its abstract-level aggregate (α within ~×2 of 1) is encoded, as α = 1.0 ± 0.4, an additive σ narrower than the paper's multiplicative factor-2 spread; the per-material table was not reproduced",
+        source: 'module doc and PLANCKIAN_CUPRATES comment, be23-planckian-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the predicted α = 1 is the Planckian reference fixed in the encoding, not fitted to this data; BE-23 does not predict α (α_SYK is a free O(1) coefficient), so this checks the O(1) assumption, not a prediction',
+        source: 'module doc, be23-planckian-confrontation.ts',
+      },
     };
   },
 };
@@ -160,6 +179,19 @@ const be36Entry: ConfrontationEntry = {
         retrieved: '2026-07-02',
         note: `two-sided bound: upper ${r.upperBound}, lower ${r.lowerBound}; encoded |ratio| ≤ ${r.encodedBound}`,
       },
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          "both bounds are recomputed from the observed 1.74 s GW-to-GRB lag at the paper's conservative lower distance 26 Mpc (not the 40 Mpc central value); the upper bound attributes the whole lag to faster GW travel, the lower bound assumes an intrinsic EM emission delay of at most 10 s",
+        source: 'module doc, be36-gw170817-confrontation.ts; Abbott et al. 2017 §3',
+      },
+      independence: {
+        state: 'shares-input',
+        shared: 'GW170817 itself',
+        statement:
+          "the encoded range |Δv|/c ≤ 1e-15 is the bridge's canonical GW170817 bound, so the comparison checks the encoding against the observation it was named for, not an independent prediction",
+        source: 'GW170817_SPEED_BOUND doc, equations/be-36-gw-speed-bound.ts',
+      },
     };
   },
 };
@@ -179,6 +211,13 @@ const be37Entry: ConfrontationEntry = {
       withinObserved: r.withinObserved,
       units: 'PPN γ (dimensionless)',
       provenance: r.observation.provenance,
+      preprocessing: { state: 'not-recorded' },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the prediction is γ = 1 exactly, fixed by the encoded GR Shapiro form; it takes no input parameter',
+        source: 'record note and confrontBE37 (predicted_gamma = 1), be37-cassini-confrontation.ts',
+      },
     };
   },
 };
@@ -197,6 +236,13 @@ const be48Entry: ConfrontationEntry = {
       predictedIs: 'point',
       units: 's⁻¹ (collapse rate)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'the bound was derived by Carlesso et al. from the LISA-Pathfinder data (Armano et al. 2016) for the CSL model at r_C = 100 nm; it is compared with the GRW single-nucleon rate, a related but distinct model',
+        source: 'module doc and record citation, be48-collapse-confrontation.ts',
+      },
+      independence: { state: 'not-recorded' },
     };
   },
 };
@@ -216,6 +262,19 @@ const be51Entry: ConfrontationEntry = {
       withinObserved: r.withinObserved,
       units: 'arcsec (solar-limb deflection)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'the source reports γ − 1 = (−0.8 ± 1.2)×10⁻⁴; the repo converts it to a deflection as (1+γ)/2 × the predicted solar-limb value, and σ likewise',
+        source: 'VLBI_LAMBERT_2009 doc and confrontBE51, be51-lensing-confrontation.ts',
+      },
+      independence: {
+        state: 'shares-input',
+        shared: 'the solar-limb baseline 4GM☉/(R☉c²) (GM☉ IAU 2015 nominal, R☉ = 6.957e8 m)',
+        statement:
+          'the derived deflection is the predicted value scaled by the measured γ, so the baseline cancels and the residual is |γ − 1|/σ_γ: the test is of γ alone',
+        source: 'confrontBE51 (observed_arcsec = scaling × predicted_arcsec), be51-lensing-confrontation.ts',
+      },
       measured: {
         quantity: 'PPN γ',
         value: r.observation.observed_gamma,
@@ -240,6 +299,18 @@ const be21Entry: ConfrontationEntry = {
       fractionalGap: r.fractional_gap,
       units: 'η/s (ℏ/k_B units); KSS lower bound 1/(4π), observed satisfies + nearly saturates',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'η/s is temperature-dependent; the Bayesian hydrodynamic extraction from RHIC/LHC flow observables gives a minimum near T_c spanning ~0.08–0.15 across analyses, and the record takes 0.10 as representative, with no σ',
+        source: 'record note and citation, be21-kss-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the KSS bound 1/(4π) contains no parameter; the record states the η/s extraction from flow observables is independent of the bound, not a recompute of 1/(4π)',
+        source: 'record note, be21-kss-confrontation.ts',
+      },
     };
   },
 };
@@ -259,6 +330,18 @@ const be35Entry: ConfrontationEntry = {
       withinObserved: r.withinObserved,
       units: 'ν (3D-Ising correlation-length exponent, dimensionless)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'observed ν is an experimental average over liquid-vapor and binary-fluid critical points compiled by Pelissetto & Vicari 2002; Monte-Carlo values were deliberately excluded from the observed slot',
+        source: 'record citation and note, be35-bootstrap-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the record states the bootstrap ν (from Δ_ε = 1.412625(10), Kos et al. 2016) is a parameter-free CFT prediction and the experimental ν an independent determination, not a recompute',
+        source: 'record note and citation, be35-bootstrap-confrontation.ts',
+      },
     };
   },
 };
@@ -277,6 +360,18 @@ const be11Entry: ConfrontationEntry = {
       units:
         'p₀(theory)/p₀(exp) ratio; parameter-free 9-gas agreement within 15% experimental error',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'the source compares theory and experiment in a figure (Fig 3) with no tabulated pair; its stated agreement across 9 gases within ~15% is encoded as ratio 1.0 with a 15% tolerance, not transcribed per gas',
+        source: 'record note and module doc, be11-decoherence-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the source states its calculation "contains no adjustable parameters"',
+        source: 'record note (quoting Hornberger et al. 2003), be11-decoherence-confrontation.ts',
+      },
     };
   },
 };
@@ -294,6 +389,18 @@ const be55Entry: ConfrontationEntry = {
       fractionalGap: r.relative_uncertainty,
       units: 'R_H(graphene)/R_H(GaAs) ratio; topological universality to 8.6e-11',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          "the source's graphene-vs-GaAs agreement to a relative 8.6e-11 is encoded as ratio 1 with that relative uncertainty; no measured ratio value is transcribed",
+        source: 'QH_UNIVERSALITY_JANSSEN_2012 (observed_ratio: 1), be55-quantum-hall-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the predicted ratio is 1 with no parameter; R_K = h/e² is exact by the post-2019 SI, and the material-to-material ratio tests universality, not that definitional value',
+        source: 'record note, be55-quantum-hall-confrontation.ts',
+      },
     };
   },
 };
@@ -311,6 +418,13 @@ const be56Entry: ConfrontationEntry = {
       fractionalGap: r.agreement,
       units: 'measured/theory force ratio; ~1% agreement (corrected theory, systematics-dominated)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'sphere-plate measurement compared with theory corrected for finite conductivity, surface roughness, temperature and electrostatic patches; the ~1% agreement is at the smallest separation and is encoded as ratio 1 with 1% agreement',
+        source: 'record note and module doc, be56-casimir-confrontation.ts',
+      },
+      independence: { state: 'not-recorded' },
     };
   },
 };
@@ -330,6 +444,14 @@ const be58Entry: ConfrontationEntry = {
       withinObserved: r.withinObserved,
       units: 'k_B (J/K); JNT via S_V=4k_BTR vs CODATA',
       provenance: r.observation.provenance,
+      preprocessing: { state: 'not-recorded' },
+      independence: {
+        state: 'shares-input',
+        shared: 'the CODATA 2014 k_B (the predicted value is this reference constant, not a bridge output) and a resistance calibration traceable to the quantum Hall effect (the physics of be-55)',
+        statement:
+          'the record states resistance (QHE) and temperature (acoustic/ITS-90) are traceable independently of the noise relation; whether this measurement entered the CODATA 2014 adjustment is not recorded',
+        source: 'record note and confrontBE58 (predicted_k_B = K_B_CODATA_2014), be58-johnson-nyquist-confrontation.ts',
+      },
     };
   },
 };
@@ -347,6 +469,18 @@ const be59Entry: ConfrontationEntry = {
       fractionalGap: r.relative_uncertainty,
       units: 'V(junction A)/V(junction B) ratio; Josephson-volt universality to ~1e-9',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'the parts-in-10⁹ agreement of independently built Josephson standards is encoded as a junction-to-junction ratio of 1 with a conservative 1e-9 bound (best comparisons reach ~1e-10 to 1e-11)',
+        source: 'record note, be59-ac-josephson-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the predicted ratio is 1 with no parameter; K_J = 2e/h is exact by the post-2019 SI, and the junction independence, not that definitional value, is what is tested',
+        source: 'record note, be59-ac-josephson-confrontation.ts',
+      },
     };
   },
 };
@@ -364,6 +498,18 @@ const be60Entry: ConfrontationEntry = {
       fractionalGap: r.relative_uncertainty,
       units: 'R_xy(plateau)/(3·R_K) ratio; the ⅓ fraction (topological order) to ~1e-5',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'the fractional quantization confirmed to ~1e-5 in high-mobility samples is encoded as R_xy/(3·R_K) = 1 with a conservative 1e-5 bound',
+        source: 'record note, be60-fractional-qh-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the predicted fraction 1/3 has no parameter; R_K is definitional (post-2019 SI), so the fraction is what is tested, and the record states no single-particle theory predicts it',
+        source: 'record note, be60-fractional-qh-confrontation.ts',
+      },
     };
   },
 };
@@ -381,6 +527,19 @@ const be61Entry: ConfrontationEntry = {
       fractionalGap: r.agreement,
       units: 'Lorenz number L (W·Ω·K⁻²); degenerate-limit consistency, material spread ~10% (caveat)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          "the source's recovery of L₀ in high-RRR silver is encoded as observed = L₀; the 10% figure is the stated material-spread bound (Cu at 0 °C ~9% low), not a measured gap",
+        source: 'LORENZ_SILVER_2023 and its note, be61-wiedemann-franz-confrontation.ts',
+      },
+      independence: {
+        state: 'shares-input',
+        shared: 'the value itself: the observed slot is the predicted constant L₀ = (π²/3)(k_B/e)²',
+        statement:
+          "observed equals predicted by construction, so this record cannot show a discrepancy; it records the source's statement, not an independent number",
+        source: 'LORENZ_SILVER_2023 (L_measured: LORENZ_NUMBER_SI), be61-wiedemann-franz-confrontation.ts',
+      },
     };
   },
 };
@@ -398,6 +557,18 @@ const be62Entry: ConfrontationEntry = {
       fractionalGap: r.agreement,
       units: '2Δ(0)/k_BT_c; weak-coupling class ~3.5, strong-coupling to ~4.3 (caveat)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'a representative weak-coupling value (Sn ~3.5) fills the observed slot; the class spans Al ~3.4 to strong-coupling Pb ~4.3, which is not used; 5% is the stated agreement bound',
+        source: 'record note and citation, be62-bcs-gap-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'the weak-coupling ratio 2π/e^γ ≈ 3.528 is a pure number with no material parameter',
+        source: 'BCS_GAP_RATIO, be62-bcs-gap.ts',
+      },
     };
   },
 };
@@ -415,6 +586,18 @@ const be63Entry: ConfrontationEntry = {
       fractionalGap: r.agreement,
       units: 'M_⊙; WD max ~1.35 vs M_Ch~1.44 (upper-bound; super-Chandrasekhar SNe caveat)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'observed is the highest reliably measured white-dwarf mass (~1.35 M_⊙); super-Chandrasekhar SN Ia progenitor inferences (2.4–2.8 M_⊙) are not used for the observed slot; 12% is the stated agreement bound',
+        source: 'module doc and record note, be63-chandrasekhar-mass-confrontation.ts',
+      },
+      independence: {
+        state: 'no-fitted-parameter',
+        statement:
+          'M_Ch is evaluated from ℏ, c, G and the atomic mass unit at μ_e = 2, with no parameter taken from white-dwarf masses',
+        source: 'confrontBE63 and evaluateChandrasekharMass, be63-chandrasekhar-mass*.ts',
+      },
     };
   },
 };
@@ -432,6 +615,13 @@ const be64Entry: ConfrontationEntry = {
       fractionalGap: r.agreement,
       units: 'peak L/L_Edd (order unity; super-Eddington ULX caveat)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'observed is the peak Eddington ratio of the brightest sub-Eddington AGN/X-ray binaries, encoded as 1 with an order-unity (50%) bound; super-Eddington sources (ULX pulsars) are not in the observed slot',
+        source: 'EddingtonRatioObservation doc and record note, be64-eddington-luminosity-confrontation.ts',
+      },
+      independence: { state: 'not-recorded' },
     };
   },
 };
@@ -449,6 +639,19 @@ const be65Entry: ConfrontationEntry = {
       fractionalGap: r.agreement,
       units: 'M_⊙; order-of-magnitude collapse scale (convention-dependent prefactor caveat)',
       provenance: r.observation.provenance,
+      preprocessing: {
+        state: 'recorded',
+        statement:
+          'the Jeans mass is evaluated at dense core-forming conditions (T = 10 K, ρ ≈ 3.8e-16 kg/m³ ~ 10⁵ cm⁻³ of H₂, μ = 2.3), not at cloud-average density where M_J is tens of M_⊙; 150% is the stated agreement bound',
+        source: 'module doc, be65-jeans-mass-confrontation.ts',
+      },
+      independence: {
+        state: 'shares-input',
+        shared: "the cloud conditions T, ρ, μ: the prediction is evaluated at the observation record's own conditions",
+        statement:
+          'the module chose them as the conditions where fragmentation occurs; whether they were chosen independently of the ~1 M_⊙ core scale is not recorded',
+        source: 'confrontBE65 and MOLECULAR_CLOUD_FRAGMENT, be65-jeans-mass-confrontation.ts',
+      },
     };
   },
 };

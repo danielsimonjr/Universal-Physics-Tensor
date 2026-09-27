@@ -778,6 +778,9 @@ export type {
   SigmaComponent,
   ObservationKind,
   ConfrontationOutcome,
+  ConfrontationDataHandling,
+  ConfrontationPreprocessing,
+  ConfrontationIndependence,
 } from './bridges/observations/types.js';
 
 // BE-37 × Cassini — GR Shapiro-delay PPN-γ confrontation.

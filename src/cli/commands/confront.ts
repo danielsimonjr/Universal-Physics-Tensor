@@ -27,9 +27,10 @@ const HELP = `upt confront [--bridge=be-XX] [--rigor=stringent|moderate|loose] [
         --sensitivity adds an input-elasticity ranking (value-kind only).
         Each record states its statistical object (point estimate ± 1σ,
         one-sided limit, or a consistency ratio with no σ), the criterion
-        applied, whether the observed number is derived, and the record's
-        notes (preprocessing, independence, caveats). Consistency ratios are
-        counted apart and never as precision tests.`;
+        applied, whether the observed number is derived, its preprocessing,
+        its independence from the prediction (no fitted parameter, a shared
+        input, or not recorded — never implied), and the record's notes.
+        Consistency ratios are counted apart and never as precision tests.`;
 
 const RIGOR_TIERS = new Set(['stringent', 'moderate', 'loose']);
 
@@ -91,6 +92,38 @@ function statisticOf(o: Outcome): { object: string; criterion: string; observed:
 function statisticDistribution(outcomes: readonly Outcome[]) {
   const n = (k: Outcome['kind']) => outcomes.filter((o) => o.kind === k).length;
   return { sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'), tables: n('table') };
+}
+
+const NOT_RECORDED = 'not recorded — the record states nothing on this; that is not "none"';
+
+function preprocessingLine(o: Outcome): string {
+  const p = o.preprocessing;
+  return p.state === 'recorded' ? `${p.statement} [source: ${p.source}]` : NOT_RECORDED;
+}
+
+function independenceLine(o: Outcome): string {
+  const i = o.independence;
+  switch (i.state) {
+    case 'no-fitted-parameter':
+      return `no parameter fitted to this measurement — ${i.statement} [source: ${i.source}]`;
+    case 'shares-input':
+      return `shares ${i.shared} — ${i.statement} [source: ${i.source}]`;
+    case 'not-recorded':
+      return NOT_RECORDED;
+  }
+}
+
+function dataHandlingDistribution(outcomes: readonly Outcome[]) {
+  const pre = (s: Outcome['preprocessing']['state']) => outcomes.filter((o) => o.preprocessing.state === s).length;
+  const ind = (s: Outcome['independence']['state']) => outcomes.filter((o) => o.independence.state === s).length;
+  return {
+    preprocessing: { recorded: pre('recorded'), notRecorded: pre('not-recorded') },
+    independence: {
+      noFittedParameter: ind('no-fitted-parameter'),
+      sharesInput: ind('shares-input'),
+      notRecorded: ind('not-recorded'),
+    },
+  };
 }
 
 async function run(ctx: CommandCtx): Promise<number> {
@@ -155,6 +188,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         epistemics,
         rigorDistribution: api.rigorDistribution(),
         statisticDistribution: statisticDistribution(results.map((r) => r.outcome)),
+        dataHandlingDistribution: dataHandlingDistribution(results.map((r) => r.outcome)),
         result: jsonResults,
       },
       ctx.write,
@@ -175,6 +209,12 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(
       `by statistic: ${s.sigmaTests} σ-residual tests · ${s.limits} limits · ${s.consistencyRatios} consistency ratios ` +
         `(no σ; never counted as precision tests)${s.tables ? ` · ${s.tables} tables` : ''}`,
+    );
+    const h = dataHandlingDistribution(results.map((r) => r.outcome));
+    out(
+      `preprocessing: recorded for ${h.preprocessing.recorded} · not recorded for ${h.preprocessing.notRecorded}; ` +
+        `independence: ${h.independence.noFittedParameter} no fitted parameter · ${h.independence.sharesInput} share an input ` +
+        `· ${h.independence.notRecorded} not recorded (independence is not goodness of fit)`,
     );
     if (wantFrontier) {
       out(
@@ -245,6 +285,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
     const st = statisticOf(outcome);
     out(`    statistic: ${st.object} · criterion: ${st.criterion} · observed: ${st.observed}`);
+    out(`    preprocessing: ${preprocessingLine(outcome)}`);
+    out(`    independence: ${independenceLine(outcome)}`);
     if (outcome.provenance.note) out(`    notes: ${outcome.provenance.note}`);
     out(`    source: ${outcome.provenance.citation}`);
   }

@@ -22,6 +22,8 @@ export interface JsonEnvelope {
   rigorDistribution?: Record<string, number>;
   /** `upt confront` — count of confrontations by statistical object (σ-test, limit, consistency ratio, table). */
   statisticDistribution?: Record<string, number>;
+  /** `upt confront` — preprocessing and independence counts, recorded vs not recorded, each counted apart. */
+  dataHandlingDistribution?: Record<string, Record<string, number>>;
   result: unknown;
 }
 
