@@ -16,7 +16,7 @@
  */
 import type { EvaluatorParameter } from '../bridges/evaluators.js';
 
-/** One derived number a case reports. @public */
+/** One derived number a case reports. @internal */
 export interface CaseOutput {
   readonly key: string;
   readonly symbol: string;
@@ -28,7 +28,7 @@ export interface CaseOutput {
 /**
  * One regime inequality, evaluated at the given inputs. The bound is a chosen
  * numerical reading of a "≪" and says so in `threshold`.
- * @public
+ * @internal
  */
 export interface CaseCheck {
   readonly id: string;
@@ -49,7 +49,7 @@ export interface CaseCheck {
  * numerically, or the ideal a finite measurement approaches. Reported beside
  * the checks, never merged into them: a small deviation at one point does not
  * establish the premises.
- * @public
+ * @internal
  */
 export interface CaseComparison {
   /** What the reference is. */
@@ -61,14 +61,14 @@ export interface CaseComparison {
   readonly method: string;
 }
 
-/** A worked invocation. `fails` lists exactly the checks it violates. @public */
+/** A worked invocation. `fails` lists exactly the checks it violates. @internal */
 export interface CaseExample {
   readonly args: readonly string[];
   readonly note: string;
   readonly fails: readonly string[];
 }
 
-/** What a case evaluates to. A `null` output is undefined outside its premise. @public */
+/** What a case evaluates to. A `null` output is undefined outside its premise. @internal */
 export interface CaseResult {
   readonly outputs: Readonly<Record<string, number | null>>;
   readonly checks: readonly CaseCheck[];
@@ -76,7 +76,7 @@ export interface CaseResult {
   readonly unchecked: readonly string[];
 }
 
-/** An applied case. @public */
+/** An applied case. @internal */
 export interface AppliedCase {
   readonly id: string;
   readonly title: string;

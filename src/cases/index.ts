@@ -10,7 +10,7 @@ import type { AppliedCase, CaseResult } from './types.js';
 
 export type { AppliedCase, CaseCheck, CaseComparison, CaseExample, CaseOutput, CaseResult } from './types.js';
 
-/** Case id → case. @public */
+/** Case id → case. @internal */
 export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = new Map(
   [RESISTOR_NOISE_CASE, BROWNIAN_SPHERE_CASE, DAMPED_RESONATOR_CASE].map((c) => [c.id, c]),
 );
@@ -18,7 +18,7 @@ export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = new Map(
 /**
  * Run a case with a numeric input record.
  * @throws Error on an unknown id, a missing input, or an input outside the model's domain.
- * @public
+ * @internal
  */
 export function runAppliedCase(id: string, inputs: Readonly<Record<string, number>>): CaseResult {
   const c = APPLIED_CASES.get(id);
