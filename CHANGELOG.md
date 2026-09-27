@@ -57,6 +57,15 @@ from v0.1.0 onward.
     and print the compatibility rule (new optional `predictedIs` field; additive).
   - **F14** — help no longer hard-codes "20" isolated bridges.
 
+- **Red `test` / `long-tests` since #202** (2026-09-27). Two root causes, both from #202:
+  - #202 renamed the `CE-wien` `scalarAst` symbol `T` → `temperature`, which drifted from the frozen,
+    pre-registered criterion-3 corpus. `criterion3-export` failed, and `criterion3-residual-corpus`
+    refused to load. The rename is reverted; the frozen files are untouched. `map --equation
+    'peak-wavelength = b/T'` and `= b/temperature` both still agree with CE-wien, and `2*b/T` still
+    reports the factor 2.
+  - #202 tagged `rewriteCatalogHyphens` `@public`, but it is not on the public surface. It is a
+    helper used only inside `user-equation.ts`, so it is now `@internal`; the npm API is unchanged.
+
 - **CLI applied-physicist persona findings on 0.47.1** (2026-09-26). Model persona dogfood;
   dispositions in `docs/research/cli-physicist-persona-0.47.1.md`.
   - **W1** — `speed-of-light` no longer skips the E=mc² prefactor check (constant-alias peel).
@@ -65,7 +74,9 @@ from v0.1.0 onward.
   - **L1** — `upt derive` accepts named dim products/quotients (`power/area`, `length*temperature`).
   - **L2 / I1** — `upt canonical --vars` prints target and governing names.
   - **L3 / I4** — `upt probe scan` defaults to searchable-only; empty case points at discover / `--all`.
-  - **L4** — latex `T` resolves to `temperature` for Wien; CE-wien AST aligned.
+  - **L4** — latex `T` resolves to `temperature` for Wien; ~~CE-wien AST aligned.~~ **[Retracted
+    2026-09-27: the AST rename `T` → `temperature` changed a pre-registered criterion-3 input and is
+    reverted. L4 holds without it, because resolution maps `T` either way.]**
   - **Q1** — discover PROMISING lists consequence/magnitude before bare inconclusive.
   - **Q2** — CONTRIBUTING.md catalog count 44 → 55.
 
