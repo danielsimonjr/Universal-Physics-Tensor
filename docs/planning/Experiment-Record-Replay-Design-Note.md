@@ -47,13 +47,16 @@ Each entry holds:
 
 | Field | Content |
 |---|---|
-| `schema` | the entry format identifier, `upt-record/1` |
+| `schema` | the entry format identifier, `upt-record/2` |
 | `recordedAt` | ISO timestamp — **metadata only, never compared on replay** |
 | `argv` | the command and its arguments exactly as given, global options removed |
+| `argvSha256` | SHA-256 of `argv` |
 | `parsed` | `{command, flags, positionals}` as the command's own flag parser read them, or `null` when there is no command (help, version, the demo) or the arguments did not parse |
+| `attribution` | the constants the command's code can reach (below), or `null` when `argv` names no command |
 | `environment` | the facts below |
 | `result` | `exitCode`, or `threw` (the message of an unexpected exception, with `exitCode: null`); `stdout`, `stderr`, and the SHA-256 of each |
 | `artifacts` | files the invocation wrote (`map --out=PATH`): path and SHA-256 |
+| `entrySha256` | SHA-256 of every other field, serialised with object keys sorted at every depth |
 
 `environment`:
 
@@ -64,8 +67,7 @@ Each entry holds:
 | `formulaParser` | `mathts` or `builtin` — the kind `getFormulaParserKind()` resolves, which is what `eval` and `derive` actually use |
 | `simplifier` | whether the MathTS simplifier passes its smoke test (`symbolic --simplify`) |
 | `peers` | for each optional peer dependency the package declares, the installed version or `null` |
-| `constants` | every numeric export of `src/core/constants.ts`, the SI constant table the evaluators read |
-| `constantsSha256` | SHA-256 of `constants` serialised with sorted keys |
+| `constantTables` | every constant table, keyed by name: `{values, sha256}`, the SHA-256 of `values` serialised with sorted keys |
 
 **Source selection, anchors, units, supplied inputs and assumptions** are recorded as the
 invocation stated them: `--source`, `--anchor`, `--at`, `--assume`/`--deny` and `key=value[unit]`
@@ -74,11 +76,53 @@ is not interpreted by the recorder; it appears in the command's own output (for 
 `--json` envelope's `source` and `options`), which the record keeps verbatim. The record states
 what was asked and what was answered; it does not re-derive the command's semantics.
 
-### Why the constant table is recorded in full
+### Constant tables
 
-A fingerprint alone says *that* the constants changed. The table says *which*: replay compares
-the recorded table against the live one and names each constant whose value moved, so a changed
-Boltzmann constant is reported as `K_B_SI`, not as an opaque hash difference.
+A table is named by the source module that holds it, relative to the source root and without the
+extension, and is fingerprinted on its own. There are two kinds:
+
+- **module exports**: every numeric export of `core/constants` and of each module under `bridges/`
+  and `cases/` (for example `bridges/be58-johnson-nyquist-confrontation`, which holds the CODATA
+  2014 Boltzmann constant its confrontation compares against, and the regime thresholds of the
+  applied cases). The modules are found by listing those directories, so a module added later is
+  fingerprinted without being listed anywhere;
+- **object tables**: the unit, prefix and degree-Celsius offset tables of `dimensional/units`, and
+  the constant registries `composition/symbolic-constants` and `composition/canonical-graph`,
+  flattened to `key.field` entries (`eV.scale`, `k_B.value`, `k_B.dimension`). A dimension is
+  written as its exponents in a fixed base order, not through the named-dimension formatter, so
+  renaming a dimension does not change a fingerprint.
+
+A fingerprint alone says *that* a table changed. The values say *which*: replay compares each
+recorded table against the live one and names each entry whose value moved, with its table, so a
+changed Boltzmann constant is reported as `constant core/constants K_B_SI`, and the same value
+seen through the symbolic registry as `constant composition/symbolic-constants k_B.value`.
+
+### Attribution
+
+Each entry records which constants its command's code **can reach**. It is derived from the
+import graph of the modules on disk when the entry is written, never declared by hand, and it is
+an **upper bound**, not an observation: ES module bindings cannot be intercepted as they are read,
+so nothing here says which constants a run actually read. The derivation:
+
+- start at the command's own module, `cli/commands/<command>`; follow every relative static
+  import and re-export and every literal dynamic import, since loading a module runs its
+  top-level code;
+- a `cli/` module reaches the `cli-api` barrel through the injected `ctx.api`, not through an
+  import, so each barrel export whose name occurs as a word in a reached `cli/` module counts as
+  read from its source module;
+- an import reads the names it binds (a namespace import reads all of them); a re-export passes on
+  only the names that are themselves read from it, so a barrel that re-exports a constant nobody
+  imports does not make it reachable;
+- a named export of a module-exports table is reachable when it is read, or when its own module
+  mentions it outside its declaration and some export of that module is read. Comments that open
+  a line are ignored for that count; any other comment or string counts, which errs toward
+  "reachable";
+- an object table is reachable whole (`*`) when any export of its module is read.
+
+Replay marks each changed constant (and each changed or missing table) `reachable`,
+`not-reachable` or `unattributed` (no command, so no attribution). `not-reachable` says the
+command's code has no import path to that constant. `reachable` says only that it has one: an
+`evaluate` entry reaches every bridge evaluator's constants whichever bridge it evaluated.
 
 ## Replay
 
@@ -95,19 +139,24 @@ exactly one of three outcomes, never merged:
 Independently of the outcome, replay compares each entry's recorded `environment` with the live
 one and lists every changed fact: version, Node, parser kind, simplifier, each peer, and each
 constant by name. An entry can be `reproduced` under a changed environment; that is reported as
-such, not folded into either "reproduced" or "differs". Replay names **what changed**; it does not
-claim the change **caused** a difference — no command reports which constants it read.
+such, not folded into either "reproduced" or "differs". Replay names **what changed** and whether
+the entry's command could reach it; it does not claim the change **caused** a difference.
 
-Replay also checks the record against itself: a `stdout`/`stderr` whose text no longer hashes to
-its recorded SHA-256, or a `constants` table that no longer hashes to `constantsSha256`, means the
-record was edited after it was written. Such an entry carries an integrity finding naming the
-field.
+Replay also checks the record against itself: an `argv`, `stdout` or `stderr` that no longer
+hashes to its recorded SHA-256, a constant table whose values no longer hash to its `sha256`, or an
+entry that no longer hashes to `entrySha256`, means the record was edited after it was written.
+The entry hash covers every field, so an edit to one no other hash covers (`parsed`,
+`attribution`, `recordedAt`, an environment fact) is still found. A missing hash is a finding too,
+since the writer always writes them. An edited argument therefore shows up twice, as the
+difference its replay produces and as an integrity finding, and the two are reported apart.
 
 ### Not replayable, by construction
 
 An entry is `not-replayable`, with the reason printed, when:
 
-- the line is not valid JSON or not a `upt-record/1` entry (the line number is given);
+- the line is not valid JSON or not a `upt-record/2` entry (the line number is given). A
+  `upt-record/1` line is named as such: it predates the argument, entry and per-table hashes, so it
+  cannot be checked for edits;
 - it wrote a file (`map --out=PATH`): replaying would overwrite that path. Its recorded artifact
   hash stays in the record;
 - it is a `probe` subverb other than `scan` or `show`: those search under a **wall-clock budget**
@@ -141,8 +190,18 @@ environment changes and integrity findings as separate counts.
 
 ## Limits
 
-- The constant fingerprint covers `src/core/constants.ts`. A constant written as a literal in
-  another module is not in the table, and a change to it shows up only as an output difference.
+- The tables cover exported numeric constants of `core/constants`, `bridges/` and `cases/`, and the
+  object tables named above. A literal a module keeps private (a bridge's atomic mass unit, a
+  prefactor inside an expression) is in no table, and a change to it shows up only as an output
+  difference.
+- Attribution is static. It does not see a value that reaches a command through shared state
+  written at import time by a module outside the command's import graph, a non-literal dynamic
+  import, or a mention on a line of a multi-line template literal that begins with `/*` or `//`
+  (the comment filter drops it). It is computed from the
+  modules on disk at recording, which are the modules that ran only if the tree was not changed
+  in between.
+- The hashes detect an edit that did not recompute them. They are not signatures: an editor who
+  recomputes `argvSha256` and `entrySha256` is not detected.
 - Replay runs in one process: module-level caches (the parser selection) are shared across the
   replayed entries, as they are within one CLI process, not as they are across separate processes.
 - Files a command reads are not captured, which is why the file-reading `probe` subverbs are
@@ -162,4 +221,16 @@ Each invariant is proven RED against the tree without the feature before it is m
 - editing the recorded constant table or its fingerprint makes replay name the changed constant
   or the fingerprint;
 - a `probe run` entry and a malformed line are `not-replayable` with their reasons, counted apart
-  from `differs`.
+  from `differs`;
+- an edited argument raises the `argv` integrity finding beside its difference; an edit to a field
+  no other hash covers raises the entry finding alone; a removed hash is a finding;
+- each table's fingerprint matches an independent sorted-key SHA-256, and every exported numeric
+  constant found in the source text of `bridges/` and `cases/` is in its module's table;
+- attribution marks a changed constant `reachable` for a command whose code imports it and
+  `not-reachable` for one whose code does not; and, by a second method, a real change to that
+  constant in a copy of the built package makes the reachable entry differ while the unreachable
+  one reproduces;
+- the builtin formula parser is exercised in-process by mocking the optional MathTS module to a
+  namespace without `parse`, which is the fallback an absent peer takes, with an unmocked child
+  process as the paired control that selects `mathts`; a record made under one parser is replayed
+  under the other in both directions.

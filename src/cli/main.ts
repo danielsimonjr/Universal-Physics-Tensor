@@ -258,12 +258,14 @@ Run with no arguments for a short demo.
 
   --record=FILE <command> ...
                   Run the command unchanged and append one JSONL entry to FILE:
-                  arguments, stdout, stderr, exit code, versions, parser, the
-                  constant table. Failed invocations are recorded too.
+                  arguments, stdout, stderr, exit code, versions, parser, each
+                  constant table by name, the constants the command's code can
+                  reach, and hashes of each. Failed invocations are recorded too.
   --replay=FILE [--json]
                   Re-run every entry of FILE; report each as reproduced, differs
                   (naming the stream and first differing line) or not replayable,
-                  and name every changed version, parser or constant. Exit 0 all
+                  name every changed version, parser or constant (and whether the
+                  entry's command can reach it), and flag edits. Exit 0 all
                   reproduced unchanged, 3 any differs, 1 otherwise.
   --show-record=FILE [--json]
                   Print FILE as a readable transcript, running nothing.`;
