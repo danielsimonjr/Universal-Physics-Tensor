@@ -1794,7 +1794,7 @@
               "id": "WD5",
               "kind": "numeric",
               "test": "tests/atlas/closure.test.ts",
-              "tolerance": "agrees with CE-stokes-einstein to 1e-12 relative; a 1 µm sphere in water at 20 °C gives D = 4.29e-13 m²/s"
+              "tolerance": "agrees with CE-stokes-einstein to 1e-12 relative; a sphere of radius a = 0.5 µm (1 µm diameter) in water at T = 293.15 K, η = 1.0016e-3 Pa·s gives D = 4.29e-13 m²/s"
             },
             {
               "id": "WD5s",

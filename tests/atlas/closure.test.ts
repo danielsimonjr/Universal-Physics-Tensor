@@ -141,8 +141,20 @@ describe('WD5 — the Stokes–Einstein hyperedge', () => {
     expect(Math.abs((ours * 6 * Math.PI) / canonical - 1)).toBeLessThan(1e-12);
   });
 
-  it('a 1 µm sphere in water at 20 °C diffuses at D = 4.29e-13 m²/s', () => {
+  it('a sphere of radius 0.5 µm (1 µm diameter) in water at 20 °C diffuses at D = 4.29e-13 m²/s', () => {
     expect(ours).toBeCloseTo(4.2873e-13, 16);
+  });
+
+  // Audit F06 (2026-09-26): the prose said "a 1 µm sphere", which a reader takes as the radius;
+  // at a = 1 µm, D is half the stated value. The record must name every input the test uses.
+  it('the WD5 prose states the radius, diameter, temperature and viscosity the test uses', () => {
+    const prose = BRIDGE_STOKES_EINSTEIN.witnesses.find((w) => w.id === 'WD5')!.tolerance;
+    expect(prose).toMatch(/radius a = 0\.5 µm/);
+    expect(prose).toMatch(/1 µm diameter/);
+    expect(prose).toMatch(/T = 293\.15 K/);
+    expect(prose).toMatch(/η = 1\.0016e-3 Pa·s/);
+    expect(a).toBe(0.5e-6);
+    expect(eta).toBe(1.0016e-3);
   });
 
   it('is a HYPEREDGE: Langevin supplies D = k_BT/γ, Stokes supplies γ', () => {
