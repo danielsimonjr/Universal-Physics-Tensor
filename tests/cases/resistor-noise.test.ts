@@ -17,13 +17,13 @@ const failed = (i: Partial<typeof base>) => C.run({ ...base, ...i }).checks.filt
 describe('case-resistor-noise — the scalar result', () => {
   it('unloaded: √(4 k_B T R B) = 4.0703547756921635e-7 V at 300 K, 1 kΩ, 10 kHz (the audit §8 value)', () => {
     expect(out().V_rms_unloaded_V).toBeCloseTo(Math.sqrt(4 * K_B * 300 * 1000 * 1e4), 20);
-    expect(out().V_rms_unloaded_V / 4.070354775692163e-7 - 1).toBeLessThan(1e-15);
+    expect(Math.abs(out().V_rms_unloaded_V / 4.070354775692163e-7 - 1)).toBeLessThan(1e-15);
   });
 
   it('loaded: the instrument sees R ∥ R_in, and V_rms falls by √(R_in/(R + R_in))', () => {
     const rEff = (1000 * 1e6) / (1000 + 1e6);
     expect(out().R_eff_ohm).toBeCloseTo(rEff, 9);
-    expect(out().V_rms_V / Math.sqrt(4 * K_B * 300 * rEff * 1e4) - 1).toBeLessThan(1e-14);
+    expect(Math.abs(out().V_rms_V / Math.sqrt(4 * K_B * 300 * rEff * 1e4) - 1)).toBeLessThan(1e-14);
     expect(out().loading_ratio).toBeCloseTo(Math.sqrt(1e6 / 1.001e6), 14);
   });
 

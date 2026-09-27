@@ -75,7 +75,7 @@ describe('upt evaluate <case-id>', () => {
     const rel = 0.5 * Math.hypot(0.3 / 300, (1 / 1000) * (1e6 / 1.001e6));
     const m = /V_rms_V = [\d.e-]+ ± ([\d.e-]+) \(1σ; relative ([\d.e-]+)%\)/.exec(r.text);
     expect(m).not.toBeNull();
-    expect(Number(m![2]) / 100 / rel - 1).toBeLessThan(0.01);
+    expect(Math.abs(Number(m![2]) / 100 / rel - 1)).toBeLessThan(0.01);
     expect(r.text).toMatch(/the regime checks are evaluated at the given inputs, not at ±u/);
   });
 
