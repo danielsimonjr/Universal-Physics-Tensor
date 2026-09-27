@@ -362,8 +362,8 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   if (c.comparison !== undefined) {
     const d = result.outputs[c.comparison.deviationKey] ?? null;
     out(
-      `  parent comparison (reported beside the checks, not one of them): ${c.comparison.scalarKey} / ${c.comparison.parentKey} − 1 = ` +
-        `${d === null ? 'undefined here' : Number(d.toPrecision(6))} — ${c.comparison.parent}; ${c.comparison.method}`,
+      `  comparison (reported beside the checks, not one of them): ${c.comparison.valueKey} / ${c.comparison.referenceKey} − 1 = ` +
+        `${d === null ? 'undefined here' : Number(d.toPrecision(6))} — against ${c.comparison.reference}; ${c.comparison.method}`,
     );
   }
   if (result.unchecked.length > 0) {
@@ -373,8 +373,8 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   out(
     failed.length === 0
       ? '  QUALIFIED: every regime check holds at these inputs.'
-      : `  NOT QUALIFIED: ${failed.join(', ')} violated — the scalar outputs above are outside their regime and are not a prediction; ` +
-          'the parent model is the one to use here.',
+      : `  NOT QUALIFIED: ${failed.join(', ')} violated — the outputs above are outside the stated regime and are not a ` +
+          'qualified prediction at these inputs.',
   );
   if (u !== null) printUncertainty(out, u);
   out('  not included in the model:');

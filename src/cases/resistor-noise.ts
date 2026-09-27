@@ -77,9 +77,9 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     'stationary Gaussian noise; the band is an ideal brick wall of width B (the real filter enters only through its noise-equivalent bandwidth)',
   ],
   comparison: {
-    parent: "Nyquist's thermal spectrum through the input RC, integrated over [f_lo, f_hi]",
-    scalarKey: 'V_rms_V',
-    parentKey: 'V_rms_parent_V',
+    reference: "the parent: Nyquist's thermal spectrum through the input RC, integrated over [f_lo, f_hi]",
+    valueKey: 'V_rms_V',
+    referenceKey: 'V_rms_parent_V',
     deviationKey: 'parent_deviation',
     method: 'adaptive Simpson quadrature, relative tolerance 1e-10',
   },

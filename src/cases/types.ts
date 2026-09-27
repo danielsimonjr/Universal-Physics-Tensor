@@ -45,15 +45,18 @@ export interface CaseCheck {
 }
 
 /**
- * A comparison of the scalar result with the parent model evaluated
- * numerically. Reported beside the checks, never merged into them: a small
- * deviation at one point does not establish the premises.
+ * A comparison of one output with a reference — the parent model evaluated
+ * numerically, or the ideal a finite measurement approaches. Reported beside
+ * the checks, never merged into them: a small deviation at one point does not
+ * establish the premises.
  * @public
  */
 export interface CaseComparison {
-  readonly parent: string;
-  readonly scalarKey: string;
-  readonly parentKey: string;
+  /** What the reference is. */
+  readonly reference: string;
+  readonly valueKey: string;
+  readonly referenceKey: string;
+  /** Output holding value/reference − 1. */
   readonly deviationKey: string;
   readonly method: string;
 }

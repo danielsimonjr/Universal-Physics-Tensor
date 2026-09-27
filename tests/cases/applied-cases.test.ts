@@ -37,7 +37,7 @@ describe('APPLIED_CASES', () => {
     expect(new Set(c.parameters.map((p) => p.key)).size).toBe(c.parameters.length);
     if (c.comparison !== undefined) {
       const keys = c.outputs.map((o) => o.key);
-      for (const k of [c.comparison.scalarKey, c.comparison.parentKey, c.comparison.deviationKey]) expect(keys).toContain(k);
+      for (const k of [c.comparison.valueKey, c.comparison.referenceKey, c.comparison.deviationKey]) expect(keys).toContain(k);
     }
   });
 
@@ -52,6 +52,10 @@ describe('APPLIED_CASES', () => {
       expect(v === null || Number.isFinite(v), `${c.id} ${o.key}`).toBe(true);
     }
     expect(r.outputs[c.observable]).not.toBeNull();
+    if (c.comparison !== undefined) {
+      const { valueKey, referenceKey, deviationKey } = c.comparison;
+      expect(r.outputs[deviationKey]).toBeCloseTo(r.outputs[valueKey]! / r.outputs[referenceKey]! - 1, 12);
+    }
   });
 
   it.each(cases.map((c) => [c.id, c] as const))('%s: each failure example violates exactly the checks it names', (_, c) => {
@@ -65,7 +69,9 @@ describe('APPLIED_CASES', () => {
   // A second source for each link: the catalog, the atlas and the canonical registry themselves.
   it.each(cases.map((c) => [c.id, c] as const))('%s links only records that exist', (_, c) => {
     const catalog = new Set(BRIDGE_EQUATIONS.map((b) => `be-${b.id}`));
-    const atlas = new Set(ATLAS_FAMILIES.flatMap((f) => [...f.models.map((m) => m.id), ...f.bridges.map((b) => b.id)]));
+    const atlas = new Set(
+      ATLAS_FAMILIES.flatMap((f) => [...f.models.map((m) => m.id), ...f.bridges.map((b) => b.id), ...f.rejections.map((r) => r.id)]),
+    );
     for (const { id } of c.links) {
       if (id.startsWith('be-')) expect(catalog.has(id), id).toBe(true);
       else if (id.startsWith('CE-')) expect(canonicalById(id), id).toBeDefined();
