@@ -66,7 +66,7 @@ node bin/upt.mjs help        # also: --help, -h
 
 ## Command reference
 
-24 commands, grouped by what they do. Several accept aliases (shown in
+25 commands, grouped by what they do. Several accept aliases (shown in
 parentheses). Every data-bearing command (all but `help` and `version`)
 also accepts `--json` for a machine-readable envelope instead of text — see
 [JSON output](#json-output).
@@ -129,6 +129,7 @@ catalog, which relates QUANTITIES. One family exists today: `oscillators`.
 | `regime <family> [--at group=value …] [--assume premise] [--deny premise]` | Where in parameter space each model and bridge of a family (`oscillators`, `diffusion` or `waves`) is claimed to apply. `--at` states a point in REGIME COORDINATES — a π-group formula, or a dimensionless input's own name (`--at theta0=0.2`). Each record reads **valid**, **VIOLATED** (naming the failed inequality) or **unknown**. `unknown` means a coordinate was never supplied, and it is NOT a pass. A regime that states no inequality is marked **VACUOUS** for the same reason. Each inequality is listed as satisfied, violated or unchecked. Prose side conditions are never evaluated: `--assume` records one as **your declaration** (not evidence), `--deny` marks it **contradicted** (the record does not apply as stated), and the rest stay unspecified. Neither changes the inequality verdict. Also prints the pairwise regime overlap and, over the box `--at` states, the points no constraining regime covers. No box is synthesized: with no `--at`, no coverage is reported. |
 | `path <from> <to> [--at group=value …]` | The chain of bridges between two models (across families when a bridge ends in another family's model, e.g. `model-klein-gordon` → `model-schrodinger-free`), the relation it composes to via the composition table, the composed `(K, delta)` with the norm it holds in, and whether every horizon still holds at `--at` (pass `t=<time>` plus the horizon's parameters). When the table declines to compose, the path carries **no bound**: the command prints `no composite claim`, lists what composing would need (the silent table cell, an exact map that states no norm), and **exits 0** — the refusal is the answer, and no number is invented in its place. A path EXISTING is not a warrant; the bound is the warrant. |
 | `atlas [<bridge-id>] [--run]` | One atlas bridge with **every qualification visible**: relation, premises and conclusion (with their families), transformation and inverse, side conditions, regime (a regime with no inequality prints **VACUOUS**), bound with its horizon and limit character, what it preserves and loses, witnesses, counterexamples, formal reference with its fidelity and what it covers, citations and review status. An empty section prints `none stated` rather than disappearing. `formally-proved` is derived from `formalRef`. `symbolically-checked` is decided by `data/atlas/witness-results.json`, which is not shipped in the package, so the command names the witnesses it is decided over and does not print a verdict it cannot see. **Evidence by claim** lists correspondence, regime, bound, horizon and preserves, each citing only what the record's structure links to it: the formal reference covers its statement, a bound its `deltaAtBasis`, and no witness is attributed to a claim, because the record attributes none. **Witness execution** gives each witness its status: `not observed by this command` (with its repository test file), `registered in-process, not run`, or, with `--run`, the checked / refuted / unresolved result of running it now. The three are counted separately, and the command exits 3 if any witness is refuted. With no id, lists every bridge of every family. |
+| `search <word> …` | Find a catalog bridge, canonical equation, atlas model, atlas bridge or quantity by the words of its name, id, symbol, genuine alias (`resolveToCatalogName`) or catalog-bridge description, and print the command that inspects each match (`upt evaluate be-58 T_K=… R_ohm=…`, `upt atlas <id>`, `upt explain <quantity> --source=…`). Every word must match, and each match names the fields its words matched in, so a description-only match reads as one. **An equal dimension is never a match**: a radius is not a wavelength. A word of one or two letters matches a symbol, alias or id segment exactly, never a stray letter in a description. No match exits 1 and names the registries and counts searched, because an empty result is an absence from this registry, not from physics. |
 
 ```bash
 # A bounded route, with its horizon evaluated:
@@ -209,7 +210,7 @@ An unrecognised value exits with an error and status `1`.
 
 ## JSON output
 
-Every data-bearing command (all 22 — every command in the tables above except
+Every data-bearing command (all 23 — every command in the tables above except
 `help` and `version`) accepts a global `--json` flag: instead of the text
 report, it prints one JSON envelope to stdout and exits `0`.
 
@@ -371,7 +372,7 @@ candidates.
 | Flag | Commands | Effect |
 |---|---|---|
 | `--source=catalog\|canonical\|both` | `discover`, `candidates`, `map`, `explain`, `priority`, `audit`, `predict`, `connectors` | Choose the graph (default `catalog`; `map` and `connectors` default to `both` instead — see [The `--source` flag](#the---source-flag)). |
-| `--json` | All 22 data-bearing commands | Emit a machine-readable JSON envelope instead of text; see [JSON output](#json-output). Not combinable with `map --format=mermaid\|dot\|svg` (exit 2). |
+| `--json` | All 23 data-bearing commands | Emit a machine-readable JSON envelope instead of text; see [JSON output](#json-output). Not combinable with `map --format=mermaid\|dot\|svg` (exit 2). |
 | `--format=text\|mermaid\|dot\|svg` | `map` | Output format. `text` (default) is the linkage printout; `mermaid`/`dot` emit the visual map source; `svg` renders it (needs the optional `@viz-js/viz` peer). |
 | `--proposed` | `map` (with `--format`) | Overlay the unadjudicated identity-consequence relations as gray-dashed junctions. |
 | `--out=PATH` | `map` (with `--format`) | Write the diagram source to a file instead of stdout. |

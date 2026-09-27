@@ -31,6 +31,63 @@ function block(text: string, id: string): string {
   return end === -1 ? rest : rest.slice(0, end);
 }
 
+/** One titled section of `upt search` text output. */
+function section(text: string, title: string): string {
+  const start = text.indexOf(`\n${title}:`);
+  if (start === -1) return '';
+  const rest = text.slice(start + 1);
+  const end = rest.search(/\n\S/);
+  return end === -1 ? rest : rest.slice(0, end);
+}
+
+describe('I5 — search by law, model, symbol, alias or description; never by equal dimension', () => {
+  it('"Schrödinger" finds the free-particle atlas model and the command that inspects it', async () => {
+    const r = await run(['search', 'Schrödinger']);
+    expect(r.code).toBe(0);
+    const models = section(r.text, 'atlas models');
+    expect(models).toMatch(/\n {2}model-schrodinger-free \[diffusion\] {2}\[words in: id\]\n {6}inspect: upt regime diffusion · upt path model-schrodinger-free <to-model>/);
+    expect(section(r.text, 'atlas bridges')).toMatch(/\n {2}ab-kg-schrodinger /);
+  });
+
+  it('"thermal noise" finds BE-58 with its evaluator inputs and where the words matched', async () => {
+    const r = await run(['search', 'thermal', 'noise']);
+    expect(r.code).toBe(0);
+    const bridges = section(r.text, 'catalog bridges');
+    expect(bridges).toMatch(/\n {2}be-58 Johnson-Nyquist noise[^\n]*\[words in: name, description\]\n {6}evaluate: upt evaluate be-58 T_K=… R_ohm=… \(the unit is the key's suffix\)/);
+  });
+
+  it('control: "radius" never returns a quantity only because its dimension is a length', async () => {
+    const r = await run(['search', 'radius']);
+    const q = section(r.text, 'quantities');
+    expect(q).not.toBe('');
+    const names = [...q.matchAll(/\n {2}(\S+) \[/g)].map((m) => m[1]!);
+    expect(names.length).toBeGreaterThan(0);
+    for (const n of names) expect(n).toMatch(/radius/);
+    expect(q).not.toMatch(/wavelength/);
+  });
+
+  it('a one-letter word matches a symbol or genuine alias only, never a stray letter in a description', async () => {
+    const r = await run(['search', 'T']);
+    expect(section(r.text, 'quantities')).toMatch(/\n {2}temperature \[temperature\][^\n]*\(alias T\)/);
+    expect(section(r.text, 'catalog bridges')).toBe('');
+  });
+
+  it('no match exits 1 and states the scope searched: an empty result is not an absence from physics', async () => {
+    const r = await run(['search', 'zzqqxx']);
+    expect(r.code).toBe(1);
+    expect(r.text).toMatch(/no entry matches every word of 'zzqqxx' — searched \d+ catalog bridges, \d+ canonical equations, \d+ atlas models, \d+ atlas bridges, \d+ quantities; this registry only/);
+  });
+
+  it('--json lists every match with its kind, the fields its words matched in, and its command', async () => {
+    const env = await json(['search', 'thermal', 'noise']);
+    expect(env.options.query).toEqual(['thermal', 'noise']);
+    const be58 = env.result.matches.find((m: any) => m.id === 'be-58');
+    expect(be58.kind).toBe('catalog-bridge');
+    expect(be58.matchedIn).toEqual(['name', 'description']);
+    expect(be58.command).toBe('upt evaluate be-58 T_K=… R_ohm=…');
+  });
+});
+
 describe('I11 — discovery readiness by dimension; connectivity alone is not evidence', () => {
   it('the audit example (a ≟ classical-electron-radius) states its premise, its missing inputs and an observation', async () => {
     const { text } = await run(['discover', '--source=canonical']);

@@ -224,6 +224,12 @@ Usage:
         With no id, lists every bridge of every family.
         e.g.  upt atlas ab-pendulum-linear
 
+  upt search <word> ...
+        Find a catalog bridge, canonical equation, atlas model or bridge, or
+        quantity by name, id, symbol, alias or description, with the command
+        that inspects each. An equal dimension is never a match.
+        e.g.  upt search thermal noise
+
   upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>
         Experimental expression/residual search (Product B). Orthogonal to
         \`upt discover\`, which vets quantity identifications a≡b and is frozen.
