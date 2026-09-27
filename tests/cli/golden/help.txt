@@ -130,11 +130,14 @@ Usage:
         discovery funnel (an axis gates only when it MEASURABLY fires). Reproduces
         the rank-7 result (topology/statistics/symmetry classify but do not gate).
 
-  upt evaluate <be-NN> key=value[unit] ... [--sigma key=u ...] [--corr a,b=rho ...]
-        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65).
+  upt evaluate <be-NN | case-id> key=value[unit] ... [--sigma key=u ...] [--corr a,b=rho ...]
+        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65),
+        or an applied case (resistor noise):
+        parent and scalar equations, observable, regime checks and a route to
+        measurement; a violated regime check prints NOT QUALIFIED and exits 3.
         Every input declares its unit and meaning; a value may carry a unit
         (d_m=1um, T_K=25degC) and converts only when the dimensions agree.
-        With no bridge id, lists the evaluable bridges and their declared inputs.
+        With no id, lists the evaluable bridges and cases and their inputs.
         --sigma/--corr propagate input uncertainties to first order, with a
         curvature check that flags an unreliable linearization.
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_sun
