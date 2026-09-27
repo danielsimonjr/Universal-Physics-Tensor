@@ -786,6 +786,8 @@ export type {
   ConfrontationDataHandling,
   ConfrontationPreprocessing,
   ConfrontationIndependence,
+  SourceRef,
+  SourceRefs,
 } from './bridges/observations/types.js';
 
 // BE-37 × Cassini — GR Shapiro-delay PPN-γ confrontation.

@@ -27,6 +27,22 @@ export interface SigmaComponent {
 export type ObservationKind = 'value' | 'upper-bound' | 'consistency' | 'table';
 
 /**
+ * Where in this repository the support for a recorded statement is written:
+ * a path from the repository root, and either a verbatim `quote` that must
+ * occur in that file or a `symbol` the file must declare. A reference that
+ * resolves shows only that the cited text exists; it does not show that the
+ * statement it supports is true, nor that the text covers every clause.
+ *
+ * @public
+ */
+export type SourceRef =
+  | { readonly file: string; readonly quote: string }
+  | { readonly file: string; readonly symbol: string };
+
+/** One or more references; a statement is never sourced by nothing. @public */
+export type SourceRefs = readonly [SourceRef, ...SourceRef[]];
+
+/**
  * What was done to the source's number before it reached the comparison
  * (averaging, selection, conversion, encoding of a stated agreement).
  * `source` names what supports the statement. `not-recorded` means the record
@@ -35,7 +51,7 @@ export type ObservationKind = 'value' | 'upper-bound' | 'consistency' | 'table';
  * @public
  */
 export type ConfrontationPreprocessing =
-  | { readonly state: 'recorded'; readonly statement: string; readonly source: string }
+  | { readonly state: 'recorded'; readonly statement: string; readonly source: SourceRefs }
   | { readonly state: 'not-recorded' };
 
 /**
@@ -49,12 +65,12 @@ export type ConfrontationPreprocessing =
  * @public
  */
 export type ConfrontationIndependence =
-  | { readonly state: 'no-fitted-parameter'; readonly statement: string; readonly source: string }
+  | { readonly state: 'no-fitted-parameter'; readonly statement: string; readonly source: SourceRefs }
   | {
       readonly state: 'shares-input';
       readonly shared: string;
       readonly statement: string;
-      readonly source: string;
+      readonly source: SourceRefs;
     }
   | { readonly state: 'not-recorded' };
 

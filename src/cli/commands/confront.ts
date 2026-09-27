@@ -30,6 +30,9 @@ const HELP = `upt confront [--bridge=be-XX] [--rigor=stringent|moderate|loose] [
         applied, whether the observed number is derived, its preprocessing,
         its independence from the prediction (no fitted parameter, a shared
         input, or not recorded — never implied), and the record's notes.
+        Each statement cites a repository file with a verbatim quote or a
+        declared symbol; that the cited text exists does not make the
+        statement true.
         Consistency ratios are counted apart and never as precision tests;
         each prints its actual difference (observed − predicted)/predicted
         separately from its stated agreement bound.`;
@@ -111,18 +114,24 @@ function signedPercent(x: number): string {
 
 const NOT_RECORDED = 'not recorded — the record states nothing on this; that is not "none"';
 
+type SourceRefs = Extract<Outcome['preprocessing'], { state: 'recorded' }>['source'];
+
+function sourceLine(refs: SourceRefs): string {
+  return `[source: ${refs.map((r) => ('quote' in r ? `${r.file} "${r.quote}"` : `${r.file} #${r.symbol}`)).join('; ')}]`;
+}
+
 function preprocessingLine(o: Outcome): string {
   const p = o.preprocessing;
-  return p.state === 'recorded' ? `${p.statement} [source: ${p.source}]` : NOT_RECORDED;
+  return p.state === 'recorded' ? `${p.statement} ${sourceLine(p.source)}` : NOT_RECORDED;
 }
 
 function independenceLine(o: Outcome): string {
   const i = o.independence;
   switch (i.state) {
     case 'no-fitted-parameter':
-      return `no parameter fitted to this measurement — ${i.statement} [source: ${i.source}]`;
+      return `no parameter fitted to this measurement — ${i.statement} ${sourceLine(i.source)}`;
     case 'shares-input':
-      return `shares ${i.shared} — ${i.statement} [source: ${i.source}]`;
+      return `shares ${i.shared} — ${i.statement} ${sourceLine(i.source)}`;
     case 'not-recorded':
       return NOT_RECORDED;
   }

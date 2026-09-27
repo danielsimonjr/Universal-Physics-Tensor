@@ -54,7 +54,7 @@ describe('confrontation registry', () => {
       expect(['no-fitted-parameter', 'shares-input', 'not-recorded'], id).toContain(o.independence.state);
       if (o.preprocessing.state === 'recorded') {
         expect(o.preprocessing.statement.trim(), `${id} preprocessing statement`).not.toBe('');
-        expect(o.preprocessing.source.trim(), `${id} preprocessing source`).not.toBe('');
+        expect(o.preprocessing.source.length, `${id} preprocessing source`).toBeGreaterThan(0);
       } else {
         expect(Object.keys(o.preprocessing), `${id} not-recorded carries no statement`).toEqual(['state']);
       }
@@ -62,7 +62,7 @@ describe('confrontation registry', () => {
         expect(Object.keys(o.independence), `${id} not-recorded carries no statement`).toEqual(['state']);
       } else {
         expect(o.independence.statement.trim(), `${id} independence statement`).not.toBe('');
-        expect(o.independence.source.trim(), `${id} independence source`).not.toBe('');
+        expect(o.independence.source.length, `${id} independence source`).toBeGreaterThan(0);
         if (o.independence.state === 'shares-input') expect(o.independence.shared.trim(), id).not.toBe('');
       }
     }
