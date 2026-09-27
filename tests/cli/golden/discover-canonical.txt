@@ -223,3 +223,4 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
     semi-major-axis ≟ planck-length                      scale: classical ≠ quantum
 
   (magnitude gate abstains where a representative value is unknown; weak priors on dimension.)
+  (inspect one candidate: upt ground --source=canonical <a> <b>, with the same --anchor/--max-orders)

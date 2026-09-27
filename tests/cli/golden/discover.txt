@@ -136,3 +136,4 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     vacuum-expectation-value ≟ inflation-hubble-energy   force: weak ≠ gravitational; scale: quantum ≠ cosmological
 
   (magnitude gate abstains where a representative value is unknown; weak priors on dimension.)
+  (inspect one candidate: upt ground --source=catalog <a> <b>, with the same --anchor/--max-orders)

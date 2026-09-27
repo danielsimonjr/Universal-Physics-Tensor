@@ -280,6 +280,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
   out('\n  (magnitude gate abstains where a representative value is unknown; weak priors on dimension.)');
+  out(`  (inspect one candidate: upt ground --source=${source} <a> <b>, with the same --anchor/--max-orders)`);
   return 0;
 }
 
