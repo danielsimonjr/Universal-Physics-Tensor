@@ -47,6 +47,8 @@ describe('BRIDGE_EVALUATORS', () => {
     const SUFFIX: readonly (readonly [RegExp, string])[] = [
       [/_kg_per_m3$/, 'kg/m^3'],
       [/_S_per_m$/, 'S/m'],
+      [/_ohm_m$/, 'ohm*m'],
+      [/_m_per_s$/, 'm/s'],
       [/_m_s2$/, 'm/s^2'],
       [/_Pa_s$/, 'Pa*s'],
       [/_N_per_m$/, 'N/m'],
