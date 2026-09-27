@@ -6,19 +6,20 @@
 
 ### Audit findings ledger (§11, F01–F14)
 
-- [ ] **F01** `upt path` follows a qualified bridge across families (KG → free Schrödinger); composition rules unchanged.
-- [ ] **F03** `ln` and every other built-in parser function evaluate under the MathTS parser too; unknown functions still fail.
-- [ ] **F04** `upt ground` takes `--source` so a canonical/combined `discover` pair can be grounded; a pair from another scope is named as such.
-- [ ] **F05** A `no composite claim` path names what the refusal is missing; the composition table is not widened.
-- [ ] **F06** `ab-stokes-einstein` witness prose states radius, temperature and viscosity explicitly.
-- [ ] **F07** `confront --frontier` says "margin to the configured acceptance threshold" and prints the criterion.
-- [ ] **F08** A VACUOUS regime lists the stated physical premises as untested, separately from checked inequalities.
-- [ ] **F09** The atlas formal-reference line states what the theorem does not certify (bound, regime, horizon).
-- [ ] **F10** An evidence-filtered map export keeps the no-overlay vs non-matching accounting.
-- [ ] **F11** `upt audit` DECOY is qualified as a dimensional-reconstruction mismatch, not a physical refutation.
-- [ ] **F12** `symbolic` prints unambiguous grouping (parenthesized denominators).
-- [ ] **F13** Upper-bound confrontations (GW-speed) label the prediction, the bound and the compatibility rule.
-- [ ] **F14** Top-level help derives the isolated-bridge count instead of a fixed "20".
+- [x] **F01** `upt path` follows a qualified bridge across families (KG → free Schrödinger); composition rules unchanged.
+- [x] **F02** `discover` states, beside the PROMISING count, how many have a mechanism test, a data test, and an abstaining falsifier.
+- [x] **F03** `ln` and every other built-in parser function evaluate under the MathTS parser too; unknown functions still fail.
+- [x] **F04** `upt ground` takes `--source` so a canonical/combined `discover` pair can be grounded; a pair from another scope is named as such.
+- [x] **F05** A `no composite claim` path names what the refusal is missing; the composition table is not widened.
+- [x] **F06** `ab-stokes-einstein` witness prose states radius, temperature and viscosity explicitly.
+- [x] **F07** `confront --frontier` says "margin to the configured acceptance threshold" and prints the criterion.
+- [x] **F08** A VACUOUS regime lists the stated physical premises as untested, separately from checked inequalities.
+- [x] **F09** The atlas formal-reference line states what the theorem does not certify (bound, regime, horizon).
+- [x] **F10** An evidence-filtered map export keeps the no-overlay vs non-matching accounting.
+- [x] **F11** `upt audit` DECOY is qualified as a dimensional-reconstruction mismatch, not a physical refutation.
+- [x] **F12** `symbolic` prints unambiguous grouping (parenthesized denominators).
+- [x] **F13** Upper-bound confrontations (GW-speed) label the prediction, the bound and the compatibility rule.
+- [x] **F14** Top-level help derives the isolated-bridge count instead of a fixed "20".
 
 ### Audit improvements (§14) not covered by the F-ledger fixes — open
 
@@ -37,6 +38,7 @@
 - [ ] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
 - [ ] **I19** Real-data, falsification-oriented probe workflow.
 - [ ] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
+- [ ] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
 
 ## TypeScript-on-Bun migration (in flight)
 

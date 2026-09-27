@@ -24,6 +24,39 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- **CLI applied-physics audit findings F01–F14** (2026-09-27). Ledger in
+  `docs/audit/Universal_Physics_Tensor_CLI_Audit.md` §11; each fix has a test that was RED first.
+  - **F01** — `upt path` searches across families when no same-family chain exists (KG → free
+    Schrödinger) and names the crossing. Composition rules are unchanged; a family is a filing label.
+    A chain whose unknown-Lipschitz step is not last is now a `missing-lipschitz` refusal instead of
+    a crash.
+  - **F02** — `discover` prints, and `--json` carries, the readiness of the promising set:
+    mechanism-tested, data-tested, without magnitude evidence, axis unresolved, entailed consequence.
+    Every count is derived from candidate fields.
+  - **F03** — `ln`, `log10`, `log2`, `cbrt`, `atan2`, `sinh`/`cosh` evaluate under the MathTS parser as
+    under the built-in one (shared conformance cases); every other built-in name falls back to the
+    built-in implementation when MathTS lacks it; an unknown function still throws.
+  - **F04** — `upt ground` takes `--source`, `--anchor` and `--max-orders` like `discover`, and a miss
+    names the source that does have the pair.
+  - **F05** — a `no composite claim` refusal lists what composing would need (the silent table cell,
+    each exact map that states no norm). The composition table is NOT widened (reviewed act; todo I2).
+  - **F06** — `ab-stokes-einstein` tolerance prose states radius vs diameter, T and η.
+  - **F07** — `confront --frontier` reads "margin to the 1σ acceptance threshold", a software
+    criterion, not a scientific exclusion level.
+  - **F08** — `regime` and `path` list prose side conditions as "premises not machine-checked",
+    separately from the checked inequalities (a VACUOUS verdict no longer reads as full validity).
+  - **F09** — the formally-proved line states that the theorem covers the formal-reference statement,
+    not the bound, regime, horizon or side conditions unless the statement says so.
+  - **F10** — no code change needed: every map export already kept the no-overlay vs non-matching
+    split. It is now pinned by a test that fails when the missing-metadata count is zeroed.
+  - **F11** — `upt audit` DECOY is headed "dimensional-reconstruction mismatch" and says it is not a
+    physical refutation; `--json` carries the definition.
+  - **F12** — `symbolic` groups every compound denominator and prints a runnable `upt eval` form with
+    SI bindings (independently re-run: values match).
+  - **F13** — upper-bound confrontations say whether the prediction is a point or an encoded bound,
+    and print the compatibility rule (new optional `predictedIs` field; additive).
+  - **F14** — help no longer hard-codes "20" isolated bridges.
+
 - **CLI applied-physicist persona findings on 0.47.1** (2026-09-26). Model persona dogfood;
   dispositions in `docs/research/cli-physicist-persona-0.47.1.md`.
   - **W1** — `speed-of-light` no longer skips the E=mc² prefactor check (constant-alias peel).

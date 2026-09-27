@@ -9,6 +9,18 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-09-27
+
+- **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
+  findings are fixed (F10 was already correct and is now pinned by a test). The §14 improvements they
+  do not cover are open in `todo.md` (I2, I5–I9, I11, I12, I14–I20). I2 needs a reviewed widening of
+  the composition table and is Mothership's call.
+- F02 as measured on `discover --source=canonical`: 49 promising, 0 mechanism-tested, 0 data-tested,
+  49 without magnitude evidence, 49 with the axis unresolved, 0 with an entailed consequence.
+  So nothing in the promising set is evidence yet (negative result).
+- Persona W7 (Landauer `ln(2)` in `map --equation`) is **still open**. F03 fixed `ln` in the formula
+  parsers, but the equation compare goes through `evalExpr`, which still rejects `transcendental`.
+
 ## As of 2026-09-26
 
 - **CLI applied-physicist persona retest on 0.47.1 after the fix batch** (model persona, not a human
