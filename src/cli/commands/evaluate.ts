@@ -64,6 +64,7 @@ function describeParameter(p: EvaluatorParameter): string {
   const extras = [
     ...(p.geometry === undefined ? [] : [`geometry: ${p.geometry}`]),
     ...(p.temperature === undefined ? [] : ['an absolute temperature; degC adds 273.15']),
+    ...(p.optional === true ? ['optional'] : []),
   ];
   const alts = (p.alternates ?? []).map((a) => `or give ${a.key}, ${a.meaning}`);
   return (
@@ -296,7 +297,7 @@ function printInputs(out: CommandCtx['out'], parameters: readonly EvaluatorParam
   }
 }
 
-const withUnit = (v: number | null, unit: string): string => (v === null ? 'undefined here (its premise fails)' : `${v}${unit === '' ? '' : ` ${unit}`}`);
+const withUnit = (v: number | null, unit: string): string => (v === null ? 'undefined here (its premise fails, or it needs an optional input not given)' : `${v}${unit === '' ? '' : ` ${unit}`}`);
 
 /** A violated regime check is a check that ran and failed: exit 3. */
 async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[]): Promise<number> {

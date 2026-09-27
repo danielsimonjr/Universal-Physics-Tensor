@@ -23,7 +23,7 @@ export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = new Map(
 export function runAppliedCase(id: string, inputs: Readonly<Record<string, number>>): CaseResult {
   const c = APPLIED_CASES.get(id);
   if (c === undefined) throw new Error(`runAppliedCase: no case '${id}' (cases: ${[...APPLIED_CASES.keys()].join(', ')})`);
-  const missing = c.parameters.map((p) => p.key).filter((k) => !(k in inputs) || !Number.isFinite(inputs[k]));
+  const missing = c.parameters.filter((p) => p.optional !== true || p.key in inputs).map((p) => p.key).filter((k) => !(k in inputs) || !Number.isFinite(inputs[k]));
   if (missing.length > 0) {
     throw new Error(`${id} needs {${c.parameters.map((p) => p.key).join(', ')}}; missing/non-finite: ${missing.join(', ')}`);
   }
