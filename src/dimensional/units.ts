@@ -35,6 +35,7 @@ export class UnitError extends Error {
 
 const D = (p: Partial<Dimension>): Dimension => ({ L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0, ...p });
 const JOULE = D({ L: 2, M: 1, T: -2 });
+const DIMENSIONLESS = D({});
 
 /** symbol → [scale to SI base, dimension, takes an SI prefix]. */
 const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Map([
@@ -55,6 +56,8 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   ['Ω', [1, D({ L: 2, M: 1, T: -3, I: -2 }), true]],
   ['S', [1, D({ L: -2, M: -1, T: 3, I: 2 }), true]],
   ['eV', [E_SI, JOULE, true]],
+  ['rad', [1, DIMENSIONLESS, true]],
+  ['deg', [Math.PI / 180, DIMENSIONLESS, false]],
   ['min', [60, D({ T: 1 }), false]],
   ['h', [3600, D({ T: 1 }), false]],
   ['d', [86400, D({ T: 1 }), false]],
@@ -70,8 +73,6 @@ const PREFIXES: ReadonlyMap<string, number> = new Map([
   ['h', 1e2], ['da', 1e1], ['d', 1e-1], ['c', 1e-2], ['m', 1e-3], ['u', 1e-6], ['µ', 1e-6], ['μ', 1e-6],
   ['n', 1e-9], ['p', 1e-12], ['f', 1e-15], ['a', 1e-18], ['z', 1e-21], ['y', 1e-24],
 ]);
-
-const DIMENSIONLESS = D({});
 
 function parseSymbol(sym: string): readonly [number, Dimension] {
   const exact = UNITS.get(sym);
