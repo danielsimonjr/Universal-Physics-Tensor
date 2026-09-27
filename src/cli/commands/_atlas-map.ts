@@ -185,6 +185,16 @@ export function parseRoute(raw: string): [string, string] {
   return parts as [string, string];
 }
 
+/** The models a route visits, in route order: an exact equivalence may be walked conclusion → premise. */
+function routeModelIds(from: string, bridges: readonly AtlasBridge[]): string[] {
+  const ids = [from];
+  for (const b of bridges) {
+    const at = ids[ids.length - 1]!;
+    ids.push(b.conclusion === at && b.relation === 'exact-equivalence' ? b.premises[0]! : b.conclusion);
+  }
+  return ids;
+}
+
 export function buildRouteView(api: Api, from: string, to: string): RouteView {
   const models = allModels(api);
   for (const id of [from, to]) {
@@ -195,12 +205,7 @@ export function buildRouteView(api: Api, from: string, to: string): RouteView {
   const { bridges } = selectRoute(api, from, to, 'map');
   const t = totals(api);
   const steps = bridges === null ? null : bridges.map((b) => bridgeView(api, b, familyOfBridge(api, b.id), models));
-  const routeModels =
-    bridges === null
-      ? [from, to]
-      : bridges.length === 0
-        ? [from]
-        : [bridges[0]!.premises[0]!, ...bridges.map((b) => b.conclusion)];
+  const routeModels = bridges === null ? [from, to] : routeModelIds(from, bridges);
   const mv = routeModels.map((id) => modelView(api, models.get(id)!));
 
   const running: RouteView['composition']['running'] = [];

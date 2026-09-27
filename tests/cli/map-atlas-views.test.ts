@@ -88,6 +88,13 @@ describe('upt map --route', () => {
     expect(kg.composition.claim).toMatchObject({ kind: 'no-claim', reason: 'missing-lipschitz' });
   });
 
+  it('lists the models in route order when an exact equivalence is walked conclusion → premise', async () => {
+    const lc = BRIDGES.find((b) => b.id === 'ab-spring-lc')!;
+    expect([lc.premises[0], lc.conclusion]).toEqual(['model-spring', 'model-lc']);
+    const r = (await json(['map', '--route=model-lc,model-spring'])).result;
+    expect(r.models.map((m: any) => m.id)).toEqual(['model-lc', 'model-spring']);
+  });
+
   it('no route is an answer (exit 0), with the endpoints still counted and shown', async () => {
     const { code, stdout } = await run(['map', '--route=model-lc,model-pendulum']);
     expect(code).toBe(0);
