@@ -163,6 +163,54 @@ describe('I18 — a bounded sweep: each row is the point verdict, and an unclaim
   });
 });
 
+const JOHNSON = ['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000', '--sigma', 'T_K=3', '--sigma', 'R_ohm=10'];
+
+describe('I9 — uncertainty propagation, kept apart from sensitivity', () => {
+  // S_V = 4 k_B T R is a product, so its relative variance is exactly
+  // rT² + rR² + 2ρ rT rR; each input here carries 1%.
+  it('Johnson noise, independent inputs: relative σ is √2 % (analytic, S ∝ T·R)', async () => {
+    const env = await json(JOHNSON);
+    const s = env.result.uncertainty.outputs.S_V_V2_per_Hz;
+    expect(s.relative).toBeCloseTo(Math.SQRT2 / 100, 8);
+    expect(s.contributions.T_K.sensitivity).toBeCloseTo(s.value / 300, 25);
+    expect(s.unreliable).toEqual([]);
+    expect(env.result.uncertainty.notIncluded).toMatch(/model discrepancy/);
+  });
+
+  it('a correlated-input result differs from the independent one, by the analytic amount', async () => {
+    const pos = (await json([...JOHNSON, '--corr', 'T_K,R_ohm=0.5'])).result.uncertainty.outputs.S_V_V2_per_Hz;
+    const neg = (await json([...JOHNSON, '--corr', 'T_K,R_ohm=-1'])).result.uncertainty.outputs.S_V_V2_per_Hz;
+    expect(pos.relative).toBeCloseTo(Math.sqrt(3) / 100, 8);
+    expect(neg.relative).toBeCloseTo(0, 10);
+  });
+
+  it('control: a strongly nonlinear case is flagged, a linear one is not', async () => {
+    const r = await run(['evaluate', 'be-56', 'd_m=1e-6', '--sigma', 'd_m=5e-7']);
+    expect(r.text).toMatch(/LINEARIZATION UNRELIABLE for d_m/);
+    const lin = await run(JOHNSON);
+    expect(lin.text).not.toMatch(/UNRELIABLE/);
+  });
+
+  it('an input without σ is named as treated-exact; the text separates sensitivity from contribution', async () => {
+    const r = await run(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000', '--sigma', 'T_K=3']);
+    expect(r.text).toMatch(/treated as exact \(no --sigma\): R_ohm — a choice, not a measurement/);
+    expect(r.text).toMatch(/from T_K: c = [^,]+, c·u = /);
+  });
+
+  it('malformed or inconsistent uncertainty input is refused', async () => {
+    const bad = async (extra: string[], msg: RegExp) => {
+      const r = await run(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000', ...extra]);
+      expect(r.code).toBe(1);
+      expect(r.text).toMatch(msg);
+    };
+    await bad(['--sigma', 'T_K=-1'], /is not key=<finite u ≥ 0>/);
+    await bad(['--sigma', 'mass=1'], /'mass' is not one of the inputs given/);
+    await bad(['--sigma', 'T_K=1', '--corr', 'T_K,R_ohm=0.5'], /names 'R_ohm', which has no --sigma/);
+    await bad(['--sigma', 'T_K=1', '--sigma', 'R_ohm=1', '--corr', 'T_K,R_ohm=1.5'], /rho in \[-1, 1\]/);
+    await bad(['--corr', 'T_K,R_ohm=0.5'], /--corr needs --sigma/);
+  });
+});
+
 describe('I11 — discovery readiness by dimension; connectivity alone is not evidence', () => {
   it('the audit example (a ≟ classical-electron-radius) states its premise, its missing inputs and an observation', async () => {
     const { text } = await run(['discover', '--source=canonical']);
