@@ -19,7 +19,7 @@
  */
 
 import type { CompiledFormula, FormulaParser } from './formula.js';
-import { FormulaError } from './formula.js';
+import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError } from './formula.js';
 
 /** Minimal structural shape of a MathTS AST node (the bits we use). */
 interface MathNode {
@@ -59,6 +59,14 @@ function createMathtsFormulaParser(
     return builtin;
   };
 
+  // Functions the built-in parser documents but MathTS does not define (`ln`),
+  // supplied through the scope so a formula means the same under either
+  // parser. Anything outside the documented list still fails.
+  const shims: Record<string, (...args: number[]) => number> = {};
+  for (const name of BUILTIN_FUNCTION_NAMES) {
+    if (!isBuiltin(name)) shims[name] = (...args) => callBuiltinFunction(name, args);
+  }
+
   return {
     parse(expr: string): CompiledFormula {
       if (!expr || !expr.trim()) throw new FormulaError('empty formula');
@@ -95,7 +103,7 @@ function createMathtsFormulaParser(
         evaluate(scope: Record<string, number>): number {
           let result: unknown;
           try {
-            result = node.evaluate(scope);
+            result = node.evaluate({ ...shims, ...scope } as Record<string, number>);
           } catch (err) {
             throw new FormulaError(
               err instanceof Error ? err.message : String(err),

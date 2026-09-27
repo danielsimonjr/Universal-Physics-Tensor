@@ -31,6 +31,16 @@ const VALUE_CASES: ReadonlyArray<
   ['1.6e-19', {}, 1.6e-19],
   ['sqrt(16)', {}, 4],
   ['log(exp(3))', {}, 3], // log = natural
+  // Every function the built-in parser documents must evaluate in both
+  // (audit F03: `ln(2)` failed under MathTS while `log(2)` worked).
+  ['ln(2)', {}, Math.LN2],
+  ['ln(exp(3))', {}, 3],
+  ['log10(1000)', {}, 3],
+  ['log2(8)', {}, 3],
+  ['cbrt(27)', {}, 3],
+  ['atan2(1, 1)', {}, Math.PI / 4],
+  ['sinh(1) + cosh(1)', {}, Math.E],
+  ['k_B*T*ln(2)', { k_B: 1.380649e-23, T: 300 }, 1.380649e-23 * 300 * Math.LN2],
   ['pow(2, 10)', {}, 1024],
   ['abs(-7)', {}, 7],
   ['2 * pi * r', { r: 1 }, 2 * Math.PI],
@@ -54,6 +64,7 @@ const VARIABLE_CASES: ReadonlyArray<readonly [string, string[]]> = [
   ['2 * pi * r', ['r']], // pi excluded
   ['a * b + sin(c)', ['a', 'b', 'c']], // function callee `sin` excluded
   ['tau * x', ['x']], // tau is a constant in both
+  ['ln(x) + log10(y)', ['x', 'y']], // function callees excluded
   ['hbar*c^3/(8*pi*G*M*k_B)', ['G', 'M', 'c', 'hbar', 'k_B']],
 ];
 
@@ -86,6 +97,9 @@ export function runFormulaConformance(
   describe(`[${label}] formula conformance — errors`, () => {
     it('an unsupplied variable throws at evaluate', () => {
       expect(() => parser.parse('x + 1').evaluate({})).toThrow();
+    });
+    it('an unknown function still fails rather than being reinterpreted', () => {
+      expect(() => parser.parse('lnn(2)').evaluate({})).toThrow();
     });
     it('an empty formula throws at parse', () => {
       expect(() => parser.parse('   ')).toThrow();

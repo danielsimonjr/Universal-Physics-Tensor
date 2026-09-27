@@ -88,6 +88,20 @@ const FUNCTIONS: Readonly<Record<string, Fn>> = {
   },
 };
 
+/** Names of the built-in functions this parser documents. @internal */
+export const BUILTIN_FUNCTION_NAMES: readonly string[] = Object.keys(FUNCTIONS);
+
+/**
+ * Call a built-in function by name, with this parser's arity checks. Lets
+ * another parser supply a documented function it does not define itself.
+ * @internal
+ */
+export function callBuiltinFunction(name: string, args: number[]): number {
+  const fn = FUNCTIONS[name];
+  if (fn === undefined) throw new FormulaError(`unknown function '${name}'`);
+  return fn(args);
+}
+
 // --- AST ------------------------------------------------------------------
 
 type Node =
