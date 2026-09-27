@@ -9,10 +9,12 @@
  * given f0 and Q, refuses it when the resonator is not underdamped, and checks
  * the record length against the linewidth it is meant to resolve. The
  * rectangular-window spectrum of the truncated ring-down is computed in
- * closed form, near resonance, for comparison.
+ * closed form, near resonance, for comparison. Given the temperature and the
+ * mode's stiffness, it checks the envelope against the thermal motion.
  *
  * @module cases/damped-resonator
  */
+import { K_B_SI } from '../core/constants.js';
 import { check, requirePositive, type AppliedCase } from './types.js';
 
 const ID = 'case-damped-resonator';
@@ -22,6 +24,15 @@ export const MIN_Q_LORENTZIAN = 10;
 
 /** (1/t_obs)/linewidth ceiling: the record resolves the line. @internal */
 export const MAX_RESOLUTION_RATIO = 0.1;
+
+/**
+ * √(k_BT/k)/A ceiling. Thermal motion of one mode is x = X cos ω_d t + Y sin ω_d t
+ * with ⟨X²⟩ = ⟨Y²⟩ = k_BT/k (equipartition), so the envelope of the ring-down
+ * plus it is Rician with ⟨A_obs²⟩ = A² + 2k_BT/k (Rice 1944); at the ceiling
+ * √(1 + 2·0.01) − 1 ≈ 0.0100.
+ * @internal
+ */
+export const MAX_THERMAL_RATIO = 0.1;
 
 /**
  * FWHM in Hz of |∫₀ᵀ e^{−(α + iΔω)t} dt|², the near-resonance power spectrum of
@@ -61,6 +72,15 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
     { key: 'x0_m', quantity: 'initial displacement', symbol: 'x0', unit: 'm', meaning: 'displacement at release, from rest' },
     { key: 't_s', quantity: 'read-out time', symbol: 't', unit: 's', meaning: 'time after release at which x and the envelope are read, ≥ 0' },
     { key: 't_obs_s', quantity: 'record length', symbol: 't_obs', unit: 's', meaning: 'length of the recorded ring-down, starting at release, > 0' },
+    { key: 'T_K', quantity: 'temperature', symbol: 'T', unit: 'K', meaning: 'temperature of the damping bath, > 0 K; give with k_N_per_m for the thermal floor', temperature: 'absolute', optional: true },
+    {
+      key: 'k_N_per_m',
+      quantity: 'mode stiffness',
+      symbol: 'k',
+      unit: 'N/m',
+      meaning: 'effective stiffness of the mode at the read-out point, > 0 (for an RLC read as charge: 1/C in 1/F, not N/m); give with T_K',
+      optional: true,
+    },
   ],
   governing: {
     parent: [
@@ -88,6 +108,13 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
     { key: 'resolution_Hz', symbol: '1/t_obs', unit: 'Hz', meaning: 'frequency resolution of the record' },
     { key: 'linewidth_windowed_Hz', symbol: 'Δf_T', unit: 'Hz', meaning: 'FWHM of the power spectrum of the truncated ring-down (rectangular window, near resonance)' },
     { key: 'windowed_excess', symbol: 'Δf_T/Δf − 1', unit: '', meaning: 'how much the finite record broadens the measured line' },
+    { key: 'x_th_rms_m', symbol: '√⟨x²⟩_th', unit: 'm', meaning: 'thermal RMS displacement √(k_BT/k) of the mode (equipartition); null without T_K and k_N_per_m' },
+    {
+      key: 'envelope_rms_m',
+      symbol: '√⟨A²⟩',
+      unit: 'm',
+      meaning: 'RMS envelope with the thermal motion added: √(A² + 2k_BT/k), the Rice second moment; null without T_K and k_N_per_m',
+    },
   ],
   conditions: [
     'released from rest: x(0) = x0, x′(0) = 0; free ring-down, no drive after release',
@@ -102,7 +129,7 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
     method: 'closed-form transform of the truncated ring-down, half-power point by bisection',
   },
   notIncluded: [
-    'the detector noise floor, and the thermal drive of the resonator: its equilibrium amplitude √(k_BT/k) is the fluctuation–dissipation partner of its damping (compare case-resistor-noise)',
+    'the detector noise floor; and the thermal drive of the resonator unless T_K and k_N_per_m are given (its equilibrium amplitude √(k_BT/k) is the fluctuation–dissipation partner of its damping; compare case-resistor-noise)',
     'frequency drift of f0 over the record',
     'window shapes other than rectangular, and the negative-frequency image of the line (the Q ≫ 1 approximation)',
     'the other modes of the structure',
@@ -120,8 +147,8 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
   ],
   examples: {
     valid: {
-      args: ['f0_Hz=1kHz', 'Q=1000', 'x0_m=1um', 't_s=0.1', 't_obs_s=20'],
-      note: 'a 1 kHz, Q = 1000 resonator (1 Hz line) read 0.1 s after release, recorded for 20 s',
+      args: ['f0_Hz=1kHz', 'Q=1000', 'x0_m=1um', 't_s=0.1', 't_obs_s=20', 'T_K=300', 'k_N_per_m=1'],
+      note: 'a 1 kHz, Q = 1000 resonator (1 Hz line), 1 N/m at 300 K, read 0.1 s after release, recorded for 20 s',
       fails: [],
     },
     failures: [
@@ -134,6 +161,11 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
         args: ['f0_Hz=1kHz', 'Q=0.3', 'x0_m=1um', 't_s=0.1', 't_obs_s=20'],
         note: 'Q = 0.3 is overdamped: there is no ring-down, and the underdamped formulas are refused',
         fails: ['underdamped', 'single-lorentzian'],
+      },
+      {
+        args: ['f0_Hz=1kHz', 'Q=1000', 'x0_m=100pm', 't_s=1', 't_obs_s=20', 'T_K=300', 'k_N_per_m=1'],
+        note: 'released from 100 pm and read after 1 s (≈ 3 ring-down times): the envelope, ≈ 4 pm, sits below the 64 pm thermal motion',
+        fails: ['above-thermal'],
       },
     ],
   },
@@ -150,6 +182,33 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
     const wd = w0 * root;
     const decay = Math.exp(-alpha * t);
     const windowed = underdamped ? windowedLinewidthHz(alpha, tObs) : null;
+    const envelope = underdamped ? (Math.abs(x0) * decay) / root : null;
+    const checks = [
+      check('underdamped', 'underdamped: the solution rings (Q > 1/2)', 'Q', Q, '>', 0.5,
+        'exact: at Q ≤ 1/2 the solution is a sum of real exponentials, with no ring-down, f_d or envelope'),
+      check('single-lorentzian', 'high Q: the line near f0 is one Lorentzian', 'Q', Q, '>=', MIN_Q_LORENTZIAN,
+        'chosen threshold for Q ≫ 1: the windowed spectrum drops the negative-frequency pole'),
+      check('resolved', 'the record resolves the line: 1/t_obs ≪ f0/Q', '(1/t_obs)/(f0/Q)', 1 / tObs / linewidth, '<=', MAX_RESOLUTION_RATIO,
+        'chosen threshold for ≪ 1; see windowed_excess for the broadening it allows'),
+      check('in-record', 'the read-out time lies inside the record', 't/t_obs', t / tObs, '<=', 1,
+        'exact: an envelope read after the record ends was not measured'),
+    ];
+    const unchecked = underdamped
+      ? ['the damping is viscous (velocity-proportional) and the same over the whole ring-down']
+      : ['for Q ≤ 1/2 the displacement is x0 (r₂e^{r₁t} − r₁e^{r₂t})/(r₂ − r₁) with real r₁, r₂; this case does not evaluate it'];
+    if ((i.T_K === undefined) !== (i.k_N_per_m === undefined)) throw new Error(`${ID}: give T_K and k_N_per_m together, or neither`);
+    let xTh: number | null = null;
+    if (i.T_K !== undefined) {
+      requirePositive(ID, i, ['T_K', 'k_N_per_m']);
+      xTh = Math.sqrt((K_B_SI * i.T_K) / i.k_N_per_m!);
+      if (envelope !== null) {
+        checks.push(
+          check('above-thermal', 'the ring-down stands above the thermal motion at t', '√(k_BT/k)/A(t)', xTh / envelope, '<=', MAX_THERMAL_RATIO,
+            'chosen threshold: the RMS envelope √(A² + 2k_BT/k) then exceeds A by ≤ 1%'),
+        );
+      }
+      unchecked.push('the thermal motion is in equilibrium with the damping bath at T and uncorrelated with the release; the read-out adds no noise of its own');
+    }
     return {
       outputs: {
         alpha_per_s: alpha,
@@ -157,24 +216,15 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
         linewidth_Hz: linewidth,
         f_d_Hz: underdamped ? f0 * root : null,
         x_m: underdamped ? x0 * decay * (Math.cos(wd * t) + (alpha / wd) * Math.sin(wd * t)) : null,
-        envelope_m: underdamped ? (Math.abs(x0) * decay) / root : null,
+        envelope_m: envelope,
         resolution_Hz: 1 / tObs,
         linewidth_windowed_Hz: windowed,
         windowed_excess: windowed === null ? null : windowed / linewidth - 1,
+        x_th_rms_m: xTh,
+        envelope_rms_m: xTh === null || envelope === null ? null : Math.sqrt(envelope * envelope + 2 * xTh * xTh),
       },
-      checks: [
-        check('underdamped', 'underdamped: the solution rings (Q > 1/2)', 'Q', Q, '>', 0.5,
-          'exact: at Q ≤ 1/2 the solution is a sum of real exponentials, with no ring-down, f_d or envelope'),
-        check('single-lorentzian', 'high Q: the line near f0 is one Lorentzian', 'Q', Q, '>=', MIN_Q_LORENTZIAN,
-          'chosen threshold for Q ≫ 1: the windowed spectrum drops the negative-frequency pole'),
-        check('resolved', 'the record resolves the line: 1/t_obs ≪ f0/Q', '(1/t_obs)/(f0/Q)', 1 / tObs / linewidth, '<=', MAX_RESOLUTION_RATIO,
-          'chosen threshold for ≪ 1; see windowed_excess for the broadening it allows'),
-        check('in-record', 'the read-out time lies inside the record', 't/t_obs', t / tObs, '<=', 1,
-          'exact: an envelope read after the record ends was not measured'),
-      ],
-      unchecked: underdamped
-        ? ['the damping is viscous (velocity-proportional) and the same over the whole ring-down']
-        : ['for Q ≤ 1/2 the displacement is x0 (r₂e^{r₁t} − r₁e^{r₂t})/(r₂ − r₁) with real r₁, r₂; this case does not evaluate it'],
+      checks,
+      unchecked,
     };
   },
 };
