@@ -3,6 +3,7 @@
  *
  * @module cases
  */
+import { BROWNIAN_SPHERE_CASE } from './brownian-sphere.js';
 import { RESISTOR_NOISE_CASE } from './resistor-noise.js';
 import type { AppliedCase, CaseResult } from './types.js';
 
@@ -10,7 +11,7 @@ export type { AppliedCase, CaseCheck, CaseComparison, CaseExample, CaseOutput, C
 
 /** Case id → case. @public */
 export const APPLIED_CASES: ReadonlyMap<string, AppliedCase> = new Map(
-  [RESISTOR_NOISE_CASE].map((c) => [c.id, c]),
+  [RESISTOR_NOISE_CASE, BROWNIAN_SPHERE_CASE].map((c) => [c.id, c]),
 );
 
 /**

@@ -181,7 +181,7 @@ Usage:
 
   upt evaluate <be-NN | case-id> key=value[unit] ... [--sigma key=u ...] [--corr a,b=rho ...]
         Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65),
-        or an applied case (resistor noise):
+        or an applied case (resistor noise, Brownian sphere):
         parent and scalar equations, observable, regime checks and a route to
         measurement; a violated regime check prints NOT QUALIFIED and exits 3.
         Every input declares its unit and meaning; a value may carry a unit

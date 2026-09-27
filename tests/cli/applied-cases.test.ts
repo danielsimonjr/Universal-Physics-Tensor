@@ -79,6 +79,15 @@ describe('upt evaluate <case-id>', () => {
     expect(r.text).toMatch(/the regime checks are evaluated at the given inputs, not at ±u/);
   });
 
+  it('case-brownian-sphere: a diameter is converted to the radius and says so; a radius key named twice is refused', async () => {
+    const args = ['T_K=293.15', 'eta_Pa_s=1e-3', 'rho_p_kg_per_m3=2000', 'rho_f_kg_per_m3=998', 't_s=1', 'd=2'];
+    const r = await run(['evaluate', 'case-brownian-sphere', 'diameter_m=2um', ...args]);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/converted: diameter_m=2um is the diameter 2a of the sphere; a_m = 0\.5 × 0\.000002 = 0\.000001 m/);
+    expect(r.text).toMatch(/D_m2_per_s = 2\.147197822774807\d*e-13 m\^2\/s/);
+    expect((await run(['evaluate', 'case-brownian-sphere', 'diameter_m=2um', 'a_m=1um', ...args])).code).toBe(1);
+  });
+
   it('an undeclared key exits 1; an unknown target is a usage error (exit 2)', async () => {
     const c = APPLIED_CASES.get('case-resistor-noise')!;
     expect((await run(['evaluate', c.id, ...c.examples.valid.args, 'B_Hz=1e4'])).code).toBe(1);
