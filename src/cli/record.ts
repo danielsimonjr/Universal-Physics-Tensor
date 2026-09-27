@@ -1,10 +1,13 @@
 /**
- * Experiment record for the UPT CLI — the global options `--record=FILE` and
- * `--show-record=FILE` (design: `docs/planning/Experiment-Record-Replay-Design-Note.md`).
+ * Experiment record and replay for the UPT CLI — the global options
+ * `--record=FILE`, `--replay=FILE` and `--show-record=FILE`
+ * (design: `docs/planning/Experiment-Record-Replay-Design-Note.md`).
  *
  * A record is JSON Lines, one `upt-record/1` entry per invocation, appended and
  * never rewritten, so a failed invocation stays next to the ones that
- * succeeded.
+ * succeeded. Replay re-runs each entry in-process and keeps three outcomes
+ * apart — reproduced, differs, not replayable — and reports environment
+ * changes and record-integrity findings beside them, never folded into them.
  *
  * `main.ts` passes its dispatcher and the `cli-api` barrel in, so this module
  * neither imports the barrel nor re-enters the global-option parser.
@@ -120,6 +123,21 @@ function parseInvocation(argv: string[]): RecordEntry['parsed'] {
   } catch {
     return null;
   }
+}
+
+const TIMED_PROBE_SUBVERBS = new Set(['run', 'candidates', 'falsify', 'rank', 'design', 'reproduce']);
+
+/** Why an invocation must not be re-run, or null. Declared by rule, never inferred from a mismatch. */
+function notReplayableReason(argv: string[]): string | null {
+  const parsed = parseInvocation(argv);
+  if (!parsed) return null;
+  if ((parsed.flags.out?.[0] ?? '') !== '') {
+    return `it wrote a file (--out=${parsed.flags.out[0]}); replaying would overwrite it — its recorded artifact hash stays in the record`;
+  }
+  if (parsed.command === 'probe' && TIMED_PROBE_SUBVERBS.has(parsed.positionals[0] ?? '')) {
+    return `probe ${parsed.positionals[0]} searches under a wall-clock budget and reads files the record does not capture; use \`upt probe reproduce\``;
+  }
+  return null;
 }
 
 async function runCaptured(
@@ -243,8 +261,185 @@ const SAFE_TOKEN = /^[A-Za-z0-9_\-=.,:/+@%]+$/;
 const shellQuote = (t: string): string => (SAFE_TOKEN.test(t) ? t : `'${t.replace(/'/g, `'\\''`)}'`);
 const commandLine = (argv: string[]): string => ['$ upt', ...argv.map(shellQuote)].join(' ');
 
+export interface EnvironmentChange {
+  fact: string;
+  recorded: unknown;
+  current: unknown;
+}
+
+function environmentChanges(recorded: Partial<RecordEnvironment>, live: RecordEnvironment): EnvironmentChange[] {
+  const changes: EnvironmentChange[] = [];
+  const cmp = (fact: string, a: unknown, b: unknown): void => {
+    if (a !== b) changes.push({ fact, recorded: a ?? null, current: b ?? null });
+  };
+  cmp('uptVersion', recorded.uptVersion, live.uptVersion);
+  cmp('node', recorded.node, live.node);
+  cmp('formulaParser', recorded.formulaParser, live.formulaParser);
+  cmp('simplifier', recorded.simplifier, live.simplifier);
+  const recPeers = recorded.peers ?? {};
+  for (const k of [...new Set([...Object.keys(recPeers), ...Object.keys(live.peers)])].sort()) {
+    cmp(`peer ${k}`, recPeers[k], live.peers[k]);
+  }
+  const recConstants = recorded.constants ?? {};
+  for (const k of [...new Set([...Object.keys(recConstants), ...Object.keys(live.constants)])].sort()) {
+    cmp(`constant ${k}`, recConstants[k], live.constants[k]);
+  }
+  cmp('constantsSha256', recorded.constantsSha256, live.constantsSha256);
+  return changes;
+}
+
+function integrityFindings(entry: RecordEntry): string[] {
+  const findings: string[] = [];
+  const r = entry.result;
+  if (sha256(r.stdout) !== r.stdoutSha256) findings.push('recorded stdout does not match its recorded stdoutSha256');
+  if (sha256(r.stderr) !== r.stderrSha256) findings.push('recorded stderr does not match its recorded stderrSha256');
+  const table = entry.environment.constants;
+  if (typeof table !== 'object' || table === null || constantsFingerprint(table) !== entry.environment.constantsSha256) {
+    findings.push('recorded constants table does not match its recorded constantsSha256');
+  }
+  return findings;
+}
+
+const clip = (s: string): string => (s.length > 200 ? s.slice(0, 200) + '…' : s);
+
+export interface StreamDifference {
+  stream: 'exit' | 'stdout' | 'stderr';
+  firstDifferingLine?: number;
+  recorded: string;
+  replayed: string;
+  recordedSha256?: string;
+  replayedSha256?: string;
+}
+
+function streamDifference(stream: 'stdout' | 'stderr', recorded: string, replayed: string): StreamDifference | null {
+  if (recorded === replayed) return null;
+  const a = recorded.split('\n');
+  const b = replayed.split('\n');
+  let i = 0;
+  while (i < a.length && i < b.length && a[i] === b[i]) i++;
+  return {
+    stream,
+    firstDifferingLine: i + 1,
+    recorded: i < a.length ? clip(a[i]) : '<end of output>',
+    replayed: i < b.length ? clip(b[i]) : '<end of output>',
+    recordedSha256: sha256(recorded),
+    replayedSha256: sha256(replayed),
+  };
+}
+
 const exitLabel = (code: number | null, threw: string | null): string =>
   code === null ? `threw: ${threw ?? 'unknown error'}` : `exit ${code}`;
+
+export type ReplayOutcome = 'reproduced' | 'differs' | 'not-replayable';
+
+export interface ReplayEntryReport {
+  line: number;
+  argv: string[] | null;
+  outcome: ReplayOutcome;
+  reason?: string;
+  exit?: { recorded: string; replayed: string };
+  differences: StreamDifference[];
+  environmentChanges: EnvironmentChange[];
+  integrity: string[];
+}
+
+export async function replayRecord(
+  file: string,
+  json: boolean,
+  dispatch: Dispatch,
+  io: Io,
+  api: typeof cliApi,
+): Promise<number> {
+  const lines = readRecord(file);
+  const live = await captureEnvironment(api);
+  const reports: ReplayEntryReport[] = [];
+  for (const l of lines) {
+    if ('error' in l) {
+      reports.push({ line: l.line, argv: null, outcome: 'not-replayable', reason: l.error, differences: [], environmentChanges: [], integrity: [] });
+      continue;
+    }
+    const { entry } = l;
+    const base = {
+      line: l.line,
+      argv: entry.argv,
+      environmentChanges: environmentChanges(entry.environment, live),
+      integrity: integrityFindings(entry),
+    };
+    const reason = notReplayableReason(entry.argv);
+    if (reason) {
+      reports.push({ ...base, outcome: 'not-replayable', reason, differences: [] });
+      continue;
+    }
+    const run = await runCaptured(dispatch, entry.argv);
+    const recordedExit = exitLabel(entry.result.exitCode, entry.result.threw ?? null);
+    const replayedExit = exitLabel(run.exitCode, run.threw);
+    const differences: StreamDifference[] = [];
+    if (recordedExit !== replayedExit) differences.push({ stream: 'exit', recorded: recordedExit, replayed: replayedExit });
+    for (const d of [
+      streamDifference('stdout', entry.result.stdout, run.stdout),
+      streamDifference('stderr', entry.result.stderr, run.stderr),
+    ]) {
+      if (d) differences.push(d);
+    }
+    reports.push({
+      ...base,
+      outcome: differences.length === 0 ? 'reproduced' : 'differs',
+      exit: { recorded: recordedExit, replayed: replayedExit },
+      differences,
+    });
+  }
+
+  const count = (o: ReplayOutcome): number => reports.filter((r) => r.outcome === o).length;
+  const summary = {
+    entries: reports.length,
+    reproduced: count('reproduced'),
+    differs: count('differs'),
+    notReplayable: count('not-replayable'),
+    environmentChanged: reports.filter((r) => r.environmentChanges.length > 0).length,
+    integrityFindings: reports.reduce((n, r) => n + r.integrity.length, 0),
+  };
+  const status =
+    summary.differs > 0 ? 3 : summary.notReplayable + summary.environmentChanged + summary.integrityFindings > 0 ? 1 : 0;
+
+  if (json) {
+    emitJson({ command: 'replay', options: { file }, result: { environment: live, entries: reports, summary } }, io.write);
+    return status;
+  }
+
+  const { out } = io;
+  out(`upt replay — ${file}: ${reports.length} ${reports.length === 1 ? 'entry' : 'entries'}`);
+  out(`environment now: ${describeEnvironment(live)}`);
+  for (const r of reports) {
+    out(`[line ${r.line}] ${r.argv ? commandLine(r.argv) : '(unreadable)'}`);
+    if (r.outcome === 'not-replayable') {
+      out(`    NOT REPLAYABLE — ${r.reason}`);
+    } else if (r.outcome === 'reproduced') {
+      out(`    reproduced — ${r.exit!.replayed}, stdout and stderr identical`);
+    } else {
+      out(`    DIFFERS — ${r.differences.map((d) => d.stream).join(', ')}`);
+      for (const d of r.differences) {
+        if (d.stream === 'exit') {
+          out(`      exit: recorded ${d.recorded}, replayed ${d.replayed}`);
+        } else {
+          out(`      ${d.stream}: first difference at line ${d.firstDifferingLine}`);
+          out(`        recorded: ${d.recorded}`);
+          out(`        replayed: ${d.replayed}`);
+        }
+      }
+    }
+    if (r.environmentChanges.length > 0) {
+      out('    environment changed since recording:');
+      for (const c of r.environmentChanges) out(`      ${c.fact}: ${JSON.stringify(c.recorded)} -> ${JSON.stringify(c.current)}`);
+    }
+    for (const f of r.integrity) out(`    record integrity: ${f} (the record was edited after it was written)`);
+  }
+  out(
+    `summary: ${summary.reproduced} reproduced, ${summary.differs} differ, ${summary.notReplayable} not replayable; ` +
+      `environment changed for ${summary.environmentChanged} of ${summary.entries}; ` +
+      `${summary.integrityFindings} integrity finding${summary.integrityFindings === 1 ? '' : 's'}`,
+  );
+  return status;
+}
 
 function describeEnvironment(env: Partial<RecordEnvironment>): string {
   const peers = Object.entries(env.peers ?? {})

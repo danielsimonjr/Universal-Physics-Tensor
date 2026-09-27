@@ -19,7 +19,7 @@ import { UsageError, CliError } from './errors.js';
 import { parseArgs } from './args.js';
 import { packageVersion } from './version.js';
 import { resolveCommand, type CommandCtx } from './command.js';
-import { recordInvocation, showRecord, type Io } from './record.js';
+import { recordInvocation, replayRecord, showRecord, type Io } from './record.js';
 // Side-effect import: registers every ported command (see commands/index.ts).
 import './commands/index.js';
 
@@ -255,21 +255,26 @@ Run with no arguments for a short demo.
                   Run the command unchanged and append one JSONL entry to FILE:
                   arguments, stdout, stderr, exit code, versions, parser, the
                   constant table. Failed invocations are recorded too.
+  --replay=FILE [--json]
+                  Re-run every entry of FILE; report each as reproduced, differs
+                  (naming the stream and first differing line) or not replayable,
+                  and name every changed version, parser or constant. Exit 0 all
+                  reproduced unchanged, 3 any differs, 1 otherwise.
   --show-record=FILE [--json]
                   Print FILE as a readable transcript, running nothing.`;
 
-const GLOBAL_FILE_OPTION = /^--(record|show-record)(?:=(.*))?$/;
+const GLOBAL_FILE_OPTION = /^--(record|replay|show-record)(?:=(.*))?$/;
 
 /**
  * Verb-first CLI entry point. `argv` is the command + its arguments (NOT
  * `process.argv` — callers slice off the node/script prefix themselves, as
  * `bin/upt.mjs` did with `process.argv.slice(2)`).
  *
- * Leading `--record=FILE` / `--show-record=FILE` are global options (see
- * `record.ts`); anything else goes to `dispatch` unchanged.
+ * Leading `--record=FILE` / `--replay=FILE` / `--show-record=FILE` are global
+ * options (see `record.ts`); anything else goes to `dispatch` unchanged.
  */
 export async function runCli(argv: string[], io: Io = defaultIo): Promise<number> {
-  const files: Partial<Record<'record' | 'show-record', string>> = {};
+  const files: Partial<Record<'record' | 'replay' | 'show-record', string>> = {};
   let json = false;
   let i = 0;
   try {
@@ -280,7 +285,7 @@ export async function runCli(argv: string[], io: Io = defaultIo): Promise<number
         if (!m[2]) throw new UsageError(`upt: '--${name}' requires '--${name}=FILE'`);
         if (files[name] !== undefined) throw new UsageError(`upt: '--${name}' given more than once`);
         files[name] = m[2];
-      } else if (argv[i] === '--json' && files['show-record'] !== undefined) {
+      } else if (argv[i] === '--json' && (files.replay !== undefined || files['show-record'] !== undefined)) {
         json = true;
       } else {
         break;
@@ -289,12 +294,13 @@ export async function runCli(argv: string[], io: Io = defaultIo): Promise<number
     if (i === 0) return await dispatch(argv, io);
     const rest = argv.slice(i);
     if (Object.keys(files).length > 1) {
-      throw new UsageError('upt: use one of --record and --show-record at a time');
+      throw new UsageError('upt: use one of --record, --replay and --show-record at a time');
     }
     if (files.record !== undefined) return await recordInvocation(files.record, rest, dispatch, io, api);
     if (rest.length > 0) {
-      throw new UsageError(`upt: '--show-record' takes no command (got '${rest[0]}')`);
+      throw new UsageError(`upt: '--${files.replay !== undefined ? 'replay' : 'show-record'}' takes no command (got '${rest[0]}')`);
     }
+    if (files.replay !== undefined) return await replayRecord(files.replay, json, dispatch, io, api);
     return showRecord(files['show-record']!, json, io);
   } catch (e) {
     if (e instanceof UsageError) {

@@ -1,13 +1,16 @@
 /**
- * `upt --record=FILE` / `--show-record=FILE` (audit I17): a session record that keeps failures.
+ * `upt --record=FILE` / `--show-record=FILE` / `--replay=FILE` (audit I17): a session record that
+ * keeps failures, and a replay that says which entries reproduce.
  *
  * The audit needed an external wrapper to keep its invocations, outputs, errors and hashes, and a
  * record that dropped the failed `ln` and the invalid input would present a cleaner history than
- * the one that happened. Design: `docs/planning/Experiment-Record-Replay-Design-Note.md`.
+ * the one that happened. Replay keeps reproduced, differs and not-replayable apart, and names
+ * environment changes and edits to the record beside them. Design:
+ * `docs/planning/Experiment-Record-Replay-Design-Note.md`.
  */
 import { describe, it, expect, beforeAll } from 'vitest';
 import { createHash } from 'node:crypto';
-import { mkdtempSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, readFileSync, existsSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runCli } from '../../dist/cli/main.js';
@@ -163,5 +166,156 @@ describe('upt --show-record', () => {
     const r = await run([`--show-record=${join(dir, 'absent.jsonl')}`]);
     expect(r.code).toBe(1);
     expect(r.stderr).toMatch(/cannot read record/);
+  });
+});
+
+/** Copy the session with one entry edited, as a reader who hand-edited the record would. */
+function tampered(name: string, edit: (entries: any[]) => void): string {
+  const entries = readEntries(session);
+  edit(entries);
+  const file = join(dir, name);
+  writeFileSync(file, entries.map((e) => JSON.stringify(e)).join('\n') + '\n');
+  return file;
+}
+
+async function replayJson(file: string) {
+  const r = await run([`--replay=${file}`, '--json']);
+  return { code: r.code, env: JSON.parse(r.stdout) };
+}
+
+describe('upt --replay', () => {
+  it('an untouched record reproduces every entry, the failures included, and exits 0', async () => {
+    const r = await run([`--replay=${session}`]);
+    expect(r.code).toBe(0);
+    expect(r.stdout).toContain(`$ upt eval 'ln(x)' x=-1\n    reproduced — exit 2, stdout and stderr identical`);
+    expect(r.stdout.match(/^ {4}reproduced — /gm)).toHaveLength(3);
+    expect(r.stdout).toContain(
+      'summary: 3 reproduced, 0 differ, 0 not replayable; environment changed for 0 of 3; 0 integrity findings',
+    );
+  });
+
+  it('--json keeps the counts separate', async () => {
+    const { code, env } = await replayJson(session);
+    expect(code).toBe(0);
+    expect(env.command).toBe('replay');
+    expect(env.result.entries.map((e: { outcome: string }) => e.outcome)).toEqual(['reproduced', 'reproduced', 'reproduced']);
+    expect(env.result.summary).toEqual({
+      entries: 3,
+      reproduced: 3,
+      differs: 0,
+      notReplayable: 0,
+      environmentChanged: 0,
+      integrityFindings: 0,
+    });
+  });
+
+  it('an edited output DIFFERS: names stdout and its first differing line, exits 3, flags the edit', async () => {
+    const file = tampered('stdout.jsonl', (e) => {
+      e[0].result.stdout = e[0].result.stdout.replace('1.6567788e-17', '1.6567789e-17');
+    });
+    const line = plain[0].stdout.split('\n').findIndex((l) => l.includes('1.6567788e-17')) + 1;
+    expect(line).toBeGreaterThan(0);
+    const { code, env } = await replayJson(file);
+    expect(code).toBe(3);
+    const [first] = env.result.entries;
+    expect(first.outcome).toBe('differs');
+    expect(first.differences).toHaveLength(1);
+    expect(first.differences[0]).toMatchObject({
+      stream: 'stdout',
+      firstDifferingLine: line,
+      recorded: '  S_V_V2_per_Hz = 1.6567789e-17',
+      replayed: '  S_V_V2_per_Hz = 1.6567788e-17',
+    });
+    expect(first.integrity).toEqual(['recorded stdout does not match its recorded stdoutSha256']);
+    expect(env.result.summary).toMatchObject({ reproduced: 2, differs: 1, notReplayable: 0 });
+
+    const text = await run([`--replay=${file}`]);
+    expect(text.code).toBe(3);
+    expect(text.stdout).toContain(`    DIFFERS — stdout\n      stdout: first difference at line ${line}`);
+  });
+
+  it('an edited exit code DIFFERS on the exit stream', async () => {
+    const file = tampered('exit.jsonl', (e) => {
+      e[1].result.exitCode = 0;
+    });
+    const { code, env } = await replayJson(file);
+    expect(code).toBe(3);
+    expect(env.result.entries[1].differences).toEqual([{ stream: 'exit', recorded: 'exit 0', replayed: 'exit 2' }]);
+  });
+
+  it('a changed constant is NAMED, beside a reproduced output — not folded into either', async () => {
+    const file = tampered('constant.jsonl', (e) => {
+      e[0].environment.constants.K_B_SI = 1.38e-23;
+    });
+    const { code, env } = await replayJson(file);
+    expect(code).toBe(1);
+    const [first] = env.result.entries;
+    expect(first.outcome).toBe('reproduced');
+    expect(first.environmentChanges).toEqual([{ fact: 'constant K_B_SI', recorded: 1.38e-23, current: 1.380649e-23 }]);
+    expect(first.integrity).toEqual(['recorded constants table does not match its recorded constantsSha256']);
+    expect(env.result.summary).toMatchObject({ reproduced: 3, differs: 0, environmentChanged: 1, integrityFindings: 1 });
+
+    const text = await run([`--replay=${file}`]);
+    expect(text.stdout).toContain('      constant K_B_SI: 1.38e-23 -> 1.380649e-23');
+  });
+
+  it('an edited constants fingerprint is named as constantsSha256', async () => {
+    const file = tampered('fingerprint.jsonl', (e) => {
+      e[2].environment.constantsSha256 = '0'.repeat(64);
+    });
+    const { code, env } = await replayJson(file);
+    expect(code).toBe(1);
+    const changes = env.result.entries[2].environmentChanges;
+    expect(changes).toHaveLength(1);
+    expect(changes[0]).toMatchObject({ fact: 'constantsSha256', recorded: '0'.repeat(64) });
+    expect(env.result.entries[2].integrity).toEqual(['recorded constants table does not match its recorded constantsSha256']);
+  });
+
+  it('a different package version is named', async () => {
+    const file = tampered('version.jsonl', (e) => {
+      e[0].environment.uptVersion = '0.0.1';
+    });
+    const { code, env } = await replayJson(file);
+    expect(code).toBe(1);
+    expect(env.result.entries[0].environmentChanges).toEqual([{ fact: 'uptVersion', recorded: '0.0.1', current: pkgVersion }]);
+  });
+
+  it('not replayable by rule — a file-writing map, a timed probe, unreadable lines — counted apart', async () => {
+    const file = join(dir, 'mixed.jsonl');
+    const dot = join(dir, 'map.dot');
+    expect((await run([`--record=${file}`, 'map', '--format=dot', `--out=${dot}`])).code).toBe(0);
+    await run([`--record=${file}`, 'probe', 'run', `--problem=${join(dir, 'absent-problem.json')}`]);
+    await run([`--record=${file}`, ...FAILED_LN]);
+    const [mapEntry] = readEntries(file);
+    expect(mapEntry.artifacts).toEqual([{ path: dot, sha256: createHash('sha256').update(readFileSync(dot)).digest('hex') }]);
+    rmSync(dot);
+    writeFileSync(file, readFileSync(file, 'utf8') + 'not json\n{"schema":"something-else"}\n');
+
+    const { code, env } = await replayJson(file);
+    expect(code).toBe(1);
+    expect(existsSync(dot)).toBe(false);
+    const outcomes = env.result.entries.map((e: { outcome: string; reason?: string }) => [e.outcome, e.reason ?? '']);
+    expect(outcomes[0][0]).toBe('not-replayable');
+    expect(outcomes[0][1]).toMatch(/wrote a file \(--out=/);
+    expect(outcomes[1][0]).toBe('not-replayable');
+    expect(outcomes[1][1]).toMatch(/wall-clock budget/);
+    expect(outcomes[2]).toEqual(['reproduced', '']);
+    expect(outcomes[3]).toEqual(['not-replayable', 'line 4 is not valid JSON']);
+    expect(outcomes[4]).toEqual(['not-replayable', 'line 5 is not a upt-record/1 entry']);
+    expect(env.result.summary).toMatchObject({ entries: 5, reproduced: 1, differs: 0, notReplayable: 4 });
+  });
+
+  it('usage and input errors', async () => {
+    const withCommand = await run([`--replay=${session}`, 'version']);
+    expect(withCommand.code).toBe(2);
+    expect(withCommand.stderr).toMatch(/'--replay' takes no command/);
+    const both = await run([`--replay=${session}`, `--show-record=${session}`]);
+    expect(both.code).toBe(2);
+    expect(both.stderr).toMatch(/use one of --record, --replay and --show-record/);
+    const empty = join(dir, 'empty.jsonl');
+    writeFileSync(empty, '\n');
+    const r = await run([`--replay=${empty}`]);
+    expect(r.code).toBe(1);
+    expect(r.stderr).toMatch(/holds no entries/);
   });
 });
