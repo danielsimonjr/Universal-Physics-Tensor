@@ -275,12 +275,17 @@ node bin/upt.mjs map --json --format=mermaid
 
 `--record=FILE`, placed **before** the command, runs it unchanged (same stdout,
 stderr and exit code) and appends one JSON line to FILE: the arguments as given
-and as parsed, stdout, stderr, their SHA-256, the exit code, and the environment
-— package version, Node version, the active formula parser, whether the MathTS
-simplifier is available, each optional peer's installed version, and the SI
-constant table with its fingerprint. Failed invocations are recorded like the
-others, so a record keeps the attempts that were refused. A `map --out=PATH`
-entry also records the written file's SHA-256.
+and as parsed, stdout, stderr, the exit code, and the environment — package
+version, Node version, the active formula parser, whether the MathTS simplifier
+is available, each optional peer's installed version, and every constant table,
+each named by its source module (`core/constants`, `dimensional/units`,
+`composition/symbolic-constants`, `composition/canonical-graph`, and each
+`bridges/*` or `cases/*` module that exports a number) with its own fingerprint.
+The arguments, each stream and the entry as a whole are hashed. Each entry also
+carries an **attribution**: the constants its command's code can reach through
+the import graph — a static upper bound, not a record of what it read. Failed
+invocations are recorded like the others, so a record keeps the attempts that
+were refused. A `map --out=PATH` entry also records the written file's SHA-256.
 
 ```bash
 node bin/upt.mjs --record=session.jsonl evaluate be-58 T_K=300 R_ohm=1000
@@ -309,8 +314,10 @@ stdout and stderr byte for byte. Each entry is exactly one of:
 
 Beside the outcome, replay names every environment fact that changed since
 recording (`uptVersion`, `node`, `formulaParser`, `simplifier`, `peer <name>`,
-`constant <NAME>`, `constantsSha256`), and flags a record edited after it was
-written (a stream or constant table that no longer matches its recorded hash). It
+`constant <table> <NAME>`, `table <table> sha256`), and marks each changed
+constant **reachable** or **not reachable** from the entry's command by its
+attribution. It flags a record edited after it was written (arguments, a stream,
+a constant table or the entry itself no longer matching its recorded hash). It
 names what changed; it does not claim the change caused a difference. Exit `0`
 when every entry reproduced under an unchanged environment with no edit found,
 `3` when any entry differs, `1` otherwise (not replayable, changed environment,

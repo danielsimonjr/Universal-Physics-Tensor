@@ -68,6 +68,7 @@ export {
   rigorDistribution,
 } from './bridges/confrontations.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
+export { consistencyComparison } from './bridges/observations/types.js';
 export type { ConfrontationOutcome } from './bridges/observations/types.js';
 export { decidingMeasurement } from './bridges/sensitivity.js';
 // Bridge-evaluator dispatch (`upt evaluate`) + axis-discrimination audit (`upt axes`).
@@ -115,6 +116,7 @@ export {
   runProbeSearch,
   formatProbeReport,
   loadStudyFromJson,
+  loadStudyFile,
   runProbeStudy,
   formatProbeStudy,
   formatFrontierScan,
@@ -175,14 +177,20 @@ export { deriveEvidence, NO_PASSING_WITNESSES } from './atlas/derive-evidence.js
 export { runWitnessRegistry } from './atlas/witness-artifact.js';
 export { WITNESS_REGISTRY } from './atlas/witness-specs.js';
 export { runNumericWitness } from './atlas/witness-numeric.js';
-export { OBSERVABLE_TRANSLATIONS, translationsOf } from './atlas/translation-registry.js';
-export type { ObservableTranslation } from './atlas/translation.js';
+export {
+  OBSERVABLE_CARRIAGES,
+  OBSERVABLE_TRANSLATIONS,
+  carriageOf,
+  runTranslationCheck,
+  translationsOf,
+} from './atlas/translation-registry.js';
+export type { ObservableCarriage, ObservableTranslation, PointCheck } from './atlas/translation.js';
 export type { AtlasFamily } from './atlas/oscillators/index.js';
 export { regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
-export { findPath, findAtlasPath, boundPath } from './atlas/path-bound.js';
+export { findPath, findAtlasPath, enumerateAtlasRoutes, boundPath } from './atlas/path-bound.js';
 export { composeRelation } from './atlas/composition-table.js';
 export type { PathBoundResult, PathBoundClaim, PathNoClaim } from './atlas/path-bound.js';
-export type { AtlasBridge, RegimeInequality } from './atlas/types.js';
+export type { AtlasBridge, RegimeInequality, Witness } from './atlas/types.js';
 export { MissingLipschitzError } from './atlas/types.js';
 export type { AtlasModel, ModelId } from './atlas/model.js';

@@ -24,6 +24,11 @@
 ### Audit improvements (§14) not covered by the F-ledger fixes — open
 
 - [ ] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
+  Proposal ready for Mothership: `docs/planning/ADR-proposal-transported-norm-composition.md`, with a
+  test-only demonstration (`tests/atlas/transported-norm-demo.test.ts`). To decide: the cell, the
+  shape of the per-direction norm-transport field, and whether the relation is set without a
+  declaration. Also for that review: `ab-spring-lc`'s declared phase carriage (I8) already lets a
+  phase tolerance cross that bridge; the composite bound stays "no composite claim".
 - [x] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
 - [x] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
   Every evaluator declares each input's unit, meaning and geometry role, and `evaluate` converts
@@ -32,46 +37,56 @@
   only up to its 6π, so it cannot back an evaluator as it stands.
 - [x] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
 - [x] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
-  `path --tolerance=EPS` judges in the bound's own norm; `--tolerance=phase:EPS` gives a phase
-  horizon through the one declared translation (`ab-pendulum-linear`), witnessed by W7p. Not encoded:
-  the pointwise position error, amplitude, multi-bridge paths and every other bridge. W7p runs at its
-  fixture θ0 = 0.2, not at the user's point.
+  `path --tolerance=EPS` judges in the bound's own norm; `--tolerance=phase:EPS` and
+  `--tolerance=position:EPS` go through `ab-pendulum-linear`'s two declared translations, and phase
+  crosses `ab-spring-lc` through its declared carriage. The witness runs at the user's θ0 and at the
+  fixture. Limits: the position bound rests on the quoted pendulum Fourier series (a premise, not
+  machine-checked); the point witness is not run below θ0 ≈ 0.007 and its control cannot fail below
+  θ0 ≈ 0.013 (both said in the output); amplitude and every other bridge are not encoded.
 - [x] **I9** Uncertainty propagation with covariance, distinct from sensitivity.
 - [x] **I11** Discovery ranking by evidential readiness dimensions.
 - [x] **I12** Premise and novelty status inseparable from every exported derived relation.
 - [x] **I14** Confrontation records expose the statistical object, preprocessing and independence for every record.
   Preprocessing and independence are required fields, each sourced or explicitly not recorded (counts
-  in `NOTES.md`). The `source` of a recorded statement is free text: a test checks it is present,
-  not that it is accurate.
-- [ ] **Confrontation gap label** — for be-56 and be-61…be-65, `confront` prints the agreement
-  tolerance as the "gap". Relabel it or add the actual observed−predicted difference; the frozen
-  confrontation-numbers golden pins the current values, so this needs review.
-- [ ] **Atlas equation links** — 17 of 24 atlas models record no `canonicalRefs` (e.g. `model-pendulum`
-  lacks `CE-pendulum-period`). Adding links is atlas data and needs review.
+  in `NOTES.md`). Each statement cites repository references (file + verbatim quote or declared
+  symbol) that a test resolves; resolving shows the cited text exists, not that the statement is true.
+- [x] **Confrontation gap label** — `confront` now prints the actual difference (observed − predicted)
+  / predicted beside the agreement bound, labelled apart; no pinned number changed. Open: be-11 and
+  be-21 carry no agreement bound in the outcome, so no compatibility decision is made for them
+  (adding one would change the frozen golden).
+- [ ] **Atlas equation links** — 15 of 24 atlas models record no `canonicalRefs` (reasons per model in
+  `tests/atlas/canonical-links.test.ts`). Eight older links are not yet checked (ratchet list in that
+  test); three need a sourced prefactor for CE-simple-harmonic-frequency, CE-sound-speed and
+  CE-string-wave-speed first. `CanonicalEquation.model` stays unset: `src/canonical` is frozen by
+  criterion 3.
 - [x] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
-  The record attributes no witness to a claim, so none is cited under one; attributing witnesses to
-  claims is atlas data and needs review.
+  Five witnesses (WS4, WD6, WD7, WS5, WS7) are attributed to their bridge's bound, each checked against
+  its spec. None can be attributed to correspondence, regime, horizon or preserves: no spec ties to
+  them. Open: an executable spec for W7 (pendulum) so it can be attributed.
 - [x] **I16** Focused (neighborhood/route/family) map exports.
   `map --around`, `--route=FROM,TO` and `--family=NAME`; models join the equation graph only through
-  their recorded `canonicalRefs`. The route view shows only the shortest route by bridge count, and
-  evidence tags that need a passing witness are always "undecided" there.
+  their recorded `canonicalRefs`. `--all-routes`, `--observable`, and `--stored`/`--run` evidence are
+  added. Open: an atlas-wide evidence view, and a test of `--run`'s exit 3 (nothing refutes today).
 - [x] **I17** Session export and replay (`--record`, `--show-record`, `--replay`).
-  Limits: only `src/core/constants.ts` is fingerprinted; replay names what changed but cannot say
-  whether it caused a difference; recorded arguments carry no hash, so an edited argument shows as
-  "differs" with no integrity finding; `map --out` and the timed `probe` subverbs are not replayable;
-  the builtin-parser path was not exercised.
+  `upt-record/2` hashes the arguments and the entry, fingerprints 18 named constant tables, and marks
+  each changed constant reachable or not from the command (a static upper bound, not an observed read).
+  Open: literals a module keeps private are in no table; attribution is per command, not per entry;
+  `map --out` and the timed `probe` subverbs are not replayable.
 - [x] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
-  The comparison is the closed-form exact error per row. A sweep of the telegraph family showing where
-  NEITHER limit applies needs two paths side by side, which is not done.
+  `--sweep … --compare=<to2>` puts two limits side by side and marks NEITHER rows with no number
+  (telegraph and Klein–Gordon).
 - [x] **I19** Real-data, falsification-oriented probe workflow (`probe study --data=FILE`).
   The pendulum controls are positive controls whose law was chosen knowing the answer: they show the
-  workflow can recover and refute a law, not that it finds an unknown one. Open: CSV input, σ on the
-  inputs, and a search beyond monomials of the dimensioned inputs. Replication independence is
-  checked only by the `source` string within one file.
+  workflow can recover and refute a law, not that it finds an unknown one; UPT ships no blind control.
+  CSV input, input σ (effective variance), a declared correction family (F test) and a separate
+  `--replication` file are added. Open: the replication check catches exact copies only; one
+  dimensionless input can carry a family; `bun run test:probe-coverage` is below its thresholds
+  (it was before this work too, and CI does not run it).
 - [x] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
-  `upt evaluate case-<id>`. Open: the hydrodynamic-memory coefficient (only its order is checked),
-  amplifier noise, Faxén wall corrections, and cases for the electromagnetic, thermodynamic and
-  astrophysical models the audit also names.
+  Six cases: the three above (now with hydrodynamic memory, Faxén/Brenner walls, amplifier noise and a
+  resonator thermal floor) plus `case-skin-depth`, `case-lumped-cooling` and `case-kepler-rv`. Open:
+  memory near a wall, the parallel lubrication limit, Faxén terms past 9/16 (quoted, not checked),
+  the anomalous skin effect and radiation-dominated cooling (refused, not evaluated).
 - [x] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
 
 ## TypeScript-on-Bun migration (in flight)

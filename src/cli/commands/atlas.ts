@@ -67,8 +67,10 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         sections print as "none stated", never disappear. With no id, lists
         every bridge of every family.
         Evidence is shown BY CLAIM (correspondence, regime, bound, horizon,
-        preserves), each citing only what the record's structure links to it,
-        and every witness shows its execution status: a witness's name is not
+        preserves), each citing only what the record's structure links to it;
+        a witness is listed under the bound only where the witness registry
+        attributes it, and the rest are listed apart. Every witness shows its
+        execution status: a witness's name is not
         its result. --run executes the bridge's in-process registered
         witnesses now and reports checked / refuted / unresolved separately
         (exit 3 if any is refuted).
@@ -106,8 +108,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   const symbolic = b.witnesses.filter((w) => w.kind === 'symbolic').map((w) => w.id);
   const familyOf = (modelId: string): string => models.get(modelId)?.family ?? 'UNKNOWN';
 
-  // A claim cites only what the record's structure links to it. The record
-  // attributes no witness to a claim, so no witness is cited under one.
+  // A claim cites only what the record's structure links to it. A witness is
+  // cited under a claim only where the registry attributes it, and
+  // tests/atlas/witness-claims.test.ts checks each attribution against the spec.
+  const registered = api.WITNESS_REGISTRY.filter((e) => e.recordId === b.id);
+  const boundWitnesses = registered.flatMap((e) =>
+    e.kind === 'numeric' && e.claim?.name === 'bound' ? [{ id: e.spec.id, at: e.claim.at(e.spec.fineResolution) }] : [],
+  );
   const notTheRef = b.formalRef === undefined ? '' : '; the formal reference is not attributed to it';
   const n = b.regime.inequalities.length;
   const claims = {
@@ -134,6 +141,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         ? null
         : {
             basis: b.bound.deltaAtBasis ?? null,
+            witnesses: boundWitnesses,
             text:
               (b.bound.deltaAtBasis === 'closed-form'
                 ? 'basis closed-form (deltaAt is the exact error)'
@@ -151,8 +159,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     },
   };
 
-  const registered = api.WITNESS_REGISTRY.filter((e) => e.recordId === b.id);
   const registeredIds = new Set(registered.map((e) => e.spec.id));
+  const claimOf = (id: string): 'bound' | null => (boundWitnesses.some((w) => w.id === id) ? 'bound' : null);
   const ran = args.flags.has('run') ? (await api.runWitnessRegistry(registered)).results : null;
   const witnessExecution = b.witnesses.map((w) => {
     const result = ran?.find((r) => r.witnessId === w.id);
@@ -160,6 +168,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       return {
         id: w.id,
         kind: w.kind,
+        claim: claimOf(w.id),
         status: result.status,
         ...(result.reason === undefined ? {} : { reason: result.reason }),
         detail: result.detail,
@@ -168,6 +177,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     return {
       id: w.id,
       kind: w.kind,
+      claim: claimOf(w.id),
       status: registeredIds.has(w.id) ? ('runnable' as const) : ('not-observed' as const),
       rerun: `bunx vitest run ${w.test}`,
     };
@@ -288,25 +298,34 @@ async function run(ctx: CommandCtx): Promise<number> {
     // certifies a transformation does not certify the bound beside it.
     out('  covers: the statement above ONLY — not the bound, regime or side conditions unless it says so');
   }
+  const execution = (w: (typeof witnessExecution)[number]): string => {
+    if (!('rerun' in w)) return `${w.status}${'reason' in w ? ` (${w.reason})` : ''} (run now) — ${w.detail}`;
+    return w.status === 'runnable'
+      ? `registered in-process, not run — \`upt atlas ${b.id} --run\` runs it`
+      : `result not observed by this command — its repository test file: ${w.rerun}`;
+  };
   out("evidence by claim (derived from the record's structure):");
   out(`  correspondence: ${claims.correspondence.text}`);
   out(`  regime: ${claims.regime.text}`);
   out(`  bound: ${claims.bound?.text ?? 'none stated'}`);
+  for (const bw of boundWitnesses) {
+    const at = Object.entries(bw.at)
+      .sort(([x], [y]) => x.localeCompare(y))
+      .map(([k, v]) => `${k} = ${v}`)
+      .join(', ');
+    const w = witnessExecution.find((x) => x.id === bw.id)!;
+    out(`    - ${w.id} [${w.kind}] tests it at ${at} (its error there is the bound's norm; tolerance ≤ delta): ${execution(w)}`);
+  }
   out(`  horizon: ${claims.horizon.text}`);
   out(`  preserves: ${claims.preserves.text}`);
-  out('witness execution (the record does not attribute a witness to a claim):');
-  if (witnessExecution.length === 0) out('  none stated');
-  for (const w of witnessExecution) {
-    if ('rerun' in w) {
-      out(
-        w.status === 'runnable'
-          ? `  - ${w.id} [${w.kind}]: registered in-process, not run — \`upt atlas ${b.id} --run\` runs it`
-          : `  - ${w.id} [${w.kind}]: result not observed by this command — its repository test file: ${w.rerun}`,
-      );
-    } else {
-      out(`  - ${w.id} [${w.kind}]: ${w.status}${'reason' in w ? ` (${w.reason})` : ''} (run now) — ${w.detail}`);
-    }
-  }
+  const unattributed = witnessExecution.filter((w) => w.claim === null);
+  out(
+    boundWitnesses.length === 0
+      ? 'witness execution (the record does not attribute a witness to a claim):'
+      : 'witness execution, witnesses not attributed to a claim:',
+  );
+  if (unattributed.length === 0) out(witnessExecution.length === 0 ? '  none stated' : '  none');
+  for (const w of unattributed) out(`  - ${w.id} [${w.kind}]: ${execution(w)}`);
   if (runSummary !== null) {
     out(
       registered.length === 0

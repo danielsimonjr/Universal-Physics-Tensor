@@ -1,0 +1,11 @@
+# description: SYNTHETIC replication file, not measured data: an independent seeded draw by tests/fixtures/probe-study/generate.mjs (seed 6).
+# provenance.synthetic: true
+# provenance.source: tests/fixtures/probe-study/generate.mjs (seed 6, independent draw)
+# provenance.acquisition: SYNTHETIC: same generating law as the study, seed 6. Not a measurement.
+# target: period
+# target.sigma: 2 ms
+id,role,length[cm],gravity[m/s^2],amplitude[deg],period[s]
+r1,replication,55,9.81,25.7831,1.50923 s
+r2,replication,110 cm,9.81,48.7014,2.20399 s
+r3,replication,170,9.81,65.8901 deg,2.852 s
+r4,replication,210,9.81,8.59437,2.91133 s

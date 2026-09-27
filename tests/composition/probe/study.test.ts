@@ -248,7 +248,7 @@ describe('probe study — synthetic fixtures', () => {
   });
 
   it('every fixture declares itself synthetic in its provenance and its description', () => {
-    for (const name of Object.keys(buildFixtures())) {
+    for (const name of Object.keys(buildFixtures()).filter((n) => n.endsWith('.json'))) {
       const raw = JSON.parse(readFileSync(join(dir, name), 'utf8'));
       expect(raw.provenance.synthetic).toBe(true);
       expect(raw.description).toMatch(/^SYNTHETIC/);

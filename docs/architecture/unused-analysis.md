@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 34
+- **Potentially unused exports**: 67
 
 ## Potentially Unused Files
 
@@ -30,9 +30,19 @@ These exports are not imported by any other file in the codebase:
 - `CONTRACT_PENDULUM_LINEAR` (constant)
 - `CONTRACT_DAMPED_MASSLESS` (constant)
 
+### `src/atlas/oscillators/pendulum-motion.ts`
+
+- `W2` (constant)
+
 ### `src/atlas/oscillators/phase-translation.ts`
 
 - `measurePhaseHorizon` (function)
+- `measurePhaseHorizonWithin` (function)
+
+### `src/atlas/oscillators/position-translation.ts`
+
+- `measureFundamental` (function)
+- `POSITION_POINT_MAX_PERIODS` (constant)
 
 ### `src/atlas/oscillators/rejections.ts`
 
@@ -42,45 +52,89 @@ These exports are not imported by any other file in the codebase:
 
 - `POSTER_5_IDENTIFICATION_NOTE` (constant)
 
+### `src/bridges/confrontations.ts`
+
+- `BCS_GAP_RATIO` (constant)
+
 ### `src/cases/brownian-sphere.ts`
 
 - `G_STANDARD` (constant)
 - `MAX_RE` (constant)
 - `MAX_TAU_P_RATIO` (constant)
-- `MAX_TAU_F_RATIO` (constant)
+- `MAX_MEMORY_CORRECTION` (constant)
 - `MAX_DRIFT_RATIO` (constant)
+- `MAX_WALL_CORRECTION` (constant)
+- `MAX_FAXEN_LAST_TERM` (constant)
+- `MAX_WALL_EXCURSION` (constant)
 
 ### `src/cases/damped-resonator.ts`
 
 - `MIN_Q_LORENTZIAN` (constant)
 - `MAX_RESOLUTION_RATIO` (constant)
+- `MAX_THERMAL_RATIO` (constant)
+
+### `src/cases/kepler-rv.ts`
+
+- `JULIAN_YEAR_S` (constant)
+- `MAX_MASS_RATIO` (constant)
+- `MAX_RADIUS_RATIO` (constant)
+- `MAX_WEAK_FIELD` (constant)
+- `MAX_APSIDAL_MISFIT` (constant)
+
+### `src/cases/lumped-cooling.ts`
+
+- `MAX_BIOT` (constant)
+- `MAX_RADIATION_RATIO` (constant)
 
 ### `src/cases/resistor-noise.ts`
 
 - `CLASSICAL_MAX_X` (constant)
 - `FLAT_BAND_MAX_WRC` (constant)
+- `AMPLIFIER_MAX_REL_SIGMA` (constant)
+
+### `src/cases/skin-depth.ts`
+
+- `MAX_DISPLACEMENT_RATIO` (constant)
+- `MAX_MFP_RATIO` (constant)
+- `MAX_OMEGA_TAU` (constant)
+- `MIN_THICKNESS_RATIO` (constant)
 
 ### `src/cli/commands/_atlas-map.ts`
 
+- `loadStoredResults` (function)
+- `runResults` (function)
 - `parseRoute` (function)
 - `buildRouteView` (function)
+- `buildRoutesView` (function)
+- `buildObservableView` (function)
 - `formatAtlasFilterLegend` (function)
-- `buildFamilyView` (function)
+- `bridgeIdsOf` (function)
+- `resultsLine` (function)
 - `routeText` (function)
 - `familyText` (function)
+- `routesText` (function)
+- `observableText` (function)
 - `viewLegend` (function)
 - `toMermaid` (function)
 - `toDot` (function)
 - `ATLAS_SOURCE` (constant)
 - `LINK_SOURCE` (constant)
+- `STORED_RESULTS_PATH` (constant)
+- `DEFAULT_MAX_ROUTES` (constant)
+- `MAX_ROUTES_CEILING` (constant)
+
+### `src/cli/record-reach.ts`
+
+- `REACH_METHOD` (constant)
 
 ### `src/cli/record.ts`
 
-- `constantsTable` (function)
+- `canonicalJson` (function)
+- `entryFingerprint` (function)
 - `captureEnvironment` (function)
 - `RECORD_SCHEMA` (constant)
 - `sha256` (constant)
-- `constantsFingerprint` (constant)
+- `argvFingerprint` (constant)
 
 ### `src/composition/probe/study.ts`
 

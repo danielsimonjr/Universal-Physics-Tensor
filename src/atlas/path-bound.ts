@@ -170,6 +170,105 @@ export function findAtlasPath(from: string, to: string): readonly AtlasBridge[] 
   );
 }
 
+/**
+ * The simple routes from `from` to `to` across every registered family, as
+ * far as a bounded search reaches. Each route is a list of bridges, and no route
+ * visits a model twice. Traversal follows the same rules as
+ * {@link findAtlasPath}: an exact equivalence both ways, every lossy relation
+ * forward only, multi-premise bridges skipped.
+ *
+ * The search runs by bridge count (every route of k bridges before any of
+ * k + 1), with ties in {@link ATLAS_FAMILIES} order and then bridge order. It stops
+ * once it has found `limit + 1` routes, or after expanding `budget` partial
+ * routes. Stopping early is REPORTED, not hidden: `exhausted` is false,
+ * `stoppedBy` says which bound stopped it, and `completeThrough` is the largest
+ * bridge count up to which every route has been found. When `exhausted` is
+ * true, `routes` holds all of them.
+ *
+ * @throws RangeError if an endpoint is not a model of any family, or `limit`
+ *   is not a positive integer (via {@link enumerateRoutes}).
+ * @internal
+ */
+export function enumerateAtlasRoutes(
+  from: string,
+  to: string,
+  limit: number,
+  budget = 100_000,
+): RouteEnumeration {
+  const models = new Set(ATLAS_FAMILIES.flatMap((f) => f.models.map((m) => m.id)));
+  for (const endpoint of [from, to]) {
+    if (!models.has(endpoint)) {
+      throw new RangeError(`enumerateAtlasRoutes: '${endpoint}' is not a model of any atlas family`);
+    }
+  }
+  return enumerateRoutes(ATLAS_FAMILIES.flatMap((f) => f.bridges), from, to, limit, budget);
+}
+
+/** What {@link enumerateAtlasRoutes} found, and whether the search was cut short. @internal */
+export interface RouteEnumeration {
+  readonly routes: (readonly AtlasBridge[])[];
+  readonly exhausted: boolean;
+  readonly completeThrough: number | null;
+  readonly stoppedBy: 'limit' | 'budget' | null;
+}
+
+/**
+ * {@link enumerateAtlasRoutes} over an explicit bridge list; endpoints are not
+ * validated against any family.
+ * @throws RangeError if `limit` is not a positive integer.
+ * @internal
+ */
+export function enumerateRoutes(
+  bridges: readonly AtlasBridge[],
+  from: string,
+  to: string,
+  limit: number,
+  budget = 100_000,
+): RouteEnumeration {
+  if (!Number.isInteger(limit) || limit < 1) {
+    throw new RangeError(`enumerateRoutes: limit must be a positive integer, got ${limit}`);
+  }
+  if (from === to) return { routes: [[]], exhausted: true, completeThrough: null, stoppedBy: null };
+
+  const outgoing = new Map<string, DirectedEdge[]>();
+  for (const edge of directedEdges(bridges)) {
+    const bucket = outgoing.get(edge.from);
+    if (bucket === undefined) outgoing.set(edge.from, [edge]);
+    else bucket.push(edge);
+  }
+
+  interface Partial {
+    readonly at: string;
+    readonly visited: ReadonlySet<string>;
+    readonly bridges: readonly AtlasBridge[];
+  }
+  const routes: (readonly AtlasBridge[])[] = [];
+  let layer: Partial[] = [{ at: from, visited: new Set([from]), bridges: [] }];
+  let expanded = 0;
+  for (let length = 1; layer.length > 0; length++) {
+    const next: Partial[] = [];
+    for (const p of layer) {
+      if (++expanded > budget) {
+        return { routes: routes.slice(0, limit), exhausted: false, completeThrough: length - 1, stoppedBy: 'budget' };
+      }
+      for (const edge of outgoing.get(p.at) ?? []) {
+        if (p.visited.has(edge.to)) continue;
+        const route = [...p.bridges, edge.bridge];
+        if (edge.to === to) {
+          routes.push(route);
+          if (routes.length > limit) {
+            return { routes: routes.slice(0, limit), exhausted: false, completeThrough: length - 1, stoppedBy: 'limit' };
+          }
+        } else {
+          next.push({ at: edge.to, visited: new Set([...p.visited, edge.to]), bridges: route });
+        }
+      }
+    }
+    layer = next;
+  }
+  return { routes, exhausted: true, completeThrough: null, stoppedBy: null };
+}
+
 /** Breadth-first shortest chain over `bridges`; endpoints already validated. */
 function shortestChain(
   bridges: readonly AtlasBridge[],

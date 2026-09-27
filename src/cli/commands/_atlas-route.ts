@@ -72,7 +72,9 @@ export function routeClaim(api: CommandCtx['api'], bridges: readonly AtlasBridge
  * What a `no-composite-claim` path lacks, stated as requirements rather than
  * supplied. The first silent table cell is named; then every exact map after a
  * bound, which states no norm and so records nothing about carrying that
- * bound's quantity through its mapping. Nothing here widens the table.
+ * bound's quantity through its mapping; then every exact map before a bound,
+ * which would have to state how its mapping acts on that later bound's norm.
+ * Nothing here widens the table.
  */
 export function missingForComposite(api: CommandCtx['api'], bridges: readonly AtlasBridge[]): string[] {
   const missing: string[] = [];
@@ -95,6 +97,16 @@ export function missingForComposite(api: CommandCtx['api'], bridges: readonly At
     else if (b.relation === 'exact-equivalence' && norm !== undefined) {
       missing.push(`'${b.id}' to state that it carries '${norm}' through its mapping (it states no norm)`);
     }
+  }
+  for (let i = 0; i < bridges.length; i++) {
+    const b = bridges[i]!;
+    if (b.relation !== 'exact-equivalence' || b.bound !== undefined) continue;
+    const later = bridges.slice(i + 1).find((x) => x.bound !== undefined);
+    if (later === undefined) continue;
+    missing.push(
+      `'${b.id}' to state how its mapping acts on '${later.bound!.norm}', the norm of the later bound on ` +
+        `'${later.id}' (it states no norm)`,
+    );
   }
   return missing;
 }

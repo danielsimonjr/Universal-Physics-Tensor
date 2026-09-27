@@ -58,6 +58,8 @@ export interface EvaluatorParameter {
   /** A temperature input is a point on the absolute scale, never a difference. */
   readonly temperature?: 'absolute';
   readonly alternates?: readonly ParameterAlternate[];
+  /** May be left out; the evaluator then says what it did without it. Applied cases only. */
+  readonly optional?: true;
 }
 
 /** A callable bridge evaluator with its input contract. @public */

@@ -168,6 +168,17 @@ describe('upt path', () => {
     expect('bound' in r).toBe(false);
   });
 
+  it('an exact map BEFORE a bound is named too: the bound must be pulled back through it', async () => {
+    const cap = capture();
+    await runCli(['path', 'model-rlc', 'model-first-order'], cap.io);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/a composition-table cell for exact-equivalence then approximation/);
+    expect(text).toMatch(/'ab-damped-rlc' to state how its mapping acts on 'sup \|x − x_reduced\|[^']*', the norm of the later bound on 'ab-damped-massless'/);
+    const json: string[] = [];
+    await runCli(['path', 'model-rlc', 'model-first-order', '--json'], { out: () => {}, err: () => {}, write: (s: string) => json.push(s) });
+    expect(JSON.parse(json.join('')).result.missing).toHaveLength(2);
+  });
+
   it('--json for a no-claim has NO bound key and names the reason', async () => {
     const cap = capture();
     const code = await runCli(['path', 'model-pendulum', 'model-lc', '--json'], cap.io);

@@ -119,3 +119,77 @@ describe('case-resistor-noise — the statistical scatter of a measured RMS', ()
     expect(Math.abs(sd / mean / predicted - 1)).toBeLessThan(0.05);
   });
 });
+
+/** Deterministic Gaussian samples: a 32-bit LCG through Box–Muller. */
+function gaussian(seed: number): () => number {
+  let s = seed >>> 0;
+  const u = () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) + 0.5) / 2 ** 32;
+  return () => Math.sqrt(-2 * Math.log(u())) * Math.cos(2 * Math.PI * u());
+}
+
+describe('case-resistor-noise — amplifier noise (e_n, i_n)', () => {
+  const amp = { e_n2_V2_per_Hz: 1e-18, i_n2_A2_per_Hz: 1e-24 };
+  const outA = (i: Record<string, number> = {}) => C.run({ ...base, ...amp, ...i }).outputs as Record<string, number | null>;
+  const failedA = (i: Record<string, number> = {}) => C.run({ ...base, ...amp, ...i }).checks.filter((k) => !k.holds).map((k) => k.id);
+
+  it('by hand at 1 kΩ ∥ 1 MΩ, 300 K, 1 nV/√Hz and 1 pA/√Hz: φ = 0.89229, T_n = 36.215 K, V_rms,total = 4.3069e-7 V', () => {
+    const rEff = 1e9 / 1001000;
+    const S = 4 * K_B * 300 * rEff;
+    const excess = 1e-18 + 1e-24 * rEff * rEff;
+    expect(outA().resistor_fraction).toBeCloseTo(S / (S + excess), 14);
+    expect(outA().resistor_fraction).toBeCloseTo(0.89229, 5);
+    expect(outA().T_n_K).toBeCloseTo(36.215, 3);
+    expect(Math.abs(outA().V_rms_total_V! / Math.sqrt((S + excess) * 1e4) - 1)).toBeLessThan(1e-14);
+    expect(outA().V_rms_total_V).toBeCloseTo(4.3069e-7, 11);
+  });
+
+  it('a second route through the noise temperature: (V_rms,total/V_rms)² = 1 + T_n/T', () => {
+    for (const T of [4.2, 77, 300]) {
+      const o = outA({ T_K: T });
+      expect((o.V_rms_total_V! / o.V_rms_V!) ** 2 / (1 + o.T_n_K! / T) - 1, `T = ${T}`).toBeCloseTo(0, 13);
+    }
+  });
+
+  it("control: i_n enters through R_eff — at R = 1 MΩ it dominates a term the 1 kΩ reading barely feels", () => {
+    const small = outA({ e_n2_V2_per_Hz: 0 });
+    const large = outA({ e_n2_V2_per_Hz: 0, R_ohm: 1e6, C_in_F: 0 });
+    expect(small.T_n_K).toBeCloseTo((1e-24 * (1e9 / 1001000)) / (4 * K_B), 6);
+    expect(large.T_n_K! / small.T_n_K!).toBeCloseTo(5e5 / (1e9 / 1001000), 3);
+  });
+
+  it('the amplifier check is 1/(φ√(B t_avg)); a Monte Carlo of the subtracted power reproduces that scatter', () => {
+    // 2B t_avg Nyquist samples of total power P, minus the known amplifier power P(1 − φ), over φP.
+    const [B, tAvg, phi] = [50, 1, 0.25];
+    const n = 2 * B * tAvg;
+    const g = gaussian(20260927);
+    const est: number[] = [];
+    for (let k = 0; k < 20000; k++) {
+      let p = 0;
+      for (let j = 0; j < n; j++) p += g() ** 2;
+      est.push((p / n - (1 - phi)) / phi);
+    }
+    const mean = est.reduce((a, b) => a + b, 0) / est.length;
+    const sd = Math.sqrt(est.reduce((a, b) => a + (b - mean) ** 2, 0) / (est.length - 1));
+    expect(Math.abs(mean - 1)).toBeLessThan(0.01);
+    expect(Math.abs(sd / (1 / (phi * Math.sqrt(B * tAvg))) - 1)).toBeLessThan(0.02);
+    const k = C.run({ ...base, ...amp }).checks.find((c) => c.id === 'amplifier')!;
+    expect(k.value).toBeCloseTo(1 / (outA().resistor_fraction! * Math.sqrt(1e4 * 10)), 14);
+  });
+
+  it('a 10 Ω resistor behind 4 nV/√Hz fails the amplifier check; the 1 kΩ one passes; shortening t_avg makes it fail', () => {
+    expect(failedA()).toEqual([]);
+    expect(failedA({ R_ohm: 10, e_n2_V2_per_Hz: 1.6e-17 })).toEqual(['amplifier']);
+    expect(failedA({ t_avg_s: 0.01 })).toEqual(['amplifier']);
+  });
+
+  it('without e_n2 and i_n2: no amplifier outputs or check; one alone takes the other as 0 and says so; a negative density is refused', () => {
+    const r = C.run(base);
+    expect(r.outputs.V_rms_total_V).toBeNull();
+    expect(r.outputs.resistor_fraction).toBeNull();
+    expect(r.checks.map((k) => k.id)).toEqual(['classical', 'flat-band']);
+    const onlyEn = C.run({ ...base, e_n2_V2_per_Hz: 1e-18 });
+    expect(onlyEn.unchecked.join(' ')).toMatch(/i_n was not given and is taken as 0/);
+    expect(onlyEn.outputs.T_n_K).toBeCloseTo(1e-18 / (4 * K_B * (1e9 / 1001000)), 8);
+    expect(() => C.run({ ...base, i_n2_A2_per_Hz: -1e-24 })).toThrow(/i_n2_A2_per_Hz must be/);
+  });
+});

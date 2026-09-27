@@ -167,3 +167,50 @@ describe('case-damped-resonator — outside the underdamped premise', () => {
     expect(() => run({ t_s: -1 })).toThrow(/t_s must be/);
   });
 });
+
+describe('case-damped-resonator — the thermal floor (T_K, k_N_per_m)', () => {
+  const K_B = 1.380649e-23;
+  const th = { T_K: 300, k_N_per_m: 1 };
+  const runT = (i: Record<string, number> = {}) => C.run({ ...base, ...th, ...i });
+
+  it('√(k_BT/k) at 300 K and 1 N/m is 6.43580e-11 m by hand', () => {
+    expect(runT().outputs.x_th_rms_m).toBeCloseTo(Math.sqrt(K_B * 300), 22);
+    expect(runT().outputs.x_th_rms_m! / 6.4358e-11 - 1).toBeCloseTo(0, 5);
+  });
+
+  it('the Rice second moment ⟨A_obs²⟩ = A² + 2k_BT/k matches a Monte Carlo of the envelope of signal plus thermal quadratures', () => {
+    let s = 12345;
+    const u = () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) + 0.5) / 2 ** 32;
+    const g = () => Math.sqrt(-2 * Math.log(u())) * Math.cos(2 * Math.PI * u());
+    const o = runT({ x0_m: 100e-12, t_s: 0.5 }).outputs;
+    const [A, sig] = [o.envelope_m!, o.x_th_rms_m!];
+    let m2 = 0;
+    const N = 200000;
+    for (let k = 0; k < N; k++) m2 += (A + sig * g()) ** 2 + (sig * g()) ** 2;
+    expect(Math.abs(Math.sqrt(m2 / N) / o.envelope_rms_m! - 1)).toBeLessThan(5e-3);
+    // Control: counting one quadrature (A² + k_BT/k) is visibly short.
+    expect(Math.abs(Math.sqrt(m2 / N) / Math.sqrt(A * A + sig * sig) - 1)).toBeGreaterThan(0.05);
+  });
+
+  it('at the ceiling √(k_BT/k)/A = 0.1 the RMS envelope exceeds A by ≤ 1%; the check flips there', () => {
+    expect(Math.sqrt(1 + 2 * 0.01) - 1).toBeLessThanOrEqual(0.01);
+    // A(t) = 10 x_th at t = τ ln(x0/(10 x_th root)); ±2% in x0 around it.
+    const o = runT().outputs;
+    const x0Edge = (10 * o.x_th_rms_m! * Math.sqrt(1 - 1 / 4e6)) / Math.exp(-o.alpha_per_s! * 0.1);
+    const ids = (x0: number) => runT({ x0_m: x0 }).checks.filter((k) => !k.holds).map((k) => k.id);
+    expect(ids(1.02 * x0Edge)).toEqual([]);
+    expect(ids(0.98 * x0Edge)).toEqual(['above-thermal']);
+  });
+
+  it('T_K and k_N_per_m go together; without them no thermal output or check; at Q ≤ 1/2 there is no envelope to check', () => {
+    expect(() => C.run({ ...base, T_K: 300 })).toThrow(/together/);
+    expect(() => runT({ k_N_per_m: 0 })).toThrow(/k_N_per_m must be/);
+    const r = run();
+    expect(r.outputs.x_th_rms_m).toBeNull();
+    expect(r.checks.map((k) => k.id)).not.toContain('above-thermal');
+    const od = runT({ Q: 0.3 });
+    expect(od.outputs.x_th_rms_m).toBeCloseTo(Math.sqrt(K_B * 300), 22);
+    expect(od.outputs.envelope_rms_m).toBeNull();
+    expect(od.checks.map((k) => k.id)).not.toContain('above-thermal');
+  });
+});

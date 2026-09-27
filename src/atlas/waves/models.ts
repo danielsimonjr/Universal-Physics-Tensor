@@ -84,7 +84,7 @@ export const WAVE_MODELS: readonly AtlasModel[] = [
     dynamics: 'two profiles translating rigidly at ±c',
     observables: ['u', 'the two travelling profiles'],
     parameters: [{ name: 'c', dim: VELOCITY }],
-    canonicalRefs: [],
+    canonicalRefs: ['CE-wave-speed'],
   }),
   model({
     id: 'model-euler-linear',

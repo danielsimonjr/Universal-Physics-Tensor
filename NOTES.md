@@ -14,20 +14,38 @@ nothing validates prose and the next reader cannot tell.
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
   findings are fixed (F10 was already correct and is now pinned by a test). Of the §14 improvements,
   I5–I9, I11, I12 and I14–I20 have landed; the limits each still has are in `todo.md`. I2 is open:
-  it needs a reviewed widening of the composition table and is Mothership's call.
+  it needs a reviewed widening of the composition table and is Mothership's call; a proposal is in
+  `docs/planning/ADR-proposal-transported-norm-composition.md`.
 - `confront` data handling: preprocessing recorded for 17 of 19 records, not recorded for 2 (be-37,
   be-58). Independence: 10 no fitted parameter, 5 share an input (be-36, be-51, be-58, be-61, be-65),
   4 not recorded (be-48, be-52, be-56, be-64). be-61's observed Lorenz number is the predicted
   constant by construction, so that record cannot show a discrepancy (negative result).
-- **Open defect:** for be-56 and be-61…be-65 the consistency "gap" `confront` prints is the record's
-  agreement tolerance, not the observed−predicted difference (be-65 prints 150%, actual 43.7%;
-  be-61 and be-64 print 10% and 50%, actual 0%). The values are pinned by the frozen
-  confrontation-numbers golden, so the fix (relabel, or add an actual-gap field) is a review call.
-- Atlas equation links: 7 of 24 atlas models record a canonical equation in `canonicalRefs`;
-  `model-pendulum` records none although `CE-pendulum-period` exists, and no `CanonicalEquation.model`
-  is set. `map --route/--family` shows only recorded links, so it shows these gaps (negative result).
-- Observable translations: one is declared (`ab-pendulum-linear`, period error → phase). Every other
-  bridge answers UNDETERMINED for a tolerance outside its bound's own norm.
+- **Fixed defect, scope corrected:** the consistency "gap" `confront` printed was the agreement bound,
+  not the observed−predicted difference, for **9 of 11** consistency records (be-55, 56, 59, 60, 61,
+  62, 63, 64, 65), not the six first recorded here; be-55/59/60 were hidden by rounding to 0.0%. Now
+  the actual difference is printed beside the bound: 0 for be-11/55/56/59/60/61/64, −0.787% be-62,
+  −7.27% be-63, −43.7% be-65, +25.7% be-21; every bounded record is compatible. No pinned number
+  changed. be-65's ±150% bound accepts any observed value from 0 to 4.44 M_⊙: its low side cannot
+  fail (negative result about the record).
+- Atlas equation links: 9 of 24 atlas models record a canonical equation (`model-pendulum` and
+  `model-dalembert` added, each by a numeric check). `model-rlc` against CE-lc-resonance fails the
+  check (2% off at ζ = 0.2). `CanonicalEquation.model` stays unset because criterion 3 freezes the
+  `src/canonical` tree. That tree already differs from `freeze.json`'s recorded tree hash since
+  `dbd4e95` (Amendment 9's residual form), then #202 and #208; the eight pinned code blobs still match.
+- Observable translations: `ab-pendulum-linear` declares phase and position; `ab-spring-lc` declares
+  a phase carriage. Every other bridge answers UNDETERMINED outside its bound's own norm.
+- `map --all-routes`: no ordered model pair has more than one simple route under `upt path`'s traversal
+  (exact equivalence both ways, other relations forward, multi-premise bridges not followed). The
+  undirected graph has two cycles (through `ab-stokes-einstein` and `ab-kg-schrodinger`); the
+  traversal rules exclude both second routes (negative result).
+- `--record`/`--replay`: `eval 'ln(x)' x=-1` fails with different stderr under the builtin and MathTS
+  parsers, so a recorded failure does not reproduce across a parser change (negative result).
+- `case-lumped-cooling`: at the textbook limit Bi = 0.1 the lumped temperature excess is 5.5% below
+  the heat-equation mean at t = τ and 16% below at 3τ; Bi ≤ 0.1 does not bound the late-time relative
+  error (negative result). `case-kepler-rv`'s double-pulsar agreement is consistency with a GR-fitted
+  timing solution, not an independent test.
+- `probe study` large-amplitude control: the fitted θ² coefficient is 0.068, not the series' 1/16,
+  because the θ⁴ term is not admitted and is absorbed; it is not a recovery of the series coefficient.
 - `discover --require-falsifier` hides **49 of 49** promising rows on `--source=canonical` and 4 of 7
   on the catalog: no independent falsifier ran and survived on them (negative result).
 - `confront` by statistic: 6 σ-residual tests, 2 limits and 11 consistency ratios (no σ). The

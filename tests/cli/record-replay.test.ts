@@ -70,7 +70,7 @@ describe('upt --record', () => {
     expect(entries.map((e) => e.argv)).toEqual([THERMAL, FAILED_LN, INVALID_INPUT]);
     expect(entries.map((e) => e.result.exitCode)).toEqual([0, 2, 1]);
     entries.forEach((e, i) => {
-      expect(e.schema).toBe('upt-record/1');
+      expect(e.schema).toBe('upt-record/2');
       expect(e.result.stdout).toBe(plain[i].stdout);
       expect(e.result.stderr).toBe(plain[i].stderr);
       expect(e.result.threw).toBeNull();
@@ -95,9 +95,11 @@ describe('upt --record', () => {
     expect(['mathts', 'builtin']).toContain(e.environment.formulaParser);
     expect(typeof e.environment.simplifier).toBe('boolean');
     expect(Object.keys(e.environment.peers)).toContain('@danielsimonjr/mathts-functions');
-    expect(e.environment.constants.K_B_SI).toBe(1.380649e-23);
-    const sorted = Object.fromEntries(Object.keys(e.environment.constants).sort().map((k) => [k, e.environment.constants[k]]));
-    expect(e.environment.constantsSha256).toBe(createHash('sha256').update(JSON.stringify(sorted)).digest('hex'));
+    expect(e.environment.constantTables['core/constants'].values.K_B_SI).toBe(1.380649e-23);
+    for (const t of Object.values(e.environment.constantTables) as { values: Record<string, unknown>; sha256: string }[]) {
+      const sorted = Object.fromEntries(Object.keys(t.values).sort().map((k) => [k, t.values[k]]));
+      expect(t.sha256).toBe(createHash('sha256').update(JSON.stringify(sorted)).digest('hex'));
+    }
   });
 
   it('appends: a second session in the same file keeps the first', async () => {
@@ -226,7 +228,10 @@ describe('upt --replay', () => {
       recorded: '  S_V_V2_per_Hz = 1.6567789e-17',
       replayed: '  S_V_V2_per_Hz = 1.6567788e-17',
     });
-    expect(first.integrity).toEqual(['recorded stdout does not match its recorded stdoutSha256']);
+    expect(first.integrity).toEqual([
+      'recorded stdout does not match its recorded stdoutSha256',
+      'recorded entry does not match its recorded entrySha256',
+    ]);
     expect(env.result.summary).toMatchObject({ reproduced: 2, differs: 1, notReplayable: 0 });
 
     const text = await run([`--replay=${file}`]);
@@ -245,30 +250,40 @@ describe('upt --replay', () => {
 
   it('a changed constant is NAMED, beside a reproduced output — not folded into either', async () => {
     const file = tampered('constant.jsonl', (e) => {
-      e[0].environment.constants.K_B_SI = 1.38e-23;
+      e[0].environment.constantTables['core/constants'].values.K_B_SI = 1.38e-23;
     });
     const { code, env } = await replayJson(file);
     expect(code).toBe(1);
     const [first] = env.result.entries;
     expect(first.outcome).toBe('reproduced');
-    expect(first.environmentChanges).toEqual([{ fact: 'constant K_B_SI', recorded: 1.38e-23, current: 1.380649e-23 }]);
-    expect(first.integrity).toEqual(['recorded constants table does not match its recorded constantsSha256']);
-    expect(env.result.summary).toMatchObject({ reproduced: 3, differs: 0, environmentChanged: 1, integrityFindings: 1 });
+    expect(first.environmentChanges).toEqual([
+      { fact: 'constant core/constants K_B_SI', recorded: 1.38e-23, current: 1.380649e-23, reach: 'reachable' },
+    ]);
+    expect(first.integrity).toEqual([
+      'recorded table core/constants does not match its recorded sha256',
+      'recorded entry does not match its recorded entrySha256',
+    ]);
+    expect(env.result.summary).toMatchObject({ reproduced: 3, differs: 0, environmentChanged: 1, integrityFindings: 2 });
 
     const text = await run([`--replay=${file}`]);
-    expect(text.stdout).toContain('      constant K_B_SI: 1.38e-23 -> 1.380649e-23');
+    expect(text.stdout).toContain(
+      "      constant core/constants K_B_SI: 1.38e-23 -> 1.380649e-23 — reachable from 'evaluate' (static upper bound, not an observed read)",
+    );
   });
 
-  it('an edited constants fingerprint is named as constantsSha256', async () => {
+  it('an edited table fingerprint is named by its table', async () => {
     const file = tampered('fingerprint.jsonl', (e) => {
-      e[2].environment.constantsSha256 = '0'.repeat(64);
+      e[2].environment.constantTables['core/constants'].sha256 = '0'.repeat(64);
     });
     const { code, env } = await replayJson(file);
     expect(code).toBe(1);
     const changes = env.result.entries[2].environmentChanges;
     expect(changes).toHaveLength(1);
-    expect(changes[0]).toMatchObject({ fact: 'constantsSha256', recorded: '0'.repeat(64) });
-    expect(env.result.entries[2].integrity).toEqual(['recorded constants table does not match its recorded constantsSha256']);
+    expect(changes[0]).toMatchObject({ fact: 'table core/constants sha256', recorded: '0'.repeat(64) });
+    expect(env.result.entries[2].integrity).toEqual([
+      'recorded table core/constants does not match its recorded sha256',
+      'recorded entry does not match its recorded entrySha256',
+    ]);
   });
 
   it('a different package version is named', async () => {
@@ -301,7 +316,7 @@ describe('upt --replay', () => {
     expect(outcomes[1][1]).toMatch(/wall-clock budget/);
     expect(outcomes[2]).toEqual(['reproduced', '']);
     expect(outcomes[3]).toEqual(['not-replayable', 'line 4 is not valid JSON']);
-    expect(outcomes[4]).toEqual(['not-replayable', 'line 5 is not a upt-record/1 entry']);
+    expect(outcomes[4]).toEqual(['not-replayable', 'line 5 is not a upt-record/2 entry']);
     expect(env.result.summary).toMatchObject({ entries: 5, reproduced: 1, differs: 0, notReplayable: 4 });
   });
 

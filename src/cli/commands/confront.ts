@@ -30,7 +30,12 @@ const HELP = `upt confront [--bridge=be-XX] [--rigor=stringent|moderate|loose] [
         applied, whether the observed number is derived, its preprocessing,
         its independence from the prediction (no fitted parameter, a shared
         input, or not recorded — never implied), and the record's notes.
-        Consistency ratios are counted apart and never as precision tests.`;
+        Each statement cites a repository file with a verbatim quote or a
+        declared symbol; that the cited text exists does not make the
+        statement true.
+        Consistency ratios are counted apart and never as precision tests;
+        each prints its actual difference (observed − predicted)/predicted
+        separately from its stated agreement bound.`;
 
 const RIGOR_TIERS = new Set(['stringent', 'moderate', 'loose']);
 
@@ -81,7 +86,10 @@ function statisticOf(o: Outcome): { object: string; criterion: string; observed:
     case 'consistency':
       return {
         object: 'reference value with no σ',
-        criterion: 'none — the gap is a fractional difference, not a σ-residual; not a precision test',
+        criterion:
+          o.fractionalGapIs === 'agreement-bound'
+            ? "|actual difference| ≤ the record's stated agreement bound — a tolerance, not a σ-residual; not a precision test"
+            : 'none — the outcome carries no agreement bound; the difference is reported, not thresholded; not a precision test',
         observed: reported,
       };
     case 'table':
@@ -94,20 +102,36 @@ function statisticDistribution(outcomes: readonly Outcome[]) {
   return { sigmaTests: n('value'), limits: n('upper-bound'), consistencyRatios: n('consistency'), tables: n('table') };
 }
 
+/** A fraction as a percentage; exponent form below 0.05% so a tiny nonzero value never prints as 0.0%. */
+function percent(x: number): string {
+  const p = x * 100;
+  return `${p !== 0 && Math.abs(p) < 0.05 ? p.toExponential(1) : p.toFixed(1)}%`;
+}
+
+function signedPercent(x: number): string {
+  return `${x > 0 ? '+' : ''}${percent(x)}`;
+}
+
 const NOT_RECORDED = 'not recorded — the record states nothing on this; that is not "none"';
+
+type SourceRefs = Extract<Outcome['preprocessing'], { state: 'recorded' }>['source'];
+
+function sourceLine(refs: SourceRefs): string {
+  return `[source: ${refs.map((r) => ('quote' in r ? `${r.file} "${r.quote}"` : `${r.file} #${r.symbol}`)).join('; ')}]`;
+}
 
 function preprocessingLine(o: Outcome): string {
   const p = o.preprocessing;
-  return p.state === 'recorded' ? `${p.statement} [source: ${p.source}]` : NOT_RECORDED;
+  return p.state === 'recorded' ? `${p.statement} ${sourceLine(p.source)}` : NOT_RECORDED;
 }
 
 function independenceLine(o: Outcome): string {
   const i = o.independence;
   switch (i.state) {
     case 'no-fitted-parameter':
-      return `no parameter fitted to this measurement — ${i.statement} [source: ${i.source}]`;
+      return `no parameter fitted to this measurement — ${i.statement} ${sourceLine(i.source)}`;
     case 'shares-input':
-      return `shares ${i.shared} — ${i.statement} [source: ${i.source}]`;
+      return `shares ${i.shared} — ${i.statement} ${sourceLine(i.source)}`;
     case 'not-recorded':
       return NOT_RECORDED;
   }
@@ -179,6 +203,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       ...(wantSensitivity && r.outcome.kind === 'value'
         ? { ...r.outcome, sensitivity: api.decidingMeasurement(r.bridgeId) }
         : r.outcome),
+      ...(r.outcome.kind === 'consistency' ? { comparison: api.consistencyComparison(r.outcome) } : {}),
       statistic: statisticOf(r.outcome),
     }));
     const epistemics = wantSensitivity ? EPISTEMICS + SENSITIVITY_EPISTEMICS : EPISTEMICS;
@@ -267,12 +292,20 @@ async function run(ctx: CommandCtx): Promise<number> {
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);
         break;
       }
-      case 'consistency':
+      case 'consistency': {
+        const c = api.consistencyComparison(outcome);
+        const verdict =
+          c.agreementBound === null
+            ? 'no agreement bound in this outcome, so no compatibility decision'
+            : `agreement bound ±${percent(c.agreementBound)} (the record's stated tolerance, not a measured difference) · ` +
+              `|difference| ≤ bound: ${c.withinBound ? 'compatible ✓' : 'OUTSIDE BOUND'}`;
         out(
-          `    predicted ${outcome.predicted} approaches ${outcome.approaches} ${outcome.units} · gap ${(outcome.fractionalGap * 100).toFixed(1)}%`
+          `    predicted ${outcome.predicted} approaches ${outcome.approaches} ${outcome.units} · ` +
+            `actual difference ${signedPercent(c.relativeDifference)} = ${c.definition} · ${verdict}`,
         );
         if (wantSensitivity) out(`    sensitivity: n/a for ${outcome.kind}-kind`);
         break;
+      }
       case 'table':
         out(`    ${outcome.rows.length} rows (${outcome.units}):`);
         for (const row of outcome.rows) {

@@ -18,6 +18,8 @@ import { OBSERVABLE_TRANSLATIONS } from '../../src/atlas/translation-registry.js
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { runNumericWitness } from '../../src/atlas/witness-numeric.js';
+import { runTranslationCheck } from '../../src/atlas/translation-registry.js';
+import { PHASE_POINT_MAX_PERIODS } from '../../src/atlas/oscillators/phase-translation.js';
 import { measuredDrift, measuredHorizon } from './_phase-drift.js';
 
 const T0 = 2;
@@ -77,14 +79,14 @@ describe('W7p — Δφ(t) = 2π (t/T0) ε/(1+ε) against an independent RK4 inte
 
 describe('W7p — the executable witness, and the evidence derived from it', () => {
   it('the registered check integrates both motions and is checked, with refinement converging', () => {
-    const r = runNumericWitness(TR.checks[0]!);
+    const r = runNumericWitness(TR.checks[0] as Parameters<typeof runNumericWitness>[0]);
     expect(r.status).toBe('checked');
     expect(r.convergence!.ratio).toBeGreaterThan(10);
   });
 
   it('control: the same check against the horizon without (1+ε) is refuted', () => {
     const eps = pendulumPeriodErrorAt({ theta0: 0.2 });
-    const r = runNumericWitness({ ...TR.checks[0]!, target: 1 / (2 * Math.PI * eps) });
+    const r = runNumericWitness({ ...(TR.checks[0] as Parameters<typeof runNumericWitness>[0]), target: 1 / (2 * Math.PI * eps) });
     expect(r.status).toBe('refuted');
   });
 
@@ -92,5 +94,47 @@ describe('W7p — the executable witness, and the evidence derived from it', () 
     expect([...deriveEvidence({ witnesses: TR.witnesses }, new Set(['W7p']))]).toEqual(['numerically-supported']);
     expect([...deriveEvidence({ witnesses: TR.witnesses }, NO_PASSING_WITNESSES)]).toEqual(['proposed']);
     expect('formalRef' in TR).toBe(false);
+  });
+});
+
+describe("W7p@point — the witness at the caller's θ0, bounded, with its control", () => {
+  it('is checked at points away from the fixture, and its (1+ε) control is refuted wherever ε exceeds its 1e-5 tolerance', () => {
+    for (const theta0 of [0.02, 0.1, 0.35, 0.5]) {
+      const pc = TR.pointCheck(pendulumPeriodErrorAt({ theta0 }));
+      if ('unavailable' in pc) throw new Error(pc.unavailable);
+      expect(runTranslationCheck(pc.check).status).toBe('checked');
+      expect(runTranslationCheck(pc.control).status).toBe('refuted');
+    }
+  });
+
+  it('the control cannot fail where ε is below the witness tolerance (θ0 = 0.01): disclosed, not hidden', () => {
+    const eps = pendulumPeriodErrorAt({ theta0: 0.01 });
+    expect(eps).toBeLessThan(1e-5);
+    const pc = TR.pointCheck(eps);
+    if ('unavailable' in pc) throw new Error(pc.unavailable);
+    expect(runTranslationCheck(pc.check).status).toBe('checked');
+    expect(runTranslationCheck(pc.control).status).toBe('checked');
+  });
+
+  it('agrees with the independent _ode.ts measurement at the same point', () => {
+    const theta0 = 0.35;
+    const eps = pendulumPeriodErrorAt({ theta0 });
+    const pc = TR.pointCheck(eps);
+    if ('unavailable' in pc) throw new Error(pc.unavailable);
+    const spec = pc.check as Parameters<typeof runNumericWitness>[0];
+    const independent = measuredHorizon(theta0, 1, 1, spec.target + 2, 800);
+    expect(Math.abs(independent - spec.target) / spec.target).toBeLessThan(1e-5);
+  });
+
+  it(`is bounded: at most ${PHASE_POINT_MAX_PERIODS} T0 are integrated, and below the resolvable drift it is not run`, () => {
+    for (const theta0 of [0.008, 0.05, 0.5]) {
+      const pc = TR.pointCheck(pendulumPeriodErrorAt({ theta0 }));
+      if ('unavailable' in pc) throw new Error(pc.unavailable);
+      const periods = Number(/, (\d+) T0 integrated$/.exec(pc.claim)![1]);
+      expect(periods).toBeLessThanOrEqual(PHASE_POINT_MAX_PERIODS + 2);
+    }
+    const tiny = TR.pointCheck(pendulumPeriodErrorAt({ theta0: 0.001 }));
+    expect(tiny).toEqual({ unavailable: expect.stringMatching(/below the 0\.01 rad this witness resolves; not run$/) });
+    expect(TR.pointCheck(0)).toEqual({ unavailable: expect.stringMatching(/no phase drift accumulates/) });
   });
 });

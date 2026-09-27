@@ -210,8 +210,8 @@ Usage:
         a key no record uses is named and ignored.
         e.g.  upt regime oscillators --at theta0=0.2
 
-  upt path <from> <to> [--at group=value ...] [--tolerance=EPS]
-           [--sweep name=lo:hi:n[:log]] [--csv]
+  upt path <from> <to> [--at group=value ...] [--tolerance=[observable:]EPS]
+           [--sweep name=lo:hi:n[:log]] [--compare=<to2>] [--csv]
         The chain of bridges between two models (across families when a
         bridge ends in another family's model), the relation it composes to,
         the composed (K, delta) with its norm, and whether every bridge's regime
@@ -220,9 +220,13 @@ Usage:
         carries no bound: it prints 'no composite claim', names what composing
         would need, and exits 0. --sweep evaluates the same verdict at 2–200
         samples of one parameter (a row outside a regime or past a horizon
-        carries no error); --csv writes the rows as CSV. --tolerance=EPS judges
-        adequacy in the bound's own norm (exit 3 if inadequate); no translation
-        to another observable, such as phase, is encoded.
+        carries no error); --csv writes the rows as CSV; --compare=<to2> sweeps
+        a second route from the same source beside it and marks NEITHER, with
+        no number, where no encoded limit applies. --tolerance=EPS judges
+        adequacy in the bound's own norm (exit 3 if inadequate);
+        --tolerance=phase:EPS or position:EPS judges it through a translation
+        a bridge declares (ab-pendulum-linear), carried only by a later
+        bridge's declared carriage (ab-spring-lc carries phase).
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
               upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
 
@@ -258,12 +262,14 @@ Run with no arguments for a short demo.
 
   --record=FILE <command> ...
                   Run the command unchanged and append one JSONL entry to FILE:
-                  arguments, stdout, stderr, exit code, versions, parser, the
-                  constant table. Failed invocations are recorded too.
+                  arguments, stdout, stderr, exit code, versions, parser, each
+                  constant table by name, the constants the command's code can
+                  reach, and hashes of each. Failed invocations are recorded too.
   --replay=FILE [--json]
                   Re-run every entry of FILE; report each as reproduced, differs
                   (naming the stream and first differing line) or not replayable,
-                  and name every changed version, parser or constant. Exit 0 all
+                  name every changed version, parser or constant (and whether the
+                  entry's command can reach it), and flag edits. Exit 0 all
                   reproduced unchanged, 3 any differs, 1 otherwise.
   --show-record=FILE [--json]
                   Print FILE as a readable transcript, running nothing.`;

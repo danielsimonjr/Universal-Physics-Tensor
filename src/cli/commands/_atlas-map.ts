@@ -15,16 +15,26 @@
  * quantity or a similar name, and a model with no recorded reference is shown
  * as having none recorded — an absent link, not a finding that none exists.
  *
- * ## Evidence without witness results
+ * ## Evidence, and the witness results it is derived from
  *
- * Which witnesses pass is decided by repository test runs this command does not
- * observe. Every tag `deriveEvidence` emits is monotone in the passing set
- * except `proposed`, which is antitone, so deriving under NO passing witness
- * and under ALL of a bridge's witnesses passing brackets every possible result:
- * a tag in both is derived whatever the results are, a tag in neither cannot
- * be, and a tag in exactly one is undecided here. An undecided bridge is
- * counted apart from one that does not match.
+ * Which witnesses pass is decided by runs the view may or may not observe.
+ * Every tag `deriveEvidence` emits is monotone in the passing set except
+ * `proposed`, which is antitone, so deriving under the witnesses KNOWN to pass
+ * and under those plus every witness with NO observed result brackets every
+ * possible result: a tag in both is derived whatever the unobserved results
+ * are, a tag in neither cannot be, and a tag in exactly one is undecided here.
+ * An undecided bridge is counted apart from one that does not match.
+ *
+ * With no results source every witness is unobserved. `--stored` observes the
+ * committed artifact (`data/atlas/witness-results.json`); `--run` observes the
+ * in-process registered witnesses, run by this invocation. Only a `'checked'`
+ * row is a pass. A `'refuted'` or `'unresolved'` row is observed and not
+ * passing, and the two are counted apart; a witness with no row stays
+ * unobserved, whatever its name.
  */
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
 import type { AtlasBridge, AtlasModel } from '../../cli-api.js';
@@ -59,12 +69,165 @@ export interface ModelView {
 }
 
 export interface EvidenceView {
-  /** Derived whatever the witness results are. */
+  /** Derived whatever the unobserved witness results are. */
   derived: EvidenceTag[];
-  /** Derived under some witness results and not others. */
+  /** Derived under some unobserved witness results and not others. */
   undecided: EvidenceTag[];
   formalRef: { system: string; fidelity: string } | null;
   witnesses: number;
+  /** Present only when the view reads a witness-results source. */
+  results?: WitnessOutcomes;
+}
+
+// ── witness results ────────────────────────────────────────────────────────
+
+export type ResultsMode = 'stored' | 'run';
+
+export interface WitnessResultRow {
+  recordId: string;
+  witnessId: string;
+  status: 'checked' | 'refuted' | 'unresolved';
+  reason?: string;
+}
+
+export interface StoredProvenance {
+  path: string;
+  schemaVersion: string;
+  /** What the artifact itself records about when it was produced. */
+  carries: string;
+  /** The last commit touching the file, read from git; null when git cannot say. */
+  lastCommit: { hash: string; date: string } | null;
+  /** Whether the working-tree file differs from that commit; null when git cannot say. */
+  modifiedSinceCommit: boolean | null;
+}
+
+export interface WitnessResults {
+  mode: ResultsMode;
+  /** stored: the artifact and what is known of when it was made. run: what ran. */
+  provenance: StoredProvenance | { ran: string; registered: number };
+  rows: readonly WitnessResultRow[];
+}
+
+/** One bridge's witnesses, split by what the results source observed of each. */
+export interface WitnessOutcomes {
+  source: ResultsMode;
+  checked: string[];
+  refuted: string[];
+  unresolved: { id: string; reason: string | null }[];
+  /** No row in the source: a name, not a result. */
+  notObserved: string[];
+}
+
+export const STORED_RESULTS_PATH = 'data/atlas/witness-results.json';
+const ARTIFACT_CARRIES = 'the artifact records no commit or date of its own';
+
+/** The repository root, when this module runs from a checkout (src/ or dist/). */
+function repoRoot(): string {
+  return fileURLToPath(new URL('../../../', import.meta.url));
+}
+
+function git(args: string[], cwd: string): string | null {
+  try {
+    return execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 5000 }).trim();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The committed witness-results artifact. It is a repository file, not shipped
+ * in the package, so its absence is refused rather than read as "no results":
+ * an empty source would render every tag exactly as the default view does,
+ * under a label claiming it had been observed.
+ */
+export function loadStoredResults(): WitnessResults {
+  const root = repoRoot();
+  const file = `${root}${STORED_RESULTS_PATH}`;
+  let raw: string;
+  try {
+    raw = readFileSync(file, 'utf8');
+  } catch {
+    throw new CliError(
+      `upt map: --stored reads ${STORED_RESULTS_PATH}, a repository artifact not shipped in the package, and it is not ` +
+        'present here; --run executes the in-process registered witnesses instead',
+    );
+  }
+  const artifact = JSON.parse(raw) as { schemaVersion?: string; results?: WitnessResultRow[] };
+  if (artifact.schemaVersion !== '0' || !Array.isArray(artifact.results)) {
+    throw new CliError(`upt map: ${STORED_RESULTS_PATH} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`);
+  }
+  const log = git(['log', '-1', '--format=%H %cI', '--', STORED_RESULTS_PATH], root);
+  const [hash, date] = log === null || log === '' ? [] : log.split(' ');
+  const lastCommit = hash !== undefined && date !== undefined ? { hash, date } : null;
+  const status = lastCommit === null ? null : git(['status', '--porcelain', '--', STORED_RESULTS_PATH], root);
+  return {
+    mode: 'stored',
+    provenance: {
+      path: STORED_RESULTS_PATH,
+      schemaVersion: artifact.schemaVersion,
+      carries: ARTIFACT_CARRIES,
+      lastCommit,
+      modifiedSinceCommit: status === null ? null : status !== '',
+    },
+    rows: artifact.results.map((r) => ({
+      recordId: r.recordId,
+      witnessId: r.witnessId,
+      status: r.status,
+      ...(r.reason === undefined ? {} : { reason: r.reason }),
+    })),
+  };
+}
+
+/** Run the in-process registered witnesses of `bridgeIds`, now. */
+export async function runResults(api: Api, bridgeIds: ReadonlySet<string>): Promise<WitnessResults> {
+  const registered = api.WITNESS_REGISTRY.filter((e) => bridgeIds.has(e.recordId));
+  const artifact = await api.runWitnessRegistry(registered);
+  return {
+    mode: 'run',
+    provenance: { ran: 'runWitnessRegistry, in-process, by this invocation', registered: registered.length },
+    rows: artifact.results.map((r) => ({
+      recordId: r.recordId,
+      witnessId: r.witnessId,
+      status: r.status,
+      ...(r.reason === undefined ? {} : { reason: r.reason }),
+    })),
+  };
+}
+
+function outcomes(b: AtlasBridge, results: WitnessResults): WitnessOutcomes {
+  const rows = results.rows.filter((r) => r.recordId === b.id);
+  const o: WitnessOutcomes = { source: results.mode, checked: [], refuted: [], unresolved: [], notObserved: [] };
+  for (const w of b.witnesses) {
+    const row = rows.find((r) => r.witnessId === w.id);
+    if (row === undefined) o.notObserved.push(w.id);
+    else if (row.status === 'checked') o.checked.push(w.id);
+    else if (row.status === 'refuted') o.refuted.push(w.id);
+    else o.unresolved.push({ id: w.id, reason: row.reason ?? null });
+  }
+  return o;
+}
+
+export interface ResultsTally {
+  mode: ResultsMode;
+  provenance: WitnessResults['provenance'];
+  /** Witnesses of the bridges this view shows, by what the source observed. */
+  witnesses: { checked: number; refuted: number; unresolved: number; notObserved: number };
+}
+
+function tally(results: WitnessResults | null, bridges: readonly BridgeView[]): ResultsTally | undefined {
+  if (results === null) return undefined;
+  const seen = new Map(bridges.map((b) => [b.id, b.evidence.results!] as const));
+  const sum = (f: (o: WitnessOutcomes) => number) => [...seen.values()].reduce((n, o) => n + f(o), 0);
+  return {
+    mode: results.mode,
+    provenance: results.provenance,
+    witnesses: {
+      checked: sum((o) => o.checked.length),
+      refuted: sum((o) => o.refuted.length),
+      unresolved: sum((o) => o.unresolved.length),
+      notObserved: sum((o) => o.notObserved.length),
+    },
+  };
 }
 
 export interface BridgeView {
@@ -110,19 +273,29 @@ function modelView(api: Api, m: AtlasModel): ModelView {
   };
 }
 
-function evidenceView(api: Api, b: AtlasBridge): EvidenceView {
-  const none = api.deriveEvidence(b, api.NO_PASSING_WITNESSES);
-  const all = api.deriveEvidence(b, new Set(b.witnesses.map((w) => w.id)));
-  const tags = [...new Set([...none, ...all])].sort();
+function evidenceView(api: Api, b: AtlasBridge, results: WitnessResults | null): EvidenceView {
+  const o = results === null ? null : outcomes(b, results);
+  const passing = o === null ? api.NO_PASSING_WITNESSES : new Set(o.checked);
+  const open = o === null ? b.witnesses.map((w) => w.id) : o.notObserved;
+  const low = api.deriveEvidence(b, passing);
+  const high = api.deriveEvidence(b, new Set([...passing, ...open]));
+  const tags = [...new Set([...low, ...high])].sort();
   return {
-    derived: tags.filter((t) => none.has(t) && all.has(t)),
-    undecided: tags.filter((t) => none.has(t) !== all.has(t)),
+    derived: tags.filter((t) => low.has(t) && high.has(t)),
+    undecided: tags.filter((t) => low.has(t) !== high.has(t)),
     formalRef: b.formalRef === undefined ? null : { system: b.formalRef.system, fidelity: b.formalRef.fidelity },
     witnesses: b.witnesses.length,
+    ...(o === null ? {} : { results: o }),
   };
 }
 
-function bridgeView(api: Api, b: AtlasBridge, family: string, models: Map<string, AtlasModel>): BridgeView {
+function bridgeView(
+  api: Api,
+  b: AtlasBridge,
+  family: string,
+  models: Map<string, AtlasModel>,
+  results: WitnessResults | null = null,
+): BridgeView {
   const at = (id: string) => ({ id, family: models.get(id)?.family ?? 'UNKNOWN' });
   return {
     id: b.id,
@@ -137,7 +310,7 @@ function bridgeView(api: Api, b: AtlasBridge, family: string, models: Map<string
       b.bound === undefined
         ? null
         : { K: b.bound.K, delta: b.bound.delta, norm: b.bound.norm, horizon: b.bound.horizon },
-    evidence: evidenceView(api, b),
+    evidence: evidenceView(api, b, results),
   };
 }
 
@@ -171,6 +344,7 @@ export interface RouteView {
     missing: string[];
   };
   equationLinks: ReturnType<typeof linkSummary>;
+  witnessResults?: ResultsTally;
   epistemics: string;
 }
 
@@ -185,41 +359,56 @@ export function parseRoute(raw: string): [string, string] {
   return parts as [string, string];
 }
 
-export function buildRouteView(api: Api, from: string, to: string): RouteView {
-  const models = allModels(api);
+function checkEndpoints(models: Map<string, AtlasModel>, from: string, to: string): void {
   for (const id of [from, to]) {
     if (!models.has(id)) {
       throw new CliError(`upt map: '${id}' is not a model of any atlas family (run \`upt map --family=NAME\` to list one family's models)`);
     }
   }
-  const { bridges } = selectRoute(api, from, to, 'map');
-  const t = totals(api);
-  const steps = bridges === null ? null : bridges.map((b) => bridgeView(api, b, familyOfBridge(api, b.id), models));
-  const routeModels =
-    bridges === null
-      ? [from, to]
-      : bridges.length === 0
-        ? [from]
-        : [bridges[0]!.premises[0]!, ...bridges.map((b) => b.conclusion)];
-  const mv = routeModels.map((id) => modelView(api, models.get(id)!));
+}
 
+/** The models a route visits, in route order: an exact equivalence may be walked conclusion → premise. */
+function routeModelIds(from: string, bridges: readonly AtlasBridge[]): string[] {
+  const ids = [from];
+  for (const b of bridges) {
+    const at = ids[ids.length - 1]!;
+    ids.push(b.conclusion === at && b.relation === 'exact-equivalence' ? b.premises[0]! : b.conclusion);
+  }
+  return ids;
+}
+
+/** The composition table folded along a non-empty route, and what the route supports. */
+function composeSteps(api: Api, bridges: readonly AtlasBridge[]): RouteView['composition'] {
   const running: RouteView['composition']['running'] = [];
   let breaksAt: number | null = null;
-  if (bridges !== null && bridges.length > 0) {
-    let rel: RelationType | 'no-composite-claim' | null = bridges[0]!.relation;
-    running.push({ after: bridges[0]!.id, relation: rel });
-    for (let i = 1; i < bridges.length; i++) {
-      if (rel === null || rel === 'no-composite-claim') rel = null;
-      else {
-        rel = api.composeRelation(rel, bridges[i]!.relation);
-        if (rel === 'no-composite-claim') breaksAt = i;
-      }
-      running.push({ after: bridges[i]!.id, relation: rel });
+  let rel: RelationType | 'no-composite-claim' | null = bridges[0]!.relation;
+  running.push({ after: bridges[0]!.id, relation: rel });
+  for (let i = 1; i < bridges.length; i++) {
+    if (rel === null || rel === 'no-composite-claim') rel = null;
+    else {
+      rel = api.composeRelation(rel, bridges[i]!.relation);
+      if (rel === 'no-composite-claim') breaksAt = i;
     }
+    running.push({ after: bridges[i]!.id, relation: rel });
   }
-  const claim = bridges === null || bridges.length === 0 ? null : routeClaim(api, bridges);
-  const missing =
-    claim !== null && claim.kind === 'no-claim' && claim.reason === 'no-composite-claim' ? missingForComposite(api, bridges!) : [];
+  const claim = routeClaim(api, bridges);
+  const missing = claim.kind === 'no-claim' && claim.reason === 'no-composite-claim' ? missingForComposite(api, bridges) : [];
+  return { running, breaksAt, claim, missing };
+}
+
+export function buildRouteView(api: Api, from: string, to: string, results: WitnessResults | null = null): RouteView {
+  const models = allModels(api);
+  checkEndpoints(models, from, to);
+  const { bridges } = selectRoute(api, from, to, 'map');
+  const t = totals(api);
+  const steps = bridges === null ? null : bridges.map((b) => bridgeView(api, b, familyOfBridge(api, b.id), models, results));
+  const routeModels = bridges === null ? [from, to] : routeModelIds(from, bridges);
+  const mv = routeModels.map((id) => modelView(api, models.get(id)!));
+  const { running, breaksAt, claim, missing } =
+    bridges === null || bridges.length === 0
+      ? { running: [], breaksAt: null, claim: null, missing: [] }
+      : composeSteps(api, bridges);
+  const witnessResults = tally(results, steps ?? []);
 
   return {
     view: 'route',
@@ -235,6 +424,207 @@ export function buildRouteView(api: Api, from: string, to: string): RouteView {
     selection: SELECTION,
     composition: { running, breaksAt, claim, missing },
     equationLinks: linkSummary(mv),
+    ...(witnessResults === undefined ? {} : { witnessResults }),
+    epistemics: EPISTEMICS,
+  };
+}
+
+// ── all routes ─────────────────────────────────────────────────────────────
+
+export const DEFAULT_MAX_ROUTES = 20;
+export const MAX_ROUTES_CEILING = 1000;
+
+export interface RoutesView {
+  view: 'routes';
+  from: string;
+  to: string;
+  source: string;
+  routes: {
+    /** Bridge ids, in route order. */
+    bridges: string[];
+    /** Model ids, in route order. */
+    models: string[];
+    composition: RouteView['composition'];
+    /** True for the route `upt path` (and `map --route` without --all-routes) reports. */
+    reported: boolean;
+  }[];
+  /** Each bridge used by a shown route, once, in atlas order. */
+  bridges: BridgeView[];
+  models: ModelView[];
+  count: {
+    shown: number;
+    limit: number;
+    /** True: the search ran out of routes, so `shown` is every simple route. */
+    exhausted: boolean;
+    /** When not exhausted: every route of at most this many bridges is among those found. */
+    completeThrough: number | null;
+    /** When not exhausted: the route limit, or the search's work budget. */
+    stoppedBy: 'limit' | 'budget' | null;
+  };
+  claims: { bound: number; noClaim: Record<string, number> };
+  denominator: { bridges: { shown: number; of: number }; models: { shown: number; of: number } };
+  selection: string;
+  equationLinks: ReturnType<typeof linkSummary>;
+  witnessResults?: ResultsTally;
+  epistemics: string;
+}
+
+const ROUTES_SELECTION =
+  'every simple route (no model visited twice), ordered by bridge count and then atlas order; the same traversal as ' +
+  '`upt path`: an exact equivalence both ways, every other relation forward only, multi-premise bridges not followed';
+
+export function buildRoutesView(
+  api: Api,
+  from: string,
+  to: string,
+  limit: number,
+  results: WitnessResults | null = null,
+): RoutesView {
+  const models = allModels(api);
+  checkEndpoints(models, from, to);
+  const found = api.enumerateAtlasRoutes(from, to, limit);
+  const reported = selectRoute(api, from, to, 'map').bridges;
+  const reportedKey = reported === null ? null : reported.map((b) => b.id).join(' ');
+  const routes = found.routes
+    .filter((r) => r.length > 0)
+    .map((r) => ({
+      bridges: r.map((b) => b.id),
+      models: routeModelIds(from, r),
+      composition: composeSteps(api, r),
+      reported: r.map((b) => b.id).join(' ') === reportedKey,
+    }));
+  const used = new Set(routes.flatMap((r) => r.bridges));
+  const bridges = api.ATLAS_FAMILIES.flatMap((f) =>
+    f.bridges.filter((b) => used.has(b.id)).map((b) => bridgeView(api, b, f.family, models, results)),
+  );
+  const visited = new Set(routes.flatMap((r) => r.models));
+  const mv = [...models.values()].filter((m) => visited.has(m.id) || (routes.length === 0 && (m.id === from || m.id === to))).map((m) => modelView(api, m));
+  const noClaim: Record<string, number> = {};
+  for (const r of routes) {
+    const c = r.composition.claim!;
+    if (c.kind === 'no-claim') noClaim[c.reason] = (noClaim[c.reason] ?? 0) + 1;
+  }
+  const t = totals(api);
+  const witnessResults = tally(results, bridges);
+  return {
+    view: 'routes',
+    from,
+    to,
+    source: ATLAS_SOURCE,
+    routes,
+    bridges,
+    models: mv,
+    count: {
+      shown: routes.length,
+      limit,
+      exhausted: found.exhausted,
+      completeThrough: found.completeThrough,
+      stoppedBy: found.stoppedBy,
+    },
+    claims: { bound: routes.filter((r) => r.composition.claim!.kind === 'bound').length, noClaim },
+    denominator: { bridges: { shown: bridges.length, of: t.bridges }, models: { shown: mv.length, of: t.models } },
+    selection: ROUTES_SELECTION,
+    equationLinks: linkSummary(mv),
+    ...(witnessResults === undefined ? {} : { witnessResults }),
+    epistemics: EPISTEMICS,
+  };
+}
+
+// ── observable ─────────────────────────────────────────────────────────────
+
+export interface ObservableView {
+  view: 'observable';
+  observable: string;
+  source: string;
+  match: string;
+  /** Bridges recording the observable as preserved, or declaring a translation of their bound into it. */
+  bridges: (BridgeView & { preservesMatched: string[]; translationsMatched: string[] })[];
+  /** Bridges recording the observable as NOT preserved; a bridge may appear here and above. */
+  notPreserved: { id: string; family: string; relation: RelationType; matched: string[] }[];
+  models: ModelView[];
+  denominator: {
+    bridges: { preserves: number; translates: number; doesNotPreserve: number; recordsNothing: number; of: number };
+    models: { shown: number; of: number };
+  };
+  filter: AtlasFilterStats | null;
+  equationLinks: ReturnType<typeof linkSummary>;
+  witnessResults?: ResultsTally;
+  epistemics: string;
+}
+
+const OBSERVABLE_MATCH =
+  "a case-insensitive whole-word text match against each bridge's recorded `preserves` and `doesNotPreserve` strings " +
+  'and the observable names of its declared bound translations; nothing is inferred from dimensions, quantities or ' +
+  'the transformation, and a bridge that records nothing about the observable is counted apart from one that records ' +
+  'it as not preserved';
+
+function wordMatcher(term: string): (text: string) => boolean {
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}($|[^\\p{L}\\p{N}])`, 'iu');
+  return (text) => re.test(text);
+}
+
+export function buildObservableView(
+  api: Api,
+  observable: string,
+  filter: AtlasFilter,
+  results: WitnessResults | null = null,
+): ObservableView {
+  const term = observable.trim();
+  if (term.length < 2) throw new CliError(`upt map: --observable='${observable}' must name an observable (two characters or more)`);
+  const hit = wordMatcher(term);
+  const models = allModels(api);
+  const rows = api.ATLAS_FAMILIES.flatMap((f) => f.bridges.map((b) => ({ family: f.family, b })));
+  const matched = rows.map(({ family, b }) => ({
+    family,
+    b,
+    preserves: b.preserves.filter(hit),
+    translations: api.translationsOf(b.id).map((x) => x.observable).filter(hit),
+    doesNot: b.doesNotPreserve.filter(hit),
+  }));
+  const candidates = matched
+    .filter((m) => m.preserves.length > 0 || m.translations.length > 0)
+    .map((m) => ({ ...bridgeView(api, m.b, m.family, models, results), preservesMatched: m.preserves, translationsMatched: m.translations }));
+  const filtering = filter.relation !== undefined || filter.evidence !== undefined;
+  const verdicts = candidates.map((b) => (filtering ? judge(b, filter) : 'kept'));
+  const kept = candidates.filter((_, i) => verdicts[i] === 'kept');
+  const n = (v: string) => verdicts.filter((x) => x === v).length;
+  const onKept = new Set(kept.flatMap((b) => [...b.premises.map((p) => p.id), b.conclusion.id]));
+  const mv = [...models.values()].filter((m) => onKept.has(m.id)).map((m) => modelView(api, m));
+  const t = totals(api);
+  const witnessResults = tally(results, kept);
+  return {
+    view: 'observable',
+    observable: term,
+    source: ATLAS_SOURCE,
+    match: OBSERVABLE_MATCH,
+    bridges: kept,
+    notPreserved: matched
+      .filter((m) => m.doesNot.length > 0)
+      .map((m) => ({ id: m.b.id, family: m.family, relation: m.b.relation, matched: m.doesNot })),
+    models: mv,
+    denominator: {
+      bridges: {
+        preserves: matched.filter((m) => m.preserves.length > 0).length,
+        translates: matched.filter((m) => m.translations.length > 0).length,
+        doesNotPreserve: matched.filter((m) => m.doesNot.length > 0).length,
+        recordsNothing: matched.filter((m) => m.preserves.length + m.translations.length + m.doesNot.length === 0).length,
+        of: t.bridges,
+      },
+      models: { shown: mv.length, of: t.models },
+    },
+    filter: filtering
+      ? {
+          ...filter,
+          total: candidates.length,
+          kept: kept.length,
+          droppedNotMatching: n('not-matching'),
+          droppedUndecided: n('undecided'),
+          ...(results === null ? {} : { results: results.mode }),
+        }
+      : null,
+    equationLinks: linkSummary(mv),
+    ...(witnessResults === undefined ? {} : { witnessResults }),
     epistemics: EPISTEMICS,
   };
 }
@@ -252,8 +642,10 @@ export interface AtlasFilterStats {
   total: number;
   kept: number;
   droppedNotMatching: number;
-  /** Bridges whose match depends on witness results this command does not observe. */
+  /** Bridges whose match depends on witness results the view does not observe. */
   droppedUndecided: number;
+  /** The witness-results source, when the view reads one. */
+  results?: ResultsMode;
 }
 
 export interface FamilyView {
@@ -272,6 +664,7 @@ export interface FamilyView {
   };
   filter: AtlasFilterStats | null;
   equationLinks: ReturnType<typeof linkSummary>;
+  witnessResults?: ResultsTally;
   epistemics: string;
 }
 
@@ -290,11 +683,23 @@ export function formatAtlasFilterLegend(s: AtlasFilterStats | null): string | nu
   return (
     `filter: ${terms.join(' ')} — ${s.kept} of ${s.total} bridges kept; ` +
     `${s.droppedNotMatching} dropped (did not match); ` +
-    `${s.droppedUndecided} dropped (undecided: depends on witness results this command does not observe)`
+    `${s.droppedUndecided} dropped (undecided: ${UNOBSERVED[s.results ?? 'none']})`
   );
 }
 
-export function buildFamilyView(api: Api, name: string, filter: AtlasFilter): FamilyView {
+const UNOBSERVED: Record<ResultsMode | 'none', string> = {
+  none: 'depends on witness results this command does not observe',
+  stored: `depends on witnesses with no result in ${STORED_RESULTS_PATH}`,
+  run: 'depends on witnesses not registered to run in-process',
+};
+
+/** Every bridge a view draws on, for running their witnesses before the view is built with the results. */
+export function bridgeIdsOf(v: AtlasView): Set<string> {
+  if (v.view === 'route') return new Set((v.steps ?? []).map((b) => b.id));
+  return new Set(v.bridges.map((b) => b.id));
+}
+
+export function buildFamilyView(api: Api, name: string, filter: AtlasFilter, results: WitnessResults | null = null): FamilyView {
   const fam = api.ATLAS_FAMILIES.find((f) => f.family === name);
   if (fam === undefined) {
     throw new CliError(
@@ -303,11 +708,11 @@ export function buildFamilyView(api: Api, name: string, filter: AtlasFilter): Fa
   }
   const models = allModels(api);
   const own = new Set(fam.models.map((m) => m.id));
-  const filed = fam.bridges.map((b) => ({ ...bridgeView(api, b, fam.family, models), role: 'filed' as const }));
+  const filed = fam.bridges.map((b) => ({ ...bridgeView(api, b, fam.family, models, results), role: 'filed' as const }));
   const touching = api.ATLAS_FAMILIES.filter((f) => f !== fam).flatMap((f) =>
     f.bridges
       .filter((b) => [...b.premises, b.conclusion].some((id) => own.has(id)))
-      .map((b) => ({ ...bridgeView(api, b, f.family, models), role: 'touching' as const })),
+      .map((b) => ({ ...bridgeView(api, b, f.family, models, results), role: 'touching' as const })),
   );
   const all = [...filed, ...touching];
   const filtering = filter.relation !== undefined || filter.evidence !== undefined;
@@ -316,6 +721,7 @@ export function buildFamilyView(api: Api, name: string, filter: AtlasFilter): Fa
   const n = (v: string) => verdicts.filter((x) => x === v).length;
   const mv = fam.models.map((m) => modelView(api, m));
   const t = totals(api);
+  const witnessResults = tally(results, kept);
   return {
     view: 'family',
     family: fam.family,
@@ -342,24 +748,67 @@ export function buildFamilyView(api: Api, name: string, filter: AtlasFilter): Fa
           kept: kept.length,
           droppedNotMatching: n('not-matching'),
           droppedUndecided: n('undecided'),
+          ...(results === null ? {} : { results: results.mode }),
         }
       : null,
     equationLinks: linkSummary(mv),
+    ...(witnessResults === undefined ? {} : { witnessResults }),
     epistemics: EPISTEMICS,
   };
 }
 
 // ── text ───────────────────────────────────────────────────────────────────
 
+const MODE_LABEL: Record<ResultsMode, string> = { stored: 'stored', run: 'run now' };
+const NO_RESULT: Record<ResultsMode, string> = {
+  stored: 'with no stored result',
+  run: 'not run: no in-process runner is registered for them',
+};
+
 function evidenceLine(e: EvidenceView, id: string): string {
   const derived = e.derived.length === 0 ? 'none' : e.derived.join(', ');
+  const formal =
+    e.formalRef === null ? '' : ` [formalRef ${e.formalRef.system}, fidelity ${e.formalRef.fidelity}; covers its statement only]`;
+  const r = e.results;
+  if (r === undefined) {
+    const undecided =
+      e.undecided.length === 0
+        ? ''
+        : `; undecided without witness results: ${e.undecided.join(', ')} (${e.witnesses} witness(es); \`upt atlas ${id} --run\`)`;
+    return `evidence (derived): ${derived}${formal}${undecided}`;
+  }
   const undecided =
     e.undecided.length === 0
       ? ''
-      : `; undecided without witness results: ${e.undecided.join(', ')} (${e.witnesses} witness(es); \`upt atlas ${id} --run\`)`;
-  const formal =
-    e.formalRef === null ? '' : ` [formalRef ${e.formalRef.system}, fidelity ${e.formalRef.fidelity}; covers its statement only]`;
-  return `evidence (derived): ${derived}${formal}${undecided}`;
+      : `; undecided: ${e.undecided.join(', ')} (${r.notObserved.length} witness(es) ${NO_RESULT[r.source]})`;
+  return `evidence (derived, witness results ${MODE_LABEL[r.source]}): ${derived}${formal}${undecided}`;
+}
+
+function outcomeLine(r: WitnessOutcomes): string {
+  const ids = (xs: readonly string[]) => (xs.length === 0 ? 'none' : xs.join(', '));
+  const unresolved = r.unresolved.length === 0 ? 'none' : r.unresolved.map((u) => `${u.id} (${u.reason ?? 'no reason recorded'})`).join(', ');
+  return (
+    `witnesses (${MODE_LABEL[r.source]}): checked ${ids(r.checked)} · refuted ${ids(r.refuted)} · ` +
+    `unresolved ${unresolved} · no result ${ids(r.notObserved)}`
+  );
+}
+
+export function resultsLine(t: ResultsTally | undefined): string | null {
+  if (t === undefined) return null;
+  const w = t.witnesses;
+  const counts =
+    `over the bridges shown: ${w.checked} checked · ${w.refuted} refuted · ${w.unresolved} unresolved · ` +
+    `${w.notObserved} with no result (not a pass)`;
+  if ('ran' in t.provenance) {
+    return `witness results: run now — ${t.provenance.ran} (${t.provenance.registered} registered witness(es) ran); ${counts}`;
+  }
+  const p = t.provenance;
+  const when =
+    p.lastCommit === null
+      ? 'no commit of it found (git unavailable, or the file is not committed)'
+      : `last commit touching it ${p.lastCommit.hash.slice(0, 12)} (${p.lastCommit.date})` +
+        (p.modifiedSinceCommit === true ? ', and the working-tree file is MODIFIED since' : '');
+  return `witness results: stored — ${p.path} (schemaVersion ${p.schemaVersion}; ${p.carries}; ${when}); ${counts}`;
 }
 
 function bridgeLines(b: BridgeView, indent: string): string[] {
@@ -371,6 +820,7 @@ function bridgeLines(b: BridgeView, indent: string): string[] {
     `${indent}regime: ${b.regime.vacuous ? 'VACUOUS — states no inequality' : b.regime.inequalities.join('; ')}`,
     `${indent}bound: ${b.bound === null ? 'none stated' : `K = ${b.bound.K} · delta = ${b.bound.delta} (${b.bound.norm}); horizon ${b.bound.horizon}`}`,
     `${indent}${evidenceLine(b.evidence, b.id)}`,
+    ...(b.evidence.results === undefined ? [] : [`${indent}${outcomeLine(b.evidence.results)}`]),
   ];
   return lines;
 }
@@ -389,6 +839,29 @@ function modelLines(m: ModelView, indent: string): string[] {
 
 function linkLine(s: ReturnType<typeof linkSummary>): string {
   return `equation links (source: ${s.source}): ${s.withLink} of ${s.of} models record one; ${s.withoutLink} record none`;
+}
+
+function compositionLines(c: RouteView['composition'], relations: readonly RelationType[], indent: string): string[] {
+  const out = c.running.map((r, i) => {
+    const state =
+      r.relation === null
+        ? 'not composed (an earlier step already yields no composite claim)'
+        : r.relation === 'no-composite-claim'
+          ? `NO COMPOSITE CLAIM — ${relations[i - 1]!} then ${relations[i]!} has no table cell`
+          : r.relation;
+    return `${indent}after step ${i + 1} (${r.after}): ${state}`;
+  });
+  const claim = c.claim!;
+  if (claim.kind === 'bound') {
+    out.push(`${indent}route claim: ${claim.relation}, K = ${claim.bound.K} · delta = ${claim.bound.delta} (${claim.norm ?? 'no norm stated'})`);
+  } else {
+    out.push(`${indent}route claim: no composite claim — reason '${claim.reason}': ${claim.detail}`);
+    if (c.missing.length > 0) {
+      out.push(`${indent}to compose, this route would need:`);
+      for (const m of c.missing) out.push(`${indent}  - ${m}`);
+    }
+  }
+  return out;
 }
 
 export function routeText(v: RouteView): string[] {
@@ -411,6 +884,8 @@ export function routeText(v: RouteView): string[] {
     `  shown: ${v.denominator.bridges.shown} of ${v.denominator.bridges.of} atlas bridges, ` +
       `${v.denominator.models.shown} of ${v.denominator.models.of} models — ${v.selection}`,
   );
+  const results = resultsLine(v.witnessResults);
+  if (results !== null) out.push(`  ${results}`);
   out.push('');
   v.steps.forEach((b, i) => {
     const [head, ...rest] = bridgeLines(b, '      ');
@@ -418,25 +893,7 @@ export function routeText(v: RouteView): string[] {
   });
   out.push('');
   out.push('  composition (the composition table, folded along the route):');
-  v.composition.running.forEach((r, i) => {
-    const state =
-      r.relation === null
-        ? 'not composed (an earlier step already yields no composite claim)'
-        : r.relation === 'no-composite-claim'
-          ? `NO COMPOSITE CLAIM — ${v.steps![i - 1]!.relation} then ${v.steps![i]!.relation} has no table cell`
-          : r.relation;
-    out.push(`    after step ${i + 1} (${r.after}): ${state}`);
-  });
-  const c = v.composition.claim!;
-  if (c.kind === 'bound') {
-    out.push(`    route claim: ${c.relation}, K = ${c.bound.K} · delta = ${c.bound.delta} (${c.norm ?? 'no norm stated'})`);
-  } else {
-    out.push(`    route claim: no composite claim — reason '${c.reason}': ${c.detail}`);
-    if (v.composition.missing.length > 0) {
-      out.push('    to compose, this route would need:');
-      for (const m of v.composition.missing) out.push(`      - ${m}`);
-    }
-  }
+  out.push(...compositionLines(v.composition, v.steps.map((b) => b.relation), '    '));
   out.push('');
   out.push('  models on the route, with the equations each records:');
   for (const m of v.models) {
@@ -458,6 +915,8 @@ export function familyText(v: FamilyView): string[] {
   );
   const legend = formatAtlasFilterLegend(v.filter);
   if (legend !== null) out.push(`  ${legend}`);
+  const results = resultsLine(v.witnessResults);
+  if (results !== null) out.push(`  ${results}`);
   out.push('');
   out.push('  models, with the equations each records:');
   for (const m of v.models) {
@@ -483,6 +942,96 @@ export function familyText(v: FamilyView): string[] {
   return out;
 }
 
+export function routesText(v: RoutesView): string[] {
+  const out = [`\nAll routes — ${v.from} → ${v.to}  [source: ${v.source}]`];
+  const c = v.count;
+  if (v.from === v.to) {
+    out.push('  the endpoints are the same model: the route is empty and composes nothing.');
+    return out;
+  }
+  const scope = c.exhausted
+    ? `${c.shown} simple route(s): the search ran out of routes, so these are all of them`
+    : (c.stoppedBy === 'limit'
+        ? `the first ${c.shown} simple routes: the search stopped at the limit of ${c.limit} (--max-routes), so MORE exist; `
+        : `${c.shown} simple route(s) found before the search exhausted its work budget; whether more exist is UNKNOWN; `) +
+      `every route of at most ${c.completeThrough} bridge(s) is among these, and longer ones may be missing`;
+  out.push(`  ${scope} — ${v.selection}`);
+  out.push(
+    `  shown: ${v.denominator.bridges.shown} of ${v.denominator.bridges.of} atlas bridges, ` +
+      `${v.denominator.models.shown} of ${v.denominator.models.of} models, over the routes shown`,
+  );
+  if (c.shown === 0) {
+    out.push('  no chain of bridges connects these models (only an exact equivalence is followed in both directions).');
+    return out;
+  }
+  const reasons = Object.entries(v.claims.noClaim).map(([r, n]) => `${n} '${r}'`);
+  out.push(
+    `  route claims: ${v.claims.bound} carry a bound; ${c.shown - v.claims.bound} carry no composite claim` +
+      (reasons.length === 0 ? '' : ` (${reasons.join(', ')})`),
+  );
+  const results = resultsLine(v.witnessResults);
+  if (results !== null) out.push(`  ${results}`);
+  const byId = new Map(v.bridges.map((b) => [b.id, b] as const));
+  v.routes.forEach((r, i) => {
+    out.push('');
+    const hops = r.bridges.map((id, k) => ` --[${byId.get(id)!.relation}: ${id}]--> ${r.models[k + 1]}`).join('');
+    out.push(`  route ${i + 1} (${r.bridges.length} bridge(s))${r.reported ? ' — the route `upt path` reports' : ''}:`);
+    out.push(`    ${r.models[0]}${hops}`);
+    out.push(...compositionLines(r.composition, r.bridges.map((id) => byId.get(id)!.relation), '    '));
+  });
+  out.push('');
+  out.push(`  bridges on these routes (${v.bridges.length}), each once:`);
+  for (const b of v.bridges) {
+    const [head, ...rest] = bridgeLines(b, '      ');
+    out.push(`    ${head}`, ...rest);
+  }
+  out.push('');
+  out.push('  models on these routes, with the equations each records:');
+  for (const m of v.models) {
+    const [head, ...rest] = modelLines(m, '      ');
+    out.push(`    ${head}`, ...rest);
+  }
+  out.push(`  ${linkLine(v.equationLinks)}`);
+  out.push(`\n  (${v.epistemics})`);
+  return out;
+}
+
+export function observableText(v: ObservableView): string[] {
+  const d = v.denominator.bridges;
+  const out = [`\nObservable map — '${v.observable}'  [source: ${v.source}]`];
+  out.push(
+    `  of ${d.of} atlas bridges: ${d.preserves} record it as preserved, ${d.translates} declare a bound translation into it, ` +
+      `${d.doesNotPreserve} record it as NOT preserved, ${d.recordsNothing} record nothing about it (an absent record, not a finding)`,
+  );
+  out.push(`  match: ${v.match}`);
+  const legend = formatAtlasFilterLegend(v.filter);
+  if (legend !== null) out.push(`  ${legend}`);
+  const results = resultsLine(v.witnessResults);
+  if (results !== null) out.push(`  ${results}`);
+  out.push('');
+  out.push(`  bridges that preserve or translate it (${v.bridges.length}):`);
+  if (v.bridges.length === 0) out.push('    none');
+  for (const b of v.bridges) {
+    const [head, ...rest] = bridgeLines(b, '      ');
+    out.push(`    ${head}`, ...rest);
+    if (b.preservesMatched.length > 0) out.push(`      preserves (recorded): ${b.preservesMatched.join('; ')}`);
+    if (b.translationsMatched.length > 0) out.push(`      bound translation declared into: ${b.translationsMatched.join(', ')}`);
+  }
+  out.push('');
+  out.push(`  bridges that record it as NOT preserved (${v.notPreserved.length}):`);
+  if (v.notPreserved.length === 0) out.push('    none');
+  for (const b of v.notPreserved) out.push(`    ${b.id} (${b.relation}) [${b.family}]: does not preserve ${b.matched.join('; ')}`);
+  out.push('');
+  out.push(`  models these bridges connect (${v.denominator.models.shown} of ${v.denominator.models.of}):`);
+  for (const m of v.models) {
+    const [head, ...rest] = modelLines(m, '      ');
+    out.push(`    ${head}`, ...rest);
+  }
+  out.push(`  ${linkLine(v.equationLinks)}`);
+  out.push(`\n  (${v.epistemics})`);
+  return out;
+}
+
 // ── diagrams ───────────────────────────────────────────────────────────────
 
 const mm = (s: string): string =>
@@ -497,30 +1046,53 @@ interface Diagram {
   breaks: Set<string>;
 }
 
+export type AtlasView = RouteView | RoutesView | FamilyView | ObservableView;
+
 /** The one-line denominator every diagram carries in its title. */
-export function viewLegend(v: RouteView | FamilyView): string {
+export function viewLegend(v: AtlasView): string {
+  const tail = v.witnessResults === undefined ? '' : `; witness results: ${MODE_LABEL[v.witnessResults.mode]}`;
   if (v.view === 'route') {
     const d = v.denominator;
     return (
       `route ${v.from} → ${v.to}: ${d.bridges.shown} of ${d.bridges.of} atlas bridges, ${d.models.shown} of ${d.models.of} models ` +
-      `[source: ${v.source}; equation links: ${LINK_SOURCE}]`
+      `[source: ${v.source}; equation links: ${LINK_SOURCE}${tail}]`
+    );
+  }
+  if (v.view === 'routes') {
+    const d = v.denominator;
+    const c = v.count;
+    const scope = c.exhausted ? `all ${c.shown} simple routes` : `the first ${c.shown} simple routes (search stopped by its ${c.stoppedBy}; more may exist)`;
+    return (
+      `routes ${v.from} → ${v.to}: ${scope}, over ${d.bridges.shown} of ${d.bridges.of} atlas bridges and ${d.models.shown} of ` +
+      `${d.models.of} models [source: ${v.source}; equation links: ${LINK_SOURCE}${tail}]`
+    );
+  }
+  if (v.view === 'observable') {
+    const d = v.denominator.bridges;
+    const f = formatAtlasFilterLegend(v.filter);
+    return (
+      `observable '${v.observable}': ${v.bridges.length} bridge(s) shown; of ${d.of} atlas bridges ${d.preserves} record it preserved, ` +
+      `${d.translates} translate into it, ${d.doesNotPreserve} record it NOT preserved, ${d.recordsNothing} record nothing ` +
+      `[source: ${v.source}, recorded preserves/doesNotPreserve text and bound translations; equation links: ${LINK_SOURCE}${tail}]` +
+      (f === null ? '' : ` — ${f}`)
     );
   }
   const d = v.denominator;
   const f = formatAtlasFilterLegend(v.filter);
   return (
     `family ${v.family}: ${d.models.shown} of ${d.models.of} atlas models, ${d.bridgesFiled.shown} filed + ` +
-    `${d.bridgesTouching.shown} touching of ${d.bridgesFiled.of} atlas bridges [source: ${v.source}; equation links: ${LINK_SOURCE}]` +
+    `${d.bridgesTouching.shown} touching of ${d.bridgesFiled.of} atlas bridges [source: ${v.source}; equation links: ${LINK_SOURCE}${tail}]` +
     (f === null ? '' : ` — ${f}`)
   );
 }
 
-function diagramOf(v: RouteView | FamilyView): Diagram {
+function diagramOf(v: AtlasView): Diagram {
   if (v.view === 'route') {
     const steps = v.steps ?? [];
     const br = v.composition.breaksAt;
     return { title: viewLegend(v), models: v.models, bridges: steps, breaks: new Set(br === null ? [] : [steps[br]!.id]) };
   }
+  // A route-specific break is not a property of a bridge shared by several routes, so none is drawn.
   return { title: viewLegend(v), models: v.models, bridges: v.bridges, breaks: new Set() };
 }
 
@@ -550,7 +1122,7 @@ function edgeLabel(b: BridgeView, breaks: boolean): string {
   return `${b.relation} (${b.id})${breaks ? ' — no composite claim from here' : ''}`;
 }
 
-export function toMermaid(v: RouteView | FamilyView): string {
+export function toMermaid(v: AtlasView): string {
   const d = diagramOf(v);
   const id = idMaker();
   const out = ['flowchart LR', `%% ${d.title}`, `  legend["${mm(d.title)}"]:::legend`];
@@ -582,7 +1154,7 @@ export function toMermaid(v: RouteView | FamilyView): string {
   return out.join('\n') + '\n';
 }
 
-export function toDot(v: RouteView | FamilyView): string {
+export function toDot(v: AtlasView): string {
   const d = diagramOf(v);
   const id = idMaker();
   const out = [

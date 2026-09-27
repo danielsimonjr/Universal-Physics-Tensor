@@ -124,6 +124,46 @@ describe('upt confront', () => {
     expect(be36.caveat).toMatch(/side/i);
   });
 
+  // Audit §14 item 14: "gap 150.0%" for be-65 was the agreement bound; the difference is −43.7%.
+  it('a consistency record prints its actual difference and its agreement bound as separate fields', async () => {
+    const cap = capture();
+    await runCli(['confront'], cap.io);
+    const text = cap.lines.join('');
+    expect(text).not.toMatch(/· gap \d/);
+    expect(text).toMatch(
+      /approaches 1 M_⊙;.* · actual difference -43\.7% = \(observed − predicted\) \/ predicted · agreement bound ±150\.0% \(the record's stated tolerance, not a measured difference\) · \|difference\| ≤ bound: compatible ✓/,
+    );
+    expect(text).toMatch(/approaches 1\.35 M_⊙;.* · actual difference -7\.3% .* agreement bound ±12\.0%/);
+    expect(text).toMatch(/approaches 3\.5 2Δ.* · actual difference -0\.8% .* agreement bound ±5\.0%/);
+    expect(text).toMatch(/Lorenz number .* · actual difference 0\.0% .* agreement bound ±10\.0%/);
+    expect(text).toMatch(/peak L\/L_Edd .* · actual difference 0\.0% .* agreement bound ±50\.0%/);
+    expect(text).toMatch(/force ratio;.* · actual difference 0\.0% .* agreement bound ±1\.0%/);
+    expect(text).toMatch(/graphene.* agreement bound ±8\.6e-9%/);
+    expect(text).toMatch(/KSS lower bound .* · actual difference \+25\.7% .* · no agreement bound in this outcome, so no compatibility decision/);
+  });
+
+  it('--json carries the comparison beside fractionalGap and says what fractionalGap is', async () => {
+    const cap = capture();
+    await runCli(['confront', '--json'], cap.io);
+    const rows = JSON.parse(cap.lines.join('')).result as {
+      bridgeId: number;
+      fractionalGap?: number;
+      fractionalGapIs?: string;
+      comparison?: { relativeDifference: number; definition: string; agreementBound: number | null; withinBound: boolean | null };
+    }[];
+    const be65 = rows.find((r) => r.bridgeId === 65)!;
+    expect(be65.fractionalGap).toBe(1.5);
+    expect(be65.fractionalGapIs).toBe('agreement-bound');
+    expect(be65.comparison!.relativeDifference).toBeCloseTo(-0.436927, 6);
+    expect(be65.comparison!.definition).toBe('(observed − predicted) / predicted');
+    expect(be65.comparison!.agreementBound).toBe(1.5);
+    expect(be65.comparison!.withinBound).toBe(true);
+    const be21 = rows.find((r) => r.bridgeId === 21)!;
+    expect(be21.fractionalGapIs).toBe('observed-difference');
+    expect(be21.comparison!.agreementBound).toBeNull();
+    expect(rows.find((r) => r.bridgeId === 52)!.comparison).toBeUndefined();
+  });
+
   it('default confront (no --sensitivity) output is unaffected', async () => {
     const cap = capture();
     const code = await runCli(['confront'], cap.io);

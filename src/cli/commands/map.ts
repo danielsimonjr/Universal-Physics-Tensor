@@ -39,7 +39,12 @@ const FLAGS: FlagSpec[] = [
   { name: '--around', valueStyle: 'either' },
   { name: '--depth', valueStyle: 'attached' },
   { name: '--route', valueStyle: 'either' },
+  { name: '--all-routes', valueStyle: 'none' },
+  { name: '--max-routes', valueStyle: 'attached' },
   { name: '--family', valueStyle: 'either' },
+  { name: '--observable', valueStyle: 'either' },
+  { name: '--stored', valueStyle: 'none' },
+  { name: '--run', valueStyle: 'none' },
   // optionalValue: a bare trailing --equation stores '' so the empty-check in
   // run() owns the diagnostic (old-CLI fidelity: bin/upt.mjs did `a[i+1] ?? ''`
   // and let mapCmd emit `upt: --equation requires "TARGET = EXPR"`, exit 2).
@@ -99,12 +104,31 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         bridge whose tag depends on witness results is counted as undecided,
         not as a mismatch. A model's equations are only those its
         canonicalRefs record; nothing is inferred from shared quantities.
-        Both views state how many of the atlas's models and bridges they show,
-        in text, --json and --format=mermaid|dot|svg.
+        --route=FROM,TO --all-routes lists every simple route (no model
+        visited twice), shortest first, each with its composition and route
+        claim, and counts the claims; --max-routes=N (default 20, at most
+        1000) bounds the list, and a list cut short says so and says up to
+        which bridge count it is complete.
+        --observable=NAME maps the bridges whose RECORDED preserves text, or
+        declared bound translation, names that observable (a whole-word text
+        match, nothing inferred), lists apart those recording it as NOT
+        preserved, and counts the bridges that record nothing about it;
+        --relation/--evidence filter it as they filter a family.
+        --stored derives evidence from the committed witness results
+        (data/atlas/witness-results.json; a repository file, not shipped),
+        labelled with the last commit that touched it; --run runs the shown
+        bridges' in-process registered witnesses now (exit 3 if any is
+        refuted). Either resolves a tag once its witnesses have results; a
+        witness with no result leaves it undecided, and checked, refuted and
+        unresolved are counted apart.
+        Every atlas view states how many of the atlas's models and bridges it
+        shows, in text, --json and --format=mermaid|dot|svg.
         e.g.  upt map --relation=derivation --source=both
               upt map --around=temperature --depth=2 --source=catalog
               upt map --route=model-pendulum,model-lc
-              upt map --family=oscillators --evidence=formally-proved`;
+              upt map --route=model-string,model-dalembert --all-routes --stored
+              upt map --family=oscillators --evidence=formally-proved
+              upt map --observable=frequency --run`;
 
 /**
  * The edges within `depth` shared-quantity hops of `quantity`: hop 1 is every
@@ -266,10 +290,19 @@ function printEquationReport(
 /** Flags that shape the equation graph, and so mean nothing on an atlas view. */
 const GRAPH_ONLY_FLAGS = ['source', 'around', 'depth', 'equation', 'proposed', 'max-orders', 'anchor'] as const;
 
-async function runAtlasView(ctx: CommandCtx, route: string | undefined, family: string | undefined): Promise<number> {
+/** Flags that only an atlas view reads. */
+const ATLAS_ONLY_FLAGS = ['all-routes', 'max-routes', 'stored', 'run'] as const;
+
+async function runAtlasView(
+  ctx: CommandCtx,
+  route: string | undefined,
+  family: string | undefined,
+  observable: string | undefined,
+): Promise<number> {
   const { args, api, err, write } = ctx;
-  if (route !== undefined && family !== undefined) throw new CliError('upt map: pick one atlas view: --route or --family');
-  const view = route !== undefined ? '--route' : '--family';
+  const chosen = [route !== undefined, family !== undefined, observable !== undefined].filter(Boolean).length;
+  if (chosen > 1) throw new CliError('upt map: pick one atlas view: --route, --family or --observable');
+  const view = route !== undefined ? '--route' : family !== undefined ? '--family' : '--observable';
   const stray = GRAPH_ONLY_FLAGS.filter((f) => args.flags.has(f));
   if (stray.length > 0) {
     throw new CliError(
@@ -281,6 +314,17 @@ async function runAtlasView(ctx: CommandCtx, route: string | undefined, family: 
   if (route !== undefined && (relation !== undefined || evidence !== undefined)) {
     throw new CliError('upt map: a route is composed whole, so --relation/--evidence do not filter it; filter a family view instead (--family=NAME)');
   }
+  const allRoutes = args.flags.has('all-routes');
+  if (allRoutes && route === undefined) throw new CliError('upt map: --all-routes needs --route=FROM,TO');
+  const maxRaw = lastValue(args.flags, 'max-routes');
+  if (maxRaw !== undefined && !allRoutes) throw new CliError('upt map: --max-routes needs --all-routes');
+  const maxRoutes = maxRaw === undefined ? atlasMap.DEFAULT_MAX_ROUTES : Number(maxRaw);
+  if (!Number.isInteger(maxRoutes) || maxRoutes < 1 || maxRoutes > atlasMap.MAX_ROUTES_CEILING) {
+    throw new CliError(`upt map: --max-routes=${maxRaw} must be an integer from 1 to ${atlasMap.MAX_ROUTES_CEILING}`);
+  }
+  if (args.flags.has('stored') && args.flags.has('run')) {
+    throw new CliError('upt map: pick one witness-results source: --stored (the committed artifact) or --run (run now)');
+  }
   const fmt = lastValue(args.flags, 'format') ?? 'text';
   const isJson = args.flags.has('json');
   if (isJson && fmt !== 'text') throw new UsageError('upt: pick one output form: --json or --format');
@@ -288,21 +332,47 @@ async function runAtlasView(ctx: CommandCtx, route: string | undefined, family: 
     throw new CliError(`upt: unknown --format='${fmt}' (expected: text | mermaid | dot | svg)`);
   }
 
-  const v =
-    route !== undefined
-      ? atlasMap.buildRouteView(api, ...atlasMap.parseRoute(route))
-      : atlasMap.buildFamilyView(api, family!, {
-          ...(relation !== undefined ? { relation } : {}),
-          ...(evidence !== undefined ? { evidence } : {}),
-        });
+  const filter = {
+    ...(relation !== undefined ? { relation } : {}),
+    ...(evidence !== undefined ? { evidence } : {}),
+  };
+  const endpoints = route === undefined ? null : atlasMap.parseRoute(route);
+  const build = (results: atlasMap.WitnessResults | null): atlasMap.AtlasView =>
+    endpoints !== null
+      ? allRoutes
+        ? atlasMap.buildRoutesView(api, ...endpoints, maxRoutes, results)
+        : atlasMap.buildRouteView(api, ...endpoints, results)
+      : family !== undefined
+        ? atlasMap.buildFamilyView(api, family, filter, results)
+        : atlasMap.buildObservableView(api, observable!, filter, results);
+  let results: atlasMap.WitnessResults | null = null;
+  if (args.flags.has('stored')) results = atlasMap.loadStoredResults();
+  else if (args.flags.has('run')) {
+    // Unfiltered first: a filter's verdict depends on the results, so every candidate bridge is run.
+    const candidates =
+      endpoints === null
+        ? atlasMap.bridgeIdsOf(family !== undefined ? atlasMap.buildFamilyView(api, family, {}) : atlasMap.buildObservableView(api, observable!, {}))
+        : atlasMap.bridgeIdsOf(build(null));
+    results = await atlasMap.runResults(api, candidates);
+  }
+  const v = build(results);
+  const exitCode = results?.mode === 'run' && results.rows.some((r) => r.status === 'refuted') ? EXIT_CHECK_FAILED : 0;
 
   if (isJson) {
     emitJson({ command: 'map', source: 'atlas', result: v }, write);
-    return 0;
+    return exitCode;
   }
   if (fmt === 'text') {
-    for (const line of v.view === 'route' ? atlasMap.routeText(v) : atlasMap.familyText(v)) ctx.out(line);
-    return 0;
+    const lines =
+      v.view === 'route'
+        ? atlasMap.routeText(v)
+        : v.view === 'routes'
+          ? atlasMap.routesText(v)
+          : v.view === 'family'
+            ? atlasMap.familyText(v)
+            : atlasMap.observableText(v);
+    for (const line of lines) ctx.out(line);
+    return exitCode;
   }
   let src: string;
   if (fmt === 'svg') {
@@ -327,14 +397,22 @@ async function runAtlasView(ctx: CommandCtx, route: string | undefined, family: 
     write(src);
   }
   err(`upt: ${atlasMap.viewLegend(v)}`);
-  return 0;
+  return exitCode;
 }
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out, err, write } = ctx;
   const route = lastValue(args.flags, 'route');
   const family = lastValue(args.flags, 'family');
-  if (route !== undefined || family !== undefined) return runAtlasView(ctx, route, family);
+  const observable = lastValue(args.flags, 'observable');
+  if (route !== undefined || family !== undefined || observable !== undefined) return runAtlasView(ctx, route, family, observable);
+  const atlasOnly = ATLAS_ONLY_FLAGS.filter((f) => args.flags.has(f));
+  if (atlasOnly.length > 0) {
+    throw new CliError(
+      `upt map: ${atlasOnly.map((f) => `--${f}`).join(', ')} appl${atlasOnly.length === 1 ? 'ies' : 'y'} to an atlas view ` +
+        '(--route, --family or --observable), not to the equation graph',
+    );
+  }
   // map asks a pure connectivity question, so it defaults to --source=both
   // (catalog + canonical) rather than graphs.ts's catalog fallback used by
   // the other --source commands (e.g. discover, which keeps catalog).

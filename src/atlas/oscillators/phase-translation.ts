@@ -20,7 +20,9 @@
  * The witness W7p integrates BOTH equations of motion and reads each phase off
  * its zero crossings — crossing k is at phase π/2 + kπ by the symmetry of a
  * release from rest, and the angle variable is linear in time between them —
- * so it measures the drift without using ε or the elliptic integral.
+ * so it measures the drift without using ε or the elliptic integral. It runs
+ * at the fixture θ0 = 0.2 as the regression anchor, and again at the caller's
+ * point, bounded to 512 T0 of integration (`phasePointCheck`).
  *
  * @module atlas/oscillators/phase-translation
  * @internal
@@ -28,49 +30,9 @@
 
 import type { ObservableTranslation } from '../translation.js';
 import { pendulumPeriodErrorAt } from './bridges-limits.js';
+import { crossingTimes, linearAccel, pendulumAccel, phaseAt, theta0OfPeriodError } from './pendulum-motion.js';
 
 const TWO_PI = 2 * Math.PI;
-
-function rk4Step(x: number, v: number, h: number, accel: (x: number) => number): [number, number] {
-  const k1x = v;
-  const k1v = accel(x);
-  const k2x = v + 0.5 * h * k1v;
-  const k2v = accel(x + 0.5 * h * k1x);
-  const k3x = v + 0.5 * h * k2v;
-  const k3v = accel(x + 0.5 * h * k2x);
-  const k4x = v + h * k3v;
-  const k4v = accel(x + h * k3x);
-  return [x + (h / 6) * (k1x + 2 * k2x + 2 * k3x + k4x), v + (h / 6) * (k1v + 2 * k2v + 2 * k3v + k4v)];
-}
-
-/** Zero-crossing times of a release from rest at `theta0`, over `periods` of T0 = 1. */
-function crossingTimes(accel: (x: number) => number, theta0: number, stepsPerPeriod: number, periods: number): number[] {
-  const h = 1 / stepsPerPeriod;
-  const out: number[] = [];
-  let x = theta0;
-  let v = 0;
-  for (let i = 0; i < stepsPerPeriod * periods; i++) {
-    const [nx, nv] = rk4Step(x, v, h, accel);
-    if (nx === 0 || x > 0 !== nx > 0) out.push(i * h + (h * x) / (x - nx));
-    x = nx;
-    v = nv;
-  }
-  return out;
-}
-
-/** The phase at `t`, interpolated through the anchors (0, 0) and (c_k, π/2 + kπ). */
-function phaseAt(crossings: readonly number[], t: number): number {
-  let prevT = 0;
-  let prevPhase = 0;
-  for (let k = 0; k < crossings.length; k++) {
-    const c = crossings[k]!;
-    const phase = Math.PI / 2 + k * Math.PI;
-    if (t <= c) return prevPhase + ((phase - prevPhase) * (t - prevT)) / (c - prevT);
-    prevT = c;
-    prevPhase = phase;
-  }
-  return Number.NaN;
-}
 
 /**
  * The time, in units of T0, at which the MEASURED phase lead of the linear
@@ -81,20 +43,26 @@ function phaseAt(crossings: readonly number[], t: number): number {
  * @internal
  */
 export function measurePhaseHorizon(theta0: number, tolerance: number, stepsPerPeriod: number): number {
-  const w2 = TWO_PI ** 2;
   for (let periods = 16; periods <= 2 ** 16; periods *= 2) {
-    const pend = crossingTimes((x) => -w2 * Math.sin(x), theta0, stepsPerPeriod, periods);
-    const lin = crossingTimes((x) => -w2 * x, theta0, stepsPerPeriod, periods);
-    let prevT = 0;
-    let prevDrift = 0;
-    for (let k = 0; k < pend.length; k++) {
-      const c = pend[k]!;
-      const drift = phaseAt(lin, c) - (Math.PI / 2 + k * Math.PI);
-      if (!Number.isFinite(drift)) break;
-      if (drift >= tolerance) return prevT + ((tolerance - prevDrift) * (c - prevT)) / (drift - prevDrift);
-      prevT = c;
-      prevDrift = drift;
-    }
+    const t = measurePhaseHorizonWithin(theta0, tolerance, stepsPerPeriod, periods);
+    if (!Number.isNaN(t)) return t;
+  }
+  return Number.NaN;
+}
+
+/** As `measurePhaseHorizon`, over exactly `periods` of T0; NaN if the drift does not reach `tolerance` in them. @internal */
+export function measurePhaseHorizonWithin(theta0: number, tolerance: number, stepsPerPeriod: number, periods: number): number {
+  const pend = crossingTimes(pendulumAccel, theta0, stepsPerPeriod, periods);
+  const lin = crossingTimes(linearAccel, theta0, stepsPerPeriod, periods);
+  let prevT = 0;
+  let prevDrift = 0;
+  for (let k = 0; k < pend.length; k++) {
+    const c = pend[k]!;
+    const drift = phaseAt(lin, c) - (Math.PI / 2 + k * Math.PI);
+    if (!Number.isFinite(drift)) break;
+    if (drift >= tolerance) return prevT + ((tolerance - prevDrift) * (c - prevT)) / (drift - prevDrift);
+    prevT = c;
+    prevDrift = drift;
   }
   return Number.NaN;
 }
@@ -108,12 +76,63 @@ function phaseHorizon(eps: number, tolerance: number, T0: number | undefined): n
 const W7P_THETA0 = 0.2;
 const W7P_TOLERANCE = 1;
 
+/** The point witness integrates at most this many periods of T0, so its cost is bounded. */
+export const PHASE_POINT_MAX_PERIODS = 512;
+/**
+ * The point witness measures the time to this much drift, or to the drift
+ * reached at the cap if less: the map is linear in t, so its slope is what is
+ * checked, whatever tolerance the caller asked about.
+ */
+const PHASE_POINT_DRIFT = 1;
+/**
+ * Below this measured drift the crossing-interpolation noise of the two
+ * motions (measured: 9.5e-6 relative at 2e-4 rad, 1.2e-7 at 2e-2 rad, at 800
+ * steps per T0) comes within a factor of ten of the witness tolerance.
+ */
+const PHASE_POINT_MIN_DRIFT = 1e-2;
+const PHASE_POINT_RELATIVE_TOLERANCE = 1e-5;
+
+/**
+ * W7p at the caller's θ0 (recovered from ε) instead of the fixture: the time
+ * the measured drift reaches min(1 rad, the drift at the cap), within 1e-5
+ * relative of the closed form. Its control is the same measurement against
+ * the horizon without the (1+ε) factor, which differs from the target by
+ * ε/(1+ε) relative — so the control can fail only where that exceeds the
+ * witness tolerance, and the caller is told when it does not.
+ */
+function phasePointCheck(eps: number): ReturnType<ObservableTranslation['pointCheck']> {
+  if (!Number.isFinite(eps) || eps <= 0) return { unavailable: `no phase drift accumulates at ε = ${eps}` };
+  const theta0 = theta0OfPeriodError(eps);
+  const measured = Math.min(PHASE_POINT_DRIFT, (TWO_PI * PHASE_POINT_MAX_PERIODS * eps) / (1 + eps));
+  if (measured < PHASE_POINT_MIN_DRIFT) {
+    return {
+      unavailable:
+        `the drift within ${PHASE_POINT_MAX_PERIODS} T0 at θ0 = ${Number(theta0.toPrecision(8))} is ${measured} rad, below the ` +
+        `${PHASE_POINT_MIN_DRIFT} rad this witness resolves; not run`,
+    };
+  }
+  const target = phaseHorizon(eps, measured, 1);
+  const periods = Math.ceil(target) + 2;
+  const evaluate = (stepsPerPeriod: number): number => measurePhaseHorizonWithin(theta0, measured, stepsPerPeriod, periods);
+  const spec = { evaluate, coarseResolution: 200, fineResolution: 800, tolerance: PHASE_POINT_RELATIVE_TOLERANCE * target };
+  const capped = measured < PHASE_POINT_DRIFT ? ` (the drift reached in ${PHASE_POINT_MAX_PERIODS} T0)` : '';
+  return {
+    claim:
+      `RK4-measured time to ${measured} rad${capped} of phase drift at θ0 = ${Number(theta0.toPrecision(8))} (recovered from ε) ` +
+      `within ${PHASE_POINT_RELATIVE_TOLERANCE} relative of t* = ${target} T0; 200 and 800 steps per T0, ${periods} T0 integrated`,
+    check: { id: 'W7p@point', ...spec, target },
+    control: { id: 'W7p@point-control', ...spec, target: measured / (TWO_PI * eps) },
+    controlClaim: 'the same measurement against the horizon without the (1+ε) factor, Δ T0/(2π ε)',
+  };
+}
+
 /** @internal */
 export const PENDULUM_PHASE_TRANSLATION: ObservableTranslation = {
   bridgeId: 'ab-pendulum-linear',
   observable: 'phase',
   unit: 'rad',
   fromNorm: 'relative period error, normalized by the value of the reduced model',
+  errorKind: 'exact',
   definition:
     'the angle variable of each motion (0 at release from rest at θ0, 2π per period); the error is the ' +
     "linear oscillator's lead over the pendulum, Δφ(t) = 2πt/T0 − 2πt/T",
@@ -154,4 +173,5 @@ export const PENDULUM_PHASE_TRANSLATION: ObservableTranslation = {
       tolerance: 1e-4,
     },
   ],
+  pointCheck: phasePointCheck,
 };

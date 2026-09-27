@@ -265,7 +265,9 @@
       "dimensionlessInputs": [
         "theta0"
       ],
-      "canonicalRefs": [],
+      "canonicalRefs": [
+        "CE-pendulum-period"
+      ],
       "regime": {
         "family": "oscillators",
         "inequalities": [],

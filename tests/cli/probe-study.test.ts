@@ -96,4 +96,74 @@ describe('upt probe study', () => {
     }
     expect(t).toMatch(/"synthetic": true\|false \(required, never inferred\)/);
   });
+
+  it('help probe documents CSV, input σ, the correction family, --replication, and that no control is blind', async () => {
+    const c = capture();
+    expect(await runCli(['help', 'probe'], c.io)).toBe(0);
+    const t = text(c);
+    expect(t).toMatch(/--replication=FILE/);
+    expect(t).toMatch(/CSV when FILE ends in \.csv/);
+    expect(t).toMatch(/σ_eff² = σ_y² \+\s+Σ \(∂f\/∂x_i · σ_x_i\)²/);
+    expect(t).toMatch(/extra-sum-of-squares\s+F test at p < α/);
+    expect(t).toMatch(/none is a blind test of finding an\s+unknown one, and UPT ships no blind control/);
+  });
+});
+
+describe('upt probe study — CSV, replication file', () => {
+  const file = (f: string) => join(dir, f);
+  const studyJson = file('pendulum-large-amplitude.synthetic.json');
+  const repCsv = file('pendulum-large-amplitude.replication.synthetic.csv');
+  const runArgs = async (...argv: string[]) => {
+    const c = capture();
+    const code = await runCli(['probe', 'study', ...argv], c.io);
+    return { code, out: text(c) };
+  };
+
+  it('--data=FILE.csv gives the report of its JSON twin, source line aside', async () => {
+    const a = await runArgs(`--data=${studyJson}`);
+    const b = await runArgs(`--data=${file('pendulum-large-amplitude.synthetic.csv')}`);
+    expect(b.code).toBe(0);
+    expect(b.out).toMatch(/verdict: survives-holdout\n/);
+    expect(b.out).toBe(a.out);
+  });
+
+  it('--replication=FILE tests the candidate on a separate acquisition and names it', async () => {
+    const { code, out } = await runArgs(`--data=${studyJson}`, `--replication=${repCsv}`, '--json');
+    expect(code).toBe(0);
+    const r = JSON.parse(out).result;
+    expect(r.replication).toBe('survives-replication');
+    expect(r.replicationFile.provenance).toMatchObject({ synthetic: true });
+    const human = await runArgs(`--data=${studyJson}`, `--replication=${repCsv}`);
+    expect(human.out).toMatch(/replication file: .* — ⚠ SYNTHETIC DATA/);
+    expect(human.out).toMatch(/replication: survives-replication/);
+  });
+
+  it('refuses the study\'s own rows under a new source name: exit 1, no stack trace', async () => {
+    const raw = JSON.parse(readFileSync(studyJson, 'utf8'));
+    const copy = {
+      provenance: { synthetic: true, source: 'renamed' },
+      target: raw.target,
+      governing: raw.governing,
+      observations: raw.observations
+        .filter((o: { role: string }) => o.role === 'exploratory')
+        .map((o: { id: string }) => ({ ...o, id: `c-${o.id}`, role: 'replication' })),
+    };
+    const p = join(mkdtempSync(join(tmpdir(), 'upt-study-')), 'renamed.json');
+    writeFileSync(p, JSON.stringify(copy));
+    const { code, out } = await runArgs(`--data=${studyJson}`, `--replication=${p}`);
+    expect(code).toBe(1);
+    expect(out).toMatch(/is identical \(inputs, observed, σ\) to exploratory row e1 .*same data under another source name/);
+    expect(out).not.toMatch(/at \w+ \(/);
+  });
+
+  it('a missing replication file or bad JSON in it is named', async () => {
+    const missing = await runArgs(`--data=${studyJson}`, '--replication=/nonexistent/rep.json');
+    expect(missing.code).toBe(1);
+    expect(missing.out).toMatch(/file not found: \/nonexistent\/rep\.json/);
+    const p = join(mkdtempSync(join(tmpdir(), 'upt-study-')), 'broken.json');
+    writeFileSync(p, '{ not json');
+    const broken = await runArgs(`--data=${studyJson}`, `--replication=${p}`);
+    expect(broken.code).toBe(1);
+    expect(broken.out).toMatch(new RegExp(`invalid JSON: ${p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}: `));
+  });
 });
