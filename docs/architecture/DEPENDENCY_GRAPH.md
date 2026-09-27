@@ -435,7 +435,7 @@ The codebase is organized into the following modules:
 | `./derive-evidence.js` | `CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike` | Re-export |
 | `./composition-table.js` | `composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM` | Re-export |
 | `./composition-table.js` | `CompositionResult, NoCompositeClaim` | Re-export |
-| `./path-bound.js` | `boundPath, findPath` | Re-export |
+| `./path-bound.js` | `boundPath, findAtlasPath, findPath` | Re-export |
 | `./path-bound.js` | `NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim` | Re-export |
 | `./model.js` | `AtlasModel, ModelId` | Re-export |
 | `./error-algebra.js` | `composeBounds, composeBoundPath, IDENTITY_BOUND` | Re-export |
@@ -501,11 +501,11 @@ The codebase is organized into the following modules:
   MissingLipschitzError, ALL_EVIDENCE_TAGS, deriveEvidence, deriveEvidenceForVerdict,
   NO_PASSING_WITNESSES, CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike,
   WitnessLike, composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM, CompositionResult,
-  NoCompositeClaim, boundPath, findPath, NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim,
-  AtlasModel, ModelId, composeBounds, composeBoundPath, IDENTITY_BOUND, BoundPair, ComposedPath,
-  deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE, CUBIC_STIFFNESS, DAMPING, INDUCTANCE,
-  RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel, OSCILLATOR_FAMILY, AtlasFamily,
-  toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson, JsonValue, blockingFindings,
+  NoCompositeClaim, boundPath, findAtlasPath, findPath, NoClaimReason, PathBoundClaim,
+  PathBoundResult, PathNoClaim, AtlasModel, ModelId, composeBounds, composeBoundPath, IDENTITY_BOUND,
+  BoundPair, ComposedPath, deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE, CUBIC_STIFFNESS,
+  DAMPING, INDUCTANCE, RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel, OSCILLATOR_FAMILY,
+  AtlasFamily, toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson, JsonValue, blockingFindings,
   checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind, ApplicabilityInput,
   ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult, WitnessStatus,
   ATLAS_FAMILIES, runLinkPrediction, ATLAS_ID_PREFIX, toAtlasJsonLd, toCombinedAtlasJson,
@@ -685,7 +685,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PathBoundClaim`, `PathNoClaim`
-- Functions: `findPath`, `boundPath`
+- Functions: `findPath`, `findAtlasPath`, `boundPath`
 
 ---
 
@@ -3091,9 +3091,10 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../graphs.js` | `resolveGraph` | Import |
+| `../graphs.js` | `resolveGraph, SourceName` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
+| `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3382,9 +3383,11 @@ The codebase is organized into the following modules:
 | `./atlas/oscillators/index.js` | `AtlasFamily` | Re-export |
 | `./atlas/regime.js` | `regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
-| `./atlas/path-bound.js` | `findPath, boundPath` | Re-export |
+| `./atlas/path-bound.js` | `findPath, findAtlasPath, boundPath` | Re-export |
+| `./atlas/composition-table.js` | `composeRelation` | Re-export |
 | `./atlas/path-bound.js` | `PathBoundResult, PathBoundClaim, PathNoClaim` | Re-export |
 | `./atlas/types.js` | `AtlasBridge, RegimeInequality` | Re-export |
+| `./atlas/types.js` | `MissingLipschitzError` | Re-export |
 | `./atlas/model.js` | `AtlasModel, ModelId` | Re-export |
 
 **Exports:**
@@ -3413,8 +3416,9 @@ The codebase is organized into the following modules:
   compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
   CanonicalComparison, CONSTANTS, CandidateGrounding, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
   deriveEvidence, NO_PASSING_WITNESSES, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
-  RegimeCheck, RegimeOverlap, RegionSample, findPath, boundPath, PathBoundResult, PathBoundClaim,
-  PathNoClaim, AtlasBridge, RegimeInequality, AtlasModel, ModelId
+  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, boundPath, composeRelation,
+  PathBoundResult, PathBoundClaim, PathNoClaim, AtlasBridge, RegimeInequality, MissingLipschitzError,
+  AtlasModel, ModelId
   ```
 
 
@@ -6039,7 +6043,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./formula.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
-| `./formula.js` | `FormulaError` | Import |
+| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError` | Import |
 
 **Exports:**
 - Functions: `loadMathtsFormulaParser`
@@ -6068,8 +6072,8 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `FormulaError`
 - Interfaces: `CompiledFormula`, `FormulaParser`
-- Functions: `parseFormula`
-- Constants: `defaultFormulaParser`, `parseFormulaToAst`
+- Functions: `callBuiltinFunction`, `parseFormula`
+- Constants: `BUILTIN_FUNCTION_NAMES`, `defaultFormulaParser`, `parseFormulaToAst`
 
 ---
 
@@ -6465,7 +6469,7 @@ The codebase is organized into the following modules:
 | `stats` | 0 files | 2 files |
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
-| `composition-table` | 1 files | 6 files |
+| `composition-table` | 1 files | 7 files |
 | `conventions` | 1 files | 4 files |
 | `coverage` | 1 files | 0 files |
 | `derivation` | 3 files | 3 files |
@@ -6623,12 +6627,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 351 |
 | Total Modules | 11 |
-| Total Lines of Code | 70494 |
-| Total Exports | 2475 |
-| Total Re-exports | 1242 |
+| Total Lines of Code | 70869 |
+| Total Exports | 2482 |
+| Total Re-exports | 1246 |
 | Total Classes | 58 |
 | Total Interfaces | 362 |
-| Total Functions | 566 |
+| Total Functions | 568 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
 | Type-only Imports | 490 |

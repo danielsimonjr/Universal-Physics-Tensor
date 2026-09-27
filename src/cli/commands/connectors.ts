@@ -21,8 +21,8 @@ const HELP = `upt connectors [--source=catalog|canonical|both]
         frontier — same-kind connectors are the motivated set for
         physicist review.
         --source defaults to 'both' (catalog + canonical) for the honest,
-        all-known-physics answer; --source=catalog isolates the 20-bridge
-        catalog-only tail.`;
+        all-known-physics answer; --source=catalog isolates the catalog-only
+        tail. The isolated count is printed for the source selected.`;
 
 const EPISTEMICS =
   '⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster\n' +

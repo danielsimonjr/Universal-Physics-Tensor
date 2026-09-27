@@ -60,8 +60,17 @@ export type ConfrontationOutcome =
   | {
       readonly kind: 'upper-bound';
       readonly predicted: number;
+      /** The observed upper limit. */
       readonly bound: number;
       readonly satisfied: boolean;
+      /**
+       * What `predicted` is. `'point'` (the default when absent): a predicted
+       * value, satisfied when it lies at or below the observed limit.
+       * `'encoded-bound'`: the bridge's own claim is a range `|x| ≤ predicted`,
+       * satisfied when the observed limit lies inside it (BE-36). The two are
+       * different comparisons and are displayed as such.
+       */
+      readonly predictedIs?: 'point' | 'encoded-bound';
       /**
        * Optional honesty caveat surfaced in the confront summary line — e.g. a
        * one-sided pass where only part of an asymmetric observed interval was

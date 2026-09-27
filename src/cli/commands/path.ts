@@ -36,7 +36,8 @@ const FLAGS: FlagSpec[] = [
 ];
 
 const HELP = `upt path <from> <to> [--at group=value ...] [--json]
-        The chain of bridges from one model to another, the relation the chain
+        The chain of bridges from one model to another (across families when
+        a bridge ends in another family's model), the relation the chain
         composes to, the composed (K, delta) with the norm it holds in,
         whether every bridge's REGIME holds at --at (the bound is claimed only
         inside it), and whether every horizon still holds (pass t=<time> plus
@@ -58,12 +59,48 @@ interface RegimeReport {
   ok: boolean | 'unknown';
   violated: string[];
   unchecked: string[];
+  /** The bridge's prose side conditions: stated, never evaluated here. */
+  premisesNotChecked?: string[];
 }
 
 interface HorizonReport {
   bridgeId: string;
   horizon: string;
   holds: boolean | null;
+}
+
+/**
+ * What a `no-composite-claim` path lacks, stated as requirements rather than
+ * supplied. The first silent table cell is named; then every exact map after a
+ * bound, which states no norm and so records nothing about carrying that
+ * bound's quantity through its mapping. Nothing here widens the table.
+ */
+function missingForComposite(
+  api: CommandCtx['api'],
+  bridges: readonly import('../../cli-api.js').AtlasBridge[],
+): string[] {
+  const missing: string[] = [];
+  let relation: import('../../cli-api.js').AtlasBridge['relation'] = bridges[0]!.relation;
+  for (let i = 1; i < bridges.length; i++) {
+    const next = bridges[i]!;
+    const composed = api.composeRelation(relation, next.relation);
+    if (composed === 'no-composite-claim') {
+      missing.push(
+        `a composition-table cell for ${relation} then ${next.relation} (silent by design; widening it is a ` +
+          'reviewed act, docs/planning/Atlas-Phase-1-Design.md §2.2)',
+      );
+      break;
+    }
+    relation = composed;
+  }
+  let norm: string | undefined;
+  for (const b of bridges) {
+    if (b.bound !== undefined) norm = b.bound.norm;
+    else if (b.relation === 'exact-equivalence' && norm !== undefined) {
+      missing.push(`'${b.id}' to state that it carries '${norm}' through its mapping (it states no norm)`);
+    }
+  }
+  return missing;
 }
 
 async function run(ctx: CommandCtx): Promise<number> {
@@ -82,25 +119,27 @@ async function run(ctx: CommandCtx): Promise<number> {
   const point = parseAt(assignments, 'path');
   const t = point['t'];
 
-  // The family is read off the endpoints — this used to be the oscillator
-  // family, hard-coded, so no path in the diffusion or wave families could be
-  // asked for. A route stays inside ONE family (findPath's scope); two
-  // endpoints in different families are reported as exactly that.
+  // Endpoints in one family are searched in that family first, so a route
+  // that exists inside it is the one reported. Endpoints in different
+  // families, or a same-family pair with no route inside it, are searched
+  // across the whole atlas: a family is a filing label, and a bridge such as
+  // ab-kg-schrodinger (waves → diffusion) is as qualified as any other.
   const familyOf = (id: string): string | undefined =>
     api.ATLAS_FAMILIES.find((f) => f.models.some((m) => m.id === id))?.family;
+  const bridgeFamily = (id: string): string | undefined =>
+    api.ATLAS_FAMILIES.find((f) => f.bridges.some((b) => b.id === id))?.family;
   const fromFamily = familyOf(from);
   const toFamily = familyOf(to);
-  if (fromFamily !== undefined && toFamily !== undefined && fromFamily !== toFamily) {
-    throw new CliError(
-      `upt path: '${from}' is in family '${fromFamily}' and '${to}' in '${toFamily}'; ` +
-        'routes are searched within one family, and cross-family routes are not supported',
-    );
-  }
   const family = fromFamily ?? toFamily ?? api.ATLAS_FAMILIES[0]!.family;
 
   let bridges: readonly import('../../cli-api.js').AtlasBridge[] | null;
   try {
-    bridges = api.findPath(family, from, to);
+    if (fromFamily !== undefined && toFamily !== undefined) {
+      bridges = fromFamily === toFamily ? api.findPath(family, from, to) : null;
+      bridges ??= api.findAtlasPath(from, to);
+    } else {
+      bridges = api.findPath(family, from, to);
+    }
   } catch (e) {
     // RangeError: an unknown endpoint. Reported as a CliError (exit 1) rather
     // than surfaced as a crash — and NOT as `null`, which would be
@@ -134,7 +173,27 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  const result = api.boundPath(bridges);
+  // boundPath throws, rather than inventing a constant, when a step with no
+  // Lipschitz constant is followed by another (ab-kg-oscillator then
+  // ab-spring-lc). For this command that is a refusal like any other.
+  let result:
+    | ReturnType<typeof api.boundPath>
+    | { kind: 'no-claim'; reason: 'missing-lipschitz'; detail: string };
+  try {
+    result = api.boundPath(bridges);
+  } catch (e) {
+    if (!(e instanceof api.MissingLipschitzError)) throw e;
+    const unbounded = bridges.slice(0, -1).find((b) => b.bound === undefined && b.relation !== 'exact-equivalence');
+    result = {
+      kind: 'no-claim',
+      reason: 'missing-lipschitz',
+      detail:
+        `'${unbounded?.id ?? '?'}' (${unbounded?.relation ?? '?'}) states no Lipschitz constant and is not the ` +
+        'last step, so the error after it is unbounded and the path carries no bound',
+    };
+  }
+
+  const missing = result.kind === 'no-claim' && result.reason === 'no-composite-claim' ? missingForComposite(api, bridges) : [];
 
   const horizons: HorizonReport[] = bridges
     .filter((b) => b.bound !== undefined)
@@ -156,6 +215,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       ok: check.ok,
       violated: check.violated.map(showInequality),
       unchecked: check.unchecked.map(showInequality),
+      ...(b.sideConditions.length > 0 ? { premisesNotChecked: [...b.sideConditions] } : {}),
     };
   });
   const allRegimesHold: boolean | 'unknown' = regimes.some((r) => r.ok === false)
@@ -205,7 +265,14 @@ async function run(ctx: CommandCtx): Promise<number> {
         epistemics: EPISTEMICS,
         options: { from, to, at: point },
         result: {
-          path: bridges.map((b) => ({ id: b.id, relation: b.relation, from: b.premises[0], to: b.conclusion })),
+          families: { from: fromFamily, to: toFamily },
+          path: bridges.map((b) => ({
+            id: b.id,
+            relation: b.relation,
+            from: b.premises[0],
+            to: b.conclusion,
+            family: bridgeFamily(b.id),
+          })),
           // A no-claim has no `bound` key at all — the type refuses it, and so
           // does this envelope.
           ...(result.kind === 'bound'
@@ -216,7 +283,13 @@ async function run(ctx: CommandCtx): Promise<number> {
                 norm: result.norm,
                 terminal: result.terminal,
               }
-            : { kind: 'no-claim', reason: result.reason, detail: result.detail, phrase: NO_COMPOSITE_PHRASE }),
+            : {
+                kind: 'no-claim',
+                reason: result.reason,
+                detail: result.detail,
+                phrase: NO_COMPOSITE_PHRASE,
+                ...(missing.length > 0 ? { missing } : {}),
+              }),
           regimes,
           allRegimesHold,
           pointBound,
@@ -234,6 +307,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`\nupt path ${from} → ${to}`);
   out(`  ${bridges.length} bridge(s):`);
   for (const b of bridges) out(`    ${b.premises[0]} --[${b.relation}]--> ${b.conclusion}  (${b.id})`);
+  if (fromFamily !== toFamily) {
+    out(
+      `  crosses families: ${fromFamily} → ${toFamily} (a family is a filing label; ` +
+        'the composition rules are the same as within one)',
+    );
+  }
   out('');
   if (result.kind === 'bound') {
     out(`  composite relation: ${result.relation}`);
@@ -252,6 +331,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  composite relation: ${NO_COMPOSITE_PHRASE}`);
     out(`  bound: ${NO_COMPOSITE_PHRASE} — reason '${result.reason}'`);
     out(`    ${result.detail}`);
+    if (missing.length > 0) {
+      out('  to compose, this path would need:');
+      for (const m of missing) out(`    - ${m}`);
+    }
   }
   out('');
   if (allRegimesHold === false) {
@@ -266,6 +349,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const r of regimes) {
     if (r.ok === false) out(`    ${r.bridgeId}: VIOLATED — ${r.violated.join('; ')}`);
     else if (r.ok === 'unknown') out(`    ${r.bridgeId}: unknown — unchecked: ${r.unchecked.join('; ')}`);
+  }
+  if (regimes.some((r) => r.premisesNotChecked !== undefined)) {
+    out('  premises not machine-checked (your judgment or measurement):');
+    for (const r of regimes) {
+      if (r.premisesNotChecked !== undefined) out(`    ${r.bridgeId}: ${r.premisesNotChecked.join('; ')}`);
+    }
   }
   if (horizons.length === 0) {
     out('  horizons: none on this path (no step carries a bound)');

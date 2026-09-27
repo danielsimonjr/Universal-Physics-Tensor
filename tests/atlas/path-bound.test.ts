@@ -25,7 +25,8 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { boundPath, findPath } from '../../src/atlas/path-bound.js';
+import { boundPath, findAtlasPath, findPath } from '../../src/atlas/path-bound.js';
+import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { composeBoundPath, IDENTITY_BOUND } from '../../src/atlas/error-algebra.js';
 import { composeRelation } from '../../src/atlas/composition-table.js';
 import { MissingLipschitzError } from '../../src/atlas/types.js';
@@ -112,6 +113,43 @@ describe('findPath', () => {
   it('throws rather than returning null for an unknown family or endpoint', () => {
     expect(() => findPath('nope', 'model-lc', 'model-lc')).toThrow(RangeError);
     expect(() => findPath('oscillators', 'model-lc', 'model-nope')).toThrow(RangeError);
+  });
+
+  it('stays inside its family: a bridge filed there but ending elsewhere is not followed', () => {
+    expect(() => findPath('waves', 'model-klein-gordon', 'model-schrodinger-free')).toThrow(RangeError);
+  });
+});
+
+describe('findAtlasPath (audit F01)', () => {
+  it('follows a bridge filed in one family that ends in another', () => {
+    expect(findAtlasPath('model-klein-gordon', 'model-schrodinger-free')?.map((b) => b.id)).toEqual([
+      'ab-kg-schrodinger',
+    ]);
+  });
+
+  it('chains across three families under the same traversal rules', () => {
+    // waves → oscillators (restriction), then the exact equivalence backwards.
+    expect(findAtlasPath('model-klein-gordon', 'model-lc')?.map((b) => b.id)).toEqual([
+      'ab-kg-oscillator',
+      'ab-spring-lc',
+    ]);
+    expect(findAtlasPath('model-schrodinger-free', 'model-klein-gordon')).toBeNull();
+  });
+
+  it('agrees with findPath on every same-family pair that findPath connects', () => {
+    for (const fam of ATLAS_FAMILIES) {
+      for (const a of fam.models) {
+        for (const b of fam.models) {
+          const inFamily = findPath(fam.family, a.id, b.id);
+          if (inFamily === null) continue;
+          expect(findAtlasPath(a.id, b.id)?.length).toBe(inFamily.length);
+        }
+      }
+    }
+  });
+
+  it('throws for an endpoint in no family', () => {
+    expect(() => findAtlasPath('model-lc', 'model-nope')).toThrow(RangeError);
   });
 });
 

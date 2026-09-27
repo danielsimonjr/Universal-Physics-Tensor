@@ -3,12 +3,14 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
 (the Observable contract: composed AST, dimensionally validated + numerically evaluable)
 
   ● CT-1  (be-42 ∘ be-16, via hawking-temperature ≡ temperature)
-      composed:   landauer-erasure-energy(mass) = k_B·(hbar·c^3 / 8pi·G·mass·k_B)·ln2
+      composed:   landauer-erasure-energy(mass) = k_B·(hbar·c^3 / (8pi·G·mass·k_B))·ln2
+      eval form:  upt eval "k_B*(hbar*c^3/((8*pi)*G*mass*k_B))*ln(2)" k_B=1.380649e-23 hbar=1.054571817e-34 c=299792458 G=6.6743e-11 mass=1.989e+30
       dimension: [energy]   (validated on the composed AST)
       value @ mass = M_sun:  5.9031e-31
 
   ● CT-1b (law-r_s ∘ be-42-via-rs, name-match junction)
-      composed:   hawking-temperature(mass) = hbar·c / 4pi·k_B·(2·G·mass / c^2)
+      composed:   hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))
+      eval form:  upt eval "hbar*c/((4*pi)*k_B*(2*G*mass/c^2))" hbar=1.054571817e-34 c=299792458 k_B=1.380649e-23 G=6.6743e-11 mass=1.989e+30
       dimension: [temperature]   (validated on the composed AST)
       value @ mass = M_sun:  6.1684e-8
 

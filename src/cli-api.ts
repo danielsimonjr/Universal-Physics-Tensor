@@ -167,7 +167,9 @@ export { deriveEvidence, NO_PASSING_WITNESSES } from './atlas/derive-evidence.js
 export type { AtlasFamily } from './atlas/oscillators/index.js';
 export { regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
-export { findPath, boundPath } from './atlas/path-bound.js';
+export { findPath, findAtlasPath, boundPath } from './atlas/path-bound.js';
+export { composeRelation } from './atlas/composition-table.js';
 export type { PathBoundResult, PathBoundClaim, PathNoClaim } from './atlas/path-bound.js';
 export type { AtlasBridge, RegimeInequality } from './atlas/types.js';
+export { MissingLipschitzError } from './atlas/types.js';
 export type { AtlasModel, ModelId } from './atlas/model.js';

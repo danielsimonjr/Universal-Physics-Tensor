@@ -88,7 +88,13 @@ describe('upt path', () => {
     const outside = await run('0.8');
     expect(outside.allRegimesHold).toBe(false);
     expect(outside.regimes).toEqual([
-      { bridgeId: 'ab-pendulum-linear', ok: false, violated: ['theta0 <= 0.5 (θ0 ≤ 0.5 rad)'], unchecked: [] },
+      {
+        bridgeId: 'ab-pendulum-linear',
+        ok: false,
+        violated: ['theta0 <= 0.5 (θ0 ≤ 0.5 rad)'],
+        unchecked: [],
+        premisesNotChecked: ['θ0 ≤ 0.5 rad', 'the bound is a PERIOD error and is not uniform in time'],
+      },
     ]);
     const inside = await run('0.2');
     expect(inside.allRegimesHold).toBe(true);
@@ -144,6 +150,22 @@ describe('upt path', () => {
     const text = cap.lines.join('');
     expect(text).toMatch(/no composite claim/);
     expect(text).not.toMatch(/composed bound/);
+  });
+
+  // Audit F05 (2026-09-26): the refusal is kept (the table is not widened), but it now names
+  // what a composite would need instead of only saying "no composite claim".
+  it('a no-composite-claim refusal names the missing information (audit F05)', async () => {
+    const cap = capture();
+    await runCli(['path', 'model-pendulum', 'model-lc'], cap.io);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/to compose, this path would need:/);
+    expect(text).toMatch(/a composition-table cell for approximation then exact-equivalence/);
+    expect(text).toMatch(/'ab-spring-lc' to state that it carries 'relative period error[^']*' through its mapping/);
+    const json: string[] = [];
+    await runCli(['path', 'model-pendulum', 'model-lc', '--json'], { out: () => {}, err: () => {}, write: (s: string) => json.push(s) });
+    const r = JSON.parse(json.join('')).result;
+    expect(r.missing).toHaveLength(2);
+    expect('bound' in r).toBe(false);
   });
 
   it('--json for a no-claim has NO bound key and names the reason', async () => {
@@ -231,6 +253,80 @@ describe('upt path', () => {
     const code = await runCli(['path', 'model-spring', 'model-cubic-spring'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/no chain of bridges connects these models/);
+  });
+
+  // Audit F01 (2026-09-26): `atlas ab-kg-schrodinger` lists a waves → diffusion bridge, and
+  // `path` refused it because the endpoints sit in different families.
+  describe('cross-family routes (audit F01)', () => {
+    it('follows the listed KG → free-Schrödinger bridge and checks its regime and horizon', async () => {
+      const cap = capture();
+      const code = await runCli(
+        ['path', 'model-klein-gordon', 'model-schrodinger-free', '--at', 'c=1', 'omega0=1', 'k=0.05', 't=1'],
+        cap.io,
+      );
+      expect(code).toBe(0);
+      const text = cap.lines.join('');
+      expect(text).toMatch(/model-klein-gordon --\[approximation\]--> model-schrodinger-free {2}\(ab-kg-schrodinger\)/);
+      expect(text).toMatch(/crosses families: waves → diffusion/);
+      expect(text).toMatch(/composite relation: approximation/);
+      expect(text).toMatch(/regimes at --at: all hold/);
+      expect(text).toMatch(/horizons at t=1: all hold/);
+    });
+
+    it('at k = 1 the violated inequality is named and the check fails (exit 3)', async () => {
+      const cap = capture();
+      const code = await runCli(
+        ['path', 'model-klein-gordon', 'model-schrodinger-free', '--at', 'c=1', 'omega0=1', 'k=1'],
+        cap.io,
+      );
+      expect(code).toBe(3);
+      expect(cap.lines.join('')).toMatch(/ab-kg-schrodinger: VIOLATED — c · omega0\^-1 · k <= 0\.1/);
+    });
+
+    it('--json records the family of each step and each endpoint', async () => {
+      const cap = capture();
+      await runCli(['path', 'model-klein-gordon', 'model-schrodinger-free', '--json'], cap.io);
+      const r = JSON.parse(cap.lines.join('')).result;
+      expect(r.families).toEqual({ from: 'waves', to: 'diffusion' });
+      expect(r.path).toEqual([
+        {
+          id: 'ab-kg-schrodinger',
+          relation: 'approximation',
+          from: 'model-klein-gordon',
+          to: 'model-schrodinger-free',
+          family: 'waves',
+        },
+      ]);
+    });
+
+    it('a cross-family chain still refuses a composite the table does not define', async () => {
+      const cap = capture();
+      const code = await runCli(['path', 'model-klein-gordon', 'model-fick', '--json'], cap.io);
+      expect(code).toBe(0);
+      const r = JSON.parse(cap.lines.join('')).result;
+      expect(r.path.map((s: { id: string }) => s.id)).toEqual(['ab-kg-schrodinger', 'ab-schrodinger-diffusion']);
+      expect(r.kind).toBe('no-claim');
+      expect('bound' in r).toBe(false);
+    });
+
+    it('an unbounded restriction followed by another step is a refusal, not a crash', async () => {
+      const cap = capture();
+      const code = await runCli(['path', 'model-klein-gordon', 'model-lc', '--json'], cap.io);
+      expect(code).toBe(0);
+      const r = JSON.parse(cap.lines.join('')).result;
+      expect(r.path.map((s: { id: string }) => s.id)).toEqual(['ab-kg-oscillator', 'ab-spring-lc']);
+      expect(r.kind).toBe('no-claim');
+      expect(r.reason).toBe('missing-lipschitz');
+      expect(r.detail).toMatch(/'ab-kg-oscillator' \(restriction\) states no Lipschitz constant/);
+      expect('bound' in r).toBe(false);
+    });
+
+    it('an approximation is never traversed backwards across families', async () => {
+      const cap = capture();
+      const code = await runCli(['path', 'model-schrodinger-free', 'model-klein-gordon'], cap.io);
+      expect(code).toBe(0);
+      expect(cap.lines.join('')).toMatch(/no chain of bridges connects these models/);
+    });
   });
 
   it('`upt help path` prints the command help', async () => {

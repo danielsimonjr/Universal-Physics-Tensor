@@ -2015,6 +2015,7 @@
         "predicted": 1e-15,
         "bound": 6.501939179989081e-16,
         "satisfied": true,
+        "predictedIs": "encoded-bound",
         "caveat": "one-sided: +side only (GW170817 −side -3.1e-15 exceeds the symmetric encoded ±1e-15)",
         "units": "|c_GW − c| / c (dimensionless)",
         "provenance": {
@@ -2054,6 +2055,7 @@
         "predicted": 1e-16,
         "bound": 2.96e-8,
         "satisfied": true,
+        "predictedIs": "point",
         "units": "s⁻¹ (collapse rate)",
         "provenance": {
           "citation": "Carlesso, Bassi, Falferi & Vinante 2016, arXiv:1606.03637 / Phys. Rev. D 95:084054 (2017); LISA-Pathfinder data Armano et al. 2016, PRL 116:231101",

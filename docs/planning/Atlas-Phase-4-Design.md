@@ -299,7 +299,7 @@ none.
 | Bridge | Relation | Witness (measured) |
 |---|---|---|
 | `ab-langevin-diffusion` | coarse-graining (Einstein D = k_BT/γ) | WD4: RK4 of the Langevin moment equations; ⟨x²⟩/(2Dt) − 1 goes 0.1000 → 0.0100 for t 10 → 100 τ_p. It matches the closed Ornstein–Uhlenbeck form to 1e-10 |
-| `ab-stokes-einstein` | derivation, **hyperedge** (Langevin + Stokes drag) | WD5s (CAS); WD5: CE-stokes-einstein up to exactly its omitted 6π; D = 4.29e-13 m²/s for a 1 µm sphere in water |
+| `ab-stokes-einstein` | derivation, **hyperedge** (Langevin + Stokes drag) | WD5s (CAS); WD5: CE-stokes-einstein up to exactly its omitted 6π; D = 4.29e-13 m²/s for a sphere of radius 0.5 µm (1 µm diameter) in water at 293.15 K |
 | `ab-telegraph-diffusion` | approximation, **singular** τ → 0 | WD6: 0.0557 → 0.0263 per halving of τ; the machine horizon has a LOWER edge (the initial layer) |
 | `ab-telegraph-wave` | approximation (ε ≥ 25, t < 2τ ln(10/9)) | WD7: 5.01e-3 → 2.50e-3 |
 | `ab-heat-laplace` | restriction (steady state, Fo ≥ 1) | WD8: deviation from the linear profile 0.139 → 0.0193 for Fo 0.2 → 0.4 |

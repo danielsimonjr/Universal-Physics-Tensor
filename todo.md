@@ -4,6 +4,42 @@
 
 - [x] Archive the CLI-only applied-physicist persona audit, evidence, maps, and 20 improvement recommendations under `docs/audit/`.
 
+### Audit findings ledger (§11, F01–F14)
+
+- [x] **F01** `upt path` follows a qualified bridge across families (KG → free Schrödinger); composition rules unchanged.
+- [x] **F02** `discover` states, beside the PROMISING count, how many have a mechanism test, a data test, and an abstaining falsifier.
+- [x] **F03** `ln` and every other built-in parser function evaluate under the MathTS parser too; unknown functions still fail.
+- [x] **F04** `upt ground` takes `--source` so a canonical/combined `discover` pair can be grounded; a pair from another scope is named as such.
+- [x] **F05** A `no composite claim` path names what the refusal is missing; the composition table is not widened.
+- [x] **F06** `ab-stokes-einstein` witness prose states radius, temperature and viscosity explicitly.
+- [x] **F07** `confront --frontier` says "margin to the configured acceptance threshold" and prints the criterion.
+- [x] **F08** A VACUOUS regime lists the stated physical premises as untested, separately from checked inequalities.
+- [x] **F09** The atlas formal-reference line states what the theorem does not certify (bound, regime, horizon).
+- [x] **F10** An evidence-filtered map export keeps the no-overlay vs non-matching accounting.
+- [x] **F11** `upt audit` DECOY is qualified as a dimensional-reconstruction mismatch, not a physical refutation.
+- [x] **F12** `symbolic` prints unambiguous grouping (parenthesized denominators).
+- [x] **F13** Upper-bound confrontations (GW-speed) label the prediction, the bound and the compatibility rule.
+- [x] **F14** Top-level help derives the isolated-bridge count instead of a fixed "20".
+
+### Audit improvements (§14) not covered by the F-ledger fixes — open
+
+- [ ] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
+- [ ] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
+- [ ] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
+- [ ] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
+- [ ] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
+- [ ] **I9** Uncertainty propagation with covariance, distinct from sensitivity.
+- [ ] **I11** Discovery ranking by evidential readiness dimensions.
+- [ ] **I12** Premise and novelty status inseparable from every exported derived relation.
+- [ ] **I14** Confrontation records expose the statistical object, preprocessing and independence for every record.
+- [ ] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
+- [ ] **I16** Focused (neighborhood/route/family) map exports.
+- [ ] **I17** Session export and replay.
+- [ ] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
+- [ ] **I19** Real-data, falsification-oriented probe workflow.
+- [ ] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
+- [ ] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
+
 ## TypeScript-on-Bun migration (in flight)
 
 - [x] **Bun as package manager + script driver; Node stays the runtime.** Same house pattern as

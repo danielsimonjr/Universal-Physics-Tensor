@@ -69,11 +69,15 @@ describe('upt confront --rigor / --frontier', () => {
     const c = capture();
     expect(await runCli(['confront', '--rigor=tight'], c.io)).toBe(1);
   });
-  it('--frontier ranks value-tests by margin to exclusion (Shapiro first)', async () => {
+  // Audit F07 (2026-09-26): "margin 0.09σ to exclusion" read as GR being 0.09σ from scientific
+  // exclusion; the margin is to this tool's configured 1σ acceptance threshold.
+  it('--frontier ranks value-tests by margin to the configured acceptance threshold (Shapiro first)', async () => {
     const c = capture();
     expect(await runCli(['confront', '--frontier'], c.io)).toBe(0);
     const t = text(c);
-    expect(t).toMatch(/margin .*σ to exclusion/);
+    expect(t).toMatch(/margin 0\.09σ to the 1σ acceptance threshold/);
+    expect(t).toMatch(/a software criterion, not a scientific exclusion level/);
+    expect(t).not.toMatch(/to exclusion/);
     // be-37 (0.91σ, margin 0.09) must precede be-52 (0.26σ, margin 0.74)
     expect(t.indexOf('be-37')).toBeLessThan(t.indexOf('be-52'));
   });
@@ -93,5 +97,48 @@ describe('upt ground', () => {
   it('needs two names → exit 2', async () => {
     const c = capture();
     expect(await runCli(['ground', 'mass'], c.io)).toBe(2);
+  });
+
+  // Audit F04 (2026-09-26): canonical/combined `discover` pairs could not be grounded, and
+  // the refusal implied the pair never existed.
+  describe('graph scope (audit F04)', () => {
+    it('grounds a canonical discover pair with --source=canonical and prints the source', async () => {
+      const c = capture();
+      expect(await runCli(['ground', '--source=canonical', 'compton-wavelength', 'hubble-distance'], c.io)).toBe(0);
+      expect(text(c)).toMatch(/\[source: canonical/);
+      expect(text(c)).toMatch(/compton-wavelength ≟ hubble-distance/);
+    });
+    it('a pair from another scope names the scope that has it', async () => {
+      const c = capture();
+      expect(await runCli(['ground', 'compton-wavelength', 'hubble-distance'], c.io)).toBe(1);
+      expect(text(c)).toMatch(/not a candidate in the catalog graph/);
+      expect(text(c)).toMatch(/upt ground --source=canonical compton-wavelength hubble-distance/);
+    });
+    it('a pair in no scope still says so, without naming a scope', async () => {
+      const c = capture();
+      expect(await runCli(['ground', 'mass', 'mass'], c.io)).toBe(1);
+      expect(text(c)).toMatch(/in any of catalog, canonical, both/);
+    });
+    it('help documents --source and the discover options', async () => {
+      const c = capture();
+      expect(await runCli(['help', 'ground'], c.io)).toBe(0);
+      expect(text(c)).toMatch(/--source=catalog\|canonical\|both/);
+      expect(text(c)).toMatch(/--anchor/);
+    });
+    it('--anchor is accepted with discover\'s validation', async () => {
+      const c = capture();
+      expect(await runCli(['ground', '--anchor=mass', 'a', 'b'], c.io)).toBe(2);
+      expect(text(c)).toMatch(/--anchor expects k=v/);
+    });
+    it('every canonical discover candidate can be grounded with the same source', async () => {
+      const d = capture();
+      await runCli(['discover', '--source=canonical', '--json'], d.io);
+      const cands = JSON.parse(text(d)).result as { a: string; b: string }[];
+      expect(cands.length).toBeGreaterThan(0);
+      for (const { a, b } of cands.slice(0, 5)) {
+        const g = capture();
+        expect(await runCli(['ground', '--source=canonical', a, b], g.io)).toBe(0);
+      }
+    });
   });
 });

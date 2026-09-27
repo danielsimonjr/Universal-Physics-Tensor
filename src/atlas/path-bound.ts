@@ -67,7 +67,7 @@ import type { AtlasFamily } from './oscillators/index.js';
  * oscillator family alone, which made the diffusion and wave families
  * unsearchable once they existed. A route stays INSIDE one family: a bridge
  * that ends in another family's model is not followed across (stated, not
- * hidden — cross-family routes are out of this function's scope).
+ * hidden — cross-family routes are {@link findAtlasPath}'s scope).
  *
  * @internal
  */
@@ -89,10 +89,10 @@ interface DirectedEdge {
   readonly bridge: AtlasBridge;
 }
 
-/** Expand a family's bridges into directed edges. Single-premise chains only. */
-function directedEdges(family: AtlasFamily): readonly DirectedEdge[] {
+/** Expand bridges into directed edges. Single-premise chains only. */
+function directedEdges(bridges: readonly AtlasBridge[]): readonly DirectedEdge[] {
   const edges: DirectedEdge[] = [];
-  for (const bridge of family.bridges) {
+  for (const bridge of bridges) {
     // Sprint 2 scope: a multi-premise bridge is a JOIN, not a link in a chain,
     // and is skipped rather than silently reduced to its first premise.
     if (bridge.premises.length !== 1) continue;
@@ -135,10 +135,51 @@ export function findPath(
       throw new RangeError(`findPath: '${endpoint}' is not a model of family '${family}'`);
     }
   }
+  return shortestChain(fam.bridges, from, to);
+}
+
+/**
+ * Shortest chain of bridges from `from` to `to` across EVERY registered
+ * family, or `null` if none exists.
+ *
+ * A family is a filing label, not a physical boundary: `ab-kg-schrodinger` is
+ * filed under waves and ends in the diffusion family's free Schrödinger model.
+ * The search runs over the union of all families' bridges under the same
+ * rules as {@link findPath} — an exact equivalence both ways, every lossy
+ * relation forward only — and the route it returns is composed by
+ * {@link boundPath} exactly as a single-family route is. Crossing a family
+ * adds no composition rule.
+ *
+ * Ties are broken by {@link ATLAS_FAMILIES} order, then each family's bridge
+ * order, so the result is stable across runs.
+ *
+ * @throws RangeError if an endpoint is not a model of any family.
+ * @internal
+ */
+export function findAtlasPath(from: string, to: string): readonly AtlasBridge[] | null {
+  const models = new Set(ATLAS_FAMILIES.flatMap((f) => f.models.map((m) => m.id)));
+  for (const endpoint of [from, to]) {
+    if (!models.has(endpoint)) {
+      throw new RangeError(`findAtlasPath: '${endpoint}' is not a model of any atlas family`);
+    }
+  }
+  return shortestChain(
+    ATLAS_FAMILIES.flatMap((f) => f.bridges),
+    from,
+    to,
+  );
+}
+
+/** Breadth-first shortest chain over `bridges`; endpoints already validated. */
+function shortestChain(
+  bridges: readonly AtlasBridge[],
+  from: string,
+  to: string,
+): readonly AtlasBridge[] | null {
   if (from === to) return [];
 
   const outgoing = new Map<string, DirectedEdge[]>();
-  for (const edge of directedEdges(fam)) {
+  for (const edge of directedEdges(bridges)) {
     const bucket = outgoing.get(edge.from);
     if (bucket === undefined) outgoing.set(edge.from, [edge]);
     else bucket.push(edge);

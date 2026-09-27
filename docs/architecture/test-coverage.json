@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 348,
-    "totalTestFiles": 476,
+    "totalTestFiles": 477,
     "testedCount": 347,
     "untestedCount": 1,
     "coveragePercent": "99.7"
@@ -414,7 +414,9 @@
     "src/atlas/composition-table.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/composition-table.test.ts",
-      "tests/atlas/path-bound.test.ts"
+      "tests/atlas/path-bound.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/recover-conventions.test.ts"
     ],
     "src/atlas/conventions.ts": [
       "tests/atlas/conventions.test.ts",
@@ -491,6 +493,7 @@
       "tests/atlas/lc-analogy-text.test.ts",
       "tests/atlas/link-prediction.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
+      "tests/atlas/path-bound.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/relative-norm-convention.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -1981,6 +1984,7 @@
     "src/cli/commands/atlas.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2011,6 +2015,7 @@
     "src/cli/commands/audit.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2041,6 +2046,7 @@
     "src/cli/commands/axes.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2071,6 +2077,7 @@
     "src/cli/commands/candidates.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2101,6 +2108,7 @@
     "src/cli/commands/canonical.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2131,6 +2139,7 @@
     "src/cli/commands/confront.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2161,6 +2170,7 @@
     "src/cli/commands/connectors.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2191,6 +2201,7 @@
     "src/cli/commands/coverage.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2221,6 +2232,7 @@
     "src/cli/commands/derive.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2251,6 +2263,7 @@
     "src/cli/commands/discover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2281,6 +2294,7 @@
     "src/cli/commands/eval.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2311,6 +2325,7 @@
     "src/cli/commands/evaluate.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2341,6 +2356,7 @@
     "src/cli/commands/explain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2371,6 +2387,7 @@
     "src/cli/commands/ground.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2401,6 +2418,7 @@
     "src/cli/commands/index.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2431,6 +2449,7 @@
     "src/cli/commands/map.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2461,6 +2480,7 @@
     "src/cli/commands/path.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2491,6 +2511,7 @@
     "src/cli/commands/predict.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2521,6 +2542,7 @@
     "src/cli/commands/priority.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2551,6 +2573,7 @@
     "src/cli/commands/probe.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2581,6 +2604,7 @@
     "src/cli/commands/recover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2611,6 +2635,7 @@
     "src/cli/commands/regime.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2641,6 +2666,7 @@
     "src/cli/commands/symbolic.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -2679,6 +2705,7 @@
     "src/cli/main.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
       "tests/cli/canonical-compare-cli.test.ts",
       "tests/cli/cli-from-src.test.ts",
@@ -6223,6 +6250,7 @@
     ],
     "tests/atlas/path-bound.test.ts": [
       "src/atlas/path-bound.ts",
+      "src/atlas/families.ts",
       "src/atlas/error-algebra.ts",
       "src/atlas/composition-table.ts",
       "src/atlas/types.ts",
@@ -7628,6 +7656,32 @@
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
     ],
+    "tests/cli/applied-physics-audit.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts"
+    ],
     "tests/cli/args.test.ts": [
       "src/cli/args.ts",
       "src/cli/errors.ts"
@@ -7909,6 +7963,7 @@
       "src/atlas/derive-evidence.ts",
       "src/atlas/regime.ts",
       "src/atlas/path-bound.ts",
+      "src/atlas/composition-table.ts",
       "src/atlas/types.ts",
       "src/atlas/model.ts",
       "src/core/tensor.ts",
@@ -8399,6 +8454,7 @@
       "src/atlas/derive-evidence.ts",
       "src/atlas/regime.ts",
       "src/atlas/path-bound.ts",
+      "src/atlas/composition-table.ts",
       "src/atlas/types.ts",
       "src/atlas/model.ts",
       "src/core/tensor.ts",

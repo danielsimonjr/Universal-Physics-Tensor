@@ -34,6 +34,8 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
         bridge is reported as valid, violated (naming the failed inequality),
         or UNKNOWN — a coordinate the point never supplied is NOT a pass, and a
         regime that states no inequality is marked VACUOUS rather than passed.
+        A bridge's prose side conditions (lossless, no-slip, ...) are listed
+        as premises not machine-checked: only the inequalities are evaluated.
         A group can be given by its formula (spaces ignored, * read as ·, so
         --at "tau*D*q^2=1" works) or through its parameters: --at tau=1 D=1
         q=1 derives tau · D · q^2 = 1. A key that no record uses is named, and
@@ -153,9 +155,19 @@ async function run(ctx: CommandCtx): Promise<number> {
   // would print nine confident 'valid's that were never checked against
   // anything — the tri-state's `true` is vacuous when there is nothing to
   // check, so that case is labelled rather than left to read as a pass.
-  const records: { id: string; kind: 'model' | 'bridge'; regime: typeof family.models[number]['regime'] }[] = [
+  const records: {
+    id: string;
+    kind: 'model' | 'bridge';
+    regime: typeof family.models[number]['regime'];
+    sideConditions?: readonly string[];
+  }[] = [
     ...family.models.map((m) => ({ id: m.id, kind: 'model' as const, regime: m.regime })),
-    ...family.bridges.map((b) => ({ id: b.id, kind: 'bridge' as const, regime: b.regime })),
+    ...family.bridges.map((b) => ({
+      id: b.id,
+      kind: 'bridge' as const,
+      regime: b.regime,
+      sideConditions: b.sideConditions,
+    })),
   ];
 
   const { values: resolved, unknown } = resolveAtPoint(point, records.map((r) => r.regime));
@@ -169,6 +181,12 @@ async function run(ctx: CommandCtx): Promise<number> {
       vacuous: r.regime.inequalities.length === 0,
       violated: check.violated.map(showInequality),
       unchecked: check.unchecked.map(showInequality),
+      // Prose side conditions are premises this command cannot evaluate; only
+      // the inequalities above were checked. A premise with a machine form is
+      // checked only through its inequality.
+      ...(r.sideConditions !== undefined && r.sideConditions.length > 0
+        ? { premisesNotChecked: [...r.sideConditions] }
+        : {}),
     };
   });
 
@@ -251,6 +269,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     for (const u of m.unchecked) out(`    unchecked (no value supplied): ${u}`);
     if (!m.vacuous && m.violated.length === 0 && m.unchecked.length === 0) {
       out('    every inequality checked and satisfied');
+    }
+    if (m.premisesNotChecked !== undefined) {
+      out(`    premises not machine-checked: ${m.premisesNotChecked.join('; ')}`);
     }
   }
 

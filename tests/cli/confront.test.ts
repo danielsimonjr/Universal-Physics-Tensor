@@ -88,10 +88,30 @@ describe('upt confront', () => {
     const code = await runCli(['confront', '--bridge=be-36'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
-    expect(text).toMatch(/not excluded/);
+    // Audit F13 (2026-09-26): "predicted 1e-15 · bound 6.5e-16 · not excluded" read as a point
+    // prediction above an upper limit. BE-36's 1e-15 is its ENCODED range, and the rule is stated.
+    expect(text).toMatch(/encoded bound \|x\| ≤ 1e-15, .*\(a range, not a point prediction\)/);
+    expect(text).toMatch(/observed upper limit 6\.50\d*e-16/);
+    expect(text).toMatch(/rule: observed limit ≤ encoded bound · compatible ✓/);
+    expect(text).not.toMatch(/predicted 1e-15/);
     // honesty fix: the pass is one-sided — the GW170817 negative side exceeds
     // BE-36's symmetric encoding, and the summary line must say so.
     expect(text).toMatch(/one-sided|\+side|−side|-side/i);
+  });
+
+  it('a point-prediction upper-bound record states its rule (be-48)', async () => {
+    const cap = capture();
+    await runCli(['confront', '--bridge=be-48'], cap.io);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/predicted 1e-16 .* · observed upper limit 2\.96e-8 · rule: predicted ≤ limit · not excluded ✓/);
+  });
+
+  it('--json names what the predicted field is for each upper-bound record', async () => {
+    const cap = capture();
+    await runCli(['confront', '--json'], cap.io);
+    const rows = JSON.parse(cap.lines.join('')).result as { bridgeId: number; predictedIs?: string }[];
+    expect(rows.find((r) => r.bridgeId === 36)!.predictedIs).toBe('encoded-bound');
+    expect(rows.find((r) => r.bridgeId === 48)!.predictedIs).toBe('point');
   });
 
   it('--json carries the be-36 caveat as a field', async () => {
