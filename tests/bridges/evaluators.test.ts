@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { BRIDGE_EVALUATORS, evaluateBridge } from '../../src/bridges/evaluators.js';
+import { parseUnit } from '../../src/dimensional/units.js';
 
 describe('BRIDGE_EVALUATORS', () => {
   it('covers the 13 closed-form / spacetime bridges (51/52/55..65)', () => {
@@ -30,6 +31,36 @@ describe('BRIDGE_EVALUATORS', () => {
   it('throws on a missing / non-finite required input', () => {
     expect(() => evaluateBridge(63, {})).toThrow(/missing|mu_e/);
     expect(() => evaluateBridge(65, { T_K: 10, rho_kg_per_m3: 1e-16 })).toThrow(/mu/);
+  });
+
+  it('every evaluator declares each input key once, in order, with a unit that parses', () => {
+    for (const [id, s] of BRIDGE_EVALUATORS) {
+      expect(s.parameters.map((p) => p.key), `be-${id}`).toEqual([...s.inputKeys]);
+      for (const p of s.parameters) expect(() => parseUnit(p.unit), `be-${id} ${p.key}`).not.toThrow();
+    }
+  });
+
+  // An independent second source: the unit the key's own suffix names. A
+  // declaration that disagrees with its key would convert `d_m=1um` wrongly.
+  it("each declared unit agrees with the unit its key's suffix names", () => {
+    const SUFFIX: readonly (readonly [RegExp, string])[] = [
+      [/_kg_per_m3$/, 'kg/m^3'],
+      [/_S_per_m$/, 'S/m'],
+      [/_m_s2$/, 'm/s^2'],
+      [/_kg$/, 'kg'],
+      [/_m$/, 'm'],
+      [/_K$/, 'K'],
+      [/_ohm$/, 'ohm'],
+      [/_volts$/, 'V'],
+      [/_yr$/, 'yr'],
+    ];
+    for (const [id, s] of BRIDGE_EVALUATORS) {
+      for (const p of s.parameters) {
+        const expected = SUFFIX.find(([re]) => re.test(p.key))?.[1] ?? '';
+        expect(p.unit, `be-${id} ${p.key}`).toBe(expected);
+        expect(p.temperature === 'absolute', `be-${id} ${p.key}`).toBe(expected === 'K');
+      }
+    }
   });
 
   it('every spec run is callable with its declared inputs', () => {

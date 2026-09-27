@@ -37,14 +37,14 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 54 files
-- **bridges**: 89 files
+- **bridges**: 90 files
 - **canonical**: 18 files
 - **cli**: 32 files
 - **root**: 1 file
 - **composition**: 73 files
 - **core**: 11 files
 - **diff**: 3 files
-- **dimensional**: 31 files
+- **dimensional**: 32 files
 - **entry**: 1 file
 - **numerical**: 39 files
 
@@ -2334,6 +2334,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/bridges/evaluator-inputs.ts` - `key=value[unit]` arguments → an evaluator's numeric inputs, through the
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/units.js` | `convertValue, UnitError, TemperatureReading` | Import |
+| `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `ResolvedInput`
+- Functions: `resolveEvaluatorInputs`
+
+---
+
 ### `src/bridges/evaluators.ts` - Bridge-evaluator registry — the single dispatch surface for `upt evaluate`.
 
 **Internal Dependencies:**
@@ -2354,7 +2368,7 @@ The codebase is organized into the following modules:
 | `./be65-jeans-mass.js` | `evaluateJeansMass` | Import |
 
 **Exports:**
-- Interfaces: `EvaluatorSpec`
+- Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
 - Functions: `evaluateBridge`
 - Constants: `BRIDGE_EVALUATORS`
 
@@ -3063,6 +3077,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
+| `../../cli-api.js` | `EvaluatorParameter, EvaluatorSpec` | Import (type-only) |
 
 **Exports:**
 - Functions: `propagateUncertainty`
@@ -3372,7 +3387,9 @@ The codebase is organized into the following modules:
 | `./bridges/observations/types.js` | `ConfrontationOutcome` | Re-export |
 | `./bridges/sensitivity.js` | `decidingMeasurement` | Re-export |
 | `./bridges/evaluators.js` | `BRIDGE_EVALUATORS, evaluateBridge` | Re-export |
-| `./bridges/evaluators.js` | `EvaluatorSpec` | Re-export |
+| `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter` | Re-export |
+| `./bridges/evaluator-inputs.js` | `resolveEvaluatorInputs` | Re-export |
+| `./dimensional/units.js` | `convertValue, UnitError` | Re-export |
 | `./composition/axis-audit.js` | `auditAxisDiscrimination` | Re-export |
 | `./composition/axis-audit.js` | `AxisDiscrimination` | Re-export |
 | `./composition/axes.js` | `AXES` | Re-export |
@@ -3425,24 +3442,24 @@ The codebase is organized into the following modules:
   getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, rankDiscoveries,
   BRIDGE_EQUATIONS, auditCoverage, CONFRONTATIONS, listConfrontations, runConfrontation,
   confrontationRigor, rigorDistribution, ConfrontationEntry, RigorTier, ConfrontationOutcome,
-  decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec, auditAxisDiscrimination,
-  AxisDiscrimination, AXES, AxisSpec, simplifyObservable, CANONICAL_EQUATIONS,
-  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
-  filterEdges, deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
-  describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
-  findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, parseExprJson,
-  runProbeSearch, formatProbeReport, formatFrontierScan, formatFrontierGap,
-  suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto, annotateAdjudications,
-  adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication,
-  annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
-  checkConventions, unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness,
-  REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation, describeComparison,
-  describeComparisons, CanonicalComparison, CONSTANTS, CandidateGrounding, CandidateReadiness,
-  OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, NO_PASSING_WITNESSES, runWitnessRegistry,
-  WITNESS_REGISTRY, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck,
-  RegimeOverlap, RegionSample, findPath, findAtlasPath, boundPath, composeRelation, PathBoundResult,
-  PathBoundClaim, PathNoClaim, AtlasBridge, RegimeInequality, MissingLipschitzError, AtlasModel,
-  ModelId
+  decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec, EvaluatorParameter,
+  resolveEvaluatorInputs, convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES,
+  AxisSpec, simplifyObservable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner, scanLinkages,
+  deriveProposedBridges, describeDerivedClaim, filterEdges, deriveEdgeEvidence, formatFilterLegend,
+  POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource, PosterGraph, PosterValidation,
+  DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, problemFromResidualGap, makeResidualGap,
+  loadSearchProblemFromJson, parseExprJson, runProbeSearch, formatProbeReport, formatFrontierScan,
+  formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto,
+  annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate,
+  CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal,
+  ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey, describeGrounding,
+  describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation,
+  describeComparison, describeComparisons, CanonicalComparison, CONSTANTS, CandidateGrounding,
+  CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, NO_PASSING_WITNESSES,
+  runWitnessRegistry, WITNESS_REGISTRY, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
+  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, boundPath, composeRelation,
+  PathBoundResult, PathBoundClaim, PathNoClaim, AtlasBridge, RegimeInequality, MissingLipschitzError,
+  AtlasModel, ModelId
   ```
 
 
@@ -5515,6 +5532,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/units.ts` - Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./algebra.js` | `equals, format, multiply, power` | Import |
+| `./types.js` | `Dimension` | Import (type-only) |
+| `../core/constants.js` | `E_SI, M_SUN_SI` | Import |
+
+**Exports:**
+- Classes: `UnitError`
+- Interfaces: `ParsedUnit`
+- Functions: `parseUnit`, `convertValue`, `unitDimension`
+
+---
+
 ### `src/dimensional/validator-registry.ts` - Validator registry for curvature- and GR-object node kinds.
 
 **Internal Dependencies:**
@@ -5619,7 +5652,7 @@ The codebase is organized into the following modules:
 | `./bridges/index.js` | `BridgeEquationEntry, BridgeEquationStatus, BridgeIssueSeverity, BridgeIssueFixable, KnownIssue` | Re-export |
 | `./bridges/index.js` | `evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult, evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult, evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult, evaluateCasimir, type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs, type UnruhResult, evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult, evaluateACJosephson, JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult, evaluateFractionalQH, type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz, LORENZ_NUMBER_SI, type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap, BCS_GAP_RATIO, type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3, type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity, THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass, type JeansInputs, type JeansResult` | Re-export |
 | `./bridges/evaluators.js` | `BRIDGE_EVALUATORS, evaluateBridge` | Re-export |
-| `./bridges/evaluators.js` | `EvaluatorSpec` | Re-export |
+| `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./bridges/bridge-equations.js` | `BridgeEquations` | Re-export |
 | `./dimensional/connection.js` | `christoffel` | Re-export |
 | `./dimensional/validator.js` | `CovariantDerivativeNode` | Re-export |
@@ -5785,31 +5818,32 @@ The codebase is organized into the following modules:
   type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity,
   THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass,
   type JeansInputs, type JeansResult, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
-  BridgeEquations, christoffel, CovariantDerivativeNode, ricci, RicciTensorNode, einstein,
-  EinsteinTensorNode, bianchiResidual, BianchiResidualNode, verifyKillingEquation,
-  checkKillingEquation, evaluateConservedCharge, KillingEquationOptions, KillingEquationCheck,
-  ChristoffelAccess, integrateGeodesic, type GeodesicIntegratorInputs, type GeodesicIntegratorResult,
-  toGeometrized, fromGeometrized, geometrizedFactor, NonGeometrizableDimensionError,
-  TracableTensorNode, TensorTraceNode, TensorTraceValidationResult, TensorTraceOptions,
-  validateTensorTrace, FriedmannVariant, FriedmannEquationNode, FriedmannEquationValidationResult,
-  validateFriedmannEquation, RGCouplingNode, BetaFunctionNode, BetaFunctionValidationResult,
-  rgCoupling, validateRGCoupling, validateBetaFunction, ArrowOfTime, GaugeFieldNode,
-  TimeSymmetryPredicateNode, TimeSymmetryPredicateValidationResult, validateGaugeField,
-  validateTimeSymmetryPredicate, ScalarFieldNode, KleinGordonEquationNode,
-  KleinGordonEquationValidationResult, validateKleinGordonEquation, Dimension, DIMENSIONLESS, LENGTH,
-  AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE,
-  ENTROPY, CHARGE, multiply, divide, power, add, subtract, equals, format, DimensionMismatchError,
-  ExprNode, TranscendentalFn, ValidationResult, Violation, validate, validateEquation,
-  validateInverseMetricPair, inferDimensionForBridge, evaluateEinsteinEquationResidual,
-  EinsteinEquationResidualInput, MetricClosure, Vec4, validateEinsteinFieldEquation,
-  EinsteinFieldEquationNode, EinsteinFieldEquationValidationResult, KretschmannScalarNode,
-  KretschmannScalarValidationResult, validateKretschmannScalar, computeKretschmann, evaluateNumerical,
-  evaluateNumericalRaw, evaluateMetricInverse, Float64ReferenceEngine, getActiveEngine,
-  setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError,
-  hasAutogradSupport, evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion,
-  NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor,
-  EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot,
-  GL4Options, PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
+  EvaluatorParameter, ParameterAlternate, GeometryRole, BridgeEquations, christoffel,
+  CovariantDerivativeNode, ricci, RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual,
+  BianchiResidualNode, verifyKillingEquation, checkKillingEquation, evaluateConservedCharge,
+  KillingEquationOptions, KillingEquationCheck, ChristoffelAccess, integrateGeodesic,
+  type GeodesicIntegratorInputs, type GeodesicIntegratorResult, toGeometrized, fromGeometrized,
+  geometrizedFactor, NonGeometrizableDimensionError, TracableTensorNode, TensorTraceNode,
+  TensorTraceValidationResult, TensorTraceOptions, validateTensorTrace, FriedmannVariant,
+  FriedmannEquationNode, FriedmannEquationValidationResult, validateFriedmannEquation, RGCouplingNode,
+  BetaFunctionNode, BetaFunctionValidationResult, rgCoupling, validateRGCoupling,
+  validateBetaFunction, ArrowOfTime, GaugeFieldNode, TimeSymmetryPredicateNode,
+  TimeSymmetryPredicateValidationResult, validateGaugeField, validateTimeSymmetryPredicate,
+  ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult,
+  validateKleinGordonEquation, Dimension, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS,
+  VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply,
+  divide, power, add, subtract, equals, format, DimensionMismatchError, ExprNode, TranscendentalFn,
+  ValidationResult, Violation, validate, validateEquation, validateInverseMetricPair,
+  inferDimensionForBridge, evaluateEinsteinEquationResidual, EinsteinEquationResidualInput,
+  MetricClosure, Vec4, validateEinsteinFieldEquation, EinsteinFieldEquationNode,
+  EinsteinFieldEquationValidationResult, KretschmannScalarNode, KretschmannScalarValidationResult,
+  validateKretschmannScalar, computeKretschmann, evaluateNumerical, evaluateNumericalRaw,
+  evaluateMetricInverse, Float64ReferenceEngine, getActiveEngine, setActiveEngine,
+  NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
+  evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion, NumericalResult,
+  NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec,
+  NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options,
+  PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
   minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError,
   CompositionJunctionError, DomainViolationError, be11ZurekEdge, be12Edge, be16Edge, be37Edge,
   be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge,
@@ -6540,7 +6574,7 @@ graph TD
         N8[be23-planckian-confrontation]
         N9[be35-bootstrap-confrontation]
         N10[be36-gw170817-confrontation]
-        N11[...84 more]
+        N11[...85 more]
     end
 
     subgraph Canonical
@@ -6595,7 +6629,7 @@ graph TD
         N42[ast-types]
         N43[bridge-check]
         N44[buckingham]
-        N45[...26 more]
+        N45[...27 more]
     end
 
     subgraph Entry
@@ -6649,17 +6683,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 352 |
+| Total TypeScript Files | 354 |
 | Total Modules | 11 |
-| Total Lines of Code | 72079 |
-| Total Exports | 2496 |
-| Total Re-exports | 1251 |
-| Total Classes | 58 |
-| Total Interfaces | 364 |
-| Total Functions | 576 |
+| Total Lines of Code | 72488 |
+| Total Exports | 2508 |
+| Total Re-exports | 1258 |
+| Total Classes | 59 |
+| Total Interfaces | 368 |
+| Total Functions | 580 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 491 |
+| Type-only Imports | 494 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

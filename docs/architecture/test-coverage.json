@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 349,
-    "totalTestFiles": 479,
-    "testedCount": 348,
+    "totalSourceFiles": 351,
+    "totalTestFiles": 480,
+    "testedCount": 350,
     "untestedCount": 1,
     "coveragePercent": "99.7"
   },
@@ -142,6 +142,7 @@
     "src/bridges/equations/be-50-wheeler-feynman.ts",
     "src/bridges/equations/be-53-yang-mills-beta.ts",
     "src/bridges/equations/be-54-randall-sundrum-brane.ts",
+    "src/bridges/evaluator-inputs.ts",
     "src/bridges/evaluators.ts",
     "src/bridges/gravitational-lensing.ts",
     "src/bridges/index.ts",
@@ -318,6 +319,7 @@
     "src/dimensional/tensor-trace.ts",
     "src/dimensional/tensor.ts",
     "src/dimensional/types.ts",
+    "src/dimensional/units.ts",
     "src/dimensional/validator-registry.ts",
     "src/dimensional/validator.ts",
     "src/dimensional/weyl-validators.ts",
@@ -1687,6 +1689,12 @@
     "src/bridges/equations/be-54-randall-sundrum-brane.ts": [
       "tests/bridges/be-54-encoding.test.ts"
     ],
+    "src/bridges/evaluator-inputs.ts": [
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/dimensional/units.test.ts"
+    ],
     "src/bridges/evaluators.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
@@ -1696,6 +1704,7 @@
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/graphs.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -5135,6 +5144,13 @@
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/dimensional/units.ts": [
+      "tests/bridges/evaluators.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/dimensional/units.test.ts"
+    ],
     "src/dimensional/validator-registry.ts": [
       "tests/dimensional/validator-registry.test.ts"
     ],
@@ -7519,7 +7535,8 @@
       "src/dimensional/types.ts"
     ],
     "tests/bridges/evaluators.test.ts": [
-      "src/bridges/evaluators.ts"
+      "src/bridges/evaluators.ts",
+      "src/dimensional/units.ts"
     ],
     "tests/bridges/gravitational-lensing.test.ts": [
       "src/bridges/gravitational-lensing.ts",
@@ -7990,6 +8007,8 @@
       "src/bridges/observations/types.ts",
       "src/bridges/sensitivity.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/evaluator-inputs.ts",
+      "src/dimensional/units.ts",
       "src/composition/axis-audit.ts",
       "src/composition/axes.ts",
       "src/composition/expr-simplify.ts",
@@ -8385,6 +8404,8 @@
       "src/bridges/observations/types.ts",
       "src/bridges/sensitivity.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/evaluator-inputs.ts",
+      "src/dimensional/units.ts",
       "src/composition/axis-audit.ts",
       "src/composition/axes.ts",
       "src/composition/expr-simplify.ts",
@@ -8890,6 +8911,8 @@
       "src/bridges/observations/types.ts",
       "src/bridges/sensitivity.ts",
       "src/bridges/evaluators.ts",
+      "src/bridges/evaluator-inputs.ts",
+      "src/dimensional/units.ts",
       "src/composition/axis-audit.ts",
       "src/composition/axes.ts",
       "src/composition/expr-simplify.ts",
@@ -10715,6 +10738,11 @@
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/dimensional/units.test.ts": [
+      "src/dimensional/units.ts",
+      "src/bridges/evaluator-inputs.ts",
+      "src/bridges/evaluators.ts"
     ],
     "tests/dimensional/uptError.test.ts": [
       "src/dimensional/errors.ts"

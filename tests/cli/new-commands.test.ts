@@ -39,7 +39,7 @@ describe('upt evaluate', () => {
   it('no args lists the evaluable bridges', async () => {
     const c = capture();
     expect(await runCli(['evaluate'], c.io)).toBe(0);
-    expect(text(c)).toMatch(/be-55.*inputs: C/);
+    expect(text(c)).toMatch(/be-55 {2}Integer quantum Hall \/ TKNN\n {6}C \[dimensionless\] TKNN \(Chern\) number C — /);
   });
   it('a non-bridge target is a usage error → exit 2', async () => {
     const c = capture();

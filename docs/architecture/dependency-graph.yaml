@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 352
+  totalFiles: 354
   totalModules: 11
-  totalExports: 2496
+  totalExports: 2508
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5208,6 +5208,26 @@ modules:
       constants:
         - BRANE_FRIEDMANN_RHS
         - BE54_BRANE_FRIEDMANN_STRUCTURAL
+    src/bridges/evaluator-inputs.ts:
+      description: "`key=value[unit]` arguments → an evaluator's numeric inputs, through the"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/units.js
+          imports:
+            - convertValue
+            - UnitError
+            - TemperatureReading
+        - file: ./evaluators.js
+          imports:
+            - EvaluatorParameter
+          typeOnly: true
+      exports:
+        - resolveEvaluatorInputs
+      interfaces:
+        - ResolvedInput
+      functions:
+        - resolveEvaluatorInputs
     src/bridges/evaluators.ts:
       description: Bridge-evaluator registry — the single dispatch surface for `upt evaluate`.
       externalDependencies: []
@@ -5256,6 +5276,8 @@ modules:
         - BRIDGE_EVALUATORS
         - evaluateBridge
       interfaces:
+        - ParameterAlternate
+        - EvaluatorParameter
         - EvaluatorSpec
       functions:
         - evaluateBridge
@@ -6724,6 +6746,11 @@ modules:
         - file: ../errors.js
           imports:
             - CliError
+        - file: ../../cli-api.js
+          imports:
+            - EvaluatorParameter
+            - EvaluatorSpec
+          typeOnly: true
       exports:
         - command
         - propagateUncertainty
@@ -7337,6 +7364,16 @@ modules:
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
+            - EvaluatorParameter
+          reExport: true
+        - file: ./bridges/evaluator-inputs.js
+          imports:
+            - resolveEvaluatorInputs
+          reExport: true
+        - file: ./dimensional/units.js
+          imports:
+            - convertValue
+            - UnitError
           reExport: true
         - file: ./composition/axis-audit.js
           imports:
@@ -7580,6 +7617,9 @@ modules:
         - decidingMeasurement
         - BRIDGE_EVALUATORS
         - evaluateBridge
+        - resolveEvaluatorInputs
+        - convertValue
+        - UnitError
         - auditAxisDiscrimination
         - AXES
         - simplifyObservable
@@ -7643,6 +7683,7 @@ modules:
         - RigorTier
         - ConfrontationOutcome
         - EvaluatorSpec
+        - EvaluatorParameter
         - AxisDiscrimination
         - AxisSpec
         - PosterGraph
@@ -7713,6 +7754,10 @@ modules:
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - EvaluatorSpec
+        - EvaluatorParameter
+        - resolveEvaluatorInputs
+        - convertValue
+        - UnitError
         - auditAxisDiscrimination
         - AxisDiscrimination
         - AXES
@@ -13180,6 +13225,38 @@ modules:
         - ENTROPY
         - CHARGE
         - NAMED_DIMENSIONS
+    src/dimensional/units.ts:
+      description: "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`."
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./algebra.js
+          imports:
+            - equals
+            - format
+            - multiply
+            - power
+        - file: ./types.js
+          imports:
+            - Dimension
+          typeOnly: true
+        - file: ../core/constants.js
+          imports:
+            - E_SI
+            - M_SUN_SI
+      exports:
+        - parseUnit
+        - convertValue
+        - unitDimension
+        - UnitError
+      classes:
+        - UnitError
+      interfaces:
+        - ParsedUnit
+      functions:
+        - parseUnit
+        - convertValue
+        - unitDimension
     src/dimensional/validator-registry.ts:
       description: Validator registry for curvature- and GR-object node kinds.
       externalDependencies: []
@@ -13652,6 +13729,9 @@ modules:
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
+            - EvaluatorParameter
+            - ParameterAlternate
+            - GeometryRole
           reExport: true
         - file: ./bridges/bridge-equations.js
           imports:
@@ -14778,6 +14858,9 @@ modules:
         - BridgeIssueFixable
         - KnownIssue
         - EvaluatorSpec
+        - EvaluatorParameter
+        - ParameterAlternate
+        - GeometryRole
         - CovariantDerivativeNode
         - RicciTensorNode
         - EinsteinTensorNode
@@ -15083,6 +15166,9 @@ modules:
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - EvaluatorSpec
+        - EvaluatorParameter
+        - ParameterAlternate
+        - GeometryRole
         - BridgeEquations
         - christoffel
         - CovariantDerivativeNode
@@ -16796,6 +16882,7 @@ dependencyGraph:
         - src/bridges/equations/be-50-wheeler-feynman.ts
         - src/bridges/equations/be-53-yang-mills-beta.ts
         - src/bridges/equations/be-54-randall-sundrum-brane.ts
+        - src/bridges/evaluator-inputs.ts
         - src/bridges/evaluators.ts
         - src/bridges/gravitational-lensing.ts
         - src/bridges/index.ts
@@ -16986,6 +17073,7 @@ dependencyGraph:
         - src/dimensional/tensor-trace.ts
         - src/dimensional/tensor.ts
         - src/dimensional/types.ts
+        - src/dimensional/units.ts
         - src/dimensional/validator-registry.ts
         - src/dimensional/validator.ts
         - src/dimensional/weyl-validators.ts
@@ -17034,19 +17122,19 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 352
+  totalTypeScriptFiles: 354
   totalModules: 11
-  totalLinesOfCode: 72079
-  totalExports: 2496
-  totalClasses: 58
-  totalInterfaces: 364
-  totalFunctions: 576
+  totalLinesOfCode: 72488
+  totalExports: 2508
+  totalClasses: 59
+  totalInterfaces: 368
+  totalFunctions: 580
   totalTypeGuards: 4
   totalEnums: 0
   totalConstants: 610
-  totalReExports: 1251
-  totalTypeOnlyImports: 491
+  totalReExports: 1258
+  totalTypeOnlyImports: 494
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 6
+  unusedExportsCount: 7

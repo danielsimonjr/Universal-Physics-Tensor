@@ -13,7 +13,7 @@ nothing validates prose and the next reader cannot tell.
 
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
   findings are fixed (F10 was already correct and is now pinned by a test). Of the §14 improvements,
-  I5, I7, I9, I11, I12, I15 and I18 have landed. I8, I14 and I16 are partial, and I2, I6, I17, I19
+  I5, I6, I7, I9, I11, I12, I15 and I18 have landed. I8, I14 and I16 are partial, and I2, I17, I19
   and I20 are open; `todo.md` says what each still needs. I2 needs a reviewed widening of the
   composition table and is Mothership's call.
 - `discover --require-falsifier` hides **49 of 49** promising rows on `--source=canonical` and 4 of 7

@@ -9,6 +9,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
+import type { EvaluatorParameter, EvaluatorSpec } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--sigma', valueStyle: 'either', repeatable: true },
@@ -16,12 +17,20 @@ const FLAGS: FlagSpec[] = [
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt evaluate <be-NN> key=value ...
+const HELP = `upt evaluate <be-NN> key=value[unit] ...
         Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65).
+        Every input is declared: its unit, its meaning, and for a length what
+        it measures (a radius, a separation, a semi-major axis). A value may
+        carry a unit (d_m=1um, R_ohm=1kohm, T_yr=88d, M_kg=1Msun); it is
+        converted into the declared unit only when the dimensions agree, and a
+        bare number is in the declared unit. An absolute temperature in degC
+        adds 273.15 K; a --sigma in degC is a difference and does not. degF is
+        refused. An undeclared key exits 1 instead of being ignored. A declared
+        alternate (major_axis_m for a_m) is converted exactly and said so.
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_⊙
               (ideal degenerate gas, with m_u and M_⊙ = 1.989e30 kg)
               upt evaluate be-55 C=1      → quantum Hall R_H = von Klitzing constant
-        With no bridge id, lists the evaluable bridges and their input keys.
+        With no bridge id, lists the evaluable bridges and their declared inputs.
         --sigma key=u (repeatable) gives an input's standard uncertainty;
         --corr a,b=rho its correlation. Propagated to first order (GUM law,
         central-difference sensitivities), with a curvature check per input
@@ -30,22 +39,30 @@ const HELP = `upt evaluate <be-NN> key=value ...
         error and model discrepancy (whether the bridge applies).
         e.g.  upt evaluate be-58 T_K=300 R_ohm=1000 --sigma T_K=3 --sigma R_ohm=10`;
 
-function parseInputs(args: readonly string[]): Record<string, number> {
-  const out: Record<string, number> = {};
+/** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2). */
+function resolveInputs(api: CommandCtx['api'], spec: EvaluatorSpec, args: readonly string[]) {
   for (const a of args) {
-    const eq = a.indexOf('=');
-    if (eq < 0) {
-      throw new UsageError(`upt evaluate: '${a}' must be key=value (e.g. mu_e=2). See \`upt help\`.`);
-    }
-    const key = a.slice(0, eq);
-    const raw = a.slice(eq + 1);
-    const num = Number(raw);
-    if (raw === '' || !Number.isFinite(num)) {
-      throw new UsageError(`upt evaluate: '${a}' is not a finite number. Expected ${key}=<number>.`);
-    }
-    out[key] = num;
+    if (a.indexOf('=') <= 0) throw new UsageError(`upt evaluate: '${a}' must be key=value (e.g. mu_e=2). See \`upt help\`.`);
   }
-  return out;
+  try {
+    return api.resolveEvaluatorInputs(spec.parameters, args);
+  } catch (e) {
+    if (e instanceof api.UnitError) throw new CliError(`upt evaluate: be-${spec.bridgeId}: ${e.message}`);
+    throw e;
+  }
+}
+
+/** `d_m [m] plate separation d (geometry: separation) — the gap …` */
+function describeParameter(p: EvaluatorParameter): string {
+  const extras = [
+    ...(p.geometry === undefined ? [] : [`geometry: ${p.geometry}`]),
+    ...(p.temperature === undefined ? [] : ['an absolute temperature; degC adds 273.15']),
+  ];
+  const alts = (p.alternates ?? []).map((a) => `or give ${a.key}, ${a.meaning}`);
+  return (
+    `${p.key} [${p.unit || 'dimensionless'}] ${p.quantity} ${p.symbol}${extras.length > 0 ? ` (${extras.join('; ')})` : ''} — ${p.meaning}` +
+    (alts.length > 0 ? `; ${alts.join('; ')}` : '')
+  );
 }
 
 /** A curvature term above this fraction of the linear term marks the linearization unreliable. */
@@ -150,6 +167,8 @@ function isPositiveSemidefinite(keys: readonly string[], corr: ReadonlyMap<strin
 }
 
 function parseUncertainty(
+  api: CommandCtx['api'],
+  spec: EvaluatorSpec,
   sigmaArgs: readonly string[],
   corrArgs: readonly string[],
   inputs: Readonly<Record<string, number>>,
@@ -157,9 +176,21 @@ function parseUncertainty(
   const sigma: Record<string, number> = {};
   for (const a of sigmaArgs) {
     const m = /^([^=]+)=(.+)$/.exec(a);
-    const u = m === null ? NaN : Number(m[2]);
+    if (m !== null && !(m[1]! in inputs)) {
+      throw new CliError(`upt evaluate: --sigma '${m[1]}' is not one of the inputs given (${Object.keys(inputs).join(', ')})`);
+    }
+    // A σ is a difference: a σ in degC takes no 273.15 offset.
+    let u = NaN;
+    if (m !== null) {
+      const p = spec.parameters.find((x) => x.key === m[1])!;
+      try {
+        u = api.convertValue(m[2]!, p.unit, 'difference').value;
+      } catch (e) {
+        if (!(e instanceof api.UnitError)) throw e;
+        if (!/is not a (finite )?number/.test(e.message)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);
+      }
+    }
     if (m === null || !Number.isFinite(u) || u < 0) throw new CliError(`upt evaluate: --sigma '${a}' is not key=<finite u ≥ 0>`);
-    if (!(m[1]! in inputs)) throw new CliError(`upt evaluate: --sigma '${m[1]}' is not one of the inputs given (${Object.keys(inputs).join(', ')})`);
     sigma[m[1]!] = u;
   }
   const corr = new Map<string, number>();
@@ -192,16 +223,18 @@ async function run(ctx: CommandCtx): Promise<number> {
       emitJson(
         {
           command: 'evaluate',
-          result: specs.map((s) => ({ bridgeId: s.bridgeId, name: s.name, inputKeys: s.inputKeys })),
+          result: specs.map((s) => ({ bridgeId: s.bridgeId, name: s.name, inputKeys: s.inputKeys, parameters: s.parameters })),
         },
         ctx.write,
       );
       return 0;
     }
-    out('\nEvaluable bridges  (upt evaluate <be-NN> key=value ...)');
+    out('\nEvaluable bridges  (upt evaluate <be-NN> key=value[unit] ...)');
     for (const s of specs) {
-      out(`  be-${s.bridgeId}  ${s.name.padEnd(34)} inputs: ${s.inputKeys.join(', ')}`);
+      out(`  be-${s.bridgeId}  ${s.name}`);
+      for (const p of s.parameters) out(`      ${describeParameter(p)}`);
     }
+    out('\n  A value may carry a unit (d_m=1um, T_K=25degC, R_ohm=1kohm); a bare number is in the declared unit.');
     return 0;
   }
 
@@ -210,7 +243,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new UsageError(`upt evaluate: '${target}' is not a bridge id (be-NN). See \`upt help\`.`);
   }
   const id = Number(m[1]);
-  const inputs = parseInputs(rest);
+  const spec = api.BRIDGE_EVALUATORS.get(id);
+  if (spec === undefined) {
+    throw new CliError(
+      `evaluateBridge: be-${id} has no evaluator (only closed-form + spacetime bridges do — see \`upt evaluate\` with no args)`,
+    );
+  }
+  const { inputs, resolved } = resolveInputs(api, spec, rest);
 
   let result: unknown;
   try {
@@ -227,7 +266,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   let propagated: ReturnType<typeof propagateUncertainty> | null = null;
   let exactInputs: string[] = [];
   if (sigmaArgs.length > 0) {
-    const { sigma, corr } = parseUncertainty(sigmaArgs, corrArgs, inputs);
+    const { sigma, corr } = parseUncertainty(api, spec, sigmaArgs, corrArgs, inputs);
     propagated = propagateUncertainty((i) => api.evaluateBridge(id, i) as Record<string, unknown>, inputs, sigma, corr);
     exactInputs = Object.keys(inputs).filter((k) => !(k in sigma));
     uncertainty = {
@@ -242,13 +281,27 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   if (args.flags.has('json')) {
     emitJson(
-      { command: 'evaluate', result: { bridgeId: id, inputs, output: result, ...(uncertainty === null ? {} : { uncertainty }) } },
+      {
+        command: 'evaluate',
+        result: {
+          bridgeId: id,
+          inputs,
+          parameters: spec.parameters,
+          conversions: resolved.filter((r) => r.note !== undefined).map((r) => ({ key: r.key, given: r.given, value: r.value, unit: r.unit, ...(r.via === undefined ? {} : { via: r.via }), note: r.note })),
+          output: result,
+          ...(uncertainty === null ? {} : { uncertainty }),
+        },
+      },
       ctx.write,
     );
     return 0;
   }
-  out(`\n● be-${id}  ${api.BRIDGE_EVALUATORS.get(id)?.name ?? ''}`);
+  out(`\n● be-${id}  ${spec.name}`);
   out('  inputs: ' + Object.entries(inputs).map(([k, v]) => `${k}=${v}`).join(', '));
+  for (const p of spec.parameters) {
+    const r = resolved.find((x) => x.key === p.key);
+    out(`    ${describeParameter(p)}${r?.note === undefined ? '' : `\n      converted: ${r.note}`}`);
+  }
   for (const [k, v] of Object.entries(result as Record<string, unknown>)) {
     out(`  ${k} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
   }
