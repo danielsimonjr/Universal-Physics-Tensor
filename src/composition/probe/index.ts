@@ -123,9 +123,14 @@ export { formatProbeReport, formatFrontierScan, formatFrontierGap } from './repo
 export {
   parseStudy,
   loadStudyFromJson,
+  loadStudyFile,
+  attachReplication,
+  studyCsvToRaw,
   runProbeStudy,
   formatProbeStudy,
   chiSquareSurvival,
+  fSurvival,
+  effectiveSigma,
   StudyRefusal,
 } from './study.js';
 export type {
@@ -142,4 +147,7 @@ export type {
   ModelTest,
   CandidateTest,
   StudyDesignSuggestion,
+  StudyCorrection,
+  StudyCorrectionReport,
+  CorrectionStep,
 } from './study.js';

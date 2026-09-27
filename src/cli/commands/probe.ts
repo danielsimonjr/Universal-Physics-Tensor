@@ -27,6 +27,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--searchable-only', valueStyle: 'none' },
   { name: '--all', valueStyle: 'none' },
   { name: '--data', valueStyle: 'attached' },
+  { name: '--replication', valueStyle: 'attached' },
   { name: '--alpha', valueStyle: 'attached' },
 ];
 
@@ -47,6 +48,8 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                              the candidate and declared baselines on withheld
                              holdout / replication rows; suggest a discriminating
                              measurement (see STUDY FILE below)
+        --replication=FILE   study: replication rows from a separate file (JSON
+                             or CSV) with its own provenance
         --searchable-only    scan: only Product-B-searchable gaps (default)
         --all                scan: include Product A wrappers (not searchable)
         --budget-ms=N        wall-clock cap (default 5000)
@@ -86,15 +89,20 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
             {"length": 1.5, "gravity": 3.71, "period": 3.995}]}
         }
 
-        STUDY FILE (--data=FILE, JSON): calibrated observations
+        STUDY FILE (--data=FILE, JSON, or CSV when FILE ends in .csv)
         provenance   {"synthetic": true|false (required, never inferred),
                      "source", "acquisition"?, "calibration"?}
         target       {"name", "unit", "sigma"?}  sigma: default row uncertainty
-        governing    [{"name", "unit"}, ...]  "unit": "" when dimensionless
+        governing    [{"name", "unit", "sigma"?}, ...]  "unit": "" when
+                     dimensionless; "sigma": default input uncertainty
         observations [{"id"?, "role", "values": {input: value}, "observed",
-                     "sigma"?, "source"?}, ...]. A bare number is in the
-                     declared unit; "120 cm" is converted; a dimension
-                     mismatch, a missing σ or an undeclared key refuses the file.
+                     "sigma"?, "inputSigma"?: {input: σ}, "source"?}, ...].
+                     A bare number is in the declared unit; "120 cm" is
+                     converted; a dimension mismatch, a missing σ or an
+                     undeclared key refuses the file.
+        input σ      propagated by effective variance: σ_eff² = σ_y² +
+                     Σ (∂f/∂x_i · σ_x_i)², with each model's own slopes; the
+                     report states which inputs carry σ. First order in σ_x.
         role         exploratory (the only rows searched and fit) | holdout
                      (withheld test, e.g. a change of regime) | replication
                      (independent acquisition, withheld). A withheld row that
@@ -106,11 +114,32 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                      fitPrefactor (default false) fits one scale on exploratory rows.
         criterion    optional {"alpha"} (default 0.001)
         design       optional {"variables": {input: {"min", "max", "steps"?}}}
+        correction   optional {"input": <dimensionless input u>, "powers": [2, 4]}:
+                     also search m(x)·(1 + c₁u² + c₂u⁴) for each monomial m, fit
+                     on exploratory rows only. Terms are admitted in the
+                     declared order while each passes an extra-sum-of-squares
+                     F test at p < α; no other function of u is searched.
+        CSV          '# key: value' lines above the header declare the study:
+                     '# target: <column>', '# target.sigma: 2 ms',
+                     '# governing.<input>.sigma: σ', '# provenance.synthetic: true',
+                     '# provenance.source: ...', and any other key above as a
+                     dotted path; a value is JSON when it parses, else text.
+                     Header: name[unit] quantity columns (name[] when
+                     dimensionless), and id, role, source, sigma, sigma(<input>),
+                     note. An empty cell is absent. Refused for the same
+                     reasons as the JSON it compiles to.
+        REPLICATION FILE (--replication=FILE): provenance, target, governing
+                     and replication rows only. Refused if its source or
+                     acquisition is the study's, or if a row repeats a study
+                     row's data exactly (the same data renamed).
         Verdicts: no-credible-candidate | refuted-on-holdout | survives-holdout |
         untested-on-holdout; replication is reported separately. A candidate
         is credible only if it passes on exploratory rows AND a constant model
         is rejected there. A fit is not a mechanism.
-        Synthetic controls: tests/fixtures/probe-study/*.synthetic.json`;
+        Synthetic controls: tests/fixtures/probe-study/*.synthetic.{json,csv}.
+        Every one was designed knowing its generating law, so a recovery shows
+        the method recovers that law; none is a blind test of finding an
+        unknown one, and UPT ships no blind control.`;
 
 const EPISTEMICS =
   '⚠ experimental Product B. Not a discovery claim. `upt discover` is the identification funnel.';
@@ -375,11 +404,19 @@ async function runStudy(ctx: CommandCtx, source: ReturnType<typeof resolveGraph>
   const { args, api, out } = ctx;
   const path = args.flags.get('data')?.[0];
   if (!path) throw new UsageError('upt probe study: --data=FILE is required');
+  const replication = args.flags.get('replication')?.[0];
+  if (replication === '') throw new UsageError('upt probe study: --replication needs a FILE');
   const budget = budgetFromFlags(api, args.flags);
   const alpha = alphaFromFlags(args.flags);
+  let study;
+  try {
+    study = api.loadStudyFile(path, replication);
+  } catch (e) {
+    mapProbeError(e, e instanceof SyntaxError ? undefined : path);
+  }
   let result;
   try {
-    result = await api.runProbeStudy(api.loadStudyFromJson(path), { budget, alpha });
+    result = await api.runProbeStudy(study, { budget, alpha });
   } catch (e) {
     mapProbeError(e, path);
   }

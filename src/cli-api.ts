@@ -116,6 +116,7 @@ export {
   runProbeSearch,
   formatProbeReport,
   loadStudyFromJson,
+  loadStudyFile,
   runProbeStudy,
   formatProbeStudy,
   formatFrontierScan,
