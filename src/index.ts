@@ -226,7 +226,7 @@ export {
 
 // Bridge-evaluator dispatch registry (`upt evaluate`) — id → evaluator.
 export { BRIDGE_EVALUATORS, evaluateBridge } from './bridges/evaluators.js';
-export type { EvaluatorSpec } from './bridges/evaluators.js';
+export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
 
 // v0.14 — `BridgeEquations` convenience facade. A root-level object that gathers
 // every per-bridge `evaluate*()` function under readable method names (1:1
