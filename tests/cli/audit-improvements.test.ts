@@ -88,6 +88,81 @@ describe('I5 — search by law, model, symbol, alias or description; never by eq
   });
 });
 
+/** T/T0 − 1 of the pendulum, independently: T/T0 = 1 / AGM(1, cos(θ0/2)). */
+function pendulumPeriodError(theta0: number): number {
+  let a = 1;
+  let b = Math.cos(theta0 / 2);
+  for (let i = 0; i < 30; i++) [a, b] = [(a + b) / 2, Math.sqrt(a * b)];
+  return 1 / a - 1;
+}
+
+const PENDULUM_SWEEP = ['path', 'model-pendulum', 'model-spring', '--at', 'T0=1', 't=10', '--sweep', 'theta0=0.1:0.8:8'];
+
+describe('I18 — a bounded sweep: each row is the point verdict, and an unclaimed row carries no number', () => {
+  it('pendulum amplitude sweep: the error grows with θ0 and matches the exact period, and stops at the regime edge', async () => {
+    const env = await json(PENDULUM_SWEEP);
+    const rows = env.result.rows;
+    expect(rows).toHaveLength(8);
+    const inside = rows.filter((r: any) => r.value <= 0.5 + 1e-12);
+    expect(inside).toHaveLength(5);
+    for (const r of inside) {
+      expect(r.regime).toBe('holds');
+      expect(r.error).toBeCloseTo(pendulumPeriodError(r.value), 12);
+    }
+    for (let i = 1; i < inside.length; i++) expect(inside[i].error).toBeGreaterThan(inside[i - 1].error);
+    for (const r of rows.slice(5)) {
+      expect(r.regime).toBe('violated');
+      expect(r.error).toBeNull();
+    }
+    expect(env.result.tally).toEqual({ inRegime: 5, outsideRegime: 3, regimeUnknown: 0, pastHorizon: 2 });
+  });
+
+  it('control: inside the regime but past the horizon, the row still carries no error', async () => {
+    const env = await json(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1', '--sweep', 't=1:200:3']);
+    const last = env.result.rows[2];
+    expect(last.regime).toBe('holds');
+    expect(last.horizon).toBe('violated');
+    expect(last.error).toBeNull();
+    expect(last.reason).toMatch(/past the horizon/);
+    expect(env.result.rows[0].error).not.toBeNull();
+  });
+
+  it('KG log sweep covers the low-x region and the violated transition, and says what was evaluated', async () => {
+    const r = await run(['path', 'model-klein-gordon', 'model-schrodinger-free', '--at', 'c=1', 'omega0=1', 't=1', '--sweep', 'k=0.01:1:5:log']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/evaluated: the path's closed-form point bound at each sample .* nothing is integrated and no trajectory is produced/);
+    expect(r.text).toMatch(/\n {2}0\.01 +holds +holds +0\.0000249\d*\n/);
+    expect(r.text).toMatch(/\n {2}1 +violated +holds +— a regime on the path is violated or unchecked\n/);
+  });
+
+  it('a path with no composite claim sweeps its status only; no number appears', async () => {
+    const env = await json(['path', 'model-pendulum', 'model-lc', '--at', 'T0=1', 't=10', '--sweep', 'theta0=0.1:0.4:3']);
+    expect(env.result.kind).toBe('no-claim');
+    expect(env.result.rows.every((r: any) => r.error === null && r.reason === 'no composite claim')).toBe(true);
+  });
+
+  it('--csv writes one header and one line per sample', async () => {
+    const r = await run([...PENDULUM_SWEEP, '--csv']);
+    const lines = r.text.trim().split('\n');
+    expect(lines[0]).toBe('theta0,regime,horizon,error,reason');
+    expect(lines).toHaveLength(9);
+  });
+
+  it('the sweep is bounded and every role is single', async () => {
+    const bad = async (spec: string[], msg: RegExp) => {
+      const r = await run(['path', 'model-pendulum', 'model-spring', ...spec]);
+      expect(r.code).toBe(1);
+      expect(r.text).toMatch(msg);
+    };
+    await bad(['--sweep', 'theta0=0.1:0.5:1'], /integer sample count from 2 to 200/);
+    await bad(['--sweep', 'theta0=0.1:0.5:201'], /integer sample count from 2 to 200/);
+    await bad(['--sweep', 'theta0=0.5:0.1:5'], /finite lo < hi/);
+    await bad(['--sweep', 'theta0=0:1:5:log'], /log-spaced, so lo must be > 0/);
+    await bad(['--at', 'theta0=0.2', '--sweep', 'theta0=0.1:0.5:3'], /'theta0' is both swept and fixed by --at/);
+    await bad(['--at', 'theta0=0.2', '--csv'], /--csv needs --sweep/);
+  });
+});
+
 describe('I11 — discovery readiness by dimension; connectivity alone is not evidence', () => {
   it('the audit example (a ≟ classical-electron-radius) states its premise, its missing inputs and an observation', async () => {
     const { text } = await run(['discover', '--source=canonical']);
