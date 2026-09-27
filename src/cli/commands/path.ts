@@ -34,10 +34,12 @@ const FLAGS: FlagSpec[] = [
   { name: '--at', valueStyle: 'either', repeatable: true },
   { name: '--sweep', valueStyle: 'either' },
   { name: '--csv', valueStyle: 'none' },
+  { name: '--tolerance', valueStyle: 'attached' },
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt path <from> <to> [--at group=value ...] [--sweep name=lo:hi:n[:log]] [--csv] [--json]
+const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=EPS]
+        [--sweep name=lo:hi:n[:log]] [--csv] [--json]
         The chain of bridges from one model to another (across families when
         a bridge ends in another family's model), the relation the chain
         composes to, the composed (K, delta) with the norm it holds in,
@@ -53,6 +55,12 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--sweep name=lo:hi:n[
         integrated. A row outside a regime or past a horizon carries no
         error, because no bound is claimed there. A sweep exits 0: each row is
         its own verdict. --csv writes the rows as CSV.
+        --tolerance=EPS asks whether the path is accurate enough: ADEQUATE only
+        when every regime holds, every horizon holds at the given t, and the
+        closed-form point error is <= EPS; INADEQUATE (exit 3) when any of
+        them fails; UNDETERMINED when the point does not settle it. EPS is in
+        the bound's own norm: no translation to another observable (phase,
+        trajectory, amplitude) is encoded. With --sweep, each row is judged.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
               upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8`;
 
@@ -136,6 +144,39 @@ export function parseSweep(spec: string): { name: string; values: number[]; spac
   return { name, values, spacing };
 }
 
+/** What a tolerance is judged in, and what it is not translated into. */
+const TOLERANCE_SCOPE =
+  "judged in the bound's own norm only; no translation to another observable (phase, trajectory, amplitude) is encoded";
+
+/**
+ * Whether the path is adequate for a requested tolerance at one point: every
+ * regime holds, every horizon holds at the given t, and the closed-form point
+ * error is within it. Anything the point does not settle is `undetermined`,
+ * never `adequate`.
+ * @internal
+ */
+export function judgeTolerance(
+  tolerance: number,
+  e: Evaluation,
+  tGiven: boolean,
+): { verdict: 'adequate' | 'inadequate' | 'undetermined'; reason: string } {
+  if (e.allRegimesHold === false) return { verdict: 'inadequate', reason: 'outside a regime on the path: no bound is claimed' };
+  if (e.allRegimesHold === 'unknown') return { verdict: 'undetermined', reason: 'a regime coordinate was not supplied' };
+  if (e.horizons.length > 0 && !tGiven) return { verdict: 'undetermined', reason: 'no t= given, so the horizon was not evaluated' };
+  if (e.horizons.length > 0 && !e.allHold) return { verdict: 'inadequate', reason: 'past the horizon: the bound is not claimed there' };
+  if (e.pointBound === null) return { verdict: 'undetermined', reason: e.pointBoundReason ?? 'no point bound' };
+  return e.pointBound.delta <= tolerance
+    ? { verdict: 'adequate', reason: `error ${e.pointBound.delta} <= tolerance ${tolerance}` }
+    : { verdict: 'inadequate', reason: `error ${e.pointBound.delta} exceeds tolerance ${tolerance}` };
+}
+
+export function parseTolerance(raw: string | undefined): number | null {
+  if (raw === undefined) return null;
+  const v = Number(raw);
+  if (raw === '' || !Number.isFinite(v) || v <= 0) throw new CliError(`upt path: --tolerance=${raw} must be a finite number > 0`);
+  return v;
+}
+
 type Evaluation = {
   allRegimesHold: boolean | 'unknown';
   horizons: readonly HorizonReport[];
@@ -160,6 +201,7 @@ function runSweep(
     result: { kind: 'bound'; norm?: string | null | undefined; bound: { K: number; delta: number } } | { kind: 'no-claim'; reason: string };
     evaluateAt: (at: Readonly<Record<string, number>>) => Evaluation;
     spec: string;
+    tolerance: number | null;
   },
 ): number {
   const { out, args } = ctx;
@@ -177,7 +219,15 @@ function runSweep(
       error = null;
       reason = 'past the horizon: the bound is not claimed there';
     }
-    return { value, regime, horizon, error, ...(error === null && reason !== null ? { reason } : {}) };
+    const adequacy = s.tolerance === null ? null : judgeTolerance(s.tolerance, e, 't' in s.point || sweep.name === 't').verdict;
+    return {
+      value,
+      regime,
+      horizon,
+      error,
+      ...(error === null && reason !== null ? { reason } : {}),
+      ...(adequacy === null ? {} : { adequacy }),
+    };
   });
   const tally = (k: 'regime' | 'horizon', v: string) => rows.filter((r) => r[k] === v).length;
   const evaluated =
@@ -198,6 +248,7 @@ function runSweep(
           kind: s.result.kind,
           ...(s.result.kind === 'bound' ? { domainSupremum: s.result.bound, norm: s.result.norm } : { reason: s.result.reason }),
           evaluated,
+          ...(s.tolerance === null ? {} : { tolerance: s.tolerance, toleranceScope: TOLERANCE_SCOPE }),
           rows,
           tally: {
             inRegime: tally('regime', 'holds'),
@@ -212,9 +263,12 @@ function runSweep(
     return 0;
   }
   if (args.flags.has('csv')) {
-    ctx.write(`${sweep.name},regime,horizon,error,reason\n`);
+    const tol = s.tolerance !== null;
+    ctx.write(`${sweep.name},regime,horizon,error,${tol ? 'adequacy,' : ''}reason\n`);
     for (const r of rows) {
-      ctx.write(`${r.value},${r.regime},${r.horizon},${r.error ?? ''},"${(r.reason ?? '').replace(/"/g, '""')}"\n`);
+      ctx.write(
+        `${r.value},${r.regime},${r.horizon},${r.error ?? ''},${tol ? `${r.adequacy},` : ''}"${(r.reason ?? '').replace(/"/g, '""')}"\n`,
+      );
     }
     return 0;
   }
@@ -223,9 +277,12 @@ function runSweep(
   out(`  path: ${s.bridges.map((b) => b.id).join(' → ')}`);
   if (s.result.kind === 'bound') out(`  domain supremum: K = ${s.result.bound.K} · delta = ${s.result.bound.delta}`);
   out(`  evaluated: ${evaluated}`);
-  out(`  ${sweep.name.padEnd(12)} ${'regime'.padEnd(10)} ${'horizon'.padEnd(14)} error`);
+  if (s.tolerance !== null) out(`  tolerance: ${s.tolerance}, ${TOLERANCE_SCOPE}`);
+  const tolCol = s.tolerance === null ? '' : `${'adequacy'.padEnd(13)} `;
+  out(`  ${sweep.name.padEnd(12)} ${'regime'.padEnd(10)} ${'horizon'.padEnd(14)} ${tolCol}error`);
   for (const r of rows) {
-    out(`  ${String(Number(r.value.toPrecision(6))).padEnd(12)} ${String(r.regime).padEnd(10)} ${String(r.horizon).padEnd(14)} ${r.error === null ? `— ${r.reason ?? ''}` : r.error}`);
+    const a = r.adequacy === undefined ? '' : `${r.adequacy.padEnd(13)} `;
+    out(`  ${String(Number(r.value.toPrecision(6))).padEnd(12)} ${String(r.regime).padEnd(10)} ${String(r.horizon).padEnd(14)} ${a}${r.error === null ? `— ${r.reason ?? ''}` : r.error}`);
   }
   out(
     `  in regime: ${tally('regime', 'holds')} · outside: ${tally('regime', 'violated')} · unknown: ${tally('regime', 'unknown')} · ` +
@@ -388,17 +445,23 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
     return { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason };
   };
+  const tolValues = args.flags.get('tolerance');
+  const tolerance = parseTolerance(tolValues === undefined ? undefined : tolValues[tolValues.length - 1]);
   const sweepSpec = args.flags.get('sweep');
   if (sweepSpec !== undefined && sweepSpec.length > 0) {
-    return runSweep(ctx, { from, to, point, bridges, result, evaluateAt, spec: sweepSpec[sweepSpec.length - 1]! });
+    return runSweep(ctx, { from, to, point, bridges, result, evaluateAt, spec: sweepSpec[sweepSpec.length - 1]!, tolerance });
   }
   if (args.flags.has('csv')) throw new CliError('upt path: --csv needs --sweep (a single point is not a table)');
 
-  const { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason } = evaluateAt(point);
+  const evaluation = evaluateAt(point);
+  const { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason } = evaluation;
+  const adequacy = tolerance === null ? null : judgeTolerance(tolerance, evaluation, t !== undefined);
 
-  // A violated regime or horizon is a failed check: exit 3 (persona finding F2).
-  // UNKNOWN, where a coordinate or t was not supplied, is not a failure.
-  const exitCode = allRegimesHold === false || (t !== undefined && !allHold) ? EXIT_CHECK_FAILED : 0;
+  // A violated regime or horizon is a failed check: exit 3 (persona finding F2),
+  // and so is a tolerance the point error exceeds. UNKNOWN, where a coordinate
+  // or t was not supplied, is not a failure.
+  const exitCode =
+    allRegimesHold === false || (t !== undefined && !allHold) || adequacy?.verdict === 'inadequate' ? EXIT_CHECK_FAILED : 0;
 
   if (wantJson) {
     emitJson(
@@ -439,6 +502,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           horizons,
           horizonsEvaluated: t !== undefined,
           allHorizonsHold: t === undefined ? null : allHold,
+          ...(adequacy === null ? {} : { tolerance: { value: tolerance, ...adequacy, scope: TOLERANCE_SCOPE } }),
         },
       },
       ctx.write,
@@ -508,6 +572,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     for (const h of horizons) {
       out(`    ${h.bridgeId}: ${h.holds ? 'holds' : 'VIOLATED'} — ${h.horizon}`);
     }
+  }
+  if (adequacy !== null) {
+    out(`  tolerance ${tolerance}: ${adequacy.verdict.toUpperCase()} — ${adequacy.reason}`);
+    out(`    (${TOLERANCE_SCOPE})`);
   }
   out(`  (${EPISTEMICS})`);
   return exitCode;

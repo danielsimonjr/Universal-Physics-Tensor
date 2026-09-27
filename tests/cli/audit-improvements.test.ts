@@ -211,6 +211,49 @@ describe('I9 — uncertainty propagation, kept apart from sensitivity', () => {
   });
 });
 
+const PENDULUM_AT = ['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1'];
+
+describe('I8 — a tolerance is judged in the bound\'s own norm, with regime and horizon first', () => {
+  it('adequate just above the exact error, inadequate (exit 3) just below it', async () => {
+    const exact = pendulumPeriodError(0.2);
+    const above = await run([...PENDULUM_AT, 't=10', `--tolerance=${exact * 1.01}`]);
+    expect(above.code).toBe(0);
+    expect(above.text).toMatch(/tolerance [\d.e-]+: ADEQUATE — error [\d.e-]+ <= tolerance/);
+    const below = await run([...PENDULUM_AT, 't=10', `--tolerance=${exact * 0.99}`]);
+    expect(below.code).toBe(3);
+    expect(below.text).toMatch(/INADEQUATE — error [\d.e-]+ exceeds tolerance/);
+  });
+
+  it('control: just past the horizon the verdict is inadequate even though the error is within tolerance', async () => {
+    const r = await run([...PENDULUM_AT, 't=101', '--tolerance=0.1']);
+    expect(r.code).toBe(3);
+    expect(r.text).toMatch(/INADEQUATE — past the horizon: the bound is not claimed there/);
+    const inside = await run([...PENDULUM_AT, 't=99', '--tolerance=0.1']);
+    expect(inside.code).toBe(0);
+  });
+
+  it('without t the horizon is unevaluated, so the verdict is undetermined, never adequate', async () => {
+    const env = await json([...PENDULUM_AT, '--tolerance=0.1']);
+    expect(env.result.tolerance.verdict).toBe('undetermined');
+    expect(env.result.tolerance.scope).toMatch(/no translation to another observable \(phase, trajectory, amplitude\) is encoded/);
+  });
+
+  it('a sweep with a tolerance marks each row, and the edge falls where the exact error crosses it', async () => {
+    const env = await json(['path', 'model-pendulum', 'model-spring', '--at', 'T0=1', 't=10', '--sweep', 'theta0=0.1:0.8:8', '--tolerance=0.01']);
+    for (const r of env.result.rows) {
+      const expected = r.value > 0.5 + 1e-12 ? 'inadequate' : pendulumPeriodError(r.value) <= 0.01 ? 'adequate' : 'inadequate';
+      expect(r.adequacy).toBe(expected);
+    }
+    expect(env.result.rows.map((r: any) => r.adequacy).filter((a: string) => a === 'adequate')).toHaveLength(3);
+  });
+
+  it('a tolerance that is not a positive number is refused', async () => {
+    const r = await run([...PENDULUM_AT, '--tolerance=0']);
+    expect(r.code).toBe(1);
+    expect(r.text).toMatch(/--tolerance=0 must be a finite number > 0/);
+  });
+});
+
 describe('I16 — a focused map states its denominator', () => {
   it('--around keeps exactly the edges that use the quantity, counted against the whole source', async () => {
     const { CATALOG_GRAPH } = await import('../../dist/cli-api.js');

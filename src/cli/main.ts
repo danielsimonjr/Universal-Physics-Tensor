@@ -210,7 +210,8 @@ Usage:
         a key no record uses is named and ignored.
         e.g.  upt regime oscillators --at theta0=0.2
 
-  upt path <from> <to> [--at group=value ...] [--sweep name=lo:hi:n[:log]] [--csv]
+  upt path <from> <to> [--at group=value ...] [--tolerance=EPS]
+           [--sweep name=lo:hi:n[:log]] [--csv]
         The chain of bridges between two models (across families when a
         bridge ends in another family's model), the relation it composes to,
         the composed (K, delta) with its norm, and whether every bridge's regime
@@ -219,7 +220,9 @@ Usage:
         carries no bound: it prints 'no composite claim', names what composing
         would need, and exits 0. --sweep evaluates the same verdict at 2–200
         samples of one parameter (a row outside a regime or past a horizon
-        carries no error); --csv writes the rows as CSV.
+        carries no error); --csv writes the rows as CSV. --tolerance=EPS judges
+        adequacy in the bound's own norm (exit 3 if inadequate); no translation
+        to another observable, such as phase, is encoded.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
               upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
 
