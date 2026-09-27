@@ -271,6 +271,33 @@ node bin/upt.mjs map --json --format=mermaid
 
 ---
 
+## Session record
+
+`--record=FILE`, placed **before** the command, runs it unchanged (same stdout,
+stderr and exit code) and appends one JSON line to FILE: the arguments as given
+and as parsed, stdout, stderr, their SHA-256, the exit code, and the environment
+— package version, Node version, the active formula parser, whether the MathTS
+simplifier is available, each optional peer's installed version, and the SI
+constant table with its fingerprint. Failed invocations are recorded like the
+others, so a record keeps the attempts that were refused. A `map --out=PATH`
+entry also records the written file's SHA-256.
+
+```bash
+node bin/upt.mjs --record=session.jsonl evaluate be-58 T_K=300 R_ohm=1000
+node bin/upt.mjs --record=session.jsonl eval "ln(x)" x=-1          # exit 2, recorded
+node bin/upt.mjs --show-record=session.jsonl                       # readable transcript
+```
+
+`--show-record=FILE` prints the record as a transcript — the environment, then
+each invocation as `$ upt …` with its exit code and output (`|` stdout, `!`
+stderr) — without running anything; `--show-record=FILE --json` emits the entries
+in the JSON envelope. The file is opened before the command runs, so an
+unwritable path exits `1` without running it. A `--record` after the command is
+that command's (unknown) flag. Design:
+`docs/planning/Experiment-Record-Replay-Design-Note.md`.
+
+---
+
 ## Worked examples
 
 ```bash
@@ -390,6 +417,7 @@ candidates.
 | `--sensitivity` | `confront` | Add the deciding-measurement elasticity ranking for value-kind confrontations (n/a for `upper-bound`/`consistency`/`table`-kind). |
 | `--rigor=<tier>` | `confront` | Filter to one rigor tier (`stringent`/`moderate`/`loose`); a bad tier → exit 1. |
 | `--frontier` | `confront` | Rank the σ-tests by margin to the configured 1σ acceptance threshold (smallest first — most at-risk under new data). The threshold is a software criterion, not a scientific exclusion level. |
+| `--record=FILE`, `--show-record=FILE` | global, before the command | Append the invocation to a JSONL session record; print a record as a transcript. See [Session record](#session-record). |
 | `--at group=value` | `regime`, `path` | State a point in regime coordinates. Repeatable, and bare `group=value` arguments are accepted too, so `--at theta0=0.2 T0=1 t=10` works as written. A malformed or non-finite value → exit 1. |
 
 

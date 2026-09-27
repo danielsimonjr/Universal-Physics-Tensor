@@ -19,18 +19,13 @@ import { UsageError, CliError } from './errors.js';
 import { parseArgs } from './args.js';
 import { packageVersion } from './version.js';
 import { resolveCommand, type CommandCtx } from './command.js';
+import { recordInvocation, showRecord, type Io } from './record.js';
 // Side-effect import: registers every ported command (see commands/index.ts).
 import './commands/index.js';
 
-/** Writer surface `runCli` needs. In production these wrap `process.stdout`/
- * `process.stderr` with exact `console.log`/`console.error` semantics; tests
- * pass a capturing stand-in as the optional second argument. Kept as an
- * unexported inline shape (not part of the CLI's public surface). */
-type Io = {
-  out: (line?: string) => void;
-  err: (line?: string) => void;
-  write: (s: string) => void;
-};
+// `Io` is the writer surface `runCli` needs. In production these wrap
+// `process.stdout`/`process.stderr` with exact `console.log`/`console.error`
+// semantics; tests pass a capturing stand-in as the optional second argument.
 
 function stdoutLine(line?: string): void {
   process.stdout.write((line ?? '') + '\n');
@@ -254,14 +249,67 @@ Run with no arguments for a short demo.
 
   upt version     Show the installed CLI/package version.
   --json          Global flag: emit a machine-readable JSON envelope instead of
-                  text (where the command supports it).`;
+                  text (where the command supports it).
+
+  --record=FILE <command> ...
+                  Run the command unchanged and append one JSONL entry to FILE:
+                  arguments, stdout, stderr, exit code, versions, parser, the
+                  constant table. Failed invocations are recorded too.
+  --show-record=FILE [--json]
+                  Print FILE as a readable transcript, running nothing.`;
+
+const GLOBAL_FILE_OPTION = /^--(record|show-record)(?:=(.*))?$/;
 
 /**
  * Verb-first CLI entry point. `argv` is the command + its arguments (NOT
  * `process.argv` — callers slice off the node/script prefix themselves, as
  * `bin/upt.mjs` did with `process.argv.slice(2)`).
+ *
+ * Leading `--record=FILE` / `--show-record=FILE` are global options (see
+ * `record.ts`); anything else goes to `dispatch` unchanged.
  */
 export async function runCli(argv: string[], io: Io = defaultIo): Promise<number> {
+  const files: Partial<Record<'record' | 'show-record', string>> = {};
+  let json = false;
+  let i = 0;
+  try {
+    for (; i < argv.length; i++) {
+      const m = GLOBAL_FILE_OPTION.exec(argv[i]);
+      if (m) {
+        const name = m[1] as keyof typeof files;
+        if (!m[2]) throw new UsageError(`upt: '--${name}' requires '--${name}=FILE'`);
+        if (files[name] !== undefined) throw new UsageError(`upt: '--${name}' given more than once`);
+        files[name] = m[2];
+      } else if (argv[i] === '--json' && files['show-record'] !== undefined) {
+        json = true;
+      } else {
+        break;
+      }
+    }
+    if (i === 0) return await dispatch(argv, io);
+    const rest = argv.slice(i);
+    if (Object.keys(files).length > 1) {
+      throw new UsageError('upt: use one of --record and --show-record at a time');
+    }
+    if (files.record !== undefined) return await recordInvocation(files.record, rest, dispatch, io, api);
+    if (rest.length > 0) {
+      throw new UsageError(`upt: '--show-record' takes no command (got '${rest[0]}')`);
+    }
+    return showRecord(files['show-record']!, json, io);
+  } catch (e) {
+    if (e instanceof UsageError) {
+      io.err(e.message);
+      return 2;
+    }
+    if (e instanceof CliError) {
+      io.err(e.message);
+      return 1;
+    }
+    throw e;
+  }
+}
+
+async function dispatch(argv: string[], io: Io): Promise<number> {
   const { out, err, write } = io;
 
   try {

@@ -201,3 +201,10 @@ Run with no arguments for a short demo.
   upt version     Show the installed CLI/package version.
   --json          Global flag: emit a machine-readable JSON envelope instead of
                   text (where the command supports it).
+
+  --record=FILE <command> ...
+                  Run the command unchanged and append one JSONL entry to FILE:
+                  arguments, stdout, stderr, exit code, versions, parser, the
+                  constant table. Failed invocations are recorded too.
+  --show-record=FILE [--json]
+                  Print FILE as a readable transcript, running nothing.

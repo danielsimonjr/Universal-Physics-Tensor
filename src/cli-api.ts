@@ -79,7 +79,7 @@ export { auditAxisDiscrimination } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';
 export { AXES } from './composition/axes.js';
 export type { AxisSpec } from './composition/axes.js';
-export { simplifyObservable } from './composition/expr-simplify.js';
+export { simplifyObservable, isSimplifierAvailable } from './composition/expr-simplify.js';
 export {
   CANONICAL_EQUATIONS,
   bridgesWithoutCanonicalPartner,
