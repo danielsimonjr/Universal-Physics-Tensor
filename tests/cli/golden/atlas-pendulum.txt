@@ -35,6 +35,16 @@ formal reference:
   version physlib@5ad56e24de155462acd8478458292347393d5908 lean4:v4.34.0; axioms propext, Classical.choice, Quot.sound
   fidelity: sanity-lemmas
   covers: the statement above ONLY — not the bound, regime or side conditions unless it says so
+evidence by claim (derived from the record's structure):
+  correspondence: formal reference lean4-physlib, fidelity sanity-lemmas — covers its statement only
+  regime: 1 machine inequality — check a point with `upt regime oscillators --at …`
+  bound: basis closed-form (deltaAt is the exact error); the formal reference is not attributed to it
+  horizon: machine form recorded; the formal reference is not attributed to it
+  preserves: no evidence is attributed to a preserved property
+witness execution (the record does not attribute a witness to a claim):
+  - W7 [numeric]: result not observed by this command — its repository test file: bunx vitest run tests/atlas/oscillators-limits.test.ts
+  - W7b [numeric]: result not observed by this command — its repository test file: bunx vitest run tests/atlas/oscillators-limits.test.ts
+  - W7c [numeric]: result not observed by this command — its repository test file: bunx vitest run tests/atlas/oscillators-limits.test.ts
 citations:
   - Landau & Lifshitz, Mechanics §11 (pendulum period as a complete elliptic integral)
   - Abramowitz & Stegun §17.6 (AGM evaluation of K)

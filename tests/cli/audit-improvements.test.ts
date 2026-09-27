@@ -153,6 +153,52 @@ describe('I14 — each confrontation names its statistical object, criterion and
   });
 });
 
+describe('I15 — evidence by claim, and a witness name is not its result', () => {
+  it('pendulum: the correspondence is formally referenced; bound and horizon keep their own evidence', async () => {
+    const { text } = await run(['atlas', 'ab-pendulum-linear']);
+    const s = text.slice(text.indexOf('evidence by claim'));
+    expect(s).toMatch(/^evidence by claim \(derived from the record's structure\):\n/);
+    expect(s).toMatch(/\n {2}correspondence: formal reference lean4-physlib, fidelity sanity-lemmas — covers its statement only/);
+    expect(s).toMatch(/\n {2}bound: basis closed-form \(deltaAt is the exact error\); the formal reference is not attributed to it/);
+    expect(s).toMatch(/\n {2}horizon: machine form recorded; the formal reference is not attributed to it/);
+    expect(s).toMatch(/\n {2}regime: 1 machine inequality — check a point with `upt regime oscillators --at …`/);
+    expect(s).toMatch(/\n {2}preserves: no evidence is attributed to a preserved property/);
+    expect(s).toMatch(/\nwitness execution \(the record does not attribute a witness to a claim\):\n {2}- W7 \[numeric\]: result not observed by this command — its repository test file: bunx vitest run tests\/atlas\/oscillators-limits\.test\.ts\n/);
+    expect(s).not.toMatch(/W7.*checked/);
+  });
+
+  it('--run executes the registered witnesses and reports each status; exit 0 when none is refuted', async () => {
+    const r = await run(['atlas', 'ab-walk-diffusion', '--run']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/\n {2}- WD1 \[numeric\]: checked \(run now\) — Fine error .* within tolerance/);
+    expect(r.text).toMatch(/witnesses run: 1 checked · 0 refuted · 0 unresolved/);
+  });
+
+  it('--run on a bridge with no registered witness says so rather than reporting a pass', async () => {
+    const r = await run(['atlas', 'ab-pendulum-linear', '--run']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/witnesses run: none — no witness of ab-pendulum-linear is registered to run in-process/);
+  });
+
+  it('control: a refuted result is counted as refuted, never merged with unresolved, and fails the check', async () => {
+    const { summarizeWitnessRuns } = await import('../../dist/cli/commands/atlas.js');
+    const s = summarizeWitnessRuns([
+      { witnessId: 'X1', kind: 'numeric', status: 'refuted', detail: 'off' },
+      { witnessId: 'X2', kind: 'symbolic', status: 'unresolved', reason: 'peer-absent', detail: 'no peer' },
+      { witnessId: 'X3', kind: 'numeric', status: 'checked', detail: 'ok' },
+    ]);
+    expect(s).toEqual({ checked: 1, refuted: 1, unresolved: 1, exitCode: 3 });
+    expect(summarizeWitnessRuns([{ witnessId: 'X2', kind: 'symbolic', status: 'unresolved', reason: 'peer-absent', detail: '' }]).exitCode).toBe(0);
+  });
+
+  it('--json carries the claims and the per-witness execution status', async () => {
+    const env = await json(['atlas', 'ab-pendulum-linear']);
+    expect(env.result.claims.correspondence.formalReference.fidelity).toBe('sanity-lemmas');
+    expect(env.result.claims.bound.basis).toBe('closed-form');
+    expect(env.result.witnessExecution.map((w: any) => w.status)).toEqual(['not-observed', 'not-observed', 'not-observed']);
+  });
+});
+
 const STOKES_AT = ['--at', 'Re=0.05', 'm=1e-15', 'gamma=1e-8', 't=1'];
 
 describe('I7 — a premise checklist: machine-checked, declared by you, denied by you, unspecified', () => {

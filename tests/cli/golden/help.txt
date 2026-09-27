@@ -161,11 +161,13 @@ Usage:
         would need, and exits 0.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
 
-  upt atlas [<bridge-id>]
+  upt atlas [<bridge-id>] [--run]
         One atlas bridge with EVERY qualification visible: relation, side
         conditions, regime, bound and horizon, witnesses, counterexamples and
-        formal reference. Empty sections print as "none stated". With no id,
-        lists every bridge of every family.
+        formal reference. Empty sections print as "none stated". Evidence is
+        shown by claim, and each witness with its execution status; --run
+        executes the in-process registered witnesses (exit 3 if refuted).
+        With no id, lists every bridge of every family.
         e.g.  upt atlas ab-pendulum-linear
 
   upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>

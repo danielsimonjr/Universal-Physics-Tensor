@@ -165,6 +165,8 @@ export type { CandidateGrounding, CandidateReadiness } from './composition/groun
 export { OSCILLATOR_FAMILY } from './atlas/oscillators/index.js';
 export { ATLAS_FAMILIES } from './atlas/families.js';
 export { deriveEvidence, NO_PASSING_WITNESSES } from './atlas/derive-evidence.js';
+export { runWitnessRegistry } from './atlas/witness-artifact.js';
+export { WITNESS_REGISTRY } from './atlas/witness-specs.js';
 export type { AtlasFamily } from './atlas/oscillators/index.js';
 export { regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
