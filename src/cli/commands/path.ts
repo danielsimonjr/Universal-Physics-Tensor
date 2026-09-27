@@ -29,6 +29,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
+import { missingForComposite, routeClaim, selectRoute } from './_atlas-route.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--at', valueStyle: 'either', repeatable: true },
@@ -84,40 +85,6 @@ interface HorizonReport {
   bridgeId: string;
   horizon: string;
   holds: boolean | null;
-}
-
-/**
- * What a `no-composite-claim` path lacks, stated as requirements rather than
- * supplied. The first silent table cell is named; then every exact map after a
- * bound, which states no norm and so records nothing about carrying that
- * bound's quantity through its mapping. Nothing here widens the table.
- */
-function missingForComposite(
-  api: CommandCtx['api'],
-  bridges: readonly import('../../cli-api.js').AtlasBridge[],
-): string[] {
-  const missing: string[] = [];
-  let relation: import('../../cli-api.js').AtlasBridge['relation'] = bridges[0]!.relation;
-  for (let i = 1; i < bridges.length; i++) {
-    const next = bridges[i]!;
-    const composed = api.composeRelation(relation, next.relation);
-    if (composed === 'no-composite-claim') {
-      missing.push(
-        `a composition-table cell for ${relation} then ${next.relation} (silent by design; widening it is a ` +
-          'reviewed act, docs/planning/Atlas-Phase-1-Design.md §2.2)',
-      );
-      break;
-    }
-    relation = composed;
-  }
-  let norm: string | undefined;
-  for (const b of bridges) {
-    if (b.bound !== undefined) norm = b.bound.norm;
-    else if (b.relation === 'exact-equivalence' && norm !== undefined) {
-      missing.push(`'${b.id}' to state that it carries '${norm}' through its mapping (it states no norm)`);
-    }
-  }
-  return missing;
 }
 
 const MAX_SAMPLES = 200;
@@ -308,33 +275,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   const point = parseAt(assignments, 'path');
   const t = point['t'];
 
-  // Endpoints in one family are searched in that family first, so a route
-  // that exists inside it is the one reported. Endpoints in different
-  // families, or a same-family pair with no route inside it, are searched
-  // across the whole atlas: a family is a filing label, and a bridge such as
-  // ab-kg-schrodinger (waves → diffusion) is as qualified as any other.
-  const familyOf = (id: string): string | undefined =>
-    api.ATLAS_FAMILIES.find((f) => f.models.some((m) => m.id === id))?.family;
   const bridgeFamily = (id: string): string | undefined =>
     api.ATLAS_FAMILIES.find((f) => f.bridges.some((b) => b.id === id))?.family;
-  const fromFamily = familyOf(from);
-  const toFamily = familyOf(to);
-  const family = fromFamily ?? toFamily ?? api.ATLAS_FAMILIES[0]!.family;
-
-  let bridges: readonly import('../../cli-api.js').AtlasBridge[] | null;
-  try {
-    if (fromFamily !== undefined && toFamily !== undefined) {
-      bridges = fromFamily === toFamily ? api.findPath(family, from, to) : null;
-      bridges ??= api.findAtlasPath(from, to);
-    } else {
-      bridges = api.findPath(family, from, to);
-    }
-  } catch (e) {
-    // RangeError: an unknown endpoint. Reported as a CliError (exit 1) rather
-    // than surfaced as a crash — and NOT as `null`, which would be
-    // indistinguishable from a genuinely disconnected pair.
-    throw new CliError(`upt path: ${e instanceof Error ? e.message : String(e)}`);
-  }
+  const { bridges, fromFamily, toFamily } = selectRoute(api, from, to, 'path');
 
   if (bridges === null) {
     if (wantJson) {
@@ -362,26 +305,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  // boundPath throws, rather than inventing a constant, when a step with no
-  // Lipschitz constant is followed by another (ab-kg-oscillator then
-  // ab-spring-lc). For this command that is a refusal like any other.
-  let result:
-    | ReturnType<typeof api.boundPath>
-    | { kind: 'no-claim'; reason: 'missing-lipschitz'; detail: string };
-  try {
-    result = api.boundPath(bridges);
-  } catch (e) {
-    if (!(e instanceof api.MissingLipschitzError)) throw e;
-    const unbounded = bridges.slice(0, -1).find((b) => b.bound === undefined && b.relation !== 'exact-equivalence');
-    result = {
-      kind: 'no-claim',
-      reason: 'missing-lipschitz',
-      detail:
-        `'${unbounded?.id ?? '?'}' (${unbounded?.relation ?? '?'}) states no Lipschitz constant and is not the ` +
-        'last step, so the error after it is unbounded and the path carries no bound',
-    };
-  }
-
+  const result = routeClaim(api, bridges);
   const missing = result.kind === 'no-claim' && result.reason === 'no-composite-claim' ? missingForComposite(api, bridges) : [];
 
   const evaluateAt = (at: Readonly<Record<string, number>>) => {
