@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 352,
+    "totalFiles": 354,
     "totalModules": 11,
-    "totalExports": 2503
+    "totalExports": 2508
   },
   "entryPoints": [
     {
@@ -7667,6 +7667,37 @@
         "constants": [
           "BRANE_FRIEDMANN_RHS",
           "BE54_BRANE_FRIEDMANN_STRUCTURAL"
+        ]
+      },
+      "src/bridges/evaluator-inputs.ts": {
+        "description": "`key=value[unit]` arguments → an evaluator's numeric inputs, through the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "convertValue",
+              "UnitError",
+              "TemperatureReading"
+            ]
+          },
+          {
+            "file": "./evaluators.js",
+            "imports": [
+              "EvaluatorParameter"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "resolveEvaluatorInputs"
+        ],
+        "interfaces": [
+          "ResolvedInput"
+        ],
+        "functions": [
+          "resolveEvaluatorInputs"
         ]
       },
       "src/bridges/evaluators.ts": {
@@ -19315,6 +19346,53 @@
           "NAMED_DIMENSIONS"
         ]
       },
+      "src/dimensional/units.ts": {
+        "description": "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./algebra.js",
+            "imports": [
+              "equals",
+              "format",
+              "multiply",
+              "power"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI",
+              "M_SUN_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "parseUnit",
+          "convertValue",
+          "unitDimension",
+          "UnitError"
+        ],
+        "classes": [
+          "UnitError"
+        ],
+        "interfaces": [
+          "ParsedUnit"
+        ],
+        "functions": [
+          "parseUnit",
+          "convertValue",
+          "unitDimension"
+        ]
+      },
       "src/dimensional/validator-registry.ts": {
         "description": "Validator registry for curvature- and GR-object node kinds.",
         "externalDependencies": [],
@@ -24155,6 +24233,7 @@
           "src/bridges/equations/be-50-wheeler-feynman.ts",
           "src/bridges/equations/be-53-yang-mills-beta.ts",
           "src/bridges/equations/be-54-randall-sundrum-brane.ts",
+          "src/bridges/evaluator-inputs.ts",
           "src/bridges/evaluators.ts",
           "src/bridges/gravitational-lensing.ts",
           "src/bridges/index.ts",
@@ -24366,6 +24445,7 @@
           "src/dimensional/tensor-trace.ts",
           "src/dimensional/tensor.ts",
           "src/dimensional/types.ts",
+          "src/dimensional/units.ts",
           "src/dimensional/validator-registry.ts",
           "src/dimensional/validator.ts",
           "src/dimensional/weyl-validators.ts"
@@ -24424,21 +24504,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 352,
+    "totalTypeScriptFiles": 354,
     "totalModules": 11,
-    "totalLinesOfCode": 72252,
-    "totalExports": 2503,
-    "totalClasses": 58,
-    "totalInterfaces": 366,
-    "totalFunctions": 576,
+    "totalLinesOfCode": 72488,
+    "totalExports": 2508,
+    "totalClasses": 59,
+    "totalInterfaces": 368,
+    "totalFunctions": 580,
     "totalTypeGuards": 4,
     "totalEnums": 0,
     "totalConstants": 610,
     "totalReExports": 1258,
-    "totalTypeOnlyImports": 492,
+    "totalTypeOnlyImports": 494,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 6
+    "unusedExportsCount": 7
   }
 }

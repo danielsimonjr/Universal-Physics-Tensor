@@ -37,14 +37,14 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 54 files
-- **bridges**: 89 files
+- **bridges**: 90 files
 - **canonical**: 18 files
 - **cli**: 32 files
 - **root**: 1 file
 - **composition**: 73 files
 - **core**: 11 files
 - **diff**: 3 files
-- **dimensional**: 31 files
+- **dimensional**: 32 files
 - **entry**: 1 file
 - **numerical**: 39 files
 
@@ -2331,6 +2331,20 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `evaluateRandallSundrumH2`, `validateBraneFriedmannDimensions`
 - Constants: `BRANE_FRIEDMANN_RHS`, `BE54_BRANE_FRIEDMANN_STRUCTURAL`
+
+---
+
+### `src/bridges/evaluator-inputs.ts` - `key=value[unit]` arguments → an evaluator's numeric inputs, through the
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/units.js` | `convertValue, UnitError, TemperatureReading` | Import |
+| `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `ResolvedInput`
+- Functions: `resolveEvaluatorInputs`
 
 ---
 
@@ -5518,6 +5532,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/units.ts` - Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./algebra.js` | `equals, format, multiply, power` | Import |
+| `./types.js` | `Dimension` | Import (type-only) |
+| `../core/constants.js` | `E_SI, M_SUN_SI` | Import |
+
+**Exports:**
+- Classes: `UnitError`
+- Interfaces: `ParsedUnit`
+- Functions: `parseUnit`, `convertValue`, `unitDimension`
+
+---
+
 ### `src/dimensional/validator-registry.ts` - Validator registry for curvature- and GR-object node kinds.
 
 **Internal Dependencies:**
@@ -6544,7 +6574,7 @@ graph TD
         N8[be23-planckian-confrontation]
         N9[be35-bootstrap-confrontation]
         N10[be36-gw170817-confrontation]
-        N11[...84 more]
+        N11[...85 more]
     end
 
     subgraph Canonical
@@ -6599,7 +6629,7 @@ graph TD
         N42[ast-types]
         N43[bridge-check]
         N44[buckingham]
-        N45[...26 more]
+        N45[...27 more]
     end
 
     subgraph Entry
@@ -6653,17 +6683,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 352 |
+| Total TypeScript Files | 354 |
 | Total Modules | 11 |
-| Total Lines of Code | 72252 |
-| Total Exports | 2503 |
+| Total Lines of Code | 72488 |
+| Total Exports | 2508 |
 | Total Re-exports | 1258 |
-| Total Classes | 58 |
-| Total Interfaces | 366 |
-| Total Functions | 576 |
+| Total Classes | 59 |
+| Total Interfaces | 368 |
+| Total Functions | 580 |
 | Total Type Guards | 4 |
 | Total Enums | 0 |
-| Type-only Imports | 492 |
+| Type-only Imports | 494 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 6
+- **Potentially unused exports**: 7
 
 ## Potentially Unused Files
 
@@ -37,4 +37,8 @@ These exports are not imported by any other file in the codebase:
 ### `src/atlas/poster/statements.ts`
 
 - `POSTER_5_IDENTIFICATION_NOTE` (constant)
+
+### `src/dimensional/units.ts`
+
+- `unitDimension` (function)
 
