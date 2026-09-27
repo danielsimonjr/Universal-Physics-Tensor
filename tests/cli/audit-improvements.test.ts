@@ -512,7 +512,8 @@ describe('I14 — each confrontation names its statistical object, criterion and
     expect(rec('be-37')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: as reported by the source \(no derivation recorded\)/);
     expect(rec('be-51')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: derived from PPN γ/);
     expect(rec('be-48')).toMatch(/\n {4}statistic: one-sided upper limit · criterion: predicted ≤ limit/);
-    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: none — the gap is a fractional difference, not a σ-residual; not a precision test/);
+    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: none — the outcome carries no agreement bound; the difference is reported, not thresholded; not a precision test/);
+    expect(rec('be-65')).toMatch(/\n {4}statistic: reference value with no σ · criterion: \|actual difference\| ≤ the record's stated agreement bound — a tolerance, not a σ-residual; not a precision test/);
   });
 
   it('the notes (preprocessing, independence, circularity) are printed, not left in the JSON only', async () => {
@@ -552,6 +553,8 @@ describe('I14 — each confrontation names its statistical object, criterion and
       expect(lines, `be-${id} ${field}`).toHaveLength(1);
       return lines[0].slice(`    ${field}: `.length);
     };
+    const src = (refs: any[]) =>
+      `[source: ${refs.map((q) => (q.quote !== undefined ? `${q.file} "${q.quote}"` : `${q.file} #${q.symbol}`)).join('; ')}]`;
     let notRecorded = 0;
     for (const r of env.result) {
       const pre = lineOf(r.bridgeId, 'preprocessing');
@@ -559,7 +562,7 @@ describe('I14 — each confrontation names its statistical object, criterion and
         notRecorded++;
         expect(pre, `be-${r.bridgeId}`).toBe(NOT_RECORDED);
       } else {
-        expect(pre, `be-${r.bridgeId}`).toBe(`${r.preprocessing.statement} [source: ${r.preprocessing.source}]`);
+        expect(pre, `be-${r.bridgeId}`).toBe(`${r.preprocessing.statement} ${src(r.preprocessing.source)}`);
       }
       const ind = lineOf(r.bridgeId, 'independence');
       const i = r.independence;
@@ -567,10 +570,10 @@ describe('I14 — each confrontation names its statistical object, criterion and
         notRecorded++;
         expect(ind, `be-${r.bridgeId}`).toBe(NOT_RECORDED);
       } else if (i.state === 'shares-input') {
-        expect(ind, `be-${r.bridgeId}`).toBe(`shares ${i.shared} — ${i.statement} [source: ${i.source}]`);
+        expect(ind, `be-${r.bridgeId}`).toBe(`shares ${i.shared} — ${i.statement} ${src(i.source)}`);
       } else {
         expect(i.state).toBe('no-fitted-parameter');
-        expect(ind, `be-${r.bridgeId}`).toBe(`no parameter fitted to this measurement — ${i.statement} [source: ${i.source}]`);
+        expect(ind, `be-${r.bridgeId}`).toBe(`no parameter fitted to this measurement — ${i.statement} ${src(i.source)}`);
       }
     }
     // Both states must occur, or the not-recorded branch above proves nothing.
