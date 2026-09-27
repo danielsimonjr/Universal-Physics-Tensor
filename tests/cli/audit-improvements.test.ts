@@ -454,6 +454,77 @@ describe('I14 — each confrontation names its statistical object, criterion and
       `by statistic: ${count('value')} σ-residual tests · ${count('upper-bound')} limits · ${count('consistency')} consistency ratios (no σ; never counted as precision tests)`,
     );
   });
+
+  const NOT_RECORDED = 'not recorded — the record states nothing on this; that is not "none"';
+
+  it('every record prints preprocessing and independence; a not-recorded field is printed as not recorded, never as a statement', async () => {
+    const env = await json(['confront']);
+    const { text } = await run(['confront']);
+    const lineOf = (id: number, field: string) => {
+      const start = text.indexOf(`\n  be-${id} [`);
+      expect(start, `be-${id} block`).toBeGreaterThan(-1);
+      const next = text.indexOf('\n  be-', start + 1);
+      const blockText = text.slice(start, next === -1 ? undefined : next);
+      const lines = blockText.split('\n').filter((l) => l.startsWith(`    ${field}: `));
+      expect(lines, `be-${id} ${field}`).toHaveLength(1);
+      return lines[0].slice(`    ${field}: `.length);
+    };
+    let notRecorded = 0;
+    for (const r of env.result) {
+      const pre = lineOf(r.bridgeId, 'preprocessing');
+      if (r.preprocessing.state === 'not-recorded') {
+        notRecorded++;
+        expect(pre, `be-${r.bridgeId}`).toBe(NOT_RECORDED);
+      } else {
+        expect(pre, `be-${r.bridgeId}`).toBe(`${r.preprocessing.statement} [source: ${r.preprocessing.source}]`);
+      }
+      const ind = lineOf(r.bridgeId, 'independence');
+      const i = r.independence;
+      if (i.state === 'not-recorded') {
+        notRecorded++;
+        expect(ind, `be-${r.bridgeId}`).toBe(NOT_RECORDED);
+      } else if (i.state === 'shares-input') {
+        expect(ind, `be-${r.bridgeId}`).toBe(`shares ${i.shared} — ${i.statement} [source: ${i.source}]`);
+      } else {
+        expect(i.state).toBe('no-fitted-parameter');
+        expect(ind, `be-${r.bridgeId}`).toBe(`no parameter fitted to this measurement — ${i.statement} [source: ${i.source}]`);
+      }
+    }
+    // Both states must occur, or the not-recorded branch above proves nothing.
+    expect(notRecorded).toBeGreaterThan(0);
+    expect(env.result.some((r: any) => r.preprocessing.state === 'recorded')).toBe(true);
+  });
+
+  it('recorded and not-recorded are counted apart, and the counts are recounted from --json', async () => {
+    const env = await json(['confront']);
+    const pre = (s: string) => env.result.filter((r: any) => r.preprocessing.state === s).length;
+    const ind = (s: string) => env.result.filter((r: any) => r.independence.state === s).length;
+    expect(env.dataHandlingDistribution).toEqual({
+      preprocessing: { recorded: pre('recorded'), notRecorded: pre('not-recorded') },
+      independence: {
+        noFittedParameter: ind('no-fitted-parameter'),
+        sharesInput: ind('shares-input'),
+        notRecorded: ind('not-recorded'),
+      },
+    });
+    expect(pre('recorded') + pre('not-recorded')).toBe(env.result.length);
+    expect(ind('no-fitted-parameter') + ind('shares-input') + ind('not-recorded')).toBe(env.result.length);
+    const { text } = await run(['confront']);
+    expect(text).toContain(
+      `preprocessing: recorded for ${pre('recorded')} · not recorded for ${pre('not-recorded')}; ` +
+        `independence: ${ind('no-fitted-parameter')} no fitted parameter · ${ind('shares-input')} share an input · ` +
+        `${ind('not-recorded')} not recorded (independence is not goodness of fit)`,
+    );
+  });
+
+  it('be-61 and be-51 name what their observed value shares with the prediction', async () => {
+    const env = await json(['confront']);
+    const rec = (id: number) => env.result.find((r: any) => r.bridgeId === id);
+    expect(rec(61).approaches).toBe(rec(61).predicted);
+    expect(rec(61).independence.state).toBe('shares-input');
+    expect(rec(51).measured.quantity).toBe('PPN γ');
+    expect(rec(51).independence.state).toBe('shares-input');
+  });
 });
 
 describe('I15 — evidence by claim, and a witness name is not its result', () => {
