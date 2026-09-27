@@ -55,6 +55,7 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   ['ohm', [1, D({ L: 2, M: 1, T: -3, I: -2 }), true]],
   ['Ω', [1, D({ L: 2, M: 1, T: -3, I: -2 }), true]],
   ['S', [1, D({ L: -2, M: -1, T: 3, I: 2 }), true]],
+  ['F', [1, D({ L: -2, M: -1, T: 4, I: 2 }), true]],
   ['eV', [E_SI, JOULE, true]],
   ['rad', [1, DIMENSIONLESS, true]],
   ['deg', [Math.PI / 180, DIMENSIONLESS, false]],

@@ -21,6 +21,12 @@ describe('parseUnit', () => {
     expect(parseUnit('yr').scale).toBe(31557600);
   });
 
+  it('the farad is C/V: 10pF converts to 1e-11 F, and a pF is not a Fahrenheit', () => {
+    expect(parseUnit('F').dim).toEqual(parseUnit('C/V').dim);
+    expect(convertValue('10pF', 'F').value).toBeCloseTo(1e-11, 24);
+    expect(convertValue('1 fF', 'C/V').value).toBeCloseTo(1e-15, 28);
+  });
+
   it('an exact symbol wins over a prefix reading: min, Pa and mm', () => {
     expect(parseUnit('min')).toMatchObject({ scale: 60, dim: { T: 1 } });
     expect(parseUnit('Pa').scale).toBe(1);
