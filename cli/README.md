@@ -271,6 +271,62 @@ node bin/upt.mjs map --json --format=mermaid
 
 ---
 
+## Session record
+
+`--record=FILE`, placed **before** the command, runs it unchanged (same stdout,
+stderr and exit code) and appends one JSON line to FILE: the arguments as given
+and as parsed, stdout, stderr, their SHA-256, the exit code, and the environment
+— package version, Node version, the active formula parser, whether the MathTS
+simplifier is available, each optional peer's installed version, and the SI
+constant table with its fingerprint. Failed invocations are recorded like the
+others, so a record keeps the attempts that were refused. A `map --out=PATH`
+entry also records the written file's SHA-256.
+
+```bash
+node bin/upt.mjs --record=session.jsonl evaluate be-58 T_K=300 R_ohm=1000
+node bin/upt.mjs --record=session.jsonl eval "ln(x)" x=-1          # exit 2, recorded
+node bin/upt.mjs --show-record=session.jsonl                       # readable transcript
+```
+
+`--show-record=FILE` prints the record as a transcript — the environment, then
+each invocation as `$ upt …` with its exit code and output (`|` stdout, `!`
+stderr) — without running anything; `--show-record=FILE --json` emits the entries
+in the JSON envelope. The file is opened before the command runs, so an
+unwritable path exits `1` without running it. A `--record` after the command is
+that command's (unknown) flag. Design:
+`docs/planning/Experiment-Record-Replay-Design-Note.md`.
+
+`--replay=FILE [--json]` re-runs every entry in-process and compares exit code,
+stdout and stderr byte for byte. Each entry is exactly one of:
+
+- **reproduced** — all three identical;
+- **differs** — the differing streams are named, each with its first differing
+  line, recorded and replayed;
+- **not replayable** — not re-run, with the reason: an unreadable line, a
+  `map --out=PATH` (replaying would overwrite the file), or a `probe` subverb
+  other than `scan`/`show` (a wall-clock budget and files the record does not
+  capture — `upt probe reproduce` is that workflow's replay).
+
+Beside the outcome, replay names every environment fact that changed since
+recording (`uptVersion`, `node`, `formulaParser`, `simplifier`, `peer <name>`,
+`constant <NAME>`, `constantsSha256`), and flags a record edited after it was
+written (a stream or constant table that no longer matches its recorded hash). It
+names what changed; it does not claim the change caused a difference. Exit `0`
+when every entry reproduced under an unchanged environment with no edit found,
+`3` when any entry differs, `1` otherwise (not replayable, changed environment,
+edited record, missing or empty file).
+
+```bash
+node bin/upt.mjs --replay=session.jsonl
+# [line 1] $ upt evaluate be-58 T_K=300 R_ohm=1000
+#     reproduced — exit 0, stdout and stderr identical
+# [line 2] $ upt eval 'ln(x)' x=-1
+#     reproduced — exit 2, stdout and stderr identical
+# summary: 2 reproduced, 0 differ, 0 not replayable; environment changed for 0 of 2; 0 integrity findings
+```
+
+---
+
 ## Worked examples
 
 ```bash
@@ -390,6 +446,7 @@ candidates.
 | `--sensitivity` | `confront` | Add the deciding-measurement elasticity ranking for value-kind confrontations (n/a for `upper-bound`/`consistency`/`table`-kind). |
 | `--rigor=<tier>` | `confront` | Filter to one rigor tier (`stringent`/`moderate`/`loose`); a bad tier → exit 1. |
 | `--frontier` | `confront` | Rank the σ-tests by margin to the configured 1σ acceptance threshold (smallest first — most at-risk under new data). The threshold is a software criterion, not a scientific exclusion level. |
+| `--record=FILE`, `--show-record=FILE`, `--replay=FILE` | global, before the command | Append the invocation to a JSONL session record; print a record as a transcript; re-run a record and report each entry reproduced / differs / not replayable. See [Session record](#session-record). |
 | `--at group=value` | `regime`, `path` | State a point in regime coordinates. Repeatable, and bare `group=value` arguments are accepted too, so `--at theta0=0.2 T0=1 t=10` works as written. A malformed or non-finite value → exit 1. |
 
 
@@ -421,7 +478,7 @@ rather than as not matching.
 | `0` | Success. |
 | `1` | Bad `--source`/`--format` value, empty `--out=`, an invalid or unregistered `confront --bridge` value, an unknown `regime` family, an unknown `path` model id, an `explain` name that is not a quantity of the graph (NOT COVERED), a malformed `--at` assignment, the optional SVG renderer is missing, or the built package could not be loaded. **A `path` that carries no composite claim is NOT an error — it exits 0.** |
 | `2` | Usage error: missing required argument, parse error, unknown command, an **unknown/mistyped flag** (e.g. `--sourc=canonical`), a malformed or dimensionally non-homogeneous `--equation`, or combining `--json` with `map --format=mermaid\|dot\|svg`. |
-| `3` | **The command ran and its check came out negative** (since 0.47.0): `derive --formula` whose dimension differs from the target, that does not match the dimensional monomial, or that differs from the canonical equation by a factor or in form; `map --equation` with a dimension mismatch (every name resolved) or a canonical difference; `path` with a violated regime or horizon at the `--at` point. An UNKNOWN result, where a coordinate was not supplied or a name did not resolve, is not a failure and exits `0`. So does a survey command such as `regime`, whose report may list violated records. |
+| `3` | **The command ran and its check came out negative** (since 0.47.0): `derive --formula` whose dimension differs from the target, that does not match the dimensional monomial, or that differs from the canonical equation by a factor or in form; `map --equation` with a dimension mismatch (every name resolved) or a canonical difference; `path` with a violated regime or horizon at the `--at` point; `--replay` with an entry whose output differs from the record. An UNKNOWN result, where a coordinate was not supplied or a name did not resolve, is not a failure and exits `0`. So does a survey command such as `regime`, whose report may list violated records. |
 
 ---
 

@@ -21,6 +21,12 @@ describe('parseUnit', () => {
     expect(parseUnit('yr').scale).toBe(31557600);
   });
 
+  it('the farad is C/V: 10pF converts to 1e-11 F, and a pF is not a Fahrenheit', () => {
+    expect(parseUnit('F').dim).toEqual(parseUnit('C/V').dim);
+    expect(convertValue('10pF', 'F').value).toBeCloseTo(1e-11, 24);
+    expect(convertValue('1 fF', 'C/V').value).toBeCloseTo(1e-15, 28);
+  });
+
   it('an exact symbol wins over a prefix reading: min, Pa and mm', () => {
     expect(parseUnit('min')).toMatchObject({ scale: 60, dim: { T: 1 } });
     expect(parseUnit('Pa').scale).toBe(1);
@@ -49,6 +55,15 @@ describe('convertValue', () => {
     expect(convertValue('25degC', 'K', 'absolute').value).toBeCloseTo(298.15, 12);
     expect(convertValue('25degC', 'K', 'difference').value).toBe(25);
     expect(convertValue('25 K', 'K', 'difference').value).toBe(25);
+  });
+
+  it('an angle is dimensionless: rad (prefixable) and deg read at their stated values', () => {
+    expect(parseUnit('rad')).toMatchObject({ scale: 1, dim: { L: 0, M: 0, T: 0 } });
+    expect(parseUnit('mrad').scale).toBeCloseTo(1e-3, 18);
+    expect(parseUnit('deg').scale).toBeCloseTo(Math.PI / 180, 15);
+    expect(convertValue('30 deg', 'rad').value).toBeCloseTo(Math.PI / 6, 15);
+    expect(convertValue('0.05 rad', '').value).toBeCloseTo(0.05, 15);
+    expect(() => convertValue('1 rad', 'm')).toThrow(/'rad' is \[1\], but this input is \[length\]/);
   });
 });
 

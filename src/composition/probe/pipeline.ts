@@ -37,6 +37,9 @@ import { hashCanonical } from './serialize.js';
 import { scoreCandidate, rankPareto, type RankedCandidate } from './scoring.js';
 import { runBackendWorker } from './backend-protocol.js';
 
+/** Stop wording when the problem carried no holdout rows. @internal */
+export const NO_HOLDOUT_WORDING = 'no holdout observations: no candidate was tested on withheld data';
+
 export interface ProbeSearchOptions {
   readonly budget?: SearchBudget;
   readonly runId?: string;
@@ -462,7 +465,11 @@ export async function runProbeSearch(
     )
   ) {
     stopReason = 'no-credible-candidate';
-    wording.push('no candidate survived holdout / falsification');
+    wording.push(
+      (problem.holdout?.rows.length ?? 0) > 0
+        ? 'no candidate survived holdout / falsification'
+        : NO_HOLDOUT_WORDING,
+    );
   } else {
     stopReason = 'exhausted-space';
   }

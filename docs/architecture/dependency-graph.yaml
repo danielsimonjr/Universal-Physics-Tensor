@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 354
-  totalModules: 11
-  totalExports: 2508
+  totalFiles: 367
+  totalModules: 12
+  totalExports: 2604
 entryPoints:
   - file: src/index.ts
     type: main
@@ -1699,6 +1699,25 @@ modules:
         - getAtlasModel
       constants:
         - ATLAS_MODELS
+    src/atlas/oscillators/phase-translation.ts:
+      description: "`ab-pendulum-linear`'s declared translation from its bound's quantity, the"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../translation.js
+          imports:
+            - ObservableTranslation
+          typeOnly: true
+        - file: ./bridges-limits.js
+          imports:
+            - pendulumPeriodErrorAt
+      exports:
+        - PENDULUM_PHASE_TRANSLATION
+        - measurePhaseHorizon
+      functions:
+        - measurePhaseHorizon
+      constants:
+        - PENDULUM_PHASE_TRANSLATION
     src/atlas/oscillators/rejections.ts:
       description: "The Phase 0 REJECTION record: a claimed bridge the atlas records as refuted,"
       externalDependencies: []
@@ -2093,6 +2112,41 @@ modules:
       functions:
         - contextUnion
         - statementContextUnion
+    src/atlas/translation-registry.ts:
+      description: Every declared observable translation (`./translation.ts`). A bridge absent
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./oscillators/phase-translation.js
+          imports:
+            - PENDULUM_PHASE_TRANSLATION
+        - file: ./translation.js
+          imports:
+            - ObservableTranslation
+          typeOnly: true
+      exports:
+        - OBSERVABLE_TRANSLATIONS
+        - translationsOf
+      functions:
+        - translationsOf
+      constants:
+        - OBSERVABLE_TRANSLATIONS
+    src/atlas/translation.ts:
+      description: A bridge's declared translation of its bound's quantity into ANOTHER
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - Witness
+          typeOnly: true
+        - file: ./witness-numeric.js
+          imports:
+            - NumericWitnessSpec
+          typeOnly: true
+      exports: []
+      interfaces:
+        - ObservableTranslation
     src/atlas/types.ts:
       description: Atlas Phase 0 pilot types (oscillator pilot).
       externalDependencies: []
@@ -5566,6 +5620,7 @@ modules:
       interfaces:
         - ObservationProvenance
         - SigmaComponent
+        - ConfrontationDataHandling
       functions:
         - residualInSigma
         - combineInQuadrature
@@ -6377,6 +6432,166 @@ modules:
         - seedCanonicalLaws
       constants:
         - CANONICAL_TENSOR_CONFIG
+  cases:
+    src/cases/brownian-sphere.ts:
+      description: "Applied case: a Brownian sphere tracked in a fluid — the diffusion"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - K_B_SI
+        - file: ./types.js
+          imports:
+            - check
+            - requirePositive
+            - AppliedCase
+      exports:
+        - G_STANDARD
+        - MAX_RE
+        - MAX_TAU_P_RATIO
+        - MAX_TAU_F_RATIO
+        - MAX_DRIFT_RATIO
+        - BROWNIAN_SPHERE_CASE
+        - ballisticDeficit
+      functions:
+        - ballisticDeficit
+      constants:
+        - G_STANDARD
+        - MAX_RE
+        - MAX_TAU_P_RATIO
+        - MAX_TAU_F_RATIO
+        - MAX_DRIFT_RATIO
+        - BROWNIAN_SPHERE_CASE
+    src/cases/damped-resonator.ts:
+      description: "Applied case: the free ring-down of a damped resonator, read out over a"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - check
+            - requirePositive
+            - AppliedCase
+      exports:
+        - MIN_Q_LORENTZIAN
+        - MAX_RESOLUTION_RATIO
+        - DAMPED_RESONATOR_CASE
+        - windowedLinewidthHz
+      functions:
+        - windowedLinewidthHz
+      constants:
+        - MIN_Q_LORENTZIAN
+        - MAX_RESOLUTION_RATIO
+        - DAMPED_RESONATOR_CASE
+    src/cases/index.ts:
+      description: The applied-case registry behind `upt evaluate case-<id>`.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./brownian-sphere.js
+          imports:
+            - BROWNIAN_SPHERE_CASE
+        - file: ./damped-resonator.js
+          imports:
+            - DAMPED_RESONATOR_CASE
+        - file: ./resistor-noise.js
+          imports:
+            - RESISTOR_NOISE_CASE
+        - file: ./types.js
+          imports:
+            - AppliedCase
+            - CaseResult
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - AppliedCase
+            - CaseCheck
+            - CaseComparison
+            - CaseExample
+            - CaseOutput
+            - CaseResult
+          reExport: true
+      exports:
+        - APPLIED_CASES
+        - runAppliedCase
+        - AppliedCase
+        - CaseCheck
+        - CaseComparison
+        - CaseExample
+        - CaseOutput
+        - CaseResult
+      reExported:
+        - AppliedCase
+        - CaseCheck
+        - CaseComparison
+        - CaseExample
+        - CaseOutput
+        - CaseResult
+      functions:
+        - runAppliedCase
+      constants:
+        - APPLIED_CASES
+    src/cases/quadrature.ts:
+      description: Adaptive Simpson quadrature for the parent-model comparisons of the applied
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - adaptiveSimpson
+      functions:
+        - adaptiveSimpson
+    src/cases/resistor-noise.ts:
+      description: "Applied case: the thermal (Johnson–Nyquist) noise voltage of a resistor as an"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - H_SI
+            - K_B_SI
+        - file: ../bridges/be58-johnson-nyquist.js
+          imports:
+            - evaluateJohnsonNyquist
+        - file: ./quadrature.js
+          imports:
+            - adaptiveSimpson
+        - file: ./types.js
+          imports:
+            - check
+            - requirePositive
+            - AppliedCase
+      exports:
+        - CLASSICAL_MAX_X
+        - FLAT_BAND_MAX_WRC
+        - RESISTOR_NOISE_CASE
+      constants:
+        - CLASSICAL_MAX_X
+        - FLAT_BAND_MAX_WRC
+        - RESISTOR_NOISE_CASE
+    src/cases/types.ts:
+      description: "An applied case: one complete measurement problem, qualified end to end."
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../bridges/evaluators.js
+          imports:
+            - EvaluatorParameter
+          typeOnly: true
+      exports:
+        - check
+        - requirePositive
+      interfaces:
+        - CaseOutput
+        - CaseCheck
+        - CaseComparison
+        - CaseExample
+        - CaseResult
+        - AppliedCase
+      functions:
+        - requirePositive
+      constants:
+        - check
   cli:
     src/cli/args.ts:
       description: Hand-written declarative flag parser for the UPT CLI.
@@ -6422,6 +6637,95 @@ modules:
         - listCommandNames
         - registerForTest
         - clearRegistryForTest
+    src/cli/commands/_atlas-map.ts:
+      description: "`upt map --route=FROM,TO` and `upt map --family=NAME` — focused maps of the"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../command.js
+          imports:
+            - CommandCtx
+          typeOnly: true
+        - file: ../errors.js
+          imports:
+            - CliError
+        - file: ../../cli-api.js
+          imports:
+            - AtlasBridge
+            - AtlasModel
+          typeOnly: true
+        - file: ../../atlas/types.js
+          imports:
+            - EvidenceTag
+            - RelationType
+          typeOnly: true
+        - file: ./regime.js
+          imports:
+            - showInequality
+        - file: ./_atlas-route.js
+          imports:
+            - missingForComposite
+            - routeClaim
+            - selectRoute
+            - RouteClaim
+      exports:
+        - ATLAS_SOURCE
+        - LINK_SOURCE
+        - parseRoute
+        - buildRouteView
+        - formatAtlasFilterLegend
+        - buildFamilyView
+        - routeText
+        - familyText
+        - viewLegend
+        - toMermaid
+        - toDot
+      interfaces:
+        - EquationLink
+        - ModelView
+        - EvidenceView
+        - BridgeView
+        - RouteView
+        - AtlasFilter
+        - AtlasFilterStats
+        - FamilyView
+      functions:
+        - parseRoute
+        - buildRouteView
+        - formatAtlasFilterLegend
+        - buildFamilyView
+        - routeText
+        - familyText
+        - viewLegend
+        - toMermaid
+        - toDot
+      constants:
+        - ATLAS_SOURCE
+        - LINK_SOURCE
+    src/cli/commands/_atlas-route.ts:
+      description: The atlas route between two models, and what composing it yields — shared by
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../command.js
+          imports:
+            - CommandCtx
+          typeOnly: true
+        - file: ../errors.js
+          imports:
+            - CliError
+        - file: ../../cli-api.js
+          imports:
+            - AtlasBridge
+          typeOnly: true
+      exports:
+        - selectRoute
+        - routeClaim
+        - missingForComposite
+      functions:
+        - selectRoute
+        - routeClaim
+        - missingForComposite
     src/cli/commands/_discovery-opts.ts:
       description: Shared `--max-orders`/`--anchor` parsing — used by both `discover` and
       externalDependencies: []
@@ -6724,7 +7028,7 @@ modules:
       constants:
         - command
     src/cli/commands/evaluate.ts:
-      description: "`upt evaluate <be-NN> key=value …` — numerically evaluate a closed-form /"
+      description: "`upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /"
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -6748,8 +7052,9 @@ modules:
             - CliError
         - file: ../../cli-api.js
           imports:
+            - AppliedCase
+            - CaseResult
             - EvaluatorParameter
-            - EvaluatorSpec
           typeOnly: true
       exports:
         - command
@@ -6925,6 +7230,9 @@ modules:
         - file: ./_discovery-opts.js
           imports:
             - parseDiscoveryOpts
+        - file: ./_atlas-map.js
+          imports:
+            - "* as atlasMap"
         - file: ../../composition/edge.js
           imports:
             - BridgeEdge
@@ -6984,15 +7292,24 @@ modules:
             - parseAt
             - resolveAtPoint
             - showInequality
+        - file: ./_atlas-route.js
+          imports:
+            - missingForComposite
+            - routeClaim
+            - selectRoute
       exports:
         - command
         - parseSweep
         - judgeTolerance
         - parseTolerance
+        - judgeObservable
+      interfaces:
+        - ToleranceRequest
       functions:
         - parseSweep
         - judgeTolerance
         - parseTolerance
+        - judgeObservable
       constants:
         - command
     src/cli/commands/predict.ts:
@@ -7237,6 +7554,12 @@ modules:
           imports:
             - resolveCommand
             - CommandCtx
+        - file: ./record.js
+          imports:
+            - recordInvocation
+            - replayRecord
+            - showRecord
+            - Io
         - file: ./commands/index.js
           imports:
             - "*"
@@ -7257,6 +7580,75 @@ modules:
       functions:
         - sanitize
         - emitJson
+    src/cli/record.ts:
+      description: Experiment record and replay for the UPT CLI — the global options
+      externalDependencies: []
+      nodeDependencies:
+        - module: crypto
+          imports:
+            - createHash
+        - module: fs
+          imports:
+            - appendFileSync
+            - closeSync
+            - existsSync
+            - openSync
+            - readFileSync
+        - module: module
+          imports:
+            - createRequire
+        - module: path
+          imports:
+            - join
+      internalDependencies:
+        - file: ../cli-api.js
+          imports:
+            - "* as cliApi"
+          typeOnly: true
+        - file: ../core/constants.js
+          imports:
+            - "* as coreConstants"
+        - file: ./args.js
+          imports:
+            - parseArgs
+        - file: ./command.js
+          imports:
+            - resolveCommand
+        - file: ./errors.js
+          imports:
+            - CliError
+        - file: ./output.js
+          imports:
+            - emitJson
+        - file: ./version.js
+          imports:
+            - packageVersion
+      exports:
+        - RECORD_SCHEMA
+        - sha256
+        - constantsFingerprint
+        - constantsTable
+        - captureEnvironment
+        - recordInvocation
+        - replayRecord
+        - showRecord
+      interfaces:
+        - RecordEnvironment
+        - RecordResult
+        - RecordEntry
+        - EnvironmentChange
+        - StreamDifference
+        - ReplayEntryReport
+      functions:
+        - constantsTable
+        - captureEnvironment
+        - recordInvocation
+        - replayRecord
+        - showRecord
+      constants:
+        - RECORD_SCHEMA
+        - sha256
+        - constantsFingerprint
     src/cli/version.ts:
       description: Runtime package-version lookup for the UPT CLI (`upt --version`, etc.).
       externalDependencies: []
@@ -7370,6 +7762,17 @@ modules:
           imports:
             - resolveEvaluatorInputs
           reExport: true
+        - file: ./cases/index.js
+          imports:
+            - APPLIED_CASES
+            - runAppliedCase
+          reExport: true
+        - file: ./cases/index.js
+          imports:
+            - AppliedCase
+            - CaseCheck
+            - CaseResult
+          reExport: true
         - file: ./dimensional/units.js
           imports:
             - convertValue
@@ -7394,6 +7797,7 @@ modules:
         - file: ./composition/expr-simplify.js
           imports:
             - simplifyObservable
+            - isSimplifierAvailable
           reExport: true
         - file: ./canonical/registry.js
           imports:
@@ -7441,6 +7845,9 @@ modules:
             - parseExprJson
             - runProbeSearch
             - formatProbeReport
+            - loadStudyFromJson
+            - runProbeStudy
+            - formatProbeStudy
             - formatFrontierScan
             - formatFrontierGap
             - suggestDiscriminatingPoint
@@ -7528,6 +7935,19 @@ modules:
         - file: ./atlas/witness-specs.js
           imports:
             - WITNESS_REGISTRY
+          reExport: true
+        - file: ./atlas/witness-numeric.js
+          imports:
+            - runNumericWitness
+          reExport: true
+        - file: ./atlas/translation-registry.js
+          imports:
+            - OBSERVABLE_TRANSLATIONS
+            - translationsOf
+          reExport: true
+        - file: ./atlas/translation.js
+          imports:
+            - ObservableTranslation
           reExport: true
         - file: ./atlas/oscillators/index.js
           imports:
@@ -7618,11 +8038,14 @@ modules:
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - resolveEvaluatorInputs
+        - APPLIED_CASES
+        - runAppliedCase
         - convertValue
         - UnitError
         - auditAxisDiscrimination
         - AXES
         - simplifyObservable
+        - isSimplifierAvailable
         - CANONICAL_EQUATIONS
         - bridgesWithoutCanonicalPartner
         - scanLinkages
@@ -7644,6 +8067,9 @@ modules:
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
+        - loadStudyFromJson
+        - runProbeStudy
+        - formatProbeStudy
         - formatFrontierScan
         - formatFrontierGap
         - suggestDiscriminatingPoint
@@ -7671,6 +8097,9 @@ modules:
         - NO_PASSING_WITNESSES
         - runWitnessRegistry
         - WITNESS_REGISTRY
+        - runNumericWitness
+        - OBSERVABLE_TRANSLATIONS
+        - translationsOf
         - regimeHolds
         - regimeOverlap
         - uncoveredRegions
@@ -7684,6 +8113,9 @@ modules:
         - ConfrontationOutcome
         - EvaluatorSpec
         - EvaluatorParameter
+        - AppliedCase
+        - CaseCheck
+        - CaseResult
         - AxisDiscrimination
         - AxisSpec
         - PosterGraph
@@ -7697,6 +8129,7 @@ modules:
         - CanonicalComparison
         - CandidateGrounding
         - CandidateReadiness
+        - ObservableTranslation
         - AtlasFamily
         - RegimeCheck
         - RegimeOverlap
@@ -7756,6 +8189,11 @@ modules:
         - EvaluatorSpec
         - EvaluatorParameter
         - resolveEvaluatorInputs
+        - APPLIED_CASES
+        - runAppliedCase
+        - AppliedCase
+        - CaseCheck
+        - CaseResult
         - convertValue
         - UnitError
         - auditAxisDiscrimination
@@ -7763,6 +8201,7 @@ modules:
         - AXES
         - AxisSpec
         - simplifyObservable
+        - isSimplifierAvailable
         - CANONICAL_EQUATIONS
         - bridgesWithoutCanonicalPartner
         - scanLinkages
@@ -7786,6 +8225,9 @@ modules:
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
+        - loadStudyFromJson
+        - runProbeStudy
+        - formatProbeStudy
         - formatFrontierScan
         - formatFrontierGap
         - suggestDiscriminatingPoint
@@ -7822,6 +8264,10 @@ modules:
         - NO_PASSING_WITNESSES
         - runWitnessRegistry
         - WITNESS_REGISTRY
+        - runNumericWitness
+        - OBSERVABLE_TRANSLATIONS
+        - translationsOf
+        - ObservableTranslation
         - AtlasFamily
         - regimeHolds
         - regimeOverlap
@@ -10490,6 +10936,31 @@ modules:
             - formatFrontierScan
             - formatFrontierGap
           reExport: true
+        - file: ./study.js
+          imports:
+            - parseStudy
+            - loadStudyFromJson
+            - runProbeStudy
+            - formatProbeStudy
+            - chiSquareSurvival
+            - StudyRefusal
+          reExport: true
+        - file: ./study.js
+          imports:
+            - ProbeStudy
+            - ProbeStudyOptions
+            - ProbeStudyResult
+            - StudyVerdict
+            - ReplicationOutcome
+            - StudyRole
+            - StudyProvenance
+            - StudyObservation
+            - StudyBaseline
+            - SetTest
+            - ModelTest
+            - CandidateTest
+            - StudyDesignSuggestion
+          reExport: true
       exports:
         - SCHEMA_VERSION
         - PROBE_SCHEMA_VERSION
@@ -10557,6 +11028,12 @@ modules:
         - formatProbeReport
         - formatFrontierScan
         - formatFrontierGap
+        - parseStudy
+        - loadStudyFromJson
+        - runProbeStudy
+        - formatProbeStudy
+        - chiSquareSurvival
+        - StudyRefusal
         - ProbeCandidateStatus
         - RelationKind
         - AuditState
@@ -10615,6 +11092,19 @@ modules:
         - ProblemFile
         - ProbeSearchOptions
         - ProbeSearchResult
+        - ProbeStudy
+        - ProbeStudyOptions
+        - ProbeStudyResult
+        - StudyVerdict
+        - ReplicationOutcome
+        - StudyRole
+        - StudyProvenance
+        - StudyObservation
+        - StudyBaseline
+        - SetTest
+        - ModelTest
+        - CandidateTest
+        - StudyDesignSuggestion
       reExported:
         - SCHEMA_VERSION
         - PROBE_SCHEMA_VERSION
@@ -10740,6 +11230,25 @@ modules:
         - formatProbeReport
         - formatFrontierScan
         - formatFrontierGap
+        - parseStudy
+        - loadStudyFromJson
+        - runProbeStudy
+        - formatProbeStudy
+        - chiSquareSurvival
+        - StudyRefusal
+        - ProbeStudy
+        - ProbeStudyOptions
+        - ProbeStudyResult
+        - StudyVerdict
+        - ReplicationOutcome
+        - StudyRole
+        - StudyProvenance
+        - StudyObservation
+        - StudyBaseline
+        - SetTest
+        - ModelTest
+        - CandidateTest
+        - StudyDesignSuggestion
     src/composition/probe/limits.ts:
       description: Declared-limit checks for probe candidates.
       externalDependencies: []
@@ -10858,12 +11367,15 @@ modules:
           imports:
             - runBackendWorker
       exports:
+        - NO_HOLDOUT_WORDING
         - runProbeSearch
       interfaces:
         - ProbeSearchOptions
         - ProbeSearchResult
       functions:
         - runProbeSearch
+      constants:
+        - NO_HOLDOUT_WORDING
     src/composition/probe/problem.ts:
       description: Search-problem construction and JSON loading for Product B.
       externalDependencies: []
@@ -10901,6 +11413,7 @@ modules:
             - asDatasetSafe
             - loadSplitDatasetsFromJson
       exports:
+        - isGapKind
         - makeResidualGap
         - loadSearchProblemFromJson
         - searchProblemFromFile
@@ -10908,6 +11421,7 @@ modules:
       interfaces:
         - ProblemFile
       functions:
+        - isGapKind
         - makeResidualGap
         - loadSearchProblemFromJson
         - searchProblemFromFile
@@ -11065,6 +11579,98 @@ modules:
         - detectMeanChangepoint
         - estimateScaleExponent
         - probeConservation
+    src/composition/probe/study.ts:
+      description: Falsification-oriented study over calibrated observations (audit §14 I19).
+      externalDependencies: []
+      nodeDependencies:
+        - module: fs
+          imports:
+            - readFileSync
+      internalDependencies:
+        - file: ../../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
+        - file: ../../dimensional/ast-types.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/algebra.js
+          imports:
+            - equals
+            - format
+        - file: ../../dimensional/units.js
+          imports:
+            - convertValue
+            - parseUnit
+            - UnitError
+        - file: ../../numerical/formula.js
+          imports:
+            - parseFormula
+        - file: ../../numerical/formula-dimension.js
+          imports:
+            - builtinFormulaDimensionChecker
+        - file: ../expr-eval.js
+          imports:
+            - evalExpr
+        - file: ./types.js
+          imports:
+            - SearchBudget
+            - SearchStopReason
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - SCHEMA_VERSION
+        - file: ./dataset.js
+          imports:
+            - datasetFromRows
+        - file: ./frontier.js
+          imports:
+            - problemFromResidualGap
+        - file: ./problem.js
+          imports:
+            - isGapKind
+            - makeResidualGap
+        - file: ./pipeline.js
+          imports:
+            - NO_HOLDOUT_WORDING
+            - runProbeSearch
+        - file: ./fingerprint.js
+          imports:
+            - bodyExpression
+        - file: ./serialize.js
+          imports:
+            - canonicalJson
+            - hashCanonical
+      exports:
+        - parseStudy
+        - loadStudyFromJson
+        - chiSquareSurvival
+        - exprToInfix
+        - runProbeStudy
+        - formatProbeStudy
+        - StudyRefusal
+      classes:
+        - StudyRefusal
+      interfaces:
+        - StudyProvenance
+        - StudyQuantity
+        - StudyObservation
+        - StudyBaseline
+        - ProbeStudy
+        - SetTest
+        - ModelTest
+        - CandidateTest
+        - StudyDesignSuggestion
+        - ProbeStudyResult
+        - ProbeStudyOptions
+      functions:
+        - parseStudy
+        - loadStudyFromJson
+        - chiSquareSurvival
+        - exprToInfix
+        - runProbeStudy
+        - formatProbeStudy
     src/composition/probe/types.ts:
       description: Product B (expression / residual search) experimental types.
       externalDependencies: []
@@ -14315,6 +14921,9 @@ modules:
             - SigmaComponent
             - ObservationKind
             - ConfrontationOutcome
+            - ConfrontationDataHandling
+            - ConfrontationPreprocessing
+            - ConfrontationIndependence
           reExport: true
         - file: ./bridges/be37-cassini-confrontation.js
           imports:
@@ -14988,6 +15597,9 @@ modules:
         - SigmaComponent
         - ObservationKind
         - ConfrontationOutcome
+        - ConfrontationDataHandling
+        - ConfrontationPreprocessing
+        - ConfrontationIndependence
         - CassiniObservation
         - BE37ConfrontationResult
         - VLBIDeflectionObservation
@@ -15464,6 +16076,9 @@ modules:
         - SigmaComponent
         - ObservationKind
         - ConfrontationOutcome
+        - ConfrontationDataHandling
+        - ConfrontationPreprocessing
+        - ConfrontationIndependence
         - confrontBE37
         - CASSINI
         - CassiniObservation
@@ -16780,6 +17395,7 @@ dependencyGraph:
         - src/atlas/oscillators/dimensions.ts
         - src/atlas/oscillators/index.ts
         - src/atlas/oscillators/models.ts
+        - src/atlas/oscillators/phase-translation.ts
         - src/atlas/oscillators/rejections.ts
         - src/atlas/path-bound.ts
         - src/atlas/poster/associations.ts
@@ -16789,6 +17405,8 @@ dependencyGraph:
         - src/atlas/regime.ts
         - src/atlas/serialize.ts
         - src/atlas/statement.ts
+        - src/atlas/translation-registry.ts
+        - src/atlas/translation.ts
         - src/atlas/types.ts
         - src/atlas/waves/bridges-closure.ts
         - src/atlas/waves/bridges.ts
@@ -16913,10 +17531,20 @@ dependencyGraph:
         - src/canonical/registry.ts
         - src/canonical/residual.ts
         - src/canonical/seed-l-layer.ts
+    - name: Cases
+      files:
+        - src/cases/brownian-sphere.ts
+        - src/cases/damped-resonator.ts
+        - src/cases/index.ts
+        - src/cases/quadrature.ts
+        - src/cases/resistor-noise.ts
+        - src/cases/types.ts
     - name: Cli
       files:
         - src/cli/args.ts
         - src/cli/command.ts
+        - src/cli/commands/_atlas-map.ts
+        - src/cli/commands/_atlas-route.ts
         - src/cli/commands/_discovery-opts.ts
         - src/cli/commands/atlas.ts
         - src/cli/commands/audit.ts
@@ -16946,6 +17574,7 @@ dependencyGraph:
         - src/cli/graphs.ts
         - src/cli/main.ts
         - src/cli/output.ts
+        - src/cli/record.ts
         - src/cli/version.ts
     - name: Root
       files:
@@ -17010,6 +17639,7 @@ dependencyGraph:
         - src/composition/probe/search-budget.ts
         - src/composition/probe/serialize.ts
         - src/composition/probe/structure.ts
+        - src/composition/probe/study.ts
         - src/composition/probe/types.ts
         - src/composition/proposed-bridges.ts
         - src/composition/quantities/_dims.ts
@@ -17122,19 +17752,19 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 354
-  totalModules: 11
-  totalLinesOfCode: 72488
-  totalExports: 2508
-  totalClasses: 59
-  totalInterfaces: 368
-  totalFunctions: 580
-  totalTypeGuards: 4
+  totalTypeScriptFiles: 367
+  totalModules: 12
+  totalLinesOfCode: 76447
+  totalExports: 2604
+  totalClasses: 60
+  totalInterfaces: 402
+  totalFunctions: 612
+  totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 610
-  totalReExports: 1258
-  totalTypeOnlyImports: 494
+  totalConstants: 632
+  totalReExports: 1299
+  totalTypeOnlyImports: 509
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 7
+  unusedExportsCount: 34

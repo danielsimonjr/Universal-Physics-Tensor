@@ -27,12 +27,50 @@ export interface SigmaComponent {
 export type ObservationKind = 'value' | 'upper-bound' | 'consistency' | 'table';
 
 /**
+ * What was done to the source's number before it reached the comparison
+ * (averaging, selection, conversion, encoding of a stated agreement).
+ * `source` names what supports the statement. `not-recorded` means the record
+ * states nothing — it is not "no preprocessing".
+ *
+ * @public
+ */
+export type ConfrontationPreprocessing =
+  | { readonly state: 'recorded'; readonly statement: string; readonly source: string }
+  | { readonly state: 'not-recorded' };
+
+/**
+ * Whether the prediction is independent of the measurement it is compared
+ * with. Separate from goodness of fit: a record can agree within 1σ and still
+ * share an input with its prediction. `no-fitted-parameter`: the prediction
+ * takes no parameter fitted to this measurement. `shares-input`: prediction
+ * and observation share `shared` (a constant, calibration, baseline, or the
+ * value itself). `not-recorded`: the record states neither.
+ *
+ * @public
+ */
+export type ConfrontationIndependence =
+  | { readonly state: 'no-fitted-parameter'; readonly statement: string; readonly source: string }
+  | {
+      readonly state: 'shares-input';
+      readonly shared: string;
+      readonly statement: string;
+      readonly source: string;
+    }
+  | { readonly state: 'not-recorded' };
+
+/** Data-handling fields every confrontation outcome carries. @public */
+export interface ConfrontationDataHandling {
+  readonly preprocessing: ConfrontationPreprocessing;
+  readonly independence: ConfrontationIndependence;
+}
+
+/**
  * Normalized confrontation result — discriminated on `kind`. Each arm
  * carries only the fields it can honestly populate.
  *
  * @public
  */
-export type ConfrontationOutcome =
+export type ConfrontationOutcome = ConfrontationDataHandling & (
   | {
       readonly kind: 'value';
       readonly predicted: number;
@@ -99,7 +137,8 @@ export type ConfrontationOutcome =
       }>;
       readonly units: string;
       readonly provenance: ObservationProvenance;
-    };
+    }
+);
 
 /** |predicted − observed| in units of the observed 1σ. @public */
 export function residualInSigma(predicted: number, observed: number, sigma: number): number {

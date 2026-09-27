@@ -14,14 +14,18 @@ export interface JsonEnvelope {
    * The graph a command read. `'poster'` is `upt map --source=poster` only —
    * the Atlas Phase 3 poster index, which is not a `BridgeEdge` graph and is
    * therefore not a value `resolveGraph` (or any other command) accepts.
+   * `'atlas'` is `upt map --route` / `--family`, which read the atlas
+   * families rather than an equation graph.
    */
-  source?: 'catalog' | 'canonical' | 'both' | 'poster';
+  source?: 'catalog' | 'canonical' | 'both' | 'poster' | 'atlas';
   options?: Record<string, unknown>;
   epistemics?: string;
   /** `upt confront` — count of confrontations by rigor tier (stringent/moderate/loose). */
   rigorDistribution?: Record<string, number>;
   /** `upt confront` — count of confrontations by statistical object (σ-test, limit, consistency ratio, table). */
   statisticDistribution?: Record<string, number>;
+  /** `upt confront` — preprocessing and independence counts, recorded vs not recorded, each counted apart. */
+  dataHandlingDistribution?: Record<string, Record<string, number>>;
   result: unknown;
 }
 

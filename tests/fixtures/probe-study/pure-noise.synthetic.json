@@ -1,0 +1,54 @@
+{
+  "description": "SYNTHETIC negative control, not measured data. Periods drawn uniformly in [0.5, 5] s, independent of the inputs, by tests/fixtures/probe-study/generate.mjs (seed 4). The search must not explain them.",
+  "gap": {
+    "id": "fg-study-pure-noise",
+    "kind": "unexplained-observation",
+    "summary": "periods with no law in length or gravity"
+  },
+  "provenance": {
+    "synthetic": true,
+    "source": "tests/fixtures/probe-study/generate.mjs (seed 4)",
+    "acquisition": "SYNTHETIC: uniform random periods, independent of every input. Not a measurement.",
+    "calibration": "none: synthetic rows have no instrument"
+  },
+  "target": {
+    "name": "period",
+    "unit": "s",
+    "sigma": "50 ms"
+  },
+  "governing": [
+    {
+      "name": "length",
+      "unit": "m"
+    },
+    {
+      "name": "gravity",
+      "unit": "m/s^2"
+    }
+  ],
+  "baselines": [
+    {
+      "name": "small-angle law 2π√(L/g)",
+      "formula": "2*pi*sqrt(length/gravity)"
+    }
+  ],
+  "observations": [
+    {"id":"e1","role":"exploratory","values":{"length":0.4,"gravity":9.81},"observed":"4.65636 s"},
+    {"id":"e2","role":"exploratory","values":{"length":0.6,"gravity":9.81},"observed":"1.99871 s"},
+    {"id":"e3","role":"exploratory","values":{"length":0.8,"gravity":9.81},"observed":"1.49751 s"},
+    {"id":"e4","role":"exploratory","values":{"length":1,"gravity":9.81},"observed":"0.868285 s"},
+    {"id":"e5","role":"exploratory","values":{"length":1.2,"gravity":9.81},"observed":"1.55299 s"},
+    {"id":"e6","role":"exploratory","values":{"length":1.4,"gravity":9.81},"observed":"2.78824 s"},
+    {"id":"e7","role":"exploratory","values":{"length":1.6,"gravity":9.81},"observed":"0.848262 s"},
+    {"id":"e8","role":"exploratory","values":{"length":1.8,"gravity":9.81},"observed":"4.88238 s"},
+    {"id":"e9","role":"exploratory","values":{"length":2,"gravity":9.81},"observed":"3.29917 s"},
+    {"id":"e10","role":"exploratory","values":{"length":2.2,"gravity":9.81},"observed":"3.60867 s"},
+    {"id":"e11","role":"exploratory","values":{"length":0.5,"gravity":9.81},"observed":"3.95666 s"},
+    {"id":"e12","role":"exploratory","values":{"length":1.5,"gravity":9.81},"observed":"2.16117 s"},
+    {"id":"h1","role":"holdout","values":{"length":0.45,"gravity":9.81},"observed":"3.79623 s"},
+    {"id":"h2","role":"holdout","values":{"length":0.95,"gravity":9.81},"observed":"4.44144 s"},
+    {"id":"h3","role":"holdout","values":{"length":1.35,"gravity":9.81},"observed":"2.87946 s"},
+    {"id":"h4","role":"holdout","values":{"length":1.95,"gravity":9.81},"observed":"3.84506 s"},
+    {"id":"h5","role":"holdout","values":{"length":2.35,"gravity":9.81},"observed":"2.39786 s"}
+  ]
+}

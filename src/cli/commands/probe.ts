@@ -11,7 +11,7 @@ import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 
-const SUBVERBS = ['scan', 'show', 'run', 'candidates', 'falsify', 'rank', 'design', 'reproduce'] as const;
+const SUBVERBS = ['scan', 'show', 'run', 'candidates', 'falsify', 'rank', 'design', 'reproduce', 'study'] as const;
 type Subverb = (typeof SUBVERBS)[number];
 
 const FLAGS: FlagSpec[] = [
@@ -26,9 +26,11 @@ const FLAGS: FlagSpec[] = [
   { name: '--h2', valueStyle: 'attached' },
   { name: '--searchable-only', valueStyle: 'none' },
   { name: '--all', valueStyle: 'none' },
+  { name: '--data', valueStyle: 'attached' },
+  { name: '--alpha', valueStyle: 'attached' },
 ];
 
-const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>
+const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
         Experimental expression/residual search (Product B). Orthogonal to
         \`upt discover\`, which vets quantity identifications a≡b and is frozen.
         Relation-link / regime-transition gaps are not searchable here — use
@@ -41,11 +43,16 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>
         rank                 run + Pareto front
         design --h1= --h2= --bounds=   discriminating experiment suggestion
         reproduce --problem=FILE       re-run a problem (same stop contract)
+        study --data=FILE    search + fit on exploratory rows only, then χ²-test
+                             the candidate and declared baselines on withheld
+                             holdout / replication rows; suggest a discriminating
+                             measurement (see STUDY FILE below)
         --searchable-only    scan: only Product-B-searchable gaps (default)
         --all                scan: include Product A wrappers (not searchable)
         --budget-ms=N        wall-clock cap (default 5000)
         --holdout-tol=X      relative holdout RMSE cap (default 0.15)
         --worker=PATH        optional NDJSON worker (spawned as node PATH)
+        --alpha=X            study: χ² test level (default: the file's, else 0.001)
         --json               machine envelope
 
         PROBLEM FILE (--problem=FILE, JSON)
@@ -77,7 +84,33 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>
             {"length": 0.5, "gravity": 1.62, "period": 3.491}]},
           "holdout": {"observable": "period", "rows": [
             {"length": 1.5, "gravity": 3.71, "period": 3.995}]}
-        }`;
+        }
+
+        STUDY FILE (--data=FILE, JSON): calibrated observations
+        provenance   {"synthetic": true|false (required, never inferred),
+                     "source", "acquisition"?, "calibration"?}
+        target       {"name", "unit", "sigma"?}  sigma: default row uncertainty
+        governing    [{"name", "unit"}, ...]  "unit": "" when dimensionless
+        observations [{"id"?, "role", "values": {input: value}, "observed",
+                     "sigma"?, "source"?}, ...]. A bare number is in the
+                     declared unit; "120 cm" is converted; a dimension
+                     mismatch, a missing σ or an undeclared key refuses the file.
+        role         exploratory (the only rows searched and fit) | holdout
+                     (withheld test, e.g. a change of regime) | replication
+                     (independent acquisition, withheld). A withheld row that
+                     repeats an exploratory row's inputs, or a replication row
+                     sharing an exploratory row's source, refuses the file.
+        baselines    optional [{"name", "formula", "fitPrefactor"?}]: competing
+                     models over the governing names in SI units, e.g.
+                     "2*pi*sqrt(length/gravity)"; must have the target's dimension.
+                     fitPrefactor (default false) fits one scale on exploratory rows.
+        criterion    optional {"alpha"} (default 0.001)
+        design       optional {"variables": {input: {"min", "max", "steps"?}}}
+        Verdicts: no-credible-candidate | refuted-on-holdout | survives-holdout |
+        untested-on-holdout; replication is reported separately. A candidate
+        is credible only if it passes on exploratory rows AND a constant model
+        is rejected there. A fit is not a mechanism.
+        Synthetic controls: tests/fixtures/probe-study/*.synthetic.json`;
 
 const EPISTEMICS =
   '⚠ experimental Product B. Not a discovery claim. `upt discover` is the identification funnel.';
@@ -260,6 +293,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
+  if (sub === 'study') return runStudy(ctx, source);
+
   const pp = problemPath(args.flags);
   let problem;
   try {
@@ -324,6 +359,39 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   throw new UsageError(`upt probe: unhandled subverb '${sub}'`);
+}
+
+function alphaFromFlags(flags: Map<string, string[]>): number | undefined {
+  const raw = flags.get('alpha')?.[0];
+  if (raw === undefined) return undefined;
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n <= 0 || n >= 1) {
+    throw new UsageError('upt probe: --alpha must be a number in (0, 1)');
+  }
+  return n;
+}
+
+async function runStudy(ctx: CommandCtx, source: ReturnType<typeof resolveGraph>['source']): Promise<number> {
+  const { args, api, out } = ctx;
+  const path = args.flags.get('data')?.[0];
+  if (!path) throw new UsageError('upt probe study: --data=FILE is required');
+  const budget = budgetFromFlags(api, args.flags);
+  const alpha = alphaFromFlags(args.flags);
+  let result;
+  try {
+    result = await api.runProbeStudy(api.loadStudyFromJson(path), { budget, alpha });
+  } catch (e) {
+    mapProbeError(e, path);
+  }
+  if (args.flags.has('json')) {
+    emitJson(
+      { command: 'probe', source, epistemics: EPISTEMICS, options: { subverb: 'study' }, result },
+      ctx.write,
+    );
+    return 0;
+  }
+  out(api.formatProbeStudy(result));
+  return 0;
 }
 
 /** Why the falsification batteries did not run for a candidate, by its final status. */

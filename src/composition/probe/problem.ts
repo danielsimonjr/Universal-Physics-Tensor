@@ -19,7 +19,8 @@ import type {
 import { problemFromResidualGap } from './frontier.js';
 import { asDatasetSafe, loadSplitDatasetsFromJson } from './dataset.js';
 
-function isGapKind(s: string): s is FrontierGapKind {
+/** @internal */
+export function isGapKind(s: string): s is FrontierGapKind {
   return (
     s === 'prediction-residual' ||
     s === 'relation-link' ||

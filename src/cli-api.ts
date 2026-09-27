@@ -74,12 +74,14 @@ export { decidingMeasurement } from './bridges/sensitivity.js';
 export { BRIDGE_EVALUATORS, evaluateBridge } from './bridges/evaluators.js';
 export type { EvaluatorSpec, EvaluatorParameter } from './bridges/evaluators.js';
 export { resolveEvaluatorInputs } from './bridges/evaluator-inputs.js';
+export { APPLIED_CASES, runAppliedCase } from './cases/index.js';
+export type { AppliedCase, CaseCheck, CaseResult } from './cases/index.js';
 export { convertValue, UnitError } from './dimensional/units.js';
 export { auditAxisDiscrimination } from './composition/axis-audit.js';
 export type { AxisDiscrimination } from './composition/axis-audit.js';
 export { AXES } from './composition/axes.js';
 export type { AxisSpec } from './composition/axes.js';
-export { simplifyObservable } from './composition/expr-simplify.js';
+export { simplifyObservable, isSimplifierAvailable } from './composition/expr-simplify.js';
 export {
   CANONICAL_EQUATIONS,
   bridgesWithoutCanonicalPartner,
@@ -112,6 +114,9 @@ export {
   parseExprJson,
   runProbeSearch,
   formatProbeReport,
+  loadStudyFromJson,
+  runProbeStudy,
+  formatProbeStudy,
   formatFrontierScan,
   formatFrontierGap,
   suggestDiscriminatingPoint,
@@ -169,6 +174,9 @@ export { ATLAS_FAMILIES } from './atlas/families.js';
 export { deriveEvidence, NO_PASSING_WITNESSES } from './atlas/derive-evidence.js';
 export { runWitnessRegistry } from './atlas/witness-artifact.js';
 export { WITNESS_REGISTRY } from './atlas/witness-specs.js';
+export { runNumericWitness } from './atlas/witness-numeric.js';
+export { OBSERVABLE_TRANSLATIONS, translationsOf } from './atlas/translation-registry.js';
+export type { ObservableTranslation } from './atlas/translation.js';
 export type { AtlasFamily } from './atlas/oscillators/index.js';
 export { regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';

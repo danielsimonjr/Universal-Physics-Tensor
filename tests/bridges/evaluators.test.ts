@@ -5,6 +5,7 @@
 import { describe, it, expect } from 'vitest';
 import { BRIDGE_EVALUATORS, evaluateBridge } from '../../src/bridges/evaluators.js';
 import { parseUnit } from '../../src/dimensional/units.js';
+import { APPLIED_CASES } from '../../src/cases/index.js';
 
 describe('BRIDGE_EVALUATORS', () => {
   it('covers the 13 closed-form / spacetime bridges (51/52/55..65)', () => {
@@ -42,23 +43,31 @@ describe('BRIDGE_EVALUATORS', () => {
 
   // An independent second source: the unit the key's own suffix names. A
   // declaration that disagrees with its key would convert `d_m=1um` wrongly.
-  it("each declared unit agrees with the unit its key's suffix names", () => {
+  it("each declared unit agrees with the unit its key's suffix names (bridges and applied cases)", () => {
     const SUFFIX: readonly (readonly [RegExp, string])[] = [
       [/_kg_per_m3$/, 'kg/m^3'],
       [/_S_per_m$/, 'S/m'],
       [/_m_s2$/, 'm/s^2'],
+      [/_Pa_s$/, 'Pa*s'],
       [/_kg$/, 'kg'],
       [/_m$/, 'm'],
       [/_K$/, 'K'],
       [/_ohm$/, 'ohm'],
       [/_volts$/, 'V'],
       [/_yr$/, 'yr'],
+      [/_Hz$/, 'Hz'],
+      [/_F$/, 'F'],
+      [/_s$/, 's'],
     ];
-    for (const [id, s] of BRIDGE_EVALUATORS) {
-      for (const p of s.parameters) {
+    const declared = [
+      ...[...BRIDGE_EVALUATORS].map(([id, s]) => [`be-${id}`, s.parameters] as const),
+      ...[...APPLIED_CASES.values()].map((c) => [c.id, c.parameters] as const),
+    ];
+    for (const [label, parameters] of declared) {
+      for (const p of parameters) {
         const expected = SUFFIX.find(([re]) => re.test(p.key))?.[1] ?? '';
-        expect(p.unit, `be-${id} ${p.key}`).toBe(expected);
-        expect(p.temperature === 'absolute', `be-${id} ${p.key}`).toBe(expected === 'K');
+        expect(p.unit, `${label} ${p.key}`).toBe(expected);
+        expect(p.temperature === 'absolute', `${label} ${p.key}`).toBe(expected === 'K');
       }
     }
   });

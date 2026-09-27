@@ -5,6 +5,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { measuredHorizon } from '../atlas/_phase-drift.js';
 
 function capture() {
   const lines: string[] = [];
@@ -282,7 +283,12 @@ describe('I8 — a tolerance is judged in the bound\'s own norm, with regime and
   it('without t the horizon is unevaluated, so the verdict is undetermined, never adequate', async () => {
     const env = await json([...PENDULUM_AT, '--tolerance=0.1']);
     expect(env.result.tolerance.verdict).toBe('undetermined');
-    expect(env.result.tolerance.scope).toMatch(/no translation to another observable \(phase, trajectory, amplitude\) is encoded/);
+    expect(env.result.tolerance.scope).toMatch(/judged in the bound's own norm only; ab-pendulum-linear declares a translation, asked with --tolerance=phase:EPS \(rad\)/);
+  });
+
+  it("control: a path with no declared translation says none is encoded in the bound-norm scope", async () => {
+    const env = await json([...DAMPED_AT, 't=1', '--tolerance=0.1']);
+    expect(env.result.tolerance.scope).toMatch(/no translation to another observable \(phase, trajectory, amplitude\) is encoded for this path/);
   });
 
   it('a sweep with a tolerance marks each row, and the edge falls where the exact error crosses it', async () => {
@@ -298,6 +304,83 @@ describe('I8 — a tolerance is judged in the bound\'s own norm, with regime and
     const r = await run([...PENDULUM_AT, '--tolerance=0']);
     expect(r.code).toBe(1);
     expect(r.text).toMatch(/--tolerance=0 must be a finite number > 0/);
+  });
+});
+
+const DAMPED_AT = ['path', 'model-damped-spring', 'model-first-order', '--at', 'm=0.01', 'b=1', 'k=1', 'x0=1', 'v0=0'];
+const PHASE_AT = ['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.3', 'T0=2'];
+
+describe('I8 — a phase tolerance gets a phase-based horizon through the declared translation', () => {
+  it('the phase horizon t* matches the time an independent RK4 integration of both motions reaches the tolerance', async () => {
+    const env = await json([...PHASE_AT, '--tolerance=phase:0.1']);
+    const tol = env.result.tolerance;
+    expect(tol.verdict).toBe('undetermined');
+    expect(tol.reason).toMatch(/^no t= given; the phase horizon here is t\* = [\d.]+ \(the unit of T0\)$/);
+    const measured = measuredHorizon(0.3, 2, 0.1, tol.horizon + 4, 400);
+    expect(Math.abs(measured - tol.horizon) / tol.horizon).toBeLessThan(1e-5);
+    expect(tol.horizon).not.toBeCloseTo(0.1 * 2 / (2 * Math.PI * tol.boundErrorAtPoint), 2);
+    expect(tol.boundErrorAtPoint).toBeCloseTo(pendulumPeriodError(0.3), 12);
+    expect(tol.domainSupremum).toBeCloseTo(pendulumPeriodError(0.5), 12);
+    expect(tol.domainHorizon).toBeLessThan(tol.horizon);
+    expect(tol.horizonConvention).toBe('inclusive: adequate iff t ≤ t*, i.e. Δφ(t) ≤ the tolerance');
+    expect(tol.thresholdOrigin).toMatch(/^t\* is derived from the requested tolerance 0\.1 rad through the translation; ab-pendulum-linear's own horizon .* is the record's fixed threshold, judged separately$/);
+    expect(tol.translation.notCovered[0]).toMatch(/^the pointwise position error \|θ\(t\) − θ_lin\(t\)\|/);
+  });
+
+  it('ADEQUATE at t = t* (the boundary is inclusive); INADEQUATE with exit 3 just beyond it', async () => {
+    const tStar = (await json([...PHASE_AT, '--tolerance=phase:0.1'])).result.tolerance.horizon;
+    const at = await run([...PHASE_AT, `t=${tStar}`, '--tolerance=phase:0.1']);
+    expect(at.code).toBe(0);
+    expect(at.text).toMatch(/\n {2}tolerance phase:0\.1 rad: ADEQUATE — t = [\d.]+ <= t\* = [\d.]+: accumulated phase error [\d.]+ rad <= 0\.1\n/);
+    const beyond = await run([...PHASE_AT, `t=${tStar * (1 + 1e-9)}`, '--tolerance=phase:0.1']);
+    expect(beyond.code).toBe(3);
+    expect(beyond.text).toMatch(/\n {2}tolerance phase:0\.1 rad: INADEQUATE — t = [\d.]+ > t\* = [\d.]+: accumulated phase error [\d.]+ rad exceeds 0\.1\n/);
+  });
+
+  it("the translation's evidence is derived by running W7p now, and it is not the bound's", async () => {
+    const env = await json([...PHASE_AT, 't=5', '--tolerance=phase:0.1']);
+    const ev = env.result.tolerance.evidence;
+    expect(ev.tags).toEqual(['numerically-supported']);
+    expect(ev.witnesses).toEqual([expect.objectContaining({ id: 'W7p', status: 'checked' })]);
+    expect(ev.note).toMatch(/distinct from the bound's; it carries no formal reference/);
+  });
+
+  it("control: a tolerance the phase would meet is still INADEQUATE past the bridge's own horizon", async () => {
+    const r = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1', 't=101', '--tolerance=phase:3']);
+    expect(r.code).toBe(3);
+    expect(r.text).toMatch(/tolerance phase:3 rad: INADEQUATE — past ab-pendulum-linear's own horizon \(.*\): the bound is not claimed there/);
+  });
+
+  it('a bridge with no declared translation refuses: UNDETERMINED, naming that none is encoded', async () => {
+    const r = await run([...DAMPED_AT, 't=1', '--tolerance=phase:0.1']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/\n {2}tolerance phase:0\.1: UNDETERMINED — no translation from 'sup \|x − x_reduced\| for t ≥ 5 m\/b' into 'phase' is encoded for ab-damped-massless\n/);
+    const env = await json([...DAMPED_AT, 't=1', '--tolerance=phase:0.1']);
+    expect(env.result.tolerance).toEqual(expect.objectContaining({ verdict: 'undetermined', translation: null }));
+    expect(env.result.tolerance.horizon).toBeUndefined();
+  });
+
+  it('a multi-bridge path and an undeclared observable refuse the same way', async () => {
+    const lc = await run(['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.3', 'T0=2', 't=1', '--tolerance=phase:0.1']);
+    expect(lc.text).toMatch(/UNDETERMINED — no translation into 'phase' is encoded for a path of 2 bridges/);
+    const amp = await run([...PHASE_AT, 't=1', '--tolerance=amplitude:0.1']);
+    expect(amp.text).toMatch(/UNDETERMINED — no translation from 'relative period error, normalized by the value of the reduced model' into 'amplitude' is encoded for ab-pendulum-linear \(it declares: phase\)/);
+  });
+
+  it('a sweep judges each row through the translation', async () => {
+    const env = await json(['path', 'model-pendulum', 'model-spring', '--at', 'T0=1', 't=10', '--sweep', 'theta0=0.1:0.5:5', '--tolerance=phase:0.5']);
+    for (const r of env.result.rows) {
+      const eps = pendulumPeriodError(r.value);
+      expect(r.adequacy).toBe(10 <= (0.5 * (1 + eps)) / (2 * Math.PI * eps) ? 'adequate' : 'inadequate');
+    }
+    expect(env.result.rows.map((r: any) => r.adequacy)).toEqual(['adequate', 'adequate', 'adequate', 'inadequate', 'inadequate']);
+    expect(env.result.translation.evidence.tags).toEqual(['numerically-supported']);
+  });
+
+  it('a malformed observable tolerance is refused', async () => {
+    const r = await run([...PHASE_AT, '--tolerance=phase:']);
+    expect(r.code).toBe(1);
+    expect(r.text).toMatch(/--tolerance=phase: must be a finite number > 0/);
   });
 });
 
@@ -453,6 +536,77 @@ describe('I14 — each confrontation names its statistical object, criterion and
     expect(text).toContain(
       `by statistic: ${count('value')} σ-residual tests · ${count('upper-bound')} limits · ${count('consistency')} consistency ratios (no σ; never counted as precision tests)`,
     );
+  });
+
+  const NOT_RECORDED = 'not recorded — the record states nothing on this; that is not "none"';
+
+  it('every record prints preprocessing and independence; a not-recorded field is printed as not recorded, never as a statement', async () => {
+    const env = await json(['confront']);
+    const { text } = await run(['confront']);
+    const lineOf = (id: number, field: string) => {
+      const start = text.indexOf(`\n  be-${id} [`);
+      expect(start, `be-${id} block`).toBeGreaterThan(-1);
+      const next = text.indexOf('\n  be-', start + 1);
+      const blockText = text.slice(start, next === -1 ? undefined : next);
+      const lines = blockText.split('\n').filter((l) => l.startsWith(`    ${field}: `));
+      expect(lines, `be-${id} ${field}`).toHaveLength(1);
+      return lines[0].slice(`    ${field}: `.length);
+    };
+    let notRecorded = 0;
+    for (const r of env.result) {
+      const pre = lineOf(r.bridgeId, 'preprocessing');
+      if (r.preprocessing.state === 'not-recorded') {
+        notRecorded++;
+        expect(pre, `be-${r.bridgeId}`).toBe(NOT_RECORDED);
+      } else {
+        expect(pre, `be-${r.bridgeId}`).toBe(`${r.preprocessing.statement} [source: ${r.preprocessing.source}]`);
+      }
+      const ind = lineOf(r.bridgeId, 'independence');
+      const i = r.independence;
+      if (i.state === 'not-recorded') {
+        notRecorded++;
+        expect(ind, `be-${r.bridgeId}`).toBe(NOT_RECORDED);
+      } else if (i.state === 'shares-input') {
+        expect(ind, `be-${r.bridgeId}`).toBe(`shares ${i.shared} — ${i.statement} [source: ${i.source}]`);
+      } else {
+        expect(i.state).toBe('no-fitted-parameter');
+        expect(ind, `be-${r.bridgeId}`).toBe(`no parameter fitted to this measurement — ${i.statement} [source: ${i.source}]`);
+      }
+    }
+    // Both states must occur, or the not-recorded branch above proves nothing.
+    expect(notRecorded).toBeGreaterThan(0);
+    expect(env.result.some((r: any) => r.preprocessing.state === 'recorded')).toBe(true);
+  });
+
+  it('recorded and not-recorded are counted apart, and the counts are recounted from --json', async () => {
+    const env = await json(['confront']);
+    const pre = (s: string) => env.result.filter((r: any) => r.preprocessing.state === s).length;
+    const ind = (s: string) => env.result.filter((r: any) => r.independence.state === s).length;
+    expect(env.dataHandlingDistribution).toEqual({
+      preprocessing: { recorded: pre('recorded'), notRecorded: pre('not-recorded') },
+      independence: {
+        noFittedParameter: ind('no-fitted-parameter'),
+        sharesInput: ind('shares-input'),
+        notRecorded: ind('not-recorded'),
+      },
+    });
+    expect(pre('recorded') + pre('not-recorded')).toBe(env.result.length);
+    expect(ind('no-fitted-parameter') + ind('shares-input') + ind('not-recorded')).toBe(env.result.length);
+    const { text } = await run(['confront']);
+    expect(text).toContain(
+      `preprocessing: recorded for ${pre('recorded')} · not recorded for ${pre('not-recorded')}; ` +
+        `independence: ${ind('no-fitted-parameter')} no fitted parameter · ${ind('shares-input')} share an input · ` +
+        `${ind('not-recorded')} not recorded (independence is not goodness of fit)`,
+    );
+  });
+
+  it('be-61 and be-51 name what their observed value shares with the prediction', async () => {
+    const env = await json(['confront']);
+    const rec = (id: number) => env.result.find((r: any) => r.bridgeId === id);
+    expect(rec(61).approaches).toBe(rec(61).predicted);
+    expect(rec(61).independence.state).toBe('shares-input');
+    expect(rec(51).measured.quantity).toBe('PPN γ');
+    expect(rec(51).independence.state).toBe('shares-input');
   });
 });
 

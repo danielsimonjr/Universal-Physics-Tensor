@@ -29,6 +29,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
+import { missingForComposite, routeClaim, selectRoute } from './_atlas-route.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--at', valueStyle: 'either', repeatable: true },
@@ -38,7 +39,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=EPS]
+const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observable:]EPS]
         [--sweep name=lo:hi:n[:log]] [--csv] [--json]
         The chain of bridges from one model to another (across families when
         a bridge ends in another family's model), the relation the chain
@@ -59,10 +60,16 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=EPS]
         when every regime holds, every horizon holds at the given t, and the
         closed-form point error is <= EPS; INADEQUATE (exit 3) when any of
         them fails; UNDETERMINED when the point does not settle it. EPS is in
-        the bound's own norm: no translation to another observable (phase,
-        trajectory, amplitude) is encoded. With --sweep, each row is judged.
+        the bound's own norm. With --sweep, each row is judged.
+        --tolerance=<observable>:EPS asks in ANOTHER observable, only through
+        a translation the bridge declares (ab-pendulum-linear: phase, in rad,
+        t in the unit of T0). It reports the horizon t* at which the
+        accumulated error reaches EPS, ADEQUATE iff t <= t* (inclusive), and
+        the translation's own evidence, derived by running its witness. A path
+        with no declared translation is UNDETERMINED and says so.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
-              upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8`;
+              upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
+              upt path model-pendulum model-spring --at theta0=0.3 T0=2 t=5 --tolerance=phase:0.1`;
 
 const EPISTEMICS =
   'a path EXISTING is not a warrant: the bound is the warrant. A no-claim carries no number, ' +
@@ -84,40 +91,6 @@ interface HorizonReport {
   bridgeId: string;
   horizon: string;
   holds: boolean | null;
-}
-
-/**
- * What a `no-composite-claim` path lacks, stated as requirements rather than
- * supplied. The first silent table cell is named; then every exact map after a
- * bound, which states no norm and so records nothing about carrying that
- * bound's quantity through its mapping. Nothing here widens the table.
- */
-function missingForComposite(
-  api: CommandCtx['api'],
-  bridges: readonly import('../../cli-api.js').AtlasBridge[],
-): string[] {
-  const missing: string[] = [];
-  let relation: import('../../cli-api.js').AtlasBridge['relation'] = bridges[0]!.relation;
-  for (let i = 1; i < bridges.length; i++) {
-    const next = bridges[i]!;
-    const composed = api.composeRelation(relation, next.relation);
-    if (composed === 'no-composite-claim') {
-      missing.push(
-        `a composition-table cell for ${relation} then ${next.relation} (silent by design; widening it is a ` +
-          'reviewed act, docs/planning/Atlas-Phase-1-Design.md §2.2)',
-      );
-      break;
-    }
-    relation = composed;
-  }
-  let norm: string | undefined;
-  for (const b of bridges) {
-    if (b.bound !== undefined) norm = b.bound.norm;
-    else if (b.relation === 'exact-equivalence' && norm !== undefined) {
-      missing.push(`'${b.id}' to state that it carries '${norm}' through its mapping (it states no norm)`);
-    }
-  }
-  return missing;
 }
 
 const MAX_SAMPLES = 200;
@@ -144,9 +117,23 @@ export function parseSweep(spec: string): { name: string; values: number[]; spac
   return { name, values, spacing };
 }
 
-/** What a tolerance is judged in, and what it is not translated into. */
-const TOLERANCE_SCOPE =
-  "judged in the bound's own norm only; no translation to another observable (phase, trajectory, amplitude) is encoded";
+type Bridges = readonly import('../../cli-api.js').AtlasBridge[];
+type Translation = import('../../cli-api.js').ObservableTranslation;
+
+/** The translations a path can use: those of its bridge, when it is one bridge. */
+function pathTranslations(api: CommandCtx['api'], bridges: Bridges): readonly Translation[] {
+  return bridges.length === 1 ? api.translationsOf(bridges[0]!.id) : [];
+}
+
+/** What a tolerance in the bound's own norm is judged in, and what else this path can be asked in. */
+function toleranceScope(api: CommandCtx['api'], bridges: Bridges): string {
+  const declared = pathTranslations(api, bridges);
+  if (declared.length === 0) {
+    return "judged in the bound's own norm only; no translation to another observable (phase, trajectory, amplitude) is encoded for this path";
+  }
+  const asks = declared.map((t) => `--tolerance=${t.observable}:EPS (${t.unit})`).join(', ');
+  return `judged in the bound's own norm only; ${bridges[0]!.id} declares a translation, asked with ${asks}`;
+}
 
 /**
  * Whether the path is adequate for a requested tolerance at one point: every
@@ -170,11 +157,201 @@ export function judgeTolerance(
     : { verdict: 'inadequate', reason: `error ${e.pointBound.delta} exceeds tolerance ${tolerance}` };
 }
 
-export function parseTolerance(raw: string | undefined): number | null {
+/** `EPS` in the bound's own norm (`observable: null`), or `<observable>:EPS`. */
+export interface ToleranceRequest {
+  observable: string | null;
+  value: number;
+}
+
+export function parseTolerance(raw: string | undefined): ToleranceRequest | null {
   if (raw === undefined) return null;
-  const v = Number(raw);
-  if (raw === '' || !Number.isFinite(v) || v <= 0) throw new CliError(`upt path: --tolerance=${raw} must be a finite number > 0`);
-  return v;
+  const colon = raw.indexOf(':');
+  const observable = colon === -1 ? null : raw.slice(0, colon);
+  const number = colon === -1 ? raw : raw.slice(colon + 1);
+  if (observable !== null && !/^[a-z][a-z-]*$/.test(observable)) {
+    throw new CliError(`upt path: --tolerance=${raw} is not EPS or <observable>:EPS, e.g. --tolerance=phase:0.1`);
+  }
+  const v = Number(number);
+  if (number === '' || !Number.isFinite(v) || v <= 0) throw new CliError(`upt path: --tolerance=${raw} must be a finite number > 0`);
+  return { observable, value: v };
+}
+
+const showTolerance = (r: ToleranceRequest, unit?: string): string =>
+  r.observable === null ? String(r.value) : `${r.observable}:${r.value}${unit === undefined ? '' : ` ${unit}`}`;
+
+/** A tolerance in another observable, judged through the path's declared translation. */
+interface ObservableJudgement {
+  verdict: 'adequate' | 'inadequate' | 'undetermined';
+  reason: string;
+  translation: Translation | null;
+  /** The bound's quantity at this point, in the bound's own norm. */
+  boundErrorAtPoint: number | null;
+  /** The bound's supremum over its domain, in the same norm. */
+  domainSupremum: number | null;
+  /** The accumulated error in the observable at the given t. */
+  observableErrorAt: number | null;
+  /** t*: where the accumulated error reaches the tolerance at this point. */
+  horizon: number | null;
+  /** t* from the domain supremum: the shortest over the bridge's domain. */
+  domainHorizon: number | null;
+  /** The bridge's own horizon at t; `null` when t was not given. */
+  bridgeHorizonHolds: boolean | null;
+}
+
+/**
+ * Whether the path is adequate for a tolerance in another observable. Only a
+ * one-bridge path whose bridge declares a translation into that observable is
+ * judged; the regime, the point bound and the bridge's own horizon still gate
+ * it, and anything the point does not settle is `undetermined`.
+ * @internal
+ */
+export function judgeObservable(
+  api: CommandCtx['api'],
+  request: ToleranceRequest & { observable: string },
+  bridges: Bridges,
+  e: Evaluation,
+  at: Readonly<Record<string, number>>,
+): ObservableJudgement {
+  const tr = pathTranslations(api, bridges).find((x) => x.observable === request.observable) ?? null;
+  const none = {
+    translation: tr,
+    boundErrorAtPoint: e.pointBound?.delta ?? null,
+    domainSupremum: bridges.length === 1 ? (bridges[0]!.bound?.delta ?? null) : null,
+    observableErrorAt: null,
+    horizon: null,
+    domainHorizon: null,
+    bridgeHorizonHolds: null,
+  };
+  if (tr === null) {
+    const reason =
+      bridges.length !== 1
+        ? `no translation into '${request.observable}' is encoded for a path of ${bridges.length} bridges: translations are declared per bridge and none composes`
+        : `no translation from '${bridges[0]!.bound?.norm ?? 'no bound'}' into '${request.observable}' is encoded for ${bridges[0]!.id}` +
+          (api.translationsOf(bridges[0]!.id).length === 0
+            ? ''
+            : ` (it declares: ${api.translationsOf(bridges[0]!.id).map((x) => x.observable).join(', ')})`);
+    return { verdict: 'undetermined', reason, ...none };
+  }
+  if (e.allRegimesHold === false) return { verdict: 'inadequate', reason: 'outside a regime on the path: no bound is claimed', ...none };
+  if (e.allRegimesHold === 'unknown') return { verdict: 'undetermined', reason: 'a regime coordinate was not supplied', ...none };
+  if (e.pointBound === null) return { verdict: 'undetermined', reason: e.pointBoundReason ?? 'no point bound', ...none };
+  const missing = tr.parameters.filter((p) => at[p] === undefined);
+  if (missing.length > 0) {
+    return { verdict: 'undetermined', reason: `the translation needs ${missing.join(', ')} (via --at)`, ...none };
+  }
+  const bound = bridges[0]!.bound!;
+  const eps = e.pointBound.delta;
+  const horizon = tr.horizonFor(eps, request.value, at);
+  const domainHorizon = tr.horizonFor(bound.delta, request.value, at);
+  if (Number.isNaN(horizon)) return { verdict: 'undetermined', reason: 'the translation is undefined at this point', ...none };
+  const t = at['t'];
+  const judged = { ...none, horizon, domainHorizon };
+  if (t === undefined) {
+    return {
+      verdict: 'undetermined',
+      reason: `no t= given; the ${tr.observable} horizon here is t* = ${horizon} (${tr.timeUnit})`,
+      ...judged,
+    };
+  }
+  const observableErrorAt = tr.errorAt(eps, t, at);
+  const bridgeHorizonHolds = bound.horizonHolds(t, at);
+  const withT = { ...judged, observableErrorAt, bridgeHorizonHolds };
+  if (!bridgeHorizonHolds) {
+    return { verdict: 'inadequate', reason: `past ${bridges[0]!.id}'s own horizon (${bound.horizon}): the bound is not claimed there`, ...withT };
+  }
+  return t <= horizon
+    ? { verdict: 'adequate', reason: `t = ${t} <= t* = ${horizon}: accumulated ${tr.observable} error ${observableErrorAt} ${tr.unit} <= ${request.value}`, ...withT }
+    : { verdict: 'inadequate', reason: `t = ${t} > t* = ${horizon}: accumulated ${tr.observable} error ${observableErrorAt} ${tr.unit} exceeds ${request.value}`, ...withT };
+}
+
+/** The translation's evidence, DERIVED by running its witnesses now; never the bound's. */
+function translationEvidence(api: CommandCtx['api'], tr: Translation) {
+  const runs = tr.checks.map((c) => api.runNumericWitness(c));
+  const passing = new Set(runs.filter((r) => r.status === 'checked').map((r) => r.witnessId));
+  return {
+    tags: [...api.deriveEvidence({ witnesses: tr.witnesses }, passing)].sort(),
+    witnesses: runs.map((r) => ({
+      id: r.witnessId,
+      claim: tr.witnesses.find((w) => w.id === r.witnessId)?.tolerance ?? null,
+      status: r.status,
+      detail: r.detail,
+    })),
+    note: "the translation's own evidence, distinct from the bound's; it carries no formal reference",
+  };
+}
+
+function thresholdOrigin(request: ToleranceRequest, tr: Translation, bridges: Bridges): string {
+  return (
+    `t* is derived from the requested tolerance ${request.value} ${tr.unit} through the translation; ` +
+    `${bridges[0]!.id}'s own horizon (${bridges[0]!.bound!.horizon}) is the record's fixed threshold, judged separately`
+  );
+}
+
+function observableReport(
+  request: ToleranceRequest,
+  j: ObservableJudgement,
+  bridges: Bridges,
+  evidence: ReturnType<typeof translationEvidence> | null,
+) {
+  const tr = j.translation;
+  return {
+    observable: request.observable,
+    value: request.value,
+    verdict: j.verdict,
+    reason: j.reason,
+    ...(tr === null
+      ? { translation: null }
+      : {
+          unit: tr.unit,
+          translation: {
+            bridgeId: tr.bridgeId,
+            fromNorm: tr.fromNorm,
+            definition: tr.definition,
+            derivation: tr.derivation,
+            premisesNotChecked: [...tr.premises],
+            timeUnit: tr.timeUnit,
+            notCovered: [...tr.notCovered],
+          },
+          boundErrorAtPoint: j.boundErrorAtPoint,
+          domainSupremum: j.domainSupremum,
+          observableErrorAt: j.observableErrorAt,
+          horizon: j.horizon,
+          domainHorizon: j.domainHorizon,
+          horizonConvention: tr.boundary,
+          thresholdOrigin: thresholdOrigin(request, tr, bridges),
+          bridgeHorizon: { horizon: bridges[0]!.bound!.horizon, holds: j.bridgeHorizonHolds },
+          evidence,
+        }),
+  };
+}
+
+function printObservable(
+  out: CommandCtx['out'],
+  request: ToleranceRequest,
+  j: ObservableJudgement,
+  bridges: Bridges,
+  evidence: ReturnType<typeof translationEvidence> | null,
+): void {
+  const tr = j.translation;
+  out(`  tolerance ${showTolerance(request, tr?.unit)}: ${j.verdict.toUpperCase()} — ${j.reason}`);
+  if (tr === null) return;
+  const show = (v: number | null): string => (v === null ? 'not evaluated' : String(v));
+  out(`    translation (${tr.bridgeId}): ${tr.fromNorm} → ${tr.observable}: ${tr.definition}`);
+  out(`      ${tr.derivation}`);
+  out(`      premises not machine-checked: ${tr.premises.join('; ')}`);
+  out(`    ${bridges[0]!.bound!.norm} at this point: ${show(j.boundErrorAtPoint)}; domain supremum: ${show(j.domainSupremum)}`);
+  out(`    accumulated ${tr.observable} error at t: ${j.observableErrorAt === null ? 'not evaluated' : `${j.observableErrorAt} ${tr.unit}`}`);
+  out(`    ${tr.observable} horizon t* at this point: ${show(j.horizon)} (${tr.timeUnit}; ${tr.boundary})`);
+  out(`    ${tr.observable} horizon over the whole domain ${bridges[0]!.bound!.domain} (from the supremum): ${show(j.domainHorizon)}`);
+  out(`    threshold origin: ${thresholdOrigin(request, tr, bridges)}`);
+  out(
+    `    ${bridges[0]!.id}'s own horizon at t: ${j.bridgeHorizonHolds === null ? 'not evaluated' : j.bridgeHorizonHolds ? 'holds' : 'VIOLATED'} — ${bridges[0]!.bound!.horizon}`,
+  );
+  out(`    not covered by this translation: ${tr.notCovered.join('; ')}`);
+  if (evidence !== null) {
+    out(`    translation evidence: ${evidence.tags.join(', ')} (${evidence.note})`);
+    for (const w of evidence.witnesses) out(`      - ${w.id} [numeric, run now; ${w.claim ?? 'no claim stated'}]: ${w.status} — ${w.detail}`);
+  }
 }
 
 type Evaluation = {
@@ -201,7 +378,14 @@ function runSweep(
     result: { kind: 'bound'; norm?: string | null | undefined; bound: { K: number; delta: number } } | { kind: 'no-claim'; reason: string };
     evaluateAt: (at: Readonly<Record<string, number>>) => Evaluation;
     spec: string;
-    tolerance: number | null;
+    tolerance: ToleranceRequest | null;
+    scope: string;
+    judgeRow: (e: Evaluation, at: Readonly<Record<string, number>>, tGiven: boolean) => {
+      verdict: string;
+      observableErrorAt?: number | null;
+      horizon?: number | null;
+    };
+    translation: { tr: Translation; evidence: ReturnType<typeof translationEvidence> } | null;
   },
 ): number {
   const { out, args } = ctx;
@@ -210,7 +394,8 @@ function runSweep(
     throw new CliError(`upt path: '${sweep.name}' is both swept and fixed by --at; give it one role`);
   }
   const rows = sweep.values.map((value) => {
-    const e = s.evaluateAt({ ...s.point, [sweep.name]: value });
+    const at = { ...s.point, [sweep.name]: value };
+    const e = s.evaluateAt(at);
     const regime = e.allRegimesHold === true ? 'holds' : e.allRegimesHold === false ? 'violated' : 'unknown';
     const horizon = e.horizons.length === 0 || e.horizons[0]!.holds === null ? 'not-evaluated' : e.allHold ? 'holds' : 'violated';
     let error: number | null = e.pointBound?.delta ?? null;
@@ -219,14 +404,15 @@ function runSweep(
       error = null;
       reason = 'past the horizon: the bound is not claimed there';
     }
-    const adequacy = s.tolerance === null ? null : judgeTolerance(s.tolerance, e, 't' in s.point || sweep.name === 't').verdict;
+    const judged = s.tolerance === null ? null : s.judgeRow(e, at, 't' in s.point || sweep.name === 't');
     return {
       value,
       regime,
       horizon,
       error,
       ...(error === null && reason !== null ? { reason } : {}),
-      ...(adequacy === null ? {} : { adequacy }),
+      ...(judged === null ? {} : { adequacy: judged.verdict }),
+      ...(judged?.horizon === undefined ? {} : { observableHorizon: judged.horizon, observableError: judged.observableErrorAt ?? null }),
     };
   });
   const tally = (k: 'regime' | 'horizon', v: string) => rows.filter((r) => r[k] === v).length;
@@ -248,7 +434,24 @@ function runSweep(
           kind: s.result.kind,
           ...(s.result.kind === 'bound' ? { domainSupremum: s.result.bound, norm: s.result.norm } : { reason: s.result.reason }),
           evaluated,
-          ...(s.tolerance === null ? {} : { tolerance: s.tolerance, toleranceScope: TOLERANCE_SCOPE }),
+          ...(s.tolerance === null
+            ? {}
+            : s.tolerance.observable === null
+              ? { tolerance: s.tolerance.value, toleranceScope: s.scope }
+              : {
+                  tolerance: s.tolerance.value,
+                  toleranceObservable: s.tolerance.observable,
+                  ...(s.translation === null
+                    ? { translation: null }
+                    : {
+                        translation: {
+                          bridgeId: s.translation.tr.bridgeId,
+                          unit: s.translation.tr.unit,
+                          boundary: s.translation.tr.boundary,
+                          evidence: s.translation.evidence,
+                        },
+                      }),
+                }),
           rows,
           tally: {
             inRegime: tally('regime', 'holds'),
@@ -277,7 +480,15 @@ function runSweep(
   out(`  path: ${s.bridges.map((b) => b.id).join(' → ')}`);
   if (s.result.kind === 'bound') out(`  domain supremum: K = ${s.result.bound.K} · delta = ${s.result.bound.delta}`);
   out(`  evaluated: ${evaluated}`);
-  if (s.tolerance !== null) out(`  tolerance: ${s.tolerance}, ${TOLERANCE_SCOPE}`);
+  if (s.tolerance !== null && s.tolerance.observable === null) out(`  tolerance: ${s.tolerance.value}, ${s.scope}`);
+  if (s.tolerance !== null && s.tolerance.observable !== null) {
+    out(
+      s.translation === null
+        ? `  tolerance: ${showTolerance(s.tolerance)} — no translation into '${s.tolerance.observable}' is encoded for this path; every row is undetermined`
+        : `  tolerance: ${showTolerance(s.tolerance, s.translation.tr.unit)} through ${s.translation.tr.bridgeId}'s declared translation (${s.translation.tr.boundary}); ` +
+            `translation evidence: ${s.translation.evidence.tags.join(', ')}`,
+    );
+  }
   const tolCol = s.tolerance === null ? '' : `${'adequacy'.padEnd(13)} `;
   out(`  ${sweep.name.padEnd(12)} ${'regime'.padEnd(10)} ${'horizon'.padEnd(14)} ${tolCol}error`);
   for (const r of rows) {
@@ -308,33 +519,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   const point = parseAt(assignments, 'path');
   const t = point['t'];
 
-  // Endpoints in one family are searched in that family first, so a route
-  // that exists inside it is the one reported. Endpoints in different
-  // families, or a same-family pair with no route inside it, are searched
-  // across the whole atlas: a family is a filing label, and a bridge such as
-  // ab-kg-schrodinger (waves → diffusion) is as qualified as any other.
-  const familyOf = (id: string): string | undefined =>
-    api.ATLAS_FAMILIES.find((f) => f.models.some((m) => m.id === id))?.family;
   const bridgeFamily = (id: string): string | undefined =>
     api.ATLAS_FAMILIES.find((f) => f.bridges.some((b) => b.id === id))?.family;
-  const fromFamily = familyOf(from);
-  const toFamily = familyOf(to);
-  const family = fromFamily ?? toFamily ?? api.ATLAS_FAMILIES[0]!.family;
-
-  let bridges: readonly import('../../cli-api.js').AtlasBridge[] | null;
-  try {
-    if (fromFamily !== undefined && toFamily !== undefined) {
-      bridges = fromFamily === toFamily ? api.findPath(family, from, to) : null;
-      bridges ??= api.findAtlasPath(from, to);
-    } else {
-      bridges = api.findPath(family, from, to);
-    }
-  } catch (e) {
-    // RangeError: an unknown endpoint. Reported as a CliError (exit 1) rather
-    // than surfaced as a crash — and NOT as `null`, which would be
-    // indistinguishable from a genuinely disconnected pair.
-    throw new CliError(`upt path: ${e instanceof Error ? e.message : String(e)}`);
-  }
+  const { bridges, fromFamily, toFamily } = selectRoute(api, from, to, 'path');
 
   if (bridges === null) {
     if (wantJson) {
@@ -362,26 +549,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  // boundPath throws, rather than inventing a constant, when a step with no
-  // Lipschitz constant is followed by another (ab-kg-oscillator then
-  // ab-spring-lc). For this command that is a refusal like any other.
-  let result:
-    | ReturnType<typeof api.boundPath>
-    | { kind: 'no-claim'; reason: 'missing-lipschitz'; detail: string };
-  try {
-    result = api.boundPath(bridges);
-  } catch (e) {
-    if (!(e instanceof api.MissingLipschitzError)) throw e;
-    const unbounded = bridges.slice(0, -1).find((b) => b.bound === undefined && b.relation !== 'exact-equivalence');
-    result = {
-      kind: 'no-claim',
-      reason: 'missing-lipschitz',
-      detail:
-        `'${unbounded?.id ?? '?'}' (${unbounded?.relation ?? '?'}) states no Lipschitz constant and is not the ` +
-        'last step, so the error after it is unbounded and the path carries no bound',
-    };
-  }
-
+  const result = routeClaim(api, bridges);
   const missing = result.kind === 'no-claim' && result.reason === 'no-composite-claim' ? missingForComposite(api, bridges) : [];
 
   const evaluateAt = (at: Readonly<Record<string, number>>) => {
@@ -447,21 +615,50 @@ async function run(ctx: CommandCtx): Promise<number> {
   };
   const tolValues = args.flags.get('tolerance');
   const tolerance = parseTolerance(tolValues === undefined ? undefined : tolValues[tolValues.length - 1]);
+  const scope = toleranceScope(api, bridges);
+  const translation =
+    tolerance?.observable == null ? undefined : pathTranslations(api, bridges).find((x) => x.observable === tolerance.observable);
   const sweepSpec = args.flags.get('sweep');
   if (sweepSpec !== undefined && sweepSpec.length > 0) {
-    return runSweep(ctx, { from, to, point, bridges, result, evaluateAt, spec: sweepSpec[sweepSpec.length - 1]!, tolerance });
+    return runSweep(ctx, {
+      from,
+      to,
+      point,
+      bridges,
+      result,
+      evaluateAt,
+      spec: sweepSpec[sweepSpec.length - 1]!,
+      tolerance,
+      scope,
+      judgeRow: (e, at, tGiven) =>
+        tolerance === null || tolerance.observable === null
+          ? judgeTolerance(tolerance?.value ?? 0, e, tGiven)
+          : judgeObservable(api, { ...tolerance, observable: tolerance.observable }, bridges, e, at),
+      translation: translation === undefined ? null : { tr: translation, evidence: translationEvidence(api, translation) },
+    });
   }
   if (args.flags.has('csv')) throw new CliError('upt path: --csv needs --sweep (a single point is not a table)');
 
   const evaluation = evaluateAt(point);
   const { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason } = evaluation;
-  const adequacy = tolerance === null ? null : judgeTolerance(tolerance, evaluation, t !== undefined);
+  const adequacy =
+    tolerance === null || tolerance.observable !== null ? null : judgeTolerance(tolerance.value, evaluation, t !== undefined);
+  const observed =
+    tolerance === null || tolerance.observable === null
+      ? null
+      : judgeObservable(api, { ...tolerance, observable: tolerance.observable }, bridges, evaluation, point);
+  const evidence = translation === undefined ? null : translationEvidence(api, translation);
 
   // A violated regime or horizon is a failed check: exit 3 (persona finding F2),
   // and so is a tolerance the point error exceeds. UNKNOWN, where a coordinate
   // or t was not supplied, is not a failure.
   const exitCode =
-    allRegimesHold === false || (t !== undefined && !allHold) || adequacy?.verdict === 'inadequate' ? EXIT_CHECK_FAILED : 0;
+    allRegimesHold === false ||
+    (t !== undefined && !allHold) ||
+    adequacy?.verdict === 'inadequate' ||
+    observed?.verdict === 'inadequate'
+      ? EXIT_CHECK_FAILED
+      : 0;
 
   if (wantJson) {
     emitJson(
@@ -502,7 +699,8 @@ async function run(ctx: CommandCtx): Promise<number> {
           horizons,
           horizonsEvaluated: t !== undefined,
           allHorizonsHold: t === undefined ? null : allHold,
-          ...(adequacy === null ? {} : { tolerance: { value: tolerance, ...adequacy, scope: TOLERANCE_SCOPE } }),
+          ...(adequacy === null ? {} : { tolerance: { value: tolerance!.value, ...adequacy, scope } }),
+          ...(observed === null ? {} : { tolerance: observableReport(tolerance!, observed, bridges, evidence) }),
         },
       },
       ctx.write,
@@ -574,9 +772,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
   if (adequacy !== null) {
-    out(`  tolerance ${tolerance}: ${adequacy.verdict.toUpperCase()} — ${adequacy.reason}`);
-    out(`    (${TOLERANCE_SCOPE})`);
+    out(`  tolerance ${tolerance!.value}: ${adequacy.verdict.toUpperCase()} — ${adequacy.reason}`);
+    out(`    (${scope})`);
   }
+  if (observed !== null) printObservable(out, tolerance!, observed, bridges, evidence);
   out(`  (${EPISTEMICS})`);
   return exitCode;
 }

@@ -19,18 +19,13 @@ import { UsageError, CliError } from './errors.js';
 import { parseArgs } from './args.js';
 import { packageVersion } from './version.js';
 import { resolveCommand, type CommandCtx } from './command.js';
+import { recordInvocation, replayRecord, showRecord, type Io } from './record.js';
 // Side-effect import: registers every ported command (see commands/index.ts).
 import './commands/index.js';
 
-/** Writer surface `runCli` needs. In production these wrap `process.stdout`/
- * `process.stderr` with exact `console.log`/`console.error` semantics; tests
- * pass a capturing stand-in as the optional second argument. Kept as an
- * unexported inline shape (not part of the CLI's public surface). */
-type Io = {
-  out: (line?: string) => void;
-  err: (line?: string) => void;
-  write: (s: string) => void;
-};
+// `Io` is the writer surface `runCli` needs. In production these wrap
+// `process.stdout`/`process.stderr` with exact `console.log`/`console.error`
+// semantics; tests pass a capturing stand-in as the optional second argument.
 
 function stdoutLine(line?: string): void {
   process.stdout.write((line ?? '') + '\n');
@@ -184,11 +179,14 @@ Usage:
         discovery funnel (an axis gates only when it MEASURABLY fires). Reproduces
         the rank-7 result (topology/statistics/symmetry classify but do not gate).
 
-  upt evaluate <be-NN> key=value[unit] ... [--sigma key=u ...] [--corr a,b=rho ...]
-        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65).
+  upt evaluate <be-NN | case-id> key=value[unit] ... [--sigma key=u ...] [--corr a,b=rho ...]
+        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65),
+        or an applied case (resistor noise, Brownian sphere, damped resonator):
+        parent and scalar equations, observable, regime checks and a route to
+        measurement; a violated regime check prints NOT QUALIFIED and exits 3.
         Every input declares its unit and meaning; a value may carry a unit
         (d_m=1um, T_K=25degC) and converts only when the dimensions agree.
-        With no bridge id, lists the evaluable bridges and their declared inputs.
+        With no id, lists the evaluable bridges and cases and their inputs.
         --sigma/--corr propagate input uncertainties to first order, with a
         curvature check that flags an unreliable linearization.
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_sun
@@ -243,10 +241,12 @@ Usage:
         that inspects each. An equal dimension is never a match.
         e.g.  upt search thermal noise
 
-  upt probe <scan|show|run|candidates|falsify|rank|design|reproduce>
+  upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
         Experimental expression/residual search (Product B). Orthogonal to
         \`upt discover\`, which vets quantity identifications a≡b and is frozen.
         Relation-link gaps are not searchable here — use \`upt discover\`.
+        \`study --data=FILE\` fits calibrated observations (units, σ) on
+        exploratory rows only and tests on withheld holdout/replication rows.
 
   upt help        Show this message.
 
@@ -254,14 +254,73 @@ Run with no arguments for a short demo.
 
   upt version     Show the installed CLI/package version.
   --json          Global flag: emit a machine-readable JSON envelope instead of
-                  text (where the command supports it).`;
+                  text (where the command supports it).
+
+  --record=FILE <command> ...
+                  Run the command unchanged and append one JSONL entry to FILE:
+                  arguments, stdout, stderr, exit code, versions, parser, the
+                  constant table. Failed invocations are recorded too.
+  --replay=FILE [--json]
+                  Re-run every entry of FILE; report each as reproduced, differs
+                  (naming the stream and first differing line) or not replayable,
+                  and name every changed version, parser or constant. Exit 0 all
+                  reproduced unchanged, 3 any differs, 1 otherwise.
+  --show-record=FILE [--json]
+                  Print FILE as a readable transcript, running nothing.`;
+
+const GLOBAL_FILE_OPTION = /^--(record|replay|show-record)(?:=(.*))?$/;
 
 /**
  * Verb-first CLI entry point. `argv` is the command + its arguments (NOT
  * `process.argv` — callers slice off the node/script prefix themselves, as
  * `bin/upt.mjs` did with `process.argv.slice(2)`).
+ *
+ * Leading `--record=FILE` / `--replay=FILE` / `--show-record=FILE` are global
+ * options (see `record.ts`); anything else goes to `dispatch` unchanged.
  */
 export async function runCli(argv: string[], io: Io = defaultIo): Promise<number> {
+  const files: Partial<Record<'record' | 'replay' | 'show-record', string>> = {};
+  let json = false;
+  let i = 0;
+  try {
+    for (; i < argv.length; i++) {
+      const m = GLOBAL_FILE_OPTION.exec(argv[i]);
+      if (m) {
+        const name = m[1] as keyof typeof files;
+        if (!m[2]) throw new UsageError(`upt: '--${name}' requires '--${name}=FILE'`);
+        if (files[name] !== undefined) throw new UsageError(`upt: '--${name}' given more than once`);
+        files[name] = m[2];
+      } else if (argv[i] === '--json' && (files.replay !== undefined || files['show-record'] !== undefined)) {
+        json = true;
+      } else {
+        break;
+      }
+    }
+    if (i === 0) return await dispatch(argv, io);
+    const rest = argv.slice(i);
+    if (Object.keys(files).length > 1) {
+      throw new UsageError('upt: use one of --record, --replay and --show-record at a time');
+    }
+    if (files.record !== undefined) return await recordInvocation(files.record, rest, dispatch, io, api);
+    if (rest.length > 0) {
+      throw new UsageError(`upt: '--${files.replay !== undefined ? 'replay' : 'show-record'}' takes no command (got '${rest[0]}')`);
+    }
+    if (files.replay !== undefined) return await replayRecord(files.replay, json, dispatch, io, api);
+    return showRecord(files['show-record']!, json, io);
+  } catch (e) {
+    if (e instanceof UsageError) {
+      io.err(e.message);
+      return 2;
+    }
+    if (e instanceof CliError) {
+      io.err(e.message);
+      return 1;
+    }
+    throw e;
+  }
+}
+
+async function dispatch(argv: string[], io: Io): Promise<number> {
   const { out, err, write } = io;
 
   try {

@@ -120,3 +120,26 @@ export type { ProblemFile } from './problem.js';
 export { runProbeSearch } from './pipeline.js';
 export type { ProbeSearchOptions, ProbeSearchResult } from './pipeline.js';
 export { formatProbeReport, formatFrontierScan, formatFrontierGap } from './report.js';
+export {
+  parseStudy,
+  loadStudyFromJson,
+  runProbeStudy,
+  formatProbeStudy,
+  chiSquareSurvival,
+  StudyRefusal,
+} from './study.js';
+export type {
+  ProbeStudy,
+  ProbeStudyOptions,
+  ProbeStudyResult,
+  StudyVerdict,
+  ReplicationOutcome,
+  StudyRole,
+  StudyProvenance,
+  StudyObservation,
+  StudyBaseline,
+  SetTest,
+  ModelTest,
+  CandidateTest,
+  StudyDesignSuggestion,
+} from './study.js';
