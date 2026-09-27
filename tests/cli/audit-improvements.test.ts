@@ -651,11 +651,32 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     expect(summarizeWitnessRuns([{ witnessId: 'X2', kind: 'symbolic', status: 'unresolved', reason: 'peer-absent', detail: '' }]).exitCode).toBe(0);
   });
 
+  it('an attributed witness is listed under the bound; the unattributed one is listed apart', async () => {
+    const { text } = await run(['atlas', 'ab-klein-gordon-wave']);
+    const s = text.slice(text.indexOf('evidence by claim'));
+    expect(s).toMatch(
+      /\n {2}bound: basis closed-form \(deltaAt is the exact error\)\n {4}- WS4 \[numeric\] tests it at c = 1, k = 20, omega0 = 1 \(its error there is the bound's norm; tolerance ≤ delta\): registered in-process, not run/,
+    );
+    const apart = s.slice(s.indexOf('witness execution, witnesses not attributed to a claim:\n'));
+    expect(apart).toMatch(/^witness execution, witnesses not attributed to a claim:\n {2}- WS4b \[numeric\]: result not observed/);
+    expect(apart).not.toMatch(/WS4 \[/);
+    const env = await json(['atlas', 'ab-klein-gordon-wave']);
+    expect(env.result.claims.bound.witnesses).toEqual([{ id: 'WS4', at: { omega0: 1, c: 1, k: 20 } }]);
+    expect(env.result.witnessExecution.map((w: any) => [w.id, w.claim])).toEqual([['WS4', 'bound'], ['WS4b', null]]);
+  });
+
+  it('--run reports an attributed witness\'s result under the claim it tests', async () => {
+    const r = await run(['atlas', 'ab-telegraph-diffusion', '--run']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/\n {4}- WD6 \[numeric\] tests it at D = 1, q = 1, tau = 0\.025 .*: checked \(run now\) — Fine error/);
+  });
+
   it('--json carries the claims and the per-witness execution status', async () => {
     const env = await json(['atlas', 'ab-pendulum-linear']);
     expect(env.result.claims.correspondence.formalReference.fidelity).toBe('sanity-lemmas');
     expect(env.result.claims.bound.basis).toBe('closed-form');
     expect(env.result.witnessExecution.map((w: any) => w.status)).toEqual(['not-observed', 'not-observed', 'not-observed']);
+    expect(env.result.claims.bound.witnesses).toEqual([]);
   });
 });
 

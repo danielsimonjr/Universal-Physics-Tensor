@@ -74,11 +74,28 @@ export interface RegisteredSymbolicWitness {
   readonly spec: SymbolicWitnessSpec;
 }
 
+/**
+ * The claim of its record a witness tests. For `'bound'`: at `at(fineResolution)`,
+ * a point inside the record's regime, the witness's error is the bound's own
+ * quantity in the bound's norm, and its tolerance is no looser than `delta`, so
+ * the bound failing there refutes the witness. `tests/atlas/witness-claims.test.ts`
+ * checks each attribution against the spec.
+ *
+ * @internal
+ */
+export interface WitnessClaim {
+  readonly name: 'bound';
+  /** The point the spec evaluates at a resolution, in the names the bound's `deltaAt` reads. */
+  readonly at: (resolution: number) => Readonly<Record<string, number>>;
+}
+
 /** A numeric spec bound to the record it supports. @internal */
 export interface RegisteredNumericWitness {
   readonly recordId: string;
   readonly kind: 'numeric';
   readonly spec: NumericWitnessSpec;
+  /** Absent: the witness is not attributed to any one claim of its record. */
+  readonly claim?: WitnessClaim;
 }
 
 /** One entry of the registry. @internal */
@@ -351,6 +368,10 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       fineResolution: 2,
       tolerance: 2e-3,
     },
+    claim: {
+      name: 'bound',
+      at: (resolution) => ({ omega0: WS4_FIXTURE.omega0, c: WS4_FIXTURE.c, k: WS4_FIXTURE.k0 * resolution }),
+    },
   },
   // ── Sprint 4 closure ─────────────────────────────────────────────────────
   {
@@ -389,6 +410,10 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       fineResolution: 4,
       tolerance: 0.03,
     },
+    claim: {
+      name: 'bound',
+      at: (resolution) => ({ tau: WD6_FIXTURE.tau0 / resolution, D: WD6_FIXTURE.D, q: WD6_FIXTURE.q }),
+    },
   },
   {
     // ε → ∞: the telegraph oscillation frequency over c q tends to 1.
@@ -402,6 +427,14 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: 3e-3,
+    },
+    claim: {
+      name: 'bound',
+      at: (resolution) => ({
+        tau: (WD7_FIXTURE.eps0 * resolution) / (WD7_FIXTURE.D * WD7_FIXTURE.q ** 2),
+        D: WD7_FIXTURE.D,
+        q: WD7_FIXTURE.q,
+      }),
     },
   },
   {
@@ -429,6 +462,8 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       fineResolution: 2,
       tolerance: 1e-3,
     },
+    // The spec reads only x = ck/ω₀; c = ω₀ = 1 is one point with that x.
+    claim: { name: 'bound', at: (resolution) => ({ c: 1, omega0: 1, k: WS5_FIXTURE.x0 / resolution }) },
   },
   {
     // Uniform-mode restriction: the full KG PDE, uniform data, vs cos(ω₀t).
@@ -456,6 +491,15 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       coarseResolution: 1,
       fineResolution: 2,
       tolerance: 0.15,
+    },
+    claim: {
+      name: 'bound',
+      at: (resolution) => ({
+        F: WS7_FIXTURE.F,
+        mu: WS7_FIXTURE.mu,
+        EI: WS7_FIXTURE.EI,
+        k: WS7_FIXTURE.k0 / resolution,
+      }),
     },
   },
 ];
