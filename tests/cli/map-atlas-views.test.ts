@@ -48,7 +48,7 @@ describe('upt map --route', () => {
     expect(stdout).toContain("route claim: no composite claim — reason 'no-composite-claim'");
     expect(stdout).toContain('model-lc [oscillators]: L q″ + q/C = 0');
     expect(stdout).toMatch(/equation: CE-lc-resonance — .*graph edge \{inductance, capacitance\} → angular-frequency/);
-    expect(stdout).toContain('equation links (source: AtlasModel.canonicalRefs): 2 of 3 models record one; 1 record none');
+    expect(stdout).toContain('equation links (source: AtlasModel.canonicalRefs): 3 of 3 models record one; 0 record none');
   });
 
   it('reports exactly the route and the refusal `upt path` reports, for every ordered pair of models', async () => {
@@ -164,10 +164,11 @@ describe('upt map --family', () => {
   });
 
   it('joins a model to an equation ONLY through its canonicalRefs, never by name', async () => {
-    // Positive control: the registry HOLDS a pendulum equation, so a join by
-    // name or shared quantity would attach it to model-pendulum.
-    expect(CANONICAL_EQUATIONS.some((e) => e.id === 'CE-pendulum-period')).toBe(true);
-    expect(MODELS.find((m) => m.id === 'model-pendulum')!.canonicalRefs).toEqual([]);
+    // Positive control: the registry HOLDS an RC equation over the RLC model's
+    // own resistance and capacitance, so a join by name or shared quantity
+    // would attach it to model-rlc.
+    expect(CANONICAL_EQUATIONS.some((e) => e.id === 'CE-rc-time-constant')).toBe(true);
+    expect(MODELS.find((m) => m.id === 'model-rlc')!.canonicalRefs).toEqual([]);
     for (const f of ATLAS_FAMILIES) {
       const r = (await json(['map', `--family=${f.family}`])).result;
       for (const m of f.models) {
@@ -177,8 +178,8 @@ describe('upt map --family', () => {
       expect(r.equationLinks.withLink + r.equationLinks.withoutLink).toBe(f.models.length);
     }
     const { stdout } = await run(['map', '--family=oscillators']);
-    expect(stdout).toMatch(/model-pendulum \[oscillators\]: .*\n\s+equations: no canonical equation recorded in its canonicalRefs/);
-    expect(stdout).not.toContain('CE-pendulum-period');
+    expect(stdout).toMatch(/model-rlc \[oscillators\]: .*\n\s+equations: no canonical equation recorded in its canonicalRefs/);
+    expect(stdout).not.toContain('CE-rc-time-constant');
   });
 
   it('--evidence=formally-proved keeps only bridges with a reviewed formalRef, and counts every other bridge', async () => {

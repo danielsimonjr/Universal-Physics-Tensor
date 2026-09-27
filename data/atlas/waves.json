@@ -74,7 +74,9 @@
         }
       ],
       "dimensionlessInputs": [],
-      "canonicalRefs": [],
+      "canonicalRefs": [
+        "CE-wave-speed"
+      ],
       "regime": {
         "family": "waves",
         "inequalities": [],

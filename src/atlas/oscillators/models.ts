@@ -13,7 +13,8 @@
  * says "not recorded" where a present empty one would claim "there are none".
  *
  * `canonicalRefs` are restricted to ids that exist in `CANONICAL_EQUATIONS`;
- * `tests/atlas/models.test.ts` resolves every one of them.
+ * `tests/atlas/models.test.ts` resolves every one of them, and a new one needs
+ * a numeric check in `tests/atlas/canonical-links.test.ts`.
  *
  * @module atlas/oscillators/models
  */
@@ -120,7 +121,7 @@ export const ATLAS_MODELS: readonly AtlasModel[] = [
       { name: 'ell', dim: LENGTH },
     ],
     dimensionlessInputs: ['theta0'],
-    canonicalRefs: [],
+    canonicalRefs: ['CE-pendulum-period'],
   }),
   model({
     id: 'model-chain',
