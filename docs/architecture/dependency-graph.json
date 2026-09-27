@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 367,
+    "totalFiles": 376,
     "totalModules": 12,
-    "totalExports": 2604
+    "totalExports": 2705
   },
   "entryPoints": [
     {
@@ -2201,11 +2201,13 @@
           "CONTRACT_DAMPED_MASSLESS",
           "LIMIT_CONTRACTS",
           "makeApproximation",
+          "agm",
           "pendulumPeriodErrorAt",
           "dampedOffsetBoundAt"
         ],
         "functions": [
           "makeApproximation",
+          "agm",
           "pendulumPeriodErrorAt",
           "dampedOffsetBoundAt"
         ],
@@ -2373,6 +2375,80 @@
           "ATLAS_MODELS"
         ]
       },
+      "src/atlas/oscillators/pendulum-motion.ts": {
+        "description": "The pendulum and its linear oscillator, integrated and read off, for the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./bridges-limits.js",
+            "imports": [
+              "agm",
+              "pendulumPeriodErrorAt"
+            ]
+          }
+        ],
+        "exports": [
+          "W2",
+          "pendulumAccel",
+          "linearAccel",
+          "rk4Step",
+          "crossingTimes",
+          "phaseAt",
+          "theta0OfPeriodError",
+          "pendulumNome"
+        ],
+        "functions": [
+          "rk4Step",
+          "crossingTimes",
+          "phaseAt",
+          "theta0OfPeriodError",
+          "pendulumNome"
+        ],
+        "constants": [
+          "W2",
+          "pendulumAccel",
+          "linearAccel"
+        ]
+      },
+      "src/atlas/oscillators/phase-carriage.ts": {
+        "description": "`ab-spring-lc`'s declaration that its map carries the PHASE unchanged, so",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../translation.js",
+            "imports": [
+              "ObservableCarriage"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../witness-numeric.js",
+            "imports": [
+              "NumericWitnessSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./pendulum-motion.js",
+            "imports": [
+              "phaseAt",
+              "rk4Step"
+            ]
+          }
+        ],
+        "exports": [
+          "SPRING_LC_PHASE_CARRIAGE",
+          "measureCarriedPhaseError"
+        ],
+        "functions": [
+          "measureCarriedPhaseError"
+        ],
+        "constants": [
+          "SPRING_LC_PHASE_CARRIAGE"
+        ]
+      },
       "src/atlas/oscillators/phase-translation.ts": {
         "description": "`ab-pendulum-linear`'s declared translation from its bound's quantity, the",
         "externalDependencies": [],
@@ -2390,17 +2466,91 @@
             "imports": [
               "pendulumPeriodErrorAt"
             ]
+          },
+          {
+            "file": "./pendulum-motion.js",
+            "imports": [
+              "crossingTimes",
+              "linearAccel",
+              "pendulumAccel",
+              "phaseAt",
+              "theta0OfPeriodError"
+            ]
           }
         ],
         "exports": [
+          "PHASE_POINT_MAX_PERIODS",
           "PENDULUM_PHASE_TRANSLATION",
-          "measurePhaseHorizon"
+          "measurePhaseHorizon",
+          "measurePhaseHorizonWithin"
         ],
         "functions": [
-          "measurePhaseHorizon"
+          "measurePhaseHorizon",
+          "measurePhaseHorizonWithin"
         ],
         "constants": [
+          "PHASE_POINT_MAX_PERIODS",
           "PENDULUM_PHASE_TRANSLATION"
+        ]
+      },
+      "src/atlas/oscillators/position-translation.ts": {
+        "description": "`ab-pendulum-linear`'s declared translation from its bound's quantity, the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../translation.js",
+            "imports": [
+              "ObservableTranslation"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../witness-dominance.js",
+            "imports": [
+              "DominanceWitnessSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../witness-numeric.js",
+            "imports": [
+              "NumericWitnessSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./bridges-limits.js",
+            "imports": [
+              "pendulumPeriodErrorAt"
+            ]
+          },
+          {
+            "file": "./pendulum-motion.js",
+            "imports": [
+              "linearAccel",
+              "pendulumAccel",
+              "pendulumNome",
+              "rk4Step",
+              "theta0OfPeriodError"
+            ]
+          }
+        ],
+        "exports": [
+          "POSITION_POINT_MAX_PERIODS",
+          "PENDULUM_POSITION_TRANSLATION",
+          "waveformBound",
+          "fundamentalCoefficient",
+          "measureFundamental"
+        ],
+        "functions": [
+          "waveformBound",
+          "fundamentalCoefficient",
+          "measureFundamental"
+        ],
+        "constants": [
+          "POSITION_POINT_MAX_PERIODS",
+          "PENDULUM_POSITION_TRANSLATION"
         ]
       },
       "src/atlas/oscillators/rejections.ts": {
@@ -2486,15 +2636,20 @@
           "IDENTITY_BOUND",
           "findPath",
           "findAtlasPath",
+          "enumerateAtlasRoutes",
+          "enumerateRoutes",
           "boundPath"
         ],
         "interfaces": [
+          "RouteEnumeration",
           "PathBoundClaim",
           "PathNoClaim"
         ],
         "functions": [
           "findPath",
           "findAtlasPath",
+          "enumerateAtlasRoutes",
+          "enumerateRoutes",
           "boundPath"
         ]
       },
@@ -2972,10 +3127,16 @@
         ]
       },
       "src/atlas/translation-registry.ts": {
-        "description": "Every declared observable translation (`./translation.ts`). A bridge absent",
+        "description": "Every declared observable translation (`./translation.ts`), and every",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "./oscillators/phase-carriage.js",
+            "imports": [
+              "SPRING_LC_PHASE_CARRIAGE"
+            ]
+          },
           {
             "file": "./oscillators/phase-translation.js",
             "imports": [
@@ -2983,22 +3144,55 @@
             ]
           },
           {
+            "file": "./oscillators/position-translation.js",
+            "imports": [
+              "PENDULUM_POSITION_TRANSLATION"
+            ]
+          },
+          {
             "file": "./translation.js",
             "imports": [
-              "ObservableTranslation"
+              "ObservableCarriage",
+              "ObservableTranslation",
+              "TranslationCheck"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./witness-dominance.js",
+            "imports": [
+              "runDominanceWitness"
+            ]
+          },
+          {
+            "file": "./witness-numeric.js",
+            "imports": [
+              "runNumericWitness"
+            ]
+          },
+          {
+            "file": "./witness-result.js",
+            "imports": [
+              "WitnessRunResult"
             ],
             "typeOnly": true
           }
         ],
         "exports": [
           "OBSERVABLE_TRANSLATIONS",
-          "translationsOf"
+          "OBSERVABLE_CARRIAGES",
+          "translationsOf",
+          "carriageOf",
+          "runTranslationCheck"
         ],
         "functions": [
-          "translationsOf"
+          "translationsOf",
+          "carriageOf",
+          "runTranslationCheck"
         ],
         "constants": [
-          "OBSERVABLE_TRANSLATIONS"
+          "OBSERVABLE_TRANSLATIONS",
+          "OBSERVABLE_CARRIAGES"
         ]
       },
       "src/atlas/translation.ts": {
@@ -3014,6 +3208,13 @@
             "typeOnly": true
           },
           {
+            "file": "./witness-dominance.js",
+            "imports": [
+              "DominanceWitnessSpec"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./witness-numeric.js",
             "imports": [
               "NumericWitnessSpec"
@@ -3023,7 +3224,9 @@
         ],
         "exports": [],
         "interfaces": [
-          "ObservableTranslation"
+          "PointCheck",
+          "ObservableTranslation",
+          "ObservableCarriage"
         ]
       },
       "src/atlas/types.ts": {
@@ -3435,6 +3638,30 @@
           "artifactPassingWitnessIds"
         ]
       },
+      "src/atlas/witness-dominance.ts": {
+        "description": "The dominance witness runner: a claimed UPPER BOUND checked against a",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./witness-result.js",
+            "imports": [
+              "WitnessRunResult"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "runDominanceWitness"
+        ],
+        "interfaces": [
+          "DominanceWitnessSpec",
+          "DominanceRunResult"
+        ],
+        "functions": [
+          "runDominanceWitness"
+        ]
+      },
       "src/atlas/witness-numeric.ts": {
         "description": "Atlas Phase 4, S4.2 — the numeric witness runner.",
         "externalDependencies": [],
@@ -3618,6 +3845,7 @@
         ],
         "interfaces": [
           "RegisteredSymbolicWitness",
+          "WitnessClaim",
           "RegisteredNumericWitness"
         ],
         "constants": [
@@ -5213,6 +5441,7 @@
         ],
         "exports": [
           "CONFRONTATION_RIGOR",
+          "BCS_GAP_RATIO",
           "CONFRONTATIONS",
           "confrontationRigor",
           "rigorDistribution",
@@ -5230,6 +5459,7 @@
         ],
         "constants": [
           "CONFRONTATION_RIGOR",
+          "BCS_GAP_RATIO",
           "CONFRONTATIONS"
         ]
       },
@@ -8251,15 +8481,18 @@
         "internalDependencies": [],
         "exports": [
           "residualInSigma",
+          "consistencyComparison",
           "combineInQuadrature"
         ],
         "interfaces": [
           "ObservationProvenance",
           "SigmaComponent",
-          "ConfrontationDataHandling"
+          "ConfrontationDataHandling",
+          "ConsistencyComparison"
         ],
         "functions": [
           "residualInSigma",
+          "consistencyComparison",
           "combineInQuadrature"
         ]
       },
@@ -9603,6 +9836,12 @@
             ]
           },
           {
+            "file": "./quadrature.js",
+            "imports": [
+              "adaptiveSimpson"
+            ]
+          },
+          {
             "file": "./types.js",
             "imports": [
               "check",
@@ -9615,20 +9854,32 @@
           "G_STANDARD",
           "MAX_RE",
           "MAX_TAU_P_RATIO",
-          "MAX_TAU_F_RATIO",
+          "MAX_MEMORY_CORRECTION",
           "MAX_DRIFT_RATIO",
+          "MAX_WALL_CORRECTION",
+          "MAX_FAXEN_LAST_TERM",
+          "MAX_WALL_EXCURSION",
           "BROWNIAN_SPHERE_CASE",
-          "ballisticDeficit"
+          "ballisticDeficit",
+          "hydrodynamicMsdRatio",
+          "faxenParallel",
+          "brennerPerpendicular"
         ],
         "functions": [
-          "ballisticDeficit"
+          "ballisticDeficit",
+          "hydrodynamicMsdRatio",
+          "faxenParallel",
+          "brennerPerpendicular"
         ],
         "constants": [
           "G_STANDARD",
           "MAX_RE",
           "MAX_TAU_P_RATIO",
-          "MAX_TAU_F_RATIO",
+          "MAX_MEMORY_CORRECTION",
           "MAX_DRIFT_RATIO",
+          "MAX_WALL_CORRECTION",
+          "MAX_FAXEN_LAST_TERM",
+          "MAX_WALL_EXCURSION",
           "BROWNIAN_SPHERE_CASE"
         ]
       },
@@ -9637,6 +9888,12 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          },
           {
             "file": "./types.js",
             "imports": [
@@ -9649,6 +9906,7 @@
         "exports": [
           "MIN_Q_LORENTZIAN",
           "MAX_RESOLUTION_RATIO",
+          "MAX_THERMAL_RATIO",
           "DAMPED_RESONATOR_CASE",
           "windowedLinewidthHz"
         ],
@@ -9658,6 +9916,7 @@
         "constants": [
           "MIN_Q_LORENTZIAN",
           "MAX_RESOLUTION_RATIO",
+          "MAX_THERMAL_RATIO",
           "DAMPED_RESONATOR_CASE"
         ]
       },
@@ -9679,9 +9938,27 @@
             ]
           },
           {
+            "file": "./kepler-rv.js",
+            "imports": [
+              "KEPLER_RV_CASE"
+            ]
+          },
+          {
+            "file": "./lumped-cooling.js",
+            "imports": [
+              "LUMPED_COOLING_CASE"
+            ]
+          },
+          {
             "file": "./resistor-noise.js",
             "imports": [
               "RESISTOR_NOISE_CASE"
+            ]
+          },
+          {
+            "file": "./skin-depth.js",
+            "imports": [
+              "SKIN_DEPTH_CASE"
             ]
           },
           {
@@ -9728,6 +10005,91 @@
         ],
         "constants": [
           "APPLIED_CASES"
+        ]
+      },
+      "src/cases/kepler-rv.ts": {
+        "description": "Applied case: the radial-velocity semi-amplitude of a star orbited by a",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "G_SI"
+            ]
+          },
+          {
+            "file": "../bridges/perihelion-precession.js",
+            "imports": [
+              "evaluatePerihelionPrecession"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "check",
+              "requirePositive",
+              "AppliedCase"
+            ]
+          }
+        ],
+        "exports": [
+          "JULIAN_YEAR_S",
+          "MAX_MASS_RATIO",
+          "MAX_RADIUS_RATIO",
+          "MAX_WEAK_FIELD",
+          "MAX_APSIDAL_MISFIT",
+          "KEPLER_RV_CASE"
+        ],
+        "constants": [
+          "JULIAN_YEAR_S",
+          "MAX_MASS_RATIO",
+          "MAX_RADIUS_RATIO",
+          "MAX_WEAK_FIELD",
+          "MAX_APSIDAL_MISFIT",
+          "KEPLER_RV_CASE"
+        ]
+      },
+      "src/cases/lumped-cooling.ts": {
+        "description": "Applied case: a solid sphere cooling (or warming) in a fluid — its",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "H_SI",
+              "K_B_SI"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "check",
+              "requirePositive",
+              "AppliedCase"
+            ]
+          }
+        ],
+        "exports": [
+          "SIGMA_SB_SI",
+          "MAX_BIOT",
+          "MAX_RADIATION_RATIO",
+          "LUMPED_COOLING_CASE",
+          "sphereEigenvalues",
+          "sphereSeries"
+        ],
+        "functions": [
+          "sphereEigenvalues",
+          "sphereSeries"
+        ],
+        "constants": [
+          "SIGMA_SB_SI",
+          "MAX_BIOT",
+          "MAX_RADIATION_RATIO",
+          "LUMPED_COOLING_CASE"
         ]
       },
       "src/cases/quadrature.ts": {
@@ -9778,12 +10140,57 @@
         "exports": [
           "CLASSICAL_MAX_X",
           "FLAT_BAND_MAX_WRC",
+          "AMPLIFIER_MAX_REL_SIGMA",
           "RESISTOR_NOISE_CASE"
         ],
         "constants": [
           "CLASSICAL_MAX_X",
           "FLAT_BAND_MAX_WRC",
+          "AMPLIFIER_MAX_REL_SIGMA",
           "RESISTOR_NOISE_CASE"
+        ]
+      },
+      "src/cases/skin-depth.ts": {
+        "description": "Applied case: the skin depth of a planar conductor driven at one frequency —",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "check",
+              "requirePositive",
+              "AppliedCase"
+            ]
+          }
+        ],
+        "exports": [
+          "MU_0_SI",
+          "EPS_0_SI",
+          "MAX_DISPLACEMENT_RATIO",
+          "MAX_MFP_RATIO",
+          "MAX_OMEGA_TAU",
+          "MIN_THICKNESS_RATIO",
+          "SKIN_DEPTH_CASE",
+          "maxwellDepthFactor"
+        ],
+        "functions": [
+          "maxwellDepthFactor"
+        ],
+        "constants": [
+          "MU_0_SI",
+          "EPS_0_SI",
+          "MAX_DISPLACEMENT_RATIO",
+          "MAX_MFP_RATIO",
+          "MAX_OMEGA_TAU",
+          "MIN_THICKNESS_RATIO",
+          "SKIN_DEPTH_CASE"
         ]
       },
       "src/cases/types.ts": {
@@ -9886,7 +10293,26 @@
       "src/cli/commands/_atlas-map.ts": {
         "description": "`upt map --route=FROM,TO` and `upt map --family=NAME` — focused maps of the",
         "externalDependencies": [],
-        "nodeDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "child_process",
+            "imports": [
+              "execFileSync"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "readFileSync"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
         "internalDependencies": [
           {
             "file": "../command.js",
@@ -9936,12 +10362,23 @@
         "exports": [
           "ATLAS_SOURCE",
           "LINK_SOURCE",
+          "STORED_RESULTS_PATH",
+          "DEFAULT_MAX_ROUTES",
+          "MAX_ROUTES_CEILING",
+          "loadStoredResults",
+          "runResults",
           "parseRoute",
           "buildRouteView",
+          "buildRoutesView",
+          "buildObservableView",
           "formatAtlasFilterLegend",
+          "bridgeIdsOf",
           "buildFamilyView",
+          "resultsLine",
           "routeText",
           "familyText",
+          "routesText",
+          "observableText",
           "viewLegend",
           "toMermaid",
           "toDot"
@@ -9950,26 +10387,44 @@
           "EquationLink",
           "ModelView",
           "EvidenceView",
+          "WitnessResultRow",
+          "StoredProvenance",
+          "WitnessResults",
+          "WitnessOutcomes",
+          "ResultsTally",
           "BridgeView",
           "RouteView",
+          "RoutesView",
+          "ObservableView",
           "AtlasFilter",
           "AtlasFilterStats",
           "FamilyView"
         ],
         "functions": [
+          "loadStoredResults",
+          "runResults",
           "parseRoute",
           "buildRouteView",
+          "buildRoutesView",
+          "buildObservableView",
           "formatAtlasFilterLegend",
+          "bridgeIdsOf",
           "buildFamilyView",
+          "resultsLine",
           "routeText",
           "familyText",
+          "routesText",
+          "observableText",
           "viewLegend",
           "toMermaid",
           "toDot"
         ],
         "constants": [
           "ATLAS_SOURCE",
-          "LINK_SOURCE"
+          "LINK_SOURCE",
+          "STORED_RESULTS_PATH",
+          "DEFAULT_MAX_ROUTES",
+          "MAX_ROUTES_CEILING"
         ]
       },
       "src/cli/commands/_atlas-route.ts": {
@@ -10974,7 +11429,8 @@
             "imports": [
               "missingForComposite",
               "routeClaim",
-              "selectRoute"
+              "selectRoute",
+              "RouteClaim"
             ]
           }
         ],
@@ -10983,7 +11439,8 @@
           "parseSweep",
           "judgeTolerance",
           "parseTolerance",
-          "judgeObservable"
+          "judgeObservable",
+          "judgeAtPoint"
         ],
         "interfaces": [
           "ToleranceRequest"
@@ -10992,7 +11449,8 @@
           "parseSweep",
           "judgeTolerance",
           "parseTolerance",
-          "judgeObservable"
+          "judgeObservable",
+          "judgeAtPoint"
         ],
         "constants": [
           "command"
@@ -11432,6 +11890,133 @@
           "emitJson"
         ]
       },
+      "src/cli/record-reach.ts": {
+        "description": "Static attribution for an experiment record: which constants a command's code can reach",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "fs",
+            "imports": [
+              "existsSync",
+              "readFileSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "dirname",
+              "join",
+              "resolve",
+              "sep"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "./record-tables.js",
+            "imports": [
+              "MODULE_EXT",
+              "SOURCE_ROOT",
+              "tableName",
+              "TableKind"
+            ]
+          }
+        ],
+        "exports": [
+          "REACH_METHOD",
+          "staticReach"
+        ],
+        "interfaces": [
+          "Attribution"
+        ],
+        "functions": [
+          "staticReach"
+        ],
+        "constants": [
+          "REACH_METHOD"
+        ]
+      },
+      "src/cli/record-tables.ts": {
+        "description": "The constant tables an experiment record fingerprints, each under its own name so replay can",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          },
+          {
+            "module": "fs",
+            "imports": [
+              "readdirSync",
+              "statSync"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "extname",
+              "join",
+              "relative",
+              "sep"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath",
+              "pathToFileURL"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../composition/canonical-graph.js",
+            "imports": [
+              "CANONICAL_CONSTANTS"
+            ]
+          },
+          {
+            "file": "../composition/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "unitTables"
+            ]
+          }
+        ],
+        "exports": [
+          "SOURCE_ROOT",
+          "MODULE_EXT",
+          "tableFingerprint",
+          "tableName",
+          "constantTables"
+        ],
+        "interfaces": [
+          "ConstantTable"
+        ],
+        "functions": [
+          "constantTables"
+        ],
+        "constants": [
+          "SOURCE_ROOT",
+          "MODULE_EXT",
+          "tableFingerprint",
+          "tableName"
+        ]
+      },
       "src/cli/record.ts": {
         "description": "Experiment record and replay for the UPT CLI — the global options",
         "externalDependencies": [],
@@ -11474,12 +12059,6 @@
             "typeOnly": true
           },
           {
-            "file": "../core/constants.js",
-            "imports": [
-              "* as coreConstants"
-            ]
-          },
-          {
             "file": "./args.js",
             "imports": [
               "parseArgs"
@@ -11504,6 +12083,21 @@
             ]
           },
           {
+            "file": "./record-reach.js",
+            "imports": [
+              "staticReach",
+              "Attribution"
+            ]
+          },
+          {
+            "file": "./record-tables.js",
+            "imports": [
+              "constantTables",
+              "tableFingerprint",
+              "ConstantTable"
+            ]
+          },
+          {
             "file": "./version.js",
             "imports": [
               "packageVersion"
@@ -11513,8 +12107,9 @@
         "exports": [
           "RECORD_SCHEMA",
           "sha256",
-          "constantsFingerprint",
-          "constantsTable",
+          "argvFingerprint",
+          "canonicalJson",
+          "entryFingerprint",
           "captureEnvironment",
           "recordInvocation",
           "replayRecord",
@@ -11529,7 +12124,8 @@
           "ReplayEntryReport"
         ],
         "functions": [
-          "constantsTable",
+          "canonicalJson",
+          "entryFingerprint",
           "captureEnvironment",
           "recordInvocation",
           "replayRecord",
@@ -11538,7 +12134,7 @@
         "constants": [
           "RECORD_SCHEMA",
           "sha256",
-          "constantsFingerprint"
+          "argvFingerprint"
         ]
       },
       "src/cli/version.ts": {
@@ -11670,6 +12266,13 @@
             "imports": [
               "ConfrontationEntry",
               "RigorTier"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/observations/types.js",
+            "imports": [
+              "consistencyComparison"
             ],
             "reExport": true
           },
@@ -11840,6 +12443,7 @@
               "runProbeSearch",
               "formatProbeReport",
               "loadStudyFromJson",
+              "loadStudyFile",
               "runProbeStudy",
               "formatProbeStudy",
               "formatFrontierScan",
@@ -11993,7 +12597,10 @@
           {
             "file": "./atlas/translation-registry.js",
             "imports": [
+              "OBSERVABLE_CARRIAGES",
               "OBSERVABLE_TRANSLATIONS",
+              "carriageOf",
+              "runTranslationCheck",
               "translationsOf"
             ],
             "reExport": true
@@ -12001,7 +12608,9 @@
           {
             "file": "./atlas/translation.js",
             "imports": [
-              "ObservableTranslation"
+              "ObservableCarriage",
+              "ObservableTranslation",
+              "PointCheck"
             ],
             "reExport": true
           },
@@ -12035,6 +12644,7 @@
             "imports": [
               "findPath",
               "findAtlasPath",
+              "enumerateAtlasRoutes",
               "boundPath"
             ],
             "reExport": true
@@ -12059,7 +12669,8 @@
             "file": "./atlas/types.js",
             "imports": [
               "AtlasBridge",
-              "RegimeInequality"
+              "RegimeInequality",
+              "Witness"
             ],
             "reExport": true
           },
@@ -12118,6 +12729,7 @@
           "runConfrontation",
           "confrontationRigor",
           "rigorDistribution",
+          "consistencyComparison",
           "decidingMeasurement",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
@@ -12152,6 +12764,7 @@
           "runProbeSearch",
           "formatProbeReport",
           "loadStudyFromJson",
+          "loadStudyFile",
           "runProbeStudy",
           "formatProbeStudy",
           "formatFrontierScan",
@@ -12182,13 +12795,17 @@
           "runWitnessRegistry",
           "WITNESS_REGISTRY",
           "runNumericWitness",
+          "OBSERVABLE_CARRIAGES",
           "OBSERVABLE_TRANSLATIONS",
+          "carriageOf",
+          "runTranslationCheck",
           "translationsOf",
           "regimeHolds",
           "regimeOverlap",
           "uncoveredRegions",
           "findPath",
           "findAtlasPath",
+          "enumerateAtlasRoutes",
           "boundPath",
           "composeRelation",
           "MissingLipschitzError",
@@ -12213,7 +12830,9 @@
           "CanonicalComparison",
           "CandidateGrounding",
           "CandidateReadiness",
+          "ObservableCarriage",
           "ObservableTranslation",
+          "PointCheck",
           "AtlasFamily",
           "RegimeCheck",
           "RegimeOverlap",
@@ -12223,6 +12842,7 @@
           "PathNoClaim",
           "AtlasBridge",
           "RegimeInequality",
+          "Witness",
           "AtlasModel",
           "ModelId"
         ],
@@ -12267,6 +12887,7 @@
           "rigorDistribution",
           "ConfrontationEntry",
           "RigorTier",
+          "consistencyComparison",
           "ConfrontationOutcome",
           "decidingMeasurement",
           "BRIDGE_EVALUATORS",
@@ -12311,6 +12932,7 @@
           "runProbeSearch",
           "formatProbeReport",
           "loadStudyFromJson",
+          "loadStudyFile",
           "runProbeStudy",
           "formatProbeStudy",
           "formatFrontierScan",
@@ -12350,9 +12972,14 @@
           "runWitnessRegistry",
           "WITNESS_REGISTRY",
           "runNumericWitness",
+          "OBSERVABLE_CARRIAGES",
           "OBSERVABLE_TRANSLATIONS",
+          "carriageOf",
+          "runTranslationCheck",
           "translationsOf",
+          "ObservableCarriage",
           "ObservableTranslation",
+          "PointCheck",
           "AtlasFamily",
           "regimeHolds",
           "regimeOverlap",
@@ -12362,6 +12989,7 @@
           "RegionSample",
           "findPath",
           "findAtlasPath",
+          "enumerateAtlasRoutes",
           "boundPath",
           "composeRelation",
           "PathBoundResult",
@@ -12369,6 +12997,7 @@
           "PathNoClaim",
           "AtlasBridge",
           "RegimeInequality",
+          "Witness",
           "MissingLipschitzError",
           "AtlasModel",
           "ModelId"
@@ -16244,9 +16873,14 @@
             "imports": [
               "parseStudy",
               "loadStudyFromJson",
+              "loadStudyFile",
+              "attachReplication",
+              "studyCsvToRaw",
               "runProbeStudy",
               "formatProbeStudy",
               "chiSquareSurvival",
+              "fSurvival",
+              "effectiveSigma",
               "StudyRefusal"
             ],
             "reExport": true
@@ -16266,7 +16900,10 @@
               "SetTest",
               "ModelTest",
               "CandidateTest",
-              "StudyDesignSuggestion"
+              "StudyDesignSuggestion",
+              "StudyCorrection",
+              "StudyCorrectionReport",
+              "CorrectionStep"
             ],
             "reExport": true
           }
@@ -16340,9 +16977,14 @@
           "formatFrontierGap",
           "parseStudy",
           "loadStudyFromJson",
+          "loadStudyFile",
+          "attachReplication",
+          "studyCsvToRaw",
           "runProbeStudy",
           "formatProbeStudy",
           "chiSquareSurvival",
+          "fSurvival",
+          "effectiveSigma",
           "StudyRefusal",
           "ProbeCandidateStatus",
           "RelationKind",
@@ -16414,7 +17056,10 @@
           "SetTest",
           "ModelTest",
           "CandidateTest",
-          "StudyDesignSuggestion"
+          "StudyDesignSuggestion",
+          "StudyCorrection",
+          "StudyCorrectionReport",
+          "CorrectionStep"
         ],
         "reExported": [
           "SCHEMA_VERSION",
@@ -16543,9 +17188,14 @@
           "formatFrontierGap",
           "parseStudy",
           "loadStudyFromJson",
+          "loadStudyFile",
+          "attachReplication",
+          "studyCsvToRaw",
           "runProbeStudy",
           "formatProbeStudy",
           "chiSquareSurvival",
+          "fSurvival",
+          "effectiveSigma",
           "StudyRefusal",
           "ProbeStudy",
           "ProbeStudyOptions",
@@ -16559,7 +17209,10 @@
           "SetTest",
           "ModelTest",
           "CandidateTest",
-          "StudyDesignSuggestion"
+          "StudyDesignSuggestion",
+          "StudyCorrection",
+          "StudyCorrectionReport",
+          "CorrectionStep"
         ]
       },
       "src/composition/probe/limits.ts": {
@@ -17074,9 +17727,9 @@
           {
             "file": "../../dimensional/types.js",
             "imports": [
+              "DIMENSIONLESS",
               "Dimension"
-            ],
-            "typeOnly": true
+            ]
           },
           {
             "file": "../../dimensional/ast-types.js",
@@ -17175,7 +17828,12 @@
         "exports": [
           "parseStudy",
           "loadStudyFromJson",
+          "loadStudyFile",
+          "attachReplication",
+          "studyCsvToRaw",
           "chiSquareSurvival",
+          "fSurvival",
+          "effectiveSigma",
           "exprToInfix",
           "runProbeStudy",
           "formatProbeStudy",
@@ -17188,11 +17846,14 @@
           "StudyProvenance",
           "StudyQuantity",
           "StudyObservation",
+          "StudyCorrection",
           "StudyBaseline",
           "ProbeStudy",
           "SetTest",
           "ModelTest",
+          "CorrectionStep",
           "CandidateTest",
+          "StudyCorrectionReport",
           "StudyDesignSuggestion",
           "ProbeStudyResult",
           "ProbeStudyOptions"
@@ -17200,7 +17861,12 @@
         "functions": [
           "parseStudy",
           "loadStudyFromJson",
+          "loadStudyFile",
+          "attachReplication",
+          "studyCsvToRaw",
           "chiSquareSurvival",
+          "fSurvival",
+          "effectiveSigma",
           "exprToInfix",
           "runProbeStudy",
           "formatProbeStudy"
@@ -20249,6 +20915,7 @@
           "parseUnit",
           "convertValue",
           "unitDimension",
+          "unitTables",
           "UnitError"
         ],
         "classes": [
@@ -20260,7 +20927,8 @@
         "functions": [
           "parseUnit",
           "convertValue",
-          "unitDimension"
+          "unitDimension",
+          "unitTables"
         ]
       },
       "src/dimensional/validator-registry.ts": {
@@ -21771,20 +22439,24 @@
             "file": "./bridges/observations/types.js",
             "imports": [
               "residualInSigma",
-              "combineInQuadrature"
+              "combineInQuadrature",
+              "consistencyComparison"
             ],
             "reExport": true
           },
           {
             "file": "./bridges/observations/types.js",
             "imports": [
+              "ConsistencyComparison",
               "ObservationProvenance",
               "SigmaComponent",
               "ObservationKind",
               "ConfrontationOutcome",
               "ConfrontationDataHandling",
               "ConfrontationPreprocessing",
-              "ConfrontationIndependence"
+              "ConfrontationIndependence",
+              "SourceRef",
+              "SourceRefs"
             ],
             "reExport": true
           },
@@ -22358,6 +23030,7 @@
           "rankDiscoveries",
           "residualInSigma",
           "combineInQuadrature",
+          "consistencyComparison",
           "confrontBE37",
           "CASSINI",
           "confrontBE51",
@@ -22565,6 +23238,7 @@
           "ConsequenceEvidence",
           "CandidateGrounding",
           "VettedCandidate",
+          "ConsistencyComparison",
           "ObservationProvenance",
           "SigmaComponent",
           "ObservationKind",
@@ -22572,6 +23246,8 @@
           "ConfrontationDataHandling",
           "ConfrontationPreprocessing",
           "ConfrontationIndependence",
+          "SourceRef",
+          "SourceRefs",
           "CassiniObservation",
           "BE37ConfrontationResult",
           "VLBIDeflectionObservation",
@@ -23045,6 +23721,8 @@
           "VettedCandidate",
           "residualInSigma",
           "combineInQuadrature",
+          "consistencyComparison",
+          "ConsistencyComparison",
           "ObservationProvenance",
           "SigmaComponent",
           "ObservationKind",
@@ -23052,6 +23730,8 @@
           "ConfrontationDataHandling",
           "ConfrontationPreprocessing",
           "ConfrontationIndependence",
+          "SourceRef",
+          "SourceRefs",
           "confrontBE37",
           "CASSINI",
           "CassiniObservation",
@@ -25007,7 +25687,10 @@
           "src/atlas/oscillators/dimensions.ts",
           "src/atlas/oscillators/index.ts",
           "src/atlas/oscillators/models.ts",
+          "src/atlas/oscillators/pendulum-motion.ts",
+          "src/atlas/oscillators/phase-carriage.ts",
           "src/atlas/oscillators/phase-translation.ts",
+          "src/atlas/oscillators/position-translation.ts",
           "src/atlas/oscillators/rejections.ts",
           "src/atlas/path-bound.ts",
           "src/atlas/poster/associations.ts",
@@ -25026,6 +25709,7 @@
           "src/atlas/waves/models.ts",
           "src/atlas/waves/numerics.ts",
           "src/atlas/witness-artifact.ts",
+          "src/atlas/witness-dominance.ts",
           "src/atlas/witness-numeric.ts",
           "src/atlas/witness-result.ts",
           "src/atlas/witness-specs.ts",
@@ -25157,8 +25841,11 @@
           "src/cases/brownian-sphere.ts",
           "src/cases/damped-resonator.ts",
           "src/cases/index.ts",
+          "src/cases/kepler-rv.ts",
+          "src/cases/lumped-cooling.ts",
           "src/cases/quadrature.ts",
           "src/cases/resistor-noise.ts",
+          "src/cases/skin-depth.ts",
           "src/cases/types.ts"
         ]
       },
@@ -25198,6 +25885,8 @@
           "src/cli/graphs.ts",
           "src/cli/main.ts",
           "src/cli/output.ts",
+          "src/cli/record-reach.ts",
+          "src/cli/record-tables.ts",
           "src/cli/record.ts",
           "src/cli/version.ts"
         ]
@@ -25401,21 +26090,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 367,
+    "totalTypeScriptFiles": 376,
     "totalModules": 12,
-    "totalLinesOfCode": 76447,
-    "totalExports": 2604,
+    "totalLinesOfCode": 80492,
+    "totalExports": 2705,
     "totalClasses": 60,
-    "totalInterfaces": 402,
-    "totalFunctions": 612,
+    "totalInterfaces": 421,
+    "totalFunctions": 653,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 632,
-    "totalReExports": 1299,
-    "totalTypeOnlyImports": 509,
+    "totalConstants": 671,
+    "totalReExports": 1320,
+    "totalTypeOnlyImports": 517,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 34
+    "unusedExportsCount": 67
   }
 }
