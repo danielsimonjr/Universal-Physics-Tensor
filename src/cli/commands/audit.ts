@@ -17,7 +17,14 @@ const FLAGS: FlagSpec[] = [
 const HELP = `upt audit
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
-        which are decoys, which are dimensionally open.`;
+        which are decoys, which are dimensionally open.
+        A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
+        closes the dimensions, but its monomial does not reproduce the
+        bridge's evaluator. It is not a physical refutation of the formula.`;
+
+const DECOY_DEFINITION =
+  'a set of constants closes the dimensions, but its monomial does not reproduce the evaluator: ' +
+  'a failed dimensional reconstruction, not a physical refutation of the formula';
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -50,6 +57,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           })),
           decoy: decoy.map(({ e, c }) => ({ id: e.id, complexity: c })),
           open: openSorted.map(({ e, c }) => ({ id: e.id, complexity: c })),
+          definitions: { decoy: DECOY_DEFINITION },
         },
       },
       ctx.write
@@ -64,8 +72,12 @@ async function run(ctx: CommandCtx): Promise<number> {
     const tag = d.cleanPrefactor ? '' : '  (empirical/tuned constant)';
     out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${d.prefactor!.toExponential(3)}${tag}`);
   }
-  out(`\n  DECOY (${decoy.length}) — dimensionally valid but wrong form:`);
+  out(
+    `\n  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, ${decoy.length}) — a set of constants closes the dimensions, ` +
+      'but its monomial does not reproduce the evaluator:',
+  );
   out('    ' + decoy.map((x) => x.e.id).join(', '));
+  out('    (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)');
   out(`\n  OPEN (${open.length}) — irreducible free dimensionless group(s); by complexity:`);
   for (const { e, c } of [...open].sort((a, b) => a.c - b.c)) {
     out(`    cplx=${c}  ${e.id}`);

@@ -15,8 +15,9 @@ Deriving the bridge equations by dimensions
     be-20                  +[c,G]  ×3.979e-2
     be-36                  +[]  ×-1.000e+0
 
-  DECOY (5) — dimensionally valid but wrong form:
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 5) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
     be-42, be-51, be-14, be-27, be-43
+    (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
   OPEN (25) — irreducible free dimensionless group(s); by complexity:
     cplx=1  be-11-zurek

@@ -15,7 +15,8 @@ Usage:
   upt audit
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
-        which are decoys, which are dimensionally open.
+        which are decoys (a failed dimensional reconstruction, not a physical
+        refutation), which are dimensionally open.
 
   upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
           [--proposed] [--out=PATH] [--equation "TARGET = EXPR"]

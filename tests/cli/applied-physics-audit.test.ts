@@ -113,6 +113,25 @@ describe('F10 — an evidence-filtered export keeps absent evidence apart from n
   });
 });
 
+describe('F11 — DECOY is a failed dimensional reconstruction, not a physical refutation', () => {
+  it('the heading names the reconstruction that failed and disclaims refutation', async () => {
+    const { text } = await run(['audit']);
+    expect(text).toMatch(
+      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 5\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
+    );
+    expect(text).toMatch(/NOT a physical refutation/);
+    expect(text).not.toMatch(/DECOY \(5\) — dimensionally valid but wrong form/);
+  });
+
+  it('--json keeps the decoy key and defines it', async () => {
+    const c = capture();
+    await runCli(['audit', '--json'], c.io);
+    const r = JSON.parse(c.lines.join('')).result;
+    expect(r.decoy.map((d: { id: string }) => d.id)).toContain('be-51');
+    expect(r.definitions.decoy).toMatch(/not a physical refutation/);
+  });
+});
+
 describe('top-level help agrees with the commands it summarizes', () => {
   it('confront: margin to the acceptance threshold, not "to exclusion" (F07)', async () => {
     const { text } = await run(['help']);
