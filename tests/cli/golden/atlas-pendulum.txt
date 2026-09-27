@@ -22,7 +22,7 @@ does NOT preserve:
   - the amplitude dependence of the period
   - phase over times t ≳ 16 T0/θ0²
 stored evidence: numerically-supported
-formally-proved (derived from formalRef): YES
+formally-proved (derived from formalRef): YES — for the formal-reference statement only (fidelity sanity-lemmas); NOT the bound, regime, horizon or side conditions unless the statement says so
 symbolically-checked: no symbolic witness
 witnesses:
   - W7 [numeric] tests/atlas/oscillators-limits.test.ts — T/T0 − 1 ∈ [0.002505, 0.002507]; residual ∈ [5.70e-6, 5.76e-6] at θ0 = 0.2

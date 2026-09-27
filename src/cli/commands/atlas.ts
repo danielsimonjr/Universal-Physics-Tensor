@@ -150,7 +150,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   list('preserves', b.preserves);
   list('does NOT preserve', b.doesNotPreserve);
   out(`stored evidence: ${report.storedEvidence.join(', ') || 'none'}`);
-  out(`formally-proved (derived from formalRef): ${report.formallyProved ? 'YES' : 'no'}`);
+  out(
+    `formally-proved (derived from formalRef): ${
+      report.formallyProved
+        ? `YES — for the formal-reference statement only (fidelity ${b.formalRef!.fidelity}); ` +
+          'NOT the bound, regime, horizon or side conditions unless the statement says so'
+        : 'no'
+    }`,
+  );
   out(
     symbolic.length === 0
       ? 'symbolically-checked: no symbolic witness'

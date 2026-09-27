@@ -76,6 +76,20 @@ describe('F08 — checked inequalities are kept apart from prose premises', () =
   });
 });
 
+describe('F09 — a proof badge carries its theorem scope', () => {
+  it('the pendulum badge line says what the formal reference does not certify', async () => {
+    const { text } = await run(['atlas', 'ab-pendulum-linear']);
+    expect(text).toMatch(
+      /formally-proved \(derived from formalRef\): YES — for the formal-reference statement only \(fidelity sanity-lemmas\); NOT the bound, regime, horizon or side conditions unless the statement says so/,
+    );
+  });
+
+  it('a bridge with no formal reference is unchanged', async () => {
+    const { text } = await run(['atlas', 'ab-kg-schrodinger']);
+    expect(text).toMatch(/formally-proved \(derived from formalRef\): no\n/);
+  });
+});
+
 describe('top-level help agrees with the commands it summarizes', () => {
   it('confront: margin to the acceptance threshold, not "to exclusion" (F07)', async () => {
     const { text } = await run(['help']);
