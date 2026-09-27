@@ -63,8 +63,19 @@ describe('upt evaluate <case-id>', () => {
     const v = env.result.outputs.find((o: any) => o.key === 'V_rms_V');
     expect(v.unit).toBe('V');
     expect(v.value).toBeCloseTo(4.0683e-7, 10);
-    expect(env.result.checks.map((k: any) => k.id)).toEqual(['classical', 'flat-band']);
+    expect(env.result.checks.map((k: any) => k.id)).toEqual(['classical', 'flat-band', 'amplifier']);
+    expect(env.result.outputs.find((o: any) => o.key === 'V_rms_total_V').value).toBeCloseTo(4.3069e-7, 11);
     expect(env.result.conversions.find((x: any) => x.key === 'C_in_F').value).toBeCloseTo(2e-11, 22);
+  });
+
+  it('an optional input is declared as such and may be left out; its outputs are then undefined, not zero', async () => {
+    const c = APPLIED_CASES.get('case-resistor-noise')!;
+    const args = c.examples.valid.args.filter((a) => !/^(e_n2|i_n2)_/.test(a));
+    const r = await run(['evaluate', c.id, ...args]);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/e_n2_V2_per_Hz \[V\^2\/Hz\] amplifier voltage-noise power density e_n² \(optional\)/);
+    expect(r.text).toMatch(/V_rms_total_V = undefined here/);
+    expect(r.text).not.toMatch(/amplifier: 1\/\(φ/);
   });
 
   it('--sigma propagates through a case and says the checks were taken at the given inputs only', async () => {
