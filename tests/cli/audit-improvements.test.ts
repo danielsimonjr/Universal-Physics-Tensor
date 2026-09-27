@@ -53,7 +53,7 @@ describe('I5 — search by law, model, symbol, alias or description; never by eq
     const r = await run(['search', 'thermal', 'noise']);
     expect(r.code).toBe(0);
     const bridges = section(r.text, 'catalog bridges');
-    expect(bridges).toMatch(/\n {2}be-58 Johnson-Nyquist noise[^\n]*\[words in: name, description\]\n {6}evaluate: upt evaluate be-58 T_K=… R_ohm=… \(the unit is the key's suffix\)/);
+    expect(bridges).toMatch(/\n {2}be-58 Johnson-Nyquist noise[^\n]*\[words in: name, description\]\n {6}evaluate: upt evaluate be-58 T_K=… R_ohm=… \(units: T_K in K, R_ohm in ohm; a value may carry its own unit\)/);
   });
 
   it('control: "radius" never returns a quantity only because its dimension is a length', async () => {
@@ -208,6 +208,53 @@ describe('I9 — uncertainty propagation, kept apart from sensitivity', () => {
     await bad(['--sigma', 'T_K=1', '--corr', 'T_K,R_ohm=0.5'], /names 'R_ohm', which has no --sigma/);
     await bad(['--sigma', 'T_K=1', '--sigma', 'R_ohm=1', '--corr', 'T_K,R_ohm=1.5'], /rho in \[-1, 1\]/);
     await bad(['--corr', 'T_K,R_ohm=0.5'], /--corr needs --sigma/);
+  });
+});
+
+describe('I6 — every evaluator declares its inputs; units convert only when the dimension agrees', () => {
+  const out = async (args: string[]) => (await json(args)).result.output;
+
+  it('a value with a unit gives the same result as the bare SI number', async () => {
+    expect(await out(['evaluate', 'be-56', 'd_m=1um'])).toEqual(await out(['evaluate', 'be-56', 'd_m=1e-6']));
+    const r = await run(['evaluate', 'be-56', 'd_m=1um']);
+    expect(r.text).toMatch(/\n {4}d_m \[m\] plate separation d \(geometry: separation\) — the gap between the facing plate surfaces, > 0\n {6}converted: 1um → 0\.000001 m\n/);
+  });
+
+  it('an absolute temperature in degC adds 273.15 K; its σ in degC does not', async () => {
+    const c = await out(['evaluate', 'be-58', 'T_K=26.85degC', 'R_ohm=1kohm']);
+    const k = await out(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000']);
+    expect(c.S_V_V2_per_Hz).toBeCloseTo(k.S_V_V2_per_Hz, 28);
+    const env = await json(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000', '--sigma', 'T_K=3degC']);
+    expect(env.result.uncertainty.sigma.T_K).toBe(3);
+    expect(env.result.uncertainty.outputs.S_V_V2_per_Hz.relative).toBeCloseTo(0.01, 10);
+  });
+
+  it('the full major axis is a declared alternate of the semi-major axis, halved and said so', async () => {
+    const viaMajor = await json(['evaluate', 'be-52', 'M_kg=1Msun', 'major_axis_m=1.158e11', 'e=0.2056', 'T_yr=88d']);
+    const direct = await json(['evaluate', 'be-52', 'M_kg=1.989e30', 'a_m=5.79e10', 'e=0.2056', `T_yr=${88 / 365.25}`]);
+    expect(viaMajor.result.inputs.a_m).toBeCloseTo(5.79e10, 0);
+    expect(viaMajor.result.output.dphi_rad_per_orbit).toBeCloseTo(direct.result.output.dphi_rad_per_orbit, 18);
+    expect(viaMajor.result.conversions.find((c: any) => c.key === 'a_m').via).toBe('major_axis_m');
+  });
+
+  it('control: a unit of the wrong dimension, a unit on a pure number and an undeclared key all exit 1', async () => {
+    const bad = async (args: string[], msg: RegExp) => {
+      const r = await run(['evaluate', ...args]);
+      expect(r.code).toBe(1);
+      expect(r.text).toMatch(msg);
+    };
+    await bad(['be-56', 'd_m=1kg'], /be-56: 'kg' is \[mass\], but this input is \[length\] \(m\)/);
+    await bad(['be-63', 'mu_e=2m'], /'m' is \[length\], but this input is \[1\] \(dimensionless\)/);
+    await bad(['be-56', 'radius_m=1um'], /'radius_m' is not an input here; the inputs are: d_m/);
+    await bad(['be-52', 'M_kg=1Msun', 'a_m=5.79e10', 'major_axis_m=1.158e11', 'e=0.2', 'T_yr=0.24'], /'a_m' is given twice \(once through an alternate\)/);
+    await bad(['be-58', 'T_K=80degF', 'R_ohm=1'], /Fahrenheit is not accepted/);
+  });
+
+  it('the listing declares every input with its unit and meaning', async () => {
+    const r = await run(['evaluate']);
+    expect(r.text).toMatch(/\n {2}be-58 {2}Johnson-Nyquist noise\n {6}T_K \[K\] temperature T \(an absolute temperature; degC adds 273\.15\) — /);
+    const env = await json(['evaluate']);
+    expect(env.result.find((s: any) => s.bridgeId === 51).parameters[1]).toMatchObject({ key: 'b_m', unit: 'm', geometry: 'impact-parameter' });
   });
 });
 
