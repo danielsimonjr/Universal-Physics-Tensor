@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 351
   totalModules: 11
-  totalExports: 2475
+  totalExports: 2482
 entryPoints:
   - file: src/index.ts
     type: main
@@ -777,6 +777,7 @@ modules:
         - file: ./path-bound.js
           imports:
             - boundPath
+            - findAtlasPath
             - findPath
           reExport: true
         - file: ./path-bound.js
@@ -1099,6 +1100,7 @@ modules:
         - COMPOSITION_TABLE
         - NO_COMPOSITE_CLAIM
         - boundPath
+        - findAtlasPath
         - findPath
         - composeBounds
         - composeBoundPath
@@ -1293,6 +1295,7 @@ modules:
         - CompositionResult
         - NoCompositeClaim
         - boundPath
+        - findAtlasPath
         - findPath
         - NoClaimReason
         - PathBoundClaim
@@ -1748,12 +1751,14 @@ modules:
       exports:
         - IDENTITY_BOUND
         - findPath
+        - findAtlasPath
         - boundPath
       interfaces:
         - PathBoundClaim
         - PathNoClaim
       functions:
         - findPath
+        - findAtlasPath
         - boundPath
     src/atlas/poster/associations.ts:
       description: Atlas Phase 3 — the poster's two association-only lines.
@@ -6764,6 +6769,7 @@ modules:
         - file: ../graphs.js
           imports:
             - resolveGraph
+            - SourceName
         - file: ../output.js
           imports:
             - emitJson
@@ -6771,6 +6777,9 @@ modules:
           imports:
             - UsageError
             - CliError
+        - file: ./_discovery-opts.js
+          imports:
+            - parseDiscoveryOpts
       exports:
         - command
       constants:
@@ -7443,7 +7452,12 @@ modules:
         - file: ./atlas/path-bound.js
           imports:
             - findPath
+            - findAtlasPath
             - boundPath
+          reExport: true
+        - file: ./atlas/composition-table.js
+          imports:
+            - composeRelation
           reExport: true
         - file: ./atlas/path-bound.js
           imports:
@@ -7455,6 +7469,10 @@ modules:
           imports:
             - AtlasBridge
             - RegimeInequality
+          reExport: true
+        - file: ./atlas/types.js
+          imports:
+            - MissingLipschitzError
           reExport: true
         - file: ./atlas/model.js
           imports:
@@ -7554,7 +7572,10 @@ modules:
         - regimeOverlap
         - uncoveredRegions
         - findPath
+        - findAtlasPath
         - boundPath
+        - composeRelation
+        - MissingLipschitzError
         - ConfrontationEntry
         - RigorTier
         - ConfrontationOutcome
@@ -7695,12 +7716,15 @@ modules:
         - RegimeOverlap
         - RegionSample
         - findPath
+        - findAtlasPath
         - boundPath
+        - composeRelation
         - PathBoundResult
         - PathBoundClaim
         - PathNoClaim
         - AtlasBridge
         - RegimeInequality
+        - MissingLipschitzError
         - AtlasModel
         - ModelId
   composition:
@@ -15743,6 +15767,8 @@ modules:
           typeOnly: true
         - file: ./formula.js
           imports:
+            - BUILTIN_FUNCTION_NAMES
+            - callBuiltinFunction
             - FormulaError
       exports:
         - loadMathtsFormulaParser
@@ -15792,8 +15818,10 @@ modules:
       nodeDependencies: []
       internalDependencies: []
       exports:
+        - BUILTIN_FUNCTION_NAMES
         - defaultFormulaParser
         - parseFormulaToAst
+        - callBuiltinFunction
         - parseFormula
         - FormulaError
       classes:
@@ -15802,8 +15830,10 @@ modules:
         - CompiledFormula
         - FormulaParser
       functions:
+        - callBuiltinFunction
         - parseFormula
       constants:
+        - BUILTIN_FUNCTION_NAMES
         - defaultFormulaParser
         - parseFormulaToAst
     src/numerical/geodesic-integrator.ts:
@@ -16930,15 +16960,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 351
   totalModules: 11
-  totalLinesOfCode: 70494
-  totalExports: 2475
+  totalLinesOfCode: 70869
+  totalExports: 2482
   totalClasses: 58
   totalInterfaces: 362
-  totalFunctions: 566
+  totalFunctions: 568
   totalTypeGuards: 4
   totalEnums: 0
-  totalConstants: 608
-  totalReExports: 1242
+  totalConstants: 609
+  totalReExports: 1246
   totalTypeOnlyImports: 490
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

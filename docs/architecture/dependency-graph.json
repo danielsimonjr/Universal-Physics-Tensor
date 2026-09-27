@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 351,
     "totalModules": 11,
-    "totalExports": 2475
+    "totalExports": 2482
   },
   "entryPoints": [
     {
@@ -1147,6 +1147,7 @@
             "file": "./path-bound.js",
             "imports": [
               "boundPath",
+              "findAtlasPath",
               "findPath"
             ],
             "reExport": true
@@ -1637,6 +1638,7 @@
           "COMPOSITION_TABLE",
           "NO_COMPOSITE_CLAIM",
           "boundPath",
+          "findAtlasPath",
           "findPath",
           "composeBounds",
           "composeBoundPath",
@@ -1832,6 +1834,7 @@
           "CompositionResult",
           "NoCompositeClaim",
           "boundPath",
+          "findAtlasPath",
           "findPath",
           "NoClaimReason",
           "PathBoundClaim",
@@ -2452,6 +2455,7 @@
         "exports": [
           "IDENTITY_BOUND",
           "findPath",
+          "findAtlasPath",
           "boundPath"
         ],
         "interfaces": [
@@ -2460,6 +2464,7 @@
         ],
         "functions": [
           "findPath",
+          "findAtlasPath",
           "boundPath"
         ]
       },
@@ -10138,7 +10143,8 @@
           {
             "file": "../graphs.js",
             "imports": [
-              "resolveGraph"
+              "resolveGraph",
+              "SourceName"
             ]
           },
           {
@@ -10152,6 +10158,12 @@
             "imports": [
               "UsageError",
               "CliError"
+            ]
+          },
+          {
+            "file": "./_discovery-opts.js",
+            "imports": [
+              "parseDiscoveryOpts"
             ]
           }
         ],
@@ -11252,7 +11264,15 @@
             "file": "./atlas/path-bound.js",
             "imports": [
               "findPath",
+              "findAtlasPath",
               "boundPath"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./atlas/composition-table.js",
+            "imports": [
+              "composeRelation"
             ],
             "reExport": true
           },
@@ -11270,6 +11290,13 @@
             "imports": [
               "AtlasBridge",
               "RegimeInequality"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./atlas/types.js",
+            "imports": [
+              "MissingLipschitzError"
             ],
             "reExport": true
           },
@@ -11375,7 +11402,10 @@
           "regimeOverlap",
           "uncoveredRegions",
           "findPath",
+          "findAtlasPath",
           "boundPath",
+          "composeRelation",
+          "MissingLipschitzError",
           "ConfrontationEntry",
           "RigorTier",
           "ConfrontationOutcome",
@@ -11517,12 +11547,15 @@
           "RegimeOverlap",
           "RegionSample",
           "findPath",
+          "findAtlasPath",
           "boundPath",
+          "composeRelation",
           "PathBoundResult",
           "PathBoundClaim",
           "PathNoClaim",
           "AtlasBridge",
           "RegimeInequality",
+          "MissingLipschitzError",
           "AtlasModel",
           "ModelId"
         ]
@@ -22596,6 +22629,8 @@
           {
             "file": "./formula.js",
             "imports": [
+              "BUILTIN_FUNCTION_NAMES",
+              "callBuiltinFunction",
               "FormulaError"
             ]
           }
@@ -22673,8 +22708,10 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
+          "BUILTIN_FUNCTION_NAMES",
           "defaultFormulaParser",
           "parseFormulaToAst",
+          "callBuiltinFunction",
           "parseFormula",
           "FormulaError"
         ],
@@ -22686,9 +22723,11 @@
           "FormulaParser"
         ],
         "functions": [
+          "callBuiltinFunction",
           "parseFormula"
         ],
         "constants": [
+          "BUILTIN_FUNCTION_NAMES",
           "defaultFormulaParser",
           "parseFormulaToAst"
         ]
@@ -24236,15 +24275,15 @@
   "statistics": {
     "totalTypeScriptFiles": 351,
     "totalModules": 11,
-    "totalLinesOfCode": 70494,
-    "totalExports": 2475,
+    "totalLinesOfCode": 70869,
+    "totalExports": 2482,
     "totalClasses": 58,
     "totalInterfaces": 362,
-    "totalFunctions": 566,
+    "totalFunctions": 568,
     "totalTypeGuards": 4,
     "totalEnums": 0,
-    "totalConstants": 608,
-    "totalReExports": 1242,
+    "totalConstants": 609,
+    "totalReExports": 1246,
     "totalTypeOnlyImports": 490,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
