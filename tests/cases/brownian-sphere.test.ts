@@ -7,7 +7,7 @@
  * Ornstein–Uhlenbeck mean-square displacement.
  */
 import { describe, expect, it } from 'vitest';
-import { BROWNIAN_SPHERE_CASE as C } from '../../src/cases/brownian-sphere.js';
+import { BROWNIAN_SPHERE_CASE as C, ballisticDeficit } from '../../src/cases/brownian-sphere.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import { canonicalById } from '../../src/canonical/registry.js';
 import { evalExpr } from '../../src/composition/expr-eval.js';
@@ -58,6 +58,57 @@ describe('case-brownian-sphere — D and the MSD', () => {
   it('MSD = 2 d D t per tracked axis count', () => {
     for (const d of [1, 2, 3]) expect(out({ d, t_s: 3 }).MSD_m2).toBeCloseTo(2 * d * out().D_m2_per_s * 3, 25);
     expect(out().rms_displacement_m).toBeCloseTo(Math.sqrt(4 * out().D_m2_per_s), 18);
+  });
+});
+
+describe('case-brownian-sphere — the Langevin parent', () => {
+  /** RK4 on the Langevin moment equations per axis: ⟨x²⟩′ = 2⟨xv⟩, ⟨xv⟩′ = k_BT/m − (γ/m)⟨xv⟩, from rest in x. */
+  function momentMsd(kT: number, m: number, gamma: number, t: number, steps: number): number {
+    const h = t / steps;
+    let y1 = 0;
+    let y2 = 0;
+    const f = (b: number) => kT / m - (gamma / m) * b;
+    for (let k = 0; k < steps; k++) {
+      const a1 = 2 * y2, b1 = f(y2);
+      const a2 = 2 * (y2 + (h / 2) * b1), b2 = f(y2 + (h / 2) * b1);
+      const a3 = 2 * (y2 + (h / 2) * b2), b3 = f(y2 + (h / 2) * b2);
+      const a4 = 2 * (y2 + h * b3), b4 = f(y2 + h * b3);
+      y1 += (h / 6) * (a1 + 2 * a2 + 2 * a3 + a4);
+      y2 += (h / 6) * (b1 + 2 * b2 + 2 * b3 + b4);
+    }
+    return y1;
+  }
+
+  it('the closed-form Langevin MSD matches RK4 on the moment equations at t = 0.01, 1 and 100 τ', () => {
+    const gamma = 6 * Math.PI * 1e-3 * 1e-6;
+    const tau = out().m_kg / gamma;
+    for (const x of [0.01, 1, 100]) {
+      const o = out({ t_s: x * tau, d: 1 });
+      const rk = momentMsd(K_B * 293.15, o.m_kg, gamma, x * tau, 20000);
+      expect(Math.abs(o.MSD_langevin_m2 / rk - 1), `t = ${x} τ`).toBeLessThan(1e-8);
+    }
+  });
+
+  it('agrees with the atlas witness WD4b: at t = 0.1 τ the Langevin MSD is 0.0483742 of 2Dt', () => {
+    const tau = out().m_kg / (6 * Math.PI * 1e-3 * 1e-6);
+    expect(1 / (1 + out({ t_s: 0.1 * tau }).langevin_deviation)).toBeCloseTo(0.0483742, 6);
+  });
+
+  it('ballistic at short times: the Langevin MSD tends to d (k_BT/m) t², with no cancellation loss', () => {
+    const o = out({ t_s: 1e-12, d: 3 });
+    expect(Math.abs(o.MSD_langevin_m2 / ((3 * K_B * 293.15) / o.m_kg / 1e12 ** 2) - 1)).toBeLessThan(1e-5);
+  });
+
+  it('x − (1 − e^{−x}) is accurate across the series switch: against expm1 at x = 5e-4, against x²/2 at x = 1e-13', () => {
+    // At 5e-4 the direct form loses only ~2ε/x ≈ 4e-13 relative, so it can referee the series.
+    expect(Math.abs(ballisticDeficit(5e-4) / (5e-4 + Math.expm1(-5e-4)) - 1)).toBeLessThan(1e-10);
+    expect(Math.abs(ballisticDeficit(1e-13) / (1e-26 / 2) - 1)).toBeLessThan(1e-12);
+    expect(Math.abs(ballisticDeficit(2) / (2 + Math.expm1(-2)) - 1)).toBeLessThan(1e-15);
+  });
+
+  it('in the checked regime the diffusive MSD is within τ/t of the Langevin one; in the failure example it is far off', () => {
+    expect(Math.abs(out().langevin_deviation)).toBeLessThan(1e-6);
+    expect(out({ t_s: 1e-6 }).langevin_deviation).toBeGreaterThan(0.5);
   });
 });
 

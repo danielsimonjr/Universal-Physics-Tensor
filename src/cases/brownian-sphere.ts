@@ -34,6 +34,11 @@ export const MAX_TAU_F_RATIO = 1e-4;
 /** (v_s t)²/(2Dt) ceiling along gravity when the vertical axis is tracked. @internal */
 export const MAX_DRIFT_RATIO = 0.01;
 
+/** t − τ(1 − e^{−t/τ}) in units of τ, i.e. x − (1 − e^{−x}), without its cancellation at small x. @internal */
+export function ballisticDeficit(x: number): number {
+  return x < 1e-3 ? x * x * (1 / 2 - x / 6 + (x * x) / 24 - (x * x * x) / 120) : x + Math.expm1(-x);
+}
+
 export const BROWNIAN_SPHERE_CASE: AppliedCase = {
   id: ID,
   title: 'Brownian sphere in a fluid (particle geometry, fluid conditions)',
@@ -80,7 +85,16 @@ export const BROWNIAN_SPHERE_CASE: AppliedCase = {
     { key: 'tau_f_s', symbol: 'τ_f', unit: 's', meaning: 'vorticity diffusion time ρ_f a²/η over one radius (hydrodynamic memory)' },
     { key: 'v_sed_m_per_s', symbol: 'v_s', unit: 'm/s', meaning: 'Stokes sedimentation speed (2/9)(ρ_p − ρ_f) g a²/η; negative means the sphere rises' },
     { key: 'Re', symbol: 'Re', unit: '', meaning: 'ρ_f a max(√(k_BT/m), |v_s|)/η — radius-based; a diameter-based Re is twice this' },
+    { key: 'MSD_langevin_m2', symbol: '⟨|Δr|²⟩_L', unit: 'm^2', meaning: 'the Langevin parent: 2dD[t − τ(1 − e^{−t/τ})], τ = m/γ (bare mass)' },
+    { key: 'langevin_deviation', symbol: 'MSD/MSD_L − 1', unit: '', meaning: 'relative excess of the diffusive MSD over the Langevin one' },
   ],
+  comparison: {
+    reference: 'the parent Langevin model (bare mass, white noise; it has neither added mass nor hydrodynamic memory)',
+    valueKey: 'MSD_m2',
+    referenceKey: 'MSD_langevin_m2',
+    deviationKey: 'langevin_deviation',
+    method: 'closed form of the Ornstein–Uhlenbeck MSD, velocities starting in equilibrium',
+  },
   conditions: [
     'a rigid sphere released at r = 0; its displacement density starts as δ(r) and spreads as a Gaussian of variance 2Dt per axis',
     'no-slip boundary on the sphere; the fluid is at rest far from it (no imposed flow, no walls within many radii)',
@@ -137,6 +151,8 @@ export const BROWNIAN_SPHERE_CASE: AppliedCase = {
     const tauF = (rhoF * a * a) / eta;
     const vSed = ((2 / 9) * (rhoP - rhoF) * G_STANDARD * a * a) / eta;
     const re = (rhoF * a * Math.max(Math.sqrt(kT / m), Math.abs(vSed))) / eta;
+    const tauBare = m / gamma;
+    const msdLangevin = 2 * d * D * tauBare * ballisticDeficit(t / tauBare);
     const checks = [
       check('creeping-flow', 'creeping flow around the sphere, Re ≪ 1', 'ρ_f a max(√(k_BT/m), |v_s|)/η', re, '<=', MAX_RE,
         "the threshold ab-stokes-einstein states: a chosen machine form of Re ≪ 1"),
@@ -167,6 +183,8 @@ export const BROWNIAN_SPHERE_CASE: AppliedCase = {
         tau_f_s: tauF,
         v_sed_m_per_s: vSed,
         Re: re,
+        MSD_langevin_m2: msdLangevin,
+        langevin_deviation: msd / msdLangevin - 1,
       },
       checks,
       unchecked,
