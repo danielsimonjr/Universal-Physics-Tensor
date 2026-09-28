@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 383,
     "totalModules": 12,
-    "totalExports": 2767
+    "totalExports": 2772
   },
   "entryPoints": [
     {
@@ -10487,6 +10487,12 @@
             ]
           },
           {
+            "module": "path",
+            "imports": [
+              "join"
+            ]
+          },
+          {
             "module": "url",
             "imports": [
               "fileURLToPath"
@@ -10549,6 +10555,7 @@
           "STORED_RESULTS_PATH",
           "DEFAULT_MAX_ROUTES",
           "MAX_ROUTES_CEILING",
+          "storedResultsFile",
           "loadStoredResults",
           "runResults",
           "parseRoute",
@@ -10589,6 +10596,7 @@
           "FamilyView"
         ],
         "functions": [
+          "storedResultsFile",
           "loadStoredResults",
           "runResults",
           "parseRoute",
@@ -12232,6 +12240,12 @@
         "externalDependencies": [],
         "nodeDependencies": [
           {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          },
+          {
             "module": "fs",
             "imports": [
               "existsSync",
@@ -12261,12 +12275,14 @@
         ],
         "exports": [
           "REACH_METHOD",
+          "moduleSources",
           "staticReach"
         ],
         "interfaces": [
           "Attribution"
         ],
         "functions": [
+          "moduleSources",
           "staticReach"
         ],
         "constants": [
@@ -12370,8 +12386,23 @@
               "appendFileSync",
               "closeSync",
               "existsSync",
+              "mkdtempSync",
               "openSync",
-              "readFileSync"
+              "readFileSync",
+              "rmSync"
+            ]
+          },
+          {
+            "module": "os",
+            "imports": [
+              "tmpdir"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "basename",
+              "join"
             ]
           }
         ],
@@ -12396,6 +12427,12 @@
             ]
           },
           {
+            "file": "./commands/_atlas-map.js",
+            "imports": [
+              "storedResultsFile"
+            ]
+          },
+          {
             "file": "./errors.js",
             "imports": [
               "CliError"
@@ -12410,6 +12447,7 @@
           {
             "file": "./record-reach.js",
             "imports": [
+              "moduleSources",
               "staticReach",
               "Attribution"
             ]
@@ -12445,6 +12483,7 @@
           "RecordEnvironment",
           "RecordResult",
           "RecordEntry",
+          "RecordInput",
           "EnvironmentChange",
           "StreamDifference",
           "ReplayEntryReport"
@@ -12842,6 +12881,7 @@
               "problemFromResidualGap",
               "makeResidualGap",
               "loadSearchProblemFromJson",
+              "resolveObservationsPath",
               "parseExprJson",
               "runProbeSearch",
               "formatProbeReport",
@@ -13177,6 +13217,7 @@
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "parseExprJson",
           "runProbeSearch",
           "formatProbeReport",
@@ -13353,6 +13394,7 @@
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "parseExprJson",
           "runProbeSearch",
           "formatProbeReport",
@@ -17286,6 +17328,7 @@
               "makeResidualGap",
               "loadSearchProblemFromJson",
               "searchProblemFromFile",
+              "resolveObservationsPath",
               "parseExprJson"
             ],
             "reExport": true
@@ -17423,6 +17466,7 @@
           "makeResidualGap",
           "loadSearchProblemFromJson",
           "searchProblemFromFile",
+          "resolveObservationsPath",
           "parseExprJson",
           "runProbeSearch",
           "formatProbeReport",
@@ -17631,6 +17675,7 @@
           "makeResidualGap",
           "loadSearchProblemFromJson",
           "searchProblemFromFile",
+          "resolveObservationsPath",
           "parseExprJson",
           "ProblemFile",
           "runProbeSearch",
@@ -17930,6 +17975,7 @@
           "isGapKind",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "searchProblemFromFile",
           "parseExprJson"
         ],
@@ -17940,6 +17986,7 @@
           "isGapKind",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "searchProblemFromFile",
           "parseExprJson"
         ]
@@ -26564,15 +26611,15 @@
   "statistics": {
     "totalTypeScriptFiles": 383,
     "totalModules": 12,
-    "totalLinesOfCode": 82403,
-    "totalExports": 2767,
+    "totalLinesOfCode": 82636,
+    "totalExports": 2772,
     "totalClasses": 60,
-    "totalInterfaces": 431,
-    "totalFunctions": 683,
+    "totalInterfaces": 432,
+    "totalFunctions": 686,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 690,
-    "totalReExports": 1333,
+    "totalReExports": 1335,
     "totalTypeOnlyImports": 523,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

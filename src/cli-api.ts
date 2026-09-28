@@ -112,6 +112,7 @@ export {
   problemFromResidualGap,
   makeResidualGap,
   loadSearchProblemFromJson,
+  resolveObservationsPath,
   parseExprJson,
   runProbeSearch,
   formatProbeReport,

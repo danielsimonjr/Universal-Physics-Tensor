@@ -14,8 +14,12 @@
  *
  * Comments and strings are not stripped, so a name mentioned only in a comment counts as reached:
  * that errs toward "reachable", never toward "not reachable".
+ *
+ * The same import graph gives the modules the command loads. Each one's source is hashed, so a
+ * change to a literal a module keeps private, which no constant table holds, is still named.
  */
 
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve, sep } from 'node:path';
 import { MODULE_EXT, SOURCE_ROOT, tableName, type TableKind } from './record-tables.js';
@@ -27,6 +31,11 @@ export interface Attribution {
   command: string;
   /** Table name -> the keys the command's code can reach, or `['*']` for the whole table. */
   tables: Record<string, string[]>;
+  /**
+   * Module name (as a table is named) -> SHA-256 of its source, for every module the command
+   * loads. Absent from entries written before module sources were hashed.
+   */
+  modules?: Record<string, string>;
 }
 
 /** A reached module reads `names` of `file`, `*` for all of them. */
@@ -132,17 +141,14 @@ const mentions = (text: string, name: string): number =>
   text.match(new RegExp(`(?<![\\w$])${name.replace(/\$/g, '\\$')}(?![\\w$])`, 'g'))?.length ?? 0;
 
 const cache = new Map<string, Attribution | null>();
+const loadedCache = new Map<string, { loaded: Set<string>; directReads: Read[] } | null>();
 
-/** The reach of `command`'s code into `tables`, or null when the command has no module of its own. */
-export function staticReach(
-  command: string,
-  tables: Record<string, { values: Record<string, unknown> }>,
-  kinds: Record<string, TableKind>,
-): Attribution | null {
-  if (cache.has(command)) return cache.get(command)!;
+/** Every module `command` loads, and what each reads, or null when the command has no module. */
+function loadedModules(command: string): { loaded: Set<string>; directReads: Read[] } | null {
+  if (loadedCache.has(command)) return loadedCache.get(command)!;
   const seed = join(SOURCE_ROOT, 'cli', 'commands', `${command}${MODULE_EXT}`);
   if (!existsSync(seed)) {
-    cache.set(command, null);
+    loadedCache.set(command, null);
     return null;
   }
   const cliDir = join(SOURCE_ROOT, 'cli') + sep;
@@ -160,6 +166,44 @@ export function staticReach(
     directReads.push(...all);
     for (const t of [...all.map((r) => r.file), ...reexports.map((r) => r.file)]) if (!loaded.has(t)) queue.push(t);
   }
+  const out = { loaded, directReads };
+  loadedCache.set(command, out);
+  return out;
+}
+
+/**
+ * SHA-256 of the source of every module `command` loads, keyed by module name, read from disk now
+ * (not from the parse cache), or null when the command has no module of its own.
+ */
+export function moduleSources(command: string): Record<string, string> | null {
+  const mods = loadedModules(command);
+  if (!mods) return null;
+  const out: Record<string, string> = {};
+  for (const file of [...mods.loaded].sort()) {
+    let hash: string;
+    try {
+      hash = createHash('sha256').update(readFileSync(file)).digest('hex');
+    } catch {
+      hash = 'unreadable';
+    }
+    out[tableName(file)] = hash;
+  }
+  return out;
+}
+
+/** The reach of `command`'s code into `tables`, or null when the command has no module of its own. */
+export function staticReach(
+  command: string,
+  tables: Record<string, { values: Record<string, unknown> }>,
+  kinds: Record<string, TableKind>,
+): Attribution | null {
+  if (cache.has(command)) return cache.get(command)!;
+  const mods = loadedModules(command);
+  if (!mods) {
+    cache.set(command, null);
+    return null;
+  }
+  const { loaded, directReads } = mods;
 
   // Names read: an import reads its names; a re-export passes on only the names read from it.
   const namesOf = new Map<string, Set<string> | '*'>();

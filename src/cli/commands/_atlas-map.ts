@@ -34,6 +34,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
@@ -134,6 +135,11 @@ function repoRoot(): string {
   return fileURLToPath(new URL('../../../', import.meta.url));
 }
 
+/** The absolute path `--stored` reads, which an experiment record hashes as an input. */
+export function storedResultsFile(): string {
+  return join(repoRoot(), STORED_RESULTS_PATH);
+}
+
 function git(args: string[], cwd: string): string | null {
   try {
     return execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 5000 }).trim();
@@ -150,7 +156,7 @@ function git(args: string[], cwd: string): string | null {
  */
 export function loadStoredResults(command = 'upt map'): WitnessResults {
   const root = repoRoot();
-  const file = `${root}${STORED_RESULTS_PATH}`;
+  const file = storedResultsFile();
   let raw: string;
   try {
     raw = readFileSync(file, 'utf8');

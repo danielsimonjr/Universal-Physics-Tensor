@@ -115,7 +115,7 @@ export {
   listRelationMetadata,
   clearRelationMetadata,
 } from './metadata.js';
-export { makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, parseExprJson } from './problem.js';
+export { makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson } from './problem.js';
 export type { ProblemFile } from './problem.js';
 export { runProbeSearch } from './pipeline.js';
 export type { ProbeSearchOptions, ProbeSearchResult } from './pipeline.js';

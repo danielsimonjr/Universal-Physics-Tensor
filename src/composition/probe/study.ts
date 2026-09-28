@@ -1478,7 +1478,7 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
   L.push('');
   L.push(
     `  search (exploratory rows only): ${r.search.generated} candidate(s) generated, ${r.search.fitted} fit, ` +
-      `${r.search.rejected} rejected`,
+      `${r.search.rejected} rejected; stop: ${r.search.stopReason}`,
   );
   for (const n of r.search.notes.slice(0, 6)) L.push(`    ${n}`);
   if (r.correction) {

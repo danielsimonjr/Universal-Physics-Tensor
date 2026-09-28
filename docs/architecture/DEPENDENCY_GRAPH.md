@@ -3189,6 +3189,7 @@ The codebase is organized into the following modules:
 |--------|--------|
 | `child_process` | `execFileSync` |
 | `fs` | `readFileSync` |
+| `path` | `join` |
 | `url` | `fileURLToPath` |
 
 **Internal Dependencies:**
@@ -3213,9 +3214,10 @@ The codebase is organized into the following modules:
 - Functions:
 
   ```text
-  loadStoredResults, runResults, parseRoute, buildRouteView, buildRoutesView, buildObservableView,
-  buildAtlasEvidenceView, atlasEvidenceText, formatAtlasFilterLegend, bridgeIdsOf, buildFamilyView,
-  resultsLine, routeText, familyText, routesText, observableText, viewLegend, toMermaid, toDot
+  storedResultsFile, loadStoredResults, runResults, parseRoute, buildRouteView, buildRoutesView,
+  buildObservableView, buildAtlasEvidenceView, atlasEvidenceText, formatAtlasFilterLegend,
+  bridgeIdsOf, buildFamilyView, resultsLine, routeText, familyText, routesText, observableText,
+  viewLegend, toMermaid, toDot
   ```
 
 - Constants: `ATLAS_SOURCE`, `LINK_SOURCE`, `STORED_RESULTS_PATH`, `DEFAULT_MAX_ROUTES`, `MAX_ROUTES_CEILING`
@@ -3743,6 +3745,7 @@ The codebase is organized into the following modules:
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
+| `crypto` | `createHash` |
 | `fs` | `existsSync, readFileSync` |
 | `path` | `dirname, join, resolve, sep` |
 
@@ -3753,7 +3756,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `Attribution`
-- Functions: `staticReach`
+- Functions: `moduleSources`, `staticReach`
 - Constants: `REACH_METHOD`
 
 ---
@@ -3789,7 +3792,9 @@ The codebase is organized into the following modules:
 | Module | Import |
 |--------|--------|
 | `crypto` | `createHash` |
-| `fs` | `appendFileSync, closeSync, existsSync, openSync, readFileSync` |
+| `fs` | `appendFileSync, closeSync, existsSync, mkdtempSync, openSync, readFileSync, rmSync` |
+| `os` | `tmpdir` |
+| `path` | `basename, join` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -3797,14 +3802,15 @@ The codebase is organized into the following modules:
 | `../cli-api.js` | `* as cliApi` | Import (type-only) |
 | `./args.js` | `parseArgs` | Import |
 | `./command.js` | `resolveCommand` | Import |
+| `./commands/_atlas-map.js` | `storedResultsFile` | Import |
 | `./errors.js` | `CliError` | Import |
 | `./output.js` | `emitJson` | Import |
-| `./record-reach.js` | `staticReach, Attribution` | Import |
+| `./record-reach.js` | `moduleSources, staticReach, Attribution` | Import |
 | `./record-tables.js` | `constantTables, tableFingerprint, ConstantTable` | Import |
 | `./version.js` | `packageVersion, peerVersions` | Import |
 
 **Exports:**
-- Interfaces: `RecordEnvironment`, `RecordResult`, `RecordEntry`, `EnvironmentChange`, `StreamDifference`, `ReplayEntryReport`
+- Interfaces: `RecordEnvironment`, `RecordResult`, `RecordEntry`, `RecordInput`, `EnvironmentChange`, `StreamDifference`, `ReplayEntryReport`
 - Functions: `canonicalJson`, `entryFingerprint`, `captureEnvironment`, `recordInvocation`, `replayRecord`, `showRecord`
 - Constants: `RECORD_SCHEMA`, `sha256`, `argvFingerprint`
 
@@ -3886,7 +3892,7 @@ The codebase is organized into the following modules:
 | `./composition/graph-viz.js` | `filterEdges, deriveEdgeEvidence, formatFilterLegend` | Re-export |
 | `./composition/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
 | `./composition/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
-| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
+| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
 | `./composition/adjudication.js` | `AnnotatedCandidate, CandidateAdjudication` | Re-export |
 | `./composition/consequence.js` | `annotateConsequences` | Re-export |
@@ -3937,20 +3943,20 @@ The codebase is organized into the following modules:
   bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
   filterEdges, deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
   describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
-  findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, parseExprJson,
-  runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy,
-  formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint,
-  parseDesignBounds, runFalsification, rankPareto, annotateAdjudications, adjudicationFor,
-  candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication, annotateConsequences,
-  ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence, checkConventions,
-  unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness, REPRESENTATIVE_VALUES,
-  compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
-  CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness,
-  OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES,
-  summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
-  OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
-  ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, regimeHolds, regimeOverlap,
-  uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath,
+  findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson,
+  resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson,
+  loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap,
+  suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto, annotateAdjudications,
+  adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication,
+  annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
+  checkConventions, unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness,
+  REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation, describeComparison,
+  describeComparisons, CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding,
+  CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence,
+  NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY,
+  runNumericWitness, OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck,
+  translationsOf, ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, regimeHolds,
+  regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath,
   enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult,
   PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality, Witness,
   MissingLipschitzError, AtlasModel, ModelId
@@ -4876,7 +4882,7 @@ The codebase is organized into the following modules:
 | `./backend-protocol.js` | `runBackendWorker` | Re-export |
 | `./backend-protocol.js` | `BackendRequest, BackendCandidate, BackendResponse` | Re-export |
 | `./metadata.js` | `setRelationMetadata, getRelationMetadata, listRelationMetadata, clearRelationMetadata` | Re-export |
-| `./problem.js` | `makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, parseExprJson` | Re-export |
+| `./problem.js` | `makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson` | Re-export |
 | `./problem.js` | `ProblemFile` | Re-export |
 | `./pipeline.js` | `runProbeSearch` | Re-export |
 | `./pipeline.js` | `ProbeSearchOptions, ProbeSearchResult` | Re-export |
@@ -4911,13 +4917,13 @@ The codebase is organized into the following modules:
   ChangepointResult, ScaleSymmetryInput, runBackendWorker, BackendRequest, BackendCandidate,
   BackendResponse, setRelationMetadata, getRelationMetadata, listRelationMetadata,
   clearRelationMetadata, makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile,
-  parseExprJson, ProblemFile, runProbeSearch, ProbeSearchOptions, ProbeSearchResult,
-  formatProbeReport, formatFrontierScan, formatFrontierGap, parseStudy, loadStudyFromJson,
-  loadStudyFile, attachReplication, studyCsvToRaw, runProbeStudy, formatProbeStudy, chiSquareSurvival,
-  fSurvival, effectiveSigma, StudyRefusal, ProbeStudy, ProbeStudyOptions, ProbeStudyResult,
-  StudyVerdict, ReplicationOutcome, StudyRole, StudyProvenance, StudyObservation, StudyBaseline,
-  SetTest, ModelTest, CandidateTest, StudyDesignSuggestion, StudyCorrection, StudyCorrectionReport,
-  CorrectionStep
+  resolveObservationsPath, parseExprJson, ProblemFile, runProbeSearch, ProbeSearchOptions,
+  ProbeSearchResult, formatProbeReport, formatFrontierScan, formatFrontierGap, parseStudy,
+  loadStudyFromJson, loadStudyFile, attachReplication, studyCsvToRaw, runProbeStudy, formatProbeStudy,
+  chiSquareSurvival, fSurvival, effectiveSigma, StudyRefusal, ProbeStudy, ProbeStudyOptions,
+  ProbeStudyResult, StudyVerdict, ReplicationOutcome, StudyRole, StudyProvenance, StudyObservation,
+  StudyBaseline, SetTest, ModelTest, CandidateTest, StudyDesignSuggestion, StudyCorrection,
+  StudyCorrectionReport, CorrectionStep
   ```
 
 
@@ -4997,7 +5003,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ProblemFile`
-- Functions: `isGapKind`, `makeResidualGap`, `loadSearchProblemFromJson`, `searchProblemFromFile`, `parseExprJson`
+- Functions: `isGapKind`, `makeResidualGap`, `loadSearchProblemFromJson`, `resolveObservationsPath`, `searchProblemFromFile`, `parseExprJson`
 
 ---
 
@@ -7247,12 +7253,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 82403 |
-| Total Exports | 2767 |
-| Total Re-exports | 1333 |
+| Total Lines of Code | 82636 |
+| Total Exports | 2772 |
+| Total Re-exports | 1335 |
 | Total Classes | 60 |
-| Total Interfaces | 431 |
-| Total Functions | 683 |
+| Total Interfaces | 432 |
+| Total Functions | 686 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |

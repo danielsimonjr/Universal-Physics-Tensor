@@ -10,6 +10,25 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Replay covers file-writing, file-reading and private-literal cases (audit I17 limits).**
+  - `map --out=PATH` entries replay into a temporary file, never over PATH. The file is compared by
+    SHA-256 with the recorded artifact, and a mismatch is an `artifact` difference (exit 3). An
+    `--out` entry that wrote no file is not replayable.
+  - Entries now carry `inputs`: each file the invocation reads, hashed before it runs. For `probe`
+    that is `--problem`, `--h1`, `--h2`, `--bounds`, `--data`, `--replication` and the observations
+    file a problem names; for `atlas`/`map --stored` it is the witness-results artifact. An entry
+    replays while its inputs hash as recorded; one whose input changed, vanished or appeared is not
+    replayable, naming the file.
+  - Probe subverbs were all declared not replayable; now only these are: a run with an external
+    `--worker`, and a search whose recorded or replayed output states `stop: time-limit`. `probe
+    study` had been replayed without its data being hashed; it is now covered by the input rule, and
+    its search line prints its stop reason.
+  - `attribution.modules` holds the SHA-256 of every module the command loads. A changed literal a
+    module keeps private (no constant table holds it) is named as `module <name>`, reachable. The
+    second-method test changes `L_SUN_SI` in a copy of `dist`, and the replay names the module.
+  - Not done: per-entry attribution. The reason is in `todo.md` (I17 row) and the design note.
+  - `record-replay.test.ts`'s "not replayable by rule" case is updated deliberately: its map and
+    absent-problem entries now reproduce.
 - **An atlas-wide evidence view, and a test that `--run` exits 3 on a refutation (audit I16).**
   - `upt atlas --evidence [--stored | --run] [--json]` shows every bridge of every family. Each has
     its evidence, derived whatever the unobserved witness results are, and the tags left undecided

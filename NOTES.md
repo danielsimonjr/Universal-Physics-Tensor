@@ -68,6 +68,12 @@ nothing validates prose and the next reader cannot tell.
   traversal rules exclude both second routes (negative result).
 - `--record`/`--replay`: `eval 'ln(x)' x=-1` fails with different stderr under the builtin and MathTS
   parsers, so a recorded failure does not reproduce across a parser change (negative result).
+- `--record`/`--replay` (2026-09-27, audit I17 limits): `map --out`, the probe subverbs and `--stored`
+  now replay under stated rules (`docs/planning/Experiment-Record-Replay-Design-Note.md`). An entry
+  hashes its command's loaded modules: 34 for `evaluate`, 48 for `eval` (about 3–4.5 kB of an entry of
+  about 13 kB). A probe search under the default 5 s budget gave identical output on two runs; with
+  `--budget-ms=1` it states `stop: time-limit` and is not replayable. Per-entry attribution is not
+  done and cannot be derived from the import graph (negative result).
 - `case-lumped-cooling`: at the textbook limit Bi = 0.1 the lumped temperature excess is 5.5% below
   the heat-equation mean at t = τ and 16% below at 3τ; Bi ≤ 0.1 does not bound the late-time relative
   error (negative result). `case-kepler-rv`'s double-pulsar agreement is consistency with a GR-fitted

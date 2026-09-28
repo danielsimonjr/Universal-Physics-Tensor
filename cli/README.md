@@ -307,6 +307,11 @@ carries an **attribution**: the constants its command's code can reach through
 the import graph — a static upper bound, not a record of what it read. Failed
 invocations are recorded like the others, so a record keeps the attempts that
 were refused. A `map --out=PATH` entry also records the written file's SHA-256.
+An entry also hashes the **files it reads** (`probe`'s `--problem`, `--h1`,
+`--h2`, `--bounds`, `--data`, `--replication` and the observations file a
+problem names; the witness-results artifact `--stored` reads) and the **source
+of every module** its command loads, so a changed literal that no constant table
+holds is still named, as a change to its module.
 
 ```bash
 node bin/upt.mjs --record=session.jsonl evaluate be-58 T_K=300 R_ohm=1000
@@ -325,17 +330,20 @@ that command's (unknown) flag. Design:
 `--replay=FILE [--json]` re-runs every entry in-process and compares exit code,
 stdout and stderr byte for byte. Each entry is exactly one of:
 
-- **reproduced** — all three identical;
-- **differs** — the differing streams are named, each with its first differing
-  line, recorded and replayed;
-- **not replayable** — not re-run, with the reason: an unreadable line, a
-  `map --out=PATH` (replaying would overwrite the file), or a `probe` subverb
-  other than `scan`/`show` (a wall-clock budget and files the record does not
-  capture — `upt probe reproduce` is that workflow's replay).
+- **reproduced** — all three identical (and a file written with `--out`, which
+  the replay writes to a temporary path, never over PATH, has the recorded
+  SHA-256);
+- **differs** — the differing streams (or the written file, `artifact`) are
+  named, each with its first differing line, recorded and replayed;
+- **not replayable** — not re-run, or not compared, with the reason: an
+  unreadable line; an `--out` entry that wrote no file; a probe run with an
+  external `--worker`; a file it read that changed, vanished or appeared since
+  recording (named with its flag); or a probe search whose recorded or replayed
+  output says it stopped on its wall-clock budget (`stop: time-limit`).
 
 Beside the outcome, replay names every environment fact that changed since
 recording (`uptVersion`, `node`, `formulaParser`, `simplifier`, `peer <name>`,
-`constant <table> <NAME>`, `table <table> sha256`), and marks each changed
+`constant <table> <NAME>`, `table <table> sha256`, `module <name>`), and marks each changed
 constant **reachable** or **not reachable** from the entry's command by its
 attribution. It flags a record edited after it was written (arguments, a stream,
 a constant table or the entry itself no longer matching its recorded hash). It

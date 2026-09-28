@@ -195,23 +195,27 @@ export const STATUS_GLOSSARY: readonly StatusDefinition[] = [
   {
     key: 'reproduced',
     words: ['reproduced'],
-    meaning: 'the replayed run gave the recorded exit code, stdout and stderr, byte for byte',
+    meaning:
+      'the replayed run gave the recorded exit code, stdout and stderr, byte for byte, and any file it wrote ' +
+      '(--out, written to a temporary path, never over the recorded one) has the recorded SHA-256',
     commands: ['replay'],
   },
   {
     key: 'differs',
     words: ['differs', 'differ'],
     meaning:
-      'the replayed run differs from the record: the stream and first differing line are named, with every ' +
-      'changed version, parser or constant and whether the command can reach it. Exit 3',
+      'the replayed run differs from the record: the stream (or the written file) and first differing line are ' +
+      'named, with every changed version, parser, constant or module source and whether the command can reach it. Exit 3',
     commands: ['replay'],
   },
   {
     key: 'not-replayable',
     words: ['not replayable', 'not-replayable'],
     meaning:
-      'the entry is not re-run: its line is malformed, it wrote a file (--out, which a replay would overwrite; the ' +
-      'recorded artifact hash stays in the record), or it is a timed probe search. Nothing was compared',
+      'the entry is not re-run, or its replay is not compared: its line is malformed; it was to write a file and ' +
+      'wrote none; it ran an external probe worker; a file it read (--problem, --data, --stored, ...) changed, ' +
+      'vanished or appeared since recording, or was not hashed; or the recorded or the replayed probe search ' +
+      'stopped on its wall-clock budget (time-limit). Nothing was compared',
     commands: ['replay'],
   },
   {

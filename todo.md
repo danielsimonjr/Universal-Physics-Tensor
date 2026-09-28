@@ -97,6 +97,14 @@ them only partly met, and their rows are in "Review of the audit against the rec
   each changed constant reachable or not from the command (a static upper bound, not an observed read).
   Open: literals a module keeps private are in no table; attribution is per command, not per entry;
   `map --out` and the timed `probe` subverbs are not replayable.
+  Done 2026-09-27: each entry hashes the source of every module its command loads, so a changed private
+  literal is named as a module change (the module, not the literal). `map --out` replays into a temporary
+  file compared by hash. Probe entries hash their input files (the observations file a problem names
+  included) and replay while those are unchanged; a changed input, an external worker, and a search the
+  record or the replay says stopped on its wall-clock budget are declared not replayable. `--stored`
+  hashes the witness-results artifact. Not done (negative result): per-entry attribution. The import
+  graph does not depend on the arguments, and a module's reads of its own private bindings cannot be
+  observed from outside it; a hand-kept id-to-module map would be declared, not derived.
 - [x] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
   `--sweep … --compare=<to2>` puts two limits side by side and marks NEITHER rows with no number
   (telegraph and Klein–Gordon).

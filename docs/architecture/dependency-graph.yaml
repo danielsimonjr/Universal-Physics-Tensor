@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 383
   totalModules: 12
-  totalExports: 2767
+  totalExports: 2772
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7057,6 +7057,9 @@ modules:
         - module: fs
           imports:
             - readFileSync
+        - module: path
+          imports:
+            - join
         - module: url
           imports:
             - fileURLToPath
@@ -7097,6 +7100,7 @@ modules:
         - STORED_RESULTS_PATH
         - DEFAULT_MAX_ROUTES
         - MAX_ROUTES_CEILING
+        - storedResultsFile
         - loadStoredResults
         - runResults
         - parseRoute
@@ -7135,6 +7139,7 @@ modules:
         - AtlasFilterStats
         - FamilyView
       functions:
+        - storedResultsFile
         - loadStoredResults
         - runResults
         - parseRoute
@@ -8149,6 +8154,9 @@ modules:
       description: "Static attribution for an experiment record: which constants a command's code can reach"
       externalDependencies: []
       nodeDependencies:
+        - module: crypto
+          imports:
+            - createHash
         - module: fs
           imports:
             - existsSync
@@ -8168,10 +8176,12 @@ modules:
             - TableKind
       exports:
         - REACH_METHOD
+        - moduleSources
         - staticReach
       interfaces:
         - Attribution
       functions:
+        - moduleSources
         - staticReach
       constants:
         - REACH_METHOD
@@ -8237,8 +8247,17 @@ modules:
             - appendFileSync
             - closeSync
             - existsSync
+            - mkdtempSync
             - openSync
             - readFileSync
+            - rmSync
+        - module: os
+          imports:
+            - tmpdir
+        - module: path
+          imports:
+            - basename
+            - join
       internalDependencies:
         - file: ../cli-api.js
           imports:
@@ -8250,6 +8269,9 @@ modules:
         - file: ./command.js
           imports:
             - resolveCommand
+        - file: ./commands/_atlas-map.js
+          imports:
+            - storedResultsFile
         - file: ./errors.js
           imports:
             - CliError
@@ -8258,6 +8280,7 @@ modules:
             - emitJson
         - file: ./record-reach.js
           imports:
+            - moduleSources
             - staticReach
             - Attribution
         - file: ./record-tables.js
@@ -8283,6 +8306,7 @@ modules:
         - RecordEnvironment
         - RecordResult
         - RecordEntry
+        - RecordInput
         - EnvironmentChange
         - StreamDifference
         - ReplayEntryReport
@@ -8551,6 +8575,7 @@ modules:
             - problemFromResidualGap
             - makeResidualGap
             - loadSearchProblemFromJson
+            - resolveObservationsPath
             - parseExprJson
             - runProbeSearch
             - formatProbeReport
@@ -8793,6 +8818,7 @@ modules:
         - problemFromResidualGap
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
@@ -8968,6 +8994,7 @@ modules:
         - problemFromResidualGap
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
@@ -11691,6 +11718,7 @@ modules:
             - makeResidualGap
             - loadSearchProblemFromJson
             - searchProblemFromFile
+            - resolveObservationsPath
             - parseExprJson
           reExport: true
         - file: ./problem.js
@@ -11807,6 +11835,7 @@ modules:
         - makeResidualGap
         - loadSearchProblemFromJson
         - searchProblemFromFile
+        - resolveObservationsPath
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
@@ -12014,6 +12043,7 @@ modules:
         - makeResidualGap
         - loadSearchProblemFromJson
         - searchProblemFromFile
+        - resolveObservationsPath
         - parseExprJson
         - ProblemFile
         - runProbeSearch
@@ -12216,6 +12246,7 @@ modules:
         - isGapKind
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - searchProblemFromFile
         - parseExprJson
       interfaces:
@@ -12224,6 +12255,7 @@ modules:
         - isGapKind
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - searchProblemFromFile
         - parseExprJson
     src/composition/probe/report.ts:
@@ -18608,15 +18640,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 82403
-  totalExports: 2767
+  totalLinesOfCode: 82636
+  totalExports: 2772
   totalClasses: 60
-  totalInterfaces: 431
-  totalFunctions: 683
+  totalInterfaces: 432
+  totalFunctions: 686
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 690
-  totalReExports: 1333
+  totalReExports: 1335
   totalTypeOnlyImports: 523
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
