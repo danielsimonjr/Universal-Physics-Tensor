@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { runCli } from '../../dist/cli/main.js';
@@ -159,7 +159,9 @@ describe('upt probe study — CSV, replication file', () => {
   it('a missing replication file or bad JSON in it is named', async () => {
     const missing = await runArgs(`--data=${studyJson}`, '--replication=/nonexistent/rep.json');
     expect(missing.code).toBe(1);
-    expect(missing.out).toMatch(/file not found: \/nonexistent\/rep\.json/);
+    // The CLI names the resolved path, which on Windows carries a drive letter and backslashes.
+    const resolvedMissing = resolve('/nonexistent/rep.json').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    expect(missing.out).toMatch(new RegExp(`file not found: ${resolvedMissing}`));
     const p = join(mkdtempSync(join(tmpdir(), 'upt-study-')), 'broken.json');
     writeFileSync(p, '{ not json');
     const broken = await runArgs(`--data=${studyJson}`, `--replication=${p}`);

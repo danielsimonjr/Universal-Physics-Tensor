@@ -139,6 +139,17 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- **Windows checkout: six tests failed on a tree with no content difference** (2026-09-27). With
+  `core.autocrlf=true`, `tests/fixtures/probe-study/**` checked out CRLF because it was missing from
+  the `text eol=lf` list in `.gitattributes`, although `generate.mjs` writes LF; the generator
+  comparison and three CSV tests that edit the text by `\n` failed. The directory is now LF in every
+  checkout, the CSV tests normalize line ends before editing, and a new test checks that a CRLF file
+  parses to the same study as its LF twin (it fails when the parser splits on `\n` only). Two more
+  tests assumed POSIX paths: `probe-study` expected `/nonexistent/rep.json` where the CLI names the
+  resolved path, and `record-hardening` looked up the constant tables by a backslash key. Each was
+  RED on a Windows checkout before the change. `npm run validate` runs all six, so a Windows publish
+  was blocked.
+
 - **CLI applied-physics audit findings F01–F14** (2026-09-27). Ledger in
   `docs/audit/Universal_Physics_Tensor_CLI_Audit.md` §11; each fix has a test that was RED first.
   - **F01** — `upt path` searches across families when no same-family chain exists (KG → free

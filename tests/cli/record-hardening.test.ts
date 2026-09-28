@@ -155,7 +155,7 @@ describe('named constant tables', () => {
       const mod = await import(join(repo, 'dist', rel.replace(/\.ts$/, '.js')));
       for (const n of names) {
         if (typeof mod[n] !== 'number') continue;
-        expect(tables[rel.replace(/\.ts$/, '')]?.values[n], `${rel} ${n}`).toBe(mod[n]);
+        expect(tables[rel.replace(/\\/g, '/').replace(/\.ts$/, '')]?.values[n], `${rel} ${n}`).toBe(mod[n]);
         checked++;
       }
     }

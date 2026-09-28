@@ -89,6 +89,34 @@
   the anomalous skin effect and radiation-dominated cooling (refused, not evaluated).
 - [x] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
 
+### Review of the audit against the records and the code (owner order 2026-09-27)
+
+Audit items are written "audit I5"; the persona notes in `docs/research/` number their own ideas, written
+"persona I5". Earlier entries used the bare form for both.
+
+- [x] **Windows checkout: probe-study fixtures and two path-separator tests fail.** With
+  `core.autocrlf=true`, `tests/fixtures/probe-study/**` checked out CRLF (it was missing from the
+  `text eol=lf` list) and four probe-study tests failed; `tests/cli/probe-study.test.ts` expected a
+  POSIX path and `tests/cli/record-hardening.test.ts` keyed the constant tables by a backslash path.
+  `npm run validate` runs them, so a Windows publish was blocked.
+- [ ] **Probe coverage gate** — `bun run test:probe-coverage` below its thresholds (branches 82.47% < 85,
+  statements 91.46% < 95); raise with tests that can fail, keep the thresholds, and run it in CI.
+- [ ] **Records** — stale I6 note; §14 heading over a list of ticked rows; CHANGELOG "(partial)" lines
+  contradicted by later "(rest)" lines; audit/persona ID collision.
+- [x] **audit I1** Qualified routes across model families — met by F01.
+- [ ] **audit I3** Consistent graph scope — F04 carries `--source` to `ground`; open: `explain`'s help
+  omits `--source`, and results do not print the effective source and anchor.
+- [ ] **audit I4** Stable expression syntax — F03 made `ln` agree; open: an unknown function suggests no
+  tested equivalent, `--debug` omits the parser version, help does not state the base of `log`, and
+  `map --equation` cannot compare `ln(2)` (persona W7).
+- [ ] **audit I5 residual** — `explain <law-name>` suggests one-letter quantities instead of `upt search`.
+- [ ] **audit I10** Reproducible equation rendering — F12 grouped denominators; open: no LaTeX, no
+  symbol table.
+- [ ] **audit I13** Precise verdict words — F07/F11 reworded two; open: no single glossary, no JSON
+  definitions except DECOY, and a VACUOUS regime line still starts with "valid".
+- [ ] **Top-level help map usage** omits `--route`, `--family`, `--all-routes`, `--observable`,
+  `--stored`, `--run`, `--evidence`.
+
 ## TypeScript-on-Bun migration (in flight)
 
 - [x] **Bun as package manager + script driver; Node stays the runtime.** Same house pattern as
