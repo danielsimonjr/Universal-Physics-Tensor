@@ -49,7 +49,7 @@ export interface PointCheck {
   readonly controlClaim: string;
 }
 
-/** @internal */
+/** A bridge-specific map from a bound's norm to an observable error and horizon. @internal */
 export interface ObservableTranslation {
   /** The `AtlasBridge.id` whose bound is translated. */
   readonly bridgeId: string;

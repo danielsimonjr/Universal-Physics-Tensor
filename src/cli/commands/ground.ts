@@ -12,7 +12,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { resolveGraph, type SourceName } from '../graphs.js';
+import { resolveGraph, groundTruthAnchor, groundTruthLine, type SourceName } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
@@ -71,6 +71,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       {
         command: 'ground',
         source,
+        anchor: { groundTruth: groundTruthAnchor(api, opts) },
         options: opts as Record<string, unknown>,
         result: { a: cand.a, b: cand.b, verdict: cand.verdict, grounding: g },
       },
@@ -80,6 +81,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   out(`\n● ${cand.a} ≟ ${cand.b}  [${cand.verdict}]  [source: ${label}]`);
+  out(`  ${groundTruthLine(groundTruthAnchor(api, opts))}`);
   out(EPISTEMICS + '\n');
   out(`  passed:  ${g.passed.join(', ') || '—'}`);
   out(`  gaps:    ${g.gaps.join(', ') || '—'}`);

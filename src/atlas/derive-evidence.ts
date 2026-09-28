@@ -324,3 +324,35 @@ export function deriveEvidenceForVerdict(
       return deriveEvidence(record, passingWitnessIds);
   }
 }
+
+/**
+ * The evidence set of a COMPOSITE claim, derived from its parts' sets: every
+ * step of a route and every norm transport it applied
+ * (`docs/planning/ADR-transported-norm-composition.md` §4).
+ *
+ * - A positive tag survives only if EVERY part carries it: a chain is never
+ *   better supported than its weakest link, so the composite is the
+ *   intersection. `formally-proved` therefore needs a proof of every part; a
+ *   transport declaration's set holds at most its numeric or symbolic basis, so
+ *   no route through one is formally proved.
+ * - `contradicted` survives if ANY part carries it: a refuted part refutes the
+ *   chain that rests on it.
+ * - With no positive tag left, the composite is `{'proposed'}` (plus
+ *   `contradicted` when present). An unwitnessed declaration contributes
+ *   `{'proposed'}` and so caps the composite there.
+ *
+ * @throws RangeError on no parts: a composite of nothing has no evidence to state.
+ * @internal
+ */
+export function deriveCompositeEvidence(parts: readonly ReadonlySet<EvidenceTag>[]): ReadonlySet<EvidenceTag> {
+  if (parts.length === 0) {
+    throw new RangeError('deriveCompositeEvidence: a composite of no parts has no evidence to derive');
+  }
+  const positive = (s: ReadonlySet<EvidenceTag>) => [...s].filter((t) => t !== 'proposed' && t !== 'contradicted');
+  let common = new Set(positive(parts[0]!));
+  for (const part of parts.slice(1)) common = new Set(positive(part).filter((t) => common.has(t)));
+  const tags = new Set<EvidenceTag>(common);
+  if (parts.some((p) => p.has('contradicted'))) tags.add('contradicted');
+  if (common.size === 0) tags.add('proposed');
+  return tags;
+}

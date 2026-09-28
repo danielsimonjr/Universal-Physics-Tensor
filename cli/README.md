@@ -122,12 +122,12 @@ pure connectivity questions (see [The `--source` flag](#the---source-flag)).
 ### Atlas — regimes and routes between MODELS
 
 The atlas layer relates whole MODELS (`model-pendulum`, `model-lc`, …), as opposed to the bridge
-catalog, which relates QUANTITIES. One family exists today: `oscillators`.
+catalog, which relates QUANTITIES. Its families are those registered in `ATLAS_FAMILIES` (`src/atlas/families.ts`); `upt atlas` lists every bridge with its family.
 
 | Command (aliases) | What it does |
 |---|---|
-| `regime <family> [--at group=value …] [--assume premise] [--deny premise]` | Where in parameter space each model and bridge of a family (`oscillators`, `diffusion` or `waves`) is claimed to apply. `--at` states a point in REGIME COORDINATES — a π-group formula, or a dimensionless input's own name (`--at theta0=0.2`). Each record reads **valid**, **VIOLATED** (naming the failed inequality) or **unknown**. `unknown` means a coordinate was never supplied, and it is NOT a pass. A regime that states no inequality is marked **VACUOUS** for the same reason. Each inequality is listed as satisfied, violated or unchecked. Prose side conditions are never evaluated: `--assume` records one as **your declaration** (not evidence), `--deny` marks it **contradicted** (the record does not apply as stated), and the rest stay unspecified. Neither changes the inequality verdict. Also prints the pairwise regime overlap and, over the box `--at` states, the points no constraining regime covers. No box is synthesized: with no `--at`, no coverage is reported. |
-| `path <from> <to> [--at group=value …] [--tolerance=EPS] [--sweep name=lo:hi:n[:log]] [--csv]` | The chain of bridges between two models (across families when a bridge ends in another family's model, e.g. `model-klein-gordon` → `model-schrodinger-free`), the relation it composes to via the composition table, the composed `(K, delta)` with the norm it holds in, and whether every horizon still holds at `--at` (pass `t=<time>` plus the horizon's parameters). When the table declines to compose, the path carries **no bound**: the command prints `no composite claim`, lists what composing would need (the silent table cell, an exact map that states no norm), and **exits 0** — the refusal is the answer, and no number is invented in its place. A path EXISTING is not a warrant; the bound is the warrant. `--sweep name=lo:hi:n[:log]` evaluates the same verdict at 2–200 samples of one parameter (endpoints included; the parameter must not also be fixed by `--at`): per row the regime, the horizon and the closed-form point error, in the bound's norm. Nothing is integrated and no trajectory is produced. A row outside a regime or past a horizon carries **no error**, because no bound is claimed there, and a no-claim path sweeps its status only. A sweep exits 0, since each row is its own verdict; `--csv` writes the rows as CSV. `--tolerance=EPS` asks whether the path is accurate enough. It is **ADEQUATE** only when every regime holds, every horizon holds at the given `t`, and the closed-form point error is ≤ EPS. It is **INADEQUATE** (exit 3) when any of those fails, so a point just past the horizon fails even when its error is small, and **UNDETERMINED** when the point does not settle it (no `t`, an unchecked coordinate, a numerically supported bound). EPS is in the bound's own norm, and no translation to another observable (phase, trajectory, amplitude) is encoded. With `--sweep`, each row is judged. |
+| `regime <family> [--at group=value …] [--assume premise] [--deny premise]` | Where in parameter space each model and bridge of a family (`oscillators`, `diffusion` or `waves`) is claimed to apply. `--at` states a point in REGIME COORDINATES — a π-group formula, or a dimensionless input's own name (`--at theta0=0.2`). Each record reads **valid**, **VIOLATED** (naming the failed inequality) or **unknown**. `unknown` means a coordinate was never supplied, and it is NOT a pass. A regime that states no inequality reads **no machine condition evaluated (VACUOUS …)**, never valid, for the same reason; `--json` gives each record a `verdict` of `valid`, `violated`, `unknown` or `vacuous`. Each inequality is listed as satisfied, violated or unchecked. Prose side conditions are never evaluated: `--assume` records one as **your declaration** (not evidence), `--deny` marks it **contradicted** (the record does not apply as stated), and the rest stay unspecified. Neither changes the inequality verdict. Also prints the pairwise regime overlap and, over the box `--at` states, the points no constraining regime covers. No box is synthesized: with no `--at`, no coverage is reported. |
+| `path <from> <to> [--at group=value …] [--tolerance=EPS] [--sweep name=lo:hi:n[:log]] [--csv]` | The chain of bridges between two models (across families when a bridge ends in another family's model, e.g. `model-klein-gordon` → `model-schrodinger-free`), the relation it composes to via the composition table, the composed `(K, delta)` with the norm it holds in, and whether every horizon still holds at `--at` (pass `t=<time>` plus the horizon's parameters). An exact-equivalence step carries a bound only through a **norm transport** the bridge declares for that direction and norm (`ab-spring-lc` declares relative period error, so `model-pendulum → model-lc` composes); the output names each transport it applied, its witness, and the horizons restated through its time map. When the table declines to compose, or an exact step declares no transport for the running norm, the path carries **no bound**: the command prints `no composite claim`, lists what composing would need (the silent table cell, the missing transport declaration, an exact map that states no norm), and **exits 0** — the refusal is the answer, and no number is invented in its place. A path EXISTING is not a warrant; the bound is the warrant. `--sweep name=lo:hi:n[:log]` evaluates the same verdict at 2–200 samples of one parameter (endpoints included; the parameter must not also be fixed by `--at`): per row the regime, the horizon and the closed-form point error, in the bound's norm. Nothing is integrated and no trajectory is produced. A row outside a regime or past a horizon carries **no error**, because no bound is claimed there, and a no-claim path sweeps its status only. A sweep exits 0, since each row is its own verdict; `--csv` writes the rows as CSV. `--tolerance=EPS` asks whether the path is accurate enough. It is **ADEQUATE** only when every regime holds, every horizon holds at the given `t`, and the closed-form point error is ≤ EPS. It is **INADEQUATE** (exit 3) when any of those fails, so a point just past the horizon fails even when its error is small, and **UNDETERMINED** when the point does not settle it (no `t`, an unchecked coordinate, a numerically supported bound). EPS is in the bound's own norm, and no translation to another observable (phase, trajectory, amplitude) is encoded. With `--sweep`, each row is judged. |
 | `atlas [<bridge-id>] [--run]` | One atlas bridge with **every qualification visible**: relation, premises and conclusion (with their families), transformation and inverse, side conditions, regime (a regime with no inequality prints **VACUOUS**), bound with its horizon and limit character, what it preserves and loses, witnesses, counterexamples, formal reference with its fidelity and what it covers, citations and review status. An empty section prints `none stated` rather than disappearing. `formally-proved` is derived from `formalRef`. `symbolically-checked` is decided by `data/atlas/witness-results.json`, which is not shipped in the package, so the command names the witnesses it is decided over and does not print a verdict it cannot see. **Evidence by claim** lists correspondence, regime, bound, horizon and preserves, each citing only what the record's structure links to it: the formal reference covers its statement, a bound its `deltaAtBasis`, and no witness is attributed to a claim, because the record attributes none. **Witness execution** gives each witness its status: `not observed by this command` (with its repository test file), `registered in-process, not run`, or, with `--run`, the checked / refuted / unresolved result of running it now. The three are counted separately, and the command exits 3 if any witness is refuted. With no id, lists every bridge of every family. |
 | `search <word> …` | Find a catalog bridge, canonical equation, atlas model, atlas bridge or quantity by the words of its name, id, symbol, genuine alias (`resolveToCatalogName`) or catalog-bridge description, and print the command that inspects each match (`upt evaluate be-58 T_K=… R_ohm=…`, `upt atlas <id>`, `upt explain <quantity> --source=…`). Every word must match, and each match names the fields its words matched in, so a description-only match reads as one. **An equal dimension is never a match**: a radius is not a wavelength. A word of one or two letters matches a symbol, alias or id segment exactly, never a stray letter in a description. No match exits 1 and names the registries and counts searched, because an empty result is an absence from this registry, not from physics. |
 
@@ -136,8 +136,10 @@ catalog, which relates QUANTITIES. One family exists today: `oscillators`.
 node bin/upt.mjs path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
 # Past the horizon (machine form t < 4 T0/θ0² = 100), the same route reports VIOLATED:
 node bin/upt.mjs path model-pendulum model-spring --at theta0=0.2 T0=1 t=1000
+# Across an exact map through its declared norm transport (relative period error, K = 1):
+node bin/upt.mjs path model-pendulum model-lc --at theta0=0.2 T0=1 t=10
 # A pair the composition table refuses — prints 'no composite claim', exits 0:
-node bin/upt.mjs path model-pendulum model-lc
+node bin/upt.mjs path model-rlc model-first-order
 ```
 
 ### Experimental expression / residual search (Product B)
@@ -155,6 +157,7 @@ Do not use `probe` to vet identifications; do not use `discover` to search expre
 |---|---|
 | `help` (`--help`, `-h`) | Print the built-in usage text. |
 | `help <command>` | Print that one command's own usage block (e.g. `upt help map`). |
+| `help statuses` | Define every status word the commands print (VACUOUS, UNKNOWN, VIOLATED, valid, ADEQUATE, NEITHER, DECOY, NOT COVERED, no composite claim, promising, reproduced, checked, refuted, unresolved, …), and which commands emit each. |
 | `version` (`--version`, `-v`) | Print the installed CLI/package version — a bare semver line, e.g. `0.29.0`. |
 | *(no arguments)* | Run a short demo. Takes no flags — `upt --json` is treated as an unrecognized top-level command, not a demo flag. |
 
@@ -162,9 +165,19 @@ Do not use `probe` to vet identifications; do not use `discover` to search expre
 
 ## The `--source` flag
 
-All 8 graph-analysis commands accept `--source=<which>` to choose which graph
-the analysis runs over: `discover`, `candidates`, `map`, `explain`,
-`priority`, `audit`, `predict`, and `connectors`.
+The graph-analysis commands accept `--source=<which>` to choose which graph
+the analysis runs over: `discover`, `ground`, `candidates`, `map`, `explain`,
+`priority`, `audit`, `predict`, and `connectors` (`probe` also takes it; see `upt help probe`).
+
+**Every result names what it used.** `explain`, `ground`, `discover`, `map`, `candidates` and
+`connectors` print the effective source in their text banner and set `source` in `--json`, whether
+or not `--source` was given. Where a result is relative to an anchor, it names that too, in text and
+as the envelope's `anchor`. Two anchors exist, and they are different things: the discovery
+**ground truth** (`discover`, `ground`, `map --proposed`; `--anchor=k=v`, default one solar mass),
+printed as the values and whether they are the default; and the **anchored core** (`map`,
+`candidates`, `connectors`), the clusters that hold at least one established-confidence edge,
+printed with the count of such edges in the graph used. A bridge id given to `explain` is answered
+from the catalog bridge registry whatever `--source` says, and the result says so.
 
 | Value | Graph |
 |---|---|
@@ -226,10 +239,18 @@ node bin/upt.mjs explain hawking-temperature mass=1.989e30 --json
   command: string;                                  // e.g. "priority"
   source?: 'catalog' | 'canonical' | 'both';         // only on --source-bearing commands
   options?: Record<string, unknown>;                 // e.g. discover's max-orders/anchor
+  anchor?: { groundTruth?: { values: Record<string, number>; isDefault: boolean };
+            core?: { establishedEdges: number; edges: number } };  // what the result is relative to
   epistemics?: string;                                // the command's own "review surface, not truth" caveat
+  definitions?: Record<string, string>;               // the meaning of each status the command can emit
   result: unknown;                                    // the same library object the text report is printed from
 }
 ```
+
+**Status words.** `upt help statuses` defines every status word the commands print, from one table
+(`src/cli/statuses.ts`). `definitions` holds the entries for the statuses the envelope's command can
+emit; a command that emits none has no `definitions`. A word can name different statuses in different
+commands (`decoy` in `audit` and in `discover`), and each envelope defines its own command's.
 
 **`discover`'s additive fields.** Every candidate in `result` (unless `--derive`
 is also set) carries an optional `adjudication: {id, verdict, grounds, source,
@@ -286,6 +307,11 @@ carries an **attribution**: the constants its command's code can reach through
 the import graph — a static upper bound, not a record of what it read. Failed
 invocations are recorded like the others, so a record keeps the attempts that
 were refused. A `map --out=PATH` entry also records the written file's SHA-256.
+An entry also hashes the **files it reads** (`probe`'s `--problem`, `--h1`,
+`--h2`, `--bounds`, `--data`, `--replication` and the observations file a
+problem names; the witness-results artifact `--stored` reads) and the **source
+of every module** its command loads, so a changed literal that no constant table
+holds is still named, as a change to its module.
 
 ```bash
 node bin/upt.mjs --record=session.jsonl evaluate be-58 T_K=300 R_ohm=1000
@@ -304,17 +330,20 @@ that command's (unknown) flag. Design:
 `--replay=FILE [--json]` re-runs every entry in-process and compares exit code,
 stdout and stderr byte for byte. Each entry is exactly one of:
 
-- **reproduced** — all three identical;
-- **differs** — the differing streams are named, each with its first differing
-  line, recorded and replayed;
-- **not replayable** — not re-run, with the reason: an unreadable line, a
-  `map --out=PATH` (replaying would overwrite the file), or a `probe` subverb
-  other than `scan`/`show` (a wall-clock budget and files the record does not
-  capture — `upt probe reproduce` is that workflow's replay).
+- **reproduced** — all three identical (and a file written with `--out`, which
+  the replay writes to a temporary path, never over PATH, has the recorded
+  SHA-256);
+- **differs** — the differing streams (or the written file, `artifact`) are
+  named, each with its first differing line, recorded and replayed;
+- **not replayable** — not re-run, or not compared, with the reason: an
+  unreadable line; an `--out` entry that wrote no file; a probe run with an
+  external `--worker`; a file it read that changed, vanished or appeared since
+  recording (named with its flag); or a probe search whose recorded or replayed
+  output says it stopped on its wall-clock budget (`stop: time-limit`).
 
 Beside the outcome, replay names every environment fact that changed since
 recording (`uptVersion`, `node`, `formulaParser`, `simplifier`, `peer <name>`,
-`constant <table> <NAME>`, `table <table> sha256`), and marks each changed
+`constant <table> <NAME>`, `table <table> sha256`, `module <name>`), and marks each changed
 constant **reachable** or **not reachable** from the entry's command by its
 attribution. It flags a record edited after it was written (arguments, a stream,
 a constant table or the entry itself no longer matching its recorded hash). It
@@ -440,6 +469,7 @@ candidates.
 | `--proposed` | `map` (with `--format`) | Overlay the unadjudicated identity-consequence relations as gray-dashed junctions. |
 | `--out=PATH` | `map` (with `--format`) | Write the diagram source to a file instead of stdout. |
 | `--equation "TARGET = EXPR"` | `map` | Inject your own equation as a violet `user` node; reports where it lands (nearest equations by shared-quantity overlap, not a full edge dump) + a "did you mean?" hint. Multi-word quantities may use underscores or the catalog's own hyphens (`planck-length` / `planck_length`). |
+| `--equation-only` | `map` (with `--equation`) | Print the equation verdict and skip the linkage map; in `--json` the `linkage` field is omitted. Without `--equation` it exits 2. |
 | `--relation=TYPE` | `map` | Keep only edges whose recorded Atlas relation is `derivation`, `exact-equivalence`, `restriction`, `approximation`, `coarse-graining`, `analytic-continuation`, `structural-analogy` or `deformation-quantization`. An unknown value exits 1. |
 | `--evidence=TAG` | `map` | Keep only edges whose evidence set contains the tag. Evidence is **derived at read time** from the catalog row the edge names — it is never stored on a row or an edge, so no filter can be satisfied by an unchecked assertion. Tags: `proposed`, `reviewed`, `dimension-checked`, `convention-checked`, `symbolically-checked`, `numerically-supported`, `formally-proved`, `empirically-supported`, `contradicted`, `unresolved`. An unknown value exits 1. |
 | `--around=QUANTITY`, `--depth=N` | `map` | Focus on one quantity's neighbourhood: hop 1 keeps every edge that uses QUANTITY as a source or target, and each further hop (up to `--depth`, 1–10, default 1) adds the edges sharing a quantity with one already kept. It applies to every output form and composes with `--relation`/`--evidence`, and it prints `focused: K of N edges within D hop(s) of 'QUANTITY' [source]` (on stderr for the visual forms). The omitted edges are out of the view, not absent from the graph. An unknown quantity exits 1 with near names. |

@@ -295,7 +295,10 @@ describe('upt --replay', () => {
     expect(env.result.entries[0].environmentChanges).toEqual([{ fact: 'uptVersion', recorded: '0.0.1', current: pkgVersion }]);
   });
 
-  it('not replayable by rule — a file-writing map, a timed probe, unreadable lines — counted apart', async () => {
+  // A file-writing map replays into a temporary file, and a probe whose input is still absent
+  // replays its error (both were declared not replayable before input and artifact hashing:
+  // record-inputs.test.ts). Unreadable lines stay not replayable, counted apart.
+  it('a file-writing map and a probe with an absent input replay; unreadable lines are not replayable — counted apart', async () => {
     const file = join(dir, 'mixed.jsonl');
     const dot = join(dir, 'map.dot');
     expect((await run([`--record=${file}`, 'map', '--format=dot', `--out=${dot}`])).code).toBe(0);
@@ -310,14 +313,12 @@ describe('upt --replay', () => {
     expect(code).toBe(1);
     expect(existsSync(dot)).toBe(false);
     const outcomes = env.result.entries.map((e: { outcome: string; reason?: string }) => [e.outcome, e.reason ?? '']);
-    expect(outcomes[0][0]).toBe('not-replayable');
-    expect(outcomes[0][1]).toMatch(/wrote a file \(--out=/);
-    expect(outcomes[1][0]).toBe('not-replayable');
-    expect(outcomes[1][1]).toMatch(/wall-clock budget/);
+    expect(outcomes[0]).toEqual(['reproduced', '']);
+    expect(outcomes[1]).toEqual(['reproduced', '']);
     expect(outcomes[2]).toEqual(['reproduced', '']);
     expect(outcomes[3]).toEqual(['not-replayable', 'line 4 is not valid JSON']);
     expect(outcomes[4]).toEqual(['not-replayable', 'line 5 is not a upt-record/2 entry']);
-    expect(env.result.summary).toMatchObject({ entries: 5, reproduced: 1, differs: 0, notReplayable: 4 });
+    expect(env.result.summary).toMatchObject({ entries: 5, reproduced: 3, differs: 0, notReplayable: 2 });
   });
 
   it('usage and input errors', async () => {

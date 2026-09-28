@@ -10,6 +10,275 @@ from v0.1.0 onward.
 
 ### Added
 
+- **The architecture docs' Verification claims, re-measured.** The pre-push `repo_map` check refused
+  this branch, and it fails on `master` as well (956 files and 3441 exports measured against 898 and
+  3120 claimed). `repo_map.py map` was re-run, and the seven hand-written docs now state what it
+  measures: 976 files, 3533 exports, 172 unused-export candidates, 949 type-only imports, 370
+  reachable files, 10 test-only files, and 5 duplicate names. The `src`-scope prose follows
+  `DEPENDENCY_GRAPH.md` (383 files, 2777 exports, 1335 re-exports, 12 modules). The three new
+  duplicate names were read and triaged; no code changed. No generated report was edited (see
+  `NOTES.md`, Open defects).
+- **Doc comments for 84 exported symbols, restoring the code-docs ratchet to its baseline.** The
+  pre-push gate refused this branch: `code_docs.py check src` reported 237 MUST issues against a
+  baseline of 153. `master` alone gives 221, and the baseline commit `6d0feed` gives 153 under the
+  same tool, so 68 came from pushes that skipped the local gate, and 16 from this branch. Each symbol
+  now has a summary written from its definition, and the check reports 153. Two comments that carried
+  a control character from a shell escape are restored (see `NOTES.md`, Open defects).
+- **The persona-retest findings on `map --equation`, fixed or disposed (persona W4–W6, L5–L8, Q3, Q4,
+  persona I5–I8; owner order 2026-09-27).**
+  - Persona W4 / persona I5: the monomial comparison bound every governing name that is not a variable
+    to 1, so `G` and `c` became 1 on the canonical side while the user's side used SI. Kepler III read
+    as the factor 122404 and the Schwarzschild radius as 7.426e-28, both with exit 3. The canonical
+    side now binds constants to their SI values; a name that is neither a variable nor a constant
+    makes the entry not-compared instead of reading as 1. Both now agree at ratio 1, and a halved
+    prefactor reads 0.5.
+  - Q3: three recorded-prefactor entries were wrong this way, not two; the third is
+    CE-einstein-field-eq, whose 8π is only in its field equation. It is now prefactor-unchecked,
+    because `src/canonical` is frozen.
+  - Persona W5 / persona I6: `planck_length = sqrt(hbar*G/c^3)` was refused ("no source quantities").
+    A catalog target may now have an all-constant right-hand side, compared at the SI constant values,
+    and the output says only the value is compared, not the form. The Planck length, mass and time
+    prefactors (1) are added to the prefactor table with verbatim quotes. The second method is the
+    CODATA 2022 values from NIST (1.616255e-35 m, 2.176434e-8 kg, 5.391247e-44 s).
+  - Persona W6: a one-letter source resolved to a catalog quantity is now disclosed, in text and JSON
+    (`shortBindings`). It is not refused.
+  - L5 / persona I7: an unknown symbol whose inferred dimension equals a registered constant's names
+    that constant (`sigma` → `sigma_sb`).
+  - L6: `pressure = N*k_B*temperature/V` now agrees with CE-ideal-gas. `N` is only in that entry's AST;
+    it is paired by name, and only when the governing pairing fails. A control with N² reads as a
+    different form, so N varies across the points.
+  - L7 / persona I8: `map --equation … --equation-only` prints the verdict and skips the linkage map.
+  - L8: an empty `probe scan` frontier says how to start an expression search.
+  - Q4 is not changed (a product-ordering call).
+  - Dispositions are in `todo.md` (Active queue). RED first: 16 of the 19 library tests then written
+    failed before the fix, and 5 of 37 CLI tests. One library failure was a wrong expectation, not a
+    missing fix: without N, CE-ideal-gas is listed as not compared, not absent. That test was
+    corrected to it. One library test was added after the RED run.
+  - Two real-process record tests (`record-hardening`, `record-inputs`) copy `dist` and replay. They
+    get a 180 s budget: one took 73 s and the other timed out at the 60 s default under a parallel run.
+- **The observable translations' limits, closed where they can be (audit I8).**
+  - The position bound's quoted Fourier-series premise is now machine-checked. Witness W7xs compares
+    the series with RK4 over one period at θ0 ∈ {0.01, 0.1, 0.2, 0.3, 0.4, 0.5}, within 1e-9 rad. Its
+    control, with (1 − q^{2n+1}) in the coefficients, is refuted. A test checks the coefficients a
+    second way: a nome from a Simpson quadrature of K, and a projection of an independent RK4 run.
+  - The phase point witness locates each zero crossing by a secant on the RK4 step, instead of a
+    straight line between steps. Its fine error falls from 9.5e-6 to 2.5e-9 relative at 2e-4 rad of
+    drift. It now runs from 1e-4 rad of drift (θ0 ≈ 7.0e-4; it was 0.01 rad, θ0 ≈ 0.007), at a
+    tolerance of 5e-8 relative (it was 1e-5). Its (1+ε) control now fails down to θ0 ≈ 9e-4 (it was
+    0.013).
+  - Below that the control cannot fail, and cannot be made to, because the two maps differ by ε
+    relative. No other translation was added. Reasons in `todo.md` (I8 row).
+  - Mutation: the straight-line crossing makes three of the new or changed phase tests fail. Two test
+    parameters were moved after the first RED run: the small-θ0 list starts at 0.0015 rather than
+    0.001, where the control's margin was 1.2×, and the blind case is at 7.5e-4. Both still failed
+    before the change.
+- **`case-lumped-cooling` evaluates radiation-dominated cooling (audit I20 limit).**
+  - It had refused through the linear-loss check and returned only Newton's T(t). It now also reports
+    `T_radiating_K`: the lumped equation with the T⁴ loss kept, integrated by RK4 with steps of 1/100
+    of the local relaxation time.
+  - Its own premise is `Bi_radiating` = (h + h_rad)(a/3)/k ≤ 0.1; outside it the output is null. The
+    linear-loss check does not apply to it.
+  - Second method: at h = 0 the result inverts through a closed form, derived here by partial
+    fractions, to the same t within 1e-7, cooling and warming. With ε = 0 it is Newton's exponential
+    within 1e-9. The oxidized steel ball of the failure example reads 711.2 K after 60 s, against
+    Newton's 929.8 K.
+  - The other I20 limits stay refused (or quoted, for the Faxén terms), and no EM, thermal or astro
+    atlas family is added. The reasons are in `todo.md` (I20 row).
+- **`probe study` catches near and affine replication copies, and takes several correction families
+  (audit I19 limits).**
+  - Replication rows at a study row's inputs (within 3σ of a declared input σ, else to 1e-9
+    relative) are tested for agreement too good to be true. Identity: Σz² on ν = n. Affine: y_rep =
+    a + b·y_study with the effective variance, ν = n − 2. Each is a lower-tail χ² test at α/2, computed
+    by a new `chiSquareCdf` that keeps the lower tail (1 − Q loses it below about 1e-16). Either
+    firing sets replication to `too-close` whatever the candidate; the verdict is unchanged. Before,
+    only an exact copy was refused, and a copy of the holdout shifted by 1 µs was scored as an
+    independent replication.
+  - Provenance comparisons ignore case, spacing and punctuation, so `LAB A` no longer passes as
+    independent of `lab a`. Inline replication rows are reported as sharing the study's provenance
+    block, and a replication file that declares the study's calibration is reported as not testing it.
+  - `correction` takes a list of families, one per dimensionless input (at most 6 powers in all),
+    admitted family by family. A new synthetic physical-pendulum control (`pendulum-physical`, √(1 +
+    0.4ρ²) from the parallel-axis theorem; the fixture's period is checked against RK4) needs both:
+    either family alone finds nothing.
+  - Not done, inherent: a blind control; no author who does not know the generating law is available
+    under `AGENTS.md`'s benchmark rules. The families are additive and pairs are found only at shared
+    inputs; both limits are stated in the report's caveats and in `upt help probe`.
+  - Deliberate test updates: `study-inputs.test.ts` reads the correction as a list. A paired check
+    first written in `study-replication.test.ts` claimed 1 − Q is orders of magnitude off at χ² = 1e-6
+    on ν = 4; it is 9e-5 off there, so the check moved to χ² = 1e-9, where 1 − Q returns 0.
+
+- **Replay covers file-writing, file-reading and private-literal cases (audit I17 limits).**
+  - `map --out=PATH` entries replay into a temporary file, never over PATH. The file is compared by
+    SHA-256 with the recorded artifact, and a mismatch is an `artifact` difference (exit 3). An
+    `--out` entry that wrote no file is not replayable.
+  - Entries now carry `inputs`: each file the invocation reads, hashed before it runs. For `probe`
+    that is `--problem`, `--h1`, `--h2`, `--bounds`, `--data`, `--replication` and the observations
+    file a problem names; for `atlas`/`map --stored` it is the witness-results artifact. An entry
+    replays while its inputs hash as recorded; one whose input changed, vanished or appeared is not
+    replayable, naming the file.
+  - Probe subverbs were all declared not replayable; now only these are: a run with an external
+    `--worker`, and a search whose recorded or replayed output states `stop: time-limit`. `probe
+    study` had been replayed without its data being hashed; it is now covered by the input rule, and
+    its search line prints its stop reason.
+  - `attribution.modules` holds the SHA-256 of every module the command loads. A changed literal a
+    module keeps private (no constant table holds it) is named as `module <name>`, reachable. The
+    second-method test changes `L_SUN_SI` in a copy of `dist`, and the replay names the module.
+  - Not done: per-entry attribution. The reason is in `todo.md` (I17 row) and the design note.
+  - `record-replay.test.ts`'s "not replayable by rule" case is updated deliberately: its map and
+    absent-problem entries now reproduce.
+- **An atlas-wide evidence view, and a test that `--run` exits 3 on a refutation (audit I16).**
+  - `upt atlas --evidence [--stored | --run] [--json]` shows every bridge of every family. Each has
+    its evidence, derived whatever the unobserved witness results are, and the tags left undecided
+    without them. It also shows per-tag counts, zeros included, with derived and undecided counted
+    apart, and each declared norm transport's witness. `--stored` or `--run` with no id implies it;
+    before this, `upt atlas --run` with no id ignored `--run`.
+  - A test checks the view two ways: against `deriveEvidence` over the committed results, and
+    against each family view's filed bridges.
+  - The shipped registry never refutes, so a refuting W7 is injected through a test-only patched
+    api. `atlas <id> --run`, `atlas --evidence --run` and `map --family`, `--route` and
+    `--observable` with `--run` all exit 3 on it.
+  - Paired checks: the shipped registry exits 0, an unresolved W7 exits 0, and `--stored` never
+    exits 3.
+- **Every atlas bridge now runs a witness in-process (audit I15).** Three executable specs join
+  `WITNESS_REGISTRY` (`src/atlas/oscillators/limit-witnesses.ts`), so `upt atlas <id> --run` no longer
+  answers "none" for `ab-pendulum-linear`, `ab-damped-massless` or `ab-chain-wave`:
+  - W7: the pendulum's T/T0, integrated by RK4, at θ0 = 0.2. It is attributed to the bound. Its
+    error there is the bound's `deltaAt`, which is the AGM form, a second method (agreement 3.5e-13).
+  - W8b: the full damped spring's sup offset from e^{−t} outside the layer, at m = 0.01. The bound is
+    not sharp, so a new claim kind, `bound-holds-at`, takes the bound's `deltaAt` there (0.12) as the
+    tolerance. The integrated offset, 0.0574, matches the two-root closed form to 2e-9.
+  - W9: the integrated ring's 1 − ω/(cq) over (qa)²/24 at N = 32 (0.99952). The chain has no bound,
+    so a new claim kind, `preserves`, attributes W9 to "long-wavelength dispersion ω ≈ c q".
+  Each has a negative control that is refuted: the θ0²/16 tolerance; the 2m/b tolerance, with the
+  bound's own `deltaAt` still passing; and the (qa)²/12 coefficient. Each also has a meta-check that
+  the true claim resolves. `witness-claims.test.ts` checks the two new claim kinds against the
+  record. `atlas` prints them per claim. `data/atlas/witness-results.json` now holds 22 results, all
+  checked. The pendulum golden changes because W7 is now attributed to the bound. The criterion-2
+  atlas-condition hash is unchanged.
+- **Atlas equation links: the eight links that predated the numeric-check rule are now each checked,
+  and one link is added.** `tests/atlas/canonical-links.test.ts` derives every recorded link from
+  its model: RK4 periods (model-spring's ω), mode frequencies from the model's own spatial operator
+  (model-wave-1d, model-string, model-sound), a mode decay rate (model-heat), work integrals of the
+  model's restoring term (model-spring's U, model-lc's capacitor energy), and a launch amplitude
+  (model-spring's E). Its ratchet list of unchecked links is now empty and must stay so.
+  - Four sourced prefactors join `src/composition/canonical-prefactors.ts`, outside the pinned
+    `src/canonical` tree, each with a verbatim wikitext quote at a pinned revision:
+    CE-simple-harmonic-frequency 1, CE-spring-potential-energy ½, CE-oscillator-energy ½ and
+    CE-string-wave-speed 1. CE-sound-speed's factor is √γ, a power of a group the entry does not
+    record, so it goes to a separate `CANONICAL_GROUP_PREFACTORS` table. `canonicalPrefactor` does
+    not return it. Each new number is checked a second way by the model-side check. The √γ is also
+    derived from model-euler-linear closed by model-adiabatic-eos, with c_s² never written.
+  - `compareWithCanonical` now catches ω = 2√(k/m), E = kA², U = kx² and v = √(2F/μ) as factor
+    mismatches. Two compare tests that used those entries to show the unchecked path now use
+    CE-debye-frequency and CE-inductor-energy, which have no sourced prefactor.
+  - New link: `model-lc` → CE-capacitor-energy (U = ½CV², checked by the work integral of the q/C
+    term). The criterion-2 atlas-condition hash is unchanged.
+  - Every model with no link states why in `NO_LINK_REASONS`, and a test holds that the reasons
+    cover exactly those models. Four reasons are shown by a check that fails:
+    - model-damped-spring and model-rlc (ζ = 0.2), each passing when the damping is zero;
+    - model-cubic-spring, which passes as βx0²/k → 0 and fails at 0.1;
+    - model-klein-gordon (phase velocity ≠ c), which passes at ω0 = 0.
+  - Controls: every check fails when the canonical value is 0.1% off. Other wrong relations also fail:
+    - the f-for-ω confusion 2π√(k/m);
+    - the missing ½;
+    - Newton's isothermal sound speed at γ = 1.4.
+    A check is also refused when it has no prefactor (model-lc → CE-inductor-energy), an unbound
+    group, or a datum that is a parameter.
+  - Limits, recorded plainly:
+    - model-stokes-drag is a closed-form law, so its check is a transcription that tests the
+      prefactor and exponents only;
+    - model-spring → CE-oscillator-energy rests on CE-kinetic-energy's sourced ½ as a premise;
+    - `CanonicalEquation.model` stays unset because criterion 3 freezes `src/canonical`.
+- **Audit I2: a bound composes across an exact map through a declared norm transport** (owner
+  decision 2026-09-27; `docs/planning/ADR-transported-norm-composition.md`, option 4). The owner made
+  the ADR-level call in the order that asked for it; it is recorded here, not taken by this session.
+  - **Public behaviour change:** `composeRelation('approximation', 'exact-equivalence')` (and
+    `COMPOSITION_TABLE`) now returns `'approximation'`, not `'no-composite-claim'`. The table has 9
+    defined cells and 55 silent ones and stays a pure function of relation types (ADR §5.1). The
+    other order, exact then approximation, stays silent (ADR §3). The pinned silent count went RED
+    at 56 before the change; the widened cell is asserted on its own, and so is the silent reverse.
+  - The licence is `AtlasBridge.normTransports` (`NormTransport`, internal): per direction, the norm
+    it accepts and delivers, `K` and `KAt`, the derivation, the time map (uniform or not) with a
+    horizon restatement, the uniformity, a witness registered under the transport id, and its basis.
+    `boundPath` gate 4 accepts an exact step as `(K_Φ, 0)` only through a declaration for the crossed
+    direction whose `from` is the running norm and whose time map is uniform; otherwise it keeps
+    `norm-not-stated`. `horizonOnRoute` restates each horizon through the transports after it.
+  - `ab-spring-lc` declares `nt-spring-lc-relative-period` (relative period error, model-spring →
+    model-lc, K = 1). Its witness W1τ, built from the demonstration test, integrates the pendulum's
+    image in circuit time at a fixture with ω_LC = 2√2 ≠ ω_s = 2 and compares it with the closed-form
+    elliptic error: fine error 7.1e-11, refinement ratio 256 (fourth order). Its negative control,
+    the absolute-period factor K = ω_s/ω_LC, is refuted, and a meta-check shows the same assertion
+    fails on the true claim. The declaration is serialized into `data/atlas/oscillators.json` without
+    its functions, and `upt atlas ab-spring-lc [--run]` lists it.
+  - `upt path model-pendulum model-lc --at theta0=0.2 T0=1 t=10` returns K = 1 · delta = 0.0158525 in
+    relative period error, says why the bound crosses `ab-spring-lc` and which witness supports it,
+    and evaluates the pendulum horizon restated in circuit time. The point bound 0.0025057 agrees with
+    the series θ0²/16 + 11θ0⁴/3072 to 1.5e-8 in the test. A position tolerance on the same route stays
+    UNDETERMINED (the map declares no carriage of position), and absolute-period and trajectory norms
+    refuse at the library level, naming the missing declaration.
+  - `upt map --route` prints the transports applied and the composite evidence, derived by
+    `deriveCompositeEvidence`: a positive tag survives only if every part carries it, `contradicted` if
+    any part does, and a transport contributes its basis only when its witness checks (else
+    `proposed`). `formally-proved` cannot be produced by a composite.
+  - The composition-graph edge layer carries no transports, so `composeEdges` refuses the widened
+    cell with its own message rather than fabricate a bound.
+  - **Negative result:** `ab-heat-diffusion` declares no transport. Its declaration would need its own
+    witness for model-fick → model-heat and a horizon restatement through D = κ/(ρc_p); neither
+    exists, so model-telegraph → model-heat refuses as `norm-not-stated` and names the declaration.
+  - The F05 refusal tests on pendulum → lc became acceptance tests; the no-claim cases now use
+    model-rlc → model-first-order (exact then approximation) and telegraph → heat. The CLI tests were
+    RED (16 failures) against the old source before the change.
+- **Every accepted flag is documented** (2026-09-27). The top-level `upt help` map usage omitted
+  `--route`, `--family`, `--all-routes`, `--observable`, `--stored`, `--run` and `--evidence`; both map
+  synopses are now complete and the top-level one points to `upt help map`. A new test reads each
+  registered command's accepted flags from its own `FlagSpec` and requires `upt help <name>` to name
+  every one, and the top-level block either to name every one or to say `upt help <name>` lists them.
+  It was RED on 14 of its 49 tests: besides map, `audit`, `predict`, `priority` and `probe` accepted
+  `--source` that neither help named, `derive --debug` was undocumented, the top-level help omitted
+  `canonical --vars` and `discover --show-adjudicated`, and `upt help map` omitted the `--anchor` and
+  `--max-orders` that tune `--proposed`. Two controls show the block check fails on an omitted flag
+  and does not borrow the next command's flags.
+
+- **Audit I3: every graph result names its source and anchor** (2026-09-27). `explain`, `ground`,
+  `discover` (and `--derive`), `map`, `candidates` and `connectors` print the effective source in text
+  and set `source` in `--json`, including when `--source` was not given; `explain`'s text header did
+  not before, and its bridge-id redirect had no `source` in JSON. A bridge id is answered from the
+  catalog bridge registry whatever `--source` says, and the redirect says so. The envelope gains
+  `anchor`, keeping two different anchors apart: the discovery ground truth (`discover`, `ground`,
+  `map --proposed`), printed as its values and whether they are the default one solar mass or came
+  from `--anchor`; and the anchored core (`map`, `candidates`, `connectors`), the clusters that hold an
+  established-confidence edge, printed with the count of such edges in the graph used (9 of 41 in the
+  catalog, 116 of 148 in both, 107 of 107 in canonical). `upt help explain` and the top-level help list
+  `--source`. The new test recounts each number from the graph and checks both states of each anchor;
+  13 of its 14 tests were RED before the change. 18 goldens gained the line or the source.
+
+- **Audit I13: one glossary of status words** (2026-09-27). `upt help statuses` defines every status
+  the commands print (VACUOUS, UNKNOWN/unchecked, VIOLATED, valid, ADEQUATE, INADEQUATE,
+  UNDETERMINED, NEITHER, UNSETTLED, no composite claim, DECOY, NOT COVERED, the discover verdicts and
+  signals, reproduced/differs/not replayable, checked/refuted/unresolved) from one table,
+  `src/cli/statuses.ts`. `emitJson` adds `definitions` for the statuses the envelope's command can
+  emit, so no command keeps its own copy; audit's `result.definitions.decoy` now reads the same entry.
+  The test derives the statuses from ten commands' own output (all-capitals words in text, exact string
+  values in JSON, never prose) and requires each to be defined in the same invocation's envelope; a
+  control removes the definitions and the check reports them, and another shows prose containing
+  "valid" is not counted. 14 of its 18 tests were RED before the change. Found by the check: `decoy`
+  names two statuses, audit's failed reconstruction and discover's adjudication verdict, so the
+  glossary resolves a word per command. Changed wording: a regime record that states no inequality
+  now reads "no machine condition evaluated (VACUOUS — …)" instead of "valid (VACUOUS — …)", and
+  `regime --json` gives each record a `verdict`; three tests that pinned the old line were updated.
+
+- **Audit I10: `upt symbolic` prints LaTeX and a symbol table** (2026-09-27). Each composed (and
+  simplified) chain now has a LaTeX line, with `\frac` for every division and a parenthesized base
+  under every power, and a symbol table: each named symbol's meaning, value, SI unit and source
+  (CODATA 2018, exact SI, a mathematical constant, or the evaluation point; the solar mass is named
+  as the repository's rounded value). Both are in `--json` (`latex`, `symbols`). The constant
+  descriptions are `CONSTANT_PROVENANCE` beside `CONSTANTS`; a test holds the two key sets equal and
+  parses each unit back to the constant's registered dimension at SI scale 1. Round trips: the eval
+  form, the display form and the LaTeX (read back by a reader in the test that shares no code with
+  the printer) of nine ASTs, nested division and powers of quotients and powers included, evaluate
+  to `evalExpr` of the AST; a control shows the reader catches a dropped grouping. The printers moved
+  from `symbolic.ts` to `src/cli/expr-print.ts`. 24 of the 28 tests were RED before the change.
+
 - **CLI audit §14 improvements** (2026-09-27), from `docs/audit/Universal_Physics_Tensor_CLI_Audit.md`
   §14. Each has tests in `tests/cli/audit-improvements.test.ts`, shown RED before the change.
   - **I5** — `upt search <word> …` finds a catalog bridge, canonical equation, atlas model, atlas
@@ -21,8 +290,10 @@ from v0.1.0 onward.
     evidence, and a denied premise marks the record as not applying.
   - **I8 (partial)** — `upt path --tolerance=EPS`: ADEQUATE only when every regime and horizon holds
     and the closed-form point error is ≤ EPS, INADEQUATE (exit 3) otherwise, and UNDETERMINED when the
-    point does not settle it. EPS is in the bound's own norm; no phase or trajectory translation is
-    encoded, and the output says so.
+    point does not settle it. EPS is in the bound's own norm; ~~no phase or trajectory translation is
+    encoded, and the output says so.~~ *(Superseded within this release by **I8 (rest)** and **I8 / I18
+    (limits)** below: phase and position translations are encoded for `ab-pendulum-linear`. Struck
+    2026-09-27.)*
   - **I9** — `upt evaluate --sigma/--corr`: first-order (GUM) propagation with correlations and a
     positive-semidefinite check. The sensitivity is kept apart from the contribution, a curvature
     check flags an unreliable linearization, inputs without σ are named as treated-exact, and
@@ -34,13 +305,15 @@ from v0.1.0 onward.
     assumptions and the scope of its canonical match in the text and in `--json`.
   - **I14 (partial)** — `confront` names each record's statistical object, criterion and data origin,
     plus its notes, and tallies σ-residual tests, limits and consistency ratios separately.
-    Preprocessing and independence are not recorded fields yet.
+    ~~Preprocessing and independence are not recorded fields yet.~~ *(Superseded within this release
+    by **I14 (rest)** below: both are required fields. Struck 2026-09-27.)*
   - **I15** — `upt atlas <id>` shows evidence by claim (correspondence, regime, bound, horizon,
     preserves), each citing only what the record links to it. Every witness shows its execution
     status. `--run` executes the in-process registered witnesses and counts checked, refuted and
     unresolved separately (exit 3 on a refutation).
   - **I16 (partial)** — `upt map --around=Q [--depth=N]` focuses on one quantity's neighbourhood in
-    every output form and prints how many of the source's edges it kept.
+    every output form and prints how many of the source's edges it kept. *(Extended within this
+    release by **I16 (rest)** and **I16 (limits)** below. Marked 2026-09-27.)*
   - **I18** — `upt path --sweep name=lo:hi:n[:log]` (2–200 samples, `--csv`) evaluates the point
     verdict per row. A row outside a regime or past a horizon carries no error.
   - A closed stdout (`upt … | head`) ends the run quietly instead of crashing with `EPIPE`.
@@ -121,7 +394,10 @@ from v0.1.0 onward.
     cases accept optional inputs.
   - **I2 proposal** — `docs/planning/ADR-proposal-transported-norm-composition.md` and a test-only
     demonstration (relative period error survives `ab-spring-lc` unchanged; absolute period and
-    trajectory errors do not). The composition table is not changed; the decision is Mothership's.
+    trajectory errors do not). ~~The composition table is not changed; the decision is Mothership's.~~
+    *Superseded 2026-09-27: the owner decided the proposal (option 4), the file is now
+    `docs/planning/ADR-transported-norm-composition.md`, and the table is widened (see [Unreleased]
+    "Audit I2").*
   - `path`'s "to compose, this path would need" list also names an exact map before a bound (e.g.
     `ab-damped-rlc` before `ab-damped-massless`), which must state how it acts on that bound's norm.
 
@@ -138,6 +414,80 @@ from v0.1.0 onward.
   compared while stub `ln2` agrees; L5–L8 vocabulary/output/frontier friction.
 
 ### Fixed
+
+- **Every `confront` consistency record now makes a compatibility decision** (audit I14 limit).
+  be-11 and be-21 printed "no agreement bound in this outcome, so no compatibility decision".
+  - be-11 now carries its module's stated tolerance, `DECOHERENCE_EXPERIMENTAL_TOLERANCE` = 15% (the source
+    reports agreement "within the ~15% experimental uncertainty"), as its agreement bound, like the other nine.
+  - be-21's prediction is the KSS lower bound, so it gains `predictedIs: 'lower-limit'` and is decided by
+    observed ≥ predicted. `consistencyComparison` gains a `rule` field and refuses a lower limit that also carries
+    an agreement bound.
+  - Both are compatible. A control shows the lower-limit rule fails below the bound, and makes no decision when a record has neither rule.
+
+  **Re-pinned deliberately:** be-11's `fractionalGap` in `tests/fixtures/confrontation-numbers.golden.json` goes from
+  0 to 0.15. The field now holds the bound, not the difference. The actual difference is still 0, computed by
+  `consistencyComparison`. That golden is the Sprint 2 regression gate; no pre-registration names it.
+  Every other pinned number is unchanged. `data/bridge-catalog.json` and `tests/cli/golden/confront.txt` were regenerated.
+
+  Negative result: be-11's decision cannot fail on this record, because its observed slot is the stated agreement
+  encoded as ratio 1.
+- **Windows checkout: six tests failed on a tree with no content difference** (2026-09-27). With
+  `core.autocrlf=true`, `tests/fixtures/probe-study/**` checked out CRLF because it was missing from
+  the `text eol=lf` list in `.gitattributes`, although `generate.mjs` writes LF; the generator
+  comparison and three CSV tests that edit the text by `\n` failed. The directory is now LF in every
+  checkout, the CSV tests normalize line ends before editing, and a new test checks that a CRLF file
+  parses to the same study as its LF twin (it fails when the parser splits on `\n` only). Two more
+  tests assumed POSIX paths: `probe-study` expected `/nonexistent/rep.json` where the CLI names the
+  resolved path, and `record-hardening` looked up the constant tables by a backslash key. Each was
+  RED on a Windows checkout before the change. `npm run validate` runs all six, so a Windows publish
+  was blocked.
+
+- **Probe coverage gate below its thresholds, and not in CI** (2026-09-27). `bun run
+  test:probe-coverage` measured 91.87% statements and 83.03% branches against thresholds of 95 and
+  85 (branches were 86.36% on 2026-09-25 by the owner's review, so the I19 work took them below). The
+  thresholds are unchanged. New tests: every refusal of a study, CSV or replication file named by its
+  field (78 rows; removing any one of three sampled checks fails its row), the χ² and F survival
+  functions against closed forms that use neither incomplete function, the design suggestion's two
+  abstentions on noise-free rows whose prefactor 2π must be recovered, and the generator's depth,
+  operator and candidate caps, each beside a default-budget control that does yield candidates. Now
+  95.41% / 88.26% / 98.07% functions / 97.4% lines. The CI `test` job runs the gate. Negative result
+  found on the way: a relative or standardized correction is never emitted for a dimensioned target,
+  since `1 + m` with m of the target's dimension is inhomogeneous; the test pins that behaviour.
+
+- **Records disagreed with the code and with each other** (2026-09-27). `todo.md` said no evaluator
+  takes a radius and the audit's Stokes–Einstein example is shown only on the resolver; the I20 case
+  meets it on the CLI (D = 2.1471978e-13 m²/s for `a_m=1um` and for `diameter_m=2um`, twice that for
+  `a_m=0.5um`, as k_BT/(6πηa) gives by hand; `tests/cli/applied-cases.test.ts` pins it). The note is
+  struck through with the correction beside it. The §14 heading said "open" over a list of ticked
+  rows. Two "(partial)" entries above made claims that later entries of the same release contradict;
+  those sentences are struck through, not rewritten. Audit and persona ids overlap (both use I1–I8),
+  so `todo.md` and `NOTES.md` now write "audit I5" and "persona I5"; older entries are left as they
+  were.
+
+- **Audit I4: expression syntax, and persona W7** (2026-09-27). An unknown function failed with the
+  parser's own words (`Undefined function lg` under MathTS) and no way forward. Both parsers now fail
+  with one message that names a documented equivalent where one exists (`lg` → `log10`, `arcsin` →
+  `asin`, `Sin` → `sin`, …; the table's values are checked against `Math`), and list the documented
+  functions otherwise. `--debug` prints the parser and its version (`mathts
+  (@danielsimonjr/mathts-functions 0.64.0)` or `builtin (universal-physics-tensor …)`). `upt help eval`
+  lists the functions and says that `log` is the natural logarithm. `map --equation` evaluated the
+  right-hand side with `evalExpr`, which has no transcendental arm, so `ln(2)` was "not compared"
+  while `ln2` agreed; it now evaluates with the active formula parser, the one `eval` uses. The
+  catalog target `landauer-erasure-energy` (BE-16) never met CE-landauer, whose target is
+  `erasure-energy`; a target now also matches through the bridge an entry records that it restates,
+  and the line says so. Controls: `log10(2)` for `ln(2)` differs by 0.434294, and `rest-energy` with
+  the same right-hand side matches no entry. The builtin path is tested by mocking the peer away.
+  `peerVersions` moved from `record.ts` to `version.ts` so both use one reader.
+
+- **Audit I5 residual: `explain <law-name>` suggested one-letter names** (2026-09-27). `upt explain
+  schrodinger-equation --source=canonical` answered "did you mean: a, A, g, q, r?": the ranking counted
+  a name contained in the input as near, and every one-letter name occurs inside a long input. A
+  contained name now counts only from three characters (`temperature` inside `hawkng-temperature`
+  still does; `lenght` → `length` and `hawkng-temperature` → `hawking-temperature` still rank first).
+  NOT COVERED also lists what `upt search` finds for the name's words; when no entry matches every
+  word, the largest matching set is used, the rarer when sets tie, so `schrodinger-equation` lists
+  model-schrodinger-free, ab-schrodinger-diffusion and ab-kg-schrodinger. The search index moved
+  from `search.ts` to `src/cli/search-index.ts` so both commands use one index.
 
 - **CLI applied-physics audit findings F01–F14** (2026-09-27). Ledger in
   `docs/audit/Universal_Physics_Tensor_CLI_Audit.md` §11; each fix has a test that was RED first.

@@ -32,6 +32,32 @@ export function rk4Step(x: number, v: number, h: number, accel: (x: number) => n
   return [x + (h / 6) * (k1x + 2 * k2x + 2 * k3x + k4x), v + (h / 6) * (k1v + 2 * k2v + 2 * k3v + k4v)];
 }
 
+/**
+ * The root in (0, h] of x(τ), the position one partial RK4 step of length τ
+ * from (x, v), by the secant method from the bracket (0, x) and (h, nx).
+ *
+ * The crossing is then located to the integrator's own truncation error,
+ * rather than to the O(h³) error of a straight line between the two steps.
+ * That truncation error is nearly the same for the pendulum and the linear
+ * oscillator at small θ0, so it cancels in their phase difference; the
+ * interpolation error does not.
+ */
+function refineCrossing(x: number, v: number, nx: number, h: number, accel: (x: number) => number): number {
+  let a = 0;
+  let fa = x;
+  let b = h;
+  let fb = nx;
+  for (let k = 0; k < 50 && fb !== 0 && fb !== fa; k++) {
+    const c = b - (fb * (b - a)) / (fb - fa);
+    if (!(c >= -h && c <= 2 * h) || c === b) break;
+    a = b;
+    fa = fb;
+    b = c;
+    fb = rk4Step(x, v, c, accel)[0];
+  }
+  return b;
+}
+
 /** Zero-crossing times of a release from rest at `theta0`, over `periods` of T0 = 1. @internal */
 export function crossingTimes(accel: (x: number) => number, theta0: number, stepsPerPeriod: number, periods: number): number[] {
   const h = 1 / stepsPerPeriod;
@@ -40,7 +66,7 @@ export function crossingTimes(accel: (x: number) => number, theta0: number, step
   let v = 0;
   for (let i = 0; i < stepsPerPeriod * periods; i++) {
     const [nx, nv] = rk4Step(x, v, h, accel);
-    if (nx === 0 || x > 0 !== nx > 0) out.push(i * h + (h * x) / (x - nx));
+    if (nx === 0 || x > 0 !== nx > 0) out.push(i * h + refineCrossing(x, v, nx, h, accel));
     x = nx;
     v = nv;
   }

@@ -86,7 +86,8 @@
         }
       ],
       "upt:canonicalRef": [
-        "CE-lc-resonance"
+        "CE-lc-resonance",
+        "CE-capacitor-energy"
       ]
     },
     {

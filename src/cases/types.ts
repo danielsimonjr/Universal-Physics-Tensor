@@ -104,7 +104,7 @@ export interface AppliedCase {
   run(inputs: Readonly<Record<string, number>>): CaseResult;
 }
 
-/** @internal */
+/** Build a CaseCheck from one evaluated inequality and mark whether it holds. @internal */
 export const check = (
   id: string,
   premise: string,
@@ -124,7 +124,7 @@ export const check = (
   holds: op === '<=' ? value <= bound : op === '>=' ? value >= bound : value > bound,
 });
 
-/** @internal */
+/** Reject missing, non-finite or non-positive inputs for the listed case parameters. @internal */
 export function requirePositive(caseId: string, inputs: Readonly<Record<string, number>>, keys: readonly string[]): void {
   for (const k of keys) {
     const v = inputs[k];

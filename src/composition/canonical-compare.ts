@@ -32,7 +32,9 @@ import { CONSTANTS } from './symbolic-constants.js';
 import { evalExpr } from './expr-eval.js';
 import { canonicalPrefactor } from './canonical-prefactors.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
-import { parsePhysics } from '../numerical/formula-registry.js';
+import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
+import type { CompiledFormula } from '../numerical/formula.js';
+import { CATALOG_GRAPH } from './catalog-graph.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 
 /**
@@ -60,6 +62,17 @@ export interface CanonicalComparison {
   readonly detail?: string;
   /** `[yours, canonical]` for each variable paired by dimension, not by name (persona finding N1). */
   readonly paired?: readonly (readonly [string, string])[];
+  /**
+   * True when neither side has a free variable (every name is a registered constant, persona
+   * finding W5): the two sides are compared once, at the SI constant values, so the form is not
+   * tested, only the value.
+   */
+  readonly constantsOnly?: true;
+  /**
+   * Present when your target matched through the catalog bridge this entry restates
+   * (`restatesBridge`), not by the entry's own target name: that bridge's id and the entry's target.
+   */
+  readonly targetVia?: { readonly bridge: string; readonly its: string };
 }
 
 /** A user source variable; with a dimension it may pair with a differently named canonical variable. */
@@ -159,6 +172,18 @@ function isConstant(v: { name: string; dim: Dimension }): boolean {
   return c !== undefined && equals(c.dim, v.dim);
 }
 
+/**
+ * The catalog bridge through which `wantTarget` names this entry's target: the entry records that
+ * it restates that bridge (`restatesBridge`), and the bridge's graph edge has `wantTarget` as its
+ * target (persona finding W7: `landauer-erasure-energy` is BE-16's target, and CE-landauer, which
+ * restates BE-16, names it `erasure-energy`). A recorded restatement, never a shared dimension.
+ */
+function targetThroughRestatedBridge(entry: CanonicalEquation, wantTarget: string): string | undefined {
+  if (entry.restatesBridge === undefined) return undefined;
+  const beId = Number(entry.restatesBridge);
+  return CATALOG_GRAPH.find((e) => e.beId === beId && normalize(e.target.name) === wantTarget)?.id;
+}
+
 /** The free (non-constant, non-literal) symbols of an AST, with their dimensions. */
 function freeSymbols(node: ExprNode, out: Map<string, Dimension>): Map<string, Dimension> {
   if (node.kind === 'symbol') {
@@ -169,6 +194,24 @@ function freeSymbols(node: ExprNode, out: Map<string, Dimension>): Map<string, D
   const args = (node as { args?: readonly ExprNode[] }).args ?? [];
   for (const a of args) freeSymbols(a, out);
   return out;
+}
+
+/**
+ * Dimensionless symbols the entry's AST holds that its governing set does not, and that the user
+ * names too: CE-ideal-gas writes `P = N k_B T/V` with the count `N` in its AST only (persona finding
+ * L6). They join the comparison variables BY NAME only; pairing a dimensionless stub such as
+ * `one_minus_e_sq` with any dimensionless user quantity by dimension would compare different laws.
+ */
+function astOnlyCounts(
+  entry: CanonicalEquation,
+  userNames: ReadonlySet<string>,
+): { name: string; dim: Dimension }[] {
+  if (entry.scalarAst === undefined) return [];
+  const governing = new Set(entry.dimensional.governing.map((g) => normalize(g.name)));
+  return [...freeSymbols(entry.scalarAst, new Map())]
+    .filter(([name, dim]) => /^[A-Za-z][A-Za-z0-9_]*$/.test(name) && equals(dim, DIMENSIONLESS))
+    .filter(([name]) => !governing.has(normalize(name)) && userNames.has(normalize(name)))
+    .map(([name, dim]) => ({ name, dim }));
 }
 
 /**
@@ -214,7 +257,11 @@ function classify(
       detail:
         entry.epistemicStatus === 'dimensional'
           ? 'the registry records its dimensional form only'
-          : 'the registry records it only up to a constant',
+          : entry.epistemicStatus === 'fully-quantitative' && entry.fieldEquation !== undefined
+            ? 'the registry records its prefactor only in its field equation, and its scalar record is the dimensional monomial'
+            : entry.epistemicStatus === 'fully-quantitative'
+              ? 'its scalar record is the dimensional monomial only'
+              : 'the registry records it only up to a constant',
     };
   }
   return Math.abs(r0 - 1) <= RATIO_TOLERANCE
@@ -252,8 +299,10 @@ export function compareWithCanonical(
 
   for (const entry of entries) {
     const d = entry.dimensional;
-    if (normalize(d.target.name) !== wantTarget) continue;
-    const variables = d.governing.filter((g) => !isConstant(g));
+    const via = normalize(d.target.name) === wantTarget ? undefined : targetThroughRestatedBridge(entry, wantTarget);
+    if (normalize(d.target.name) !== wantTarget && via === undefined) continue;
+    const targetVia = via === undefined ? {} : { targetVia: { bridge: via, its: d.target.name } };
+    let variables = d.governing.filter((g) => !isConstant(g));
     const constants = d.governing.filter(isConstant);
     // W1: sources that restate a governing constant (speed-of-light ↔ c) peel off first so they
     // do not inflate the free-variable count and skip the prefactor check.
@@ -262,7 +311,16 @@ export function compareWithCanonical(
       variables,
       constants,
     );
-    const pairing = pairSources(forVariables, variables);
+    let pairing = pairSources(forVariables, variables);
+    if (pairing === null) {
+      // L6: a count the AST holds but the governing set does not (CE-ideal-gas's N), named by the user.
+      const counts = astOnlyCounts(entry, new Set(forVariables.map((s) => s.name)));
+      if (counts.length > 0) {
+        const widened = [...variables, ...counts];
+        pairing = pairSources(forVariables, widened);
+        if (pairing !== null) variables = widened;
+      }
+    }
     if (pairing === null) continue;
     if (pairing === 'ambiguous') {
       results.push({
@@ -270,6 +328,7 @@ export function compareWithCanonical(
         name: entry.name,
         kind: 'not-compared',
         detail: 'your variable names differ from its names, and they pair with its variables by dimension in more than one way',
+        ...targetVia,
       });
       continue;
     }
@@ -312,7 +371,7 @@ export function compareWithCanonical(
           name: entry.name,
           kind: 'not-compared',
           detail: 'its variables could not be aligned by name or by a unique dimension',
-          ...paired,
+          ...paired, ...targetVia,
         });
         continue;
       }
@@ -320,9 +379,17 @@ export function compareWithCanonical(
       canonicalAt = (p) =>
         factor * evalExpr(ast, Object.fromEntries([...alignment].map(([sym, g]) => [sym, p[normalize(g)]!])));
     } else if (d.monomial !== null) {
+      // W4: a governing constant takes its SI value, as on the user side and in the AST branch. A
+      // name that is neither a variable nor a constant has no value, so the ratio is not finite and
+      // the entry is reported as not compared; reading it as 1 made Kepler III "factor 122404".
       const monomial = d.monomial;
+      const constValues = new Map(constants.map((g) => [normalize(g.name), CONSTANTS[g.name]!.value]));
       canonicalAt = (p) =>
-        factor * Object.entries(monomial).reduce((acc, [n, e]) => acc * Math.pow(p[normalize(n)] ?? 1, e), 1);
+        factor *
+        Object.entries(monomial).reduce(
+          (acc, [n, e]) => acc * Math.pow(p[normalize(n)] ?? constValues.get(normalize(n)) ?? Number.NaN, e),
+          1,
+        );
     } else {
       continue;
     }
@@ -336,17 +403,22 @@ export function compareWithCanonical(
         name: entry.name,
         kind: 'not-compared',
         detail: `an evaluation failed (${e instanceof Error ? e.message : String(e)})`,
-        ...paired,
+        ...paired, ...targetVia,
       });
       continue;
     }
     if (!ratios.every((r) => Number.isFinite(r) && r !== 0)) {
-      results.push({ id: entry.id, name: entry.name, kind: 'not-compared', detail: 'a ratio was zero or not finite', ...paired });
+      results.push({ id: entry.id, name: entry.name, kind: 'not-compared', detail: 'a ratio was zero or not finite', ...paired, ...targetVia });
       continue;
     }
+    // A monomial-only record carries no prefactor, even on a fully-quantitative entry: the EFE keeps
+    // its 8π in the field equation (persona question Q3).
+    const recordsPrefactor =
+      tabled !== undefined || (entry.epistemicStatus === 'fully-quantitative' && entry.scalarAst !== undefined);
     results.push({
-      ...classify(entry, ratios, entry.epistemicStatus === 'fully-quantitative' || tabled !== undefined),
-      ...paired,
+      ...classify(entry, ratios, recordsPrefactor),
+      ...(names.length === 0 ? { constantsOnly: true as const } : {}),
+      ...paired, ...targetVia,
     });
   }
   return results;
@@ -356,6 +428,10 @@ export function compareWithCanonical(
  * Compare a `TARGET = EXPR` user equation (the `upt map --equation` input) with
  * the canonical registry. Names resolve onto `catalogDims` the way
  * `analyzeUserEquation` resolves them; `pi` and `tau` are the only named numbers.
+ * The right-hand side is dimension-checked through `parsePhysics` and evaluated by
+ * the active formula parser, the one `upt eval` uses, so a comparison accepts every
+ * function `eval` accepts (`ln(2)`, `asin`, `atan2`; persona finding W7). A registered
+ * constant takes its SI value, as in the canonical AST.
  * Returns `[]` when the equation does not parse or no entry matches.
  *
  * @internal
@@ -373,21 +449,23 @@ export async function compareUserEquation(
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
   for (const [s, r] of resolved) dims[s] = catalogDims.get(r) ?? DIMENSIONLESS;
-  let expr: ExprNode;
+  const rhs = eq.text.slice(eq.text.indexOf('=') + 1);
+  let compiled: CompiledFormula;
   try {
-    expr = (await parsePhysics(eq.text.slice(eq.text.indexOf('=') + 1), dims)).expr;
+    await parsePhysics(rhs, dims);
+    compiled = (await getFormulaParser()).parse(rhs);
   } catch {
     return [];
   }
+  const constantValues = Object.fromEntries(Object.entries(CONSTANTS).map(([name, c]) => [name, c.value]));
   // A name the catalog does not know carries no dimension, so it never pairs by dimension.
   const sources = [...resolved.values()].map((r) => {
     const dim = catalogDims.get(r);
     return dim === undefined ? r : { name: r, dim };
   });
   return compareWithCanonical(target, sources, (values) =>
-    evalExpr(expr, {
-      pi: Math.PI,
-      tau: 2 * Math.PI,
+    compiled.evaluate({
+      ...constantValues,
       ...Object.fromEntries([...resolved].map(([s, r]) => [s, values[normalize(r)]!])),
     }),
   );
@@ -407,16 +485,24 @@ export function describeComparisons(cs: readonly CanonicalComparison[]): string[
 
 /** One report line per comparison. @internal */
 export function describeComparison(c: CanonicalComparison): string {
-  const pairs = c.paired?.map(([yours, its]) => `your ${yours} as its ${its}`).join(', ');
-  const who = `${c.id} (${c.name}${pairs === undefined ? '' : `; ${pairs}, paired by dimension`})`;
-  const n = FIXED_POINT_EXPONENTS.length;
+  const pairs = [
+    ...(c.targetVia === undefined
+      ? []
+      : [`your target as its ${c.targetVia.its}, the target of ${c.targetVia.bridge}, which it restates`]),
+    ...(c.paired === undefined ? [] : [`${c.paired.map(([yours, its]) => `your ${yours} as its ${its}`).join(', ')}, paired by dimension`]),
+  ];
+  const who = `${c.id} (${c.name}${pairs.length === 0 ? '' : `; ${pairs.join('; ')}`})`;
+  const at =
+    c.constantsOnly === true
+      ? 'at the SI constant values (no free variable, so only the value is compared, not the form)'
+      : `at ${FIXED_POINT_EXPONENTS.length} fixed points`;
   switch (c.kind) {
     case 'agrees':
-      return `✓ agrees with ${who}, prefactor included: yours/canonical = 1 at ${n} fixed points`;
+      return `✓ agrees with ${who}, prefactor included: yours/canonical = 1 ${at}`;
     case 'factor':
-      return `⚠ differs from ${who} by a constant factor: yours/canonical = ${c.ratio!.toPrecision(6)} at ${n} fixed points`;
+      return `⚠ differs from ${who} by a constant factor: yours/canonical = ${c.ratio!.toPrecision(6)} ${at}`;
     case 'form':
-      return `⚠ differs in FORM from ${who}: yours/canonical is not constant across ${n} fixed points`;
+      return `⚠ differs in FORM from ${who}: yours/canonical is not constant across ${FIXED_POINT_EXPONENTS.length} fixed points`;
     case 'prefactor-unchecked':
       return `· same form as ${who}, but ${c.detail}, so your prefactor is NOT checked`;
     case 'not-compared':

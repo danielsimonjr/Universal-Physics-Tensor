@@ -217,7 +217,7 @@ describe('multicategory composition — the §0 invariant', () => {
   });
 
   it('a hyperedge cannot launder a pair the binary table refuses (§3)', () => {
-    // `approximation ∘ derivation` is one of the 56 silent cells.
+    // `approximation ∘ derivation` is one of the silent cells (pinned in composition-table.test.ts).
     const d1 = derivation('D1', ['A', 'B'], 'C', 'approximation');
     const d2 = derivation('D2', ['C', 'E'], 'F', 'derivation');
     const result = composeDerivations('D12', d1, d2, ABCEF);

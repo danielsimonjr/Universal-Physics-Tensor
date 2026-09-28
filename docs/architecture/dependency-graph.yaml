@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 376
+  totalFiles: 383
   totalModules: 12
-  totalExports: 2705
+  totalExports: 2777
 entryPoints:
   - file: src/index.ts
     type: main
@@ -412,6 +412,7 @@ modules:
         - counterexamplesWithRejection
         - deriveEvidence
         - deriveEvidenceForVerdict
+        - deriveCompositeEvidence
       interfaces:
         - WitnessLike
         - CounterexampleLike
@@ -421,6 +422,7 @@ modules:
         - counterexamplesWithRejection
         - deriveEvidence
         - deriveEvidenceForVerdict
+        - deriveCompositeEvidence
       constants:
         - NO_PASSING_WITNESSES
     src/atlas/diffusion/bridges-closure.ts:
@@ -739,6 +741,7 @@ modules:
             - AtlasRejection
             - FormalFidelity
             - FormalRef
+            - NormTransport
           reExport: true
         - file: ./types.js
           imports:
@@ -751,6 +754,7 @@ modules:
           reExport: true
         - file: ./derive-evidence.js
           imports:
+            - deriveCompositeEvidence
             - deriveEvidence
             - deriveEvidenceForVerdict
             - NO_PASSING_WITNESSES
@@ -779,9 +783,12 @@ modules:
             - boundPath
             - findAtlasPath
             - findPath
+            - horizonOnRoute
+            - routeEntryModels
           reExport: true
         - file: ./path-bound.js
           imports:
+            - AppliedTransport
             - NoClaimReason
             - PathBoundClaim
             - PathBoundResult
@@ -1093,6 +1100,7 @@ modules:
         - MissingHorizonError
         - MissingLipschitzError
         - ALL_EVIDENCE_TAGS
+        - deriveCompositeEvidence
         - deriveEvidence
         - deriveEvidenceForVerdict
         - NO_PASSING_WITNESSES
@@ -1102,6 +1110,8 @@ modules:
         - boundPath
         - findAtlasPath
         - findPath
+        - horizonOnRoute
+        - routeEntryModels
         - composeBounds
         - composeBoundPath
         - IDENTITY_BOUND
@@ -1189,6 +1199,7 @@ modules:
         - AtlasRejection
         - FormalFidelity
         - FormalRef
+        - NormTransport
         - CounterexampleLike
         - EvidenceInput
         - MembershipVerdict
@@ -1196,6 +1207,7 @@ modules:
         - WitnessLike
         - CompositionResult
         - NoCompositeClaim
+        - AppliedTransport
         - NoClaimReason
         - PathBoundClaim
         - PathBoundResult
@@ -1278,9 +1290,11 @@ modules:
         - AtlasRejection
         - FormalFidelity
         - FormalRef
+        - NormTransport
         - MissingHorizonError
         - MissingLipschitzError
         - ALL_EVIDENCE_TAGS
+        - deriveCompositeEvidence
         - deriveEvidence
         - deriveEvidenceForVerdict
         - NO_PASSING_WITNESSES
@@ -1297,6 +1311,9 @@ modules:
         - boundPath
         - findAtlasPath
         - findPath
+        - horizonOnRoute
+        - routeEntryModels
+        - AppliedTransport
         - NoClaimReason
         - PathBoundClaim
         - PathBoundResult
@@ -1536,6 +1553,9 @@ modules:
             - Regime
             - RelationContract
           typeOnly: true
+        - file: ./norm-transport.js
+          imports:
+            - SPRING_LC_RELATIVE_PERIOD_TRANSPORT
       exports:
         - BRIDGE_SPRING_LC
         - BRIDGE_DAMPED_RLC
@@ -1574,6 +1594,9 @@ modules:
           imports:
             - DAMPING
             - SPRING_CONSTANT
+        - file: ./norms.js
+          imports:
+            - RELATIVE_PERIOD_NORM
         - file: ../../dimensional/types.js
           imports:
             - ACCELERATION
@@ -1664,6 +1687,29 @@ modules:
         - AtlasFamily
       constants:
         - OSCILLATOR_FAMILY
+    src/atlas/oscillators/limit-witnesses.ts:
+      description: The measurements behind the in-process witnesses of the three oscillator
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./norm-transport-witness.js
+          imports:
+            - quarterPeriod
+      exports:
+        - W7_FIXTURE
+        - W8B_FIXTURE
+        - W9_FIXTURE
+        - measurePendulumPeriodRatio
+        - measureMasslessOffset
+        - measureChainDispersionError
+      functions:
+        - measurePendulumPeriodRatio
+        - measureMasslessOffset
+        - measureChainDispersionError
+      constants:
+        - W7_FIXTURE
+        - W8B_FIXTURE
+        - W9_FIXTURE
     src/atlas/oscillators/models.ts:
       description: The nine oscillator models of design note §3.
       externalDependencies: []
@@ -1701,6 +1747,54 @@ modules:
         - getAtlasModel
       constants:
         - ATLAS_MODELS
+    src/atlas/oscillators/norm-transport-witness.ts:
+      description: The measurement behind W1τ, `ab-spring-lc`'s relative-period norm transport
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./pendulum-motion.js
+          imports:
+            - rk4Step
+        - file: ./norm-transport.js
+          imports:
+            - W1TAU_FIXTURE
+      exports:
+        - quarterPeriod
+        - measureTransportedPeriodError
+      interfaces:
+        - TransportCircuit
+      functions:
+        - quarterPeriod
+        - measureTransportedPeriodError
+    src/atlas/oscillators/norm-transport.ts:
+      description: "`ab-spring-lc`'s declared norm transport: the spring → LC map carries a bound"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../types.js
+          imports:
+            - NormTransport
+          typeOnly: true
+        - file: ./norms.js
+          imports:
+            - RELATIVE_PERIOD_NORM
+      exports:
+        - SPRING_LC_TRANSPORT_TEST
+        - W1TAU_FIXTURE
+        - SPRING_LC_RELATIVE_PERIOD_TRANSPORT
+      constants:
+        - SPRING_LC_TRANSPORT_TEST
+        - W1TAU_FIXTURE
+        - SPRING_LC_RELATIVE_PERIOD_TRANSPORT
+    src/atlas/oscillators/norms.ts:
+      description: Norm names the oscillator records share, so a bound and the transport that
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - RELATIVE_PERIOD_NORM
+      constants:
+        - RELATIVE_PERIOD_NORM
     src/atlas/oscillators/pendulum-motion.ts:
       description: The pendulum and its linear oscillator, integrated and read off, for the
       externalDependencies: []
@@ -1812,16 +1906,20 @@ modules:
             - theta0OfPeriodError
       exports:
         - POSITION_POINT_MAX_PERIODS
+        - FOURIER_SERIES_THETA0S
         - PENDULUM_POSITION_TRANSLATION
         - waveformBound
         - fundamentalCoefficient
         - measureFundamental
+        - fourierSeriesCheck
       functions:
         - waveformBound
         - fundamentalCoefficient
         - measureFundamental
+        - fourierSeriesCheck
       constants:
         - POSITION_POINT_MAX_PERIODS
+        - FOURIER_SERIES_THETA0S
         - PENDULUM_POSITION_TRANSLATION
     src/atlas/oscillators/rejections.ts:
       description: "The Phase 0 REJECTION record: a claimed bridge the atlas records as refuted,"
@@ -1863,6 +1961,7 @@ modules:
         - file: ./types.js
           imports:
             - AtlasBridge
+            - NormTransport
             - RelationType
           typeOnly: true
         - file: ./families.js
@@ -1879,9 +1978,12 @@ modules:
         - enumerateAtlasRoutes
         - enumerateRoutes
         - boundPath
+        - routeEntryModels
+        - horizonOnRoute
       interfaces:
         - RouteEnumeration
         - PathBoundClaim
+        - AppliedTransport
         - PathNoClaim
       functions:
         - findPath
@@ -1889,6 +1991,8 @@ modules:
         - enumerateAtlasRoutes
         - enumerateRoutes
         - boundPath
+        - routeEntryModels
+        - horizonOnRoute
     src/atlas/poster/associations.ts:
       description: Atlas Phase 3 — the poster's two association-only lines.
       externalDependencies: []
@@ -2313,6 +2417,7 @@ modules:
         - ApproximationBound
         - Witness
         - Counterexample
+        - NormTransport
         - AtlasBridge
         - AtlasRejection
         - Conventions
@@ -2680,6 +2785,30 @@ modules:
             - DalembertFixture
             - StringFixture
           typeOnly: true
+        - file: ./oscillators/bridges-limits.js
+          imports:
+            - pendulumPeriodErrorAt
+        - file: ./oscillators/norm-transport.js
+          imports:
+            - SPRING_LC_RELATIVE_PERIOD_TRANSPORT
+            - W1TAU_FIXTURE
+        - file: ./oscillators/norm-transport-witness.js
+          imports:
+            - measureTransportedPeriodError
+        - file: ./oscillators/bridges-limits.js
+          imports:
+            - dampedOffsetBoundAt
+        - file: ./oscillators/bridges-coarse.js
+          imports:
+            - dispersionErrorApproximation
+        - file: ./oscillators/limit-witnesses.js
+          imports:
+            - measureChainDispersionError
+            - measureMasslessOffset
+            - measurePendulumPeriodRatio
+            - W7_FIXTURE
+            - W8B_FIXTURE
+            - W9_FIXTURE
         - file: ./witness-numeric.js
           imports:
             - NumericWitnessSpec
@@ -2706,7 +2835,6 @@ modules:
         - WITNESS_REGISTRY
       interfaces:
         - RegisteredSymbolicWitness
-        - WitnessClaim
         - RegisteredNumericWitness
       constants:
         - WD1_FIXTURE
@@ -6774,9 +6902,13 @@ modules:
         - MAX_BIOT
         - MAX_RADIATION_RATIO
         - LUMPED_COOLING_CASE
+        - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
+      interfaces:
+        - LumpedRadiating
       functions:
+        - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
       constants:
@@ -6933,6 +7065,9 @@ modules:
         - module: fs
           imports:
             - readFileSync
+        - module: path
+          imports:
+            - join
         - module: url
           imports:
             - fileURLToPath
@@ -6946,6 +7081,7 @@ modules:
             - CliError
         - file: ../../cli-api.js
           imports:
+            - AppliedTransport
             - AtlasBridge
             - AtlasModel
           typeOnly: true
@@ -6959,22 +7095,28 @@ modules:
             - showInequality
         - file: ./_atlas-route.js
           imports:
+            - claimReport
+            - explainsRefusal
             - missingForComposite
             - routeClaim
             - selectRoute
-            - RouteClaim
+            - transportReport
+            - TransportReport
       exports:
         - ATLAS_SOURCE
         - LINK_SOURCE
         - STORED_RESULTS_PATH
         - DEFAULT_MAX_ROUTES
         - MAX_ROUTES_CEILING
+        - storedResultsFile
         - loadStoredResults
         - runResults
         - parseRoute
         - buildRouteView
         - buildRoutesView
         - buildObservableView
+        - buildAtlasEvidenceView
+        - atlasEvidenceText
         - formatAtlasFilterLegend
         - bridgeIdsOf
         - buildFamilyView
@@ -6997,18 +7139,23 @@ modules:
         - ResultsTally
         - BridgeView
         - RouteView
+        - CompositeEvidenceView
         - RoutesView
         - ObservableView
+        - AtlasEvidenceView
         - AtlasFilter
         - AtlasFilterStats
         - FamilyView
       functions:
+        - storedResultsFile
         - loadStoredResults
         - runResults
         - parseRoute
         - buildRouteView
         - buildRoutesView
         - buildObservableView
+        - buildAtlasEvidenceView
+        - atlasEvidenceText
         - formatAtlasFilterLegend
         - bridgeIdsOf
         - buildFamilyView
@@ -7040,16 +7187,23 @@ modules:
             - CliError
         - file: ../../cli-api.js
           imports:
+            - AppliedTransport
             - AtlasBridge
           typeOnly: true
       exports:
         - selectRoute
         - routeClaim
         - missingForComposite
+        - explainsRefusal
+        - transportReport
+        - claimReport
       functions:
         - selectRoute
         - routeClaim
         - missingForComposite
+        - explainsRefusal
+        - transportReport
+        - claimReport
     src/cli/commands/_discovery-opts.ts:
       description: Shared `--max-orders`/`--anchor` parsing — used by both `discover` and
       externalDependencies: []
@@ -7091,6 +7245,13 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ./_atlas-map.js
+          imports:
+            - atlasEvidenceText
+            - buildAtlasEvidenceView
+            - loadStoredResults
+            - runResults
+            - WitnessResults
       exports:
         - command
         - summarizeWitnessRuns
@@ -7118,6 +7279,9 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../statuses.js
+          imports:
+            - statusMeaning
       exports:
         - command
       constants:
@@ -7160,6 +7324,8 @@ modules:
         - file: ../graphs.js
           imports:
             - resolveGraph
+            - coreAnchor
+            - coreLine
         - file: ../output.js
           imports:
             - emitJson
@@ -7229,6 +7395,8 @@ modules:
         - file: ../graphs.js
           imports:
             - resolveGraph
+            - coreAnchor
+            - coreLine
         - file: ../output.js
           imports:
             - emitJson
@@ -7278,6 +7446,9 @@ modules:
           imports:
             - UsageError
             - EXIT_CHECK_FAILED
+        - file: ../version.js
+          imports:
+            - formulaParserLabel
         - file: ../../dimensional/types.js
           imports:
             - Dimension
@@ -7303,6 +7474,8 @@ modules:
         - file: ../graphs.js
           imports:
             - resolveGraph
+            - groundTruthAnchor
+            - groundTruthLine
         - file: ../output.js
           imports:
             - emitJson
@@ -7347,6 +7520,9 @@ modules:
         - file: ../errors.js
           imports:
             - UsageError
+        - file: ../version.js
+          imports:
+            - formulaParserLabel
       exports:
         - command
       constants:
@@ -7411,6 +7587,9 @@ modules:
           imports:
             - UsageError
             - CliError
+        - file: ../search-index.js
+          imports:
+            - searchNameWords
       exports:
         - command
       constants:
@@ -7432,6 +7611,8 @@ modules:
         - file: ../graphs.js
           imports:
             - resolveGraph
+            - groundTruthAnchor
+            - groundTruthLine
             - SourceName
         - file: ../output.js
           imports:
@@ -7543,6 +7724,11 @@ modules:
         - file: ../graphs.js
           imports:
             - resolveGraph
+            - coreAnchor
+            - coreLine
+            - groundTruthAnchor
+            - groundTruthLine
+            - AnchorScope
         - file: ../output.js
           imports:
             - emitJson
@@ -7618,9 +7804,11 @@ modules:
             - showInequality
         - file: ./_atlas-route.js
           imports:
+            - explainsRefusal
             - missingForComposite
             - routeClaim
             - selectRoute
+            - transportReport
             - RouteClaim
       exports:
         - command
@@ -7792,6 +7980,13 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../search-index.js
+          imports:
+            - buildSearchIndex
+            - fold
+            - matchEveryWord
+            - SEARCH_SECTIONS
+            - STOP_WORDS
       exports:
         - command
       constants:
@@ -7817,6 +8012,14 @@ modules:
           imports:
             - ExprNode
           typeOnly: true
+        - file: ../expr-print.js
+          imports:
+            - EVAL_STUBS
+            - printDisplay
+            - printEval
+            - printLatex
+            - latexName
+            - siUnitOf
       exports:
         - command
       constants:
@@ -7835,6 +8038,34 @@ modules:
         - CliError
       constants:
         - EXIT_CHECK_FAILED
+    src/cli/expr-print.ts:
+      description: "The three printed forms of a scalar composed AST (`upt symbolic`, audit F12 and I10):"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
+      exports:
+        - EVAL_STUBS
+        - printDisplay
+        - printEval
+        - latexName
+        - printLatex
+        - siUnitOf
+      functions:
+        - latexName
+        - printLatex
+        - siUnitOf
+      constants:
+        - EVAL_STUBS
+        - printDisplay
+        - printEval
     src/cli/graphs.ts:
       description: Shared `--source=catalog|canonical|both` graph resolution — replaces
       externalDependencies: []
@@ -7857,8 +8088,18 @@ modules:
             - CliError
       exports:
         - resolveGraph
+        - groundTruthAnchor
+        - coreAnchor
+        - groundTruthLine
+        - coreLine
+      interfaces:
+        - AnchorScope
       functions:
         - resolveGraph
+        - groundTruthAnchor
+        - coreAnchor
+        - groundTruthLine
+        - coreLine
     src/cli/main.ts:
       description: Verb-first dispatcher for the UPT CLI — `upt <command> [args...]`.
       externalDependencies: []
@@ -7877,6 +8118,9 @@ modules:
         - file: ./version.js
           imports:
             - packageVersion
+        - file: ./statuses.js
+          imports:
+            - glossaryText
         - file: ./command.js
           imports:
             - resolveCommand
@@ -7898,7 +8142,14 @@ modules:
       description: JSON output envelope for the UPT CLI.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ./statuses.js
+          imports:
+            - definitionsFor
+        - file: ./graphs.js
+          imports:
+            - AnchorScope
+          typeOnly: true
       exports:
         - sanitize
         - emitJson
@@ -7911,6 +8162,9 @@ modules:
       description: "Static attribution for an experiment record: which constants a command's code can reach"
       externalDependencies: []
       nodeDependencies:
+        - module: crypto
+          imports:
+            - createHash
         - module: fs
           imports:
             - existsSync
@@ -7930,10 +8184,12 @@ modules:
             - TableKind
       exports:
         - REACH_METHOD
+        - moduleSources
         - staticReach
       interfaces:
         - Attribution
       functions:
+        - moduleSources
         - staticReach
       constants:
         - REACH_METHOD
@@ -7999,13 +8255,16 @@ modules:
             - appendFileSync
             - closeSync
             - existsSync
+            - mkdtempSync
             - openSync
             - readFileSync
-        - module: module
+            - rmSync
+        - module: os
           imports:
-            - createRequire
+            - tmpdir
         - module: path
           imports:
+            - basename
             - join
       internalDependencies:
         - file: ../cli-api.js
@@ -8018,6 +8277,9 @@ modules:
         - file: ./command.js
           imports:
             - resolveCommand
+        - file: ./commands/_atlas-map.js
+          imports:
+            - storedResultsFile
         - file: ./errors.js
           imports:
             - CliError
@@ -8026,6 +8288,7 @@ modules:
             - emitJson
         - file: ./record-reach.js
           imports:
+            - moduleSources
             - staticReach
             - Attribution
         - file: ./record-tables.js
@@ -8036,6 +8299,7 @@ modules:
         - file: ./version.js
           imports:
             - packageVersion
+            - peerVersions
       exports:
         - RECORD_SCHEMA
         - sha256
@@ -8050,6 +8314,7 @@ modules:
         - RecordEnvironment
         - RecordResult
         - RecordEntry
+        - RecordInput
         - EnvironmentChange
         - StreamDifference
         - ReplayEntryReport
@@ -8064,18 +8329,74 @@ modules:
         - RECORD_SCHEMA
         - sha256
         - argvFingerprint
+    src/cli/search-index.ts:
+      description: The word index behind `upt search`, shared with `upt explain`'s NOT COVERED answer (audit I5).
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./command.js
+          imports:
+            - CommandCtx
+          typeOnly: true
+      exports:
+        - SEARCH_SECTIONS
+        - STOP_WORDS
+        - fold
+        - buildSearchIndex
+        - matchEveryWord
+        - searchNameWords
+      interfaces:
+        - SearchEntry
+        - SearchMatch
+      functions:
+        - buildSearchIndex
+        - matchEveryWord
+        - searchNameWords
+      constants:
+        - SEARCH_SECTIONS
+        - STOP_WORDS
+        - fold
+    src/cli/statuses.ts:
+      description: The status words the CLI prints, defined once (audit I13).
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - STATUS_GLOSSARY
+        - definitionsFor
+        - statusMeaning
+        - glossaryText
+      interfaces:
+        - StatusDefinition
+      functions:
+        - definitionsFor
+        - statusMeaning
+        - glossaryText
+      constants:
+        - STATUS_GLOSSARY
     src/cli/version.ts:
       description: Runtime package-version lookup for the UPT CLI (`upt --version`, etc.).
       externalDependencies: []
       nodeDependencies:
         - module: fs
           imports:
+            - existsSync
             - readFileSync
+        - module: module
+          imports:
+            - createRequire
+        - module: path
+          imports:
+            - join
       internalDependencies: []
       exports:
         - packageVersion
+        - peerVersions
+        - formulaParserLabel
       functions:
         - packageVersion
+        - peerVersions
+        - formulaParserLabel
   root:
     src/cli-api.ts:
       description: CLI-facing barrel — the single stable entrypoint `bin/upt.mjs` imports.
@@ -8133,6 +8454,7 @@ modules:
         - file: ./composition/discovery.js
           imports:
             - rankDiscoveries
+            - ANCHOR_DEFAULT
           reExport: true
         - file: ./bridges/index.js
           imports:
@@ -8261,6 +8583,7 @@ modules:
             - problemFromResidualGap
             - makeResidualGap
             - loadSearchProblemFromJson
+            - resolveObservationsPath
             - parseExprJson
             - runProbeSearch
             - formatProbeReport
@@ -8329,6 +8652,7 @@ modules:
         - file: ./composition/symbolic-constants.js
           imports:
             - CONSTANTS
+            - CONSTANT_PROVENANCE
           reExport: true
         - file: ./composition/grounding.js
           imports:
@@ -8346,7 +8670,13 @@ modules:
         - file: ./atlas/derive-evidence.js
           imports:
             - deriveEvidence
+            - deriveCompositeEvidence
             - NO_PASSING_WITNESSES
+          reExport: true
+        - file: ./atlas/coverage.js
+          imports:
+            - summarizeEvidence
+            - ALL_EVIDENCE_TAGS
           reExport: true
         - file: ./atlas/witness-artifact.js
           imports:
@@ -8396,6 +8726,8 @@ modules:
             - findAtlasPath
             - enumerateAtlasRoutes
             - boundPath
+            - horizonOnRoute
+            - routeEntryModels
           reExport: true
         - file: ./atlas/composition-table.js
           imports:
@@ -8406,6 +8738,7 @@ modules:
             - PathBoundResult
             - PathBoundClaim
             - PathNoClaim
+            - AppliedTransport
           reExport: true
         - file: ./atlas/types.js
           imports:
@@ -8454,6 +8787,7 @@ modules:
         - parseDimensionSpec
         - predictMissingBridges
         - rankDiscoveries
+        - ANCHOR_DEFAULT
         - BRIDGE_EQUATIONS
         - auditCoverage
         - CONFRONTATIONS
@@ -8492,6 +8826,7 @@ modules:
         - problemFromResidualGap
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
@@ -8520,10 +8855,14 @@ modules:
         - describeComparison
         - describeComparisons
         - CONSTANTS
+        - CONSTANT_PROVENANCE
         - OSCILLATOR_FAMILY
         - ATLAS_FAMILIES
         - deriveEvidence
+        - deriveCompositeEvidence
         - NO_PASSING_WITNESSES
+        - summarizeEvidence
+        - ALL_EVIDENCE_TAGS
         - runWitnessRegistry
         - WITNESS_REGISTRY
         - runNumericWitness
@@ -8539,6 +8878,8 @@ modules:
         - findAtlasPath
         - enumerateAtlasRoutes
         - boundPath
+        - horizonOnRoute
+        - routeEntryModels
         - composeRelation
         - MissingLipschitzError
         - ConfrontationEntry
@@ -8572,6 +8913,7 @@ modules:
         - PathBoundResult
         - PathBoundClaim
         - PathNoClaim
+        - AppliedTransport
         - AtlasBridge
         - RegimeInequality
         - Witness
@@ -8609,6 +8951,7 @@ modules:
         - parseDimensionSpec
         - predictMissingBridges
         - rankDiscoveries
+        - ANCHOR_DEFAULT
         - BRIDGE_EQUATIONS
         - auditCoverage
         - CONFRONTATIONS
@@ -8659,6 +9002,7 @@ modules:
         - problemFromResidualGap
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
@@ -8694,12 +9038,16 @@ modules:
         - describeComparisons
         - CanonicalComparison
         - CONSTANTS
+        - CONSTANT_PROVENANCE
         - CandidateGrounding
         - CandidateReadiness
         - OSCILLATOR_FAMILY
         - ATLAS_FAMILIES
         - deriveEvidence
+        - deriveCompositeEvidence
         - NO_PASSING_WITNESSES
+        - summarizeEvidence
+        - ALL_EVIDENCE_TAGS
         - runWitnessRegistry
         - WITNESS_REGISTRY
         - runNumericWitness
@@ -8722,10 +9070,13 @@ modules:
         - findAtlasPath
         - enumerateAtlasRoutes
         - boundPath
+        - horizonOnRoute
+        - routeEntryModels
         - composeRelation
         - PathBoundResult
         - PathBoundClaim
         - PathNoClaim
+        - AppliedTransport
         - AtlasBridge
         - RegimeInequality
         - Witness
@@ -8931,7 +9282,15 @@ modules:
             - resolveToCatalogName
         - file: ../numerical/formula-registry.js
           imports:
+            - getFormulaParser
             - parsePhysics
+        - file: ../numerical/formula.js
+          imports:
+            - CompiledFormula
+          typeOnly: true
+        - file: ./catalog-graph.js
+          imports:
+            - CATALOG_GRAPH
         - file: ../dimensional/types.js
           imports:
             - DIMENSIONLESS
@@ -9007,13 +9366,18 @@ modules:
       internalDependencies: []
       exports:
         - CANONICAL_PREFACTORS
+        - CANONICAL_GROUP_PREFACTORS
         - canonicalPrefactor
+        - canonicalGroupPrefactor
       interfaces:
         - CanonicalPrefactor
+        - CanonicalGroupPrefactor
       functions:
         - canonicalPrefactor
+        - canonicalGroupPrefactor
       constants:
         - CANONICAL_PREFACTORS
+        - CANONICAL_GROUP_PREFACTORS
     src/composition/catalog-graph.ts:
       description: The full composition graph as a single constant — the 41 `BridgeEdge`s
       externalDependencies: []
@@ -9323,6 +9687,7 @@ modules:
             - format
       exports:
         - REGISTRY_ATTRIBUTES_BY_NAME
+        - ANCHOR_DEFAULT
         - vetLinkCandidate
         - rankDiscoveries
       interfaces:
@@ -9333,6 +9698,7 @@ modules:
         - rankDiscoveries
       constants:
         - REGISTRY_ATTRIBUTES_BY_NAME
+        - ANCHOR_DEFAULT
     src/composition/edge.ts:
       description: Composition graph — edges (bridges and laws) + validity domains
       externalDependencies: []
@@ -11360,6 +11726,7 @@ modules:
             - makeResidualGap
             - loadSearchProblemFromJson
             - searchProblemFromFile
+            - resolveObservationsPath
             - parseExprJson
           reExport: true
         - file: ./problem.js
@@ -11476,6 +11843,7 @@ modules:
         - makeResidualGap
         - loadSearchProblemFromJson
         - searchProblemFromFile
+        - resolveObservationsPath
         - parseExprJson
         - runProbeSearch
         - formatProbeReport
@@ -11683,6 +12051,7 @@ modules:
         - makeResidualGap
         - loadSearchProblemFromJson
         - searchProblemFromFile
+        - resolveObservationsPath
         - parseExprJson
         - ProblemFile
         - runProbeSearch
@@ -11885,6 +12254,7 @@ modules:
         - isGapKind
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - searchProblemFromFile
         - parseExprJson
       interfaces:
@@ -11893,6 +12263,7 @@ modules:
         - isGapKind
         - makeResidualGap
         - loadSearchProblemFromJson
+        - resolveObservationsPath
         - searchProblemFromFile
         - parseExprJson
     src/composition/probe/report.ts:
@@ -12116,8 +12487,10 @@ modules:
         - loadStudyFromJson
         - loadStudyFile
         - attachReplication
+        - replicationIndependence
         - studyCsvToRaw
         - chiSquareSurvival
+        - chiSquareCdf
         - fSurvival
         - effectiveSigma
         - exprToInfix
@@ -12133,6 +12506,8 @@ modules:
         - StudyCorrection
         - StudyBaseline
         - ProbeStudy
+        - ClosenessTest
+        - ReplicationIndependence
         - SetTest
         - ModelTest
         - CorrectionStep
@@ -12146,8 +12521,10 @@ modules:
         - loadStudyFromJson
         - loadStudyFile
         - attachReplication
+        - replicationIndependence
         - studyCsvToRaw
         - chiSquareSurvival
+        - chiSquareCdf
         - fSurvival
         - effectiveSigma
         - exprToInfix
@@ -12858,8 +13235,12 @@ modules:
             - B_WIEN_SI
       exports:
         - CONSTANTS
+        - CONSTANT_PROVENANCE
+      interfaces:
+        - ConstantProvenance
       constants:
         - CONSTANTS
+        - CONSTANT_PROVENANCE
     src/composition/uncertainty.ts:
       description: First-order uncertainty propagation through composition edges
       externalDependencies: []
@@ -12930,6 +13311,7 @@ modules:
         - UserEquation
         - EquationLanding
         - EquationHint
+        - ShortBinding
         - EquationAnalysis
       functions:
         - rewriteCatalogHyphens
@@ -17042,6 +17424,7 @@ modules:
             - BUILTIN_FUNCTION_NAMES
             - callBuiltinFunction
             - FormulaError
+            - unknownFunctionMessage
       exports:
         - loadMathtsFormulaParser
       functions:
@@ -17091,8 +17474,11 @@ modules:
       internalDependencies: []
       exports:
         - BUILTIN_FUNCTION_NAMES
+        - FUNCTION_EQUIVALENTS
+        - BUILTIN_FUNCTION_LIST
         - defaultFormulaParser
         - parseFormulaToAst
+        - unknownFunctionMessage
         - callBuiltinFunction
         - parseFormula
         - FormulaError
@@ -17102,10 +17488,13 @@ modules:
         - CompiledFormula
         - FormulaParser
       functions:
+        - unknownFunctionMessage
         - callBuiltinFunction
         - parseFormula
       constants:
         - BUILTIN_FUNCTION_NAMES
+        - FUNCTION_EQUIVALENTS
+        - BUILTIN_FUNCTION_LIST
         - defaultFormulaParser
         - parseFormulaToAst
     src/numerical/geodesic-integrator.ts:
@@ -17890,7 +18279,11 @@ dependencyGraph:
         - src/atlas/oscillators/bridges-limits.ts
         - src/atlas/oscillators/dimensions.ts
         - src/atlas/oscillators/index.ts
+        - src/atlas/oscillators/limit-witnesses.ts
         - src/atlas/oscillators/models.ts
+        - src/atlas/oscillators/norm-transport-witness.ts
+        - src/atlas/oscillators/norm-transport.ts
+        - src/atlas/oscillators/norms.ts
         - src/atlas/oscillators/pendulum-motion.ts
         - src/atlas/oscillators/phase-carriage.ts
         - src/atlas/oscillators/phase-translation.ts
@@ -18074,12 +18467,15 @@ dependencyGraph:
         - src/cli/commands/search.ts
         - src/cli/commands/symbolic.ts
         - src/cli/errors.ts
+        - src/cli/expr-print.ts
         - src/cli/graphs.ts
         - src/cli/main.ts
         - src/cli/output.ts
         - src/cli/record-reach.ts
         - src/cli/record-tables.ts
         - src/cli/record.ts
+        - src/cli/search-index.ts
+        - src/cli/statuses.ts
         - src/cli/version.ts
     - name: Root
       files:
@@ -18257,19 +18653,19 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 376
+  totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 80492
-  totalExports: 2705
+  totalLinesOfCode: 83226
+  totalExports: 2777
   totalClasses: 60
-  totalInterfaces: 421
-  totalFunctions: 653
+  totalInterfaces: 436
+  totalFunctions: 690
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 671
-  totalReExports: 1320
-  totalTypeOnlyImports: 517
+  totalConstants: 691
+  totalReExports: 1335
+  totalTypeOnlyImports: 523
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 67
+  unusedExportsCount: 65

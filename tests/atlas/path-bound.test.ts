@@ -11,27 +11,32 @@
  * ⚠ Two corrections to the S2.2 brief are pinned here as tests, because a
  * correction that lives only in a report gets re-introduced:
  *
- * 1. The brief expects `findPath('oscillators', 'model-pendulum', 'model-lc')`
- *    to carry the bound `(1, 0.0025)`. It carries NO bound. That path is
- *    `approximation` then `exact-equivalence`, and that cell of
- *    `COMPOSITION_TABLE` is `'no-composite-claim'` — deliberately, by Phase 1
- *    §2.2 item 5. The brief's own load-bearing rule forbids the number the
- *    brief asks for, and the very path it names is the case that proves it.
+ * 1. The brief expected `findPath('oscillators', 'model-pendulum', 'model-lc')`
+ *    to carry the bound `(1, 0.0025)`. When it was written, that path carried
+ *    NO bound: `approximation` then `exact-equivalence` was a silent cell of
+ *    `COMPOSITION_TABLE`. The cell is now `'approximation'`
+ *    (docs/planning/ADR-transported-norm-composition.md), and the path carries
+ *    a bound ONLY because `ab-spring-lc` declares a witnessed transport of the
+ *    relative period norm; the load-bearing test therefore walks a cell that is
+ *    still silent (`exact-equivalence` then `approximation`).
  * 2. `0.0025` is `θ0²/16` at `θ0 = 0.2`, but `AB_PENDULUM_LINEAR.bound.delta`
- *    is `0.5²/16 = 0.015625` — the worst case over the recorded regime
- *    `θ0 ≤ 0.5`. No field parameterises a bound by operating point, so no
- *    function here can produce `0.0025`.
+ *    is the exact error at the regime edge `θ0 = 0.5` — the worst case over
+ *    the recorded regime. `boundPath` composes the supremum; the point value is
+ *    the CLI's `deltaAt` substitution, not a field of the path.
  */
 
 import { describe, expect, it } from 'vitest';
 
-import { boundPath, findAtlasPath, findPath } from '../../src/atlas/path-bound.js';
+import { boundPath, findAtlasPath, findPath, horizonOnRoute } from '../../src/atlas/path-bound.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { composeBoundPath, IDENTITY_BOUND } from '../../src/atlas/error-algebra.js';
 import { composeRelation } from '../../src/atlas/composition-table.js';
 import { MissingLipschitzError } from '../../src/atlas/types.js';
-import type { ApproximationBound, AtlasBridge, RelationType } from '../../src/atlas/types.js';
-import { AB_PENDULUM_LINEAR } from '../../src/atlas/oscillators/bridges-limits.js';
+import type { ApproximationBound, AtlasBridge, NormTransport, RelationType } from '../../src/atlas/types.js';
+import { AB_PENDULUM_LINEAR, pendulumPeriodErrorAt } from '../../src/atlas/oscillators/bridges-limits.js';
+import { BRIDGE_SPRING_LC } from '../../src/atlas/oscillators/bridges-exact.js';
+import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT } from '../../src/atlas/oscillators/norm-transport.js';
+import { RELATIVE_PERIOD_NORM } from '../../src/atlas/oscillators/norms.js';
 import { propagateUncertainty } from '../../src/composition/uncertainty.js';
 import type { BridgeEdge } from '../../src/composition/edge.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -157,11 +162,12 @@ describe('boundPath — the refusals', () => {
   it('LOAD-BEARING: a path crossing a no-composite-claim cell yields NO number', () => {
     // Guard the premise: if this cell is ever widened, this test must be
     // rewritten deliberately rather than silently start passing for a new
-    // reason.
-    expect(composeRelation('approximation', 'exact-equivalence')).toBe('no-composite-claim');
+    // reason. It was, once: it walked pendulum → lc until the approximation
+    // then exact-equivalence cell was widened by the transported-norm ADR.
+    expect(composeRelation('exact-equivalence', 'approximation')).toBe('no-composite-claim');
 
-    const path = findPath('oscillators', 'model-pendulum', 'model-lc');
-    expect(path).not.toBeNull();
+    const path = findPath('oscillators', 'model-rlc', 'model-first-order');
+    expect(path?.map((b) => b.id)).toEqual(['ab-damped-rlc', 'ab-damped-massless']);
     const result = boundPath(path!);
 
     expect(result.kind).toBe('no-claim');
@@ -238,10 +244,10 @@ describe('boundPath — the refusals', () => {
   it('a no-composite-claim path still reports that reason when a bound is unanalysed', () => {
     // Relation is the first gate. This path fails BOTH the relation cell and
     // the uniformity check; the reported reason must stay the relation.
-    expect(composeRelation('approximation', 'exact-equivalence')).toBe('no-composite-claim');
+    expect(composeRelation('exact-equivalence', 'approximation')).toBe('no-composite-claim');
     const result = boundPath([
-      bridgeOf('approx-unanalysed', 'approximation', bound(1, 0.01, 'relative period error', null)),
       bridgeOf('ex-bare', 'exact-equivalence', undefined),
+      bridgeOf('approx-unanalysed', 'approximation', bound(1, 0.01, 'relative period error', null)),
     ]);
     expect(result.kind).toBe('no-claim');
     if (result.kind !== 'no-claim') throw new Error('unreachable');
@@ -406,5 +412,113 @@ describe('boundPath — the arithmetic, where a claim is actually licensed', () 
     expect(result.bound).toEqual(IDENTITY_BOUND);
     expect(result.norm).toBeNull();
     expect(result.relation).toBe('exact-equivalence');
+  });
+});
+
+describe('boundPath — a declared norm transport carries a bound across an exact map (ADR)', () => {
+  /** An approximation into `conclusion` with a bound in `norm`, entering from `premise`. */
+  const approxInto = (id: string, premise: string, conclusion: string, norm: string): AtlasBridge => ({
+    ...bridgeOf(id, 'approximation', bound(1, 0.01, norm)),
+    premises: [premise],
+    conclusion,
+  });
+  const springLcWith = (normTransports: readonly NormTransport[] | undefined): AtlasBridge => ({
+    ...BRIDGE_SPRING_LC,
+    normTransports,
+  });
+
+  it('ACCEPTANCE: pendulum → lc composes, in the relative period norm, because ab-spring-lc declares it', () => {
+    const path = findPath('oscillators', 'model-pendulum', 'model-lc');
+    expect(path?.map((b) => b.id)).toEqual(['ab-pendulum-linear', 'ab-spring-lc']);
+    const result = boundPath(path!);
+    expect(result.kind).toBe('bound');
+    if (result.kind !== 'bound') throw new Error(result.detail);
+    expect(result.relation).toBe('approximation');
+    expect(result.norm).toBe(RELATIVE_PERIOD_NORM);
+    // K_Φ = 1 and nothing added, so the composite is the pendulum bound itself.
+    // Independent method: the closed-form elliptic error at the regime edge.
+    expect(result.bound.K).toBe(1);
+    expect(Math.abs(result.bound.delta - pendulumPeriodErrorAt({ theta0: 0.5 }))).toBeLessThan(1e-15);
+    expect(result.terminal).toBe(false);
+    expect(result.transports).toHaveLength(1);
+    expect(result.transports![0]).toMatchObject({ index: 1, bridgeId: 'ab-spring-lc' });
+    expect(result.transports![0]!.transport.id).toBe('nt-spring-lc-relative-period');
+  });
+
+  it('CONTROL: the same route with the declaration removed is refused, naming the missing transport', () => {
+    const result = boundPath([AB_PENDULUM_LINEAR, springLcWith(undefined)]);
+    expect(result.kind).toBe('no-claim');
+    if (result.kind !== 'no-claim') throw new Error('unreachable');
+    expect(result.reason).toBe('norm-not-stated');
+    expect(result.detail).toContain(
+      `'ab-spring-lc' declares no norm transport from '${RELATIVE_PERIOD_NORM}' for model-spring → model-lc`,
+    );
+    expect(Object.hasOwn(result, 'bound')).toBe(false);
+  });
+
+  for (const norm of ['absolute period error, in seconds', 'sup |x − x_reduced| over one period, in metres']) {
+    it(`a bound in '${norm}' is still refused through ab-spring-lc, and the refusal names what is declared`, () => {
+      const result = boundPath([approxInto('ax-synthetic', 'model-pendulum', 'model-spring', norm), BRIDGE_SPRING_LC]);
+      expect(result.kind).toBe('no-claim');
+      if (result.kind !== 'no-claim') throw new Error('unreachable');
+      expect(result.reason).toBe('norm-not-stated');
+      expect(result.detail).toContain(`declares no norm transport from '${norm}' for model-spring → model-lc`);
+      expect(result.detail).toContain(`it declares only '${RELATIVE_PERIOD_NORM}' → '${RELATIVE_PERIOD_NORM}'`);
+    });
+  }
+
+  it('the declaration is one-way: the same norm crossing lc → spring is refused', () => {
+    const result = boundPath([approxInto('ax-into-lc', 'model-x', 'model-lc', RELATIVE_PERIOD_NORM), BRIDGE_SPRING_LC]);
+    expect(result.kind).toBe('no-claim');
+    if (result.kind !== 'no-claim') throw new Error('unreachable');
+    expect(result.reason).toBe('norm-not-stated');
+    expect(result.detail).toContain('for model-lc → model-spring');
+  });
+
+  it('a transport whose time map is not uniform is not applied', () => {
+    const nonUniform: NormTransport = {
+      ...SPRING_LC_RELATIVE_PERIOD_TRANSPORT,
+      timeMap: { ...SPRING_LC_RELATIVE_PERIOD_TRANSPORT.timeMap, uniform: false },
+    };
+    const result = boundPath([AB_PENDULUM_LINEAR, springLcWith([nonUniform])]);
+    expect(result.kind).toBe('no-claim');
+    if (result.kind !== 'no-claim') throw new Error('unreachable');
+    expect(result.reason).toBe('norm-not-stated');
+    expect(result.detail).toContain('non-uniform time map');
+  });
+
+  it('K multiplies the whole bound: a K = 2 transport gives (2·K_A, 2·δ_A), and its `to` norm is the result', () => {
+    const doubled: NormTransport = { ...SPRING_LC_RELATIVE_PERIOD_TRANSPORT, K: 2, to: 'a different norm' };
+    const result = boundPath([AB_PENDULUM_LINEAR, springLcWith([doubled])]);
+    expect(result.kind).toBe('bound');
+    if (result.kind !== 'bound') throw new Error('unreachable');
+    expect(result.bound.K).toBe(2);
+    expect(result.bound.delta).toBe(2 * AB_PENDULUM_LINEAR.bound!.delta);
+    expect(result.norm).toBe('a different norm');
+  });
+
+  it('an exact map with no declaration still refuses after the widening: telegraph → fick → heat', () => {
+    const path = findPath('diffusion', 'model-telegraph', 'model-heat');
+    expect(path?.map((b) => b.id)).toEqual(['ab-telegraph-diffusion', 'ab-heat-diffusion']);
+    const result = boundPath(path!);
+    expect(result.kind).toBe('no-claim');
+    if (result.kind !== 'no-claim') throw new Error('unreachable');
+    expect(result.reason).toBe('norm-not-stated');
+    expect(result.detail).toContain("'ab-heat-diffusion' declares no norm transport");
+    expect(result.detail).toContain('model-fick → model-heat');
+  });
+
+  it('horizonOnRoute restates the pendulum horizon through the transport: 10 T0 holds, 200 T0 does not', () => {
+    const path = findPath('oscillators', 'model-pendulum', 'model-lc')!;
+    const claim = boundPath(path);
+    const h = horizonOnRoute(path, claim.kind === 'bound' ? (claim.transports ?? []) : [], 0);
+    expect(h).not.toBeNull();
+    expect(h!.restatedBy.map((a) => a.transport.id)).toEqual(['nt-spring-lc-relative-period']);
+    expect(h!.holds(10, { T0: 1, theta0: 0.2 })).toBe(true);
+    expect(h!.holds(200, { T0: 1, theta0: 0.2 })).toBe(false);
+    // A step with no bound has no horizon to restate.
+    expect(horizonOnRoute(path, [], 1)).toBeNull();
+    // Without the transports the horizon is the bridge's own, unrestated.
+    expect(horizonOnRoute(path, [], 0)!.restatedBy).toEqual([]);
   });
 });

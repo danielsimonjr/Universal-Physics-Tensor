@@ -14,9 +14,10 @@ const FLAGS: FlagSpec[] = [
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt priority
+const HELP = `upt priority [--source=catalog|canonical|both]
         Triage the speculative bridges by structural DECIDABILITY against
-        established physics (Tiers 1-3). NOT a credibility ranking.`;
+        established physics (Tiers 1-3). NOT a credibility ranking.
+        --source picks the graph (default catalog).`;
 
 const EPISTEMICS = '(review/confrontation priority — NOT a credibility ranking)';
 

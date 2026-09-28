@@ -26,6 +26,7 @@ import { MissingHorizonError } from '../types.js';
 import type { ApproximationBound, AtlasBridge, RelationContract, Regime } from '../types.js';
 import { relationContractOf } from './bridges-exact.js';
 import { DAMPING, SPRING_CONSTANT } from './dimensions.js';
+import { RELATIVE_PERIOD_NORM } from './norms.js';
 import { ACCELERATION, LENGTH, MASS } from '../../dimensional/types.js';
 
 const FAMILY = 'oscillators';
@@ -178,7 +179,7 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
     delta: pendulumPeriodErrorAt({ theta0: 0.5 }),
     deltaAt: pendulumPeriodErrorAt,
     deltaAtBasis: 'closed-form',
-    norm: 'relative period error, normalized by the value of the reduced model',
+    norm: RELATIVE_PERIOD_NORM,
     domain: 'θ0 ≤ 0.5 rad',
     horizon: 't ≪ 16 T0/θ0²; machine form t < 4 T0/θ0², the π/2-drift time',
     // ⚠ The machine form is a QUARTER of the prose scale, and it must be.

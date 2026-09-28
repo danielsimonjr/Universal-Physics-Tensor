@@ -6,6 +6,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { rk4 } from './_ode.js';
+import { measureChainDispersionError } from '../../src/atlas/oscillators/limit-witnesses.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 
 import { dim } from '../../src/dimensional/ast-builders.js';
@@ -22,6 +23,9 @@ import {
 import { CUBIC_STIFFNESS, SPRING_CONSTANT } from '../../src/atlas/oscillators/dimensions.js';
 import { getAtlasModel } from '../../src/atlas/oscillators/models.js';
 import { ATLAS_REJECTIONS } from '../../src/atlas/oscillators/rejections.js';
+import { runNumericWitness } from '../../src/atlas/witness-numeric.js';
+import { WITNESS_REGISTRY } from '../../src/atlas/witness-specs.js';
+import type { RegisteredNumericWitness } from '../../src/atlas/witness-specs.js';
 
 describe('W9 — chain → wave coarse-graining, dispersion', () => {
   const kappa = 1;
@@ -231,5 +235,59 @@ describe('W9b — the chain integrated on a ring: dispersion from the dynamics, 
 
   it('NEGATIVE CONTROL: a cubic on-site force breaks superposition by more than 1e-3', () => {
     expect(superpositionGap(ring(kappa, 0.5))).toBeGreaterThan(1e-3);
+  });
+});
+
+describe('W9 — the registered in-process spec: the ring integrated, against the dispersion formulas', () => {
+  const entry = (): RegisteredNumericWitness => {
+    const e = WITNESS_REGISTRY.find((w) => w.spec.id === 'W9');
+    if (e === undefined || e.kind !== 'numeric') throw new Error('W9: not a registered numeric witness');
+    return e;
+  };
+  const qaAt = (r: number): number => (2 * Math.PI) / (16 * r);
+
+  it('is registered under ab-chain-wave and attributed to the preserved long-wavelength dispersion', () => {
+    const e = entry();
+    expect(e.recordId).toBe('ab-chain-wave');
+    expect(e.claim?.name).toBe('preserves');
+    expect(e.claim?.name === 'preserves' ? e.claim.item : null).toBe('long-wavelength dispersion ω ≈ c q');
+    expect(BRIDGE_CHAIN_WAVE.preserves).toContain('long-wavelength dispersion ω ≈ c q');
+    expect(e.claim?.at(e.spec.fineResolution)).toEqual({ qa: qaAt(2) });
+  });
+
+  it('integrates the ring: its value equals (1 − ω_lattice/ω_continuum)/((qa)²/24) from the formulas within 1e-9', () => {
+    // Second method: the spec reads ω off the integrated motion; the formulas are the closed-form dispersions.
+    const { spec } = entry();
+    for (const r of [spec.coarseResolution, spec.fineResolution]) {
+      const qa = qaAt(r);
+      const formula = (1 - latticeDispersion(qa, 1, 1, 1) / continuumDispersion(qa, 1, 1, 1)) / dispersionErrorApproximation(qa);
+      expect(Math.abs(spec.evaluate(r) - formula)).toBeLessThan(1e-9);
+    }
+  });
+
+  it('checks within 0.5% of (qa)²/24 at N = 32, the deviation is −(qa)²/80, and doubling N cuts it about 4×', () => {
+    const { spec } = entry();
+    const qa = qaAt(spec.fineResolution);
+    expect(spec.evaluate(spec.fineResolution) - 1).toBeCloseTo(-(qa * qa) / 80, 5);
+    const r = runNumericWitness(spec);
+    expect(r.status).toBe('checked');
+    expect(r.convergence!.ratio).toBeGreaterThan(3.9);
+    expect(r.convergence!.ratio).toBeLessThan(4.1);
+  });
+
+  it('the measurement itself, off the fixture: the integrated 1 − ω/(cq) at N = 24 equals the formulas within 1e-9', () => {
+    const qa = (2 * Math.PI) / 24;
+    const formula = 1 - latticeDispersion(qa, 1, 1, 1) / continuumDispersion(qa, 1, 1, 1);
+    expect(Math.abs(measureChainDispersionError(24) - formula)).toBeLessThan(1e-9);
+  });
+
+  it('NEGATIVE CONTROL: the coefficient (qa)²/12 in place of (qa)²/24 is refuted', () => {
+    const { spec } = entry();
+    const wrong = { ...spec, evaluate: (r: number) => spec.evaluate(r) / 2 };
+    expect(runNumericWitness(wrong).status).toBe('refuted');
+  });
+
+  it('META-CHECK: the same assertion FAILS on the true spec (the control can fail)', () => {
+    expect(runNumericWitness(entry().spec).status).not.toBe('refuted');
   });
 });

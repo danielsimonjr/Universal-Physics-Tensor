@@ -19,7 +19,7 @@ import type {
 import { problemFromResidualGap } from './frontier.js';
 import { asDatasetSafe, loadSplitDatasetsFromJson } from './dataset.js';
 
-/** @internal */
+/** Return whether a string names a supported frontier-gap kind for probe problems. @internal */
 export function isGapKind(s: string): s is FrontierGapKind {
   return (
     s === 'prediction-residual' ||
@@ -94,6 +94,17 @@ export function loadSearchProblemFromJson(path: string): SearchProblem {
   return searchProblemFromFile(raw, path);
 }
 
+/**
+ * The observations file a problem file names, resolved against the problem file's directory
+ * (the working directory for an inline problem), or null when it names none. @internal
+ */
+export function resolveObservationsPath(raw: Pick<ProblemFile, 'observationsPath'>, source = 'inline'): string | null {
+  if (!raw.observationsPath) return null;
+  return isAbsolute(raw.observationsPath)
+    ? raw.observationsPath
+    : resolve(source === 'inline' ? process.cwd() : dirname(source), raw.observationsPath);
+}
+
 /** Build a SearchProblem from an already-parsed problem file. @internal */
 export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): SearchProblem {
   const kindRaw = raw.gap?.kind ?? 'unexplained-observation';
@@ -109,10 +120,8 @@ export function searchProblemFromFile(raw: ProblemFile, source = 'inline'): Sear
   const governing = raw.governing.map(varFromJson);
   let exploratory: ProbeDataset | undefined;
   let holdout: ProbeDataset | undefined;
-  if (raw.observationsPath) {
-    const observationsPath = isAbsolute(raw.observationsPath)
-      ? raw.observationsPath
-      : resolve(source === 'inline' ? process.cwd() : dirname(source), raw.observationsPath);
+  const observationsPath = resolveObservationsPath(raw, source);
+  if (observationsPath !== null) {
     const split = loadSplitDatasetsFromJson(observationsPath);
     exploratory = split.exploratory;
     holdout = split.holdout;

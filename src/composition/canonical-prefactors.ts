@@ -10,7 +10,13 @@
  * carries a constant of its own.
  *
  * Every quote is verbatim wikitext from the pinned Wikipedia revision in its
- * locator, fetched and matched on 2026-09-25.
+ * locator, fetched and matched on 2026-09-25 (the first nine) or 2026-09-27 (the
+ * rest, and the group prefactor below).
+ *
+ * A prefactor that depends on a dimensionless group the entry's dimensional
+ * record does not carry (CE-sound-speed's √γ) is not a constant, so it is not in
+ * CANONICAL_PREFACTORS and canonicalPrefactor does not return it: it is in
+ * CANONICAL_GROUP_PREFACTORS, which only a caller that can bind the group uses.
  *
  * @module composition/canonical-prefactors
  */
@@ -85,9 +91,86 @@ export const CANONICAL_PREFACTORS: readonly CanonicalPrefactor[] = [
     quote: String.raw`D = \frac{k_\text{B} T}{6\pi\,\eta\,r}.`,
     locator: "Wikipedia, 'Einstein relation (kinetic theory)', revision 1353047788, wikitext line 79",
   },
+  {
+    id: 'CE-simple-harmonic-frequency',
+    prefactor: 1,
+    quote: String.raw`\omega = \sqrt{\frac k m}.`,
+    locator: "Wikipedia, 'Harmonic oscillator', revision 1373924880, wikitext line 44",
+  },
+  {
+    id: 'CE-spring-potential-energy',
+    prefactor: 0.5,
+    quote: String.raw`U_\mathrm{el}(x) = \tfrac 1 2 kx^2`,
+    locator: "Wikipedia, 'Hooke's law', revision 1375736650, wikitext line 146",
+  },
+  {
+    id: 'CE-oscillator-energy',
+    prefactor: 0.5,
+    quote: String.raw`E = K + U = \tfrac12 k A^2.`,
+    locator: "Wikipedia, 'Simple harmonic motion', revision 1347475303, wikitext line 80",
+  },
+  {
+    // The source writes the tension T; the canonical entry calls it F.
+    id: 'CE-string-wave-speed',
+    prefactor: 1,
+    quote: String.raw`v=\sqrt{T\over\mu},`,
+    locator: "Wikipedia, 'String vibration', revision 1306385524, wikitext line 40",
+  },
+  {
+    // The three Planck units are all-constant: compared once, at the SI values (persona finding W5).
+    id: 'CE-planck-length',
+    prefactor: 1,
+    quote: String.raw`<math>l_\text{P} = \sqrt{\frac{\hbar G}{c^3}}</math>`,
+    locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 77",
+  },
+  {
+    id: 'CE-planck-mass',
+    prefactor: 1,
+    quote: String.raw`<math>m_\text{P} = \sqrt{\frac{\hbar c}{G}}</math>`,
+    locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 82",
+  },
+  {
+    id: 'CE-planck-time',
+    prefactor: 1,
+    quote: String.raw`<math>t_\text{P} = \sqrt{\frac{\hbar G}{c^5}}</math>`,
+    locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 87",
+  },
 ];
 
 /** The sourced prefactor of a canonical entry, or `undefined`. @internal */
 export function canonicalPrefactor(id: string): number | undefined {
   return CANONICAL_PREFACTORS.find((p) => p.id === id)?.prefactor;
+}
+
+/**
+ * A sourced prefactor that is a power of a dimensionless group: the factor in
+ * front of the entry's AST or monomial is `coefficient · group^exponent`. @internal
+ */
+export interface CanonicalGroupPrefactor {
+  readonly id: string;
+  /** The group as the entry's formula names it (`'gamma'` for γ). */
+  readonly group: string;
+  readonly coefficient: number;
+  readonly exponent: number;
+  readonly quote: string;
+  readonly locator: string;
+}
+
+/** The sourced group prefactors, by canonical id. @internal */
+export const CANONICAL_GROUP_PREFACTORS: readonly CanonicalGroupPrefactor[] = [
+  {
+    // c = √(γ p/ρ): the monomial p^½ ρ^-½ times γ^½, γ the adiabatic index.
+    id: 'CE-sound-speed',
+    group: 'gamma',
+    coefficient: 1,
+    exponent: 0.5,
+    quote: String.raw`c = \sqrt{\gamma \cdot {p \over \rho}},`,
+    locator: "Wikipedia, 'Speed of sound', revision 1373106219, wikitext line 142",
+  },
+];
+
+/** The prefactor of a group-dependent entry at a value of its group, or `undefined`. @internal */
+export function canonicalGroupPrefactor(id: string, groupValue: number): number | undefined {
+  const p = CANONICAL_GROUP_PREFACTORS.find((q) => q.id === id);
+  return p === undefined ? undefined : p.coefficient * groupValue ** p.exponent;
 }

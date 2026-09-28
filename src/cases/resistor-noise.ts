@@ -153,6 +153,7 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
       },
     ],
   },
+  /** Evaluate the measured Johnson-Nyquist RMS voltage and instrument-regime checks for the supplied inputs. */
   run(i) {
     requirePositive(ID, i, ['T_K', 'R_ohm', 'R_in_ohm', 'f_hi_Hz', 't_avg_s']);
     const { T_K: T, R_ohm: R, R_in_ohm: Rin, C_in_F: C, f_lo_Hz: fLo, f_hi_Hz: fHi, t_avg_s: tAvg } = i as Record<string, number>;

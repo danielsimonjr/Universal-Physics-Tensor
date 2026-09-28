@@ -25,13 +25,16 @@ import { CONSTANTS as SYMBOLIC_CONSTANTS } from '../composition/symbolic-constan
 import type { Dimension } from '../dimensional/types.js';
 import { unitTables } from '../dimensional/units.js';
 
+/** A serialisable primitive value that can be fingerprinted in a constant table. */
 export type TableValue = number | string | boolean;
 
+/** A named table of constants and the SHA-256 fingerprint of its serialised values. */
 export interface ConstantTable {
   values: Record<string, TableValue>;
   sha256: string;
 }
 
+/** The source shape used to build a constant table. */
 export type TableKind = 'module-exports' | 'object';
 
 const sha256 = (s: string): string => createHash('sha256').update(s).digest('hex');

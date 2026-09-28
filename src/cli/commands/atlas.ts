@@ -22,9 +22,12 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
+import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--run', valueStyle: 'none' },
+  { name: '--evidence', valueStyle: 'none' },
+  { name: '--stored', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
 ];
 
@@ -60,6 +63,7 @@ function formatUniformity(uniformity: readonly string[] | null): string {
 }
 
 const HELP = `upt atlas [<bridge-id>] [--run] [--json]
+       upt atlas --evidence [--stored | --run] [--json]
         One atlas bridge with every qualification visible: relation, premises
         and conclusion, transformation and inverse, side conditions, regime
         inequalities, bound with its horizon and uniformity, what it preserves and loses,
@@ -68,14 +72,22 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         every bridge of every family.
         Evidence is shown BY CLAIM (correspondence, regime, bound, horizon,
         preserves), each citing only what the record's structure links to it;
-        a witness is listed under the bound only where the witness registry
-        attributes it, and the rest are listed apart. Every witness shows its
+        a witness is listed under the bound (sharp, or at one point for a bound
+        that is not sharp) or under a preserved property only where the witness
+        registry attributes it, and the rest are listed apart. Every witness shows its
         execution status: a witness's name is not
         its result. --run executes the bridge's in-process registered
         witnesses now and reports checked / refuted / unresolved separately
         (exit 3 if any is refuted).
+        --evidence, with no id, is the atlas-wide evidence view: every bridge of
+        every family with its DERIVED evidence, the tags undecided without
+        witness results, per-tag counts (zeros included) and each declared norm
+        transport's witness. --stored derives it from the committed witness
+        results, --run from every registered witness run now (exit 3 if any is
+        refuted); either implies --evidence when no id is given.
         e.g.  upt atlas ab-pendulum-linear
-              upt atlas ab-walk-diffusion --run`;
+              upt atlas ab-walk-diffusion --run
+              upt atlas --evidence --run`;
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -87,6 +99,31 @@ async function run(ctx: CommandCtx): Promise<number> {
   const rows = families.flatMap((f) => f.bridges.map((b) => ({ family: f.family, bridge: b })));
   const models = new Map(families.flatMap((f) => f.models.map((m) => [m.id, m] as const)));
 
+  const stored = args.flags.has('stored');
+  const running = args.flags.has('run');
+  if (id !== undefined && (args.flags.has('evidence') || stored)) {
+    throw new CliError(
+      'upt atlas: --evidence and --stored are the atlas-wide view (no bridge id); one bridge already shows its evidence ' +
+        'by claim, and --run runs its witnesses',
+    );
+  }
+  if (id === undefined && (args.flags.has('evidence') || stored || running)) {
+    if (stored && running) throw new CliError('upt atlas: pick one witness-results source: --stored (the committed artifact) or --run (run now)');
+    const results: WitnessResults | null = stored
+      ? loadStoredResults('upt atlas')
+      : running
+        ? await runResults(api, new Set(rows.map((r) => r.bridge.id)))
+        : null;
+    const view = buildAtlasEvidenceView(api, results);
+    const code = results?.mode === 'run' && results.rows.some((r) => r.status === 'refuted') ? EXIT_CHECK_FAILED : 0;
+    if (wantJson) {
+      emitJson({ command: 'atlas', options: { view: 'evidence', results: results?.mode ?? null }, result: view }, ctx.write);
+      return code;
+    }
+    for (const line of atlasEvidenceText(view)) out(line);
+    return code;
+  }
+
   if (id === undefined) {
     const listing = rows.map((r) => ({ id: r.bridge.id, family: r.family, relation: r.bridge.relation }));
     if (wantJson) {
@@ -95,7 +132,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
     out(`\n${listing.length} atlas bridges across ${families.length} families:`);
     for (const l of listing) out(`  ${l.id.padEnd(28)} ${l.relation.padEnd(22)} [${l.family}]`);
-    out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification.');
+    out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge\'s derived evidence.');
     return 0;
   }
 
@@ -113,8 +150,16 @@ async function run(ctx: CommandCtx): Promise<number> {
   // tests/atlas/witness-claims.test.ts checks each attribution against the spec.
   const registered = api.WITNESS_REGISTRY.filter((e) => e.recordId === b.id);
   const boundWitnesses = registered.flatMap((e) =>
-    e.kind === 'numeric' && e.claim?.name === 'bound' ? [{ id: e.spec.id, at: e.claim.at(e.spec.fineResolution) }] : [],
+    e.kind === 'numeric' && (e.claim?.name === 'bound' || e.claim?.name === 'bound-holds-at')
+      ? [{ id: e.spec.id, claim: e.claim.name, at: e.claim.at(e.spec.fineResolution) }]
+      : [],
   );
+  const preservesWitnesses = registered.flatMap((e) =>
+    e.kind === 'numeric' && e.claim?.name === 'preserves'
+      ? [{ id: e.spec.id, item: e.claim.item, at: e.claim.at(e.spec.fineResolution) }]
+      : [],
+  );
+  const preservedWithWitness = new Set(preservesWitnesses.map((w) => w.item)).size;
   const notTheRef = b.formalRef === undefined ? '' : '; the formal reference is not attributed to it';
   const n = b.regime.inequalities.length;
   const claims = {
@@ -154,13 +199,19 @@ async function run(ctx: CommandCtx): Promise<number> {
       text: b.bound === undefined ? 'none stated (no bound)' : `machine form recorded${notTheRef}`,
     },
     preserves: {
-      evidence: null,
-      text: b.preserves.length === 0 ? 'none stated' : 'no evidence is attributed to a preserved property',
+      evidence: preservesWitnesses.length === 0 ? null : preservesWitnesses,
+      text:
+        b.preserves.length === 0
+          ? 'none stated'
+          : preservesWitnesses.length === 0
+            ? 'no evidence is attributed to a preserved property'
+            : `${preservedWithWitness} of ${b.preserves.length} stated properties ${preservedWithWitness === 1 ? 'has' : 'have'} an attributed witness`,
     },
   };
 
   const registeredIds = new Set(registered.map((e) => e.spec.id));
-  const claimOf = (id: string): 'bound' | null => (boundWitnesses.some((w) => w.id === id) ? 'bound' : null);
+  const claimOf = (id: string): 'bound' | 'bound-holds-at' | 'preserves' | null =>
+    boundWitnesses.find((w) => w.id === id)?.claim ?? (preservesWitnesses.some((w) => w.id === id) ? 'preserves' : null);
   const ran = args.flags.has('run') ? (await api.runWitnessRegistry(registered)).results : null;
   const witnessExecution = b.witnesses.map((w) => {
     const result = ran?.find((r) => r.witnessId === w.id);
@@ -183,6 +234,37 @@ async function run(ctx: CommandCtx): Promise<number> {
     };
   });
   const runSummary = ran === null ? null : summarizeWitnessRuns(ran);
+
+  // A declared norm transport's witness is registered under the transport id,
+  // not the bridge's: it checks how the map acts on one norm, not the bridge.
+  const declared = b.normTransports ?? [];
+  const transportEntries = api.WITNESS_REGISTRY.filter((e) => declared.some((nt) => nt.id === e.recordId));
+  const ranTransports = args.flags.has('run') ? (await api.runWitnessRegistry(transportEntries)).results : null;
+  const transportSummary = ranTransports === null ? null : summarizeWitnessRuns(ranTransports);
+  const normTransports =
+    b.relation !== 'exact-equivalence'
+      ? null
+      : declared.map((nt) => {
+          const r = ranTransports?.find((x) => x.recordId === nt.id && x.witnessId === nt.witness.id);
+          const registeredHere = transportEntries.some((e) => e.recordId === nt.id && e.spec.id === nt.witness.id);
+          return {
+            id: nt.id,
+            fromModel: nt.fromModel,
+            toModel: nt.toModel,
+            from: nt.from,
+            to: nt.to,
+            K: nt.K,
+            domain: nt.domain,
+            derivation: nt.derivation,
+            timeMap: { map: nt.timeMap.map, uniform: nt.timeMap.uniform, horizon: nt.timeMap.horizon },
+            uniformity: nt.uniformity,
+            witness: { id: nt.witness.id, kind: nt.witness.kind, test: nt.witness.test, tolerance: nt.witness.tolerance ?? null },
+            basis: nt.basis,
+            status: r === undefined ? (registeredHere ? ('runnable' as const) : ('not-observed' as const)) : r.status,
+            ...(r?.reason === undefined ? {} : { reason: r.reason }),
+          };
+        });
+  const exitCode = Math.max(runSummary?.exitCode ?? 0, transportSummary?.exitCode ?? 0);
 
   const report = {
     id: b.id,
@@ -223,6 +305,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     claims,
     witnessExecution,
     witnessRun: runSummary,
+    normTransports,
+    ...(transportSummary === null ? {} : { normTransportRun: transportSummary }),
   };
 
   if (wantJson) {
@@ -238,7 +322,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       },
       ctx.write,
     );
-    return runSummary?.exitCode ?? 0;
+    return exitCode;
   }
 
   const list = (label: string, items: readonly string[]): void => {
@@ -308,19 +392,28 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`  correspondence: ${claims.correspondence.text}`);
   out(`  regime: ${claims.regime.text}`);
   out(`  bound: ${claims.bound?.text ?? 'none stated'}`);
-  for (const bw of boundWitnesses) {
-    const at = Object.entries(bw.at)
+  const pointText = (p: Readonly<Record<string, number>>): string =>
+    Object.entries(p)
       .sort(([x], [y]) => x.localeCompare(y))
       .map(([k, v]) => `${k} = ${v}`)
       .join(', ');
+  for (const bw of boundWitnesses) {
     const w = witnessExecution.find((x) => x.id === bw.id)!;
-    out(`    - ${w.id} [${w.kind}] tests it at ${at} (its error there is the bound's norm; tolerance ≤ delta): ${execution(w)}`);
+    const what =
+      bw.claim === 'bound'
+        ? "its error there is the bound's norm; tolerance ≤ delta"
+        : "its error there is in the bound's norm; tolerance = deltaAt there, the bound is not sharp";
+    out(`    - ${w.id} [${w.kind}] tests it at ${pointText(bw.at)} (${what}): ${execution(w)}`);
   }
   out(`  horizon: ${claims.horizon.text}`);
   out(`  preserves: ${claims.preserves.text}`);
+  for (const pw of preservesWitnesses) {
+    const w = witnessExecution.find((x) => x.id === pw.id)!;
+    out(`    - ${w.id} [${w.kind}] tests '${pw.item}' at ${pointText(pw.at)}: ${execution(w)}`);
+  }
   const unattributed = witnessExecution.filter((w) => w.claim === null);
   out(
-    boundWitnesses.length === 0
+    boundWitnesses.length + preservesWitnesses.length === 0
       ? 'witness execution (the record does not attribute a witness to a claim):'
       : 'witness execution, witnesses not attributed to a claim:',
   );
@@ -333,9 +426,24 @@ async function run(ctx: CommandCtx): Promise<number> {
         : `witnesses run: ${runSummary.checked} checked · ${runSummary.refuted} refuted · ${runSummary.unresolved} unresolved`,
     );
   }
+  if (normTransports !== null) {
+    out('norm transports (declared; a bound in any other norm, or crossing the other way, is refused through this map):');
+    if (normTransports.length === 0) out('  none declared — this exact map carries no bound in any norm');
+    for (const nt of normTransports) {
+      out(`  - ${nt.id}: ${nt.fromModel} → ${nt.toModel}, '${nt.from}' → '${nt.to}', K = ${nt.K} (${nt.domain})`);
+      out(`    time map: ${nt.timeMap.map} (${nt.timeMap.uniform ? 'uniform' : 'NOT uniform — not applied'})`);
+      const status =
+        nt.status === 'runnable'
+          ? `registered in-process, not run — \`upt atlas ${b.id} --run\` runs it`
+          : nt.status === 'not-observed'
+            ? `result not observed by this command — its repository test file: bunx vitest run ${nt.witness.test}`
+            : `${nt.status}${'reason' in nt ? ` (${nt.reason})` : ''} (run now)`;
+      out(`    witness ${nt.witness.id} [${nt.witness.kind}; ${nt.basis} when it checks]: ${status}`);
+    }
+  }
   list('citations', b.citations);
   out(`review status: ${b.reviewStatus}`);
-  return runSummary?.exitCode ?? 0;
+  return exitCode;
 }
 
 export const command: Command = { name: 'atlas', aliases: [], flags: FLAGS, help: HELP, run };

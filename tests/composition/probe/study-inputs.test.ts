@@ -41,7 +41,10 @@ const dir = join(dirname(fileURLToPath(import.meta.url)), '../../fixtures/probe-
 const path = (file: string) => join(dir, file);
 type Raw = { observations: Record<string, unknown>[]; [k: string]: unknown };
 const load = (name: string): Raw => JSON.parse(readFileSync(path(`${name}.synthetic.json`), 'utf8')) as Raw;
-const csvText = (file: string) => readFileSync(path(file), 'utf8');
+// These tests edit the CSV text line by line, so they read it with LF line ends whatever the checkout
+// wrote. The byte-exact comparison with the generator is in study.test.ts; .gitattributes keeps the
+// fixture directory LF, and the CRLF test below checks the parser itself.
+const csvText = (file: string) => readFileSync(path(file), 'utf8').replace(/\r\n/g, '\n');
 const run = (raw: unknown): Promise<ProbeStudyResult> => runProbeStudy(parseStudy(raw, 'test'));
 const selectedOf = (r: ProbeStudyResult) => r.candidates.find((c) => c.id === r.selected)!;
 const refusal = (f: () => unknown): string => {
@@ -153,6 +156,16 @@ describe('probe study — CSV input', () => {
     for (const [what, text, obj] of cases) {
       const m = fromJson(obj);
       expect(fromCsv(text), what).toBe(m);
+    }
+  });
+
+  it('a CRLF file parses to the same study as its LF twin', () => {
+    for (const f of ['pendulum-large-amplitude.synthetic.csv', 'pendulum-large-amplitude.replication.synthetic.csv']) {
+      const lf = csvText(f);
+      expect(lf).not.toMatch(/\r/);
+      const crlf = lf.replace(/\n/g, '\r\n');
+      expect(crlf).toMatch(/\r\n/);
+      expect(studyCsvToRaw(crlf, f)).toEqual(studyCsvToRaw(lf, f));
     }
   });
 
@@ -307,7 +320,7 @@ describe('probe study — declared correction family', () => {
     expect(base.credible).toBe(false);
     expect(base.exploratory!.pass).toBe(false);
     const c = selectedOf(r);
-    expect(c.correction!.input).toBe('amplitude');
+    expect(c.correction!.terms.map((t) => t.input)).toEqual(c.correction!.terms.map(() => 'amplitude'));
     expect(c.correction!.terms.map((t) => t.power)).toEqual([2]);
     expect(c.fittedParameters).toBe(2);
     expect(r.verdict).toBe('survives-holdout');
@@ -349,7 +362,7 @@ describe('probe study — declared correction family', () => {
     const study = parseStudy(load('noise-amplitude'));
     expect(study.provenance.source).toContain(`seed ${NOISE_AMPLITUDE_SEED}`);
     const ex = study.observations.filter((o) => o.role === 'exploratory');
-    const powers = study.correction!.powers;
+    const powers = study.correction![0]!.powers;
     const y = ex.map((o) => o.observed);
     const s = ex.map((o) => o.sigma);
     const constant = lsq(ex.map(() => [1]), y, s);

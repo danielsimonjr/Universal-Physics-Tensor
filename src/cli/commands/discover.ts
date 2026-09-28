@@ -7,7 +7,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { resolveGraph } from '../graphs.js';
+import { resolveGraph, groundTruthAnchor, groundTruthLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import type { VettedCandidate } from '../../composition/discovery.js';
@@ -86,10 +86,12 @@ function deriveReport(
   api: CommandCtx['api'],
   ranked: readonly VettedCandidate[],
   label: string,
+  anchorLine: string,
   out: (line?: string) => void
 ): void {
   const proposals = api.deriveProposedBridges(ranked);
   out(`\nDerived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ${label}]`);
+  out(`  ${anchorLine}`);
   out(DERIVE_EPISTEMICS + '\n');
   if (!proposals.length) {
     out('  no admissible proposal (need two fully-quantitative, monomial canonical targets).');
@@ -212,6 +214,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, label, source } = resolveGraph(api, args.flags);
   const opts = parseDiscoveryOpts(args.flags);
+  const anchor = groundTruthAnchor(api, opts);
   const ranked = api.rankDiscoveries(graph, opts);
   const isDerive = args.flags.has('derive');
   const annotated = isDerive ? ([] as AnnotatedCandidate[]) : api.annotateAdjudications(ranked);
@@ -231,6 +234,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const envelope = {
       command: 'discover',
       source,
+      anchor: { groundTruth: anchor },
       options: opts as Record<string, unknown>,
       epistemics: isDerive ? DERIVE_EPISTEMICS : EPISTEMICS,
       result,
@@ -255,7 +259,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   if (isDerive) {
-    deriveReport(api, ranked, label, out);
+    deriveReport(api, ranked, label, groundTruthLine(anchor), out);
     return 0;
   }
 
@@ -278,6 +282,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const clash = by('magnitude-clash');
   const axisClash = by('axis-clash');
   out(`\nDiscovery — link candidates VETTED through the inference suite  [source: ${label}]`);
+  out(`  ${groundTruthLine(anchor)}`);
   out('⚠ a REVIEW SURFACE: `promising` means "worth a physicist\'s minute", not "true".');
   out('  Each candidate hypothesises an identification a≡b and tests its consequences.\n');
   out(

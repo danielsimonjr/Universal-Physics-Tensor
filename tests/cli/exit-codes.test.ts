@@ -52,7 +52,8 @@ describe('exit 0: the check passed, or could not run', () => {
     expect(await code(['path', 'model-pendulum', 'model-spring'])).toBe(0);
   });
   it('path: a no-composite-claim is an answer, not a failure', async () => {
-    expect(await code(['path', 'model-pendulum', 'model-lc'])).toBe(0);
+    // model-rlc → model-first-order: exact then approximation, a silent cell (pendulum → lc composes since 2026-09-27).
+    expect(await code(['path', 'model-rlc', 'model-first-order'])).toBe(0);
   });
   it('regime is a survey: a violated record in it is not a failed command', async () => {
     expect(await code(['regime', 'oscillators', '--at', 'theta0=0.8'])).toBe(0);

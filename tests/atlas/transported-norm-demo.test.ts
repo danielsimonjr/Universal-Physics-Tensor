@@ -2,11 +2,11 @@
  * Worked demonstration for audit item I2 / finding F05: does an approximation
  * bound survive an exact map, and in which norms?
  *
- * TEST-ONLY. Nothing here is wired into the composition table, `boundPath` or
- * the CLI; the last block pins that the route still carries no claim. The rule
- * under demonstration, and the declaration it needs, are the subject of
- * `docs/planning/ADR-proposal-transported-norm-composition.md`, which is a
- * proposal for a reviewed act, not a decision.
+ * The measurements the decision rests on. The rule, and the declaration it
+ * needs, are `docs/planning/ADR-transported-norm-composition.md`; this file was
+ * written before the rule was wired, and §3 now pins that the route composes
+ * THROUGH the declaration and only through it. The declaration's own witness
+ * (W1τ) and its control are in `tests/atlas/spring-lc-norm-transport.test.ts`.
  *
  * The route is pendulum → spring (`ab-pendulum-linear`, approximation, bound
  * in the RELATIVE PERIOD norm) → LC (`ab-spring-lc`, exact). The spring→LC map
@@ -242,19 +242,32 @@ describe('transported norm — naive transport is wrong where the map is not an 
   });
 });
 
-// ── 3. The boundary: none of this is wired ──────────────────────────────────
+// ── 3. The boundary: wired through the declaration, and only through it ────
 
-describe('transported norm — the route still carries no claim (the table is not widened here)', () => {
-  it('composeRelation(approximation, exact-equivalence) is silent', () => {
-    expect(composeRelation('approximation', 'exact-equivalence')).toBe(NO_COMPOSITE_CLAIM);
+describe('transported norm — the route composes through the declaration (ADR)', () => {
+  it('composeRelation(approximation, exact-equivalence) is approximation; the reverse order stays silent', () => {
+    expect(composeRelation('approximation', 'exact-equivalence')).toBe('approximation');
+    expect(composeRelation('exact-equivalence', 'approximation')).toBe(NO_COMPOSITE_CLAIM);
   });
 
-  it('boundPath on pendulum → LC returns the no-composite-claim refusal', () => {
+  it('boundPath on pendulum → LC is the measured finding 1: (1·K_A, 1·δ_A) in the relative period norm', () => {
     const route = findPath('oscillators', 'model-pendulum', 'model-lc');
     expect(route?.map((b) => b.id)).toEqual(['ab-pendulum-linear', 'ab-spring-lc']);
     const result = boundPath(route!);
+    expect(result.kind).toBe('bound');
+    if (result.kind !== 'bound') throw new Error(result.detail);
+    expect(result.norm).toBe(AB_PENDULUM_LINEAR.bound!.norm);
+    expect(result.bound).toEqual({ K: AB_PENDULUM_LINEAR.bound!.K, delta: AB_PENDULUM_LINEAR.bound!.delta });
+    // The measured route error at the regime edge sits under the composed bound.
+    const { Timg, Tlc } = measureRoute(0.5, L_IND, C_CAP);
+    expect(Timg / Tlc - 1).toBeLessThanOrEqual(result.bound.delta + 1e-10);
+  });
+
+  it('without the declaration the same route is refused: exact alone is not enough (finding 2)', () => {
+    const bare: AtlasBridge = { ...BRIDGE_SPRING_LC, normTransports: undefined };
+    const result = boundPath([AB_PENDULUM_LINEAR, bare]);
     expect(result.kind).toBe('no-claim');
-    expect(result.kind === 'no-claim' && result.reason).toBe('no-composite-claim');
+    expect(result.kind === 'no-claim' && result.reason).toBe('norm-not-stated');
   });
 });
 

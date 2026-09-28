@@ -63,6 +63,19 @@ import {
   stringLeapfrogMidpoint,
 } from './waves/numerics.js';
 import type { AcousticFixture, DalembertFixture, StringFixture } from './waves/numerics.js';
+import { pendulumPeriodErrorAt } from './oscillators/bridges-limits.js';
+import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT, W1TAU_FIXTURE } from './oscillators/norm-transport.js';
+import { measureTransportedPeriodError } from './oscillators/norm-transport-witness.js';
+import { dampedOffsetBoundAt } from './oscillators/bridges-limits.js';
+import { dispersionErrorApproximation } from './oscillators/bridges-coarse.js';
+import {
+  measureChainDispersionError,
+  measureMasslessOffset,
+  measurePendulumPeriodRatio,
+  W7_FIXTURE,
+  W8B_FIXTURE,
+  W9_FIXTURE,
+} from './oscillators/limit-witnesses.js';
 import type { NumericWitnessSpec } from './witness-numeric.js';
 import type { SymbolicWitnessSpec } from './witness-symbolic.js';
 
@@ -75,19 +88,35 @@ export interface RegisteredSymbolicWitness {
 }
 
 /**
- * The claim of its record a witness tests. For `'bound'`: at `at(fineResolution)`,
- * a point inside the record's regime, the witness's error is the bound's own
- * quantity in the bound's norm, and its tolerance is no looser than `delta`, so
- * the bound failing there refutes the witness. `tests/atlas/witness-claims.test.ts`
+ * The claim of its record a witness tests. `tests/atlas/witness-claims.test.ts`
  * checks each attribution against the spec.
+ *
+ * - `'bound'`: at `at(fineResolution)`, a point inside the record's regime, the
+ *   witness's error is the bound's own quantity in the bound's norm (it equals
+ *   `deltaAt` there: the bound is sharp), and its tolerance is no looser than
+ *   `delta`, so the bound failing there refutes the witness.
+ * - `'bound-holds-at'`: for a bound that is not sharp. At that point, inside the
+ *   regime, the witness's error is measured in the bound's norm and its
+ *   tolerance IS `deltaAt` there, so the bound failing at that point refutes the
+ *   witness. That the spec measures the bound's norm is checked beside the spec.
+ * - `'preserves'`: the witness tests `item`, one entry of the record's
+ *   `preserves`, at a point inside the regime.
  *
  * @internal
  */
-export interface WitnessClaim {
-  readonly name: 'bound';
-  /** The point the spec evaluates at a resolution, in the names the bound's `deltaAt` reads. */
-  readonly at: (resolution: number) => Readonly<Record<string, number>>;
-}
+export type WitnessClaim =
+  | {
+      readonly name: 'bound' | 'bound-holds-at';
+      /** The point the spec evaluates at a resolution, in the names the bound's `deltaAt` reads. */
+      readonly at: (resolution: number) => Readonly<Record<string, number>>;
+    }
+  | {
+      readonly name: 'preserves';
+      /** One entry of the record's `preserves`, verbatim. */
+      readonly item: string;
+      /** The point the spec evaluates at a resolution, in the names the regime's groups read. */
+      readonly at: (resolution: number) => Readonly<Record<string, number>>;
+    };
 
 /** A numeric spec bound to the record it supports. @internal */
 export interface RegisteredNumericWitness {
@@ -248,6 +277,22 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       id: 'W2s',
       lhs: applyDictionary(op('/', op('^', b, n(2)), op('*', n(4), m, k)), SPRING_TO_CIRCUIT),
       rhs: op('/', op('*', op('^', R, n(2)), C), op('*', n(4), L)),
+    },
+  },
+  {
+    // Norm transport, not a bridge claim: the pendulum's image under ab-spring-lc's
+    // map, integrated in circuit time, has K times the pendulum's relative period
+    // error against the circuit. Keyed by the transport id, so the bridge's own
+    // evidence is not derived from it (ADR-transported-norm-composition.md §4).
+    recordId: SPRING_LC_RELATIVE_PERIOD_TRANSPORT.id,
+    kind: 'numeric',
+    spec: {
+      id: SPRING_LC_RELATIVE_PERIOD_TRANSPORT.witness.id,
+      evaluate: (steps) => measureTransportedPeriodError(W1TAU_FIXTURE.theta0, steps),
+      target: SPRING_LC_RELATIVE_PERIOD_TRANSPORT.KAt({}) * pendulumPeriodErrorAt({ theta0: W1TAU_FIXTURE.theta0 }),
+      coarseResolution: 160,
+      fineResolution: 640,
+      tolerance: 1e-9,
     },
   },
   {
@@ -500,6 +545,64 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
         EI: WS7_FIXTURE.EI,
         k: WS7_FIXTURE.k0 / resolution,
       }),
+    },
+  },
+  // ── The three oscillator bridges that had no in-process witness ──────────
+  {
+    // Regular limit θ0 → 0: T/T0 of the pendulum, integrated by RK4, tends to 1.
+    // The tolerance is the upper end W7 records, 0.002507 at θ0 = 0.2; the
+    // bound's deltaAt there is the AGM form, a second method.
+    recordId: 'ab-pendulum-linear',
+    kind: 'numeric',
+    spec: {
+      id: 'W7',
+      evaluate: (resolution) => measurePendulumPeriodRatio(W7_FIXTURE.theta0 / resolution),
+      target: 1,
+      coarseResolution: 1,
+      fineResolution: 2,
+      tolerance: 0.002507,
+    },
+    claim: { name: 'bound', at: (resolution) => ({ theta0: W7_FIXTURE.theta0 / resolution }) },
+  },
+  {
+    // Singular limit m → 0: the full damped spring's offset from the reduced
+    // model outside the layer, integrated by RK4; the tolerance is the bound's
+    // own deltaAt at the fine mass, which is not sharp there.
+    recordId: 'ab-damped-massless',
+    kind: 'numeric',
+    spec: {
+      id: 'W8b',
+      evaluate: (resolution) => measureMasslessOffset(W8B_FIXTURE.m / resolution),
+      target: 0,
+      coarseResolution: 1,
+      fineResolution: 2,
+      tolerance: dampedOffsetBoundAt({ m: W8B_FIXTURE.m / 2, b: W8B_FIXTURE.b, k: W8B_FIXTURE.k, x0: W8B_FIXTURE.x0, v0: W8B_FIXTURE.v0 }),
+    },
+    claim: {
+      name: 'bound-holds-at',
+      at: (resolution) => ({ m: W8B_FIXTURE.m / resolution, b: W8B_FIXTURE.b, k: W8B_FIXTURE.k, x0: W8B_FIXTURE.x0, v0: W8B_FIXTURE.v0 }),
+    },
+  },
+  {
+    // Coarse-graining, long wavelength: 1 − ω/(c q) measured on the integrated
+    // ring, over (qa)²/24, tends to 1 within the 0.5% W9 records.
+    recordId: 'ab-chain-wave',
+    kind: 'numeric',
+    spec: {
+      id: 'W9',
+      evaluate: (resolution) => {
+        const masses = W9_FIXTURE.masses * resolution;
+        return measureChainDispersionError(masses) / dispersionErrorApproximation((2 * Math.PI) / masses);
+      },
+      target: 1,
+      coarseResolution: 1,
+      fineResolution: 2,
+      tolerance: 0.005,
+    },
+    claim: {
+      name: 'preserves',
+      item: 'long-wavelength dispersion ω ≈ c q',
+      at: (resolution) => ({ qa: (2 * Math.PI) / (W9_FIXTURE.masses * resolution) }),
     },
   },
 ];

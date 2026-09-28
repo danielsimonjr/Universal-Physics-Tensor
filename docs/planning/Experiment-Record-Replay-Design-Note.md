@@ -52,10 +52,11 @@ Each entry holds:
 | `argv` | the command and its arguments exactly as given, global options removed |
 | `argvSha256` | SHA-256 of `argv` |
 | `parsed` | `{command, flags, positionals}` as the command's own flag parser read them, or `null` when there is no command (help, version, the demo) or the arguments did not parse |
-| `attribution` | the constants the command's code can reach (below), or `null` when `argv` names no command |
+| `attribution` | the constants the command's code can reach and the source hash of each module it loads (below), or `null` when `argv` names no command |
 | `environment` | the facts below |
 | `result` | `exitCode`, or `threw` (the message of an unexpected exception, with `exitCode: null`); `stdout`, `stderr`, and the SHA-256 of each |
 | `artifacts` | files the invocation wrote (`map --out=PATH`): path and SHA-256 |
+| `inputs` | files the invocation reads, hashed before it runs (below): the flag that named each, its path, and its SHA-256, or `null` when it was absent or unreadable |
 | `entrySha256` | SHA-256 of every other field, serialised with object keys sorted at every depth |
 
 `environment`:
@@ -119,6 +120,12 @@ so nothing here says which constants a run actually read. The derivation:
   "reachable";
 - an object table is reachable whole (`*`) when any export of its module is read.
 
+The same import graph gives the **modules the command loads**, and `attribution.modules` holds the
+SHA-256 of each one's source, keyed by module name as a table is named. A literal a module keeps
+private (a bridge's solar luminosity, a prefactor inside an expression) is in no table; a change to
+it changes its module's source hash, which replay names as `module <name>`, `reachable`. It names
+the module, not the literal, and it also fires on an edit that changes no value (a comment).
+
 Replay marks each changed constant (and each changed or missing table) `reachable`,
 `not-reachable` or `unattributed` (no command, so no attribution). A changed table fingerprint
 takes the reach of the values that changed with it — reachable if any of them is — and the table's
@@ -126,11 +133,33 @@ own reach only when no value changed (an edited fingerprint). `not-reachable` sa
 command's code has no import path to that constant. `reachable` says only that it has one: an
 `evaluate` entry reaches every bridge evaluator's constants whichever bridge it evaluated.
 
+Attribution is **per command, not per entry**, and cannot be narrowed from the import graph: the
+graph does not depend on the arguments, and ES modules load every static import before the command
+runs, so every `evaluate` entry loads the same modules whichever bridge it names. An observed-read
+attribution would have to see a module read its own private bindings, which never cross a module
+boundary and cannot be intercepted from outside it; a hand-kept map from bridge id to module would
+be declared rather than derived. Neither is done.
+
+### Input files
+
+A file an invocation reads is hashed before it runs, by rule from its parsed arguments:
+
+- `probe`: the files named by `--problem`, `--h1`, `--h2`, `--bounds`, `--data` and
+  `--replication`, and the observations file a problem file names (`observationsPath`, resolved
+  as the problem loader resolves it), recorded under the flag `--problem observationsPath`;
+- `atlas --stored` and `map --stored`: the committed witness-results artifact.
+
+A file that is absent is recorded with `sha256: null`, so a run that failed because its input was
+missing is replayed against the same absence.
+
 ## Replay
 
 Each entry is re-run **in-process** through the same dispatcher, with the recorded `argv`, and
-compared **byte for byte**: exit code (or thrown message), stdout, stderr. Every entry gets
-exactly one of three outcomes, never merged:
+compared **byte for byte**: exit code (or thrown message), stdout, stderr. An entry that wrote a
+file is re-run with `--out` pointed at a temporary path, never over the recorded one; the
+temporary path is written back as the recorded path in the replayed streams, and the file is
+compared by SHA-256 with the recorded artifact (a mismatch is the `artifact` difference). Every
+entry gets exactly one of three outcomes, never merged:
 
 | Outcome | Meaning |
 |---|---|
@@ -159,15 +188,23 @@ An entry is `not-replayable`, with the reason printed, when:
 - the line is not valid JSON or not a `upt-record/2` entry (the line number is given). A
   `upt-record/1` line is named as such: it predates the argument, entry and per-table hashes, so it
   cannot be checked for edits;
-- it wrote a file (`map --out=PATH`): replaying would overwrite that path. Its recorded artifact
-  hash stays in the record;
-- it is a `probe` subverb other than `scan` or `show`: those search under a **wall-clock budget**
-  (`--budget-ms`) and read problem, observation and worker files the record does not capture, so
-  their output is timing-dependent. `upt probe reproduce` is the probe workflow's own replay.
+- it was to write a file (`--out=PATH`) and wrote none: there is no artifact to compare with,
+  and a replay to another path would not repeat the failure;
+- it ran an external probe worker (`--worker`): the worker's output is not UPT's and is not
+  recorded;
+- a file it read no longer hashes as recorded — changed, missing now, or present now though absent
+  at recording — or it reads files and was recorded before input files were hashed. Each such
+  file is named with its flag;
+- it is a `probe` search whose recorded output states it stopped on its **wall-clock budget**
+  (`stop: time-limit`, or `"stopReason": "time-limit"`): what it searched depends on the speed of
+  the machine. When the recorded run did not stop on the budget and the replay does, the replay is
+  reported not replayable for the same reason, and nothing is compared.
 
-These are declared, not detected after the fact: output that depends on time is excluded
-explicitly rather than compared and then ignored. `recordedAt` is the only timestamp in an entry,
-and it is never compared.
+These are declared by rule from the record, the files and the runs' own stated stop reason, never
+inferred from a mismatch of the outputs: output that depends on time is excluded explicitly
+rather than compared and then ignored. A probe search that did not stop on its budget is
+deterministic (its run id is a hash of its inputs), so it is compared like any other entry.
+`recordedAt` is the only timestamp in an entry, and it is never compared.
 
 ### Exit status
 
@@ -194,8 +231,10 @@ environment changes and integrity findings as separate counts.
 
 - The tables cover exported numeric constants of `core/constants`, `bridges/` and `cases/`, and the
   object tables named above. A literal a module keeps private (a bridge's atomic mass unit, a
-  prefactor inside an expression) is in no table, and a change to it shows up only as an output
-  difference.
+  prefactor inside an expression) is in no table; a change to it is named only through its
+  module's source hash, as a module change, not as the literal that moved.
+- Module source hashes cover the modules in the command's static reach, not every module the
+  process loads.
 - Attribution is static. It does not see a value that reaches a command through shared state
   written at import time by a module outside the command's import graph, a non-literal dynamic
   import, or a mention on a line of a multi-line template literal that begins with `/*` or `//`
@@ -206,8 +245,11 @@ environment changes and integrity findings as separate counts.
   recomputes `argvSha256` and `entrySha256` is not detected.
 - Replay runs in one process: module-level caches (the parser selection) are shared across the
   replayed entries, as they are within one CLI process, not as they are across separate processes.
-- Files a command reads are not captured, which is why the file-reading `probe` subverbs are
-  declared not replayable.
+- Input files are hashed, not captured: a replay needs the same files on disk, and one whose input
+  changed is declared not replayable rather than replayed against the recorded bytes. Only the
+  files named above are hashed; a probe worker script is not.
+- A probe search near its wall-clock budget can stop on it in one run and not in the other; the
+  rule declares that case, but it cannot make the two runs comparable.
 - Output identity is byte identity. A change in formatting only is reported as `differs`; the
   report shows the first differing line so a reader can judge it.
 
@@ -222,8 +264,20 @@ Each invariant is proven RED against the tree without the feature before it is m
   the integrity finding for that field;
 - editing the recorded constant table or its fingerprint makes replay name the changed constant
   or the fingerprint;
-- a `probe run` entry and a malformed line are `not-replayable` with their reasons, counted apart
-  from `differs`;
+- a malformed line is `not-replayable` with its reason, counted apart from `differs`;
+- a `map --out` entry replays into a temporary file, leaves the recorded path untouched, and a
+  recorded artifact hash that does not match makes it differ on `artifact`; an `--out` entry that
+  wrote no file is not replayable;
+- a probe entry records each input file (the observations file a problem names included) with its
+  hash, checked by an independent SHA-256; it reproduces while its inputs are unchanged and is not
+  replayable, naming the file, when one changed or was removed; a run that stopped on a 1 ms budget,
+  a replay that stops on it when the record did not, and a run with an external worker are not
+  replayable;
+- each entry hashes the source of every module its command loads, checked by an independent
+  SHA-256; an edited module hash is named `reachable` beside a reproduced output; and, by a second
+  method, a real change to a private literal in a copy of the built package is named as a module
+  change though no constant table holds it, while an entry whose command does not load that
+  module reports no change;
 - an edited argument raises the `argv` integrity finding beside its difference; an edit to a field
   no other hash covers raises the entry finding alone; a removed hash is a finding;
 - each table's fingerprint matches an independent sorted-key SHA-256, and every exported numeric

@@ -3,7 +3,7 @@
  * `--record=FILE`, `--replay=FILE` and `--show-record=FILE`
  * (design: `docs/planning/Experiment-Record-Replay-Design-Note.md`).
  *
- * A record is JSON Lines, one `upt-record/1` entry per invocation, appended and
+ * A record is JSON Lines, one `upt-record/2` entry per invocation, appended and
  * never rewritten, so a failed invocation stays next to the ones that
  * succeeded. Replay re-runs each entry in-process and keeps three outcomes
  * apart — reproduced, differs, not replayable — and reports environment
@@ -14,29 +14,33 @@
  */
 
 import { createHash } from 'node:crypto';
-import { appendFileSync, closeSync, existsSync, openSync, readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import { join } from 'node:path';
+import { appendFileSync, closeSync, existsSync, mkdtempSync, openSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, join } from 'node:path';
 import type * as cliApi from '../cli-api.js';
 import { parseArgs } from './args.js';
 import { resolveCommand } from './command.js';
+import { storedResultsFile } from './commands/_atlas-map.js';
 import { CliError } from './errors.js';
 import { emitJson } from './output.js';
-import { staticReach, type Attribution } from './record-reach.js';
+import { moduleSources, staticReach, type Attribution } from './record-reach.js';
 import { constantTables, tableFingerprint, type ConstantTable } from './record-tables.js';
-import { packageVersion } from './version.js';
+import { packageVersion, peerVersions } from './version.js';
 
+/** The output callbacks a recorded or replayed CLI invocation writes through. */
 export type Io = {
   out: (line?: string) => void;
   err: (line?: string) => void;
   write: (s: string) => void;
 };
 
+/** A CLI dispatcher invoked with argv and an isolated output sink. */
 export type Dispatch = (argv: string[], io: Io) => Promise<number>;
 
 export const RECORD_SCHEMA = 'upt-record/2';
 const SUPERSEDED_SCHEMA = 'upt-record/1';
 
+/** The toolchain, parser, peers and constants captured beside a CLI invocation. */
 export interface RecordEnvironment {
   uptVersion: string;
   node: string;
@@ -46,6 +50,7 @@ export interface RecordEnvironment {
   constantTables: Record<string, ConstantTable>;
 }
 
+/** The exit state and captured streams of one recorded CLI invocation. */
 export interface RecordResult {
   exitCode: number | null;
   threw: string | null;
@@ -55,6 +60,7 @@ export interface RecordResult {
   stderrSha256: string;
 }
 
+/** One JSON-lines record entry for a CLI invocation and its replay inputs. */
 export interface RecordEntry {
   schema: typeof RECORD_SCHEMA;
   recordedAt: string;
@@ -65,8 +71,21 @@ export interface RecordEntry {
   environment: RecordEnvironment;
   result: RecordResult;
   artifacts: { path: string; sha256: string }[];
+  /**
+   * Files the invocation read, hashed before it ran (`null`: absent or unreadable then). Absent
+   * from entries written before input files were hashed.
+   */
+  inputs?: RecordInput[];
   /** SHA-256 of every other field, serialised by {@link canonicalJson}. */
   entrySha256: string;
+}
+
+/** One input file an invocation read, hashed before it ran. */
+export interface RecordInput {
+  /** The flag that named the file, or `--problem observationsPath` for the file a problem names. */
+  flag: string;
+  path: string;
+  sha256: string | null;
 }
 
 export const sha256 = (s: string | Buffer): string => createHash('sha256').update(s).digest('hex');
@@ -87,32 +106,14 @@ export function canonicalJson(v: unknown): string {
 
 export const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv));
 
+/** Hash a record entry after excluding its stored fingerprint field. */
 export function entryFingerprint(entry: Partial<RecordEntry>): string {
   const { entrySha256: _, ...rest } = entry;
   return sha256(canonicalJson(rest));
 }
 
-/** Installed version of each optional peer the package declares, `null` when absent. Reads the
- * peer's own package.json from the resolution paths, because a peer's `exports` may not expose it. */
-function peerVersions(): Record<string, string | null> {
-  const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as {
-    peerDependencies?: Record<string, string>;
-  };
-  const require = createRequire(import.meta.url);
-  const peers: Record<string, string | null> = {};
-  for (const name of Object.keys(pkg.peerDependencies ?? {}).sort()) {
-    peers[name] = null;
-    for (const dir of require.resolve.paths(name) ?? []) {
-      const manifest = join(dir, name, 'package.json');
-      if (existsSync(manifest)) {
-        peers[name] = (JSON.parse(readFileSync(manifest, 'utf8')) as { version?: string }).version ?? null;
-        break;
-      }
-    }
-  }
-  return peers;
-}
 
+/** Capture the live UPT runtime environment and constant table fingerprints for a record. */
 export async function captureEnvironment(api: typeof cliApi): Promise<RecordEnvironment> {
   return {
     uptVersion: packageVersion(),
@@ -128,7 +129,8 @@ async function attribute(argv: string[]): Promise<Attribution | null> {
   const command = argv[0] === undefined ? undefined : resolveCommand(argv[0]);
   if (!command) return null;
   const { tables, kinds } = await constantTables();
-  return staticReach(command.name, tables, kinds);
+  const reach = staticReach(command.name, tables, kinds);
+  return reach && { ...reach, modules: moduleSources(command.name) ?? {} };
 }
 
 function parseInvocation(argv: string[]): RecordEntry['parsed'] {
@@ -143,17 +145,87 @@ function parseInvocation(argv: string[]): RecordEntry['parsed'] {
   }
 }
 
-const TIMED_PROBE_SUBVERBS = new Set(['run', 'candidates', 'falsify', 'rank', 'design', 'reproduce']);
+/** The `probe` flags that name a file the invocation reads. */
+const PROBE_INPUT_FLAGS = ['problem', 'h1', 'h2', 'bounds', 'data', 'replication'] as const;
 
-/** Why an invocation must not be re-run, or null. Declared by rule, never inferred from a mismatch. */
-function notReplayableReason(argv: string[]): string | null {
-  const parsed = parseInvocation(argv);
-  if (!parsed) return null;
-  if ((parsed.flags.out?.[0] ?? '') !== '') {
-    return `it wrote a file (--out=${parsed.flags.out[0]}); replaying would overwrite it — its recorded artifact hash stays in the record`;
+/** The stop reason a probe search reports when its wall-clock budget ran out, in text or JSON. */
+const TIME_LIMIT_STATED = /(?:\bstop: |"stopReason": ")time-limit\b/;
+
+function hashFile(path: string): string | null {
+  try {
+    return sha256(readFileSync(path));
+  } catch {
+    return null;
   }
-  if (parsed.command === 'probe' && TIMED_PROBE_SUBVERBS.has(parsed.positionals[0] ?? '')) {
-    return `probe ${parsed.positionals[0]} searches under a wall-clock budget and reads files the record does not capture; use \`upt probe reproduce\``;
+}
+
+/** The observations file a problem file names, or null (also when the problem cannot be read). */
+function observationsOf(problem: string, api: typeof cliApi): string | null {
+  try {
+    const raw = JSON.parse(readFileSync(problem, 'utf8')) as { observationsPath?: unknown } | null;
+    return raw !== null && typeof raw.observationsPath === 'string'
+      ? api.resolveObservationsPath({ observationsPath: raw.observationsPath }, problem)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The files an invocation reads, by rule from its parsed arguments; hashed as they are now. */
+function readInputs(parsed: RecordEntry['parsed'], api: typeof cliApi): RecordInput[] {
+  if (!parsed) return [];
+  const files: { flag: string; path: string }[] = [];
+  if (parsed.command === 'probe') {
+    for (const name of PROBE_INPUT_FLAGS) {
+      const path = parsed.flags[name]?.[0] ?? '';
+      if (path === '') continue;
+      files.push({ flag: `--${name}`, path });
+      const observations = name === 'problem' ? observationsOf(path, api) : null;
+      if (observations !== null) files.push({ flag: '--problem observationsPath', path: observations });
+    }
+  }
+  if ((parsed.command === 'atlas' || parsed.command === 'map') && parsed.flags.stored !== undefined) {
+    files.push({ flag: '--stored', path: storedResultsFile() });
+  }
+  return files.map((f) => ({ ...f, sha256: hashFile(f.path) }));
+}
+
+const short = (h: string): string => `${h.slice(0, 12)}…`;
+
+/**
+ * Why an entry must not be re-run, or null. Declared by rule from the record and the files as
+ * they are now, never inferred from a mismatch of the outputs.
+ */
+function notReplayableReason(entry: RecordEntry, api: typeof cliApi): string | null {
+  const parsed = parseInvocation(entry.argv);
+  if (!parsed) return null;
+  const out = parsed.flags.out?.[0] ?? '';
+  if (out !== '' && (entry.artifacts ?? []).length === 0) {
+    return `it was to write a file (--out=${out}) and wrote no file, so there is no artifact to compare a replay with`;
+  }
+  const worker = parsed.flags.worker?.[0] ?? '';
+  if (parsed.command === 'probe' && worker !== '') {
+    return `it ran an external worker (--worker=${worker}), whose output the record does not capture`;
+  }
+  const reads = entry.inputs;
+  if (!Array.isArray(reads)) {
+    const names = readInputs(parsed, api);
+    if (names.length > 0) {
+      return `it reads ${names.map((n) => `${n.path} (${n.flag})`).join(', ')} and was recorded before input files were hashed; record it again`;
+    }
+  } else {
+    const changed: string[] = [];
+    for (const i of reads) {
+      const now = hashFile(i.path);
+      if (now === i.sha256) continue;
+      if (now === null) changed.push(`${i.path} (${i.flag}) is missing now`);
+      else if (i.sha256 === null) changed.push(`${i.path} (${i.flag}) exists now and was absent at recording`);
+      else changed.push(`${i.path} (${i.flag}) changed since recording (sha256 ${short(i.sha256)} -> ${short(now)})`);
+    }
+    if (changed.length > 0) return `an input it read differs from the recorded one: ${changed.join('; ')}`;
+  }
+  if (parsed.command === 'probe' && TIME_LIMIT_STATED.test(entry.result.stdout)) {
+    return 'the recorded run stopped on its wall-clock budget (time-limit), so what it searched depends on the speed of the machine';
   }
   return null;
 }
@@ -205,8 +277,9 @@ export async function recordInvocation(
 ): Promise<number> {
   assertAppendable(file);
   const recordedAt = new Date().toISOString();
-  const run = await runCaptured(dispatch, argv, io);
   const parsed = parseInvocation(argv);
+  const inputs = readInputs(parsed, api);
+  const run = await runCaptured(dispatch, argv, io);
   const artifacts: RecordEntry['artifacts'] = [];
   const outPath = parsed?.flags.out?.[0] ?? '';
   if (outPath !== '' && existsSync(outPath)) artifacts.push({ path: outPath, sha256: sha256(readFileSync(outPath)) });
@@ -227,6 +300,7 @@ export async function recordInvocation(
       stderrSha256: sha256(run.stderr),
     },
     artifacts,
+    inputs,
   };
   appendFileSync(file, JSON.stringify({ ...entry, entrySha256: entryFingerprint(entry) }) + '\n');
   if (run.error !== undefined) throw run.error;
@@ -292,6 +366,7 @@ const commandLine = (argv: string[]): string => ['$ upt', ...argv.map(shellQuote
  */
 export type Reach = 'reachable' | 'not-reachable' | 'unattributed';
 
+/** One runtime or reachable-constant fact that differs between recording and replay. */
 export interface EnvironmentChange {
   fact: string;
   recorded: unknown;
@@ -372,8 +447,11 @@ function integrityFindings(entry: RecordEntry): string[] {
 
 const clip = (s: string): string => (s.length > 200 ? s.slice(0, 200) + '…' : s);
 
+/** One output stream, exit state or artifact difference found during replay. */
 export interface StreamDifference {
-  stream: 'exit' | 'stdout' | 'stderr';
+  stream: 'exit' | 'stdout' | 'stderr' | 'artifact';
+  /** The recorded path of a written file (`artifact` only). */
+  path?: string;
   firstDifferingLine?: number;
   recorded: string;
   replayed: string;
@@ -400,8 +478,10 @@ function streamDifference(stream: 'stdout' | 'stderr', recorded: string, replaye
 const exitLabel = (code: number | null, threw: string | null): string =>
   code === null ? `threw: ${threw ?? 'unknown error'}` : `exit ${code}`;
 
+/** The replay classification for one record entry. */
 export type ReplayOutcome = 'reproduced' | 'differs' | 'not-replayable';
 
+/** The replay report for one record entry, including environment and integrity findings. */
 export interface ReplayEntryReport {
   line: number;
   argv: string[] | null;
@@ -409,11 +489,59 @@ export interface ReplayEntryReport {
   reason?: string;
   exit?: { recorded: string; replayed: string };
   differences: StreamDifference[];
+  /** Each file the entry wrote: its recorded hash and the hash of the replay's temporary copy. */
+  artifacts?: { path: string; recorded: string; replayed: string | null }[];
   attribution: Attribution | null;
+  /** Whether the sources of the modules the command loads were compared (entries with a command). */
+  moduleSources?: 'compared' | 'not-recorded';
   environmentChanges: EnvironmentChange[];
   integrity: string[];
 }
 
+/** Each module the command loads whose source hash differs from the recorded one. */
+function moduleChanges(attribution: Attribution | null | undefined): {
+  changes: EnvironmentChange[];
+  moduleSources?: 'compared' | 'not-recorded';
+} {
+  if (!attribution || typeof attribution.command !== 'string') return { changes: [] };
+  const recorded = attribution.modules;
+  if (typeof recorded !== 'object' || recorded === null) return { changes: [], moduleSources: 'not-recorded' };
+  const live = moduleSources(attribution.command) ?? {};
+  const changes: EnvironmentChange[] = [];
+  for (const name of [...new Set([...Object.keys(recorded), ...Object.keys(live)])].sort()) {
+    if (recorded[name] !== live[name]) {
+      changes.push({ fact: `module ${name}`, recorded: recorded[name] ?? null, current: live[name] ?? null, reach: 'reachable' });
+    }
+  }
+  return { changes, moduleSources: 'compared' };
+}
+
+/**
+ * Re-run an entry that wrote a file with `--out` pointed at a temporary path instead, so the
+ * recorded path is never overwritten; the temporary path is written back as the recorded one in
+ * the replayed streams, and the file is returned by hash.
+ */
+async function runRedirected(
+  dispatch: Dispatch,
+  entry: RecordEntry,
+): Promise<{ run: Awaited<ReturnType<typeof runCaptured>>; artifact: { path: string; recorded: string; replayed: string | null } }> {
+  const recorded = entry.artifacts[0];
+  const dir = mkdtempSync(join(tmpdir(), 'upt-replay-'));
+  const temp = join(dir, basename(recorded.path) || 'artifact');
+  try {
+    const argv = entry.argv.map((t) => (t.startsWith('--out=') ? `--out=${temp}` : t));
+    const run = await runCaptured(dispatch, argv);
+    const back = (s: string): string => s.split(temp).join(recorded.path);
+    return {
+      run: { ...run, stdout: back(run.stdout), stderr: back(run.stderr), threw: run.threw === null ? null : back(run.threw) },
+      artifact: { path: recorded.path, recorded: recorded.sha256, replayed: hashFile(temp) },
+    };
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+/** Replay every entry in a record file and report reproduced, differing and not-replayable entries. */
 export async function replayRecord(
   file: string,
   json: boolean,
@@ -439,19 +567,35 @@ export async function replayRecord(
       continue;
     }
     const { entry } = l;
+    const modules = moduleChanges(entry.attribution);
     const base = {
       line: l.line,
       argv: entry.argv,
       attribution: entry.attribution ?? null,
-      environmentChanges: environmentChanges(entry.environment, live, entry.attribution),
+      ...(modules.moduleSources ? { moduleSources: modules.moduleSources } : {}),
+      environmentChanges: [...environmentChanges(entry.environment, live, entry.attribution), ...modules.changes],
       integrity: integrityFindings(entry),
     };
-    const reason = notReplayableReason(entry.argv);
+    const reason = notReplayableReason(entry, api);
     if (reason) {
       reports.push({ ...base, outcome: 'not-replayable', reason, differences: [] });
       continue;
     }
-    const run = await runCaptured(dispatch, entry.argv);
+    const writes = (entry.artifacts ?? []).length > 0 && (parseInvocation(entry.argv)?.flags.out?.[0] ?? '') !== '';
+    const { run, artifact } = writes
+      ? await runRedirected(dispatch, entry)
+      : { run: await runCaptured(dispatch, entry.argv), artifact: null };
+    if (parseInvocation(entry.argv)?.command === 'probe' && TIME_LIMIT_STATED.test(run.stdout)) {
+      reports.push({
+        ...base,
+        outcome: 'not-replayable',
+        reason:
+          'the replay stopped on its wall-clock budget (time-limit) and the recorded run did not, so the two ran ' +
+          'different searches; nothing was compared',
+        differences: [],
+      });
+      continue;
+    }
     const recordedExit = exitLabel(entry.result.exitCode, entry.result.threw ?? null);
     const replayedExit = exitLabel(run.exitCode, run.threw);
     const differences: StreamDifference[] = [];
@@ -462,11 +606,15 @@ export async function replayRecord(
     ]) {
       if (d) differences.push(d);
     }
+    if (artifact && artifact.recorded !== artifact.replayed) {
+      differences.push({ stream: 'artifact', path: artifact.path, recorded: artifact.recorded, replayed: artifact.replayed ?? '<no file>' });
+    }
     reports.push({
       ...base,
       outcome: differences.length === 0 ? 'reproduced' : 'differs',
       exit: { recorded: recordedExit, replayed: replayedExit },
       differences,
+      ...(artifact ? { artifacts: [artifact] } : {}),
     });
   }
 
@@ -495,12 +643,17 @@ export async function replayRecord(
     if (r.outcome === 'not-replayable') {
       out(`    NOT REPLAYABLE — ${r.reason}`);
     } else if (r.outcome === 'reproduced') {
-      out(`    reproduced — ${r.exit!.replayed}, stdout and stderr identical`);
+      out(
+        `    reproduced — ${r.exit!.replayed}, stdout and stderr identical` +
+          (r.artifacts ? `, and the file it wrote (written to a temporary path, not over ${r.artifacts[0].path})` : ''),
+      );
     } else {
       out(`    DIFFERS — ${r.differences.map((d) => d.stream).join(', ')}`);
       for (const d of r.differences) {
         if (d.stream === 'exit') {
           out(`      exit: recorded ${d.recorded}, replayed ${d.replayed}`);
+        } else if (d.stream === 'artifact') {
+          out(`      artifact ${d.path}: recorded sha256 ${d.recorded}, replayed ${d.replayed} (written to a temporary path)`);
         } else {
           out(`      ${d.stream}: first difference at line ${d.firstDifferingLine}`);
           out(`        recorded: ${d.recorded}`);
@@ -513,6 +666,9 @@ export async function replayRecord(
       for (const c of r.environmentChanges) {
         out(`      ${c.fact}: ${JSON.stringify(c.recorded)} -> ${JSON.stringify(c.current)}${reachNote(c.reach, r.attribution?.command)}`);
       }
+    }
+    if (r.moduleSources === 'not-recorded') {
+      out('    module sources: not recorded in this entry, so a changed literal a module keeps private would go unseen');
     }
     for (const f of r.integrity) out(`    record integrity: ${f} (the record was edited after it was written)`);
   }
@@ -545,6 +701,7 @@ function describeEnvironment(env: Partial<RecordEnvironment>): string {
   );
 }
 
+/** Render a record file's entries without replaying them. */
 export function showRecord(file: string, json: boolean, io: Io): number {
   const lines = readRecord(file);
   if (json) {
@@ -578,6 +735,7 @@ export function showRecord(file: string, json: boolean, io: Io): number {
     out(`[line ${l.line}] ${commandLine(entry.argv)}   (${exitLabel(entry.result.exitCode, entry.result.threw ?? null)}; recorded ${entry.recordedAt})`);
     block(entry.result.stdout, '|');
     block(entry.result.stderr, '!');
+    for (const i of entry.inputs ?? []) out(`    read ${i.path} (${i.flag}; ${i.sha256 === null ? 'absent' : `sha256 ${i.sha256}`})`);
     for (const a of entry.artifacts ?? []) out(`    wrote ${a.path} (sha256 ${a.sha256})`);
   }
   return 0;

@@ -12,7 +12,10 @@
  * §5.1–5.2). The parent's exact series (Carslaw & Jaeger, Conduction of Heat
  * in Solids, 2nd ed., §9.4; Incropera §5.6.2) is summed here for the volume
  * mean, the centre and the surface. A second check keeps radiation, which is
- * not linear in T − T∞, small beside convection.
+ * not linear in T − T∞, small beside convection. Where it is not small, the
+ * lumped equation is also integrated with the T⁴ loss kept (Incropera §5.3,
+ * general lumped capacitance analysis), provided the Biot number with the
+ * radiative conductance added still allows one temperature.
  *
  * @module cases/lumped-cooling
  */
@@ -29,6 +32,44 @@ export const MAX_BIOT = 0.1;
 
 /** h_rad,max/h ceiling for a loss linear in T − T∞. @internal */
 export const MAX_RADIATION_RATIO = 0.1;
+
+/** Parameters of the lumped equation with the radiative loss kept, in SI units. @internal */
+export interface LumpedRadiating {
+  readonly a: number;
+  readonly rho: number;
+  readonly c: number;
+  /** ≥ 0; 0 is pure radiation. */
+  readonly h: number;
+  readonly eps: number;
+  readonly T0: number;
+  readonly Tinf: number;
+  readonly t: number;
+}
+
+/**
+ * T(t) of ρcV dT/dt = −A[h(T − T∞) + εσ_SB(T⁴ − T∞⁴)] for a sphere (V/A =
+ * a/3), by RK4 with each step 1/100 of the local relaxation time
+ * ρca/(3(h + 4εσ_SB T³)). Stops early once |T − T∞| is below 1e-15 |T0 − T∞|.
+ * @internal
+ */
+export function lumpedRadiatingTemperature(p: LumpedRadiating): number {
+  const k = 3 / (p.rho * p.c * p.a);
+  const f = (T: number) => -k * (p.h * (T - p.Tinf) + p.eps * SIGMA_SB_SI * (T ** 4 - p.Tinf ** 4));
+  const floor = 1e-15 * Math.abs(p.T0 - p.Tinf);
+  let T = p.T0;
+  let s = 0;
+  while (s < p.t && Math.abs(T - p.Tinf) > floor) {
+    const rate = k * (p.h + 4 * p.eps * SIGMA_SB_SI * Math.max(T, p.Tinf) ** 3);
+    const dt = Math.min(p.t - s, 0.01 / rate);
+    const k1 = f(T);
+    const k2 = f(T + (dt / 2) * k1);
+    const k3 = f(T + (dt / 2) * k2);
+    const k4 = f(T + dt * k3);
+    T += (dt / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
+    s += dt;
+  }
+  return T;
+}
 
 /**
  * The first n roots of 1 − ζ cot ζ = Bi (Bi = h a/k, radius-based): the n-th
@@ -132,6 +173,8 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
     { key: 'T_centre_K', symbol: 'T(0, t)', unit: 'K', meaning: 'temperature at the centre from the series solution' },
     { key: 'T_surface_K', symbol: 'T(a, t)', unit: 'K', meaning: 'temperature at the surface from the series solution' },
     { key: 'h_rad_max_W_per_m2_K', symbol: 'h_rad', unit: 'W/(m^2*K)', meaning: 'εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run' },
+    { key: 'Bi_radiating', symbol: 'Bi_r', unit: '', meaning: '(h + h_rad)(a/3)/k: the Biot number with the largest radiative conductance added' },
+    { key: 'T_radiating_K', symbol: 'T_r(t)', unit: 'K', meaning: 'the lumped temperature with the T⁴ loss kept (RK4). The linear-loss check does not apply to it; its premise is Bi_radiating ≤ 0.1, and it is null otherwise' },
   ],
   conditions: [
     'initial condition: the sphere is at the uniform temperature T0 when it is immersed at t = 0',
@@ -146,7 +189,7 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
     method: 'eigenfunction series, roots of 1 − ζ cot ζ = Bi_a by bisection, summed until e^{−ζ²Fo} < 1e-18',
   },
   notIncluded: [
-    'radiation in the model: the check bounds it, the evaluated T(t) and the series both omit it',
+    'radiation in T_K and in the series: the linear-loss check bounds it; T_radiating_K keeps it, in the lumped model only',
     'the temperature dependence of h (natural convection has h ∝ ΔT^{1/4}) and of ρ, c, k',
     'the thermometer\'s own heat capacity and contact resistance, and conduction along its leads',
     'phase change at the surface (boiling in a quench), which makes h neither uniform nor constant',
@@ -182,6 +225,7 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
       },
     ],
   },
+  /** Evaluate the lumped sphere temperature, parent-series comparison and heat-transfer checks for the supplied inputs. */
   run(i) {
     requirePositive(ID, i, ['a_m', 'rho_kg_per_m3', 'c_J_per_kg_K', 'k_W_per_m_K', 'h_W_per_m2_K', 'T0_K', 'T_inf_K']);
     const {
@@ -201,6 +245,8 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
     const Tmax = Math.max(T0, Tinf);
     const hRad = eps * SIGMA_SB_SI * (Tmax + Tinf) * (Tmax * Tmax + Tinf * Tinf);
     const volume = (4 / 3) * Math.PI * a ** 3;
+    const biRadiating = ((h + hRad) * (a / 3)) / k;
+    const tRadiating = biRadiating <= MAX_BIOT ? lumpedRadiatingTemperature({ a, rho, c, h, eps, T0, Tinf, t }) : null;
     return {
       outputs: {
         tau_s: tau,
@@ -216,6 +262,8 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
         T_centre_K: Tinf + dT0 * series.centre,
         T_surface_K: Tinf + dT0 * series.surface,
         h_rad_max_W_per_m2_K: hRad,
+        Bi_radiating: biRadiating,
+        T_radiating_K: tRadiating,
       },
       checks: [
         check('lumped', 'one temperature for the sphere: internal conduction fast beside surface loss, Bi ≪ 1', 'h (a/3)/k', bi, '<=', MAX_BIOT,

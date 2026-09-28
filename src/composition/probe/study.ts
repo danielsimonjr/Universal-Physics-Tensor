@@ -17,10 +17,12 @@
  *
  * A study is JSON or CSV (the CSV compiles to the same object, so both are
  * refused for the same reasons). Inputs may carry σ, propagated by the
- * effective-variance method. A file may declare a correction family in one
- * dimensionless input; its terms are admitted only by an F test on the
- * exploratory rows. Replication rows may come from a separate file with its
- * own provenance.
+ * effective-variance method. A file may declare correction families in one
+ * or more dimensionless inputs; their terms are admitted only by an F test on
+ * the exploratory rows. Replication rows may come from a separate file with
+ * its own provenance; replication rows at a study row's inputs that agree
+ * with it more closely than independent measurements would are reported as
+ * `too-close`, not as a replication.
  *
  * @internal
  */
@@ -42,6 +44,7 @@ import { NO_HOLDOUT_WORDING, runProbeSearch } from './pipeline.js';
 import { bodyExpression } from './fingerprint.js';
 import { canonicalJson, hashCanonical } from './serialize.js';
 
+/** The partition a study row belongs to for fitting, holdout testing or replication. @internal */
 export type StudyRole = 'exploratory' | 'holdout' | 'replication';
 
 /** Where the observations came from. `synthetic` is declared, never inferred. @internal */
@@ -52,6 +55,7 @@ export interface StudyProvenance {
   readonly calibration?: string;
 }
 
+/** A named variable in a study, with its unit conversion and optional input uncertainty. @internal */
 export interface StudyQuantity {
   readonly name: string;
   readonly unit: string;
@@ -80,6 +84,7 @@ export interface StudyCorrection {
   readonly powers: readonly number[];
 }
 
+/** A declared comparison model formula and whether its scale is fit on exploratory rows. @internal */
 export interface StudyBaseline {
   readonly name: string;
   readonly formula: string;
@@ -97,7 +102,8 @@ export interface ProbeStudy {
   readonly baselines: readonly StudyBaseline[];
   readonly alpha: number;
   readonly design?: Readonly<Record<string, { min: number; max: number; steps: number }>>;
-  readonly correction?: StudyCorrection;
+  /** The declared families, in the declared order (one object in the file is a list of one). */
+  readonly correction?: readonly StudyCorrection[];
   /** Set when the replication rows came from a separate file. */
   readonly replication?: { readonly source: string; readonly provenance: StudyProvenance };
 }
@@ -172,29 +178,49 @@ function governingQuantity(raw: unknown, where: string): StudyQuantity {
   return sigma === undefined ? q : { ...q, sigma: positiveSigma(sigma, q, `${where}.sigma`) };
 }
 
-function parseCorrection(raw: unknown, governing: readonly StudyQuantity[]): StudyCorrection | undefined {
-  if (raw === undefined) return undefined;
+function parseFamily(raw: unknown, governing: readonly StudyQuantity[], where: string): StudyCorrection {
   if (!isObject(raw) || !nonEmptyString(raw.input) || !Array.isArray(raw.powers)) {
-    refuse('correction', 'needs {"input": <dimensionless governing input>, "powers": [p, ...]}');
+    refuse(where, 'needs {"input": <dimensionless governing input>, "powers": [p, ...]}');
   }
   for (const k of Object.keys(raw)) {
-    if (k !== 'input' && k !== 'powers') refuse('correction', `undeclared key '${k}'`);
+    if (k !== 'input' && k !== 'powers') refuse(where, `undeclared key '${k}'`);
   }
   const q = governing.find((g) => g.name === raw.input);
-  if (!q) refuse('correction.input', `'${raw.input}' is not a declared governing input`);
+  if (!q) refuse(`${where}.input`, `'${raw.input}' is not a declared governing input`);
   if (!equals(q.dim, DIMENSIONLESS)) {
-    refuse('correction.input', `'${q.name}' is ${format(q.dim)}; a correction family needs a dimensionless input`);
+    refuse(`${where}.input`, `'${q.name}' is ${format(q.dim)}; a correction family needs a dimensionless input`);
   }
   const powers = raw.powers;
   if (powers.length === 0 || powers.length > MAX_CORRECTION_TERMS) {
-    refuse('correction.powers', `must list 1 to ${MAX_CORRECTION_TERMS} powers`);
+    refuse(`${where}.powers`, `must list 1 to ${MAX_CORRECTION_TERMS} powers`);
   }
   if (!powers.every((p): p is number => typeof p === 'number' && Number.isFinite(p) && p > 0)) {
-    refuse('correction.powers', 'must be positive finite numbers');
+    refuse(`${where}.powers`, 'must be positive finite numbers');
   }
-  if (new Set(powers).size !== powers.length) refuse('correction.powers', 'must be distinct');
+  if (new Set(powers).size !== powers.length) refuse(`${where}.powers`, 'must be distinct');
   return { input: q.name, powers };
 }
+
+/** One family `{input, powers}`, or a list of them, each in a different dimensionless input. */
+function parseCorrection(raw: unknown, governing: readonly StudyQuantity[]): StudyCorrection[] | undefined {
+  if (raw === undefined) return undefined;
+  if (!Array.isArray(raw)) return [parseFamily(raw, governing, 'correction')];
+  if (raw.length === 0) refuse('correction', 'must list at least one family');
+  const families = raw.map((f, i) => parseFamily(f, governing, `correction[${i}]`));
+  const seen = new Set<string>();
+  for (const [i, f] of families.entries()) {
+    if (seen.has(f.input)) refuse(`correction[${i}].input`, `'${f.input}' already has a family; give each input one family`);
+    seen.add(f.input);
+  }
+  const total = families.reduce((s, f) => s + f.powers.length, 0);
+  if (total > MAX_CORRECTION_TERMS) {
+    refuse('correction', `lists ${total} powers across its families; at most ${MAX_CORRECTION_TERMS}`);
+  }
+  return families;
+}
+
+/** Provenance text compared without case, spacing or punctuation: "Lab A" and "lab-a" are one source. */
+const provenanceKey = (s: string): string => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 
 function parseProvenance(raw: unknown): StudyProvenance {
   if (!isObject(raw)) refuse('provenance', 'is required: {"synthetic": true|false, "source": "..."}');
@@ -333,7 +359,7 @@ function guardLeakage(rows: readonly StudyObservation[]): void {
     if (r.role !== 'replication') studyData.set(dataKey(r), r);
     if (r.role !== 'exploratory') continue;
     fitKeys.set(canonicalJson(r.inputs), r.id);
-    fitSources.add(r.source);
+    fitSources.add(provenanceKey(r.source));
   }
   for (const r of rows) {
     if (r.role === 'exploratory') continue;
@@ -349,7 +375,7 @@ function guardLeakage(rows: readonly StudyObservation[]): void {
     if (twin !== undefined) {
       refuse(`observation ${r.id}`, `${r.role} row repeats the inputs of exploratory row ${twin}; withheld data must not be fit data`);
     }
-    if (r.role === 'replication' && fitSources.has(r.source)) {
+    if (r.role === 'replication' && fitSources.has(provenanceKey(r.source))) {
       refuse(
         `observation ${r.id}`,
         `replication row has source '${r.source}', which also supplied exploratory rows; ` +
@@ -466,10 +492,14 @@ export function attachReplication(study: ProbeStudy, raw: unknown, source: strin
   ) {
     refuse(`${source} governing`, `must declare the study's inputs {${names(study.governing)}} with the same dimensions (got {${names(rep.governing)}})`);
   }
-  if (rep.provenance.source === study.provenance.source) {
+  if (provenanceKey(rep.provenance.source) === provenanceKey(study.provenance.source)) {
     refuse(`${source} provenance.source`, `is '${rep.provenance.source}', the study's own source; replication must be an independent acquisition`);
   }
-  if (rep.provenance.acquisition !== undefined && rep.provenance.acquisition === study.provenance.acquisition) {
+  if (
+    rep.provenance.acquisition !== undefined &&
+    study.provenance.acquisition !== undefined &&
+    provenanceKey(rep.provenance.acquisition) === provenanceKey(study.provenance.acquisition)
+  ) {
     refuse(`${source} provenance.acquisition`, 'is the study\'s own acquisition; replication must be an independent acquisition');
   }
   const ids = new Set(study.observations.map((o) => o.id));
@@ -478,6 +508,130 @@ export function attachReplication(study: ProbeStudy, raw: unknown, source: strin
   const observations = [...study.observations, ...rep.observations];
   guardLeakage(observations);
   return { ...study, observations, replication: { source, provenance: rep.provenance } };
+}
+
+// --- replication closeness -------------------------------------------------
+
+/** One lower-tail χ² test of replication rows against the study rows they pair with. @internal */
+export interface ClosenessTest {
+  readonly chi2: number;
+  readonly dof: number;
+  /** P(χ²_ν ≤ chi2): small when the rows agree better than their σ allows. */
+  readonly pLower: number;
+  /** pLower < α/2. */
+  readonly flagged: boolean;
+}
+
+/**
+ * Whether replication rows are closer to the study rows at the same inputs
+ * than independent measurements with the declared σ can be. @internal
+ */
+export interface ReplicationIndependence {
+  /** Replication rows paired with a study row at the same inputs. */
+  readonly pairs: number;
+  /** y_rep = y_study: Σ Δy²/(σ_rep² + σ_study²) on ν = pairs. Null without a pair. */
+  readonly identity: ClosenessTest | null;
+  /** y_rep = a + b·y_study, fit with weights 1/(σ_rep² + b²σ_study²), on ν = pairs − 2. Null below 3 pairs or when degenerate. */
+  readonly affine: (ClosenessTest & { readonly slope: number; readonly offset: number }) | null;
+  readonly tooClose: boolean;
+  readonly reason: string;
+}
+
+function sameInputs(a: StudyObservation, b: StudyObservation): boolean {
+  const keys = Object.keys(a.inputs);
+  if (keys.length !== Object.keys(b.inputs).length) return false;
+  return keys.every((k) => {
+    const x = a.inputs[k];
+    const y = b.inputs[k];
+    if (x === undefined || y === undefined) return false;
+    const sa = a.inputSigma[k] ?? 0;
+    const sb = b.inputSigma[k] ?? 0;
+    const tol = sa > 0 || sb > 0 ? 3 * Math.hypot(sa, sb) : 1e-9 * Math.max(Math.abs(x), Math.abs(y));
+    return Math.abs(x - y) <= tol;
+  });
+}
+
+function closeness(chi2: number, dof: number, alpha: number): ClosenessTest {
+  const pLower = chiSquareCdf(chi2, dof);
+  return { chi2, dof, pLower, flagged: pLower < alpha / 2 };
+}
+
+/** Weighted straight line y = a + b·x with the effective variance σ_y² + b²σ_x², iterated from b = 1. */
+function affineFit(pts: readonly { x: number; sx: number; y: number; sy: number }[]): { a: number; b: number; chi2: number } | null {
+  let b = 1;
+  let a = 0;
+  for (let it = 0; it < 6; it++) {
+    const w = pts.map((p) => 1 / (p.sy ** 2 + b * b * p.sx ** 2));
+    const W = w.reduce((s, v) => s + v, 0);
+    const xm = pts.reduce((s, p, i) => s + w[i]! * p.x, 0) / W;
+    const ym = pts.reduce((s, p, i) => s + w[i]! * p.y, 0) / W;
+    const sxx = pts.reduce((s, p, i) => s + w[i]! * (p.x - xm) ** 2, 0);
+    const sxy = pts.reduce((s, p, i) => s + w[i]! * (p.x - xm) * (p.y - ym), 0);
+    if (!(sxx > 0) || !Number.isFinite(sxy)) return null;
+    b = sxy / sxx;
+    a = ym - b * xm;
+  }
+  const chi2 = pts.reduce((s, p) => s + (p.y - a - b * p.x) ** 2 / (p.sy ** 2 + b * b * p.sx ** 2), 0);
+  return Number.isFinite(chi2) ? { a, b, chi2 } : null;
+}
+
+/**
+ * Fisher's test of agreement too good to be true. Each replication row is
+ * paired with the first unused study row at the same inputs (within 3·√(σ_x²
+ * + σ_x'²) when an input σ is declared, else to 1e-9 relative). Independent
+ * acquisitions differ by about their σ, so a χ² far in the lower tail means a
+ * copy, or an overstated σ. Two tests, each at α/2: identity (y_rep = y_study)
+ * and affine (y_rep = a + b·y_study, which catches a rescaled or shifted copy).
+ * Only paired rows are tested: a copy moved to other inputs is not caught.
+ *
+ * @internal
+ */
+export function replicationIndependence(observations: readonly StudyObservation[], alpha: number): ReplicationIndependence {
+  const reps = observations.filter((o) => o.role === 'replication');
+  if (reps.length === 0) {
+    return { pairs: 0, identity: null, affine: null, tooClose: false, reason: 'no replication rows; the closeness test did not run' };
+  }
+  const used = new Set<StudyObservation>();
+  const pts: { x: number; sx: number; y: number; sy: number }[] = [];
+  for (const r of reps) {
+    const s = observations.find((o) => o.role !== 'replication' && !used.has(o) && sameInputs(r, o));
+    if (!s) continue;
+    used.add(s);
+    pts.push({ x: s.observed, sx: s.sigma, y: r.observed, sy: r.sigma });
+  }
+  const n = pts.length;
+  if (n === 0) {
+    return {
+      pairs: 0,
+      identity: null,
+      affine: null,
+      tooClose: false,
+      reason: 'no replication row shares its inputs with a study row; the closeness test did not run',
+    };
+  }
+  const identity = closeness(
+    pts.reduce((s, p) => s + (p.y - p.x) ** 2 / (p.sy ** 2 + p.sx ** 2), 0),
+    n,
+    alpha,
+  );
+  const fit = n >= 3 ? affineFit(pts) : null;
+  const affine = fit ? { ...closeness(fit.chi2, n - 2, alpha), slope: fit.b, offset: fit.a } : null;
+  const tooClose = identity.flagged || (affine?.flagged ?? false);
+  const cmp = (t: ClosenessTest) => `lower-tail p = ${fmtP(t.pLower)} ${t.flagged ? '<' : '≥'} α/2 = ${alpha / 2}`;
+  const parts = [
+    n === 1 ? '1 replication row shares its inputs with a study row' : `${n} replication rows share their inputs with study rows`,
+    ...(n < reps.length ? [`${reps.length - n} other(s) are at inputs no study row has and are not tested`] : []),
+    `identity: Σz² = ${identity.chi2.toPrecision(3)} on ν = ${n}, ${cmp(identity)}`,
+    affine
+      ? `affine: y_rep = ${affine.offset.toPrecision(3)} + ${affine.slope.toPrecision(6)} · y_study, χ² = ${affine.chi2.toPrecision(3)} on ν = ${n - 2}, ${cmp(affine)}`
+      : n < 3
+        ? 'affine: not run (needs 3 pairs)'
+        : 'affine: not run (the paired study values do not vary)',
+  ];
+  const verdict = tooClose
+    ? 'closer than independent measurements with the declared σ allow — not independent, or σ is overstated'
+    : 'no closer than independent measurements with the declared σ would be';
+  return { pairs: n, identity, affine, tooClose, reason: `${parts.join('; ')}: ${verdict}` };
 }
 
 // --- CSV study files -------------------------------------------------------
@@ -669,22 +823,26 @@ function lnGamma(z: number): number {
   return 0.5 * Math.log(2 * Math.PI) + (zz + 0.5) * Math.log(t) - t + Math.log(x);
 }
 
+/** The series for the regularized lower incomplete gamma P(a, x); converges fast for x < a + 1. */
+function gammaSeries(a: number, x: number): number {
+  const front = Math.exp(-x + a * Math.log(x) - lnGamma(a));
+  let ap = a;
+  let del = 1 / a;
+  let sum = del;
+  for (let n = 0; n < 1000; n++) {
+    ap += 1;
+    del *= x / ap;
+    sum += del;
+    if (Math.abs(del) < Math.abs(sum) * 1e-16) break;
+  }
+  return sum * front;
+}
+
 /** Regularized upper incomplete gamma Q(a, x). */
 function gammaQ(a: number, x: number): number {
   if (x <= 0) return 1;
+  if (x < a + 1) return Math.max(0, 1 - gammaSeries(a, x));
   const front = Math.exp(-x + a * Math.log(x) - lnGamma(a));
-  if (x < a + 1) {
-    let ap = a;
-    let del = 1 / a;
-    let sum = del;
-    for (let n = 0; n < 1000; n++) {
-      ap += 1;
-      del *= x / ap;
-      sum += del;
-      if (Math.abs(del) < Math.abs(sum) * 1e-16) break;
-    }
-    return Math.max(0, 1 - sum * front);
-  }
   const tiny = 1e-300;
   let b = x + 1 - a;
   let c = 1 / tiny;
@@ -710,6 +868,18 @@ export function chiSquareSurvival(chi2: number, dof: number): number {
   if (!(dof > 0)) throw new RangeError('chiSquareSurvival: dof must be positive');
   if (!(chi2 > 0)) return 1;
   return gammaQ(dof / 2, chi2 / 2);
+}
+
+/**
+ * P(χ²_ν ≤ chi2), computed directly in the lower tail, where 1 − Q would
+ * round a small probability away. @internal
+ */
+export function chiSquareCdf(chi2: number, dof: number): number {
+  if (!(dof > 0)) throw new RangeError('chiSquareCdf: dof must be positive');
+  if (!(chi2 > 0)) return 0;
+  const a = dof / 2;
+  const x = chi2 / 2;
+  return x < a + 1 ? Math.min(1, gammaSeries(a, x)) : 1 - gammaQ(a, x);
 }
 
 /** Continued fraction for the incomplete beta function (modified Lentz). */
@@ -771,6 +941,7 @@ export interface SetTest {
   readonly pass: boolean | null;
 }
 
+/** The category of model being scored in a probe study. @internal */
 export type ModelKind = 'candidate' | 'baseline' | 'null';
 
 /** One model scored on each set. Only the exploratory rows ever set its parameter. @internal */
@@ -965,6 +1136,7 @@ function scoreModel(spec: ModelSpec, sets: Split, alpha: number, withheld: boole
 
 /** One step of admitting a correction term. @internal */
 export interface CorrectionStep {
+  readonly input: string;
   readonly power: number;
   /** Extra-sum-of-squares F = (χ²_{k−1} − χ²_k) / (χ²_k / ν_k); null when not testable. */
   readonly F: number | null;
@@ -977,58 +1149,70 @@ export interface CorrectionStep {
 const SUBSCRIPT = '₀₁₂₃₄₅₆₇₈₉';
 const sub = (n: number) => [...String(n)].map((d) => SUBSCRIPT[Number(d)]).join('');
 
-function correctionBasis(shape: Predictor, input: string, powers: readonly number[]): Predictor[] {
-  return [shape, ...powers.map((p) => (x: Readonly<Record<string, number>>) => shape(x) * x[input]! ** p)];
+/** One admitted term u^p of a correction family. */
+interface CorrectionTerm {
+  readonly input: string;
+  readonly power: number;
+}
+
+function correctionBasis(shape: Predictor, terms: readonly CorrectionTerm[]): Predictor[] {
+  return [shape, ...terms.map((t) => (x: Readonly<Record<string, number>>) => shape(x) * x[t.input]! ** t.power)];
 }
 
 /**
- * Admit the declared powers one at a time, in the declared order, while each
- * lowers the exploratory χ² significantly: F on (1, ν_k) with p < α. The
- * first term that fails stops the sequence. The F ratio divides by the
- * residual χ²/ν, so an understated σ does not inflate it.
+ * Admit the declared terms one at a time, family by family in the declared
+ * order and each family's powers in its declared order, while each lowers the
+ * exploratory χ² significantly given the terms already admitted: F on
+ * (1, ν_k) with p < α. The first term a family fails ends that family; the
+ * next family is then tried. The F ratio divides by the residual χ²/ν, so an
+ * understated σ does not inflate it.
  */
 function admitCorrection(
   shape: Predictor,
-  correction: StudyCorrection,
+  families: readonly StudyCorrection[],
   rows: readonly StudyObservation[],
   alpha: number,
-): { powers: number[]; steps: CorrectionStep[] } {
-  const chi2With = (k: number): number | null => {
-    const basis = correctionBasis(shape, correction.input, correction.powers.slice(0, k));
+): { terms: CorrectionTerm[]; steps: CorrectionStep[] } {
+  const chi2With = (terms: readonly CorrectionTerm[]): number | null => {
+    const basis = correctionBasis(shape, terms);
     const coef = fitLinear(rows, basis);
-    return coef === null ? null : testRows(rows, combine(basis, coef), k + 1, alpha).chi2;
+    return coef === null ? null : testRows(rows, combine(basis, coef), terms.length + 1, alpha).chi2;
   };
   const steps: CorrectionStep[] = [];
-  let prev = chi2With(0);
-  let admitted = 0;
-  for (let k = 1; prev !== null && k <= correction.powers.length; k++) {
-    const power = correction.powers[k - 1]!;
-    const dof = rows.length - (k + 1);
-    if (dof < 1) {
-      steps.push({ power, F: null, dof, p: null, admitted: false, reason: 'ν < 1: too few exploratory rows to test another term' });
-      break;
+  const admitted: CorrectionTerm[] = [];
+  let prev = chi2With([]);
+  families: for (const family of families) {
+    for (const power of family.powers) {
+      if (prev === null) break families;
+      const term = { input: family.input, power };
+      const trial = [...admitted, term];
+      const dof = rows.length - (trial.length + 1);
+      if (dof < 1) {
+        steps.push({ ...term, F: null, dof, p: null, admitted: false, reason: 'ν < 1: too few exploratory rows to test another term' });
+        break families;
+      }
+      const cur = chi2With(trial);
+      if (cur === null) {
+        steps.push({ ...term, F: null, dof, p: null, admitted: false, reason: 'degenerate with the terms before it on the exploratory rows' });
+        break;
+      }
+      const F = cur > 0 ? Math.max(0, prev - cur) / (cur / dof) : Infinity;
+      const p = fSurvival(F, 1, dof);
+      const ok = p < alpha;
+      steps.push({
+        ...term,
+        F,
+        dof,
+        p,
+        admitted: ok,
+        reason: ok ? `admitted: F = ${F.toPrecision(3)} on (1, ${dof}), p = ${fmtP(p)} < α` : `not admitted: F = ${F.toPrecision(3)} on (1, ${dof}), p = ${fmtP(p)} ≥ α`,
+      });
+      if (!ok) break;
+      admitted.push(term);
+      prev = cur;
     }
-    const cur = chi2With(k);
-    if (cur === null) {
-      steps.push({ power, F: null, dof, p: null, admitted: false, reason: 'degenerate with the terms before it on the exploratory rows' });
-      break;
-    }
-    const F = cur > 0 ? Math.max(0, prev - cur) / (cur / dof) : Infinity;
-    const p = fSurvival(F, 1, dof);
-    const ok = p < alpha;
-    steps.push({
-      power,
-      F,
-      dof,
-      p,
-      admitted: ok,
-      reason: ok ? `admitted: F = ${F.toPrecision(3)} on (1, ${dof}), p = ${fmtP(p)} < α` : `not admitted: F = ${F.toPrecision(3)} on (1, ${dof}), p = ${fmtP(p)} ≥ α`,
-    });
-    if (!ok) break;
-    admitted = k;
-    prev = cur;
   }
-  return { powers: correction.powers.slice(0, admitted), steps };
+  return { terms: admitted, steps };
 }
 
 /** Infix rendering of a scalar ExprNode for reports. */
@@ -1043,28 +1227,35 @@ export function exprToInfix(e: ExprNode): string {
 
 // --- the study -------------------------------------------------------------
 
+/** The main holdout verdict assigned after candidate selection. @internal */
 export type StudyVerdict = 'no-credible-candidate' | 'refuted-on-holdout' | 'survives-holdout' | 'untested-on-holdout';
-export type ReplicationOutcome = 'survives-replication' | 'refuted-on-replication' | 'no-replication-data' | 'not-tested';
+/** The separate replication classification assigned after fitting and holdout handling. @internal */
+export type ReplicationOutcome =
+  | 'survives-replication'
+  | 'refuted-on-replication'
+  | 'no-replication-data'
+  | 'not-tested'
+  | 'too-close';
 
+/** A searched candidate's chi-squared results with its credibility judgement and any admitted correction. @internal */
 export interface CandidateTest extends ModelTest {
   readonly credible: boolean;
   readonly credibility: string;
-  /** Set on a candidate from the declared correction family: m(x)·(1 + Σ c_k·u^p_k). */
+  /** Set on a candidate from the declared correction families: m(x)·(1 + Σ c_k·u_k^p_k). */
   readonly correction?: {
     readonly base: string;
-    readonly input: string;
-    readonly terms: readonly { readonly power: number; readonly coefficient: number }[];
+    readonly terms: readonly { readonly input: string; readonly power: number; readonly coefficient: number }[];
   };
 }
 
-/** How the declared correction family was searched. @internal */
+/** How the declared correction families were searched. @internal */
 export interface StudyCorrectionReport {
-  readonly input: string;
-  readonly powers: readonly number[];
+  readonly families: readonly StudyCorrection[];
   readonly criterion: string;
   readonly perCandidate: readonly { readonly base: string; readonly steps: readonly CorrectionStep[]; readonly error?: string }[];
 }
 
+/** A proposed next measurement point or the reason no design suggestion was made. @internal */
 export interface StudyDesignSuggestion {
   readonly abstained: boolean;
   readonly reason?: string;
@@ -1077,7 +1268,7 @@ export interface StudyDesignSuggestion {
   readonly bounds?: 'declared' | 'exploratory-range';
 }
 
-/** @internal */
+/** The full report of a probe study run, including selection, holdout, replication and caveats. @internal */
 export interface ProbeStudyResult {
   readonly studyId: string;
   readonly source: string;
@@ -1104,12 +1295,15 @@ export interface ProbeStudyResult {
   readonly verdict: StudyVerdict;
   readonly verdictReasons: readonly string[];
   readonly replication: ReplicationOutcome;
+  /** Whether the replication rows are closer to the study rows than independent data can be. */
+  readonly replicationIndependence: ReplicationIndependence;
   readonly baselines: readonly ModelTest[];
   readonly design: StudyDesignSuggestion;
   readonly caveats: readonly string[];
   readonly schemaVersion: string;
 }
 
+/** Runtime overrides controlling search budget and the study's test level. @internal */
 export interface ProbeStudyOptions {
   readonly budget?: SearchBudget;
   /** Overrides the file's `criterion.alpha`. */
@@ -1264,21 +1458,21 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
       return [base];
     }
     perCandidate.push({ base: c.id, steps: admission.steps });
-    const powers = admission.powers;
-    if (powers.length === 0) return [base];
-    const terms = powers.map((p, j) => `c${sub(j + 1)}·${corr.input}^${p}`).join(' + ');
+    const admitted = admission.terms;
+    if (admitted.length === 0) return [base];
+    const terms = admitted.map((t, j) => `c${sub(j + 1)}·${t.input}^${t.power}`).join(' + ');
     return [
       base,
       {
         spec: {
-          id: `${c.id}×(1+${powers.map((p) => `${corr.input}^${p}`).join('+')})`,
+          id: `${c.id}×(1+${admitted.map((t) => `${t.input}^${t.power}`).join('+')})`,
           kind: 'candidate' as const,
           label: `${label} · (1 + ${terms})`,
-          basis: correctionBasis(shape, corr.input, powers),
+          basis: correctionBasis(shape, admitted),
           fit: true,
         },
-        complexity: c.complexity.astNodes + 4 * powers.length,
-        correction: { base: c.id, input: corr.input, powers },
+        complexity: c.complexity.astNodes + 4 * admitted.length,
+        correction: { base: c.id, terms: admitted },
       },
     ];
   });
@@ -1290,8 +1484,7 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
       ? {
           correction: {
             base: s.correction.base,
-            input: s.correction.input,
-            terms: s.correction.powers.map((power, j) => ({ power, coefficient: coef[j + 1]! / coef[0]! })),
+            terms: s.correction.terms.map((t, j) => ({ input: t.input, power: t.power, coefficient: coef[j + 1]! / coef[0]! })),
           },
         }
       : {};
@@ -1356,6 +1549,14 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
     const rep = selected.replication;
     if (rep) replication = rep.pass ? 'survives-replication' : 'refuted-on-replication';
   }
+  // Rows closer to the study's than independent data can be are not a replication, whatever they agree with.
+  const independence = replicationIndependence(study.observations, alpha);
+  if (independence.tooClose) replication = 'too-close';
+  const corrInputs = corr?.map((c) => `'${c.input}'`).join(', ') ?? '';
+  const sharedCalibration =
+    repFile?.provenance.calibration !== undefined &&
+    study.provenance.calibration !== undefined &&
+    provenanceKey(repFile.provenance.calibration) === provenanceKey(study.provenance.calibration);
 
   const caveats = [
     'A fit is not a mechanism: a candidate that survives a holdout was not refuted by these rows; ' +
@@ -1373,17 +1574,30 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
       : []),
     ...(repFile
       ? [`The replication rows come from ${repFile.source}, whose provenance is its author's declaration. UPT checked only ` +
-          'that its source and acquisition differ from the study\'s and that no row repeats a study row\'s data exactly; ' +
-          'a copy with altered values would not be caught.']
+          'that its source and acquisition differ from the study\'s (ignoring case, spacing and punctuation), that no row ' +
+          'repeats a study row\'s data exactly, and that rows at a study row\'s inputs are not closer to it than their σ ' +
+          'allows, as an identical or an affine (rescaled or shifted) copy, each tested at α/2. A copy at altered inputs, ' +
+          'or of rows the study does not contain, is not caught.']
+      : sets.replication.length > 0
+        ? ['The replication rows are in the study file and share its provenance block (calibration included); only their ' +
+            'row source differs from the fit rows\'.']
+        : []),
+    ...(sharedCalibration
+      ? [`The replication file declares the study's own calibration ('${study.provenance.calibration}'): whatever that ` +
+          'calibration gets wrong, both share, so the replication does not test it.']
       : []),
     ...(inputsWithSigma.length > 0
       ? ['Input σ is propagated to first order (effective variance): exact for a model linear in the input, ' +
           'approximate when the model curves appreciably over ±σ_x.']
       : []),
-    ...(corr
-      ? [`The correction family in '${corr.input}' was declared by the file; only that family was searched, and UPT ` +
+    ...(corr && corr.length === 1
+      ? [`The correction family in ${corrInputs} was declared by the file; only that family was searched, and UPT ` +
           'cannot verify it was declared before the data were seen.']
-      : []),
+      : corr
+        ? [`The correction families in ${corrInputs} were declared by the file; only those families were searched, and UPT ` +
+            'cannot verify they were declared before the data were seen. The families are additive: a cross term (u·v) ' +
+            'is not in them, and the order they were declared in decides which terms are tried first.']
+        : []),
   ];
 
   return {
@@ -1398,11 +1612,12 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
     uncertainty: { method: inputsWithSigma.length > 0 ? 'effective-variance' : 'output-only', inputs: inputsWithSigma },
     correction: corr
       ? {
-          input: corr.input,
-          powers: corr.powers,
+          families: corr,
           criterion:
-            `m(x)·(1 + Σ c_k·${corr.input}^p_k) for each searched monomial m, fit on the exploratory rows only; ` +
-            `terms admitted in the declared order while each passes an extra-sum-of-squares F test at p < α = ${alpha}`,
+            `m(x)·(1 + ${corr.map((c) => `Σ c_k·${c.input}^p_k`).join(' + ')}) for each searched monomial m, fit on the ` +
+            'exploratory rows only; terms admitted in the declared order' +
+            (corr.length > 1 ? ', family by family (the first term a family fails ends that family),' : '') +
+            ` while each passes an extra-sum-of-squares F test at p < α = ${alpha}`,
           perCandidate,
         }
       : null,
@@ -1420,6 +1635,7 @@ export async function runProbeStudy(study: ProbeStudy, opts: ProbeStudyOptions =
     verdict,
     verdictReasons,
     replication,
+    replicationIndependence: independence,
     baselines: baselines.map((b) => b.test),
     design,
     caveats,
@@ -1478,13 +1694,13 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
   L.push('');
   L.push(
     `  search (exploratory rows only): ${r.search.generated} candidate(s) generated, ${r.search.fitted} fit, ` +
-      `${r.search.rejected} rejected`,
+      `${r.search.rejected} rejected; stop: ${r.search.stopReason}`,
   );
   for (const n of r.search.notes.slice(0, 6)) L.push(`    ${n}`);
   if (r.correction) {
-    L.push(`  declared correction family: ${r.correction.criterion}`);
+    L.push(`  declared correction ${r.correction.families.length > 1 ? 'families' : 'family'}: ${r.correction.criterion}`);
     for (const pc of r.correction.perCandidate) {
-      const steps = pc.error ?? (pc.steps.map((s) => `${r.correction!.input}^${s.power} ${s.reason}`).join('; ') || 'no term tested');
+      const steps = pc.error ?? (pc.steps.map((s) => `${s.input}^${s.power} ${s.reason}`).join('; ') || 'no term tested');
       L.push(`    on ${pc.base}: ${steps}`);
     }
   }
@@ -1540,6 +1756,7 @@ export function formatProbeStudy(r: ProbeStudyResult): string {
   L.push(`  verdict: ${r.verdict}`);
   for (const why of r.verdictReasons) L.push(`    ${why}`);
   L.push(`  replication: ${r.replication}`);
+  if (r.counts.replication > 0) L.push(`    closeness: ${r.replicationIndependence.reason}`);
   L.push('');
   for (const c of r.caveats) L.push(`  ⚠ ${c}`);
   return L.join('\n');

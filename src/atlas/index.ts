@@ -38,6 +38,7 @@ export type {
   AtlasRejection,
   FormalFidelity,
   FormalRef,
+  NormTransport,
 } from './types.js';
 export { MissingHorizonError, MissingLipschitzError } from './types.js';
 export { ALL_EVIDENCE_TAGS } from './types.js';
@@ -45,7 +46,7 @@ export { ALL_EVIDENCE_TAGS } from './types.js';
 // The Phase 1–3 core. Absent from this barrel until the S6.7 API review found
 // the gap: subpath users could not reach evidence derivation, the composition
 // table or path bounding at all (tests/atlas/barrel-completeness.test.ts).
-export { deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES } from './derive-evidence.js';
+export { deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES } from './derive-evidence.js';
 export type {
   CounterexampleLike,
   EvidenceInput,
@@ -55,8 +56,8 @@ export type {
 } from './derive-evidence.js';
 export { composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM } from './composition-table.js';
 export type { CompositionResult, NoCompositeClaim } from './composition-table.js';
-export { boundPath, findAtlasPath, findPath } from './path-bound.js';
-export type { NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim } from './path-bound.js';
+export { boundPath, findAtlasPath, findPath, horizonOnRoute, routeEntryModels } from './path-bound.js';
+export type { AppliedTransport, NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim } from './path-bound.js';
 
 export type { AtlasModel, ModelId } from './model.js';
 

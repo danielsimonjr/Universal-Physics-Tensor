@@ -839,10 +839,16 @@ upt path model-pendulum model-lc --at theta0=0.2 T0=1 t=10
                unnormed exact map may carry a normed claim. IDENTITY_BOUND is
                the identity ONLY IN THE NORM A BRIDGE STATES, and an
                exact-equivalence bridge carries no bound, hence states no
-               norm — so it contributes IDENTITY_BOUND in NO norm.
+               norm — so it contributes IDENTITY_BOUND in NO norm, UNLESS it
+               declares a norm transport (AtlasBridge.normTransports) for the
+               crossed direction whose `from` is the running norm and whose
+               time map is uniform. Then it contributes (K_Φ, 0) in the
+               transport's `to` norm, and each horizon before it is restated
+               through the transport's time map (horizonOnRoute).
+               docs/planning/ADR-transported-norm-composition.md.
         │
         ▼
-  { kind: 'bound', bound, terminal, relation, norm }
+  { kind: 'bound', bound, terminal, relation, norm, transports? }
         or
   { kind: 'no-claim', reason, detail }   ← carries NO number, by type
 ```
@@ -891,7 +897,7 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 | Claim | Value | Source |
 |---|---|---|
 | entryRoots | 5 | dependency-graph.json |
-| reachableFiles | 337 | dependency-graph.json |
+| reachableFiles | 370 | dependency-graph.json |
 | runtimeCircularDeps | 0 | dependency-graph.json |
 
 **`entryRoots` is 5.** The roots are `src/index.ts`, the subpath entries

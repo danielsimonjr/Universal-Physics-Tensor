@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 376,
+    "totalFiles": 383,
     "totalModules": 12,
-    "totalExports": 2705
+    "totalExports": 2777
   },
   "entryPoints": [
     {
@@ -608,7 +608,8 @@
           "NO_PASSING_WITNESSES",
           "counterexamplesWithRejection",
           "deriveEvidence",
-          "deriveEvidenceForVerdict"
+          "deriveEvidenceForVerdict",
+          "deriveCompositeEvidence"
         ],
         "interfaces": [
           "WitnessLike",
@@ -619,7 +620,8 @@
         "functions": [
           "counterexamplesWithRejection",
           "deriveEvidence",
-          "deriveEvidenceForVerdict"
+          "deriveEvidenceForVerdict",
+          "deriveCompositeEvidence"
         ],
         "constants": [
           "NO_PASSING_WITNESSES"
@@ -1087,7 +1089,8 @@
               "AtlasBridge",
               "AtlasRejection",
               "FormalFidelity",
-              "FormalRef"
+              "FormalRef",
+              "NormTransport"
             ],
             "reExport": true
           },
@@ -1109,6 +1112,7 @@
           {
             "file": "./derive-evidence.js",
             "imports": [
+              "deriveCompositeEvidence",
               "deriveEvidence",
               "deriveEvidenceForVerdict",
               "NO_PASSING_WITNESSES"
@@ -1148,13 +1152,16 @@
             "imports": [
               "boundPath",
               "findAtlasPath",
-              "findPath"
+              "findPath",
+              "horizonOnRoute",
+              "routeEntryModels"
             ],
             "reExport": true
           },
           {
             "file": "./path-bound.js",
             "imports": [
+              "AppliedTransport",
               "NoClaimReason",
               "PathBoundClaim",
               "PathBoundResult",
@@ -1631,6 +1638,7 @@
           "MissingHorizonError",
           "MissingLipschitzError",
           "ALL_EVIDENCE_TAGS",
+          "deriveCompositeEvidence",
           "deriveEvidence",
           "deriveEvidenceForVerdict",
           "NO_PASSING_WITNESSES",
@@ -1640,6 +1648,8 @@
           "boundPath",
           "findAtlasPath",
           "findPath",
+          "horizonOnRoute",
+          "routeEntryModels",
           "composeBounds",
           "composeBoundPath",
           "IDENTITY_BOUND",
@@ -1727,6 +1737,7 @@
           "AtlasRejection",
           "FormalFidelity",
           "FormalRef",
+          "NormTransport",
           "CounterexampleLike",
           "EvidenceInput",
           "MembershipVerdict",
@@ -1734,6 +1745,7 @@
           "WitnessLike",
           "CompositionResult",
           "NoCompositeClaim",
+          "AppliedTransport",
           "NoClaimReason",
           "PathBoundClaim",
           "PathBoundResult",
@@ -1817,9 +1829,11 @@
           "AtlasRejection",
           "FormalFidelity",
           "FormalRef",
+          "NormTransport",
           "MissingHorizonError",
           "MissingLipschitzError",
           "ALL_EVIDENCE_TAGS",
+          "deriveCompositeEvidence",
           "deriveEvidence",
           "deriveEvidenceForVerdict",
           "NO_PASSING_WITNESSES",
@@ -1836,6 +1850,9 @@
           "boundPath",
           "findAtlasPath",
           "findPath",
+          "horizonOnRoute",
+          "routeEntryModels",
+          "AppliedTransport",
           "NoClaimReason",
           "PathBoundClaim",
           "PathBoundResult",
@@ -2125,6 +2142,12 @@
               "RelationContract"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./norm-transport.js",
+            "imports": [
+              "SPRING_LC_RELATIVE_PERIOD_TRANSPORT"
+            ]
           }
         ],
         "exports": [
@@ -2182,6 +2205,12 @@
             "imports": [
               "DAMPING",
               "SPRING_CONSTANT"
+            ]
+          },
+          {
+            "file": "./norms.js",
+            "imports": [
+              "RELATIVE_PERIOD_NORM"
             ]
           },
           {
@@ -2318,6 +2347,37 @@
           "OSCILLATOR_FAMILY"
         ]
       },
+      "src/atlas/oscillators/limit-witnesses.ts": {
+        "description": "The measurements behind the in-process witnesses of the three oscillator",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./norm-transport-witness.js",
+            "imports": [
+              "quarterPeriod"
+            ]
+          }
+        ],
+        "exports": [
+          "W7_FIXTURE",
+          "W8B_FIXTURE",
+          "W9_FIXTURE",
+          "measurePendulumPeriodRatio",
+          "measureMasslessOffset",
+          "measureChainDispersionError"
+        ],
+        "functions": [
+          "measurePendulumPeriodRatio",
+          "measureMasslessOffset",
+          "measureChainDispersionError"
+        ],
+        "constants": [
+          "W7_FIXTURE",
+          "W8B_FIXTURE",
+          "W9_FIXTURE"
+        ]
+      },
       "src/atlas/oscillators/models.ts": {
         "description": "The nine oscillator models of design note §3.",
         "externalDependencies": [],
@@ -2373,6 +2433,78 @@
         ],
         "constants": [
           "ATLAS_MODELS"
+        ]
+      },
+      "src/atlas/oscillators/norm-transport-witness.ts": {
+        "description": "The measurement behind W1τ, `ab-spring-lc`'s relative-period norm transport",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./pendulum-motion.js",
+            "imports": [
+              "rk4Step"
+            ]
+          },
+          {
+            "file": "./norm-transport.js",
+            "imports": [
+              "W1TAU_FIXTURE"
+            ]
+          }
+        ],
+        "exports": [
+          "quarterPeriod",
+          "measureTransportedPeriodError"
+        ],
+        "interfaces": [
+          "TransportCircuit"
+        ],
+        "functions": [
+          "quarterPeriod",
+          "measureTransportedPeriodError"
+        ]
+      },
+      "src/atlas/oscillators/norm-transport.ts": {
+        "description": "`ab-spring-lc`'s declared norm transport: the spring → LC map carries a bound",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../types.js",
+            "imports": [
+              "NormTransport"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./norms.js",
+            "imports": [
+              "RELATIVE_PERIOD_NORM"
+            ]
+          }
+        ],
+        "exports": [
+          "SPRING_LC_TRANSPORT_TEST",
+          "W1TAU_FIXTURE",
+          "SPRING_LC_RELATIVE_PERIOD_TRANSPORT"
+        ],
+        "constants": [
+          "SPRING_LC_TRANSPORT_TEST",
+          "W1TAU_FIXTURE",
+          "SPRING_LC_RELATIVE_PERIOD_TRANSPORT"
+        ]
+      },
+      "src/atlas/oscillators/norms.ts": {
+        "description": "Norm names the oscillator records share, so a bound and the transport that",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "RELATIVE_PERIOD_NORM"
+        ],
+        "constants": [
+          "RELATIVE_PERIOD_NORM"
         ]
       },
       "src/atlas/oscillators/pendulum-motion.ts": {
@@ -2538,18 +2670,22 @@
         ],
         "exports": [
           "POSITION_POINT_MAX_PERIODS",
+          "FOURIER_SERIES_THETA0S",
           "PENDULUM_POSITION_TRANSLATION",
           "waveformBound",
           "fundamentalCoefficient",
-          "measureFundamental"
+          "measureFundamental",
+          "fourierSeriesCheck"
         ],
         "functions": [
           "waveformBound",
           "fundamentalCoefficient",
-          "measureFundamental"
+          "measureFundamental",
+          "fourierSeriesCheck"
         ],
         "constants": [
           "POSITION_POINT_MAX_PERIODS",
+          "FOURIER_SERIES_THETA0S",
           "PENDULUM_POSITION_TRANSLATION"
         ]
       },
@@ -2614,6 +2750,7 @@
             "file": "./types.js",
             "imports": [
               "AtlasBridge",
+              "NormTransport",
               "RelationType"
             ],
             "typeOnly": true
@@ -2638,11 +2775,14 @@
           "findAtlasPath",
           "enumerateAtlasRoutes",
           "enumerateRoutes",
-          "boundPath"
+          "boundPath",
+          "routeEntryModels",
+          "horizonOnRoute"
         ],
         "interfaces": [
           "RouteEnumeration",
           "PathBoundClaim",
+          "AppliedTransport",
           "PathNoClaim"
         ],
         "functions": [
@@ -2650,7 +2790,9 @@
           "findAtlasPath",
           "enumerateAtlasRoutes",
           "enumerateRoutes",
-          "boundPath"
+          "boundPath",
+          "routeEntryModels",
+          "horizonOnRoute"
         ]
       },
       "src/atlas/poster/associations.ts": {
@@ -3261,6 +3403,7 @@
           "ApproximationBound",
           "Witness",
           "Counterexample",
+          "NormTransport",
           "AtlasBridge",
           "AtlasRejection",
           "Conventions"
@@ -3812,6 +3955,48 @@
             "typeOnly": true
           },
           {
+            "file": "./oscillators/bridges-limits.js",
+            "imports": [
+              "pendulumPeriodErrorAt"
+            ]
+          },
+          {
+            "file": "./oscillators/norm-transport.js",
+            "imports": [
+              "SPRING_LC_RELATIVE_PERIOD_TRANSPORT",
+              "W1TAU_FIXTURE"
+            ]
+          },
+          {
+            "file": "./oscillators/norm-transport-witness.js",
+            "imports": [
+              "measureTransportedPeriodError"
+            ]
+          },
+          {
+            "file": "./oscillators/bridges-limits.js",
+            "imports": [
+              "dampedOffsetBoundAt"
+            ]
+          },
+          {
+            "file": "./oscillators/bridges-coarse.js",
+            "imports": [
+              "dispersionErrorApproximation"
+            ]
+          },
+          {
+            "file": "./oscillators/limit-witnesses.js",
+            "imports": [
+              "measureChainDispersionError",
+              "measureMasslessOffset",
+              "measurePendulumPeriodRatio",
+              "W7_FIXTURE",
+              "W8B_FIXTURE",
+              "W9_FIXTURE"
+            ]
+          },
+          {
             "file": "./witness-numeric.js",
             "imports": [
               "NumericWitnessSpec"
@@ -3845,7 +4030,6 @@
         ],
         "interfaces": [
           "RegisteredSymbolicWitness",
-          "WitnessClaim",
           "RegisteredNumericWitness"
         ],
         "constants": [
@@ -10078,10 +10262,15 @@
           "MAX_BIOT",
           "MAX_RADIATION_RATIO",
           "LUMPED_COOLING_CASE",
+          "lumpedRadiatingTemperature",
           "sphereEigenvalues",
           "sphereSeries"
         ],
+        "interfaces": [
+          "LumpedRadiating"
+        ],
         "functions": [
+          "lumpedRadiatingTemperature",
           "sphereEigenvalues",
           "sphereSeries"
         ],
@@ -10307,6 +10496,12 @@
             ]
           },
           {
+            "module": "path",
+            "imports": [
+              "join"
+            ]
+          },
+          {
             "module": "url",
             "imports": [
               "fileURLToPath"
@@ -10330,6 +10525,7 @@
           {
             "file": "../../cli-api.js",
             "imports": [
+              "AppliedTransport",
               "AtlasBridge",
               "AtlasModel"
             ],
@@ -10352,10 +10548,13 @@
           {
             "file": "./_atlas-route.js",
             "imports": [
+              "claimReport",
+              "explainsRefusal",
               "missingForComposite",
               "routeClaim",
               "selectRoute",
-              "RouteClaim"
+              "transportReport",
+              "TransportReport"
             ]
           }
         ],
@@ -10365,12 +10564,15 @@
           "STORED_RESULTS_PATH",
           "DEFAULT_MAX_ROUTES",
           "MAX_ROUTES_CEILING",
+          "storedResultsFile",
           "loadStoredResults",
           "runResults",
           "parseRoute",
           "buildRouteView",
           "buildRoutesView",
           "buildObservableView",
+          "buildAtlasEvidenceView",
+          "atlasEvidenceText",
           "formatAtlasFilterLegend",
           "bridgeIdsOf",
           "buildFamilyView",
@@ -10394,19 +10596,24 @@
           "ResultsTally",
           "BridgeView",
           "RouteView",
+          "CompositeEvidenceView",
           "RoutesView",
           "ObservableView",
+          "AtlasEvidenceView",
           "AtlasFilter",
           "AtlasFilterStats",
           "FamilyView"
         ],
         "functions": [
+          "storedResultsFile",
           "loadStoredResults",
           "runResults",
           "parseRoute",
           "buildRouteView",
           "buildRoutesView",
           "buildObservableView",
+          "buildAtlasEvidenceView",
+          "atlasEvidenceText",
           "formatAtlasFilterLegend",
           "bridgeIdsOf",
           "buildFamilyView",
@@ -10448,6 +10655,7 @@
           {
             "file": "../../cli-api.js",
             "imports": [
+              "AppliedTransport",
               "AtlasBridge"
             ],
             "typeOnly": true
@@ -10456,12 +10664,18 @@
         "exports": [
           "selectRoute",
           "routeClaim",
-          "missingForComposite"
+          "missingForComposite",
+          "explainsRefusal",
+          "transportReport",
+          "claimReport"
         ],
         "functions": [
           "selectRoute",
           "routeClaim",
-          "missingForComposite"
+          "missingForComposite",
+          "explainsRefusal",
+          "transportReport",
+          "claimReport"
         ]
       },
       "src/cli/commands/_discovery-opts.ts": {
@@ -10529,6 +10743,16 @@
             "imports": [
               "emitJson"
             ]
+          },
+          {
+            "file": "./_atlas-map.js",
+            "imports": [
+              "atlasEvidenceText",
+              "buildAtlasEvidenceView",
+              "loadStoredResults",
+              "runResults",
+              "WitnessResults"
+            ]
           }
         ],
         "exports": [
@@ -10572,6 +10796,12 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../statuses.js",
+            "imports": [
+              "statusMeaning"
             ]
           }
         ],
@@ -10639,7 +10869,9 @@
           {
             "file": "../graphs.js",
             "imports": [
-              "resolveGraph"
+              "resolveGraph",
+              "coreAnchor",
+              "coreLine"
             ]
           },
           {
@@ -10753,7 +10985,9 @@
           {
             "file": "../graphs.js",
             "imports": [
-              "resolveGraph"
+              "resolveGraph",
+              "coreAnchor",
+              "coreLine"
             ]
           },
           {
@@ -10838,6 +11072,12 @@
             ]
           },
           {
+            "file": "../version.js",
+            "imports": [
+              "formulaParserLabel"
+            ]
+          },
+          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -10875,7 +11115,9 @@
           {
             "file": "../graphs.js",
             "imports": [
-              "resolveGraph"
+              "resolveGraph",
+              "groundTruthAnchor",
+              "groundTruthLine"
             ]
           },
           {
@@ -10951,6 +11193,12 @@
             "file": "../errors.js",
             "imports": [
               "UsageError"
+            ]
+          },
+          {
+            "file": "../version.js",
+            "imports": [
+              "formulaParserLabel"
             ]
           }
         ],
@@ -11058,6 +11306,12 @@
               "UsageError",
               "CliError"
             ]
+          },
+          {
+            "file": "../search-index.js",
+            "imports": [
+              "searchNameWords"
+            ]
           }
         ],
         "exports": [
@@ -11091,6 +11345,8 @@
             "file": "../graphs.js",
             "imports": [
               "resolveGraph",
+              "groundTruthAnchor",
+              "groundTruthLine",
               "SourceName"
             ]
           },
@@ -11298,7 +11554,12 @@
           {
             "file": "../graphs.js",
             "imports": [
-              "resolveGraph"
+              "resolveGraph",
+              "coreAnchor",
+              "coreLine",
+              "groundTruthAnchor",
+              "groundTruthLine",
+              "AnchorScope"
             ]
           },
           {
@@ -11427,9 +11688,11 @@
           {
             "file": "./_atlas-route.js",
             "imports": [
+              "explainsRefusal",
               "missingForComposite",
               "routeClaim",
               "selectRoute",
+              "transportReport",
               "RouteClaim"
             ]
           }
@@ -11705,6 +11968,16 @@
             "imports": [
               "emitJson"
             ]
+          },
+          {
+            "file": "../search-index.js",
+            "imports": [
+              "buildSearchIndex",
+              "fold",
+              "matchEveryWord",
+              "SEARCH_SECTIONS",
+              "STOP_WORDS"
+            ]
           }
         ],
         "exports": [
@@ -11746,6 +12019,17 @@
               "ExprNode"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../expr-print.js",
+            "imports": [
+              "EVAL_STUBS",
+              "printDisplay",
+              "printEval",
+              "printLatex",
+              "latexName",
+              "siUnitOf"
+            ]
           }
         ],
         "exports": [
@@ -11771,6 +12055,45 @@
         ],
         "constants": [
           "EXIT_CHECK_FAILED"
+        ]
+      },
+      "src/cli/expr-print.ts": {
+        "description": "The three printed forms of a scalar composed AST (`upt symbolic`, audit F12 and I10):",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "EVAL_STUBS",
+          "printDisplay",
+          "printEval",
+          "latexName",
+          "printLatex",
+          "siUnitOf"
+        ],
+        "functions": [
+          "latexName",
+          "printLatex",
+          "siUnitOf"
+        ],
+        "constants": [
+          "EVAL_STUBS",
+          "printDisplay",
+          "printEval"
         ]
       },
       "src/cli/graphs.ts": {
@@ -11807,10 +12130,21 @@
           }
         ],
         "exports": [
-          "resolveGraph"
+          "resolveGraph",
+          "groundTruthAnchor",
+          "coreAnchor",
+          "groundTruthLine",
+          "coreLine"
+        ],
+        "interfaces": [
+          "AnchorScope"
         ],
         "functions": [
-          "resolveGraph"
+          "resolveGraph",
+          "groundTruthAnchor",
+          "coreAnchor",
+          "groundTruthLine",
+          "coreLine"
         ]
       },
       "src/cli/main.ts": {
@@ -11841,6 +12175,12 @@
             "file": "./version.js",
             "imports": [
               "packageVersion"
+            ]
+          },
+          {
+            "file": "./statuses.js",
+            "imports": [
+              "glossaryText"
             ]
           },
           {
@@ -11877,7 +12217,21 @@
         "description": "JSON output envelope for the UPT CLI.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./statuses.js",
+            "imports": [
+              "definitionsFor"
+            ]
+          },
+          {
+            "file": "./graphs.js",
+            "imports": [
+              "AnchorScope"
+            ],
+            "typeOnly": true
+          }
+        ],
         "exports": [
           "sanitize",
           "emitJson"
@@ -11894,6 +12248,12 @@
         "description": "Static attribution for an experiment record: which constants a command's code can reach",
         "externalDependencies": [],
         "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          },
           {
             "module": "fs",
             "imports": [
@@ -11924,12 +12284,14 @@
         ],
         "exports": [
           "REACH_METHOD",
+          "moduleSources",
           "staticReach"
         ],
         "interfaces": [
           "Attribution"
         ],
         "functions": [
+          "moduleSources",
           "staticReach"
         ],
         "constants": [
@@ -12033,19 +12395,22 @@
               "appendFileSync",
               "closeSync",
               "existsSync",
+              "mkdtempSync",
               "openSync",
-              "readFileSync"
+              "readFileSync",
+              "rmSync"
             ]
           },
           {
-            "module": "module",
+            "module": "os",
             "imports": [
-              "createRequire"
+              "tmpdir"
             ]
           },
           {
             "module": "path",
             "imports": [
+              "basename",
               "join"
             ]
           }
@@ -12071,6 +12436,12 @@
             ]
           },
           {
+            "file": "./commands/_atlas-map.js",
+            "imports": [
+              "storedResultsFile"
+            ]
+          },
+          {
             "file": "./errors.js",
             "imports": [
               "CliError"
@@ -12085,6 +12456,7 @@
           {
             "file": "./record-reach.js",
             "imports": [
+              "moduleSources",
               "staticReach",
               "Attribution"
             ]
@@ -12100,7 +12472,8 @@
           {
             "file": "./version.js",
             "imports": [
-              "packageVersion"
+              "packageVersion",
+              "peerVersions"
             ]
           }
         ],
@@ -12119,6 +12492,7 @@
           "RecordEnvironment",
           "RecordResult",
           "RecordEntry",
+          "RecordInput",
           "EnvironmentChange",
           "StreamDifference",
           "ReplayEntryReport"
@@ -12137,6 +12511,65 @@
           "argvFingerprint"
         ]
       },
+      "src/cli/search-index.ts": {
+        "description": "The word index behind `upt search`, shared with `upt explain`'s NOT COVERED answer (audit I5).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./command.js",
+            "imports": [
+              "CommandCtx"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "SEARCH_SECTIONS",
+          "STOP_WORDS",
+          "fold",
+          "buildSearchIndex",
+          "matchEveryWord",
+          "searchNameWords"
+        ],
+        "interfaces": [
+          "SearchEntry",
+          "SearchMatch"
+        ],
+        "functions": [
+          "buildSearchIndex",
+          "matchEveryWord",
+          "searchNameWords"
+        ],
+        "constants": [
+          "SEARCH_SECTIONS",
+          "STOP_WORDS",
+          "fold"
+        ]
+      },
+      "src/cli/statuses.ts": {
+        "description": "The status words the CLI prints, defined once (audit I13).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "STATUS_GLOSSARY",
+          "definitionsFor",
+          "statusMeaning",
+          "glossaryText"
+        ],
+        "interfaces": [
+          "StatusDefinition"
+        ],
+        "functions": [
+          "definitionsFor",
+          "statusMeaning",
+          "glossaryText"
+        ],
+        "constants": [
+          "STATUS_GLOSSARY"
+        ]
+      },
       "src/cli/version.ts": {
         "description": "Runtime package-version lookup for the UPT CLI (`upt --version`, etc.).",
         "externalDependencies": [],
@@ -12144,16 +12577,33 @@
           {
             "module": "fs",
             "imports": [
+              "existsSync",
               "readFileSync"
+            ]
+          },
+          {
+            "module": "module",
+            "imports": [
+              "createRequire"
+            ]
+          },
+          {
+            "module": "path",
+            "imports": [
+              "join"
             ]
           }
         ],
         "internalDependencies": [],
         "exports": [
-          "packageVersion"
+          "packageVersion",
+          "peerVersions",
+          "formulaParserLabel"
         ],
         "functions": [
-          "packageVersion"
+          "packageVersion",
+          "peerVersions",
+          "formulaParserLabel"
         ]
       }
     },
@@ -12232,7 +12682,8 @@
           {
             "file": "./composition/discovery.js",
             "imports": [
-              "rankDiscoveries"
+              "rankDiscoveries",
+              "ANCHOR_DEFAULT"
             ],
             "reExport": true
           },
@@ -12439,6 +12890,7 @@
               "problemFromResidualGap",
               "makeResidualGap",
               "loadSearchProblemFromJson",
+              "resolveObservationsPath",
               "parseExprJson",
               "runProbeSearch",
               "formatProbeReport",
@@ -12539,7 +12991,8 @@
           {
             "file": "./composition/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "CONSTANT_PROVENANCE"
             ],
             "reExport": true
           },
@@ -12569,7 +13022,16 @@
             "file": "./atlas/derive-evidence.js",
             "imports": [
               "deriveEvidence",
+              "deriveCompositeEvidence",
               "NO_PASSING_WITNESSES"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./atlas/coverage.js",
+            "imports": [
+              "summarizeEvidence",
+              "ALL_EVIDENCE_TAGS"
             ],
             "reExport": true
           },
@@ -12645,7 +13107,9 @@
               "findPath",
               "findAtlasPath",
               "enumerateAtlasRoutes",
-              "boundPath"
+              "boundPath",
+              "horizonOnRoute",
+              "routeEntryModels"
             ],
             "reExport": true
           },
@@ -12661,7 +13125,8 @@
             "imports": [
               "PathBoundResult",
               "PathBoundClaim",
-              "PathNoClaim"
+              "PathNoClaim",
+              "AppliedTransport"
             ],
             "reExport": true
           },
@@ -12722,6 +13187,7 @@
           "parseDimensionSpec",
           "predictMissingBridges",
           "rankDiscoveries",
+          "ANCHOR_DEFAULT",
           "BRIDGE_EQUATIONS",
           "auditCoverage",
           "CONFRONTATIONS",
@@ -12760,6 +13226,7 @@
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "parseExprJson",
           "runProbeSearch",
           "formatProbeReport",
@@ -12788,10 +13255,14 @@
           "describeComparison",
           "describeComparisons",
           "CONSTANTS",
+          "CONSTANT_PROVENANCE",
           "OSCILLATOR_FAMILY",
           "ATLAS_FAMILIES",
           "deriveEvidence",
+          "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
+          "summarizeEvidence",
+          "ALL_EVIDENCE_TAGS",
           "runWitnessRegistry",
           "WITNESS_REGISTRY",
           "runNumericWitness",
@@ -12807,6 +13278,8 @@
           "findAtlasPath",
           "enumerateAtlasRoutes",
           "boundPath",
+          "horizonOnRoute",
+          "routeEntryModels",
           "composeRelation",
           "MissingLipschitzError",
           "ConfrontationEntry",
@@ -12840,6 +13313,7 @@
           "PathBoundResult",
           "PathBoundClaim",
           "PathNoClaim",
+          "AppliedTransport",
           "AtlasBridge",
           "RegimeInequality",
           "Witness",
@@ -12878,6 +13352,7 @@
           "parseDimensionSpec",
           "predictMissingBridges",
           "rankDiscoveries",
+          "ANCHOR_DEFAULT",
           "BRIDGE_EQUATIONS",
           "auditCoverage",
           "CONFRONTATIONS",
@@ -12928,6 +13403,7 @@
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "parseExprJson",
           "runProbeSearch",
           "formatProbeReport",
@@ -12963,12 +13439,16 @@
           "describeComparisons",
           "CanonicalComparison",
           "CONSTANTS",
+          "CONSTANT_PROVENANCE",
           "CandidateGrounding",
           "CandidateReadiness",
           "OSCILLATOR_FAMILY",
           "ATLAS_FAMILIES",
           "deriveEvidence",
+          "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
+          "summarizeEvidence",
+          "ALL_EVIDENCE_TAGS",
           "runWitnessRegistry",
           "WITNESS_REGISTRY",
           "runNumericWitness",
@@ -12991,10 +13471,13 @@
           "findAtlasPath",
           "enumerateAtlasRoutes",
           "boundPath",
+          "horizonOnRoute",
+          "routeEntryModels",
           "composeRelation",
           "PathBoundResult",
           "PathBoundClaim",
           "PathNoClaim",
+          "AppliedTransport",
           "AtlasBridge",
           "RegimeInequality",
           "Witness",
@@ -13321,7 +13804,21 @@
           {
             "file": "../numerical/formula-registry.js",
             "imports": [
+              "getFormulaParser",
               "parsePhysics"
+            ]
+          },
+          {
+            "file": "../numerical/formula.js",
+            "imports": [
+              "CompiledFormula"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
             ]
           },
           {
@@ -13442,16 +13939,21 @@
         "internalDependencies": [],
         "exports": [
           "CANONICAL_PREFACTORS",
-          "canonicalPrefactor"
+          "CANONICAL_GROUP_PREFACTORS",
+          "canonicalPrefactor",
+          "canonicalGroupPrefactor"
         ],
         "interfaces": [
-          "CanonicalPrefactor"
+          "CanonicalPrefactor",
+          "CanonicalGroupPrefactor"
         ],
         "functions": [
-          "canonicalPrefactor"
+          "canonicalPrefactor",
+          "canonicalGroupPrefactor"
         ],
         "constants": [
-          "CANONICAL_PREFACTORS"
+          "CANONICAL_PREFACTORS",
+          "CANONICAL_GROUP_PREFACTORS"
         ]
       },
       "src/composition/catalog-graph.ts": {
@@ -13951,6 +14453,7 @@
         ],
         "exports": [
           "REGISTRY_ATTRIBUTES_BY_NAME",
+          "ANCHOR_DEFAULT",
           "vetLinkCandidate",
           "rankDiscoveries"
         ],
@@ -13963,7 +14466,8 @@
           "rankDiscoveries"
         ],
         "constants": [
-          "REGISTRY_ATTRIBUTES_BY_NAME"
+          "REGISTRY_ATTRIBUTES_BY_NAME",
+          "ANCHOR_DEFAULT"
         ]
       },
       "src/composition/edge.ts": {
@@ -16833,6 +17337,7 @@
               "makeResidualGap",
               "loadSearchProblemFromJson",
               "searchProblemFromFile",
+              "resolveObservationsPath",
               "parseExprJson"
             ],
             "reExport": true
@@ -16970,6 +17475,7 @@
           "makeResidualGap",
           "loadSearchProblemFromJson",
           "searchProblemFromFile",
+          "resolveObservationsPath",
           "parseExprJson",
           "runProbeSearch",
           "formatProbeReport",
@@ -17178,6 +17684,7 @@
           "makeResidualGap",
           "loadSearchProblemFromJson",
           "searchProblemFromFile",
+          "resolveObservationsPath",
           "parseExprJson",
           "ProblemFile",
           "runProbeSearch",
@@ -17477,6 +17984,7 @@
           "isGapKind",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "searchProblemFromFile",
           "parseExprJson"
         ],
@@ -17487,6 +17995,7 @@
           "isGapKind",
           "makeResidualGap",
           "loadSearchProblemFromJson",
+          "resolveObservationsPath",
           "searchProblemFromFile",
           "parseExprJson"
         ]
@@ -17830,8 +18339,10 @@
           "loadStudyFromJson",
           "loadStudyFile",
           "attachReplication",
+          "replicationIndependence",
           "studyCsvToRaw",
           "chiSquareSurvival",
+          "chiSquareCdf",
           "fSurvival",
           "effectiveSigma",
           "exprToInfix",
@@ -17849,6 +18360,8 @@
           "StudyCorrection",
           "StudyBaseline",
           "ProbeStudy",
+          "ClosenessTest",
+          "ReplicationIndependence",
           "SetTest",
           "ModelTest",
           "CorrectionStep",
@@ -17863,8 +18376,10 @@
           "loadStudyFromJson",
           "loadStudyFile",
           "attachReplication",
+          "replicationIndependence",
           "studyCsvToRaw",
           "chiSquareSurvival",
+          "chiSquareCdf",
           "fSurvival",
           "effectiveSigma",
           "exprToInfix",
@@ -18793,10 +19308,15 @@
           }
         ],
         "exports": [
-          "CONSTANTS"
+          "CONSTANTS",
+          "CONSTANT_PROVENANCE"
+        ],
+        "interfaces": [
+          "ConstantProvenance"
         ],
         "constants": [
-          "CONSTANTS"
+          "CONSTANTS",
+          "CONSTANT_PROVENANCE"
         ]
       },
       "src/composition/uncertainty.ts": {
@@ -18907,6 +19427,7 @@
           "UserEquation",
           "EquationLanding",
           "EquationHint",
+          "ShortBinding",
           "EquationAnalysis"
         ],
         "functions": [
@@ -24418,7 +24939,8 @@
             "imports": [
               "BUILTIN_FUNCTION_NAMES",
               "callBuiltinFunction",
-              "FormulaError"
+              "FormulaError",
+              "unknownFunctionMessage"
             ]
           }
         ],
@@ -24496,8 +25018,11 @@
         "internalDependencies": [],
         "exports": [
           "BUILTIN_FUNCTION_NAMES",
+          "FUNCTION_EQUIVALENTS",
+          "BUILTIN_FUNCTION_LIST",
           "defaultFormulaParser",
           "parseFormulaToAst",
+          "unknownFunctionMessage",
           "callBuiltinFunction",
           "parseFormula",
           "FormulaError"
@@ -24510,11 +25035,14 @@
           "FormulaParser"
         ],
         "functions": [
+          "unknownFunctionMessage",
           "callBuiltinFunction",
           "parseFormula"
         ],
         "constants": [
           "BUILTIN_FUNCTION_NAMES",
+          "FUNCTION_EQUIVALENTS",
+          "BUILTIN_FUNCTION_LIST",
           "defaultFormulaParser",
           "parseFormulaToAst"
         ]
@@ -25686,7 +26214,11 @@
           "src/atlas/oscillators/bridges-limits.ts",
           "src/atlas/oscillators/dimensions.ts",
           "src/atlas/oscillators/index.ts",
+          "src/atlas/oscillators/limit-witnesses.ts",
           "src/atlas/oscillators/models.ts",
+          "src/atlas/oscillators/norm-transport-witness.ts",
+          "src/atlas/oscillators/norm-transport.ts",
+          "src/atlas/oscillators/norms.ts",
           "src/atlas/oscillators/pendulum-motion.ts",
           "src/atlas/oscillators/phase-carriage.ts",
           "src/atlas/oscillators/phase-translation.ts",
@@ -25882,12 +26414,15 @@
           "src/cli/commands/search.ts",
           "src/cli/commands/symbolic.ts",
           "src/cli/errors.ts",
+          "src/cli/expr-print.ts",
           "src/cli/graphs.ts",
           "src/cli/main.ts",
           "src/cli/output.ts",
           "src/cli/record-reach.ts",
           "src/cli/record-tables.ts",
           "src/cli/record.ts",
+          "src/cli/search-index.ts",
+          "src/cli/statuses.ts",
           "src/cli/version.ts"
         ]
       },
@@ -26090,21 +26625,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 376,
+    "totalTypeScriptFiles": 383,
     "totalModules": 12,
-    "totalLinesOfCode": 80492,
-    "totalExports": 2705,
+    "totalLinesOfCode": 83226,
+    "totalExports": 2777,
     "totalClasses": 60,
-    "totalInterfaces": 421,
-    "totalFunctions": 653,
+    "totalInterfaces": 436,
+    "totalFunctions": 690,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 671,
-    "totalReExports": 1320,
-    "totalTypeOnlyImports": 517,
+    "totalConstants": 691,
+    "totalReExports": 1335,
+    "totalTypeOnlyImports": 523,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 67
+    "unusedExportsCount": 65
   }
 }

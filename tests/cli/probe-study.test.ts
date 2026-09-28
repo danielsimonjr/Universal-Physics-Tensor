@@ -4,7 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { runCli } from '../../dist/cli/main.js';
@@ -107,6 +107,16 @@ describe('upt probe study', () => {
     expect(t).toMatch(/extra-sum-of-squares\s+F test at p < α/);
     expect(t).toMatch(/none is a blind test of finding an\s+unknown one, and UPT ships no blind control/);
   });
+
+  it('help probe documents several correction families and the too-close replication outcome', async () => {
+    const c = capture();
+    expect(await runCli(['help', 'probe'], c.io)).toBe(0);
+    const t = text(c);
+    expect(t).toMatch(/or a list of them, one per input \(at most 6 powers in all\)/);
+    expect(t).toMatch(/The families are additive:\s+no cross term/);
+    expect(t).toMatch(/agreement too good to be true/);
+    expect(t).toMatch(/survives-replication \| refuted-on-replication \| too-close/);
+  });
 });
 
 describe('upt probe study — CSV, replication file', () => {
@@ -159,7 +169,9 @@ describe('upt probe study — CSV, replication file', () => {
   it('a missing replication file or bad JSON in it is named', async () => {
     const missing = await runArgs(`--data=${studyJson}`, '--replication=/nonexistent/rep.json');
     expect(missing.code).toBe(1);
-    expect(missing.out).toMatch(/file not found: \/nonexistent\/rep\.json/);
+    // The CLI names the resolved path, which on Windows carries a drive letter and backslashes.
+    const resolvedMissing = resolve('/nonexistent/rep.json').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    expect(missing.out).toMatch(new RegExp(`file not found: ${resolvedMissing}`));
     const p = join(mkdtempSync(join(tmpdir(), 'upt-study-')), 'broken.json');
     writeFileSync(p, '{ not json');
     const broken = await runArgs(`--data=${studyJson}`, `--replication=${p}`);

@@ -10,6 +10,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
 import { UsageError, EXIT_CHECK_FAILED } from '../errors.js';
+import { formulaParserLabel } from '../version.js';
 import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
@@ -18,12 +19,13 @@ const FLAGS: FlagSpec[] = [
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"]
+const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
         Derive YOUR OWN equation's dimensional form. <dim> is a named
         dimension (length, time, mass, velocity, ...), a constant (hbar, c,
         G, k_B, e), a named product/quotient (power/area, length*temperature),
         or explicit (L^3.M^-1.T^-2). With --formula, also verify it and
-        recover the dimensionless prefactor.
+        recover the dimensionless prefactor. --debug prints the formula parser
+        and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
                        --formula "2*pi*sqrt(length/gravity)"`;
 
@@ -110,7 +112,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   if (formula) {
     const parser = await api.getFormulaParser();
-    if (debug) err(`  [parser: ${await api.getFormulaParserKind()}]`);
+    if (debug) err(`  [parser: ${formulaParserLabel(await api.getFormulaParserKind())}]`);
 
     const checker = await api.getFormulaDimensionChecker();
     const dims = Object.fromEntries(governing.map((g) => [g.name, g.dim]));

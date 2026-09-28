@@ -16,7 +16,10 @@
  * refuted — so the CAS controls assert `not 'checked'`, which is the property
  * that matters: a wrong dictionary earns no evidence tag.
  *
- * Existing controls (not repeated here): WD2, WD3, WD4, WS1, WS3 numeric; W1s CAS.
+ * Existing controls (not repeated here): WD2, WD3, WD4, WS1, WS3 numeric; W1s CAS; and W1τ numeric,
+ * the norm-transport witness added later, whose control sits beside it in
+ * `tests/atlas/spring-lc-norm-transport.test.ts`. W7 and W8b, registered later, have theirs in
+ * `tests/atlas/oscillators-limits.test.ts`, and W9 in `tests/atlas/oscillators-coarse.test.ts`.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -246,9 +249,9 @@ for (const { id, wrong, lhs } of CAS_CONTROLS) {
 }
 
 describe('coverage — every registered witness now has a negative control', () => {
-  it('the 12 here plus the 6 elsewhere are exactly the registry', () => {
+  it('the 12 here plus the 10 elsewhere are exactly the registry', () => {
     const here = [...NUMERIC_CONTROLS.map((c) => c.id), ...CAS_CONTROLS.map((c) => c.id)];
-    const elsewhere = ['WD2', 'WD3', 'WD4', 'WS1', 'WS3', 'W1s'];
+    const elsewhere = ['WD2', 'WD3', 'WD4', 'WS1', 'WS3', 'W1s', 'W1τ', 'W7', 'W8b', 'W9'];
     expect(here.length).toBe(12);
     expect([...here, ...elsewhere].sort()).toEqual(WITNESS_REGISTRY.map((w) => w.spec.id).sort());
   });

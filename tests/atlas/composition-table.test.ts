@@ -10,6 +10,10 @@
  * count-only test would have passed through that revision without noticing.
  * The count assertion catches the opposite failure — silent widening of the
  * table by a cell nobody named.
+ *
+ * The ninth cell, `approximation ∘ exact-equivalence = approximation`, was added
+ * by the reviewed act of docs/planning/ADR-transported-norm-composition.md: the
+ * count went from 56 to 55 and the new cell is asserted on its own below.
  */
 import { describe, it, expect } from 'vitest';
 import {
@@ -68,17 +72,21 @@ describe('composeRelation — the eight defined cells (design note §2.1)', () =
 
 describe('composeRelation — cells where the design note overrides the implementation plan', () => {
   // Design note §0: K = 1 for an exact equivalence holds only in the norm that
-  // bridge states, and no Sprint 1 field records a norm. The plan's brief says
-  // 'approximation'; it is wrong.
+  // bridge states. With the exact edge first, the approximation's norm would have
+  // to be pulled back through the map, which the ADR on transported norms leaves
+  // undefined (its §3). The plan's brief says 'approximation'; it is wrong.
   it('exact-equivalence ∘ approximation is silent, not approximation (§0)', () => {
     expect(composeRelation('exact-equivalence', 'approximation')).toBe(
       'no-composite-claim',
     );
   });
 
-  it('approximation ∘ exact-equivalence is silent, not approximation (§0)', () => {
+  // The table cell is a pure function of relation types. Whether a given route
+  // carries a bound is decided by boundPath, which needs a declared norm
+  // transport on the exact bridge (ADR-transported-norm-composition.md).
+  it('approximation ∘ exact-equivalence = approximation (ADR, transported norm)', () => {
     expect(composeRelation('approximation', 'exact-equivalence')).toBe(
-      'no-composite-claim',
+      'approximation',
     );
   });
 
@@ -92,8 +100,8 @@ describe('composeRelation — cells where the design note overrides the implemen
 });
 
 describe('composeRelation — the conservative reading of Blueprint v2 §4.2', () => {
-  it('pins 56 of 64 cells as no-composite-claim (design note §2.2)', () => {
-    // 64 − 8 defined. The authority is docs/planning/Atlas-Phase-1-Design.md;
+  it('pins 55 of 64 cells as no-composite-claim (design note §2.2, ADR transported norm)', () => {
+    // 64 − 9 defined. The authority is docs/planning/Atlas-Phase-1-Design.md;
     // widening the table must be a reviewed change, not a silent one.
     let silent = 0;
     for (const first of RELATION_TYPES) {
@@ -101,7 +109,7 @@ describe('composeRelation — the conservative reading of Blueprint v2 §4.2', (
         if (composeRelation(first, second) === 'no-composite-claim') silent++;
       }
     }
-    expect(silent).toBe(56);
+    expect(silent).toBe(55);
   });
 
   it('covers all 64 ordered pairs of the eight relation types', () => {

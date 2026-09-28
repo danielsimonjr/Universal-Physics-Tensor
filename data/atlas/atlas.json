@@ -93,7 +93,8 @@
           ],
           "dimensionlessInputs": [],
           "canonicalRefs": [
-            "CE-lc-resonance"
+            "CE-lc-resonance",
+            "CE-capacitor-energy"
           ],
           "regime": {
             "family": "oscillators",
@@ -595,7 +596,32 @@
             "Olson, Dynamical Analogies - the force-voltage (impedance) analogy between a mass-spring–damper and a series RLC circuit",
             "Feynman, Lectures on Physics Vol. II, chapter on resonance - the LC oscillator and its mechanical counterpart"
           ],
-          "reviewStatus": "proposed"
+          "reviewStatus": "proposed",
+          "normTransports": [
+            {
+              "id": "nt-spring-lc-relative-period",
+              "fromModel": "model-spring",
+              "toModel": "model-lc",
+              "from": "relative period error, normalized by the value of the reduced model",
+              "to": "relative period error, normalized by the value of the reduced model",
+              "K": 1,
+              "domain": "every m, k, L, C > 0 and x0, q0 ≠ 0 (the bridge's side conditions); K is the same constant throughout",
+              "derivation": "q(t_LC) = (q0/x0)·x(t) with t_LC = t·ω_s/ω_LC scales every period by the same ω_s/ω_LC, so a ratio of two periods, T_full/T_reduced − 1, is unchanged: K = 1 and nothing is added",
+              "timeMap": {
+                "map": "t_LC = t·ω_s/ω_LC, one constant factor for every t",
+                "uniform": true,
+                "horizon": "a horizon that reads time only through t/T0 holds unchanged with t read on the circuit clock and T0 = 2π√(LC): a uniform time scale leaves t/T0 invariant"
+              },
+              "uniformity": "preserved: K is one constant over the whole domain, so the incoming bound's uniformity holds unchanged",
+              "witness": {
+                "id": "W1τ",
+                "kind": "numeric",
+                "test": "tests/atlas/spring-lc-norm-transport.test.ts",
+                "tolerance": "RK4 relative period error of the pendulum's image q'' = −ω_LC²(q0/θ0) sin(θ0 q/q0) against the LC period, in circuit time (L = 0.5, C = 0.25, ω_LC = 2√2 ≠ ω_s = 2), at 640 steps per LC period within 1e-9 of K times the closed-form elliptic error at θ0 = 0.5; 160 steps is the coarse resolution"
+              },
+              "basis": "numerically-supported"
+            }
+          ]
         },
         {
           "id": "ab-damped-rlc",

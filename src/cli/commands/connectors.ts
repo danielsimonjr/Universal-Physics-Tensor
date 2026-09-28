@@ -7,7 +7,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { resolveGraph } from '../graphs.js';
+import { resolveGraph, coreAnchor, coreLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
@@ -39,12 +39,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   const r = api.proposeOrphanConnectors(graph);
 
   if (args.flags.has('json')) {
-    emitJson({ command: 'connectors', source, epistemics: EPISTEMICS, result: r }, ctx.write);
+    emitJson({ command: 'connectors', source, anchor: { core: coreAnchor(graph) }, epistemics: EPISTEMICS, result: r }, ctx.write);
     return 0;
   }
 
   out('\nOrphan connectors — same-dimension identifications that would pull an ISOLATED');
   out(`bridge into the anchored core (the graph's structural frontier).  [source: ${label}]`);
+  out(`  ${coreLine(coreAnchor(graph))}`);
   out('⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster');
   out('  radius is not a Schwarzschild radius). Same-kind (shared name token) = stronger.\n');
   out(

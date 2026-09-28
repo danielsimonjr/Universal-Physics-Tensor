@@ -85,17 +85,25 @@ export const PHASE_POINT_MAX_PERIODS = 512;
  */
 const PHASE_POINT_DRIFT = 1;
 /**
- * Below this measured drift the crossing-interpolation noise of the two
- * motions (measured: 9.5e-6 relative at 2e-4 rad, 1.2e-7 at 2e-2 rad, at 800
- * steps per T0) comes within a factor of ten of the witness tolerance.
+ * Below this measured drift the rounding noise of the two motions' crossing
+ * times comes within a factor of ten of the witness tolerance. With the
+ * crossings located by `crossingTimes`' secant refinement, the fine error was
+ * measured at 800 steps per T0 as 1.5e-8 relative at 1.1e-5 rad of drift,
+ * 7.4e-9 at 7.2e-5 rad, 2.5e-9 at 2.0e-4 rad and 2.4e-10 to 9.2e-10 from
+ * 2e-2 rad up. With the straight-line crossings it replaced, the same error
+ * was 9.5e-6 relative at 2e-4 rad and 1.2e-7 at 2e-2 rad.
  */
-const PHASE_POINT_MIN_DRIFT = 1e-2;
-const PHASE_POINT_RELATIVE_TOLERANCE = 1e-5;
+const PHASE_POINT_MIN_DRIFT = 1e-4;
+/**
+ * The (1+ε) control differs from the target by ε/(1+ε) relative, so it can be
+ * refuted only where ε exceeds this tolerance (θ0 above about 9e-4).
+ */
+const PHASE_POINT_RELATIVE_TOLERANCE = 5e-8;
 
 /**
  * W7p at the caller's θ0 (recovered from ε) instead of the fixture: the time
- * the measured drift reaches min(1 rad, the drift at the cap), within 1e-5
- * relative of the closed form. Its control is the same measurement against
+ * the measured drift reaches min(1 rad, the drift at the cap), within
+ * PHASE_POINT_RELATIVE_TOLERANCE of the closed form. Its control is the same measurement against
  * the horizon without the (1+ε) factor, which differs from the target by
  * ε/(1+ε) relative — so the control can fail only where that exceeds the
  * witness tolerance, and the caller is told when it does not.

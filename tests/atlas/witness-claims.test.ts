@@ -15,7 +15,18 @@
  * function its witness evaluates, so the second check shows the witness
  * measures the bound's quantity at the declared point, not that the physics is
  * independently right. And a tolerance compared with `delta` tests the
- * supremum at one interior point, not the tighter `deltaAt` there.
+ * supremum at one interior point, not the tighter `deltaAt` there. W7 is the
+ * exception: its spec integrates the pendulum, and `deltaAt` is the AGM form.
+ *
+ * `'bound-holds-at'` is the claim a witness can make of a bound that is not
+ * sharp: at the declared point, inside the regime, its tolerance IS `deltaAt`
+ * there, so the bound failing at that point refutes the witness. Its error is
+ * not equal to `deltaAt`, so that the spec measures the bound's norm is checked
+ * beside the spec, by a second method (W8b: tests/atlas/oscillators-limits.test.ts).
+ *
+ * `'preserves'` names one item of the record's `preserves` list; the point
+ * must be inside the regime. What the spec measures is checked beside it
+ * (W9: tests/atlas/oscillators-coarse.test.ts).
  */
 import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
@@ -62,6 +73,40 @@ function checkBoundClaim(entry: RegisteredNumericWitness, claim: WitnessClaim): 
   return { ok: true };
 }
 
+function checkBoundHoldsAtClaim(entry: RegisteredNumericWitness, claim: WitnessClaim): Verdict {
+  const bridge = bridgeOf(entry.recordId);
+  const bound = bridge.bound;
+  if (bound === undefined || bound.deltaAt === undefined) return { ok: false, reason: `${bridge.id} states no bound with a deltaAt` };
+  const { spec } = entry;
+  const p = claim.at(spec.fineResolution);
+  const regime = regimeHolds(bridge.regime, groupValues(bridge, p));
+  if (regime.ok !== true) return { ok: false, reason: `the point ${JSON.stringify(p)} is not inside the regime (${String(regime.ok)})` };
+  const scale = spec.target === 0 ? 1 : Math.abs(spec.target);
+  const deltaAt = bound.deltaAt(p);
+  if (!(Math.abs(spec.tolerance / scale - deltaAt) <= 1e-12 * Math.max(deltaAt, 1e-12))) {
+    return { ok: false, reason: `tolerance ${spec.tolerance / scale} is not the bound's deltaAt ${deltaAt} at the declared point` };
+  }
+  if (!(spec.tolerance / scale <= bound.delta)) {
+    return { ok: false, reason: `tolerance ${spec.tolerance / scale} in the bound's norm is looser than delta ${bound.delta}` };
+  }
+  return { ok: true };
+}
+
+function checkPreservesClaim(entry: RegisteredNumericWitness, claim: WitnessClaim & { name: 'preserves' }): Verdict {
+  const bridge = bridgeOf(entry.recordId);
+  if (!bridge.preserves.includes(claim.item)) return { ok: false, reason: `'${claim.item}' is not in ${bridge.id}'s preserves` };
+  const p = claim.at(entry.spec.fineResolution);
+  const regime = regimeHolds(bridge.regime, groupValues(bridge, p));
+  if (regime.ok !== true) return { ok: false, reason: `the point ${JSON.stringify(p)} is not inside the regime (${String(regime.ok)})` };
+  return { ok: true };
+}
+
+function checkClaim(entry: RegisteredNumericWitness, claim: WitnessClaim): Verdict {
+  if (claim.name === 'preserves') return checkPreservesClaim(entry, claim);
+  if (claim.name === 'bound') return checkBoundClaim(entry, claim);
+  return checkBoundHoldsAtClaim(entry, claim);
+}
+
 const attributed = WITNESS_REGISTRY.filter(
   (e): e is RegisteredNumericWitness & { claim: WitnessClaim } => e.kind === 'numeric' && e.claim !== undefined,
 );
@@ -74,11 +119,14 @@ describe('witness → claim attribution is derived from the spec', () => {
       'WD7 → ab-telegraph-wave bound',
       'WS5 → ab-kg-schrodinger bound',
       'WS7 → ab-stiff-string bound',
+      'W7 → ab-pendulum-linear bound',
+      'W8b → ab-damped-massless bound-holds-at',
+      'W9 → ab-chain-wave preserves',
     ]);
   });
 
-  it.each(attributed.map((e) => [e.spec.id, e] as const))('%s tests the bound of its record', (_, e) => {
-    const verdict = checkBoundClaim(e, e.claim);
+  it.each(attributed.map((e) => [e.spec.id, e] as const))('%s tests the claim of its record it is attributed to', (_, e) => {
+    const verdict = checkClaim(e, e.claim);
     expect(verdict, verdict.ok ? '' : verdict.reason).toEqual({ ok: true });
   });
 
@@ -111,6 +159,36 @@ describe('controls: a wrong attribution fails', () => {
   it('a point outside the regime (WD6 at ε = 0.1 > 0.05)', () => {
     const wd6 = numeric('WD6');
     const v = checkBoundClaim(wd6, { name: 'bound', at: () => ({ tau: 0.1, D: 1, q: 1 }) });
+    expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/not inside the regime/) });
+  });
+
+  it('a non-sharp bound claimed as sharp (W8b as a bound: its error 0.0574 is not deltaAt 0.12)', () => {
+    const w8b = numeric('W8b');
+    const v = checkBoundClaim(w8b, { name: 'bound', at: w8b.claim!.at });
+    expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/is not the bound's deltaAt/) });
+  });
+
+  it('a bound-holds-at tolerance that is not deltaAt there (W8b at tolerance 0.2)', () => {
+    const w8b = numeric('W8b');
+    const v = checkBoundHoldsAtClaim({ ...w8b, spec: { ...w8b.spec, tolerance: 0.2 } }, w8b.claim!);
+    expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/is not the bound's deltaAt/) });
+  });
+
+  it('a bound-holds-at point outside the regime (W8b at m = 0.3, m k/b² > 1/4)', () => {
+    const w8b = numeric('W8b');
+    const v = checkBoundHoldsAtClaim(w8b, { name: 'bound-holds-at', at: () => ({ m: 0.3, b: 1, k: 1, x0: 1, v0: 5 }) });
+    expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/not inside the regime/) });
+  });
+
+  it('a preserved item the record does not list (W9 claiming the band edge, which it does NOT preserve)', () => {
+    const w9 = numeric('W9');
+    const v = checkPreservesClaim(w9, { name: 'preserves', item: 'the band edge ω_max = 2 √(κ/m) at qa = π', at: w9.claim!.at });
+    expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/is not in ab-chain-wave's preserves/) });
+  });
+
+  it('a preserved-property point outside the regime (W9 at qa = 2)', () => {
+    const w9 = numeric('W9');
+    const v = checkPreservesClaim(w9, { name: 'preserves', item: 'long-wavelength dispersion ω ≈ c q', at: () => ({ qa: 2 }) });
     expect(v).toMatchObject({ ok: false, reason: expect.stringMatching(/not inside the regime/) });
   });
 

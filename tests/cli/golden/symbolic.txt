@@ -4,13 +4,30 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
 
   ● CT-1  (be-42 ∘ be-16, via hawking-temperature ≡ temperature)
       composed:   landauer-erasure-energy(mass) = k_B·(hbar·c^3 / (8pi·G·mass·k_B))·ln2
+      latex:      \text{landauer-erasure-energy}(\mathrm{mass}) = k_{\mathrm{B}} \cdot \frac{\hbar \cdot {c}^{3}}{8\pi \cdot G \cdot \mathrm{mass} \cdot k_{\mathrm{B}}} \cdot \ln 2
       eval form:  upt eval "k_B*(hbar*c^3/((8*pi)*G*mass*k_B))*ln(2)" k_B=1.380649e-23 hbar=1.054571817e-34 c=299792458 G=6.6743e-11 mass=1.989e+30
+      symbols:
+        k_B   Boltzmann constant                      1.380649e-23       J/K           exact SI, 2019 redefinition (core/constants.ts K_B_SI)
+        hbar  reduced Planck constant h/(2π)          1.054571817e-34    J*s           CODATA 2018 (core/constants.ts HBAR_SI)
+        c     speed of light in vacuum                299792458          m/s           exact SI (core/constants.ts C_SI)
+        8pi   8π                                      25.132741228718345 1             mathematical constant (8·Math.PI)
+        G     Newtonian gravitational constant        6.6743e-11         m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
+        mass  input quantity mass (symbol M), [mass]  1.989e+30          kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
+        ln2   natural logarithm of 2                  0.6931471805599453 1             mathematical constant (Math.LN2)
       dimension: [energy]   (validated on the composed AST)
       value @ mass = M_sun:  5.9031e-31
 
   ● CT-1b (law-r_s ∘ be-42-via-rs, name-match junction)
       composed:   hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))
+      latex:      \text{hawking-temperature}(\mathrm{mass}) = \frac{\hbar \cdot c}{4\pi \cdot k_{\mathrm{B}} \cdot \frac{2 \cdot G \cdot \mathrm{mass}}{{c}^{2}}}
       eval form:  upt eval "hbar*c/((4*pi)*k_B*(2*G*mass/c^2))" hbar=1.054571817e-34 c=299792458 k_B=1.380649e-23 G=6.6743e-11 mass=1.989e+30
+      symbols:
+        hbar  reduced Planck constant h/(2π)          1.054571817e-34    J*s           CODATA 2018 (core/constants.ts HBAR_SI)
+        c     speed of light in vacuum                299792458          m/s           exact SI (core/constants.ts C_SI)
+        4pi   4π                                      12.566370614359172 1             mathematical constant (4·Math.PI)
+        k_B   Boltzmann constant                      1.380649e-23       J/K           exact SI, 2019 redefinition (core/constants.ts K_B_SI)
+        G     Newtonian gravitational constant        6.6743e-11         m^3/(kg*s^2)  CODATA 2018 (core/constants.ts G_SI)
+        mass  input quantity mass (symbol M), [mass]  1.989e+30          kg            evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)
       dimension: [temperature]   (validated on the composed AST)
       value @ mass = M_sun:  6.1684e-8
 

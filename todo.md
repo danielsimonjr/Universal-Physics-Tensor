@@ -21,20 +21,28 @@
 - [x] **F13** Upper-bound confrontations (GW-speed) label the prediction, the bound and the compatibility rule.
 - [x] **F14** Top-level help derives the isolated-bridge count instead of a fixed "20".
 
-### Audit improvements (§14) not covered by the F-ledger fixes — open
+### Audit improvements (§14) not covered by the F-ledger fixes
 
-- [ ] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
-  Proposal ready for Mothership: `docs/planning/ADR-proposal-transported-norm-composition.md`, with a
-  test-only demonstration (`tests/atlas/transported-norm-demo.test.ts`). To decide: the cell, the
-  shape of the per-direction norm-transport field, and whether the relation is set without a
-  declaration. Also for that review: `ab-spring-lc`'s declared phase carriage (I8) already lets a
-  phase tolerance cross that bridge; the composite bound stays "no composite claim".
+Audit I1, I3, I4, I10 and I13 were taken as covered by F-ledger fixes; the review below found four of
+them only partly met, and their rows are in "Review of the audit against the records and the code".
+
+- [x] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
+  Owner decision 2026-09-27: option 4 of `docs/planning/ADR-transported-norm-composition.md` (the
+  cell `approximation['exact-equivalence'] = 'approximation'`, the table a pure function of relation
+  types, and per-direction `normTransports` on exact bridges). `ab-spring-lc` declares relative period
+  error with witness W1τ. Limits, recorded as negative results: `ab-heat-diffusion` declares no
+  transport (it needs its own witness and a horizon restatement through D = κ/(ρc_p)), so
+  telegraph → heat refuses as `norm-not-stated`; exact then approximation (ADR §3) stays silent; the
+  composition-graph edge layer carries no transports and refuses the widened cell.
 - [x] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
 - [x] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
   Every evaluator declares each input's unit, meaning and geometry role, and `evaluate` converts
-  units against the declarations. No evaluator takes a radius yet: the audit's Stokes–Einstein example
-  (1 µm radius ≡ 2 µm diameter) is shown on the resolver, not the CLI. `CE-stokes-einstein` is encoded
-  only up to its 6π, so it cannot back an evaluator as it stands.
+  units against the declarations. ~~No evaluator takes a radius yet: the audit's Stokes–Einstein example
+  (1 µm radius ≡ 2 µm diameter) is shown on the resolver, not the CLI.~~ *(Withdrawn 2026-09-27: the
+  I20 case meets it on the CLI. `upt evaluate case-brownian-sphere T_K=293.15 eta_Pa_s=1e-3
+  rho_p_kg_per_m3=2000 rho_f_kg_per_m3=998 t_s=1 d=2 h_m=100um` gives D = 2.1471978e-13 m²/s for
+  `a_m=1um` and for `diameter_m=2um`, and 4.2943956e-13 for `a_m=0.5um`; k_BT/(6πηa) by hand agrees.)*
+  `CE-stokes-einstein` is encoded only up to its 6π, so it cannot back an evaluator as it stands.
 - [x] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
 - [x] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
   `path --tolerance=EPS` judges in the bound's own norm; `--tolerance=phase:EPS` and
@@ -43,6 +51,17 @@
   fixture. Limits: the position bound rests on the quoted pendulum Fourier series (a premise, not
   machine-checked); the point witness is not run below θ0 ≈ 0.007 and its control cannot fail below
   θ0 ≈ 0.013 (both said in the output); amplitude and every other bridge are not encoded.
+  Done 2026-09-27, as far as it can be closed:
+  - The Fourier-series premise is machine-checked. Witness W7xs checks it against RK4 over one period at
+    six θ0 across the domain, within 1e-9 rad, and its (1 − q^{2n+1}) control is refuted. A test checks
+    the coefficients a second way, from a quadrature nome and an independent RK4 projection. It is
+    still a check at points, not a derivation.
+  - The phase point witness locates each crossing by a secant on the RK4 step. It now runs down to
+    θ0 ≈ 7.0e-4 at a tolerance of 5e-8 relative, and its control fails down to θ0 ≈ 9e-4.
+  - Not closable: below that the (1+ε) control cannot fail. The two maps differ by ε relative, which
+    no finite-precision witness resolves as θ0 → 0 (negative result).
+  - Not derived: amplitude and angular velocity, a position carriage through `ab-spring-lc` (angle to
+    charge needs a declared scale), and translations for any other bridge.
 - [x] **I9** Uncertainty propagation with covariance, distinct from sensitivity.
 - [x] **I11** Discovery ranking by evidential readiness dimensions.
 - [x] **I12** Premise and novelty status inseparable from every exported derived relation.
@@ -54,24 +73,49 @@
   / predicted beside the agreement bound, labelled apart; no pinned number changed. Open: be-11 and
   be-21 carry no agreement bound in the outcome, so no compatibility decision is made for them
   (adding one would change the frozen golden).
-- [ ] **Atlas equation links** — 15 of 24 atlas models record no `canonicalRefs` (reasons per model in
+  Done 2026-09-27: the golden is the Sprint 2 regression golden, not a pre-registered artifact (the
+  pre-registration does not name it), so it was re-pinned deliberately. be-11's fractionalGap changes from 0 to its module's 15%
+  tolerance. be-21 is decided by a lower-limit rule, observed ≥ 1/(4π). Every consistency record now
+  makes a decision. be-11's decision holds by construction (negative result, in `NOTES.md`).
+- [x] **Atlas equation links** — 15 of 24 atlas models record no `canonicalRefs` (reasons per model in
   `tests/atlas/canonical-links.test.ts`). Eight older links are not yet checked (ratchet list in that
   test); three need a sourced prefactor for CE-simple-harmonic-frequency, CE-sound-speed and
   CE-string-wave-speed first. `CanonicalEquation.model` stays unset: `src/canonical` is frozen by
   criterion 3.
+  Done 2026-09-27: all eight are checked. The ratchet list is empty. Prefactors were sourced for the three, and for CE-spring-potential-energy and
+  CE-oscillator-energy; CE-sound-speed's √γ is in a group table. New link: `model-lc` →
+  CE-capacitor-energy. `NO_LINK_REASONS` holds a reason for each of the 15 unlinked models. Open:
+  CE-inductor-energy needs a sourced ½ before `model-lc` can link it; `CanonicalEquation.model`
+  stays unset (freeze).
 - [x] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
   Five witnesses (WS4, WD6, WD7, WS5, WS7) are attributed to their bridge's bound, each checked against
   its spec. None can be attributed to correspondence, regime, horizon or preserves: no spec ties to
-  them. Open: an executable spec for W7 (pendulum) so it can be attributed.
+  them. Open: an executable spec for witness W7 (pendulum) so it can be attributed.
+  Done 2026-09-27: W7 (bound), W8b (`bound-holds-at`: `ab-damped-massless`'s bound is not sharp)
+  and W9 (`preserves`: `ab-chain-wave` has no bound) are registered, so every atlas bridge runs a
+  witness in-process; each has a negative control that is refuted and a meta-check.
 - [x] **I16** Focused (neighborhood/route/family) map exports.
   `map --around`, `--route=FROM,TO` and `--family=NAME`; models join the equation graph only through
   their recorded `canonicalRefs`. `--all-routes`, `--observable`, and `--stored`/`--run` evidence are
   added. Open: an atlas-wide evidence view, and a test of `--run`'s exit 3 (nothing refutes today).
+  Done 2026-09-27: `upt atlas --evidence [--stored | --run]` shows every bridge of every family with its
+  derived and undecided evidence, per-tag counts (zeros included) and the norm-transport witnesses.
+  A refuting witness injected through a test-only registry makes `atlas <id> --run`, `atlas --evidence
+  --run` and `map --family/--route/--observable --run` exit 3; the shipped registry exits 0 (the paired
+  check), and an unresolved witness exits 0.
 - [x] **I17** Session export and replay (`--record`, `--show-record`, `--replay`).
   `upt-record/2` hashes the arguments and the entry, fingerprints 18 named constant tables, and marks
   each changed constant reachable or not from the command (a static upper bound, not an observed read).
   Open: literals a module keeps private are in no table; attribution is per command, not per entry;
   `map --out` and the timed `probe` subverbs are not replayable.
+  Done 2026-09-27: each entry hashes the source of every module its command loads, so a changed private
+  literal is named as a module change (the module, not the literal). `map --out` replays into a temporary
+  file compared by hash. Probe entries hash their input files (the observations file a problem names
+  included) and replay while those are unchanged; a changed input, an external worker, and a search the
+  record or the replay says stopped on its wall-clock budget are declared not replayable. `--stored`
+  hashes the witness-results artifact. Not done (negative result): per-entry attribution. The import
+  graph does not depend on the arguments, and a module's reads of its own private bindings cannot be
+  observed from outside it; a hand-kept id-to-module map would be declared, not derived.
 - [x] **I18** Bounded parameter sweeps with parent vs reduced model comparison.
   `--sweep … --compare=<to2>` puts two limits side by side and marks NEITHER rows with no number
   (telegraph and Klein–Gordon).
@@ -80,14 +124,94 @@
   workflow can recover and refute a law, not that it finds an unknown one; UPT ships no blind control.
   CSV input, input σ (effective variance), a declared correction family (F test) and a separate
   `--replication` file are added. Open: the replication check catches exact copies only; one
-  dimensionless input can carry a family; `bun run test:probe-coverage` is below its thresholds
-  (it was before this work too, and CI does not run it).
+  dimensionless input can carry a family. (The coverage clause that stood here, "below its thresholds
+  (it was before this work too …)", was half wrong: the owner's review measured 94.53% statements and
+  86.36% branches on 2026-09-25, so branches fell below 85 with this work. Resolved in the review
+  section below.)
+  Done 2026-09-27: replication rows at a study row's inputs are tested for agreement too good to be
+  true, identity (Σz²) and affine (y = a + b·y_study), each a lower-tail χ² test at α/2; either firing
+  makes replication `too-close`. Provenance matches ignore case, spacing and punctuation; inline rows
+  and a shared calibration are reported. `correction` takes a list of families, one per dimensionless
+  input. Limits that stand: only rows at shared inputs are paired, so a copy at altered inputs is not
+  caught; the families are additive (no cross term) and their declared order decides which terms are
+  tried first; an overstated σ also fires the closeness test. Not done, and inherent: a blind control.
+  Authoring one would take an author who does not know the generating law, and no such author is
+  available under the benchmark rules in `AGENTS.md`.
 - [x] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
   Six cases: the three above (now with hydrodynamic memory, Faxén/Brenner walls, amplifier noise and a
   resonator thermal floor) plus `case-skin-depth`, `case-lumped-cooling` and `case-kepler-rv`. Open:
   memory near a wall, the parallel lubrication limit, Faxén terms past 9/16 (quoted, not checked),
   the anomalous skin effect and radiation-dominated cooling (refused, not evaluated).
+  Done 2026-09-27: radiation-dominated cooling is evaluated. `case-lumped-cooling` reports
+  `T_radiating_K`, the lumped equation with the T⁴ loss kept (RK4), under its own premise
+  `Bi_radiating` = (h + h_rad)(a/3)/k ≤ 0.1, and null outside it. Checked by a second method: at h = 0
+  it inverts through a closed form derived by partial fractions to the same t within 1e-7.
+  Not done (negative results; the refusals stand):
+  - memory near a wall: no sourced wall-corrected memory kernel is in the repository;
+  - the parallel lubrication limit: the Goldman–Cox–Brenner asymptote's constant could not be checked
+    against a source here;
+  - the Faxén terms past 9/16: an independent check needs the exact bispherical solution (O'Neill
+    1964), which is not implemented;
+  - the anomalous skin effect: the Reuter–Sondheimer surface impedance is an integral equation that is
+    not implemented, and no sourced closed-form limit was checked.
+  Atlas models for the EM, thermal and astrophysical cases: not added, because none has a sound bound
+  yet.
+  - The skin-depth reduction is the atlas's existing `ab-telegraph-diffusion` relation, with τ = ε/σ;
+    a family of its own would restate that relation, not add one.
+  - Lumped cooling has no error bound: the textbook Bi ≤ 0.1 does not bound the late-time error
+    (measured in `NOTES.md`).
+  - Kepler → 1PN needs a trajectory bound whose apsidal drift grows linearly in time. The case evaluates
+    periods and amplitudes, and derives no such bound.
 - [x] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
+
+### Review of the audit against the records and the code (owner order 2026-09-27)
+
+Audit items are written "audit I5"; the persona notes in `docs/research/` number their own ideas, written
+"persona I5"; persona findings W4–W7 are written "persona W7" where a witness id (W7 = the pendulum
+witness) could be meant. Earlier entries used the bare form for both.
+
+- [x] **Windows checkout: probe-study fixtures and two path-separator tests fail.** With
+  `core.autocrlf=true`, `tests/fixtures/probe-study/**` checked out CRLF (it was missing from the
+  `text eol=lf` list) and four probe-study tests failed; `tests/cli/probe-study.test.ts` expected a
+  POSIX path and `tests/cli/record-hardening.test.ts` keyed the constant tables by a backslash path.
+  `npm run validate` runs them, so a Windows publish was blocked.
+- [x] **Probe coverage gate** — `bun run test:probe-coverage` below its thresholds (branches 82.47% < 85,
+  statements 91.46% < 95); raise with tests that can fail, keep the thresholds, and run it in CI.
+  Now 95.41% statements, 88.26% branches, 98.07% functions, 97.4% lines (at 18f7cfe; 95.4 / 88.34 / 98.21 /
+  97.53 at the branch head); the `test` job runs it.
+  Found on the way (negative result): a relative or standardized correction to a baseline is never
+  emitted for a dimensioned target, because `1 + m` with m of the target's dimension is inhomogeneous.
+- [x] **Records** — stale I6 note; §14 heading over a list of ticked rows; CHANGELOG "(partial)" lines
+  contradicted by later "(rest)" lines; audit/persona ID collision.
+- [x] **audit I1** Qualified routes across model families — met by F01.
+- [x] **audit I3** Consistent graph scope — F04 carries `--source` to `ground`; open: `explain`'s help
+  omits `--source`, and results do not print the effective source and anchor. `explain`, `ground`,
+  `discover`, `map`, `candidates` and `connectors` now name the effective source in text and JSON, and
+  the anchor they are relative to (the discovery ground truth, default or `--anchor`; or the
+  established core, with its edge count). Both help texts list `explain --source`.
+- [x] **audit I4** Stable expression syntax — F03 made `ln` agree; open: an unknown function suggests no
+  tested equivalent, `--debug` omits the parser version, help does not state the base of `log`, and
+  `map --equation` cannot compare `ln(2)` (persona W7). Both parsers now name a tested equivalent
+  (`lg` → `log10`, `arcsin` → `asin`, …) and still fail; `--debug` prints the parser and its version;
+  the help lists the functions and states that `log` is natural. The equation compare evaluates with
+  the active formula parser and reaches CE-landauer through BE-16, which it restates.
+- [x] **audit I5 residual** — `explain <law-name>` suggests one-letter quantities instead of `upt search`.
+  NOT COVERED now lists what `upt search` finds for the name's words (`schrodinger-equation` →
+  model-schrodinger-free, ab-schrodinger-diffusion, ab-kg-schrodinger), and a contained name counts
+  as near only from three characters.
+- [x] **audit I10** Reproducible equation rendering — F12 grouped denominators; open: no LaTeX, no
+  symbol table. Each chain now prints LaTeX (`\frac` for every division) and a symbol table (meaning,
+  value, SI unit, source); both round-trip through `eval` to the AST value, nested cases included.
+- [x] **audit I13** Precise verdict words — F07/F11 reworded two; open: no single glossary, no JSON
+  definitions except DECOY, and a VACUOUS regime line still starts with "valid". One table
+  (`src/cli/statuses.ts`) now feeds `upt help statuses` and every `--json` envelope's `definitions`;
+  a vacuous regime line reads "no machine condition evaluated (VACUOUS …)". Found on the way: `decoy`
+  means two things (audit's failed reconstruction, discover's adjudication verdict); both are defined.
+- [x] **Top-level help map usage** omits `--route`, `--family`, `--all-routes`, `--observable`,
+  `--stored`, `--run`, `--evidence`. The map synopsis is now complete in both helps and points to
+  `upt help map`. A test derived from every command's accepted flags found the same gap in seven more
+  places (`--source` of audit/predict/priority/probe, `derive --debug`, `canonical --vars`,
+  `discover --show-adjudicated`, map's `--anchor`/`--max-orders`); all are documented now.
 
 ## TypeScript-on-Bun migration (in flight)
 
@@ -364,10 +488,36 @@ warning-silencing, not debug logging).
 
 ## Active queue
 
-- [ ] **0.47.1 CLI applied-physicist persona retest triage (2026-09-26).** After the W1–Q2 fix batch;
+- [x] **0.47.1 CLI applied-physicist persona retest triage (2026-09-26).** After the W1–Q2 fix batch;
   findings in `docs/research/cli-physicist-persona-0.47.1-post-fix.md`. Open: W4 (Kepler/Schwarzschild
   monomial binds G/c as 1), W5 (Planck all-constant RHS refused), W6 (`a`→perihelion), W7 (Landauer
-  `ln(2)` vs `ln2`), L5–L8, Q3–Q4, I5–I8. Docs-only pass; Mothership to order fixes.
+  `ln(2)` vs `ln2`), L5–L8, Q3–Q4, persona I5–I8. Docs-only pass; Mothership to order fixes.
+  Dispositions (owner order 2026-09-27):
+  - persona W4 / persona I5 — fixed: the monomial comparison binds governing constants to their SI
+    values, so Kepler III and the Schwarzschild radius agree (ratio 1) and a halved prefactor reads 0.5.
+  - Q3 — answered: three recorded-prefactor entries were wrong, not two. Kepler III and the
+    Schwarzschild radius (tabled) and the Einstein field equation (fully quantitative, no scalar AST).
+    The EFE is now prefactor-unchecked: its 8π is only in its field equation, and `src/canonical` is
+    frozen. Five more monomial entries hold a constant and were prefactor-unchecked, not wrong.
+  - persona W5 / persona I6 — fixed for a catalog target: an all-constant right-hand side is compared at
+    the SI constant values. The Planck length, mass and time prefactors (1) are sourced. Limit: with no
+    free variable only the value is compared, not the form, and the output says so.
+    CE-compton-wavelength stays prefactor-unchecked: it writes ħ/(mc), the reduced wavelength, while
+    "Compton wavelength" is h/(mc).
+  - persona W6 — partial: a one-letter source bound to a catalog quantity is now disclosed ("'a' is
+    bound to the catalog quantity a [length] …; write its full name"). It is not refused and no
+    `--as NAME=QUANTITY` was added, because writing the full name already selects the quantity and
+    CE-perihelion-precession uses `a` legitimately.
+  - persona W7 — fixed in the audit I4 commit (the equation compare accepts `ln(2)`).
+  - L5 / persona I7 — partial: an unknown symbol whose inferred dimension is a registered constant's is
+    pointed to it (`sigma` → `sigma_sb`). It is not aliased silently; `ln(2)` is covered by persona W7.
+  - L6 — fixed: a dimensionless symbol that is only in the canonical AST (`N` of CE-ideal-gas) is
+    paired with the user's symbol of the same name when the governing pairing fails.
+  - L7 / persona I8 — fixed as `map --equation … --equation-only`; the default output is unchanged,
+    so no `--map` flag was added.
+  - L8 — fixed: the empty `probe scan` frontier says how to start an expression search.
+  - Q4 — no change: whether magnitude-backed rows lead `discover` is a product-ordering call for
+    Mothership.
 
 - [x] **0.47.1 CLI applied-physicist persona pass + fix batch (2026-09-26).** Findings in
   `docs/research/cli-physicist-persona-0.47.1.md`. Fixed: W1 (c vs speed-of-light), W2 (RHS kebabs),
@@ -425,7 +575,9 @@ warning-silencing, not debug logging).
       - [x] L9: `upt path --at` prints only the domain supremum; add `deltaAt(point)` as "bound at this point", tested ≥ the exact error.
       - [x] Found during L7 (2026-09-25), NOT investigated, outside the W1/L1–L9 scope: `bun run test:probe-coverage` reports 0% on every file and "AssertionError: coverageFilesDirectory is required". Not in CI. Whether it also fails at the commit before L7 was not measured.
       - [ ] tree-sitter reports `src/cli/commands/path.ts` as UNPARSED ("parse error (tree-sitter reported ERROR nodes)"), and does so on master too. tsc compiles it. An unparsed file is invisible to the code-docs and dependency tooling, so their counts are silently incomplete. Found 2026-09-25 during F2. Fix after the 0.47.0 batch (Mothership).
-      - [ ] Probe coverage is 94.53% statements against the 95% gate (measured 2026-09-25, once the provider was fixed). Lines 97.25%, functions 98.18%, branches 86.36% pass. Below 95% statements: generator.ts 82%, pipeline.ts 90%, residual.ts 90%, limits.ts 92%, metadata.ts 86%, fingerprint.ts 94%, problem.ts 94%, backend-protocol.ts 94%. Most predate this session; the gate went unmeasured while the provider was broken. Do NOT lower the threshold.
+      - [x] Probe coverage is 94.53% statements against the 95% gate (measured 2026-09-25, once the provider was fixed). Lines 97.25%, functions 98.18%, branches 86.36% pass. Below 95% statements: generator.ts 82%, pipeline.ts 90%, residual.ts 90%, limits.ts 92%, metadata.ts 86%, fingerprint.ts 94%, problem.ts 94%, backend-protocol.ts 94%. Most predate this session; the gate went unmeasured while the provider was broken. Do NOT lower the threshold.
+        Closed 2026-09-27 by the "Probe coverage gate" row of the audit review (above): the gate passes
+        with the thresholds unchanged, and CI runs it.
 
 - [x] **Atlas Sprint 6 — study, scoped release, discovery hypothesis (IN FLIGHT).** **S6.1** — study
       orchestration (`bun run atlas:study`); refuses (exit 3) on the empty frozen set.

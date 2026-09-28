@@ -50,7 +50,7 @@ describe('upt regime', () => {
     const cap = capture();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.2'], cap.io);
     expect(code).toBe(0);
-    expect(cap.lines.join('')).toMatch(/model-spring: valid \(VACUOUS/);
+    expect(cap.lines.join('')).toMatch(/model-spring: no machine condition evaluated \(VACUOUS/);
   });
 
   it('refuses to synthesize a box when no --at point is given', async () => {

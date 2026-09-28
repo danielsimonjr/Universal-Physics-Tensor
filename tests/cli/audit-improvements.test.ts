@@ -17,6 +17,22 @@ async function run(args: string[]): Promise<{ code: number; text: string }> {
   const code = await runCli(args, c.io);
   return { code, text: c.lines.join('') };
 }
+/**
+ * Run one command with a patched api (test-only): the way to reach a state the
+ * shipped registry never produces, such as a bridge with no registered witness.
+ */
+async function runPatched(name: string, args: string[], patch: Record<string, unknown>): Promise<{ code: number; text: string }> {
+  const [{ resolveCommand }, { parseArgs }, api] = await Promise.all([
+    import('../../dist/cli/command.js'),
+    import('../../dist/cli/args.js'),
+    import('../../dist/cli-api.js'),
+    import('../../dist/cli/commands/index.js'),
+  ]);
+  const command = resolveCommand(name)!;
+  const c = capture();
+  const code = await command.run({ args: parseArgs(command.name, args, command.flags), api: { ...api, ...patch }, ...c.io } as any);
+  return { code, text: c.lines.join('') };
+}
 async function json(args: string[]): Promise<any> {
   const c = capture();
   const code = await runCli([...args, '--json'], c.io);
@@ -137,8 +153,11 @@ describe('I18 — a bounded sweep: each row is the point verdict, and an unclaim
   });
 
   it('a path with no composite claim sweeps its status only; no number appears', async () => {
-    const env = await json(['path', 'model-pendulum', 'model-lc', '--at', 'T0=1', 't=10', '--sweep', 'theta0=0.1:0.4:3']);
+    // model-rlc → model-first-order: exact then approximation, a silent cell. (pendulum → lc
+    // composes since the owner decision of 2026-09-27, through ab-spring-lc's norm transport.)
+    const env = await json(['path', 'model-rlc', 'model-first-order', '--at', 'm · b^-2 · k=0.01', '--sweep', 't=0.1:1:3']);
     expect(env.result.kind).toBe('no-claim');
+    expect(env.result.rows).toHaveLength(3);
     expect(env.result.rows.every((r: any) => r.error === null && r.reason === 'no composite claim')).toBe(true);
   });
 
@@ -399,10 +418,12 @@ describe("I8 — the translation's witness runs at the caller's point as well as
   });
 
   it('where the control cannot fail at this point, the text says so rather than implying it can', async () => {
-    const r = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.01', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    const r = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.00075', 'T0=1', 't=1', '--tolerance=phase:0.1']);
     expect(r.text).toMatch(/control W7p@point-control \[.*\]: checked — NOT refuted: at this point the witness cannot tell the wrong map from the declared one/);
-    const tiny = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.001', 'T0=1', 't=1', '--tolerance=phase:0.1']);
-    expect(tiny.text).toMatch(/witness at this point: not run — the drift within 512 T0 at θ0 = 0\.001 is [\d.e-]+ rad, below the 0\.01 rad this witness resolves/);
+    const tiny = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.0001', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    expect(tiny.text).toMatch(/witness at this point: not run — the drift within 512 T0 at θ0 = [\d.]+ is [\d.e-]+ rad, below the 0\.0001 rad this witness resolves/);
+    const small = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.003', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    expect(small.text).toMatch(/control W7p@point-control \[.*\]: refuted/);
   });
 
   it('a sweep reports the point witness per judged row', async () => {
@@ -459,7 +480,7 @@ describe('I8 — a position tolerance through a declared UPPER BOUND on |θ − 
     expect(tol.translation.errorKind).toBe('upper-bound');
     expect(tol.pointWitness).toMatchObject({ id: 'W7x@point', status: 'checked', control: { status: 'refuted' } });
     expect(tol.evidence.tags).toEqual(['numerically-supported']);
-    expect(tol.evidence.witnesses.map((w: any) => [w.id, w.status])).toEqual([['W7x', 'checked'], ['W7xa', 'checked']]);
+    expect(tol.evidence.witnesses.map((w: any) => [w.id, w.status])).toEqual([['W7x', 'checked'], ['W7xa', 'checked'], ['W7xs', 'checked']]);
   });
 
   it('a tolerance below the waveform floor W̄ is UNDETERMINED, not inadequate: the bound certifies no t', async () => {
@@ -474,8 +495,10 @@ describe('I8 — a translation composes across a bridge only through its declare
     const direct = (await json([...PHASE_AT, 't=1', '--tolerance=phase:0.1'])).result.tolerance;
     const env = await json([...LC_AT, 't=1', '--tolerance=phase:0.1']);
     const tol = env.result.tolerance;
-    expect(env.result.kind).toBe('no-claim');
-    expect(env.result).not.toHaveProperty('bound');
+    // Since the owner decision of 2026-09-27 the composite is a bound in relative period
+    // error (ab-spring-lc's norm transport); the phase judgement is a separate claim.
+    expect(env.result.kind).toBe('bound');
+    expect(env.result.norm).toMatch(/^relative period error/);
     expect(tol.verdict).toBe('adequate');
     expect(tol.horizon).toBe(direct.horizon);
     expect(tol.translation.carriedBy).toEqual(['ab-spring-lc']);
@@ -483,12 +506,13 @@ describe('I8 — a translation composes across a bridge only through its declare
     expect(tol.evidence.carriages[0].witnesses).toEqual([expect.objectContaining({ id: 'W1φ', status: 'checked' })]);
   });
 
-  it('the composite bound stays no composite claim, and past t* the carried phase is INADEQUATE (exit 3)', async () => {
+  it('the composite bound and the carried phase are separate claims, and past t* the phase is INADEQUATE (exit 3)', async () => {
     const tStar = (await json([...LC_AT, '--tolerance=phase:0.1'])).result.tolerance.horizon;
     const r = await run([...LC_AT, `t=${tStar * 1.001}`, '--tolerance=phase:0.1']);
     expect(r.code).toBe(3);
-    expect(r.text).toMatch(/\n {2}composite relation: no composite claim\n/);
-    expect(r.text).toMatch(/the composite bound is still 'no composite claim': the composition table is not consulted or widened/);
+    expect(r.text).toMatch(/\n {2}composite relation: approximation\n/);
+    expect(r.text).toMatch(/the composite bound above is in 'relative period error[^']*', carried by a declared norm transport; this judgement is a separate claim in phase/);
+    expect(r.text).not.toMatch(/the composite bound is still 'no composite claim'/);
     expect(r.text).toMatch(/carried by ab-spring-lc \(its declared carriage of phase\)/);
   });
 });
@@ -709,7 +733,8 @@ describe('I14 — each confrontation names its statistical object, criterion and
     expect(rec('be-37')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: as reported by the source \(no derivation recorded\)/);
     expect(rec('be-51')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: derived from PPN γ/);
     expect(rec('be-48')).toMatch(/\n {4}statistic: one-sided upper limit · criterion: predicted ≤ limit/);
-    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: none — the outcome carries no agreement bound; the difference is reported, not thresholded; not a precision test/);
+    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: \|actual difference\| ≤ the record's stated agreement bound/);
+    expect(rec('be-21')).toMatch(/\n {4}statistic: lower limit claimed by the bridge, against a reference value with no σ · criterion: observed ≥ predicted lower limit — one-sided, not a σ-residual; not a precision test/);
     expect(rec('be-65')).toMatch(/\n {4}statistic: reference value with no σ · criterion: \|actual difference\| ≤ the record's stated agreement bound — a tolerance, not a σ-residual; not a precision test/);
   });
 
@@ -820,8 +845,31 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     expect(s).toMatch(/\n {2}horizon: machine form recorded; the formal reference is not attributed to it/);
     expect(s).toMatch(/\n {2}regime: 1 machine inequality — check a point with `upt regime oscillators --at …`/);
     expect(s).toMatch(/\n {2}preserves: no evidence is attributed to a preserved property/);
-    expect(s).toMatch(/\nwitness execution \(the record does not attribute a witness to a claim\):\n {2}- W7 \[numeric\]: result not observed by this command — its repository test file: bunx vitest run tests\/atlas\/oscillators-limits\.test\.ts\n/);
+    expect(s).toMatch(
+      /\n {2}bound: basis closed-form \(deltaAt is the exact error\); the formal reference is not attributed to it\n {4}- W7 \[numeric\] tests it at theta0 = 0\.2 \(its error there is the bound's norm; tolerance ≤ delta\): registered in-process, not run — `upt atlas ab-pendulum-linear --run` runs it\n/,
+    );
+    expect(s).toMatch(/\nwitness execution, witnesses not attributed to a claim:\n {2}- W7b \[numeric\]: result not observed by this command — its repository test file: bunx vitest run tests\/atlas\/oscillators-limits\.test\.ts\n/);
     expect(s).not.toMatch(/W7.*checked/);
+  });
+
+  it('--run on the pendulum runs W7 in-process and reports it under the bound (audit I15 limit closed)', async () => {
+    const r = await run(['atlas', 'ab-pendulum-linear', '--run']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/\n {4}- W7 \[numeric\] tests it at theta0 = 0\.2 .*: checked \(run now\) — Fine error /);
+    expect(r.text).toMatch(/witnesses run: 1 checked · 0 refuted · 0 unresolved/);
+  });
+
+  it('a bound that is not sharp is tested at one point, and a preserved property can carry a witness', async () => {
+    const damped = await run(['atlas', 'ab-damped-massless']);
+    expect(damped.text).toMatch(
+      /\n {4}- W8b \[numeric\] tests it at b = 1, k = 1, m = 0\.01, v0 = 5, x0 = 1 \(its error there is in the bound's norm; tolerance = deltaAt there, the bound is not sharp\): registered in-process/,
+    );
+    const chain = await run(['atlas', 'ab-chain-wave', '--run']);
+    expect(chain.code).toBe(0);
+    expect(chain.text).toMatch(/\n {2}preserves: 1 of 3 stated properties has an attributed witness\n {4}- W9 \[numeric\] tests 'long-wavelength dispersion ω ≈ c q' at qa = 0\.19634954084936207: checked \(run now\)/);
+    const env = await json(['atlas', 'ab-chain-wave']);
+    expect(env.result.claims.preserves.evidence).toEqual([{ id: 'W9', item: 'long-wavelength dispersion ω ≈ c q', at: { qa: (2 * Math.PI) / 32 } }]);
+    expect(env.result.witnessExecution.map((w: any) => [w.id, w.claim])).toEqual([['W9', 'preserves'], ['W9b', null]]);
   });
 
   it('--run executes the registered witnesses and reports each status; exit 0 when none is refuted', async () => {
@@ -832,9 +880,21 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
   });
 
   it('--run on a bridge with no registered witness says so rather than reporting a pass', async () => {
-    const r = await run(['atlas', 'ab-pendulum-linear', '--run']);
+    // Every shipped bridge now has one, so the state is reached through a registry with the pendulum's removed.
+    const all = (await import('../../dist/cli-api.js')).WITNESS_REGISTRY;
+    const without = all.filter((e: any) => e.recordId !== 'ab-pendulum-linear');
+    expect(without.length).toBeLessThan(all.length);
+    const r = await runPatched('atlas', ['ab-pendulum-linear', '--run'], { WITNESS_REGISTRY: without });
     expect(r.code).toBe(0);
     expect(r.text).toMatch(/witnesses run: none — no witness of ab-pendulum-linear is registered to run in-process/);
+  });
+
+  it('every atlas bridge has at least one witness registered to run in-process', async () => {
+    const env = await json(['atlas']);
+    const reg = (await import('../../dist/cli-api.js')).WITNESS_REGISTRY;
+    const ids: string[] = env.result.bridges.map((b: any) => b.id);
+    expect(ids.length).toBe(20);
+    expect(ids.filter((id) => !reg.some((e: any) => e.recordId === id))).toEqual([]);
   });
 
   it('control: a refuted result is counted as refuted, never merged with unresolved, and fails the check', async () => {
@@ -858,7 +918,7 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     expect(apart).toMatch(/^witness execution, witnesses not attributed to a claim:\n {2}- WS4b \[numeric\]: result not observed/);
     expect(apart).not.toMatch(/WS4 \[/);
     const env = await json(['atlas', 'ab-klein-gordon-wave']);
-    expect(env.result.claims.bound.witnesses).toEqual([{ id: 'WS4', at: { omega0: 1, c: 1, k: 20 } }]);
+    expect(env.result.claims.bound.witnesses).toEqual([{ id: 'WS4', claim: 'bound', at: { omega0: 1, c: 1, k: 20 } }]);
     expect(env.result.witnessExecution.map((w: any) => [w.id, w.claim])).toEqual([['WS4', 'bound'], ['WS4b', null]]);
   });
 
@@ -872,8 +932,9 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     const env = await json(['atlas', 'ab-pendulum-linear']);
     expect(env.result.claims.correspondence.formalReference.fidelity).toBe('sanity-lemmas');
     expect(env.result.claims.bound.basis).toBe('closed-form');
-    expect(env.result.witnessExecution.map((w: any) => w.status)).toEqual(['not-observed', 'not-observed', 'not-observed']);
-    expect(env.result.claims.bound.witnesses).toEqual([]);
+    // W7 is registered in-process (audit I15 limit), so it is runnable; W7b and W7c are not.
+    expect(env.result.witnessExecution.map((w: any) => w.status)).toEqual(['runnable', 'not-observed', 'not-observed']);
+    expect(env.result.claims.bound.witnesses).toEqual([{ id: 'W7', claim: 'bound', at: { theta0: 0.2 } }]);
   });
 });
 
@@ -901,7 +962,7 @@ describe('I7 — a premise checklist: machine-checked, declared by you, denied b
   it('spring–LC: --deny lossless marks the premise contradicted, and the inequality verdict is untouched', async () => {
     const { text } = await run(['regime', 'oscillators', '--deny', 'lossless']);
     const b = block(text, 'ab-spring-lc');
-    expect(b).toMatch(/^\] ab-spring-lc: valid \(VACUOUS/);
+    expect(b).toMatch(/^\] ab-spring-lc: no machine condition evaluated \(VACUOUS/);
     expect(b).toMatch(/\n {4}CONTRADICTED by your --deny: lossless — this record does not apply as stated/);
     expect(/\n {4}premises not machine-checked: (.*)/.exec(b)![1]).not.toMatch(/lossless/);
   });

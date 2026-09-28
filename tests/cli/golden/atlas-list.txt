@@ -21,4 +21,4 @@
   ab-kg-oscillator             restriction            [waves]
   ab-stiff-string              approximation          [waves]
 
-Run `upt atlas <bridge-id>` for one bridge with every qualification.
+Run `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge's derived evidence.

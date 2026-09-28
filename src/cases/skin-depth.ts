@@ -145,6 +145,7 @@ export const SKIN_DEPTH_CASE: AppliedCase = {
       },
     ],
   },
+  /** Evaluate the classical skin depth and conductor-regime checks for the supplied inputs. */
   run(i) {
     requirePositive(ID, i, ['rho_ohm_m', 'f_Hz', 'mu_r', 'eps_r', 'l_mfp_m', 'v_carrier_m_per_s', 'thickness_m']);
     const { rho_ohm_m: rho, f_Hz: f, mu_r: muR, eps_r: epsR, l_mfp_m: l, v_carrier_m_per_s: v, thickness_m: d } = i as Record<string, number>;

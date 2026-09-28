@@ -23,7 +23,9 @@
  *
  * bounds the error at every t; the clamp at π keeps B non-decreasing in t and
  * is still a bound, since |cos a − cos b| ≤ 2. It is rigorous GIVEN the
- * Fourier series, which is quoted, not derived here.
+ * Fourier series, which is quoted, not derived here. Witness W7xs checks the
+ * series against RK4 over one period at each θ0 of a grid across the domain;
+ * that is a check at those points, not a derivation.
  *
  * B is an upper bound, not the error: past its horizon the BOUND exceeds the
  * tolerance, and the error may not. It is near-sharp where Δφ → π (the
@@ -136,6 +138,58 @@ export function measureFundamental(theta0: number, stepsPerPeriod: number): numb
   return (2 * sum) / stepsPerPeriod;
 }
 
+/** The θ0 at which W7xs checks the Fourier series: a grid across the bridge's domain θ0 ≤ 0.5. @internal */
+export const FOURIER_SERIES_THETA0S: readonly number[] = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5];
+const FOURIER_SERIES_TERMS = 20;
+const FOURIER_SERIES_TOLERANCE = 1e-9;
+
+/**
+ * F(φ) = Σ_{n<20} (−1)ⁿ aₙ cos((2n+1)φ). `'minus'` puts (1 − q^{2n+1}) in the
+ * denominator of aₙ, a transcription error the control uses.
+ */
+function fourierSeries(theta0: number, phi: number, variant: 'plus' | 'minus'): number {
+  const q = pendulumNome(theta0);
+  let s = 0;
+  for (let n = 0; n < FOURIER_SERIES_TERMS; n++) {
+    const odd = 2 * n + 1;
+    const a = (8 * q ** (n + 0.5)) / (odd * (variant === 'plus' ? 1 + q ** odd : 1 - q ** odd));
+    s += (n % 2 === 0 ? a : -a) * Math.cos(odd * phi);
+  }
+  return s;
+}
+
+/** max over the grid, and over one period T = T0(1+ε) sampled at every RK4 step, of |θ_RK4(t) − F(2πt/T)|. */
+function fourierSeriesDeviation(stepsPerPeriod: number, variant: 'plus' | 'minus'): number {
+  let worst = 0;
+  for (const theta0 of FOURIER_SERIES_THETA0S) {
+    const h = (1 + pendulumPeriodErrorAt({ theta0 })) / stepsPerPeriod;
+    let x = theta0;
+    let v = 0;
+    worst = Math.max(worst, Math.abs(x - fourierSeries(theta0, 0, variant)));
+    for (let i = 1; i <= stepsPerPeriod; i++) {
+      [x, v] = rk4Step(x, v, h, pendulumAccel);
+      worst = Math.max(worst, Math.abs(x - fourierSeries(theta0, (TWO_PI * i) / stepsPerPeriod, variant)));
+    }
+  }
+  return worst;
+}
+
+/**
+ * W7xs, or its control: the Fourier series against RK4 of the pendulum, at 200
+ * and 800 steps per period, within 1e-9 rad at every step and every grid θ0.
+ * @internal
+ */
+export function fourierSeriesCheck(id: string, variant: 'plus' | 'minus' = 'plus'): NumericWitnessSpec {
+  return {
+    id,
+    evaluate: (stepsPerPeriod) => fourierSeriesDeviation(stepsPerPeriod, variant),
+    target: 0,
+    coarseResolution: 200,
+    fineResolution: 800,
+    tolerance: FOURIER_SERIES_TOLERANCE,
+  };
+}
+
 const W7X_THETA0 = 0.3;
 const W7X_EPS = pendulumPeriodErrorAt({ theta0: W7X_THETA0 });
 
@@ -179,7 +233,8 @@ export const PENDULUM_POSITION_TRANSLATION: ObservableTranslation = {
   premises: [
     'both motions are released from rest at the same θ0 at t = 0',
     'T0 = 2π √(ℓ/g) is the linear period, in the unit t is given in',
-    'the classical Fourier series of the pendulum (all aₙ > 0, Σ (−1)ⁿ aₙ = θ0) — quoted, not derived here',
+    'the classical Fourier series of the pendulum (all aₙ > 0, Σ (−1)ⁿ aₙ = θ0) — quoted, not derived here; ' +
+      `machine-checked against RK4 at θ0 ∈ {${FOURIER_SERIES_THETA0S.join(', ')}} (W7xs), not between those points`,
   ],
   parameters: ['T0'],
   timeUnit: 'the unit of T0',
@@ -205,7 +260,15 @@ export const PENDULUM_POSITION_TRANSLATION: ObservableTranslation = {
       test: 'tests/atlas/pendulum-position-translation.test.ts',
       tolerance: `RK4-projected fundamental coefficient at θ0 = ${W7X_THETA0} within 1e-10 of 8√q/(1+q)`,
     },
+    {
+      id: 'W7xs',
+      kind: 'numeric',
+      test: 'tests/atlas/pendulum-position-translation.test.ts',
+      tolerance:
+        `the Fourier series (${FOURIER_SERIES_TERMS} terms) within ${FOURIER_SERIES_TOLERANCE} rad of RK4 at every step of one period, ` +
+        `at θ0 ∈ {${FOURIER_SERIES_THETA0S.join(', ')}}`,
+    },
   ],
-  checks: [dominanceSpec('W7x', W7X_EPS, 1, 1), W7XA],
+  checks: [dominanceSpec('W7x', W7X_EPS, 1, 1), W7XA, fourierSeriesCheck('W7xs')],
   pointCheck: positionPointCheck,
 };

@@ -53,3 +53,29 @@ describe('upt explain — not covered vs not derivable', () => {
     expect(r.text).toMatch(/is in the graph, but cannot be determined from \{\} \(no inputs\)/);
   });
 });
+
+// Audit I5 residual (owner review 2026-09-27): `explain schrodinger-equation --source=canonical` said
+// "did you mean: a, A, g, q, r?" — one-letter names that the containment rule let through because each
+// occurs inside the long input. It now names what `upt search` finds for the input's words.
+describe('audit I5 residual: a law or model name is pointed to upt search', () => {
+  const suggested = (text: string): string[] =>
+    (/did you mean: ([^?]*)\?/.exec(text)?.[1] ?? '').split(', ').filter((s) => s !== '');
+
+  it('schrodinger-equation lists the search hits and the search command, and no one-letter names', async () => {
+    const r = await run(['explain', 'schrodinger-equation', '--source=canonical']);
+    expect(r.code).toBe(1);
+    expect(r.text).toMatch(/'schrodinger-equation' is not a quantity in the canonical graph: NOT COVERED/);
+    expect(r.text).toMatch(/`upt search schrodinger` finds/);
+    for (const id of ['model-schrodinger-free', 'ab-kg-schrodinger', 'ab-schrodinger-diffusion']) {
+      expect(r.text).toContain(id);
+    }
+    expect(suggested(r.text).filter((s) => s.length < 3)).toEqual([]);
+  });
+
+  it('control: a misspelled quantity still gets its near name, and no search line when search finds nothing', async () => {
+    const r = await run(['explain', 'hawkng-temperature']);
+    expect(suggested(r.text)[0]).toBe('hawking-temperature');
+    const q = await run(['explain', 'qwertyuiop']);
+    expect(q.text).not.toMatch(/upt search/);
+  });
+});

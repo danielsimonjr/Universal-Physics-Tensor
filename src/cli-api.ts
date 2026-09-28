@@ -57,7 +57,7 @@ export {
 } from './numerical/formula-registry.js';
 export { parseDimensionSpec } from './dimensional/dimension-spec.js';
 export { predictMissingBridges } from './composition/bridge-prediction.js';
-export { rankDiscoveries } from './composition/discovery.js';
+export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
 export { auditCoverage } from './bridges/confrontation-coverage.js';
 export {
@@ -112,6 +112,7 @@ export {
   problemFromResidualGap,
   makeResidualGap,
   loadSearchProblemFromJson,
+  resolveObservationsPath,
   parseExprJson,
   runProbeSearch,
   formatProbeReport,
@@ -166,14 +167,15 @@ export {
   describeComparisons,
 } from './composition/canonical-compare.js';
 export type { CanonicalComparison } from './composition/canonical-compare.js';
-export { CONSTANTS } from './composition/symbolic-constants.js';
+export { CONSTANTS, CONSTANT_PROVENANCE } from './composition/symbolic-constants.js';
 export type { CandidateGrounding, CandidateReadiness } from './composition/grounding.js';
 
 // Atlas Phase 2 CLI surface (`upt regime`, `upt path`). Regime admission and
 // route bounds are `@internal`; the CLI is their only consumer today.
 export { OSCILLATOR_FAMILY } from './atlas/oscillators/index.js';
 export { ATLAS_FAMILIES } from './atlas/families.js';
-export { deriveEvidence, NO_PASSING_WITNESSES } from './atlas/derive-evidence.js';
+export { deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES } from './atlas/derive-evidence.js';
+export { summarizeEvidence, ALL_EVIDENCE_TAGS } from './atlas/coverage.js';
 export { runWitnessRegistry } from './atlas/witness-artifact.js';
 export { WITNESS_REGISTRY } from './atlas/witness-specs.js';
 export { runNumericWitness } from './atlas/witness-numeric.js';
@@ -188,9 +190,9 @@ export type { ObservableCarriage, ObservableTranslation, PointCheck } from './at
 export type { AtlasFamily } from './atlas/oscillators/index.js';
 export { regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
-export { findPath, findAtlasPath, enumerateAtlasRoutes, boundPath } from './atlas/path-bound.js';
+export { findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels } from './atlas/path-bound.js';
 export { composeRelation } from './atlas/composition-table.js';
-export type { PathBoundResult, PathBoundClaim, PathNoClaim } from './atlas/path-bound.js';
+export type { PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport } from './atlas/path-bound.js';
 export type { AtlasBridge, RegimeInequality, Witness } from './atlas/types.js';
 export { MissingLipschitzError } from './atlas/types.js';
 export type { AtlasModel, ModelId } from './atlas/model.js';

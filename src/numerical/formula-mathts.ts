@@ -19,7 +19,7 @@
  */
 
 import type { CompiledFormula, FormulaParser } from './formula.js';
-import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError } from './formula.js';
+import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError, unknownFunctionMessage } from './formula.js';
 
 /** Minimal structural shape of a MathTS AST node (the bits we use). */
 interface MathNode {
@@ -87,6 +87,9 @@ function createMathtsFormulaParser(
           .map((n) => n.fn?.name)
           .filter((n): n is string => typeof n === 'string'),
       );
+      // A callee MathTS does not resolve and no shim supplies: evaluation would fail with MathTS's
+      // own "Undefined function", so it fails with the shared diagnostic instead (audit I4).
+      const unknownCallee = [...callees].find((n) => !(n in shims) && !isBuiltin(n));
       const variables = [
         ...new Set(
           node
@@ -101,6 +104,7 @@ function createMathtsFormulaParser(
         source: expr,
         variables,
         evaluate(scope: Record<string, number>): number {
+          if (unknownCallee !== undefined) throw new FormulaError(unknownFunctionMessage(unknownCallee));
           let result: unknown;
           try {
             result = node.evaluate({ ...shims, ...scope } as Record<string, number>);

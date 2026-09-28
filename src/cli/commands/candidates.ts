@@ -6,7 +6,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { resolveGraph } from '../graphs.js';
+import { resolveGraph, coreAnchor, coreLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
@@ -29,13 +29,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   const cands = api.proposeLinkCandidates(graph);
 
   if (args.flags.has('json')) {
-    emitJson({ command: 'candidates', source, epistemics: EPISTEMICS, result: cands }, ctx.write);
+    emitJson({ command: 'candidates', source, anchor: { core: coreAnchor(graph) }, epistemics: EPISTEMICS, result: cands }, ctx.write);
     return 0;
   }
 
   const core = cands.filter((c) => c.touchesCore);
   const ck = cands.filter((c) => c.touchesCore && c.sameKind);
   out(`\nLink candidates — cross-cluster quantities sharing a dimension  [source: ${label}]`);
+  out(`  ${coreLine(coreAnchor(graph))}`);
   out('⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a');
   out('  weak signal; each needs a physicist to accept or (far more often) reject.\n');
   out(`  funnel:  ${cands.length} total  →  ${core.length} touch the anchored core  →  ${ck.length} also same-kind\n`);

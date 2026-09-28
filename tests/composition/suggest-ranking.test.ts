@@ -52,3 +52,20 @@ describe('N2: suggestByDimension ranks the same-dimension set by the typed name'
     expect(suggestByDimension(LENGTH, cat, 3)).toEqual(['a', 'amplitude', 'barrier-width']);
   });
 });
+
+// Audit I5 residual: containment let every one-letter name through for a long input
+// (`schrodinger-equation` contains a, g, q, r). A contained name counts only from 3 characters.
+describe('audit I5 residual: containment needs at least three characters', () => {
+  it('a long input is not "near" a one-letter name it happens to contain', () => {
+    const got = suggestQuantities('schrodinger-equation', ['a', 'A', 'g', 'q', 'r', 'energy']);
+    expect(got.filter((s) => s.length < 3)).toEqual([]);
+  });
+
+  it('a one-letter input finds its exact name and one-edit neighbours, not every name holding the letter', () => {
+    expect(suggestQuantities('a', ['a', 'b', 'acceleration'])).toEqual(['a', 'b']);
+  });
+
+  it('control: a contained name of three or more characters still counts (temperature in hawkng-temperature)', () => {
+    expect(suggestQuantities('hawkng-temperature', ['temperature', 'mass'])).toEqual(['temperature']);
+  });
+});

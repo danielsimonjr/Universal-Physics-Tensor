@@ -24,6 +24,7 @@
 import { deriveRegimeGroups } from '../regime.js';
 import { getAtlasModel } from './models.js';
 import type { AtlasBridge, EvidenceTag, Regime, RelationContract } from '../types.js';
+import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT } from './norm-transport.js';
 
 const FAMILY = 'oscillators';
 
@@ -142,6 +143,8 @@ export const BRIDGE_SPRING_LC: AtlasBridge = {
   ],
   citations: CITATIONS,
   reviewStatus: 'proposed',
+  // spring → LC in relative period error only; see ./norm-transport.ts for what is not declared.
+  normTransports: [SPRING_LC_RELATIVE_PERIOD_TRANSPORT],
 };
 
 /**

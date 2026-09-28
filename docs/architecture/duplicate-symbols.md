@@ -6,38 +6,66 @@ Names that more than one `src` file exports.
 
 ## Read this first
 
-**2 names out of 1,657 are exported by more than one file.** For a repository of 350 source
-files, that count is unusually low. The count is the headline result: this codebase does not
-have a naming-collision problem.
+**5 names out of 1,982 are exported by more than one file.** For 383 TypeScript files under
+`src/`, that count is low. The names split into one registration convention, one shared
+dimension constant, two artifact helpers with different scopes, and one uncertainty name used at
+two layers.
 
 The tool groups **by name only**. The tool does not compare bodies, so a group means "more than
-one place uses this name", never "these definitions conflict". Both groups below were read.
+one place uses this name", never "these definitions conflict". All five groups below were read.
 
-## The two groups
+## The five groups
 
-### `command` — 22 files. Not a defect.
+### `command` — 23 files. Benign.
 
 Every module under `src/cli/commands/` exports a `command`. This export is the CLI's registration
 convention: `command.ts` defines the shape, the registry collects one per module, and each is
 reached through `CommandCtx`. Renaming them would break the pattern that makes the command tree
 uniform. **No action.**
 
-### `MASS_DENSITY` — 2 files. Worth one look.
+### `MASS_DENSITY` — 2 files. Drift risk.
 
 | File | Role |
 |---|---|
 | `src/bridges/equations/be-20-vacuum-energy.ts` | A bridge's own dimensional symbol |
 | `src/composition/quantities/_dims.ts` | The shared dimension table for composition quantities |
 
-The two files sit on either side of the boundary between the bridge catalog and the composition
-graph. That boundary is the one seam in this repository where two definitions of the same
-physical quantity must agree. A mass density is `M·L⁻³` in both places, or the two layers disagree
-about physics, not merely about a name.
+Both definitions encode `M·L⁻³`. The files sit on either side of the boundary between the bridge
+catalog and the composition graph. That boundary is a seam where two definitions of the same
+physical quantity must agree. A change to one definition must check the other definition.
 
-**The duplicate is a question to answer, not a defect to report.** If the two are identical, the
-bridge can take the shared definition. If the bridge intends a narrower local symbol, the
-duplication is deliberate, and a comment should say so. The artifact cannot tell the two cases
-apart, and this document cannot either without a reading of both files.
+### `canonicalJson` — 2 files. Drift risk.
+
+| File | Role |
+|---|---|
+| `src/cli/record.ts` | Record/replay entry hashing |
+| `src/composition/probe/serialize.ts` | Product B probe artifact hashing |
+
+Both functions write sorted-key JSON for hashes, but their edge behavior is not identical. The
+probe serializer gives `Date` values an ISO string and turns `undefined` array entries into `null`.
+The record serializer has no `Date` case and uses a hand-written array join. A shared helper would
+change at least one hash format unless tests pinned the edge cases first.
+
+### `captureEnvironment` — 2 files. Benign.
+
+| File | Role |
+|---|---|
+| `src/cli/record.ts` | Captures the UPT version, Node version, parser, simplifier, peers, and constant table hashes for replay |
+| `src/composition/probe/run-manifest.ts` | Captures the host Node version, platform, and architecture for a probe run manifest |
+
+The name is the same because both artifacts carry an environment block. The schemas are different
+by design, and neither function is a copy of the other.
+
+### `propagateUncertainty` — 2 files. Drift risk.
+
+| File | Role |
+|---|---|
+| `src/cli/commands/evaluate.ts` | Propagates case-input uncertainty through an arbitrary evaluator output map, with correlations and curvature warnings |
+| `src/composition/uncertainty.ts` | Propagates uncertainty through a `BridgeEdge`, with an optional deterministic approximation bound reported separately |
+
+Both functions are uncertainty propagators, but their contracts differ. The CLI helper is case-local
+and reports per-output reliability detail. The composition helper is a graph-layer API over bridge
+sources. A fix in one layer does not prove the other layer correct.
 
 ## Verification
 
@@ -46,10 +74,10 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| duplicateCount | 2 | duplicate-symbols.json |
-| totalSourceFiles | 898 | dependency-graph.json |
+| duplicateCount | 5 | duplicate-symbols.json |
+| totalSourceFiles | 976 | dependency-graph.json |
 
-**Claims the gate cannot hold.** The `totalSymbols` figure of 1,657 and the per-group file lists
+**Claims the gate cannot hold.** The `totalSymbols` figure of 1,982 and the per-group file lists
 come from `duplicate-symbols.json`. The judgement about each group comes from reading the source.
 The artifact states in its own note that it does **not** classify a group as a true duplicate or
 a legitimate one. This document makes no stronger claim than the reading behind it.

@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 67
+- **Potentially unused exports**: 65
 
 ## Potentially Unused Files
 
@@ -101,8 +101,6 @@ These exports are not imported by any other file in the codebase:
 
 ### `src/cli/commands/_atlas-map.ts`
 
-- `loadStoredResults` (function)
-- `runResults` (function)
 - `parseRoute` (function)
 - `buildRouteView` (function)
 - `buildRoutesView` (function)

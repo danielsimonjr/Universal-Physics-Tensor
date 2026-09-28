@@ -35,6 +35,10 @@ docs/research/criterion3/** text eol=lf
 # Git must store them byte for byte, so no line-end conversion applies (this later rule wins).
 docs/research/criterion3/labels/** -text
 docs/research/phase-1-citation-quote-check.out.md text eol=lf
+# Written by tests/fixtures/probe-study/generate.mjs, which emits LF; the probe-study tests compare the
+# committed files with the generator output and edit the CSV text line by line. A Windows checkout with
+# core.autocrlf=true wrote them CRLF and four tests failed on a tree with no content difference.
+tests/fixtures/probe-study/** text eol=lf
 
 # Binary-ish: never touch these.
 *.png binary

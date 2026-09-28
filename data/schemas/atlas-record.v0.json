@@ -181,6 +181,15 @@
         "evidence": {
           "type": "string",
           "description": "Evidence tag for the claim (`proposed` … `contradicted`, `unresolved`)."
+        },
+        "normTransports": {
+          "type": "array",
+          "description": "Optional, on an exact-equivalence bridge only: per-direction declarations of how the map carries an error norm (docs/planning/ADR-transported-norm-composition.md). A bound crosses the map only in a norm and direction declared here, with its own witness.",
+          "items": {
+            "type": "object",
+            "required": ["id", "fromModel", "toModel", "from", "to", "K", "timeMap", "witness", "basis"],
+            "additionalProperties": true
+          }
         }
       },
       "additionalProperties": true,

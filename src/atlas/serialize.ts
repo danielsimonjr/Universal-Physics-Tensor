@@ -146,6 +146,28 @@ const serializeWitnesses = (
     ...(w.tolerance === undefined ? {} : { tolerance: w.tolerance }),
   }));
 
+/**
+ * A norm transport's `KAt` and `timeMap.restateHorizon` are functions and are
+ * absent for the reason `serializeBound` gives; the declaration's data is kept.
+ */
+const serializeNormTransports = (
+  transports: NonNullable<AtlasBridge['normTransports']>,
+): readonly JsonValue[] =>
+  transports.map((nt) => ({
+    id: nt.id,
+    fromModel: nt.fromModel,
+    toModel: nt.toModel,
+    from: nt.from,
+    to: nt.to,
+    K: zeroSafe(nt.K),
+    domain: nt.domain,
+    derivation: nt.derivation,
+    timeMap: { map: nt.timeMap.map, uniform: nt.timeMap.uniform, horizon: nt.timeMap.horizon },
+    uniformity: nt.uniformity,
+    witness: serializeWitnesses([nt.witness])[0]!,
+    basis: nt.basis,
+  }));
+
 const serializeBridge = (bridge: AtlasBridge): JsonValue => ({
   id: bridge.id,
   relation: bridge.relation,
@@ -181,6 +203,10 @@ const serializeBridge = (bridge: AtlasBridge): JsonValue => ({
           fidelity: bridge.formalRef.fidelity,
         },
       }),
+  // Omitted when absent, like formalRef: no declaration is the default.
+  ...(bridge.normTransports === undefined
+    ? {}
+    : { normTransports: serializeNormTransports(bridge.normTransports) }),
 });
 
 /**

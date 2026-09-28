@@ -2,25 +2,30 @@ upt — Universal Physics Tensor bridge-inference CLI
 
 Usage:
   upt explain <quantity> [name=value | name] ...
+              [--source=catalog|canonical|both] [--json]
         Explain how the graph determines a quantity: the identifiability
         verdict, recovered value, derivation chains, and whether the inputs
         are dimensionally sufficient. A name that is not a quantity of the
-        graph is reported NOT COVERED, with near names, and exits 1.
+        graph is reported NOT COVERED, with near names and what `upt search`
+        finds for its words, and exits 1. --source picks the graph (default
+        catalog); the result names the source it used.
         e.g.  upt explain hawking-temperature mass=1.989e30
 
-  upt priority
+  upt priority [--source=catalog|canonical|both]
         Triage the speculative bridges by structural DECIDABILITY against
         established physics (Tiers 1-3). NOT a credibility ranking.
 
-  upt audit
+  upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
         which are decoys (a failed dimensional reconstruction, not a physical
         refutation), which are dimensionally open.
 
-  upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
-          [--proposed] [--out=PATH] [--equation "TARGET = EXPR"]
-          [--around=QUANTITY [--depth=N]]
+  upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
+          [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
+          [--equation "TARGET = EXPR" [--equation-only]] [--around=QUANTITY [--depth=N]]
+          [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
+          [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
         Map how the equations LINK: connected components (clusters) of the
         graph by shared quantities, the anchored core, the link hubs, and
         the isolated tail.
@@ -37,6 +42,10 @@ Usage:
         underscores for multi-word quantities (photon_energy -> photon-energy).
         --around=QUANTITY [--depth=N] focuses on the edges within N hops of one
         quantity and states how many of the source's edges it kept.
+        --relation / --evidence filter edges by their Atlas relation or derived
+        evidence; --route, --family and --observable map the ATLAS (models and
+        the bridges between them) instead, and --stored / --run resolve their
+        evidence from witness results. `upt help map` describes every flag.
         e.g.  upt map --equation "period = 2*pi*sqrt(length/gravity)"
 
   upt candidates [--source=catalog|canonical|both]
@@ -44,7 +53,7 @@ Usage:
         dimension in different clusters) for PHYSICIST REVIEW — a
         coincidence-heavy surface, not discovered bridges.
 
-  upt predict
+  upt predict [--source=catalog|canonical|both]
         Project the catalog onto the (scale × force) regime plane and rank
         the EMPTY regime cells as undiscovered-connection hypotheses
         (triadic closure). Makes the namesake tensor operational. Review
@@ -65,7 +74,8 @@ Usage:
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
-        --derive consumes.
+        --derive consumes. Adjudicated candidates fold out of the promising
+        list; --show-adjudicated lists them with their recorded verdict.
         Each promising row states which independent falsifiers ran and which
         abstained, and what would make it testable; --require-falsifier lists
         only rows one of them ran on and survived.
@@ -82,10 +92,11 @@ Usage:
         data-confronted vs graph-computable vs encoded-only vs thin — to
         target the physicist review. Fabricates nothing.
 
-  upt canonical
+  upt canonical [--vars]
         List the canonical-equation registry — the standard-physics L-layer
         (textbook "answer key") with each entry's fidelity (L0/L1/L2),
-        domain, and bridge partners, plus the coverage gap.
+        domain, and bridge partners, plus the coverage gap. --vars also prints
+        each entry's target and governing variable names.
 
   upt recover
         Validate bridges against standard physics: classify each bridge↔
@@ -98,19 +109,27 @@ Usage:
         evaluators (the Observable contract). Shows the CT-1 / CT-1b chains
         composed by substitution, dimensionally validated and evaluable.
         With --simplify, folds the composed AST via MathTS (k_B cancels),
-        re-validated dimensionally + numerically.
+        re-validated dimensionally + numerically. Each chain also prints a
+        runnable `upt eval` form, a LaTeX form (\frac for every division)
+        and a symbol table: meaning, value, SI unit and source of each symbol.
 
   upt eval "<formula>" name=value ...
-        Evaluate YOUR OWN scalar formula (safe — arithmetic only). Knows
-        pi/tau and sqrt/exp/ln/sin/...; any other name must be supplied.
+        Evaluate YOUR OWN scalar formula (safe — arithmetic only). Knows the
+        constants pi and tau and the functions sqrt, cbrt, exp, ln, log
+        (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
+        sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
+        or log2 for base 10 or 2. An unknown function fails and names a
+        documented equivalent where one exists (lg → log10). Any other name
+        must be supplied. --debug prints the parser and its version to stderr.
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \
                        c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
 
-  upt derive <target:dim> <var:dim> ... [--formula "<expr>"]
+  upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
         Derive YOUR OWN equation's dimensional form. <dim> is a named
         dimension (length, time, mass, velocity, ...), a constant (hbar, c,
         G, k_B, e), or explicit (L^3.M^-1.T^-2). With --formula, also verify
-        it and recover the dimensionless prefactor.
+        it and recover the dimensionless prefactor. --debug prints the formula
+        parser and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \
                        --formula "2*pi*sqrt(length/gravity)"
 
@@ -152,7 +171,8 @@ Usage:
   upt regime <family> [--at group=value ...] [--assume premise] [--deny premise]
         Where in parameter space a family's models are claimed to apply. Each
         model reads valid, VIOLATED (naming the failed inequality), or UNKNOWN
-        — a coordinate --at never supplied is NOT a pass. Prose premises are
+        — a coordinate --at never supplied is NOT a pass; one that states no
+        inequality reads 'no machine condition evaluated (VACUOUS …)'. Prose premises are
         never evaluated: --assume records your declaration (not evidence),
         --deny marks one contradicted, the rest stay unspecified. Also prints the
         pairwise regime overlap and, over the box --at states, the uncovered
@@ -182,12 +202,15 @@ Usage:
               upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
 
   upt atlas [<bridge-id>] [--run]
+  upt atlas --evidence [--stored | --run]
         One atlas bridge with EVERY qualification visible: relation, side
         conditions, regime, bound and horizon, witnesses, counterexamples and
         formal reference. Empty sections print as "none stated". Evidence is
         shown by claim, and each witness with its execution status; --run
         executes the in-process registered witnesses (exit 3 if refuted).
-        With no id, lists every bridge of every family.
+        With no id, lists every bridge of every family; --evidence (or
+        --stored / --run with no id) shows every bridge's derived evidence,
+        per-tag counts and the witness results it observes.
         e.g.  upt atlas ab-pendulum-linear
 
   upt search <word> ...
@@ -202,8 +225,16 @@ Usage:
         Relation-link gaps are not searchable here — use `upt discover`.
         `study --data=FILE` fits calibrated observations (units, σ) on
         exploratory rows only and tests on withheld holdout/replication rows.
+        `upt help probe` lists every flag.
 
   upt help        Show this message.
+  upt help <command>
+                  Show one command's usage and flags.
+  upt help statuses
+                  Define every status word the commands print (VACUOUS,
+                  UNKNOWN, VIOLATED, ADEQUATE, NEITHER, DECOY, NOT COVERED, …).
+                  Each --json envelope carries the definitions of the statuses
+                  its command can emit, under `definitions`.
 
 Run with no arguments for a short demo.
 
@@ -215,12 +246,15 @@ Run with no arguments for a short demo.
                   Run the command unchanged and append one JSONL entry to FILE:
                   arguments, stdout, stderr, exit code, versions, parser, each
                   constant table by name, the constants the command's code can
-                  reach, and hashes of each. Failed invocations are recorded too.
+                  reach, the files it reads and its modules' sources, and hashes
+                  of each. Failed invocations are recorded too.
   --replay=FILE [--json]
                   Re-run every entry of FILE; report each as reproduced, differs
                   (naming the stream and first differing line) or not replayable,
-                  name every changed version, parser or constant (and whether the
-                  entry's command can reach it), and flag edits. Exit 0 all
-                  reproduced unchanged, 3 any differs, 1 otherwise.
+                  name every changed version, parser, constant or module (and
+                  whether the entry's command can reach it), and flag edits. A
+                  file written with --out is replayed to a temporary path and
+                  compared by hash. Exit 0 all reproduced unchanged, 3 any
+                  differs, 1 otherwise.
   --show-record=FILE [--json]
                   Print FILE as a readable transcript, running nothing.

@@ -34,7 +34,7 @@ const BRIDGES = ATLAS_FAMILIES.flatMap((f) => f.bridges);
 const MODELS = ATLAS_FAMILIES.flatMap((f) => f.models);
 
 describe('upt map --route', () => {
-  it('pendulum → LC: both bridges with their assumptions and regime, and the step that yields no composite claim', async () => {
+  it('pendulum → LC: both bridges with their assumptions and regime, and the composite through the declared norm transport', async () => {
     const { code, stdout } = await run(['map', '--route=model-pendulum,model-lc']);
     expect(code).toBe(0);
     expect(stdout).toContain(`shown: 2 of ${BRIDGES.length} atlas bridges, 3 of ${MODELS.length} models`);
@@ -44,16 +44,30 @@ describe('upt map --route', () => {
     expect(stdout).toContain('assumptions: θ0 ≤ 0.5 rad');
     expect(stdout).toContain('regime: theta0 <= 0.5 (θ0 ≤ 0.5 rad)');
     expect(stdout).toContain('after step 1 (ab-pendulum-linear): approximation');
-    expect(stdout).toContain('after step 2 (ab-spring-lc): NO COMPOSITE CLAIM — approximation then exact-equivalence has no table cell');
-    expect(stdout).toContain("route claim: no composite claim — reason 'no-composite-claim'");
+    // Owner decision 2026-09-27 (docs/planning/ADR-transported-norm-composition.md).
+    expect(stdout).toContain('after step 2 (ab-spring-lc): approximation');
+    expect(stdout).toContain('route claim: approximation, K = 1 · delta = 0.0158525');
+    expect(stdout).toContain("across 'ab-spring-lc' by its declared transport 'nt-spring-lc-relative-period'");
+    expect(stdout).toMatch(/composite evidence \(derived\): .*never stronger than the weakest part/);
+    expect(stdout).not.toContain('NO COMPOSITE CLAIM');
     expect(stdout).toContain('model-lc [oscillators]: L q″ + q/C = 0');
     expect(stdout).toMatch(/equation: CE-lc-resonance — .*graph edge \{inductance, capacitance\} → angular-frequency/);
     expect(stdout).toContain('equation links (source: AtlasModel.canonicalRefs): 3 of 3 models record one; 0 record none');
   });
 
+  it('rlc → first-order: the step where the table stays silent (exact then approximation)', async () => {
+    const { code, stdout } = await run(['map', '--route=model-rlc,model-first-order']);
+    expect(code).toBe(0);
+    expect(stdout).toContain('after step 2 (ab-damped-massless): NO COMPOSITE CLAIM — exact-equivalence then approximation has no table cell');
+    expect(stdout).toContain("route claim: no composite claim — reason 'no-composite-claim'");
+    expect(stdout).not.toContain('composite evidence');
+  });
+
   it('reports exactly the route and the refusal `upt path` reports, for every ordered pair of models', async () => {
     const pairs: [string, string][] = [
       ['model-pendulum', 'model-lc'],
+      ['model-rlc', 'model-first-order'],
+      ['model-telegraph', 'model-heat'],
       ['model-klein-gordon', 'model-lc'],
       ['model-klein-gordon', 'model-schrodinger-free'],
       ['model-string', 'model-dalembert'],
@@ -79,9 +93,15 @@ describe('upt map --route', () => {
   });
 
   it('marks the step where the table declines, and only that step', async () => {
-    const r = (await json(['map', '--route=model-pendulum,model-lc'])).result;
+    const r = (await json(['map', '--route=model-rlc,model-first-order'])).result;
     expect(r.composition.breaksAt).toBe(1);
-    expect(r.composition.running.map((x: any) => x.relation)).toEqual(['approximation', 'no-composite-claim']);
+    expect(r.composition.running.map((x: any) => x.relation)).toEqual(['exact-equivalence', 'no-composite-claim']);
+    // Control: the widened cell does not break, and its route carries a bound.
+    const lcRoute = (await json(['map', '--route=model-pendulum,model-lc'])).result;
+    expect(lcRoute.composition.breaksAt).toBeNull();
+    expect(lcRoute.composition.running.map((x: any) => x.relation)).toEqual(['approximation', 'approximation']);
+    expect(lcRoute.composition.claim.kind).toBe('bound');
+    expect(lcRoute.composition.transports.map((x: any) => x.id)).toEqual(['nt-spring-lc-relative-period']);
     // A missing Lipschitz constant composes the relations but still carries no bound: no step breaks.
     const kg = (await json(['map', '--route=model-klein-gordon,model-lc'])).result;
     expect(kg.composition.breaksAt).toBeNull();
@@ -110,19 +130,24 @@ describe('upt map --route', () => {
     expect(dot.code).toBe(0);
     expect(dot.stdout).toContain(`label="route model-pendulum → model-lc: 2 of ${BRIDGES.length} atlas bridges`);
     expect(dot.stdout).toContain('equation links: AtlasModel.canonicalRefs');
-    const red = dot.stdout.split('\n').filter((l) => l.includes('color="#c0392b"'));
+    // pendulum → lc no longer declines (its composite is a bound), so no step is highlighted.
+    expect(dot.stdout.split('\n').filter((l) => l.includes('color="#c0392b"'))).toHaveLength(0);
+    const silent = await run(['map', '--route=model-rlc,model-first-order', '--format=dot']);
+    const red = silent.stdout.split('\n').filter((l) => l.includes('color="#c0392b"'));
     expect(red).toHaveLength(1);
-    expect(red[0]).toContain('m_model_spring -> m_model_lc');
+    expect(red[0]).toContain('m_model_damped_spring -> m_model_first_order');
     const refs = ['model-pendulum', 'model-spring', 'model-lc'].flatMap((id) => MODELS.find((m) => m.id === id)!.canonicalRefs);
     expect(dot.stdout.split('\n').filter((l) => l.includes('label="canonicalRef"'))).toHaveLength(refs.length);
     expect(dot.stderr).toContain(`upt: route model-pendulum → model-lc: 2 of ${BRIDGES.length} atlas bridges`);
 
     const mm = await run(['map', '--route=model-pendulum,model-lc', '--format=mermaid']);
-    const links = mm.stdout.split('\n').filter((l) => /-->|<-->|-\.->/.test(l));
-    const styled = /linkStyle (\d+) stroke:#c0392b/.exec(mm.stdout);
-    expect(styled).not.toBeNull();
-    expect(links[Number(styled![1])]).toContain('(ab-spring-lc)');
+    expect(mm.stdout).not.toMatch(/linkStyle \d+ stroke:#c0392b/);
     expect(mm.stdout).toContain('%% route model-pendulum → model-lc');
+    const mmSilent = await run(['map', '--route=model-rlc,model-first-order', '--format=mermaid']);
+    const links = mmSilent.stdout.split('\n').filter((l) => /-->|<-->|-\.->/.test(l));
+    const styled = /linkStyle (\d+) stroke:#c0392b/.exec(mmSilent.stdout);
+    expect(styled).not.toBeNull();
+    expect(links[Number(styled![1])]).toContain('(ab-damped-massless)');
   });
 
   it('refuses what does not apply to a route, and bad endpoints', async () => {

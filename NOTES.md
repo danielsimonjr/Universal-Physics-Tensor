@@ -12,10 +12,22 @@ nothing validates prose and the next reader cannot tell.
 ## As of 2026-09-27
 
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
-  findings are fixed (F10 was already correct and is now pinned by a test). Of the §14 improvements,
-  I5–I9, I11, I12 and I14–I20 have landed; the limits each still has are in `todo.md`. I2 is open:
-  it needs a reviewed widening of the composition table and is Mothership's call; a proposal is in
-  `docs/planning/ADR-proposal-transported-norm-composition.md`.
+  findings are fixed (F10 was already correct and is now pinned by a test). All 20 §14 improvements
+  have landed: audit I1 through F01, and the open parts of audit I3, I4, I10 and I13 on 2026-09-27.
+  Landed is not limit-free; the limits each still has are in `todo.md`. Audit I2 landed by owner
+  decision 2026-09-27 (`docs/planning/ADR-transported-norm-composition.md`, option 4).
+- **Audit I2 as landed:** the composition table has 9 defined cells and 55 silent ones; the widened
+  cell is approximation then exact-equivalence, and exact then approximation stays silent. One norm
+  transport is declared: `nt-spring-lc-relative-period` on `ab-spring-lc` (model-spring → model-lc,
+  K = 1), with witness W1τ (checked; fine error 7.1e-11, refinement ratio 256). `upt path
+  model-pendulum model-lc --at theta0=0.2 T0=1 t=10` now composes K = 1 · delta = 0.0158525 in
+  relative period error; the point bound 0.0025057 agrees with the series θ0²/16 + 11θ0⁴/3072 to
+  1.5e-8. Composite evidence of that route: `contradicted`, with numerically-supported and proposed
+  undecided until its witnesses are run (`contradicted` comes from the parts' stored counterexamples).
+  **Negative result:** `ab-heat-diffusion` declares no transport, so model-telegraph → model-heat
+  still refuses as `norm-not-stated`; a declaration needs its own witness for the model-fick →
+  model-heat direction and a horizon restatement through D = κ/(ρc_p), and neither exists. Absolute
+  period and trajectory norms have no declaration and stay refused through `ab-spring-lc`.
 - `confront` data handling: preprocessing recorded for 17 of 19 records, not recorded for 2 (be-37,
   be-58). Independence: 10 no fitted parameter, 5 share an input (be-36, be-51, be-58, be-61, be-65),
   4 not recorded (be-48, be-52, be-56, be-64). be-61's observed Lorenz number is the predicted
@@ -27,37 +39,113 @@ nothing validates prose and the next reader cannot tell.
   −7.27% be-63, −43.7% be-65, +25.7% be-21; every bounded record is compatible. No pinned number
   changed. be-65's ±150% bound accepts any observed value from 0 to 4.44 M_⊙: its low side cannot
   fail (negative result about the record).
-- Atlas equation links: 9 of 24 atlas models record a canonical equation (`model-pendulum` and
-  `model-dalembert` added, each by a numeric check). `model-rlc` against CE-lc-resonance fails the
-  check (2% off at ζ = 0.2). `CanonicalEquation.model` stays unset because criterion 3 freezes the
-  `src/canonical` tree. That tree already differs from `freeze.json`'s recorded tree hash since
+- `confront` compatibility decisions: all 11 consistency records now make one (2026-09-27). be-11 takes
+  its module's 15% tolerance as the bound; be-21 is decided by observed ≥ 1/(4π), a one-sided lower-limit
+  rule. Both are compatible. be-11's decision cannot fail on this record: its observed slot is the
+  source's stated agreement, encoded as ratio 1, so the difference is 0 by construction (negative result,
+  as for be-61). be-21's decision does not rest on the representative 0.10: the extraction band's
+  lower edge, 0.08, is also above the bound, by 0.53%.
+- Atlas equation links: 9 of 24 atlas models record a canonical equation. All 12 recorded links are
+  checked numerically from the model (the eight older ones on 2026-09-27, plus `model-lc` →
+  CE-capacitor-energy, new), and the unchecked-link ratchet list is empty. The 15 models without a
+  link each state a reason (`NO_LINK_REASONS`). Four reasons are shown by a failing check:
+  - `model-rlc` against CE-lc-resonance is 2% off at ζ = 0.2, and so is `model-damped-spring`
+    against CE-simple-harmonic-frequency;
+  - `model-cubic-spring` fails at βx0²/k = 0.1;
+  - `model-klein-gordon` fails against CE-wave-speed, with a phase velocity ≠ c.
+
+  Negative results:
+  - `model-stokes-drag`'s check is a transcription of a closed-form law;
+  - CE-inductor-energy has no sourced ½, so `model-lc` cannot link it yet;
+  - CE-sound-speed's √γ is not used by `compareWithCanonical`, which cannot bind γ.
+
+  `CanonicalEquation.model` stays unset because criterion 3 freezes the `src/canonical` tree. That tree already differs from `freeze.json`'s recorded tree hash since
   `dbd4e95` (Amendment 9's residual form), then #202 and #208; the eight pinned code blobs still match.
 - Observable translations: `ab-pendulum-linear` declares phase and position; `ab-spring-lc` declares
   a phase carriage. Every other bridge answers UNDETERMINED outside its bound's own norm.
+  As of 2026-09-27 (audit I8 limits):
+  - The position bound's Fourier-series premise is checked against RK4 over one period at θ0 ∈ {0.01,
+    0.1, 0.2, 0.3, 0.4, 0.5} (W7xs, 1e-9 rad). It is not derived, and not checked between those points.
+  - The phase point witness is now run down to a drift of 1e-4 rad in 512 T0 (θ0 ≈ 7.0e-4; it was 0.01
+    rad, θ0 ≈ 0.007), at a tolerance of 5e-8 relative (it was 1e-5).
+  - Its (1+ε) control can be refuted only where ε/(1+ε) exceeds that tolerance, so it cannot fail below
+    θ0 ≈ 9e-4 (it was 0.013; measured: not refuted at 8.5e-4, refuted at 9e-4; not run at 6.9e-4, run at
+    7.1e-4). That floor is inherent: the wrong map and the declared one differ by ε
+    relative, so no witness of finite precision separates them as θ0 → 0 (negative result).
+  - No other translation or carriage was added. `ab-spring-lc` would need a position carriage from
+    angle to charge with a declared amplitude scale, and none is derived. No other bridge's bound has a
+    derived map into another observable.
 - `map --all-routes`: no ordered model pair has more than one simple route under `upt path`'s traversal
   (exact equivalence both ways, other relations forward, multi-premise bridges not followed). The
   undirected graph has two cycles (through `ab-stokes-einstein` and `ab-kg-schrodinger`); the
   traversal rules exclude both second routes (negative result).
 - `--record`/`--replay`: `eval 'ln(x)' x=-1` fails with different stderr under the builtin and MathTS
   parsers, so a recorded failure does not reproduce across a parser change (negative result).
+- `--record`/`--replay` (2026-09-27, audit I17 limits): `map --out`, the probe subverbs and `--stored`
+  now replay under stated rules (`docs/planning/Experiment-Record-Replay-Design-Note.md`). An entry
+  hashes its command's loaded modules: 34 for `evaluate`, 48 for `eval` (about 3–4.5 kB of an entry of
+  about 13 kB). A probe search under the default 5 s budget gave identical output on two runs; with
+  `--budget-ms=1` it states `stop: time-limit` and is not replayable. Per-entry attribution is not
+  done and cannot be derived from the import graph (negative result).
 - `case-lumped-cooling`: at the textbook limit Bi = 0.1 the lumped temperature excess is 5.5% below
   the heat-equation mean at t = τ and 16% below at 3τ; Bi ≤ 0.1 does not bound the late-time relative
   error (negative result). `case-kepler-rv`'s double-pulsar agreement is consistency with a GR-fitted
   timing solution, not an independent test.
+- `case-lumped-cooling` with radiation kept (2026-09-27, audit I20 limit): for the 1 cm oxidized steel
+  ball at 1000 K in still air (the linear-loss failure example), T_radiating_K = 711.2 K after 60 s,
+  against Newton's 929.8 K, at Bi_radiating = 0.0020. For the valid copper example the two differ
+  by 0.53 K of a 28 K excess (1.9%; h_rad/h ≈ 0.021). Still refused, not evaluated: hydrodynamic
+  memory near a wall, the parallel lubrication limit and the anomalous skin effect. The Faxén terms
+  past 9/16 are still quoted and not checked. The atlas has no EM, thermal or astrophysical family:
+  none of those cases has a derived bound (reasons in `todo.md`, I20).
 - `probe study` large-amplitude control: the fitted θ² coefficient is 0.068, not the series' 1/16,
   because the θ⁴ term is not admitted and is absorbed; it is not a recovery of the series coefficient.
+- `probe study` (2026-09-27, audit I19 limits): the synthetic physical-pendulum control
+  (`pendulum-physical`, both families declared knowing the law) admits amplitude² and bob_ratio², fitted
+  0.0674 and 0.214 (series 1/16 and 1/5; θ⁴ and ρ⁴ not admitted), and survives its holdout (χ² = 8.12
+  on ν = 5, p = 0.15). Either family alone finds no credible candidate. Over 2000 honest re-measurements
+  (7 pairs, α = 0.2) the identity test flags 9.65% and the affine test 9.70%, against α/2 = 10%; either
+  flags 14.35%, so the combined false-flag rate is below α, not α/2. No shipped fixture's
+  replication rows share inputs with its study rows, so none of them is tested for closeness.
 - `discover --require-falsifier` hides **49 of 49** promising rows on `--source=canonical` and 4 of 7
   on the catalog: no independent falsifier ran and survived on them (negative result).
 - `confront` by statistic: 6 σ-residual tests, 2 limits and 11 consistency ratios (no σ). The
   ratios are not precision tests and are never counted as such.
-- `atlas --run`: 17 of the 20 atlas bridges have an entry in `WITNESS_REGISTRY` and can run
-  witnesses in-process. `ab-pendulum-linear` is one of the three without, so `--run` on it reports
-  "none" rather than a pass.
+- `atlas --run`: all 20 atlas bridges have an entry in `WITNESS_REGISTRY` and run witnesses
+  in-process (2026-09-27; it was 17 of 20). The three added are executable specs of W7
+  (`ab-pendulum-linear`, RK4 T/T0 at θ0 = 0.2, matches AGM to 3.5e-13), W8b (`ab-damped-massless`,
+  RK4 offset 0.0574 at m = 0.01 against the bound's 0.12, matches the closed form to 2e-9) and W9
+  (`ab-chain-wave`, integrated ring, 1 − ω/(cq) over (qa)²/24 = 0.99952 at N = 32). 22 witness
+  results, all checked. Negative results: `ab-damped-massless`'s bound is not sharp (5.7× loose at
+  its sup), so W8b is attributed as `bound-holds-at` one point, not as the bound's value; `ab-chain-wave`
+  has no bound, so W9 is attributed to a preserved property, not to a bound.
+- Atlas-wide evidence (`upt atlas --evidence --stored`, 2026-09-27): of 20 bridges, 17 derive
+  numerically-supported and 3 leave it undecided (their numeric witnesses have no in-process runner:
+  ab-spring-lc, ab-damped-rlc, ab-stokes-einstein); 4 symbolically-checked; 1 formally-proved; 12
+  contradicted (from their stored counterexamples, outside the regime); 0 empirically-supported. 21 of 40
+  recorded bridge witnesses have a stored result, all checked; 19 have none. With no results source,
+  proposed is undecided on 8 bridges.
 - F02 as measured on `discover --source=canonical`: 49 promising, 0 mechanism-tested, 0 data-tested,
   49 without magnitude evidence, 49 with the axis unresolved, 0 with an entailed consequence.
   So nothing in the promising set is evidence yet (negative result).
-- Persona W7 (Landauer `ln(2)` in `map --equation`) is **still open**. F03 fixed `ln` in the formula
-  parsers, but the equation compare goes through `evalExpr`, which still rejects `transcendental`.
+- Persona W7 (Landauer `ln(2)` in `map --equation`) is **fixed**: the equation compare evaluates with
+  the active formula parser, so `ln(2)` agrees with CE-landauer, and the catalog target
+  `landauer-erasure-energy` reaches CE-landauer through BE-16, which CE-landauer records that it
+  restates. Before the fix, `evalExpr` rejected `transcendental`, and the target names never met.
+- **Persona retest (post-fix note), dispositions** (dispositions per item in `todo.md`, Active queue):
+  - Eight monomial-only canonical entries hold a governing constant. Before the fix, three of them gave
+    a wrong prefactor verdict: CE-kepler-third (factor 122404), CE-schwarzschild-radius (7.426e-28)
+    and CE-einstein-field-eq. The persona asked whether it was two. Kepler III and the Schwarzschild
+    radius now agree at ratio 1, and a halved prefactor reads 0.5 with exit 3.
+  - The EFE is now prefactor-unchecked: its 8π sits only in its field equation, and `src/canonical`
+    is frozen (negative result).
+  - The Planck length, mass and time now compare at the SI constant values, with prefactor 1 sourced.
+    An all-constant comparison checks the value, not the form (limit).
+  - CE-compton-wavelength stays prefactor-unchecked: it writes ħ/(mc), the reduced Compton wavelength.
+  - Persona W6 is disclosed, not refused: `unruh_temperature = hbar*a/(2*pi*k_B*c)` still binds `a` to
+    the length `a` and prints RHS [T^2 Theta], and now says so. `sigma` is pointed to `sigma_sb`, not
+    aliased.
+  - Q4 (`discover` ordering) is not changed; it is Mothership's call.
 
 ## As of 2026-09-26
 
@@ -65,9 +153,9 @@ nothing validates prose and the next reader cannot tell.
   reviewer): findings in `docs/research/cli-physicist-persona-0.47.1-post-fix.md`. Prior W1–Q2 still
   hold. New open triage: W4 (Kepler/Schwarzschild monomial constants→1), W5 (Planck all-constant
   RHS refused), W6 (`a`→perihelion not acceleration), W7 (Landauer `ln(2)` vs `ln2`), L5–L8, Q3–Q4,
-  I5–I8. No code change in that pass; Mothership to triage.
+  persona I5–I8. No code change in that pass; Mothership to triage.
 - **CLI applied-physicist persona pass on 0.47.1** (model persona, not a human reviewer): findings in
-  `docs/research/cli-physicist-persona-0.47.1.md`. W1–W3, L1–L4, Q1–Q2, I1–I4 fixed in the patch
+  `docs/research/cli-physicist-persona-0.47.1.md`. W1–W3, L1–L4, Q1–Q2, persona I1–I4 fixed in the patch
   batch on `cursor/persona-cli-fixes-b6c5` (dispositions in that note).
 
 ## As of 2026-09-23
@@ -148,7 +236,8 @@ Those are different claims and merging them produces a false green.
   not re-checked then): the CONTRIBUTING.md tasks; the contested BE-44/46/50 adjudications; the
   C2/C3 calibration targets; the CI-1/CI-2 dynamic-scaling call; and the §XXVII-B adjudication of the
   Part-XI machine-derived proposals.
-- **Composition table** remains 56 silent cells. Widening was not done.
+- **Composition table** remained 56 silent cells on 2026-09-23 (not widened then); see the 2026-09-27
+  block for the I2 widening to 55.
 - **`8 → 12`** direction is unresolved. The poster records it as one approximation, `d-8-to-12`.
 
 ### Results
@@ -163,6 +252,25 @@ Those are different claims and merging them produces a false green.
 
 ### Open defects and unknowns
 
+- **The code-docs ratchet drifted on `master` (found 2026-09-27).** The pre-push gate counts MUST
+  doc-comment issues against `.githooks/code-docs-baseline.txt` (153). Measured with the same tool
+  and environment: 153 at `6d0feed`, where the baseline was set, and 221 at `master` `335e970`. So 68
+  exported symbols reached `master` undocumented. Every commit on `master` after `6d0feed` is a GitHub
+  merge (27 on the first-parent line, #186–#212): a merge on GitHub runs no local hook, a push from a machine without the tool
+  skips the check, and CI does not run it. Which PR added which symbol was not measured. The audit
+  branch added 16 more; all 84 are documented
+  there, and the count is back to 153. The gate stays a local hook only, so the drift can recur.
+  On this machine the gate first crashed, because `tree_sitter_typescript` was missing from the
+  Python on PATH; the tool's pinned `requirements.txt` was installed.
+- **The architecture-docs claims drifted on `master` too (found 2026-09-27).** The pre-push gate's
+  `repo_map.py check . --docs docs/architecture` fails on `master` `335e970`: the hand-written
+  Verification tables claim 898 files and 3120 exports, and `master` measures 956 and 3441. The same
+  route as the code-docs drift applies: GitHub merges run no local hook, and CI does not run this
+  check. On the audit branch the seven hand-written docs were re-measured (976 files, 3533 exports,
+  370 reachable, 10 test-only, 5 duplicate names) and the check exits 0. No generated report was
+  edited. Three of the five duplicate names (`MASS_DENSITY`, `canonicalJson`,
+  `propagateUncertainty`) are triaged as drift risks in `docs/architecture/duplicate-symbols.md`;
+  none was changed in code.
 - **The pre-push gate did not run for the `cd4f0d5` push (2026-09-24).** `core.hooksPath` was found
   set to the absolute `.git\hooks`, which holds only sample hooks. The repo's `prepare` script sets
   `.githooks`. `.git/config` was last written at 14:02:16. At 14:02 a security-guidance plugin review

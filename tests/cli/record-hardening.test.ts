@@ -155,7 +155,7 @@ describe('named constant tables', () => {
       const mod = await import(join(repo, 'dist', rel.replace(/\.ts$/, '.js')));
       for (const n of names) {
         if (typeof mod[n] !== 'number') continue;
-        expect(tables[rel.replace(/\.ts$/, '')]?.values[n], `${rel} ${n}`).toBe(mod[n]);
+        expect(tables[rel.replace(/\\/g, '/').replace(/\.ts$/, '')]?.values[n], `${rel} ${n}`).toBe(mod[n]);
         checked++;
       }
     }
@@ -238,5 +238,7 @@ describe('static attribution', () => {
     expect(tableSha(formula)).toBe('not-reachable');
     expect(thermal.integrity).toEqual([]);
     expect(formula.integrity).toEqual([]);
-  });
+    // A copy of dist plus a real replay process: about 10 s alone, 73 s measured under a parallel
+    // run of four test directories, past the 60 s default. Same budget as the golden spawns.
+  }, 180_000);
 });

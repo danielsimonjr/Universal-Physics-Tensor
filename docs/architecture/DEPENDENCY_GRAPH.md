@@ -37,11 +37,11 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 61 files
+- **atlas**: 65 files
 - **bridges**: 90 files
 - **canonical**: 18 files
 - **cases**: 9 files
-- **cli**: 37 files
+- **cli**: 40 files
 - **root**: 1 file
 - **composition**: 74 files
 - **core**: 11 files
@@ -270,7 +270,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `WitnessLike`, `CounterexampleLike`, `RejectionLike`, `EvidenceInput`
-- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `deriveEvidenceForVerdict`
+- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `deriveEvidenceForVerdict`, `deriveCompositeEvidence`
 - Constants: `NO_PASSING_WITNESSES`
 
 ---
@@ -430,15 +430,15 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef` | Re-export |
+| `./types.js` | `RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, NormTransport` | Re-export |
 | `./types.js` | `MissingHorizonError, MissingLipschitzError` | Re-export |
 | `./types.js` | `ALL_EVIDENCE_TAGS` | Re-export |
-| `./derive-evidence.js` | `deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Re-export |
+| `./derive-evidence.js` | `deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Re-export |
 | `./derive-evidence.js` | `CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike` | Re-export |
 | `./composition-table.js` | `composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM` | Re-export |
 | `./composition-table.js` | `CompositionResult, NoCompositeClaim` | Re-export |
-| `./path-bound.js` | `boundPath, findAtlasPath, findPath` | Re-export |
-| `./path-bound.js` | `NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim` | Re-export |
+| `./path-bound.js` | `boundPath, findAtlasPath, findPath, horizonOnRoute, routeEntryModels` | Re-export |
+| `./path-bound.js` | `AppliedTransport, NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim` | Re-export |
 | `./model.js` | `AtlasModel, ModelId` | Re-export |
 | `./error-algebra.js` | `composeBounds, composeBoundPath, IDENTITY_BOUND` | Re-export |
 | `./error-algebra.js` | `BoundPair, ComposedPath` | Re-export |
@@ -499,14 +499,15 @@ The codebase is organized into the following modules:
 
   ```text
   RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness,
-  Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, MissingHorizonError,
-  MissingLipschitzError, ALL_EVIDENCE_TAGS, deriveEvidence, deriveEvidenceForVerdict,
-  NO_PASSING_WITNESSES, CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike,
-  WitnessLike, composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM, CompositionResult,
-  NoCompositeClaim, boundPath, findAtlasPath, findPath, NoClaimReason, PathBoundClaim,
-  PathBoundResult, PathNoClaim, AtlasModel, ModelId, composeBounds, composeBoundPath, IDENTITY_BOUND,
-  BoundPair, ComposedPath, deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE, CUBIC_STIFFNESS,
-  DAMPING, INDUCTANCE, RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel, OSCILLATOR_FAMILY,
+  Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, NormTransport,
+  MissingHorizonError, MissingLipschitzError, ALL_EVIDENCE_TAGS, deriveCompositeEvidence,
+  deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES, CounterexampleLike, EvidenceInput,
+  MembershipVerdict, RejectionLike, WitnessLike, composeRelation, COMPOSITION_TABLE,
+  NO_COMPOSITE_CLAIM, CompositionResult, NoCompositeClaim, boundPath, findAtlasPath, findPath,
+  horizonOnRoute, routeEntryModels, AppliedTransport, NoClaimReason, PathBoundClaim, PathBoundResult,
+  PathNoClaim, AtlasModel, ModelId, composeBounds, composeBoundPath, IDENTITY_BOUND, BoundPair,
+  ComposedPath, deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE, CUBIC_STIFFNESS, DAMPING,
+  INDUCTANCE, RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel, OSCILLATOR_FAMILY,
   AtlasFamily, toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson, JsonValue, blockingFindings,
   checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind, ApplicabilityInput,
   ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult, WitnessStatus,
@@ -585,6 +586,7 @@ The codebase is organized into the following modules:
 | `../regime.js` | `deriveRegimeGroups` | Import |
 | `./models.js` | `getAtlasModel` | Import |
 | `../types.js` | `AtlasBridge, EvidenceTag, Regime, RelationContract` | Import (type-only) |
+| `./norm-transport.js` | `SPRING_LC_RELATIVE_PERIOD_TRANSPORT` | Import |
 
 **Exports:**
 - Functions: `relationContractOf`
@@ -602,6 +604,7 @@ The codebase is organized into the following modules:
 | `../types.js` | `ApproximationBound, AtlasBridge, RelationContract, Regime` | Import (type-only) |
 | `./bridges-exact.js` | `relationContractOf` | Import |
 | `./dimensions.js` | `DAMPING, SPRING_CONSTANT` | Import |
+| `./norms.js` | `RELATIVE_PERIOD_NORM` | Import |
 | `../../dimensional/types.js` | `ACCELERATION, LENGTH, MASS` | Import |
 
 **Exports:**
@@ -642,6 +645,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/atlas/oscillators/limit-witnesses.ts` - The measurements behind the in-process witnesses of the three oscillator
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./norm-transport-witness.js` | `quarterPeriod` | Import |
+
+**Exports:**
+- Functions: `measurePendulumPeriodRatio`, `measureMasslessOffset`, `measureChainDispersionError`
+- Constants: `W7_FIXTURE`, `W8B_FIXTURE`, `W9_FIXTURE`
+
+---
+
 ### `src/atlas/oscillators/models.ts` - The nine oscillator models of design note §3.
 
 **Internal Dependencies:**
@@ -656,6 +672,40 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `getAtlasModel`
 - Constants: `ATLAS_MODELS`
+
+---
+
+### `src/atlas/oscillators/norm-transport-witness.ts` - The measurement behind W1τ, `ab-spring-lc`'s relative-period norm transport
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./pendulum-motion.js` | `rk4Step` | Import |
+| `./norm-transport.js` | `W1TAU_FIXTURE` | Import |
+
+**Exports:**
+- Interfaces: `TransportCircuit`
+- Functions: `quarterPeriod`, `measureTransportedPeriodError`
+
+---
+
+### `src/atlas/oscillators/norm-transport.ts` - `ab-spring-lc`'s declared norm transport: the spring → LC map carries a bound
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../types.js` | `NormTransport` | Import (type-only) |
+| `./norms.js` | `RELATIVE_PERIOD_NORM` | Import |
+
+**Exports:**
+- Constants: `SPRING_LC_TRANSPORT_TEST`, `W1TAU_FIXTURE`, `SPRING_LC_RELATIVE_PERIOD_TRANSPORT`
+
+---
+
+### `src/atlas/oscillators/norms.ts` - Norm names the oscillator records share, so a bound and the transport that
+
+**Exports:**
+- Constants: `RELATIVE_PERIOD_NORM`
 
 ---
 
@@ -714,8 +764,8 @@ The codebase is organized into the following modules:
 | `./pendulum-motion.js` | `linearAccel, pendulumAccel, pendulumNome, rk4Step, theta0OfPeriodError` | Import |
 
 **Exports:**
-- Functions: `waveformBound`, `fundamentalCoefficient`, `measureFundamental`
-- Constants: `POSITION_POINT_MAX_PERIODS`, `PENDULUM_POSITION_TRANSLATION`
+- Functions: `waveformBound`, `fundamentalCoefficient`, `measureFundamental`, `fourierSeriesCheck`
+- Constants: `POSITION_POINT_MAX_PERIODS`, `FOURIER_SERIES_THETA0S`, `PENDULUM_POSITION_TRANSLATION`
 
 ---
 
@@ -741,13 +791,13 @@ The codebase is organized into the following modules:
 | `./error-algebra.js` | `BoundPair` | Import (type-only) |
 | `./composition-table.js` | `composeRelation, NO_COMPOSITE_CLAIM` | Import |
 | `./composition-table.js` | `CompositionResult` | Import (type-only) |
-| `./types.js` | `AtlasBridge, RelationType` | Import (type-only) |
+| `./types.js` | `AtlasBridge, NormTransport, RelationType` | Import (type-only) |
 | `./families.js` | `ATLAS_FAMILIES` | Import |
 | `./oscillators/index.js` | `AtlasFamily` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `RouteEnumeration`, `PathBoundClaim`, `PathNoClaim`
-- Functions: `findPath`, `findAtlasPath`, `enumerateAtlasRoutes`, `enumerateRoutes`, `boundPath`
+- Interfaces: `RouteEnumeration`, `PathBoundClaim`, `AppliedTransport`, `PathNoClaim`
+- Functions: `findPath`, `findAtlasPath`, `enumerateAtlasRoutes`, `enumerateRoutes`, `boundPath`, `routeEntryModels`, `horizonOnRoute`
 
 ---
 
@@ -925,8 +975,8 @@ The codebase is organized into the following modules:
 - Interfaces:
 
   ```text
-  FormalRef, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge,
-  AtlasRejection, Conventions
+  FormalRef, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, NormTransport,
+  AtlasBridge, AtlasRejection, Conventions
   ```
 
 - Constants: `ALL_EVIDENCE_TAGS`
@@ -1088,11 +1138,17 @@ The codebase is organized into the following modules:
 | `./witnesses/quantum-support.js` | `wickRotatedFreeKernel` | Import |
 | `./waves/numerics.js` | `kgNonrelativisticError, kgUniformModeValue, stiffStringPhaseVelocity, acousticLeapfrogQuarter, dalembertResidual, kleinGordonPhaseVelocity, stringLeapfrogMidpoint` | Import |
 | `./waves/numerics.js` | `AcousticFixture, DalembertFixture, StringFixture` | Import (type-only) |
+| `./oscillators/bridges-limits.js` | `pendulumPeriodErrorAt` | Import |
+| `./oscillators/norm-transport.js` | `SPRING_LC_RELATIVE_PERIOD_TRANSPORT, W1TAU_FIXTURE` | Import |
+| `./oscillators/norm-transport-witness.js` | `measureTransportedPeriodError` | Import |
+| `./oscillators/bridges-limits.js` | `dampedOffsetBoundAt` | Import |
+| `./oscillators/bridges-coarse.js` | `dispersionErrorApproximation` | Import |
+| `./oscillators/limit-witnesses.js` | `measureChainDispersionError, measureMasslessOffset, measurePendulumPeriodRatio, W7_FIXTURE, W8B_FIXTURE, W9_FIXTURE` | Import |
 | `./witness-numeric.js` | `NumericWitnessSpec` | Import (type-only) |
 | `./witness-symbolic.js` | `SymbolicWitnessSpec` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `RegisteredSymbolicWitness`, `WitnessClaim`, `RegisteredNumericWitness`
+- Interfaces: `RegisteredSymbolicWitness`, `RegisteredNumericWitness`
 - Constants:
 
   ```text
@@ -3042,7 +3098,8 @@ The codebase is organized into the following modules:
 | `./types.js` | `check, requirePositive, AppliedCase` | Import |
 
 **Exports:**
-- Functions: `sphereEigenvalues`, `sphereSeries`
+- Interfaces: `LumpedRadiating`
+- Functions: `lumpedRadiatingTemperature`, `sphereEigenvalues`, `sphereSeries`
 - Constants: `SIGMA_SB_SI`, `MAX_BIOT`, `MAX_RADIATION_RATIO`, `LUMPED_COOLING_CASE`
 
 ---
@@ -3133,6 +3190,7 @@ The codebase is organized into the following modules:
 |--------|--------|
 | `child_process` | `execFileSync` |
 | `fs` | `readFileSync` |
+| `path` | `join` |
 | `url` | `fileURLToPath` |
 
 **Internal Dependencies:**
@@ -3140,26 +3198,27 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../command.js` | `CommandCtx` | Import (type-only) |
 | `../errors.js` | `CliError` | Import |
-| `../../cli-api.js` | `AtlasBridge, AtlasModel` | Import (type-only) |
+| `../../cli-api.js` | `AppliedTransport, AtlasBridge, AtlasModel` | Import (type-only) |
 | `../../atlas/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
 | `./regime.js` | `showInequality` | Import |
-| `./_atlas-route.js` | `missingForComposite, routeClaim, selectRoute, RouteClaim` | Import |
+| `./_atlas-route.js` | `claimReport, explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, TransportReport` | Import |
 
 **Exports:**
 - Interfaces:
 
   ```text
   EquationLink, ModelView, EvidenceView, WitnessResultRow, StoredProvenance, WitnessResults,
-  WitnessOutcomes, ResultsTally, BridgeView, RouteView, RoutesView, ObservableView, AtlasFilter,
-  AtlasFilterStats, FamilyView
+  WitnessOutcomes, ResultsTally, BridgeView, RouteView, CompositeEvidenceView, RoutesView,
+  ObservableView, AtlasEvidenceView, AtlasFilter, AtlasFilterStats, FamilyView
   ```
 
 - Functions:
 
   ```text
-  loadStoredResults, runResults, parseRoute, buildRouteView, buildRoutesView, buildObservableView,
-  formatAtlasFilterLegend, bridgeIdsOf, buildFamilyView, resultsLine, routeText, familyText,
-  routesText, observableText, viewLegend, toMermaid, toDot
+  storedResultsFile, loadStoredResults, runResults, parseRoute, buildRouteView, buildRoutesView,
+  buildObservableView, buildAtlasEvidenceView, atlasEvidenceText, formatAtlasFilterLegend,
+  bridgeIdsOf, buildFamilyView, resultsLine, routeText, familyText, routesText, observableText,
+  viewLegend, toMermaid, toDot
   ```
 
 - Constants: `ATLAS_SOURCE`, `LINK_SOURCE`, `STORED_RESULTS_PATH`, `DEFAULT_MAX_ROUTES`, `MAX_ROUTES_CEILING`
@@ -3173,10 +3232,10 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../command.js` | `CommandCtx` | Import (type-only) |
 | `../errors.js` | `CliError` | Import |
-| `../../cli-api.js` | `AtlasBridge` | Import (type-only) |
+| `../../cli-api.js` | `AppliedTransport, AtlasBridge` | Import (type-only) |
 
 **Exports:**
-- Functions: `selectRoute`, `routeClaim`, `missingForComposite`
+- Functions: `selectRoute`, `routeClaim`, `missingForComposite`, `explainsRefusal`, `transportReport`, `claimReport`
 
 ---
 
@@ -3203,6 +3262,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
+| `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 
 **Exports:**
 - Functions: `summarizeWitnessRuns`
@@ -3219,6 +3279,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../statuses.js` | `statusMeaning` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3246,7 +3307,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../graphs.js` | `resolveGraph` | Import |
+| `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3290,7 +3351,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../graphs.js` | `resolveGraph` | Import |
+| `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3321,6 +3382,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, EXIT_CHECK_FAILED` | Import |
+| `../version.js` | `formulaParserLabel` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -3335,7 +3397,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../graphs.js` | `resolveGraph` | Import |
+| `../graphs.js` | `resolveGraph, groundTruthAnchor, groundTruthLine` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `../../composition/discovery.js` | `VettedCandidate` | Import (type-only) |
@@ -3356,6 +3418,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
+| `../version.js` | `formulaParserLabel` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3390,6 +3453,7 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
+| `../search-index.js` | `searchNameWords` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3403,7 +3467,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../graphs.js` | `resolveGraph, SourceName` | Import |
+| `../graphs.js` | `resolveGraph, groundTruthAnchor, groundTruthLine, SourceName` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
@@ -3456,7 +3520,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec, ParsedArgs` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../graphs.js` | `resolveGraph` | Import |
+| `../graphs.js` | `resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine, AnchorScope` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError, EXIT_CHECK_FAILED` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
@@ -3484,7 +3548,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
-| `./_atlas-route.js` | `missingForComposite, routeClaim, selectRoute, RouteClaim` | Import |
+| `./_atlas-route.js` | `explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, RouteClaim` | Import |
 
 **Exports:**
 - Interfaces: `ToleranceRequest`
@@ -3583,6 +3647,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../search-index.js` | `buildSearchIndex, fold, matchEveryWord, SEARCH_SECTIONS, STOP_WORDS` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3598,6 +3663,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../expr-print.js` | `EVAL_STUBS, printDisplay, printEval, printLatex, latexName, siUnitOf` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3612,6 +3678,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/expr-print.ts` - The three printed forms of a scalar composed AST (`upt symbolic`, audit F12 and I10):
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Functions: `latexName`, `printLatex`, `siUnitOf`
+- Constants: `EVAL_STUBS`, `printDisplay`, `printEval`
+
+---
+
 ### `src/cli/graphs.ts` - Shared `--source=catalog|canonical|both` graph resolution — replaces
 
 **Internal Dependencies:**
@@ -3623,7 +3703,8 @@ The codebase is organized into the following modules:
 | `./errors.js` | `CliError` | Import |
 
 **Exports:**
-- Functions: `resolveGraph`
+- Interfaces: `AnchorScope`
+- Functions: `resolveGraph`, `groundTruthAnchor`, `coreAnchor`, `groundTruthLine`, `coreLine`
 
 ---
 
@@ -3636,6 +3717,7 @@ The codebase is organized into the following modules:
 | `./errors.js` | `UsageError, CliError` | Import |
 | `./args.js` | `parseArgs` | Import |
 | `./version.js` | `packageVersion` | Import |
+| `./statuses.js` | `glossaryText` | Import |
 | `./command.js` | `resolveCommand, CommandCtx` | Import |
 | `./record.js` | `recordInvocation, replayRecord, showRecord, Io` | Import |
 | `./commands/index.js` | `*` | Import |
@@ -3646,6 +3728,12 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/cli/output.ts` - JSON output envelope for the UPT CLI.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./statuses.js` | `definitionsFor` | Import |
+| `./graphs.js` | `AnchorScope` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `JsonEnvelope`
@@ -3658,6 +3746,7 @@ The codebase is organized into the following modules:
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
+| `crypto` | `createHash` |
 | `fs` | `existsSync, readFileSync` |
 | `path` | `dirname, join, resolve, sep` |
 
@@ -3668,7 +3757,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `Attribution`
-- Functions: `staticReach`
+- Functions: `moduleSources`, `staticReach`
 - Constants: `REACH_METHOD`
 
 ---
@@ -3704,9 +3793,9 @@ The codebase is organized into the following modules:
 | Module | Import |
 |--------|--------|
 | `crypto` | `createHash` |
-| `fs` | `appendFileSync, closeSync, existsSync, openSync, readFileSync` |
-| `module` | `createRequire` |
-| `path` | `join` |
+| `fs` | `appendFileSync, closeSync, existsSync, mkdtempSync, openSync, readFileSync, rmSync` |
+| `os` | `tmpdir` |
+| `path` | `basename, join` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -3714,16 +3803,40 @@ The codebase is organized into the following modules:
 | `../cli-api.js` | `* as cliApi` | Import (type-only) |
 | `./args.js` | `parseArgs` | Import |
 | `./command.js` | `resolveCommand` | Import |
+| `./commands/_atlas-map.js` | `storedResultsFile` | Import |
 | `./errors.js` | `CliError` | Import |
 | `./output.js` | `emitJson` | Import |
-| `./record-reach.js` | `staticReach, Attribution` | Import |
+| `./record-reach.js` | `moduleSources, staticReach, Attribution` | Import |
 | `./record-tables.js` | `constantTables, tableFingerprint, ConstantTable` | Import |
-| `./version.js` | `packageVersion` | Import |
+| `./version.js` | `packageVersion, peerVersions` | Import |
 
 **Exports:**
-- Interfaces: `RecordEnvironment`, `RecordResult`, `RecordEntry`, `EnvironmentChange`, `StreamDifference`, `ReplayEntryReport`
+- Interfaces: `RecordEnvironment`, `RecordResult`, `RecordEntry`, `RecordInput`, `EnvironmentChange`, `StreamDifference`, `ReplayEntryReport`
 - Functions: `canonicalJson`, `entryFingerprint`, `captureEnvironment`, `recordInvocation`, `replayRecord`, `showRecord`
 - Constants: `RECORD_SCHEMA`, `sha256`, `argvFingerprint`
+
+---
+
+### `src/cli/search-index.ts` - The word index behind `upt search`, shared with `upt explain`'s NOT COVERED answer (audit I5).
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./command.js` | `CommandCtx` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `SearchEntry`, `SearchMatch`
+- Functions: `buildSearchIndex`, `matchEveryWord`, `searchNameWords`
+- Constants: `SEARCH_SECTIONS`, `STOP_WORDS`, `fold`
+
+---
+
+### `src/cli/statuses.ts` - The status words the CLI prints, defined once (audit I13).
+
+**Exports:**
+- Interfaces: `StatusDefinition`
+- Functions: `definitionsFor`, `statusMeaning`, `glossaryText`
+- Constants: `STATUS_GLOSSARY`
 
 ---
 
@@ -3732,10 +3845,12 @@ The codebase is organized into the following modules:
 **Node.js Built-in Dependencies:**
 | Module | Import |
 |--------|--------|
-| `fs` | `readFileSync` |
+| `fs` | `existsSync, readFileSync` |
+| `module` | `createRequire` |
+| `path` | `join` |
 
 **Exports:**
-- Functions: `packageVersion`
+- Functions: `packageVersion`, `peerVersions`, `formulaParserLabel`
 
 ---
 
@@ -3752,7 +3867,7 @@ The codebase is organized into the following modules:
 | `./numerical/formula-registry.js` | `getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker` | Re-export |
 | `./dimensional/dimension-spec.js` | `parseDimensionSpec` | Re-export |
 | `./composition/bridge-prediction.js` | `predictMissingBridges` | Re-export |
-| `./composition/discovery.js` | `rankDiscoveries` | Re-export |
+| `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
 | `./bridges/confrontation-coverage.js` | `auditCoverage` | Re-export |
 | `./bridges/confrontations.js` | `CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution` | Re-export |
@@ -3778,7 +3893,7 @@ The codebase is organized into the following modules:
 | `./composition/graph-viz.js` | `filterEdges, deriveEdgeEvidence, formatFilterLegend` | Re-export |
 | `./composition/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
 | `./composition/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
-| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
+| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
 | `./composition/adjudication.js` | `AnnotatedCandidate, CandidateAdjudication` | Re-export |
 | `./composition/consequence.js` | `annotateConsequences` | Re-export |
@@ -3789,11 +3904,12 @@ The codebase is organized into the following modules:
 | `./composition/representative-values.js` | `REPRESENTATIVE_VALUES` | Re-export |
 | `./composition/canonical-compare.js` | `compareWithCanonical, compareUserEquation, describeComparison, describeComparisons` | Re-export |
 | `./composition/canonical-compare.js` | `CanonicalComparison` | Re-export |
-| `./composition/symbolic-constants.js` | `CONSTANTS` | Re-export |
+| `./composition/symbolic-constants.js` | `CONSTANTS, CONSTANT_PROVENANCE` | Re-export |
 | `./composition/grounding.js` | `CandidateGrounding, CandidateReadiness` | Re-export |
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
 | `./atlas/families.js` | `ATLAS_FAMILIES` | Re-export |
-| `./atlas/derive-evidence.js` | `deriveEvidence, NO_PASSING_WITNESSES` | Re-export |
+| `./atlas/derive-evidence.js` | `deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES` | Re-export |
+| `./atlas/coverage.js` | `summarizeEvidence, ALL_EVIDENCE_TAGS` | Re-export |
 | `./atlas/witness-artifact.js` | `runWitnessRegistry` | Re-export |
 | `./atlas/witness-specs.js` | `WITNESS_REGISTRY` | Re-export |
 | `./atlas/witness-numeric.js` | `runNumericWitness` | Re-export |
@@ -3802,9 +3918,9 @@ The codebase is organized into the following modules:
 | `./atlas/oscillators/index.js` | `AtlasFamily` | Re-export |
 | `./atlas/regime.js` | `regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
-| `./atlas/path-bound.js` | `findPath, findAtlasPath, enumerateAtlasRoutes, boundPath` | Re-export |
+| `./atlas/path-bound.js` | `findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
 | `./atlas/composition-table.js` | `composeRelation` | Re-export |
-| `./atlas/path-bound.js` | `PathBoundResult, PathBoundClaim, PathNoClaim` | Re-export |
+| `./atlas/path-bound.js` | `PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport` | Re-export |
 | `./atlas/types.js` | `AtlasBridge, RegimeInequality, Witness` | Re-export |
 | `./atlas/types.js` | `MissingLipschitzError` | Re-export |
 | `./atlas/model.js` | `AtlasModel, ModelId` | Re-export |
@@ -3819,30 +3935,32 @@ The codebase is organized into the following modules:
   formatConnectedSummary, bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap,
   proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser, getFormulaParserKind,
   getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, rankDiscoveries,
-  BRIDGE_EQUATIONS, auditCoverage, CONFRONTATIONS, listConfrontations, runConfrontation,
-  confrontationRigor, rigorDistribution, ConfrontationEntry, RigorTier, consistencyComparison,
-  ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
-  EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck,
-  CaseResult, convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
-  simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
-  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, deriveEdgeEvidence,
-  formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
-  PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap,
-  problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, parseExprJson, runProbeSearch,
-  formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
-  formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
-  runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
-  AnnotatedCandidate, CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
-  ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
-  describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
-  compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
-  CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence,
-  NO_PASSING_WITNESSES, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
-  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
-  ObservableTranslation, PointCheck, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
-  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath,
-  composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AtlasBridge, RegimeInequality,
-  Witness, MissingLipschitzError, AtlasModel, ModelId
+  ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage, CONFRONTATIONS, listConfrontations,
+  runConfrontation, confrontationRigor, rigorDistribution, ConfrontationEntry, RigorTier,
+  consistencyComparison, ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge,
+  EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase,
+  AppliedCase, CaseCheck, CaseResult, convertValue, UnitError, auditAxisDiscrimination,
+  AxisDiscrimination, AXES, AxisSpec, simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS,
+  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
+  filterEdges, deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
+  describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
+  findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson,
+  resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson,
+  loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap,
+  suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto, annotateAdjudications,
+  adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication,
+  annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
+  checkConventions, unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness,
+  REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation, describeComparison,
+  describeComparisons, CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding,
+  CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence,
+  NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY,
+  runNumericWitness, OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck,
+  translationsOf, ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, regimeHolds,
+  regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath,
+  enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult,
+  PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality, Witness,
+  MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -3942,7 +4060,9 @@ The codebase is organized into the following modules:
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./canonical-prefactors.js` | `canonicalPrefactor` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
-| `../numerical/formula-registry.js` | `parsePhysics` | Import |
+| `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
+| `../numerical/formula.js` | `CompiledFormula` | Import (type-only) |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
 
 **Exports:**
@@ -3976,9 +4096,9 @@ The codebase is organized into the following modules:
 ### `src/composition/canonical-prefactors.ts` - Exact prefactors for canonical equations that `src/canonical` records only
 
 **Exports:**
-- Interfaces: `CanonicalPrefactor`
-- Functions: `canonicalPrefactor`
-- Constants: `CANONICAL_PREFACTORS`
+- Interfaces: `CanonicalPrefactor`, `CanonicalGroupPrefactor`
+- Functions: `canonicalPrefactor`, `canonicalGroupPrefactor`
+- Constants: `CANONICAL_PREFACTORS`, `CANONICAL_GROUP_PREFACTORS`
 
 ---
 
@@ -4125,7 +4245,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `VettedCandidate`, `DiscoveryOptions`
 - Functions: `vetLinkCandidate`, `rankDiscoveries`
-- Constants: `REGISTRY_ATTRIBUTES_BY_NAME`
+- Constants: `REGISTRY_ATTRIBUTES_BY_NAME`, `ANCHOR_DEFAULT`
 
 ---
 
@@ -4763,7 +4883,7 @@ The codebase is organized into the following modules:
 | `./backend-protocol.js` | `runBackendWorker` | Re-export |
 | `./backend-protocol.js` | `BackendRequest, BackendCandidate, BackendResponse` | Re-export |
 | `./metadata.js` | `setRelationMetadata, getRelationMetadata, listRelationMetadata, clearRelationMetadata` | Re-export |
-| `./problem.js` | `makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, parseExprJson` | Re-export |
+| `./problem.js` | `makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile, resolveObservationsPath, parseExprJson` | Re-export |
 | `./problem.js` | `ProblemFile` | Re-export |
 | `./pipeline.js` | `runProbeSearch` | Re-export |
 | `./pipeline.js` | `ProbeSearchOptions, ProbeSearchResult` | Re-export |
@@ -4798,13 +4918,13 @@ The codebase is organized into the following modules:
   ChangepointResult, ScaleSymmetryInput, runBackendWorker, BackendRequest, BackendCandidate,
   BackendResponse, setRelationMetadata, getRelationMetadata, listRelationMetadata,
   clearRelationMetadata, makeResidualGap, loadSearchProblemFromJson, searchProblemFromFile,
-  parseExprJson, ProblemFile, runProbeSearch, ProbeSearchOptions, ProbeSearchResult,
-  formatProbeReport, formatFrontierScan, formatFrontierGap, parseStudy, loadStudyFromJson,
-  loadStudyFile, attachReplication, studyCsvToRaw, runProbeStudy, formatProbeStudy, chiSquareSurvival,
-  fSurvival, effectiveSigma, StudyRefusal, ProbeStudy, ProbeStudyOptions, ProbeStudyResult,
-  StudyVerdict, ReplicationOutcome, StudyRole, StudyProvenance, StudyObservation, StudyBaseline,
-  SetTest, ModelTest, CandidateTest, StudyDesignSuggestion, StudyCorrection, StudyCorrectionReport,
-  CorrectionStep
+  resolveObservationsPath, parseExprJson, ProblemFile, runProbeSearch, ProbeSearchOptions,
+  ProbeSearchResult, formatProbeReport, formatFrontierScan, formatFrontierGap, parseStudy,
+  loadStudyFromJson, loadStudyFile, attachReplication, studyCsvToRaw, runProbeStudy, formatProbeStudy,
+  chiSquareSurvival, fSurvival, effectiveSigma, StudyRefusal, ProbeStudy, ProbeStudyOptions,
+  ProbeStudyResult, StudyVerdict, ReplicationOutcome, StudyRole, StudyProvenance, StudyObservation,
+  StudyBaseline, SetTest, ModelTest, CandidateTest, StudyDesignSuggestion, StudyCorrection,
+  StudyCorrectionReport, CorrectionStep
   ```
 
 
@@ -4884,7 +5004,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ProblemFile`
-- Functions: `isGapKind`, `makeResidualGap`, `loadSearchProblemFromJson`, `searchProblemFromFile`, `parseExprJson`
+- Functions: `isGapKind`, `makeResidualGap`, `loadSearchProblemFromJson`, `resolveObservationsPath`, `searchProblemFromFile`, `parseExprJson`
 
 ---
 
@@ -5010,15 +5130,16 @@ The codebase is organized into the following modules:
 
   ```text
   StudyProvenance, StudyQuantity, StudyObservation, StudyCorrection, StudyBaseline, ProbeStudy,
-  SetTest, ModelTest, CorrectionStep, CandidateTest, StudyCorrectionReport, StudyDesignSuggestion,
-  ProbeStudyResult, ProbeStudyOptions
+  ClosenessTest, ReplicationIndependence, SetTest, ModelTest, CorrectionStep, CandidateTest,
+  StudyCorrectionReport, StudyDesignSuggestion, ProbeStudyResult, ProbeStudyOptions
   ```
 
 - Functions:
 
   ```text
-  parseStudy, loadStudyFromJson, loadStudyFile, attachReplication, studyCsvToRaw, chiSquareSurvival,
-  fSurvival, effectiveSigma, exprToInfix, runProbeStudy, formatProbeStudy
+  parseStudy, loadStudyFromJson, loadStudyFile, attachReplication, replicationIndependence,
+  studyCsvToRaw, chiSquareSurvival, chiSquareCdf, fSurvival, effectiveSigma, exprToInfix,
+  runProbeStudy, formatProbeStudy
   ```
 
 
@@ -5289,7 +5410,8 @@ The codebase is organized into the following modules:
 | `../core/constants.js` | `C_SI, G_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
 
 **Exports:**
-- Constants: `CONSTANTS`
+- Interfaces: `ConstantProvenance`
+- Constants: `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -5323,7 +5445,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `UserEquationError`
-- Interfaces: `UserEquation`, `EquationLanding`, `EquationHint`, `EquationAnalysis`
+- Interfaces: `UserEquation`, `EquationLanding`, `EquationHint`, `ShortBinding`, `EquationAnalysis`
 - Functions:
 
   ```text
@@ -6540,7 +6662,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./formula.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
-| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError` | Import |
+| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError, unknownFunctionMessage` | Import |
 
 **Exports:**
 - Functions: `loadMathtsFormulaParser`
@@ -6569,8 +6691,8 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `FormulaError`
 - Interfaces: `CompiledFormula`, `FormulaParser`
-- Functions: `callBuiltinFunction`, `parseFormula`
-- Constants: `BUILTIN_FUNCTION_NAMES`, `defaultFormulaParser`, `parseFormulaToAst`
+- Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `parseFormula`
+- Constants: `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
 
 ---
 
@@ -6968,7 +7090,7 @@ The codebase is organized into the following modules:
 | `types` | 2 files | 5 files |
 | `composition-table` | 1 files | 7 files |
 | `conventions` | 1 files | 4 files |
-| `coverage` | 1 files | 0 files |
+| `coverage` | 1 files | 1 files |
 | `derivation` | 3 files | 3 files |
 | `derive-evidence` | 1 files | 3 files |
 | `bridges-closure` | 9 files | 2 files |
@@ -6983,9 +7105,9 @@ The codebase is organized into the following modules:
 | `index` | 37 files | 0 files |
 | `link-prediction` | 2 files | 1 files |
 | `model` | 2 files | 12 files |
-| `bridges-coarse` | 5 files | 1 files |
-| `bridges-exact` | 3 files | 3 files |
-| `bridges-limits` | 5 files | 7 files |
+| `bridges-coarse` | 5 files | 2 files |
+| `bridges-exact` | 4 files | 3 files |
+| `bridges-limits` | 6 files | 8 files |
 
 ---
 
@@ -7004,7 +7126,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[leakage]
-        N5[...56 more]
+        N5[...60 more]
     end
 
     subgraph Bridges
@@ -7040,7 +7162,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...32 more]
+        N29[...35 more]
     end
 
     subgraph Root
@@ -7131,17 +7253,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 376 |
+| Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 80492 |
-| Total Exports | 2705 |
-| Total Re-exports | 1320 |
+| Total Lines of Code | 83226 |
+| Total Exports | 2777 |
+| Total Re-exports | 1335 |
 | Total Classes | 60 |
-| Total Interfaces | 421 |
-| Total Functions | 653 |
+| Total Interfaces | 436 |
+| Total Functions | 690 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 517 |
+| Type-only Imports | 523 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
