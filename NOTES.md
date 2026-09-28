@@ -56,8 +56,10 @@ nothing validates prose and the next reader cannot tell.
 - F02 as measured on `discover --source=canonical`: 49 promising, 0 mechanism-tested, 0 data-tested,
   49 without magnitude evidence, 49 with the axis unresolved, 0 with an entailed consequence.
   So nothing in the promising set is evidence yet (negative result).
-- Persona W7 (Landauer `ln(2)` in `map --equation`) is **still open**. F03 fixed `ln` in the formula
-  parsers, but the equation compare goes through `evalExpr`, which still rejects `transcendental`.
+- Persona W7 (Landauer `ln(2)` in `map --equation`) is **fixed**: the equation compare evaluates with
+  the active formula parser, so `ln(2)` agrees with CE-landauer, and the catalog target
+  `landauer-erasure-energy` reaches CE-landauer through BE-16, which CE-landauer records that it
+  restates. Before the fix, `evalExpr` rejected `transcendental`, and the target names never met.
 
 ## As of 2026-09-26
 

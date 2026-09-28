@@ -92,13 +92,57 @@ const FUNCTIONS: Readonly<Record<string, Fn>> = {
 export const BUILTIN_FUNCTION_NAMES: readonly string[] = Object.keys(FUNCTIONS);
 
 /**
+ * Function names from other conventions, each with the documented function that computes the same
+ * value (audit I4). An unknown name still fails: the equivalent is only named in the message, so a
+ * formula never means something its author did not write. Every `use` is in
+ * {@link BUILTIN_FUNCTION_NAMES}, and the conformance suite checks each against the value the
+ * foreign name means, under both parsers.
+ * @internal
+ */
+export const FUNCTION_EQUIVALENTS: Readonly<Record<string, { readonly use: string; readonly meaning: string }>> = {
+  lg: { use: 'log10', meaning: 'the base-10 logarithm' },
+  lb: { use: 'log2', meaning: 'the base-2 logarithm' },
+  ld: { use: 'log2', meaning: 'the base-2 logarithm' },
+  arcsin: { use: 'asin', meaning: 'the inverse sine' },
+  arccos: { use: 'acos', meaning: 'the inverse cosine' },
+  arctan: { use: 'atan', meaning: 'the inverse tangent' },
+  arctg: { use: 'atan', meaning: 'the inverse tangent' },
+  tg: { use: 'tan', meaning: 'the tangent' },
+  fabs: { use: 'abs', meaning: 'the absolute value' },
+  power: { use: 'pow', meaning: 'a power' },
+  arctan2: { use: 'atan2', meaning: 'the two-argument inverse tangent' },
+};
+
+/** The documented functions as help and diagnostics list them, with the base of `log` stated. @internal */
+export const BUILTIN_FUNCTION_LIST: string = BUILTIN_FUNCTION_NAMES.map((n) =>
+  n === 'log' ? 'log (natural, = ln)' : n,
+).join(', ');
+
+/**
+ * The diagnostic for a function neither parser documents: the documented equivalent when the name
+ * is a known alias or differs only in case, then the documented list. @internal
+ */
+export function unknownFunctionMessage(name: string): string {
+  const alias = FUNCTION_EQUIVALENTS[name];
+  const lower = name.toLowerCase();
+  const use =
+    alias?.use ?? (lower !== name && BUILTIN_FUNCTION_NAMES.includes(lower) ? lower : FUNCTION_EQUIVALENTS[lower]?.use);
+  const meaning = alias?.meaning ?? FUNCTION_EQUIVALENTS[lower]?.meaning;
+  const hint =
+    use === undefined
+      ? ''
+      : ` For ${meaning ?? `the function ${use}`} use ${use}(…), which both formula parsers evaluate.`;
+  return `unknown function '${name}'.${hint} Documented functions: ${BUILTIN_FUNCTION_LIST}.`;
+}
+
+/**
  * Call a built-in function by name, with this parser's arity checks. Lets
  * another parser supply a documented function it does not define itself.
  * @internal
  */
 export function callBuiltinFunction(name: string, args: number[]): number {
   const fn = FUNCTIONS[name];
-  if (fn === undefined) throw new FormulaError(`unknown function '${name}'`);
+  if (fn === undefined) throw new FormulaError(unknownFunctionMessage(name));
   return fn(args);
 }
 
@@ -291,7 +335,7 @@ function evalNode(node: Node, scope: Record<string, number>): number {
     // eslint-disable-next-line no-fallthrough
     case 'call': {
       const fn = FUNCTIONS[node.fn];
-      if (!fn) throw new FormulaError(`unknown function '${node.fn}'`);
+      if (!fn) throw new FormulaError(unknownFunctionMessage(node.fn));
       return fn(node.args.map((a) => evalNode(a, scope)));
     }
   }

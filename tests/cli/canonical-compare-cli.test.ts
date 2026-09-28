@@ -210,3 +210,34 @@ describe('N4: map --equation prints the verdict before the linkage map', () => {
     expect(t.slice(verdict, map)).toMatch(/✓ agrees with CE-pendulum-period/);
   });
 });
+
+// Persona finding W7 (0.47.1 post-fix retest): the comparison evaluated the RHS with `evalExpr`,
+// which has no `transcendental` arm, so `ln(2)` was "not compared" while `ln2` agreed; and the
+// catalog's BE-16 target `landauer-erasure-energy` never met CE-landauer, whose target is
+// `erasure-energy`, though CE-landauer records that it restates BE-16.
+describe('W7: map --equation compares through the formula parser and the restated bridge', () => {
+  it('erasure_energy = k_B*temperature*ln(2) agrees with CE-landauer', async () => {
+    const t = await text(['map', '--equation', 'erasure_energy = k_B*temperature*ln(2)']);
+    expect(t).toMatch(/✓ agrees with CE-landauer/);
+  });
+
+  it('the catalog target landauer-erasure-energy reaches CE-landauer through BE-16, and says so', async () => {
+    for (const rhs of ['k_B*temperature*ln(2)', 'k_B*temperature*ln2']) {
+      const t = await text(['map', '--equation', `landauer-erasure-energy = ${rhs}`]);
+      expect(t).toMatch(/✓ agrees with CE-landauer \(.*your target as its erasure-energy, the target of be-16, which it restates/);
+    }
+  });
+
+  it('control: log10(2) for ln(2) differs by the constant factor log10(2)/ln(2) = 0.434294', async () => {
+    const t = await text(['map', '--equation', 'landauer-erasure-energy = k_B*temperature*log10(2)'], 3);
+    expect(t).toMatch(/⚠ differs from CE-landauer .* by a constant factor: yours\/canonical = 0\.434294/);
+    expect(Math.log10(2) / Math.LN2).toBeCloseTo(0.434294, 6);
+  });
+
+  it('control: a target that merely shares a dimension is not matched through a restated bridge', async () => {
+    const t = await text(['map', '--equation', 'rest-energy = k_B*temperature*ln(2)']);
+    const verdict = t.slice(t.indexOf('Your equation:'), t.indexOf('● your equation joins'));
+    expect(verdict).toMatch(/no canonical equation has this target and these variables/);
+    expect(verdict).not.toMatch(/CE-landauer/);
+  });
+});

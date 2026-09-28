@@ -176,6 +176,21 @@ from v0.1.0 onward.
   so `todo.md` and `NOTES.md` now write "audit I5" and "persona I5"; older entries are left as they
   were.
 
+- **Audit I4: expression syntax, and persona W7** (2026-09-27). An unknown function failed with the
+  parser's own words (`Undefined function lg` under MathTS) and no way forward. Both parsers now fail
+  with one message that names a documented equivalent where one exists (`lg` → `log10`, `arcsin` →
+  `asin`, `Sin` → `sin`, …; the table's values are checked against `Math`), and list the documented
+  functions otherwise. `--debug` prints the parser and its version (`mathts
+  (@danielsimonjr/mathts-functions 0.64.0)` or `builtin (universal-physics-tensor …)`). `upt help eval`
+  lists the functions and says that `log` is the natural logarithm. `map --equation` evaluated the
+  right-hand side with `evalExpr`, which has no transcendental arm, so `ln(2)` was "not compared"
+  while `ln2` agreed; it now evaluates with the active formula parser, the one `eval` uses. The
+  catalog target `landauer-erasure-energy` (BE-16) never met CE-landauer, whose target is
+  `erasure-energy`; a target now also matches through the bridge an entry records that it restates,
+  and the line says so. Controls: `log10(2)` for `ln(2)` differs by 0.434294, and `rest-energy` with
+  the same right-hand side matches no entry. The builtin path is tested by mocking the peer away.
+  `peerVersions` moved from `record.ts` to `version.ts` so both use one reader.
+
 - **CLI applied-physics audit findings F01–F14** (2026-09-27). Ledger in
   `docs/audit/Universal_Physics_Tensor_CLI_Audit.md` §11; each fix has a test that was RED first.
   - **F01** — `upt path` searches across families when no same-family chain exists (KG → free

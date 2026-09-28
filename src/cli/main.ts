@@ -150,8 +150,13 @@ Usage:
         re-validated dimensionally + numerically.
 
   upt eval "<formula>" name=value ...
-        Evaluate YOUR OWN scalar formula (safe — arithmetic only). Knows
-        pi/tau and sqrt/exp/ln/sin/...; any other name must be supplied.
+        Evaluate YOUR OWN scalar formula (safe — arithmetic only). Knows the
+        constants pi and tau and the functions sqrt, cbrt, exp, ln, log
+        (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
+        sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
+        or log2 for base 10 or 2. An unknown function fails and names a
+        documented equivalent where one exists (lg → log10). Any other name
+        must be supplied. --debug prints the parser and its version to stderr.
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \\
                        c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
 

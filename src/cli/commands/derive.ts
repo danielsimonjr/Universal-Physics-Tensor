@@ -10,6 +10,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
 import { UsageError, EXIT_CHECK_FAILED } from '../errors.js';
+import { formulaParserLabel } from '../version.js';
 import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
@@ -110,7 +111,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   if (formula) {
     const parser = await api.getFormulaParser();
-    if (debug) err(`  [parser: ${await api.getFormulaParserKind()}]`);
+    if (debug) err(`  [parser: ${formulaParserLabel(await api.getFormulaParserKind())}]`);
 
     const checker = await api.getFormulaDimensionChecker();
     const dims = Object.fromEntries(governing.map((g) => [g.name, g.dim]));

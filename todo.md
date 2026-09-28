@@ -118,9 +118,12 @@ witness) could be meant. Earlier entries used the bare form for both.
 - [x] **audit I1** Qualified routes across model families — met by F01.
 - [ ] **audit I3** Consistent graph scope — F04 carries `--source` to `ground`; open: `explain`'s help
   omits `--source`, and results do not print the effective source and anchor.
-- [ ] **audit I4** Stable expression syntax — F03 made `ln` agree; open: an unknown function suggests no
+- [x] **audit I4** Stable expression syntax — F03 made `ln` agree; open: an unknown function suggests no
   tested equivalent, `--debug` omits the parser version, help does not state the base of `log`, and
-  `map --equation` cannot compare `ln(2)` (persona W7).
+  `map --equation` cannot compare `ln(2)` (persona W7). Both parsers now name a tested equivalent
+  (`lg` → `log10`, `arcsin` → `asin`, …) and still fail; `--debug` prints the parser and its version;
+  the help lists the functions and states that `log` is natural. The equation compare evaluates with
+  the active formula parser and reaches CE-landauer through BE-16, which it restates.
 - [ ] **audit I5 residual** — `explain <law-name>` suggests one-letter quantities instead of `upt search`.
 - [ ] **audit I10** Reproducible equation rendering — F12 grouped denominators; open: no LaTeX, no
   symbol table.

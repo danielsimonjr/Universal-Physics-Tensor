@@ -15,8 +15,6 @@
 
 import { createHash } from 'node:crypto';
 import { appendFileSync, closeSync, existsSync, openSync, readFileSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import { join } from 'node:path';
 import type * as cliApi from '../cli-api.js';
 import { parseArgs } from './args.js';
 import { resolveCommand } from './command.js';
@@ -24,7 +22,7 @@ import { CliError } from './errors.js';
 import { emitJson } from './output.js';
 import { staticReach, type Attribution } from './record-reach.js';
 import { constantTables, tableFingerprint, type ConstantTable } from './record-tables.js';
-import { packageVersion } from './version.js';
+import { packageVersion, peerVersions } from './version.js';
 
 export type Io = {
   out: (line?: string) => void;
@@ -92,26 +90,6 @@ export function entryFingerprint(entry: Partial<RecordEntry>): string {
   return sha256(canonicalJson(rest));
 }
 
-/** Installed version of each optional peer the package declares, `null` when absent. Reads the
- * peer's own package.json from the resolution paths, because a peer's `exports` may not expose it. */
-function peerVersions(): Record<string, string | null> {
-  const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as {
-    peerDependencies?: Record<string, string>;
-  };
-  const require = createRequire(import.meta.url);
-  const peers: Record<string, string | null> = {};
-  for (const name of Object.keys(pkg.peerDependencies ?? {}).sort()) {
-    peers[name] = null;
-    for (const dir of require.resolve.paths(name) ?? []) {
-      const manifest = join(dir, name, 'package.json');
-      if (existsSync(manifest)) {
-        peers[name] = (JSON.parse(readFileSync(manifest, 'utf8')) as { version?: string }).version ?? null;
-        break;
-      }
-    }
-  }
-  return peers;
-}
 
 export async function captureEnvironment(api: typeof cliApi): Promise<RecordEnvironment> {
   return {
