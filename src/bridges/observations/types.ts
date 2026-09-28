@@ -148,6 +148,13 @@ export type ConfrontationOutcome = ConfrontationDataHandling & (
        * difference either way.
        */
       readonly fractionalGapIs: 'agreement-bound' | 'observed-difference';
+      /**
+       * What `predicted` is. `'reference'` (the default when absent): a reference value the
+       * observation is compared with. `'lower-limit'`: the bridge claims the range
+       * `x ≥ predicted` (BE-21's KSS bound η/s ≥ 1/(4π)), decided by observed ≥ predicted. A lower
+       * limit carries no agreement bound, so it requires `fractionalGapIs: 'observed-difference'`.
+       */
+      readonly predictedIs?: 'reference' | 'lower-limit';
       readonly units: string;
       readonly provenance: ObservationProvenance;
     }
@@ -180,14 +187,17 @@ export interface ConsistencyComparison {
   readonly definition: '(observed − predicted) / predicted';
   /** The record's stated tolerance on |relativeDifference|; null when the outcome carries none. */
   readonly agreementBound: number | null;
-  /** |relativeDifference| ≤ agreementBound; null when there is no bound to decide against. */
+  /** The rule the decision applies; null when the outcome states none. */
+  readonly rule: '|difference| ≤ agreement bound' | 'observed ≥ predicted lower limit' | null;
+  /** The decision under `rule`: compatible (true) or not (false); null when there is no rule. */
   readonly withinBound: boolean | null;
 }
 
 /**
  * The actual difference of a consistency outcome, computed from its own
- * predicted and observed values, and the compatibility decision against its
- * agreement bound when it has one.
+ * predicted and observed values, and the compatibility decision: against its
+ * agreement bound when it has one, or observed ≥ predicted when the prediction
+ * is a lower limit.
  *
  * @public
  */
@@ -199,10 +209,18 @@ export function consistencyComparison(
   }
   const relativeDifference = (o.approaches - o.predicted) / o.predicted;
   const agreementBound = o.fractionalGapIs === 'agreement-bound' ? o.fractionalGap : null;
+  const definition = '(observed − predicted) / predicted' as const;
+  if (o.predictedIs === 'lower-limit') {
+    if (agreementBound !== null) {
+      throw new RangeError('consistencyComparison: a lower limit carries no agreement bound');
+    }
+    return { relativeDifference, definition, agreementBound, rule: 'observed ≥ predicted lower limit', withinBound: o.approaches >= o.predicted };
+  }
   return {
     relativeDifference,
-    definition: '(observed − predicted) / predicted',
+    definition,
     agreementBound,
+    rule: agreementBound === null ? null : '|difference| ≤ agreement bound',
     withinBound: agreementBound === null ? null : Math.abs(relativeDifference) <= agreementBound,
   };
 }

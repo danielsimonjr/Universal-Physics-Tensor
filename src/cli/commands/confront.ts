@@ -84,6 +84,13 @@ function statisticOf(o: Outcome): { object: string; criterion: string; observed:
         ? { object: 'one-sided upper limit against an encoded range', criterion: 'observed limit ≤ encoded bound', observed: reported }
         : { object: 'one-sided upper limit', criterion: 'predicted ≤ limit', observed: reported };
     case 'consistency':
+      if (o.predictedIs === 'lower-limit') {
+        return {
+          object: 'lower limit claimed by the bridge, against a reference value with no σ',
+          criterion: 'observed ≥ predicted lower limit — one-sided, not a σ-residual; not a precision test',
+          observed: reported,
+        };
+      }
       return {
         object: 'reference value with no σ',
         criterion:
@@ -295,10 +302,12 @@ async function run(ctx: CommandCtx): Promise<number> {
       case 'consistency': {
         const c = api.consistencyComparison(outcome);
         const verdict =
-          c.agreementBound === null
-            ? 'no agreement bound in this outcome, so no compatibility decision'
-            : `agreement bound ±${percent(c.agreementBound)} (the record's stated tolerance, not a measured difference) · ` +
-              `|difference| ≤ bound: ${c.withinBound ? 'compatible ✓' : 'OUTSIDE BOUND'}`;
+          c.rule === 'observed ≥ predicted lower limit'
+            ? `rule: ${c.rule} · ${c.withinBound ? 'compatible ✓' : 'BELOW THE LIMIT'}`
+            : c.agreementBound === null
+              ? 'no agreement bound in this outcome, so no compatibility decision'
+              : `agreement bound ±${percent(c.agreementBound)} (the record's stated tolerance, not a measured difference) · ` +
+                `|difference| ≤ bound: ${c.withinBound ? 'compatible ✓' : 'OUTSIDE BOUND'}`;
         out(
           `    predicted ${outcome.predicted} approaches ${outcome.approaches} ${outcome.units} · ` +
             `actual difference ${signedPercent(c.relativeDifference)} = ${c.definition} · ${verdict}`,

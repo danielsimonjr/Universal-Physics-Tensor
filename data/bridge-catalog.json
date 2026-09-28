@@ -1939,8 +1939,8 @@
         "kind": "consistency",
         "predicted": 1,
         "approaches": 1,
-        "fractionalGap": 0,
-        "fractionalGapIs": "observed-difference",
+        "fractionalGap": 0.15,
+        "fractionalGapIs": "agreement-bound",
         "units": "p₀(theory)/p₀(exp) ratio; parameter-free 9-gas agreement within 15% experimental error",
         "provenance": {
           "citation": "Hornberger, Uttenthaler, Brezger, Hackermuller, Arndt & Zeilinger 2003, Phys. Rev. Lett. 90:160401 (arXiv:quant-ph/0303093), \"Collisional Decoherence Observed in Matter Wave Interferometry\"",
@@ -1988,6 +1988,7 @@
         "approaches": 0.1,
         "fractionalGap": 0.2566370614359173,
         "fractionalGapIs": "observed-difference",
+        "predictedIs": "lower-limit",
         "units": "η/s (ℏ/k_B units); KSS lower bound 1/(4π), observed satisfies + nearly saturates",
         "provenance": {
           "citation": "Bernhard, Moreland & Bass 2019, Nature Phys. 15:1113-1117 (Bayesian eta/s extraction from RHIC/LHC heavy-ion flow observables); KSS bound: Kovtun, Son & Starinets 2005, PRL 94:111601",

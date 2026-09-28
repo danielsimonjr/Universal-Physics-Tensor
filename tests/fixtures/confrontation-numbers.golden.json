@@ -5,7 +5,7 @@
     "numbers": {
       "predicted": 1,
       "approaches": 1,
-      "fractionalGap": 0,
+      "fractionalGap": 0.15,
       "provenance": {
         "year": 2003
       }

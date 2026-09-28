@@ -38,6 +38,12 @@ nothing validates prose and the next reader cannot tell.
   −7.27% be-63, −43.7% be-65, +25.7% be-21; every bounded record is compatible. No pinned number
   changed. be-65's ±150% bound accepts any observed value from 0 to 4.44 M_⊙: its low side cannot
   fail (negative result about the record).
+- `confront` compatibility decisions: all 11 consistency records now make one (2026-09-27). be-11 takes
+  its module's 15% tolerance as the bound; be-21 is decided by observed ≥ 1/(4π), a one-sided lower-limit
+  rule. Both are compatible. be-11's decision cannot fail on this record: its observed slot is the
+  source's stated agreement, encoded as ratio 1, so the difference is 0 by construction (negative result,
+  as for be-61). be-21's decision does not rest on the representative 0.10: the extraction band's
+  lower edge, 0.08, is also above the bound, by 0.53%.
 - Atlas equation links: 9 of 24 atlas models record a canonical equation. All 12 recorded links are
   checked numerically from the model (the eight older ones on 2026-09-27, plus `model-lc` →
   CE-capacitor-energy, new), and the unchecked-link ratchet list is empty. The 15 models without a

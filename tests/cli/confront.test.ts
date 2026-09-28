@@ -139,7 +139,10 @@ describe('upt confront', () => {
     expect(text).toMatch(/peak L\/L_Edd .* · actual difference 0\.0% .* agreement bound ±50\.0%/);
     expect(text).toMatch(/force ratio;.* · actual difference 0\.0% .* agreement bound ±1\.0%/);
     expect(text).toMatch(/graphene.* agreement bound ±8\.6e-9%/);
-    expect(text).toMatch(/KSS lower bound .* · actual difference \+25\.7% .* · no agreement bound in this outcome, so no compatibility decision/);
+    expect(text).toMatch(/KSS lower bound .* · actual difference \+25\.7% .* · rule: observed ≥ predicted lower limit · compatible ✓/);
+    expect(text).toMatch(/9-gas agreement within 15% experimental error · actual difference 0\.0% .* agreement bound ±15\.0% .* compatible ✓/);
+    // Audit I14 limit closed: every consistency record now makes a compatibility decision.
+    expect(text).not.toMatch(/no compatibility decision/);
   });
 
   it('--json carries the comparison beside fractionalGap and says what fractionalGap is', async () => {
@@ -149,7 +152,8 @@ describe('upt confront', () => {
       bridgeId: number;
       fractionalGap?: number;
       fractionalGapIs?: string;
-      comparison?: { relativeDifference: number; definition: string; agreementBound: number | null; withinBound: boolean | null };
+      predictedIs?: string;
+      comparison?: { relativeDifference: number; definition: string; agreementBound: number | null; withinBound: boolean | null; rule: string | null };
     }[];
     const be65 = rows.find((r) => r.bridgeId === 65)!;
     expect(be65.fractionalGap).toBe(1.5);
@@ -160,7 +164,15 @@ describe('upt confront', () => {
     expect(be65.comparison!.withinBound).toBe(true);
     const be21 = rows.find((r) => r.bridgeId === 21)!;
     expect(be21.fractionalGapIs).toBe('observed-difference');
+    expect(be21.predictedIs).toBe('lower-limit');
     expect(be21.comparison!.agreementBound).toBeNull();
+    expect(be21.comparison!.rule).toBe('observed ≥ predicted lower limit');
+    expect(be21.comparison!.withinBound).toBe(true);
+    const be11 = rows.find((r) => r.bridgeId === 11)!;
+    expect(be11.fractionalGapIs).toBe('agreement-bound');
+    expect(be11.comparison!.agreementBound).toBe(0.15);
+    expect(be11.comparison!.rule).toBe('|difference| ≤ agreement bound');
+    expect(be11.comparison!.withinBound).toBe(true);
     expect(rows.find((r) => r.bridgeId === 52)!.comparison).toBeUndefined();
   });
 

@@ -270,6 +270,22 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- **Every `confront` consistency record now makes a compatibility decision** (audit I14 limit).
+  be-11 and be-21 printed "no agreement bound in this outcome, so no compatibility decision".
+  - be-11 now carries its module's stated tolerance, `DECOHERENCE_EXPERIMENTAL_TOLERANCE` = 15% (the source
+    reports agreement "within the ~15% experimental uncertainty"), as its agreement bound, like the other nine.
+  - be-21's prediction is the KSS lower bound, so it gains `predictedIs: 'lower-limit'` and is decided by
+    observed ≥ predicted. `consistencyComparison` gains a `rule` field and refuses a lower limit that also carries
+    an agreement bound.
+  - Both are compatible. A control shows the lower-limit rule fails below the bound, and makes no decision when a record has neither rule.
+
+  **Re-pinned deliberately:** be-11's `fractionalGap` in `tests/fixtures/confrontation-numbers.golden.json` goes from
+  0 to 0.15. The field now holds the bound, not the difference. The actual difference is still 0, computed by
+  `consistencyComparison`. That golden is the Sprint 2 regression gate; no pre-registration names it.
+  Every other pinned number is unchanged. `data/bridge-catalog.json` and `tests/cli/golden/confront.txt` were regenerated.
+
+  Negative result: be-11's decision cannot fail on this record, because its observed slot is the stated agreement
+  encoded as ratio 1.
 - **Windows checkout: six tests failed on a tree with no content difference** (2026-09-27). With
   `core.autocrlf=true`, `tests/fixtures/probe-study/**` checked out CRLF because it was missing from
   the `text eol=lf` list in `.gitattributes`, although `generate.mjs` writes LF; the generator

@@ -715,7 +715,8 @@ describe('I14 — each confrontation names its statistical object, criterion and
     expect(rec('be-37')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: as reported by the source \(no derivation recorded\)/);
     expect(rec('be-51')).toMatch(/\n {4}statistic: point estimate ± 1σ · criterion: residual ≤ 1σ · observed: derived from PPN γ/);
     expect(rec('be-48')).toMatch(/\n {4}statistic: one-sided upper limit · criterion: predicted ≤ limit/);
-    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: none — the outcome carries no agreement bound; the difference is reported, not thresholded; not a precision test/);
+    expect(rec('be-11')).toMatch(/\n {4}statistic: reference value with no σ · criterion: \|actual difference\| ≤ the record's stated agreement bound/);
+    expect(rec('be-21')).toMatch(/\n {4}statistic: lower limit claimed by the bridge, against a reference value with no σ · criterion: observed ≥ predicted lower limit — one-sided, not a σ-residual; not a precision test/);
     expect(rec('be-65')).toMatch(/\n {4}statistic: reference value with no σ · criterion: \|actual difference\| ≤ the record's stated agreement bound — a tolerance, not a σ-residual; not a precision test/);
   });
 

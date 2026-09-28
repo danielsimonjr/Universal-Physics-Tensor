@@ -44,7 +44,7 @@ export type RigorTier = 'stringent' | 'moderate' | 'loose';
 /**
  * Author-declared rigor of each confrontation. Folds in test PRECISION *and*
  * HONESTY (one-sidedness, order-of-magnitude, caveats) — it is deliberately NOT
- * purely computed: e.g. be-11's ratio is exactly 1 (fractionalGap 0) but its real
+ * purely computed: e.g. be-11's ratio is exactly 1 (actual difference 0) but its real
  * precision is ~15% gas-to-gas, so it is declared `loose`. The spine is a RIGOR
  * HIERARCHY, not N equal confirmations — after the 2026-07-05 branch expansion the
  * precision core is the quantum-metrology triangle (be-55 QHE 8.6e-11, be-59
@@ -69,7 +69,7 @@ export const CONFRONTATION_RIGOR: ReadonlyMap<number, RigorTier> = new Map([
   [56, 'moderate'], // Casimir 1% (systematics-dominated)
   [62, 'moderate'], // BCS gap 5% (weak-coupling class)
   // loose (≥~10% / one-sided / order-of-magnitude)
-  [11, 'loose'], // decoherence ~15% gas-to-gas (fractionalGap 0 hides it)
+  [11, 'loose'], // decoherence ~15% gas-to-gas (an actual difference of 0 hides it)
   [21, 'loose'], // KSS bound, 26% above
   [23, 'loose'], // Planckian α, factor 2
   [36, 'loose'], // GW speed, one-sided bound
@@ -327,6 +327,7 @@ const be21Entry: ConfrontationEntry = {
       approaches: r.observed_eta_over_s,
       fractionalGap: r.fractional_gap,
       fractionalGapIs: 'observed-difference',
+      predictedIs: 'lower-limit',
       units: 'η/s (ℏ/k_B units); KSS lower bound 1/(4π), observed satisfies + nearly saturates',
       provenance: r.observation.provenance,
       preprocessing: {
@@ -398,8 +399,10 @@ const be11Entry: ConfrontationEntry = {
       kind: 'consistency',
       predicted: r.predicted_ratio,
       approaches: r.observed_ratio,
-      fractionalGap: r.fractional_gap,
-      fractionalGapIs: 'observed-difference',
+      // The module's stated tolerance (the source's ~15% experimental uncertainty); the actual
+      // difference is computed by `consistencyComparison`, never read from this field.
+      fractionalGap: r.observation.tolerance,
+      fractionalGapIs: 'agreement-bound',
       units:
         'p₀(theory)/p₀(exp) ratio; parameter-free 9-gas agreement within 15% experimental error',
       provenance: r.observation.provenance,

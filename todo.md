@@ -62,6 +62,10 @@ them only partly met, and their rows are in "Review of the audit against the rec
   / predicted beside the agreement bound, labelled apart; no pinned number changed. Open: be-11 and
   be-21 carry no agreement bound in the outcome, so no compatibility decision is made for them
   (adding one would change the frozen golden).
+  Done 2026-09-27: the golden is the Sprint 2 regression golden, not a pre-registered artifact (the
+  pre-registration does not name it), so it was re-pinned deliberately. be-11's fractionalGap changes from 0 to its module's 15%
+  tolerance. be-21 is decided by a lower-limit rule, observed ≥ 1/(4π). Every consistency record now
+  makes a decision. be-11's decision holds by construction (negative result, in `NOTES.md`).
 - [x] **Atlas equation links** — 15 of 24 atlas models record no `canonicalRefs` (reasons per model in
   `tests/atlas/canonical-links.test.ts`). Eight older links are not yet checked (ratchet list in that
   test); three need a sourced prefactor for CE-simple-harmonic-frequency, CE-sound-speed and
