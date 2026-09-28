@@ -487,10 +487,36 @@ warning-silencing, not debug logging).
 
 ## Active queue
 
-- [ ] **0.47.1 CLI applied-physicist persona retest triage (2026-09-26).** After the W1–Q2 fix batch;
+- [x] **0.47.1 CLI applied-physicist persona retest triage (2026-09-26).** After the W1–Q2 fix batch;
   findings in `docs/research/cli-physicist-persona-0.47.1-post-fix.md`. Open: W4 (Kepler/Schwarzschild
   monomial binds G/c as 1), W5 (Planck all-constant RHS refused), W6 (`a`→perihelion), W7 (Landauer
   `ln(2)` vs `ln2`), L5–L8, Q3–Q4, persona I5–I8. Docs-only pass; Mothership to order fixes.
+  Dispositions (owner order 2026-09-27):
+  - persona W4 / persona I5 — fixed: the monomial comparison binds governing constants to their SI
+    values, so Kepler III and the Schwarzschild radius agree (ratio 1) and a halved prefactor reads 0.5.
+  - Q3 — answered: three recorded-prefactor entries were wrong, not two. Kepler III and the
+    Schwarzschild radius (tabled) and the Einstein field equation (fully quantitative, no scalar AST).
+    The EFE is now prefactor-unchecked: its 8π is only in its field equation, and `src/canonical` is
+    frozen. Five more monomial entries hold a constant and were prefactor-unchecked, not wrong.
+  - persona W5 / persona I6 — fixed for a catalog target: an all-constant right-hand side is compared at
+    the SI constant values. The Planck length, mass and time prefactors (1) are sourced. Limit: with no
+    free variable only the value is compared, not the form, and the output says so.
+    CE-compton-wavelength stays prefactor-unchecked: it writes ħ/(mc), the reduced wavelength, while
+    "Compton wavelength" is h/(mc).
+  - persona W6 — partial: a one-letter source bound to a catalog quantity is now disclosed ("'a' is
+    bound to the catalog quantity a [length] …; write its full name"). It is not refused and no
+    `--as NAME=QUANTITY` was added, because writing the full name already selects the quantity and
+    CE-perihelion-precession uses `a` legitimately.
+  - persona W7 — fixed in the audit I4 commit (the equation compare accepts `ln(2)`).
+  - L5 / persona I7 — partial: an unknown symbol whose inferred dimension is a registered constant's is
+    pointed to it (`sigma` → `sigma_sb`). It is not aliased silently; `ln(2)` is covered by persona W7.
+  - L6 — fixed: a dimensionless symbol that is only in the canonical AST (`N` of CE-ideal-gas) is
+    paired with the user's symbol of the same name when the governing pairing fails.
+  - L7 / persona I8 — fixed as `map --equation … --equation-only`; the default output is unchanged,
+    so no `--map` flag was added.
+  - L8 — fixed: the empty `probe scan` frontier says how to start an expression search.
+  - Q4 — no change: whether magnitude-backed rows lead `discover` is a product-ordering call for
+    Mothership.
 
 - [x] **0.47.1 CLI applied-physicist persona pass + fix batch (2026-09-26).** Findings in
   `docs/research/cli-physicist-persona-0.47.1.md`. Fixed: W1 (c vs speed-of-light), W2 (RHS kebabs),

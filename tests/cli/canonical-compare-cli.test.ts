@@ -241,3 +241,70 @@ describe('W7: map --equation compares through the formula parser and the restate
     expect(verdict).not.toMatch(/CE-landauer/);
   });
 });
+
+// Persona retest on 0.47.1 after the fix batch: W4, W5, W6, L5, L6, L7 and L8 as the user sees them.
+describe('persona retest: what map --equation prints', () => {
+  it('W4: Kepler III and the Schwarzschild radius agree, and a halved prefactor exits 3 with the factor 0.5', async () => {
+    expect(await text(['map', '--equation', 'period = 2*pi*sqrt(semi_major_axis^3/(G*mass))'])).toMatch(/✓ agrees with CE-kepler-third/);
+    expect(await text(['map', '--equation', 'radius = 2*G*mass/c^2'])).toMatch(/✓ agrees with CE-schwarzschild-radius/);
+    expect(await text(['map', '--equation', 'period = pi*sqrt(semi_major_axis^3/(G*mass))'], 3)).toMatch(
+      /⚠ differs from CE-kepler-third .* by a constant factor: yours\/canonical = 0\.500000 at 3 fixed points/,
+    );
+  });
+
+  it('W5: the Planck length is compared at the SI constants, and says the form is not tested', async () => {
+    const t = await text(['map', '--equation', 'planck_length = sqrt(hbar*G/c^3)']);
+    expect(t).toMatch(/✓ agrees with CE-planck-length \(Planck length\), prefactor included: yours\/canonical = 1 at the SI constant values \(no free variable, so only the value is compared, not the form\)/);
+    expect(await text(['map', '--equation', 'planck_length = sqrt(2*hbar*G/c^3)'], 3)).toMatch(/yours\/canonical = 1\.41421 at the SI constant values/);
+  });
+
+  it('W5 control: an all-constant right-hand side whose target is no catalog quantity is still refused', async () => {
+    const cap = capture();
+    expect(await runCli(['map', '--equation', 'not_a_quantity = sqrt(hbar*G/c^3)'], cap.io)).toBe(2);
+    expect(cap.lines.join('')).toMatch(/no source quantities/);
+  });
+
+  it('W6: the one-letter a is disclosed as the catalog a, with its dimension and who uses it', async () => {
+    const t = await text(['map', '--equation', 'unruh_temperature = hbar*a/(2*pi*k_B*c)']);
+    expect(t).toMatch(/· 'a' is bound to the catalog quantity a \[length\], a one-letter name \(used by CE-perihelion-precession[^)]*\); if you meant another quantity, write its full name/);
+  });
+
+  it('W6 control: the full name acceleration is not disclosed as a one-letter binding', async () => {
+    const t = await text(['map', '--equation', 'unruh_temperature = hbar*acceleration/(2*pi*k_B*c)']);
+    expect(t).not.toMatch(/a one-letter name/);
+  });
+
+  it('L5: sigma suggests the registered constant sigma_sb by its inferred dimension', async () => {
+    const t = await text(['map', '--equation', 'radiative_flux = sigma*temperature^4']);
+    expect(t).toMatch(/'sigma' has the inferred dimension of the registered constant sigma_sb; write that name to use its SI value/);
+    expect(await text(['map', '--equation', 'radiative_flux = sigma_sb*temperature^4'])).toMatch(/✓ agrees with CE-stefan-boltzmann/);
+  });
+
+  it('L6: P = N k_B T / V, the answer key\'s own form, agrees with CE-ideal-gas', async () => {
+    expect(await text(['map', '--equation', 'pressure = N*k_B*temperature/V'])).toMatch(/✓ agrees with CE-ideal-gas/);
+  });
+
+  it('L7: --equation-only prints the verdict and not the linkage map; without it the map follows', async () => {
+    const only = await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)', '--equation-only']);
+    expect(only).toMatch(/✓ agrees with CE-pendulum-period/);
+    expect(only).not.toMatch(/Linkage map/);
+    expect(await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)'])).toMatch(/Linkage map/);
+  });
+
+  it('L7: --equation-only needs --equation, and its JSON drops the linkage map', async () => {
+    const cap = capture();
+    expect(await runCli(['map', '--equation-only'], cap.io)).toBe(2);
+    expect(cap.lines.join('')).toMatch(/--equation-only needs --equation/);
+    const j = capture();
+    await runCli(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)', '--equation-only', '--json'], j.io);
+    const parsed = JSON.parse(j.lines.join(''));
+    expect(parsed.result.linkage).toBeUndefined();
+    expect(parsed.result.userEquation.shortBindings).toEqual([]);
+  });
+
+  it('L8: probe scan with no searchable gap says how to start an expression search', async () => {
+    const t = await text(['probe', 'scan']);
+    expect(t).toMatch(/0 of \d+ gaps are searchable by Product B/);
+    expect(t).toMatch(/To search expressions, write a problem file \(`upt help probe`, PROBLEM FILE, has a minimal example\) and run `upt probe run --problem=FILE`/);
+  });
+});

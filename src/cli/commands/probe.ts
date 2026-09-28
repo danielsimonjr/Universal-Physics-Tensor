@@ -279,6 +279,11 @@ async function run(ctx: CommandCtx): Promise<number> {
           `(all are relation-link / regime-transition).`,
       );
       out('  Use `upt discover` for those. Pass --all to list them here.');
+      // Persona finding L8: an applied user who came to search expressions has no gap to start from.
+      out(
+        '  To search expressions, write a problem file (`upt help probe`, PROBLEM FILE, has a minimal example) ' +
+          'and run `upt probe run --problem=FILE`.',
+      );
       return 0;
     }
     out(api.formatFrontierScan(gaps));

@@ -131,6 +131,20 @@ nothing validates prose and the next reader cannot tell.
   the active formula parser, so `ln(2)` agrees with CE-landauer, and the catalog target
   `landauer-erasure-energy` reaches CE-landauer through BE-16, which CE-landauer records that it
   restates. Before the fix, `evalExpr` rejected `transcendental`, and the target names never met.
+- **Persona retest (post-fix note), dispositions** (dispositions per item in `todo.md`, Active queue):
+  - Eight monomial-only canonical entries hold a governing constant. Before the fix, three of them gave
+    a wrong prefactor verdict: CE-kepler-third (factor 122404), CE-schwarzschild-radius (7.426e-28)
+    and CE-einstein-field-eq. The persona asked whether it was two. Kepler III and the Schwarzschild
+    radius now agree at ratio 1, and a halved prefactor reads 0.5 with exit 3.
+  - The EFE is now prefactor-unchecked: its 8π sits only in its field equation, and `src/canonical`
+    is frozen (negative result).
+  - The Planck length, mass and time now compare at the SI constant values, with prefactor 1 sourced.
+    An all-constant comparison checks the value, not the form (limit).
+  - CE-compton-wavelength stays prefactor-unchecked: it writes ħ/(mc), the reduced Compton wavelength.
+  - Persona W6 is disclosed, not refused: `unruh_temperature = hbar*a/(2*pi*k_B*c)` still binds `a` to
+    the length `a` and prints RHS [T^2 Theta], and now says so. `sigma` is pointed to `sigma_sb`, not
+    aliased.
+  - Q4 (`discover` ordering) is not changed; it is Mothership's call.
 
 ## As of 2026-09-26
 

@@ -49,12 +49,13 @@ const FLAGS: FlagSpec[] = [
   // run() owns the diagnostic (old-CLI fidelity: bin/upt.mjs did `a[i+1] ?? ''`
   // and let mapCmd emit `upt: --equation requires "TARGET = EXPR"`, exit 2).
   { name: '--equation', valueStyle: 'either', optionalValue: true },
+  { name: '--equation-only', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
 ];
 
 const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
-        [--equation "TARGET = EXPR"] [--around=QUANTITY [--depth=N]]
+        [--equation "TARGET = EXPR" [--equation-only]] [--around=QUANTITY [--depth=N]]
         [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
         [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
         Map how the equations LINK: connected components (clusters) of the
@@ -84,7 +85,13 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         node, dimensionally checks it, compares with the canonical registry, and
         reports nearest equations by shared-quantity overlap (not a full edge
         dump). Multi-word names may use underscores or catalog hyphens
-        (planck_length / planck-length). Unknown names get a "did you mean?".
+        (planck_length / planck-length). Unknown names get a "did you mean?",
+        and a registered constant of the inferred dimension (sigma → sigma_sb);
+        a one-letter name bound to the catalog is named with its dimension.
+        An all-constant right-hand side (the Planck length) is compared at the
+        SI constant values when its target is a catalog quantity.
+        --equation-only prints the verdict and stops: no linkage map after it
+        (with --json: no "linkage" field).
         --relation=TYPE keeps only edges whose recorded Atlas relation is that
         type; --evidence=TAG keeps only edges whose evidence set, DERIVED from
         the catalog row at read time, contains that tag.
@@ -288,11 +295,31 @@ function printEquationReport(
     } else {
       out(`  ⚠ '${h.name}' did not match a catalog quantity — did you mean: ${h.suggestions.join(', ')}?`);
     }
+    // Persona finding L5: `sigma` for the Stefan–Boltzmann constant `sigma_sb`.
+    if ((h.constants ?? []).length > 0) {
+      const list = h.constants!.join(', ');
+      out(
+        `    '${h.name}' has the inferred dimension of the registered constant${h.constants!.length > 1 ? 's' : ''} ${list}; ` +
+          'write that name to use its SI value',
+      );
+    }
+  }
+  // Persona finding W6: a one-letter name binds to whatever the catalog calls that letter.
+  for (const b of user.shortBindings ?? []) {
+    const users = model.junctions
+      .filter((j) => j.id !== 'user-equation' && (j.target === b.quantity || j.sources.includes(b.quantity)))
+      .map((j) => j.id)
+      .sort();
+    const shown = users.slice(0, 3).join(', ') + (users.length > 3 ? `, +${users.length - 3} more` : '');
+    out(
+      `  · '${b.name}' is bound to the catalog quantity ${b.quantity} ${api.format(b.dim)}, a one-letter name` +
+        `${users.length > 0 ? ` (used by ${shown})` : ''}; if you meant another quantity, write its full name`,
+    );
   }
 }
 
 /** Flags that shape the equation graph, and so mean nothing on an atlas view. */
-const GRAPH_ONLY_FLAGS = ['source', 'around', 'depth', 'equation', 'proposed', 'max-orders', 'anchor'] as const;
+const GRAPH_ONLY_FLAGS = ['source', 'around', 'depth', 'equation', 'equation-only', 'proposed', 'max-orders', 'anchor'] as const;
 
 /** Flags that only an atlas view reads. */
 const ATLAS_ONLY_FLAGS = ['all-routes', 'max-routes', 'stored', 'run'] as const;
@@ -502,6 +529,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   let comparisons: CanonicalComparison[] = [];
   const equationValues = args.flags.get('equation');
   const equation = equationValues && equationValues.length > 0 ? equationValues[equationValues.length - 1] : null;
+  // Persona finding L7: the verdict alone, without the linkage map after it.
+  const equationOnly = args.flags.has('equation-only');
+  if (equationOnly && equation == null) throw new UsageError('upt map: --equation-only needs --equation "TARGET = EXPR"');
+  if (equationOnly && fmt !== 'text') {
+    throw new UsageError(`upt map: --equation-only prints the verdict as text or --json; it does not apply to --format=${fmt}`);
+  }
   if (equation != null) {
     if (!equation.trim()) {
       throw new UsageError('upt: --equation requires "TARGET = EXPR"');
@@ -556,6 +589,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         rhsDimension: user.rhsDimension,
         targetDimension: user.targetDimension,
         hints: user.hints,
+        shortBindings: user.shortBindings,
         canonicalComparisons: comparisons,
       };
     }
@@ -565,7 +599,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         source,
         ...(anchor !== null ? { anchor } : {}),
         result: {
-          linkage,
+          ...(equationOnly ? {} : { linkage }),
           ...(posterMode ? { poster: { note: posterNote, ...posterValidation! } } : {}),
           ...(edgeLegend !== null ? { filter: edgeStats } : {}),
           ...(focus !== null ? { focus } : {}),
@@ -658,6 +692,7 @@ Your equation:  ${user.junction.label}`);
     });
     out(`\nYour equation:  ${user.junction.label}`);
     printEquationReport(api, model, user, out, comparisons);
+    if (equationOnly) return exitCode;
   }
 
   const m = api.linkageMap(graph);

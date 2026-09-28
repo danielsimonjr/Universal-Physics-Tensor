@@ -326,5 +326,7 @@ describe('module sources', () => {
     expect(formula.outcome).toBe('reproduced');
     expect(formula.environmentChanges).toEqual([]);
     expect(r.status).toBe(1);
-  });
+    // A copy of dist plus a real replay process: it timed out at the 60 s default under a parallel
+    // run of five test paths (vitest pointed at the test declaration, not at an expect).
+  }, 180_000);
 });

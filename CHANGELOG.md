@@ -10,6 +10,38 @@ from v0.1.0 onward.
 
 ### Added
 
+- **The persona-retest findings on `map --equation`, fixed or disposed (persona W4–W6, L5–L8, Q3, Q4,
+  persona I5–I8; owner order 2026-09-27).**
+  - Persona W4 / persona I5: the monomial comparison bound every governing name that is not a variable
+    to 1, so `G` and `c` became 1 on the canonical side while the user's side used SI. Kepler III read
+    as the factor 122404 and the Schwarzschild radius as 7.426e-28, both with exit 3. The canonical
+    side now binds constants to their SI values; a name that is neither a variable nor a constant
+    makes the entry not-compared instead of reading as 1. Both now agree at ratio 1, and a halved
+    prefactor reads 0.5.
+  - Q3: three recorded-prefactor entries were wrong this way, not two; the third is
+    CE-einstein-field-eq, whose 8π is only in its field equation. It is now prefactor-unchecked,
+    because `src/canonical` is frozen.
+  - Persona W5 / persona I6: `planck_length = sqrt(hbar*G/c^3)` was refused ("no source quantities").
+    A catalog target may now have an all-constant right-hand side, compared at the SI constant values,
+    and the output says only the value is compared, not the form. The Planck length, mass and time
+    prefactors (1) are added to the prefactor table with verbatim quotes. The second method is the
+    CODATA 2022 values from NIST (1.616255e-35 m, 2.176434e-8 kg, 5.391247e-44 s).
+  - Persona W6: a one-letter source resolved to a catalog quantity is now disclosed, in text and JSON
+    (`shortBindings`). It is not refused.
+  - L5 / persona I7: an unknown symbol whose inferred dimension equals a registered constant's names
+    that constant (`sigma` → `sigma_sb`).
+  - L6: `pressure = N*k_B*temperature/V` now agrees with CE-ideal-gas. `N` is only in that entry's AST;
+    it is paired by name, and only when the governing pairing fails. A control with N² reads as a
+    different form, so N varies across the points.
+  - L7 / persona I8: `map --equation … --equation-only` prints the verdict and skips the linkage map.
+  - L8: an empty `probe scan` frontier says how to start an expression search.
+  - Q4 is not changed (a product-ordering call).
+  - Dispositions are in `todo.md` (Active queue). RED first: 16 of the 19 library tests then written
+    failed before the fix, and 5 of 37 CLI tests. One library failure was a wrong expectation, not a
+    missing fix: without N, CE-ideal-gas is listed as not compared, not absent. That test was
+    corrected to it. One library test was added after the RED run.
+  - Two real-process record tests (`record-hardening`, `record-inputs`) copy `dist` and replay. They
+    get a 180 s budget: one took 73 s and the other timed out at the 60 s default under a parallel run.
 - **The observable translations' limits, closed where they can be (audit I8).**
   - The position bound's quoted Fourier-series premise is now machine-checked. Witness W7xs compares
     the series with RK4 over one period at θ0 ∈ {0.01, 0.1, 0.2, 0.3, 0.4, 0.5}, within 1e-9 rad. Its

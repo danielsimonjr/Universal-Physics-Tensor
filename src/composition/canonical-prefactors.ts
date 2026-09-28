@@ -116,6 +116,25 @@ export const CANONICAL_PREFACTORS: readonly CanonicalPrefactor[] = [
     quote: String.raw`v=\sqrt{T\over\mu},`,
     locator: "Wikipedia, 'String vibration', revision 1306385524, wikitext line 40",
   },
+  {
+    // The three Planck units are all-constant: compared once, at the SI values (persona finding W5).
+    id: 'CE-planck-length',
+    prefactor: 1,
+    quote: String.raw`<math>l_\text{P} = \sqrt{\frac{\hbar G}{c^3}}</math>`,
+    locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 77",
+  },
+  {
+    id: 'CE-planck-mass',
+    prefactor: 1,
+    quote: String.raw`<math>m_\text{P} = \sqrt{\frac{\hbar c}{G}}</math>`,
+    locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 82",
+  },
+  {
+    id: 'CE-planck-time',
+    prefactor: 1,
+    quote: String.raw`<math>t_\text{P} = \sqrt{\frac{\hbar G}{c^5}}</math>`,
+    locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 87",
+  },
 ];
 
 /** The sourced prefactor of a canonical entry, or `undefined`. @internal */

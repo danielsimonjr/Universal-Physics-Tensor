@@ -135,8 +135,9 @@ export async function parseUserEquation(
       `equation exceeds ${MAX_USER_EQUATION_LEN} characters (${equation.length})`,
     );
   }
-  const rewritten =
-    catalogNames === undefined ? equation : rewriteCatalogHyphens(equation, catalogNames);
+  // Materialized once: an iterator (`map.keys()`) would be spent by the first use.
+  const names = catalogNames === undefined ? undefined : new Set(catalogNames);
+  const rewritten = names === undefined ? equation : rewriteCatalogHyphens(equation, names);
   const eqIdx = rewritten.indexOf('=');
   if (eqIdx < 0) {
     throw new UserEquationError(
@@ -155,15 +156,18 @@ export async function parseUserEquation(
   } catch (e) {
     const base = `could not parse the right-hand side '${rhs}': ${(e as Error).message}`;
     const hint =
-      catalogNames === undefined
+      names === undefined
         ? null
-        : hyphenSubtractHint(String((e as Error).message), equation.slice(equation.indexOf('=') + 1), new Set(catalogNames));
+        : hyphenSubtractHint(String((e as Error).message), equation.slice(equation.indexOf('=') + 1), names);
     throw new UserEquationError(hint ? `${base}. ${hint}` : base);
   }
   const sources = variables.filter(
     (v) => !Object.prototype.hasOwnProperty.call(CONSTANTS, v),
   );
-  if (sources.length === 0) {
+  // An all-constant right-hand side (the Planck length) is an equation about a catalog quantity
+  // only when its target is one; otherwise it names nothing to check (persona finding W5).
+  const targetIsCatalog = names !== undefined && resolveToCatalogName(target, names) !== null;
+  if (sources.length === 0 && !targetIsCatalog) {
     throw new UserEquationError(
       `no source quantities in '${rhs}' (only constants/numbers?)`,
     );
@@ -395,6 +399,18 @@ export interface EquationHint {
   readonly suggestions: readonly string[];
   /** True when the suggestions come from the symbol's INFERRED dimension. */
   readonly byDimension: boolean;
+  /**
+   * Registered constants that carry the symbol's inferred dimension (`sigma` → `sigma_sb`,
+   * persona finding L5). Present only when a dimension was inferred and it is not dimensionless.
+   */
+  readonly constants?: readonly string[];
+}
+
+/** A one-letter user name bound to a catalog quantity (persona finding W6). */
+export interface ShortBinding {
+  readonly name: string;
+  readonly quantity: string;
+  readonly dim: Dimension;
 }
 
 /**
@@ -417,6 +433,12 @@ export interface EquationAnalysis {
   /** rhsDimension === targetDimension; null when unknowable or parse failed. */
   readonly consistent: boolean | null;
   readonly hints: readonly EquationHint[];
+  /**
+   * One-letter names that resolved to a catalog quantity. A one-letter name is the likeliest to
+   * mean something else: the catalog's `a` is perihelion's semi-major axis, a length, and the
+   * Unruh formula's `a` is an acceleration (persona finding W6).
+   */
+  readonly shortBindings: readonly ShortBinding[];
 }
 
 /**
@@ -471,14 +493,24 @@ export async function analyzeUserEquation(
     const totalUnmatched = unmatchedSources.length + (resolvedTarget ? 0 : 1);
     for (const s of unmatchedSources) {
       let byDim: string[] | null = null;
+      let constants: string[] = [];
       if (targetDimension && totalUnmatched === 1) {
         const inferred = inferUnknownDimension(exprForInference, s, targetDimension);
-        if (inferred) byDim = suggestByDimension(inferred, catalogDims, 5, s);
+        if (inferred) {
+          byDim = suggestByDimension(inferred, catalogDims, 5, s);
+          if (!equals(inferred, DIMENSIONLESS)) {
+            constants = Object.entries(CONSTANTS)
+              .filter(([, c]) => equals(c.dim, inferred))
+              .map(([name]) => name)
+              .sort();
+          }
+        }
       }
+      const withConstants = constants.length > 0 ? { constants } : {};
       hints.push(
         byDim
-          ? { name: s, suggestions: byDim, byDimension: true }
-          : { name: s, suggestions: suggestQuantities(s, catalogNames, 5), byDimension: false },
+          ? { name: s, suggestions: byDim, byDimension: true, ...withConstants }
+          : { name: s, suggestions: suggestQuantities(s, catalogNames, 5), byDimension: false, ...withConstants },
       );
     }
     if (!resolvedTarget) {
@@ -499,5 +531,8 @@ export async function analyzeUserEquation(
     targetDimension,
     consistent: rhsDimension && targetDimension ? equals(rhsDimension, targetDimension) : null,
     hints,
+    shortBindings: eq.sources
+      .filter((s) => s.length === 1 && resolve(s) !== null)
+      .map((s) => ({ name: s, quantity: resolve(s)!, dim: catalogDims.get(resolve(s)!) as Dimension })),
   };
 }

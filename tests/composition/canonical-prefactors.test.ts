@@ -33,6 +33,9 @@ const EXPECTED: Record<string, number> = {
   'CE-spring-potential-energy': 0.5,
   'CE-oscillator-energy': 0.5,
   'CE-string-wave-speed': 1,
+  'CE-planck-length': 1,
+  'CE-planck-mass': 1,
+  'CE-planck-time': 1,
 };
 
 /** A dimensionless number used as a FACTOR (not as an exponent) anywhere in the AST. */

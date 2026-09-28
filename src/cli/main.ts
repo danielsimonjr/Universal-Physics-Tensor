@@ -73,7 +73,7 @@ Usage:
 
   upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
           [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
-          [--equation "TARGET = EXPR"] [--around=QUANTITY [--depth=N]]
+          [--equation "TARGET = EXPR" [--equation-only]] [--around=QUANTITY [--depth=N]]
           [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
           [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
         Map how the equations LINK: connected components (clusters) of the
