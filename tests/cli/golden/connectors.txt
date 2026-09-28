@@ -1,6 +1,7 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
+  anchored core: the clusters holding at least one of the 116 established-confidence edge(s) of the 148 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster
   radius is not a Schwarzschild radius). Same-kind (shared name token) = stronger.
 

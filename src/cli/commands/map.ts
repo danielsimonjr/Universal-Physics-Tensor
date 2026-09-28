@@ -15,7 +15,7 @@
 import { writeFileSync } from 'node:fs';
 import type { FlagSpec, ParsedArgs } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { resolveGraph } from '../graphs.js';
+import { resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine, type AnchorScope } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
@@ -476,6 +476,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   // One predicate, two callers: they cannot disagree about what a filter
   // selects, only about how much they were asked to count.
   const { kept: graph, stats: edgeStats } = api.filterEdges(fullGraph, filterOpts);
+  // Audit I3: what "anchored" means here, and the discovery ground truth when --proposed ran the funnel.
+  const anchor: AnchorScope | null = posterMode
+    ? null
+    : {
+        core: coreAnchor(graph),
+        ...(args.flags.has('proposed') ? { groundTruth: groundTruthAnchor(api, parseDiscoveryOpts(args.flags)) } : {}),
+      };
   const edgeLegend = api.formatFilterLegend(edgeStats);
 
   const fmtValues = args.flags.get('format');
@@ -552,6 +559,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       {
         command: 'map',
         source,
+        ...(anchor !== null ? { anchor } : {}),
         result: {
           linkage,
           ...(posterMode ? { poster: { note: posterNote, ...posterValidation! } } : {}),
@@ -654,7 +662,10 @@ Your equation:  ${user.junction.label}`);
       .map(([k, v]) => `${v} ${k}`)
       .join(', ');
   out(`\nLinkage map — how the equations connect via shared quantities  [source: ${label}]`);
-  out(`(${m.componentCount} components over ${graph.length} edges; ${m.compositions} compose into chains)\n`);
+  out(`(${m.componentCount} components over ${graph.length} edges; ${m.compositions} compose into chains)`);
+  out(`  ${coreLine(anchor!.core!)}`);
+  if (anchor!.groundTruth) out(`  proposals: ${groundTruthLine(anchor!.groundTruth)}`);
+  out('');
   if (focusLine !== null) out(`  ${focusLine}`);
   if (edgeLegend !== null) out(`  ${edgeLegend}`);
   for (const c of m.clusters.filter((x) => x.size > 1)) {

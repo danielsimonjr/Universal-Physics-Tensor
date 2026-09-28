@@ -278,7 +278,12 @@ function quantityComponents(
   return roots;
 }
 
-const ANCHOR_DEFAULT: Readonly<Record<string, number>> = { mass: M_SUN_KG };
+/**
+ * The ground truth the funnel anchors magnitudes to when the caller gives none: one solar mass.
+ * Exported so the CLI can print the anchor a result is relative to (audit I3).
+ * @internal
+ */
+export const ANCHOR_DEFAULT: Readonly<Record<string, number>> = { mass: M_SUN_KG };
 
 /**
  * Factor every anchor input is multiplied by to probe whether a magnitude ratio

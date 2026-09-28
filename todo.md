@@ -116,8 +116,11 @@ witness) could be meant. Earlier entries used the bare form for both.
 - [x] **Records** — stale I6 note; §14 heading over a list of ticked rows; CHANGELOG "(partial)" lines
   contradicted by later "(rest)" lines; audit/persona ID collision.
 - [x] **audit I1** Qualified routes across model families — met by F01.
-- [ ] **audit I3** Consistent graph scope — F04 carries `--source` to `ground`; open: `explain`'s help
-  omits `--source`, and results do not print the effective source and anchor.
+- [x] **audit I3** Consistent graph scope — F04 carries `--source` to `ground`; open: `explain`'s help
+  omits `--source`, and results do not print the effective source and anchor. `explain`, `ground`,
+  `discover`, `map`, `candidates` and `connectors` now name the effective source in text and JSON, and
+  the anchor they are relative to (the discovery ground truth, default or `--anchor`; or the
+  established core, with its edge count). Both help texts list `explain --source`.
 - [x] **audit I4** Stable expression syntax — F03 made `ln` agree; open: an unknown function suggests no
   tested equivalent, `--debug` omits the parser version, help does not state the base of `log`, and
   `map --equation` cannot compare `ln(2)` (persona W7). Both parsers now name a tested equivalent

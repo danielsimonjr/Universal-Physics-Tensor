@@ -10,6 +10,19 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Audit I3: every graph result names its source and anchor** (2026-09-27). `explain`, `ground`,
+  `discover` (and `--derive`), `map`, `candidates` and `connectors` print the effective source in text
+  and set `source` in `--json`, including when `--source` was not given; `explain`'s text header did
+  not before, and its bridge-id redirect had no `source` in JSON. A bridge id is answered from the
+  catalog bridge registry whatever `--source` says, and the redirect says so. The envelope gains
+  `anchor`, keeping two different anchors apart: the discovery ground truth (`discover`, `ground`,
+  `map --proposed`), printed as its values and whether they are the default one solar mass or came
+  from `--anchor`; and the anchored core (`map`, `candidates`, `connectors`), the clusters that hold an
+  established-confidence edge, printed with the count of such edges in the graph used (9 of 41 in the
+  catalog, 116 of 148 in both, 107 of 107 in canonical). `upt help explain` and the top-level help list
+  `--source`. The new test recounts each number from the graph and checks both states of each anchor;
+  13 of its 14 tests were RED before the change. 18 goldens gained the line or the source.
+
 - **Audit I13: one glossary of status words** (2026-09-27). `upt help statuses` defines every status
   the commands print (VACUOUS, UNKNOWN/unchecked, VIOLATED, valid, ADEQUATE, INADEQUATE,
   UNDETERMINED, NEITHER, UNSETTLED, no composite claim, DECOY, NOT COVERED, the discover verdicts and

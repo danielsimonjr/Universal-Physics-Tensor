@@ -9,6 +9,7 @@
  */
 
 import { definitionsFor } from './statuses.js';
+import type { AnchorScope } from './graphs.js';
 
 export interface JsonEnvelope {
   command: string;
@@ -20,6 +21,8 @@ export interface JsonEnvelope {
    * families rather than an equation graph.
    */
   source?: 'catalog' | 'canonical' | 'both' | 'poster' | 'atlas';
+  /** What the result is anchored to (audit I3): the discovery ground truth, the established core, or both. */
+  anchor?: AnchorScope;
   options?: Record<string, unknown>;
   epistemics?: string;
   /** `upt confront` — count of confrontations by rigor tier (stringent/moderate/loose). */

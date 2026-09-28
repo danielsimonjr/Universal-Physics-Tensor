@@ -1,6 +1,7 @@
   [discovery options: max-orders=4; anchor={mass=1.989e+30}]
 
 Discovery — link candidates VETTED through the inference suite  [source: catalog (55-bridge)]
+  anchor: mass=1.989e+30 (from --anchor)
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 

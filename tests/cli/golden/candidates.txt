@@ -1,5 +1,6 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (55-bridge)]
+  anchored core: the clusters holding at least one of the 9 established-confidence edge(s) of the 41 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 

@@ -28,11 +28,13 @@ const FLAGS: FlagSpec[] = [
 ];
 
 const HELP = `upt explain <quantity> [name=value | name] ...
+            [--source=catalog|canonical|both] [--json]
         Explain how the graph determines a quantity: the identifiability
         verdict, recovered value, derivation chains, and whether the inputs
         are dimensionally sufficient. A name that is not a quantity of the
         graph is reported NOT COVERED, with near names and what \`upt search\`
-        finds for its words, and exits 1.
+        finds for its words, and exits 1. --source picks the graph (default
+        catalog); the result names the source it used.
         e.g.  upt explain hawking-temperature mass=1.989e30`;
 
 /**
@@ -113,16 +115,17 @@ async function run(ctx: CommandCtx): Promise<number> {
   // A bridge id is an edge, not a quantity — redirect before touching the graph.
   const redirect = bridgeRedirect(api, target);
   if (redirect) {
+    // A bridge id names a CATALOG bridge whatever --source says; say so rather than print a source it did not use.
     if (args.flags.has('json')) {
-      emitJson({ command: 'explain', result: { kind: 'bridge-redirect', ...redirect } }, ctx.write);
+      emitJson({ command: 'explain', source: 'catalog', result: { kind: 'bridge-redirect', ...redirect } }, ctx.write);
       return 0;
     }
-    out(`\n● ${target}`);
+    out(`\n● ${target}  [source: catalog bridge registry; a bridge id names a catalog bridge whatever --source says]`);
     out(`  ${redirect.hint}`);
     return 0;
   }
 
-  const { graph, source } = resolveGraph(api, args.flags);
+  const { graph, label, source } = resolveGraph(api, args.flags);
   // A name that is not a quantity of this graph is NOT COVERED (persona finding
   // C4). It used to get the same "no derivation path" answer as a real quantity
   // the inputs cannot reach, and exit 0. Underscores resolve like hyphens.
@@ -156,7 +159,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
-  out(`\n● ${target}`);
+  out(`\n● ${target}  [source: ${label}]`);
   out(`  ${x.summary}`);
   if (x.derivations.length) {
     out('  derivations:');

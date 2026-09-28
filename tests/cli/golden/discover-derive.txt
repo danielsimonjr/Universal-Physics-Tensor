@@ -1,5 +1,6 @@
 
 Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: catalog + canonical]
+  anchor: mass=1.989e+30 (the default; --anchor=k=v replaces it)
 ⚠ Each is the ALGEBRAIC CONSEQUENCE of an unadjudicated identification — NOT a new
   relation and NOT a bridge. No mechanism asserted. Promotion to the catalog needs
   adversarial + literature review (Part-VI §XXVII-B). The enumerator proposes; humans dispose.

@@ -52,11 +52,13 @@ const HELP_TEXT = `upt — Universal Physics Tensor bridge-inference CLI
 
 Usage:
   upt explain <quantity> [name=value | name] ...
+              [--source=catalog|canonical|both] [--json]
         Explain how the graph determines a quantity: the identifiability
         verdict, recovered value, derivation chains, and whether the inputs
         are dimensionally sufficient. A name that is not a quantity of the
         graph is reported NOT COVERED, with near names and what \`upt search\`
-        finds for its words, and exits 1.
+        finds for its words, and exits 1. --source picks the graph (default
+        catalog); the result names the source it used.
         e.g.  upt explain hawking-temperature mass=1.989e30
 
   upt priority

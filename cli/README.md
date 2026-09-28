@@ -163,9 +163,19 @@ Do not use `probe` to vet identifications; do not use `discover` to search expre
 
 ## The `--source` flag
 
-All 8 graph-analysis commands accept `--source=<which>` to choose which graph
-the analysis runs over: `discover`, `candidates`, `map`, `explain`,
-`priority`, `audit`, `predict`, and `connectors`.
+The graph-analysis commands accept `--source=<which>` to choose which graph
+the analysis runs over: `discover`, `ground`, `candidates`, `map`, `explain`,
+`priority`, `audit`, `predict`, and `connectors` (`probe` also takes it; see `upt help probe`).
+
+**Every result names what it used.** `explain`, `ground`, `discover`, `map`, `candidates` and
+`connectors` print the effective source in their text banner and set `source` in `--json`, whether
+or not `--source` was given. Where a result is relative to an anchor, it names that too, in text and
+as the envelope's `anchor`. Two anchors exist, and they are different things: the discovery
+**ground truth** (`discover`, `ground`, `map --proposed`; `--anchor=k=v`, default one solar mass),
+printed as the values and whether they are the default; and the **anchored core** (`map`,
+`candidates`, `connectors`), the clusters that hold at least one established-confidence edge,
+printed with the count of such edges in the graph used. A bridge id given to `explain` is answered
+from the catalog bridge registry whatever `--source` says, and the result says so.
 
 | Value | Graph |
 |---|---|
@@ -227,6 +237,8 @@ node bin/upt.mjs explain hawking-temperature mass=1.989e30 --json
   command: string;                                  // e.g. "priority"
   source?: 'catalog' | 'canonical' | 'both';         // only on --source-bearing commands
   options?: Record<string, unknown>;                 // e.g. discover's max-orders/anchor
+  anchor?: { groundTruth?: { values: Record<string, number>; isDefault: boolean };
+            core?: { establishedEdges: number; edges: number } };  // what the result is relative to
   epistemics?: string;                                // the command's own "review surface, not truth" caveat
   definitions?: Record<string, string>;               // the meaning of each status the command can emit
   result: unknown;                                    // the same library object the text report is printed from

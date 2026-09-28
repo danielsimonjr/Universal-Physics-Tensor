@@ -1,6 +1,7 @@
 
 Linkage map — how the equations connect via shared quantities  [source: catalog (55-bridge)]
 (23 components over 41 edges; 11 compose into chains)
+  anchored core: the clusters holding at least one of the 9 established-confidence edge(s) of the 41 in this graph
 
   ● cluster of 16  [ANCHORED to known physics]
      edges:  be-11-zurek, be-12, be-16, be-37, be-42, be-42-via-rs, be-51, be-52, law-schwarzschild-radius, be-48, be-11-master, be-23, be-27, be-33, be-34, be-38

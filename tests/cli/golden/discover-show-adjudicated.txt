@@ -1,5 +1,6 @@
 
 Discovery — link candidates VETTED through the inference suite  [source: canonical (standard-physics L-layer, bridges excluded)]
+  anchor: mass=1.989e+30 (the default; --anchor=k=v replaces it)
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 

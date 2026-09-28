@@ -42,3 +42,36 @@ export function resolveGraph(
       throw new CliError(`upt: unknown --source='${src}' (expected: catalog | canonical | both)`);
   }
 }
+
+/**
+ * What a result is anchored to (audit I3), printed beside the source in text and carried as the
+ * envelope's `anchor` in `--json`. Two different anchors exist and are never merged:
+ * `groundTruth` is the discovery funnel's known values (`--anchor=k=v`, default one solar mass);
+ * `core` is the set of established-confidence edges that "anchored" means in a linkage view.
+ */
+export interface AnchorScope {
+  readonly groundTruth?: { readonly values: Readonly<Record<string, number>>; readonly isDefault: boolean };
+  readonly core?: { readonly establishedEdges: number; readonly edges: number };
+}
+
+export function groundTruthAnchor(
+  api: CommandCtx['api'],
+  opts: { readonly groundTruth?: Readonly<Record<string, number>> },
+): NonNullable<AnchorScope['groundTruth']> {
+  return opts.groundTruth === undefined
+    ? { values: { ...api.ANCHOR_DEFAULT }, isDefault: true }
+    : { values: { ...opts.groundTruth }, isDefault: false };
+}
+
+export function coreAnchor(graph: readonly BridgeEdge[]): NonNullable<AnchorScope['core']> {
+  return { establishedEdges: graph.filter((e) => e.confidence === 'established').length, edges: graph.length };
+}
+
+export function groundTruthLine(a: NonNullable<AnchorScope['groundTruth']>): string {
+  const values = Object.entries(a.values).map(([k, v]) => `${k}=${v}`).join(', ');
+  return `anchor: ${values}${a.isDefault ? ' (the default; --anchor=k=v replaces it)' : ' (from --anchor)'}`;
+}
+
+export function coreLine(a: NonNullable<AnchorScope['core']>): string {
+  return `anchored core: the clusters holding at least one of the ${a.establishedEdges} established-confidence edge(s) of the ${a.edges} in this graph`;
+}
