@@ -21,8 +21,10 @@ from v0.1.0 onward.
     evidence, and a denied premise marks the record as not applying.
   - **I8 (partial)** — `upt path --tolerance=EPS`: ADEQUATE only when every regime and horizon holds
     and the closed-form point error is ≤ EPS, INADEQUATE (exit 3) otherwise, and UNDETERMINED when the
-    point does not settle it. EPS is in the bound's own norm; no phase or trajectory translation is
-    encoded, and the output says so.
+    point does not settle it. EPS is in the bound's own norm; ~~no phase or trajectory translation is
+    encoded, and the output says so.~~ *(Superseded within this release by **I8 (rest)** and **I8 / I18
+    (limits)** below: phase and position translations are encoded for `ab-pendulum-linear`. Struck
+    2026-09-27.)*
   - **I9** — `upt evaluate --sigma/--corr`: first-order (GUM) propagation with correlations and a
     positive-semidefinite check. The sensitivity is kept apart from the contribution, a curvature
     check flags an unreliable linearization, inputs without σ are named as treated-exact, and
@@ -34,13 +36,15 @@ from v0.1.0 onward.
     assumptions and the scope of its canonical match in the text and in `--json`.
   - **I14 (partial)** — `confront` names each record's statistical object, criterion and data origin,
     plus its notes, and tallies σ-residual tests, limits and consistency ratios separately.
-    Preprocessing and independence are not recorded fields yet.
+    ~~Preprocessing and independence are not recorded fields yet.~~ *(Superseded within this release
+    by **I14 (rest)** below: both are required fields. Struck 2026-09-27.)*
   - **I15** — `upt atlas <id>` shows evidence by claim (correspondence, regime, bound, horizon,
     preserves), each citing only what the record links to it. Every witness shows its execution
     status. `--run` executes the in-process registered witnesses and counts checked, refuted and
     unresolved separately (exit 3 on a refutation).
   - **I16 (partial)** — `upt map --around=Q [--depth=N]` focuses on one quantity's neighbourhood in
-    every output form and prints how many of the source's edges it kept.
+    every output form and prints how many of the source's edges it kept. *(Extended within this
+    release by **I16 (rest)** and **I16 (limits)** below. Marked 2026-09-27.)*
   - **I18** — `upt path --sweep name=lo:hi:n[:log]` (2–200 samples, `--csv`) evaluates the point
     verdict per row. A row outside a regime or past a horizon carries no error.
   - A closed stdout (`upt … | head`) ends the run quietly instead of crashing with `EPIPE`.
@@ -161,6 +165,16 @@ from v0.1.0 onward.
   95.41% / 88.26% / 98.07% functions / 97.4% lines. The CI `test` job runs the gate. Negative result
   found on the way: a relative or standardized correction is never emitted for a dimensioned target,
   since `1 + m` with m of the target's dimension is inhomogeneous; the test pins that behaviour.
+
+- **Records disagreed with the code and with each other** (2026-09-27). `todo.md` said no evaluator
+  takes a radius and the audit's Stokes–Einstein example is shown only on the resolver; the I20 case
+  meets it on the CLI (D = 2.1471978e-13 m²/s for `a_m=1um` and for `diameter_m=2um`, twice that for
+  `a_m=0.5um`, as k_BT/(6πηa) gives by hand; `tests/cli/applied-cases.test.ts` pins it). The note is
+  struck through with the correction beside it. The §14 heading said "open" over a list of ticked
+  rows. Two "(partial)" entries above made claims that later entries of the same release contradict;
+  those sentences are struck through, not rewritten. Audit and persona ids overlap (both use I1–I8),
+  so `todo.md` and `NOTES.md` now write "audit I5" and "persona I5"; older entries are left as they
+  were.
 
 - **CLI applied-physics audit findings F01–F14** (2026-09-27). Ledger in
   `docs/audit/Universal_Physics_Tensor_CLI_Audit.md` §11; each fix has a test that was RED first.

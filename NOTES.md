@@ -13,7 +13,7 @@ nothing validates prose and the next reader cannot tell.
 
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
   findings are fixed (F10 was already correct and is now pinned by a test). Of the §14 improvements,
-  I5–I9, I11, I12 and I14–I20 have landed; the limits each still has are in `todo.md`. I2 is open:
+  audit I5–I9, I11, I12 and I14–I20 have landed; the limits each still has are in `todo.md`. I2 is open:
   it needs a reviewed widening of the composition table and is Mothership's call; a proposal is in
   `docs/planning/ADR-proposal-transported-norm-composition.md`.
 - `confront` data handling: preprocessing recorded for 17 of 19 records, not recorded for 2 (be-37,
@@ -65,9 +65,9 @@ nothing validates prose and the next reader cannot tell.
   reviewer): findings in `docs/research/cli-physicist-persona-0.47.1-post-fix.md`. Prior W1–Q2 still
   hold. New open triage: W4 (Kepler/Schwarzschild monomial constants→1), W5 (Planck all-constant
   RHS refused), W6 (`a`→perihelion not acceleration), W7 (Landauer `ln(2)` vs `ln2`), L5–L8, Q3–Q4,
-  I5–I8. No code change in that pass; Mothership to triage.
+  persona I5–I8. No code change in that pass; Mothership to triage.
 - **CLI applied-physicist persona pass on 0.47.1** (model persona, not a human reviewer): findings in
-  `docs/research/cli-physicist-persona-0.47.1.md`. W1–W3, L1–L4, Q1–Q2, I1–I4 fixed in the patch
+  `docs/research/cli-physicist-persona-0.47.1.md`. W1–W3, L1–L4, Q1–Q2, persona I1–I4 fixed in the patch
   batch on `cursor/persona-cli-fixes-b6c5` (dispositions in that note).
 
 ## As of 2026-09-23

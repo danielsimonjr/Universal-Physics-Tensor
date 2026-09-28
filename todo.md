@@ -21,7 +21,10 @@
 - [x] **F13** Upper-bound confrontations (GW-speed) label the prediction, the bound and the compatibility rule.
 - [x] **F14** Top-level help derives the isolated-bridge count instead of a fixed "20".
 
-### Audit improvements (§14) not covered by the F-ledger fixes — open
+### Audit improvements (§14) not covered by the F-ledger fixes
+
+Audit I1, I3, I4, I10 and I13 were taken as covered by F-ledger fixes; the review below found four of
+them only partly met, and their rows are in "Review of the audit against the records and the code".
 
 - [ ] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
   Proposal ready for Mothership: `docs/planning/ADR-proposal-transported-norm-composition.md`, with a
@@ -32,9 +35,12 @@
 - [x] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
 - [x] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
   Every evaluator declares each input's unit, meaning and geometry role, and `evaluate` converts
-  units against the declarations. No evaluator takes a radius yet: the audit's Stokes–Einstein example
-  (1 µm radius ≡ 2 µm diameter) is shown on the resolver, not the CLI. `CE-stokes-einstein` is encoded
-  only up to its 6π, so it cannot back an evaluator as it stands.
+  units against the declarations. ~~No evaluator takes a radius yet: the audit's Stokes–Einstein example
+  (1 µm radius ≡ 2 µm diameter) is shown on the resolver, not the CLI.~~ *(Withdrawn 2026-09-27: the
+  I20 case meets it on the CLI. `upt evaluate case-brownian-sphere T_K=293.15 eta_Pa_s=1e-3
+  rho_p_kg_per_m3=2000 rho_f_kg_per_m3=998 t_s=1 d=2 h_m=100um` gives D = 2.1471978e-13 m²/s for
+  `a_m=1um` and for `diameter_m=2um`, and 4.2943956e-13 for `a_m=0.5um`; k_BT/(6πηa) by hand agrees.)*
+  `CE-stokes-einstein` is encoded only up to its 6π, so it cannot back an evaluator as it stands.
 - [x] **I7** Full premise checklist with verified / user-declared / contradicted / unspecified states.
 - [x] **I8** Tolerance-driven horizons (requested observable tolerance → horizon).
   `path --tolerance=EPS` judges in the bound's own norm; `--tolerance=phase:EPS` and
@@ -62,7 +68,7 @@
 - [x] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
   Five witnesses (WS4, WD6, WD7, WS5, WS7) are attributed to their bridge's bound, each checked against
   its spec. None can be attributed to correspondence, regime, horizon or preserves: no spec ties to
-  them. Open: an executable spec for W7 (pendulum) so it can be attributed.
+  them. Open: an executable spec for witness W7 (pendulum) so it can be attributed.
 - [x] **I16** Focused (neighborhood/route/family) map exports.
   `map --around`, `--route=FROM,TO` and `--family=NAME`; models join the equation graph only through
   their recorded `canonicalRefs`. `--all-routes`, `--observable`, and `--stored`/`--run` evidence are
@@ -94,7 +100,8 @@
 ### Review of the audit against the records and the code (owner order 2026-09-27)
 
 Audit items are written "audit I5"; the persona notes in `docs/research/` number their own ideas, written
-"persona I5". Earlier entries used the bare form for both.
+"persona I5"; persona findings W4–W7 are written "persona W7" where a witness id (W7 = the pendulum
+witness) could be meant. Earlier entries used the bare form for both.
 
 - [x] **Windows checkout: probe-study fixtures and two path-separator tests fail.** With
   `core.autocrlf=true`, `tests/fixtures/probe-study/**` checked out CRLF (it was missing from the
@@ -106,7 +113,7 @@ Audit items are written "audit I5"; the persona notes in `docs/research/` number
   Now 95.41% statements, 88.26% branches, 98.07% functions, 97.4% lines; the `test` job runs it.
   Found on the way (negative result): a relative or standardized correction to a baseline is never
   emitted for a dimensioned target, because `1 + m` with m of the target's dimension is inhomogeneous.
-- [ ] **Records** — stale I6 note; §14 heading over a list of ticked rows; CHANGELOG "(partial)" lines
+- [x] **Records** — stale I6 note; §14 heading over a list of ticked rows; CHANGELOG "(partial)" lines
   contradicted by later "(rest)" lines; audit/persona ID collision.
 - [x] **audit I1** Qualified routes across model families — met by F01.
 - [ ] **audit I3** Consistent graph scope — F04 carries `--source` to `ground`; open: `explain`'s help
@@ -400,7 +407,7 @@ warning-silencing, not debug logging).
 - [ ] **0.47.1 CLI applied-physicist persona retest triage (2026-09-26).** After the W1–Q2 fix batch;
   findings in `docs/research/cli-physicist-persona-0.47.1-post-fix.md`. Open: W4 (Kepler/Schwarzschild
   monomial binds G/c as 1), W5 (Planck all-constant RHS refused), W6 (`a`→perihelion), W7 (Landauer
-  `ln(2)` vs `ln2`), L5–L8, Q3–Q4, I5–I8. Docs-only pass; Mothership to order fixes.
+  `ln(2)` vs `ln2`), L5–L8, Q3–Q4, persona I5–I8. Docs-only pass; Mothership to order fixes.
 
 - [x] **0.47.1 CLI applied-physicist persona pass + fix batch (2026-09-26).** Findings in
   `docs/research/cli-physicist-persona-0.47.1.md`. Fixed: W1 (c vs speed-of-light), W2 (RHS kebabs),
