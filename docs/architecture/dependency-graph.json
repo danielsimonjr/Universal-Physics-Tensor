@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 382,
     "totalModules": 12,
-    "totalExports": 2754
+    "totalExports": 2756
   },
   "entryPoints": [
     {
@@ -13806,16 +13806,21 @@
         "internalDependencies": [],
         "exports": [
           "CANONICAL_PREFACTORS",
-          "canonicalPrefactor"
+          "CANONICAL_GROUP_PREFACTORS",
+          "canonicalPrefactor",
+          "canonicalGroupPrefactor"
         ],
         "interfaces": [
-          "CanonicalPrefactor"
+          "CanonicalPrefactor",
+          "CanonicalGroupPrefactor"
         ],
         "functions": [
-          "canonicalPrefactor"
+          "canonicalPrefactor",
+          "canonicalGroupPrefactor"
         ],
         "constants": [
-          "CANONICAL_PREFACTORS"
+          "CANONICAL_PREFACTORS",
+          "CANONICAL_GROUP_PREFACTORS"
         ]
       },
       "src/composition/catalog-graph.ts": {
@@ -26476,14 +26481,14 @@
   "statistics": {
     "totalTypeScriptFiles": 382,
     "totalModules": 12,
-    "totalLinesOfCode": 81930,
-    "totalExports": 2754,
+    "totalLinesOfCode": 81994,
+    "totalExports": 2756,
     "totalClasses": 60,
-    "totalInterfaces": 430,
-    "totalFunctions": 676,
+    "totalInterfaces": 431,
+    "totalFunctions": 677,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 686,
+    "totalConstants": 687,
     "totalReExports": 1331,
     "totalTypeOnlyImports": 523,
     "runtimeCircularDeps": 0,

@@ -4070,9 +4070,9 @@ The codebase is organized into the following modules:
 ### `src/composition/canonical-prefactors.ts` - Exact prefactors for canonical equations that `src/canonical` records only
 
 **Exports:**
-- Interfaces: `CanonicalPrefactor`
-- Functions: `canonicalPrefactor`
-- Constants: `CANONICAL_PREFACTORS`
+- Interfaces: `CanonicalPrefactor`, `CanonicalGroupPrefactor`
+- Functions: `canonicalPrefactor`, `canonicalGroupPrefactor`
+- Constants: `CANONICAL_PREFACTORS`, `CANONICAL_GROUP_PREFACTORS`
 
 ---
 
@@ -7228,12 +7228,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 382 |
 | Total Modules | 12 |
-| Total Lines of Code | 81930 |
-| Total Exports | 2754 |
+| Total Lines of Code | 81994 |
+| Total Exports | 2756 |
 | Total Re-exports | 1331 |
 | Total Classes | 60 |
-| Total Interfaces | 430 |
-| Total Functions | 676 |
+| Total Interfaces | 431 |
+| Total Functions | 677 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |

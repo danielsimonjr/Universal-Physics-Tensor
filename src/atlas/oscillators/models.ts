@@ -83,7 +83,7 @@ export const ATLAS_MODELS: readonly AtlasModel[] = [
       { name: 'C', dim: CAPACITANCE },
     ],
     dimensionlessInputs: [],
-    canonicalRefs: ['CE-lc-resonance'],
+    canonicalRefs: ['CE-lc-resonance', 'CE-capacitor-energy'],
   }),
   model({
     id: 'model-damped-spring',

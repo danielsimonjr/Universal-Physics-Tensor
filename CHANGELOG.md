@@ -10,6 +10,40 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Atlas equation links: the eight links that predated the numeric-check rule are now each checked,
+  and one link is added.** `tests/atlas/canonical-links.test.ts` derives every recorded link from
+  its model: RK4 periods (model-spring's ω), mode frequencies from the model's own spatial operator
+  (model-wave-1d, model-string, model-sound), a mode decay rate (model-heat), work integrals of the
+  model's restoring term (model-spring's U, model-lc's capacitor energy), and a launch amplitude
+  (model-spring's E). Its ratchet list of unchecked links is now empty and must stay so.
+  - Four sourced prefactors join `src/composition/canonical-prefactors.ts`, outside the pinned
+    `src/canonical` tree, each with a verbatim wikitext quote at a pinned revision:
+    CE-simple-harmonic-frequency 1, CE-spring-potential-energy ½, CE-oscillator-energy ½ and
+    CE-string-wave-speed 1. CE-sound-speed's factor is √γ, a power of a group the entry does not
+    record, so it goes to a separate `CANONICAL_GROUP_PREFACTORS` table. `canonicalPrefactor` does
+    not return it. Each new number is checked a second way by the model-side check. The √γ is also
+    derived from model-euler-linear closed by model-adiabatic-eos, with c_s² never written.
+  - `compareWithCanonical` now catches ω = 2√(k/m), E = kA², U = kx² and v = √(2F/μ) as factor
+    mismatches. Two compare tests that used those entries to show the unchecked path now use
+    CE-debye-frequency and CE-inductor-energy, which have no sourced prefactor.
+  - New link: `model-lc` → CE-capacitor-energy (U = ½CV², checked by the work integral of the q/C
+    term). The criterion-2 atlas-condition hash is unchanged.
+  - Every model with no link states why in `NO_LINK_REASONS`, and a test holds that the reasons
+    cover exactly those models. Four reasons are shown by a check that fails:
+    - model-damped-spring and model-rlc (ζ = 0.2), each passing when the damping is zero;
+    - model-cubic-spring, which passes as βx0²/k → 0 and fails at 0.1;
+    - model-klein-gordon (phase velocity ≠ c), which passes at ω0 = 0.
+  - Controls: every check fails when the canonical value is 0.1% off. Other wrong relations also fail:
+    - the f-for-ω confusion 2π√(k/m);
+    - the missing ½;
+    - Newton's isothermal sound speed at γ = 1.4.
+    A check is also refused when it has no prefactor (model-lc → CE-inductor-energy), an unbound
+    group, or a datum that is a parameter.
+  - Limits, recorded plainly:
+    - model-stokes-drag is a closed-form law, so its check is a transcription that tests the
+      prefactor and exponents only;
+    - model-spring → CE-oscillator-energy rests on CE-kinetic-energy's sourced ½ as a premise;
+    - `CanonicalEquation.model` stays unset because criterion 3 freezes `src/canonical`.
 - **Audit I2: a bound composes across an exact map through a declared norm transport** (owner
   decision 2026-09-27; `docs/planning/ADR-transported-norm-composition.md`, option 4). The owner made
   the ADR-level call in the order that asked for it; it is recorded here, not taken by this session.

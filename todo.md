@@ -62,11 +62,16 @@ them only partly met, and their rows are in "Review of the audit against the rec
   / predicted beside the agreement bound, labelled apart; no pinned number changed. Open: be-11 and
   be-21 carry no agreement bound in the outcome, so no compatibility decision is made for them
   (adding one would change the frozen golden).
-- [ ] **Atlas equation links** — 15 of 24 atlas models record no `canonicalRefs` (reasons per model in
+- [x] **Atlas equation links** — 15 of 24 atlas models record no `canonicalRefs` (reasons per model in
   `tests/atlas/canonical-links.test.ts`). Eight older links are not yet checked (ratchet list in that
   test); three need a sourced prefactor for CE-simple-harmonic-frequency, CE-sound-speed and
   CE-string-wave-speed first. `CanonicalEquation.model` stays unset: `src/canonical` is frozen by
   criterion 3.
+  Done 2026-09-27: all eight are checked. The ratchet list is empty. Prefactors were sourced for the three, and for CE-spring-potential-energy and
+  CE-oscillator-energy; CE-sound-speed's √γ is in a group table. New link: `model-lc` →
+  CE-capacitor-energy. `NO_LINK_REASONS` holds a reason for each of the 15 unlinked models. Open:
+  CE-inductor-energy needs a sourced ½ before `model-lc` can link it; `CanonicalEquation.model`
+  stays unset (freeze).
 - [x] **I15** Claim-level evidence per bridge (transformation, regime, bound, horizon) with witness execution status.
   Five witnesses (WS4, WD6, WD7, WS5, WS7) are attributed to their bridge's bound, each checked against
   its spec. None can be attributed to correspondence, regime, horizon or preserves: no spec ties to

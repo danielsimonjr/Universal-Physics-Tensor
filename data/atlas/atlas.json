@@ -93,7 +93,8 @@
           ],
           "dimensionlessInputs": [],
           "canonicalRefs": [
-            "CE-lc-resonance"
+            "CE-lc-resonance",
+            "CE-capacitor-energy"
           ],
           "regime": {
             "family": "oscillators",

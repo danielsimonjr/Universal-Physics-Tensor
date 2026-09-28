@@ -38,10 +38,21 @@ nothing validates prose and the next reader cannot tell.
   −7.27% be-63, −43.7% be-65, +25.7% be-21; every bounded record is compatible. No pinned number
   changed. be-65's ±150% bound accepts any observed value from 0 to 4.44 M_⊙: its low side cannot
   fail (negative result about the record).
-- Atlas equation links: 9 of 24 atlas models record a canonical equation (`model-pendulum` and
-  `model-dalembert` added, each by a numeric check). `model-rlc` against CE-lc-resonance fails the
-  check (2% off at ζ = 0.2). `CanonicalEquation.model` stays unset because criterion 3 freezes the
-  `src/canonical` tree. That tree already differs from `freeze.json`'s recorded tree hash since
+- Atlas equation links: 9 of 24 atlas models record a canonical equation. All 12 recorded links are
+  checked numerically from the model (the eight older ones on 2026-09-27, plus `model-lc` →
+  CE-capacitor-energy, new), and the unchecked-link ratchet list is empty. The 15 models without a
+  link each state a reason (`NO_LINK_REASONS`). Four reasons are shown by a failing check:
+  - `model-rlc` against CE-lc-resonance is 2% off at ζ = 0.2, and so is `model-damped-spring`
+    against CE-simple-harmonic-frequency;
+  - `model-cubic-spring` fails at βx0²/k = 0.1;
+  - `model-klein-gordon` fails against CE-wave-speed, with a phase velocity ≠ c.
+
+  Negative results:
+  - `model-stokes-drag`'s check is a transcription of a closed-form law;
+  - CE-inductor-energy has no sourced ½, so `model-lc` cannot link it yet;
+  - CE-sound-speed's √γ is not used by `compareWithCanonical`, which cannot bind γ.
+
+  `CanonicalEquation.model` stays unset because criterion 3 freezes the `src/canonical` tree. That tree already differs from `freeze.json`'s recorded tree hash since
   `dbd4e95` (Amendment 9's residual form), then #202 and #208; the eight pinned code blobs still match.
 - Observable translations: `ab-pendulum-linear` declares phase and position; `ab-spring-lc` declares
   a phase carriage. Every other bridge answers UNDETERMINED outside its bound's own norm.

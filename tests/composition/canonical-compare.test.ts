@@ -52,12 +52,13 @@ describe('compareWithCanonical — a fully quantitative entry', () => {
 });
 
 describe('compareWithCanonical — entries that record no prefactor', () => {
-  // CE-pendulum-period and CE-kinetic-energy now take their prefactors from the sourced table
-  // (tests/composition/canonical-prefactors.test.ts). These cases use entries it does not cover.
-  it('ω = 2√(k/m): same form as CE-simple-harmonic-frequency, prefactor NOT checked (dimensional only)', () => {
+  // CE-pendulum-period, CE-kinetic-energy, CE-simple-harmonic-frequency and CE-oscillator-energy now
+  // take their prefactors from the sourced table (tests/composition/canonical-prefactors.test.ts).
+  // These cases use entries it does not cover.
+  it('ω = 2·v_s·n^(1/3): same form as CE-debye-frequency, prefactor NOT checked (dimensional only)', () => {
     const r = find(
-      compareWithCanonical('angular-velocity', ['spring-constant', 'mass'], (v) => 2 * Math.sqrt(v['spring-constant']! / v['mass']!)),
-      'CE-simple-harmonic-frequency',
+      compareWithCanonical('debye-frequency', ['sound-speed', 'number-density'], (v) => 2 * v['sound-speed']! * v['number-density']! ** (1 / 3)),
+      'CE-debye-frequency',
     );
     expect(r?.kind).toBe('prefactor-unchecked');
     expect(r?.detail).toMatch(/dimensional form only/);
@@ -71,10 +72,10 @@ describe('compareWithCanonical — entries that record no prefactor', () => {
     expect(r?.kind).toBe('form');
   });
 
-  it('E = k·A² has the form of CE-oscillator-energy, which the registry records only up to a constant', () => {
+  it('U = L·I² has the form of CE-inductor-energy, which the registry records only up to a constant', () => {
     const r = find(
-      compareWithCanonical('oscillator-energy', ['spring-constant', 'amplitude'], (v) => v['spring-constant']! * v['amplitude']! ** 2),
-      'CE-oscillator-energy',
+      compareWithCanonical('energy', ['inductance', 'current'], (v) => v['inductance']! * v['current']! ** 2),
+      'CE-inductor-energy',
     );
     expect(r?.kind).toBe('prefactor-unchecked');
     expect(r?.detail).toMatch(/up to a constant/);

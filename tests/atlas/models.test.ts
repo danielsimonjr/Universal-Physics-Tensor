@@ -113,7 +113,7 @@ describe('ATLAS_MODELS', () => {
       'CE-spring-potential-energy',
       'CE-oscillator-energy',
     ]);
-    expect(getAtlasModel('model-lc').canonicalRefs).toEqual(['CE-lc-resonance']);
+    expect(getAtlasModel('model-lc').canonicalRefs).toEqual(['CE-lc-resonance', 'CE-capacitor-energy']);
     expect(getAtlasModel('model-wave-1d').canonicalRefs).toEqual(['CE-wave-speed']);
   });
 
