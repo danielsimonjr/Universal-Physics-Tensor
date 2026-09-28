@@ -11,6 +11,7 @@
 import { definitionsFor } from './statuses.js';
 import type { AnchorScope } from './graphs.js';
 
+/** The shape of every `--json` output: the command, what it read, and its result. */
 export interface JsonEnvelope {
   command: string;
   /**
@@ -32,7 +33,8 @@ export interface JsonEnvelope {
   /** `upt confront` — preprocessing and independence counts, recorded vs not recorded, each counted apart. */
   dataHandlingDistribution?: Record<string, Record<string, number>>;
   /**
-   * The meaning of each status the command can emit, from STATUS_GLOSSARY (audit I13). mitJson`n   * fills it in; a command never sets it.
+   * The meaning of each status the command can emit, from STATUS_GLOSSARY (audit I13). `emitJson`
+   * fills it in; a command never sets it.
    */
   definitions?: Record<string, string>;
   result: unknown;

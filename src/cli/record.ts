@@ -75,6 +75,7 @@ export interface RecordEntry {
   entrySha256: string;
 }
 
+/** One input file an invocation read, hashed before it ran. */
 export interface RecordInput {
   /** The flag that named the file, or `--problem observationsPath` for the file a problem names. */
   flag: string;

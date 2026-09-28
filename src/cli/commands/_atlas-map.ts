@@ -405,6 +405,7 @@ function routeModelIds(from: string, bridges: readonly AtlasBridge[]): string[] 
 /** What a results source observed of a transport's witness; 'no result' when it has no row or there is no source. */
 export type TransportResult = 'checked' | 'refuted' | 'unresolved' | 'no result';
 
+/** The composite evidence of a bound route: the tags derived, the tags left undecided, and the rule that derived them. */
 export interface CompositeEvidenceView {
   /** Derived whatever the unobserved results are: never stronger than the weakest part. */
   derived: EvidenceTag[];
@@ -710,6 +711,7 @@ export function buildObservableView(
 
 // ── atlas-wide evidence ────────────────────────────────────────────────────
 
+/** The atlas-wide evidence view of `upt atlas --evidence`: each bridge's derived evidence and the per-tag counts. */
 export interface AtlasEvidenceView {
   view: 'atlas-evidence';
   source: string;
@@ -755,6 +757,7 @@ export function buildAtlasEvidenceView(api: Api, results: WitnessResults | null 
   };
 }
 
+/** The text lines `upt atlas --evidence` prints for the view `v`. */
 export function atlasEvidenceText(v: AtlasEvidenceView): string[] {
   const d = v.denominator;
   const out = [`\nAtlas evidence — ${d.bridges} bridges across ${d.families} families, ${d.witnesses} recorded witnesses  [source: ${v.source}]`];

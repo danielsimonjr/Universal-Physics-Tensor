@@ -11,6 +11,7 @@
  */
 import type { CommandCtx } from './command.js';
 
+/** The registry a search-index entry comes from. */
 export type SearchKind = 'catalog-bridge' | 'canonical-equation' | 'atlas-model' | 'atlas-bridge' | 'quantity';
 
 export const SEARCH_SECTIONS: readonly (readonly [SearchKind, string])[] = [
@@ -28,6 +29,7 @@ interface Field {
   readonly exact?: readonly string[];
 }
 
+/** One indexed record: its registry, its id, the line `upt search` prints, the command that shows it, and its searchable fields. */
 export interface SearchEntry {
   readonly kind: SearchKind;
   readonly id: string;
@@ -38,6 +40,7 @@ export interface SearchEntry {
   readonly fields: readonly Field[];
 }
 
+/** An entry that matched every query word, the fields it matched in, and the alias that resolved it, if one did. */
 export interface SearchMatch {
   readonly entry: SearchEntry;
   readonly matchedIn: readonly string[];
@@ -61,6 +64,7 @@ function matchWord(q: string, e: SearchEntry): string[] | null {
   return hit.length === 0 ? null : hit.map((f) => f.label);
 }
 
+/** Index every registry the CLI exposes: catalog bridges, canonical equations, atlas models, atlas bridges and quantities. */
 export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
   const entries: SearchEntry[] = [];
   const fmt = api.format;

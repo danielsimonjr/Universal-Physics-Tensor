@@ -154,6 +154,7 @@ export function transportReport(a: AppliedTransport) {
   };
 }
 
+/** The JSON form of an applied norm transport, as {@link transportReport} builds it. */
 export type TransportReport = ReturnType<typeof transportReport>;
 
 /** A route claim with its transports reduced to their declarative fields, so it serializes as data. */

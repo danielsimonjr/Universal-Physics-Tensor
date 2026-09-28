@@ -54,6 +54,7 @@ export interface AnchorScope {
   readonly core?: { readonly establishedEdges: number; readonly edges: number };
 }
 
+/** The discovery ground truth a result is relative to: the `--anchor` values when given, else the default. */
 export function groundTruthAnchor(
   api: CommandCtx['api'],
   opts: { readonly groundTruth?: Readonly<Record<string, number>> },
@@ -63,15 +64,18 @@ export function groundTruthAnchor(
     : { values: { ...opts.groundTruth }, isDefault: false };
 }
 
+/** The established core of `graph`: its established-confidence edge count beside its edge count. */
 export function coreAnchor(graph: readonly BridgeEdge[]): NonNullable<AnchorScope['core']> {
   return { establishedEdges: graph.filter((e) => e.confidence === 'established').length, edges: graph.length };
 }
 
+/** The text line naming the ground-truth anchor and whether it is the default. */
 export function groundTruthLine(a: NonNullable<AnchorScope['groundTruth']>): string {
   const values = Object.entries(a.values).map(([k, v]) => `${k}=${v}`).join(', ');
   return `anchor: ${values}${a.isDefault ? ' (the default; --anchor=k=v replaces it)' : ' (from --anchor)'}`;
 }
 
+/** The text line stating what "anchored" means for a graph's established core. */
 export function coreLine(a: NonNullable<AnchorScope['core']>): string {
   return `anchored core: the clusters holding at least one of the ${a.establishedEdges} established-confidence edge(s) of the ${a.edges} in this graph`;
 }

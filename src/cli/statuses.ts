@@ -250,12 +250,14 @@ export function definitionsFor(command: string): Record<string, string> {
   return out;
 }
 
+/** The glossary meaning of status `key`; throws on a key the glossary does not define. */
 export function statusMeaning(key: string): string {
   const s = STATUS_GLOSSARY.find((d) => d.key === key);
   if (s === undefined) throw new Error(`statuses: no status '${key}'`);
   return s.meaning;
 }
 
+/** The text of `upt help statuses`: each status, its words, the commands that emit it, and its meaning. */
 export function glossaryText(): string {
   const lines = [
     'upt help statuses — the status words the commands print',

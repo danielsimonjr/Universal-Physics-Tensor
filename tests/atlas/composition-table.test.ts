@@ -11,7 +11,7 @@
  * The count assertion catches the opposite failure — silent widening of the
  * table by a cell nobody named.
  *
- * The ninth cell, pproximation ∘ exact-equivalence = approximation, was added
+ * The ninth cell, `approximation ∘ exact-equivalence = approximation`, was added
  * by the reviewed act of docs/planning/ADR-transported-norm-composition.md: the
  * count went from 56 to 55 and the new cell is asserted on its own below.
  */
