@@ -15,13 +15,14 @@ const FLAGS: FlagSpec[] = [
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt audit
+const HELP = `upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
         which are decoys, which are dimensionally open.
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
-        bridge's evaluator. It is not a physical refutation of the formula.`;
+        bridge's evaluator. It is not a physical refutation of the formula.
+        --source picks the graph (default catalog).`;
 
 const DECOY_DEFINITION = statusMeaning('decoy');
 

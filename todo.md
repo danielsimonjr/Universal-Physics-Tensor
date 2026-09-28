@@ -139,8 +139,11 @@ witness) could be meant. Earlier entries used the bare form for both.
   (`src/cli/statuses.ts`) now feeds `upt help statuses` and every `--json` envelope's `definitions`;
   a vacuous regime line reads "no machine condition evaluated (VACUOUS …)". Found on the way: `decoy`
   means two things (audit's failed reconstruction, discover's adjudication verdict); both are defined.
-- [ ] **Top-level help map usage** omits `--route`, `--family`, `--all-routes`, `--observable`,
-  `--stored`, `--run`, `--evidence`.
+- [x] **Top-level help map usage** omits `--route`, `--family`, `--all-routes`, `--observable`,
+  `--stored`, `--run`, `--evidence`. The map synopsis is now complete in both helps and points to
+  `upt help map`. A test derived from every command's accepted flags found the same gap in seven more
+  places (`--source` of audit/predict/priority/probe, `derive --debug`, `canonical --vars`,
+  `discover --show-adjudicated`, map's `--anchor`/`--max-orders`); all are documented now.
 
 ## TypeScript-on-Bun migration (in flight)
 

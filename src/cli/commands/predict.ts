@@ -15,11 +15,12 @@ const FLAGS: FlagSpec[] = [
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt predict
+const HELP = `upt predict [--source=catalog|canonical|both]
         Project the catalog onto the (scale × force) regime plane and rank
         the EMPTY regime cells as undiscovered-connection hypotheses
         (triadic closure). Makes the namesake tensor operational. Review
-        surface, not discovered bridges.`;
+        surface, not discovered bridges.
+        --source picks the graph (default catalog).`;
 
 const EPISTEMICS =
   '⚠ STRUCTURAL hypotheses for physicist review, NOT discovered bridges. "Two regimes\n' +

@@ -53,7 +53,10 @@ const FLAGS: FlagSpec[] = [
 ];
 
 const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
-        [--proposed] [--out=PATH] [--equation "TARGET = EXPR"]
+        [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
+        [--equation "TARGET = EXPR"] [--around=QUANTITY [--depth=N]]
+        [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
+        [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
         Map how the equations LINK: connected components (clusters) of the
         graph by shared quantities, the anchored core, the link hubs, and
         the isolated tail.
@@ -74,8 +77,9 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         text (default) is the unchanged linkage printout. svg renders the dot
         layout via the optional @viz-js/viz peer (npm i @viz-js/viz; or pipe
         dot through "dot -Tsvg"). --proposed overlays the unadjudicated
-        identity-consequence relations (gray dashed). --out writes to a file
-        (default stdout).
+        identity-consequence relations (gray dashed); --anchor and --max-orders
+        tune the discovery funnel that derives them, as in \`upt discover\`.
+        --out writes to a file (default stdout).
         --equation "TARGET = EXPR" injects YOUR OWN equation as a violet 'user'
         node, dimensionally checks it, compares with the canonical registry, and
         reports nearest equations by shared-quantity overlap (not a full edge

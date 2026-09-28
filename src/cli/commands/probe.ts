@@ -55,6 +55,7 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
         --budget-ms=N        wall-clock cap (default 5000)
         --holdout-tol=X      relative holdout RMSE cap (default 0.15)
         --worker=PATH        optional NDJSON worker (spawned as node PATH)
+        --source=catalog|canonical|both   the graph a subverb reads (default catalog)
         --alpha=X            study: χ² test level (default: the file's, else 0.001)
         --json               machine envelope
 

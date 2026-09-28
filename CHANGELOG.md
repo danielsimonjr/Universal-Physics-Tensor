@@ -10,6 +10,17 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Every accepted flag is documented** (2026-09-27). The top-level `upt help` map usage omitted
+  `--route`, `--family`, `--all-routes`, `--observable`, `--stored`, `--run` and `--evidence`; both map
+  synopses are now complete and the top-level one points to `upt help map`. A new test reads each
+  registered command's accepted flags from its own `FlagSpec` and requires `upt help <name>` to name
+  every one, and the top-level block either to name every one or to say `upt help <name>` lists them.
+  It was RED on 14 of its 49 tests: besides map, `audit`, `predict`, `priority` and `probe` accepted
+  `--source` that neither help named, `derive --debug` was undocumented, the top-level help omitted
+  `canonical --vars` and `discover --show-adjudicated`, and `upt help map` omitted the `--anchor` and
+  `--max-orders` that tune `--proposed`. Two controls show the block check fails on an omitted flag
+  and does not borrow the next command's flags.
+
 - **Audit I3: every graph result names its source and anchor** (2026-09-27). `explain`, `ground`,
   `discover` (and `--derive`), `map`, `candidates` and `connectors` print the effective source in text
   and set `source` in `--json`, including when `--source` was not given; `explain`'s text header did

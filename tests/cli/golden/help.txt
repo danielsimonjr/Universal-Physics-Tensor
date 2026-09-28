@@ -11,19 +11,21 @@ Usage:
         catalog); the result names the source it used.
         e.g.  upt explain hawking-temperature mass=1.989e30
 
-  upt priority
+  upt priority [--source=catalog|canonical|both]
         Triage the speculative bridges by structural DECIDABILITY against
         established physics (Tiers 1-3). NOT a credibility ranking.
 
-  upt audit
+  upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
         which are decoys (a failed dimensional reconstruction, not a physical
         refutation), which are dimensionally open.
 
-  upt map [--source=catalog|canonical|both] [--format=text|mermaid|dot|svg]
-          [--proposed] [--out=PATH] [--equation "TARGET = EXPR"]
-          [--around=QUANTITY [--depth=N]]
+  upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
+          [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
+          [--equation "TARGET = EXPR"] [--around=QUANTITY [--depth=N]]
+          [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
+          [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
         Map how the equations LINK: connected components (clusters) of the
         graph by shared quantities, the anchored core, the link hubs, and
         the isolated tail.
@@ -40,6 +42,10 @@ Usage:
         underscores for multi-word quantities (photon_energy -> photon-energy).
         --around=QUANTITY [--depth=N] focuses on the edges within N hops of one
         quantity and states how many of the source's edges it kept.
+        --relation / --evidence filter edges by their Atlas relation or derived
+        evidence; --route, --family and --observable map the ATLAS (models and
+        the bridges between them) instead, and --stored / --run resolve their
+        evidence from witness results. `upt help map` describes every flag.
         e.g.  upt map --equation "period = 2*pi*sqrt(length/gravity)"
 
   upt candidates [--source=catalog|canonical|both]
@@ -47,7 +53,7 @@ Usage:
         dimension in different clusters) for PHYSICIST REVIEW — a
         coincidence-heavy surface, not discovered bridges.
 
-  upt predict
+  upt predict [--source=catalog|canonical|both]
         Project the catalog onto the (scale × force) regime plane and rank
         the EMPTY regime cells as undiscovered-connection hypotheses
         (triadic closure). Makes the namesake tensor operational. Review
@@ -68,7 +74,8 @@ Usage:
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
-        --derive consumes.
+        --derive consumes. Adjudicated candidates fold out of the promising
+        list; --show-adjudicated lists them with their recorded verdict.
         Each promising row states which independent falsifiers ran and which
         abstained, and what would make it testable; --require-falsifier lists
         only rows one of them ran on and survived.
@@ -85,10 +92,11 @@ Usage:
         data-confronted vs graph-computable vs encoded-only vs thin — to
         target the physicist review. Fabricates nothing.
 
-  upt canonical
+  upt canonical [--vars]
         List the canonical-equation registry — the standard-physics L-layer
         (textbook "answer key") with each entry's fidelity (L0/L1/L2),
-        domain, and bridge partners, plus the coverage gap.
+        domain, and bridge partners, plus the coverage gap. --vars also prints
+        each entry's target and governing variable names.
 
   upt recover
         Validate bridges against standard physics: classify each bridge↔
@@ -116,11 +124,12 @@ Usage:
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \
                        c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
 
-  upt derive <target:dim> <var:dim> ... [--formula "<expr>"]
+  upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
         Derive YOUR OWN equation's dimensional form. <dim> is a named
         dimension (length, time, mass, velocity, ...), a constant (hbar, c,
         G, k_B, e), or explicit (L^3.M^-1.T^-2). With --formula, also verify
-        it and recover the dimensionless prefactor.
+        it and recover the dimensionless prefactor. --debug prints the formula
+        parser and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \
                        --formula "2*pi*sqrt(length/gravity)"
 
@@ -213,6 +222,7 @@ Usage:
         Relation-link gaps are not searchable here — use `upt discover`.
         `study --data=FILE` fits calibrated observations (units, σ) on
         exploratory rows only and tests on withheld holdout/replication rows.
+        `upt help probe` lists every flag.
 
   upt help        Show this message.
   upt help <command>
