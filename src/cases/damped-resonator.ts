@@ -169,6 +169,7 @@ export const DAMPED_RESONATOR_CASE: AppliedCase = {
       },
     ],
   },
+  /** Evaluate the underdamped ring-down outputs and checks for the supplied resonator inputs. */
   run(i) {
     requirePositive(ID, i, ['f0_Hz', 'Q', 't_obs_s']);
     const { f0_Hz: f0, Q, x0_m: x0, t_s: t, t_obs_s: tObs } = i as Record<string, number>;

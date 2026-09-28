@@ -10,6 +10,12 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Doc comments for 84 exported symbols, restoring the code-docs ratchet to its baseline.** The
+  pre-push gate refused this branch: `code_docs.py check src` reported 237 MUST issues against a
+  baseline of 153. `master` alone gives 221, and the baseline commit `6d0feed` gives 153 under the
+  same tool, so 68 came from pushes that skipped the local gate, and 16 from this branch. Each symbol
+  now has a summary written from its definition, and the check reports 153. Two comments that carried
+  a control character from a shell escape are restored (see `NOTES.md`, Open defects).
 - **The persona-retest findings on `map --equation`, fixed or disposed (persona W4–W6, L5–L8, Q3, Q4,
   persona I5–I8; owner order 2026-09-27).**
   - Persona W4 / persona I5: the monomial comparison bound every governing name that is not a variable

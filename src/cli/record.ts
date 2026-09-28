@@ -27,17 +27,20 @@ import { moduleSources, staticReach, type Attribution } from './record-reach.js'
 import { constantTables, tableFingerprint, type ConstantTable } from './record-tables.js';
 import { packageVersion, peerVersions } from './version.js';
 
+/** The output callbacks a recorded or replayed CLI invocation writes through. */
 export type Io = {
   out: (line?: string) => void;
   err: (line?: string) => void;
   write: (s: string) => void;
 };
 
+/** A CLI dispatcher invoked with argv and an isolated output sink. */
 export type Dispatch = (argv: string[], io: Io) => Promise<number>;
 
 export const RECORD_SCHEMA = 'upt-record/2';
 const SUPERSEDED_SCHEMA = 'upt-record/1';
 
+/** The toolchain, parser, peers and constants captured beside a CLI invocation. */
 export interface RecordEnvironment {
   uptVersion: string;
   node: string;
@@ -47,6 +50,7 @@ export interface RecordEnvironment {
   constantTables: Record<string, ConstantTable>;
 }
 
+/** The exit state and captured streams of one recorded CLI invocation. */
 export interface RecordResult {
   exitCode: number | null;
   threw: string | null;
@@ -56,6 +60,7 @@ export interface RecordResult {
   stderrSha256: string;
 }
 
+/** One JSON-lines record entry for a CLI invocation and its replay inputs. */
 export interface RecordEntry {
   schema: typeof RECORD_SCHEMA;
   recordedAt: string;
@@ -101,12 +106,14 @@ export function canonicalJson(v: unknown): string {
 
 export const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv));
 
+/** Hash a record entry after excluding its stored fingerprint field. */
 export function entryFingerprint(entry: Partial<RecordEntry>): string {
   const { entrySha256: _, ...rest } = entry;
   return sha256(canonicalJson(rest));
 }
 
 
+/** Capture the live UPT runtime environment and constant table fingerprints for a record. */
 export async function captureEnvironment(api: typeof cliApi): Promise<RecordEnvironment> {
   return {
     uptVersion: packageVersion(),
@@ -359,6 +366,7 @@ const commandLine = (argv: string[]): string => ['$ upt', ...argv.map(shellQuote
  */
 export type Reach = 'reachable' | 'not-reachable' | 'unattributed';
 
+/** One runtime or reachable-constant fact that differs between recording and replay. */
 export interface EnvironmentChange {
   fact: string;
   recorded: unknown;
@@ -439,6 +447,7 @@ function integrityFindings(entry: RecordEntry): string[] {
 
 const clip = (s: string): string => (s.length > 200 ? s.slice(0, 200) + '…' : s);
 
+/** One output stream, exit state or artifact difference found during replay. */
 export interface StreamDifference {
   stream: 'exit' | 'stdout' | 'stderr' | 'artifact';
   /** The recorded path of a written file (`artifact` only). */
@@ -469,8 +478,10 @@ function streamDifference(stream: 'stdout' | 'stderr', recorded: string, replaye
 const exitLabel = (code: number | null, threw: string | null): string =>
   code === null ? `threw: ${threw ?? 'unknown error'}` : `exit ${code}`;
 
+/** The replay classification for one record entry. */
 export type ReplayOutcome = 'reproduced' | 'differs' | 'not-replayable';
 
+/** The replay report for one record entry, including environment and integrity findings. */
 export interface ReplayEntryReport {
   line: number;
   argv: string[] | null;
@@ -530,6 +541,7 @@ async function runRedirected(
   }
 }
 
+/** Replay every entry in a record file and report reproduced, differing and not-replayable entries. */
 export async function replayRecord(
   file: string,
   json: boolean,
@@ -689,6 +701,7 @@ function describeEnvironment(env: Partial<RecordEnvironment>): string {
   );
 }
 
+/** Render a record file's entries without replaying them. */
 export function showRecord(file: string, json: boolean, io: Io): number {
   const lines = readRecord(file);
   if (json) {

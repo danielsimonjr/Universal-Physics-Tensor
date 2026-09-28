@@ -19,7 +19,7 @@ import type {
 import { problemFromResidualGap } from './frontier.js';
 import { asDatasetSafe, loadSplitDatasetsFromJson } from './dataset.js';
 
-/** @internal */
+/** Return whether a string names a supported frontier-gap kind for probe problems. @internal */
 export function isGapKind(s: string): s is FrontierGapKind {
   return (
     s === 'prediction-residual' ||

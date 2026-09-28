@@ -44,6 +44,7 @@ import { NO_HOLDOUT_WORDING, runProbeSearch } from './pipeline.js';
 import { bodyExpression } from './fingerprint.js';
 import { canonicalJson, hashCanonical } from './serialize.js';
 
+/** The partition a study row belongs to for fitting, holdout testing or replication. @internal */
 export type StudyRole = 'exploratory' | 'holdout' | 'replication';
 
 /** Where the observations came from. `synthetic` is declared, never inferred. @internal */
@@ -54,6 +55,7 @@ export interface StudyProvenance {
   readonly calibration?: string;
 }
 
+/** A named variable in a study, with its unit conversion and optional input uncertainty. @internal */
 export interface StudyQuantity {
   readonly name: string;
   readonly unit: string;
@@ -82,6 +84,7 @@ export interface StudyCorrection {
   readonly powers: readonly number[];
 }
 
+/** A declared comparison model formula and whether its scale is fit on exploratory rows. @internal */
 export interface StudyBaseline {
   readonly name: string;
   readonly formula: string;
@@ -938,6 +941,7 @@ export interface SetTest {
   readonly pass: boolean | null;
 }
 
+/** The category of model being scored in a probe study. @internal */
 export type ModelKind = 'candidate' | 'baseline' | 'null';
 
 /** One model scored on each set. Only the exploratory rows ever set its parameter. @internal */
@@ -1223,7 +1227,9 @@ export function exprToInfix(e: ExprNode): string {
 
 // --- the study -------------------------------------------------------------
 
+/** The main holdout verdict assigned after candidate selection. @internal */
 export type StudyVerdict = 'no-credible-candidate' | 'refuted-on-holdout' | 'survives-holdout' | 'untested-on-holdout';
+/** The separate replication classification assigned after fitting and holdout handling. @internal */
 export type ReplicationOutcome =
   | 'survives-replication'
   | 'refuted-on-replication'
@@ -1231,6 +1237,7 @@ export type ReplicationOutcome =
   | 'not-tested'
   | 'too-close';
 
+/** A searched candidate's chi-squared results with its credibility judgement and any admitted correction. @internal */
 export interface CandidateTest extends ModelTest {
   readonly credible: boolean;
   readonly credibility: string;
@@ -1248,6 +1255,7 @@ export interface StudyCorrectionReport {
   readonly perCandidate: readonly { readonly base: string; readonly steps: readonly CorrectionStep[]; readonly error?: string }[];
 }
 
+/** A proposed next measurement point or the reason no design suggestion was made. @internal */
 export interface StudyDesignSuggestion {
   readonly abstained: boolean;
   readonly reason?: string;
@@ -1260,7 +1268,7 @@ export interface StudyDesignSuggestion {
   readonly bounds?: 'declared' | 'exploratory-range';
 }
 
-/** @internal */
+/** The full report of a probe study run, including selection, holdout, replication and caveats. @internal */
 export interface ProbeStudyResult {
   readonly studyId: string;
   readonly source: string;
@@ -1295,6 +1303,7 @@ export interface ProbeStudyResult {
   readonly schemaVersion: string;
 }
 
+/** Runtime overrides controlling search budget and the study's test level. @internal */
 export interface ProbeStudyOptions {
   readonly budget?: SearchBudget;
   /** Overrides the file's `criterion.alpha`. */

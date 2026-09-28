@@ -25,7 +25,7 @@
 
 import type { WitnessRunResult } from './witness-result.js';
 
-/** @internal */
+/** The executable specification for checking a measured quantity against a claimed upper bound. @internal */
 export interface DominanceWitnessSpec {
   readonly id: string;
   readonly kind: 'dominance';
@@ -35,7 +35,7 @@ export interface DominanceWitnessSpec {
   readonly fineResolution: number;
 }
 
-/** @internal */
+/** The numeric outcome of one dominance-witness run, including margin and tightness. @internal */
 export interface DominanceRunResult extends WitnessRunResult {
   readonly kind: 'numeric';
   /** min(bound − measured) at the fine resolution; absent when evaluation failed. */

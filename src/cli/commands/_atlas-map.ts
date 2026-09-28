@@ -62,6 +62,7 @@ const EPISTEMICS =
   'bridges are recorded transformations between models; the equation links are only those a model records. ' +
   'A route existing is not a warrant: the composed claim is.';
 
+/** A canonical equation recorded for an atlas model, with its graph edge when present. */
 export interface EquationLink {
   id: string;
   name: string | null;
@@ -70,6 +71,7 @@ export interface EquationLink {
   graphEdge: { sources: string[]; target: string } | null;
 }
 
+/** An atlas model row with its family and recorded canonical-equation links. */
 export interface ModelView {
   id: string;
   family: string;
@@ -77,6 +79,7 @@ export interface ModelView {
   equationLinks: EquationLink[];
 }
 
+/** A bridge's derived evidence tags and witness observations for the current view. */
 export interface EvidenceView {
   /** Derived whatever the unobserved witness results are. */
   derived: EvidenceTag[];
@@ -90,8 +93,10 @@ export interface EvidenceView {
 
 // ── witness results ────────────────────────────────────────────────────────
 
+/** The witness-result source a view can observe. */
 export type ResultsMode = 'stored' | 'run';
 
+/** One stored or freshly run witness result for an atlas record. */
 export interface WitnessResultRow {
   recordId: string;
   witnessId: string;
@@ -99,6 +104,7 @@ export interface WitnessResultRow {
   reason?: string;
 }
 
+/** Where stored witness results came from and whether the artifact changed since its last commit. */
 export interface StoredProvenance {
   path: string;
   schemaVersion: string;
@@ -110,6 +116,7 @@ export interface StoredProvenance {
   modifiedSinceCommit: boolean | null;
 }
 
+/** The witness-result rows a view observed, with provenance for their source. */
 export interface WitnessResults {
   mode: ResultsMode;
   /** stored: the artifact and what is known of when it was made. run: what ran. */
@@ -228,6 +235,7 @@ function outcomes(b: AtlasBridge, results: WitnessResults): WitnessOutcomes {
   return o;
 }
 
+/** Aggregate witness result counts over the bridges a view shows. */
 export interface ResultsTally {
   mode: ResultsMode;
   provenance: WitnessResults['provenance'];
@@ -251,6 +259,7 @@ function tally(results: WitnessResults | null, bridges: readonly BridgeView[]): 
   };
 }
 
+/** The atlas bridge data a map view renders after joining models, evidence, regime and bounds. */
 export interface BridgeView {
   id: string;
   family: string;
@@ -346,6 +355,7 @@ function linkSummary(models: readonly ModelView[]): { source: string; withLink: 
 
 // ── route ──────────────────────────────────────────────────────────────────
 
+/** The focused view for one selected atlas route and the claim its composition makes. */
 export interface RouteView {
   view: 'route';
   from: string;
@@ -376,6 +386,7 @@ export interface RouteView {
 const SELECTION =
   'the shortest route by bridge count (the one `upt path` reports); other routes between the endpoints, if any, are not shown';
 
+/** Parse a FROM,TO route flag into atlas model ids. */
 export function parseRoute(raw: string): [string, string] {
   const parts = raw.split(',').map((s) => s.trim());
   if (parts.length !== 2 || parts.some((p) => p === '')) {
@@ -476,6 +487,7 @@ function composeSteps(api: Api, bridges: readonly AtlasBridge[], results: Witnes
   return { running, breaksAt, claim: claimReport(claim), missing, transports, evidence };
 }
 
+/** Build the focused atlas route view for two model ids. */
 export function buildRouteView(api: Api, from: string, to: string, results: WitnessResults | null = null): RouteView {
   const models = allModels(api);
   checkEndpoints(models, from, to);
@@ -514,6 +526,7 @@ export function buildRouteView(api: Api, from: string, to: string, results: Witn
 export const DEFAULT_MAX_ROUTES = 20;
 export const MAX_ROUTES_CEILING = 1000;
 
+/** The multi-route view between two atlas models, including composition outcomes for each route. */
 export interface RoutesView {
   view: 'routes';
   from: string;
@@ -553,6 +566,7 @@ const ROUTES_SELECTION =
   'every simple route (no model visited twice), ordered by bridge count and then atlas order; the same traversal as ' +
   '`upt path`: an exact equivalence both ways, every other relation forward only, multi-premise bridges not followed';
 
+/** Build the simple-route atlas view between two model ids up to the requested limit. */
 export function buildRoutesView(
   api: Api,
   from: string,
@@ -612,6 +626,7 @@ export function buildRoutesView(
 
 // ── observable ─────────────────────────────────────────────────────────────
 
+/** The observable-focused atlas view listing bridges that preserve, translate or reject a named observable. */
 export interface ObservableView {
   view: 'observable';
   observable: string;
@@ -644,6 +659,7 @@ function wordMatcher(term: string): (text: string) => boolean {
   return (text) => re.test(text);
 }
 
+/** Build an observable-focused atlas view by matching recorded observable text and translations. */
 export function buildObservableView(
   api: Api,
   observable: string,
@@ -782,11 +798,13 @@ export function atlasEvidenceText(v: AtlasEvidenceView): string[] {
 }
 
 // ── family ─────────────────────────────────────────────────────────────────
+/** Filter options applied to atlas bridge views. */
 export interface AtlasFilter {
   relation?: RelationType;
   evidence?: EvidenceTag;
 }
 
+/** Counts explaining how an atlas bridge filter kept or dropped rows. */
 export interface AtlasFilterStats {
   relation?: RelationType;
   evidence?: EvidenceTag;
@@ -799,6 +817,7 @@ export interface AtlasFilterStats {
   results?: ResultsMode;
 }
 
+/** The family-focused atlas view with local models, filed bridges, touching bridges and rejections. */
 export interface FamilyView {
   view: 'family';
   family: string;
@@ -825,6 +844,7 @@ function judge(b: BridgeView, f: AtlasFilter): 'kept' | 'not-matching' | 'undeci
   return b.evidence.undecided.includes(f.evidence) ? 'undecided' : 'not-matching';
 }
 
+/** Format the bridge-filter counts shown in text and diagram legends. */
 export function formatAtlasFilterLegend(s: AtlasFilterStats | null): string | null {
   if (s === null) return null;
   const terms = [
@@ -850,6 +870,7 @@ export function bridgeIdsOf(v: AtlasView): Set<string> {
   return new Set(v.bridges.map((b) => b.id));
 }
 
+/** Build a family-focused atlas map, applying relation and evidence filters to its bridges. */
 export function buildFamilyView(api: Api, name: string, filter: AtlasFilter, results: WitnessResults | null = null): FamilyView {
   const fam = api.ATLAS_FAMILIES.find((f) => f.family === name);
   if (fam === undefined) {
@@ -944,6 +965,7 @@ function outcomeLine(r: WitnessOutcomes): string {
   );
 }
 
+/** Format witness-result provenance and counts for a rendered atlas view. */
 export function resultsLine(t: ResultsTally | undefined): string | null {
   if (t === undefined) return null;
   const w = t.witnesses;
@@ -1026,6 +1048,7 @@ function compositionLines(c: RouteView['composition'], relations: readonly Relat
   return out;
 }
 
+/** Render a focused route view as human-readable CLI output lines. */
 export function routeText(v: RouteView): string[] {
   const out = [`\nRoute map — ${v.from} → ${v.to}  [source: ${v.source}]`];
   if (v.steps === null) {
@@ -1067,6 +1090,7 @@ export function routeText(v: RouteView): string[] {
   return out;
 }
 
+/** Render a family atlas view as human-readable CLI output lines. */
 export function familyText(v: FamilyView): string[] {
   const d = v.denominator;
   const out = [`\nFamily map — ${v.family}  [source: ${v.source}]`];
@@ -1104,6 +1128,7 @@ export function familyText(v: FamilyView): string[] {
   return out;
 }
 
+/** Render a multi-route atlas view as human-readable CLI output lines. */
 export function routesText(v: RoutesView): string[] {
   const out = [`\nAll routes — ${v.from} → ${v.to}  [source: ${v.source}]`];
   const c = v.count;
@@ -1158,6 +1183,7 @@ export function routesText(v: RoutesView): string[] {
   return out;
 }
 
+/** Render an observable atlas view as human-readable CLI output lines. */
 export function observableText(v: ObservableView): string[] {
   const d = v.denominator.bridges;
   const out = [`\nObservable map — '${v.observable}'  [source: ${v.source}]`];
@@ -1208,6 +1234,7 @@ interface Diagram {
   breaks: Set<string>;
 }
 
+/** Any atlas map view that can be rendered as text or a diagram. */
 export type AtlasView = RouteView | RoutesView | FamilyView | ObservableView;
 
 /** The one-line denominator every diagram carries in its title. */
@@ -1284,6 +1311,7 @@ function edgeLabel(b: BridgeView, breaks: boolean): string {
   return `${b.relation} (${b.id})${breaks ? ' — no composite claim from here' : ''}`;
 }
 
+/** Render an atlas map view as a Mermaid flowchart. */
 export function toMermaid(v: AtlasView): string {
   const d = diagramOf(v);
   const id = idMaker();
@@ -1316,6 +1344,7 @@ export function toMermaid(v: AtlasView): string {
   return out.join('\n') + '\n';
 }
 
+/** Render an atlas map view as a DOT graph. */
 export function toDot(v: AtlasView): string {
   const d = diagramOf(v);
   const id = idMaker();

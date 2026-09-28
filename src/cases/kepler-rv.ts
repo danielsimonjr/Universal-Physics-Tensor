@@ -128,6 +128,7 @@ export const KEPLER_RV_CASE: AppliedCase = {
       },
     ],
   },
+  /** Evaluate the test-mass radial-velocity amplitude and checks for the supplied binary inputs. */
   run(i) {
     requirePositive(ID, i, ['M_star_kg', 'm_p_kg', 'P_s', 'sin_i', 'R_star_m', 'T_obs_s']);
     const { M_star_kg: M, m_p_kg: m, P_s: P, e, sin_i: sinI, R_star_m: R, T_obs_s: tObs } = i as Record<string, number>;

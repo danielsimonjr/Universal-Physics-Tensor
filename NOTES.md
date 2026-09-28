@@ -252,6 +252,16 @@ Those are different claims and merging them produces a false green.
 
 ### Open defects and unknowns
 
+- **The code-docs ratchet drifted on `master` (found 2026-09-27).** The pre-push gate counts MUST
+  doc-comment issues against `.githooks/code-docs-baseline.txt` (153). Measured with the same tool
+  and environment: 153 at `6d0feed`, where the baseline was set, and 221 at `master` `335e970`. So 68
+  exported symbols reached `master` undocumented. Every commit on `master` after `6d0feed` is a GitHub
+  merge (27 on the first-parent line, #186–#212): a merge on GitHub runs no local hook, a push from a machine without the tool
+  skips the check, and CI does not run it. Which PR added which symbol was not measured. The audit
+  branch added 16 more; all 84 are documented
+  there, and the count is back to 153. The gate stays a local hook only, so the drift can recur.
+  On this machine the gate first crashed, because `tree_sitter_typescript` was missing from the
+  Python on PATH; the tool's pinned `requirements.txt` was installed.
 - **The pre-push gate did not run for the `cd4f0d5` push (2026-09-24).** `core.hooksPath` was found
   set to the absolute `.git\hooks`, which holds only sample hooks. The repo's `prepare` script sets
   `.githooks`. `.git/config` was last written at 14:02:16. At 14:02 a security-guidance plugin review

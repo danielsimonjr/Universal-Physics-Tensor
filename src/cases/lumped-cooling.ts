@@ -225,6 +225,7 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
       },
     ],
   },
+  /** Evaluate the lumped sphere temperature, parent-series comparison and heat-transfer checks for the supplied inputs. */
   run(i) {
     requirePositive(ID, i, ['a_m', 'rho_kg_per_m3', 'c_J_per_kg_K', 'k_W_per_m_K', 'h_W_per_m2_K', 'T0_K', 'T_inf_K']);
     const {

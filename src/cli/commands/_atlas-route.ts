@@ -7,6 +7,7 @@ import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
 import type { AppliedTransport, AtlasBridge } from '../../cli-api.js';
 
+/** What composing an atlas route yields: `boundPath`'s claim or refusal, or a refusal for a missing Lipschitz constant. */
 export type RouteClaim =
   | ReturnType<CommandCtx['api']['boundPath']>
   | { kind: 'no-claim'; reason: 'missing-lipschitz'; detail: string };

@@ -26,6 +26,7 @@ import { MODULE_EXT, SOURCE_ROOT, tableName, type TableKind } from './record-tab
 
 export const REACH_METHOD = 'static-import-reach';
 
+/** The constant-table keys and module sources a recorded command can reach, by static import reach (it errs toward reachable). */
 export interface Attribution {
   method: typeof REACH_METHOD;
   command: string;
