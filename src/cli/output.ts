@@ -8,6 +8,8 @@
  * as explicit strings so round-tripping through JSON preserves them.
  */
 
+import { definitionsFor } from './statuses.js';
+
 export interface JsonEnvelope {
   command: string;
   /**
@@ -26,6 +28,10 @@ export interface JsonEnvelope {
   statisticDistribution?: Record<string, number>;
   /** `upt confront` — preprocessing and independence counts, recorded vs not recorded, each counted apart. */
   dataHandlingDistribution?: Record<string, Record<string, number>>;
+  /**
+   * The meaning of each status the command can emit, from STATUS_GLOSSARY (audit I13). mitJson`n   * fills it in; a command never sets it.
+   */
+  definitions?: Record<string, string>;
   result: unknown;
 }
 
@@ -75,5 +81,8 @@ export function sanitize(v: unknown): unknown {
 }
 
 export function emitJson(env: JsonEnvelope, write: (s: string) => void = (s) => process.stdout.write(s)): void {
-  write(JSON.stringify(sanitize(env), null, 2) + '\n');
+  const definitions = definitionsFor(env.command);
+  const { result, ...head } = env;
+  const full = Object.keys(definitions).length > 0 ? { ...head, definitions, result } : env;
+  write(JSON.stringify(sanitize(full), null, 2) + '\n');
 }

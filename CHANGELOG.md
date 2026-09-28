@@ -10,6 +10,21 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Audit I13: one glossary of status words** (2026-09-27). `upt help statuses` defines every status
+  the commands print (VACUOUS, UNKNOWN/unchecked, VIOLATED, valid, ADEQUATE, INADEQUATE,
+  UNDETERMINED, NEITHER, UNSETTLED, no composite claim, DECOY, NOT COVERED, the discover verdicts and
+  signals, reproduced/differs/not replayable, checked/refuted/unresolved) from one table,
+  `src/cli/statuses.ts`. `emitJson` adds `definitions` for the statuses the envelope's command can
+  emit, so no command keeps its own copy; audit's `result.definitions.decoy` now reads the same entry.
+  The test derives the statuses from ten commands' own output (all-capitals words in text, exact string
+  values in JSON, never prose) and requires each to be defined in the same invocation's envelope; a
+  control removes the definitions and the check reports them, and another shows prose containing
+  "valid" is not counted. 14 of its 18 tests were RED before the change. Found by the check: `decoy`
+  names two statuses, audit's failed reconstruction and discover's adjudication verdict, so the
+  glossary resolves a word per command. Changed wording: a regime record that states no inequality
+  now reads "no machine condition evaluated (VACUOUS — …)" instead of "valid (VACUOUS — …)", and
+  `regime --json` gives each record a `verdict`; three tests that pinned the old line were updated.
+
 - **Audit I10: `upt symbolic` prints LaTeX and a symbol table** (2026-09-27). Each composed (and
   simplified) chain now has a LaTeX line, with `\frac` for every division and a parenthesized base
   under every power, and a symbol table: each named symbol's meaning, value, SI unit and source

@@ -901,7 +901,7 @@ describe('I7 — a premise checklist: machine-checked, declared by you, denied b
   it('spring–LC: --deny lossless marks the premise contradicted, and the inequality verdict is untouched', async () => {
     const { text } = await run(['regime', 'oscillators', '--deny', 'lossless']);
     const b = block(text, 'ab-spring-lc');
-    expect(b).toMatch(/^\] ab-spring-lc: valid \(VACUOUS/);
+    expect(b).toMatch(/^\] ab-spring-lc: no machine condition evaluated \(VACUOUS/);
     expect(b).toMatch(/\n {4}CONTRADICTED by your --deny: lossless — this record does not apply as stated/);
     expect(/\n {4}premises not machine-checked: (.*)/.exec(b)![1]).not.toMatch(/lossless/);
   });

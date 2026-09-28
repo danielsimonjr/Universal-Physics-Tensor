@@ -8,6 +8,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
+import { statusMeaning } from '../statuses.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--source', valueStyle: 'attached' },
@@ -22,9 +23,7 @@ const HELP = `upt audit
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.`;
 
-const DECOY_DEFINITION =
-  'a set of constants closes the dimensions, but its monomial does not reproduce the evaluator: ' +
-  'a failed dimensional reconstruction, not a physical refutation of the formula';
+const DECOY_DEFINITION = statusMeaning('decoy');
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;

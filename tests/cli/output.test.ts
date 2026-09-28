@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { sanitize, emitJson } from '../../dist/cli/output.js';
 import type { JsonEnvelope } from '../../dist/cli/output.js';
 import { packageVersion } from '../../dist/cli/version.js';
+import { definitionsFor } from '../../dist/cli/statuses.js';
 
 describe('sanitize', () => {
   it('converts Infinity to the string "Infinity"', () => {
@@ -88,8 +89,17 @@ describe('emitJson', () => {
     emitJson(env, (s) => calls.push(s));
 
     expect(calls.length).toBe(1);
-    const expected = JSON.stringify(sanitize(env), null, 2) + '\n';
+    // Audit I13: the status definitions of the command are added before the result.
+    const expected =
+      JSON.stringify(sanitize({ command: 'discover', source: 'catalog', definitions: definitionsFor('discover'), result: env.result }), null, 2) + '\n';
     expect(calls[0]).toBe(expected);
+  });
+
+  it('adds no definitions for a command that emits no status', () => {
+    const calls: string[] = [];
+    emitJson({ command: 'eval', result: { value: 1 } }, (s) => calls.push(s));
+    expect(definitionsFor('eval')).toEqual({});
+    expect(calls[0]).toBe(JSON.stringify({ command: 'eval', result: { value: 1 } }, null, 2) + '\n');
   });
 
   it('produces output that is JSON.parse-able and ends with a trailing newline', () => {
@@ -104,7 +114,7 @@ describe('emitJson', () => {
 
     expect(output.endsWith('\n')).toBe(true);
     expect(() => JSON.parse(output)).not.toThrow();
-    expect(JSON.parse(output)).toEqual({ command: 'map', result: [1, 2, 3] });
+    expect(JSON.parse(output)).toEqual({ command: 'map', definitions: definitionsFor('map'), result: [1, 2, 3] });
   });
 
   it('defaults to writing to process.stdout.write when no write function is given', () => {

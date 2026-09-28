@@ -131,8 +131,11 @@ witness) could be meant. Earlier entries used the bare form for both.
 - [x] **audit I10** Reproducible equation rendering — F12 grouped denominators; open: no LaTeX, no
   symbol table. Each chain now prints LaTeX (`\frac` for every division) and a symbol table (meaning,
   value, SI unit, source); both round-trip through `eval` to the AST value, nested cases included.
-- [ ] **audit I13** Precise verdict words — F07/F11 reworded two; open: no single glossary, no JSON
-  definitions except DECOY, and a VACUOUS regime line still starts with "valid".
+- [x] **audit I13** Precise verdict words — F07/F11 reworded two; open: no single glossary, no JSON
+  definitions except DECOY, and a VACUOUS regime line still starts with "valid". One table
+  (`src/cli/statuses.ts`) now feeds `upt help statuses` and every `--json` envelope's `definitions`;
+  a vacuous regime line reads "no machine condition evaluated (VACUOUS …)". Found on the way: `decoy`
+  means two things (audit's failed reconstruction, discover's adjudication verdict); both are defined.
 - [ ] **Top-level help map usage** omits `--route`, `--family`, `--all-routes`, `--observable`,
   `--stored`, `--run`, `--evidence`.
 

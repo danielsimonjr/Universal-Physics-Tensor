@@ -75,7 +75,7 @@ describe('F08 — checked inequalities are kept apart from prose premises', () =
   it('a VACUOUS exact analogy lists its premises as not machine-checked (regime)', async () => {
     const { text } = await run(['regime', 'oscillators']);
     expect(text).toMatch(
-      /\[bridge\] ab-spring-lc: valid \(VACUOUS — states no inequality; nothing was checked\)\n {4}premises not machine-checked: m, k, L, C > 0; lossless; unforced; x0, q0 nonzero/,
+      /\[bridge\] ab-spring-lc: no machine condition evaluated \(VACUOUS — states no inequality; nothing was checked\)\n {4}premises not machine-checked: m, k, L, C > 0; lossless; unforced; x0, q0 nonzero/,
     );
   });
 

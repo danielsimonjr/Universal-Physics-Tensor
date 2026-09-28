@@ -35,7 +35,8 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
         dimensionless input's own name, e.g. --at theta0=0.2). Every model AND
         bridge is reported as valid, violated (naming the failed inequality),
         or UNKNOWN — a coordinate the point never supplied is NOT a pass, and a
-        regime that states no inequality is marked VACUOUS rather than passed.
+        regime that states no inequality reads 'no machine condition evaluated
+        (VACUOUS …)' rather than passed (\`upt help statuses\` defines each word).
         Each inequality is listed as satisfied, violated or unchecked. A
         bridge's prose side conditions (lossless, no-slip, ...) are never
         evaluated: they are listed as premises not machine-checked unless you
@@ -209,6 +210,14 @@ async function run(ctx: CommandCtx): Promise<number> {
       kind: r.kind,
       ok: check.ok,
       vacuous: r.regime.inequalities.length === 0,
+      verdict:
+        r.regime.inequalities.length === 0
+          ? ('vacuous' as const)
+          : check.ok === true
+            ? ('valid' as const)
+            : check.ok === false
+              ? ('violated' as const)
+              : ('unknown' as const),
       violated,
       unchecked,
       // The two bases never mix: `machine` is what this command evaluated at
@@ -303,11 +312,16 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   out('');
   for (const m of verdicts) {
-    const verdict = m.ok === true ? 'valid' : m.ok === false ? 'VIOLATED' : 'unknown';
-    // A vacuous 'valid' is marked on the same line, not left to read as a pass:
-    // nothing was checked, so the verdict is not evidence the record applies here.
-    const note = m.vacuous ? ' (VACUOUS — states no inequality; nothing was checked)' : '';
-    out(`  [${m.kind}] ${m.id}: ${verdict}${note}`);
+    // A record that states no inequality was not checked, so its line does not begin with a verdict
+    // that reads as a pass (audit I13); the tri-state's `true` is vacuous there.
+    const verdict = m.vacuous
+      ? 'no machine condition evaluated (VACUOUS — states no inequality; nothing was checked)'
+      : m.ok === true
+        ? 'valid'
+        : m.ok === false
+          ? 'VIOLATED'
+          : 'unknown';
+    out(`  [${m.kind}] ${m.id}: ${verdict}`);
     for (const v of m.violated) out(`    violated: ${v}`);
     for (const u of m.unchecked) out(`    unchecked (no value supplied): ${u}`);
     for (const s of m.premises.machine.satisfied) out(`    satisfied: ${s}`);

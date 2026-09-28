@@ -18,6 +18,7 @@ import * as api from '../cli-api.js';
 import { UsageError, CliError } from './errors.js';
 import { parseArgs } from './args.js';
 import { packageVersion } from './version.js';
+import { glossaryText } from './statuses.js';
 import { resolveCommand, type CommandCtx } from './command.js';
 import { recordInvocation, replayRecord, showRecord, type Io } from './record.js';
 // Side-effect import: registers every ported command (see commands/index.ts).
@@ -209,7 +210,8 @@ Usage:
   upt regime <family> [--at group=value ...] [--assume premise] [--deny premise]
         Where in parameter space a family's models are claimed to apply. Each
         model reads valid, VIOLATED (naming the failed inequality), or UNKNOWN
-        — a coordinate --at never supplied is NOT a pass. Prose premises are
+        — a coordinate --at never supplied is NOT a pass; one that states no
+        inequality reads 'no machine condition evaluated (VACUOUS …)'. Prose premises are
         never evaluated: --assume records your declaration (not evidence),
         --deny marks one contradicted, the rest stay unspecified. Also prints the
         pairwise regime overlap and, over the box --at states, the uncovered
@@ -261,6 +263,13 @@ Usage:
         exploratory rows only and tests on withheld holdout/replication rows.
 
   upt help        Show this message.
+  upt help <command>
+                  Show one command's usage and flags.
+  upt help statuses
+                  Define every status word the commands print (VACUOUS,
+                  UNKNOWN, VIOLATED, ADEQUATE, NEITHER, DECOY, NOT COVERED, …).
+                  Each --json envelope carries the definitions of the statuses
+                  its command can emit, under \`definitions\`.
 
 Run with no arguments for a short demo.
 
@@ -366,6 +375,10 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
 
     if (cmd === 'help' || cmd === '--help' || cmd === '-h') {
       const target = rest[0];
+      if (target === 'statuses') {
+        out(glossaryText());
+        return 0;
+      }
       if (target !== undefined) {
         const command = resolveCommand(target);
         if (!command) throw new UsageError(unknownCommandMessage(target));
