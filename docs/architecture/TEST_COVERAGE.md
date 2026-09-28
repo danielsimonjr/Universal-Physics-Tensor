@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 380 |
-| Total Test Files | 517 |
+| Total Test Files | 518 |
 | Source Files with Tests | 373 |
 | Source Files without Tests | 7 |
 | Coverage | 98.2% |
@@ -318,7 +318,7 @@ The following 7 source files are not directly imported by any test file:
 | `probe/search-budget.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `coverage-backfill.test.ts`, `generator-budget.test.ts`, `modules.test.ts` |
 | `probe/serialize.ts` | `benchmark-preregistration.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `serialize.test.ts` |
 | `probe/structure.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `coverage-backfill.test.ts`, `modules.test.ts` |
-| `probe/study.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `study-inputs.test.ts`, `study-refusals.test.ts`, `study.test.ts` |
+| `probe/study.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `study-inputs.test.ts`, `study-refusals.test.ts`, `study-replication.test.ts`, `study.test.ts` |
 | `probe/types.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `generator-budget.test.ts`, `modules.test.ts` |
 | `composition/proposed-bridges.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `proposed-bridges.test.ts` |
 | `composition/quantities.ts` | `association.test.ts`, `attribute-audit.test.ts`, `quantities.test.ts` |
@@ -740,6 +740,7 @@ The following 7 source files are not directly imported by any test file:
 | `probe/serialize.test.ts` | 1 files |
 | `probe/study-inputs.test.ts` | 1 files |
 | `probe/study-refusals.test.ts` | 1 files |
+| `probe/study-replication.test.ts` | 1 files |
 | `probe/study.test.ts` | 1 files |
 | `composition/proposed-bridges.test.ts` | 22 files |
 | `composition/quantities.test.ts` | 32 files |

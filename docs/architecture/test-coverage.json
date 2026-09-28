@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 380,
-    "totalTestFiles": 517,
+    "totalTestFiles": 518,
     "testedCount": 373,
     "untestedCount": 7,
     "coveragePercent": "98.2"
@@ -5084,6 +5084,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/study-inputs.test.ts",
       "tests/composition/probe/study-refusals.test.ts",
+      "tests/composition/probe/study-replication.test.ts",
       "tests/composition/probe/study.test.ts"
     ],
     "src/composition/probe/types.ts": [
@@ -12632,6 +12633,9 @@
       "src/composition/probe/study.ts"
     ],
     "tests/composition/probe/study-refusals.test.ts": [
+      "src/composition/probe/study.ts"
+    ],
+    "tests/composition/probe/study-replication.test.ts": [
       "src/composition/probe/study.ts"
     ],
     "tests/composition/probe/study.test.ts": [

@@ -10,6 +10,29 @@ from v0.1.0 onward.
 
 ### Added
 
+- **`probe study` catches near and affine replication copies, and takes several correction families
+  (audit I19 limits).**
+  - Replication rows at a study row's inputs (within 3σ of a declared input σ, else to 1e-9
+    relative) are tested for agreement too good to be true. Identity: Σz² on ν = n. Affine: y_rep =
+    a + b·y_study with the effective variance, ν = n − 2. Each is a lower-tail χ² test at α/2, computed
+    by a new `chiSquareCdf` that keeps the lower tail (1 − Q loses it below about 1e-16). Either
+    firing sets replication to `too-close` whatever the candidate; the verdict is unchanged. Before,
+    only an exact copy was refused, and a copy of the holdout shifted by 1 µs was scored as an
+    independent replication.
+  - Provenance comparisons ignore case, spacing and punctuation, so `LAB A` no longer passes as
+    independent of `lab a`. Inline replication rows are reported as sharing the study's provenance
+    block, and a replication file that declares the study's calibration is reported as not testing it.
+  - `correction` takes a list of families, one per dimensionless input (at most 6 powers in all),
+    admitted family by family. A new synthetic physical-pendulum control (`pendulum-physical`, √(1 +
+    0.4ρ²) from the parallel-axis theorem; the fixture's period is checked against RK4) needs both:
+    either family alone finds nothing.
+  - Not done, inherent: a blind control; no author who does not know the generating law is available
+    under `AGENTS.md`'s benchmark rules. The families are additive and pairs are found only at shared
+    inputs; both limits are stated in the report's caveats and in `upt help probe`.
+  - Deliberate test updates: `study-inputs.test.ts` reads the correction as a list. A paired check
+    first written in `study-replication.test.ts` claimed 1 − Q is orders of magnitude off at χ² = 1e-6
+    on ν = 4; it is 9e-5 off there, so the check moved to χ² = 1e-9, where 1 − Q returns 0.
+
 - **Replay covers file-writing, file-reading and private-literal cases (audit I17 limits).**
   - `map --out=PATH` entries replay into a temporary file, never over PATH. The file is compared by
     SHA-256 with the recorded artifact, and a mismatch is an `artifact` difference (exit 3). An

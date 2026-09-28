@@ -107,6 +107,16 @@ describe('upt probe study', () => {
     expect(t).toMatch(/extra-sum-of-squares\s+F test at p < α/);
     expect(t).toMatch(/none is a blind test of finding an\s+unknown one, and UPT ships no blind control/);
   });
+
+  it('help probe documents several correction families and the too-close replication outcome', async () => {
+    const c = capture();
+    expect(await runCli(['help', 'probe'], c.io)).toBe(0);
+    const t = text(c);
+    expect(t).toMatch(/or a list of them, one per input \(at most 6 powers in all\)/);
+    expect(t).toMatch(/The families are additive:\s+no cross term/);
+    expect(t).toMatch(/agreement too good to be true/);
+    expect(t).toMatch(/survives-replication \| refuted-on-replication \| too-close/);
+  });
 });
 
 describe('upt probe study — CSV, replication file', () => {

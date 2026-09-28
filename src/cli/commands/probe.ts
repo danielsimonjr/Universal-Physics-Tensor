@@ -115,11 +115,14 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                      fitPrefactor (default false) fits one scale on exploratory rows.
         criterion    optional {"alpha"} (default 0.001)
         design       optional {"variables": {input: {"min", "max", "steps"?}}}
-        correction   optional {"input": <dimensionless input u>, "powers": [2, 4]}:
-                     also search m(x)·(1 + c₁u² + c₂u⁴) for each monomial m, fit
-                     on exploratory rows only. Terms are admitted in the
-                     declared order while each passes an extra-sum-of-squares
-                     F test at p < α; no other function of u is searched.
+        correction   optional {"input": <dimensionless input u>, "powers": [2, 4]},
+                     or a list of them, one per input (at most 6 powers in all):
+                     also search m(x)·(1 + c₁u² + c₂u⁴ + …) for each monomial m,
+                     fit on exploratory rows only. Terms are admitted in the
+                     declared order, family by family, while each passes an
+                     extra-sum-of-squares F test at p < α; the first term a
+                     family fails ends that family. The families are additive:
+                     no cross term (u·v) and no other function is searched.
         CSV          '# key: value' lines above the header declare the study:
                      '# target: <column>', '# target.sigma: 2 ms',
                      '# governing.<input>.sigma: σ', '# provenance.synthetic: true',
@@ -131,10 +134,19 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
                      reasons as the JSON it compiles to.
         REPLICATION FILE (--replication=FILE): provenance, target, governing
                      and replication rows only. Refused if its source or
-                     acquisition is the study's, or if a row repeats a study
-                     row's data exactly (the same data renamed).
+                     acquisition is the study's (ignoring case, spacing and
+                     punctuation), or if a row repeats a study row's data
+                     exactly (the same data renamed).
+        closeness    replication rows at a study row's inputs are tested for
+                     agreement too good to be true: identity (Σz² on ν = n) and
+                     affine (y_rep = a + b·y_study, ν = n − 2), each a lower-tail
+                     χ² test at α/2. Either firing makes replication too-close:
+                     a copy, or an overstated σ. Rows at other inputs are not
+                     tested, so a copy at altered inputs is not caught.
         Verdicts: no-credible-candidate | refuted-on-holdout | survives-holdout |
-        untested-on-holdout; replication is reported separately. A candidate
+        untested-on-holdout; replication is reported separately
+        (survives-replication | refuted-on-replication | too-close |
+        no-replication-data | not-tested). A candidate
         is credible only if it passes on exploratory rows AND a constant model
         is rejected there. A fit is not a mechanism.
         Synthetic controls: tests/fixtures/probe-study/*.synthetic.{json,csv}.

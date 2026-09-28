@@ -320,7 +320,7 @@ describe('probe study — declared correction family', () => {
     expect(base.credible).toBe(false);
     expect(base.exploratory!.pass).toBe(false);
     const c = selectedOf(r);
-    expect(c.correction!.input).toBe('amplitude');
+    expect(c.correction!.terms.map((t) => t.input)).toEqual(c.correction!.terms.map(() => 'amplitude'));
     expect(c.correction!.terms.map((t) => t.power)).toEqual([2]);
     expect(c.fittedParameters).toBe(2);
     expect(r.verdict).toBe('survives-holdout');
@@ -362,7 +362,7 @@ describe('probe study — declared correction family', () => {
     const study = parseStudy(load('noise-amplitude'));
     expect(study.provenance.source).toContain(`seed ${NOISE_AMPLITUDE_SEED}`);
     const ex = study.observations.filter((o) => o.role === 'exploratory');
-    const powers = study.correction!.powers;
+    const powers = study.correction![0]!.powers;
     const y = ex.map((o) => o.observed);
     const s = ex.map((o) => o.sigma);
     const constant = lsq(ex.map(() => [1]), y, s);

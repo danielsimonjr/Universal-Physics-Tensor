@@ -117,6 +117,15 @@ them only partly met, and their rows are in "Review of the audit against the rec
   (it was before this work too …)", was half wrong: the owner's review measured 94.53% statements and
   86.36% branches on 2026-09-25, so branches fell below 85 with this work. Resolved in the review
   section below.)
+  Done 2026-09-27: replication rows at a study row's inputs are tested for agreement too good to be
+  true, identity (Σz²) and affine (y = a + b·y_study), each a lower-tail χ² test at α/2; either firing
+  makes replication `too-close`. Provenance matches ignore case, spacing and punctuation; inline rows
+  and a shared calibration are reported. `correction` takes a list of families, one per dimensionless
+  input. Limits that stand: only rows at shared inputs are paired, so a copy at altered inputs is not
+  caught; the families are additive (no cross term) and their declared order decides which terms are
+  tried first; an overstated σ also fires the closeness test. Not done, and inherent: a blind control.
+  Authoring one would take an author who does not know the generating law, and no such author is
+  available under the benchmark rules in `AGENTS.md`.
 - [x] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
   Six cases: the three above (now with hydrodynamic memory, Faxén/Brenner walls, amplifier noise and a
   resonator thermal floor) plus `case-skin-depth`, `case-lumped-cooling` and `case-kepler-rv`. Open:

@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 383
   totalModules: 12
-  totalExports: 2772
+  totalExports: 2774
 entryPoints:
   - file: src/index.ts
     type: main
@@ -12479,8 +12479,10 @@ modules:
         - loadStudyFromJson
         - loadStudyFile
         - attachReplication
+        - replicationIndependence
         - studyCsvToRaw
         - chiSquareSurvival
+        - chiSquareCdf
         - fSurvival
         - effectiveSigma
         - exprToInfix
@@ -12496,6 +12498,8 @@ modules:
         - StudyCorrection
         - StudyBaseline
         - ProbeStudy
+        - ClosenessTest
+        - ReplicationIndependence
         - SetTest
         - ModelTest
         - CorrectionStep
@@ -12509,8 +12513,10 @@ modules:
         - loadStudyFromJson
         - loadStudyFile
         - attachReplication
+        - replicationIndependence
         - studyCsvToRaw
         - chiSquareSurvival
+        - chiSquareCdf
         - fSurvival
         - effectiveSigma
         - exprToInfix
@@ -18640,11 +18646,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 82636
-  totalExports: 2772
+  totalLinesOfCode: 82856
+  totalExports: 2774
   totalClasses: 60
-  totalInterfaces: 432
-  totalFunctions: 686
+  totalInterfaces: 434
+  totalFunctions: 688
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 690

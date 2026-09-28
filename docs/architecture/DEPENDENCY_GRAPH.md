@@ -5129,15 +5129,16 @@ The codebase is organized into the following modules:
 
   ```text
   StudyProvenance, StudyQuantity, StudyObservation, StudyCorrection, StudyBaseline, ProbeStudy,
-  SetTest, ModelTest, CorrectionStep, CandidateTest, StudyCorrectionReport, StudyDesignSuggestion,
-  ProbeStudyResult, ProbeStudyOptions
+  ClosenessTest, ReplicationIndependence, SetTest, ModelTest, CorrectionStep, CandidateTest,
+  StudyCorrectionReport, StudyDesignSuggestion, ProbeStudyResult, ProbeStudyOptions
   ```
 
 - Functions:
 
   ```text
-  parseStudy, loadStudyFromJson, loadStudyFile, attachReplication, studyCsvToRaw, chiSquareSurvival,
-  fSurvival, effectiveSigma, exprToInfix, runProbeStudy, formatProbeStudy
+  parseStudy, loadStudyFromJson, loadStudyFile, attachReplication, replicationIndependence,
+  studyCsvToRaw, chiSquareSurvival, chiSquareCdf, fSurvival, effectiveSigma, exprToInfix,
+  runProbeStudy, formatProbeStudy
   ```
 
 
@@ -7253,12 +7254,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 82636 |
-| Total Exports | 2772 |
+| Total Lines of Code | 82856 |
+| Total Exports | 2774 |
 | Total Re-exports | 1335 |
 | Total Classes | 60 |
-| Total Interfaces | 432 |
-| Total Functions | 686 |
+| Total Interfaces | 434 |
+| Total Functions | 688 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |

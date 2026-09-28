@@ -1,4 +1,5 @@
 export function exactPeriod(length: number, gravity: number, amplitude: number): number;
+export function physicalPeriod(length: number, gravity: number, amplitude: number, bobRatio: number): number;
 export function buildFixtures(): Record<string, string>;
 export function renderCsv(study: unknown): string;
 export const NOISE_AMPLITUDE_SEED: number;

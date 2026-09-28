@@ -80,6 +80,13 @@ nothing validates prose and the next reader cannot tell.
   timing solution, not an independent test.
 - `probe study` large-amplitude control: the fitted θ² coefficient is 0.068, not the series' 1/16,
   because the θ⁴ term is not admitted and is absorbed; it is not a recovery of the series coefficient.
+- `probe study` (2026-09-27, audit I19 limits): the synthetic physical-pendulum control
+  (`pendulum-physical`, both families declared knowing the law) admits amplitude² and bob_ratio², fitted
+  0.0674 and 0.214 (series 1/16 and 1/5; θ⁴ and ρ⁴ not admitted), and survives its holdout (χ² = 8.12
+  on ν = 5, p = 0.15). Either family alone finds no credible candidate. Over 2000 honest re-measurements
+  (7 pairs, α = 0.2) the identity test flags 9.65% and the affine test 9.70%, against α/2 = 10%; either
+  flags 14.35%, so the combined false-flag rate is below α, not α/2. No shipped fixture's
+  replication rows share inputs with its study rows, so none of them is tested for closeness.
 - `discover --require-falsifier` hides **49 of 49** promising rows on `--source=canonical` and 4 of 7
   on the catalog: no independent falsifier ran and survived on them (negative result).
 - `confront` by statistic: 6 σ-residual tests, 2 limits and 11 consistency ratios (no σ). The
