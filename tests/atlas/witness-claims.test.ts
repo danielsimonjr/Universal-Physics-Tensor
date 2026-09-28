@@ -102,9 +102,9 @@ function checkPreservesClaim(entry: RegisteredNumericWitness, claim: WitnessClai
 }
 
 function checkClaim(entry: RegisteredNumericWitness, claim: WitnessClaim): Verdict {
+  if (claim.name === 'preserves') return checkPreservesClaim(entry, claim);
   if (claim.name === 'bound') return checkBoundClaim(entry, claim);
-  if (claim.name === 'bound-holds-at') return checkBoundHoldsAtClaim(entry, claim);
-  return checkPreservesClaim(entry, claim);
+  return checkBoundHoldsAtClaim(entry, claim);
 }
 
 const attributed = WITNESS_REGISTRY.filter(
