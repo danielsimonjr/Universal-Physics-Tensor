@@ -68,8 +68,9 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         every bridge of every family.
         Evidence is shown BY CLAIM (correspondence, regime, bound, horizon,
         preserves), each citing only what the record's structure links to it;
-        a witness is listed under the bound only where the witness registry
-        attributes it, and the rest are listed apart. Every witness shows its
+        a witness is listed under the bound (sharp, or at one point for a bound
+        that is not sharp) or under a preserved property only where the witness
+        registry attributes it, and the rest are listed apart. Every witness shows its
         execution status: a witness's name is not
         its result. --run executes the bridge's in-process registered
         witnesses now and reports checked / refuted / unresolved separately
@@ -113,8 +114,16 @@ async function run(ctx: CommandCtx): Promise<number> {
   // tests/atlas/witness-claims.test.ts checks each attribution against the spec.
   const registered = api.WITNESS_REGISTRY.filter((e) => e.recordId === b.id);
   const boundWitnesses = registered.flatMap((e) =>
-    e.kind === 'numeric' && e.claim?.name === 'bound' ? [{ id: e.spec.id, at: e.claim.at(e.spec.fineResolution) }] : [],
+    e.kind === 'numeric' && (e.claim?.name === 'bound' || e.claim?.name === 'bound-holds-at')
+      ? [{ id: e.spec.id, claim: e.claim.name, at: e.claim.at(e.spec.fineResolution) }]
+      : [],
   );
+  const preservesWitnesses = registered.flatMap((e) =>
+    e.kind === 'numeric' && e.claim?.name === 'preserves'
+      ? [{ id: e.spec.id, item: e.claim.item, at: e.claim.at(e.spec.fineResolution) }]
+      : [],
+  );
+  const preservedWithWitness = new Set(preservesWitnesses.map((w) => w.item)).size;
   const notTheRef = b.formalRef === undefined ? '' : '; the formal reference is not attributed to it';
   const n = b.regime.inequalities.length;
   const claims = {
@@ -154,13 +163,19 @@ async function run(ctx: CommandCtx): Promise<number> {
       text: b.bound === undefined ? 'none stated (no bound)' : `machine form recorded${notTheRef}`,
     },
     preserves: {
-      evidence: null,
-      text: b.preserves.length === 0 ? 'none stated' : 'no evidence is attributed to a preserved property',
+      evidence: preservesWitnesses.length === 0 ? null : preservesWitnesses,
+      text:
+        b.preserves.length === 0
+          ? 'none stated'
+          : preservesWitnesses.length === 0
+            ? 'no evidence is attributed to a preserved property'
+            : `${preservedWithWitness} of ${b.preserves.length} stated properties ${preservedWithWitness === 1 ? 'has' : 'have'} an attributed witness`,
     },
   };
 
   const registeredIds = new Set(registered.map((e) => e.spec.id));
-  const claimOf = (id: string): 'bound' | null => (boundWitnesses.some((w) => w.id === id) ? 'bound' : null);
+  const claimOf = (id: string): 'bound' | 'bound-holds-at' | 'preserves' | null =>
+    boundWitnesses.find((w) => w.id === id)?.claim ?? (preservesWitnesses.some((w) => w.id === id) ? 'preserves' : null);
   const ran = args.flags.has('run') ? (await api.runWitnessRegistry(registered)).results : null;
   const witnessExecution = b.witnesses.map((w) => {
     const result = ran?.find((r) => r.witnessId === w.id);
@@ -341,19 +356,28 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`  correspondence: ${claims.correspondence.text}`);
   out(`  regime: ${claims.regime.text}`);
   out(`  bound: ${claims.bound?.text ?? 'none stated'}`);
-  for (const bw of boundWitnesses) {
-    const at = Object.entries(bw.at)
+  const pointText = (p: Readonly<Record<string, number>>): string =>
+    Object.entries(p)
       .sort(([x], [y]) => x.localeCompare(y))
       .map(([k, v]) => `${k} = ${v}`)
       .join(', ');
+  for (const bw of boundWitnesses) {
     const w = witnessExecution.find((x) => x.id === bw.id)!;
-    out(`    - ${w.id} [${w.kind}] tests it at ${at} (its error there is the bound's norm; tolerance ≤ delta): ${execution(w)}`);
+    const what =
+      bw.claim === 'bound'
+        ? "its error there is the bound's norm; tolerance ≤ delta"
+        : "its error there is in the bound's norm; tolerance = deltaAt there, the bound is not sharp";
+    out(`    - ${w.id} [${w.kind}] tests it at ${pointText(bw.at)} (${what}): ${execution(w)}`);
   }
   out(`  horizon: ${claims.horizon.text}`);
   out(`  preserves: ${claims.preserves.text}`);
+  for (const pw of preservesWitnesses) {
+    const w = witnessExecution.find((x) => x.id === pw.id)!;
+    out(`    - ${w.id} [${w.kind}] tests '${pw.item}' at ${pointText(pw.at)}: ${execution(w)}`);
+  }
   const unattributed = witnessExecution.filter((w) => w.claim === null);
   out(
-    boundWitnesses.length === 0
+    boundWitnesses.length + preservesWitnesses.length === 0
       ? 'witness execution (the record does not attribute a witness to a claim):'
       : 'witness execution, witnesses not attributed to a claim:',
   );

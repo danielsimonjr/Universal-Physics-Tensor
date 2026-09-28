@@ -78,9 +78,14 @@ nothing validates prose and the next reader cannot tell.
   on the catalog: no independent falsifier ran and survived on them (negative result).
 - `confront` by statistic: 6 σ-residual tests, 2 limits and 11 consistency ratios (no σ). The
   ratios are not precision tests and are never counted as such.
-- `atlas --run`: 17 of the 20 atlas bridges have an entry in `WITNESS_REGISTRY` and can run
-  witnesses in-process. `ab-pendulum-linear` is one of the three without, so `--run` on it reports
-  "none" rather than a pass.
+- `atlas --run`: all 20 atlas bridges have an entry in `WITNESS_REGISTRY` and run witnesses
+  in-process (2026-09-27; it was 17 of 20). The three added are executable specs of W7
+  (`ab-pendulum-linear`, RK4 T/T0 at θ0 = 0.2, matches AGM to 3.5e-13), W8b (`ab-damped-massless`,
+  RK4 offset 0.0574 at m = 0.01 against the bound's 0.12, matches the closed form to 2e-9) and W9
+  (`ab-chain-wave`, integrated ring, 1 − ω/(cq) over (qa)²/24 = 0.99952 at N = 32). 22 witness
+  results, all checked. Negative results: `ab-damped-massless`'s bound is not sharp (5.7× loose at
+  its sup), so W8b is attributed as `bound-holds-at` one point, not as the bound's value; `ab-chain-wave`
+  has no bound, so W9 is attributed to a preserved property, not to a bound.
 - F02 as measured on `discover --source=canonical`: 49 promising, 0 mechanism-tested, 0 data-tested,
   49 without magnitude evidence, 49 with the axis unresolved, 0 with an entailed consequence.
   So nothing in the promising set is evidence yet (negative result).

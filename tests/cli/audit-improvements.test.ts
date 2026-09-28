@@ -17,6 +17,22 @@ async function run(args: string[]): Promise<{ code: number; text: string }> {
   const code = await runCli(args, c.io);
   return { code, text: c.lines.join('') };
 }
+/**
+ * Run one command with a patched api (test-only): the way to reach a state the
+ * shipped registry never produces, such as a bridge with no registered witness.
+ */
+async function runPatched(name: string, args: string[], patch: Record<string, unknown>): Promise<{ code: number; text: string }> {
+  const [{ resolveCommand }, { parseArgs }, api] = await Promise.all([
+    import('../../dist/cli/command.js'),
+    import('../../dist/cli/args.js'),
+    import('../../dist/cli-api.js'),
+    import('../../dist/cli/commands/index.js'),
+  ]);
+  const command = resolveCommand(name)!;
+  const c = capture();
+  const code = await command.run({ args: parseArgs(command.name, args, command.flags), api: { ...api, ...patch }, ...c.io } as any);
+  return { code, text: c.lines.join('') };
+}
 async function json(args: string[]): Promise<any> {
   const c = capture();
   const code = await runCli([...args, '--json'], c.io);
@@ -827,8 +843,31 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     expect(s).toMatch(/\n {2}horizon: machine form recorded; the formal reference is not attributed to it/);
     expect(s).toMatch(/\n {2}regime: 1 machine inequality — check a point with `upt regime oscillators --at …`/);
     expect(s).toMatch(/\n {2}preserves: no evidence is attributed to a preserved property/);
-    expect(s).toMatch(/\nwitness execution \(the record does not attribute a witness to a claim\):\n {2}- W7 \[numeric\]: result not observed by this command — its repository test file: bunx vitest run tests\/atlas\/oscillators-limits\.test\.ts\n/);
+    expect(s).toMatch(
+      /\n {2}bound: basis closed-form \(deltaAt is the exact error\); the formal reference is not attributed to it\n {4}- W7 \[numeric\] tests it at theta0 = 0\.2 \(its error there is the bound's norm; tolerance ≤ delta\): registered in-process, not run — `upt atlas ab-pendulum-linear --run` runs it\n/,
+    );
+    expect(s).toMatch(/\nwitness execution, witnesses not attributed to a claim:\n {2}- W7b \[numeric\]: result not observed by this command — its repository test file: bunx vitest run tests\/atlas\/oscillators-limits\.test\.ts\n/);
     expect(s).not.toMatch(/W7.*checked/);
+  });
+
+  it('--run on the pendulum runs W7 in-process and reports it under the bound (audit I15 limit closed)', async () => {
+    const r = await run(['atlas', 'ab-pendulum-linear', '--run']);
+    expect(r.code).toBe(0);
+    expect(r.text).toMatch(/\n {4}- W7 \[numeric\] tests it at theta0 = 0\.2 .*: checked \(run now\) — Fine error /);
+    expect(r.text).toMatch(/witnesses run: 1 checked · 0 refuted · 0 unresolved/);
+  });
+
+  it('a bound that is not sharp is tested at one point, and a preserved property can carry a witness', async () => {
+    const damped = await run(['atlas', 'ab-damped-massless']);
+    expect(damped.text).toMatch(
+      /\n {4}- W8b \[numeric\] tests it at b = 1, k = 1, m = 0\.01, v0 = 5, x0 = 1 \(its error there is in the bound's norm; tolerance = deltaAt there, the bound is not sharp\): registered in-process/,
+    );
+    const chain = await run(['atlas', 'ab-chain-wave', '--run']);
+    expect(chain.code).toBe(0);
+    expect(chain.text).toMatch(/\n {2}preserves: 1 of 3 stated properties has an attributed witness\n {4}- W9 \[numeric\] tests 'long-wavelength dispersion ω ≈ c q' at qa = 0\.19634954084936207: checked \(run now\)/);
+    const env = await json(['atlas', 'ab-chain-wave']);
+    expect(env.result.claims.preserves.evidence).toEqual([{ id: 'W9', item: 'long-wavelength dispersion ω ≈ c q', at: { qa: (2 * Math.PI) / 32 } }]);
+    expect(env.result.witnessExecution.map((w: any) => [w.id, w.claim])).toEqual([['W9', 'preserves'], ['W9b', null]]);
   });
 
   it('--run executes the registered witnesses and reports each status; exit 0 when none is refuted', async () => {
@@ -839,9 +878,21 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
   });
 
   it('--run on a bridge with no registered witness says so rather than reporting a pass', async () => {
-    const r = await run(['atlas', 'ab-pendulum-linear', '--run']);
+    // Every shipped bridge now has one, so the state is reached through a registry with the pendulum's removed.
+    const all = (await import('../../dist/cli-api.js')).WITNESS_REGISTRY;
+    const without = all.filter((e: any) => e.recordId !== 'ab-pendulum-linear');
+    expect(without.length).toBeLessThan(all.length);
+    const r = await runPatched('atlas', ['ab-pendulum-linear', '--run'], { WITNESS_REGISTRY: without });
     expect(r.code).toBe(0);
     expect(r.text).toMatch(/witnesses run: none — no witness of ab-pendulum-linear is registered to run in-process/);
+  });
+
+  it('every atlas bridge has at least one witness registered to run in-process', async () => {
+    const env = await json(['atlas']);
+    const reg = (await import('../../dist/cli-api.js')).WITNESS_REGISTRY;
+    const ids: string[] = env.result.bridges.map((b: any) => b.id);
+    expect(ids.length).toBe(20);
+    expect(ids.filter((id) => !reg.some((e: any) => e.recordId === id))).toEqual([]);
   });
 
   it('control: a refuted result is counted as refuted, never merged with unresolved, and fails the check', async () => {
@@ -865,7 +916,7 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     expect(apart).toMatch(/^witness execution, witnesses not attributed to a claim:\n {2}- WS4b \[numeric\]: result not observed/);
     expect(apart).not.toMatch(/WS4 \[/);
     const env = await json(['atlas', 'ab-klein-gordon-wave']);
-    expect(env.result.claims.bound.witnesses).toEqual([{ id: 'WS4', at: { omega0: 1, c: 1, k: 20 } }]);
+    expect(env.result.claims.bound.witnesses).toEqual([{ id: 'WS4', claim: 'bound', at: { omega0: 1, c: 1, k: 20 } }]);
     expect(env.result.witnessExecution.map((w: any) => [w.id, w.claim])).toEqual([['WS4', 'bound'], ['WS4b', null]]);
   });
 
@@ -879,8 +930,9 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     const env = await json(['atlas', 'ab-pendulum-linear']);
     expect(env.result.claims.correspondence.formalReference.fidelity).toBe('sanity-lemmas');
     expect(env.result.claims.bound.basis).toBe('closed-form');
-    expect(env.result.witnessExecution.map((w: any) => w.status)).toEqual(['not-observed', 'not-observed', 'not-observed']);
-    expect(env.result.claims.bound.witnesses).toEqual([]);
+    // W7 is registered in-process (audit I15 limit), so it is runnable; W7b and W7c are not.
+    expect(env.result.witnessExecution.map((w: any) => w.status)).toEqual(['runnable', 'not-observed', 'not-observed']);
+    expect(env.result.claims.bound.witnesses).toEqual([{ id: 'W7', claim: 'bound', at: { theta0: 0.2 } }]);
   });
 });
 

@@ -1,12 +1,13 @@
 {
   "metadata": {
-    "totalSourceFiles": 379,
+    "totalSourceFiles": 380,
     "totalTestFiles": 515,
     "testedCount": 372,
-    "untestedCount": 7,
-    "coveragePercent": "98.2"
+    "untestedCount": 8,
+    "coveragePercent": "97.9"
   },
   "untestedFiles": [
+    "src/atlas/oscillators/limit-witnesses.ts",
     "src/atlas/public.ts",
     "src/cases/quadrature.ts",
     "src/cli/commands/_atlas-route.ts",
@@ -629,6 +630,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts"
     ],
+    "src/atlas/oscillators/limit-witnesses.ts": [],
     "src/atlas/oscillators/models.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/model.test.ts",
@@ -801,6 +803,8 @@
     "src/atlas/witness-numeric.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/negative-controls.test.ts",
+      "tests/atlas/oscillators-coarse.test.ts",
+      "tests/atlas/oscillators-limits.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
       "tests/atlas/spring-lc-norm-transport.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
@@ -821,6 +825,8 @@
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
       "tests/atlas/negative-controls.test.ts",
+      "tests/atlas/oscillators-coarse.test.ts",
+      "tests/atlas/oscillators-limits.test.ts",
       "tests/atlas/spring-lc-norm-transport.test.ts",
       "tests/atlas/waves.test.ts",
       "tests/atlas/witness-claims.test.ts",
@@ -2406,9 +2412,11 @@
     ],
     "src/cli/args.ts": [
       "tests/cli/args.test.ts",
+      "tests/cli/audit-improvements.test.ts",
       "tests/cli/main-dispatch.test.ts"
     ],
     "src/cli/command.ts": [
+      "tests/cli/audit-improvements.test.ts",
       "tests/cli/help-covers-registry.test.ts",
       "tests/cli/help-flags.test.ts",
       "tests/cli/main-dispatch.test.ts",
@@ -7572,14 +7580,18 @@
       "src/atlas/oscillators/bridges-coarse.ts",
       "src/atlas/oscillators/dimensions.ts",
       "src/atlas/oscillators/models.ts",
-      "src/atlas/oscillators/rejections.ts"
+      "src/atlas/oscillators/rejections.ts",
+      "src/atlas/witness-numeric.ts",
+      "src/atlas/witness-specs.ts"
     ],
     "tests/atlas/oscillators-exact.test.ts": [
       "src/atlas/oscillators/bridges-exact.ts"
     ],
     "tests/atlas/oscillators-limits.test.ts": [
       "src/atlas/oscillators/bridges-limits.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/atlas/witness-numeric.ts",
+      "src/atlas/witness-specs.ts"
     ],
     "tests/atlas/overlay-types.test.ts": [
       "src/composition/edge.ts",
@@ -9233,6 +9245,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/command.ts",
+      "src/cli/args.ts",
       "src/cli-api.ts",
       "src/index.ts",
       "src/composition/user-equation.ts",

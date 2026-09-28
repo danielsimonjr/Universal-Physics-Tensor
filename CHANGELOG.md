@@ -10,6 +10,22 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Every atlas bridge now runs a witness in-process (audit I15).** Three executable specs join
+  `WITNESS_REGISTRY` (`src/atlas/oscillators/limit-witnesses.ts`), so `upt atlas <id> --run` no longer
+  answers "none" for `ab-pendulum-linear`, `ab-damped-massless` or `ab-chain-wave`:
+  - W7: the pendulum's T/T0, integrated by RK4, at θ0 = 0.2. It is attributed to the bound. Its
+    error there is the bound's `deltaAt`, which is the AGM form, a second method (agreement 3.5e-13).
+  - W8b: the full damped spring's sup offset from e^{−t} outside the layer, at m = 0.01. The bound is
+    not sharp, so a new claim kind, `bound-holds-at`, takes the bound's `deltaAt` there (0.12) as the
+    tolerance. The integrated offset, 0.0574, matches the two-root closed form to 2e-9.
+  - W9: the integrated ring's 1 − ω/(cq) over (qa)²/24 at N = 32 (0.99952). The chain has no bound,
+    so a new claim kind, `preserves`, attributes W9 to "long-wavelength dispersion ω ≈ c q".
+  Each has a negative control that is refuted: the θ0²/16 tolerance; the 2m/b tolerance, with the
+  bound's own `deltaAt` still passing; and the (qa)²/12 coefficient. Each also has a meta-check that
+  the true claim resolves. `witness-claims.test.ts` checks the two new claim kinds against the
+  record. `atlas` prints them per claim. `data/atlas/witness-results.json` now holds 22 results, all
+  checked. The pendulum golden changes because W7 is now attributed to the bound. The criterion-2
+  atlas-condition hash is unchanged.
 - **Atlas equation links: the eight links that predated the numeric-check rule are now each checked,
   and one link is added.** `tests/atlas/canonical-links.test.ts` derives every recorded link from
   its model: RK4 periods (model-spring's ω), mode frequencies from the model's own spatial operator

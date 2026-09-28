@@ -27,8 +27,10 @@ export interface TransportCircuit {
  * First downward zero crossing of the release from rest at `q0 > 0`, by cubic
  * Hermite interpolation of the bracketing RK4 step (values and derivatives at
  * both ends), refined by Newton. Released from rest, it is a quarter period.
+ *
+ * @internal
  */
-function quarterPeriod(accel: (q: number) => number, q0: number, h: number, maxSteps: number): number {
+export function quarterPeriod(accel: (q: number) => number, q0: number, h: number, maxSteps: number): number {
   let x = q0;
   let v = 0;
   for (let i = 0; i < maxSteps; i++) {

@@ -208,6 +208,42 @@
         "fine": 0.12492197250392678,
         "ratio": 3.992541914059367
       }
+    },
+    {
+      "recordId": "ab-pendulum-linear",
+      "witnessId": "W7",
+      "kind": "numeric",
+      "status": "checked",
+      "detail": "Fine error 0.00250574422860117 is within tolerance 0.002507, and refinement reduced the error by a factor of 4.027801075813206.",
+      "convergence": {
+        "coarse": 0.010092639299672523,
+        "fine": 0.00250574422860117,
+        "ratio": 4.027801075813206
+      }
+    },
+    {
+      "recordId": "ab-damped-massless",
+      "witnessId": "W8b",
+      "kind": "numeric",
+      "status": "checked",
+      "detail": "Fine error 0.05740000229213571 is within tolerance 0.12, and refinement reduced the error by a factor of 1.9257657114035949.",
+      "convergence": {
+        "coarse": 0.11053895624868271,
+        "fine": 0.05740000229213571,
+        "ratio": 1.9257657114035949
+      }
+    },
+    {
+      "recordId": "ab-chain-wave",
+      "witnessId": "W9",
+      "kind": "numeric",
+      "status": "checked",
+      "detail": "Fine error 0.0004818037019190813 is within tolerance 0.005, and refinement reduced the error by a factor of 3.9972474079370457.",
+      "convergence": {
+        "coarse": 0.0019258885986305208,
+        "fine": 0.0004818037019190813,
+        "ratio": 3.9972474079370457
+      }
     }
   ]
 }

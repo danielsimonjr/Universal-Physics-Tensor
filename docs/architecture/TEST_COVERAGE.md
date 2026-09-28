@@ -10,20 +10,21 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 379 |
+| Total Source Files | 380 |
 | Total Test Files | 515 |
 | Source Files with Tests | 372 |
-| Source Files without Tests | 7 |
-| Coverage | 98.2% |
+| Source Files without Tests | 8 |
+| Coverage | 97.9% |
 
 ---
 
 ## Source Files Without Test Coverage
 
-The following 7 source files are not directly imported by any test file:
+The following 8 source files are not directly imported by any test file:
 
 ### atlas/
 
+- `src/atlas/oscillators/limit-witnesses.ts` → Expected test: `tests/unit/atlas/limit-witnesses.test.ts`
 - `src/atlas/public.ts` → Expected test: `tests/unit/atlas/public.test.ts`
 
 ### cases/
@@ -102,9 +103,9 @@ The following 7 source files are not directly imported by any test file:
 | `waves/numerics.ts` | `closure.test.ts`, `negative-controls.test.ts`, `waves.test.ts` |
 | `atlas/witness-artifact.ts` | `barrel-completeness.test.ts`, `witness-results.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/witness-dominance.ts` | `pendulum-position-translation.test.ts`, `witness-dominance.test.ts` |
-| `atlas/witness-numeric.ts` | `barrel-completeness.test.ts`, `negative-controls.test.ts`, `pendulum-phase-translation.test.ts`, `spring-lc-norm-transport.test.ts`, `spring-lc-phase-carriage.test.ts`, `witness-runners.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `atlas/witness-numeric.ts` | `barrel-completeness.test.ts`, `negative-controls.test.ts`, `oscillators-coarse.test.ts`, `oscillators-limits.test.ts`, `pendulum-phase-translation.test.ts`, `spring-lc-norm-transport.test.ts`, `spring-lc-phase-carriage.test.ts`, `witness-runners.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/witness-result.ts` | `barrel-completeness.test.ts`, `witness-runners.test.ts` |
-| `atlas/witness-specs.ts` | `barrel-completeness.test.ts`, `closure.test.ts`, `diffusion.test.ts`, `negative-controls.test.ts`, `spring-lc-norm-transport.test.ts`, `waves.test.ts`, `witness-claims.test.ts`, `witness-results.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `atlas/witness-specs.ts` | `barrel-completeness.test.ts`, `closure.test.ts`, `diffusion.test.ts`, `negative-controls.test.ts`, `oscillators-coarse.test.ts`, `oscillators-limits.test.ts`, `spring-lc-norm-transport.test.ts`, `waves.test.ts`, `witness-claims.test.ts`, `witness-results.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/witness-symbolic.ts` | `barrel-completeness.test.ts`, `negative-controls.test.ts`, `witness-runners.test.ts` |
 | `witnesses/quantum-support.ts` | `diffusion.test.ts`, `quantum-support.test.ts` |
 | `bridges/be11-decoherence-confrontation.ts` | `atlas-public-closure.test.ts`, `public-surface.test.ts`, `be11-decoherence-confrontation.test.ts`, `bridge-equations-facade.test.ts`, `confrontation-consistency-gap.test.ts`, `public-api-stability.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
@@ -224,8 +225,8 @@ The following 7 source files are not directly imported by any test file:
 | `cases/skin-depth.ts` | `skin-depth.test.ts` |
 | `cases/types.ts` | `evaluators.test.ts`, `applied-cases.test.ts`, `applied-cases.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `src/cli-api.ts` | `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
-| `cli/args.ts` | `args.test.ts`, `main-dispatch.test.ts` |
-| `cli/command.ts` | `help-covers-registry.test.ts`, `help-flags.test.ts`, `main-dispatch.test.ts`, `record-hardening.test.ts`, `recover-conventions.test.ts` |
+| `cli/args.ts` | `args.test.ts`, `audit-improvements.test.ts`, `main-dispatch.test.ts` |
+| `cli/command.ts` | `audit-improvements.test.ts`, `help-covers-registry.test.ts`, `help-flags.test.ts`, `main-dispatch.test.ts`, `record-hardening.test.ts`, `recover-conventions.test.ts` |
 | `commands/_atlas-map.ts` | `map-atlas-results.test.ts` |
 | `commands/_discovery-opts.ts` | `helper-coverage.test.ts` |
 | `commands/atlas.ts` | `gr-spine-regime.test.ts`, `stokes-einstein-regime.test.ts`, `applied-cases.test.ts`, `applied-physics-audit.test.ts`, `atlas-command.test.ts`, `audit-improvements.test.ts`, `canonical-compare-cli.test.ts`, `cli-from-src.test.ts`, `command-count-prose.test.ts`, `confront.test.ts`, `discover-derive-samples.test.ts`, `eval-functions-builtin.test.ts`, `eval-functions.test.ts`, `exit-codes.test.ts`, `explain-bridge-redirect.test.ts`, `explain-not-covered.test.ts`, `help-covers-registry.test.ts`, `help-flags.test.ts`, `inprocess-golden.test.ts`, `json-contract.test.ts`, `main-dispatch.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `map-filters.test.ts`, `new-commands.test.ts`, `path.test.ts`, `persona-0471-cli.test.ts`, `probe-falsify-says-why.test.ts`, `probe-help-problem-format.test.ts`, `probe-study.test.ts`, `probe.test.ts`, `record-builtin-parser.test.ts`, `record-hardening.test.ts`, `record-replay.test.ts`, `recover-conventions.test.ts`, `regime-at-resolution.test.ts`, `regime.test.ts`, `source-anchor.test.ts`, `source-extension.test.ts`, `statuses.test.ts`, `suggest-ranking-cli.test.ts`, `symbolic-latex.test.ts`, `upt-discover-opts.test.ts` |
@@ -465,9 +466,9 @@ The following 7 source files are not directly imported by any test file:
 | `atlas/models.test.ts` | 5 files |
 | `atlas/negative-controls.test.ts` | 13 files |
 | `atlas/ode-helper.test.ts` | 1 files |
-| `atlas/oscillators-coarse.test.ts` | 8 files |
+| `atlas/oscillators-coarse.test.ts` | 10 files |
 | `atlas/oscillators-exact.test.ts` | 1 files |
-| `atlas/oscillators-limits.test.ts` | 2 files |
+| `atlas/oscillators-limits.test.ts` | 4 files |
 | `atlas/overlay-types.test.ts` | 4 files |
 | `atlas/path-bound.test.ts` | 12 files |
 | `atlas/pendulum-phase-translation.test.ts` | 6 files |
@@ -633,7 +634,7 @@ The following 7 source files are not directly imported by any test file:
 | `cli/applied-physics-audit.test.ts` | 25 files |
 | `cli/args.test.ts` | 2 files |
 | `cli/atlas-command.test.ts` | 27 files |
-| `cli/audit-improvements.test.ts` | 204 files |
+| `cli/audit-improvements.test.ts` | 206 files |
 | `cli/canonical-compare-cli.test.ts` | 25 files |
 | `cli/cli-from-src.test.ts` | 25 files |
 | `cli/closed-stdout.test.ts` | 0 files |

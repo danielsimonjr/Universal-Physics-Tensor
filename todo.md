@@ -80,6 +80,9 @@ them only partly met, and their rows are in "Review of the audit against the rec
   Five witnesses (WS4, WD6, WD7, WS5, WS7) are attributed to their bridge's bound, each checked against
   its spec. None can be attributed to correspondence, regime, horizon or preserves: no spec ties to
   them. Open: an executable spec for witness W7 (pendulum) so it can be attributed.
+  Done 2026-09-27: W7 (bound), W8b (`bound-holds-at`: `ab-damped-massless`'s bound is not sharp)
+  and W9 (`preserves`: `ab-chain-wave` has no bound) are registered, so every atlas bridge runs a
+  witness in-process; each has a negative control that is refuted and a meta-check.
 - [x] **I16** Focused (neighborhood/route/family) map exports.
   `map --around`, `--route=FROM,TO` and `--family=NAME`; models join the equation graph only through
   their recorded `canonicalRefs`. `--all-routes`, `--observable`, and `--stored`/`--run` evidence are

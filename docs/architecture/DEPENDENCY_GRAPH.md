@@ -37,7 +37,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 64 files
+- **atlas**: 65 files
 - **bridges**: 90 files
 - **canonical**: 18 files
 - **cases**: 9 files
@@ -645,6 +645,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/atlas/oscillators/limit-witnesses.ts` - The measurements behind the in-process witnesses of the three oscillator
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./norm-transport-witness.js` | `quarterPeriod` | Import |
+
+**Exports:**
+- Functions: `measurePendulumPeriodRatio`, `measureMasslessOffset`, `measureChainDispersionError`
+- Constants: `W7_FIXTURE`, `W8B_FIXTURE`, `W9_FIXTURE`
+
+---
+
 ### `src/atlas/oscillators/models.ts` - The nine oscillator models of design note §3.
 
 **Internal Dependencies:**
@@ -672,7 +685,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `TransportCircuit`
-- Functions: `measureTransportedPeriodError`
+- Functions: `quarterPeriod`, `measureTransportedPeriodError`
 
 ---
 
@@ -1128,11 +1141,14 @@ The codebase is organized into the following modules:
 | `./oscillators/bridges-limits.js` | `pendulumPeriodErrorAt` | Import |
 | `./oscillators/norm-transport.js` | `SPRING_LC_RELATIVE_PERIOD_TRANSPORT, W1TAU_FIXTURE` | Import |
 | `./oscillators/norm-transport-witness.js` | `measureTransportedPeriodError` | Import |
+| `./oscillators/bridges-limits.js` | `dampedOffsetBoundAt` | Import |
+| `./oscillators/bridges-coarse.js` | `dispersionErrorApproximation` | Import |
+| `./oscillators/limit-witnesses.js` | `measureChainDispersionError, measureMasslessOffset, measurePendulumPeriodRatio, W7_FIXTURE, W8B_FIXTURE, W9_FIXTURE` | Import |
 | `./witness-numeric.js` | `NumericWitnessSpec` | Import (type-only) |
 | `./witness-symbolic.js` | `SymbolicWitnessSpec` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `RegisteredSymbolicWitness`, `WitnessClaim`, `RegisteredNumericWitness`
+- Interfaces: `RegisteredSymbolicWitness`, `RegisteredNumericWitness`
 - Constants:
 
   ```text
@@ -7078,7 +7094,7 @@ The codebase is organized into the following modules:
 | `index` | 37 files | 0 files |
 | `link-prediction` | 2 files | 1 files |
 | `model` | 2 files | 12 files |
-| `bridges-coarse` | 5 files | 1 files |
+| `bridges-coarse` | 5 files | 2 files |
 | `bridges-exact` | 4 files | 3 files |
 | `bridges-limits` | 6 files | 8 files |
 
@@ -7099,7 +7115,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[leakage]
-        N5[...59 more]
+        N5[...60 more]
     end
 
     subgraph Bridges
@@ -7226,14 +7242,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 382 |
+| Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 82024 |
-| Total Exports | 2756 |
+| Total Lines of Code | 82294 |
+| Total Exports | 2763 |
 | Total Re-exports | 1331 |
 | Total Classes | 60 |
-| Total Interfaces | 431 |
-| Total Functions | 677 |
+| Total Interfaces | 430 |
+| Total Functions | 681 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |

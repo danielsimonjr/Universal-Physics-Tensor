@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 382,
+    "totalFiles": 383,
     "totalModules": 12,
-    "totalExports": 2756
+    "totalExports": 2763
   },
   "entryPoints": [
     {
@@ -2347,6 +2347,37 @@
           "OSCILLATOR_FAMILY"
         ]
       },
+      "src/atlas/oscillators/limit-witnesses.ts": {
+        "description": "The measurements behind the in-process witnesses of the three oscillator",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./norm-transport-witness.js",
+            "imports": [
+              "quarterPeriod"
+            ]
+          }
+        ],
+        "exports": [
+          "W7_FIXTURE",
+          "W8B_FIXTURE",
+          "W9_FIXTURE",
+          "measurePendulumPeriodRatio",
+          "measureMasslessOffset",
+          "measureChainDispersionError"
+        ],
+        "functions": [
+          "measurePendulumPeriodRatio",
+          "measureMasslessOffset",
+          "measureChainDispersionError"
+        ],
+        "constants": [
+          "W7_FIXTURE",
+          "W8B_FIXTURE",
+          "W9_FIXTURE"
+        ]
+      },
       "src/atlas/oscillators/models.ts": {
         "description": "The nine oscillator models of design note §3.",
         "externalDependencies": [],
@@ -2423,12 +2454,14 @@
           }
         ],
         "exports": [
+          "quarterPeriod",
           "measureTransportedPeriodError"
         ],
         "interfaces": [
           "TransportCircuit"
         ],
         "functions": [
+          "quarterPeriod",
           "measureTransportedPeriodError"
         ]
       },
@@ -3937,6 +3970,29 @@
             ]
           },
           {
+            "file": "./oscillators/bridges-limits.js",
+            "imports": [
+              "dampedOffsetBoundAt"
+            ]
+          },
+          {
+            "file": "./oscillators/bridges-coarse.js",
+            "imports": [
+              "dispersionErrorApproximation"
+            ]
+          },
+          {
+            "file": "./oscillators/limit-witnesses.js",
+            "imports": [
+              "measureChainDispersionError",
+              "measureMasslessOffset",
+              "measurePendulumPeriodRatio",
+              "W7_FIXTURE",
+              "W8B_FIXTURE",
+              "W9_FIXTURE"
+            ]
+          },
+          {
             "file": "./witness-numeric.js",
             "imports": [
               "NumericWitnessSpec"
@@ -3970,7 +4026,6 @@
         ],
         "interfaces": [
           "RegisteredSymbolicWitness",
-          "WitnessClaim",
           "RegisteredNumericWitness"
         ],
         "constants": [
@@ -26069,6 +26124,7 @@
           "src/atlas/oscillators/bridges-limits.ts",
           "src/atlas/oscillators/dimensions.ts",
           "src/atlas/oscillators/index.ts",
+          "src/atlas/oscillators/limit-witnesses.ts",
           "src/atlas/oscillators/models.ts",
           "src/atlas/oscillators/norm-transport-witness.ts",
           "src/atlas/oscillators/norm-transport.ts",
@@ -26479,16 +26535,16 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 382,
+    "totalTypeScriptFiles": 383,
     "totalModules": 12,
-    "totalLinesOfCode": 82024,
-    "totalExports": 2756,
+    "totalLinesOfCode": 82294,
+    "totalExports": 2763,
     "totalClasses": 60,
-    "totalInterfaces": 431,
-    "totalFunctions": 677,
+    "totalInterfaces": 430,
+    "totalFunctions": 681,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 687,
+    "totalConstants": 690,
     "totalReExports": 1331,
     "totalTypeOnlyImports": 523,
     "runtimeCircularDeps": 0,

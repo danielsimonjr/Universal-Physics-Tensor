@@ -20,7 +20,18 @@ import {
 } from '../../src/atlas/oscillators/bridges-limits.js';
 import { MissingHorizonError } from '../../src/atlas/types.js';
 import type { ApproximationBound } from '../../src/atlas/types.js';
+import { runNumericWitness } from '../../src/atlas/witness-numeric.js';
+import type { NumericWitnessSpec } from '../../src/atlas/witness-numeric.js';
+import { WITNESS_REGISTRY } from '../../src/atlas/witness-specs.js';
+import type { RegisteredNumericWitness } from '../../src/atlas/witness-specs.js';
 import { rk4 } from './_ode.js';
+
+/** The registered in-process entry of a witness, refusing one that is absent or not numeric. */
+function registeredNumeric(id: string): RegisteredNumericWitness {
+  const e = WITNESS_REGISTRY.find((w) => w.spec.id === id);
+  if (e === undefined || e.kind !== 'numeric') throw new Error(`${id}: not a registered numeric witness`);
+  return e;
+}
 
 /** Arithmetic-geometric mean of two positive reals. */
 function agm(a0: number, b0: number): number {
@@ -240,5 +251,100 @@ describe('both bridges carry a mandatory horizon', () => {
       uniformity: null,
     };
     expect(() => makeApproximation(empty)).toThrow(MissingHorizonError);
+  });
+});
+
+describe('W7 — the registered in-process spec: RK4 period of the pendulum against the AGM closed form', () => {
+  it('is registered under ab-pendulum-linear and attributed to its bound', () => {
+    const e = registeredNumeric('W7');
+    expect(e.recordId).toBe('ab-pendulum-linear');
+    expect(e.claim?.name).toBe('bound');
+    expect(e.claim?.at(e.spec.fineResolution)).toEqual({ theta0: 0.2 });
+    expect(e.claim?.at(e.spec.coarseResolution)).toEqual({ theta0: 0.4 });
+  });
+
+  it('integrates θ″ = −sin θ: T/T0 − 1 equals this file\'s own AGM period ratio within 1e-12 at both amplitudes', () => {
+    // Second method: the spec integrates the equation of motion; periodRatio above
+    // evaluates the complete elliptic integral by its own AGM.
+    const { spec } = registeredNumeric('W7');
+    for (const [r, theta0] of [[spec.coarseResolution, 0.4], [spec.fineResolution, 0.2]] as const) {
+      expect(Math.abs(spec.evaluate(r) - periodRatio(theta0))).toBeLessThan(1e-12);
+    }
+  });
+
+  it('checks: the fine error is inside the recorded [0.002505, 0.002507], and halving θ0 cuts it about 4×', () => {
+    const { spec } = registeredNumeric('W7');
+    const fineError = spec.evaluate(spec.fineResolution) - spec.target;
+    expect(fineError).toBeGreaterThan(0.002505);
+    expect(fineError).toBeLessThan(0.002507);
+    const r = runNumericWitness(spec);
+    expect(r.status).toBe('checked');
+    expect(r.convergence!.ratio).toBeGreaterThan(3.9);
+    expect(r.convergence!.ratio).toBeLessThan(4.1);
+  });
+
+  it('NEGATIVE CONTROL: the series θ0²/16 used as the bound is refuted, because the series understates the error', () => {
+    const { spec } = registeredNumeric('W7');
+    const wrong: NumericWitnessSpec = { ...spec, tolerance: THETA0 ** 2 / 16 };
+    expect(runNumericWitness(wrong).status).toBe('refuted');
+  });
+
+  it('META-CHECK: the same assertion FAILS on the true spec (the control can fail)', () => {
+    expect(runNumericWitness(registeredNumeric('W7').spec).status).not.toBe('refuted');
+  });
+});
+
+describe('W8b — the registered in-process spec: the damped spring integrated, against its two-root solution', () => {
+  const b = 1;
+  const k = 1;
+  const v0 = 5;
+
+  /** sup |x_full − e^(−t)| on the grid t = i·m/20, i ≥ 100 (t ≥ 5m/b), up to t = 10, from the closed-form roots. */
+  function closedFormSup(m: number): number {
+    const { slow, fast } = roots(m, b, k);
+    const A = (v0 - fast) / (slow - fast);
+    const B = (slow - v0) / (slow - fast);
+    const h = m / 20;
+    let sup = 0;
+    for (let i = 100; i <= Math.ceil(10 / h); i++) {
+      const t = i * h;
+      sup = Math.max(sup, Math.abs(A * Math.exp(slow * t) + B * Math.exp(fast * t) - Math.exp((-k / b) * t)));
+    }
+    return sup;
+  }
+
+  it('is registered under ab-damped-massless and attributed to its bound at one point, not as sharp', () => {
+    const e = registeredNumeric('W8b');
+    expect(e.recordId).toBe('ab-damped-massless');
+    expect(e.claim?.name).toBe('bound-holds-at');
+    expect(e.claim?.at(e.spec.fineResolution)).toEqual({ m: 0.01, b: 1, k: 1, x0: 1, v0: 5 });
+  });
+
+  it('measures the bound\'s norm: the RK4 sup equals the closed-form sup within 1e-7 of itself at both masses', () => {
+    const { spec } = registeredNumeric('W8b');
+    for (const [r, m] of [[spec.coarseResolution, 0.02], [spec.fineResolution, 0.01]] as const) {
+      const exact = closedFormSup(m);
+      expect(exact).toBeGreaterThan(0);
+      expect(Math.abs(spec.evaluate(r) - exact) / exact).toBeLessThan(1e-7);
+    }
+  });
+
+  it('checks against the tolerance 2(1+|v0|)m/b = 0.12 at m = 0.01, and the offset about halves with m', () => {
+    const { spec } = registeredNumeric('W8b');
+    expect(spec.tolerance).toBe(AB_DAMPED_MASSLESS.bound!.deltaAt!({ m: 0.01, b: 1, k: 1, x0: 1, v0: 5 }));
+    expect(spec.tolerance).toBeCloseTo(0.12, 15);
+    const r = runNumericWitness(spec);
+    expect(r.status).toBe('checked');
+    expect(r.convergence!.ratio).toBeGreaterThan(1.8);
+    expect(r.convergence!.ratio).toBeLessThan(2.1);
+  });
+
+  it('NEGATIVE CONTROL: 2m/b, the bound without its (1 + |v0|) factor, is refuted', () => {
+    const { spec } = registeredNumeric('W8b');
+    expect(runNumericWitness({ ...spec, tolerance: (2 * 0.01) / b }).status).toBe('refuted');
+  });
+
+  it('META-CHECK: the same assertion FAILS on the true spec (the control can fail)', () => {
+    expect(runNumericWitness(registeredNumeric('W8b').spec).status).not.toBe('refuted');
   });
 });
