@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 383
   totalModules: 12
-  totalExports: 2763
+  totalExports: 2767
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7103,6 +7103,8 @@ modules:
         - buildRouteView
         - buildRoutesView
         - buildObservableView
+        - buildAtlasEvidenceView
+        - atlasEvidenceText
         - formatAtlasFilterLegend
         - bridgeIdsOf
         - buildFamilyView
@@ -7128,6 +7130,7 @@ modules:
         - CompositeEvidenceView
         - RoutesView
         - ObservableView
+        - AtlasEvidenceView
         - AtlasFilter
         - AtlasFilterStats
         - FamilyView
@@ -7138,6 +7141,8 @@ modules:
         - buildRouteView
         - buildRoutesView
         - buildObservableView
+        - buildAtlasEvidenceView
+        - atlasEvidenceText
         - formatAtlasFilterLegend
         - bridgeIdsOf
         - buildFamilyView
@@ -7227,6 +7232,13 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ./_atlas-map.js
+          imports:
+            - atlasEvidenceText
+            - buildAtlasEvidenceView
+            - loadStoredResults
+            - runResults
+            - WitnessResults
       exports:
         - command
         - summarizeWitnessRuns
@@ -8628,6 +8640,11 @@ modules:
             - deriveCompositeEvidence
             - NO_PASSING_WITNESSES
           reExport: true
+        - file: ./atlas/coverage.js
+          imports:
+            - summarizeEvidence
+            - ALL_EVIDENCE_TAGS
+          reExport: true
         - file: ./atlas/witness-artifact.js
           imports:
             - runWitnessRegistry
@@ -8810,6 +8827,8 @@ modules:
         - deriveEvidence
         - deriveCompositeEvidence
         - NO_PASSING_WITNESSES
+        - summarizeEvidence
+        - ALL_EVIDENCE_TAGS
         - runWitnessRegistry
         - WITNESS_REGISTRY
         - runNumericWitness
@@ -8992,6 +9011,8 @@ modules:
         - deriveEvidence
         - deriveCompositeEvidence
         - NO_PASSING_WITNESSES
+        - summarizeEvidence
+        - ALL_EVIDENCE_TAGS
         - runWitnessRegistry
         - WITNESS_REGISTRY
         - runNumericWitness
@@ -18587,17 +18608,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 82294
-  totalExports: 2763
+  totalLinesOfCode: 82403
+  totalExports: 2767
   totalClasses: 60
-  totalInterfaces: 430
-  totalFunctions: 681
+  totalInterfaces: 431
+  totalFunctions: 683
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 690
-  totalReExports: 1331
+  totalReExports: 1333
   totalTypeOnlyImports: 523
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 67
+  unusedExportsCount: 65

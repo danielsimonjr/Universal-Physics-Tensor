@@ -87,6 +87,11 @@ them only partly met, and their rows are in "Review of the audit against the rec
   `map --around`, `--route=FROM,TO` and `--family=NAME`; models join the equation graph only through
   their recorded `canonicalRefs`. `--all-routes`, `--observable`, and `--stored`/`--run` evidence are
   added. Open: an atlas-wide evidence view, and a test of `--run`'s exit 3 (nothing refutes today).
+  Done 2026-09-27: `upt atlas --evidence [--stored | --run]` shows every bridge of every family with its
+  derived and undecided evidence, per-tag counts (zeros included) and the norm-transport witnesses.
+  A refuting witness injected through a test-only registry makes `atlas <id> --run`, `atlas --evidence
+  --run` and `map --family/--route/--observable --run` exit 3; the shipped registry exits 0 (the paired
+  check), and an unresolved witness exits 0.
 - [x] **I17** Session export and replay (`--record`, `--show-record`, `--replay`).
   `upt-record/2` hashes the arguments and the entry, fingerprints 18 named constant tables, and marks
   each changed constant reachable or not from the command (a static upper bound, not an observed read).

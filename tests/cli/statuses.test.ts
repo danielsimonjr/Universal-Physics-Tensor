@@ -70,6 +70,7 @@ const INVOCATIONS: string[][] = [
   ['path', 'model-telegraph', 'model-fick', '--compare=model-wave-1d', '--at', 'D=1', 'q=1', 't=1', '--sweep', 'tau=0.001:1000:13:log'],
   ['audit'],
   ['atlas', 'ab-spring-lc', '--run'],
+  ['atlas', '--evidence', '--run'],
   ['discover'],
 ];
 

@@ -86,6 +86,12 @@ nothing validates prose and the next reader cannot tell.
   results, all checked. Negative results: `ab-damped-massless`'s bound is not sharp (5.7× loose at
   its sup), so W8b is attributed as `bound-holds-at` one point, not as the bound's value; `ab-chain-wave`
   has no bound, so W9 is attributed to a preserved property, not to a bound.
+- Atlas-wide evidence (`upt atlas --evidence --stored`, 2026-09-27): of 20 bridges, 17 derive
+  numerically-supported and 3 leave it undecided (their numeric witnesses have no in-process runner:
+  ab-spring-lc, ab-damped-rlc, ab-stokes-einstein); 4 symbolically-checked; 1 formally-proved; 12
+  contradicted (from their stored counterexamples, outside the regime); 0 empirically-supported. 21 of 40
+  recorded bridge witnesses have a stored result, all checked; 19 have none. With no results source,
+  proposed is undecided on 8 bridges.
 - F02 as measured on `discover --source=canonical`: 49 promising, 0 mechanism-tested, 0 data-tested,
   49 without magnitude evidence, 49 with the axis unresolved, 0 with an entailed consequence.
   So nothing in the promising set is evidence yet (negative result).

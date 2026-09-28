@@ -10,6 +10,19 @@ from v0.1.0 onward.
 
 ### Added
 
+- **An atlas-wide evidence view, and a test that `--run` exits 3 on a refutation (audit I16).**
+  - `upt atlas --evidence [--stored | --run] [--json]` shows every bridge of every family. Each has
+    its evidence, derived whatever the unobserved witness results are, and the tags left undecided
+    without them. It also shows per-tag counts, zeros included, with derived and undecided counted
+    apart, and each declared norm transport's witness. `--stored` or `--run` with no id implies it;
+    before this, `upt atlas --run` with no id ignored `--run`.
+  - A test checks the view two ways: against `deriveEvidence` over the committed results, and
+    against each family view's filed bridges.
+  - The shipped registry never refutes, so a refuting W7 is injected through a test-only patched
+    api. `atlas <id> --run`, `atlas --evidence --run` and `map --family`, `--route` and
+    `--observable` with `--run` all exit 3 on it.
+  - Paired checks: the shipped registry exits 0, an unresolved W7 exits 0, and `--stored` never
+    exits 3.
 - **Every atlas bridge now runs a witness in-process (audit I15).** Three executable specs join
   `WITNESS_REGISTRY` (`src/atlas/oscillators/limit-witnesses.ts`), so `upt atlas <id> --run` no longer
   answers "none" for `ab-pendulum-linear`, `ab-damped-massless` or `ab-chain-wave`:

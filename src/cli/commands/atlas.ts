@@ -22,9 +22,12 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
+import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--run', valueStyle: 'none' },
+  { name: '--evidence', valueStyle: 'none' },
+  { name: '--stored', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
 ];
 
@@ -60,6 +63,7 @@ function formatUniformity(uniformity: readonly string[] | null): string {
 }
 
 const HELP = `upt atlas [<bridge-id>] [--run] [--json]
+       upt atlas --evidence [--stored | --run] [--json]
         One atlas bridge with every qualification visible: relation, premises
         and conclusion, transformation and inverse, side conditions, regime
         inequalities, bound with its horizon and uniformity, what it preserves and loses,
@@ -75,8 +79,15 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         its result. --run executes the bridge's in-process registered
         witnesses now and reports checked / refuted / unresolved separately
         (exit 3 if any is refuted).
+        --evidence, with no id, is the atlas-wide evidence view: every bridge of
+        every family with its DERIVED evidence, the tags undecided without
+        witness results, per-tag counts (zeros included) and each declared norm
+        transport's witness. --stored derives it from the committed witness
+        results, --run from every registered witness run now (exit 3 if any is
+        refuted); either implies --evidence when no id is given.
         e.g.  upt atlas ab-pendulum-linear
-              upt atlas ab-walk-diffusion --run`;
+              upt atlas ab-walk-diffusion --run
+              upt atlas --evidence --run`;
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -88,6 +99,31 @@ async function run(ctx: CommandCtx): Promise<number> {
   const rows = families.flatMap((f) => f.bridges.map((b) => ({ family: f.family, bridge: b })));
   const models = new Map(families.flatMap((f) => f.models.map((m) => [m.id, m] as const)));
 
+  const stored = args.flags.has('stored');
+  const running = args.flags.has('run');
+  if (id !== undefined && (args.flags.has('evidence') || stored)) {
+    throw new CliError(
+      'upt atlas: --evidence and --stored are the atlas-wide view (no bridge id); one bridge already shows its evidence ' +
+        'by claim, and --run runs its witnesses',
+    );
+  }
+  if (id === undefined && (args.flags.has('evidence') || stored || running)) {
+    if (stored && running) throw new CliError('upt atlas: pick one witness-results source: --stored (the committed artifact) or --run (run now)');
+    const results: WitnessResults | null = stored
+      ? loadStoredResults('upt atlas')
+      : running
+        ? await runResults(api, new Set(rows.map((r) => r.bridge.id)))
+        : null;
+    const view = buildAtlasEvidenceView(api, results);
+    const code = results?.mode === 'run' && results.rows.some((r) => r.status === 'refuted') ? EXIT_CHECK_FAILED : 0;
+    if (wantJson) {
+      emitJson({ command: 'atlas', options: { view: 'evidence', results: results?.mode ?? null }, result: view }, ctx.write);
+      return code;
+    }
+    for (const line of atlasEvidenceText(view)) out(line);
+    return code;
+  }
+
   if (id === undefined) {
     const listing = rows.map((r) => ({ id: r.bridge.id, family: r.family, relation: r.bridge.relation }));
     if (wantJson) {
@@ -96,7 +132,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
     out(`\n${listing.length} atlas bridges across ${families.length} families:`);
     for (const l of listing) out(`  ${l.id.padEnd(28)} ${l.relation.padEnd(22)} [${l.family}]`);
-    out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification.');
+    out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge\'s derived evidence.');
     return 0;
   }
 

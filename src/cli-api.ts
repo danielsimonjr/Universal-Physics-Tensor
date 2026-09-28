@@ -174,6 +174,7 @@ export type { CandidateGrounding, CandidateReadiness } from './composition/groun
 export { OSCILLATOR_FAMILY } from './atlas/oscillators/index.js';
 export { ATLAS_FAMILIES } from './atlas/families.js';
 export { deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES } from './atlas/derive-evidence.js';
+export { summarizeEvidence, ALL_EVIDENCE_TAGS } from './atlas/coverage.js';
 export { runWitnessRegistry } from './atlas/witness-artifact.js';
 export { WITNESS_REGISTRY } from './atlas/witness-specs.js';
 export { runNumericWitness } from './atlas/witness-numeric.js';

@@ -148,7 +148,7 @@ function git(args: string[], cwd: string): string | null {
  * an empty source would render every tag exactly as the default view does,
  * under a label claiming it had been observed.
  */
-export function loadStoredResults(): WitnessResults {
+export function loadStoredResults(command = 'upt map'): WitnessResults {
   const root = repoRoot();
   const file = `${root}${STORED_RESULTS_PATH}`;
   let raw: string;
@@ -156,13 +156,13 @@ export function loadStoredResults(): WitnessResults {
     raw = readFileSync(file, 'utf8');
   } catch {
     throw new CliError(
-      `upt map: --stored reads ${STORED_RESULTS_PATH}, a repository artifact not shipped in the package, and it is not ` +
+      `${command}: --stored reads ${STORED_RESULTS_PATH}, a repository artifact not shipped in the package, and it is not ` +
         'present here; --run executes the in-process registered witnesses instead',
     );
   }
   const artifact = JSON.parse(raw) as { schemaVersion?: string; results?: WitnessResultRow[] };
   if (artifact.schemaVersion !== '0' || !Array.isArray(artifact.results)) {
-    throw new CliError(`upt map: ${STORED_RESULTS_PATH} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`);
+    throw new CliError(`${command}: ${STORED_RESULTS_PATH} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`);
   }
   const log = git(['log', '-1', '--format=%H %cI', '--', STORED_RESULTS_PATH], root);
   const [hash, date] = log === null || log === '' ? [] : log.split(' ');
@@ -702,8 +702,77 @@ export function buildObservableView(
   };
 }
 
-// ── family ─────────────────────────────────────────────────────────────────
+// ── atlas-wide evidence ────────────────────────────────────────────────────
 
+export interface AtlasEvidenceView {
+  view: 'atlas-evidence';
+  source: string;
+  denominator: { families: number; bridges: number; witnesses: number };
+  bridges: { id: string; family: string; relation: RelationType; evidence: EvidenceView }[];
+  /**
+   * Per tag, over every atlas bridge: how many derive it whatever the unobserved
+   * witness results are, and, apart, how many it is undecided on. Every tag is
+   * listed, zero included; a bridge carries several tags, so no column sums to
+   * the bridge count.
+   */
+  byTag: { tag: EvidenceTag; derived: number; undecided: number }[];
+  /** Declared norm transports, whose witnesses are registered under the transport id. */
+  normTransports: { id: string; bridge: string; witness: string; status: TransportResult }[];
+  witnessResults?: ResultsTally;
+  epistemics: string;
+}
+
+/** Every bridge of every family, with its derived evidence: the atlas-wide view of `upt atlas --evidence`. */
+export function buildAtlasEvidenceView(api: Api, results: WitnessResults | null = null): AtlasEvidenceView {
+  const models = allModels(api);
+  const views = api.ATLAS_FAMILIES.flatMap((f) => f.bridges.map((b) => bridgeView(api, b, f.family, models, results)));
+  const derived = api.summarizeEvidence(views.map((v) => new Set(v.evidence.derived)));
+  const undecided = api.summarizeEvidence(views.map((v) => new Set(v.evidence.undecided)));
+  const witnessResults = tally(results, views);
+  return {
+    view: 'atlas-evidence',
+    source: ATLAS_SOURCE,
+    denominator: {
+      families: api.ATLAS_FAMILIES.length,
+      bridges: views.length,
+      witnesses: views.reduce((n, v) => n + v.evidence.witnesses, 0),
+    },
+    bridges: views.map((v) => ({ id: v.id, family: v.family, relation: v.relation, evidence: v.evidence })),
+    byTag: api.ALL_EVIDENCE_TAGS.map((tag) => ({ tag, derived: derived.byTag[tag], undecided: undecided.byTag[tag] })),
+    normTransports: api.ATLAS_FAMILIES.flatMap((f) => f.bridges).flatMap((b) =>
+      (b.normTransports ?? []).map((nt) => ({ id: nt.id, bridge: b.id, witness: nt.witness.id, status: transportResult(nt, results) })),
+    ),
+    ...(witnessResults === undefined ? {} : { witnessResults }),
+    epistemics:
+      'evidence is derived from each record and the witness results the view observes, never read from a stored tag; ' +
+      'a tag is undecided when unobserved witness results could give it or withhold it. Only a checked witness is a pass.',
+  };
+}
+
+export function atlasEvidenceText(v: AtlasEvidenceView): string[] {
+  const d = v.denominator;
+  const out = [`\nAtlas evidence — ${d.bridges} bridges across ${d.families} families, ${d.witnesses} recorded witnesses  [source: ${v.source}]`];
+  const r = resultsLine(v.witnessResults);
+  out.push(`  ${r ?? 'witness results: none observed (every witness is a name, not a result); --stored reads the committed artifact, --run runs them now'}`);
+  out.push(`  by tag (bridges; a bridge carries several tags, so the counts do not sum to ${d.bridges}):`);
+  for (const t of v.byTag) out.push(`    ${t.tag.padEnd(22)} derived ${String(t.derived).padStart(2)} · undecided ${String(t.undecided).padStart(2)}`);
+  for (const family of [...new Set(v.bridges.map((b) => b.family))]) {
+    const bs = v.bridges.filter((b) => b.family === family);
+    out.push(`  ${family} (${bs.length} bridge${bs.length === 1 ? '' : 's'}):`);
+    for (const b of bs) {
+      out.push(`    ${b.id} — ${b.relation}`);
+      out.push(`      ${evidenceLine(b.evidence, b.id)}`);
+      if (b.evidence.results !== undefined) out.push(`      ${outcomeLine(b.evidence.results)}`);
+    }
+  }
+  out.push(`  norm transports (${v.normTransports.length}):`);
+  if (v.normTransports.length === 0) out.push('    none declared');
+  for (const nt of v.normTransports) out.push(`    ${nt.id} on ${nt.bridge}: witness ${nt.witness} — ${nt.status}`);
+  out.push('  Refuted and unresolved are counted apart; neither is a pass. `upt atlas <bridge-id>` shows one bridge by claim.');
+  return out;
+}
+
+// ── family ─────────────────────────────────────────────────────────────────
 export interface AtlasFilter {
   relation?: RelationType;
   evidence?: EvidenceTag;

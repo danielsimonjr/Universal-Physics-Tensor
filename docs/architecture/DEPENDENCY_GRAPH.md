@@ -3207,15 +3207,15 @@ The codebase is organized into the following modules:
   ```text
   EquationLink, ModelView, EvidenceView, WitnessResultRow, StoredProvenance, WitnessResults,
   WitnessOutcomes, ResultsTally, BridgeView, RouteView, CompositeEvidenceView, RoutesView,
-  ObservableView, AtlasFilter, AtlasFilterStats, FamilyView
+  ObservableView, AtlasEvidenceView, AtlasFilter, AtlasFilterStats, FamilyView
   ```
 
 - Functions:
 
   ```text
   loadStoredResults, runResults, parseRoute, buildRouteView, buildRoutesView, buildObservableView,
-  formatAtlasFilterLegend, bridgeIdsOf, buildFamilyView, resultsLine, routeText, familyText,
-  routesText, observableText, viewLegend, toMermaid, toDot
+  buildAtlasEvidenceView, atlasEvidenceText, formatAtlasFilterLegend, bridgeIdsOf, buildFamilyView,
+  resultsLine, routeText, familyText, routesText, observableText, viewLegend, toMermaid, toDot
   ```
 
 - Constants: `ATLAS_SOURCE`, `LINK_SOURCE`, `STORED_RESULTS_PATH`, `DEFAULT_MAX_ROUTES`, `MAX_ROUTES_CEILING`
@@ -3259,6 +3259,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
+| `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 
 **Exports:**
 - Functions: `summarizeWitnessRuns`
@@ -3901,6 +3902,7 @@ The codebase is organized into the following modules:
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
 | `./atlas/families.js` | `ATLAS_FAMILIES` | Re-export |
 | `./atlas/derive-evidence.js` | `deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES` | Re-export |
+| `./atlas/coverage.js` | `summarizeEvidence, ALL_EVIDENCE_TAGS` | Re-export |
 | `./atlas/witness-artifact.js` | `runWitnessRegistry` | Re-export |
 | `./atlas/witness-specs.js` | `WITNESS_REGISTRY` | Re-export |
 | `./atlas/witness-numeric.js` | `runNumericWitness` | Re-export |
@@ -3945,12 +3947,13 @@ The codebase is organized into the following modules:
   compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
   CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness,
   OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES,
-  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
-  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
-  ObservableTranslation, PointCheck, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
-  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath,
-  horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim,
-  AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
+  summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
+  OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
+  ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, regimeHolds, regimeOverlap,
+  uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath,
+  enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult,
+  PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality, Witness,
+  MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -7079,7 +7082,7 @@ The codebase is organized into the following modules:
 | `types` | 2 files | 5 files |
 | `composition-table` | 1 files | 7 files |
 | `conventions` | 1 files | 4 files |
-| `coverage` | 1 files | 0 files |
+| `coverage` | 1 files | 1 files |
 | `derivation` | 3 files | 3 files |
 | `derive-evidence` | 1 files | 3 files |
 | `bridges-closure` | 9 files | 2 files |
@@ -7244,12 +7247,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 82294 |
-| Total Exports | 2763 |
-| Total Re-exports | 1331 |
+| Total Lines of Code | 82403 |
+| Total Exports | 2767 |
+| Total Re-exports | 1333 |
 | Total Classes | 60 |
-| Total Interfaces | 430 |
-| Total Functions | 681 |
+| Total Interfaces | 431 |
+| Total Functions | 683 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |
