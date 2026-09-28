@@ -2,12 +2,11 @@
   "metadata": {
     "totalSourceFiles": 380,
     "totalTestFiles": 516,
-    "testedCount": 372,
-    "untestedCount": 8,
-    "coveragePercent": "97.9"
+    "testedCount": 373,
+    "untestedCount": 7,
+    "coveragePercent": "98.2"
   },
   "untestedFiles": [
-    "src/atlas/oscillators/limit-witnesses.ts",
     "src/atlas/public.ts",
     "src/cases/quadrature.ts",
     "src/cli/commands/_atlas-route.ts",
@@ -49,6 +48,7 @@
     "src/atlas/oscillators/bridges-limits.ts",
     "src/atlas/oscillators/dimensions.ts",
     "src/atlas/oscillators/index.ts",
+    "src/atlas/oscillators/limit-witnesses.ts",
     "src/atlas/oscillators/models.ts",
     "src/atlas/oscillators/norm-transport-witness.ts",
     "src/atlas/oscillators/norm-transport.ts",
@@ -643,7 +643,10 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts"
     ],
-    "src/atlas/oscillators/limit-witnesses.ts": [],
+    "src/atlas/oscillators/limit-witnesses.ts": [
+      "tests/atlas/oscillators-coarse.test.ts",
+      "tests/atlas/oscillators-limits.test.ts"
+    ],
     "src/atlas/oscillators/models.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/model.test.ts",
@@ -7786,6 +7789,7 @@
       "src/numerical/null-ray-integrator.ts"
     ],
     "tests/atlas/oscillators-coarse.test.ts": [
+      "src/atlas/oscillators/limit-witnesses.ts",
       "src/atlas/families.ts",
       "src/dimensional/ast-builders.ts",
       "src/dimensional/buckingham.ts",
@@ -7804,7 +7808,8 @@
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/types.ts",
       "src/atlas/witness-numeric.ts",
-      "src/atlas/witness-specs.ts"
+      "src/atlas/witness-specs.ts",
+      "src/atlas/oscillators/limit-witnesses.ts"
     ],
     "tests/atlas/overlay-types.test.ts": [
       "src/composition/edge.ts",

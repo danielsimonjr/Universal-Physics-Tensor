@@ -12,19 +12,18 @@
 |--------|-------|
 | Total Source Files | 380 |
 | Total Test Files | 516 |
-| Source Files with Tests | 372 |
-| Source Files without Tests | 8 |
-| Coverage | 97.9% |
+| Source Files with Tests | 373 |
+| Source Files without Tests | 7 |
+| Coverage | 98.2% |
 
 ---
 
 ## Source Files Without Test Coverage
 
-The following 8 source files are not directly imported by any test file:
+The following 7 source files are not directly imported by any test file:
 
 ### atlas/
 
-- `src/atlas/oscillators/limit-witnesses.ts` → Expected test: `tests/unit/atlas/limit-witnesses.test.ts`
 - `src/atlas/public.ts` → Expected test: `tests/unit/atlas/public.test.ts`
 
 ### cases/
@@ -77,6 +76,7 @@ The following 8 source files are not directly imported by any test file:
 | `oscillators/bridges-limits.ts` | `audited-catalog.test.ts`, `bound-machine-form.test.ts`, `formal-sanity.test.ts`, `oscillators-limits.test.ts`, `path-bound.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `regime-admission.test.ts`, `spring-lc-norm-transport.test.ts`, `transported-norm-demo.test.ts` |
 | `oscillators/dimensions.ts` | `barrel-completeness.test.ts`, `models.test.ts`, `negative-controls.test.ts`, `oscillators-coarse.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `witness-results.test.ts` |
 | `oscillators/index.ts` | `atlas-json.test.ts`, `audited-catalog.test.ts`, `barrel-completeness.test.ts`, `link-prediction.test.ts`, `model.test.ts`, `regime-admission.test.ts`, `serialize.test.ts`, `spring-lc-norm-transport.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `oscillators/limit-witnesses.ts` | `oscillators-coarse.test.ts`, `oscillators-limits.test.ts` |
 | `oscillators/models.ts` | `barrel-completeness.test.ts`, `model.test.ts`, `models.test.ts`, `oscillators-coarse.test.ts`, `poster.test.ts` |
 | `oscillators/norm-transport-witness.ts` | `spring-lc-norm-transport.test.ts` |
 | `oscillators/norm-transport.ts` | `path-bound.test.ts`, `spring-lc-norm-transport.test.ts` |
@@ -466,9 +466,9 @@ The following 8 source files are not directly imported by any test file:
 | `atlas/models.test.ts` | 5 files |
 | `atlas/negative-controls.test.ts` | 13 files |
 | `atlas/ode-helper.test.ts` | 1 files |
-| `atlas/oscillators-coarse.test.ts` | 10 files |
+| `atlas/oscillators-coarse.test.ts` | 11 files |
 | `atlas/oscillators-exact.test.ts` | 1 files |
-| `atlas/oscillators-limits.test.ts` | 4 files |
+| `atlas/oscillators-limits.test.ts` | 5 files |
 | `atlas/overlay-types.test.ts` | 4 files |
 | `atlas/path-bound.test.ts` | 12 files |
 | `atlas/pendulum-phase-translation.test.ts` | 6 files |

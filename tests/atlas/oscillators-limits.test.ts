@@ -25,6 +25,7 @@ import type { NumericWitnessSpec } from '../../src/atlas/witness-numeric.js';
 import { WITNESS_REGISTRY } from '../../src/atlas/witness-specs.js';
 import type { RegisteredNumericWitness } from '../../src/atlas/witness-specs.js';
 import { rk4 } from './_ode.js';
+import { measureMasslessOffset, measurePendulumPeriodRatio } from '../../src/atlas/oscillators/limit-witnesses.js';
 
 /** The registered in-process entry of a witness, refusing one that is absent or not numeric. */
 function registeredNumeric(id: string): RegisteredNumericWitness {
@@ -283,6 +284,10 @@ describe('W7 — the registered in-process spec: RK4 period of the pendulum agai
     expect(r.convergence!.ratio).toBeLessThan(4.1);
   });
 
+  it('the measurement itself, off the fixture: RK4 T/T0 at θ0 = 0.3 and 0.05 equals the AGM ratio within 1e-12', () => {
+    for (const theta0 of [0.3, 0.05]) expect(Math.abs(measurePendulumPeriodRatio(theta0) - periodRatio(theta0))).toBeLessThan(1e-12);
+  });
+
   it('NEGATIVE CONTROL: the series θ0²/16 used as the bound is refuted, because the series understates the error', () => {
     const { spec } = registeredNumeric('W7');
     const wrong: NumericWitnessSpec = { ...spec, tolerance: THETA0 ** 2 / 16 };
@@ -337,6 +342,11 @@ describe('W8b — the registered in-process spec: the damped spring integrated, 
     expect(r.status).toBe('checked');
     expect(r.convergence!.ratio).toBeGreaterThan(1.8);
     expect(r.convergence!.ratio).toBeLessThan(2.1);
+  });
+
+  it('the measurement itself, off the fixture: the RK4 sup at m = 0.015 equals the closed-form sup within 1e-7', () => {
+    const exact = closedFormSup(0.015);
+    expect(Math.abs(measureMasslessOffset(0.015) - exact) / exact).toBeLessThan(1e-7);
   });
 
   it('NEGATIVE CONTROL: 2m/b, the bound without its (1 + |v0|) factor, is refuted', () => {

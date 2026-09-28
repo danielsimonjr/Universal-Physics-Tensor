@@ -6,6 +6,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { rk4 } from './_ode.js';
+import { measureChainDispersionError } from '../../src/atlas/oscillators/limit-witnesses.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 
 import { dim } from '../../src/dimensional/ast-builders.js';
@@ -272,6 +273,12 @@ describe('W9 — the registered in-process spec: the ring integrated, against th
     expect(r.status).toBe('checked');
     expect(r.convergence!.ratio).toBeGreaterThan(3.9);
     expect(r.convergence!.ratio).toBeLessThan(4.1);
+  });
+
+  it('the measurement itself, off the fixture: the integrated 1 − ω/(cq) at N = 24 equals the formulas within 1e-9', () => {
+    const qa = (2 * Math.PI) / 24;
+    const formula = 1 - latticeDispersion(qa, 1, 1, 1) / continuumDispersion(qa, 1, 1, 1);
+    expect(Math.abs(measureChainDispersionError(24) - formula)).toBeLessThan(1e-9);
   });
 
   it('NEGATIVE CONTROL: the coefficient (qa)²/12 in place of (qa)²/24 is refuted', () => {
