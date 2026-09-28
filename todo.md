@@ -574,7 +574,9 @@ warning-silencing, not debug logging).
       - [x] L9: `upt path --at` prints only the domain supremum; add `deltaAt(point)` as "bound at this point", tested ≥ the exact error.
       - [x] Found during L7 (2026-09-25), NOT investigated, outside the W1/L1–L9 scope: `bun run test:probe-coverage` reports 0% on every file and "AssertionError: coverageFilesDirectory is required". Not in CI. Whether it also fails at the commit before L7 was not measured.
       - [ ] tree-sitter reports `src/cli/commands/path.ts` as UNPARSED ("parse error (tree-sitter reported ERROR nodes)"), and does so on master too. tsc compiles it. An unparsed file is invisible to the code-docs and dependency tooling, so their counts are silently incomplete. Found 2026-09-25 during F2. Fix after the 0.47.0 batch (Mothership).
-      - [ ] Probe coverage is 94.53% statements against the 95% gate (measured 2026-09-25, once the provider was fixed). Lines 97.25%, functions 98.18%, branches 86.36% pass. Below 95% statements: generator.ts 82%, pipeline.ts 90%, residual.ts 90%, limits.ts 92%, metadata.ts 86%, fingerprint.ts 94%, problem.ts 94%, backend-protocol.ts 94%. Most predate this session; the gate went unmeasured while the provider was broken. Do NOT lower the threshold.
+      - [x] Probe coverage is 94.53% statements against the 95% gate (measured 2026-09-25, once the provider was fixed). Lines 97.25%, functions 98.18%, branches 86.36% pass. Below 95% statements: generator.ts 82%, pipeline.ts 90%, residual.ts 90%, limits.ts 92%, metadata.ts 86%, fingerprint.ts 94%, problem.ts 94%, backend-protocol.ts 94%. Most predate this session; the gate went unmeasured while the provider was broken. Do NOT lower the threshold.
+        Closed 2026-09-27 by the "Probe coverage gate" row of the audit review (above): the gate passes
+        with the thresholds unchanged, and CI runs it.
 
 - [x] **Atlas Sprint 6 — study, scoped release, discovery hypothesis (IN FLIGHT).** **S6.1** — study
       orchestration (`bun run atlas:study`); refuses (exit 3) on the empty frozen set.

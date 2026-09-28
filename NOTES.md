@@ -12,9 +12,10 @@ nothing validates prose and the next reader cannot tell.
 ## As of 2026-09-27
 
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
-  findings are fixed (F10 was already correct and is now pinned by a test). Of the §14 improvements,
-  audit I5–I9, I11, I12 and I14–I20 have landed; the limits each still has are in `todo.md`. Audit I2
-  landed by owner decision 2026-09-27 (`docs/planning/ADR-transported-norm-composition.md`, option 4).
+  findings are fixed (F10 was already correct and is now pinned by a test). All 20 §14 improvements
+  have landed: audit I1 through F01, and the open parts of audit I3, I4, I10 and I13 on 2026-09-27.
+  Landed is not limit-free; the limits each still has are in `todo.md`. Audit I2 landed by owner
+  decision 2026-09-27 (`docs/planning/ADR-transported-norm-composition.md`, option 4).
 - **Audit I2 as landed:** the composition table has 9 defined cells and 55 silent ones; the widened
   cell is approximation then exact-equivalence, and exact then approximation stays silent. One norm
   transport is declared: `nt-spring-lc-relative-period` on `ab-spring-lc` (model-spring → model-lc,
