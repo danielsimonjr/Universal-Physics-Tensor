@@ -19427,6 +19427,7 @@
           "UserEquation",
           "EquationLanding",
           "EquationHint",
+          "ShortBinding",
           "EquationAnalysis"
         ],
         "functions": [
@@ -26626,10 +26627,10 @@
   "statistics": {
     "totalTypeScriptFiles": 383,
     "totalModules": 12,
-    "totalLinesOfCode": 83000,
+    "totalLinesOfCode": 83147,
     "totalExports": 2777,
     "totalClasses": 60,
-    "totalInterfaces": 435,
+    "totalInterfaces": 436,
     "totalFunctions": 690,
     "totalTypeGuards": 5,
     "totalEnums": 0,

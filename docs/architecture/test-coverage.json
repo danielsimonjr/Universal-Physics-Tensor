@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 380,
-    "totalTestFiles": 518,
+    "totalTestFiles": 519,
     "testedCount": 373,
     "untestedCount": 7,
     "coveragePercent": "98.2"
@@ -2415,6 +2415,7 @@
       "tests/composition/canonical-graph.test.ts",
       "tests/composition/canonical-prefactors.test.ts",
       "tests/composition/consequence.test.ts",
+      "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts",
@@ -3796,7 +3797,8 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/canonical-compare-pairing.test.ts",
       "tests/composition/canonical-compare.test.ts",
-      "tests/composition/canonical-prefactors.test.ts"
+      "tests/composition/canonical-prefactors.test.ts",
+      "tests/composition/persona-retest-compare.test.ts"
     ],
     "src/composition/canonical-graph.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -3847,7 +3849,8 @@
     ],
     "src/composition/canonical-prefactors.ts": [
       "tests/atlas/canonical-links.test.ts",
-      "tests/composition/canonical-prefactors.test.ts"
+      "tests/composition/canonical-prefactors.test.ts",
+      "tests/composition/persona-retest-compare.test.ts"
     ],
     "src/composition/catalog-graph.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -5243,6 +5246,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/composition/symbolic-constants-extra.test.ts"
     ],
@@ -5319,6 +5323,7 @@
       "tests/composition/linkage-map.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/composition/orphan-connectors.test.ts",
+      "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/composition/stress-tests.test.ts",
@@ -5673,6 +5678,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/calibration-targets.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
+      "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/composition/symbolic-simplification.test.ts",
@@ -6311,6 +6317,7 @@
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
       "tests/composition/namespacing.test.ts",
+      "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/experiment-design.test.ts",
       "tests/composition/probe/family-b.test.ts",
@@ -12521,6 +12528,15 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts"
+    ],
+    "tests/composition/persona-retest-compare.test.ts": [
+      "src/composition/canonical-compare.ts",
+      "src/composition/user-equation.ts",
+      "src/composition/canonical-prefactors.ts",
+      "src/canonical/registry.ts",
+      "src/composition/symbolic-constants.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/types.ts"
     ],
     "tests/composition/poster-source.test.ts": [
       "src/composition/poster-source.ts",

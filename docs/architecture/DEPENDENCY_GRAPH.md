@@ -5445,7 +5445,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `UserEquationError`
-- Interfaces: `UserEquation`, `EquationLanding`, `EquationHint`, `EquationAnalysis`
+- Interfaces: `UserEquation`, `EquationLanding`, `EquationHint`, `ShortBinding`, `EquationAnalysis`
 - Functions:
 
   ```text
@@ -7255,11 +7255,11 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 83000 |
+| Total Lines of Code | 83147 |
 | Total Exports | 2777 |
 | Total Re-exports | 1335 |
 | Total Classes | 60 |
-| Total Interfaces | 435 |
+| Total Interfaces | 436 |
 | Total Functions | 690 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
