@@ -80,8 +80,10 @@
   workflow can recover and refute a law, not that it finds an unknown one; UPT ships no blind control.
   CSV input, input σ (effective variance), a declared correction family (F test) and a separate
   `--replication` file are added. Open: the replication check catches exact copies only; one
-  dimensionless input can carry a family; `bun run test:probe-coverage` is below its thresholds
-  (it was before this work too, and CI does not run it).
+  dimensionless input can carry a family. (The coverage clause that stood here, "below its thresholds
+  (it was before this work too …)", was half wrong: the owner's review measured 94.53% statements and
+  86.36% branches on 2026-09-25, so branches fell below 85 with this work. Resolved in the review
+  section below.)
 - [x] **I20** End-to-end qualified applied cases (resistor noise, Brownian diffusion, damped resonator).
   Six cases: the three above (now with hydrodynamic memory, Faxén/Brenner walls, amplifier noise and a
   resonator thermal floor) plus `case-skin-depth`, `case-lumped-cooling` and `case-kepler-rv`. Open:
@@ -99,8 +101,11 @@ Audit items are written "audit I5"; the persona notes in `docs/research/` number
   `text eol=lf` list) and four probe-study tests failed; `tests/cli/probe-study.test.ts` expected a
   POSIX path and `tests/cli/record-hardening.test.ts` keyed the constant tables by a backslash path.
   `npm run validate` runs them, so a Windows publish was blocked.
-- [ ] **Probe coverage gate** — `bun run test:probe-coverage` below its thresholds (branches 82.47% < 85,
+- [x] **Probe coverage gate** — `bun run test:probe-coverage` below its thresholds (branches 82.47% < 85,
   statements 91.46% < 95); raise with tests that can fail, keep the thresholds, and run it in CI.
+  Now 95.41% statements, 88.26% branches, 98.07% functions, 97.4% lines; the `test` job runs it.
+  Found on the way (negative result): a relative or standardized correction to a baseline is never
+  emitted for a dimensioned target, because `1 + m` with m of the target's dimension is inhomogeneous.
 - [ ] **Records** — stale I6 note; §14 heading over a list of ticked rows; CHANGELOG "(partial)" lines
   contradicted by later "(rest)" lines; audit/persona ID collision.
 - [x] **audit I1** Qualified routes across model families — met by F01.

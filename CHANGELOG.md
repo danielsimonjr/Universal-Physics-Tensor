@@ -150,6 +150,18 @@ from v0.1.0 onward.
   RED on a Windows checkout before the change. `npm run validate` runs all six, so a Windows publish
   was blocked.
 
+- **Probe coverage gate below its thresholds, and not in CI** (2026-09-27). `bun run
+  test:probe-coverage` measured 91.87% statements and 83.03% branches against thresholds of 95 and
+  85 (branches were 86.36% on 2026-09-25 by the owner's review, so the I19 work took them below). The
+  thresholds are unchanged. New tests: every refusal of a study, CSV or replication file named by its
+  field (78 rows; removing any one of three sampled checks fails its row), the χ² and F survival
+  functions against closed forms that use neither incomplete function, the design suggestion's two
+  abstentions on noise-free rows whose prefactor 2π must be recovered, and the generator's depth,
+  operator and candidate caps, each beside a default-budget control that does yield candidates. Now
+  95.41% / 88.26% / 98.07% functions / 97.4% lines. The CI `test` job runs the gate. Negative result
+  found on the way: a relative or standardized correction is never emitted for a dimensioned target,
+  since `1 + m` with m of the target's dimension is inhomogeneous; the test pins that behaviour.
+
 - **CLI applied-physics audit findings F01–F14** (2026-09-27). Ledger in
   `docs/audit/Universal_Physics_Tensor_CLI_Audit.md` §11; each fix has a test that was RED first.
   - **F01** — `upt path` searches across families when no same-family chain exists (KG → free
