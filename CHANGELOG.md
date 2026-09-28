@@ -10,6 +10,14 @@ from v0.1.0 onward.
 
 ### Added
 
+- **The architecture docs' Verification claims, re-measured.** The pre-push `repo_map` check refused
+  this branch, and it fails on `master` as well (956 files and 3441 exports measured against 898 and
+  3120 claimed). `repo_map.py map` was re-run, and the seven hand-written docs now state what it
+  measures: 976 files, 3533 exports, 172 unused-export candidates, 949 type-only imports, 370
+  reachable files, 10 test-only files, and 5 duplicate names. The `src`-scope prose follows
+  `DEPENDENCY_GRAPH.md` (383 files, 2777 exports, 1335 re-exports, 12 modules). The three new
+  duplicate names were read and triaged; no code changed. No generated report was edited (see
+  `NOTES.md`, Open defects).
 - **Doc comments for 84 exported symbols, restoring the code-docs ratchet to its baseline.** The
   pre-push gate refused this branch: `code_docs.py check src` reported 237 MUST issues against a
   baseline of 153. `master` alone gives 221, and the baseline commit `6d0feed` gives 153 under the

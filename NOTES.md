@@ -262,6 +262,15 @@ Those are different claims and merging them produces a false green.
   there, and the count is back to 153. The gate stays a local hook only, so the drift can recur.
   On this machine the gate first crashed, because `tree_sitter_typescript` was missing from the
   Python on PATH; the tool's pinned `requirements.txt` was installed.
+- **The architecture-docs claims drifted on `master` too (found 2026-09-27).** The pre-push gate's
+  `repo_map.py check . --docs docs/architecture` fails on `master` `335e970`: the hand-written
+  Verification tables claim 898 files and 3120 exports, and `master` measures 956 and 3441. The same
+  route as the code-docs drift applies: GitHub merges run no local hook, and CI does not run this
+  check. On the audit branch the seven hand-written docs were re-measured (976 files, 3533 exports,
+  370 reachable, 10 test-only, 5 duplicate names) and the check exits 0. No generated report was
+  edited. Three of the five duplicate names (`MASS_DENSITY`, `canonicalJson`,
+  `propagateUncertainty`) are triaged as drift risks in `docs/architecture/duplicate-symbols.md`;
+  none was changed in code.
 - **The pre-push gate did not run for the `cd4f0d5` push (2026-09-24).** `core.hooksPath` was found
   set to the absolute `.git\hooks`, which holds only sample hooks. The repo's `prepare` script sets
   `.githooks`. `.git/config` was last written at 14:02:16. At 14:02 a security-guidance plugin review

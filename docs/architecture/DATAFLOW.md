@@ -897,7 +897,7 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 | Claim | Value | Source |
 |---|---|---|
 | entryRoots | 5 | dependency-graph.json |
-| reachableFiles | 337 | dependency-graph.json |
+| reachableFiles | 370 | dependency-graph.json |
 | runtimeCircularDeps | 0 | dependency-graph.json |
 
 **`entryRoots` is 5.** The roots are `src/index.ts`, the subpath entries
