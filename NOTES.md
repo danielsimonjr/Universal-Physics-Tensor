@@ -78,6 +78,13 @@ nothing validates prose and the next reader cannot tell.
   the heat-equation mean at t = τ and 16% below at 3τ; Bi ≤ 0.1 does not bound the late-time relative
   error (negative result). `case-kepler-rv`'s double-pulsar agreement is consistency with a GR-fitted
   timing solution, not an independent test.
+- `case-lumped-cooling` with radiation kept (2026-09-27, audit I20 limit): for the 1 cm oxidized steel
+  ball at 1000 K in still air (the linear-loss failure example), T_radiating_K = 711.2 K after 60 s,
+  against Newton's 929.8 K, at Bi_radiating = 0.0020. For the valid copper example the two differ
+  by 0.53 K of a 28 K excess (1.9%; h_rad/h ≈ 0.021). Still refused, not evaluated: hydrodynamic
+  memory near a wall, the parallel lubrication limit and the anomalous skin effect. The Faxén terms
+  past 9/16 are still quoted and not checked. The atlas has no EM, thermal or astrophysical family:
+  none of those cases has a derived bound (reasons in `todo.md`, I20).
 - `probe study` large-amplitude control: the fitted θ² coefficient is 0.068, not the series' 1/16,
   because the θ⁴ term is not admitted and is absorbed; it is not a recovery of the series coefficient.
 - `probe study` (2026-09-27, audit I19 limits): the synthetic physical-pendulum control

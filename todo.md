@@ -131,6 +131,26 @@ them only partly met, and their rows are in "Review of the audit against the rec
   resonator thermal floor) plus `case-skin-depth`, `case-lumped-cooling` and `case-kepler-rv`. Open:
   memory near a wall, the parallel lubrication limit, Faxén terms past 9/16 (quoted, not checked),
   the anomalous skin effect and radiation-dominated cooling (refused, not evaluated).
+  Done 2026-09-27: radiation-dominated cooling is evaluated. `case-lumped-cooling` reports
+  `T_radiating_K`, the lumped equation with the T⁴ loss kept (RK4), under its own premise
+  `Bi_radiating` = (h + h_rad)(a/3)/k ≤ 0.1, and null outside it. Checked by a second method: at h = 0
+  it inverts through a closed form derived by partial fractions to the same t within 1e-7.
+  Not done (negative results; the refusals stand):
+  - memory near a wall: no sourced wall-corrected memory kernel is in the repository;
+  - the parallel lubrication limit: the Goldman–Cox–Brenner asymptote's constant could not be checked
+    against a source here;
+  - the Faxén terms past 9/16: an independent check needs the exact bispherical solution (O'Neill
+    1964), which is not implemented;
+  - the anomalous skin effect: the Reuter–Sondheimer surface impedance is an integral equation that is
+    not implemented, and no sourced closed-form limit was checked.
+  Atlas models for the EM, thermal and astrophysical cases: not added, because none has a sound bound
+  yet.
+  - The skin-depth reduction is the atlas's existing `ab-telegraph-diffusion` relation, with τ = ε/σ;
+    a family of its own would restate that relation, not add one.
+  - Lumped cooling has no error bound: the textbook Bi ≤ 0.1 does not bound the late-time error
+    (measured in `NOTES.md`).
+  - Kepler → 1PN needs a trajectory bound whose apsidal drift grows linearly in time. The case evaluates
+    periods and amplitudes, and derives no such bound.
 - [x] **EPIPE** `upt … | head` crashes with an unhandled `write EPIPE` from `stdoutLine`; a closed stdout should end the run quietly (seen while fixing the audit; not an audit finding).
 
 ### Review of the audit against the records and the code (owner order 2026-09-27)

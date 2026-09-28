@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 383
   totalModules: 12
-  totalExports: 2774
+  totalExports: 2775
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6898,9 +6898,13 @@ modules:
         - MAX_BIOT
         - MAX_RADIATION_RATIO
         - LUMPED_COOLING_CASE
+        - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
+      interfaces:
+        - LumpedRadiating
       functions:
+        - lumpedRadiatingTemperature
         - sphereEigenvalues
         - sphereSeries
       constants:
@@ -18646,11 +18650,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 82856
-  totalExports: 2774
+  totalLinesOfCode: 82903
+  totalExports: 2775
   totalClasses: 60
-  totalInterfaces: 434
-  totalFunctions: 688
+  totalInterfaces: 435
+  totalFunctions: 689
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 690

@@ -3098,7 +3098,8 @@ The codebase is organized into the following modules:
 | `./types.js` | `check, requirePositive, AppliedCase` | Import |
 
 **Exports:**
-- Functions: `sphereEigenvalues`, `sphereSeries`
+- Interfaces: `LumpedRadiating`
+- Functions: `lumpedRadiatingTemperature`, `sphereEigenvalues`, `sphereSeries`
 - Constants: `SIGMA_SB_SI`, `MAX_BIOT`, `MAX_RADIATION_RATIO`, `LUMPED_COOLING_CASE`
 
 ---
@@ -7254,12 +7255,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 82856 |
-| Total Exports | 2774 |
+| Total Lines of Code | 82903 |
+| Total Exports | 2775 |
 | Total Re-exports | 1335 |
 | Total Classes | 60 |
-| Total Interfaces | 434 |
-| Total Functions | 688 |
+| Total Interfaces | 435 |
+| Total Functions | 689 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |

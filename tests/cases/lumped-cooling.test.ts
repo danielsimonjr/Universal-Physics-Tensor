@@ -6,7 +6,14 @@
  * lumped equation integrated with the T⁴ loss kept.
  */
 import { describe, expect, it } from 'vitest';
-import { LUMPED_COOLING_CASE as C, SIGMA_SB_SI, sphereEigenvalues, sphereSeries } from '../../src/cases/lumped-cooling.js';
+import {
+  LUMPED_COOLING_CASE as C,
+  lumpedRadiatingTemperature,
+  SIGMA_SB_SI,
+  sphereEigenvalues,
+  sphereSeries,
+  type LumpedRadiating,
+} from '../../src/cases/lumped-cooling.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 
 const base = {
@@ -195,7 +202,59 @@ describe('case-lumped-cooling — regime checks', () => {
   it('with ε = 0 the linear-loss check holds whatever the temperatures', () => {
     expect(failed({ emissivity: 0, T0_K: 3000 })).toEqual([]);
   });
+});
 
+describe('case-lumped-cooling — radiation kept (audit I20 limit)', () => {
+  const p = (i: Partial<LumpedRadiating> = {}): LumpedRadiating => ({ a: 5e-3, rho: 7854, c: 434, h: 10, eps: 0.8, T0: 1000, Tinf: 300, t: 60, ...i });
+  /**
+   * Pure radiation (h = 0) has a closed form, derived here by partial fractions of 1/(T∞⁴ − T⁴):
+   * t = ρca/(3εσ) · [F(T) − F(T0)]/(4T∞³),  F(T) = ln|(T + T∞)/(T − T∞)| + 2 atan(T/T∞).
+   */
+  const closedFormTime = (q: LumpedRadiating, T: number) => {
+    const F = (x: number) => Math.log(Math.abs((x + q.Tinf) / (x - q.Tinf))) + 2 * Math.atan(x / q.Tinf);
+    return ((q.rho * q.c * q.a) / (3 * q.eps * SIGMA_SB_SI)) * ((F(T) - F(q.T0)) / (4 * q.Tinf ** 3));
+  };
+
+  it('pure radiation: the integrated T(t) inverts through the closed form to the same t, cooling and warming', () => {
+    for (const q of [p({ h: 0 }), p({ h: 0, t: 600 }), p({ h: 0, T0: 250, Tinf: 900, t: 30 })]) {
+      const T = lumpedRadiatingTemperature(q);
+      expect(Math.abs(closedFormTime(q, T) / q.t - 1), `T0=${q.T0} t=${q.t}`).toBeLessThan(1e-7);
+    }
+    // Paired check: the closed form tells a 0.1% error in t apart, so it can fail.
+    const q = p({ h: 0 });
+    const wrong = lumpedRadiatingTemperature({ ...q, t: q.t * 1.001 });
+    expect(Math.abs(closedFormTime(q, wrong) / q.t - 1)).toBeGreaterThan(5e-4);
+  });
+
+  it('with ε = 0 it is Newton\'s exponential', () => {
+    const q = p({ eps: 0 });
+    const tau = (q.rho * q.c * q.a) / (3 * q.h);
+    expect(Math.abs((lumpedRadiatingTemperature(q) - q.Tinf) / ((q.T0 - q.Tinf) * Math.exp(-q.t / tau)) - 1)).toBeLessThan(1e-9);
+  });
+
+  it('the hot steel ball: T_radiating_K is evaluated where T_K fails linear-loss, and they differ by > 100 K', () => {
+    const hot = { ...base, rho_kg_per_m3: 7854, c_J_per_kg_K: 434, k_W_per_m_K: 60.5, h_W_per_m2_K: 10, emissivity: 0.8, T0_K: 1000, T_inf_K: 300, t_s: 60 };
+    const o = C.run(hot).outputs as Record<string, number | null>;
+    expect(o.Bi_radiating).toBeCloseTo(((10 + o.h_rad_max_W_per_m2_K!) * (5e-3 / 3)) / 60.5, 12);
+    expect(o.Bi_radiating!).toBeLessThan(0.1);
+    expect(o.T_radiating_K).toBeCloseTo(lumpedRadiatingTemperature(p()), 9);
+    expect(o.T_K! - o.T_radiating_K!).toBeGreaterThan(100);
+    // Valid example: h_rad/h ≈ 0.021, so the radiating excess differs from Newton's by about that fraction (0.53 K of 28 K).
+    const v = out();
+    const rel = Math.abs(v.T_radiating_K! - v.T_K!) / (v.T_K! - 293.15);
+    expect(rel).toBeLessThan(0.022);
+    expect(rel).toBeGreaterThan(0.005);
+  });
+
+  it('T_radiating_K is null where Bi with the radiative conductance exceeds 0.1', () => {
+    const big = { ...base, a_m: 5e-2, rho_kg_per_m3: 7854, c_J_per_kg_K: 434, k_W_per_m_K: 60.5, h_W_per_m2_K: 1000, emissivity: 0, T0_K: 363.15, T_inf_K: 293.15, t_s: 600 };
+    expect((C.run(big).outputs as Record<string, number | null>).T_radiating_K).toBeNull();
+    // Paired check: a tenth of that h brings Bi_radiating under 0.1, and the output is a number.
+    expect(typeof (C.run({ ...big, h_W_per_m2_K: 100 }).outputs as Record<string, number | null>).T_radiating_K).toBe('number');
+  });
+});
+
+describe('case-lumped-cooling — domain', () => {
   it('refuses an emissivity outside [0, 1], a negative time and a non-positive radius', () => {
     expect(() => run({ emissivity: 1.2 })).toThrow(/emissivity must be/);
     expect(() => run({ t_s: -1 })).toThrow(/t_s must be/);

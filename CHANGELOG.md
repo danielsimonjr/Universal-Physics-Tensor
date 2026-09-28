@@ -10,6 +10,18 @@ from v0.1.0 onward.
 
 ### Added
 
+- **`case-lumped-cooling` evaluates radiation-dominated cooling (audit I20 limit).**
+  - It had refused through the linear-loss check and returned only Newton's T(t). It now also reports
+    `T_radiating_K`: the lumped equation with the T⁴ loss kept, integrated by RK4 with steps of 1/100
+    of the local relaxation time.
+  - Its own premise is `Bi_radiating` = (h + h_rad)(a/3)/k ≤ 0.1; outside it the output is null. The
+    linear-loss check does not apply to it.
+  - Second method: at h = 0 the result inverts through a closed form, derived here by partial
+    fractions, to the same t within 1e-7, cooling and warming. With ε = 0 it is Newton's exponential
+    within 1e-9. The oxidized steel ball of the failure example reads 711.2 K after 60 s, against
+    Newton's 929.8 K.
+  - The other I20 limits stay refused (or quoted, for the Faxén terms), and no EM, thermal or astro
+    atlas family is added. The reasons are in `todo.md` (I20 row).
 - **`probe study` catches near and affine replication copies, and takes several correction families
   (audit I19 limits).**
   - Replication rows at a study row's inputs (within 3σ of a declared input σ, else to 1e-9
