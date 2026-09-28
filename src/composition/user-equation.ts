@@ -231,23 +231,30 @@ function editDistance(a: string, b: string): number {
 /** Normalize for comparison: lowercase, `_`/`-` unified. */
 const normalizeForCompare = (s: string): string => s.toLowerCase().replace(/[_-]/g, '-');
 
+/** The shortest name that counts as contained in another for the "did you mean?" ranking. */
+const MIN_CONTAINED = 3;
+
 /**
  * The one "did you mean?" ranking, shared by {@link suggestQuantities} and
  * {@link suggestByDimension}: edit distance first, then containment (one name
  * inside the other), then length, then name. Edit distance leads so a one-edit
  * typo beats a substring: `hawkng-temperature` → `hawking-temperature` before
  * `temperature` (persona finding N5). `gate` keeps a candidate only if one name
- * contains the other or the distance is small against the query length; the
+ * contains the other (the contained one at least three characters long) or the
+ * distance is small against the query length; the
  * dimension-based caller passes `false`, because there the dimension is the evidence.
  */
 function rankByName(name: string, candidates: Iterable<string>, gate: boolean): string[] {
   const needle = normalizeForCompare(name);
   // Without the gate, short catalog names (`a`, `nu`) are spurious "matches" for any typo.
   const maxDist = Math.max(1, Math.ceil(needle.length / 2));
+  // A contained name counts only from MIN_CONTAINED characters: every one-letter name occurs inside
+  // a long input (`schrodinger-equation` holds a, g, q, r), and that is not nearness (audit I5).
+  const within = (outer: string, inner: string): boolean => inner.length >= MIN_CONTAINED && outer.includes(inner);
   return [...candidates]
     .map((cand) => {
       const hay = normalizeForCompare(cand);
-      const contains = hay.includes(needle) || needle.includes(hay) ? 0 : 1;
+      const contains = within(hay, needle) || within(needle, hay) ? 0 : 1;
       return { cand, contains, dist: editDistance(needle, hay) };
     })
     .filter((s) => !gate || s.contains === 0 || s.dist <= maxDist)

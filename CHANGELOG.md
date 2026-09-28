@@ -191,6 +191,16 @@ from v0.1.0 onward.
   the same right-hand side matches no entry. The builtin path is tested by mocking the peer away.
   `peerVersions` moved from `record.ts` to `version.ts` so both use one reader.
 
+- **Audit I5 residual: `explain <law-name>` suggested one-letter names** (2026-09-27). `upt explain
+  schrodinger-equation --source=canonical` answered "did you mean: a, A, g, q, r?": the ranking counted
+  a name contained in the input as near, and every one-letter name occurs inside a long input. A
+  contained name now counts only from three characters (`temperature` inside `hawkng-temperature`
+  still does; `lenght` → `length` and `hawkng-temperature` → `hawking-temperature` still rank first).
+  NOT COVERED also lists what `upt search` finds for the name's words; when no entry matches every
+  word, the largest matching set is used, the rarer when sets tie, so `schrodinger-equation` lists
+  model-schrodinger-free, ab-schrodinger-diffusion and ab-kg-schrodinger. The search index moved
+  from `search.ts` to `src/cli/search-index.ts` so both commands use one index.
+
 - **CLI applied-physics audit findings F01–F14** (2026-09-27). Ledger in
   `docs/audit/Universal_Physics_Tensor_CLI_Audit.md` §11; each fix has a test that was RED first.
   - **F01** — `upt path` searches across families when no same-family chain exists (KG → free

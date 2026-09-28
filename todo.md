@@ -124,7 +124,10 @@ witness) could be meant. Earlier entries used the bare form for both.
   (`lg` → `log10`, `arcsin` → `asin`, …) and still fail; `--debug` prints the parser and its version;
   the help lists the functions and states that `log` is natural. The equation compare evaluates with
   the active formula parser and reaches CE-landauer through BE-16, which it restates.
-- [ ] **audit I5 residual** — `explain <law-name>` suggests one-letter quantities instead of `upt search`.
+- [x] **audit I5 residual** — `explain <law-name>` suggests one-letter quantities instead of `upt search`.
+  NOT COVERED now lists what `upt search` finds for the name's words (`schrodinger-equation` →
+  model-schrodinger-free, ab-schrodinger-diffusion, ab-kg-schrodinger), and a contained name counts
+  as near only from three characters.
 - [ ] **audit I10** Reproducible equation rendering — F12 grouped denominators; open: no LaTeX, no
   symbol table.
 - [ ] **audit I13** Precise verdict words — F07/F11 reworded two; open: no single glossary, no JSON

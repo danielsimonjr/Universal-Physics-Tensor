@@ -17,6 +17,10 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
+import { searchNameWords } from '../search-index.js';
+
+/** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
+const SEARCH_HITS_SHOWN = 5;
 
 const FLAGS: FlagSpec[] = [
   { name: '--source', valueStyle: 'attached' },
@@ -27,7 +31,8 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         Explain how the graph determines a quantity: the identifiability
         verdict, recovered value, derivation chains, and whether the inputs
         are dimensionally sufficient. A name that is not a quantity of the
-        graph is reported NOT COVERED, with near names, and exits 1.
+        graph is reported NOT COVERED, with near names and what \`upt search\`
+        finds for its words, and exits 1.
         e.g.  upt explain hawking-temperature mass=1.989e30`;
 
 /**
@@ -125,11 +130,22 @@ async function run(ctx: CommandCtx): Promise<number> {
   const resolvedTarget = api.resolveToCatalogName(target, names);
   if (resolvedTarget === null) {
     const near = api.suggestQuantities(target, names, 5);
+    // Audit I5: a law or model name (`schrodinger-equation`) is not a quantity; name what
+    // `upt search` finds for its words, beside the near quantity names.
+    const found = searchNameWords(api, target);
+    const shown = found?.matches.slice(0, SEARCH_HITS_SHOWN) ?? [];
+    const searchLine =
+      found === null
+        ? ''
+        : `\n  \`upt search ${found.words.join(' ')}\` finds ${found.matches.length}:` +
+          shown.map((m) => `\n    ${m.entry.id} (${m.entry.kind.replace('-', ' ')}) — ${m.entry.command}`).join('') +
+          (found.matches.length > shown.length ? `\n    … and ${found.matches.length - shown.length} more` : '');
     throw new CliError(
       `upt explain: '${target}' is not a quantity in the ${source} graph: NOT COVERED.` +
         (near.length > 0
           ? ` did you mean: ${near.join(', ')}?`
-          : ' `upt canonical` and `upt map` list the vocabulary.'),
+          : ' `upt canonical` and `upt map` list the vocabulary.') +
+        searchLine,
     );
   }
   const known = parseKnown(rest);
