@@ -10,6 +10,18 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Audit I10: `upt symbolic` prints LaTeX and a symbol table** (2026-09-27). Each composed (and
+  simplified) chain now has a LaTeX line, with `\frac` for every division and a parenthesized base
+  under every power, and a symbol table: each named symbol's meaning, value, SI unit and source
+  (CODATA 2018, exact SI, a mathematical constant, or the evaluation point; the solar mass is named
+  as the repository's rounded value). Both are in `--json` (`latex`, `symbols`). The constant
+  descriptions are `CONSTANT_PROVENANCE` beside `CONSTANTS`; a test holds the two key sets equal and
+  parses each unit back to the constant's registered dimension at SI scale 1. Round trips: the eval
+  form, the display form and the LaTeX (read back by a reader in the test that shares no code with
+  the printer) of nine ASTs, nested division and powers of quotients and powers included, evaluate
+  to `evalExpr` of the AST; a control shows the reader catches a dropped grouping. The printers moved
+  from `symbolic.ts` to `src/cli/expr-print.ts`. 24 of the 28 tests were RED before the change.
+
 - **CLI audit §14 improvements** (2026-09-27), from `docs/audit/Universal_Physics_Tensor_CLI_Audit.md`
   §14. Each has tests in `tests/cli/audit-improvements.test.ts`, shown RED before the change.
   - **I5** — `upt search <word> …` finds a catalog bridge, canonical equation, atlas model, atlas

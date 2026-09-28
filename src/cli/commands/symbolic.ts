@@ -8,6 +8,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
 import type { ExprNode } from '../../dimensional/validator.js';
+import { EVAL_STUBS, printDisplay, printEval, printLatex, latexName, siUnitOf } from '../expr-print.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--simplify', valueStyle: 'none' },
@@ -21,58 +22,12 @@ const HELP = `upt symbolic [--simplify]
         With --simplify, folds the composed AST via MathTS (k_B cancels),
         re-validated dimensionally + numerically. Each chain also prints an
         'eval form': a runnable \`upt eval\` command, fully grouped, that
-        reproduces the printed value.`;
-
-interface PrintStyle {
-  readonly times: string;
-  readonly divide: string;
-  readonly symbol: (name: string) => string;
-}
-
-const DISPLAY: PrintStyle = { times: '·', divide: ' / ', symbol: (name) => name };
-
-/** Named numeric stubs spelled so `upt eval` parses them. */
-const EVAL_STUBS: Readonly<Record<string, string>> = {
-  '8pi': '(8*pi)',
-  '4pi': '(4*pi)',
-  '2pi': '(2*pi)',
-  ln2: 'ln(2)',
-};
-const EVAL: PrintStyle = { times: '*', divide: '/', symbol: (name) => EVAL_STUBS[name] ?? name };
-
-/**
- * Precedence-aware printing. Every divisor that is not a bare power is
- * grouped, so `a / (b·c)` never prints as `a / b·c` (audit F12); a quotient
- * inside a product or as a dividend is grouped too, for the reader.
- */
-function printExpr(n: ExprNode, style: PrintStyle): string | null {
-  if (n.kind === 'symbol') return style.symbol(n.name);
-  if (n.kind !== 'op') return null;
-  const parts: string[] = [];
-  for (let i = 0; i < n.args.length; i++) {
-    const a = n.args[i]!;
-    const s = printExpr(a, style);
-    if (s === null) return null;
-    const aOp = a.kind === 'op' ? a.op : null;
-    const group =
-      aOp !== null &&
-      (n.op === '^'
-        ? true
-        : n.op === '/'
-          ? i === 0
-            ? aOp === '+' || aOp === '-' || aOp === '/'
-            : aOp !== '^'
-          : n.op === '*'
-            ? aOp === '+' || aOp === '-' || aOp === '/'
-            : n.op === '-' && i > 0 && (aOp === '+' || aOp === '-'));
-    parts.push(group ? `(${s})` : s);
-  }
-  const sep = n.op === '*' ? style.times : n.op === '/' ? style.divide : n.op === '^' ? '^' : ` ${n.op} `;
-  return parts.join(sep);
-}
+        reproduces the printed value, a LaTeX form (\\frac for every
+        division) and a symbol table: each symbol's meaning, value, SI unit
+        and the source of a constant or the point an input is evaluated at.`;
 
 function exprToString(n: ExprNode): string {
-  return printExpr(n, DISPLAY) ?? `⟨${n.kind}⟩`;
+  return printDisplay(n) ?? `⟨${n.kind}⟩`;
 }
 
 /**
@@ -85,7 +40,7 @@ function evalFormOf(
   constants: CommandCtx['api']['CONSTANTS'],
   point: Readonly<Record<string, number>>,
 ): { formula: string; bindings: string[] } | null {
-  const formula = printExpr(n, EVAL);
+  const formula = printEval(n);
   if (formula === null) return null;
   const names: string[] = [];
   const collect = (e: ExprNode): void => {
@@ -107,6 +62,75 @@ function evalFormOf(
 const showEvalForm = (f: { formula: string; bindings: string[] } | null): string =>
   f === null ? 'none (a node the scalar evaluator cannot take)' : `upt eval "${f.formula}" ${f.bindings.join(' ')}`;
 
+/** One row of the symbol table (audit I10). */
+interface SymbolRow {
+  readonly symbol: string;
+  readonly meaning: string;
+  readonly value: number;
+  readonly unit: string;
+  readonly source: string;
+}
+
+const SOLAR_MASS_SOURCE =
+  'evaluation point: the solar mass 1.989e30 kg, the rounded value the repository uses (core/constants.ts M_SUN_SI)';
+
+/**
+ * Every named symbol of the formula, in order of first use: a registered constant with its meaning,
+ * unit and source; an input with its quantity and the point it is evaluated at. Numeric literals are
+ * not symbols. `null` when a name is neither, so no row is ever invented.
+ */
+function symbolTable(
+  n: ExprNode,
+  api: CommandCtx['api'],
+  inputs: readonly { name: string; symbol: string; dim: Parameters<CommandCtx['api']['format']>[0] }[],
+  point: Readonly<Record<string, number>>,
+): SymbolRow[] | null {
+  const names: string[] = [];
+  const collect = (e: ExprNode): void => {
+    if (e.kind === 'symbol') {
+      if (!names.includes(e.name) && !Number.isFinite(Number(e.name))) names.push(e.name);
+    } else if (e.kind === 'op') e.args.forEach(collect);
+  };
+  collect(n);
+  const rows: SymbolRow[] = [];
+  for (const name of names) {
+    const c = api.CONSTANTS[name];
+    const info = api.CONSTANT_PROVENANCE[name];
+    if (c !== undefined && info !== undefined) {
+      rows.push({ symbol: name, meaning: info.meaning, value: c.value, unit: info.unit, source: info.source });
+      continue;
+    }
+    const q = inputs.find((i) => i.name === name);
+    const v = point[name];
+    if (q === undefined || v === undefined) return null;
+    rows.push({
+      symbol: name,
+      meaning: `input quantity ${q.name} (symbol ${q.symbol}), ${api.format(q.dim)}`,
+      value: v,
+      unit: siUnitOf(q.dim),
+      source: name === 'mass' && v === api.M_SUN_KG ? SOLAR_MASS_SOURCE : 'evaluation point',
+    });
+  }
+  return rows;
+}
+
+function showSymbolTable(rows: readonly SymbolRow[] | null, out: CommandCtx['out']): void {
+  if (rows === null) {
+    out('      symbols:    none (a name is neither a registered constant nor an input)');
+    return;
+  }
+  out('      symbols:');
+  const w = (k: keyof SymbolRow): number => Math.max(...rows.map((r) => String(r[k]).length));
+  const [ws, wm, wv, wu] = [w('symbol'), w('meaning'), w('value'), w('unit')];
+  for (const r of rows) {
+    out(`        ${r.symbol.padEnd(ws)}  ${r.meaning.padEnd(wm)}  ${String(r.value).padEnd(wv)} ${r.unit.padEnd(wu)}  ${r.source}`);
+  }
+}
+
+const latexOf = (name: string, leaves: readonly string[], n: ExprNode): string | null => {
+  const rhs = printLatex(n);
+  return rhs === null ? null : `${latexName(name)}(${leaves.map(latexName).join(', ')}) = ${rhs}`;
+};
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const doSimplify = args.flags.has('simplify');
@@ -131,6 +155,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const obs = api.composeSymbolic(first, second);
     const point = { mass: api.M_SUN_KG };
     const num = obs.evaluate(point);
+    const inputs = [...first.sources, ...second.sources];
 
     if (!isJson) {
       out(`  ● ${label}`);
@@ -146,7 +171,9 @@ async function run(ctx: CommandCtx): Promise<number> {
           name: s.name,
           leaves: s.leaves,
           expr: exprToString(s.expr),
+          latex: latexOf(s.name, s.leaves, s.expr),
           evalForm: evalFormOf(s.expr, api.CONSTANTS, point),
+          symbols: symbolTable(s.expr, api, inputs, point),
           dim: api.format(s.dim),
           value: sNum,
           simplified: true,
@@ -154,7 +181,9 @@ async function run(ctx: CommandCtx): Promise<number> {
       } else {
         const tag = s.expr === obs.expr ? '  (unchanged — minimal, MathTS absent, or not reducible here)' : '';
         out(`      simplified: ${s.name}(${s.leaves.join(',')}) = ${exprToString(s.expr)}${tag}`);
+        out(`      latex:      ${latexOf(s.name, s.leaves, s.expr) ?? 'none (a node the printer cannot take)'}`);
         out(`      eval form:  ${showEvalForm(evalFormOf(s.expr, api.CONSTANTS, point))}`);
+        showSymbolTable(symbolTable(s.expr, api, inputs, point), out);
         out(`      value @ mass = M_sun:  ${sNum.toExponential(4)}  (= composed, ${api.format(s.dim)})`);
       }
     } else if (isJson) {
@@ -163,12 +192,16 @@ async function run(ctx: CommandCtx): Promise<number> {
         name: obs.name,
         leaves: obs.leaves,
         expr: exprToString(obs.expr),
+        latex: latexOf(obs.name, obs.leaves, obs.expr),
         evalForm: evalFormOf(obs.expr, api.CONSTANTS, point),
+        symbols: symbolTable(obs.expr, api, inputs, point),
         dim: api.format(obs.dim),
         value: num,
       });
     } else {
+      out(`      latex:      ${latexOf(obs.name, obs.leaves, obs.expr) ?? 'none (a node the printer cannot take)'}`);
       out(`      eval form:  ${showEvalForm(evalFormOf(obs.expr, api.CONSTANTS, point))}`);
+      showSymbolTable(symbolTable(obs.expr, api, inputs, point), out);
       out(`      dimension: ${api.format(obs.dim)}   (validated on the composed AST)`);
       out(`      value @ mass = M_sun:  ${num.toExponential(4)}`);
     }

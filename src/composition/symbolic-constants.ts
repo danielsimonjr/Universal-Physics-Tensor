@@ -77,3 +77,27 @@ export const CONSTANTS: Readonly<Record<string, NamedConstantValue>> = {
   sigma_sb: { value: 5.670374419e-8, dim: STEFAN_BOLTZMANN },
   b: { value: B_WIEN_SI, dim: WIEN },
 };
+
+/** What a registered constant is, its SI unit, and where its value comes from (audit I10). @internal */
+export interface ConstantProvenance {
+  readonly meaning: string;
+  /** The SI unit, in the syntax `parseUnit` reads; a test checks it against the registered dimension. */
+  readonly unit: string;
+  readonly source: string;
+}
+
+/** One row per {@link CONSTANTS} key; a test holds the two key sets equal. @internal */
+export const CONSTANT_PROVENANCE: Readonly<Record<string, ConstantProvenance>> = {
+  hbar: { meaning: 'reduced Planck constant h/(2π)', unit: 'J*s', source: 'CODATA 2018 (core/constants.ts HBAR_SI)' },
+  h: { meaning: 'Planck constant', unit: 'J*s', source: 'exact SI, 2019 redefinition (core/constants.ts H_SI)' },
+  c: { meaning: 'speed of light in vacuum', unit: 'm/s', source: 'exact SI (core/constants.ts C_SI)' },
+  G: { meaning: 'Newtonian gravitational constant', unit: 'm^3/(kg*s^2)', source: 'CODATA 2018 (core/constants.ts G_SI)' },
+  k_B: { meaning: 'Boltzmann constant', unit: 'J/K', source: 'exact SI, 2019 redefinition (core/constants.ts K_B_SI)' },
+  ln2: { meaning: 'natural logarithm of 2', unit: '1', source: 'mathematical constant (Math.LN2)' },
+  '8pi': { meaning: '8π', unit: '1', source: 'mathematical constant (8·Math.PI)' },
+  '4pi': { meaning: '4π', unit: '1', source: 'mathematical constant (4·Math.PI)' },
+  '2pi': { meaning: '2π', unit: '1', source: 'mathematical constant (2·Math.PI)' },
+  epsilon_0: { meaning: 'vacuum permittivity', unit: 'F/m', source: 'CODATA 2018 (this table)' },
+  sigma_sb: { meaning: 'Stefan–Boltzmann constant', unit: 'W/(m^2*K^4)', source: 'CODATA 2018 (this table)' },
+  b: { meaning: 'Wien displacement constant', unit: 'm*K', source: 'CODATA 2018 (core/constants.ts B_WIEN_SI)' },
+};

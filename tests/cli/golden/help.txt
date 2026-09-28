@@ -99,7 +99,9 @@ Usage:
         evaluators (the Observable contract). Shows the CT-1 / CT-1b chains
         composed by substitution, dimensionally validated and evaluable.
         With --simplify, folds the composed AST via MathTS (k_B cancels),
-        re-validated dimensionally + numerically.
+        re-validated dimensionally + numerically. Each chain also prints a
+        runnable `upt eval` form, a LaTeX form (\frac for every division)
+        and a symbol table: meaning, value, SI unit and source of each symbol.
 
   upt eval "<formula>" name=value ...
         Evaluate YOUR OWN scalar formula (safe — arithmetic only). Knows the
