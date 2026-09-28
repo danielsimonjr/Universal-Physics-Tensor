@@ -175,6 +175,28 @@ describe('S1.2b — a refused pair throws UndefinedCompositionError', () => {
   });
 });
 
+describe('the widened cell approximation ∘ exact-equivalence is refused at the edge layer', () => {
+  // The table now returns 'approximation' for this order
+  // (docs/planning/ADR-transported-norm-composition.md). An edge's relation
+  // declares no norm transport, so the edge layer cannot compose the bound and
+  // must refuse with the guard's own message, not the silent-cell message.
+  const widened = () =>
+    composeEdges(edge('be-approx', 'a', 'b', APPROX), edge('be-exact', 'b', 'c', EXACT));
+
+  it('throws UndefinedCompositionError naming the missing composed bound', () => {
+    expect(widened).toThrow(UndefinedCompositionError);
+    expect(widened).toThrow(/returned 'approximation'/);
+    expect(widened).toThrow(/declares no norm transport/);
+  });
+
+  it('control: the reverse order is still a silent cell, with the silent-cell message', () => {
+    const reverse = () =>
+      composeEdges(edge('be-exact', 'a', 'b', EXACT), edge('be-approx', 'b', 'c', APPROX));
+    expect(reverse).toThrow(/asserts no composite relation/);
+    expect(reverse).not.toThrow(/returned 'approximation'/);
+  });
+});
+
 describe('S1.2b — one operand without a relation takes the unchanged path', () => {
   it('does not throw, and sets neither overlay key', () => {
     for (const [first, second] of [

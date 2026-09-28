@@ -26,12 +26,14 @@
 Audit I1, I3, I4, I10 and I13 were taken as covered by F-ledger fixes; the review below found four of
 them only partly met, and their rows are in "Review of the audit against the records and the code".
 
-- [ ] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
-  Proposal ready for Mothership: `docs/planning/ADR-proposal-transported-norm-composition.md`, with a
-  test-only demonstration (`tests/atlas/transported-norm-demo.test.ts`). To decide: the cell, the
-  shape of the per-direction norm-transport field, and whether the relation is set without a
-  declaration. Also for that review: `ab-spring-lc`'s declared phase carriage (I8) already lets a
-  phase tolerance cross that bridge; the composite bound stays "no composite claim".
+- [x] **I2** Justified composition of approximation ∘ exact-equivalence with a transported norm (needs a reviewed composition-table widening).
+  Owner decision 2026-09-27: option 4 of `docs/planning/ADR-transported-norm-composition.md` (the
+  cell `approximation['exact-equivalence'] = 'approximation'`, the table a pure function of relation
+  types, and per-direction `normTransports` on exact bridges). `ab-spring-lc` declares relative period
+  error with witness W1τ. Limits, recorded as negative results: `ab-heat-diffusion` declares no
+  transport (it needs its own witness and a horizon restatement through D = κ/(ρc_p)), so
+  telegraph → heat refuses as `norm-not-stated`; exact then approximation (ADR §3) stays silent; the
+  composition-graph edge layer carries no transports and refuses the widened cell.
 - [x] **I5** Semantic lookup across law, model, symbol and alias names (`upt search`).
 - [x] **I6** Unit-aware input parsing and explicit parameter schemas (radius vs diameter, conventions).
   Every evaluator declares each input's unit, meaning and geometry role, and `evaluate` converts

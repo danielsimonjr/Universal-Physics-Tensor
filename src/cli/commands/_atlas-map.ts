@@ -37,10 +37,18 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
-import type { AtlasBridge, AtlasModel } from '../../cli-api.js';
+import type { AppliedTransport, AtlasBridge, AtlasModel } from '../../cli-api.js';
 import type { EvidenceTag, RelationType } from '../../atlas/types.js';
 import { showInequality } from './regime.js';
-import { missingForComposite, routeClaim, selectRoute, type RouteClaim } from './_atlas-route.js';
+import {
+  claimReport,
+  explainsRefusal,
+  missingForComposite,
+  routeClaim,
+  selectRoute,
+  transportReport,
+  type TransportReport,
+} from './_atlas-route.js';
 
 type Api = CommandCtx['api'];
 
@@ -178,9 +186,16 @@ export function loadStoredResults(): WitnessResults {
   };
 }
 
-/** Run the in-process registered witnesses of `bridgeIds`, now. */
+/**
+ * Run the in-process registered witnesses of `bridgeIds`, now, and those of
+ * the norm transports the bridges declare (registered under the transport id).
+ */
 export async function runResults(api: Api, bridgeIds: ReadonlySet<string>): Promise<WitnessResults> {
-  const registered = api.WITNESS_REGISTRY.filter((e) => bridgeIds.has(e.recordId));
+  const transportIds = api.ATLAS_FAMILIES.flatMap((f) => f.bridges)
+    .filter((b) => bridgeIds.has(b.id))
+    .flatMap((b) => (b.normTransports ?? []).map((nt) => nt.id));
+  const ids = new Set([...bridgeIds, ...transportIds]);
+  const registered = api.WITNESS_REGISTRY.filter((e) => ids.has(e.recordId));
   const artifact = await api.runWitnessRegistry(registered);
   return {
     mode: 'run',
@@ -340,8 +355,12 @@ export interface RouteView {
     running: { after: string; relation: RelationType | 'no-composite-claim' | null }[];
     /** Index into `steps` of the step whose composition the table declines, or null. */
     breaksAt: number | null;
-    claim: RouteClaim | null;
+    claim: ReturnType<typeof claimReport> | null;
     missing: string[];
+    /** The declared norm transports that carried the bound across exact steps, with their witness results. */
+    transports: (TransportReport & { result: TransportResult })[];
+    /** The composite claim's evidence (ADR §4); null when the route makes no composite claim. */
+    evidence: CompositeEvidenceView | null;
   };
   equationLinks: ReturnType<typeof linkSummary>;
   witnessResults?: ResultsTally;
@@ -377,8 +396,59 @@ function routeModelIds(from: string, bridges: readonly AtlasBridge[]): string[] 
   return ids;
 }
 
+/** What a results source observed of a transport's witness; 'no result' when it has no row or there is no source. */
+export type TransportResult = 'checked' | 'refuted' | 'unresolved' | 'no result';
+
+export interface CompositeEvidenceView {
+  /** Derived whatever the unobserved results are: never stronger than the weakest part. */
+  derived: EvidenceTag[];
+  undecided: EvidenceTag[];
+  rule: string;
+}
+
+const COMPOSITE_RULE =
+  'derived from the parts (every step and every transport applied): a positive tag survives only if every part ' +
+  "carries it, contradicted if any part does; a transport contributes its basis when its witness checks, else 'proposed' " +
+  '(docs/planning/ADR-transported-norm-composition.md §4)';
+
+function transportResult(nt: { id: string; witness: { id: string } }, results: WitnessResults | null): TransportResult {
+  const row = results?.rows.find((r) => r.recordId === nt.id && r.witnessId === nt.witness.id);
+  return row === undefined ? 'no result' : row.status;
+}
+
+/** The composite evidence of a bound route, bracketed over the unobserved witness results like one bridge's. */
+function compositeEvidence(
+  api: Api,
+  bridges: readonly AtlasBridge[],
+  transports: readonly AppliedTransport[],
+  results: WitnessResults | null,
+): CompositeEvidenceView {
+  const lows: ReadonlySet<EvidenceTag>[] = [];
+  const highs: ReadonlySet<EvidenceTag>[] = [];
+  for (const b of bridges) {
+    const o = results === null ? null : outcomes(b, results);
+    const passing = o === null ? api.NO_PASSING_WITNESSES : new Set(o.checked);
+    const open = o === null ? b.witnesses.map((w) => w.id) : o.notObserved;
+    lows.push(api.deriveEvidence(b, passing));
+    highs.push(api.deriveEvidence(b, new Set([...passing, ...open])));
+  }
+  for (const { transport } of transports) {
+    const r = transportResult(transport, results);
+    lows.push(new Set<EvidenceTag>([r === 'checked' ? transport.basis : 'proposed']));
+    highs.push(new Set<EvidenceTag>([r === 'checked' || r === 'no result' ? transport.basis : 'proposed']));
+  }
+  const low = api.deriveCompositeEvidence(lows);
+  const high = api.deriveCompositeEvidence(highs);
+  const tags = [...new Set([...low, ...high])].sort();
+  return {
+    derived: tags.filter((t) => low.has(t) && high.has(t)),
+    undecided: tags.filter((t) => low.has(t) !== high.has(t)),
+    rule: COMPOSITE_RULE,
+  };
+}
+
 /** The composition table folded along a non-empty route, and what the route supports. */
-function composeSteps(api: Api, bridges: readonly AtlasBridge[]): RouteView['composition'] {
+function composeSteps(api: Api, bridges: readonly AtlasBridge[], results: WitnessResults | null): RouteView['composition'] {
   const running: RouteView['composition']['running'] = [];
   let breaksAt: number | null = null;
   let rel: RelationType | 'no-composite-claim' | null = bridges[0]!.relation;
@@ -392,8 +462,11 @@ function composeSteps(api: Api, bridges: readonly AtlasBridge[]): RouteView['com
     running.push({ after: bridges[i]!.id, relation: rel });
   }
   const claim = routeClaim(api, bridges);
-  const missing = claim.kind === 'no-claim' && claim.reason === 'no-composite-claim' ? missingForComposite(api, bridges) : [];
-  return { running, breaksAt, claim, missing };
+  const missing = explainsRefusal(claim) ? missingForComposite(api, bridges) : [];
+  const applied = claim.kind === 'bound' ? (claim.transports ?? []) : [];
+  const transports = applied.map((a) => ({ ...transportReport(a), result: transportResult(a.transport, results) }));
+  const evidence = claim.kind === 'bound' ? compositeEvidence(api, bridges, applied, results) : null;
+  return { running, breaksAt, claim: claimReport(claim), missing, transports, evidence };
 }
 
 export function buildRouteView(api: Api, from: string, to: string, results: WitnessResults | null = null): RouteView {
@@ -404,10 +477,10 @@ export function buildRouteView(api: Api, from: string, to: string, results: Witn
   const steps = bridges === null ? null : bridges.map((b) => bridgeView(api, b, familyOfBridge(api, b.id), models, results));
   const routeModels = bridges === null ? [from, to] : routeModelIds(from, bridges);
   const mv = routeModels.map((id) => modelView(api, models.get(id)!));
-  const { running, breaksAt, claim, missing } =
+  const { running, breaksAt, claim, missing, transports, evidence } =
     bridges === null || bridges.length === 0
-      ? { running: [], breaksAt: null, claim: null, missing: [] }
-      : composeSteps(api, bridges);
+      ? { running: [], breaksAt: null, claim: null, missing: [], transports: [], evidence: null }
+      : composeSteps(api, bridges, results);
   const witnessResults = tally(results, steps ?? []);
 
   return {
@@ -422,7 +495,7 @@ export function buildRouteView(api: Api, from: string, to: string, results: Witn
       models: { shown: mv.length, of: t.models },
     },
     selection: SELECTION,
-    composition: { running, breaksAt, claim, missing },
+    composition: { running, breaksAt, claim, missing, transports, evidence },
     equationLinks: linkSummary(mv),
     ...(witnessResults === undefined ? {} : { witnessResults }),
     epistemics: EPISTEMICS,
@@ -490,7 +563,7 @@ export function buildRoutesView(
     .map((r) => ({
       bridges: r.map((b) => b.id),
       models: routeModelIds(from, r),
-      composition: composeSteps(api, r),
+      composition: composeSteps(api, r, results),
       reported: r.map((b) => b.id).join(' ') === reportedKey,
     }));
   const used = new Set(routes.flatMap((r) => r.bridges));
@@ -854,6 +927,17 @@ function compositionLines(c: RouteView['composition'], relations: readonly Relat
   const claim = c.claim!;
   if (claim.kind === 'bound') {
     out.push(`${indent}route claim: ${claim.relation}, K = ${claim.bound.K} · delta = ${claim.bound.delta} (${claim.norm ?? 'no norm stated'})`);
+    for (const nt of c.transports) {
+      out.push(
+        `${indent}  across '${nt.bridgeId}' by its declared transport '${nt.id}' (${nt.fromModel} → ${nt.toModel}, ` +
+          `K = ${nt.K}, time map uniform): witness ${nt.witness.id} ${nt.result === 'no result' ? 'has no result here (not a pass)' : nt.result}`,
+      );
+    }
+    if (c.evidence !== null) {
+      const d = c.evidence.derived.length === 0 ? 'none' : c.evidence.derived.join(', ');
+      const u = c.evidence.undecided.length === 0 ? '' : `; undecided: ${c.evidence.undecided.join(', ')}`;
+      out.push(`${indent}composite evidence (derived): ${d}${u} — never stronger than the weakest part`);
+    }
   } else {
     out.push(`${indent}route claim: no composite claim — reason '${claim.reason}': ${claim.detail}`);
     if (c.missing.length > 0) {

@@ -159,9 +159,10 @@ supplied, is reported beside `sigma` and is not folded into it.
    before Lipschitz arithmetic. A composed number over an undefined composite would be the most
    dangerous output this library could produce: precise-looking and unfounded.
 2. **`ApproximationBound.norm` is a mandatory `string` from Phase 0.** Phase 2 does not add
-   `norm?`. The composition table was not widened. Widening remains the reviewed act in §4: fail
-   the 56 `'no-composite-claim'` pin first, assert each new cell, and name the edge field that
-   licenses it.
+   `norm?`. Phase 2 did not widen the composition table. Widening remains the reviewed act in §4:
+   fail the pinned `'no-composite-claim'` count first, assert each new cell, and name the edge field
+   that licenses it. `docs/planning/ADR-transported-norm-composition.md` is the one widening made
+   that way.
 
 ---
 
@@ -170,8 +171,8 @@ supplied, is reported beside `sigma` and is not folded into it.
 `norm` was already a mandatory string, and that fact does not widen the table. Any widening
 must:
 
-- fail the **pinned cell-count test** first (56 `'no-composite-claim'` of 64), so the change is
-  visible;
+- fail the **pinned cell-count test** first (the `'no-composite-claim'` cells of the 64, pinned in
+  `tests/atlas/composition-table.test.ts`), so the change is visible;
 - assert each newly-defined cell individually, because — as Phase 1 learned when a demotion and an
   addition cancelled — **a count pin does not detect a swap**;
 - state which edge field justifies the widening. A cell defined without the data that licenses it

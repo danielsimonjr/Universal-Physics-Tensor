@@ -144,8 +144,11 @@ edge data that would justify it does not exist until Phase 2:
    `exact-equivalence ∘ approximation`, both orders) — see §0. For `derivation` there is no bound
    at all; for `exact-equivalence` the identity holds in the norm a bridge states, and
    `ApproximationBound.norm` is already a mandatory `string`. The matrix does not define the cell.
-   → `'no-composite-claim'`. Widening it is Phase 2 §4: fail the 56-cell pin first, assert each
-   new cell, and name the edge field that licenses it.
+   → `'no-composite-claim'`. Widening it is Phase 2 §4: fail the pinned silent-cell count first,
+   assert each new cell, and name the edge field that licenses it. One order has been widened that
+   way: `approximation` then `exact-equivalence` is `'approximation'`, licensed by the exact
+   bridge's declared norm transports (`docs/planning/ADR-transported-norm-composition.md`). The
+   other orders stay silent.
 4. **`X` ∘ `deformation-quantization`** — the classical limit of a quantization is never the
    identity. This is a statement ABOUT the composite, not that the composite is undefined; encoding
    it needs an ħ-order field that does not exist. → `'no-composite-claim'`.

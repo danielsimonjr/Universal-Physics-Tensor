@@ -8,18 +8,24 @@
  *
  * **The table is a deliberate UNDER-approximation of Blueprint v2 §4.2.** Every
  * cell not named in §2.1 is `'no-composite-claim'`, because a wrong composite
- * type is a false physical claim while silence is only silence. Eight of the
- * sixty-four cells are defined; the remaining fifty-six are silent, and the
+ * type is a false physical claim while silence is only silence. Nine of the
+ * sixty-four cells are defined; the remaining fifty-five are silent, and the
  * reasons for the notable silences are §2.2.
+ *
+ * The ninth cell, `approximation ∘ exact-equivalence = approximation`, is the
+ * reviewed widening of `docs/planning/ADR-transported-norm-composition.md`. The
+ * table stays a pure function of relation types: the cell says what a route
+ * WOULD assert, and `boundPath` (`./path-bound.ts`) decides whether a given route
+ * carries a bound, which it does only when the exact bridge declares a norm
+ * transport from the norm the approximation states.
  *
  * Two cells the implementation plan asserts are NOT defined here, on the
  * authority of the design note (§0 and §2.2 item 5):
  *
- * - `exact-equivalence ∘ approximation`, either order. An exact equivalence
- *   contributes `IDENTITY_BOUND` only *in the norm a given bridge states* (see
- *   `./error-algebra.ts`), and no field in Sprint 1 records a norm, so
- *   norm-compatibility cannot be checked. A `norm?` field unblocks it in
- *   Phase 2.
+ * - `exact-equivalence ∘ approximation`. An exact equivalence contributes
+ *   `IDENTITY_BOUND` only *in the norm a given bridge states* (see
+ *   `./error-algebra.ts`); with the exact edge first, that norm would have to be
+ *   pulled back through the map, which the ADR leaves undefined (its §3).
  * - `structural-analogy ∘ structural-analogy`. Analogy is not transitive: the
  *   shared structure can dilute to nothing across a chain.
  *
@@ -84,7 +90,8 @@ export const COMPOSITION_TABLE: Readonly<
   },
   approximation: {
     derivation: NO_COMPOSITE_CLAIM,
-    'exact-equivalence': NO_COMPOSITE_CLAIM,
+    // Licensed per route by a declared norm transport on the exact bridge; see the module comment.
+    'exact-equivalence': 'approximation',
     restriction: NO_COMPOSITE_CLAIM,
     approximation: NO_COMPOSITE_CLAIM,
     'coarse-graining': NO_COMPOSITE_CLAIM,

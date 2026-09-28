@@ -137,8 +137,11 @@ describe('I18 — a bounded sweep: each row is the point verdict, and an unclaim
   });
 
   it('a path with no composite claim sweeps its status only; no number appears', async () => {
-    const env = await json(['path', 'model-pendulum', 'model-lc', '--at', 'T0=1', 't=10', '--sweep', 'theta0=0.1:0.4:3']);
+    // model-rlc → model-first-order: exact then approximation, a silent cell. (pendulum → lc
+    // composes since the owner decision of 2026-09-27, through ab-spring-lc's norm transport.)
+    const env = await json(['path', 'model-rlc', 'model-first-order', '--at', 'm · b^-2 · k=0.01', '--sweep', 't=0.1:1:3']);
     expect(env.result.kind).toBe('no-claim');
+    expect(env.result.rows).toHaveLength(3);
     expect(env.result.rows.every((r: any) => r.error === null && r.reason === 'no composite claim')).toBe(true);
   });
 
@@ -474,8 +477,10 @@ describe('I8 — a translation composes across a bridge only through its declare
     const direct = (await json([...PHASE_AT, 't=1', '--tolerance=phase:0.1'])).result.tolerance;
     const env = await json([...LC_AT, 't=1', '--tolerance=phase:0.1']);
     const tol = env.result.tolerance;
-    expect(env.result.kind).toBe('no-claim');
-    expect(env.result).not.toHaveProperty('bound');
+    // Since the owner decision of 2026-09-27 the composite is a bound in relative period
+    // error (ab-spring-lc's norm transport); the phase judgement is a separate claim.
+    expect(env.result.kind).toBe('bound');
+    expect(env.result.norm).toMatch(/^relative period error/);
     expect(tol.verdict).toBe('adequate');
     expect(tol.horizon).toBe(direct.horizon);
     expect(tol.translation.carriedBy).toEqual(['ab-spring-lc']);
@@ -483,12 +488,13 @@ describe('I8 — a translation composes across a bridge only through its declare
     expect(tol.evidence.carriages[0].witnesses).toEqual([expect.objectContaining({ id: 'W1φ', status: 'checked' })]);
   });
 
-  it('the composite bound stays no composite claim, and past t* the carried phase is INADEQUATE (exit 3)', async () => {
+  it('the composite bound and the carried phase are separate claims, and past t* the phase is INADEQUATE (exit 3)', async () => {
     const tStar = (await json([...LC_AT, '--tolerance=phase:0.1'])).result.tolerance.horizon;
     const r = await run([...LC_AT, `t=${tStar * 1.001}`, '--tolerance=phase:0.1']);
     expect(r.code).toBe(3);
-    expect(r.text).toMatch(/\n {2}composite relation: no composite claim\n/);
-    expect(r.text).toMatch(/the composite bound is still 'no composite claim': the composition table is not consulted or widened/);
+    expect(r.text).toMatch(/\n {2}composite relation: approximation\n/);
+    expect(r.text).toMatch(/the composite bound above is in 'relative period error[^']*', carried by a declared norm transport; this judgement is a separate claim in phase/);
+    expect(r.text).not.toMatch(/the composite bound is still 'no composite claim'/);
     expect(r.text).toMatch(/carried by ab-spring-lc \(its declared carriage of phase\)/);
   });
 });

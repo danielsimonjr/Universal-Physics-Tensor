@@ -184,6 +184,37 @@ async function run(ctx: CommandCtx): Promise<number> {
   });
   const runSummary = ran === null ? null : summarizeWitnessRuns(ran);
 
+  // A declared norm transport's witness is registered under the transport id,
+  // not the bridge's: it checks how the map acts on one norm, not the bridge.
+  const declared = b.normTransports ?? [];
+  const transportEntries = api.WITNESS_REGISTRY.filter((e) => declared.some((nt) => nt.id === e.recordId));
+  const ranTransports = args.flags.has('run') ? (await api.runWitnessRegistry(transportEntries)).results : null;
+  const transportSummary = ranTransports === null ? null : summarizeWitnessRuns(ranTransports);
+  const normTransports =
+    b.relation !== 'exact-equivalence'
+      ? null
+      : declared.map((nt) => {
+          const r = ranTransports?.find((x) => x.recordId === nt.id && x.witnessId === nt.witness.id);
+          const registeredHere = transportEntries.some((e) => e.recordId === nt.id && e.spec.id === nt.witness.id);
+          return {
+            id: nt.id,
+            fromModel: nt.fromModel,
+            toModel: nt.toModel,
+            from: nt.from,
+            to: nt.to,
+            K: nt.K,
+            domain: nt.domain,
+            derivation: nt.derivation,
+            timeMap: { map: nt.timeMap.map, uniform: nt.timeMap.uniform, horizon: nt.timeMap.horizon },
+            uniformity: nt.uniformity,
+            witness: { id: nt.witness.id, kind: nt.witness.kind, test: nt.witness.test, tolerance: nt.witness.tolerance ?? null },
+            basis: nt.basis,
+            status: r === undefined ? (registeredHere ? ('runnable' as const) : ('not-observed' as const)) : r.status,
+            ...(r?.reason === undefined ? {} : { reason: r.reason }),
+          };
+        });
+  const exitCode = Math.max(runSummary?.exitCode ?? 0, transportSummary?.exitCode ?? 0);
+
   const report = {
     id: b.id,
     family: row.family,
@@ -223,6 +254,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     claims,
     witnessExecution,
     witnessRun: runSummary,
+    normTransports,
+    ...(transportSummary === null ? {} : { normTransportRun: transportSummary }),
   };
 
   if (wantJson) {
@@ -238,7 +271,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       },
       ctx.write,
     );
-    return runSummary?.exitCode ?? 0;
+    return exitCode;
   }
 
   const list = (label: string, items: readonly string[]): void => {
@@ -333,9 +366,24 @@ async function run(ctx: CommandCtx): Promise<number> {
         : `witnesses run: ${runSummary.checked} checked · ${runSummary.refuted} refuted · ${runSummary.unresolved} unresolved`,
     );
   }
+  if (normTransports !== null) {
+    out('norm transports (declared; a bound in any other norm, or crossing the other way, is refused through this map):');
+    if (normTransports.length === 0) out('  none declared — this exact map carries no bound in any norm');
+    for (const nt of normTransports) {
+      out(`  - ${nt.id}: ${nt.fromModel} → ${nt.toModel}, '${nt.from}' → '${nt.to}', K = ${nt.K} (${nt.domain})`);
+      out(`    time map: ${nt.timeMap.map} (${nt.timeMap.uniform ? 'uniform' : 'NOT uniform — not applied'})`);
+      const status =
+        nt.status === 'runnable'
+          ? `registered in-process, not run — \`upt atlas ${b.id} --run\` runs it`
+          : nt.status === 'not-observed'
+            ? `result not observed by this command — its repository test file: bunx vitest run ${nt.witness.test}`
+            : `${nt.status}${'reason' in nt ? ` (${nt.reason})` : ''} (run now)`;
+      out(`    witness ${nt.witness.id} [${nt.witness.kind}; ${nt.basis} when it checks]: ${status}`);
+    }
+  }
   list('citations', b.citations);
   out(`review status: ${b.reviewStatus}`);
-  return runSummary?.exitCode ?? 0;
+  return exitCode;
 }
 
 export const command: Command = { name: 'atlas', aliases: [], flags: FLAGS, help: HELP, run };

@@ -13,9 +13,20 @@ nothing validates prose and the next reader cannot tell.
 
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11
   findings are fixed (F10 was already correct and is now pinned by a test). Of the §14 improvements,
-  audit I5–I9, I11, I12 and I14–I20 have landed; the limits each still has are in `todo.md`. I2 is open:
-  it needs a reviewed widening of the composition table and is Mothership's call; a proposal is in
-  `docs/planning/ADR-proposal-transported-norm-composition.md`.
+  audit I5–I9, I11, I12 and I14–I20 have landed; the limits each still has are in `todo.md`. Audit I2
+  landed by owner decision 2026-09-27 (`docs/planning/ADR-transported-norm-composition.md`, option 4).
+- **Audit I2 as landed:** the composition table has 9 defined cells and 55 silent ones; the widened
+  cell is approximation then exact-equivalence, and exact then approximation stays silent. One norm
+  transport is declared: `nt-spring-lc-relative-period` on `ab-spring-lc` (model-spring → model-lc,
+  K = 1), with witness W1τ (checked; fine error 7.1e-11, refinement ratio 256). `upt path
+  model-pendulum model-lc --at theta0=0.2 T0=1 t=10` now composes K = 1 · delta = 0.0158525 in
+  relative period error; the point bound 0.0025057 agrees with the series θ0²/16 + 11θ0⁴/3072 to
+  1.5e-8. Composite evidence of that route: `contradicted`, with numerically-supported and proposed
+  undecided until its witnesses are run (`contradicted` comes from the parts' stored counterexamples).
+  **Negative result:** `ab-heat-diffusion` declares no transport, so model-telegraph → model-heat
+  still refuses as `norm-not-stated`; a declaration needs its own witness for the model-fick →
+  model-heat direction and a horizon restatement through D = κ/(ρc_p), and neither exists. Absolute
+  period and trajectory norms have no declaration and stay refused through `ab-spring-lc`.
 - `confront` data handling: preprocessing recorded for 17 of 19 records, not recorded for 2 (be-37,
   be-58). Independence: 10 no fitted parameter, 5 share an input (be-36, be-51, be-58, be-61, be-65),
   4 not recorded (be-48, be-52, be-56, be-64). be-61's observed Lorenz number is the predicted
@@ -150,7 +161,8 @@ Those are different claims and merging them produces a false green.
   not re-checked then): the CONTRIBUTING.md tasks; the contested BE-44/46/50 adjudications; the
   C2/C3 calibration targets; the CI-1/CI-2 dynamic-scaling call; and the §XXVII-B adjudication of the
   Part-XI machine-derived proposals.
-- **Composition table** remains 56 silent cells. Widening was not done.
+- **Composition table** remained 56 silent cells on 2026-09-23 (not widened then); see the 2026-09-27
+  block for the I2 widening to 55.
 - **`8 → 12`** direction is unresolved. The poster records it as one approximation, `d-8-to-12`.
 
 ### Results

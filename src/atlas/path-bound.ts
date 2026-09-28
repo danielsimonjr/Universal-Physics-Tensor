@@ -35,6 +35,13 @@
  * makes the error invisible without this gate: the danger is not a wrong
  * magnitude, it is a right magnitude attached to the wrong norm.
  *
+ * The one way through is a DECLARATION on the exact bridge
+ * (`AtlasBridge.normTransports`, `docs/planning/ADR-transported-norm-composition.md`):
+ * a norm, a direction, a factor `K` and a time map, each with a witness. A route
+ * that crosses the bridge in that direction, carrying a bound in that norm,
+ * composes with `(K, 0)`; every other norm and direction is still refused, and
+ * the refusal names the declaration that is missing.
+ *
  * ⚠ **Correction to the S2.2 brief.** The brief states that no field records a
  * norm and that Phase 2 must add `norm?` to `ApproximationBound`. That is
  * out of date: `ApproximationBound.norm` already exists as a MANDATORY
@@ -58,7 +65,7 @@ import { composeBoundPath, IDENTITY_BOUND } from './error-algebra.js';
 import type { BoundPair } from './error-algebra.js';
 import { composeRelation, NO_COMPOSITE_CLAIM } from './composition-table.js';
 import type { CompositionResult } from './composition-table.js';
-import type { AtlasBridge, RelationType } from './types.js';
+import type { AtlasBridge, NormTransport, RelationType } from './types.js';
 import { ATLAS_FAMILIES } from './families.js';
 import type { AtlasFamily } from './oscillators/index.js';
 
@@ -332,11 +339,22 @@ export interface PathBoundClaim {
   /** The relation the chain asserts, from {@link composeRelation}. */
   readonly relation: RelationType;
   /**
-   * The single norm every bound on the path states, or `null` when the path
-   * carries no bound at all and the claim is the vacuous `terminal` identity
-   * over an empty prefix.
+   * The norm the composite holds in: the single norm every bound on the path
+   * states, or the `to` norm of the last transport applied after them. `null`
+   * when the path carries no bound at all and the claim is the vacuous
+   * `terminal` identity over an empty prefix.
    */
   readonly norm: string | null;
+  /** The declared norm transports that carried the bound across exact maps; absent when none did. */
+  readonly transports?: readonly AppliedTransport[];
+}
+
+/** A declared norm transport {@link boundPath} applied, and where on the path. @internal */
+export interface AppliedTransport {
+  /** Index of the exact bridge in the path. */
+  readonly index: number;
+  readonly bridgeId: string;
+  readonly transport: NormTransport;
 }
 
 /** A path that carries NO bound, and the reason. @internal */
@@ -368,10 +386,14 @@ export type PathBoundResult = PathBoundClaim | PathNoClaim;
  *    edge that is neither bounded nor exact — is tolerated only as the LAST
  *    entry, where it terminates the claim (`terminal: true`); anywhere else it
  *    throws `MissingLipschitzError` rather than inventing a constant.
- * 4. **Norm.** Every stated norm on the path must be the SAME norm, and no
- *    unnormed exact map may carry a normed claim. An `exact-equivalence`
- *    states no norm (it has no `bound`), so a path mixing one with a normed
- *    bound is `'norm-not-stated'` — see the module note.
+ * 4. **Norm.** Every stated norm on the path must be the SAME norm as the bound
+ *    reaching it, and no unnormed exact map may carry a normed claim. An
+ *    `exact-equivalence` states no norm (it has no `bound`), so a path mixing
+ *    one with a normed bound is `'norm-not-stated'` — see the module note —
+ *    UNLESS the exact bridge declares a `NormTransport` from the running norm,
+ *    for the direction the route crosses it, with a uniform time map. Then it
+ *    contributes `(K, 0)` and the running norm becomes the transport's `to`.
+ *    A mismatch is reported before a missing norm.
  *
  * @throws RangeError on an empty path. Returning `IDENTITY_BOUND` for "no
  *   edges" would be a bound asserted about nothing.
@@ -427,20 +449,62 @@ export function boundPath(bridges: readonly AtlasBridge[]): PathBoundResult {
   // constant. Any OTHER relation with no bound has an unknown Lipschitz
   // constant, and `null` is what says so. Conflating the two would either
   // invent a constant for a lossy map or throw on an exact one.
+  //
+  // An exact edge AFTER a bound contributes `(K, 0)` in its declared transport's
+  // `to` norm, but only when it declares a transport from the norm the bound so
+  // far is in, for the direction the route crosses it
+  // (docs/planning/ADR-transported-norm-composition.md). Without one it stays the
+  // identity in no norm, and gate 4 refuses.
+  const entries = entryModels(bridges);
   const pairs: (BoundPair | null)[] = [];
-  const norms = new Set<string>();
-  const unnormedIdentities: string[] = [];
-  for (const bridge of bridges) {
+  const stated: string[] = [];
+  const transports: AppliedTransport[] = [];
+  const unnormed: string[] = [];
+  let running: string | null = null;
+  let mismatch: string | null = null;
+  bridges.forEach((bridge, index) => {
     if (bridge.bound !== undefined) {
       pairs.push({ K: bridge.bound.K, delta: bridge.bound.delta });
-      norms.add(bridge.bound.norm);
+      stated.push(bridge.bound.norm);
+      if (running !== null && bridge.bound.norm !== running && mismatch === null) {
+        mismatch =
+          `'${bridge.id}' states '${bridge.bound.norm}', but the bound reaching it is in '${running}'` +
+          (transports.length > 0 ? ` after ${transports.map((a) => `'${a.transport.id}'`).join(', ')}` : '');
+      }
+      running = bridge.bound.norm;
     } else if (bridge.relation === 'exact-equivalence') {
+      const entry = entries[index] ?? null;
+      const exit = entry === null ? null : otherEnd(bridge, entry);
+      const declared = bridge.normTransports ?? [];
+      const applies = (nt: NormTransport): boolean =>
+        nt.from === running && nt.fromModel === entry && nt.toModel === exit;
+      const transport = running === null ? undefined : declared.find((nt) => applies(nt) && nt.timeMap.uniform);
+      if (transport !== undefined) {
+        pairs.push({ K: transport.K, delta: 0 });
+        transports.push({ index, bridgeId: bridge.id, transport });
+        running = transport.to;
+        return;
+      }
       pairs.push(IDENTITY_BOUND);
-      unnormedIdentities.push(bridge.id);
+      if (running === null) {
+        unnormed.push(`'${bridge.id}' comes before any bound, and no transport is defined for an exact map there`);
+        return;
+      }
+      const nonUniform = declared.find((nt) => applies(nt) && !nt.timeMap.uniform);
+      const others = declared.filter((nt) => !applies(nt));
+      unnormed.push(
+        `'${bridge.id}' declares no norm transport from '${running}' for ${entry ?? '?'} → ${exit ?? '?'}` +
+          (nonUniform !== undefined
+            ? ` (its transport '${nonUniform.id}' has a non-uniform time map and is not applied)`
+            : '') +
+          (others.length > 0
+            ? `; it declares only ${others.map((nt) => `'${nt.from}' → '${nt.to}' for ${nt.fromModel} → ${nt.toModel}`).join(', ')}`
+            : ''),
+      );
     } else {
       pairs.push(null);
     }
-  }
+  });
 
   // ── Gate 3: an unknown Lipschitz constant, anywhere but last, is fatal ────
   // Delegated to `composeBoundPath`, which throws `MissingLipschitzError`
@@ -450,23 +514,25 @@ export function boundPath(bridges: readonly AtlasBridge[]): PathBoundResult {
   const composed = composeBoundPath(pairs);
 
   // ── Gate 4: one norm, and no unnormed map carrying a normed claim ─────────
-  if (norms.size > 1) {
+  const distinct = [...new Set(stated)];
+  if (mismatch !== null) {
     return {
       kind: 'no-claim',
       reason: 'norm-mismatch',
       detail:
-        `the path states ${norms.size} different norms (${[...norms].map((n) => `'${n}'`).join(', ')}); ` +
-        'bounds in different norms do not compose',
+        distinct.length > 1
+          ? `the path states ${distinct.length} different norms (${distinct.map((n) => `'${n}'`).join(', ')}); ` +
+            'bounds in different norms do not compose'
+          : `${mismatch}; bounds in different norms do not compose`,
     };
   }
-  if (unnormedIdentities.length > 0 && norms.size > 0) {
+  if (unnormed.length > 0 && stated.length > 0) {
     return {
       kind: 'no-claim',
       reason: 'norm-not-stated',
       detail:
-        `${unnormedIdentities.map((id) => `'${id}'`).join(', ')} state no norm, so they ` +
-        `contribute IDENTITY_BOUND in no norm; the composite cannot be claimed in ` +
-        `'${[...norms][0]}'`,
+        `${unnormed.join('; ')}. An exact map with no transport for the norm contributes IDENTITY_BOUND in no ` +
+        `norm, so the composite cannot be claimed in '${stated[0]}'`,
     };
   }
   return {
@@ -474,8 +540,70 @@ export function boundPath(bridges: readonly AtlasBridge[]): PathBoundResult {
     bound: composed.bound,
     terminal: composed.terminal,
     relation,
-    norm: [...norms][0] ?? null,
+    norm: running,
+    ...(transports.length > 0 ? { transports } : {}),
   };
+}
+
+/**
+ * The model each step of a route is entered from, or `null` where the list is
+ * not a chain. An exact equivalence may be crossed either way; the first one is
+ * read as reversed when the next step leaves from its premise and not from its
+ * conclusion. Every other relation is crossed forward.
+ *
+ * @internal
+ */
+export function routeEntryModels(bridges: readonly AtlasBridge[]): (string | null)[] {
+  if (bridges.length === 0) return [];
+  return entryModels(bridges);
+}
+
+function entryModels(bridges: readonly AtlasBridge[]): (string | null)[] {
+  const first = bridges[0]!;
+  let at: string | null = first.premises.length === 1 ? first.premises[0]! : null;
+  if (first.relation === 'exact-equivalence' && at !== null && bridges.length > 1) {
+    const next = bridges[1]!;
+    const ends = [...next.premises, next.conclusion];
+    if (!ends.includes(first.conclusion) && ends.includes(at)) at = first.conclusion;
+  }
+  const entries: (string | null)[] = [];
+  for (const b of bridges) {
+    entries.push(at);
+    at = b.relation === 'exact-equivalence' ? (at === null ? null : otherEnd(b, at)) : b.conclusion;
+  }
+  return entries;
+}
+
+/** The end of an exact bridge a route leaves by, entering at `entry`; `null` when `entry` is neither end. */
+function otherEnd(bridge: AtlasBridge, entry: string): string | null {
+  if (bridge.premises.length !== 1) return null;
+  if (entry === bridge.premises[0]) return bridge.conclusion;
+  if (entry === bridge.conclusion) return bridge.premises[0]!;
+  return null;
+}
+
+/**
+ * The horizon of the bound on `bridges[index]` as it reads at the END of the
+ * route: restated through every transport applied after it (a
+ * {@link PathBoundClaim}'s `transports`; none for a no-claim). `null` when that
+ * step carries no bound.
+ *
+ * @internal
+ */
+export function horizonOnRoute(
+  bridges: readonly AtlasBridge[],
+  transports: readonly AppliedTransport[],
+  index: number,
+): {
+  readonly horizon: string;
+  readonly restatedBy: readonly AppliedTransport[];
+  readonly holds: (t: number, params: Readonly<Record<string, number>>) => boolean;
+} | null {
+  const bound = bridges[index]?.bound;
+  if (bound === undefined) return null;
+  const later = transports.filter((a) => a.index > index);
+  const holds = later.reduce((h, a) => a.transport.timeMap.restateHorizon(h), bound.horizonHolds);
+  return { horizon: bound.horizon, restatedBy: later, holds };
 }
 
 /** Re-exported so a caller need not reach into the algebra module. @internal */

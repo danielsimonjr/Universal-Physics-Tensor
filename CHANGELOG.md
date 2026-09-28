@@ -10,6 +10,45 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Audit I2: a bound composes across an exact map through a declared norm transport** (owner
+  decision 2026-09-27; `docs/planning/ADR-transported-norm-composition.md`, option 4). The owner made
+  the ADR-level call in the order that asked for it; it is recorded here, not taken by this session.
+  - **Public behaviour change:** `composeRelation('approximation', 'exact-equivalence')` (and
+    `COMPOSITION_TABLE`) now returns `'approximation'`, not `'no-composite-claim'`. The table has 9
+    defined cells and 55 silent ones and stays a pure function of relation types (ADR §5.1). The
+    other order, exact then approximation, stays silent (ADR §3). The pinned silent count went RED
+    at 56 before the change; the widened cell is asserted on its own, and so is the silent reverse.
+  - The licence is `AtlasBridge.normTransports` (`NormTransport`, internal): per direction, the norm
+    it accepts and delivers, `K` and `KAt`, the derivation, the time map (uniform or not) with a
+    horizon restatement, the uniformity, a witness registered under the transport id, and its basis.
+    `boundPath` gate 4 accepts an exact step as `(K_Φ, 0)` only through a declaration for the crossed
+    direction whose `from` is the running norm and whose time map is uniform; otherwise it keeps
+    `norm-not-stated`. `horizonOnRoute` restates each horizon through the transports after it.
+  - `ab-spring-lc` declares `nt-spring-lc-relative-period` (relative period error, model-spring →
+    model-lc, K = 1). Its witness W1τ, built from the demonstration test, integrates the pendulum's
+    image in circuit time at a fixture with ω_LC = 2√2 ≠ ω_s = 2 and compares it with the closed-form
+    elliptic error: fine error 7.1e-11, refinement ratio 256 (fourth order). Its negative control,
+    the absolute-period factor K = ω_s/ω_LC, is refuted, and a meta-check shows the same assertion
+    fails on the true claim. The declaration is serialized into `data/atlas/oscillators.json` without
+    its functions, and `upt atlas ab-spring-lc [--run]` lists it.
+  - `upt path model-pendulum model-lc --at theta0=0.2 T0=1 t=10` returns K = 1 · delta = 0.0158525 in
+    relative period error, says why the bound crosses `ab-spring-lc` and which witness supports it,
+    and evaluates the pendulum horizon restated in circuit time. The point bound 0.0025057 agrees with
+    the series θ0²/16 + 11θ0⁴/3072 to 1.5e-8 in the test. A position tolerance on the same route stays
+    UNDETERMINED (the map declares no carriage of position), and absolute-period and trajectory norms
+    refuse at the library level, naming the missing declaration.
+  - `upt map --route` prints the transports applied and the composite evidence, derived by
+    `deriveCompositeEvidence`: a positive tag survives only if every part carries it, `contradicted` if
+    any part does, and a transport contributes its basis only when its witness checks (else
+    `proposed`). `formally-proved` cannot be produced by a composite.
+  - The composition-graph edge layer carries no transports, so `composeEdges` refuses the widened
+    cell with its own message rather than fabricate a bound.
+  - **Negative result:** `ab-heat-diffusion` declares no transport. Its declaration would need its own
+    witness for model-fick → model-heat and a horizon restatement through D = κ/(ρc_p); neither
+    exists, so model-telegraph → model-heat refuses as `norm-not-stated` and names the declaration.
+  - The F05 refusal tests on pendulum → lc became acceptance tests; the no-claim cases now use
+    model-rlc → model-first-order (exact then approximation) and telegraph → heat. The CLI tests were
+    RED (16 failures) against the old source before the change.
 - **Every accepted flag is documented** (2026-09-27). The top-level `upt help` map usage omitted
   `--route`, `--family`, `--all-routes`, `--observable`, `--stored`, `--run` and `--evidence`; both map
   synopses are now complete and the top-level one points to `upt help map`. A new test reads each
@@ -176,7 +215,10 @@ from v0.1.0 onward.
     cases accept optional inputs.
   - **I2 proposal** — `docs/planning/ADR-proposal-transported-norm-composition.md` and a test-only
     demonstration (relative period error survives `ab-spring-lc` unchanged; absolute period and
-    trajectory errors do not). The composition table is not changed; the decision is Mothership's.
+    trajectory errors do not). ~~The composition table is not changed; the decision is Mothership's.~~
+    *Superseded 2026-09-27: the owner decided the proposal (option 4), the file is now
+    `docs/planning/ADR-transported-norm-composition.md`, and the table is widened (see [Unreleased]
+    "Audit I2").*
   - `path`'s "to compose, this path would need" list also names an exact map before a bound (e.g.
     `ab-damped-rlc` before `ab-damped-massless`), which must state how it acts on that bound's norm.
 

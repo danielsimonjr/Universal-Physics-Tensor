@@ -5,7 +5,7 @@
  */
 import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
-import type { AtlasBridge } from '../../cli-api.js';
+import type { AppliedTransport, AtlasBridge } from '../../cli-api.js';
 
 export type RouteClaim =
   | ReturnType<CommandCtx['api']['boundPath']>
@@ -69,12 +69,14 @@ export function routeClaim(api: CommandCtx['api'], bridges: readonly AtlasBridge
 }
 
 /**
- * What a `no-composite-claim` path lacks, stated as requirements rather than
- * supplied. The first silent table cell is named; then every exact map after a
- * bound, which states no norm and so records nothing about carrying that
- * bound's quantity through its mapping; then every exact map before a bound,
- * which would have to state how its mapping acts on that later bound's norm.
- * Nothing here widens the table.
+ * What a refused route lacks, stated as requirements rather than supplied. For
+ * a `no-composite-claim`, the first silent table cell is named. Then, for that
+ * refusal and for `norm-not-stated`: every exact map after a bound that declares
+ * no transport of the bound's norm for the direction the route crosses it
+ * (docs/planning/ADR-transported-norm-composition.md), and every exact map
+ * before a bound, which would have to state how its mapping acts on that later
+ * bound's norm (the exact-then-approximation cell stays silent, ADR §3).
+ * Nothing here widens the table or declares a transport.
  */
 export function missingForComposite(api: CommandCtx['api'], bridges: readonly AtlasBridge[]): string[] {
   const missing: string[] = [];
@@ -91,13 +93,28 @@ export function missingForComposite(api: CommandCtx['api'], bridges: readonly At
     }
     relation = composed;
   }
+  const entries = api.routeEntryModels(bridges);
   let norm: string | undefined;
-  for (const b of bridges) {
-    if (b.bound !== undefined) norm = b.bound.norm;
-    else if (b.relation === 'exact-equivalence' && norm !== undefined) {
-      missing.push(`'${b.id}' to state that it carries '${norm}' through its mapping (it states no norm)`);
+  bridges.forEach((b, i) => {
+    if (b.bound !== undefined) {
+      norm = b.bound.norm;
+      return;
     }
-  }
+    if (b.relation !== 'exact-equivalence' || norm === undefined) return;
+    const entry = entries[i] ?? null;
+    const exit = entry === b.conclusion ? (b.premises[0] ?? null) : entry === b.premises[0] ? b.conclusion : null;
+    const nt = (b.normTransports ?? []).find(
+      (x) => x.from === norm && x.fromModel === entry && x.toModel === exit && x.timeMap.uniform,
+    );
+    if (nt !== undefined) {
+      norm = nt.to;
+      return;
+    }
+    missing.push(
+      `'${b.id}' to declare a norm transport of '${norm}' for ${entry ?? '?'} → ${exit ?? '?'}, with its own ` +
+        'witness (docs/planning/ADR-transported-norm-composition.md); an exact map carries no norm without one',
+    );
+  });
   for (let i = 0; i < bridges.length; i++) {
     const b = bridges[i]!;
     if (b.relation !== 'exact-equivalence' || b.bound !== undefined) continue;
@@ -109,4 +126,39 @@ export function missingForComposite(api: CommandCtx['api'], bridges: readonly At
     );
   }
   return missing;
+}
+
+/** The refusals {@link missingForComposite} explains. */
+export function explainsRefusal(claim: RouteClaim): boolean {
+  return claim.kind === 'no-claim' && (claim.reason === 'no-composite-claim' || claim.reason === 'norm-not-stated');
+}
+
+/** The declarative fields of an applied norm transport, as a JSON envelope carries them (no functions). */
+export function transportReport(a: AppliedTransport) {
+  const nt = a.transport;
+  return {
+    index: a.index,
+    bridgeId: a.bridgeId,
+    id: nt.id,
+    fromModel: nt.fromModel,
+    toModel: nt.toModel,
+    from: nt.from,
+    to: nt.to,
+    K: nt.K,
+    domain: nt.domain,
+    derivation: nt.derivation,
+    timeMap: { map: nt.timeMap.map, uniform: nt.timeMap.uniform, horizon: nt.timeMap.horizon },
+    uniformity: nt.uniformity,
+    witness: { id: nt.witness.id, kind: nt.witness.kind, test: nt.witness.test, tolerance: nt.witness.tolerance },
+    basis: nt.basis,
+  };
+}
+
+export type TransportReport = ReturnType<typeof transportReport>;
+
+/** A route claim with its transports reduced to their declarative fields, so it serializes as data. */
+export function claimReport(claim: RouteClaim) {
+  if (claim.kind !== 'bound' || claim.transports === undefined) return claim;
+  const { transports, ...rest } = claim;
+  return { ...rest, transports: transports.map(transportReport) };
 }

@@ -80,7 +80,7 @@ without a number attached, so a caller cannot read a conclusion off a union that
 Only EXACT hyperedges compose. The composite's premises are the union of the inputs' premises minus
 those premises satisfied by an input's conclusion (the internal conclusions).
 
-The composition table governs the relation of each edge, and its 56 `no-composite-claim` cells apply
+The composition table governs the relation of each edge, and its `no-composite-claim` cells apply
 unchanged — a hyperedge cannot launder a pair that the binary table refuses. If a Derivation's edges
 compose pairwise to `no-composite-claim`, the hyperedge does too.
 

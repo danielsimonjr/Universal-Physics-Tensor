@@ -5,6 +5,11 @@
  * literal phrase, EXIT 0 (a refusal is an answer), and carry no number — the
  * envelope must have no `bound` key at all, because a precise-looking bound
  * over an undefined composite is the one output this library must never emit.
+ * Its route is model-rlc → model-first-order (exact then approximation, a cell
+ * that stays silent). pendulum → lc composed since the owner decision of
+ * 2026-09-27 (docs/planning/ADR-transported-norm-composition.md): it crosses
+ * ab-spring-lc through that bridge's declared norm transport, and the tests
+ * below pin both what it now claims and what it still refuses.
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
@@ -142,29 +147,92 @@ describe('upt path', () => {
 
   it("a no-composite-claim pair prints the phrase, carries no bound, and EXITS 0", async () => {
     const cap = capture();
-    const code = await runCli(
-      ['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.2', 'T0=1', 't=10'],
-      cap.io,
-    );
+    const code = await runCli(['path', 'model-rlc', 'model-first-order'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
-    expect(text).toMatch(/no composite claim/);
+    expect(text).toMatch(/composite relation: no composite claim/);
     expect(text).not.toMatch(/composed bound/);
   });
 
-  // Audit F05 (2026-09-26): the refusal is kept (the table is not widened), but it now names
-  // what a composite would need instead of only saying "no composite claim".
-  it('a no-composite-claim refusal names the missing information (audit F05)', async () => {
+  // Audit I2, owner decision 2026-09-27: approximation then exact-equivalence is a
+  // defined cell, and the bound crosses the exact map only through a declared norm
+  // transport. This was the audit F05 refusal; the refusal tests moved to the routes
+  // that still refuse (below).
+  it('pendulum → lc composes through ab-spring-lc\'s declared norm transport, and says why', async () => {
     const cap = capture();
-    await runCli(['path', 'model-pendulum', 'model-lc'], cap.io);
+    const code = await runCli(['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.2', 'T0=1', 't=10'], cap.io);
+    expect(code).toBe(0);
     const text = cap.lines.join('');
-    expect(text).toMatch(/to compose, this path would need:/);
-    expect(text).toMatch(/a composition-table cell for approximation then exact-equivalence/);
-    expect(text).toMatch(/'ab-spring-lc' to state that it carries 'relative period error[^']*' through its mapping/);
+    expect(text).toMatch(/composite relation: approximation/);
+    expect(text).toMatch(/composed bound: K = 1 · delta = 0\.0158525/);
+    expect(text).toMatch(/norm: relative period error, normalized by the value of the reduced model/);
+    expect(text).toMatch(/why the bound crosses 'ab-spring-lc' \(exact\): it declares the norm transport 'nt-spring-lc-relative-period'/);
+    expect(text).toMatch(/witness: W1τ \(numeric; numerically-supported when it checks, never formally proved\)/);
+    expect(text).toMatch(/no other norm or direction through this map is declared, and each stays refused/);
+    expect(text).toMatch(/horizons at t=10: all hold/);
+    expect(text).toMatch(/restated by 'nt-spring-lc-relative-period'/);
+    expect(text).not.toMatch(/no composite claim/);
+    // The point bound at θ0 = 0.2 is the closed-form elliptic error times K = 1. A second,
+    // independent method: the period series θ0²/16 + 11θ0⁴/3072, whose next term is O(θ0⁶).
+    const point = /bound at this point: K = 1 · delta = ([0-9.e-]+)/.exec(text);
+    expect(point).not.toBeNull();
+    const series = 0.2 ** 2 / 16 + (11 * 0.2 ** 4) / 3072;
+    expect(Math.abs(Number(point![1]) - series)).toBeLessThan(1e-7);
+  });
+
+  it('control: at θ0 = 0.4 the point bound moves with θ0, so the check above is not reading a constant', async () => {
+    const cap = capture();
+    await runCli(['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.4', 'T0=1', 't=1'], cap.io);
+    const point = /bound at this point: K = 1 · delta = ([0-9.e-]+)/.exec(cap.lines.join(''));
+    const seriesAt02 = 0.2 ** 2 / 16 + (11 * 0.2 ** 4) / 3072;
+    expect(Math.abs(Number(point![1]) - seriesAt02)).toBeGreaterThan(1e-3);
+  });
+
+  it('--json for pendulum → lc carries the applied transport as data, with no function field', async () => {
     const json: string[] = [];
-    await runCli(['path', 'model-pendulum', 'model-lc', '--json'], { out: () => {}, err: () => {}, write: (s: string) => json.push(s) });
+    const code = await runCli(
+      ['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.2', 'T0=1', 't=10', '--json'],
+      { out: () => {}, err: () => {}, write: (s: string) => json.push(s) },
+    );
+    expect(code).toBe(0);
     const r = JSON.parse(json.join('')).result;
-    expect(r.missing).toHaveLength(2);
+    expect(r.kind).toBe('bound');
+    expect(r.relation).toBe('approximation');
+    expect(r.bound.delta).toBeCloseTo(0.0158525311014, 10);
+    expect(r.transports).toHaveLength(1);
+    expect(r.transports[0].id).toBe('nt-spring-lc-relative-period');
+    expect(r.transports[0].bridgeId).toBe('ab-spring-lc');
+    expect(r.transports[0].witness.id).toBe('W1τ');
+    expect(r.transports[0]).not.toHaveProperty('KAt');
+    expect(r.transports[0].timeMap).not.toHaveProperty('restateHorizon');
+    expect(r.horizons[0].restatedBy[0].transport).toBe('nt-spring-lc-relative-period');
+    expect('missing' in r).toBe(false);
+  });
+
+  it('a trajectory tolerance on pendulum → lc stays UNDETERMINED: the map declares no carriage of position', async () => {
+    const cap = capture();
+    await runCli(
+      ['path', 'model-pendulum', 'model-lc', '--at', 'theta0=0.2', 'T0=1', 't=10', '--tolerance=position:0.1'],
+      cap.io,
+    );
+    expect(cap.lines.join('')).toMatch(/tolerance position:0\.1: UNDETERMINED — .*'ab-spring-lc' declares no carriage of 'position' through its map/);
+  });
+
+  it('a route whose exact step declares no transport refuses as norm-not-stated, naming the declaration (audit F05)', async () => {
+    const cap = capture();
+    const code = await runCli(['path', 'model-telegraph', 'model-heat'], cap.io);
+    expect(code).toBe(0);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/bound: no composite claim — reason 'norm-not-stated'/);
+    expect(text).toMatch(/to compose, this path would need:/);
+    expect(text).toMatch(/'ab-heat-diffusion' to declare a norm transport of '[^']+' for model-fick → model-heat, with its own witness/);
+    expect(text).not.toMatch(/composed bound/);
+    const json: string[] = [];
+    await runCli(['path', 'model-telegraph', 'model-heat', '--json'], { out: () => {}, err: () => {}, write: (s: string) => json.push(s) });
+    const r = JSON.parse(json.join('')).result;
+    expect(r.kind).toBe('no-claim');
+    expect(r.reason).toBe('norm-not-stated');
+    expect(r.missing).toHaveLength(1);
     expect('bound' in r).toBe(false);
   });
 
@@ -181,7 +249,7 @@ describe('upt path', () => {
 
   it('--json for a no-claim has NO bound key and names the reason', async () => {
     const cap = capture();
-    const code = await runCli(['path', 'model-pendulum', 'model-lc', '--json'], cap.io);
+    const code = await runCli(['path', 'model-rlc', 'model-first-order', '--json'], cap.io);
     expect(code).toBe(0);
     const parsed = JSON.parse(cap.lines.join(''));
     expect(parsed.command).toBe('path');

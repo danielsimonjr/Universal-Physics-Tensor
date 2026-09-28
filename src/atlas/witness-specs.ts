@@ -63,6 +63,9 @@ import {
   stringLeapfrogMidpoint,
 } from './waves/numerics.js';
 import type { AcousticFixture, DalembertFixture, StringFixture } from './waves/numerics.js';
+import { pendulumPeriodErrorAt } from './oscillators/bridges-limits.js';
+import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT, W1TAU_FIXTURE } from './oscillators/norm-transport.js';
+import { measureTransportedPeriodError } from './oscillators/norm-transport-witness.js';
 import type { NumericWitnessSpec } from './witness-numeric.js';
 import type { SymbolicWitnessSpec } from './witness-symbolic.js';
 
@@ -248,6 +251,22 @@ export const WITNESS_REGISTRY: readonly RegisteredWitness[] = [
       id: 'W2s',
       lhs: applyDictionary(op('/', op('^', b, n(2)), op('*', n(4), m, k)), SPRING_TO_CIRCUIT),
       rhs: op('/', op('*', op('^', R, n(2)), C), op('*', n(4), L)),
+    },
+  },
+  {
+    // Norm transport, not a bridge claim: the pendulum's image under ab-spring-lc's
+    // map, integrated in circuit time, has K times the pendulum's relative period
+    // error against the circuit. Keyed by the transport id, so the bridge's own
+    // evidence is not derived from it (ADR-transported-norm-composition.md §4).
+    recordId: SPRING_LC_RELATIVE_PERIOD_TRANSPORT.id,
+    kind: 'numeric',
+    spec: {
+      id: SPRING_LC_RELATIVE_PERIOD_TRANSPORT.witness.id,
+      evaluate: (steps) => measureTransportedPeriodError(W1TAU_FIXTURE.theta0, steps),
+      target: SPRING_LC_RELATIVE_PERIOD_TRANSPORT.KAt({}) * pendulumPeriodErrorAt({ theta0: W1TAU_FIXTURE.theta0 }),
+      coarseResolution: 160,
+      fineResolution: 640,
+      tolerance: 1e-9,
     },
   },
   {

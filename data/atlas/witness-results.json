@@ -16,6 +16,18 @@
       "detail": "lhs − rhs simplified to literal 0."
     },
     {
+      "recordId": "nt-spring-lc-relative-period",
+      "witnessId": "W1τ",
+      "kind": "numeric",
+      "status": "checked",
+      "detail": "Fine error 7.117284539503999e-11 is within tolerance 1e-9, and refinement reduced the error by a factor of 256.42174933080423.",
+      "convergence": {
+        "coarse": 1.8250265521047027e-8,
+        "fine": 7.117284539503999e-11,
+        "ratio": 256.42174933080423
+      }
+    },
+    {
       "recordId": "ab-walk-diffusion",
       "witnessId": "WD1",
       "kind": "numeric",

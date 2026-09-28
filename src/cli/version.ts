@@ -40,7 +40,7 @@ export function peerVersions(): Record<string, string | null> {
 }
 
 /** The peer that backs the `mathts` formula parser. */
-export const MATHTS_PARSER_PEER = '@danielsimonjr/mathts-functions';
+const MATHTS_PARSER_PEER = '@danielsimonjr/mathts-functions';
 
 /**
  * The active formula parser with the version that defines it (audit I4): the MathTS peer's

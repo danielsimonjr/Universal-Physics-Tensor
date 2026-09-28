@@ -239,6 +239,58 @@ export interface Counterexample {
   readonly witness: string;
 }
 
+/**
+ * An exact bridge's declaration of how its map acts on ONE norm, in ONE
+ * direction: a bound stated in `from` about `fromModel` becomes a bound in `to`
+ * about `toModel`, multiplied by `K`. Design:
+ * `docs/planning/ADR-transported-norm-composition.md`.
+ *
+ * Without a declaration an exact map contributes the identity in no norm, and a
+ * route through it after a normed bound carries no bound (`'norm-not-stated'`).
+ * A declaration licenses exactly the norm and direction it names; every other
+ * norm, and the reverse direction, stay refused.
+ *
+ * @internal
+ */
+export interface NormTransport {
+  /** `'nt-spring-lc-relative-period'`; also the `recordId` of its registered witness. */
+  readonly id: string;
+  /** The model the bound is about before the map. */
+  readonly fromModel: string;
+  /** The model the transported bound is about. */
+  readonly toModel: string;
+  /** The norm the incoming bound must state, verbatim. */
+  readonly from: string;
+  /** The norm the transported bound holds in. */
+  readonly to: string;
+  /** The factor the map multiplies the error by: the supremum of {@link KAt} over {@link domain}. */
+  readonly K: number;
+  /** The same factor at a point, in closed form. */
+  readonly KAt: (params: Readonly<Record<string, number>>) => number;
+  /** Where `K` is the supremum. */
+  readonly domain: string;
+  /** Why the map acts on the norm by `K`. */
+  readonly derivation: string;
+  readonly timeMap: {
+    /** The map from the `fromModel`'s clock to the `toModel`'s. */
+    readonly map: string;
+    /** A transport whose time map is not uniform is refused by `boundPath`. */
+    readonly uniform: boolean;
+    /** How a horizon stated before the map reads after it. */
+    readonly horizon: string;
+    /** The machine form of {@link horizon}. */
+    readonly restateHorizon: (
+      holds: (t: number, params: Readonly<Record<string, number>>) => boolean,
+    ) => (t: number, params: Readonly<Record<string, number>>) => boolean;
+  };
+  /** What the incoming bound's uniformity becomes; the list is carried unchanged when the map preserves it. */
+  readonly uniformity: string;
+  /** The check that the map acts on the norm by `K`. */
+  readonly witness: Witness;
+  /** The evidence tag the witness supports when it checks; never `'formally-proved'`. */
+  readonly basis: 'numerically-supported' | 'symbolically-checked';
+}
+
 /** Field set = Blueprint v2 §3.1 Bridge record + citations. @internal */
 export interface AtlasBridge {
   /** `'ab-spring-lc'`. */
@@ -269,6 +321,11 @@ export interface AtlasBridge {
    * no reference rather than an `'unreviewed'` placeholder.
    */
   readonly formalRef?: FormalRef;
+  /**
+   * Only on an `exact-equivalence`: the norms, and directions, the map is
+   * declared to transport a bound in. Absent means none.
+   */
+  readonly normTransports?: readonly NormTransport[];
 }
 
 /** A claimed bridge the atlas records as REJECTED, with the reason. @public */

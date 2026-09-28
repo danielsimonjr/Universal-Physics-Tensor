@@ -29,7 +29,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
-import { missingForComposite, routeClaim, selectRoute, type RouteClaim } from './_atlas-route.js';
+import { explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, type RouteClaim } from './_atlas-route.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--at', valueStyle: 'either', repeatable: true },
@@ -51,6 +51,11 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observab
         When the composition table declines to compose the relations, the path
         carries NO bound: the command prints 'no composite claim' and exits 0.
         That refusal is the answer, and no number is invented in its place.
+        An exact equivalence carries a bound only in a norm it DECLARES a
+        transport of, in the declared direction, with a witness (ab-spring-lc:
+        relative period error, spring → lc; the horizon is restated on the
+        circuit clock). Any other norm or direction is refused as
+        'norm-not-stated', and the refusal names the missing declaration.
         --sweep name=lo:hi:n[:log] evaluates the path at n samples (2 to 200,
         endpoints included) of one parameter not fixed by --at: per row the
         regime, the horizon and the closed-form point error. A row outside a
@@ -101,6 +106,8 @@ interface HorizonReport {
   bridgeId: string;
   horizon: string;
   holds: boolean | null;
+  /** The transports that restated this horizon for the end of the route; absent when none did. */
+  restatedBy?: { transport: string; horizon: string }[];
 }
 
 const MAX_SAMPLES = 200;
@@ -494,6 +501,11 @@ function printObservable(
       `    the composite bound is still '${NO_COMPOSITE_PHRASE}': the composition table is not consulted or widened; ` +
         `this judgement is in ${tr.observable} only, through the declared carriage`,
     );
+  } else if (j.carriages.length > 0) {
+    out(
+      `    the composite bound above is in '${first.bound!.norm}', carried by a declared norm transport; ` +
+        `this judgement is a separate claim in ${tr.observable}, through the declared carriage, and neither implies the other`,
+    );
   }
   const what = tr.errorKind === 'upper-bound' ? `bound on the ${tr.observable} error` : `accumulated ${tr.observable} error`;
   out(`    ${first.bound!.norm} at this point: ${show(j.boundErrorAtPoint)}; domain supremum: ${show(j.domainSupremum)}`);
@@ -841,13 +853,22 @@ function runCompare(ctx: CommandCtx, from: string, point: Readonly<Record<string
 /** The point evaluation of one route: regimes, horizons and the proven point bound at `at`. */
 function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteClaim) {
   return (at: Readonly<Record<string, number>>): Evaluation & { regimes: RegimeReport[] } => {
-    const horizons: HorizonReport[] = bridges
-      .filter((b) => b.bound !== undefined)
-      .map((b) => ({
-        bridgeId: b.id,
-        horizon: b.bound!.horizon,
-        holds: at['t'] === undefined ? null : b.bound!.horizonHolds(at['t'], at),
-      }));
+    // A horizon is read at the END of the route: a transport applied after a
+    // bound restates it on the later model's clock (ADR, time map).
+    const horizons: HorizonReport[] = bridges.flatMap((b, i) => {
+      const h = api.horizonOnRoute(bridges, result.kind === 'bound' ? (result.transports ?? []) : [], i);
+      if (h === null) return [];
+      return [
+        {
+          bridgeId: b.id,
+          horizon: h.horizon,
+          holds: at['t'] === undefined ? null : h.holds(at['t'], at),
+          ...(h.restatedBy.length > 0
+            ? { restatedBy: h.restatedBy.map((a) => ({ transport: a.transport.id, horizon: a.transport.timeMap.horizon })) }
+            : {}),
+        },
+      ];
+    });
     const allHold = horizons.every((h) => h.holds === true);
 
     // The same --at resolution as `upt regime`: group spellings, and groups derived
@@ -889,8 +910,14 @@ function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteCl
             ? `${numerical.id} states no point bound`
             : `${numerical.id}'s point bound is numerically supported, not proven`;
       } else {
+        // A transport's K is substituted by its closed form at the point, as a
+        // bound's delta is (for ab-spring-lc both are the constant 1).
         const atPoint = bridges.map((b) =>
-          b.bound === undefined ? b : { ...b, bound: { ...b.bound, delta: b.bound.deltaAt!(at) } },
+          b.bound === undefined
+            ? b.normTransports === undefined
+              ? b
+              : { ...b, normTransports: b.normTransports.map((nt) => ({ ...nt, K: nt.KAt(at) })) }
+            : { ...b, bound: { ...b.bound, delta: b.bound.deltaAt!(at) } },
         );
         const composed = atPoint.every((b) => b.bound === undefined || Number.isFinite(b.bound.delta))
           ? api.boundPath(atPoint)
@@ -950,7 +977,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const result = routeClaim(api, bridges);
-  const missing = result.kind === 'no-claim' && result.reason === 'no-composite-claim' ? missingForComposite(api, bridges) : [];
+  const missing = explainsRefusal(result) ? missingForComposite(api, bridges) : [];
 
   const evaluateAt = makeEvaluator(api, bridges, result);
   const tolValues = args.flags.get('tolerance');
@@ -1047,6 +1074,7 @@ async function run(ctx: CommandCtx): Promise<number> {
                 bound: result.bound,
                 norm: result.norm,
                 terminal: result.terminal,
+                ...(result.transports === undefined ? {} : { transports: result.transports.map(transportReport) }),
               }
             : {
                 kind: 'no-claim',
@@ -1086,6 +1114,19 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  composed bound: K = ${result.bound.K} · delta = ${result.bound.delta}`);
     out(`  norm: ${result.norm ?? '(none stated — the claim is the vacuous identity)'}`);
     if (result.terminal) out('  terminal: the last step states no Lipschitz constant; the claim ends there');
+    for (const a of result.transports ?? []) {
+      const nt = a.transport;
+      out(`  why the bound crosses '${a.bridgeId}' (exact): it declares the norm transport '${nt.id}'`);
+      out(`    ${nt.fromModel} → ${nt.toModel}: '${nt.from}' → '${nt.to}', K = ${nt.K} (${nt.domain})`);
+      out(`    because: ${nt.derivation}`);
+      out(`    time map: ${nt.timeMap.map} (uniform)`);
+      out(`    horizon: ${nt.timeMap.horizon}`);
+      out(
+        `    witness: ${nt.witness.id} (${nt.witness.kind}; ${nt.basis} when it checks, never formally proved) — ` +
+          `\`upt map --route=${from},${to} --run\` runs it`,
+      );
+      out('    no other norm or direction through this map is declared, and each stays refused');
+    }
     if (pointBound !== null) {
       out(
         `  bound at this point: K = ${pointBound.K} · delta = ${pointBound.delta} (closed-form: the exact error; ` +
@@ -1127,11 +1168,15 @@ async function run(ctx: CommandCtx): Promise<number> {
     out('  horizons: none on this path (no step carries a bound)');
   } else if (t === undefined) {
     out('  horizons: NOT EVALUATED (no t= supplied via --at); an unevaluated horizon is not a passing one');
-    for (const h of horizons) out(`    ${h.bridgeId}: ${h.horizon}`);
+    for (const h of horizons) {
+      out(`    ${h.bridgeId}: ${h.horizon}`);
+      for (const r of h.restatedBy ?? []) out(`      restated by '${r.transport}': ${r.horizon}`);
+    }
   } else {
     out(`  horizons at t=${t}: ${allHold ? 'all hold' : 'NOT all hold'}`);
     for (const h of horizons) {
       out(`    ${h.bridgeId}: ${h.holds ? 'holds' : 'VIOLATED'} — ${h.horizon}`);
+      for (const r of h.restatedBy ?? []) out(`      restated by '${r.transport}': ${r.horizon}`);
     }
   }
   if (adequacy !== null) {

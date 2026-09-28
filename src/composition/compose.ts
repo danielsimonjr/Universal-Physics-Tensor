@@ -438,15 +438,19 @@ export function composeEdges(
       );
     }
     if (composite === 'approximation') {
-      // Not reachable with the Sprint-1 table (no cell yields it), and this is
-      // the guard that keeps it that way: an `approximation` contract REQUIRES
-      // an `ApproximationBound`, which needs the `composeBounds` wiring that is
-      // a separate task. Widening the table without that wiring must fail here
-      // rather than fabricate a bound.
+      // Reachable since the table's one widening: approximation then
+      // exact-equivalence (docs/planning/ADR-transported-norm-composition.md).
+      // An `approximation` contract REQUIRES an `ApproximationBound`, and the
+      // composed bound exists only when the exact map declares a norm
+      // transport. A `RelationContract` on an edge carries none, so this layer
+      // cannot compose the bound and must refuse rather than fabricate one.
+      // The atlas route layer (`boundPath`) is where a declared transport is
+      // applied.
       throw new UndefinedCompositionError(
         `Cannot compose ${first.id} -> ${second.id}: the composition table ` +
           `returned 'approximation', which requires a composed ` +
-          `ApproximationBound that this sprint does not compute.`,
+          `ApproximationBound; an edge relation declares no norm transport, ` +
+          `so no bound is composed here (the atlas boundPath applies declared transports).`,
       );
     }
     // Conventions carry forward only when the operands do not CONTRADICT each
