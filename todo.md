@@ -177,7 +177,8 @@ witness) could be meant. Earlier entries used the bare form for both.
   `npm run validate` runs them, so a Windows publish was blocked.
 - [x] **Probe coverage gate** — `bun run test:probe-coverage` below its thresholds (branches 82.47% < 85,
   statements 91.46% < 95); raise with tests that can fail, keep the thresholds, and run it in CI.
-  Now 95.41% statements, 88.26% branches, 98.07% functions, 97.4% lines; the `test` job runs it.
+  Now 95.41% statements, 88.26% branches, 98.07% functions, 97.4% lines (at 18f7cfe; 95.4 / 88.34 / 98.21 /
+  97.53 at the branch head); the `test` job runs it.
   Found on the way (negative result): a relative or standardized correction to a baseline is never
   emitted for a dimensioned target, because `1 + m` with m of the target's dimension is inhomogeneous.
 - [x] **Records** — stale I6 note; §14 heading over a list of ticked rows; CHANGELOG "(partial)" lines
