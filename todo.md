@@ -51,6 +51,17 @@ them only partly met, and their rows are in "Review of the audit against the rec
   fixture. Limits: the position bound rests on the quoted pendulum Fourier series (a premise, not
   machine-checked); the point witness is not run below θ0 ≈ 0.007 and its control cannot fail below
   θ0 ≈ 0.013 (both said in the output); amplitude and every other bridge are not encoded.
+  Done 2026-09-27, as far as it can be closed:
+  - The Fourier-series premise is machine-checked. Witness W7xs checks it against RK4 over one period at
+    six θ0 across the domain, within 1e-9 rad, and its (1 − q^{2n+1}) control is refuted. A test checks
+    the coefficients a second way, from a quadrature nome and an independent RK4 projection. It is
+    still a check at points, not a derivation.
+  - The phase point witness locates each crossing by a secant on the RK4 step. It now runs down to
+    θ0 ≈ 7.0e-4 at a tolerance of 5e-8 relative, and its control fails down to θ0 ≈ 9e-4.
+  - Not closable: below that the (1+ε) control cannot fail. The two maps differ by ε relative, which
+    no finite-precision witness resolves as θ0 → 0 (negative result).
+  - Not derived: amplitude and angular velocity, a position carriage through `ab-spring-lc` (angle to
+    charge needs a declared scale), and translations for any other bridge.
 - [x] **I9** Uncertainty propagation with covariance, distinct from sensitivity.
 - [x] **I11** Discovery ranking by evidential readiness dimensions.
 - [x] **I12** Premise and novelty status inseparable from every exported derived relation.

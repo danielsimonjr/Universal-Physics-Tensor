@@ -62,6 +62,18 @@ nothing validates prose and the next reader cannot tell.
   `dbd4e95` (Amendment 9's residual form), then #202 and #208; the eight pinned code blobs still match.
 - Observable translations: `ab-pendulum-linear` declares phase and position; `ab-spring-lc` declares
   a phase carriage. Every other bridge answers UNDETERMINED outside its bound's own norm.
+  As of 2026-09-27 (audit I8 limits):
+  - The position bound's Fourier-series premise is checked against RK4 over one period at θ0 ∈ {0.01,
+    0.1, 0.2, 0.3, 0.4, 0.5} (W7xs, 1e-9 rad). It is not derived, and not checked between those points.
+  - The phase point witness is now run down to a drift of 1e-4 rad in 512 T0 (θ0 ≈ 7.0e-4; it was 0.01
+    rad, θ0 ≈ 0.007), at a tolerance of 5e-8 relative (it was 1e-5).
+  - Its (1+ε) control can be refuted only where ε/(1+ε) exceeds that tolerance, so it cannot fail below
+    θ0 ≈ 9e-4 (it was 0.013; measured: not refuted at 8.5e-4, refuted at 9e-4; not run at 6.9e-4, run at
+    7.1e-4). That floor is inherent: the wrong map and the declared one differ by ε
+    relative, so no witness of finite precision separates them as θ0 → 0 (negative result).
+  - No other translation or carriage was added. `ab-spring-lc` would need a position carriage from
+    angle to charge with a declared amplitude scale, and none is derived. No other bridge's bound has a
+    derived map into another observable.
 - `map --all-routes`: no ordered model pair has more than one simple route under `upt path`'s traversal
   (exact equivalence both ways, other relations forward, multi-premise bridges not followed). The
   undirected graph has two cycles (through `ab-stokes-einstein` and `ab-kg-schrodinger`); the

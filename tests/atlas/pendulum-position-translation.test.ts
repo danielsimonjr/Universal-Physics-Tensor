@@ -16,6 +16,8 @@ import { describe, expect, it } from 'vitest';
 import { AB_PENDULUM_LINEAR, pendulumPeriodErrorAt } from '../../src/atlas/oscillators/bridges-limits.js';
 import { theta0OfPeriodError } from '../../src/atlas/oscillators/pendulum-motion.js';
 import {
+  FOURIER_SERIES_THETA0S,
+  fourierSeriesCheck,
   fundamentalCoefficient,
   PENDULUM_POSITION_TRANSLATION as TR,
   waveformBound,
@@ -132,7 +134,7 @@ describe('W7x — the horizon, the floor and the domain supremum', () => {
 });
 
 describe('W7x — the executable witnesses, the point witness and the evidence derived from them', () => {
-  it('the registered W7x and W7xa are checked', () => {
+  it('the registered W7x, W7xa and W7xs are checked', () => {
     for (const c of TR.checks) expect(runTranslationCheck(c).status).toBe('checked');
   });
 
@@ -161,8 +163,57 @@ describe('W7x — the executable witnesses, the point witness and the evidence d
   });
 
   it('derives numerically-supported only from passing witnesses, and never formally-proved', () => {
-    expect([...deriveEvidence({ witnesses: TR.witnesses }, new Set(['W7x', 'W7xa']))]).toEqual(['numerically-supported']);
+    expect([...deriveEvidence({ witnesses: TR.witnesses }, new Set(['W7x', 'W7xa', 'W7xs']))]).toEqual(['numerically-supported']);
     expect([...deriveEvidence({ witnesses: TR.witnesses }, NO_PASSING_WITNESSES)]).toEqual(['proposed']);
     expect('formalRef' in TR).toBe(false);
+  });
+});
+
+/** K(m) = ∫₀^{π/2} dφ/√(1 − m sin²φ) by composite Simpson on 4096 intervals: independent of the source's AGM. */
+function ellipticK(m: number): number {
+  const n = 4096;
+  const h = Math.PI / 2 / n;
+  let s = 0;
+  for (let i = 0; i <= n; i++) {
+    const w = i === 0 || i === n ? 1 : i % 2 === 1 ? 4 : 2;
+    s += w / Math.sqrt(1 - m * Math.sin(i * h) ** 2);
+  }
+  return (s * h) / 3;
+}
+
+describe('W7xs — the Fourier-series premise, checked against RK4 across the domain (audit I8 limit)', () => {
+  it('is registered, checked, and names its grid in the premise it supports', () => {
+    const w7xs = TR.checks.find((c) => c.id === 'W7xs');
+    expect(w7xs).toBeDefined();
+    expect(runTranslationCheck(w7xs!).status).toBe('checked');
+    expect(TR.witnesses.map((w) => w.id)).toContain('W7xs');
+    expect(FOURIER_SERIES_THETA0S).toEqual([0.01, 0.1, 0.2, 0.3, 0.4, 0.5]);
+    expect(TR.premises.join(' ')).toMatch(/Fourier series .* machine-checked against RK4 at θ0 ∈ \{0\.01, 0\.1, 0\.2, 0\.3, 0\.4, 0\.5\} \(W7xs\)/);
+  });
+
+  it('control: the same check with (1 − q^{2n+1}) for (1 + q^{2n+1}) in aₙ is refuted', () => {
+    expect(runTranslationCheck(fourierSeriesCheck('W7xs-control', 'minus')).status).toBe('refuted');
+  });
+
+  it('second method: the coefficients from a quadrature nome match an independent RK4 projection, and Σ(−1)ⁿaₙ = θ0', () => {
+    for (const theta0 of [0.1, 0.5]) {
+      const m = Math.sin(theta0 / 2) ** 2;
+      const q = Math.exp((-Math.PI * ellipticK(1 - m)) / ellipticK(m));
+      const a = (n: number) => (8 * q ** (n + 0.5)) / ((2 * n + 1) * (1 + q ** (2 * n + 1)));
+      let alt = 0;
+      for (let n = 0; n < 12; n++) alt += (-1) ** n * a(n);
+      expect(Math.abs(alt - theta0)).toBeLessThan(1e-12);
+      // One period T = 4K(m)/(2π) T0 at T0 = 1, by the independent integrator.
+      const T = (4 * ellipticK(m)) / (2 * Math.PI);
+      const steps = 4000;
+      const { samples } = rk4((_t, y) => [y[1]!, -((2 * Math.PI) ** 2) * Math.sin(y[0]!)], [theta0, 0], 0, T, steps);
+      for (const n of [0, 1, 2]) {
+        let s = 0;
+        for (let i = 0; i < steps; i++) s += samples[i]!.y[0]! * Math.cos(((2 * n + 1) * 2 * Math.PI * i) / steps);
+        expect(Math.abs((2 * s) / steps - (-1) ** n * a(n))).toBeLessThan(1e-9);
+      }
+      // Not vacuous: the (1 − q) transcription moves a₀ by far more than the tolerance.
+      expect(Math.abs((8 * Math.sqrt(q)) / (1 - q) - a(0))).toBeGreaterThan(1e-6);
+    }
   });
 });

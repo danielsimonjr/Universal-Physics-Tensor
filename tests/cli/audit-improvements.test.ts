@@ -418,10 +418,12 @@ describe("I8 — the translation's witness runs at the caller's point as well as
   });
 
   it('where the control cannot fail at this point, the text says so rather than implying it can', async () => {
-    const r = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.01', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    const r = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.00075', 'T0=1', 't=1', '--tolerance=phase:0.1']);
     expect(r.text).toMatch(/control W7p@point-control \[.*\]: checked — NOT refuted: at this point the witness cannot tell the wrong map from the declared one/);
-    const tiny = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.001', 'T0=1', 't=1', '--tolerance=phase:0.1']);
-    expect(tiny.text).toMatch(/witness at this point: not run — the drift within 512 T0 at θ0 = 0\.001 is [\d.e-]+ rad, below the 0\.01 rad this witness resolves/);
+    const tiny = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.0001', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    expect(tiny.text).toMatch(/witness at this point: not run — the drift within 512 T0 at θ0 = [\d.]+ is [\d.e-]+ rad, below the 0\.0001 rad this witness resolves/);
+    const small = await run(['path', 'model-pendulum', 'model-spring', '--at', 'theta0=0.003', 'T0=1', 't=1', '--tolerance=phase:0.1']);
+    expect(small.text).toMatch(/control W7p@point-control \[.*\]: refuted/);
   });
 
   it('a sweep reports the point witness per judged row', async () => {
@@ -478,7 +480,7 @@ describe('I8 — a position tolerance through a declared UPPER BOUND on |θ − 
     expect(tol.translation.errorKind).toBe('upper-bound');
     expect(tol.pointWitness).toMatchObject({ id: 'W7x@point', status: 'checked', control: { status: 'refuted' } });
     expect(tol.evidence.tags).toEqual(['numerically-supported']);
-    expect(tol.evidence.witnesses.map((w: any) => [w.id, w.status])).toEqual([['W7x', 'checked'], ['W7xa', 'checked']]);
+    expect(tol.evidence.witnesses.map((w: any) => [w.id, w.status])).toEqual([['W7x', 'checked'], ['W7xa', 'checked'], ['W7xs', 'checked']]);
   });
 
   it('a tolerance below the waveform floor W̄ is UNDETERMINED, not inadequate: the bound certifies no t', async () => {

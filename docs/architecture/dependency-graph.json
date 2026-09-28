@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 383,
     "totalModules": 12,
-    "totalExports": 2775
+    "totalExports": 2777
   },
   "entryPoints": [
     {
@@ -2670,18 +2670,22 @@
         ],
         "exports": [
           "POSITION_POINT_MAX_PERIODS",
+          "FOURIER_SERIES_THETA0S",
           "PENDULUM_POSITION_TRANSLATION",
           "waveformBound",
           "fundamentalCoefficient",
-          "measureFundamental"
+          "measureFundamental",
+          "fourierSeriesCheck"
         ],
         "functions": [
           "waveformBound",
           "fundamentalCoefficient",
-          "measureFundamental"
+          "measureFundamental",
+          "fourierSeriesCheck"
         ],
         "constants": [
           "POSITION_POINT_MAX_PERIODS",
+          "FOURIER_SERIES_THETA0S",
           "PENDULUM_POSITION_TRANSLATION"
         ]
       },
@@ -26622,14 +26626,14 @@
   "statistics": {
     "totalTypeScriptFiles": 383,
     "totalModules": 12,
-    "totalLinesOfCode": 82903,
-    "totalExports": 2775,
+    "totalLinesOfCode": 83000,
+    "totalExports": 2777,
     "totalClasses": 60,
     "totalInterfaces": 435,
-    "totalFunctions": 689,
+    "totalFunctions": 690,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 690,
+    "totalConstants": 691,
     "totalReExports": 1335,
     "totalTypeOnlyImports": 523,
     "runtimeCircularDeps": 0,

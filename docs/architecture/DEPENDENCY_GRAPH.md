@@ -764,8 +764,8 @@ The codebase is organized into the following modules:
 | `./pendulum-motion.js` | `linearAccel, pendulumAccel, pendulumNome, rk4Step, theta0OfPeriodError` | Import |
 
 **Exports:**
-- Functions: `waveformBound`, `fundamentalCoefficient`, `measureFundamental`
-- Constants: `POSITION_POINT_MAX_PERIODS`, `PENDULUM_POSITION_TRANSLATION`
+- Functions: `waveformBound`, `fundamentalCoefficient`, `measureFundamental`, `fourierSeriesCheck`
+- Constants: `POSITION_POINT_MAX_PERIODS`, `FOURIER_SERIES_THETA0S`, `PENDULUM_POSITION_TRANSLATION`
 
 ---
 
@@ -7255,12 +7255,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 82903 |
-| Total Exports | 2775 |
+| Total Lines of Code | 83000 |
+| Total Exports | 2777 |
 | Total Re-exports | 1335 |
 | Total Classes | 60 |
 | Total Interfaces | 435 |
-| Total Functions | 689 |
+| Total Functions | 690 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |

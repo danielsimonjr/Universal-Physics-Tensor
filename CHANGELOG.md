@@ -10,6 +10,22 @@ from v0.1.0 onward.
 
 ### Added
 
+- **The observable translations' limits, closed where they can be (audit I8).**
+  - The position bound's quoted Fourier-series premise is now machine-checked. Witness W7xs compares
+    the series with RK4 over one period at θ0 ∈ {0.01, 0.1, 0.2, 0.3, 0.4, 0.5}, within 1e-9 rad. Its
+    control, with (1 − q^{2n+1}) in the coefficients, is refuted. A test checks the coefficients a
+    second way: a nome from a Simpson quadrature of K, and a projection of an independent RK4 run.
+  - The phase point witness locates each zero crossing by a secant on the RK4 step, instead of a
+    straight line between steps. Its fine error falls from 9.5e-6 to 2.5e-9 relative at 2e-4 rad of
+    drift. It now runs from 1e-4 rad of drift (θ0 ≈ 7.0e-4; it was 0.01 rad, θ0 ≈ 0.007), at a
+    tolerance of 5e-8 relative (it was 1e-5). Its (1+ε) control now fails down to θ0 ≈ 9e-4 (it was
+    0.013).
+  - Below that the control cannot fail, and cannot be made to, because the two maps differ by ε
+    relative. No other translation was added. Reasons in `todo.md` (I8 row).
+  - Mutation: the straight-line crossing makes three of the new or changed phase tests fail. Two test
+    parameters were moved after the first RED run: the small-θ0 list starts at 0.0015 rather than
+    0.001, where the control's margin was 1.2×, and the blind case is at 7.5e-4. Both still failed
+    before the change.
 - **`case-lumped-cooling` evaluates radiation-dominated cooling (audit I20 limit).**
   - It had refused through the linear-loss check and returned only Newton's T(t). It now also reports
     `T_radiating_K`: the lumped equation with the T⁴ loss kept, integrated by RK4 with steps of 1/100

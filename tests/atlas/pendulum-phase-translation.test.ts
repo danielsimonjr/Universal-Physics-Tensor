@@ -98,7 +98,7 @@ describe('W7p — the executable witness, and the evidence derived from it', () 
 });
 
 describe("W7p@point — the witness at the caller's θ0, bounded, with its control", () => {
-  it('is checked at points away from the fixture, and its (1+ε) control is refuted wherever ε exceeds its 1e-5 tolerance', () => {
+  it('is checked at points away from the fixture, and its (1+ε) control is refuted wherever ε exceeds its 5e-8 tolerance', () => {
     for (const theta0 of [0.02, 0.1, 0.35, 0.5]) {
       const pc = TR.pointCheck(pendulumPeriodErrorAt({ theta0 }));
       if ('unavailable' in pc) throw new Error(pc.unavailable);
@@ -107,9 +107,18 @@ describe("W7p@point — the witness at the caller's θ0, bounded, with its contr
     }
   });
 
-  it('the control cannot fail where ε is below the witness tolerance (θ0 = 0.01): disclosed, not hidden', () => {
-    const eps = pendulumPeriodErrorAt({ theta0: 0.01 });
-    expect(eps).toBeLessThan(1e-5);
+  it('runs at small θ0 too, and its (1+ε) control is refuted there (audit I8 limit: was not run below θ0 ≈ 0.007, control blind below ≈ 0.013)', () => {
+    for (const theta0 of [0.0015, 0.003, 0.01]) {
+      const pc = TR.pointCheck(pendulumPeriodErrorAt({ theta0 }));
+      if ('unavailable' in pc) throw new Error(pc.unavailable);
+      expect(runTranslationCheck(pc.check).status).toBe('checked');
+      expect(runTranslationCheck(pc.control).status).toBe('refuted');
+    }
+  });
+
+  it('the control cannot fail where ε is below the witness tolerance (θ0 = 7.5e-4): disclosed, not hidden', () => {
+    const eps = pendulumPeriodErrorAt({ theta0: 7.5e-4 });
+    expect(eps).toBeLessThan(5e-8);
     const pc = TR.pointCheck(eps);
     if ('unavailable' in pc) throw new Error(pc.unavailable);
     expect(runTranslationCheck(pc.check).status).toBe('checked');
@@ -133,8 +142,8 @@ describe("W7p@point — the witness at the caller's θ0, bounded, with its contr
       const periods = Number(/, (\d+) T0 integrated$/.exec(pc.claim)![1]);
       expect(periods).toBeLessThanOrEqual(PHASE_POINT_MAX_PERIODS + 2);
     }
-    const tiny = TR.pointCheck(pendulumPeriodErrorAt({ theta0: 0.001 }));
-    expect(tiny).toEqual({ unavailable: expect.stringMatching(/below the 0\.01 rad this witness resolves; not run$/) });
+    const tiny = TR.pointCheck(pendulumPeriodErrorAt({ theta0: 1e-4 }));
+    expect(tiny).toEqual({ unavailable: expect.stringMatching(/below the 0\.0001 rad this witness resolves; not run$/) });
     expect(TR.pointCheck(0)).toEqual({ unavailable: expect.stringMatching(/no phase drift accumulates/) });
   });
 });
