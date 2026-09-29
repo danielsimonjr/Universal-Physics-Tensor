@@ -3,11 +3,11 @@ Bridge↔canonical recovery — validating bridges against standard physics
 ⚠ structural match is "same relation UP TO a dimensionless factor"; that factor
   may itself be physically substantive (e.g. ⟨e^-βW⟩). A review surface.
 
-  197 non-unrelated links  →  3 restates-canonical  ·  0 recovers  ·  194 dimensional-only
+  203 non-unrelated links  →  3 restates-canonical  ·  0 recovers  ·  200 dimensional-only
 
   RESTATES-CANONICAL (the bridge IS the canonical law — F4: NOT a discovery):
     CE-hawking-temperature     ≡ bridge 42 (recovery exact, err 0e+0)
     CE-landauer                ≡ bridge 16 (recovery exact, err 0e+0)
     CE-jarzynski               ≡ bridge 29 (recovery exact, err 0e+0)
 
-  (194 dimensional-only: same dimension, different form. Run `upt canonical` for the registry.)
+  (200 dimensional-only: same dimension, different form. Run `upt canonical` for the registry.)

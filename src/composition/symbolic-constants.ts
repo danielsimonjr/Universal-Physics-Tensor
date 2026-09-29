@@ -24,7 +24,7 @@ import {
   VELOCITY,
   ACTION,
 } from '../dimensional/types.js';
-import { C_SI, G_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI } from '../core/constants.js';
+import { C_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI } from '../core/constants.js';
 
 const dim = (L = 0, M = 0, T = 0, Theta = 0): Dimension => ({
   L,
@@ -76,6 +76,9 @@ export const CONSTANTS: Readonly<Record<string, NamedConstantValue>> = {
   epsilon_0: { value: 8.8541878128e-12, dim: PERMITTIVITY },
   sigma_sb: { value: 5.670374419e-8, dim: STEFAN_BOLTZMANN },
   b: { value: B_WIEN_SI, dim: WIEN },
+  // IAU 2015 nominal solar parameter. M_sun in eval stays the rounded kilogram M_SUN_SI.
+  GM_sun: { value: GM_SUN_SI, dim: dim(3, 0, -2) },
+  Msun_iau: { value: GM_SUN_SI / G_SI, dim: dim(0, 1, 0) },
 };
 
 /** What a registered constant is, its SI unit, and where its value comes from (audit I10). @internal */
@@ -105,7 +108,7 @@ export function piMultipleValue(name: string): number | undefined {
 
 /** One row per {@link CONSTANTS} key; a test holds the two key sets equal. @internal */
 export const CONSTANT_PROVENANCE: Readonly<Record<string, ConstantProvenance>> = {
-  hbar: { meaning: 'reduced Planck constant h/(2π)', unit: 'J*s', source: 'CODATA 2018 (core/constants.ts HBAR_SI)' },
+  hbar: { meaning: 'reduced Planck constant h/(2π)', unit: 'J*s', source: 'exact H_SI/(2π) (core/constants.ts HBAR_SI)' },
   h: { meaning: 'Planck constant', unit: 'J*s', source: 'exact SI, 2019 redefinition (core/constants.ts H_SI)' },
   c: { meaning: 'speed of light in vacuum', unit: 'm/s', source: 'exact SI (core/constants.ts C_SI)' },
   G: { meaning: 'Newtonian gravitational constant', unit: 'm^3/(kg*s^2)', source: 'CODATA 2018 (core/constants.ts G_SI)' },
@@ -117,4 +120,14 @@ export const CONSTANT_PROVENANCE: Readonly<Record<string, ConstantProvenance>> =
   epsilon_0: { meaning: 'vacuum permittivity', unit: 'F/m', source: 'CODATA 2018 (this table)' },
   sigma_sb: { meaning: 'Stefan–Boltzmann constant', unit: 'W/(m^2*K^4)', source: 'CODATA 2018 (this table)' },
   b: { meaning: 'Wien displacement constant', unit: 'm*K', source: 'CODATA 2018 (core/constants.ts B_WIEN_SI)' },
+  GM_sun: {
+    meaning: 'IAU nominal solar gravitational parameter (GM)☉',
+    unit: 'm^3/s^2',
+    source: 'IAU 2015 Resolution B3 (core/constants.ts GM_SUN_SI)',
+  },
+  Msun_iau: {
+    meaning: 'IAU solar mass (GM)☉/G, the mass that reproduces GM_sun with G_SI',
+    unit: 'kg',
+    source: 'GM_SUN_SI/G_SI (core/constants.ts)',
+  },
 };

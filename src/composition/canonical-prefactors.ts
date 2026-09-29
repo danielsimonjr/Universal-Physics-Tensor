@@ -156,6 +156,14 @@ export const CANONICAL_PREFACTORS: readonly CanonicalPrefactor[] = [
     quote: String.raw`u = \frac{\varepsilon}{2} \mathbf{E}^2 + \frac{1}{2 \mu} \mathbf{B}^2`,
     locator: "Wikipedia, 'Energy density', revision 1366889538, wikitext line 81",
   },
+  {
+    // The L0 monomial is ħ/(m c). The quote is the reduced wavelength, so the factor is 1.
+    // λ = h/(m c) is the separate fully-quantitative entry CE-compton-wavelength-full.
+    id: 'CE-compton-wavelength',
+    prefactor: 1,
+    quote: String.raw`\lambda\!\!\!\bar{} = \frac{\lambda}{2 \pi} = \frac{\hbar}{m c},`,
+    locator: "Wikipedia, 'Compton wavelength', revision 1376812882, wikitext line 13",
+  },
 ];
 
 /** The sourced prefactor of a canonical entry, or `undefined`. @internal */

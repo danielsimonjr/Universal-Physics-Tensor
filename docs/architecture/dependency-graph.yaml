@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 392
   totalModules: 12
-  totalExports: 2811
+  totalExports: 2820
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6396,6 +6396,7 @@ modules:
             - TIME
             - POWER
             - FREQUENCY
+            - DIMENSIONLESS
         - file: ./_l1-build.js
           imports:
             - dim
@@ -7864,6 +7865,9 @@ modules:
         - file: ../../numerical/spacetime-metrics.js
           imports:
             - curvatureReport
+            - kerrEquatorialCircular
+            - kerrGeodesic
+            - kerrTurningPointOrbit
             - schwarzschildCircularOrbit
             - MetricId
       exports:
@@ -8156,7 +8160,7 @@ modules:
       constants:
         - command
     src/cli/conventions.ts:
-      description: Convention lines the CLI prints beside a comparison. They do not change the
+      description: Convention lines the CLI prints beside a comparison.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies: []
@@ -9360,6 +9364,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - HBAR_SI
         - file: ../dimensional/buckingham.js
           imports:
             - buckinghamPi
@@ -9481,9 +9488,6 @@ modules:
         - file: ./formula-names.js
           imports:
             - formulaNameDimensions
-        - file: ../core/constants.js
-          imports:
-            - C_SI
         - file: ./user-equation.js
           imports:
             - parseUserEquation
@@ -13525,6 +13529,7 @@ modules:
           imports:
             - C_SI
             - G_SI
+            - GM_SUN_SI
             - HBAR_SI
             - H_SI
             - K_B_SI
@@ -13938,7 +13943,10 @@ modules:
       description: Core types for Universal Physics Tensor Framework
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ./constants.js
+          imports:
+            - HBAR_SI
       exports:
         - PhysicalConstants
       interfaces:
@@ -18514,9 +18522,19 @@ modules:
         - metricParams
         - curvatureReport
         - schwarzschildCircularOrbit
+        - kerrIscoRadius
+        - kerrPhotonRadius
+        - kerrSphericalTimelike
+        - kerrSphericalPhoton
+        - kerrTurningPointOrbit
+        - kerrChristoffelFdGap
+        - kerrGeodesic
+        - schwarzschildGeodesic
+        - kerrEquatorialCircular
       interfaces:
         - Component
         - CurvatureReport
+        - KerrGeodesicSample
       functions:
         - schwarzschildKretschmann
         - flrwRicciScalar
@@ -18525,6 +18543,15 @@ modules:
         - metricParams
         - curvatureReport
         - schwarzschildCircularOrbit
+        - kerrIscoRadius
+        - kerrPhotonRadius
+        - kerrSphericalTimelike
+        - kerrSphericalPhoton
+        - kerrTurningPointOrbit
+        - kerrChristoffelFdGap
+        - kerrGeodesic
+        - schwarzschildGeodesic
+        - kerrEquatorialCircular
       constants:
         - METRIC_SIGNATURE
         - METRIC_SIGNATURE_NOTE
@@ -19012,11 +19039,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 392
   totalModules: 12
-  totalLinesOfCode: 85202
-  totalExports: 2811
+  totalLinesOfCode: 85865
+  totalExports: 2820
   totalClasses: 60
-  totalInterfaces: 441
-  totalFunctions: 711
+  totalInterfaces: 442
+  totalFunctions: 720
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 700

@@ -43,7 +43,7 @@ function buildRiemann(mu = 'mu', nu = 'nu'): RiemannTensorNode {
       { label: 'b', variance: 'lower' },
     ],
     DIMENSIONLESS,
-    '+,-,-,-',
+    '-,+,+,+',
   );
   const gInverse = metric(
     'g_inv',
@@ -52,7 +52,7 @@ function buildRiemann(mu = 'mu', nu = 'nu'): RiemannTensorNode {
       { label: 'b', variance: 'upper' },
     ],
     DIMENSIONLESS,
-    '+,-,-,-',
+    '-,+,+,+',
   );
   const xCoord = tsym(
     'x',
@@ -109,7 +109,7 @@ const buildMetric = (): MetricTensorNode =>
       { label: 'nu', variance: 'lower' },
     ],
     DIMENSIONLESS,
-    '+,-,-,-',
+    '-,+,+,+',
   );
 
 /** The canonical Einstein field equation node, G_μν + Λg_μν = (8πG/c⁴)T_μν. @internal */
@@ -147,12 +147,49 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     domain: 'general-relativity',
     formula_latex: 'G_{\\mu\\nu} + \\Lambda g_{\\mu\\nu} = (8\\pi G/c^4) T_{\\mu\\nu}',
     epistemicStatus: 'fully-quantitative',
+    // The 8π is in this scalar record as well as in the field equation, so a
+    // comparison checks it. The metric node is mostly-plus, the signature
+    // `upt metric` differentiates.
+    scalarAst: op('/', [
+      op('*', [sym('8pi', DIMENSIONLESS), sym('G', GRAV), sym('stress-energy-density', ENERGY_DENSITY)]),
+      pow(sym('c', VELOCITY), '4'),
+    ]),
     fieldEquation: EFE_NODE,
     regime: { force: 'gravitational', symmetry: 'poincare' },
     assumptions: ['classical GR', 'pseudo-Riemannian spacetime'],
     references: ['Einstein 1915'],
     partnerBridges: ['13'], // 13 = Information-Geometry (Jacobson thermodynamic EFE)
   }),
+  l1(
+    FRIEDMANN_TARGET,
+    [
+      ...FRIEDMANN_GOV,
+      { name: 'c', dim: dim(1, 0, -1) },
+      { name: 'curvature-k', dim: DIMENSIONLESS },
+      { name: 'scale-factor', dim: LENGTH },
+    ],
+    {
+      id: 'CE-friedmann-curvature',
+      name: 'Friedmann equation (with curvature)',
+      domain: 'cosmology',
+      formula_latex: 'H^2 = 8\\pi G \\rho/3 - k c^2/a^2',
+      epistemicStatus: 'fully-quantitative',
+      scalarAst: op('-', [
+        op('/', [
+          op('*', [sym('8pi', DIMENSIONLESS), sym('G', GRAV), sym('rho', DENSITY)]),
+          sym('3', DIMENSIONLESS),
+        ]),
+        op('/', [
+          op('*', [sym('curvature-k', DIMENSIONLESS), pow(sym('c', VELOCITY), '2')]),
+          pow(sym('scale-factor', LENGTH), '2'),
+        ]),
+      ]),
+      regime: { scale: 'cosmological', force: 'gravitational' },
+      assumptions: ['matter-dominated', 'Λ=0', 'FLRW', 'k the normalized curvature'],
+      references: ['Friedmann 1922'],
+      partnerBridges: [],
+    },
+  ),
   l1(FRIEDMANN_TARGET, FRIEDMANN_GOV, {
     id: 'CE-friedmann',
     name: 'Friedmann equation (flat, matter-dominated)',

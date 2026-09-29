@@ -122,7 +122,7 @@ describe('F09 — a proof badge carries its theorem scope', () => {
 // Already true when the audit ran (it read the text view only); pinned across every export so a
 // later change cannot merge "no overlay metadata" into "did not match".
 describe('F10 — an evidence-filtered export keeps absent evidence apart from non-matching evidence', () => {
-  const split = /0 of 148 kept; 40 dropped \(did not match\); 108 dropped \(no overlay metadata\)/;
+  const split = /0 of 150 kept; 40 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
   for (const format of ['text', 'mermaid', 'dot']) {
     it(`--format=${format}`, async () => {
       const { text } = await run(['map', '--source=both', '--evidence=formally-proved', `--format=${format}`]);
@@ -133,10 +133,10 @@ describe('F10 — an evidence-filtered export keeps absent evidence apart from n
     const c = capture();
     await runCli(['map', '--source=both', '--evidence=formally-proved', '--json'], c.io);
     expect(JSON.parse(c.lines.join('')).result.filter).toEqual({
-      total: 148,
+      total: 150,
       kept: 0,
       droppedNotMatching: 40,
-      droppedMissingMetadata: 108,
+      droppedMissingMetadata: 110,
       evidence: 'formally-proved',
     });
   });

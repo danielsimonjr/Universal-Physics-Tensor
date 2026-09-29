@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (100)"]
+  subgraph cl_0["anchored cluster (101)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -146,7 +146,7 @@ flowchart LR
     q_linear_density --> j_CE_string_wave_speed
     q_speed(["speed"]):::qty
     j_CE_string_wave_speed --> q_speed
-    j_CE_compton_wavelength["Compton wavelength"]:::law
+    j_CE_compton_wavelength["Reduced Compton wavelength"]:::law
     q_mass --> j_CE_compton_wavelength
     q_compton_wavelength(["compton-wavelength"]):::qty
     j_CE_compton_wavelength --> q_compton_wavelength
@@ -477,6 +477,10 @@ flowchart LR
     j_CE_de_broglie["de Broglie wavelength"]:::law
     q_p --> j_CE_de_broglie
     j_CE_de_broglie --> q_compton_wavelength
+    j_CE_compton_wavelength_full["Compton wavelength"]:::law
+    q_mass --> j_CE_compton_wavelength_full
+    q_compton_wavelength_full(["compton-wavelength-full"]):::qty
+    j_CE_compton_wavelength_full --> q_compton_wavelength_full
     j_CE_carrier_mobility["Carrier mobility"]:::law
     q_charge --> j_CE_carrier_mobility
     q_relaxation_time(["relaxation-time"]):::qty
@@ -638,7 +642,7 @@ flowchart LR
     j_CE_planck_length["Planck length"]:::law
     j_CE_planck_length --> q_planck_length
   end
-  subgraph cl_2["anchored cluster (3)"]
+  subgraph cl_2["anchored cluster (4)"]
     direction LR
     j_be_19["BE-19"]:::speculative
     q_mass_density(["mass-density"]):::qty
@@ -654,8 +658,15 @@ flowchart LR
     q_brane_tension(["brane-tension"]):::qty
     q_brane_tension --> j_be_54
     j_be_54 --> q_hubble_rate_squared
-    j_CE_friedmann["Friedmann equation (flat, matter-dominated)"]:::law
+    j_CE_friedmann_curvature["Friedmann equation (with curvature)"]:::law
     q_rho(["rho"]):::qty
+    q_rho --> j_CE_friedmann_curvature
+    q_curvature_k(["curvature-k"]):::qty
+    q_curvature_k --> j_CE_friedmann_curvature
+    q_scale_factor(["scale-factor"]):::qty
+    q_scale_factor --> j_CE_friedmann_curvature
+    j_CE_friedmann_curvature --> q_hubble_rate_squared
+    j_CE_friedmann["Friedmann equation (flat, matter-dominated)"]:::law
     q_rho --> j_CE_friedmann
     j_CE_friedmann --> q_hubble_rate_squared
   end

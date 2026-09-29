@@ -55,11 +55,13 @@ describe('deriveProposedBridges — canonical-only pilot', () => {
   it('emits the Landauer photon first, plus the new fully-quantitative IDs', () => {
     // The canonical L-layer expansion (Adam+Eve audit) added more
     // fully-quantitative + determinate laws, so the identity-consequence funnel
-    // now surfaces three coincidences (all UNADJUDICATED): the Landauer photon,
+    // now surfaces four coincidences (all UNADJUDICATED), including
+    // CE-compton-wavelength-full against the Hubble distance: the Landauer photon,
     // hν=mc² (photon-energy↔rest-energy via mass), and c/H≟b/T
     // (hubble-distance↔peak-wavelength). Order is registry-stable (Landauer first).
-    expect(proposals).toHaveLength(3);
+    expect(proposals).toHaveLength(4);
     expect(proposals.map((p) => p.id).sort()).toEqual([
+      'IC-compton-wavelength-full--hubble-distance--hubble-rate',
       'IC-erasure-energy--photon-energy--nu',
       'IC-hubble-distance--peak-wavelength--temperature',
       'IC-photon-energy--rest-energy--mass',
@@ -244,7 +246,7 @@ describe('bridge-source adapter + leaf canonicalization', () => {
 
 describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', () => {
   it('materializes the pilot as an unadjudicated, honest entry', () => {
-    expect(PROPOSED_BRIDGES).toHaveLength(3); // Landauer photon + 2 expansion IDs
+    expect(PROPOSED_BRIDGES).toHaveLength(4); // Landauer photon + 3 expansion IDs
     const e = PROPOSED_BRIDGES.find(
       (b) => b.id === 'IC-erasure-energy--photon-energy--nu',
     )!;

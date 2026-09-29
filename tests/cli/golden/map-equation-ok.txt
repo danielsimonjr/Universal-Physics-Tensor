@@ -3,6 +3,6 @@ Your equation:  period = 2*pi*sqrt(length/gravity)
 
   ✓ dimensionally consistent: [time]
   ✓ agrees with CE-pendulum-period (Pendulum period), prefactor included: yours/canonical = 1 at 3 fixed points
-  ● your equation joins the ANCHORED cluster of 84 via {gravity, length, period}
-     nearest equations: CE-pendulum-period, CE-kepler-third, CE-resistance-material, CE-angular-momentum, CE-bernoulli (+78 more)
+  ● your equation joins the ANCHORED cluster of 85 via {gravity, length, period}
+     nearest equations: CE-pendulum-period, CE-kepler-third, CE-resistance-material, CE-angular-momentum, CE-bernoulli (+79 more)
      (shared-quantity connectivity, not a physics claim)

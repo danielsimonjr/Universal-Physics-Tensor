@@ -32,7 +32,6 @@ import { CONSTANTS, piMultipleValue } from './symbolic-constants.js';
 import { evalExpr } from './expr-eval.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
 import { formulaNameDimensions } from './formula-names.js';
-import { C_SI } from '../core/constants.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import type { CompiledFormula } from '../numerical/formula.js';
@@ -60,6 +59,10 @@ const RATIO_TOLERANCE = 1e-9;
  */
 const ENTRY_TARGET_ALIASES: Readonly<Record<string, readonly string[]>> = {
   'CE-schwarzschild-radius': ['schwarzschild-radius'],
+  // The L0 id keeps the catalog name. The reduced name is the same entry.
+  // The non-reduced entry also answers to that catalog name when the formula uses h.
+  'CE-compton-wavelength': ['reduced-compton-wavelength'],
+  'CE-compton-wavelength-full': ['compton-wavelength'],
 };
 
 /** What a dimensionless registry stub stands for, when the symbol is not the latex. */
@@ -167,6 +170,11 @@ function peelConstantAliases(
     if (s.dim !== undefined) {
       const varHits = variables.filter((v) => equals(v.dim, s.dim!));
       if (varHits.length > 0) {
+        forVariables.push(s);
+        continue;
+      }
+      // h and ħ are both action. A formula that writes one is not the other.
+      if (Object.prototype.hasOwnProperty.call(CONSTANTS, s.name)) {
         forVariables.push(s);
         continue;
       }
@@ -383,8 +391,7 @@ export function compareWithCanonical(
       constants,
     );
     // A dimensionless group the record does not carry (sound-speed γ) is checked only when the
-    // user wrote it. Friedmann's curvature term is the same kind of extension: the frozen entry
-    // is the flat dust equation, and curvature_k / scale_factor are not its governing names.
+    // user wrote it. Friedmann's curvature term is CE-friedmann-curvature, not an extension of the flat entry.
     const groupSpec = CANONICAL_GROUP_PREFACTORS.find((g) => g.id === entry.id);
     let boundGroup: string | undefined;
     if (groupSpec) {
@@ -392,16 +399,6 @@ export function compareWithCanonical(
       if (idx >= 0) {
         boundGroup = forVariables[idx]!.name;
         forVariables.splice(idx, 1);
-      }
-    }
-    const friedmannExtras = ['curvature-k', 'scale-factor'] as const;
-    const friedmannK =
-      entry.id === 'CE-friedmann' &&
-      friedmannExtras.every((n) => forVariables.some((s) => s.name === n));
-    if (friedmannK) {
-      for (const n of friedmannExtras) {
-        const idx = forVariables.findIndex((s) => s.name === n);
-        if (idx >= 0) forVariables.splice(idx, 1);
       }
     }
     let pairing = pairSources(forVariables, variables);
@@ -434,10 +431,6 @@ export function compareWithCanonical(
     const points = FIXED_POINT_EXPONENTS.map((p) => {
       const row: Record<string, number> = Object.fromEntries(names.map((n, i) => [n, Math.pow(1.7 + i, p)]));
       if (boundGroup !== undefined) row['__group'] = Math.pow(2.3, p);
-      if (friedmannK) {
-        row['curvature-k'] = Math.pow(1.1, p);
-        row['scale-factor'] = Math.pow(1.9, p);
-      }
       return row;
     });
     // Constant aliases bind to the registered SI value (same as the canonical AST's CONSTANTS
@@ -456,7 +449,6 @@ export function compareWithCanonical(
         ...Object.fromEntries([...pairing].map(([u, c]) => [u, p[c]!])),
         ...constBindings,
         ...(boundGroup === undefined ? {} : { [boundGroup]: p['__group']! }),
-        ...(friedmannK ? { 'curvature-k': p['curvature-k']!, 'scale-factor': p['scale-factor']! } : {}),
       });
 
     // A prefactor the entry does not record may come from the sourced table,
@@ -466,10 +458,8 @@ export function compareWithCanonical(
       boundGroup === undefined || groupSpec === undefined
         ? 1
         : groupSpec.coefficient * Math.pow(p['__group']!, groupSpec.exponent);
-    const withExtension = (flat: number, p: Readonly<Record<string, number>>): number =>
-      friedmannK ? flat - (p['curvature-k']! * C_SI * C_SI) / (p['scale-factor']! * p['scale-factor']!) : flat;
     const scale = (flat: number, p: Readonly<Record<string, number>>): number =>
-      withExtension((tabled ?? 1) * extraFactor(p) * flat, p);
+      (tabled ?? 1) * extraFactor(p) * flat;
     let canonicalAt: (p: Readonly<Record<string, number>>) => number;
     if (entry.scalarAst !== undefined) {
       const ast = entry.scalarAst;
@@ -553,19 +543,15 @@ export function compareWithCanonical(
       results.push({ id: entry.id, name: entry.name, kind: 'not-compared', detail: 'a ratio was zero or not finite', ...paired, ...targetVia });
       continue;
     }
-    // A monomial-only record carries no prefactor, even on a fully-quantitative entry: the EFE keeps
-    // its 8π in the field equation (persona question Q3).
+    // A monomial-only record carries no prefactor. A fully-quantitative scalar AST does.
     const recordsPrefactor =
       tabled !== undefined ||
       boundGroup !== undefined ||
-      friedmannK ||
       (entry.epistemicStatus === 'fully-quantitative' && entry.scalarAst !== undefined);
     const extension =
-      friedmannK
-        ? 'CE-friedmann records the flat term; this check also subtracts curvature_k·c²/scale_factor²'
-        : boundGroup !== undefined && groupSpec !== undefined
-          ? `the dimensionless group ${groupSpec.group} is bound, so the prefactor includes ${groupSpec.coefficient}·${groupSpec.group}^${groupSpec.exponent}`
-          : undefined;
+      boundGroup !== undefined && groupSpec !== undefined
+        ? `the dimensionless group ${groupSpec.group} is bound, so the prefactor includes ${groupSpec.coefficient}·${groupSpec.group}^${groupSpec.exponent}`
+        : undefined;
     const classified = classify(entry, ratios, recordsPrefactor);
     results.push({
       ...classified,

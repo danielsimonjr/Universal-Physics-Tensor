@@ -178,9 +178,9 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-compton-wavelength',
-    name: 'Compton wavelength',
+    name: 'Reduced Compton wavelength',
     domain: 'quantum',
-    formula_latex: '\\lambda_C = \\hbar/(mc)',
+    formula_latex: '\\bar{\\lambda}_C = \\hbar/(mc)',
     dimensional: {
       target: { name: 'compton-wavelength', dim: LENGTH },
       governing: [

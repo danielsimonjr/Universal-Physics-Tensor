@@ -9,6 +9,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -35,22 +36,56 @@ const truth = readJson('truth.json');
 const queryIds = (readJson('queries.json') as { id: string }[]).map((q) => q.id);
 const corpusIds = new Set((readJson('corpus.json') as { id: string }[]).map((r) => r.id));
 
+/**
+ * The exported corpus the labelers saw. Amendment 8 names the canonical tree at c144150;
+ * the file itself landed in 1263bce and was not edited after that. The working-tree
+ * corpus.json is the live registry export.
+ *
+ * GitHub Actions checks out the pull request with fetch-depth 1, so this ancestor is
+ * not in the local object store until it is fetched.
+ */
+const LABELLED_CORPUS_COMMIT = '1263bce2d2253d6a38ba319e74cacfbee5451fcd';
+const LABELLED_CORPUS_SPEC = `${LABELLED_CORPUS_COMMIT}:docs/research/criterion3/corpus.json`;
+
+function labelledCorpusBytes(): Buffer {
+  const show = () => execFileSync('git', ['show', LABELLED_CORPUS_SPEC]);
+  try {
+    return show();
+  } catch {
+    execFileSync('git', ['fetch', '--depth=1', 'origin', LABELLED_CORPUS_COMMIT], {
+      stdio: ['ignore', 'ignore', 'pipe'],
+    });
+    return show();
+  }
+}
+
 describe('criterion 3 — Amendment 8 freezes the files', () => {
   it('lists the seven files, each with the SHA-256 of its committed bytes', () => {
     expect([...table.keys()].sort()).toEqual(
       ['corpus.json', 'labels/agreed-labels.json', 'labels/labeler-A.json', 'labels/labeler-B.json', 'queries-key.json', 'queries.json', 'truth.json'].sort(),
     );
-    for (const [file, hash] of table) expect(rawSha(file), file).toBe(hash);
+    for (const [file, hash] of table) {
+      if (file === 'corpus.json') {
+        const historical = labelledCorpusBytes();
+        expect(createHash('sha256').update(historical).digest('hex'), file).toBe(hash);
+      } else {
+        expect(rawSha(file), file).toBe(hash);
+      }
+    }
   });
 
   it('writes those hashes WITHOUT back quotes, so the item-set hash stays the last back-quoted one', () => {
     for (const hash of table.values()) expect(note).not.toContain(`\`${hash}\``);
   });
 
-  it('names the same corpus and query hashes as the export freeze', () => {
+  it('names the labelled corpus, and the same query hash as the export freeze', () => {
     const freeze = readJson('freeze.json');
-    expect(table.get('corpus.json')).toBe(freeze.files['corpus.json'].sha256);
+    // Queries were not relabelled. The corpus hash in Amendment 8 is the file at c144150;
+    // freeze.json tracks the live export, which the export test binds to the registry.
     expect(table.get('queries.json')).toBe(freeze.files['queries.json'].sha256);
+    const historical = labelledCorpusBytes();
+    expect(createHash('sha256').update(historical).digest('hex')).toBe(table.get('corpus.json'));
+    expect(freeze.files['corpus.json'].sha256).toBe(rawSha('corpus.json'));
   });
 });
 

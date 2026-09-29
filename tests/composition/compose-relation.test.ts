@@ -103,6 +103,7 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
   });
 
   it('reproduces the pre-change golden snapshot of all 1681 ordered pairs', () => {
+    // evaluateAtOnes was refreshed when HBAR_SI became H_SI/(2π). Pair structure was not.
     const live = snapshotAllPairs(CATALOG_GRAPH, composeEdges);
     expect(live.length).toBe(GOLDEN.length);
     // Deep-equal the whole array, not a per-pair loop: a pair that stopped

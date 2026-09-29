@@ -64,7 +64,7 @@ Beside the layers sits a **composition graph** (`src/composition/`). The graph h
 - first-order uncertainty propagation (`propagateUncertainty`);
 - a name-collision namespacing gate (`CompositionAliasError` + `SOURCE_ALIAS_DISPOSITIONS` over 131 centralized `Quantity` nodes in `quantities.ts`).
 
-BE-23 vs. cuprate Planckian dissipation is another data confrontation. The 55-bridge catalog (41 graph edges) is validated against the **canonical L-layer** (`src/canonical/`, 107 equations). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** of 19 (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` + the per-bridge `be*-confrontation.ts` evaluators carry the spine.
+BE-23 vs. cuprate Planckian dissipation is another data confrontation. The 55-bridge catalog (41 graph edges) is validated against the **canonical L-layer** (`src/canonical/`, 109 equations). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** of 19 (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` + the per-bridge `be*-confrontation.ts` evaluators carry the spine.
 
 ---
 
@@ -98,7 +98,7 @@ change when the STRUCTURE changes.
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 392 files, 2811 exports, 1339 of them re-exports. 976 and 392 do not
+(`bun run docs:deps`): 392 files, 2820 exports, 1339 of them re-exports. 976 and 392 do not
 contradict each other; they answer different questions. Every figure states its scope.
 
 > The `src/`-scope figures above are read from `statistics` in the generated
@@ -111,7 +111,7 @@ contradict each other; they answer different questions. Every figure states its 
 not of the dependency graph:
 
 - 55 bridge entries (IDs 11–65; 19 established, 33 speculative, 3 highly-speculative);
-- 107 canonical equations;
+- 109 canonical equations;
 - 41 composition-graph edges;
 - 19 real-data confrontations.
 

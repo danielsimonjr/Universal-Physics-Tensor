@@ -2855,7 +2855,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../../bridges/equations/_be-helpers.js` | `sym` | Import |
-| `../../dimensional/types.js` | `MASS, VELOCITY, ENERGY, FORCE, ACCELERATION, LENGTH, TIME, POWER, FREQUENCY` | Import |
+| `../../dimensional/types.js` | `MASS, VELOCITY, ENERGY, FORCE, ACCELERATION, LENGTH, TIME, POWER, FREQUENCY, DIMENSIONLESS` | Import |
 | `./_l1-build.js` | `dim, op, pow, l1` | Import |
 
 **Exports:**
@@ -3565,7 +3565,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
-| `../../numerical/spacetime-metrics.js` | `curvatureReport, schwarzschildCircularOrbit, MetricId` | Import |
+| `../../numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, MetricId` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3722,7 +3722,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/cli/conventions.ts` - Convention lines the CLI prints beside a comparison. They do not change the
+### `src/cli/conventions.ts` - Convention lines the CLI prints beside a comparison.
 
 **Exports:**
 - Functions: `conventionLines`
@@ -4102,6 +4102,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../core/constants.js` | `HBAR_SI` | Import |
 | `../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -4148,7 +4149,6 @@ The codebase is organized into the following modules:
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
 | `./formula-names.js` | `formulaNameDimensions` | Import |
-| `../core/constants.js` | `C_SI` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula.js` | `CompiledFormula` | Import (type-only) |
@@ -5543,7 +5543,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS, VELOCITY, ACTION` | Import |
-| `../core/constants.js` | `C_SI, G_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
+| `../core/constants.js` | `C_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
 
 **Exports:**
 - Interfaces: `ConstantProvenance`
@@ -5729,6 +5729,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/core/types.ts` - Core types for Universal Physics Tensor Framework
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./constants.js` | `HBAR_SI` | Import |
 
 **Exports:**
 - Interfaces: `TensorConfig`, `TensorIndices`, `PhysicalLaw`, `BridgeEquation`, `EmergentPhenomenon`
@@ -7187,8 +7192,16 @@ The codebase is organized into the following modules:
 | `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
 
 **Exports:**
-- Interfaces: `Component`, `CurvatureReport`
-- Functions: `schwarzschildKretschmann`, `flrwRicciScalar`, `friedmannSides`, `kerrKretschmann`, `metricParams`, `curvatureReport`, `schwarzschildCircularOrbit`
+- Interfaces: `Component`, `CurvatureReport`, `KerrGeodesicSample`
+- Functions:
+
+  ```text
+  schwarzschildKretschmann, flrwRicciScalar, friedmannSides, kerrKretschmann, metricParams,
+  curvatureReport, schwarzschildCircularOrbit, kerrIscoRadius, kerrPhotonRadius,
+  kerrSphericalTimelike, kerrSphericalPhoton, kerrTurningPointOrbit, kerrChristoffelFdGap,
+  kerrGeodesic, schwarzschildGeodesic, kerrEquatorialCircular
+  ```
+
 - Constants: `METRIC_SIGNATURE`, `METRIC_SIGNATURE_NOTE`
 
 ---
@@ -7408,12 +7421,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 392 |
 | Total Modules | 12 |
-| Total Lines of Code | 85202 |
-| Total Exports | 2811 |
+| Total Lines of Code | 85865 |
+| Total Exports | 2820 |
 | Total Re-exports | 1339 |
 | Total Classes | 60 |
-| Total Interfaces | 441 |
-| Total Functions | 711 |
+| Total Interfaces | 442 |
+| Total Functions | 720 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 534 |

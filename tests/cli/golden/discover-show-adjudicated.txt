@@ -4,8 +4,8 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  345 candidates  →  49 promising  ·  286 inert  ·  9 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
-  readiness of the 49 promising: 0 mechanism-tested · 0 data-tested · 49 without magnitude evidence · 49 with axis unresolved · 0 with an entailed consequence
+  funnel:  377 candidates  →  59 promising  ·  305 inert  ·  12 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  readiness of the 59 promising: 0 mechanism-tested · 0 data-tested · 59 without magnitude evidence · 59 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   PROMISING (merges disconnected physics, unlocks quantities, stays consistent):
@@ -25,6 +25,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [to make it testable — premise: rest-energy and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: rest-energy, photon-energy · needs a stated force regime for: rest-energy, photon-energy · needs a consequence that re-derives a known law]
         [observation: measure rest-energy and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
         [adjudicated: entailed — Real physics, already entailed by the L-layer via CE-planck-einstein (E=hν) and CE-mass-energy (E=mc²); not a new link. Both Adam and Eve agree it is not a new discovery.]
+    hubble-distance ≟ compton-wavelength-full            [[length]]  score 6
+        unlocks: hubble-distance
+        [consequence: novel-consequence]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: hubble-distance and compton-wavelength-full are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, compton-wavelength-full · needs a stated force regime for: hubble-distance, compton-wavelength-full · needs a consequence that re-derives a known law]
+        [observation: measure hubble-distance and compton-wavelength-full in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     hubble-distance ≟ peak-wavelength                    [[length]]  score 6
         unlocks: hubble-distance
         [consequence: novel-consequence]
@@ -173,6 +180,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: compton-wavelength, hubble-distance · needs a stated force regime for: compton-wavelength, hubble-distance · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength ≟ scale-factor                    [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: compton-wavelength, scale-factor · needs a stated force regime for: compton-wavelength, scale-factor · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     compton-wavelength ≟ standard-deviation              [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -180,6 +194,20 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: compton-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: compton-wavelength, standard-deviation · needs a stated force regime for: compton-wavelength, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure compton-wavelength and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ deviation-from-mean        [[length]]  score 6
+        unlocks: deviation-from-mean
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: compton-wavelength-full, deviation-from-mean · needs a stated force regime for: compton-wavelength-full, deviation-from-mean · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    compton-wavelength-full ≟ standard-deviation         [[length]]  score 6
+        unlocks: standard-deviation
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: compton-wavelength-full and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: compton-wavelength-full, standard-deviation · needs a stated force regime for: compton-wavelength-full, standard-deviation · needs a consequence that re-derives a known law]
+        [observation: measure compton-wavelength-full and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     displacement ≟ classical-electron-radius             [[length]]  score 6
         unlocks: displacement
         [consequence: inconclusive]
@@ -194,6 +222,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: distance and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: distance · needs a stated scale regime for: distance, classical-electron-radius · needs a stated force regime for: distance, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure distance and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    droplet-radius ≟ compton-wavelength-full             [[length]]  score 6
+        unlocks: droplet-radius
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: droplet-radius and compton-wavelength-full are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: droplet-radius, compton-wavelength-full · needs a stated force regime for: droplet-radius, compton-wavelength-full · needs a consequence that re-derives a known law]
+        [observation: measure droplet-radius and compton-wavelength-full in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     droplet-radius ≟ peak-wavelength                     [[length]]  score 6
         unlocks: droplet-radius
         [consequence: inconclusive]
@@ -299,6 +334,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: radius and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: radius, hubble-distance · needs a stated force regime for: radius, hubble-distance · needs a consequence that re-derives a known law]
         [observation: measure radius and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    radius ≟ scale-factor                                [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: radius and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: radius, scale-factor · needs a stated force regime for: radius, scale-factor · needs a consequence that re-derives a known law]
+        [observation: measure radius and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     radius ≟ standard-deviation                          [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -320,6 +362,27 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: rest-energy and work-done-by-system are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-done-by-system · needs a stated scale regime for: rest-energy, work-done-by-system · needs a stated force regime for: rest-energy, work-done-by-system · needs a consequence that re-derives a known law]
         [observation: measure rest-energy and work-done-by-system in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    scale-factor ≟ classical-electron-radius             [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: scale-factor and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor, classical-electron-radius · needs a stated force regime for: scale-factor, classical-electron-radius · needs a consequence that re-derives a known law]
+        [observation: measure scale-factor and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    scale-factor ≟ compton-wavelength-full               [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: scale-factor and compton-wavelength-full are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor, compton-wavelength-full · needs a stated force regime for: scale-factor, compton-wavelength-full · needs a consequence that re-derives a known law]
+        [observation: measure scale-factor and compton-wavelength-full in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    scale-factor ≟ peak-wavelength                       [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: scale-factor and peak-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor, peak-wavelength · needs a stated scale regime for: scale-factor, peak-wavelength · needs a stated force regime for: scale-factor, peak-wavelength · needs a consequence that re-derives a known law]
+        [observation: measure scale-factor and peak-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ deviation-from-mean             [[length]]  score 6
         unlocks: deviation-from-mean
         [consequence: inconclusive]
@@ -341,6 +404,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    thermal-wavelength ≟ scale-factor                    [[length]]  score 6
+        unlocks: scale-factor
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: thermal-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: thermal-wavelength, scale-factor · needs a consequence that re-derives a known law]
+        [observation: measure thermal-wavelength and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ standard-deviation              [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
@@ -355,14 +425,17 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: wavelength and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: wavelength · needs a stated scale regime for: wavelength, classical-electron-radius · needs a stated force regime for: wavelength, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure wavelength and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-  adjudicated: 3 of the 49 promising carry recorded verdicts (2 decoy, 1 entailed) — folded; --show-adjudicated to list
+  adjudicated: 3 of the 59 promising carry recorded verdicts (2 decoy, 1 entailed) — folded; --show-adjudicated to list
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):
+    bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart  (anchor-derived)
     classical-electron-radius ≟ bohr-radius              ~3.2 orders apart  (anchor-derived)
+    classical-electron-radius ≟ compton-wavelength-full  ~58.5 orders apart  (anchor-derived)
     mass ≟ planck-mass                                   ~38.0 orders apart  (anchor-derived)
     planck-length ≟ bohr-radius                          ~24.5 orders apart
     planck-length ≟ classical-electron-radius            ~21.3 orders apart  (anchor-derived)
     planck-length ≟ compton-wavelength                   ~23.2 orders apart
+    planck-length ≟ compton-wavelength-full              ~37.2 orders apart  (anchor-derived)
     radius ≟ bohr-radius                                 ~13.4 orders apart  (anchor-derived)
     radius ≟ classical-electron-radius                   ~16.6 orders apart  (anchor-derived)
     radius ≟ planck-length                               ~38.0 orders apart  (anchor-derived)

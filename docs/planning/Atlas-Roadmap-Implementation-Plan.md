@@ -36,7 +36,7 @@ completion ledger. Do not "fix" them; the sprint's `ACTIVE.md` line is the audit
   64, 65). Of the ten S1.5 audit targets, BE-37 and BE-48 are catalog-status `speculative`;
   the other eight are `established`. BE-35 is **both** confronted (`stringent`) and in
   `REJECTED_BRIDGE_ADJUDICATIONS` (`not-a-bridge`).
-- 107 canonical entries; since Sprint 3 `tests/canonical/canonical-count-prose.test.ts` pins
+- 109 canonical entries; since Sprint 3 `tests/canonical/canonical-count-prose.test.ts` pins
   every prose statement of the number against `CANONICAL_EQUATIONS.length`.
 - The named dimension constants the oscillator entries use are **module-local** except
   `FREQUENCY` and `MASS` (`src/dimensional/types.ts`); `SPRING_CONSTANT`, `INDUCTANCE`,
@@ -777,7 +777,7 @@ Tasks:
    (`stringent`) and adjudicated `not-a-bridge`; the test title says this is by design (a
    relation can be quantitatively confirmed and still not be a regime-crossing bridge).
 2. `coverage.ts`: `overlayCoverage()` → `{ schema, audited, verified, notYetAudited }` over the
-   55 catalog rows + 107 canonical entries (**atlas families are not in the denominator**;
+   55 catalog rows + 109 canonical entries (**atlas families are not in the denominator**;
    they are reported separately as `atlas: { bridges, reviewed }`), where "audited" means a
    human set `relation` or `conventions` on the row, and "verified" means the derived tag set
    is non-empty. Test pins `schema = 158` and the initial `audited` (0 before S1.5; 10 after).
