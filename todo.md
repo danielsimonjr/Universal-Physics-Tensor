@@ -1,5 +1,12 @@
 # UPT TODO
 
+## CLI physicist dogfood (2026-09-29)
+
+- [x] MathTS function names used as quantities (`gamma`, `distance`, `zeta`) are dropped from free variables, so `upt map --equation` rejects the textbook formulas that use them.
+- [x] Gate-input fixture commits time out vitest's hook when commit.gpgsign is on.
+- [x] `.githooks/pre-push` is mode 100644, so git skips the gate and a push is not checked.
+- [x] A probe `--budget-ms` below one millisecond never stops: the clock is `Date.now()`, so a 1 ms pendulum search sometimes finishes as `exhausted-space` and `--replay` calls that reproduced.
+
 ## CLI applied-physics audit publication
 
 - [x] Archive the CLI-only applied-physicist persona audit, evidence, maps, and 20 improvement recommendations under `docs/audit/`.

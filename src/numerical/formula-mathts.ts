@@ -59,6 +59,27 @@ function createMathtsFormulaParser(
     return builtin;
   };
 
+  // A MathTS *function* (`gamma`, `distance`, `zeta`, `sin`, …) also resolves
+  // with an empty scope: it returns the function. That is not a value. A bare
+  // symbol with that name is a quantity (the adiabatic index, a length), and
+  // treating it as a built-in dropped it from the free-variable list, so
+  // `sqrt(gamma*pressure/density)` died as "undeclared symbol 'gamma'".
+  // Only a name that evaluates to a number is a constant (`pi`, `tau`, `e`).
+  // A call such as `gamma(5)` is still a callee, decided separately.
+  const valueConstantCache = new Map<string, boolean>();
+  const isValueConstant = (name: string): boolean => {
+    const cached = valueConstantCache.get(name);
+    if (cached !== undefined) return cached;
+    let constant = false;
+    try {
+      constant = typeof mod.parse(name).evaluate({}) === 'number';
+    } catch {
+      constant = false;
+    }
+    valueConstantCache.set(name, constant);
+    return constant;
+  };
+
   // Functions the built-in parser documents but MathTS does not define (`ln`),
   // supplied through the scope so a formula means the same under either
   // parser. Anything outside the documented list still fails.
@@ -79,8 +100,9 @@ function createMathtsFormulaParser(
         );
       }
 
-      // Free variables = symbol names − function callees − built-in
-      // constants/functions (MathTS's own namespace decides "built-in").
+      // Free variables = symbol names − function callees − numeric constants.
+      // A function name is excluded only where it is called (`gamma(5)`), not
+      // where it is a quantity (`gamma` the adiabatic index).
       const callees = new Set(
         node
           .filter((n) => n.isFunctionNode === true)
@@ -96,7 +118,7 @@ function createMathtsFormulaParser(
             .filter((n) => n.isSymbolNode === true)
             .map((n) => n.name)
             .filter((n): n is string => typeof n === 'string')
-            .filter((n) => !callees.has(n) && !isBuiltin(n)),
+            .filter((n) => !callees.has(n) && !isValueConstant(n)),
         ),
       ].sort();
 
@@ -114,9 +136,9 @@ function createMathtsFormulaParser(
             );
           }
           if (typeof result !== 'number' || !Number.isFinite(result)) {
-            throw new FormulaError(
-              `formula did not evaluate to a finite number (got ${typeof result})`,
-            );
+            // typeof Infinity and NaN is "number", which reads as a type error.
+            const shown = typeof result === 'number' ? String(result) : typeof result;
+            throw new FormulaError(`formula did not evaluate to a finite number (got ${shown})`);
           }
           return result;
         },

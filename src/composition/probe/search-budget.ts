@@ -22,7 +22,11 @@ export interface BudgetState {
 export function openBudget(budget: SearchBudget = DEFAULT_SEARCH_BUDGET): BudgetState {
   return {
     budget,
-    startedAtMs: Date.now(),
+    // performance.now() moves inside a millisecond. Date.now() does not, so a
+    // budget under 1 ms — and a 1 ms budget on a search that finishes in the
+    // same tick — never returned time-limit, and a replay of that search could
+    // disagree with the recording while still being called reproduced.
+    startedAtMs: performance.now(),
     candidates: 0,
     evaluations: 0,
   };
@@ -36,7 +40,7 @@ export function budgetStopReason(state: BudgetState): SearchStopReason | undefin
   const { budget } = state;
   if (state.candidates >= budget.maxCandidates) return 'candidate-limit';
   if (state.evaluations >= budget.maxEvaluations) return 'evaluation-limit';
-  if (Date.now() - state.startedAtMs >= budget.maxWallClockMs) return 'time-limit';
+  if (performance.now() - state.startedAtMs >= budget.maxWallClockMs) return 'time-limit';
   return undefined;
 }
 

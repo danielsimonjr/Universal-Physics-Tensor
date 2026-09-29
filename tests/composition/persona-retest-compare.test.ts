@@ -180,7 +180,26 @@ describe('L5 / persona I7: an unknown name whose inferred dimension a registered
   it('control: an unknown name whose dimension no constant carries suggests no constant', async () => {
     const dims = new Map<string, Dimension>([['pressure', PRESSURE], ['temperature', TEMPERATURE]]);
     const a = await analyzeUserEquation('pressure = zeta*temperature', dims);
+    // zeta is also the name of a MathTS function. The old assertion
+    // `hints[0]?.constants ?? []` was [] either way, including when zeta was
+    // swallowed and the equation never parsed. Require the symbol to survive.
+    expect(a.parseError).toBeNull();
+    expect(a.junction.sources).toContain('zeta');
     expect(a.hints[0]?.constants ?? []).toEqual([]);
+  });
+
+  it('sound speed with the adiabatic index gamma is dimensionally a velocity, not an undeclared symbol', async () => {
+    const VELOCITY: Dimension = { L: 1, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
+    const DENSITY: Dimension = { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+    const dims = new Map<string, Dimension>([
+      ['speed', VELOCITY],
+      ['pressure', PRESSURE],
+      ['density', DENSITY],
+    ]);
+    const a = await analyzeUserEquation('speed = sqrt(gamma*pressure/density)', dims);
+    expect(a.parseError).toBeNull();
+    expect(a.junction.sources).toContain('gamma');
+    expect(a.consistent).toBe(true);
   });
 });
 
