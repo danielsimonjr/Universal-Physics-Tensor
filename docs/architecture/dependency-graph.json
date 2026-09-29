@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 383,
     "totalModules": 12,
-    "totalExports": 2777
+    "totalExports": 2780
   },
   "entryPoints": [
     {
@@ -9819,7 +9819,8 @@
           {
             "file": "../composition/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "piMultipleValue"
             ]
           }
         ],
@@ -11078,6 +11079,12 @@
             ]
           },
           {
+            "file": "../../numerical/formula.js",
+            "imports": [
+              "eulerConstantNote"
+            ]
+          },
+          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -11200,6 +11207,12 @@
             "imports": [
               "formulaParserLabel"
             ]
+          },
+          {
+            "file": "../../numerical/formula.js",
+            "imports": [
+              "eulerConstantNote"
+            ]
           }
         ],
         "exports": [
@@ -11255,13 +11268,22 @@
               "EvaluatorParameter"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../core/constants.js",
+            "imports": [
+              "C_SI",
+              "G_SI"
+            ]
           }
         ],
         "exports": [
           "command",
+          "weakFieldDomainNote",
           "propagateUncertainty"
         ],
         "functions": [
+          "weakFieldDomainNote",
           "propagateUncertainty"
         ],
         "constants": [
@@ -11631,6 +11653,12 @@
               "CanonicalComparison"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../numerical/formula.js",
+            "imports": [
+              "eulerConstantNote"
+            ]
           }
         ],
         "exports": [
@@ -13779,7 +13807,8 @@
           {
             "file": "./symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "piMultipleValue"
             ]
           },
           {
@@ -15572,7 +15601,8 @@
           {
             "file": "./symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "piMultipleValue"
             ]
           }
         ],
@@ -19309,10 +19339,14 @@
         ],
         "exports": [
           "CONSTANTS",
-          "CONSTANT_PROVENANCE"
+          "CONSTANT_PROVENANCE",
+          "piMultipleValue"
         ],
         "interfaces": [
           "ConstantProvenance"
+        ],
+        "functions": [
+          "piMultipleValue"
         ],
         "constants": [
           "CONSTANTS",
@@ -25024,6 +25058,7 @@
           "parseFormulaToAst",
           "unknownFunctionMessage",
           "callBuiltinFunction",
+          "eulerConstantNote",
           "parseFormula",
           "FormulaError"
         ],
@@ -25037,6 +25072,7 @@
         "functions": [
           "unknownFunctionMessage",
           "callBuiltinFunction",
+          "eulerConstantNote",
           "parseFormula"
         ],
         "constants": [
@@ -26627,11 +26663,11 @@
   "statistics": {
     "totalTypeScriptFiles": 383,
     "totalModules": 12,
-    "totalLinesOfCode": 83252,
-    "totalExports": 2777,
+    "totalLinesOfCode": 83474,
+    "totalExports": 2780,
     "totalClasses": 60,
     "totalInterfaces": 436,
-    "totalFunctions": 690,
+    "totalFunctions": 693,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 691,

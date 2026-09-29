@@ -1,5 +1,9 @@
 # UPT TODO
 
+## CLI GR/QFT dogfood (2026-09-29)
+
+- [x] Textbook GR checks report not-compared for perihelion (`6pi`), Newton (`m_1`, `m_2`), and `schwarzschild-radius`, and a complex square root says `got object`.
+
 ## CLI physicist dogfood (2026-09-29)
 
 - [x] MathTS function names used as quantities (`gamma`, `distance`, `zeta`) are dropped from free variables, so `upt map --equation` rejects the textbook formulas that use them.

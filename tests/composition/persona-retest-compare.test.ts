@@ -157,7 +157,10 @@ describe('L6: a dimensionless count the entry holds only in its AST is a compari
 
   it('without N the result is what it was before: CE-ideal-gas is listed as not compared', async () => {
     const r = find(await compareUserEquation('pressure = k_B*temperature/V', dims), 'CE-ideal-gas');
-    expect(r).toMatchObject({ kind: 'not-compared', detail: 'its variables could not be aligned by name or by a unique dimension' });
+    expect(r).toMatchObject({
+      kind: 'not-compared',
+      detail: 'its formula depends on N, which your formula does not name',
+    });
   });
 
   it('a count is joined by name only: a dimensionless catalog quantity under another name does not pair with N', async () => {

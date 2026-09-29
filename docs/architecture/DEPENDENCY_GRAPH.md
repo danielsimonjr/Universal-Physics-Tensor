@@ -2957,7 +2957,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../composition/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
 - Functions: `normalForm`, `structurallyEqual`
@@ -3383,6 +3383,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, EXIT_CHECK_FAILED` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
+| `../../numerical/formula.js` | `eulerConstantNote` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -3419,6 +3420,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
+| `../../numerical/formula.js` | `eulerConstantNote` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3436,9 +3438,10 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
+| `../../core/constants.js` | `C_SI, G_SI` | Import |
 
 **Exports:**
-- Functions: `propagateUncertainty`
+- Functions: `weakFieldDomainNote`, `propagateUncertainty`
 - Constants: `command`
 
 ---
@@ -3531,6 +3534,7 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `SourceName` | Import (type-only) |
 | `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
+| `../../numerical/formula.js` | `eulerConstantNote` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -4056,7 +4060,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./canonical-prefactors.js` | `canonicalPrefactor` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
@@ -4487,7 +4491,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
 - Classes: `SymbolicEvalError`
@@ -5411,6 +5415,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ConstantProvenance`
+- Functions: `piMultipleValue`
 - Constants: `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
@@ -6691,7 +6696,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `FormulaError`
 - Interfaces: `CompiledFormula`, `FormulaParser`
-- Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `parseFormula`
+- Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `eulerConstantNote`, `parseFormula`
 - Constants: `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
 
 ---
@@ -7255,12 +7260,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 83252 |
-| Total Exports | 2777 |
+| Total Lines of Code | 83474 |
+| Total Exports | 2780 |
 | Total Re-exports | 1335 |
 | Total Classes | 60 |
 | Total Interfaces | 436 |
-| Total Functions | 690 |
+| Total Functions | 693 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 523 |

@@ -9,6 +9,17 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-09-29
+
+- **CLI GR/QFT dogfood** (model persona, not a human reviewer): the findings report is the PR
+  description for `cursor/gr-cli-dogfood-91ec`.
+  Fixed in that branch: perihelion `6pi` now compares; Newton's `m_1 m_2` compares when every
+  same-dimension assignment agrees; `schwarzschild-radius` reaches the frozen target `radius`;
+  `sqrt(-1)` says complex; a bare `e` is warned as Euler's number; be-51/be-52 warn inside 10 r_s.
+  Left as they are, with the reason in that report: no curvature command on the CLI, no ħ=c=1 mode,
+  EFE and Compton prefactors unchecked, Friedmann is the flat dust form only, potential sign
+  unchecked, `Msun` is 1.989e30 kg rather than GM☉/G.
+
 ## As of 2026-09-27
 
 - **CLI applied-physics audit** (`docs/audit/Universal_Physics_Tensor_CLI_Audit.md`): all 14 §11

@@ -19,7 +19,7 @@
  */
 
 import type { ExprNode } from '../dimensional/validator.js';
-import { CONSTANTS } from './symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from './symbolic-constants.js';
 
 /** A scalar `ExprNode` could not be evaluated (unsupported arm / unresolved
  *  leaf / non-finite result). @public */
@@ -35,6 +35,8 @@ function resolveLeaf(name: string, values: Readonly<Record<string, number>>): nu
   if (Object.prototype.hasOwnProperty.call(values, name)) return values[name];
   const constant = CONSTANTS[name];
   if (constant !== undefined) return constant.value;
+  const pi = piMultipleValue(name);
+  if (pi !== undefined) return pi;
   const literal = Number(name);
   if (Number.isFinite(literal)) return literal;
   throw new SymbolicEvalError(

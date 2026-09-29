@@ -86,6 +86,23 @@ export interface ConstantProvenance {
   readonly source: string;
 }
 
+/**
+ * A spelled-out multiple of π written as one symbol (`pi`, `6pi`). `2pi`,
+ * `4pi` and `8pi` are also registered in {@link CONSTANTS}; this covers the
+ * multiples an encoder spelled out and did not register (`6pi` in
+ * CE-perihelion-precession). The structural normal form already drops these.
+ * The numeric evaluator has to resolve them too, or a comparison treats `6pi`
+ * as a free symbol and never aligns the formula.
+ * @internal
+ */
+export function piMultipleValue(name: string): number | undefined {
+  const m = /^(\d*)pi$/.exec(name);
+  if (m === null) return undefined;
+  const n = m[1] === '' ? 1 : Number(m[1]);
+  if (!Number.isInteger(n) || n < 0) return undefined;
+  return n * Math.PI;
+}
+
 /** One row per {@link CONSTANTS} key; a test holds the two key sets equal. @internal */
 export const CONSTANT_PROVENANCE: Readonly<Record<string, ConstantProvenance>> = {
   hbar: { meaning: 'reduced Planck constant h/(2π)', unit: 'J*s', source: 'CODATA 2018 (core/constants.ts HBAR_SI)' },
