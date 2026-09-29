@@ -207,3 +207,71 @@ describe('upt confront be-51 shows the measurement, and labels the deflection as
     expect(s).toContain('"measured":{"quantity":"PPN γ","value":0.99992,"sigma":0.00012,"source":"VLBI","derivation":"(1+γ)/2 × predicted"}');
   });
 });
+
+// `upt explain be-58` prints `upt confront be-58`. That positional was ignored:
+// the command exited 0 and printed every confrontation. These tests fail while
+// a bare `be-58` still selects the full list.
+describe('upt confront <be-NN> — the id explain prints', () => {
+  it('a positional be-58 prints that confrontation and not the rest of the catalog', async () => {
+    const cap = capture();
+    const code = await runCli(['confront', 'be-58'], cap.io);
+    expect(code).toBe(0);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/be-58/);
+    expect(text).toMatch(/Johnson-Nyquist/);
+    expect(text).not.toMatch(/be-11/);
+    expect(text).not.toMatch(/NOT 19 equal confirmations/);
+  });
+
+  it('positional be-58 --json is a one-element result', async () => {
+    const cap = capture();
+    const code = await runCli(['confront', 'be-58', '--json'], cap.io);
+    expect(code).toBe(0);
+    const parsed = JSON.parse(cap.lines.join(''));
+    expect(parsed.result.map((r: { bridgeId: number }) => r.bridgeId)).toEqual([58]);
+  });
+
+  it('positional be-58 prints the same record as --bridge=be-58', async () => {
+    const positional = capture();
+    const flagged = capture();
+    expect(await runCli(['confront', 'be-58'], positional.io)).toBe(0);
+    expect(await runCli(['confront', '--bridge=be-58'], flagged.io)).toBe(0);
+    expect(positional.lines.join('')).toBe(flagged.lines.join(''));
+  });
+
+  // Agreeing spellings. Before the fix this already exited 0: the positional was
+  // ignored and --bridge was obeyed. It guards a fix that rejects every pair.
+  it('be-58 together with --bridge=58 is that one record, not an error', async () => {
+    const both = capture();
+    const flagged = capture();
+    expect(await runCli(['confront', 'be-58', '--bridge=58'], both.io)).toBe(0);
+    expect(await runCli(['confront', '--bridge=be-58'], flagged.io)).toBe(0);
+    expect(both.lines.join('')).toBe(flagged.lines.join(''));
+  });
+
+  it('a positional and --bridge that name different bridges is an error, not both records', async () => {
+    const cap = capture();
+    const code = await runCli(['confront', 'be-58', '--bridge=be-56'], cap.io);
+    expect(code).toBe(2);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/different bridges/);
+    expect(text).not.toMatch(/Johnson-Nyquist/);
+    expect(text).not.toMatch(/Casimir/);
+  });
+
+  it('a positional that is not a bridge id is an error, not the full list', async () => {
+    const cap = capture();
+    const code = await runCli(['confront', 'nope'], cap.io);
+    expect(code).toBe(1);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/not a bridge id/);
+    expect(text).not.toMatch(/NOT 19 equal confirmations/);
+  });
+
+  it('two positionals are a usage error', async () => {
+    const cap = capture();
+    const code = await runCli(['confront', 'be-58', 'be-56'], cap.io);
+    expect(code).toBe(2);
+    expect(cap.lines.join('')).toMatch(/unexpected/);
+  });
+});

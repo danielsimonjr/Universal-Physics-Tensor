@@ -186,10 +186,12 @@ Usage:
         e.g.  upt derive period:time length:length gravity:acceleration \\
                        --formula "2*pi*sqrt(length/gravity)"
 
-  upt confront [--bridge=be-XX] [--rigor=stringent|moderate|loose] [--frontier]
-               [--sensitivity]
+  upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|loose]
+               [--frontier] [--sensitivity]
         Run the catalog's committed real-data confrontations (predicted vs
-        observed), each tagged with its RIGOR tier. --rigor filters to one tier
+        observed), each tagged with its RIGOR tier. A positional be-XX selects
+        that bridge, the same as --bridge (this is the command \`upt explain be-XX\`
+        prints). A positional that is not a bridge id is an error. --rigor filters to one tier
         (the precision core, or the loose tail that needs better data); --frontier
         ranks the σ-tests by margin to the 1σ acceptance threshold (a software
         criterion, not a scientific exclusion level; tightest = most at-risk under

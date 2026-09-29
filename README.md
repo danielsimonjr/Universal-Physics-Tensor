@@ -57,7 +57,10 @@ of it:
 git clone https://github.com/danielsimonjr/universal-physics-tensor.git
 cd universal-physics-tensor
 
-# Install dependencies (Bun is the local/CI package manager; Node ≥ 18 is the runtime)
+# Install dependencies (Bun is the local/CI package manager; Node ≥ 18 is the runtime).
+# Bun is not installed by Node. `corepack prepare bun@1.4.2 --activate` fails
+# ("Unsupported package manager specification"). Install the pinned Bun from
+# https://bun.sh/install (this repo pins bun@1.4.2), then:
 bun install
 
 # Build the project
@@ -97,7 +100,15 @@ bun run upt -- help
 `eval`/`derive --formula` use the MathTS expression engine
 (`@danielsimonjr/mathts-functions`) when the optional peers are installed,
 and a built-in, dependency-free parser otherwise — transparently, via a
-`FormulaParser` registry (add `--debug` to see which is active). UPT keeps
+`FormulaParser` registry (`upt eval --debug` prints which is active; `upt version`
+stays a bare semver line). A clone's `bun install` or `npm install` installs
+the MathTS packages as devDependencies, so that path uses MathTS. A published
+`npm install universal-physics-tensor` does not install the optional peers and
+uses the builtin parser. The two are not the same language: MathTS accepts
+`factorial`, `erf`, `gamma()`, juxtaposition such as `2pi`, and treats a bare
+`e` as Euler's number; the builtin parser does not. On a machine that has Node
+and not Bun, the clone path is `npm install`, `npm run build`, then
+`node bin/upt.mjs <command>`. UPT keeps
 **zero hard dependencies**; the MathTS packages and `@viz-js/viz` are optional peers, which a
 default install does not pull in. Add the ones you want, for example
 `npm install @danielsimonjr/mathts-functions` for the MathTS parser, or `npm install @viz-js/viz`

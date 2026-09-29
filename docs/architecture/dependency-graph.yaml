@@ -7372,6 +7372,7 @@ modules:
         - file: ../errors.js
           imports:
             - CliError
+            - UsageError
         - file: ../output.js
           imports:
             - emitJson
@@ -18678,7 +18679,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 83474
+  totalLinesOfCode: 83503
   totalExports: 2780
   totalClasses: 60
   totalInterfaces: 436
