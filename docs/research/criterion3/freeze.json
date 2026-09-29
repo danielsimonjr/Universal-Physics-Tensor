@@ -1,7 +1,7 @@
 {
-  "pinnedCommit": "bf6df35a6130ec4454f53e19a0fca049fd09283d",
+  "pinnedCommit": "7100b237a3743894f4d6e4f0bcef7eba832d227a",
   "inputTrees": {
-    "src/canonical": "c817e2e03e51dfb7e96e33fb71835e12bf4f3518",
+    "src/canonical": "178511d2cf4a09757474b3c492e49c737fc7519e",
     "tests/fixtures/atlas/benchmark/public/items.json": "3c938aa3ac9cbd7a6573735324335c99e3774071"
   },
   "files": {
