@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 392,
+    "totalFiles": 393,
     "totalModules": 12,
-    "totalExports": 2826
+    "totalExports": 2829
   },
   "entryPoints": [
     {
@@ -24931,6 +24931,88 @@
           "evaluateBE37CovariantEikonalNumerical"
         ]
       },
+      "src/numerical/binding-value.ts": {
+        "description": "A binding value: a bare number, a number with a unit, or an expression of",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "M_SUN_SI"
+            ]
+          },
+          {
+            "file": "../composition/formula-names.js",
+            "imports": [
+              "FORMULA_NAMED"
+            ]
+          },
+          {
+            "file": "../composition/natural-units.js",
+            "imports": [
+              "naturalConstantOverrides",
+              "UnitMode"
+            ]
+          },
+          {
+            "file": "../composition/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "divide",
+              "equals",
+              "format",
+              "multiply",
+              "power"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "MASS",
+              "Dimension"
+            ]
+          },
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "convertValue",
+              "parseUnit",
+              "unitConventionNotes",
+              "UnitError",
+              "TemperatureReading"
+            ]
+          },
+          {
+            "file": "./formula.js",
+            "imports": [
+              "callBuiltinFunction",
+              "FormulaError",
+              "parseFormulaToAst",
+              "FormulaAstNode"
+            ]
+          }
+        ],
+        "exports": [
+          "readBinding",
+          "bindingInUnit",
+          "readParameter"
+        ],
+        "interfaces": [
+          "BindingValue"
+        ],
+        "functions": [
+          "readBinding",
+          "bindingInUnit",
+          "readParameter"
+        ]
+      },
       "src/numerical/christoffel-flat.ts": {
         "description": "Flat-array Christoffel evaluator (v0.6.0 Phase 2, Task 2.8 — BR-2 BREAKING).",
         "externalDependencies": [],
@@ -27224,6 +27306,7 @@
         "name": "Numerical",
         "files": [
           "src/numerical/be37-covariant-eikonal.ts",
+          "src/numerical/binding-value.ts",
           "src/numerical/christoffel-flat.ts",
           "src/numerical/connection-lowering-helpers.ts",
           "src/numerical/curvature-lowering-helpers.ts",
@@ -27268,13 +27351,13 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 392,
+    "totalTypeScriptFiles": 393,
     "totalModules": 12,
-    "totalLinesOfCode": 86490,
-    "totalExports": 2826,
+    "totalLinesOfCode": 86836,
+    "totalExports": 2829,
     "totalClasses": 59,
-    "totalInterfaces": 443,
-    "totalFunctions": 724,
+    "totalInterfaces": 444,
+    "totalFunctions": 727,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 701,
@@ -27283,6 +27366,6 @@
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 69
+    "unusedExportsCount": 68
   }
 }

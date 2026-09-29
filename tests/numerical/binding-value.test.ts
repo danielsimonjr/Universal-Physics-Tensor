@@ -53,14 +53,15 @@ describe('readBinding', () => {
     expect(v.value).toBeCloseTo(0.6, 12);
     expect(v.dimensioned).toBe(false);
     expect(() => readBinding('e')).toThrow(/e_charge/);
-    expect(() => readBinding('sigma')).toThrow(/unknown name 'sigma'/);
+    expect(() => readBinding('sigma')).toThrow(/is not a number with an optional unit/);
     expect(readBinding('sigma_sb').value).toBeGreaterThan(5e-8);
     expect(readBinding('sigma_sb').value).toBeLessThan(6e-8);
   });
 
   it('refuses a non-finite literal and a dimension that does not match the parameter', () => {
     expect(() => readBinding('1e500')).toThrow(/not a finite number/);
-    expect(() => readBinding('abc')).toThrow();
+    expect(() => readBinding('abc')).toThrow(/is not a number with an optional unit/);
+    expect(() => readBinding('80degF')).toThrow(/Fahrenheit is not accepted/);
     expect(() => readParameter('1s', MASS)).toThrow(/time/);
     expect(readParameter('1s', TIME).value).toBe(1);
     expect(readParameter('pi/2', TIME).value).toBeCloseTo(Math.PI / 2, 12);

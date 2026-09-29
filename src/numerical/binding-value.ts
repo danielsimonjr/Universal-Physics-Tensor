@@ -82,6 +82,12 @@ function scopeFor(mode: UnitMode): Map<string, Qty> {
   return m;
 }
 
+/** A unit the parser recognized and refused, rather than a prefix that is not a unit. */
+function unitRefusal(e: unknown): UnitError | null {
+  if (!(e instanceof UnitError)) return null;
+  return /Fahrenheit|affine|more than one/.test(e.message) ? e : null;
+}
+
 /** The longest unit expression at the start of `rest`, or null. */
 function longestUnit(rest: string): string | null {
   if (rest.length === 0 || !/[A-Za-zµμ°ÅΩ]/.test(rest[0]!)) return null;
@@ -92,8 +98,14 @@ function longestUnit(rest: string): string | null {
     if (/[/*^·+\-(\s]$/.test(prefix)) continue;
     try {
       parseUnit(prefix);
+      // `deg` is a unit, but `degF` is Fahrenheit. Do not keep a prefix whose
+      // next character continues the same token.
+      const next = rest[n];
+      if (next !== undefined && /[A-Za-z0-9µμ°ÅΩ]/.test(next)) continue;
       best = prefix;
-    } catch {
+    } catch (e) {
+      const refused = unitRefusal(e);
+      if (refused !== null) throw refused;
       // A longer prefix may still be a unit (`m` then `m/s`, `M` then `Msun`).
     }
   }
@@ -225,7 +237,9 @@ function plainUnit(raw: string, reading: TemperatureReading): BindingValue | nul
   let unit;
   try {
     unit = parseUnit(m[2]);
-  } catch {
+  } catch (e) {
+    const refused = unitRefusal(e);
+    if (refused !== null) throw refused;
     return null;
   }
   const v = finite(raw, Number(m[1]));
@@ -262,10 +276,27 @@ export function readBinding(
   try {
     ast = parseFormulaToAst(spliced.expr);
   } catch (e) {
-    if (e instanceof FormulaError) throw new UnitError(e.message);
+    if (e instanceof FormulaError) {
+      // `abc` is not an expression. A token with an operator (`2*`) is.
+      if (!/[+\-*/^()]/.test(trimmed)) throw new UnitError(`'${trimmed}' is not a number with an optional unit`);
+      throw new UnitError(e.message);
+    }
     throw e;
   }
-  const qty = evalAst(ast, scopeFor(mode), spliced.slots);
+  let qty: Qty;
+  try {
+    qty = evalAst(ast, scopeFor(mode), spliced.slots);
+  } catch (e) {
+    if (
+      e instanceof UnitError &&
+      /unknown name '(?!e')/.test(e.message) &&
+      spliced.slots.size === 0 &&
+      !/[+\-*/^()]/.test(trimmed)
+    ) {
+      throw new UnitError(`'${trimmed}' is not a number with an optional unit`);
+    }
+    throw e;
+  }
   return {
     value: finite(trimmed, qty.value),
     dimensioned: spliced.slots.size > 0 || !equals(qty.dim, DIMENSIONLESS),

@@ -48,7 +48,7 @@ The codebase is organized into the following modules:
 - **diff**: 3 files
 - **dimensional**: 32 files
 - **entry**: 1 file
-- **numerical**: 40 files
+- **numerical**: 41 files
 
 ---
 
@@ -6636,6 +6636,26 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/numerical/binding-value.ts` - A binding value: a bare number, a number with a unit, or an expression of
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `M_SUN_SI` | Import |
+| `../composition/formula-names.js` | `FORMULA_NAMED` | Import |
+| `../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
+| `../dimensional/units.js` | `convertValue, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
+| `./formula.js` | `callBuiltinFunction, FormulaError, parseFormulaToAst, FormulaAstNode` | Import |
+
+**Exports:**
+- Interfaces: `BindingValue`
+- Functions: `readBinding`, `bindingInUnit`, `readParameter`
+
+---
+
 ### `src/numerical/christoffel-flat.ts` - Flat-array Christoffel evaluator (v0.6.0 Phase 2, Task 2.8 — BR-2 BREAKING).
 
 **Internal Dependencies:**
@@ -7383,11 +7403,11 @@ graph TD
 
     subgraph Numerical
         N53[be37-covariant-eikonal]
-        N54[christoffel-flat]
-        N55[connection-lowering-helpers]
-        N56[curvature-lowering-helpers]
-        N57[derivative-lowering]
-        N58[...35 more]
+        N54[binding-value]
+        N55[christoffel-flat]
+        N56[connection-lowering-helpers]
+        N57[curvature-lowering-helpers]
+        N58[...36 more]
     end
 
     N0 --> N48
@@ -7428,14 +7448,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 392 |
+| Total TypeScript Files | 393 |
 | Total Modules | 12 |
-| Total Lines of Code | 86490 |
-| Total Exports | 2826 |
+| Total Lines of Code | 86836 |
+| Total Exports | 2829 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
-| Total Interfaces | 443 |
-| Total Functions | 724 |
+| Total Interfaces | 444 |
+| Total Functions | 727 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |
