@@ -30,23 +30,31 @@ Two lists stay separate.
   isolated-bridge connectors, and empty regime pairs. Every wrapper has
   `searchable: false`. `problemFromResidualGap` refuses `relation-link`
   and `regime-transition`. The text points at `upt discover`.
-- **Expression gaps.** One prediction-residual gap per applied case.
-  The id is `fg-expr-` plus the case id. `searchable` is true. The list
-  is concatenated after the wrappers, so the wrapper list's own length
-  does not change when a case is added.
+- **Expression search templates.** One template per applied case. The id is
+  `fg-expr-` plus the case id, but a template is not a detected residual: it
+  has no observations or baseline predictor and therefore is not a
+  `prediction-residual` gap and is not searchable. The template list is
+  concatenated after the wrappers, so the wrapper list's own length does not
+  change when a case is added. A future `prediction-residual` entry is
+  searchable only when its problem file supplies the named baseline and
+  dataset required by the scanner contract.
 
-`upt probe scan` defaults to the searchable list. `--all` prints both.
+`upt probe scan` defaults to the searchable list. `--all` prints wrappers and
+templates. A template is an index entry for authoring a problem file; it is
+not evidence that a residual has been observed and cannot be passed to
+`upt probe run`.
 `--searchable-only` is the default and is rejected together with `--all`.
 A scan that has gaps and none of them searchable prints the warning that
 names the zero, points at `upt discover`, and points at
 `upt probe run --problem=FILE`. That warning is the wording for a scan
-that really has no searchable gap. It is not the wording for the live
-catalog scan once expression gaps exist.
+that really has no searchable gap, including the current catalog scan whose
+case entries are only templates.
 
-`upt probe show <id>` reads the combined list, so an expression-gap id
-and a wrapper id both resolve. A wrapper still says it is not searchable.
+`upt probe show <id>` reads the combined list, so an expression-template id
+and a wrapper id both resolve. A template and a wrapper both say they are not
+searchable.
 
-`upt probe run` still requires a problem file. An expression gap is a
+`upt probe run` still requires a problem file. An expression template is a
 typed handle and a summary. It does not carry a dataset, a target
 dimension, or a governing set. Listing it does not start a search and
 does not fit a formula. The user writes the problem file, as the help
@@ -54,15 +62,16 @@ already says.
 
 JSON for a scan reports `total`, `searchable`, and whether the result is
 the searchable list or the combined list. Text for the default scan names
-how many Product A wrappers were hidden.
+how many non-searchable wrappers and templates were hidden.
 
 ## 3. What stays refused
 
-- A relation-link gap, a connector, or a regime-transition gap does not
-  become searchable under this note. Making one searchable is a different
-  design: it would turn a Product A review into an expression search.
-- The expression-gap id is not a problem file. The command does not
-  invent observations for a case.
+- A relation-link gap, a connector, a regime-transition gap, or an
+  expression search template does not become searchable under this note.
+  Making one searchable is a different design: it would turn a review or an
+  index entry into an expression search.
+- The expression-template id is not a problem file. The command does not
+  invent observations or a baseline predictor for a case.
 - No new search grammar, no new operator, and no change to the
   composition table.
 - The release tag, the version bump, and publication stay with
@@ -73,18 +82,23 @@ how many Product A wrappers were hidden.
 A drift guard on the catalog graph:
 
 - every wrapper has `searchable: false`;
-- every expression gap is `prediction-residual`, `searchable`, and
+- every expression template is non-searchable and is marked as a
+  `search-template` entry, not a `prediction-residual` gap, and is
   `fg-expr-<case id>` for a registered applied case;
-- the combined list is the wrappers plus those gaps, with no other
-  searchable kind;
-- the default command output contains an expression-gap id and does not
-  contain the zero-searchable warning;
+- the exact, duplicate-free set of template ids equals
+  `{fg-expr-${id} | id ∈ APPLIED_CASES}`;
+- the combined list is the wrappers plus exactly those templates, with no
+  other searchable kind; a `prediction-residual` is searchable only when its
+  authored problem file has a baseline and dataset;
+- the default command output contains the zero-searchable warning until a
+  backed prediction-residual is registered;
 - `--all` contains a relation-link id and says it is not searchable;
 - the zero-searchable warning is tested by calling it directly, so the
   wording remains covered after the live scan is no longer empty.
 
-A new applied case adds one expression gap and nothing else. A change
-that marks a wrapper searchable fails the guard.
+A new applied case adds exactly one expression template and nothing else. A
+change that omits a case, duplicates a template id, or marks a wrapper or
+template searchable fails the guard.
 
 ## 5. Approval
 
