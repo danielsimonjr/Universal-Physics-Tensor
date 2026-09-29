@@ -225,7 +225,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
         op('*', [
           sym('8pi', DIMENSIONLESS),
           sym('G', GRAV),
-          sym('M', MASS),
+          sym('mass', MASS),
           sym('k_B', ENTROPY),
         ]),
       ]),
@@ -252,7 +252,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
       formula_latex: '\\alpha = 4 G M/(c^2 b)',
       epistemicStatus: 'fully-quantitative',
       scalarAst: op('/', [
-        op('*', [sym('4', DIMENSIONLESS), sym('G', GRAV), sym('M', MASS)]),
+        op('*', [sym('4', DIMENSIONLESS), sym('G', GRAV), sym('mass', MASS)]),
         op('*', [pow(sym('c', VELOCITY), '2'), sym('impact_parameter', LENGTH)]),
       ]),
       regime: { force: 'gravitational' },
@@ -277,7 +277,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
       formula_latex: '\\Delta\\phi = 6\\pi G M/(c^2 a (1-e^2))',
       epistemicStatus: 'fully-quantitative',
       scalarAst: op('/', [
-        op('*', [sym('6pi', DIMENSIONLESS), sym('G', GRAV), sym('M', MASS)]),
+        op('*', [sym('6pi', DIMENSIONLESS), sym('G', GRAV), sym('mass', MASS)]),
         op('*', [
           pow(sym('c', VELOCITY), '2'),
           sym('a', LENGTH),
@@ -338,7 +338,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
       formula_latex: 'F = G m_1 m_2/r^2',
       epistemicStatus: 'fully-quantitative',
       scalarAst: op('/', [
-        op('*', [sym('G', GRAV), sym('m_1', MASS), sym('m_2', MASS)]),
+        op('*', [sym('G', GRAV), sym('mass', MASS), sym('secondary-mass', MASS)]),
         pow(sym('r', LENGTH), '2'),
       ]),
       regime: { scale: 'classical', force: 'gravitational' },

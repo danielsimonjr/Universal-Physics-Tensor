@@ -9,7 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import { normalForm, structurallyEqual } from '../../src/canonical/normal-form.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
-import { ENTROPY, TEMPERATURE, DIMENSIONLESS, VELOCITY, LENGTH } from '../../src/dimensional/types.js';
+import { ENTROPY, TEMPERATURE, DIMENSIONLESS, VELOCITY, LENGTH, MASS, TIME } from '../../src/dimensional/types.js';
 
 const sym = (name: string, dim = DIMENSIONLESS): ExprNode => ({ kind: 'symbol', name, dim });
 const op = (o: '*' | '/' | '^' | '+', args: ExprNode[]): ExprNode => ({ kind: 'op', op: o, args });
@@ -51,6 +51,15 @@ describe('normalForm — structural hash up to dimensionless factors', () => {
       op('*', [sym('T', TEMPERATURE), sym('k_B', ENTROPY)]),
     ]);
     expect(structurallyEqual(jarzynski, jarzynski2)).toBe(true);
+  });
+
+  it('treats the historical short spellings as the governing names', () => {
+    expect(normalForm(sym('T', TEMPERATURE))).toBe(normalForm(sym('temperature', TEMPERATURE)));
+    expect(normalForm(sym('M', MASS))).toBe(normalForm(sym('mass', MASS)));
+    expect(normalForm(sym('m_1', MASS))).toBe(normalForm(sym('mass', MASS)));
+    expect(normalForm(sym('m_2', MASS))).toBe(normalForm(sym('secondary-mass', MASS)));
+    // A time coordinate named T is not temperature.
+    expect(normalForm(sym('T', TIME))).not.toBe(normalForm(sym('temperature', TEMPERATURE)));
   });
 
   it('is commutative for products', () => {

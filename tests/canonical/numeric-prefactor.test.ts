@@ -23,7 +23,7 @@ const rel = (a: number, b: number) => Math.abs((a - b) / b);
 describe('canonical numeric-prefactor guards', () => {
   it('Landauer E(300 K) = k_B·T·ln2 (natural log)', () => {
     const ast = canonicalById('CE-landauer')!.scalarAst!;
-    const got = evalExpr(ast, { T: 300 });
+    const got = evalExpr(ast, { temperature: 300 });
     const expected = K_B_SI * 300 * Math.LN2; // ≈ 2.871e-21 J
     expect(rel(got, expected)).toBeLessThan(1e-12);
     // A log₁₀ slip would be ~3.32× larger — pin the order of magnitude too.
@@ -33,7 +33,7 @@ describe('canonical numeric-prefactor guards', () => {
 
   it('Stefan–Boltzmann j(5778 K) = σ·T⁴ (flux, fourth power)', () => {
     const ast = canonicalById('CE-stefan-boltzmann')!.scalarAst!;
-    const got = evalExpr(ast, { T: 5778 });
+    const got = evalExpr(ast, { temperature: 5778 });
     const expected = 5.670374419e-8 * Math.pow(5778, 4); // ≈ 6.3e7 W/m²
     expect(rel(got, expected)).toBeLessThan(1e-9);
     // T³ instead of T⁴ would be ~5778× smaller — guard the magnitude.
@@ -65,7 +65,7 @@ describe('canonical universal-constant resolution (h, b register correctly)', ()
 
   it('Wien λ_max = b/T resolves b from CONSTANTS (~501 nm at the Sun)', () => {
     const ast = canonicalById('CE-wien')!.scalarAst!;
-    const got = evalExpr(ast, { T: 5778 });
+    const got = evalExpr(ast, { temperature: 5778 });
     expect(rel(got, B_WIEN_SI / 5778)).toBeLessThan(1e-12);
     expect(got).toBeGreaterThan(4.9e-7);
     expect(got).toBeLessThan(5.1e-7);

@@ -22,6 +22,8 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
+import { MASS, TEMPERATURE } from '../dimensional/types.js';
+import { equals } from '../dimensional/algebra.js';
 import { CONSTANTS, piMultipleValue } from '../composition/symbolic-constants.js';
 
 const isDimensionless = (d: Dimension): boolean =>
@@ -54,6 +56,20 @@ const NAMED_DIMENSIONLESS_CONSTANTS = new Set(['ln_2_constant']);
  * (a parameter or a functional like `ln⟨exp(−βW)⟩`) and is structural —
  * dropping it would conflate distinct interiors.
  */
+/**
+ * Bridge ASTs still spell a governing quantity with the short symbol (`T`, `M`,
+ * `m_1`, `m_2`). The registry uses one name. The structural hash treats the
+ * short spelling as that name when the dimension is the quantity's dimension,
+ * so a time coordinate named `T` stays a different symbol.
+ */
+/** @internal */
+export function canonicalQuantityName(name: string, dim: Dimension): string {
+  if (name === 'T' && equals(dim, TEMPERATURE)) return 'temperature';
+  if ((name === 'M' || name === 'm_1') && equals(dim, MASS)) return 'mass';
+  if (name === 'm_2' && equals(dim, MASS)) return 'secondary-mass';
+  return name;
+}
+
 function isDroppableConstant(name: string): boolean {
   return (
     name in CONSTANTS ||
@@ -107,7 +123,7 @@ export function normalForm(node: ExprNode): string {
       // droppable factor ONLY when it is a recognized constant; otherwise it is
       // a stub for an unknown dimensionless quantity and is kept (tagged) so two
       // different stubs do not collapse to the same form.
-      if (!isDimensionless(node.dim)) return `sym:${node.name}`;
+      if (!isDimensionless(node.dim)) return `sym:${canonicalQuantityName(node.name, node.dim)}`;
       return isDroppableConstant(node.name) ? UNIT : `stub:${node.name}`;
 
     case 'op': {
