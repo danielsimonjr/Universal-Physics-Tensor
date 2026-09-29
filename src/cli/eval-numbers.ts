@@ -8,8 +8,9 @@
  * @internal
  */
 
-import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI } from '../core/constants.js';
-import { EPS0_SI, MU0_SI } from '../composition/formula-names.js';
+import { E_SI, M_E_SI, M_SUN_SI } from '../core/constants.js';
+import { MU0_SI } from '../composition/formula-names.js';
+import { CONSTANTS } from '../composition/symbolic-constants.js';
 import type { UnitMode } from '../composition/natural-units.js';
 
 /** ħ in eval is the exact quotient H_SI/(2π). */
@@ -17,25 +18,27 @@ export const HBAR_TRUNCATION_NOTE =
   'note: hbar is HBAR_SI = H_SI/(2π), the exact reduced Planck constant. ' +
   'The CODATA display 1.054571817e-34 is that quotient truncated (relative difference 6.127e-10).';
 
-/** CODATA / SI names an eval may omit. Explicit `name=` wins over these. @internal */
+/**
+ * Registered constants an eval may omit, taken from {@link CONSTANTS} so a
+ * new registry leaf is a formula name without a second list. Aliases below
+ * are spellings that are not registry keys. Bare `sigma` is not an alias of
+ * `sigma_sb`. Explicit `name=` wins over these.
+ *
+ * `2pi`, `4pi` and `8pi` are in the scope. The MathTS parser reads those
+ * spellings as n·pi before the scope is consulted; the builtin parser
+ * tokenizes a leading digit as a number. The values match either way.
+ * @internal
+ */
 export function codataScope(mode: UnitMode): Record<string, number> {
-  const scope: Record<string, number> = {
-    G: G_SI,
-    c: C_SI,
-    hbar: HBAR_SI,
-    h: H_SI,
-    k_B: K_B_SI,
-    e_charge: E_SI,
-    m_e: M_E_SI,
-    eps0: EPS0_SI,
-    epsilon_0: EPS0_SI,
-    mu0: MU0_SI,
-    mu_0: MU0_SI,
-    kB: K_B_SI,
-    M_sun: M_SUN_SI,
-    GM_sun: GM_SUN_SI,
-    Msun_iau: GM_SUN_SI / G_SI,
-  };
+  const scope: Record<string, number> = {};
+  for (const [name, c] of Object.entries(CONSTANTS)) scope[name] = c.value;
+  scope.e_charge = E_SI;
+  scope.m_e = M_E_SI;
+  scope.eps0 = CONSTANTS.epsilon_0.value;
+  scope.mu0 = MU0_SI;
+  scope.mu_0 = MU0_SI;
+  scope.kB = CONSTANTS.k_B.value;
+  scope.M_sun = M_SUN_SI;
   if (mode !== 'si') {
     scope.c = 1;
     scope.hbar = 1;

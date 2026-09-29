@@ -23,7 +23,7 @@ Tier 10 `upt path` is on master. The reports are `docs/dogfood/2026-09-29-applie
 - [x] `upt eval --json` leaves the ħ truncation note on stderr and out of the envelope.
 - [x] A violated `upt path` still prints the domain supremum above the line that no bound is claimed at the point.
 - [x] A value binding cannot be an expression (`v=0.6*c` is read as a unit).
-- [ ] `upt eval` has no Stefan–Boltzmann constant. Do not add a bare `sigma`; the map hint already names `sigma_sb`. Bindings already evaluate the registered name `sigma_sb`. The formula scope still does not, and a bare `sigma` is refused.
+- [x] `upt eval` has no Stefan–Boltzmann constant. Do not add a bare `sigma`; the map hint already names `sigma_sb`. Bindings already evaluate the registered name `sigma_sb`. The formula scope still does not, and a bare `sigma` is refused.
 
 ## CLI GR/QFT dogfood (2026-09-29)
 

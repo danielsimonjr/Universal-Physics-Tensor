@@ -62,8 +62,10 @@ const HELP = `upt eval "<formula>" name=value ...
         number (≈2.718); the built-in parser leaves e for you to set.
         Elementary charge is e_charge, not e. An unbound e under MathTS is
         refused (exit 2) unless you pass e=<number> or --allow-euler. CODATA
-        names are filled in when you omit them: G, c, hbar, h, k_B, e_charge,
-        m_e, eps0, epsilon_0, mu0, mu_0, kB, M_sun, GM_sun. A value may be a
+        names are filled in when you omit them: every registered constant
+        (G, c, hbar, h, k_B, ln2, epsilon_0, sigma_sb, b, GM_sun, Msun_iau)
+        and the aliases e_charge, m_e, eps0, mu0, mu_0, kB, M_sun. A bare
+        sigma is not the Stefan–Boltzmann constant; write sigma_sb. A value may be a
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). Bindings use the built-in
         parser, so write 2*pi and e_charge; a bare e is not Euler's number.
