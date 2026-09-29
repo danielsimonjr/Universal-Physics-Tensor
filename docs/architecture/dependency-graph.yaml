@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 392
   totalModules: 12
-  totalExports: 2820
+  totalExports: 2824
 entryPoints:
   - file: src/index.ts
     type: main
@@ -1979,6 +1979,7 @@ modules:
         - enumerateRoutes
         - boundPath
         - routeEntryModels
+        - familyChangeBlocksHorizon
         - horizonOnRoute
       interfaces:
         - RouteEnumeration
@@ -1992,6 +1993,7 @@ modules:
         - enumerateRoutes
         - boundPath
         - routeEntryModels
+        - familyChangeBlocksHorizon
         - horizonOnRoute
     src/atlas/poster/associations.ts:
       description: Atlas Phase 3 — the poster's two association-only lines.
@@ -2244,6 +2246,7 @@ modules:
         - deriveRegimeGroups
         - regimeHolds
         - intersectRegimes
+        - collidingRegimeGroups
         - regimeOverlap
         - uncoveredRegions
         - admitApproximation
@@ -2255,6 +2258,7 @@ modules:
         - deriveRegimeGroups
         - regimeHolds
         - intersectRegimes
+        - collidingRegimeGroups
         - regimeOverlap
         - uncoveredRegions
         - admitApproximation
@@ -8910,6 +8914,7 @@ modules:
           reExport: true
         - file: ./atlas/regime.js
           imports:
+            - collidingRegimeGroups
             - regimeHolds
             - regimeOverlap
             - uncoveredRegions
@@ -8922,6 +8927,7 @@ modules:
           reExport: true
         - file: ./atlas/path-bound.js
           imports:
+            - familyChangeBlocksHorizon
             - findPath
             - findAtlasPath
             - enumerateAtlasRoutes
@@ -9073,9 +9079,11 @@ modules:
         - carriageOf
         - runTranslationCheck
         - translationsOf
+        - collidingRegimeGroups
         - regimeHolds
         - regimeOverlap
         - uncoveredRegions
+        - familyChangeBlocksHorizon
         - findPath
         - findAtlasPath
         - enumerateAtlasRoutes
@@ -9264,12 +9272,14 @@ modules:
         - ObservableTranslation
         - PointCheck
         - AtlasFamily
+        - collidingRegimeGroups
         - regimeHolds
         - regimeOverlap
         - uncoveredRegions
         - RegimeCheck
         - RegimeOverlap
         - RegionSample
+        - familyChangeBlocksHorizon
         - findPath
         - findAtlasPath
         - enumerateAtlasRoutes
@@ -19041,15 +19051,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 392
   totalModules: 12
-  totalLinesOfCode: 85948
-  totalExports: 2820
+  totalLinesOfCode: 86184
+  totalExports: 2824
   totalClasses: 59
   totalInterfaces: 443
-  totalFunctions: 720
+  totalFunctions: 722
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 701
-  totalReExports: 1339
+  totalReExports: 1341
   totalTypeOnlyImports: 534
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

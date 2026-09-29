@@ -27,7 +27,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { boundPath, findAtlasPath, findPath, horizonOnRoute } from '../../src/atlas/path-bound.js';
+import { boundPath, familyChangeBlocksHorizon, findAtlasPath, findPath, horizonOnRoute } from '../../src/atlas/path-bound.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { composeBoundPath, IDENTITY_BOUND } from '../../src/atlas/error-algebra.js';
 import { composeRelation } from '../../src/atlas/composition-table.js';
@@ -35,6 +35,7 @@ import { MissingLipschitzError } from '../../src/atlas/types.js';
 import type { ApproximationBound, AtlasBridge, NormTransport, RelationType } from '../../src/atlas/types.js';
 import { AB_PENDULUM_LINEAR, pendulumPeriodErrorAt } from '../../src/atlas/oscillators/bridges-limits.js';
 import { BRIDGE_SPRING_LC } from '../../src/atlas/oscillators/bridges-exact.js';
+import { BRIDGE_KG_OSCILLATOR, BRIDGE_KG_SCHRODINGER } from '../../src/atlas/waves/bridges-closure.js';
 import { SPRING_LC_RELATIVE_PERIOD_TRANSPORT } from '../../src/atlas/oscillators/norm-transport.js';
 import { RELATIVE_PERIOD_NORM } from '../../src/atlas/oscillators/norms.js';
 import { propagateUncertainty } from '../../src/composition/uncertainty.js';
@@ -155,6 +156,25 @@ describe('findAtlasPath (audit F01)', () => {
 
   it('throws for an endpoint in no family', () => {
     expect(() => findAtlasPath('model-lc', 'model-nope')).toThrow(RangeError);
+  });
+
+  it('pins that no same-family pair is reachable only by the atlas walk', () => {
+    // selectRoute keeps the intra-family chain when one exists. A same-family
+    // pair that findPath misses and findAtlasPath finds would be a route the
+    // command never reports. None exists in this atlas; a future bridge that
+    // creates one fails this list.
+    const onlyAcross: string[] = [];
+    for (const fam of ATLAS_FAMILIES) {
+      for (const a of fam.models) {
+        for (const b of fam.models) {
+          if (a.id === b.id) continue;
+          if (findPath(fam.family, a.id, b.id) !== null) continue;
+          const across = findAtlasPath(a.id, b.id);
+          if (across !== null) onlyAcross.push(`${fam.family}: ${a.id} → ${b.id} (${across.map((br) => br.id).join(' → ')})`);
+        }
+      }
+    }
+    expect(onlyAcross).toEqual([]);
   });
 });
 
@@ -520,5 +540,133 @@ describe('boundPath — a declared norm transport carries a bound across an exac
     expect(horizonOnRoute(path, [], 1)).toBeNull();
     // Without the transports the horizon is the bridge's own, unrestated.
     expect(horizonOnRoute(path, [], 0)!.restatedBy).toEqual([]);
+  });
+});
+
+describe('boundPath — a cross-family norm needs a transport (Tier 10 M2)', () => {
+  const finiteRestriction = {
+    ...BRIDGE_KG_OSCILLATOR,
+    bound: bound(1, 0.01, RELATIVE_PERIOD_NORM),
+  };
+
+  it('CONTROL: a finite K on ab-kg-oscillator still does not compose into ab-spring-lc by string equality', () => {
+    // The norm string is the one ab-spring-lc transports, spring → lc. Same-family
+    // string match would therefore return a bound. The route entered from waves.
+    const result = boundPath([finiteRestriction, BRIDGE_SPRING_LC]);
+    expect(result.kind).toBe('no-claim');
+    if (result.kind !== 'no-claim') throw new Error('unreachable');
+    expect(result.reason).toBe('cross-family-unmapped');
+    expect(result.detail).toContain('ab-spring-lc');
+    expect(result.detail).toContain('waves');
+    expect(result.detail).toContain('oscillators');
+    expect(result.detail).toContain(RELATIVE_PERIOD_NORM);
+    expect(Object.hasOwn(result, 'bound')).toBe(false);
+  });
+
+  it('the real restriction still fails as missing-lipschitz, which outranks the vocabulary gate', () => {
+    const path = findAtlasPath('model-klein-gordon', 'model-lc');
+    expect(path?.map((b) => b.id)).toEqual(['ab-kg-oscillator', 'ab-spring-lc']);
+    expect(() => boundPath(path!)).toThrow(MissingLipschitzError);
+  });
+
+  it('Klein–Gordon → Fick stays the silent cell, and the one-step bound is the bridge\'s own', () => {
+    const fick = findAtlasPath('model-klein-gordon', 'model-fick');
+    expect(fick?.map((b) => b.id)).toEqual(['ab-kg-schrodinger', 'ab-schrodinger-diffusion']);
+    const silent = boundPath(fick!);
+    expect(silent.kind).toBe('no-claim');
+    if (silent.kind !== 'no-claim') throw new Error(silent.relation);
+    expect(silent.reason).toBe('no-composite-claim');
+    expect(Object.hasOwn(silent, 'bound')).toBe(false);
+
+    const one = boundPath([BRIDGE_KG_SCHRODINGER]);
+    expect(one.kind).toBe('bound');
+    if (one.kind !== 'bound') throw new Error(one.detail);
+    expect(one.bound).toEqual({ K: BRIDGE_KG_SCHRODINGER.bound!.K, delta: BRIDGE_KG_SCHRODINGER.bound!.delta });
+    expect(one.norm).toBe(BRIDGE_KG_SCHRODINGER.bound!.norm);
+  });
+
+  it('ACCEPTANCE: a witnessed transport across the family boundary carries the bound, and its K is applied', () => {
+    const across: NormTransport = {
+      ...SPRING_LC_RELATIVE_PERIOD_TRANSPORT,
+      id: 'nt-fixture-kg-spring',
+      fromModel: 'model-klein-gordon',
+      toModel: 'model-spring',
+      from: RELATIVE_PERIOD_NORM,
+      to: RELATIVE_PERIOD_NORM,
+      K: 2,
+      KAt: () => 2,
+    };
+    const result = boundPath([{ ...finiteRestriction, normTransports: [across] }, BRIDGE_SPRING_LC]);
+    expect(result.kind).toBe('bound');
+    if (result.kind !== 'bound') throw new Error(result.detail);
+    expect(result.bound).toEqual({ K: 2, delta: 0.02 });
+    expect(result.transports?.map((a) => a.transport.id)).toEqual([
+      'nt-fixture-kg-spring',
+      'nt-spring-lc-relative-period',
+    ]);
+  });
+
+  it('a later horizon across families is unevaluated unless that step declares a time map', () => {
+    const inWaves: AtlasBridge = {
+      ...bridgeOf('hx-waves', 'approximation', bound(1, 0.01, 'n')),
+      premises: ['model-klein-gordon'],
+      conclusion: 'model-string',
+    };
+    const intoDiffusion: AtlasBridge = {
+      ...bridgeOf('hx-diff', 'approximation', bound(1, 0.01, 'n')),
+      premises: ['model-string'],
+      conclusion: 'model-schrodinger-free',
+    };
+    expect(familyChangeBlocksHorizon([inWaves, intoDiffusion], [], 0)).toBe(false);
+    expect(familyChangeBlocksHorizon([inWaves, intoDiffusion], [], 1)).toBe(true);
+    const onTheCrossing = {
+      index: 1,
+      bridgeId: 'hx-diff',
+      transport: SPRING_LC_RELATIVE_PERIOD_TRANSPORT,
+    };
+    expect(familyChangeBlocksHorizon([inWaves, intoDiffusion], [onTheCrossing], 1)).toBe(false);
+    // A transport on the earlier step does not restate the later model's clock.
+    expect(familyChangeBlocksHorizon([inWaves, intoDiffusion], [{ ...onTheCrossing, index: 0 }], 1)).toBe(true);
+    const intra = findPath('oscillators', 'model-pendulum', 'model-lc')!;
+    const claim = boundPath(intra);
+    expect(familyChangeBlocksHorizon(intra, claim.kind === 'bound' ? (claim.transports ?? []) : [], 1)).toBe(false);
+  });
+
+  it('CONTROL: a witness whose kind is formal does not carry the norm', () => {
+    const formal = {
+      ...SPRING_LC_RELATIVE_PERIOD_TRANSPORT,
+      id: 'nt-fixture-formal',
+      fromModel: 'model-klein-gordon',
+      toModel: 'model-spring',
+      from: RELATIVE_PERIOD_NORM,
+      to: RELATIVE_PERIOD_NORM,
+      K: 2,
+      KAt: () => 2,
+      witness: { id: 'W-formal', kind: 'formal' as const, test: 'tests/atlas/path-bound.test.ts' },
+    };
+    const result = boundPath([{ ...finiteRestriction, normTransports: [formal] }, BRIDGE_SPRING_LC]);
+    expect(result.kind).toBe('no-claim');
+    if (result.kind !== 'no-claim') throw new Error('unreachable');
+    expect(result.reason).toBe('cross-family-unmapped');
+    expect(Object.hasOwn(result, 'bound')).toBe(false);
+  });
+
+  it('CONTROL: the same declaration with no witness does not carry the norm', () => {
+    const unwitnessed = {
+      ...SPRING_LC_RELATIVE_PERIOD_TRANSPORT,
+      id: 'nt-fixture-unwitnessed',
+      fromModel: 'model-klein-gordon',
+      toModel: 'model-spring',
+      from: RELATIVE_PERIOD_NORM,
+      to: RELATIVE_PERIOD_NORM,
+      K: 2,
+      KAt: () => 2,
+      witness: { id: '', kind: 'numeric' as const, test: '' },
+    };
+    const result = boundPath([{ ...finiteRestriction, normTransports: [unwitnessed] }, BRIDGE_SPRING_LC]);
+    expect(result.kind).toBe('no-claim');
+    if (result.kind !== 'no-claim') throw new Error('unreachable');
+    expect(result.reason).toBe('cross-family-unmapped');
+    expect(Object.hasOwn(result, 'bound')).toBe(false);
   });
 });

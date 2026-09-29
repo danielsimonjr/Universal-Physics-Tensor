@@ -551,6 +551,44 @@ describe('upt path', () => {
   it('`upt help path` prints the command help', async () => {
     const cap = capture();
     expect(await runCli(['help', 'path'], cap.io)).toBe(0);
-    expect(cap.lines.join('')).toMatch(/upt path <from> <to>/);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/upt path <from> <to>/);
+    expect(text).toMatch(/A route may cross families/);
+    expect(text).toMatch(/matching norm name is not one/);
+    expect(text).toMatch(/not a step of the chain/);
+  });
+
+  it('the process status agrees with the JSON kind and reason', async () => {
+    const cases: { args: string[]; exit: number; kind: string; reason?: string; regimes?: boolean | 'unknown' }[] = [
+      { args: ['model-pendulum', 'model-lc', '--at', 'theta0=0.2', 'T0=1', 't=1'], exit: 0, kind: 'bound', regimes: true },
+      { args: ['model-pendulum', 'model-spring', '--at', 'theta0=0.8', 'T0=1', 't=1'], exit: 3, kind: 'bound', regimes: false },
+      { args: ['model-pendulum', 'model-spring', '--at', 'theta0=0.2', 'T0=1', 't=1000'], exit: 3, kind: 'bound' },
+      { args: ['model-klein-gordon', 'model-schrodinger-free', '--at', 'c=1', 'omega0=1', 'k=0.05', 't=1'], exit: 0, kind: 'bound', regimes: true },
+      { args: ['model-klein-gordon', 'model-schrodinger-free', '--at', 'c=1', 'omega0=1', 'k=1'], exit: 3, kind: 'bound', regimes: false },
+      { args: ['model-klein-gordon', 'model-schrodinger-free'], exit: 0, kind: 'bound', regimes: 'unknown' },
+      { args: ['model-klein-gordon', 'model-fick'], exit: 0, kind: 'no-claim', reason: 'no-composite-claim' },
+      { args: ['model-klein-gordon', 'model-lc'], exit: 0, kind: 'no-claim', reason: 'missing-lipschitz' },
+      { args: ['model-langevin', 'model-fick'], exit: 0, kind: 'bound' },
+      { args: ['model-stokes-drag', 'model-fick'], exit: 0, kind: 'missing-chain' },
+    ];
+    for (const c of cases) {
+      const cap = capture();
+      const code = await runCli(['path', ...c.args, '--json'], cap.io);
+      const env = JSON.parse(cap.lines.join(''));
+      expect(code, c.args.join(' ')).toBe(c.exit);
+      expect(env.result).not.toHaveProperty('sigma');
+      if (c.kind === 'missing-chain') {
+        expect(env.result.path).toBeNull();
+        expect(code).toBe(0);
+        continue;
+      }
+      expect(env.result.kind, c.args.join(' ')).toBe(c.kind);
+      if (c.reason !== undefined) expect(env.result.reason).toBe(c.reason);
+      if (c.regimes !== undefined) expect(env.result.allRegimesHold).toBe(c.regimes);
+      if (c.kind === 'no-claim') {
+        expect(code).toBe(0);
+        expect(env.result).not.toHaveProperty('bound');
+      }
+    }
   });
 });

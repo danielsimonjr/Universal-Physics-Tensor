@@ -81,9 +81,12 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observab
         INADEQUATE), and the evidence of the translation and of each carriage,
         derived by running their witnesses, plus the translation's witness
         run at this point with a control. Otherwise it is UNDETERMINED.
+        A route may cross families. A bound crosses only through the relation,
+        uniformity, Lipschitz, and norm gates, and, across families, only
+        through a witnessed norm transport; a matching norm name is not one.
         A bridge with two or more premises is named when both models appear
         among its premises and its conclusion. That line is the bridge; it is
-        not composed as a chain, and a missing chain still exits 0.
+        not a step of the chain, and a missing chain still exits 0.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
               upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
               upt path model-pendulum model-lc --at theta0=0.3 T0=2 t=5 --tolerance=phase:0.1
@@ -142,6 +145,8 @@ interface HorizonReport {
   holds: boolean | null;
   /** The transports that restated this horizon for the end of the route; absent when none did. */
   restatedBy?: { transport: string; horizon: string }[];
+  /** Set when a family change reached this step with no time map. Unevaluated, not violated. */
+  unevaluated?: 'cross-family';
 }
 
 const MAX_SAMPLES = 200;
@@ -302,6 +307,10 @@ export function judgeTolerance(
   if (e.allRegimesHold === false) return { verdict: 'inadequate', reason: 'outside a regime on the path: no bound is claimed' };
   if (e.allRegimesHold === 'unknown') return { verdict: 'undetermined', reason: 'a regime coordinate was not supplied' };
   if (e.horizons.length > 0 && !tGiven) return { verdict: 'undetermined', reason: 'no t= given, so the horizon was not evaluated' };
+  if (e.horizons.some((h) => h.holds === false)) return { verdict: 'inadequate', reason: 'past the horizon: the bound is not claimed there' };
+  if (e.horizons.some((h) => h.holds === null)) {
+    return { verdict: 'undetermined', reason: 'a family change did not restate a horizon onto the next clock' };
+  }
   if (e.horizons.length > 0 && !e.allHold) return { verdict: 'inadequate', reason: 'past the horizon: the bound is not claimed there' };
   if (e.pointBound === null) return { verdict: 'undetermined', reason: e.pointBoundReason ?? 'no point bound' };
   return e.pointBound.delta <= tolerance
@@ -660,6 +669,7 @@ type Evaluation = {
   allHold: boolean;
   pointBound: { K: number; delta: number } | null;
   pointBoundReason: string | null;
+  regimeCollisions: readonly { readonly group: string; readonly families: readonly string[] }[];
 };
 
 type SweepResult = { kind: 'bound'; norm?: string | null | undefined; bound: { K: number; delta: number } } | { kind: 'no-claim'; reason: string };
@@ -965,28 +975,37 @@ function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteCl
   return (at: Readonly<Record<string, number>>): Evaluation & { regimes: RegimeReport[] } => {
     // A horizon is read at the END of the route: a transport applied after a
     // bound restates it on the later model's clock (ADR, time map).
+    const carried = result.kind === 'bound' ? (result.transports ?? []) : [];
     const horizons: HorizonReport[] = bridges.flatMap((b, i) => {
-      const h = api.horizonOnRoute(bridges, result.kind === 'bound' ? (result.transports ?? []) : [], i);
+      const h = api.horizonOnRoute(bridges, carried, i);
       if (h === null) return [];
+      // A later step in another family keeps its horizon unevaluated unless a
+      // transport on that step restates the clock. The earlier horizon stays
+      // in the time of the model where it was stated.
+      const blocked = api.familyChangeBlocksHorizon(bridges, carried, i);
       return [
         {
           bridgeId: b.id,
           horizon: h.horizon,
-          holds: at['t'] === undefined ? null : h.holds(at['t'], at),
+          holds: at['t'] === undefined || blocked ? null : h.holds(at['t'], at),
           ...(h.restatedBy.length > 0
             ? { restatedBy: h.restatedBy.map((a) => ({ transport: a.transport.id, horizon: a.transport.timeMap.horizon })) }
             : {}),
+          ...(blocked ? { unevaluated: 'cross-family' as const } : {}),
         },
       ];
     });
     const allHold = horizons.every((h) => h.holds === true);
 
-    // The same --at resolution as `upt regime`: group spellings, and groups derived
-    // from their parameters. Unknown keys are not reported here, because horizon
-    // parameters such as T0 and t are legitimate --at keys on a path.
-    const { values: resolved } = resolveAtPoint(at, bridges.map((b) => b.regime));
+    // Each step is checked against its own regime. A group name whose π-groups
+    // differ is dropped on every step that defines it, so the supplied number
+    // is not applied to either definition. intersectRegimes is not called.
+    const regimeCollisions = api.collidingRegimeGroups(bridges.map((b) => b.regime));
+    const blockedGroups = new Set(regimeCollisions.map((c) => c.group));
     const regimes: RegimeReport[] = bridges.map((b) => {
-      const check = api.regimeHolds(b.regime, resolved);
+      const { values } = resolveAtPoint(at, [b.regime]);
+      for (const name of blockedGroups) delete values[name];
+      const check = api.regimeHolds(b.regime, values);
       return {
         bridgeId: b.id,
         ok: check.ok,
@@ -1036,7 +1055,7 @@ function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteCl
         else pointBoundReason = 'a parameter the point bound needs was not supplied';
       }
     }
-    return { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason };
+    return { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason, regimeCollisions };
   };
 }
 
@@ -1152,7 +1171,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   if (args.flags.has('csv')) throw new CliError('upt path: --csv needs --sweep (a single point is not a table)');
 
   const evaluation = evaluateAt(point);
-  const { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason } = evaluation;
+  const { regimes, allRegimesHold, horizons, allHold, pointBound, pointBoundReason, regimeCollisions } = evaluation;
   const adequacy =
     tolerance === null || tolerance.observable !== null ? null : judgeTolerance(tolerance.value, evaluation, t !== undefined);
   const observed =
@@ -1164,9 +1183,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   // A violated regime or horizon is a failed check: exit 3 (persona finding F2),
   // and so is a tolerance the point error exceeds. UNKNOWN, where a coordinate
   // or t was not supplied, is not a failure.
+  const horizonViolated = t !== undefined && horizons.some((h) => h.holds === false);
   const exitCode =
     allRegimesHold === false ||
-    (t !== undefined && !allHold) ||
+    horizonViolated ||
     adequacy?.verdict === 'inadequate' ||
     observed?.verdict === 'inadequate'
       ? EXIT_CHECK_FAILED
@@ -1207,8 +1227,10 @@ async function run(ctx: CommandCtx): Promise<number> {
           ...(pointBoundReason !== null ? { pointBoundReason } : {}),
           horizons,
           ...(multi.length === 0 ? {} : { multiPremise: multi }),
+          ...(regimeCollisions.length === 0 ? {} : { regimeCollisions }),
           horizonsEvaluated: t !== undefined,
-          allHorizonsHold: t === undefined ? null : allHold,
+          allHorizonsHold:
+            t === undefined || horizons.some((h) => h.holds === null) ? (horizonViolated ? false : null) : allHold,
           ...(adequacy === null ? {} : { tolerance: { value: tolerance!.value, ...adequacy, scope } }),
           ...(observed === null ? {} : { tolerance: observableReport(tolerance!, observed, bridges, evidence) }),
         },
@@ -1275,6 +1297,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (r.ok === false) out(`    ${r.bridgeId}: VIOLATED — ${r.violated.join('; ')}`);
     else if (r.ok === 'unknown') out(`    ${r.bridgeId}: unknown — unchecked: ${r.unchecked.join('; ')}`);
   }
+  if (regimeCollisions.length > 0) {
+    out('  regime group names collide (unchecked on each step that defines them):');
+    for (const c of regimeCollisions) out(`    ${c.group}: ${c.families.join(', ')}`);
+  }
   if (regimes.some((r) => r.premisesNotChecked !== undefined)) {
     out('  premises not machine-checked (your judgment or measurement):');
     for (const r of regimes) {
@@ -1289,10 +1315,18 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`    ${h.bridgeId}: ${h.horizon}`);
       for (const r of h.restatedBy ?? []) out(`      restated by '${r.transport}': ${r.horizon}`);
     }
+  } else if (horizons.some((h) => h.unevaluated === 'cross-family') && !horizonViolated) {
+    out(`  horizons at t=${t}: NOT EVALUATED — a family change does not restate a horizon onto the next clock`);
+    for (const h of horizons) {
+      const state = h.holds === null ? 'unevaluated' : h.holds ? 'holds' : 'VIOLATED';
+      out(`    ${h.bridgeId}: ${state} — ${h.horizon}`);
+      for (const r of h.restatedBy ?? []) out(`      restated by '${r.transport}': ${r.horizon}`);
+    }
   } else {
     out(`  horizons at t=${t}: ${allHold ? 'all hold' : 'NOT all hold'}`);
     for (const h of horizons) {
-      out(`    ${h.bridgeId}: ${h.holds ? 'holds' : 'VIOLATED'} — ${h.horizon}`);
+      const state = h.holds === null ? 'unevaluated' : h.holds ? 'holds' : 'VIOLATED';
+      out(`    ${h.bridgeId}: ${state} — ${h.horizon}`);
       for (const r of h.restatedBy ?? []) out(`      restated by '${r.transport}': ${r.horizon}`);
     }
   }

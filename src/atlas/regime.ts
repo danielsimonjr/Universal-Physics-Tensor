@@ -174,6 +174,49 @@ export function intersectRegimes(a: Regime, b: Regime): Regime {
   };
 }
 
+/**
+ * Group names whose π-groups differ across `regimes`. The path command leaves
+ * those names unchecked on every step that defines them. It does not call
+ * {@link intersectRegimes}: that function still throws when the families differ.
+ *
+ * The same key with the same exponent vector is not a collision. A zero
+ * exponent is ignored, matching `--at` derivation.
+ *
+ * @internal
+ */
+export function collidingRegimeGroups(
+  regimes: readonly Regime[],
+): readonly { readonly group: string; readonly families: readonly string[] }[] {
+  const seen = new Map<string, { sig: string; families: string[] }>();
+  const collisions = new Map<string, string[]>();
+  for (const regime of regimes) {
+    for (const [name, group] of Object.entries(regime.groupDefinitions)) {
+      const sig = exponentSignature(group);
+      const prev = seen.get(name);
+      if (prev === undefined) {
+        seen.set(name, { sig, families: [regime.family] });
+        continue;
+      }
+      if (prev.sig === sig) {
+        if (!prev.families.includes(regime.family)) prev.families.push(regime.family);
+        continue;
+      }
+      const families = collisions.get(name) ?? [...prev.families];
+      if (!families.includes(regime.family)) families.push(regime.family);
+      collisions.set(name, families);
+    }
+  }
+  return [...collisions.entries()].map(([group, families]) => ({ group, families }));
+}
+
+function exponentSignature(group: PiGroup): string {
+  return Object.entries(group.exponents)
+    .filter(([, exp]) => exp !== 0)
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([name, exp]) => `${name}:${exp}`)
+    .join(',');
+}
+
 function samePiGroup(x: PiGroup, y: PiGroup): boolean {
   const names = new Set([...Object.keys(x.exponents), ...Object.keys(y.exponents)]);
   for (const name of names) {
