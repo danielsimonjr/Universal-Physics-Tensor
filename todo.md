@@ -643,8 +643,8 @@ warning-silencing, not debug logging).
 - [ ] **After 0.47.0: one release per tier, each DESIGNED and approved by Mothership before any code**
       (owner order 2026-09-25). No code before the design is approved.
       - [ ] After the criterion 3 study closes: switch the product's typed structural search (`rankByStructure` callers) to the residual-form canonical corpus, so user claims in residual form can match. Blocked while the Amendment 8 pins are live.
-      - [ ] Tier 8 → 0.48.0 also: C1, probe-searchable frontier gaps (today `upt probe scan` lists 232 gaps, none searchable).
-      - [ ] Tier 10 → 0.49.0: C3, cross-family `upt path`, with bound composition across families.
+      - [ ] Tier 8 → 0.48.0 also: C1, probe-searchable frontier gaps. Measured 2026-09-29: `upt probe scan` lists 6 searchable prediction-residual gaps (`fg-expr-<case-id>`, one per applied case). `--all` still lists the 232 Product A wrappers (216 relation-link, 16 regime-transition), and those stay not-searchable. The "none searchable" clause was the pre-#219 scan.
+      - [ ] Tier 10 → 0.49.0: C3, cross-family `upt path`, with bound composition across families. Design: `docs/design/tier-10-cross-family-path.md`. No code until Mothership approves that note. Routing already calls `findAtlasPath` when the endpoints are in different families; the open work is the composition rule.
       - [ ] Tier 11 → 0.50.0: ROADMAP §8 hybrid retrieval: optional out-of-process embedding backend (qwen3-embedding:4b via Ollama), zero hard deps, fallback to atlas search, deterministic tests with a stub embedder plus the frozen study vectors; the live GPU evaluation waits for LLMBench's reservation to end.
 
 - [x] **0.47.0 batch from the persona pass (Mothership ruling 2026-09-25).** One finding per commit;
@@ -680,7 +680,8 @@ warning-silencing, not debug logging).
       - [x] L8: `ab-stokes-einstein` states Re ≪ 1 and t ≫ m/γ in prose only; add machine inequalities (conditional: no frozen hash may move).
       - [x] L9: `upt path --at` prints only the domain supremum; add `deltaAt(point)` as "bound at this point", tested ≥ the exact error.
       - [x] Found during L7 (2026-09-25), NOT investigated, outside the W1/L1–L9 scope: `bun run test:probe-coverage` reports 0% on every file and "AssertionError: coverageFilesDirectory is required". Not in CI. Whether it also fails at the commit before L7 was not measured.
-      - [ ] tree-sitter reports `src/cli/commands/path.ts` as UNPARSED ("parse error (tree-sitter reported ERROR nodes)"), and does so on master too. tsc compiles it. An unparsed file is invisible to the code-docs and dependency tooling, so their counts are silently incomplete. Found 2026-09-25 during F2. Fix after the 0.47.0 batch (Mothership).
+      - [x] tree-sitter reports `src/cli/commands/path.ts` as UNPARSED ("parse error (tree-sitter reported ERROR nodes)"), and does so on master too. tsc compiles it. An unparsed file is invisible to the code-docs and dependency tooling, so their counts are silently incomplete. Found 2026-09-25 during F2. Fix after the 0.47.0 batch (Mothership).
+        Done: the TypeScript grammar rejects `readonly` immediately before an inline `import('…').Type`, and `static [key: string]` on a class (`src/numerical/mathts-tensor.ambient.d.ts` was the second file). Both are rewritten with the same types. `docs:deps` already indexed `path.ts`; the drop was the tree-sitter pass. `tests/internal/src-parses.test.ts` fails if any file under `src/` has an ERROR node, and its paired snippets still must.
       - [x] Probe coverage is 94.53% statements against the 95% gate (measured 2026-09-25, once the provider was fixed). Lines 97.25%, functions 98.18%, branches 86.36% pass. Below 95% statements: generator.ts 82%, pipeline.ts 90%, residual.ts 90%, limits.ts 92%, metadata.ts 86%, fingerprint.ts 94%, problem.ts 94%, backend-protocol.ts 94%. Most predate this session; the gate went unmeasured while the provider was broken. Do NOT lower the threshold.
         Closed 2026-09-27 by the "Probe coverage gate" row of the audit review (above): the gate passes
         with the thresholds unchanged, and CI runs it.
@@ -2365,12 +2366,17 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
       blocked per-material table verification, refused to fabricate:
       α = 1.0±0.4 abstract-level claim with machine-readable
       encodingHonestyLevel marker; upgradeable in place; 14 tests).
-- [ ] G-9 units-normalization implementation — note VETTED 2026-06-11
+- [x] G-9 units-normalization implementation — note VETTED 2026-06-11
       (Adam YELLOW; r2 revisions applied in the note: x⁰=ct convention,
       Q_geom = Q_SI·G^m·c^(t−2m) formula, criterion-(b) reframed as a
       measured gate per the FD unit-invariance derivation, unitless*
       fixture subsumption, factor pins). **Implementation = v0.12** (the
       next foundation-change slot).
+      Done: that slot sentence is stale. Boundary adapters shipped as G-9
+      increments 1 and 2 (`src/numerical/geometrized.ts`). Increment 3, the
+      consumer-wide default-pipeline migration, was declined
+      (`docs/planning/v0.14-G9-Increment3-Disposition.md`). The per-quantity
+      GeV/J tag remains the open G-9 follow-on row.
 - [x] ✅ O-4 — EXECUTED 2026-06-11: computeKretschmann/WeylInputs
       widened (non-breaking union), 6 shims removed (2 left with reason
       — evaluateNumerical boundary), sibling fixtures unified to
@@ -2400,9 +2406,10 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
 - [x] **`unused-analysis.md` 19-export cull — STALE, nothing to do (verified 2026-08-29).**
   The regenerated report now reads **0 potentially unused files, 0 potentially unused exports**.
   The 19 no longer exist; the entry was carrying phantom work.
-- [ ] Remaining from that line:
-      `mergeAxes` rank-changing reshape (labeled-tensor); regime
-      built-ins taxonomy (deferred v0.9 in code comments).
+- [ ] Remaining from that line: regime built-ins taxonomy, still deferred
+      in `src/core/regime-registry.ts` and the note in `src/index.ts`.
+      `LabeledTensor.mergeAxes` / `splitAxis` shipped; that half of the line
+      was stale.
 
 ### Human-physicist (standing review surface — CONTRIBUTING.md)
 

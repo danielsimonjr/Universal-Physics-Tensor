@@ -7089,7 +7089,8 @@ The codebase is organized into the following modules:
 ### `src/numerical/mathts-tensor.ambient.d.ts` - Ambient module declaration for the optional peer dependency
 
 **Exports:**
-- Classes: `Tensor`
+- Interfaces: `Tensor`
+- Constants: `Tensor`
 
 ---
 
@@ -7421,11 +7422,11 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 392 |
 | Total Modules | 12 |
-| Total Lines of Code | 85865 |
+| Total Lines of Code | 85878 |
 | Total Exports | 2820 |
 | Total Re-exports | 1339 |
-| Total Classes | 60 |
-| Total Interfaces | 442 |
+| Total Classes | 59 |
+| Total Interfaces | 443 |
 | Total Functions | 720 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |

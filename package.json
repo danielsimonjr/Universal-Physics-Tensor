@@ -112,6 +112,8 @@
     "@viz-js/viz": "^3.28.0",
     "fast-check": "^4.8.0",
     "js-yaml": "^5.0.0",
+    "tree-sitter": "0.22.4",
+    "tree-sitter-typescript": "0.23.2",
     "typescript": "^7.0.2",
     "vitest": "^4.1.7"
   },

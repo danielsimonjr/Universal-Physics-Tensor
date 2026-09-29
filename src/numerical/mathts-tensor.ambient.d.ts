@@ -41,10 +41,19 @@ declare module '@danielsimonjr/mathts-tensor' {
   // safety in the primary dev env, where the real peer `.d.ts` shadows this shim
   // entirely. The index signature is the correct decoupling for an OPTIONAL peer.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export class Tensor {
+  // Class form with `static [key: string]` is a tree-sitter ERROR node (the
+  // TypeScript grammar's index_signature has no `static`). A value and a type
+  // of the same name keep both uses: `Tensor.einsum(...)` and `x: Tensor`.
+  // The index signatures stay: an optional peer's fallback must not name every
+  // member the real package exports.
+  export interface Tensor {
     [key: string]: any;
-    static [key: string]: any;
     readonly shape: ReadonlyArray<number>;
   }
+  export const Tensor: {
+    new (...args: any[]): Tensor;
+    readonly prototype: Tensor;
+    [key: string]: any;
+  };
 }
 

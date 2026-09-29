@@ -168,7 +168,11 @@ export function parseSweep(spec: string): { name: string; values: number[]; spac
   return { name, values, spacing };
 }
 
-type Bridges = readonly import('../../cli-api.js').AtlasBridge[];
+// `readonly` directly before `import('…').T` is a tree-sitter ERROR node. Alias
+// the import type first; the array is still readonly.
+type AtlasBridge = import('../../cli-api.js').AtlasBridge;
+type Witness = import('../../cli-api.js').Witness;
+type Bridges = readonly AtlasBridge[];
 type Translation = import('../../cli-api.js').ObservableTranslation;
 type Carriage = import('../../cli-api.js').ObservableCarriage;
 
@@ -377,7 +381,7 @@ export function judgeObservable(
 }
 
 /** Evidence DERIVED by running a record's witnesses now. */
-function runWitnesses(api: CommandCtx['api'], witnesses: readonly import('../../cli-api.js').Witness[], checks: Translation['checks']) {
+function runWitnesses(api: CommandCtx['api'], witnesses: readonly Witness[], checks: Translation['checks']) {
   const runs = checks.map((c) => api.runTranslationCheck(c));
   const passing = new Set(runs.filter((r) => r.status === 'checked').map((r) => r.witnessId));
   return {
@@ -621,7 +625,7 @@ function runSweep(
     from: string;
     to: string;
     point: Readonly<Record<string, number>>;
-    bridges: readonly import('../../cli-api.js').AtlasBridge[];
+    bridges: readonly AtlasBridge[];
     result: SweepResult;
     evaluateAt: (at: Readonly<Record<string, number>>) => Evaluation;
     spec: string;

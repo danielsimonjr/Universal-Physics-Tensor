@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 389 |
-| Total Test Files | 530 |
+| Total Test Files | 531 |
 | Source Files with Tests | 377 |
 | Source Files without Tests | 12 |
 | Coverage | 96.9% |
@@ -868,6 +868,7 @@ The following 12 source files are not directly imported by any test file:
 | `fixtures/schwarzschild.test.ts` | 1 files |
 | `internal/helper-coverage.test.ts` | 7 files |
 | `internal/no-raw-nul.test.ts` | 0 files |
+| `internal/src-parses.test.ts` | 0 files |
 | `numerical/be37-covariant-eikonal-real.test.ts` | 11 files |
 | `numerical/be37-shapiro-step-sweep.test.ts` | 12 files |
 | `numerical/christoffel-flat-indexing.test.ts` | 1 files |

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 389,
-    "totalTestFiles": 530,
+    "totalTestFiles": 531,
     "testedCount": 377,
     "untestedCount": 12,
     "coveragePercent": "96.9"
@@ -14086,6 +14086,7 @@
       "src/composition/expr-eval.ts"
     ],
     "tests/internal/no-raw-nul.test.ts": [],
+    "tests/internal/src-parses.test.ts": [],
     "tests/numerical/be37-covariant-eikonal-real.test.ts": [
       "src/numerical/index.ts",
       "src/numerical/tensor-engine.ts",

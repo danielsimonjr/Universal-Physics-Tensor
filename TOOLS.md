@@ -36,6 +36,14 @@ pointed at the wrong thing.
 
 ## How they lie
 
+- **`tsc` accepting a file is not evidence tree-sitter parsed it.** The pinned
+  `tree-sitter-typescript` grammar reports ERROR nodes for `readonly` immediately before an inline
+  `import('…').Type`, and for `static [key: string]` on a class. `bun run docs:deps` uses the
+  TypeScript compiler and still indexes those files. A code-docs pass that uses tree-sitter drops
+  them, so an export count from that pass can omit a file `tsc` and `docs:deps` both see.
+  `tests/internal/src-parses.test.ts` is the gate: the scan fails if any file under `src/` has an
+  ERROR node, and the paired snippets of those two constructs must still be errors. A scan that
+  passes after the grammar starts accepting them is not a control.
 - **`bun run docs:deps` reads tracked files only.** A new file is left out of the generated docs
   until it is staged (`git add` or `git add -N`). This is deliberate: an untracked scratch file once
   entered the committed coverage docs. The pre-push hook refuses while the tree differs from HEAD.
