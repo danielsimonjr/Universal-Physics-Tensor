@@ -14,6 +14,7 @@ import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.
 import { C_SI, G_SI } from '../../core/constants.js';
 import { JEANS_FORMULA_NOTE } from '../conventions.js';
 import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
+import { bindingInUnit } from '../../numerical/binding-value.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--sigma', valueStyle: 'either', repeatable: true },
@@ -31,9 +32,10 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
               R_in_ohm=1Mohm C_in_F=20pF f_lo_Hz=0 f_hi_Hz=10kHz t_avg_s=10
         Every input is declared: its unit, its meaning, and for a length what
         it measures (a radius, a separation, a semi-major axis). A value may
-        carry a unit (d_m=1um, R_ohm=1kohm, T_yr=88d, M_kg=1Msun); it is
+        carry a unit (d_m=1um, R_ohm=1kohm, T_yr=88d, M_kg=1Msun) or an
+        expression of constants and units (M_kg=1*M_sun, v=0.6*c); it is
         converted into the declared unit only when the dimensions agree, and a
-        bare number is in the declared unit. An absolute temperature in degC
+        bare number is in the declared unit. The same reader accepts --sigma. An absolute temperature in degC
         adds 273.15 K; a --sigma in degC is a difference and does not. degF is
         refused. An undeclared key exits 1 instead of being ignored. A declared
         alternate (major_axis_m for a_m) is converted exactly and said so.
@@ -241,7 +243,7 @@ function parseUncertainty(
     if (m !== null) {
       const p = spec.parameters.find((x) => x.key === m[1])!;
       try {
-        u = api.convertValue(m[2]!, p.unit, 'difference').value;
+        u = bindingInUnit(m[2]!, p.unit, 'difference').value;
       } catch (e) {
         if (!(e instanceof api.UnitError)) throw e;
         if (!/is not a (finite )?number/.test(e.message)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);

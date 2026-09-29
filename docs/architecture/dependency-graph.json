@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 392,
+    "totalFiles": 393,
     "totalModules": 12,
-    "totalExports": 2824
+    "totalExports": 2829
   },
   "entryPoints": [
     {
@@ -8180,15 +8180,15 @@
           {
             "file": "../dimensional/units.js",
             "imports": [
-              "convertValue",
+              "unitConventionNotes",
               "UnitError",
               "TemperatureReading"
             ]
           },
           {
-            "file": "../core/constants.js",
+            "file": "../numerical/binding-value.js",
             "imports": [
-              "M_SUN_SI"
+              "bindingInUnit"
             ]
           },
           {
@@ -10714,6 +10714,12 @@
               "DiscoveryOptions"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
+            ]
           }
         ],
         "exports": [
@@ -11106,6 +11112,7 @@
           {
             "file": "../conventions.js",
             "imports": [
+              "canonicalCheckFailed",
               "conventionLines"
             ]
           },
@@ -11250,8 +11257,7 @@
             "file": "../eval-numbers.js",
             "imports": [
               "HBAR_TRUNCATION_NOTE",
-              "codataScope",
-              "parseEvalToken"
+              "codataScope"
             ]
           },
           {
@@ -11265,6 +11271,12 @@
             "file": "../../dimensional/units.js",
             "imports": [
               "UnitError"
+            ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
             ]
           }
         ],
@@ -11340,6 +11352,12 @@
             "imports": [
               "HBAR_TRUNCATION_NOTE"
             ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "bindingInUnit"
+            ]
           }
         ],
         "exports": [
@@ -11398,6 +11416,12 @@
             "file": "../search-index.js",
             "imports": [
               "searchNameWords"
+            ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
             ]
           }
         ],
@@ -11746,15 +11770,16 @@
           {
             "file": "../conventions.js",
             "imports": [
+              "canonicalCheckFailed",
               "conventionLines"
             ]
           },
           {
             "file": "../../composition/natural-units.js",
             "imports": [
+              "naturalConstantOverrides",
               "UnitMode"
-            ],
-            "typeOnly": true
+            ]
           }
         ],
         "exports": [
@@ -11858,6 +11883,12 @@
               "parseAt",
               "resolveAtPoint",
               "showInequality"
+            ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
             ]
           },
           {
@@ -12099,6 +12130,12 @@
             "imports": [
               "emitJson"
             ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
+            ]
           }
         ],
         "exports": [
@@ -12281,9 +12318,11 @@
         "internalDependencies": [],
         "exports": [
           "JEANS_FORMULA_NOTE",
+          "canonicalCheckFailed",
           "conventionLines"
         ],
         "functions": [
+          "canonicalCheckFailed",
           "conventionLines"
         ],
         "constants": [
@@ -12349,13 +12388,6 @@
             ]
           },
           {
-            "file": "../dimensional/units.js",
-            "imports": [
-              "parseUnit",
-              "UnitError"
-            ]
-          },
-          {
             "file": "../composition/formula-names.js",
             "imports": [
               "EPS0_SI",
@@ -12372,12 +12404,10 @@
         ],
         "exports": [
           "HBAR_TRUNCATION_NOTE",
-          "codataScope",
-          "parseEvalToken"
+          "codataScope"
         ],
         "functions": [
-          "codataScope",
-          "parseEvalToken"
+          "codataScope"
         ],
         "constants": [
           "HBAR_TRUNCATION_NOTE"
@@ -16866,6 +16896,7 @@
           }
         ],
         "exports": [
+          "naturalConstantOverrides",
           "naturalPowers",
           "naturalNote"
         ],
@@ -16873,6 +16904,7 @@
           "NaturalPowers"
         ],
         "functions": [
+          "naturalConstantOverrides",
           "naturalPowers",
           "naturalNote"
         ]
@@ -21949,6 +21981,7 @@
           }
         ],
         "exports": [
+          "unitConventionNotes",
           "parseUnit",
           "convertValue",
           "unitDimension",
@@ -21962,6 +21995,7 @@
           "ParsedUnit"
         ],
         "functions": [
+          "unitConventionNotes",
           "parseUnit",
           "convertValue",
           "unitDimension",
@@ -24897,6 +24931,88 @@
           "evaluateBE37CovariantEikonalNumerical"
         ]
       },
+      "src/numerical/binding-value.ts": {
+        "description": "A binding value: a bare number, a number with a unit, or an expression of",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "M_SUN_SI"
+            ]
+          },
+          {
+            "file": "../composition/formula-names.js",
+            "imports": [
+              "FORMULA_NAMED"
+            ]
+          },
+          {
+            "file": "../composition/natural-units.js",
+            "imports": [
+              "naturalConstantOverrides",
+              "UnitMode"
+            ]
+          },
+          {
+            "file": "../composition/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "divide",
+              "equals",
+              "format",
+              "multiply",
+              "power"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "MASS",
+              "Dimension"
+            ]
+          },
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "convertValue",
+              "parseUnit",
+              "unitConventionNotes",
+              "UnitError",
+              "TemperatureReading"
+            ]
+          },
+          {
+            "file": "./formula.js",
+            "imports": [
+              "callBuiltinFunction",
+              "FormulaError",
+              "parseFormulaToAst",
+              "FormulaAstNode"
+            ]
+          }
+        ],
+        "exports": [
+          "readBinding",
+          "bindingInUnit",
+          "readParameter"
+        ],
+        "interfaces": [
+          "BindingValue"
+        ],
+        "functions": [
+          "readBinding",
+          "bindingInUnit",
+          "readParameter"
+        ]
+      },
       "src/numerical/christoffel-flat.ts": {
         "description": "Flat-array Christoffel evaluator (v0.6.0 Phase 2, Task 2.8 — BR-2 BREAKING).",
         "externalDependencies": [],
@@ -26625,6 +26741,23 @@
               "G_SI",
               "M_SUN_SI"
             ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "LENGTH",
+              "MASS",
+              "TIME",
+              "VELOCITY",
+              "Dimension"
+            ]
+          },
+          {
+            "file": "./binding-value.js",
+            "imports": [
+              "readParameter"
+            ]
           }
         ],
         "exports": [
@@ -27173,6 +27306,7 @@
         "name": "Numerical",
         "files": [
           "src/numerical/be37-covariant-eikonal.ts",
+          "src/numerical/binding-value.ts",
           "src/numerical/christoffel-flat.ts",
           "src/numerical/connection-lowering-helpers.ts",
           "src/numerical/curvature-lowering-helpers.ts",
@@ -27217,21 +27351,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 392,
+    "totalTypeScriptFiles": 393,
     "totalModules": 12,
-    "totalLinesOfCode": 86184,
-    "totalExports": 2824,
+    "totalLinesOfCode": 86836,
+    "totalExports": 2829,
     "totalClasses": 59,
-    "totalInterfaces": 443,
-    "totalFunctions": 722,
+    "totalInterfaces": 444,
+    "totalFunctions": 727,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 701,
     "totalReExports": 1341,
-    "totalTypeOnlyImports": 534,
+    "totalTypeOnlyImports": 533,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 69
+    "unusedExportsCount": 68
   }
 }

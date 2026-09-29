@@ -21,6 +21,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
+import { readBinding } from '../../numerical/binding-value.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--at', valueStyle: 'either', repeatable: true },
@@ -52,6 +53,8 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
         states, the points no CONSTRAINING regime covers.
         Exit 3 when any record is VIOLATED. VACUOUS, UNKNOWN and a survey with
         no violated record exit 0.
+        A value is a number, a unit, or a constant expression (theta0=pi/2,
+        t=1s). A bare number is already in the coordinate's unit.
         e.g.  upt regime oscillators --at theta0=0.2
               upt regime oscillators --deny lossless`;
 
@@ -65,7 +68,7 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
  *   which is exactly the reading this command exists to keep honest.
  * @internal
  */
-export function parseAt(raw: readonly string[], command: string): Record<string, number> {
+export function parseAt(raw: readonly string[], command: string, notes?: string[]): Record<string, number> {
   const point: Record<string, number> = {};
   for (const token of raw) {
     const eq = token.indexOf('=');
@@ -73,11 +76,20 @@ export function parseAt(raw: readonly string[], command: string): Record<string,
       throw new CliError(`upt ${command}: '${token}' is not a group=value assignment`);
     }
     const name = token.slice(0, eq);
-    const value = Number(token.slice(eq + 1));
-    if (token.slice(eq + 1) === '' || !Number.isFinite(value)) {
-      throw new CliError(`upt ${command}: '${token}' is not a finite number`);
+    const rawValue = token.slice(eq + 1);
+    try {
+      const read = readBinding(rawValue);
+      if (rawValue === '' || !Number.isFinite(read.value)) {
+        throw new CliError(`upt ${command}: '${token}' is not a finite number`);
+      }
+      point[name] = read.value;
+      if (notes !== undefined) {
+        for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
+      }
+    } catch (e) {
+      if (e instanceof CliError) throw e;
+      throw new CliError(`upt ${command}: '${token}' is not a finite number. ${(e as Error).message}`);
     }
-    point[name] = value;
   }
   return point;
 }
@@ -137,7 +149,7 @@ function groupsOf(inequalities: readonly { group: string }[]): Set<string> {
 }
 
 async function run(ctx: CommandCtx): Promise<number> {
-  const { args, api, out } = ctx;
+  const { args, api, out, err } = ctx;
   const wantJson = args.flags.has('json');
   const [familyArg, ...rest] = args.positionals.filter((p) => !p.includes('='));
   const assignments = [...(args.flags.get('at') ?? []), ...args.positionals.filter((p) => p.includes('='))];
@@ -158,7 +170,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
 
-  const point = parseAt(assignments, 'regime');
+  const atNotes: string[] = [];
+  const point = parseAt(assignments, 'regime', atNotes);
+  for (const note of atNotes) err(note);
   const stated = Object.keys(point);
   const assume = args.flags.get('assume') ?? [];
   const deny = args.flags.get('deny') ?? [];

@@ -13,6 +13,7 @@
 import type { ParsedArgs } from '../args.js';
 import { UsageError } from '../errors.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
+import { readBinding } from '../../numerical/binding-value.js';
 
 export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
@@ -36,7 +37,14 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
       const eq = pair.indexOf('=');
       const k = eq >= 0 ? pair.slice(0, eq) : pair;
       const v = eq >= 0 ? pair.slice(eq + 1) : '';
-      const val = Number(v);
+      let val = Number.NaN;
+      if (v !== '') {
+        try {
+          val = readBinding(v).value;
+        } catch {
+          val = Number.NaN;
+        }
+      }
       if (eq < 0 || !k || v === '' || !Number.isFinite(val)) {
         throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${pair}".`);
       }

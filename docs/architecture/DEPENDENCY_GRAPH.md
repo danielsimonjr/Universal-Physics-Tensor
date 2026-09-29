@@ -48,7 +48,7 @@ The codebase is organized into the following modules:
 - **diff**: 3 files
 - **dimensional**: 32 files
 - **entry**: 1 file
-- **numerical**: 40 files
+- **numerical**: 41 files
 
 ---
 
@@ -2500,8 +2500,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/units.js` | `convertValue, UnitError, TemperatureReading` | Import |
-| `../core/constants.js` | `M_SUN_SI` | Import |
+| `../dimensional/units.js` | `unitConventionNotes, UnitError, TemperatureReading` | Import |
+| `../numerical/binding-value.js` | `bindingInUnit` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
 **Exports:**
@@ -3248,6 +3248,7 @@ The codebase is organized into the following modules:
 | `../args.js` | `ParsedArgs` | Import (type-only) |
 | `../errors.js` | `UsageError` | Import |
 | `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
+| `../../numerical/binding-value.js` | `readBinding` | Import |
 
 **Exports:**
 - Functions: `parseDiscoveryOpts`
@@ -3386,7 +3387,7 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
 | `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
-| `../conventions.js` | `conventionLines` | Import |
+| `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -3425,9 +3426,10 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
 | `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
-| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope, parseEvalToken` | Import |
+| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
 | `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/units.js` | `UnitError` | Import |
+| `../../numerical/binding-value.js` | `readBinding` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3448,6 +3450,7 @@ The codebase is organized into the following modules:
 | `../../core/constants.js` | `C_SI, G_SI` | Import |
 | `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
+| `../../numerical/binding-value.js` | `bindingInUnit` | Import |
 
 **Exports:**
 - Functions: `weakFieldDomainNote`, `propagateUncertainty`
@@ -3466,6 +3469,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../search-index.js` | `searchNameWords` | Import |
+| `../../numerical/binding-value.js` | `readBinding` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3547,8 +3551,8 @@ The codebase is organized into the following modules:
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
 | `../euler-guard.js` | `unboundEulerRefusal` | Import |
-| `../conventions.js` | `conventionLines` | Import |
-| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
+| `../../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -3582,6 +3586,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
+| `../../numerical/binding-value.js` | `readBinding` | Import |
 | `./_atlas-route.js` | `explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, RouteClaim` | Import |
 
 **Exports:**
@@ -3666,6 +3671,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../../numerical/binding-value.js` | `readBinding` | Import |
 
 **Exports:**
 - Functions: `parseAt`, `resolveAtPoint`, `showInequality`
@@ -3725,7 +3731,7 @@ The codebase is organized into the following modules:
 ### `src/cli/conventions.ts` - Convention lines the CLI prints beside a comparison.
 
 **Exports:**
-- Functions: `conventionLines`
+- Functions: `canonicalCheckFailed`, `conventionLines`
 - Constants: `JEANS_FORMULA_NOTE`
 
 ---
@@ -3756,12 +3762,11 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI` | Import |
-| `../dimensional/units.js` | `parseUnit, UnitError` | Import |
 | `../composition/formula-names.js` | `EPS0_SI, MU0_SI` | Import |
 | `../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
-- Functions: `codataScope`, `parseEvalToken`
+- Functions: `codataScope`
 - Constants: `HBAR_TRUNCATION_NOTE`
 
 ---
@@ -4773,7 +4778,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `NaturalPowers`
-- Functions: `naturalPowers`, `naturalNote`
+- Functions: `naturalConstantOverrides`, `naturalPowers`, `naturalNote`
 
 ---
 
@@ -6248,7 +6253,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `UnitError`
 - Interfaces: `ParsedUnit`
-- Functions: `parseUnit`, `convertValue`, `unitDimension`, `unitTables`
+- Functions: `unitConventionNotes`, `parseUnit`, `convertValue`, `unitDimension`, `unitTables`
 
 ---
 
@@ -6628,6 +6633,26 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `BE37CovariantEikonalInputs`, `BE37CovariantEikonalResult`
 - Functions: `evaluateBE37CovariantEikonalNumerical`
+
+---
+
+### `src/numerical/binding-value.ts` - A binding value: a bare number, a number with a unit, or an expression of
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `M_SUN_SI` | Import |
+| `../composition/formula-names.js` | `FORMULA_NAMED` | Import |
+| `../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
+| `../dimensional/units.js` | `convertValue, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
+| `./formula.js` | `callBuiltinFunction, FormulaError, parseFormulaToAst, FormulaAstNode` | Import |
+
+**Exports:**
+- Interfaces: `BindingValue`
+- Functions: `readBinding`, `bindingInUnit`, `readParameter`
 
 ---
 
@@ -7192,6 +7217,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, LENGTH, MASS, TIME, VELOCITY, Dimension` | Import |
+| `./binding-value.js` | `readParameter` | Import |
 
 **Exports:**
 - Interfaces: `Component`, `CurvatureReport`, `KerrGeodesicSample`
@@ -7376,11 +7403,11 @@ graph TD
 
     subgraph Numerical
         N53[be37-covariant-eikonal]
-        N54[christoffel-flat]
-        N55[connection-lowering-helpers]
-        N56[curvature-lowering-helpers]
-        N57[derivative-lowering]
-        N58[...35 more]
+        N54[binding-value]
+        N55[christoffel-flat]
+        N56[connection-lowering-helpers]
+        N57[curvature-lowering-helpers]
+        N58[...36 more]
     end
 
     N0 --> N48
@@ -7421,17 +7448,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 392 |
+| Total TypeScript Files | 393 |
 | Total Modules | 12 |
-| Total Lines of Code | 86184 |
-| Total Exports | 2824 |
+| Total Lines of Code | 86836 |
+| Total Exports | 2829 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
-| Total Interfaces | 443 |
-| Total Functions | 722 |
+| Total Interfaces | 444 |
+| Total Functions | 727 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 534 |
+| Type-only Imports | 533 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

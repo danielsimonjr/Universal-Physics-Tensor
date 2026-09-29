@@ -37,8 +37,14 @@ const HELP = `upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--
         −k c²/a² and Λ. Kerr Kretschmann uses the Boyer–Lindquist closed form.
         --geodesic integrates a short Schwarzschild circular orbit, or a Kerr
         geodesic (equatorial and circular at θ = π/2; inclined, with that
-        polar turning point, at any other θ). \`upt help metric\` describes every flag.
-        e.g.  upt metric schwarzschild M=1.989e30 r=1e8
+        polar turning point, at any other θ). Kerr's a is a length in metres;
+        the report prints a/M = a/(GM/c²). A Ricci scalar that has a closed
+        form is that form; a vacuum finite-difference residual is not listed
+        as Ricci. A parameter is a number, a unit (M=1Msun, r=1km) or a
+        constant expression (theta=pi/2). A bare number is already in the
+        parameter's SI unit; a dimensioned quantity must match it.
+        \`upt help metric\` describes every flag.
+        e.g.  upt metric schwarzschild M=1Msun r=1e8 theta=pi/2
               upt metric flrw k=1 t=2
               upt curvature kerr a=1000 r=1e8 theta=1.2`;
 

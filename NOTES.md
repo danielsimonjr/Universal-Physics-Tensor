@@ -11,6 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-09-29
 
+- **CLI dogfood, three personas, 2026-09-29.** Findings are in `docs/dogfood/2026-09-29-applied-physicist.md`, `docs/dogfood/2026-09-29-gr-qft.md` and `docs/dogfood/2026-09-29-engineering-physicist.md`.
 - **MathTS optional peers, 2026-09-29.** Ranges match `npm view`: autograd 0.3.15, core 0.15.5,
   expression 0.8.2, functions 0.65.0, matrix 0.7.5, parallel 0.6.7, tensor 0.2.21, wasm 0.3.0,
   workerpool 0.2.6. Still optional peers. The packages themselves were not republished.

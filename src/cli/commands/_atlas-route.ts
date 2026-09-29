@@ -30,15 +30,19 @@ export function selectRoute(
     api.ATLAS_FAMILIES.find((f) => f.models.some((m) => m.id === id))?.family;
   const fromFamily = familyOf(from);
   const toFamily = familyOf(to);
-  const family = fromFamily ?? toFamily ?? api.ATLAS_FAMILIES[0]!.family;
+  if (fromFamily === undefined || toFamily === undefined) {
+    const missing = [
+      ...(fromFamily === undefined ? [from] : []),
+      ...(toFamily === undefined ? [to] : []),
+    ];
+    throw new CliError(
+      `upt ${command}: unknown model ${missing.map((id) => `'${id}'`).join(' and ')}; \`upt atlas\` lists the models`,
+    );
+  }
   let bridges: readonly AtlasBridge[] | null;
   try {
-    if (fromFamily !== undefined && toFamily !== undefined) {
-      bridges = fromFamily === toFamily ? api.findPath(family, from, to) : null;
-      bridges ??= api.findAtlasPath(from, to);
-    } else {
-      bridges = api.findPath(family, from, to);
-    }
+    bridges = fromFamily === toFamily ? api.findPath(fromFamily, from, to) : null;
+    bridges ??= api.findAtlasPath(from, to);
   } catch (e) {
     // RangeError: an unknown endpoint. Reported as a CliError (exit 1) rather
     // than surfaced as a crash — and NOT as `null`, which would be

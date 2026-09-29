@@ -327,7 +327,8 @@ describe('upt path', () => {
     const cap = capture();
     const code = await runCli(['path', 'model-nope', 'model-spring'], cap.io);
     expect(code).toBe(1);
-    expect(cap.lines.join('')).toMatch(/is not a model of family 'oscillators'/);
+    expect(cap.lines.join('')).toMatch(/unknown model 'model-nope'/);
+    expect(cap.lines.join('')).not.toMatch(/family 'oscillators'/);
   });
 
   it('a wrong number of endpoints → exit 1', async () => {

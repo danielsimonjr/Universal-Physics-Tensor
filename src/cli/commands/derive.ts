@@ -13,7 +13,7 @@ import { UsageError, EXIT_CHECK_FAILED } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { eulerConstantNote } from '../../numerical/formula.js';
 import { unboundEulerRefusal, withParser } from '../euler-guard.js';
-import { conventionLines } from '../conventions.js';
+import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
@@ -178,7 +178,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       for (const line of api.describeComparisons(canonicalComparisons!)) textOut(`  ${line}`);
       for (const line of conventionLines(canonicalComparisons!.map((c) => c.id))) textOut(`  ${line}`);
     };
-    if (canonicalComparisons.some((c) => c.kind === 'factor' || c.kind === 'form')) failed = true;
+    if (canonicalCheckFailed(canonicalComparisons)) failed = true;
 
     if (!det.determined) {
       textOut('  formula given, but with no unique monomial there is no single prefactor to recover.');

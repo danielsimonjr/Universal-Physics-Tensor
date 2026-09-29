@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 392
+  totalFiles: 393
   totalModules: 12
-  totalExports: 2824
+  totalExports: 2829
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5560,12 +5560,12 @@ modules:
       internalDependencies:
         - file: ../dimensional/units.js
           imports:
-            - convertValue
+            - unitConventionNotes
             - UnitError
             - TemperatureReading
-        - file: ../core/constants.js
+        - file: ../numerical/binding-value.js
           imports:
-            - M_SUN_SI
+            - bindingInUnit
         - file: ./evaluators.js
           imports:
             - EvaluatorParameter
@@ -7229,6 +7229,9 @@ modules:
           imports:
             - DiscoveryOptions
           typeOnly: true
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - parseDiscoveryOpts
       functions:
@@ -7468,6 +7471,7 @@ modules:
             - withParser
         - file: ../conventions.js
           imports:
+            - canonicalCheckFailed
             - conventionLines
         - file: ../../dimensional/types.js
           imports:
@@ -7554,7 +7558,6 @@ modules:
           imports:
             - HBAR_TRUNCATION_NOTE
             - codataScope
-            - parseEvalToken
         - file: ../../composition/natural-units.js
           imports:
             - UnitMode
@@ -7562,6 +7565,9 @@ modules:
         - file: ../../dimensional/units.js
           imports:
             - UnitError
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - command
       constants:
@@ -7605,6 +7611,9 @@ modules:
         - file: ../eval-numbers.js
           imports:
             - HBAR_TRUNCATION_NOTE
+        - file: ../../numerical/binding-value.js
+          imports:
+            - bindingInUnit
       exports:
         - command
         - weakFieldDomainNote
@@ -7641,6 +7650,9 @@ modules:
         - file: ../search-index.js
           imports:
             - searchNameWords
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - command
       constants:
@@ -7834,11 +7846,12 @@ modules:
             - unboundEulerRefusal
         - file: ../conventions.js
           imports:
+            - canonicalCheckFailed
             - conventionLines
         - file: ../../composition/natural-units.js
           imports:
+            - naturalConstantOverrides
             - UnitMode
-          typeOnly: true
       exports:
         - command
         - neighbourhood
@@ -7904,6 +7917,9 @@ modules:
             - parseAt
             - resolveAtPoint
             - showInequality
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
         - file: ./_atlas-route.js
           imports:
             - explainsRefusal
@@ -8054,6 +8070,9 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - command
         - parseAt
@@ -8170,8 +8189,10 @@ modules:
       internalDependencies: []
       exports:
         - JEANS_FORMULA_NOTE
+        - canonicalCheckFailed
         - conventionLines
       functions:
+        - canonicalCheckFailed
         - conventionLines
       constants:
         - JEANS_FORMULA_NOTE
@@ -8219,10 +8240,6 @@ modules:
             - K_B_SI
             - M_E_SI
             - M_SUN_SI
-        - file: ../dimensional/units.js
-          imports:
-            - parseUnit
-            - UnitError
         - file: ../composition/formula-names.js
           imports:
             - EPS0_SI
@@ -8234,10 +8251,8 @@ modules:
       exports:
         - HBAR_TRUNCATION_NOTE
         - codataScope
-        - parseEvalToken
       functions:
         - codataScope
-        - parseEvalToken
       constants:
         - HBAR_TRUNCATION_NOTE
     src/cli/expr-print.ts:
@@ -11407,11 +11422,13 @@ modules:
             - Dimension
           typeOnly: true
       exports:
+        - naturalConstantOverrides
         - naturalPowers
         - naturalNote
       interfaces:
         - NaturalPowers
       functions:
+        - naturalConstantOverrides
         - naturalPowers
         - naturalNote
     src/composition/poster-source.ts:
@@ -15045,6 +15062,7 @@ modules:
             - GM_SUN_SI
             - M_SUN_SI
       exports:
+        - unitConventionNotes
         - parseUnit
         - convertValue
         - unitDimension
@@ -15055,6 +15073,7 @@ modules:
       interfaces:
         - ParsedUnit
       functions:
+        - unitConventionNotes
         - parseUnit
         - convertValue
         - unitDimension
@@ -17394,6 +17413,59 @@ modules:
         - BE37CovariantEikonalResult
       functions:
         - evaluateBE37CovariantEikonalNumerical
+    src/numerical/binding-value.ts:
+      description: "A binding value: a bare number, a number with a unit, or an expression of"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - M_SUN_SI
+        - file: ../composition/formula-names.js
+          imports:
+            - FORMULA_NAMED
+        - file: ../composition/natural-units.js
+          imports:
+            - naturalConstantOverrides
+            - UnitMode
+        - file: ../composition/symbolic-constants.js
+          imports:
+            - CONSTANTS
+        - file: ../dimensional/algebra.js
+          imports:
+            - divide
+            - equals
+            - format
+            - multiply
+            - power
+        - file: ../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+            - MASS
+            - Dimension
+        - file: ../dimensional/units.js
+          imports:
+            - convertValue
+            - parseUnit
+            - unitConventionNotes
+            - UnitError
+            - TemperatureReading
+        - file: ./formula.js
+          imports:
+            - callBuiltinFunction
+            - FormulaError
+            - parseFormulaToAst
+            - FormulaAstNode
+      exports:
+        - readBinding
+        - bindingInUnit
+        - readParameter
+      interfaces:
+        - BindingValue
+      functions:
+        - readBinding
+        - bindingInUnit
+        - readParameter
     src/numerical/christoffel-flat.ts:
       description: Flat-array Christoffel evaluator (v0.6.0 Phase 2, Task 2.8 — BR-2 BREAKING).
       externalDependencies: []
@@ -18524,6 +18596,17 @@ modules:
             - C_SI
             - G_SI
             - M_SUN_SI
+        - file: ../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+            - LENGTH
+            - MASS
+            - TIME
+            - VELOCITY
+            - Dimension
+        - file: ./binding-value.js
+          imports:
+            - readParameter
       exports:
         - METRIC_SIGNATURE
         - METRIC_SIGNATURE_NOTE
@@ -19009,6 +19092,7 @@ dependencyGraph:
     - name: Numerical
       files:
         - src/numerical/be37-covariant-eikonal.ts
+        - src/numerical/binding-value.ts
         - src/numerical/christoffel-flat.ts
         - src/numerical/connection-lowering-helpers.ts
         - src/numerical/curvature-lowering-helpers.ts
@@ -19049,19 +19133,19 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 392
+  totalTypeScriptFiles: 393
   totalModules: 12
-  totalLinesOfCode: 86184
-  totalExports: 2824
+  totalLinesOfCode: 86836
+  totalExports: 2829
   totalClasses: 59
-  totalInterfaces: 443
-  totalFunctions: 722
+  totalInterfaces: 444
+  totalFunctions: 727
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 701
   totalReExports: 1341
-  totalTypeOnlyImports: 534
+  totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 69
+  unusedExportsCount: 68

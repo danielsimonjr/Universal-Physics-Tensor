@@ -89,11 +89,51 @@ export const STATUS_GLOSSARY: readonly StatusDefinition[] = [
   },
   {
     key: 'no-composite-claim',
-    words: ['no composite claim', 'no-claim'],
+    words: ['no composite claim', 'no-claim', 'no-composite-claim'],
     meaning:
-      'the composition table yields no relation for two steps of the route (a silent cell), or a step carries ' +
-      'no bound in the running norm, so the route claims no error; regimes and horizons are still reported. It exits 0',
+      'the composition table yields no relation for two steps of the route (a silent cell). The route claims no ' +
+      'error and exits 0. A missing Lipschitz constant, an undeclared norm and an unmapped cross-family norm are ' +
+      'other refusals, counted apart from this one',
     commands: ['path', 'map'],
+  },
+  {
+    key: 'missing-lipschitz',
+    words: ['missing-lipschitz'],
+    meaning:
+      'a step that is not last states no Lipschitz constant, so the error after it is unbounded. No bound is ' +
+      'claimed. It exits 0. It is not a silent composition-table cell',
+    commands: ['path'],
+  },
+  {
+    key: 'norm-not-stated',
+    words: ['norm-not-stated'],
+    meaning:
+      'an exact step declares no norm transport for the running norm and the direction the route crosses it. ' +
+      'No bound is claimed. It exits 0',
+    commands: ['path'],
+  },
+  {
+    key: 'norm-mismatch',
+    words: ['norm-mismatch'],
+    meaning:
+      'two stated norms on one route are not the same norm, and no transport maps one to the other. No bound is ' +
+      'claimed. It exits 0',
+    commands: ['path'],
+  },
+  {
+    key: 'cross-family-unmapped',
+    words: ['cross-family-unmapped'],
+    meaning:
+      'across model families a matching norm name is not a transport. No witnessed NormTransport carries the ' +
+      'bound, so none is claimed. It exits 0. It is not a violated check',
+    commands: ['path'],
+  },
+  {
+    key: 'uniformity-unanalysed',
+    words: ['uniformity-unanalysed'],
+    meaning:
+      'a bound on the route does not state whether its error is uniform. No bound is claimed. It exits 0',
+    commands: ['path'],
   },
   {
     key: 'decoy',

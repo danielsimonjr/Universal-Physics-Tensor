@@ -13,9 +13,10 @@ import { UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { eulerConstantNote } from '../../numerical/formula.js';
 import { unboundEulerRefusal, withParser } from '../euler-guard.js';
-import { HBAR_TRUNCATION_NOTE, codataScope, parseEvalToken } from '../eval-numbers.js';
+import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../composition/natural-units.js';
 import { UnitError } from '../../dimensional/units.js';
+import { readBinding } from '../../numerical/binding-value.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none' },
@@ -26,9 +27,13 @@ const FLAGS: FlagSpec[] = [
   { name: '--geometrized', valueStyle: 'none' },
 ];
 
-/** Reject malformed `name=value` bindings. A value may carry a unit (`1Msun`). */
-function parseScope(args: readonly string[]): Record<string, number> {
+/**
+ * Reject malformed `name=value` bindings. A value is a number, a unit
+ * (`1Msun`), or an expression of constants and units (`0.6*c`, `pi/2`).
+ */
+function parseScope(args: readonly string[], mode: UnitMode): { scope: Record<string, number>; notes: string[] } {
   const scope: Record<string, number> = {};
+  const notes: string[] = [];
   for (const a of args) {
     const eq = a.indexOf('=');
     if (eq < 0) {
@@ -36,16 +41,16 @@ function parseScope(args: readonly string[]): Record<string, number> {
     }
     const name = a.slice(0, eq);
     const raw = a.slice(eq + 1);
-    let num: number;
     try {
-      num = parseEvalToken(raw);
+      const read = readBinding(raw, { mode });
+      scope[name] = read.value;
+      for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
       const msg = e instanceof UnitError ? e.message : (e as Error).message;
       throw new UsageError(`upt eval: '${a}' is not a finite number or a known unit. ${msg}`);
     }
-    scope[name] = num;
   }
-  return scope;
+  return { scope, notes };
 }
 
 const HELP = `upt eval "<formula>" name=value ...
@@ -58,10 +63,14 @@ const HELP = `upt eval "<formula>" name=value ...
         Elementary charge is e_charge, not e. An unbound e under MathTS is
         refused (exit 2) unless you pass e=<number> or --allow-euler. CODATA
         names are filled in when you omit them: G, c, hbar, h, k_B, e_charge,
-        m_e, eps0, mu0, M_sun, GM_sun. A value may carry a unit (M=1Msun,
-        B=1T, x=1AU). --natural sets ħ = c = 1 (h = 2π); --geometrized also
+        m_e, eps0, epsilon_0, mu0, mu_0, kB, M_sun, GM_sun. A value may be a
+        number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
+        constants and units (v=0.6*c, theta=pi/2). Bindings use the built-in
+        parser, so write 2*pi and e_charge; a bare e is not Euler's number.
+        --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts or builtin and, with no
-        formula, exits 0. --debug prints the parser and its version to stderr.
+        formula, exits 0. With --json that answer is a JSON envelope.
+        --debug prints the parser and its version to stderr.
         An unknown function fails and names a documented equivalent where one
         exists (lg → log10).
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \\
@@ -76,6 +85,10 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const expr = positionals[0];
   if (args.flags.has('show-parser') && !expr) {
+    if (isJson) {
+      emitJson({ command: 'eval', result: { parser: kind } }, ctx.write);
+      return 0;
+    }
     out(kind);
     return 0;
   }
@@ -94,10 +107,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const mode: UnitMode = args.flags.has('geometrized') ? 'geometrized' : args.flags.has('natural') ? 'natural' : 'si';
-  const scope = { ...codataScope(mode), ...parseScope(positionals.slice(1)) };
+  const parsed = parseScope(positionals.slice(1), mode);
+  const scope = { ...codataScope(mode), ...parsed.scope };
   if (args.flags.has('allow-euler') && !('e' in scope)) scope.e = Math.E;
 
-  const refusal = unboundEulerRefusal(expr, cf.variables, kind, args.flags.has('allow-euler'), 'e' in parseScope(positionals.slice(1)));
+  const refusal = unboundEulerRefusal(expr, cf.variables, kind, args.flags.has('allow-euler'), 'e' in parsed.scope);
   if (refusal) throw new UsageError(refusal);
   const note = eulerConstantNote(expr, cf.variables);
   if (note && (args.flags.has('allow-euler') || 'e' in scope)) err(note);
@@ -115,7 +129,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
 
-  if (mode === 'si' && cf.variables.includes('hbar')) err(HBAR_TRUNCATION_NOTE);
+  const notes: string[] = [...parsed.notes];
+  if (mode === 'si' && cf.variables.includes('hbar')) notes.push(HBAR_TRUNCATION_NOTE);
+  for (const note of notes) err(note);
 
   let value: number;
   try {
@@ -125,7 +141,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   if (isJson) {
-    emitJson({ command: 'eval', result: { value, ...(mode === 'si' ? {} : { units: mode }) } }, ctx.write);
+    emitJson(
+      {
+        command: 'eval',
+        result: { value, ...(notes.length === 0 ? {} : { notes }), ...(mode === 'si' ? {} : { units: mode }) },
+      },
+      ctx.write,
+    );
     return 0;
   }
 

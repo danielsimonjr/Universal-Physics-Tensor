@@ -375,8 +375,8 @@ export function eulerConstantNote(expr: string, variables: readonly string[]): s
   if (variables.includes('e')) return undefined;
   if (!/(^|[^A-Za-z0-9_])e(?![A-Za-z0-9_])/.test(expr)) return undefined;
   return (
-    "note: bare e is Euler's number (≈2.718). Elementary charge and eccentricity need their own names " +
-    '(charge, eccentricity). The built-in parser leaves e for you to set.'
+    "note: bare e is Euler's number (≈2.718). Elementary charge is e_charge and eccentricity is " +
+    'eccentricity. The built-in parser leaves e for you to set.'
   );
 }
 
