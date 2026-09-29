@@ -29,7 +29,8 @@ import {
   lawSchwarzschildRadius,
   M_SUN_KG,
 } from '../../src/composition/edges/calibration.js';
-import { be18Edge, be20Edge } from '../../src/composition/edges/catalog-full.js';
+import { be18Edge, be20Edge, be30Edge, be36Edge } from '../../src/composition/edges/catalog-full.js';
+import { C_SI } from '../../src/core/constants.js';
 import { CATALOG_GRAPH, be33Edge } from '../../src/composition/index.js';
 import type { BridgeEdge } from '../../src/composition/index.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
@@ -61,6 +62,8 @@ const SYMBOLIC_EDGES: Array<{ edge: BridgeEdge; probe: Record<string, number> }>
   { edge: be51Edge, probe: { mass: M_SUN_KG, 'impact-parameter': 6.96e8 } },
   { edge: be18Edge, probe: { 'yukawa-coupling': 0.5, 'vacuum-expectation-value': 246 } },
   { edge: be20Edge, probe: { 'cosmological-constant-curvature': 1.1e-52 } },
+  { edge: be30Edge, probe: { 'modular-hamiltonian-variation': 0.5 } },
+  { edge: be36Edge, probe: { 'gravitational-wave-speed': 1.1 * C_SI } },
   // v0.13 — BE-33's faithful (T/T_0)^(−1/z) form exercises the SYMBOLIC
   // (input-dependent) exponent on a dimensionless base. z = 2 ≠ 1 genuinely
   // exercises it (z = 1 would degenerate to the old literal ^(-1)); the probe

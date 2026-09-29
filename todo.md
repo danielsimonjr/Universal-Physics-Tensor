@@ -1905,6 +1905,8 @@ warning-silencing, not debug logging).
   - [ ] (future, when warranted) add symbolic forms to more composition edges, then
         build composition-derived recovery; continue tranche growth for established
         bridges only (most remaining gap bridges are speculative — no standard partner).
+        be-30 and be-36 now have symbolic forms (the identity and (c_GW−c)/c).
+        Recovery is still deferred. The composition table is unchanged.
 
 - [x] ✅ **DONE — post-0.22.0 discovery/linkage hardening (2026-06-18,
       branch `claude/upt-physics-tensor-analysis-9s38dp`).** Acts on a fresh

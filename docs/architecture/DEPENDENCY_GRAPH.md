@@ -4374,7 +4374,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/types.js` | `LENGTH, TEMPERATURE, DIMENSIONLESS` | Import |
 
 **Exports:**
-- Constants: `isFin`, `BE18_SYMBOLIC`, `BE20_SYMBOLIC`, `BE33_HERTZ_MILLIS_SYMBOLIC`
+- Constants: `isFin`, `BE18_SYMBOLIC`, `BE20_SYMBOLIC`, `BE30_SYMBOLIC`, `BE36_SYMBOLIC`, `BE33_HERTZ_MILLIS_SYMBOLIC`
 
 ---
 
@@ -4443,7 +4443,7 @@ The codebase is organized into the following modules:
 | `../../bridges/equations/be-41-swampland.js` | `evaluateSwampland` | Import |
 | `../edge.js` | `BridgeEdge` | Import (type-only) |
 | `../quantities.js` | `cosmologicalConstantDimensionlessQ, couplingPrefactorSquaredQ, darkFermionMassQ, gravitationalWaveSpeedQ, gwPhotonSpeedRatioQ, massQ, mondAccelerationScaleQ, mondForceQ, newtonCouplingBetaQ, newtonCouplingQ, newtonianForceQ, planckMassQ, referenceMassQ, scalarFieldReferenceQ, scalarFieldValueQ, spinDensitySquaredQ, swamplandCoefficientQ, swamplandTowerMassQ, torsionContractionScalarQ, truncationCoefficientAQ, truncationCoefficientBQ, truncationCoefficientCQ, vacuumExpectationValueQ, yukawaCouplingQ` | Import |
-| `./_catalog-helpers.js` | `isFin, BE18_SYMBOLIC` | Import |
+| `./_catalog-helpers.js` | `isFin, BE18_SYMBOLIC, BE36_SYMBOLIC` | Import |
 
 **Exports:**
 - Constants: `be17Edge`, `be18Edge`, `be36Edge`, `be38Edge`, `be39Edge`, `be41Edge`
@@ -4492,7 +4492,7 @@ The codebase is organized into the following modules:
 | `../../bridges/equations/be-46-multiverse-measure.js` | `evaluateWeinbergVilenkinP` | Import |
 | `../edge.js` | `BridgeEdge` | Import (type-only) |
 | `../quantities.js` | `anthropicModelParameterQ, anthropicProbabilityQ, causalSetCount0Q, causalSetCount1Q, causalSetCount2Q, causalSetCount3Q, cosmologicalConstantCurvatureQ, darkReactionRateCoefficientQ, darkSpeciesDensityQ, entanglementEntropyVariationQ, hubbleRateQ, inflationHubbleEnergyQ, lambdaMassDensityQ, landscapeParameterQ, maxEfoldsQ, measureNormalizationQ, modularHamiltonianVariationQ, neutronDensityQ, nucleonYieldDensityQ, nucleonYieldRateQ, planckLengthQ, planckMassEnergyQ, protonDensityQ, ricciScalarQ, smReactionRateCoefficientQ, tccCorrectionCoefficientQ, tensorToScalarRatioQ, transferEfficiencyQ, wormholeCrossSectionAreaQ, wormholeEntanglementEntropyQ` | Import |
-| `./_catalog-helpers.js` | `isFin, BE20_SYMBOLIC` | Import |
+| `./_catalog-helpers.js` | `isFin, BE20_SYMBOLIC, BE30_SYMBOLIC` | Import |
 
 **Exports:**
 - Constants: `be20Edge`, `be30Edge`, `be31Edge`, `be43Edge`, `be45Edge`, `be46Edge`, `be47Edge`
@@ -7453,8 +7453,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 12 |
-| Total Lines of Code | 86861 |
-| Total Exports | 2830 |
+| Total Lines of Code | 86880 |
+| Total Exports | 2832 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
 | Total Interfaces | 444 |

@@ -69,6 +69,23 @@ export const BE20_SYMBOLIC: ExprNode = {
  * names; drift-guarded against `evaluateHertzMillis`. BE-33 composes with
  * nothing — this is a demonstration of the now-expressible faithful encoding.
  */
+/** δS_EE = δ⟨H_R⟩. The evaluator returns its one input. */
+export const BE30_SYMBOLIC: ExprNode = symN('modular-hamiltonian-variation', DIMENSIONLESS);
+
+/** (c_GW − c) / c. */
+export const BE36_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '/',
+  args: [
+    {
+      kind: 'op',
+      op: '-',
+      args: [symN('gravitational-wave-speed', VELOCITY_DIM), symN('c', VELOCITY_DIM)],
+    },
+    symN('c', VELOCITY_DIM),
+  ],
+};
+
 export const BE33_HERTZ_MILLIS_SYMBOLIC: ExprNode = {
   kind: 'op',
   op: '*',
