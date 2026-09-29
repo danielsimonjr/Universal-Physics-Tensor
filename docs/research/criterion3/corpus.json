@@ -443,7 +443,7 @@
             },
             {
               "kind": "symbol",
-              "name": "M",
+              "name": "mass",
               "dim": {
                 "L": 0,
                 "M": 1,
@@ -511,7 +511,7 @@
             },
             {
               "kind": "symbol",
-              "name": "M",
+              "name": "mass",
               "dim": {
                 "L": 0,
                 "M": 1,
@@ -617,7 +617,7 @@
             },
             {
               "kind": "symbol",
-              "name": "M",
+              "name": "mass",
               "dim": {
                 "L": 0,
                 "M": 1,
@@ -842,7 +842,7 @@
             },
             {
               "kind": "symbol",
-              "name": "m_1",
+              "name": "mass",
               "dim": {
                 "L": 0,
                 "M": 1,
@@ -855,7 +855,7 @@
             },
             {
               "kind": "symbol",
-              "name": "m_2",
+              "name": "secondary-mass",
               "dim": {
                 "L": 0,
                 "M": 1,
@@ -3305,7 +3305,7 @@
         },
         {
           "kind": "symbol",
-          "name": "T",
+          "name": "temperature",
           "dim": {
             "L": 0,
             "M": 0,
@@ -3367,7 +3367,7 @@
         },
         {
           "kind": "symbol",
-          "name": "T",
+          "name": "temperature",
           "dim": {
             "L": 0,
             "M": 0,
@@ -3420,7 +3420,7 @@
           "args": [
             {
               "kind": "symbol",
-              "name": "T",
+              "name": "temperature",
               "dim": {
                 "L": 0,
                 "M": 0,
@@ -3488,7 +3488,7 @@
             },
             {
               "kind": "symbol",
-              "name": "T",
+              "name": "temperature",
               "dim": {
                 "L": 0,
                 "M": 0,
@@ -3539,7 +3539,7 @@
         },
         {
           "kind": "symbol",
-          "name": "T",
+          "name": "temperature",
           "dim": {
             "L": 0,
             "M": 0,

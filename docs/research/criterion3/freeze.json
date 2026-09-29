@@ -1,12 +1,12 @@
 {
-  "pinnedCommit": "d93e0b8edc8aee7bbe25cc223b490adbc6d7d022",
+  "pinnedCommit": "bf6df35a6130ec4454f53e19a0fca049fd09283d",
   "inputTrees": {
-    "src/canonical": "52b5700ea81bfa79ed5653e2909779002ff7ba73",
+    "src/canonical": "c817e2e03e51dfb7e96e33fb71835e12bf4f3518",
     "tests/fixtures/atlas/benchmark/public/items.json": "3c938aa3ac9cbd7a6573735324335c99e3774071"
   },
   "files": {
     "corpus.json": {
-      "sha256": "4e0e5effa29476cd827ac6bbff8a3a8682c710a0661734541cec01b968855d5f",
+      "sha256": "3153e08fea9a93de2b042ae140992c26b7dccd786c8ea7baad3ba90bdde58171",
       "records": 109,
       "withExpr": 92
     },
