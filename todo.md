@@ -2,7 +2,12 @@
 
 ## CLI GR/QFT dogfood (2026-09-29)
 
+Landed on master as #217 (`02c7dc6`). The checked rows are what that PR closed. The open rows under "Open CLI dogfood" are what it did not close.
+
 - [x] Textbook GR checks report not-compared for perihelion (`6pi`), Newton (`m_1`, `m_2`), and `schwarzschild-radius`, and a complex square root says `got object`.
+- [x] A bare `e` under the MathTS parser is Euler's number, and eval / derive / map exited 0 with the wrong number and no note. #217 prints that `e` is Euler's number on `upt eval`, `upt derive --formula`, and `upt map --equation`, and help states both meanings of `e`. It does not unbind `e` and it does not refuse: the wrong number still exits 0. The refusal and a charge symbol that is not `e` stay open below.
+- [x] `upt evaluate be-51` and be-52 accept a length inside 10 Schwarzschild radii and exit 0 with the weak-field closed form and no note. #217 prints that cut in text and as JSON `domainNote`. The number is still the closed form. Solar-limb deflection and Mercury do not warn.
+- [x] Omitting the perihelion factor `(1−e²)` was silent. #217 names the registry symbol `one_minus_e_sq` (the latex is `(1−e²)`; a bare `e` is not eccentricity). A spelling of `(1−e²)` that Euler's `e` does not consume is still open below.
 
 ## CLI physicist dogfood (2026-09-29)
 
@@ -13,7 +18,7 @@
 
 ## Open CLI dogfood — applied physicist (#216) and GR (#217), 2026-09-29
 
-Unfixed suggestions from those two passes. #217 has since landed on master. It already did the warning named under unbound `e`; it did not do the rest of these rows. Do not guess a convention where a row says the record is ambiguous or frozen.
+Unfixed suggestions from those two passes. #217 is on master; the four checked rows under "CLI GR/QFT dogfood" are what it closed (perihelion `6pi`, Newton mass pairing, the `schwarzschild-radius` alias, a complex square root, the bare-`e` warning, the be-51/be-52 weak-field note, and naming `one_minus_e_sq` when `(1−e²)` is omitted). The rows in this section are what it did not close. Do not guess a convention where a row says the record is ambiguous or frozen.
 
 ### Conventions to surface on the CLI
 
@@ -36,7 +41,7 @@ Unfixed suggestions from those two passes. #217 has since landed on master. It a
 
 - [ ] **Einstein 8π and Compton h vs ħ, only if the canonical freeze is lifted.** `efe_curvature = 8*pi*G*stress_energy_density/c^4` and the same with `4*pi` both exit 0 with "prefactor is NOT checked". The 8π lives only in the field equation. Compton `h` and `ħ` are both dimensionally a length and prefactor-unchecked. `src/canonical` is frozen; this is already a recorded negative result for the EFE. A checked prefactor waits on lifting the freeze, through the citation workflow. Source: GR dogfood (Einstein also the applied-physicist retest). Priority: low until the freeze lifts.
 - [ ] **Sourced prefactors where a citation already exists:** the wire's 2π, Coulomb's 4π, Larmor, and the field energy density. Ampere's law with or without 2π, and with 4π, all say prefactor NOT checked and exit 0. Hooke's law `F=−kx` does not test the sign. Until a sourced prefactor exists, NOT checked is the correct output. Sound-speed √γ is the same gap: comparison does not bind γ (negative result in `NOTES.md`); bind it when the user actually wrote `gamma`, through the existing sourced-prefactor path. Source: applied-physicist dogfood. Priority: medium.
-- [ ] **A way to write (1−e²) that Euler's `e` does not consume.** The perihelion registry symbol is `one_minus_e_sq`. Under MathTS, `1-e^2` is `1−e²` with Euler's number, not the eccentricity factor. #217's warning states that. Reinterpreting `e` would break the pinned parser divergence; a spelling that is not a bare `e` is still missing. Source: GR dogfood. Priority: high.
+- [ ] **A way to write (1−e²) that Euler's `e` does not consume.** The perihelion registry symbol is `one_minus_e_sq`. Under MathTS, `1-e^2` is `1−e²` with Euler's number, not the eccentricity factor. #217 warns on a bare `e`, and omitting the factor now names `one_minus_e_sq`. Reinterpreting `e` would break the pinned parser divergence; a spelling that is not a bare `e` is still missing. Source: GR dogfood. Priority: high.
 - [ ] **`m_e` is not a catalog quantity.** Bohr, Rydberg and the classical electron radius therefore cannot be dimension-checked as hydrogen formulas until the electron mass is a named source. Source: GR dogfood. Priority: medium.
 - [ ] **Friedmann curvature term.** The comparison is the flat, matter-dominated equation only: `H² = 8πGρ/3` agrees with `CE-friedmann`. Adding `−k c²/a²` is dimensionally `[T^-2]` and is not compared (extra variables). `k`'s suggestions are not curvature. The catalog length `a` is the perihelion semi-major axis and is disclosed as a one-letter name. Source: GR dogfood. Priority: medium.
 - [ ] **Stale `c = 2.998e8` comments.** `src/bridges/gravitational-lensing.ts` and `src/bridges/perihelion-precession.ts` still say `c = 2.998e8` in a comment. The code imports exact `C_SI`. The evaluated numbers use `299792458`. Comments only. Source: GR dogfood. Priority: low.
