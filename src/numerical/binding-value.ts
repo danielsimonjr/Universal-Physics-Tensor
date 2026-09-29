@@ -268,7 +268,7 @@ export function readNamedBinding(
   const unit = quantityConventionUnit(name);
   if (unit === undefined) return readBinding(raw, opts);
   const reading = opts?.reading ?? 'absolute';
-  const converted = bindingInUnit(raw, unit, reading);
+  const converted = bindingInUnit(raw, unit, reading, opts?.mode);
   return {
     value: converted.value,
     dimensioned: converted.given !== '',
@@ -339,11 +339,12 @@ export function bindingInUnit(
   raw: string,
   target: string,
   reading: TemperatureReading = 'absolute',
+  mode: UnitMode = 'si',
 ): { value: number; given: string } {
   if (NUMBER.test(raw.trim()) || plainUnit(raw.trim(), reading) !== null) {
     return convertValue(raw, target, reading);
   }
-  const b = readBinding(raw, { reading });
+  const b = readBinding(raw, { reading, mode });
   if (!b.dimensioned) return { value: b.value, given: '' };
   const to = parseUnit(target);
   if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);

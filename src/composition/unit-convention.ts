@@ -35,6 +35,12 @@ export function quantityConventionUnit(name: string): string | undefined {
   return QUANTITY_CONVENTION_UNIT.get(name);
 }
 
+/** Scale a quantity's evaluator-unit value into SI. @internal */
+export function conventionScaleToSI(name: string): number {
+  const unit = QUANTITY_CONVENTION_UNIT.get(name);
+  return unit === undefined ? 1 : parseUnit(unit).scale;
+}
+
 /**
  * Multiply a value in `from`'s convention to obtain the value in `to`'s
  * convention. Two untagged names, or two names with the same unit, are 1.

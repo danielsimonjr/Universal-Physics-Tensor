@@ -125,8 +125,11 @@ export function forwardEvaluate(
     for (const id of idents) {
       const fromVal = values.get(id.from);
       if (fromVal !== undefined && !values.has(id.to)) {
-        values.set(id.to, fromVal * conventionFactor(id.from, id.to));
-        changed = true;
+        const converted = fromVal * conventionFactor(id.from, id.to);
+        if (Number.isFinite(converted)) {
+          values.set(id.to, converted);
+          changed = true;
+        }
       }
     }
     for (const e of edges) {

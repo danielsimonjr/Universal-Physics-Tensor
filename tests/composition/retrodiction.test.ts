@@ -82,6 +82,21 @@ describe('unit-convention copy', () => {
       ]),
     ).toThrow(/dimensions differ/);
   });
+
+  it('does not copy an identification whose unit conversion overflows', () => {
+    const values = forwardEvaluate(
+      [],
+      { 'subsystem-entanglement-entropy': Number.MAX_VALUE },
+      [
+        {
+          from: 'subsystem-entanglement-entropy',
+          to: 'intrinsic-information',
+          rationale: 'nats to bits',
+        },
+      ],
+    );
+    expect(values.has('intrinsic-information')).toBe(false);
+  });
 });
 
 describe('forwardEvaluate — seed validation', () => {

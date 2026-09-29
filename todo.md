@@ -2,7 +2,7 @@
 
 ## Unit-convention review follow-up (2026-09-29)
 
-- [ ] Merge current `master` and resolve conflicts; normalize discovery magnitudes, scale composed junction inputs, skip non-finite identification copies, and pass unit mode into named-binding expressions.
+- [x] Merge current `master` and resolve conflicts; normalize discovery magnitudes, scale composed junction inputs, skip non-finite identification copies, and pass unit mode into named-binding expressions.
 
 ## CLI dogfood, three personas (2026-09-29)
 

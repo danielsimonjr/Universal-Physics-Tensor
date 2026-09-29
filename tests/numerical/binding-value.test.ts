@@ -7,7 +7,12 @@
 import { describe, expect, it } from 'vitest';
 import { C_SI, G_SI, H_SI, M_SUN_SI } from '../../src/core/constants.js';
 import { convertValue, unitConventionNotes } from '../../src/dimensional/units.js';
-import { bindingInUnit, readBinding, readParameter } from '../../src/numerical/binding-value.js';
+import {
+  bindingInUnit,
+  readBinding,
+  readNamedBinding,
+  readParameter,
+} from '../../src/numerical/binding-value.js';
 import { MASS, TIME } from '../../src/dimensional/types.js';
 
 describe('readBinding', () => {
@@ -52,6 +57,11 @@ describe('readBinding', () => {
     const v = readBinding('0.6*c', { mode: 'natural' });
     expect(v.value).toBeCloseTo(0.6, 12);
     expect(v.dimensioned).toBe(false);
+    expect(
+      readNamedBinding('intrinsic-information', '0.6*c', {
+        mode: 'natural',
+      }),
+    ).toMatchObject({ value: 0.6, dimensioned: false });
     expect(() => readBinding('e')).toThrow(/e_charge/);
     expect(() => readBinding('sigma')).toThrow(/is not a number with an optional unit/);
     expect(readBinding('sigma_sb').value).toBeGreaterThan(5e-8);

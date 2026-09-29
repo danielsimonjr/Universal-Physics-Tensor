@@ -130,6 +130,38 @@ describe('composeEdges', () => {
     expect(composed.evaluate({ x: 5 })).toBe(30);
   });
 
+  it('converts identified junctions before domain checks and evaluation', () => {
+    const bits = edge({
+      id: 'bits',
+      sources: [q('x')],
+      target: q('intrinsic-information'),
+      evaluate: (i) => i['x']!,
+    });
+    const nats = edge({
+      id: 'nats',
+      sources: [q('subsystem-entanglement-entropy')],
+      target: q('out'),
+      domain: {
+        description: 'junction is ln 2 nats',
+        predicate: (i) =>
+          Math.abs(i['subsystem-entanglement-entropy']! - Math.LN2) < 1e-12,
+      },
+      evaluate: (i) => i['subsystem-entanglement-entropy']! * 2,
+    });
+    const composed = composeEdges(bits, nats, {
+      identifications: [
+        {
+          from: 'intrinsic-information',
+          to: 'subsystem-entanglement-entropy',
+          rationale: 'bits to nats',
+        },
+      ],
+    });
+
+    expect(composed.domain.predicate({ x: 1 })).toBe(true);
+    expect(composed.evaluate({ x: 1 })).toBeCloseTo(2 * Math.LN2, 12);
+  });
+
   it('throws CompositionDimensionError on junction dim mismatch (functor check)', () => {
     const wrongDim = edge({
       id: 'wrong-dim',
