@@ -22,6 +22,8 @@
 
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { CONSTANTS } from './symbolic-constants.js';
+import { formulaNameDimensions } from './formula-names.js';
+import { naturalNote, naturalPowers, type UnitMode } from './natural-units.js';
 import type { VizModel, VizJunction } from './graph-viz.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -126,6 +128,39 @@ export function hyphenSubtractHint(
   );
 }
 
+/**
+ * Spellings that must not be a bare `e`: `1-eccentricity^2` is the perihelion
+ * factor `one_minus_e_sq`, and `eps0` is the constant `epsilon_0`.
+ */
+function rewriteFormulaSpellings(text: string): string {
+  return text
+    .replace(/(?<![A-Za-z0-9_])eps0(?![A-Za-z0-9_])/g, 'epsilon_0')
+    .replace(
+      /(?<![A-Za-z0-9_])1\s*-\s*eccentricity\s*(?:\^|\*\*)\s*2(?![A-Za-z0-9_])/g,
+      'one_minus_e_sq',
+    );
+}
+
+/** Options for {@link analyzeUserEquation}. @internal */
+export interface AnalyzeUserEquationOptions {
+  /**
+   * Bind a one-letter token that is itself a catalog quantity (`a`, `r`, …).
+   * Default false: the match is reported and not applied. The alias `T` →
+   * `temperature` is not a one-letter catalog name and still binds.
+   */
+  readonly bindShortNames?: boolean;
+  /** Reconcile a dimension difference by powers of c, ħ, and (geometrized) G. */
+  readonly units?: Exclude<UnitMode, 'si'>;
+}
+
+function withFormulaNames(catalog: ReadonlyMap<string, Dimension>): Map<string, Dimension> {
+  const out = new Map(catalog);
+  for (const [name, dim] of formulaNameDimensions()) {
+    if (!out.has(name)) out.set(name, dim);
+  }
+  return out;
+}
+
 export async function parseUserEquation(
   equation: string,
   catalogNames?: ReadonlySet<string> | Iterable<string>,
@@ -137,7 +172,8 @@ export async function parseUserEquation(
   }
   // Materialized once: an iterator (`map.keys()`) would be spent by the first use.
   const names = catalogNames === undefined ? undefined : new Set(catalogNames);
-  const rewritten = names === undefined ? equation : rewriteCatalogHyphens(equation, names);
+  const spelled = rewriteFormulaSpellings(equation);
+  const rewritten = names === undefined ? spelled : rewriteCatalogHyphens(spelled, names);
   const eqIdx = rewritten.indexOf('=');
   if (eqIdx < 0) {
     throw new UserEquationError(
@@ -411,6 +447,11 @@ export interface ShortBinding {
   readonly name: string;
   readonly quantity: string;
   readonly dim: Dimension;
+  /**
+   * Present and false when a one-letter catalog name was recognised and not
+   * applied. Omitted when the name was bound.
+   */
+  readonly bound?: false;
 }
 
 /**
@@ -439,6 +480,8 @@ export interface EquationAnalysis {
    * Unruh formula's `a` is an acceleration (persona finding W6).
    */
   readonly shortBindings: readonly ShortBinding[];
+  /** Set when `--natural` / `--geometrized` reconciled the two dimensions. */
+  readonly naturalNote?: string;
 }
 
 /**
@@ -452,11 +495,19 @@ export interface EquationAnalysis {
 export async function analyzeUserEquation(
   equation: string,
   catalogDims: ReadonlyMap<string, Dimension>,
+  options?: AnalyzeUserEquationOptions,
 ): Promise<EquationAnalysis> {
-  const catalogNames = new Set(catalogDims.keys());
+  const dimsIn = withFormulaNames(catalogDims);
+  const catalogNames = new Set(dimsIn.keys());
+  const bindShort = options?.bindShortNames === true;
   // W2: rewrite catalog kebabs before either parser sees `-` as subtraction.
   const eq = await parseUserEquation(equation, catalogNames);
-  const resolve = (n: string): string | null => resolveToCatalogName(n, catalogNames);
+  const literalShort = (n: string): string | null =>
+    n.length === 1 && catalogNames.has(n) ? n : null;
+  const resolve = (n: string): string | null => {
+    if (!bindShort && literalShort(n) !== null) return null;
+    return resolveToCatalogName(n, catalogNames);
+  };
 
   // dims for parsePhysics: physics constants carry their REAL dimensions; matched
   // sources their catalog dimension; the (≤1) unmatched source a DIMENSIONLESS
@@ -465,7 +516,7 @@ export async function analyzeUserEquation(
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
   for (const s of eq.sources) {
     const r = resolve(s);
-    dims[s] = r ? (catalogDims.get(r) as Dimension) : DIMENSIONLESS;
+    dims[s] = r ? (dimsIn.get(r) as Dimension) : DIMENSIONLESS;
   }
   // Use the rewritten equation's RHS (eq.text) so planck-length has already
   // become planck_length before dimensional parse.
@@ -485,7 +536,7 @@ export async function analyzeUserEquation(
   }
 
   const resolvedTarget = resolve(eq.target);
-  const targetDimension = resolvedTarget ? (catalogDims.get(resolvedTarget) as Dimension) : null;
+  const targetDimension = resolvedTarget ? (dimsIn.get(resolvedTarget) as Dimension) : null;
 
   const hints: EquationHint[] = [];
   if (exprForInference) {
@@ -497,7 +548,7 @@ export async function analyzeUserEquation(
       if (targetDimension && totalUnmatched === 1) {
         const inferred = inferUnknownDimension(exprForInference, s, targetDimension);
         if (inferred) {
-          byDim = suggestByDimension(inferred, catalogDims, 5, s);
+          byDim = suggestByDimension(inferred, dimsIn, 5, s);
           if (!equals(inferred, DIMENSIONLESS)) {
             constants = Object.entries(CONSTANTS)
               .filter(([, c]) => equals(c.dim, inferred))
@@ -518,6 +569,30 @@ export async function analyzeUserEquation(
     }
   }
 
+  const declined = eq.sources
+    .filter((s) => !bindShort && literalShort(s) !== null)
+    .map((s) => ({ name: s, quantity: s, dim: dimsIn.get(s) as Dimension, bound: false as const }));
+  const boundShort = eq.sources
+    .filter((s) => s.length === 1 && resolve(s) !== null)
+    .map((s) => ({ name: s, quantity: resolve(s)!, dim: dimsIn.get(resolve(s)!) as Dimension }));
+
+  let consistent = rhsDimension && targetDimension ? equals(rhsDimension, targetDimension) : null;
+  let natural: string | undefined;
+  if (
+    consistent === false &&
+    rhsDimension &&
+    targetDimension &&
+    options?.units !== undefined &&
+    (hints.length === 0)
+  ) {
+    const powers = naturalPowers(rhsDimension, targetDimension, options.units);
+    const note = powers === null ? null : naturalNote(powers, options.units);
+    if (note) {
+      consistent = true;
+      natural = note;
+    }
+  }
+
   return {
     junction: {
       id: 'user-equation',
@@ -529,10 +604,9 @@ export async function analyzeUserEquation(
     parseError,
     rhsDimension,
     targetDimension,
-    consistent: rhsDimension && targetDimension ? equals(rhsDimension, targetDimension) : null,
+    consistent,
     hints,
-    shortBindings: eq.sources
-      .filter((s) => s.length === 1 && resolve(s) !== null)
-      .map((s) => ({ name: s, quantity: resolve(s)!, dim: catalogDims.get(resolve(s)!) as Dimension })),
+    shortBindings: [...declined, ...boundShort],
+    ...(natural === undefined ? {} : { naturalNote: natural }),
   };
 }

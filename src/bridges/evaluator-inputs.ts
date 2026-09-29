@@ -11,6 +11,7 @@
  * @module bridges/evaluator-inputs
  */
 import { convertValue, UnitError, type TemperatureReading } from '../dimensional/units.js';
+import { M_SUN_SI } from '../core/constants.js';
 import type { EvaluatorParameter } from './evaluators.js';
 
 /** One input as it was given and as the evaluator receives it. @internal */
@@ -27,6 +28,23 @@ export interface ResolvedInput {
 /** 15 significant digits: the value itself is passed unrounded. */
 const show = (v: number): number => Number(v.toPrecision(15));
 
+/** Disclosures that a unit symbol does not carry by itself. */
+function unitAside(given: string): string {
+  const notes: string[] = [];
+  const symbols = given.split(/[*·/\s^0-9+-]+/).filter((s) => s.length > 0);
+  if (symbols.includes('myr')) {
+    notes.push('myr is a milliyear (the SI prefix m on yr = 0.001 yr), not a million years; a million years is Myr');
+  }
+  if (symbols.includes('Msun')) {
+    notes.push(
+      `Msun is ${M_SUN_SI} kg (M_SUN_SI), not GM☉/G; G×Msun is about 3.0e-4 high versus the IAU GM☉. Use the unit Msun_iau, or the eval name GM_sun, for GM_SUN_SI`,
+    );
+  }
+  if (symbols.includes('G')) notes.push('bare G is the gauss (1e-4 T); GPa is still a gigapascal');
+  if (symbols.includes('T')) notes.push('bare T is the tesla; Ts is a terasecond');
+  return notes.length === 0 ? '' : ` — ${notes.join('; ')}`;
+}
+
 const splitArg = (a: string): [string, string] => {
   const eq = a.indexOf('=');
   if (eq <= 0) throw new UnitError(`'${a}' must be key=value (e.g. d_m=1um)`);
@@ -37,7 +55,7 @@ function convert(p: EvaluatorParameter, raw: string, reading: TemperatureReading
   const { value, given } = convertValue(raw, p.unit, reading);
   if (given === '') return { value };
   const offset = /degC|°C/.test(given) && reading === 'absolute' ? ' (absolute: + 273.15)' : /degC|°C/.test(given) ? ' (a difference: no offset)' : '';
-  return { value, note: `${raw.trim()} → ${show(value)} ${p.unit || '(dimensionless)'}${offset}` };
+  return { value, note: `${raw.trim()} → ${show(value)} ${p.unit || '(dimensionless)'}${offset}${unitAside(given)}` };
 }
 
 /**

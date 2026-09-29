@@ -28,7 +28,7 @@ describe('upt regime', () => {
   it('reports a CHECKED violation by naming the inequality', async () => {
     const cap = capture();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.9'], cap.io);
-    expect(code).toBe(0);
+    expect(code).toBe(3);
     const text = cap.lines.join('');
     expect(text).toMatch(/ab-pendulum-linear: VIOLATED/);
     expect(text).toMatch(/violated: theta0 <= 0\.5/);
@@ -92,7 +92,7 @@ describe('upt regime', () => {
   it('--json emits the confront-shaped envelope with the tri-state preserved', async () => {
     const cap = capture();
     const code = await runCli(['regime', 'oscillators', '--at', 'theta0=0.9', '--json'], cap.io);
-    expect(code).toBe(0);
+    expect(code).toBe(3);
     const parsed = JSON.parse(cap.lines.join(''));
     expect(parsed.command).toBe('regime');
     expect(typeof parsed.epistemics).toBe('string');

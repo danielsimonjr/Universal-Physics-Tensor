@@ -26,13 +26,14 @@ describe('upt probe', () => {
     expect(text(c)).toMatch(/subverb/);
   });
 
-  it('scan defaults to searchable-only and points at discover when none are searchable (L3)', async () => {
+  it('scan defaults to searchable expression gaps and hides relation-link wrappers', async () => {
     const c = capture();
     expect(await runCli(['probe', 'scan'], c.io)).toBe(0);
     const t = text(c);
-    expect(t).toMatch(/0 of \d+ gaps are searchable/);
-    expect(t).toMatch(/upt discover/);
-    expect(t).toMatch(/--all/);
+    expect(t).toMatch(/fg-expr-case-skin-depth/);
+    expect(t).toMatch(/prediction-residual \/ searchable/);
+    expect(t).toMatch(/Product A wrappers hidden/);
+    expect(t).not.toMatch(/0 of \d+ gaps are searchable/);
     expect(t).not.toMatch(/fg-link-/);
   });
 

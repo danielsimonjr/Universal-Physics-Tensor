@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 383
   totalModules: 12
-  totalExports: 2780
+  totalExports: 2785
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5559,6 +5559,9 @@ modules:
             - convertValue
             - UnitError
             - TemperatureReading
+        - file: ../core/constants.js
+          imports:
+            - M_SUN_SI
         - file: ./evaluators.js
           imports:
             - EvaluatorParameter
@@ -7454,6 +7457,13 @@ modules:
         - file: ../../numerical/formula.js
           imports:
             - eulerConstantNote
+        - file: ../euler-guard.js
+          imports:
+            - unboundEulerRefusal
+            - withParser
+        - file: ../conventions.js
+          imports:
+            - conventionLines
         - file: ../../dimensional/types.js
           imports:
             - Dimension
@@ -7531,6 +7541,22 @@ modules:
         - file: ../../numerical/formula.js
           imports:
             - eulerConstantNote
+        - file: ../euler-guard.js
+          imports:
+            - unboundEulerRefusal
+            - withParser
+        - file: ../eval-numbers.js
+          imports:
+            - HBAR_TRUNCATION_NOTE
+            - codataScope
+            - parseEvalToken
+        - file: ../../composition/natural-units.js
+          imports:
+            - UnitMode
+          typeOnly: true
+        - file: ../../dimensional/units.js
+          imports:
+            - UnitError
       exports:
         - command
       constants:
@@ -7568,6 +7594,12 @@ modules:
           imports:
             - C_SI
             - G_SI
+        - file: ../conventions.js
+          imports:
+            - JEANS_FORMULA_NOTE
+        - file: ../eval-numbers.js
+          imports:
+            - HBAR_TRUNCATION_NOTE
       exports:
         - command
         - weakFieldDomainNote
@@ -7716,6 +7748,12 @@ modules:
         - file: ./search.js
           imports:
             - "*"
+        - file: ./metric.js
+          imports:
+            - "*"
+        - file: ./testplan.js
+          imports:
+            - "*"
       exports: []
     src/cli/commands/map.ts:
       description: "`upt map` — how the equations LINK: the text linkage map, the visual"
@@ -7786,6 +7824,16 @@ modules:
         - file: ../../numerical/formula.js
           imports:
             - eulerConstantNote
+        - file: ../euler-guard.js
+          imports:
+            - unboundEulerRefusal
+        - file: ../conventions.js
+          imports:
+            - conventionLines
+        - file: ../../composition/natural-units.js
+          imports:
+            - UnitMode
+          typeOnly: true
       exports:
         - command
         - neighbourhood
@@ -7922,6 +7970,9 @@ modules:
             - CliError
       exports:
         - command
+        - emptySearchableWarning
+      functions:
+        - emptySearchableWarning
       constants:
         - command
     src/cli/commands/recover.ts:
@@ -7962,6 +8013,7 @@ modules:
         - file: ../errors.js
           imports:
             - CliError
+            - EXIT_CHECK_FAILED
         - file: ../output.js
           imports:
             - emitJson
@@ -8597,6 +8649,8 @@ modules:
             - DEFAULT_SEARCH_BUDGET
             - scanFrontier
             - findFrontierGap
+            - expressionSearchGaps
+            - scanWithExpressionGaps
             - problemFromResidualGap
             - makeResidualGap
             - loadSearchProblemFromJson
@@ -8840,6 +8894,8 @@ modules:
         - DEFAULT_SEARCH_BUDGET
         - scanFrontier
         - findFrontierGap
+        - expressionSearchGaps
+        - scanWithExpressionGaps
         - problemFromResidualGap
         - makeResidualGap
         - loadSearchProblemFromJson
@@ -9016,6 +9072,8 @@ modules:
         - DEFAULT_SEARCH_BUDGET
         - scanFrontier
         - findFrontierGap
+        - expressionSearchGaps
+        - scanWithExpressionGaps
         - problemFromResidualGap
         - makeResidualGap
         - loadSearchProblemFromJson
@@ -9293,7 +9351,14 @@ modules:
             - evalExpr
         - file: ./canonical-prefactors.js
           imports:
+            - CANONICAL_GROUP_PREFACTORS
             - canonicalPrefactor
+        - file: ./formula-names.js
+          imports:
+            - formulaNameDimensions
+        - file: ../core/constants.js
+          imports:
+            - C_SI
         - file: ./user-equation.js
           imports:
             - parseUserEquation
@@ -11642,6 +11707,11 @@ modules:
             - findFrontierGap
             - problemFromResidualGap
           reExport: true
+        - file: ./expression-gaps.js
+          imports:
+            - expressionSearchGaps
+            - scanWithExpressionGaps
+          reExport: true
         - file: ./fit.js
           imports:
             - fitPrefactor
@@ -11834,6 +11904,8 @@ modules:
         - scanFrontier
         - findFrontierGap
         - problemFromResidualGap
+        - expressionSearchGaps
+        - scanWithExpressionGaps
         - fitPrefactor
         - scoreCandidate
         - rankPareto
@@ -12026,6 +12098,8 @@ modules:
         - scanFrontier
         - findFrontierGap
         - problemFromResidualGap
+        - expressionSearchGaps
+        - scanWithExpressionGaps
         - fitPrefactor
         - FitResult
         - scoreCandidate
@@ -13298,6 +13372,14 @@ modules:
         - file: ./symbolic-constants.js
           imports:
             - CONSTANTS
+        - file: ./formula-names.js
+          imports:
+            - formulaNameDimensions
+        - file: ./natural-units.js
+          imports:
+            - naturalNote
+            - naturalPowers
+            - UnitMode
         - file: ./graph-viz.js
           imports:
             - VizModel
@@ -13331,6 +13413,7 @@ modules:
         - UserEquationError
       interfaces:
         - UserEquation
+        - AnalyzeUserEquationOptions
         - EquationLanding
         - EquationHint
         - ShortBinding
@@ -14190,8 +14273,9 @@ modules:
             - CHARGE
         - file: ./algebra.js
           imports:
-            - multiply
             - divide
+            - multiply
+            - power
       exports:
         - parseDimensionSpec
         - DimensionSpecError
@@ -14734,7 +14818,10 @@ modules:
           typeOnly: true
         - file: ../core/constants.js
           imports:
+            - C_SI
             - E_SI
+            - G_SI
+            - GM_SUN_SI
             - M_SUN_SI
       exports:
         - parseUnit
@@ -18679,16 +18766,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 83503
-  totalExports: 2780
+  totalLinesOfCode: 84000
+  totalExports: 2785
   totalClasses: 60
-  totalInterfaces: 436
-  totalFunctions: 693
+  totalInterfaces: 437
+  totalFunctions: 694
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 691
-  totalReExports: 1335
-  totalTypeOnlyImports: 523
+  totalReExports: 1339
+  totalTypeOnlyImports: 525
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

@@ -135,6 +135,27 @@ export const CANONICAL_PREFACTORS: readonly CanonicalPrefactor[] = [
     quote: String.raw`<math>t_\text{P} = \sqrt{\frac{\hbar G}{c^5}}</math>`,
     locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 87",
   },
+  {
+    // The AST is μ₀ I / r; the quoted wire field divides by 2π.
+    id: 'CE-magnetic-field-wire',
+    prefactor: 1 / (2 * Math.PI),
+    quote: String.raw`B = \frac{\mu_0I}{2\pi x}`,
+    locator: "Wikipedia, 'Magnetic field', revision 1375215267, wikitext line 876",
+  },
+  {
+    // The AST divides by ε₀ c³ only; the quoted power divides by 6π as well.
+    id: 'CE-larmor-power',
+    prefactor: 1 / (6 * Math.PI),
+    quote: String.raw`\frac{q^2 a^2}{6 \pi \varepsilon_0 c^3}`,
+    locator: "Wikipedia, 'Larmor formula', revision 1352376843, wikitext line 9",
+  },
+  {
+    // The quote's electric term is ε E²/2. In vacuum ε = ε₀, and the AST is ε₀ E².
+    id: 'CE-field-energy-density',
+    prefactor: 0.5,
+    quote: String.raw`u = \frac{\varepsilon}{2} \mathbf{E}^2 + \frac{1}{2 \mu} \mathbf{B}^2`,
+    locator: "Wikipedia, 'Energy density', revision 1366889538, wikitext line 81",
+  },
 ];
 
 /** The sourced prefactor of a canonical entry, or `undefined`. @internal */

@@ -55,8 +55,9 @@ describe('exit 0: the check passed, or could not run', () => {
     // model-rlc → model-first-order: exact then approximation, a silent cell (pendulum → lc composes since 2026-09-27).
     expect(await code(['path', 'model-rlc', 'model-first-order'])).toBe(0);
   });
-  it('regime is a survey: a violated record in it is not a failed command', async () => {
-    expect(await code(['regime', 'oscillators', '--at', 'theta0=0.8'])).toBe(0);
+  it('regime exits 3 when a record is VIOLATED, and 0 when the survey is unchecked', async () => {
+    expect(await code(['regime', 'oscillators', '--at', 'theta0=0.8'])).toBe(3);
+    expect(await code(['regime', 'oscillators'])).toBe(0);
   });
 });
 

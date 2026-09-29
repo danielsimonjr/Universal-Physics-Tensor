@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 383,
     "totalModules": 12,
-    "totalExports": 2780
+    "totalExports": 2785
   },
   "entryPoints": [
     {
@@ -8182,6 +8182,12 @@
             ]
           },
           {
+            "file": "../core/constants.js",
+            "imports": [
+              "M_SUN_SI"
+            ]
+          },
+          {
             "file": "./evaluators.js",
             "imports": [
               "EvaluatorParameter"
@@ -11086,6 +11092,19 @@
             ]
           },
           {
+            "file": "../euler-guard.js",
+            "imports": [
+              "unboundEulerRefusal",
+              "withParser"
+            ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "conventionLines"
+            ]
+          },
+          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -11214,6 +11233,34 @@
             "imports": [
               "eulerConstantNote"
             ]
+          },
+          {
+            "file": "../euler-guard.js",
+            "imports": [
+              "unboundEulerRefusal",
+              "withParser"
+            ]
+          },
+          {
+            "file": "../eval-numbers.js",
+            "imports": [
+              "HBAR_TRUNCATION_NOTE",
+              "codataScope",
+              "parseEvalToken"
+            ]
+          },
+          {
+            "file": "../../composition/natural-units.js",
+            "imports": [
+              "UnitMode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/units.js",
+            "imports": [
+              "UnitError"
+            ]
           }
         ],
         "exports": [
@@ -11275,6 +11322,18 @@
             "imports": [
               "C_SI",
               "G_SI"
+            ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "JEANS_FORMULA_NOTE"
+            ]
+          },
+          {
+            "file": "../eval-numbers.js",
+            "imports": [
+              "HBAR_TRUNCATION_NOTE"
             ]
           }
         ],
@@ -11542,6 +11601,18 @@
             "imports": [
               "*"
             ]
+          },
+          {
+            "file": "./metric.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
+            "file": "./testplan.js",
+            "imports": [
+              "*"
+            ]
           }
         ],
         "exports": []
@@ -11660,6 +11731,25 @@
             "imports": [
               "eulerConstantNote"
             ]
+          },
+          {
+            "file": "../euler-guard.js",
+            "imports": [
+              "unboundEulerRefusal"
+            ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "conventionLines"
+            ]
+          },
+          {
+            "file": "../../composition/natural-units.js",
+            "imports": [
+              "UnitMode"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -11877,7 +11967,11 @@
           }
         ],
         "exports": [
-          "command"
+          "command",
+          "emptySearchableWarning"
+        ],
+        "functions": [
+          "emptySearchableWarning"
         ],
         "constants": [
           "command"
@@ -11940,7 +12034,8 @@
           {
             "file": "../errors.js",
             "imports": [
-              "CliError"
+              "CliError",
+              "EXIT_CHECK_FAILED"
             ]
           },
           {
@@ -12916,6 +13011,8 @@
               "DEFAULT_SEARCH_BUDGET",
               "scanFrontier",
               "findFrontierGap",
+              "expressionSearchGaps",
+              "scanWithExpressionGaps",
               "problemFromResidualGap",
               "makeResidualGap",
               "loadSearchProblemFromJson",
@@ -13252,6 +13349,8 @@
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
@@ -13429,6 +13528,8 @@
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
@@ -13821,7 +13922,20 @@
           {
             "file": "./canonical-prefactors.js",
             "imports": [
+              "CANONICAL_GROUP_PREFACTORS",
               "canonicalPrefactor"
+            ]
+          },
+          {
+            "file": "./formula-names.js",
+            "imports": [
+              "formulaNameDimensions"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI"
             ]
           },
           {
@@ -17208,6 +17322,14 @@
             "reExport": true
           },
           {
+            "file": "./expression-gaps.js",
+            "imports": [
+              "expressionSearchGaps",
+              "scanWithExpressionGaps"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./fit.js",
             "imports": [
               "fitPrefactor"
@@ -17478,6 +17600,8 @@
           "scanFrontier",
           "findFrontierGap",
           "problemFromResidualGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "fitPrefactor",
           "scoreCandidate",
           "rankPareto",
@@ -17671,6 +17795,8 @@
           "scanFrontier",
           "findFrontierGap",
           "problemFromResidualGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "fitPrefactor",
           "FitResult",
           "scoreCandidate",
@@ -19410,6 +19536,20 @@
             ]
           },
           {
+            "file": "./formula-names.js",
+            "imports": [
+              "formulaNameDimensions"
+            ]
+          },
+          {
+            "file": "./natural-units.js",
+            "imports": [
+              "naturalNote",
+              "naturalPowers",
+              "UnitMode"
+            ]
+          },
+          {
             "file": "./graph-viz.js",
             "imports": [
               "VizModel",
@@ -19460,6 +19600,7 @@
         ],
         "interfaces": [
           "UserEquation",
+          "AnalyzeUserEquationOptions",
           "EquationLanding",
           "EquationHint",
           "ShortBinding",
@@ -20679,8 +20820,9 @@
           {
             "file": "./algebra.js",
             "imports": [
+              "divide",
               "multiply",
-              "divide"
+              "power"
             ]
           }
         ],
@@ -21462,7 +21604,10 @@
           {
             "file": "../core/constants.js",
             "imports": [
+              "C_SI",
               "E_SI",
+              "G_SI",
+              "GM_SUN_SI",
               "M_SUN_SI"
             ]
           }
@@ -26664,16 +26809,16 @@
   "statistics": {
     "totalTypeScriptFiles": 383,
     "totalModules": 12,
-    "totalLinesOfCode": 83503,
-    "totalExports": 2780,
+    "totalLinesOfCode": 84000,
+    "totalExports": 2785,
     "totalClasses": 60,
-    "totalInterfaces": 436,
-    "totalFunctions": 693,
+    "totalInterfaces": 437,
+    "totalFunctions": 694,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 691,
-    "totalReExports": 1335,
-    "totalTypeOnlyImports": 523,
+    "totalReExports": 1339,
+    "totalTypeOnlyImports": 525,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

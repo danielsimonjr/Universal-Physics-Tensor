@@ -5453,6 +5453,7 @@
       "tests/composition/canonical-graph.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/core/constants.test.ts",
+      "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/fixtures/perfect-fluid.test.ts",
       "tests/fixtures/schwarzschild-riemann.test.ts",
@@ -13534,6 +13535,7 @@
     ],
     "tests/dimensional/units.test.ts": [
       "src/dimensional/units.ts",
+      "src/core/constants.ts",
       "src/bridges/evaluator-inputs.ts",
       "src/bridges/evaluators.ts"
     ],

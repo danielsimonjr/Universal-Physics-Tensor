@@ -183,8 +183,10 @@ describe('static attribution', () => {
     expect(thermal.attribution.tables['core/constants']).toContain('K_B_SI');
     expect(thermal.attribution.tables['dimensional/units']).toEqual(['*']);
     expect(formula.attribution.command).toBe('eval');
-    expect(formula.attribution.tables['core/constants']).not.toContain('K_B_SI');
-    expect(formula.attribution.tables['dimensional/units']).toBeUndefined();
+    // eval binds CODATA names, so those constants are in its static reach. A constant it does not import stays out.
+    expect(formula.attribution.tables['core/constants']).toContain('K_B_SI');
+    expect(formula.attribution.tables['core/constants']).not.toContain('ALPHA');
+    expect(formula.attribution.tables['dimensional/units']).toEqual(['*']);
     expect(version.attribution).toBeNull();
   });
 
@@ -204,13 +206,13 @@ describe('static attribution', () => {
     const reach = env.result.entries.map((e: { environmentChanges: { fact: string; reach?: string }[] }) =>
       e.environmentChanges.filter((c) => c.fact === 'constant core/constants K_B_SI').map((c) => c.reach),
     );
-    expect(reach).toEqual([['reachable'], ['not-reachable'], ['unattributed']]);
+    expect(reach).toEqual([['reachable'], ['reachable'], ['unattributed']]);
     expect(text).toContain(
-      "      constant core/constants K_B_SI: 1.38e-23 -> 1.380649e-23 — not reachable from 'eval' by static import analysis",
+      "      constant core/constants K_B_SI: 1.38e-23 -> 1.380649e-23 — reachable from 'eval' (static upper bound, not an observed read)",
     );
   });
 
-  it('SECOND METHOD — a real change to K_B_SI in a copy of dist: the unreachable entry reproduces, the reachable one differs', () => {
+  it('SECOND METHOD — a real change to K_B_SI in a copy of dist differs on every command that can reach it', () => {
     const copy = mkdtempSync(join(tmpdir(), 'upt-perturbed-'));
     cpSync(join(repo, 'dist'), join(copy, 'dist'), { recursive: true, filter: (s) => !/\.(d\.ts|map)$/.test(s) });
     mkdirSync(join(copy, 'bin'));
@@ -230,12 +232,14 @@ describe('static attribution', () => {
     const kb = (e: { environmentChanges: { fact: string }[] }) => e.environmentChanges.find((c) => c.fact === 'constant core/constants K_B_SI');
     expect(thermal.outcome).toBe('differs');
     expect(kb(thermal)).toMatchObject({ recorded: 1.380649e-23, current: 1.38e-23, reach: 'reachable' });
+    // 2*x+1 does not read K_B, so its output reproduces. The change is still labelled reachable:
+    // eval imports the CODATA names, and the label is a static upper bound.
     expect(formula.outcome).toBe('reproduced');
-    expect(kb(formula)).toMatchObject({ reach: 'not-reachable' });
+    expect(kb(formula)).toMatchObject({ recorded: 1.380649e-23, current: 1.38e-23, reach: 'reachable' });
     const tableSha = (e: { environmentChanges: { fact: string; reach?: string }[] }) =>
       e.environmentChanges.find((c) => c.fact === 'table core/constants sha256')?.reach;
     expect(tableSha(thermal)).toBe('reachable');
-    expect(tableSha(formula)).toBe('not-reachable');
+    expect(tableSha(formula)).toBe('reachable');
     expect(thermal.integrity).toEqual([]);
     expect(formula.integrity).toEqual([]);
     // A copy of dist plus a real replay process: about 10 s alone, 73 s measured under a parallel

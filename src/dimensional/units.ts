@@ -11,11 +11,16 @@
  * DIFFERENCE (an uncertainty, an interval) does not. °F is refused rather than
  * converted.
  *
+ * An exact symbol wins over a prefix: `T` is the tesla and `Ts` is a
+ * terasecond; `G` is the gauss and `GPa` is a gigapascal. `AU` is the same
+ * exact metre count as `au`. `Msun` is `M_SUN_SI` kilograms; `Msun_iau` is
+ * `GM_SUN_SI / G_SI`. `myr` is a milliyear because `m` is the SI prefix.
+ *
  * @module dimensional/units
  */
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
-import { E_SI, M_SUN_SI } from '../core/constants.js';
+import { C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../core/constants.js';
 
 /** A unit, as a scale to SI base units and a dimension. @internal */
 export interface ParsedUnit {
@@ -65,8 +70,23 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   // The Julian year, the year the orbital evaluators take.
   ['yr', [365.25 * 86400, D({ T: 1 }), true]],
   ['au', [149597870700, D({ L: 1 }), false]],
+  ['AU', [149597870700, D({ L: 1 }), false]],
   // The solar mass the evaluators use, not the IAU nominal value.
   ['Msun', [M_SUN_SI, D({ M: 1 }), false]],
+  // GM☉/G, so G × Msun_iau is the IAU solar mass parameter.
+  ['Msun_iau', [GM_SUN_SI / G_SI, D({ M: 1 }), false]],
+  // Tesla. Exact, so it is not a prefix: `Ts` is a terasecond, `T` is a tesla.
+  ['T', [1, D({ M: 1, T: -2, I: -1 }), false]],
+  // Gauss = 10⁻⁴ T. Exact, so `GPa` stays gigapascal (prefix G + Pa) and bare `G` is gauss.
+  ['G', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
+  ['bar', [1e5, D({ L: -1, M: 1, T: -2 }), true]],
+  ['atm', [101325, D({ L: -1, M: 1, T: -2 }), false]],
+  ['angstrom', [1e-10, D({ L: 1 }), false]],
+  ['Angstrom', [1e-10, D({ L: 1 }), false]],
+  ['Å', [1e-10, D({ L: 1 }), false]],
+  // IAU-style parsec; the prefix applies, so `Mpc` is a megaparsec.
+  ['pc', [3.0856775814913673e16, D({ L: 1 }), true]],
+  ['ly', [C_SI * 365.25 * 86400, D({ L: 1 }), false]],
 ]);
 
 const CELSIUS_OFFSET_K = 273.15;

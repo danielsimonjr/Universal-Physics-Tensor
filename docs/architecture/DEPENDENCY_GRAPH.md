@@ -2501,6 +2501,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/units.js` | `convertValue, UnitError, TemperatureReading` | Import |
+| `../core/constants.js` | `M_SUN_SI` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
 **Exports:**
@@ -3384,6 +3385,8 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError, EXIT_CHECK_FAILED` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
+| `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
+| `../conventions.js` | `conventionLines` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -3421,6 +3424,10 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
+| `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
+| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope, parseEvalToken` | Import |
+| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../dimensional/units.js` | `UnitError` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3439,6 +3446,8 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
 | `../../core/constants.js` | `C_SI, G_SI` | Import |
+| `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
+| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
 
 **Exports:**
 - Functions: `weakFieldDomainNote`, `propagateUncertainty`
@@ -3508,6 +3517,8 @@ The codebase is organized into the following modules:
 | `./path.js` | `*` | Import |
 | `./atlas.js` | `*` | Import |
 | `./search.js` | `*` | Import |
+| `./metric.js` | `*` | Import |
+| `./testplan.js` | `*` | Import |
 
 ---
 
@@ -3535,6 +3546,9 @@ The codebase is organized into the following modules:
 | `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
+| `../euler-guard.js` | `unboundEulerRefusal` | Import |
+| `../conventions.js` | `conventionLines` | Import |
+| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -3608,6 +3622,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError, CliError` | Import |
 
 **Exports:**
+- Functions: `emptySearchableWarning`
 - Constants: `command`
 
 ---
@@ -3633,7 +3648,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../errors.js` | `CliError` | Import |
+| `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3897,7 +3912,7 @@ The codebase is organized into the following modules:
 | `./composition/graph-viz.js` | `filterEdges, deriveEdgeEvidence, formatFilterLegend` | Re-export |
 | `./composition/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
 | `./composition/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
-| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
+| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
 | `./composition/adjudication.js` | `AnnotatedCandidate, CandidateAdjudication` | Re-export |
 | `./composition/consequence.js` | `annotateConsequences` | Re-export |
@@ -3948,23 +3963,23 @@ The codebase is organized into the following modules:
   bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
   filterEdges, deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
   describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
-  findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson,
-  resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson,
-  loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap,
-  suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto, annotateAdjudications,
-  adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication,
-  annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
-  checkConventions, unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness,
-  REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation, describeComparison,
-  describeComparisons, CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding,
-  CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence,
-  NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY,
-  runNumericWitness, OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck,
-  translationsOf, ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, regimeHolds,
-  regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath,
-  enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult,
-  PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality, Witness,
-  MissingLipschitzError, AtlasModel, ModelId
+  findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap,
+  makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
+  formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
+  formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
+  runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
+  AnnotatedCandidate, CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
+  ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
+  describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
+  compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
+  CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
+  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS,
+  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
+  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
+  ObservableTranslation, PointCheck, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
+  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath,
+  horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim,
+  AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -4062,7 +4077,9 @@ The codebase is organized into the following modules:
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
-| `./canonical-prefactors.js` | `canonicalPrefactor` | Import |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
+| `./formula-names.js` | `formulaNameDimensions` | Import |
+| `../core/constants.js` | `C_SI` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula.js` | `CompiledFormula` | Import (type-only) |
@@ -4868,6 +4885,7 @@ The codebase is organized into the following modules:
 | `./generator.js` | `monomialToExpr, generateNative` | Re-export |
 | `./generator.js` | `RawCandidate` | Re-export |
 | `./frontier.js` | `wrapRelationLinkGaps, wrapConnectorGaps, wrapRegimeGaps, scanFrontier, findFrontierGap, problemFromResidualGap` | Re-export |
+| `./expression-gaps.js` | `expressionSearchGaps, scanWithExpressionGaps` | Re-export |
 | `./fit.js` | `fitPrefactor` | Re-export |
 | `./fit.js` | `FitResult` | Re-export |
 | `./scoring.js` | `scoreCandidate, rankPareto` | Re-export |
@@ -4912,11 +4930,11 @@ The codebase is organized into the following modules:
   complexityOf, fingerprintExpr, scalarDiscrepancy, rmse, ResidualError, openManifest, closeManifest,
   captureEnvironment, canTransition, applyStatus, statusRank, ProbeCandidateStore, monomialToExpr,
   generateNative, RawCandidate, wrapRelationLinkGaps, wrapConnectorGaps, wrapRegimeGaps, scanFrontier,
-  findFrontierGap, problemFromResidualGap, fitPrefactor, FitResult, scoreCandidate, rankPareto,
-  RankedCandidate, compareToCorpus, corpusRelativeWording, CorpusMatch, CorpusComparisonResult,
-  checkDeclaredLimit, checkDeclaredLimits, LimitCheckResult, runFalsification, DEFAULT_BATTERIES,
-  FalsifyInput, FalsifyResult, datasetFromRows, asDatasetSafe, loadDatasetFromJson,
-  loadSplitDatasetsFromJson, loadDatasetFromCsv, loadSplitCsv, SplitFileDatasets,
+  findFrontierGap, problemFromResidualGap, expressionSearchGaps, scanWithExpressionGaps, fitPrefactor,
+  FitResult, scoreCandidate, rankPareto, RankedCandidate, compareToCorpus, corpusRelativeWording,
+  CorpusMatch, CorpusComparisonResult, checkDeclaredLimit, checkDeclaredLimits, LimitCheckResult,
+  runFalsification, DEFAULT_BATTERIES, FalsifyInput, FalsifyResult, datasetFromRows, asDatasetSafe,
+  loadDatasetFromJson, loadSplitDatasetsFromJson, loadDatasetFromCsv, loadSplitCsv, SplitFileDatasets,
   suggestDiscriminatingPoint, parseDesignBounds, DesignBounds, DesignSuggestion,
   detectMeanChangepoint, estimateScaleExponent, probeConservation, ChangepointInput,
   ChangepointResult, ScaleSymmetryInput, runBackendWorker, BackendRequest, BackendCandidate,
@@ -5442,6 +5460,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `./formula-names.js` | `formulaNameDimensions` | Import |
+| `./natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
 | `./graph-viz.js` | `VizModel, VizJunction` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -5450,7 +5470,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `UserEquationError`
-- Interfaces: `UserEquation`, `EquationLanding`, `EquationHint`, `ShortBinding`, `EquationAnalysis`
+- Interfaces: `UserEquation`, `AnalyzeUserEquationOptions`, `EquationLanding`, `EquationHint`, `ShortBinding`, `EquationAnalysis`
 - Functions:
 
   ```text
@@ -5847,7 +5867,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./types.js` | `DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE` | Import |
-| `./algebra.js` | `multiply, divide` | Import |
+| `./algebra.js` | `divide, multiply, power` | Import |
 
 **Exports:**
 - Classes: `DimensionSpecError`
@@ -6103,7 +6123,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./algebra.js` | `equals, format, multiply, power` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
-| `../core/constants.js` | `E_SI, M_SUN_SI` | Import |
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI` | Import |
 
 **Exports:**
 - Classes: `UnitError`
@@ -7260,15 +7280,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 83503 |
-| Total Exports | 2780 |
-| Total Re-exports | 1335 |
+| Total Lines of Code | 84000 |
+| Total Exports | 2785 |
+| Total Re-exports | 1339 |
 | Total Classes | 60 |
-| Total Interfaces | 436 |
-| Total Functions | 693 |
+| Total Interfaces | 437 |
+| Total Functions | 694 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 523 |
+| Type-only Imports | 525 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

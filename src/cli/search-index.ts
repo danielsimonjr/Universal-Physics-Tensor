@@ -12,7 +12,13 @@
 import type { CommandCtx } from './command.js';
 
 /** The registry a search-index entry comes from. */
-export type SearchKind = 'catalog-bridge' | 'canonical-equation' | 'atlas-model' | 'atlas-bridge' | 'quantity';
+export type SearchKind =
+  | 'catalog-bridge'
+  | 'canonical-equation'
+  | 'atlas-model'
+  | 'atlas-bridge'
+  | 'quantity'
+  | 'applied-case';
 
 export const SEARCH_SECTIONS: readonly (readonly [SearchKind, string])[] = [
   ['catalog-bridge', 'catalog bridges'],
@@ -20,6 +26,7 @@ export const SEARCH_SECTIONS: readonly (readonly [SearchKind, string])[] = [
   ['atlas-model', 'atlas models'],
   ['atlas-bridge', 'atlas bridges'],
   ['quantity', 'quantities'],
+  ['applied-case', 'applied cases'],
 ];
 
 /** A searchable field: its label, its words, and the exact strings a short word may equal. */
@@ -64,7 +71,7 @@ function matchWord(q: string, e: SearchEntry): string[] | null {
   return hit.length === 0 ? null : hit.map((f) => f.label);
 }
 
-/** Index every registry the CLI exposes: catalog bridges, canonical equations, atlas models, atlas bridges and quantities. */
+/** Index every registry the CLI exposes, including applied cases. */
 export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
   const entries: SearchEntry[] = [];
   const fmt = api.format;
@@ -147,6 +154,20 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       addQ(e.target, graph);
     }
   }
+  for (const c of api.APPLIED_CASES.values()) {
+    entries.push({
+      kind: 'applied-case',
+      id: c.id,
+      line: `${c.id} ${c.title}`,
+      command: `upt evaluate ${c.id}`,
+      commandLabel: 'evaluate',
+      fields: [
+        { label: 'id', text: c.id, exact: [c.id] },
+        { label: 'name', text: c.title },
+      ],
+    });
+  }
+
   for (const [name, q] of quantities) {
     const graphs = [...q.graphs];
     entries.push({

@@ -65,20 +65,25 @@ describe('upt map --equation — GR formulas a student types', () => {
     expect(half).toMatch(/differs from CE-schwarzschild-radius .* by a constant factor: yours\/canonical = 0\.500000/);
   });
 
-  it('a Bohr-radius formula that writes e is warned that e is Euler, and is not reported as agreeing', async () => {
-    const t = await text([
+  it('a Bohr-radius formula that writes e is refused, and --allow-euler does not call it an agreement', async () => {
+    const refused = await text([
       'map', '--equation-only', '--equation',
       'bohr_radius = 4*pi*epsilon_0*hbar^2/(m_e*e^2)',
-    ]);
+    ], 2);
+    expect(refused).toMatch(/unbound e is Euler's number/);
+    const t = await text([
+      'map', '--equation-only', '--allow-euler', '--equation',
+      'bohr_radius = 4*pi*epsilon_0*hbar^2/(m_e*e^2)',
+    ], 3);
     expect(t).toMatch(/Euler/);
-    expect(t).toMatch(/no canonical equation has this target and these variables/);
     expect(t).not.toMatch(/agrees with CE-bohr-radius/);
   });
 });
 
 describe('upt eval — bare e', () => {
-  it('e^2 is Euler\'s number squared, and the note says so', async () => {
-    const t = await text(['eval', 'e^2']);
+  it('an unbound e^2 is refused; --allow-euler evaluates Euler\'s number squared', async () => {
+    expect(await text(['eval', 'e^2'], 2)).toMatch(/Euler/);
+    const t = await text(['eval', 'e^2', '--allow-euler']);
     expect(t).toMatch(/Euler/);
     expect(Number(t.match(/[\d.]+e?[+\-]?\d*/g)?.filter((s) => Number(s) > 2).at(-1))).toBeCloseTo(Math.E ** 2, 10);
   });

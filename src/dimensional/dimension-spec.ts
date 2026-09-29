@@ -10,8 +10,10 @@
  *      `e` (its SI dimension);
  *   3. a product/quotient of named dimensions or constants — `power/area`,
  *      `length*temperature` (persona finding L1); parentheses group a
- *      denominator or factor, e.g. `power/(area*temperature^4)` is NOT yet
- *      accepted (declare the compound with explicit bases instead);
+ *      denominator or factor (`power/(area*temperature^4)`), a name may
+ *      carry an exponent (`mass/length^3`), and a single base letter works
+ *      in a quotient (`M/L^3`). A slash that is only the bar of a fractional
+ *      exponent (`T^1/2`) stays on the explicit-base path;
  *   4. explicit base exponents — `L^3.M^-1.T^-2` (bases L M T I Theta/Θ N J,
  *      separated by `.`, `*`, or spaces; `^` optional; fractional exponents
  *      like `T^1/2` allowed).
@@ -37,7 +39,7 @@ import {
   ENTROPY,
   CHARGE,
 } from './types.js';
-import { multiply, divide } from './algebra.js';
+import { divide, multiply, power } from './algebra.js';
 
 /** A bad dimension spec. */
 export class DimensionSpecError extends Error {
@@ -72,6 +74,12 @@ const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
   temperature: TEMPERATURE,
   entropy: ENTROPY,
   charge: CHARGE,
+  pressure: d(-1, 1, -2),
+  density: d(-3, 1),
+  volume: d(3),
+  viscosity: d(-1, 1, -1),
+  resistance: d(2, 1, -3, 0, -2),
+  magnetic_field: d(0, 1, -2, 0, -1),
 };
 
 /** Fundamental constants by their SI dimension — matched EXACT-case, so
@@ -118,8 +126,16 @@ function resolveAtom(raw: string): Dimension | null {
   const s = raw.trim();
   if (!s) return null;
   if (CONST_DIMS[s]) return CONST_DIMS[s]!;
-  const named = NAMED_DIMS[s.toLowerCase()];
-  return named ?? null;
+  const key = s.toLowerCase().replace(/[\s-]+/g, '_');
+  return NAMED_DIMS[key] ?? NAMED_DIMS[s.toLowerCase()] ?? null;
+}
+
+function baseAtom(id: string): Dimension | null {
+  const baseKey = BASES[id.toUpperCase()] ?? BASES[id];
+  if (!baseKey) return null;
+  const dim = d();
+  dim[baseKey] = 1;
+  return dim;
 }
 
 /**
@@ -129,24 +145,80 @@ function resolveAtom(raw: string): Dimension | null {
  * Returns `null` when the string is not this form (so the base-exponent path
  * can try).
  */
-function parseNamedProductQuotient(s: string): Dimension | null {
-  if (!/[*\/]/.test(s) || /[()]/.test(s)) return null;
-  // Split on * and / keeping the operators. Reject if any atom looks like a
-  // base-exponent token we should leave to step 4 (e.g. L^3.M^-1).
-  const tokens = s.split(/([*/])/).map((t) => t.trim()).filter((t) => t.length > 0);
-  if (tokens.length < 3 || tokens.length % 2 === 0) return null;
-  const first = resolveAtom(tokens[0]!);
-  if (first === null) return null;
-  let acc: Dimension = first;
-  for (let i = 1; i < tokens.length; i += 2) {
-    const op = tokens[i]!;
-    const atom = resolveAtom(tokens[i + 1]!);
-    if (atom === null) return null;
-    if (op === '*') acc = multiply(acc, atom);
-    else if (op === '/') acc = divide(acc, atom);
-    else return null;
-  }
-  return acc;
+/**
+ * A product/quotient with parentheses and exponents: `power/(area*temperature^4)`,
+ * `mass/length^3`, `M/L^3`. A slash followed by a digit is a fractional
+ * exponent on the explicit-base path (`T^1/2`), not this one.
+ */
+function parseGroupedProduct(s: string): Dimension {
+  let i = 0;
+  const skip = (): void => {
+    while (s[i] === ' ') i++;
+  };
+  const parseExponentToken = (): number => {
+    skip();
+    const start = i;
+    if (s[i] === '+' || s[i] === '-') i++;
+    if (!/\d/.test(s[i] ?? '')) throw new DimensionSpecError(`bad exponent in '${s}'`);
+    while (/\d/.test(s[i] ?? '')) i++;
+    if (s[i] === '/' && /\d/.test(s[i + 1] ?? '')) {
+      i++;
+      while (/\d/.test(s[i] ?? '')) i++;
+    }
+    return parseExponent(s.slice(start, i));
+  };
+  const parseAtom = (): Dimension => {
+    skip();
+    if (s[i] === '(') {
+      i++;
+      const inner = parseProduct();
+      skip();
+      if (s[i] !== ')') throw new DimensionSpecError(`unbalanced '(' in '${s}'`);
+      i++;
+      return inner;
+    }
+    const start = i;
+    while (i < s.length && /[A-Za-zΘ_]/.test(s[i]!)) i++;
+    const id = s.slice(start, i);
+    if (!id) throw new DimensionSpecError(`unrecognized dimension term '${s.slice(start)}'`);
+    const named = resolveAtom(id);
+    if (named) return named;
+    const base = baseAtom(id);
+    if (base) return base;
+    throw new DimensionSpecError(
+      `unrecognized dimension term '${id}' (use a named dimension, a constant, ` +
+        `or bases L M T I Theta N J)`,
+    );
+  };
+  const parsePower = (): Dimension => {
+    const base = parseAtom();
+    skip();
+    if (s[i] !== '^') return base;
+    i++;
+    return power(base, parseExponentToken());
+  };
+  const parseProduct = (): Dimension => {
+    let acc = parsePower();
+    while (true) {
+      skip();
+      const op = s[i];
+      if (op !== '*' && op !== '/') break;
+      i++;
+      const rhs = parsePower();
+      acc = op === '*' ? multiply(acc, rhs) : divide(acc, rhs);
+    }
+    return acc;
+  };
+  const out = parseProduct();
+  skip();
+  if (i !== s.length) throw new DimensionSpecError(`unrecognized dimension term '${s.slice(i)}'`);
+  return out;
+}
+
+function wantsGroupedProduct(s: string): boolean {
+  if (/[()]/.test(s)) return true;
+  if (/\/\s*[(A-Za-zΘ]/.test(s)) return true;
+  return /\*/.test(s) && /[A-Za-z]{2,}/.test(s);
 }
 
 /** Parse a dimension spec string into a {@link Dimension}. @internal */
@@ -160,9 +232,8 @@ export function parseDimensionSpec(spec: string): Dimension {
   const named = NAMED_DIMS[s.toLowerCase()];
   if (named) return named;
 
-  // (3) product/quotient of named dims / constants (persona L1).
-  const compound = parseNamedProductQuotient(s);
-  if (compound !== null) return compound;
+  // (3) product/quotient, including parentheses and named exponents.
+  if (wantsGroupedProduct(s)) return parseGroupedProduct(s);
 
   // (4) explicit base exponents.
   const out = d();
