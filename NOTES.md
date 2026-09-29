@@ -11,6 +11,19 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-09-29
 
+- **MathTS optional peers, 2026-09-29.** Ranges match `npm view`: autograd 0.3.15, core 0.15.5,
+  expression 0.8.2, functions 0.65.0, matrix 0.7.5, parallel 0.6.7, tensor 0.2.21, wasm 0.3.0,
+  workerpool 0.2.6. Still optional peers. The packages themselves were not republished.
+- **Tier 10 design, no code.** `docs/design/tier-10-cross-family-path.md` is the design for
+  cross-family `upt path`. Routing already uses `findAtlasPath` when the endpoints differ in
+  family. The open work is the composition rule (norms, regimes, horizons) across families.
+  Mothership has not approved it. No implementation in this change.
+- **`upt probe scan` gaps, measured 2026-09-29.** 6 searchable prediction-residual gaps, one per
+  applied case. `--all` lists 232 Product A wrappers (216 relation-link, 16 regime-transition),
+  none of those searchable. Combined list 238.
+- **Tree-sitter.** `src/cli/commands/path.ts` and `src/numerical/mathts-tensor.ambient.d.ts` parsed
+  with ERROR nodes under tree-sitter-typescript 0.23.2 and compiled under tsc. Both rewritten.
+  The scan in `tests/internal/src-parses.test.ts` is green, and the two old constructs still error.
 - **CLI dogfood open items, after the owner unfroze `src/canonical`:** `upt metric` (alias
   `curvature`) reports Christoffel, Ricci, the Ricci scalar and the Kretschmann scalar for
   Minkowski, Schwarzschild, FLRW and Kerr. The line element and the canonical Einstein-equation
