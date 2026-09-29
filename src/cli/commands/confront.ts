@@ -5,7 +5,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { CliError } from '../errors.js';
+import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
@@ -16,9 +16,12 @@ const FLAGS: FlagSpec[] = [
   { name: '--json', valueStyle: 'none' },
 ];
 
-const HELP = `upt confront [--bridge=be-XX] [--rigor=stringent|moderate|loose] [--frontier] [--sensitivity] [--json]
+const HELP = `upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|loose] [--frontier] [--sensitivity] [--json]
         Run the catalog's committed real-data confrontations (predicted vs
-        observed), each tagged with its RIGOR tier. --bridge runs one;
+        observed), each tagged with its RIGOR tier. A positional be-XX is the
+        same selection as --bridge (the form \`upt explain be-XX\` prints);
+        the two must name the same bridge when both are given. A positional
+        that is not a bridge id is an error. It is not ignored.
         --rigor=<tier> shows only that tier (the precision core, or the loose
         tail that needs better data); --frontier ranks the σ-tests by margin to
         this tool's 1σ acceptance threshold (a software criterion, not a
@@ -54,11 +57,36 @@ const SENSITIVITY_EPISTEMICS =
   ' sensitivity (elasticity) ranks which input the prediction depends on most STRONGLY; ' +
   'it is NOT which input dominates the uncertainty budget (that needs input sigma).';
 
-function parseBridgeId(raw: string): number {
+function parseBridgeId(raw: string, via: 'flag' | 'positional'): number {
   // Accept "be-37", "BE-37", or "37".
   const m = /^(?:be-?)?(\d+)$/i.exec(raw.trim());
-  if (!m) throw new CliError(`upt confront: invalid --bridge='${raw}' (expected be-XX)`);
+  if (!m) {
+    throw new CliError(
+      via === 'flag'
+        ? `upt confront: invalid --bridge='${raw}' (expected be-XX)`
+        : `upt confront: '${raw}' is not a bridge id (expected be-XX). A positional is not ignored.`,
+    );
+  }
   return Number(m[1]);
+}
+
+/** The bridge a positional id and/or `--bridge` select, or undefined for the full list. */
+function selectedBridgeId(args: CommandCtx['args']): number | undefined {
+  if (args.positionals.length > 1) {
+    throw new UsageError(
+      `upt confront: unexpected extra arguments (${args.positionals.slice(1).join(', ')}). ` +
+        'Give one bridge id, e.g. `upt confront be-58`, or `--bridge=be-58`.',
+    );
+  }
+  const flag = args.flags.get('bridge');
+  const fromFlag = flag && flag.length > 0 ? parseBridgeId(flag[flag.length - 1]!, 'flag') : undefined;
+  const fromPositional = args.positionals.length === 1 ? parseBridgeId(args.positionals[0]!, 'positional') : undefined;
+  if (fromFlag !== undefined && fromPositional !== undefined && fromFlag !== fromPositional) {
+    throw new UsageError(
+      `upt confront: positional be-${fromPositional} and --bridge=be-${fromFlag} name different bridges`,
+    );
+  }
+  return fromFlag ?? fromPositional;
 }
 
 const SENSITIVITY_NOTE = 'strongest dependence, not uncertainty budget';
@@ -159,7 +187,7 @@ function dataHandlingDistribution(outcomes: readonly Outcome[]) {
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
-  const bridgeFlag = args.flags.get('bridge');
+  const bridgeId = selectedBridgeId(args);
   const wantJson = args.flags.has('json');
   const wantSensitivity = args.flags.has('sensitivity');
   const wantFrontier = args.flags.has('frontier');
@@ -170,14 +198,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   let entries =
-    bridgeFlag && bridgeFlag.length
-      ? (() => {
-          const id = parseBridgeId(bridgeFlag[bridgeFlag.length - 1]);
-          const one = api.listConfrontations().find((e) => e.bridgeId === id);
-          if (!one) throw new CliError(`upt confront: no confrontation registered for be-${id}`);
+    bridgeId === undefined
+      ? api.listConfrontations()
+      : (() => {
+          const one = api.listConfrontations().find((e) => e.bridgeId === bridgeId);
+          if (!one) throw new CliError(`upt confront: no confrontation registered for be-${bridgeId}`);
           return [one];
-        })()
-      : api.listConfrontations();
+        })();
 
   if (rigorTier !== undefined) {
     entries = entries.filter((e) => api.confrontationRigor(e.bridgeId) === rigorTier);
