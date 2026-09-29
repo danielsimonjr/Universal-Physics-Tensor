@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 393,
     "totalModules": 12,
-    "totalExports": 2829
+    "totalExports": 2830
   },
   "entryPoints": [
     {
@@ -9791,6 +9791,7 @@
           {
             "file": "./normal-form.js",
             "imports": [
+              "canonicalQuantityName",
               "normalForm"
             ]
           }
@@ -9849,10 +9850,12 @@
           }
         ],
         "exports": [
+          "canonicalQuantityName",
           "normalForm",
           "structurallyEqual"
         ],
         "functions": [
+          "canonicalQuantityName",
           "normalForm",
           "structurallyEqual"
         ]
@@ -27365,11 +27368,11 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 12,
-    "totalLinesOfCode": 86856,
-    "totalExports": 2829,
+    "totalLinesOfCode": 86861,
+    "totalExports": 2830,
     "totalClasses": 59,
     "totalInterfaces": 444,
-    "totalFunctions": 727,
+    "totalFunctions": 728,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 701,

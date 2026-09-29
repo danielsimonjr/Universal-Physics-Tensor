@@ -27,7 +27,7 @@ describe('bridge↔canonical linkage', () => {
     expect(r.structuralMatch).toBe(true);
     expect(r.dimMatch).toBe(true);
     expect(r.recovery?.tested).toBe(true);
-    expect(r.recovery?.maxRelErr).toBeLessThan(1e-9);
+    expect(r.recovery?.maxRelErr).toBe(0);
   });
 
   it('Landauer ↔ bridge 29 (Jarzynski) is dimensional-only — ln2 ≠ ln⟨e^−βW⟩', () => {
@@ -60,7 +60,7 @@ describe('bridge↔canonical linkage', () => {
     expect(r.classification).toBe('restates-canonical');
     expect(r.structuralMatch).toBe(true);
     expect(r.recovery?.tested).toBe(true);
-    expect(r.recovery?.maxRelErr).toBeLessThan(1e-9);
+    expect(r.recovery?.maxRelErr).toBe(0);
   });
 
   it('scan: every restates-canonical has a real restatesBridge (F4 invariant)', () => {

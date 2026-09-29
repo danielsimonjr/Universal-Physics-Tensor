@@ -2943,7 +2943,7 @@ The codebase is organized into the following modules:
 | `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID` | Import |
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `./registry.js` | `CANONICAL_EQUATIONS, canonicalById` | Import |
-| `./normal-form.js` | `normalForm` | Import |
+| `./normal-form.js` | `canonicalQuantityName, normalForm` | Import |
 
 **Exports:**
 - Interfaces: `RecoveryOutcome`, `LinkageResult`
@@ -2963,7 +2963,7 @@ The codebase is organized into the following modules:
 | `../composition/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
-- Functions: `normalForm`, `structurallyEqual`
+- Functions: `canonicalQuantityName`, `normalForm`, `structurallyEqual`
 
 ---
 
@@ -7453,12 +7453,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 12 |
-| Total Lines of Code | 86856 |
-| Total Exports | 2829 |
+| Total Lines of Code | 86861 |
+| Total Exports | 2830 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
 | Total Interfaces | 444 |
-| Total Functions | 727 |
+| Total Functions | 728 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |

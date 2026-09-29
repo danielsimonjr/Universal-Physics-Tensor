@@ -62,7 +62,8 @@ const NAMED_DIMENSIONLESS_CONSTANTS = new Set(['ln_2_constant']);
  * short spelling as that name when the dimension is the quantity's dimension,
  * so a time coordinate named `T` stays a different symbol.
  */
-function canonicalQuantityName(name: string, dim: Dimension): string {
+/** @internal */
+export function canonicalQuantityName(name: string, dim: Dimension): string {
   if (name === 'T' && equals(dim, TEMPERATURE)) return 'temperature';
   if ((name === 'M' || name === 'm_1') && equals(dim, MASS)) return 'mass';
   if (name === 'm_2' && equals(dim, MASS)) return 'secondary-mass';

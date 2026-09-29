@@ -21,7 +21,7 @@ import { CONSTANTS } from '../composition/symbolic-constants.js';
 import { BRIDGE_RHS_BY_ID } from '../bridges/rhs-registry.js';
 import type { CanonicalEquation } from './canonical-equation.js';
 import { CANONICAL_EQUATIONS, canonicalById } from './registry.js';
-import { normalForm } from './normal-form.js';
+import { canonicalQuantityName, normalForm } from './normal-form.js';
 
 /** Best-effort numerical-recovery outcome. */
 export interface RecoveryOutcome {
@@ -74,13 +74,14 @@ const isDimensionless = (d: Dimension): boolean =>
  */
 function collectLeaves(
   node: ExprNode,
-  vars: Set<string>,
+  vars: Map<string, string>,
   dimless: Set<string>,
 ): void {
   switch (node.kind) {
     case 'symbol':
       if (!(node.name in CONSTANTS) && Number.isNaN(Number(node.name))) {
-        (isDimensionless(node.dim) ? dimless : vars).add(node.name);
+        if (isDimensionless(node.dim)) dimless.add(node.name);
+        else vars.set(node.name, canonicalQuantityName(node.name, node.dim));
       }
       return;
     case 'op':
@@ -101,17 +102,20 @@ const SAMPLE_FACTORS = [1, 2, 3];
 
 /** Best-effort check that two ASTs agree up to a constant ratio. */
 function numericalRecovery(canon: ExprNode, bridge: ExprNode): RecoveryOutcome {
-  const vars = new Set<string>();
+  const vars = new Map<string, string>();
   const dimless = new Set<string>();
   collectLeaves(canon, vars, dimless);
   collectLeaves(bridge, vars, dimless);
-  const names = [...vars].sort();
+  // `M` and `mass` are one quantity. They share a sample, or the ratio is a
+  // float artifact of two independent draws of the same mass.
+  const canonicals = [...new Set(vars.values())].sort();
+  const index = new Map(canonicals.map((n, i) => [n, i]));
   const ratios: number[] = [];
   for (const s of SAMPLE_FACTORS) {
     const values: Record<string, number> = {};
-    names.forEach((n, i) => {
-      values[n] = (1.3 + 0.7 * i) * s; // distinct positive samples
-    });
+    for (const [raw, canonName] of vars) {
+      values[raw] = (1.3 + 0.7 * index.get(canonName)!) * s;
+    }
     // Hold unresolved dimensionless leaves fixed — recovery is "up to" them.
     for (const n of dimless) values[n] = 1;
     let cv: number;
