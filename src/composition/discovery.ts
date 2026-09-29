@@ -45,6 +45,7 @@ import type { LinkCandidate } from './bridge-analysis.js';
 import { M_SUN_KG } from './edges/calibration.js';
 import { REPRESENTATIVE_VALUES } from './representative-values.js';
 import type { RepresentativeValue } from './representative-values.js';
+import { conventionScaleToSI } from './unit-convention.js';
 import * as REGISTRY_QUANTITIES from './quantities.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { format } from '../dimensional/algebra.js';
@@ -431,8 +432,11 @@ function vetInContext(
     if (rv !== undefined && Number.isFinite(rv.value) && rv.value !== 0)
       return { value: rv.value, fromAnchor: false };
     const av = anchorValues.get(name);
-    if (av !== undefined && Number.isFinite(av) && av !== 0)
-      return { value: av, fromAnchor: true };
+    if (av !== undefined) {
+      const value = av * conventionScaleToSI(name);
+      if (Number.isFinite(value) && value !== 0)
+        return { value, fromAnchor: true };
+    }
     return undefined;
   };
   const va = magnitudeOf(candidate.a);
@@ -450,7 +454,11 @@ function vetInContext(
   const probeOf = (
     name: string,
     m: { value: number; fromAnchor: boolean },
-  ): number | undefined => (m.fromAnchor ? anchorValuesProbe.get(name) : m.value);
+  ): number | undefined => {
+    if (!m.fromAnchor) return m.value;
+    const probe = anchorValuesProbe.get(name);
+    return probe === undefined ? undefined : probe * conventionScaleToSI(name);
+  };
   let magnitudeAnchorInvariant = false;
   if (magnitudeUsedAnchor) {
     const pa = probeOf(candidate.a, va!);

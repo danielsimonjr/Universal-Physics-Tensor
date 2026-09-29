@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 68
+- **Potentially unused exports**: 69
 
 ## Potentially Unused Files
 
@@ -137,6 +137,10 @@ These exports are not imported by any other file in the codebase:
 ### `src/composition/probe/study.ts`
 
 - `exprToInfix` (function)
+
+### `src/composition/unit-convention.ts`
+
+- `QUANTITY_CONVENTION_UNIT` (constant)
 
 ### `src/dimensional/units.ts`
 

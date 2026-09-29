@@ -18,7 +18,7 @@ import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
-import { readBinding } from '../../numerical/binding-value.js';
+import { readNamedBinding } from '../../numerical/binding-value.js';
 
 /** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
 const SEARCH_HITS_SHOWN = 5;
@@ -38,6 +38,7 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         catalog); the result names the source it used.
         A value is a number, a unit (mass=1Msun) or a constant expression
         (mass=1*M_sun). A bare number is already in the quantity's unit.
+        A tagged quantity converts into that unit (GeV, bit, nat, J/K).
         e.g.  upt explain hawking-temperature mass=1.989e30`;
 
 /**
@@ -66,7 +67,7 @@ function parseKnown(args: readonly string[]): string[] | Record<string, number> 
     const raw = a.slice(eq + 1);
     let num: number;
     try {
-      num = readBinding(raw).value;
+      num = readNamedBinding(name, raw).value;
     } catch {
       num = Number.NaN;
     }

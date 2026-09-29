@@ -18,6 +18,7 @@
 
 import { M_SUN_SI } from '../core/constants.js';
 import { FORMULA_NAMED } from '../composition/formula-names.js';
+import { quantityConventionUnit } from '../composition/unit-convention.js';
 import { naturalConstantOverrides, type UnitMode } from '../composition/natural-units.js';
 import { CONSTANTS as SYMBOLIC } from '../composition/symbolic-constants.js';
 import { divide, equals, format, multiply, power } from '../dimensional/algebra.js';
@@ -253,6 +254,30 @@ function plainUnit(raw: string, reading: TemperatureReading): BindingValue | nul
 }
 
 /**
+ * Read a binding for a named quantity. A name in the convention table is
+ * returned in that unit: a bare number is already in it, and a unit
+ * converts into it. Any other name is {@link readBinding} (SI when the
+ * value carries a unit).
+ * @internal
+ */
+export function readNamedBinding(
+  name: string,
+  raw: string,
+  opts?: { readonly mode?: UnitMode; readonly reading?: TemperatureReading },
+): BindingValue {
+  const unit = quantityConventionUnit(name);
+  if (unit === undefined) return readBinding(raw, opts);
+  const reading = opts?.reading ?? 'absolute';
+  const converted = bindingInUnit(raw, unit, reading, opts?.mode);
+  return {
+    value: converted.value,
+    dimensioned: converted.given !== '',
+    dimension: parseUnit(unit).dim,
+    notes: unitConventionNotes(converted.given),
+  };
+}
+
+/**
  * Read one binding. `mode` selects the constant values (`--natural`,
  * `--geometrized`). `reading` is how a lone `degC` is taken.
  * @internal
@@ -314,11 +339,12 @@ export function bindingInUnit(
   raw: string,
   target: string,
   reading: TemperatureReading = 'absolute',
+  mode: UnitMode = 'si',
 ): { value: number; given: string } {
   if (NUMBER.test(raw.trim()) || plainUnit(raw.trim(), reading) !== null) {
     return convertValue(raw, target, reading);
   }
-  const b = readBinding(raw, { reading });
+  const b = readBinding(raw, { reading, mode });
   if (!b.dimensioned) return { value: b.value, given: '' };
   const to = parseUnit(target);
   if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);

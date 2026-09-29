@@ -1,5 +1,9 @@
 # UPT TODO
 
+## Unit-convention review follow-up (2026-09-29)
+
+- [x] Merge current `master` and resolve conflicts; normalize discovery magnitudes, scale composed junction inputs, skip non-finite identification copies, and pass unit mode into named-binding expressions.
+
 ## CLI dogfood, three personas (2026-09-29)
 
 Tier 10 `upt path` is on master. The reports are `docs/dogfood/2026-09-29-applied-physicist.md`,
@@ -2059,7 +2063,7 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
       the bianchi-residual test-local de Sitter/Schwarzschild closures), so the
       suite carries exactly SI + geometrized with consistent naming. Suite **2595
       passing** (pure rename); tsc src+tests ✓.
-- [ ] **G-9 follow-on (separate axis, deferred):** the Eve M-1 per-quantity
+- [x] **G-9 follow-on (separate axis, deferred):** the Eve M-1 per-quantity
       unit-convention tag (GeV/J, bits/nats) — distinct from c/G geometrization.
 - [x] ✅ **Distributional / variational grammar primitives (v0.14) — EXECUTED
       2026-06-16** (`docs/planning/v0.14-Distributional-Grammar-Design.md`,

@@ -34,6 +34,13 @@ describe('parseUnit', () => {
     expect(parseUnit('mm').scale).toBeCloseTo(1e-3, 18);
   });
 
+  it('converts bits and nats by ln 2, and leaves a bit equal to itself', () => {
+    expect(convertValue('1bit', 'nat').value).toBeCloseTo(Math.LN2, 12);
+    expect(convertValue('1nat', 'bit').value).toBeCloseTo(1 / Math.LN2, 12);
+    expect(convertValue('1bit', 'bit').value).toBe(1);
+    expect(convertValue('1nat', 'nat').value).toBe(1);
+  });
+
   it('reads the lab units a script reaches for, and keeps prefix rules', () => {
     expect(parseUnit('T')).toMatchObject({ scale: 1, dim: { M: 1, T: -2, I: -1 } });
     expect(parseUnit('Ts').scale).toBe(1e12);
