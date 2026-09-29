@@ -4,6 +4,8 @@
  * These types define the fundamental structure of the tensor and its components.
  */
 
+import { HBAR_SI } from './constants.js';
+
 /**
  * Physical scales represented in the tensor
  */
@@ -179,7 +181,7 @@ export const PhysicalConstants = {
   // Fundamental constants
   c: 299792458,              // Speed of light (m/s)
   h: 6.62607015e-34,         // Planck constant (J⋅s)
-  hbar: 1.054571817e-34,     // Reduced Planck constant (J⋅s)
+  hbar: HBAR_SI,             // Reduced Planck constant h/(2π) (J⋅s)
   G: 6.67430e-11,            // Gravitational constant (m³/kg⋅s²)
   kB: 1.380649e-23,          // Boltzmann constant (J/K)
   e: 1.602176634e-19,        // Elementary charge (C)

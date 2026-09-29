@@ -43,11 +43,17 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     id: 'CE-rydberg-energy',
     name: 'Rydberg energy',
     domain: 'quantum',
-    formula_latex: 'E_R = m_e e^4 / (8 \\varepsilon_0^2 \\hbar^2)',
-    epistemicStatus: 'scalar-up-to-constant',
+    formula_latex: 'E_R = m_e e^4 / (32 \\pi^2 \\varepsilon_0^2 \\hbar^2)',
+    epistemicStatus: 'fully-quantitative',
+    // The ħ form equals m e^4 / (8 ε₀² h²). The old latex omitted 4π².
     scalarAst: op('/', [
       op('*', [sym('m_e', MASS), pow(sym('e', CHARGE), '4')]),
-      op('*', [pow(sym('epsilon_0', PERMITTIVITY), '2'), pow(sym('hbar', ACTION), '2')]),
+      op('*', [
+        sym('32', DIMENSIONLESS),
+        pow(sym('pi', DIMENSIONLESS), '2'),
+        pow(sym('epsilon_0', PERMITTIVITY), '2'),
+        pow(sym('hbar', ACTION), '2'),
+      ]),
     ]),
     regime: { scale: 'quantum', force: 'electromagnetic' },
     assumptions: ['hydrogen-like', 'non-relativistic'],
@@ -156,13 +162,29 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     references: ['Bohr 1913'],
     partnerBridges: [],
   }),
-  // ── batch 6 (final): Thomson cross-section (scalar-up-to-constant, the
-  // 8π/3). NOTE: the Compton wavelength (λ_C = h/(mc)) was in the batch-6
-  // brief but is DELIBERATELY OMITTED here — `CE-compton-wavelength` already
-  // exists as an L0 dimensional entry in `dimensional-classics.ts` (hbar/mass/c
-  // governing set, same physics, same integer monomial shape); adding it here
-  // would collide on id and violate the registry's id-uniqueness invariant.
-  // See the batch-6 report. ──────────────────────────────────────────────────
+  // λ = h/(m c). The L0 id CE-compton-wavelength stays the reduced wavelength
+  // λ̄ = ħ/(m c); this id is the non-reduced one. Both answer to the catalog
+  // name compton-wavelength, and h does not alias ħ.
+  l1({ name: 'compton-wavelength-full', dim: LENGTH }, [
+    { name: 'h', dim: ACTION },
+    { name: 'mass', dim: MASS },
+    { name: 'c', dim: VELOCITY },
+  ], {
+    id: 'CE-compton-wavelength-full',
+    name: 'Compton wavelength',
+    domain: 'quantum',
+    formula_latex: '\\lambda_C = h/(mc)',
+    epistemicStatus: 'fully-quantitative',
+    scalarAst: op('/', [
+      sym('h', ACTION),
+      op('*', [sym('mass', MASS), sym('c', VELOCITY)]),
+    ]),
+    regime: { scale: 'quantum' },
+    assumptions: [],
+    references: ['Compton 1923'],
+    partnerBridges: [],
+  }),
+  // ── batch 6 (final): Thomson cross-section (scalar-up-to-constant, the 8π/3).
   l1({ name: 'thomson-cross-section', dim: AREA }, [
     { name: 'classical-electron-radius', dim: LENGTH },
   ], {

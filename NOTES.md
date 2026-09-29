@@ -11,26 +11,30 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-09-29
 
-- **CLI dogfood open items:** `upt metric` (alias `curvature`) reports Christoffel, Ricci, the
-  Ricci scalar and the Kretschmann scalar for Minkowski, Schwarzschild, FLRW and Kerr. The line
-  element is (−,+,+,+). The Einstein-equation tensor AST stays (+,-,-,-). Schwarzschild
-  Kretschmann is checked against `48 G² M² / (c⁴ r⁶)`. FLRW includes the curvature term. Kerr
-  geodesics are not integrated; `--geodesic` runs a short Schwarzschild circular orbit.
+- **CLI dogfood open items, after the owner unfroze `src/canonical`:** `upt metric` (alias
+  `curvature`) reports Christoffel, Ricci, the Ricci scalar and the Kretschmann scalar for
+  Minkowski, Schwarzschild, FLRW and Kerr. The line element and the canonical Einstein-equation
+  metric node are both (−,+,+,+). Schwarzschild Kretschmann is checked against
+  `48 G² M² / (c⁴ r⁶)`. `--geodesic` integrates a short Schwarzschild circular orbit and a Kerr
+  equatorial circular orbit (θ = π/2, so the Carter constant stays 0; E and L are integrated).
+  Inclined Kerr orbits are not integrated. ISCO and photon radii are the closed forms.
   `--natural` sets ħ = c = 1 and `--geometrized` also sets G = 1; the SI default still refuses
-  `rest_energy = mass`. Friedmann's frozen entry stays the flat dust form; a comparison that
-  names `curvature_k` and `scale_factor` also subtracts `k c²/a²`. `1Msun` is still
-  `M_SUN_SI = 1.989e30` kg; `Msun_iau` and `GM_sun` are the IAU parameter. `HBAR_SI` is still
-  the truncated display. EFE 8π and Compton h versus ħ stay unchecked prefactors while
-  `src/canonical` is frozen; the CLI names both conventions. `upt eval --show-parser` prints
-  `mathts` or `builtin`; `upt version` stays a bare semver.
+  `rest_energy = mass`. Flat `CE-friedmann` is `H² = 8πGρ/3`. `CE-friedmann-curvature` is
+  `H² = 8πGρ/3 − k c²/a²`. `1Msun` is `M_SUN_SI = 1.989e30` kg. `GM_sun` is `GM_SUN_SI` and
+  `Msun_iau` is `GM_SUN_SI/G_SI`, both registered constants. `HBAR_SI` is `H_SI/(2π)`. The
+  CODATA display `1.054571817e-34` is smaller by a relative `6.127e-10`. Planck-unit constants
+  stay the published CODATA 2018 values. The Einstein 8π is in the scalar AST. Reduced Compton
+  is `CE-compton-wavelength` with sourced prefactor 1; `CE-compton-wavelength-full` is
+  λ = h/(m c). The registry has 109 entries. The criterion 3 live export matches that registry.
+  Amendment 8 still hashes the labelled corpus at `c144150` (107 records, 89 expressions). The
+  study runner still refuses a tree that does not match Amendment 8, which is the closed study.
+  `upt eval --show-parser` prints `mathts` or `builtin`; `upt version` stays a bare semver.
 - **CLI GR/QFT dogfood** (model persona, not a human reviewer): the findings report is the PR
   description for `cursor/gr-cli-dogfood-91ec`.
   Fixed in that branch: perihelion `6pi` now compares; Newton's `m_1 m_2` compares when every
   same-dimension assignment agrees; `schwarzschild-radius` reaches the frozen target `radius`;
   `sqrt(-1)` says complex; a bare `e` is warned as Euler's number; be-51/be-52 warn inside 10 r_s.
-  The leftovers named in that report (no curvature command, no ħ=c=1 mode, flat Friedmann only,
-  potential sign, which sun `Msun` is) are the open-items paragraph above. EFE and Compton
-  prefactors stay unchecked.
+  The leftovers named in that report are closed in the open-items paragraph above.
 
 ## As of 2026-09-27
 
@@ -82,8 +86,9 @@ nothing validates prose and the next reader cannot tell.
   - CE-inductor-energy has no sourced ½, so `model-lc` cannot link it yet;
   - CE-sound-speed's √γ is not used by `compareWithCanonical`, which cannot bind γ.
 
-  `CanonicalEquation.model` stays unset because criterion 3 freezes the `src/canonical` tree. That tree already differs from `freeze.json`'s recorded tree hash since
-  `dbd4e95` (Amendment 9's residual form), then #202 and #208; the eight pinned code blobs still match.
+  `CanonicalEquation.model` stays unset. The live criterion 3 export was re-pinned when the owner
+  unfroze `src/canonical`. Amendment 8 still hashes the labelled corpus at `c144150`. The study's
+  pinned code blobs still match; the study runner still refuses a tree that is not that corpus.
 - Observable translations: `ab-pendulum-linear` declares phase and position; `ab-spring-lc` declares
   a phase carriage. Every other bridge answers UNDETERMINED outside its bound's own norm.
   As of 2026-09-27 (audit I8 limits):

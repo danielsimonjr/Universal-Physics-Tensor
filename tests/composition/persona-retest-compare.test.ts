@@ -70,9 +70,9 @@ describe('Q3: which monomial entries the constant binding reaches', () => {
       e.dimensional.governing.some((g) => CONSTANTS[g.name] !== undefined && equals(CONSTANTS[g.name]!.dim, g.dim)),
   );
 
-  it('eight entries hold a governing constant in a monomial-only record', () => {
+  it('seven entries hold a governing constant in a monomial-only record', () => {
     expect(monomialWithConstant.map((e) => e.id).sort()).toEqual([
-      'CE-compton-wavelength', 'CE-einstein-field-eq', 'CE-kepler-third', 'CE-planck-length',
+      'CE-compton-wavelength', 'CE-kepler-third', 'CE-planck-length',
       'CE-planck-mass', 'CE-planck-time', 'CE-schwarzschild-radius', 'CE-thermal-de-broglie',
     ]);
   });
@@ -92,10 +92,12 @@ describe('Q3: which monomial entries the constant binding reaches', () => {
     }
   });
 
-  it("CE-einstein-field-eq records its 8π only in its field equation, so its monomial checks no prefactor", () => {
-    const r = compareWithCanonical('efe-curvature', ['stress-energy-density'], (v) => (8 * Math.PI * G * v['stress-energy-density']!) / C ** 4);
-    expect(find(r, 'CE-einstein-field-eq')).toMatchObject({ kind: 'prefactor-unchecked' });
-    expect(find(r, 'CE-einstein-field-eq')?.detail).toMatch(/field equation/);
+  it('CE-einstein-field-eq checks the 8π in its scalar AST', () => {
+    const right = compareWithCanonical('efe-curvature', ['stress-energy-density'], (v) => (8 * Math.PI * G * v['stress-energy-density']!) / C ** 4);
+    const half = compareWithCanonical('efe-curvature', ['stress-energy-density'], (v) => (4 * Math.PI * G * v['stress-energy-density']!) / C ** 4);
+    expect(find(right, 'CE-einstein-field-eq')?.kind).toBe('agrees');
+    expect(find(half, 'CE-einstein-field-eq')?.kind).toBe('factor');
+    expect(find(half, 'CE-einstein-field-eq')?.ratio).toBeCloseTo(0.5, 12);
   });
 });
 

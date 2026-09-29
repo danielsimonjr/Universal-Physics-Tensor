@@ -10,8 +10,8 @@
  * Values use:
  *   • Exact-SI definitions (`C_SI`, `H_SI`, `K_B_SI`, `E_SI`) where the
  *     2019 SI redefinition fixed their values exactly.
- *   • CODATA 2018 best estimates for measured constants (`G_SI`, `HBAR_SI`,
- *     `ALPHA`, Planck units).
+ *   • `HBAR_SI` is the exact quotient `H_SI / (2π)`, not the truncated CODATA display.
+ *   • CODATA 2018 best estimates for measured constants (`G_SI`, `ALPHA`, Planck units).
  *   • Planck 2018 best estimate for `H0_SI`.
  *
  * The `PhysicalConstants` namespace in `src/core/types.ts` is retained for
@@ -30,8 +30,13 @@ export const G_SI = 6.67430e-11;
 /** Planck constant (J·s). Exact SI definition since 2019. */
 export const H_SI = 6.62607015e-34;
 
-/** Reduced Planck constant h/(2π) (J·s). CODATA 2018. */
-export const HBAR_SI = 1.054571817e-34;
+/**
+ * Reduced Planck constant h/(2π) (J·s). Exact, from the 2019 SI definition of
+ * h. The CODATA display `1.054571817e-34` is that quotient truncated; it is
+ * smaller by a relative `6.127e-10`. Planck units below stay the published
+ * CODATA 2018 values, which were computed from the truncated display.
+ */
+export const HBAR_SI = H_SI / (2 * Math.PI);
 
 /** Boltzmann constant (J/K). Exact SI definition since 2019. */
 export const K_B_SI = 1.380649e-23;

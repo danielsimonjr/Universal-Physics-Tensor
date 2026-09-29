@@ -5,11 +5,8 @@
  * Dimensional correctness is otherwise guarded registry-wide in
  * invariants.test.ts.
  *
- * The batch-6 brief also called for the Compton wavelength, but it is
- * DELIBERATELY OMITTED — `CE-compton-wavelength` already exists as an L0
- * dimensional entry in `dimensional-classics.ts` (hbar/mass/c governing set,
- * same physics); adding it here would collide on id. See the atomic.ts module
- * docstring and the batch-6 report.
+ * `CE-compton-wavelength-full` is λ = h/(m c). The reduced wavelength stays
+ * the L0 id `CE-compton-wavelength`.
  *
  * @module tests/canonical/atomic
  */
@@ -25,6 +22,7 @@ const EXPECTED_IDS = [
   // split): the quantum-domain monomials (Bohr radius already-adjacent).
   'CE-bohr-radius',
   'CE-classical-electron-radius',
+  'CE-compton-wavelength-full',
   'CE-de-broglie',
   'CE-planck-einstein',
   'CE-rydberg-energy',

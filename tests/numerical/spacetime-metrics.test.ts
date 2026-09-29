@@ -8,7 +8,10 @@ import {
   curvatureReport,
   flrwRicciScalar,
   friedmannSides,
+  kerrEquatorialCircular,
+  kerrIscoRadius,
   kerrKretschmann,
+  kerrPhotonRadius,
   schwarzschildCircularOrbit,
   schwarzschildKretschmann,
 } from '../../src/numerical/spacetime-metrics.js';
@@ -52,7 +55,7 @@ describe('finite-difference curvature', () => {
     expect(rel(r.kretschmann, want)).toBeLessThan(1e-4);
     expect(Math.abs(r.ricciScalar)).toBeLessThan(1e-12);
     expect(r.signature).toBe('(-,+,+,+)');
-    expect(r.signatureNote).toMatch(/\(\+,-,-,-\)/);
+    expect(r.signatureNote).toMatch(/canonical Einstein-equation metric node/);
   });
 
   it('flat-dust FLRW Ricci scalar is 3 H²/c² and Friedmann holds', () => {
@@ -83,5 +86,33 @@ describe('Schwarzschild circular orbit', () => {
     const o = schwarzschildCircularOrbit({ fraction: 0.01 });
     expect(Math.abs(o.rEnd - o.r0) / o.r0).toBeLessThan(1e-6);
     expect(o.phiAdvance).toBeGreaterThan(0);
+  });
+});
+
+describe('Kerr geodesics', () => {
+  it('ISCO radii are 6M at a = 0, and M and 9M at a = M', () => {
+    const zero = kerrIscoRadius(0);
+    expect(zero.prograde).toBeCloseTo(6, 12);
+    expect(zero.retrograde).toBeCloseTo(6, 12);
+    const ext = kerrIscoRadius(1);
+    expect(ext.prograde).toBeCloseTo(1, 12);
+    expect(ext.retrograde).toBeCloseTo(9, 12);
+  });
+
+  it('the photon orbit is 3M at a = 0 and 1M prograde at a = M', () => {
+    expect(kerrPhotonRadius(0).prograde).toBeCloseTo(3, 12);
+    expect(kerrPhotonRadius(0).retrograde).toBeCloseTo(3, 12);
+    expect(kerrPhotonRadius(1).prograde).toBeCloseTo(1, 12);
+    expect(kerrPhotonRadius(1).retrograde).toBeCloseTo(4, 12);
+  });
+
+  it('an equatorial circular orbit keeps r, E and L, and holds Q at 0', () => {
+    const o = kerrEquatorialCircular({ aOverM: 0.5, rOverM: 10, fraction: 0.01, steps: 40 });
+    expect(Math.abs(o.rEnd - o.r0) / o.r0).toBeLessThan(1e-3);
+    expect(Math.abs(o.EEnd - o.E0) / Math.abs(o.E0)).toBeLessThan(1e-3);
+    expect(Math.abs(o.LEnd - o.L0) / Math.abs(o.L0)).toBeLessThan(1e-3);
+    expect(Math.abs(o.Q0)).toBeLessThan(1e-8);
+    expect(Math.abs(o.QEnd)).toBeLessThan(1e-6);
+    expect(Math.abs(o.phiAdvance)).toBeGreaterThan(0);
   });
 });

@@ -24,7 +24,7 @@
 
 UPT follows a layered architecture. The 392 TypeScript files under `src/` fall into twelve modules. Each module keeps a strictly separated responsibility.
 
-`atlas` holds typed relations between physical models (see Atlas Module). `bridges` catalogs, evaluates, and adjudicates established equations, and confronts them against real data through the evidence-spine registry. `canonical` is the textbook L-layer registry that bridges are validated against. The registry has 107 equations, spanning a monomial L0 tier, a non-monomial L1-sum tier, and a condensed-matter domain. `composition` is the graph-lite bridge-composition layer: the 41-edge catalog graph, the canonical-only graph, the discovery-hardening funnel, and the epistemic-grounding ledger. `dimensional` provides the symbolic layer, including the connection and curvature AST. `numerical` provides the compute layer, including the GR integrators and evaluators. `core` holds legacy high-level utilities, the flat constants, and the intelligent-index / regime layer. `diff` is the bridge-gradient layer. `cases` holds qualified applied-case evaluators. `cli` is the typed CLI command tree behind the `bin/upt.mjs` shim. `entry` is the public re-export surface. `root` is the one-file `cli-api` barrel at the `src/` root.
+`atlas` holds typed relations between physical models (see Atlas Module). `bridges` catalogs, evaluates, and adjudicates established equations, and confronts them against real data through the evidence-spine registry. `canonical` is the textbook L-layer registry that bridges are validated against. The registry has 109 equations, spanning a monomial L0 tier, a non-monomial L1-sum tier, and a condensed-matter domain. `composition` is the graph-lite bridge-composition layer: the 41-edge catalog graph, the canonical-only graph, the discovery-hardening funnel, and the epistemic-grounding ledger. `dimensional` provides the symbolic layer, including the connection and curvature AST. `numerical` provides the compute layer, including the GR integrators and evaluators. `core` holds legacy high-level utilities, the flat constants, and the intelligent-index / regime layer. `diff` is the bridge-gradient layer. `cases` holds qualified applied-case evaluators. `cli` is the typed CLI command tree behind the `bin/upt.mjs` shim. `entry` is the public re-export surface. `root` is the one-file `cli-api` barrel at the `src/` root.
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
@@ -51,7 +51,7 @@ UPT follows a layered architecture. The 392 TypeScript files under `src/` fall i
 │  canonical/        │  Canonical L-layer registry + entries +   │
 │                    │  dimensional fields + normal-form hash +  │
 │                    │  bridge↔canonical linkage (F4 guard) +    │
-│                    │  tensor seeder (18 files; 107             │
+│                    │  tensor seeder (18 files; 109             │
 │                    │  equations incl. the L1-sum non-monomial  │
 │                    │  tier + condensed-matter domain)          │
 ├────────────────────────────────────────────────────────────────┤
@@ -87,7 +87,7 @@ UPT follows a layered architecture. The 392 TypeScript files under `src/` fall i
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**Total** (`src/` scope): 392 TypeScript files, 2811 exports (1339 re-exports), and 55 bridge catalog entries. The catalog spans IDs 11–65: 19 established, 33 speculative, 3 highly-speculative. The scope also has 41 composition-graph edges, plus 107 canonical-only `law` edges through `CANONICAL_GRAPH`. The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
+**Total** (`src/` scope): 392 TypeScript files, 2811 exports (1339 re-exports), and 55 bridge catalog entries. The catalog spans IDs 11–65: 19 established, 33 speculative, 3 highly-speculative. The scope also has 41 composition-graph edges, plus 109 canonical-only `law` edges through `CANONICAL_GRAPH`. The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
 
 (The `src/`-scope file and export counts come from the Summary Statistics in `docs/architecture/DEPENDENCY_GRAPH.md`, which `bun run docs:deps` regenerates. The catalog, canonical, graph and confrontation counts come from the built package; see Verification below.)
 
@@ -301,7 +301,7 @@ Six catalog-backed edges wrap existing validated evaluators: `be14Edge`, `be19Ed
 
 ## Canonical Module
 
-The textbook **L-layer** registry (`src/canonical/`, 17 files): the standard-physics "answer key" the catalog bridges are validated against (Π = L + B + E). **107 canonical equations** (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier), grouped into per-domain `entries/` modules.
+The textbook **L-layer** registry (`src/canonical/`, 17 files): the standard-physics "answer key" the catalog bridges are validated against (Π = L + B + E). **109 canonical equations** (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier), grouped into per-domain `entries/` modules.
 
 ### `CanonicalEquation` type (`src/canonical/canonical-equation.ts`)
 
@@ -935,7 +935,7 @@ contradict each other; they answer different questions. Every figure states its 
 
 **Claims the gate cannot hold.** Catalog figures are properties of the physics catalog,
 not of the dependency graph. These figures are: 55 bridge entries (IDs 11–65; 19
-established, 33 speculative, 3 highly-speculative), 107 canonical equations, 41
+established, 33 speculative, 3 highly-speculative), 109 canonical equations, 41
 composition-graph edges, and 19 real-data confrontations. They were measured by importing the built package and reading
 `BRIDGE_EQUATIONS`, `CANONICAL_EQUATIONS`, `CATALOG_GRAPH` and `listConfrontations()` directly,
 not taken from any metric. Re-measure the same way; `repo_map` cannot check them.

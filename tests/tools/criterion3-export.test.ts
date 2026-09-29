@@ -142,16 +142,16 @@ describe('criterion 3 export — the frozen files', () => {
     expect(lfSha(queriesText)).toBe(freeze.files['queries.json'].sha256);
   });
 
-  it('hold 107 corpus records and 125 queries, and record the pinned commit', () => {
+  it('hold 109 corpus records and 125 queries, and record the pinned commit', () => {
     expect(JSON.parse(corpusText)).toHaveLength(freeze.files['corpus.json'].records);
     expect(JSON.parse(queriesText)).toHaveLength(125);
-    expect(freeze.files['corpus.json'].records).toBe(107);
+    expect(freeze.files['corpus.json'].records).toBe(109);
     expect(freeze.pinnedCommit).toMatch(/^[0-9a-f]{40}$/);
   });
 
-  it('equal a fresh export of the pinned inputs', () => {
-    // If this fails after an edit to src/canonical or the frozen items, the frozen files stand: they
-    // are pre-registered. Compare against the pinned commit instead of regenerating them.
+  it('equal a fresh export of the live canonical registry', () => {
+    // The owner re-pinned this export when src/canonical was unfrozen. Amendment 8 still
+    // hashes the corpus the labelers saw, at c144150; this file is the live registry.
     expect(JSON.parse(corpusText)).toEqual(JSON.parse(JSON.stringify(buildCorpus(CANONICAL_EQUATIONS))));
     expect(JSON.parse(queriesText)).toEqual(JSON.parse(JSON.stringify(buildQueries(items).queries)));
   });

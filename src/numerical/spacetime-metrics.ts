@@ -2,14 +2,15 @@
  * Curvature of a few exact metrics for `upt metric`.
  *
  * The line element is mostly-plus, (−,+,+,+), the signature of the
- * Schwarzschild fixture in this repo. The Einstein-equation tensor AST stays
- * mostly-minus (+,−,−,−); this module does not change it. The Kretschmann
- * scalar does not depend on that choice.
+ * Schwarzschild fixture in this repo. The canonical Einstein-equation metric
+ * node uses the same mostly-plus signature. The Kretschmann scalar does not
+ * depend on that choice.
  *
  * Schwarzschild Christoffel symbols are the closed form. Riemann, Ricci and
  * Kretschmann are a 4th-order finite difference of the metric, checked in
  * tests against the closed forms (Schwarzschild Kretschmann, flat-dust FLRW
- * Ricci scalar, Kerr Kretschmann). Kerr geodesics are not integrated.
+ * Ricci scalar, Kerr Kretschmann). Kerr equatorial circular geodesics are
+ * integrated with the Carter constant held at the equator.
  *
  * @module numerical/spacetime-metrics
  * @internal
@@ -28,8 +29,8 @@ export const METRIC_SIGNATURE = '(-,+,+,+)';
  * curvature number is printed.
  */
 export const METRIC_SIGNATURE_NOTE =
-  'Line element signature (−,+,+,+), the same mostly-plus signature as the Schwarzschild fixture. ' +
-  'The Einstein-equation tensor AST remains mostly-minus (+,-,-,-) and was not changed. ' +
+  'Line element signature (−,+,+,+), the same mostly-plus signature as the Schwarzschild fixture ' +
+  'and as the canonical Einstein-equation metric node. ' +
   'The Kretschmann scalar does not depend on that choice.';
 
 export type MetricId = 'minkowski' | 'schwarzschild' | 'flrw' | 'kerr';
@@ -504,7 +505,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     });
     return pack('flrw', p, x, t, { ricciScalar: R, H2: sides.H2, friedmannRhs: sides.rhs }, [
       'ds² = −c² dt² + a(t)² [dr²/(1−k r²) + r² dΩ²], a(t) = a0 (t/t0)^n.',
-      'Friedmann: H² = 8πGρ/3 − k c²/a² + Λ c²/3. Flat dust defaults n = 2/3 and ρ = 3 H²/(8πG), so the curvature term is the −k c²/a² the frozen CE-friedmann entry does not carry.',
+      'Friedmann: H² = 8πGρ/3 − k c²/a² + Λ c²/3. Flat dust defaults n = 2/3 and ρ = 3 H²/(8πG). CE-friedmann is the flat term; CE-friedmann-curvature carries −k c²/a².',
       'Ricci scalar closed form: R = 6/c² (ä/a + H² + k c²/a²). Flat dust: R = 3 H²/c².',
       'Ricci and Kretschmann are finite-differenced at c = 1 and restored with 1/c² and 1/c⁴. Christoffel symbols are the SI difference.',
     ]);
@@ -530,7 +531,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     'Boyer–Lindquist, geometrized lengths: M stands for GM/c² and a is a length. Kretschmann is 1/length⁴.',
     'Closed form: K = 48 M² (r² − a² cos²θ) [(r² + a² cos²θ)² − 16 r² a² cos²θ] / (r² + a² cos²θ)⁶.',
     'a = 0 reduces to the Schwarzschild Kretschmann 48 M²/r⁶.',
-    'Kerr geodesic integration is not implemented.',
+    'Equatorial circular geodesics: --geodesic. ISCO and photon radii are closed forms in r/M.',
   ]);
 }
 
@@ -636,4 +637,132 @@ export function schwarzschildCircularOrbit(opts?: {
     y[6] = 0;
   }
   return { r0, rEnd: y[1]!, phiAdvance: y[3]!, steps };
+}
+
+/**
+ * Kerr ISCO radii in units of M. χ = a/M, |χ| ≤ 1.
+ * Bardeen, Press & Teukolsky 1972: r/M = 3 + Z2 ∓ √((3−Z1)(3+Z1+2 Z2)),
+ * upper sign prograde.
+ * @internal
+ */
+export function kerrIscoRadius(aOverM: number): { readonly prograde: number; readonly retrograde: number } {
+  const chi = aOverM;
+  if (!(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
+  const z1 = 1 + Math.cbrt(1 - chi * chi) * (Math.cbrt(1 + chi) + Math.cbrt(1 - chi));
+  const z2 = Math.sqrt(3 * chi * chi + z1 * z1);
+  const inner = Math.sqrt((3 - z1) * (3 + z1 + 2 * z2));
+  return { prograde: 3 + z2 - inner, retrograde: 3 + z2 + inner };
+}
+
+/**
+ * Unstable equatorial photon orbits in units of M.
+ * r/M = 2 (1 + cos(⅔ arccos(∓ a/M))), upper sign prograde.
+ * @internal
+ */
+export function kerrPhotonRadius(aOverM: number): { readonly prograde: number; readonly retrograde: number } {
+  const chi = aOverM;
+  if (!(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
+  return {
+    prograde: 2 * (1 + Math.cos((2 / 3) * Math.acos(-chi))),
+    retrograde: 2 * (1 + Math.cos((2 / 3) * Math.acos(chi))),
+  };
+}
+
+/** One Kerr equatorial circular orbit. @internal */
+export interface KerrGeodesicSample {
+  readonly r0: number;
+  readonly rEnd: number;
+  readonly phiAdvance: number;
+  readonly steps: number;
+  readonly E0: number;
+  readonly EEnd: number;
+  readonly L0: number;
+  readonly LEnd: number;
+  readonly Q0: number;
+  readonly QEnd: number;
+}
+
+/**
+ * Integrate a Kerr equatorial circular orbit in geometrized units (G = c = 1).
+ * θ is held at π/2, so the Carter constant stays 0; E = −u_t and L = u_φ are
+ * evolved and must not drift. `rOverM` must sit outside the photon orbit.
+ * @internal
+ */
+export function kerrEquatorialCircular(opts?: {
+  readonly M?: number;
+  readonly aOverM?: number;
+  readonly rOverM?: number;
+  readonly prograde?: boolean;
+  readonly fraction?: number;
+  readonly steps?: number;
+}): KerrGeodesicSample {
+  const M = opts?.M ?? 1;
+  const chi = opts?.aOverM ?? 0;
+  if (!(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
+  const a = chi * M;
+  const sign = opts?.prograde === false ? -1 : 1;
+  const r0 = (opts?.rOverM ?? 10) * M;
+  const gfn = kerrMetric(M, a);
+  const sqrtM = Math.sqrt(M);
+  const Omega = (sign * sqrtM) / (r0 ** 1.5 + sign * a * sqrtM);
+  const g0 = gfn([0, r0, Math.PI / 2, 0]);
+  const norm = -(g0[0]![0]! + 2 * Omega * g0[0]![3]! + Omega * Omega * g0[3]![3]!);
+  if (!(norm > 0) || !Number.isFinite(Omega)) throw new Error('circular orbit is not timelike at this radius');
+  const ut = 1 / Math.sqrt(norm);
+  const uphi = Omega * ut;
+
+  const conserved = (s: number[]) => {
+    const gg = gfn([s[0]!, s[1]!, Math.PI / 2, s[3]!]);
+    const u0 = s[4]!;
+    const u3 = s[7]!;
+    const uTheta = gg[2]![2]! * s[6]!;
+    const E = -(gg[0]![0]! * u0 + gg[0]![3]! * u3);
+    const L = gg[3]![0]! * u0 + gg[3]![3]! * u3;
+    const cth = Math.cos(s[2]!);
+    const sth = Math.sin(s[2]!);
+    const Q = uTheta * uTheta + cth * cth * (a * a * (1 - E * E) + (L * L) / (sth * sth));
+    return { E, L, Q };
+  };
+
+  let y = [0, r0, Math.PI / 2, 0, ut, 0, 0, uphi];
+  const start = conserved(y);
+  const accel = (s: number[]): number[] => {
+    const xx: Pt = [s[0]!, s[1]!, Math.PI / 2, s[3]!];
+    const Gma = christoffelOf(gfn, xx, stepsFor(xx));
+    const u = [s[4]!, s[5]!, 0, s[7]!];
+    const du = [0, 0, 0, 0];
+    for (let rho = 0; rho < 4; rho++) {
+      let sum = 0;
+      for (let mu = 0; mu < 4; mu++) for (let nu = 0; nu < 4; nu++) sum += Gma[rho]![mu]![nu]! * u[mu]! * u[nu]!;
+      du[rho] = -sum;
+    }
+    return [u[0]!, u[1]!, 0, u[3]!, du[0]!, du[1]!, 0, du[3]!];
+  };
+  const add = (left: number[], right: number[], scale: number) => left.map((v, i) => v + scale * right[i]!);
+  const period = (2 * Math.PI) / Math.abs(uphi);
+  const fraction = opts?.fraction ?? 0.01;
+  const steps = opts?.steps ?? 80;
+  const h = (period * fraction) / steps;
+  for (let n = 0; n < steps; n++) {
+    const k1 = accel(y);
+    const k2 = accel(add(y, k1, h / 2));
+    const k3 = accel(add(y, k2, h / 2));
+    const k4 = accel(add(y, k3, h));
+    y = y.map((v, i) => v + (h / 6) * (k1[i]! + 2 * k2[i]! + 2 * k3[i]! + k4[i]!));
+    y[2] = Math.PI / 2;
+    y[6] = 0;
+  }
+  const end = conserved(y);
+  return {
+    r0,
+    rEnd: y[1]!,
+    phiAdvance: y[3]!,
+    steps,
+    E0: start.E,
+    EEnd: end.E,
+    L0: start.L,
+    LEnd: end.L,
+    Q0: start.Q,
+    QEnd: end.Q,
+  };
 }

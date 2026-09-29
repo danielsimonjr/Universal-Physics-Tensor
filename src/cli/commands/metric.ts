@@ -1,8 +1,8 @@
 /**
  * `upt metric` — Christoffel symbols and curvature scalars for a named metric.
  *
- * Kerr geodesics are not integrated. `--geodesic` runs a short Schwarzschild
- * circular orbit and says so when the metric is Kerr.
+ * `--geodesic` integrates a short Schwarzschild circular orbit, or a Kerr
+ * equatorial circular orbit (Carter constant held at θ = π/2).
  *
  * @module cli/commands/metric
  */
@@ -12,6 +12,7 @@ import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import {
   curvatureReport,
+  kerrEquatorialCircular,
   schwarzschildCircularOrbit,
   type MetricId,
 } from '../../numerical/spacetime-metrics.js';
@@ -26,15 +27,13 @@ const NAMES = ['minkowski', 'schwarzschild', 'flrw', 'kerr'] as const;
 const HELP = `upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
         Christoffel symbols, the Ricci tensor, the Ricci scalar and the
         Kretschmann scalar of one exact metric. Alias: upt curvature.
-        Signature of the line element is (-,+,+,+). The Einstein-equation
-        tensor AST stays mostly-minus (+,-,-,-); this command does not change it.
+        Signature of the line element is (-,+,+,+), the same mostly-plus
+        signature as the canonical Einstein-equation metric node.
         Schwarzschild Kretschmann is checked against 48 G² M² / (c⁴ r⁶).
         FLRW prints the Friedmann equation including the curvature term
-        −k c²/a² and Λ. Kerr Kretschmann uses the Boyer–Lindquist closed form;
-        Kerr geodesics are not implemented.
-        Defaults: Schwarzschild M = M_sun, r = 10 r_s; FLRW flat dust n = 2/3;
-        Kerr a = 0, r = 10 GM/c². --geodesic integrates a short Schwarzschild
-        circular orbit. \`upt help metric\` describes every flag.
+        −k c²/a² and Λ. Kerr Kretschmann uses the Boyer–Lindquist closed form.
+        --geodesic integrates a short Schwarzschild circular orbit, or a Kerr
+        equatorial circular orbit. \`upt help metric\` describes every flag.
         e.g.  upt metric schwarzschild M=1.989e30 r=1e8
               upt metric flrw k=1 t=2
               upt curvature kerr a=1000 r=1e8 theta=1.2`;
@@ -58,7 +57,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   } catch (e) {
     throw new UsageError((e as Error).message);
   }
-  let geodesic: { readonly r0: number; readonly rEnd: number; readonly phiAdvance: number; readonly steps: number } | { readonly deferred: string } | undefined;
+  let geodesic:
+    | { readonly r0: number; readonly rEnd: number; readonly phiAdvance: number; readonly steps: number; readonly E0?: number; readonly EEnd?: number; readonly L0?: number; readonly LEnd?: number; readonly Q0?: number; readonly QEnd?: number }
+    | undefined;
   if (args.flags.has('geodesic')) {
     if (name === 'schwarzschild') {
       const M = report.parameters.M;
@@ -68,9 +69,19 @@ async function run(ctx: CommandCtx): Promise<number> {
         ...(r === undefined ? {} : { r }),
       });
     } else if (name === 'kerr') {
-      geodesic = { deferred: 'Kerr geodesic integration is not implemented. Schwarzschild --geodesic runs a circular orbit.' };
+      const Mgeom = report.parameters.M_geom_m;
+      const a = report.parameters.a ?? 0;
+      const r = report.parameters.r;
+      if (Mgeom === undefined || !(Mgeom > 0)) throw new UsageError('Kerr geodesic needs a positive mass');
+      geodesic = kerrEquatorialCircular({
+        M: Mgeom,
+        aOverM: a / Mgeom,
+        rOverM: (r ?? 10 * Mgeom) / Mgeom,
+        fraction: 0.005,
+        steps: 40,
+      });
     } else {
-      throw new UsageError(`upt metric: --geodesic is for schwarzschild (kerr is deferred).`);
+      throw new UsageError('upt metric: --geodesic is for schwarzschild or kerr.');
     }
   }
   if (args.flags.has('json')) {
@@ -92,10 +103,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`  Ricci scalar R = ${report.ricciScalar}`);
   out(`  Kretschmann K = ${report.kretschmann}`);
   out('  closed form: ' + Object.entries(report.closedForm).map(([k, v]) => `${k}=${v}`).join(' '));
-  if (geodesic && 'deferred' in geodesic) out(`  geodesic: ${geodesic.deferred}`);
-  else if (geodesic) {
+  if (geodesic) {
+    const cons =
+      geodesic.E0 === undefined
+        ? ''
+        : ` E ${geodesic.E0}→${geodesic.EEnd} L ${geodesic.L0}→${geodesic.LEnd} Q ${geodesic.Q0}→${geodesic.QEnd}`;
     out(
-      `  geodesic: circular orbit r0=${geodesic.r0} rEnd=${geodesic.rEnd} Δφ=${geodesic.phiAdvance} over ${geodesic.steps} steps`,
+      `  geodesic: circular orbit r0=${geodesic.r0} rEnd=${geodesic.rEnd} Δφ=${geodesic.phiAdvance} over ${geodesic.steps} steps${cons}`,
     );
   }
   return 0;

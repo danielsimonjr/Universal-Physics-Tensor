@@ -10,10 +10,11 @@ from v0.1.0 onward.
 
 ### Added
 
-- **`upt metric` / `upt curvature`.** Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann scalar for Minkowski, Schwarzschild, FLRW and Kerr. The line element is (−,+,+,+); the Einstein-equation AST stays (+,-,-,-). Schwarzschild Kretschmann is checked against `48 G² M² / (c⁴ r⁶)`. FLRW includes the curvature term. `--geodesic` integrates a short Schwarzschild circular orbit. Kerr geodesic integration is not implemented.
+- **`upt metric` / `upt curvature`.** Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann scalar for Minkowski, Schwarzschild, FLRW and Kerr. The line element is (−,+,+,+). Schwarzschild Kretschmann is checked against `48 G² M² / (c⁴ r⁶)`. FLRW includes the curvature term. `--geodesic` integrates a short Schwarzschild circular orbit, and a Kerr equatorial circular orbit (Carter constant Q, E = −u_t, L = u_φ). ~~The Einstein-equation AST stays (+,-,-,-). Kerr geodesic integration is not implemented.~~ Retracted: the canonical Einstein-equation metric node is (−,+,+,+), the same signature this command prints, and the Kerr equatorial orbit is implemented. Inclined Kerr orbits are not.
+- **Canonical entries after the owner unfroze `src/canonical`.** `CE-einstein-field-eq` carries 8π in its scalar AST (a `4π` formula is the factor 0.5) and its metric node is (−,+,+,+). `CE-compton-wavelength` is named Reduced Compton wavelength, with sourced prefactor 1; `CE-compton-wavelength-full` is λ = h/(m c). Rydberg latex is `E_R = m_e e^4 / (32 π² ε0² ħ²)`, in the AST. Gravitational potential and Hooke's law carry the minus in the AST. Flat `CE-friedmann` is unchanged; `CE-friedmann-curvature` is `H² = 8πGρ/3 − k c²/a²`. The registry is 109 entries. The criterion 3 live export was re-pinned. Amendment 8 still hashes the corpus the labelers saw, at `c144150`.
 - **`upt testplan`.** The confirm and falsify criteria already stored on a confrontation or an applied case, as Markdown or JSON.
 - **Opt-in natural units.** `upt eval` and `upt map --equation` take `--natural` (ħ = c = 1) and `--geometrized` (also G = 1). The SI default is unchanged.
-- **CODATA names and lab units in `upt eval`.** `G`, `c`, `hbar`, `h`, `k_B`, `e_charge`, `m_e`, `eps0`, `mu0`, `M_sun`, `GM_sun`, and the units tesla, gauss, bar, atm, ångström, parsec, light-year and `AU`. `Msun` stays `M_SUN_SI`; `Msun_iau` is `GM☉/G`.
+- **CODATA names and lab units in `upt eval`.** `G`, `c`, `hbar`, `h`, `k_B`, `e_charge`, `m_e`, `eps0`, `mu0`, `M_sun`, `GM_sun`, `Msun_iau`, and the units tesla, gauss, bar, atm, ångström, parsec, light-year and `AU`. `Msun` stays `M_SUN_SI`. `GM_sun` is `GM_SUN_SI` and `Msun_iau` is `GM☉/G`, both registered constants.
 - **`upt eval --show-parser`.** Prints `mathts` or `builtin`. Formula errors name the same parser. `upt version` stays a bare semver.
 
 ### Fixed
@@ -23,14 +24,14 @@ from v0.1.0 onward.
 - **`map --equation` prints the verdict only.** `--verbose` restores the linkage map. `--equation-only` is unchanged.
 - **`derive` dimension specs accept parentheses and named quotients** (`power/(area*temperature^4)`, `mass/volume`, pressure, density, viscosity, resistance, magnetic field).
 - **Sourced prefactors** for the wire (`1/(2π)`), Larmor (`1/(6π)`) and field energy density (`1/2`), and the sound-speed `√γ` when the formula writes `gamma`. Coulomb's `4π` was already in the fully-quantitative AST.
-- **Friedmann's curvature term** is compared when the formula names `curvature_k` and `scale_factor`. The frozen flat entry is unchanged.
+- **Friedmann's curvature term** is the canonical entry `CE-friedmann-curvature`. ~~It was compared by subtracting `k c²/a²` from the frozen flat entry.~~ Retracted: the flat entry is unchanged, and the curved formula matches the new entry.
 - **`m_e` and `e_charge`** are formula names, so a hydrogen formula can be dimension-checked. They are not new canonical-graph constants.
 - **`upt search` indexes applied cases.** `skin` and `brownian` find `upt evaluate case-…`.
 - **`upt path` names a multi-premise bridge** that mentions both models. Stokes drag → Fick names `ab-stokes-einstein` and still exits 0 when there is no chain.
 - **`upt regime` exits 3 when a record is VIOLATED.** VACUOUS and UNKNOWN stay 0.
 - **`upt probe scan` lists searchable expression gaps** from applied cases. Relation-link wrappers stay not-searchable.
 - **`discover --require-falsifier` lists encoded falsifiers** (confrontations, counterexamples, regime inequalities) after it hides untested promising rows.
-- **A case result can print the `regime --at` line** its outputs imply. be-65 prints the Jeans formula. be-56 names the truncated stored ħ.
+- **A case result can print the `regime --at` line** its outputs imply. be-65 prints the Jeans formula. be-56 names `HBAR_SI`. ~~be-56 names the truncated stored ħ.~~ Retracted: `HBAR_SI` is the exact quotient `H_SI/(2π)`. The note states that the CODATA display is that quotient truncated.
 - **Stale `c = 2.998e8` comments** in the lensing and perihelion bridges now say the exact `299792458`.
 - **Architecture dependency docs regenerated** after this change (`src/` scope: 392 files, 2811 exports, 1339 re-exports). The hand-written `src/`-scope figures in `ARCHITECTURE.md`, `OVERVIEW.md` and `COMPONENTS.md` were re-read from that output. No generated report was hand-edited.
 - **`upt confront be-XX` selects that confrontation.** `upt explain be-XX` already told you to run that command. The positional was ignored, so the command exited 0 and printed every confrontation. A positional that is not a bridge id is now an error, and a positional that disagrees with `--bridge` is an error. `--bridge=be-XX` is unchanged.

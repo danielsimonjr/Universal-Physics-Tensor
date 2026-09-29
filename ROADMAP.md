@@ -141,7 +141,7 @@ following are binding (from `CLAUDE.md` and the discovery plan's second audit):
 | New `ScientificRelationRecord` envelope (discovery plan §3) and new atlas records | **One** additive overlay, not two. The discovery plan's `RelationKind` / `AuditState` / `EvidenceProfile` sketch and the atlas `Bridge` / `Evidence` record are the same object and must be reconciled in the Phase 1 design note. | Two overlays pointing at the same `BridgeEdge` is the "parallel UPT inside UPT" the second audit forbade. |
 | Replace status with evidence tags | Derive evidence tags from the existing surfaces (validator, confrontations, rejections) beside `BridgeEquationStatus` / `EdgeConfidence`; never store them on a row, never adapt one type into the other | Eve forbade the `confidenceToStatus` adapter (`src/core/cell.ts`); existing epistemic types are not replaced (audit corrections #11 and #16). |
 | Nested CLI (`atlas regime`, `atlas path`) | Flat verbs (`upt regime`, `upt path`, …), `FlagSpec`-parsed, `--json` envelope | The CLI is a flat registry; frozen verbs (`discover`, `candidates`, `ground`, `connectors`, `predict`, `confront`) are never hijacked. |
-| No forced migration | Existing 41 graph edges, 55 catalog rows (`BridgeEquationEntry`), and 107 canonical entries all receive the optional overlay fields in Phase 1 and start as `relation: undefined` / `auditState: 'not-yet-audited'` until audited (evidence tags are derived, never stored); 17 catalog rows have no graph edge, so the row is the per-bridge home | No fabricated metadata (audit correction #16, §3.1). Coverage is reported as schema / audited / verified. |
+| No forced migration | Existing 41 graph edges, 55 catalog rows (`BridgeEquationEntry`), and 109 canonical entries all receive the optional overlay fields in Phase 1 and start as `relation: undefined` / `auditState: 'not-yet-audited'` until audited (evidence tags are derived, never stored); 17 catalog rows have no graph edge, so the row is the per-bridge home | No fabricated metadata (audit correction #16, §3.1). Coverage is reported as schema / audited / verified. |
 | Product A is "the discovery hypothesis" | Product A stays frozen. Link prediction over the typed graph is a Phase 6 study, and its held-out-recovery claim is the only one made | Audit corrections #1 and #17. |
 
 ---
@@ -477,7 +477,7 @@ agent's time is not a reviewer's time. The owner amended this criterion; it is n
 - **Replacing `BridgeEquationStatus`, `EdgeConfidence`, `EpistemicStatus`, `VettedCandidate`,
   or `AdjudicationVerdict`.** Overlay only.
 - **A staffing or delivery date.** Set after Phase 0 and Phase 1 measure curation cost.
-- **A 50–100-family corpus.** The proposal's Phase 1 target. UPT's corpus is the 107-entry
+- **A 50–100-family corpus.** The proposal's Phase 1 target. UPT's corpus is the 109-entry
   L-layer plus the families each phase adds (oscillators, diffusion, waves); breadth is set
   by measured curation cost, not by a target. Recorded here so the drop is not silent.
 - **Not carried, by choice:** OpenMath / Content MathML syntax trees (UPT's `ExprNode` is the
