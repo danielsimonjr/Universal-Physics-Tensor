@@ -14,10 +14,13 @@ nothing validates prose and the next reader cannot tell.
 - **MathTS optional peers, 2026-09-29.** Ranges match `npm view`: autograd 0.3.15, core 0.15.5,
   expression 0.8.2, functions 0.65.0, matrix 0.7.5, parallel 0.6.7, tensor 0.2.21, wasm 0.3.0,
   workerpool 0.2.6. Still optional peers. The packages themselves were not republished.
-- **Tier 10 design, no code.** `docs/design/tier-10-cross-family-path.md` is the design for
-  cross-family `upt path`. Routing already uses `findAtlasPath` when the endpoints differ in
-  family. The open work is the composition rule (norms, regimes, horizons) across families.
-  Mothership has not approved it. No implementation in this change.
+- **Tier 10, as of 2026-09-29.** Daniel approved the §11 defaults in
+  `docs/design/tier-10-cross-family-path.md`. M1 is in: `upt path` labels `crossFamily` and
+  `modelFamilies` from the models the route visits, and `fromModelFamily` / `toModelFamily` on
+  each JSON step. The filing family stays `family`. The sentence that composition rules are the
+  same as within one family is gone. No new refusal. `ab-kg-schrodinger`'s bound is the bridge's
+  own. M2 (vocabulary gate), M3 (regime conjunction) and M4 (help text) are not started. The
+  composition table is unchanged.
 - **`upt probe scan` gaps, measured 2026-09-29.** 6 searchable prediction-residual gaps, one per
   applied case. `--all` lists 232 Product A wrappers (216 relation-link, 16 regime-transition),
   none of those searchable. Combined list 238.

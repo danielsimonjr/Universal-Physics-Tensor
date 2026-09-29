@@ -120,8 +120,8 @@ is the single-premise coarse-graining `ab-langevin-diffusion`
 named beside that chain when the endpoints match the rule above. It is not
 composed with it.
 
-This design keeps the join out of the chain. Section 11 asks whether that
-should ever change.
+This design keeps the join out of the chain. `ab-stokes-einstein` stays a
+named multi-premise join and is never a chain step.
 
 ## 4. Data model
 
@@ -172,10 +172,10 @@ bridge, which states no norm of its own.
 norm composes with the next stated norm only through a `NormTransport` whose
 `from` / `to` are those strings and whose `fromModel` / `toModel` are the
 models the route actually crosses. The transport's witness stays the
-evidence. A missing transport is a no-claim. The proposed reason is
-`cross-family-unmapped`, with a detail that names the bridge, the two model
-families, and the norm string that had no transport. It is the same shape as
-`norm-not-stated`: a refusal, no number.
+evidence. A missing transport is a no-claim. The reason is `cross-family-unmapped`,
+with a detail that names the bridge, the two model families, and the norm
+string that had no transport. It is the same shape as `norm-not-stated`: a
+refusal, no number.
 
 A one-step route has nothing to compose with. `ab-kg-schrodinger` is one
 approximation, filed under waves, ending at a diffusion model, with its own
@@ -187,7 +187,8 @@ bridge's own regime and horizon.
 partials, `σ² = Σ (∂f/∂xᵢ)² σᵢ²`, optional `bound.delta` only when the caller
 passes it. A path bound is a Lipschitz-plus-offset claim in a named norm. A
 statistical sigma is a different object. This command does not print a sigma
-and does not add `δ` and `σ`. Section 11 records the question of a later flag.
+and does not add `δ` and `σ`. A later flag that would print
+`propagateUncertainty` beside the bound is outside this design.
 
 ## 6. How regime validity composes
 
@@ -372,38 +373,28 @@ models actually visited.
   returns would print no crossing if only the endpoints were compared.
   `crossFamily` is defined on the visited models.
 
-## 11. Open questions for Daniel
+## 11. Decisions
 
 1. **Intra-family preference.** When both endpoints share a family and an
-   intra-family chain exists, this note keeps that chain even if the atlas
-   union contains another route. Should the command also report that another
-   atlas route exists, without switching to it?
-2. **Reason string.** `cross-family-unmapped` is a new `no-claim` reason.
-   Reusing `norm-not-stated` would avoid a new enum member and would blur a
-   missing intra-family transport with a family boundary. Which string should
-   the JSON carry?
-3. **`--at` namespace.** One flat namespace, with a colliding group name
-   forced to `unknown`, is the rule in §6. The alternative is a qualified key
-   (`waves.k`, `diffusion.k`). Qualified keys change every existing `--at`
-   invocation that happens to be unambiguous. Is the flat namespace the one
-   to ship?
-4. **Hyperedges.** Should `ab-stokes-einstein` remain a named join forever,
-   or is there a later tier in which a path may require every premise of a
-   join to be supplied (`upt path` with more than two model ids)?
-5. **One-step cross-family bounds.** `ab-kg-schrodinger` prints its own bound
-   once the families are labeled. Is labeling enough, or should a one-step
-   cross-family edge also require an explicit "this norm is stated in the
-   conclusion's vocabulary" declaration before any number is printed?
-6. **Uncertainty.** This note leaves `σ` off `upt path`. Is that the decision,
-   or should a later flag print `propagateUncertainty` beside the bound
-   without combining the two numbers?
-7. **Table.** Confirm that Tier 10 does not widen the composition table,
-   including `approximation` then `analytic-continuation`.
+   intra-family chain exists, that chain is the route. The command does not
+   mention or report another atlas route.
+2. **Reason string.** An unmapped cross-family norm is `no-claim` with reason
+   `cross-family-unmapped`.
+3. **`--at` namespace.** One flat namespace. A group name whose π-groups
+   differ across steps is `unknown` on both steps.
+4. **Hyperedges.** `ab-stokes-einstein` stays a named multi-premise join. It
+   is never a chain step. A path does not take more than two model ids.
+5. **One-step cross-family bounds.** Labeling is enough. `ab-kg-schrodinger`
+   prints its own bound. A one-step edge does not require a separate
+   vocabulary declaration.
+6. **Uncertainty.** `upt path` does not print a sigma.
+7. **Table.** The composition table is not widened. `approximation` then
+   `analytic-continuation` stays a silent cell.
 
 ## 12. Milestones
 
-Each milestone is a code change that waits for approval of this note. Later
-milestones assume the earlier ones. None of them edits the composition table.
+Each milestone is one code change. Later milestones assume the earlier ones.
+None of them edits the composition table.
 
 **M1 — Labels, no new refusal.** Compute `crossFamily` and `modelFamilies`
 from the route `selectRoute` already returns. Add `fromModelFamily` and
@@ -413,11 +404,10 @@ or refusal they have before any gate is added. `ab-kg-schrodinger`'s bound
 must be unchanged at M1.
 
 **M2 — Vocabulary gate.** Implement §5. Same-family routes, including
-pendulum → LC, keep the `(K, δ)` that route already returns. A cross-family multi-step route
-without a transport returns `cross-family-unmapped` (or the reason chosen in
-question 2) and no bound. The missing-Lipschitz chain stays
-`missing-lipschitz`. The silent Klein–Gordon → Fick cell stays
-`no-composite-claim`.
+pendulum → LC, keep the `(K, δ)` that route already returns. A cross-family
+multi-step route without a transport returns `cross-family-unmapped` and no
+bound. The missing-Lipschitz chain stays `missing-lipschitz`. The silent
+Klein–Gordon → Fick cell stays `no-composite-claim`.
 
 **M3 — Regime and horizon conjunction.** Implement §6. `intersectRegimes`
 still throws across families. Duplicate group keys become `unknown`.

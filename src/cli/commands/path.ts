@@ -176,6 +176,78 @@ type Bridges = readonly AtlasBridge[];
 type Translation = import('../../cli-api.js').ObservableTranslation;
 type Carriage = import('../../cli-api.js').ObservableCarriage;
 
+function modelFamilyOf(api: CommandCtx['api'], id: string | null): string | undefined {
+  if (id === null) return undefined;
+  return api.ATLAS_FAMILIES.find((f) => f.models.some((m) => m.id === id))?.family;
+}
+
+function filingFamilyOf(api: CommandCtx['api'], id: string): string | undefined {
+  return api.ATLAS_FAMILIES.find((f) => f.bridges.some((b) => b.id === id))?.family;
+}
+
+/** The model a step leaves, entered at `entry`. An exact step may leave by either end. */
+function leaveModel(bridge: AtlasBridge, entry: string): string | null {
+  if (bridge.premises.length !== 1) return null;
+  const premise = bridge.premises[0]!;
+  if (entry === premise) return bridge.conclusion;
+  if (bridge.relation === 'exact-equivalence' && entry === bridge.conclusion) return premise;
+  return null;
+}
+
+interface PathStepLabel {
+  readonly id: string;
+  readonly relation: AtlasBridge['relation'];
+  readonly from: string | undefined;
+  readonly to: string;
+  readonly family: string | undefined;
+  readonly fromModelFamily: string | undefined;
+  readonly toModelFamily: string | undefined;
+}
+
+/**
+ * Families of the models a route visits, in order, starting at `from`.
+ * Adjacent duplicates collapse. A family visited again after a different one
+ * stays in the list. `family` on each step stays the filing family.
+ */
+function routeFamilyLabels(
+  api: CommandCtx['api'],
+  bridges: readonly AtlasBridge[],
+  from: string,
+): {
+  readonly crossFamily: boolean;
+  readonly modelFamilies: readonly string[];
+  readonly steps: readonly PathStepLabel[];
+} {
+  const modelFamilies: string[] = [];
+  const push = (id: string | null): string | undefined => {
+    const family = modelFamilyOf(api, id);
+    if (family !== undefined && modelFamilies[modelFamilies.length - 1] !== family) modelFamilies.push(family);
+    return family;
+  };
+  if (bridges.length === 0) {
+    push(from);
+    return { crossFamily: false, modelFamilies, steps: [] };
+  }
+  let at: string | null = from;
+  const steps = bridges.map((b) => {
+    const entry = at;
+    const exit = entry === null ? null : leaveModel(b, entry);
+    const fromModelFamily = modelFamilies.length === 0 ? push(entry) : modelFamilyOf(api, entry);
+    const toModelFamily = push(exit);
+    at = exit;
+    return {
+      id: b.id,
+      relation: b.relation,
+      from: b.premises[0],
+      to: b.conclusion,
+      family: filingFamilyOf(api, b.id),
+      fromModelFamily,
+      toModelFamily,
+    };
+  });
+  return { crossFamily: modelFamilies.length > 1, modelFamilies, steps };
+}
+
 /**
  * The translation a path can use for `observable`: the first bridge's, carried
  * through every later bridge only by that bridge's declared carriage of the
@@ -984,8 +1056,6 @@ async function run(ctx: CommandCtx): Promise<number> {
   const point = parseAt(assignments, 'path');
   const t = point['t'];
 
-  const bridgeFamily = (id: string): string | undefined =>
-    api.ATLAS_FAMILIES.find((f) => f.bridges.some((b) => b.id === id))?.family;
   const { bridges, fromFamily, toFamily } = selectRoute(api, from, to, 'path');
   const multi = from === to ? [] : multiPremiseBridges(api, from, to);
 
@@ -1008,10 +1078,17 @@ async function run(ctx: CommandCtx): Promise<number> {
     return 0;
   }
 
+  const labels = routeFamilyLabels(api, bridges, from);
+
   if (bridges.length === 0) {
     if (wantJson) {
       emitJson(
-        { command: 'path', epistemics: EPISTEMICS, options: { from, to, at: point }, result: { path: [] } },
+        {
+          command: 'path',
+          epistemics: EPISTEMICS,
+          options: { from, to, at: point },
+          result: { path: [], crossFamily: labels.crossFamily, modelFamilies: labels.modelFamilies },
+        },
         ctx.write,
       );
       return 0;
@@ -1103,13 +1180,9 @@ async function run(ctx: CommandCtx): Promise<number> {
         options: { from, to, at: point },
         result: {
           families: { from: fromFamily, to: toFamily },
-          path: bridges.map((b) => ({
-            id: b.id,
-            relation: b.relation,
-            from: b.premises[0],
-            to: b.conclusion,
-            family: bridgeFamily(b.id),
-          })),
+          crossFamily: labels.crossFamily,
+          modelFamilies: labels.modelFamilies,
+          path: labels.steps,
           // A no-claim has no `bound` key at all — the type refuses it, and so
           // does this envelope.
           ...(result.kind === 'bound'
@@ -1149,11 +1222,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`  ${bridges.length} bridge(s):`);
   for (const b of bridges) out(`    ${b.premises[0]} --[${b.relation}]--> ${b.conclusion}  (${b.id})`);
   printMultiPremise(out, multi);
-  if (fromFamily !== toFamily) {
-    out(
-      `  crosses families: ${fromFamily} → ${toFamily} (a family is a filing label; ` +
-        'the composition rules are the same as within one)',
-    );
+  if (labels.crossFamily) {
+    out(`  crosses families: ${labels.modelFamilies.join(' → ')}`);
   }
   out('');
   if (result.kind === 'bound') {
