@@ -797,7 +797,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `RouteEnumeration`, `PathBoundClaim`, `AppliedTransport`, `PathNoClaim`
-- Functions: `findPath`, `findAtlasPath`, `enumerateAtlasRoutes`, `enumerateRoutes`, `boundPath`, `routeEntryModels`, `horizonOnRoute`
+- Functions: `findPath`, `findAtlasPath`, `enumerateAtlasRoutes`, `enumerateRoutes`, `boundPath`, `routeEntryModels`, `familyChangeBlocksHorizon`, `horizonOnRoute`
 
 ---
 
@@ -895,7 +895,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `RegimeCheck`, `RegionSample`, `RegimeBearing`
-- Functions: `deriveRegimeGroups`, `regimeHolds`, `intersectRegimes`, `regimeOverlap`, `uncoveredRegions`, `admitApproximation`
+- Functions: `deriveRegimeGroups`, `regimeHolds`, `intersectRegimes`, `collidingRegimeGroups`, `regimeOverlap`, `uncoveredRegions`, `admitApproximation`
 
 ---
 
@@ -4004,9 +4004,9 @@ The codebase is organized into the following modules:
 | `./atlas/translation-registry.js` | `OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf` | Re-export |
 | `./atlas/translation.js` | `ObservableCarriage, ObservableTranslation, PointCheck` | Re-export |
 | `./atlas/oscillators/index.js` | `AtlasFamily` | Re-export |
-| `./atlas/regime.js` | `regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
+| `./atlas/regime.js` | `collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
-| `./atlas/path-bound.js` | `findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
+| `./atlas/path-bound.js` | `familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
 | `./atlas/composition-table.js` | `composeRelation` | Re-export |
 | `./atlas/path-bound.js` | `PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport` | Re-export |
 | `./atlas/types.js` | `AtlasBridge, RegimeInequality, Witness` | Re-export |
@@ -4045,10 +4045,11 @@ The codebase is organized into the following modules:
   deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS,
   runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
   OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
-  ObservableTranslation, PointCheck, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
-  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath,
-  horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim,
-  AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
+  ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap,
+  uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon, findPath,
+  findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation,
+  PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality,
+  Witness, MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -7422,12 +7423,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 392 |
 | Total Modules | 12 |
-| Total Lines of Code | 85948 |
-| Total Exports | 2820 |
-| Total Re-exports | 1339 |
+| Total Lines of Code | 86184 |
+| Total Exports | 2824 |
+| Total Re-exports | 1341 |
 | Total Classes | 59 |
 | Total Interfaces | 443 |
-| Total Functions | 720 |
+| Total Functions | 722 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 534 |

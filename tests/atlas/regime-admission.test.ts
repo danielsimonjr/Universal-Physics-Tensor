@@ -18,6 +18,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   admitApproximation,
+  collidingRegimeGroups,
   deriveRegimeGroups,
   intersectRegimes,
   regimeHolds,
@@ -283,6 +284,36 @@ describe('intersectRegimes', () => {
     expect(() => intersectRegimes(onZeta('<', 1), conflicting)).toThrow(
       /defined differently/,
     );
+  });
+});
+
+describe('collidingRegimeGroups — a path does not merge families', () => {
+  const waves: Regime = {
+    family: 'waves',
+    inequalities: [{ group: ZETA, op: '<=', bound: 0.1 }],
+    groupDefinitions: {
+      [ZETA]: { formula: ZETA, exponents: { m: 2, b: -4, k: 2 } },
+    } as Regime['groupDefinitions'],
+  };
+
+  it('names a shared group whose exponent vectors differ, and does not throw across families', () => {
+    expect(() => intersectRegimes(onZeta('<', 1), waves)).toThrow(/families differ/);
+    const collisions = collidingRegimeGroups([onZeta('<', 1), waves]);
+    expect(collisions).toEqual([{ group: ZETA, families: ['oscillators', 'waves'] }]);
+    // The path command drops the colliding name before regimeHolds, so the
+    // supplied number is unchecked on every step that defines it.
+    const values: Record<string, number> = { [ZETA]: 0.2 };
+    for (const c of collisions) delete values[c.group];
+    expect(regimeHolds(onZeta('<', 1), values).ok).toBe('unknown');
+    expect(regimeHolds(waves, values).ok).toBe('unknown');
+  });
+
+  it('CONTROL: the same exponent vector is not a collision, so each step may use the supplied number', () => {
+    const same: Regime = { ...onZeta('<=', 0.5), family: 'waves' };
+    expect(collidingRegimeGroups([onZeta('<=', 0.5), same])).toEqual([]);
+    expect(regimeHolds(onZeta('<=', 0.5), { [ZETA]: 0.2 }).ok).toBe(true);
+    expect(regimeHolds(same, { [ZETA]: 0.2 }).ok).toBe(true);
+    expect(regimeHolds(onZeta('<=', 0.5), { [ZETA]: 0.9 }).ok).toBe(false);
   });
 });
 

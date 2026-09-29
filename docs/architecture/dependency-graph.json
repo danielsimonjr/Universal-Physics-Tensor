@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 392,
     "totalModules": 12,
-    "totalExports": 2820
+    "totalExports": 2824
   },
   "entryPoints": [
     {
@@ -2777,6 +2777,7 @@
           "enumerateRoutes",
           "boundPath",
           "routeEntryModels",
+          "familyChangeBlocksHorizon",
           "horizonOnRoute"
         ],
         "interfaces": [
@@ -2792,6 +2793,7 @@
           "enumerateRoutes",
           "boundPath",
           "routeEntryModels",
+          "familyChangeBlocksHorizon",
           "horizonOnRoute"
         ]
       },
@@ -3144,6 +3146,7 @@
           "deriveRegimeGroups",
           "regimeHolds",
           "intersectRegimes",
+          "collidingRegimeGroups",
           "regimeOverlap",
           "uncoveredRegions",
           "admitApproximation"
@@ -3157,6 +3160,7 @@
           "deriveRegimeGroups",
           "regimeHolds",
           "intersectRegimes",
+          "collidingRegimeGroups",
           "regimeOverlap",
           "uncoveredRegions",
           "admitApproximation"
@@ -13410,6 +13414,7 @@
           {
             "file": "./atlas/regime.js",
             "imports": [
+              "collidingRegimeGroups",
               "regimeHolds",
               "regimeOverlap",
               "uncoveredRegions"
@@ -13428,6 +13433,7 @@
           {
             "file": "./atlas/path-bound.js",
             "imports": [
+              "familyChangeBlocksHorizon",
               "findPath",
               "findAtlasPath",
               "enumerateAtlasRoutes",
@@ -13597,9 +13603,11 @@
           "carriageOf",
           "runTranslationCheck",
           "translationsOf",
+          "collidingRegimeGroups",
           "regimeHolds",
           "regimeOverlap",
           "uncoveredRegions",
+          "familyChangeBlocksHorizon",
           "findPath",
           "findAtlasPath",
           "enumerateAtlasRoutes",
@@ -13789,12 +13797,14 @@
           "ObservableTranslation",
           "PointCheck",
           "AtlasFamily",
+          "collidingRegimeGroups",
           "regimeHolds",
           "regimeOverlap",
           "uncoveredRegions",
           "RegimeCheck",
           "RegimeOverlap",
           "RegionSample",
+          "familyChangeBlocksHorizon",
           "findPath",
           "findAtlasPath",
           "enumerateAtlasRoutes",
@@ -27209,15 +27219,15 @@
   "statistics": {
     "totalTypeScriptFiles": 392,
     "totalModules": 12,
-    "totalLinesOfCode": 85948,
-    "totalExports": 2820,
+    "totalLinesOfCode": 86184,
+    "totalExports": 2824,
     "totalClasses": 59,
     "totalInterfaces": 443,
-    "totalFunctions": 720,
+    "totalFunctions": 722,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 701,
-    "totalReExports": 1339,
+    "totalReExports": 1341,
     "totalTypeOnlyImports": 534,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

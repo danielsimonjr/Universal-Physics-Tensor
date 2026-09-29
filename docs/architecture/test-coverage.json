@@ -798,7 +798,8 @@
     ],
     "src/atlas/waves/bridges-closure.ts": [
       "tests/atlas/barrel-completeness.test.ts",
-      "tests/atlas/closure.test.ts"
+      "tests/atlas/closure.test.ts",
+      "tests/atlas/path-bound.test.ts"
     ],
     "src/atlas/waves/bridges.ts": [
       "tests/atlas/barrel-completeness.test.ts",
@@ -8105,6 +8106,7 @@
       "src/atlas/types.ts",
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/oscillators/bridges-exact.ts",
+      "src/atlas/waves/bridges-closure.ts",
       "src/atlas/oscillators/norm-transport.ts",
       "src/atlas/oscillators/norms.ts",
       "src/composition/uncertainty.ts",

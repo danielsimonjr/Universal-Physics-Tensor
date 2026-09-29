@@ -104,7 +104,7 @@ The following 12 source files are not directly imported by any test file:
 | `atlas/translation-registry.ts` | `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `spring-lc-phase-carriage.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/translation.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/types.ts` | `applicability.test.ts`, `audited-catalog.test.ts`, `barrel-completeness.test.ts`, `bound-machine-form.test.ts`, `composition-table.test.ts`, `conventions.test.ts`, `coverage.test.ts`, `error-algebra.test.ts`, `evidence-rule.test.ts`, `gr-spine-regime.test.ts`, `link-prediction.test.ts`, `oscillators-limits.test.ts`, `overlay-types.test.ts`, `path-bound.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `statement-derivation.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `witness-results.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `compose-relation.test.ts`, `graph-viz-filters.test.ts` |
-| `waves/bridges-closure.ts` | `barrel-completeness.test.ts`, `closure.test.ts` |
+| `waves/bridges-closure.ts` | `barrel-completeness.test.ts`, `closure.test.ts`, `path-bound.test.ts` |
 | `waves/bridges.ts` | `barrel-completeness.test.ts`, `waves.test.ts` |
 | `waves/index.ts` | `barrel-completeness.test.ts`, `waves.test.ts` |
 | `waves/models.ts` | `barrel-completeness.test.ts` |
@@ -482,7 +482,7 @@ The following 12 source files are not directly imported by any test file:
 | `atlas/oscillators-exact.test.ts` | 1 files |
 | `atlas/oscillators-limits.test.ts` | 5 files |
 | `atlas/overlay-types.test.ts` | 4 files |
-| `atlas/path-bound.test.ts` | 12 files |
+| `atlas/path-bound.test.ts` | 13 files |
 | `atlas/pendulum-phase-translation.test.ts` | 6 files |
 | `atlas/pendulum-position-translation.test.ts` | 6 files |
 | `atlas/poster.test.ts` | 6 files |

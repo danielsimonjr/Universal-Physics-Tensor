@@ -15,12 +15,16 @@ nothing validates prose and the next reader cannot tell.
   expression 0.8.2, functions 0.65.0, matrix 0.7.5, parallel 0.6.7, tensor 0.2.21, wasm 0.3.0,
   workerpool 0.2.6. Still optional peers. The packages themselves were not republished.
 - **Tier 10, as of 2026-09-29.** Daniel approved the §11 defaults in
-  `docs/design/tier-10-cross-family-path.md`. M1 is in: `upt path` labels `crossFamily` and
-  `modelFamilies` from the models the route visits, and `fromModelFamily` / `toModelFamily` on
-  each JSON step. The filing family stays `family`. The sentence that composition rules are the
-  same as within one family is gone. No new refusal. `ab-kg-schrodinger`'s bound is the bridge's
-  own. M2 (vocabulary gate), M3 (regime conjunction) and M4 (help text) are not started. The
-  composition table is unchanged.
+  `docs/design/tier-10-cross-family-path.md`. M1–M4 are in. `upt path` labels `crossFamily` and
+  `modelFamilies` from the models the route visits. Across families a matching norm name is not a
+  transport: only a witnessed `NormTransport` carries a bound, and its factor is applied; otherwise
+  the reason is `cross-family-unmapped` and there is no `bound` key. A missing Lipschitz constant
+  is reported first. Each step's regime is its own tri-state; a colliding group name is unchecked
+  on every step that defines it. A horizon is restated only through a declared time map on that
+  step. Exit 3 is a check that ran and failed. A no-claim stays exit 0. Help states the gates.
+  There is no sigma. `--at` is one flat namespace. `ab-stokes-einstein` is still a named join.
+  The composition table is unchanged. `src/` scope after `docs:deps`: 392 files, 2824 exports,
+  1341 re-exports.
 - **`upt probe scan` gaps, measured 2026-09-29.** 6 searchable prediction-residual gaps, one per
   applied case. `--all` lists 232 Product A wrappers (216 relation-link, 16 regime-transition),
   none of those searchable. Combined list 238.

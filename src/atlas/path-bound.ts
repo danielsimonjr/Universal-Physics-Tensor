@@ -325,6 +325,12 @@ export type NoClaimReason =
   /** Two edges state DIFFERENT norms; composing across norms is unsound. */
   | 'norm-mismatch'
   /**
+   * A norm stated in one model family was carried into another with no
+   * witnessed transport across that boundary. String equality is not a match
+   * there. A one-step route does not reach this gate.
+   */
+  | 'cross-family-unmapped'
+  /**
    * A bound on the path has `uniformity === null` or an empty list: what the
    * error is uniform in has not been analysed, so no number is stated.
    */
@@ -368,10 +374,44 @@ export interface PathNoClaim {
 /** The result of {@link boundPath}: a bound, or an explicit refusal. @internal */
 export type PathBoundResult = PathBoundClaim | PathNoClaim;
 
+function modelFamilyOf(id: string | null): string | undefined {
+  if (id === null) return undefined;
+  return ATLAS_FAMILIES.find((f) => f.models.some((m) => m.id === id))?.family;
+}
+
+function familiesDiffer(a: string | undefined, b: string | undefined): boolean {
+  return a !== undefined && b !== undefined && a !== b;
+}
+
+/**
+ * A cross-family transport with a witness. An empty witness id or test is not
+ * one, and `kind: 'formal'` is not one: `formally-proved` is only a reviewed
+ * `formalRef`, which a transport does not carry.
+ */
+function vocabularyTransport(
+  bridge: AtlasBridge,
+  norm: string,
+  fromModel: string | null,
+  toModel: string | null,
+): NormTransport | undefined {
+  if (fromModel === null || toModel === null) return undefined;
+  return (bridge.normTransports ?? []).find(
+    (nt) =>
+      nt.from === norm &&
+      nt.fromModel === fromModel &&
+      nt.toModel === toModel &&
+      nt.timeMap.uniform &&
+      familiesDiffer(modelFamilyOf(nt.fromModel), modelFamilyOf(nt.toModel)) &&
+      nt.witness.id !== '' &&
+      nt.witness.test !== '' &&
+      nt.witness.kind !== 'formal',
+  );
+}
+
 /**
  * The error bound a chain of bridges carries — or an explicit no-claim.
  *
- * Four gates, in this order. Each one is a reason to refuse, and the FIRST
+ * Five gates, in this order. Each one is a reason to refuse, and the FIRST
  * reason found is the one reported; none of them is skippable by a caller.
  *
  * 1. **Relation.** `composeRelation` is folded along the path. The moment the
@@ -394,6 +434,13 @@ export type PathBoundResult = PathBoundClaim | PathNoClaim;
  *    for the direction the route crosses it, with a uniform time map. Then it
  *    contributes `(K, 0)` and the running norm becomes the transport's `to`.
  *    A mismatch is reported before a missing norm.
+ * 5. **Vocabulary.** When the models a norm is carried between sit in different
+ *    families, string equality is not a match. The carry needs a
+ *    `NormTransport` whose `fromModel` / `toModel` are the models the route
+ *    crosses, whose `from` is the running norm, whose time map is uniform, and
+ *    whose witness is present. Otherwise the refusal is
+ *    `'cross-family-unmapped'`. A one-step route has nothing to carry, so this
+ *    gate does not fire. A missing Lipschitz constant is reported first.
  *
  * @throws RangeError on an empty path. Returning `IDENTITY_BOUND` for "no
  *   edges" would be a bound asserted about nothing.
@@ -462,33 +509,105 @@ export function boundPath(bridges: readonly AtlasBridge[]): PathBoundResult {
   const unnormed: string[] = [];
   let running: string | null = null;
   let mismatch: string | null = null;
-  bridges.forEach((bridge, index) => {
+  let normFamily: string | undefined;
+  let normModel: string | null = null;
+  let vocabulary: {
+    bridgeId: string;
+    fromFamily: string;
+    toFamily: string;
+    norm: string;
+    fromModel: string;
+    toModel: string;
+  } | null = null;
+  for (let index = 0; index < bridges.length; index++) {
+    const bridge = bridges[index]!;
+    const entry = entries[index] ?? null;
+    const exit =
+      entry === null ? null : bridge.relation === 'exact-equivalence' ? otherEnd(bridge, entry) : bridge.conclusion;
+    const entryFam = modelFamilyOf(entry);
+    const exitFam = modelFamilyOf(exit);
+    if (
+      running !== null &&
+      normFamily !== undefined &&
+      entryFam !== undefined &&
+      normFamily !== entryFam &&
+      vocabulary === null
+    ) {
+      const carried = vocabularyTransport(bridge, running, normModel, entry);
+      if (carried === undefined) {
+        vocabulary = {
+          bridgeId: bridge.id,
+          fromFamily: normFamily,
+          toFamily: entryFam,
+          norm: running,
+          fromModel: normModel ?? '?',
+          toModel: entry ?? '?',
+        };
+      } else {
+        pairs.push({ K: carried.K, delta: 0 });
+        transports.push({ index, bridgeId: bridge.id, transport: carried });
+        running = carried.to;
+        normFamily = modelFamilyOf(carried.toModel);
+        normModel = carried.toModel;
+      }
+    }
     if (bridge.bound !== undefined) {
       pairs.push({ K: bridge.bound.K, delta: bridge.bound.delta });
       stated.push(bridge.bound.norm);
-      if (running !== null && bridge.bound.norm !== running && mismatch === null) {
-        mismatch =
-          `'${bridge.id}' states '${bridge.bound.norm}', but the bound reaching it is in '${running}'` +
-          (transports.length > 0 ? ` after ${transports.map((a) => `'${a.transport.id}'`).join(', ')}` : '');
+      const statedFamily = familiesDiffer(entryFam, exitFam) ? entryFam : (exitFam ?? entryFam);
+      if (vocabulary === null && running !== null && bridge.bound.norm !== running) {
+        if (normFamily !== undefined && statedFamily !== undefined && normFamily !== statedFamily) {
+          vocabulary = {
+            bridgeId: bridge.id,
+            fromFamily: normFamily,
+            toFamily: statedFamily,
+            norm: running,
+            fromModel: normModel ?? '?',
+            toModel: exit ?? '?',
+          };
+        } else if (mismatch === null) {
+          mismatch =
+            `'${bridge.id}' states '${bridge.bound.norm}', but the bound reaching it is in '${running}'` +
+            (transports.length > 0 ? ` after ${transports.map((a) => `'${a.transport.id}'`).join(', ')}` : '');
+        }
       }
       running = bridge.bound.norm;
+      if (familiesDiffer(entryFam, exitFam)) {
+        const into = vocabularyTransport(bridge, running, entry, exit);
+        if (into !== undefined) {
+          pairs.push({ K: into.K, delta: 0 });
+          transports.push({ index, bridgeId: bridge.id, transport: into });
+          running = into.to;
+          normFamily = exitFam;
+          normModel = exit;
+        } else {
+          normFamily = entryFam;
+          normModel = entry;
+        }
+      } else {
+        normFamily = statedFamily;
+        normModel = exit ?? entry;
+      }
     } else if (bridge.relation === 'exact-equivalence') {
-      const entry = entries[index] ?? null;
-      const exit = entry === null ? null : otherEnd(bridge, entry);
       const declared = bridge.normTransports ?? [];
+      const normNow: string | null = running;
       const applies = (nt: NormTransport): boolean =>
-        nt.from === running && nt.fromModel === entry && nt.toModel === exit;
-      const transport = running === null ? undefined : declared.find((nt) => applies(nt) && nt.timeMap.uniform);
+        nt.from === normNow && nt.fromModel === entry && nt.toModel === exit;
+      const transport: NormTransport | undefined =
+        normNow === null ? undefined : declared.find((nt) => applies(nt) && nt.timeMap.uniform);
       if (transport !== undefined) {
         pairs.push({ K: transport.K, delta: 0 });
         transports.push({ index, bridgeId: bridge.id, transport });
         running = transport.to;
-        return;
+        normModel = exit;
+        const carriedFamily = modelFamilyOf(exit);
+        if (carriedFamily !== undefined) normFamily = carriedFamily;
+        continue;
       }
       pairs.push(IDENTITY_BOUND);
       if (running === null) {
         unnormed.push(`'${bridge.id}' comes before any bound, and no transport is defined for an exact map there`);
-        return;
+        continue;
       }
       const nonUniform = declared.find((nt) => applies(nt) && !nt.timeMap.uniform);
       const others = declared.filter((nt) => !applies(nt));
@@ -504,7 +623,7 @@ export function boundPath(bridges: readonly AtlasBridge[]): PathBoundResult {
     } else {
       pairs.push(null);
     }
-  });
+  }
 
   // ── Gate 3: an unknown Lipschitz constant, anywhere but last, is fatal ────
   // Delegated to `composeBoundPath`, which throws `MissingLipschitzError`
@@ -512,6 +631,20 @@ export function boundPath(bridges: readonly AtlasBridge[]): PathBoundResult {
   // composite is a harder failure than an unstatable norm, and reporting the
   // softer one would mask it.
   const composed = composeBoundPath(pairs);
+
+  // ── Gate 5: a family boundary is not string equality ──────────────────────
+  // After the Lipschitz gate, so a missing constant is still the harder failure.
+  // Before the string mismatch: across families the strings were never the same
+  // norm, and a mismatch would claim they were compared.
+  if (vocabulary !== null) {
+    return {
+      kind: 'no-claim',
+      reason: 'cross-family-unmapped',
+      detail:
+        `'${vocabulary.bridgeId}' has no norm transport of '${vocabulary.norm}' from family '${vocabulary.fromFamily}' ` +
+        `(${vocabulary.fromModel}) into family '${vocabulary.toFamily}' (${vocabulary.toModel}), so the path carries no bound`,
+    };
+  }
 
   // ── Gate 4: one norm, and no unnormed map carrying a normed claim ─────────
   const distinct = [...new Set(stated)];
@@ -572,6 +705,32 @@ function entryModels(bridges: readonly AtlasBridge[]): (string | null)[] {
     at = b.relation === 'exact-equivalence' ? (at === null ? null : otherEnd(b, at)) : b.conclusion;
   }
   return entries;
+}
+
+/**
+ * True when step `index` sits in a different model family from the previous
+ * step and no applied transport restates a clock onto it. The step's own
+ * horizon is then unevaluated: a family change does not copy one.
+ *
+ * @internal
+ */
+export function familyChangeBlocksHorizon(
+  bridges: readonly AtlasBridge[],
+  transports: readonly AppliedTransport[],
+  index: number,
+): boolean {
+  if (index <= 0 || index >= bridges.length) return false;
+  const entries = entryModels(bridges);
+  const exitAt = (i: number): string | null => {
+    const entry = entries[i] ?? null;
+    const bridge = bridges[i]!;
+    if (entry === null) return null;
+    return bridge.relation === 'exact-equivalence' ? otherEnd(bridge, entry) : bridge.conclusion;
+  };
+  const previous = modelFamilyOf(exitAt(index - 1));
+  const here = modelFamilyOf(exitAt(index)) ?? modelFamilyOf(entries[index] ?? null);
+  if (!familiesDiffer(previous, here)) return false;
+  return !transports.some((a) => a.index === index && a.transport.timeMap.uniform);
 }
 
 /** The end of an exact bridge a route leaves by, entering at `entry`; `null` when `entry` is neither end. */

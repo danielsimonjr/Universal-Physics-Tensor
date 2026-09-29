@@ -444,7 +444,14 @@ describe("I8 — the translation's witness runs at the caller's point as well as
     };
     const fake = { ...api, translationsOf: () => [broken] };
     const bridge = api.ATLAS_FAMILIES.flatMap((f: any) => f.bridges).find((b: any) => b.id === 'ab-pendulum-linear');
-    const e = { allRegimesHold: true, horizons: [], allHold: true, pointBound: null, pointBoundReason: null };
+    const e = {
+      allRegimesHold: true,
+      horizons: [],
+      allHold: true,
+      pointBound: null,
+      pointBoundReason: null,
+      regimeCollisions: [],
+    };
     const at = { theta0: 0.3, T0: 2, t: 1 };
     const honest = judgeAtPoint(api, { observable: 'phase', value: 0.1 }, [bridge], e, at, false);
     expect(honest.verdict).toBe('adequate');
