@@ -157,7 +157,9 @@ describe('probe entries hash the files they read', () => {
     session = join(dir, 'probe.jsonl');
     for (const argv of [
       ['probe', 'run', `--problem=${files.problem}`],
-      ['probe', 'run', `--problem=${files.problem}`, '--budget-ms=1'],
+      // 1 µs. A 1 ms cap is smaller than Date.now()'s tick, so the same pendulum
+      // search stopped on one run and exhausted its space on the next.
+      ['probe', 'run', `--problem=${files.problem}`, '--budget-ms=0.001'],
       ['probe', 'study', `--data=${study}`],
       ['probe', 'run', `--problem=${absent()}`],
       ['probe', 'run', `--problem=${files.problem}`, `--worker=${worker}`],

@@ -222,7 +222,7 @@ export async function runProbeSearch(
   }
 
   if (opts.backendArgv && opts.backendArgv.length > 0 && !budgetStopReason(state)) {
-    const remainingMs = Math.max(1, budget.maxWallClockMs - (Date.now() - state.startedAtMs));
+    const remainingMs = Math.max(1, budget.maxWallClockMs - (performance.now() - state.startedAtMs));
     const backend = await runBackendWorker(
       opts.backendArgv,
       {

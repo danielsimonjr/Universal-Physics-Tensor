@@ -114,6 +114,17 @@ describe('search-budget', () => {
     const t = openBudget({ ...DEFAULT_SEARCH_BUDGET, maxWallClockMs: 0 });
     expect(budgetStopReason(t)).toBe('time-limit');
   });
+  it('a sub-millisecond budget stops after a few tens of microseconds of work', () => {
+    // Date.now() moves in whole milliseconds, so this used to stay open and a
+    // 1 ms probe could finish as exhausted-space on one run and time-limit on
+    // the next. Replay then called the two searches reproduced.
+    const t = openBudget({ ...DEFAULT_SEARCH_BUDGET, maxWallClockMs: 1e-3 });
+    const start = performance.now();
+    while (performance.now() - start < 0.05) {
+      // spin ~50 µs, far under one Date.now() tick
+    }
+    expect(budgetStopReason(t)).toBe('time-limit');
+  });
 });
 
 describe('fingerprint / residual', () => {

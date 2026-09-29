@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- **A probe wall-clock budget under one millisecond now stops.** The clock was `Date.now()`, which does not move inside a millisecond, so `--budget-ms=1` on the pendulum problem sometimes finished as `exhausted-space`. A replay of a run that had stopped on the budget could then match that finish and be called reproduced. The budget clock is `performance.now()`.
 - **The pre-push hook is executable.** It was stored as mode 100644, so git skipped it (`hook was ignored because it's not set as executable`) and a push was not gated. The index mode is now 100755.
 - **Throwaway git commits in the gate-input tests no longer sign.** With `commit.gpgsign` on, each `beforeEach` commit waited on the signing agent and the file exceeded vitest's 10s hook timeout on the last case. Those repositories are fixtures; they commit with `commit.gpgsign=false`.
 - **MathTS quantity names that are also function names.** With the MathTS parser active, a bare symbol whose name is a function (`gamma`, `distance`, `zeta`, …) was dropped from the free-variable list, because evaluating the name with an empty scope returns the function and does not throw. `upt map --equation "speed = sqrt(gamma*pressure/density)"` and Ampere's law / parallel-plate capacitance written with `distance` then failed as `undeclared symbol` (and the message's example called that symbol a length). A call such as `gamma(5)` is unchanged (Γ(5) = 24). `e`, `pi` and `tau` stay numeric constants. Division by zero now reports `Infinity`, not `got number`.

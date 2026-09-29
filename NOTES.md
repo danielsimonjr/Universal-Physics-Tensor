@@ -84,8 +84,10 @@ nothing validates prose and the next reader cannot tell.
 - `--record`/`--replay` (2026-09-27, audit I17 limits): `map --out`, the probe subverbs and `--stored`
   now replay under stated rules (`docs/planning/Experiment-Record-Replay-Design-Note.md`). An entry
   hashes its command's loaded modules: 34 for `evaluate`, 48 for `eval` (about 3–4.5 kB of an entry of
-  about 13 kB). A probe search under the default 5 s budget gave identical output on two runs; with
-  `--budget-ms=1` it states `stop: time-limit` and is not replayable. Per-entry attribution is not
+  about 13 kB). A probe search under the default 5 s budget gave identical output on two runs.
+  `--budget-ms=1` is not a reliable stop: `Date.now()` does not move inside a millisecond, and on
+  2026-09-29 a replay of that pendulum search finished as `exhausted-space` and was called
+  reproduced. The clock is `performance.now()` now; a 1 µs cap states `time-limit`. Per-entry attribution is not
   done and cannot be derived from the import graph (negative result).
 - `case-lumped-cooling`: at the textbook limit Bi = 0.1 the lumped temperature excess is 5.5% below
   the heat-equation mean at t = τ and 16% below at 3τ; Bi ≤ 0.1 does not bound the late-time relative
