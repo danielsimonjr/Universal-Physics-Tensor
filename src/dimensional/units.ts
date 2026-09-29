@@ -15,6 +15,9 @@
  * terasecond; `G` is the gauss and `GPa` is a gigapascal. `AU` is the same
  * exact metre count as `au`. `Msun` is `M_SUN_SI` kilograms; `Msun_iau` is
  * `GM_SUN_SI / G_SI`. `myr` is a milliyear because `m` is the SI prefix.
+ * `eV` takes an SI prefix, so `GeV` is 10⁹ eV in joules. `nat` is the
+ * coherent information unit (scale 1); `bit` is ln 2 nat. Neither takes a
+ * prefix.
  *
  * @module dimensional/units
  */
@@ -62,6 +65,10 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   ['S', [1, D({ L: -2, M: -1, T: 3, I: 2 }), true]],
   ['F', [1, D({ L: -2, M: -1, T: 4, I: 2 }), true]],
   ['eV', [E_SI, JOULE, true]],
+  // Information. A nat is the coherent dimensionless unit; a bit is ln 2 nat.
+  // Exact, so neither takes a prefix (`kbit` is not a kilobit).
+  ['nat', [1, DIMENSIONLESS, false]],
+  ['bit', [Math.LN2, DIMENSIONLESS, false]],
   ['rad', [1, DIMENSIONLESS, true]],
   ['deg', [Math.PI / 180, DIMENSIONLESS, false]],
   ['min', [60, D({ T: 1 }), false]],

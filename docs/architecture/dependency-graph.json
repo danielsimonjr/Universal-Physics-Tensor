@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 393,
+    "totalFiles": 394,
     "totalModules": 12,
-    "totalExports": 2832
+    "totalExports": 2837
   },
   "entryPoints": [
     {
@@ -10734,7 +10734,7 @@
           {
             "file": "../../numerical/binding-value.js",
             "imports": [
-              "readBinding"
+              "readNamedBinding"
             ]
           }
         ],
@@ -11437,7 +11437,7 @@
           {
             "file": "../../numerical/binding-value.js",
             "imports": [
-              "readBinding"
+              "readNamedBinding"
             ]
           }
         ],
@@ -14569,6 +14569,12 @@
             "typeOnly": true
           },
           {
+            "file": "./unit-convention.js",
+            "imports": [
+              "conventionFactor"
+            ]
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "CompositionAliasError",
@@ -14828,6 +14834,12 @@
               "RepresentativeValue"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./unit-convention.js",
+            "imports": [
+              "conventionScaleToSI"
+            ]
           },
           {
             "file": "./quantities.js",
@@ -19790,6 +19802,12 @@
             ]
           },
           {
+            "file": "./unit-convention.js",
+            "imports": [
+              "conventionFactor"
+            ]
+          },
+          {
             "file": "./identifiability.js",
             "imports": [
               "classifyAll"
@@ -19897,6 +19915,39 @@
         ],
         "functions": [
           "propagateUncertainty"
+        ]
+      },
+      "src/composition/unit-convention.ts": {
+        "description": "Per-quantity unit convention for the quantities whose dimension does not",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "parseUnit"
+            ]
+          }
+        ],
+        "exports": [
+          "QUANTITY_CONVENTION_UNIT",
+          "quantityConventionUnit",
+          "conventionScaleToSI",
+          "conventionFactor"
+        ],
+        "functions": [
+          "quantityConventionUnit",
+          "conventionScaleToSI",
+          "conventionFactor"
+        ],
+        "constants": [
+          "QUANTITY_CONVENTION_UNIT"
         ]
       },
       "src/composition/user-equation.ts": {
@@ -24970,6 +25021,12 @@
             ]
           },
           {
+            "file": "../composition/unit-convention.js",
+            "imports": [
+              "quantityConventionUnit"
+            ]
+          },
+          {
             "file": "../composition/natural-units.js",
             "imports": [
               "naturalConstantOverrides",
@@ -25021,6 +25078,7 @@
           }
         ],
         "exports": [
+          "readNamedBinding",
           "readBinding",
           "bindingInUnit",
           "readParameter"
@@ -25029,6 +25087,7 @@
           "BindingValue"
         ],
         "functions": [
+          "readNamedBinding",
           "readBinding",
           "bindingInUnit",
           "readParameter"
@@ -27253,6 +27312,7 @@
           "src/composition/retrodiction.ts",
           "src/composition/symbolic-constants.ts",
           "src/composition/uncertainty.ts",
+          "src/composition/unit-convention.ts",
           "src/composition/user-equation.ts"
         ]
       },
@@ -27372,21 +27432,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 393,
+    "totalTypeScriptFiles": 394,
     "totalModules": 12,
-    "totalLinesOfCode": 86880,
-    "totalExports": 2832,
+    "totalLinesOfCode": 86984,
+    "totalExports": 2837,
     "totalClasses": 59,
     "totalInterfaces": 444,
-    "totalFunctions": 728,
+    "totalFunctions": 732,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 703,
+    "totalConstants": 704,
     "totalReExports": 1341,
     "totalTypeOnlyImports": 533,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 68
+    "unusedExportsCount": 69
   }
 }

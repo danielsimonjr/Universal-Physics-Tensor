@@ -33,6 +33,7 @@
 import { equals, format } from '../dimensional/algebra.js';
 import type { BridgeEdge, EdgeConfidence } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
+import { conventionFactor } from './unit-convention.js';
 import {
   CompositionAliasError,
   CompositionDimensionError,
@@ -328,6 +329,10 @@ export function composeEdges(
         `but ${junction.name} is ${format(junction.dim)}`,
     );
   }
+  const junctionScale =
+    viaIdentification === null
+      ? 1
+      : conventionFactor(first.target.name, junction.name);
 
   const remainingSources = second.sources.filter((s) => s !== junction);
 
@@ -395,7 +400,7 @@ export function composeEdges(
       si[original] = inputs[renamed];
       delete si[renamed];
     }
-    si[junction.name] = intermediate;
+    si[junction.name] = intermediate * junctionScale;
     return si;
   };
 
