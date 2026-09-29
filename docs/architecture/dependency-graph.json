@@ -9828,6 +9828,19 @@
             "typeOnly": true
           },
           {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "MASS",
+              "TEMPERATURE"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
             "file": "../composition/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
@@ -27352,7 +27365,7 @@
   "statistics": {
     "totalTypeScriptFiles": 393,
     "totalModules": 12,
-    "totalLinesOfCode": 86841,
+    "totalLinesOfCode": 86856,
     "totalExports": 2829,
     "totalClasses": 59,
     "totalInterfaces": 444,

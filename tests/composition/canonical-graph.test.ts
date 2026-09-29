@@ -112,7 +112,7 @@ describe('canonicalToEdges — adapter contract', () => {
   it('abstains numerically (NaN) where dimensions cannot pin a monomial', () => {
     // Newton's gravitation: F = G m₁ m₂ / r² — two same-dim masses ⇒ monomial null.
     const e = byId('CE-newton-gravitation');
-    expect(Number.isFinite(e.evaluate({ 'm_1': 1, 'm_2': 1, r: 1 }))).toBe(false);
+    expect(Number.isFinite(e.evaluate({ mass: 1, 'secondary-mass': 1, r: 1 }))).toBe(false);
   });
 
   it('is callable on an explicit equation subset', () => {
@@ -168,8 +168,8 @@ describe('canonical-only discovery — regression harness', () => {
   });
 
   it("preserves Newton's free-mass-ratio structure (monomial stays null)", () => {
-    // m_1/m_2 stay two DISTINCT mass quantities (buckinghamPi requires unique
-    // governing names, and the free mass-ratio is why the monomial is null).
+    // mass and secondary-mass stay two DISTINCT mass quantities (buckinghamPi
+    // requires unique governing names, and the free mass-ratio is why the monomial is null).
     expect(CANONICAL_BY_ID['CE-newton-gravitation'].dimensional.monomial).toBeNull();
   });
 

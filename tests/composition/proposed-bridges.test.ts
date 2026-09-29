@@ -25,10 +25,10 @@ const promising = (a: string, b: string, dim = '[energy]'): VettedCandidate =>
   ({ a, b, dim, verdict: 'promising' } as unknown as VettedCandidate);
 
 describe('monomial algebra', () => {
-  it('decomposes the Landauer scalarAst to {k_B, T, ln2}', () => {
+  it('decomposes the Landauer scalarAst to {k_B, temperature, ln2}', () => {
     const m = toMonomial(CANONICAL_BY_ID['CE-landauer'].scalarAst!);
-    expect(new Set(m.keys())).toEqual(new Set(['k_B', 'T', 'ln2']));
-    expect(m.get('T')!.exp).toBe(1);
+    expect(new Set(m.keys())).toEqual(new Set(['k_B', 'temperature', 'ln2']));
+    expect(m.get('temperature')!.exp).toBe(1);
   });
 
   it('round-trips a monomial through fromMonomial to an equal dimension', () => {

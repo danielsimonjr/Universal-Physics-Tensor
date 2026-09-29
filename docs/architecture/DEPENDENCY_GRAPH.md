@@ -2958,6 +2958,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/types.js` | `MASS, TEMPERATURE` | Import |
+| `../dimensional/algebra.js` | `equals` | Import |
 | `../composition/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
@@ -7451,7 +7453,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 12 |
-| Total Lines of Code | 86841 |
+| Total Lines of Code | 86856 |
 | Total Exports | 2829 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |

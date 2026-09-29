@@ -1857,7 +1857,7 @@ warning-silencing, not debug logging).
       Exported from the public manifest alongside `CATALOG_GRAPH`. In `CHANGELOG.md
       [Unreleased]`. Suite green (2806 passing). Adam+Eve-equivalent review applied
       (baked `m_e`, added dimension guard). **NOT yet released to npm.**
-      - [ ] (follow-up, optional) the canonical registry uses two names for the same
+      - [x] (follow-up, optional) the canonical registry uses two names for the same
             physical kind (`M`/`mass`, `T`/`temperature`, Newton's `m_1`/`m_2`) —
             canonical-only `discover`/`map` surface these as candidates/separate
             nodes. Unify the governing names in `src/canonical/entries/*` if desired.

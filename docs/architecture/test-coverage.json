@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 390,
-    "totalTestFiles": 536,
+    "totalTestFiles": 537,
     "testedCount": 380,
     "untestedCount": 10,
     "coveragePercent": "97.4"
@@ -2410,6 +2410,7 @@
       "tests/canonical/linkage.test.ts",
       "tests/canonical/nonmonomial.test.ts",
       "tests/canonical/numeric-prefactor.test.ts",
+      "tests/canonical/quantity-names.test.ts",
       "tests/canonical/registry.test.ts",
       "tests/canonical/relativity.test.ts",
       "tests/canonical/residual.test.ts",
@@ -5581,6 +5582,7 @@
       "tests/tensor.test.ts"
     ],
     "src/composition/symbolic-constants.ts": [
+      "tests/canonical/quantity-names.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/eval-registered-constants-builtin.test.ts",
@@ -6021,6 +6023,7 @@
       "tests/canonical/invariants.test.ts",
       "tests/canonical/mechanics.test.ts",
       "tests/canonical/nonmonomial.test.ts",
+      "tests/canonical/quantity-names.test.ts",
       "tests/canonical/statistical-mechanics.test.ts",
       "tests/canonical/thermo-nuclear-cosmo.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -6142,6 +6145,7 @@
       "tests/canonical/invariants.test.ts",
       "tests/canonical/nonmonomial.test.ts",
       "tests/canonical/normal-form.test.ts",
+      "tests/canonical/quantity-names.test.ts",
       "tests/canonical/relativity.test.ts",
       "tests/canonical/residual.test.ts",
       "tests/canonical/statistical-mechanics.test.ts",
@@ -6647,6 +6651,7 @@
       "tests/canonical/invariants.test.ts",
       "tests/canonical/mechanics.test.ts",
       "tests/canonical/normal-form.test.ts",
+      "tests/canonical/quantity-names.test.ts",
       "tests/canonical/residual.test.ts",
       "tests/canonical/statistical-mechanics.test.ts",
       "tests/canonical/thermo-nuclear-cosmo.test.ts",
@@ -6832,6 +6837,7 @@
       "tests/canonical/invariants.test.ts",
       "tests/canonical/nonmonomial.test.ts",
       "tests/canonical/normal-form.test.ts",
+      "tests/canonical/quantity-names.test.ts",
       "tests/canonical/relativity.test.ts",
       "tests/canonical/residual.test.ts",
       "tests/canonical/statistical-mechanics.test.ts",
@@ -9673,6 +9679,14 @@
       "src/composition/expr-eval.ts",
       "src/canonical/registry.ts",
       "src/core/constants.ts"
+    ],
+    "tests/canonical/quantity-names.test.ts": [
+      "src/canonical/registry.ts",
+      "src/composition/symbolic-constants.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/types.ts"
     ],
     "tests/canonical/registry.test.ts": [
       "src/canonical/registry.ts"

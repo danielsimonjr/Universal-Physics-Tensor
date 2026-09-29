@@ -3,10 +3,10 @@
  *
  * CE-perihelion-precession writes 6π as the symbol `6pi`, which the structural
  * normal form already treats as a constant, but the comparison treated it as a
- * free symbol, so the formula was never aligned. CE-newton-gravitation's AST
- * names the masses `m_1` and `m_2` while the governing set names them `mass`
- * and `secondary-mass`; the product is symmetric, and refusing to compare left
- * a wrong prefactor at exit 0. CE-schwarzschild-radius stores its target as
+ * free symbol, so the formula was never aligned. CE-newton-gravitation names
+ * both masses in the AST and the governing set (`mass`, `secondary-mass`).
+ * A toy whose AST still says `m_1` and `m_2` with unequal powers is not paired
+ * by guessing which mass is which. CE-schwarzschild-radius stores its target as
  * `radius` (the L0 record is frozen); the catalog quantity is `schwarzschild-radius`.
  */
 import { describe, it, expect } from 'vitest';
