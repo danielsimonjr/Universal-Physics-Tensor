@@ -4262,6 +4262,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals, format` | Import |
 | `./edge.js` | `BridgeEdge, EdgeConfidence` | Import (type-only) |
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
+| `./unit-convention.js` | `conventionFactor` | Import |
 | `./edge.js` | `CompositionAliasError, CompositionDimensionError, CompositionJunctionError, DomainViolationError, UndefinedCompositionError` | Import |
 | `../atlas/composition-table.js` | `composeRelation, NO_COMPOSITE_CLAIM` | Import |
 | `../atlas/conventions.js` | `checkConventions` | Import |
@@ -4337,6 +4338,7 @@ The codebase is organized into the following modules:
 | `./edges/calibration.js` | `M_SUN_KG` | Import |
 | `./representative-values.js` | `REPRESENTATIVE_VALUES` | Import |
 | `./representative-values.js` | `RepresentativeValue` | Import (type-only) |
+| `./unit-convention.js` | `conventionScaleToSI` | Import |
 | `./quantities.js` | `* as REGISTRY_QUANTITIES` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../dimensional/algebra.js` | `format` | Import |
@@ -5586,7 +5588,7 @@ The codebase is organized into the following modules:
 | `../dimensional/units.js` | `parseUnit` | Import |
 
 **Exports:**
-- Functions: `quantityConventionUnit`, `conventionFactor`
+- Functions: `quantityConventionUnit`, `conventionScaleToSI`, `conventionFactor`
 - Constants: `QUANTITY_CONVENTION_UNIT`
 
 ---
@@ -7469,12 +7471,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 394 |
 | Total Modules | 12 |
-| Total Lines of Code | 86942 |
-| Total Exports | 2834 |
+| Total Lines of Code | 86965 |
+| Total Exports | 2835 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
 | Total Interfaces | 444 |
-| Total Functions | 731 |
+| Total Functions | 732 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |

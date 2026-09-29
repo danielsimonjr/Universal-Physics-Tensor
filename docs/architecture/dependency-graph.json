@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 394,
     "totalModules": 12,
-    "totalExports": 2834
+    "totalExports": 2835
   },
   "entryPoints": [
     {
@@ -14569,6 +14569,12 @@
             "typeOnly": true
           },
           {
+            "file": "./unit-convention.js",
+            "imports": [
+              "conventionFactor"
+            ]
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "CompositionAliasError",
@@ -14828,6 +14834,12 @@
               "RepresentativeValue"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./unit-convention.js",
+            "imports": [
+              "conventionScaleToSI"
+            ]
           },
           {
             "file": "./quantities.js",
@@ -19920,10 +19932,12 @@
         "exports": [
           "QUANTITY_CONVENTION_UNIT",
           "quantityConventionUnit",
+          "conventionScaleToSI",
           "conventionFactor"
         ],
         "functions": [
           "quantityConventionUnit",
+          "conventionScaleToSI",
           "conventionFactor"
         ],
         "constants": [
@@ -27414,11 +27428,11 @@
   "statistics": {
     "totalTypeScriptFiles": 394,
     "totalModules": 12,
-    "totalLinesOfCode": 86942,
-    "totalExports": 2834,
+    "totalLinesOfCode": 86965,
+    "totalExports": 2835,
     "totalClasses": 59,
     "totalInterfaces": 444,
-    "totalFunctions": 731,
+    "totalFunctions": 732,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 702,

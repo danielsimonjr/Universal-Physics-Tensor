@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 394
   totalModules: 12
-  totalExports: 2834
+  totalExports: 2835
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9759,6 +9759,9 @@ modules:
             - Quantity
             - RegimeAttributes
           typeOnly: true
+        - file: ./unit-convention.js
+          imports:
+            - conventionFactor
         - file: ./edge.js
           imports:
             - CompositionAliasError
@@ -9919,6 +9922,9 @@ modules:
           imports:
             - RepresentativeValue
           typeOnly: true
+        - file: ./unit-convention.js
+          imports:
+            - conventionScaleToSI
         - file: ./quantities.js
           imports:
             - "* as REGISTRY_QUANTITIES"
@@ -13618,9 +13624,11 @@ modules:
       exports:
         - QUANTITY_CONVENTION_UNIT
         - quantityConventionUnit
+        - conventionScaleToSI
         - conventionFactor
       functions:
         - quantityConventionUnit
+        - conventionScaleToSI
         - conventionFactor
       constants:
         - QUANTITY_CONVENTION_UNIT
@@ -19170,11 +19178,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 394
   totalModules: 12
-  totalLinesOfCode: 86942
-  totalExports: 2834
+  totalLinesOfCode: 86965
+  totalExports: 2835
   totalClasses: 59
   totalInterfaces: 444
-  totalFunctions: 731
+  totalFunctions: 732
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 702

@@ -4482,6 +4482,7 @@
       "tests/composition/compose-properties.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
+      "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
@@ -5540,6 +5541,7 @@
       "tests/composition/compose-properties.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
+      "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
@@ -6704,6 +6706,7 @@
       "tests/composition/compose.test.ts",
       "tests/composition/dimension-adjacency.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
+      "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/dogfood-compare.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
@@ -13023,6 +13026,9 @@
     "tests/composition/discovery-magnitude.test.ts": [
       "src/composition/discovery.ts",
       "src/composition/bridge-analysis.ts",
+      "src/composition/edge.ts",
+      "src/composition/quantity.ts",
+      "src/dimensional/types.ts",
       "src/composition/representative-values.ts"
     ],
     "tests/composition/discovery.test.ts": [
