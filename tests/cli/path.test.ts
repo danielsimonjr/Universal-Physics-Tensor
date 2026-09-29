@@ -20,6 +20,11 @@ function capture() {
   return { lines, io: { out: sink, err: sink, write: (s: string) => lines.push(s) } };
 }
 
+/** Relative kinetic-frequency error at x = ck/ω₀. Independent of the bridge record. */
+function kgKineticError(x: number): number {
+  return Math.abs((Math.sqrt(1 + x * x) - 1) / ((x * x) / 2) - 1);
+}
+
 describe('upt path', () => {
   it('pendulum → spring composes to an approximation with its stated bound', async () => {
     const cap = capture();
@@ -169,6 +174,9 @@ describe('upt path', () => {
     expect(text).toMatch(/why the bound crosses 'ab-spring-lc' \(exact\): it declares the norm transport 'nt-spring-lc-relative-period'/);
     expect(text).toMatch(/witness: W1τ \(numeric; numerically-supported when it checks, never formally proved\)/);
     expect(text).toMatch(/no other norm or direction through this map is declared, and each stays refused/);
+    expect(text).not.toMatch(/crosses families/);
+    expect(text).not.toMatch(/composition rules are the same/);
+    expect(text).not.toMatch(/another atlas route/);
     expect(text).toMatch(/horizons at t=10: all hold/);
     expect(text).toMatch(/restated by 'nt-spring-lc-relative-period'/);
     expect(text).not.toMatch(/no composite claim/);
@@ -207,6 +215,16 @@ describe('upt path', () => {
     expect(r.transports[0].timeMap).not.toHaveProperty('restateHorizon');
     expect(r.horizons[0].restatedBy[0].transport).toBe('nt-spring-lc-relative-period');
     expect('missing' in r).toBe(false);
+    // Intra-family: both models are oscillators, so the route is not cross-family.
+    // The (K, δ) pin above is the value boundPath already returns. The control that
+    // deleting ab-spring-lc's transport yields norm-not-stated lives in
+    // tests/atlas/path-bound.test.ts (CONTROL: the declaration removed).
+    expect(r.crossFamily).toBe(false);
+    expect(r.modelFamilies).toEqual(['oscillators']);
+    expect(r.path.map((s: { id: string }) => s.id)).toEqual(['ab-pendulum-linear', 'ab-spring-lc']);
+    expect(r.path.map((s: { family: string }) => s.family)).toEqual(['oscillators', 'oscillators']);
+    expect(r.path.map((s: { fromModelFamily: string }) => s.fromModelFamily)).toEqual(['oscillators', 'oscillators']);
+    expect(r.path.map((s: { toModelFamily: string }) => s.toModelFamily)).toEqual(['oscillators', 'oscillators']);
   });
 
   it('a trajectory tolerance on pendulum → lc stays UNDETERMINED: the map declares no carriage of position', async () => {
@@ -295,6 +313,14 @@ describe('upt path', () => {
     expect(parsed.result.kind).toBe('bound');
     expect(parsed.result.relation).toBe('exact-equivalence');
     expect(parsed.result.bound).toEqual({ K: 1, delta: 0 });
+    // Entered at model-lc and left toward model-spring. Both are oscillators.
+    // `from` / `to` stay the bridge's declared ends.
+    expect(parsed.result.crossFamily).toBe(false);
+    expect(parsed.result.modelFamilies).toEqual(['oscillators']);
+    expect(parsed.result.path[0].from).toBe('model-spring');
+    expect(parsed.result.path[0].to).toBe('model-lc');
+    expect(parsed.result.path[0].fromModelFamily).toBe('oscillators');
+    expect(parsed.result.path[0].toModelFamily).toBe('oscillators');
   });
 
   it('an unknown model id → exit 1', async () => {
@@ -325,6 +351,17 @@ describe('upt path', () => {
     const code = await runCli(['path', 'model-spring', 'model-spring'], cap.io);
     expect(code).toBe(0);
     expect(cap.lines.join('')).toMatch(/the path is empty and composes nothing/);
+    expect(cap.lines.join('')).not.toMatch(/crosses families/);
+    const json: string[] = [];
+    await runCli(['path', 'model-spring', 'model-spring', '--json'], {
+      out: () => {},
+      err: () => {},
+      write: (s: string) => json.push(s),
+    });
+    const r = JSON.parse(json.join('')).result;
+    expect(r.path).toEqual([]);
+    expect(r.crossFamily).toBe(false);
+    expect(r.modelFamilies).toEqual(['oscillators']);
   });
 
   it('a disconnected pair reports no chain rather than a bound (exit 0)', async () => {
@@ -347,7 +384,21 @@ describe('upt path', () => {
       const text = cap.lines.join('');
       expect(text).toMatch(/model-klein-gordon --\[approximation\]--> model-schrodinger-free {2}\(ab-kg-schrodinger\)/);
       expect(text).toMatch(/crosses families: waves → diffusion/);
+      expect(text).not.toMatch(/composition rules are the same/);
       expect(text).toMatch(/composite relation: approximation/);
+      // The composed number is the bridge's own domain delta (x = 0.1), and the
+      // point number is the same formula at x = ck/ω₀ = 0.05. A second factor
+      // would move both off those values.
+      const edge = kgKineticError(0.1);
+      const atX = kgKineticError(0.05);
+      const composed = /composed bound: K = 1 · delta = ([0-9.eE+-]+)/.exec(text);
+      const point = /bound at this point: K = 1 · delta = ([0-9.eE+-]+)/.exec(text);
+      expect(composed).not.toBeNull();
+      expect(point).not.toBeNull();
+      expect(Math.abs(Number(composed![1]) - edge)).toBeLessThan(1e-12);
+      expect(Math.abs(Number(point![1]) - atX)).toBeLessThan(1e-12);
+      expect(Math.abs(edge - atX)).toBeGreaterThan(1e-3);
+      expect(text).toMatch(/norm: relative error of the kinetic frequency/);
       expect(text).toMatch(/regimes at --at: all hold/);
       expect(text).toMatch(/horizons at t=1: all hold/);
     });
@@ -364,9 +415,19 @@ describe('upt path', () => {
 
     it('--json records the family of each step and each endpoint', async () => {
       const cap = capture();
-      await runCli(['path', 'model-klein-gordon', 'model-schrodinger-free', '--json'], cap.io);
+      const code = await runCli(['path', 'model-klein-gordon', 'model-schrodinger-free', '--json'], cap.io);
+      expect(code).toBe(0);
       const r = JSON.parse(cap.lines.join('')).result;
       expect(r.families).toEqual({ from: 'waves', to: 'diffusion' });
+      expect(r.crossFamily).toBe(true);
+      expect(r.modelFamilies).toEqual(['waves', 'diffusion']);
+      expect(r.kind).toBe('bound');
+      expect(r.relation).toBe('approximation');
+      expect(r.bound).toEqual({ K: 1, delta: kgKineticError(0.1) });
+      expect(r.norm).toBe(
+        'relative error of the kinetic frequency ω − ω₀, normalized by the value of the reduced model',
+      );
+      expect(r.path).toHaveLength(1);
       expect(r.path).toEqual([
         {
           id: 'ab-kg-schrodinger',
@@ -374,8 +435,13 @@ describe('upt path', () => {
           from: 'model-klein-gordon',
           to: 'model-schrodinger-free',
           family: 'waves',
+          fromModelFamily: 'waves',
+          toModelFamily: 'diffusion',
         },
       ]);
+      // No --at group: the regime stays unknown and the exit stays 0. A missing
+      // group is not a violated one.
+      expect(r.allRegimesHold).toBe('unknown');
     });
 
     it('a cross-family chain still refuses a composite the table does not define', async () => {
@@ -385,7 +451,23 @@ describe('upt path', () => {
       const r = JSON.parse(cap.lines.join('')).result;
       expect(r.path.map((s: { id: string }) => s.id)).toEqual(['ab-kg-schrodinger', 'ab-schrodinger-diffusion']);
       expect(r.kind).toBe('no-claim');
+      expect(r.reason).toBe('no-composite-claim');
       expect('bound' in r).toBe(false);
+      // Visited models: Klein–Gordon (waves), free Schrödinger (diffusion), Fick
+      // (diffusion). Adjacent diffusion entries collapse.
+      expect(r.crossFamily).toBe(true);
+      expect(r.modelFamilies).toEqual(['waves', 'diffusion']);
+      expect(r.path[0]).toMatchObject({
+        family: 'waves',
+        fromModelFamily: 'waves',
+        toModelFamily: 'diffusion',
+      });
+      expect(r.path[1]).toMatchObject({
+        id: 'ab-schrodinger-diffusion',
+        family: 'diffusion',
+        fromModelFamily: 'diffusion',
+        toModelFamily: 'diffusion',
+      });
     });
 
     it('an unbounded restriction followed by another step is a refusal, not a crash', async () => {
@@ -398,6 +480,64 @@ describe('upt path', () => {
       expect(r.reason).toBe('missing-lipschitz');
       expect(r.detail).toMatch(/'ab-kg-oscillator' \(restriction\) states no Lipschitz constant/);
       expect('bound' in r).toBe(false);
+      // Klein–Gordon (waves), spring (oscillators), lc (oscillators). The second
+      // oscillators entry is adjacent and drops. Three entries would mean the
+      // duplicate was kept.
+      expect(r.crossFamily).toBe(true);
+      expect(r.modelFamilies).toEqual(['waves', 'oscillators']);
+      expect(r.modelFamilies).toHaveLength(2);
+      expect(r.path[0]).toMatchObject({
+        family: 'waves',
+        fromModelFamily: 'waves',
+        toModelFamily: 'oscillators',
+      });
+      expect(r.path[1]).toMatchObject({
+        family: 'oscillators',
+        fromModelFamily: 'oscillators',
+        toModelFamily: 'oscillators',
+      });
+    });
+
+    it('Langevin → Fick is the coarse-graining only; the hyperedge is named and is not a step', async () => {
+      const cap = capture();
+      const code = await runCli(['path', 'model-langevin', 'model-fick', '--json'], cap.io);
+      expect(code).toBe(0);
+      const r = JSON.parse(cap.lines.join('')).result;
+      expect(r.path.map((s: { id: string }) => s.id)).toEqual(['ab-langevin-diffusion']);
+      expect(r.path.some((s: { id: string }) => s.id === 'ab-stokes-einstein')).toBe(false);
+      expect(r.multiPremise.map((m: { id: string }) => m.id)).toEqual(['ab-stokes-einstein']);
+      expect(r.kind).toBe('bound');
+      expect(r.relation).toBe('coarse-graining');
+      // The coarse-graining states no Lipschitz constant, so the claim is the
+      // identity on the empty prefix. The hyperedge's 6πηa is not a factor.
+      expect(r.bound).toEqual({ K: 1, delta: 0 });
+      expect(r.terminal).toBe(true);
+      expect(r.crossFamily).toBe(false);
+      expect(r.modelFamilies).toEqual(['diffusion']);
+      expect(r.path[0]).toMatchObject({
+        family: 'diffusion',
+        fromModelFamily: 'diffusion',
+        toModelFamily: 'diffusion',
+        relation: 'coarse-graining',
+      });
+    });
+
+    it('Stokes drag → Fick names the hyperedge and has no chain', async () => {
+      const cap = capture();
+      const code = await runCli(['path', 'model-stokes-drag', 'model-fick', '--json'], cap.io);
+      expect(code).toBe(0);
+      const r = JSON.parse(cap.lines.join('')).result;
+      expect(r.path).toBeNull();
+      expect(r.multiPremise).toEqual([
+        {
+          id: 'ab-stokes-einstein',
+          premises: ['model-langevin', 'model-stokes-drag'],
+          conclusion: 'model-fick',
+        },
+      ]);
+      expect(r).not.toHaveProperty('crossFamily');
+      expect(r).not.toHaveProperty('bound');
+      expect(JSON.stringify(r)).not.toMatch(/6πηa|6 π η a/);
     });
 
     it('an approximation is never traversed backwards across families', async () => {
