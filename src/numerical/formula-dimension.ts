@@ -67,7 +67,7 @@ function resolveSymbol(name: string, dims: Readonly<Record<string, Dimension>>):
   if (name in dims) return sym(name, dims[name]);
   if (MATH_CONSTANTS.has(name)) return sym(name, DIMENSIONLESS);
   throw new FormulaDimensionError(
-    `undeclared symbol '${name}' — declare its dimension (e.g. ${name}:length)`,
+    `undeclared symbol '${name}' — declare its dimension (a separate name:dimension argument, for example x:length)`,
   );
 }
 

@@ -1,5 +1,10 @@
 # UPT TODO
 
+## CLI physicist dogfood (2026-09-29)
+
+- [x] MathTS function names used as quantities (`gamma`, `distance`, `zeta`) are dropped from free variables, so `upt map --equation` rejects the textbook formulas that use them.
+- [x] Gate-input fixture commits time out vitest's hook when commit.gpgsign is on.
+
 ## CLI applied-physics audit publication
 
 - [x] Archive the CLI-only applied-physicist persona audit, evidence, maps, and 20 improvement recommendations under `docs/audit/`.

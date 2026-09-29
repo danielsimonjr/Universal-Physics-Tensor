@@ -24,10 +24,27 @@ import { dirtyGateInputs } from '../../tools/gate-inputs/gate-inputs.js';
 
 let repo: string;
 const git = (...args: string[]) =>
-  execFileSync('git', ['-c', 'user.email=t@example.invalid', '-c', 'user.name=t', '-c', 'core.autocrlf=false', ...args], {
-    cwd: repo,
-    encoding: 'utf-8',
-  });
+  execFileSync(
+    'git',
+    [
+      '-c',
+      'user.email=t@example.invalid',
+      '-c',
+      'user.name=t',
+      '-c',
+      'core.autocrlf=false',
+      // Throwaway commits must not wait on the user's signing agent. With
+      // commit.gpgsign set, each beforeEach commit can exceed vitest's 10s
+      // hook timeout (measured: the file then fails on the last case).
+      '-c',
+      'commit.gpgsign=false',
+      ...args,
+    ],
+    {
+      cwd: repo,
+      encoding: 'utf-8',
+    },
+  );
 const write = (rel: string, text = 'export const x = 1;\n') => {
   const p = join(repo, rel);
   mkdirSync(resolve(p, '..'), { recursive: true });

@@ -25,6 +25,8 @@ const CASES: ReadonlyArray<readonly [string, Record<string, Dimension>, Dimensio
   ['sin(a)', { a: D(1) }, 'error', /dimensionless/],
   ['a^b', { a: D(1), b: D() }, 'error', /exponent must be/],
   ['mass * foo', { mass: D(0, 1) }, 'error', /undeclared symbol 'foo'/],
+  // The example must not assign the user's own symbol the dimension length.
+  ['mass * foo', { mass: D(0, 1) }, 'error', /for example x:length/],
 ];
 
 function runChecks(checker: FormulaDimensionChecker, label: string): void {

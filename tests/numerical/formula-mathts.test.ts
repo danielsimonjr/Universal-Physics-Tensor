@@ -27,6 +27,29 @@ d('formula-mathts (Path A specifics)', () => {
     expect([...parser!.parse('e * y').variables]).toEqual(['y']);
   });
 
+  it('a quantity whose name is a MathTS function stays a free variable; the call stays a function', () => {
+    // gamma() is Γ, and gamma is the adiabatic index. distance() is a metric,
+    // and distance is a length. Swallowing the bare name made both formulas
+    // fail as "undeclared symbol" / "got function".
+    expect([...parser!.parse('sqrt(gamma*pressure/density)').variables]).toEqual([
+      'density',
+      'gamma',
+      'pressure',
+    ]);
+    expect([...parser!.parse('mu_0*current/(2*pi*distance)').variables]).toEqual([
+      'current',
+      'distance',
+      'mu_0',
+    ]);
+    expect([...parser!.parse('zeta*temperature').variables]).toEqual(['temperature', 'zeta']);
+    expect(parser!.parse('gamma(5)').variables).toEqual([]);
+    expect(parser!.parse('gamma(5)').evaluate({})).toBe(24);
+    expect(parser!.parse('sqrt(gamma*p/rho)').evaluate({ gamma: 1.4, p: 101325, rho: 1.225 })).toBeCloseTo(
+      Math.sqrt(1.4 * 101325 / 1.225),
+      8,
+    );
+  });
+
   it('scalar-only guard: a non-number result is rejected, not leaked', () => {
     // A vector/array expression must throw rather than return a MathTS type.
     expect(() => parser!.parse('[1, 2, 3]').evaluate({})).toThrow();
@@ -68,6 +91,9 @@ d('formula-mathts (Path A specifics)', () => {
     // `!Number.isFinite` guard) or throws internally (caught by the try/catch
     // around node.evaluate), the seam still surfaces a FormulaError either way.
     expect(() => parser!.parse('x / 0').evaluate({ x: 1 })).toThrow(FormulaError);
+    // typeof Infinity is "number"; the message has to name Infinity or a
+    // division by zero looks like a type error.
+    expect(() => parser!.parse('x / 0').evaluate({ x: 1 })).toThrow(/Infinity/);
   });
 
   it('evaluate() wraps a scope-related evaluation failure as FormulaError', async () => {
