@@ -2,7 +2,8 @@
  * `upt metric` — Christoffel symbols and curvature scalars for a named metric.
  *
  * `--geodesic` integrates a short Schwarzschild circular orbit, or a Kerr
- * equatorial circular orbit (Carter constant held at θ = π/2).
+ * geodesic. θ = π/2 is equatorial and circular. Any other θ is an inclined
+ * spherical orbit with that polar turning point.
  *
  * @module cli/commands/metric
  */
@@ -13,6 +14,8 @@ import { UsageError } from '../errors.js';
 import {
   curvatureReport,
   kerrEquatorialCircular,
+  kerrGeodesic,
+  kerrTurningPointOrbit,
   schwarzschildCircularOrbit,
   type MetricId,
 } from '../../numerical/spacetime-metrics.js';
@@ -33,7 +36,8 @@ const HELP = `upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--
         FLRW prints the Friedmann equation including the curvature term
         −k c²/a² and Λ. Kerr Kretschmann uses the Boyer–Lindquist closed form.
         --geodesic integrates a short Schwarzschild circular orbit, or a Kerr
-        equatorial circular orbit. \`upt help metric\` describes every flag.
+        geodesic (equatorial and circular at θ = π/2; inclined, with that
+        polar turning point, at any other θ). \`upt help metric\` describes every flag.
         e.g.  upt metric schwarzschild M=1.989e30 r=1e8
               upt metric flrw k=1 t=2
               upt curvature kerr a=1000 r=1e8 theta=1.2`;
@@ -58,30 +62,62 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new UsageError((e as Error).message);
   }
   let geodesic:
-    | { readonly r0: number; readonly rEnd: number; readonly phiAdvance: number; readonly steps: number; readonly E0?: number; readonly EEnd?: number; readonly L0?: number; readonly LEnd?: number; readonly Q0?: number; readonly QEnd?: number }
+    | {
+        readonly kind: 'circular' | 'inclined';
+        readonly r0: number;
+        readonly rEnd: number;
+        readonly theta0?: number;
+        readonly thetaEnd?: number;
+        readonly phiAdvance: number;
+        readonly steps: number;
+        readonly E0?: number;
+        readonly EEnd?: number;
+        readonly L0?: number;
+        readonly LEnd?: number;
+        readonly Q0?: number;
+        readonly QEnd?: number;
+        readonly norm0?: number;
+        readonly normEnd?: number;
+      }
     | undefined;
   if (args.flags.has('geodesic')) {
-    if (name === 'schwarzschild') {
-      const M = report.parameters.M;
-      const r = report.parameters.r;
-      geodesic = schwarzschildCircularOrbit({
-        ...(M === undefined ? {} : { M }),
-        ...(r === undefined ? {} : { r }),
-      });
-    } else if (name === 'kerr') {
-      const Mgeom = report.parameters.M_geom_m;
-      const a = report.parameters.a ?? 0;
-      const r = report.parameters.r;
-      if (Mgeom === undefined || !(Mgeom > 0)) throw new UsageError('Kerr geodesic needs a positive mass');
-      geodesic = kerrEquatorialCircular({
-        M: Mgeom,
-        aOverM: a / Mgeom,
-        rOverM: (r ?? 10 * Mgeom) / Mgeom,
-        fraction: 0.005,
-        steps: 40,
-      });
-    } else {
-      throw new UsageError('upt metric: --geodesic is for schwarzschild or kerr.');
+    try {
+      if (name === 'schwarzschild') {
+        const M = report.parameters.M;
+        const r = report.parameters.r;
+        const orbit = schwarzschildCircularOrbit({
+          ...(M === undefined ? {} : { M }),
+          ...(r === undefined ? {} : { r }),
+        });
+        geodesic = { kind: 'circular', ...orbit };
+      } else if (name === 'kerr') {
+        const Mgeom = report.parameters.M_geom_m;
+        const a = report.parameters.a ?? 0;
+        const r = report.parameters.r;
+        const theta = report.parameters.theta ?? Math.PI / 2;
+        if (Mgeom === undefined || !(Mgeom > 0)) throw new Error('Kerr geodesic needs a positive mass');
+        const rOverM = (r ?? 10 * Mgeom) / Mgeom;
+        const aOverM = a / Mgeom;
+        if (!(Math.abs(aOverM) <= 1)) throw new Error('Kerr geodesic wants |a| ≤ GM/c²');
+        const shared = { M: Mgeom, aOverM, rOverM, fraction: 0.005, steps: 40 };
+        geodesic =
+          Math.abs(theta - Math.PI / 2) < 1e-6
+            ? { kind: 'circular' as const, ...kerrEquatorialCircular(shared) }
+            : {
+                kind: 'inclined' as const,
+                ...kerrGeodesic({
+                  ...shared,
+                  theta,
+                  ...kerrTurningPointOrbit({ M: Mgeom, aOverM, rOverM, theta }),
+                  mu2: 1,
+                }),
+              };
+      } else {
+        throw new UsageError('upt metric: --geodesic is for schwarzschild or kerr.');
+      }
+    } catch (e) {
+      if (e instanceof UsageError) throw e;
+      throw new UsageError((e as Error).message);
     }
   }
   if (args.flags.has('json')) {
@@ -107,9 +143,12 @@ async function run(ctx: CommandCtx): Promise<number> {
     const cons =
       geodesic.E0 === undefined
         ? ''
-        : ` E ${geodesic.E0}→${geodesic.EEnd} L ${geodesic.L0}→${geodesic.LEnd} Q ${geodesic.Q0}→${geodesic.QEnd}`;
+        : ` E ${geodesic.E0}→${geodesic.EEnd} L ${geodesic.L0}→${geodesic.LEnd} Q ${geodesic.Q0}→${geodesic.QEnd} norm ${geodesic.norm0}→${geodesic.normEnd}`;
+    const polar =
+      geodesic.theta0 === undefined ? '' : ` θ ${geodesic.theta0}→${geodesic.thetaEnd}`;
+    const label = geodesic.kind === 'inclined' ? 'inclined orbit' : 'circular orbit';
     out(
-      `  geodesic: circular orbit r0=${geodesic.r0} rEnd=${geodesic.rEnd} Δφ=${geodesic.phiAdvance} over ${geodesic.steps} steps${cons}`,
+      `  geodesic: ${label} r0=${geodesic.r0} rEnd=${geodesic.rEnd}${polar} Δφ=${geodesic.phiAdvance} over ${geodesic.steps} steps${cons}`,
     );
   }
   return 0;

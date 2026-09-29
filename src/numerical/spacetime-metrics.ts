@@ -9,8 +9,9 @@
  * Schwarzschild Christoffel symbols are the closed form. Riemann, Ricci and
  * Kretschmann are a 4th-order finite difference of the metric, checked in
  * tests against the closed forms (Schwarzschild Kretschmann, flat-dust FLRW
- * Ricci scalar, Kerr Kretschmann). Kerr equatorial circular geodesics are
- * integrated with the Carter constant held at the equator.
+ * Ricci scalar, Kerr Kretschmann). Kerr geodesics in Boyer–Lindquist
+ * coordinates, including inclined ones, take their initial data from the
+ * Carter constant and are integrated with the second-order geodesic equation.
  *
  * @module numerical/spacetime-metrics
  * @internal
@@ -25,8 +26,8 @@ export type Pt = [number, number, number, number];
 export const METRIC_SIGNATURE = '(-,+,+,+)';
 
 /**
- * The canonical Einstein-equation AST was not edited. Say so wherever a
- * curvature number is printed.
+ * Printed with every curvature report. The line element and the canonical
+ * Einstein-equation metric node share this mostly-plus signature.
  */
 export const METRIC_SIGNATURE_NOTE =
   'Line element signature (−,+,+,+), the same mostly-plus signature as the Schwarzschild fixture ' +
@@ -531,7 +532,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     'Boyer–Lindquist, geometrized lengths: M stands for GM/c² and a is a length. Kretschmann is 1/length⁴.',
     'Closed form: K = 48 M² (r² − a² cos²θ) [(r² + a² cos²θ)² − 16 r² a² cos²θ] / (r² + a² cos²θ)⁶.',
     'a = 0 reduces to the Schwarzschild Kretschmann 48 M²/r⁶.',
-    'Equatorial circular geodesics: --geodesic. ISCO and photon radii are closed forms in r/M.',
+    'Geodesics (--geodesic) use the Carter constant. θ = π/2 is an equatorial circular orbit. Any other θ is an inclined spherical orbit with that polar turning point. ISCO and photon radii are closed forms in r/M.',
   ]);
 }
 
@@ -668,10 +669,12 @@ export function kerrPhotonRadius(aOverM: number): { readonly prograde: number; r
   };
 }
 
-/** One Kerr equatorial circular orbit. @internal */
+/** One integrated geodesic in geometrized units. @internal */
 export interface KerrGeodesicSample {
   readonly r0: number;
   readonly rEnd: number;
+  readonly theta0: number;
+  readonly thetaEnd: number;
   readonly phiAdvance: number;
   readonly steps: number;
   readonly E0: number;
@@ -680,12 +683,465 @@ export interface KerrGeodesicSample {
   readonly LEnd: number;
   readonly Q0: number;
   readonly QEnd: number;
+  readonly norm0: number;
+  readonly normEnd: number;
+  readonly mu2: number;
+}
+
+interface SphericalConstants {
+  readonly E: number;
+  readonly L: number;
+  readonly Q: number;
+}
+
+function radialPotential(M: number, a: number, r: number, E: number, L: number, Q: number, mu2: number): number {
+  const Delta = r * r - 2 * M * r + a * a;
+  const P = E * (r * r + a * a) - a * L;
+  return P * P - Delta * (mu2 * r * r + (L - a * E) ** 2 + Q);
+}
+
+function radialPotentialPrime(M: number, a: number, r: number, E: number, L: number, Q: number, mu2: number): number {
+  const Delta = r * r - 2 * M * r + a * a;
+  const dDelta = 2 * (r - M);
+  const P = E * (r * r + a * a) - a * L;
+  const separated = mu2 * r * r + (L - a * E) ** 2 + Q;
+  return 4 * r * E * P - dDelta * separated - 2 * mu2 * r * Delta;
+}
+
+/** Equatorial circular energy and axial angular momentum. Upper sign is prograde. */
+function equatorialCircular(M: number, a: number, r: number, prograde: boolean): { readonly E: number; readonly L: number; readonly uphi: number } {
+  const sign = prograde ? 1 : -1;
+  const sqrtM = Math.sqrt(M);
+  const Omega = (sign * sqrtM) / (r ** 1.5 + sign * a * sqrtM);
+  const g0 = kerrMetric(M, a)([0, r, Math.PI / 2, 0]);
+  const norm = -(g0[0]![0]! + 2 * Omega * g0[0]![3]! + Omega * Omega * g0[3]![3]!);
+  if (!(norm > 0) || !Number.isFinite(Omega)) throw new Error('circular orbit is not timelike at this radius');
+  const ut = 1 / Math.sqrt(norm);
+  const uphi = Omega * ut;
+  return {
+    E: -(g0[0]![0]! * ut + g0[0]![3]! * uphi),
+    L: g0[3]![0]! * ut + g0[3]![3]! * uphi,
+    uphi,
+  };
+}
+
+/** ∂(R, R')/∂(E, L). Lengths are in units of M, so L and Q are L/M and Q/M². */
+function sphericalJacobian(
+  a: number,
+  r: number,
+  E: number,
+  L: number,
+): { readonly j11: number; readonly j12: number; readonly j21: number; readonly j22: number } {
+  const Delta = r * r - 2 * r + a * a;
+  const dDelta = 2 * (r - 1);
+  const alpha = r * r + a * a;
+  const P = E * alpha - a * L;
+  const x = L - a * E;
+  const dPdE = alpha;
+  const dPdL = -a;
+  const dSdE = -2 * a * x;
+  const dSdL = 2 * x;
+  return {
+    j11: 2 * P * dPdE - Delta * dSdE,
+    j12: 2 * P * dPdL - Delta * dSdL,
+    j21: 4 * r * P + 4 * r * E * dPdE - dDelta * dSdE,
+    j22: 4 * r * E * dPdL - dDelta * dSdL,
+  };
+}
+
+function solveSpherical(M: number, a: number, r: number, Q: number, mu2: number, prograde: boolean): { readonly E: number; readonly L: number } {
+  // R is a difference of terms ~ r⁴. Solve in units of M so a solar radius
+  // does not wipe the L-column of a finite-difference Jacobian.
+  const aHat = a / M;
+  const rHat = r / M;
+  const QHat = Q / (M * M);
+  const seed = equatorialCircular(1, aHat, rHat, prograde);
+  let E = seed.E;
+  let L = seed.L;
+  for (let n = 0; n < 30; n++) {
+    const f1 = radialPotential(1, aHat, rHat, E, L, QHat, mu2);
+    const f2 = radialPotentialPrime(1, aHat, rHat, E, L, QHat, mu2);
+    const { j11, j12, j21, j22 } = sphericalJacobian(aHat, rHat, E, L);
+    const det = j11 * j22 - j12 * j21;
+    const scale = Math.max(1, Math.abs(j11), Math.abs(j12), Math.abs(j21), Math.abs(j22));
+    if (!Number.isFinite(det) || Math.abs(det) < 1e-18 * scale * scale) throw new Error('spherical-orbit Jacobian is singular');
+    const stepE = (j22 * f1 - j12 * f2) / det;
+    const stepL = (-j21 * f1 + j11 * f2) / det;
+    E -= stepE;
+    L -= stepL;
+    // r⁴ cancellation leaves R' uncertain by a fraction of a unit at large r/M.
+    const room = Math.max(1, rHat ** 4);
+    const settled =
+      Math.abs(stepE) < 1e-10 &&
+      Math.abs(stepL) < 1e-8 * Math.max(1, Math.abs(L)) &&
+      Math.abs(f1) < 1e-6 * room &&
+      Math.abs(f2) < 1e-6 * room;
+    if (settled) return { E, L: L * M };
+  }
+  throw new Error('spherical orbit did not converge');
+}
+
+/**
+ * Timelike spherical orbit at fixed r: R = R' = 0. `Q` is the Carter constant
+ * (0 on the equator). E and L come from that pair of conditions.
+ * @internal
+ */
+export function kerrSphericalTimelike(opts?: {
+  readonly M?: number;
+  readonly aOverM?: number;
+  readonly rOverM?: number;
+  readonly Q?: number;
+  readonly prograde?: boolean;
+}): SphericalConstants & { readonly R: number; readonly Rp: number } {
+  const M = opts?.M ?? 1;
+  const chi = opts?.aOverM ?? 0;
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('spherical orbit wants M > 0 and |a/M| ≤ 1');
+  const a = chi * M;
+  const r = (opts?.rOverM ?? 10) * M;
+  const Q = opts?.Q ?? 0;
+  const solved = solveSpherical(M, a, r, Q, 1, opts?.prograde !== false);
+  return {
+    E: solved.E,
+    L: solved.L,
+    Q,
+    R: radialPotential(M, a, r, solved.E, solved.L, Q, 1),
+    Rp: radialPotentialPrime(M, a, r, solved.E, solved.L, Q, 1),
+  };
+}
+
+/**
+ * Spherical photon orbit between the equatorial photon radii.
+ * E is fixed at 1 (null affine scale). L/E and Q/E² are the separated
+ * constants with R = R' = 0 and μ² = 0. Q = 0 on either equatorial photon orbit.
+ * @internal
+ */
+export function kerrSphericalPhoton(opts?: {
+  readonly M?: number;
+  readonly aOverM?: number;
+  readonly rOverM?: number;
+}): SphericalConstants {
+  const M = opts?.M ?? 1;
+  const chi = opts?.aOverM ?? 0;
+  const rHat = opts?.rOverM;
+  if (!(M > 0) || !(Math.abs(chi) > 0 && Math.abs(chi) <= 1)) throw new Error('spherical photon orbit wants M > 0 and 0 < |a/M| ≤ 1');
+  if (rHat === undefined) throw new Error('spherical photon orbit needs rOverM');
+  const ends = kerrPhotonRadius(chi);
+  const lo = Math.min(ends.prograde, ends.retrograde);
+  const hi = Math.max(ends.prograde, ends.retrograde);
+  if (!(rHat >= lo - 1e-9 && rHat <= hi + 1e-9)) {
+    throw new Error('spherical photon radius lies between the prograde and retrograde photon orbits');
+  }
+  const a = chi * M;
+  const r = rHat * M;
+  if (!(Math.abs(r - M) > 1e-9 * M)) throw new Error('extremal prograde photon orbit sits on the horizon');
+  const Delta = r * r - 2 * M * r + a * a;
+  const E = 1;
+  const L = E * ((r * r + a * a) / a - (2 * r * Delta) / (a * (r - M)));
+  const P = E * (r * r + a * a) - a * L;
+  const Q = (P * P) / Delta - (L - a * E) ** 2;
+  if (Q < -1e-8 * M * M) throw new Error('no spherical photon orbit at this radius');
+  return { E, L, Q: Q < 0 ? 0 : Q };
+}
+
+/**
+ * Spherical timelike orbit whose polar turning point is `theta`.
+ * The Carter constant is the value that makes Θ(θ) = 0 there.
+ * @internal
+ */
+export function kerrTurningPointOrbit(opts: {
+  readonly M?: number;
+  readonly aOverM?: number;
+  readonly rOverM?: number;
+  readonly theta: number;
+  readonly prograde?: boolean;
+}): SphericalConstants {
+  const M = opts.M ?? 1;
+  const chi = opts.aOverM ?? 0;
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('turning-point orbit wants M > 0 and |a/M| ≤ 1');
+  const a = chi * M;
+  const r = (opts.rOverM ?? 10) * M;
+  const theta = opts.theta;
+  const s = Math.sin(theta);
+  const c = Math.cos(theta);
+  if (!(Math.abs(s) > 1e-3) || !(Math.abs(c) > 1e-4)) {
+    throw new Error('turning-point θ must sit off the equator and off the pole');
+  }
+  const seed = equatorialCircular(M, a, r, opts.prograde !== false);
+  let Q = seed.L * seed.L * c * c;
+  let E = seed.E;
+  let L = seed.L;
+  for (let n = 0; n < 16; n++) {
+    const solved = solveSpherical(M, a, r, Q, 1, opts.prograde !== false);
+    E = solved.E;
+    L = solved.L;
+    const next = c * c * (a * a * (1 - E * E) + (L * L) / (s * s));
+    if (!Number.isFinite(next) || next < 0) throw new Error('turning-point Carter constant left the physical range');
+    if (Math.abs(next - Q) <= 1e-9 * Math.max(1, Math.abs(next))) return { E, L, Q: next };
+    Q = next;
+  }
+  throw new Error('turning-point Carter constant did not converge');
+}
+
+function kerrMetricDerivatives(M: number, a: number, r: number, theta: number): { readonly dr: number[][]; readonly dth: number[][] } {
+  const c = Math.cos(theta);
+  const s = Math.sin(theta);
+  const Sigma = r * r + a * a * c * c;
+  const dSr = 2 * r;
+  const dSt = -2 * a * a * c * s;
+  const Delta = r * r - 2 * M * r + a * a;
+  const dDr = 2 * (r - M);
+  const Sigma2 = Sigma * Sigma;
+  const dr = mat4();
+  const dth = mat4();
+  dr[0]![0] = (2 * M * (a * a * c * c - r * r)) / Sigma2;
+  dth[0]![0] = (4 * M * r * a * a * c * s) / Sigma2;
+  const dtpR = (-2 * M * a * s * s * (a * a * c * c - r * r)) / Sigma2;
+  const dtpT = (-4 * M * a * r * s * c * (Sigma + a * a * s * s)) / Sigma2;
+  dr[0]![3] = dr[3]![0] = dtpR;
+  dth[0]![3] = dth[3]![0] = dtpT;
+  dr[1]![1] = (dSr * Delta - Sigma * dDr) / (Delta * Delta);
+  dth[1]![1] = dSt / Delta;
+  dr[2]![2] = dSr;
+  dth[2]![2] = dSt;
+  const A = (r * r + a * a) ** 2 - a * a * Delta * s * s;
+  const dAr = 4 * r * (r * r + a * a) - a * a * dDr * s * s;
+  const dAt = -2 * a * a * Delta * s * c;
+  dr[3]![3] = (s * s * (dAr * Sigma - A * dSr)) / Sigma2;
+  dth[3]![3] = ((2 * s * c * A + s * s * dAt) * Sigma - s * s * A * dSt) / Sigma2;
+  return { dr, dth };
+}
+
+function christoffelFrom(g: number[][], dg: readonly (number[][] | null)[]): Gamma {
+  const gi = invert4(g);
+  const G: Gamma = blankGamma();
+  for (let rho = 0; rho < 4; rho++) {
+    for (let mu = 0; mu < 4; mu++) {
+      for (let nu = mu; nu < 4; nu++) {
+        let s = 0;
+        for (let sigma = 0; sigma < 4; sigma++) {
+          const dmu = dg[mu]?.[nu]![sigma] ?? 0;
+          const dnu = dg[nu]?.[mu]![sigma] ?? 0;
+          const dsig = dg[sigma]?.[mu]![nu] ?? 0;
+          s += gi[rho]![sigma]! * (dmu + dnu - dsig);
+        }
+        const v = 0.5 * s;
+        G[rho]![mu]![nu] = v;
+        G[rho]![nu]![mu] = v;
+      }
+    }
+  }
+  return G;
+}
+
+function kerrChristoffel(M: number, a: number, r: number, theta: number): Gamma {
+  const partial = kerrMetricDerivatives(M, a, r, theta);
+  return christoffelFrom(kerrMetric(M, a)([0, r, theta, 0]), [null, partial.dr, partial.dth, null]);
+}
+
+/** Largest |Γ_analytic − Γ_finite_difference| at one Boyer–Lindquist point. @internal */
+export function kerrChristoffelFdGap(M: number, a: number, r: number, theta: number): number {
+  const x: Pt = [0, r, theta, 0];
+  const analytic = kerrChristoffel(M, a, r, theta);
+  const fd = christoffelOf(kerrMetric(M, a), x, stepsFor(x));
+  let gap = 0;
+  for (let rho = 0; rho < 4; rho++) {
+    for (let mu = 0; mu < 4; mu++) {
+      for (let nu = 0; nu < 4; nu++) gap = Math.max(gap, Math.abs(analytic[rho]![mu]![nu]! - fd[rho]![mu]![nu]!));
+    }
+  }
+  return gap;
+}
+
+function schwarzschildChristoffel(M: number, r: number, theta: number): Gamma {
+  const rs = 2 * M;
+  const ff = 1 - rs / r;
+  const s = Math.sin(theta);
+  const c = Math.cos(theta);
+  const Gma: Gamma = blankGamma();
+  const set = (rho: number, mu: number, nu: number, v: number) => {
+    Gma[rho]![mu]![nu] = v;
+    Gma[rho]![nu]![mu] = v;
+  };
+  set(0, 0, 1, rs / (2 * r * (r - rs)));
+  set(1, 0, 0, (rs * ff) / (2 * r * r));
+  set(1, 1, 1, -rs / (2 * r * (r - rs)));
+  set(1, 2, 2, -(r - rs));
+  set(1, 3, 3, -(r - rs) * s * s);
+  set(2, 1, 2, 1 / r);
+  set(2, 3, 3, -s * c);
+  set(3, 1, 3, 1 / r);
+  set(3, 2, 3, c / s);
+  return Gma;
+}
+
+function conservedOf(metric: MetricFn, a: number, y: readonly number[], mu2: number): { readonly E: number; readonly L: number; readonly Q: number; readonly norm: number } {
+  const g = metric([y[0]!, y[1]!, y[2]!, y[3]!]);
+  const u = [y[4]!, y[5]!, y[6]!, y[7]!];
+  let norm = 0;
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) norm += g[i]![j]! * u[i]! * u[j]!;
+  const E = -(g[0]![0]! * u[0]! + g[0]![3]! * u[3]!);
+  const L = g[3]![0]! * u[0]! + g[3]![3]! * u[3]!;
+  const pTheta = g[2]![2]! * u[2]!;
+  const c = Math.cos(y[2]!);
+  const s = Math.sin(y[2]!);
+  const Q = pTheta * pTheta + c * c * (a * a * (mu2 - E * E) + (L * L) / (s * s));
+  return { E, L, Q, norm };
+}
+
+function carterState(
+  M: number,
+  a: number,
+  r: number,
+  theta: number,
+  E: number,
+  L: number,
+  Q: number,
+  mu2: number,
+  signR: number,
+  signTheta: number,
+  allowOffShell: boolean,
+): number[] {
+  const c = Math.cos(theta);
+  const s = Math.sin(theta);
+  if (!(Math.abs(s) > 1e-6)) throw new Error('Boyer–Lindquist geodesic wants θ away from the poles');
+  const Sigma = r * r + a * a * c * c;
+  const Delta = r * r - 2 * M * r + a * a;
+  if (!(Delta > 0)) throw new Error('geodesic start must be outside the horizon');
+  const R = radialPotential(M, a, r, E, L, Q, mu2);
+  const Theta = Q - c * c * (a * a * (mu2 - E * E) + (L * L) / (s * s));
+  const scale = Math.max(1, E * E, L * L, Math.abs(Q));
+  if (R < -1e-8 * scale && !allowOffShell) throw new Error('radial potential is negative at the start');
+  if (Theta < -1e-8 * scale && !allowOffShell) throw new Error('polar potential is negative at the start');
+  const g = kerrMetric(M, a)([0, r, theta, 0]);
+  const det = g[0]![0]! * g[3]![3]! - g[0]![3]! * g[0]![3]!;
+  const ut = (g[3]![3]! * -E - g[0]![3]! * L) / det;
+  const uphi = (g[0]![0]! * L - g[0]![3]! * -E) / det;
+  const ur = signR * Math.sqrt(Math.max(R, 0)) / Sigma;
+  const uth = signTheta * Math.sqrt(Math.max(Theta, 0)) / Sigma;
+  return [0, r, theta, 0, ut, ur, uth, uphi];
+}
+
+function integrateGeodesic(gammaAt: (r: number, theta: number) => Gamma, y0: readonly number[], fraction: number, steps: number): number[] {
+  const accel = (s: number[]): number[] => {
+    const Gma = gammaAt(s[1]!, s[2]!);
+    const u = [s[4]!, s[5]!, s[6]!, s[7]!];
+    const du = [0, 0, 0, 0];
+    for (let rho = 0; rho < 4; rho++) {
+      let sum = 0;
+      for (let mu = 0; mu < 4; mu++) for (let nu = 0; nu < 4; nu++) sum += Gma[rho]![mu]![nu]! * u[mu]! * u[nu]!;
+      du[rho] = -sum;
+    }
+    return [u[0]!, u[1]!, u[2]!, u[3]!, du[0]!, du[1]!, du[2]!, du[3]!];
+  };
+  const add = (left: number[], right: number[], scale: number) => left.map((v, i) => v + scale * right[i]!);
+  const angular = Math.max(Math.abs(y0[7]!), Math.abs(y0[6]!), 1e-12);
+  const h = ((2 * Math.PI) / angular) * fraction / steps;
+  let y = y0.slice();
+  for (let n = 0; n < steps; n++) {
+    const k1 = accel(y);
+    const k2 = accel(add(y, k1, h / 2));
+    const k3 = accel(add(y, k2, h / 2));
+    const k4 = accel(add(y, k3, h));
+    y = y.map((v, i) => v + (h / 6) * (k1[i]! + 2 * k2[i]! + 2 * k3[i]! + k4[i]!));
+  }
+  return y;
+}
+
+function sampleOf(metric: MetricFn, a: number, y0: readonly number[], y1: readonly number[], steps: number, mu2: number): KerrGeodesicSample {
+  const start = conservedOf(metric, a, y0, mu2);
+  const end = conservedOf(metric, a, y1, mu2);
+  return {
+    r0: y0[1]!,
+    rEnd: y1[1]!,
+    theta0: y0[2]!,
+    thetaEnd: y1[2]!,
+    phiAdvance: y1[3]!,
+    steps,
+    E0: start.E,
+    EEnd: end.E,
+    L0: start.L,
+    LEnd: end.L,
+    Q0: start.Q,
+    QEnd: end.Q,
+    norm0: start.norm,
+    normEnd: end.norm,
+    mu2,
+  };
+}
+
+/**
+ * Integrate a Kerr geodesic in Boyer–Lindquist coordinates, geometrized (G = c = 1).
+ * Initial u^μ comes from the Carter first-order potentials (E, L, Q, μ²).
+ * The step is the second-order geodesic equation with analytic Christoffel symbols,
+ * so E, L, Q and g_μν u^μ u^ν are evolved quantities and can drift.
+ * `mu2` is 1 for timelike and 0 for null. `allowOffShell` starts the second-order
+ * equation even when a potential is negative; that is the control that r can move.
+ * @internal
+ */
+export function kerrGeodesic(opts: {
+  readonly M?: number;
+  readonly aOverM?: number;
+  readonly rOverM?: number;
+  readonly theta?: number;
+  readonly E: number;
+  readonly L: number;
+  readonly Q: number;
+  readonly mu2?: number;
+  readonly signR?: number;
+  readonly signTheta?: number;
+  readonly fraction?: number;
+  readonly steps?: number;
+  readonly allowOffShell?: boolean;
+}): KerrGeodesicSample {
+  const M = opts.M ?? 1;
+  const chi = opts.aOverM ?? 0;
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('Kerr geodesic wants M > 0 and |a/M| ≤ 1');
+  const a = chi * M;
+  const r = (opts.rOverM ?? 10) * M;
+  const theta = opts.theta ?? Math.PI / 2;
+  const mu2 = opts.mu2 ?? 1;
+  const steps = opts.steps ?? 80;
+  const fraction = opts.fraction ?? 0.01;
+  const metric = kerrMetric(M, a);
+  const y0 = carterState(M, a, r, theta, opts.E, opts.L, opts.Q, mu2, opts.signR ?? 1, opts.signTheta ?? 1, opts.allowOffShell === true);
+  const y1 = integrateGeodesic((rr, th) => kerrChristoffel(M, a, rr, th), y0, fraction, steps);
+  return sampleOf(metric, a, y0, y1, steps, mu2);
+}
+
+/**
+ * Schwarzschild geodesic in geometrized units, with the closed-form Christoffel
+ * symbols (the polar terms included). The initial 4-velocity is the a = 0 Carter
+ * state, so a Kerr run at a = 0 can be compared coordinate by coordinate.
+ * @internal
+ */
+export function schwarzschildGeodesic(opts: {
+  readonly M?: number;
+  readonly rOverM?: number;
+  readonly theta?: number;
+  readonly E: number;
+  readonly L: number;
+  readonly Q: number;
+  readonly signR?: number;
+  readonly signTheta?: number;
+  readonly fraction?: number;
+  readonly steps?: number;
+}): KerrGeodesicSample {
+  const M = opts.M ?? 1;
+  if (!(M > 0)) throw new Error('Schwarzschild geodesic wants M > 0');
+  const r = (opts.rOverM ?? 10) * M;
+  const theta = opts.theta ?? Math.PI / 2;
+  const steps = opts.steps ?? 80;
+  const fraction = opts.fraction ?? 0.01;
+  const metric = schwarzschildMetric(M, 1, 1);
+  const y0 = carterState(M, 0, r, theta, opts.E, opts.L, opts.Q, 1, opts.signR ?? 1, opts.signTheta ?? 1, false);
+  const y1 = integrateGeodesic((rr, th) => schwarzschildChristoffel(M, rr, th), y0, fraction, steps);
+  return sampleOf(metric, 0, y0, y1, steps, 1);
 }
 
 /**
  * Integrate a Kerr equatorial circular orbit in geometrized units (G = c = 1).
- * θ is held at π/2, so the Carter constant stays 0; E = −u_t and L = u_φ are
- * evolved and must not drift. `rOverM` must sit outside the photon orbit.
+ * Q is 0 and θ starts at π/2. E = −u_t and L = u_φ are evolved with the
+ * second-order equation. `rOverM` must sit outside the photon orbit.
  * @internal
  */
 export function kerrEquatorialCircular(opts?: {
@@ -698,71 +1154,19 @@ export function kerrEquatorialCircular(opts?: {
 }): KerrGeodesicSample {
   const M = opts?.M ?? 1;
   const chi = opts?.aOverM ?? 0;
-  if (!(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
-  const a = chi * M;
-  const sign = opts?.prograde === false ? -1 : 1;
-  const r0 = (opts?.rOverM ?? 10) * M;
-  const gfn = kerrMetric(M, a);
-  const sqrtM = Math.sqrt(M);
-  const Omega = (sign * sqrtM) / (r0 ** 1.5 + sign * a * sqrtM);
-  const g0 = gfn([0, r0, Math.PI / 2, 0]);
-  const norm = -(g0[0]![0]! + 2 * Omega * g0[0]![3]! + Omega * Omega * g0[3]![3]!);
-  if (!(norm > 0) || !Number.isFinite(Omega)) throw new Error('circular orbit is not timelike at this radius');
-  const ut = 1 / Math.sqrt(norm);
-  const uphi = Omega * ut;
-
-  const conserved = (s: number[]) => {
-    const gg = gfn([s[0]!, s[1]!, Math.PI / 2, s[3]!]);
-    const u0 = s[4]!;
-    const u3 = s[7]!;
-    const uTheta = gg[2]![2]! * s[6]!;
-    const E = -(gg[0]![0]! * u0 + gg[0]![3]! * u3);
-    const L = gg[3]![0]! * u0 + gg[3]![3]! * u3;
-    const cth = Math.cos(s[2]!);
-    const sth = Math.sin(s[2]!);
-    const Q = uTheta * uTheta + cth * cth * (a * a * (1 - E * E) + (L * L) / (sth * sth));
-    return { E, L, Q };
-  };
-
-  let y = [0, r0, Math.PI / 2, 0, ut, 0, 0, uphi];
-  const start = conserved(y);
-  const accel = (s: number[]): number[] => {
-    const xx: Pt = [s[0]!, s[1]!, Math.PI / 2, s[3]!];
-    const Gma = christoffelOf(gfn, xx, stepsFor(xx));
-    const u = [s[4]!, s[5]!, 0, s[7]!];
-    const du = [0, 0, 0, 0];
-    for (let rho = 0; rho < 4; rho++) {
-      let sum = 0;
-      for (let mu = 0; mu < 4; mu++) for (let nu = 0; nu < 4; nu++) sum += Gma[rho]![mu]![nu]! * u[mu]! * u[nu]!;
-      du[rho] = -sum;
-    }
-    return [u[0]!, u[1]!, 0, u[3]!, du[0]!, du[1]!, 0, du[3]!];
-  };
-  const add = (left: number[], right: number[], scale: number) => left.map((v, i) => v + scale * right[i]!);
-  const period = (2 * Math.PI) / Math.abs(uphi);
-  const fraction = opts?.fraction ?? 0.01;
-  const steps = opts?.steps ?? 80;
-  const h = (period * fraction) / steps;
-  for (let n = 0; n < steps; n++) {
-    const k1 = accel(y);
-    const k2 = accel(add(y, k1, h / 2));
-    const k3 = accel(add(y, k2, h / 2));
-    const k4 = accel(add(y, k3, h));
-    y = y.map((v, i) => v + (h / 6) * (k1[i]! + 2 * k2[i]! + 2 * k3[i]! + k4[i]!));
-    y[2] = Math.PI / 2;
-    y[6] = 0;
-  }
-  const end = conserved(y);
-  return {
-    r0,
-    rEnd: y[1]!,
-    phiAdvance: y[3]!,
-    steps,
-    E0: start.E,
-    EEnd: end.E,
-    L0: start.L,
-    LEnd: end.L,
-    Q0: start.Q,
-    QEnd: end.Q,
-  };
+  const rOverM = opts?.rOverM ?? 10;
+  if (!(M > 0) || !(Math.abs(chi) <= 1)) throw new Error('|a/M| must be at most 1');
+  const eq = equatorialCircular(M, chi * M, rOverM * M, opts?.prograde !== false);
+  return kerrGeodesic({
+    M,
+    aOverM: chi,
+    rOverM,
+    theta: Math.PI / 2,
+    E: eq.E,
+    L: eq.L,
+    Q: 0,
+    mu2: 1,
+    fraction: opts?.fraction ?? 0.01,
+    steps: opts?.steps ?? 80,
+  });
 }

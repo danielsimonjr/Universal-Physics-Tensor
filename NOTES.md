@@ -16,8 +16,10 @@ nothing validates prose and the next reader cannot tell.
   Minkowski, Schwarzschild, FLRW and Kerr. The line element and the canonical Einstein-equation
   metric node are both (−,+,+,+). Schwarzschild Kretschmann is checked against
   `48 G² M² / (c⁴ r⁶)`. `--geodesic` integrates a short Schwarzschild circular orbit and a Kerr
-  equatorial circular orbit (θ = π/2, so the Carter constant stays 0; E and L are integrated).
-  Inclined Kerr orbits are not integrated. ISCO and photon radii are the closed forms.
+  geodesic. θ = π/2 is an equatorial circular orbit. Any other θ is an inclined spherical orbit
+  whose polar turning point is that θ. Initial data use the Carter constant. The integrator is
+  the second-order geodesic equation. ISCO radii, the equatorial photon sphere, and a spherical
+  photon orbit between those radii are checked. a = 0 matches a Schwarzschild geodesic.
   `--natural` sets ħ = c = 1 and `--geometrized` also sets G = 1; the SI default still refuses
   `rest_energy = mass`. Flat `CE-friedmann` is `H² = 8πGρ/3`. `CE-friedmann-curvature` is
   `H² = 8πGρ/3 − k c²/a²`. `1Msun` is `M_SUN_SI = 1.989e30` kg. `GM_sun` is `GM_SUN_SI` and

@@ -3565,7 +3565,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
-| `../../numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, schwarzschildCircularOrbit, MetricId` | Import |
+| `../../numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, MetricId` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -7198,7 +7198,8 @@ The codebase is organized into the following modules:
   ```text
   schwarzschildKretschmann, flrwRicciScalar, friedmannSides, kerrKretschmann, metricParams,
   curvatureReport, schwarzschildCircularOrbit, kerrIscoRadius, kerrPhotonRadius,
-  kerrEquatorialCircular
+  kerrSphericalTimelike, kerrSphericalPhoton, kerrTurningPointOrbit, kerrChristoffelFdGap,
+  kerrGeodesic, schwarzschildGeodesic, kerrEquatorialCircular
   ```
 
 - Constants: `METRIC_SIGNATURE`, `METRIC_SIGNATURE_NOTE`
@@ -7420,12 +7421,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 392 |
 | Total Modules | 12 |
-| Total Lines of Code | 85422 |
-| Total Exports | 2814 |
+| Total Lines of Code | 85865 |
+| Total Exports | 2820 |
 | Total Re-exports | 1339 |
 | Total Classes | 60 |
 | Total Interfaces | 442 |
-| Total Functions | 714 |
+| Total Functions | 720 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 534 |

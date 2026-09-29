@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 392
   totalModules: 12
-  totalExports: 2814
+  totalExports: 2820
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7866,6 +7866,8 @@ modules:
           imports:
             - curvatureReport
             - kerrEquatorialCircular
+            - kerrGeodesic
+            - kerrTurningPointOrbit
             - schwarzschildCircularOrbit
             - MetricId
       exports:
@@ -18522,6 +18524,12 @@ modules:
         - schwarzschildCircularOrbit
         - kerrIscoRadius
         - kerrPhotonRadius
+        - kerrSphericalTimelike
+        - kerrSphericalPhoton
+        - kerrTurningPointOrbit
+        - kerrChristoffelFdGap
+        - kerrGeodesic
+        - schwarzschildGeodesic
         - kerrEquatorialCircular
       interfaces:
         - Component
@@ -18537,6 +18545,12 @@ modules:
         - schwarzschildCircularOrbit
         - kerrIscoRadius
         - kerrPhotonRadius
+        - kerrSphericalTimelike
+        - kerrSphericalPhoton
+        - kerrTurningPointOrbit
+        - kerrChristoffelFdGap
+        - kerrGeodesic
+        - schwarzschildGeodesic
         - kerrEquatorialCircular
       constants:
         - METRIC_SIGNATURE
@@ -19025,11 +19039,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 392
   totalModules: 12
-  totalLinesOfCode: 85422
-  totalExports: 2814
+  totalLinesOfCode: 85865
+  totalExports: 2820
   totalClasses: 60
   totalInterfaces: 442
-  totalFunctions: 714
+  totalFunctions: 720
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 700

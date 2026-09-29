@@ -40,8 +40,24 @@ const corpusIds = new Set((readJson('corpus.json') as { id: string }[]).map((r) 
  * The exported corpus the labelers saw. Amendment 8 names the canonical tree at c144150;
  * the file itself landed in 1263bce and was not edited after that. The working-tree
  * corpus.json is the live registry export.
+ *
+ * GitHub Actions checks out the pull request with fetch-depth 1, so this ancestor is
+ * not in the local object store until it is fetched.
  */
 const LABELLED_CORPUS_COMMIT = '1263bce2d2253d6a38ba319e74cacfbee5451fcd';
+const LABELLED_CORPUS_SPEC = `${LABELLED_CORPUS_COMMIT}:docs/research/criterion3/corpus.json`;
+
+function labelledCorpusBytes(): Buffer {
+  const show = () => execFileSync('git', ['show', LABELLED_CORPUS_SPEC]);
+  try {
+    return show();
+  } catch {
+    execFileSync('git', ['fetch', '--depth=1', 'origin', LABELLED_CORPUS_COMMIT], {
+      stdio: ['ignore', 'ignore', 'pipe'],
+    });
+    return show();
+  }
+}
 
 describe('criterion 3 — Amendment 8 freezes the files', () => {
   it('lists the seven files, each with the SHA-256 of its committed bytes', () => {
@@ -50,7 +66,7 @@ describe('criterion 3 — Amendment 8 freezes the files', () => {
     );
     for (const [file, hash] of table) {
       if (file === 'corpus.json') {
-        const historical = execFileSync('git', ['show', `${LABELLED_CORPUS_COMMIT}:docs/research/criterion3/corpus.json`]);
+        const historical = labelledCorpusBytes();
         expect(createHash('sha256').update(historical).digest('hex'), file).toBe(hash);
       } else {
         expect(rawSha(file), file).toBe(hash);
@@ -67,7 +83,7 @@ describe('criterion 3 — Amendment 8 freezes the files', () => {
     // Queries were not relabelled. The corpus hash in Amendment 8 is the file at c144150;
     // freeze.json tracks the live export, which the export test binds to the registry.
     expect(table.get('queries.json')).toBe(freeze.files['queries.json'].sha256);
-    const historical = execFileSync('git', ['show', `${LABELLED_CORPUS_COMMIT}:docs/research/criterion3/corpus.json`]);
+    const historical = labelledCorpusBytes();
     expect(createHash('sha256').update(historical).digest('hex')).toBe(table.get('corpus.json'));
     expect(freeze.files['corpus.json'].sha256).toBe(rawSha('corpus.json'));
   });

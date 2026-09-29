@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 392,
     "totalModules": 12,
-    "totalExports": 2814
+    "totalExports": 2820
   },
   "entryPoints": [
     {
@@ -11801,6 +11801,8 @@
             "imports": [
               "curvatureReport",
               "kerrEquatorialCircular",
+              "kerrGeodesic",
+              "kerrTurningPointOrbit",
               "schwarzschildCircularOrbit",
               "MetricId"
             ]
@@ -26624,6 +26626,12 @@
           "schwarzschildCircularOrbit",
           "kerrIscoRadius",
           "kerrPhotonRadius",
+          "kerrSphericalTimelike",
+          "kerrSphericalPhoton",
+          "kerrTurningPointOrbit",
+          "kerrChristoffelFdGap",
+          "kerrGeodesic",
+          "schwarzschildGeodesic",
           "kerrEquatorialCircular"
         ],
         "interfaces": [
@@ -26641,6 +26649,12 @@
           "schwarzschildCircularOrbit",
           "kerrIscoRadius",
           "kerrPhotonRadius",
+          "kerrSphericalTimelike",
+          "kerrSphericalPhoton",
+          "kerrTurningPointOrbit",
+          "kerrChristoffelFdGap",
+          "kerrGeodesic",
+          "schwarzschildGeodesic",
           "kerrEquatorialCircular"
         ],
         "constants": [
@@ -27192,11 +27206,11 @@
   "statistics": {
     "totalTypeScriptFiles": 392,
     "totalModules": 12,
-    "totalLinesOfCode": 85422,
-    "totalExports": 2814,
+    "totalLinesOfCode": 85865,
+    "totalExports": 2820,
     "totalClasses": 60,
     "totalInterfaces": 442,
-    "totalFunctions": 714,
+    "totalFunctions": 720,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 700,

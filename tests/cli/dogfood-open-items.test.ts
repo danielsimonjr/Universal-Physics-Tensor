@@ -116,6 +116,15 @@ describe('upt metric', () => {
     expect(text(c)).toMatch(/geodesic: circular orbit/);
     expect(text(c)).not.toMatch(/not implemented/);
   });
+
+  it('Kerr --geodesic at θ off the equator integrates an inclined orbit', async () => {
+    const c = capture();
+    expect(await runCli(['metric', 'kerr', '--geodesic', '--json', 'a=0', 'r=1e8', 'theta=1.2'], c.io)).toBe(0);
+    const env = JSON.parse(text(c));
+    expect(env.result.geodesic.kind).toBe('inclined');
+    expect(env.result.geodesic.thetaEnd).not.toBe(env.result.geodesic.theta0);
+    expect(Math.abs(env.result.geodesic.norm0 + 1)).toBeLessThan(1e-9);
+  });
 });
 
 describe('upt testplan', () => {
