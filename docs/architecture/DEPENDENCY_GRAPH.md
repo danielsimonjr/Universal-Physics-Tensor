@@ -3336,7 +3336,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../errors.js` | `CliError` | Import |
+| `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -7260,7 +7260,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 383 |
 | Total Modules | 12 |
-| Total Lines of Code | 83474 |
+| Total Lines of Code | 83503 |
 | Total Exports | 2780 |
 | Total Re-exports | 1335 |
 | Total Classes | 60 |
