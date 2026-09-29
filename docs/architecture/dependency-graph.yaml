@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 383
   totalModules: 12
-  totalExports: 2777
+  totalExports: 2780
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6610,6 +6610,7 @@ modules:
         - file: ../composition/symbolic-constants.js
           imports:
             - CONSTANTS
+            - piMultipleValue
       exports:
         - normalForm
         - structurallyEqual
@@ -7449,6 +7450,9 @@ modules:
         - file: ../version.js
           imports:
             - formulaParserLabel
+        - file: ../../numerical/formula.js
+          imports:
+            - eulerConstantNote
         - file: ../../dimensional/types.js
           imports:
             - Dimension
@@ -7523,6 +7527,9 @@ modules:
         - file: ../version.js
           imports:
             - formulaParserLabel
+        - file: ../../numerical/formula.js
+          imports:
+            - eulerConstantNote
       exports:
         - command
       constants:
@@ -7556,10 +7563,16 @@ modules:
             - CaseResult
             - EvaluatorParameter
           typeOnly: true
+        - file: ../../core/constants.js
+          imports:
+            - C_SI
+            - G_SI
       exports:
         - command
+        - weakFieldDomainNote
         - propagateUncertainty
       functions:
+        - weakFieldDomainNote
         - propagateUncertainty
       constants:
         - command
@@ -7769,6 +7782,9 @@ modules:
           imports:
             - CanonicalComparison
           typeOnly: true
+        - file: ../../numerical/formula.js
+          imports:
+            - eulerConstantNote
       exports:
         - command
         - neighbourhood
@@ -9270,6 +9286,7 @@ modules:
         - file: ./symbolic-constants.js
           imports:
             - CONSTANTS
+            - piMultipleValue
         - file: ./expr-eval.js
           imports:
             - evalExpr
@@ -10476,6 +10493,7 @@ modules:
         - file: ./symbolic-constants.js
           imports:
             - CONSTANTS
+            - piMultipleValue
       exports:
         - evalExpr
         - SymbolicEvalError
@@ -13236,8 +13254,11 @@ modules:
       exports:
         - CONSTANTS
         - CONSTANT_PROVENANCE
+        - piMultipleValue
       interfaces:
         - ConstantProvenance
+      functions:
+        - piMultipleValue
       constants:
         - CONSTANTS
         - CONSTANT_PROVENANCE
@@ -17480,6 +17501,7 @@ modules:
         - parseFormulaToAst
         - unknownFunctionMessage
         - callBuiltinFunction
+        - eulerConstantNote
         - parseFormula
         - FormulaError
       classes:
@@ -17490,6 +17512,7 @@ modules:
       functions:
         - unknownFunctionMessage
         - callBuiltinFunction
+        - eulerConstantNote
         - parseFormula
       constants:
         - BUILTIN_FUNCTION_NAMES
@@ -18655,11 +18678,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 383
   totalModules: 12
-  totalLinesOfCode: 83252
-  totalExports: 2777
+  totalLinesOfCode: 83474
+  totalExports: 2780
   totalClasses: 60
   totalInterfaces: 436
-  totalFunctions: 690
+  totalFunctions: 693
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 691
