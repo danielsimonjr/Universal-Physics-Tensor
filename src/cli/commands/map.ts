@@ -28,8 +28,8 @@ import type { EquationAnalysis } from '../../composition/user-equation.js';
 import type { CanonicalComparison } from '../../composition/canonical-compare.js';
 import { eulerConstantNote } from '../../numerical/formula.js';
 import { unboundEulerRefusal } from '../euler-guard.js';
-import { conventionLines } from '../conventions.js';
-import type { UnitMode } from '../../composition/natural-units.js';
+import { canonicalCheckFailed, conventionLines } from '../conventions.js';
+import { naturalConstantOverrides, type UnitMode } from '../../composition/natural-units.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--source', valueStyle: 'attached' },
@@ -260,7 +260,10 @@ async function analyzeEquation(
   // user's one restates, when the registry holds one (persona finding L2).
   const comparisons = user.parseError
     ? []
-    : await api.compareUserEquation(equation, catalogDims, { bindShortNames: options?.bindShortNames });
+    : await api.compareUserEquation(equation, catalogDims, {
+        bindShortNames: options?.bindShortNames,
+        ...(options?.units === undefined ? {} : { constantOverrides: naturalConstantOverrides(options.units) }),
+      });
   return { user, comparisons };
 }
 
@@ -274,15 +277,20 @@ function printEquationReport(
   comparisons: readonly CanonicalComparison[] = [],
 ): void {
   out('');
+  const placeholderNames = [
+    ...(user.placeholders ?? []),
+    ...(user.shortBindings ?? []).filter((b) => b.bound === false).map((b) => b.name),
+  ];
+  const unresolved = [...new Set([...(user.hints ?? []).map((h) => h.name), ...placeholderNames])];
   if (user.consistent === true) {
     out(`  ✓ dimensionally consistent: ${api.format(user.rhsDimension!)}`);
-  } else if (user.consistent === false && (user.hints ?? []).length > 0) {
+  } else if (user.consistent === false && unresolved.length > 0) {
     // An unknown name is checked as a dimensionless placeholder, so this mismatch is not a real
     // check and does not fail the command (exit 0). Say so on the line itself (persona finding N3).
-    const names = user.hints!.map((h) => `'${h.name}'`).join(', ');
+    const names = unresolved.map((n) => `'${n}'`).join(', ');
     out(
       `  · UNKNOWN: RHS is ${api.format(user.rhsDimension!)} but the target is ${api.format(user.targetDimension!)}; ` +
-        `the mismatch involves the unresolved placeholder${user.hints!.length > 1 ? 's' : ''} ${names} ` +
+        `the mismatch involves the unresolved placeholder${unresolved.length > 1 ? 's' : ''} ${names} ` +
         `(taken as dimensionless), so it is not a failed check`,
     );
   } else if (user.consistent === false) {
@@ -290,6 +298,13 @@ function printEquationReport(
       `  ⚠ dimensional MISMATCH: RHS is ${api.format(user.rhsDimension!)} but the target is ${api.format(
         user.targetDimension!
       )}`
+    );
+  } else if (user.rhsDimension && (user.placeholders ?? []).length > 0) {
+    const names = user.placeholders.map((n) => `'${n}'`).join(', ');
+    out(
+      `  · UNKNOWN: RHS is ${api.format(user.rhsDimension)} only because ${names} ` +
+        `${user.placeholders.length === 1 ? 'was' : 'were'} taken as dimensionless. ` +
+        'That is not the dimension of the formula, and the target is not a bound catalog name, so nothing was checked',
     );
   } else if (user.rhsDimension) {
     out(`  · RHS dimension: ${api.format(user.rhsDimension)} (target not in the catalog, so no comparison)`);
@@ -604,8 +619,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   // as a dimensionless placeholder, so its "mismatch" is not a real check.
   const exitCode =
     user !== null &&
-    ((user.consistent === false && (user.hints ?? []).length === 0) ||
-      comparisons.some((c) => c.kind === 'factor' || c.kind === 'form'))
+    ((user.consistent === false &&
+      (user.hints ?? []).length === 0 &&
+      (user.placeholders ?? []).length === 0 &&
+      !(user.shortBindings ?? []).some((b) => b.bound === false)) ||
+      canonicalCheckFailed(comparisons))
       ? EXIT_CHECK_FAILED
       : 0;
 
@@ -639,6 +657,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         targetDimension: user.targetDimension,
         hints: user.hints,
         shortBindings: user.shortBindings,
+        ...(user.placeholders.length === 0 ? {} : { placeholders: user.placeholders }),
         canonicalComparisons: comparisons,
       };
     }

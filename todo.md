@@ -1,5 +1,30 @@
 # UPT TODO
 
+## CLI dogfood, three personas (2026-09-29)
+
+Tier 10 `upt path` is on master. The reports are `docs/dogfood/2026-09-29-applied-physicist.md`,
+`docs/dogfood/2026-09-29-gr-qft.md` and `docs/dogfood/2026-09-29-engineering-physicist.md`.
+
+- [x] The `--allow-euler` note names `charge`, and that symbol is not defined. Charge is `e_charge`.
+- [x] `map --equation` does not rewrite `mu0` to `mu_0`, so a wire formula is dimensioned as if permeability were dimensionless. `upt eval` accepts `mu0` and `eps0` and does not accept `mu_0` or `epsilon_0`.
+- [x] An unbound name taken as dimensionless is printed as the RHS dimension when the target is not a bound catalog name.
+- [x] A declined one-letter catalog name says it did not match, then suggests itself.
+- [x] A Compton formula that agrees with one of the two entries exits 3 because the other differs by 2π.
+- [x] `--natural` and `--geometrized` still compare the prefactor at the SI values of c, ħ and G.
+- [x] `upt eval` does not print the unit-convention notes `evaluate` prints, and bare `A` is the ampere with no note that it is not the angstrom.
+- [x] An unknown `upt path` id is reported as missing from the other endpoint's family.
+- [x] For FLRW with k ≠ 0 the printed Ricci scalar is the finite-difference residual, not the closed form. Vacuum Ricci noise is listed as Ricci. Kerr `a` is a length and `a/M` is not printed.
+- [x] `cli/README.md` says every `--json` command exits 0. `upt help statuses` does not define the path refusal reasons.
+
+### Suggestions from that pass, not implemented
+
+- [ ] `upt metric` rejects `M=1Msun` and `theta=pi/2` (`not a finite number`).
+- [ ] `upt eval --show-parser --json` prints the bare word `mathts`.
+- [x] `upt eval --json` leaves the ħ truncation note on stderr and out of the envelope.
+- [ ] A violated `upt path` still prints the domain supremum above the line that no bound is claimed at the point.
+- [ ] A value binding cannot be an expression (`v=0.6*c` is read as a unit).
+- [ ] `upt eval` has no Stefan–Boltzmann constant. Do not add a bare `sigma`; the map hint already names `sigma_sb`.
+
 ## CLI GR/QFT dogfood (2026-09-29)
 
 Landed on master as #217 (`02c7dc6`). The checked rows are what that PR closed. The open rows under "Open CLI dogfood" are what it did not close.

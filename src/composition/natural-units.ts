@@ -12,6 +12,17 @@ import type { Dimension } from '../dimensional/types.js';
 /** Which constants may be set to 1. @internal */
 export type UnitMode = 'si' | 'natural' | 'geometrized';
 
+/**
+ * Constant values for a numeric comparison in this mode. `h = 2π` keeps
+ * `h = 2π ħ` when `ħ = 1`. SI comparisons pass no overrides.
+ * @internal
+ */
+export function naturalConstantOverrides(mode: Exclude<UnitMode, 'si'>): Record<string, number> {
+  const overrides: Record<string, number> = { c: 1, hbar: 1, h: 2 * Math.PI };
+  if (mode === 'geometrized') overrides.G = 1;
+  return overrides;
+}
+
 /** The powers of G, ħ and c that reconcile two dimensions, or null. @internal */
 export interface NaturalPowers {
   readonly nG: number;

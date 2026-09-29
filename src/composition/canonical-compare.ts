@@ -92,6 +92,11 @@ export interface CanonicalComparison {
    * (`restatesBridge`), not by the entry's own target name: that bridge's id and the entry's target.
    */
   readonly targetVia?: { readonly bridge: string; readonly its: string };
+  /**
+   * Set when the comparison evaluated c, ħ, h or G at a non-SI value
+   * (`--natural` / `--geometrized`). Absent on an SI comparison.
+   */
+  readonly evaluatedAt?: string;
 }
 
 /** A user source variable; with a dimension it may pair with a differently named canonical variable. */
@@ -361,11 +366,32 @@ function classify(
  *
  * @internal
  */
+function overrideValue(
+  name: string,
+  si: number,
+  overrides: Readonly<Record<string, number>> | undefined,
+): number {
+  if (overrides !== undefined && Object.prototype.hasOwnProperty.call(overrides, name)) return overrides[name]!;
+  return si;
+}
+
+/** A short label for a non-SI constant table, or undefined when the table is SI. */
+function overrideLabel(overrides: Readonly<Record<string, number>> | undefined): string | undefined {
+  if (overrides === undefined) return undefined;
+  const bits: string[] = [];
+  if (overrides.c === 1) bits.push('c = 1');
+  if (overrides.hbar === 1) bits.push('ħ = 1');
+  if (overrides.h === 2 * Math.PI) bits.push('h = 2π');
+  if (overrides.G === 1) bits.push('G = 1');
+  return bits.length === 0 ? undefined : bits.join(', ');
+}
+
 export function compareWithCanonical(
   target: string,
   sources: readonly ComparisonSource[],
   evaluateUser: (values: Readonly<Record<string, number>>) => number,
   entries: readonly CanonicalEquation[] = CANONICAL_EQUATIONS,
+  constantOverrides?: Readonly<Record<string, number>>,
 ): CanonicalComparison[] {
   const wantTarget = normalize(target);
   const wantSources = new Map<string, { name: string; dim?: Dimension }>();
@@ -441,7 +467,7 @@ export function compareWithCanonical(
         if (c === undefined) {
           throw new Error(`compareWithCanonical: governing constant '${cName}' is not in CONSTANTS`);
         }
-        return [u, c.value];
+        return [u, overrideValue(cName, c.value, constantOverrides)];
       }),
     );
     const userAt = (p: Readonly<Record<string, number>>) =>
@@ -466,7 +492,13 @@ export function compareWithCanonical(
       const symbols = freeSymbols(ast, new Map());
       const alignments = symbolAlignments(symbols, variables);
       const at = (alignment: ReadonlyMap<string, string>) => (p: Readonly<Record<string, number>>) =>
-        scale(evalExpr(ast, Object.fromEntries([...alignment].map(([sym, g]) => [sym, p[normalize(g)]!]))), p);
+        scale(
+          evalExpr(ast, {
+            ...(constantOverrides ?? {}),
+            ...Object.fromEntries([...alignment].map(([sym, g]) => [sym, p[normalize(g)]!])),
+          }),
+          p,
+        );
       if (alignments.length === 0) {
         results.push({
           id: entry.id,
@@ -513,7 +545,9 @@ export function compareWithCanonical(
       // name that is neither a variable nor a constant has no value, so the ratio is not finite and
       // the entry is reported as not compared; reading it as 1 made Kepler III "factor 122404".
       const monomial = d.monomial;
-      const constValues = new Map(constants.map((g) => [normalize(g.name), CONSTANTS[g.name]!.value]));
+      const constValues = new Map(
+        constants.map((g) => [normalize(g.name), overrideValue(g.name, CONSTANTS[g.name]!.value, constantOverrides)]),
+      );
       canonicalAt = (p) =>
         scale(
           Object.entries(monomial).reduce(
@@ -560,7 +594,8 @@ export function compareWithCanonical(
       ...paired, ...targetVia,
     });
   }
-  return results;
+  const label = overrideLabel(constantOverrides);
+  return label === undefined ? results : results.map((r) => ({ ...r, evaluatedAt: label }));
 }
 
 /**
@@ -570,7 +605,8 @@ export function compareWithCanonical(
  * The right-hand side is dimension-checked through `parsePhysics` and evaluated by
  * the active formula parser, the one `upt eval` uses, so a comparison accepts every
  * function `eval` accepts (`ln(2)`, `asin`, `atan2`; persona finding W7). A registered
- * constant takes its SI value, as in the canonical AST.
+ * constant takes its SI value, as in the canonical AST, unless
+ * `constantOverrides` replaces c, ħ, h or G (`--natural` / `--geometrized`).
  * Returns `[]` when the equation does not parse or no entry matches.
  *
  * @internal
@@ -578,7 +614,7 @@ export function compareWithCanonical(
 export async function compareUserEquation(
   equation: string,
   catalogDims: ReadonlyMap<string, Dimension>,
-  options?: { readonly bindShortNames?: boolean },
+  options?: { readonly bindShortNames?: boolean; readonly constantOverrides?: Readonly<Record<string, number>> },
 ): Promise<CanonicalComparison[]> {
   const dimsIn = new Map(catalogDims);
   for (const [name, dim] of formulaNameDimensions()) {
@@ -605,18 +641,26 @@ export async function compareUserEquation(
   } catch {
     return [];
   }
-  const constantValues = Object.fromEntries(Object.entries(CONSTANTS).map(([name, c]) => [name, c.value]));
+  const overrides = options?.constantOverrides;
+  const constantValues = Object.fromEntries(
+    Object.entries(CONSTANTS).map(([name, c]) => [name, overrideValue(name, c.value, overrides)]),
+  );
   // A name the catalog does not know carries no dimension, so it never pairs by dimension.
   const sources = [...resolved.entries()].map(([token, r]) => {
     if (declined(token)) return r;
     const dim = dimsIn.get(r);
     return dim === undefined ? r : { name: r, dim };
   });
-  return compareWithCanonical(target, sources, (values) =>
-    compiled.evaluate({
-      ...constantValues,
-      ...Object.fromEntries([...resolved].map(([s, r]) => [s, values[normalize(r)]!])),
-    }),
+  return compareWithCanonical(
+    target,
+    sources,
+    (values) =>
+      compiled.evaluate({
+        ...constantValues,
+        ...Object.fromEntries([...resolved].map(([s, r]) => [s, values[normalize(r)]!])),
+      }),
+    CANONICAL_EQUATIONS,
+    overrides,
   );
 }
 
@@ -643,8 +687,8 @@ export function describeComparison(c: CanonicalComparison): string {
   const who = `${c.id} (${c.name}${pairs.length === 0 ? '' : `; ${pairs.join('; ')}`})`;
   const at =
     c.constantsOnly === true
-      ? 'at the SI constant values (no free variable, so only the value is compared, not the form)'
-      : `at ${FIXED_POINT_EXPONENTS.length} fixed points`;
+      ? `at the ${c.evaluatedAt ?? 'SI'} constant values (no free variable, so only the value is compared, not the form)`
+      : `at ${FIXED_POINT_EXPONENTS.length} fixed points${c.evaluatedAt === undefined ? '' : ` (${c.evaluatedAt})`}`;
   switch (c.kind) {
     case 'agrees':
       return `✓ agrees with ${who}, prefactor included: yours/canonical = 1 ${at}${c.detail ? ` (${c.detail})` : ''}`;

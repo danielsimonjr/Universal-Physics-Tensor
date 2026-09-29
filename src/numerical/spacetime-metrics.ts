@@ -439,9 +439,9 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     };
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
     const t = tensorsOf(g, x, stepsFor(x));
-    return pack('minkowski', p, x, t, { ricciScalar: 0, kretschmann: 0 }, [
+    return stateCurvature(pack('minkowski', p, x, t, { ricciScalar: 0, kretschmann: 0 }, [
       'Minkowski in Cartesian-like coordinates (the angular part is not a sphere here; g_θθ = g_φφ = 1).',
-    ]);
+    ]));
   }
   if (metric === 'schwarzschild') {
     const p = metricParams(pairs, { M: M_SUN_SI, c: C_SI, G: G_SI, r: 0, theta: Math.PI / 2, phi: 0, t: 0 });
@@ -452,10 +452,10 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
     const t = tensorsOf(g, x, stepsFor(x));
     const K = schwarzschildKretschmann(p.M!, p.r!, p.c!, p.G!);
-    return pack('schwarzschild', p, x, t, { kretschmann: K, ricciScalar: 0, horizon_m: rs }, [
+    return stateCurvature(pack('schwarzschild', p, x, t, { kretschmann: K, ricciScalar: 0, horizon_m: rs }, [
       'Closed form: Kretschmann = 48 G² M² / (c⁴ r⁶), Ricci = 0.',
       'Christoffel symbols below are the finite-difference values.',
-    ]);
+    ]));
   }
   if (metric === 'flrw') {
     const p = metricParams(pairs, {
@@ -504,12 +504,12 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
       c: p.c,
       G: p.G,
     });
-    return pack('flrw', p, x, t, { ricciScalar: R, H2: sides.H2, friedmannRhs: sides.rhs }, [
+    return stateCurvature(pack('flrw', p, x, t, { ricciScalar: R, H2: sides.H2, friedmannRhs: sides.rhs }, [
       'ds² = −c² dt² + a(t)² [dr²/(1−k r²) + r² dΩ²], a(t) = a0 (t/t0)^n.',
       'Friedmann: H² = 8πGρ/3 − k c²/a² + Λ c²/3. Flat dust defaults n = 2/3 and ρ = 3 H²/(8πG). CE-friedmann is the flat term; CE-friedmann-curvature carries −k c²/a².',
       'Ricci scalar closed form: R = 6/c² (ä/a + H² + k c²/a²). Flat dust: R = 3 H²/c².',
       'Ricci and Kretschmann are finite-differenced at c = 1 and restored with 1/c² and 1/c⁴. Christoffel symbols are the SI difference.',
-    ]);
+    ]));
   }
   const p = metricParams(pairs, {
     M: M_SUN_SI,
@@ -528,12 +528,54 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
   const x: Pt = [p.t!, p.r!, p.theta!, p.phi!];
   const t = tensorsOf(g, x, stepsFor(x));
   const K = kerrKretschmann(Mgeom, p.r!, p.a!, p.theta!);
-  return pack('kerr', { ...p, M_geom_m: Mgeom }, x, t, { kretschmann: K }, [
+  const aOverM = p.a! / Mgeom;
+  const kerrNotes = [
     'Boyer–Lindquist, geometrized lengths: M stands for GM/c² and a is a length. Kretschmann is 1/length⁴.',
+  ];
+  if (p.a! !== 0 && Math.abs(p.a!) <= 1 && Mgeom > 10) {
+    kerrNotes.push(
+      `a = ${p.a} m is a length, so a/M = ${aOverM}. A dimensionless spin is a/(GM/c²), not the number passed as a.`,
+    );
+  }
+  return stateCurvature(pack('kerr', { ...p, M_geom_m: Mgeom, a_over_M: aOverM }, x, t, { kretschmann: K, ricciScalar: 0 }, [
+    ...kerrNotes,
     'Closed form: K = 48 M² (r² − a² cos²θ) [(r² + a² cos²θ)² − 16 r² a² cos²θ] / (r² + a² cos²θ)⁶.',
     'a = 0 reduces to the Schwarzschild Kretschmann 48 M²/r⁶.',
     'Geodesics (--geodesic) use the Carter constant. θ = π/2 is an equatorial circular orbit. Any other θ is an inclined spherical orbit with that polar turning point. ISCO and photon radii are closed forms in r/M.',
-  ]);
+  ]));
+}
+
+const relDiff = (got: number, want: number): number => Math.abs(got - want) / Math.max(Math.abs(want), 1e-30);
+
+/**
+ * The headline Ricci scalar is the closed form when the finite difference
+ * does not match it. A vacuum metric's finite-difference residual is not
+ * listed as Ricci. A scale factor that does not solve Friedmann says so.
+ */
+function stateCurvature(report: CurvatureReport): CurvatureReport {
+  const notes = [...report.notes];
+  let ricci = report.ricci;
+  let ricciScalar = report.ricciScalar;
+  const exactR = report.closedForm.ricciScalar;
+  if (exactR === 0 && Math.abs(report.ricciScalar) < 1e-6) {
+    ricciScalar = 0;
+    ricci = [];
+    notes.push('Ricci is 0 for this vacuum metric. A finite-difference residual is not listed.');
+  } else if (exactR !== undefined && relDiff(report.ricciScalar, exactR) > 1e-2) {
+    ricciScalar = exactR;
+    ricci = [];
+    notes.push(
+      'Ricci scalar is the closed form. The finite-difference scalar, restored from a c = 1 difference by 1/c², does not match it when spatial curvature is present, so those components are not listed.',
+    );
+  }
+  const H2 = report.closedForm.H2;
+  const rhs = report.closedForm.friedmannRhs;
+  if (H2 !== undefined && rhs !== undefined && relDiff(H2, rhs) > 1e-6) {
+    notes.push(
+      'H² and the Friedmann right-hand side differ, so this scale factor is not a solution of the Friedmann equation at the stated ρ, k and Λ. k is a curvature in 1/length²: k = 1 with c in m/s is a curvature radius of about a metre, not the dimensionless k = ±1 of geometrized cosmology.',
+    );
+  }
+  return { ...report, ricci, ricciScalar, notes };
 }
 
 function pack(

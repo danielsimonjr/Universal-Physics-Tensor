@@ -130,11 +130,15 @@ export function hyphenSubtractHint(
 
 /**
  * Spellings that must not be a bare `e`: `1-eccentricity^2` is the perihelion
- * factor `one_minus_e_sq`, and `eps0` is the constant `epsilon_0`.
+ * factor `one_minus_e_sq`, `eps0` and `epsilon0` are `epsilon_0`, and `mu0` is
+ * `mu_0`. `upt eval` already accepts `eps0` and `mu0`; this is the equation path.
  */
 function rewriteFormulaSpellings(text: string): string {
   return text
     .replace(/(?<![A-Za-z0-9_])eps0(?![A-Za-z0-9_])/g, 'epsilon_0')
+    .replace(/(?<![A-Za-z0-9_])epsilon0(?![A-Za-z0-9_])/g, 'epsilon_0')
+    .replace(/(?<![A-Za-z0-9_])mu0(?![A-Za-z0-9_])/g, 'mu_0')
+    .replace(/(?<![A-Za-z0-9_])kB(?![A-Za-z0-9_])/g, 'k_B')
     .replace(
       /(?<![A-Za-z0-9_])1\s*-\s*eccentricity\s*(?:\^|\*\*)\s*2(?![A-Za-z0-9_])/g,
       'one_minus_e_sq',
@@ -480,6 +484,12 @@ export interface EquationAnalysis {
    * Unruh formula's `a` is an acceleration (persona finding W6).
    */
   readonly shortBindings: readonly ShortBinding[];
+  /**
+   * RHS names given a dimensionless placeholder because they did not resolve.
+   * The reported RHS dimension treats them as dimensionless, so it is not a
+   * check of the formula until they are bound.
+   */
+  readonly placeholders: readonly string[];
   /** Set when `--natural` / `--geometrized` reconciled the two dimensions. */
   readonly naturalNote?: string;
 }
@@ -538,10 +548,11 @@ export async function analyzeUserEquation(
   const resolvedTarget = resolve(eq.target);
   const targetDimension = resolvedTarget ? (dimsIn.get(resolvedTarget) as Dimension) : null;
 
+  const placeholders = eq.sources.filter((s) => !resolve(s));
   const hints: EquationHint[] = [];
   if (exprForInference) {
-    const unmatchedSources = eq.sources.filter((s) => !resolve(s));
-    const totalUnmatched = unmatchedSources.length + (resolvedTarget ? 0 : 1);
+    const unmatchedSources = placeholders.filter((s) => bindShort || literalShort(s) === null);
+    const totalUnmatched = placeholders.length + (resolvedTarget ? 0 : 1);
     for (const s of unmatchedSources) {
       let byDim: string[] | null = null;
       let constants: string[] = [];
@@ -564,7 +575,7 @@ export async function analyzeUserEquation(
           : { name: s, suggestions: suggestQuantities(s, catalogNames, 5), byDimension: false, ...withConstants },
       );
     }
-    if (!resolvedTarget) {
+    if (!resolvedTarget && (bindShort || literalShort(eq.target) === null)) {
       hints.push({ name: eq.target, suggestions: suggestQuantities(eq.target, catalogNames, 5), byDimension: false });
     }
   }
@@ -572,6 +583,10 @@ export async function analyzeUserEquation(
   const declined = eq.sources
     .filter((s) => !bindShort && literalShort(s) !== null)
     .map((s) => ({ name: s, quantity: s, dim: dimsIn.get(s) as Dimension, bound: false as const }));
+  const declinedTarget =
+    !bindShort && literalShort(eq.target) !== null
+      ? [{ name: eq.target, quantity: eq.target, dim: dimsIn.get(eq.target) as Dimension, bound: false as const }]
+      : [];
   const boundShort = eq.sources
     .filter((s) => s.length === 1 && resolve(s) !== null)
     .map((s) => ({ name: s, quantity: resolve(s)!, dim: dimsIn.get(resolve(s)!) as Dimension }));
@@ -606,7 +621,8 @@ export async function analyzeUserEquation(
     targetDimension,
     consistent,
     hints,
-    shortBindings: [...declined, ...boundShort],
+    shortBindings: [...declined, ...boundShort, ...declinedTarget],
+    placeholders,
     ...(natural === undefined ? {} : { naturalNote: natural }),
   };
 }

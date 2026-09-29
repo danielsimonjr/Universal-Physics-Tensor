@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 392
   totalModules: 12
-  totalExports: 2824
+  totalExports: 2828
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5561,11 +5561,9 @@ modules:
         - file: ../dimensional/units.js
           imports:
             - convertValue
+            - unitConventionNotes
             - UnitError
             - TemperatureReading
-        - file: ../core/constants.js
-          imports:
-            - M_SUN_SI
         - file: ./evaluators.js
           imports:
             - EvaluatorParameter
@@ -7468,6 +7466,7 @@ modules:
             - withParser
         - file: ../conventions.js
           imports:
+            - canonicalCheckFailed
             - conventionLines
         - file: ../../dimensional/types.js
           imports:
@@ -7554,6 +7553,7 @@ modules:
           imports:
             - HBAR_TRUNCATION_NOTE
             - codataScope
+            - evalUnitNotes
             - parseEvalToken
         - file: ../../composition/natural-units.js
           imports:
@@ -7834,11 +7834,12 @@ modules:
             - unboundEulerRefusal
         - file: ../conventions.js
           imports:
+            - canonicalCheckFailed
             - conventionLines
         - file: ../../composition/natural-units.js
           imports:
+            - naturalConstantOverrides
             - UnitMode
-          typeOnly: true
       exports:
         - command
         - neighbourhood
@@ -8170,8 +8171,10 @@ modules:
       internalDependencies: []
       exports:
         - JEANS_FORMULA_NOTE
+        - canonicalCheckFailed
         - conventionLines
       functions:
+        - canonicalCheckFailed
         - conventionLines
       constants:
         - JEANS_FORMULA_NOTE
@@ -8227,6 +8230,9 @@ modules:
           imports:
             - EPS0_SI
             - MU0_SI
+        - file: ../dimensional/units.js
+          imports:
+            - unitConventionNotes
         - file: ../composition/natural-units.js
           imports:
             - UnitMode
@@ -8235,9 +8241,11 @@ modules:
         - HBAR_TRUNCATION_NOTE
         - codataScope
         - parseEvalToken
+        - evalUnitNotes
       functions:
         - codataScope
         - parseEvalToken
+        - evalUnitNotes
       constants:
         - HBAR_TRUNCATION_NOTE
     src/cli/expr-print.ts:
@@ -11407,11 +11415,13 @@ modules:
             - Dimension
           typeOnly: true
       exports:
+        - naturalConstantOverrides
         - naturalPowers
         - naturalNote
       interfaces:
         - NaturalPowers
       functions:
+        - naturalConstantOverrides
         - naturalPowers
         - naturalNote
     src/composition/poster-source.ts:
@@ -15045,6 +15055,7 @@ modules:
             - GM_SUN_SI
             - M_SUN_SI
       exports:
+        - unitConventionNotes
         - parseUnit
         - convertValue
         - unitDimension
@@ -15055,6 +15066,7 @@ modules:
       interfaces:
         - ParsedUnit
       functions:
+        - unitConventionNotes
         - parseUnit
         - convertValue
         - unitDimension
@@ -19051,16 +19063,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 392
   totalModules: 12
-  totalLinesOfCode: 86184
-  totalExports: 2824
+  totalLinesOfCode: 86421
+  totalExports: 2828
   totalClasses: 59
   totalInterfaces: 443
-  totalFunctions: 722
+  totalFunctions: 726
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 701
   totalReExports: 1341
-  totalTypeOnlyImports: 534
+  totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

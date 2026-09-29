@@ -122,6 +122,29 @@ function parseFactors(text: string, sign: 1 | -1): { scale: number; dim: Dimensi
   return { scale, dim };
 }
 
+/**
+ * Spellings that convert correctly and still mean something else to a reader.
+ * `myr` is a milliyear, `Msun` is `M_SUN_SI`, bare `G` is the gauss, bare `T`
+ * is the tesla, and bare `A` is the ampere rather than the angstrom.
+ * @internal
+ */
+export function unitConventionNotes(given: string): string[] {
+  const notes: string[] = [];
+  const symbols = given.split(/[*·/\s^0-9()+-]+/).filter((s) => s.length > 0);
+  if (symbols.includes('myr')) {
+    notes.push('myr is a milliyear (the SI prefix m on yr = 0.001 yr), not a million years; a million years is Myr');
+  }
+  if (symbols.includes('Msun')) {
+    notes.push(
+      `Msun is ${M_SUN_SI} kg (M_SUN_SI), not GM☉/G; G×Msun is about 3.0e-4 high versus the IAU GM☉. Use the unit Msun_iau, or the eval name GM_sun, for GM_SUN_SI`,
+    );
+  }
+  if (symbols.includes('G')) notes.push('bare G is the gauss (1e-4 T); GPa is still a gigapascal');
+  if (symbols.includes('T')) notes.push('bare T is the tesla; Ts is a terasecond');
+  if (symbols.includes('A')) notes.push('bare A is the ampere, not the angstrom; write angstrom or Å for 10^-10 m');
+  return notes;
+}
+
 /** Parse a unit expression; the empty string is dimensionless. @internal */
 export function parseUnit(text: string): ParsedUnit {
   const t = text.trim();

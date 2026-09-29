@@ -194,7 +194,10 @@ Usage:
         and every horizon still holds at --at (a bound outside its regime is
         not claimed). When the composition table declines to compose, the path
         carries no bound: it prints 'no composite claim', names what composing
-        would need, and exits 0. --sweep evaluates the same verdict at 2–200
+        would need, and exits 0. Across families a matching norm name is not a
+        transport (reason cross-family-unmapped, still exit 0). A multi-premise
+        bridge is named and is not a step. Exit 3 is a regime or horizon that
+        was checked and failed, including under --json. --sweep evaluates the same verdict at 2–200
         samples of one parameter (a row outside a regime or past a horizon
         carries no error); --csv writes the rows as CSV; --compare=<to2> sweeps
         a second route from the same source beside it and marks NEITHER, with

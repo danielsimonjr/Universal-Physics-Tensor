@@ -5,6 +5,24 @@
  * @internal
  */
 
+const COMPTON_PAIR = new Set(['CE-compton-wavelength', 'CE-compton-wavelength-full']);
+
+/**
+ * A factor or form difference is a failed check, except the Compton pair:
+ * both entries answer to `compton-wavelength` and differ by 2π, so a formula
+ * that agrees with one of them has matched that convention. The other
+ * difference is still printed. A formula that matches neither still fails.
+ * @internal
+ */
+export function canonicalCheckFailed(
+  comparisons: readonly { readonly id: string; readonly kind: string }[],
+): boolean {
+  const hard = comparisons.filter((c) => c.kind === 'factor' || c.kind === 'form');
+  if (hard.length === 0) return false;
+  const agreed = comparisons.some((c) => COMPTON_PAIR.has(c.id) && c.kind === 'agrees');
+  return !(agreed && hard.every((c) => COMPTON_PAIR.has(c.id)));
+}
+
 /** One line per convention a listed comparison is ambiguous about. @internal */
 export function conventionLines(ids: readonly string[]): string[] {
   const has = new Set(ids);

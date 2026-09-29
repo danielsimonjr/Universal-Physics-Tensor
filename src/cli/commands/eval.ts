@@ -13,7 +13,7 @@ import { UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { eulerConstantNote } from '../../numerical/formula.js';
 import { unboundEulerRefusal, withParser } from '../euler-guard.js';
-import { HBAR_TRUNCATION_NOTE, codataScope, parseEvalToken } from '../eval-numbers.js';
+import { HBAR_TRUNCATION_NOTE, codataScope, evalUnitNotes, parseEvalToken } from '../eval-numbers.js';
 import type { UnitMode } from '../../composition/natural-units.js';
 import { UnitError } from '../../dimensional/units.js';
 
@@ -58,7 +58,7 @@ const HELP = `upt eval "<formula>" name=value ...
         Elementary charge is e_charge, not e. An unbound e under MathTS is
         refused (exit 2) unless you pass e=<number> or --allow-euler. CODATA
         names are filled in when you omit them: G, c, hbar, h, k_B, e_charge,
-        m_e, eps0, mu0, M_sun, GM_sun. A value may carry a unit (M=1Msun,
+        m_e, eps0, epsilon_0, mu0, mu_0, kB, M_sun, GM_sun. A value may carry a unit (M=1Msun,
         B=1T, x=1AU). --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts or builtin and, with no
         formula, exits 0. --debug prints the parser and its version to stderr.
@@ -115,7 +115,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
 
-  if (mode === 'si' && cf.variables.includes('hbar')) err(HBAR_TRUNCATION_NOTE);
+  const notes: string[] = [];
+  if (mode === 'si' && cf.variables.includes('hbar')) notes.push(HBAR_TRUNCATION_NOTE);
+  for (const raw of positionals.slice(1)) {
+    for (const note of evalUnitNotes(raw.slice(raw.indexOf('=') + 1))) {
+      if (!notes.includes(note)) notes.push(note);
+    }
+  }
+  for (const note of notes) err(note);
 
   let value: number;
   try {
@@ -125,7 +132,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   if (isJson) {
-    emitJson({ command: 'eval', result: { value, ...(mode === 'si' ? {} : { units: mode }) } }, ctx.write);
+    emitJson(
+      {
+        command: 'eval',
+        result: { value, ...(notes.length === 0 ? {} : { notes }), ...(mode === 'si' ? {} : { units: mode }) },
+      },
+      ctx.write,
+    );
     return 0;
   }
 

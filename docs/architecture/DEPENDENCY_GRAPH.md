@@ -2500,8 +2500,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/units.js` | `convertValue, UnitError, TemperatureReading` | Import |
-| `../core/constants.js` | `M_SUN_SI` | Import |
+| `../dimensional/units.js` | `convertValue, unitConventionNotes, UnitError, TemperatureReading` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
 **Exports:**
@@ -3386,7 +3385,7 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
 | `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
-| `../conventions.js` | `conventionLines` | Import |
+| `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -3425,7 +3424,7 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
 | `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
-| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope, parseEvalToken` | Import |
+| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope, evalUnitNotes, parseEvalToken` | Import |
 | `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/units.js` | `UnitError` | Import |
 
@@ -3547,8 +3546,8 @@ The codebase is organized into the following modules:
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
 | `../euler-guard.js` | `unboundEulerRefusal` | Import |
-| `../conventions.js` | `conventionLines` | Import |
-| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
+| `../../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -3725,7 +3724,7 @@ The codebase is organized into the following modules:
 ### `src/cli/conventions.ts` - Convention lines the CLI prints beside a comparison.
 
 **Exports:**
-- Functions: `conventionLines`
+- Functions: `canonicalCheckFailed`, `conventionLines`
 - Constants: `JEANS_FORMULA_NOTE`
 
 ---
@@ -3758,10 +3757,11 @@ The codebase is organized into the following modules:
 | `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI` | Import |
 | `../dimensional/units.js` | `parseUnit, UnitError` | Import |
 | `../composition/formula-names.js` | `EPS0_SI, MU0_SI` | Import |
+| `../dimensional/units.js` | `unitConventionNotes` | Import |
 | `../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
-- Functions: `codataScope`, `parseEvalToken`
+- Functions: `codataScope`, `parseEvalToken`, `evalUnitNotes`
 - Constants: `HBAR_TRUNCATION_NOTE`
 
 ---
@@ -4773,7 +4773,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `NaturalPowers`
-- Functions: `naturalPowers`, `naturalNote`
+- Functions: `naturalConstantOverrides`, `naturalPowers`, `naturalNote`
 
 ---
 
@@ -6248,7 +6248,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `UnitError`
 - Interfaces: `ParsedUnit`
-- Functions: `parseUnit`, `convertValue`, `unitDimension`, `unitTables`
+- Functions: `unitConventionNotes`, `parseUnit`, `convertValue`, `unitDimension`, `unitTables`
 
 ---
 
@@ -7423,15 +7423,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 392 |
 | Total Modules | 12 |
-| Total Lines of Code | 86184 |
-| Total Exports | 2824 |
+| Total Lines of Code | 86421 |
+| Total Exports | 2828 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
 | Total Interfaces | 443 |
-| Total Functions | 722 |
+| Total Functions | 726 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 534 |
+| Type-only Imports | 533 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

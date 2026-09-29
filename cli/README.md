@@ -233,7 +233,9 @@ An unrecognised value exits with an error and status `1`.
 
 Every data-bearing command (all 25 — every command in the tables above except
 `help` and `version`) accepts a global `--json` flag: instead of the text
-report, it prints one JSON envelope to stdout and exits `0`.
+report, it prints one JSON envelope to stdout. The exit code is the text
+command's exit code. A check that ran and failed is still exit 3 under
+`--json`. A no-claim, including `cross-family-unmapped`, stays exit 0.
 
 ```bash
 node bin/upt.mjs priority --json

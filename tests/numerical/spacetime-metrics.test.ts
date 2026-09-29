@@ -75,6 +75,28 @@ describe('finite-difference curvature', () => {
     const r = curvatureReport('flrw', ['k=1', 't=2', 'rho=0', 'Lambda=0']);
     expect(r.closedForm.friedmannRhs).not.toBe(r.closedForm.H2);
     expect(r.notes.join(' ')).toMatch(/k c²\/a²/);
+    // The headline scalar is the closed form. Restoring a c=1 finite
+    // difference by 1/c² drops the spatial-curvature piece, which is why
+    // the raw difference was ~1e-17 while the closed form is O(1).
+    expect(r.ricciScalar).toBeCloseTo(r.closedForm.ricciScalar as number, 6);
+    expect(r.notes.join(' ')).toMatch(/not a solution of the Friedmann equation/);
+  });
+
+  it('a vacuum metric does not list a finite-difference residual as Ricci', () => {
+    const r = curvatureReport('schwarzschild');
+    expect(r.ricciScalar).toBe(0);
+    expect(r.ricci).toEqual([]);
+    expect(r.notes.join(' ')).toMatch(/finite-difference residual is not listed/);
+  });
+
+  it('Kerr a is a length, and a near-unity metre on a solar mass is not a spin', () => {
+    const solar = curvatureReport('kerr', ['a=0.9']);
+    expect(solar.parameters.a_over_M).toBeLessThan(1e-3);
+    expect(solar.notes.join(' ')).toMatch(/dimensionless spin/);
+    const spin = curvatureReport('kerr', ['a=1000', 'r=2e4']);
+    expect(spin.parameters.a_over_M).toBeGreaterThan(0.5);
+    expect(spin.notes.join(' ')).not.toMatch(/dimensionless spin/);
+    expect(curvatureReport('kerr', ['a=0']).notes.join(' ')).not.toMatch(/dimensionless spin/);
   });
 
   it('Kerr Kretschmann matches the closed form, and a = 0 matches Schwarzschild', () => {

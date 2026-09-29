@@ -11,6 +11,7 @@
 import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI } from '../core/constants.js';
 import { parseUnit, UnitError } from '../dimensional/units.js';
 import { EPS0_SI, MU0_SI } from '../composition/formula-names.js';
+import { unitConventionNotes } from '../dimensional/units.js';
 import type { UnitMode } from '../composition/natural-units.js';
 
 /** ħ in eval is the exact quotient H_SI/(2π). */
@@ -29,7 +30,10 @@ export function codataScope(mode: UnitMode): Record<string, number> {
     e_charge: E_SI,
     m_e: M_E_SI,
     eps0: EPS0_SI,
+    epsilon_0: EPS0_SI,
     mu0: MU0_SI,
+    mu_0: MU0_SI,
+    kB: K_B_SI,
     M_sun: M_SUN_SI,
     GM_sun: GM_SUN_SI,
     Msun_iau: GM_SUN_SI / G_SI,
@@ -62,4 +66,13 @@ export function parseEvalToken(raw: string): number {
   const unit = parseUnit(m[2]);
   if (unit.affine === 'celsius') return v * unit.scale + 273.15;
   return v * unit.scale;
+}
+
+/** Convention notes for a `name=value` token that carries a unit. @internal */
+export function evalUnitNotes(raw: string): readonly string[] {
+  const trimmed = raw.trim();
+  if (/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(trimmed)) return [];
+  const m = /^\s*[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?\s*(.*?)\s*$/.exec(trimmed);
+  if (m === null || m[1] === undefined || m[1] === '') return [];
+  return unitConventionNotes(m[1]);
 }
