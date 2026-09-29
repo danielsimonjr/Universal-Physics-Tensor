@@ -263,9 +263,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (args.flags.has('searchable-only') && args.flags.has('all')) {
       throw new UsageError('upt probe scan: pick one of --searchable-only or --all');
     }
-    // Default: searchable only (persona L3/I4). Today that is often empty —
-    // say so, and point at `upt discover` / `--all` rather than dumping 200+
-    // Product A wrappers as if they were a Product B frontier.
+    // Default: the searchable expression gaps (one prediction-residual per
+    // applied case). Product A wrappers stay hidden unless `--all`. The
+    // zero-searchable warning is only for a scan that really has none.
     const showAll = args.flags.has('all');
     const allGaps = api.scanWithExpressionGaps(graph);
     const searchable = allGaps.filter((g) => g.searchability.searchable);

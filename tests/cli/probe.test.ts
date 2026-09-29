@@ -46,6 +46,27 @@ describe('upt probe', () => {
     expect(t).toMatch(/not-searchable/);
   });
 
+  it('scan --json reports the same catalog split as the library pin', async () => {
+    const c = capture();
+    expect(await runCli(['probe', 'scan', '--json'], c.io)).toBe(0);
+    const env = JSON.parse(text(c));
+    expect(env.options.scan).toEqual({ total: 238, searchable: 6, showing: 'searchable-only' });
+    expect(env.result).toHaveLength(6);
+    expect(env.result.every((g: { kind: string; searchability: { searchable: boolean } }) =>
+      g.kind === 'prediction-residual' && g.searchability.searchable)).toBe(true);
+
+    const all = capture();
+    expect(await runCli(['probe', 'scan', '--all', '--json'], all.io)).toBe(0);
+    const envAll = JSON.parse(text(all));
+    expect(envAll.options.scan).toEqual({ total: 238, searchable: 6, showing: 'all' });
+    const kinds: Record<string, number> = {};
+    for (const g of envAll.result as { kind: string; searchability: { searchable: boolean } }[]) {
+      kinds[g.kind] = (kinds[g.kind] ?? 0) + 1;
+      if (g.kind !== 'prediction-residual') expect(g.searchability.searchable).toBe(false);
+    }
+    expect(kinds).toEqual({ 'relation-link': 216, 'regime-transition': 16, 'prediction-residual': 6 });
+  });
+
   it('show a missing gap → exit 1', async () => {
     const c = capture();
     expect(await runCli(['probe', 'show', 'fg-does-not-exist'], c.io)).toBe(1);
