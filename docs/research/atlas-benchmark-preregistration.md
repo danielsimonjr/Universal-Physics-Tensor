@@ -386,3 +386,21 @@ and 3 are NOT MET (Amendments 4 and 11). Mothership relayed the owner's decision
 - **(b) is future work, not started:** hybrid retrieval with qwen3-embedding:4b. The ROADMAP records it.
 
 No threshold, item, rater assignment, truth set or hash changes.
+
+**Amendment 13 (2026-09-29) — the owner unfroze `src/canonical`, and the live export was re-pinned.**
+The criterion 3 study stays closed. Its verdicts are the ones Amendment 12 accepted. They are not
+re-run and not re-scored. Amendment 8 still hashes the corpus the labelers saw. That file landed in
+commit 1263bce, exported from the canonical tree at c144150: 107 records, 89 expressions, SHA-256
+232062ff9fd0e6c1f3fcc56d489c0c1de92c4db6370c8696eb42b4463a4f2fcc. The labeler files still name that
+hash. The study runner still refuses a tree whose `corpus.json` is not that file.
+
+The working-tree `docs/research/criterion3/corpus.json` is now the live registry export, so the
+export test can check it against `CANONICAL_EQUATIONS`. `freeze.json` records that export. Queries
+are unchanged, and their Amendment 8 hash still matches.
+
+| File | SHA-256 |
+|---|---|
+| corpus.json | 4e0e5effa29476cd827ac6bbff8a3a8682c710a0661734541cec01b968855d5f |
+
+The live export has 109 records and 92 expressions, pinned at commit
+d93e0b8edc8aee7bbe25cc223b490adbc6d7d022. No threshold, item, rater assignment or truth set changes.

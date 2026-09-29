@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (100)";
+    label="anchored cluster (101)";
     j_be_11_zurek [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-11"];
     q_relaxation_rate [shape=ellipse,label="relaxation-rate"];
     q_relaxation_rate -> j_be_11_zurek;
@@ -148,7 +148,7 @@ digraph PhysicsMap {
     q_linear_density -> j_CE_string_wave_speed;
     q_speed [shape=ellipse,label="speed"];
     j_CE_string_wave_speed -> q_speed;
-    j_CE_compton_wavelength [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Compton wavelength"];
+    j_CE_compton_wavelength [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Reduced Compton wavelength"];
     q_mass -> j_CE_compton_wavelength;
     q_compton_wavelength [shape=ellipse,label="compton-wavelength"];
     j_CE_compton_wavelength -> q_compton_wavelength;
@@ -479,6 +479,10 @@ digraph PhysicsMap {
     j_CE_de_broglie [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="de Broglie wavelength"];
     q_p -> j_CE_de_broglie;
     j_CE_de_broglie -> q_compton_wavelength;
+    j_CE_compton_wavelength_full [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Compton wavelength"];
+    q_mass -> j_CE_compton_wavelength_full;
+    q_compton_wavelength_full [shape=ellipse,label="compton-wavelength-full"];
+    j_CE_compton_wavelength_full -> q_compton_wavelength_full;
     j_CE_carrier_mobility [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Carrier mobility"];
     q_charge -> j_CE_carrier_mobility;
     q_relaxation_time [shape=ellipse,label="relaxation-time"];
@@ -641,7 +645,7 @@ digraph PhysicsMap {
     j_CE_planck_length -> q_planck_length;
   }
   subgraph cluster_2 {
-    label="anchored cluster (3)";
+    label="anchored cluster (4)";
     j_be_19 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-19"];
     q_mass_density [shape=ellipse,label="mass-density"];
     q_mass_density -> j_be_19;
@@ -656,8 +660,15 @@ digraph PhysicsMap {
     q_brane_tension [shape=ellipse,label="brane-tension"];
     q_brane_tension -> j_be_54;
     j_be_54 -> q_hubble_rate_squared;
-    j_CE_friedmann [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Friedmann equation (flat, matter-dominated)"];
+    j_CE_friedmann_curvature [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Friedmann equation (with curvature)"];
     q_rho [shape=ellipse,label="rho"];
+    q_rho -> j_CE_friedmann_curvature;
+    q_curvature_k [shape=ellipse,label="curvature-k"];
+    q_curvature_k -> j_CE_friedmann_curvature;
+    q_scale_factor [shape=ellipse,label="scale-factor"];
+    q_scale_factor -> j_CE_friedmann_curvature;
+    j_CE_friedmann_curvature -> q_hubble_rate_squared;
+    j_CE_friedmann [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Friedmann equation (flat, matter-dominated)"];
     q_rho -> j_CE_friedmann;
     j_CE_friedmann -> q_hubble_rate_squared;
   }

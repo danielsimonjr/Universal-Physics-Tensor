@@ -5609,6 +5609,7 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/bridges/be-26-encoding.test.ts",
       "tests/bridges/be-56-casimir.test.ts",
       "tests/bridges/be-58-johnson-nyquist.test.ts",
       "tests/bridges/be-62-bcs-gap.test.ts",
@@ -8426,6 +8427,7 @@
     ],
     "tests/bridges/be-25-reformulation.test.ts": [],
     "tests/bridges/be-26-encoding.test.ts": [
+      "src/core/constants.ts",
       "src/bridges/equations/be-26-dna-tunneling.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",

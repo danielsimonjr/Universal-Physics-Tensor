@@ -30,6 +30,7 @@
  * and excited-state lifetimes are included.
  */
 import { describe, it, expect } from 'vitest';
+import { HBAR_SI } from '../../src/core/constants.js';
 import {
   DNA_TUNNELING_RHS,
   DNA_TUNNELING_WKB_ARG,
@@ -215,7 +216,7 @@ describe('BE-26 DNA Mutation Quantum Tunneling Rate', () => {
       const eV = 1.602176634e-19;
       const m = 1.67e-27;
       const V = 0.4 * eV;
-      const hbar = 1.054571817e-34;
+      const hbar = HBAR_SI;
       const p = Math.sqrt(2 * m * V);
       for (const L of [0.5e-10, 1e-10, 1.5e-10, 2e-10, 3e-10]) {
         const G_L = evaluateDNATunneling({

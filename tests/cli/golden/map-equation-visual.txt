@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — canonical (standard-physics L-layer, bridges excluded)
-  subgraph cl_0["anchored cluster (84)"]
+  subgraph cl_0["anchored cluster (85)"]
     direction LR
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
@@ -26,7 +26,7 @@ flowchart LR
     q_linear_density --> j_CE_string_wave_speed
     q_speed(["speed"]):::qty
     j_CE_string_wave_speed --> q_speed
-    j_CE_compton_wavelength["Compton wavelength"]:::law
+    j_CE_compton_wavelength["Reduced Compton wavelength"]:::law
     q_mass --> j_CE_compton_wavelength
     q_compton_wavelength(["compton-wavelength"]):::qty
     j_CE_compton_wavelength --> q_compton_wavelength
@@ -361,6 +361,10 @@ flowchart LR
     j_CE_de_broglie["de Broglie wavelength"]:::law
     q_p --> j_CE_de_broglie
     j_CE_de_broglie --> q_compton_wavelength
+    j_CE_compton_wavelength_full["Compton wavelength"]:::law
+    q_mass --> j_CE_compton_wavelength_full
+    q_compton_wavelength_full(["compton-wavelength-full"]):::qty
+    j_CE_compton_wavelength_full --> q_compton_wavelength_full
     j_CE_carrier_mobility["Carrier mobility"]:::law
     q_charge --> j_CE_carrier_mobility
     q_relaxation_time(["relaxation-time"]):::qty
@@ -511,6 +515,21 @@ flowchart LR
   end
   subgraph cl_2["anchored cluster (2)"]
     direction LR
+    j_CE_friedmann_curvature["Friedmann equation (with curvature)"]:::law
+    q_rho(["rho"]):::qty
+    q_rho --> j_CE_friedmann_curvature
+    q_curvature_k(["curvature-k"]):::qty
+    q_curvature_k --> j_CE_friedmann_curvature
+    q_scale_factor(["scale-factor"]):::qty
+    q_scale_factor --> j_CE_friedmann_curvature
+    q_hubble_rate_squared(["hubble-rate-squared"]):::qty
+    j_CE_friedmann_curvature --> q_hubble_rate_squared
+    j_CE_friedmann["Friedmann equation (flat, matter-dominated)"]:::law
+    q_rho --> j_CE_friedmann
+    j_CE_friedmann --> q_hubble_rate_squared
+  end
+  subgraph cl_3["anchored cluster (2)"]
+    direction LR
     j_CE_half_life["Radioactive half-life"]:::law
     q_decay_constant(["decay-constant"]):::qty
     q_decay_constant --> j_CE_half_life
@@ -525,7 +544,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (20)"]
+  subgraph cl_iso["isolated (19)"]
     direction LR
     j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
     q_A(["A"]):::qty
@@ -557,11 +576,6 @@ flowchart LR
     q_work_done_by_system --> j_CE_first_law_thermodynamics
     q_internal_energy_change(["internal-energy-change"]):::qty
     j_CE_first_law_thermodynamics --> q_internal_energy_change
-    j_CE_friedmann["Friedmann equation (flat, matter-dominated)"]:::law
-    q_rho(["rho"]):::qty
-    q_rho --> j_CE_friedmann
-    q_hubble_rate_squared(["hubble-rate-squared"]):::qty
-    j_CE_friedmann --> q_hubble_rate_squared
     j_CE_hubble_distance["Hubble distance"]:::law
     q_hubble_rate(["hubble-rate"]):::qty
     q_hubble_rate --> j_CE_hubble_distance
