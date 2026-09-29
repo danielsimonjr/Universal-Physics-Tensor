@@ -3761,8 +3761,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI` | Import |
-| `../composition/formula-names.js` | `EPS0_SI, MU0_SI` | Import |
+| `../core/constants.js` | `E_SI, M_E_SI, M_SUN_SI` | Import |
+| `../composition/formula-names.js` | `MU0_SI` | Import |
+| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
@@ -7450,7 +7451,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 393 |
 | Total Modules | 12 |
-| Total Lines of Code | 86836 |
+| Total Lines of Code | 86841 |
 | Total Exports | 2829 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |

@@ -8231,19 +8231,15 @@ modules:
       internalDependencies:
         - file: ../core/constants.js
           imports:
-            - C_SI
             - E_SI
-            - G_SI
-            - GM_SUN_SI
-            - HBAR_SI
-            - H_SI
-            - K_B_SI
             - M_E_SI
             - M_SUN_SI
         - file: ../composition/formula-names.js
           imports:
-            - EPS0_SI
             - MU0_SI
+        - file: ../composition/symbolic-constants.js
+          imports:
+            - CONSTANTS
         - file: ../composition/natural-units.js
           imports:
             - UnitMode
@@ -19135,7 +19131,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 393
   totalModules: 12
-  totalLinesOfCode: 86836
+  totalLinesOfCode: 86841
   totalExports: 2829
   totalClasses: 59
   totalInterfaces: 444
