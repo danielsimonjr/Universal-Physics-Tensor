@@ -45,8 +45,8 @@ describe('Flat CODATA / SI constants — src/core/constants.ts', () => {
     expect(G_SI).toBeCloseTo(6.67430e-11, 16);
   });
 
-  it('HBAR_SI matches CODATA 2018 reduced Planck constant', () => {
-    expect(HBAR_SI).toBeCloseTo(1.054571817e-34, 43);
+  it('HBAR_SI is exactly H_SI / (2π)', () => {
+    expect(HBAR_SI).toBe(H_SI / (2 * Math.PI));
   });
 
   it('ALPHA matches CODATA 2018 fine-structure constant', () => {
@@ -70,8 +70,8 @@ describe('Flat CODATA / SI constants — src/core/constants.ts', () => {
   });
 
   // ── Cross-consistency checks ─────────────────────────────────────────────
-  it('HBAR_SI ≈ H_SI / (2π) to better than 1e-9 relative', () => {
-    const expected = H_SI / (2 * Math.PI);
-    expect(Math.abs(HBAR_SI - expected) / expected).toBeLessThan(1e-9);
+  it('HBAR_SI differs from the truncated CODATA display by a relative 6.127e-10', () => {
+    const display = 1.054571817e-34;
+    expect(Math.abs(HBAR_SI - display) / HBAR_SI).toBeCloseTo(6.127e-10, 12);
   });
 });

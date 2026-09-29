@@ -39,6 +39,7 @@ const EXPECTED: Record<string, number> = {
   'CE-magnetic-field-wire': 1 / (2 * Math.PI),
   'CE-larmor-power': 1 / (6 * Math.PI),
   'CE-field-energy-density': 0.5,
+  'CE-compton-wavelength': 1,
 };
 
 /** A dimensionless number used as a FACTOR (not as an exponent) anywhere in the AST. */

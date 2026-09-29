@@ -106,13 +106,15 @@ describe('upt metric', () => {
     const r = 1e8;
     const closed = (48 * G_SI * G_SI * M * M) / (C_SI ** 4 * r ** 6);
     expect(Math.abs(env.result.kretschmann - closed) / Math.abs(closed)).toBeLessThan(1e-3);
-    expect(env.result.signatureNote).toMatch(/\(\+,-,-,-\)/);
+    expect(env.result.signatureNote).toMatch(/canonical Einstein-equation metric node/);
+    expect(env.result.signature).toBe('(-,+,+,+)');
   });
 
-  it('Kerr --geodesic says the integration is deferred', async () => {
+  it('Kerr --geodesic integrates an equatorial circular orbit', async () => {
     const c = capture();
     expect(await runCli(['curvature', 'kerr', '--geodesic', 'a=0', 'r=1e8'], c.io)).toBe(0);
-    expect(text(c)).toMatch(/Kerr geodesic integration is not implemented/);
+    expect(text(c)).toMatch(/geodesic: circular orbit/);
+    expect(text(c)).not.toMatch(/not implemented/);
   });
 });
 

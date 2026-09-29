@@ -4,7 +4,7 @@
  * spelling, the electron-mass overlay, and natural units.
  */
 import { describe, expect, it } from 'vitest';
-import { C_SI } from '../../src/core/constants.js';
+import { C_SI, G_SI, HBAR_SI, H_SI } from '../../src/core/constants.js';
 import { compareWithCanonical } from '../../src/composition/canonical-compare.js';
 import { analyzeUserEquation, parseUserEquation } from '../../src/composition/user-equation.js';
 import { ENERGY, MASS } from '../../src/dimensional/types.js';
@@ -26,8 +26,8 @@ describe('sound speed binds gamma only when the user wrote it', () => {
   });
 });
 
-describe('Friedmann curvature extension', () => {
-  it('the flat equation still agrees, and curvature_k with scale_factor is checked against −k c²/a²', () => {
+describe('Friedmann curvature is its own canonical entry', () => {
+  it('the flat equation still agrees, and curvature_k with scale_factor is CE-friedmann-curvature', () => {
     const flat = compareWithCanonical('hubble-rate-squared', ['rho', 'G'], (v) => (8 * Math.PI * v.G! * v.rho!) / 3).find(
       (c) => c.id === 'CE-friedmann',
     );
@@ -35,17 +35,53 @@ describe('Friedmann curvature extension', () => {
       'hubble-rate-squared',
       ['rho', 'G', 'curvature-k', 'scale-factor'],
       (v) => (8 * Math.PI * v.G! * v.rho!) / 3 - (v['curvature-k']! * C_SI * C_SI) / v['scale-factor']! ** 2,
-    ).find((c) => c.id === 'CE-friedmann');
+    ).find((c) => c.id === 'CE-friedmann-curvature');
+    const flatOnCurved = compareWithCanonical('hubble-rate-squared', ['rho', 'G'], (v) => (8 * Math.PI * v.G! * v.rho!) / 3).find(
+      (c) => c.id === 'CE-friedmann-curvature',
+    );
     const missing = compareWithCanonical(
       'hubble-rate-squared',
       ['rho', 'G', 'curvature-k', 'scale-factor'],
       (v) => (8 * Math.PI * v.G! * v.rho!) / 3,
-    ).find((c) => c.id === 'CE-friedmann');
+    ).find((c) => c.id === 'CE-friedmann-curvature');
     expect(flat?.kind).toBe('agrees');
-    expect(flat?.detail).toBeUndefined();
+    expect(flatOnCurved).toBeUndefined();
     expect(curved?.kind).toBe('agrees');
-    expect(curved?.detail).toMatch(/curvature_k/);
     expect(missing?.kind).not.toBe('agrees');
+  });
+});
+
+describe('signs and Compton h versus ħ are checked', () => {
+  it('a positive potential differs by −1, and −G m1 m2/r agrees', () => {
+    const plus = compareWithCanonical('gravitational-potential-energy', ['mass', 'secondary-mass', 'r'], (v) =>
+      (G_SI * v.mass! * v['secondary-mass']!) / v.r!,
+    ).find((c) => c.id === 'CE-gravitational-potential-energy');
+    const minus = compareWithCanonical('gravitational-potential-energy', ['mass', 'secondary-mass', 'r'], (v) =>
+      -(G_SI * v.mass! * v['secondary-mass']!) / v.r!,
+    ).find((c) => c.id === 'CE-gravitational-potential-energy');
+    expect(plus?.kind).toBe('factor');
+    expect(plus?.ratio).toBeCloseTo(-1, 12);
+    expect(minus?.kind).toBe('agrees');
+  });
+
+  it('ħ/(m c) agrees with the reduced entry and h/(m c) agrees with the full entry', () => {
+    const reduced = compareWithCanonical('compton-wavelength', ['mass'], (v) => HBAR_SI / (v.mass! * C_SI)).find(
+      (c) => c.id === 'CE-compton-wavelength',
+    );
+    const doubled = compareWithCanonical('compton-wavelength', ['mass'], (v) => (2 * Math.PI * HBAR_SI) / (v.mass! * C_SI)).find(
+      (c) => c.id === 'CE-compton-wavelength',
+    );
+    const full = compareWithCanonical('compton-wavelength', ['mass', 'h'], (v) => H_SI / (v.mass! * C_SI)).find(
+      (c) => c.id === 'CE-compton-wavelength-full',
+    );
+    const crossed = compareWithCanonical('compton-wavelength', ['mass', 'h'], (v) => H_SI / (v.mass! * C_SI)).find(
+      (c) => c.id === 'CE-compton-wavelength',
+    );
+    expect(reduced?.kind).toBe('agrees');
+    expect(doubled?.kind).toBe('factor');
+    expect(doubled?.ratio).toBeCloseTo(2 * Math.PI, 8);
+    expect(full?.kind).toBe('agrees');
+    expect(crossed).toBeUndefined();
   });
 });
 

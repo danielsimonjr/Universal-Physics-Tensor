@@ -312,7 +312,7 @@ The current machine-checked state is:
 | Bridge catalog | **55 entries (BE-11…65)**: 19 established, 33 speculative, 3 highly speculative; the JSON artifact is freshness-tested against the TypeScript registry |
 | Empirical spine | **19 committed confrontations**, exposed through `upt confront` with rigor/caveat metadata |
 | Composition layer | **41 bridge edges** plus the canonical L-layer graph; dimensional, symbolic, discovery, consequence, and visualization tooling |
-| Canonical reference layer | **107 canonical equations** used as the non-speculative answer-key layer for bridge recovery/linkage |
+| Canonical reference layer | **109 canonical equations** used as the non-speculative answer-key layer for bridge recovery/linkage |
 | Architecture | Generated dependency graph reports **0 circular dependencies** and a clean unused-analysis report; `npm run docs:deps` is CI freshness-gated |
 | Quality gates | Build, strict source+test TypeScript checks, full Vitest suite, active-plan audit, package-content smoke test, and nightly long-horizon GL4/Shapiro accuracy tests |
 

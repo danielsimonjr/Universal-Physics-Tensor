@@ -14,6 +14,7 @@ import { RELATIVITY } from '../../src/canonical/entries/relativity.js';
 const RELATIVITY_IDS = [
   'CE-einstein-field-eq',
   'CE-friedmann',
+  'CE-friedmann-curvature',
   'CE-hawking-temperature',
   'CE-light-deflection',
   'CE-perihelion-precession',
@@ -36,6 +37,7 @@ describe('canonical relativity entries', () => {
     // EFE is a rank-2 lower-lower identity with per-component dim [L⁻²].
     expect(result.dim).toEqual({ L: -2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 });
     expect(result.freeIndices.size).toBe(2);
+    expect(efe?.fieldEquation?.metric.signature).toBe('-,+,+,+');
   });
 
   it('CE-friedmann scalar form validates to [T⁻²] (L1)', () => {

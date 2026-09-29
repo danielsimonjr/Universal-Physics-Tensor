@@ -25,6 +25,7 @@ import {
   TIME,
   POWER,
   FREQUENCY,
+  DIMENSIONLESS,
 } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 
@@ -126,10 +127,13 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     name: 'Gravitational potential energy',
     domain: 'mechanics',
     formula_latex: 'U = -G m_1 m_2 / r',
-    epistemicStatus: 'scalar-up-to-constant',
-    scalarAst: op('/', [
-      op('*', [sym('G', G_DIM), sym('mass', MASS), sym('secondary-mass', MASS)]),
-      sym('r', LENGTH),
+    epistemicStatus: 'fully-quantitative',
+    scalarAst: op('*', [
+      sym('-1', DIMENSIONLESS),
+      op('/', [
+        op('*', [sym('G', G_DIM), sym('mass', MASS), sym('secondary-mass', MASS)]),
+        sym('r', LENGTH),
+      ]),
     ]),
     regime: { scale: 'classical', force: 'gravitational' },
     assumptions: ['two point masses', 'zero reference at infinity'],
@@ -213,8 +217,9 @@ export const MECHANICS: readonly CanonicalEquation[] = [
     name: "Hooke's law",
     domain: 'mechanics',
     formula_latex: 'F = -k x',
-    epistemicStatus: 'scalar-up-to-constant',
+    epistemicStatus: 'fully-quantitative',
     scalarAst: op('*', [
+      sym('-1', DIMENSIONLESS),
       sym('spring-constant', SPRING_CONSTANT),
       sym('displacement', LENGTH),
     ]),

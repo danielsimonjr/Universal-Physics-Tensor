@@ -625,7 +625,7 @@ const report = enumerateCompositions(CATALOG_FULL_EDGES);
 The **L-layer**: the textbook-physics "answer key" the catalog bridges are
 validated against (Π = L + B + E). Each `CanonicalEquation` is multi-fidelity —
 L0 dimensional signature / L1 scalar-AST / L2 field-equation — with
-epistemic-honesty (`epistemicStatus`) and provenance fields. 107 equations. All symbols below are re-exported from `src/index.ts`; verify the
+epistemic-honesty (`epistemicStatus`) and provenance fields. 109 equations. All symbols below are re-exported from `src/index.ts`; verify the
 authoritative set in `tests/api/public-surface.test.ts`.
 
 ### Registry and accessors (`src/canonical/registry.ts`)
@@ -652,7 +652,7 @@ authoritative set in `tests/api/public-surface.test.ts`.
 ### Canonical graph (`src/composition/`)
 
 - **`CANONICAL_GRAPH`** — the textbook-physics-only composition graph (the
-  `--source=canonical` graph; 107 `law` edges).
+  `--source=canonical` graph; 109 `law` edges).
 - **`canonicalToEdges(...)`** — derive graph edges from canonical equations.
 - **`CANONICAL_CONSTANTS`** — the canonical physical-constant set used by the
   canonical graph.

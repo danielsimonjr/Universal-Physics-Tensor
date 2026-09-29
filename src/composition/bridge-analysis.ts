@@ -24,6 +24,7 @@
  * @module composition/bridge-analysis
  */
 
+import { HBAR_SI } from '../core/constants.js';
 import { buckinghamPi, dimensionallyDetermines } from '../dimensional/buckingham.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -44,7 +45,7 @@ interface NamedConstant {
 
 /** ℏ, c, G, k_B, e — the constants the audit/triage may invoke. */
 const FUNDAMENTAL_CONSTANTS: readonly NamedConstant[] = [
-  { name: 'ℏ', dim: dim(2, 1, -1), si: 1.054571817e-34 },
+  { name: 'ℏ', dim: dim(2, 1, -1), si: HBAR_SI },
   { name: 'c', dim: dim(1, 0, -1), si: 299792458 },
   { name: 'G', dim: dim(3, -1, -2), si: 6.6743e-11 },
   { name: 'k_B', dim: dim(2, 1, -2, 0, -1), si: 1.380649e-23 }, // M L² T⁻² Θ⁻¹

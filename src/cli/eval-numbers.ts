@@ -13,10 +13,10 @@ import { parseUnit, UnitError } from '../dimensional/units.js';
 import { EPS0_SI, MU0_SI } from '../composition/formula-names.js';
 import type { UnitMode } from '../composition/natural-units.js';
 
-/** The stored ħ is the truncated CODATA display, not H_SI/(2π). */
+/** ħ in eval is the exact quotient H_SI/(2π). */
 export const HBAR_TRUNCATION_NOTE =
-  'note: hbar is the stored HBAR_SI = 1.054571817e-34, the truncated CODATA display, not H_SI/(2π). ' +
-  'The relative difference is 6.127e-10. This value uses the stored ħ.';
+  'note: hbar is HBAR_SI = H_SI/(2π), the exact reduced Planck constant. ' +
+  'The CODATA display 1.054571817e-34 is that quotient truncated (relative difference 6.127e-10).';
 
 /** CODATA / SI names an eval may omit. Explicit `name=` wins over these. @internal */
 export function codataScope(mode: UnitMode): Record<string, number> {
@@ -32,6 +32,7 @@ export function codataScope(mode: UnitMode): Record<string, number> {
     mu0: MU0_SI,
     M_sun: M_SUN_SI,
     GM_sun: GM_SUN_SI,
+    Msun_iau: GM_SUN_SI / G_SI,
   };
   if (mode !== 'si') {
     scope.c = 1;
