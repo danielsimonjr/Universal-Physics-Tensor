@@ -4,6 +4,7 @@
 
 - [x] MathTS function names used as quantities (`gamma`, `distance`, `zeta`) are dropped from free variables, so `upt map --equation` rejects the textbook formulas that use them.
 - [x] Gate-input fixture commits time out vitest's hook when commit.gpgsign is on.
+- [x] `.githooks/pre-push` is mode 100644, so git skips the gate and a push is not checked.
 
 ## CLI applied-physics audit publication
 
