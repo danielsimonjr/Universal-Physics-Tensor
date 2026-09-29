@@ -137,14 +137,27 @@ function createMathtsFormulaParser(
           }
           if (typeof result !== 'number' || !Number.isFinite(result)) {
             // typeof Infinity and NaN is "number", which reads as a type error.
-            const shown = typeof result === 'number' ? String(result) : typeof result;
-            throw new FormulaError(`formula did not evaluate to a finite number (got ${shown})`);
+            // A Complex is an object; "got object" hides that sqrt(-1) left the reals.
+            throw new FormulaError(`formula did not evaluate to a finite number (got ${describeNonFinite(result)})`);
           }
           return result;
         },
       };
     },
   };
+}
+
+/** What a non-finite or non-number result was, for the error text. */
+function describeNonFinite(result: unknown): string {
+  if (typeof result === 'number') return String(result);
+  if (result !== null && typeof result === 'object') {
+    const c = result as { re?: unknown; im?: unknown; toString?: () => string };
+    if (typeof c.re === 'number' && typeof c.im === 'number') {
+      const text = typeof c.toString === 'function' ? c.toString() : `${c.re}+${c.im}i`;
+      return `a complex number (${text})`;
+    }
+  }
+  return typeof result;
 }
 
 /**

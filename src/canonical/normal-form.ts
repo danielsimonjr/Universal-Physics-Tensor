@@ -22,7 +22,7 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
-import { CONSTANTS } from '../composition/symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../composition/symbolic-constants.js';
 
 const isDimensionless = (d: Dimension): boolean =>
   d.L === 0 &&
@@ -45,7 +45,6 @@ const UNIT = '1';
  * PARAMETER stub (`alpha`, `lambda`, `g_dark`, `ln⟨e^−βW⟩`, …) and is kept.
  */
 const NAMED_DIMENSIONLESS_CONSTANTS = new Set(['ln_2_constant']);
-const PI_MULTIPLE = /^\d*pi$/;
 
 /**
  * A dimensionless symbol is a droppable "up to a constant" factor only when it
@@ -60,7 +59,7 @@ function isDroppableConstant(name: string): boolean {
     name in CONSTANTS ||
     Number.isFinite(Number(name)) ||
     NAMED_DIMENSIONLESS_CONSTANTS.has(name) ||
-    PI_MULTIPLE.test(name)
+    piMultipleValue(name) !== undefined
   );
 }
 

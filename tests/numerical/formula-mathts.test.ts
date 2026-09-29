@@ -94,6 +94,8 @@ d('formula-mathts (Path A specifics)', () => {
     // typeof Infinity is "number"; the message has to name Infinity or a
     // division by zero looks like a type error.
     expect(() => parser!.parse('x / 0').evaluate({ x: 1 })).toThrow(/Infinity/);
+    // sqrt(-1) is a Complex object. "got object" reads as a type error.
+    expect(() => parser!.parse('sqrt(-1)').evaluate({})).toThrow(/complex number/);
   });
 
   it('evaluate() wraps a scope-related evaluation failure as FormulaError', async () => {

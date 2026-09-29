@@ -11,6 +11,7 @@ import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
+import { C_SI, G_SI } from '../../core/constants.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--sigma', valueStyle: 'either', repeatable: true },
@@ -44,7 +45,11 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         that flags where the linearization is unreliable. An input without
         --sigma is treated as exact. Not included: the evaluator's numerical
         error and model discrepancy (whether the bridge applies).
-        e.g.  upt evaluate be-58 T_K=300 R_ohm=1000 --sigma T_K=3 --sigma R_ohm=10`;
+        e.g.  upt evaluate be-58 T_K=300 R_ohm=1000 --sigma T_K=3 --sigma R_ohm=10
+        be-51 and be-52 are weak-field formulas. When the impact parameter, or
+        the periapsis a(1-e), is not above 10 Schwarzschild radii, the number
+        is still printed and a warning names that cut (the same b ≥ 10 r_s cut
+        be-51's graph domain already uses). Exit stays 0.`;
 
 /** Unit and geometry trouble is a bad value (exit 1); a missing `=` is a usage error (exit 2). */
 function resolveInputs(api: CommandCtx['api'], label: string, parameters: readonly EvaluatorParameter[], args: readonly string[]) {
@@ -75,6 +80,48 @@ function describeParameter(p: EvaluatorParameter): string {
 
 /** A curvature term above this fraction of the linear term marks the linearization unreliable. */
 const NONLINEAR_FRACTION = 0.1;
+
+/**
+ * be-51's graph domain already refuses `b < 10 r_s`. `upt evaluate` calls the
+ * closed form anyway (`b > 0` is the only throw). This note names that cut
+ * when the impact parameter, or a periapsis `a(1−e)`, is inside it. The
+ * number is unchanged. Solar-limb deflection and Mercury sit far outside it.
+ * @internal
+ */
+export function weakFieldDomainNote(
+  bridgeId: number,
+  inputs: Readonly<Record<string, number>>,
+): string | undefined {
+  const mass = inputs.M_kg;
+  if (!(mass > 0) || !Number.isFinite(mass)) return undefined;
+  const rs = (2 * G_SI * mass) / (C_SI * C_SI);
+  if (!(rs > 0) || !Number.isFinite(rs)) return undefined;
+  if (bridgeId === 51) {
+    const b = inputs.b_m;
+    if (b > 0 && b <= 10 * rs) {
+      return (
+        `WARNING: weak-field formula α = 4GM/(b c²) assumes b ≫ r_s = 2GM/c² ` +
+        `(be-51's graph domain requires b ≥ 10 r_s). Here b = ${b} m and r_s = ${rs} m ` +
+        `(b/r_s = ${b / rs}). The number above is that formula anyway; it is not the strong-field deflection.`
+      );
+    }
+  }
+  if (bridgeId === 52) {
+    const a = inputs.a_m;
+    const e = inputs.e;
+    if (a > 0 && e >= 0 && e < 1) {
+      const peri = a * (1 - e);
+      if (peri <= 10 * rs) {
+        return (
+          `WARNING: weak-field formula for the perihelion advance assumes periapsis a(1−e) ≫ r_s = 2GM/c² ` +
+          `(the same 10 r_s cut as be-51's graph domain). Here a(1−e) = ${peri} m and r_s = ${rs} m ` +
+          `(a(1−e)/r_s = ${peri / rs}). The number above is that formula anyway.`
+        );
+      }
+    }
+  }
+  return undefined;
+}
 
 interface Contribution {
   readonly sensitivity: number | null;
@@ -449,6 +496,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => api.evaluateBridge(id, i) as Record<string, unknown>, NOT_INCLUDED);
+  const domainNote = weakFieldDomainNote(id, inputs);
 
   if (args.flags.has('json')) {
     emitJson(
@@ -460,6 +508,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           parameters: spec.parameters,
           conversions: conversionsOf(resolved),
           output: result,
+          ...(domainNote === undefined ? {} : { domainNote }),
           ...(u === null ? {} : { uncertainty: u.block }),
         },
       },
@@ -472,6 +521,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const [k, v] of Object.entries(result as Record<string, unknown>)) {
     out(`  ${k} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
   }
+  if (domainNote !== undefined) out(`  ${domainNote}`);
   if (u !== null) printUncertainty(out, u);
   return 0;
 }

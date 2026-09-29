@@ -11,6 +11,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
 import { UsageError, EXIT_CHECK_FAILED } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
+import { eulerConstantNote } from '../../numerical/formula.js';
 import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
@@ -22,8 +23,10 @@ const FLAGS: FlagSpec[] = [
 const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
         Derive YOUR OWN equation's dimensional form. <dim> is a named
         dimension (length, time, mass, velocity, ...), a constant (hbar, c,
-        G, k_B, e), a named product/quotient (power/area, length*temperature),
-        or explicit (L^3.M^-1.T^-2). With --formula, also verify it and
+        G, k_B, e — e here is the elementary charge's dimension), a named
+        product/quotient (power/area, length*temperature),
+        or explicit (L^3.M^-1.T^-2). In --formula, a bare e is Euler's number
+        when the MathTS parser is active. With --formula, also verify it and
         recover the dimensionless prefactor. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
@@ -136,6 +139,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     } catch (e) {
       throw new UsageError('  formula parse error: ' + (e as Error).message);
     }
+    const euler = eulerConstantNote(formula, cf.variables);
+    if (euler) err(euler);
 
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This

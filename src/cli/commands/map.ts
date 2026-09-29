@@ -26,6 +26,7 @@ import type { EvidenceTag, RelationType } from '../../atlas/types.js';
 import type { SourceName } from '../graphs.js';
 import type { EquationAnalysis } from '../../composition/user-equation.js';
 import type { CanonicalComparison } from '../../composition/canonical-compare.js';
+import { eulerConstantNote } from '../../numerical/formula.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--source', valueStyle: 'attached' },
@@ -543,6 +544,13 @@ async function run(ctx: CommandCtx): Promise<number> {
       ({ user, comparisons } = await analyzeEquation(api, equation, graph)); // throws UserEquationError on malformed structure
     } catch (e) {
       throw new UsageError('upt: ' + (e && (e as Error).message ? (e as Error).message : String(e)));
+    }
+    const rhs = equation.slice(equation.indexOf('=') + 1);
+    try {
+      const note = eulerConstantNote(rhs, (await api.getFormulaParser()).parse(rhs).variables);
+      if (note) err(note);
+    } catch {
+      // A formula that does not parse is reported by the equation analysis.
     }
     if (user.parseError) {
       throw new UsageError('upt: ' + user.parseError); // dimensionally malformed RHS

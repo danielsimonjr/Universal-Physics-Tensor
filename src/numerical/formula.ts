@@ -365,6 +365,21 @@ export const defaultFormulaParser: FormulaParser = {
   },
 };
 
+/**
+ * A bare `e` that the active parser did not leave free was consumed as Euler's
+ * number. The built-in parser leaves `e` free, so this note stays silent there.
+ * `m_e` and `one_minus_e_sq` do not count: the `e` is part of a longer name.
+ * @internal
+ */
+export function eulerConstantNote(expr: string, variables: readonly string[]): string | undefined {
+  if (variables.includes('e')) return undefined;
+  if (!/(^|[^A-Za-z0-9_])e(?![A-Za-z0-9_])/.test(expr)) return undefined;
+  return (
+    "note: bare e is Euler's number (≈2.718). Elementary charge and eccentricity need their own names " +
+    '(charge, eccentricity). The built-in parser leaves e for you to set.'
+  );
+}
+
 /** Parse a scalar formula with the default (self-contained) parser. @internal */
 export function parseFormula(expr: string): CompiledFormula {
   return defaultFormulaParser.parse(expr);

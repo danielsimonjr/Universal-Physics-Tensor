@@ -28,7 +28,7 @@ import type { Dimension } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
-import { CONSTANTS } from './symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from './symbolic-constants.js';
 import { evalExpr } from './expr-eval.js';
 import { canonicalPrefactor } from './canonical-prefactors.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
@@ -50,6 +50,20 @@ const FIXED_POINT_EXPONENTS: readonly number[] = [1, 1.3, 1.6];
 
 /** Relative tolerance for "the ratio is constant" and "the ratio is 1". @internal */
 const RATIO_TOLERANCE = 1e-9;
+
+/**
+ * Catalog names for an entry whose frozen target name is a different word.
+ * CE-schwarzschild-radius's L0 record calls the target `radius`; the catalog
+ * quantity, and the name a student writes, is `schwarzschild-radius`.
+ */
+const ENTRY_TARGET_ALIASES: Readonly<Record<string, readonly string[]>> = {
+  'CE-schwarzschild-radius': ['schwarzschild-radius'],
+};
+
+/** What a dimensionless registry stub stands for, when the symbol is not the latex. */
+const STUB_GLOSS: Readonly<Record<string, string>> = {
+  one_minus_e_sq: '1-e²',
+};
 
 /** How a user formula compares with one canonical equation. @internal */
 export interface CanonicalComparison {
@@ -188,7 +202,9 @@ function targetThroughRestatedBridge(entry: CanonicalEquation, wantTarget: strin
 function freeSymbols(node: ExprNode, out: Map<string, Dimension>): Map<string, Dimension> {
   if (node.kind === 'symbol') {
     const literal = Number.isFinite(Number(node.name));
-    if (!literal && CONSTANTS[node.name] === undefined) out.set(node.name, node.dim);
+    if (!literal && CONSTANTS[node.name] === undefined && piMultipleValue(node.name) === undefined) {
+      out.set(node.name, node.dim);
+    }
     return out;
   }
   const args = (node as { args?: readonly ExprNode[] }).args ?? [];
@@ -215,14 +231,18 @@ function astOnlyCounts(
 }
 
 /**
- * Map each free AST symbol to a governing variable: by name first, then by a
- * dimension that exactly one unassigned variable carries. `null` when that fails.
+ * Every way to map free AST symbols onto governing variables: by name first,
+ * then any bijection that respects dimension. One map when each remaining
+ * symbol has a unique dimension; several when a product such as m₁ m₂ can be
+ * assigned either way. Empty when the counts differ or a symbol has no
+ * variable of its dimension. More than 24 bijections is treated as empty —
+ * that pairing is not checked, rather than searched.
  */
-function alignSymbols(
+function symbolAlignments(
   symbols: ReadonlyMap<string, Dimension>,
   governing: readonly { name: string; dim: Dimension }[],
-): Map<string, string> | null {
-  if (symbols.size !== governing.length) return null;
+): Map<string, string>[] {
+  if (symbols.size !== governing.length) return [];
   const assignment = new Map<string, string>();
   const free = new Set(governing.map((g) => g.name));
   for (const s of [...symbols.keys()].sort()) {
@@ -231,14 +251,62 @@ function alignSymbols(
       free.delete(s);
     }
   }
-  for (const [s, dim] of [...symbols.entries()].sort(([a], [b]) => a.localeCompare(b))) {
-    if (assignment.has(s)) continue;
-    const candidates = governing.filter((g) => free.has(g.name) && equals(g.dim, dim));
-    if (candidates.length !== 1) return null;
-    assignment.set(s, candidates[0]!.name);
-    free.delete(candidates[0]!.name);
+  const rest = [...symbols.entries()]
+    .filter(([s]) => !assignment.has(s))
+    .sort(([a], [b]) => a.localeCompare(b));
+  const out: Map<string, string>[] = [];
+  const CAP = 24;
+  const rec = (i: number): void => {
+    if (out.length > CAP) return;
+    if (i === rest.length) {
+      out.push(new Map(assignment));
+      return;
+    }
+    const [s, dim] = rest[i]!;
+    const candidates = governing
+      .filter((g) => free.has(g.name) && equals(g.dim, dim))
+      .map((g) => g.name)
+      .sort();
+    for (const c of candidates) {
+      assignment.set(s, c);
+      free.delete(c);
+      rec(i + 1);
+      free.add(c);
+      assignment.delete(s);
+      if (out.length > CAP) return;
+    }
+  };
+  rec(0);
+  return out.length > CAP ? [] : out;
+}
+
+/** Why an AST could not be aligned, naming a dimensionless stub the user did not. */
+function alignmentDetail(
+  symbols: ReadonlyMap<string, Dimension>,
+  variables: readonly { name: string; dim: Dimension }[],
+): string {
+  const named = new Set(variables.map((v) => v.name));
+  const stubs = [...symbols.entries()]
+    .filter(([name, dim]) => !named.has(name) && equals(dim, DIMENSIONLESS))
+    .map(([name]) => name)
+    .sort();
+  if (symbols.size !== variables.length && stubs.length > 0) {
+    const shown = stubs.map((s) => (STUB_GLOSS[s] === undefined ? s : `${s} (${STUB_GLOSS[s]})`));
+    return `its formula depends on ${shown.join(', ')}, which your formula does not name`;
   }
-  return assignment;
+  return 'its variables could not be aligned by name or by a unique dimension';
+}
+
+/** True when every alignment produced the same ratio at each fixed point. */
+function sameRatios(series: readonly (readonly number[])[]): boolean {
+  const first = series[0];
+  if (first === undefined) return false;
+  return series.every((s) =>
+    s.every((r, i) => {
+      const r0 = first[i]!;
+      return Number.isFinite(r) && Number.isFinite(r0) && r0 !== 0 && Math.abs(r / r0 - 1) <= RATIO_TOLERANCE;
+    }),
+  );
 }
 
 function classify(
@@ -300,7 +368,8 @@ export function compareWithCanonical(
   for (const entry of entries) {
     const d = entry.dimensional;
     const via = normalize(d.target.name) === wantTarget ? undefined : targetThroughRestatedBridge(entry, wantTarget);
-    if (normalize(d.target.name) !== wantTarget && via === undefined) continue;
+    const alias = (ENTRY_TARGET_ALIASES[entry.id] ?? []).includes(wantTarget);
+    if (normalize(d.target.name) !== wantTarget && via === undefined && !alias) continue;
     const targetVia = via === undefined ? {} : { targetVia: { bridge: via, its: d.target.name } };
     let variables = d.governing.filter((g) => !isConstant(g));
     const constants = d.governing.filter(isConstant);
@@ -364,20 +433,52 @@ export function compareWithCanonical(
     const factor = tabled ?? 1;
     let canonicalAt: (p: Readonly<Record<string, number>>) => number;
     if (entry.scalarAst !== undefined) {
-      const alignment = alignSymbols(freeSymbols(entry.scalarAst, new Map()), variables);
-      if (alignment === null) {
+      const ast = entry.scalarAst;
+      const symbols = freeSymbols(ast, new Map());
+      const alignments = symbolAlignments(symbols, variables);
+      const at = (alignment: ReadonlyMap<string, string>) => (p: Readonly<Record<string, number>>) =>
+        factor * evalExpr(ast, Object.fromEntries([...alignment].map(([sym, g]) => [sym, p[normalize(g)]!])));
+      if (alignments.length === 0) {
         results.push({
           id: entry.id,
           name: entry.name,
           kind: 'not-compared',
-          detail: 'its variables could not be aligned by name or by a unique dimension',
+          detail: alignmentDetail(symbols, variables),
           ...paired, ...targetVia,
         });
         continue;
       }
-      const ast = entry.scalarAst;
-      canonicalAt = (p) =>
-        factor * evalExpr(ast, Object.fromEntries([...alignment].map(([sym, g]) => [sym, p[normalize(g)]!])));
+      if (alignments.length === 1) {
+        const alignment = alignments[0]!;
+        canonicalAt = at(alignment);
+      } else {
+        let series: number[][];
+        try {
+          series = alignments.map((alignment) => points.map((p) => userAt(p) / at(alignment)(p)));
+        } catch (e) {
+          results.push({
+            id: entry.id,
+            name: entry.name,
+            kind: 'not-compared',
+            detail: `an evaluation failed (${e instanceof Error ? e.message : String(e)})`,
+            ...paired, ...targetVia,
+          });
+          continue;
+        }
+        if (!sameRatios(series)) {
+          results.push({
+            id: entry.id,
+            name: entry.name,
+            kind: 'not-compared',
+            detail: 'swapping its same-dimension symbols changes the ratio, so they were not paired',
+            ...paired, ...targetVia,
+          });
+          continue;
+        }
+        // The ratio does not depend on which same-dimension symbol takes which
+        // variable (m₁ m₂ = m₂ m₁). One assignment is enough; none is named.
+        canonicalAt = at(alignments[0]!);
+      }
     } else if (d.monomial !== null) {
       // W4: a governing constant takes its SI value, as on the user side and in the AST branch. A
       // name that is neither a variable nor a constant has no value, so the ratio is not finite and
