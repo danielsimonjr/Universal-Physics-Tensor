@@ -31,6 +31,23 @@ const FLAGS: FlagSpec[] = [
   { name: '--alpha', valueStyle: 'attached' },
 ];
 
+/**
+ * The text printed when a scan has gaps and none of them are searchable.
+ * The live catalog scan is no longer in that state; this wording stays
+ * covered by a direct test.
+ * @internal
+ */
+export function emptySearchableWarning(total: number): readonly string[] {
+  return [
+    'upt probe scan — typed frontier gaps',
+    `⚠ 0 of ${total} gaps are searchable by Product B ` +
+      `(all are relation-link / regime-transition).`,
+    '  Use `upt discover` for those. Pass --all to list them here.',
+    '  To search expressions, write a problem file (`upt help probe`, PROBLEM FILE, has a minimal example) ' +
+      'and run `upt probe run --problem=FILE`.',
+  ];
+}
+
 const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
         Experimental expression/residual search (Product B). Orthogonal to
         \`upt discover\`, which vets quantity identifications a≡b and is frozen.
@@ -250,7 +267,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     // say so, and point at `upt discover` / `--all` rather than dumping 200+
     // Product A wrappers as if they were a Product B frontier.
     const showAll = args.flags.has('all');
-    const allGaps = api.scanFrontier(graph);
+    const allGaps = api.scanWithExpressionGaps(graph);
     const searchable = allGaps.filter((g) => g.searchability.searchable);
     const gaps = showAll ? allGaps : searchable;
     if (args.flags.has('json')) {
@@ -273,17 +290,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       return 0;
     }
     if (!showAll && searchable.length === 0 && allGaps.length > 0) {
-      out('upt probe scan — typed frontier gaps');
-      out(
-        `⚠ 0 of ${allGaps.length} gaps are searchable by Product B ` +
-          `(all are relation-link / regime-transition).`,
-      );
-      out('  Use `upt discover` for those. Pass --all to list them here.');
-      // Persona finding L8: an applied user who came to search expressions has no gap to start from.
-      out(
-        '  To search expressions, write a problem file (`upt help probe`, PROBLEM FILE, has a minimal example) ' +
-          'and run `upt probe run --problem=FILE`.',
-      );
+      for (const line of emptySearchableWarning(allGaps.length)) out(line);
       return 0;
     }
     out(api.formatFrontierScan(gaps));
@@ -298,7 +305,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   if (sub === 'show') {
     const id = args.positionals[1];
     if (!id) throw new UsageError('upt probe show needs a gap id (fg-*). See `upt help probe`.');
-    const gap = api.findFrontierGap(graph, id);
+    const gap = api.scanWithExpressionGaps(graph).find((g) => g.id === id);
     if (!gap) throw new CliError(`upt probe show: no gap '${id}' on this graph`);
     if (args.flags.has('json')) {
       emitJson({ command: 'probe', source, epistemics: EPISTEMICS, result: gap }, ctx.write);

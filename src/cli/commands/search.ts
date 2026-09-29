@@ -23,9 +23,9 @@ import { buildSearchIndex, fold, matchEveryWord, SEARCH_SECTIONS, STOP_WORDS } f
 const FLAGS: FlagSpec[] = [{ name: '--json', valueStyle: 'none' }];
 
 const HELP = `upt search <word> ...
-        Find a catalog bridge, canonical equation, atlas model, atlas bridge
-        or quantity by the words in its name, id, symbol, alias or bridge
-        description, and print the command that inspects each match. Every
+        Find a catalog bridge, canonical equation, atlas model, atlas bridge,
+        quantity or applied case by the words in its name, id, symbol, alias
+        or bridge description, and print the command that inspects each match. Every
         word must match. An equal dimension is never a match (a radius is not
         a wavelength). A word of one or two letters matches a symbol or alias
         exactly. No match exits 1 and names the registries searched.

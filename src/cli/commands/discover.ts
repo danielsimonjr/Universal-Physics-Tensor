@@ -59,8 +59,10 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         consequence) ran and survived or abstained — and what would make it
         testable: the identity premise, the missing magnitudes and regimes,
         and the observation that would test it. An abstention is a missing
-        test, never a pass. --require-falsifier lists only rows at least one
-        independent falsifier ran on and survived, and counts the rest.`;
+        test, never a pass. --require-falsifier hides promising rows that no
+        independent falsifier ran on and survived, counts them, and lists the
+        encoded bridges that already carry a falsifier (a confrontation, a
+        counterexample, or a regime inequality).`;
 
 const EPISTEMICS =
   '⚠ a REVIEW SURFACE: `promising` means "worth a physicist\'s minute", not "true".\n' +
@@ -197,6 +199,27 @@ interface Readiness {
 }
 
 /** How far the `promising` set is from evidence, counted from candidate fields. */
+/** Encoded bridges that already carry a falsifier. Not discovery rows. */
+function encodedFalsifiers(api: CommandCtx['api']): readonly string[] {
+  const lines: string[] = [];
+  for (const id of [...api.CONFRONTATIONS.keys()].sort((a, b) => a - b)) {
+    lines.push(`be-${id} (confrontation)`);
+  }
+  for (const f of api.ATLAS_FAMILIES) {
+    for (const b of f.bridges) {
+      const cx = b.counterexamples.length;
+      const ineq = b.regime.inequalities.length;
+      if (cx === 0 && ineq === 0) continue;
+      const bits = [
+        cx > 0 ? `${cx} counterexample${cx === 1 ? '' : 's'}` : '',
+        ineq > 0 ? `${ineq} regime inequalit${ineq === 1 ? 'y' : 'ies'}` : '',
+      ].filter((s) => s !== '');
+      lines.push(`${b.id} (${bits.join(', ')})`);
+    }
+  }
+  return lines;
+}
+
 function readinessOf(api: CommandCtx['api'], candidates: readonly FullyAnnotatedCandidate[]): Readiness {
   const p = candidates.filter((c) => c.verdict === 'promising');
   const g = p.map((c) => api.describeGrounding(c, c.consequence?.signal));
@@ -224,13 +247,23 @@ async function run(ctx: CommandCtx): Promise<number> {
   const showAdjudicated = args.flags.has('show-adjudicated');
 
   if (args.flags.has('json')) {
-    const result = isDerive
+    const requireFalsifier = args.flags.has('require-falsifier');
+    const mapped = isDerive
       ? api.deriveProposedBridges(ranked).map((p) => ({ ...p, claim: api.describeDerivedClaim(p) }))
       : withConsequence.map((c) => ({
           ...c,
           grounding: api.describeGrounding(c, c.consequence?.signal),
           readiness: api.describeReadiness(c, c.consequence?.signal),
         }));
+    const result =
+      requireFalsifier && !isDerive
+        ? mapped.filter(
+            (c) =>
+              !('readiness' in c) ||
+              c.verdict !== 'promising' ||
+              c.readiness.falsifiers.survived.length > 0,
+          )
+        : mapped;
     const envelope = {
       command: 'discover',
       source,
@@ -238,6 +271,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       options: opts as Record<string, unknown>,
       epistemics: isDerive ? DERIVE_EPISTEMICS : EPISTEMICS,
       result,
+      ...(requireFalsifier && !isDerive ? { encodedFalsifiers: encodedFalsifiers(api) } : {}),
       ...(isDerive
         ? {}
         : {
@@ -305,6 +339,10 @@ async function run(ctx: CommandCtx): Promise<number> {
       `  --require-falsifier: ${promising.filter(untested).length} of the ${promising.length} promising hidden — ` +
         'no independent falsifier ran and survived (connectivity alone is not evidence)\n',
     );
+    const encoded = encodedFalsifiers(api);
+    out(`  encoded falsifiers already on the records (${encoded.length}; these are not discovery rows):`);
+    for (const line of encoded) out(`    ${line}`);
+    out('');
   }
   if (promising.length) {
     out('  PROMISING (merges disconnected physics, unlocks quantities, stays consistent):');

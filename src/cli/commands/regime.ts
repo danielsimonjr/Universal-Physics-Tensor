@@ -19,7 +19,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { CliError } from '../errors.js';
+import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
@@ -50,6 +50,8 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
         ignored.
         Also prints the pairwise overlap of the regimes and, over the box --at
         states, the points no CONSTRAINING regime covers.
+        Exit 3 when any record is VIOLATED. VACUOUS, UNKNOWN and a survey with
+        no violated record exit 0.
         e.g.  upt regime oscillators --at theta0=0.2
               upt regime oscillators --deny lossless`;
 
@@ -292,7 +294,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       },
       ctx.write,
     );
-    return 0;
+    return verdicts.some((v) => v.ok === false) ? EXIT_CHECK_FAILED : 0;
   }
 
   out(`\nRegimes of family '${family.family}'`);
@@ -366,7 +368,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
     out("  (an 'unknown' is not coverage — see the tri-state rule above)");
   }
-  return 0;
+  return verdicts.some((v) => v.ok === false) ? EXIT_CHECK_FAILED : 0;
 }
 
 export const command: Command = { name: 'regime', aliases: [], flags: FLAGS, help: HELP, run };

@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 383,
+    "totalFiles": 392,
     "totalModules": 12,
-    "totalExports": 2780
+    "totalExports": 2811
   },
   "entryPoints": [
     {
@@ -8182,6 +8182,12 @@
             ]
           },
           {
+            "file": "../core/constants.js",
+            "imports": [
+              "M_SUN_SI"
+            ]
+          },
+          {
             "file": "./evaluators.js",
             "imports": [
               "EvaluatorParameter"
@@ -11086,6 +11092,19 @@
             ]
           },
           {
+            "file": "../euler-guard.js",
+            "imports": [
+              "unboundEulerRefusal",
+              "withParser"
+            ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "conventionLines"
+            ]
+          },
+          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -11214,6 +11233,34 @@
             "imports": [
               "eulerConstantNote"
             ]
+          },
+          {
+            "file": "../euler-guard.js",
+            "imports": [
+              "unboundEulerRefusal",
+              "withParser"
+            ]
+          },
+          {
+            "file": "../eval-numbers.js",
+            "imports": [
+              "HBAR_TRUNCATION_NOTE",
+              "codataScope",
+              "parseEvalToken"
+            ]
+          },
+          {
+            "file": "../../composition/natural-units.js",
+            "imports": [
+              "UnitMode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/units.js",
+            "imports": [
+              "UnitError"
+            ]
           }
         ],
         "exports": [
@@ -11275,6 +11322,18 @@
             "imports": [
               "C_SI",
               "G_SI"
+            ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "JEANS_FORMULA_NOTE"
+            ]
+          },
+          {
+            "file": "../eval-numbers.js",
+            "imports": [
+              "HBAR_TRUNCATION_NOTE"
             ]
           }
         ],
@@ -11542,6 +11601,18 @@
             "imports": [
               "*"
             ]
+          },
+          {
+            "file": "./metric.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
+            "file": "./testplan.js",
+            "imports": [
+              "*"
+            ]
           }
         ],
         "exports": []
@@ -11660,6 +11731,25 @@
             "imports": [
               "eulerConstantNote"
             ]
+          },
+          {
+            "file": "../euler-guard.js",
+            "imports": [
+              "unboundEulerRefusal"
+            ]
+          },
+          {
+            "file": "../conventions.js",
+            "imports": [
+              "conventionLines"
+            ]
+          },
+          {
+            "file": "../../composition/natural-units.js",
+            "imports": [
+              "UnitMode"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -11668,6 +11758,54 @@
         ],
         "functions": [
           "neighbourhood"
+        ],
+        "constants": [
+          "command"
+        ]
+      },
+      "src/cli/commands/metric.ts": {
+        "description": "`upt metric` — Christoffel symbols and curvature scalars for a named metric.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../command.js",
+            "imports": [
+              "registerCommand",
+              "Command",
+              "CommandCtx"
+            ]
+          },
+          {
+            "file": "../output.js",
+            "imports": [
+              "emitJson"
+            ]
+          },
+          {
+            "file": "../errors.js",
+            "imports": [
+              "UsageError"
+            ]
+          },
+          {
+            "file": "../../numerical/spacetime-metrics.js",
+            "imports": [
+              "curvatureReport",
+              "schwarzschildCircularOrbit",
+              "MetricId"
+            ]
+          }
+        ],
+        "exports": [
+          "command"
         ],
         "constants": [
           "command"
@@ -11877,7 +12015,11 @@
           }
         ],
         "exports": [
-          "command"
+          "command",
+          "emptySearchableWarning"
+        ],
+        "functions": [
+          "emptySearchableWarning"
         ],
         "constants": [
           "command"
@@ -11940,7 +12082,8 @@
           {
             "file": "../errors.js",
             "imports": [
-              "CliError"
+              "CliError",
+              "EXIT_CHECK_FAILED"
             ]
           },
           {
@@ -12068,6 +12211,77 @@
           "command"
         ]
       },
+      "src/cli/commands/testplan.ts": {
+        "description": "`upt testplan` — the measurement plan already stored on a case or a",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../command.js",
+            "imports": [
+              "registerCommand",
+              "Command",
+              "CommandCtx"
+            ]
+          },
+          {
+            "file": "../output.js",
+            "imports": [
+              "emitJson"
+            ]
+          },
+          {
+            "file": "../errors.js",
+            "imports": [
+              "UsageError",
+              "CliError"
+            ]
+          },
+          {
+            "file": "../../cases/types.js",
+            "imports": [
+              "AppliedCase"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../bridges/observations/types.js",
+            "imports": [
+              "ConfrontationOutcome"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "command"
+        ],
+        "constants": [
+          "command"
+        ]
+      },
+      "src/cli/conventions.ts": {
+        "description": "Convention lines the CLI prints beside a comparison. They do not change the",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "JEANS_FORMULA_NOTE",
+          "conventionLines"
+        ],
+        "functions": [
+          "conventionLines"
+        ],
+        "constants": [
+          "JEANS_FORMULA_NOTE"
+        ]
+      },
       "src/cli/errors.ts": {
         "description": "Typed error classes and exit codes for the UPT CLI.",
         "externalDependencies": [],
@@ -12084,6 +12298,81 @@
         ],
         "constants": [
           "EXIT_CHECK_FAILED"
+        ]
+      },
+      "src/cli/euler-guard.ts": {
+        "description": "Refuse a bare `e` that the MathTS parser would evaluate as Euler's number.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../numerical/formula.js",
+            "imports": [
+              "eulerConstantNote"
+            ]
+          }
+        ],
+        "exports": [
+          "unboundEulerRefusal",
+          "withParser"
+        ],
+        "functions": [
+          "unboundEulerRefusal",
+          "withParser"
+        ]
+      },
+      "src/cli/eval-numbers.ts": {
+        "description": "Numbers `upt eval` understands: a bare numeral, a numeral with a unit, and",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "E_SI",
+              "G_SI",
+              "GM_SUN_SI",
+              "HBAR_SI",
+              "H_SI",
+              "K_B_SI",
+              "M_E_SI",
+              "M_SUN_SI"
+            ]
+          },
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "parseUnit",
+              "UnitError"
+            ]
+          },
+          {
+            "file": "../composition/formula-names.js",
+            "imports": [
+              "EPS0_SI",
+              "MU0_SI"
+            ]
+          },
+          {
+            "file": "../composition/natural-units.js",
+            "imports": [
+              "UnitMode"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "HBAR_TRUNCATION_NOTE",
+          "codataScope",
+          "parseEvalToken"
+        ],
+        "functions": [
+          "codataScope",
+          "parseEvalToken"
+        ],
+        "constants": [
+          "HBAR_TRUNCATION_NOTE"
         ]
       },
       "src/cli/expr-print.ts": {
@@ -12916,6 +13205,8 @@
               "DEFAULT_SEARCH_BUDGET",
               "scanFrontier",
               "findFrontierGap",
+              "expressionSearchGaps",
+              "scanWithExpressionGaps",
               "problemFromResidualGap",
               "makeResidualGap",
               "loadSearchProblemFromJson",
@@ -13252,6 +13543,8 @@
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
@@ -13429,6 +13722,8 @@
           "DEFAULT_SEARCH_BUDGET",
           "scanFrontier",
           "findFrontierGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "problemFromResidualGap",
           "makeResidualGap",
           "loadSearchProblemFromJson",
@@ -13821,7 +14116,20 @@
           {
             "file": "./canonical-prefactors.js",
             "imports": [
+              "CANONICAL_GROUP_PREFACTORS",
               "canonicalPrefactor"
+            ]
+          },
+          {
+            "file": "./formula-names.js",
+            "imports": [
+              "formulaNameDimensions"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI"
             ]
           },
           {
@@ -15718,6 +16026,54 @@
           "substitute"
         ]
       },
+      "src/composition/formula-names.ts": {
+        "description": "Names a formula may use that are not leaves of {@link CONSTANTS}.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "CHARGE",
+              "DIMENSIONLESS",
+              "LENGTH",
+              "MASS"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "E_SI",
+              "M_E_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "EPS0_SI",
+          "MU0_SI",
+          "FORMULA_NAMED",
+          "formulaNameDimensions"
+        ],
+        "interfaces": [
+          "FormulaName"
+        ],
+        "functions": [
+          "formulaNameDimensions"
+        ],
+        "constants": [
+          "EPS0_SI",
+          "MU0_SI",
+          "FORMULA_NAMED"
+        ]
+      },
       "src/composition/graph-viz-svg.ts": {
         "description": "SVG rendering for the physics map — render Graphviz DOT source to an SVG",
         "externalDependencies": [],
@@ -16482,6 +16838,31 @@
           "UserEquationError"
         ]
       },
+      "src/composition/natural-units.ts": {
+        "description": "Opt-in natural units. The default comparison stays SI: an energy written as",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "naturalPowers",
+          "naturalNote"
+        ],
+        "interfaces": [
+          "NaturalPowers"
+        ],
+        "functions": [
+          "naturalPowers",
+          "naturalNote"
+        ]
+      },
       "src/composition/poster-source.ts": {
         "description": "The POSTER source for the physics map — turn the Atlas Phase 3 poster index",
         "externalDependencies": [],
@@ -16757,6 +17138,53 @@
         "functions": [
           "parseDesignBounds",
           "suggestDiscriminatingPoint"
+        ]
+      },
+      "src/composition/probe/expression-gaps.ts": {
+        "description": "Expression gaps a `upt probe scan` can hand to Product B.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../cases/index.js",
+            "imports": [
+              "APPLIED_CASES"
+            ]
+          },
+          {
+            "file": "./frontier.js",
+            "imports": [
+              "scanFrontier"
+            ]
+          },
+          {
+            "file": "./problem.js",
+            "imports": [
+              "makeResidualGap"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "FrontierGap"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "expressionSearchGaps",
+          "scanWithExpressionGaps"
+        ],
+        "functions": [
+          "expressionSearchGaps",
+          "scanWithExpressionGaps"
         ]
       },
       "src/composition/probe/falsify.ts": {
@@ -17208,6 +17636,14 @@
             "reExport": true
           },
           {
+            "file": "./expression-gaps.js",
+            "imports": [
+              "expressionSearchGaps",
+              "scanWithExpressionGaps"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./fit.js",
             "imports": [
               "fitPrefactor"
@@ -17478,6 +17914,8 @@
           "scanFrontier",
           "findFrontierGap",
           "problemFromResidualGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "fitPrefactor",
           "scoreCandidate",
           "rankPareto",
@@ -17671,6 +18109,8 @@
           "scanFrontier",
           "findFrontierGap",
           "problemFromResidualGap",
+          "expressionSearchGaps",
+          "scanWithExpressionGaps",
           "fitPrefactor",
           "FitResult",
           "scoreCandidate",
@@ -19410,6 +19850,20 @@
             ]
           },
           {
+            "file": "./formula-names.js",
+            "imports": [
+              "formulaNameDimensions"
+            ]
+          },
+          {
+            "file": "./natural-units.js",
+            "imports": [
+              "naturalNote",
+              "naturalPowers",
+              "UnitMode"
+            ]
+          },
+          {
             "file": "./graph-viz.js",
             "imports": [
               "VizModel",
@@ -19460,6 +19914,7 @@
         ],
         "interfaces": [
           "UserEquation",
+          "AnalyzeUserEquationOptions",
           "EquationLanding",
           "EquationHint",
           "ShortBinding",
@@ -20679,8 +21134,9 @@
           {
             "file": "./algebra.js",
             "imports": [
+              "divide",
               "multiply",
-              "divide"
+              "power"
             ]
           }
         ],
@@ -21462,7 +21918,10 @@
           {
             "file": "../core/constants.js",
             "imports": [
+              "C_SI",
               "E_SI",
+              "G_SI",
+              "GM_SUN_SI",
               "M_SUN_SI"
             ]
           }
@@ -26129,6 +26588,49 @@
           "GAUSS_LEGENDRE_16"
         ]
       },
+      "src/numerical/spacetime-metrics.ts": {
+        "description": "Curvature of a few exact metrics for `upt metric`.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "G_SI",
+              "M_SUN_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "METRIC_SIGNATURE",
+          "METRIC_SIGNATURE_NOTE",
+          "schwarzschildKretschmann",
+          "flrwRicciScalar",
+          "friedmannSides",
+          "kerrKretschmann",
+          "metricParams",
+          "curvatureReport",
+          "schwarzschildCircularOrbit"
+        ],
+        "interfaces": [
+          "Component",
+          "CurvatureReport"
+        ],
+        "functions": [
+          "schwarzschildKretschmann",
+          "flrwRicciScalar",
+          "friedmannSides",
+          "kerrKretschmann",
+          "metricParams",
+          "curvatureReport",
+          "schwarzschildCircularOrbit"
+        ],
+        "constants": [
+          "METRIC_SIGNATURE",
+          "METRIC_SIGNATURE_NOTE"
+        ]
+      },
       "src/numerical/strides.ts": {
         "description": "Shared stride and flat-index utilities for row-major tensor storage.",
         "externalDependencies": [],
@@ -26442,6 +26944,7 @@
           "src/cli/commands/ground.ts",
           "src/cli/commands/index.ts",
           "src/cli/commands/map.ts",
+          "src/cli/commands/metric.ts",
           "src/cli/commands/path.ts",
           "src/cli/commands/predict.ts",
           "src/cli/commands/priority.ts",
@@ -26450,7 +26953,11 @@
           "src/cli/commands/regime.ts",
           "src/cli/commands/search.ts",
           "src/cli/commands/symbolic.ts",
+          "src/cli/commands/testplan.ts",
+          "src/cli/conventions.ts",
           "src/cli/errors.ts",
+          "src/cli/euler-guard.ts",
+          "src/cli/eval-numbers.ts",
           "src/cli/expr-print.ts",
           "src/cli/graphs.ts",
           "src/cli/main.ts",
@@ -26502,17 +27009,20 @@
           "src/composition/expr-eval.ts",
           "src/composition/expr-simplify.ts",
           "src/composition/expr-subst.ts",
+          "src/composition/formula-names.ts",
           "src/composition/graph-viz-svg.ts",
           "src/composition/graph-viz.ts",
           "src/composition/grounding.ts",
           "src/composition/identifiability.ts",
           "src/composition/index.ts",
+          "src/composition/natural-units.ts",
           "src/composition/poster-source.ts",
           "src/composition/probe/backend-protocol.ts",
           "src/composition/probe/candidate-store.ts",
           "src/composition/probe/corpus.ts",
           "src/composition/probe/dataset.ts",
           "src/composition/probe/experiment-design.ts",
+          "src/composition/probe/expression-gaps.ts",
           "src/composition/probe/falsify.ts",
           "src/composition/probe/fingerprint.ts",
           "src/composition/probe/fit.ts",
@@ -26653,6 +27163,7 @@
           "src/numerical/pderiv.ts",
           "src/numerical/perihelion-finder.ts",
           "src/numerical/quadrature.ts",
+          "src/numerical/spacetime-metrics.ts",
           "src/numerical/strides.ts",
           "src/numerical/tensor-engine.ts",
           "src/numerical/types.ts",
@@ -26662,21 +27173,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 383,
+    "totalTypeScriptFiles": 392,
     "totalModules": 12,
-    "totalLinesOfCode": 83503,
-    "totalExports": 2780,
+    "totalLinesOfCode": 85202,
+    "totalExports": 2811,
     "totalClasses": 60,
-    "totalInterfaces": 436,
-    "totalFunctions": 693,
+    "totalInterfaces": 441,
+    "totalFunctions": 711,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 691,
-    "totalReExports": 1335,
-    "totalTypeOnlyImports": 523,
+    "totalConstants": 700,
+    "totalReExports": 1339,
+    "totalTypeOnlyImports": 534,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 65
+    "unusedExportsCount": 69
   }
 }

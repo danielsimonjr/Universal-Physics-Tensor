@@ -8,8 +8,31 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Added
+
+- **`upt metric` / `upt curvature`.** Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann scalar for Minkowski, Schwarzschild, FLRW and Kerr. The line element is (−,+,+,+); the Einstein-equation AST stays (+,-,-,-). Schwarzschild Kretschmann is checked against `48 G² M² / (c⁴ r⁶)`. FLRW includes the curvature term. `--geodesic` integrates a short Schwarzschild circular orbit. Kerr geodesic integration is not implemented.
+- **`upt testplan`.** The confirm and falsify criteria already stored on a confrontation or an applied case, as Markdown or JSON.
+- **Opt-in natural units.** `upt eval` and `upt map --equation` take `--natural` (ħ = c = 1) and `--geometrized` (also G = 1). The SI default is unchanged.
+- **CODATA names and lab units in `upt eval`.** `G`, `c`, `hbar`, `h`, `k_B`, `e_charge`, `m_e`, `eps0`, `mu0`, `M_sun`, `GM_sun`, and the units tesla, gauss, bar, atm, ångström, parsec, light-year and `AU`. `Msun` stays `M_SUN_SI`; `Msun_iau` is `GM☉/G`.
+- **`upt eval --show-parser`.** Prints `mathts` or `builtin`. Formula errors name the same parser. `upt version` stays a bare semver.
+
 ### Fixed
 
+- **An unbound `e` under MathTS is refused.** `upt eval`, `upt derive --formula` and `upt map --equation` exit 2 unless `e=<number>` or `--allow-euler`. Charge is `e_charge`. `1-eccentricity^2` rewrites to `one_minus_e_sq`.
+- **One-letter catalog names are not bound** unless `--bind-short`. The declined match is still named. The alias `T` → temperature still binds.
+- **`map --equation` prints the verdict only.** `--verbose` restores the linkage map. `--equation-only` is unchanged.
+- **`derive` dimension specs accept parentheses and named quotients** (`power/(area*temperature^4)`, `mass/volume`, pressure, density, viscosity, resistance, magnetic field).
+- **Sourced prefactors** for the wire (`1/(2π)`), Larmor (`1/(6π)`) and field energy density (`1/2`), and the sound-speed `√γ` when the formula writes `gamma`. Coulomb's `4π` was already in the fully-quantitative AST.
+- **Friedmann's curvature term** is compared when the formula names `curvature_k` and `scale_factor`. The frozen flat entry is unchanged.
+- **`m_e` and `e_charge`** are formula names, so a hydrogen formula can be dimension-checked. They are not new canonical-graph constants.
+- **`upt search` indexes applied cases.** `skin` and `brownian` find `upt evaluate case-…`.
+- **`upt path` names a multi-premise bridge** that mentions both models. Stokes drag → Fick names `ab-stokes-einstein` and still exits 0 when there is no chain.
+- **`upt regime` exits 3 when a record is VIOLATED.** VACUOUS and UNKNOWN stay 0.
+- **`upt probe scan` lists searchable expression gaps** from applied cases. Relation-link wrappers stay not-searchable.
+- **`discover --require-falsifier` lists encoded falsifiers** (confrontations, counterexamples, regime inequalities) after it hides untested promising rows.
+- **A case result can print the `regime --at` line** its outputs imply. be-65 prints the Jeans formula. be-56 names the truncated stored ħ.
+- **Stale `c = 2.998e8` comments** in the lensing and perihelion bridges now say the exact `299792458`.
+- **Architecture dependency docs regenerated** after this change (`src/` scope: 392 files, 2811 exports, 1339 re-exports). The hand-written `src/`-scope figures in `ARCHITECTURE.md`, `OVERVIEW.md` and `COMPONENTS.md` were re-read from that output. No generated report was hand-edited.
 - **`upt confront be-XX` selects that confrontation.** `upt explain be-XX` already told you to run that command. The positional was ignored, so the command exited 0 and printed every confrontation. A positional that is not a bridge id is now an error, and a positional that disagrees with `--bridge` is an error. `--bridge=be-XX` is unchanged.
 - **The install docs name a path that works when Bun is absent.** `corepack prepare bun@1.4.2` fails (`Unsupported package manager specification`). README and `cli/README.md` say to install the pinned Bun from bun.sh, and that a clone with only Node can use `npm install`, `npm run build`, and `node bin/upt.mjs`. They also say a clone install uses the MathTS parser and a published install uses the builtin parser.
 - **Architecture dependency docs regenerated.** The pre-push gate rewrote them after `confront.ts` imported `UsageError` (83474 → 83503 lines). No hand edit of a generated report.

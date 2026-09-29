@@ -200,14 +200,17 @@ describe('N3: a mismatch caused by an unresolved placeholder is reported as UNKN
 
 // 0.47.0 persona finding N4: the verdict on the user's equation came after the whole linkage map
 // (about 45 lines), so the answer the user asked for was the last thing printed.
-describe('N4: map --equation prints the verdict before the linkage map', () => {
-  it('the "Your equation" block comes first, and the linkage map follows it', async () => {
+describe('N4: map --equation prints the verdict before any linkage map', () => {
+  it('the default stops at the verdict; --verbose puts the linkage map after it', async () => {
     const t = await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)']);
-    const verdict = t.indexOf('Your equation:');
-    const map = t.indexOf('Linkage map');
-    expect(verdict).toBeGreaterThanOrEqual(0);
+    expect(t.indexOf('Your equation:')).toBeGreaterThanOrEqual(0);
+    expect(t).toMatch(/✓ agrees with CE-pendulum-period/);
+    expect(t).not.toMatch(/Linkage map/);
+    const verbose = await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)', '--verbose']);
+    const verdict = verbose.indexOf('Your equation:');
+    const map = verbose.indexOf('Linkage map');
     expect(map).toBeGreaterThan(verdict);
-    expect(t.slice(verdict, map)).toMatch(/✓ agrees with CE-pendulum-period/);
+    expect(verbose.slice(verdict, map)).toMatch(/✓ agrees with CE-pendulum-period/);
   });
 });
 
@@ -266,7 +269,9 @@ describe('persona retest: what map --equation prints', () => {
 
   it('W6: the one-letter a is disclosed as the catalog a, with its dimension and who uses it', async () => {
     const t = await text(['map', '--equation', 'unruh_temperature = hbar*a/(2*pi*k_B*c)']);
-    expect(t).toMatch(/· 'a' is bound to the catalog quantity a \[length\], a one-letter name \(used by CE-perihelion-precession[^)]*\); if you meant another quantity, write its full name/);
+    expect(t).toMatch(/· 'a' matches the catalog quantity a \[length\] \(used by CE-perihelion-precession[^)]*\), a one-letter name, and is not bound\. Pass --bind-short to bind it/);
+    const bound = await text(['map', '--equation', 'unruh_temperature = hbar*a/(2*pi*k_B*c)', '--bind-short']);
+    expect(bound).toMatch(/· 'a' is bound to the catalog quantity a \[length\], a one-letter name \(used by CE-perihelion-precession[^)]*\); if you meant another quantity, write its full name/);
   });
 
   it('W6 control: the full name acceleration is not disclosed as a one-letter binding', async () => {
@@ -284,11 +289,14 @@ describe('persona retest: what map --equation prints', () => {
     expect(await text(['map', '--equation', 'pressure = N*k_B*temperature/V'])).toMatch(/✓ agrees with CE-ideal-gas/);
   });
 
-  it('L7: --equation-only prints the verdict and not the linkage map; without it the map follows', async () => {
+  it('L7: --equation prints the verdict only; --verbose and the old flag restore the map', async () => {
     const only = await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)', '--equation-only']);
     expect(only).toMatch(/✓ agrees with CE-pendulum-period/);
     expect(only).not.toMatch(/Linkage map/);
-    expect(await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)'])).toMatch(/Linkage map/);
+    const verdict = await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)']);
+    expect(verdict).toMatch(/✓ agrees with CE-pendulum-period/);
+    expect(verdict).not.toMatch(/Linkage map/);
+    expect(await text(['map', '--equation', 'period = 2*pi*sqrt(length/gravity)', '--verbose'])).toMatch(/Linkage map/);
   });
 
   it('L7: --equation-only needs --equation, and its JSON drops the linkage map', async () => {
@@ -302,9 +310,10 @@ describe('persona retest: what map --equation prints', () => {
     expect(parsed.result.userEquation.shortBindings).toEqual([]);
   });
 
-  it('L8: probe scan with no searchable gap says how to start an expression search', async () => {
+  it('L8: probe scan lists searchable expression gaps from applied cases', async () => {
     const t = await text(['probe', 'scan']);
-    expect(t).toMatch(/0 of \d+ gaps are searchable by Product B/);
-    expect(t).toMatch(/To search expressions, write a problem file \(`upt help probe`, PROBLEM FILE, has a minimal example\) and run `upt probe run --problem=FILE`/);
+    expect(t).toMatch(/fg-expr-case-brownian-sphere/);
+    expect(t).toMatch(/prediction-residual \/ searchable/);
+    expect(t).not.toMatch(/0 of \d+ gaps are searchable by Product B/);
   });
 });

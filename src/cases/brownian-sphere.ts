@@ -276,6 +276,14 @@ export const BROWNIAN_SPHERE_CASE: AppliedCase = {
     ],
   },
   /** Evaluate the Stokes-Einstein MSD and regime checks for the supplied Brownian-sphere inputs. */
+  regimeAt(inputs, outputs) {
+    const re = outputs.Re;
+    const m = outputs.m_kg;
+    const gamma = outputs.gamma_kg_per_s;
+    const t = inputs.t_s;
+    if (re == null || m == null || gamma == null || t == null) return '';
+    return `upt regime diffusion --at Re=${re} m=${m} gamma=${gamma} t=${t}`;
+  },
   run(i) {
     requirePositive(ID, i, ['T_K', 'eta_Pa_s', 'a_m', 'rho_p_kg_per_m3', 'rho_f_kg_per_m3', 't_s']);
     const { T_K: T, eta_Pa_s: eta, a_m: a, rho_p_kg_per_m3: rhoP, rho_f_kg_per_m3: rhoF, t_s: t, d } = i as Record<string, number>;

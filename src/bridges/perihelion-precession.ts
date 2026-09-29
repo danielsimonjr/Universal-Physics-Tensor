@@ -7,7 +7,7 @@
  *
  * where
  *   G  = 6.6743 × 10⁻¹¹ m³ kg⁻¹ s⁻²  (CODATA 2018)
- *   c  = 2.998 × 10⁸ m s⁻¹             (CODATA 2018)
+ *   c  = 299792458 m s⁻¹               (exact SI)
  *   M  = central mass (kg)
  *   a  = semi-major axis (m)
  *   e  = orbital eccentricity (dimensionless, 0 ≤ e < 1)

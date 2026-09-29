@@ -30,7 +30,9 @@ import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CONSTANTS, piMultipleValue } from './symbolic-constants.js';
 import { evalExpr } from './expr-eval.js';
-import { canonicalPrefactor } from './canonical-prefactors.js';
+import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
+import { formulaNameDimensions } from './formula-names.js';
+import { C_SI } from '../core/constants.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import type { CompiledFormula } from '../numerical/formula.js';
@@ -380,6 +382,28 @@ export function compareWithCanonical(
       variables,
       constants,
     );
+    // A dimensionless group the record does not carry (sound-speed γ) is checked only when the
+    // user wrote it. Friedmann's curvature term is the same kind of extension: the frozen entry
+    // is the flat dust equation, and curvature_k / scale_factor are not its governing names.
+    const groupSpec = CANONICAL_GROUP_PREFACTORS.find((g) => g.id === entry.id);
+    let boundGroup: string | undefined;
+    if (groupSpec) {
+      const idx = forVariables.findIndex((s) => s.name === groupSpec.group);
+      if (idx >= 0) {
+        boundGroup = forVariables[idx]!.name;
+        forVariables.splice(idx, 1);
+      }
+    }
+    const friedmannExtras = ['curvature-k', 'scale-factor'] as const;
+    const friedmannK =
+      entry.id === 'CE-friedmann' &&
+      friedmannExtras.every((n) => forVariables.some((s) => s.name === n));
+    if (friedmannK) {
+      for (const n of friedmannExtras) {
+        const idx = forVariables.findIndex((s) => s.name === n);
+        if (idx >= 0) forVariables.splice(idx, 1);
+      }
+    }
     let pairing = pairSources(forVariables, variables);
     if (pairing === null) {
       // L6: a count the AST holds but the governing set does not (CE-ideal-gas's N), named by the user.
@@ -407,9 +431,15 @@ export function compareWithCanonical(
     const paired = byDimension.length > 0 ? { paired: byDimension } : {};
     const names = variables.map((g) => normalize(g.name)).sort();
 
-    const points = FIXED_POINT_EXPONENTS.map((p) =>
-      Object.fromEntries(names.map((n, i) => [n, Math.pow(1.7 + i, p)])),
-    );
+    const points = FIXED_POINT_EXPONENTS.map((p) => {
+      const row: Record<string, number> = Object.fromEntries(names.map((n, i) => [n, Math.pow(1.7 + i, p)]));
+      if (boundGroup !== undefined) row['__group'] = Math.pow(2.3, p);
+      if (friedmannK) {
+        row['curvature-k'] = Math.pow(1.1, p);
+        row['scale-factor'] = Math.pow(1.9, p);
+      }
+      return row;
+    });
     // Constant aliases bind to the registered SI value (same as the canonical AST's CONSTANTS
     // lookup), not to a fixed-point sample — otherwise the ratio would wander with the points.
     const constBindings = Object.fromEntries(
@@ -425,19 +455,28 @@ export function compareWithCanonical(
       evaluateUser({
         ...Object.fromEntries([...pairing].map(([u, c]) => [u, p[c]!])),
         ...constBindings,
+        ...(boundGroup === undefined ? {} : { [boundGroup]: p['__group']! }),
+        ...(friedmannK ? { 'curvature-k': p['curvature-k']!, 'scale-factor': p['scale-factor']! } : {}),
       });
 
     // A prefactor the entry does not record may come from the sourced table,
     // which lives outside the pinned src/canonical tree.
     const tabled = entry.epistemicStatus === 'fully-quantitative' ? undefined : canonicalPrefactor(entry.id);
-    const factor = tabled ?? 1;
+    const extraFactor = (p: Readonly<Record<string, number>>): number =>
+      boundGroup === undefined || groupSpec === undefined
+        ? 1
+        : groupSpec.coefficient * Math.pow(p['__group']!, groupSpec.exponent);
+    const withExtension = (flat: number, p: Readonly<Record<string, number>>): number =>
+      friedmannK ? flat - (p['curvature-k']! * C_SI * C_SI) / (p['scale-factor']! * p['scale-factor']!) : flat;
+    const scale = (flat: number, p: Readonly<Record<string, number>>): number =>
+      withExtension((tabled ?? 1) * extraFactor(p) * flat, p);
     let canonicalAt: (p: Readonly<Record<string, number>>) => number;
     if (entry.scalarAst !== undefined) {
       const ast = entry.scalarAst;
       const symbols = freeSymbols(ast, new Map());
       const alignments = symbolAlignments(symbols, variables);
       const at = (alignment: ReadonlyMap<string, string>) => (p: Readonly<Record<string, number>>) =>
-        factor * evalExpr(ast, Object.fromEntries([...alignment].map(([sym, g]) => [sym, p[normalize(g)]!])));
+        scale(evalExpr(ast, Object.fromEntries([...alignment].map(([sym, g]) => [sym, p[normalize(g)]!]))), p);
       if (alignments.length === 0) {
         results.push({
           id: entry.id,
@@ -486,10 +525,12 @@ export function compareWithCanonical(
       const monomial = d.monomial;
       const constValues = new Map(constants.map((g) => [normalize(g.name), CONSTANTS[g.name]!.value]));
       canonicalAt = (p) =>
-        factor *
-        Object.entries(monomial).reduce(
-          (acc, [n, e]) => acc * Math.pow(p[normalize(n)] ?? constValues.get(normalize(n)) ?? Number.NaN, e),
-          1,
+        scale(
+          Object.entries(monomial).reduce(
+            (acc, [n, e]) => acc * Math.pow(p[normalize(n)] ?? constValues.get(normalize(n)) ?? Number.NaN, e),
+            1,
+          ),
+          p,
         );
     } else {
       continue;
@@ -515,9 +556,20 @@ export function compareWithCanonical(
     // A monomial-only record carries no prefactor, even on a fully-quantitative entry: the EFE keeps
     // its 8π in the field equation (persona question Q3).
     const recordsPrefactor =
-      tabled !== undefined || (entry.epistemicStatus === 'fully-quantitative' && entry.scalarAst !== undefined);
+      tabled !== undefined ||
+      boundGroup !== undefined ||
+      friedmannK ||
+      (entry.epistemicStatus === 'fully-quantitative' && entry.scalarAst !== undefined);
+    const extension =
+      friedmannK
+        ? 'CE-friedmann records the flat term; this check also subtracts curvature_k·c²/scale_factor²'
+        : boundGroup !== undefined && groupSpec !== undefined
+          ? `the dimensionless group ${groupSpec.group} is bound, so the prefactor includes ${groupSpec.coefficient}·${groupSpec.group}^${groupSpec.exponent}`
+          : undefined;
+    const classified = classify(entry, ratios, recordsPrefactor);
     results.push({
-      ...classify(entry, ratios, recordsPrefactor),
+      ...classified,
+      ...(extension !== undefined && classified.detail === undefined ? { detail: extension } : {}),
       ...(names.length === 0 ? { constantsOnly: true as const } : {}),
       ...paired, ...targetVia,
     });
@@ -540,16 +592,25 @@ export function compareWithCanonical(
 export async function compareUserEquation(
   equation: string,
   catalogDims: ReadonlyMap<string, Dimension>,
+  options?: { readonly bindShortNames?: boolean },
 ): Promise<CanonicalComparison[]> {
-  const catalogNames = new Set(catalogDims.keys());
+  const dimsIn = new Map(catalogDims);
+  for (const [name, dim] of formulaNameDimensions()) {
+    if (!dimsIn.has(name)) dimsIn.set(name, dim);
+  }
+  const catalogNames = new Set(dimsIn.keys());
+  const bindShort = options?.bindShortNames === true;
+  const declined = (token: string): boolean => !bindShort && token.length === 1 && catalogNames.has(token);
   // W2: same kebab→underscore rewrite as analyzeUserEquation, so comparison and
   // dimensional check see one formula.
   const eq = await parseUserEquation(equation, catalogNames);
-  const resolved = new Map(eq.sources.map((s) => [s, resolveToCatalogName(s, catalogNames) ?? s]));
-  const target = resolveToCatalogName(eq.target, catalogNames) ?? eq.target;
+  const resolved = new Map(
+    eq.sources.map((s) => [s, declined(s) ? s : (resolveToCatalogName(s, catalogNames) ?? s)]),
+  );
+  const target = declined(eq.target) ? eq.target : (resolveToCatalogName(eq.target, catalogNames) ?? eq.target);
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
-  for (const [s, r] of resolved) dims[s] = catalogDims.get(r) ?? DIMENSIONLESS;
+  for (const [s, r] of resolved) dims[s] = declined(s) ? DIMENSIONLESS : (dimsIn.get(r) ?? DIMENSIONLESS);
   const rhs = eq.text.slice(eq.text.indexOf('=') + 1);
   let compiled: CompiledFormula;
   try {
@@ -560,8 +621,9 @@ export async function compareUserEquation(
   }
   const constantValues = Object.fromEntries(Object.entries(CONSTANTS).map(([name, c]) => [name, c.value]));
   // A name the catalog does not know carries no dimension, so it never pairs by dimension.
-  const sources = [...resolved.values()].map((r) => {
-    const dim = catalogDims.get(r);
+  const sources = [...resolved.entries()].map(([token, r]) => {
+    if (declined(token)) return r;
+    const dim = dimsIn.get(r);
     return dim === undefined ? r : { name: r, dim };
   });
   return compareWithCanonical(target, sources, (values) =>
@@ -599,7 +661,7 @@ export function describeComparison(c: CanonicalComparison): string {
       : `at ${FIXED_POINT_EXPONENTS.length} fixed points`;
   switch (c.kind) {
     case 'agrees':
-      return `✓ agrees with ${who}, prefactor included: yours/canonical = 1 ${at}`;
+      return `✓ agrees with ${who}, prefactor included: yours/canonical = 1 ${at}${c.detail ? ` (${c.detail})` : ''}`;
     case 'factor':
       return `⚠ differs from ${who} by a constant factor: yours/canonical = ${c.ratio!.toPrecision(6)} ${at}`;
     case 'form':

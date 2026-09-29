@@ -27,6 +27,9 @@ import type { SourceName } from '../graphs.js';
 import type { EquationAnalysis } from '../../composition/user-equation.js';
 import type { CanonicalComparison } from '../../composition/canonical-compare.js';
 import { eulerConstantNote } from '../../numerical/formula.js';
+import { unboundEulerRefusal } from '../euler-guard.js';
+import { conventionLines } from '../conventions.js';
+import type { UnitMode } from '../../composition/natural-units.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--source', valueStyle: 'attached' },
@@ -51,12 +54,18 @@ const FLAGS: FlagSpec[] = [
   // and let mapCmd emit `upt: --equation requires "TARGET = EXPR"`, exit 2).
   { name: '--equation', valueStyle: 'either', optionalValue: true },
   { name: '--equation-only', valueStyle: 'none' },
+  { name: '--verbose', valueStyle: 'none' },
+  { name: '--bind-short', valueStyle: 'none' },
+  { name: '--allow-euler', valueStyle: 'none' },
+  { name: '--natural', valueStyle: 'none' },
+  { name: '--geometrized', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
 ];
 
 const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
-        [--equation "TARGET = EXPR" [--equation-only]] [--around=QUANTITY [--depth=N]]
+        [--equation "TARGET = EXPR" [--equation-only] [--verbose] [--bind-short]
+        [--allow-euler] [--natural] [--geometrized]] [--around=QUANTITY [--depth=N]]
         [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
         [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
         Map how the equations LINK: connected components (clusters) of the
@@ -88,11 +97,17 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         dump). Multi-word names may use underscores or catalog hyphens
         (planck_length / planck-length). Unknown names get a "did you mean?",
         and a registered constant of the inferred dimension (sigma → sigma_sb);
-        a one-letter name bound to the catalog is named with its dimension.
+        a one-letter catalog name (a, r, …) is reported and not bound; --bind-short
+        binds it. The alias T → temperature still binds.
         An all-constant right-hand side (the Planck length) is compared at the
         SI constant values when its target is a catalog quantity.
-        --equation-only prints the verdict and stops: no linkage map after it
-        (with --json: no "linkage" field).
+        With --equation, the default is the verdict only. --verbose prints the
+        linkage map after it. --equation-only is the same verdict and errors
+        when --equation is missing (with --json: no "linkage" field).
+        An unbound e under MathTS is refused unless --allow-euler.
+        --natural sets ħ = c = 1 for a dimension difference that is a power of
+        those constants; --geometrized also allows powers of G. The SI default
+        still refuses rest_energy = mass.
         --relation=TYPE keeps only edges whose recorded Atlas relation is that
         type; --evidence=TAG keeps only edges whose evidence set, DERIVED from
         the catalog row at read time, contains that tag.
@@ -233,16 +248,19 @@ function proposedJunctions(
 async function analyzeEquation(
   api: CommandCtx['api'],
   equation: string,
-  graph: readonly BridgeEdge[]
+  graph: readonly BridgeEdge[],
+  options?: { readonly bindShortNames?: boolean; readonly units?: Exclude<UnitMode, 'si'> },
 ): Promise<{ user: EquationAnalysis; comparisons: CanonicalComparison[] }> {
   const catalogDims = new Map<string, import('../../dimensional/types.js').Dimension>();
   for (const e of graph) {
     for (const q of [...e.sources, e.target]) catalogDims.set(q.name, q.dim);
   }
-  const user = await api.analyzeUserEquation(equation, catalogDims);
+  const user = await api.analyzeUserEquation(equation, catalogDims, options);
   // Dimensions cannot see a prefactor: compare with the canonical equation the
   // user's one restates, when the registry holds one (persona finding L2).
-  const comparisons = user.parseError ? [] : await api.compareUserEquation(equation, catalogDims);
+  const comparisons = user.parseError
+    ? []
+    : await api.compareUserEquation(equation, catalogDims, { bindShortNames: options?.bindShortNames });
   return { user, comparisons };
 }
 
@@ -277,6 +295,8 @@ function printEquationReport(
     out(`  · RHS dimension: ${api.format(user.rhsDimension)} (target not in the catalog, so no comparison)`);
   }
   for (const line of api.describeComparisons(comparisons)) out(`  ${line}`);
+  for (const line of conventionLines(comparisons.map((c) => c.id))) out(`  ${line}`);
+  if (user.naturalNote) out(`  ${user.naturalNote}`);
   const L = api.equationLanding(model, 'user-equation');
   if (L.isolated) {
     out('  ⚠ your equation is ISOLATED — it shares no quantity with this graph.');
@@ -312,10 +332,18 @@ function printEquationReport(
       .map((j) => j.id)
       .sort();
     const shown = users.slice(0, 3).join(', ') + (users.length > 3 ? `, +${users.length - 3} more` : '');
-    out(
-      `  · '${b.name}' is bound to the catalog quantity ${b.quantity} ${api.format(b.dim)}, a one-letter name` +
-        `${users.length > 0 ? ` (used by ${shown})` : ''}; if you meant another quantity, write its full name`,
-    );
+    const used = users.length > 0 ? ` (used by ${shown})` : '';
+    if (b.bound === false) {
+      out(
+        `  · '${b.name}' matches the catalog quantity ${b.quantity} ${api.format(b.dim)}${used}, a one-letter name, and is not bound. ` +
+          'Pass --bind-short to bind it, or write the full name you meant',
+      );
+    } else {
+      out(
+        `  · '${b.name}' is bound to the catalog quantity ${b.quantity} ${api.format(b.dim)}, a one-letter name` +
+          `${used}; if you meant another quantity, write its full name`,
+      );
+    }
   }
 }
 
@@ -541,15 +569,28 @@ async function run(ctx: CommandCtx): Promise<number> {
       throw new UsageError('upt: --equation requires "TARGET = EXPR"');
     }
     try {
-      ({ user, comparisons } = await analyzeEquation(api, equation, graph)); // throws UserEquationError on malformed structure
+      const units: Exclude<UnitMode, 'si'> | undefined = args.flags.has('geometrized')
+        ? 'geometrized'
+        : args.flags.has('natural')
+          ? 'natural'
+          : undefined;
+      ({ user, comparisons } = await analyzeEquation(api, equation, graph, {
+        bindShortNames: args.flags.has('bind-short'),
+        ...(units === undefined ? {} : { units }),
+      })); // throws UserEquationError on malformed structure
     } catch (e) {
       throw new UsageError('upt: ' + (e && (e as Error).message ? (e as Error).message : String(e)));
     }
     const rhs = equation.slice(equation.indexOf('=') + 1);
     try {
-      const note = eulerConstantNote(rhs, (await api.getFormulaParser()).parse(rhs).variables);
-      if (note) err(note);
-    } catch {
+      const parsed = (await api.getFormulaParser()).parse(rhs);
+      const kind = await api.getFormulaParserKind();
+      const refusal = unboundEulerRefusal(rhs, parsed.variables, kind, args.flags.has('allow-euler'), false);
+      if (refusal) throw new UsageError(refusal);
+      const note = eulerConstantNote(rhs, parsed.variables);
+      if (note && args.flags.has('allow-euler')) err(note);
+    } catch (e) {
+      if (e instanceof UsageError) throw e;
       // A formula that does not parse is reported by the equation analysis.
     }
     if (user.parseError) {
@@ -607,7 +648,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         source,
         ...(anchor !== null ? { anchor } : {}),
         result: {
-          ...(equationOnly ? {} : { linkage }),
+          ...(equation != null && (equationOnly || !args.flags.has('verbose')) ? {} : { linkage }),
           ...(posterMode ? { poster: { note: posterNote, ...posterValidation! } } : {}),
           ...(edgeLegend !== null ? { filter: edgeStats } : {}),
           ...(focus !== null ? { focus } : {}),
@@ -700,7 +741,7 @@ Your equation:  ${user.junction.label}`);
     });
     out(`\nYour equation:  ${user.junction.label}`);
     printEquationReport(api, model, user, out, comparisons);
-    if (equationOnly) return exitCode;
+    if (equationOnly || !args.flags.has('verbose')) return exitCode;
   }
 
   const m = api.linkageMap(graph);

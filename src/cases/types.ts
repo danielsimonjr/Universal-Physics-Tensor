@@ -100,6 +100,11 @@ export interface AppliedCase {
   /** Catalog bridges (`be-58`), atlas records (`ab-…`, `model-…`) and canonical entries it rests on. */
   readonly links: readonly { readonly id: string; readonly role: string }[];
   readonly examples: { readonly valid: CaseExample; readonly failures: readonly CaseExample[] };
+  /**
+   * The `upt regime --at` line implied by a result, when the case's outputs
+   * are not the regime's coordinate names.
+   */
+  regimeAt?(inputs: Readonly<Record<string, number>>, outputs: Readonly<Record<string, number | null>>): string;
   /** @throws Error on an input outside the model's domain (a negative radius, f_lo ≥ f_hi). */
   run(inputs: Readonly<Record<string, number>>): CaseResult;
 }

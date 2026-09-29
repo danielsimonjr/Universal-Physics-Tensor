@@ -81,6 +81,9 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observab
         INADEQUATE), and the evidence of the translation and of each carriage,
         derived by running their witnesses, plus the translation's witness
         run at this point with a control. Otherwise it is UNDETERMINED.
+        A bridge with two or more premises is named when both models appear
+        among its premises and its conclusion. That line is the bridge; it is
+        not composed as a chain, and a missing chain still exits 0.
         e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
               upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
               upt path model-pendulum model-lc --at theta0=0.3 T0=2 t=5 --tolerance=phase:0.1
@@ -89,6 +92,37 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observab
 const EPISTEMICS =
   'a path EXISTING is not a warrant: the bound is the warrant. A no-claim carries no number, ' +
   'and none is synthesized for it.';
+
+interface MultiPremise {
+  readonly id: string;
+  readonly premises: readonly string[];
+  readonly conclusion: string;
+}
+
+/** Bridges with two or more premises that mention both endpoints. Not a chain. */
+function multiPremiseBridges(api: CommandCtx['api'], from: string, to: string): MultiPremise[] {
+  const rows: MultiPremise[] = [];
+  const seen = new Set<string>();
+  for (const f of api.ATLAS_FAMILIES) {
+    for (const b of f.bridges) {
+      if (b.premises.length < 2 || seen.has(b.id)) continue;
+      const ends = new Set([...b.premises, b.conclusion]);
+      if (!ends.has(from) || !ends.has(to)) continue;
+      seen.add(b.id);
+      rows.push({ id: b.id, premises: [...b.premises], conclusion: b.conclusion });
+    }
+  }
+  return rows;
+}
+
+function printMultiPremise(out: CommandCtx['out'], rows: readonly MultiPremise[]): void {
+  for (const b of rows) {
+    out(`  multi-premise bridge: ${b.id}: ${b.premises.join(' + ')} → ${b.conclusion}`);
+  }
+  if (rows.length > 0) {
+    out('  A path composes one premise at a time. This bridge needs every premise named above.');
+  }
+}
 
 /** The literal phrase the no-composite-claim case must print. */
 const NO_COMPOSITE_PHRASE = 'no composite claim';
@@ -949,17 +983,24 @@ async function run(ctx: CommandCtx): Promise<number> {
   const bridgeFamily = (id: string): string | undefined =>
     api.ATLAS_FAMILIES.find((f) => f.bridges.some((b) => b.id === id))?.family;
   const { bridges, fromFamily, toFamily } = selectRoute(api, from, to, 'path');
+  const multi = from === to ? [] : multiPremiseBridges(api, from, to);
 
   if (bridges === null) {
     if (wantJson) {
       emitJson(
-        { command: 'path', epistemics: EPISTEMICS, options: { from, to, at: point }, result: { path: null } },
+        {
+          command: 'path',
+          epistemics: EPISTEMICS,
+          options: { from, to, at: point },
+          result: { path: null, ...(multi.length === 0 ? {} : { multiPremise: multi }) },
+        },
         ctx.write,
       );
       return 0;
     }
     out(`\nupt path ${from} → ${to}`);
     out('  no chain of bridges connects these models; there is nothing to compose.');
+    printMultiPremise(out, multi);
     return 0;
   }
 
@@ -1088,6 +1129,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           pointBound,
           ...(pointBoundReason !== null ? { pointBoundReason } : {}),
           horizons,
+          ...(multi.length === 0 ? {} : { multiPremise: multi }),
           horizonsEvaluated: t !== undefined,
           allHorizonsHold: t === undefined ? null : allHold,
           ...(adequacy === null ? {} : { tolerance: { value: tolerance!.value, ...adequacy, scope } }),
@@ -1102,6 +1144,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`\nupt path ${from} → ${to}`);
   out(`  ${bridges.length} bridge(s):`);
   for (const b of bridges) out(`    ${b.premises[0]} --[${b.relation}]--> ${b.conclusion}  (${b.id})`);
+  printMultiPremise(out, multi);
   if (fromFamily !== toFamily) {
     out(
       `  crosses families: ${fromFamily} → ${toFamily} (a family is a filing label; ` +

@@ -12,6 +12,8 @@ import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
 import { C_SI, G_SI } from '../../core/constants.js';
+import { JEANS_FORMULA_NOTE } from '../conventions.js';
+import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--sigma', valueStyle: 'either', repeatable: true },
@@ -359,6 +361,7 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   const u = uncertaintyOf(ctx, c, inputs, (i) => ({ ...api.runAppliedCase(c.id, i).outputs }), CASE_NOT_INCLUDED);
   const failed = result.checks.filter((k) => !k.holds).map((k) => k.id);
   const code = failed.length === 0 ? 0 : 3;
+  const regimeLine = c.regimeAt?.(inputs, result.outputs) ?? '';
 
   if (args.flags.has('json')) {
     emitJson(
@@ -382,6 +385,7 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
           notIncluded: c.notIncluded,
           measurement: c.measurement,
           links: c.links,
+          ...(regimeLine === '' ? {} : { regimeAt: regimeLine }),
           ...(u === null ? {} : { uncertainty: u.block }),
         },
       },
@@ -404,6 +408,7 @@ async function runCase(ctx: CommandCtx, c: AppliedCase, rest: readonly string[])
   const obs = c.outputs.find((o) => o.key === c.observable)!;
   out(`  observable: ${obs.key} = ${withUnit(result.outputs[obs.key] ?? null, obs.unit)}`);
   out('  regime checks (at the given inputs):');
+  if (regimeLine !== '') out(`  regime coordinates: ${regimeLine}`);
   for (const k of result.checks) {
     out(`    ${k.holds ? 'holds   ' : 'VIOLATED'}  ${k.id}: ${k.quantity} = ${Number(k.value.toPrecision(6))} ${k.op} ${k.bound} — ${k.premise} (${k.threshold})`);
   }
@@ -497,6 +502,8 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => api.evaluateBridge(id, i) as Record<string, unknown>, NOT_INCLUDED);
   const domainNote = weakFieldDomainNote(id, inputs);
+  const formulaNote = id === 65 ? JEANS_FORMULA_NOTE : undefined;
+  const hbarNote = id === 56 ? HBAR_TRUNCATION_NOTE : undefined;
 
   if (args.flags.has('json')) {
     emitJson(
@@ -509,6 +516,8 @@ async function run(ctx: CommandCtx): Promise<number> {
           conversions: conversionsOf(resolved),
           output: result,
           ...(domainNote === undefined ? {} : { domainNote }),
+          ...(formulaNote === undefined ? {} : { formulaNote }),
+          ...(hbarNote === undefined ? {} : { hbarNote }),
           ...(u === null ? {} : { uncertainty: u.block }),
         },
       },
@@ -522,6 +531,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  ${k} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
   }
   if (domainNote !== undefined) out(`  ${domainNote}`);
+  if (formulaNote !== undefined) out(`  ${formulaNote}`);
+  if (hbarNote !== undefined) out(`  ${hbarNote}`);
   if (u !== null) printUncertainty(out, u);
   return 0;
 }

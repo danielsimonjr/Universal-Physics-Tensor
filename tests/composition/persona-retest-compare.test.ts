@@ -210,7 +210,11 @@ describe('W6 / persona I7: a short name bound to a catalog quantity is disclosed
   it("'a' in the Unruh formula is reported as bound to the catalog's a, a length, not an acceleration", async () => {
     const dims = new Map<string, Dimension>([['a', LENGTH], ['temperature', TEMPERATURE]]);
     const a = await analyzeUserEquation('unruh_temperature = hbar*a/(2*pi*k_B*c)', dims);
-    expect(a.shortBindings).toEqual([{ name: 'a', quantity: 'a', dim: LENGTH }]);
+    expect(a.shortBindings).toEqual([{ name: 'a', quantity: 'a', dim: LENGTH, bound: false }]);
+    expect(a.junction.sources).toContain('a');
+    const bound = await analyzeUserEquation('unruh_temperature = hbar*a/(2*pi*k_B*c)', dims, { bindShortNames: true });
+    expect(bound.shortBindings).toEqual([{ name: 'a', quantity: 'a', dim: LENGTH }]);
+    expect(bound.junction.sources).toContain('a');
   });
 
   it('control: a long name bound to the catalog is not listed', async () => {

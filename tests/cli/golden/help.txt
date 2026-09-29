@@ -120,10 +120,8 @@ Usage:
         sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
         or log2 for base 10 or 2. With the MathTS parser, a bare e is Euler's
         number (≈2.718); the built-in parser leaves e for you to set.
-        Elementary charge and eccentricity need their own names. An unknown
-        function fails and names a documented equivalent where one exists
-        (lg → log10). Any other name must be supplied. --debug prints the
-        parser and its version to stderr.
+        Elementary charge is e_charge. An unbound e under MathTS is refused
+        unless you pass e=<number> or --allow-euler. `upt help eval` describes every flag.
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \
                        c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
 
@@ -131,8 +129,7 @@ Usage:
         Derive YOUR OWN equation's dimensional form. <dim> is a named
         dimension (length, time, mass, velocity, ...), a constant (hbar, c,
         G, k_B, e), or explicit (L^3.M^-1.T^-2). With --formula, also verify
-        it and recover the dimensionless prefactor. --debug prints the formula
-        parser and its version to stderr.
+        it and recover the dimensionless prefactor. `upt help derive` describes every flag.
         e.g.  upt derive period:time length:length gravity:acceleration \
                        --formula "2*pi*sqrt(length/gravity)"
 
@@ -185,7 +182,8 @@ Usage:
         pairwise regime overlap and, over the box --at states, the uncovered
         points. A group can be given by name (spaces ignored, * for ·) or
         through its parameters (--at tau=1 D=1 q=1 gives tau · D · q^2 = 1);
-        a key no record uses is named and ignored.
+        a key no record uses is named and ignored. Exit 3 when any record is
+        VIOLATED. VACUOUS, UNKNOWN and a survey with no violated record exit 0.
         e.g.  upt regime oscillators --at theta0=0.2
 
   upt path <from> <to> [--at group=value ...] [--tolerance=[observable:]EPS]
@@ -221,10 +219,21 @@ Usage:
         e.g.  upt atlas ab-pendulum-linear
 
   upt search <word> ...
-        Find a catalog bridge, canonical equation, atlas model or bridge, or
-        quantity by name, id, symbol, alias or description, with the command
-        that inspects each. An equal dimension is never a match.
+        Find a catalog bridge, canonical equation, atlas model or bridge,
+        quantity or applied case by name, id, symbol, alias or description,
+        with the command that inspects each. An equal dimension is never a match.
         e.g.  upt search thermal noise
+              upt search skin
+
+  upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
+        Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann
+        scalar. Alias: upt curvature. `upt help metric` describes every flag.
+        e.g.  upt metric schwarzschild M=1.989e30 r=1e8
+
+  upt testplan <be-NN | case-id> [--json]
+        The measurement plan stored on a confrontation or an applied case.
+        `upt help testplan` describes every flag.
+        e.g.  upt testplan be-58
 
   upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
         Experimental expression/residual search (Product B). Orthogonal to

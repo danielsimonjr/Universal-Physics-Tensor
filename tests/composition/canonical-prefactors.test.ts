@@ -36,6 +36,9 @@ const EXPECTED: Record<string, number> = {
   'CE-planck-length': 1,
   'CE-planck-mass': 1,
   'CE-planck-time': 1,
+  'CE-magnetic-field-wire': 1 / (2 * Math.PI),
+  'CE-larmor-power': 1 / (6 * Math.PI),
+  'CE-field-energy-density': 0.5,
 };
 
 /** A dimensionless number used as a FACTOR (not as an exponent) anywhere in the AST. */

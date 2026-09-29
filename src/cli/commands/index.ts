@@ -27,3 +27,5 @@ import './regime.js';
 import './path.js';
 import './atlas.js';
 import './search.js';
+import './metric.js';
+import './testplan.js';

@@ -41,14 +41,14 @@ The codebase is organized into the following modules:
 - **bridges**: 90 files
 - **canonical**: 18 files
 - **cases**: 9 files
-- **cli**: 40 files
+- **cli**: 45 files
 - **root**: 1 file
-- **composition**: 74 files
+- **composition**: 77 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 32 files
 - **entry**: 1 file
-- **numerical**: 39 files
+- **numerical**: 40 files
 
 ---
 
@@ -2501,6 +2501,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/units.js` | `convertValue, UnitError, TemperatureReading` | Import |
+| `../core/constants.js` | `M_SUN_SI` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
 **Exports:**
@@ -3384,6 +3385,8 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError, EXIT_CHECK_FAILED` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
+| `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
+| `../conventions.js` | `conventionLines` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -3421,6 +3424,10 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
+| `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
+| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope, parseEvalToken` | Import |
+| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../dimensional/units.js` | `UnitError` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3439,6 +3446,8 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
 | `../../core/constants.js` | `C_SI, G_SI` | Import |
+| `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
+| `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
 
 **Exports:**
 - Functions: `weakFieldDomainNote`, `propagateUncertainty`
@@ -3508,6 +3517,8 @@ The codebase is organized into the following modules:
 | `./path.js` | `*` | Import |
 | `./atlas.js` | `*` | Import |
 | `./search.js` | `*` | Import |
+| `./metric.js` | `*` | Import |
+| `./testplan.js` | `*` | Import |
 
 ---
 
@@ -3535,9 +3546,28 @@ The codebase is organized into the following modules:
 | `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../../numerical/formula.js` | `eulerConstantNote` | Import |
+| `../euler-guard.js` | `unboundEulerRefusal` | Import |
+| `../conventions.js` | `conventionLines` | Import |
+| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
 - Functions: `neighbourhood`
+- Constants: `command`
+
+---
+
+### `src/cli/commands/metric.ts` - `upt metric` — Christoffel symbols and curvature scalars for a named metric.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../output.js` | `emitJson` | Import |
+| `../errors.js` | `UsageError` | Import |
+| `../../numerical/spacetime-metrics.js` | `curvatureReport, schwarzschildCircularOrbit, MetricId` | Import |
+
+**Exports:**
 - Constants: `command`
 
 ---
@@ -3608,6 +3638,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError, CliError` | Import |
 
 **Exports:**
+- Functions: `emptySearchableWarning`
 - Constants: `command`
 
 ---
@@ -3633,7 +3664,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../errors.js` | `CliError` | Import |
+| `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3674,11 +3705,64 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/commands/testplan.ts` - `upt testplan` — the measurement plan already stored on a case or a
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../output.js` | `emitJson` | Import |
+| `../errors.js` | `UsageError, CliError` | Import |
+| `../../cases/types.js` | `AppliedCase` | Import (type-only) |
+| `../../bridges/observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
+
+**Exports:**
+- Constants: `command`
+
+---
+
+### `src/cli/conventions.ts` - Convention lines the CLI prints beside a comparison. They do not change the
+
+**Exports:**
+- Functions: `conventionLines`
+- Constants: `JEANS_FORMULA_NOTE`
+
+---
+
 ### `src/cli/errors.ts` - Typed error classes and exit codes for the UPT CLI.
 
 **Exports:**
 - Classes: `UsageError`, `CliError`
 - Constants: `EXIT_CHECK_FAILED`
+
+---
+
+### `src/cli/euler-guard.ts` - Refuse a bare `e` that the MathTS parser would evaluate as Euler's number.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../numerical/formula.js` | `eulerConstantNote` | Import |
+
+**Exports:**
+- Functions: `unboundEulerRefusal`, `withParser`
+
+---
+
+### `src/cli/eval-numbers.ts` - Numbers `upt eval` understands: a bare numeral, a numeral with a unit, and
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI` | Import |
+| `../dimensional/units.js` | `parseUnit, UnitError` | Import |
+| `../composition/formula-names.js` | `EPS0_SI, MU0_SI` | Import |
+| `../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+
+**Exports:**
+- Functions: `codataScope`, `parseEvalToken`
+- Constants: `HBAR_TRUNCATION_NOTE`
 
 ---
 
@@ -3897,7 +3981,7 @@ The codebase is organized into the following modules:
 | `./composition/graph-viz.js` | `filterEdges, deriveEdgeEvidence, formatFilterLegend` | Re-export |
 | `./composition/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
 | `./composition/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
-| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
+| `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
 | `./composition/adjudication.js` | `AnnotatedCandidate, CandidateAdjudication` | Re-export |
 | `./composition/consequence.js` | `annotateConsequences` | Re-export |
@@ -3948,23 +4032,23 @@ The codebase is organized into the following modules:
   bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
   filterEdges, deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
   describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
-  findFrontierGap, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson,
-  resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson,
-  loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap,
-  suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto, annotateAdjudications,
-  adjudicationFor, candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication,
-  annotateConsequences, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
-  checkConventions, unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness,
-  REPRESENTATIVE_VALUES, compareWithCanonical, compareUserEquation, describeComparison,
-  describeComparisons, CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding,
-  CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence,
-  NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY,
-  runNumericWitness, OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck,
-  translationsOf, ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, regimeHolds,
-  regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath,
-  enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult,
-  PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality, Witness,
-  MissingLipschitzError, AtlasModel, ModelId
+  findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap,
+  makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
+  formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
+  formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
+  runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
+  AnnotatedCandidate, CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
+  ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
+  describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
+  compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
+  CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
+  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS,
+  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
+  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
+  ObservableTranslation, PointCheck, AtlasFamily, regimeHolds, regimeOverlap, uncoveredRegions,
+  RegimeCheck, RegimeOverlap, RegionSample, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath,
+  horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim,
+  AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -4062,7 +4146,9 @@ The codebase is organized into the following modules:
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
-| `./canonical-prefactors.js` | `canonicalPrefactor` | Import |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
+| `./formula-names.js` | `formulaNameDimensions` | Import |
+| `../core/constants.js` | `C_SI` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula.js` | `CompiledFormula` | Import (type-only) |
@@ -4532,6 +4618,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
+| `../core/constants.js` | `C_SI, E_SI, M_E_SI` | Import |
+
+**Exports:**
+- Interfaces: `FormulaName`
+- Functions: `formulaNameDimensions`
+- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
+
+---
+
 ### `src/composition/graph-viz-svg.ts` - SVG rendering for the physics map — render Graphviz DOT source to an SVG
 
 **Exports:**
@@ -4661,6 +4763,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/natural-units.ts` - Opt-in natural units. The default comparison stays SI: an energy written as
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `NaturalPowers`
+- Functions: `naturalPowers`, `naturalNote`
+
+---
+
 ### `src/composition/poster-source.ts` - The POSTER source for the physics map — turn the Atlas Phase 3 poster index
 
 **Internal Dependencies:**
@@ -4760,6 +4875,22 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `DesignBounds`, `DesignSuggestion`
 - Functions: `parseDesignBounds`, `suggestDiscriminatingPoint`
+
+---
+
+### `src/composition/probe/expression-gaps.ts` - Expression gaps a `upt probe scan` can hand to Product B.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../cases/index.js` | `APPLIED_CASES` | Import |
+| `./frontier.js` | `scanFrontier` | Import |
+| `./problem.js` | `makeResidualGap` | Import |
+| `./types.js` | `FrontierGap` | Import (type-only) |
+| `../edge.js` | `BridgeEdge` | Import (type-only) |
+
+**Exports:**
+- Functions: `expressionSearchGaps`, `scanWithExpressionGaps`
 
 ---
 
@@ -4868,6 +4999,7 @@ The codebase is organized into the following modules:
 | `./generator.js` | `monomialToExpr, generateNative` | Re-export |
 | `./generator.js` | `RawCandidate` | Re-export |
 | `./frontier.js` | `wrapRelationLinkGaps, wrapConnectorGaps, wrapRegimeGaps, scanFrontier, findFrontierGap, problemFromResidualGap` | Re-export |
+| `./expression-gaps.js` | `expressionSearchGaps, scanWithExpressionGaps` | Re-export |
 | `./fit.js` | `fitPrefactor` | Re-export |
 | `./fit.js` | `FitResult` | Re-export |
 | `./scoring.js` | `scoreCandidate, rankPareto` | Re-export |
@@ -4912,11 +5044,11 @@ The codebase is organized into the following modules:
   complexityOf, fingerprintExpr, scalarDiscrepancy, rmse, ResidualError, openManifest, closeManifest,
   captureEnvironment, canTransition, applyStatus, statusRank, ProbeCandidateStore, monomialToExpr,
   generateNative, RawCandidate, wrapRelationLinkGaps, wrapConnectorGaps, wrapRegimeGaps, scanFrontier,
-  findFrontierGap, problemFromResidualGap, fitPrefactor, FitResult, scoreCandidate, rankPareto,
-  RankedCandidate, compareToCorpus, corpusRelativeWording, CorpusMatch, CorpusComparisonResult,
-  checkDeclaredLimit, checkDeclaredLimits, LimitCheckResult, runFalsification, DEFAULT_BATTERIES,
-  FalsifyInput, FalsifyResult, datasetFromRows, asDatasetSafe, loadDatasetFromJson,
-  loadSplitDatasetsFromJson, loadDatasetFromCsv, loadSplitCsv, SplitFileDatasets,
+  findFrontierGap, problemFromResidualGap, expressionSearchGaps, scanWithExpressionGaps, fitPrefactor,
+  FitResult, scoreCandidate, rankPareto, RankedCandidate, compareToCorpus, corpusRelativeWording,
+  CorpusMatch, CorpusComparisonResult, checkDeclaredLimit, checkDeclaredLimits, LimitCheckResult,
+  runFalsification, DEFAULT_BATTERIES, FalsifyInput, FalsifyResult, datasetFromRows, asDatasetSafe,
+  loadDatasetFromJson, loadSplitDatasetsFromJson, loadDatasetFromCsv, loadSplitCsv, SplitFileDatasets,
   suggestDiscriminatingPoint, parseDesignBounds, DesignBounds, DesignSuggestion,
   detectMeanChangepoint, estimateScaleExponent, probeConservation, ChangepointInput,
   ChangepointResult, ScaleSymmetryInput, runBackendWorker, BackendRequest, BackendCandidate,
@@ -5442,6 +5574,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `./formula-names.js` | `formulaNameDimensions` | Import |
+| `./natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
 | `./graph-viz.js` | `VizModel, VizJunction` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -5450,7 +5584,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `UserEquationError`
-- Interfaces: `UserEquation`, `EquationLanding`, `EquationHint`, `ShortBinding`, `EquationAnalysis`
+- Interfaces: `UserEquation`, `AnalyzeUserEquationOptions`, `EquationLanding`, `EquationHint`, `ShortBinding`, `EquationAnalysis`
 - Functions:
 
   ```text
@@ -5847,7 +5981,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./types.js` | `DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE` | Import |
-| `./algebra.js` | `multiply, divide` | Import |
+| `./algebra.js` | `divide, multiply, power` | Import |
 
 **Exports:**
 - Classes: `DimensionSpecError`
@@ -6103,7 +6237,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./algebra.js` | `equals, format, multiply, power` | Import |
 | `./types.js` | `Dimension` | Import (type-only) |
-| `../core/constants.js` | `E_SI, M_SUN_SI` | Import |
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI` | Import |
 
 **Exports:**
 - Classes: `UnitError`
@@ -7045,6 +7179,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/numerical/spacetime-metrics.ts` - Curvature of a few exact metrics for `upt metric`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
+
+**Exports:**
+- Interfaces: `Component`, `CurvatureReport`
+- Functions: `schwarzschildKretschmann`, `flrwRicciScalar`, `friedmannSides`, `kerrKretschmann`, `metricParams`, `curvatureReport`, `schwarzschildCircularOrbit`
+- Constants: `METRIC_SIGNATURE`, `METRIC_SIGNATURE_NOTE`
+
+---
+
 ### `src/numerical/strides.ts` - Shared stride and flat-index utilities for row-major tensor storage.
 
 **Exports:**
@@ -7167,7 +7315,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...35 more]
+        N29[...40 more]
     end
 
     subgraph Root
@@ -7180,7 +7328,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...69 more]
+        N36[...72 more]
     end
 
     subgraph Core
@@ -7217,7 +7365,7 @@ graph TD
         N55[connection-lowering-helpers]
         N56[curvature-lowering-helpers]
         N57[derivative-lowering]
-        N58[...34 more]
+        N58[...35 more]
     end
 
     N0 --> N48
@@ -7258,17 +7406,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 383 |
+| Total TypeScript Files | 392 |
 | Total Modules | 12 |
-| Total Lines of Code | 83503 |
-| Total Exports | 2780 |
-| Total Re-exports | 1335 |
+| Total Lines of Code | 85202 |
+| Total Exports | 2811 |
+| Total Re-exports | 1339 |
 | Total Classes | 60 |
-| Total Interfaces | 436 |
-| Total Functions | 693 |
+| Total Interfaces | 441 |
+| Total Functions | 711 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 523 |
+| Type-only Imports | 534 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

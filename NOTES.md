@@ -11,14 +11,26 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-09-29
 
+- **CLI dogfood open items:** `upt metric` (alias `curvature`) reports Christoffel, Ricci, the
+  Ricci scalar and the Kretschmann scalar for Minkowski, Schwarzschild, FLRW and Kerr. The line
+  element is (−,+,+,+). The Einstein-equation tensor AST stays (+,-,-,-). Schwarzschild
+  Kretschmann is checked against `48 G² M² / (c⁴ r⁶)`. FLRW includes the curvature term. Kerr
+  geodesics are not integrated; `--geodesic` runs a short Schwarzschild circular orbit.
+  `--natural` sets ħ = c = 1 and `--geometrized` also sets G = 1; the SI default still refuses
+  `rest_energy = mass`. Friedmann's frozen entry stays the flat dust form; a comparison that
+  names `curvature_k` and `scale_factor` also subtracts `k c²/a²`. `1Msun` is still
+  `M_SUN_SI = 1.989e30` kg; `Msun_iau` and `GM_sun` are the IAU parameter. `HBAR_SI` is still
+  the truncated display. EFE 8π and Compton h versus ħ stay unchecked prefactors while
+  `src/canonical` is frozen; the CLI names both conventions. `upt eval --show-parser` prints
+  `mathts` or `builtin`; `upt version` stays a bare semver.
 - **CLI GR/QFT dogfood** (model persona, not a human reviewer): the findings report is the PR
   description for `cursor/gr-cli-dogfood-91ec`.
   Fixed in that branch: perihelion `6pi` now compares; Newton's `m_1 m_2` compares when every
   same-dimension assignment agrees; `schwarzschild-radius` reaches the frozen target `radius`;
   `sqrt(-1)` says complex; a bare `e` is warned as Euler's number; be-51/be-52 warn inside 10 r_s.
-  Left as they are, with the reason in that report: no curvature command on the CLI, no ħ=c=1 mode,
-  EFE and Compton prefactors unchecked, Friedmann is the flat dust form only, potential sign
-  unchecked, `Msun` is 1.989e30 kg rather than GM☉/G.
+  The leftovers named in that report (no curvature command, no ħ=c=1 mode, flat Friedmann only,
+  potential sign, which sun `Msun` is) are the open-items paragraph above. EFE and Compton
+  prefactors stay unchecked.
 
 ## As of 2026-09-27
 
@@ -320,7 +332,7 @@ Those are different claims and merging them produces a false green.
 - **Axes:** `RegimeAttributes` carries six axes (scale, force, information, symmetry, topology,
   statistics). `GATE_AXES` is scale and force; topology, symmetry and statistics are typed and
   wired but ungated, for thin coverage.
-- **CLI:** the `upt` CLI (23 data-bearing commands + `help`/`version`).
+- **CLI:** the `upt` CLI (25 data-bearing commands + `help`/`version`).
 - **Atlas families:** oscillators 9 models, 5 bridges, 1 rejection; diffusion 8 models, 8 bridges;
   waves 7 models, 7 bridges.
 - **Atlas import sites** (measured 2026-09-22): value imports at `bridges/index.ts:40`

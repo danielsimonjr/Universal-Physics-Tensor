@@ -175,10 +175,16 @@ describe('F12 — symbolic output groups every denominator and round-trips throu
       const rows = JSON.parse(c.lines.join('')).result as { value: number; evalForm: { formula: string; bindings: string[] } }[];
       expect(rows).toHaveLength(2);
       for (const row of rows) {
-        const e = capture();
-        expect(await runCli(['eval', row.evalForm.formula, ...row.evalForm.bindings, '--json'], e.io)).toBe(0);
-        const value = JSON.parse(e.lines.join('')).result.value as number;
+        const stdout: string[] = [];
+        const stderr: string[] = [];
+        expect(await runCli(['eval', row.evalForm.formula, ...row.evalForm.bindings, '--json'], {
+          out: (l?: string) => stdout.push((l ?? '') + '\n'),
+          err: (l?: string) => stderr.push((l ?? '') + '\n'),
+          write: (s: string) => stdout.push(s),
+        })).toBe(0);
+        const value = JSON.parse(stdout.join('')).result.value as number;
         expect(Math.abs(value / row.value - 1)).toBeLessThan(1e-12);
+        if (row.evalForm.formula.includes('hbar')) expect(stderr.join('')).toMatch(/HBAR_SI/);
       }
     });
   }

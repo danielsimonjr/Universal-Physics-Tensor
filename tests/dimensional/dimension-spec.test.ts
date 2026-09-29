@@ -60,8 +60,8 @@ describe('L1: named products and quotients', () => {
     expect(parseDimensionSpec('c*mass')).toEqual(multiply(VELOCITY, parseDimensionSpec('mass')));
   });
 
-  it('still rejects parentheses (use explicit bases for those)', () => {
-    expect(() => parseDimensionSpec('power/(area*temperature)')).toThrow(DimensionSpecError);
+  it('accepts parentheses around a product in the denominator', () => {
+    expect(parseDimensionSpec('power/(area*temperature)')).toEqual(parseDimensionSpec('M.T^-3.Theta^-1'));
   });
 });
 

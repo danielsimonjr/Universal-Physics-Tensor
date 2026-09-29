@@ -109,6 +109,8 @@ export {
   DEFAULT_SEARCH_BUDGET,
   scanFrontier,
   findFrontierGap,
+  expressionSearchGaps,
+  scanWithExpressionGaps,
   problemFromResidualGap,
   makeResidualGap,
   loadSearchProblemFromJson,

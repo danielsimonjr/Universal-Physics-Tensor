@@ -5,6 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { convertValue, parseUnit, UnitError } from '../../src/dimensional/units.js';
+import { C_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../../src/core/constants.js';
 import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import type { EvaluatorParameter } from '../../src/bridges/evaluators.js';
 
@@ -31,6 +32,27 @@ describe('parseUnit', () => {
     expect(parseUnit('min')).toMatchObject({ scale: 60, dim: { T: 1 } });
     expect(parseUnit('Pa').scale).toBe(1);
     expect(parseUnit('mm').scale).toBeCloseTo(1e-3, 18);
+  });
+
+  it('reads the lab units a script reaches for, and keeps prefix rules', () => {
+    expect(parseUnit('T')).toMatchObject({ scale: 1, dim: { M: 1, T: -2, I: -1 } });
+    expect(parseUnit('Ts').scale).toBe(1e12);
+    expect(parseUnit('G').scale).toBe(1e-4);
+    expect(parseUnit('GPa').scale).toBe(1e9);
+    expect(parseUnit('bar').scale).toBe(1e5);
+    expect(parseUnit('mbar').scale).toBe(100);
+    expect(parseUnit('atm').scale).toBe(101325);
+    expect(parseUnit('angstrom').scale).toBe(1e-10);
+    expect(parseUnit('Å').scale).toBe(1e-10);
+    expect(parseUnit('pc').scale).toBe(3.0856775814913673e16);
+    expect(parseUnit('Mpc').scale).toBeCloseTo(3.0856775814913673e22, -6);
+    expect(parseUnit('ly').scale).toBe(C_SI * 365.25 * 86400);
+    expect(parseUnit('AU').scale).toBe(149597870700);
+    expect(parseUnit('au').scale).toBe(parseUnit('AU').scale);
+    expect(parseUnit('Msun').scale).toBe(M_SUN_SI);
+    expect(parseUnit('Msun_iau').scale).toBe(GM_SUN_SI / G_SI);
+    expect(parseUnit('myr').scale).toBe(0.001 * 365.25 * 86400);
+    expect(parseUnit('Myr').scale).toBe(1e6 * 365.25 * 86400);
   });
 
   it('refuses what it cannot read rather than guessing', () => {
@@ -92,6 +114,16 @@ describe('resolveEvaluatorInputs — geometry is declared, never guessed', () =>
     const d = resolveEvaluatorInputs(SPHERE, ['diameter_m=2um']);
     expect(d.inputs['radius_m']).not.toBeCloseTo(2e-6, 12);
     expect(d.resolved[0]!.note).toMatch(/diameter_m=2um is the diameter 2r; radius_m = 0.5 × /);
+  });
+
+  it('a milliyear and a solar mass say which convention the conversion used', () => {
+    const time: EvaluatorParameter = { key: 't_s', quantity: 'duration', symbol: 't', unit: 's', meaning: 'a duration' };
+    const mass: EvaluatorParameter = { key: 'M_kg', quantity: 'mass', symbol: 'M', unit: 'kg', meaning: 'a mass' };
+    expect(resolveEvaluatorInputs([time], ['t_s=1myr']).resolved[0]!.note).toMatch(/milliyear/);
+    const sun = resolveEvaluatorInputs([mass], ['M_kg=1Msun']);
+    expect(sun.inputs['M_kg']).toBe(M_SUN_SI);
+    expect(sun.resolved[0]!.note).toMatch(/M_SUN_SI/);
+    expect(sun.resolved[0]!.note).toMatch(/Msun_iau/);
   });
 
   it('an undeclared key, or one input given twice, is refused', () => {

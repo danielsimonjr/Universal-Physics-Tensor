@@ -80,6 +80,7 @@ export {
   findFrontierGap,
   problemFromResidualGap,
 } from './frontier.js';
+export { expressionSearchGaps, scanWithExpressionGaps } from './expression-gaps.js';
 export { fitPrefactor } from './fit.js';
 export type { FitResult } from './fit.js';
 export { scoreCandidate, rankPareto } from './scoring.js';
