@@ -277,7 +277,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:1.975836903679986e+44"
+  "evaluateAtOnes": "ok:1.97583690125872e+44"
  },
  {
   "pair": "be-12>>be-12",
@@ -1053,7 +1053,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:1.174135305735368"
+  "evaluateAtOnes": "ok:1.1741353064547837"
  },
  {
   "pair": "be-42>>be-37",
@@ -1203,7 +1203,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:6.257426224821911e+71"
+  "evaluateAtOnes": "ok:6.257426224821912e+71"
  },
  {
   "pair": "be-42>>be-24",
@@ -1254,7 +1254,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:1.9511977214462635e+23"
+  "evaluateAtOnes": "ok:1.9511977221980092e+23"
  },
  {
   "pair": "be-42>>be-30",
@@ -1302,7 +1302,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:8.150619072761274e-24"
+  "evaluateAtOnes": "ok:8.15061906776723e-24"
  },
  {
   "pair": "be-42>>be-34",
@@ -1407,7 +1407,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:5.270145373795902e-21"
+  "evaluateAtOnes": "ok:5.27014537541046e-21"
  },
  {
   "pair": "be-42-via-rs>>be-16",
@@ -1439,7 +1439,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:1.743863391604297e-27"
+  "evaluateAtOnes": "ok:1.7438633926727963e-27"
  },
  {
   "pair": "be-42-via-rs>>be-37",
@@ -1589,7 +1589,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:9.293730003542733e+44"
+  "evaluateAtOnes": "ok:9.293730003542736e+44"
  },
  {
   "pair": "be-42-via-rs>>be-24",
@@ -1688,7 +1688,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:5487.774823992983"
+  "evaluateAtOnes": "ok:5487.774820630518"
  },
  {
   "pair": "be-42-via-rs>>be-34",
@@ -2307,7 +2307,7 @@
    "target"
   ],
   "predicateAtOnes": "ok:true",
-  "evaluateAtOnes": "ok:1.2269006698422712e+23"
+  "evaluateAtOnes": "ok:1.226900670594017e+23"
  },
  {
   "pair": "law-schwarzschild-radius>>be-51",

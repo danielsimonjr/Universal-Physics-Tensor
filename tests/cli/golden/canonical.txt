@@ -2,7 +2,7 @@
 Canonical-equation registry — the standard-physics L-layer (Π = L + B + E)
 the textbook "answer key" bridge equations are validated against.
 
-  107 entries:
+  109 entries:
 
    fid  domain               id                       partners
    ─────────────────────────────────────────────────────────────────
@@ -16,6 +16,7 @@ the textbook "answer key" bridge equations are validated against.
    L0   quantum             CE-compton-wavelength    —
    L0   statistical         CE-thermal-de-broglie    12
    L2   general-relativity  CE-einstein-field-eq     13
+   L1   cosmology           CE-friedmann-curvature   —
    L1   cosmology           CE-friedmann             —
    L1   general-relativity  CE-hawking-temperature   42,=42
    L1   general-relativity  CE-light-deflection      51,=51
@@ -85,6 +86,7 @@ the textbook "answer key" bridge equations are validated against.
    L1   quantum             CE-planck-einstein       —
    L1   quantum             CE-de-broglie            —
    L1   quantum             CE-bohr-radius           —
+   L1   quantum             CE-compton-wavelength-full —
    L1   quantum             CE-thomson-cross-section —
    L1   quantum             CE-uncertainty-principle —
    L1   condensed-matter    CE-carrier-mobility      —

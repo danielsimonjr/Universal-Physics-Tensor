@@ -27,11 +27,12 @@ describe('annotateConsequences', () => {
     expect(novel).toBe(1);
   });
 
-  it('LIVE PIN (Task-0 measured): canonical promising yields 0 entailed, 3 novel-consequence', () => {
+  it('LIVE PIN: canonical promising yields 0 entailed, 4 novel-consequence', () => {
     const annotated = annotateConsequences(rankDiscoveries(CANONICAL_GRAPH));
     const promising = annotated.filter((c) => c.verdict === 'promising');
     expect(promising.filter((c) => c.consequence?.signal === 'entailed').length).toBe(0);
-    expect(promising.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(3);
+    // Landauer photon, hν=mc², Wien/Hubble, and Compton-full against Hubble distance.
+    expect(promising.filter((c) => c.consequence?.signal === 'novel-consequence').length).toBe(4);
   });
 
   it('annotation is order-preserving and non-mutating (same verdicts/scores as input)', () => {

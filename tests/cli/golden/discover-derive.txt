@@ -35,6 +35,13 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       meaning: mass is the mass of CE-mass-energy (Mass–energy equivalence): the mass for which rest-energy equals ? (undefined) — an equal-[energy] scale; the ? side is not given a mass
       assumptions carried: CE-mass-energy: rest energy of a massive body
       canonical match: none — 0 registry equation(s) target mass, 0 with governing {yukawa-coupling, vacuum-expectation-value}; scope: this registry only, not physics at large
+  IC-compton-wavelength-full--hubble-distance--hubble-rate
+      hubble-rate = \frac{c^{2} \cdot mass}{h}      [frequency]  (no sourced sample value for mass; not evaluated)
+      from: hubble-distance ≟ compton-wavelength-full  (CE-compton-wavelength-full = CE-hubble-distance); solved for hubble-rate
+      status: conditional identity — holds only if hubble-distance ≡ compton-wavelength-full (unadjudicated); untested
+      meaning: hubble-rate is the hubble-rate of CE-hubble-distance (Hubble distance): the hubble-rate for which hubble-distance equals compton-wavelength-full (CE-compton-wavelength-full) — an equal-[length] scale; the compton-wavelength-full side is not given a hubble-rate
+      assumptions carried: CE-compton-wavelength-full: none stated; CE-hubble-distance: present-epoch Hubble parameter
+      canonical match: none — 0 registry equation(s) target hubble-rate, 0 with governing {mass}; scope: this registry only, not physics at large
   IC-hubble-distance--peak-wavelength--temperature
       temperature = \frac{b \cdot hubble-rate}{c}      [temperature]  ≈ 2.13e-29 (hubble-rate=2.2e-18 [H0 ≈ 67 km/s/Mpc (Planck 2018)])
       from: hubble-distance ≟ peak-wavelength  (CE-hubble-distance = CE-wien); solved for temperature

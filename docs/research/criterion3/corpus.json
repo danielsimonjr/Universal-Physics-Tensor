@@ -29,7 +29,7 @@
   },
   {
     "id": "CE-compton-wavelength",
-    "text": "Compton wavelength\nquantum"
+    "text": "Reduced Compton wavelength\nquantum"
   },
   {
     "id": "CE-thermal-de-broglie",
@@ -37,7 +37,253 @@
   },
   {
     "id": "CE-einstein-field-eq",
-    "text": "Einstein field equation\ngeneral-relativity\nclassical GR\npseudo-Riemannian spacetime"
+    "text": "Einstein field equation\ngeneral-relativity\nclassical GR\npseudo-Riemannian spacetime",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "8pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "G",
+              "dim": {
+                "L": 3,
+                "M": -1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "stress-energy-density",
+              "dim": {
+                "L": -1,
+                "M": 1,
+                "T": -2,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "^",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "4",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-friedmann-curvature",
+    "text": "Friedmann equation (with curvature)\ncosmology\nmatter-dominated\nΛ=0\nFLRW\nk the normalized curvature",
+    "expr": {
+      "kind": "op",
+      "op": "-",
+      "args": [
+        {
+          "kind": "op",
+          "op": "/",
+          "args": [
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "8pi",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "G",
+                  "dim": {
+                    "L": 3,
+                    "M": -1,
+                    "T": -2,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "rho",
+                  "dim": {
+                    "L": -3,
+                    "M": 1,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "symbol",
+              "name": "3",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "op",
+          "op": "/",
+          "args": [
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "curvature-k",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "op",
+                  "op": "^",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "c",
+                      "dim": {
+                        "L": 1,
+                        "M": 0,
+                        "T": -1,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "2",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "scale-factor",
+                  "dim": {
+                    "L": 1,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     "id": "CE-friedmann",
@@ -899,44 +1145,76 @@
     "text": "Gravitational potential energy\nmechanics\ntwo point masses\nzero reference at infinity",
     "expr": {
       "kind": "op",
-      "op": "/",
+      "op": "*",
       "args": [
         {
+          "kind": "symbol",
+          "name": "-1",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
           "kind": "op",
-          "op": "*",
+          "op": "/",
           "args": [
             {
-              "kind": "symbol",
-              "name": "G",
-              "dim": {
-                "L": 3,
-                "M": -1,
-                "T": -2,
-                "I": 0,
-                "Theta": 0,
-                "N": 0,
-                "J": 0
-              }
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "G",
+                  "dim": {
+                    "L": 3,
+                    "M": -1,
+                    "T": -2,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "mass",
+                  "dim": {
+                    "L": 0,
+                    "M": 1,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "secondary-mass",
+                  "dim": {
+                    "L": 0,
+                    "M": 1,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
             },
             {
               "kind": "symbol",
-              "name": "mass",
+              "name": "r",
               "dim": {
-                "L": 0,
-                "M": 1,
-                "T": 0,
-                "I": 0,
-                "Theta": 0,
-                "N": 0,
-                "J": 0
-              }
-            },
-            {
-              "kind": "symbol",
-              "name": "secondary-mass",
-              "dim": {
-                "L": 0,
-                "M": 1,
+                "L": 1,
+                "M": 0,
                 "T": 0,
                 "I": 0,
                 "Theta": 0,
@@ -945,19 +1223,6 @@
               }
             }
           ]
-        },
-        {
-          "kind": "symbol",
-          "name": "r",
-          "dim": {
-            "L": 1,
-            "M": 0,
-            "T": 0,
-            "I": 0,
-            "Theta": 0,
-            "N": 0,
-            "J": 0
-          }
         }
       ]
     }
@@ -1170,6 +1435,19 @@
       "kind": "op",
       "op": "*",
       "args": [
+        {
+          "kind": "symbol",
+          "name": "-1",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
         {
           "kind": "symbol",
           "name": "spring-constant",
@@ -3465,6 +3743,51 @@
           "op": "*",
           "args": [
             {
+              "kind": "symbol",
+              "name": "32",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "op",
+              "op": "^",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "pi",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "2",
+                  "dim": {
+                    "L": 0,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            },
+            {
               "kind": "op",
               "op": "^",
               "args": [
@@ -3885,6 +4208,61 @@
                   }
                 }
               ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "CE-compton-wavelength-full",
+    "text": "Compton wavelength\nquantum",
+    "expr": {
+      "kind": "op",
+      "op": "/",
+      "args": [
+        {
+          "kind": "symbol",
+          "name": "h",
+          "dim": {
+            "L": 2,
+            "M": 1,
+            "T": -1,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        },
+        {
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "mass",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "c",
+              "dim": {
+                "L": 1,
+                "M": 0,
+                "T": -1,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
             }
           ]
         }

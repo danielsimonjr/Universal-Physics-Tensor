@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 392,
     "totalModules": 12,
-    "totalExports": 2811
+    "totalExports": 2814
   },
   "entryPoints": [
     {
@@ -9475,7 +9475,8 @@
               "LENGTH",
               "TIME",
               "POWER",
-              "FREQUENCY"
+              "FREQUENCY",
+              "DIMENSIONLESS"
             ]
           },
           {
@@ -11799,6 +11800,7 @@
             "file": "../../numerical/spacetime-metrics.js",
             "imports": [
               "curvatureReport",
+              "kerrEquatorialCircular",
               "schwarzschildCircularOrbit",
               "MetricId"
             ]
@@ -12267,7 +12269,7 @@
         ]
       },
       "src/cli/conventions.ts": {
-        "description": "Convention lines the CLI prints beside a comparison. They do not change the",
+        "description": "Convention lines the CLI prints beside a comparison.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [],
@@ -13928,6 +13930,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/constants.js",
+            "imports": [
+              "HBAR_SI"
+            ]
+          },
+          {
             "file": "../dimensional/buckingham.js",
             "imports": [
               "buckinghamPi",
@@ -14124,12 +14132,6 @@
             "file": "./formula-names.js",
             "imports": [
               "formulaNameDimensions"
-            ]
-          },
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "C_SI"
             ]
           },
           {
@@ -19771,6 +19773,7 @@
             "imports": [
               "C_SI",
               "G_SI",
+              "GM_SUN_SI",
               "HBAR_SI",
               "H_SI",
               "K_B_SI",
@@ -20348,7 +20351,14 @@
         "description": "Core types for Universal Physics Tensor Framework",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./constants.js",
+            "imports": [
+              "HBAR_SI"
+            ]
+          }
+        ],
         "exports": [
           "PhysicalConstants"
         ],
@@ -26611,11 +26621,15 @@
           "kerrKretschmann",
           "metricParams",
           "curvatureReport",
-          "schwarzschildCircularOrbit"
+          "schwarzschildCircularOrbit",
+          "kerrIscoRadius",
+          "kerrPhotonRadius",
+          "kerrEquatorialCircular"
         ],
         "interfaces": [
           "Component",
-          "CurvatureReport"
+          "CurvatureReport",
+          "KerrGeodesicSample"
         ],
         "functions": [
           "schwarzschildKretschmann",
@@ -26624,7 +26638,10 @@
           "kerrKretschmann",
           "metricParams",
           "curvatureReport",
-          "schwarzschildCircularOrbit"
+          "schwarzschildCircularOrbit",
+          "kerrIscoRadius",
+          "kerrPhotonRadius",
+          "kerrEquatorialCircular"
         ],
         "constants": [
           "METRIC_SIGNATURE",
@@ -27175,11 +27192,11 @@
   "statistics": {
     "totalTypeScriptFiles": 392,
     "totalModules": 12,
-    "totalLinesOfCode": 85202,
-    "totalExports": 2811,
+    "totalLinesOfCode": 85422,
+    "totalExports": 2814,
     "totalClasses": 60,
-    "totalInterfaces": 441,
-    "totalFunctions": 711,
+    "totalInterfaces": 442,
+    "totalFunctions": 714,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 700,

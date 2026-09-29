@@ -33,6 +33,10 @@
  * If this test fails during Sprint 2, the re-expression is wrong. Do NOT
  * regenerate the golden to make it pass: that discards the only evidence that
  * the physics was preserved.
+ *
+ * The sole later delta is be-63's predicted Chandrasekhar mass. It scales as
+ * ħ to the 3/2, and HBAR_SI is now H_SI/(2π). Every other number is still the
+ * 2026-09-21 capture.
  */
 
 import { describe, it, expect } from 'vitest';
