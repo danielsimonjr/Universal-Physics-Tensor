@@ -1,5 +1,9 @@
 # UPT TODO
 
+## Unit-convention review follow-up (2026-09-29)
+
+- [ ] Merge current `master` and resolve conflicts; normalize discovery magnitudes, scale composed junction inputs, skip non-finite identification copies, and pass unit mode into named-binding expressions.
+
 ## CLI dogfood, three personas (2026-09-29)
 
 Tier 10 `upt path` is on master. The reports are `docs/dogfood/2026-09-29-applied-physicist.md`,
