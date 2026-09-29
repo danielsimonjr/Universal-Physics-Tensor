@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 393
+  totalFiles: 394
   totalModules: 12
-  totalExports: 2830
+  totalExports: 2834
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7241,7 +7241,7 @@ modules:
           typeOnly: true
         - file: ../../numerical/binding-value.js
           imports:
-            - readBinding
+            - readNamedBinding
       exports:
         - parseDiscoveryOpts
       functions:
@@ -7662,7 +7662,7 @@ modules:
             - searchNameWords
         - file: ../../numerical/binding-value.js
           imports:
-            - readBinding
+            - readNamedBinding
       exports:
         - command
       constants:
@@ -13528,6 +13528,9 @@ modules:
         - file: ./compose.js
           imports:
             - QUANTITY_IDENTIFICATIONS
+        - file: ./unit-convention.js
+          imports:
+            - conventionFactor
         - file: ./identifiability.js
           imports:
             - classifyAll
@@ -13601,6 +13604,26 @@ modules:
         - UncertaintyResult
       functions:
         - propagateUncertainty
+    src/composition/unit-convention.ts:
+      description: Per-quantity unit convention for the quantities whose dimension does not
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/algebra.js
+          imports:
+            - equals
+        - file: ../dimensional/units.js
+          imports:
+            - parseUnit
+      exports:
+        - QUANTITY_CONVENTION_UNIT
+        - quantityConventionUnit
+        - conventionFactor
+      functions:
+        - quantityConventionUnit
+        - conventionFactor
+      constants:
+        - QUANTITY_CONVENTION_UNIT
     src/composition/user-equation.ts:
       description: User-equation injection — turn a free-form `TARGET = EXPR` string into a graph
       externalDependencies: []
@@ -17430,6 +17453,9 @@ modules:
         - file: ../composition/formula-names.js
           imports:
             - FORMULA_NAMED
+        - file: ../composition/unit-convention.js
+          imports:
+            - quantityConventionUnit
         - file: ../composition/natural-units.js
           imports:
             - naturalConstantOverrides
@@ -17463,12 +17489,14 @@ modules:
             - parseFormulaToAst
             - FormulaAstNode
       exports:
+        - readNamedBinding
         - readBinding
         - bindingInUnit
         - readParameter
       interfaces:
         - BindingValue
       functions:
+        - readNamedBinding
         - readBinding
         - bindingInUnit
         - readParameter
@@ -19039,6 +19067,7 @@ dependencyGraph:
         - src/composition/retrodiction.ts
         - src/composition/symbolic-constants.ts
         - src/composition/uncertainty.ts
+        - src/composition/unit-convention.ts
         - src/composition/user-equation.ts
     - name: Core
       files:
@@ -19139,19 +19168,19 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 393
+  totalTypeScriptFiles: 394
   totalModules: 12
-  totalLinesOfCode: 86861
-  totalExports: 2830
+  totalLinesOfCode: 86942
+  totalExports: 2834
   totalClasses: 59
   totalInterfaces: 444
-  totalFunctions: 728
+  totalFunctions: 731
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 701
+  totalConstants: 702
   totalReExports: 1341
   totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 68
+  unusedExportsCount: 69

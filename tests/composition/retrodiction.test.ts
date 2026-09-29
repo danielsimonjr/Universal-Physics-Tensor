@@ -13,6 +13,8 @@ import {
   retrodictNode,
   forwardEvaluate,
 } from '../../src/composition/retrodiction.js';
+import { QUANTITY_IDENTIFICATIONS } from '../../src/composition/compose.js';
+import { conventionFactor } from '../../src/composition/unit-convention.js';
 import { CATALOG_GRAPH, M_SUN_KG } from '../../src/composition/index.js';
 import type { BridgeEdge, Quantity } from '../../src/composition/index.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
@@ -57,6 +59,28 @@ describe('retrodictNode — relativeSpread is robust to sign cancellation', () =
     expect(Number.isFinite(r.relativeSpread)).toBe(true);
     expect(r.relativeSpread).toBeCloseTo(2, 12);
     expect(r.outcome).toBe('inconsistent');
+  });
+});
+
+describe('unit-convention copy', () => {
+  it('scales a bit into nats and leaves a same-convention identification at 1', () => {
+    const scaled = forwardEvaluate([], { 'intrinsic-information': 1 }, [
+      { from: 'intrinsic-information', to: 'subsystem-entanglement-entropy', rationale: 'bits to nats' },
+    ]);
+    expect(scaled.get('subsystem-entanglement-entropy')).toBeCloseTo(Math.LN2, 12);
+    const same = forwardEvaluate([], { 'hawking-temperature': 5 }, [
+      { from: 'hawking-temperature', to: 'temperature', rationale: 'same kelvin' },
+    ]);
+    expect(same.get('temperature')).toBe(5);
+    for (const id of QUANTITY_IDENTIFICATIONS) expect(conventionFactor(id.from, id.to)).toBe(1);
+  });
+
+  it('refuses to copy a bit onto an entropy in J/K', () => {
+    expect(() =>
+      forwardEvaluate([], { 'intrinsic-information': 1 }, [
+        { from: 'intrinsic-information', to: 'wormhole-entanglement-entropy', rationale: 'different dimension' },
+      ]),
+    ).toThrow(/dimensions differ/);
   });
 });
 

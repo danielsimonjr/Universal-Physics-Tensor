@@ -43,7 +43,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 45 files
 - **root**: 1 file
-- **composition**: 77 files
+- **composition**: 78 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 32 files
@@ -3250,7 +3250,7 @@ The codebase is organized into the following modules:
 | `../args.js` | `ParsedArgs` | Import (type-only) |
 | `../errors.js` | `UsageError` | Import |
 | `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
+| `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 
 **Exports:**
 - Functions: `parseDiscoveryOpts`
@@ -3471,7 +3471,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../search-index.js` | `searchNameWords` | Import |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
+| `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -5537,6 +5537,7 @@ The codebase is organized into the following modules:
 | `./edge.js` | `evaluateEdge` | Import |
 | `./compose.js` | `QuantityIdentification` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
+| `./unit-convention.js` | `conventionFactor` | Import |
 | `./identifiability.js` | `classifyAll` | Import |
 
 **Exports:**
@@ -5573,6 +5574,20 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `UncertaintyOptions`, `UncertaintyResult`
 - Functions: `propagateUncertainty`
+
+---
+
+### `src/composition/unit-convention.ts` - Per-quantity unit convention for the quantities whose dimension does not
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/units.js` | `parseUnit` | Import |
+
+**Exports:**
+- Functions: `quantityConventionUnit`, `conventionFactor`
+- Constants: `QUANTITY_CONVENTION_UNIT`
 
 ---
 
@@ -6646,6 +6661,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../core/constants.js` | `M_SUN_SI` | Import |
 | `../composition/formula-names.js` | `FORMULA_NAMED` | Import |
+| `../composition/unit-convention.js` | `quantityConventionUnit` | Import |
 | `../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
@@ -6655,7 +6671,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `BindingValue`
-- Functions: `readBinding`, `bindingInUnit`, `readParameter`
+- Functions: `readNamedBinding`, `readBinding`, `bindingInUnit`, `readParameter`
 
 ---
 
@@ -7373,7 +7389,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...72 more]
+        N36[...73 more]
     end
 
     subgraph Core
@@ -7451,14 +7467,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 393 |
+| Total TypeScript Files | 394 |
 | Total Modules | 12 |
-| Total Lines of Code | 86861 |
-| Total Exports | 2830 |
+| Total Lines of Code | 86942 |
+| Total Exports | 2834 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
 | Total Interfaces | 444 |
-| Total Functions | 728 |
+| Total Functions | 731 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |
