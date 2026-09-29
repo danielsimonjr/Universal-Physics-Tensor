@@ -25,12 +25,6 @@ updates:
       # REMOVE THIS ENTRY once the benches are migrated; then the bump is a one-line change.
       - dependency-name: vitest
         update-types: [version-update:semver-major]
-      # The optional @danielsimonjr/mathts-* peers are held for a dedicated MathTS-alignment
-      # release (todo.md, the "mathts-* peers lag" row), not merged as drive-by bumps. PRs
-      # #178-181 were closed for this reason. REMOVE THIS ENTRY when the MathTS-alignment
-      # release lands.
-      - dependency-name: "@danielsimonjr/mathts-*"
-
   - package-ecosystem: github-actions
     directory: /
     schedule:

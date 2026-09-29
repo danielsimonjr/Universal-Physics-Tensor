@@ -366,10 +366,16 @@ witness) could be meant. Earlier entries used the bare form for both.
 - [x] **`npm run test:coverage`** — full `src/**` coverage report script added
   (informational; ~82% lines at HEAD with 3827 tests — CLI spawn gap remains the
   main drag; in-process src tests are the mitigation).
-- [ ] Optional `@danielsimonjr/mathts-*` peers lag their latest releases — still
+- [x] Optional `@danielsimonjr/mathts-*` peers lag their latest releases — still
   deliberately not bumped (release-sized optional-dep sweep; zero hard-dep
   breakage risk). Revisit as a dedicated MathTS-alignment release, not a gap-fix
   drive-by.
+  Done 2026-09-29: floors are the versions `npm view` reported, still optional
+  peers, each devDependency range equal to its peer range. autograd ^0.3.15,
+  core ^0.15.5, expression ^0.8.2, functions ^0.65.0, matrix ^0.7.5,
+  parallel ^0.6.7, tensor ^0.2.21, wasm ^0.3.0, workerpool ^0.2.6. The MathTS
+  packages were not republished. Dependabot's ignore of `@danielsimonjr/mathts-*`
+  is removed; the 2026-09-22 hold said to remove it when this alignment landed.
   - [x] Dependabot ignores `@danielsimonjr/mathts-*` until that release (PRs #178–181 closed by Mothership 2026-09-22).
 
 ## v0.44.3 released 2026-08-28

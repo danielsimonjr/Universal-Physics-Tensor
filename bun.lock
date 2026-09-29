@@ -5,15 +5,15 @@
     "": {
       "name": "universal-physics-tensor",
       "devDependencies": {
-        "@danielsimonjr/mathts-autograd": "^0.3.13",
-        "@danielsimonjr/mathts-core": "^0.1.3",
-        "@danielsimonjr/mathts-expression": "^0.7.1",
-        "@danielsimonjr/mathts-functions": "^0.64.0",
-        "@danielsimonjr/mathts-matrix": "^0.7.1",
-        "@danielsimonjr/mathts-parallel": "^0.2.1",
-        "@danielsimonjr/mathts-tensor": "^0.1.1",
-        "@danielsimonjr/mathts-wasm": "^0.1.3",
-        "@danielsimonjr/mathts-workerpool": "^0.2.0",
+        "@danielsimonjr/mathts-autograd": "^0.3.15",
+        "@danielsimonjr/mathts-core": "^0.15.5",
+        "@danielsimonjr/mathts-expression": "^0.8.2",
+        "@danielsimonjr/mathts-functions": "^0.65.0",
+        "@danielsimonjr/mathts-matrix": "^0.7.5",
+        "@danielsimonjr/mathts-parallel": "^0.6.7",
+        "@danielsimonjr/mathts-tensor": "^0.2.21",
+        "@danielsimonjr/mathts-wasm": "^0.3.0",
+        "@danielsimonjr/mathts-workerpool": "^0.2.6",
         "@types/node": "^26.0.0",
         "@vitest/coverage-v8": "^4.1.7",
         "@viz-js/viz": "^3.28.0",
@@ -25,15 +25,15 @@
         "vitest": "^4.1.7",
       },
       "peerDependencies": {
-        "@danielsimonjr/mathts-autograd": "^0.3.13",
-        "@danielsimonjr/mathts-core": "^0.1.3",
-        "@danielsimonjr/mathts-expression": "^0.7.1",
-        "@danielsimonjr/mathts-functions": "^0.64.0",
-        "@danielsimonjr/mathts-matrix": "^0.7.1",
-        "@danielsimonjr/mathts-parallel": "^0.2.1",
-        "@danielsimonjr/mathts-tensor": "^0.1.1",
-        "@danielsimonjr/mathts-wasm": "^0.1.3",
-        "@danielsimonjr/mathts-workerpool": "^0.2.0",
+        "@danielsimonjr/mathts-autograd": "^0.3.15",
+        "@danielsimonjr/mathts-core": "^0.15.5",
+        "@danielsimonjr/mathts-expression": "^0.8.2",
+        "@danielsimonjr/mathts-functions": "^0.65.0",
+        "@danielsimonjr/mathts-matrix": "^0.7.5",
+        "@danielsimonjr/mathts-parallel": "^0.6.7",
+        "@danielsimonjr/mathts-tensor": "^0.2.21",
+        "@danielsimonjr/mathts-wasm": "^0.3.0",
+        "@danielsimonjr/mathts-workerpool": "^0.2.6",
         "@viz-js/viz": "^3.28.0",
       },
       "optionalPeers": [
@@ -61,25 +61,25 @@
 
     "@bcoe/v8-coverage": ["@bcoe/v8-coverage@1.0.2", "", {}, "sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA=="],
 
-    "@danielsimonjr/mathts-autograd": ["@danielsimonjr/mathts-autograd@0.3.13", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.14.0", "@danielsimonjr/mathts-tensor": "^0.2.19" } }, "sha512-VrWVCIhFVy01buhDlQKddP01xnVy2F3arEEOzEvl/yw9icIjOByO8YZXjlXyq2lHR8N4rN3tx3Byv5T1JNJCKA=="],
+    "@danielsimonjr/mathts-autograd": ["@danielsimonjr/mathts-autograd@0.3.15", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.15.4", "@danielsimonjr/mathts-tensor": "^0.2.21" } }, "sha512-ZlfU6cR9e7hnUD9gDJDb+jgx4LO2hLcwtO9ar1Qgq9hL0z+EET2mdDa7Z6StWMHXdhfCLdIoTg+UYsEZ88tsDw=="],
 
-    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.1.5", "", { "dependencies": { "typed-function": "github:danielsimonjr/typed-function" } }, "sha512-YkVSpX+QUl6QzZMxqIRIpC7Ut6a1z4X5CSpnUM2BbE8A/YV7EBesjf1gh2MsFz2GbMTlVWKzV29YQ3RnmhUe+w=="],
+    "@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.15.5", "", { "dependencies": { "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-OiAZmhXwJJMpxdRY/KQldjsQEAJGcbwkyS4Of+1fln9kcHCY2ngEfYyaCLgXOemuJiKYmkY/tgT6MJBjE6BRgA=="],
 
-    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.7.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.14.1", "typed-function": "^4.0.0" } }, "sha512-GmSCwppfMNhbB5b45lpB2LBXFaQZytNkoiCUENtQZiI90Lmb+8FmQyfxTrYHonv/r28X3oM70Xffowz07sDmww=="],
+    "@danielsimonjr/mathts-expression": ["@danielsimonjr/mathts-expression@0.8.2", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.15.5", "typed-function": "^4.0.0" } }, "sha512-xatW3ptfqw/dVERtUyoosszWd0avVLSOrF/gZ0fpVY/38nRebFkBw9zidFfm8ylwirvOYyLp9v0cYG2g8mGoSw=="],
 
-    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.64.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.14.1", "@danielsimonjr/mathts-expression": "^0.7.1", "@danielsimonjr/mathts-gpu": "^0.2.0", "@danielsimonjr/mathts-matrix": "^0.7.1", "@danielsimonjr/mathts-parallel": "^0.6.4", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "javascript-natural-sort": "^0.7.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "github:danielsimonjr/typed-function" } }, "sha512-eIDPK/wQWJE8xc+JfdJ1D/t8MxSw6qJPR2Lnbr3g1OhR1p6xknAJhdkZcC78clw0VAvDyW4vXtwIctsHD6dSQw=="],
+    "@danielsimonjr/mathts-functions": ["@danielsimonjr/mathts-functions@0.65.0", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.15.5", "@danielsimonjr/mathts-expression": "^0.8.2", "@danielsimonjr/mathts-gpu": "^0.2.1", "@danielsimonjr/mathts-matrix": "^0.7.5", "@danielsimonjr/mathts-parallel": "^0.6.7", "bignumber.js": "^11.1.5", "complex.js": "^2.2.5", "decimal.js": "^10.4.3", "escape-latex": "^1.2.0", "fraction.js": "^5.2.1", "javascript-natural-sort": "^0.7.1", "seedrandom": "^3.0.5", "tiny-emitter": "^2.1.0", "typed-function": "npm:@danielsimonjr/typed-function@5.0.0-alpha.4" } }, "sha512-tkeUmyYT9mEIUFzvkR0WcSTr7R7jkIiUOdRiOvOVHSIl6cqeLWW0PmQ33wmH16VmWe0ha4CInA5YZlYurQe+9g=="],
 
-    "@danielsimonjr/mathts-gpu": ["@danielsimonjr/mathts-gpu@0.2.0", "", { "peerDependencies": { "@webgpu/types": "^0.1.67" }, "optionalPeers": ["@webgpu/types"] }, "sha512-jpLlicRh92ueyLyA5++M6YZwkNXYm3nmoPDwpLK9hO9J2rQRNUr2Xg1ngZgbOuw2B2Y76ApQse6YMdmb+OQdXQ=="],
+    "@danielsimonjr/mathts-gpu": ["@danielsimonjr/mathts-gpu@0.2.1", "", { "peerDependencies": { "@webgpu/types": "^0.1.72" }, "optionalPeers": ["@webgpu/types"] }, "sha512-bxfmnIeM7hhtOoq6EvidPghzpjcxgoi7SWFeVfjU+kxbO/NNbOFo4deYFfvmOjCJ8fNTi/YisxouZHWlPZmfcQ=="],
 
-    "@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.7.1", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.14.0", "@danielsimonjr/mathts-gpu": "^0.2.0", "@danielsimonjr/mathts-parallel": "^0.6.4" }, "peerDependencies": { "@webgpu/types": "^0.1.67" }, "optionalPeers": ["@webgpu/types"] }, "sha512-UH1PvZRgAvNiNZZpP+IUxZwY2P0cToxrVqvh21+PrNjM4j3s4oBTGoZTsm9hTETl4O0ZOYc9xpv4XPt7+7n1DA=="],
+    "@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.7.5", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.15.5", "@danielsimonjr/mathts-gpu": "^0.2.1", "@danielsimonjr/mathts-parallel": "^0.6.7" }, "peerDependencies": { "@webgpu/types": "^0.1.72" }, "optionalPeers": ["@webgpu/types"] }, "sha512-RbvKcbkDjR83GIfsZGgLmmUJurNiSq0okmLDqiSyMNuxewrdZsFIFxt222d79XHut0aEmeifCwbdo0wY7FYtYg=="],
 
-    "@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.2.2", "", { "dependencies": { "@danielsimonjr/mathts-workerpool": "^0.2.0" } }, "sha512-7XH1V8LtCenYXJWJ1T6UwK6I2dJ8dp6rqr1cLGYBw86fOAZwc6KTjWDOKa7zMb+7sJmYlHhGfTVieRXzwIPVyQ=="],
+    "@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.6.7", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.15.5", "@danielsimonjr/mathts-workerpool": "^0.2.5" } }, "sha512-9vyw8nxfuE+gQAl4y4uVsASYw8385ZH7s3HhiGIR/p4swxWVRdiZEChIkK5Qeai+gDbF/P+WF1r9+2NA5LxIVA=="],
 
-    "@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.1.3", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.1.4", "@danielsimonjr/mathts-matrix": "^0.1.6" } }, "sha512-c4CosfBSuf391cUHnfEwAF5znKOc5IUMj/sQYdlmm7hXdX9oBp5yopBA8N4pdX0t3jlcI6LucKo4sgacFKxj2Q=="],
+    "@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.2.21", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.15.4", "@danielsimonjr/mathts-matrix": "^0.7.4" } }, "sha512-qEocwRrbXSvhVDUbL3Lpc/uiRSG7mP54erwB9ap72pQhJM5PT+ttLDlSwK1RTm8NFHt19whUBv869zDGyfC7Kw=="],
 
-    "@danielsimonjr/mathts-wasm": ["@danielsimonjr/mathts-wasm@0.1.5", "", {}, "sha512-uJDsofZ4GAXofSlCWJdGo9ykAx3YRlfmGmlVWDhSLBULTITEp6DqcQH661Dr72UV41EqJuiA2sjeY0qO18xOvQ=="],
+    "@danielsimonjr/mathts-wasm": ["@danielsimonjr/mathts-wasm@0.3.0", "", {}, "sha512-ir+jhPqsUlNFRFzkND7WfI21GeQWaw67nZJtthMjwr/QEaq7QVQY/XqwepJs3QNOG20cVOVRSR9sfGlv/cduiw=="],
 
-    "@danielsimonjr/mathts-workerpool": ["@danielsimonjr/mathts-workerpool@0.2.1", "", { "dependencies": { "workerpool": "github:danielsimonjr/workerpool" } }, "sha512-r/MqX9qfmIXrLob73u/AFJEc4jFi+ADXPtvJ8QQ88GmdgyrILCjwpp4okEWBD1u52p5SdFCUO3lgyMfF6jLq2A=="],
+    "@danielsimonjr/mathts-workerpool": ["@danielsimonjr/mathts-workerpool@0.2.6", "", { "dependencies": { "workerpool": "npm:@danielsimonjr/workerpool@10.2.2" } }, "sha512-790SVQUi65fhZwSoRBJ4r8JF/IlvR2SIADHfZRcflFmjlzPiH60BlPvpeBtcAlMWOA59w0jwWhXBdxCJ3cP/7Q=="],
 
     "@jridgewell/resolve-uri": ["@jridgewell/resolve-uri@3.1.2", "", {}, "sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw=="],
 
@@ -319,7 +319,7 @@
 
     "tree-sitter-typescript": ["tree-sitter-typescript@0.23.2", "", { "dependencies": { "node-addon-api": "^8.2.2", "node-gyp-build": "^4.8.2", "tree-sitter-javascript": "^0.23.1" }, "peerDependencies": { "tree-sitter": "^0.21.0" }, "optionalPeers": ["tree-sitter"] }, "sha512-e04JUUKxTT53/x3Uq1zIL45DoYKVfHH4CZqwgZhPg5qYROl5nQjV+85ruFzFGZxu+QeFVbRTPDRnqL9UbU4VeA=="],
 
-    "typed-function": ["@danielsimonjr/typed-function@github:danielsimonjr/typed-function#1c4c1dd", {}, "danielsimonjr-typed-function-1c4c1dd", "sha512-1g5NhHLJXGSGnWzk5J1NR0BJMyYtnbtv5PXaFhwsNiPOwzo2OwBZxfTQXNwmSPWb/bQJcaFXWYIRZ1589v3J8A=="],
+    "typed-function": ["@danielsimonjr/typed-function@5.0.0-alpha.4", "", {}, "sha512-8frL4OQGbB2v9NnKf4Uc92GBQZ9p9F8HbkfJlceiTEkpgJU7DWCC1x4evdxRdsW/tKyJkEqNQX9z3dueUEea1g=="],
 
     "typescript": ["typescript@7.0.2", "", { "optionalDependencies": { "@typescript/typescript-aix-ppc64": "7.0.2", "@typescript/typescript-darwin-arm64": "7.0.2", "@typescript/typescript-darwin-x64": "7.0.2", "@typescript/typescript-freebsd-arm64": "7.0.2", "@typescript/typescript-freebsd-x64": "7.0.2", "@typescript/typescript-linux-arm": "7.0.2", "@typescript/typescript-linux-arm64": "7.0.2", "@typescript/typescript-linux-loong64": "7.0.2", "@typescript/typescript-linux-mips64el": "7.0.2", "@typescript/typescript-linux-ppc64": "7.0.2", "@typescript/typescript-linux-riscv64": "7.0.2", "@typescript/typescript-linux-s390x": "7.0.2", "@typescript/typescript-linux-x64": "7.0.2", "@typescript/typescript-netbsd-arm64": "7.0.2", "@typescript/typescript-netbsd-x64": "7.0.2", "@typescript/typescript-openbsd-arm64": "7.0.2", "@typescript/typescript-openbsd-x64": "7.0.2", "@typescript/typescript-sunos-x64": "7.0.2", "@typescript/typescript-win32-arm64": "7.0.2", "@typescript/typescript-win32-x64": "7.0.2" }, "bin": { "tsc": "bin/tsc" } }, "sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA=="],
 
@@ -331,30 +331,8 @@
 
     "why-is-node-running": ["why-is-node-running@2.3.0", "", { "dependencies": { "siginfo": "^2.0.0", "stackback": "0.0.2" }, "bin": { "why-is-node-running": "cli.js" } }, "sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w=="],
 
-    "workerpool": ["@danielsimonjr/workerpool@github:danielsimonjr/workerpool#b873058", {}, "danielsimonjr-workerpool-b873058", "sha512-OBu8O0Kd17clU19F9N3LZ6xv9qaPeRYmn35gTMHLyAy1NmQLZwKcN1xexPEYttwwMeO5vFdKBtVbeZlCUOoAuQ=="],
-
-    "@danielsimonjr/mathts-autograd/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.14.3", "", { "dependencies": { "typed-function": "github:danielsimonjr/typed-function" } }, "sha512-ZXNdSKmwXiCeBFACog3djGcLgjzHWUfwDwEDg/N8HY46ElhR1YmrQCzFNsVs+AFfmhbCbAZ4iJC/F8TRMMn3xA=="],
-
-    "@danielsimonjr/mathts-autograd/@danielsimonjr/mathts-tensor": ["@danielsimonjr/mathts-tensor@0.2.19", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.14.0", "@danielsimonjr/mathts-matrix": "^0.7.1" } }, "sha512-Crw3nxd8lvaQ9uhP5wnz187VFOLjnwi/U8rM9USTcSTjushfE6FV9I86QVMBkzOluoVbtCeIIch55H9fDNZzNw=="],
-
-    "@danielsimonjr/mathts-expression/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.14.3", "", { "dependencies": { "typed-function": "github:danielsimonjr/typed-function" } }, "sha512-ZXNdSKmwXiCeBFACog3djGcLgjzHWUfwDwEDg/N8HY46ElhR1YmrQCzFNsVs+AFfmhbCbAZ4iJC/F8TRMMn3xA=="],
+    "workerpool": ["@danielsimonjr/workerpool@10.2.2", "", {}, "sha512-2ku3pC7MzMWuAbLuS5AxUE3Dh2P75gf891Hi4RPoSkGtgo6ta7XlhOra19wtCea1ci6vcBx7MiMCt6oc9V2gBQ=="],
 
     "@danielsimonjr/mathts-expression/typed-function": ["typed-function@4.2.2", "", {}, "sha512-VwaXim9Gp1bngi/q3do8hgttYn2uC3MoT/gfuMWylnj1IeZBUAyPddHZlo1K05BDoj8DYPpMdiHqH1dDYdJf2A=="],
-
-    "@danielsimonjr/mathts-functions/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.14.3", "", { "dependencies": { "typed-function": "github:danielsimonjr/typed-function" } }, "sha512-ZXNdSKmwXiCeBFACog3djGcLgjzHWUfwDwEDg/N8HY46ElhR1YmrQCzFNsVs+AFfmhbCbAZ4iJC/F8TRMMn3xA=="],
-
-    "@danielsimonjr/mathts-functions/@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.6.4", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.14.0", "@danielsimonjr/mathts-workerpool": "^0.2.1" } }, "sha512-+QKl8jg9LIIpUtzOTTB2y9MkeY9+4YqnzhhTLdObLP7ZKAxV4DP9rjxbIWgcEFvVjyNmKY83EWXeKGUFTqbjLw=="],
-
-    "@danielsimonjr/mathts-matrix/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.14.3", "", { "dependencies": { "typed-function": "github:danielsimonjr/typed-function" } }, "sha512-ZXNdSKmwXiCeBFACog3djGcLgjzHWUfwDwEDg/N8HY46ElhR1YmrQCzFNsVs+AFfmhbCbAZ4iJC/F8TRMMn3xA=="],
-
-    "@danielsimonjr/mathts-matrix/@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.6.4", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.14.0", "@danielsimonjr/mathts-workerpool": "^0.2.1" } }, "sha512-+QKl8jg9LIIpUtzOTTB2y9MkeY9+4YqnzhhTLdObLP7ZKAxV4DP9rjxbIWgcEFvVjyNmKY83EWXeKGUFTqbjLw=="],
-
-    "@danielsimonjr/mathts-tensor/@danielsimonjr/mathts-matrix": ["@danielsimonjr/mathts-matrix@0.1.14", "", { "dependencies": { "@danielsimonjr/mathts-core": "^0.4.0", "@danielsimonjr/mathts-parallel": "^0.3.0" } }, "sha512-800tB+8qrVDIv8xS4wvi0mPCDUX9Q6jBJjRZzAdCB5AvCQ3UL7PmbfqP8+QpcULCGpaxRiAcw7gCBadu4h+t2g=="],
-
-    "@danielsimonjr/mathts-expression/@danielsimonjr/mathts-core/typed-function": ["@danielsimonjr/typed-function@github:danielsimonjr/typed-function#1c4c1dd", {}, "danielsimonjr-typed-function-1c4c1dd", "sha512-1g5NhHLJXGSGnWzk5J1NR0BJMyYtnbtv5PXaFhwsNiPOwzo2OwBZxfTQXNwmSPWb/bQJcaFXWYIRZ1589v3J8A=="],
-
-    "@danielsimonjr/mathts-tensor/@danielsimonjr/mathts-matrix/@danielsimonjr/mathts-core": ["@danielsimonjr/mathts-core@0.4.1", "", { "dependencies": { "typed-function": "github:danielsimonjr/typed-function" } }, "sha512-r65b4vS12h7nksLxXdlcD2ykavolTVkSaMP0qDX31iGa1rB7RVl0JhgfuoNATdtlOHwecS2pBt3xx1rhnDE4bQ=="],
-
-    "@danielsimonjr/mathts-tensor/@danielsimonjr/mathts-matrix/@danielsimonjr/mathts-parallel": ["@danielsimonjr/mathts-parallel@0.3.4", "", { "dependencies": { "@danielsimonjr/mathts-workerpool": "^0.2.1" } }, "sha512-7IWuEyhAjU3gngQ+owBpTR0gKexp5HqraIGrwsrR9yCWhRUH8RqA2X92OtmtMur3OhNT2AiCTDDE9DaKnXwodA=="],
   }
 }
