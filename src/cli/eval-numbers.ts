@@ -9,9 +9,7 @@
  */
 
 import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI } from '../core/constants.js';
-import { parseUnit, UnitError } from '../dimensional/units.js';
 import { EPS0_SI, MU0_SI } from '../composition/formula-names.js';
-import { unitConventionNotes } from '../dimensional/units.js';
 import type { UnitMode } from '../composition/natural-units.js';
 
 /** ħ in eval is the exact quotient H_SI/(2π). */
@@ -47,32 +45,3 @@ export function codataScope(mode: UnitMode): Record<string, number> {
   return scope;
 }
 
-/**
- * A scope token: a finite number, or a number with a unit converted to its SI
- * scale (`1Msun` → kilograms, `25degC` → kelvin with the absolute offset).
- * @internal
- */
-export function parseEvalToken(raw: string): number {
-  const trimmed = raw.trim();
-  // A scientific literal (`1.054571817e-34`) is a number. The `e` is the exponent, not a unit.
-  if (/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(trimmed)) {
-    return Number(trimmed);
-  }
-  const m = /^\s*([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)\s*$/.exec(trimmed);
-  if (m === null || m[2] === undefined || m[2] === '') {
-    throw new UnitError(`'${raw}' is not a finite number or a number with a unit`);
-  }
-  const v = Number(m[1]);
-  const unit = parseUnit(m[2]);
-  if (unit.affine === 'celsius') return v * unit.scale + 273.15;
-  return v * unit.scale;
-}
-
-/** Convention notes for a `name=value` token that carries a unit. @internal */
-export function evalUnitNotes(raw: string): readonly string[] {
-  const trimmed = raw.trim();
-  if (/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(trimmed)) return [];
-  const m = /^\s*[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?\s*(.*?)\s*$/.exec(trimmed);
-  if (m === null || m[1] === undefined || m[1] === '') return [];
-  return unitConventionNotes(m[1]);
-}

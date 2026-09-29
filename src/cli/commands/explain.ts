@@ -18,6 +18,7 @@ import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
+import { readBinding } from '../../numerical/binding-value.js';
 
 /** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
 const SEARCH_HITS_SHOWN = 5;
@@ -35,6 +36,8 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         graph is reported NOT COVERED, with near names and what \`upt search\`
         finds for its words, and exits 1. --source picks the graph (default
         catalog); the result names the source it used.
+        A value is a number, a unit (mass=1Msun) or a constant expression
+        (mass=1*M_sun). A bare number is already in the quantity's unit.
         e.g.  upt explain hawking-temperature mass=1.989e30`;
 
 /**
@@ -61,7 +64,12 @@ function parseKnown(args: readonly string[]): string[] | Record<string, number> 
     const eq = a.indexOf('=');
     const name = a.slice(0, eq);
     const raw = a.slice(eq + 1);
-    const num = Number(raw);
+    let num: number;
+    try {
+      num = readBinding(raw).value;
+    } catch {
+      num = Number.NaN;
+    }
     if (raw === '' || !Number.isFinite(num)) {
       throw new UsageError(`upt: '${a}' is not a finite number. Expected ${name}=<number>. See \`upt help\`.`);
     }

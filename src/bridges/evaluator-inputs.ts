@@ -10,7 +10,8 @@
  *
  * @module bridges/evaluator-inputs
  */
-import { convertValue, unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
+import { unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
+import { bindingInUnit } from '../numerical/binding-value.js';
 import type { EvaluatorParameter } from './evaluators.js';
 
 /** One input as it was given and as the evaluator receives it. @internal */
@@ -40,7 +41,7 @@ const splitArg = (a: string): [string, string] => {
 };
 
 function convert(p: EvaluatorParameter, raw: string, reading: TemperatureReading): { value: number; note?: string } {
-  const { value, given } = convertValue(raw, p.unit, reading);
+  const { value, given } = bindingInUnit(raw, p.unit, reading);
   if (given === '') return { value };
   const offset = /degC|°C/.test(given) && reading === 'absolute' ? ' (absolute: + 273.15)' : /degC|°C/.test(given) ? ' (a difference: no offset)' : '';
   return { value, note: `${raw.trim()} → ${show(value)} ${p.unit || '(dimensionless)'}${offset}${unitAside(given)}` };

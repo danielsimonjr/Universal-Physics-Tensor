@@ -18,6 +18,8 @@
  */
 
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
+import { DIMENSIONLESS, LENGTH, MASS, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
+import { readParameter } from './binding-value.js';
 
 /** Coordinate order (t, r, θ, φ). */
 export type Pt = [number, number, number, number];
@@ -399,27 +401,41 @@ export function kerrKretschmann(M: number, r: number, a: number, theta: number):
   return num / Sigma ** 6;
 }
 
-function num(raw: string | undefined, fallback: number): number {
-  if (raw === undefined) return fallback;
-  const v = Number(raw);
-  if (!Number.isFinite(v)) throw new Error(`not a finite number: ${raw}`);
-  return v;
-}
+/** SI dimension of each metric parameter. A bare number is already in that unit. */
+const PARAM_DIM: Readonly<Record<string, Dimension>> = {
+  M: MASS,
+  c: VELOCITY,
+  G: { L: 3, M: -1, T: -2, I: 0, Theta: 0, N: 0, J: 0 },
+  r: LENGTH,
+  a: LENGTH,
+  t: TIME,
+  theta: DIMENSIONLESS,
+  phi: DIMENSIONLESS,
+  a0: DIMENSIONLESS,
+  t0: TIME,
+  n: DIMENSIONLESS,
+  k: { L: -2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
+  Lambda: { L: -2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
+  rho: { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
+};
 
-/** Parse `key=value` pairs. Unknown keys are an error. @internal */
+/** Parse `key=value` pairs. A value is a number, a unit, or a constant expression. @internal */
 export function metricParams(
   pairs: readonly string[],
   defaults: Readonly<Record<string, number>>,
-): Record<string, number> {
-  const out: Record<string, number> = { ...defaults };
+): { values: Record<string, number>; notes: string[] } {
+  const values: Record<string, number> = { ...defaults };
+  const notes: string[] = [];
   for (const pair of pairs) {
     const eq = pair.indexOf('=');
     if (eq <= 0) throw new Error(`'${pair}' must be key=value`);
     const key = pair.slice(0, eq);
     if (!(key in defaults)) throw new Error(`unknown parameter '${key}' (expected ${Object.keys(defaults).join(', ')})`);
-    out[key] = num(pair.slice(eq + 1), Number.NaN);
+    const read = readParameter(pair.slice(eq + 1), PARAM_DIM[key] ?? DIMENSIONLESS);
+    values[key] = read.value;
+    for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
   }
-  return out;
+  return { values, notes };
 }
 
 /**
@@ -428,7 +444,7 @@ export function metricParams(
  */
 export function curvatureReport(metric: MetricId, pairs: readonly string[] = []): CurvatureReport {
   if (metric === 'minkowski') {
-    const p = metricParams(pairs, { c: C_SI, t: 0, r: 1, theta: 1, phi: 0 });
+    const { values: p, notes } = metricParams(pairs, { c: C_SI, t: 0, r: 1, theta: 1, phi: 0 });
     const g: MetricFn = () => {
       const m = mat4();
       m[0]![0] = -(p.c! * p.c!);
@@ -441,10 +457,11 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     const t = tensorsOf(g, x, stepsFor(x));
     return stateCurvature(pack('minkowski', p, x, t, { ricciScalar: 0, kretschmann: 0 }, [
       'Minkowski in Cartesian-like coordinates (the angular part is not a sphere here; g_θθ = g_φφ = 1).',
+      ...notes,
     ]));
   }
   if (metric === 'schwarzschild') {
-    const p = metricParams(pairs, { M: M_SUN_SI, c: C_SI, G: G_SI, r: 0, theta: Math.PI / 2, phi: 0, t: 0 });
+    const { values: p, notes } = metricParams(pairs, { M: M_SUN_SI, c: C_SI, G: G_SI, r: 0, theta: Math.PI / 2, phi: 0, t: 0 });
     const rs = (2 * p.G! * p.M!) / (p.c! * p.c!);
     if (p.r === 0) p.r = 10 * rs;
     if (!(p.r! > rs)) throw new Error(`r must be outside the horizon (r_s = ${rs})`);
@@ -455,10 +472,11 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     return stateCurvature(pack('schwarzschild', p, x, t, { kretschmann: K, ricciScalar: 0, horizon_m: rs }, [
       'Closed form: Kretschmann = 48 G² M² / (c⁴ r⁶), Ricci = 0.',
       'Christoffel symbols below are the finite-difference values.',
+      ...notes,
     ]));
   }
   if (metric === 'flrw') {
-    const p = metricParams(pairs, {
+    const { values: p, notes } = metricParams(pairs, {
       a0: 1,
       t0: 1,
       n: 2 / 3,
@@ -509,9 +527,10 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
       'Friedmann: H² = 8πGρ/3 − k c²/a² + Λ c²/3. Flat dust defaults n = 2/3 and ρ = 3 H²/(8πG). CE-friedmann is the flat term; CE-friedmann-curvature carries −k c²/a².',
       'Ricci scalar closed form: R = 6/c² (ä/a + H² + k c²/a²). Flat dust: R = 3 H²/c².',
       'Ricci and Kretschmann are finite-differenced at c = 1 and restored with 1/c² and 1/c⁴. Christoffel symbols are the SI difference.',
+      ...notes,
     ]));
   }
-  const p = metricParams(pairs, {
+  const { values: p, notes: paramNotes } = metricParams(pairs, {
     M: M_SUN_SI,
     a: 0,
     c: C_SI,
@@ -538,6 +557,7 @@ export function curvatureReport(metric: MetricId, pairs: readonly string[] = [])
     );
   }
   return stateCurvature(pack('kerr', { ...p, M_geom_m: Mgeom, a_over_M: aOverM }, x, t, { kretschmann: K, ricciScalar: 0 }, [
+    ...paramNotes,
     ...kerrNotes,
     'Closed form: K = 48 M² (r² − a² cos²θ) [(r² + a² cos²θ)² − 16 r² a² cos²θ] / (r² + a² cos²θ)⁶.',
     'a = 0 reduces to the Schwarzschild Kretschmann 48 M²/r⁶.',

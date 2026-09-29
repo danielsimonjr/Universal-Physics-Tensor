@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 392
   totalModules: 12
-  totalExports: 2828
+  totalExports: 2826
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5560,10 +5560,12 @@ modules:
       internalDependencies:
         - file: ../dimensional/units.js
           imports:
-            - convertValue
             - unitConventionNotes
             - UnitError
             - TemperatureReading
+        - file: ../numerical/binding-value.js
+          imports:
+            - bindingInUnit
         - file: ./evaluators.js
           imports:
             - EvaluatorParameter
@@ -7227,6 +7229,9 @@ modules:
           imports:
             - DiscoveryOptions
           typeOnly: true
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - parseDiscoveryOpts
       functions:
@@ -7553,8 +7558,6 @@ modules:
           imports:
             - HBAR_TRUNCATION_NOTE
             - codataScope
-            - evalUnitNotes
-            - parseEvalToken
         - file: ../../composition/natural-units.js
           imports:
             - UnitMode
@@ -7562,6 +7565,9 @@ modules:
         - file: ../../dimensional/units.js
           imports:
             - UnitError
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - command
       constants:
@@ -7605,6 +7611,9 @@ modules:
         - file: ../eval-numbers.js
           imports:
             - HBAR_TRUNCATION_NOTE
+        - file: ../../numerical/binding-value.js
+          imports:
+            - bindingInUnit
       exports:
         - command
         - weakFieldDomainNote
@@ -7641,6 +7650,9 @@ modules:
         - file: ../search-index.js
           imports:
             - searchNameWords
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - command
       constants:
@@ -7905,6 +7917,9 @@ modules:
             - parseAt
             - resolveAtPoint
             - showInequality
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
         - file: ./_atlas-route.js
           imports:
             - explainsRefusal
@@ -8055,6 +8070,9 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../../numerical/binding-value.js
+          imports:
+            - readBinding
       exports:
         - command
         - parseAt
@@ -8222,17 +8240,10 @@ modules:
             - K_B_SI
             - M_E_SI
             - M_SUN_SI
-        - file: ../dimensional/units.js
-          imports:
-            - parseUnit
-            - UnitError
         - file: ../composition/formula-names.js
           imports:
             - EPS0_SI
             - MU0_SI
-        - file: ../dimensional/units.js
-          imports:
-            - unitConventionNotes
         - file: ../composition/natural-units.js
           imports:
             - UnitMode
@@ -8240,12 +8251,8 @@ modules:
       exports:
         - HBAR_TRUNCATION_NOTE
         - codataScope
-        - parseEvalToken
-        - evalUnitNotes
       functions:
         - codataScope
-        - parseEvalToken
-        - evalUnitNotes
       constants:
         - HBAR_TRUNCATION_NOTE
     src/cli/expr-print.ts:
@@ -18536,6 +18543,17 @@ modules:
             - C_SI
             - G_SI
             - M_SUN_SI
+        - file: ../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+            - LENGTH
+            - MASS
+            - TIME
+            - VELOCITY
+            - Dimension
+        - file: ./binding-value.js
+          imports:
+            - readParameter
       exports:
         - METRIC_SIGNATURE
         - METRIC_SIGNATURE_NOTE
@@ -19063,11 +19081,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 392
   totalModules: 12
-  totalLinesOfCode: 86421
-  totalExports: 2828
+  totalLinesOfCode: 86490
+  totalExports: 2826
   totalClasses: 59
   totalInterfaces: 443
-  totalFunctions: 726
+  totalFunctions: 724
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 701

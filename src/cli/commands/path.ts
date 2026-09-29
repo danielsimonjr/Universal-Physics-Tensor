@@ -29,6 +29,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
+import { readBinding } from '../../numerical/binding-value.js';
 import { explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, type RouteClaim } from './_atlas-route.js';
 
 const FLAGS: FlagSpec[] = [
@@ -56,6 +57,9 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observab
         relative period error, spring → lc; the horizon is restated on the
         circuit clock). Any other norm or direction is refused as
         'norm-not-stated', and the refusal names the missing declaration.
+        --at values are numbers, units, or constant expressions (theta0=pi/2).
+        A regime or horizon that was checked and failed prints no bound
+        number: the domain supremum is not a claim at that point.
         --sweep name=lo:hi:n[:log] evaluates the path at n samples (2 to 200,
         endpoints included) of one parameter not fixed by --at: per row the
         regime, the horizon and the closed-form point error. A row outside a
@@ -156,8 +160,15 @@ export function parseSweep(spec: string): { name: string; values: number[]; spac
   const m = /^([^=\s]+)=([^:]+):([^:]+):([^:]+)(?::(linear|log))?$/.exec(spec);
   if (m === null) throw new CliError(`upt path: --sweep '${spec}' is not name=lo:hi:n[:log], e.g. --sweep theta0=0.05:0.9:18`);
   const [, name, loS, hiS, nS, sp] = m as unknown as [string, string, string, string, string, string | undefined];
-  const lo = Number(loS);
-  const hi = Number(hiS);
+  const endpoint = (raw: string): number => {
+    try {
+      return readBinding(raw).value;
+    } catch {
+      return Number.NaN;
+    }
+  };
+  const lo = endpoint(loS);
+  const hi = endpoint(hiS);
   const n = Number(nS);
   const spacing = sp === 'log' ? 'log' : 'linear';
   if (!Number.isFinite(lo) || !Number.isFinite(hi) || !(lo < hi)) {
@@ -332,7 +343,12 @@ export function parseTolerance(raw: string | undefined): ToleranceRequest | null
   if (observable !== null && !/^[a-z][a-z-]*$/.test(observable)) {
     throw new CliError(`upt path: --tolerance=${raw} is not EPS or <observable>:EPS, e.g. --tolerance=phase:0.1`);
   }
-  const v = Number(number);
+  let v = Number.NaN;
+  try {
+    if (number !== '') v = readBinding(number).value;
+  } catch {
+    v = Number.NaN;
+  }
   if (number === '' || !Number.isFinite(v) || v <= 0) throw new CliError(`upt path: --tolerance=${raw} must be a finite number > 0`);
   return { observable, value: v };
 }
@@ -1060,7 +1076,7 @@ function makeEvaluator(api: CommandCtx['api'], bridges: Bridges, result: RouteCl
 }
 
 async function run(ctx: CommandCtx): Promise<number> {
-  const { args, api, out } = ctx;
+  const { args, api, out, err } = ctx;
   const wantJson = args.flags.has('json');
   const endpoints = args.positionals.filter((p) => !p.includes('='));
   const assignments = [...(args.flags.get('at') ?? []), ...args.positionals.filter((p) => p.includes('='))];
@@ -1072,7 +1088,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
   const [from, to] = endpoints as [string, string];
-  const point = parseAt(assignments, 'path');
+  const atNotes: string[] = [];
+  const point = parseAt(assignments, 'path', atNotes);
+  for (const note of atNotes) err(note);
   const t = point['t'];
 
   const { bridges, fromFamily, toFamily } = selectRoute(api, from, to, 'path');
@@ -1184,6 +1202,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   // and so is a tolerance the point error exceeds. UNKNOWN, where a coordinate
   // or t was not supplied, is not a failure.
   const horizonViolated = t !== undefined && horizons.some((h) => h.holds === false);
+  // The domain supremum is the route's answer only while the point check has
+  // not withdrawn it. A violated regime or horizon is not a claim, so neither
+  // text nor JSON carries a bound number.
+  const claimWithdrawn = allRegimesHold === false || horizonViolated;
+  const withdrawnReason = allRegimesHold === false
+    ? (pointBoundReason ?? 'a regime on the path is violated or unchecked')
+    : 'past the horizon, no bound is claimed at this point';
   const exitCode =
     allRegimesHold === false ||
     horizonViolated ||
@@ -1209,7 +1234,7 @@ async function run(ctx: CommandCtx): Promise<number> {
             ? {
                 kind: 'bound',
                 relation: result.relation,
-                bound: result.bound,
+                ...(claimWithdrawn ? {} : { bound: result.bound }),
                 norm: result.norm,
                 terminal: result.terminal,
                 ...(result.transports === undefined ? {} : { transports: result.transports.map(transportReport) }),
@@ -1223,8 +1248,10 @@ async function run(ctx: CommandCtx): Promise<number> {
               }),
           regimes,
           allRegimesHold,
-          pointBound,
-          ...(pointBoundReason !== null ? { pointBoundReason } : {}),
+          pointBound: claimWithdrawn ? null : pointBound,
+          ...((claimWithdrawn ? withdrawnReason : pointBoundReason) !== null
+            ? { pointBoundReason: claimWithdrawn ? withdrawnReason : pointBoundReason }
+            : {}),
           horizons,
           ...(multi.length === 0 ? {} : { multiPremise: multi }),
           ...(regimeCollisions.length === 0 ? {} : { regimeCollisions }),
@@ -1250,7 +1277,11 @@ async function run(ctx: CommandCtx): Promise<number> {
   out('');
   if (result.kind === 'bound') {
     out(`  composite relation: ${result.relation}`);
-    out(`  composed bound: K = ${result.bound.K} · delta = ${result.bound.delta}`);
+    if (claimWithdrawn) {
+      out('  composed bound: none — no bound is claimed at this point');
+    } else {
+      out(`  composed bound: K = ${result.bound.K} · delta = ${result.bound.delta}`);
+    }
     out(`  norm: ${result.norm ?? '(none stated — the claim is the vacuous identity)'}`);
     if (result.terminal) out('  terminal: the last step states no Lipschitz constant; the claim ends there');
     for (const a of result.transports ?? []) {
@@ -1266,13 +1297,13 @@ async function run(ctx: CommandCtx): Promise<number> {
       );
       out('    no other norm or direction through this map is declared, and each stays refused');
     }
-    if (pointBound !== null) {
+    if (!claimWithdrawn && pointBound !== null) {
       out(
         `  bound at this point: K = ${pointBound.K} · delta = ${pointBound.delta} (closed-form: the exact error; ` +
           "the composed bound above is the supremum over the bridge's domain)",
       );
-    } else if (pointBoundReason !== null) {
-      out(`  bound at this point: none — ${pointBoundReason}`);
+    } else if ((claimWithdrawn ? withdrawnReason : pointBoundReason) !== null) {
+      out(`  bound at this point: none — ${claimWithdrawn ? withdrawnReason : pointBoundReason}`);
     }
   } else {
     out(`  composite relation: ${NO_COMPOSITE_PHRASE}`);

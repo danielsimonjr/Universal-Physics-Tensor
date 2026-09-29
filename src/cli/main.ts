@@ -171,7 +171,8 @@ Usage:
         or log2 for base 10 or 2. With the MathTS parser, a bare e is Euler's
         number (≈2.718); the built-in parser leaves e for you to set.
         Elementary charge is e_charge. An unbound e under MathTS is refused
-        unless you pass e=<number> or --allow-euler. \`upt help eval\` describes every flag.
+        unless you pass e=<number> or --allow-euler. A value may be a number,
+        a unit, or an expression (v=0.6*c). \`upt help eval\` describes every flag.
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \\
                        c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
 
@@ -207,7 +208,8 @@ Usage:
         parent and scalar equations, observable, regime checks and a route to
         measurement; a violated regime check prints NOT QUALIFIED and exits 3.
         Every input declares its unit and meaning; a value may carry a unit
-        (d_m=1um, T_K=25degC) and converts only when the dimensions agree.
+        (d_m=1um, T_K=25degC) or an expression (M_kg=1*M_sun) and converts
+        only when the dimensions agree.
         With no id, lists the evaluable bridges and cases and their inputs.
         --sigma/--corr propagate input uncertainties to first order, with a
         curvature check that flags an unreliable linearization. be-51 and be-52
@@ -242,7 +244,8 @@ Usage:
         bridge ends in another family's model), the relation it composes to,
         the composed (K, delta) with its norm, and whether every bridge's regime
         and every horizon still holds at --at (a bound outside its regime is
-        not claimed). When the composition table declines to compose, the path
+        not claimed, and a failed check prints no bound number). Values may
+        be expressions (theta0=pi/2). When the composition table declines to compose, the path
         carries no bound: it prints 'no composite claim', names what composing
         would need, and exits 0. Across families a matching norm name is not a
         transport (reason cross-family-unmapped, still exit 0). A multi-premise
@@ -280,8 +283,9 @@ Usage:
 
   upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
         Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann
-        scalar. Alias: upt curvature. \`upt help metric\` describes every flag.
-        e.g.  upt metric schwarzschild M=1.989e30 r=1e8
+        scalar. Parameters accept units and constant expressions (M=1Msun,
+        theta=pi/2). Alias: upt curvature. \`upt help metric\` describes every flag.
+        e.g.  upt metric schwarzschild M=1Msun r=1e8 theta=pi/2
 
   upt testplan <be-NN | case-id> [--json]
         The measurement plan stored on a confrontation or an applied case.

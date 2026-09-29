@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 392,
     "totalModules": 12,
-    "totalExports": 2828
+    "totalExports": 2826
   },
   "entryPoints": [
     {
@@ -8180,10 +8180,15 @@
           {
             "file": "../dimensional/units.js",
             "imports": [
-              "convertValue",
               "unitConventionNotes",
               "UnitError",
               "TemperatureReading"
+            ]
+          },
+          {
+            "file": "../numerical/binding-value.js",
+            "imports": [
+              "bindingInUnit"
             ]
           },
           {
@@ -10709,6 +10714,12 @@
               "DiscoveryOptions"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
+            ]
           }
         ],
         "exports": [
@@ -11246,9 +11257,7 @@
             "file": "../eval-numbers.js",
             "imports": [
               "HBAR_TRUNCATION_NOTE",
-              "codataScope",
-              "evalUnitNotes",
-              "parseEvalToken"
+              "codataScope"
             ]
           },
           {
@@ -11262,6 +11271,12 @@
             "file": "../../dimensional/units.js",
             "imports": [
               "UnitError"
+            ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
             ]
           }
         ],
@@ -11337,6 +11352,12 @@
             "imports": [
               "HBAR_TRUNCATION_NOTE"
             ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "bindingInUnit"
+            ]
           }
         ],
         "exports": [
@@ -11395,6 +11416,12 @@
             "file": "../search-index.js",
             "imports": [
               "searchNameWords"
+            ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
             ]
           }
         ],
@@ -11859,6 +11886,12 @@
             ]
           },
           {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
+            ]
+          },
+          {
             "file": "./_atlas-route.js",
             "imports": [
               "explainsRefusal",
@@ -12096,6 +12129,12 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../../numerical/binding-value.js",
+            "imports": [
+              "readBinding"
             ]
           }
         ],
@@ -12349,23 +12388,10 @@
             ]
           },
           {
-            "file": "../dimensional/units.js",
-            "imports": [
-              "parseUnit",
-              "UnitError"
-            ]
-          },
-          {
             "file": "../composition/formula-names.js",
             "imports": [
               "EPS0_SI",
               "MU0_SI"
-            ]
-          },
-          {
-            "file": "../dimensional/units.js",
-            "imports": [
-              "unitConventionNotes"
             ]
           },
           {
@@ -12378,14 +12404,10 @@
         ],
         "exports": [
           "HBAR_TRUNCATION_NOTE",
-          "codataScope",
-          "parseEvalToken",
-          "evalUnitNotes"
+          "codataScope"
         ],
         "functions": [
-          "codataScope",
-          "parseEvalToken",
-          "evalUnitNotes"
+          "codataScope"
         ],
         "constants": [
           "HBAR_TRUNCATION_NOTE"
@@ -26637,6 +26659,23 @@
               "G_SI",
               "M_SUN_SI"
             ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "LENGTH",
+              "MASS",
+              "TIME",
+              "VELOCITY",
+              "Dimension"
+            ]
+          },
+          {
+            "file": "./binding-value.js",
+            "imports": [
+              "readParameter"
+            ]
           }
         ],
         "exports": [
@@ -27231,11 +27270,11 @@
   "statistics": {
     "totalTypeScriptFiles": 392,
     "totalModules": 12,
-    "totalLinesOfCode": 86421,
-    "totalExports": 2828,
+    "totalLinesOfCode": 86490,
+    "totalExports": 2826,
     "totalClasses": 59,
     "totalInterfaces": 443,
-    "totalFunctions": 726,
+    "totalFunctions": 724,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 701,
