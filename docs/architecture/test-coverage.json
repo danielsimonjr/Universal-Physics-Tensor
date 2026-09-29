@@ -1,19 +1,24 @@
 {
   "metadata": {
-    "totalSourceFiles": 380,
-    "totalTestFiles": 523,
-    "testedCount": 373,
-    "untestedCount": 7,
-    "coveragePercent": "98.2"
+    "totalSourceFiles": 389,
+    "totalTestFiles": 530,
+    "testedCount": 377,
+    "untestedCount": 12,
+    "coveragePercent": "96.9"
   },
   "untestedFiles": [
     "src/atlas/public.ts",
     "src/cases/quadrature.ts",
     "src/cli/commands/_atlas-route.ts",
+    "src/cli/conventions.ts",
+    "src/cli/euler-guard.ts",
+    "src/cli/eval-numbers.ts",
     "src/cli/record-reach.ts",
     "src/cli/record-tables.ts",
     "src/cli/record.ts",
-    "src/cli/search-index.ts"
+    "src/cli/search-index.ts",
+    "src/composition/formula-names.ts",
+    "src/composition/natural-units.ts"
   ],
   "testedFiles": [
     "src/atlas/applicability.ts",
@@ -217,6 +222,7 @@
     "src/cli/commands/ground.ts",
     "src/cli/commands/index.ts",
     "src/cli/commands/map.ts",
+    "src/cli/commands/metric.ts",
     "src/cli/commands/path.ts",
     "src/cli/commands/predict.ts",
     "src/cli/commands/priority.ts",
@@ -225,6 +231,7 @@
     "src/cli/commands/regime.ts",
     "src/cli/commands/search.ts",
     "src/cli/commands/symbolic.ts",
+    "src/cli/commands/testplan.ts",
     "src/cli/errors.ts",
     "src/cli/expr-print.ts",
     "src/cli/graphs.ts",
@@ -273,6 +280,7 @@
     "src/composition/probe/corpus.ts",
     "src/composition/probe/dataset.ts",
     "src/composition/probe/experiment-design.ts",
+    "src/composition/probe/expression-gaps.ts",
     "src/composition/probe/falsify.ts",
     "src/composition/probe/fingerprint.ts",
     "src/composition/probe/fit.ts",
@@ -385,6 +393,7 @@
     "src/numerical/pderiv.ts",
     "src/numerical/perihelion-finder.ts",
     "src/numerical/quadrature.ts",
+    "src/numerical/spacetime-metrics.ts",
     "src/numerical/strides.ts",
     "src/numerical/tensor-engine.ts",
     "src/numerical/types.ts",
@@ -2521,6 +2530,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2570,6 +2580,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2619,6 +2630,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2668,6 +2680,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2717,6 +2730,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2766,6 +2780,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2815,6 +2830,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2864,6 +2880,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2913,6 +2930,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -2962,6 +2980,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3011,6 +3030,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3060,6 +3080,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3109,6 +3130,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3158,6 +3180,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3207,6 +3230,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3256,6 +3280,57 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
+      "tests/cli/eval-functions-builtin.test.ts",
+      "tests/cli/eval-functions.test.ts",
+      "tests/cli/exit-codes.test.ts",
+      "tests/cli/explain-bridge-redirect.test.ts",
+      "tests/cli/explain-not-covered.test.ts",
+      "tests/cli/gr-dogfood-cli.test.ts",
+      "tests/cli/help-covers-registry.test.ts",
+      "tests/cli/help-flags.test.ts",
+      "tests/cli/inprocess-golden.test.ts",
+      "tests/cli/json-contract.test.ts",
+      "tests/cli/main-dispatch.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/map-filters.test.ts",
+      "tests/cli/new-commands.test.ts",
+      "tests/cli/path.test.ts",
+      "tests/cli/persona-0471-cli.test.ts",
+      "tests/cli/probe-falsify-says-why.test.ts",
+      "tests/cli/probe-help-problem-format.test.ts",
+      "tests/cli/probe-study.test.ts",
+      "tests/cli/probe.test.ts",
+      "tests/cli/quantity-name-collision.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/record-hardening.test.ts",
+      "tests/cli/record-inputs.test.ts",
+      "tests/cli/record-replay.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-at-resolution.test.ts",
+      "tests/cli/regime.test.ts",
+      "tests/cli/source-anchor.test.ts",
+      "tests/cli/source-extension.test.ts",
+      "tests/cli/statuses.test.ts",
+      "tests/cli/suggest-ranking-cli.test.ts",
+      "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/upt-discover-opts.test.ts"
+    ],
+    "src/cli/commands/metric.ts": [
+      "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-cases.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
+      "tests/cli/atlas-command.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/canonical-compare-cli.test.ts",
+      "tests/cli/cli-from-src.test.ts",
+      "tests/cli/command-count-prose.test.ts",
+      "tests/cli/confront.test.ts",
+      "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3305,6 +3380,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3354,6 +3430,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3403,6 +3480,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3452,6 +3530,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3469,6 +3548,7 @@
       "tests/cli/new-commands.test.ts",
       "tests/cli/path.test.ts",
       "tests/cli/persona-0471-cli.test.ts",
+      "tests/cli/probe-empty-warning.test.ts",
       "tests/cli/probe-falsify-says-why.test.ts",
       "tests/cli/probe-help-problem-format.test.ts",
       "tests/cli/probe-study.test.ts",
@@ -3501,6 +3581,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3550,6 +3631,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3599,6 +3681,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3648,6 +3731,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3684,11 +3768,64 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
+    "src/cli/commands/testplan.ts": [
+      "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/cli/applied-cases.test.ts",
+      "tests/cli/applied-physics-audit.test.ts",
+      "tests/cli/atlas-command.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/canonical-compare-cli.test.ts",
+      "tests/cli/cli-from-src.test.ts",
+      "tests/cli/command-count-prose.test.ts",
+      "tests/cli/confront.test.ts",
+      "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
+      "tests/cli/eval-functions-builtin.test.ts",
+      "tests/cli/eval-functions.test.ts",
+      "tests/cli/exit-codes.test.ts",
+      "tests/cli/explain-bridge-redirect.test.ts",
+      "tests/cli/explain-not-covered.test.ts",
+      "tests/cli/gr-dogfood-cli.test.ts",
+      "tests/cli/help-covers-registry.test.ts",
+      "tests/cli/help-flags.test.ts",
+      "tests/cli/inprocess-golden.test.ts",
+      "tests/cli/json-contract.test.ts",
+      "tests/cli/main-dispatch.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/map-filters.test.ts",
+      "tests/cli/new-commands.test.ts",
+      "tests/cli/path.test.ts",
+      "tests/cli/persona-0471-cli.test.ts",
+      "tests/cli/probe-falsify-says-why.test.ts",
+      "tests/cli/probe-help-problem-format.test.ts",
+      "tests/cli/probe-study.test.ts",
+      "tests/cli/probe.test.ts",
+      "tests/cli/quantity-name-collision.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/record-hardening.test.ts",
+      "tests/cli/record-inputs.test.ts",
+      "tests/cli/record-replay.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-at-resolution.test.ts",
+      "tests/cli/regime.test.ts",
+      "tests/cli/source-anchor.test.ts",
+      "tests/cli/source-extension.test.ts",
+      "tests/cli/statuses.test.ts",
+      "tests/cli/suggest-ranking-cli.test.ts",
+      "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/upt-discover-opts.test.ts"
+    ],
+    "src/cli/conventions.ts": [],
     "src/cli/errors.ts": [
       "tests/cli/args.test.ts",
       "tests/cli/graphs.test.ts",
       "tests/cli/main-dispatch.test.ts"
     ],
+    "src/cli/euler-guard.ts": [],
+    "src/cli/eval-numbers.ts": [],
     "src/cli/expr-print.ts": [
       "tests/cli/symbolic-latex.test.ts"
     ],
@@ -3708,6 +3845,7 @@
       "tests/cli/command-count-prose.test.ts",
       "tests/cli/confront.test.ts",
       "tests/cli/discover-derive-samples.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/eval-functions-builtin.test.ts",
       "tests/cli/eval-functions.test.ts",
       "tests/cli/exit-codes.test.ts",
@@ -3849,6 +3987,7 @@
       "tests/composition/canonical-compare-pairing.test.ts",
       "tests/composition/canonical-compare.test.ts",
       "tests/composition/canonical-prefactors.test.ts",
+      "tests/composition/dogfood-compare.test.ts",
       "tests/composition/gr-formula-compare.test.ts",
       "tests/composition/persona-retest-compare.test.ts"
     ],
@@ -3945,6 +4084,7 @@
       "tests/composition/namespacing.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/proposed-bridges.test.ts",
@@ -4652,6 +4792,7 @@
       "tests/atlas/negative-controls.test.ts",
       "tests/composition/symbolic-composition.test.ts"
     ],
+    "src/composition/formula-names.ts": [],
     "src/composition/graph-viz-svg.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
@@ -4835,6 +4976,7 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/composition/natural-units.ts": [],
     "src/composition/poster-source.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
@@ -4885,7 +5027,8 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/backend.test.ts",
-      "tests/composition/probe/coverage-backfill.test.ts"
+      "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts"
     ],
     "src/composition/probe/candidate-store.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -4896,6 +5039,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/corpus.ts": [
@@ -4908,6 +5052,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/corpus-prefactor.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/dataset.ts": [
@@ -4919,6 +5064,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/experiment-design.ts": [
@@ -4930,7 +5076,18 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/experiment-design.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
+    ],
+    "src/composition/probe/expression-gaps.ts": [
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts"
     ],
     "src/composition/probe/falsify.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -4941,6 +5098,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/fingerprint.ts": [
@@ -4952,6 +5110,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/fit.ts": [
@@ -4963,6 +5122,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
@@ -4975,6 +5135,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts"
@@ -4988,6 +5149,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts"
@@ -4999,7 +5161,8 @@
       "tests/cli/map-atlas-results.test.ts",
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
-      "tests/cli/recover-conventions.test.ts"
+      "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts"
     ],
     "src/composition/probe/limits.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -5010,6 +5173,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/metadata.ts": [
@@ -5020,6 +5184,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/pipeline.ts": [
@@ -5033,6 +5198,7 @@
       "tests/composition/probe/corpus-prefactor.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/dimensionless-input.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/no-holdout-wording.test.ts"
     ],
@@ -5048,6 +5214,7 @@
       "tests/composition/probe/corpus-prefactor.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/dimensionless-input.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
@@ -5063,6 +5230,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/family-b.test.ts"
     ],
     "src/composition/probe/residual.ts": [
@@ -5074,6 +5242,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/run-manifest.ts": [
@@ -5084,6 +5253,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/scoring.ts": [
@@ -5094,6 +5264,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/search-budget.ts": [
@@ -5105,6 +5276,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
@@ -5117,6 +5289,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/serialize.test.ts"
     ],
     "src/composition/probe/structure.ts": [
@@ -5128,6 +5301,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
     "src/composition/probe/study.ts": [
@@ -5138,6 +5312,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/study-inputs.test.ts",
       "tests/composition/probe/study-refusals.test.ts",
       "tests/composition/probe/study-replication.test.ts",
@@ -5151,6 +5326,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts"
     ],
@@ -5369,6 +5545,7 @@
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
       "tests/composition/discovery.test.ts",
+      "tests/composition/dogfood-compare.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/identifiability.test.ts",
@@ -5443,6 +5620,7 @@
       "tests/cases/kepler-rv.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
+      "tests/cli/dogfood-open-items.test.ts",
       "tests/cli/gr-dogfood-cli.test.ts",
       "tests/cli/graphs.test.ts",
       "tests/cli/map-atlas-results.test.ts",
@@ -5451,6 +5629,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/canonical-compare.test.ts",
       "tests/composition/canonical-graph.test.ts",
+      "tests/composition/dogfood-compare.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/core/constants.test.ts",
       "tests/dimensional/units.test.ts",
@@ -5472,6 +5651,7 @@
       "tests/numerical/kretschmann-schwarzschild.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
       "tests/numerical/schwarzschild-radial-geodesic.test.ts",
+      "tests/numerical/spacetime-metrics.test.ts",
       "tests/numerical/weyl-kerr-schild.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts",
       "tests/tensor.test.ts"
@@ -6058,6 +6238,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/dimensional/dimension-spec-grouping.test.ts",
       "tests/dimensional/dimension-spec.test.ts"
     ],
     "src/dimensional/einstein-equation.ts": [
@@ -6368,6 +6549,7 @@
       "tests/composition/dimension-adjacency.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery.test.ts",
+      "tests/composition/dogfood-compare.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/gr-formula-compare.test.ts",
@@ -6849,7 +7031,8 @@
     ],
     "src/numerical/formula-mathts.ts": [
       "tests/numerical/formula-conformance.mathts.test.ts",
-      "tests/numerical/formula-mathts.test.ts"
+      "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parsers-agree.test.ts"
     ],
     "src/numerical/formula-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -6874,6 +7057,7 @@
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/formula-conformance.builtin.test.ts",
       "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parsers-agree.test.ts",
       "tests/numerical/formula.test.ts"
     ],
     "src/numerical/geodesic-integrator.ts": [
@@ -7160,6 +7344,9 @@
     "src/numerical/quadrature.ts": [
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/integral-quadrature.test.ts"
+    ],
+    "src/numerical/spacetime-metrics.ts": [
+      "tests/numerical/spacetime-metrics.test.ts"
     ],
     "src/numerical/strides.ts": [
       "tests/numerical/strides.test.ts"
@@ -7814,6 +8001,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -8021,7 +8210,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/atlas/transported-norm-demo.test.ts": [
       "src/atlas/composition-table.ts",
@@ -9464,6 +9655,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cases/index.ts",
       "src/cases/types.ts"
     ],
@@ -9492,7 +9685,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/args.test.ts": [
       "src/cli/args.ts",
@@ -9524,6 +9719,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/atlas/families.ts",
       "src/atlas/types.ts"
     ],
@@ -9553,6 +9750,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/atlas/families.ts",
       "src/atlas/types.ts",
       "src/atlas/derive-evidence.ts",
@@ -9687,6 +9886,7 @@
       "src/composition/probe/candidate-store.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -9762,6 +9962,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli/command.ts",
       "src/cli/args.ts",
       "src/cli-api.ts",
@@ -9896,6 +10098,7 @@
       "src/composition/probe/candidate-store.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -9970,7 +10173,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/cli-from-src.test.ts": [
       "src/cli/main.ts",
@@ -9997,7 +10202,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/closed-stdout.test.ts": [],
     "tests/cli/command-count-prose.test.ts": [
@@ -10025,7 +10232,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/confront.test.ts": [
       "src/cli/main.ts",
@@ -10052,7 +10261,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/discover-derive-samples.test.ts": [
       "src/cli/main.ts",
@@ -10079,7 +10290,39 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
+    ],
+    "tests/cli/dogfood-open-items.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/core/constants.ts"
     ],
     "tests/cli/eval-functions-builtin.test.ts": [
       "src/cli/main.ts",
@@ -10106,7 +10349,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/eval-functions.test.ts": [
       "src/cli/main.ts",
@@ -10134,6 +10379,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/numerical/formula.ts"
     ],
     "tests/cli/evaluate-help-claim.test.ts": [
@@ -10164,7 +10411,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/explain-bridge-redirect.test.ts": [
       "src/cli/main.ts",
@@ -10191,7 +10440,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/explain-not-covered.test.ts": [
       "src/cli/main.ts",
@@ -10218,7 +10469,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/gr-dogfood-cli.test.ts": [
       "src/cli/main.ts",
@@ -10246,6 +10499,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/core/constants.ts"
     ],
     "tests/cli/graphs.test.ts": [
@@ -10383,6 +10638,7 @@
       "src/composition/probe/candidate-store.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -10459,6 +10715,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli/command.ts"
     ],
     "tests/cli/help-flags.test.ts": [
@@ -10487,6 +10745,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli/command.ts"
     ],
     "tests/cli/inprocess-golden.test.ts": [
@@ -10514,7 +10774,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/json-contract.test.ts": [
       "src/cli/main.ts",
@@ -10541,7 +10803,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/main-dispatch.test.ts": [
       "src/cli/main.ts",
@@ -10569,6 +10833,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli/command.ts",
       "src/cli/errors.ts",
       "src/cli/args.ts"
@@ -10599,6 +10865,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli-api.ts",
       "src/index.ts",
       "src/composition/user-equation.ts",
@@ -10731,6 +10999,7 @@
       "src/composition/probe/candidate-store.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -10807,6 +11076,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli-api.ts",
       "src/index.ts",
       "src/composition/user-equation.ts",
@@ -10939,6 +11210,7 @@
       "src/composition/probe/candidate-store.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -11013,7 +11285,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/new-commands.test.ts": [
       "src/cli/main.ts",
@@ -11040,7 +11314,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/output.test.ts": [
       "src/cli/output.ts",
@@ -11072,7 +11348,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/persona-0471-cli.test.ts": [
       "src/cli/main.ts",
@@ -11099,7 +11377,12 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
+    ],
+    "tests/cli/probe-empty-warning.test.ts": [
+      "src/cli/commands/probe.ts"
     ],
     "tests/cli/probe-falsify-says-why.test.ts": [
       "src/cli/main.ts",
@@ -11126,7 +11409,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/probe-help-problem-format.test.ts": [
       "src/cli/main.ts",
@@ -11154,6 +11439,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/composition/probe/problem.ts"
     ],
     "tests/cli/probe-study.test.ts": [
@@ -11181,7 +11468,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/probe.test.ts": [
       "src/cli/main.ts",
@@ -11208,7 +11497,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/quantity-name-collision.test.ts": [
       "src/cli/main.ts",
@@ -11235,7 +11526,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/record-builtin-parser.test.ts": [
       "src/cli/main.ts",
@@ -11263,6 +11556,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli-api.ts",
       "src/index.ts",
       "src/composition/user-equation.ts",
@@ -11395,6 +11690,7 @@
       "src/composition/probe/candidate-store.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -11470,6 +11766,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli/command.ts"
     ],
     "tests/cli/record-inputs.test.ts": [
@@ -11497,7 +11795,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/record-replay.test.ts": [
       "src/cli/main.ts",
@@ -11524,7 +11824,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/recover-conventions.test.ts": [
       "src/cli/main.ts",
@@ -11552,6 +11854,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli-api.ts",
       "src/index.ts",
       "src/composition/user-equation.ts",
@@ -11684,6 +11988,7 @@
       "src/composition/probe/candidate-store.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
       "src/composition/probe/fit.ts",
       "src/composition/probe/scoring.ts",
       "src/composition/probe/corpus.ts",
@@ -11759,7 +12064,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/regime.test.ts": [
       "src/cli/main.ts",
@@ -11786,7 +12093,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/source-anchor.test.ts": [
       "src/cli/main.ts",
@@ -11814,6 +12123,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/canonical-graph.ts"
     ],
@@ -11842,7 +12153,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/statuses.test.ts": [
       "src/cli/main.ts",
@@ -11870,6 +12183,8 @@
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
       "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
       "src/cli/statuses.ts"
     ],
     "tests/cli/suggest-ranking-cli.test.ts": [
@@ -11897,7 +12212,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/symbolic-latex.test.ts": [
       "src/cli/expr-print.ts",
@@ -11932,7 +12249,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/upt-derive.test.ts": [],
     "tests/cli/upt-discover-opts.test.ts": [
@@ -11960,7 +12279,9 @@
       "src/cli/commands/regime.ts",
       "src/cli/commands/path.ts",
       "src/cli/commands/atlas.ts",
-      "src/cli/commands/search.ts"
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/upt-eval-inputs.test.ts": [],
     "tests/cli/upt-explain-inputs.test.ts": [],
@@ -12412,6 +12733,12 @@
       "src/composition/edges/catalog-condensed-matter.ts",
       "src/dimensional/types.ts"
     ],
+    "tests/composition/dogfood-compare.test.ts": [
+      "src/core/constants.ts",
+      "src/composition/canonical-compare.ts",
+      "src/composition/user-equation.ts",
+      "src/dimensional/types.ts"
+    ],
     "tests/composition/enumerate-uncertainty.test.ts": [
       "src/composition/enumerate.ts",
       "src/composition/uncertainty.ts",
@@ -12706,6 +13033,34 @@
       "src/composition/probe/experiment-design.ts",
       "src/dimensional/ast-builders.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/probe/expression-gaps.test.ts": [
+      "src/composition/catalog-graph.ts",
+      "src/composition/probe/index.ts",
+      "src/composition/probe/types.ts",
+      "src/composition/probe/serialize.ts",
+      "src/composition/probe/search-budget.ts",
+      "src/composition/probe/fingerprint.ts",
+      "src/composition/probe/residual.ts",
+      "src/composition/probe/run-manifest.ts",
+      "src/composition/probe/candidate-store.ts",
+      "src/composition/probe/generator.ts",
+      "src/composition/probe/frontier.ts",
+      "src/composition/probe/expression-gaps.ts",
+      "src/composition/probe/fit.ts",
+      "src/composition/probe/scoring.ts",
+      "src/composition/probe/corpus.ts",
+      "src/composition/probe/limits.ts",
+      "src/composition/probe/falsify.ts",
+      "src/composition/probe/dataset.ts",
+      "src/composition/probe/experiment-design.ts",
+      "src/composition/probe/structure.ts",
+      "src/composition/probe/backend-protocol.ts",
+      "src/composition/probe/metadata.ts",
+      "src/composition/probe/problem.ts",
+      "src/composition/probe/pipeline.ts",
+      "src/composition/probe/report.ts",
+      "src/composition/probe/study.ts"
     ],
     "tests/composition/probe/family-b.test.ts": [
       "src/composition/probe/problem.ts",
@@ -13219,6 +13574,9 @@
       "src/dimensional/algebra.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
+    ],
+    "tests/dimensional/dimension-spec-grouping.test.ts": [
+      "src/dimensional/dimension-spec.ts"
     ],
     "tests/dimensional/dimension-spec.test.ts": [
       "src/dimensional/dimension-spec.ts",
@@ -13905,6 +14263,10 @@
       "src/numerical/formula.ts",
       "src/numerical/formula-mathts.ts"
     ],
+    "tests/numerical/formula-parsers-agree.test.ts": [
+      "src/numerical/formula.ts",
+      "src/numerical/formula-mathts.ts"
+    ],
     "tests/numerical/formula-registry.test.ts": [
       "src/numerical/formula-registry.ts"
     ],
@@ -14179,6 +14541,10 @@
     "tests/numerical/schwarzschild-radial-geodesic.test.ts": [
       "src/numerical/geodesic-integrator.ts",
       "src/core/constants.ts"
+    ],
+    "tests/numerical/spacetime-metrics.test.ts": [
+      "src/core/constants.ts",
+      "src/numerical/spacetime-metrics.ts"
     ],
     "tests/numerical/strides.test.ts": [
       "src/numerical/strides.ts"

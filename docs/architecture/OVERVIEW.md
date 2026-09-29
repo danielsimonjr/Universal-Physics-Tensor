@@ -98,7 +98,7 @@ change when the STRUCTURE changes.
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 383 files, 2777 exports, 1335 of them re-exports. 976 and 383 do not
+(`bun run docs:deps`): 392 files, 2811 exports, 1339 of them re-exports. 976 and 392 do not
 contradict each other; they answer different questions. Every figure states its scope.
 
 > The `src/`-scope figures above are read from `statistics` in the generated

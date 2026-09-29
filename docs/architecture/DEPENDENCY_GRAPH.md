@@ -41,14 +41,14 @@ The codebase is organized into the following modules:
 - **bridges**: 90 files
 - **canonical**: 18 files
 - **cases**: 9 files
-- **cli**: 40 files
+- **cli**: 45 files
 - **root**: 1 file
-- **composition**: 74 files
+- **composition**: 77 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 32 files
 - **entry**: 1 file
-- **numerical**: 39 files
+- **numerical**: 40 files
 
 ---
 
@@ -3556,6 +3556,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/commands/metric.ts` - `upt metric` — Christoffel symbols and curvature scalars for a named metric.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../output.js` | `emitJson` | Import |
+| `../errors.js` | `UsageError` | Import |
+| `../../numerical/spacetime-metrics.js` | `curvatureReport, schwarzschildCircularOrbit, MetricId` | Import |
+
+**Exports:**
+- Constants: `command`
+
+---
+
 ### `src/cli/commands/path.ts` - `upt path` — the route between two models of a family, and what that route
 
 **Internal Dependencies:**
@@ -3689,11 +3705,64 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/commands/testplan.ts` - `upt testplan` — the measurement plan already stored on a case or a
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../output.js` | `emitJson` | Import |
+| `../errors.js` | `UsageError, CliError` | Import |
+| `../../cases/types.js` | `AppliedCase` | Import (type-only) |
+| `../../bridges/observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
+
+**Exports:**
+- Constants: `command`
+
+---
+
+### `src/cli/conventions.ts` - Convention lines the CLI prints beside a comparison. They do not change the
+
+**Exports:**
+- Functions: `conventionLines`
+- Constants: `JEANS_FORMULA_NOTE`
+
+---
+
 ### `src/cli/errors.ts` - Typed error classes and exit codes for the UPT CLI.
 
 **Exports:**
 - Classes: `UsageError`, `CliError`
 - Constants: `EXIT_CHECK_FAILED`
+
+---
+
+### `src/cli/euler-guard.ts` - Refuse a bare `e` that the MathTS parser would evaluate as Euler's number.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../numerical/formula.js` | `eulerConstantNote` | Import |
+
+**Exports:**
+- Functions: `unboundEulerRefusal`, `withParser`
+
+---
+
+### `src/cli/eval-numbers.ts` - Numbers `upt eval` understands: a bare numeral, a numeral with a unit, and
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, M_E_SI, M_SUN_SI` | Import |
+| `../dimensional/units.js` | `parseUnit, UnitError` | Import |
+| `../composition/formula-names.js` | `EPS0_SI, MU0_SI` | Import |
+| `../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+
+**Exports:**
+- Functions: `codataScope`, `parseEvalToken`
+- Constants: `HBAR_TRUNCATION_NOTE`
 
 ---
 
@@ -4549,6 +4618,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
+| `../core/constants.js` | `C_SI, E_SI, M_E_SI` | Import |
+
+**Exports:**
+- Interfaces: `FormulaName`
+- Functions: `formulaNameDimensions`
+- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
+
+---
+
 ### `src/composition/graph-viz-svg.ts` - SVG rendering for the physics map — render Graphviz DOT source to an SVG
 
 **Exports:**
@@ -4678,6 +4763,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/natural-units.ts` - Opt-in natural units. The default comparison stays SI: an energy written as
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `NaturalPowers`
+- Functions: `naturalPowers`, `naturalNote`
+
+---
+
 ### `src/composition/poster-source.ts` - The POSTER source for the physics map — turn the Atlas Phase 3 poster index
 
 **Internal Dependencies:**
@@ -4777,6 +4875,22 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `DesignBounds`, `DesignSuggestion`
 - Functions: `parseDesignBounds`, `suggestDiscriminatingPoint`
+
+---
+
+### `src/composition/probe/expression-gaps.ts` - Expression gaps a `upt probe scan` can hand to Product B.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../cases/index.js` | `APPLIED_CASES` | Import |
+| `./frontier.js` | `scanFrontier` | Import |
+| `./problem.js` | `makeResidualGap` | Import |
+| `./types.js` | `FrontierGap` | Import (type-only) |
+| `../edge.js` | `BridgeEdge` | Import (type-only) |
+
+**Exports:**
+- Functions: `expressionSearchGaps`, `scanWithExpressionGaps`
 
 ---
 
@@ -7065,6 +7179,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/numerical/spacetime-metrics.ts` - Curvature of a few exact metrics for `upt metric`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
+
+**Exports:**
+- Interfaces: `Component`, `CurvatureReport`
+- Functions: `schwarzschildKretschmann`, `flrwRicciScalar`, `friedmannSides`, `kerrKretschmann`, `metricParams`, `curvatureReport`, `schwarzschildCircularOrbit`
+- Constants: `METRIC_SIGNATURE`, `METRIC_SIGNATURE_NOTE`
+
+---
+
 ### `src/numerical/strides.ts` - Shared stride and flat-index utilities for row-major tensor storage.
 
 **Exports:**
@@ -7187,7 +7315,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...35 more]
+        N29[...40 more]
     end
 
     subgraph Root
@@ -7200,7 +7328,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...69 more]
+        N36[...72 more]
     end
 
     subgraph Core
@@ -7237,7 +7365,7 @@ graph TD
         N55[connection-lowering-helpers]
         N56[curvature-lowering-helpers]
         N57[derivative-lowering]
-        N58[...34 more]
+        N58[...35 more]
     end
 
     N0 --> N48
@@ -7278,17 +7406,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 383 |
+| Total TypeScript Files | 392 |
 | Total Modules | 12 |
-| Total Lines of Code | 84000 |
-| Total Exports | 2785 |
+| Total Lines of Code | 85202 |
+| Total Exports | 2811 |
 | Total Re-exports | 1339 |
 | Total Classes | 60 |
-| Total Interfaces | 437 |
-| Total Functions | 694 |
+| Total Interfaces | 441 |
+| Total Functions | 711 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 525 |
+| Type-only Imports | 534 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
