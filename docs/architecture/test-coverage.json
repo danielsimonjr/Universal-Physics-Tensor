@@ -2472,7 +2472,8 @@
       "tests/cli/map-atlas-results.test.ts",
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
-      "tests/cli/recover-conventions.test.ts"
+      "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts"
     ],
     "src/cases/kepler-rv.ts": [
       "tests/cases/kepler-rv.test.ts"
@@ -2497,7 +2498,8 @@
       "tests/cli/map-atlas-results.test.ts",
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
-      "tests/cli/recover-conventions.test.ts"
+      "tests/cli/recover-conventions.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts"
     ],
     "src/cli/args.ts": [
       "tests/cli/args.test.ts",
@@ -13366,6 +13368,8 @@
     ],
     "tests/composition/probe/expression-gaps.test.ts": [
       "src/composition/catalog-graph.ts",
+      "src/cases/index.ts",
+      "src/cases/types.ts",
       "src/composition/probe/index.ts",
       "src/composition/probe/types.ts",
       "src/composition/probe/serialize.ts",

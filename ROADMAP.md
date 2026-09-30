@@ -525,7 +525,7 @@ agent's time is not a reviewer's time. The owner amended this criterion; it is n
 
 **Hybrid retrieval** (owner, 2026-09-24; pre-registration Amendment 12). An embedding model finds the candidate canonical relations for a claim, and the atlas verifies them. Each part is used where the study measured it strong. qwen3-embedding:4b retrieved the correct relation for 49/50 claims, and the atlas's typed search for 12/50 (criterion 3, Amendment 11). The atlas made 1 wrong accept, and the local LLMs made 9 to 13 (criterion 4, Amendment 4). No design exists yet.
 
-**Probe-searchable frontier gaps** (persona finding C1; owner order 2026-09-25, designed and approved before any code). `upt probe scan` lists relation-link and regime-transition gaps that the probe cannot search, so the scan offers a user nothing to run. Make at least one gap kind searchable, or have the scan say which kinds it can serve.
+**Probe-searchable frontier gaps** (persona finding C1). Design: `docs/design/tier-8-probe-searchable-gaps.md`. What landed is in `CHANGELOG.md`.
 
 **Cross-family `upt path`** (persona finding C3; owner order 2026-09-25, designed and approved before any code). Atlas bridges already cross families (Klein–Gordon → wave, telegraph → wave, Klein–Gordon → Schrödinger), but a route is searched inside one family. Search across families, and compose the bounds across them.
 

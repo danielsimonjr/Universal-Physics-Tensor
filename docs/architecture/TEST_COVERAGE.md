@@ -224,12 +224,12 @@ The following 10 source files are not directly imported by any test file:
 | `canonical/seed-l-layer.ts` | `atlas-public-closure.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `seed-l-layer.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `cases/brownian-sphere.ts` | `brownian-sphere.test.ts` |
 | `cases/damped-resonator.ts` | `damped-resonator.test.ts` |
-| `cases/index.ts` | `evaluators.test.ts`, `applied-cases.test.ts`, `applied-cases.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `cases/index.ts` | `evaluators.test.ts`, `applied-cases.test.ts`, `applied-cases.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `expression-gaps.test.ts` |
 | `cases/kepler-rv.ts` | `kepler-rv.test.ts` |
 | `cases/lumped-cooling.ts` | `lumped-cooling.test.ts` |
 | `cases/resistor-noise.ts` | `resistor-noise.test.ts` |
 | `cases/skin-depth.ts` | `skin-depth.test.ts` |
-| `cases/types.ts` | `evaluators.test.ts`, `applied-cases.test.ts`, `applied-cases.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `cases/types.ts` | `evaluators.test.ts`, `applied-cases.test.ts`, `applied-cases.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `expression-gaps.test.ts` |
 | `src/cli-api.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `cli/args.ts` | `args.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `main-dispatch.test.ts` |
 | `cli/command.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `help-covers-registry.test.ts`, `help-flags.test.ts`, `main-dispatch.test.ts`, `record-hardening.test.ts`, `recover-conventions.test.ts` |
@@ -758,7 +758,7 @@ The following 10 source files are not directly imported by any test file:
 | `probe/dimensionless-input.test.ts` | 2 files |
 | `probe/discovery-run-schema.test.ts` | 0 files |
 | `probe/experiment-design.test.ts` | 3 files |
-| `probe/expression-gaps.test.ts` | 26 files |
+| `probe/expression-gaps.test.ts` | 28 files |
 | `probe/family-b.test.ts` | 11 files |
 | `probe/generator-budget.test.ts` | 6 files |
 | `probe/import-graph.test.ts` | 0 files |
