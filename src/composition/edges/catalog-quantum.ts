@@ -7,6 +7,9 @@
  * @module composition/edges/catalog-quantum
  */
 
+import { DIMENSIONLESS, FREQUENCY } from '../../dimensional/types.js';
+import type { ExprNode } from '../../dimensional/validator.js';
+import { sym } from '../../dimensional/ast-builders.js';
 import { evaluateDNATunneling } from '../../bridges/equations/be-26-dna-tunneling.js';
 import { evaluateDecoherenceRate } from '../../bridges/equations/be-11-decoherence-master.js';
 import { evaluateEinsteinTrace } from '../../bridges/equations/be-13-einstein-trace.js';
@@ -46,6 +49,30 @@ import {
 } from '../quantities.js';
 import { isFin } from './_catalog-helpers.js';
 
+/** γ_k = γ_0 (λ / λ_0)², leaves in graph quantity names. */
+const BE11_MASTER_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '*',
+  args: [
+    sym('relaxation-rate', FREQUENCY),
+    {
+      kind: 'op',
+      op: '^',
+      args: [
+        {
+          kind: 'op',
+          op: '/',
+          args: [
+            sym('system-environment-coupling', DIMENSIONLESS),
+            sym('reference-coupling', DIMENSIONLESS),
+          ],
+        },
+        sym('2', DIMENSIONLESS),
+      ],
+    },
+  ],
+};
+
 /**
  * BE-11 canonical decoherence master rate (Caldeira-Leggett weak-coupling
  * form): (relaxation-rate, system-environment-coupling, reference-coupling) →
@@ -81,6 +108,7 @@ export const be11Edge: BridgeEdge = {
       lambda: i['system-environment-coupling'],
       lambda0: i['reference-coupling'],
     }),
+  symbolic: BE11_MASTER_SYMBOLIC,
   citation: 'Caldeira & Leggett 1983 Physica A 121:587; Lindblad 1976 CMP 48:119',
   // -- Atlas Phase 1 overlay: mirrors BRIDGE_EQUATIONS' BE-11 row, which carries
   // the full '// source:' citation. tests/atlas/audited-catalog.test.ts

@@ -27,7 +27,9 @@ two different sets:
   Formal libraries hold almost no physics PDEs: Mathlib's own index lists the heat, wave and Laplace
   equations as not formalized (§3). So no checked statement was expected for them either.
 
-The routes in §4.5 stay as a record. None of them is scheduled.
+The routes in §4.5 stay as a record. ~~None of them is scheduled.~~ The schedule is
+[`docs/design/roadmap-lean-proven-bridges.md`](../design/roadmap-lean-proven-bridges.md).
+See the correction below. The 2026-09-24 deferral is unchanged: this criterion does not block DONE.
 
 ## Answer in brief
 
@@ -38,8 +40,10 @@ The routes in §4.5 stay as a record. None of them is scheduled.
    at an external checked statement. No library searched holds such a statement for the other 19
    bridges, so somebody must write the proofs. The ROADMAP puts proofs out of tree, and PhysJS is
    the out-of-tree repository made for them. PhysJS does not block a Physlib reference. The absence
-   of a Physlib statement blocks it. PhysJS itself is an empty, private scaffold, held by the owner's
-   standing no-build instruction.
+   of a Physlib statement blocks it. ~~PhysJS itself is an empty, private scaffold, held by the owner's
+   standing no-build instruction.~~ At the 2026-09-24 read it was a private scaffold with no Lean
+   project. The no-build hold recorded in §2 is superseded for planning; see the correction below.
+   The privacy measurement is not superseded: this report still has not read the repository.
 3. **Per bridge:** no library searched holds a statement that meets the S4.6 standard for any of
    the other 19 bridges. The search covered Physlib, Mathlib, Coq/Coquelicot, Isabelle, HOL Light,
    HOL4 and Mizar. Two bridges have partial counterparts. Neither qualifies (§3).
@@ -47,10 +51,34 @@ The routes in §4.5 stay as a record. None of them is scheduled.
    - `ab-walk-diffusion`: the fixed-time central limit theorem, in Mathlib, Isabelle and HOL Light;
    - `ab-wave-dalembert`: the converse direction, in Physlib and in Coq.
 
-   5 bridges could get short, Mathlib-only PhysJS lemmas that certify `bound.delta` (§4).
+   5 bridges could get short PhysJS lemmas that certify `bound.delta` (§4). The inequality
+   itself uses Mathlib. The lake project still requires Physlib. See the correction below.
 5. **Fewer than 4 candidates exist in existing libraries.** The criterion cannot close from
-   existing libraries. It closes only through new proofs (PhysJS, or an upstream contribution to
-   Physlib) or an owner amendment.
+   existing libraries. It closes through the PhysJS proofs in route A, or an owner amendment.
+   ~~or an upstream contribution to Physlib.~~ An upstream patch is not a substitute (the
+   correction that follows).
+
+## Correction (2026-09-30)
+
+Daniel assigned the Lean 4 project and its CI to PhysJS, and made PhysLean a firm
+dependency beside Mathlib. Struck sentences above are the claims this replaces. The
+search tables below are unchanged.
+
+- The proofs are scheduled. Route A is milestone 1 of the roadmap. The deferral still
+  means the old exit does not block DONE.
+- The no-build hold in §2 reached this report only as a Mothership relay. It is
+  superseded for planning. This report does not claim PhysJS has since gained a Lean
+  project: the 2026-09-24 tree is still the last tree it read.
+- Route B is not a substitute for PhysJS. PhysJS requires Mathlib and the Physlib
+  package (the library Daniel calls PhysLean; `leanprover-community/physlib`), both as
+  direct requires. An upstream patch may still be offered. It does not replace that
+  project. The standing statement is `MEMORY.md`.
+- Publishing PhysJS is still the open decision in §4.4. Route A's phrase "make PhysJS
+  public" is not decided by the schedule.
+- §4.3 rank 1 is an inequality on the reals. "Mathlib only" describes that inequality.
+  The lake project requires Physlib anyway.
+- §4.4 said "4 rank-1 references." The rank-1 row is five bridges. Five new references
+  take the reviewed count from 1 to 6.
 
 ## 1. The existing reviewed formalRef
 
@@ -112,7 +140,8 @@ named "a standing no-build instruction from the owner". At 21:42 UTC, the next r
 instruction "is about PhysJS and ComputeJS", and: "STILL HELD: PhysJS, by the owner's standing
 instruction". **This session has not seen the owner's own words.** The hold reaches this report only
 through Mothership. The PhysJS CHANGELOG (last commit 20:43 UTC) is older than those relays and
-expects the UPT session to add the proofs. The hold supersedes that.
+expects the UPT session to add the proofs. ~~The hold supersedes that.~~ That sentence is
+superseded for planning (correction at the top). The relay record stays.
 
 ### Three facts that any PhysJS route must face
 
@@ -129,10 +158,11 @@ expects the UPT session to add the proofs. The hold supersedes that.
 
 ### A second route
 
-Contribute the missing statements upstream to Physlib. The reference is then
-`system: 'lean4-physlib'`, and the existing gate applies with no change. A pull request to a
-third-party repository is outward-facing, so the decision is the owner's. Physlib's review time is
-unknown.
+~~Contribute the missing statements upstream to Physlib. The reference is then
+`system: 'lean4-physlib'`, and the existing gate applies with no change.~~ An upstream
+patch may still be offered. It is not a substitute for the PhysJS project (correction
+at the top). A pull request to a third-party repository is outward-facing, so the
+decision is the owner's. Physlib's review time is unknown.
 
 ## 3. Per-bridge search
 
@@ -282,14 +312,17 @@ the other direction: a d'Alembert-type formula solves the wave equation. The bri
 solution has d'Alembert form. The Coq file also leaves its source-term part `Admitted`. S4.6
 recorded NO, and nothing found since changes that.
 
-### 4.3 PhysJS candidates, if the hold is lifted
+### 4.3 PhysJS candidates
+
+The planning hold is lifted; see the correction at the top. The table is the one
+written when the hold was still recorded.
 
 These statements need new proofs. Each row names what the proof would certify, because a true
 lemma about the wrong claim adds nothing.
 
 | Rank | Bridge(s) | Lean statement shape | Certifies | Size |
 |---|---|---|---|---|
-| 1 | `ab-kg-schrodinger`, `ab-klein-gordon-wave`, `ab-stiff-string`, `ab-telegraph-diffusion`, `ab-telegraph-wave` | Each record's error function has a closed form, for example (√(1 + x²) − 1)/(√(1 + x²) + 1) for KG → Schrödinger. The lemma: the function is monotone on the regime, and its value at the edge equals `delta`. Mathlib only (`Real.sqrt`) | **`bound.delta` exactly**, at the level of the dispersion relation. This is more than the pendulum reference certifies. It does not derive the dispersion relation from the PDE | S, each |
+| 1 | `ab-kg-schrodinger`, `ab-klein-gordon-wave`, `ab-stiff-string`, `ab-telegraph-diffusion`, `ab-telegraph-wave` | Each record's error function has a closed form, for example (√(1 + x²) − 1)/(√(1 + x²) + 1) for KG → Schrödinger. The lemma: the function is monotone on the regime, and its value at the edge equals `delta`. The inequality uses Mathlib (`Real.sqrt`). The lake project still requires Physlib | **`bound.delta` exactly**, at the level of the dispersion relation. This is more than the pendulum reference certifies. It does not derive the dispersion relation from the PDE | S, each |
 | 1a | the same five | Add: a plane wave solves the PDE if and only if ω(k) obeys the dispersion relation | the transformation, from the PDE | M, each |
 | 2 | `ab-kg-oscillator` | A spatially uniform solution of u_tt = c²u_xx − ω₀²u solves Physlib's `HarmonicOscillator.EquationOfMotion` with ω = ω₀ | the restriction, in Physlib's own terms | M |
 | 3 | `ab-spring-lc`, `ab-damped-rlc` | The time rescaling maps a solution of one oscillator to a solution of the other. Physlib's `(Damped)HarmonicOscillator` states both sides, with the LC circuit as an oscillator with m ↦ L, k ↦ 1/C | the dictionary. The circuit reading stays UPT's claim, because Physlib has no circuit | M |
@@ -328,8 +361,12 @@ range can be wrong by a factor of 3.
   Otherwise every new reference is ungated.
 - An owner decision on PhysJS visibility, because no reader can check a private proof.
 
-**Total for 4 rank-1 references: about 10–25 agent-hours plus the owner decisions.** This is an
-estimate. The first proof should be timed, so that the rest are costed from a measurement.
+~~Total for 4 rank-1 references: about 10–25 agent-hours plus the owner decisions.~~
+**Total for the five rank-1 bridges: about 10–25 agent-hours plus the owner decisions.**
+The row is five bridges, so five references take the reviewed count from 1 to 6. Four
+would meet a count of five only by adding the pendulum reference that already exists.
+This is an estimate. The first proof should be timed, so that the rest are costed from
+a measurement.
 
 ### 4.5 A plain statement
 
@@ -337,14 +374,18 @@ estimate. The first proof should be timed, so that the rest are costed from a me
 criterion "≥ 5 with a reviewed `formalRef`" cannot close from existing libraries. The criterion can
 close through one of these:
 
-- **A.** Lift the PhysJS hold and make PhysJS public. Write the rank-1 lemmas. The five dispersion
-  bridges alone take the count from 1 to 6.
-- **B.** Contribute upstream to Physlib. The same lemmas become `lean4-physlib` references under
-  the existing gate.
+- **A.** Write the rank-1 lemmas in PhysJS. The five dispersion bridges alone take the count
+  from 1 to 6. ~~Lift the PhysJS hold and make PhysJS public.~~ The hold is lifted for
+  planning (correction at the top). Making the repository public is still open (§4.4).
+- **B.** ~~Contribute upstream to Physlib. The same lemmas become `lean4-physlib` references under
+  the existing gate.~~ An upstream patch may still be offered. It is not a substitute for the
+  PhysJS project (correction at the top).
 - **C.** An owner amendment to the criterion. The numbers for it:
   - 1 of 5 reviewed;
   - 0 further counterparts in Physlib (`5ad56e24` and `1c81053a`), Mathlib (`bd6c1abe`) or the
     other systems in §3.3;
   - 2 partial counterparts.
 
-A, B and C are the owner's decisions: A and B are outward-facing, and C changes a pre-set criterion.
+~~A, B and C are the owner's decisions: A and B are outward-facing, and C changes a pre-set criterion.~~
+Route A is scheduled (correction at the top). Publishing PhysJS, an upstream patch, and an
+amendment to the criterion stay owner decisions.

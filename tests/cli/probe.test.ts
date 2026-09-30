@@ -33,8 +33,43 @@ describe('upt probe', () => {
     expect(t).toMatch(/fg-expr-case-skin-depth/);
     expect(t).toMatch(/prediction-residual \/ searchable/);
     expect(t).toMatch(/Product A wrappers hidden/);
+    expect(t).toMatch(/no named baseline or dataset/);
+    expect(t).toMatch(/not a problem file/);
     expect(t).not.toMatch(/0 of \d+ gaps are searchable/);
     expect(t).not.toMatch(/fg-link-/);
+  });
+
+  it('scan rejects --searchable-only together with --all', async () => {
+    const c = capture();
+    expect(await runCli(['probe', 'scan', '--searchable-only', '--all'], c.io)).toBe(2);
+    expect(text(c)).toMatch(/--searchable-only or --all/);
+  });
+
+  it('run without a problem file is a usage error', async () => {
+    const c = capture();
+    expect(await runCli(['probe', 'run'], c.io)).toBe(2);
+    expect(text(c)).toMatch(/--problem=FILE is required/);
+  });
+
+  it('show resolves an expression gap and a wrapper from the combined list', async () => {
+    const expr = capture();
+    expect(await runCli(['probe', 'show', 'fg-expr-case-skin-depth'], expr.io)).toBe(0);
+    const shown = text(expr);
+    expect(shown).toMatch(/searchable: true/);
+    expect(shown).toMatch(/no named baseline/);
+    expect(shown).toMatch(/no dataset/);
+    expect(shown).toMatch(/not a detected prediction residual/);
+
+    const scan = capture();
+    expect(await runCli(['probe', 'scan', '--all', '--json'], scan.io)).toBe(0);
+    const link = (JSON.parse(text(scan)).result as { id: string; kind: string }[]).find(
+      (g) => g.kind === 'relation-link',
+    );
+    expect(link).toBeDefined();
+    const wrap = capture();
+    expect(await runCli(['probe', 'show', link!.id], wrap.io)).toBe(0);
+    expect(text(wrap)).toMatch(/searchable: false/);
+    expect(text(wrap)).toMatch(/upt discover/);
   });
 
   it('scan --all lists not-searchable relation-link gaps', async () => {
@@ -52,8 +87,13 @@ describe('upt probe', () => {
     const env = JSON.parse(text(c));
     expect(env.options.scan).toEqual({ total: 238, searchable: 6, showing: 'searchable-only' });
     expect(env.result).toHaveLength(6);
-    expect(env.result.every((g: { kind: string; searchability: { searchable: boolean } }) =>
-      g.kind === 'prediction-residual' && g.searchability.searchable)).toBe(true);
+    expect(env.result.every((g: { kind: string; observations: unknown[]; searchability: { searchable: boolean; reasons: string[] } }) =>
+      g.kind === 'prediction-residual' &&
+      g.searchability.searchable &&
+      g.observations.length === 0 &&
+      /no named baseline/.test(g.searchability.reasons.join(' ')) &&
+      /no dataset/.test(g.searchability.reasons.join(' ')) &&
+      /not a detected prediction residual/.test(g.searchability.reasons.join(' ')))).toBe(true);
 
     const all = capture();
     expect(await runCli(['probe', 'scan', '--all', '--json'], all.io)).toBe(0);
@@ -129,7 +169,13 @@ describe('upt probe', () => {
   it('help probe documents Product B vs discover', async () => {
     const c = capture();
     expect(await runCli(['help', 'probe'], c.io)).toBe(0);
-    expect(text(c)).toMatch(/Product B/);
-    expect(text(c)).toMatch(/upt discover/);
+    const t = text(c);
+    expect(t).toMatch(/Product B/);
+    expect(t).toMatch(/upt discover/);
+    expect(t).toMatch(/fg-expr-<case id>/);
+    expect(t).toMatch(/no named baseline and no/);
+    expect(t).toMatch(/dataset/);
+    expect(t).toMatch(/not a detected/);
+    expect(t).toMatch(/The id is not that file/);
   });
 });

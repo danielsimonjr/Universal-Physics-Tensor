@@ -6,6 +6,7 @@
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
+import { scanCompositionRecovery } from '../../composition/composition-recovery.js';
 
 const FLAGS: FlagSpec[] = [{ name: '--json', valueStyle: 'none' }];
 
@@ -13,7 +14,9 @@ const HELP = `upt recover
         Validate bridges against standard physics: classify each bridge↔
         canonical link as restates-canonical (F4 circularity — NOT a
         discovery), recovers (undeclared structural match), or
-        dimensional-only.`;
+        dimensional-only. A chain of two symbolic edges is reported
+        separately. That comparison does not cancel dimensionful constants,
+        and a chain is never restates-canonical.`;
 
 const EPISTEMICS =
   '⚠ structural match is "same relation UP TO a dimensionless factor"; that factor\n' +
@@ -44,12 +47,15 @@ function conventionAdvisory(
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const all = api.scanLinkages();
+  const composition = scanCompositionRecovery();
 
   if (args.flags.has('json')) {
-    emitJson({ command: 'recover', epistemics: EPISTEMICS, result: all }, ctx.write);
+    emitJson(
+      { command: 'recover', epistemics: EPISTEMICS, result: all, compositionRecovery: composition },
+      ctx.write,
+    );
     return 0;
   }
-
   const by = (c: string) => all.filter((r) => r.classification === c);
   const restates = by('restates-canonical');
   const recovers = by('recovers');
@@ -81,6 +87,13 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
   out(`\n  (${dimOnly.length} dimensional-only: same dimension, different form. Run \`upt canonical\` for the registry.)`);
+  out('\nComposition-derived recovery — a chain of two symbolic edges');
+  out('  Compared up to a dimensionless factor. Dimensionful cancellation is not applied.');
+  out('  A chain is never restates-canonical.');
+  out(`  ${composition.pairs.length} pairs examined, ${composition.hits.length} structural matches.`);
+  for (const hit of composition.hits) {
+    out(`    ${hit.firstId} -> ${hit.secondId}  recovers  ${hit.canonicalId}`);
+  }
   return 0;
 }
 
