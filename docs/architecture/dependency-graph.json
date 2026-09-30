@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 394,
+    "totalFiles": 395,
     "totalModules": 12,
-    "totalExports": 2837
+    "totalExports": 2838
   },
   "entryPoints": [
     {
@@ -12105,6 +12105,12 @@
             "imports": [
               "emitJson"
             ]
+          },
+          {
+            "file": "../../composition/composition-recovery.js",
+            "imports": [
+              "scanCompositionRecovery"
+            ]
           }
         ],
         "exports": [
@@ -14629,6 +14635,56 @@
           "SOURCE_ALIAS_DISPOSITIONS"
         ]
       },
+      "src/composition/composition-recovery.ts": {
+        "description": "Composition-derived recovery.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../canonical/registry.js",
+            "imports": [
+              "CANONICAL_EQUATIONS"
+            ]
+          },
+          {
+            "file": "../canonical/normal-form.js",
+            "imports": [
+              "normalForm"
+            ]
+          },
+          {
+            "file": "./catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "./compose-symbolic.js",
+            "imports": [
+              "composeSymbolic",
+              "SymbolicCompositionError"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "scanCompositionRecovery"
+        ],
+        "interfaces": [
+          "CompositionRecoveryPair",
+          "CompositionRecoveryHit",
+          "CompositionRecoveryScan"
+        ],
+        "functions": [
+          "scanCompositionRecovery"
+        ]
+      },
       "src/composition/consequence.ts": {
         "description": "Consequence propagation — the machine pre-classifier for the human",
         "externalDependencies": [],
@@ -15630,6 +15686,26 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "FREQUENCY"
+            ]
+          },
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
             "file": "../../bridges/equations/be-26-dna-tunneling.js",
             "imports": [
               "evaluateDNATunneling"
@@ -15774,6 +15850,7 @@
             "file": "../../bridges/equations/be-21-kss-bound.js",
             "imports": [
               "evaluateKSSBound",
+              "BE21_KSS_RHS",
               "VISCOSITY_OVER_ENTROPY_DENSITY"
             ]
           },
@@ -27248,6 +27325,7 @@
           "src/composition/compose-surface.ts",
           "src/composition/compose-symbolic.ts",
           "src/composition/compose.ts",
+          "src/composition/composition-recovery.ts",
           "src/composition/consequence.ts",
           "src/composition/consistency.ts",
           "src/composition/dimension-adjacency.ts",
@@ -27432,18 +27510,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 394,
+    "totalTypeScriptFiles": 395,
     "totalModules": 12,
-    "totalLinesOfCode": 87028,
-    "totalExports": 2837,
+    "totalLinesOfCode": 87240,
+    "totalExports": 2838,
     "totalClasses": 59,
-    "totalInterfaces": 444,
-    "totalFunctions": 732,
+    "totalInterfaces": 447,
+    "totalFunctions": 733,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 704,
     "totalReExports": 1341,
-    "totalTypeOnlyImports": 533,
+    "totalTypeOnlyImports": 535,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

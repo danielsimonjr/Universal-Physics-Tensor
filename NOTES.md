@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-09-30
+
+- **Composition-derived recovery.** `scanCompositionRecovery` on `CATALOG_GRAPH` examines 8 pairs and 0 structural matches. The pairs are `be-12`→`be-11-zurek`, `be-42`→`be-12`, `be-42`→`be-16`, `be-42`→`be-33`, `be-42-via-rs`→`be-12`, `be-42-via-rs`→`be-16`, `be-42-via-rs`→`be-33`, and `law-schwarzschild-radius`→`be-42-via-rs`. A chain is `recovers` or it is not a hit. It is not `restates-canonical`.
+
 ## As of 2026-09-29
 
 - **CLI dogfood, three personas, 2026-09-29.** Findings are in `docs/dogfood/2026-09-29-applied-physicist.md`, `docs/dogfood/2026-09-29-gr-qft.md` and `docs/dogfood/2026-09-29-engineering-physicist.md`.

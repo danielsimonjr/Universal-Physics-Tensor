@@ -1904,12 +1904,14 @@ warning-silencing, not debug logging).
   - [x] (deferred-item) grew the canonical tranche: +Hawking temperature (restates 42),
         +light-deflection (partners 51), +perihelion (partners 52). 22→25 entries,
         gap 39→37, restates-canonical 1→2.
-  - [~] (deferred-item) composition-derived recovery — **DEFERRED as premature**:
+  - [x] (deferred-item) composition-derived recovery — **DEFERRED as premature**:
         only 5/41 edges have symbolic forms; CT-1 chain matches no canonical.
         Revisit when symbolic-form coverage + tranche grow.
-  - [ ] (future, when warranted) add symbolic forms to more composition edges, then
+        Done: `upt recover` scans two-edge symbolic chains with `normalForm` and never labels a chain `restates-canonical`. Measured on the catalog: 8 pairs, 0 structural matches, including CT-1 and the Schwarzschild∘Hawking chain. Dimensionful cancellation is not applied. `src/canonical` is unchanged.
+  - [x] (future, when warranted) add symbolic forms to more composition edges, then
         build composition-derived recovery; continue tranche growth for established
         bridges only (most remaining gap bridges are speculative — no standard partner).
+        Done: symbolic forms on the established edges `evalExpr` can already run — be-11 master, be-11 Zurek, be-21, be-52 — each bound to its evaluator. be-37 stays numeric-only (`ln`). Speculative gap bridges were not given forms.
 
 - [x] ✅ **DONE — post-0.22.0 discovery/linkage hardening (2026-06-18,
       branch `claude/upt-physics-tensor-analysis-9s38dp`).** Acts on a fresh

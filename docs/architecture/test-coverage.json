@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 391,
-    "totalTestFiles": 538,
-    "testedCount": 381,
+    "totalSourceFiles": 392,
+    "totalTestFiles": 539,
+    "testedCount": 382,
     "untestedCount": 10,
     "coveragePercent": "97.4"
   },
@@ -250,6 +250,7 @@
     "src/composition/compose-surface.ts",
     "src/composition/compose-symbolic.ts",
     "src/composition/compose.ts",
+    "src/composition/composition-recovery.ts",
     "src/composition/consequence.ts",
     "src/composition/consistency.ts",
     "src/composition/dimension-adjacency.ts",
@@ -2576,7 +2577,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/audit.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2631,7 +2633,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/axes.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2686,7 +2689,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/candidates.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2741,7 +2745,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/canonical.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2796,7 +2801,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/confront.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2851,7 +2857,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/connectors.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2906,7 +2913,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/coverage.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -2961,7 +2969,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/derive.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3016,7 +3025,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/discover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3071,7 +3081,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/eval.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3126,7 +3137,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/evaluate.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3181,7 +3193,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/explain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3236,7 +3249,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/ground.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3291,7 +3305,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/index.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3346,7 +3361,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/map.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3401,7 +3417,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/metric.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3456,7 +3473,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/path.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3511,7 +3529,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/predict.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3566,7 +3585,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/priority.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3621,7 +3641,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/probe.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3677,7 +3698,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/recover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3732,7 +3754,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/regime.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3787,7 +3810,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/search.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3842,7 +3866,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/symbolic.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3897,7 +3922,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/commands/testplan.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
@@ -3952,7 +3978,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/conventions.ts": [],
     "src/cli/errors.ts": [
@@ -4023,7 +4050,8 @@
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
-      "tests/cli/upt-discover-opts.test.ts"
+      "tests/cli/upt-discover-opts.test.ts",
+      "tests/composition/composition-recovery.test.ts"
     ],
     "src/cli/output.ts": [
       "tests/cli/output.test.ts"
@@ -4337,6 +4365,9 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/composition/composition-recovery.ts": [
+      "tests/composition/composition-recovery.test.ts"
+    ],
     "src/composition/consequence.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
@@ -4484,6 +4515,7 @@
       "tests/composition/compose-properties.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
@@ -4532,6 +4564,7 @@
       "tests/composition/compose-properties.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
@@ -5492,31 +5525,37 @@
     "src/composition/quantities/common.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/quantities.test.ts"
     ],
     "src/composition/quantities/condensed-matter.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/quantities.test.ts"
     ],
     "src/composition/quantities/fields.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/quantities.test.ts"
     ],
     "src/composition/quantities/gravitation-cosmology.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/quantities.test.ts"
     ],
     "src/composition/quantities/quantum.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/quantities.test.ts"
     ],
     "src/composition/quantities.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/quantities.test.ts"
     ],
     "src/composition/quantity.ts": [
@@ -6196,6 +6235,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/canonical-prefactors.test.ts",
       "tests/composition/collect-symbols-transcendental.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/probe/corpus-prefactor.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/family-b.test.ts",
@@ -6707,6 +6747,7 @@
       "tests/composition/compose-properties.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/dimension-adjacency.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
@@ -6888,6 +6929,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/collect-symbols-transcendental.test.ts",
+      "tests/composition/composition-recovery.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/symbolic-composition.test.ts",
@@ -13003,6 +13045,47 @@
       "src/composition/edges/catalog-condensed-matter.ts",
       "src/dimensional/types.ts"
     ],
+    "tests/composition/composition-recovery.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/types.ts",
+      "src/composition/edge.ts",
+      "src/composition/edges/calibration.ts",
+      "src/composition/quantities.ts",
+      "src/composition/quantities/quantum.ts",
+      "src/composition/quantities/gravitation-cosmology.ts",
+      "src/composition/quantities/fields.ts",
+      "src/composition/quantities/condensed-matter.ts",
+      "src/composition/quantities/common.ts",
+      "src/composition/composition-recovery.ts"
+    ],
     "tests/composition/consequence.test.ts": [
       "src/composition/consequence.ts",
       "src/composition/discovery.ts",
@@ -13597,12 +13680,12 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts",
+      "src/composition/edges/catalog-tranche.ts",
       "src/core/constants.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
       "src/composition/consistency.ts",
-      "src/composition/edges/catalog-tranche.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/canonical-graph.ts",
       "src/composition/enumerate.ts",
