@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-09-30
+
+- **Tier 11 hybrid retrieval.** `upt retrieve` is the atlas search (`rankByStructure` on the live canonical registry). The default does not call out of process. `--embed` asks local Ollama for `qwen3-embedding:4b`. A cosine order is a proposal, not an acceptance. Fallback names one of four reasons and exits 0. The frozen vector file is ranked in tests and is not re-embedded. The study's recall is not recomputed. A live GPU run is outside this gate. The 0.50.0 release is still open.
+
 ## As of 2026-09-29
 
 - **CLI dogfood, three personas, 2026-09-29.** Findings are in `docs/dogfood/2026-09-29-applied-physicist.md`, `docs/dogfood/2026-09-29-gr-qft.md` and `docs/dogfood/2026-09-29-engineering-physicist.md`.
@@ -363,7 +367,7 @@ Those are different claims and merging them produces a false green.
 - **Axes:** `RegimeAttributes` carries six axes (scale, force, information, symmetry, topology,
   statistics). `GATE_AXES` is scale and force; topology, symmetry and statistics are typed and
   wired but ungated, for thin coverage.
-- **CLI:** the `upt` CLI (25 data-bearing commands + `help`/`version`).
+- **CLI:** the `upt` CLI (26 data-bearing commands + `help`/`version`).
 - **Atlas families:** oscillators 9 models, 5 bridges, 1 rejection; diffusion 8 models, 8 bridges;
   waves 7 models, 7 bridges.
 - **Atlas import sites** (measured 2026-09-22): value imports at `bridges/index.ts:40`
