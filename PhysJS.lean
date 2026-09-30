@@ -4,3 +4,4 @@ import PhysJS.StiffString
 import PhysJS.TelegraphDiffusion
 import PhysJS.TelegraphWave
 import PhysJS.Pendulum
+import PhysJS.KgOscillator
