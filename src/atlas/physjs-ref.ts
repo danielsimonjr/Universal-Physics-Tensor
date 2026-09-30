@@ -7,8 +7,9 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is the head of PhysJS pull request 2. It is bumped after that pull
- * request and pull request 1 are squash-merged.
+ * The commit is PhysJS `main` after pull requests 1 and 2 were squash-merged:
+ * the Dependabot checkout bump `0e0594f`, whose parent is the proofs squash
+ * `ed86b4a38536c502e4e7796dadeb8063f94d1ec1`. The theorem names are unchanged.
  *
  * @module atlas/physjs-ref
  */
@@ -16,7 +17,7 @@
 import type { FormalRef } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = 'acda892';
+export const PHYSJS_COMMIT = '0e0594f';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';

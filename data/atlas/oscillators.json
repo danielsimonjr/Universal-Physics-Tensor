@@ -799,7 +799,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
-        "version": "physjs@acda892 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@0e0594f leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",

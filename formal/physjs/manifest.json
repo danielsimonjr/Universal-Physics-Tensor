@@ -1,6 +1,6 @@
 {
   "schema": "physjs-bridge-manifest/v1",
-  "commit": "acda892",
+  "commit": "0e0594f",
   "toolchain": "leanprover/lean4:v4.34.1",
   "mathlib": "v4.34.1",
   "physlib": "af484f78ee0701290595f8bf892b157b10d64940",
