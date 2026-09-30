@@ -594,6 +594,18 @@
         "Feynman, Lectures on Physics Vol. II, chapter on resonance - the LC oscillator and its mechanical counterpart"
       ],
       "reviewStatus": "proposed",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
+        "version": "physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "the oscillator dictionary — covers its statement only"
+      },
       "normTransports": [
         {
           "id": "nt-spring-lc-relative-period",
@@ -706,7 +718,19 @@
         "Olson, Dynamical Analogies - the force-voltage (impedance) analogy between a mass-spring–damper and a series RLC circuit",
         "Feynman, Lectures on Physics Vol. II, chapter on resonance - the LC oscillator and its mechanical counterpart"
       ],
-      "reviewStatus": "proposed"
+      "reviewStatus": "proposed",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.DampedRlc.time_rescale_equationOfMotion",
+        "version": "physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "the oscillator dictionary — covers its statement only"
+      }
     },
     {
       "id": "ab-pendulum-linear",
@@ -799,7 +823,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
-        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",

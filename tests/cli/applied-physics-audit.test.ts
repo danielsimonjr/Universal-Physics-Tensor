@@ -122,8 +122,16 @@ describe('F09 — a proof badge carries its theorem scope', () => {
   });
 
   it('a bridge with no formal reference is unchanged', async () => {
-    const { text } = await run(['atlas', 'ab-kg-oscillator']);
+    const { text } = await run(['atlas', 'ab-chain-wave']);
     expect(text).toMatch(/formally-proved \(derived from formalRef\): no\n/);
+  });
+
+  it('the uniform-mode restriction is formally-proved for its statement only', async () => {
+    const { text } = await run(['atlas', 'ab-kg-oscillator']);
+    expect(text).toMatch(
+      /formally-proved \(derived from formalRef\): YES — for the formal-reference statement only \(fidelity sanity-lemmas\); NOT the bound, regime, horizon or side conditions unless the statement says so/,
+    );
+    expect(text).toMatch(/covers: the restriction, in Physlib's own terms — covers its statement only/);
   });
 });
 

@@ -1,6 +1,6 @@
 {
   "schema": "physjs-bridge-manifest/v1",
-  "commit": "0e0594f6ec277b4e0f150c5287c17ab7507e8cc3",
+  "commit": "d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c",
   "toolchain": "leanprover/lean4:v4.34.1",
   "mathlib": "v4.34.1",
   "physlib": "af484f78ee0701290595f8bf892b157b10d64940",
@@ -12,7 +12,14 @@
       "covers": "bound.delta exactly, at the dispersion relation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
-      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "planeWave": {
+        "theorem": "PhysJS.KgSchrodinger.planeWave_iff_dispersion",
+        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
     },
     {
       "key": "ab-klein-gordon-wave",
@@ -21,7 +28,14 @@
       "covers": "bound.delta exactly, at the dispersion relation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
-      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "planeWave": {
+        "theorem": "PhysJS.KleinGordonWave.planeWave_iff_dispersion",
+        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
     },
     {
       "key": "ab-stiff-string",
@@ -30,7 +44,14 @@
       "covers": "bound.delta exactly, at the dispersion relation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
-      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "planeWave": {
+        "theorem": "PhysJS.StiffString.planeWave_iff_dispersion",
+        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
     },
     {
       "key": "ab-telegraph-diffusion",
@@ -39,7 +60,14 @@
       "covers": "bound.delta exactly, at the dispersion relation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
-      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "planeWave": {
+        "theorem": "PhysJS.TelegraphDiffusion.planeWave_iff_dispersion",
+        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
     },
     {
       "key": "ab-telegraph-wave",
@@ -48,7 +76,14 @@
       "covers": "bound.delta exactly, at the dispersion relation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
-      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "planeWave": {
+        "theorem": "PhysJS.TelegraphWave.planeWave_iff_dispersion",
+        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
     },
     {
       "key": "ab-pendulum-linear",
@@ -58,6 +93,42 @@
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "imports": "ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-kg-oscillator",
+      "bridgeId": "ab-kg-oscillator",
+      "theorem": "PhysJS.KgOscillator.uniform_solves_equationOfMotion",
+      "covers": "the restriction, in Physlib's own terms",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-spring-lc",
+      "bridgeId": "ab-spring-lc",
+      "theorem": "PhysJS.SpringLc.time_rescale_equationOfMotion",
+      "covers": "the oscillator dictionary",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-damped-rlc",
+      "bridgeId": "ab-damped-rlc",
+      "theorem": "PhysJS.DampedRlc.time_rescale_equationOfMotion",
+      "covers": "the oscillator dictionary",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-wave-dalembert",
+      "bridgeId": "ab-wave-dalembert",
+      "theorem": "PhysJS.WaveDalembert.solution_eq_profiles",
+      "covers": "the missing direction of d'Alembert's formula",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
       "axioms": ["propext", "Classical.choice", "Quot.sound"]
     }
   ]

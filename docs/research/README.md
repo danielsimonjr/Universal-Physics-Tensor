@@ -12,7 +12,7 @@ adjudication/calibration notes that close out the discovery pipeline
 
 - `BRIDGE_EQUATIONS`: 55 entries, ids 11–65, 19 established, 33 speculative, 3 highly-speculative.
 - `CONFRONTATIONS`: 19 entries (ids 11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65).
-- Reviewed `formalRef`s: six, all `system: 'lean4-physjs'`, via public PhysJS. `NOTES.md` is the rolling record. `phase-4-formalref-scoping.md` is the 2026-09-24 scoping report; its "count is 1" is that day's measurement.
+- Reviewed `formalRef`s: ten, all `system: 'lean4-physjs'`, via public PhysJS. `NOTES.md` is the rolling record. `phase-4-formalref-scoping.md` is the 2026-09-24 scoping report; its "count is 1" is that day's measurement.
 
 ## Notes
 
@@ -135,7 +135,7 @@ adjudication/calibration notes that close out the discovery pipeline
   `tests/composition/link-candidates.test.ts`.
 - `phase-4-formalref-scoping.md` — the 2026-09-24 scoping report on which atlas
   bridges had a checked Lean counterpart. Its tables record one reviewed
-  `formalRef` that day (`ab-pendulum-linear` → Physlib). The live set is six
+  `formalRef` that day (`ab-pendulum-linear` → Physlib). The live set is ten
   `lean4-physjs` references via public PhysJS (`NOTES.md`). The banner at the
   top of the report says so. The ranked lemmas and the two partial counterparts
   stay as that day's search.

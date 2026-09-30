@@ -627,6 +627,7 @@
     ],
     "src/atlas/oscillators/bridges-exact.ts": [
       "tests/atlas/audited-catalog.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/oscillators-exact.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/spring-lc-norm-transport.test.ts",
@@ -8442,6 +8443,7 @@
       "src/atlas/families.ts"
     ],
     "tests/atlas/formal-sanity.test.ts": [
+      "src/atlas/oscillators/bridges-exact.ts",
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/derive-evidence.ts",
       "src/atlas/families.ts",

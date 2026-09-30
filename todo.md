@@ -1,5 +1,10 @@
 # UPT TODO
 
+## PhysJS milestone 2 formalRefs (2026-09-30)
+
+- [x] Link PhysJS milestone 2 proofs: pin the vendored manifest at `d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c` and add reviewed `lean4-physjs` formalRefs for the bridges whose theorems certify the transformation.
+  Done: four references (`ab-kg-oscillator`, `ab-spring-lc`, `ab-damped-rlc`, `ab-wave-dalembert`). The reviewed count is 10. Nested `planeWave` objects stay on the five rank-1 entries and are not the formalRef.
+
 ## Documentation review no-approval fixes (2026-09-30)
 
 - [x] Refresh the stale formalRef indexes (six `lean4-physjs` refs, public PhysJS), mark the three 2026-05 plans superseded, fix the BRIDGE-PHYSICS-AUDIT-v2 link and dead paths, correct Dependabot's ecosystem in the Bun-migration row, add the `lean4-physjs` WORKFLOWS procedure, and explain the empty tsc baseline. Correct the BE-38 deep-MOND asymptotic to `ν ~ 1/√z` and the catalog force limit to `√(m F_N a_0)`.

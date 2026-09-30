@@ -17,6 +17,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { BRIDGE_DAMPED_RLC, BRIDGE_SPRING_LC } from '../../src/atlas/oscillators/bridges-exact.js';
 import { AB_PENDULUM_LINEAR, pendulumPeriodErrorAt } from '../../src/atlas/oscillators/bridges-limits.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
@@ -27,8 +28,8 @@ import {
   TELEGRAPH_WAVE_MIN_EPS,
 } from '../../src/atlas/diffusion/bridges-closure.js';
 import { telegraphSlowRateRatio, telegraphWaveFrequencyRatio } from '../../src/atlas/diffusion/numerics.js';
-import { BRIDGE_KLEIN_GORDON_WAVE, KG_MAX_DISPERSION_RATIO } from '../../src/atlas/waves/bridges.js';
-import { BRIDGE_KG_SCHRODINGER, BRIDGE_STIFF_STRING, KG_NR_MAX_X, STIFF_MAX_BETA } from '../../src/atlas/waves/bridges-closure.js';
+import { BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_WAVE_DALEMBERT, KG_MAX_DISPERSION_RATIO } from '../../src/atlas/waves/bridges.js';
+import { BRIDGE_KG_OSCILLATOR, BRIDGE_KG_SCHRODINGER, BRIDGE_STIFF_STRING, KG_NR_MAX_X, STIFF_MAX_BETA } from '../../src/atlas/waves/bridges-closure.js';
 import { kgNonrelativisticError, kleinGordonPhaseError, stiffStringPhaseError } from '../../src/atlas/waves/numerics.js';
 import type { AtlasBridge } from '../../src/atlas/types.js';
 
@@ -42,7 +43,7 @@ describe('ab-pendulum-linear ↔ PhysJS.Pendulum.linearizedEquationOfMotion_iff'
     expect(ref!.system).toBe('lean4-physjs');
     expect(ref!.statement).toBe('PhysJS.Pendulum.linearizedEquationOfMotion_iff');
     expect(ref!.fidelity).toBe('sanity-lemmas');
-    expect(ref!.version).toContain('physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3');
+    expect(ref!.version).toContain('physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c');
     expect(ref!.covers).toContain('the transformation, not bound.delta');
     expect(ref!.covers).toContain('covers its statement only');
   });
@@ -172,6 +173,160 @@ describe('rank-1 dispersion bounds ↔ PhysJS covers_bound_delta', () => {
   });
 });
 
+describe('ab-kg-oscillator ↔ PhysJS.KgOscillator.uniform_solves_equationOfMotion', () => {
+  it('the reference names the uniform-mode restriction and covers its statement only', () => {
+    const ref = BRIDGE_KG_OSCILLATOR.formalRef;
+    expect(ref?.system).toBe('lean4-physjs');
+    expect(ref?.statement).toBe('PhysJS.KgOscillator.uniform_solves_equationOfMotion');
+    expect(ref?.fidelity).toBe('sanity-lemmas');
+    expect(ref?.covers).toContain("the restriction, in Physlib's own terms");
+    expect(ref?.covers).toContain('covers its statement only');
+    expect(ref?.covers).not.toContain('bound.delta');
+    expect(BRIDGE_KG_OSCILLATOR.transformation).toContain('u(x, t) = u(t)');
+    expect(BRIDGE_KG_OSCILLATOR.transformation).toContain('ω₀² ↦ k/m');
+  });
+
+  it('a uniform field cos(ω₀ t) solves u_tt = −ω₀² u, and ω₀² is k/m', () => {
+    // Lean: u x = f, so the second space derivative is 0, and
+    // u_tt = c² u_xx − ω₀² u reduces to f'' = −ω₀² f when S.ω = ω₀.
+    const omega0 = 2;
+    const c = 5;
+    const f = (t: number): number => Math.cos(omega0 * t);
+    const u = (_x: number, t: number): number => f(t);
+    const spaceSecond = (x: number, t: number, h: number): number =>
+      (u(x + h, t) - 2 * u(x, t) + u(x - h, t)) / (h * h);
+    const timeSecond = (x: number, t: number, h: number): number =>
+      (u(x, t + h) - 2 * u(x, t) + u(x, t - h)) / (h * h);
+    expect(Math.abs(spaceSecond(0.4, 0.3, 1e-4))).toBeLessThan(1e-8);
+    const kgResidual = (h: number): number =>
+      Math.abs(timeSecond(0.4, 0.3, h) - (c ** 2 * spaceSecond(0.4, 0.3, h) - omega0 ** 2 * u(0.4, 0.3)));
+    // Truncation of the second difference, not a leftover PDE term: it falls as h².
+    expect(kgResidual(1e-3)).toBeLessThan(2e-6);
+    expect(kgResidual(1e-3) / kgResidual(5e-4)).toBeGreaterThan(3.9);
+    expect(kgResidual(1e-3) / kgResidual(5e-4)).toBeLessThan(4.1);
+    const m = 1;
+    const k = m * omega0 ** 2;
+    expect(k / m).toBeCloseTo(omega0 ** 2, 12);
+    // A travelling mode's dispersion is not the uniform-mode frequency when c k ≠ 0.
+    const kWave = 0.5;
+    expect(c * kWave).not.toBe(0);
+    expect(c ** 2 * kWave ** 2 + omega0 ** 2).not.toBeCloseTo(omega0 ** 2, 6);
+  });
+});
+
+describe('ab-spring-lc ↔ PhysJS.SpringLc.time_rescale_equationOfMotion', () => {
+  it('the reference names the oscillator dictionary, not a Physlib circuit', () => {
+    const ref = BRIDGE_SPRING_LC.formalRef;
+    expect(ref?.statement).toBe('PhysJS.SpringLc.time_rescale_equationOfMotion');
+    expect(ref?.fidelity).toBe('sanity-lemmas');
+    expect(ref?.covers).toBe('the oscillator dictionary — covers its statement only');
+    expect(BRIDGE_SPRING_LC.transformation).toContain('m ↔ L');
+    expect(BRIDGE_SPRING_LC.transformation).toContain('k ↔ 1/C');
+    expect(BRIDGE_SPRING_LC.transformation).toContain('q(t) = (q0/x0)·x(ω_LC t / ω_s)');
+  });
+
+  it('rescaling time by ω_LC/ω_s sends a spring solution to an LC solution; the source frequency does not', () => {
+    // W1a: m = 1, k = 4 so ω_s = 2; L = 2, C = 0.125 so ω_LC = 2√2.
+    // Lean: y(t) = β • x((ω_target / ω_source) • t), with m ↦ L and k ↦ 1/C.
+    const omegaS = 2;
+    const omegaLc = 2 * Math.sqrt(2);
+    const beta = -1.9 / 0.37;
+    const x = (t: number): number => Math.cos(omegaS * t);
+    const alpha = omegaLc / omegaS;
+    const y = (t: number): number => beta * x(alpha * t);
+    const second = (fn: (t: number) => number, t: number, h: number): number =>
+      (fn(t + h) - 2 * fn(t) + fn(t - h)) / (h * h);
+    const lcResidual = (fn: (t: number) => number, t: number): number =>
+      Math.abs(second(fn, t, 1e-4) + omegaLc ** 2 * fn(t));
+    expect(lcResidual(y, 0.37)).toBeLessThan(1e-6);
+    const wrong = (t: number): number => beta * x(t);
+    expect(lcResidual(wrong, 0.37)).toBeGreaterThan(1);
+    expect(omegaLc / omegaS).not.toBeCloseTo(1, 6);
+  });
+});
+
+describe('ab-damped-rlc ↔ PhysJS.DampedRlc.time_rescale_equationOfMotion', () => {
+  it('the reference names the oscillator dictionary and the damping-ratio side condition', () => {
+    const ref = BRIDGE_DAMPED_RLC.formalRef;
+    expect(ref?.statement).toBe('PhysJS.DampedRlc.time_rescale_equationOfMotion');
+    expect(ref?.fidelity).toBe('sanity-lemmas');
+    expect(ref?.covers).toBe('the oscillator dictionary — covers its statement only');
+    expect(BRIDGE_DAMPED_RLC.transformation).toContain('m ↔ L, k ↔ 1/C, b ↔ R');
+    expect(BRIDGE_DAMPED_RLC.sideConditions[0]).toContain('ζ_mech = b/(2√(mk)) equals ζ_RLC');
+  });
+
+  it('equal damping ratios and the frequency ratio match; a matched γ/m with unequal frequencies does not', () => {
+    // Lean: dampingRatio = γ / (2 √(m k)). The RLC reading is (R/2) √(C/L).
+    // y(t) = β • x((ω_RLC / ω) • t) solves the target iff the ratios agree.
+    const zeta = 0.25;
+    const omegaS = 2;
+    const omegaT = 4;
+    const m = 1;
+    const k = m * omegaS ** 2;
+    const b = 2 * zeta * Math.sqrt(m * k);
+    const L = 2;
+    const C = 1 / (L * omegaT ** 2);
+    const R = 2 * zeta * Math.sqrt(L / C);
+    expect(b / (2 * Math.sqrt(m * k))).toBeCloseTo(zeta, 12);
+    expect((R / 2) * Math.sqrt(C / L)).toBeCloseTo(zeta, 12);
+    const omegaD = omegaS * Math.sqrt(1 - zeta ** 2);
+    const x = (t: number): number => {
+      const decay = Math.exp(-zeta * omegaS * t);
+      return decay * (Math.cos(omegaD * t) + ((zeta * omegaS) / omegaD) * Math.sin(omegaD * t));
+    };
+    const alpha = omegaT / omegaS;
+    const beta = 1.5;
+    const y = (t: number): number => beta * x(alpha * t);
+    const deriv = (fn: (t: number) => number, t: number, h: number): number => (fn(t + h) - fn(t - h)) / (2 * h);
+    const second = (fn: (t: number) => number, t: number, h: number): number =>
+      (fn(t + h) - 2 * fn(t) + fn(t - h)) / (h * h);
+    const residual = (fn: (t: number) => number, omega: number, t: number): number =>
+      Math.abs(second(fn, t, 1e-4) + 2 * zeta * omega * deriv(fn, t, 1e-4) + omega ** 2 * fn(t));
+    expect(residual(x, omegaS, 0.2)).toBeLessThan(1e-5);
+    expect(residual(y, omegaT, 0.2)).toBeLessThan(1e-4);
+    const unscaled = (t: number): number => beta * x(t);
+    expect(residual(unscaled, omegaT, 0.2)).toBeGreaterThan(1);
+    const rateMatchedR = (b / m) * L;
+    const rateMatchedZeta = (rateMatchedR / 2) * Math.sqrt(C / L);
+    expect(rateMatchedR / L).toBeCloseTo(b / m, 12);
+    expect(rateMatchedZeta).not.toBeCloseTo(zeta, 6);
+  });
+});
+
+describe("ab-wave-dalembert ↔ PhysJS.WaveDalembert.solution_eq_profiles", () => {
+  it("the reference names the missing direction of d'Alembert's formula", () => {
+    const ref = BRIDGE_WAVE_DALEMBERT.formalRef;
+    expect(ref?.statement).toBe('PhysJS.WaveDalembert.solution_eq_profiles');
+    expect(ref?.fidelity).toBe('sanity-lemmas');
+    expect(ref?.covers).toBe("the missing direction of d'Alembert's formula — covers its statement only");
+    expect(BRIDGE_WAVE_DALEMBERT.transformation).toContain('ξ = x − ct');
+    expect(BRIDGE_WAVE_DALEMBERT.transformation).toContain('η = x + ct');
+    expect(BRIDGE_WAVE_DALEMBERT.preserves).toContain('every C² solution on the whole line');
+  });
+
+  it('a standing wave is F(x − ct) + G(x + ct); sending both profiles the same way is a different field', () => {
+    // Lean: a jointly C² solution at c ≠ 0 equals F(x − c t) + G(x + c t).
+    // sin(x) cos(c t) = [sin(x − c t) + sin(x + c t)] / 2.
+    const c = 2;
+    const standing = (x: number, t: number): number => Math.sin(x) * Math.cos(c * t);
+    const right = (s: number): number => Math.sin(s) / 2;
+    const left = (s: number): number => Math.sin(s) / 2;
+    const profiles = (x: number, t: number): number => right(x - c * t) + left(x + c * t);
+    const sameWay = (x: number, t: number): number => right(x - c * t) + left(x - c * t);
+    const x = 0.7;
+    const t = 0.4;
+    expect(profiles(x, t)).toBeCloseTo(standing(x, t), 12);
+    expect(sameWay(x, t)).not.toBeCloseTo(standing(x, t), 4);
+    const h = 1e-3;
+    const utt = (standing(x, t + h) - 2 * standing(x, t) + standing(x, t - h)) / (h * h);
+    const uxx = (standing(x + h, t) - 2 * standing(x, t) + standing(x - h, t)) / (h * h);
+    expect(Math.abs(utt - c ** 2 * uxx)).toBeLessThan(1e-5);
+    // At speed zero the equation does not force this shape: u = t has u_tt = 0.
+    const linear = (time: number): number => time;
+    expect(linear(t)).not.toBeCloseTo(right(x) + left(x), 4);
+  });
+});
+
 describe('formally-proved is derived, and reachable only from a reviewed reference', () => {
   it('ab-pendulum-linear derives formally-proved from its reference and stores nothing', () => {
     expect(deriveEvidence(AB_PENDULUM_LINEAR, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
@@ -183,11 +338,15 @@ describe('formally-proved is derived, and reachable only from a reviewed referen
   it('every bridge with a formalRef has a sanity lemma here, or a fidelity that is not sanity-lemmas', () => {
     const withRef = ATLAS_FAMILIES.flatMap((f) => f.bridges).filter((b) => b.formalRef !== undefined);
     expect(withRef.map((b) => b.id)).toEqual([
+      'ab-spring-lc',
+      'ab-damped-rlc',
       'ab-pendulum-linear',
       'ab-telegraph-diffusion',
       'ab-telegraph-wave',
+      'ab-wave-dalembert',
       'ab-klein-gordon-wave',
       'ab-kg-schrodinger',
+      'ab-kg-oscillator',
       'ab-stiff-string',
     ]);
     for (const bridge of withRef) expect(bridge.formalRef!.fidelity).toBe('sanity-lemmas');

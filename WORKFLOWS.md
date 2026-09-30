@@ -68,7 +68,7 @@ count of the old file.
 
 ## Adding or changing a Lean `formalRef` (`lean4-physjs`)
 
-Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs. UPT does not run Lean for this system. `NOTES.md` records six reviewed `formalRef`s, each `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
+Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs. UPT does not run Lean for this system. `NOTES.md` records ten reviewed `formalRef`s, each `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
 
 1. Land the theorem in PhysJS. Its `manifest/bridges.json` entry (schema `physjs-bridge-manifest/v1`) names `key`, `bridgeId`, `theorem`, `covers`, `coverage` (`covers its statement only`), `leanProof`, and `axioms`. The axioms are what PhysJS measured with `#print axioms`. This repository does not re-measure them.
 2. Vendor that file to `formal/physjs/manifest.json` at the PhysJS commit being pinned. The file's `commit`, `toolchain`, `mathlib`, and `physlib` are the pin.

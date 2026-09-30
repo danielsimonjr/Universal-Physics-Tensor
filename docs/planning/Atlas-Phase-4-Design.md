@@ -139,7 +139,7 @@ interface FormalRef {
 ```
 
 **Reading against the code.** The union includes `lean4-physjs`, and a reference carries
-`covers`. The six reviewed references use `lean4-physjs` and name public PhysJS. The count
+`covers`. The ten reviewed references use `lean4-physjs` and name public PhysJS. The count
 and the pin are in `NOTES.md`. This section does not keep a second count.
 
 **Both tags are derived from a committed artifact, never hand-set.**
