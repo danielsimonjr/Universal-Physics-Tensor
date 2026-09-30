@@ -198,6 +198,9 @@ Usage:
         new data); --sensitivity ranks the prediction's input elasticities.
         Each record names its statistical object, criterion and data origin;
         consistency ratios (no σ) are counted apart from the σ-tests.
+        be-53 is not a registered confrontation. \`upt confront be-53\` refuses
+        and names the missing table and running procedure. It prints no
+        residual and does not change the catalog status.
 
   upt axes
         Axis-discrimination audit — which tensor classification axes GATE the

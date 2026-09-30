@@ -38,7 +38,13 @@ const HELP = `upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|
         statement true.
         Consistency ratios are counted apart and never as precision tests;
         each prints its actual difference (observed − predicted)/predicted
-        separately from its stated agreement bound.`;
+        separately from its stated agreement bound.
+        be-53 is not in that registry. \`upt confront be-53\` refuses: a
+        confrontation needs a caller-supplied measured-coupling table and a
+        running procedure (requestYangMillsConfrontation). The refusal names
+        each missing input, prints no residual, and does not change the
+        catalog status. It is not a pass and not a fail. The one-loop
+        coefficient's sign is oneLoopCoefficientStatement, not this command.`;
 
 const RIGOR_TIERS = new Set(['stringent', 'moderate', 'loose']);
 
@@ -195,6 +201,34 @@ async function run(ctx: CommandCtx): Promise<number> {
   const rigorTier = rigorFlag && rigorFlag.length ? rigorFlag[rigorFlag.length - 1] : undefined;
   if (rigorTier !== undefined && !RIGOR_TIERS.has(rigorTier)) {
     throw new CliError(`upt confront: invalid --rigor='${rigorTier}' (expected stringent|moderate|loose)`);
+  }
+
+  if (bridgeId === 53) {
+    const refusal = api.requestYangMillsConfrontation({});
+    if (refusal.status !== 'refused') {
+      throw new CliError('upt confront: be-53 without a table and a running procedure did not refuse');
+    }
+    const missing = refusal.missing.join('; ');
+    if (wantJson) {
+      emitJson(
+        {
+          command: 'confront',
+          result: {
+            bridgeId: 53,
+            status: 'refused',
+            missing: refusal.missing,
+            pass: false,
+            fail: false,
+            catalogStatus: 'unchanged',
+          },
+        },
+        ctx.write,
+      );
+    } else {
+      out(`be-53 refused. Missing: ${missing}.`);
+      out('This is not a pass and not a fail. The catalog status of be-53 is unchanged.');
+    }
+    return 1;
   }
 
   let entries =

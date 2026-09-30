@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 398
+  totalFiles: 399
   totalModules: 12
-  totalExports: 2880
+  totalExports: 2894
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3263,6 +3263,32 @@ modules:
         - confrontBE52
       constants:
         - MERCURY
+    src/bridges/be53-yang-mills-confrontation.ts:
+      description: BE-53 confrontation request.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./observations/types.js
+          imports:
+            - ConfrontationOutcome
+          typeOnly: true
+        - file: ./observations/types.js
+          imports:
+            - residualInSigma
+        - file: ./equations/be-53-yang-mills-beta.js
+          imports:
+            - evaluateYangMillsBeta
+      exports:
+        - requestYangMillsConfrontation
+      interfaces:
+        - MeasuredCouplingRow
+        - RunningProcedureRecord
+        - RunningProcedure
+        - YangMillsConfrontationRequest
+        - YangMillsConfrontationRefusal
+        - YangMillsConfrontationHit
+      functions:
+        - requestYangMillsConfrontation
     src/bridges/be55-quantum-hall-confrontation.ts:
       description: BE-55 × quantum-Hall universality — confront the TOPOLOGICAL quantization by
       externalDependencies: []
@@ -5656,9 +5682,13 @@ modules:
         - BE53_BETA_G_STRUCTURAL
         - evaluateYangMillsBeta
         - computeB0
+        - oneLoopCoefficientStatement
+      interfaces:
+        - OneLoopCoefficientStatement
       functions:
         - evaluateYangMillsBeta
         - computeB0
+        - oneLoopCoefficientStatement
       constants:
         - BE53_COUPLING_G
         - BE53_BETA_G_RHS
@@ -8885,6 +8915,10 @@ modules:
             - confrontationRigor
             - rigorDistribution
           reExport: true
+        - file: ./bridges/be53-yang-mills-confrontation.js
+          imports:
+            - requestYangMillsConfrontation
+          reExport: true
         - file: ./bridges/confrontations.js
           imports:
             - ConfrontationEntry
@@ -9212,6 +9246,7 @@ modules:
         - runConfrontation
         - confrontationRigor
         - rigorDistribution
+        - requestYangMillsConfrontation
         - consistencyComparison
         - decidingMeasurement
         - BRIDGE_EVALUATORS
@@ -9380,6 +9415,7 @@ modules:
         - runConfrontation
         - confrontationRigor
         - rigorDistribution
+        - requestYangMillsConfrontation
         - ConfrontationEntry
         - RigorTier
         - consistencyComparison
@@ -16439,6 +16475,29 @@ modules:
             - VLBIDeflectionObservation
             - BE51ConfrontationResult
           reExport: true
+        - file: ./bridges/equations/be-53-yang-mills-beta.js
+          imports:
+            - oneLoopCoefficientStatement
+          reExport: true
+        - file: ./bridges/equations/be-53-yang-mills-beta.js
+          imports:
+            - OneLoopCoefficientStatement
+            - OneLoopCoefficientSign
+          reExport: true
+        - file: ./bridges/be53-yang-mills-confrontation.js
+          imports:
+            - requestYangMillsConfrontation
+          reExport: true
+        - file: ./bridges/be53-yang-mills-confrontation.js
+          imports:
+            - MeasuredCouplingRow
+            - RunningProcedure
+            - RunningProcedureRecord
+            - YangMillsConfrontationRequest
+            - YangMillsConfrontationRefusal
+            - YangMillsConfrontationHit
+            - YangMillsConfrontationResult
+          reExport: true
         - file: ./bridges/be21-kss-confrontation.js
           imports:
             - confrontBE21
@@ -16885,6 +16944,8 @@ modules:
         - CASSINI
         - confrontBE51
         - VLBI_LAMBERT_2009
+        - oneLoopCoefficientStatement
+        - requestYangMillsConfrontation
         - confrontBE21
         - KSS_BOUND
         - QGP_BMB19
@@ -17102,6 +17163,15 @@ modules:
         - BE37ConfrontationResult
         - VLBIDeflectionObservation
         - BE51ConfrontationResult
+        - OneLoopCoefficientStatement
+        - OneLoopCoefficientSign
+        - MeasuredCouplingRow
+        - RunningProcedure
+        - RunningProcedureRecord
+        - YangMillsConfrontationRequest
+        - YangMillsConfrontationRefusal
+        - YangMillsConfrontationHit
+        - YangMillsConfrontationResult
         - QGPViscosityObservation
         - BE21ConfrontationResult
         - IsingExponentObservation
@@ -17589,6 +17659,17 @@ modules:
         - VLBI_LAMBERT_2009
         - VLBIDeflectionObservation
         - BE51ConfrontationResult
+        - oneLoopCoefficientStatement
+        - OneLoopCoefficientStatement
+        - OneLoopCoefficientSign
+        - requestYangMillsConfrontation
+        - MeasuredCouplingRow
+        - RunningProcedure
+        - RunningProcedureRecord
+        - YangMillsConfrontationRequest
+        - YangMillsConfrontationRefusal
+        - YangMillsConfrontationHit
+        - YangMillsConfrontationResult
         - confrontBE21
         - KSS_BOUND
         - QGP_BMB19
@@ -19075,6 +19156,7 @@ dependencyGraph:
         - src/bridges/be48-collapse-confrontation.ts
         - src/bridges/be51-lensing-confrontation.ts
         - src/bridges/be52-mercury-confrontation.ts
+        - src/bridges/be53-yang-mills-confrontation.ts
         - src/bridges/be55-quantum-hall-confrontation.ts
         - src/bridges/be55-quantum-hall.ts
         - src/bridges/be56-casimir-confrontation.ts
@@ -19418,18 +19500,18 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 398
+  totalTypeScriptFiles: 399
   totalModules: 12
-  totalLinesOfCode: 87897
-  totalExports: 2880
+  totalLinesOfCode: 88163
+  totalExports: 2894
   totalClasses: 60
-  totalInterfaces: 450
-  totalFunctions: 743
+  totalInterfaces: 457
+  totalFunctions: 745
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 714
-  totalReExports: 1362
-  totalTypeOnlyImports: 537
+  totalReExports: 1374
+  totalTypeOnlyImports: 538
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

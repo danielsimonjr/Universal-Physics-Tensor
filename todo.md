@@ -1150,9 +1150,14 @@ warning-silencing, not debug logging).
             publishable coincidence-rejection catalog + a legible frontier map
             (what physics hasn't connected + what would test it).
 
-- [ ] **BE-53 Yang–Mills β-function confrontation** (re-homed 2026-09-25 from the closed 2026-07-04
-      NEXT umbrella): PDG α_s(M_Z) = 0.1179 running, open data, value/consistency kind. Needs its own
-      design → Adam/Eve vet → Task-0 gate. Optional backlog.
+- [x] **BE-53 Yang–Mills β-function confrontation** (re-homed 2026-09-25 from the closed 2026-07-04
+      NEXT umbrella). Design: `docs/design/be-53-yang-mills-confrontation.md` (approved).
+      `requestYangMillsConfrontation` refuses unless the caller supplies a measured-coupling table and a
+      running procedure whose record states loop order and flavor thresholds. `upt confront be-53` is that
+      refusal: exit 1, the missing inputs named, no residual, catalog status unchanged. The one-loop
+      evaluator is unchanged. `oneLoopCoefficientStatement` labels the sign of `b₀` as the one-loop
+      coefficient, not a data test. The one-loop formula is not a running procedure. A single central
+      value at the Z mass is not encoded. be-53 is not in the confrontation registry.
 - [x] 🟢 **NEXT — active work (as of 2026-07-04, post-v0.36.0).** The
       discovery-hardening program is COMPLETE (results:
       `docs/research/v0.33.0-discovery-hardening-results.md`) and the canonical
