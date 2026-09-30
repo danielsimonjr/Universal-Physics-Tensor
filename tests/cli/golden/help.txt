@@ -108,7 +108,9 @@ Usage:
         Validate bridges against standard physics: classify each bridge↔
         canonical link as restates-canonical (F4 circularity — NOT a
         discovery), recovers (undeclared structural match), or
-        dimensional-only.
+        dimensional-only. A chain of two symbolic edges is reported
+        separately. That comparison does not cancel dimensionful constants,
+        and a chain is never restates-canonical.
 
   upt symbolic [--simplify]
         Compose bridges' SYMBOLIC (AST) forms, not just their numeric

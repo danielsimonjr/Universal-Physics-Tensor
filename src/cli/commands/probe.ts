@@ -53,6 +53,13 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
         \`upt discover\`, which vets quantity identifications a≡b and is frozen.
         Relation-link / regime-transition gaps are not searchable here — use
         \`upt discover\`.
+        An \`fg-expr-<case id>\` gap is a searchable expression handle: one
+        prediction-residual record per applied case, observations empty, built
+        from the case id and title. It carries no named baseline and no
+        dataset. Scientific-Bridge-Discovery-v1 admits a prediction-residual
+        scanner only when both exist, so this listing is not a detected
+        residual and not a fitted formula. \`upt probe run\` still requires
+        \`--problem=FILE\`. The id is not that file.
         scan                 typed frontier gaps (default: searchable only)
         show <gap-id>        one gap
         run --problem=FILE   bounded native search (MHC / holdout / budget)
@@ -297,6 +304,21 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (!showAll && allGaps.length > searchable.length) {
       out(
         `  (${allGaps.length - searchable.length} Product A wrappers hidden; pass --all to list them)`,
+      );
+    }
+    if (
+      !showAll &&
+      searchable.length > 0 &&
+      searchable.every(
+        (g) =>
+          g.kind === 'prediction-residual' &&
+          g.id.startsWith('fg-expr-') &&
+          g.observations.length === 0,
+      )
+    ) {
+      out(
+        '  Expression gaps are listed as searchable with empty observations and no named baseline or dataset. ' +
+          'A detected prediction residual needs both. An id is not a problem file (`upt probe run --problem=FILE`).',
       );
     }
     return 0;
