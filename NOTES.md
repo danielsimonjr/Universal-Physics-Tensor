@@ -11,6 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-09-30
 
+- **Reviewed formalRef.** Six bridges carry a reviewed PhysJS `formalRef`: the five rank-1 dispersion bounds and `ab-pendulum-linear`, retargeted at `PhysJS.Pendulum.linearizedEquationOfMotion_iff`. That meets the ≥5 gate. The 2026-09-24 deferral still means the criterion does not block DONE. The manifest pin is PhysJS `acda892`.
 - **Composition-derived recovery.** `scanCompositionRecovery` on `CATALOG_GRAPH` examines 8 pairs and 0 structural matches. The pairs are `be-12`→`be-11-zurek`, `be-42`→`be-12`, `be-42`→`be-16`, `be-42`→`be-33`, `be-42-via-rs`→`be-12`, `be-42-via-rs`→`be-16`, `be-42-via-rs`→`be-33`, and `law-schwarzschild-radius`→`be-42-via-rs`. A chain is `recovers` or it is not a hit. It is not `restates-canonical`.
 
 ## As of 2026-09-29

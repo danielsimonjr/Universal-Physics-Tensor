@@ -30,7 +30,14 @@ const probeSource = read('formal/physlib/AxiomProbe.lean');
 const probeOutput = read('formal/physlib/captured/AxiomProbe.out');
 const holeOutput = read('formal/physlib/captured/HoleProbe.out');
 const importedHoleOutput = read('formal/physlib/captured/ImportedHoleProbe.out');
-const references = lean4PhyslibReferences(ATLAS_FAMILIES);
+/** The Physlib theorem the pendulum reference used to name. The live atlas no longer carries a `lean4-physlib` formalRef; the captured probe still measures this theorem. */
+const references = [
+  {
+    statement: 'ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff',
+    axioms: ['propext', 'Classical.choice', 'Quot.sound'],
+    version: 'physlib@5ad56e24de155462acd8478458292347393d5908 lean4:v4.34.0',
+  },
+];
 
 describe('formalRef axiom gate — parsing', () => {
   it('reads every probed theorem, including axiom lists Lean wraps across lines', () => {
@@ -72,10 +79,8 @@ describe('formalRef axiom gate — parsing', () => {
     expect(probedTheorems(probeSource)).toHaveLength(6);
   });
 
-  it('collects every lean4-physlib formalRef in the atlas', () => {
-    expect(references.map((r) => r.statement)).toContain(
-      'ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff',
-    );
+  it('the live atlas has no lean4-physlib formalRef; the pendulum reference is PhysJS', () => {
+    expect(lean4PhyslibReferences(ATLAS_FAMILIES)).toEqual([]);
   });
 });
 

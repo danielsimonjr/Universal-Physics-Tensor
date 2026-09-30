@@ -40,8 +40,10 @@ reads the printed axioms and ignores the exit code.
 
 ## The pinned commit
 
-Physlib `5ad56e24de155462acd8478458292347393d5908`, toolchain `leanprover/lean4:v4.34.0`. Each
-`formalRef.version` records the same pin.
+Physlib `5ad56e24de155462acd8478458292347393d5908`, toolchain `leanprover/lean4:v4.34.0`. These
+probes measure that checkout. The live atlas has no `lean4-physlib` formalRef: `ab-pendulum-linear`
+names the PhysJS theorem that imports `linearizedEquationOfMotion_iff`. The gate runs these probes
+only when a `lean4-physlib` formalRef exists.
 
 ## Run the gate
 
@@ -78,7 +80,8 @@ The gate prints `formalRef axiom gate: PASS` and exits 0, or prints each problem
 
 ## When the pin or a formalRef changes
 
-Add each new `formalRef` theorem to `AxiomProbe.lean`. When the pin changes, update the
-`version` of every `lean4-physlib` formalRef; the gate fails for a checkout at another commit. Run
-the gate with `--write-captured`. The option writes new files into `captured/`. Review the new
-output before you commit it.
+Add each new `lean4-physlib` formalRef theorem to `AxiomProbe.lean`. When the pin changes, update
+the `version` of every such formalRef; the gate fails for a checkout at another commit. Run the
+gate with `--write-captured`. The option writes new files into `captured/`. Review the new output
+before you commit it. A `lean4-physjs` reference is checked against `formal/physjs/manifest.json`
+and is not added here.

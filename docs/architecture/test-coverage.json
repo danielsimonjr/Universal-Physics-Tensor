@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "totalSourceFiles": 392,
-    "totalTestFiles": 539,
-    "testedCount": 382,
+    "totalSourceFiles": 393,
+    "totalTestFiles": 540,
+    "testedCount": 383,
     "untestedCount": 10,
-    "coveragePercent": "97.4"
+    "coveragePercent": "97.5"
   },
   "untestedFiles": [
     "src/atlas/public.ts",
@@ -62,6 +62,7 @@
     "src/atlas/oscillators/position-translation.ts",
     "src/atlas/oscillators/rejections.ts",
     "src/atlas/path-bound.ts",
+    "src/atlas/physjs-ref.ts",
     "src/atlas/poster/associations.ts",
     "src/atlas/poster/derivations.ts",
     "src/atlas/poster/statements.ts",
@@ -502,6 +503,7 @@
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
       "tests/atlas/pendulum-position-translation.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
       "tests/atlas/witness-results.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -515,6 +517,7 @@
     "src/atlas/diffusion/bridges-closure.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/closure.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/atlas/witness-results.test.ts"
     ],
@@ -539,6 +542,7 @@
     "src/atlas/diffusion/numerics.ts": [
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/negative-controls.test.ts"
     ],
     "src/atlas/error-algebra.ts": [
@@ -566,6 +570,7 @@
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/relative-norm-convention.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
@@ -704,6 +709,9 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts"
     ],
+    "src/atlas/physjs-ref.ts": [
+      "tests/atlas/physjs-manifest.test.ts"
+    ],
     "src/atlas/poster/associations.ts": [
       "tests/atlas/poster.test.ts"
     ],
@@ -777,6 +785,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/error-algebra.test.ts",
       "tests/atlas/evidence-rule.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/link-prediction.test.ts",
       "tests/atlas/oscillators-limits.test.ts",
@@ -802,10 +811,12 @@
     "src/atlas/waves/bridges-closure.ts": [
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/closure.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/path-bound.test.ts"
     ],
     "src/atlas/waves/bridges.ts": [
       "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/waves.test.ts"
     ],
     "src/atlas/waves/index.ts": [
@@ -817,6 +828,7 @@
     ],
     "src/atlas/waves/numerics.ts": [
       "tests/atlas/closure.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/negative-controls.test.ts",
       "tests/atlas/waves.test.ts"
     ],
@@ -8183,7 +8195,13 @@
     "tests/atlas/formal-sanity.test.ts": [
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/derive-evidence.ts",
-      "src/atlas/families.ts"
+      "src/atlas/families.ts",
+      "src/atlas/diffusion/bridges-closure.ts",
+      "src/atlas/diffusion/numerics.ts",
+      "src/atlas/waves/bridges.ts",
+      "src/atlas/waves/bridges-closure.ts",
+      "src/atlas/waves/numerics.ts",
+      "src/atlas/types.ts"
     ],
     "tests/atlas/gr-spine-regime.test.ts": [
       "src/cli/main.ts",
@@ -8336,6 +8354,11 @@
       "src/atlas/derive-evidence.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/witness-dominance.ts"
+    ],
+    "tests/atlas/physjs-manifest.test.ts": [
+      "src/atlas/families.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/physjs-ref.ts"
     ],
     "tests/atlas/poster.test.ts": [
       "src/atlas/statement.ts",

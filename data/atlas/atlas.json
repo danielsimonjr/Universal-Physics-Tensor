@@ -800,15 +800,16 @@
           ],
           "reviewStatus": "proposed",
           "formalRef": {
-            "system": "lean4-physlib",
-            "statement": "ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff: for a smooth lift θ, θ̈ + ω²θ = 0 iff θ solves the equation of motion of toHarmonicOscillator (mass mℓ², spring constant mgℓ); with toHarmonicOscillator_ω, ω = √(g/ℓ)",
-            "version": "physlib@5ad56e24de155462acd8478458292347393d5908 lean4:v4.34.0",
+            "system": "lean4-physjs",
+            "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
+            "version": "physjs@acda892 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
               "Quot.sound"
             ],
-            "fidelity": "sanity-lemmas"
+            "fidelity": "sanity-lemmas",
+            "covers": "the transformation, not bound.delta — covers its statement only"
           }
         },
         {
@@ -1919,7 +1920,19 @@
             "Cattaneo, Atti Sem. Mat. Fis. Univ. Modena 3 (1948) 83 - heat conduction with a relaxation time",
             "Goldstein, Q. J. Mech. Appl. Math. 4 (1951) 129 - On diffusion by discontinuous movements, and on the telegraph equation"
           ],
-          "reviewStatus": "proposed"
+          "reviewStatus": "proposed",
+          "formalRef": {
+            "system": "lean4-physjs",
+            "statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
+            "version": "physjs@acda892 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "fidelity": "sanity-lemmas",
+            "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+          }
         },
         {
           "id": "ab-telegraph-wave",
@@ -2000,7 +2013,19 @@
           "citations": [
             "Goldstein, Q. J. Mech. Appl. Math. 4 (1951) 129 - On diffusion by discontinuous movements, and on the telegraph equation"
           ],
-          "reviewStatus": "proposed"
+          "reviewStatus": "proposed",
+          "formalRef": {
+            "system": "lean4-physjs",
+            "statement": "PhysJS.TelegraphWave.covers_bound_delta",
+            "version": "physjs@acda892 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "fidelity": "sanity-lemmas",
+            "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+          }
         },
         {
           "id": "ab-heat-laplace",
@@ -2676,7 +2701,19 @@
           "citations": [
             "Whitham, Linear and Nonlinear Waves - §11.1, dispersive waves and the Klein-Gordon equation"
           ],
-          "reviewStatus": "proposed"
+          "reviewStatus": "proposed",
+          "formalRef": {
+            "system": "lean4-physjs",
+            "statement": "PhysJS.KleinGordonWave.covers_bound_delta",
+            "version": "physjs@acda892 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "fidelity": "sanity-lemmas",
+            "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+          }
         },
         {
           "id": "ab-kg-schrodinger",
@@ -2771,7 +2808,19 @@
           "citations": [
             "Greiner, Relativistic Quantum Mechanics: Wave Equations - Ch. 1, the Klein-Gordon equation and its non-relativistic limit"
           ],
-          "reviewStatus": "proposed"
+          "reviewStatus": "proposed",
+          "formalRef": {
+            "system": "lean4-physjs",
+            "statement": "PhysJS.KgSchrodinger.covers_bound_delta",
+            "version": "physjs@acda892 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "fidelity": "sanity-lemmas",
+            "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+          }
         },
         {
           "id": "ab-kg-oscillator",
@@ -2906,7 +2955,19 @@
           "citations": [
             "Fletcher, J. Acoust. Soc. Am. 36 (1964) 203 - Normal vibration frequencies of a stiff piano string"
           ],
-          "reviewStatus": "proposed"
+          "reviewStatus": "proposed",
+          "formalRef": {
+            "system": "lean4-physjs",
+            "statement": "PhysJS.StiffString.covers_bound_delta",
+            "version": "physjs@acda892 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound"
+            ],
+            "fidelity": "sanity-lemmas",
+            "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+          }
         }
       ],
       "rejections": []

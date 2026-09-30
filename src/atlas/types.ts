@@ -97,7 +97,7 @@ export type FormalFidelity =
  * @internal
  */
 export interface FormalRef {
-  readonly system: 'lean4-physlib' | 'other';
+  readonly system: 'lean4-physlib' | 'lean4-physjs' | 'other';
   /** The formal statement's name or text, as it appears in `system`. */
   readonly statement: string;
   /** The library version or commit the statement was checked against. */
@@ -105,6 +105,11 @@ export interface FormalRef {
   /** Axioms the proof depends on beyond the system's core. */
   readonly axioms: readonly string[];
   readonly fidelity: FormalFidelity;
+  /**
+   * What the statement certifies, and the limit of that certification.
+   * A reviewed reference's line contains `covers its statement only`.
+   */
+  readonly covers: string;
 }
 
 /** Whether the limit a bridge takes is regular or singular. @public */

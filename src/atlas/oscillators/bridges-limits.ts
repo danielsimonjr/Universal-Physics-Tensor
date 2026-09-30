@@ -21,6 +21,7 @@
  * @module atlas/oscillators/bridges-limits
  */
 
+import { physjsFormalRef } from '../physjs-ref.js';
 import { deriveRegimeGroups } from '../regime.js';
 import { MissingHorizonError } from '../types.js';
 import type { ApproximationBound, AtlasBridge, RelationContract, Regime } from '../types.js';
@@ -236,24 +237,13 @@ export const AB_PENDULUM_LINEAR: AtlasBridge = {
     'Abramowitz & Stegun §17.6 (AGM evaluation of K)',
   ],
   reviewStatus: 'proposed',
-  // Phase 4 S4.6. A checked counterpart of this bridge's TRANSFORMATION — the
-  // linearized pendulum IS the harmonic oscillator with mass mℓ², spring
-  // constant mgℓ, hence ω0² = g/ℓ. It does NOT certify `bound.delta`: Physlib's
-  // period results concern `periodFormula`, which its own TODO has not yet tied
-  // to the motion. Axioms measured with `#print axioms` on a local build at
-  // this commit (positive control: a `sorry` prints `sorryAx`; none here). The probes and
-  // their gate: `formal/physlib/`, `tools/formalref-axiom-gate/`.
-  // Fidelity is earned in tests/atlas/formal-sanity.test.ts.
-  formalRef: {
-    system: 'lean4-physlib',
-    statement:
-      'ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff: for a smooth lift θ, ' +
-      'θ̈ + ω²θ = 0 iff θ solves the equation of motion of toHarmonicOscillator (mass mℓ², ' +
-      'spring constant mgℓ); with toHarmonicOscillator_ω, ω = √(g/ℓ)',
-    version: 'physlib@5ad56e24de155462acd8478458292347393d5908 lean4:v4.34.0',
-    axioms: ['propext', 'Classical.choice', 'Quot.sound'],
-    fidelity: 'sanity-lemmas',
-  },
+  // Milestone 1. The reference is the PhysJS theorem, which imports Physlib's
+  // `ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff`. It
+  // certifies the TRANSFORMATION (mass mℓ², spring constant mgℓ, ω0² = g/ℓ),
+  // not `bound.delta`. Physlib's period results concern `periodFormula`, which
+  // its own TODO has not yet tied to the motion. The sanity lemmas instantiate
+  // that imported statement. Keyed by `formal/physjs/manifest.json`.
+  formalRef: physjsFormalRef('ab-pendulum-linear'),
 };
 
 /**

@@ -24,6 +24,7 @@ import { ENERGY, LENGTH, MASS, TIME, VELOCITY } from '../../dimensional/types.js
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { DAMPING } from '../oscillators/dimensions.js';
 import { deriveRegimeGroups } from '../regime.js';
+import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { WAVENUMBER } from '../waves/models.js';
 import { DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY } from './dimensions.js';
@@ -283,6 +284,7 @@ export const BRIDGE_TELEGRAPH_DIFFUSION: AtlasBridge = {
     'Goldstein, Q. J. Mech. Appl. Math. 4 (1951) 129 - On diffusion by discontinuous movements, and on the telegraph equation',
   ],
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-telegraph-diffusion'),
 };
 
 /**
@@ -340,6 +342,7 @@ export const BRIDGE_TELEGRAPH_WAVE: AtlasBridge = {
   ],
   citations: ['Goldstein, Q. J. Mech. Appl. Math. 4 (1951) 129 - On diffusion by discontinuous movements, and on the telegraph equation'],
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-telegraph-wave'),
 };
 
 /** Bridge: heat → Laplace, the steady-state restriction. @internal */

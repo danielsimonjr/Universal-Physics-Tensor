@@ -847,7 +847,7 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     const { text } = await run(['atlas', 'ab-pendulum-linear']);
     const s = text.slice(text.indexOf('evidence by claim'));
     expect(s).toMatch(/^evidence by claim \(derived from the record's structure\):\n/);
-    expect(s).toMatch(/\n {2}correspondence: formal reference lean4-physlib, fidelity sanity-lemmas — covers its statement only/);
+    expect(s).toMatch(/\n {2}correspondence: formal reference lean4-physjs, fidelity sanity-lemmas — covers its statement only/);
     expect(s).toMatch(/\n {2}bound: basis closed-form \(deltaAt is the exact error\); the formal reference is not attributed to it/);
     expect(s).toMatch(/\n {2}horizon: machine form recorded; the formal reference is not attributed to it/);
     expect(s).toMatch(/\n {2}regime: 1 machine inequality — check a point with `upt regime oscillators --at …`/);
@@ -919,7 +919,7 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     const { text } = await run(['atlas', 'ab-klein-gordon-wave']);
     const s = text.slice(text.indexOf('evidence by claim'));
     expect(s).toMatch(
-      /\n {2}bound: basis closed-form \(deltaAt is the exact error\)\n {4}- WS4 \[numeric\] tests it at c = 1, k = 20, omega0 = 1 \(its error there is the bound's norm; tolerance ≤ delta\): registered in-process, not run/,
+      /\n {2}bound: basis closed-form \(deltaAt is the exact error\); the formal reference is not attributed to it\n {4}- WS4 \[numeric\] tests it at c = 1, k = 20, omega0 = 1 \(its error there is the bound's norm; tolerance ≤ delta\): registered in-process, not run/,
     );
     const apart = s.slice(s.indexOf('witness execution, witnesses not attributed to a claim:\n'));
     expect(apart).toMatch(/^witness execution, witnesses not attributed to a claim:\n {2}- WS4b \[numeric\]: result not observed/);

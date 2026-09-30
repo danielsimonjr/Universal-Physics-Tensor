@@ -299,7 +299,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     witnesses: b.witnesses.map((w) => ({ id: w.id, kind: w.kind, test: w.test, tolerance: w.tolerance ?? null })),
     counterexamples: b.counterexamples.map((c) => ({ description: c.description, witness: c.witness })),
     formalRef: b.formalRef ?? null,
-    formalRefCovers: b.formalRef === undefined ? null : 'the statement only — not the bound, regime or side conditions unless it says so',
+    formalRefCovers: b.formalRef === undefined ? null : b.formalRef.covers,
     citations: [...b.citations],
     reviewStatus: b.reviewStatus,
     claims,
@@ -378,9 +378,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  ${b.formalRef.system}: ${b.formalRef.statement}`);
     out(`  version ${b.formalRef.version}; axioms ${b.formalRef.axioms.join(', ') || 'none'}`);
     out(`  fidelity: ${b.formalRef.fidelity}`);
-    // The tag above must not read wider than the statement: a reference that
-    // certifies a transformation does not certify the bound beside it.
-    out('  covers: the statement above ONLY — not the bound, regime or side conditions unless it says so');
+    // The tag above must not read wider than the statement. The record's covers
+    // line says what the theorem certifies and that it covers its statement only.
+    out(`  covers: ${b.formalRef.covers}`);
   }
   const execution = (w: (typeof witnessExecution)[number]): string => {
     if (!('rerun' in w)) return `${w.status}${'reason' in w ? ` (${w.reason})` : ''} (run now) — ${w.detail}`;

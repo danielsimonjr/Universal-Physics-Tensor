@@ -37,7 +37,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 65 files
+- **atlas**: 66 files
 - **bridges**: 90 files
 - **canonical**: 18 files
 - **cases**: 9 files
@@ -284,6 +284,7 @@ The codebase is organized into the following modules:
 | `../oscillators/bridges-limits.js` | `makeApproximation` | Import |
 | `../oscillators/dimensions.js` | `DAMPING` | Import |
 | `../regime.js` | `deriveRegimeGroups` | Import |
+| `../physjs-ref.js` | `physjsFormalRef` | Import |
 | `../types.js` | `AtlasBridge` | Import (type-only) |
 | `../waves/models.js` | `WAVENUMBER` | Import |
 | `./dimensions.js` | `DENSITY, DIFFUSIVITY, SPECIFIC_HEAT, THERMAL_CONDUCTIVITY` | Import |
@@ -599,6 +600,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../physjs-ref.js` | `physjsFormalRef` | Import |
 | `../regime.js` | `deriveRegimeGroups` | Import |
 | `../types.js` | `MissingHorizonError` | Import |
 | `../types.js` | `ApproximationBound, AtlasBridge, RelationContract, Regime` | Import (type-only) |
@@ -801,6 +803,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/atlas/physjs-ref.ts` - Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `FormalRef` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `PhysjsManifestFile`
+- Functions: `physjsFormalRef`, `physjsManifestProblems`
+- Constants: `PHYSJS_COMMIT`
+
+---
+
 ### `src/atlas/poster/associations.ts` - Atlas Phase 3 — the poster's two association-only lines.
 
 **Internal Dependencies:**
@@ -993,6 +1009,7 @@ The codebase is organized into the following modules:
 | `../oscillators/bridges-limits.js` | `makeApproximation` | Import |
 | `../oscillators/dimensions.js` | `SPRING_CONSTANT` | Import |
 | `../regime.js` | `deriveRegimeGroups` | Import |
+| `../physjs-ref.js` | `physjsFormalRef` | Import |
 | `../types.js` | `AtlasBridge` | Import (type-only) |
 | `./models.js` | `FLEXURAL_RIGIDITY, LINEAR_DENSITY, WAVENUMBER, WAVES_FAMILY_NAME` | Import |
 | `./numerics.js` | `kgNonrelativisticError, stiffStringPhaseError` | Import |
@@ -1011,6 +1028,7 @@ The codebase is organized into the following modules:
 | `../diffusion/dimensions.js` | `DENSITY` | Import |
 | `../oscillators/bridges-limits.js` | `makeApproximation` | Import |
 | `../regime.js` | `deriveRegimeGroups` | Import |
+| `../physjs-ref.js` | `physjsFormalRef` | Import |
 | `../types.js` | `AtlasBridge` | Import (type-only) |
 | `./models.js` | `LINEAR_DENSITY, PRESSURE, WAVENUMBER, WAVES_FAMILY_NAME` | Import |
 | `./numerics.js` | `kleinGordonPhaseError` | Import |
@@ -7330,7 +7348,7 @@ The codebase is organized into the following modules:
 | `coverage` | 1 files | 1 files |
 | `derivation` | 3 files | 3 files |
 | `derive-evidence` | 1 files | 3 files |
-| `bridges-closure` | 9 files | 2 files |
+| `bridges-closure` | 10 files | 2 files |
 | `bridges` | 5 files | 2 files |
 | `dimensions` | 2 files | 6 files |
 | `index` | 4 files | 2 files |
@@ -7344,7 +7362,7 @@ The codebase is organized into the following modules:
 | `model` | 2 files | 12 files |
 | `bridges-coarse` | 5 files | 2 files |
 | `bridges-exact` | 4 files | 3 files |
-| `bridges-limits` | 6 files | 8 files |
+| `bridges-limits` | 7 files | 8 files |
 
 ---
 
@@ -7363,7 +7381,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[leakage]
-        N5[...60 more]
+        N5[...61 more]
     end
 
     subgraph Bridges
@@ -7490,17 +7508,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 395 |
+| Total TypeScript Files | 396 |
 | Total Modules | 12 |
-| Total Lines of Code | 87240 |
-| Total Exports | 2838 |
+| Total Lines of Code | 87497 |
+| Total Exports | 2841 |
 | Total Re-exports | 1341 |
 | Total Classes | 59 |
-| Total Interfaces | 447 |
-| Total Functions | 733 |
+| Total Interfaces | 448 |
+| Total Functions | 735 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 535 |
+| Type-only Imports | 536 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

@@ -535,7 +535,7 @@
         }
       ],
       "upt:formalRef": {
-        "upt:statement": "ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff: for a smooth lift θ, θ̈ + ω²θ = 0 iff θ solves the equation of motion of toHarmonicOscillator (mass mℓ², spring constant mgℓ); with toHarmonicOscillator_ω, ω = √(g/ℓ)",
+        "upt:statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
         "upt:fidelity": "sanity-lemmas"
       }
     },
@@ -1189,7 +1189,11 @@
           "upt:kind": "numeric",
           "upt:test": "tests/atlas/closure.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-telegraph-wave",
@@ -1221,7 +1225,11 @@
           "upt:kind": "numeric",
           "upt:test": "tests/atlas/closure.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.TelegraphWave.covers_bound_delta",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-heat-laplace",
@@ -1671,7 +1679,11 @@
           "upt:kind": "numeric",
           "upt:test": "tests/atlas/waves.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.KleinGordonWave.covers_bound_delta",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-kg-schrodinger",
@@ -1708,7 +1720,11 @@
           "upt:kind": "numeric",
           "upt:test": "tests/atlas/closure.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.KgSchrodinger.covers_bound_delta",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-kg-oscillator",
@@ -1777,7 +1793,11 @@
           "upt:kind": "numeric",
           "upt:test": "tests/atlas/closure.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.StiffString.covers_bound_delta",
+        "upt:fidelity": "sanity-lemmas"
+      }
     }
   ]
 }
