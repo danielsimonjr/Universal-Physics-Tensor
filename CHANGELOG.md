@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Tier 8 design.** `docs/design/tier-8-probe-searchable-gaps.md` specifies what `upt probe scan` lists as searchable and what stays a Product A wrapper. No implementation in that change.
+- ~~**Tier 8 design review correction.** Case-derived entries are scan templates, not `FrontierGap` or detected prediction-residual records; searchable status remains conditional on a problem file's baseline and dataset.~~ Retracted: the catalog scan lists those entries as searchable `prediction-residual` gaps, one per applied case. The zero-searchable warning is only for a scan that has none. `upt probe run` still requires a problem file.
 - **Tier 11 design.** `docs/design/tier-11-hybrid-retrieval.md` specifies an optional out-of-process embedder, a stub for tests, and a fallback to atlas search. No implementation in that change.
 - **Three CLI dogfood reports (2026-09-29).** `docs/dogfood/2026-09-29-applied-physicist.md`, `docs/dogfood/2026-09-29-gr-qft.md` and `docs/dogfood/2026-09-29-engineering-physicist.md` record what the CLI printed on master `44e4450` for practical calculations, curvature, and cross-family `upt path`. The open suggestions stay in `todo.md`.
 - **Tier 10 design.** `docs/design/tier-10-cross-family-path.md` specifies cross-family `upt path` and bound composition across families. ~~No implementation.~~
