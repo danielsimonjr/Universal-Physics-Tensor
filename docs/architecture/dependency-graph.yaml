@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 394
   totalModules: 12
-  totalExports: 2835
+  totalExports: 2837
 entryPoints:
   - file: src/index.ts
     type: main
@@ -10008,11 +10008,15 @@ modules:
         - isFin
         - BE18_SYMBOLIC
         - BE20_SYMBOLIC
+        - BE30_SYMBOLIC
+        - BE36_SYMBOLIC
         - BE33_HERTZ_MILLIS_SYMBOLIC
       constants:
         - isFin
         - BE18_SYMBOLIC
         - BE20_SYMBOLIC
+        - BE30_SYMBOLIC
+        - BE36_SYMBOLIC
         - BE33_HERTZ_MILLIS_SYMBOLIC
     src/composition/edges/calibration.ts:
       description: Calibration edges — catalog-backed `BridgeEdge` wrappers for the
@@ -10250,6 +10254,7 @@ modules:
           imports:
             - isFin
             - BE18_SYMBOLIC
+            - BE36_SYMBOLIC
       exports:
         - be17Edge
         - be18Edge
@@ -10470,6 +10475,7 @@ modules:
           imports:
             - isFin
             - BE20_SYMBOLIC
+            - BE30_SYMBOLIC
       exports:
         - be20Edge
         - be30Edge
@@ -19178,14 +19184,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 394
   totalModules: 12
-  totalLinesOfCode: 86965
-  totalExports: 2835
+  totalLinesOfCode: 86984
+  totalExports: 2837
   totalClasses: 59
   totalInterfaces: 444
   totalFunctions: 732
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 702
+  totalConstants: 704
   totalReExports: 1341
   totalTypeOnlyImports: 533
   runtimeCircularDeps: 0

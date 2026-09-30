@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 394,
     "totalModules": 12,
-    "totalExports": 2835
+    "totalExports": 2837
   },
   "entryPoints": [
     {
@@ -14964,12 +14964,16 @@
           "isFin",
           "BE18_SYMBOLIC",
           "BE20_SYMBOLIC",
+          "BE30_SYMBOLIC",
+          "BE36_SYMBOLIC",
           "BE33_HERTZ_MILLIS_SYMBOLIC"
         ],
         "constants": [
           "isFin",
           "BE18_SYMBOLIC",
           "BE20_SYMBOLIC",
+          "BE30_SYMBOLIC",
+          "BE36_SYMBOLIC",
           "BE33_HERTZ_MILLIS_SYMBOLIC"
         ]
       },
@@ -15311,7 +15315,8 @@
             "file": "./_catalog-helpers.js",
             "imports": [
               "isFin",
-              "BE18_SYMBOLIC"
+              "BE18_SYMBOLIC",
+              "BE36_SYMBOLIC"
             ]
           }
         ],
@@ -15595,7 +15600,8 @@
             "file": "./_catalog-helpers.js",
             "imports": [
               "isFin",
-              "BE20_SYMBOLIC"
+              "BE20_SYMBOLIC",
+              "BE30_SYMBOLIC"
             ]
           }
         ],
@@ -27428,14 +27434,14 @@
   "statistics": {
     "totalTypeScriptFiles": 394,
     "totalModules": 12,
-    "totalLinesOfCode": 86965,
-    "totalExports": 2835,
+    "totalLinesOfCode": 86984,
+    "totalExports": 2837,
     "totalClasses": 59,
     "totalInterfaces": 444,
     "totalFunctions": 732,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 702,
+    "totalConstants": 704,
     "totalReExports": 1341,
     "totalTypeOnlyImports": 533,
     "runtimeCircularDeps": 0,
