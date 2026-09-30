@@ -147,6 +147,26 @@ export {
   recallAtK,
 } from './benchmark/baselines.js';
 export type { CorpusRecord, Ranking, RetrievalQuery } from './benchmark/baselines.js';
+export {
+  ATLAS_ONLY_NOTE,
+  EMBEDDING_INSTRUCTION,
+  FROZEN_VECTOR_DIMS,
+  FROZEN_VECTOR_SHA256,
+  OLLAMA_EMBEDDING_MODEL,
+  OLLAMA_TIMEOUT_MS,
+  PROPOSAL_NOTE,
+  EmbeddingUnavailable,
+  canonicalRetrievalCorpus,
+  cosine,
+  decodeFloat32,
+  ollamaEmbedder,
+  queryInput,
+  rankByCosine,
+  retrieveHybrid,
+  stubEmbedder,
+  stubVector,
+} from './benchmark/hybrid-retrieval.js';
+export type { Embedder, EmbeddingFallbackReason, HybridRetrieval, OllamaEmbedderOptions } from './benchmark/hybrid-retrieval.js';
 export { parseBackendResponse } from './benchmark/backend-shapes.js';
 export {
   cohensKappa,
