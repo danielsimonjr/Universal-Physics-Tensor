@@ -1146,9 +1146,15 @@ warning-silencing, not debug logging).
             consistency outcome kinds without a proper QCD running code — a
             documented Phase-4 boundary. Design:
             `docs/superpowers/specs/2026-07-04-pi-instrument-phase4-confrontations-design.md`.
-      - [ ] **Phase 5 — frontier + null-result as first-class output.** A
+      - [x] **Phase 5 — frontier + null-result as first-class output.** A
             publishable coincidence-rejection catalog + a legible frontier map
             (what physics hasn't connected + what would test it).
+            Design: `docs/design/phase-5-frontier-null-result.md` (approved).
+            `upt frontier` prints the two lists apart, with counts, and prints an empty
+            list as empty. JSON carries `nullResults` and `frontier` as two arrays.
+            A membership rejection is quoted from the negative catalog. A contested
+            id stays out of the null-result list. A frontier row with no registered
+            observation says so and carries no residual. Neither list changes a score.
 
 - [x] **BE-53 Yang–Mills β-function confrontation** (re-homed 2026-09-25 from the closed 2026-07-04
       NEXT umbrella). Design: `docs/design/be-53-yang-mills-confrontation.md` (approved).

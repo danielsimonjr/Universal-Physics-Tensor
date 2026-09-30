@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 69
+- **Potentially unused exports**: 70
 
 ## Potentially Unused Files
 
@@ -133,6 +133,10 @@ These exports are not imported by any other file in the codebase:
 - `RECORD_SCHEMA` (constant)
 - `sha256` (constant)
 - `argvFingerprint` (constant)
+
+### `src/composition/frontier-account.ts`
+
+- `CONTESTED_BRIDGE_IDS` (constant)
 
 ### `src/composition/probe/study.ts`
 
