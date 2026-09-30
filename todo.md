@@ -885,7 +885,7 @@ warning-silencing, not debug logging).
       - [x] **Sprint 4 exit criterion "≥ 5 bridges with a reviewed `formalRef`" is met at 6.** The five
         rank-1 bridges and the retargeted pendulum reference. Physlib held no further counterpart
         (S4.6 table in the Phase 4 design note). The proofs are the PhysJS theorems in
-        `formal/physjs/manifest.json` at commit `0e0594f`.
+        `formal/physjs/manifest.json` at commit `0e0594f6ec277b4e0f150c5287c17ab7507e8cc3`.
         - deferred - owner 2026-09-24 15:02 (pre-registration Amendment 10; the PhysJS proofs with it).
           The deferral still means the criterion does not block DONE. The count is no longer 1 of 5.
       **Standing trap for anyone picking this up:** the plan says the canonical-equation count

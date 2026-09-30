@@ -24,7 +24,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
 const bridges = ATLAS_FAMILIES.flatMap((family) => family.bridges);
 
-/** The manifest at PhysJS `main` `0e0594f`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `0e0594f6ec277b4e0f150c5287c17ab7507e8cc3`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -37,8 +37,9 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit 0e0594f, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('0e0594f');
+  it('records commit 0e0594f6ec277b4e0f150c5287c17ab7507e8cc3, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('0e0594f6ec277b4e0f150c5287c17ab7507e8cc3');
+    expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
     expect(manifest.entries).toHaveLength(EXPECTED.length);

@@ -42,7 +42,7 @@ describe('ab-pendulum-linear ↔ PhysJS.Pendulum.linearizedEquationOfMotion_iff'
     expect(ref!.system).toBe('lean4-physjs');
     expect(ref!.statement).toBe('PhysJS.Pendulum.linearizedEquationOfMotion_iff');
     expect(ref!.fidelity).toBe('sanity-lemmas');
-    expect(ref!.version).toContain('physjs@0e0594f');
+    expect(ref!.version).toContain('physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3');
     expect(ref!.covers).toContain('the transformation, not bound.delta');
     expect(ref!.covers).toContain('covers its statement only');
   });

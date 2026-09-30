@@ -802,7 +802,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
-            "version": "physjs@0e0594f leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -1924,7 +1924,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
-            "version": "physjs@0e0594f leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2017,7 +2017,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.TelegraphWave.covers_bound_delta",
-            "version": "physjs@0e0594f leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2705,7 +2705,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KleinGordonWave.covers_bound_delta",
-            "version": "physjs@0e0594f leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2812,7 +2812,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.KgSchrodinger.covers_bound_delta",
-            "version": "physjs@0e0594f leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",
@@ -2959,7 +2959,7 @@
           "formalRef": {
             "system": "lean4-physjs",
             "statement": "PhysJS.StiffString.covers_bound_delta",
-            "version": "physjs@0e0594f leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+            "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
             "axioms": [
               "propext",
               "Classical.choice",

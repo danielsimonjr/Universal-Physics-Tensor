@@ -8,7 +8,7 @@
  * coverage phrase.
  *
  * The commit is PhysJS `main` after pull requests 1 and 2 were squash-merged:
- * the Dependabot checkout bump `0e0594f`, whose parent is the proofs squash
+ * the Dependabot checkout bump `0e0594f6ec277b4e0f150c5287c17ab7507e8cc3`, whose parent is the proofs squash
  * `ed86b4a38536c502e4e7796dadeb8063f94d1ec1`. The theorem names are unchanged.
  *
  * @module atlas/physjs-ref
@@ -17,7 +17,7 @@
 import type { FormalRef } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '0e0594f';
+export const PHYSJS_COMMIT = '0e0594f6ec277b4e0f150c5287c17ab7507e8cc3';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
