@@ -35,6 +35,7 @@ import { evaluateRyuTakayanagi } from '../../bridges/equations/be-14-ryu-takayan
 import { evaluateQuantumBounce } from '../../bridges/equations/be-19-quantum-bounce.js';
 import {
   evaluateKSSBound,
+  BE21_KSS_RHS,
   VISCOSITY_OVER_ENTROPY_DENSITY,
 } from '../../bridges/equations/be-21-kss-bound.js';
 import { evaluateGRWLocalization } from '../../bridges/equations/be-48-grw-localization.js';
@@ -176,6 +177,7 @@ export const be21Edge: BridgeEdge = {
     predicate: () => true,
   },
   evaluate: () => evaluateKSSBound(),
+  symbolic: BE21_KSS_RHS,
   citation: 'Kovtun, Son & Starinets 2005 PRL 94:111601',
   // -- Atlas Phase 1 overlay: mirrors BRIDGE_EQUATIONS' row, which carries the
   // full '// source:' citation. tests/atlas/audited-catalog.test.ts deep-equals

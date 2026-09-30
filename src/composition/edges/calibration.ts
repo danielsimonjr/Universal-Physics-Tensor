@@ -119,6 +119,63 @@ const BE42_SYMBOLIC: ExprNode = {
   ],
 };
 
+/** Γ_dec = γ_relax (Δx / λ_T)². The λ_T leaf is the CT-3 junction. */
+const BE11_ZUREK_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '*',
+  args: [
+    sym('relaxation-rate', FREQUENCY),
+    {
+      kind: 'op',
+      op: '^',
+      args: [
+        {
+          kind: 'op',
+          op: '/',
+          args: [
+            sym('superposition-extent', LENGTH),
+            sym('thermal-de-broglie-wavelength', LENGTH),
+          ],
+        },
+        sym('2', DIMENSIONLESS),
+      ],
+    },
+  ],
+};
+
+/** Δφ = 6π G mass / (a (1 − e²) c²). */
+const BE52_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '/',
+  args: [
+    {
+      kind: 'op',
+      op: '*',
+      args: [sym('6pi', DIMENSIONLESS), sym('G', GRAV_DIM), sym('mass', MASS)],
+    },
+    {
+      kind: 'op',
+      op: '*',
+      args: [
+        { kind: 'op', op: '^', args: [sym('c', VELOCITY), sym('2', DIMENSIONLESS)] },
+        sym('semi-major-axis', LENGTH),
+        {
+          kind: 'op',
+          op: '-',
+          args: [
+            sym('1', DIMENSIONLESS),
+            {
+              kind: 'op',
+              op: '^',
+              args: [sym('eccentricity', DIMENSIONLESS), sym('2', DIMENSIONLESS)],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 /** E_min = k_B · temperature · ln2. */
 const BE16_SYMBOLIC: ExprNode = {
   kind: 'op',
@@ -399,6 +456,7 @@ export const be52Edge: BridgeEdge = {
       e: i['eccentricity'],
       T_yr: 1,
     }).dphi_rad_per_orbit,
+  symbolic: BE52_SYMBOLIC,
   citation: 'Einstein 1915 Preuss. Akad. Wiss. 831',
   // -- Atlas Phase 1 overlay: mirrors BRIDGE_EQUATIONS' row, which carries the
   // full '// source:' citation. tests/atlas/audited-catalog.test.ts deep-equals
@@ -478,6 +536,7 @@ export const be11ZurekEdge: BridgeEdge = {
       lambda: i['superposition-extent'],
       lambda0: i['thermal-de-broglie-wavelength'],
     }),
+  symbolic: BE11_ZUREK_SYMBOLIC,
   citation:
     'Caldeira & Leggett 1983 Physica A 121:587; Zurek 1991 Phys. Today 44(10):36',
   // -- Atlas Phase 1 overlay: mirrors BRIDGE_EQUATIONS' BE-11 row, which carries

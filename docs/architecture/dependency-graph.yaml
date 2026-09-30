@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 395
+  totalFiles: 396
   totalModules: 12
-  totalExports: 2851
+  totalExports: 2852
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8085,6 +8085,9 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../../composition/composition-recovery.js
+          imports:
+            - scanCompositionRecovery
       exports:
         - command
       constants:
@@ -9835,6 +9838,36 @@ modules:
       constants:
         - QUANTITY_IDENTIFICATIONS
         - SOURCE_ALIAS_DISPOSITIONS
+    src/composition/composition-recovery.ts:
+      description: Composition-derived recovery.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
+        - file: ../canonical/normal-form.js
+          imports:
+            - normalForm
+        - file: ./catalog-graph.js
+          imports:
+            - CATALOG_GRAPH
+        - file: ./compose-symbolic.js
+          imports:
+            - composeSymbolic
+            - SymbolicCompositionError
+        - file: ./edge.js
+          imports:
+            - BridgeEdge
+          typeOnly: true
+      exports:
+        - scanCompositionRecovery
+      interfaces:
+        - CompositionRecoveryPair
+        - CompositionRecoveryHit
+        - CompositionRecoveryScan
+      functions:
+        - scanCompositionRecovery
     src/composition/consequence.ts:
       description: Consequence propagation — the machine pre-classifier for the human
       externalDependencies: []
@@ -10533,6 +10566,17 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+            - FREQUENCY
+        - file: ../../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/ast-builders.js
+          imports:
+            - sym
         - file: ../../bridges/equations/be-26-dna-tunneling.js
           imports:
             - evaluateDNATunneling
@@ -10631,6 +10675,7 @@ modules:
         - file: ../../bridges/equations/be-21-kss-bound.js
           imports:
             - evaluateKSSBound
+            - BE21_KSS_RHS
             - VISCOSITY_OVER_ENTROPY_DENSITY
         - file: ../../bridges/equations/be-48-grw-localization.js
           imports:
@@ -19099,6 +19144,7 @@ dependencyGraph:
         - src/composition/compose-surface.ts
         - src/composition/compose-symbolic.ts
         - src/composition/compose.ts
+        - src/composition/composition-recovery.ts
         - src/composition/consequence.ts
         - src/composition/consistency.ts
         - src/composition/dimension-adjacency.ts
@@ -19264,18 +19310,18 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 395
+  totalTypeScriptFiles: 396
   totalModules: 12
-  totalLinesOfCode: 87249
-  totalExports: 2851
+  totalLinesOfCode: 87505
+  totalExports: 2852
   totalClasses: 59
-  totalInterfaces: 451
-  totalFunctions: 734
+  totalInterfaces: 454
+  totalFunctions: 735
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 704
   totalReExports: 1353
-  totalTypeOnlyImports: 534
+  totalTypeOnlyImports: 536
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
