@@ -12,6 +12,7 @@ nothing validates prose and the next reader cannot tell.
 ## As of 2026-09-30
 
 - **Reviewed formalRef.** Six bridges carry a reviewed PhysJS `formalRef`: the five rank-1 dispersion bounds and `ab-pendulum-linear`, retargeted at `PhysJS.Pendulum.linearizedEquationOfMotion_iff`. That meets the ≥5 gate. The 2026-09-24 deferral still means the criterion does not block DONE. The manifest pin is PhysJS `acda892`.
+- **Tier 11 hybrid retrieval.** `upt retrieve` is the atlas search (`rankByStructure` on the live canonical registry). The default does not call out of process. `--embed` asks local Ollama for `qwen3-embedding:4b`. A cosine order is a proposal, not an acceptance. Fallback names one of four reasons and exits 0. The frozen vector file is ranked in tests and is not re-embedded. The study's recall is not recomputed. A live GPU run is outside this gate. The 0.50.0 release is still open.
 - **Composition-derived recovery.** `scanCompositionRecovery` on `CATALOG_GRAPH` examines 8 pairs and 0 structural matches. The pairs are `be-12`→`be-11-zurek`, `be-42`→`be-12`, `be-42`→`be-16`, `be-42`→`be-33`, `be-42-via-rs`→`be-12`, `be-42-via-rs`→`be-16`, `be-42-via-rs`→`be-33`, and `law-schwarzschild-radius`→`be-42-via-rs`. A chain is `recovers` or it is not a hit. It is not `restates-canonical`.
 
 ## As of 2026-09-29
@@ -371,7 +372,7 @@ Those are different claims and merging them produces a false green.
 - **Axes:** `RegimeAttributes` carries six axes (scale, force, information, symmetry, topology,
   statistics). `GATE_AXES` is scale and force; topology, symmetry and statistics are typed and
   wired but ungated, for thin coverage.
-- **CLI:** the `upt` CLI (25 data-bearing commands + `help`/`version`).
+- **CLI:** the `upt` CLI (26 data-bearing commands + `help`/`version`).
 - **Atlas families:** oscillators 9 models, 5 bridges, 1 rejection; diffusion 8 models, 8 bridges;
   waves 7 models, 7 bridges.
 - **Atlas import sites** (measured 2026-09-22): value imports at `bridges/index.ts:40`

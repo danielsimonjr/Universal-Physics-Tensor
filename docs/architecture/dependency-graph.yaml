@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 396
+  totalFiles: 398
   totalModules: 12
-  totalExports: 2841
+  totalExports: 2880
 entryPoints:
   - file: src/index.ts
     type: main
@@ -99,6 +99,60 @@ modules:
         - rankBySymbolOverlap
         - rankByStructure
         - recallAtK
+    src/atlas/benchmark/hybrid-retrieval.ts:
+      description: Optional embedding retrieval. An embedder proposes an order. `rankByStructure`
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
+        - file: ./baselines.js
+          imports:
+            - rankByStructure
+            - CorpusRecord
+            - RetrievalQuery
+      exports:
+        - EMBEDDING_INSTRUCTION
+        - OLLAMA_EMBEDDING_MODEL
+        - FROZEN_VECTOR_DIMS
+        - FROZEN_VECTOR_SHA256
+        - OLLAMA_TIMEOUT_MS
+        - ATLAS_ONLY_NOTE
+        - PROPOSAL_NOTE
+        - stubEmbedder
+        - queryInput
+        - stubVector
+        - cosine
+        - rankByCosine
+        - decodeFloat32
+        - canonicalRetrievalCorpus
+        - ollamaEmbedder
+        - retrieveHybrid
+        - EmbeddingUnavailable
+      classes:
+        - EmbeddingUnavailable
+      interfaces:
+        - OllamaEmbedderOptions
+        - HybridRetrieval
+      functions:
+        - queryInput
+        - stubVector
+        - cosine
+        - rankByCosine
+        - decodeFloat32
+        - canonicalRetrievalCorpus
+        - ollamaEmbedder
+        - retrieveHybrid
+      constants:
+        - EMBEDDING_INSTRUCTION
+        - OLLAMA_EMBEDDING_MODEL
+        - FROZEN_VECTOR_DIMS
+        - FROZEN_VECTOR_SHA256
+        - OLLAMA_TIMEOUT_MS
+        - ATLAS_ONLY_NOTE
+        - PROPOSAL_NOTE
+        - stubEmbedder
     src/atlas/benchmark/leakage.ts:
       description: Atlas Phase 5, S5.1 — leakage checks for the invalid-bridge benchmark.
       externalDependencies: []
@@ -988,6 +1042,33 @@ modules:
             - Ranking
             - RetrievalQuery
           reExport: true
+        - file: ./benchmark/hybrid-retrieval.js
+          imports:
+            - ATLAS_ONLY_NOTE
+            - EMBEDDING_INSTRUCTION
+            - FROZEN_VECTOR_DIMS
+            - FROZEN_VECTOR_SHA256
+            - OLLAMA_EMBEDDING_MODEL
+            - OLLAMA_TIMEOUT_MS
+            - PROPOSAL_NOTE
+            - EmbeddingUnavailable
+            - canonicalRetrievalCorpus
+            - cosine
+            - decodeFloat32
+            - ollamaEmbedder
+            - queryInput
+            - rankByCosine
+            - retrieveHybrid
+            - stubEmbedder
+            - stubVector
+          reExport: true
+        - file: ./benchmark/hybrid-retrieval.js
+          imports:
+            - Embedder
+            - EmbeddingFallbackReason
+            - HybridRetrieval
+            - OllamaEmbedderOptions
+          reExport: true
         - file: ./benchmark/backend-shapes.js
           imports:
             - parseBackendResponse
@@ -1169,6 +1250,23 @@ modules:
         - rankByStructure
         - rankByTextOverlap
         - recallAtK
+        - ATLAS_ONLY_NOTE
+        - EMBEDDING_INSTRUCTION
+        - FROZEN_VECTOR_DIMS
+        - FROZEN_VECTOR_SHA256
+        - OLLAMA_EMBEDDING_MODEL
+        - OLLAMA_TIMEOUT_MS
+        - PROPOSAL_NOTE
+        - EmbeddingUnavailable
+        - canonicalRetrievalCorpus
+        - cosine
+        - decodeFloat32
+        - ollamaEmbedder
+        - queryInput
+        - rankByCosine
+        - retrieveHybrid
+        - stubEmbedder
+        - stubVector
         - parseBackendResponse
         - cohensKappa
         - mcnemar
@@ -1244,6 +1342,10 @@ modules:
         - CorpusRecord
         - Ranking
         - RetrievalQuery
+        - Embedder
+        - EmbeddingFallbackReason
+        - HybridRetrieval
+        - OllamaEmbedderOptions
         - Interval
         - McNemarResult
         - PairedTable
@@ -1404,6 +1506,27 @@ modules:
         - CorpusRecord
         - Ranking
         - RetrievalQuery
+        - ATLAS_ONLY_NOTE
+        - EMBEDDING_INSTRUCTION
+        - FROZEN_VECTOR_DIMS
+        - FROZEN_VECTOR_SHA256
+        - OLLAMA_EMBEDDING_MODEL
+        - OLLAMA_TIMEOUT_MS
+        - PROPOSAL_NOTE
+        - EmbeddingUnavailable
+        - canonicalRetrievalCorpus
+        - cosine
+        - decodeFloat32
+        - ollamaEmbedder
+        - queryInput
+        - rankByCosine
+        - retrieveHybrid
+        - stubEmbedder
+        - stubVector
+        - Embedder
+        - EmbeddingFallbackReason
+        - HybridRetrieval
+        - OllamaEmbedderOptions
         - parseBackendResponse
         - cohensKappa
         - mcnemar
@@ -7807,6 +7930,9 @@ modules:
         - file: ./search.js
           imports:
             - "*"
+        - file: ./retrieve.js
+          imports:
+            - "*"
         - file: ./metric.js
           imports:
             - "*"
@@ -8127,6 +8253,35 @@ modules:
         - parseAt
         - resolveAtPoint
         - showInequality
+      constants:
+        - command
+    src/cli/commands/retrieve.ts:
+      description: "`upt retrieve <claim>` — optional embedding proposals, atlas acceptance."
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../args.js
+          imports:
+            - FlagSpec
+          typeOnly: true
+        - file: ../command.js
+          imports:
+            - registerCommand
+            - Command
+            - CommandCtx
+        - file: ../errors.js
+          imports:
+            - UsageError
+        - file: ../output.js
+          imports:
+            - emitJson
+        - file: ../../atlas/benchmark/hybrid-retrieval.js
+          imports:
+            - canonicalRetrievalCorpus
+            - ollamaEmbedder
+            - retrieveHybrid
+      exports:
+        - command
       constants:
         - command
     src/cli/commands/search.ts:
@@ -18846,6 +19001,7 @@ dependencyGraph:
         - src/atlas/association.ts
         - src/atlas/benchmark/backend-shapes.ts
         - src/atlas/benchmark/baselines.ts
+        - src/atlas/benchmark/hybrid-retrieval.ts
         - src/atlas/benchmark/leakage.ts
         - src/atlas/benchmark/loader.ts
         - src/atlas/benchmark/run-atlas.ts
@@ -19061,6 +19217,7 @@ dependencyGraph:
         - src/cli/commands/probe.ts
         - src/cli/commands/recover.ts
         - src/cli/commands/regime.ts
+        - src/cli/commands/retrieve.ts
         - src/cli/commands/search.ts
         - src/cli/commands/symbolic.ts
         - src/cli/commands/testplan.ts
@@ -19261,18 +19418,18 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 396
+  totalTypeScriptFiles: 398
   totalModules: 12
-  totalLinesOfCode: 87497
-  totalExports: 2841
-  totalClasses: 59
-  totalInterfaces: 448
-  totalFunctions: 735
+  totalLinesOfCode: 87897
+  totalExports: 2880
+  totalClasses: 60
+  totalInterfaces: 450
+  totalFunctions: 743
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 705
-  totalReExports: 1341
-  totalTypeOnlyImports: 536
+  totalConstants: 714
+  totalReExports: 1362
+  totalTypeOnlyImports: 537
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

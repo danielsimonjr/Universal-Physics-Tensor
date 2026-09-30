@@ -523,7 +523,7 @@ agent's time is not a reviewer's time. The owner amended this criterion; it is n
 
 ## 8. Later work
 
-**Hybrid retrieval** (owner, 2026-09-24; pre-registration Amendment 12). An embedding model finds the candidate canonical relations for a claim, and the atlas verifies them. Each part is used where the study measured it strong. The study's scores are in §7 and `NOTES.md`. ~~No design exists yet.~~ Design: [`docs/design/tier-11-hybrid-retrieval.md`](docs/design/tier-11-hybrid-retrieval.md).
+**Hybrid retrieval** (owner, 2026-09-24; pre-registration Amendment 12). An embedding model finds the candidate canonical relations for a claim, and the atlas verifies them. Each part is used where the study measured it strong. qwen3-embedding:4b retrieved the correct relation for 49/50 claims, and the atlas's typed search for 12/50 (criterion 3, Amendment 11). The atlas made 1 wrong accept, and the local LLMs made 9 to 13 (criterion 4, Amendment 4). The study's scores are in §7 and `NOTES.md`. ~~No design exists yet.~~ Design: [`docs/design/tier-11-hybrid-retrieval.md`](docs/design/tier-11-hybrid-retrieval.md). What landed is in `CHANGELOG.md`.
 
 **Probe-searchable frontier gaps** (persona finding C1). Design: `docs/design/tier-8-probe-searchable-gaps.md`. What landed is in `CHANGELOG.md`.
 
