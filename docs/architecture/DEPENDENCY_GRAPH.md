@@ -43,7 +43,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 46 files
 - **root**: 1 file
-- **composition**: 78 files
+- **composition**: 79 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 32 files
@@ -3681,6 +3681,7 @@ The codebase is organized into the following modules:
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../../composition/composition-recovery.js` | `scanCompositionRecovery` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -4314,6 +4315,23 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/composition-recovery.ts` - Composition-derived recovery.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `../canonical/normal-form.js` | `normalForm` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
+| `./compose-symbolic.js` | `composeSymbolic, SymbolicCompositionError` | Import |
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `CompositionRecoveryPair`, `CompositionRecoveryHit`, `CompositionRecoveryScan`
+- Functions: `scanCompositionRecovery`
+
+---
+
 ### `src/composition/consequence.ts` - Consequence propagation — the machine pre-classifier for the human
 
 **Internal Dependencies:**
@@ -4545,6 +4563,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/types.js` | `DIMENSIONLESS, FREQUENCY` | Import |
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
 | `../../bridges/equations/be-26-dna-tunneling.js` | `evaluateDNATunneling` | Import |
 | `../../bridges/equations/be-11-decoherence-master.js` | `evaluateDecoherenceRate` | Import |
 | `../../bridges/equations/be-13-einstein-trace.js` | `evaluateEinsteinTrace` | Import |
@@ -4570,7 +4591,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../../bridges/equations/be-14-ryu-takayanagi.js` | `evaluateRyuTakayanagi` | Import |
 | `../../bridges/equations/be-19-quantum-bounce.js` | `evaluateQuantumBounce` | Import |
-| `../../bridges/equations/be-21-kss-bound.js` | `evaluateKSSBound, VISCOSITY_OVER_ENTROPY_DENSITY` | Import |
+| `../../bridges/equations/be-21-kss-bound.js` | `evaluateKSSBound, BE21_KSS_RHS, VISCOSITY_OVER_ENTROPY_DENSITY` | Import |
 | `../../bridges/equations/be-48-grw-localization.js` | `evaluateGRWLocalization` | Import |
 | `../../bridges/equations/be-53-yang-mills-beta.js` | `evaluateYangMillsBeta` | Import |
 | `../../bridges/equations/be-54-randall-sundrum-brane.js` | `evaluateRandallSundrumH2` | Import |
@@ -7430,7 +7451,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...73 more]
+        N36[...74 more]
     end
 
     subgraph Core
@@ -7508,17 +7529,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 396 |
+| Total TypeScript Files | 397 |
 | Total Modules | 12 |
-| Total Lines of Code | 87384 |
-| Total Exports | 2876 |
+| Total Lines of Code | 87640 |
+| Total Exports | 2877 |
 | Total Re-exports | 1362 |
 | Total Classes | 60 |
-| Total Interfaces | 446 |
-| Total Functions | 740 |
+| Total Interfaces | 449 |
+| Total Functions | 741 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 534 |
+| Type-only Imports | 536 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

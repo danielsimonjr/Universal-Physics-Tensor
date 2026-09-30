@@ -12,6 +12,7 @@ nothing validates prose and the next reader cannot tell.
 ## As of 2026-09-30
 
 - **Tier 11 hybrid retrieval.** `upt retrieve` is the atlas search (`rankByStructure` on the live canonical registry). The default does not call out of process. `--embed` asks local Ollama for `qwen3-embedding:4b`. A cosine order is a proposal, not an acceptance. Fallback names one of four reasons and exits 0. The frozen vector file is ranked in tests and is not re-embedded. The study's recall is not recomputed. A live GPU run is outside this gate. The 0.50.0 release is still open.
+- **Composition-derived recovery.** `scanCompositionRecovery` on `CATALOG_GRAPH` examines 8 pairs and 0 structural matches. The pairs are `be-12`→`be-11-zurek`, `be-42`→`be-12`, `be-42`→`be-16`, `be-42`→`be-33`, `be-42-via-rs`→`be-12`, `be-42-via-rs`→`be-16`, `be-42-via-rs`→`be-33`, and `law-schwarzschild-radius`→`be-42-via-rs`. A chain is `recovers` or it is not a hit. It is not `restates-canonical`.
 
 ## As of 2026-09-29
 
@@ -30,12 +31,15 @@ nothing validates prose and the next reader cannot tell.
   There is no sigma. `--at` is one flat namespace. `ab-stokes-einstein` is still a named join.
   The composition table is unchanged. `src/` scope after `docs:deps`: 392 files, 2824 exports,
   1341 re-exports.
-- **`upt probe scan` gaps, measured 2026-09-29, rechecked on master `40bf16f`.** Library
+- **`upt probe scan` gaps, measured 2026-09-29, rechecked on master `40bf16f`, contract held 2026-09-30.** Library
   `scanWithExpressionGaps(CATALOG_GRAPH)` and `upt probe scan --json` agree: 6 searchable
   prediction-residual gaps, one per applied case. `--all` lists 232 Product A wrappers
   (216 relation-link, 16 regime-transition), none of those searchable. Combined list 238.
-  The split is pinned in `tests/composition/probe/expression-gaps.test.ts`. The 0.48.0 release
-  is still open.
+  The split is pinned in `tests/composition/probe/expression-gaps.test.ts`, and the emitted
+  `fg-expr-*` ids match `APPLIED_CASES` exactly. `searchable: true` on those gaps is the
+  Tier 8 listing flag. Each record has empty observations and no named baseline or dataset.
+  A detected prediction residual, under Scientific-Bridge-Discovery-v1, needs both, so the
+  listing is not that detection. The 0.48.0 release is still open.
 - **Tree-sitter.** `src/cli/commands/path.ts` and `src/numerical/mathts-tensor.ambient.d.ts` parsed
   with ERROR nodes under tree-sitter-typescript 0.23.2 and compiled under tsc. Both rewritten.
   The scan in `tests/internal/src-parses.test.ts` is green, and the two old constructs still error.

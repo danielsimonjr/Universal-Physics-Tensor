@@ -317,7 +317,7 @@ delivered pilot, and the stiff-string limit replaced it.
 | Criterion | How it is checked |
 |---|---|
 | ≥ 20 bridges across ≥ 5 relation types, each with a witness | pinned in `tests/atlas/families.test.ts` |
-| ≥ 5 with a reviewed `formalRef` | a real counterpart must exist in a formal library (the S4.6 table). Proofs authored OUT OF TREE would need a new repository, which is outward-facing and not an agent's decision |
+| ≥ 5 with a reviewed `formalRef` | a real counterpart must exist (the S4.6 table). The out-of-tree repository is PhysJS. The schedule and the PhysLean require are [`docs/design/roadmap-lean-proven-bridges.md`](../design/roadmap-lean-proven-bridges.md) and `MEMORY.md`. The honesty rule is unchanged: no `formalRef` without a real statement |
 | zero `formally-proved` without a `formalRef` | by construction: the tag is derived only, and a file allow-list lint forbids setting it |
 | curation cost per bridge by type, compared with Phase 0 | measured below |
 

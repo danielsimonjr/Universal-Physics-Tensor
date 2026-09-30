@@ -137,7 +137,8 @@ export function findFrontierGap(
 
 /**
  * Build a Product B search problem for an unexplained-observation /
- * prediction-residual gap. Relation-link gaps must not be passed here.
+ * prediction-residual gap. Relation-link and regime-transition gaps are
+ * refused; the error names `upt discover`.
  *
  * @internal
  */
@@ -150,7 +151,7 @@ export function problemFromResidualGap(
 ): SearchProblem {
   if (gap.kind === 'relation-link' || gap.kind === 'regime-transition') {
     throw new RangeError(
-      `problemFromResidualGap: ${gap.kind} is not a Product B search target`,
+      `problemFromResidualGap: ${gap.kind} is not a Product B search target; use upt discover`,
     );
   }
   const nObs = exploratory?.rows.length ?? 0;
