@@ -274,4 +274,37 @@ describe('upt confront <be-NN> — the id explain prints', () => {
     expect(code).toBe(2);
     expect(cap.lines.join('')).toMatch(/unexpected/);
   });
+
+  it('be-53 with no table and no procedure refuses and names both', async () => {
+    const cap = capture();
+    const code = await runCli(['confront', 'be-53'], cap.io);
+    expect(code).toBe(1);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/refused/);
+    expect(text).toMatch(/table/);
+    expect(text).toMatch(/running procedure/);
+    expect(text).not.toMatch(/residual/i);
+    expect(text).toMatch(/not a pass and not a fail/);
+    expect(text).toMatch(/catalog status of be-53 is unchanged/);
+  });
+
+  it('be-53 --json is the same refusal and has no residual field', async () => {
+    const cap = capture();
+    const code = await runCli(['confront', '--bridge=be-53', '--json'], cap.io);
+    expect(code).toBe(1);
+    const parsed = JSON.parse(cap.lines.join(''));
+    expect(parsed.command).toBe('confront');
+    expect(parsed.result.status).toBe('refused');
+    expect(parsed.result.missing).toEqual(['table', 'running procedure']);
+    expect(parsed.result.pass).toBe(false);
+    expect(parsed.result.fail).toBe(false);
+    expect(JSON.stringify(parsed)).not.toMatch(/residual/i);
+  });
+
+  it('the full confrontation list still does not include be-53', async () => {
+    const cap = capture();
+    const code = await runCli(['confront'], cap.io);
+    expect(code).toBe(0);
+    expect(cap.lines.join('')).not.toMatch(/be-53/);
+  });
 });
