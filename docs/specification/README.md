@@ -10,7 +10,7 @@ part carries status notes marking superseded or speculative content.
 | Part | File | Scope | Status |
 |---|---|---|---|
 | I | [Part-I.md](Part-I.md) | Theoretical foundation: the rank-6 catalog `Π`, framing commitment, consistency invariants, Bridge Equations 11–20 | Core; wave-revised |
-| II | [Part-II.md](Part-II.md) | Bridge-equation catalog BE-21–54 (§V original 21–50; §V-B post-spec extensions BE-51–54) + tensor-integration mapping | Core; matches the 44-entry `BRIDGE_EQUATIONS` 1:1 |
+| II | [Part-II.md](Part-II.md) | Bridge-equation catalog BE-21–54 (§V original 21–50; §V-B post-spec extensions BE-51–54) + tensor-integration mapping | Core; writes up BE-21–54. The runtime catalog is 55 entries (ids 11–65); see Conventions |
 | III | [Part-III.md](Part-III.md) | Algorithms + information-theoretic definitions (none of the §-numbered pseudocode algorithms are implemented) | Core; spec-only |
 | IV | [Part-IV.md](Part-IV.md) | Validation framework: experimental-validation roadmap (near/medium/long-term) + dimensional-validation protocol | Core; experimental targets aspirational |
 | V | [Part-V.md](Part-V.md) | Advanced mathematics: category theory, tensor networks, consistency matrix, experimental design (former §§XXI–XXII applications/risk essays → [`docs/essays/`](../essays/README.md)) | Core; largest + most speculative — read its status note first |
@@ -25,11 +25,14 @@ part carries status notes marking superseded or speculative content.
 
 ## Conventions
 
-- **Catalog count**: 44 bridge equations, IDs 11–54 (8 established ·
-  33 speculative · 3 highly-speculative · 0 invalid). BE-1–10 are the
-  implicit "diagonal" laws (Schrödinger, Newton, Maxwell, Einstein,
-  Standard Model) and are not individually catalogued. Single source of
-  truth: `src/bridges/index.ts` (`BRIDGE_EQUATIONS`).
+- **Catalog count**: 55 bridge equations, IDs 11–65 with no gaps (19 established ·
+  33 speculative · 3 highly-speculative). Counted from each entry's `id` and
+  `status` in `src/bridges/index.ts` (`BRIDGE_EQUATIONS`). Parts I–II write up
+  BE-11–54. Entries 55–65 are in that array (`source_part: 'III'`) and have no
+  Bridge Equation heading in Parts I–II. BE-1–10 are the implicit "diagonal"
+  laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) and are not
+  individually catalogued. Ten reviewed atlas `formalRef`s use `lean4-physjs`
+  and name public PhysJS; that count is in `NOTES.md`, not in this catalog.
 - **Revision provenance**: the 2026-05 adversarial-review iterations
   ("Wave X Tier Y, per Reviewer Z") were relocated to
   [CHANGELOG.md](CHANGELOG.md) on 2026-06-10 so the spec reads as a clean

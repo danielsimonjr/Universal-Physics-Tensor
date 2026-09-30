@@ -8,8 +8,8 @@
  * Milgrom 1983 interpolation).
  *
  * Limits:
- *   - Newtonian (F_N >> m·a_0, z → ∞): F → F_N (ν → 1)
- *   - Deep-MOND (F_N << m·a_0, z → 0): F → √(m · F_N · a_0)
+ *   - Newtonian (F_N >> m·a_0, z → ∞): ν → 1, so F → F_N
+ *   - Deep-MOND (F_N << m·a_0, z → 0): ν ~ 1/√z, so F → √(m · F_N · a_0)
  *
  * Status pin: 'speculative' (Milgrom MOND interpolation canonical;
  * UPT bridge framing speculative).
@@ -168,6 +168,31 @@ describe('BE-38 Milgrom MOND interpolation — Tier 5 AST encoding', () => {
       const lhs = mu_x * a;
       // Should equal a_N
       expect(lhs).toBeCloseTo(a_N, 14);
+    });
+  });
+
+  describe('ν asymptotics — both limits', () => {
+    // z = F_N / (m · a_0). With m = 1 and a_0 = 1, F_N is z and ν is F / F_N.
+    function nu(z: number): number {
+      const F = evaluateMONDForce({ F_N_newton: z, m_kg: 1, a_0_m_per_s2: 1 });
+      return F / z;
+    }
+
+    it('Newtonian limit: z = 1e6 gives ν → 1', () => {
+      expect(nu(1e6)).toBeCloseTo(1, 10);
+    });
+
+    it('deep-MOND limit: z = 1e-6 gives ν ~ 1/√z (about 1000), not √(2/z)', () => {
+      const z = 1e-6;
+      const value = nu(z);
+      const asymptotic = 1 / Math.sqrt(z);
+      const rejected = Math.sqrt(2 / z);
+      expect(asymptotic).toBeCloseTo(1000, 6);
+      expect(rejected).toBeCloseTo(1414.213562, 3);
+      expect(value / asymptotic).toBeCloseTo(1, 5);
+      // √(2/z) is larger by √2. This fails if the evaluator is changed to that expansion.
+      expect(value / rejected).toBeCloseTo(1 / Math.sqrt(2), 4);
+      expect(Math.abs(value - rejected)).toBeGreaterThan(400);
     });
   });
 

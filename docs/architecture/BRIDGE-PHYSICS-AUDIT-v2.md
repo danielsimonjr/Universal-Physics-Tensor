@@ -11,7 +11,7 @@
 **Generated:** 2026-05-24
 **Catalog audited:** `universal-physics-tensor` v0.7-prep, the 44-bridge `BRIDGE_EQUATIONS` registry at HEAD `acae340` (branch `claude/changelog-todo-sync-9PdMg`)
 **Reviewer:** Adam (architectural + theory-correctness re-derivation)
-**Predecessor:** [`BRIDGE-PHYSICS-AUDIT.md`](BRIDGE-PHYSICS-AUDIT.md) (2026-05-20, 42 bridges, Gemini 2.5 Pro + OpenAI o3, 84 reviews)
+**Predecessor:** [`BRIDGE-PHYSICS-AUDIT.md`](archive/BRIDGE-PHYSICS-AUDIT.md) (2026-05-20, 42 bridges, Gemini 2.5 Pro + OpenAI o3, 84 reviews)
 
 ---
 
@@ -254,7 +254,7 @@ correctly. No physics error in the recalibration.
 
 ## 4. 17 unknown↔unknown renames — spot-check
 
-Per `docs/architecture/v0.7-physics-judgment-proposals.md` §3, 17 entries were renamed from
+Per `docs/architecture/archive/v0.7-physics-judgment-proposals.md` §3, 17 entries were renamed from
 `bridges: [unknown, unknown]` to explicit regime pairs. Verified at HEAD via the catalog
 file at the IDs noted.
 
@@ -299,7 +299,7 @@ solutions, but not exclusively). **This is a labeling preference, not an error.*
 
 ## 5. 9 NOT-A-BRIDGE classifications — two disagreements
 
-Per `docs/architecture/v0.7-physics-judgment-proposals.md` §3, 9 entries are kept with
+Per `docs/architecture/archive/v0.7-physics-judgment-proposals.md` §3, 9 entries are kept with
 `bridges: [unknown, unknown]` as a *structural marker* meaning "this is a single-regime law,
 not actually a regime-spanning bridge." The proposed long-term fix (per v0.7 doc) is to move
 them to a separate `LAW_EQUATIONS` registry in v0.8+.

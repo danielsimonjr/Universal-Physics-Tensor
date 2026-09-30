@@ -2,7 +2,9 @@
 
 This file is the machine-audited backlog for **current code work**. Historical implementation plans under `docs/planning/` are frozen design/review records; their unchecked boxes preserve the state of those documents at the time and are not a live completion ledger.
 
-As of v0.44.1 completion hardening, there are no known unimplemented code tasks that block the repository's stated purpose as a computational laboratory for organizing, composing, evaluating, and confronting physics relations.
+Ten reviewed `formalRef`s use `system: 'lean4-physjs'` and name public PhysJS (`https://github.com/danielsimonjr/PhysJS`; the GitHub API reports `private: false`). The pin and the ten keys are in `NOTES.md` and `formal/physjs/manifest.json`. Promotion is an entry in the sprint list below. Sprint 6 is the last promoted heading.
+
+At the v0.44.1 completion-hardening checkpoint, there were no known unimplemented code tasks that blocked the repository's stated purpose as a computational laboratory for organizing, composing, evaluating, and confronting physics relations. That sentence is the checkpoint.
 
 The next strategic evolution of the project is defined in [`Scientific-Bridge-Discovery-v1.md`](docs/planning/Scientific-Bridge-Discovery-v1.md) (re-audited against the v0.44.1 tree on 2026-08-19; see [`Scientific-Bridge-Discovery-v1-AUDIT.md`](docs/planning/Scientific-Bridge-Discovery-v1-AUDIT.md)): a phased plan that **freezes** the shipped identification funnel (`upt discover` / `VettedCandidate`) and, separately, adds an experimental expression/residual search pipeline (`src/composition/probe/`, CLI `upt probe`). That roadmap is intentionally separate from this machine-audited release-blocking backlog until individual phases are promoted into active engineering work. Do not treat Tranche A as authorized by this sentence.
 

@@ -1,0 +1,5 @@
+This file was committed empty (0 bytes).
+
+docs/architecture/v0.9.0-phase-1-vet.md says a tsconfig.tests.json run surfaced 71 preexisting error lines and that they were baselined here, so a later diff-gate could check for new errors. The baseline text was never stored. This file cannot support that gate, and the 71 figure has no artifact at this path.
+
+The path is kept because the vet note, the CHANGELOG, and docs/architecture/archive/README.md name it.

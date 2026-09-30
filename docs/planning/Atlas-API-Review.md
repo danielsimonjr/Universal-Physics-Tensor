@@ -1,8 +1,11 @@
 # Atlas API review (S6.7): what moves from `@internal` to `@public`
 
-Moving a symbol onto the public API is an ADR-level decision, and it belongs to Mothership (the
-repository is private and unreleased, with no external dependents, so it is not an owner-level
-call). `package.json` stays `0.x` whatever is decided.
+Moving a symbol onto the public API is an ADR-level decision, and it belongs to Mothership.
+This note originally said the repository was private and unreleased, with no external
+dependents, so the call was not owner-level. That premise is false: the repository is
+public and published on npm. Whether a public-API change stays a Mothership call is an
+open owner decision; this wording fix does not make it. `package.json` stays `0.x`
+whatever is decided.
 
 ## 0. The starting point
 
