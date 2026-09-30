@@ -911,7 +911,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
-        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1004,7 +1004,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.TelegraphWave.covers_bound_delta",
-        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",

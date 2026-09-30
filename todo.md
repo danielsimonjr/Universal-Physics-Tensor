@@ -1,5 +1,10 @@
 # UPT TODO
 
+## PhysJS milestone 2 formalRefs (2026-09-30)
+
+- [x] Link PhysJS milestone 2 proofs: pin the vendored manifest at `d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c` and add reviewed `lean4-physjs` formalRefs for the bridges whose theorems certify the transformation.
+  Done: four references (`ab-kg-oscillator`, `ab-spring-lc`, `ab-damped-rlc`, `ab-wave-dalembert`). The reviewed count is 10. Nested `planeWave` objects stay on the five rank-1 entries and are not the formalRef.
+
 ## Unit-convention review follow-up (2026-09-29)
 
 - [x] Merge current `master` and resolve conflicts; normalize discovery magnitudes, scale composed junction inputs, skip non-finite identification copies, and pass unit mode into named-binding expressions.

@@ -606,6 +606,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../physjs-ref.js` | `physjsFormalRef` | Import |
 | `../regime.js` | `deriveRegimeGroups` | Import |
 | `./models.js` | `getAtlasModel` | Import |
 | `../types.js` | `AtlasBridge, EvidenceTag, Regime, RelationContract` | Import (type-only) |
@@ -7463,7 +7464,7 @@ The codebase is organized into the following modules:
 | `link-prediction` | 2 files | 1 files |
 | `model` | 2 files | 12 files |
 | `bridges-coarse` | 5 files | 2 files |
-| `bridges-exact` | 4 files | 3 files |
+| `bridges-exact` | 5 files | 3 files |
 
 ---
 
@@ -7611,7 +7612,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 401 |
 | Total Modules | 12 |
-| Total Lines of Code | 88400 |
+| Total Lines of Code | 88510 |
 | Total Exports | 2903 |
 | Total Re-exports | 1376 |
 | Total Classes | 60 |

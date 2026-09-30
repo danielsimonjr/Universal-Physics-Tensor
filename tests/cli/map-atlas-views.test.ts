@@ -256,8 +256,9 @@ describe('upt map --family', () => {
     expect(dot.stdout).toContain(`label="family oscillators: 9 of ${MODELS.length} atlas models`);
     expect(dot.stdout).toContain('m_model_klein_gordon [shape=box,style=dashed');
     const mm = await run(['map', '--family=oscillators', '--format=mermaid', '--evidence=formally-proved']);
-    // Pendulum is filed here. Klein–Gordon → wave and telegraph → wave touch model-wave-1d.
-    expect(mm.stdout).toContain('filter: evidence=formally-proved — 3 of');
+    // Filed here: pendulum, spring–LC, damped RLC. Touching model-wave-1d: Klein–Gordon → wave,
+    // telegraph → wave, and d'Alembert. Touching model-spring: Klein–Gordon → spring.
+    expect(mm.stdout).toContain('filter: evidence=formally-proved — 7 of');
     expect(mm.stderr).toContain('upt: family oscillators:');
   });
 

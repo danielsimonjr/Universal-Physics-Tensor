@@ -166,6 +166,7 @@ export const BRIDGE_KG_OSCILLATOR: AtlasBridge = {
     'Whitham, Linear and Nonlinear Waves - §11.1, dispersive waves and the Klein-Gordon equation',
   ],
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-kg-oscillator'),
 };
 
 /** Bridge: stiff string → flexible string, as bending stiffness → 0. @internal */

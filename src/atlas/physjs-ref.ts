@@ -7,9 +7,10 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` after pull requests 1 and 2 were squash-merged:
- * the Dependabot checkout bump `0e0594f6ec277b4e0f150c5287c17ab7507e8cc3`, whose parent is the proofs squash
- * `ed86b4a38536c502e4e7796dadeb8063f94d1ec1`. The theorem names are unchanged.
+ * The commit is PhysJS `main` `d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c`.
+ * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
+ * entries. The five rank-1 entries also carry a nested `planeWave` object.
+ * That object is not a `formalRef`.
  *
  * @module atlas/physjs-ref
  */
@@ -17,7 +18,7 @@
 import type { FormalRef } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '0e0594f6ec277b4e0f150c5287c17ab7507e8cc3';
+export const PHYSJS_COMMIT = 'd1c1b18fb54d5fe3aa14f8307b5349b0d672d70c';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -37,17 +38,32 @@ const PHYSJS_COVERAGE = 'covers its statement only';
 /** Axioms `#print axioms` reported for every entry at the pinned commit. */
 const PHYSJS_AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 
+/**
+ * Rank 1a, nested on a rank-1 entry. A plane wave solves the PDE if and only
+ * if its frequency obeys the dispersion relation. It is not the entry's
+ * `formalRef`: that decision is the owner's.
+ */
+interface PhysjsPlaneWave {
+  readonly theorem: string;
+  readonly covers: string;
+  readonly coverage: string;
+  readonly leanProof: string;
+  readonly axioms: readonly string[];
+}
+
 /** One manifest entry, reduced to the fields a `formalRef` is built from. */
 interface PhysjsEntry {
   readonly key: string;
   readonly bridgeId: string;
   readonly theorem: string;
-  /** What the theorem certifies. The pendulum entry is not `bound.delta`. */
+  /** What the top-level theorem certifies. The pendulum entry is not `bound.delta`. */
   readonly covers: string;
   readonly coverage: string;
   readonly leanProof: string;
   readonly axioms: readonly string[];
   readonly imports?: string;
+  /** Present on the five rank-1 entries. Absent elsewhere. Not a `formalRef`. */
+  readonly planeWave?: PhysjsPlaneWave;
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -62,9 +78,23 @@ export interface PhysjsManifestFile {
 
 const RANK1_COVERS = 'bound.delta exactly, at the dispersion relation';
 
+const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispersion relation';
+
+/** The nested rank-1a object. The top-level theorem stays `covers_bound_delta`. */
+function planeWave(namespace: string): PhysjsPlaneWave {
+  return {
+    theorem: `PhysJS.${namespace}.planeWave_iff_dispersion`,
+    covers: PLANE_WAVE_COVERS,
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  };
+}
+
 /**
- * The six entries, in manifest order. A bridge obtains its reference by key
+ * The ten entries, in manifest order. A bridge obtains its reference by key
  * through {@link physjsFormalRef}; it does not name a theorem of its own.
+ * `planeWave` is recorded and is not that reference.
  */
 const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
   {
@@ -75,6 +105,7 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    planeWave: planeWave('KgSchrodinger'),
   },
   {
     key: 'ab-klein-gordon-wave',
@@ -84,6 +115,7 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    planeWave: planeWave('KleinGordonWave'),
   },
   {
     key: 'ab-stiff-string',
@@ -93,6 +125,7 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    planeWave: planeWave('StiffString'),
   },
   {
     key: 'ab-telegraph-diffusion',
@@ -102,6 +135,7 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    planeWave: planeWave('TelegraphDiffusion'),
   },
   {
     key: 'ab-telegraph-wave',
@@ -111,6 +145,7 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    planeWave: planeWave('TelegraphWave'),
   },
   {
     key: 'ab-pendulum-linear',
@@ -120,6 +155,42 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     imports: 'ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'ab-kg-oscillator',
+    bridgeId: 'ab-kg-oscillator',
+    theorem: 'PhysJS.KgOscillator.uniform_solves_equationOfMotion',
+    covers: "the restriction, in Physlib's own terms",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'ab-spring-lc',
+    bridgeId: 'ab-spring-lc',
+    theorem: 'PhysJS.SpringLc.time_rescale_equationOfMotion',
+    covers: 'the oscillator dictionary',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'ab-damped-rlc',
+    bridgeId: 'ab-damped-rlc',
+    theorem: 'PhysJS.DampedRlc.time_rescale_equationOfMotion',
+    covers: 'the oscillator dictionary',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'ab-wave-dalembert',
+    bridgeId: 'ab-wave-dalembert',
+    theorem: 'PhysJS.WaveDalembert.solution_eq_profiles',
+    covers: "the missing direction of d'Alembert's formula",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
 ];
@@ -154,6 +225,18 @@ function sameAxioms(recorded: readonly string[], manifest: readonly string[]): b
   return recorded.length === manifest.length && recorded.every((axiom, i) => axiom === manifest[i]);
 }
 
+function samePlaneWave(compiled: PhysjsPlaneWave | undefined, manifest: PhysjsPlaneWave | undefined): boolean {
+  if (compiled === undefined && manifest === undefined) return true;
+  if (compiled === undefined || manifest === undefined) return false;
+  return (
+    compiled.theorem === manifest.theorem &&
+    compiled.covers === manifest.covers &&
+    compiled.coverage === manifest.coverage &&
+    compiled.leanProof === manifest.leanProof &&
+    sameAxioms(compiled.axioms, manifest.axioms)
+  );
+}
+
 /**
  * Problems in the vendored manifest against the bridges that claim to be keyed
  * by it. Empty means every entry resolves to a `lean4-physjs` reference whose
@@ -161,7 +244,9 @@ function sameAxioms(recorded: readonly string[], manifest: readonly string[]): b
  *
  * A wrong commit, theorem, key or coverage phrase is a problem. A manifest
  * entry with no bridge is a problem. A `lean4-physjs` reference with no entry
- * is a problem: the gate does not skip that system.
+ * is a problem: the gate does not skip that system. A nested `planeWave`
+ * object is kept and compared; naming it as the `formalRef` is a problem.
+ * The top-level theorem stays the reference.
  *
  * @internal
  */
@@ -203,6 +288,16 @@ export function physjsManifestProblems(input: {
     if (entry.leanProof !== 'complete') {
       problems.push(`leanProof for '${entry.key}' is '${entry.leanProof}', expected 'complete'`);
     }
+    if (entry.planeWave !== undefined) {
+      if (entry.planeWave.coverage !== PHYSJS_COVERAGE) {
+        problems.push(
+          `planeWave coverage phrase for '${entry.key}' is '${entry.planeWave.coverage}', expected '${PHYSJS_COVERAGE}'`,
+        );
+      }
+      if (entry.planeWave.leanProof !== 'complete') {
+        problems.push(`planeWave leanProof for '${entry.key}' is '${entry.planeWave.leanProof}', expected 'complete'`);
+      }
+    }
     const bridge = byId.get(entry.key);
     if (bridge === undefined) {
       problems.push(`manifest key '${entry.key}' does not resolve to a bridge`);
@@ -214,6 +309,11 @@ export function physjsManifestProblems(input: {
         `bridge '${entry.key}' has no lean4-physjs formalRef (system '${ref?.system ?? 'none'}')`,
       );
       continue;
+    }
+    if (entry.planeWave !== undefined && ref.statement === entry.planeWave.theorem) {
+      problems.push(
+        `bridge '${entry.key}' formalRef names the nested planeWave theorem '${entry.planeWave.theorem}'; the top-level theorem stays the reference`,
+      );
     }
     if (ref.statement !== entry.theorem) {
       problems.push(`bridge '${entry.key}' theorem is '${ref.statement}', manifest theorem is '${entry.theorem}'`);
@@ -238,7 +338,12 @@ export function physjsManifestProblems(input: {
     const compiled = entryByKey.get(entry.key);
     if (compiled === undefined) {
       problems.push(`manifest key '${entry.key}' is not in the compiled entry table`);
-    } else if (compiled.theorem !== entry.theorem || compiled.covers !== entry.covers || compiled.coverage !== entry.coverage) {
+    } else if (
+      compiled.theorem !== entry.theorem ||
+      compiled.covers !== entry.covers ||
+      compiled.coverage !== entry.coverage ||
+      !samePlaneWave(compiled.planeWave, entry.planeWave)
+    ) {
       problems.push(`compiled entry for '${entry.key}' disagrees with the vendored manifest`);
     }
   }

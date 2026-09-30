@@ -452,7 +452,11 @@
           "upt:kind": "symbolic",
           "upt:test": "tests/atlas/witness-results.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-damped-rlc",
@@ -490,7 +494,11 @@
           "upt:kind": "symbolic",
           "upt:test": "tests/atlas/witness-results.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.DampedRlc.time_rescale_equationOfMotion",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-pendulum-linear",
@@ -1598,7 +1606,11 @@
           "upt:kind": "numeric",
           "upt:test": "tests/atlas/waves.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.WaveDalembert.solution_eq_profiles",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-sound-speed",
@@ -1756,7 +1768,11 @@
           "upt:kind": "numeric",
           "upt:test": "tests/atlas/closure.test.ts"
         }
-      ]
+      ],
+      "upt:formalRef": {
+        "upt:statement": "PhysJS.KgOscillator.uniform_solves_equationOfMotion",
+        "upt:fidelity": "sanity-lemmas"
+      }
     },
     {
       "@id": "urn:upt:atlas:bridge:ab-stiff-string",

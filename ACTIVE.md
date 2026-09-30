@@ -192,8 +192,10 @@ No open items.
   measured and argued in `Atlas-Phase-5-Design.md` §4.
 
 - [x] **Sprint 4 — Verification workflow and checked bridges.** Code COMPLETE 2026-09-22 (S4.1–S4.6 +
-  closure, a3b5de2). **Reviewed `formalRef` is met at 6**, which meets the ≥5 gate: five rank-1
-  PhysJS lemmas and the pendulum reference retargeted at PhysJS. The owner deferred the criterion
+  closure, a3b5de2). **Reviewed `formalRef` is met at 10**, which meets the ≥5 gate. Milestone 1
+  is five rank-1 PhysJS lemmas and the pendulum reference retargeted at PhysJS (6). Milestone 2
+  adds `ab-kg-oscillator`, `ab-spring-lc`, `ab-damped-rlc`, and `ab-wave-dalembert`. The nested
+  rank-1a `planeWave` objects are not references. The owner deferred the criterion
   on 2026-09-24 (Amendment 10), so it does not block DONE; the count is no longer 1 of 5. Side by
   side, not merged: "≥ 20 bridges across ≥ 5 relation types" is **MET** (20 / 6). Promoted 2026-09-22 by the Lead
   under the same standing instruction to run Sprints 0–6 continuously, and on Mothership's direct
