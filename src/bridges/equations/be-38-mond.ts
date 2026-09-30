@@ -9,8 +9,8 @@
  *   μ(a/a_0) · a = a_N    where  μ(x) = x / √(1 + x²)
  *
  * Limits:
- *   - Newtonian (F_N >> m·a_0, z → ∞):    F → F_N
- *   - Deep-MOND (F_N << m·a_0, z → 0):    F → √(m · F_N · a_0)
+ *   - Newtonian (z → ∞):    ν → 1, so F → F_N
+ *   - Deep-MOND (z → 0):    ν ~ 1/√z, so F → √(m · F_N · a_0)
  *
  * Status: speculative.
  *
@@ -108,9 +108,11 @@ interface MONDForceInputs {
  *   F = F_N · ν(z),  z = F_N / (m · a_0)
  *   ν(z) = √[(1 + √(1 + 4/z²)) / 2]
  *
- * Limits (verifiable by inspection):
+ * Limits (the closed form; pinned in be-38-encoding.test.ts):
  *   - z → ∞: ν → 1, so F → F_N (Newtonian)
- *   - z → 0: ν → √(2/z) → ∞, but F = F_N·ν → √(F_N · m · a_0) (deep-MOND)
+ *   - z → 0: ν ~ 1/√z, so F = F_N·ν → √(m · F_N · a_0) (deep-MOND).
+ *     At z = 1e-6 the closed form is about 1000. √(2/z) is about 1414
+ *     and is not this expansion.
  *
  * @returns Force in newtons.
  */

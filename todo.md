@@ -1,5 +1,9 @@
 # UPT TODO
 
+## Documentation review no-approval fixes (2026-09-30)
+
+- [x] Refresh the stale formalRef indexes (six `lean4-physjs` refs, public PhysJS), mark the three 2026-05 plans superseded, fix the BRIDGE-PHYSICS-AUDIT-v2 link and dead paths, correct Dependabot's ecosystem in the Bun-migration row, add the `lean4-physjs` WORKFLOWS procedure, and explain the empty tsc baseline. Correct the BE-38 deep-MOND asymptotic to `ν ~ 1/√z` and the catalog force limit to `√(m F_N a_0)`.
+
 ## Unit-convention review follow-up (2026-09-29)
 
 - [x] Merge current `master` and resolve conflicts; normalize discovery magnitudes, scale composed junction inputs, skip non-finite identification copies, and pass unit mode into named-binding expressions.
@@ -352,7 +356,7 @@ witness) could be meant. Earlier entries used the bare form for both.
 
 - [x] **Bun as package manager + script driver; Node stays the runtime.** Same house pattern as
   time-mcp / neural-computer / memory-mcp: `bun.lock` only, CI `bun install --frozen-lockfile` +
-  `bun run …`, `setup-node` kept, Dependabot `package-ecosystem: bun`. Re-attempt after the
+  `bun run …`, `setup-node` kept, Dependabot `package-ecosystem: npm` (`.github/dependabot.yml`; the bun ecosystem updater cannot parse this repo's `bun.lock`). Re-attempt after the
   2026-08-22 revert (`0dd2cfc`) — root cause was Bun dropping the MathTS `github:` deps
   (`typed-function`, `workerpool`); verified present under Bun 1.4.2 frozen install before this
   lands. Publish path still `npm publish` (registry); `package:check` still uses `npm pack`.
@@ -783,7 +787,7 @@ warning-silencing, not debug logging).
       - [x] Rename the `@internal` atlas `AdjudicationVerdict` (a bridge-membership verdict) so it no longer shares a name with the public composition `AdjudicationVerdict` (`duplicate-symbols.md`).
       - [x] `repo_map` files `tests/tools/plan-doc-audit.test.ts` in the `tools` zone because the path contains `tools/`; report to the `skills` repo owner.
       - [x] Found by EVO custody (Starship): the Physlib `formalRef` review for `ab-pendulum-linear` rests on two probe files that no repo holds — `AxiomProbe.lean` (`#print axioms` over six theorems) and `HoleProbe.lean` (the deliberate-`sorry` positive control). Each was untracked in `%TEMP%\physlib-src` at `physlib@5ad56e24`; a copy is in `~/Dropbox/_fleet/reviews/physlib-probes-20260922/`. Commit both probes, with the re-run recipe, into this repo so the review can be repeated.
-      - [x] Local gates and generators read UNTRACKED files: an untracked `tests/tmp/differential.test.ts` (a PR #133 differential check whose writer is not on this machine) broke the pre-push typecheck (`tsconfig.tests.json` compiles `tests/**/*`), and `bun run docs:deps` recorded it in `test-coverage.json` and `TEST_COVERAGE.md`, so a commit's generated docs disagreed with the tracked tree and with CI. Make `create-dependency-graph` enumerate tracked files (`git ls-files`, as `repo_map` does) and keep scratch out of the typecheck (gitignore and exclude a scratch dir, or move the convention out of `tests/`); prove each RED with a stray file first.
+      - [x] Local gates and generators read UNTRACKED files: an untracked `tests/tmp/differential.test.ts` (a PR #133 differential check whose writer is not on this machine; the path is scratch and is absent from the tree) broke the pre-push typecheck (`tsconfig.tests.json` compiles `tests/**/*`), and `bun run docs:deps` recorded it in `test-coverage.json` and `TEST_COVERAGE.md`, so a commit's generated docs disagreed with the tracked tree and with CI. Make `create-dependency-graph` enumerate tracked files (`git ls-files`, as `repo_map` does) and keep scratch out of the typecheck (gitignore and exclude a scratch dir, or move the convention out of `tests/`); prove each RED with a stray file first.
       - [x] Found by the formalRef-gate review: `formal/physlib/HoleProbe.lean` puts its `sorry` in the probe file, so the control shows the gate detects a hole in the file it runs, not a hole inside an imported prebuilt module (where every probed theorem lives). Add a second control that compiles a small module with a `sorry` and imports it, then prove the gate goes red on it.
       - [x] Shapiro delay is the FOURTH classic GR test, not one of three: fix the Phase 2 exit-criterion wording in `ROADMAP.md`, `OVERVIEW.md` and `docs/research/README.md`, add a correction note to the dated `docs/research/pi-instrument-results.md`, and document what the public `'rank-3-lower'` tag means (Mothership 2026-09-23).
       - [x] Record the owner-delegated amendments (Mothership, 2026-09-23): curation cost per bridge NOT MEASURED, model cost reported as model cost (Phase 0, Phase 4, C6); kappa reported is MODEL agreement, human kappa NOT MEASURED; C5 human time NOT MEASURED. Write them as ROADMAP section 7 updates and pre-registration Amendment 6. No threshold, item or hash change.
@@ -832,7 +836,7 @@ warning-silencing, not debug logging).
       - [x] Found by the living-docs review: the header comment of `bench/be37-eikonal.bench.ts` (lines 10–14) still describes the BE-37 stub that `src/` replaced with a GL4 integration.
       - [x] Found by the COMPONENTS.md audit, source comments that contradict the code: `ast-types.ts:139` (`RicciTensorNode` "first two slots are contracted", but `ricci()` computes R^λ_{μλν}); `einstein-equation.ts:136` example uses kind `'stress-energy-tensor'` (real kind `'stress-energy'`); `curvature-composite.ts:31` says Bianchi is "rank-5 lower" (its registry says `'rank-3-lower'`); `klein-gordon.ts:102` imports a subpath `package.json` does not export; `BridgeEquationEntry.id` documented as "11-50".
 
-- [x] **Atlas Sprint 5 — the invalid-bridge benchmark (CODE COMPLETE; κ criterion open).** Promoted in `docs/planning/ACTIVE.md`
+- [x] **Atlas Sprint 5 — the invalid-bridge benchmark (CODE COMPLETE; κ criterion open).** Promoted in `ACTIVE.md`
       2026-09-22; design note `docs/planning/Atlas-Phase-5-Design.md`. **S5.1** — schema, loader,
       leakage checks (renamed variants keyed by dimension; held-out family corrected to FLUID STATICS).
       **S5.2** — atlas condition runner (accept only when every instrument ran and cleared).
@@ -862,7 +866,7 @@ warning-silencing, not debug logging).
       - Closed by pre-registration Amendment 6 (2026-09-23): κ amended. The reported κ is MODEL agreement; human κ is NOT MEASURED.
 
 - [x] **Atlas Sprint 4 — verification workflow and checked bridges (CODE COMPLETE; 6 reviewed formalRefs, which meets the ≥5 gate).** Promoted in
-      `docs/planning/ACTIVE.md` 2026-09-22; design note `docs/planning/Atlas-Phase-4-Design.md`.
+      `ACTIVE.md` 2026-09-22; design note `docs/planning/Atlas-Phase-4-Design.md`.
       Eighteen tasks assigned to this lane: **S4.1–S4.6, S5.1–S5.5, S6.1–S6.7.**
       **Done so far: S4.1** — `src/atlas/applicability.ts`, the applicability checker (dimensions,
       conventions, side conditions, model compatibility), findings not a boolean, two severities
@@ -2493,7 +2497,7 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
       - **S-9** lowerNode 5-arm deferred-cluster consolidation via registry dispatch (Phase 4).
       
       **Sprint task queue** (consume design r2 + plan r1 — DO NOT re-design):
-      1. **Phase 0** (1 commit, ~30 min): Tasks 0.1-0.6 baseline + per-candidate empirical verification. Re-grep with Adam A-1 revised regex (catches variable-indexed callsites — true count ~109 raw / ~53 non-comment). Re-bench v0.7.1 PO-1 baseline (5% drift gate). Deliverable: `docs/architecture/v0.7.2-baseline.md`.
+      1. **Phase 0** (1 commit, ~30 min): Tasks 0.1-0.6 baseline + per-candidate empirical verification. Re-grep with Adam A-1 revised regex (catches variable-indexed callsites — true count ~109 raw / ~53 non-comment). Re-bench v0.7.1 PO-1 baseline (5% drift gate). Deliverable: `docs/architecture/v0.9.0-baseline.md` (the plan's name was `v0.7.2-baseline.md`; the sprint was renumbered, and that file says so).
       2. **Phase 1** (3 commits, ~1-2 hr): PG pilot — `MetricFnFlat` + `MetricFn` union alias; PG fixture BREAKING(public) migration; consumer rewrite + R-1b off-diagonal pin in `tests/numerical/painleve-gullstrand-curvature.test.ts`.
       3. **Phase 2** (2 commits, ~30-45 min): mid-cycle Adam+Eve vet (SERIAL dispatch per Decision #9 — Adam first, Eve on post-Adam HEAD). Reports at `docs/architecture/v0.7.2-phase-1-{adam,eve}-vet.md`.
       4. **Phase 3** (5 commits, ~3-4 hr): Schwarzschild high-volume — fixture migration BREAKING(fixture) + 6-file hot-path `src/` consumer rewrite (gl4-integrator, weyl-lowering, perihelion-finder, killing, null-ic, be37-covariant-eikonal — these BYPASS flattenNA per Adam A-3) + Batch A tests/numerical+dimensional + Batch B tests/fixtures + R-1 / R-1c regression pins.
