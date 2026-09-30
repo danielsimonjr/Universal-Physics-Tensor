@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 394
   totalModules: 12
-  totalExports: 2837
+  totalExports: 2839
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7730,6 +7730,9 @@ modules:
         - file: ./candidates.js
           imports:
             - "*"
+        - file: ./frontier.js
+          imports:
+            - "*"
         - file: ./explain.js
           imports:
             - "*"
@@ -8674,6 +8677,11 @@ modules:
           imports:
             - predictMissingBridges
           reExport: true
+        - file: ./composition/frontier-account.js
+          imports:
+            - catalogFrontierAccount
+            - formatFrontierAccount
+          reExport: true
         - file: ./composition/discovery.js
           imports:
             - rankDiscoveries
@@ -9013,6 +9021,8 @@ modules:
         - getFormulaDimensionChecker
         - parseDimensionSpec
         - predictMissingBridges
+        - catalogFrontierAccount
+        - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
         - BRIDGE_EQUATIONS
@@ -9181,6 +9191,8 @@ modules:
         - getFormulaDimensionChecker
         - parseDimensionSpec
         - predictMissingBridges
+        - catalogFrontierAccount
+        - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
         - BRIDGE_EQUATIONS
@@ -19184,15 +19196,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 394
   totalModules: 12
-  totalLinesOfCode: 86984
-  totalExports: 2837
+  totalLinesOfCode: 86992
+  totalExports: 2839
   totalClasses: 59
   totalInterfaces: 444
   totalFunctions: 732
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 704
-  totalReExports: 1341
+  totalReExports: 1343
   totalTypeOnlyImports: 533
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

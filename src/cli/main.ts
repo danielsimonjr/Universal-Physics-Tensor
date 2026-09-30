@@ -103,6 +103,12 @@ Usage:
         dimension in different clusters) for PHYSICIST REVIEW — a
         coincidence-heavy surface, not discovered bridges.
 
+  upt frontier [--json]
+        Print two lists apart: null results (records already examined that
+        did not become an accepted connection) and the frontier (connections
+        the catalog does not contain). An empty list is printed as empty.
+        Neither list is a verdict and neither list changes a score.
+
   upt predict [--source=catalog|canonical|both]
         Project the catalog onto the (scale × force) regime plane and rank
         the EMPTY regime cells as undiscovered-connection hypotheses

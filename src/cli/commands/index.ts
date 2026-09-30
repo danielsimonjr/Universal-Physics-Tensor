@@ -12,6 +12,7 @@ import './recover.js';
 import './connectors.js';
 import './predict.js';
 import './candidates.js';
+import './frontier.js';
 import './explain.js';
 import './symbolic.js';
 import './eval.js';

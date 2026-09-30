@@ -363,7 +363,7 @@ Those are different claims and merging them produces a false green.
 - **Axes:** `RegimeAttributes` carries six axes (scale, force, information, symmetry, topology,
   statistics). `GATE_AXES` is scale and force; topology, symmetry and statistics are typed and
   wired but ungated, for thin coverage.
-- **CLI:** the `upt` CLI (25 data-bearing commands + `help`/`version`).
+- **CLI:** the `upt` CLI (26 data-bearing commands + `help`/`version`).
 - **Atlas families:** oscillators 9 models, 5 bridges, 1 rejection; diffusion 8 models, 8 bridges;
   waves 7 models, 7 bridges.
 - **Atlas import sites** (measured 2026-09-22): value imports at `bridges/index.ts:40`
