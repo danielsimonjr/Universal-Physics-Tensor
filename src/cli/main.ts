@@ -204,6 +204,9 @@ Usage:
         new data); --sensitivity ranks the prediction's input elasticities.
         Each record names its statistical object, criterion and data origin;
         consistency ratios (no σ) are counted apart from the σ-tests.
+        be-53 is not a registered confrontation. \`upt confront be-53\` refuses
+        and names the missing table and running procedure. It prints no
+        residual and does not change the catalog status.
 
   upt axes
         Axis-discrimination audit — which tensor classification axes GATE the
@@ -288,6 +291,14 @@ Usage:
         with the command that inspects each. An equal dimension is never a match.
         e.g.  upt search thermal noise
               upt search skin
+
+  upt retrieve <claim>
+        Atlas search for a claim. The default does not call out of process.
+        --embed asks a local Ollama model for a proposal; acceptance stays
+        the atlas search. If Ollama cannot be used, the atlas search is
+        still printed and the reason is named. Exit 0.
+        \`upt help retrieve\` lists every flag.
+        e.g.  upt retrieve period of a pendulum
 
   upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
         Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann

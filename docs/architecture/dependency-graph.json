@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 397,
+    "totalFiles": 400,
     "totalModules": 12,
-    "totalExports": 2847
+    "totalExports": 2900
   },
   "entryPoints": [
     {
@@ -146,6 +146,73 @@
           "rankBySymbolOverlap",
           "rankByStructure",
           "recallAtK"
+        ]
+      },
+      "src/atlas/benchmark/hybrid-retrieval.ts": {
+        "description": "Optional embedding retrieval. An embedder proposes an order. `rankByStructure`",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../canonical/registry.js",
+            "imports": [
+              "CANONICAL_EQUATIONS"
+            ]
+          },
+          {
+            "file": "./baselines.js",
+            "imports": [
+              "rankByStructure",
+              "CorpusRecord",
+              "RetrievalQuery"
+            ]
+          }
+        ],
+        "exports": [
+          "EMBEDDING_INSTRUCTION",
+          "OLLAMA_EMBEDDING_MODEL",
+          "FROZEN_VECTOR_DIMS",
+          "FROZEN_VECTOR_SHA256",
+          "OLLAMA_TIMEOUT_MS",
+          "ATLAS_ONLY_NOTE",
+          "PROPOSAL_NOTE",
+          "stubEmbedder",
+          "queryInput",
+          "stubVector",
+          "cosine",
+          "rankByCosine",
+          "decodeFloat32",
+          "canonicalRetrievalCorpus",
+          "ollamaEmbedder",
+          "retrieveHybrid",
+          "EmbeddingUnavailable"
+        ],
+        "classes": [
+          "EmbeddingUnavailable"
+        ],
+        "interfaces": [
+          "OllamaEmbedderOptions",
+          "HybridRetrieval"
+        ],
+        "functions": [
+          "queryInput",
+          "stubVector",
+          "cosine",
+          "rankByCosine",
+          "decodeFloat32",
+          "canonicalRetrievalCorpus",
+          "ollamaEmbedder",
+          "retrieveHybrid"
+        ],
+        "constants": [
+          "EMBEDDING_INSTRUCTION",
+          "OLLAMA_EMBEDDING_MODEL",
+          "FROZEN_VECTOR_DIMS",
+          "FROZEN_VECTOR_SHA256",
+          "OLLAMA_TIMEOUT_MS",
+          "ATLAS_ONLY_NOTE",
+          "PROPOSAL_NOTE",
+          "stubEmbedder"
         ]
       },
       "src/atlas/benchmark/leakage.ts": {
@@ -1469,6 +1536,39 @@
             "reExport": true
           },
           {
+            "file": "./benchmark/hybrid-retrieval.js",
+            "imports": [
+              "ATLAS_ONLY_NOTE",
+              "EMBEDDING_INSTRUCTION",
+              "FROZEN_VECTOR_DIMS",
+              "FROZEN_VECTOR_SHA256",
+              "OLLAMA_EMBEDDING_MODEL",
+              "OLLAMA_TIMEOUT_MS",
+              "PROPOSAL_NOTE",
+              "EmbeddingUnavailable",
+              "canonicalRetrievalCorpus",
+              "cosine",
+              "decodeFloat32",
+              "ollamaEmbedder",
+              "queryInput",
+              "rankByCosine",
+              "retrieveHybrid",
+              "stubEmbedder",
+              "stubVector"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./benchmark/hybrid-retrieval.js",
+            "imports": [
+              "Embedder",
+              "EmbeddingFallbackReason",
+              "HybridRetrieval",
+              "OllamaEmbedderOptions"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./benchmark/backend-shapes.js",
             "imports": [
               "parseBackendResponse"
@@ -1704,6 +1804,23 @@
           "rankByStructure",
           "rankByTextOverlap",
           "recallAtK",
+          "ATLAS_ONLY_NOTE",
+          "EMBEDDING_INSTRUCTION",
+          "FROZEN_VECTOR_DIMS",
+          "FROZEN_VECTOR_SHA256",
+          "OLLAMA_EMBEDDING_MODEL",
+          "OLLAMA_TIMEOUT_MS",
+          "PROPOSAL_NOTE",
+          "EmbeddingUnavailable",
+          "canonicalRetrievalCorpus",
+          "cosine",
+          "decodeFloat32",
+          "ollamaEmbedder",
+          "queryInput",
+          "rankByCosine",
+          "retrieveHybrid",
+          "stubEmbedder",
+          "stubVector",
           "parseBackendResponse",
           "cohensKappa",
           "mcnemar",
@@ -1779,6 +1896,10 @@
           "CorpusRecord",
           "Ranking",
           "RetrievalQuery",
+          "Embedder",
+          "EmbeddingFallbackReason",
+          "HybridRetrieval",
+          "OllamaEmbedderOptions",
           "Interval",
           "McNemarResult",
           "PairedTable",
@@ -1940,6 +2061,27 @@
           "CorpusRecord",
           "Ranking",
           "RetrievalQuery",
+          "ATLAS_ONLY_NOTE",
+          "EMBEDDING_INSTRUCTION",
+          "FROZEN_VECTOR_DIMS",
+          "FROZEN_VECTOR_SHA256",
+          "OLLAMA_EMBEDDING_MODEL",
+          "OLLAMA_TIMEOUT_MS",
+          "PROPOSAL_NOTE",
+          "EmbeddingUnavailable",
+          "canonicalRetrievalCorpus",
+          "cosine",
+          "decodeFloat32",
+          "ollamaEmbedder",
+          "queryInput",
+          "rankByCosine",
+          "retrieveHybrid",
+          "stubEmbedder",
+          "stubVector",
+          "Embedder",
+          "EmbeddingFallbackReason",
+          "HybridRetrieval",
+          "OllamaEmbedderOptions",
           "parseBackendResponse",
           "cohensKappa",
           "mcnemar",
@@ -4431,6 +4573,46 @@
         ],
         "constants": [
           "MERCURY"
+        ]
+      },
+      "src/bridges/be53-yang-mills-confrontation.ts": {
+        "description": "BE-53 confrontation request.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./observations/types.js",
+            "imports": [
+              "ConfrontationOutcome"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./observations/types.js",
+            "imports": [
+              "residualInSigma"
+            ]
+          },
+          {
+            "file": "./equations/be-53-yang-mills-beta.js",
+            "imports": [
+              "evaluateYangMillsBeta"
+            ]
+          }
+        ],
+        "exports": [
+          "requestYangMillsConfrontation"
+        ],
+        "interfaces": [
+          "MeasuredCouplingRow",
+          "RunningProcedureRecord",
+          "RunningProcedure",
+          "YangMillsConfrontationRequest",
+          "YangMillsConfrontationRefusal",
+          "YangMillsConfrontationHit"
+        ],
+        "functions": [
+          "requestYangMillsConfrontation"
         ]
       },
       "src/bridges/be55-quantum-hall-confrontation.ts": {
@@ -8089,11 +8271,16 @@
           "BE53_BETA_G_LHS",
           "BE53_BETA_G_STRUCTURAL",
           "evaluateYangMillsBeta",
-          "computeB0"
+          "computeB0",
+          "oneLoopCoefficientStatement"
+        ],
+        "interfaces": [
+          "OneLoopCoefficientStatement"
         ],
         "functions": [
           "evaluateYangMillsBeta",
-          "computeB0"
+          "computeB0",
+          "oneLoopCoefficientStatement"
         ],
         "constants": [
           "BE53_COUPLING_G",
@@ -11688,6 +11875,12 @@
             ]
           },
           {
+            "file": "./retrieve.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
             "file": "./metric.js",
             "imports": [
               "*"
@@ -12210,6 +12403,54 @@
           "parseAt",
           "resolveAtPoint",
           "showInequality"
+        ],
+        "constants": [
+          "command"
+        ]
+      },
+      "src/cli/commands/retrieve.ts": {
+        "description": "`upt retrieve <claim>` — optional embedding proposals, atlas acceptance.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../command.js",
+            "imports": [
+              "registerCommand",
+              "Command",
+              "CommandCtx"
+            ]
+          },
+          {
+            "file": "../errors.js",
+            "imports": [
+              "UsageError"
+            ]
+          },
+          {
+            "file": "../output.js",
+            "imports": [
+              "emitJson"
+            ]
+          },
+          {
+            "file": "../../atlas/benchmark/hybrid-retrieval.js",
+            "imports": [
+              "canonicalRetrievalCorpus",
+              "ollamaEmbedder",
+              "retrieveHybrid"
+            ]
+          }
+        ],
+        "exports": [
+          "command"
         ],
         "constants": [
           "command"
@@ -13138,6 +13379,13 @@
             "reExport": true
           },
           {
+            "file": "./bridges/be53-yang-mills-confrontation.js",
+            "imports": [
+              "requestYangMillsConfrontation"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/confrontations.js",
             "imports": [
               "ConfrontationEntry",
@@ -13626,6 +13874,7 @@
           "runConfrontation",
           "confrontationRigor",
           "rigorDistribution",
+          "requestYangMillsConfrontation",
           "consistencyComparison",
           "decidingMeasurement",
           "BRIDGE_EVALUATORS",
@@ -13797,6 +14046,7 @@
           "runConfrontation",
           "confrontationRigor",
           "rigorDistribution",
+          "requestYangMillsConfrontation",
           "ConfrontationEntry",
           "RigorTier",
           "consistencyComparison",
@@ -23847,6 +24097,41 @@
             "reExport": true
           },
           {
+            "file": "./bridges/equations/be-53-yang-mills-beta.js",
+            "imports": [
+              "oneLoopCoefficientStatement"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/equations/be-53-yang-mills-beta.js",
+            "imports": [
+              "OneLoopCoefficientStatement",
+              "OneLoopCoefficientSign"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/be53-yang-mills-confrontation.js",
+            "imports": [
+              "requestYangMillsConfrontation"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/be53-yang-mills-confrontation.js",
+            "imports": [
+              "MeasuredCouplingRow",
+              "RunningProcedure",
+              "RunningProcedureRecord",
+              "YangMillsConfrontationRequest",
+              "YangMillsConfrontationRefusal",
+              "YangMillsConfrontationHit",
+              "YangMillsConfrontationResult"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/be21-kss-confrontation.js",
             "imports": [
               "confrontBE21",
@@ -24389,6 +24674,8 @@
           "CASSINI",
           "confrontBE51",
           "VLBI_LAMBERT_2009",
+          "oneLoopCoefficientStatement",
+          "requestYangMillsConfrontation",
           "confrontBE21",
           "KSS_BOUND",
           "QGP_BMB19",
@@ -24606,6 +24893,15 @@
           "BE37ConfrontationResult",
           "VLBIDeflectionObservation",
           "BE51ConfrontationResult",
+          "OneLoopCoefficientStatement",
+          "OneLoopCoefficientSign",
+          "MeasuredCouplingRow",
+          "RunningProcedure",
+          "RunningProcedureRecord",
+          "YangMillsConfrontationRequest",
+          "YangMillsConfrontationRefusal",
+          "YangMillsConfrontationHit",
+          "YangMillsConfrontationResult",
           "QGPViscosityObservation",
           "BE21ConfrontationResult",
           "IsingExponentObservation",
@@ -25094,6 +25390,17 @@
           "VLBI_LAMBERT_2009",
           "VLBIDeflectionObservation",
           "BE51ConfrontationResult",
+          "oneLoopCoefficientStatement",
+          "OneLoopCoefficientStatement",
+          "OneLoopCoefficientSign",
+          "requestYangMillsConfrontation",
+          "MeasuredCouplingRow",
+          "RunningProcedure",
+          "RunningProcedureRecord",
+          "YangMillsConfrontationRequest",
+          "YangMillsConfrontationRefusal",
+          "YangMillsConfrontationHit",
+          "YangMillsConfrontationResult",
           "confrontBE21",
           "KSS_BOUND",
           "QGP_BMB19",
@@ -27193,6 +27500,7 @@
           "src/atlas/association.ts",
           "src/atlas/benchmark/backend-shapes.ts",
           "src/atlas/benchmark/baselines.ts",
+          "src/atlas/benchmark/hybrid-retrieval.ts",
           "src/atlas/benchmark/leakage.ts",
           "src/atlas/benchmark/loader.ts",
           "src/atlas/benchmark/run-atlas.ts",
@@ -27268,6 +27576,7 @@
           "src/bridges/be48-collapse-confrontation.ts",
           "src/bridges/be51-lensing-confrontation.ts",
           "src/bridges/be52-mercury-confrontation.ts",
+          "src/bridges/be53-yang-mills-confrontation.ts",
           "src/bridges/be55-quantum-hall-confrontation.ts",
           "src/bridges/be55-quantum-hall.ts",
           "src/bridges/be56-casimir-confrontation.ts",
@@ -27420,6 +27729,7 @@
           "src/cli/commands/probe.ts",
           "src/cli/commands/recover.ts",
           "src/cli/commands/regime.ts",
+          "src/cli/commands/retrieve.ts",
           "src/cli/commands/search.ts",
           "src/cli/commands/symbolic.ts",
           "src/cli/commands/testplan.ts",
@@ -27646,18 +27956,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 397,
+    "totalTypeScriptFiles": 400,
     "totalModules": 12,
-    "totalLinesOfCode": 87477,
-    "totalExports": 2847,
-    "totalClasses": 59,
-    "totalInterfaces": 452,
-    "totalFunctions": 737,
+    "totalLinesOfCode": 88142,
+    "totalExports": 2900,
+    "totalClasses": 60,
+    "totalInterfaces": 461,
+    "totalFunctions": 747,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 707,
-    "totalReExports": 1343,
-    "totalTypeOnlyImports": 538,
+    "totalConstants": 716,
+    "totalReExports": 1376,
+    "totalTypeOnlyImports": 540,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

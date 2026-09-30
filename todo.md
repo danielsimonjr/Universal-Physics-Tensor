@@ -681,7 +681,8 @@ warning-silencing, not debug logging).
       - [x] Tier 8 → 0.48.0 also: C1, probe-searchable frontier gaps. The expression-gap list landed in #219. Rechecked on master `40bf16f`: the library scan and `upt probe scan --json` agree with the measurement in NOTES.md (6 searchable prediction-residual gaps, one per applied case; `--all` adds 232 Product A wrappers, 216 relation-link and 16 regime-transition, none searchable). The default-scan comment that still called that list empty was the leftover. Design: `docs/design/tier-8-probe-searchable-gaps.md`. The 0.48.0 release waits on Mothership approval of that note.
         Done: the approved note is the scan contract. Expression gaps stay `searchable: true` with empty observations. The record, the default scan, `show`, and help say there is no named baseline and no dataset, so the listing is not a detected prediction residual. The guard compares `fg-expr-*` ids with `APPLIED_CASES` exactly. `problemFromResidualGap` names `upt discover`. The release stays Mothership's.
       - [ ] Tier 10 → 0.49.0: C3, cross-family `upt path`, with bound composition across families. Design: `docs/design/tier-10-cross-family-path.md`. Daniel approved the §11 defaults on 2026-09-29; those rules are the design note's §11. M1–M4 are in the tree. Labels: `crossFamily`, `modelFamilies`, and `fromModelFamily` / `toModelFamily` on each JSON step (`family` stays the filing family). The `crosses families:` line replaces the sentence that composition rules are the same as within one family. M2: a matching norm name across families is not a transport; only a witnessed `NormTransport` carries a bound and its factor is applied; otherwise the reason is `cross-family-unmapped`. M3: each step's regime is conjoined as true/false/unknown, and a horizon is restated only through a declared time map. M4: help text, JSON, and the section 9 controls, including command-level exit codes. No sigma. `--at` stays flat. `ab-stokes-einstein` stays a named join. The composition table is unchanged. The version bump and the release stay Mothership's.
-      - [ ] Tier 11 → 0.50.0: ROADMAP §8 hybrid retrieval: optional out-of-process embedding backend (qwen3-embedding:4b via Ollama), zero hard deps, fallback to atlas search, deterministic tests with a stub embedder plus the frozen study vectors; the live GPU evaluation waits for LLMBench's reservation to end. Design: `docs/design/tier-11-hybrid-retrieval.md`.
+      - [x] Tier 11 → 0.50.0: ROADMAP §8 hybrid retrieval: optional out-of-process embedding backend (qwen3-embedding:4b via Ollama), zero hard deps, fallback to atlas search, deterministic tests with a stub embedder plus the frozen study vectors; the live GPU evaluation waits for LLMBench's reservation to end. Design: `docs/design/tier-11-hybrid-retrieval.md`.
+        Done: `upt retrieve` defaults to `rankByStructure` and does not call out. `--embed` uses a local Ollama model. A proposal is not acceptance. A closed port, a missing model, a bad reply, and a call that does not finish each fall back to the atlas search, name the reason, and exit 0. Tests use a stub embedder and the frozen vector file. They do not start Ollama and they do not recompute the study score. The live GPU run stays outside this gate. The release stays Mothership's.
 
 - [x] **0.47.0 batch from the persona pass (Mothership ruling 2026-09-25).** One finding per commit;
       STOP and report before any release (0.47.0 is Mothership's).
@@ -1152,9 +1153,14 @@ warning-silencing, not debug logging).
             id stays out of the null-result list. A frontier row with no registered
             observation says so and carries no residual. Neither list changes a score.
 
-- [ ] **BE-53 Yang–Mills β-function confrontation** (re-homed 2026-09-25 from the closed 2026-07-04
-      NEXT umbrella): PDG α_s(M_Z) = 0.1179 running, open data, value/consistency kind. Needs its own
-      design → Adam/Eve vet → Task-0 gate. Optional backlog.
+- [x] **BE-53 Yang–Mills β-function confrontation** (re-homed 2026-09-25 from the closed 2026-07-04
+      NEXT umbrella). Design: `docs/design/be-53-yang-mills-confrontation.md` (approved).
+      `requestYangMillsConfrontation` refuses unless the caller supplies a measured-coupling table and a
+      running procedure whose record states loop order and flavor thresholds. `upt confront be-53` is that
+      refusal: exit 1, the missing inputs named, no residual, catalog status unchanged. The one-loop
+      evaluator is unchanged. `oneLoopCoefficientStatement` labels the sign of `b₀` as the one-loop
+      coefficient, not a data test. The one-loop formula is not a running procedure. A single central
+      value at the Z mass is not encoded. be-53 is not in the confrontation registry.
 - [x] 🟢 **NEXT — active work (as of 2026-07-04, post-v0.36.0).** The
       discovery-hardening program is COMPLETE (results:
       `docs/research/v0.33.0-discovery-hardening-results.md`) and the canonical
