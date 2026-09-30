@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import PhysJS.Inequalities
+import PhysJS.PlaneWave
 
 /-!
 `ab-kg-schrodinger`. Covers `bound.delta` exactly, at the dispersion relation.
@@ -15,8 +16,14 @@ form in the scoping report §4.3. UPT's `kgNonrelativisticError` is the same
 quantity written as `|(√(1 + x²) - 1) / (x²/2) - 1|`.
 
 The regime is `x ≤ 1/10`. The error increases with `x`, so the value at the
-edge is the supremum: that supremum is `bound.delta`. This does not derive
-the dispersion relation from the PDE.
+edge is the supremum: that supremum is `bound.delta`. `covers_bound_delta`
+does not derive the dispersion relation from the PDE.
+
+`planeWave_iff_dispersion` does. A non-trivial real plane wave solves
+`u_tt = c² u_xx − ω₀² u` if and only if `ω² = c² k² + ω₀²`, and a non-zero
+complex plane wave solves `i ψ_t = −κ ψ_xx` with `κ = c²/(2 ω₀)` if and only
+if `ω = κ k²`. That is the rank-1a transformation. It covers that statement
+only, and it does not prove `covers_bound_delta`.
 -/
 
 namespace PhysJS.KgSchrodinger
@@ -104,5 +111,47 @@ theorem wrong_dictionary :
   rcases mul_eq_zero.mp this with h0 | h0
   · linarith
   · linarith
+
+open PhysJS.PlaneWave Complex
+
+/-- A non-trivial plane wave solves each side's PDE if and only if its
+frequency obeys that side's dispersion relation.
+
+The Klein–Gordon side is `u_tt = c² u_xx − ω₀² u`, with `ω² = c² k² + ω₀²`.
+The Schrödinger side is `i ψ_t = −κ ψ_xx` at `κ = c² / (2 ω₀)`, with
+`ω = κ k²`, which is `ω = c² k² / (2 ω₀)`. The zero wave is excluded: it
+solves every linear equation and does not determine the frequency.
+
+Covers the rank-1a transformation of `ab-kg-schrodinger`. It does not prove
+`covers_bound_delta`. -/
+theorem planeWave_iff_dispersion (A k ω φ c ω0 : ℝ) (B : ℂ) (kS ωS : ℝ)
+    (hω0 : ω0 ≠ 0) (hnt : ∃ x t, planeWave A k ω φ x t ≠ 0) (hB : B ≠ 0) :
+    ((∀ x t, timeSecond (planeWave A k ω φ) x t =
+        c ^ 2 * spaceSecond (planeWave A k ω φ) x t
+          - ω0 ^ 2 * planeWave A k ω φ x t) ↔
+      ω ^ 2 = c ^ 2 * k ^ 2 + ω0 ^ 2) ∧
+    ((∀ x t, I * deriv (fun s => cPlane B kS ωS x s) t =
+        (-((c ^ 2 / (2 * ω0) : ℝ))) *
+          deriv (fun y => deriv (fun y => cPlane B kS ωS y t) y) x) ↔
+      ωS = c ^ 2 * kS ^ 2 / (2 * ω0)) := by
+  refine ⟨kg_solves_iff A k ω φ c ω0 hnt, ?_⟩
+  have hsch := schrodinger_solves_iff B kS ωS (c ^ 2 / (2 * ω0)) hB
+  constructor
+  · intro h
+    have hdiv : ωS = c ^ 2 / (2 * ω0) * kS ^ 2 := hsch.mp h
+    rw [hdiv]
+    field_simp [hω0]
+  · intro h
+    apply hsch.mpr
+    rw [h]
+    field_simp [hω0]
+
+/-- The massless wave dispersion is not the Klein–Gordon dispersion when
+`ω₀ ≠ 0`. -/
+theorem planeWave_wrong_dictionary (c k ω0 : ℝ) (hω0 : ω0 ≠ 0) :
+    c ^ 2 * k ^ 2 ≠ c ^ 2 * k ^ 2 + ω0 ^ 2 := by
+  intro h
+  have : ω0 ^ 2 = 0 := by linarith
+  exact hω0 (sq_eq_zero_iff.mp this)
 
 end PhysJS.KgSchrodinger

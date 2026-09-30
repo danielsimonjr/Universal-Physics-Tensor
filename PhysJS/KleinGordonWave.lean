@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import PhysJS.Inequalities
+import PhysJS.PlaneWave
 
 /-!
 `ab-klein-gordon-wave`. Covers `bound.delta` exactly, at the dispersion relation.
@@ -13,7 +14,11 @@ phase-velocity error is `√(1 + r²) - 1` with `r = ω₀/(ck)`. UPT's
 `kleinGordonPhaseError` is this quantity. It increases with `r`, and the
 regime is `r ≤ 1/10`, so the edge value is the supremum `bound.delta`.
 
-This does not derive the dispersion relation from the PDE.
+`covers_bound_delta` does not derive the dispersion relation from the PDE.
+`planeWave_iff_dispersion` does: a non-trivial plane wave solves
+`u_tt = c² u_xx − ω₀² u` if and only if `ω² = c² k² + ω₀²`, and a non-trivial
+plane wave solves `u_tt = c² u_xx` if and only if `ω² = c² k²`. That is the
+rank-1a transformation. It covers that statement only.
 -/
 
 namespace PhysJS.KleinGordonWave
@@ -86,5 +91,32 @@ theorem wrong_dictionary :
     have := congrArg (· ^ 2) hsq
     simpa [sq_sqrt hleft, sq_sqrt hright] using this
   norm_num [regimeEdge] at this
+
+open PhysJS.PlaneWave
+
+/-- A non-trivial plane wave solves the Klein–Gordon equation if and only if
+`ω² = c² k² + ω₀²`, and a non-trivial plane wave solves the wave equation at
+the same `c` if and only if `ω² = c² k²`.
+
+Covers the rank-1a transformation of `ab-klein-gordon-wave`. It does not prove
+`covers_bound_delta`. -/
+theorem planeWave_iff_dispersion (A k ω φ c ω0 : ℝ) (Aw kw ωw φw : ℝ)
+    (hnt : ∃ x t, planeWave A k ω φ x t ≠ 0)
+    (hntw : ∃ x t, planeWave Aw kw ωw φw x t ≠ 0) :
+    ((∀ x t, timeSecond (planeWave A k ω φ) x t =
+        c ^ 2 * spaceSecond (planeWave A k ω φ) x t
+          - ω0 ^ 2 * planeWave A k ω φ x t) ↔
+      ω ^ 2 = c ^ 2 * k ^ 2 + ω0 ^ 2) ∧
+    ((∀ x t, timeSecond (planeWave Aw kw ωw φw) x t =
+        c ^ 2 * spaceSecond (planeWave Aw kw ωw φw) x t) ↔
+      ωw ^ 2 = c ^ 2 * kw ^ 2) :=
+  ⟨kg_solves_iff A k ω φ c ω0 hnt, wave_solves_iff Aw kw ωw φw (c ^ 2) hntw⟩
+
+/-- Dropping `ω₀²` changes the dispersion relation when `ω₀ ≠ 0`. -/
+theorem planeWave_wrong_dictionary (c k ω0 : ℝ) (hω0 : ω0 ≠ 0) :
+    c ^ 2 * k ^ 2 + ω0 ^ 2 ≠ c ^ 2 * k ^ 2 := by
+  intro h
+  have : ω0 ^ 2 = 0 := by linarith
+  exact hω0 (sq_eq_zero_iff.mp this)
 
 end PhysJS.KleinGordonWave

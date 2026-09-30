@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import PhysJS.Inequalities
+import PhysJS.PlaneWave
 
 /-!
 `ab-stiff-string`. Covers `bound.delta` exactly, at the dispersion relation.
@@ -14,7 +15,11 @@ flexible-string speed `√(F/μ)`, the relative phase-velocity error is
 quantity. It increases with `β`, and the regime is `β ≤ 0.01`, so the edge
 value is the supremum `bound.delta`.
 
-This does not derive the dispersion relation from the PDE.
+`covers_bound_delta` does not derive the dispersion relation from the PDE.
+`planeWave_iff_dispersion` does, for a non-trivial plane wave and `μ ≠ 0`:
+the stiff string `μ y_tt = F y_xx − EI y_xxxx` holds if and only if
+`ω² = (F/μ) k² + (EI/μ) k⁴`, and the flexible string `μ y_tt = F y_xx` holds
+if and only if `ω² = (F/μ) k²`. It covers that statement only.
 -/
 
 namespace PhysJS.StiffString
@@ -86,5 +91,37 @@ theorem wrong_dictionary :
     have := congrArg (· ^ 2) hsq
     simpa [sq_sqrt hleft, sq_sqrt hright] using this
   norm_num [regimeEdge] at this
+
+open PhysJS.PlaneWave
+
+/-- A non-trivial plane wave solves the stiff-string equation if and only if
+`ω² = (F/μ) k² + (EI/μ) k⁴`, and a non-trivial plane wave solves the flexible
+string if and only if `ω² = (F/μ) k²`. Both statements divide by the linear
+density, so each requires `μ ≠ 0`.
+
+Covers the rank-1a transformation of `ab-stiff-string`. It does not prove
+`covers_bound_delta`. -/
+theorem planeWave_iff_dispersion
+    (A k ω φ μ F EI : ℝ) (As ks ωs φs μs Fs : ℝ)
+    (hμ : μ ≠ 0) (hμs : μs ≠ 0)
+    (hnt : ∃ x t, planeWave A k ω φ x t ≠ 0)
+    (hnts : ∃ x t, planeWave As ks ωs φs x t ≠ 0) :
+    ((∀ x t, μ * timeSecond (planeWave A k ω φ) x t =
+        F * spaceSecond (planeWave A k ω φ) x t
+          - EI * spaceFourth (planeWave A k ω φ) x t) ↔
+      ω ^ 2 = F / μ * k ^ 2 + EI / μ * k ^ 4) ∧
+    ((∀ x t, μs * timeSecond (planeWave As ks ωs φs) x t =
+        Fs * spaceSecond (planeWave As ks ωs φs) x t) ↔
+      ωs ^ 2 = Fs / μs * ks ^ 2) :=
+  ⟨stiff_solves_iff A k ω φ μ F EI hμ hnt,
+    string_solves_iff As ks ωs φs μs Fs hμs hnts⟩
+
+/-- The flexible-string dispersion is not the stiff-string dispersion when the
+bending term `EI k⁴` is non-zero. -/
+theorem planeWave_wrong_dictionary (F k EI : ℝ) (hbend : EI * k ^ 4 ≠ 0) :
+    F * k ^ 2 + EI * k ^ 4 ≠ F * k ^ 2 := by
+  intro h
+  have : EI * k ^ 4 = 0 := by linarith
+  exact hbend this
 
 end PhysJS.StiffString

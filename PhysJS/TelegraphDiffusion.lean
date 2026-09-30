@@ -4,6 +4,7 @@ Released under MIT license as described in the file LICENSE.
 -/
 
 import PhysJS.Inequalities
+import PhysJS.PlaneWave
 
 /-!
 `ab-telegraph-diffusion`. Covers `bound.delta` exactly, at the dispersion relation.
@@ -14,7 +15,11 @@ That ratio is `2 / (1 + √(1 - 4ε))`, including the limit `1` at `ε = 0`.
 UPT's `telegraphSlowRateRatio - 1` is the relative error. It increases with
 `ε` on `0 ≤ ε ≤ 0.05`, so the edge value is the supremum `bound.delta`.
 
-This does not derive the dispersion relation from the PDE.
+`covers_bound_delta` does not derive the dispersion relation from the PDE.
+`planeWave_iff_dispersion` does, for a decay mode that is not identically
+zero: `τ u_tt + u_t = D u_xx` holds if and only if `τ σ² + σ + D q² = 0`, and
+Fick's equation `u_t = D u_xx` holds if and only if `σ = −D q²`. It covers
+that statement only. The slow-rate approximation is still `covers_bound_delta`.
 -/
 
 namespace PhysJS.TelegraphDiffusion
@@ -132,5 +137,32 @@ theorem wrong_dictionary :
     have := congrArg (· * (1 + sqrt (1 - 4 * regimeEdge))) hleft
     simpa [hden] using this
   linarith
+
+open PhysJS.PlaneWave
+
+/-- A non-trivial decay mode `A exp(σ t) cos(qx + φ)` solves the telegraph
+equation if and only if `τ σ² + σ + D q² = 0`, and a non-trivial decay mode
+solves Fick's equation if and only if `σ = −D q²`.
+
+Covers the rank-1a transformation of `ab-telegraph-diffusion`. It does not
+prove `covers_bound_delta`. -/
+theorem planeWave_iff_dispersion
+    (A σ q φ τ D : ℝ) (Af σf qf φf Df : ℝ)
+    (hnt : ∃ x t, decayMode A σ q φ x t ≠ 0)
+    (hntf : ∃ x t, decayMode Af σf qf φf x t ≠ 0) :
+    ((∀ x t, τ * timeSecond (decayMode A σ q φ) x t + timeFirst (decayMode A σ q φ) x t =
+        D * spaceSecond (decayMode A σ q φ) x t) ↔
+      τ * σ ^ 2 + σ + D * q ^ 2 = 0) ∧
+    ((∀ x t, timeFirst (decayMode Af σf qf φf) x t =
+        Df * spaceSecond (decayMode Af σf qf φf) x t) ↔
+      σf = -Df * qf ^ 2) :=
+  ⟨telegraph_decay_solves_iff A σ q φ τ D hnt, fick_solves_iff Af σf qf φf Df hntf⟩
+
+/-- The telegraph quadratic is not the Fick factor when `τ σ² ≠ 0`. -/
+theorem planeWave_wrong_dictionary (τ σ D q : ℝ) (hτσ : τ * σ ^ 2 ≠ 0) :
+    τ * σ ^ 2 + σ + D * q ^ 2 ≠ σ + D * q ^ 2 := by
+  intro h
+  have : τ * σ ^ 2 = 0 := by linarith
+  exact hτσ this
 
 end PhysJS.TelegraphDiffusion
