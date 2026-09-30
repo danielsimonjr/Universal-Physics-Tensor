@@ -231,6 +231,14 @@ Usage:
         e.g.  upt search thermal noise
               upt search skin
 
+  upt retrieve <claim>
+        Atlas search for a claim. The default does not call out of process.
+        --embed asks a local Ollama model for a proposal; acceptance stays
+        the atlas search. If Ollama cannot be used, the atlas search is
+        still printed and the reason is named. Exit 0.
+        `upt help retrieve` lists every flag.
+        e.g.  upt retrieve period of a pendulum
+
   upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
         Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann
         scalar. Parameters accept units and constant expressions (M=1Msun,
