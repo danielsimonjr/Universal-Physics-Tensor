@@ -41,9 +41,9 @@ The codebase is organized into the following modules:
 - **bridges**: 90 files
 - **canonical**: 18 files
 - **cases**: 9 files
-- **cli**: 45 files
+- **cli**: 46 files
 - **root**: 1 file
-- **composition**: 78 files
+- **composition**: 79 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 32 files
@@ -3478,6 +3478,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/commands/frontier.ts` - `upt frontier` — the two lists from the frontier and null-result design.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../output.js` | `emitJson` | Import |
+
+**Exports:**
+- Constants: `command`
+
+---
+
 ### `src/cli/commands/ground.ts` - `upt ground <quantityA> <quantityB>` — the epistemic-grounding ledger for a
 
 **Internal Dependencies:**
@@ -4644,6 +4658,27 @@ The codebase is organized into the following modules:
 - Interfaces: `FormulaName`
 - Functions: `formulaNameDimensions`
 - Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
+
+---
+
+### `src/composition/frontier-account.ts` - Two lists the catalog already knows how to tell apart: records that were
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./bridge-analysis.js` | `proposeLinkCandidates` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `./probe/frontier.js` | `scanFrontier` | Import |
+| `./probe/expression-gaps.js` | `expressionSearchGaps` | Import |
+| `./probe/types.js` | `FrontierGap` | Import (type-only) |
+| `../bridges/rejected.js` | `REJECTED_BRIDGE_ADJUDICATIONS` | Import |
+| `../bridges/confrontations.js` | `listConfrontations` | Import |
+
+**Exports:**
+- Interfaces: `ConfrontationMark`, `NullResultRow`, `FrontierAccountRow`, `FrontierAccount`, `FrontierAccountOptions`
+- Functions: `marksFromEntries`, `accountFromGraph`, `catalogFrontierAccount`, `formatFrontierAccount`
+- Constants: `CANDIDATE_NOT_A_BRIDGE_REASON`, `CONTESTED_BRIDGE_IDS`
 
 ---
 
@@ -7380,7 +7415,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...40 more]
+        N29[...41 more]
     end
 
     subgraph Root
@@ -7393,7 +7428,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...73 more]
+        N36[...74 more]
     end
 
     subgraph Core
@@ -7471,17 +7506,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 394 |
+| Total TypeScript Files | 396 |
 | Total Modules | 12 |
-| Total Lines of Code | 86992 |
-| Total Exports | 2839 |
+| Total Lines of Code | 87221 |
+| Total Exports | 2846 |
 | Total Re-exports | 1343 |
 | Total Classes | 59 |
-| Total Interfaces | 444 |
-| Total Functions | 732 |
+| Total Interfaces | 449 |
+| Total Functions | 736 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 533 |
+| Type-only Imports | 536 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

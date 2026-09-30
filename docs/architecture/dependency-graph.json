@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 394,
+    "totalFiles": 396,
     "totalModules": 12,
-    "totalExports": 2839
+    "totalExports": 2846
   },
   "entryPoints": [
     {
@@ -11448,6 +11448,40 @@
           "command"
         ]
       },
+      "src/cli/commands/frontier.ts": {
+        "description": "`upt frontier` — the two lists from the frontier and null-result design.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../command.js",
+            "imports": [
+              "registerCommand",
+              "Command",
+              "CommandCtx"
+            ]
+          },
+          {
+            "file": "../output.js",
+            "imports": [
+              "emitJson"
+            ]
+          }
+        ],
+        "exports": [
+          "command"
+        ],
+        "constants": [
+          "command"
+        ]
+      },
       "src/cli/commands/ground.ts": {
         "description": "`upt ground <quantityA> <quantityB>` — the epistemic-grounding ledger for a",
         "externalDependencies": [],
@@ -16167,6 +16201,88 @@
           "EPS0_SI",
           "MU0_SI",
           "FORMULA_NAMED"
+        ]
+      },
+      "src/composition/frontier-account.ts": {
+        "description": "Two lists the catalog already knows how to tell apart: records that were",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./bridge-analysis.js",
+            "imports": [
+              "proposeLinkCandidates"
+            ]
+          },
+          {
+            "file": "./catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./probe/frontier.js",
+            "imports": [
+              "scanFrontier"
+            ]
+          },
+          {
+            "file": "./probe/expression-gaps.js",
+            "imports": [
+              "expressionSearchGaps"
+            ]
+          },
+          {
+            "file": "./probe/types.js",
+            "imports": [
+              "FrontierGap"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../bridges/rejected.js",
+            "imports": [
+              "REJECTED_BRIDGE_ADJUDICATIONS"
+            ]
+          },
+          {
+            "file": "../bridges/confrontations.js",
+            "imports": [
+              "listConfrontations"
+            ]
+          }
+        ],
+        "exports": [
+          "CANDIDATE_NOT_A_BRIDGE_REASON",
+          "CONTESTED_BRIDGE_IDS",
+          "marksFromEntries",
+          "accountFromGraph",
+          "catalogFrontierAccount",
+          "formatFrontierAccount"
+        ],
+        "interfaces": [
+          "ConfrontationMark",
+          "NullResultRow",
+          "FrontierAccountRow",
+          "FrontierAccount",
+          "FrontierAccountOptions"
+        ],
+        "functions": [
+          "marksFromEntries",
+          "accountFromGraph",
+          "catalogFrontierAccount",
+          "formatFrontierAccount"
+        ],
+        "constants": [
+          "CANDIDATE_NOT_A_BRIDGE_REASON",
+          "CONTESTED_BRIDGE_IDS"
         ]
       },
       "src/composition/graph-viz-svg.ts": {
@@ -27216,6 +27332,7 @@
           "src/cli/commands/eval.ts",
           "src/cli/commands/evaluate.ts",
           "src/cli/commands/explain.ts",
+          "src/cli/commands/frontier.ts",
           "src/cli/commands/ground.ts",
           "src/cli/commands/index.ts",
           "src/cli/commands/map.ts",
@@ -27285,6 +27402,7 @@
           "src/composition/expr-simplify.ts",
           "src/composition/expr-subst.ts",
           "src/composition/formula-names.ts",
+          "src/composition/frontier-account.ts",
           "src/composition/graph-viz-svg.ts",
           "src/composition/graph-viz.ts",
           "src/composition/grounding.ts",
@@ -27450,21 +27568,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 394,
+    "totalTypeScriptFiles": 396,
     "totalModules": 12,
-    "totalLinesOfCode": 86992,
-    "totalExports": 2839,
+    "totalLinesOfCode": 87221,
+    "totalExports": 2846,
     "totalClasses": 59,
-    "totalInterfaces": 444,
-    "totalFunctions": 732,
+    "totalInterfaces": 449,
+    "totalFunctions": 736,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 704,
+    "totalConstants": 707,
     "totalReExports": 1343,
-    "totalTypeOnlyImports": 533,
+    "totalTypeOnlyImports": 536,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 69
+    "unusedExportsCount": 70
   }
 }
