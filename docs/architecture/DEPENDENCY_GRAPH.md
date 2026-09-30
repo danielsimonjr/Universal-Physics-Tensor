@@ -37,11 +37,11 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 65 files
+- **atlas**: 66 files
 - **bridges**: 91 files
 - **canonical**: 18 files
 - **cases**: 9 files
-- **cli**: 45 files
+- **cli**: 46 files
 - **root**: 1 file
 - **composition**: 79 files
 - **core**: 11 files
@@ -104,6 +104,22 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `CorpusRecord`, `RetrievalQuery`
 - Functions: `rankByTextOverlap`, `rankBySymbolOverlap`, `rankByStructure`, `recallAtK`
+
+---
+
+### `src/atlas/benchmark/hybrid-retrieval.ts` - Optional embedding retrieval. An embedder proposes an order. `rankByStructure`
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `./baselines.js` | `rankByStructure, CorpusRecord, RetrievalQuery` | Import |
+
+**Exports:**
+- Classes: `EmbeddingUnavailable`
+- Interfaces: `OllamaEmbedderOptions`, `HybridRetrieval`
+- Functions: `queryInput`, `stubVector`, `cosine`, `rankByCosine`, `decodeFloat32`, `canonicalRetrievalCorpus`, `ollamaEmbedder`, `retrieveHybrid`
+- Constants: `EMBEDDING_INSTRUCTION`, `OLLAMA_EMBEDDING_MODEL`, `FROZEN_VECTOR_DIMS`, `FROZEN_VECTOR_SHA256`, `OLLAMA_TIMEOUT_MS`, `ATLAS_ONLY_NOTE`, `PROPOSAL_NOTE`, `stubEmbedder`
 
 ---
 
@@ -475,6 +491,8 @@ The codebase is organized into the following modules:
 | `./benchmark/run-atlas.js` | `AtlasRunConfig, AtlasVerdict` | Re-export |
 | `./benchmark/baselines.js` | `rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK` | Re-export |
 | `./benchmark/baselines.js` | `CorpusRecord, Ranking, RetrievalQuery` | Re-export |
+| `./benchmark/hybrid-retrieval.js` | `ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS, FROZEN_VECTOR_SHA256, OLLAMA_EMBEDDING_MODEL, OLLAMA_TIMEOUT_MS, PROPOSAL_NOTE, EmbeddingUnavailable, canonicalRetrievalCorpus, cosine, decodeFloat32, ollamaEmbedder, queryInput, rankByCosine, retrieveHybrid, stubEmbedder, stubVector` | Re-export |
+| `./benchmark/hybrid-retrieval.js` | `Embedder, EmbeddingFallbackReason, HybridRetrieval, OllamaEmbedderOptions` | Re-export |
 | `./benchmark/backend-shapes.js` | `parseBackendResponse` | Re-export |
 | `./benchmark/stats.js` | `cohensKappa, mcnemar, pairedDifferenceInterval, powerReport, wilsonInterval, Z95` | Re-export |
 | `./benchmark/stats.js` | `Interval, McNemarResult, PairedTable, PowerReport` | Re-export |
@@ -520,18 +538,22 @@ The codebase is organized into the following modules:
   FailureKind, checkRenamedVariants, findCrossSplitLeakage, leakageKey, LeakageCollision,
   VariantProblem, ABLATION_CONFIGS, FULL_CONFIG, runAtlasCondition, runAtlasOnItem, AtlasRunConfig,
   AtlasVerdict, rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK, CorpusRecord,
-  Ranking, RetrievalQuery, parseBackendResponse, cohensKappa, mcnemar, pairedDifferenceInterval,
-  powerReport, wilsonInterval, Z95, Interval, McNemarResult, PairedTable, PowerReport,
-  pairedRejection, scoreAblation, scoreCondition, AblationRow, ConditionAnswer, ConditionMetrics,
-  ItemLabel, PairedRejection, BackendShapeError, BenchmarkBackendRequest, BenchmarkBackendResponse,
-  runWitnessRegistry, artifactPassingWitnessIds, WitnessResultRecord, WitnessResultsArtifact,
-  WITNESS_REGISTRY, RegisteredNumericWitness, RegisteredSymbolicWitness, RegisteredWitness,
-  runSymbolicWitness, SymbolicSimplifier, SymbolicWitnessSpec, runNumericWitness, Convergence,
-  NumericWitnessRunResult, NumericWitnessSpec, contextUnion, statementContextUnion, Context,
-  ContextUnionFormed, ContextUnionRefused, ContextUnionResult, NoUnionReason, Statement, StatementId,
-  composeDerivations, composeDerivationsOrThrow, DerivationCompositionError, makeDerivation,
-  CompositeFormed, CompositeRefused, Derivation, DerivationCompositionResult, DerivationId,
-  DerivationSpec, NoCompositeReason
+  Ranking, RetrievalQuery, ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS,
+  FROZEN_VECTOR_SHA256, OLLAMA_EMBEDDING_MODEL, OLLAMA_TIMEOUT_MS, PROPOSAL_NOTE,
+  EmbeddingUnavailable, canonicalRetrievalCorpus, cosine, decodeFloat32, ollamaEmbedder, queryInput,
+  rankByCosine, retrieveHybrid, stubEmbedder, stubVector, Embedder, EmbeddingFallbackReason,
+  HybridRetrieval, OllamaEmbedderOptions, parseBackendResponse, cohensKappa, mcnemar,
+  pairedDifferenceInterval, powerReport, wilsonInterval, Z95, Interval, McNemarResult, PairedTable,
+  PowerReport, pairedRejection, scoreAblation, scoreCondition, AblationRow, ConditionAnswer,
+  ConditionMetrics, ItemLabel, PairedRejection, BackendShapeError, BenchmarkBackendRequest,
+  BenchmarkBackendResponse, runWitnessRegistry, artifactPassingWitnessIds, WitnessResultRecord,
+  WitnessResultsArtifact, WITNESS_REGISTRY, RegisteredNumericWitness, RegisteredSymbolicWitness,
+  RegisteredWitness, runSymbolicWitness, SymbolicSimplifier, SymbolicWitnessSpec, runNumericWitness,
+  Convergence, NumericWitnessRunResult, NumericWitnessSpec, contextUnion, statementContextUnion,
+  Context, ContextUnionFormed, ContextUnionRefused, ContextUnionResult, NoUnionReason, Statement,
+  StatementId, composeDerivations, composeDerivationsOrThrow, DerivationCompositionError,
+  makeDerivation, CompositeFormed, CompositeRefused, Derivation, DerivationCompositionResult,
+  DerivationId, DerivationSpec, NoCompositeReason
   ```
 
 
@@ -3539,6 +3561,7 @@ The codebase is organized into the following modules:
 | `./path.js` | `*` | Import |
 | `./atlas.js` | `*` | Import |
 | `./search.js` | `*` | Import |
+| `./retrieve.js` | `*` | Import |
 | `./metric.js` | `*` | Import |
 | `./testplan.js` | `*` | Import |
 
@@ -3694,6 +3717,22 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `parseAt`, `resolveAtPoint`, `showInequality`
+- Constants: `command`
+
+---
+
+### `src/cli/commands/retrieve.ts` - `upt retrieve <claim>` — optional embedding proposals, atlas acceptance.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../errors.js` | `UsageError` | Import |
+| `../output.js` | `emitJson` | Import |
+| `../../atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid` | Import |
+
+**Exports:**
 - Constants: `command`
 
 ---
@@ -7342,7 +7381,8 @@ The codebase is organized into the following modules:
 | `applicability` | 5 files | 2 files |
 | `association` | 0 files | 2 files |
 | `backend-shapes` | 1 files | 1 files |
-| `baselines` | 2 files | 1 files |
+| `baselines` | 2 files | 2 files |
+| `hybrid-retrieval` | 2 files | 2 files |
 | `leakage` | 4 files | 2 files |
 | `loader` | 1 files | 0 files |
 | `run-atlas` | 5 files | 1 files |
@@ -7363,12 +7403,11 @@ The codebase is organized into the following modules:
 | `error-algebra` | 1 files | 3 files |
 | `export` | 2 files | 1 files |
 | `families` | 3 files | 3 files |
-| `index` | 37 files | 0 files |
+| `index` | 38 files | 0 files |
 | `link-prediction` | 2 files | 1 files |
 | `model` | 2 files | 12 files |
 | `bridges-coarse` | 5 files | 2 files |
 | `bridges-exact` | 4 files | 3 files |
-| `bridges-limits` | 6 files | 8 files |
 
 ---
 
@@ -7386,8 +7425,8 @@ graph TD
         N1[association]
         N2[backend-shapes]
         N3[baselines]
-        N4[leakage]
-        N5[...60 more]
+        N4[hybrid-retrieval]
+        N5[...61 more]
     end
 
     subgraph Bridges
@@ -7423,7 +7462,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...40 more]
+        N29[...41 more]
     end
 
     subgraph Root
@@ -7478,8 +7517,7 @@ graph TD
 
     N0 --> N48
     N3 --> N48
-    N3 --> N4
-    N4 --> N48
+    N4 --> N3
     N10 --> N39
     N12 --> N50
     N13 --> N50
@@ -7506,6 +7544,7 @@ graph TD
     N26 --> N27
     N27 --> N25
     N27 --> N30
+    N28 --> N24
 ```
 
 ---
@@ -7514,17 +7553,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 396 |
+| Total TypeScript Files | 398 |
 | Total Modules | 12 |
-| Total Lines of Code | 87505 |
-| Total Exports | 2852 |
-| Total Re-exports | 1353 |
-| Total Classes | 59 |
-| Total Interfaces | 454 |
-| Total Functions | 735 |
+| Total Lines of Code | 87905 |
+| Total Exports | 2891 |
+| Total Re-exports | 1374 |
+| Total Classes | 60 |
+| Total Interfaces | 456 |
+| Total Functions | 743 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 536 |
+| Type-only Imports | 537 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
