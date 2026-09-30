@@ -214,6 +214,12 @@ describe('frontier', () => {
     const gap = wrapRelationLinkGaps(CATALOG_GRAPH)[0]!;
     expect(() => problemFromResidualGap(gap, period, [length, gravity])).toThrow(/not a Product B/);
   });
+  it('refuses relation-link and regime-transition and points at upt discover', () => {
+    const link = wrapRelationLinkGaps(CATALOG_GRAPH)[0]!;
+    const regime = wrapRegimeGaps(CATALOG_GRAPH)[0]!;
+    expect(() => problemFromResidualGap(link, period, [length, gravity])).toThrow(/upt discover/);
+    expect(() => problemFromResidualGap(regime, period, [length, gravity])).toThrow(/upt discover/);
+  });
 });
 
 describe('fit / scoring / corpus', () => {

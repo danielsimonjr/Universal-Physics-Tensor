@@ -38,6 +38,11 @@ export interface JsonEnvelope {
    */
   definitions?: Record<string, string>;
   result: unknown;
+  /**
+   * `upt recover` — two-edge symbolic chains examined against the canonical
+   * registry, and the structural matches. A chain is never restates-canonical.
+   */
+  compositionRecovery?: unknown;
 }
 
 export function sanitize(v: unknown): unknown {

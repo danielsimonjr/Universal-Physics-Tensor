@@ -1,12 +1,53 @@
 /**
  * Expression gaps are a separate searchable list. Product A wrappers stay
  * not-searchable, and `scanFrontier`'s own length is unchanged.
+ *
+ * The id guard compares the emitted `fg-expr-*` list with `APPLIED_CASES`
+ * exactly. A length check and a single example id still pass when one case
+ * is omitted and another id is duplicated.
  */
 import { describe, expect, it } from 'vitest';
 import { CATALOG_GRAPH } from '../../../src/composition/catalog-graph.js';
+import { APPLIED_CASES } from '../../../src/cases/index.js';
 import { expressionSearchGaps, scanFrontier, scanWithExpressionGaps } from '../../../src/composition/probe/index.js';
 
+/** `fg-expr-<case id>` for every registered case, sorted, with no duplicate. */
+function expectedExpressionIds(): string[] {
+  const ids = [...APPLIED_CASES.keys()].map((id) => `fg-expr-${id}`);
+  expect(new Set(ids).size).toBe(ids.length);
+  return [...ids].sort((a, b) => a.localeCompare(b));
+}
+
 describe('expression search gaps', () => {
+  it('emits fg-expr-<case id> once per applied case, and no other searchable kind', () => {
+    const wrappers = scanFrontier(CATALOG_GRAPH);
+    const extra = expressionSearchGaps();
+    const emitted = extra.map((g) => g.id);
+    const expected = expectedExpressionIds();
+    expect(emitted).toEqual(expected);
+    expect(new Set(emitted).size).toBe(emitted.length);
+    expect(wrappers.every((g) => g.searchability.searchable === false)).toBe(true);
+    for (const g of extra) {
+      const caseId = g.id.slice('fg-expr-'.length);
+      const applied = APPLIED_CASES.get(caseId);
+      expect(applied, caseId).toBeDefined();
+      expect(g.kind).toBe('prediction-residual');
+      expect(g.searchability.searchable).toBe(true);
+      expect(g.observations).toEqual([]);
+      expect(g.evidence.summary).toBe(`${applied!.id}: ${applied!.title}`);
+      const why = g.searchability.reasons.join(' ');
+      expect(why).toMatch(/no named baseline/);
+      expect(why).toMatch(/no dataset/);
+      expect(why).toMatch(/not a detected prediction residual/);
+    }
+    const combined = scanWithExpressionGaps(CATALOG_GRAPH);
+    expect(combined.slice(0, wrappers.length)).toEqual(wrappers);
+    expect(combined.slice(wrappers.length).map((g) => g.id)).toEqual(emitted);
+    const searchable = combined.filter((g) => g.searchability.searchable);
+    expect(searchable.map((g) => g.id)).toEqual(emitted);
+    expect(searchable.every((g) => g.kind === 'prediction-residual')).toBe(true);
+  });
+
   it('adds one searchable prediction-residual gap per applied case', () => {
     const wrappers = scanFrontier(CATALOG_GRAPH);
     const extra = expressionSearchGaps();
