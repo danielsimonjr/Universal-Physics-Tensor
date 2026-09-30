@@ -124,6 +124,10 @@ adjudication/calibration notes that close out the discovery pipeline
   length). The funnel quantifies the false-positive rate of dimensional
   matching. `upt candidates`; pinned by
   `tests/composition/link-candidates.test.ts`.
+- `phase-4-formalref-scoping.md` — which atlas bridges have a checked Lean
+  counterpart. One reviewed `formalRef` (`ab-pendulum-linear` → Physlib). The
+  ranked PhysJS lemmas, the two partial counterparts, and the recommendation
+  not to count a substitution. The correction at the top schedules route A.
 - `BE-29-Landauer-Recovery.md` — the pre-fix scan's single *undeclared*
   structural match: BE-29 (Jarzynski) appeared to recover CE-landauer's
   `k_B T ln(·)` form. Argues it is a shared functional form (the `ln` factor —
