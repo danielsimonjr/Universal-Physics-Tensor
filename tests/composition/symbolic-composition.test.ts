@@ -14,7 +14,7 @@
 import { describe, it, expect } from 'vitest';
 import { evalExpr, SymbolicEvalError } from '../../src/composition/expr-eval.js';
 import { substitute } from '../../src/composition/expr-subst.js';
-import { CONSTANTS } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../../src/composition/symbolic-constants.js';
 import {
   composeSymbolic,
   SymbolicCompositionError,
@@ -24,12 +24,16 @@ import {
   be42Edge,
   be16Edge,
   be12Edge,
+  be11ZurekEdge,
   be42ViaRsEdge,
   be51Edge,
+  be52Edge,
   lawSchwarzschildRadius,
   M_SUN_KG,
 } from '../../src/composition/edges/calibration.js';
 import { be18Edge, be20Edge, be30Edge, be36Edge } from '../../src/composition/edges/catalog-full.js';
+import { be11Edge } from '../../src/composition/edges/catalog-quantum.js';
+import { be21Edge } from '../../src/composition/edges/catalog-tranche.js';
 import { C_SI } from '../../src/core/constants.js';
 import { CATALOG_GRAPH, be33Edge } from '../../src/composition/index.js';
 import type { BridgeEdge } from '../../src/composition/index.js';
@@ -64,6 +68,25 @@ const SYMBOLIC_EDGES: Array<{ edge: BridgeEdge; probe: Record<string, number> }>
   { edge: be20Edge, probe: { 'cosmological-constant-curvature': 1.1e-52 } },
   { edge: be30Edge, probe: { 'modular-hamiltonian-variation': 0.5 } },
   { edge: be36Edge, probe: { 'gravitational-wave-speed': 1.1 * C_SI } },
+  // Established closed forms evalExpr can already run. be-37 stays
+  // numeric-only: its ln is outside evalExpr, so a drift guard could not bind it.
+  {
+    edge: be11Edge,
+    probe: { 'relaxation-rate': 2, 'system-environment-coupling': 3, 'reference-coupling': 4 },
+  },
+  {
+    edge: be11ZurekEdge,
+    probe: {
+      'relaxation-rate': 2,
+      'superposition-extent': 3,
+      'thermal-de-broglie-wavelength': 4,
+    },
+  },
+  { edge: be21Edge, probe: {} },
+  {
+    edge: be52Edge,
+    probe: { mass: M_SUN_KG, 'semi-major-axis': 1.496e11, eccentricity: 0.0167 },
+  },
   // v0.13 — BE-33's faithful (T/T_0)^(−1/z) form exercises the SYMBOLIC
   // (input-dependent) exponent on a dimensionless base. z = 2 ≠ 1 genuinely
   // exercises it (z = 1 would degenerate to the old literal ^(-1)); the probe
@@ -150,7 +173,7 @@ describe('symbolic forms — leaf-dimension + name-disjointness guards', () => {
       for (const leaf of leavesOf(edge.symbolic!)) {
         if (leaf.name in CONSTANTS) {
           expect(equals(leaf.dim, CONSTANTS[leaf.name].dim)).toBe(true);
-        } else if (Number.isFinite(Number(leaf.name))) {
+        } else if (Number.isFinite(Number(leaf.name)) || piMultipleValue(leaf.name) !== undefined) {
           expect(equals(leaf.dim, DIMENSIONLESS)).toBe(true);
         } else {
           // a source-quantity leaf

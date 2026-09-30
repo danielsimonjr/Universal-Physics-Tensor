@@ -11,3 +11,8 @@ Bridge↔canonical recovery — validating bridges against standard physics
     CE-jarzynski               ≡ bridge 29 (recovery exact, err 0e+0)
 
   (200 dimensional-only: same dimension, different form. Run `upt canonical` for the registry.)
+
+Composition-derived recovery — a chain of two symbolic edges
+  Compared up to a dimensionless factor. Dimensionful cancellation is not applied.
+  A chain is never restates-canonical.
+  8 pairs examined, 0 structural matches.

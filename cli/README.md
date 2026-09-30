@@ -99,7 +99,7 @@ pure connectivity questions (see [The `--source` flag](#the---source-flag)).
 | Command (aliases) | What it does |
 |---|---|
 | `canonical` (`laws`) | List the canonical-equation registry — the textbook "answer key" L-layer, each entry's fidelity (L0/L1/L2), domain, bridge partners, and the coverage gap. `--vars` also prints each entry's target and governing variable names (the vocabulary for `map --equation` / `derive`). |
-| `recover` (`recovery`, `validate`) | Validate bridges against standard physics: classify each bridge↔canonical link as `restates-canonical` (F4 circularity — *not* a discovery), `recovers` (undeclared structural match), or `dimensional-only`. Prints one advisory line under a row whose canonical equation and bridge edge DECLARE conflicting sign/unit conventions; an undeclared convention is unknown, never a conflict, so no row triggers it today. |
+| `recover` (`recovery`, `validate`) | Validate bridges against standard physics: classify each bridge↔canonical link as `restates-canonical` (F4 circularity — *not* a discovery), `recovers` (undeclared structural match), or `dimensional-only`. Also reports a chain of two symbolic edges. That comparison does not cancel dimensionful constants, and a chain is never `restates-canonical`. Prints one advisory line under a row whose canonical equation and bridge edge DECLARE conflicting sign/unit conventions; an undeclared convention is unknown, never a conflict, so no row triggers it today. |
 
 ### Symbolic composition
 
