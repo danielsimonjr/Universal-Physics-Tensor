@@ -1148,6 +1148,7 @@ warning-silencing, not debug logging).
 - [ ] **BE-53 Yang–Mills β-function confrontation** (re-homed 2026-09-25 from the closed 2026-07-04
       NEXT umbrella): PDG α_s(M_Z) = 0.1179 running, open data, value/consistency kind. Needs its own
       design → Adam/Eve vet → Task-0 gate. Optional backlog.
+      Design: `docs/design/be-53-yang-mills-confrontation.md`. The one-loop coefficient is not a confrontation. No implementation until that note is approved.
 - [x] 🟢 **NEXT — active work (as of 2026-07-04, post-v0.36.0).** The
       discovery-hardening program is COMPLETE (results:
       `docs/research/v0.33.0-discovery-hardening-results.md`) and the canonical
