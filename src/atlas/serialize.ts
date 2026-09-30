@@ -201,6 +201,7 @@ const serializeBridge = (bridge: AtlasBridge): JsonValue => ({
           version: bridge.formalRef.version,
           axioms: [...bridge.formalRef.axioms],
           fidelity: bridge.formalRef.fidelity,
+          covers: bridge.formalRef.covers,
         },
       }),
   // Omitted when absent, like formalRef: no declaration is the default.

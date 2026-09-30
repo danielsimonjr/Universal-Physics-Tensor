@@ -609,7 +609,19 @@
       "citations": [
         "Whitham, Linear and Nonlinear Waves - §11.1, dispersive waves and the Klein-Gordon equation"
       ],
-      "reviewStatus": "proposed"
+      "reviewStatus": "proposed",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.KleinGordonWave.covers_bound_delta",
+        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+      }
     },
     {
       "id": "ab-kg-schrodinger",
@@ -704,7 +716,19 @@
       "citations": [
         "Greiner, Relativistic Quantum Mechanics: Wave Equations - Ch. 1, the Klein-Gordon equation and its non-relativistic limit"
       ],
-      "reviewStatus": "proposed"
+      "reviewStatus": "proposed",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.KgSchrodinger.covers_bound_delta",
+        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+      }
     },
     {
       "id": "ab-kg-oscillator",
@@ -839,7 +863,19 @@
       "citations": [
         "Fletcher, J. Acoust. Soc. Am. 36 (1964) 203 - Normal vibration frequencies of a stiff piano string"
       ],
-      "reviewStatus": "proposed"
+      "reviewStatus": "proposed",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.StiffString.covers_bound_delta",
+        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+      }
     }
   ],
   "rejections": []

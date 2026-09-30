@@ -1,0 +1,64 @@
+{
+  "schema": "physjs-bridge-manifest/v1",
+  "commit": "0e0594f6ec277b4e0f150c5287c17ab7507e8cc3",
+  "toolchain": "leanprover/lean4:v4.34.1",
+  "mathlib": "v4.34.1",
+  "physlib": "af484f78ee0701290595f8bf892b157b10d64940",
+  "entries": [
+    {
+      "key": "ab-kg-schrodinger",
+      "bridgeId": "ab-kg-schrodinger",
+      "theorem": "PhysJS.KgSchrodinger.covers_bound_delta",
+      "covers": "bound.delta exactly, at the dispersion relation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-klein-gordon-wave",
+      "bridgeId": "ab-klein-gordon-wave",
+      "theorem": "PhysJS.KleinGordonWave.covers_bound_delta",
+      "covers": "bound.delta exactly, at the dispersion relation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-stiff-string",
+      "bridgeId": "ab-stiff-string",
+      "theorem": "PhysJS.StiffString.covers_bound_delta",
+      "covers": "bound.delta exactly, at the dispersion relation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-telegraph-diffusion",
+      "bridgeId": "ab-telegraph-diffusion",
+      "theorem": "PhysJS.TelegraphDiffusion.covers_bound_delta",
+      "covers": "bound.delta exactly, at the dispersion relation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-telegraph-wave",
+      "bridgeId": "ab-telegraph-wave",
+      "theorem": "PhysJS.TelegraphWave.covers_bound_delta",
+      "covers": "bound.delta exactly, at the dispersion relation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "ab-pendulum-linear",
+      "bridgeId": "ab-pendulum-linear",
+      "theorem": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
+      "covers": "the transformation, not bound.delta",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "imports": "ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    }
+  ]
+}

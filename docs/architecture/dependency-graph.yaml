@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 400
+  totalFiles: 401
   totalModules: 12
-  totalExports: 2900
+  totalExports: 2903
 entryPoints:
   - file: src/index.ts
     type: main
@@ -500,6 +500,9 @@ modules:
         - file: ../regime.js
           imports:
             - deriveRegimeGroups
+        - file: ../physjs-ref.js
+          imports:
+            - physjsFormalRef
         - file: ../types.js
           imports:
             - AtlasBridge
@@ -1697,6 +1700,9 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../physjs-ref.js
+          imports:
+            - physjsFormalRef
         - file: ../regime.js
           imports:
             - deriveRegimeGroups
@@ -2118,6 +2124,26 @@ modules:
         - routeEntryModels
         - familyChangeBlocksHorizon
         - horizonOnRoute
+    src/atlas/physjs-ref.ts:
+      description: Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - FormalRef
+          typeOnly: true
+      exports:
+        - PHYSJS_COMMIT
+        - physjsFormalRef
+        - physjsManifestProblems
+      interfaces:
+        - PhysjsManifestFile
+      functions:
+        - physjsFormalRef
+        - physjsManifestProblems
+      constants:
+        - PHYSJS_COMMIT
     src/atlas/poster/associations.ts:
       description: Atlas Phase 3 — the poster's two association-only lines.
       externalDependencies: []
@@ -2575,6 +2601,9 @@ modules:
         - file: ../regime.js
           imports:
             - deriveRegimeGroups
+        - file: ../physjs-ref.js
+          imports:
+            - physjsFormalRef
         - file: ../types.js
           imports:
             - AtlasBridge
@@ -2622,6 +2651,9 @@ modules:
         - file: ../regime.js
           imports:
             - deriveRegimeGroups
+        - file: ../physjs-ref.js
+          imports:
+            - physjsFormalRef
         - file: ../types.js
           imports:
             - AtlasBridge
@@ -19175,6 +19207,7 @@ dependencyGraph:
         - src/atlas/oscillators/position-translation.ts
         - src/atlas/oscillators/rejections.ts
         - src/atlas/path-bound.ts
+        - src/atlas/physjs-ref.ts
         - src/atlas/poster/associations.ts
         - src/atlas/poster/derivations.ts
         - src/atlas/poster/statements.ts
@@ -19554,18 +19587,18 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 400
+  totalTypeScriptFiles: 401
   totalModules: 12
-  totalLinesOfCode: 88142
-  totalExports: 2900
+  totalLinesOfCode: 88400
+  totalExports: 2903
   totalClasses: 60
-  totalInterfaces: 461
-  totalFunctions: 747
+  totalInterfaces: 462
+  totalFunctions: 749
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 716
+  totalConstants: 717
   totalReExports: 1376
-  totalTypeOnlyImports: 540
+  totalTypeOnlyImports: 541
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

@@ -861,7 +861,7 @@ warning-silencing, not debug logging).
       - [x] Move `docs/planning/ACTIVE.md` (an authorization register, status by nature) out of `docs/planning/`; fix every inbound link in the same commit.
       - Closed by pre-registration Amendment 6 (2026-09-23): κ amended. The reported κ is MODEL agreement; human κ is NOT MEASURED.
 
-- [x] **Atlas Sprint 4 — verification workflow and checked bridges (CODE COMPLETE; formalRef exit OPEN at 1/5).** Promoted in
+- [x] **Atlas Sprint 4 — verification workflow and checked bridges (CODE COMPLETE; 6 reviewed formalRefs, which meets the ≥5 gate).** Promoted in
       `docs/planning/ACTIVE.md` 2026-09-22; design note `docs/planning/Atlas-Phase-4-Design.md`.
       Eighteen tasks assigned to this lane: **S4.1–S4.6, S5.1–S5.5, S6.1–S6.7.**
       **Done so far: S4.1** — `src/atlas/applicability.ts`, the applicability checker (dimensions,
@@ -875,21 +875,24 @@ warning-silencing, not debug logging).
       analytic-continuation), witnesses WD1–WD3 with measured convergence; gates iterate
       `ATLAS_FAMILIES`.
       **S4.6** — one `formalRef` (`ab-pendulum-linear` → Physlib `linearizedEquationOfMotion_iff`,
-      axioms measured); every other bridge searched and reported without one.
+      axioms measured); every other bridge searched and reported without one. Milestone 1 retargets
+      that reference at `PhysJS.Pendulum.linearizedEquationOfMotion_iff` and adds the five rank-1
+      `lean4-physjs` references. The reviewed count is 6, which meets the ≥5 gate.
       **S4.5** — `src/atlas/waves/` (6 models, 4 bridges incl. the Euler + EOS → sound hyperedge).
       - [x] **Sprint 4 exit criterion "≥ 20 bridges" is OPEN at 12 — NOT cut** (measured cost makes 20
         reachable; the plan's briefs name only 12). Add eight witnessed bridges before Sprint 4 is
         declared complete. "≥ 5 relation types" is met (6).
-      - [ ] **Sprint 4 exit criterion "≥ 5 bridges with a reviewed `formalRef`" is OPEN at 1.** Physlib
-        holds no further real counterpart (S4.6 table in the Phase 4 design note). Closing it needs
-        proofs authored OUT OF TREE, meaning a new repository, which is outward-facing: escalated to
-        Mothership.
+      - [x] **Sprint 4 exit criterion "≥ 5 bridges with a reviewed `formalRef`" is met at 6.** The five
+        rank-1 bridges and the retargeted pendulum reference. Physlib held no further counterpart
+        (S4.6 table in the Phase 4 design note). The proofs are the PhysJS theorems in
+        `formal/physjs/manifest.json` at commit `0e0594f6ec277b4e0f150c5287c17ab7507e8cc3`.
         - deferred - owner 2026-09-24 15:02 (pre-registration Amendment 10; the PhysJS proofs with it).
+          The deferral still means the criterion does not block DONE. The count is no longer 1 of 5.
       **Standing trap for anyone picking this up:** the plan says the canonical-equation count
       "lives only in `CHANGELOG.md`, `ROADMAP.md` and the architecture docs". **It is in 22
       files.** `tests/canonical/canonical-count-prose.test.ts` DISCOVERS them; trust the gate,
       never the list.
-      - Closed by pre-registration Amendment 10 (2026-09-24): the formalRef exit criterion is deferred by the owner, at 1 of 5.
+      - Closed by pre-registration Amendment 10 (2026-09-24): the formalRef exit criterion is deferred by the owner, at 1 of 5. Met later at 6 reviewed PhysJS formalRefs; the deferral still means it does not block DONE.
 
 - [x] **Atlas Phase 0 — two exit criteria OPEN; the code is done.** Shipped 2026-09-20 on
       `master`: `src/atlas/` (nine models, five typed bridges, one rejection, fifteen witnesses),

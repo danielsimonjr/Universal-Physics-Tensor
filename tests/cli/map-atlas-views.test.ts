@@ -226,11 +226,11 @@ describe('upt map --family', () => {
       expect(r.filter.total).toBe(all.length);
       expect(r.filter.kept + r.filter.droppedNotMatching + r.filter.droppedUndecided).toBe(r.filter.total);
     }
-    // No bridge qualifies here, and the accounting is still printed.
+    // Filed telegraph bridges, plus the Klein–Gordon → Schrödinger bridge that touches a diffusion model.
     const { code, stdout } = await run(['map', '--family=diffusion', '--evidence=formally-proved']);
     expect(code).toBe(0);
     expect(stdout).toMatch(
-      /filter: evidence=formally-proved — 0 of \d+ bridges kept; \d+ dropped \(did not match\); 0 dropped \(undecided: depends on witness results this command does not observe\)/,
+      /filter: evidence=formally-proved — 3 of \d+ bridges kept; \d+ dropped \(did not match\); 0 dropped \(undecided: depends on witness results this command does not observe\)/,
     );
   });
 
@@ -256,7 +256,8 @@ describe('upt map --family', () => {
     expect(dot.stdout).toContain(`label="family oscillators: 9 of ${MODELS.length} atlas models`);
     expect(dot.stdout).toContain('m_model_klein_gordon [shape=box,style=dashed');
     const mm = await run(['map', '--family=oscillators', '--format=mermaid', '--evidence=formally-proved']);
-    expect(mm.stdout).toContain('filter: evidence=formally-proved — 1 of');
+    // Pendulum is filed here. Klein–Gordon → wave and telegraph → wave touch model-wave-1d.
+    expect(mm.stdout).toContain('filter: evidence=formally-proved — 3 of');
     expect(mm.stderr).toContain('upt: family oscillators:');
   });
 

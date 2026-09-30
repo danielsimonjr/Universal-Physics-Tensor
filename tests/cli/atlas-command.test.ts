@@ -77,7 +77,7 @@ describe('Eve E6 — no output hides a qualification (three bridges vs their sou
   it('formally-proved is shown WITH its scope: the statement only, not the bound', async () => {
     const r = await run(['atlas', 'ab-pendulum-linear']);
     expect(r.out).toContain('formally-proved (derived from formalRef): YES');
-    expect(r.out).toContain('covers: the statement above ONLY');
+    expect(r.out).toContain('covers: the transformation, not bound.delta — covers its statement only');
   });
 
   it('--json carries the same qualifications', async () => {

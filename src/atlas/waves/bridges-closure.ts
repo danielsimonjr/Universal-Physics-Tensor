@@ -22,6 +22,7 @@ import { ACTION, FORCE, FREQUENCY, MASS, VELOCITY } from '../../dimensional/type
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { SPRING_CONSTANT } from '../oscillators/dimensions.js';
 import { deriveRegimeGroups } from '../regime.js';
+import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { FLEXURAL_RIGIDITY, LINEAR_DENSITY, WAVENUMBER, WAVES_FAMILY_NAME } from './models.js';
 import { kgNonrelativisticError, stiffStringPhaseError } from './numerics.js';
@@ -130,6 +131,7 @@ export const BRIDGE_KG_SCHRODINGER: AtlasBridge = {
     'Greiner, Relativistic Quantum Mechanics: Wave Equations - Ch. 1, the Klein-Gordon equation and its non-relativistic limit',
   ],
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-kg-schrodinger'),
 };
 
 /** Bridge: Klein–Gordon → spring, restricted to the spatially uniform mode. @internal */
@@ -236,6 +238,7 @@ export const BRIDGE_STIFF_STRING: AtlasBridge = {
     'Fletcher, J. Acoust. Soc. Am. 36 (1964) 203 - Normal vibration frequencies of a stiff piano string',
   ],
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-stiff-string'),
 };
 
 /** The wave-family closure bridges. @internal */

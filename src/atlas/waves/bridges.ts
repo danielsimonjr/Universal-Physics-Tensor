@@ -20,6 +20,7 @@ import { FORCE, FREQUENCY, VELOCITY } from '../../dimensional/types.js';
 import { DENSITY } from '../diffusion/dimensions.js';
 import { makeApproximation } from '../oscillators/bridges-limits.js';
 import { deriveRegimeGroups } from '../regime.js';
+import { physjsFormalRef } from '../physjs-ref.js';
 import type { AtlasBridge } from '../types.js';
 import { LINEAR_DENSITY, PRESSURE, WAVENUMBER, WAVES_FAMILY_NAME } from './models.js';
 import { kleinGordonPhaseError } from './numerics.js';
@@ -280,6 +281,7 @@ export const BRIDGE_KLEIN_GORDON_WAVE: AtlasBridge = {
     'Whitham, Linear and Nonlinear Waves - §11.1, dispersive waves and the Klein-Gordon equation',
   ],
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-klein-gordon-wave'),
 };
 
 /** The wave family's bridges, in design-note order. @internal */

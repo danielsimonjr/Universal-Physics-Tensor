@@ -10,26 +10,41 @@
  * If the record and the formal statement ever disagree on a known case, the
  * reference is to a different claim and the fidelity is wrong.
  *
- * The Lean source quoted below is Physlib at the commit recorded in the
- * reference's `version`.
+ * The pendulum lemmas instantiate the Physlib statement that
+ * `PhysJS.Pendulum.linearizedEquationOfMotion_iff` imports. The rank-1 lemmas
+ * instantiate each record's dispersion error, which is what
+ * `covers_bound_delta` states.
  */
 
 import { describe, expect, it } from 'vitest';
 import { AB_PENDULUM_LINEAR, pendulumPeriodErrorAt } from '../../src/atlas/oscillators/bridges-limits.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
+import {
+  BRIDGE_TELEGRAPH_DIFFUSION,
+  BRIDGE_TELEGRAPH_WAVE,
+  TELEGRAPH_FICK_MAX_EPS,
+  TELEGRAPH_WAVE_MIN_EPS,
+} from '../../src/atlas/diffusion/bridges-closure.js';
+import { telegraphSlowRateRatio, telegraphWaveFrequencyRatio } from '../../src/atlas/diffusion/numerics.js';
+import { BRIDGE_KLEIN_GORDON_WAVE, KG_MAX_DISPERSION_RATIO } from '../../src/atlas/waves/bridges.js';
+import { BRIDGE_KG_SCHRODINGER, BRIDGE_STIFF_STRING, KG_NR_MAX_X, STIFF_MAX_BETA } from '../../src/atlas/waves/bridges-closure.js';
+import { kgNonrelativisticError, kleinGordonPhaseError, stiffStringPhaseError } from '../../src/atlas/waves/numerics.js';
+import type { AtlasBridge } from '../../src/atlas/types.js';
 
 /** A known pendulum: m = 0.3 kg, g = 9.81 m/s², ℓ = 1.2 m. */
 const PENDULUM = { m: 0.3, g: 9.81, ell: 1.2 } as const;
 
-describe('ab-pendulum-linear ↔ ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff', () => {
-  it('the reference names the Lean statement and a real fidelity', () => {
+describe('ab-pendulum-linear ↔ PhysJS.Pendulum.linearizedEquationOfMotion_iff', () => {
+  it('the reference names the PhysJS theorem and a real fidelity', () => {
     const ref = AB_PENDULUM_LINEAR.formalRef;
     expect(ref).toBeDefined();
-    expect(ref!.system).toBe('lean4-physlib');
-    expect(ref!.statement).toContain('ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff');
+    expect(ref!.system).toBe('lean4-physjs');
+    expect(ref!.statement).toBe('PhysJS.Pendulum.linearizedEquationOfMotion_iff');
     expect(ref!.fidelity).toBe('sanity-lemmas');
-    expect(ref!.version).toMatch(/^physlib@[0-9a-f]{40} lean4:v\d+\.\d+\.\d+$/);
+    expect(ref!.version).toContain('physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3');
+    expect(ref!.covers).toContain('the transformation, not bound.delta');
+    expect(ref!.covers).toContain('covers its statement only');
   });
 
   it('toHarmonicOscillator: mass I = mℓ², spring constant k = mgℓ, so √(k/I) = √(g/ℓ) — the record’s ω0² = g/ℓ', () => {
@@ -85,6 +100,78 @@ describe('ab-pendulum-linear ↔ ClassicalMechanics.SimplePendulum.linearizedEqu
   });
 });
 
+/**
+ * Rank-1 lemmas: the error is monotone on the declared regime, and its value
+ * at the edge equals `bound.delta`. A point outside the regime exceeds delta,
+ * so a check that the bound held there would fail.
+ */
+function expectMonotoneEdge(
+  bridge: AtlasBridge,
+  samples: readonly number[],
+  at: (x: number) => number,
+): void {
+  const delta = bridge.bound?.delta;
+  expect(delta).toBeDefined();
+  const values = samples.map(at);
+  for (let i = 1; i < values.length; i++) expect(values[i]).toBeGreaterThan(values[i - 1]!);
+  expect(values[values.length - 1]).toBeCloseTo(delta!, 12);
+  expect(bridge.formalRef?.covers).toContain('bound.delta exactly, at the dispersion relation');
+  expect(bridge.formalRef?.covers).toContain('covers its statement only');
+  expect(bridge.formalRef?.system).toBe('lean4-physjs');
+}
+
+describe('rank-1 dispersion bounds ↔ PhysJS covers_bound_delta', () => {
+  it('ab-kg-schrodinger: (√(1+x²)−1)/(√(1+x²)+1) is monotone and equals delta at x = 0.1', () => {
+    const closed = (x: number): number => {
+      const root = Math.sqrt(1 + x * x);
+      return (root - 1) / (root + 1);
+    };
+    expectMonotoneEdge(BRIDGE_KG_SCHRODINGER, [0.02, 0.05, KG_NR_MAX_X], (x) => kgNonrelativisticError(x));
+    expect(kgNonrelativisticError(KG_NR_MAX_X)).toBeCloseTo(closed(KG_NR_MAX_X), 12);
+    expect(BRIDGE_KG_SCHRODINGER.formalRef?.statement).toBe('PhysJS.KgSchrodinger.covers_bound_delta');
+    // The numerator alone is not the error. A record that stored it would not match delta.
+    expect(Math.sqrt(1 + KG_NR_MAX_X ** 2) - 1).not.toBeCloseTo(BRIDGE_KG_SCHRODINGER.bound!.delta, 4);
+    expect(kgNonrelativisticError(1)).toBeGreaterThan(BRIDGE_KG_SCHRODINGER.bound!.delta);
+  });
+
+  it('ab-klein-gordon-wave: √(1+r²)−1 is monotone and equals delta at r = 0.1', () => {
+    expectMonotoneEdge(BRIDGE_KLEIN_GORDON_WAVE, [0.02, 0.05, KG_MAX_DISPERSION_RATIO], (ratio) =>
+      kleinGordonPhaseError(ratio, 1, 1),
+    );
+    expect(BRIDGE_KLEIN_GORDON_WAVE.formalRef?.statement).toBe('PhysJS.KleinGordonWave.covers_bound_delta');
+    expect(Math.sqrt(1 + KG_MAX_DISPERSION_RATIO ** 2)).not.toBeCloseTo(BRIDGE_KLEIN_GORDON_WAVE.bound!.delta, 4);
+    expect(kleinGordonPhaseError(1, 1, 1)).toBeGreaterThan(BRIDGE_KLEIN_GORDON_WAVE.bound!.delta);
+  });
+
+  it('ab-stiff-string: √(1+β)−1 is monotone and equals delta at β = 0.01', () => {
+    expectMonotoneEdge(BRIDGE_STIFF_STRING, [0.001, 0.005, STIFF_MAX_BETA], (beta) =>
+      stiffStringPhaseError(1, beta, 1),
+    );
+    expect(BRIDGE_STIFF_STRING.formalRef?.statement).toBe('PhysJS.StiffString.covers_bound_delta');
+    expect(Math.sqrt(1 + STIFF_MAX_BETA)).not.toBeCloseTo(BRIDGE_STIFF_STRING.bound!.delta, 4);
+    expect(stiffStringPhaseError(1, 1, 1)).toBeGreaterThan(BRIDGE_STIFF_STRING.bound!.delta);
+  });
+
+  it('ab-telegraph-diffusion: the slow-rate error is monotone and equals delta at ε = 0.05', () => {
+    const error = (eps: number): number => telegraphSlowRateRatio(eps, 1, 1) - 1;
+    expectMonotoneEdge(BRIDGE_TELEGRAPH_DIFFUSION, [0.01, 0.02, TELEGRAPH_FICK_MAX_EPS], error);
+    expect(BRIDGE_TELEGRAPH_DIFFUSION.formalRef?.statement).toBe('PhysJS.TelegraphDiffusion.covers_bound_delta');
+    expect(error(0.2)).toBeGreaterThan(BRIDGE_TELEGRAPH_DIFFUSION.bound!.delta);
+    expect(telegraphSlowRateRatio(1, 1, 1)).toBeNaN();
+  });
+
+  it('ab-telegraph-wave: the frequency error falls as ε grows, and equals delta at ε = 25', () => {
+    const error = (eps: number): number => 1 - telegraphWaveFrequencyRatio(eps, 1, 1);
+    const edge = error(TELEGRAPH_WAVE_MIN_EPS);
+    expect(edge).toBeCloseTo(BRIDGE_TELEGRAPH_WAVE.bound!.delta, 12);
+    expect(error(50)).toBeLessThan(edge);
+    expect(error(100)).toBeLessThan(error(50));
+    expect(error(1)).toBeGreaterThan(edge);
+    expect(BRIDGE_TELEGRAPH_WAVE.formalRef?.statement).toBe('PhysJS.TelegraphWave.covers_bound_delta');
+    expect(BRIDGE_TELEGRAPH_WAVE.formalRef?.covers).toContain('covers its statement only');
+  });
+});
+
 describe('formally-proved is derived, and reachable only from a reviewed reference', () => {
   it('ab-pendulum-linear derives formally-proved from its reference and stores nothing', () => {
     expect(deriveEvidence(AB_PENDULUM_LINEAR, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
@@ -95,6 +182,14 @@ describe('formally-proved is derived, and reachable only from a reviewed referen
 
   it('every bridge with a formalRef has a sanity lemma here, or a fidelity that is not sanity-lemmas', () => {
     const withRef = ATLAS_FAMILIES.flatMap((f) => f.bridges).filter((b) => b.formalRef !== undefined);
-    expect(withRef.map((b) => b.id)).toEqual(['ab-pendulum-linear']);
+    expect(withRef.map((b) => b.id)).toEqual([
+      'ab-pendulum-linear',
+      'ab-telegraph-diffusion',
+      'ab-telegraph-wave',
+      'ab-klein-gordon-wave',
+      'ab-kg-schrodinger',
+      'ab-stiff-string',
+    ]);
+    for (const bridge of withRef) expect(bridge.formalRef!.fidelity).toBe('sanity-lemmas');
   });
 });

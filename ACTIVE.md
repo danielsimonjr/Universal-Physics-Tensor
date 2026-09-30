@@ -191,12 +191,11 @@ No open items.
   "first-order relaxation"**, which Phase 0 already encodes as `model-first-order` (b x′ + k x = 0);
   measured and argued in `Atlas-Phase-5-Design.md` §4.
 
-- [ ] **Sprint 4 — Verification workflow and checked bridges.** Code COMPLETE 2026-09-22 (S4.1–S4.6 +
-  closure, a3b5de2). **Box held OPEN on purpose:** ROADMAP exit "≥ 5 bridges with a reviewed
-  `formalRef`" is **OPEN at 1 of 5** (Physlib has one real counterpart; the S4.6 table in the
-  Phase 4 design note). Side by side, not merged: "≥ 20 bridges across ≥ 5 relation types" is
-  **MET** (20 / 6). Closing the formalRef criterion needs an out-of-tree proof repository — an
-  outward-facing decision now with the user. Promoted 2026-09-22 by the Lead
+- [x] **Sprint 4 — Verification workflow and checked bridges.** Code COMPLETE 2026-09-22 (S4.1–S4.6 +
+  closure, a3b5de2). **Reviewed `formalRef` is met at 6**, which meets the ≥5 gate: five rank-1
+  PhysJS lemmas and the pendulum reference retargeted at PhysJS. The owner deferred the criterion
+  on 2026-09-24 (Amendment 10), so it does not block DONE; the count is no longer 1 of 5. Side by
+  side, not merged: "≥ 20 bridges across ≥ 5 relation types" is **MET** (20 / 6). Promoted 2026-09-22 by the Lead
   under the same standing instruction to run Sprints 0–6 continuously, and on Mothership's direct
   assignment of S4.1–S6.7 to the Atlas-Roadmap session. **This line is what authorizes the plan's
   Sprint 4 briefs.**

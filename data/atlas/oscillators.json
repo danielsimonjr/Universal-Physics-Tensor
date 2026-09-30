@@ -797,15 +797,16 @@
       ],
       "reviewStatus": "proposed",
       "formalRef": {
-        "system": "lean4-physlib",
-        "statement": "ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff: for a smooth lift θ, θ̈ + ω²θ = 0 iff θ solves the equation of motion of toHarmonicOscillator (mass mℓ², spring constant mgℓ); with toHarmonicOscillator_ω, ω = √(g/ℓ)",
-        "version": "physlib@5ad56e24de155462acd8478458292347393d5908 lean4:v4.34.0",
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
+        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
           "Quot.sound"
         ],
-        "fidelity": "sanity-lemmas"
+        "fidelity": "sanity-lemmas",
+        "covers": "the transformation, not bound.delta — covers its statement only"
       }
     },
     {

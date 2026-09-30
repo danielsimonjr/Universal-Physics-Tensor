@@ -18,7 +18,10 @@
  *   that differ from the measured ones;
  * - the checkout is not at the commit and toolchain that each `formalRef.version` records;
  * - there is nothing to check (no probed theorem, no reference, or a `#print axioms` line that the
- *   gate cannot parse), so that the gate cannot pass by checking nothing.
+ *   gate cannot parse), so that the gate cannot pass by checking nothing;
+ * - a `lean4-physjs` formalRef disagrees with `formal/physjs/manifest.json` (commit, theorem, key,
+ *   axioms, or the coverage phrase), or a manifest entry does not resolve to a bridge. That system
+ *   is not skipped. The manifest check does not run Lean.
  *
  * Lean exits 0 for a proof that uses `sorry` (it only warns), so the gate reads the printed axioms
  * and never the exit code.
@@ -247,15 +250,28 @@ function runProbe(lake: string, physlibDir: string, probePath: string): string {
 async function main(args: readonly string[]): Promise<number> {
   const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
   const physlibDir = argValue(args, '--physlib');
+  const { ATLAS_FAMILIES } = await import('../../src/atlas/families.js');
+  const { physjsManifestProblems } = await import('../../src/atlas/physjs-ref.js');
+  const manifest = JSON.parse(readFileSync(join(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf-8'));
+  const bridges = ATLAS_FAMILIES.flatMap((family) => family.bridges);
+  const physjsProblems = physjsManifestProblems({ manifest, bridges });
+  for (const p of physjsProblems) console.error(`FAIL: ${p}`);
+
+  const references = lean4PhyslibReferences(ATLAS_FAMILIES);
+  if (references.length === 0) {
+    console.log(
+      physjsProblems.length === 0
+        ? 'formalRef axiom gate: PASS (lean4-physjs manifest; no lean4-physlib formalRef)'
+        : `formalRef axiom gate: FAIL (${physjsProblems.length})`,
+    );
+    return physjsProblems.length === 0 ? 0 : 1;
+  }
   if (!physlibDir) {
     console.error('usage: gate.ts --physlib <dir> [--probes <dir>] [--lake <exe>] [--write-captured]');
     return 2;
   }
   const probesDir = resolve(argValue(args, '--probes') ?? join(repoRoot, 'formal', 'physlib'));
   const lake = argValue(args, '--lake') ?? 'lake';
-
-  const { ATLAS_FAMILIES } = await import('../../src/atlas/families.js');
-  const references = lean4PhyslibReferences(ATLAS_FAMILIES);
   // The pin is checked first: a Lean run takes minutes, and its result means nothing for a commit
   // that no record names.
   const head = spawnSync('git', ['-C', physlibDir, 'rev-parse', 'HEAD'], { encoding: 'utf-8' });
@@ -296,9 +312,10 @@ async function main(args: readonly string[]): Promise<number> {
     importedHoleOutput,
     references,
   });
+  const problems = [...physjsProblems, ...verdict.problems];
   for (const p of verdict.problems) console.error(`FAIL: ${p}`);
-  console.log(verdict.ok ? 'formalRef axiom gate: PASS' : `formalRef axiom gate: FAIL (${verdict.problems.length})`);
-  return verdict.ok ? 0 : 1;
+  console.log(problems.length === 0 ? 'formalRef axiom gate: PASS' : `formalRef axiom gate: FAIL (${problems.length})`);
+  return problems.length === 0 ? 0 : 1;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

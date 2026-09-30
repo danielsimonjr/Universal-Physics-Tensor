@@ -31,12 +31,12 @@ witnesses:
 counterexamples:
   - the approximation is non-uniform in time: at θ0 = 0.2 the phase drift reaches π/2 after ~100 cycles, however small the per-cycle error is (witness W7b)
 formal reference:
-  lean4-physlib: ClassicalMechanics.SimplePendulum.linearizedEquationOfMotion_iff: for a smooth lift θ, θ̈ + ω²θ = 0 iff θ solves the equation of motion of toHarmonicOscillator (mass mℓ², spring constant mgℓ); with toHarmonicOscillator_ω, ω = √(g/ℓ)
-  version physlib@5ad56e24de155462acd8478458292347393d5908 lean4:v4.34.0; axioms propext, Classical.choice, Quot.sound
+  lean4-physjs: PhysJS.Pendulum.linearizedEquationOfMotion_iff
+  version physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940; axioms propext, Classical.choice, Quot.sound
   fidelity: sanity-lemmas
-  covers: the statement above ONLY — not the bound, regime or side conditions unless it says so
+  covers: the transformation, not bound.delta — covers its statement only
 evidence by claim (derived from the record's structure):
-  correspondence: formal reference lean4-physlib, fidelity sanity-lemmas — covers its statement only
+  correspondence: formal reference lean4-physjs, fidelity sanity-lemmas — covers its statement only
   regime: 1 machine inequality — check a point with `upt regime oscillators --at …`
   bound: basis closed-form (deltaAt is the exact error); the formal reference is not attributed to it
     - W7 [numeric] tests it at theta0 = 0.2 (its error there is the bound's norm; tolerance ≤ delta): registered in-process, not run — `upt atlas ab-pendulum-linear --run` runs it

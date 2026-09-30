@@ -907,7 +907,19 @@
         "Cattaneo, Atti Sem. Mat. Fis. Univ. Modena 3 (1948) 83 - heat conduction with a relaxation time",
         "Goldstein, Q. J. Mech. Appl. Math. 4 (1951) 129 - On diffusion by discontinuous movements, and on the telegraph equation"
       ],
-      "reviewStatus": "proposed"
+      "reviewStatus": "proposed",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
+        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+      }
     },
     {
       "id": "ab-telegraph-wave",
@@ -988,7 +1000,19 @@
       "citations": [
         "Goldstein, Q. J. Mech. Appl. Math. 4 (1951) 129 - On diffusion by discontinuous movements, and on the telegraph equation"
       ],
-      "reviewStatus": "proposed"
+      "reviewStatus": "proposed",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.TelegraphWave.covers_bound_delta",
+        "version": "physjs@0e0594f6ec277b4e0f150c5287c17ab7507e8cc3 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
+      }
     },
     {
       "id": "ab-heat-laplace",
