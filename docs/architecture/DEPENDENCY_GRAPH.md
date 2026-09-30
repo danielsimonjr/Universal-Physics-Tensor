@@ -41,9 +41,9 @@ The codebase is organized into the following modules:
 - **bridges**: 91 files
 - **canonical**: 18 files
 - **cases**: 9 files
-- **cli**: 46 files
+- **cli**: 47 files
 - **root**: 1 file
-- **composition**: 79 files
+- **composition**: 80 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 32 files
@@ -3516,6 +3516,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/commands/frontier.ts` - `upt frontier` — the two lists from the frontier and null-result design.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../output.js` | `emitJson` | Import |
+
+**Exports:**
+- Constants: `command`
+
+---
+
 ### `src/cli/commands/ground.ts` - `upt ground <quantityA> <quantityB>` — the epistemic-grounding ledger for a
 
 **Internal Dependencies:**
@@ -3546,6 +3560,7 @@ The codebase is organized into the following modules:
 | `./connectors.js` | `*` | Import |
 | `./predict.js` | `*` | Import |
 | `./candidates.js` | `*` | Import |
+| `./frontier.js` | `*` | Import |
 | `./explain.js` | `*` | Import |
 | `./symbolic.js` | `*` | Import |
 | `./eval.js` | `*` | Import |
@@ -4019,6 +4034,7 @@ The codebase is organized into the following modules:
 | `./numerical/formula-registry.js` | `getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker` | Re-export |
 | `./dimensional/dimension-spec.js` | `parseDimensionSpec` | Re-export |
 | `./composition/bridge-prediction.js` | `predictMissingBridges` | Re-export |
+| `./composition/frontier-account.js` | `catalogFrontierAccount, formatFrontierAccount` | Re-export |
 | `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
 | `./bridges/confrontation-coverage.js` | `auditCoverage` | Re-export |
@@ -4087,34 +4103,35 @@ The codebase is organized into the following modules:
   analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi, dimensionallyDetermines,
   formatConnectedSummary, bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap,
   proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser, getFormulaParserKind,
-  getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, rankDiscoveries,
-  ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage, CONFRONTATIONS, listConfrontations,
-  runConfrontation, confrontationRigor, rigorDistribution, requestYangMillsConfrontation,
-  ConfrontationEntry, RigorTier, consistencyComparison, ConfrontationOutcome, decidingMeasurement,
-  BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs,
-  APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck, CaseResult, convertValue, UnitError,
-  auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec, simplifyObservable,
-  isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner, scanLinkages,
-  deriveProposedBridges, describeDerivedClaim, filterEdges, deriveEdgeEvidence, formatFilterLegend,
-  POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource, PosterGraph, PosterValidation,
-  DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps,
-  problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath,
-  parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy,
-  formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint,
-  parseDesignBounds, runFalsification, rankPareto, annotateAdjudications, adjudicationFor,
-  candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication, annotateConsequences,
-  ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence, checkConventions,
-  unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness, REPRESENTATIVE_VALUES,
-  compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
-  CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness,
-  OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES,
-  summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
-  OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
-  ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups,
-  regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample,
-  familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
-  routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
-  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
+  getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, catalogFrontierAccount,
+  formatFrontierAccount, rankDiscoveries, ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage,
+  CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution,
+  requestYangMillsConfrontation, ConfrontationEntry, RigorTier, consistencyComparison,
+  ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
+  EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck,
+  CaseResult, convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
+  simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
+  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, deriveEdgeEvidence,
+  formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
+  PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap,
+  expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap,
+  loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
+  formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
+  formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
+  runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
+  AnnotatedCandidate, CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
+  ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
+  describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
+  compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
+  CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
+  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS,
+  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
+  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
+  ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap,
+  uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon, findPath,
+  findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation,
+  PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality,
+  Witness, MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -4719,6 +4736,27 @@ The codebase is organized into the following modules:
 - Interfaces: `FormulaName`
 - Functions: `formulaNameDimensions`
 - Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
+
+---
+
+### `src/composition/frontier-account.ts` - Two lists the catalog already knows how to tell apart: records that were
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./bridge-analysis.js` | `proposeLinkCandidates` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `./probe/frontier.js` | `scanFrontier` | Import |
+| `./probe/expression-gaps.js` | `expressionSearchGaps` | Import |
+| `./probe/types.js` | `FrontierGap` | Import (type-only) |
+| `../bridges/rejected.js` | `REJECTED_BRIDGE_ADJUDICATIONS` | Import |
+| `../bridges/confrontations.js` | `listConfrontations` | Import |
+
+**Exports:**
+- Interfaces: `ConfrontationMark`, `NullResultRow`, `FrontierAccountRow`, `FrontierAccount`, `FrontierAccountOptions`
+- Functions: `marksFromEntries`, `accountFromGraph`, `catalogFrontierAccount`, `formatFrontierAccount`
+- Constants: `CANDIDATE_NOT_A_BRIDGE_REASON`, `CONTESTED_BRIDGE_IDS`
 
 ---
 
@@ -7462,7 +7500,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...41 more]
+        N29[...42 more]
     end
 
     subgraph Root
@@ -7475,7 +7513,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...74 more]
+        N36[...75 more]
     end
 
     subgraph Core
@@ -7553,17 +7591,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 398 |
+| Total TypeScript Files | 400 |
 | Total Modules | 12 |
-| Total Lines of Code | 87905 |
-| Total Exports | 2891 |
-| Total Re-exports | 1374 |
+| Total Lines of Code | 88142 |
+| Total Exports | 2900 |
+| Total Re-exports | 1376 |
 | Total Classes | 60 |
-| Total Interfaces | 456 |
-| Total Functions | 743 |
+| Total Interfaces | 461 |
+| Total Functions | 747 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 537 |
+| Type-only Imports | 540 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

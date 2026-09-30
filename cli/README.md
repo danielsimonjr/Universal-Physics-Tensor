@@ -70,7 +70,7 @@ node bin/upt.mjs help        # also: --help, -h
 
 ## Command reference
 
-28 commands, grouped by what they do. Several accept aliases (shown in
+29 commands, grouped by what they do. Several accept aliases (shown in
 parentheses). Every data-bearing command (all but `help` and `version`)
 also accepts `--json` for a machine-readable envelope instead of text — see
 [JSON output](#json-output).
@@ -89,6 +89,7 @@ pure connectivity questions (see [The `--source` flag](#the---source-flag)).
 | `audit` | Try to derive every bridge by dimensions: which re-derive as a recognized monomial (prefactor recovered), which are decoys, which are dimensionally open. |
 | `map` (`linkage`) | Connected components (clusters) of the graph by shared quantities — the anchored core, the link hubs, the isolated tail. With `--format=mermaid\|dot\|svg` it emits the **visual** map (quantities = nodes, equations = junctions colored by status, one subgraph per component); `svg` renders the dot layout via the optional `@viz-js/viz` peer (`npm i @viz-js/viz`). `--proposed` overlays the unadjudicated identity-consequence relations (gray dashed); `--out=PATH` writes to a file. `--equation "TARGET = EXPR"` injects **your own** equation as a violet `user` node, **dimensionally validates it** (✓ consistent / ⚠ mismatch vs the target's catalog dimension), reports where it lands (cluster / shared quantities), and gives a **dimension-based** "did you mean?" (inferring an unknown symbol's dimension) — falling back to name-similarity. A dimensionally non-homogeneous RHS exits non-zero. `--relation=TYPE` and `--evidence=TAG` filter the map by the Atlas overlay — see the note below, because filtering changes what a MISSING overlay means. |
 | `candidates` (`propose`) | Propose cross-cluster links (same-dimension quantities in different clusters) for **physicist review**. A coincidence-heavy surface, not discovered bridges. |
+| `frontier` | Print null results and the frontier as two lists. A null result quotes a reason the program already states (a membership rejection, a candidate the link proposer already labels as not a bridge, or a confrontation the registry already marks unconfrontable or data-pending). A frontier row names two sides, a reason the graph already computes, and a registered observation or `observation absent`. An empty list is printed as empty. Neither list is a verdict and neither list changes a score. |
 | `predict` (`predictions`) | Project the catalog onto the (scale × force) regime plane and rank empty cells as undiscovered-connection hypotheses (triadic closure). |
 | `discover` (`discovery`) | **Vet** the link candidates through the inference suite: hypothesise each identification `a≡b` and test whether it merges disconnected physics, unlocks quantities, and stays numerically consistent. Ranks promising / inert / magnitude-clash / contradictory / axis-clash (a stated `scale`/`force` regime-label mismatch: a prior against a literal identity, not a physical test, and not "no connection possible"). Each PROMISING candidate also carries a `[consequence: entailed\|novel-consequence\|inconclusive]` trailer (`src/composition/consequence.ts`) — a machine pre-classifier, not adjudication: `entailed` re-derives a known canonical equation, `novel-consequence` is a valid algebraic consequence with no canonical match, `inconclusive` means none was derivable. Candidates a physicist has already adjudicated (`src/composition/adjudication.ts`) fold out of the printed PROMISING list by default; `--show-adjudicated` lists them again with their recorded verdict. Each PROMISING row also states its **readiness** dimension by dimension (structure, kind, which independent falsifiers — magnitude, axis, consequence — ran and survived or abstained; an abstention is a missing test, never a pass) and **what would make it testable**: the identity premise, the missing magnitudes and regime labels, and the observation that would test it. `--require-falsifier` hides promising rows that no independent falsifier ran on and survived, counts them, and lists the encoded bridges that already carry a falsifier (a confrontation, a counterexample, or a regime inequality). |
 | `connectors` (`orphans`) | Of the isolated bridges, which could connect to the anchored core via a same-dimension identification? The structural frontier. |
@@ -232,7 +233,7 @@ An unrecognised value exits with an error and status `1`.
 
 ## JSON output
 
-Every data-bearing command (all 26 — every command in the tables above except
+Every data-bearing command (all 27 — every command in the tables above except
 `help` and `version`) accepts a global `--json` flag: instead of the text
 report, it prints one JSON envelope to stdout. The exit code is the text
 command's exit code. A check that ran and failed is still exit 3 under
@@ -475,7 +476,7 @@ candidates.
 | Flag | Commands | Effect |
 |---|---|---|
 | `--source=catalog\|canonical\|both` | `discover`, `candidates`, `map`, `explain`, `priority`, `audit`, `predict`, `connectors` | Choose the graph (default `catalog`; `map` and `connectors` default to `both` instead — see [The `--source` flag](#the---source-flag)). |
-| `--json` | All 26 data-bearing commands | Emit a machine-readable JSON envelope instead of text; see [JSON output](#json-output). Not combinable with `map --format=mermaid\|dot\|svg` (exit 2). |
+| `--json` | All 27 data-bearing commands | Emit a machine-readable JSON envelope instead of text; see [JSON output](#json-output). Not combinable with `map --format=mermaid\|dot\|svg` (exit 2). |
 | `--format=text\|mermaid\|dot\|svg` | `map` | Output format. `text` (default) is the linkage printout; `mermaid`/`dot` emit the visual map source; `svg` renders it (needs the optional `@viz-js/viz` peer). |
 | `--proposed` | `map` (with `--format`) | Overlay the unadjudicated identity-consequence relations as gray-dashed junctions. |
 | `--out=PATH` | `map` (with `--format`) | Write the diagram source to a file instead of stdout. |

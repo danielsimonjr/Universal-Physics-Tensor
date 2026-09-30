@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 398
+  totalFiles: 400
   totalModules: 12
-  totalExports: 2891
+  totalExports: 2900
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7820,6 +7820,27 @@ modules:
         - command
       constants:
         - command
+    src/cli/commands/frontier.ts:
+      description: "`upt frontier` — the two lists from the frontier and null-result design."
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../args.js
+          imports:
+            - FlagSpec
+          typeOnly: true
+        - file: ../command.js
+          imports:
+            - registerCommand
+            - Command
+            - CommandCtx
+        - file: ../output.js
+          imports:
+            - emitJson
+      exports:
+        - command
+      constants:
+        - command
     src/cli/commands/ground.ts:
       description: "`upt ground <quantityA> <quantityB>` — the epistemic-grounding ledger for a"
       externalDependencies: []
@@ -7881,6 +7902,9 @@ modules:
           imports:
             - "*"
         - file: ./candidates.js
+          imports:
+            - "*"
+        - file: ./frontier.js
           imports:
             - "*"
         - file: ./explain.js
@@ -8862,6 +8886,11 @@ modules:
           imports:
             - predictMissingBridges
           reExport: true
+        - file: ./composition/frontier-account.js
+          imports:
+            - catalogFrontierAccount
+            - formatFrontierAccount
+          reExport: true
         - file: ./composition/discovery.js
           imports:
             - rankDiscoveries
@@ -9205,6 +9234,8 @@ modules:
         - getFormulaDimensionChecker
         - parseDimensionSpec
         - predictMissingBridges
+        - catalogFrontierAccount
+        - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
         - BRIDGE_EQUATIONS
@@ -9374,6 +9405,8 @@ modules:
         - getFormulaDimensionChecker
         - parseDimensionSpec
         - predictMissingBridges
+        - catalogFrontierAccount
+        - formatFrontierAccount
         - rankDiscoveries
         - ANCHOR_DEFAULT
         - BRIDGE_EQUATIONS
@@ -11067,6 +11100,58 @@ modules:
         - EPS0_SI
         - MU0_SI
         - FORMULA_NAMED
+    src/composition/frontier-account.ts:
+      description: "Two lists the catalog already knows how to tell apart: records that were"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./bridge-analysis.js
+          imports:
+            - proposeLinkCandidates
+        - file: ./catalog-graph.js
+          imports:
+            - CATALOG_GRAPH
+        - file: ./edge.js
+          imports:
+            - BridgeEdge
+          typeOnly: true
+        - file: ./probe/frontier.js
+          imports:
+            - scanFrontier
+        - file: ./probe/expression-gaps.js
+          imports:
+            - expressionSearchGaps
+        - file: ./probe/types.js
+          imports:
+            - FrontierGap
+          typeOnly: true
+        - file: ../bridges/rejected.js
+          imports:
+            - REJECTED_BRIDGE_ADJUDICATIONS
+        - file: ../bridges/confrontations.js
+          imports:
+            - listConfrontations
+      exports:
+        - CANDIDATE_NOT_A_BRIDGE_REASON
+        - CONTESTED_BRIDGE_IDS
+        - marksFromEntries
+        - accountFromGraph
+        - catalogFrontierAccount
+        - formatFrontierAccount
+      interfaces:
+        - ConfrontationMark
+        - NullResultRow
+        - FrontierAccountRow
+        - FrontierAccount
+        - FrontierAccountOptions
+      functions:
+        - marksFromEntries
+        - accountFromGraph
+        - catalogFrontierAccount
+        - formatFrontierAccount
+      constants:
+        - CANDIDATE_NOT_A_BRIDGE_REASON
+        - CONTESTED_BRIDGE_IDS
     src/composition/graph-viz-svg.ts:
       description: SVG rendering for the physics map — render Graphviz DOT source to an SVG
       externalDependencies: []
@@ -19256,6 +19341,7 @@ dependencyGraph:
         - src/cli/commands/eval.ts
         - src/cli/commands/evaluate.ts
         - src/cli/commands/explain.ts
+        - src/cli/commands/frontier.ts
         - src/cli/commands/ground.ts
         - src/cli/commands/index.ts
         - src/cli/commands/map.ts
@@ -19321,6 +19407,7 @@ dependencyGraph:
         - src/composition/expr-simplify.ts
         - src/composition/expr-subst.ts
         - src/composition/formula-names.ts
+        - src/composition/frontier-account.ts
         - src/composition/graph-viz-svg.ts
         - src/composition/graph-viz.ts
         - src/composition/grounding.ts
@@ -19467,19 +19554,19 @@ dependencyGraph:
         - src/numerical/types.ts
         - src/numerical/weyl-lowering.ts
 statistics:
-  totalTypeScriptFiles: 398
+  totalTypeScriptFiles: 400
   totalModules: 12
-  totalLinesOfCode: 87905
-  totalExports: 2891
+  totalLinesOfCode: 88142
+  totalExports: 2900
   totalClasses: 60
-  totalInterfaces: 456
-  totalFunctions: 743
+  totalInterfaces: 461
+  totalFunctions: 747
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 713
-  totalReExports: 1374
-  totalTypeOnlyImports: 537
+  totalConstants: 716
+  totalReExports: 1376
+  totalTypeOnlyImports: 540
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 69
+  unusedExportsCount: 70
