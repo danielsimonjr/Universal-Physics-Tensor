@@ -13,6 +13,9 @@ import { describe, it, expect } from 'vitest';
 import { vetLinkCandidate } from '../../src/composition/discovery.js';
 import type { DiscoveryOptions } from '../../src/composition/discovery.js';
 import type { LinkCandidate } from '../../src/composition/bridge-analysis.js';
+import type { BridgeEdge } from '../../src/composition/edge.js';
+import type { Quantity } from '../../src/composition/quantity.js';
+import { DIMENSIONLESS, ENERGY } from '../../src/dimensional/types.js';
 import {
   representativeValue,
   REPRESENTATIVE_VALUES,
@@ -38,6 +41,13 @@ const repVals = {
 const opts = (extra: Partial<DiscoveryOptions> = {}): DiscoveryOptions => ({
   representativeValues: repVals,
   ...extra,
+});
+
+const graphQuantity = (name: string, dim: Quantity['dim']): Quantity => ({
+  name,
+  symbol: name,
+  dim,
+  attributes: {},
 });
 
 describe('discover — order-of-magnitude falsifier', () => {
@@ -70,6 +80,39 @@ describe('discover — order-of-magnitude falsifier', () => {
       cand('alpha', 'beta'),
       opts({ maxOrdersOfMagnitude: 12 }),
     );
+    expect(r.verdict).not.toBe('magnitude-clash');
+  });
+
+  it('compares anchor-derived tagged quantities with SI representative values', () => {
+    const derivesDarkMass: BridgeEdge = {
+      id: 'derive-dark-mass',
+      beId: null,
+      kind: 'bridge',
+      label: 'derive dark mass',
+      sources: [
+        graphQuantity('vacuum-expectation-value', ENERGY),
+        graphQuantity('yukawa-coupling', DIMENSIONLESS),
+      ],
+      target: graphQuantity('dark-fermion-mass', ENERGY),
+      confidence: 'established',
+      domain: { description: 'any', predicate: () => true },
+      evaluate: (inputs) =>
+        inputs['vacuum-expectation-value']! * inputs['yukawa-coupling']!,
+      citation: 'synthetic',
+    };
+    const r = vetLinkCandidate(
+      [derivesDarkMass],
+      cand('dark-fermion-mass', 'vacuum-expectation-value'),
+      {
+        groundTruth: {
+          'vacuum-expectation-value': 246,
+          'yukawa-coupling': 1,
+        },
+      },
+    );
+
+    expect(r.magnitudeChecked).toBe(true);
+    expect(r.ordersApart).toBeLessThan(0.01);
     expect(r.verdict).not.toBe('magnitude-clash');
   });
 });

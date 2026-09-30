@@ -50,6 +50,23 @@ export const BE20_SYMBOLIC: ExprNode = {
   ],
 };
 
+/** δS_EE = δ⟨H_R⟩. The evaluator returns its one input. */
+export const BE30_SYMBOLIC: ExprNode = symN('modular-hamiltonian-variation', DIMENSIONLESS);
+
+/** (c_GW − c) / c. */
+export const BE36_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '/',
+  args: [
+    {
+      kind: 'op',
+      op: '-',
+      args: [symN('gravitational-wave-speed', VELOCITY_DIM), symN('c', VELOCITY_DIM)],
+    },
+    symN('c', VELOCITY_DIM),
+  ],
+};
+
 /**
  * BE-33 Hertz-Millis correlation length: (reference-correlation-length,
  * temperature, reference-temperature, static-exponent-nu, dynamic-exponent-z) →

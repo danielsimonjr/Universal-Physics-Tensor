@@ -47,7 +47,7 @@ import {
   wormholeCrossSectionAreaQ,
   wormholeEntanglementEntropyQ,
 } from '../quantities.js';
-import { isFin, BE20_SYMBOLIC } from './_catalog-helpers.js';
+import { isFin, BE20_SYMBOLIC, BE30_SYMBOLIC } from './_catalog-helpers.js';
 
 /**
  * BE-20 cosmological-constant mass density:
@@ -102,6 +102,7 @@ export const be30Edge: BridgeEdge = {
   },
   evaluate: (i) =>
     evaluateFLMFirstLaw({ delta_avg_H_R: i['modular-hamiltonian-variation'] }),
+  symbolic: BE30_SYMBOLIC,
   citation: 'Faulkner, Lewkowycz & Maldacena 2013 JHEP 11:074; Blanco et al. 2013 JHEP 08:060',
 };
 

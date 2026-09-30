@@ -1,5 +1,9 @@
 # UPT TODO
 
+## Unit-convention review follow-up (2026-09-29)
+
+- [x] Merge current `master` and resolve conflicts; normalize discovery magnitudes, scale composed junction inputs, skip non-finite identification copies, and pass unit mode into named-binding expressions.
+
 ## CLI dogfood, three personas (2026-09-29)
 
 Tier 10 `upt path` is on master. The reports are `docs/dogfood/2026-09-29-applied-physicist.md`,
@@ -674,9 +678,9 @@ warning-silencing, not debug logging).
 - [ ] **After 0.47.0: one release per tier, each DESIGNED and approved by Mothership before any code**
       (owner order 2026-09-25). No code before the design is approved.
       - [ ] After the criterion 3 study closes: switch the product's typed structural search (`rankByStructure` callers) to the residual-form canonical corpus, so user claims in residual form can match. Blocked while the Amendment 8 pins are live.
-      - [ ] Tier 8 → 0.48.0 also: C1, probe-searchable frontier gaps. Design: `docs/design/tier-8-probe-searchable-gaps.md`. Measured 2026-09-29: `upt probe scan` lists 6 searchable prediction-residual gaps (`fg-expr-<case-id>`, one per applied case). `--all` still lists the 232 Product A wrappers (216 relation-link, 16 regime-transition), and those stay not-searchable. The "none searchable" clause was the pre-#219 scan.
+      - [ ] Tier 8 → 0.48.0 also: C1, probe-searchable frontier gaps. The expression-gap list landed in #219. Rechecked on master `40bf16f`: the library scan and `upt probe scan --json` agree with the measurement in NOTES.md (6 searchable prediction-residual gaps, one per applied case; `--all` adds 232 Product A wrappers, 216 relation-link and 16 regime-transition, none searchable). The default-scan comment that still called that list empty was the leftover. Design: `docs/design/tier-8-probe-searchable-gaps.md`. The 0.48.0 release waits on Mothership approval of that note.
       - [ ] Tier 10 → 0.49.0: C3, cross-family `upt path`, with bound composition across families. Design: `docs/design/tier-10-cross-family-path.md`. Daniel approved the §11 defaults on 2026-09-29; those rules are the design note's §11. M1–M4 are in the tree. Labels: `crossFamily`, `modelFamilies`, and `fromModelFamily` / `toModelFamily` on each JSON step (`family` stays the filing family). The `crosses families:` line replaces the sentence that composition rules are the same as within one family. M2: a matching norm name across families is not a transport; only a witnessed `NormTransport` carries a bound and its factor is applied; otherwise the reason is `cross-family-unmapped`. M3: each step's regime is conjoined as true/false/unknown, and a horizon is restated only through a declared time map. M4: help text, JSON, and the section 9 controls, including command-level exit codes. No sigma. `--at` stays flat. `ab-stokes-einstein` stays a named join. The composition table is unchanged. The version bump and the release stay Mothership's.
-      - [ ] Tier 11 → 0.50.0: ROADMAP §8 hybrid retrieval: optional out-of-process embedding backend (qwen3-embedding:4b via Ollama), zero hard deps, fallback to atlas search, deterministic tests with a stub embedder plus the frozen study vectors; the live GPU evaluation waits for LLMBench's reservation to end.
+      - [ ] Tier 11 → 0.50.0: ROADMAP §8 hybrid retrieval: optional out-of-process embedding backend (qwen3-embedding:4b via Ollama), zero hard deps, fallback to atlas search, deterministic tests with a stub embedder plus the frozen study vectors; the live GPU evaluation waits for LLMBench's reservation to end. Design: `docs/design/tier-11-hybrid-retrieval.md`.
 
 - [x] **0.47.0 batch from the persona pass (Mothership ruling 2026-09-25).** One finding per commit;
       STOP and report before any release (0.47.0 is Mothership's).
@@ -2059,7 +2063,7 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
       the bianchi-residual test-local de Sitter/Schwarzschild closures), so the
       suite carries exactly SI + geometrized with consistent naming. Suite **2595
       passing** (pure rename); tsc src+tests ✓.
-- [ ] **G-9 follow-on (separate axis, deferred):** the Eve M-1 per-quantity
+- [x] **G-9 follow-on (separate axis, deferred):** the Eve M-1 per-quantity
       unit-convention tag (GeV/J, bits/nats) — distinct from c/G geometrization.
 - [x] ✅ **Distributional / variational grammar primitives (v0.14) — EXECUTED
       2026-06-16** (`docs/planning/v0.14-Distributional-Grammar-Design.md`,

@@ -40,7 +40,7 @@ import {
   vacuumExpectationValueQ,
   yukawaCouplingQ,
 } from '../quantities.js';
-import { isFin, BE18_SYMBOLIC } from './_catalog-helpers.js';
+import { isFin, BE18_SYMBOLIC, BE36_SYMBOLIC } from './_catalog-helpers.js';
 
 /**
  * BE-17 Einstein-Cartan torsion-spin squared invariant:
@@ -129,6 +129,7 @@ export const be36Edge: BridgeEdge = {
   },
   evaluate: (i) =>
     evaluateGWSpeedRatio({ c_GW_m_per_s: i['gravitational-wave-speed'] }),
+  symbolic: BE36_SYMBOLIC,
   citation: 'Abbott et al. 2017 ApJ Lett. 848:L13; Boran et al. 2018 PRD 97:041501',
 };
 

@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 390,
-    "totalTestFiles": 537,
-    "testedCount": 380,
+    "totalSourceFiles": 391,
+    "totalTestFiles": 538,
+    "testedCount": 381,
     "untestedCount": 10,
     "coveragePercent": "97.4"
   },
@@ -313,6 +313,7 @@
     "src/composition/retrodiction.ts",
     "src/composition/symbolic-constants.ts",
     "src/composition/uncertainty.ts",
+    "src/composition/unit-convention.ts",
     "src/composition/user-equation.ts",
     "src/core/axes-registry.ts",
     "src/core/cell.ts",
@@ -2572,6 +2573,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/audit.ts": [
@@ -2626,6 +2628,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/axes.ts": [
@@ -2680,6 +2683,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/candidates.ts": [
@@ -2734,6 +2738,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/canonical.ts": [
@@ -2788,6 +2793,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/confront.ts": [
@@ -2842,6 +2848,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/connectors.ts": [
@@ -2896,6 +2903,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/coverage.ts": [
@@ -2950,6 +2958,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/derive.ts": [
@@ -3004,6 +3013,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/discover.ts": [
@@ -3058,6 +3068,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/eval.ts": [
@@ -3112,6 +3123,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/evaluate.ts": [
@@ -3166,6 +3178,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/explain.ts": [
@@ -3220,6 +3233,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/ground.ts": [
@@ -3274,6 +3288,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/index.ts": [
@@ -3328,6 +3343,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/map.ts": [
@@ -3382,6 +3398,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/metric.ts": [
@@ -3436,6 +3453,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/path.ts": [
@@ -3490,6 +3508,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/predict.ts": [
@@ -3544,6 +3563,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/priority.ts": [
@@ -3598,6 +3618,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/probe.ts": [
@@ -3653,6 +3674,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/recover.ts": [
@@ -3707,6 +3729,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/regime.ts": [
@@ -3761,6 +3784,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/search.ts": [
@@ -3815,6 +3839,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/symbolic.ts": [
@@ -3869,6 +3894,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/commands/testplan.ts": [
@@ -3923,6 +3949,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/conventions.ts": [],
@@ -3993,6 +4020,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts"
     ],
     "src/cli/output.ts": [
@@ -4454,6 +4482,7 @@
       "tests/composition/compose-properties.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
+      "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
@@ -5512,6 +5541,7 @@
       "tests/composition/compose-properties.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/compose.test.ts",
+      "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
@@ -5638,6 +5668,9 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/composition/unit-convention.ts": [
+      "tests/composition/retrodiction.test.ts"
+    ],
     "src/composition/user-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
@@ -5752,6 +5785,7 @@
       "tests/composition/canonical-graph.test.ts",
       "tests/composition/dogfood-compare.test.ts",
       "tests/composition/namespacing.test.ts",
+      "tests/composition/symbolic-composition.test.ts",
       "tests/core/constants.test.ts",
       "tests/dimensional/units.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -6673,6 +6707,7 @@
       "tests/composition/compose.test.ts",
       "tests/composition/dimension-adjacency.test.ts",
       "tests/composition/discovery-canonical-kind.test.ts",
+      "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
       "tests/composition/dogfood-compare.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
@@ -12516,6 +12551,35 @@
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts"
     ],
+    "tests/cli/unit-convention-binding.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
+    ],
     "tests/cli/upt-derive.test.ts": [],
     "tests/cli/upt-discover-opts.test.ts": [
       "src/cli/main.ts",
@@ -12963,6 +13027,9 @@
     "tests/composition/discovery-magnitude.test.ts": [
       "src/composition/discovery.ts",
       "src/composition/bridge-analysis.ts",
+      "src/composition/edge.ts",
+      "src/composition/quantity.ts",
+      "src/dimensional/types.ts",
       "src/composition/representative-values.ts"
     ],
     "tests/composition/discovery.test.ts": [
@@ -13454,10 +13521,11 @@
     ],
     "tests/composition/retrodiction.test.ts": [
       "src/composition/retrodiction.ts",
+      "src/composition/compose.ts",
+      "src/composition/unit-convention.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
-      "src/composition/compose.ts",
       "src/composition/consistency.ts",
       "src/composition/edges/calibration.ts",
       "src/composition/edges/catalog-tranche.ts",
@@ -13525,6 +13593,7 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts",
+      "src/core/constants.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",

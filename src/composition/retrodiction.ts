@@ -33,6 +33,7 @@ import type { BridgeEdge } from './edge.js';
 import { evaluateEdge } from './edge.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
+import { conventionFactor } from './unit-convention.js';
 import { classifyAll } from './identifiability.js';
 
 /** Outcome of retrodicting one node. @public */
@@ -124,8 +125,11 @@ export function forwardEvaluate(
     for (const id of idents) {
       const fromVal = values.get(id.from);
       if (fromVal !== undefined && !values.has(id.to)) {
-        values.set(id.to, fromVal);
-        changed = true;
+        const converted = fromVal * conventionFactor(id.from, id.to);
+        if (Number.isFinite(converted)) {
+          values.set(id.to, converted);
+          changed = true;
+        }
       }
     }
     for (const e of edges) {

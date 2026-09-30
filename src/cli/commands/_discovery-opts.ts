@@ -13,7 +13,7 @@
 import type { ParsedArgs } from '../args.js';
 import { UsageError } from '../errors.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
-import { readBinding } from '../../numerical/binding-value.js';
+import { readNamedBinding } from '../../numerical/binding-value.js';
 
 export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
@@ -40,7 +40,7 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
       let val = Number.NaN;
       if (v !== '') {
         try {
-          val = readBinding(v).value;
+          val = readNamedBinding(k, v).value;
         } catch {
           val = Number.NaN;
         }
