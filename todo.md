@@ -1144,6 +1144,7 @@ warning-silencing, not debug logging).
       - [ ] **Phase 5 — frontier + null-result as first-class output.** A
             publishable coincidence-rejection catalog + a legible frontier map
             (what physics hasn't connected + what would test it).
+            Design: `docs/design/phase-5-frontier-null-result.md`. No implementation until that note is approved.
 
 - [ ] **BE-53 Yang–Mills β-function confrontation** (re-homed 2026-09-25 from the closed 2026-07-04
       NEXT umbrella): PDG α_s(M_Z) = 0.1179 running, open data, value/consistency kind. Needs its own

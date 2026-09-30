@@ -10,6 +10,7 @@ from v0.1.0 onward.
 
 ### Added
 
+- **Frontier and null-result design.** `docs/design/phase-5-frontier-null-result.md` specifies two separate lists: records already examined and rejected, and connections the catalog does not contain. A missing observation stays missing. No implementation in that change.
 - **Tier 8 design.** `docs/design/tier-8-probe-searchable-gaps.md` specifies what `upt probe scan` lists as searchable and what stays a Product A wrapper. No implementation in that change.
 - ~~**Tier 8 design review correction.** Case-derived entries are scan templates, not `FrontierGap` or detected prediction-residual records; searchable status remains conditional on a problem file's baseline and dataset.~~ Retracted: the catalog scan lists those entries as searchable `prediction-residual` gaps, one per applied case. The zero-searchable warning is only for a scan that has none. `upt probe run` still requires a problem file.
 - **Tier 11 design.** `docs/design/tier-11-hybrid-retrieval.md` specifies an optional out-of-process embedder, a stub for tests, and a fallback to atlas search. No implementation in that change.
