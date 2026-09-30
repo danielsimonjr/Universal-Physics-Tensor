@@ -33,18 +33,18 @@ Two lists stay separate.
 - **Expression search templates.** One template per applied case. The id is
   `fg-expr-` plus the case id, but a template is not a detected residual: it
   has no observations or baseline predictor and therefore is not a
-  `prediction-residual` gap and is not searchable. The template list is
-  concatenated after the wrappers, so the wrapper list's own length does not
-  change when a case is added. A future `prediction-residual` entry is
-  searchable only when its problem file supplies the named baseline and
-  dataset required by the scanner contract.
+  `FrontierGap` or a `prediction-residual` gap and is not searchable. The
+  template list is concatenated after the wrappers for presentation, so the
+  wrapper list's own length does not change when a case is added. A future
+  `prediction-residual` entry is searchable only when its problem file
+  supplies the named baseline and dataset required by the scanner contract.
 
 `upt probe scan` defaults to the searchable list. `--all` prints wrappers and
 templates. A template is an index entry for authoring a problem file; it is
 not evidence that a residual has been observed and cannot be passed to
 `upt probe run`.
 `--searchable-only` is the default and is rejected together with `--all`.
-A scan that has gaps and none of them searchable prints the warning that
+A scan that has entries and none of them searchable prints the warning that
 names the zero, points at `upt discover`, and points at
 `upt probe run --problem=FILE`. That warning is the wording for a scan
 that really has no searchable gap, including the current catalog scan whose
@@ -82,9 +82,9 @@ how many non-searchable wrappers and templates were hidden.
 A drift guard on the catalog graph:
 
 - every wrapper has `searchable: false`;
-- every expression template is non-searchable and is marked as a
-  `search-template` entry, not a `prediction-residual` gap, and is
-  `fg-expr-<case id>` for a registered applied case;
+- every expression template is a separate non-searchable scan entry, not a
+  `FrontierGap` or `prediction-residual` gap, and is `fg-expr-<case id>` for
+  a registered applied case;
 - the exact, duplicate-free set of template ids equals
   `{fg-expr-${id} | id ∈ APPLIED_CASES}`;
 - the combined list is the wrappers plus exactly those templates, with no

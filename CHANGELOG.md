@@ -11,6 +11,7 @@ from v0.1.0 onward.
 ### Added
 
 - **Tier 8 design.** `docs/design/tier-8-probe-searchable-gaps.md` specifies what `upt probe scan` lists as searchable and what stays a Product A wrapper. No implementation in that change.
+- **Tier 8 design review correction.** Case-derived entries are scan templates, not `FrontierGap` or detected prediction-residual records; searchable status remains conditional on a problem file's baseline and dataset.
 - **Three CLI dogfood reports (2026-09-29).** `docs/dogfood/2026-09-29-applied-physicist.md`, `docs/dogfood/2026-09-29-gr-qft.md` and `docs/dogfood/2026-09-29-engineering-physicist.md` record what the CLI printed on master `44e4450` for practical calculations, curvature, and cross-family `upt path`. The open suggestions stay in `todo.md`.
 - **Tier 10 design.** `docs/design/tier-10-cross-family-path.md` specifies cross-family `upt path` and bound composition across families. ~~No implementation.~~
 - **Tier 10 M1 labels.** `upt path` reports `crossFamily` and `modelFamilies` from the models the route visits, and `fromModelFamily` / `toModelFamily` on each JSON step. `family` stays the filing family. The line that composition rules are the same as within one family is replaced by `crosses families: …`. No new refusal. `ab-kg-schrodinger`'s bound is unchanged. ~~M2–M4 are not in this change.~~ Retracted: M2–M4 landed in the following entries.
@@ -11425,4 +11426,3 @@ unreformulable:
   `'action'` (same SI shape J·s). `hbar` is the canonical action-typed
   consumer, so when `format()` renders that shape it now returns
   `'[action]'` rather than `'[angular_momentum]'`.
-
