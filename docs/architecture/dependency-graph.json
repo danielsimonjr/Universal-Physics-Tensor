@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 394,
+    "totalFiles": 395,
     "totalModules": 12,
-    "totalExports": 2850
+    "totalExports": 2851
   },
   "entryPoints": [
     {
@@ -4431,6 +4431,46 @@
         ],
         "constants": [
           "MERCURY"
+        ]
+      },
+      "src/bridges/be53-yang-mills-confrontation.ts": {
+        "description": "BE-53 confrontation request.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./observations/types.js",
+            "imports": [
+              "ConfrontationOutcome"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./observations/types.js",
+            "imports": [
+              "residualInSigma"
+            ]
+          },
+          {
+            "file": "./equations/be-53-yang-mills-beta.js",
+            "imports": [
+              "evaluateYangMillsBeta"
+            ]
+          }
+        ],
+        "exports": [
+          "requestYangMillsConfrontation"
+        ],
+        "interfaces": [
+          "MeasuredCouplingRow",
+          "RunningProcedureRecord",
+          "RunningProcedure",
+          "YangMillsConfrontationRequest",
+          "YangMillsConfrontationRefusal",
+          "YangMillsConfrontationHit"
+        ],
+        "functions": [
+          "requestYangMillsConfrontation"
         ]
       },
       "src/bridges/be55-quantum-hall-confrontation.ts": {
@@ -27128,6 +27168,7 @@
           "src/bridges/be48-collapse-confrontation.ts",
           "src/bridges/be51-lensing-confrontation.ts",
           "src/bridges/be52-mercury-confrontation.ts",
+          "src/bridges/be53-yang-mills-confrontation.ts",
           "src/bridges/be55-quantum-hall-confrontation.ts",
           "src/bridges/be55-quantum-hall.ts",
           "src/bridges/be56-casimir-confrontation.ts",
@@ -27503,18 +27544,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 394,
+    "totalTypeScriptFiles": 395,
     "totalModules": 12,
-    "totalLinesOfCode": 87064,
-    "totalExports": 2850,
+    "totalLinesOfCode": 87249,
+    "totalExports": 2851,
     "totalClasses": 59,
-    "totalInterfaces": 445,
-    "totalFunctions": 733,
+    "totalInterfaces": 451,
+    "totalFunctions": 734,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 704,
     "totalReExports": 1353,
-    "totalTypeOnlyImports": 533,
+    "totalTypeOnlyImports": 534,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

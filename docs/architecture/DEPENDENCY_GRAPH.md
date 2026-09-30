@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 65 files
-- **bridges**: 90 files
+- **bridges**: 91 files
 - **canonical**: 18 files
 - **cases**: 9 files
 - **cli**: 45 files
@@ -1317,6 +1317,21 @@ The codebase is organized into the following modules:
 - Interfaces: `PerihelionObservation`, `BE52ConfrontationResult`
 - Functions: `confrontBE52`
 - Constants: `MERCURY`
+
+---
+
+### `src/bridges/be53-yang-mills-confrontation.ts` - BE-53 confrontation request.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./observations/types.js` | `ConfrontationOutcome` | Import (type-only) |
+| `./observations/types.js` | `residualInSigma` | Import |
+| `./equations/be-53-yang-mills-beta.js` | `evaluateYangMillsBeta` | Import |
+
+**Exports:**
+- Interfaces: `MeasuredCouplingRow`, `RunningProcedureRecord`, `RunningProcedure`, `YangMillsConfrontationRequest`, `YangMillsConfrontationRefusal`, `YangMillsConfrontationHit`
+- Functions: `requestYangMillsConfrontation`
 
 ---
 
@@ -7360,7 +7375,7 @@ graph TD
         N8[be23-planckian-confrontation]
         N9[be35-bootstrap-confrontation]
         N10[be36-gw170817-confrontation]
-        N11[...85 more]
+        N11[...86 more]
     end
 
     subgraph Canonical
@@ -7478,17 +7493,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 394 |
+| Total TypeScript Files | 395 |
 | Total Modules | 12 |
-| Total Lines of Code | 87064 |
-| Total Exports | 2850 |
+| Total Lines of Code | 87249 |
+| Total Exports | 2851 |
 | Total Re-exports | 1353 |
 | Total Classes | 59 |
-| Total Interfaces | 445 |
-| Total Functions | 733 |
+| Total Interfaces | 451 |
+| Total Functions | 734 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 533 |
+| Type-only Imports | 534 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
