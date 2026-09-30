@@ -67,6 +67,7 @@ export {
   confrontationRigor,
   rigorDistribution,
 } from './bridges/confrontations.js';
+export { requestYangMillsConfrontation } from './bridges/be53-yang-mills-confrontation.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
 export { consistencyComparison } from './bridges/observations/types.js';
 export type { ConfrontationOutcome } from './bridges/observations/types.js';

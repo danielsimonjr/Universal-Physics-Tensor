@@ -217,3 +217,31 @@ export function evaluateYangMillsBeta(input: YangMillsBetaInputs): number {
 export function computeB0(N_c: number, N_f: number): number {
   return (11 / 3) * N_c - (2 / 3) * N_f;
 }
+
+/** Sign of the one-loop coefficient. Not a confrontation. @public */
+export type OneLoopCoefficientSign = 'positive' | 'zero' | 'negative';
+
+/**
+ * Whether `b₀` is positive, zero, or negative for a stated `(N_c, N_f)`.
+ * The label is the one-loop coefficient. This is not a data test.
+ *
+ * @public
+ */
+export interface OneLoopCoefficientStatement {
+  readonly label: 'one-loop coefficient';
+  readonly sign: OneLoopCoefficientSign;
+  readonly b0: number;
+}
+
+/**
+ * State the sign of `b₀ = (11/3) N_c − (2/3) N_f`. Positive is asymptotic
+ * freedom in this one-loop truncation. The statement is the coefficient,
+ * not a residual against a measurement.
+ *
+ * @public
+ */
+export function oneLoopCoefficientStatement(N_c: number, N_f: number): OneLoopCoefficientStatement {
+  const b0 = computeB0(N_c, N_f);
+  const sign: OneLoopCoefficientSign = b0 > 0 ? 'positive' : b0 < 0 ? 'negative' : 'zero';
+  return { label: 'one-loop coefficient', sign, b0 };
+}

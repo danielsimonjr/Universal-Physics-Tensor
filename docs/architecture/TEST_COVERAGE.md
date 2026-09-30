@@ -191,7 +191,7 @@ The following 10 source files are not directly imported by any test file:
 | `equations/be-48-grw-localization.ts` | `be-48-encoding.test.ts` |
 | `equations/be-49-quantum-darwinism.ts` | `be-49-encoding.test.ts` |
 | `equations/be-50-wheeler-feynman.ts` | `be-50-encoding.test.ts` |
-| `equations/be-53-yang-mills-beta.ts` | `be-53-encoding.test.ts` |
+| `equations/be-53-yang-mills-beta.ts` | `atlas-public-closure.test.ts`, `public-surface.test.ts`, `be-53-encoding.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `equations/be-54-randall-sundrum-brane.ts` | `be-54-encoding.test.ts` |
 | `bridges/evaluator-inputs.ts` | `applied-cases.test.ts`, `brownian-sphere.test.ts`, `lumped-cooling.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `units.test.ts` |
 | `bridges/evaluators.ts` | `atlas-public-closure.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `evaluators.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `units.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
@@ -438,10 +438,10 @@ The following 10 source files are not directly imported by any test file:
 
 | Test File | Imports from Source |
 |-----------|---------------------|
-| `api/atlas-public-closure.test.ts` | 127 files |
+| `api/atlas-public-closure.test.ts` | 128 files |
 | `api/namespace-facade-invariant.test.ts` | 0 files |
 | `api/optional-peer-absence.test.ts` | 0 files |
-| `api/public-surface.test.ts` | 127 files |
+| `api/public-surface.test.ts` | 128 files |
 | `api/public-tag-vs-index-invariant.test.ts` | 0 files |
 | `atlas/applicability.test.ts` | 5 files |
 | `atlas/association.test.ts` | 35 files |
@@ -591,7 +591,7 @@ The following 10 source files are not directly imported by any test file:
 | `bridges/be48-collapse.test.ts` | 3 files |
 | `bridges/be51-lensing-confrontation.test.ts` | 3 files |
 | `bridges/be52-mercury-confrontation.test.ts` | 1 files |
-| `bridges/bridge-equations-facade.test.ts` | 131 files |
+| `bridges/bridge-equations-facade.test.ts` | 132 files |
 | `bridges/catalog-adapter.test.ts` | 17 files |
 | `bridges/catalog-grammar-applicability.test.ts` | 7 files |
 | `bridges/catalog-integrity.test.ts` | 14 files |
@@ -613,7 +613,7 @@ The following 10 source files are not directly imported by any test file:
 | `bridges/overlay-registry-quote.test.ts` | 15 files |
 | `bridges/perihelion-precession-labeled.test.ts` | 6 files |
 | `bridges/perihelion-precession.test.ts` | 4 files |
-| `bridges/public-api-stability.test.ts` | 128 files |
+| `bridges/public-api-stability.test.ts` | 129 files |
 | `bridges/sensitivity.test.ts` | 1 files |
 | `bridges/solar-gm.test.ts` | 4 files |
 | `bridges/spec-vs-index.test.ts` | 14 files |
@@ -649,8 +649,8 @@ The following 10 source files are not directly imported by any test file:
 | `cli/applied-physics-audit.test.ts` | 27 files |
 | `cli/args.test.ts` | 2 files |
 | `cli/atlas-command.test.ts` | 29 files |
-| `cli/atlas-evidence.test.ts` | 210 files |
-| `cli/audit-improvements.test.ts` | 210 files |
+| `cli/atlas-evidence.test.ts` | 211 files |
+| `cli/audit-improvements.test.ts` | 211 files |
 | `cli/binding-expressions.test.ts` | 28 files |
 | `cli/canonical-compare-cli.test.ts` | 27 files |
 | `cli/cli-from-src.test.ts` | 27 files |
@@ -669,15 +669,15 @@ The following 10 source files are not directly imported by any test file:
 | `cli/explain-bridge-redirect.test.ts` | 27 files |
 | `cli/explain-not-covered.test.ts` | 27 files |
 | `cli/gr-dogfood-cli.test.ts` | 28 files |
-| `cli/graphs.test.ts` | 183 files |
+| `cli/graphs.test.ts` | 184 files |
 | `cli/hardening.test.ts` | 0 files |
 | `cli/help-covers-registry.test.ts` | 28 files |
 | `cli/help-flags.test.ts` | 28 files |
 | `cli/inprocess-golden.test.ts` | 27 files |
 | `cli/json-contract.test.ts` | 27 files |
 | `cli/main-dispatch.test.ts` | 30 files |
-| `cli/map-atlas-results.test.ts` | 209 files |
-| `cli/map-atlas-views.test.ts` | 208 files |
+| `cli/map-atlas-results.test.ts` | 210 files |
+| `cli/map-atlas-views.test.ts` | 209 files |
 | `cli/map-filters.test.ts` | 27 files |
 | `cli/new-commands.test.ts` | 27 files |
 | `cli/output.test.ts` | 3 files |
@@ -689,11 +689,11 @@ The following 10 source files are not directly imported by any test file:
 | `cli/probe-study.test.ts` | 27 files |
 | `cli/probe.test.ts` | 27 files |
 | `cli/quantity-name-collision.test.ts` | 27 files |
-| `cli/record-builtin-parser.test.ts` | 208 files |
+| `cli/record-builtin-parser.test.ts` | 209 files |
 | `cli/record-hardening.test.ts` | 28 files |
 | `cli/record-inputs.test.ts` | 27 files |
 | `cli/record-replay.test.ts` | 27 files |
-| `cli/recover-conventions.test.ts` | 209 files |
+| `cli/recover-conventions.test.ts` | 210 files |
 | `cli/regime-at-resolution.test.ts` | 27 files |
 | `cli/regime.test.ts` | 27 files |
 | `cli/source-anchor.test.ts` | 29 files |
@@ -870,7 +870,7 @@ The following 10 source files are not directly imported by any test file:
 | `dimensional/validator.test.ts` | 4 files |
 | `dimensional/violation-severity.test.ts` | 3 files |
 | `dimensional/weyl-validators.test.ts` | 4 files |
-| `fixtures/confrontation-golden.test.ts` | 127 files |
+| `fixtures/confrontation-golden.test.ts` | 128 files |
 | `fixtures/perfect-fluid.test.ts` | 1 files |
 | `fixtures/schwarzschild-riemann.test.ts` | 3 files |
 | `fixtures/schwarzschild.test.ts` | 1 files |
@@ -959,7 +959,7 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/weyl-reference.test.ts` | 1 files |
 | `numerical/weyl-schwarzschild.test.ts` | 4 files |
 | `tests/peers-required.test.ts` | 0 files |
-| `tests/tensor.test.ts` | 127 files |
+| `tests/tensor.test.ts` | 128 files |
 | `tools/api-surface.test.ts` | 0 files |
 | `tools/citation-quote-check.test.ts` | 0 files |
 | `tools/criterion3-embedding.test.ts` | 1 files |

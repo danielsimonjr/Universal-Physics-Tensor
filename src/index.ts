@@ -804,6 +804,20 @@ export type {
   BE51ConfrontationResult,
 } from './bridges/be51-lensing-confrontation.js';
 
+// BE-53 — one-loop coefficient, and a confrontation only when the caller supplies both inputs.
+export { oneLoopCoefficientStatement } from './bridges/equations/be-53-yang-mills-beta.js';
+export type { OneLoopCoefficientStatement, OneLoopCoefficientSign } from './bridges/equations/be-53-yang-mills-beta.js';
+export { requestYangMillsConfrontation } from './bridges/be53-yang-mills-confrontation.js';
+export type {
+  MeasuredCouplingRow,
+  RunningProcedure,
+  RunningProcedureRecord,
+  YangMillsConfrontationRequest,
+  YangMillsConfrontationRefusal,
+  YangMillsConfrontationHit,
+  YangMillsConfrontationResult,
+} from './bridges/be53-yang-mills-confrontation.js';
+
 // BE-21 × QGP — KSS viscosity-bound confrontation (the "most perfect fluid").
 export { confrontBE21, KSS_BOUND, QGP_BMB19 } from './bridges/be21-kss-confrontation.js';
 export type {

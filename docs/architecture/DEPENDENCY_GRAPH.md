@@ -2471,7 +2471,8 @@ The codebase is organized into the following modules:
 | `./_be-helpers.js` | `sym, validateFiniteInputs` | Import |
 
 **Exports:**
-- Functions: `evaluateYangMillsBeta`, `computeB0`
+- Interfaces: `OneLoopCoefficientStatement`
+- Functions: `evaluateYangMillsBeta`, `computeB0`, `oneLoopCoefficientStatement`
 - Constants: `BE53_COUPLING_G`, `BE53_BETA_G_RHS`, `BE53_BETA_G_LHS`, `BE53_BETA_G_STRUCTURAL`
 
 ---
@@ -3967,6 +3968,7 @@ The codebase is organized into the following modules:
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
 | `./bridges/confrontation-coverage.js` | `auditCoverage` | Re-export |
 | `./bridges/confrontations.js` | `CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution` | Re-export |
+| `./bridges/be53-yang-mills-confrontation.js` | `requestYangMillsConfrontation` | Re-export |
 | `./bridges/confrontations.js` | `ConfrontationEntry, RigorTier` | Re-export |
 | `./bridges/observations/types.js` | `consistencyComparison` | Re-export |
 | `./bridges/observations/types.js` | `ConfrontationOutcome` | Re-export |
@@ -4032,32 +4034,32 @@ The codebase is organized into the following modules:
   proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser, getFormulaParserKind,
   getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, rankDiscoveries,
   ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage, CONFRONTATIONS, listConfrontations,
-  runConfrontation, confrontationRigor, rigorDistribution, ConfrontationEntry, RigorTier,
-  consistencyComparison, ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge,
-  EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase,
-  AppliedCase, CaseCheck, CaseResult, convertValue, UnitError, auditAxisDiscrimination,
-  AxisDiscrimination, AXES, AxisSpec, simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS,
-  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
-  filterEdges, deriveEdgeEvidence, formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster,
-  describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
-  findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap,
-  makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
-  formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
-  formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
-  runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
-  AnnotatedCandidate, CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
-  ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
-  describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
-  compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
-  CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
-  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS,
-  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
-  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
-  ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap,
-  uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon, findPath,
-  findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation,
-  PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality,
-  Witness, MissingLipschitzError, AtlasModel, ModelId
+  runConfrontation, confrontationRigor, rigorDistribution, requestYangMillsConfrontation,
+  ConfrontationEntry, RigorTier, consistencyComparison, ConfrontationOutcome, decidingMeasurement,
+  BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs,
+  APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck, CaseResult, convertValue, UnitError,
+  auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec, simplifyObservable,
+  isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner, scanLinkages,
+  deriveProposedBridges, describeDerivedClaim, filterEdges, deriveEdgeEvidence, formatFilterLegend,
+  POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource, PosterGraph, PosterValidation,
+  DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps,
+  problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath,
+  parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy,
+  formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint,
+  parseDesignBounds, runFalsification, rankPareto, annotateAdjudications, adjudicationFor,
+  candidateId, ADJUDICATIONS, AnnotatedCandidate, CandidateAdjudication, annotateConsequences,
+  ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence, checkConventions,
+  unknownConventionKeys, ConventionKey, describeGrounding, describeReadiness, REPRESENTATIVE_VALUES,
+  compareWithCanonical, compareUserEquation, describeComparison, describeComparisons,
+  CanonicalComparison, CONSTANTS, CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness,
+  OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES,
+  summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
+  OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
+  ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups,
+  regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample,
+  familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
+  routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
+  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -6482,6 +6484,10 @@ The codebase is organized into the following modules:
 | `./bridges/be37-cassini-confrontation.js` | `CassiniObservation, BE37ConfrontationResult` | Re-export |
 | `./bridges/be51-lensing-confrontation.js` | `confrontBE51, VLBI_LAMBERT_2009` | Re-export |
 | `./bridges/be51-lensing-confrontation.js` | `VLBIDeflectionObservation, BE51ConfrontationResult` | Re-export |
+| `./bridges/equations/be-53-yang-mills-beta.js` | `oneLoopCoefficientStatement` | Re-export |
+| `./bridges/equations/be-53-yang-mills-beta.js` | `OneLoopCoefficientStatement, OneLoopCoefficientSign` | Re-export |
+| `./bridges/be53-yang-mills-confrontation.js` | `requestYangMillsConfrontation` | Re-export |
+| `./bridges/be53-yang-mills-confrontation.js` | `MeasuredCouplingRow, RunningProcedure, RunningProcedureRecord, YangMillsConfrontationRequest, YangMillsConfrontationRefusal, YangMillsConfrontationHit, YangMillsConfrontationResult` | Re-export |
 | `./bridges/be21-kss-confrontation.js` | `confrontBE21, KSS_BOUND, QGP_BMB19` | Re-export |
 | `./bridges/be21-kss-confrontation.js` | `QGPViscosityObservation, BE21ConfrontationResult` | Re-export |
 | `./bridges/be35-bootstrap-confrontation.js` | `confrontBE35, BOOTSTRAP_NU, BOOTSTRAP_NU_SIGMA, ISING_PELISSETTO_VICARI_2002` | Re-export |
@@ -6611,24 +6617,27 @@ The codebase is organized into the following modules:
   ObservationProvenance, SigmaComponent, ObservationKind, ConfrontationOutcome,
   ConfrontationDataHandling, ConfrontationPreprocessing, ConfrontationIndependence, SourceRef,
   SourceRefs, confrontBE37, CASSINI, CassiniObservation, BE37ConfrontationResult, confrontBE51,
-  VLBI_LAMBERT_2009, VLBIDeflectionObservation, BE51ConfrontationResult, confrontBE21, KSS_BOUND,
-  QGP_BMB19, QGPViscosityObservation, BE21ConfrontationResult, confrontBE35, BOOTSTRAP_NU,
-  BOOTSTRAP_NU_SIGMA, ISING_PELISSETTO_VICARI_2002, IsingExponentObservation, BE35ConfrontationResult,
-  confrontBE11, DECOHERENCE_EXPERIMENTAL_TOLERANCE, COLLISIONAL_HORNBERGER_2003,
-  CollisionalDecoherenceObservation, BE11ConfrontationResult, confrontBE55,
-  QH_UNIVERSALITY_JANSSEN_2012, QHUniversalityObservation, BE55ConfrontationResult, confrontBE56,
-  CASIMIR_MOHIDEEN_ROY_1998, CasimirAgreementObservation, BE56ConfrontationResult, confrontBE58,
-  K_B_CODATA_2014, JNT_FLOWERS_JACOBS_2017, JNTObservation, BE58ConfrontationResult, confrontBE59,
-  JOSEPHSON_UNIVERSALITY_BIPM, JosephsonUniversalityObservation, BE59ConfrontationResult,
-  confrontBE60, FQH_PLATEAU_TSUI_1982, FractionalQHObservation, BE60ConfrontationResult, confrontBE61,
-  LORENZ_SILVER_2023, LorenzNumberObservation, BE61ConfrontationResult, confrontBE62, BCS_RATIO_TIN,
-  BCSRatioObservation, BE62ConfrontationResult, confrontBE63, WHITE_DWARF_MAX_MASS,
-  WhiteDwarfMassObservation, BE63ConfrontationResult, confrontBE64, EDDINGTON_RATIO_BRIGHT,
-  EddingtonRatioObservation, BE64ConfrontationResult, confrontBE65, MOLECULAR_CLOUD_FRAGMENT,
-  CloudFragmentObservation, BE65ConfrontationResult, confrontBE48, LISA_PATHFINDER_CSL,
-  CollapseBoundObservation, BE48ConfrontationResult, CONFRONTATIONS, listConfrontations,
-  runConfrontation, CONFRONTATION_RIGOR, confrontationRigor, rigorDistribution, ConfrontationEntry,
-  RigorTier, decidingMeasurement, Elasticity
+  VLBI_LAMBERT_2009, VLBIDeflectionObservation, BE51ConfrontationResult, oneLoopCoefficientStatement,
+  OneLoopCoefficientStatement, OneLoopCoefficientSign, requestYangMillsConfrontation,
+  MeasuredCouplingRow, RunningProcedure, RunningProcedureRecord, YangMillsConfrontationRequest,
+  YangMillsConfrontationRefusal, YangMillsConfrontationHit, YangMillsConfrontationResult,
+  confrontBE21, KSS_BOUND, QGP_BMB19, QGPViscosityObservation, BE21ConfrontationResult, confrontBE35,
+  BOOTSTRAP_NU, BOOTSTRAP_NU_SIGMA, ISING_PELISSETTO_VICARI_2002, IsingExponentObservation,
+  BE35ConfrontationResult, confrontBE11, DECOHERENCE_EXPERIMENTAL_TOLERANCE,
+  COLLISIONAL_HORNBERGER_2003, CollisionalDecoherenceObservation, BE11ConfrontationResult,
+  confrontBE55, QH_UNIVERSALITY_JANSSEN_2012, QHUniversalityObservation, BE55ConfrontationResult,
+  confrontBE56, CASIMIR_MOHIDEEN_ROY_1998, CasimirAgreementObservation, BE56ConfrontationResult,
+  confrontBE58, K_B_CODATA_2014, JNT_FLOWERS_JACOBS_2017, JNTObservation, BE58ConfrontationResult,
+  confrontBE59, JOSEPHSON_UNIVERSALITY_BIPM, JosephsonUniversalityObservation,
+  BE59ConfrontationResult, confrontBE60, FQH_PLATEAU_TSUI_1982, FractionalQHObservation,
+  BE60ConfrontationResult, confrontBE61, LORENZ_SILVER_2023, LorenzNumberObservation,
+  BE61ConfrontationResult, confrontBE62, BCS_RATIO_TIN, BCSRatioObservation, BE62ConfrontationResult,
+  confrontBE63, WHITE_DWARF_MAX_MASS, WhiteDwarfMassObservation, BE63ConfrontationResult,
+  confrontBE64, EDDINGTON_RATIO_BRIGHT, EddingtonRatioObservation, BE64ConfrontationResult,
+  confrontBE65, MOLECULAR_CLOUD_FRAGMENT, CloudFragmentObservation, BE65ConfrontationResult,
+  confrontBE48, LISA_PATHFINDER_CSL, CollapseBoundObservation, BE48ConfrontationResult,
+  CONFRONTATIONS, listConfrontations, runConfrontation, CONFRONTATION_RIGOR, confrontationRigor,
+  rigorDistribution, ConfrontationEntry, RigorTier, decidingMeasurement, Elasticity
   ```
 
 
@@ -7471,12 +7480,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 394 |
 | Total Modules | 12 |
-| Total Lines of Code | 86984 |
-| Total Exports | 2837 |
-| Total Re-exports | 1341 |
+| Total Lines of Code | 87064 |
+| Total Exports | 2850 |
+| Total Re-exports | 1353 |
 | Total Classes | 59 |
-| Total Interfaces | 444 |
-| Total Functions | 732 |
+| Total Interfaces | 445 |
+| Total Functions | 733 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 533 |

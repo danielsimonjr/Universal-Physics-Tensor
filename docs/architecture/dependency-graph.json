@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 394,
     "totalModules": 12,
-    "totalExports": 2837
+    "totalExports": 2850
   },
   "entryPoints": [
     {
@@ -8089,11 +8089,16 @@
           "BE53_BETA_G_LHS",
           "BE53_BETA_G_STRUCTURAL",
           "evaluateYangMillsBeta",
-          "computeB0"
+          "computeB0",
+          "oneLoopCoefficientStatement"
+        ],
+        "interfaces": [
+          "OneLoopCoefficientStatement"
         ],
         "functions": [
           "evaluateYangMillsBeta",
-          "computeB0"
+          "computeB0",
+          "oneLoopCoefficientStatement"
         ],
         "constants": [
           "BE53_COUPLING_G",
@@ -13084,6 +13089,13 @@
             "reExport": true
           },
           {
+            "file": "./bridges/be53-yang-mills-confrontation.js",
+            "imports": [
+              "requestYangMillsConfrontation"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/confrontations.js",
             "imports": [
               "ConfrontationEntry",
@@ -13570,6 +13582,7 @@
           "runConfrontation",
           "confrontationRigor",
           "rigorDistribution",
+          "requestYangMillsConfrontation",
           "consistencyComparison",
           "decidingMeasurement",
           "BRIDGE_EVALUATORS",
@@ -13739,6 +13752,7 @@
           "runConfrontation",
           "confrontationRigor",
           "rigorDistribution",
+          "requestYangMillsConfrontation",
           "ConfrontationEntry",
           "RigorTier",
           "consistencyComparison",
@@ -23636,6 +23650,41 @@
             "reExport": true
           },
           {
+            "file": "./bridges/equations/be-53-yang-mills-beta.js",
+            "imports": [
+              "oneLoopCoefficientStatement"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/equations/be-53-yang-mills-beta.js",
+            "imports": [
+              "OneLoopCoefficientStatement",
+              "OneLoopCoefficientSign"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/be53-yang-mills-confrontation.js",
+            "imports": [
+              "requestYangMillsConfrontation"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/be53-yang-mills-confrontation.js",
+            "imports": [
+              "MeasuredCouplingRow",
+              "RunningProcedure",
+              "RunningProcedureRecord",
+              "YangMillsConfrontationRequest",
+              "YangMillsConfrontationRefusal",
+              "YangMillsConfrontationHit",
+              "YangMillsConfrontationResult"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/be21-kss-confrontation.js",
             "imports": [
               "confrontBE21",
@@ -24178,6 +24227,8 @@
           "CASSINI",
           "confrontBE51",
           "VLBI_LAMBERT_2009",
+          "oneLoopCoefficientStatement",
+          "requestYangMillsConfrontation",
           "confrontBE21",
           "KSS_BOUND",
           "QGP_BMB19",
@@ -24395,6 +24446,15 @@
           "BE37ConfrontationResult",
           "VLBIDeflectionObservation",
           "BE51ConfrontationResult",
+          "OneLoopCoefficientStatement",
+          "OneLoopCoefficientSign",
+          "MeasuredCouplingRow",
+          "RunningProcedure",
+          "RunningProcedureRecord",
+          "YangMillsConfrontationRequest",
+          "YangMillsConfrontationRefusal",
+          "YangMillsConfrontationHit",
+          "YangMillsConfrontationResult",
           "QGPViscosityObservation",
           "BE21ConfrontationResult",
           "IsingExponentObservation",
@@ -24883,6 +24943,17 @@
           "VLBI_LAMBERT_2009",
           "VLBIDeflectionObservation",
           "BE51ConfrontationResult",
+          "oneLoopCoefficientStatement",
+          "OneLoopCoefficientStatement",
+          "OneLoopCoefficientSign",
+          "requestYangMillsConfrontation",
+          "MeasuredCouplingRow",
+          "RunningProcedure",
+          "RunningProcedureRecord",
+          "YangMillsConfrontationRequest",
+          "YangMillsConfrontationRefusal",
+          "YangMillsConfrontationHit",
+          "YangMillsConfrontationResult",
           "confrontBE21",
           "KSS_BOUND",
           "QGP_BMB19",
@@ -27434,15 +27505,15 @@
   "statistics": {
     "totalTypeScriptFiles": 394,
     "totalModules": 12,
-    "totalLinesOfCode": 86984,
-    "totalExports": 2837,
+    "totalLinesOfCode": 87064,
+    "totalExports": 2850,
     "totalClasses": 59,
-    "totalInterfaces": 444,
-    "totalFunctions": 732,
+    "totalInterfaces": 445,
+    "totalFunctions": 733,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 704,
-    "totalReExports": 1341,
+    "totalReExports": 1353,
     "totalTypeOnlyImports": 533,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
