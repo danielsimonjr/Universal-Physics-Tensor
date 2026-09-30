@@ -7,6 +7,15 @@ honest about scope. The collection spans the composition/linkage analyses,
 the bridges-vs-canonical map, the canonical-only baseline, and the
 adjudication/calibration notes that close out the discovery pipeline
 (proposed equations + orphan connectors → 0 promoted; precision calibration).
+
+**Current reading** (re-counted from the source; the notes below keep the counts they were written with):
+
+- `BRIDGE_EQUATIONS`: 55 entries, ids 11–65, 19 established, 33 speculative, 3 highly-speculative.
+- `CONFRONTATIONS`: 19 entries (ids 11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65).
+- Reviewed `formalRef`s: six, all `system: 'lean4-physjs'`, via public PhysJS. `NOTES.md` is the rolling record. `phase-4-formalref-scoping.md` is the 2026-09-24 scoping report; its "count is 1" is that day's measurement.
+
+## Notes
+
 - **`cli-physicist-persona-0.47.1-post-fix.md` — retest after the W1–Q2 batch (2026-09-26).**
   Model persona again on built `upt` at 0.47.1 (`a9eff31`). Prior fixes hold. New
   open findings: W4 (Kepler/Schwarzschild monomial constants→1), W5 (Planck
@@ -21,7 +30,7 @@ adjudication/calibration notes that close out the discovery pipeline
   extraordinary *yes*. Consolidates the three first-class outputs — the
   **null-result catalog** (132 → 7 promising · 0 contradictory · 90 falsified;
   0/8 ever genuine, each promising verdict now carrying its grounding ledger of
-  passed-vs-gap falsifiers), the **evidence spine** (9 real-data confrontations;
+  passed-vs-gap falsifiers), the **evidence spine** (9 real-data confrontations in that note; the registry now has 19;
   three GR tests within 1σ — Mercury 0.26σ, Shapiro 0.91σ, lensing
   0.67σ — plus the QGP nearly saturating the KSS bound, the 3D-Ising bootstrap ν
   at 0.015σ, and parameter-free collisional decoherence within ~15%), and the
@@ -42,9 +51,9 @@ adjudication/calibration notes that close out the discovery pipeline
   the two GR tests — Mercury 0.26σ, Cassini 0.91σ — within 1σ). Every number
   has a `upt` reproducer + a pinned regression gate. The consolidated results of
   that program; the current instrument-wide picture is in `pi-instrument-results.md`
-  above. (Post-v0.33.0, the evidence spine grew to **7 confrontations** —
+  above. (Post-v0.33.0, the evidence spine grew to **7 confrontations** in that note —
   be-51 gravitational lensing, the third classic GR test at 0.67σ, and be-21 the
-  KSS η/s bound vs the quark-gluon plasma, joining Mercury/Shapiro/Planckian/GW/GRW.)
+  KSS η/s bound vs the quark-gluon plasma, joining Mercury/Shapiro/Planckian/GW/GRW. The registry now has 19.)
 - **`canonical-expansion-candidate-audit.md` — the monomial-fit audit gating the
   v0.34.0 canonical L-layer expansion (66 → 93 monomial laws).** Classifies every
   candidate textbook law by whether it fits the L0 monomial model, mapping the
@@ -124,10 +133,37 @@ adjudication/calibration notes that close out the discovery pipeline
   length). The funnel quantifies the false-positive rate of dimensional
   matching. `upt candidates`; pinned by
   `tests/composition/link-candidates.test.ts`.
-- `phase-4-formalref-scoping.md` — which atlas bridges have a checked Lean
-  counterpart. One reviewed `formalRef` (`ab-pendulum-linear` → Physlib). The
-  ranked PhysJS lemmas, the two partial counterparts, and the recommendation
-  not to count a substitution. The correction at the top schedules route A.
+- `phase-4-formalref-scoping.md` — the 2026-09-24 scoping report on which atlas
+  bridges had a checked Lean counterpart. Its tables record one reviewed
+  `formalRef` that day (`ab-pendulum-linear` → Physlib). The live set is six
+  `lean4-physjs` references via public PhysJS (`NOTES.md`). The banner at the
+  top of the report says so. The ranked lemmas and the two partial counterparts
+  stay as that day's search.
+- `Orphan-Connector-Analysis.md` — the 2026-06-15 isolated-bridge frontier
+  (`upt connectors`), refreshed 2026-07-04. Period counts stay in the note.
+- `atlas-benchmark-preregistration.md` — frozen pre-registration for the
+  invalid-bridge benchmark. Thresholds and the empty item set stay as
+  registered. Hybrid retrieval has since landed as Tier 11; that fact is in
+  `NOTES.md`. The frozen text stays as registered.
+- `atlas-link-prediction.md` — the Phase 6 leave-one-bridge-out result.
+  `tests/atlas/link-prediction.test.ts` recomputes the table.
+- `atlas-study-results.md` — generated study output (`bun run atlas:study`).
+  Do not edit the table by hand.
+- `phase-0-model-persona-review.md` — model-persona review of the oscillator
+  pilot. The reviewer is a model. A human physicist review is a separate criterion.
+- `phase-1-citation-check.md` — model spot-check of sampled `// source:`
+  comments against the cited papers.
+- `phase-1-citation-quote-check.out.md` — generated quote-match output. Do not
+  edit by hand.
+- `phase3-dataset-verification.md` — 2026-07-02 check that a confrontation's
+  encoding and its dataset both support the pin.
+- `rank7-axis-measurement.md` — 2026-07-05 measurement that the Topology and
+  Quantum Statistics axes classify and do not gate. The note's "rank-7" is
+  that measurement's name for the axis set.
+- `v0.10.0-Composition-Research-Note.md` — methods note for the v0.10.0
+  composition experiment. Its catalog count is the count at that version.
+- `v0.10.0-novel-candidates.md` — the Phase D review surface that
+  `v0.11.0-novel-candidates.md` supersedes. Kept for provenance.
 - `BE-29-Landauer-Recovery.md` — the pre-fix scan's single *undeclared*
   structural match: BE-29 (Jarzynski) appeared to recover CE-landauer's
   `k_B T ln(·)` form. Argues it is a shared functional form (the `ln` factor —

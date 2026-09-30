@@ -1,7 +1,13 @@
 # Phase 4 formalRef scoping
 
+> **Banner.** The measurements below are the 2026-09-24 scoping record. The live set is six
+> reviewed `formalRef`s with `system: 'lean4-physjs'`, vendored from public PhysJS
+> (`private: false`). The rolling record is `NOTES.md`. The search tables stay as that day's
+> record.
+
 A scoping report, not code. It answers five questions from Mothership (2026-09-24) about the Phase 4
-exit criterion "≥ 5 with a reviewed `formalRef`". The count is 1. Every statement below names its
+exit criterion "≥ 5 with a reviewed `formalRef`". The count is ~~1~~ six `lean4-physjs` references
+via public PhysJS. "The count is 1" is the 2026-09-24 measurement. Every statement below names its
 source. Measurements carry their commit and date.
 
 ## Owner decision
@@ -73,8 +79,9 @@ search tables below are unchanged.
   package (the library Daniel calls PhysLean; `leanprover-community/physlib`), both as
   direct requires. An upstream patch may still be offered. It does not replace that
   project. The standing statement is `MEMORY.md`.
-- Publishing PhysJS is still the open decision in §4.4. Route A's phrase "make PhysJS
-  public" is not decided by the schedule.
+- ~~Publishing PhysJS is still the open decision in §4.4. Route A's phrase "make PhysJS
+  public" is not decided by the schedule.~~ PhysJS is public. The GitHub API reports
+  `private: false`. The privacy row in §2 remains the 2026-09-24 reading.
 - §4.3 rank 1 is an inequality on the reals. "Mathlib only" describes that inequality.
   The lake project requires Physlib anyway.
 - §4.4 said "4 rank-1 references." The rank-1 row is five bridges. Five new references

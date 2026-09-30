@@ -66,7 +66,21 @@ count of the old file.
 - **Review tier:** design, plan and physics-correctness checks go to the Adam+Eve adversarial pair.
   The model mapping and invocation conventions live in `todo.md` §Conventions.
 
-## Adding or changing a Lean `formalRef`
+## Adding or changing a Lean `formalRef` (`lean4-physjs`)
+
+Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs. UPT does not run Lean for this system. `NOTES.md` records six reviewed `formalRef`s, each `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
+
+1. Land the theorem in PhysJS. Its `manifest/bridges.json` entry (schema `physjs-bridge-manifest/v1`) names `key`, `bridgeId`, `theorem`, `covers`, `coverage` (`covers its statement only`), `leanProof`, and `axioms`. The axioms are what PhysJS measured with `#print axioms`. This repository does not re-measure them.
+2. Vendor that file to `formal/physjs/manifest.json` at the PhysJS commit being pinned. The file's `commit`, `toolchain`, `mathlib`, and `physlib` are the pin.
+3. Copy the entry into `PHYSJS_ENTRIES` in `src/atlas/physjs-ref.ts`, and set `PHYSJS_COMMIT` to that commit. A bridge obtains its reference with `physjsFormalRef(key)`. The module sets `system: 'lean4-physjs'` and `fidelity: 'sanity-lemmas'`. The bridge does not name a theorem of its own.
+4. Put `formalRef: physjsFormalRef('<key>')` on the atlas bridge. `deriveEvidence` turns a fidelity other than `unreviewed` into `formally-proved`. The tag is not stored on the bridge.
+5. Add the key, theorem, and `covers` line to `EXPECTED` in `tests/atlas/physjs-manifest.test.ts`.
+6. Run `bun run atlas:formal-gate`. With no `lean4-physlib` reference, the gate compares the vendored manifest to the bridges and does not run Lean. It must print `formalRef axiom gate: PASS (lean4-physjs manifest; no lean4-physlib formalRef)`. A wrong commit, theorem, key, axiom list, or coverage phrase fails. A manifest entry with no bridge fails. A `lean4-physjs` reference with no manifest entry fails.
+7. Commit the vendored manifest, `PHYSJS_ENTRIES`, the bridge's `formalRef`, and the test's `EXPECTED` list together.
+
+## Adding or changing a Lean `formalRef` (`lean4-physlib`)
+
+Use this section only when a reference has `system: 'lean4-physlib'`. The live reviewed set is the `lean4-physjs` section above. When no such Physlib reference exists, `atlas:formal-gate` skips the Lean probes and still checks the PhysJS manifest.
 
 1. Add the theorem to `formal/physlib/AxiomProbe.lean`.
 2. Run `bun run atlas:formal-gate -- --physlib <checkout> --write-captured` (setup in
