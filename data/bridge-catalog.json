@@ -75,7 +75,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Einstein.trace_eq",
-        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -836,7 +836,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.KibbleZurek.exponent",
-        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1043,7 +1043,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Mond.tendsto_nu_limits",
-        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1481,6 +1481,18 @@
     },
     {
       "id": 51,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Deflection.line_integral",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "derivation-step: (1+γ)/c² ∫_ℝ G M b / (b² + z²)^{3/2} dz = 2(1+γ) G M / (b c²), and at γ = 1 this is the encoded angle 4 G M / (b c²). γ = 0 is half. Not a geodesic — covers its statement only"
+      },
       "name": "Gravitational Lensing — Eddington 1919 weak-field deflection",
       "category": "I",
       "category_name": "Emergent Spacetime",
@@ -1639,7 +1651,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.YangMills.b0_pos_iff_nf_le",
-        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1762,7 +1774,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.JohnsonNyquist.tendsto_classical",
-        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1867,6 +1879,18 @@
     },
     {
       "id": 61,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Sommerfeld.integral_eq",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "derivation-step: ∫_ℝ x² e^x / (1+e^x)² dx = π²/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of π²/3. Claiming the half-line equals π²/3 fails. Not the transport law — covers its statement only"
+      },
       "name": "Wiedemann-Franz law (Lorenz number)",
       "category": "F",
       "category_name": "Condensed Matter - High Energy Bridges",
@@ -1945,7 +1969,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Eddington.balance_iff",
-        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1979,6 +2003,18 @@
     },
     {
       "id": 65,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Jeans.mass_eq",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "derivation-step: the encoded Jeans mass (5 k T / (G μ m_u))^(3/2) (3 / (4 π ρ))^(1/2) follows from the virial convention with factor 5 and M = 4 π R³ ρ / 3. Replacing 5 by 3 fails. Not the virial theorem — covers its statement only"
+      },
       "name": "Jeans mass (gravitational collapse criterion)",
       "category": "I",
       "category_name": "Emergent Spacetime",

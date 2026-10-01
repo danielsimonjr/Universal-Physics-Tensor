@@ -315,7 +315,7 @@ The current machine-checked state is:
 | Canonical reference layer | **109 canonical equations** used as the non-speculative answer-key layer for bridge recovery/linkage |
 | Architecture | Generated dependency graph reports **0 circular dependencies** and a clean unused-analysis report; `npm run docs:deps` is CI freshness-gated |
 | Quality gates | Build, strict source+test TypeScript checks, full Vitest suite, active-plan audit, package-content smoke test, and nightly long-horizon GL4/Shapiro accuracy tests |
-| Formal references | **10** atlas bridges derive `formally-proved` from a reviewed `lean4-physjs` reference. **6** catalog equations carry a counted reference (a reduction, a limit, or a derivation-step) that does not light that tag. Nested statements are not second references. The pin and the split are [`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md) |
+| Formal references | **10** atlas bridges derive `formally-proved` from a reviewed `lean4-physjs` reference. **9** catalog equations carry a counted reference (a reduction, a limit, or a derivation-step) that does not light that tag. Nested statements are not second references. The pin and the split are [`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md) |
 
 The project is **engineering-complete for its stated goal**: it is a computational
 laboratory and falsification/review instrument, not a claim that physics itself is

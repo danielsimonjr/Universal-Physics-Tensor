@@ -7,11 +7,12 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `2ca196eb968252230d71018c14b6ca7d2d445763`.
+ * The commit is PhysJS `main` `57a9ecbc851952d539882400a7176926d2990d34`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
- * atlas entries. Milestone 2b adds six catalog entries, keyed `be-<n>`.
- * A nested object (`planeWave`, `oneLoop`, `inversion`, `vacuum`) is recorded
- * and is not a `formalRef`. A `property` or a `cross-check` is not vendored.
+ * atlas entries. Milestone 2b adds nine catalog entries, keyed `be-<n>`:
+ * the six counted rows and the three stretch rows. A nested object
+ * (`planeWave`, `oneLoop`, `inversion`, `vacuum`) is recorded and is not a
+ * `formalRef`. A `property` or a `cross-check` is not vendored.
  *
  * @module atlas/physjs-ref
  */
@@ -19,7 +20,7 @@
 import type { FormalRef } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '2ca196eb968252230d71018c14b6ca7d2d445763';
+export const PHYSJS_COMMIT = '57a9ecbc851952d539882400a7176926d2990d34';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -122,7 +123,7 @@ function planeWave(namespace: string): PhysjsNestedStatement {
 }
 
 /**
- * The sixteen entries, in manifest order. A bridge obtains its reference by key
+ * The nineteen entries, in manifest order. A bridge obtains its reference by key
  * through {@link physjsFormalRef}; it does not name a theorem of its own.
  * A nested object is recorded and is not that reference.
  */
@@ -301,6 +302,36 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     theorem: 'PhysJS.KibbleZurek.exponent',
     covers:
       'derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-65',
+    bridgeId: 'be-65',
+    theorem: 'PhysJS.Jeans.mass_eq',
+    covers:
+      'derivation-step: the encoded Jeans mass (5 k T / (G μ m_u))^(3/2) (3 / (4 π ρ))^(1/2) follows from the virial convention with factor 5 and M = 4 π R³ ρ / 3. Replacing 5 by 3 fails. Not the virial theorem',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-51',
+    bridgeId: 'be-51',
+    theorem: 'PhysJS.Deflection.line_integral',
+    covers:
+      'derivation-step: (1+γ)/c² ∫_ℝ G M b / (b² + z²)^{3/2} dz = 2(1+γ) G M / (b c²), and at γ = 1 this is the encoded angle 4 G M / (b c²). γ = 0 is half. Not a geodesic',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-61',
+    bridgeId: 'be-61',
+    theorem: 'PhysJS.Sommerfeld.integral_eq',
+    covers:
+      'derivation-step: ∫_ℝ x² e^x / (1+e^x)² dx = π²/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of π²/3. Claiming the half-line equals π²/3 fails. Not the transport law',
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,

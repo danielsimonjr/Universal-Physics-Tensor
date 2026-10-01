@@ -1,5 +1,5 @@
 /**
- * Sanity lemmas for the six counted catalog `formalRef`s.
+ * Sanity lemmas for the nine counted catalog `formalRef`s.
  *
  * Each block instantiates the top-level PhysJS statement on a known case and
  * shows the negative control fails. The nested theorems are not these
@@ -8,13 +8,16 @@
 
 import { describe, expect, it } from 'vitest';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
-import { C_SI, G_SI, K_B_SI } from '../../src/core/constants.js';
+import { C_SI, E_SI, G_SI, K_B_SI } from '../../src/core/constants.js';
 import { evaluateEddingtonLuminosity, THOMSON_CROSS_SECTION_SI } from '../../src/bridges/be64-eddington-luminosity.js';
 import { computeB0 } from '../../src/bridges/equations/be-53-yang-mills-beta.js';
 import { evaluateJohnsonNyquist } from '../../src/bridges/be58-johnson-nyquist.js';
 import { evaluateMONDForce } from '../../src/bridges/equations/be-38-mond.js';
 import { evaluateEinsteinTrace } from '../../src/bridges/equations/be-13-einstein-trace.js';
 import { evaluateKibbleZurek } from '../../src/bridges/equations/be-34-kibble-zurek.js';
+import { evaluateJeansMass } from '../../src/bridges/be65-jeans-mass.js';
+import { evaluateGravitationalLensing } from '../../src/bridges/gravitational-lensing.js';
+import { LORENZ_NUMBER_SI } from '../../src/bridges/be61-wiedemann-franz.js';
 import { deriveEdgeEvidence } from '../../src/composition/graph-viz.js';
 
 const COUNTED = [
@@ -24,6 +27,9 @@ const COUNTED = [
   [38, 'PhysJS.Mond.tendsto_nu_limits'],
   [13, 'PhysJS.Einstein.trace_eq'],
   [34, 'PhysJS.KibbleZurek.exponent'],
+  [65, 'PhysJS.Jeans.mass_eq'],
+  [51, 'PhysJS.Deflection.line_integral'],
+  [61, 'PhysJS.Sommerfeld.integral_eq'],
 ] as const;
 
 function row(id: number) {
@@ -33,8 +39,8 @@ function row(id: number) {
 }
 
 describe('catalog formalRef sanity lemmas', () => {
-  it('the six counted references are sanity-lemmas and do not tag the row', () => {
-    expect(COUNTED.map(([id]) => id)).toEqual([64, 53, 58, 38, 13, 34]);
+  it('the nine counted references are sanity-lemmas and do not tag the row', () => {
+    expect(COUNTED.map(([id]) => id)).toEqual([64, 53, 58, 38, 13, 34, 65, 51, 61]);
     for (const [id, statement] of COUNTED) {
       const entry = row(id);
       expect(entry.formalRef?.fidelity).toBe('sanity-lemmas');
@@ -135,5 +141,81 @@ describe('catalog formalRef sanity lemmas', () => {
       T_reh: 1,
     });
     expect(density).toBeCloseTo((tauQ / tau0) ** ((-d * nu) / (1 + z * nu)), 10);
+  });
+
+  it('BE-65: the virial factor 5 gives the encoded mass, and factor 3 does not', () => {
+    expect(row(65).formalRef?.statement).toBe('PhysJS.Jeans.mass_eq');
+    const k = 1.2;
+    const T = 3;
+    const G = 0.4;
+    const mu = 2;
+    const mU = 0.5;
+    const rho = 1.5;
+    const thermal = (5 * k * T) / (G * mu * mU);
+    const density = 3 / (4 * Math.PI * rho);
+    const R = Math.sqrt(thermal * density);
+    const M = (4 * Math.PI * R ** 3 * rho) / 3;
+    const virialLeft = (3 * M * k * T) / (mu * mU);
+    const virialRight = (3 * G * M * M) / (5 * R);
+    expect(Math.abs(virialLeft - virialRight) / virialRight).toBeLessThan(1e-12);
+    const encoded = thermal ** 1.5 * density ** 0.5;
+    expect(Math.abs(M - encoded) / encoded).toBeLessThan(1e-12);
+    const factorThree = ((3 * k * T) / (G * mu * mU)) ** 1.5 * density ** 0.5;
+    expect(Math.abs(factorThree - encoded) / encoded).toBeGreaterThan(0.4);
+    const cloud = evaluateJeansMass({ T_K: 10, rho_kg_per_m3: 1e-18, mu: 2.3 });
+    const stated =
+      ((5 * K_B_SI * 10) / (G_SI * 2.3 * 1.6605390666e-27)) ** 1.5 *
+      (3 / (4 * Math.PI * 1e-18)) ** 0.5;
+    expect(Math.abs(cloud.M_J_kg - stated) / stated).toBeLessThan(1e-12);
+  });
+
+  it('BE-51: the line integral at γ = 1 is the encoded angle, and γ = 0 is half', () => {
+    expect(row(51).formalRef?.statement).toBe('PhysJS.Deflection.line_integral');
+    const G = G_SI;
+    const M = 1.989e30;
+    const b = 6.96e8;
+    const steps = 4000;
+    const dTheta = Math.PI / steps;
+    let integral = 0;
+    for (let i = 0; i < steps; i += 1) {
+      const theta = -Math.PI / 2 + (i + 0.5) * dTheta;
+      const cosine = Math.cos(theta);
+      const z = b * Math.tan(theta);
+      const dz = b / (cosine * cosine);
+      integral += ((G * M * b) / (b * b + z * z) ** 1.5) * dz;
+    }
+    integral *= dTheta;
+    const closed = (2 * G * M) / b;
+    expect(Math.abs(integral - closed) / closed).toBeLessThan(1e-6);
+    const gammaOne = ((1 + 1) / (C_SI * C_SI)) * integral;
+    const encoded = evaluateGravitationalLensing({ M_kg: M, b_m: b }).alpha_rad;
+    expect(Math.abs(gammaOne - encoded) / encoded).toBeLessThan(1e-6);
+    expect(Math.abs(encoded - (4 * G * M) / (b * C_SI * C_SI)) / encoded).toBeLessThan(1e-12);
+    const gammaZero = ((1 + 0) / (C_SI * C_SI)) * integral;
+    expect(Math.abs(gammaZero - encoded / 2) / encoded).toBeLessThan(1e-6);
+    expect(Math.abs(gammaZero - encoded) / encoded).toBeGreaterThan(0.4);
+  });
+
+  it('BE-61: the Sommerfeld integral is π²/3, and the half-line is not', () => {
+    expect(row(61).formalRef?.statement).toBe('PhysJS.Sommerfeld.integral_eq');
+    const integrand = (x: number) => {
+      const exp = Math.exp(x);
+      return (x * x * exp) / (1 + exp) ** 2;
+    };
+    const trap = (a: number, b: number, n: number) => {
+      const h = (b - a) / n;
+      let sum = 0.5 * integrand(a) + 0.5 * integrand(b);
+      for (let i = 1; i < n; i += 1) sum += integrand(a + i * h);
+      return sum * h;
+    };
+    const full = trap(-30, 30, 4000);
+    const half = trap(0, 30, 2000);
+    const pi2over3 = Math.PI ** 2 / 3;
+    expect(Math.abs(full - pi2over3) / pi2over3).toBeLessThan(1e-9);
+    expect(Math.abs(half - pi2over3 / 2) / (pi2over3 / 2)).toBeLessThan(1e-9);
+    expect(Math.abs(half - pi2over3) / pi2over3).toBeGreaterThan(0.4);
+    expect(LORENZ_NUMBER_SI).toBe((pi2over3) * (K_B_SI / E_SI) ** 2);
+    const halfLineLorenz = (Math.PI ** 2 / 6) * (K_B_SI / E_SI) ** 2;
+    expect(Math.abs(halfLineLorenz - LORENZ_NUMBER_SI) / LORENZ_NUMBER_SI).toBeGreaterThan(0.4);
   });
 });
