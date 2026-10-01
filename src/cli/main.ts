@@ -176,10 +176,9 @@ Usage:
         constants pi and tau and the functions sqrt, cbrt, exp, ln, log
         (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
         sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
-        or log2 for base 10 or 2. With the MathTS parser, a bare e is Euler's
-        number (≈2.718); the built-in parser leaves e for you to set.
-        Elementary charge is e_charge. An unbound e under MathTS is refused
-        unless you pass e=<number> or --allow-euler. A value may be a number,
+        or log2 for base 10 or 2. A bare e is the elementary charge. E is
+        energy: pass E=<number>. Euler's number is exp(1) or euler.
+        e_charge is the same charge. A value may be a number,
         a unit, or an expression (v=0.6*c). \`upt help eval\` describes every flag.
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \\
                        c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23

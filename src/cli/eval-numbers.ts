@@ -2,7 +2,8 @@
  * Numbers `upt eval` understands: a bare numeral, a numeral with a unit, and
  * the CODATA names a script should not have to paste.
  *
- * Bare `e` is not one of them. Charge is `e_charge`.
+ * Bare `e` is the elementary charge, taken from the constant registry.
+ * Euler's number is `euler`. `E` is energy and is not filled in.
  *
  * @module cli/eval-numbers
  * @internal
@@ -33,6 +34,7 @@ export function codataScope(mode: UnitMode): Record<string, number> {
   const scope: Record<string, number> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) scope[name] = c.value;
   scope.e_charge = E_SI;
+  scope.euler = Math.E;
   scope.m_e = M_E_SI;
   scope.eps0 = CONSTANTS.epsilon_0.value;
   scope.mu0 = MU0_SI;

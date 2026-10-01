@@ -21,6 +21,7 @@
  */
 
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
+import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
 import { CONSTANTS } from './symbolic-constants.js';
 import { formulaNameDimensions } from './formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from './natural-units.js';
@@ -526,7 +527,7 @@ export async function analyzeUserEquation(
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
   for (const s of eq.sources) {
     const r = resolve(s);
-    dims[s] = r ? (dimsIn.get(r) as Dimension) : DIMENSIONLESS;
+    dims[s] = r ? (dimsIn.get(r) as Dimension) : (formulaSymbolDimension(s) ?? DIMENSIONLESS);
   }
   // Use the rewritten equation's RHS (eq.text) so planck-length has already
   // become planck_length before dimensional parse.

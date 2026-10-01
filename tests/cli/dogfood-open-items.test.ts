@@ -4,7 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
-import { C_SI, G_SI, M_SUN_SI } from '../../src/core/constants.js';
+import { C_SI, E_SI, G_SI, M_SUN_SI } from '../../src/core/constants.js';
 
 function capture() {
   const lines: string[] = [];
@@ -19,18 +19,33 @@ function capture() {
 const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 
 describe('upt eval — unbound e, CODATA names, units, parser', () => {
-  it('refuses an unbound e and accepts e_charge, an explicit e, and --allow-euler', async () => {
-    const refused = capture();
-    expect(await runCli(['eval', 'e^2/(4*pi*eps0*r^2)', 'r=1'], refused.io)).toBe(2);
-    expect(refused.err.join('')).toMatch(/unbound e is Euler's number/);
-    expect(refused.err.join('')).toMatch(/formula parser: mathts/);
-    const allowed = capture();
-    expect(await runCli(['eval', 'e', '--allow-euler'], allowed.io)).toBe(0);
-    expect(Number(text(allowed).trim())).toBeCloseTo(Math.E, 10);
+  it('reads bare e as the elementary charge, exp(1) and euler as Euler, and refuses --allow-euler', async () => {
     const charge = capture();
-    expect(await runCli(['eval', 'e_charge'], charge.io)).toBe(0);
-    expect(Number(text(charge).trim())).toBeGreaterThan(1e-19);
-    expect(Number(text(charge).trim())).toBeLessThan(2e-19);
+    expect(await runCli(['eval', 'e'], charge.io)).toBe(0);
+    expect(Number(text(charge).trim())).toBeCloseTo(E_SI, 15);
+    expect(charge.err.join('')).not.toMatch(/Euler/);
+    const squared = capture();
+    expect(await runCli(['eval', 'e^2'], squared.io)).toBe(0);
+    expect(Number(text(squared).trim())).toBeCloseTo(E_SI * E_SI, 30);
+    const named = capture();
+    expect(await runCli(['eval', 'e_charge'], named.io)).toBe(0);
+    expect(Number(text(named).trim())).toBeCloseTo(E_SI, 15);
+    const euler = capture();
+    expect(await runCli(['eval', 'exp(1)'], euler.io)).toBe(0);
+    expect(Number(text(euler).trim())).toBeCloseTo(Math.E, 12);
+    const spelled = capture();
+    expect(await runCli(['eval', 'euler'], spelled.io)).toBe(0);
+    expect(Number(text(spelled).trim())).toBeCloseTo(Math.E, 12);
+    const energy = capture();
+    expect(await runCli(['eval', 'E'], energy.io)).toBe(2);
+    expect(energy.err.join('')).toMatch(/E is energy/);
+    const flagged = capture();
+    expect(await runCli(['eval', 'e', '--allow-euler'], flagged.io)).toBe(2);
+    expect(flagged.err.join('')).toMatch(/unknown flag/);
+    const coulomb = capture();
+    expect(await runCli(['eval', 'e^2/(4*pi*eps0*r^2)', 'r=1'], coulomb.io)).toBe(0);
+    expect(Number(text(coulomb).trim())).toBeGreaterThan(1e-28);
+    expect(coulomb.err.join('')).not.toMatch(/Euler/);
   });
 
   it('--show-parser prints the kind and upt version stays a bare semver', async () => {

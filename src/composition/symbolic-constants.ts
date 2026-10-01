@@ -20,11 +20,12 @@
 
 import type { Dimension } from '../dimensional/types.js';
 import {
+  ACTION,
+  CHARGE,
   DIMENSIONLESS,
   VELOCITY,
-  ACTION,
 } from '../dimensional/types.js';
-import { C_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI } from '../core/constants.js';
+import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI } from '../core/constants.js';
 
 const dim = (L = 0, M = 0, T = 0, Theta = 0): Dimension => ({
   L,
@@ -73,6 +74,10 @@ export const CONSTANTS: Readonly<Record<string, NamedConstantValue>> = {
   '2pi': { value: 2 * Math.PI, dim: DIMENSIONLESS },
   // Extension constants for the canonical-equation L1 entries (Coulomb, Bohr,
   // Stefan–Boltzmann). CODATA 2018 values.
+  // ISO 80000 / CODATA: a bare e is the elementary charge. Eccentricity is
+  // one_minus_e_sq. The canonical dimension guard still refuses to bake a
+  // dimensionless governing name e.
+  e: { value: E_SI, dim: CHARGE },
   epsilon_0: { value: 8.8541878128e-12, dim: PERMITTIVITY },
   sigma_sb: { value: 5.670374419e-8, dim: STEFAN_BOLTZMANN },
   b: { value: B_WIEN_SI, dim: WIEN },
@@ -117,6 +122,7 @@ export const CONSTANT_PROVENANCE: Readonly<Record<string, ConstantProvenance>> =
   '8pi': { meaning: '8π', unit: '1', source: 'mathematical constant (8·Math.PI)' },
   '4pi': { meaning: '4π', unit: '1', source: 'mathematical constant (4·Math.PI)' },
   '2pi': { meaning: '2π', unit: '1', source: 'mathematical constant (2·Math.PI)' },
+  e: { meaning: 'elementary charge', unit: 'C', source: 'exact SI, 2019 redefinition (core/constants.ts E_SI)' },
   epsilon_0: { meaning: 'vacuum permittivity', unit: 'F/m', source: 'CODATA 2018 (this table)' },
   sigma_sb: { meaning: 'Stefan–Boltzmann constant', unit: 'W/(m^2*K^4)', source: 'CODATA 2018 (this table)' },
   b: { meaning: 'Wien displacement constant', unit: 'm*K', source: 'CODATA 2018 (core/constants.ts B_WIEN_SI)' },
