@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Show a catalog formalRef from `upt atlas be-<n>` when that catalog entry has one. A catalog id is not an unknown atlas bridge. The BE-13 name stays; the rename proposal is `docs/planning/BE-13-name-proposal.md`.
 - [ ] Correct the formal-reference system union in the Phase 4 deliverable of ROADMAP.md. It still names lean4-physlib or other, and it has no covers field. The atlas type and the Phase 4 design note already include lean4-physjs and covers.
 - [ ] Add atlas, formal-reference, Lean, and PhysJS rows to the Development Status table in the root README. That table currently records the catalog, confrontations, composition, canonical equations, architecture, and quality gates.
 - [x] Rename bridge 38's catalog name and the Part II heading to the Milgrom interpolation, as the catalog formal-reference design note specifies. The id and the module file stay. Bridge 36 is not renamed. The deep-MOND prose correction has already landed.
