@@ -282,7 +282,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `Conventions, EvidenceTag, FormalFidelity` | Import (type-only) |
+| `./types.js` | `Conventions, EvidenceTag, FormalFidelity, FormalRefKind` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `WitnessLike`, `CounterexampleLike`, `RejectionLike`, `EvidenceInput`
@@ -447,7 +447,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, NormTransport` | Re-export |
+| `./types.js` | `RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind, NormTransport` | Re-export |
 | `./types.js` | `MissingHorizonError, MissingLipschitzError` | Re-export |
 | `./types.js` | `ALL_EVIDENCE_TAGS` | Re-export |
 | `./derive-evidence.js` | `deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Re-export |
@@ -518,28 +518,28 @@ The codebase is organized into the following modules:
 
   ```text
   RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness,
-  Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, NormTransport,
-  MissingHorizonError, MissingLipschitzError, ALL_EVIDENCE_TAGS, deriveCompositeEvidence,
-  deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES, CounterexampleLike, EvidenceInput,
-  MembershipVerdict, RejectionLike, WitnessLike, composeRelation, COMPOSITION_TABLE,
-  NO_COMPOSITE_CLAIM, CompositionResult, NoCompositeClaim, boundPath, findAtlasPath, findPath,
-  horizonOnRoute, routeEntryModels, AppliedTransport, NoClaimReason, PathBoundClaim, PathBoundResult,
-  PathNoClaim, AtlasModel, ModelId, composeBounds, composeBoundPath, IDENTITY_BOUND, BoundPair,
-  ComposedPath, deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE, CUBIC_STIFFNESS, DAMPING,
-  INDUCTANCE, RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel, OSCILLATOR_FAMILY,
-  AtlasFamily, toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson, JsonValue, blockingFindings,
-  checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind, ApplicabilityInput,
-  ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult, WitnessStatus,
-  ATLAS_FAMILIES, runLinkPrediction, ATLAS_ID_PREFIX, toAtlasJsonLd, toCombinedAtlasJson,
-  QudtResolution, LinkPredictionResult, LinkPredictionTrial, DIFFUSION_FAMILY, BRIDGE_HEAT_DIFFUSION,
-  BRIDGE_SCHRODINGER_DIFFUSION, BRIDGE_WALK_DIFFUSION, DIFFUSION_BRIDGES, DIFFUSION_MODELS,
-  getDiffusionModel, WAVES_FAMILY, BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_SOUND_SPEED, BRIDGE_STRING_WAVE,
-  BRIDGE_WAVE_DALEMBERT, WAVE_BRIDGES, WAVE_MODELS, DIFFUSION_CLOSURE_BRIDGES, WAVE_CLOSURE_BRIDGES,
-  FAILURE_KINDS, HELD_OUT_FAMILY, HELD_OUT_MARKERS, Authorship, BenchmarkItem, BenchmarkSplit,
-  FailureKind, checkRenamedVariants, findCrossSplitLeakage, leakageKey, LeakageCollision,
-  VariantProblem, ABLATION_CONFIGS, FULL_CONFIG, runAtlasCondition, runAtlasOnItem, AtlasRunConfig,
-  AtlasVerdict, rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK, CorpusRecord,
-  Ranking, RetrievalQuery, ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS,
+  Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind,
+  NormTransport, MissingHorizonError, MissingLipschitzError, ALL_EVIDENCE_TAGS,
+  deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES,
+  CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike, composeRelation,
+  COMPOSITION_TABLE, NO_COMPOSITE_CLAIM, CompositionResult, NoCompositeClaim, boundPath,
+  findAtlasPath, findPath, horizonOnRoute, routeEntryModels, AppliedTransport, NoClaimReason,
+  PathBoundClaim, PathBoundResult, PathNoClaim, AtlasModel, ModelId, composeBounds, composeBoundPath,
+  IDENTITY_BOUND, BoundPair, ComposedPath, deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE,
+  CUBIC_STIFFNESS, DAMPING, INDUCTANCE, RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel,
+  OSCILLATOR_FAMILY, AtlasFamily, toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson,
+  JsonValue, blockingFindings, checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind,
+  ApplicabilityInput, ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult,
+  WitnessStatus, ATLAS_FAMILIES, runLinkPrediction, ATLAS_ID_PREFIX, toAtlasJsonLd,
+  toCombinedAtlasJson, QudtResolution, LinkPredictionResult, LinkPredictionTrial, DIFFUSION_FAMILY,
+  BRIDGE_HEAT_DIFFUSION, BRIDGE_SCHRODINGER_DIFFUSION, BRIDGE_WALK_DIFFUSION, DIFFUSION_BRIDGES,
+  DIFFUSION_MODELS, getDiffusionModel, WAVES_FAMILY, BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_SOUND_SPEED,
+  BRIDGE_STRING_WAVE, BRIDGE_WAVE_DALEMBERT, WAVE_BRIDGES, WAVE_MODELS, DIFFUSION_CLOSURE_BRIDGES,
+  WAVE_CLOSURE_BRIDGES, FAILURE_KINDS, HELD_OUT_FAMILY, HELD_OUT_MARKERS, Authorship, BenchmarkItem,
+  BenchmarkSplit, FailureKind, checkRenamedVariants, findCrossSplitLeakage, leakageKey,
+  LeakageCollision, VariantProblem, ABLATION_CONFIGS, FULL_CONFIG, runAtlasCondition, runAtlasOnItem,
+  AtlasRunConfig, AtlasVerdict, rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK,
+  CorpusRecord, Ranking, RetrievalQuery, ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS,
   FROZEN_VECTOR_SHA256, OLLAMA_EMBEDDING_MODEL, OLLAMA_TIMEOUT_MS, PROPOSAL_NOTE,
   EmbeddingUnavailable, canonicalRetrievalCorpus, cosine, decodeFloat32, ollamaEmbedder, queryInput,
   rankByCosine, retrieveHybrid, stubEmbedder, stubVector, Embedder, EmbeddingFallbackReason,
@@ -831,7 +831,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `FormalRef` | Import (type-only) |
+| `./types.js` | `FormalRef, FormalRefKind` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `PhysjsManifestFile`
@@ -7612,9 +7612,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 401 |
 | Total Modules | 12 |
-| Total Lines of Code | 88869 |
-| Total Exports | 2903 |
-| Total Re-exports | 1376 |
+| Total Lines of Code | 88973 |
+| Total Exports | 2904 |
+| Total Re-exports | 1377 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
 | Total Functions | 749 |

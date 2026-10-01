@@ -918,6 +918,8 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/TelegraphDiffusion.lean",
         "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
       }
     },
@@ -1011,6 +1013,8 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/TelegraphWave.lean",
         "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
       }
     },

@@ -85,7 +85,7 @@ export interface EvidenceView {
   derived: EvidenceTag[];
   /** Derived under some unobserved witness results and not others. */
   undecided: EvidenceTag[];
-  formalRef: { system: string; fidelity: string } | null;
+  formalRef: { system: string; fidelity: string; kind: string; url: string } | null;
   witnesses: number;
   /** Present only when the view reads a witness-results source. */
   results?: WitnessOutcomes;
@@ -313,7 +313,15 @@ function evidenceView(api: Api, b: AtlasBridge, results: WitnessResults | null):
   return {
     derived: tags.filter((t) => low.has(t) && high.has(t)),
     undecided: tags.filter((t) => low.has(t) !== high.has(t)),
-    formalRef: b.formalRef === undefined ? null : { system: b.formalRef.system, fidelity: b.formalRef.fidelity },
+    formalRef:
+      b.formalRef === undefined
+        ? null
+        : {
+            system: b.formalRef.system,
+            fidelity: b.formalRef.fidelity,
+            kind: b.formalRef.kind,
+            url: b.formalRef.url,
+          },
     witnesses: b.witnesses.length,
     ...(o === null ? {} : { results: o }),
   };

@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 401
   totalModules: 12
-  totalExports: 2903
+  totalExports: 2904
 entryPoints:
   - file: src/index.ts
     type: main
@@ -460,6 +460,7 @@ modules:
             - Conventions
             - EvidenceTag
             - FormalFidelity
+            - FormalRefKind
           typeOnly: true
       exports:
         - NO_PASSING_WITNESSES
@@ -800,6 +801,7 @@ modules:
             - AtlasRejection
             - FormalFidelity
             - FormalRef
+            - FormalRefKind
             - NormTransport
           reExport: true
         - file: ./types.js
@@ -1302,6 +1304,7 @@ modules:
         - AtlasRejection
         - FormalFidelity
         - FormalRef
+        - FormalRefKind
         - NormTransport
         - CounterexampleLike
         - EvidenceInput
@@ -1397,6 +1400,7 @@ modules:
         - AtlasRejection
         - FormalFidelity
         - FormalRef
+        - FormalRefKind
         - NormTransport
         - MissingHorizonError
         - MissingLipschitzError
@@ -2137,6 +2141,7 @@ modules:
         - file: ./types.js
           imports:
             - FormalRef
+            - FormalRefKind
           typeOnly: true
       exports:
         - PHYSJS_COMMIT
@@ -19596,15 +19601,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 401
   totalModules: 12
-  totalLinesOfCode: 88869
-  totalExports: 2903
+  totalLinesOfCode: 88973
+  totalExports: 2904
   totalClasses: 60
   totalInterfaces: 462
   totalFunctions: 749
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 717
-  totalReExports: 1376
+  totalReExports: 1377
   totalTypeOnlyImports: 541
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

@@ -60,6 +60,9 @@ describe('catalog formalRef — upt atlas be-<n>', () => {
     expect(r.out).toContain(entry.name);
     expect(r.out).toContain(entry.formalRef!.statement);
     expect(r.out).toContain(entry.formalRef!.covers);
+    expect(r.out).toContain(`kind: ${entry.formalRef!.kind}`);
+    expect(r.out).toContain(entry.formalRef!.url);
+    expect(r.out).not.toContain('formally-proved-property');
   });
 
   it('BE-16 is found with either letter case', async () => {

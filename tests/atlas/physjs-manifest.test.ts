@@ -353,13 +353,14 @@ describe('vendored PhysJS manifest', () => {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
       expect(row?.formalRef?.system).toBe('lean4-physjs');
       expect(row?.formalRef?.covers).toMatch(/^(reduction|limit|derivation-step): /);
-      expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
+      expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     for (const id of labeledIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
       expect(row?.formalRef?.system).toBe('lean4-physjs');
       expect(row?.formalRef?.covers).toMatch(/^(property|cross-check): /);
+      expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     const reviewed = atlasBridges.filter(
