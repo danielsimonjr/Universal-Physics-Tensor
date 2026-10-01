@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 407,
     "totalModules": 13,
-    "totalExports": 2919
+    "totalExports": 2922
   },
   "entryPoints": [
     {
@@ -685,6 +685,7 @@
           "NO_PASSING_WITNESSES",
           "counterexamplesWithRejection",
           "deriveEvidence",
+          "provedWithUnresolvedCounterexample",
           "catalogEvidenceInput",
           "deriveEvidenceForVerdict",
           "deriveCompositeEvidence"
@@ -698,6 +699,7 @@
         "functions": [
           "counterexamplesWithRejection",
           "deriveEvidence",
+          "provedWithUnresolvedCounterexample",
           "catalogEvidenceInput",
           "deriveEvidenceForVerdict",
           "deriveCompositeEvidence"
@@ -1201,7 +1203,8 @@
               "deriveCompositeEvidence",
               "deriveEvidence",
               "deriveEvidenceForVerdict",
-              "NO_PASSING_WITNESSES"
+              "NO_PASSING_WITNESSES",
+              "provedWithUnresolvedCounterexample"
             ],
             "reExport": true
           },
@@ -1761,6 +1764,7 @@
           "deriveEvidence",
           "deriveEvidenceForVerdict",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "composeRelation",
           "COMPOSITION_TABLE",
           "NO_COMPOSITE_CLAIM",
@@ -1979,6 +1983,7 @@
           "deriveEvidence",
           "deriveEvidenceForVerdict",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "CounterexampleLike",
           "EvidenceInput",
           "MembershipVerdict",
@@ -13885,7 +13890,8 @@
             "imports": [
               "deriveEvidence",
               "deriveCompositeEvidence",
-              "NO_PASSING_WITNESSES"
+              "NO_PASSING_WITNESSES",
+              "provedWithUnresolvedCounterexample"
             ],
             "reExport": true
           },
@@ -14130,6 +14136,7 @@
           "deriveEvidence",
           "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "summarizeEvidence",
           "ALL_EVIDENCE_TAGS",
           "runWitnessRegistry",
@@ -14323,6 +14330,7 @@
           "deriveEvidence",
           "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "summarizeEvidence",
           "ALL_EVIDENCE_TAGS",
           "runWitnessRegistry",
@@ -28236,15 +28244,15 @@
   "statistics": {
     "totalTypeScriptFiles": 407,
     "totalModules": 13,
-    "totalLinesOfCode": 89101,
-    "totalExports": 2919,
+    "totalLinesOfCode": 89410,
+    "totalExports": 2922,
     "totalClasses": 60,
     "totalInterfaces": 462,
-    "totalFunctions": 750,
+    "totalFunctions": 751,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 721,
-    "totalReExports": 1387,
+    "totalReExports": 1389,
     "totalTypeOnlyImports": 545,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

@@ -21,7 +21,9 @@ import { fileURLToPath } from 'node:url';
 
 const PROPERTIES = [11, 16, 29] as const;
 const CROSS_CHECKS = [19, 24, 42] as const;
-const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61] as const;
+const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61, 14, 54, 17, 22, 15, 33, 50, 32, 35, 60, 30] as const;
+/** Theorem states the catalogued equation. Covers still begins with derivation-step. */
+const CATALOG_EQUATION = [12, 21, 27, 37, 40, 43, 55, 59, 63] as const;
 
 /** Namespaces that are not their own Lean file at the pinned commit. */
 const FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
@@ -42,8 +44,8 @@ function fileFor(statement: string): string {
 }
 
 describe('formalRef kind — formally-proved is a bridge only', () => {
-  it('the fifteen catalog references exist (otherwise the next assertions pass vacuously)', () => {
-    expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED].every((id) => row(id).formalRef !== undefined)).toBe(true);
+  it('the catalog references exist (otherwise the next assertions pass vacuously)', () => {
+    expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED, ...CATALOG_EQUATION, 28].every((id) => row(id).formalRef !== undefined)).toBe(true);
   });
 
   it('a property derives its own label and not formally-proved', () => {
@@ -64,6 +66,22 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
       expect(tags.has('formally-proved-cross-check'), `be-${id}`).toBe(true);
       expect(tags.has('formally-proved-property'), `be-${id}`).toBe(false);
     }
+  });
+
+  it('a catalog theorem that states the catalogued equation is kind bridge', () => {
+    for (const id of CATALOG_EQUATION) {
+      const tags = deriveEvidence(row(id), NO_PASSING_WITNESSES);
+      expect(row(id).formalRef?.kind, `be-${id}`).toBe('bridge');
+      expect(row(id).formalRef?.covers.startsWith('derivation-step:'), `be-${id}`).toBe(true);
+      expect(tags.has('formally-proved'), `be-${id}`).toBe(true);
+    }
+  });
+
+  it('BE-28 derives the property label and not formally-proved', () => {
+    const tags = deriveEvidence(row(28), NO_PASSING_WITNESSES);
+    expect(row(28).formalRef?.kind).toBe('property');
+    expect(tags.has('formally-proved')).toBe(false);
+    expect(tags.has('formally-proved-property')).toBe(true);
   });
 
   it('a counted catalog reference derives neither label', () => {
@@ -109,7 +127,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
       ),
       ...BRIDGE_EQUATIONS.flatMap((entry) => (entry.formalRef === undefined ? [] : [entry.formalRef])),
     ];
-    expect(refs.length).toBe(25);
+    expect(refs.length).toBe(46);
     for (const ref of refs) {
       const file = fileFor(ref.statement);
       expect(ref.url).toBe(

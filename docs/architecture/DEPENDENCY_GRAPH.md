@@ -288,7 +288,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `WitnessLike`, `CounterexampleLike`, `RejectionLike`, `EvidenceInput`
-- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `catalogEvidenceInput`, `deriveEvidenceForVerdict`, `deriveCompositeEvidence`
+- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `provedWithUnresolvedCounterexample`, `catalogEvidenceInput`, `deriveEvidenceForVerdict`, `deriveCompositeEvidence`
 - Constants: `NO_PASSING_WITNESSES`
 
 ---
@@ -452,7 +452,7 @@ The codebase is organized into the following modules:
 | `./types.js` | `RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind, NormTransport` | Re-export |
 | `./types.js` | `MissingHorizonError, MissingLipschitzError` | Re-export |
 | `./types.js` | `ALL_EVIDENCE_TAGS` | Re-export |
-| `./derive-evidence.js` | `deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Re-export |
+| `./derive-evidence.js` | `deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample` | Re-export |
 | `./derive-evidence.js` | `CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike` | Re-export |
 | `./composition-table.js` | `composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM` | Re-export |
 | `./composition-table.js` | `CompositionResult, NoCompositeClaim` | Re-export |
@@ -523,25 +523,26 @@ The codebase is organized into the following modules:
   Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind,
   NormTransport, MissingHorizonError, MissingLipschitzError, ALL_EVIDENCE_TAGS,
   deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES,
-  CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike, composeRelation,
-  COMPOSITION_TABLE, NO_COMPOSITE_CLAIM, CompositionResult, NoCompositeClaim, boundPath,
-  findAtlasPath, findPath, horizonOnRoute, routeEntryModels, AppliedTransport, NoClaimReason,
-  PathBoundClaim, PathBoundResult, PathNoClaim, AtlasModel, ModelId, composeBounds, composeBoundPath,
-  IDENTITY_BOUND, BoundPair, ComposedPath, deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE,
-  CUBIC_STIFFNESS, DAMPING, INDUCTANCE, RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel,
-  OSCILLATOR_FAMILY, AtlasFamily, toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson,
-  JsonValue, blockingFindings, checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind,
-  ApplicabilityInput, ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult,
-  WitnessStatus, ATLAS_FAMILIES, runLinkPrediction, ATLAS_ID_PREFIX, toAtlasJsonLd,
-  toCombinedAtlasJson, QudtResolution, LinkPredictionResult, LinkPredictionTrial, DIFFUSION_FAMILY,
-  BRIDGE_HEAT_DIFFUSION, BRIDGE_SCHRODINGER_DIFFUSION, BRIDGE_WALK_DIFFUSION, DIFFUSION_BRIDGES,
-  DIFFUSION_MODELS, getDiffusionModel, WAVES_FAMILY, BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_SOUND_SPEED,
-  BRIDGE_STRING_WAVE, BRIDGE_WAVE_DALEMBERT, WAVE_BRIDGES, WAVE_MODELS, DIFFUSION_CLOSURE_BRIDGES,
-  WAVE_CLOSURE_BRIDGES, FAILURE_KINDS, HELD_OUT_FAMILY, HELD_OUT_MARKERS, Authorship, BenchmarkItem,
-  BenchmarkSplit, FailureKind, checkRenamedVariants, findCrossSplitLeakage, leakageKey,
-  LeakageCollision, VariantProblem, ABLATION_CONFIGS, FULL_CONFIG, runAtlasCondition, runAtlasOnItem,
-  AtlasRunConfig, AtlasVerdict, rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK,
-  CorpusRecord, Ranking, RetrievalQuery, ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS,
+  provedWithUnresolvedCounterexample, CounterexampleLike, EvidenceInput, MembershipVerdict,
+  RejectionLike, WitnessLike, composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM,
+  CompositionResult, NoCompositeClaim, boundPath, findAtlasPath, findPath, horizonOnRoute,
+  routeEntryModels, AppliedTransport, NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim,
+  AtlasModel, ModelId, composeBounds, composeBoundPath, IDENTITY_BOUND, BoundPair, ComposedPath,
+  deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE, CUBIC_STIFFNESS, DAMPING, INDUCTANCE,
+  RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel, OSCILLATOR_FAMILY, AtlasFamily,
+  toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson, JsonValue, blockingFindings,
+  checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind, ApplicabilityInput,
+  ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult, WitnessStatus,
+  ATLAS_FAMILIES, runLinkPrediction, ATLAS_ID_PREFIX, toAtlasJsonLd, toCombinedAtlasJson,
+  QudtResolution, LinkPredictionResult, LinkPredictionTrial, DIFFUSION_FAMILY, BRIDGE_HEAT_DIFFUSION,
+  BRIDGE_SCHRODINGER_DIFFUSION, BRIDGE_WALK_DIFFUSION, DIFFUSION_BRIDGES, DIFFUSION_MODELS,
+  getDiffusionModel, WAVES_FAMILY, BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_SOUND_SPEED, BRIDGE_STRING_WAVE,
+  BRIDGE_WAVE_DALEMBERT, WAVE_BRIDGES, WAVE_MODELS, DIFFUSION_CLOSURE_BRIDGES, WAVE_CLOSURE_BRIDGES,
+  FAILURE_KINDS, HELD_OUT_FAMILY, HELD_OUT_MARKERS, Authorship, BenchmarkItem, BenchmarkSplit,
+  FailureKind, checkRenamedVariants, findCrossSplitLeakage, leakageKey, LeakageCollision,
+  VariantProblem, ABLATION_CONFIGS, FULL_CONFIG, runAtlasCondition, runAtlasOnItem, AtlasRunConfig,
+  AtlasVerdict, rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK, CorpusRecord,
+  Ranking, RetrievalQuery, ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS,
   FROZEN_VECTOR_SHA256, OLLAMA_EMBEDDING_MODEL, OLLAMA_TIMEOUT_MS, PROPOSAL_NOTE,
   EmbeddingUnavailable, canonicalRetrievalCorpus, cosine, decodeFloat32, ollamaEmbedder, queryInput,
   rankByCosine, retrieveHybrid, stubEmbedder, stubVector, Embedder, EmbeddingFallbackReason,
@@ -4121,7 +4122,7 @@ The codebase is organized into the following modules:
 | `./composition/grounding.js` | `CandidateGrounding, CandidateReadiness` | Re-export |
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
 | `./atlas/families.js` | `ATLAS_FAMILIES` | Re-export |
-| `./atlas/derive-evidence.js` | `deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES` | Re-export |
+| `./atlas/derive-evidence.js` | `deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample` | Re-export |
 | `./atlas/coverage.js` | `summarizeEvidence, ALL_EVIDENCE_TAGS` | Re-export |
 | `./atlas/witness-artifact.js` | `runWitnessRegistry` | Re-export |
 | `./atlas/witness-specs.js` | `WITNESS_REGISTRY` | Re-export |
@@ -4168,14 +4169,14 @@ The codebase is organized into the following modules:
   describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
   compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
   CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
-  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS,
-  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
-  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
-  ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap,
-  uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon, findPath,
-  findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation,
-  PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality,
-  Witness, MissingLipschitzError, AtlasModel, ModelId
+  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample,
+  summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
+  OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
+  ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups,
+  regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample,
+  familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
+  routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
+  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -7697,12 +7698,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 407 |
 | Total Modules | 13 |
-| Total Lines of Code | 89101 |
-| Total Exports | 2919 |
-| Total Re-exports | 1387 |
+| Total Lines of Code | 89410 |
+| Total Exports | 2922 |
+| Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
-| Total Functions | 750 |
+| Total Functions | 751 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 545 |

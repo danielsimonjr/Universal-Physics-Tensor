@@ -124,9 +124,13 @@ the catalog case of that schedule's conflict 2.
 ## Kinds
 
 Three kinds. They are not one count. Each may occupy the one catalog
-`formalRef`. The first word of `covers` is the kind. None of the three
-lights `formally-proved`: the catalog path does not pass the reference to
-`deriveEvidence`.
+`formalRef`. The first word of `covers` is the kind, except where the
+theorem states the catalogued equation. In that case the kind is
+`bridge` and the covers line stays the text PhysJS wrote. A theorem that
+proves a weaker or partial statement keeps the covers word. Passing a
+`bridge` reference to `deriveEvidence` lights `formally-proved`. The
+catalog path does not pass the reference, so none of these kinds lights
+that tag on the catalog path.
 
 **Counted reduction, limit, or derivation-step.** The `covers` word is
 `reduction`, `limit`, or `derivation-step`. One id is one reference. The
