@@ -276,6 +276,19 @@ export function deriveEvidence(
 }
 
 /**
+ * A reviewed bridge whose delimiting counterexample is still unresolved.
+ *
+ * Both tags stay. This does not clear the counterexample and it does not
+ * remove `formally-proved`. Callers that print only the proof tag hide the
+ * other one; this is the flag that names the pair.
+ *
+ * @internal
+ */
+export function provedWithUnresolvedCounterexample(tags: ReadonlySet<EvidenceTag>): boolean {
+  return tags.has('formally-proved') && tags.has('contradicted');
+}
+
+/**
  * The artifacts a catalog row may be judged on.
  *
  * `formalRef` is absent on purpose. A catalog reference certifies one part.

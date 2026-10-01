@@ -394,6 +394,8 @@ and the error bounds along a route, and returns a no-claim result when the table
 ReadonlySet<EvidenceTag>`. The second argument is required, so "no witness passed" is a written
 choice (`NO_PASSING_WITNESSES`). `formally-proved` is reachable only through a reviewed
 `formalRef`; a file allow-list lint forbids spelling the tag anywhere a record could set it.
+`provedWithUnresolvedCounterexample` is true when the derived set contains both `formally-proved`
+and `contradicted`. It does not remove either tag.
 
 ### `checkApplicability(input)` (`src/atlas/applicability.ts`)
 

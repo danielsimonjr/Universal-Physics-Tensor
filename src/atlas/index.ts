@@ -47,7 +47,7 @@ export { ALL_EVIDENCE_TAGS } from './types.js';
 // The Phase 1–3 core. Absent from this barrel until the S6.7 API review found
 // the gap: subpath users could not reach evidence derivation, the composition
 // table or path bounding at all (tests/atlas/barrel-completeness.test.ts).
-export { deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES } from './derive-evidence.js';
+export { deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample } from './derive-evidence.js';
 export type {
   CounterexampleLike,
   EvidenceInput,
