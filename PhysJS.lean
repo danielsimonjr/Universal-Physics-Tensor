@@ -16,3 +16,4 @@ import PhysJS.KibbleZurek
 import PhysJS.HawkingUnruh
 import PhysJS.Fret
 import PhysJS.QuantumBounce
+import PhysJS.Landauer
