@@ -17,3 +17,4 @@ import PhysJS.HawkingUnruh
 import PhysJS.Fret
 import PhysJS.QuantumBounce
 import PhysJS.Landauer
+import PhysJS.Jarzynski
