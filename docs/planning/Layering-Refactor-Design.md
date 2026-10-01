@@ -221,15 +221,15 @@ so existing import paths keep working:
 | Moves | Why it is in the set |
 |---|---|
 | `RelationType`, `EvidenceTag`, `ALL_EVIDENCE_TAGS` | The contract and the tag union. The const is the value list of the union; leaving it behind splits them. |
-| `FormalFidelity`, `FormalRef` | `FormalRef.fidelity` is `FormalFidelity`. Moving the interface without the union leaves `relations` importing `atlas`. |
+| `FormalFidelity`, `FormalRefKind`, `FormalRef` | `FormalRef.fidelity` is `FormalFidelity` and `FormalRef.kind` is `FormalRefKind`. Moving the interface without either union leaves `relations` importing `atlas`. |
 | `RegimeInequality`, `Regime` | `Regime.inequalities` is `RegimeInequality`. |
-| `ApproximationBound` | Named by `RelationContract` and by `uncertainty.ts`. |
+| `LimitCharacter`, `ApproximationBound` | `ApproximationBound.limitCharacter` is `LimitCharacter`. The bound is named by `RelationContract` and by `uncertainty.ts`. Moving the bound without the union leaves `relations` importing `atlas`. |
 | `Counterexample` | `witness` is a string, so `Witness` can stay. |
 | `RelationContract` | The Phase 1 overlay union. |
 | `Conventions` | The sign and unit record. |
 
 Stay in `src/atlas/types.ts`, and import the moved names from `relations`
-(a downward edge): `LimitCharacter`, `Witness`, `NormTransport`,
+(a downward edge): `Witness`, `NormTransport`,
 `AtlasBridge`, `AtlasRejection`, `MissingHorizonError`,
 `MissingDeltaAtError`, `MissingLipschitzError`. The two public error
 classes stay on `src/atlas/public.ts` through the existing re-export.

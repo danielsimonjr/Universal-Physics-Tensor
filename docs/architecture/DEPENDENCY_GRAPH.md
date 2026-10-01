@@ -26,10 +26,11 @@ This document provides a comprehensive dependency graph of all files, components
 11. [Dimensional Dependencies](#dimensional-dependencies)
 12. [Entry Dependencies](#entry-dependencies)
 13. [Numerical Dependencies](#numerical-dependencies)
-14. [Dependency Matrix](#dependency-matrix)
-15. [Circular Dependency Analysis](#circular-dependency-analysis)
-16. [Visual Dependency Graph](#visual-dependency-graph)
-17. [Summary Statistics](#summary-statistics)
+14. [Relations Dependencies](#relations-dependencies)
+15. [Dependency Matrix](#dependency-matrix)
+16. [Circular Dependency Analysis](#circular-dependency-analysis)
+17. [Visual Dependency Graph](#visual-dependency-graph)
+18. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -49,6 +50,7 @@ The codebase is organized into the following modules:
 - **dimensional**: 32 files
 - **entry**: 1 file
 - **numerical**: 41 files
+- **relations**: 4 files
 
 ---
 
@@ -218,28 +220,28 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/composition-table.ts` - The composition table for `RelationType` — a literal 8×8 matrix.
+### `src/atlas/composition-table.ts` - Re-export of the composition table. The table lives in
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `RelationType` | Import (type-only) |
+| `../relations/composition-table.js` | `COMPOSITION_TABLE, composeRelation, NO_COMPOSITE_CLAIM` | Import |
 
 **Exports:**
-- Functions: `composeRelation`
-- Constants: `NO_COMPOSITE_CLAIM`, `COMPOSITION_TABLE`
+- Constants: `NO_COMPOSITE_CLAIM`, `COMPOSITION_TABLE`, `composeRelation`
 
 ---
 
-### `src/atlas/conventions.ts` - Atlas Phase 1 — convention comparison.
+### `src/atlas/conventions.ts` - Re-export of the convention comparison. The implementation lives in
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `Conventions` | Import (type-only) |
+| `../relations/conventions.js` | `checkConventions, unknownConventionKeys` | Re-export |
+| `../relations/conventions.js` | `ConventionKey` | Re-export |
 
 **Exports:**
-- Functions: `checkConventions`, `unknownConventionKeys`
+- Re-exports: `checkConventions`, `unknownConventionKeys`, `ConventionKey`
 
 ---
 
@@ -921,20 +923,21 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/regime.ts` - Regime derivation — π-groups as the coordinates a regime is written in.
+### `src/atlas/regime.ts` - Regime admission, and the re-export of the vocabulary half.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/buckingham.js` | `buckinghamPi` | Import |
-| `../dimensional/buckingham.js` | `DimensionalVariable, PiGroup` | Import (type-only) |
-| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../relations/regime.js` | `regimeHolds` | Import |
+| `./types.js` | `AtlasBridge` | Import (type-only) |
 | `./types.js` | `MissingDeltaAtError, MissingHorizonError` | Import |
-| `./types.js` | `AtlasBridge, Regime, RegimeInequality` | Import (type-only) |
+| `../relations/regime.js` | `collidingRegimeGroups, deriveRegimeGroups, intersectRegimes, regimeOverlap, uncoveredRegions` | Re-export |
+| `../relations/regime.js` | `RegimeBearing, RegimeOverlap, RegionSample` | Re-export |
 
 **Exports:**
-- Interfaces: `RegimeCheck`, `RegionSample`, `RegimeBearing`
-- Functions: `deriveRegimeGroups`, `regimeHolds`, `intersectRegimes`, `collidingRegimeGroups`, `regimeOverlap`, `uncoveredRegions`, `admitApproximation`
+- Functions: `admitApproximation`
+- Constants: `regimeHolds`
+- Re-exports: `collidingRegimeGroups`, `deriveRegimeGroups`, `intersectRegimes`, `regimeOverlap`, `uncoveredRegions`, `RegimeBearing`, `RegimeOverlap`, `RegionSample`
 
 ---
 
@@ -1002,23 +1005,19 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/types.ts` - Atlas Phase 0 pilot types (oscillator pilot).
+### `src/atlas/types.ts` - Atlas record types.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/buckingham.js` | `DimensionalVariable, PiGroup` | Import (type-only) |
+| `../relations/types.js` | `FormalRef` | Import (type-only) |
+| `../relations/types.js` | `Conventions, FormalFidelity, FormalRef, FormalRefKind, RelationContract` | Re-export |
+| `../relations/types.js` | `ALL_EVIDENCE_TAGS` | Re-export |
 
 **Exports:**
 - Classes: `MissingHorizonError`, `MissingDeltaAtError`, `MissingLipschitzError`
-- Interfaces:
-
-  ```text
-  FormalRef, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, NormTransport,
-  AtlasBridge, AtlasRejection, Conventions
-  ```
-
-- Constants: `ALL_EVIDENCE_TAGS`
+- Interfaces: `Witness`, `NormTransport`, `AtlasBridge`, `AtlasRejection`
+- Re-exports: `Conventions`, `FormalFidelity`, `FormalRef`, `FormalRefKind`, `RelationContract`, `ALL_EVIDENCE_TAGS`
 
 ---
 
@@ -2611,9 +2610,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../atlas/types.js` | `Conventions, Counterexample, FormalRef, Regime, RelationContract` | Import (type-only) |
+| `../relations/types.js` | `Conventions, Counterexample, FormalRef, Regime, RelationContract` | Import (type-only) |
 | `../atlas/physjs-ref.js` | `physjsFormalRef` | Import |
-| `../atlas/regime.js` | `deriveRegimeGroups` | Import |
+| `../relations/regime.js` | `deriveRegimeGroups` | Import |
 | `../dimensional/types.js` | `LENGTH, VELOCITY` | Import |
 | `./be52-mercury-confrontation.js` | `MERCURY` | Import |
 | `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
@@ -2798,7 +2797,7 @@ The codebase is organized into the following modules:
 | `../dimensional/buckingham.js` | `DimensionalVariable` | Import (type-only) |
 | `../core/types.js` | `TensorIndices` | Import (type-only) |
 | `../dimensional/einstein-equation.js` | `EinsteinFieldEquationNode` | Import (type-only) |
-| `../atlas/types.js` | `Conventions` | Import (type-only) |
+| `../relations/types.js` | `Conventions` | Import (type-only) |
 
 ---
 
@@ -4350,9 +4349,9 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `./unit-convention.js` | `conventionFactor` | Import |
 | `./edge.js` | `CompositionAliasError, CompositionDimensionError, CompositionJunctionError, DomainViolationError, UndefinedCompositionError` | Import |
-| `../atlas/composition-table.js` | `composeRelation, NO_COMPOSITE_CLAIM` | Import |
-| `../atlas/conventions.js` | `checkConventions` | Import |
-| `../atlas/types.js` | `Conventions, RelationContract, RelationType` | Import (type-only) |
+| `../relations/composition-table.js` | `composeRelation, NO_COMPOSITE_CLAIM` | Import |
+| `../relations/conventions.js` | `checkConventions` | Import |
+| `../relations/types.js` | `Conventions, RelationContract, RelationType` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `QuantityIdentification`, `AliasDisposition`, `ComposeOptions`
@@ -4460,7 +4459,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./quantity.js` | `Quantity` | Import (type-only) |
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `../atlas/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
+| `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
 
 **Exports:**
 - Classes: `CompositionJunctionError`, `CompositionDimensionError`, `DomainViolationError`, `CompositionAliasError`, `UndefinedCompositionError`
@@ -4787,7 +4786,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
-| `../atlas/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
+| `../relations/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
 | `../atlas/derive-evidence.js` | `catalogEvidenceInput, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Import |
 | `../bridges/membership.js` | `adjudicateBridgeEntry` | Import |
 | `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
@@ -5698,7 +5697,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./edge.js` | `evaluateEdge` | Import |
-| `../atlas/types.js` | `ApproximationBound` | Import (type-only) |
+| `../relations/types.js` | `ApproximationBound` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `UncertaintyOptions`, `UncertaintyResult`
@@ -7429,6 +7428,62 @@ The codebase is organized into the following modules:
 
 ---
 
+## Relations Dependencies
+
+### `src/relations/composition-table.ts` - The composition table for `RelationType` — a literal 8×8 matrix.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `RelationType` | Import (type-only) |
+
+**Exports:**
+- Functions: `composeRelation`
+- Constants: `NO_COMPOSITE_CLAIM`, `COMPOSITION_TABLE`
+
+---
+
+### `src/relations/conventions.ts` - Atlas Phase 1 — convention comparison.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Conventions` | Import (type-only) |
+
+**Exports:**
+- Functions: `checkConventions`, `unknownConventionKeys`
+
+---
+
+### `src/relations/regime.ts` - Regime derivation — π-groups as the coordinates a regime is written in.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/buckingham.js` | `buckinghamPi` | Import |
+| `../dimensional/buckingham.js` | `DimensionalVariable, PiGroup` | Import (type-only) |
+| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `./types.js` | `Regime, RegimeInequality` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `RegimeCheck`, `RegionSample`, `RegimeBearing`
+- Functions: `deriveRegimeGroups`, `regimeHolds`, `intersectRegimes`, `collidingRegimeGroups`, `regimeOverlap`, `uncoveredRegions`
+
+---
+
+### `src/relations/types.ts` - Shared relation vocabulary.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/buckingham.js` | `PiGroup` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `FormalRef`, `RegimeInequality`, `Regime`, `ApproximationBound`, `Counterexample`, `Conventions`
+- Constants: `ALL_EVIDENCE_TAGS`
+
+---
+
 ## Dependency Matrix
 
 ### File Import/Export Matrix
@@ -7446,8 +7501,8 @@ The codebase is organized into the following modules:
 | `stats` | 0 files | 2 files |
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
-| `composition-table` | 1 files | 7 files |
-| `conventions` | 1 files | 4 files |
+| `composition-table` | 1 files | 6 files |
+| `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
 | `derivation` | 3 files | 3 files |
 | `derive-evidence` | 1 files | 3 files |
@@ -7572,11 +7627,19 @@ graph TD
         N58[...36 more]
     end
 
+    subgraph Relations
+        N59[composition-table]
+        N60[conventions]
+        N61[regime]
+        N62[types]
+    end
+
     N0 --> N48
     N3 --> N48
     N4 --> N3
     N10 --> N39
     N12 --> N50
+    N12 --> N62
     N13 --> N50
     N14 --> N12
     N14 --> N50
@@ -7601,7 +7664,6 @@ graph TD
     N26 --> N27
     N27 --> N25
     N27 --> N30
-    N28 --> N24
 ```
 
 ---
@@ -7610,17 +7672,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 401 |
-| Total Modules | 12 |
-| Total Lines of Code | 88973 |
-| Total Exports | 2904 |
-| Total Re-exports | 1377 |
+| Total TypeScript Files | 405 |
+| Total Modules | 13 |
+| Total Lines of Code | 89070 |
+| Total Exports | 2925 |
+| Total Re-exports | 1394 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
 | Total Functions | 749 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 541 |
+| Type-only Imports | 543 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

@@ -12,7 +12,7 @@
  * `bridges/*` and `composition/*`, so a barrel import closes a cycle that
  * `bun run docs:deps` reports. Importing a leaf module (`./types.js`,
  * `./regime.js`, `./composition-table.js`, …) is fine and the tree has always
- * done it, VALUES INCLUDED: `bridges/index.ts:40`, `composition/compose.ts`,
+ * done it, VALUES INCLUDED: `bridges/index.ts`, `composition/compose.ts`,
  * `composition/graph-viz.ts`.
  *
  * This comment used to say "TYPES ONLY, and only from `src/atlas/types.js`",

@@ -18,7 +18,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { namedReExports } from './_public-surface-parse.js';
@@ -80,6 +80,29 @@ const ATLAS_TYPE_NAMES = new Set(
   ),
 );
 
+/**
+ * Declaration text the closure scan should read. A public alias
+ * `export type Name = import('./m.js').Name` is the same type as the
+ * vocabulary declaration; the scan follows it, or a moved interface would
+ * pass while its fields were never read.
+ */
+export function followedDeclaration(
+  source: string,
+  name: string,
+  read: (spec: string) => string | undefined,
+  depth = 0,
+): string | undefined {
+  const text = declarationText(source, name);
+  if (text === undefined || depth > 4) return text;
+  const alias = /export\s+type\s+[A-Za-z0-9_$]+\s*=\s*import\(\s*(['"])([^'"]+)\1\s*\)\.([A-Za-z0-9_$]+)/.exec(
+    stripComments(text),
+  );
+  if (alias === null) return text;
+  const next = read(alias[2]!);
+  if (next === undefined) return text;
+  return followedDeclaration(next, alias[3]!, read, depth + 1) ?? text;
+}
+
 /** Atlas type names referenced (as whole words) in `text`, other than `self`. */
 const atlasRefs = (text: string, self: string): string[] =>
   [...ATLAS_TYPE_NAMES].filter((t) => t !== self && new RegExp(`\\b${t}\\b`).test(text));
@@ -128,6 +151,15 @@ describe('the scan — proven before it is trusted', () => {
     expect(atlasRefs(declarationText(src, 'Probe')!, 'Probe')).toEqual([]);
   });
 
+  it('FOLLOWS a type alias into the module it names, so a leak behind the alias fails', () => {
+    const leaky = 'export interface Secret { readonly x: AtlasBridge; }';
+    const alias = 'export type Public = import("./secret.js").Secret;';
+    const read = (spec: string): string | undefined => (spec === './secret.js' ? leaky : undefined);
+    const text = followedDeclaration(alias, 'Public', read);
+    expect(text).toBeDefined();
+    expect(atlasRefs(text!, 'Public')).toContain('AtlasBridge');
+  });
+
   it('a function contributes its SIGNATURE, not its body', () => {
     const src = 'export function f(a: Regime): BoundPair {\n  const x: AtlasBridge = null!;\n  return x;\n}';
     const refs = atlasRefs(declarationText(src, 'f')!, 'f');
@@ -143,7 +175,10 @@ describe('closure under type references', () => {
     const leaks: string[] = [];
     for (const { name, specifier } of facadeReExports) {
       const file = resolve(dirname(FACADE), specifier.replace(/\.js$/, '.ts'));
-      const text = declarationText(readFileSync(file, 'utf-8'), name);
+      const text = followedDeclaration(readFileSync(file, 'utf-8'), name, (spec) => {
+        const target = resolve(dirname(file), spec.replace(/\.js$/, '.ts'));
+        return existsSync(target) ? readFileSync(target, 'utf-8') : undefined;
+      });
       if (text === undefined) {
         leaks.push(`${name}: declaration not found in ${specifier}`);
         continue;

@@ -21,7 +21,7 @@
 
 import type { BridgeEdge } from './edge.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
-import type { EvidenceTag, RelationType } from '../atlas/types.js';
+import type { EvidenceTag, RelationType } from '../relations/types.js';
 import {
   catalogEvidenceInput,
   deriveEvidenceForVerdict,
