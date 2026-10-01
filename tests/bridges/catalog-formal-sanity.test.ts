@@ -1,14 +1,21 @@
 /**
- * Sanity lemmas for the nine counted catalog `formalRef`s.
+ * Sanity lemmas for the catalog `formalRef`s.
  *
- * Each block instantiates the top-level PhysJS statement on a known case and
- * shows the negative control fails. The nested theorems are not these
- * references. A catalog reference does not light `formally-proved`.
+ * The nine counted references and the six labeled references (three
+ * cross-checks, three properties) each instantiate the top-level PhysJS
+ * statement on a known case and show the negative control fails. The nested
+ * theorems are not these references. A catalog reference does not light
+ * `formally-proved`.
  */
 
 import { describe, expect, it } from 'vitest';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
-import { C_SI, E_SI, G_SI, K_B_SI } from '../../src/core/constants.js';
+import { C_SI, E_SI, G_SI, HBAR_SI, K_B_SI } from '../../src/core/constants.js';
+import { evaluateHawkingTemperature } from '../../src/bridges/equations/be-42-hawking-temperature.js';
+import { evaluateUnruh } from '../../src/bridges/be57-unruh.js';
+import { be42ViaRsEdge } from '../../src/composition/edges/calibration.js';
+import { evaluateFRETEfficiency } from '../../src/bridges/equations/be-24-foerster-fret.js';
+import { evaluateQuantumBounce } from '../../src/bridges/equations/be-19-quantum-bounce.js';
 import { evaluateEddingtonLuminosity, THOMSON_CROSS_SECTION_SI } from '../../src/bridges/be64-eddington-luminosity.js';
 import { computeB0 } from '../../src/bridges/equations/be-53-yang-mills-beta.js';
 import { evaluateJohnsonNyquist } from '../../src/bridges/be58-johnson-nyquist.js';
@@ -217,5 +224,233 @@ describe('catalog formalRef sanity lemmas', () => {
     expect(LORENZ_NUMBER_SI).toBe((pi2over3) * (K_B_SI / E_SI) ** 2);
     const halfLineLorenz = (Math.PI ** 2 / 6) * (K_B_SI / E_SI) ** 2;
     expect(Math.abs(halfLineLorenz - LORENZ_NUMBER_SI) / LORENZ_NUMBER_SI).toBeGreaterThan(0.4);
+  });
+});
+
+const LABELED = [
+  [42, 'PhysJS.HawkingUnruh.dictionary', 'cross-check'],
+  [24, 'PhysJS.Fret.dictionary', 'cross-check'],
+  [19, 'PhysJS.QuantumBounce.dictionary', 'cross-check'],
+  [16, 'PhysJS.Landauer.equal_levels', 'property'],
+  [29, 'PhysJS.Jarzynski.jensen_work', 'property'],
+  [11, 'PhysJS.Lindblad.preserve', 'property'],
+] as const;
+
+/** Thermodynamic entropy of a two-level canonical ensemble. */
+function twoStateEntropy(energy1: number, energy2: number, temperature: number): number {
+  const beta = 1 / (K_B_SI * temperature);
+  const boltzmann1 = Math.exp(-beta * energy1);
+  const boltzmann2 = Math.exp(-beta * energy2);
+  const partition = boltzmann1 + boltzmann2;
+  const mean = (boltzmann1 * energy1 + boltzmann2 * energy2) / partition;
+  const free = -K_B_SI * temperature * Math.log(partition);
+  return (mean - free) / temperature;
+}
+
+type Complex = readonly [number, number];
+
+function cadd(a: Complex, b: Complex): Complex {
+  return [a[0] + b[0], a[1] + b[1]];
+}
+
+function cscale(s: number, a: Complex): Complex {
+  return [s * a[0], s * a[1]];
+}
+
+function cmul(a: Complex, b: Complex): Complex {
+  return [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]];
+}
+
+/** 2×2 complex matrix, row-major. */
+type Mat = readonly [Complex, Complex, Complex, Complex];
+
+function mmul(a: Mat, b: Mat): Mat {
+  const dot = (r: number, c: number): Complex =>
+    cadd(cmul(a[r * 2]!, b[c]!), cmul(a[r * 2 + 1]!, b[2 + c]!));
+  return [dot(0, 0), dot(0, 1), dot(1, 0), dot(1, 1)];
+}
+
+function madd(a: Mat, b: Mat): Mat {
+  return [cadd(a[0], b[0]), cadd(a[1], b[1]), cadd(a[2], b[2]), cadd(a[3], b[3])];
+}
+
+function mscale(s: number, a: Mat): Mat {
+  return [cscale(s, a[0]), cscale(s, a[1]), cscale(s, a[2]), cscale(s, a[3])];
+}
+
+function mdag(a: Mat): Mat {
+  return [
+    [a[0][0], -a[0][1]],
+    [a[2][0], -a[2][1]],
+    [a[1][0], -a[1][1]],
+    [a[3][0], -a[3][1]],
+  ];
+}
+
+function mtrace(a: Mat): Complex {
+  return cadd(a[0], a[3]);
+}
+
+/** One channel of the displayed GKSL generator, anticommutator optional. */
+function gksl(H: Mat, L: Mat, rho: Mat, gamma: number, anticommutator: boolean): Mat {
+  const commutator = madd(mmul(H, rho), mscale(-1, mmul(rho, H)));
+  // -i [H, ρ]: (a+bi)·(−i) = b − ai.
+  const iComm: Mat = [
+    [commutator[0][1], -commutator[0][0]],
+    [commutator[1][1], -commutator[1][0]],
+    [commutator[2][1], -commutator[2][0]],
+    [commutator[3][1], -commutator[3][0]],
+  ];
+  const ldag = mdag(L);
+  const jump = mmul(mmul(L, rho), ldag);
+  const ldagL = mmul(ldag, L);
+  const anti = madd(mmul(ldagL, rho), mmul(rho, ldagL));
+  const dissipator = anticommutator ? madd(jump, mscale(-0.5, anti)) : jump;
+  return madd(iComm, mscale(gamma, dissipator));
+}
+
+describe('labeled catalog formalRef sanity lemmas', () => {
+  it('three cross-checks and three properties are sanity-lemmas and do not tag the row', () => {
+    expect(LABELED.map(([id]) => id)).toEqual([42, 24, 19, 16, 29, 11]);
+    for (const [id, statement, kind] of LABELED) {
+      const entry = row(id);
+      expect(entry.formalRef?.fidelity).toBe('sanity-lemmas');
+      expect(entry.formalRef?.statement).toBe(statement);
+      expect(entry.formalRef?.covers.startsWith(`${kind}: `)).toBe(true);
+      expect(entry.formalRef?.covers.startsWith('reduction')).toBe(false);
+      expect(entry.formalRef?.covers.startsWith('limit')).toBe(false);
+      expect(entry.formalRef?.covers.startsWith('derivation-step')).toBe(false);
+      expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
+    }
+    expect(row(57).formalRef).toBeUndefined();
+    expect(row(54).formalRef).toBeUndefined();
+  });
+
+  it('BE-42: the Hawking–Unruh dictionary holds, and T_U(c⁴/(2GM)) does not', () => {
+    expect(row(42).formalRef?.statement).toBe('PhysJS.HawkingUnruh.dictionary');
+    expect(row(42).formalRef?.covers).toContain('naming BE-57 and be-42-via-rs');
+    expect(row(42).formalRef?.covers).toContain('Not the Hawking effect');
+    expect(row(57).formalRef).toBeUndefined();
+    const mass = 2e30;
+    const hawking = evaluateHawkingTemperature({ M_kg: mass });
+    const radius = (2 * G_SI * mass) / C_SI ** 2;
+    const viaRadius = be42ViaRsEdge.evaluate({ 'schwarzschild-radius': radius });
+    const matched = evaluateUnruh({ a_m_s2: C_SI ** 4 / (4 * G_SI * mass) }).T_K;
+    const wrong = evaluateUnruh({ a_m_s2: C_SI ** 4 / (2 * G_SI * mass) }).T_K;
+    expect(Math.abs(viaRadius - hawking) / hawking).toBeLessThan(1e-12);
+    expect(Math.abs(matched - hawking) / hawking).toBeLessThan(1e-12);
+    expect(Math.abs(wrong - hawking) / hawking).toBeGreaterThan(0.5);
+    expect(Math.abs(hawking - HBAR_SI * C_SI ** 3 / (8 * Math.PI * G_SI * mass * K_B_SI)) / hawking).toBeLessThan(1e-12);
+  });
+
+  it('BE-24: the Förster identities hold, and exponent 4 at R = 2 R₀ does not', () => {
+    expect(row(24).formalRef?.statement).toBe('PhysJS.Fret.dictionary');
+    expect(row(24).formalRef?.covers).toContain('Not the dipole–dipole law');
+    const radius0 = 5e-9;
+    const tau = 4e-9;
+    const atEqual = evaluateFRETEfficiency({ R: radius0, R_0: radius0 });
+    expect(atEqual).toBeCloseTo(0.5, 12);
+    const far = 2 * radius0;
+    const eta = evaluateFRETEfficiency({ R: far, R_0: radius0 });
+    const fromRadius = radius0 ** 6 / (radius0 ** 6 + far ** 6);
+    const rate = (1 / tau) * (radius0 / far) ** 6;
+    const fromRate = rate / (rate + 1 / tau);
+    expect(Math.abs(eta - fromRadius)).toBeLessThan(1e-12);
+    expect(Math.abs(eta - fromRate)).toBeLessThan(1e-12);
+    const exponent4 = 1 / (1 + (far / radius0) ** 4);
+    expect(Math.abs(exponent4 - eta) / eta).toBeGreaterThan(0.5);
+    const nearer = evaluateFRETEfficiency({ R: radius0, R_0: radius0 });
+    const farther = evaluateFRETEfficiency({ R: 3 * radius0, R_0: radius0 });
+    expect(farther).toBeLessThan(nearer);
+  });
+
+  it('BE-19: LQC matches RS at σ = −ρ_c/2, and σ = +ρ_c/2 does not', () => {
+    expect(row(19).formalRef?.statement).toBe('PhysJS.QuantumBounce.dictionary');
+    expect(row(19).formalRef?.covers).toContain('naming BE-54');
+    expect(row(19).formalRef?.covers).toContain('not a physical Randall–Sundrum brane');
+    expect(row(54).formalRef).toBeUndefined();
+    const rho = 4;
+    const rhoC = 8;
+    const friedmann = ((8 * Math.PI * G_SI) / 3) * rho;
+    const lqc = evaluateQuantumBounce({ rho, rho_crit: rhoC, Lambda_Tinv2: 0 });
+    const rs = (sigma: number, cosmological = 0) => friedmann * (1 + rho / (2 * sigma)) + cosmological / 3;
+    expect(Math.abs(lqc - rs(-rhoC / 2))).toBeLessThan(Math.abs(friedmann) * 1e-12);
+    expect(Math.abs(lqc - rs(rhoC / 2)) / Math.abs(lqc)).toBeGreaterThan(0.5);
+    const lambda = 1e-10;
+    const withLambda = evaluateQuantumBounce({ rho, rho_crit: rhoC, Lambda_Tinv2: lambda });
+    expect(Math.abs(withLambda - rs(-rhoC / 2, lambda)) / Math.abs(withLambda)).toBeLessThan(1e-12);
+    const bounce = evaluateQuantumBounce({ rho: rhoC, rho_crit: rhoC, Lambda_Tinv2: 0 });
+    expect(Math.abs(bounce)).toBeLessThan(1e-12);
+    const wide = evaluateQuantumBounce({ rho, rho_crit: rho * 1e6, Lambda_Tinv2: 0 });
+    expect(Math.abs(wide - friedmann) / Math.abs(friedmann)).toBeLessThan(1e-5);
+    const wideRs = rs(-rho * 1e6);
+    expect(Math.abs(wideRs - friedmann) / Math.abs(friedmann)).toBeLessThan(1e-5);
+  });
+
+  it('BE-16: equal levels have entropy k_B log 2, and unequal levels do not', () => {
+    expect(row(16).formalRef?.statement).toBe('PhysJS.Landauer.equal_levels');
+    expect(row(16).formalRef?.covers).toContain('k_B log 2');
+    expect(row(16).formalRef?.covers).toContain('Not E ≥ T ΔS');
+    expect(row(16).formalRef?.covers).toContain('not the Bérut confrontation');
+    const temperature = 300;
+    const level = 1e-20;
+    const equal = twoStateEntropy(level, level, temperature);
+    expect(Math.abs(equal - K_B_SI * Math.LN2) / (K_B_SI * Math.LN2)).toBeLessThan(1e-12);
+    const unequal = twoStateEntropy(level, level + 1e-20, temperature);
+    expect(Math.abs(unequal - K_B_SI * Math.LN2) / (K_B_SI * Math.LN2)).toBeGreaterThan(1e-3);
+  });
+
+  it('BE-29: Jensen gives ⟨W⟩ ≥ ΔF, and the reversed inequality fails on unequal work', () => {
+    expect(row(29).formalRef?.statement).toBe('PhysJS.Jarzynski.jensen_work');
+    expect(row(29).formalRef?.covers).toContain("Not Jarzynski's theorem");
+    const beta = 1.5;
+    const probability = [0.2, 0.8];
+    const work = [0, 2];
+    const mean = probability[0]! * work[0]! + probability[1]! * work[1]!;
+    const logSum = Math.log(
+      probability[0]! * Math.exp(-beta * work[0]!) + probability[1]! * Math.exp(-beta * work[1]!),
+    );
+    const deltaF = -logSum / beta;
+    expect(mean).toBeGreaterThan(deltaF);
+    expect(mean <= deltaF).toBe(false);
+    const equalWork = [1, 1];
+    const equalMean = probability[0]! * equalWork[0]! + probability[1]! * equalWork[1]!;
+    const equalLog = Math.log(
+      probability[0]! * Math.exp(-beta * equalWork[0]!) + probability[1]! * Math.exp(-beta * equalWork[1]!),
+    );
+    expect(equalMean).toBeCloseTo(-equalLog / beta, 12);
+  });
+
+  it('BE-11: one GKSL channel preserves trace and Hermitianness, and dropping the anticommutator does not', () => {
+    expect(row(11).formalRef?.statement).toBe('PhysJS.Lindblad.preserve');
+    expect(row(11).formalRef?.covers).toContain('Not Born–Markov coarse-graining');
+    const H: Mat = [
+      [1, 0],
+      [0, 0],
+      [0, 0],
+      [-1, 0],
+    ];
+    const rho: Mat = [
+      [0.7, 0],
+      [0.1, 0.2],
+      [0.1, -0.2],
+      [0.3, 0],
+    ];
+    const L: Mat = [
+      [0, 0],
+      [1, 0],
+      [0, 0],
+      [0, 0],
+    ];
+    const kept = gksl(H, L, rho, 0.4, true);
+    const trace = mtrace(kept);
+    expect(Math.hypot(trace[0], trace[1])).toBeLessThan(1e-12);
+    const dag = mdag(kept);
+    for (let i = 0; i < 4; i += 1) {
+      expect(Math.abs(kept[i]![0] - dag[i]![0])).toBeLessThan(1e-12);
+      expect(Math.abs(kept[i]![1] - dag[i]![1])).toBeLessThan(1e-12);
+    }
+    const dropped = gksl(H, L, rho, 0.4, false);
+    expect(Math.hypot(mtrace(dropped)[0], mtrace(dropped)[1])).toBeGreaterThan(1e-3);
   });
 });

@@ -1989,6 +1989,7 @@
     ],
     "src/bridges/equations/be-19-quantum-bounce.ts": [
       "tests/bridges/be-19-encoding.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/dimensional/bridge-check.test.ts"
     ],
     "src/bridges/equations/be-20-vacuum-energy.ts": [
@@ -2007,7 +2008,8 @@
       "tests/bridges/be23-planckian-confrontation.test.ts"
     ],
     "src/bridges/equations/be-24-foerster-fret.ts": [
-      "tests/bridges/be-24-encoding.test.ts"
+      "tests/bridges/be-24-encoding.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-25-iit-phi.ts": [
       "tests/bridges/be-25-iit-encoding.test.ts"
@@ -2079,6 +2081,7 @@
     "src/bridges/equations/be-42-hawking-temperature.ts": [
       "tests/bridges/be-42-encoding.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/diff/bridge-ast-gradient-byid.test.ts",
       "tests/diff/bridge-ast-gradient.test.ts"
     ],
@@ -4821,6 +4824,7 @@
       "tests/atlas/association.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -9654,6 +9658,10 @@
       "src/bridges/be64-eddington-luminosity.ts",
       "src/bridges/be65-jeans-mass.ts",
       "src/core/constants.ts",
+      "src/bridges/equations/be-42-hawking-temperature.ts",
+      "src/composition/edges/calibration.ts",
+      "src/bridges/equations/be-24-foerster-fret.ts",
+      "src/bridges/equations/be-19-quantum-bounce.ts",
       "src/bridges/equations/be-53-yang-mills-beta.ts",
       "src/bridges/equations/be-38-mond.ts",
       "src/bridges/equations/be-13-einstein-trace.ts",

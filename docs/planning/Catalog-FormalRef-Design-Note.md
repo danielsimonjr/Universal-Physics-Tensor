@@ -49,7 +49,8 @@ predicate does not consult `covers`. `deriveEvidenceForVerdict` is the
 same predicate for a catalog row. A catalog id is not passed to either
 predicate. Storing a `formalRef` on `BridgeEquationEntry` or on
 `CanonicalEquation` does not light a tag. The field, when it is added, is
-the existing `FormalRef`, optional, and only a counted kind may occupy it.
+the existing `FormalRef`, optional. The covers word says which kind
+occupies it.
 
 ## Keying
 
@@ -89,13 +90,15 @@ the nested object `oneLoop`. The reference, when it is attached, names
 the top-level theorem only. The milestone row is done only when both
 statements are recorded. Each covers line claims its own part.
 
-A property or a cross-check is not copied into the vendored manifest the
-checker requires to carry a `formalRef`. It stays in the PhysJS manifest.
+A property or a cross-check is copied into the vendored manifest and may
+occupy the one catalog `formalRef`. The first word of `covers` is the
+kind. `property` and `cross-check` are not `reduction`, `limit`, or
+`derivation-step`, so a reader can tell them from a counted statement.
 A cross-check of two ids is one entry. `bridgeId` is one of those ids, and
 `covers` names the other. `be-42` names BE-57 and the edge `be-42-via-rs`.
-`be-19` names BE-54. If that id later gains a counted theorem, the counted
-theorem becomes the top-level `theorem` and the cross-check moves to a
-nested object.
+`be-19` names BE-54. The named partner does not get a second key. If that
+id later gains a counted theorem, the counted theorem becomes the
+top-level `theorem` and the cross-check moves to a nested object.
 
 ## Coverage
 
@@ -120,28 +123,36 @@ the catalog case of that schedule's conflict 2.
 
 ## Kinds
 
-Three kinds. They are not one count.
+Three kinds. They are not one count. Each may occupy the one catalog
+`formalRef`. The first word of `covers` is the kind. None of the three
+lights `formally-proved`: the catalog path does not pass the reference to
+`deriveEvidence`.
 
 **Counted reduction, limit, or derivation-step.** The `covers` word is
-`reduction`, `limit`, or `derivation-step`. This is the only kind that may
-become a UPT `formalRef`. One id is one reference. It does not light
-`formally-proved`. The rows and their sizes are milestone 2b.
+`reduction`, `limit`, or `derivation-step`. One id is one reference. The
+rows and their sizes are milestone 2b. This kind is not a `property` and
+not a `cross-check`.
 
-**Uncounted cross-check.** The word is `cross-check`. A substitution or a
-relabelling stays on the do-not-count recommendation in scoping §4.3.
-These rows are dictionaries that fail if a prefactor or a sign is wrong,
-which is why they are proved, and they are not counted unless that
-recommendation is withdrawn. Each entry carries a negative control: the
-assertion fails on a stated wrong dictionary. The control is part of the
-manifest entry, not a separate id. A cross-check is not a UPT `formalRef`.
+**Cross-check.** The word is `cross-check`. A substitution or a
+relabelling is a dictionary. These rows fail if a prefactor or a sign is
+wrong, which is why they are proved. They are not the counted kind.
+Scoping §4.3's do-not-count recommendation applied to counting them as
+that kind. Each entry carries a negative control: the assertion fails on
+a stated wrong dictionary. The control is part of the manifest entry, not
+a separate id. A cross-check of two ids is one entry. The covers line
+names the partner. The partner does not receive a second reference.
 
-**Property.** The word is `property`. Scoping §4.2 withholds a
-property-level reference: the pendulum reference certifies a
-transformation, and a property would overstate a tag that
-`deriveEvidence` attaches to the whole record. A property is a PhysJS
-manifest entry only. It is not a UPT `formalRef` until the owner rules on
-property-level references. That ruling is the one §4.2 already asks for.
-This note does not make it.
+**Property.** The word is `property`. Scoping §4.2 withheld a
+property-level reference because `deriveEvidence` would attach
+`formally-proved` to the whole record. The catalog path does not pass the
+reference, so the tag stays off, and the covers word keeps the property
+from reading as a reduction, a limit, or a derivation-step. The covers
+line says which property, and what is left out. BE-16 is the equal-levels
+entropy `k_B log 2`, not Landauer's bound `E ≥ T ΔS` and not the Bérut
+confrontation. BE-29 is `⟨W⟩ ≥ ΔF` by Jensen's inequality, not Jarzynski's
+equality. BE-11 is trace and Hermitian preservation for one channel of
+the displayed GKSL generator, not Born–Markov coarse-graining and not the
+encoded rate `γ(λ)`.
 
 Milestone 3's Buckingham monomials use this note's key and coverage rule.
 The covers line is the exponent tuple: form, not the prefactor. A decoy
@@ -247,9 +258,5 @@ the SPARC confrontation.
 ## Open questions
 
 The schedule's confirmation questions are the open questions in the
-roadmap. Two rulings stay where they already are:
-
-- A property-level reference is the ruling scoping §4.2 asks for. This
-  note leaves properties in the manifest.
-- Counting a cross-check withdraws the do-not-count recommendation in
-  scoping §4.3. This note does not withdraw it.
+roadmap. The catalog rule for a property and a cross-check is the kinds
+section above. The dated decision is recorded outside this file.
