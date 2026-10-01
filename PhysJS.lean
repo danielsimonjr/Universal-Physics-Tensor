@@ -41,3 +41,4 @@ import PhysJS.BornOverlap
 import PhysJS.EntropyProduction
 import PhysJS.CompositeHiggs
 import PhysJS.Crossing
+import PhysJS.Chandrasekhar
