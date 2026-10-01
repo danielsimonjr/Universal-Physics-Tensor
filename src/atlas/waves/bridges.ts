@@ -108,6 +108,7 @@ export const BRIDGE_WAVE_DALEMBERT: AtlasBridge = {
     'Strauss, Partial Differential Equations: An Introduction - §2.1, the wave equation on the line',
   ],
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-wave-dalembert'),
 };
 
 /**

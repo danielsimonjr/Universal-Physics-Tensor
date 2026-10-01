@@ -2270,6 +2270,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../physjs-ref.js",
+            "imports": [
+              "physjsFormalRef"
+            ]
+          },
+          {
             "file": "../regime.js",
             "imports": [
               "deriveRegimeGroups"
@@ -28012,7 +28018,7 @@
   "statistics": {
     "totalTypeScriptFiles": 401,
     "totalModules": 12,
-    "totalLinesOfCode": 88400,
+    "totalLinesOfCode": 88512,
     "totalExports": 2903,
     "totalClasses": 60,
     "totalInterfaces": 462,

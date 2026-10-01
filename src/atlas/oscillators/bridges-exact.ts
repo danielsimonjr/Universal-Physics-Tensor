@@ -21,6 +21,7 @@
  * @module atlas/oscillators/bridges-exact
  */
 
+import { physjsFormalRef } from '../physjs-ref.js';
 import { deriveRegimeGroups } from '../regime.js';
 import { getAtlasModel } from './models.js';
 import type { AtlasBridge, EvidenceTag, Regime, RelationContract } from '../types.js';
@@ -145,6 +146,7 @@ export const BRIDGE_SPRING_LC: AtlasBridge = {
   reviewStatus: 'proposed',
   // spring → LC in relative period error only; see ./norm-transport.ts for what is not declared.
   normTransports: [SPRING_LC_RELATIVE_PERIOD_TRANSPORT],
+  formalRef: physjsFormalRef('ab-spring-lc'),
 };
 
 /**
@@ -193,6 +195,7 @@ export const BRIDGE_DAMPED_RLC: AtlasBridge = {
   ],
   citations: CITATIONS,
   reviewStatus: 'proposed',
+  formalRef: physjsFormalRef('ab-damped-rlc'),
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

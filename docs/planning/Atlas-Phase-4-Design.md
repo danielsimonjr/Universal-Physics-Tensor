@@ -128,13 +128,19 @@ asserting an order nobody recorded would be fabrication.
 
 ```ts
 interface FormalRef {
-  system: 'lean4-physlib' | 'other';
+  system: 'lean4-physlib' | 'lean4-physjs' | 'other';
   statement: string;
   version: string;
   axioms: readonly string[];
   fidelity: 'two-formalizers' | 'back-translation' | 'sanity-lemmas' | 'unreviewed';
+  /** What the statement certifies. A reviewed line contains `covers its statement only`. */
+  covers: string;
 }
 ```
+
+**Reading against the code.** The union includes `lean4-physjs`, and a reference carries
+`covers`. The ten reviewed references use `lean4-physjs` and name public PhysJS. The count
+and the pin are in `NOTES.md`. This section does not keep a second count.
 
 **Both tags are derived from a committed artifact, never hand-set.**
 `scripts/emit-witness-results.mjs` (Lead-run, like `emit-atlas-json.mjs`) writes

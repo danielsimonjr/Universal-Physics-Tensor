@@ -1,52 +1,54 @@
 # Documentation
 
-This directory contains the complete theoretical foundation and planning documents for the Universal Physics Tensor Framework.
+Index of this repository's documents. A count that moves is recorded in `NOTES.md`. This page names the document.
 
-## 📚 Documentation Structure
+## Formal specification (`specification/`)
 
-### Formal Specification (`specification/`)
+Eleven parts. The reader's map, including which claims are speculative, is [`specification/README.md`](specification/README.md).
 
-The complete 6-part formal specification of the Universal Physics Tensor Framework:
+- **[Part I](specification/Part-I.md)** — foundation, and Bridge Equations 11–20.
+- **[Part II](specification/Part-II.md)** — Bridge Equations 21–54.
+- **[Part III](specification/Part-III.md)** — algorithms and information-theoretic definitions. The numbered pseudocode remains a specification.
+- **[Part IV](specification/Part-IV.md)** — validation pathways.
+- **[Part V](specification/Part-V.md)** — advanced mathematics. Read its status note first.
+- **[Part VI](specification/Part-VI.md)** — implementation framing and the Status-Promotion Protocol.
+- **[Parts VII–XI](specification/README.md)** — tensor algebra, the metric layer, composition, curvature and field equations, and proposed equations (Part XI is non-normative).
 
-- **[Part I: Foundation & Mathematical Framework](specification/Part-I.md)**
-  Introduces the tensor structure over index sets (scale, force, symmetry, information, dimension, topology), the Π = L + B + E decomposition, and Bridge Equations 11-20
+The runtime catalog is `BRIDGE_EQUATIONS` in `src/bridges/index.ts`: 55 entries, ids 11–65, 19 established, 33 speculative, 3 highly-speculative. Parts I–II write up ids 11–54. Ids 55–65 are runtime catalog entries filed with `source_part: 'III'` and have no Bridge Equation heading in Parts I–II. Re-count from the array. `NOTES.md` is the rolling note.
 
-- **[Part II: Extended Bridge Equation Catalog](specification/Part-II.md)**
-  Bridge Equations 21-50 covering condensed matter, quantum biology, non-equilibrium statistical mechanics, emergent spacetime, and phase transitions
+## Atlas, roadmap, and formal references
 
-- **[Part III: Computational Implementation](specification/Part-III.md)**
-  Consistency verification algorithms, information-theoretic bounds, and machine learning integration
+- **[ROADMAP.md](../ROADMAP.md)** — atlas phases.
+- **[ACTIVE.md](../ACTIVE.md)** — the authorization ledger. The last promoted sprint heading is Sprint 6.
+- **[docs/design/](design/)** — designs written after the roadmap's DONE mark (Lean milestones, tiers, frontier, BE-53).
+- **Reviewed `formalRef`s.** Ten, each `system: 'lean4-physjs'`, naming public [PhysJS](https://github.com/danielsimonjr/PhysJS). The pin is [`formal/physjs/manifest.json`](../formal/physjs/manifest.json). The rolling record is [`NOTES.md`](../NOTES.md).
 
-- **[Part IV: Validation & Implications](specification/Part-IV.md)**
-  Experimental validation pathways, philosophical implications, and proposed technological applications (the latter are speculative and should be read accordingly)
+## Research (`research/`)
 
-- **[Part V: Advanced Mathematics & Protocols](specification/Part-V.md)**
-  Category theory extensions, noncommutative geometry, tensor network simulation, and validation protocols
+Physicist-facing notes: [`research/README.md`](research/README.md). Dated notes keep the counts they were written with. The live confrontation registry has 19 entries.
 
-- **[Part VI: Deployment & Governance](specification/Part-VI.md)**
-  Implementation strategies, applications, emergency protocols, and governance frameworks
+## Architecture (`architecture/`)
 
-### Planning Documents (`planning/`)
+[`architecture/OVERVIEW.md`](architecture/OVERVIEW.md) is the project overview, including the atlas layer. Module design, components, data flow, and the API are the siblings named at the bottom of that file.
 
-Software development planning and requirements:
+## Planning (`planning/`)
 
-- **[Development Plan](planning/Development-Plan.md)**
-  Phased approach to building the implementation (MVP → Validation → Extensions → Ecosystem)
+Historical plans and design notes. Three plans from 2026-05-04 are **superseded**. They describe a v0.1.0 formalization phase (TypeScript 5.x, ESLint, npm, a catalog of about 40 bridges):
 
-- **[Implementation Plan](planning/Implementation-Plan.md)**
-  Technical architecture, technology stack, and implementation roadmap
+- **[Development Plan](planning/Development-Plan.md)** — superseded.
+- **[Implementation Plan](planning/Implementation-Plan.md)** — superseded.
+- **[System Requirements](planning/System-Requirements.md)** — superseded.
 
-- **[System Requirements](planning/System-Requirements.md)**
-  Functional and non-functional requirements for the software framework
+Later planning lives in [`ROADMAP.md`](../ROADMAP.md), [`todo.md`](../todo.md), and [`planning/Future-Production-Hardening.md`](planning/Future-Production-Hardening.md). The other files under `planning/` are design and review records. Their unchecked boxes preserve those documents. `ACTIVE.md` is the live ledger.
 
-## 🎯 Purpose
+## Purpose
 
 This documentation serves two purposes:
 
-1. **Theoretical Foundation**: Complete formal specification of the tensor framework for physicists and researchers
-2. **Engineering Context**: Planning documents that guided this TypeScript/JavaScript implementation
+1. **Theoretical foundation** — the specification, for review by physicists.
+2. **Engineering context** — the plans and the code that implement it.
 
-## ⚠️ Important Note
+## Important note
 
 I (Daniel Simon Jr.) am **not a physicist by trade**. This is an engineering implementation of a theoretical framework. The formal specification documents are shared to:
 
@@ -55,10 +57,6 @@ I (Daniel Simon Jr.) am **not a physicist by trade**. This is an engineering imp
 - Invite collaboration from domain experts
 - Demonstrate rigorous systems thinking applied to theoretical physics
 
-## 🤝 Collaboration Welcome
+## Collaboration
 
 If you're a physicist interested in reviewing, validating, or extending this framework, please see the main [README](../README.md) for contribution guidelines.
-
----
-
-*For the most current documentation state, see git history.*

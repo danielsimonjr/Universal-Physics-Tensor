@@ -2,7 +2,9 @@
 
 This file is the machine-audited backlog for **current code work**. Historical implementation plans under `docs/planning/` are frozen design/review records; their unchecked boxes preserve the state of those documents at the time and are not a live completion ledger.
 
-As of v0.44.1 completion hardening, there are no known unimplemented code tasks that block the repository's stated purpose as a computational laboratory for organizing, composing, evaluating, and confronting physics relations.
+Ten reviewed `formalRef`s use `system: 'lean4-physjs'` and name public PhysJS (`https://github.com/danielsimonjr/PhysJS`; the GitHub API reports `private: false`). The pin and the ten keys are in `NOTES.md` and `formal/physjs/manifest.json`. Promotion is an entry in the sprint list below. Sprint 6 is the last promoted heading.
+
+At the v0.44.1 completion-hardening checkpoint, there were no known unimplemented code tasks that blocked the repository's stated purpose as a computational laboratory for organizing, composing, evaluating, and confronting physics relations. That sentence is the checkpoint.
 
 The next strategic evolution of the project is defined in [`Scientific-Bridge-Discovery-v1.md`](docs/planning/Scientific-Bridge-Discovery-v1.md) (re-audited against the v0.44.1 tree on 2026-08-19; see [`Scientific-Bridge-Discovery-v1-AUDIT.md`](docs/planning/Scientific-Bridge-Discovery-v1-AUDIT.md)): a phased plan that **freezes** the shipped identification funnel (`upt discover` / `VettedCandidate`) and, separately, adds an experimental expression/residual search pipeline (`src/composition/probe/`, CLI `upt probe`). That roadmap is intentionally separate from this machine-audited release-blocking backlog until individual phases are promoted into active engineering work. Do not treat Tranche A as authorized by this sentence.
 
@@ -192,8 +194,10 @@ No open items.
   measured and argued in `Atlas-Phase-5-Design.md` §4.
 
 - [x] **Sprint 4 — Verification workflow and checked bridges.** Code COMPLETE 2026-09-22 (S4.1–S4.6 +
-  closure, a3b5de2). **Reviewed `formalRef` is met at 6**, which meets the ≥5 gate: five rank-1
-  PhysJS lemmas and the pendulum reference retargeted at PhysJS. The owner deferred the criterion
+  closure, a3b5de2). **Reviewed `formalRef` is met at 10**, which meets the ≥5 gate. Milestone 1
+  is five rank-1 PhysJS lemmas and the pendulum reference retargeted at PhysJS (6). Milestone 2
+  adds `ab-kg-oscillator`, `ab-spring-lc`, `ab-damped-rlc`, and `ab-wave-dalembert`. The nested
+  rank-1a `planeWave` objects are not references. The owner deferred the criterion
   on 2026-09-24 (Amendment 10), so it does not block DONE; the count is no longer 1 of 5. Side by
   side, not merged: "≥ 20 bridges across ≥ 5 relation types" is **MET** (20 / 6). Promoted 2026-09-22 by the Lead
   under the same standing instruction to run Sprints 0–6 continuously, and on Mothership's direct

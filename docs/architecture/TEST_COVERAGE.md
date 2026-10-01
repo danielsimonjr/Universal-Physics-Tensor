@@ -79,7 +79,7 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/link-prediction.ts` | `barrel-completeness.test.ts`, `link-prediction.test.ts` |
 | `atlas/model.ts` | `applicability.test.ts`, `barrel-completeness.test.ts`, `canonical-links.test.ts`, `link-prediction.test.ts`, `model.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `oscillators/bridges-coarse.ts` | `audited-catalog.test.ts`, `bound-machine-form.test.ts`, `oscillators-coarse.test.ts` |
-| `oscillators/bridges-exact.ts` | `audited-catalog.test.ts`, `oscillators-exact.test.ts`, `path-bound.test.ts`, `spring-lc-norm-transport.test.ts`, `spring-lc-phase-carriage.test.ts`, `transported-norm-demo.test.ts`, `witness-results.test.ts` |
+| `oscillators/bridges-exact.ts` | `audited-catalog.test.ts`, `formal-sanity.test.ts`, `oscillators-exact.test.ts`, `path-bound.test.ts`, `spring-lc-norm-transport.test.ts`, `spring-lc-phase-carriage.test.ts`, `transported-norm-demo.test.ts`, `witness-results.test.ts` |
 | `oscillators/bridges-limits.ts` | `audited-catalog.test.ts`, `bound-machine-form.test.ts`, `formal-sanity.test.ts`, `oscillators-limits.test.ts`, `path-bound.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `regime-admission.test.ts`, `spring-lc-norm-transport.test.ts`, `transported-norm-demo.test.ts` |
 | `oscillators/dimensions.ts` | `barrel-completeness.test.ts`, `models.test.ts`, `negative-controls.test.ts`, `oscillators-coarse.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `witness-results.test.ts` |
 | `oscillators/index.ts` | `atlas-json.test.ts`, `audited-catalog.test.ts`, `barrel-completeness.test.ts`, `link-prediction.test.ts`, `model.test.ts`, `regime-admission.test.ts`, `serialize.test.ts`, `spring-lc-norm-transport.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
@@ -478,7 +478,7 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/export.test.ts` | 2 files |
 | `atlas/exports-subpath.test.ts` | 0 files |
 | `atlas/families.test.ts` | 1 files |
-| `atlas/formal-sanity.test.ts` | 9 files |
+| `atlas/formal-sanity.test.ts` | 10 files |
 | `atlas/gr-spine-regime.test.ts` | 48 files |
 | `atlas/hybrid-retrieval.test.ts` | 4 files |
 | `atlas/import-graph.test.ts` | 0 files |
