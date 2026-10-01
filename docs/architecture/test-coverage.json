@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 398,
-    "totalTestFiles": 548,
+    "totalTestFiles": 549,
     "testedCount": 388,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -15815,6 +15815,7 @@
       "src/atlas/families.ts"
     ],
     "tests/tools/hook-git-env.test.ts": [],
+    "tests/tools/layer-order.test.ts": [],
     "tests/tools/package-deps.test.ts": [],
     "tests/tools/plan-doc-audit.test.ts": [],
     "tests/tools/pre-push-executable.test.ts": [],

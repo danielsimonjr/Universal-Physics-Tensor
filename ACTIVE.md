@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Enforce the layer order in CI. The checker is tools/layer-order, the command is bun run layer:check, and the allowlist may only shrink. The design is docs/planning/Layering-Refactor-Design.md. No module moved.
 - [x] Show a catalog formalRef from `upt atlas be-<n>` when that catalog entry has one. A catalog id is not an unknown atlas bridge. The BE-13 name stays; the rename proposal is `docs/planning/BE-13-name-proposal.md`.
 - [x] Add a kind and a PhysJS file URL on every formal reference. Only a bridge kind derives formally-proved. A property and a cross-check derive their own labels, and those labels are not a proved bridge.
 - [x] Bare `e` in a formula is the elementary charge, `E` is energy, and Euler's number is `exp(1)` or `euler`. `--allow-euler` is not a flag.
