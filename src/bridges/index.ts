@@ -603,7 +603,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 13,
-  name: `Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)`,
+  name: `Einstein trace reduction`,
   category: `B`,
   category_name: `Information-Physical Bridges`,
   bridges: [`information`, `physical`] as [string, string],

@@ -158,7 +158,7 @@ export const RELATIVITY: readonly CanonicalEquation[] = [
     regime: { force: 'gravitational', symmetry: 'poincare' },
     assumptions: ['classical GR', 'pseudo-Riemannian spacetime'],
     references: ['Einstein 1915'],
-    partnerBridges: ['13'], // 13 = Information-Geometry (Jacobson thermodynamic EFE)
+    partnerBridges: ['13'], // 13 = Einstein trace reduction (Jacobson stays framing)
   }),
   l1(
     FRIEDMANN_TARGET,

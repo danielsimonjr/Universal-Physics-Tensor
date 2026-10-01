@@ -114,7 +114,7 @@
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/Einstein.lean",
         "covers": "reduction: contracting G_μν + Λ g_μν = κ T_μν in four dimensions gives R = 4Λ − κ T, not Jacobson's thermodynamic derivation — covers its statement only"
       },
-      "name": "Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)",
+      "name": "Einstein trace reduction",
       "category": "B",
       "category_name": "Information-Physical Bridges",
       "bridges": [

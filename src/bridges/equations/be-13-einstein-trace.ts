@@ -1,6 +1,5 @@
 /**
- * Bridge Equation 13 — Trace of Einstein equations (Jacobson 1995
- * thermodynamic interpretation, post Wave Y reformulation).
+ * Bridge Equation 13 — Einstein trace reduction.
  *
  *   R = 4Λ - (8π G / c⁴) T
  *
@@ -52,7 +51,7 @@
  *   structural form is exposed via the separate `BE13_T_TRACE_NODE` export.
  *   See the "BE-13 structural TensorTraceNode" section below.
  *
- * @see docs/specification/Part-I.md ("Bridge Equation 13")
+ * @see docs/specification/Part-I.md ("Bridge Equation 13: Einstein trace reduction")
  * @see src/bridges/index.ts BRIDGE_EQUATIONS.find(e => e.id === 13)
  * @module bridges/equations/be-13-einstein-trace
  */
