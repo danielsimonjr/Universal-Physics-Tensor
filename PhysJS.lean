@@ -18,3 +18,4 @@ import PhysJS.Fret
 import PhysJS.QuantumBounce
 import PhysJS.Landauer
 import PhysJS.Jarzynski
+import PhysJS.Lindblad
