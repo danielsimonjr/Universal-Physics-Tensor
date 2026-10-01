@@ -12,15 +12,15 @@ The checkout this triage is written against is PhysJS `57a9ecbc851952d539882400a
 
 A statement is real, in PhysJS's sense, when the proof has no `sorry` and `#print axioms` reports only `propext`, `Classical.choice`, and `Quot.sound`. UPT does not run Lean. Mathlib lemma names are not pinned. Physlib paths below were read at that commit.
 
-**Already proved, and outside this list.** Ten atlas bridges, and catalog ids BE-11, 13, 16, 19, 24, 29, 34, 38, 42, 51, 53, 58, 61, 64, 65. Six of those catalog ids are manifest-only (properties BE-16, BE-29, BE-11; cross-checks BE-42, BE-24, BE-19). The design note withholds a `formalRef` for a property and for a cross-check.
+**Already proved, and outside this list.** Ten atlas bridges, and catalog ids BE-11, 13, 16, 19, 24, 29, 34, 38, 42, 51, 53, 58, 61, 64, 65. Nine of those catalog ids are counted reductions, limits, or derivation-steps: BE-13, 34, 38, 51, 53, 58, 61, 64, 65. Six more occupy a catalog `formalRef` of another kind: properties BE-16, BE-29, and BE-11, and cross-checks BE-42, BE-24, and BE-19. The covers word is the kind, so those six stay separate from the nine counted references. Neither kind lights `formally-proved`. A cross-check of two ids is one entry. `be-42` names BE-57, and `be-19` names BE-54. The named partner does not get a second key for that cross-check.
 
 **Three ids on this list are already named inside a proof.**
 
 | Id | Where it already appears | What a standalone proof would add |
 |---|---|---|
 | BE-20 | Nested `PhysJS.Einstein.vacuum_density` on `be-13`: `T_μν = −ρ c² g_μν` rearranges to `ρ = c² Λ / (8π G)`. The opposite sign fails | The density itself is proved. The new statement is the one-line corollary that this `ρ` reproduces the `Λ c² / 3` term of Physlib's `FirstOrderFriedmann`. A `be-20` key is withheld by the design note |
-| BE-54 | Named by `PhysJS.QuantumBounce.dictionary` on `be-19`: the polynomials match at `σ = −ρ_c/2`, both tend to `(8πG/3)ρ + Λ/3`, and `σ = +ρ_c/2` fails. The covers line already says `σ < 0` is not a physical brane | The physical branch `σ > 0`: the correction is `ρ/(2σ)`, so `H²` lies strictly above the Friedmann value, and the `c²` dictionary onto Physlib's Friedmann equation. The limit `σ → ∞` is already proved |
-| BE-57 | Named by `PhysJS.HawkingUnruh.dictionary` on `be-42`: `T_U(a) = ℏ a / (2π c k_B)` and `T_U(c⁴/(4GM)) = T_H(M)`. `T_U(c⁴/(2GM))` fails | The temperature as a theorem about the Rindler wedge, not another copy of the algebra |
+| BE-54 | Named by `PhysJS.QuantumBounce.dictionary`, the catalog `formalRef` on `be-19`: the polynomials match at `σ = −ρ_c/2`, both tend to `(8πG/3)ρ + Λ/3`, and `σ = +ρ_c/2` fails. The covers line already says `σ < 0` is not a physical brane. BE-54 does not get a second key for that cross-check | The physical branch `σ > 0`: the correction is `ρ/(2σ)`, so `H²` lies strictly above the Friedmann value, and the `c²` dictionary onto Physlib's Friedmann equation. The limit `σ → ∞` is already the `be-19` reference |
+| BE-57 | Named by `PhysJS.HawkingUnruh.dictionary`, the catalog `formalRef` on `be-42`: `T_U(a) = ℏ a / (2π c k_B)` and `T_U(c⁴/(4GM)) = T_H(M)`. `T_U(c⁴/(2GM))` fails. BE-57 does not get a second key for that cross-check | The temperature as a theorem about the Rindler wedge, not another copy of the algebra |
 
 ## How a row is read
 
@@ -46,7 +46,7 @@ Buckets:
 | C | An owner or physics ruling has to fix the equation before a statement exists |
 | D | The written claim is a conjecture, an empirical number, or an unsolved problem. A fragment may still be formalizable |
 
-Four ids on this list are adjudicated not-a-bridge (`be-28`, `be-32`, `be-35`, `be-40`). Three are contested (`be-44`, `be-46`, `be-50`). A Lean lemma about the encoded scalar does not adjudicate membership, and a property is still not a catalog `formalRef` until the owner rules. The rename review of bridges 22 and 31 does not change the formulas below.
+Four ids on this list are adjudicated not-a-bridge (`be-28`, `be-32`, `be-35`, `be-40`). Three are contested (`be-44`, `be-46`, `be-50`). A Lean lemma about the encoded scalar does not adjudicate membership. A property may occupy the one catalog `formalRef`. The covers word is `property`, and that reference does not light `formally-proved`. The rename review of bridges 22 and 31 does not change the formulas below.
 
 **Λ, two symbols.** BE-20's `Λ` is the curvature-scale constant in `ρ = c² Λ / (8π G)`, the same symbol as Physlib's `Λ` in `FirstOrderFriedmann`: `(a'/a)² = (8πG/3)ρ − k c²/a² + Λ c²/3` (`Physlib.Cosmology.FLRW.Basic`). BE-19 and BE-54 put `Λ/3` in `H²`, and that symbol has dimension `[T⁻²]`. It equals Physlib's `Λ c²`. Using one letter for both is the negative control for BE-20 and BE-54.
 
@@ -535,7 +535,7 @@ with `u = 1/r` and `0 ≤ e < 1`, the advance per radial period above the Newton
 
 ### BE-54 — positive-tension Randall–Sundrum correction
 
-**Statement.** `PhysJS.QuantumBounce.dictionary` already proves the `σ → ∞` limit and the unphysical match at `σ = −ρ_c/2`. The standalone addition, for `σ > 0` and `ρ > 0`, is
+**Statement.** `PhysJS.QuantumBounce.dictionary` is the catalog `formalRef` on `be-19`. It already proves the `σ → ∞` limit and the unphysical match at `σ = −ρ_c/2`. BE-54 does not get a second key for that cross-check. The standalone addition, for `σ > 0` and `ρ > 0`, is
 
 ```
 H²_RS − H²_FRW = (8π G / 3) ρ² / (2σ) > 0
@@ -597,7 +597,7 @@ T = ℏ a / (2π c k_B)
 
 because the Minkowski vacuum is a KMS state on the Rindler wedge at that temperature.
 
-**Library.** The algebra of `T_U`, and its match to Hawking temperature at `a = c⁴/(4 G M)`, are `PhysJS.HawkingUnruh.dictionary`. Physlib has Lorentz boosts and no Rindler wedge, no modular Hamiltonian of the wedge, and no Bisognano–Wichmann theorem.
+**Library.** The algebra of `T_U`, and its match to Hawking temperature at `a = c⁴/(4 G M)`, are `PhysJS.HawkingUnruh.dictionary`, the catalog `formalRef` on `be-42`. BE-57 does not get a second key for that cross-check. Physlib has Lorentz boosts and no Rindler wedge, no modular Hamiltonian of the wedge, and no Bisognano–Wichmann theorem.
 
 **Difficulty.** Research-level. **Bucket B.** The gap is that wedge theorem. A standalone proof that only repeats `T_U`'s definition adds nothing.
 
