@@ -7,7 +7,7 @@ import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.FieldSimp
 
 /-!
-`be-50`. Derivation step. The time-symmetric residual.
+`be-50`. The catalog half-sum, and the time-symmetric residual.
 
 When `A_ret + A_adv ≠ 0`,
 
@@ -35,6 +35,26 @@ noncomputable def symmetricField (Aret Aadv : ℝ) : ℝ :=
 /-- Twice the half-sum is the residual's denominator. -/
 lemma twice_half (Aret Aadv : ℝ) : 2 * symmetricField Aret Aadv = Aret + Aadv := by
   unfold symmetricField
+  rw [mul_div_cancel₀ _ (by norm_num : (2 : ℝ) ≠ 0)]
+
+/-- Component `A_μ(x)` of the time-symmetric potential. -/
+noncomputable def potential {X : Type*} (Aret Aadv : X → Fin 4 → ℝ) (x : X) (μ : Fin 4) : ℝ :=
+  (Aret x μ + Aadv x μ) / 2
+
+/-- The catalog equation
+
+```
+A_μ(x) = ½ (A_μ^ret(x) + A_μ^adv(x))
+```
+
+Twice the component is the sum of the retarded and advanced components.
+`residual_iff` remains the vanishing of the residual. Not the absorber
+theory of radiation reaction. -/
+theorem wheeler_feynman {X : Type*} (Aret Aadv : X → Fin 4 → ℝ) (x : X) (μ : Fin 4) :
+    potential Aret Aadv x μ = (Aret x μ + Aadv x μ) / 2 ∧
+      2 * potential Aret Aadv x μ = Aret x μ + Aadv x μ := by
+  unfold potential
+  refine ⟨rfl, ?_⟩
   rw [mul_div_cancel₀ _ (by norm_num : (2 : ℝ) ≠ 0)]
 
 /-- The residual vanishes if and only if `A_ret = A_adv`.

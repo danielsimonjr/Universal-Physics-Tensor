@@ -3,13 +3,14 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
+import PhysJS.Dimensional
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 
 /-!
-`be-33`. Derivation step. The finite-temperature exponent `−1/z`.
+`be-33`. The catalog scaling, and the finite-temperature product at `z = 1`.
 
 For `z > 0`, `T > 0`, and `T₀ > 0`, the encoded scaling is
 
@@ -22,6 +23,12 @@ when `ν ≠ 1`. The module's old pin `−0.71 = −71/100` fails `−1/z` at
 `z = 1`. At `T = T₀` every exponent agrees, so that direction assumes
 `T ≠ T₀`. This is not Hertz–Millis theory, and it does not choose a
 universality class.
+
+`scaling_shape` is the Buckingham step. Its hypothesis is that `ξ` is a
+dimensionally homogeneous function of a length `ξ₀` and two temperatures.
+The conclusion is `ξ = ξ₀ φ(T/T₀)`. The function `φ` is not fixed, so the
+exponent `−1/z` is not a conclusion. `every_power_homogeneous` records that
+every real power of the temperature ratio has the same homogeneity.
 -/
 
 namespace PhysJS.QuantumCritical
@@ -47,6 +54,26 @@ lemma rpow_eq_rpow_iff {r a b : ℝ} (hr : 0 < r) (hr1 : r ≠ 1) : r ^ a = r ^ 
     exact sub_eq_zero.mp ((mul_eq_zero.mp hsub).resolve_right (log_ne_zero_of_pos_of_ne_one hr hr1))
   · rintro rfl
     rfl
+
+/-- The catalog scaling
+
+```
+ξ(T) = ξ₀ (T / T₀) ^ (−1 / z)
+```
+
+and, at `z = 1`, `ξ(T) = ξ₀ (T / T₀) ^ (−1) = ξ₀ T₀ / T`.
+`xi_product` remains the product `ξ T = ξ₀ T₀`. Not Hertz–Millis theory. -/
+theorem thermal_scaling (xi0 T T0 z : ℝ) (hT : 0 < T) (hT0 : 0 < T0) :
+    xi xi0 T T0 z = xi0 * (T / T0) ^ (-1 / z) ∧
+      xi xi0 T T0 1 = xi0 * (T / T0) ^ (-(1 : ℝ)) ∧
+      xi xi0 T T0 1 = xi0 * T0 / T := by
+  refine ⟨rfl, ?_, ?_⟩
+  · unfold xi
+    norm_num
+  · unfold xi
+    have hexp : (-1 : ℝ) / 1 = -1 := by norm_num
+    rw [hexp, rpow_neg_one, inv_div]
+    field_simp [hT.ne', hT0.ne']
 
 /-- At `z = 1`, `ξ T = ξ₀ T₀`.
 
@@ -90,5 +117,27 @@ theorem old_pin_fails (xi0 T T0 : ℝ) (hxi : xi0 ≠ 0) (hT : 0 < T) (hT0 : 0 <
     -((71 : ℝ) / 100) / 1 ≠ -1 / 1 ∧
       xiRetired xi0 T T0 (71 / 100) 1 * T ≠ xi0 * T0 := by
   exact wrong_exponent xi0 T T0 ((71 : ℝ) / 100) hxi hT hT0 hne (by norm_num)
+
+/-- Hypothesis: `ξ` is dimensionally homogeneous in a length `ξ₀` and two
+temperatures. Then `ξ = ξ₀ φ(T/T₀)` with `φ(u) = f(1, u, 1)`.
+
+`φ` is not fixed. The catalog exponent `−1/z` is not a conclusion, and this
+is not Hertz–Millis theory. -/
+theorem scaling_shape (f : ℝ → ℝ → ℝ → ℝ)
+    (hf : ∀ lams lame s a b, 0 < lams → 0 < lame → 0 < s → 0 < a → 0 < b →
+      f (lams * s) (lame * a) (lame * b) = lams * f s a b)
+    {xi0 T T0 : ℝ} (hxi : 0 < xi0) (hT : 0 < T) (hT0 : 0 < T0) :
+    f xi0 T T0 = xi0 * f 1 (T / T0) 1 :=
+  Dimensional.ratio_shape f hf hxi hT hT0
+
+/-- Every real power of `T/T₀` is dimensionally homogeneous. The exponent is
+not chosen. -/
+theorem every_power_homogeneous (p lams lame xi0 T T0 : ℝ)
+    (hlams : 0 < lams) (hlame : 0 < lame) (hxi : 0 < xi0) (hT : 0 < T) (hT0 : 0 < T0) :
+    0 < lams * xi0 ∧ 0 < T / T0 ∧
+      (lams * xi0) * ((lame * T) / (lame * T0)) ^ p = lams * (xi0 * (T / T0) ^ p) := by
+  refine ⟨mul_pos hlams hxi, div_pos hT hT0, ?_⟩
+  rw [Dimensional.ratio_power_invariant p lame T T0 hlame.ne']
+  exact mul_assoc lams xi0 ((T / T0) ^ p)
 
 end PhysJS.QuantumCritical
