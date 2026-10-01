@@ -18,11 +18,11 @@
 import { describe, it, expect } from 'vitest';
 import {
   buildVizModel,
-  deriveEdgeEvidence,
   filterEdges,
   formatFilterLegend,
 } from '../../src/composition/graph-viz.js';
 import type { VizJunction } from '../../src/composition/graph-viz.js';
+import { deriveEdgeEvidence, withCatalogEvidence } from '../../src/cli/map-evidence.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import type { EvidenceTag } from '../../src/atlas/types.js';
@@ -101,8 +101,12 @@ describe('deriveEdgeEvidence — derived at read time, from the row', () => {
 });
 
 describe('buildVizModel — evidence filter', () => {
+  it('without a derivation function, a beId cannot be evaluated and the filter throws', () => {
+    expect(() => buildVizModel(BOTH, { evidence: 'proposed' })).toThrow(/no deriveEvidence/);
+  });
+
   it('every catalog-backed edge derives `proposed` today, so that tag keeps them', () => {
-    const model = buildVizModel(BOTH, { evidence: 'proposed' });
+    const model = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'proposed' }));
     const withBeId = BOTH.filter((e) => e.beId != null).length;
     expect(model.filterStats.kept).toBe(withBeId);
     // Law/canonical edges have `beId: null` — they cannot be evaluated, so they
@@ -112,7 +116,7 @@ describe('buildVizModel — evidence filter', () => {
   });
 
   it('`contradicted` selects nothing on the live graph (BE-35 has no edge)', () => {
-    const model = buildVizModel(BOTH, { evidence: 'contradicted' });
+    const model = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'contradicted' }));
     expect(model.filterStats.kept).toBe(0);
     expect(model.filterStats.droppedNotMatching).toBeGreaterThan(0);
   });
@@ -123,7 +127,10 @@ describe('buildVizModel — evidence filter', () => {
     const loser = catalogBacked.find((e) => e.beId !== winner)!.beId!;
     const derive = (beId: number): ReadonlySet<EvidenceTag> =>
       new Set<EvidenceTag>(beId === winner ? ['numerically-supported'] : ['proposed']);
-    const model = buildVizModel(BOTH, { evidence: 'numerically-supported', deriveEvidence: derive });
+    const model = buildVizModel(
+      BOTH,
+      withCatalogEvidence({ evidence: 'numerically-supported', deriveEvidence: derive }),
+    );
     const keptIds = new Set(model.junctions.map((j) => j.beId));
     expect(keptIds.has(winner)).toBe(true);
     expect(keptIds.has(loser)).toBe(false);
@@ -143,12 +150,15 @@ describe('buildVizModel — evidence filter', () => {
     const plain = buildVizModel(BOTH, { extraJunctions: [extra] });
     expect(plain.junctions.some((j) => j.id === 'IC-test')).toBe(true);
 
-    const filtered = buildVizModel(BOTH, {
-      extraJunctions: [extra],
-      evidence: 'proposed',
-    });
+    const filtered = buildVizModel(
+      BOTH,
+      withCatalogEvidence({
+        extraJunctions: [extra],
+        evidence: 'proposed',
+      }),
+    );
     expect(filtered.junctions.some((j) => j.id === 'IC-test')).toBe(false);
-    const unfiltered = buildVizModel(BOTH, { evidence: 'proposed' });
+    const unfiltered = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'proposed' }));
     expect(filtered.filterStats.droppedMissingMetadata).toBe(
       unfiltered.filterStats.droppedMissingMetadata + 1,
     );
