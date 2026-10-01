@@ -8,10 +8,6 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
-### Breaking
-
-- **Bare `e` is the elementary charge.** Daniel, 2026-10-01: the formula parser follows SI / CODATA / ISO 80000. A bare `e` is the elementary charge (`E_SI`, dimension charge). `E` is energy and is not given a number; `upt eval E` asks for `E=<number>` and says so. Euler's number is only `exp(1)` or `euler`. `--allow-euler` is not a flag. An explicit `e=<number>` still replaces the CODATA value. `1.6e-19`, `m_e`, `e_charge`, and `exp` are unchanged. `parsePhysics('e^2', {})` has the dimension of charge squared. `parsePhysics('exp(1)', {})` is dimensionless and evaluates to Euler's number. Both the MathTS parser and the built-in parser do this. A caller-supplied dimension for `e` still wins. The constant registry carries `e` with unit `C`, so `upt eval e` and a Bohr-radius formula `4*pi*epsilon_0*hbar^2/(m_e*e^2)` use that charge. Eccentricity stays `one_minus_e_sq`; a dimensionless governing name `e` is still not baked as the charge. The help golden was regenerated from the built CLI. Architecture docs were regenerated: 401 files, 2903 exports, 1376 re-exports, 88785 lines. ~~The unreleased notes below that say a bare `e` is Euler's number, that an unbound `e` is refused, and that `--allow-euler` accepts Euler's number are withdrawn by this entry.~~
-
 ### Fixed
 
 - **A bucket-A kind is bridge when the theorem states the catalogued equation.** The covers line stays the PhysJS text, which begins with `derivation-step`. Kind is `bridge` for `be-12`, `be-59`, `be-55`, `be-21`, `be-43`, `be-37`, `be-27`, `be-40`, and `be-63`: each theorem states `formula_latex`. Passing that reference to `deriveEvidence` lights `formally-proved`. Kind stays `derivation-step` for `be-14`, `be-60`, `be-54`, `be-17`, `be-22`, `be-15`, `be-33`, `be-50`, `be-32`, `be-35`, and `be-30`: each theorem proves a part of the catalogued equation and leaves the rest out. `be-28` is kind `property`: the theorem is non-negativity of the defining sum, not the variational principle. `be-28`, `be-32`, `be-35`, and `be-40` stay not-a-bridge. The catalog path still omits the reference, so `deriveEdgeEvidence` does not light `formally-proved` or `formally-proved-property`. ~~Architecture docs were regenerated: 406 files, 2919 exports, 1387 re-exports, 89381 lines, 0 circular dependencies.~~ ~~Architecture test-coverage docs count 552 test files.~~ ~~After merging the binding-value move, architecture test-coverage docs count 553 test files.~~ ~~After merging the proved-counterexample change, architecture docs were regenerated: 406 files, 2922 exports, 1389 re-exports, 89413 lines, 0 circular dependencies. Architecture test-coverage docs count 554 test files.~~
@@ -655,6 +651,16 @@ from v0.1.0 onward.
     reverted. L4 holds without it, because resolution maps `T` either way.]**
   - **Q1** — discover PROMISING lists consequence/magnitude before bare inconclusive.
   - **Q2** — CONTRIBUTING.md catalog count 44 → 55.
+
+## [1.0.0] - 2026-10-01
+
+### Breaking
+
+- **Bare `e` is the elementary charge.** This is the major bump. Daniel, 2026-10-01: the formula parser follows SI / CODATA / ISO 80000. A bare `e` is the elementary charge (`E_SI`, dimension charge). `E` is energy and is not given a number; `upt eval E` asks for `E=<number>` and says so. Euler's number is only `exp(1)` or `euler`. `--allow-euler` is not a flag. An explicit `e=<number>` still replaces the CODATA value. `1.6e-19`, `m_e`, `e_charge`, and `exp` are unchanged. `parsePhysics('e^2', {})` has the dimension of charge squared. `parsePhysics('exp(1)', {})` is dimensionless and evaluates to Euler's number. Both the MathTS parser and the built-in parser do this. A caller-supplied dimension for `e` still wins. The constant registry carries `e` with unit `C`, so `upt eval e` and a Bohr-radius formula `4*pi*epsilon_0*hbar^2/(m_e*e^2)` use that charge. Eccentricity stays `one_minus_e_sq`; a dimensionless governing name `e` is still not baked as the charge. The help golden was regenerated from the built CLI. ~~The unreleased notes that say a bare `e` is Euler's number, that an unbound `e` is refused, and that `--allow-euler` accepts Euler's number are withdrawn by this entry.~~
+
+- **A catalog row does not carry `formalRef`.** `BridgeEquationEntry` has no `formalRef` field. The reference for a catalog id is `catalogFormalRef` in `src/atlas/catalog-formal-ref.ts`. That function is not a package-root export and is not on the `atlas` barrel. `upt atlas be-<n>` still prints the reference. `data/bridge-catalog.json` still carries the object. The published npm `0.47.1` tarball did not include catalog formal references; this break is against the unreleased tree that stored them on the row.
+
+No tag is pushed with this version. Publishing stays the owner's job. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `1.0.0`. Architecture counts are unchanged: 408 files, 2923 exports, 1389 re-exports, 89408 lines, 0 circular dependencies. Architecture test-coverage docs count 557 test files.
 
 ## [0.47.1] - 2026-09-25
 
