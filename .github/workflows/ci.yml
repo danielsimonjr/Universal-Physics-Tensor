@@ -27,6 +27,10 @@ jobs:
         with:
           bun-version: '1.4.2'
       - uses: actions/checkout@v7
+      # The shrink check reads tools/layer-order/allowlist.json from origin/master. A
+      # depth-1 checkout of the pull-request branch does not have that ref.
+      - name: Fetch master for the layer-order shrink check
+        run: git fetch origin master --depth=1
       # Node stays: Bun is the package manager and script driver; Node is the runtime under test
       # and what the published library ships to. No `cache: npm` — package-lock.json is gone.
       - uses: actions/setup-node@v7
@@ -50,11 +54,14 @@ jobs:
         with:
           bun-version: '1.4.2'
       - uses: actions/checkout@v7
+      - name: Fetch master for the layer-order shrink check
+        run: git fetch origin master --depth=1
       - uses: actions/setup-node@v7
         with:
           node-version: 22
       - run: bun install --frozen-lockfile
       - run: bun run build
+      - run: bun run layer:check
       - run: bun run audit:plans
       - run: bun run package:check
       # `npm audit` requires package-lock.json; Bun owns the lockfile now.
