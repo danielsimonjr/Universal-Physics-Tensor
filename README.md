@@ -198,7 +198,7 @@ Bridge equations connect different physical regimes:
 - Mesoscopic Coherence Length
 
 **Information ↔ Geometry:**
-- Landauer-Wheeler Information-Geometry Equation
+- Einstein trace reduction
 - Holographic Quantum Error Correction
 
 **Microscopic ↔ Macroscopic:**

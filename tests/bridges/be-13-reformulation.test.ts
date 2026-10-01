@@ -1,8 +1,10 @@
 /**
- * Wave P-B R-B2 (2026-05-06): BE-13 Landauer-Wheeler Information-Geometry
- * reformulated to the canonical Jacobson 1995 thermodynamic derivation
- * of Einstein's equations from the Clausius relation δQ = T dS applied
- * to local Rindler horizons:
+ * Wave P-B R-B2 (2026-05-06): BE-13 reformulated away from the
+ * Landauer-mis-attributed form. The catalog name is `Einstein trace
+ * reduction`. It does not claim Jacobson's thermodynamic derivation.
+ * That framing stays in the context, the notes, and the references.
+ * The 2026-05-06 notes record the Clausius relation δQ = T dS on
+ * local Rindler horizons:
  *
  *   R_μν − (1/2) R g_μν + Λ g_μν = (8π G / c⁴) T_μν
  *
@@ -29,7 +31,16 @@
 import { describe, it, expect } from 'vitest';
 import { expectBridgeInIndex, expectHasReformulationIssue } from './_helpers.js';
 
-describe('BE-13 Information-Geometry (Wave P-B R-B2 reformulation, Jacobson 1995)', () => {
+describe('BE-13 Einstein trace reduction (Wave P-B R-B2 reformulation, Jacobson 1995)', () => {
+  it('is named for the trace reduction, and Jacobson stays in the framing', () => {
+    const entry = expectBridgeInIndex(13);
+    expect(entry.name).toBe('Einstein trace reduction');
+    expect(entry.name).not.toMatch(/Jacobson/);
+    expect(entry.context).toMatch(/Jacobson/);
+    expect(entry.notes).toMatch(/Jacobson/);
+    expect(entry.references.join(' | ')).toMatch(/Jacobson 1995/);
+  });
+
   it('exists in the index', () => {
     expectBridgeInIndex(13);
   });

@@ -4225,7 +4225,7 @@ modules:
         - BE12_COHERENCE_LENGTH_RHS
         - BE12_COHERENCE_LENGTH_LHS
     src/bridges/equations/be-13-einstein-trace.ts:
-      description: Bridge Equation 13 — Trace of Einstein equations (Jacobson 1995
+      description: Bridge Equation 13 — Einstein trace reduction.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -19764,7 +19764,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 408
   totalModules: 13
-  totalLinesOfCode: 89408
+  totalLinesOfCode: 89407
   totalExports: 2923
   totalClasses: 60
   totalInterfaces: 462
