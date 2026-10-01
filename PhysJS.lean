@@ -31,3 +31,4 @@ import PhysJS.PlanckArea
 import PhysJS.Shapiro
 import PhysJS.RandallSundrum
 import PhysJS.EinsteinCartan
+import PhysJS.EffectiveTemperature
