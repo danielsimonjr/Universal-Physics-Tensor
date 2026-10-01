@@ -6132,6 +6132,8 @@
       "tests/numerical/einstein-desitter.test.ts",
       "tests/numerical/einstein-flrw.test.ts",
       "tests/numerical/einstein-vacuum-schwarzschild.test.ts",
+      "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parsers-agree.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
       "tests/numerical/geometrized.test.ts",
       "tests/numerical/gl4-integrator.test.ts",
@@ -6141,6 +6143,7 @@
       "tests/numerical/kretschmann-lowering.test.ts",
       "tests/numerical/kretschmann-schwarzschild.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
+      "tests/numerical/parse-physics.test.ts",
       "tests/numerical/schwarzschild-radial-geodesic.test.ts",
       "tests/numerical/spacetime-metrics.test.ts",
       "tests/numerical/weyl-kerr-schild.test.ts",
@@ -7565,7 +7568,8 @@
       "tests/numerical/formula-conformance.builtin.test.ts",
       "tests/numerical/formula-mathts.test.ts",
       "tests/numerical/formula-parsers-agree.test.ts",
-      "tests/numerical/formula.test.ts"
+      "tests/numerical/formula.test.ts",
+      "tests/numerical/parse-physics.test.ts"
     ],
     "src/numerical/geodesic-integrator.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -15121,9 +15125,9 @@
     ],
     "tests/numerical/binding-value.test.ts": [
       "src/core/constants.ts",
+      "src/dimensional/types.ts",
       "src/dimensional/units.ts",
-      "src/numerical/binding-value.ts",
-      "src/dimensional/types.ts"
+      "src/numerical/binding-value.ts"
     ],
     "tests/numerical/christoffel-flat-indexing.test.ts": [
       "src/numerical/christoffel-flat.ts"
@@ -15274,10 +15278,12 @@
       "src/numerical/formula-dimension.ts"
     ],
     "tests/numerical/formula-mathts.test.ts": [
+      "src/core/constants.ts",
       "src/numerical/formula.ts",
       "src/numerical/formula-mathts.ts"
     ],
     "tests/numerical/formula-parsers-agree.test.ts": [
+      "src/core/constants.ts",
       "src/numerical/formula.ts",
       "src/numerical/formula-mathts.ts"
     ],
@@ -15511,7 +15517,9 @@
       "src/numerical/formula-dimension.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/core/constants.ts",
+      "src/numerical/formula.ts"
     ],
     "tests/numerical/pderiv-flatten-consolidation.test.ts": [
       "src/numerical/pderiv.ts"

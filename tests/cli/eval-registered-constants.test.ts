@@ -39,6 +39,9 @@ describe('formula scope is the constant registry', () => {
     }
     expect(scope).not.toHaveProperty('sigma');
     // Natural and geometrized overrides still replace the SI values of c, ħ, h and G.
+    expect(codataScope('si').e).toBe(CONSTANTS.e.value);
+    expect(codataScope('natural').e).toBe(CONSTANTS.e.value);
+    expect(codataScope('natural').euler).toBe(Math.E);
     expect(codataScope('natural').c).toBe(1);
     expect(codataScope('natural').hbar).toBe(1);
     expect(codataScope('natural').h).toBe(2 * Math.PI);

@@ -2,9 +2,9 @@
  * A binding value: a bare number, a number with a unit, or an expression of
  * registered constants and unit literals (`pi/2`, `0.6*c`, `2*1km`).
  *
- * The built-in formula parser evaluates the expression. MathTS is not used:
- * a bare `e` stays unbound (charge is `e_charge`), and a published install
- * has no MathTS. A bare number, or an expression whose result is
+ * The built-in formula parser evaluates the expression. MathTS is not used.
+ * A bare `e` is the elementary charge. Euler's number is `euler` or `exp(1)`.
+ * A published install has no MathTS. A bare number, or an expression whose result is
  * dimensionless and contains no unit literal, is already in the caller's
  * unit. Anything else is an SI quantity: the caller converts it into the
  * declared unit when the dimensions agree.
@@ -68,6 +68,7 @@ function scopeFor(mode: UnitMode): Map<string, Qty> {
   };
   put('pi', Math.PI, DIMENSIONLESS);
   put('tau', 2 * Math.PI, DIMENSIONLESS);
+  put('euler', Math.E, DIMENSIONLESS);
   for (const [name, c] of Object.entries(SYMBOLIC)) put(name, c.value, c.dim);
   for (const n of FORMULA_NAMED) put(n.name, n.value, n.dim);
   const eps = m.get('epsilon_0');
@@ -163,9 +164,6 @@ function evalAst(node: FormulaAstNode, scope: ReadonlyMap<string, Qty>, slots: R
       if (slot !== undefined) return slot;
       const known = scope.get(node.name);
       if (known !== undefined) return known;
-      if (node.name === 'e') {
-        throw new UnitError("unknown name 'e'. Elementary charge is e_charge. This reader does not treat e as Euler's number.");
-      }
       throw new UnitError(`unknown name '${node.name}'`);
     }
     case 'unary': {
@@ -314,7 +312,7 @@ export function readBinding(
   } catch (e) {
     if (
       e instanceof UnitError &&
-      /unknown name '(?!e')/.test(e.message) &&
+      /unknown name '/.test(e.message) &&
       spliced.slots.size === 0 &&
       !/[+\-*/^()]/.test(trimmed)
     ) {

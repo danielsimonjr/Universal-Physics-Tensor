@@ -25,6 +25,8 @@
  * @module numerical/formula
  */
 
+import { E_SI } from '../core/constants.js';
+
 /** A parse or evaluation failure (bad syntax, unknown symbol, arity). */
 export class FormulaError extends Error {
   constructor(message: string) {
@@ -50,10 +52,21 @@ export interface FormulaParser {
 
 // --- built-ins ------------------------------------------------------------
 
+/**
+ * Baked numeric constants. `e` is the elementary charge (CODATA / ISO 80000),
+ * not Euler's number. Euler's number is `euler` or `exp(1)`. `pi` and `tau`
+ * ignore a scope value. `e` and `euler` do not: an explicit `name=` replaces
+ * the baked value, the same way a filled CODATA name does.
+ */
 const CONSTANTS: Readonly<Record<string, number>> = {
   pi: Math.PI,
   tau: 2 * Math.PI,
+  e: E_SI,
+  euler: Math.E,
 };
+
+/** Scope replaces the baked value for these names only. */
+const SCOPE_WINS: ReadonlySet<string> = new Set(['e', 'euler']);
 
 type Fn = (args: number[]) => number;
 const arity1 = (f: (x: number) => number): Fn => (a) => {
@@ -312,10 +325,11 @@ function evalNode(node: Node, scope: Record<string, number>): number {
     case 'num':
       return node.value;
     case 'sym': {
-      if (node.name in CONSTANTS) return CONSTANTS[node.name];
-      const v = scope[node.name];
-      if (v === undefined) throw new FormulaError(`unknown variable '${node.name}'`);
-      return v;
+      const baked = CONSTANTS[node.name];
+      const fromScope = scope[node.name];
+      if (baked !== undefined && !(SCOPE_WINS.has(node.name) && fromScope !== undefined)) return baked;
+      if (fromScope === undefined) throw new FormulaError(`unknown variable '${node.name}'`);
+      return fromScope;
     }
     case 'unary': {
       const a = evalNode(node.arg, scope);
@@ -364,21 +378,6 @@ export const defaultFormulaParser: FormulaParser = {
     };
   },
 };
-
-/**
- * A bare `e` that the active parser did not leave free was consumed as Euler's
- * number. The built-in parser leaves `e` free, so this note stays silent there.
- * `m_e` and `one_minus_e_sq` do not count: the `e` is part of a longer name.
- * @internal
- */
-export function eulerConstantNote(expr: string, variables: readonly string[]): string | undefined {
-  if (variables.includes('e')) return undefined;
-  if (!/(^|[^A-Za-z0-9_])e(?![A-Za-z0-9_])/.test(expr)) return undefined;
-  return (
-    "note: bare e is Euler's number (≈2.718). Elementary charge is e_charge and eccentricity is " +
-    'eccentricity. The built-in parser leaves e for you to set.'
-  );
-}
 
 /** Parse a scalar formula with the default (self-contained) parser. @internal */
 export function parseFormula(expr: string): CompiledFormula {

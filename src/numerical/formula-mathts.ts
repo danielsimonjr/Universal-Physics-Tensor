@@ -20,6 +20,17 @@
 
 import type { CompiledFormula, FormulaParser } from './formula.js';
 import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError, unknownFunctionMessage } from './formula.js';
+import { E_SI } from '../core/constants.js';
+
+/**
+ * Values injected ahead of the caller scope. MathTS's own `e` is Euler's
+ * number; the physics reading is the elementary charge, and a scope entry
+ * replaces it. `euler` is not a MathTS constant.
+ */
+const PHYSICS_VALUES: Readonly<Record<string, number>> = { e: E_SI, euler: Math.E };
+
+/** Names that are constants here even when MathTS does not know them. */
+const PHYSICS_CONSTANT_NAMES: ReadonlySet<string> = new Set(['e', 'euler']);
 
 /** Minimal structural shape of a MathTS AST node (the bits we use). */
 interface MathNode {
@@ -64,7 +75,9 @@ function createMathtsFormulaParser(
   // symbol with that name is a quantity (the adiabatic index, a length), and
   // treating it as a built-in dropped it from the free-variable list, so
   // `sqrt(gamma*pressure/density)` died as "undeclared symbol 'gamma'".
-  // Only a name that evaluates to a number is a constant (`pi`, `tau`, `e`).
+  // Only a name that evaluates to a number is a MathTS constant (`pi`, `tau`).
+  // Bare `e` is one of those, and evaluation replaces MathTS's Euler value
+  // with the elementary charge. `euler` is added below; MathTS does not know it.
   // A call such as `gamma(5)` is still a callee, decided separately.
   const valueConstantCache = new Map<string, boolean>();
   const isValueConstant = (name: string): boolean => {
@@ -118,7 +131,7 @@ function createMathtsFormulaParser(
             .filter((n) => n.isSymbolNode === true)
             .map((n) => n.name)
             .filter((n): n is string => typeof n === 'string')
-            .filter((n) => !callees.has(n) && !isValueConstant(n)),
+            .filter((n) => !callees.has(n) && !isValueConstant(n) && !PHYSICS_CONSTANT_NAMES.has(n)),
         ),
       ].sort();
 
@@ -129,7 +142,7 @@ function createMathtsFormulaParser(
           if (unknownCallee !== undefined) throw new FormulaError(unknownFunctionMessage(unknownCallee));
           let result: unknown;
           try {
-            result = node.evaluate({ ...shims, ...scope } as Record<string, number>);
+            result = node.evaluate({ ...shims, ...PHYSICS_VALUES, ...scope } as Record<string, number>);
           } catch (err) {
             throw new FormulaError(
               err instanceof Error ? err.message : String(err),

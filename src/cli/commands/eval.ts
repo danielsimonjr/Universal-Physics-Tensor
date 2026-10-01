@@ -11,8 +11,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
-import { eulerConstantNote } from '../../numerical/formula.js';
-import { unboundEulerRefusal, withParser } from '../euler-guard.js';
+import { withParser } from '../euler-guard.js';
 import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../composition/natural-units.js';
 import { UnitError } from '../../dimensional/units.js';
@@ -22,7 +21,6 @@ const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
   { name: '--show-parser', valueStyle: 'none' },
-  { name: '--allow-euler', valueStyle: 'none' },
   { name: '--natural', valueStyle: 'none' },
   { name: '--geometrized', valueStyle: 'none' },
 ];
@@ -58,17 +56,17 @@ const HELP = `upt eval "<formula>" name=value ...
         constants pi and tau and the functions sqrt, cbrt, exp, ln, log
         (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
         sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
-        or log2 for base 10 or 2. With the MathTS parser, a bare e is Euler's
-        number (≈2.718); the built-in parser leaves e for you to set.
-        Elementary charge is e_charge, not e. An unbound e under MathTS is
-        refused (exit 2) unless you pass e=<number> or --allow-euler. CODATA
+        or log2 for base 10 or 2. A bare e is the elementary charge (the
+        CODATA value). E is energy: pass E=<number>. Euler's number is
+        exp(1) or euler, never a bare e. e_charge is the same charge.
+        An explicit e=<number> replaces the CODATA value. CODATA
         names are filled in when you omit them: every registered constant
-        (G, c, hbar, h, k_B, ln2, epsilon_0, sigma_sb, b, GM_sun, Msun_iau)
-        and the aliases e_charge, m_e, eps0, mu0, mu_0, kB, M_sun. A bare
+        (G, c, hbar, h, k_B, e, ln2, epsilon_0, sigma_sb, b, GM_sun, Msun_iau)
+        and the aliases e_charge, euler, m_e, eps0, mu0, mu_0, kB, M_sun. A bare
         sigma is not the Stefan–Boltzmann constant; write sigma_sb. A value may be a
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). Bindings use the built-in
-        parser, so write 2*pi and e_charge; a bare e is not Euler's number.
+        parser, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts or builtin and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
@@ -111,21 +109,15 @@ async function run(ctx: CommandCtx): Promise<number> {
   const mode: UnitMode = args.flags.has('geometrized') ? 'geometrized' : args.flags.has('natural') ? 'natural' : 'si';
   const parsed = parseScope(positionals.slice(1), mode);
   const scope = { ...codataScope(mode), ...parsed.scope };
-  if (args.flags.has('allow-euler') && !('e' in scope)) scope.e = Math.E;
-
-  const refusal = unboundEulerRefusal(expr, cf.variables, kind, args.flags.has('allow-euler'), 'e' in parsed.scope);
-  if (refusal) throw new UsageError(refusal);
-  const note = eulerConstantNote(expr, cf.variables);
-  if (note && (args.flags.has('allow-euler') || 'e' in scope)) err(note);
 
   const missing = cf.variables.filter((v) => !(v in scope));
   if (missing.length) {
-    const eHint = missing.includes('e')
-      ? ' A bare e is not given a value. Pass e=<number>, --allow-euler for Euler\'s number, or e_charge for the elementary charge.'
+    const energyHint = missing.includes('E')
+      ? ' E is energy. Pass E=<number> in joules, or with a unit (E=1eV).'
       : '';
     throw new UsageError(
       withParser(
-        `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${eHint}`,
+        `missing values for: ${missing.join(', ')}   (free variables: ${cf.variables.join(', ') || 'none'}).${energyHint}`,
         kind,
       ),
     );

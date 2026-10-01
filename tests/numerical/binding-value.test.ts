@@ -5,7 +5,8 @@
  * the unit `*c`.
  */
 import { describe, expect, it } from 'vitest';
-import { C_SI, G_SI, H_SI, M_SUN_SI } from '../../src/core/constants.js';
+import { C_SI, E_SI, G_SI, H_SI, M_SUN_SI } from '../../src/core/constants.js';
+import { CHARGE } from '../../src/dimensional/types.js';
 import { convertValue, unitConventionNotes } from '../../src/dimensional/units.js';
 import {
   bindingInUnit,
@@ -53,7 +54,7 @@ describe('readBinding', () => {
     expect(readBinding('1/h').value).toBeCloseTo(1 / 3600, 12);
   });
 
-  it('uses c = 1 under --natural and does not treat a bare e as Euler', () => {
+  it('uses c = 1 under --natural, and a bare e is the elementary charge', () => {
     const v = readBinding('0.6*c', { mode: 'natural' });
     expect(v.value).toBeCloseTo(0.6, 12);
     expect(v.dimensioned).toBe(false);
@@ -62,7 +63,12 @@ describe('readBinding', () => {
         mode: 'natural',
       }),
     ).toMatchObject({ value: 0.6, dimensioned: false });
-    expect(() => readBinding('e')).toThrow(/e_charge/);
+    expect(readBinding('e').value).toBeCloseTo(E_SI, 15);
+    expect(readBinding('e').dimension).toEqual(CHARGE);
+    expect(readBinding('e').dimensioned).toBe(true);
+    expect(readBinding('euler').value).toBeCloseTo(Math.E, 12);
+    expect(readBinding('euler').dimensioned).toBe(false);
+    expect(readBinding('exp(1)').value).toBeCloseTo(Math.E, 12);
     expect(() => readBinding('sigma')).toThrow(/is not a number with an optional unit/);
     expect(readBinding('sigma_sb').value).toBeGreaterThan(5e-8);
     expect(readBinding('sigma_sb').value).toBeLessThan(6e-8);

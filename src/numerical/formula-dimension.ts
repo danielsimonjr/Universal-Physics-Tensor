@@ -16,7 +16,7 @@
  */
 
 import type { Dimension } from '../dimensional/types.js';
-import { DIMENSIONLESS } from '../dimensional/types.js';
+import { CHARGE, DIMENSIONLESS, ENERGY } from '../dimensional/types.js';
 import { equals, format } from '../dimensional/algebra.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/validator.js';
 import { validate } from '../dimensional/validator.js';
@@ -34,8 +34,22 @@ export class FormulaDimensionError extends Error {
   }
 }
 
-/** Dimensionless math constants both parsers recognize. */
-const MATH_CONSTANTS = new Set(['pi', 'tau', 'e', 'phi', 'Infinity', 'NaN']);
+/** Dimensionless math constants both parsers recognize. Bare `e` is not here:
+ *  ISO 80000 names that symbol the elementary charge. Euler's number is `euler`. */
+const MATH_CONSTANTS = new Set(['pi', 'tau', 'euler', 'phi', 'Infinity', 'NaN']);
+
+/**
+ * Dimension of a symbol the physics parser knows when the caller did not
+ * declare one. A caller-supplied dimension still wins. `e` is the elementary
+ * charge. `E` is energy. `euler` is Euler's number.
+ * @internal
+ */
+export function formulaSymbolDimension(name: string): Dimension | undefined {
+  if (name === 'e') return CHARGE;
+  if (name === 'E') return ENERGY;
+  if (MATH_CONSTANTS.has(name)) return DIMENSIONLESS;
+  return undefined;
+}
 
 /** Parser function names → the dimensional grammar's `transcendental` node fn
  *  (dimensionless → dimensionless). `log` is natural log (mathjs convention). */
@@ -65,7 +79,8 @@ function transpileFunction(fn: string, argExpr: ExprNode): ExprNode | null {
  *  dimensionless math constant, else an error). */
 function resolveSymbol(name: string, dims: Readonly<Record<string, Dimension>>): ExprNode {
   if (name in dims) return sym(name, dims[name]);
-  if (MATH_CONSTANTS.has(name)) return sym(name, DIMENSIONLESS);
+  const known = formulaSymbolDimension(name);
+  if (known !== undefined) return sym(name, known);
   throw new FormulaDimensionError(
     `undeclared symbol '${name}' — declare its dimension (a separate name:dimension argument, for example x:length)`,
   );
