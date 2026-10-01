@@ -122,7 +122,7 @@ not published.
 7. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
    Plain `npm view` serves a stale cache right after a publish.
 
-The Actions secret `NPM_TOKEN` must exist (repository Settings → Secrets and variables →
+The Actions secret `NPM` must exist (repository Settings → Secrets and variables →
 Actions). The workflow passes it as `NODE_AUTH_TOKEN`. Provenance uses the workflow's
 `id-token: write` permission. Rotate the token at
 <https://www.npmjs.com/settings/danielsimonjr/tokens> and update the secret.
