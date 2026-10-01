@@ -19,7 +19,7 @@
  */
 
 import type { ExprNode } from '../dimensional/validator.js';
-import { CONSTANTS, piMultipleValue } from './symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 
 /** A scalar `ExprNode` could not be evaluated (unsupported arm / unresolved
  *  leaf / non-finite result). @public */

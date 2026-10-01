@@ -7,7 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { codataScope } from '../../src/cli/eval-numbers.js';
-import { CONSTANTS } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS } from '../../src/dimensional/symbolic-constants.js';
 
 function capture() {
   const stdout: string[] = [];

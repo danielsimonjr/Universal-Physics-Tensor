@@ -9,7 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
-import { CONSTANTS, piMultipleValue } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../../src/dimensional/symbolic-constants.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 import type { Dimension } from '../../src/dimensional/types.js';

@@ -25,7 +25,7 @@ import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { substitute } from './expr-subst.js';
 import { evalExpr, SymbolicEvalError } from './expr-eval.js';
-import { CONSTANTS } from './symbolic-constants.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 
 /**
  * A composed quantity carrying its SYMBOLIC form and an executable

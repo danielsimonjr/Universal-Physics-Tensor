@@ -17,10 +17,10 @@
  */
 
 import { M_SUN_SI } from '../core/constants.js';
-import { FORMULA_NAMED } from '../composition/formula-names.js';
-import { quantityConventionUnit } from '../composition/unit-convention.js';
-import { naturalConstantOverrides, type UnitMode } from '../composition/natural-units.js';
-import { CONSTANTS as SYMBOLIC } from '../composition/symbolic-constants.js';
+import { FORMULA_NAMED } from '../dimensional/formula-names.js';
+import { quantityConventionUnit } from '../dimensional/unit-convention.js';
+import { naturalConstantOverrides, type UnitMode } from '../dimensional/natural-units.js';
+import { CONSTANTS as SYMBOLIC } from '../dimensional/symbolic-constants.js';
 import { divide, equals, format, multiply, power } from '../dimensional/algebra.js';
 import { DIMENSIONLESS, MASS, type Dimension } from '../dimensional/types.js';
 import {

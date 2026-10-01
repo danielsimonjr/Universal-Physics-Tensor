@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { E_SI, K_B_SI } from '../../src/core/constants.js';
-import { EPS0_SI, MU0_SI } from '../../src/composition/formula-names.js';
+import { EPS0_SI, MU0_SI } from '../../src/dimensional/formula-names.js';
 
 function capture() {
   const stdout: string[] = [];

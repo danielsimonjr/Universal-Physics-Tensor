@@ -15,16 +15,16 @@
  *
  * INTERNAL — not on the public surface.
  *
- * @module composition/symbolic-constants
+ * @module dimensional/symbolic-constants
  */
 
-import type { Dimension } from '../dimensional/types.js';
+import type { Dimension } from './types.js';
 import {
   ACTION,
   CHARGE,
   DIMENSIONLESS,
   VELOCITY,
-} from '../dimensional/types.js';
+} from './types.js';
 import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI } from '../core/constants.js';
 
 const dim = (L = 0, M = 0, T = 0, Theta = 0): Dimension => ({

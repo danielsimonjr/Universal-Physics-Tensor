@@ -10,9 +10,9 @@
  */
 
 import { E_SI, M_E_SI, M_SUN_SI } from '../core/constants.js';
-import { MU0_SI } from '../composition/formula-names.js';
-import { CONSTANTS } from '../composition/symbolic-constants.js';
-import type { UnitMode } from '../composition/natural-units.js';
+import { MU0_SI } from '../dimensional/formula-names.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import type { UnitMode } from '../dimensional/natural-units.js';
 
 /** ħ in eval is the exact quotient H_SI/(2π). */
 export const HBAR_TRUNCATION_NOTE =

@@ -11,7 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { printDisplay, printEval, printLatex, siUnitOf } from '../../src/cli/expr-print.js';
 import { evalExpr } from '../../src/composition/expr-eval.js';
 import { parseFormula } from '../../src/numerical/formula.js';
-import { CONSTANTS, CONSTANT_PROVENANCE } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS, CONSTANT_PROVENANCE } from '../../src/dimensional/symbolic-constants.js';
 import { parseUnit } from '../../src/dimensional/units.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
