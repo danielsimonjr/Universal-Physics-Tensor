@@ -550,8 +550,9 @@ another (e.g. `upt derive --source=catalog`) is rejected the same way, since
   `tsc`); the CLI still runs entirely from `dist/`, never from `src/`, so the
   build-first requirement is unchanged.
 - **Windows cold-start.** The test suite (run by `prepublishOnly`) has a 3–5 min
-  cold-start tax on Windows; the CLI itself does not, but publishing uses
-  `npm publish --ignore-scripts` to skip it. The CLI resolves `dist/` paths via
+  cold-start tax on Windows; the CLI itself does not. The release publish is
+  `.github/workflows/publish.yml`, which does not pass `--ignore-scripts`, so
+  `prepublishOnly` still runs. The CLI resolves `dist/` paths via
   `pathToFileURL`, so absolute Windows paths work under Node's ESM loader.
 - **`npm run upt` swallows my flags.** Use the `--` separator:
   `npm run upt -- discover --source=canonical`.
