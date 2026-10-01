@@ -5,11 +5,11 @@
  * (`CANONICAL_CONSTANTS` spreads that table). They are an overlay for
  * dimensional assignment and for `upt eval` only.
  *
- * @module composition/formula-names
+ * @module dimensional/formula-names
  */
 
-import type { Dimension } from '../dimensional/types.js';
-import { CHARGE, DIMENSIONLESS, LENGTH, MASS } from '../dimensional/types.js';
+import type { Dimension } from './types.js';
+import { CHARGE, DIMENSIONLESS, LENGTH, MASS } from './types.js';
 import { C_SI, E_SI, M_E_SI } from '../core/constants.js';
 
 const PERMITTIVITY: Dimension = { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };

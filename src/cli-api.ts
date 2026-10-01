@@ -175,7 +175,7 @@ export {
   describeComparisons,
 } from './composition/canonical-compare.js';
 export type { CanonicalComparison } from './composition/canonical-compare.js';
-export { CONSTANTS, CONSTANT_PROVENANCE } from './composition/symbolic-constants.js';
+export { CONSTANTS, CONSTANT_PROVENANCE } from './dimensional/symbolic-constants.js';
 export type { CandidateGrounding, CandidateReadiness } from './composition/grounding.js';
 
 // Atlas Phase 2 CLI surface (`upt regime`, `upt path`). Regime admission and

@@ -14,7 +14,7 @@
 import { describe, it, expect } from 'vitest';
 import { evalExpr, SymbolicEvalError } from '../../src/composition/expr-eval.js';
 import { substitute } from '../../src/composition/expr-subst.js';
-import { CONSTANTS, piMultipleValue } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../../src/dimensional/symbolic-constants.js';
 import {
   composeSymbolic,
   SymbolicCompositionError,

@@ -6805,7 +6805,7 @@ modules:
         - file: ../composition/expr-eval.js
           imports:
             - evalExpr
-        - file: ../composition/symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
         - file: ../bridges/rhs-registry.js
@@ -6852,7 +6852,7 @@ modules:
         - file: ../dimensional/algebra.js
           imports:
             - equals
-        - file: ../composition/symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
             - piMultipleValue
@@ -7789,7 +7789,7 @@ modules:
           imports:
             - HBAR_TRUNCATION_NOTE
             - codataScope
-        - file: ../../composition/natural-units.js
+        - file: ../../dimensional/natural-units.js
           imports:
             - UnitMode
           typeOnly: true
@@ -8100,7 +8100,7 @@ modules:
           imports:
             - canonicalCheckFailed
             - conventionLines
-        - file: ../../composition/natural-units.js
+        - file: ../../dimensional/natural-units.js
           imports:
             - naturalConstantOverrides
             - UnitMode
@@ -8516,13 +8516,13 @@ modules:
             - E_SI
             - M_E_SI
             - M_SUN_SI
-        - file: ../composition/formula-names.js
+        - file: ../dimensional/formula-names.js
           imports:
             - MU0_SI
-        - file: ../composition/symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
-        - file: ../composition/natural-units.js
+        - file: ../dimensional/natural-units.js
           imports:
             - UnitMode
           typeOnly: true
@@ -8777,7 +8777,7 @@ modules:
         - file: ../composition/canonical-graph.js
           imports:
             - CANONICAL_CONSTANTS
-        - file: ../composition/symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
         - file: ../dimensional/types.js
@@ -9222,7 +9222,7 @@ modules:
           imports:
             - CanonicalComparison
           reExport: true
-        - file: ./composition/symbolic-constants.js
+        - file: ./dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
             - CONSTANT_PROVENANCE
@@ -9859,7 +9859,7 @@ modules:
           imports:
             - CanonicalEquation
           typeOnly: true
-        - file: ./symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
             - piMultipleValue
@@ -9870,7 +9870,7 @@ modules:
           imports:
             - CANONICAL_GROUP_PREFACTORS
             - canonicalPrefactor
-        - file: ./formula-names.js
+        - file: ../dimensional/formula-names.js
           imports:
             - formulaNameDimensions
         - file: ./user-equation.js
@@ -9928,7 +9928,7 @@ modules:
         - file: ../canonical/registry.js
           imports:
             - CANONICAL_EQUATIONS
-        - file: ./symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
         - file: ../core/constants.js
@@ -10082,7 +10082,7 @@ modules:
           imports:
             - evalExpr
             - SymbolicEvalError
-        - file: ./symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
       exports:
@@ -10116,7 +10116,7 @@ modules:
             - Quantity
             - RegimeAttributes
           typeOnly: true
-        - file: ./unit-convention.js
+        - file: ../dimensional/unit-convention.js
           imports:
             - conventionFactor
         - file: ./edge.js
@@ -10309,7 +10309,7 @@ modules:
           imports:
             - RepresentativeValue
           typeOnly: true
-        - file: ./unit-convention.js
+        - file: ../dimensional/unit-convention.js
           imports:
             - conventionScaleToSI
         - file: ./quantities.js
@@ -11127,7 +11127,7 @@ modules:
           imports:
             - ExprNode
           typeOnly: true
-        - file: ./symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
             - piMultipleValue
@@ -11163,7 +11163,7 @@ modules:
         - file: ./expr-eval.js
           imports:
             - evalExpr
-        - file: ./symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
         - file: ./compose-symbolic.js
@@ -11197,39 +11197,6 @@ modules:
         - substitute
       functions:
         - substitute
-    src/composition/formula-names.ts:
-      description: Names a formula may use that are not leaves of {@link CONSTANTS}.
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../dimensional/types.js
-          imports:
-            - Dimension
-          typeOnly: true
-        - file: ../dimensional/types.js
-          imports:
-            - CHARGE
-            - DIMENSIONLESS
-            - LENGTH
-            - MASS
-        - file: ../core/constants.js
-          imports:
-            - C_SI
-            - E_SI
-            - M_E_SI
-      exports:
-        - EPS0_SI
-        - MU0_SI
-        - FORMULA_NAMED
-        - formulaNameDimensions
-      interfaces:
-        - FormulaName
-      functions:
-        - formulaNameDimensions
-      constants:
-        - EPS0_SI
-        - MU0_SI
-        - FORMULA_NAMED
     src/composition/frontier-account.ts:
       description: "Two lists the catalog already knows how to tell apart: records that were"
       externalDependencies: []
@@ -11842,25 +11809,6 @@ modules:
         - equationLanding
         - analyzeUserEquation
         - UserEquationError
-    src/composition/natural-units.ts:
-      description: "Opt-in natural units. The default comparison stays SI: an energy written as"
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../dimensional/types.js
-          imports:
-            - Dimension
-          typeOnly: true
-      exports:
-        - naturalConstantOverrides
-        - naturalPowers
-        - naturalNote
-      interfaces:
-        - NaturalPowers
-      functions:
-        - naturalConstantOverrides
-        - naturalPowers
-        - naturalNote
     src/composition/probe/backend-protocol.ts:
       description: Optional NDJSON worker protocol for expression-search backends.
       externalDependencies: []
@@ -13348,7 +13296,7 @@ modules:
         - file: ../canonical/normal-form.js
           imports:
             - normalForm
-        - file: ./symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
         - file: ./expr-eval.js
@@ -13914,7 +13862,7 @@ modules:
         - file: ./compose.js
           imports:
             - QUANTITY_IDENTIFICATIONS
-        - file: ./unit-convention.js
+        - file: ../dimensional/unit-convention.js
           imports:
             - conventionFactor
         - file: ./identifiability.js
@@ -13933,42 +13881,6 @@ modules:
         - forwardEvaluate
         - retrodictNode
         - retrodict
-    src/composition/symbolic-constants.ts:
-      description: Symbolic-composition constant registry (v0.12 symbolic composition).
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../dimensional/types.js
-          imports:
-            - Dimension
-          typeOnly: true
-        - file: ../dimensional/types.js
-          imports:
-            - ACTION
-            - CHARGE
-            - DIMENSIONLESS
-            - VELOCITY
-        - file: ../core/constants.js
-          imports:
-            - C_SI
-            - E_SI
-            - G_SI
-            - GM_SUN_SI
-            - HBAR_SI
-            - H_SI
-            - K_B_SI
-            - B_WIEN_SI
-      exports:
-        - CONSTANTS
-        - CONSTANT_PROVENANCE
-        - piMultipleValue
-      interfaces:
-        - ConstantProvenance
-      functions:
-        - piMultipleValue
-      constants:
-        - CONSTANTS
-        - CONSTANT_PROVENANCE
     src/composition/uncertainty.ts:
       description: First-order uncertainty propagation through composition edges
       externalDependencies: []
@@ -13992,28 +13904,6 @@ modules:
         - UncertaintyResult
       functions:
         - propagateUncertainty
-    src/composition/unit-convention.ts:
-      description: Per-quantity unit convention for the quantities whose dimension does not
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../dimensional/algebra.js
-          imports:
-            - equals
-        - file: ../dimensional/units.js
-          imports:
-            - parseUnit
-      exports:
-        - QUANTITY_CONVENTION_UNIT
-        - quantityConventionUnit
-        - conventionScaleToSI
-        - conventionFactor
-      functions:
-        - quantityConventionUnit
-        - conventionScaleToSI
-        - conventionFactor
-      constants:
-        - QUANTITY_CONVENTION_UNIT
     src/composition/user-equation.ts:
       description: User-equation injection — turn a free-form `TARGET = EXPR` string into a graph
       externalDependencies: []
@@ -14026,13 +13916,13 @@ modules:
         - file: ../numerical/formula-dimension.js
           imports:
             - formulaSymbolDimension
-        - file: ./symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
-        - file: ./formula-names.js
+        - file: ../dimensional/formula-names.js
           imports:
             - formulaNameDimensions
-        - file: ./natural-units.js
+        - file: ../dimensional/natural-units.js
           imports:
             - naturalNote
             - naturalPowers
@@ -15039,6 +14929,39 @@ modules:
         - validateFreeIndexLabelMatch
         - validateComponentDimension
         - validateTensorSymmetry
+    src/dimensional/formula-names.ts:
+      description: Names a formula may use that are not leaves of {@link CONSTANTS}.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - Dimension
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - CHARGE
+            - DIMENSIONLESS
+            - LENGTH
+            - MASS
+        - file: ../core/constants.js
+          imports:
+            - C_SI
+            - E_SI
+            - M_E_SI
+      exports:
+        - EPS0_SI
+        - MU0_SI
+        - FORMULA_NAMED
+        - formulaNameDimensions
+      interfaces:
+        - FormulaName
+      functions:
+        - formulaNameDimensions
+      constants:
+        - EPS0_SI
+        - MU0_SI
+        - FORMULA_NAMED
     src/dimensional/fresh-label.ts:
       description: Shared deterministic fresh-label utility used by both metric.ts (raise/lower)
       externalDependencies: []
@@ -15266,6 +15189,25 @@ modules:
         - pderiv
         - raise
         - lower
+    src/dimensional/natural-units.ts:
+      description: "Opt-in natural units. The default comparison stays SI: an energy written as"
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - Dimension
+          typeOnly: true
+      exports:
+        - naturalConstantOverrides
+        - naturalPowers
+        - naturalNote
+      interfaces:
+        - NaturalPowers
+      functions:
+        - naturalConstantOverrides
+        - naturalPowers
+        - naturalNote
     src/dimensional/rg-flow.ts:
       description: Renormalization-group (RG) flow primitives — `RGCouplingNode` +
       externalDependencies: []
@@ -15331,6 +15273,42 @@ modules:
       functions:
         - validateStressEnergyTensor
         - validateCosmologicalConstant
+    src/dimensional/symbolic-constants.ts:
+      description: Symbolic-composition constant registry (v0.12 symbolic composition).
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - Dimension
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - ACTION
+            - CHARGE
+            - DIMENSIONLESS
+            - VELOCITY
+        - file: ../core/constants.js
+          imports:
+            - C_SI
+            - E_SI
+            - G_SI
+            - GM_SUN_SI
+            - HBAR_SI
+            - H_SI
+            - K_B_SI
+            - B_WIEN_SI
+      exports:
+        - CONSTANTS
+        - CONSTANT_PROVENANCE
+        - piMultipleValue
+      interfaces:
+        - ConstantProvenance
+      functions:
+        - piMultipleValue
+      constants:
+        - CONSTANTS
+        - CONSTANT_PROVENANCE
     src/dimensional/tensor-trace.ts:
       description: TensorTraceNode — structural tensor-trace operator for rank-2 tensors.
       externalDependencies: []
@@ -15461,6 +15439,28 @@ modules:
         - ENTROPY
         - CHARGE
         - NAMED_DIMENSIONS
+    src/dimensional/unit-convention.ts:
+      description: Per-quantity unit convention for the quantities whose dimension does not
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./algebra.js
+          imports:
+            - equals
+        - file: ./units.js
+          imports:
+            - parseUnit
+      exports:
+        - QUANTITY_CONVENTION_UNIT
+        - quantityConventionUnit
+        - conventionScaleToSI
+        - conventionFactor
+      functions:
+        - quantityConventionUnit
+        - conventionScaleToSI
+        - conventionFactor
+      constants:
+        - QUANTITY_CONVENTION_UNIT
     src/dimensional/units.ts:
       description: "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`."
       externalDependencies: []
@@ -17888,17 +17888,17 @@ modules:
         - file: ../core/constants.js
           imports:
             - M_SUN_SI
-        - file: ../composition/formula-names.js
+        - file: ../dimensional/formula-names.js
           imports:
             - FORMULA_NAMED
-        - file: ../composition/unit-convention.js
+        - file: ../dimensional/unit-convention.js
           imports:
             - quantityConventionUnit
-        - file: ../composition/natural-units.js
+        - file: ../dimensional/natural-units.js
           imports:
             - naturalConstantOverrides
             - UnitMode
-        - file: ../composition/symbolic-constants.js
+        - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
         - file: ../dimensional/algebra.js
@@ -19568,14 +19568,12 @@ dependencyGraph:
         - src/composition/expr-eval.ts
         - src/composition/expr-simplify.ts
         - src/composition/expr-subst.ts
-        - src/composition/formula-names.ts
         - src/composition/frontier-account.ts
         - src/composition/graph-viz-svg.ts
         - src/composition/graph-viz.ts
         - src/composition/grounding.ts
         - src/composition/identifiability.ts
         - src/composition/index.ts
-        - src/composition/natural-units.ts
         - src/composition/probe/backend-protocol.ts
         - src/composition/probe/candidate-store.ts
         - src/composition/probe/corpus.ts
@@ -19612,9 +19610,7 @@ dependencyGraph:
         - src/composition/quantity.ts
         - src/composition/representative-values.ts
         - src/composition/retrodiction.ts
-        - src/composition/symbolic-constants.ts
         - src/composition/uncertainty.ts
-        - src/composition/unit-convention.ts
         - src/composition/user-equation.ts
     - name: Core
       files:
@@ -19652,6 +19648,7 @@ dependencyGraph:
         - src/dimensional/einstein-equation.ts
         - src/dimensional/errors.ts
         - src/dimensional/field-equation-helpers.ts
+        - src/dimensional/formula-names.ts
         - src/dimensional/fresh-label.ts
         - src/dimensional/friedmann-equation.ts
         - src/dimensional/gauge-field.ts
@@ -19659,11 +19656,14 @@ dependencyGraph:
         - src/dimensional/klein-gordon-equation.ts
         - src/dimensional/metric-validators.ts
         - src/dimensional/metric.ts
+        - src/dimensional/natural-units.ts
         - src/dimensional/rg-flow.ts
         - src/dimensional/stress-energy-validators.ts
+        - src/dimensional/symbolic-constants.ts
         - src/dimensional/tensor-trace.ts
         - src/dimensional/tensor.ts
         - src/dimensional/types.ts
+        - src/dimensional/unit-convention.ts
         - src/dimensional/units.ts
         - src/dimensional/validator-registry.ts
         - src/dimensional/validator.ts

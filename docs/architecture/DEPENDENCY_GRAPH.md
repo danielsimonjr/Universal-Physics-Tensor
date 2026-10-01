@@ -44,10 +44,10 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 49 files
 - **root**: 1 file
-- **composition**: 79 files
+- **composition**: 75 files
 - **core**: 11 files
 - **diff**: 3 files
-- **dimensional**: 32 files
+- **dimensional**: 36 files
 - **entry**: 1 file
 - **numerical**: 41 files
 - **relations**: 4 files
@@ -2996,7 +2996,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/validator.js` | `validate` | Import |
 | `../composition/expr-eval.js` | `evalExpr` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID` | Import |
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `./registry.js` | `CANONICAL_EQUATIONS, canonicalById` | Import |
@@ -3017,7 +3017,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `MASS, TEMPERATURE` | Import |
 | `../dimensional/algebra.js` | `equals` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
 - Functions: `canonicalQuantityName`, `normalForm`, `structurallyEqual`
@@ -3484,7 +3484,7 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
-| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/units.js` | `UnitError` | Import |
 | `../../numerical/binding-value.js` | `readBinding` | Import |
 
@@ -3623,7 +3623,7 @@ The codebase is organized into the following modules:
 | `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
-| `../../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../map-evidence.js` | `withCatalogEvidence` | Import |
 
 **Exports:**
@@ -3846,9 +3846,9 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `E_SI, M_E_SI, M_SUN_SI` | Import |
-| `../composition/formula-names.js` | `MU0_SI` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
-| `../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../dimensional/formula-names.js` | `MU0_SI` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
 - Functions: `codataScope`
@@ -3986,7 +3986,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../composition/canonical-graph.js` | `CANONICAL_CONSTANTS` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/units.js` | `unitTables` | Import |
 
@@ -4117,7 +4117,7 @@ The codebase is organized into the following modules:
 | `./composition/representative-values.js` | `REPRESENTATIVE_VALUES` | Re-export |
 | `./composition/canonical-compare.js` | `compareWithCanonical, compareUserEquation, describeComparison, describeComparisons` | Re-export |
 | `./composition/canonical-compare.js` | `CanonicalComparison` | Re-export |
-| `./composition/symbolic-constants.js` | `CONSTANTS, CONSTANT_PROVENANCE` | Re-export |
+| `./dimensional/symbolic-constants.js` | `CONSTANTS, CONSTANT_PROVENANCE` | Re-export |
 | `./composition/grounding.js` | `CandidateGrounding, CandidateReadiness` | Re-export |
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
 | `./atlas/families.js` | `ATLAS_FAMILIES` | Re-export |
@@ -4272,10 +4272,10 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
-| `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
-| `./formula-names.js` | `formulaNameDimensions` | Import |
+| `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
@@ -4298,7 +4298,7 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../core/constants.js` | `E_SI, M_E_SI` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../core/types.js` | `InformationMeasure` | Import (type-only) |
@@ -4364,7 +4364,7 @@ The codebase is organized into the following modules:
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
 | `./expr-subst.js` | `substitute` | Import |
 | `./expr-eval.js` | `evalExpr, SymbolicEvalError` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 
 **Exports:**
 - Classes: `SymbolicCompositionError`
@@ -4381,7 +4381,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals, format` | Import |
 | `./edge.js` | `BridgeEdge, EdgeConfidence` | Import (type-only) |
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
-| `./unit-convention.js` | `conventionFactor` | Import |
+| `../dimensional/unit-convention.js` | `conventionFactor` | Import |
 | `./edge.js` | `CompositionAliasError, CompositionDimensionError, CompositionJunctionError, DomainViolationError, UndefinedCompositionError` | Import |
 | `../relations/composition-table.js` | `composeRelation, NO_COMPOSITE_CLAIM` | Import |
 | `../relations/conventions.js` | `checkConventions` | Import |
@@ -4474,7 +4474,7 @@ The codebase is organized into the following modules:
 | `./edges/calibration.js` | `M_SUN_KG` | Import |
 | `./representative-values.js` | `REPRESENTATIVE_VALUES` | Import |
 | `./representative-values.js` | `RepresentativeValue` | Import (type-only) |
-| `./unit-convention.js` | `conventionScaleToSI` | Import |
+| `../dimensional/unit-convention.js` | `conventionScaleToSI` | Import |
 | `./quantities.js` | `* as REGISTRY_QUANTITIES` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../dimensional/algebra.js` | `format` | Import |
@@ -4727,7 +4727,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
 - Classes: `SymbolicEvalError`
@@ -4746,7 +4746,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `./compose-symbolic.js` | `Observable` | Import (type-only) |
 | `./compose-symbolic.js` | `makeObservable` | Import |
 
@@ -4765,22 +4765,6 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `substitute`
-
----
-
-### `src/composition/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}.
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
-| `../core/constants.js` | `C_SI, E_SI, M_E_SI` | Import |
-
-**Exports:**
-- Interfaces: `FormulaName`
-- Functions: `formulaNameDimensions`
-- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
 
 ---
 
@@ -4924,19 +4908,6 @@ The codebase is organized into the following modules:
   suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
   ```
 
-
----
-
-### `src/composition/natural-units.ts` - Opt-in natural units. The default comparison stays SI: an energy written as
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
-
-**Exports:**
-- Interfaces: `NaturalPowers`
-- Functions: `naturalConstantOverrides`, `naturalPowers`, `naturalNote`
 
 ---
 
@@ -5470,7 +5441,7 @@ The codebase is organized into the following modules:
 | `../bridges/index.js` | `KnownIssue` | Import (type-only) |
 | `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
 | `../canonical/normal-form.js` | `normalForm` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./discovery.js` | `rankDiscoveries` | Import |
 | `./discovery.js` | `VettedCandidate` | Import (type-only) |
@@ -5675,28 +5646,12 @@ The codebase is organized into the following modules:
 | `./edge.js` | `evaluateEdge` | Import |
 | `./compose.js` | `QuantityIdentification` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
-| `./unit-convention.js` | `conventionFactor` | Import |
+| `../dimensional/unit-convention.js` | `conventionFactor` | Import |
 | `./identifiability.js` | `classifyAll` | Import |
 
 **Exports:**
 - Interfaces: `RetrodictionPrediction`, `RetrodictionOptions`, `RetrodictionResult`, `RetrodictionReport`
 - Functions: `forwardEvaluate`, `retrodictNode`, `retrodict`
-
----
-
-### `src/composition/symbolic-constants.ts` - Symbolic-composition constant registry (v0.12 symbolic composition).
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `ACTION, CHARGE, DIMENSIONLESS, VELOCITY` | Import |
-| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
-
-**Exports:**
-- Interfaces: `ConstantProvenance`
-- Functions: `piMultipleValue`
-- Constants: `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -5715,20 +5670,6 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/unit-convention.ts` - Per-quantity unit convention for the quantities whose dimension does not
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/algebra.js` | `equals` | Import |
-| `../dimensional/units.js` | `parseUnit` | Import |
-
-**Exports:**
-- Functions: `quantityConventionUnit`, `conventionScaleToSI`, `conventionFactor`
-- Constants: `QUANTITY_CONVENTION_UNIT`
-
----
-
 ### `src/composition/user-equation.ts` - User-equation injection — turn a free-form `TARGET = EXPR` string into a graph
 
 **Internal Dependencies:**
@@ -5736,9 +5677,9 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
-| `./formula-names.js` | `formulaNameDimensions` | Import |
-| `./natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
+| `../dimensional/natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
 | `./graph-viz.js` | `VizModel, VizJunction` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -6213,6 +6154,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Dimension` | Import (type-only) |
+| `./types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
+| `../core/constants.js` | `C_SI, E_SI, M_E_SI` | Import |
+
+**Exports:**
+- Interfaces: `FormulaName`
+- Functions: `formulaNameDimensions`
+- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
+
+---
+
 ### `src/dimensional/fresh-label.ts` - Shared deterministic fresh-label utility used by both metric.ts (raise/lower)
 
 **Exports:**
@@ -6318,6 +6275,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/natural-units.ts` - Opt-in natural units. The default comparison stays SI: an energy written as
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `NaturalPowers`
+- Functions: `naturalConstantOverrides`, `naturalPowers`, `naturalNote`
+
+---
+
 ### `src/dimensional/rg-flow.ts` - Renormalization-group (RG) flow primitives — `RGCouplingNode` +
 
 **Internal Dependencies:**
@@ -6347,6 +6317,22 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `validateStressEnergyTensor`, `validateCosmologicalConstant`
 - Re-exports: `StressEnergyTensorNode`, `CosmologicalConstantNode`
+
+---
+
+### `src/dimensional/symbolic-constants.ts` - Symbolic-composition constant registry (v0.12 symbolic composition).
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Dimension` | Import (type-only) |
+| `./types.js` | `ACTION, CHARGE, DIMENSIONLESS, VELOCITY` | Import |
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
+
+**Exports:**
+- Interfaces: `ConstantProvenance`
+- Functions: `piMultipleValue`
+- Constants: `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -6395,6 +6381,20 @@ The codebase is organized into the following modules:
   ACTION, TEMPERATURE, ENTROPY, CHARGE, NAMED_DIMENSIONS
   ```
 
+
+---
+
+### `src/dimensional/unit-convention.ts` - Per-quantity unit convention for the quantities whose dimension does not
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./algebra.js` | `equals` | Import |
+| `./units.js` | `parseUnit` | Import |
+
+**Exports:**
+- Functions: `quantityConventionUnit`, `conventionScaleToSI`, `conventionFactor`
+- Constants: `QUANTITY_CONVENTION_UNIT`
 
 ---
 
@@ -6806,10 +6806,10 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `M_SUN_SI` | Import |
-| `../composition/formula-names.js` | `FORMULA_NAMED` | Import |
-| `../composition/unit-convention.js` | `quantityConventionUnit` | Import |
-| `../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
+| `../dimensional/unit-convention.js` | `quantityConventionUnit` | Import |
+| `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
 | `../dimensional/units.js` | `convertValue, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
@@ -7597,7 +7597,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...74 more]
+        N36[...70 more]
     end
 
     subgraph Core
@@ -7621,7 +7621,7 @@ graph TD
         N48[ast-types]
         N49[bridge-check]
         N50[buckingham]
-        N51[...27 more]
+        N51[...31 more]
     end
 
     subgraph Entry

@@ -142,7 +142,7 @@ These exports are not imported by any other file in the codebase:
 
 - `exprToInfix` (function)
 
-### `src/composition/unit-convention.ts`
+### `src/dimensional/unit-convention.ts`
 
 - `QUANTITY_CONVENTION_UNIT` (constant)
 

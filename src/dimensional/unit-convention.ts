@@ -10,12 +10,12 @@
  * `representative-values.ts` stay in SI joules and are not read through
  * this table.
  *
- * @module composition/unit-convention
+ * @module dimensional/unit-convention
  * @internal
  */
 
-import { equals } from '../dimensional/algebra.js';
-import { parseUnit } from '../dimensional/units.js';
+import { equals } from './algebra.js';
+import { parseUnit } from './units.js';
 
 /** Quantity name → the unit its evaluator speaks. @internal */
 export const QUANTITY_CONVENTION_UNIT: ReadonlyMap<string, string> = new Map([

@@ -17,7 +17,7 @@ import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { validate } from '../dimensional/validator.js';
 import { evalExpr } from '../composition/expr-eval.js';
-import { CONSTANTS } from '../composition/symbolic-constants.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { BRIDGE_RHS_BY_ID } from '../bridges/rhs-registry.js';
 import type { CanonicalEquation } from './canonical-equation.js';
 import { CANONICAL_EQUATIONS, canonicalById } from './registry.js';
