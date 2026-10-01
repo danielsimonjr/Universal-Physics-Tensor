@@ -102,17 +102,29 @@ Use this section only when a reference has `system: 'lean4-physlib'`. The live r
 
 ## Release (Mothership's; recorded so the order is never re-derived)
 
-1. Bump `package.json`.
+`.github/workflows/publish.yml` publishes `universal-physics-tensor`. It runs on a push of a
+tag matching `v*` (for example `v0.48.0`) and on `workflow_dispatch` of that same tag. It does
+not run from a branch. The three `tools/*/package.json` packages are local utilities and are
+not published.
+
+1. Bump `package.json` to `X.Y.Z`.
 2. `bun run atlas:json` — AFTER the bump: `data/atlas/oscillators.json` embeds `packageVersion`,
    and `tests/atlas/atlas-json.test.ts` fails on a stale artifact.
 3. `bun run docs:deps` — AFTER the bump: `DEPENDENCY_GRAPH.md` embeds the version, and the
    `docs-fresh` job fails on a release commit that regenerated first.
 4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
-5. Commit, push `master`, tag `v0.X.Y`, push the tag, verify CI green.
-6. `npm publish --access public` (`TOOLS.md`, Publish).
-7. Verify against the REGISTRY: `npm view <pkg> version --prefer-online`. Plain `npm view` serves
-   a stale cache right after a publish.
+5. Commit, merge to `master`, and wait until CI on that commit is green.
+6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
+   workflow checks out the tag, installs, builds, typechecks, runs the test suite, and fails
+   the job when the tag version (the leading `v` removed) is not `package.json`'s version.
+   It then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish).
+7. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
+   Plain `npm view` serves a stale cache right after a publish.
 
-`NPM_TOKEN` is a Windows user-level environment variable; `.npmrc` interpolates `${NPM_TOKEN}`.
-Rotate at <https://www.npmjs.com/settings/danielsimonjr/tokens>.
+The Actions secret `NPM` must exist (repository Settings → Secrets and variables →
+Actions). The workflow passes it as `NODE_AUTH_TOKEN`. Provenance uses the workflow's
+`id-token: write` permission. Rotate the token at
+<https://www.npmjs.com/settings/danielsimonjr/tokens> and update the secret.
+`workflow_dispatch` publishes only when the selected ref is the `v*` tag; a branch ref fails
+the version guard.

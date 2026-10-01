@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 398,
-    "totalTestFiles": 546,
+    "totalTestFiles": 547,
     "testedCount": 388,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -15746,6 +15746,7 @@
     "tests/tools/package-deps.test.ts": [],
     "tests/tools/plan-doc-audit.test.ts": [],
     "tests/tools/pre-push-executable.test.ts": [],
+    "tests/tools/publish-version-guard.test.ts": [],
     "tests/tools/pushed-head.test.ts": [],
     "tests/tools/readme-links.test.ts": [],
     "tests/tools/untracked-gate-inputs.test.ts": [],

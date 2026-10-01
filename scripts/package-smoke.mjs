@@ -3,10 +3,12 @@ import { readFileSync } from 'node:fs';
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 // Node >=18.20.2 / >=20.12.2 refuse to spawn a `.cmd` without a shell (the CVE-2024-27980
-// argument-injection fix), so `execFileSync('npm.cmd', ...)` dies with EINVAL on Windows. CI runs
-// on ubuntu and never hits it -- but publishing happens ONLY from the Windows box, so this
-// blocked `prepublishOnly` and therefore every release, while every gate stayed green.
-// `shell: true` is safe here: every argument below is a literal, none is derived from input.
+// argument-injection fix), so `execFileSync('npm.cmd', ...)` dies with EINVAL on Windows.
+// `package:check` runs inside `prepublishOnly`, including when `npm run validate` is run on
+// Windows. CI and the publish workflow run on ubuntu and take the `npm` branch. The Windows
+// failure once blocked `prepublishOnly`, and therefore every release, while every other gate
+// stayed green. `shell: true` is safe here: every argument below is a literal, none is
+// derived from input.
 const npmBin = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const raw = execFileSync(npmBin, ['pack', '--dry-run', '--json', '--ignore-scripts'], {
   encoding: 'utf8',
