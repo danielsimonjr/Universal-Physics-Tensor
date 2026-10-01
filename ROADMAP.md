@@ -1,10 +1,9 @@
 # UPT Roadmap — from bridge catalog to verified physics atlas
 
-**Status:** strategic direction, not a release-blocking backlog. Release-blocking work
-stays in [`ACTIVE.md`](ACTIVE.md); cross-session task state
-stays in [`todo.md`](todo.md). A phase below becomes engineering work only when it is
-promoted into `ACTIVE.md` with a design note, a plan, and an Adam+Eve review, per the
-conventions in `todo.md` §Conventions. Nothing here is authorized by being written here.
+**Status:** strategic direction, not a release-blocking backlog. The live task list
+is [`ACTIVE.md`](ACTIVE.md). [`todo.md`](todo.md) is the historical ledger. A phase
+below becomes engineering work only when it is an open task in `ACTIVE.md`. Nothing
+here is authorized by being written here.
 
 **Baseline:** `universal-physics-tensor@0.45.2` on `master`, 2026-09-20.
 
@@ -151,9 +150,8 @@ following are binding (from `CLAUDE.md` and the discovery plan's second audit):
 Phase numbering does **not** match Blueprint v2 §9 one-to-one. The mapping: Phase 0 → BP 0
 (package); Phases 1, 2, 3 → BP 1 (schema and corpus) split into overlay, regimes, and
 hyperedges because each lands on existing types; Phase 4 → BP 2 (checked bridges); Phase 5 →
-BP 3 (benchmark); Phase 6 → BP 4 + 5 (study, release). Version windows are indicative. Budget and schedule are set only after Phase 0 and Phase 1 measure
-curation cost per admitted bridge, per relation type; this document makes no delivery
-commitment.
+BP 3 (benchmark); Phase 6 → BP 4 + 5 (study, release). Version windows are indicative.
+This document makes no delivery commitment. Per-bridge curation cost is not a gate.
 
 Every phase: design note → Adam (design vet) → implementation plan → TDD with scoped vitest →
 Eve (value-level verification) → stale-docs gate → CHANGELOG → `bun run docs:deps` → wrap.
@@ -162,25 +160,9 @@ in `composeEdges`) are allowed; new modules stay off `src/index.ts` until Phase 
 
 ### Phase 0 — Pilot package: the oscillator family (target: v0.46)
 
-> **▶ STATUS 2026-09-20 — IMPLEMENTED, exit criteria NOT all met.**
-> The code and the witnesses are shipped and on `master`: `src/atlas/` with nine models, five
-> bridges and one rejection, 126 atlas tests inside a full suite of 384 files / 3,959 tests, the
-> JSON export under `data/atlas/`, and the `(K, δ)` composition law with its associativity
-> witness. Adam vetted the design before implementation and caught one arithmetic error in this
-> roadmap's own W6 numbers; Eve verified the values afterwards.
->
-> **Two exit criteria remain open, and neither is a code change.**
-> 1. **Independent physicist review has not happened.** It needs a person who is not the author,
->    through the `CONTRIBUTING.md` review surface. Nothing in this repo can satisfy it.
-> 2. **Curation cost is recorded but NOT at the granularity this phase promised.** The log is
->    [`docs/planning/Atlas-Phase-0-Curation-Cost.md`](docs/planning/Atlas-Phase-0-Curation-Cost.md).
->    Work was dispatched per agent, not per bridge, so per-bridge hours were never instrumented
->    and are not reconstructed. The finding that IS supported: relation type did not drive cost
->    here — specification quality did, and both defects that cost real time were in the plan
->    rather than in any bridge.
->
-> Phase 1 scope therefore rests on a per-agent measurement, not the per-type one §L0.2 asks for.
-> Treat the Phase 4 and Phase 5 numbers as still unmeasured until Phase 1 instruments per bridge.
+> **Status.** The code and the witnesses shipped on 2026-09-20. On 2026-10-01 the owner
+> removed the two exit criteria that were not code: independent physicist review, and
+> per-bridge curation cost. The phase is closed. The harness and the witnesses stay.
 
 **Goal.** Prove the five relation contracts on one family where curation is cheap and every
 contract is exercised, before designing types for all of physics.
@@ -214,10 +196,9 @@ contract is exercised, before designing types for all of physics.
 - The regime records for the family: inequalities on `ζ`, `θ₀`, `ε`, `qa`, `mk/b²`, each traced
   to the family's dimension matrix via `buckingham.ts`.
 
-**Exit criteria.** Reproduces from a fresh `bun install --frozen-lockfile && bun run test`;
-the five contracts are reviewed by an independent physicist through the `CONTRIBUTING.md`
-review surface; curation cost (person-hours per bridge, by type) is recorded in the design
-note. Existing suite count unchanged or higher; no public-API change.
+**Exit criteria.** Reproduces from a fresh `bun install --frozen-lockfile && bun run test`.
+Existing suite count unchanged or higher; no public-API change. Independent physicist review
+and per-bridge curation cost are not exit criteria (owner, 2026-10-01).
 
 **Explicitly out.** No changes to `BridgeEdge`, `composeEdges`, or the catalog. The pilot is
 allowed to be throwaway if Phase 1 shows the types were wrong.
@@ -392,14 +373,15 @@ reproducible witness, and the statement-fidelity safeguard applied to every form
   first release scope), using the existing `fluids-waves.ts` entries as the L-layer.
 
 **Exit criteria.** ≥ 20 bridges across ≥ 5 relation types, every one with a witness; ≥ 5 with
-a reviewed `formalRef`; zero bridges tagged `formally-proved` without a `formalRef`; curation
-cost per bridge by type recorded and compared with Phase 0.
+a reviewed `formalRef`; zero bridges tagged `formally-proved` without a `formalRef`.
+Per-bridge curation cost is not an exit criterion (owner, 2026-10-01).
 
 ### Phase 5 — The invalid-bridge benchmark (target: v0.56)
 
-**Goal.** A frozen, independently authored benchmark that the atlas, formula similarity, and
-LLM conditions are all scored against. This is a third benchmark family, separate from
-Product A's identification pins and Product B's expression fixtures.
+**Goal.** A frozen benchmark that the atlas, formula similarity, and LLM conditions are
+scored against. This is a third benchmark family, separate from Product A's identification
+pins and Product B's expression fixtures. The human study (independent item authors and
+human κ raters) was dropped by the owner on 2026-10-01. The harness stays.
 
 **Deliverables.**
 
@@ -408,9 +390,9 @@ Product A's identification pins and Product B's expression fixtures.
   inverse (quantization as inverse of a limit); analogy promoted to equivalence.
 - Fixtures at `tests/fixtures/atlas/<case>/{public,scorer}/`, mirroring the discovery layout;
   the scorer half is never read by the generator side.
-- Independent authorship: items written by physicists who have not seen the schema, drawing
-  on textbook errata and documented misconceptions; Cohen's κ reported before freezing;
-  disputed items to a `contested` set.
+- Independent authorship and Cohen's κ were the human study. That study was dropped
+  (owner, 2026-10-01) and is not an exit criterion. The harness, including the contested
+  set, stays.
 - Leakage controls: frozen held-out set; at least one entire model family held out; renamed
   variables and equivalent syntax included.
 - Power: 60 items (the revised proposal's 60 valid + 60 invalid) gives a Wilson interval too wide to separate methods; the target
@@ -420,15 +402,19 @@ Product A's identification pins and Product B's expression fixtures.
   `formally-proved` (any instance blocks release); invalid-bridge rejection vs the best LLM
   baseline, paired difference with a 95% interval excluding zero; recall at depth 10 vs
   embeddings; abstention reported and preferred to a wrong accept; practical value (time and
-  error rate for tracing a known derivation with the atlas versus ordinary references);
-  curation cost (person-hours per admitted bridge, by relation type).
+  error rate for tracing a known derivation with the atlas versus ordinary references).
+  Per-bridge curation cost is not a criterion (owner, 2026-10-01). The "if curation cost
+  makes 200 unreachable" sentence above is not a gate.
 
-**Exit criteria.** κ reported; held-out family fixed; thresholds frozen in a pre-registration
-note under `docs/research/` before any condition is run.
+**Exit criteria.** Held-out family fixed; thresholds frozen in a pre-registration note under
+`docs/research/` before any condition is run. Human κ and independent item authors are not
+exit criteria (owner, 2026-10-01). The harness stays.
 
 ### Phase 6 — Study, scoped release, and the discovery hypothesis (target: v0.57+)
 
 **Goal.** Run the comparison, publish the data, and state the discovery result modestly.
+The scoring study was dropped by the owner on 2026-10-01. The harness stays. The remaining
+engineering item is the public-API move.
 
 **Deliverables.**
 
@@ -455,10 +441,10 @@ note under `docs/research/` before any condition is run.
 - Governance: named maintainers per model family; a written policy for contested entries;
   contribution by small reviewable PRs.
 
-**Exit criteria.** A fresh environment reproduces every published check; paired statistics and
-abstention are reported in `docs/research/`; all qualifications remain visible in every output.
-Reviewer time is NOT MEASURED: there are no independent human reviewers, and a model's or an
-agent's time is not a reviewer's time. The owner amended this criterion; it is not an unmet box.
+**Exit criteria.** The scoring study (S6.1/S6.2 on the frozen set) was dropped by the owner
+on 2026-10-01. The harness stays. Results already written under `docs/research/` stay the
+record of the run that happened. The remaining engineering item is the public-API move
+(S6.7), tracked in [`ACTIVE.md`](ACTIVE.md). Reviewer time is not an exit criterion.
 
 ---
 
@@ -473,13 +459,13 @@ agent's time is not a reviewer's time. The owner amended this criterion; it is n
 - **Python, SymPy, a proof assistant, or a database in the repo.** All backends stay out of
   process; witnesses are TypeScript.
 - **An interactive explorer in this package.** Parked in `Future-Production-Hardening.md`.
-- **A `1.0.0`.** The atlas surface is experimental until the Phase 6 review.
+- **A `1.0.0`.** The atlas surface stays experimental. `package.json` stays `0.x` until the owner says otherwise.
 - **Replacing `BridgeEquationStatus`, `EdgeConfidence`, `EpistemicStatus`, `VettedCandidate`,
   or `AdjudicationVerdict`.** Overlay only.
-- **A staffing or delivery date.** Set after Phase 0 and Phase 1 measure curation cost.
+- **A staffing or delivery date.**
 - **A 50–100-family corpus.** The proposal's Phase 1 target. UPT's corpus is the 109-entry
-  L-layer plus the families each phase adds (oscillators, diffusion, waves); breadth is set
-  by measured curation cost, not by a target. Recorded here so the drop is not silent.
+  L-layer plus the families each phase adds (oscillators, diffusion, waves). Breadth is
+  those families, not a target set by a curation-cost measurement.
 - **Not carried, by choice:** OpenMath / Content MathML syntax trees (UPT's `ExprNode` is the
   syntax tree) and Wikidata symbol identifiers; assisted-authoring hours-saved measurement;
   Lean4PHYS / LeanPhysBench positioning; the Bronstein-cube caveat that its corners are
@@ -494,24 +480,24 @@ agent's time is not a reviewer's time. The owner amended this criterion; it is n
 | Fabricated relation types or assumptions during migration | `undefined` / `not-yet-audited` is the default; Eve samples migrated records against sources. |
 | Composition-table change breaks the 41-edge graph tests | Edges without a `relation` compose as today; the table only fires when both operands carry one. |
 | Formal-reference theatre (a `formalRef` to the wrong statement) | Fidelity field is required; `unreviewed` never contributes a `formally-proved` tag. |
-| Benchmark built by the schema authors | Independent authorship and κ are exit criteria, not nice-to-haves. |
-| Curation cost swamps the project | Measured in Phase 0; Phase 4 scope (20 bridges) and Phase 5 scope (200/class) are cut to what the measurement supports, and the cut is reported. |
+| Benchmark built by the schema authors | The human study was dropped (owner, 2026-10-01). The harness remains. Model-rater agreement, where already reported, is model agreement. |
+| Curation cost swamps the project | Per-bridge person-hours are not an exit criterion (owner, 2026-10-01). |
 | Graph statistics misread as physics | Every hub/gap figure reports its filters and coverage and is labelled a hypothesis about the representation. |
 | This document drifts like the old `CLAUDE.md` release section did | It records direction and exit criteria only. Counts, versions, and shipped state live in `CHANGELOG.md`, `todo.md`, and `ACTIVE.md`; when a phase ships, this file gets a one-line status pointer, not a narrative. |
 
 ## 7. Phase status
 
-**UPT is DONE (owner, 2026-09-24; pre-registration Amendment 12).** DONE means that every criterion below is MEASURED and REPORTED: MET, NOT MET, amended or deferred. It does not mean that every criterion is met. Study criteria 2 and 3 are NOT MET, and they are the study's findings.
+**UPT is DONE (owner, 2026-09-24; pre-registration Amendment 12).** DONE means that every criterion below is MEASURED and REPORTED: MET, NOT MET, amended or deferred. It does not mean that every criterion is met. Study criteria 2 and 3 are NOT MET, and they are the findings of the run that happened. On 2026-10-01 the owner dropped the human-dependent studies and removed the human-reviewer gates. Those gates are not open criteria. The harness stays.
 
 | Phase | Status | Pointer |
 |---|---|---|
-| 0 — Oscillator pilot | code delivered; exit criteria closed by amendment | Independent human physicist review NOT MEASURED (no human reviewer); a model-persona review (Fable) was run on 2026-09-24, 13 findings, each with its disposition in [`docs/research/phase-0-model-persona-review.md`](docs/research/phase-0-model-persona-review.md) (pre-registration Amendment 7). Per-bridge curation cost AMENDED to NOT MEASURED (Amendment 6). [`NOTES.md`](NOTES.md) |
+| 0 — Oscillator pilot | closed | Code shipped 2026-09-20. The owner removed independent physicist review and per-bridge curation cost as exit criteria on 2026-10-01. [`ACTIVE.md`](ACTIVE.md) |
 | 1 — Relation contracts overlay | overlay shipped; "zero fabricated assumptions" MET (Mothership's ruling, after a mechanical quote check) | Every quoted span in the 15 `// source:` comments matches its source exactly (`bun run atlas:quote-check`: 43 MATCH, 44 negative controls held). Disclosed by name: BE-11 checked on search-snippet access, not full text; C6 (Josephson 1962, paywalled) unverifiable; two equation numbers not confirmed by machine, von Klitzing eq. 4 (publisher bot wall) and Shapiro's printed label (1) (not machine-readable), both deferred by the owner on 2026-09-24 (they were for the owner to check in a browser). [`docs/research/phase-1-citation-check.md`](docs/research/phase-1-citation-check.md) |
 | 2 — Regimes and error-carrying paths | shipped | Uniformity gate on `boundPath` (reason `uniformity-unanalysed`). The table was not widened. [`NOTES.md`](NOTES.md) |
 | 3 — Hyperedges, models, poster index | shipped | `8 → 12` is one approximation (`d-8-to-12`) and its direction is unresolved. [`NOTES.md`](NOTES.md) |
-| 4 — Verification workflow, checked bridges | 20 bridges / 6 types delivered | Reviewed `formalRef` is 10, which meets the ≥5 gate. The owner deferred the criterion (pre-registration Amendment 10), so it does not block DONE. Scoping: [`docs/research/phase-4-formalref-scoping.md`](docs/research/phase-4-formalref-scoping.md). Per-bridge cost AMENDED to NOT MEASURED; model cost is reported. [`NOTES.md`](NOTES.md) |
-| 5 — Invalid-bridge benchmark | harness and model-authored frozen set exist | κ AMENDED: the reported κ is MODEL agreement (0.984 / 0.978); human κ NOT MEASURED. Criteria 5 and 6 AMENDED to NOT MEASURED / model cost. All three in pre-registration Amendment 6. [`NOTES.md`](NOTES.md) |
-| 6 — Study and scoped release | study has run on the non-empty set | Criterion 2 (local LLM) is NOT MET. Criterion 3 is NOT MET (pre-registration Amendment 11): embeddings (qwen3-embedding:4b, frozen vectors) 49/50 = 98.0% against typed structural search 12/50 = 24.0% [14.3%, 37.4%]. Typed structural search scored 24% on PRIMARY and never matched on structure (query residuals vs corpus right-hand sides). An EXPLORATORY, post hoc residual-form rerun (Amendment 9) also scored 24%, with 4 key matches in 11,125 pairs. The empty-set refusal still exists for an empty set. [`NOTES.md`](NOTES.md), [`docs/research/atlas-study-results.md`](docs/research/atlas-study-results.md) |
+| 4 — Verification workflow, checked bridges | closed | 20 bridges / 6 types. Reviewed `formalRef` is 10, which meets the ≥5 gate. Per-bridge curation cost is not an exit criterion (owner, 2026-10-01). [`NOTES.md`](NOTES.md) |
+| 5 — Invalid-bridge benchmark | closed; harness kept | The human study was dropped by the owner on 2026-10-01. Human κ and independent item authors are not exit criteria. The harness is unchanged. [`ACTIVE.md`](ACTIVE.md) |
+| 6 — Study and scoped release | closed except the public-API move | S6.1/S6.2 scoring was dropped by the owner on 2026-10-01. The harness stays. The run that already happened is in [`NOTES.md`](NOTES.md) and [`docs/research/atlas-study-results.md`](docs/research/atlas-study-results.md). S6.7 is an open task in [`ACTIVE.md`](ACTIVE.md). |
 
 > **This table is updated at the END of every sprint, and the risk register above is why.** Its own
 > last row names the failure — *"this document drifts like the old `CLAUDE.md` release section
@@ -537,5 +523,5 @@ Subagent-driven execution plan for all seven phases:
 Related programs already recorded elsewhere and not restated here: the Product B
 expression/residual search (`Scientific-Bridge-Discovery-v1.md`, phases 0A–12, Product B
 shipped experimentally in v0.44.2, 2026-08-25), the v0.7 proposal set (`docs/planning/UPT v0.70 -
-Proposals.md`, P1–P3/P5/P8 shipped, P4 and P7 pending peers, P6 phases B–D open), and the
+Proposals.md`, P1–P3/P5/P8 shipped, P4 and P7 pending peers, P6 phases B–D awaiting an owner ruling on whether they are open or met), and the
 parking lot in `Future-Production-Hardening.md`.

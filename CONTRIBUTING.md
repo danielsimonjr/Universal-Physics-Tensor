@@ -14,10 +14,8 @@ checks.
 Each task is a self-contained judgment with the evidence already
 gathered. Open an issue (or PR against the JSON/markdown directly):
 
-0. **⭐ Review the Phase 0 atlas pilot — this one BLOCKS a roadmap phase.**
-   `ROADMAP.md` §7 Phase 0 makes independent physicist review an exit
-   criterion, and it is the only criterion no amount of work in this repo
-   can satisfy. The pilot claims five typed relations between oscillator
+0. **Review the Phase 0 atlas pilot.** It does not block a roadmap phase.
+   The owner removed that gate on 2026-10-01. The pilot claims five typed relations between oscillator
    models plus one rejection, each with executable witnesses under
    `src/atlas/oscillators/`; the design note is
    `docs/planning/Atlas-Phase-0-Design.md`. The claims worth attacking:

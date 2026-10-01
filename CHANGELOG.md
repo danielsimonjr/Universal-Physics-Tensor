@@ -8,6 +8,10 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
+### Changed
+
+- **Authorization gate.** The owner removed the human-reviewer gates on 2026-10-01: independent physicist review, per-bridge curation-cost measurement, the kappa raters, the independent and frozen item authors, and the rule that no agent may author a frozen item, as a blocker. Sprints 0 and 5 are closed on code that had already landed. The Sprint 5 benchmark study and the Sprint 6 study (S6.1/S6.2, scoring the frozen set) were dropped by the owner on 2026-10-01. The harness code is unchanged. Sprint 6 is closed except the S6.7 public-API remainder. `ACTIVE.md` is the live task list. `ROADMAP.md` exit criteria match that. Publishing to npm stays the owner's job.
+
 ### Added
 
 - **Ten reviewed PhysJS formalRefs (milestone 2).** `formal/physjs/manifest.json` is refreshed from PhysJS `manifest/bridges.json` at main `d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c`. Four bridges gain a reviewed `lean4-physjs` reference because the theorem certifies the transformation in scoping §4.3: `ab-kg-oscillator` → `PhysJS.KgOscillator.uniform_solves_equationOfMotion` (the uniform-mode restriction), `ab-spring-lc` → `PhysJS.SpringLc.time_rescale_equationOfMotion` and `ab-damped-rlc` → `PhysJS.DampedRlc.time_rescale_equationOfMotion` (the oscillator dictionary; the circuit reading stays this repository's claim), and `ab-wave-dalembert` → `PhysJS.WaveDalembert.solution_eq_profiles` (the missing direction of d'Alembert's formula). Each covers line says the reference covers its statement only. The five rank-1 entries keep `covers_bound_delta` as the formalRef and carry a nested `planeWave` object (`planeWave_iff_dispersion`); that object is not promoted. `formally-proved` stays derived. The reviewed count is 10. `src/canonical` is unchanged. The composition table is unchanged. Architecture docs were regenerated after merging the BE-38 docstring change: 401 files, 2903 exports, 1376 re-exports, 88512 lines.

@@ -108,8 +108,8 @@ When encoding or reformulating a bridge, prefer these; they avoid grammar extens
 
 ## Where things live
 
-- What shipped and when: `CHANGELOG.md`. What is in flight: `todo.md`. The authorized sprint
-  ledger: `ACTIVE.md`. The current version: `package.json`. What is on the registry: the
+- What shipped and when: `CHANGELOG.md`. What is in flight, and the authorization gate:
+  `ACTIVE.md`. `todo.md` is the historical ledger. The current version: `package.json`. What is on the registry: the
   registry itself (`WORKFLOWS.md`, Release step 7).
 - Out-of-tree Lean proofs belong to the **`PhysJS`** repo, outside this one. That Lean
   project requires Mathlib and the Physlib package (the library Daniel calls PhysLean;

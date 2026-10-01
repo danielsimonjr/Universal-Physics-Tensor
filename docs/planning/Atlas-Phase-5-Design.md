@@ -5,16 +5,18 @@ Authorized by the Sprint 5 entry in [`ACTIVE.md`](../../ACTIVE.md). Briefs:
 
 ## 0. The independence wall — read this first
 
-**No agent authors a frozen benchmark item.** That covers this session, every subagent, and
-every local model. Agents build the harness, the loader, the leakage checks, the scorer
+**No agent authors a frozen benchmark item.** That is how the loader behaves. It is not a
+blocker: the owner dropped the human study on 2026-10-01. The sentence covers this session,
+every subagent, and every local model. Agents build the harness, the loader, the leakage checks, the scorer
 plumbing, the statistics and the pre-registration template. They may draft candidate items
 ONLY into `tests/fixtures/atlas/benchmark/contested/`, with `authorship: 'contested-draft'`.
 The loader refuses any frozen item whose authorship is not `'independent'`.
 
 The consequence must be stated before any code exists, or the harness will be mistaken for
-the study. **ROADMAP Phase 5's exit criteria are "κ reported; held-out family fixed;
-thresholds frozen in a pre-registration note before any condition is run".** κ needs two
-raters, and a frozen item set needs authors, none of whom has read `src/atlas/`. The harness
+the study. **The human study is not a ROADMAP exit criterion** (owner, 2026-10-01). Held-out
+family and the pre-registration thresholds remain what the harness froze. Two raters and
+authors who have not read `src/atlas/` are how the set was filled. Neither is an exit
+criterion. The harness
 fixes the held-out family, freezes the thresholds and makes everything else mechanical; it
 cannot supply the items or the ratings. Authors and raters may be people, or model instances
 launched with no tools, no repository access and no shared context
