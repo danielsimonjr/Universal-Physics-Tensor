@@ -21,3 +21,4 @@ import PhysJS.Jarzynski
 import PhysJS.Lindblad
 import PhysJS.Jeans
 import PhysJS.Deflection
+import PhysJS.Sommerfeld
