@@ -27,3 +27,4 @@ import PhysJS.Josephson
 import PhysJS.QuantumHall
 import PhysJS.Laughlin
 import PhysJS.Kss
+import PhysJS.PlanckArea
