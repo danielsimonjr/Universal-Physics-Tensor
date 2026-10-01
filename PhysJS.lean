@@ -23,3 +23,4 @@ import PhysJS.Jeans
 import PhysJS.Deflection
 import PhysJS.Sommerfeld
 import PhysJS.ThermalDeBroglie
+import PhysJS.Josephson
