@@ -1884,7 +1884,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/equations/be-13-einstein-trace.ts` - Bridge Equation 13 — Trace of Einstein equations (Jacobson 1995
+### `src/bridges/equations/be-13-einstein-trace.ts` - Bridge Equation 13 — Einstein trace reduction.
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -7711,7 +7711,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 408 |
 | Total Modules | 13 |
-| Total Lines of Code | 89408 |
+| Total Lines of Code | 89407 |
 | Total Exports | 2923 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |

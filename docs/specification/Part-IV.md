@@ -105,7 +105,7 @@ where <img src="https://i.upmath.me/svg/%5Cphi_n(x)" alt="\phi_n(x)" /> are quan
 
 **10.3.4 Information-Gravity Duality**
 
-- **Target**: Bridge Equations 13, 14 (Information-Geometry, Holographic QEC)
+- **Target**: Bridge Equations 13, 14 (Einstein trace reduction, Holographic QEC)
 - **Method**: Quantum computer simulations of AdS/CFT
 - **Observable**: Holographic entanglement entropy scaling
 - **Computational Requirements**: <img src="https://i.upmath.me/svg/%3E%2010%5E6" alt="> 10^6" /> qubits with <img src="https://i.upmath.me/svg/%3E%2099.9%5C%25" alt="> 99.9\%" /> fidelity
