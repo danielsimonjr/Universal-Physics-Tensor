@@ -660,7 +660,7 @@ from v0.1.0 onward.
 
 - **A catalog row does not carry `formalRef`.** `BridgeEquationEntry` has no `formalRef` field. The reference for a catalog id is `catalogFormalRef` in `src/atlas/catalog-formal-ref.ts`. That function is not a package-root export and is not on the `atlas` barrel. `upt atlas be-<n>` still prints the reference. `data/bridge-catalog.json` still carries the object. The published npm `0.47.1` tarball did not include catalog formal references; this break is against the unreleased tree that stored them on the row.
 
-No tag is pushed with this version. Publishing stays the owner's job. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `1.0.0`. Architecture counts are unchanged: 408 files, 2923 exports, 1389 re-exports, 89408 lines, 0 circular dependencies. Architecture test-coverage docs count 557 test files.
+No tag is pushed with this version. Publishing stays the owner's job. The pre-1.0 guard in `tests/dimensional/part-viii-spec-vs-impl.test.ts` now requires `1.0.0`; a `0.x` version fails it. The Part VIII marker still records that v0.3.0 was a minor bump. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `1.0.0`. Architecture counts are unchanged: 408 files, 2923 exports, 1389 re-exports, 89408 lines, 0 circular dependencies. Architecture test-coverage docs count 557 test files.
 
 ## [0.47.1] - 2026-09-25
 
