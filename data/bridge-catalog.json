@@ -6,6 +6,18 @@
   "entries": [
     {
       "id": 11,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Lindblad.preserve",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "property: one channel of the displayed GKSL generator has trace zero, and it is Hermitian when H and ρ are. L need not be Hermitian. Dropping the anticommutator makes the trace nonzero. Not Born–Markov coarse-graining — covers its statement only"
+      },
       "name": "Decoherence Master Equation",
       "category": "A",
       "category_name": "Quantum-Classical Bridges",
@@ -186,6 +198,18 @@
     },
     {
       "id": 16,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Landauer.equal_levels",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation — covers its statement only"
+      },
       "name": "Information-Thermodynamics Bridge (Landauer's principle)",
       "category": "C",
       "category_name": "Emergence and Complexity",
@@ -301,6 +325,18 @@
     },
     {
       "id": 19,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.QuantumBounce.dictionary",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "cross-check: H²_LQC equals H²_RS at σ = −ρ_c/2, both tend to (8πG/3)ρ + Λ/3 at infinity, and H²_LQC = 0 at ρ = ρ_c and Λ = 0, naming BE-54. σ = +ρ_c/2 is not that polynomial. σ < 0 is not a physical Randall–Sundrum brane — covers its statement only"
+      },
       "name": "Quantum Bounce Equation",
       "category": "E",
       "category_name": "Cosmological-Quantum Bridges",
@@ -493,6 +529,18 @@
     },
     {
       "id": 24,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Fret.dictionary",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "cross-check: η = R₀⁶/(R₀⁶+R⁶) = 1/(1+(R/R₀)⁶) = k_FRET/(k_FRET+1/τ_D), and η decreases on (0, ∞). At R = 2 R₀ the exponent 4 is not the exponent 6. Not the dipole–dipole law — covers its statement only"
+      },
       "name": "Quantum Coherence in Photosynthesis Efficiency (Förster resonance energy transfer)",
       "category": "G",
       "category_name": "Quantum Biology Bridges",
@@ -660,6 +708,18 @@
     },
     {
       "id": 29,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Jarzynski.jensen_work",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "property: for a finite probability and β > 0, ∑ p_i W_i ≥ −(1/β) log(∑ p_i exp(−β W_i)). The reversed inequality fails on two unequal work values. Not Jarzynski's theorem, and not the Gaussian identity — covers its statement only"
+      },
       "name": "Jarzynski free-energy equality (canonical 1997 form)",
       "category": "H",
       "category_name": "Non-Equilibrium Statistical Mechanics",
@@ -1184,6 +1244,18 @@
     },
     {
       "id": 42,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.HawkingUnruh.dictionary",
+        "version": "physjs@57a9ecbc851952d539882400a7176926d2990d34 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "cross-check: T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect — covers its statement only"
+      },
       "name": "Hawking temperature (canonical 1975 derivation)",
       "category": "M",
       "category_name": "Information Paradox Resolutions",

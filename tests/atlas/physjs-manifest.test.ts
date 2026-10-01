@@ -65,6 +65,36 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
     'derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor',
   ],
   [
+    'be-42',
+    'PhysJS.HawkingUnruh.dictionary',
+    'cross-check: T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect',
+  ],
+  [
+    'be-24',
+    'PhysJS.Fret.dictionary',
+    'cross-check: η = R₀⁶/(R₀⁶+R⁶) = 1/(1+(R/R₀)⁶) = k_FRET/(k_FRET+1/τ_D), and η decreases on (0, ∞). At R = 2 R₀ the exponent 4 is not the exponent 6. Not the dipole–dipole law',
+  ],
+  [
+    'be-19',
+    'PhysJS.QuantumBounce.dictionary',
+    'cross-check: H²_LQC equals H²_RS at σ = −ρ_c/2, both tend to (8πG/3)ρ + Λ/3 at infinity, and H²_LQC = 0 at ρ = ρ_c and Λ = 0, naming BE-54. σ = +ρ_c/2 is not that polynomial. σ < 0 is not a physical Randall–Sundrum brane',
+  ],
+  [
+    'be-16',
+    'PhysJS.Landauer.equal_levels',
+    'property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation',
+  ],
+  [
+    'be-29',
+    'PhysJS.Jarzynski.jensen_work',
+    'property: for a finite probability and β > 0, ∑ p_i W_i ≥ −(1/β) log(∑ p_i exp(−β W_i)). The reversed inequality fails on two unequal work values. Not Jarzynski\'s theorem, and not the Gaussian identity',
+  ],
+  [
+    'be-11',
+    'PhysJS.Lindblad.preserve',
+    'property: one channel of the displayed GKSL generator has trace zero, and it is Hermitian when H and ρ are. L need not be Hermitian. Dropping the anticommutator makes the trace nonzero. Not Born–Markov coarse-graining',
+  ],
+  [
     'be-65',
     'PhysJS.Jeans.mass_eq',
     'derivation-step: the encoded Jeans mass (5 k T / (G μ m_u))^(3/2) (3 / (4 π ρ))^(1/2) follows from the virial convention with factor 5 and M = 4 π R³ ρ / 3. Replacing 5 by 3 fails. Not the virial theorem',
@@ -103,7 +133,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the nineteen theorems and keys, in manifest order', () => {
+  it('names the twenty-five theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -121,7 +151,7 @@ describe('vendored PhysJS manifest', () => {
       expect(bridge!.formalRef?.fidelity).not.toBe('unreviewed');
       const kind = entry.covers.split(':')[0];
       if (entry.key.startsWith('be-')) {
-        expect(['reduction', 'limit', 'derivation-step']).toContain(kind);
+        expect(['reduction', 'limit', 'derivation-step', 'property', 'cross-check']).toContain(kind);
       }
     }
   });
@@ -283,60 +313,60 @@ describe('vendored PhysJS manifest', () => {
     );
   });
 
-  it('refuses a property or a cross-check as a vendored formalRef', () => {
-    const property = {
-      ...manifest,
-      entries: [
-        ...manifest.entries,
-        {
-          key: 'be-16',
-          bridgeId: 'be-16',
-          theorem: 'PhysJS.Landauer.twoState_entropy_eq',
-          covers: 'property: the two-state entropy equals k_B log 2',
-          coverage: COVERAGE,
-          leanProof: 'complete',
-          axioms: ['propext', 'Classical.choice', 'Quot.sound'],
-        },
-      ],
-    };
-    expect(physjsManifestProblems({ manifest: property, bridges: carriers }).join('\n')).toMatch(
-      /uncounted property and is not a UPT formalRef/,
-    );
+  it('keeps property and cross-check as their own kinds, and a missing kind word fails', () => {
+    const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
+    const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
+    const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-65', 'be-51', 'be-61']);
+    expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
+    expect(properties.map((entry) => entry.key)).toEqual(['be-16', 'be-29', 'be-11']);
+    expect(counted.length + crossChecks.length + properties.length).toBe(15);
 
-    const crossCheck = {
+    const unlabeled = {
       ...manifest,
       entries: manifest.entries.map((entry) =>
-        entry.key === 'be-64' ? { ...entry, covers: 'cross-check: a wrong dictionary' } : entry,
+        entry.key === 'be-16' ? { ...entry, covers: 'the two-state entropy equals k_B log 2' } : entry,
       ),
     };
-    expect(physjsManifestProblems({ manifest: crossCheck, bridges: carriers }).join('\n')).toMatch(
-      /uncounted cross-check and is not a UPT formalRef/,
+    expect(physjsManifestProblems({ manifest: unlabeled, bridges: carriers }).join('\n')).toMatch(/catalog kind/);
+
+    const dropped = carriers.map((bridge) => (bridge.id === 'be-16' ? { ...bridge, formalRef: undefined } : bridge));
+    expect(physjsManifestProblems({ manifest, bridges: dropped }).join('\n')).toMatch(
+      /bridge 'be-16' has no lean4-physjs formalRef/,
     );
   });
 
-  it('a catalog covers line that is not a counted kind fails', () => {
+  it('a catalog covers line that is not a catalog kind fails', () => {
     const unkind = {
       ...manifest,
       entries: manifest.entries.map((entry) =>
         entry.key === 'be-64' ? { ...entry, covers: 'the whole bridge' } : entry,
       ),
     };
-    expect(physjsManifestProblems({ manifest: unkind, bridges: carriers }).join('\n')).toMatch(/counted kind/);
+    expect(physjsManifestProblems({ manifest: unkind, bridges: carriers }).join('\n')).toMatch(/catalog kind/);
   });
 
-  it('nine catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
-    const catalogIds = [64, 53, 58, 38, 13, 34, 65, 51, 61];
-    for (const id of catalogIds) {
+  it('catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
+    const countedIds = [64, 53, 58, 38, 13, 34, 65, 51, 61];
+    const labeledIds = [42, 24, 19, 16, 29, 11];
+    for (const id of countedIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
       expect(row?.formalRef?.system).toBe('lean4-physjs');
+      expect(row?.formalRef?.covers).toMatch(/^(reduction|limit|derivation-step): /);
       expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
+      expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
+    }
+    for (const id of labeledIds) {
+      const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
+      expect(row?.formalRef?.system).toBe('lean4-physjs');
+      expect(row?.formalRef?.covers).toMatch(/^(property|cross-check): /);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     const reviewed = atlasBridges.filter(
       (bridge) => bridge.formalRef !== undefined && bridge.formalRef.fidelity !== 'unreviewed',
     );
     expect(reviewed).toHaveLength(10);
-    for (const id of [16, 29, 11, 42, 24, 19, 36, 20]) {
+    for (const id of [36, 20, 57, 54]) {
       expect(BRIDGE_EQUATIONS.find((entry) => entry.id === id)?.formalRef).toBeUndefined();
       expect(manifest.entries.some((entry) => entry.key === `be-${id}`)).toBe(false);
     }
