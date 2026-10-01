@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 401,
     "totalModules": 12,
-    "totalExports": 2903
+    "totalExports": 2904
   },
   "entryPoints": [
     {
@@ -666,7 +666,8 @@
             "imports": [
               "Conventions",
               "EvidenceTag",
-              "FormalFidelity"
+              "FormalFidelity",
+              "FormalRefKind"
             ],
             "typeOnly": true
           }
@@ -1165,6 +1166,7 @@
               "AtlasRejection",
               "FormalFidelity",
               "FormalRef",
+              "FormalRefKind",
               "NormTransport"
             ],
             "reExport": true
@@ -1862,6 +1864,7 @@
           "AtlasRejection",
           "FormalFidelity",
           "FormalRef",
+          "FormalRefKind",
           "NormTransport",
           "CounterexampleLike",
           "EvidenceInput",
@@ -1958,6 +1961,7 @@
           "AtlasRejection",
           "FormalFidelity",
           "FormalRef",
+          "FormalRefKind",
           "NormTransport",
           "MissingHorizonError",
           "MissingLipschitzError",
@@ -2967,7 +2971,8 @@
           {
             "file": "./types.js",
             "imports": [
-              "FormalRef"
+              "FormalRef",
+              "FormalRefKind"
             ],
             "typeOnly": true
           }
@@ -28022,15 +28027,15 @@
   "statistics": {
     "totalTypeScriptFiles": 401,
     "totalModules": 12,
-    "totalLinesOfCode": 88791,
-    "totalExports": 2903,
+    "totalLinesOfCode": 88973,
+    "totalExports": 2904,
     "totalClasses": 60,
     "totalInterfaces": 462,
     "totalFunctions": 749,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 717,
-    "totalReExports": 1376,
+    "totalReExports": 1377,
     "totalTypeOnlyImports": 541,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

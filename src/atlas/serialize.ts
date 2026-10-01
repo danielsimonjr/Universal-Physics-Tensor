@@ -201,6 +201,8 @@ const serializeBridge = (bridge: AtlasBridge): JsonValue => ({
           version: bridge.formalRef.version,
           axioms: [...bridge.formalRef.axioms],
           fidelity: bridge.formalRef.fidelity,
+          kind: bridge.formalRef.kind,
+          url: bridge.formalRef.url,
           covers: bridge.formalRef.covers,
         },
       }),

@@ -60,6 +60,14 @@ const qc = BRIDGE_EQUATIONS.filter(e =>
 );
 ```
 
+### Formal references on a catalog entry
+
+A `BRIDGE_EQUATIONS` entry may carry `formalRef`. The object has `kind` and `url` in addition to `system`, `statement`, `version`, `axioms`, `fidelity`, and `covers`.
+
+`kind` is `property`, `cross-check`, `reduction`, `limit`, or `derivation-step` on a catalog entry. `url` is a permalink to that theorem's Lean file at the commit named in `version`. `SpringLc` and `DampedRlc` are namespaces inside `PhysJS/OscillatorDictionary.lean`.
+
+Passing the reference to `deriveEvidence` (the atlas subpath) lights `formally-proved` only when `kind` is `bridge`. A property lights `formally-proved-property`. A cross-check lights `formally-proved-cross-check`. Those two labels are shown and are not a proved bridge. A reduction, a limit, and a derivation-step light none of the three. The catalog evidence path still omits `formalRef`, so a catalog row stays `proposed` or `contradicted`.
+
 ### `isActiveStatus(s)` — function
 
 Type predicate that returns `true` for any status that is not `'invalid'`. Use to exclude deprecated catalog entries from active-research filters.
