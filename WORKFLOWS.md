@@ -5,11 +5,11 @@ it belongs in another file.
 
 ## Before non-trivial work
 
-Read `todo.md` (cross-session task state and repo conventions) and `NOTES.md` (current state).
+Read `ACTIVE.md` (the live task list) and `NOTES.md` (current state). `todo.md` is the historical ledger.
 
 ## Every commit-shaped change
 
-**File the `todo.md` row BEFORE the work** → do it → tick it **without retitling** →
+**File the `ACTIVE.md` row BEFORE the work** → do it → tick it **without retitling** →
 `CHANGELOG.md` entry saying what changed *and why* → commit → push → **read CI on GitHub**.
 
 The row is late the moment you are about to change a file something else will later run.

@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-10-01
+
+- The live task list and the 2026-10-01 gate ruling are `ACTIVE.md`. Paragraphs below that still call a human-reviewer gate or either dropped study open are the record from the date in their heading.
+
 ## As of 2026-09-30
 
 - **Reviewed formalRef.** Ten bridges carry a reviewed PhysJS `formalRef`, each `system: 'lean4-physjs'`. Milestone 1 is the five rank-1 dispersion bounds (`covers_bound_delta`) and `ab-pendulum-linear`, retargeted at `PhysJS.Pendulum.linearizedEquationOfMotion_iff`. Milestone 2 adds `ab-kg-oscillator`, `ab-spring-lc`, `ab-damped-rlc`, and `ab-wave-dalembert`. Each of those four certifies the bridge transformation named in the scoping report §4.3: the uniform-mode restriction, the oscillator dictionary (the circuit reading stays this repository's claim), and the missing direction of d'Alembert's formula. The five rank-1 entries also carry a nested `planeWave` object (`planeWave_iff_dispersion`). That object is not the `formalRef`. That meets the ≥5 gate. The 2026-09-24 deferral still means the criterion does not block DONE. The manifest pin is PhysJS main `d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c`. PhysJS is public (`https://github.com/danielsimonjr/PhysJS`; GitHub API `private: false`).

@@ -684,12 +684,14 @@ warning-silencing, not debug logging).
 
 - [x] **The git-spawning gate tests are not hermetic** (Mothership report 2026-09-25; fix AFTER the 0.47.0 persona re-test). When the pre-push hook runs from a LINKED git worktree, git exports GIT_DIR to the hook. `tests/tools/pushed-head.test.ts` (3 tests) and `tests/tools/untracked-gate-inputs.test.ts` (15 tests) spawn `git init` and `git commit` in temp dirs, inherit GIT_DIR, and act on the REAL repository. On the 0.47.0 release push they set `core.bare = true` in the main `.git/config` and committed "a" by t@example.invalid onto the worktree HEAD (repaired; nothing reached the remote). Fix: the tests' git helper removes GIT_DIR, GIT_WORK_TREE, GIT_INDEX_FILE and GIT_COMMON_DIR from the child env, and the hook unsets GIT_* before it runs the suite. Proof: a test that runs the gate from a linked worktree and checks that the main repo is unchanged.
 
-- [ ] **After 0.47.0: one release per tier, each DESIGNED and approved by Mothership before any code**
+- [x] **After 0.47.0: one release per tier, each DESIGNED and approved by Mothership before any code**
       (owner order 2026-09-25). No code before the design is approved.
-      - [ ] After the criterion 3 study closes: switch the product's typed structural search (`rankByStructure` callers) to the residual-form canonical corpus, so user claims in residual form can match. Blocked while the Amendment 8 pins are live.
+      Moved to `ACTIVE.md` on 2026-10-01. The release choice is an owner decision there. Publishing to npm stays the owner's. The code for tiers 8, 10, and 11 is already in the tree.
+      - [x] After the criterion 3 study closes: switch the product's typed structural search (`rankByStructure` callers) to the residual-form canonical corpus, so user claims in residual form can match. Blocked while the Amendment 8 pins are live.
+      Moved to `ACTIVE.md` on 2026-10-01. Dropping the study does not lift the Amendment 8 pins.
       - [x] Tier 8 → 0.48.0 also: C1, probe-searchable frontier gaps. The expression-gap list landed in #219. Rechecked on master `40bf16f`: the library scan and `upt probe scan --json` agree with the measurement in NOTES.md (6 searchable prediction-residual gaps, one per applied case; `--all` adds 232 Product A wrappers, 216 relation-link and 16 regime-transition, none searchable). The default-scan comment that still called that list empty was the leftover. Design: `docs/design/tier-8-probe-searchable-gaps.md`. The 0.48.0 release waits on Mothership approval of that note.
         Done: the approved note is the scan contract. Expression gaps stay `searchable: true` with empty observations. The record, the default scan, `show`, and help say there is no named baseline and no dataset, so the listing is not a detected prediction residual. The guard compares `fg-expr-*` ids with `APPLIED_CASES` exactly. `problemFromResidualGap` names `upt discover`. The release stays Mothership's.
-      - [ ] Tier 10 → 0.49.0: C3, cross-family `upt path`, with bound composition across families. Design: `docs/design/tier-10-cross-family-path.md`. Daniel approved the §11 defaults on 2026-09-29; those rules are the design note's §11. M1–M4 are in the tree. Labels: `crossFamily`, `modelFamilies`, and `fromModelFamily` / `toModelFamily` on each JSON step (`family` stays the filing family). The `crosses families:` line replaces the sentence that composition rules are the same as within one family. M2: a matching norm name across families is not a transport; only a witnessed `NormTransport` carries a bound and its factor is applied; otherwise the reason is `cross-family-unmapped`. M3: each step's regime is conjoined as true/false/unknown, and a horizon is restated only through a declared time map. M4: help text, JSON, and the section 9 controls, including command-level exit codes. No sigma. `--at` stays flat. `ab-stokes-einstein` stays a named join. The composition table is unchanged. The version bump and the release stay Mothership's.
+      - [x] Tier 10 → 0.49.0: C3, cross-family `upt path`, with bound composition across families. Design: `docs/design/tier-10-cross-family-path.md`. Daniel approved the §11 defaults on 2026-09-29; those rules are the design note's §11. M1–M4 are in the tree. Labels: `crossFamily`, `modelFamilies`, and `fromModelFamily` / `toModelFamily` on each JSON step (`family` stays the filing family). The `crosses families:` line replaces the sentence that composition rules are the same as within one family. M2: a matching norm name across families is not a transport; only a witnessed `NormTransport` carries a bound and its factor is applied; otherwise the reason is `cross-family-unmapped`. M3: each step's regime is conjoined as true/false/unknown, and a horizon is restated only through a declared time map. M4: help text, JSON, and the section 9 controls, including command-level exit codes. No sigma. `--at` stays flat. `ab-stokes-einstein` stays a named join. The composition table is unchanged. The version bump and the release stay Mothership's.
       - [x] Tier 11 → 0.50.0: ROADMAP §8 hybrid retrieval: optional out-of-process embedding backend (qwen3-embedding:4b via Ollama), zero hard deps, fallback to atlas search, deterministic tests with a stub embedder plus the frozen study vectors; the live GPU evaluation waits for LLMBench's reservation to end. Design: `docs/design/tier-11-hybrid-retrieval.md`.
         Done: `upt retrieve` defaults to `rankByStructure` and does not call out. `--embed` uses a local Ollama model. A proposal is not acceptance. A closed port, a missing model, a bad reply, and a call that does not finish each fall back to the atlas search, name the reason, and exit 0. Tests use a stub embedder and the frozen vector file. They do not start Ollama and they do not recompute the study score. The live GPU run stays outside this gate. The release stays Mothership's.
 
@@ -841,7 +843,7 @@ warning-silencing, not debug logging).
       - [x] Found by the living-docs review: the header comment of `bench/be37-eikonal.bench.ts` (lines 10–14) still describes the BE-37 stub that `src/` replaced with a GL4 integration.
       - [x] Found by the COMPONENTS.md audit, source comments that contradict the code: `ast-types.ts:139` (`RicciTensorNode` "first two slots are contracted", but `ricci()` computes R^λ_{μλν}); `einstein-equation.ts:136` example uses kind `'stress-energy-tensor'` (real kind `'stress-energy'`); `curvature-composite.ts:31` says Bianchi is "rank-5 lower" (its registry says `'rank-3-lower'`); `klein-gordon.ts:102` imports a subpath `package.json` does not export; `BridgeEquationEntry.id` documented as "11-50".
 
-- [x] **Atlas Sprint 5 — the invalid-bridge benchmark (CODE COMPLETE; κ criterion open).** Promoted in `ACTIVE.md`
+- [x] **Atlas Sprint 5 — the invalid-bridge benchmark (CODE COMPLETE; closed 2026-10-01).** The owner dropped the human study. The harness stays. The line is in `ACTIVE.md`. Promoted in `ACTIVE.md`
       2026-09-22; design note `docs/planning/Atlas-Phase-5-Design.md`. **S5.1** — schema, loader,
       leakage checks (renamed variants keyed by dimension; held-out family corrected to FLUID STATICS).
       **S5.2** — atlas condition runner (accept only when every instrument ran and cleared).
@@ -850,9 +852,9 @@ warning-silencing, not debug logging).
       **S5.5** — pre-registration REGISTERED (thresholds + held-out family frozen; empty-set hash bound by test).
       - [x] Check `pairedDifferenceInterval` (Newcombe method 10) against a PUBLISHED worked example;
         today it is pinned by properties only.
-      - [x] **Frozen item set needs INDEPENDENT human authors and two named κ raters.** No agent may
+      - [x] **Frozen item set needs INDEPENDENT human authors and two named κ raters.** ~~No agent may
         author a frozen item; until authors exist, Phase 5's "κ reported" exit criterion cannot be met
-        by code. Route to the user via Mothership.
+        by code. Route to the user via Mothership.~~ Retracted 2026-10-01: the owner dropped that study. The harness stays. The independence wall is not a blocker.
       - [x] Model-authored frozen set (owner 2026-09-22: "use a fable model"): isolated atlas-blind author, label-blind encoder.
       - [x] Two independent model raters (separate isolated instances) and Cohen's kappa, reported as MODEL agreement.
       - [x] Freeze the set; the empty-set hash test must go RED before the note is amended.
@@ -903,19 +905,20 @@ warning-silencing, not debug logging).
       never the list.
       - Closed by pre-registration Amendment 10 (2026-09-24): the formalRef exit criterion is deferred by the owner, at 1 of 5. Met later at 6 reviewed PhysJS formalRefs; the deferral still means it does not block DONE.
 
-- [x] **Atlas Phase 0 — two exit criteria OPEN; the code is done.** Shipped 2026-09-20 on
+- [x] **Atlas Phase 0 — closed 2026-10-01; the code was already done.** The owner removed independent physicist review and per-bridge curation cost as exit criteria. The line is in `ACTIVE.md`. ~~two exit criteria OPEN~~ Shipped 2026-09-20 on
       `master`: `src/atlas/` (nine models, five typed bridges, one rejection, fifteen witnesses),
       126 atlas tests inside 384 files / 3,959 tests exit 0, deterministic JSON under
-      `data/atlas/`, nothing on `src/index.ts`. **What is NOT done, and neither is code:**
+      `data/atlas/`, nothing on `src/index.ts`. ~~**What is NOT done, and neither is code:**
       (a) **independent physicist review** — now item 0 of `CONTRIBUTING.md`'s physics-review
       list, and it needs a person who is not the author; (b) **curation cost was measured per
       AGENT, not per bridge** — `ROADMAP.md` §L0.2 wants per-relation-type hours to scope
       Phases 4 and 5, and the pilot dispatched work per agent, so those rows were never
-      instrumented and `docs/planning/Atlas-Phase-0-Curation-Cost.md` declines to estimate them.
+      instrumented and `docs/planning/Atlas-Phase-0-Curation-Cost.md` declines to estimate them.~~
+      Retracted 2026-10-01: those two items are not exit criteria.
       The supported finding is that relation type did NOT drive cost here — specification
       quality did; both costly defects were in the plan, not in a bridge.
-      **Sprint 1 is deliberately not promoted in `ACTIVE.md`** until someone decides whether the
-      per-agent figure is good enough or Sprint 1 re-measures per bridge.
+      ~~**Sprint 1 is deliberately not promoted in `ACTIVE.md`** until someone decides whether the
+      per-agent figure is good enough or Sprint 1 re-measures per bridge.~~ Retracted 2026-10-01: Sprint 1 was promoted and is closed. The two non-code criteria are not gates.
       **Also fixed 2026-09-20:** `master` had been CI-red for nine commits on `docs-fresh`. Root
       cause was NOT in this repo — local `node_modules` carried js-yaml 5.2.3 while `bun.lock`
       resolves 5.4.2, and the two quote `": "`-bearing strings differently, so the committed
@@ -2029,9 +2032,10 @@ warning-silencing, not debug logging).
       bridgeGradientASTById('BE-26',…) now differentiates exactly w.r.t. m, V−E, x₁,
       x₂ (physical signs verified; f(T,pH,EM) stays a stub). **Adam + Eve both GREEN**
       (Eve back on o3 after the reload). Round-trip [frequency] preserved. Published.
-- [ ] **Frontier (research-level):** ensemble averages (BE-29 `⟨…⟩`) and
+- [x] **Frontier (research-level):** ensemble averages (BE-29 `⟨…⟩`) and
       interpolation-function stubs (BE-26 `f()`, BE-38 `ν(z)`) remain non-closed-form;
       `bridgeGradientNumerical` (FD) serves them. No clean lever — large/open scope.
+      Moved to `ACTIVE.md` on 2026-10-01.
 - [x] **v0.11 headline: full 44-edge catalog→graph migration** + the
       per-edge quantity-NAMESPACING design (the aliasing finding in the
       Phase-D report is the forcing function), + O-4 flat migration,
@@ -2055,8 +2059,8 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
       (`npm publish --ignore-scripts --access public`); CI green (the workflow
       had in fact already run for PRs #63/#64 — the "never executed" note was
       stale). Strict `tsc -p tsconfig.tests.json` gate passes.
-- [ ] Zenodo DOI for `docs/research/v0.10.0-Composition-Research-Note.md`
-      + actually send it to a physicist.
+- [x] Zenodo DOI for `docs/research/v0.10.0-Composition-Research-Note.md`.
+      Moved to `ACTIVE.md` on 2026-10-01 as an owner-only deposit. Sending it to a physicist was a human-reviewer gate and is removed.
 
 ### Code (next sessions, roughly priority-ordered)
 
@@ -2413,7 +2417,7 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
       marked PROPOSED/UNADJUDICATED with an adjudication checklist; NOT in
       QUANTITY_IDENTIFICATIONS. Spec README + spec CHANGELOG updated.
       Pending: physicist adjudication before any promotion.
-- [ ] C2 (Einstein-Cartan Newtonian limit — needs weak-field-limit
+- [x] C2 (Einstein-Cartan Newtonian limit — needs weak-field-limit
       machinery) + C3 (Higgs→Λ residue) calibration targets; P-3
       pre-registration required. **(2026-06-16 disposition: NOT engineering —
       physics-blocked.** C2 needs weak-field-limit machinery that does not exist
@@ -2421,7 +2425,7 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
       none of the quantities a Newtonian limit relates. C3 has no closed-form
       relation or literature anchor in the repo (the edges share no quantity; the
       Λ "residue" is the famous unsolved problem). Implementing either = fabricating
-      physics. **Stays on the human-physicist surface.**)
+      physics. **Not a live task (2026-10-01).** The human-physicist surface is not a gate. Recorded in `ACTIVE.md`. Implementing either would fabricate physics.
 - [x] ✅ Second data confrontation — EXECUTED 2026-06-11: BE-23 vs
       Legros et al. 2019 Nat. Phys. 15:142 Planckian-dissipation claim
       (confrontBE23 + uncertainty; HONEST AGGREGATE encoding — network
@@ -2468,22 +2472,24 @@ BE-53/54" and "CLAUDE.md 42-bridge tally" are both already fixed.)
 - [x] **`unused-analysis.md` 19-export cull — STALE, nothing to do (verified 2026-08-29).**
   The regenerated report now reads **0 potentially unused files, 0 potentially unused exports**.
   The 19 no longer exist; the entry was carrying phantom work.
-- [ ] Remaining from that line: regime built-ins taxonomy, still deferred
+- [x] Remaining from that line: regime built-ins taxonomy, still deferred
       in `src/core/regime-registry.ts` and the note in `src/index.ts`.
       `LabeledTensor.mergeAxes` / `splitAxis` shipped; that half of the line
-      was stale.
+      was stale. Moved to `ACTIVE.md` on 2026-10-01 as an owner decision. The mechanism is shipped. Choosing the built-ins is not a code task.
 
 ### Human-physicist (standing review surface — CONTRIBUTING.md)
 
-- [ ] Contested adjudications: BE-44 (soft hair), BE-46 (multiverse
+Moved to `ACTIVE.md` on 2026-10-01. These judgments are not gates, and an agent does not invent the verdict.
+
+- [x] Contested adjudications: BE-44 (soft hair), BE-46 (multiverse
       measure), BE-50 (Wheeler-Feynman) — both readings in
       `docs/architecture/v0.8.0-catalog-adjudication.md`.
-- [ ] Novel-candidate verdicts: 2 candidates in
+- [x] Novel-candidate verdicts: 2 candidates in
       `docs/research/v0.10.0-novel-candidates.md` (review protocol in
       the file; `be-42-via-rs>>be-12` is the clean one).
-- [ ] `QUANTITY_IDENTIFICATIONS` review (currently the T_H ≡ T
+- [x] `QUANTITY_IDENTIFICATIONS` review (currently the T_H ≡ T
       judgment + each future migration naming).
-- [ ] BE-23 encoding check vs Hartnoll 2015; standing
+- [x] BE-23 encoding check vs Hartnoll 2015; standing
       JSON-catalog/dimensional-signature audits; negative-catalog
       rebuttals (`src/bridges/rejected.ts`).
 
@@ -2709,7 +2715,7 @@ to keep the queue focused on still-open work.)
 
 ### From v0.6.0 doc-integrity review (2026-05-20)
 - [x] ✅ **C-9 dep-graph generator bug** — FIXED 2026-05-20. The `create-dependency-graph` tool was vendored into `tools/create-dependency-graph/` (from the `memoryjs` sister repo); the comment-as-symbol leak (source-comment text in multi-line `export {…} from` blocks bleeding into re-export symbol rows) was fixed in-tree via `stripBraceBlockComments`/`splitBraceSymbols`. `DEPENDENCY_GRAPH.md` regenerated clean — the stale "C-9 unfixed" banner is gone. Run `npm run docs:deps` to regenerate.
-- [ ] **BRIDGE-PHYSICS-AUDIT.md per-bridge follow-ups** — the 42-bridge Adam+Eve physics audit flagged ~19 contested framings + several questionable `dimensional_signature` tags. **v0.7 follow-up FULL DISPOSITION (2026-05-23 + 2026-05-24)**:
+- [x] **BRIDGE-PHYSICS-AUDIT.md per-bridge follow-ups** — the 42-bridge Adam+Eve physics audit flagged ~19 contested framings + several questionable `dimensional_signature` tags. The code follow-ups below had already landed. The still-deferred judgments moved to `ACTIVE.md` on 2026-10-01 and are not gates. **v0.7 follow-up FULL DISPOSITION (2026-05-23 + 2026-05-24)**:
       - ✅ Audit §1 `encoded_form` field added to BridgeEquationEntry + applied to BE-13/47/48 (commit `3ad5404`).
       - ✅ Audit §3 unknown↔unknown bridge naming applied (commit `e9e870c`): 17 renamed + 9 NOT-A-BRIDGE classified per the user-approved proposals doc.
       - ✅ Audit §5 status recalibration applied (commit `9d2c20c`): 1 status flip (BE-14 demoted) + 3 audit-considered notes footnotes (BE-16/29/40) + 1 deferral (BE-34 coupled to Boltzmann dispute).
