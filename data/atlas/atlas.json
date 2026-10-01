@@ -607,6 +607,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/OscillatorDictionary.lean",
             "covers": "the oscillator dictionary — covers its statement only"
           },
           "normTransports": [
@@ -732,6 +734,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/OscillatorDictionary.lean",
             "covers": "the oscillator dictionary — covers its statement only"
           }
         },
@@ -833,6 +837,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/Pendulum.lean",
             "covers": "the transformation, not bound.delta — covers its statement only"
           }
         },
@@ -1955,6 +1961,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/TelegraphDiffusion.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2048,6 +2056,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/TelegraphWave.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2559,6 +2569,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/WaveDalembert.lean",
             "covers": "the missing direction of d'Alembert's formula — covers its statement only"
           }
         },
@@ -2748,6 +2760,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/KleinGordonWave.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2855,6 +2869,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/KgSchrodinger.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         },
@@ -2919,6 +2935,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/KgOscillator.lean",
             "covers": "the restriction, in Physlib's own terms — covers its statement only"
           }
         },
@@ -3014,6 +3032,8 @@
               "Quot.sound"
             ],
             "fidelity": "sanity-lemmas",
+            "kind": "bridge",
+            "url": "https://github.com/danielsimonjr/PhysJS/blob/57a9ecbc851952d539882400a7176926d2990d34/PhysJS/StiffString.lean",
             "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
           }
         }
