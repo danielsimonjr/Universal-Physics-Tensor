@@ -10,3 +10,4 @@ import PhysJS.WaveDalembert
 import PhysJS.Eddington
 import PhysJS.YangMills
 import PhysJS.JohnsonNyquist
+import PhysJS.Mond
