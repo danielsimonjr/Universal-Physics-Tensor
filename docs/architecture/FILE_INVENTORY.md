@@ -21,30 +21,31 @@ construction. Both are correct; each states its scope.
 
 | Zone | Files | What lives here |
 |---|---|---|
-| `tests` | 578 | The vitest suite |
+| `tests` | 579 | The vitest suite |
 | `src` | 403 | The library, the CLI, and the physics catalog |
 | `benchmarks` | 15 | `bench/*.bench.ts` plus their fixture, run by `npm run bench` |
-| `tools` | 23 | Repository tooling under `tools/` and `scripts/` |
+| `tools` | 24 | Repository tooling under `tools/` and `scripts/` |
 | `examples` | 1 | The smoke entry |
+| `docs` | 1 | A TypeScript file under `docs/` |
 | `config` | 1 | A `*.config.*` file |
-| **Total** | **1021** | |
+| **Total** | **1024** | |
 
-**Tests outnumber source files: 578 against 403.** The ratio fits a repository whose claims are
+**Tests outnumber source files: 579 against 403.** The ratio fits a repository whose claims are
 physical: a wrong number is a wrong prediction, not a cosmetic defect.
 
 ## By disposition
 
 | Disposition | Files | Meaning |
 |---|---|---|
-| `test` | 578 | In the test zone |
+| `test` | 579 | In the test zone |
 | `reachable` | 383 | Reached from an entry root |
 | `bench` | 15 | A benchmark; nothing imports it, `npm run bench` runs it |
 | `test-only` | 10 | Reached only from a test |
 | `orphan` | 5 | Reached from nothing the tool can follow |
-| `tool` | 23 | Meta-tooling, excluded from reachability |
+| `tool` | 24 | Meta-tooling, excluded from reachability |
 | `build-entry` | 5 | A declared entry root |
 | `config` | 1 | Configuration |
-| `example` | 1 | An example |
+| `example` | 2 | An example |
 
 ## The five orphans, and why none is dead code
 
@@ -74,7 +75,7 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1021 | dependency-graph.json |
+| totalSourceFiles | 1024 | dependency-graph.json |
 | orphanedFiles | 5 | dependency-graph.json |
 | reachableFiles | 388 | dependency-graph.json |
 | testOnlyFiles | 10 | dependency-graph.json |

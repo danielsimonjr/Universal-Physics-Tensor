@@ -523,6 +523,7 @@ export const GR_SPINE_CONFRONTATION_POINTS: Readonly<
 export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 {
   id: 11,
+  formalRef: physjsFormalRef('be-11'),
   name: `Decoherence Master Equation`,
   category: `A`,
   category_name: `Quantum-Classical Bridges`,
@@ -730,6 +731,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 16,
+  formalRef: physjsFormalRef('be-16'),
   name: `Information-Thermodynamics Bridge (Landauer's principle)`,
   category: `C`,
   category_name: `Emergence and Complexity`,
@@ -879,6 +881,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 19,
+  formalRef: physjsFormalRef('be-19'),
   name: `Quantum Bounce Equation`,
   category: `E`,
   category_name: `Cosmological-Quantum Bridges`,
@@ -1133,6 +1136,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 24,
+  formalRef: physjsFormalRef('be-24'),
   name: `Quantum Coherence in Photosynthesis Efficiency (Förster resonance energy transfer)`,
   category: `G`,
   category_name: `Quantum Biology Bridges`,
@@ -1340,6 +1344,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 29,
+  formalRef: physjsFormalRef('be-29'),
   name: `Jarzynski free-energy equality (canonical 1997 form)`,
   category: `H`,
   category_name: `Non-Equilibrium Statistical Mechanics`,
@@ -1884,6 +1889,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 42,
+  formalRef: physjsFormalRef('be-42'),
   name: `Hawking temperature (canonical 1975 derivation)`,
   category: `M`,
   category_name: `Information Paradox Resolutions`,

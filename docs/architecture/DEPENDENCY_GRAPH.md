@@ -3445,8 +3445,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, EXIT_CHECK_FAILED` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
-| `../../numerical/formula.js` | `eulerConstantNote` | Import |
-| `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
+| `../euler-guard.js` | `withParser` | Import |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
@@ -3484,8 +3483,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
-| `../../numerical/formula.js` | `eulerConstantNote` | Import |
-| `../euler-guard.js` | `unboundEulerRefusal, withParser` | Import |
+| `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
 | `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/units.js` | `UnitError` | Import |
@@ -3625,8 +3623,6 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `SourceName` | Import (type-only) |
 | `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
-| `../../numerical/formula.js` | `eulerConstantNote` | Import |
-| `../euler-guard.js` | `unboundEulerRefusal` | Import |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 
@@ -3837,15 +3833,10 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/cli/euler-guard.ts` - Refuse a bare `e` that the MathTS parser would evaluate as Euler's number.
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../numerical/formula.js` | `eulerConstantNote` | Import |
+### `src/cli/euler-guard.ts` - Name the active formula parser on an error a script can read.
 
 **Exports:**
-- Functions: `unboundEulerRefusal`, `withParser`
+- Functions: `withParser`
 
 ---
 
@@ -4254,6 +4245,7 @@ The codebase is organized into the following modules:
 | `./formula-names.js` | `formulaNameDimensions` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
+| `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
 | `../numerical/formula.js` | `CompiledFormula` | Import (type-only) |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -5689,8 +5681,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `DIMENSIONLESS, VELOCITY, ACTION` | Import |
-| `../core/constants.js` | `C_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
+| `../dimensional/types.js` | `ACTION, CHARGE, DIMENSIONLESS, VELOCITY` | Import |
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
 
 **Exports:**
 - Interfaces: `ConstantProvenance`
@@ -5734,6 +5726,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
+| `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
 | `./symbolic-constants.js` | `CONSTANTS` | Import |
 | `./formula-names.js` | `formulaNameDimensions` | Import |
 | `./natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
@@ -6974,7 +6967,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, ENERGY` | Import |
 | `../dimensional/algebra.js` | `equals, format` | Import |
 | `../dimensional/validator.js` | `ExprNode, TranscendentalFn` | Import (type-only) |
 | `../dimensional/validator.js` | `validate` | Import |
@@ -6985,7 +6978,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `FormulaDimensionError`
 - Interfaces: `ParsedPhysics`, `FormulaDimensionChecker`
-- Functions: `builtinFormulaDimensionChecker`, `loadFormulaDimensionChecker`
+- Functions: `formulaSymbolDimension`, `builtinFormulaDimensionChecker`, `loadFormulaDimensionChecker`
 
 ---
 
@@ -6996,6 +6989,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./formula.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
 | `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError, unknownFunctionMessage` | Import |
+| `../core/constants.js` | `E_SI` | Import |
 
 **Exports:**
 - Functions: `loadMathtsFormulaParser`
@@ -7021,10 +7015,15 @@ The codebase is organized into the following modules:
 
 ### `src/numerical/formula.ts` - Self-contained scalar-formula parser/evaluator (Path B).
 
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `E_SI` | Import |
+
 **Exports:**
 - Classes: `FormulaError`
 - Interfaces: `CompiledFormula`, `FormulaParser`
-- Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `eulerConstantNote`, `parseFormula`
+- Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `parseFormula`
 - Constants: `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
 
 ---
@@ -7613,12 +7612,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 401 |
 | Total Modules | 12 |
-| Total Lines of Code | 88749 |
-| Total Exports | 2904 |
+| Total Lines of Code | 88791 |
+| Total Exports | 2903 |
 | Total Re-exports | 1376 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
-| Total Functions | 750 |
+| Total Functions | 749 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 541 |

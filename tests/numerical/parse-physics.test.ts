@@ -15,8 +15,10 @@ import {
   FormulaDimensionError,
 } from '../../src/numerical/formula-dimension.js';
 import { parsePhysics } from '../../src/numerical/formula-registry.js';
-import { LENGTH, TIME, DIMENSIONLESS } from '../../src/dimensional/types.js';
-import { equals } from '../../src/dimensional/algebra.js';
+import { CHARGE, ENERGY as ENERGY_NAMED, LENGTH, TIME, DIMENSIONLESS } from '../../src/dimensional/types.js';
+import { equals, format, multiply } from '../../src/dimensional/algebra.js';
+import { E_SI } from '../../src/core/constants.js';
+import { defaultFormulaParser } from '../../src/numerical/formula.js';
 
 const ENERGY = { L: 2, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 const b = builtinFormulaDimensionChecker();
@@ -74,6 +76,31 @@ describe('grammar gap — faithful transcendental / abs nodes (Path B)', () => {
     const { expr, dimension } = b.parse('abs(x)', { x: LENGTH });
     expect(expr.kind).toBe('abs');
     expect(equals(dimension, LENGTH)).toBe(true);
+  });
+});
+
+describe('SI names — elementary charge, energy, Euler', () => {
+  const chargeSquared = multiply(CHARGE, CHARGE);
+
+  it("parsePhysics('e^2') is the elementary charge squared", async () => {
+    const parsed = await parsePhysics('e^2', {});
+    expect(equals(parsed.dimension, chargeSquared)).toBe(true);
+    expect(format(parsed.dimension)).not.toBe('[1]');
+    expect(equals(b.parse('e^2', {}).dimension, chargeSquared)).toBe(true);
+  });
+
+  it('exp(1) and euler are Euler\'s number, and a declared dimension still wins', async () => {
+    const exp1 = await parsePhysics('exp(1)', {});
+    expect(equals(exp1.dimension, DIMENSIONLESS)).toBe(true);
+    expect(format(exp1.dimension)).toBe('[1]');
+    expect(defaultFormulaParser.parse('exp(1)').evaluate({})).toBeCloseTo(Math.E, 12);
+    expect(defaultFormulaParser.parse('euler').evaluate({})).toBeCloseTo(Math.E, 12);
+    expect(defaultFormulaParser.parse('e').evaluate({})).toBeCloseTo(E_SI, 15);
+    expect(defaultFormulaParser.parse('e^2').evaluate({})).toBeCloseTo(E_SI * E_SI, 30);
+    const named = await parsePhysics('E', {});
+    expect(equals(named.dimension, ENERGY_NAMED)).toBe(true);
+    expect(format(named.dimension)).toBe('[energy]');
+    expect(equals(b.parse('e', { e: DIMENSIONLESS }).dimension, DIMENSIONLESS)).toBe(true);
   });
 });
 

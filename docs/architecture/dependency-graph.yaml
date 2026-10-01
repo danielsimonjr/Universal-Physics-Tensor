@@ -3,7 +3,7 @@ metadata:
   version: 0.47.1
   totalFiles: 401
   totalModules: 12
-  totalExports: 2904
+  totalExports: 2903
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7666,12 +7666,8 @@ modules:
         - file: ../version.js
           imports:
             - formulaParserLabel
-        - file: ../../numerical/formula.js
-          imports:
-            - eulerConstantNote
         - file: ../euler-guard.js
           imports:
-            - unboundEulerRefusal
             - withParser
         - file: ../conventions.js
           imports:
@@ -7751,12 +7747,8 @@ modules:
         - file: ../version.js
           imports:
             - formulaParserLabel
-        - file: ../../numerical/formula.js
-          imports:
-            - eulerConstantNote
         - file: ../euler-guard.js
           imports:
-            - unboundEulerRefusal
             - withParser
         - file: ../eval-numbers.js
           imports:
@@ -8069,12 +8061,6 @@ modules:
           imports:
             - CanonicalComparison
           typeOnly: true
-        - file: ../../numerical/formula.js
-          imports:
-            - eulerConstantNote
-        - file: ../euler-guard.js
-          imports:
-            - unboundEulerRefusal
         - file: ../conventions.js
           imports:
             - canonicalCheckFailed
@@ -8474,18 +8460,13 @@ modules:
       constants:
         - EXIT_CHECK_FAILED
     src/cli/euler-guard.ts:
-      description: Refuse a bare `e` that the MathTS parser would evaluate as Euler's number.
+      description: Name the active formula parser on an error a script can read.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies:
-        - file: ../numerical/formula.js
-          imports:
-            - eulerConstantNote
+      internalDependencies: []
       exports:
-        - unboundEulerRefusal
         - withParser
       functions:
-        - unboundEulerRefusal
         - withParser
     src/cli/eval-numbers.ts:
       description: "Numbers `upt eval` understands: a bare numeral, a numeral with a unit, and"
@@ -9795,6 +9776,9 @@ modules:
           imports:
             - getFormulaParser
             - parsePhysics
+        - file: ../numerical/formula-dimension.js
+          imports:
+            - formulaSymbolDimension
         - file: ../numerical/formula.js
           imports:
             - CompiledFormula
@@ -13933,12 +13917,14 @@ modules:
           typeOnly: true
         - file: ../dimensional/types.js
           imports:
+            - ACTION
+            - CHARGE
             - DIMENSIONLESS
             - VELOCITY
-            - ACTION
         - file: ../core/constants.js
           imports:
             - C_SI
+            - E_SI
             - G_SI
             - GM_SUN_SI
             - HBAR_SI
@@ -14010,6 +13996,9 @@ modules:
           imports:
             - getFormulaParser
             - parsePhysics
+        - file: ../numerical/formula-dimension.js
+          imports:
+            - formulaSymbolDimension
         - file: ./symbolic-constants.js
           imports:
             - CONSTANTS
@@ -18232,7 +18221,9 @@ modules:
           typeOnly: true
         - file: ../dimensional/types.js
           imports:
+            - CHARGE
             - DIMENSIONLESS
+            - ENERGY
         - file: ../dimensional/algebra.js
           imports:
             - equals
@@ -18256,6 +18247,7 @@ modules:
           imports:
             - parseFormulaToAst
       exports:
+        - formulaSymbolDimension
         - builtinFormulaDimensionChecker
         - loadFormulaDimensionChecker
         - FormulaDimensionError
@@ -18265,6 +18257,7 @@ modules:
         - ParsedPhysics
         - FormulaDimensionChecker
       functions:
+        - formulaSymbolDimension
         - builtinFormulaDimensionChecker
         - loadFormulaDimensionChecker
     src/numerical/formula-mathts.ts:
@@ -18283,6 +18276,9 @@ modules:
             - callBuiltinFunction
             - FormulaError
             - unknownFunctionMessage
+        - file: ../core/constants.js
+          imports:
+            - E_SI
       exports:
         - loadMathtsFormulaParser
       functions:
@@ -18329,7 +18325,10 @@ modules:
       description: Self-contained scalar-formula parser/evaluator (Path B).
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - E_SI
       exports:
         - BUILTIN_FUNCTION_NAMES
         - FUNCTION_EQUIVALENTS
@@ -18338,7 +18337,6 @@ modules:
         - parseFormulaToAst
         - unknownFunctionMessage
         - callBuiltinFunction
-        - eulerConstantNote
         - parseFormula
         - FormulaError
       classes:
@@ -18349,7 +18347,6 @@ modules:
       functions:
         - unknownFunctionMessage
         - callBuiltinFunction
-        - eulerConstantNote
         - parseFormula
       constants:
         - BUILTIN_FUNCTION_NAMES
@@ -19599,11 +19596,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 401
   totalModules: 12
-  totalLinesOfCode: 88749
-  totalExports: 2904
+  totalLinesOfCode: 88791
+  totalExports: 2903
   totalClasses: 60
   totalInterfaces: 462
-  totalFunctions: 750
+  totalFunctions: 749
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 717

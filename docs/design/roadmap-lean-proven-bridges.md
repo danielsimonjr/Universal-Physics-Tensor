@@ -250,9 +250,11 @@ the exponent `−dν / (zν)` with the `1` omitted fails the identity. The
 factor `exp(−m c² / k_B T_reh)` is not in the theorem. The module's
 missing `1/a^d` prefactor is not repaired here.
 
-#### Manifest-only properties
+#### Properties
 
-Not a UPT `formalRef` until the owner rules on property-level references.
+A catalog `formalRef` of this kind follows
+[`docs/planning/Catalog-FormalRef-Design-Note.md`](../planning/Catalog-FormalRef-Design-Note.md).
+The covers word is `property`.
 
 **BE-16, the `ln 2` only.** Property. Size S. Physlib's two-state
 canonical ensemble. The intended lemma is `twoState_entropy_eq`; this
@@ -295,13 +297,15 @@ H and ρ Hermitian  →  lindblad H L γ ρ Hermitian
 Negative control: dropping the anticommutator terms makes the trace
 nonzero. Born–Markov coarse-graining is not this entry.
 
-#### Uncounted cross-checks
+#### Cross-checks
 
-Manifest only. Each has a negative control. Not a UPT `formalRef`.
+A catalog `formalRef` of this kind follows the catalog design note. The
+covers word is `cross-check`. Each has a negative control. One entry, not
+a second key.
 
 **BE-42, `be-42-via-rs`, BE-57.** Cross-check. Size S. Plain reals. One
-entry, key `be-42`. The covers line names BE-57 and `be-42-via-rs`. Not a
-formalRef, and not a second key.
+entry, key `be-42`. The covers line names BE-57 and `be-42-via-rs`. The
+catalog reference is that one entry, not a second key.
 
 ```
 T_H(M)    = ℏ c³ / (8 π G M k_B)

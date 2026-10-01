@@ -9,10 +9,11 @@
  *
  * The commit is PhysJS `main` `57a9ecbc851952d539882400a7176926d2990d34`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
- * atlas entries. Milestone 2b adds nine catalog entries, keyed `be-<n>`:
- * the six counted rows and the three stretch rows. A nested object
- * (`planeWave`, `oneLoop`, `inversion`, `vacuum`) is recorded and is not a
- * `formalRef`. A `property` or a `cross-check` is not vendored.
+ * atlas entries. Milestone 2b adds fifteen catalog entries, keyed `be-<n>`:
+ * nine counted rows and six labeled rows. A counted covers line begins with
+ * `reduction`, `limit`, or `derivation-step`. A labeled covers line begins
+ * with `property` or `cross-check`. A nested object (`planeWave`, `oneLoop`,
+ * `inversion`, `vacuum`) is recorded and is not a `formalRef`.
  *
  * @module atlas/physjs-ref
  */
@@ -66,11 +67,14 @@ const ENTRY_FIELDS = new Set<string>([
   ...NESTED_FIELDS,
 ]);
 
-/** Counted catalog kinds. The only kinds that may occupy a UPT `formalRef`. */
+/** Counted catalog kinds. Not a property and not a cross-check. */
 const COUNTED_KIND = /^(reduction|limit|derivation-step): /;
 
-/** Kinds the design note keeps out of the vendored manifest. */
-const UNCOUNTED_KIND = /^(property|cross-check): /;
+/**
+ * Labeled catalog kinds. A reader tells them from a counted statement by
+ * this word. They occupy a catalog `formalRef` and are not the counted kind.
+ */
+const LABELED_KIND = /^(property|cross-check): /;
 
 /** One manifest entry, reduced to the fields a `formalRef` is built from. */
 interface PhysjsEntry {
@@ -123,7 +127,7 @@ function planeWave(namespace: string): PhysjsNestedStatement {
 }
 
 /**
- * The nineteen entries, in manifest order. A bridge obtains its reference by key
+ * The twenty-five entries, in manifest order. A bridge obtains its reference by key
  * through {@link physjsFormalRef}; it does not name a theorem of its own.
  * A nested object is recorded and is not that reference.
  */
@@ -307,6 +311,66 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     axioms: PHYSJS_AXIOMS,
   },
   {
+    key: 'be-42',
+    bridgeId: 'be-42',
+    theorem: 'PhysJS.HawkingUnruh.dictionary',
+    covers:
+      'cross-check: T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-24',
+    bridgeId: 'be-24',
+    theorem: 'PhysJS.Fret.dictionary',
+    covers:
+      'cross-check: η = R₀⁶/(R₀⁶+R⁶) = 1/(1+(R/R₀)⁶) = k_FRET/(k_FRET+1/τ_D), and η decreases on (0, ∞). At R = 2 R₀ the exponent 4 is not the exponent 6. Not the dipole–dipole law',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-19',
+    bridgeId: 'be-19',
+    theorem: 'PhysJS.QuantumBounce.dictionary',
+    covers:
+      'cross-check: H²_LQC equals H²_RS at σ = −ρ_c/2, both tend to (8πG/3)ρ + Λ/3 at infinity, and H²_LQC = 0 at ρ = ρ_c and Λ = 0, naming BE-54. σ = +ρ_c/2 is not that polynomial. σ < 0 is not a physical Randall–Sundrum brane',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-16',
+    bridgeId: 'be-16',
+    theorem: 'PhysJS.Landauer.equal_levels',
+    covers:
+      'property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-29',
+    bridgeId: 'be-29',
+    theorem: 'PhysJS.Jarzynski.jensen_work',
+    covers:
+      'property: for a finite probability and β > 0, ∑ p_i W_i ≥ −(1/β) log(∑ p_i exp(−β W_i)). The reversed inequality fails on two unequal work values. Not Jarzynski\'s theorem, and not the Gaussian identity',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-11',
+    bridgeId: 'be-11',
+    theorem: 'PhysJS.Lindblad.preserve',
+    covers:
+      'property: one channel of the displayed GKSL generator has trace zero, and it is Hermitian when H and ρ are. L need not be Hermitian. Dropping the anticommutator makes the trace nonzero. Not Born–Markov coarse-graining',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
     key: 'be-65',
     bridgeId: 'be-65',
     theorem: 'PhysJS.Jeans.mass_eq',
@@ -381,21 +445,15 @@ function sameNested(compiled: PhysjsNestedStatement | undefined, manifest: Physj
 }
 
 /**
- * A `be-` covers line is a counted kind, or it is not a vendored reference.
+ * A `be-` covers line begins with a counted kind or a labeled kind.
  * Atlas covers lines stay as milestone 1 and 2 wrote them.
  */
 function catalogCoversProblems(key: string, covers: string, where: string): string[] {
   if (!key.startsWith('be-')) return [];
-  if (UNCOUNTED_KIND.test(covers)) {
-    const kind = covers.split(':')[0];
-    return [`${where} '${key}' is an uncounted ${kind} and is not a UPT formalRef`];
-  }
-  if (!COUNTED_KIND.test(covers)) {
-    return [
-      `${where} '${key}' covers line does not begin with a counted kind (reduction, limit, or derivation-step)`,
-    ];
-  }
-  return [];
+  if (COUNTED_KIND.test(covers) || LABELED_KIND.test(covers)) return [];
+  return [
+    `${where} '${key}' covers line does not begin with a catalog kind (reduction, limit, derivation-step, property, or cross-check)`,
+  ];
 }
 
 /**
@@ -408,7 +466,8 @@ function catalogCoversProblems(key: string, covers: string, where: string): stri
  * is a problem: the gate does not skip that system. A nested object is kept
  * and compared; naming it as the `formalRef` is a problem. The top-level
  * theorem stays the reference. A catalog entry whose covers line is a
- * `property` or a `cross-check` is a problem: that kind is not vendored.
+ * `property` or a `cross-check` is a labeled reference: it resolves to a
+ * `formalRef`, and it is not a counted kind.
  *
  * @internal
  */
@@ -457,7 +516,6 @@ export function physjsManifestProblems(input: {
     }
     const coversProblems = catalogCoversProblems(entry.key, entry.covers, 'manifest key');
     problems.push(...coversProblems);
-    const uncounted = entry.key.startsWith('be-') && UNCOUNTED_KIND.test(entry.covers);
     for (const field of NESTED_FIELDS) {
       const nested = entry[field];
       if (nested === undefined) continue;
@@ -474,12 +532,6 @@ export function physjsManifestProblems(input: {
     const bridge = byId.get(entry.key);
     if (bridge === undefined) {
       problems.push(`manifest key '${entry.key}' does not resolve to a bridge`);
-      continue;
-    }
-    if (uncounted) {
-      if (bridge.formalRef !== undefined) {
-        problems.push(`bridge '${entry.key}' carries a formalRef for an uncounted kind`);
-      }
       continue;
     }
     const ref = bridge.formalRef;

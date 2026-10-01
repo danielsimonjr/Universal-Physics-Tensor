@@ -83,7 +83,7 @@
           "notes": { "type": "string" },
           "formalRef": {
             "type": "object",
-            "description": "A counted PhysJS reference for one part of the equation. Optional. A property or a cross-check does not occupy it. It does not light formally-proved.",
+            "description": "A PhysJS reference for one part of the equation. Optional. The covers line begins with the kind: reduction, limit, derivation-step, property, or cross-check. A property or a cross-check is not a reduction, a limit, or a derivation-step. It does not light formally-proved.",
             "required": ["system", "statement", "version", "axioms", "fidelity", "covers"],
             "additionalProperties": false,
             "properties": {

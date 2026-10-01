@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 398,
-    "totalTestFiles": 546,
+    "totalTestFiles": 547,
     "testedCount": 388,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -1989,6 +1989,7 @@
     ],
     "src/bridges/equations/be-19-quantum-bounce.ts": [
       "tests/bridges/be-19-encoding.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/dimensional/bridge-check.test.ts"
     ],
     "src/bridges/equations/be-20-vacuum-energy.ts": [
@@ -2007,7 +2008,8 @@
       "tests/bridges/be23-planckian-confrontation.test.ts"
     ],
     "src/bridges/equations/be-24-foerster-fret.ts": [
-      "tests/bridges/be-24-encoding.test.ts"
+      "tests/bridges/be-24-encoding.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-25-iit-phi.ts": [
       "tests/bridges/be-25-iit-encoding.test.ts"
@@ -2079,6 +2081,7 @@
     "src/bridges/equations/be-42-hawking-temperature.ts": [
       "tests/bridges/be-42-encoding.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/diff/bridge-ast-gradient-byid.test.ts",
       "tests/diff/bridge-ast-gradient.test.ts"
     ],
@@ -4821,6 +4824,7 @@
       "tests/atlas/association.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -6128,6 +6132,8 @@
       "tests/numerical/einstein-desitter.test.ts",
       "tests/numerical/einstein-flrw.test.ts",
       "tests/numerical/einstein-vacuum-schwarzschild.test.ts",
+      "tests/numerical/formula-mathts.test.ts",
+      "tests/numerical/formula-parsers-agree.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
       "tests/numerical/geometrized.test.ts",
       "tests/numerical/gl4-integrator.test.ts",
@@ -6137,6 +6143,7 @@
       "tests/numerical/kretschmann-lowering.test.ts",
       "tests/numerical/kretschmann-schwarzschild.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
+      "tests/numerical/parse-physics.test.ts",
       "tests/numerical/schwarzschild-radial-geodesic.test.ts",
       "tests/numerical/spacetime-metrics.test.ts",
       "tests/numerical/weyl-kerr-schild.test.ts",
@@ -7561,7 +7568,8 @@
       "tests/numerical/formula-conformance.builtin.test.ts",
       "tests/numerical/formula-mathts.test.ts",
       "tests/numerical/formula-parsers-agree.test.ts",
-      "tests/numerical/formula.test.ts"
+      "tests/numerical/formula.test.ts",
+      "tests/numerical/parse-physics.test.ts"
     ],
     "src/numerical/geodesic-integrator.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -9654,6 +9662,10 @@
       "src/bridges/be64-eddington-luminosity.ts",
       "src/bridges/be65-jeans-mass.ts",
       "src/core/constants.ts",
+      "src/bridges/equations/be-42-hawking-temperature.ts",
+      "src/composition/edges/calibration.ts",
+      "src/bridges/equations/be-24-foerster-fret.ts",
+      "src/bridges/equations/be-19-quantum-bounce.ts",
       "src/bridges/equations/be-53-yang-mills-beta.ts",
       "src/bridges/equations/be-38-mond.ts",
       "src/bridges/equations/be-13-einstein-trace.ts",
@@ -15113,9 +15125,9 @@
     ],
     "tests/numerical/binding-value.test.ts": [
       "src/core/constants.ts",
+      "src/dimensional/types.ts",
       "src/dimensional/units.ts",
-      "src/numerical/binding-value.ts",
-      "src/dimensional/types.ts"
+      "src/numerical/binding-value.ts"
     ],
     "tests/numerical/christoffel-flat-indexing.test.ts": [
       "src/numerical/christoffel-flat.ts"
@@ -15266,10 +15278,12 @@
       "src/numerical/formula-dimension.ts"
     ],
     "tests/numerical/formula-mathts.test.ts": [
+      "src/core/constants.ts",
       "src/numerical/formula.ts",
       "src/numerical/formula-mathts.ts"
     ],
     "tests/numerical/formula-parsers-agree.test.ts": [
+      "src/core/constants.ts",
       "src/numerical/formula.ts",
       "src/numerical/formula-mathts.ts"
     ],
@@ -15503,7 +15517,9 @@
       "src/numerical/formula-dimension.ts",
       "src/numerical/formula-registry.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/core/constants.ts",
+      "src/numerical/formula.ts"
     ],
     "tests/numerical/pderiv-flatten-consolidation.test.ts": [
       "src/numerical/pderiv.ts"
@@ -15738,6 +15754,7 @@
     "tests/tools/package-deps.test.ts": [],
     "tests/tools/plan-doc-audit.test.ts": [],
     "tests/tools/pre-push-executable.test.ts": [],
+    "tests/tools/publish-version-guard.test.ts": [],
     "tests/tools/pushed-head.test.ts": [],
     "tests/tools/readme-links.test.ts": [],
     "tests/tools/untracked-gate-inputs.test.ts": [],

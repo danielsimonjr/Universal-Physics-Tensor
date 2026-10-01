@@ -105,8 +105,9 @@ stays a bare semver line). A clone's `bun install` or `npm install` installs
 the MathTS packages as devDependencies, so that path uses MathTS. A published
 `npm install universal-physics-tensor` does not install the optional peers and
 uses the builtin parser. The two are not the same language: MathTS accepts
-`factorial`, `erf`, `gamma()`, juxtaposition such as `2pi`, and treats a bare
-`e` as Euler's number; the builtin parser does not. On a machine that has Node
+`factorial`, `erf`, `gamma()`, and juxtaposition such as `2pi`; the builtin
+parser does not. Both read a bare `e` as the elementary charge, `E` as energy,
+and Euler's number only as `exp(1)` or `euler`. On a machine that has Node
 and not Bun, the clone path is `npm install`, `npm run build`, then
 `node bin/upt.mjs <command>`. UPT keeps
 **zero hard dependencies**; the MathTS packages and `@viz-js/viz` are optional peers, which a
@@ -315,7 +316,7 @@ The current machine-checked state is:
 | Canonical reference layer | **109 canonical equations** used as the non-speculative answer-key layer for bridge recovery/linkage |
 | Architecture | Generated dependency graph reports **0 circular dependencies** and a clean unused-analysis report; `npm run docs:deps` is CI freshness-gated |
 | Quality gates | Build, strict source+test TypeScript checks, full Vitest suite, active-plan audit, package-content smoke test, and nightly long-horizon GL4/Shapiro accuracy tests |
-| Formal references | **10** atlas bridges derive `formally-proved` from a reviewed `lean4-physjs` reference. **9** catalog equations carry a counted reference (a reduction, a limit, or a derivation-step) that does not light that tag. Nested statements are not second references. The pin and the split are [`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md) |
+| Formal references | **10** atlas bridges derive `formally-proved` from a reviewed `lean4-physjs` reference. **9** catalog equations carry a counted reference (a reduction, a limit, or a derivation-step). **3** carry a cross-check and **3** carry a property. The covers word is the kind. None of those catalog references lights `formally-proved`. Nested statements are not second references. The pin and the split are [`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md) |
 
 The project is **engineering-complete for its stated goal**: it is a computational
 laboratory and falsification/review instrument, not a claim that physics itself is

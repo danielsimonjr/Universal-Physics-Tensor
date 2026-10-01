@@ -4,6 +4,7 @@
  * clone install fail the same assertions.
  */
 import { describe, expect, it } from 'vitest';
+import { E_SI } from '../../src/core/constants.js';
 import { defaultFormulaParser, FormulaError } from '../../src/numerical/formula.js';
 import { loadMathtsFormulaParser } from '../../src/numerical/formula-mathts.js';
 import type { FormulaParser } from '../../src/numerical/formula.js';
@@ -39,17 +40,28 @@ describe('formula parsers agree on common arithmetic', () => {
   });
 });
 
-describe('formula parsers diverge where the languages differ', () => {
-  it('bare e is Euler under MathTS and a free variable under the builtin parser', async () => {
+describe('formula parsers agree on the elementary charge and on Euler', () => {
+  it('bare e is the elementary charge, and exp(1) and euler are Euler\'s number', async () => {
     const { mathts } = await both();
-    const m = mathts.parse('e');
-    expect(m.variables).not.toContain('e');
-    expect(m.evaluate({})).toBeCloseTo(Math.E, 12);
-    const b = builtin.parse('e');
-    expect(b.variables).toContain('e');
-    expect(() => b.evaluate({})).toThrow(FormulaError);
-    expect(b.evaluate({ e: 1.6e-19 })).toBeCloseTo(1.6e-19, 24);
+    for (const parser of [builtin, mathts]) {
+      const charge = parser.parse('e');
+      expect(charge.variables).not.toContain('e');
+      expect(charge.evaluate({})).toBeCloseTo(E_SI, 15);
+      expect(parser.parse('e^2').evaluate({})).toBeCloseTo(E_SI * E_SI, 30);
+      expect(parser.parse('e').evaluate({ e: 3 })).toBe(3);
+      expect(parser.parse('exp(1)').evaluate({})).toBeCloseTo(Math.E, 12);
+      const euler = parser.parse('euler');
+      expect(euler.variables).not.toContain('euler');
+      expect(euler.evaluate({})).toBeCloseTo(Math.E, 12);
+      expect(parser.parse('m_e').variables).toContain('m_e');
+      expect(parser.parse('e_charge').variables).toContain('e_charge');
+      expect(parser.parse('1.6e-19').evaluate({})).toBeCloseTo(1.6e-19, 24);
+      expect(parser.parse('E').variables).toContain('E');
+    }
   });
+});
+
+describe('formula parsers diverge where the languages differ', () => {
 
   it('factorial, erf, gamma() and juxtaposition 2pi are MathTS-only', async () => {
     const { mathts } = await both();

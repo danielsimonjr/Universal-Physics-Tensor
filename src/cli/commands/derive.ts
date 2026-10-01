@@ -11,8 +11,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { emitJson } from '../output.js';
 import { UsageError, EXIT_CHECK_FAILED } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
-import { eulerConstantNote } from '../../numerical/formula.js';
-import { unboundEulerRefusal, withParser } from '../euler-guard.js';
+import { withParser } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { Dimension } from '../../dimensional/types.js';
 
@@ -20,7 +19,6 @@ const FLAGS: FlagSpec[] = [
   { name: '--formula', valueStyle: 'next' },
   { name: '--debug', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
-  { name: '--allow-euler', valueStyle: 'none' },
 ];
 
 const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
@@ -31,8 +29,8 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         or explicit (L^3.M^-1.T^-2). Parentheses group a factor
         (power/(area*temperature^4)); pressure, density, volume, viscosity,
         resistance and magnetic_field are names; mass/length^3 and M/L^3 work.
-        In --formula, an unbound e under MathTS is refused unless you pass
-        --allow-euler. With --formula, also verify it and
+        In --formula, a bare e is the elementary charge and E is energy.
+        Euler's number is exp(1) or euler. With --formula, also verify it and
         recover the dimensionless prefactor. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
@@ -145,12 +143,6 @@ async function run(ctx: CommandCtx): Promise<number> {
     } catch (e) {
       throw new UsageError(withParser('  formula parse error: ' + (e as Error).message, await api.getFormulaParserKind()));
     }
-    const kind = await api.getFormulaParserKind();
-    const refusal = unboundEulerRefusal(formula, cf.variables, kind, args.flags.has('allow-euler'), false);
-    if (refusal) throw new UsageError(refusal);
-    const euler = eulerConstantNote(formula, cf.variables);
-    if (euler && args.flags.has('allow-euler')) err(euler);
-
     // Dimensions cannot see a prefactor: compare with the canonical equation this
     // formula restates, when the registry holds one (persona finding L2). This
     // needs no unique monomial, so it runs on both branches below. A variable

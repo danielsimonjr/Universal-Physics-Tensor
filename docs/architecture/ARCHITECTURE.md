@@ -65,9 +65,9 @@ Numbers extracted from `docs/architecture/DEPENDENCY_GRAPH.md` Summary Statistic
 
 | Metric | Value |
 |--------|-------|
-| Source files | 401 TypeScript files under `src/` (1021 across the whole repository, including tests and tooling) |
+| Source files | 401 TypeScript files under `src/` (1024 across the whole repository, including tests and tooling) |
 | Modules | 12 (`atlas`, `bridges`, `canonical`, `cases`, `cli`, `composition`, `core`, `diff`, `dimensional`, `entry`, `numerical`, `root`) |
-| Total exports | 2904 (1376 re-exports) |
+| Total exports | 2903 (1376 re-exports) |
 | Bridge catalog entries | 55 (IDs 11–65) |
 | Per-bridge evaluator modules | see `bridge-coverage-audit.md` |
 | Composition-graph edges | 41 `BridgeEdge` constants (9 calibration + 6 catalog-tranche + 26 catalog-full), assembled once as the public `CATALOG_GRAPH` |
@@ -169,7 +169,7 @@ The dimensional module is the heart of UPT's symbolic layer. Its responsibilitie
 
 **Dimension algebra** (`algebra.ts`): Pure functions (`multiply`, `divide`, `power`, `add`, `subtract`, `equals`, `format`) that operate on `Dimension` values. `add` and `subtract` throw `DimensionMismatchError` if operands disagree — this is the mechanism that catches non-homogeneous equations.
 
-**Scalar-formula parser** (`numerical/formula.ts`, `formula-mathts.ts`, `formula-registry.ts`, all INTERNAL): lets the `upt` CLI evaluate user-supplied closed-form scalar equations. `formula.ts` is the dependency-free, safe Path B parser. `formula-mathts.ts` is the MathTS-backed Path A parser (over `@danielsimonjr/mathts-functions`'s assembled mathjs engine, dynamically imported via the `mathts-functions.ambient.d.ts` optional-peer pattern). `formula-registry.ts` selects MathTS when it is installed and smoke-tests clean, else falls back to Path B. Both parsers sit behind the one `FormulaParser` interface, proven interchangeable by a shared conformance suite. The one accepted divergence between the parsers: MathTS recognizes Euler's `e`.
+**Scalar-formula parser** (`numerical/formula.ts`, `formula-mathts.ts`, `formula-registry.ts`, all INTERNAL): lets the `upt` CLI evaluate user-supplied closed-form scalar equations. `formula.ts` is the dependency-free, safe Path B parser. `formula-mathts.ts` is the MathTS-backed Path A parser (over `@danielsimonjr/mathts-functions`'s assembled mathjs engine, dynamically imported via the `mathts-functions.ambient.d.ts` optional-peer pattern). `formula-registry.ts` selects MathTS when it is installed and smoke-tests clean, else falls back to Path B. Both parsers sit behind the one `FormulaParser` interface, proven interchangeable by a shared conformance suite. Both read a bare `e` as the elementary charge and Euler's number as `exp(1)` or `euler`. The accepted divergences are MathTS-only: factorial, `erf`, `gamma()`, and juxtaposition such as `2pi`.
 
 **Buckingham-π enumerator** (`buckingham.ts`): `buckinghamPi` enumerates the dimensionless groups of a variable set (exact rational arithmetic — the null space of the dimension matrix; n − r groups). `dimensionallyDetermines` answers whether a governing set fixes a target UP TO A DIMENSIONLESS CONSTANT, returning the (possibly rational) monomial. The principled primitive for the identifiability classifier's exactly-determined case. The result types carry FORM only — no value or constant field — enforcing the honest boundary between dimensional analysis and numerology. Pins the canonical results (pendulum T = const·√(L/g); r_s = const·GM/c²). `dimension-spec.ts` (INTERNAL) parses human dimension strings (named dims, constants, or explicit `L^3.M^-1.T^-2`) into `Dimension`s, so CLI users can declare a custom equation's dimensions without TypeScript.
 
@@ -391,13 +391,13 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1021 | dependency-graph.json |
-| totalExports | 3694 | dependency-graph.json |
+| totalSourceFiles | 1024 | dependency-graph.json |
+| totalExports | 3695 | dependency-graph.json |
 | runtimeCircularDeps | 0 | dependency-graph.json |
 | typeOnlyCircularDeps | 0 | dependency-graph.json |
 
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 401 files, 2904 exports, 1376 of them re-exports. 1021 and 401 do not
+(`bun run docs:deps`): 401 files, 2903 exports, 1376 of them re-exports. 1024 and 401 do not
 contradict each other; they answer different questions. Every figure states its scope.

@@ -73,7 +73,7 @@ Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs.
 1. Land the theorem in PhysJS. Its `manifest/bridges.json` entry (schema `physjs-bridge-manifest/v1`) names `key`, `bridgeId`, `theorem`, `covers`, `coverage` (`covers its statement only`), `leanProof`, and `axioms`. The axioms are what PhysJS measured with `#print axioms`. This repository does not re-measure them.
 2. Vendor that file to `formal/physjs/manifest.json` at the PhysJS commit being pinned. The file's `commit`, `toolchain`, `mathlib`, and `physlib` are the pin.
 3. Copy the entry into `PHYSJS_ENTRIES` in `src/atlas/physjs-ref.ts`, and set `PHYSJS_COMMIT` to that commit. A bridge obtains its reference with `physjsFormalRef(key)`. The module sets `system: 'lean4-physjs'` and `fidelity: 'sanity-lemmas'`. The bridge does not name a theorem of its own.
-4. Put `formalRef: physjsFormalRef('<key>')` on the atlas bridge, or, for a catalog id `be-<n>`, on `BridgeEquationEntry`. `deriveEvidence` turns a fidelity other than `unreviewed` into `formally-proved` when the reference is passed to it. The tag is not stored on the bridge. A catalog reference is not passed: a proof of one part does not tag the row. Only a covers line that begins with `reduction`, `limit`, or `derivation-step` may be a catalog reference. A nested object is recorded and is not a second reference. A `property` or a `cross-check` is not copied into the vendored manifest.
+4. Put `formalRef: physjsFormalRef('<key>')` on the atlas bridge, or, for a catalog id `be-<n>`, on `BridgeEquationEntry`. `deriveEvidence` turns a fidelity other than `unreviewed` into `formally-proved` when the reference is passed to it. The tag is not stored on the bridge. A catalog reference is not passed: a proof of one part does not tag the row. A catalog covers line begins with `reduction`, `limit`, `derivation-step`, `property`, or `cross-check`. The first three are the counted kind. `property` and `cross-check` are catalog references of their own kind and are not that count. A nested object is recorded and is not a second reference. A cross-check of two ids is one entry; the covers line names the partner, and the partner does not get a second key.
 5. Add the key, theorem, and `covers` line to `EXPECTED` in `tests/atlas/physjs-manifest.test.ts`.
 6. Run `bun run atlas:formal-gate`. With no `lean4-physlib` reference, the gate compares the vendored manifest to the bridges and does not run Lean. It must print `formalRef axiom gate: PASS (lean4-physjs manifest; no lean4-physlib formalRef)`. A wrong commit, theorem, key, axiom list, or coverage phrase fails. A manifest entry with no bridge fails. A `lean4-physjs` reference with no manifest entry fails.
 7. Commit the vendored manifest, `PHYSJS_ENTRIES`, the bridge's `formalRef`, and the test's `EXPECTED` list together.
@@ -102,17 +102,29 @@ Use this section only when a reference has `system: 'lean4-physlib'`. The live r
 
 ## Release (Mothership's; recorded so the order is never re-derived)
 
-1. Bump `package.json`.
+`.github/workflows/publish.yml` publishes `universal-physics-tensor`. It runs on a push of a
+tag matching `v*` (for example `v0.48.0`) and on `workflow_dispatch` of that same tag. It does
+not run from a branch. The three `tools/*/package.json` packages are local utilities and are
+not published.
+
+1. Bump `package.json` to `X.Y.Z`.
 2. `bun run atlas:json` — AFTER the bump: `data/atlas/oscillators.json` embeds `packageVersion`,
    and `tests/atlas/atlas-json.test.ts` fails on a stale artifact.
 3. `bun run docs:deps` — AFTER the bump: `DEPENDENCY_GRAPH.md` embeds the version, and the
    `docs-fresh` job fails on a release commit that regenerated first.
 4. Pre-flight: `bun audit` and `bun outdated`. Resolve HIGH/CRITICAL findings before tagging, and
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
-5. Commit, push `master`, tag `v0.X.Y`, push the tag, verify CI green.
-6. `npm publish --access public` (`TOOLS.md`, Publish).
-7. Verify against the REGISTRY: `npm view <pkg> version --prefer-online`. Plain `npm view` serves
-   a stale cache right after a publish.
+5. Commit, merge to `master`, and wait until CI on that commit is green.
+6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
+   workflow checks out the tag, installs, builds, typechecks, runs the test suite, and fails
+   the job when the tag version (the leading `v` removed) is not `package.json`'s version.
+   It then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish).
+7. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
+   Plain `npm view` serves a stale cache right after a publish.
 
-`NPM_TOKEN` is a Windows user-level environment variable; `.npmrc` interpolates `${NPM_TOKEN}`.
-Rotate at <https://www.npmjs.com/settings/danielsimonjr/tokens>.
+The Actions secret `NPM` must exist (repository Settings → Secrets and variables →
+Actions). The workflow passes it as `NODE_AUTH_TOKEN`. Provenance uses the workflow's
+`id-token: write` permission. Rotate the token at
+<https://www.npmjs.com/settings/danielsimonjr/tokens> and update the secret.
+`workflow_dispatch` publishes only when the selected ref is the `v*` tag; a branch ref fails
+the version guard.

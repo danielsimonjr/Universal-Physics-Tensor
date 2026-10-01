@@ -207,6 +207,60 @@
       "axioms": ["propext", "Classical.choice", "Quot.sound"]
     },
     {
+      "key": "be-42",
+      "bridgeId": "be-42",
+      "theorem": "PhysJS.HawkingUnruh.dictionary",
+      "covers": "cross-check: T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-24",
+      "bridgeId": "be-24",
+      "theorem": "PhysJS.Fret.dictionary",
+      "covers": "cross-check: η = R₀⁶/(R₀⁶+R⁶) = 1/(1+(R/R₀)⁶) = k_FRET/(k_FRET+1/τ_D), and η decreases on (0, ∞). At R = 2 R₀ the exponent 4 is not the exponent 6. Not the dipole–dipole law",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-19",
+      "bridgeId": "be-19",
+      "theorem": "PhysJS.QuantumBounce.dictionary",
+      "covers": "cross-check: H²_LQC equals H²_RS at σ = −ρ_c/2, both tend to (8πG/3)ρ + Λ/3 at infinity, and H²_LQC = 0 at ρ = ρ_c and Λ = 0, naming BE-54. σ = +ρ_c/2 is not that polynomial. σ < 0 is not a physical Randall–Sundrum brane",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-16",
+      "bridgeId": "be-16",
+      "theorem": "PhysJS.Landauer.equal_levels",
+      "covers": "property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-29",
+      "bridgeId": "be-29",
+      "theorem": "PhysJS.Jarzynski.jensen_work",
+      "covers": "property: for a finite probability and β > 0, ∑ p_i W_i ≥ −(1/β) log(∑ p_i exp(−β W_i)). The reversed inequality fails on two unequal work values. Not Jarzynski's theorem, and not the Gaussian identity",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-11",
+      "bridgeId": "be-11",
+      "theorem": "PhysJS.Lindblad.preserve",
+      "covers": "property: one channel of the displayed GKSL generator has trace zero, and it is Hermitian when H and ρ are. L need not be Hermitian. Dropping the anticommutator makes the trace nonzero. Not Born–Markov coarse-graining",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
       "key": "be-65",
       "bridgeId": "be-65",
       "theorem": "PhysJS.Jeans.mass_eq",

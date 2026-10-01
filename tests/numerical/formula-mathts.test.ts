@@ -2,11 +2,12 @@
  * MathTS-backed parser (Path A) — behaviors specific to it, beyond the
  * shared conformance suite. Guarded on the optional peer.
  *
- * Pins the one ACCEPTED divergence from Path B (`e` = Euler's number, a
- * MathTS built-in) and the scalar-only seam guard (a non-number result is
- * rejected rather than leaking MathTS types).
+ * Pins the scalar-only seam guard (a non-number result is rejected rather
+ * than leaking MathTS types). Bare `e` is the elementary charge on this
+ * parser too; Euler's number is `exp(1)` or `euler`.
  */
 import { describe, it, expect } from 'vitest';
+import { E_SI } from '../../src/core/constants.js';
 
 let parser: import('../../src/numerical/formula.js').FormulaParser | null = null;
 try {
@@ -22,9 +23,9 @@ try {
 const d = parser ? describe : describe.skip;
 
 d('formula-mathts (Path A specifics)', () => {
-  it('recognizes Euler `e` as a constant (the accepted divergence from Path B)', () => {
-    // Path B treats `e` as a free variable; MathTS knows it.
+  it('reads bare e as a constant and leaves the other factor free', () => {
     expect([...parser!.parse('e * y').variables]).toEqual(['y']);
+    expect(parser!.parse('e * y').evaluate({ y: 1 })).toBeCloseTo(E_SI, 15);
   });
 
   it('a quantity whose name is a MathTS function stays a free variable; the call stays a function', () => {

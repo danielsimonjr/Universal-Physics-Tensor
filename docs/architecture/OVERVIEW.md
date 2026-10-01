@@ -90,8 +90,8 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1021 | dependency-graph.json |
-| totalExports | 3694 | dependency-graph.json |
+| totalSourceFiles | 1024 | dependency-graph.json |
+| totalExports | 3695 | dependency-graph.json |
 | entryRoots | 5 | dependency-graph.json |
 
 **Lines of code are not a gated claim.** They change on almost every edit, so a gated figure
@@ -102,7 +102,7 @@ change when the STRUCTURE changes.
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 401 files, 2904 exports, 1376 of them re-exports. 1021 and 401 do not
+(`bun run docs:deps`): 401 files, 2903 exports, 1376 of them re-exports. 1024 and 401 do not
 contradict each other; they answer different questions. Every figure states its scope.
 
 > The `src/`-scope figures above are read from `statistics` in the generated

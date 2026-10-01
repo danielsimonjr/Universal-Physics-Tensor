@@ -63,8 +63,8 @@ interface ConstantDef {
 /**
  * The universal constants a canonical `governing` list may name, with SI value
  * AND dimension. Reuses the symbolic-composition `CONSTANTS` registry (single
- * source for ℏ/c/G/k_B/ε₀/σ_sb/b) and adds the `boltzmann` alias, the
- * elementary charge `e`, and the electron mass `m_e` — all universal constants,
+ * source for ℏ/c/G/k_B/ε₀/σ_sb/b and the elementary charge `e`) and adds the
+ * `boltzmann` alias, repeats `e`, and adds the electron mass `m_e` — all universal constants,
  * not observables. A governing entry is BAKED into the evaluator iff its name
  * AND dimension match an entry here; everything else is a physical variable (a
  * graph node). The dimension guard is load-bearing: it stops a future

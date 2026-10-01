@@ -8,16 +8,17 @@
  * Not a *.test.ts file: it exports a function each parser's own *.test.ts
  * wraps (same discipline as engine-conformance.ts).
  *
- * KNOWN, ACCEPTED divergence (deliberately NOT in the shared cases): the
- * MathTS parser recognizes `e` as Euler's number (a built-in constant),
- * while Path B treats `e` as a free variable. Avoid `e` as a variable
- * name; both agree on `pi` and `tau`.
+ * KNOWN, ACCEPTED divergence (deliberately NOT in the shared cases):
+ * factorial, erf, gamma() and juxtaposition such as `2pi` are MathTS-only.
+ * Both parsers read a bare `e` as the elementary charge and `euler` / `exp(1)`
+ * as Euler's number.
  *
  * @module tests/numerical/formula-conformance
  */
 import { describe, it, expect } from 'vitest';
 import type { FormulaParser } from '../../src/numerical/formula.js';
 import { FUNCTION_EQUIVALENTS } from '../../src/numerical/formula.js';
+import { E_SI } from '../../src/core/constants.js';
 
 /** (expr, scope) → expected scalar value — both parsers must agree. */
 const VALUE_CASES: ReadonlyArray<
@@ -30,6 +31,10 @@ const VALUE_CASES: ReadonlyArray<
   ['2 ^ -2', {}, 0.25],
   ['2 ^ 3 ^ 2', {}, 512], // right-assoc power
   ['1.6e-19', {}, 1.6e-19],
+  ['e', {}, E_SI],
+  ['e^2', {}, E_SI * E_SI],
+  ['exp(1)', {}, Math.E],
+  ['euler', {}, Math.E],
   ['sqrt(16)', {}, 4],
   ['log(exp(3))', {}, 3], // log = natural
   // Every function the built-in parser documents must evaluate in both

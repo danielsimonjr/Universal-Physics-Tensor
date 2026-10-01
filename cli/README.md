@@ -114,7 +114,7 @@ pure connectivity questions (see [The `--source` flag](#the---source-flag)).
 
 | Command (aliases) | What it does |
 |---|---|
-| `eval "<formula>" name=value …` (`calc`) | Evaluate **your own** scalar formula (safe — arithmetic only). Knows `pi`/`tau` and `sqrt`/`exp`/`ln`/`sin`/…, plus every registered constant (`G`, `c`, `hbar`, `h`, `k_B`, `ln2`, `epsilon_0`, `sigma_sb`, `b`, `GM_sun`, `Msun_iau`) and the aliases `e_charge`, `m_e`, `eps0`, `mu0`, `mu_0`, `kB`, `M_sun`. A bare `sigma` is not filled in. A value may be a number, a unit (`M=1Msun`, `x=1AU`, `B=1T`) or an expression of constants and units (`v=0.6*c`, `theta=pi/2`), read by the built-in parser. An unbound `e` under MathTS is refused (exit 2) unless `e=<number>` or `--allow-euler`; charge is `e_charge`. `--natural` sets ħ = c = 1; `--geometrized` also sets G = 1. `--show-parser` prints `mathts` or `builtin`; with `--json` and no formula that answer is a JSON envelope. `upt version` stays a bare semver. |
+| `eval "<formula>" name=value …` (`calc`) | Evaluate **your own** scalar formula (safe — arithmetic only). Knows `pi`/`tau` and `sqrt`/`exp`/`ln`/`sin`/…, plus every registered constant (`G`, `c`, `hbar`, `h`, `k_B`, `e`, `ln2`, `epsilon_0`, `sigma_sb`, `b`, `GM_sun`, `Msun_iau`) and the aliases `e_charge`, `euler`, `m_e`, `eps0`, `mu0`, `mu_0`, `kB`, `M_sun`. A bare `e` is the elementary charge. `E` is energy and is not filled in. Euler's number is `exp(1)` or `euler`. A bare `sigma` is not filled in. A value may be a number, a unit (`M=1Msun`, `x=1AU`, `B=1T`) or an expression of constants and units (`v=0.6*c`, `theta=pi/2`), read by the built-in parser. An explicit `e=<number>` replaces the CODATA charge. `--natural` sets ħ = c = 1; `--geometrized` also sets G = 1. `--show-parser` prints `mathts` or `builtin`; with `--json` and no formula that answer is a JSON envelope. `upt version` stays a bare semver. |
 | `derive <target:dim> <var:dim> … [--formula "<expr>"]` (`dim`) | Derive **your own** equation's dimensional form, and (with `--formula`) verify it and recover the dimensionless prefactor. `<dim>` may be a named dimension (`pressure`, `density`, `volume`, `viscosity`, `resistance`, `magnetic_field`), a constant, a grouped product (`power/(area*temperature^4)`, `mass/volume`, `M/L^3`), or explicit bases (`L^3.M^-1.T^-2`). With `--formula` it also compares the formula with the canonical equation of the same target and variables, at fixed points: agrees, differs by a constant factor, differs in form, or the prefactor is NOT checked because the registry holds the law only up to a constant. `upt map --equation` reports the same comparison. |
 
 ### Data confrontation
@@ -550,8 +550,9 @@ another (e.g. `upt derive --source=catalog`) is rejected the same way, since
   `tsc`); the CLI still runs entirely from `dist/`, never from `src/`, so the
   build-first requirement is unchanged.
 - **Windows cold-start.** The test suite (run by `prepublishOnly`) has a 3–5 min
-  cold-start tax on Windows; the CLI itself does not, but publishing uses
-  `npm publish --ignore-scripts` to skip it. The CLI resolves `dist/` paths via
+  cold-start tax on Windows; the CLI itself does not. The release publish is
+  `.github/workflows/publish.yml`, which does not pass `--ignore-scripts`, so
+  `prepublishOnly` still runs. The CLI resolves `dist/` paths via
   `pathToFileURL`, so absolute Windows paths work under Node's ESM loader.
 - **`npm run upt` swallows my flags.** Use the `--` separator:
   `npm run upt -- discover --source=canonical`.

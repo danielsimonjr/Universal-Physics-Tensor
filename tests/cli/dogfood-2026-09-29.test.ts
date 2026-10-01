@@ -30,12 +30,14 @@ async function run(args: string[]) {
 }
 
 describe('applied physicist', () => {
-  it('the Euler note names e_charge, the symbol that actually works', async () => {
-    const r = await run(['eval', '--allow-euler', 'e']);
-    expect(r.stderr).toMatch(/e_charge/);
-    expect(r.stderr).not.toMatch(/\(charge,/);
+  it('bare e is the elementary charge, and the old charge spelling still works', async () => {
+    const r = await run(['eval', 'e']);
+    expect(r.code).toBe(0);
+    expect(Number(r.stdout)).toBeCloseTo(E_SI, 20);
+    expect(r.stderr).not.toMatch(/Euler/);
     expect((await run(['eval', 'charge'])).code).toBe(2);
     expect(Number((await run(['eval', 'e_charge'])).stdout)).toBeCloseTo(E_SI, 20);
+    expect((await run(['eval', '--allow-euler', 'e'])).code).toBe(2);
   });
 
   it('eval accepts epsilon_0, mu_0 and kB, the names the catalog uses', async () => {
