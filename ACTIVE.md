@@ -41,6 +41,7 @@ These are not authorized engineering until the owner rules. Publishing to npm is
 - [ ] Owner decision: which reading of composition phases B through D is true. ROADMAP.md says they are open. The specification index says they were met on 2026-06-11. Part IX says Phase B will ship, and it also marks a Phase B reproduction criterion met on that date. Do not implement either reading.
 - [ ] Owner decision: multi-statement formal-reference promotion. A second Lean statement stays a nested manifest object and is not a second reference. Promoting it, whether as an array or by pointing the reference at the nested plane-wave theorem, is not authorized by the design note.
 - [ ] Owner decision: property-level references. A property stays in the PhysJS manifest and is not a catalog formal reference until the owner rules. That is the ruling scoping section 4.2 already asks for.
+- [ ] Owner decision: whether any row of the unproven-bridge Lean feasibility triage is authorized. The triage is docs/planning/Unproven-Bridges-Lean-Feasibility.md. It does not move milestone 3.
 - [ ] Owner decision, not a code task: which new physics-regime built-ins to add. The registry mechanism is shipped. The closed taxonomy was left as a physicist decision.
 - [ ] Owner only: a Zenodo DOI for the composition research note. Do not send it out for physicist review. That send was a human-reviewer gate and is removed. A deposit is outward-facing and is the owner's.
 
