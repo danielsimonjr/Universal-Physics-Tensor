@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 398,
-    "totalTestFiles": 549,
+    "totalTestFiles": 550,
     "testedCount": 388,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -1125,6 +1125,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1199,6 +1200,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1256,6 +1258,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1329,6 +1332,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1403,6 +1407,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1477,6 +1482,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1551,6 +1557,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1625,6 +1632,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1699,6 +1707,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1774,6 +1783,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1848,6 +1858,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -1987,17 +1998,20 @@
       "tests/bridges/bridge-equations-facade.test.ts"
     ],
     "src/bridges/equations/be-12-coherence-length.ts": [
-      "tests/bridges/be-12-encoding.test.ts"
+      "tests/bridges/be-12-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-13-einstein-trace.ts": [
       "tests/bridges/be-13-encoding.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-14-ryu-takayanagi.ts": [
-      "tests/bridges/be-14-ryu-takayanagi.test.ts"
+      "tests/bridges/be-14-ryu-takayanagi.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-15-emergence.ts": [
       "tests/bridges/be-15-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-grammar-applicability.test.ts"
     ],
     "src/bridges/equations/be-16-landauer.ts": [
@@ -2007,6 +2021,7 @@
     "src/bridges/equations/be-17-einstein-cartan.ts": [
       "tests/bridges/be-17-encoding.test.ts",
       "tests/bridges/be-17-structural.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/dimensional/bridge-check.test.ts"
     ],
     "src/bridges/equations/be-18-higgs-mass.ts": [
@@ -2018,14 +2033,17 @@
       "tests/dimensional/bridge-check.test.ts"
     ],
     "src/bridges/equations/be-20-vacuum-energy.ts": [
-      "tests/bridges/be-20-encoding.test.ts"
+      "tests/bridges/be-20-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-21-kss-bound.ts": [
       "tests/bridges/be-21-encoding.test.ts",
-      "tests/bridges/bridge-equations-facade.test.ts"
+      "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-22-topological-entanglement.ts": [
       "tests/bridges/be-22-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/dimensional/bridge-check.test.ts"
     ],
     "src/bridges/equations/be-23-syk-planckian.ts": [
@@ -2048,10 +2066,12 @@
       "tests/dimensional/bridge-check.test.ts"
     ],
     "src/bridges/equations/be-27-effective-temperature.ts": [
-      "tests/bridges/be-27-encoding.test.ts"
+      "tests/bridges/be-27-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-28-onsager-entropy-production.ts": [
       "tests/bridges/be-28-onsager-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-grammar-applicability.test.ts"
     ],
     "src/bridges/equations/be-29-jarzynski.ts": [
@@ -2064,10 +2084,12 @@
       "tests/bridges/be-31-encoding.test.ts"
     ],
     "src/bridges/equations/be-32-quantum-reference-frame.ts": [
-      "tests/bridges/be-32-encoding.test.ts"
+      "tests/bridges/be-32-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-33-hertz-millis.ts": [
-      "tests/bridges/be-33-encoding.test.ts"
+      "tests/bridges/be-33-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-34-kibble-zurek.ts": [
       "tests/bridges/be-34-encoding.test.ts",
@@ -2076,6 +2098,7 @@
     ],
     "src/bridges/equations/be-35-conformal-bootstrap.ts": [
       "tests/bridges/be-35-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/crossing-residual-removed.test.ts"
     ],
     "src/bridges/equations/be-36-gw-speed-bound.ts": [
@@ -2086,6 +2109,7 @@
       "tests/bridges/be-37-numerical-eikonal.test.ts",
       "tests/bridges/be-37-shapiro-eikonal-structural.test.ts",
       "tests/bridges/be-37-shapiro-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
       "tests/numerical/be37-shapiro-step-sweep.test.ts"
     ],
@@ -2097,7 +2121,8 @@
       "tests/bridges/be-39-encoding.test.ts"
     ],
     "src/bridges/equations/be-40-composite-higgs.ts": [
-      "tests/bridges/be-40-encoding.test.ts"
+      "tests/bridges/be-40-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-41-swampland.ts": [
       "tests/bridges/be-41-encoding.test.ts",
@@ -2111,7 +2136,8 @@
       "tests/diff/bridge-ast-gradient.test.ts"
     ],
     "src/bridges/equations/be-43-er-epr.ts": [
-      "tests/bridges/be-43-encoding.test.ts"
+      "tests/bridges/be-43-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-44-soft-hair.ts": [
       "tests/bridges/be-44-encoding.test.ts"
@@ -2134,7 +2160,8 @@
       "tests/bridges/be-49-encoding.test.ts"
     ],
     "src/bridges/equations/be-50-wheeler-feynman.ts": [
-      "tests/bridges/be-50-encoding.test.ts"
+      "tests/bridges/be-50-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-53-yang-mills-beta.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -2155,7 +2182,8 @@
       "tests/tensor.test.ts"
     ],
     "src/bridges/equations/be-54-randall-sundrum-brane.ts": [
-      "tests/bridges/be-54-encoding.test.ts"
+      "tests/bridges/be-54-encoding.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts"
     ],
     "src/bridges/evaluator-inputs.ts": [
       "tests/cases/applied-cases.test.ts",
@@ -2215,6 +2243,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -2273,6 +2302,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -2308,6 +2338,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -2370,6 +2401,7 @@
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
@@ -2407,6 +2439,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/membership.test.ts",
       "tests/bridges/overlay-registry-quote.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -5340,6 +5373,7 @@
       "tests/atlas/association.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -6130,6 +6164,7 @@
       "tests/bridges/be-58-johnson-nyquist.test.ts",
       "tests/bridges/be-62-bcs-gap.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/perihelion-precession.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -9676,6 +9711,43 @@
       "src/bridges/equations/be-42-hawking-temperature.ts",
       "src/bridges/equations/be-21-kss-bound.ts",
       "src/bridges/equations/be-16-landauer.ts"
+    ],
+    "tests/bridges/bucket-a-formal-sanity.test.ts": [
+      "src/bridges/index.ts",
+      "src/bridges/gravitational-lensing.ts",
+      "src/bridges/perihelion-precession.ts",
+      "src/bridges/be55-quantum-hall.ts",
+      "src/bridges/be56-casimir.ts",
+      "src/bridges/be57-unruh.ts",
+      "src/bridges/be58-johnson-nyquist.ts",
+      "src/bridges/be59-ac-josephson.ts",
+      "src/bridges/be60-fractional-qh.ts",
+      "src/bridges/be61-wiedemann-franz.ts",
+      "src/bridges/be62-bcs-gap.ts",
+      "src/bridges/be63-chandrasekhar-mass.ts",
+      "src/bridges/be64-eddington-luminosity.ts",
+      "src/bridges/be65-jeans-mass.ts",
+      "src/bridges/membership.ts",
+      "src/bridges/rejected.ts",
+      "src/core/constants.ts",
+      "src/bridges/equations/be-12-coherence-length.ts",
+      "src/bridges/equations/be-21-kss-bound.ts",
+      "src/bridges/equations/be-14-ryu-takayanagi.ts",
+      "src/bridges/equations/be-43-er-epr.ts",
+      "src/bridges/equations/be-37-shapiro-delay.ts",
+      "src/bridges/equations/be-54-randall-sundrum-brane.ts",
+      "src/bridges/equations/be-17-einstein-cartan.ts",
+      "src/bridges/equations/be-27-effective-temperature.ts",
+      "src/bridges/equations/be-22-topological-entanglement.ts",
+      "src/bridges/equations/be-20-vacuum-energy.ts",
+      "src/bridges/equations/be-15-emergence.ts",
+      "src/bridges/equations/be-33-hertz-millis.ts",
+      "src/bridges/equations/be-50-wheeler-feynman.ts",
+      "src/bridges/equations/be-32-quantum-reference-frame.ts",
+      "src/bridges/equations/be-28-onsager-entropy-production.ts",
+      "src/bridges/equations/be-40-composite-higgs.ts",
+      "src/bridges/equations/be-35-conformal-bootstrap.ts",
+      "src/composition/graph-viz.ts"
     ],
     "tests/bridges/catalog-adapter.test.ts": [
       "src/bridges/index.ts",

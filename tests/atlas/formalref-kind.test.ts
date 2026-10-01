@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 
 const PROPERTIES = [11, 16, 29] as const;
 const CROSS_CHECKS = [19, 24, 42] as const;
-const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61] as const;
+const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61, 12, 59, 55, 60, 21, 14, 43, 37, 54, 17, 27, 22, 15, 33, 50, 32, 28, 40, 35, 63, 30] as const;
 
 /** Namespaces that are not their own Lean file at the pinned commit. */
 const FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
@@ -42,7 +42,7 @@ function fileFor(statement: string): string {
 }
 
 describe('formalRef kind — formally-proved is a bridge only', () => {
-  it('the fifteen catalog references exist (otherwise the next assertions pass vacuously)', () => {
+  it('the catalog references exist (otherwise the next assertions pass vacuously)', () => {
     expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED].every((id) => row(id).formalRef !== undefined)).toBe(true);
   });
 
@@ -109,7 +109,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
       ),
       ...BRIDGE_EQUATIONS.flatMap((entry) => (entry.formalRef === undefined ? [] : [entry.formalRef])),
     ];
-    expect(refs.length).toBe(25);
+    expect(refs.length).toBe(46);
     for (const ref of refs) {
       const file = fileFor(ref.statement);
       expect(ref.url).toBe(

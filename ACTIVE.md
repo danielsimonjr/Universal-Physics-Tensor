@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Pin the PhysJS manifest at the bucket-A commit and add one catalog formal reference for each bucket-A id except bridge 20, which stays nested on bridge 13. The kind is the covers word. A not-a-bridge id does not become a proved bridge.
 - [x] Enforce the layer order in CI. The checker is tools/layer-order, the command is bun run layer:check, and the allowlist may only shrink. The design is docs/planning/Layering-Refactor-Design.md. No module moved.
 - [x] Show a catalog formalRef from `upt atlas be-<n>` when that catalog entry has one. A catalog id is not an unknown atlas bridge. The BE-13 name stays; the rename proposal is `docs/planning/BE-13-name-proposal.md`.
 - [x] Add a kind and a PhysJS file URL on every formal reference. Only a bridge kind derives formally-proved. A property and a cross-check derive their own labels, and those labels are not a proved bridge.
