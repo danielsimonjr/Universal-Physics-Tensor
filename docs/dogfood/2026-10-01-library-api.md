@@ -120,11 +120,11 @@ Effort is the size of the change that would close the finding: a sentence, a gua
 ### 10. `npm install universal-physics-tensor` is not this master, at the same version
 
 - **Persona.** Engineering physicist, following README Quick Start (`npm install universal-physics-tensor`).
-- **Repro.** `npm view universal-physics-tensor version` is `0.47.1`, modified 2026-09-25. This clone's `package.json` version is also `0.47.1`. The published tarball's `dist/bridges/index.js` contains no `formalRef` and no `PhysJS` string. Importing the extracted package: 55 bridges, 0 formal references, 109 is not the canonical count — the published registry length is 107. Its README development-status table has no Formal references row and says 107 canonical equations. A `file:` install of this clone exposes 15 catalog formal references and 109 canonical equations.
+- **Repro.** `npm view universal-physics-tensor version` is `0.47.1`, modified 2026-09-25. This clone's `package.json` version is also `0.47.1`. The published tarball's `dist/bridges/index.js` contains no `formalRef` and no `PhysJS` string. Importing the extracted package yields 55 bridges and zero formal references. Its canonical registry is two entries shorter than this tree. Its README development-status table has no Formal references row and states that shorter canonical count. A `file:` install of this clone exposes 15 catalog formal references and 109 canonical equations.
 - **Expected.** The install command in the README yields the tree the README describes, or the README says the npm tarball lags the default branch and that formal references exist only on a clone.
 - **Actual.** Quick Start installs a package whose version string matches master and whose contents do not. Publishing is an owner decision (`ACTIVE.md`). The doc gap is separate from that decision.
 - **Severity.** High.
-- **Suggested fix.** One README sentence: npm `0.47.1` (2026-09-25) has no PhysJS `formalRef` and 107 canonical equations; the formal-reference row describes the default branch. A version bump and publish stay with the owner.
+- **Suggested fix.** One README sentence: npm `0.47.1` (2026-09-25) has no PhysJS `formalRef`, and its canonical registry is two entries shorter than this tree; the formal-reference row describes the default branch. A version bump and publish stay with the owner.
 - **Effort.** Small for the sentence. The publish is not a code task.
 
 ### 11. Unit conversion is not on the public export map
