@@ -7,3 +7,4 @@ import PhysJS.Pendulum
 import PhysJS.KgOscillator
 import PhysJS.OscillatorDictionary
 import PhysJS.WaveDalembert
+import PhysJS.Eddington
