@@ -31,6 +31,7 @@ import { telegraphSlowRateRatio, telegraphWaveFrequencyRatio } from '../../src/a
 import { BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_WAVE_DALEMBERT, KG_MAX_DISPERSION_RATIO } from '../../src/atlas/waves/bridges.js';
 import { BRIDGE_KG_OSCILLATOR, BRIDGE_KG_SCHRODINGER, BRIDGE_STIFF_STRING, KG_NR_MAX_X, STIFF_MAX_BETA } from '../../src/atlas/waves/bridges-closure.js';
 import { kgNonrelativisticError, kleinGordonPhaseError, stiffStringPhaseError } from '../../src/atlas/waves/numerics.js';
+import { PHYSJS_COMMIT } from '../../src/atlas/physjs-ref.js';
 import type { AtlasBridge } from '../../src/atlas/types.js';
 
 /** A known pendulum: m = 0.3 kg, g = 9.81 m/s², ℓ = 1.2 m. */
@@ -43,7 +44,7 @@ describe('ab-pendulum-linear ↔ PhysJS.Pendulum.linearizedEquationOfMotion_iff'
     expect(ref!.system).toBe('lean4-physjs');
     expect(ref!.statement).toBe('PhysJS.Pendulum.linearizedEquationOfMotion_iff');
     expect(ref!.fidelity).toBe('sanity-lemmas');
-    expect(ref!.version).toContain('physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c');
+    expect(ref!.version).toContain(`physjs@${PHYSJS_COMMIT}`);
     expect(ref!.covers).toContain('the transformation, not bound.delta');
     expect(ref!.covers).toContain('covers its statement only');
   });

@@ -1,6 +1,6 @@
 {
   "schema": "physjs-bridge-manifest/v1",
-  "commit": "d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c",
+  "commit": "2ca196eb968252230d71018c14b6ca7d2d445763",
   "toolchain": "leanprover/lean4:v4.34.1",
   "mathlib": "v4.34.1",
   "physlib": "af484f78ee0701290595f8bf892b157b10d64940",
@@ -127,6 +127,81 @@
       "bridgeId": "ab-wave-dalembert",
       "theorem": "PhysJS.WaveDalembert.solution_eq_profiles",
       "covers": "the missing direction of d'Alembert's formula",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-64",
+      "bridgeId": "be-64",
+      "theorem": "PhysJS.Eddington.balance_iff",
+      "covers": "derivation-step: the r² cancellation in the Eddington force balance, not a hard cap",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-53",
+      "bridgeId": "be-53",
+      "theorem": "PhysJS.YangMills.b0_pos_iff_nf_le",
+      "covers": "derivation-step: b₀ > 0 iff N_f ≤ 16 for SU(3), not a running procedure past one loop",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "oneLoop": {
+        "theorem": "PhysJS.YangMills.alphaRun_hasDerivAt",
+        "covers": "derivation-step: α(t) = α₀ / (1 + b₀ α₀ t / (2π)) solves the one-loop running equation where the denominator is positive",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
+    },
+    {
+      "key": "be-58",
+      "bridgeId": "be-58",
+      "theorem": "PhysJS.JohnsonNyquist.tendsto_classical",
+      "covers": "limit: the classical Johnson–Nyquist spectrum is the ω → 0⁺ limit of the quantum parent, not the fluctuation–dissipation theorem",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-38",
+      "bridgeId": "be-38",
+      "theorem": "PhysJS.Mond.tendsto_nu_limits",
+      "covers": "limit: ν → 1 as z → ∞, ν √z → 1 as z → 0⁺, and F_N ν(z) / √(m F_N a₀) → 1 as F_N → 0⁺; not ν → √(2/z), and not the SPARC confrontation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "inversion": {
+        "theorem": "PhysJS.Mond.mu_inversion",
+        "covers": "derivation-step: for z > 0, y = z ν(z) satisfies y² / √(1 + y²) = z, which inverts μ(x) = x / √(1 + x²)",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
+    },
+    {
+      "key": "be-13",
+      "bridgeId": "be-13",
+      "theorem": "PhysJS.Einstein.trace_eq",
+      "covers": "reduction: contracting G_μν + Λ g_μν = κ T_μν in four dimensions gives R = 4Λ − κ T, not Jacobson's thermodynamic derivation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"],
+      "vacuum": {
+        "theorem": "PhysJS.Einstein.vacuum_density",
+        "covers": "reduction: with κ = 8πG/c⁴, T_μν = −ρ c² g_μν and Λ g = −κ T rearrange to ρ = c² Λ / (8π G). The opposite sign does not. This is the BE-20 density; BE-20 has no reference of its own",
+        "coverage": "covers its statement only",
+        "leanProof": "complete",
+        "axioms": ["propext", "Classical.choice", "Quot.sound"]
+      }
+    },
+    {
+      "key": "be-34",
+      "bridgeId": "be-34",
+      "theorem": "PhysJS.KibbleZurek.exponent",
+      "covers": "derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": ["propext", "Classical.choice", "Quot.sound"]

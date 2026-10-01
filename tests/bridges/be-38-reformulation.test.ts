@@ -1,7 +1,7 @@
 /**
- * Wave I.B C4 (2026-05-05): BE-38 Entropic Gravity Correction Term
- * reformulated to canonical Milgrom 1983 MOND interpolation
- * μ(x) = x/√(1+x²).
+ * Wave I.B C4 (2026-05-05): BE-38 reformulated to the canonical Milgrom
+ * 1983 MOND interpolation μ(x) = x/√(1+x²). The catalog name is
+ * `Milgrom MOND interpolation ν(z)`.
  *
  * Replaces tests/bridges/be-38-r2-spec.test.ts (deleted).
  *
@@ -14,9 +14,15 @@
 import { describe, it, expect } from 'vitest';
 import { expectBridgeInIndex, expectHasReformulationIssue } from './_helpers.js';
 
-describe('BE-38 Entropic Gravity (Wave I.B C4 reformulation)', () => {
+describe('BE-38 Milgrom MOND interpolation ν(z) (Wave I.B C4 reformulation)', () => {
   it('exists in the index', () => {
     expectBridgeInIndex(38);
+  });
+
+  it('is named for the Milgrom interpolation, and the bridges pair stays the framing', () => {
+    const entry = expectBridgeInIndex(38);
+    expect(entry.name).toBe('Milgrom MOND interpolation ν(z)');
+    expect(entry.bridges).toEqual(['information', 'gravity']);
   });
 
   it("status remains 'speculative' (interpolation is canonical, framing is conjectural)", () => {

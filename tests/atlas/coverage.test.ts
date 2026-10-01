@@ -9,7 +9,12 @@
 import { describe, it, expect } from 'vitest';
 
 import { ALL_EVIDENCE_TAGS, summarizeEvidence } from '../../src/atlas/coverage.js';
-import { deriveEvidenceForVerdict, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
+import {
+  catalogEvidenceInput,
+  deriveEvidence,
+  deriveEvidenceForVerdict,
+  NO_PASSING_WITNESSES,
+} from '../../src/atlas/derive-evidence.js';
 import type { EvidenceTag } from '../../src/atlas/types.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { adjudicateBridgeEntry } from '../../src/bridges/membership.js';
@@ -61,7 +66,7 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
     // cannot fail and therefore proves nothing.
     const report = summarizeEvidence(
       BRIDGE_EQUATIONS.map((e) =>
-        deriveEvidenceForVerdict(adjudicateBridgeEntry(e), e, NO_PASSING_WITNESSES),
+        deriveEvidenceForVerdict(adjudicateBridgeEntry(e), catalogEvidenceInput(e), NO_PASSING_WITNESSES),
       ),
     );
     // CORRECTED after Eve E1. This used to key off REJECTED_BRIDGE_IDS and
@@ -119,5 +124,18 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
     // witness set, not the derivation's inability to speak.
     const unearned = deriveEvidenceForVerdict('bridge', rich, NO_PASSING_WITNESSES);
     expect([...unearned]).toEqual(['proposed']);
+  });
+
+  it('CONTROL: a counted catalog formalRef lights formally-proved only when the reference is passed', () => {
+    const row = BRIDGE_EQUATIONS.find((entry) => entry.id === 64);
+    expect(row?.formalRef?.fidelity).toBe('sanity-lemmas');
+    expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
+    expect(deriveEvidence(catalogEvidenceInput(row!), NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
+    const report = summarizeEvidence(
+      BRIDGE_EQUATIONS.map((entry) =>
+        deriveEvidenceForVerdict(adjudicateBridgeEntry(entry), catalogEvidenceInput(entry), NO_PASSING_WITNESSES),
+      ),
+    );
+    expect(report.byTag['formally-proved']).toBe(0);
   });
 });

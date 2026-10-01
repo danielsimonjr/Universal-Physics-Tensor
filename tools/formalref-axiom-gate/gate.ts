@@ -251,9 +251,13 @@ async function main(args: readonly string[]): Promise<number> {
   const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
   const physlibDir = argValue(args, '--physlib');
   const { ATLAS_FAMILIES } = await import('../../src/atlas/families.js');
+  const { BRIDGE_EQUATIONS } = await import('../../src/bridges/index.js');
   const { physjsManifestProblems } = await import('../../src/atlas/physjs-ref.js');
   const manifest = JSON.parse(readFileSync(join(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf-8'));
-  const bridges = ATLAS_FAMILIES.flatMap((family) => family.bridges);
+  const bridges = [
+    ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
+    ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: entry.formalRef })),
+  ];
   const physjsProblems = physjsManifestProblems({ manifest, bridges });
   for (const p of physjsProblems) console.error(`FAIL: ${p}`);
 

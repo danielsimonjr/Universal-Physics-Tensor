@@ -13,6 +13,7 @@
 import { describe, it, expect } from 'vitest';
 
 import {
+  catalogEvidenceInput,
   counterexamplesWithRejection,
   deriveEvidence,
   NO_PASSING_WITNESSES,
@@ -226,7 +227,7 @@ describe('TRUTHFUL MIGRATION — the overlay adds evidence to NO existing catalo
       // values below would hold even if every row were full of passing
       // evidence. The positive control in coverage.test.ts is what gives this
       // assertion its meaning.
-      const tags = sorted(deriveEvidenceForVerdict(verdict, entry, NO_PASSING_WITNESSES));
+      const tags = sorted(deriveEvidenceForVerdict(verdict, catalogEvidenceInput(entry), NO_PASSING_WITNESSES));
       // CORRECTED after Eve E1: the expectation keys off the ARTIFACT the row
       // actually carries, not off its membership verdict. Only a row with an
       // unresolved counterexample is 'contradicted'. BE-35 is the single rejected
@@ -254,7 +255,7 @@ describe('ROADMAP §7 Phase 1 — a rejection LINKS its counterexample, and the 
     for (const row of rejected) {
       const cx = counterexamplesWithRejection(row, byId.get(row.id));
       expect(cx.length).toBeGreaterThan(0);
-      const tags = deriveEvidence({ ...row, counterexamples: cx }, NO_PASSING_WITNESSES);
+      const tags = deriveEvidence({ ...catalogEvidenceInput(row), counterexamples: cx }, NO_PASSING_WITNESSES);
       expect(tags.has('contradicted')).toBe(true);
     }
   });

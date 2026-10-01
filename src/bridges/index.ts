@@ -32,9 +32,11 @@
 import type {
   Conventions,
   Counterexample,
+  FormalRef,
   Regime,
   RelationContract,
 } from '../atlas/types.js';
+import { physjsFormalRef } from '../atlas/physjs-ref.js';
 // `deriveRegimeGroups` is a VALUE, so the type-only rule above does not cover
 // it. It comes from the leaf `atlas/regime.js`, whose own imports are
 // `dimensional/*` only — importing it closes no cycle back into `bridges/`.
@@ -257,6 +259,15 @@ export interface BridgeEquationEntry {
   conventions?: Conventions;
   /** Cases this bridge does NOT cover, each with its witness. */
   counterexamples?: readonly Counterexample[];
+  /**
+   * A reviewed PhysJS reference for one counted part of this equation.
+   *
+   * Optional. Only a reduction, a limit, or a derivation-step may occupy it.
+   * One id is one reference, and it names the manifest's top-level theorem.
+   * The catalog evidence path does not pass this field to `deriveEvidence`:
+   * a proof of one part does not tag the bridge `formally-proved`.
+   */
+  formalRef?: FormalRef;
 }
 
 // ── GR spine regimes (Atlas Phase 2, S2.5) ─────────────────────────────────
@@ -601,6 +612,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 13,
+  formalRef: physjsFormalRef('be-13'),
   name: `Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)`,
   category: `B`,
   category_name: `Information-Physical Bridges`,
@@ -1513,6 +1525,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 34,
+  formalRef: physjsFormalRef('be-34'),
   name: `Kibble-Zurek Mechanism in Curved Spacetime`,
   category: `J`,
   category_name: `Phase Transitions and Criticality`,
@@ -1740,7 +1753,8 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 38,
-  name: `Entropic Gravity Correction Term`,
+  formalRef: physjsFormalRef('be-38'),
+  name: `Milgrom MOND interpolation ν(z)`,
   category: `K`,
   category_name: `Modified Theories and Extensions`,
   bridges: [`information`, `gravity`] as [string, string],
@@ -2364,6 +2378,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 53,
+  formalRef: physjsFormalRef('be-53'),
   name: `Yang-Mills one-loop β-function (asymptotic freedom)`,
   category: `L`,
   category_name: `Quantum Field Theory Extensions`,
@@ -2476,6 +2491,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 58,
+  formalRef: physjsFormalRef('be-58'),
   name: `Johnson-Nyquist noise / fluctuation-dissipation theorem`,
   category: `H`,
   category_name: `Non-Equilibrium Statistical Mechanics`,
@@ -2652,6 +2668,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 64,
+  formalRef: physjsFormalRef('be-64'),
   name: `Eddington luminosity (radiation-pressure limit)`,
   category: `I`,
   category_name: `Emergent Spacetime`,

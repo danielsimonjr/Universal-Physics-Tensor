@@ -32,7 +32,7 @@
  *     (TeVeS gravitational-wave speed deviates from c); see BE-36 for
  *     the relativistic completion bridge and its known issue.
  *
- * @see docs/specification/Part-II.md ("Bridge Equation 38: Entropic Gravity Correction Term")
+ * @see docs/specification/Part-II.md ("Bridge Equation 38: Milgrom MOND interpolation ν(z)")
  * @see src/bridges/index.ts BRIDGE_EQUATIONS.find(e => e.id === 38)
  * @module bridges/equations/be-38-mond
  */

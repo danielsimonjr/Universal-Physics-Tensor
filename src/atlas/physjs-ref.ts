@@ -7,10 +7,11 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c`.
+ * The commit is PhysJS `main` `2ca196eb968252230d71018c14b6ca7d2d445763`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
- * entries. The five rank-1 entries also carry a nested `planeWave` object.
- * That object is not a `formalRef`.
+ * atlas entries. Milestone 2b adds six catalog entries, keyed `be-<n>`.
+ * A nested object (`planeWave`, `oneLoop`, `inversion`, `vacuum`) is recorded
+ * and is not a `formalRef`. A `property` or a `cross-check` is not vendored.
  *
  * @module atlas/physjs-ref
  */
@@ -18,7 +19,7 @@
 import type { FormalRef } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = 'd1c1b18fb54d5fe3aa14f8307b5349b0d672d70c';
+export const PHYSJS_COMMIT = '2ca196eb968252230d71018c14b6ca7d2d445763';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -38,18 +39,37 @@ const PHYSJS_COVERAGE = 'covers its statement only';
 /** Axioms `#print axioms` reported for every entry at the pinned commit. */
 const PHYSJS_AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 
-/**
- * Rank 1a, nested on a rank-1 entry. A plane wave solves the PDE if and only
- * if its frequency obeys the dispersion relation. It is not the entry's
- * `formalRef`: that decision is the owner's.
- */
-interface PhysjsPlaneWave {
+/** A second statement on the same entry. No key. Not a `formalRef`. */
+interface PhysjsNestedStatement {
   readonly theorem: string;
   readonly covers: string;
   readonly coverage: string;
   readonly leanProof: string;
   readonly axioms: readonly string[];
 }
+
+/** Nested objects the manifest schema records. A new name is a problem. */
+const NESTED_FIELDS = ['planeWave', 'oneLoop', 'inversion', 'vacuum'] as const;
+
+type NestedField = (typeof NESTED_FIELDS)[number];
+
+const ENTRY_FIELDS = new Set<string>([
+  'key',
+  'bridgeId',
+  'theorem',
+  'covers',
+  'coverage',
+  'leanProof',
+  'axioms',
+  'imports',
+  ...NESTED_FIELDS,
+]);
+
+/** Counted catalog kinds. The only kinds that may occupy a UPT `formalRef`. */
+const COUNTED_KIND = /^(reduction|limit|derivation-step): /;
+
+/** Kinds the design note keeps out of the vendored manifest. */
+const UNCOUNTED_KIND = /^(property|cross-check): /;
 
 /** One manifest entry, reduced to the fields a `formalRef` is built from. */
 interface PhysjsEntry {
@@ -63,7 +83,13 @@ interface PhysjsEntry {
   readonly axioms: readonly string[];
   readonly imports?: string;
   /** Present on the five rank-1 entries. Absent elsewhere. Not a `formalRef`. */
-  readonly planeWave?: PhysjsPlaneWave;
+  readonly planeWave?: PhysjsNestedStatement;
+  /** BE-53. The running solution. Not the reference. */
+  readonly oneLoop?: PhysjsNestedStatement;
+  /** BE-38. The μ inversion. Not the reference. */
+  readonly inversion?: PhysjsNestedStatement;
+  /** BE-13. The BE-20 vacuum density. Not a reference, and not a `be-20` key. */
+  readonly vacuum?: PhysjsNestedStatement;
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -80,8 +106,12 @@ const RANK1_COVERS = 'bound.delta exactly, at the dispersion relation';
 
 const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispersion relation';
 
-/** The nested rank-1a object. The top-level theorem stays `covers_bound_delta`. */
-function planeWave(namespace: string): PhysjsPlaneWave {
+/**
+ * Rank 1a, nested on a rank-1 entry. A plane wave solves the PDE if and only
+ * if its frequency obeys the dispersion relation. It is not the entry's
+ * `formalRef`: that decision is the owner's.
+ */
+function planeWave(namespace: string): PhysjsNestedStatement {
   return {
     theorem: `PhysJS.${namespace}.planeWave_iff_dispersion`,
     covers: PLANE_WAVE_COVERS,
@@ -92,9 +122,9 @@ function planeWave(namespace: string): PhysjsPlaneWave {
 }
 
 /**
- * The ten entries, in manifest order. A bridge obtains its reference by key
+ * The sixteen entries, in manifest order. A bridge obtains its reference by key
  * through {@link physjsFormalRef}; it does not name a theorem of its own.
- * `planeWave` is recorded and is not that reference.
+ * A nested object is recorded and is not that reference.
  */
 const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
   {
@@ -193,6 +223,88 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
+  {
+    key: 'be-64',
+    bridgeId: 'be-64',
+    theorem: 'PhysJS.Eddington.balance_iff',
+    covers: 'derivation-step: the r² cancellation in the Eddington force balance, not a hard cap',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-53',
+    bridgeId: 'be-53',
+    theorem: 'PhysJS.YangMills.b0_pos_iff_nf_le',
+    covers: 'derivation-step: b₀ > 0 iff N_f ≤ 16 for SU(3), not a running procedure past one loop',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    oneLoop: {
+      theorem: 'PhysJS.YangMills.alphaRun_hasDerivAt',
+      covers:
+        'derivation-step: α(t) = α₀ / (1 + b₀ α₀ t / (2π)) solves the one-loop running equation where the denominator is positive',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: 'be-58',
+    bridgeId: 'be-58',
+    theorem: 'PhysJS.JohnsonNyquist.tendsto_classical',
+    covers:
+      'limit: the classical Johnson–Nyquist spectrum is the ω → 0⁺ limit of the quantum parent, not the fluctuation–dissipation theorem',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-38',
+    bridgeId: 'be-38',
+    theorem: 'PhysJS.Mond.tendsto_nu_limits',
+    covers:
+      'limit: ν → 1 as z → ∞, ν √z → 1 as z → 0⁺, and F_N ν(z) / √(m F_N a₀) → 1 as F_N → 0⁺; not ν → √(2/z), and not the SPARC confrontation',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    inversion: {
+      theorem: 'PhysJS.Mond.mu_inversion',
+      covers:
+        'derivation-step: for z > 0, y = z ν(z) satisfies y² / √(1 + y²) = z, which inverts μ(x) = x / √(1 + x²)',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: 'be-13',
+    bridgeId: 'be-13',
+    theorem: 'PhysJS.Einstein.trace_eq',
+    covers:
+      'reduction: contracting G_μν + Λ g_μν = κ T_μν in four dimensions gives R = 4Λ − κ T, not Jacobson\'s thermodynamic derivation',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    vacuum: {
+      theorem: 'PhysJS.Einstein.vacuum_density',
+      covers:
+        'reduction: with κ = 8πG/c⁴, T_μν = −ρ c² g_μν and Λ g = −κ T rearrange to ρ = c² Λ / (8π G). The opposite sign does not. This is the BE-20 density; BE-20 has no reference of its own',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: 'be-34',
+    bridgeId: 'be-34',
+    theorem: 'PhysJS.KibbleZurek.exponent',
+    covers:
+      'derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
 ];
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
@@ -225,7 +337,7 @@ function sameAxioms(recorded: readonly string[], manifest: readonly string[]): b
   return recorded.length === manifest.length && recorded.every((axiom, i) => axiom === manifest[i]);
 }
 
-function samePlaneWave(compiled: PhysjsPlaneWave | undefined, manifest: PhysjsPlaneWave | undefined): boolean {
+function sameNested(compiled: PhysjsNestedStatement | undefined, manifest: PhysjsNestedStatement | undefined): boolean {
   if (compiled === undefined && manifest === undefined) return true;
   if (compiled === undefined || manifest === undefined) return false;
   return (
@@ -238,15 +350,34 @@ function samePlaneWave(compiled: PhysjsPlaneWave | undefined, manifest: PhysjsPl
 }
 
 /**
+ * A `be-` covers line is a counted kind, or it is not a vendored reference.
+ * Atlas covers lines stay as milestone 1 and 2 wrote them.
+ */
+function catalogCoversProblems(key: string, covers: string, where: string): string[] {
+  if (!key.startsWith('be-')) return [];
+  if (UNCOUNTED_KIND.test(covers)) {
+    const kind = covers.split(':')[0];
+    return [`${where} '${key}' is an uncounted ${kind} and is not a UPT formalRef`];
+  }
+  if (!COUNTED_KIND.test(covers)) {
+    return [
+      `${where} '${key}' covers line does not begin with a counted kind (reduction, limit, or derivation-step)`,
+    ];
+  }
+  return [];
+}
+
+/**
  * Problems in the vendored manifest against the bridges that claim to be keyed
  * by it. Empty means every entry resolves to a `lean4-physjs` reference whose
  * theorem, axioms, commit and coverage phrase are the entry's own.
  *
  * A wrong commit, theorem, key or coverage phrase is a problem. A manifest
  * entry with no bridge is a problem. A `lean4-physjs` reference with no entry
- * is a problem: the gate does not skip that system. A nested `planeWave`
- * object is kept and compared; naming it as the `formalRef` is a problem.
- * The top-level theorem stays the reference.
+ * is a problem: the gate does not skip that system. A nested object is kept
+ * and compared; naming it as the `formalRef` is a problem. The top-level
+ * theorem stays the reference. A catalog entry whose covers line is a
+ * `property` or a `cross-check` is a problem: that kind is not vendored.
  *
  * @internal
  */
@@ -277,6 +408,11 @@ export function physjsManifestProblems(input: {
   for (const entry of manifest.entries) {
     if (seen.has(entry.key)) problems.push(`manifest key '${entry.key}' is duplicated`);
     seen.add(entry.key);
+    for (const field of Object.keys(entry)) {
+      if (!ENTRY_FIELDS.has(field)) {
+        problems.push(`manifest entry '${entry.key}' has unexpected field '${field}'`);
+      }
+    }
     if (entry.key !== entry.bridgeId) {
       problems.push(`manifest key '${entry.key}' does not equal bridgeId '${entry.bridgeId}'`);
     }
@@ -288,19 +424,31 @@ export function physjsManifestProblems(input: {
     if (entry.leanProof !== 'complete') {
       problems.push(`leanProof for '${entry.key}' is '${entry.leanProof}', expected 'complete'`);
     }
-    if (entry.planeWave !== undefined) {
-      if (entry.planeWave.coverage !== PHYSJS_COVERAGE) {
+    const coversProblems = catalogCoversProblems(entry.key, entry.covers, 'manifest key');
+    problems.push(...coversProblems);
+    const uncounted = entry.key.startsWith('be-') && UNCOUNTED_KIND.test(entry.covers);
+    for (const field of NESTED_FIELDS) {
+      const nested = entry[field];
+      if (nested === undefined) continue;
+      if (nested.coverage !== PHYSJS_COVERAGE) {
         problems.push(
-          `planeWave coverage phrase for '${entry.key}' is '${entry.planeWave.coverage}', expected '${PHYSJS_COVERAGE}'`,
+          `${field} coverage phrase for '${entry.key}' is '${nested.coverage}', expected '${PHYSJS_COVERAGE}'`,
         );
       }
-      if (entry.planeWave.leanProof !== 'complete') {
-        problems.push(`planeWave leanProof for '${entry.key}' is '${entry.planeWave.leanProof}', expected 'complete'`);
+      if (nested.leanProof !== 'complete') {
+        problems.push(`${field} leanProof for '${entry.key}' is '${nested.leanProof}', expected 'complete'`);
       }
+      problems.push(...catalogCoversProblems(entry.key, nested.covers, `${field} covers`));
     }
     const bridge = byId.get(entry.key);
     if (bridge === undefined) {
       problems.push(`manifest key '${entry.key}' does not resolve to a bridge`);
+      continue;
+    }
+    if (uncounted) {
+      if (bridge.formalRef !== undefined) {
+        problems.push(`bridge '${entry.key}' carries a formalRef for an uncounted kind`);
+      }
       continue;
     }
     const ref = bridge.formalRef;
@@ -315,6 +463,15 @@ export function physjsManifestProblems(input: {
         `bridge '${entry.key}' formalRef names the nested planeWave theorem '${entry.planeWave.theorem}'; the top-level theorem stays the reference`,
       );
     }
+    for (const field of NESTED_FIELDS) {
+      if (field === 'planeWave') continue;
+      const nested = entry[field];
+      if (nested !== undefined && ref.statement === nested.theorem) {
+        problems.push(
+          `bridge '${entry.key}' formalRef names the nested ${field} theorem '${nested.theorem}'; the top-level theorem stays the reference`,
+        );
+      }
+    }
     if (ref.statement !== entry.theorem) {
       problems.push(`bridge '${entry.key}' theorem is '${ref.statement}', manifest theorem is '${entry.theorem}'`);
     }
@@ -323,6 +480,7 @@ export function physjsManifestProblems(input: {
         `bridge '${entry.key}' axioms [${ref.axioms.join(', ')}] differ from the manifest [${entry.axioms.join(', ')}]`,
       );
     }
+    problems.push(...catalogCoversProblems(entry.key, ref.covers, 'formalRef covers'));
     if (!ref.covers.includes(PHYSJS_COVERAGE)) {
       problems.push(`bridge '${entry.key}' covers line does not say '${PHYSJS_COVERAGE}'`);
     }
@@ -342,7 +500,7 @@ export function physjsManifestProblems(input: {
       compiled.theorem !== entry.theorem ||
       compiled.covers !== entry.covers ||
       compiled.coverage !== entry.coverage ||
-      !samePlaneWave(compiled.planeWave, entry.planeWave)
+      NESTED_FIELDS.some((field) => !sameNested(compiled[field], entry[field]))
     ) {
       problems.push(`compiled entry for '${entry.key}' disagrees with the vendored manifest`);
     }

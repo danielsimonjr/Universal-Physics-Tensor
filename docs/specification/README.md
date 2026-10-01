@@ -31,8 +31,8 @@ part carries status notes marking superseded or speculative content.
   BE-11–54. Entries 55–65 are in that array (`source_part: 'III'`) and have no
   Bridge Equation heading in Parts I–II. BE-1–10 are the implicit "diagonal"
   laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) and are not
-  individually catalogued. Ten reviewed atlas `formalRef`s use `lean4-physjs`
-  and name public PhysJS; that count is in `NOTES.md`, not in this catalog.
+  individually catalogued. Reviewed `formalRef`s use `lean4-physjs`
+  and name public PhysJS; the atlas and catalog counts are in `NOTES.md`, not in this catalog.
 - **Revision provenance**: the 2026-05 adversarial-review iterations
   ("Wave X Tier Y, per Reviewer Z") were relocated to
   [CHANGELOG.md](CHANGELOG.md) on 2026-06-10 so the spec reads as a clean

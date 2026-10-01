@@ -12,7 +12,7 @@ adjudication/calibration notes that close out the discovery pipeline
 
 - `BRIDGE_EQUATIONS`: 55 entries, ids 11–65, 19 established, 33 speculative, 3 highly-speculative.
 - `CONFRONTATIONS`: 19 entries (ids 11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65).
-- Reviewed `formalRef`s: ten, all `system: 'lean4-physjs'`, via public PhysJS. `NOTES.md` is the rolling record. `phase-4-formalref-scoping.md` is the 2026-09-24 scoping report; its "count is 1" is that day's measurement.
+- Reviewed `formalRef`s: all `system: 'lean4-physjs'`, via public PhysJS. `NOTES.md` is the rolling record, including the atlas and catalog split. `phase-4-formalref-scoping.md` is the 2026-09-24 scoping report; its "count is 1" is that day's measurement.
 
 ## Notes
 
