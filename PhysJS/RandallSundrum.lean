@@ -11,7 +11,7 @@ import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Ring
 
 /-!
-`be-54`. Derivation step. The positive-tension factor `1/2`.
+`be-54`. The catalog Hubble rate, and the positive-tension factor `1/2`.
 
 `PhysJS.QuantumBounce.dictionary` already proves the limit `σ → ∞` and
 the unphysical match at `σ = −ρ_c/2`. This file does not reprove that
@@ -54,6 +54,25 @@ theorem positive_tension (G ρ σ Λ : ℝ) (hG : 0 < G) (hρ : 0 < ρ) (hσ : 0
   refine ⟨heq, ?_⟩
   rw [heq]
   positivity
+
+/-- The catalog equation
+
+```
+H² = (8π G / 3) ρ (1 + ρ / (2σ)) + Λ / 3
+```
+
+for `σ ≠ 0`. The same rate is the Friedmann term plus
+`(8π G / 3) ρ² / (2σ)`. `positive_tension` remains the sign of that
+excess. Not a derivation from the five-dimensional Einstein equation. -/
+theorem brane_friedmann (G ρ σ Λ : ℝ) (hσ : σ ≠ 0) :
+    h2Rs G ρ σ Λ = (8 * π * G / 3) * ρ * (1 + ρ / (2 * σ)) + Λ / 3 ∧
+      h2Rs G ρ σ Λ = h2Frw G ρ Λ + (8 * π * G / 3) * ρ ^ 2 / (2 * σ) := by
+  refine ⟨?_, ?_⟩
+  · unfold h2Rs
+    rfl
+  · unfold h2Rs h2Frw
+    field_simp [hσ]
+    ring
 
 /-- The module's `[T⁻²]` cosmological term is Physlib's `Λ c²`. At `k = 0`
 that is `FirstOrderFriedmann`. -/
