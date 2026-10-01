@@ -24,6 +24,7 @@ Under `−,+,+,+`, dust `T_μν = ρ u_μ u_ν` with `u_μ u^μ = −c²` has
 `T_μν = −ρ c² g_μν` identified as `Λ g = −κ T`, rearrange to
 `ρ = c² Λ / (8π G)`. The opposite sign does not. This does not certify
 Jacobson's thermodynamic derivation. BE-20 does not get its own reference.
+The Friedmann corollary of that density is `friedmann_corollary`.
 -/
 
 namespace PhysJS.Einstein

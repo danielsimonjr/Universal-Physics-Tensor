@@ -12,6 +12,7 @@ import PhysJS.YangMills
 import PhysJS.JohnsonNyquist
 import PhysJS.Mond
 import PhysJS.Einstein
+import PhysJS.VacuumFriedmann
 import PhysJS.KibbleZurek
 import PhysJS.HawkingUnruh
 import PhysJS.Fret
