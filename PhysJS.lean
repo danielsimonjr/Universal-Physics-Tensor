@@ -15,3 +15,4 @@ import PhysJS.Einstein
 import PhysJS.KibbleZurek
 import PhysJS.HawkingUnruh
 import PhysJS.Fret
+import PhysJS.QuantumBounce
