@@ -285,7 +285,7 @@ Usage:
         With no id, lists every bridge of every family; --evidence (or
         --stored / --run with no id) shows every bridge's derived evidence,
         per-tag counts and the witness results it observes.
-        A catalog id be-<n> whose entry has a formalRef prints that stored
+        A catalog id be-<n> with a stored formal reference prints that
         reference. It is a catalog equation, not an atlas bridge, and the
         command does not derive formally-proved from it.
         e.g.  upt atlas ab-pendulum-linear

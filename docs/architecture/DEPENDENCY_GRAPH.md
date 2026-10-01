@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 67 files
+- **atlas**: 68 files
 - **bridges**: 91 files
 - **canonical**: 18 files
 - **cases**: 9 files
@@ -217,6 +217,19 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `BenchmarkItem`
 - Constants: `FAILURE_KINDS`, `HELD_OUT_FAMILY`, `HELD_OUT_MARKERS`
+
+---
+
+### `src/atlas/catalog-formal-ref.ts` - Catalog formal references, keyed by bridge id.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../relations/types.js` | `FormalRef` | Import (type-only) |
+| `./physjs-ref.js` | `physjsFormalRef` | Import |
+
+**Exports:**
+- Functions: `catalogFormalRef`
 
 ---
 
@@ -2611,8 +2624,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../relations/types.js` | `Conventions, Counterexample, FormalRef, Regime, RelationContract` | Import (type-only) |
-| `../atlas/physjs-ref.js` | `physjsFormalRef` | Import |
+| `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
 | `../relations/regime.js` | `deriveRegimeGroups` | Import |
 | `../dimensional/types.js` | `LENGTH, VELOCITY` | Import |
 | `./be52-mercury-confrontation.js` | `MERCURY` | Import |
@@ -3324,6 +3336,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../../atlas/catalog-formal-ref.js` | `catalogFormalRef` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 
 **Exports:**
@@ -7525,6 +7538,7 @@ The codebase is organized into the following modules:
 | `stats` | 0 files | 2 files |
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
+| `catalog-formal-ref` | 2 files | 1 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
@@ -7543,7 +7557,6 @@ The codebase is organized into the following modules:
 | `link-prediction` | 2 files | 1 files |
 | `model` | 2 files | 12 files |
 | `bridges-coarse` | 5 files | 2 files |
-| `bridges-exact` | 5 files | 3 files |
 
 ---
 
@@ -7562,7 +7575,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...62 more]
+        N5[...63 more]
     end
 
     subgraph Bridges
@@ -7696,17 +7709,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 407 |
+| Total TypeScript Files | 408 |
 | Total Modules | 13 |
-| Total Lines of Code | 89410 |
-| Total Exports | 2922 |
+| Total Lines of Code | 89408 |
+| Total Exports | 2923 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
-| Total Functions | 751 |
+| Total Functions | 752 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 545 |
+| Type-only Imports | 546 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

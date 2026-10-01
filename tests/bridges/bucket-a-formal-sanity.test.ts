@@ -33,6 +33,7 @@ import { evaluateQRFOverlap } from '../../src/bridges/equations/be-32-quantum-re
 import { evaluateOnsagerEntropyProduction } from '../../src/bridges/equations/be-28-onsager-entropy-production.js';
 import { evaluateCompositeHiggs } from '../../src/bridges/equations/be-40-composite-higgs.js';
 import { evaluateCrossingEquation } from '../../src/bridges/equations/be-35-conformal-bootstrap.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
@@ -69,7 +70,7 @@ const NOT_A_BRIDGE = [28, 32, 35, 40] as const;
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
   expect(entry, `be-${id}`).toBeDefined();
-  return entry!;
+  return { ...entry!, formalRef: catalogFormalRef(id) };
 }
 
 function near(actual: number, expected: number, rel = 1e-9): void {

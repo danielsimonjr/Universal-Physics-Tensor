@@ -10,10 +10,10 @@
  *
  * With no id it lists every bridge of every registered family.
  *
- * A catalog id (`be-<n>`, any letter case) is not an atlas bridge. When that
- * catalog equation carries a `formalRef`, this command prints the stored
- * reference. It does not derive `formally-proved` from it. A catalog equation
- * with no reference says so. An id in neither registry stays an unknown bridge.
+ * A catalog id (`be-<n>`, any letter case) is not an atlas bridge. When the
+ * atlas overlay has a formal reference for that id, this command prints it.
+ * It does not derive `formally-proved` from it. A catalog equation with no
+ * reference says so. An id in neither registry stays an unknown bridge.
  *
  * ## The two derived tags, shown honestly
  *
@@ -30,6 +30,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
+import { catalogFormalRef } from '../../atlas/catalog-formal-ref.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 
 const FLAGS: FlagSpec[] = [
@@ -82,9 +83,9 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         counterexample stays unresolved. With no id, lists
         every bridge of every family.
         A catalog id be-<n> (either letter case) is not an atlas bridge. When
-        that catalog equation has a formalRef, the command prints the stored
-        reference and does not derive formally-proved from it. A catalog
-        equation with no formalRef says so. --run applies only to an atlas bridge.
+        the atlas overlay has a formal reference for that id, the command
+        prints it and does not derive formally-proved from it. A catalog
+        equation with no formal reference says so. --run applies only to an atlas bridge.
         Evidence is shown BY CLAIM (correspondence, regime, bound, horizon,
         preserves), each citing only what the record's structure links to it;
         a witness is listed under the bound (sharp, or at one point for a bound
@@ -123,7 +124,7 @@ function catalogEquationNumber(raw: string): number | undefined {
  * `formally-proved` tag.
  */
 function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: CommandCtx): number {
-  const ref = entry.formalRef;
+  const ref = catalogFormalRef(entry.id);
   if (ref === undefined) {
     throw new CliError(`upt atlas: be-${entry.id} is a catalog equation and has no formalRef (\`upt atlas\` lists atlas bridges)`);
   }
@@ -205,7 +206,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`\n${listing.length} atlas bridges across ${families.length} families:`);
     for (const l of listing) out(`  ${l.id.padEnd(28)} ${l.relation.padEnd(22)} [${l.family}]`);
     out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge\'s derived evidence.');
-    out('A catalog equation with a formalRef is `upt atlas be-<n>`.');
+    out('A catalog equation with a stored formal reference is `upt atlas be-<n>`.');
     return 0;
   }
 

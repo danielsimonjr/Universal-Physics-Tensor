@@ -16,6 +16,7 @@ import {
   NO_PASSING_WITNESSES,
 } from '../../src/atlas/derive-evidence.js';
 import type { EvidenceTag } from '../../src/atlas/types.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { adjudicateBridgeEntry } from '../../src/bridges/membership.js';
 import { REJECTED_BRIDGE_IDS } from '../../src/bridges/rejected.js';
@@ -128,13 +129,14 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
 
   it('CONTROL: a counted catalog formalRef does not light formally-proved, and a bridge kind does', () => {
     const row = BRIDGE_EQUATIONS.find((entry) => entry.id === 64);
-    expect(row?.formalRef?.fidelity).toBe('sanity-lemmas');
-    expect(row?.formalRef?.kind).toBe('derivation-step');
-    expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
+    const formalRef = catalogFormalRef(64);
+    expect(formalRef?.fidelity).toBe('sanity-lemmas');
+    expect(formalRef?.kind).toBe('derivation-step');
+    expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
     expect(deriveEvidence(catalogEvidenceInput(row!), NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
     expect(
       deriveEvidence(
-        { formalRef: { fidelity: row!.formalRef!.fidelity, kind: 'bridge' } },
+        { formalRef: { fidelity: formalRef!.fidelity, kind: 'bridge' } },
         NO_PASSING_WITNESSES,
       ).has('formally-proved'),
     ).toBe(true);

@@ -11,9 +11,9 @@
  * `src/composition/` must not import THIS FILE — `src/atlas/` imports
  * `bridges/*` and `composition/*`, so a barrel import closes a cycle that
  * `bun run docs:deps` reports. Importing a leaf module (`./types.js`,
- * `./regime.js`, `./composition-table.js`, …) is fine and the tree has always
- * done it, VALUES INCLUDED: `bridges/index.ts`, `composition/compose.ts`,
- * `composition/graph-viz.ts`.
+ * `./regime.js`, `./composition-table.js`, …) is fine. `src/bridges/` does
+ * not import this directory. Catalog formal references live in
+ * `src/atlas/catalog-formal-ref.ts`.
  *
  * This comment used to say "TYPES ONLY, and only from `src/atlas/types.js`",
  * which the tree HAS NEVER SATISFIED while `docs:deps` reported 0 cycles.

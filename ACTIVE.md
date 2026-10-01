@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Move the catalog physjsFormalRef entries out of src/bridges/index.ts into an atlas-side overlay keyed by catalog id. The catalog row does not keep a second copy. The layer-order allowlist drops the bridges/index to atlas/physjs-ref edge. The design is docs/planning/Layering-Refactor-Design.md.
 - [x] Move the Bianchi residual evaluator out of src/dimensional/curvature.ts into src/numerical/bianchi-residual.ts. The validators stay in curvature.ts. The layer-order allowlist drops the six dimensional/numerical cycles. The seven upward edges stay. The design is docs/planning/Layering-Refactor-Design.md.
 - [x] Set a bucket-A catalog formal reference to kind bridge when its theorem states the catalogued equation, and keep a weaker kind when the theorem proves only part of that equation.
 - [x] Pin the PhysJS manifest at the bucket-A commit and add one catalog formal reference for each bucket-A id except bridge 20, which stays nested on bridge 13. The kind is the covers word. A not-a-bridge id does not become a proved bridge.

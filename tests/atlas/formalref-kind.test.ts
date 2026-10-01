@@ -13,6 +13,7 @@
 import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { PHYSJS_COMMIT, physjsFormalRef, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { readFileSync } from 'node:fs';
@@ -33,8 +34,9 @@ const FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
 
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
-  if (entry?.formalRef === undefined) throw new Error(`be-${id} has no formalRef`);
-  return entry;
+  const formalRef = catalogFormalRef(id);
+  if (entry === undefined || formalRef === undefined) throw new Error(`be-${id} has no formalRef`);
+  return { ...entry, formalRef };
 }
 
 function fileFor(statement: string): string {
@@ -125,7 +127,10 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
       ...ATLAS_FAMILIES.flatMap((family) => family.bridges).flatMap((bridge) =>
         bridge.formalRef === undefined ? [] : [bridge.formalRef],
       ),
-      ...BRIDGE_EQUATIONS.flatMap((entry) => (entry.formalRef === undefined ? [] : [entry.formalRef])),
+      ...BRIDGE_EQUATIONS.flatMap((entry) => {
+        const formalRef = catalogFormalRef(entry.id);
+        return formalRef === undefined ? [] : [formalRef];
+      }),
     ];
     expect(refs.length).toBe(46);
     for (const ref of refs) {
@@ -146,7 +151,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
     const bridges = [
       ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
-      ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: entry.formalRef })),
+      ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
     ];
     expect(physjsManifestProblems({ manifest, bridges })).toEqual([]);
     const lied = bridges.map((bridge) =>

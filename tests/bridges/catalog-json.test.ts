@@ -12,6 +12,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { listConfrontations } from '../../src/bridges/confrontations.js';
 import { ADJUDICATIONS } from '../../src/composition/adjudication.js';
@@ -77,10 +78,19 @@ describe('data/bridge-catalog.json — committed artifact integrity (P-2)', () =
     }
   });
 
-  it('FRESHNESS: committed entries deep-equal the live catalog (re-run npm run catalog:json after catalog edits)', () => {
-    // JSON round-trip the live catalog so undefined-vs-absent and
-    // non-JSON values normalize identically to the artifact.
-    const live = JSON.parse(JSON.stringify(BRIDGE_EQUATIONS));
+  it('FRESHNESS: committed entries deep-equal the live catalog joined with the overlay (re-run npm run catalog:json after catalog edits)', () => {
+    // The catalog row does not store formalRef. The artifact still does:
+    // the overlay is joined after id, which is where the committed file
+    // carries it. JSON round-trip so undefined-vs-absent normalizes.
+    const live = JSON.parse(
+      JSON.stringify(
+        BRIDGE_EQUATIONS.map((entry) => {
+          const { id, ...rest } = entry;
+          const formalRef = catalogFormalRef(id);
+          return formalRef === undefined ? { id, ...rest } : { id, formalRef, ...rest };
+        }),
+      ),
+    );
     expect(artifact.entries).toEqual(live);
   });
 });

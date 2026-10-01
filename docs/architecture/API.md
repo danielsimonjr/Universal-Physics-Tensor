@@ -60,13 +60,13 @@ const qc = BRIDGE_EQUATIONS.filter(e =>
 );
 ```
 
-### Formal references on a catalog entry
+### Formal references for a catalog id
 
-A `BRIDGE_EQUATIONS` entry may carry `formalRef`. The object has `kind` and `url` in addition to `system`, `statement`, `version`, `axioms`, `fidelity`, and `covers`.
+A `BRIDGE_EQUATIONS` entry does not carry `formalRef`. The reference for a catalog id is `catalogFormalRef` in `src/atlas/catalog-formal-ref.ts`. That function is not a package-root export. The object has `kind` and `url` in addition to `system`, `statement`, `version`, `axioms`, `fidelity`, and `covers`.
 
-`kind` is `property`, `cross-check`, `reduction`, `limit`, or `derivation-step` on a catalog entry. `url` is a permalink to that theorem's Lean file at the commit named in `version`. `SpringLc` and `DampedRlc` are namespaces inside `PhysJS/OscillatorDictionary.lean`.
+`kind` is `bridge`, `property`, `cross-check`, `reduction`, `limit`, or `derivation-step`. `url` is a permalink to that theorem's Lean file at the commit named in `version`. `SpringLc` and `DampedRlc` are namespaces inside `PhysJS/OscillatorDictionary.lean`.
 
-Passing the reference to `deriveEvidence` (the atlas subpath) lights `formally-proved` only when `kind` is `bridge`. A property lights `formally-proved-property`. A cross-check lights `formally-proved-cross-check`. Those two labels are shown and are not a proved bridge. A reduction, a limit, and a derivation-step light none of the three. The catalog evidence path still omits `formalRef`, so a catalog row stays `proposed` or `contradicted`.
+Passing the reference to `deriveEvidence` (the atlas subpath) lights `formally-proved` only when `kind` is `bridge`. A property lights `formally-proved-property`. A cross-check lights `formally-proved-cross-check`. Those two labels are shown and are not a proved bridge. A reduction, a limit, and a derivation-step light none of the three. The catalog evidence path still omits the reference, so a catalog row stays `proposed` or `contradicted`.
 
 ### `isActiveStatus(s)` — function
 

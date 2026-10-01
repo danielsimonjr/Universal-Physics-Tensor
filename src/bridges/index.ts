@@ -32,11 +32,9 @@
 import type {
   Conventions,
   Counterexample,
-  FormalRef,
   Regime,
   RelationContract,
 } from '../relations/types.js';
-import { physjsFormalRef } from '../atlas/physjs-ref.js';
 // `deriveRegimeGroups` is a value. It lives in `relations/regime.js`, which
 // imports the relations vocabulary and `dimensional/*` only — importing it
 // closes no cycle back into `bridges/`.
@@ -259,16 +257,8 @@ export interface BridgeEquationEntry {
   conventions?: Conventions;
   /** Cases this bridge does NOT cover, each with its witness. */
   counterexamples?: readonly Counterexample[];
-  /**
-   * A reviewed PhysJS reference for one part of this equation.
-   *
-   * Optional. One id is one reference, and it names the manifest's top-level
-   * theorem. `kind` is `property`, `cross-check`, `reduction`, `limit`, or
-   * `derivation-step`. It is not `bridge`, so passing it to `deriveEvidence`
-   * does not tag the row `formally-proved`. The catalog evidence path still
-   * omits the field.
-   */
-  formalRef?: FormalRef;
+  // A PhysJS reference for a catalog id is catalogFormalRef in
+  // src/atlas/catalog-formal-ref.ts. This row does not store one.
 }
 
 // ── GR spine regimes (Atlas Phase 2, S2.5) ─────────────────────────────────
@@ -524,7 +514,6 @@ export const GR_SPINE_CONFRONTATION_POINTS: Readonly<
 export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 {
   id: 11,
-  formalRef: physjsFormalRef('be-11'),
   name: `Decoherence Master Equation`,
   category: `A`,
   category_name: `Quantum-Classical Bridges`,
@@ -571,7 +560,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 12,
-  formalRef: physjsFormalRef('be-12'),
   name: `Mesoscopic Coherence Length Equation (Caldeira-Leggett dephasing length)`,
   category: `A`,
   category_name: `Quantum-Classical Bridges`,
@@ -615,7 +603,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 13,
-  formalRef: physjsFormalRef('be-13'),
   name: `Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)`,
   category: `B`,
   category_name: `Information-Physical Bridges`,
@@ -666,7 +653,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 14,
-  formalRef: physjsFormalRef('be-14'),
   name: `Quantum Error Correction Holographic Mapping`,
   category: `B`,
   category_name: `Information-Physical Bridges`,
@@ -685,7 +671,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 15,
-  formalRef: physjsFormalRef('be-15'),
   name: `Universal Emergence Equation (Hohenberg-Halperin Model A gradient flow)`,
   category: `C`,
   category_name: `Emergence and Complexity`,
@@ -735,7 +720,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 16,
-  formalRef: physjsFormalRef('be-16'),
   name: `Information-Thermodynamics Bridge (Landauer's principle)`,
   category: `C`,
   category_name: `Emergence and Complexity`,
@@ -803,7 +787,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 17,
-  formalRef: physjsFormalRef('be-17'),
   name: `Einstein-Cartan torsion-spin coupling`,
   category: `D`,
   category_name: `Field Unification Bridges`,
@@ -886,7 +869,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 19,
-  formalRef: physjsFormalRef('be-19'),
   name: `Quantum Bounce Equation`,
   category: `E`,
   category_name: `Cosmological-Quantum Bridges`,
@@ -974,7 +956,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 21,
-  formalRef: physjsFormalRef('be-21'),
   name: `KSS viscosity-to-entropy bound (AdS/CFT universal lower bound)`,
   category: `F`,
   category_name: `Condensed Matter - High Energy Bridges`,
@@ -1037,7 +1018,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 22,
-  formalRef: physjsFormalRef('be-22'),
   name: `Topological Entanglement Entropy - Quantum Gravity Link`,
   category: `F`,
   category_name: `Condensed Matter - High Energy Bridges`,
@@ -1143,7 +1123,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 24,
-  formalRef: physjsFormalRef('be-24'),
   name: `Quantum Coherence in Photosynthesis Efficiency (Förster resonance energy transfer)`,
   category: `G`,
   category_name: `Quantum Biology Bridges`,
@@ -1290,7 +1269,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 27,
-  formalRef: physjsFormalRef('be-27'),
   name: `Fluctuation-Dissipation Violation in Active Matter`,
   category: `H`,
   category_name: `Non-Equilibrium Statistical Mechanics`,
@@ -1329,7 +1307,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 28,
-  formalRef: physjsFormalRef('be-28'),
   name: `Maximum Entropy Production Principle`,
   category: `H`,
   category_name: `Non-Equilibrium Statistical Mechanics`,
@@ -1353,7 +1330,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 29,
-  formalRef: physjsFormalRef('be-29'),
   name: `Jarzynski free-energy equality (canonical 1997 form)`,
   category: `H`,
   category_name: `Non-Equilibrium Statistical Mechanics`,
@@ -1394,7 +1370,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 30,
-  formalRef: physjsFormalRef('be-30'),
   name: `Entanglement - Geometry Equation (FLM first-law / linear-response)`,
   category: `I`,
   category_name: `Emergent Spacetime`,
@@ -1464,7 +1439,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 32,
-  formalRef: physjsFormalRef('be-32'),
   name: `Quantum Reference Frame Transformation`,
   category: `I`,
   category_name: `Emergent Spacetime`,
@@ -1497,7 +1471,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 33,
-  formalRef: physjsFormalRef('be-33'),
   name: `Quantum-Classical Critical Point Mapping (Hertz-Millis canonical scaling, 3D Heisenberg)`,
   category: `J`,
   category_name: `Phase Transitions and Criticality`,
@@ -1542,7 +1515,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 34,
-  formalRef: physjsFormalRef('be-34'),
   name: `Kibble-Zurek Mechanism in Curved Spacetime`,
   category: `J`,
   category_name: `Phase Transitions and Criticality`,
@@ -1573,7 +1545,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 35,
-  formalRef: physjsFormalRef('be-35'),
   name: `Conformal Bootstrap - Physical Operator Equation`,
   category: `J`,
   category_name: `Phase Transitions and Criticality`,
@@ -1700,7 +1671,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 37,
-  formalRef: physjsFormalRef('be-37'),
   name: `Modified light-propagation: Shapiro gravitational time delay`,
   category: `K`,
   category_name: `Modified Theories and Extensions`,
@@ -1772,7 +1742,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 38,
-  formalRef: physjsFormalRef('be-38'),
   name: `Milgrom MOND interpolation ν(z)`,
   category: `K`,
   category_name: `Modified Theories and Extensions`,
@@ -1851,7 +1820,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 40,
-  formalRef: physjsFormalRef('be-40'),
   name: `Composite Higgs Potential`,
   category: `L`,
   category_name: `Quantum Field Theory Extensions`,
@@ -1904,7 +1872,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 42,
-  formalRef: physjsFormalRef('be-42'),
   name: `Hawking temperature (canonical 1975 derivation)`,
   category: `M`,
   category_name: `Information Paradox Resolutions`,
@@ -1957,7 +1924,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 43,
-  formalRef: physjsFormalRef('be-43'),
   name: `ER=EPR Wormhole-Entropy Bound`,
   category: `M`,
   category_name: `Information Paradox Resolutions`,
@@ -2222,7 +2188,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 50,
-  formalRef: physjsFormalRef('be-50'),
   name: `Retrocausal QFT (Wheeler-Feynman half-retarded-plus-half-advanced)`,
   category: `O`,
   category_name: `Quantum Foundations`,
@@ -2274,7 +2239,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 // ---------------------------------------------------------------------------
 {
   id: 51,
-  formalRef: physjsFormalRef('be-51'),
   name: `Gravitational Lensing — Eddington 1919 weak-field deflection`,
   category: `I`,
   category_name: `Emergent Spacetime`,
@@ -2365,7 +2329,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 // ---------------------------------------------------------------------------
 {
   id: 54,
-  formalRef: physjsFormalRef('be-54'),
   name: `Randall-Sundrum brane cosmology (modified Friedmann with brane-tension correction)`,
   category: `E`,
   category_name: `Cosmological-Quantum Bridges`,
@@ -2403,7 +2366,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 53,
-  formalRef: physjsFormalRef('be-53'),
   name: `Yang-Mills one-loop β-function (asymptotic freedom)`,
   category: `L`,
   category_name: `Quantum Field Theory Extensions`,
@@ -2426,7 +2388,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 55,
-  formalRef: physjsFormalRef('be-55'),
   name: `Integer Quantum Hall effect / TKNN (topological Hall conductance)`,
   category: `F`,
   category_name: `Condensed Matter - High Energy Bridges`,
@@ -2517,7 +2478,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 58,
-  formalRef: physjsFormalRef('be-58'),
   name: `Johnson-Nyquist noise / fluctuation-dissipation theorem`,
   category: `H`,
   category_name: `Non-Equilibrium Statistical Mechanics`,
@@ -2565,7 +2525,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 59,
-  formalRef: physjsFormalRef('be-59'),
   name: `AC Josephson effect (quantum voltage standard)`,
   category: `F`,
   category_name: `Condensed Matter - High Energy Bridges`,
@@ -2607,7 +2566,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 60,
-  formalRef: physjsFormalRef('be-60'),
   name: `Fractional Quantum Hall effect (Laughlin ν=1/3)`,
   category: `F`,
   category_name: `Condensed Matter - High Energy Bridges`,
@@ -2630,7 +2588,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 61,
-  formalRef: physjsFormalRef('be-61'),
   name: `Wiedemann-Franz law (Lorenz number)`,
   category: `F`,
   category_name: `Condensed Matter - High Energy Bridges`,
@@ -2675,7 +2632,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 63,
-  formalRef: physjsFormalRef('be-63'),
   name: `Chandrasekhar mass (white-dwarf degeneracy limit)`,
   category: `I`,
   category_name: `Emergent Spacetime`,
@@ -2698,7 +2654,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 64,
-  formalRef: physjsFormalRef('be-64'),
   name: `Eddington luminosity (radiation-pressure limit)`,
   category: `I`,
   category_name: `Emergent Spacetime`,
@@ -2721,7 +2676,6 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 65,
-  formalRef: physjsFormalRef('be-65'),
   name: `Jeans mass (gravitational collapse criterion)`,
   category: `I`,
   category_name: `Emergent Spacetime`,
