@@ -72,6 +72,18 @@
     },
     {
       "id": 13,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Einstein.trace_eq",
+        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "reduction: contracting G_μν + Λ g_μν = κ T_μν in four dimensions gives R = 4Λ − κ T, not Jacobson's thermodynamic derivation — covers its statement only"
+      },
       "name": "Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)",
       "category": "B",
       "category_name": "Information-Physical Bridges",
@@ -821,6 +833,18 @@
     },
     {
       "id": 34,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.KibbleZurek.exponent",
+        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor — covers its statement only"
+      },
       "name": "Kibble-Zurek Mechanism in Curved Spacetime",
       "category": "J",
       "category_name": "Phase Transitions and Criticality",
@@ -1016,7 +1040,19 @@
     },
     {
       "id": 38,
-      "name": "Entropic Gravity Correction Term",
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Mond.tendsto_nu_limits",
+        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "limit: ν → 1 as z → ∞, ν √z → 1 as z → 0⁺, and F_N ν(z) / √(m F_N a₀) → 1 as F_N → 0⁺; not ν → √(2/z), and not the SPARC confrontation — covers its statement only"
+      },
+      "name": "Milgrom MOND interpolation ν(z)",
       "category": "K",
       "category_name": "Modified Theories and Extensions",
       "bridges": [
@@ -1600,6 +1636,18 @@
     },
     {
       "id": 53,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.YangMills.b0_pos_iff_nf_le",
+        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "derivation-step: b₀ > 0 iff N_f ≤ 16 for SU(3), not a running procedure past one loop — covers its statement only"
+      },
       "name": "Yang-Mills one-loop β-function (asymptotic freedom)",
       "category": "L",
       "category_name": "Quantum Field Theory Extensions",
@@ -1711,6 +1759,18 @@
     },
     {
       "id": 58,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.JohnsonNyquist.tendsto_classical",
+        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "limit: the classical Johnson–Nyquist spectrum is the ω → 0⁺ limit of the quantum parent, not the fluctuation–dissipation theorem — covers its statement only"
+      },
       "name": "Johnson-Nyquist noise / fluctuation-dissipation theorem",
       "category": "H",
       "category_name": "Non-Equilibrium Statistical Mechanics",
@@ -1882,6 +1942,18 @@
     },
     {
       "id": 64,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Eddington.balance_iff",
+        "version": "physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "covers": "derivation-step: the r² cancellation in the Eddington force balance, not a hard cap — covers its statement only"
+      },
       "name": "Eddington luminosity (radiation-pressure limit)",
       "category": "I",
       "category_name": "Emergent Spacetime",

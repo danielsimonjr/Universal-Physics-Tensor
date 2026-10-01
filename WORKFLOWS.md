@@ -68,12 +68,12 @@ count of the old file.
 
 ## Adding or changing a Lean `formalRef` (`lean4-physjs`)
 
-Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs. UPT does not run Lean for this system. `NOTES.md` records ten reviewed `formalRef`s, each `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
+Public PhysJS (`https://github.com/danielsimonjr/PhysJS`) holds the Lean proofs. UPT does not run Lean for this system. `NOTES.md` records the reviewed count. Each reference is `system: 'lean4-physjs'`. The procedure below is how one of those references is added or retargeted. The count itself stays in `NOTES.md`.
 
 1. Land the theorem in PhysJS. Its `manifest/bridges.json` entry (schema `physjs-bridge-manifest/v1`) names `key`, `bridgeId`, `theorem`, `covers`, `coverage` (`covers its statement only`), `leanProof`, and `axioms`. The axioms are what PhysJS measured with `#print axioms`. This repository does not re-measure them.
 2. Vendor that file to `formal/physjs/manifest.json` at the PhysJS commit being pinned. The file's `commit`, `toolchain`, `mathlib`, and `physlib` are the pin.
 3. Copy the entry into `PHYSJS_ENTRIES` in `src/atlas/physjs-ref.ts`, and set `PHYSJS_COMMIT` to that commit. A bridge obtains its reference with `physjsFormalRef(key)`. The module sets `system: 'lean4-physjs'` and `fidelity: 'sanity-lemmas'`. The bridge does not name a theorem of its own.
-4. Put `formalRef: physjsFormalRef('<key>')` on the atlas bridge. `deriveEvidence` turns a fidelity other than `unreviewed` into `formally-proved`. The tag is not stored on the bridge.
+4. Put `formalRef: physjsFormalRef('<key>')` on the atlas bridge, or, for a catalog id `be-<n>`, on `BridgeEquationEntry`. `deriveEvidence` turns a fidelity other than `unreviewed` into `formally-proved` when the reference is passed to it. The tag is not stored on the bridge. A catalog reference is not passed: a proof of one part does not tag the row. Only a covers line that begins with `reduction`, `limit`, or `derivation-step` may be a catalog reference. A nested object is recorded and is not a second reference. A `property` or a `cross-check` is not copied into the vendored manifest.
 5. Add the key, theorem, and `covers` line to `EXPECTED` in `tests/atlas/physjs-manifest.test.ts`.
 6. Run `bun run atlas:formal-gate`. With no `lean4-physlib` reference, the gate compares the vendored manifest to the bridges and does not run Lean. It must print `formalRef axiom gate: PASS (lean4-physjs manifest; no lean4-physlib formalRef)`. A wrong commit, theorem, key, axiom list, or coverage phrase fails. A manifest entry with no bridge fails. A `lean4-physjs` reference with no manifest entry fails.
 7. Commit the vendored manifest, `PHYSJS_ENTRIES`, the bridge's `formalRef`, and the test's `EXPECTED` list together.

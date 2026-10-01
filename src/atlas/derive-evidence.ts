@@ -270,6 +270,26 @@ export function deriveEvidence(
 }
 
 /**
+ * The artifacts a catalog row may be judged on.
+ *
+ * `formalRef` is absent on purpose. A catalog reference certifies one part.
+ * Passing it to {@link deriveEvidence} would light `formally-proved` on the
+ * whole row. The predicate still lights that tag when a caller passes a
+ * reference; this function is what keeps the catalog path from doing so.
+ *
+ * @internal
+ */
+export function catalogEvidenceInput(row: {
+  readonly conventions?: Conventions;
+  readonly counterexamples?: readonly CounterexampleLike[];
+}): EvidenceInput {
+  return {
+    ...(row.conventions !== undefined ? { conventions: row.conventions } : {}),
+    ...(row.counterexamples !== undefined ? { counterexamples: row.counterexamples } : {}),
+  };
+}
+
+/**
  * Derive the evidence set of a catalog row, under the adjudication precedence
  * of design note §4. The verdict is supplied by the caller — it comes from
  * `adjudicateBridgeEntry`, which owns the rejected-id registry

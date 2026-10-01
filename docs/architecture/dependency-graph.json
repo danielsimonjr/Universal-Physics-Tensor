@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 401,
     "totalModules": 12,
-    "totalExports": 2903
+    "totalExports": 2904
   },
   "entryPoints": [
     {
@@ -675,6 +675,7 @@
           "NO_PASSING_WITNESSES",
           "counterexamplesWithRejection",
           "deriveEvidence",
+          "catalogEvidenceInput",
           "deriveEvidenceForVerdict",
           "deriveCompositeEvidence"
         ],
@@ -687,6 +688,7 @@
         "functions": [
           "counterexamplesWithRejection",
           "deriveEvidence",
+          "catalogEvidenceInput",
           "deriveEvidenceForVerdict",
           "deriveCompositeEvidence"
         ],
@@ -8589,10 +8591,17 @@
             "imports": [
               "Conventions",
               "Counterexample",
+              "FormalRef",
               "Regime",
               "RelationContract"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../atlas/physjs-ref.js",
+            "imports": [
+              "physjsFormalRef"
+            ]
           },
           {
             "file": "../atlas/regime.js",
@@ -16716,6 +16725,7 @@
           {
             "file": "../atlas/derive-evidence.js",
             "imports": [
+              "catalogEvidenceInput",
               "deriveEvidenceForVerdict",
               "NO_PASSING_WITNESSES"
             ]
@@ -28018,11 +28028,11 @@
   "statistics": {
     "totalTypeScriptFiles": 401,
     "totalModules": 12,
-    "totalLinesOfCode": 88512,
-    "totalExports": 2903,
+    "totalLinesOfCode": 88709,
+    "totalExports": 2904,
     "totalClasses": 60,
     "totalInterfaces": 462,
-    "totalFunctions": 749,
+    "totalFunctions": 750,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 717,

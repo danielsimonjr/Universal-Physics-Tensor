@@ -1,13 +1,12 @@
 # Phase 4 formalRef scoping
 
-> **Banner.** The measurements below are the 2026-09-24 scoping record. The live set is ten
-> reviewed `formalRef`s with `system: 'lean4-physjs'`, vendored from public PhysJS
-> (`private: false`). The rolling record is `NOTES.md`. The search tables stay as that day's
-> record.
+> **Banner.** The measurements below are the 2026-09-24 scoping record. The live count is in
+> `NOTES.md`: atlas bridges and catalog equations are separate, each `system: 'lean4-physjs'`,
+> vendored from public PhysJS (`private: false`). The search tables stay as that day's record.
 
 A scoping report, not code. It answers five questions from Mothership (2026-09-24) about the Phase 4
-exit criterion "≥ 5 with a reviewed `formalRef`". The count is ~~1~~ ~~six~~ ten `lean4-physjs` references
-via public PhysJS. "The count is 1" is the 2026-09-24 measurement. Every statement below names its
+exit criterion "≥ 5 with a reviewed `formalRef`". The count is ~~1~~ ~~six~~ ~~ten~~ the split in
+`NOTES.md`. "The count is 1" is the 2026-09-24 measurement. Every statement below names its
 source. Measurements carry their commit and date.
 
 ## Owner decision

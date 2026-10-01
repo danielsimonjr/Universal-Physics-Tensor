@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 398,
-    "totalTestFiles": 545,
+    "totalTestFiles": 546,
     "testedCount": 388,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -723,6 +723,7 @@
       "tests/cli/recover-conventions.test.ts"
     ],
     "src/atlas/physjs-ref.ts": [
+      "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/physjs-manifest.test.ts"
     ],
     "src/atlas/poster/associations.ts": [
@@ -1100,6 +1101,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1120,6 +1122,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1170,6 +1173,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1190,6 +1194,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1223,6 +1228,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1243,6 +1249,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1292,6 +1299,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1312,6 +1320,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1362,6 +1371,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1382,6 +1392,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1432,6 +1443,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1452,6 +1464,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1502,6 +1515,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1522,6 +1536,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1572,6 +1587,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1592,6 +1608,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1642,6 +1659,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1662,6 +1680,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1713,6 +1732,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1733,6 +1753,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1783,6 +1804,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1803,6 +1825,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -1942,7 +1965,8 @@
       "tests/bridges/be-12-encoding.test.ts"
     ],
     "src/bridges/equations/be-13-einstein-trace.ts": [
-      "tests/bridges/be-13-encoding.test.ts"
+      "tests/bridges/be-13-encoding.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-14-ryu-takayanagi.ts": [
       "tests/bridges/be-14-ryu-takayanagi.test.ts"
@@ -2020,6 +2044,7 @@
     ],
     "src/bridges/equations/be-34-kibble-zurek.ts": [
       "tests/bridges/be-34-encoding.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/dimensional/bridge-check.test.ts"
     ],
     "src/bridges/equations/be-35-conformal-bootstrap.ts": [
@@ -2038,7 +2063,8 @@
       "tests/numerical/be37-shapiro-step-sweep.test.ts"
     ],
     "src/bridges/equations/be-38-mond.ts": [
-      "tests/bridges/be-38-encoding.test.ts"
+      "tests/bridges/be-38-encoding.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts"
     ],
     "src/bridges/equations/be-39-asymptotic-safety.ts": [
       "tests/bridges/be-39-encoding.test.ts"
@@ -2088,6 +2114,7 @@
       "tests/bridges/be-53-encoding.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -2139,6 +2166,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -2159,6 +2187,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -2193,6 +2222,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -2213,6 +2243,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -2286,6 +2317,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -2306,6 +2338,7 @@
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-integrity.test.ts",
       "tests/bridges/catalog-json.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
@@ -5270,7 +5303,9 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -6060,6 +6095,7 @@
       "tests/bridges/be-58-johnson-nyquist.test.ts",
       "tests/bridges/be-62-bcs-gap.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/perihelion-precession.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/bridges/solar-gm.test.ts",
@@ -8452,6 +8488,7 @@
       "src/atlas/waves/bridges.ts",
       "src/atlas/waves/bridges-closure.ts",
       "src/atlas/waves/numerics.ts",
+      "src/atlas/physjs-ref.ts",
       "src/atlas/types.ts"
     ],
     "tests/atlas/gr-spine-regime.test.ts": [
@@ -8617,6 +8654,21 @@
     "tests/atlas/physjs-manifest.test.ts": [
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
+      "src/composition/graph-viz.ts",
+      "src/bridges/index.ts",
+      "src/bridges/gravitational-lensing.ts",
+      "src/bridges/perihelion-precession.ts",
+      "src/bridges/be55-quantum-hall.ts",
+      "src/bridges/be56-casimir.ts",
+      "src/bridges/be57-unruh.ts",
+      "src/bridges/be58-johnson-nyquist.ts",
+      "src/bridges/be59-ac-josephson.ts",
+      "src/bridges/be60-fractional-qh.ts",
+      "src/bridges/be61-wiedemann-franz.ts",
+      "src/bridges/be62-bcs-gap.ts",
+      "src/bridges/be63-chandrasekhar-mass.ts",
+      "src/bridges/be64-eddington-luminosity.ts",
+      "src/bridges/be65-jeans-mass.ts",
       "src/atlas/physjs-ref.ts"
     ],
     "tests/atlas/poster.test.ts": [
@@ -9585,6 +9637,28 @@
       "src/bridges/catalog-adapter.ts",
       "src/core/tensor.ts",
       "src/core/types.ts"
+    ],
+    "tests/bridges/catalog-formal-sanity.test.ts": [
+      "src/bridges/index.ts",
+      "src/bridges/gravitational-lensing.ts",
+      "src/bridges/perihelion-precession.ts",
+      "src/bridges/be55-quantum-hall.ts",
+      "src/bridges/be56-casimir.ts",
+      "src/bridges/be57-unruh.ts",
+      "src/bridges/be58-johnson-nyquist.ts",
+      "src/bridges/be59-ac-josephson.ts",
+      "src/bridges/be60-fractional-qh.ts",
+      "src/bridges/be61-wiedemann-franz.ts",
+      "src/bridges/be62-bcs-gap.ts",
+      "src/bridges/be63-chandrasekhar-mass.ts",
+      "src/bridges/be64-eddington-luminosity.ts",
+      "src/bridges/be65-jeans-mass.ts",
+      "src/core/constants.ts",
+      "src/bridges/equations/be-53-yang-mills-beta.ts",
+      "src/bridges/equations/be-38-mond.ts",
+      "src/bridges/equations/be-13-einstein-trace.ts",
+      "src/bridges/equations/be-34-kibble-zurek.ts",
+      "src/composition/graph-viz.ts"
     ],
     "tests/bridges/catalog-grammar-applicability.test.ts": [
       "src/dimensional/validator.ts",

@@ -23,6 +23,7 @@ import type { BridgeEdge } from './edge.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import type { EvidenceTag, RelationType } from '../atlas/types.js';
 import {
+  catalogEvidenceInput,
   deriveEvidenceForVerdict,
   NO_PASSING_WITNESSES,
 } from '../atlas/derive-evidence.js';
@@ -246,6 +247,7 @@ export function edgeToJunction(edge: BridgeEdge): VizJunction {
  * `NO_PASSING_WITNESSES` is passed deliberately: catalog rows declare no
  * `witnesses` at all, so no witness-backed tag can be earned from them today,
  * and saying so explicitly is required by `deriveEvidence`'s own contract.
+ * A catalog `formalRef` is not passed. A proof of one part does not tag the row.
  *
  * @internal — CLI support, reached through `src/cli-api.ts`. Not on the
  * published surface: `tests/api/public-surface.test.ts` pins that surface and
@@ -256,7 +258,7 @@ export function deriveEdgeEvidence(beId: number): ReadonlySet<EvidenceTag> {
   if (row === undefined) return new Set<EvidenceTag>();
   return deriveEvidenceForVerdict(
     adjudicateBridgeEntry(row),
-    row,
+    catalogEvidenceInput(row),
     NO_PASSING_WITNESSES,
   );
 }

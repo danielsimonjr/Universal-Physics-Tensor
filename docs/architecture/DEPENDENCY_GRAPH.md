@@ -286,7 +286,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `WitnessLike`, `CounterexampleLike`, `RejectionLike`, `EvidenceInput`
-- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `deriveEvidenceForVerdict`, `deriveCompositeEvidence`
+- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `catalogEvidenceInput`, `deriveEvidenceForVerdict`, `deriveCompositeEvidence`
 - Constants: `NO_PASSING_WITNESSES`
 
 ---
@@ -2611,7 +2611,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../atlas/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
+| `../atlas/types.js` | `Conventions, Counterexample, FormalRef, Regime, RelationContract` | Import (type-only) |
+| `../atlas/physjs-ref.js` | `physjsFormalRef` | Import |
 | `../atlas/regime.js` | `deriveRegimeGroups` | Import |
 | `../dimensional/types.js` | `LENGTH, VELOCITY` | Import |
 | `./be52-mercury-confrontation.js` | `MERCURY` | Import |
@@ -4795,7 +4796,7 @@ The codebase is organized into the following modules:
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
 | `../atlas/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
-| `../atlas/derive-evidence.js` | `deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Import |
+| `../atlas/derive-evidence.js` | `catalogEvidenceInput, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Import |
 | `../bridges/membership.js` | `adjudicateBridgeEntry` | Import |
 | `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
 
@@ -7612,12 +7613,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 401 |
 | Total Modules | 12 |
-| Total Lines of Code | 88512 |
-| Total Exports | 2903 |
+| Total Lines of Code | 88709 |
+| Total Exports | 2904 |
 | Total Re-exports | 1376 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
-| Total Functions | 749 |
+| Total Functions | 750 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 541 |

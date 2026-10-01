@@ -32,7 +32,7 @@ counterexamples:
   - the approximation is non-uniform in time: at θ0 = 0.2 the phase drift reaches π/2 after ~100 cycles, however small the per-cycle error is (witness W7b)
 formal reference:
   lean4-physjs: PhysJS.Pendulum.linearizedEquationOfMotion_iff
-  version physjs@d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940; axioms propext, Classical.choice, Quot.sound
+  version physjs@2ca196eb968252230d71018c14b6ca7d2d445763 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940; axioms propext, Classical.choice, Quot.sound
   fidelity: sanity-lemmas
   covers: the transformation, not bound.delta — covers its statement only
 evidence by claim (derived from the record's structure):
