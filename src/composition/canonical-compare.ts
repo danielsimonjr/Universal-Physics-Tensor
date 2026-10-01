@@ -34,6 +34,7 @@ import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-pref
 import { formulaNameDimensions } from './formula-names.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
+import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
 import type { CompiledFormula } from '../numerical/formula.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -632,7 +633,9 @@ export async function compareUserEquation(
   const target = declined(eq.target) ? eq.target : (resolveToCatalogName(eq.target, catalogNames) ?? eq.target);
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
-  for (const [s, r] of resolved) dims[s] = declined(s) ? DIMENSIONLESS : (dimsIn.get(r) ?? DIMENSIONLESS);
+  for (const [s, r] of resolved) {
+    dims[s] = declined(s) ? DIMENSIONLESS : (dimsIn.get(r) ?? formulaSymbolDimension(s) ?? DIMENSIONLESS);
+  }
   const rhs = eq.text.slice(eq.text.indexOf('=') + 1);
   let compiled: CompiledFormula;
   try {

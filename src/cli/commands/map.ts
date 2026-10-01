@@ -26,8 +26,6 @@ import type { EvidenceTag, RelationType } from '../../atlas/types.js';
 import type { SourceName } from '../graphs.js';
 import type { EquationAnalysis } from '../../composition/user-equation.js';
 import type { CanonicalComparison } from '../../composition/canonical-compare.js';
-import { eulerConstantNote } from '../../numerical/formula.js';
-import { unboundEulerRefusal } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import { naturalConstantOverrides, type UnitMode } from '../../composition/natural-units.js';
 
@@ -56,7 +54,6 @@ const FLAGS: FlagSpec[] = [
   { name: '--equation-only', valueStyle: 'none' },
   { name: '--verbose', valueStyle: 'none' },
   { name: '--bind-short', valueStyle: 'none' },
-  { name: '--allow-euler', valueStyle: 'none' },
   { name: '--natural', valueStyle: 'none' },
   { name: '--geometrized', valueStyle: 'none' },
   { name: '--json', valueStyle: 'none' },
@@ -65,7 +62,7 @@ const FLAGS: FlagSpec[] = [
 const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
         [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
         [--equation "TARGET = EXPR" [--equation-only] [--verbose] [--bind-short]
-        [--allow-euler] [--natural] [--geometrized]] [--around=QUANTITY [--depth=N]]
+        [--natural] [--geometrized]] [--around=QUANTITY [--depth=N]]
         [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
         [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
         Map how the equations LINK: connected components (clusters) of the
@@ -104,7 +101,8 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         With --equation, the default is the verdict only. --verbose prints the
         linkage map after it. --equation-only is the same verdict and errors
         when --equation is missing (with --json: no "linkage" field).
-        An unbound e under MathTS is refused unless --allow-euler.
+        A bare e in the formula is the elementary charge. E is energy.
+        Euler's number is exp(1) or euler.
         --natural sets ħ = c = 1 for a dimension difference that is a power of
         those constants; --geometrized also allows powers of G. The SI default
         still refuses rest_energy = mass.
@@ -595,18 +593,6 @@ async function run(ctx: CommandCtx): Promise<number> {
       })); // throws UserEquationError on malformed structure
     } catch (e) {
       throw new UsageError('upt: ' + (e && (e as Error).message ? (e as Error).message : String(e)));
-    }
-    const rhs = equation.slice(equation.indexOf('=') + 1);
-    try {
-      const parsed = (await api.getFormulaParser()).parse(rhs);
-      const kind = await api.getFormulaParserKind();
-      const refusal = unboundEulerRefusal(rhs, parsed.variables, kind, args.flags.has('allow-euler'), false);
-      if (refusal) throw new UsageError(refusal);
-      const note = eulerConstantNote(rhs, parsed.variables);
-      if (note && args.flags.has('allow-euler')) err(note);
-    } catch (e) {
-      if (e instanceof UsageError) throw e;
-      // A formula that does not parse is reported by the equation analysis.
     }
     if (user.parseError) {
       throw new UsageError('upt: ' + user.parseError); // dimensionally malformed RHS

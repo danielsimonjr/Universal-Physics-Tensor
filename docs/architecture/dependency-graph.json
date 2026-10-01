@@ -4,7 +4,7 @@
     "version": "0.47.1",
     "totalFiles": 401,
     "totalModules": 12,
-    "totalExports": 2904
+    "totalExports": 2903
   },
   "entryPoints": [
     {
@@ -11368,15 +11368,8 @@
             ]
           },
           {
-            "file": "../../numerical/formula.js",
-            "imports": [
-              "eulerConstantNote"
-            ]
-          },
-          {
             "file": "../euler-guard.js",
             "imports": [
-              "unboundEulerRefusal",
               "withParser"
             ]
           },
@@ -11512,15 +11505,8 @@
             ]
           },
           {
-            "file": "../../numerical/formula.js",
-            "imports": [
-              "eulerConstantNote"
-            ]
-          },
-          {
             "file": "../euler-guard.js",
             "imports": [
-              "unboundEulerRefusal",
               "withParser"
             ]
           },
@@ -12071,18 +12057,6 @@
               "CanonicalComparison"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../../numerical/formula.js",
-            "imports": [
-              "eulerConstantNote"
-            ]
-          },
-          {
-            "file": "../euler-guard.js",
-            "imports": [
-              "unboundEulerRefusal"
-            ]
           },
           {
             "file": "../conventions.js",
@@ -12719,23 +12693,14 @@
         ]
       },
       "src/cli/euler-guard.ts": {
-        "description": "Refuse a bare `e` that the MathTS parser would evaluate as Euler's number.",
+        "description": "Name the active formula parser on an error a script can read.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../numerical/formula.js",
-            "imports": [
-              "eulerConstantNote"
-            ]
-          }
-        ],
+        "internalDependencies": [],
         "exports": [
-          "unboundEulerRefusal",
           "withParser"
         ],
         "functions": [
-          "unboundEulerRefusal",
           "withParser"
         ]
       },
@@ -14579,6 +14544,12 @@
             "imports": [
               "getFormulaParser",
               "parsePhysics"
+            ]
+          },
+          {
+            "file": "../numerical/formula-dimension.js",
+            "imports": [
+              "formulaSymbolDimension"
             ]
           },
           {
@@ -20376,15 +20347,17 @@
           {
             "file": "../dimensional/types.js",
             "imports": [
+              "ACTION",
+              "CHARGE",
               "DIMENSIONLESS",
-              "VELOCITY",
-              "ACTION"
+              "VELOCITY"
             ]
           },
           {
             "file": "../core/constants.js",
             "imports": [
               "C_SI",
+              "E_SI",
               "G_SI",
               "GM_SUN_SI",
               "HBAR_SI",
@@ -20490,6 +20463,12 @@
             "imports": [
               "getFormulaParser",
               "parsePhysics"
+            ]
+          },
+          {
+            "file": "../numerical/formula-dimension.js",
+            "imports": [
+              "formulaSymbolDimension"
             ]
           },
           {
@@ -26159,7 +26138,9 @@
           {
             "file": "../dimensional/types.js",
             "imports": [
-              "DIMENSIONLESS"
+              "CHARGE",
+              "DIMENSIONLESS",
+              "ENERGY"
             ]
           },
           {
@@ -26204,6 +26185,7 @@
           }
         ],
         "exports": [
+          "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker",
           "FormulaDimensionError"
@@ -26216,6 +26198,7 @@
           "FormulaDimensionChecker"
         ],
         "functions": [
+          "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker"
         ]
@@ -26240,6 +26223,12 @@
               "callBuiltinFunction",
               "FormulaError",
               "unknownFunctionMessage"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI"
             ]
           }
         ],
@@ -26314,7 +26303,14 @@
         "description": "Self-contained scalar-formula parser/evaluator (Path B).",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI"
+            ]
+          }
+        ],
         "exports": [
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
@@ -26323,7 +26319,6 @@
           "parseFormulaToAst",
           "unknownFunctionMessage",
           "callBuiltinFunction",
-          "eulerConstantNote",
           "parseFormula",
           "FormulaError"
         ],
@@ -26337,7 +26332,6 @@
         "functions": [
           "unknownFunctionMessage",
           "callBuiltinFunction",
-          "eulerConstantNote",
           "parseFormula"
         ],
         "constants": [
@@ -28028,11 +28022,11 @@
   "statistics": {
     "totalTypeScriptFiles": 401,
     "totalModules": 12,
-    "totalLinesOfCode": 88801,
-    "totalExports": 2904,
+    "totalLinesOfCode": 88785,
+    "totalExports": 2903,
     "totalClasses": 60,
     "totalInterfaces": 462,
-    "totalFunctions": 750,
+    "totalFunctions": 749,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 717,

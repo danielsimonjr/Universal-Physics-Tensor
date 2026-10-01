@@ -1,11 +1,11 @@
 /**
  * Textbook formulas and weak-field domain notes as `upt` prints them.
  * The comparison rules are pinned in tests/composition/gr-formula-compare.test.ts;
- * this file pins the CLI text, the Euler warning, and the be-51/be-52 cut.
+ * this file pins the CLI text, the elementary-charge reading of e, and the be-51/be-52 cut.
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
-import { C_SI, G_SI, M_SUN_SI } from '../../src/core/constants.js';
+import { C_SI, E_SI, G_SI, M_SUN_SI } from '../../src/core/constants.js';
 
 function capture() {
   const lines: string[] = [];
@@ -65,27 +65,24 @@ describe('upt map --equation — GR formulas a student types', () => {
     expect(half).toMatch(/differs from CE-schwarzschild-radius .* by a constant factor: yours\/canonical = 0\.500000/);
   });
 
-  it('a Bohr-radius formula that writes e is refused, and --allow-euler does not call it an agreement', async () => {
-    const refused = await text([
+  it('a Bohr-radius formula that writes e agrees with the canonical charge', async () => {
+    const t = await text([
       'map', '--equation-only', '--equation',
       'bohr_radius = 4*pi*epsilon_0*hbar^2/(m_e*e^2)',
-    ], 2);
-    expect(refused).toMatch(/unbound e is Euler's number/);
-    const t = await text([
-      'map', '--equation-only', '--allow-euler', '--equation',
-      'bohr_radius = 4*pi*epsilon_0*hbar^2/(m_e*e^2)',
-    ], 3);
-    expect(t).toMatch(/Euler/);
-    expect(t).not.toMatch(/agrees with CE-bohr-radius/);
+    ]);
+    expect(t).toMatch(/agrees with CE-bohr-radius/);
+    expect(t).not.toMatch(/Euler/);
+    const flagged = await text(['map', '--allow-euler'], 2);
+    expect(flagged).toMatch(/unknown flag/);
   });
 });
 
 describe('upt eval — bare e', () => {
-  it('an unbound e^2 is refused; --allow-euler evaluates Euler\'s number squared', async () => {
-    expect(await text(['eval', 'e^2'], 2)).toMatch(/Euler/);
-    const t = await text(['eval', 'e^2', '--allow-euler']);
-    expect(t).toMatch(/Euler/);
-    expect(Number(t.match(/[\d.]+e?[+\-]?\d*/g)?.filter((s) => Number(s) > 2).at(-1))).toBeCloseTo(Math.E ** 2, 10);
+  it('e^2 is the elementary charge squared, and --allow-euler is not a flag', async () => {
+    const t = await text(['eval', 'e^2']);
+    expect(t).not.toMatch(/Euler/);
+    expect(Number(t.trim())).toBeCloseTo(E_SI ** 2, 30);
+    expect(await text(['eval', '--allow-euler', 'e'], 2)).toMatch(/unknown flag/);
   });
 
   it('a longer name that contains e is not treated as Euler', async () => {

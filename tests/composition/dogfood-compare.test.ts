@@ -95,6 +95,15 @@ describe('spellings that are not a bare e', () => {
   });
 });
 
+describe('a bare E is energy', () => {
+  it('energy = E is dimensionally the energy', async () => {
+    const a = await analyzeUserEquation('energy = E', new Map([['energy', ENERGY]]));
+    expect(a.parseError).toBeNull();
+    expect(a.consistent).toBe(true);
+    expect(a.rhsDimension).toEqual(ENERGY);
+  });
+});
+
 describe('formula-name overlay', () => {
   it('m_e and e_charge carry mass and charge, so a Rydberg monomial is an energy', async () => {
     const a = await analyzeUserEquation(
