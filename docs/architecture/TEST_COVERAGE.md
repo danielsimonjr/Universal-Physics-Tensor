@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 398 |
-| Total Test Files | 546 |
+| Total Test Files | 547 |
 | Source Files with Tests | 388 |
 | Source Files without Tests | 10 |
 | Coverage | 97.5% |
@@ -987,6 +987,7 @@ The following 10 source files are not directly imported by any test file:
 | `tools/package-deps.test.ts` | 0 files |
 | `tools/plan-doc-audit.test.ts` | 0 files |
 | `tools/pre-push-executable.test.ts` | 0 files |
+| `tools/publish-version-guard.test.ts` | 0 files |
 | `tools/pushed-head.test.ts` | 0 files |
 | `tools/readme-links.test.ts` | 0 files |
 | `tools/untracked-gate-inputs.test.ts` | 0 files |

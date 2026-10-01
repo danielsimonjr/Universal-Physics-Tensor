@@ -1,0 +1,50 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# contents: read checks out the tagged commit. id-token: write is what npm
+# provenance asks Sigstore for. This job does not push, tag, or open a release.
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # Same runtime pins as ci.yml. Bun installs and drives scripts; Node 22 is
+      # the runtime the published package is tested on, and the npm that publishes.
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.2'
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      # ci.yml installs with Bun. There is no package-lock.json (the lockfile is
+      # bun.lock), so `npm ci` cannot run.
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      # The test job in ci.yml typechecks the tests project. `bun run test`'s
+      # pretest is `tsc` (the library build), which does not.
+      - run: bun run typecheck
+      - run: bun run test
+        env:
+          UPT_REQUIRE_PEERS: '1'
+      # docs/dogfood/2026-10-01-library-api.md: the npm tarball at 0.47.1 was not
+      # this tree at the same version string. Publishing the tagged commit, and
+      # refusing when the tag (leading v removed) is not package.json's version,
+      # is the guard. workflow_dispatch on a branch is not a v* tag, so it fails
+      # here. `npm publish` below still runs prepublishOnly (`npm run validate`).
+      - name: Refuse a tag whose version is not package.json's version
+        run: node scripts/publish-version-guard.mjs "$GITHUB_REF_NAME"
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
