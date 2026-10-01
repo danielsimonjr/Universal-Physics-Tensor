@@ -126,11 +126,18 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
     expect([...unearned]).toEqual(['proposed']);
   });
 
-  it('CONTROL: a counted catalog formalRef lights formally-proved only when the reference is passed', () => {
+  it('CONTROL: a counted catalog formalRef does not light formally-proved, and a bridge kind does', () => {
     const row = BRIDGE_EQUATIONS.find((entry) => entry.id === 64);
     expect(row?.formalRef?.fidelity).toBe('sanity-lemmas');
-    expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
+    expect(row?.formalRef?.kind).toBe('derivation-step');
+    expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
     expect(deriveEvidence(catalogEvidenceInput(row!), NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
+    expect(
+      deriveEvidence(
+        { formalRef: { fidelity: row!.formalRef!.fidelity, kind: 'bridge' } },
+        NO_PASSING_WITNESSES,
+      ).has('formally-proved'),
+    ).toBe(true);
     const report = summarizeEvidence(
       BRIDGE_EQUATIONS.map((entry) =>
         deriveEvidenceForVerdict(adjudicateBridgeEntry(entry), catalogEvidenceInput(entry), NO_PASSING_WITNESSES),

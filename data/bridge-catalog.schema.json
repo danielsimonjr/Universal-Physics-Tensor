@@ -83,8 +83,8 @@
           "notes": { "type": "string" },
           "formalRef": {
             "type": "object",
-            "description": "A PhysJS reference for one part of the equation. Optional. The covers line begins with the kind: reduction, limit, derivation-step, property, or cross-check. A property or a cross-check is not a reduction, a limit, or a derivation-step. It does not light formally-proved.",
-            "required": ["system", "statement", "version", "axioms", "fidelity", "covers"],
+            "description": "A PhysJS reference for one part of the equation. Optional. kind bridge is the only kind that lights formally-proved. A property lights formally-proved-property and a cross-check lights formally-proved-cross-check. A reduction, a limit, or a derivation-step lights neither. url is the theorem file at the pinned commit.",
+            "required": ["system", "statement", "version", "axioms", "fidelity", "kind", "url", "covers"],
             "additionalProperties": false,
             "properties": {
               "system": { "enum": ["lean4-physlib", "lean4-physjs", "other"] },
@@ -92,6 +92,8 @@
               "version": { "type": "string" },
               "axioms": { "type": "array", "items": { "type": "string" } },
               "fidelity": { "type": "string" },
+              "kind": { "enum": ["bridge", "property", "cross-check", "reduction", "limit", "derivation-step"] },
+              "url": { "type": "string" },
               "covers": { "type": "string" }
             }
           }

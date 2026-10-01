@@ -40,6 +40,8 @@ export type EvidenceTag =
   | 'symbolically-checked'
   | 'numerically-supported'
   | 'formally-proved'
+  | 'formally-proved-property'
+  | 'formally-proved-cross-check'
   | 'empirically-supported'
   | 'contradicted'
   | 'unresolved';
@@ -63,6 +65,8 @@ export const ALL_EVIDENCE_TAGS = [
   'symbolically-checked',
   'numerically-supported',
   'formally-proved',
+  'formally-proved-property',
+  'formally-proved-cross-check',
   'empirically-supported',
   'contradicted',
   'unresolved',
@@ -88,11 +92,30 @@ export type FormalFidelity =
   | 'unreviewed';
 
 /**
+ * What a formal reference certifies.
+ *
+ * `'bridge'` is the only kind that derives `formally-proved`. `'property'`
+ * and `'cross-check'` derive their own labels. A reduction, a limit, and a
+ * derivation-step are recorded and derive neither.
+ *
+ * @internal
+ */
+export type FormalRefKind =
+  | 'bridge'
+  | 'property'
+  | 'cross-check'
+  | 'reduction'
+  | 'limit'
+  | 'derivation-step';
+
+/**
  * A machine-checked counterpart of a record's claim in a proof assistant.
  *
  * A proof of the WRONG statement proves nothing about the physics, so the
  * reference carries its `fidelity` — how anyone knows the formal statement says
- * what the bridge says. `formally-proved` is derived from it and never set.
+ * what the bridge says. `formally-proved` is derived from `kind` and `fidelity`
+ * and never set. A property and a cross-check are shown under their own labels
+ * and are not a proved bridge.
  *
  * @internal
  */
@@ -105,6 +128,9 @@ export interface FormalRef {
   /** Axioms the proof depends on beyond the system's core. */
   readonly axioms: readonly string[];
   readonly fidelity: FormalFidelity;
+  readonly kind: FormalRefKind;
+  /** Permalink to the theorem's source file at `version`'s commit. */
+  readonly url: string;
   /**
    * What the statement certifies, and the limit of that certification.
    * A reviewed reference's line contains `covers its statement only`.

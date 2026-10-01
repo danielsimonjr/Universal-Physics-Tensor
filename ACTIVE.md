@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Add a kind and a PhysJS file URL on every formal reference. Only a bridge kind derives formally-proved. A property and a cross-check derive their own labels, and those labels are not a proved bridge.
 - [x] Bare `e` in a formula is the elementary charge, `E` is energy, and Euler's number is `exp(1)` or `euler`. `--allow-euler` is not a flag.
 - [x] Publish `universal-physics-tensor` from a `v*` tag via GitHub Actions, with a tag/`package.json` version guard, instead of a hand `npm publish`.
 - [ ] Correct the formal-reference system union in the Phase 4 deliverable of ROADMAP.md. It still names lean4-physlib or other, and it has no covers field. The atlas type and the Phase 4 design note already include lean4-physjs and covers.

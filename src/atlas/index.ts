@@ -38,6 +38,7 @@ export type {
   AtlasRejection,
   FormalFidelity,
   FormalRef,
+  FormalRefKind,
   NormTransport,
 } from './types.js';
 export { MissingHorizonError, MissingLipschitzError } from './types.js';

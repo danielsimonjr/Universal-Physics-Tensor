@@ -21,7 +21,12 @@ import { dirname, join, relative, resolve } from 'node:path';
 const here = dirname(fileURLToPath(import.meta.url));
 const atlasDir = resolve(here, '../../src/atlas');
 
-const DERIVED_TAGS = ['formally-proved', 'symbolically-checked'] as const;
+const DERIVED_TAGS = [
+  'formally-proved',
+  'formally-proved-property',
+  'formally-proved-cross-check',
+  'symbolically-checked',
+] as const;
 const ALLOWED = new Set(['types.ts', 'derive-evidence.ts']);
 
 function tsFiles(dir: string): string[] {

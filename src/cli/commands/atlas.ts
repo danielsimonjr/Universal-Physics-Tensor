@@ -167,7 +167,13 @@ async function run(ctx: CommandCtx): Promise<number> {
       formalReference:
         b.formalRef === undefined
           ? null
-          : { system: b.formalRef.system, statement: b.formalRef.statement, fidelity: b.formalRef.fidelity },
+          : {
+              system: b.formalRef.system,
+              statement: b.formalRef.statement,
+              fidelity: b.formalRef.fidelity,
+              kind: b.formalRef.kind,
+              url: b.formalRef.url,
+            },
       text:
         b.formalRef === undefined
           ? 'no formal reference — no checked counterpart is recorded'
@@ -378,6 +384,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  ${b.formalRef.system}: ${b.formalRef.statement}`);
     out(`  version ${b.formalRef.version}; axioms ${b.formalRef.axioms.join(', ') || 'none'}`);
     out(`  fidelity: ${b.formalRef.fidelity}`);
+    out(`  kind: ${b.formalRef.kind}`);
+    out(`  url: ${b.formalRef.url}`);
     // The tag above must not read wider than the statement. The record's covers
     // line says what the theorem certifies and that it covers its statement only.
     out(`  covers: ${b.formalRef.covers}`);
