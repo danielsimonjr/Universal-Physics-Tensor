@@ -27,7 +27,7 @@
  * @module bridges
  */
 
-// Atlas TYPES only, and from the leaf module — never `../atlas/index.js`,
+// Relation vocabulary, from the relations leaf — never `../atlas/index.js`,
 // which would close a dependency cycle `bun run docs:deps` reports.
 import type {
   Conventions,
@@ -35,12 +35,12 @@ import type {
   FormalRef,
   Regime,
   RelationContract,
-} from '../atlas/types.js';
+} from '../relations/types.js';
 import { physjsFormalRef } from '../atlas/physjs-ref.js';
-// `deriveRegimeGroups` is a VALUE, so the type-only rule above does not cover
-// it. It comes from the leaf `atlas/regime.js`, whose own imports are
-// `dimensional/*` only — importing it closes no cycle back into `bridges/`.
-import { deriveRegimeGroups } from '../atlas/regime.js';
+// `deriveRegimeGroups` is a value. It lives in `relations/regime.js`, which
+// imports the relations vocabulary and `dimensional/*` only — importing it
+// closes no cycle back into `bridges/`.
+import { deriveRegimeGroups } from '../relations/regime.js';
 import { LENGTH, VELOCITY } from '../dimensional/types.js';
 // BE-52's regime bounds are computed from the `MERCURY` orbital elements
 // rather than retyped, so they cannot drift from the record they describe.

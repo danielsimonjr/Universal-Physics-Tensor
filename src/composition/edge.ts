@@ -14,14 +14,12 @@
 
 import type { Quantity } from './quantity.js';
 import type { ExprNode } from '../dimensional/validator.js';
-// Atlas TYPES only, and from the leaf module — never `../atlas/index.js`,
-// which would close a dependency cycle `bun run docs:deps` reports.
 import type {
   Conventions,
   Counterexample,
   Regime,
   RelationContract,
-} from '../atlas/types.js';
+} from '../relations/types.js';
 
 /**
  * First-class validity domain (v0.8.0 G-8). The predicate receives the

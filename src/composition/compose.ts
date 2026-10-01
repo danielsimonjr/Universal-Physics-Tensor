@@ -44,9 +44,9 @@ import {
 // Atlas Phase 1 overlay. The composition table is a leaf module (pure, no
 // registry reads, no import from `src/composition/`), so this does not close a
 // cycle — same rule as the type-only atlas import in `./edge.ts`.
-import { composeRelation, NO_COMPOSITE_CLAIM } from '../atlas/composition-table.js';
-import { checkConventions } from '../atlas/conventions.js';
-import type { Conventions, RelationContract, RelationType } from '../atlas/types.js';
+import { composeRelation, NO_COMPOSITE_CLAIM } from '../relations/composition-table.js';
+import { checkConventions } from '../relations/conventions.js';
+import type { Conventions, RelationContract, RelationType } from '../relations/types.js';
 
 /**
  * The `RelationContract` a composed edge carries, given the composite TYPE the
