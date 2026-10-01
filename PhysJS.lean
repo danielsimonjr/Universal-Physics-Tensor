@@ -12,3 +12,4 @@ import PhysJS.YangMills
 import PhysJS.JohnsonNyquist
 import PhysJS.Mond
 import PhysJS.Einstein
+import PhysJS.KibbleZurek
