@@ -148,6 +148,7 @@ export function canonicalRetrievalCorpus(): CorpusRecord[] {
   }));
 }
 
+/** Where an Ollama embedder reaches the server, which model it asks for, and the vector width it expects. @internal */
 export interface OllamaEmbedderOptions {
   readonly baseUrl: string;
   readonly model?: string;

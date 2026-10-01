@@ -335,6 +335,7 @@ export interface ToleranceRequest {
   value: number;
 }
 
+/** Read a `--tolerance` argument as `EPS` or `<observable>:EPS`. Returns null when the flag is absent, and throws a {@link CliError} when it is present and malformed. */
 export function parseTolerance(raw: string | undefined): ToleranceRequest | null {
   if (raw === undefined) return null;
   const colon = raw.indexOf(':');
