@@ -4,10 +4,10 @@
  * sets G = 1. A mismatch is reconciled only when the exponent difference is
  * an integer combination of those constants.
  *
- * @module composition/natural-units
+ * @module dimensional/natural-units
  */
 
-import type { Dimension } from '../dimensional/types.js';
+import type { Dimension } from './types.js';
 
 /** Which constants may be set to 1. @internal */
 export type UnitMode = 'si' | 'natural' | 'geometrized';

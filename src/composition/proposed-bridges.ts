@@ -43,7 +43,7 @@ import { canonicalByTarget, canonicalById } from '../canonical/registry.js';
 import type { KnownIssue } from '../bridges/index.js';
 import { BRIDGE_EQUATIONS } from '../bridges/index.js';
 import { normalForm } from '../canonical/normal-form.js';
-import { CONSTANTS } from './symbolic-constants.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { evalExpr } from './expr-eval.js';
 import { rankDiscoveries } from './discovery.js';
 import type { VettedCandidate } from './discovery.js';

@@ -13,7 +13,7 @@ import { UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
-import type { UnitMode } from '../../composition/natural-units.js';
+import type { UnitMode } from '../../dimensional/natural-units.js';
 import { UnitError } from '../../dimensional/units.js';
 import { readBinding } from '../../numerical/binding-value.js';
 

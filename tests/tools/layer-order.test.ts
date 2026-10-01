@@ -4,7 +4,7 @@
  * ok would fail these tests.
  */
 
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -210,10 +210,46 @@ describe('layer-order judge', () => {
   });
 });
 
+/**
+ * The live gate reads `origin/master`. The `test` and `quality` jobs fetch it.
+ * `long-tests` runs the same suite when `src/numerical/` changes, and a
+ * depth-1 checkout of the pull-request branch does not have that ref.
+ */
+export function longTestsFetchesMasterBeforeSuite(yml: string): boolean {
+  const marker = '\n  long-tests:';
+  const start = yml.indexOf(marker);
+  if (start < 0) return false;
+  const rest = yml.slice(start + marker.length);
+  const next = rest.search(/\n  [a-z0-9-]+:/);
+  const job = next < 0 ? rest : rest.slice(0, next);
+  const fetchAt = job.indexOf('git fetch origin master --depth=1');
+  const testAt = job.indexOf('bun run test');
+  return fetchAt >= 0 && testAt > fetchAt;
+}
+
 describe('layer-order live tree', () => {
   it('matches the committed allowlist', () => {
     const result = gate(root);
     expect(result.errors).toEqual([]);
     expect(result.ok).toBe(true);
+  });
+
+  it('long-tests fetches origin/master before the suite', () => {
+    const yml = readFileSync(join(root, '.github/workflows/ci.yml'), 'utf8');
+    expect(longTestsFetchesMasterBeforeSuite(yml)).toBe(true);
+  });
+
+  it('POSITIVE CONTROL: a suite step with no fetch is not enough', () => {
+    const yml = [
+      'jobs:',
+      '  long-tests:',
+      '    steps:',
+      '      - run: bun run test',
+      '  other:',
+      '    steps:',
+      '      - run: git fetch origin master --depth=1',
+      '',
+    ].join('\n');
+    expect(longTestsFetchesMasterBeforeSuite(yml)).toBe(false);
   });
 });

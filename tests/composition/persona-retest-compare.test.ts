@@ -13,7 +13,7 @@ import { compareWithCanonical, compareUserEquation } from '../../src/composition
 import { analyzeUserEquation, parseUserEquation, UserEquationError } from '../../src/composition/user-equation.js';
 import { canonicalPrefactor } from '../../src/composition/canonical-prefactors.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
-import { CONSTANTS } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS } from '../../src/dimensional/symbolic-constants.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import { LENGTH, MASS, TEMPERATURE, TIME, DIMENSIONLESS } from '../../src/dimensional/types.js';
 import type { Dimension } from '../../src/dimensional/types.js';

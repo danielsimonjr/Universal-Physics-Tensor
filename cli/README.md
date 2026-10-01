@@ -312,7 +312,7 @@ and as parsed, stdout, stderr, the exit code, and the environment — package
 version, Node version, the active formula parser, whether the MathTS simplifier
 is available, each optional peer's installed version, and every constant table,
 each named by its source module (`core/constants`, `dimensional/units`,
-`composition/symbolic-constants`, `composition/canonical-graph`, and each
+`dimensional/symbolic-constants`, `composition/canonical-graph`, and each
 `bridges/*` or `cases/*` module that exports a number) with its own fingerprint.
 The arguments, each stream and the entry as a whole are hashed. Each entry also
 carries an **attribution**: the constants its command's code can reach through

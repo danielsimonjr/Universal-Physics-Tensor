@@ -7,7 +7,7 @@
  * @module tests/composition/symbolic-constants-extra
  */
 import { describe, it, expect } from 'vitest';
-import { CONSTANTS } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS } from '../../src/dimensional/symbolic-constants.js';
 
 describe('extension constants ε₀ and σ_sb', () => {
   it('epsilon_0 — vacuum permittivity [I² T⁴ M⁻¹ L⁻³]', () => {

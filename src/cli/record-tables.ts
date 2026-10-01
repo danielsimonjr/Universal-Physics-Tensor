@@ -10,7 +10,7 @@
  *   `bridges/` and `cases/`, found by listing those directories, so a module added later is
  *   fingerprinted without being listed here;
  * - **object tables** — the unit and prefix tables of `dimensional/units`, and the constant
- *   registries `composition/symbolic-constants` and `composition/canonical-graph`, flattened to
+ *   registries `dimensional/symbolic-constants` and `composition/canonical-graph`, flattened to
  *   `key.field` entries.
  *
  * A literal a module keeps private (not exported, not in one of the object tables) is in no table.
@@ -21,7 +21,7 @@ import { readdirSync, statSync } from 'node:fs';
 import { extname, join, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { CANONICAL_CONSTANTS } from '../composition/canonical-graph.js';
-import { CONSTANTS as SYMBOLIC_CONSTANTS } from '../composition/symbolic-constants.js';
+import { CONSTANTS as SYMBOLIC_CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { Dimension } from '../dimensional/types.js';
 import { unitTables } from '../dimensional/units.js';
 
@@ -97,7 +97,7 @@ function objectTables(): Record<string, Record<string, TableValue>> {
   };
   return {
     'dimensional/units': units,
-    'composition/symbolic-constants': registry(SYMBOLIC_CONSTANTS),
+    'dimensional/symbolic-constants': registry(SYMBOLIC_CONSTANTS),
     'composition/canonical-graph': registry(CANONICAL_CONSTANTS),
   };
 }

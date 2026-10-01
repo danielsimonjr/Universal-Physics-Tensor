@@ -5,14 +5,8 @@
     "src/bridges/descriptor.ts -> src/composition/edge.ts",
     "src/bridges/index.ts -> src/atlas/physjs-ref.ts",
     "src/canonical/linkage.ts -> src/composition/expr-eval.ts",
-    "src/canonical/linkage.ts -> src/composition/symbolic-constants.ts",
-    "src/canonical/normal-form.ts -> src/composition/symbolic-constants.ts",
     "src/core/labeled-tensor.ts -> src/dimensional/errors.ts",
-    "src/core/labeled-tensor.ts -> src/numerical/tensor-engine.ts",
-    "src/numerical/binding-value.ts -> src/composition/formula-names.ts",
-    "src/numerical/binding-value.ts -> src/composition/natural-units.ts",
-    "src/numerical/binding-value.ts -> src/composition/symbolic-constants.ts",
-    "src/numerical/binding-value.ts -> src/composition/unit-convention.ts"
+    "src/core/labeled-tensor.ts -> src/numerical/tensor-engine.ts"
   ],
   "cycles": [
     [
