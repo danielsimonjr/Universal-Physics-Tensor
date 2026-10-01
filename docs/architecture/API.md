@@ -465,7 +465,7 @@ Wraps a `RiemannTensorNode` plus a metric pair and produces the composite Einste
 
 ### `bianchiResidual(R)` — function
 
-Returns `{ residual, evaluate, evaluateMax }` for the cyclic second-Bianchi-identity check ∇_{[λ} R_{μν]ρσ} = 0.
+Returns `{ residual, evaluate, evaluateMax }` for the cyclic second-Bianchi-identity check ∇_{[λ} R_{μν]ρσ} = 0. Defined in `src/numerical/bianchi-residual.ts`.
 
 **Kind**: function
 **Stability**: `@public`

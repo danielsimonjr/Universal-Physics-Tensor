@@ -49,7 +49,7 @@ The codebase is organized into the following modules:
 - **diff**: 3 files
 - **dimensional**: 36 files
 - **entry**: 1 file
-- **numerical**: 41 files
+- **numerical**: 42 files
 - **relations**: 4 files
 
 ---
@@ -6049,7 +6049,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/dimensional/curvature.ts` - Curvature-derived helpers — Ricci, Einstein, Bianchi (v0.5.0 Phase 1d).
+### `src/dimensional/curvature.ts` - Curvature-derived helpers — Ricci and Einstein (v0.5.0 Phase 1d).
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -6057,12 +6057,10 @@ The codebase is organized into the following modules:
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./ast-types.js` | `ExprNode, CovariantIndex, RiemannTensorNode, MetricTensorNode, RicciTensorNode, EinsteinTensorNode, BianchiResidualNode` | Import (type-only) |
 | `./errors.js` | `IndexLabelCollisionError` | Import |
-| `../numerical/tensor-engine.js` | `TensorEngine` | Import (type-only) |
-| `../numerical/types.js` | `NumericalInputs, NestedArray` | Import (type-only) |
 | `./ast-types.js` | `RicciTensorNode, EinsteinTensorNode, BianchiResidualNode` | Re-export |
 
 **Exports:**
-- Functions: `validateRicciTensor`, `ricci`, `validateEinsteinTensor`, `einstein`, `validateBianchiResidual`, `bianchiResidual`
+- Functions: `validateRicciTensor`, `ricci`, `validateEinsteinTensor`, `einstein`, `validateBianchiResidual`
 - Re-exports: `RicciTensorNode`, `EinsteinTensorNode`, `BianchiResidualNode`
 
 ---
@@ -6526,7 +6524,7 @@ The codebase is organized into the following modules:
 | `./dimensional/validator.js` | `RicciTensorNode` | Re-export |
 | `./dimensional/curvature.js` | `einstein` | Re-export |
 | `./dimensional/validator.js` | `EinsteinTensorNode` | Re-export |
-| `./dimensional/curvature.js` | `bianchiResidual` | Re-export |
+| `./numerical/bianchi-residual.js` | `bianchiResidual` | Re-export |
 | `./dimensional/validator.js` | `BianchiResidualNode` | Re-export |
 | `./numerical/killing.js` | `verifyKillingEquation, checkKillingEquation, evaluateConservedCharge` | Re-export |
 | `./numerical/killing.js` | `KillingEquationOptions, KillingEquationCheck, ChristoffelAccess` | Re-export |
@@ -6797,6 +6795,21 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `BE37CovariantEikonalInputs`, `BE37CovariantEikonalResult`
 - Functions: `evaluateBE37CovariantEikonalNumerical`
+
+---
+
+### `src/numerical/bianchi-residual.ts` - Evaluator for the second-Bianchi-identity residual.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/ast-types.js` | `BianchiResidualNode, ExprNode, RiemannTensorNode` | Import (type-only) |
+| `./tensor-engine.js` | `TensorEngine` | Import (type-only) |
+| `./types.js` | `NumericalInputs, NestedArray` | Import (type-only) |
+| `./index.js` | `evaluateNumerical` | Import |
+
+**Exports:**
+- Functions: `bianchiResidual`
 
 ---
 
@@ -7630,11 +7643,11 @@ graph TD
 
     subgraph Numerical
         N53[be37-covariant-eikonal]
-        N54[binding-value]
-        N55[christoffel-flat]
-        N56[connection-lowering-helpers]
-        N57[curvature-lowering-helpers]
-        N58[...36 more]
+        N54[bianchi-residual]
+        N55[binding-value]
+        N56[christoffel-flat]
+        N57[connection-lowering-helpers]
+        N58[...37 more]
     end
 
     subgraph Relations
@@ -7682,9 +7695,9 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 406 |
+| Total TypeScript Files | 407 |
 | Total Modules | 13 |
-| Total Lines of Code | 89104 |
+| Total Lines of Code | 89101 |
 | Total Exports | 2919 |
 | Total Re-exports | 1387 |
 | Total Classes | 60 |
@@ -7692,7 +7705,7 @@ graph TD
 | Total Functions | 750 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 544 |
+| Type-only Imports | 545 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

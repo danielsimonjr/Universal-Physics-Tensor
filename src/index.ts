@@ -259,8 +259,9 @@ export type { EinsteinTensorNode } from './dimensional/validator.js';
 
 // v0.5.0 curvature layer — Bianchi residual helper (Task 9). `bianchiResidual(R)`
 // returns {residual, evaluate, evaluateMax} for the cyclic second-Bianchi-identity
-// check ∇_{[λ} R_{μν]ρσ} = 0. Closes Phase 1 — Foundations.
-export { bianchiResidual } from './dimensional/curvature.js';
+// check ∇_{[λ} R_{μν]ρσ} = 0. The evaluator lives in numerical so curvature.ts
+// does not import it. Closes Phase 1 — Foundations.
+export { bianchiResidual } from './numerical/bianchi-residual.js';
 export type { BianchiResidualNode } from './dimensional/validator.js';
 
 // v0.6.0 Phase 1 — Killing-vector machinery (Task 1.3).

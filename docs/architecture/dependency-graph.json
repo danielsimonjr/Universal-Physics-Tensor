@@ -2,7 +2,7 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 406,
+    "totalFiles": 407,
     "totalModules": 13,
     "totalExports": 2919
   },
@@ -21488,7 +21488,7 @@
         ]
       },
       "src/dimensional/curvature.ts": {
-        "description": "Curvature-derived helpers — Ricci, Einstein, Bianchi (v0.5.0 Phase 1d).",
+        "description": "Curvature-derived helpers — Ricci and Einstein (v0.5.0 Phase 1d).",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -21519,21 +21519,6 @@
             ]
           },
           {
-            "file": "../numerical/tensor-engine.js",
-            "imports": [
-              "TensorEngine"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../numerical/types.js",
-            "imports": [
-              "NumericalInputs",
-              "NestedArray"
-            ],
-            "typeOnly": true
-          },
-          {
             "file": "./ast-types.js",
             "imports": [
               "RicciTensorNode",
@@ -21549,7 +21534,6 @@
           "validateEinsteinTensor",
           "einstein",
           "validateBianchiResidual",
-          "bianchiResidual",
           "RicciTensorNode",
           "EinsteinTensorNode",
           "BianchiResidualNode"
@@ -21564,8 +21548,7 @@
           "ricci",
           "validateEinsteinTensor",
           "einstein",
-          "validateBianchiResidual",
-          "bianchiResidual"
+          "validateBianchiResidual"
         ]
       },
       "src/dimensional/dimension-inference.ts": {
@@ -23327,7 +23310,7 @@
             "reExport": true
           },
           {
-            "file": "./dimensional/curvature.js",
+            "file": "./numerical/bianchi-residual.js",
             "imports": [
               "bianchiResidual"
             ],
@@ -25610,6 +25593,49 @@
         ],
         "functions": [
           "evaluateBE37CovariantEikonalNumerical"
+        ]
+      },
+      "src/numerical/bianchi-residual.ts": {
+        "description": "Evaluator for the second-Bianchi-identity residual.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/ast-types.js",
+            "imports": [
+              "BianchiResidualNode",
+              "ExprNode",
+              "RiemannTensorNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tensor-engine.js",
+            "imports": [
+              "TensorEngine"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "NumericalInputs",
+              "NestedArray"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./index.js",
+            "imports": [
+              "evaluateNumerical"
+            ]
+          }
+        ],
+        "exports": [
+          "bianchiResidual"
+        ],
+        "functions": [
+          "bianchiResidual"
         ]
       },
       "src/numerical/binding-value.ts": {
@@ -28153,6 +28179,7 @@
         "name": "Numerical",
         "files": [
           "src/numerical/be37-covariant-eikonal.ts",
+          "src/numerical/bianchi-residual.ts",
           "src/numerical/binding-value.ts",
           "src/numerical/christoffel-flat.ts",
           "src/numerical/connection-lowering-helpers.ts",
@@ -28207,9 +28234,9 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 406,
+    "totalTypeScriptFiles": 407,
     "totalModules": 13,
-    "totalLinesOfCode": 89104,
+    "totalLinesOfCode": 89101,
     "totalExports": 2919,
     "totalClasses": 60,
     "totalInterfaces": 462,
@@ -28218,7 +28245,7 @@
     "totalEnums": 0,
     "totalConstants": 721,
     "totalReExports": 1387,
-    "totalTypeOnlyImports": 544,
+    "totalTypeOnlyImports": 545,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
