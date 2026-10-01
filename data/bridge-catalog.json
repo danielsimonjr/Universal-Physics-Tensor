@@ -61,7 +61,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/ThermalDeBroglie.lean",
         "covers": "derivation-step: √(2π ℏ²/(m k_B T)) = h/√(2π m k_B T) for h = 2πℏ and ℏ > 0. The non-negative square root needs ℏ > 0. The Wave Q form ℏ/√(m k_B T), with ℏ in the numerator and no √(2π), fails, as does ℏ/√(2 m k_B T). Not Caldeira–Leggett dephasing — covers its statement only"
       },
@@ -481,7 +481,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/Kss.lean",
         "covers": "derivation-step: η/s = ℏ/(4π k_B) is the equality 4π k_B (η/s) = ℏ for k_B ≠ 0. The Hawking factor 8π in place of 4π is 2ℏ, not ℏ, once ℏ ≠ 0. Not the inequality η/s ≥ ℏ/(4π k_B) — covers its statement only"
       },
@@ -752,7 +752,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/EffectiveTemperature.lean",
         "covers": "derivation-step: for T ≠ 0 and k_B ≠ 0, T (1 + Σ_active/(k_B T)) = T + Σ_active/k_B, and this equals T iff Σ_active = 0. The product T · Σ_active/(k_B T), with the 1 omitted, is not that sum. Not the frequency-dependent Cugliandolo–Kurchan T_eff(ω) — covers its statement only"
       },
@@ -800,7 +800,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "property",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/EntropyProduction.lean",
         "covers": "derivation-step: σ = Σ_i J_i X_i is the definition of σ. If every product is ≥ 0 then σ ≥ 0. One flipped sign, with the other products zero and the flipped product strictly positive, is not σ, and that flipped sum is negative. Not the variational maximum-entropy-production principle. The catalog records this id as not-a-bridge; this lemma does not decide that — covers its statement only"
       },
@@ -1216,7 +1216,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/Shapiro.lean",
         "covers": "derivation-step: for 0 < R_near < R_far and c ≠ 0, ∫_{R_near}^{R_far} (2 G M / c³) (dr / r) = (2 G M / c³) ln(R_far / R_near). The factor 1 in place of 2 is half, once G ≠ 0 and M ≠ 0. log₁₀ of the radius ratio is not ln. Not the impact-parameter formula, and not the Cassini measurement — covers its statement only"
       },
@@ -1398,7 +1398,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/CompositeHiggs.lean",
         "covers": "derivation-step: for f ≠ 0 and θ = h/f, V(h)/f⁴ = −α sin²θ + β [sin⁴θ − sin²θ cos²θ]. Both terms carry f⁴, so the ratio depends on h only through θ. The pre-correction first term −α f² sin²θ, divided by f⁴, is −α sin²θ / f². It depends on f, and it agrees with −α sin²θ only when f² = 1. Not SILH matching onto a confining theory. The catalog records this id as not-a-bridge; this lemma does not decide that — covers its statement only"
       },
@@ -1515,7 +1515,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/PlanckArea.lean",
         "covers": "derivation-step: the be-14 lemma on a wormhole area. k_B A/(4 ℓ_P²) equals k_B c³ A/(4 G ℏ) for ℓ_P² = ℏ G/c³. ℓ_P² = ℏ G/c² fails when c ≠ 1, and the factor 2 fails. Not ER=EPR — covers its statement only"
       },
@@ -2029,7 +2029,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/QuantumHall.lean",
         "covers": "derivation-step: for a nonzero integer C and e ≠ 0, σ_xy = C e²/h, R_H = h/(C e²), and R_K = h/e², so σ_xy R_H = 1 and R_H = R_K/C. The shifted index C+1 is a different conductance. Replacing e² by e fails the product when e ≠ 1. Not TKNN — covers its statement only"
       },
@@ -2175,7 +2175,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/Josephson.lean",
         "covers": "derivation-step: f = (2e/h) V, K_J = 2e/h, and f = K_J V. Clearing h recovers 2e. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing 2e by e fails. Not the tunneling Hamiltonian — covers its statement only"
       },
@@ -2329,7 +2329,7 @@
           "Quot.sound"
         ],
         "fidelity": "sanity-lemmas",
-        "kind": "derivation-step",
+        "kind": "bridge",
         "url": "https://github.com/danielsimonjr/PhysJS/blob/4b150d3352aa1a5edccf1f8159e99ada2cba6048/PhysJS/Chandrasekhar.lean",
         "covers": "derivation-step: with n = ρ/(μ_e m_u), p_F = ℏ (3π² n)^{1/3}, and P = (1/4) n p_F c, one has P = K_ρ ρ^{4/3} where K_ρ = K_n/(μ_e m_u)^{4/3} and K_n = (ℏ c/4)(3π²)^{1/3}. For the n = 3 Lane–Emden scale the central density cancels, and M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}. ω₃⁰ stays symbolic; the decimal 2.01824 is not in the theorem. With ℏ = c = μ_e = m_u = 1 both routes give the same K. √π/2 in place of √(3π)/2 fails when ω₃⁰ ≠ 0, and dropping ω₃⁰ fails when ω₃⁰ ≠ 1. Not stellar rotation or magnetic support — covers its statement only"
       },

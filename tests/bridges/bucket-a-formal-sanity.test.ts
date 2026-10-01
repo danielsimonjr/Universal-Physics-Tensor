@@ -2,10 +2,11 @@
  * Sanity lemmas for the bucket-A catalog formalRefs.
  *
  * Each top-level statement is instantiated on a known case, and the
- * negative control named in its covers line fails. Kind is
- * `derivation-step`. None of these is a proved bridge. BE-20 stays a
- * nested corollary on be-13. The four not-a-bridge ids stay that
- * membership.
+ * negative control named in its covers line fails. Kind is `bridge`
+ * when the theorem states the catalogued equation, and a weaker kind
+ * when it proves only part of that equation. The catalog path still
+ * omits the reference. BE-20 stays a nested corollary on be-13. The
+ * four not-a-bridge ids stay that membership.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -32,6 +33,7 @@ import { evaluateQRFOverlap } from '../../src/bridges/equations/be-32-quantum-re
 import { evaluateOnsagerEntropyProduction } from '../../src/bridges/equations/be-28-onsager-entropy-production.js';
 import { evaluateCompositeHiggs } from '../../src/bridges/equations/be-40-composite-higgs.js';
 import { evaluateCrossingEquation } from '../../src/bridges/equations/be-35-conformal-bootstrap.js';
+import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
 const BUCKET_A = [
@@ -58,6 +60,10 @@ const BUCKET_A = [
   [30, 'PhysJS.Entanglement.first_variation'],
 ] as const;
 
+/** The theorem states `formula_latex`. Kind is bridge. The covers word stays derivation-step. */
+const EQUATION = [12, 21, 27, 37, 40, 43, 55, 59, 63] as const;
+/** The theorem proves a part of the catalogued equation. Kind stays derivation-step. */
+const PARTIAL = [14, 15, 17, 22, 30, 32, 33, 35, 50, 54, 60] as const;
 const NOT_A_BRIDGE = [28, 32, 35, 40] as const;
 
 function row(id: number) {
@@ -77,15 +83,42 @@ function apart(actual: number, expected: number, rel = 1e-3): void {
 }
 
 describe('bucket-A catalog formalRefs', () => {
-  it('twenty-one counted references are derivation-steps and do not tag the row', () => {
+  it('twenty-one references exist, and the catalog path does not pass them', () => {
     expect(BUCKET_A).toHaveLength(21);
+    expect(EQUATION.length + PARTIAL.length + 1).toBe(21);
     for (const [id, statement] of BUCKET_A) {
       const entry = row(id);
       expect(entry.formalRef?.statement, `be-${id}`).toBe(statement);
-      expect(entry.formalRef?.kind, `be-${id}`).toBe('derivation-step');
-      expect(entry.formalRef?.kind, `be-${id}`).not.toBe('bridge');
       expect(deriveEdgeEvidence(id).has('formally-proved'), `be-${id}`).toBe(false);
+      expect(deriveEdgeEvidence(id).has('formally-proved-property'), `be-${id}`).toBe(false);
     }
+  });
+
+  it('a theorem that states the catalogued equation is kind bridge', () => {
+    for (const id of EQUATION) {
+      const entry = row(id);
+      expect(entry.formalRef?.kind, `be-${id}`).toBe('bridge');
+      expect(entry.formalRef?.covers.startsWith('derivation-step:'), `be-${id}`).toBe(true);
+      expect(deriveEvidence(entry, NO_PASSING_WITNESSES).has('formally-proved'), `be-${id}`).toBe(true);
+    }
+  });
+
+  it('a partial theorem stays derivation-step and does not light formally-proved', () => {
+    for (const id of PARTIAL) {
+      const entry = row(id);
+      expect(entry.formalRef?.kind, `be-${id}`).toBe('derivation-step');
+      const tags = deriveEvidence(entry, NO_PASSING_WITNESSES);
+      expect(tags.has('formally-proved'), `be-${id}`).toBe(false);
+      expect(tags.has('formally-proved-property'), `be-${id}`).toBe(false);
+    }
+  });
+
+  it('BE-28 is a property of the defining sum, not the variational principle', () => {
+    expect(row(28).formalRef?.kind).toBe('property');
+    expect(row(28).formalRef?.covers.startsWith('derivation-step:')).toBe(true);
+    const tags = deriveEvidence(row(28), NO_PASSING_WITNESSES);
+    expect(tags.has('formally-proved')).toBe(false);
+    expect(tags.has('formally-proved-property')).toBe(true);
   });
 
   it('BE-20 is the nested Friedmann corollary and has no reference of its own', () => {
@@ -103,7 +136,6 @@ describe('bucket-A catalog formalRefs', () => {
   it('the four not-a-bridge ids stay not-a-bridge', () => {
     for (const id of NOT_A_BRIDGE) {
       expect(adjudicateBridgeEntry(row(id)), `be-${id}`).toBe('not-a-bridge');
-      expect(row(id).formalRef?.kind, `be-${id}`).toBe('derivation-step');
       expect(deriveEdgeEvidence(id).has('formally-proved'), `be-${id}`).toBe(false);
     }
   });

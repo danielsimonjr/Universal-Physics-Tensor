@@ -526,6 +526,7 @@
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
       "tests/atlas/witness-results.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/graphs.test.ts",
@@ -9837,6 +9838,7 @@
       "src/bridges/equations/be-28-onsager-entropy-production.ts",
       "src/bridges/equations/be-40-composite-higgs.ts",
       "src/bridges/equations/be-35-conformal-bootstrap.ts",
+      "src/atlas/derive-evidence.ts",
       "src/cli/map-evidence.ts"
     ],
     "tests/bridges/catalog-adapter.test.ts": [

@@ -65,7 +65,7 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/conventions.ts` | `conventions.test.ts`, `relations-shim.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/coverage.ts` | `audited-catalog.test.ts`, `coverage.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/derivation.ts` | `barrel-completeness.test.ts`, `poster.test.ts`, `statement-derivation.test.ts`, `poster-source.test.ts` |
-| `atlas/derive-evidence.ts` | `barrel-completeness.test.ts`, `coverage.test.ts`, `derive-evidence.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `physjs-manifest.test.ts`, `spring-lc-phase-carriage.test.ts`, `witness-results.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `atlas/derive-evidence.ts` | `barrel-completeness.test.ts`, `coverage.test.ts`, `derive-evidence.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `physjs-manifest.test.ts`, `spring-lc-phase-carriage.test.ts`, `witness-results.test.ts`, `bucket-a-formal-sanity.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `diffusion/bridges-closure.ts` | `barrel-completeness.test.ts`, `closure.test.ts`, `formal-sanity.test.ts`, `stokes-einstein-regime.test.ts`, `witness-results.test.ts` |
 | `diffusion/bridges.ts` | `barrel-completeness.test.ts`, `diffusion.test.ts`, `witness-results.test.ts` |
 | `diffusion/dimensions.ts` | `diffusion.test.ts`, `negative-controls.test.ts` |
@@ -609,7 +609,7 @@ The following 10 source files are not directly imported by any test file:
 | `bridges/be52-mercury-confrontation.test.ts` | 1 files |
 | `bridges/be53-yang-mills-confrontation.test.ts` | 17 files |
 | `bridges/bridge-equations-facade.test.ts` | 132 files |
-| `bridges/bucket-a-formal-sanity.test.ts` | 35 files |
+| `bridges/bucket-a-formal-sanity.test.ts` | 36 files |
 | `bridges/catalog-adapter.test.ts` | 17 files |
 | `bridges/catalog-formal-sanity.test.ts` | 24 files |
 | `bridges/catalog-grammar-applicability.test.ts` | 7 files |

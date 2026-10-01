@@ -662,9 +662,32 @@ function physjsStatementUrl(theorem: string): string {
   return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/PhysJS/${file}`;
 }
 
-/** Atlas keys are bridges. A catalog key's kind is the covers prefix. */
+/**
+ * Catalog keys whose theorem states the catalogued equation.
+ * The PhysJS covers line still begins with `derivation-step`.
+ * The kind is bridge because that equation is the theorem.
+ */
+const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
+  'be-12',
+  'be-21',
+  'be-27',
+  'be-37',
+  'be-40',
+  'be-43',
+  'be-55',
+  'be-59',
+  'be-63',
+]);
+
+/**
+ * Atlas keys are bridges. A catalog key whose theorem states the catalogued
+ * equation is a bridge. BE-28 is a property of the defining sum. Every other
+ * catalog key's kind is the covers prefix.
+ */
 function formalRefKind(key: string, covers: string): FormalRefKind | undefined {
   if (key.startsWith('ab-')) return 'bridge';
+  if (CATALOG_EQUATION_KEYS.has(key)) return 'bridge';
+  if (key === 'be-28') return 'property';
   const word = covers.split(':')[0];
   if (
     word === 'property' ||
