@@ -23,6 +23,11 @@ jobs:
         with:
           bun-version: '1.4.2'
       - uses: actions/checkout@v7
+      # The suite includes the layer-order live gate, which reads origin/master.
+      # A tag checkout is that commit only and does not have the ref. The test,
+      # quality, and long-tests jobs fetch it the same way.
+      - name: Fetch master for the layer-order shrink check
+        run: git fetch origin master --depth=1
       - uses: actions/setup-node@v7
         with:
           node-version: 22

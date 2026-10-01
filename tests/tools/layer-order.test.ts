@@ -214,9 +214,11 @@ describe('layer-order judge', () => {
  * The live gate reads `origin/master`. The `test` and `quality` jobs fetch it.
  * `long-tests` runs the same suite when `src/numerical/` changes, and a
  * depth-1 checkout of the pull-request branch does not have that ref.
+ * The publish job runs the same suite on a `v*` tag. That checkout is the
+ * tagged commit and does not have the ref either.
  */
-export function longTestsFetchesMasterBeforeSuite(yml: string): boolean {
-  const marker = '\n  long-tests:';
+export function jobFetchesMasterBeforeTests(yml: string, jobName: string): boolean {
+  const marker = `\n  ${jobName}:`;
   const start = yml.indexOf(marker);
   if (start < 0) return false;
   const rest = yml.slice(start + marker.length);
@@ -225,6 +227,14 @@ export function longTestsFetchesMasterBeforeSuite(yml: string): boolean {
   const fetchAt = job.indexOf('git fetch origin master --depth=1');
   const testAt = job.indexOf('bun run test');
   return fetchAt >= 0 && testAt > fetchAt;
+}
+
+export function longTestsFetchesMasterBeforeSuite(yml: string): boolean {
+  return jobFetchesMasterBeforeTests(yml, 'long-tests');
+}
+
+export function publishFetchesMasterBeforeTests(yml: string): boolean {
+  return jobFetchesMasterBeforeTests(yml, 'publish');
 }
 
 describe('layer-order live tree', () => {
@@ -251,5 +261,24 @@ describe('layer-order live tree', () => {
       '',
     ].join('\n');
     expect(longTestsFetchesMasterBeforeSuite(yml)).toBe(false);
+  });
+
+  it('publish fetches origin/master before the suite', () => {
+    const yml = readFileSync(join(root, '.github/workflows/publish.yml'), 'utf8');
+    expect(publishFetchesMasterBeforeTests(yml)).toBe(true);
+  });
+
+  it('POSITIVE CONTROL: a publish test step with no fetch is not enough', () => {
+    const yml = [
+      'jobs:',
+      '  publish:',
+      '    steps:',
+      '      - run: bun run test',
+      '  other:',
+      '    steps:',
+      '      - run: git fetch origin master --depth=1',
+      '',
+    ].join('\n');
+    expect(publishFetchesMasterBeforeTests(yml)).toBe(false);
   });
 });
