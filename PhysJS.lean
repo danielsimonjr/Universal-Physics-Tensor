@@ -35,3 +35,4 @@ import PhysJS.RandallSundrum
 import PhysJS.EinsteinCartan
 import PhysJS.EffectiveTemperature
 import PhysJS.ToricCode
+import PhysJS.QuantumCritical
