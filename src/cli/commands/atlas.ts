@@ -10,6 +10,11 @@
  *
  * With no id it lists every bridge of every registered family.
  *
+ * A catalog id (`be-<n>`, any letter case) is not an atlas bridge. When that
+ * catalog equation carries a `formalRef`, this command prints the stored
+ * reference. It does not derive `formally-proved` from it. A catalog equation
+ * with no reference says so. An id in neither registry stays an unknown bridge.
+ *
  * ## The two derived tags, shown honestly
  *
  * `formally-proved` is derived here from the record's `formalRef`.
@@ -70,6 +75,10 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         witnesses, counterexamples, formal reference and review status. Empty
         sections print as "none stated", never disappear. With no id, lists
         every bridge of every family.
+        A catalog id be-<n> (either letter case) is not an atlas bridge. When
+        that catalog equation has a formalRef, the command prints the stored
+        reference and does not derive formally-proved from it. A catalog
+        equation with no formalRef says so. --run applies only to an atlas bridge.
         Evidence is shown BY CLAIM (correspondence, regime, bound, horizon,
         preserves), each citing only what the record's structure links to it;
         a witness is listed under the bound (sharp, or at one point for a bound
@@ -86,8 +95,65 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         results, --run from every registered witness run now (exit 3 if any is
         refuted); either implies --evidence when no id is given.
         e.g.  upt atlas ab-pendulum-linear
+              upt atlas be-16
               upt atlas ab-walk-diffusion --run
               upt atlas --evidence --run`;
+
+type CatalogEquation = CommandCtx['api']['BRIDGE_EQUATIONS'][number];
+
+/**
+ * `be-16`, `BE-16`, and `16` name a catalog equation by its integer id.
+ * An atlas id (`ab-…`) does not match.
+ */
+function catalogEquationNumber(raw: string): number | undefined {
+  const m = /^(?:be-)?(\d+)$/i.exec(raw);
+  if (m === null) return undefined;
+  return Number(m[1]);
+}
+
+/**
+ * Print the stored catalog `formalRef`. This is not an atlas-bridge report,
+ * and it does not call `deriveEvidence`: a catalog reference is not a derived
+ * `formally-proved` tag.
+ */
+function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: CommandCtx): number {
+  const ref = entry.formalRef;
+  if (ref === undefined) {
+    throw new CliError(`upt atlas: be-${entry.id} is a catalog equation and has no formalRef (\`upt atlas\` lists atlas bridges)`);
+  }
+  const id = `be-${entry.id}`;
+  if (wantJson) {
+    emitJson(
+      {
+        command: 'atlas',
+        epistemics:
+          'This is the stored catalog formalRef. The entry is a catalog equation, not an atlas bridge. ' +
+          'This command does not derive formally-proved from it. The covers line states the part the theorem certifies.',
+        options: { id },
+        result: {
+          source: 'catalog',
+          id,
+          catalogId: entry.id,
+          name: entry.name,
+          formalRef: ref,
+        },
+      },
+      ctx.write,
+    );
+    return 0;
+  }
+  ctx.out(`\n${id} — catalog equation, not an atlas bridge`);
+  ctx.out(`  ${entry.name}`);
+  ctx.out('formal reference:');
+  ctx.out(`  ${ref.system}: ${ref.statement}`);
+  ctx.out(`  version ${ref.version}; axioms ${ref.axioms.join(', ') || 'none'}`);
+  ctx.out(`  fidelity: ${ref.fidelity}`);
+  ctx.out(`  kind: ${ref.kind}`);
+  ctx.out(`  url: ${ref.url}`);
+  ctx.out(`  covers: ${ref.covers}`);
+  ctx.out('This command prints the stored catalog formalRef. It does not derive formally-proved from it.');
+  return 0;
+}
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -133,11 +199,27 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`\n${listing.length} atlas bridges across ${families.length} families:`);
     for (const l of listing) out(`  ${l.id.padEnd(28)} ${l.relation.padEnd(22)} [${l.family}]`);
     out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge\'s derived evidence.');
+    out('A catalog equation with a formalRef is `upt atlas be-<n>`.');
     return 0;
   }
 
   const row = rows.find((r) => r.bridge.id === id);
   if (row === undefined) {
+    const catalogN = catalogEquationNumber(id);
+    if (catalogN !== undefined) {
+      const entry = api.BRIDGE_EQUATIONS.find((e) => e.id === catalogN);
+      if (entry !== undefined) {
+        if (args.flags.has('run')) {
+          throw new CliError(
+            `upt atlas: be-${entry.id} is a catalog equation, not an atlas bridge; --run applies to an atlas bridge (ab-*)`,
+          );
+        }
+        return emitCatalogFormalRef(entry, wantJson, ctx);
+      }
+      throw new CliError(
+        `upt atlas: unknown bridge '${id}' (not an atlas bridge and not a catalog equation; run \`upt atlas\` to list atlas bridges)`,
+      );
+    }
     throw new CliError(`upt atlas: unknown bridge '${id}' (run \`upt atlas\` to list them)`);
   }
   const b = row.bridge;
@@ -167,7 +249,13 @@ async function run(ctx: CommandCtx): Promise<number> {
       formalReference:
         b.formalRef === undefined
           ? null
-          : { system: b.formalRef.system, statement: b.formalRef.statement, fidelity: b.formalRef.fidelity },
+          : {
+              system: b.formalRef.system,
+              statement: b.formalRef.statement,
+              fidelity: b.formalRef.fidelity,
+              kind: b.formalRef.kind,
+              url: b.formalRef.url,
+            },
       text:
         b.formalRef === undefined
           ? 'no formal reference — no checked counterpart is recorded'
@@ -378,6 +466,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`  ${b.formalRef.system}: ${b.formalRef.statement}`);
     out(`  version ${b.formalRef.version}; axioms ${b.formalRef.axioms.join(', ') || 'none'}`);
     out(`  fidelity: ${b.formalRef.fidelity}`);
+    out(`  kind: ${b.formalRef.kind}`);
+    out(`  url: ${b.formalRef.url}`);
     // The tag above must not read wider than the statement. The record's covers
     // line says what the theorem certifies and that it covers its statement only.
     out(`  covers: ${b.formalRef.covers}`);

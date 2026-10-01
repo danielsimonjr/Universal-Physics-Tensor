@@ -195,6 +195,8 @@ const EVIDENCE_TAGS: readonly EvidenceTag[] = [
   'symbolically-checked',
   'numerically-supported',
   'formally-proved',
+  'formally-proved-property',
+  'formally-proved-cross-check',
   'empirically-supported',
   'contradicted',
   'unresolved',

@@ -49,7 +49,7 @@
  * @internal
  */
 
-import type { Conventions, EvidenceTag, FormalFidelity } from './types.js';
+import type { Conventions, EvidenceTag, FormalFidelity, FormalRefKind } from './types.js';
 
 /**
  * The verdict of `adjudicateBridgeEntry` (`src/bridges/membership.ts`),
@@ -172,10 +172,12 @@ export interface EvidenceInput {
   readonly conventions?: Conventions;
   readonly counterexamples?: readonly CounterexampleLike[];
   /**
-   * The record's formal reference, read ONLY for its fidelity. Structural so a
-   * caller can pass an `AtlasBridge` directly.
+   * The record's formal reference, read for its fidelity and its kind.
+   * Structural so a caller can pass an `AtlasBridge` directly. A missing kind
+   * cannot be supplied by this function: only `'bridge'` derives
+   * `formally-proved`.
    */
-  readonly formalRef?: { readonly fidelity: FormalFidelity };
+  readonly formalRef?: { readonly fidelity: FormalFidelity; readonly kind: FormalRefKind };
 }
 
 /**
@@ -239,11 +241,15 @@ export function deriveEvidence(
   if (passing.some((w) => w.kind === 'dimensional')) tags.add('dimension-checked');
   if (passing.some((w) => w.kind === 'symbolic')) tags.add('symbolically-checked');
 
-  // `formally-proved` iff a formal reference exists AND someone checked that
-  // its statement says what the record says. `'unreviewed'` records a reference
-  // without earning the tag — a proof of the wrong statement proves nothing.
+  // `formally-proved` iff the reference is a reviewed bridge. `'unreviewed'`
+  // records a reference without earning a tag — a proof of the wrong statement
+  // proves nothing. A property and a cross-check earn their own labels and do
+  // not count as a proved bridge. A reduction, a limit, and a derivation-step
+  // earn neither.
   if (record.formalRef !== undefined && record.formalRef.fidelity !== 'unreviewed') {
-    tags.add('formally-proved');
+    if (record.formalRef.kind === 'bridge') tags.add('formally-proved');
+    else if (record.formalRef.kind === 'property') tags.add('formally-proved-property');
+    else if (record.formalRef.kind === 'cross-check') tags.add('formally-proved-cross-check');
   }
   if (passing.some((w) => w.kind === 'numeric')) tags.add('numerically-supported');
 

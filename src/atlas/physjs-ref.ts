@@ -18,7 +18,7 @@
  * @module atlas/physjs-ref
  */
 
-import type { FormalRef } from './types.js';
+import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
 export const PHYSJS_COMMIT = '57a9ecbc851952d539882400a7176926d2990d34';
@@ -410,6 +410,42 @@ function physjsVersion(): string {
 }
 
 /**
+ * Namespaces whose theorems live in another Lean file at this pin.
+ * Measured against PhysJS `57a9ecbc`: `SpringLc` and `DampedRlc` are
+ * namespaces inside `OscillatorDictionary.lean`, not their own files.
+ */
+const PHYSJS_FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
+  SpringLc: 'OscillatorDictionary.lean',
+  DampedRlc: 'OscillatorDictionary.lean',
+};
+
+/** Permalink to the Lean file that contains `theorem` at the pinned commit. */
+function physjsStatementUrl(theorem: string): string {
+  const parts = theorem.split('.');
+  if (parts.length < 3 || parts[0] !== 'PhysJS' || parts[1] === undefined) {
+    throw new Error(`PhysJS theorem '${theorem}' is not PhysJS.<module>.<name>`);
+  }
+  const file = PHYSJS_FILE_BY_NAMESPACE[parts[1]] ?? `${parts[1]}.lean`;
+  return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/PhysJS/${file}`;
+}
+
+/** Atlas keys are bridges. A catalog key's kind is the covers prefix. */
+function formalRefKind(key: string, covers: string): FormalRefKind | undefined {
+  if (key.startsWith('ab-')) return 'bridge';
+  const word = covers.split(':')[0];
+  if (
+    word === 'property' ||
+    word === 'cross-check' ||
+    word === 'reduction' ||
+    word === 'limit' ||
+    word === 'derivation-step'
+  ) {
+    return word;
+  }
+  return undefined;
+}
+
+/**
  * The reviewed reference for a manifest key. Throws when the key is not an
  * entry, so a typo cannot ship a bridge with no reference.
  *
@@ -418,12 +454,16 @@ function physjsVersion(): string {
 export function physjsFormalRef(key: string): FormalRef {
   const entry = entryByKey.get(key);
   if (entry === undefined) throw new Error(`PhysJS manifest has no entry for '${key}'`);
+  const kind = formalRefKind(entry.key, entry.covers);
+  if (kind === undefined) throw new Error(`PhysJS entry '${entry.key}' covers line has no catalog kind`);
   return {
     system: 'lean4-physjs',
     statement: entry.theorem,
     version: physjsVersion(),
     axioms: entry.axioms,
     fidelity: 'sanity-lemmas',
+    kind,
+    url: physjsStatementUrl(entry.theorem),
     covers: `${entry.covers} — ${entry.coverage}`,
   };
 }
@@ -575,6 +615,14 @@ export function physjsManifestProblems(input: {
     }
     if (ref.fidelity === 'unreviewed') {
       problems.push(`bridge '${entry.key}' formalRef is unreviewed`);
+    }
+    const kind = formalRefKind(entry.key, entry.covers);
+    if (kind !== undefined && ref.kind !== kind) {
+      problems.push(`bridge '${entry.key}' kind is '${ref.kind}', expected '${kind}'`);
+    }
+    const url = physjsStatementUrl(entry.theorem);
+    if (ref.url !== url) {
+      problems.push(`bridge '${entry.key}' url is '${ref.url}', expected '${url}'`);
     }
     const compiled = entryByKey.get(entry.key);
     if (compiled === undefined) {

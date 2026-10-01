@@ -174,6 +174,7 @@ describe('formally-proved is DERIVED from formalRef.fidelity', () => {
     version: 'v',
     axioms: [],
     fidelity,
+    kind: 'bridge' as const,
   });
 
   it('Eve E4: fidelity "unreviewed" can NOT earn formally-proved', () => {

@@ -260,12 +260,13 @@ export interface BridgeEquationEntry {
   /** Cases this bridge does NOT cover, each with its witness. */
   counterexamples?: readonly Counterexample[];
   /**
-   * A reviewed PhysJS reference for one counted part of this equation.
+   * A reviewed PhysJS reference for one part of this equation.
    *
-   * Optional. Only a reduction, a limit, or a derivation-step may occupy it.
-   * One id is one reference, and it names the manifest's top-level theorem.
-   * The catalog evidence path does not pass this field to `deriveEvidence`:
-   * a proof of one part does not tag the bridge `formally-proved`.
+   * Optional. One id is one reference, and it names the manifest's top-level
+   * theorem. `kind` is `property`, `cross-check`, `reduction`, `limit`, or
+   * `derivation-step`. It is not `bridge`, so passing it to `deriveEvidence`
+   * does not tag the row `formally-proved`. The catalog evidence path still
+   * omits the field.
    */
   formalRef?: FormalRef;
 }
