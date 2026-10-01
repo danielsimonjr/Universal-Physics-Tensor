@@ -48,14 +48,15 @@
  *
  * Pure string/record production: no I/O, no registry reads beyond what the
  * caller passes in. Imports atlas LEAF modules only, never `atlas/index.ts`.
+ * Lives in `cli` because it feeds `upt map` and imports the poster registries.
  *
- * @module composition/poster-source
+ * @module cli/poster-source
  */
 
 import type { Association } from '../atlas/association.js';
 import type { Derivation, DerivationId } from '../atlas/derivation.js';
 import type { Statement, StatementId } from '../atlas/statement.js';
-import type { VizJunction } from './graph-viz.js';
+import type { VizJunction } from '../composition/graph-viz.js';
 
 /**
  * The poster index as this module consumes it: the three registries, passed

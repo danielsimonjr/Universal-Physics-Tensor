@@ -19,7 +19,7 @@ import {
   describePosterSource,
   POSTER_GRAPH,
   type PosterGraph,
-} from '../../src/composition/poster-source.js';
+} from '../../src/cli/poster-source.js';
 import {
   buildVizModel,
   ALL_VIZ_STATUSES,

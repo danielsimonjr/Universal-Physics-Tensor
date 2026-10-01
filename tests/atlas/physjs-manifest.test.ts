@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
-import { deriveEdgeEvidence } from '../../src/composition/graph-viz.js';
+import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import {
   PHYSJS_COMMIT,

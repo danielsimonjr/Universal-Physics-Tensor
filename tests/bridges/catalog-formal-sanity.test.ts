@@ -25,7 +25,7 @@ import { evaluateKibbleZurek } from '../../src/bridges/equations/be-34-kibble-zu
 import { evaluateJeansMass } from '../../src/bridges/be65-jeans-mass.js';
 import { evaluateGravitationalLensing } from '../../src/bridges/gravitational-lensing.js';
 import { LORENZ_NUMBER_SI } from '../../src/bridges/be61-wiedemann-franz.js';
-import { deriveEdgeEvidence } from '../../src/composition/graph-viz.js';
+import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
 const COUNTED = [
   [64, 'PhysJS.Eddington.balance_iff'],

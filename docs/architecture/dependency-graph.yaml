@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 405
+  totalFiles: 406
   totalModules: 13
-  totalExports: 2925
+  totalExports: 2919
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8104,6 +8104,9 @@ modules:
           imports:
             - naturalConstantOverrides
             - UnitMode
+        - file: ../map-evidence.js
+          imports:
+            - withCatalogEvidence
       exports:
         - command
         - neighbourhood
@@ -8630,6 +8633,32 @@ modules:
         - runCli
       functions:
         - runCli
+    src/cli/map-evidence.ts:
+      description: Catalog evidence for `upt map`.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../relations/types.js
+          imports:
+            - EvidenceTag
+          typeOnly: true
+        - file: ../atlas/derive-evidence.js
+          imports:
+            - catalogEvidenceInput
+            - deriveEvidenceForVerdict
+            - NO_PASSING_WITNESSES
+        - file: ../bridges/membership.js
+          imports:
+            - adjudicateBridgeEntry
+        - file: ../bridges/index.js
+          imports:
+            - BRIDGE_EQUATIONS
+      exports:
+        - deriveEdgeEvidence
+        - withCatalogEvidence
+      functions:
+        - deriveEdgeEvidence
+        - withCatalogEvidence
     src/cli/output.ts:
       description: JSON output envelope for the UPT CLI.
       externalDependencies: []
@@ -8650,6 +8679,44 @@ modules:
       functions:
         - sanitize
         - emitJson
+    src/cli/poster-source.ts:
+      description: The POSTER source for the physics map — turn the Atlas Phase 3 poster index
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../atlas/association.js
+          imports:
+            - Association
+          typeOnly: true
+        - file: ../atlas/derivation.js
+          imports:
+            - Derivation
+            - DerivationId
+          typeOnly: true
+        - file: ../atlas/statement.js
+          imports:
+            - Statement
+            - StatementId
+          typeOnly: true
+        - file: ../composition/graph-viz.js
+          imports:
+            - VizJunction
+          typeOnly: true
+      exports:
+        - POSTER_GRAPH
+        - validatePoster
+        - posterJunctions
+        - describePosterSource
+      interfaces:
+        - PosterGraph
+        - DanglingPremise
+        - PosterValidation
+      functions:
+        - validatePoster
+        - posterJunctions
+        - describePosterSource
+      constants:
+        - POSTER_GRAPH
     src/cli/record-reach.ts:
       description: "Static attribution for an experiment record: which constants a command's code can reach"
       externalDependencies: []
@@ -9061,17 +9128,20 @@ modules:
         - file: ./composition/graph-viz.js
           imports:
             - filterEdges
-            - deriveEdgeEvidence
             - formatFilterLegend
           reExport: true
-        - file: ./composition/poster-source.js
+        - file: ./cli/map-evidence.js
+          imports:
+            - deriveEdgeEvidence
+          reExport: true
+        - file: ./cli/poster-source.js
           imports:
             - POSTER_GRAPH
             - posterJunctions
             - validatePoster
             - describePosterSource
           reExport: true
-        - file: ./composition/poster-source.js
+        - file: ./cli/poster-source.js
           imports:
             - PosterGraph
             - PosterValidation
@@ -9322,8 +9392,8 @@ modules:
         - deriveProposedBridges
         - describeDerivedClaim
         - filterEdges
-        - deriveEdgeEvidence
         - formatFilterLegend
+        - deriveEdgeEvidence
         - POSTER_GRAPH
         - posterJunctions
         - validatePoster
@@ -9503,8 +9573,8 @@ modules:
         - deriveProposedBridges
         - describeDerivedClaim
         - filterEdges
-        - deriveEdgeEvidence
         - formatFilterLegend
+        - deriveEdgeEvidence
         - POSTER_GRAPH
         - posterJunctions
         - validatePoster
@@ -11241,21 +11311,9 @@ modules:
             - EvidenceTag
             - RelationType
           typeOnly: true
-        - file: ../atlas/derive-evidence.js
-          imports:
-            - catalogEvidenceInput
-            - deriveEvidenceForVerdict
-            - NO_PASSING_WITNESSES
-        - file: ../bridges/membership.js
-          imports:
-            - adjudicateBridgeEntry
-        - file: ../bridges/index.js
-          imports:
-            - BRIDGE_EQUATIONS
       exports:
         - ALL_VIZ_STATUSES
         - edgeToJunction
-        - deriveEdgeEvidence
         - filterEdges
         - formatFilterLegend
         - buildVizModel
@@ -11267,7 +11325,6 @@ modules:
         - VizModel
       functions:
         - edgeToJunction
-        - deriveEdgeEvidence
         - filterEdges
         - formatFilterLegend
         - buildVizModel
@@ -11514,19 +11571,6 @@ modules:
             - buildVizModel
             - edgeToJunction
           reExport: true
-        - file: ./poster-source.js
-          imports:
-            - PosterGraph
-            - PosterValidation
-            - DanglingPremise
-          reExport: true
-        - file: ./poster-source.js
-          imports:
-            - POSTER_GRAPH
-            - posterJunctions
-            - validatePoster
-            - describePosterSource
-          reExport: true
         - file: ./graph-viz-svg.js
           imports:
             - renderDotToSvg
@@ -11634,10 +11678,6 @@ modules:
         - SymbolicEvalError
         - buildVizModel
         - edgeToJunction
-        - POSTER_GRAPH
-        - posterJunctions
-        - validatePoster
-        - describePosterSource
         - renderDotToSvg
         - SvgRendererUnavailableError
         - dimensionAdjacency
@@ -11678,9 +11718,6 @@ modules:
         - VizOptions
         - VizModel
         - VizFilterStats
-        - PosterGraph
-        - PosterValidation
-        - DanglingPremise
         - DimensionAdjacency
         - UserEquation
         - EquationLanding
@@ -11790,13 +11827,6 @@ modules:
         - VizFilterStats
         - buildVizModel
         - edgeToJunction
-        - PosterGraph
-        - PosterValidation
-        - DanglingPremise
-        - POSTER_GRAPH
-        - posterJunctions
-        - validatePoster
-        - describePosterSource
         - renderDotToSvg
         - SvgRendererUnavailableError
         - DimensionAdjacency
@@ -11831,44 +11861,6 @@ modules:
         - naturalConstantOverrides
         - naturalPowers
         - naturalNote
-    src/composition/poster-source.ts:
-      description: The POSTER source for the physics map — turn the Atlas Phase 3 poster index
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies:
-        - file: ../atlas/association.js
-          imports:
-            - Association
-          typeOnly: true
-        - file: ../atlas/derivation.js
-          imports:
-            - Derivation
-            - DerivationId
-          typeOnly: true
-        - file: ../atlas/statement.js
-          imports:
-            - Statement
-            - StatementId
-          typeOnly: true
-        - file: ./graph-viz.js
-          imports:
-            - VizJunction
-          typeOnly: true
-      exports:
-        - POSTER_GRAPH
-        - validatePoster
-        - posterJunctions
-        - describePosterSource
-      interfaces:
-        - PosterGraph
-        - DanglingPremise
-        - PosterValidation
-      functions:
-        - validatePoster
-        - posterJunctions
-        - describePosterSource
-      constants:
-        - POSTER_GRAPH
     src/composition/probe/backend-protocol.ts:
       description: Optional NDJSON worker protocol for expression-search backends.
       externalDependencies: []
@@ -19531,7 +19523,9 @@ dependencyGraph:
         - src/cli/expr-print.ts
         - src/cli/graphs.ts
         - src/cli/main.ts
+        - src/cli/map-evidence.ts
         - src/cli/output.ts
+        - src/cli/poster-source.ts
         - src/cli/record-reach.ts
         - src/cli/record-tables.ts
         - src/cli/record.ts
@@ -19582,7 +19576,6 @@ dependencyGraph:
         - src/composition/identifiability.ts
         - src/composition/index.ts
         - src/composition/natural-units.ts
-        - src/composition/poster-source.ts
         - src/composition/probe/backend-protocol.ts
         - src/composition/probe/candidate-store.ts
         - src/composition/probe/corpus.ts
@@ -19728,18 +19721,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 405
+  totalTypeScriptFiles: 406
   totalModules: 13
-  totalLinesOfCode: 89324
-  totalExports: 2925
+  totalLinesOfCode: 89358
+  totalExports: 2919
   totalClasses: 60
   totalInterfaces: 462
-  totalFunctions: 749
+  totalFunctions: 750
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
-  totalReExports: 1394
-  totalTypeOnlyImports: 543
+  totalReExports: 1387
+  totalTypeOnlyImports: 544
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
