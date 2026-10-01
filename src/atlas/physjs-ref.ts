@@ -7,15 +7,16 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `4b150d3352aa1a5edccf1f8159e99ada2cba6048`.
+ * The commit is PhysJS `main` `dd35202920bf19c39f71f15d9ee740a6d28ec173`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
  * `corollary` on `be-13` and has no key. A counted covers line begins with
  * `reduction`, `limit`, or `derivation-step`. A labeled covers line begins
  * with `property` or `cross-check`. A nested object (`planeWave`, `oneLoop`,
- * `inversion`, `vacuum`, `corollary`, `friedmann`) is recorded and is not a
- * `formalRef`.
+ * `inversion`, `vacuum`, `corollary`, `friedmann`, `lengthMonomial`,
+ * `torsionMonomial`, `coefficientNotFixed`, `unitCoefficient`, `scalingShape`,
+ * `everyPower`) is recorded and is not a `formalRef`.
  *
  * @module atlas/physjs-ref
  */
@@ -23,7 +24,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '4b150d3352aa1a5edccf1f8159e99ada2cba6048';
+export const PHYSJS_COMMIT = 'dd35202920bf19c39f71f15d9ee740a6d28ec173';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -53,7 +54,20 @@ interface PhysjsNestedStatement {
 }
 
 /** Nested objects the manifest schema records. A new name is a problem. */
-const NESTED_FIELDS = ['planeWave', 'oneLoop', 'inversion', 'vacuum', 'corollary', 'friedmann'] as const;
+const NESTED_FIELDS = [
+  'planeWave',
+  'oneLoop',
+  'inversion',
+  'vacuum',
+  'corollary',
+  'friedmann',
+  'lengthMonomial',
+  'torsionMonomial',
+  'coefficientNotFixed',
+  'unitCoefficient',
+  'scalingShape',
+  'everyPower',
+] as const;
 
 type NestedField = (typeof NESTED_FIELDS)[number];
 
@@ -101,6 +115,21 @@ interface PhysjsEntry {
   readonly corollary?: PhysjsNestedStatement;
   /** BE-54. The flat Friedmann identification. Not the reference. */
   readonly friedmann?: PhysjsNestedStatement;
+  /**
+   * BE-15. L = C (Γ t)^{1/z} under dimensional homogeneity with [Γ] = L^z T⁻¹.
+   * C is not fixed, and z = 2 is not derived. Not the reference.
+   */
+  readonly lengthMonomial?: PhysjsNestedStatement;
+  /** BE-17. T = C κ S from dimensions. C is not fixed. Not the reference. */
+  readonly torsionMonomial?: PhysjsNestedStatement;
+  /** BE-17. A factor other than 1 is not the catalog coefficient. Not the reference. */
+  readonly coefficientNotFixed?: PhysjsNestedStatement;
+  /** BE-17. Inversion under the hypothesis C = 1. Not the reference. */
+  readonly unitCoefficient?: PhysjsNestedStatement;
+  /** BE-33. ξ = ξ₀ φ(T/T₀). φ is not fixed. Not the reference. */
+  readonly scalingShape?: PhysjsNestedStatement;
+  /** BE-33. Every real power of the temperature ratio is homogeneous. The exponent is not chosen. Not the reference. */
+  readonly everyPower?: PhysjsNestedStatement;
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -448,9 +477,9 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
   {
     key: 'be-60',
     bridgeId: 'be-60',
-    theorem: 'PhysJS.Laughlin.fraction',
+    theorem: 'PhysJS.Laughlin.filling_fraction',
     covers:
-      'derivation-step: at ν = 1/3, σ_xy = ν e²/h and R_xy = 3 h/e² = 3 R_K, from the BE-55 reciprocal. At ν = 1 the formula is the integer plateau C = 1. R_K/3 is that lemma at C = 3, the fraction inverted, and it fails. Not the Laughlin wavefunction, and not the anyon charge e/3',
+      'derivation-step: for integers p ≠ 0 and q ≠ 0, with ν = p/q, σ_xy = ν e²/h and R_xy = R_K/ν = (q/p) h/e². The charge and Planck\'s constant are not assumed nonzero. Oddness of q is the Laughlin selection rule and is not this identity. Not the Laughlin wavefunction, and not the anyon charge e/3',
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
@@ -498,9 +527,9 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
   {
     key: 'be-54',
     bridgeId: 'be-54',
-    theorem: 'PhysJS.RandallSundrum.positive_tension',
+    theorem: 'PhysJS.RandallSundrum.brane_friedmann',
     covers:
-      'derivation-step: for σ > 0, ρ > 0, and G > 0, H²_RS − H²_FRW = (8πG/3) ρ²/(2σ) > 0. The factor is 1/2. The correction 1+ρ/σ fails. σ < 0 lies below the Friedmann value and is not a physical brane. The limit σ → ∞ is already the be-19 reference. Not a derivation from the five-dimensional Einstein equation',
+      'derivation-step: for σ ≠ 0, H²_RS = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3, which equals the Friedmann term plus (8πG/3) ρ²/(2σ). Not a derivation from the five-dimensional Einstein equation',
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
@@ -522,6 +551,30 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    torsionMonomial: {
+      theorem: 'PhysJS.EinsteinCartan.torsion_monomial',
+      covers:
+        'derivation-step: [κ] and [S] are independent base dimensions and [T] = [κ][S]. If a positive component is dimensionally homogeneous in those dimensions, every positive pair is a unit change of (1, 1) and T = C κ S with C = f(1, 1). C is not fixed. Not the Einstein–Cartan field equation',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+    coefficientNotFixed: {
+      theorem: 'PhysJS.EinsteinCartan.coefficient_not_fixed',
+      covers:
+        'derivation-step: if C ≠ 1 and κ S ≠ 0, then C κ S ≠ κ S. A factor other than 1 is not the catalog coefficient',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+    unitCoefficient: {
+      theorem: 'PhysJS.EinsteinCartan.inversion_of_unit_coefficient',
+      covers:
+        'derivation-step: if C = 1 and every component satisfies T = C κ S, then inversion gives S·S = T·T / κ². C = 1 is a hypothesis. The Einstein trace stays a hypothesis of PhysJS.Einstein.trace_eq',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
   },
   {
     key: 'be-27',
@@ -552,23 +605,47 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    lengthMonomial: {
+      theorem: 'PhysJS.Coarsening.length_monomial_at',
+      covers:
+        'derivation-step: if L is a dimensionally homogeneous function of Γ and t alone and [Γ] = L^z T⁻¹ for a positive rational z, then L = C (Γ t)^{1/z} with C = f(1, 1). C is not fixed. Every positive rational z is allowed, so z = 2 is not derived. Not the Model A Langevin equation',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
   },
   {
     key: 'be-33',
     bridgeId: 'be-33',
-    theorem: 'PhysJS.QuantumCritical.xi_product',
+    theorem: 'PhysJS.QuantumCritical.thermal_scaling',
     covers:
-      'derivation-step: for T > 0 and T₀ > 0, the encoded scaling ξ(T) = ξ₀ (T/T₀)^{−1/z} gives ξ T = ξ₀ T₀ at z = 1. The retired exponent −ν/z fails −1/z at z = 1 when ν ≠ 1. The old pin −0.71 = −71/100 is that failure. At T = T₀ every exponent agrees, so the comparison assumes T ≠ T₀. Not Hertz–Millis theory, and not a universality class',
+      'derivation-step: ξ(T) = ξ₀ (T/T₀)^{−1/z}, and at z = 1 this is ξ(T) = ξ₀ (T/T₀)^{−1} = ξ₀ T₀/T for T > 0 and T₀ > 0. Not Hertz–Millis theory, and not a universality class',
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
+    scalingShape: {
+      theorem: 'PhysJS.QuantumCritical.scaling_shape',
+      covers:
+        'derivation-step: if ξ is a dimensionally homogeneous function of a length ξ₀ and two temperatures, then ξ = ξ₀ φ(T/T₀) with φ(u) = f(1, u, 1). φ is not fixed. Not Hertz–Millis theory',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+    everyPower: {
+      theorem: 'PhysJS.QuantumCritical.every_power_homogeneous',
+      covers:
+        'derivation-step: for every real p and positive scale factors, (λ_s ξ₀) ((λ_e T)/(λ_e T₀))^p = λ_s (ξ₀ (T/T₀)^p). The exponent p is not chosen. Not Hertz–Millis theory',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
   },
   {
     key: 'be-50',
     bridgeId: 'be-50',
-    theorem: 'PhysJS.TimeSymmetric.residual_iff',
+    theorem: 'PhysJS.TimeSymmetric.wheeler_feynman',
     covers:
-      'derivation-step: when A_ret + A_adv ≠ 0, (A_ret − A_adv)/(A_ret + A_adv) = 0 iff A_ret = A_adv. The encoded field is the half-sum (A_ret + A_adv)/2, and twice that field is the residual\'s denominator. A fully retarded field, A_adv = 0 with A_ret ≠ 0, gives residual 1, not 0. The id is contested. This lemma does not decide the contest. Not the absorber boundary condition as a theory of radiation reaction',
+      'derivation-step: A_μ(x) = (A_μ^ret(x) + A_μ^adv(x))/2, and twice that component is the sum. The id is contested. This lemma does not decide the contest. Not the absorber boundary condition as a theory of radiation reaction',
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
@@ -671,11 +748,15 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-12',
   'be-21',
   'be-27',
+  'be-33',
   'be-37',
   'be-40',
   'be-43',
+  'be-50',
+  'be-54',
   'be-55',
   'be-59',
+  'be-60',
   'be-63',
 ]);
 

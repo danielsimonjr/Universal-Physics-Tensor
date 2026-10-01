@@ -41,18 +41,18 @@ const BUCKET_A = [
   [12, 'PhysJS.ThermalDeBroglie.wavelength_eq'],
   [59, 'PhysJS.Josephson.frequency_eq'],
   [55, 'PhysJS.QuantumHall.reciprocal'],
-  [60, 'PhysJS.Laughlin.fraction'],
+  [60, 'PhysJS.Laughlin.filling_fraction'],
   [21, 'PhysJS.Kss.saturating'],
   [14, 'PhysJS.PlanckArea.area_law'],
   [43, 'PhysJS.PlanckArea.area_law'],
   [37, 'PhysJS.Shapiro.radial_integral'],
-  [54, 'PhysJS.RandallSundrum.positive_tension'],
+  [54, 'PhysJS.RandallSundrum.brane_friedmann'],
   [17, 'PhysJS.EinsteinCartan.inversion'],
   [27, 'PhysJS.EffectiveTemperature.sum_eq'],
   [22, 'PhysJS.ToricCode.toric'],
   [15, 'PhysJS.Coarsening.exponent_iff'],
-  [33, 'PhysJS.QuantumCritical.xi_product'],
-  [50, 'PhysJS.TimeSymmetric.residual_iff'],
+  [33, 'PhysJS.QuantumCritical.thermal_scaling'],
+  [50, 'PhysJS.TimeSymmetric.wheeler_feynman'],
   [32, 'PhysJS.BornOverlap.modulus_sq'],
   [28, 'PhysJS.EntropyProduction.nonneg'],
   [40, 'PhysJS.CompositeHiggs.scale_free'],
@@ -62,9 +62,9 @@ const BUCKET_A = [
 ] as const;
 
 /** The theorem states `formula_latex`. Kind is bridge. The covers word stays derivation-step. */
-const EQUATION = [12, 21, 27, 37, 40, 43, 55, 59, 63] as const;
+const EQUATION = [12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63] as const;
 /** The theorem proves a part of the catalogued equation. Kind stays derivation-step. */
-const PARTIAL = [14, 15, 17, 22, 30, 32, 33, 35, 50, 54, 60] as const;
+const PARTIAL = [14, 15, 17, 22, 30, 32, 35] as const;
 const NOT_A_BRIDGE = [28, 32, 35, 40] as const;
 
 function row(id: number) {
@@ -168,10 +168,19 @@ describe('bucket-A catalog formalRefs', () => {
     expect(hall.R_K_ohm).toBe(VON_KLITZING_SI);
   });
 
-  it('BE-60: ν = 1/3 gives 3 R_K, and R_K/3 fails', () => {
-    const frac = evaluateFractionalQH({ nu: 1 / 3 });
-    near(frac.R_xy_ohm, 3 * VON_KLITZING_SI);
-    apart(frac.R_xy_ohm, VON_KLITZING_SI / 3);
+  it('BE-60: σ_xy = ν e²/h and R_xy = R_K/ν for nonzero p, q, and ν R_K fails', () => {
+    const p = 2;
+    const q = 5;
+    const nu = p / q;
+    const frac = evaluateFractionalQH({ nu });
+    near(frac.sigma_xy_S, (nu * E_SI * E_SI) / H_SI);
+    near(frac.R_xy_ohm, (q / p) * VON_KLITZING_SI);
+    apart(frac.R_xy_ohm, nu * VON_KLITZING_SI);
+    const even = evaluateFractionalQH({ nu: 1 / 2 });
+    near(even.R_xy_ohm, 2 * VON_KLITZING_SI);
+    const third = evaluateFractionalQH({ nu: 1 / 3 });
+    apart(third.sigma_xy_S, (E_SI / 3) ** 2 / H_SI);
+    expect(row(60).formalRef?.kind).toBe('bridge');
   });
 
   it('BE-21: the saturating 4π holds, and the Hawking 8π fails', () => {
@@ -202,16 +211,21 @@ describe('bucket-A catalog formalRefs', () => {
     apart(got, full / 2);
   });
 
-  it('BE-54: the positive-tension factor is 1/2, and 1+ρ/σ fails', () => {
+  it('BE-54: H² is the brane Friedmann equation, and dropping the factor 1/2 fails', () => {
     const rho = 10;
     const sigma = 40;
+    const lambda = 1e-8;
     const h2 = evaluateRandallSundrumH2({ rho_kg_per_m3: rho, sigma_kg_per_m3: sigma });
     const frw = ((8 * Math.PI * G_SI) / 3) * rho;
-    const extra = ((8 * Math.PI * G_SI) / 3) * (rho * rho) / (2 * sigma);
-    near(h2 - frw, extra);
-    const withoutHalf = ((8 * Math.PI * G_SI) / 3) * (rho * rho) / sigma;
-    apart(h2 - frw, withoutHalf);
+    const quadratic = ((8 * Math.PI * G_SI) / 3) * (rho * rho) / (2 * sigma);
+    const stated = ((8 * Math.PI * G_SI) / 3) * rho * (1 + rho / (2 * sigma)) + lambda / 3;
+    near(h2, frw + quadratic);
+    near(stated, h2 + lambda / 3);
+    const withoutHalf = ((8 * Math.PI * G_SI) / 3) * rho * (1 + rho / sigma);
+    apart(h2, withoutHalf);
+    expect(row(54).formalRef?.statement).toBe('PhysJS.RandallSundrum.brane_friedmann');
     expect(row(54).formalRef?.statement).not.toBe('PhysJS.RandallSundrum.flat_friedmann');
+    expect(row(54).formalRef?.kind).toBe('bridge');
   });
 
   it('BE-17: S·S = T·T / κ², and κ² in the numerator fails', () => {
@@ -228,6 +242,14 @@ describe('bucket-A catalog formalRefs', () => {
       torsion_squared: torsion,
     });
     apart(backwards, got);
+    expect(row(17).formalRef?.statement).toBe('PhysJS.EinsteinCartan.inversion');
+    expect(row(17).formalRef?.statement).not.toBe('PhysJS.EinsteinCartan.torsion_monomial');
+    expect(row(17).formalRef?.statement).not.toBe('PhysJS.EinsteinCartan.coefficient_not_fixed');
+    expect(row(17).formalRef?.statement).not.toBe('PhysJS.EinsteinCartan.inversion_of_unit_coefficient');
+    expect(row(17).formalRef?.kind).toBe('derivation-step');
+    const kappaS = 4;
+    const unfixed = 2;
+    apart(unfixed * kappaS, kappaS);
   });
 
   it('BE-27: T(1 + Σ/(kT)) equals T + Σ/k, and the product with the 1 omitted fails', () => {
@@ -255,21 +277,41 @@ describe('bucket-A catalog formalRefs', () => {
     near(at(2) ** 2, gamma * t);
     near(evaluateCoarseningLength({ gamma, t }), at(2));
     apart(at(3) ** 2, gamma * t);
+    expect(row(15).formalRef?.statement).toBe('PhysJS.Coarsening.exponent_iff');
+    expect(row(15).formalRef?.statement).not.toBe('PhysJS.Coarsening.length_monomial_at');
+    expect(row(15).formalRef?.kind).toBe('derivation-step');
+    const z = 3;
+    const unfixed = 5;
+    const monomial = unfixed * (gamma * t) ** (1 / z);
+    near(monomial / (gamma * t) ** (1 / z), unfixed);
+    apart(monomial ** 2, gamma * t);
   });
 
-  it('BE-33: ξ T = ξ₀ T₀ at z = 1, and the retired −ν/z fails', () => {
+  it('BE-33: ξ(T) = ξ₀ (T/T₀)^{−1/z}, and a different power fails at z = 1', () => {
     const xi0 = 2;
     const T = 4;
     const T0 = 1;
     const got = evaluateHertzMillis({ xi_0_m: xi0, T_K: T, T_0_K: T0, nu: 0.71, z: 1 });
-    near(got * T, xi0 * T0);
-    const retired = xi0 * (T / T0) ** (-0.71 / 1);
-    apart(got, retired);
+    near(got, xi0 * (T / T0) ** -1);
+    near(got, (xi0 * T0) / T);
+    apart(got, xi0 * (T / T0) ** -2);
+    expect(row(33).formalRef?.statement).toBe('PhysJS.QuantumCritical.thermal_scaling');
+    expect(row(33).formalRef?.statement).not.toBe('PhysJS.QuantumCritical.scaling_shape');
+    expect(row(33).formalRef?.statement).not.toBe('PhysJS.QuantumCritical.every_power_homogeneous');
+    expect(row(33).formalRef?.kind).toBe('bridge');
   });
 
-  it('BE-50: the residual is 0 iff the fields match, and a pure retarded field fails', () => {
-    expect(evaluateWFTimeSymmetry({ A_retarded: 3, A_advanced: 3 })).toBe(0);
-    near(evaluateWFTimeSymmetry({ A_retarded: 3, A_advanced: 0 }), 1);
+  it('BE-50: the field is the half-sum, and the sum itself fails', () => {
+    const retarded = 3;
+    const advanced = 1;
+    const half = (retarded + advanced) / 2;
+    near(2 * half, retarded + advanced);
+    apart(half, retarded + advanced);
+    apart(retarded, retarded / 2);
+    apart(evaluateWFTimeSymmetry({ A_retarded: retarded, A_advanced: advanced }), half);
+    expect(row(50).formalRef?.statement).toBe('PhysJS.TimeSymmetric.wheeler_feynman');
+    expect(row(50).formalRef?.covers).toContain('The id is contested');
+    expect(row(50).formalRef?.kind).toBe('bridge');
   });
 
   it('BE-32: |c + s i|² = c² + s², and c² − s² fails', () => {

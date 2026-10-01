@@ -324,7 +324,7 @@ describe('labeled catalog formalRef sanity lemmas', () => {
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     expect(row(57).formalRef).toBeUndefined();
-    expect(row(54).formalRef?.statement).toBe('PhysJS.RandallSundrum.positive_tension');
+    expect(row(54).formalRef?.statement).toBe('PhysJS.RandallSundrum.brane_friedmann');
     expect(row(54).formalRef?.statement).not.toBe('PhysJS.QuantumBounce.dictionary');
   });
 
@@ -370,8 +370,8 @@ describe('labeled catalog formalRef sanity lemmas', () => {
     expect(row(19).formalRef?.statement).toBe('PhysJS.QuantumBounce.dictionary');
     expect(row(19).formalRef?.covers).toContain('naming BE-54');
     expect(row(19).formalRef?.covers).toContain('not a physical Randall–Sundrum brane');
-    expect(row(54).formalRef?.statement).toBe('PhysJS.RandallSundrum.positive_tension');
-    expect(row(54).formalRef?.kind).toBe('derivation-step');
+    expect(row(54).formalRef?.statement).toBe('PhysJS.RandallSundrum.brane_friedmann');
+    expect(row(54).formalRef?.kind).toBe('bridge');
     const rho = 4;
     const rhoC = 8;
     const friedmann = ((8 * Math.PI * G_SI) / 3) * rho;
