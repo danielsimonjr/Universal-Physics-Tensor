@@ -14,3 +14,4 @@ import PhysJS.Mond
 import PhysJS.Einstein
 import PhysJS.KibbleZurek
 import PhysJS.HawkingUnruh
+import PhysJS.Fret
