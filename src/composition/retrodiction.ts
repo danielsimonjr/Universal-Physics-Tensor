@@ -33,7 +33,7 @@ import type { BridgeEdge } from './edge.js';
 import { evaluateEdge } from './edge.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
-import { conventionFactor } from './unit-convention.js';
+import { conventionFactor } from '../dimensional/unit-convention.js';
 import { classifyAll } from './identifiability.js';
 
 /** Outcome of retrodicting one node. @public */

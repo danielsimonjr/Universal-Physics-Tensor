@@ -10062,7 +10062,7 @@
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -10141,7 +10141,7 @@
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "piMultipleValue"
@@ -11562,7 +11562,7 @@
             ]
           },
           {
-            "file": "../../composition/natural-units.js",
+            "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
             ],
@@ -12110,7 +12110,7 @@
             ]
           },
           {
-            "file": "../../composition/natural-units.js",
+            "file": "../../dimensional/natural-units.js",
             "imports": [
               "naturalConstantOverrides",
               "UnitMode"
@@ -12768,19 +12768,19 @@
             ]
           },
           {
-            "file": "../composition/formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "MU0_SI"
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
           },
           {
-            "file": "../composition/natural-units.js",
+            "file": "../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
             ],
@@ -13179,7 +13179,7 @@
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -13851,7 +13851,7 @@
             "reExport": true
           },
           {
-            "file": "./composition/symbolic-constants.js",
+            "file": "./dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "CONSTANT_PROVENANCE"
@@ -14661,7 +14661,7 @@
             "typeOnly": true
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "piMultipleValue"
@@ -14681,7 +14681,7 @@
             ]
           },
           {
-            "file": "./formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "formulaNameDimensions"
             ]
@@ -14777,7 +14777,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -15018,7 +15018,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -15070,7 +15070,7 @@
             "typeOnly": true
           },
           {
-            "file": "./unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "conventionFactor"
             ]
@@ -15387,7 +15387,7 @@
             "typeOnly": true
           },
           {
-            "file": "./unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "conventionScaleToSI"
             ]
@@ -16557,7 +16557,7 @@
             "typeOnly": true
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "piMultipleValue"
@@ -16619,7 +16619,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -16673,54 +16673,6 @@
         ],
         "functions": [
           "substitute"
-        ]
-      },
-      "src/composition/formula-names.ts": {
-        "description": "Names a formula may use that are not leaves of {@link CONSTANTS}.",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "CHARGE",
-              "DIMENSIONLESS",
-              "LENGTH",
-              "MASS"
-            ]
-          },
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "C_SI",
-              "E_SI",
-              "M_E_SI"
-            ]
-          }
-        ],
-        "exports": [
-          "EPS0_SI",
-          "MU0_SI",
-          "FORMULA_NAMED",
-          "formulaNameDimensions"
-        ],
-        "interfaces": [
-          "FormulaName"
-        ],
-        "functions": [
-          "formulaNameDimensions"
-        ],
-        "constants": [
-          "EPS0_SI",
-          "MU0_SI",
-          "FORMULA_NAMED"
         ]
       },
       "src/composition/frontier-account.ts": {
@@ -17513,33 +17465,6 @@
           "equationLanding",
           "analyzeUserEquation",
           "UserEquationError"
-        ]
-      },
-      "src/composition/natural-units.ts": {
-        "description": "Opt-in natural units. The default comparison stays SI: an energy written as",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "naturalConstantOverrides",
-          "naturalPowers",
-          "naturalNote"
-        ],
-        "interfaces": [
-          "NaturalPowers"
-        ],
-        "functions": [
-          "naturalConstantOverrides",
-          "naturalPowers",
-          "naturalNote"
         ]
       },
       "src/composition/probe/backend-protocol.ts": {
@@ -19631,7 +19556,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -20346,7 +20271,7 @@
             ]
           },
           {
-            "file": "./unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "conventionFactor"
             ]
@@ -20373,57 +20298,6 @@
           "forwardEvaluate",
           "retrodictNode",
           "retrodict"
-        ]
-      },
-      "src/composition/symbolic-constants.ts": {
-        "description": "Symbolic-composition constant registry (v0.12 symbolic composition).",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "ACTION",
-              "CHARGE",
-              "DIMENSIONLESS",
-              "VELOCITY"
-            ]
-          },
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "C_SI",
-              "E_SI",
-              "G_SI",
-              "GM_SUN_SI",
-              "HBAR_SI",
-              "H_SI",
-              "K_B_SI",
-              "B_WIEN_SI"
-            ]
-          }
-        ],
-        "exports": [
-          "CONSTANTS",
-          "CONSTANT_PROVENANCE",
-          "piMultipleValue"
-        ],
-        "interfaces": [
-          "ConstantProvenance"
-        ],
-        "functions": [
-          "piMultipleValue"
-        ],
-        "constants": [
-          "CONSTANTS",
-          "CONSTANT_PROVENANCE"
         ]
       },
       "src/composition/uncertainty.ts": {
@@ -20463,39 +20337,6 @@
           "propagateUncertainty"
         ]
       },
-      "src/composition/unit-convention.ts": {
-        "description": "Per-quantity unit convention for the quantities whose dimension does not",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/algebra.js",
-            "imports": [
-              "equals"
-            ]
-          },
-          {
-            "file": "../dimensional/units.js",
-            "imports": [
-              "parseUnit"
-            ]
-          }
-        ],
-        "exports": [
-          "QUANTITY_CONVENTION_UNIT",
-          "quantityConventionUnit",
-          "conventionScaleToSI",
-          "conventionFactor"
-        ],
-        "functions": [
-          "quantityConventionUnit",
-          "conventionScaleToSI",
-          "conventionFactor"
-        ],
-        "constants": [
-          "QUANTITY_CONVENTION_UNIT"
-        ]
-      },
       "src/composition/user-equation.ts": {
         "description": "User-equation injection — turn a free-form `TARGET = EXPR` string into a graph",
         "externalDependencies": [],
@@ -20515,19 +20356,19 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
           },
           {
-            "file": "./formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "formulaNameDimensions"
             ]
           },
           {
-            "file": "./natural-units.js",
+            "file": "../dimensional/natural-units.js",
             "imports": [
               "naturalNote",
               "naturalPowers",
@@ -21963,6 +21804,54 @@
           "validateTensorSymmetry"
         ]
       },
+      "src/dimensional/formula-names.ts": {
+        "description": "Names a formula may use that are not leaves of {@link CONSTANTS}.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "CHARGE",
+              "DIMENSIONLESS",
+              "LENGTH",
+              "MASS"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "E_SI",
+              "M_E_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "EPS0_SI",
+          "MU0_SI",
+          "FORMULA_NAMED",
+          "formulaNameDimensions"
+        ],
+        "interfaces": [
+          "FormulaName"
+        ],
+        "functions": [
+          "formulaNameDimensions"
+        ],
+        "constants": [
+          "EPS0_SI",
+          "MU0_SI",
+          "FORMULA_NAMED"
+        ]
+      },
       "src/dimensional/fresh-label.ts": {
         "description": "Shared deterministic fresh-label utility used by both metric.ts (raise/lower)",
         "externalDependencies": [],
@@ -22301,6 +22190,33 @@
           "lower"
         ]
       },
+      "src/dimensional/natural-units.ts": {
+        "description": "Opt-in natural units. The default comparison stays SI: an energy written as",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "naturalConstantOverrides",
+          "naturalPowers",
+          "naturalNote"
+        ],
+        "interfaces": [
+          "NaturalPowers"
+        ],
+        "functions": [
+          "naturalConstantOverrides",
+          "naturalPowers",
+          "naturalNote"
+        ]
+      },
       "src/dimensional/rg-flow.ts": {
         "description": "Renormalization-group (RG) flow primitives — `RGCouplingNode` +",
         "externalDependencies": [],
@@ -22398,6 +22314,57 @@
         "functions": [
           "validateStressEnergyTensor",
           "validateCosmologicalConstant"
+        ]
+      },
+      "src/dimensional/symbolic-constants.ts": {
+        "description": "Symbolic-composition constant registry (v0.12 symbolic composition).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "ACTION",
+              "CHARGE",
+              "DIMENSIONLESS",
+              "VELOCITY"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "E_SI",
+              "G_SI",
+              "GM_SUN_SI",
+              "HBAR_SI",
+              "H_SI",
+              "K_B_SI",
+              "B_WIEN_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "CONSTANTS",
+          "CONSTANT_PROVENANCE",
+          "piMultipleValue"
+        ],
+        "interfaces": [
+          "ConstantProvenance"
+        ],
+        "functions": [
+          "piMultipleValue"
+        ],
+        "constants": [
+          "CONSTANTS",
+          "CONSTANT_PROVENANCE"
         ]
       },
       "src/dimensional/tensor-trace.ts": {
@@ -22570,6 +22537,39 @@
           "ENTROPY",
           "CHARGE",
           "NAMED_DIMENSIONS"
+        ]
+      },
+      "src/dimensional/unit-convention.ts": {
+        "description": "Per-quantity unit convention for the quantities whose dimension does not",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "./units.js",
+            "imports": [
+              "parseUnit"
+            ]
+          }
+        ],
+        "exports": [
+          "QUANTITY_CONVENTION_UNIT",
+          "quantityConventionUnit",
+          "conventionScaleToSI",
+          "conventionFactor"
+        ],
+        "functions": [
+          "quantityConventionUnit",
+          "conventionScaleToSI",
+          "conventionFactor"
+        ],
+        "constants": [
+          "QUANTITY_CONVENTION_UNIT"
         ]
       },
       "src/dimensional/units.ts": {
@@ -25624,26 +25624,26 @@
             ]
           },
           {
-            "file": "../composition/formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "FORMULA_NAMED"
             ]
           },
           {
-            "file": "../composition/unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "quantityConventionUnit"
             ]
           },
           {
-            "file": "../composition/natural-units.js",
+            "file": "../dimensional/natural-units.js",
             "imports": [
               "naturalConstantOverrides",
               "UnitMode"
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -28032,14 +28032,12 @@
           "src/composition/expr-eval.ts",
           "src/composition/expr-simplify.ts",
           "src/composition/expr-subst.ts",
-          "src/composition/formula-names.ts",
           "src/composition/frontier-account.ts",
           "src/composition/graph-viz-svg.ts",
           "src/composition/graph-viz.ts",
           "src/composition/grounding.ts",
           "src/composition/identifiability.ts",
           "src/composition/index.ts",
-          "src/composition/natural-units.ts",
           "src/composition/probe/backend-protocol.ts",
           "src/composition/probe/candidate-store.ts",
           "src/composition/probe/corpus.ts",
@@ -28076,9 +28074,7 @@
           "src/composition/quantity.ts",
           "src/composition/representative-values.ts",
           "src/composition/retrodiction.ts",
-          "src/composition/symbolic-constants.ts",
           "src/composition/uncertainty.ts",
-          "src/composition/unit-convention.ts",
           "src/composition/user-equation.ts"
         ]
       },
@@ -28125,6 +28121,7 @@
           "src/dimensional/einstein-equation.ts",
           "src/dimensional/errors.ts",
           "src/dimensional/field-equation-helpers.ts",
+          "src/dimensional/formula-names.ts",
           "src/dimensional/fresh-label.ts",
           "src/dimensional/friedmann-equation.ts",
           "src/dimensional/gauge-field.ts",
@@ -28132,11 +28129,14 @@
           "src/dimensional/klein-gordon-equation.ts",
           "src/dimensional/metric-validators.ts",
           "src/dimensional/metric.ts",
+          "src/dimensional/natural-units.ts",
           "src/dimensional/rg-flow.ts",
           "src/dimensional/stress-energy-validators.ts",
+          "src/dimensional/symbolic-constants.ts",
           "src/dimensional/tensor-trace.ts",
           "src/dimensional/tensor.ts",
           "src/dimensional/types.ts",
+          "src/dimensional/unit-convention.ts",
           "src/dimensional/units.ts",
           "src/dimensional/validator-registry.ts",
           "src/dimensional/validator.ts",

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 403,
-    "totalTestFiles": 552,
+    "totalTestFiles": 553,
     "testedCount": 393,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -16,7 +16,7 @@
     "src/cli/record-tables.ts",
     "src/cli/record.ts",
     "src/cli/search-index.ts",
-    "src/composition/natural-units.ts"
+    "src/dimensional/natural-units.ts"
   ],
   "testedFiles": [
     "src/atlas/applicability.ts",
@@ -276,7 +276,6 @@
     "src/composition/expr-eval.ts",
     "src/composition/expr-simplify.ts",
     "src/composition/expr-subst.ts",
-    "src/composition/formula-names.ts",
     "src/composition/frontier-account.ts",
     "src/composition/graph-viz-svg.ts",
     "src/composition/graph-viz.ts",
@@ -319,9 +318,7 @@
     "src/composition/quantity.ts",
     "src/composition/representative-values.ts",
     "src/composition/retrodiction.ts",
-    "src/composition/symbolic-constants.ts",
     "src/composition/uncertainty.ts",
-    "src/composition/unit-convention.ts",
     "src/composition/user-equation.ts",
     "src/core/axes-registry.ts",
     "src/core/cell.ts",
@@ -353,6 +350,7 @@
     "src/dimensional/einstein-equation.ts",
     "src/dimensional/errors.ts",
     "src/dimensional/field-equation-helpers.ts",
+    "src/dimensional/formula-names.ts",
     "src/dimensional/fresh-label.ts",
     "src/dimensional/friedmann-equation.ts",
     "src/dimensional/gauge-field.ts",
@@ -362,9 +360,11 @@
     "src/dimensional/metric.ts",
     "src/dimensional/rg-flow.ts",
     "src/dimensional/stress-energy-validators.ts",
+    "src/dimensional/symbolic-constants.ts",
     "src/dimensional/tensor-trace.ts",
     "src/dimensional/tensor.ts",
     "src/dimensional/types.ts",
+    "src/dimensional/unit-convention.ts",
     "src/dimensional/units.ts",
     "src/dimensional/validator-registry.ts",
     "src/dimensional/validator.ts",
@@ -5345,9 +5345,6 @@
       "tests/atlas/negative-controls.test.ts",
       "tests/composition/symbolic-composition.test.ts"
     ],
-    "src/composition/formula-names.ts": [
-      "tests/cli/dogfood-2026-09-29.test.ts"
-    ],
     "src/composition/frontier-account.ts": [
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -5541,7 +5538,6 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
-    "src/composition/natural-units.ts": [],
     "src/composition/probe/backend-protocol.ts": [
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -5998,22 +5994,6 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
-    "src/composition/symbolic-constants.ts": [
-      "tests/canonical/quantity-names.test.ts",
-      "tests/cli/atlas-evidence.test.ts",
-      "tests/cli/audit-improvements.test.ts",
-      "tests/cli/eval-registered-constants-builtin.test.ts",
-      "tests/cli/eval-registered-constants.test.ts",
-      "tests/cli/graphs.test.ts",
-      "tests/cli/map-atlas-results.test.ts",
-      "tests/cli/map-atlas-views.test.ts",
-      "tests/cli/record-builtin-parser.test.ts",
-      "tests/cli/recover-conventions.test.ts",
-      "tests/cli/symbolic-latex.test.ts",
-      "tests/composition/persona-retest-compare.test.ts",
-      "tests/composition/symbolic-composition.test.ts",
-      "tests/composition/symbolic-constants-extra.test.ts"
-    ],
     "src/composition/uncertainty.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
@@ -6054,9 +6034,6 @@
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
-    ],
-    "src/composition/unit-convention.ts": [
-      "tests/composition/retrodiction.test.ts"
     ],
     "src/composition/user-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -6862,6 +6839,9 @@
     "src/dimensional/field-equation-helpers.ts": [
       "tests/dimensional/field-equation-helpers.test.ts"
     ],
+    "src/dimensional/formula-names.ts": [
+      "tests/cli/dogfood-2026-09-29.test.ts"
+    ],
     "src/dimensional/fresh-label.ts": [
       "tests/dimensional/fresh-label.test.ts"
     ],
@@ -6954,6 +6934,7 @@
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts"
     ],
+    "src/dimensional/natural-units.ts": [],
     "src/dimensional/rg-flow.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/public-surface.test.ts",
@@ -6976,6 +6957,22 @@
       "tests/dimensional/cosmological-constant.test.ts",
       "tests/dimensional/einstein-equation.test.ts",
       "tests/dimensional/stress-energy-validators.test.ts"
+    ],
+    "src/dimensional/symbolic-constants.ts": [
+      "tests/canonical/quantity-names.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/eval-registered-constants-builtin.test.ts",
+      "tests/cli/eval-registered-constants.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/symbolic-latex.test.ts",
+      "tests/composition/persona-retest-compare.test.ts",
+      "tests/composition/symbolic-composition.test.ts",
+      "tests/composition/symbolic-constants-extra.test.ts"
     ],
     "src/dimensional/tensor-trace.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -7190,6 +7187,9 @@
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/numerical/tensor-partial-derivative-lowering.test.ts",
       "tests/tensor.test.ts"
+    ],
+    "src/dimensional/unit-convention.ts": [
+      "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/units.ts": [
       "tests/bridges/evaluators.test.ts",
@@ -10367,7 +10367,7 @@
     ],
     "tests/canonical/quantity-names.test.ts": [
       "src/canonical/registry.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
@@ -10643,7 +10643,7 @@
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
       "src/composition/canonical-compare.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/coverage.ts",
       "src/atlas/witness-artifact.ts",
@@ -10859,7 +10859,7 @@
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
       "src/composition/canonical-compare.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
@@ -11232,7 +11232,7 @@
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
       "src/core/constants.ts",
-      "src/composition/formula-names.ts"
+      "src/dimensional/formula-names.ts"
     ],
     "tests/cli/dogfood-open-items.test.ts": [
       "src/cli/main.ts",
@@ -11359,7 +11359,7 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
-      "src/composition/symbolic-constants.ts"
+      "src/dimensional/symbolic-constants.ts"
     ],
     "tests/cli/eval-registered-constants.test.ts": [
       "src/cli/main.ts",
@@ -11392,7 +11392,7 @@
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
       "src/cli/eval-numbers.ts",
-      "src/composition/symbolic-constants.ts"
+      "src/dimensional/symbolic-constants.ts"
     ],
     "tests/cli/evaluate-help-claim.test.ts": [
       "src/bridges/be63-chandrasekhar-mass.ts"
@@ -11591,7 +11591,7 @@
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
       "src/composition/canonical-compare.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
@@ -11971,7 +11971,7 @@
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
       "src/composition/canonical-compare.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
@@ -12191,7 +12191,7 @@
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
       "src/composition/canonical-compare.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
@@ -12698,7 +12698,7 @@
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
       "src/composition/canonical-compare.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
@@ -13011,7 +13011,7 @@
       "src/composition/grounding.ts",
       "src/composition/representative-values.ts",
       "src/composition/canonical-compare.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
@@ -13392,7 +13392,7 @@
       "src/cli/expr-print.ts",
       "src/composition/expr-eval.ts",
       "src/numerical/formula.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/validator.ts",
@@ -14227,7 +14227,7 @@
       "src/composition/user-equation.ts",
       "src/composition/canonical-prefactors.ts",
       "src/canonical/registry.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/types.ts"
     ],
@@ -14440,7 +14440,7 @@
     "tests/composition/retrodiction.test.ts": [
       "src/composition/retrodiction.ts",
       "src/composition/compose.ts",
-      "src/composition/unit-convention.ts",
+      "src/dimensional/unit-convention.ts",
       "src/composition/index.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
@@ -14500,7 +14500,7 @@
     "tests/composition/symbolic-composition.test.ts": [
       "src/composition/expr-eval.ts",
       "src/composition/expr-subst.ts",
-      "src/composition/symbolic-constants.ts",
+      "src/dimensional/symbolic-constants.ts",
       "src/composition/compose-symbolic.ts",
       "src/composition/compose.ts",
       "src/composition/edges/calibration.ts",
@@ -14532,7 +14532,7 @@
       "src/dimensional/types.ts"
     ],
     "tests/composition/symbolic-constants-extra.test.ts": [
-      "src/composition/symbolic-constants.ts"
+      "src/dimensional/symbolic-constants.ts"
     ],
     "tests/composition/symbolic-simplification.test.ts": [
       "src/composition/expr-simplify.ts",
@@ -15741,6 +15741,7 @@
     "tests/numerical/null-ray-integrator.test.ts": [
       "src/numerical/null-ray-integrator.ts"
     ],
+    "tests/numerical/numerical-composition-imports.test.ts": [],
     "tests/numerical/painleve-gullstrand-curvature.test.ts": [
       "src/numerical/kretschmann.ts",
       "src/numerical/curvature-lowering-helpers.ts",

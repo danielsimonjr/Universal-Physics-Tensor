@@ -130,7 +130,7 @@ describe('argument and entry hashes', () => {
 describe('named constant tables', () => {
   it('fingerprints each table separately (checked by an independent sorted-key SHA-256)', () => {
     const tables = readEntries(session)[0].environment.constantTables;
-    for (const name of ['core/constants', 'dimensional/units', 'composition/symbolic-constants', 'composition/canonical-graph']) {
+    for (const name of ['core/constants', 'dimensional/units', 'dimensional/symbolic-constants', 'composition/canonical-graph']) {
       expect(Object.keys(tables)).toContain(name);
     }
     for (const t of Object.values(tables) as { values: Record<string, unknown>; sha256: string }[]) {
@@ -138,7 +138,7 @@ describe('named constant tables', () => {
     }
     expect(tables['dimensional/units'].values['eV.scale']).toBe(1.602176634e-19);
     expect(tables['dimensional/units'].values['Msun.scale']).toBe(1.989e30);
-    expect(tables['composition/symbolic-constants'].values['k_B.value']).toBe(1.380649e-23);
+    expect(tables['dimensional/symbolic-constants'].values['k_B.value']).toBe(1.380649e-23);
     expect(tables['composition/canonical-graph'].values['e.value']).toBe(1.602176634e-19);
   });
 

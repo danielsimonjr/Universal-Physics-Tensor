@@ -33,7 +33,7 @@
 import { equals, format } from '../dimensional/algebra.js';
 import type { BridgeEdge, EdgeConfidence } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
-import { conventionFactor } from './unit-convention.js';
+import { conventionFactor } from '../dimensional/unit-convention.js';
 import {
   CompositionAliasError,
   CompositionDimensionError,

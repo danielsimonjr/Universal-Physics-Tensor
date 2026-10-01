@@ -22,9 +22,9 @@
 
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
-import { CONSTANTS } from './symbolic-constants.js';
-import { formulaNameDimensions } from './formula-names.js';
-import { naturalNote, naturalPowers, type UnitMode } from './natural-units.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { formulaNameDimensions } from '../dimensional/formula-names.js';
+import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
 import type { VizModel, VizJunction } from './graph-viz.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';

@@ -7,7 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('@danielsimonjr/mathts-functions', () => ({}));
 
 const { runCli } = await import('../../dist/cli/main.js');
-const { CONSTANTS } = await import('../../src/composition/symbolic-constants.js');
+const { CONSTANTS } = await import('../../src/dimensional/symbolic-constants.js');
 
 async function run(args: string[]) {
   const stdout: string[] = [];

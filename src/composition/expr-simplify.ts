@@ -33,7 +33,7 @@ import { equals } from '../dimensional/algebra.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 import { evalExpr } from './expr-eval.js';
-import { CONSTANTS } from './symbolic-constants.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { Observable } from './compose-symbolic.js';
 import { makeObservable } from './compose-symbolic.js';
 
