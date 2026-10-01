@@ -38,3 +38,4 @@ import PhysJS.ToricCode
 import PhysJS.QuantumCritical
 import PhysJS.TimeSymmetric
 import PhysJS.BornOverlap
+import PhysJS.EntropyProduction
