@@ -32,7 +32,8 @@
  * Spec: docs/planning/v0.5.1-Implementation-Plan.md Task 16 / Design Decision #5.
  */
 import { describe, it, expect } from 'vitest';
-import { ricci, einstein, bianchiResidual } from '../../src/dimensional/curvature.js';
+import { ricci, einstein } from '../../src/dimensional/curvature.js';
+import { bianchiResidual } from '../../src/numerical/bianchi-residual.js';
 import { evaluateNumerical } from '../../src/numerical/index.js';
 import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
 import type { ExprNode, RiemannTensorNode } from '../../src/dimensional/validator.js';
