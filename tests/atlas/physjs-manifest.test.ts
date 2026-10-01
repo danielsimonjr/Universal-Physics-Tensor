@@ -14,6 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import {
   PHYSJS_COMMIT,
@@ -27,7 +28,7 @@ const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.j
 const atlasBridges = ATLAS_FAMILIES.flatMap((family) => family.bridges);
 const carriers = [
   ...atlasBridges,
-  ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: entry.formalRef })),
+  ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
 /** The manifest at PhysJS `main` `4b150d3352aa1a5edccf1f8159e99ada2cba6048`, in file order. A swapped theorem or key fails this list. */
@@ -299,11 +300,11 @@ describe('vendored PhysJS manifest', () => {
         | undefined;
       expect(entry?.[field]?.theorem).toBe(theorem);
       expect(entry?.[field]?.covers?.split(':')[0]).toMatch(/^(reduction|limit|derivation-step)$/);
-      const row = BRIDGE_EQUATIONS.find((candidate) => candidate.id === Number(key.slice(3)));
-      expect(row?.formalRef?.statement).toBe(entry?.theorem);
-      expect(row?.formalRef?.statement).not.toBe(theorem);
+      const formalRef = catalogFormalRef(Number(key.slice(3)));
+      expect(formalRef?.statement).toBe(entry?.theorem);
+      expect(formalRef?.statement).not.toBe(theorem);
     }
-    expect(BRIDGE_EQUATIONS.find((entry) => entry.id === 20)?.formalRef).toBeUndefined();
+    expect(catalogFormalRef(20)).toBeUndefined();
     expect(manifest.entries.some((entry) => entry.key === 'be-20')).toBe(false);
   });
 
@@ -374,16 +375,18 @@ describe('vendored PhysJS manifest', () => {
     const labeledIds = [42, 24, 19, 16, 29, 11];
     for (const id of countedIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
-      expect(row?.formalRef?.system).toBe('lean4-physjs');
-      expect(row?.formalRef?.covers).toMatch(/^(reduction|limit|derivation-step): /);
-      expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
+      const formalRef = catalogFormalRef(id);
+      expect(formalRef?.system).toBe('lean4-physjs');
+      expect(formalRef?.covers).toMatch(/^(reduction|limit|derivation-step): /);
+      expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     for (const id of labeledIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
-      expect(row?.formalRef?.system).toBe('lean4-physjs');
-      expect(row?.formalRef?.covers).toMatch(/^(property|cross-check): /);
-      expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
+      const formalRef = catalogFormalRef(id);
+      expect(formalRef?.system).toBe('lean4-physjs');
+      expect(formalRef?.covers).toMatch(/^(property|cross-check): /);
+      expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     const reviewed = atlasBridges.filter(
@@ -391,7 +394,7 @@ describe('vendored PhysJS manifest', () => {
     );
     expect(reviewed).toHaveLength(10);
     for (const id of [36, 20, 57]) {
-      expect(BRIDGE_EQUATIONS.find((entry) => entry.id === id)?.formalRef).toBeUndefined();
+      expect(catalogFormalRef(id)).toBeUndefined();
       expect(manifest.entries.some((entry) => entry.key === `be-${id}`)).toBe(false);
     }
     const be36 = BRIDGE_EQUATIONS.find((entry) => entry.id === 36);

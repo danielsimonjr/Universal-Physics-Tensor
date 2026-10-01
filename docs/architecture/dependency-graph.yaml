@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 0.47.1
-  totalFiles: 407
+  totalFiles: 408
   totalModules: 13
-  totalExports: 2922
+  totalExports: 2923
 entryPoints:
   - file: src/index.ts
     type: main
@@ -346,6 +346,22 @@ modules:
         - FAILURE_KINDS
         - HELD_OUT_FAMILY
         - HELD_OUT_MARKERS
+    src/atlas/catalog-formal-ref.ts:
+      description: Catalog formal references, keyed by bridge id.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../relations/types.js
+          imports:
+            - FormalRef
+          typeOnly: true
+        - file: ./physjs-ref.js
+          imports:
+            - physjsFormalRef
+      exports:
+        - catalogFormalRef
+      functions:
+        - catalogFormalRef
     src/atlas/composition-table.ts:
       description: Re-export of the composition table. The table lives in
       externalDependencies: []
@@ -5886,13 +5902,9 @@ modules:
           imports:
             - Conventions
             - Counterexample
-            - FormalRef
             - Regime
             - RelationContract
           typeOnly: true
-        - file: ../atlas/physjs-ref.js
-          imports:
-            - physjsFormalRef
         - file: ../relations/regime.js
           imports:
             - deriveRegimeGroups
@@ -7501,6 +7513,9 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../../atlas/catalog-formal-ref.js
+          imports:
+            - catalogFormalRef
         - file: ./_atlas-map.js
           imports:
             - atlasEvidenceText
@@ -19325,6 +19340,7 @@ dependencyGraph:
         - src/atlas/benchmark/stats.ts
         - src/atlas/benchmark/study.ts
         - src/atlas/benchmark/types.ts
+        - src/atlas/catalog-formal-ref.ts
         - src/atlas/composition-table.ts
         - src/atlas/conventions.ts
         - src/atlas/coverage.ts
@@ -19746,18 +19762,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 407
+  totalTypeScriptFiles: 408
   totalModules: 13
-  totalLinesOfCode: 89410
-  totalExports: 2922
+  totalLinesOfCode: 89408
+  totalExports: 2923
   totalClasses: 60
   totalInterfaces: 462
-  totalFunctions: 751
+  totalFunctions: 752
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
   totalReExports: 1389
-  totalTypeOnlyImports: 545
+  totalTypeOnlyImports: 546
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

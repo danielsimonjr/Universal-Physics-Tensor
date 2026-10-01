@@ -9,6 +9,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { C_SI, E_SI, G_SI, HBAR_SI, K_B_SI } from '../../src/core/constants.js';
 import { evaluateHawkingTemperature } from '../../src/bridges/equations/be-42-hawking-temperature.js';
@@ -42,7 +43,7 @@ const COUNTED = [
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
   expect(entry, `be-${id}`).toBeDefined();
-  return entry!;
+  return { ...entry!, formalRef: catalogFormalRef(id) };
 }
 
 describe('catalog formalRef sanity lemmas', () => {

@@ -27,6 +27,14 @@ const distImport = (...parts) =>
   import(pathToFileURL(resolve(repoRoot, 'dist', ...parts)).href);
 
 const { BRIDGE_EQUATIONS } = await distImport('bridges', 'index.js');
+const { catalogFormalRef } = await distImport('atlas', 'catalog-formal-ref.js');
+
+/** The catalog row does not store the reference. Put it back after `id` for the artifact. */
+function withCatalogFormalRef(entry) {
+  const { id, ...rest } = entry;
+  const formalRef = catalogFormalRef(id);
+  return formalRef === undefined ? { id, ...rest } : { id, formalRef, ...rest };
+}
 const { listConfrontations } = await distImport('bridges', 'confrontations.js');
 const { ADJUDICATIONS } = await distImport('composition', 'adjudication.js');
 const pkg = JSON.parse(
@@ -49,7 +57,7 @@ const artifact = {
   schemaVersion: 2,
   packageVersion: pkg.version,
   count: BRIDGE_EQUATIONS.length,
-  entries: BRIDGE_EQUATIONS,
+  entries: BRIDGE_EQUATIONS.map(withCatalogFormalRef),
   confrontations,
   adjudications: ADJUDICATIONS,
 };
