@@ -37,3 +37,4 @@ import PhysJS.EffectiveTemperature
 import PhysJS.ToricCode
 import PhysJS.QuantumCritical
 import PhysJS.TimeSymmetric
+import PhysJS.BornOverlap
