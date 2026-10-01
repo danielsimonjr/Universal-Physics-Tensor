@@ -23,9 +23,7 @@ import type { ExprNode } from '../dimensional/validator.js';
 import type { DimensionalVariable } from '../dimensional/buckingham.js';
 import type { TensorIndices } from '../core/types.js';
 import type { EinsteinFieldEquationNode } from '../dimensional/einstein-equation.js';
-// Atlas TYPES only, and from the leaf module — never `../atlas/index.js`,
-// which would close a dependency cycle `bun run docs:deps` reports.
-import type { Conventions } from '../atlas/types.js';
+import type { Conventions } from '../relations/types.js';
 
 /** Physics domain — indexes the registry and (later) the discovery kind filter. */
 export type CanonicalDomain =

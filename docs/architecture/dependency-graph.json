@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "0.47.1",
-    "totalFiles": 401,
-    "totalModules": 12,
-    "totalExports": 2907
+    "totalFiles": 405,
+    "totalModules": 13,
+    "totalExports": 2928
   },
   "entryPoints": [
     {
@@ -502,16 +502,17 @@
         ]
       },
       "src/atlas/composition-table.ts": {
-        "description": "The composition table for `RelationType` — a literal 8×8 matrix.",
+        "description": "Re-export of the composition table. The table lives in",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./types.js",
+            "file": "../relations/composition-table.js",
             "imports": [
-              "RelationType"
-            ],
-            "typeOnly": true
+              "COMPOSITION_TABLE",
+              "composeRelation",
+              "NO_COMPOSITE_CLAIM"
+            ]
           }
         ],
         "exports": [
@@ -519,34 +520,42 @@
           "COMPOSITION_TABLE",
           "composeRelation"
         ],
-        "functions": [
-          "composeRelation"
-        ],
         "constants": [
           "NO_COMPOSITE_CLAIM",
-          "COMPOSITION_TABLE"
+          "COMPOSITION_TABLE",
+          "composeRelation"
         ]
       },
       "src/atlas/conventions.ts": {
-        "description": "Atlas Phase 1 — convention comparison.",
+        "description": "Re-export of the convention comparison. The implementation lives in",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./types.js",
+            "file": "../relations/conventions.js",
             "imports": [
-              "Conventions"
+              "checkConventions",
+              "unknownConventionKeys"
             ],
-            "typeOnly": true
+            "reExport": true
+          },
+          {
+            "file": "../relations/conventions.js",
+            "imports": [
+              "ConventionKey"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
           "checkConventions",
-          "unknownConventionKeys"
+          "unknownConventionKeys",
+          "ConventionKey"
         ],
-        "functions": [
+        "reExported": [
           "checkConventions",
-          "unknownConventionKeys"
+          "unknownConventionKeys",
+          "ConventionKey"
         ]
       },
       "src/atlas/coverage.ts": {
@@ -3302,29 +3311,22 @@
         ]
       },
       "src/atlas/regime.ts": {
-        "description": "Regime derivation — π-groups as the coordinates a regime is written in.",
+        "description": "Regime admission, and the re-export of the vocabulary half.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../dimensional/buckingham.js",
+            "file": "../relations/regime.js",
             "imports": [
-              "buckinghamPi"
+              "regimeHolds"
             ]
           },
           {
-            "file": "../dimensional/buckingham.js",
+            "file": "./types.js",
             "imports": [
-              "DimensionalVariable",
-              "PiGroup"
+              "AtlasBridge"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "DIMENSIONLESS"
-            ]
           },
           {
             "file": "./types.js",
@@ -3334,37 +3336,53 @@
             ]
           },
           {
-            "file": "./types.js",
+            "file": "../relations/regime.js",
             "imports": [
-              "AtlasBridge",
-              "Regime",
-              "RegimeInequality"
+              "collidingRegimeGroups",
+              "deriveRegimeGroups",
+              "intersectRegimes",
+              "regimeOverlap",
+              "uncoveredRegions"
             ],
-            "typeOnly": true
+            "reExport": true
+          },
+          {
+            "file": "../relations/regime.js",
+            "imports": [
+              "RegimeBearing",
+              "RegimeOverlap",
+              "RegionSample"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
-          "deriveRegimeGroups",
-          "regimeHolds",
-          "intersectRegimes",
           "collidingRegimeGroups",
+          "deriveRegimeGroups",
+          "intersectRegimes",
           "regimeOverlap",
           "uncoveredRegions",
-          "admitApproximation"
+          "regimeHolds",
+          "admitApproximation",
+          "RegimeBearing",
+          "RegimeOverlap",
+          "RegionSample"
         ],
-        "interfaces": [
-          "RegimeCheck",
-          "RegionSample",
-          "RegimeBearing"
+        "reExported": [
+          "collidingRegimeGroups",
+          "deriveRegimeGroups",
+          "intersectRegimes",
+          "regimeOverlap",
+          "uncoveredRegions",
+          "RegimeBearing",
+          "RegimeOverlap",
+          "RegionSample"
         ],
         "functions": [
-          "deriveRegimeGroups",
-          "regimeHolds",
-          "intersectRegimes",
-          "collidingRegimeGroups",
-          "regimeOverlap",
-          "uncoveredRegions",
           "admitApproximation"
+        ],
+        "constants": [
+          "regimeHolds"
         ]
       },
       "src/atlas/serialize.ts": {
@@ -3577,24 +3595,54 @@
         ]
       },
       "src/atlas/types.ts": {
-        "description": "Atlas Phase 0 pilot types (oscillator pilot).",
+        "description": "Atlas record types.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../dimensional/buckingham.js",
+            "file": "../relations/types.js",
             "imports": [
-              "DimensionalVariable",
-              "PiGroup"
+              "FormalRef"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../relations/types.js",
+            "imports": [
+              "Conventions",
+              "FormalFidelity",
+              "FormalRef",
+              "FormalRefKind",
+              "RelationContract"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "../relations/types.js",
+            "imports": [
+              "ALL_EVIDENCE_TAGS"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
           "ALL_EVIDENCE_TAGS",
           "MissingHorizonError",
           "MissingDeltaAtError",
-          "MissingLipschitzError"
+          "MissingLipschitzError",
+          "Conventions",
+          "FormalFidelity",
+          "FormalRef",
+          "FormalRefKind",
+          "RelationContract"
+        ],
+        "reExported": [
+          "Conventions",
+          "FormalFidelity",
+          "FormalRef",
+          "FormalRefKind",
+          "RelationContract",
+          "ALL_EVIDENCE_TAGS"
         ],
         "classes": [
           "MissingHorizonError",
@@ -3602,19 +3650,10 @@
           "MissingLipschitzError"
         ],
         "interfaces": [
-          "FormalRef",
-          "RegimeInequality",
-          "Regime",
-          "ApproximationBound",
           "Witness",
-          "Counterexample",
           "NormTransport",
           "AtlasBridge",
-          "AtlasRejection",
-          "Conventions"
-        ],
-        "constants": [
-          "ALL_EVIDENCE_TAGS"
+          "AtlasRejection"
         ]
       },
       "src/atlas/waves/bridges-closure.ts": {
@@ -8597,7 +8636,7 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions",
               "Counterexample",
@@ -8614,7 +8653,7 @@
             ]
           },
           {
-            "file": "../atlas/regime.js",
+            "file": "../relations/regime.js",
             "imports": [
               "deriveRegimeGroups"
             ]
@@ -9382,7 +9421,7 @@
             "typeOnly": true
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions"
             ],
@@ -14945,20 +14984,20 @@
             ]
           },
           {
-            "file": "../atlas/composition-table.js",
+            "file": "../relations/composition-table.js",
             "imports": [
               "composeRelation",
               "NO_COMPOSITE_CLAIM"
             ]
           },
           {
-            "file": "../atlas/conventions.js",
+            "file": "../relations/conventions.js",
             "imports": [
               "checkConventions"
             ]
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions",
               "RelationContract",
@@ -15309,7 +15348,7 @@
             "typeOnly": true
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions",
               "Counterexample",
@@ -16699,7 +16738,7 @@
             ]
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "EvidenceTag",
               "RelationType"
@@ -20415,7 +20454,7 @@
             ]
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "ApproximationBound"
             ],
@@ -27558,6 +27597,140 @@
           "computeWeylTensor"
         ]
       }
+    },
+    "relations": {
+      "src/relations/composition-table.ts": {
+        "description": "The composition table for `RelationType` — a literal 8×8 matrix.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "RelationType"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "NO_COMPOSITE_CLAIM",
+          "COMPOSITION_TABLE",
+          "composeRelation"
+        ],
+        "functions": [
+          "composeRelation"
+        ],
+        "constants": [
+          "NO_COMPOSITE_CLAIM",
+          "COMPOSITION_TABLE"
+        ]
+      },
+      "src/relations/conventions.ts": {
+        "description": "Atlas Phase 1 — convention comparison.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Conventions"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "checkConventions",
+          "unknownConventionKeys"
+        ],
+        "functions": [
+          "checkConventions",
+          "unknownConventionKeys"
+        ]
+      },
+      "src/relations/regime.ts": {
+        "description": "Regime derivation — π-groups as the coordinates a regime is written in.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "buckinghamPi"
+            ]
+          },
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "DimensionalVariable",
+              "PiGroup"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "Regime",
+              "RegimeInequality"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "deriveRegimeGroups",
+          "regimeHolds",
+          "intersectRegimes",
+          "collidingRegimeGroups",
+          "regimeOverlap",
+          "uncoveredRegions"
+        ],
+        "interfaces": [
+          "RegimeCheck",
+          "RegionSample",
+          "RegimeBearing"
+        ],
+        "functions": [
+          "deriveRegimeGroups",
+          "regimeHolds",
+          "intersectRegimes",
+          "collidingRegimeGroups",
+          "regimeOverlap",
+          "uncoveredRegions"
+        ]
+      },
+      "src/relations/types.ts": {
+        "description": "Shared relation vocabulary.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "PiGroup"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "ALL_EVIDENCE_TAGS"
+        ],
+        "interfaces": [
+          "FormalRef",
+          "RegimeInequality",
+          "Regime",
+          "ApproximationBound",
+          "Counterexample",
+          "Conventions"
+        ],
+        "constants": [
+          "ALL_EVIDENCE_TAGS"
+        ]
+      }
     }
   },
   "dependencyGraph": {
@@ -28029,22 +28202,31 @@
           "src/numerical/types.ts",
           "src/numerical/weyl-lowering.ts"
         ]
+      },
+      {
+        "name": "Relations",
+        "files": [
+          "src/relations/composition-table.ts",
+          "src/relations/conventions.ts",
+          "src/relations/regime.ts",
+          "src/relations/types.ts"
+        ]
       }
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 401,
-    "totalModules": 12,
-    "totalLinesOfCode": 89005,
-    "totalExports": 2907,
+    "totalTypeScriptFiles": 405,
+    "totalModules": 13,
+    "totalLinesOfCode": 89102,
+    "totalExports": 2928,
     "totalClasses": 60,
     "totalInterfaces": 462,
     "totalFunctions": 750,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 717,
-    "totalReExports": 1379,
-    "totalTypeOnlyImports": 541,
+    "totalConstants": 721,
+    "totalReExports": 1396,
+    "totalTypeOnlyImports": 543,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

@@ -22,7 +22,7 @@
 
 import type { BridgeEdge } from './edge.js';
 import { evaluateEdge } from './edge.js';
-import type { ApproximationBound } from '../atlas/types.js';
+import type { ApproximationBound } from '../relations/types.js';
 
 /**
  * Optional extras for {@link propagateUncertainty}.

@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 398,
-    "totalTestFiles": 550,
-    "testedCount": 388,
+    "totalSourceFiles": 402,
+    "totalTestFiles": 551,
+    "testedCount": 392,
     "untestedCount": 10,
     "coveragePercent": "97.5"
   },
@@ -406,7 +406,11 @@
     "src/numerical/strides.ts",
     "src/numerical/tensor-engine.ts",
     "src/numerical/types.ts",
-    "src/numerical/weyl-lowering.ts"
+    "src/numerical/weyl-lowering.ts",
+    "src/relations/composition-table.ts",
+    "src/relations/conventions.ts",
+    "src/relations/regime.ts",
+    "src/relations/types.ts"
   ],
   "coverageMap": {
     "src/atlas/applicability.ts": [
@@ -472,6 +476,7 @@
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/composition-table.test.ts",
       "tests/atlas/path-bound.test.ts",
+      "tests/atlas/relations-shim.test.ts",
       "tests/atlas/transported-norm-demo.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -483,6 +488,7 @@
     ],
     "src/atlas/conventions.ts": [
       "tests/atlas/conventions.test.ts",
+      "tests/atlas/relations-shim.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/graphs.test.ts",
@@ -749,6 +755,7 @@
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/regime.test.ts",
+      "tests/atlas/relations-shim.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
       "tests/atlas/waves.test.ts",
       "tests/atlas/witness-claims.test.ts",
@@ -8016,6 +8023,73 @@
       "tests/numerical/weyl-kerr-schild.test.ts",
       "tests/numerical/weyl-reference.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts"
+    ],
+    "src/relations/composition-table.ts": [
+      "tests/atlas/relations-shim.test.ts"
+    ],
+    "src/relations/conventions.ts": [
+      "tests/atlas/conventions.test.ts",
+      "tests/atlas/relations-shim.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/recover-conventions.test.ts"
+    ],
+    "src/relations/regime.ts": [
+      "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/bound-machine-form.test.ts",
+      "tests/atlas/closure.test.ts",
+      "tests/atlas/diffusion.test.ts",
+      "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime.test.ts",
+      "tests/atlas/relations-shim.test.ts",
+      "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/atlas/waves.test.ts",
+      "tests/atlas/witness-claims.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/recover-conventions.test.ts"
+    ],
+    "src/relations/types.ts": [
+      "tests/atlas/applicability.test.ts",
+      "tests/atlas/audited-catalog.test.ts",
+      "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/bound-machine-form.test.ts",
+      "tests/atlas/composition-table.test.ts",
+      "tests/atlas/conventions.test.ts",
+      "tests/atlas/coverage.test.ts",
+      "tests/atlas/error-algebra.test.ts",
+      "tests/atlas/evidence-rule.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/gr-spine-regime.test.ts",
+      "tests/atlas/link-prediction.test.ts",
+      "tests/atlas/oscillators-limits.test.ts",
+      "tests/atlas/overlay-types.test.ts",
+      "tests/atlas/path-bound.test.ts",
+      "tests/atlas/regime-admission.test.ts",
+      "tests/atlas/regime.test.ts",
+      "tests/atlas/statement-derivation.test.ts",
+      "tests/atlas/transported-norm-demo.test.ts",
+      "tests/atlas/witness-claims.test.ts",
+      "tests/atlas/witness-results.test.ts",
+      "tests/cli/atlas-command.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/composition/compose-relation.test.ts",
+      "tests/composition/graph-viz-filters.test.ts"
     ]
   },
   "testToSourceMap": {
@@ -8289,7 +8363,8 @@
       "src/dimensional/ast-types.ts",
       "src/atlas/applicability.ts",
       "src/atlas/model.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/association.test.ts": [
       "src/atlas/association.ts",
@@ -8352,6 +8427,7 @@
       "src/canonical/registry.ts",
       "src/atlas/coverage.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/oscillators/bridges-exact.ts",
       "src/atlas/oscillators/bridges-limits.ts",
@@ -8396,7 +8472,9 @@
       "src/atlas/witness-symbolic.ts",
       "src/atlas/witness-numeric.ts",
       "src/atlas/statement.ts",
-      "src/atlas/derivation.ts"
+      "src/atlas/derivation.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts"
     ],
     "tests/atlas/benchmark-ablation.test.ts": [
       "src/atlas/benchmark/run-atlas.ts",
@@ -8444,9 +8522,11 @@
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/oscillators/bridges-coarse.ts",
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/atlas/families.ts",
       "src/atlas/path-bound.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/canonical-links.test.ts": [
       "src/atlas/families.ts",
@@ -8463,20 +8543,25 @@
       "src/atlas/waves/numerics.ts",
       "src/atlas/witness-specs.ts",
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/canonical/registry.ts",
       "src/composition/expr-eval.ts"
     ],
     "tests/atlas/composition-table.test.ts": [
       "src/atlas/composition-table.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/conventions.test.ts": [
       "src/atlas/conventions.ts",
-      "src/atlas/types.ts"
+      "src/relations/conventions.ts",
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/coverage.test.ts": [
       "src/atlas/coverage.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/derive-evidence.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
@@ -8527,6 +8612,7 @@
       "src/atlas/witness-specs.ts",
       "src/atlas/witnesses/quantum-support.ts",
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/canonical/registry.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/validator.ts",
@@ -8534,10 +8620,12 @@
     ],
     "tests/atlas/error-algebra.test.ts": [
       "src/atlas/error-algebra.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/evidence-rule.test.ts": [
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/families.ts"
     ],
     "tests/atlas/export.test.ts": [
@@ -8559,7 +8647,8 @@
       "src/atlas/waves/bridges-closure.ts",
       "src/atlas/waves/numerics.ts",
       "src/atlas/physjs-ref.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/formalref-kind.test.ts": [
       "src/atlas/families.ts",
@@ -8626,7 +8715,9 @@
       "src/bridges/be65-jeans-mass.ts",
       "src/composition/edges/calibration.ts",
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/core/constants.ts",
       "src/bridges/be52-mercury-confrontation.ts"
     ],
@@ -8646,6 +8737,7 @@
       "src/atlas/benchmark/stats.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/model.ts"
     ],
     "tests/atlas/model.test.ts": [
@@ -8699,6 +8791,7 @@
     "tests/atlas/oscillators-limits.test.ts": [
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/witness-numeric.ts",
       "src/atlas/witness-specs.ts",
       "src/atlas/oscillators/limit-witnesses.ts"
@@ -8707,6 +8800,7 @@
       "src/composition/edge.ts",
       "src/composition/quantity.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/dimensional/types.ts"
     ],
     "tests/atlas/path-bound.test.ts": [
@@ -8715,6 +8809,7 @@
       "src/atlas/error-algebra.ts",
       "src/atlas/composition-table.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/oscillators/bridges-exact.ts",
       "src/atlas/waves/bridges-closure.ts",
@@ -8773,7 +8868,9 @@
     ],
     "tests/atlas/regime-admission.test.ts": [
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/oscillators/index.ts",
       "src/atlas/families.ts",
       "src/atlas/oscillators/bridges-limits.ts",
@@ -8782,9 +8879,19 @@
     ],
     "tests/atlas/regime.test.ts": [
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/oscillators/dimensions.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/atlas/relations-shim.test.ts": [
+      "src/atlas/conventions.ts",
+      "src/relations/conventions.ts",
+      "src/atlas/composition-table.ts",
+      "src/atlas/regime.ts",
+      "src/relations/regime.ts",
+      "src/relations/composition-table.ts"
     ],
     "tests/atlas/relative-norm-convention.test.ts": [
       "src/atlas/families.ts"
@@ -8815,11 +8922,13 @@
     "tests/atlas/statement-derivation.test.ts": [
       "src/atlas/statement.ts",
       "src/atlas/derivation.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/stokes-einstein-regime.test.ts": [
       "src/atlas/diffusion/bridges-closure.ts",
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/cli/main.ts",
       "src/cli/commands/index.ts",
       "src/cli/commands/priority.ts",
@@ -8856,19 +8965,23 @@
       "src/atlas/oscillators/bridges-exact.ts",
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/path-bound.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/atlas/waves.test.ts": [
       "src/atlas/waves/index.ts",
       "src/atlas/waves/bridges.ts",
       "src/atlas/waves/numerics.ts",
       "src/atlas/witness-specs.ts",
-      "src/atlas/regime.ts"
+      "src/atlas/regime.ts",
+      "src/relations/regime.ts"
     ],
     "tests/atlas/witness-claims.test.ts": [
       "src/atlas/families.ts",
       "src/atlas/regime.ts",
+      "src/relations/regime.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/witness-specs.ts"
     ],
     "tests/atlas/witness-dominance.test.ts": [
@@ -8882,6 +8995,7 @@
       "src/atlas/diffusion/bridges.ts",
       "src/atlas/diffusion/bridges-closure.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/composition/expr-simplify.ts",
       "src/dimensional/ast-builders.ts",
       "src/atlas/oscillators/dimensions.ts"
@@ -10423,6 +10537,7 @@
       "src/cli/commands/testplan.ts",
       "src/atlas/families.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -10470,6 +10585,7 @@
       "src/cli/commands/testplan.ts",
       "src/atlas/families.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/atlas/derive-evidence.ts",
       "src/atlas/witness-specs.ts",
       "src/cli/command.ts",
@@ -10620,6 +10736,8 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
+      "src/relations/conventions.ts",
+      "src/relations/regime.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -10837,6 +10955,9 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
+      "src/relations/conventions.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -11565,6 +11686,9 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
+      "src/relations/conventions.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -11941,6 +12065,9 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
+      "src/relations/conventions.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -12157,6 +12284,9 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
+      "src/relations/conventions.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -12693,6 +12823,9 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
+      "src/relations/conventions.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -13002,6 +13135,9 @@
       "src/composition/probe/pipeline.ts",
       "src/composition/probe/report.ts",
       "src/composition/probe/study.ts",
+      "src/relations/conventions.ts",
+      "src/relations/types.ts",
+      "src/relations/regime.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -13722,6 +13858,7 @@
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts",
       "src/atlas/types.ts",
+      "src/relations/types.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/compose.test.ts": [
@@ -13943,7 +14080,8 @@
       "src/composition/graph-viz.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/canonical-graph.ts",
-      "src/atlas/types.ts"
+      "src/atlas/types.ts",
+      "src/relations/types.ts"
     ],
     "tests/composition/graph-viz-svg.test.ts": [
       "src/composition/graph-viz-svg.ts",
