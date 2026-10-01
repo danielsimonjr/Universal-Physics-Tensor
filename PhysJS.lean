@@ -24,3 +24,4 @@ import PhysJS.Deflection
 import PhysJS.Sommerfeld
 import PhysJS.ThermalDeBroglie
 import PhysJS.Josephson
+import PhysJS.QuantumHall
