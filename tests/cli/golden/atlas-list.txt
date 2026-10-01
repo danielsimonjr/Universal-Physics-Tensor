@@ -22,3 +22,4 @@
   ab-stiff-string              approximation          [waves]
 
 Run `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge's derived evidence.
+A catalog equation with a formalRef is `upt atlas be-<n>`.
