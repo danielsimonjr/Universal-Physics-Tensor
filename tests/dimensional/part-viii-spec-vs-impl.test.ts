@@ -109,15 +109,15 @@ describe('v030-additive-semver-minor-bump (TENSOR-RULE)', () => {
   // v0.3.1 audit fix: previously this rule was satisfied by an orphan-anchor
   // JSDoc comment in this file; the rule had no real test backing. The two
   // assertions below give the rule a concrete runtime check.
-  it('package.json version is in the 0.x line (pre-1.0)', () => {
+  it('package.json version is 1.0.0', () => {
     // v0.6.1 hygiene: original regex pinned /^0\.5\./ which went stale at
-    // v0.6.0. The TENSOR-RULE intent is "pre-1.0 additive-semver, minor bumps
-    // for additive changes". Until 1.0 ships, any 0.X.Y is correct;
-    // post-1.0, this assertion would need to change anyway. Relax to /^0\./.
+    // v0.6.0, then /^0\./ while the line stayed pre-1.0. 1.0.0 is the major
+    // for the breaking parser change. A 0.x version fails this check.
     const pkg = JSON.parse(
       readFileSync(resolve(__dirname, '../../package.json'), 'utf-8'),
-    );
-    expect(pkg.version).toMatch(/^0\./);
+    ) as { version: string };
+    expect(pkg.version).toBe('1.0.0');
+    expect(pkg.version).not.toMatch(/^0\./);
   });
 
   it('Part-VIII §VIII.11 marker exists in the spec', () => {

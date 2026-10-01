@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/atlas-record.v0.json",
   "schemaVersion": "0",
-  "packageVersion": "0.47.1",
+  "packageVersion": "1.0.0",
   "family": "diffusion",
   "models": [
     {
