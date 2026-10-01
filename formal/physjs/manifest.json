@@ -1,6 +1,6 @@
 {
   "schema": "physjs-bridge-manifest/v1",
-  "commit": "2ca196eb968252230d71018c14b6ca7d2d445763",
+  "commit": "57a9ecbc851952d539882400a7176926d2990d34",
   "toolchain": "leanprover/lean4:v4.34.1",
   "mathlib": "v4.34.1",
   "physlib": "af484f78ee0701290595f8bf892b157b10d64940",
@@ -202,6 +202,33 @@
       "bridgeId": "be-34",
       "theorem": "PhysJS.KibbleZurek.exponent",
       "covers": "derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-65",
+      "bridgeId": "be-65",
+      "theorem": "PhysJS.Jeans.mass_eq",
+      "covers": "derivation-step: the encoded Jeans mass (5 k T / (G μ m_u))^(3/2) (3 / (4 π ρ))^(1/2) follows from the virial convention with factor 5 and M = 4 π R³ ρ / 3. Replacing 5 by 3 fails. Not the virial theorem",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-51",
+      "bridgeId": "be-51",
+      "theorem": "PhysJS.Deflection.line_integral",
+      "covers": "derivation-step: (1+γ)/c² ∫_ℝ G M b / (b² + z²)^{3/2} dz = 2(1+γ) G M / (b c²), and at γ = 1 this is the encoded angle 4 G M / (b c²). γ = 0 is half. Not a geodesic",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": ["propext", "Classical.choice", "Quot.sound"]
+    },
+    {
+      "key": "be-61",
+      "bridgeId": "be-61",
+      "theorem": "PhysJS.Sommerfeld.integral_eq",
+      "covers": "derivation-step: ∫_ℝ x² e^x / (1+e^x)² dx = π²/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of π²/3. Claiming the half-line equals π²/3 fails. Not the transport law",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": ["propext", "Classical.choice", "Quot.sound"]

@@ -30,7 +30,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: entry.formalRef })),
 ];
 
-/** The manifest at PhysJS `main` `2ca196eb968252230d71018c14b6ca7d2d445763`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `57a9ecbc851952d539882400a7176926d2990d34`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -64,6 +64,21 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
     'PhysJS.KibbleZurek.exponent',
     'derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor',
   ],
+  [
+    'be-65',
+    'PhysJS.Jeans.mass_eq',
+    'derivation-step: the encoded Jeans mass (5 k T / (G μ m_u))^(3/2) (3 / (4 π ρ))^(1/2) follows from the virial convention with factor 5 and M = 4 π R³ ρ / 3. Replacing 5 by 3 fails. Not the virial theorem',
+  ],
+  [
+    'be-51',
+    'PhysJS.Deflection.line_integral',
+    'derivation-step: (1+γ)/c² ∫_ℝ G M b / (b² + z²)^{3/2} dz = 2(1+γ) G M / (b c²), and at γ = 1 this is the encoded angle 4 G M / (b c²). γ = 0 is half. Not a geodesic',
+  ],
+  [
+    'be-61',
+    'PhysJS.Sommerfeld.integral_eq',
+    'derivation-step: ∫_ℝ x² e^x / (1+e^x)² dx = π²/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of π²/3. Claiming the half-line equals π²/3 fails. Not the transport law',
+  ],
 ];
 
 const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
@@ -79,8 +94,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit 2ca196eb968252230d71018c14b6ca7d2d445763, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('2ca196eb968252230d71018c14b6ca7d2d445763');
+  it('records commit 57a9ecbc851952d539882400a7176926d2990d34, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('57a9ecbc851952d539882400a7176926d2990d34');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -88,7 +103,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the sixteen theorems and keys, in manifest order', () => {
+  it('names the nineteen theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -309,8 +324,8 @@ describe('vendored PhysJS manifest', () => {
     expect(physjsManifestProblems({ manifest: unkind, bridges: carriers }).join('\n')).toMatch(/counted kind/);
   });
 
-  it('six catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
-    const catalogIds = [64, 53, 58, 38, 13, 34];
+  it('nine catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
+    const catalogIds = [64, 53, 58, 38, 13, 34, 65, 51, 61];
     for (const id of catalogIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
       expect(row?.formalRef?.system).toBe('lean4-physjs');
@@ -321,7 +336,7 @@ describe('vendored PhysJS manifest', () => {
       (bridge) => bridge.formalRef !== undefined && bridge.formalRef.fidelity !== 'unreviewed',
     );
     expect(reviewed).toHaveLength(10);
-    for (const id of [16, 29, 11, 42, 24, 19, 36, 20, 65, 51, 61]) {
+    for (const id of [16, 29, 11, 42, 24, 19, 36, 20]) {
       expect(BRIDGE_EQUATIONS.find((entry) => entry.id === id)?.formalRef).toBeUndefined();
       expect(manifest.entries.some((entry) => entry.key === `be-${id}`)).toBe(false);
     }

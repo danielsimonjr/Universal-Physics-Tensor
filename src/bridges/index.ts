@@ -2251,6 +2251,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 // ---------------------------------------------------------------------------
 {
   id: 51,
+  formalRef: physjsFormalRef('be-51'),
   name: `Gravitational Lensing — Eddington 1919 weak-field deflection`,
   category: `I`,
   category_name: `Emergent Spacetime`,
@@ -2602,6 +2603,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 61,
+  formalRef: physjsFormalRef('be-61'),
   name: `Wiedemann-Franz law (Lorenz number)`,
   category: `F`,
   category_name: `Condensed Matter - High Energy Bridges`,
@@ -2691,6 +2693,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 },
 {
   id: 65,
+  formalRef: physjsFormalRef('be-65'),
   name: `Jeans mass (gravitational collapse criterion)`,
   category: `I`,
   category_name: `Emergent Spacetime`,
