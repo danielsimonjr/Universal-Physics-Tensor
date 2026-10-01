@@ -145,19 +145,6 @@ export type {
   VizFilterStats,
 } from './graph-viz.js';
 export { buildVizModel, edgeToJunction } from './graph-viz.js';
-// Poster source (Atlas Phase 3) — @internal, CLI-only; deliberately NOT added
-// to `src/index.ts`, which is the published v0.4.0 surface.
-export type {
-  PosterGraph,
-  PosterValidation,
-  DanglingPremise,
-} from './poster-source.js';
-export {
-  POSTER_GRAPH,
-  posterJunctions,
-  validatePoster,
-  describePosterSource,
-} from './poster-source.js';
 export { renderDotToSvg, SvgRendererUnavailableError } from './graph-viz-svg.js';
 export type { DimensionAdjacency } from './dimension-adjacency.js';
 export { dimensionAdjacency } from './dimension-adjacency.js';

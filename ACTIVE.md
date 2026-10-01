@@ -21,6 +21,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 ## Open tasks, easiest first
 
 - [x] Surface a proved bridge that also derives contradicted, as proved with an unresolved counterexample, from upt atlas and the derived evidence. Do not clear the counterexample or the proof.
+- [x] Move the map's catalog evidence derivation and the poster source out of src/composition and into src/cli. The layer-order allowlist drops the graph-viz derive-evidence row and the three poster-source rows. The design is docs/planning/Layering-Refactor-Design.md.
 - [x] Move the shared relation vocabulary into src/relations, with re-export shims so the atlas namespace and the atlas subpath stay the same. The layer-order allowlist shrinks by the imports that now land in relations. The design is docs/planning/Layering-Refactor-Design.md.
 - [x] Enforce the layer order in CI. The checker is tools/layer-order, the command is bun run layer:check, and the allowlist may only shrink. The design is docs/planning/Layering-Refactor-Design.md. No module moved.
 - [x] Show a catalog formalRef from `upt atlas be-<n>` when that catalog entry has one. A catalog id is not an unknown atlas bridge. The BE-13 name stays; the rename proposal is `docs/planning/BE-13-name-proposal.md`.

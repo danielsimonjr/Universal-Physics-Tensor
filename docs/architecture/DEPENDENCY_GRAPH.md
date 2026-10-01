@@ -42,9 +42,9 @@ The codebase is organized into the following modules:
 - **bridges**: 91 files
 - **canonical**: 18 files
 - **cases**: 9 files
-- **cli**: 47 files
+- **cli**: 49 files
 - **root**: 1 file
-- **composition**: 80 files
+- **composition**: 79 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 32 files
@@ -3625,6 +3625,7 @@ The codebase is organized into the following modules:
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../map-evidence.js` | `withCatalogEvidence` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -3905,6 +3906,21 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/map-evidence.ts` - Catalog evidence for `upt map`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../relations/types.js` | `EvidenceTag` | Import (type-only) |
+| `../atlas/derive-evidence.js` | `catalogEvidenceInput, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Import |
+| `../bridges/membership.js` | `adjudicateBridgeEntry` | Import |
+| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+
+**Exports:**
+- Functions: `deriveEdgeEvidence`, `withCatalogEvidence`
+
+---
+
 ### `src/cli/output.ts` - JSON output envelope for the UPT CLI.
 
 **Internal Dependencies:**
@@ -3916,6 +3932,23 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `JsonEnvelope`
 - Functions: `sanitize`, `emitJson`
+
+---
+
+### `src/cli/poster-source.ts` - The POSTER source for the physics map — turn the Atlas Phase 3 poster index
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../atlas/association.js` | `Association` | Import (type-only) |
+| `../atlas/derivation.js` | `Derivation, DerivationId` | Import (type-only) |
+| `../atlas/statement.js` | `Statement, StatementId` | Import (type-only) |
+| `../composition/graph-viz.js` | `VizJunction` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `PosterGraph`, `DanglingPremise`, `PosterValidation`
+- Functions: `validatePoster`, `posterJunctions`, `describePosterSource`
+- Constants: `POSTER_GRAPH`
 
 ---
 
@@ -4070,9 +4103,10 @@ The codebase is organized into the following modules:
 | `./canonical/linkage.js` | `scanLinkages` | Re-export |
 | `./composition/proposed-bridges.js` | `deriveProposedBridges` | Re-export |
 | `./composition/consequence.js` | `describeDerivedClaim` | Re-export |
-| `./composition/graph-viz.js` | `filterEdges, deriveEdgeEvidence, formatFilterLegend` | Re-export |
-| `./composition/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
-| `./composition/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
+| `./composition/graph-viz.js` | `filterEdges, formatFilterLegend` | Re-export |
+| `./cli/map-evidence.js` | `deriveEdgeEvidence` | Re-export |
+| `./cli/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
+| `./cli/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
 | `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
 | `./composition/adjudication.js` | `AnnotatedCandidate, CandidateAdjudication` | Re-export |
@@ -4122,8 +4156,8 @@ The codebase is organized into the following modules:
   EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck,
   CaseResult, convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
   simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
-  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, deriveEdgeEvidence,
-  formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
+  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
+  deriveEdgeEvidence, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
   PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap,
   expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap,
   loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
@@ -4788,13 +4822,10 @@ The codebase is organized into the following modules:
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
 | `../relations/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
-| `../atlas/derive-evidence.js` | `catalogEvidenceInput, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Import |
-| `../bridges/membership.js` | `adjudicateBridgeEntry` | Import |
-| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
 
 **Exports:**
 - Interfaces: `VizJunction`, `VizFilterStats`, `VizCluster`, `VizOptions`, `VizModel`
-- Functions: `edgeToJunction`, `deriveEdgeEvidence`, `filterEdges`, `formatFilterLegend`, `buildVizModel`
+- Functions: `edgeToJunction`, `filterEdges`, `formatFilterLegend`, `buildVizModel`
 - Constants: `ALL_VIZ_STATUSES`
 
 ---
@@ -4861,8 +4892,6 @@ The codebase is organized into the following modules:
 | `./expr-eval.js` | `SymbolicEvalError` | Re-export |
 | `./graph-viz.js` | `VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats` | Re-export |
 | `./graph-viz.js` | `buildVizModel, edgeToJunction` | Re-export |
-| `./poster-source.js` | `PosterGraph, PosterValidation, DanglingPremise` | Re-export |
-| `./poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
 | `./graph-viz-svg.js` | `renderDotToSvg, SvgRendererUnavailableError` | Re-export |
 | `./dimension-adjacency.js` | `DimensionAdjacency` | Re-export |
 | `./dimension-adjacency.js` | `dimensionAdjacency` | Re-export |
@@ -4891,11 +4920,9 @@ The codebase is organized into the following modules:
   DerivationExplanation, ExplainOptions, QuantityExplanation, explainQuantity, Observable,
   ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, VizStatus,
   VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel, edgeToJunction,
-  PosterGraph, PosterValidation, DanglingPremise, POSTER_GRAPH, posterJunctions, validatePoster,
-  describePosterSource, renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency,
-  dimensionAdjacency, UserEquation, EquationLanding, EquationAnalysis, EquationHint,
-  parseUserEquation, resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding,
-  analyzeUserEquation, UserEquationError
+  renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation,
+  EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, resolveToCatalogName,
+  suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
   ```
 
 
@@ -4911,23 +4938,6 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `NaturalPowers`
 - Functions: `naturalConstantOverrides`, `naturalPowers`, `naturalNote`
-
----
-
-### `src/composition/poster-source.ts` - The POSTER source for the physics map — turn the Atlas Phase 3 poster index
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../atlas/association.js` | `Association` | Import (type-only) |
-| `../atlas/derivation.js` | `Derivation, DerivationId` | Import (type-only) |
-| `../atlas/statement.js` | `Statement, StatementId` | Import (type-only) |
-| `./graph-viz.js` | `VizJunction` | Import (type-only) |
-
-**Exports:**
-- Interfaces: `PosterGraph`, `DanglingPremise`, `PosterValidation`
-- Functions: `validatePoster`, `posterJunctions`, `describePosterSource`
-- Constants: `POSTER_GRAPH`
 
 ---
 
@@ -7575,7 +7585,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...42 more]
+        N29[...44 more]
     end
 
     subgraph Root
@@ -7588,7 +7598,7 @@ graph TD
         N33[axis-audit]
         N34[bridge-analysis]
         N35[bridge-prediction]
-        N36[...75 more]
+        N36[...74 more]
     end
 
     subgraph Core
@@ -7673,17 +7683,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 405 |
+| Total TypeScript Files | 406 |
 | Total Modules | 13 |
-| Total Lines of Code | 89102 |
-| Total Exports | 2928 |
-| Total Re-exports | 1396 |
+| Total Lines of Code | 89136 |
+| Total Exports | 2922 |
+| Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
-| Total Functions | 750 |
+| Total Functions | 751 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 543 |
+| Type-only Imports | 544 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

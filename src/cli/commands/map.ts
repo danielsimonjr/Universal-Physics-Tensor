@@ -28,6 +28,7 @@ import type { EquationAnalysis } from '../../composition/user-equation.js';
 import type { CanonicalComparison } from '../../composition/canonical-compare.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import { naturalConstantOverrides, type UnitMode } from '../../composition/natural-units.js';
+import { withCatalogEvidence } from '../map-evidence.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--source', valueStyle: 'attached' },
@@ -540,10 +541,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   // value costs nothing and always exits 1.
   const relation = parseFilter(lastValue(args.flags, 'relation'), RELATION_TYPES, '--relation');
   const evidence = parseFilter(lastValue(args.flags, 'evidence'), EVIDENCE_TAGS, '--evidence');
-  const filterOpts = {
+  const filterOpts = withCatalogEvidence({
     ...(relation !== undefined ? { relation } : {}),
     ...(evidence !== undefined ? { evidence } : {}),
-  };
+  });
   // The TEXT and JSON paths filter the edge list here, because `linkageMap`
   // consumes edges. The VISUAL path hands `buildVizModel` the FULL graph with
   // the same options, so the model also judges the --proposed / --equation
