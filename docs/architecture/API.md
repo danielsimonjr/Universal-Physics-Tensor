@@ -1030,7 +1030,7 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalExports | 3695 | dependency-graph.json |
+| totalExports | 3697 | dependency-graph.json |
 | unusedExportsCount | 198 | dependency-graph.json |
 
 **`unusedExportsCount` is not a deletion list.** It counts exports with no importer *inside

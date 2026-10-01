@@ -21,23 +21,23 @@ construction. Both are correct; each states its scope.
 
 | Zone | Files | What lives here |
 |---|---|---|
-| `tests` | 579 | The vitest suite |
+| `tests` | 580 | The vitest suite |
 | `src` | 403 | The library, the CLI, and the physics catalog |
 | `benchmarks` | 15 | `bench/*.bench.ts` plus their fixture, run by `npm run bench` |
 | `tools` | 24 | Repository tooling under `tools/` and `scripts/` |
 | `examples` | 1 | The smoke entry |
 | `docs` | 1 | A TypeScript file under `docs/` |
 | `config` | 1 | A `*.config.*` file |
-| **Total** | **1024** | |
+| **Total** | **1025** | |
 
-**Tests outnumber source files: 579 against 403.** The ratio fits a repository whose claims are
+**Tests outnumber source files: 580 against 403.** The ratio fits a repository whose claims are
 physical: a wrong number is a wrong prediction, not a cosmetic defect.
 
 ## By disposition
 
 | Disposition | Files | Meaning |
 |---|---|---|
-| `test` | 579 | In the test zone |
+| `test` | 580 | In the test zone |
 | `reachable` | 383 | Reached from an entry root |
 | `bench` | 15 | A benchmark; nothing imports it, `npm run bench` runs it |
 | `test-only` | 10 | Reached only from a test |
@@ -75,7 +75,7 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1024 | dependency-graph.json |
+| totalSourceFiles | 1025 | dependency-graph.json |
 | orphanedFiles | 5 | dependency-graph.json |
 | reachableFiles | 388 | dependency-graph.json |
 | testOnlyFiles | 10 | dependency-graph.json |
