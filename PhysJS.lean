@@ -13,6 +13,7 @@ import PhysJS.JohnsonNyquist
 import PhysJS.Mond
 import PhysJS.Einstein
 import PhysJS.VacuumFriedmann
+import PhysJS.Coarsening
 import PhysJS.KibbleZurek
 import PhysJS.HawkingUnruh
 import PhysJS.Fret
