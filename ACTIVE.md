@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Enforce the layer order in CI. The checker is tools/layer-order, the command is bun run layer:check, and the allowlist may only shrink. The design is docs/planning/Layering-Refactor-Design.md. No module moved.
 - [x] Bare `e` in a formula is the elementary charge, `E` is energy, and Euler's number is `exp(1)` or `euler`. `--allow-euler` is not a flag.
 - [x] Publish `universal-physics-tensor` from a `v*` tag via GitHub Actions, with a tag/`package.json` version guard, instead of a hand `npm publish`.
 - [ ] Correct the formal-reference system union in the Phase 4 deliverable of ROADMAP.md. It still names lean4-physlib or other, and it has no covers field. The atlas type and the Phase 4 design note already include lean4-physjs and covers.
