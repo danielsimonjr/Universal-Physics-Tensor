@@ -4,7 +4,7 @@
     "version": "1.0.4",
     "totalFiles": 423,
     "totalModules": 13,
-    "totalExports": 2991
+    "totalExports": 2992
   },
   "entryPoints": [
     {
@@ -3339,9 +3339,14 @@
         "exports": [
           "PROOF_TARGET_DRAFT_BEGIN",
           "PROOF_TARGET_DRAFT_END",
+          "proofTargetDraft",
           "emitProofTarget"
         ],
+        "interfaces": [
+          "ProofTargetDraft"
+        ],
         "functions": [
+          "proofTargetDraft",
           "emitProofTarget"
         ],
         "constants": [
@@ -29391,11 +29396,11 @@
   "statistics": {
     "totalTypeScriptFiles": 423,
     "totalModules": 13,
-    "totalLinesOfCode": 92260,
-    "totalExports": 2991,
+    "totalLinesOfCode": 92291,
+    "totalExports": 2992,
     "totalClasses": 61,
-    "totalInterfaces": 480,
-    "totalFunctions": 779,
+    "totalInterfaces": 481,
+    "totalFunctions": 780,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 756,

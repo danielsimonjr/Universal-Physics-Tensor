@@ -940,7 +940,8 @@ The codebase is organized into the following modules:
 | `./physjs-ref.js` | `physjsTheorem` | Import |
 
 **Exports:**
-- Functions: `emitProofTarget`
+- Interfaces: `ProofTargetDraft`
+- Functions: `proofTargetDraft`, `emitProofTarget`
 - Constants: `PROOF_TARGET_DRAFT_BEGIN`, `PROOF_TARGET_DRAFT_END`
 
 ---
@@ -7997,12 +7998,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 423 |
 | Total Modules | 13 |
-| Total Lines of Code | 92260 |
-| Total Exports | 2991 |
+| Total Lines of Code | 92291 |
+| Total Exports | 2992 |
 | Total Re-exports | 1396 |
 | Total Classes | 61 |
-| Total Interfaces | 480 |
-| Total Functions | 779 |
+| Total Interfaces | 481 |
+| Total Functions | 780 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 572 |

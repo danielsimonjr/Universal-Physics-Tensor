@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Build the proof-target draft as a typed object and render the existing text from it. Design: `docs/planning/refactor-integration-phase.md`, step 4.
+  Done: `proofTargetDraft` is the object whose fields are `key`, `bridgeId`, `theorem`, `covers`, `coverage`, `leanProof`, and `axioms`. `leanProof` is `absent`. `emitProofTarget` renders the comment block from that object. The markers stay. The rendered text of the monomial fixture is unchanged. The object is not written to the vendored manifest and is not passed to `deriveEvidence`. A copy whose `leanProof` is `complete` still fails `physjsManifestProblems`. The package barrel and `src/atlas/public.ts` do not export the name.
 - [x] Make category composition refuse morphisms that do not meet, and record that result on the chain without dropping proof targets. Design: `docs/planning/refactor-integration-phase.md`, step 3.
   Done: `composeMorphisms` returns `no-composite-claim` when `first.target !== second.source`. Adjacent morphisms still match `composeRelation`. `ChainRecord.categoryComposition` records that result. A quantity edge has no category object id, so the recorded claim stays unset. A recorded `no-composite-claim` still renders as a stub. `runChainPipeline(CATALOG_GRAPH)` is unchanged. The package barrel and `src/atlas/public.ts` do not export the names.
 - [x] Use one internal chain-result type in the classifier, the orderer, and the orchestrator. Design: `docs/planning/refactor-integration-phase.md`, step 2.
