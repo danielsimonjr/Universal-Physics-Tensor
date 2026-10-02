@@ -15,12 +15,15 @@
  * (`tests/bridges/descriptor-consistency.test.ts`), so a future id that exists
  * in one registry but not another fails loudly instead of drifting.
  *
- * @module bridges/descriptor
+ * The join lives here, beside `catalog-graph.ts`, because `composition/` owns
+ * the graph and already imports `bridges/`. `bridges/` does not import it back.
+ *
+ * @module composition/descriptor
  */
-import { BRIDGE_EQUATIONS, type BridgeEquationEntry } from './index.js';
-import { BRIDGE_RHS_BY_ID, parseBridgeId } from './rhs-registry.js';
-import { CATALOG_GRAPH } from '../composition/catalog-graph.js';
-import type { BridgeEdge } from '../composition/edge.js';
+import { BRIDGE_EQUATIONS, type BridgeEquationEntry } from '../bridges/index.js';
+import { BRIDGE_RHS_BY_ID, parseBridgeId } from '../bridges/rhs-registry.js';
+import { CATALOG_GRAPH } from './catalog-graph.js';
+import type { BridgeEdge } from './edge.js';
 import type { ExprNode } from '../dimensional/validator.js';
 
 /** One bridge, joined across the catalog's three id-keyed registries. */
