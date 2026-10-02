@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 419,
-    "totalTestFiles": 581,
+    "totalTestFiles": 582,
     "testedCount": 409,
     "untestedCount": 10,
     "coveragePercent": "97.6"
@@ -5070,6 +5070,7 @@
       "tests/composition/probe/modules.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
@@ -5378,6 +5379,7 @@
       "tests/composition/namespacing.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/quantities.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/stress-tests.test.ts",
@@ -5743,6 +5745,7 @@
       "tests/composition/namespacing.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/quantities.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/stress-tests.test.ts",
@@ -7066,6 +7069,7 @@
       "tests/composition/probe/experiment-design.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/dimensional/ast-builders.test.ts",
       "tests/internal/helper-coverage.test.ts"
@@ -7163,6 +7167,7 @@
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/proposed-bridges.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/symbolic-composition.test.ts",
@@ -7733,6 +7738,7 @@
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/composition/retrodiction.test.ts",
       "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
@@ -7916,6 +7922,7 @@
       "tests/composition/composition-recovery.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/proposed-bridges.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/symbolic-composition.test.ts",
@@ -8754,6 +8761,7 @@
       "tests/composition/chain-regime.test.ts",
       "tests/composition/compose-relation.test.ts",
       "tests/composition/graph-viz-filters.test.ts",
+      "tests/composition/relation-refusal.test.ts",
       "tests/relations/category.test.ts"
     ]
   },
@@ -15707,6 +15715,16 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts"
+    ],
+    "tests/composition/relation-refusal.test.ts": [
+      "src/dimensional/ast-builders.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/enumerate.ts",
+      "src/composition/edge.ts",
+      "src/relations/types.ts"
     ],
     "tests/composition/retrodiction.test.ts": [
       "src/composition/retrodiction.ts",

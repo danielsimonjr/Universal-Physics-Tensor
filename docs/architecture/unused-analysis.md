@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 80
+- **Potentially unused exports**: 79
 
 ## Potentially Unused Files
 
@@ -150,10 +150,6 @@ These exports are not imported by any other file in the codebase:
 - `be59Edge` (constant)
 - `be60Edge` (constant)
 - `be63Edge` (constant)
-
-### `src/composition/enumerate.ts`
-
-- `enumerateCompositionsWithRefusals` (function)
 
 ### `src/composition/frontier-account.ts`
 
