@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **dimensional**: 36 files
 - **entry**: 1 file
 - **numerical**: 42 files
-- **relations**: 4 files
+- **relations**: 5 files
 
 ---
 
@@ -7478,6 +7478,20 @@ The codebase is organized into the following modules:
 
 ## Relations Dependencies
 
+### `src/relations/category.ts` - Objects and morphisms of the regime category.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Regime, RelationType` | Import (type-only) |
+| `./composition-table.js` | `composeRelation, CompositionResult` | Import |
+
+**Exports:**
+- Interfaces: `CategoryObject`, `CategoryMorphism`
+- Functions: `composeMorphisms`
+
+---
+
 ### `src/relations/composition-table.ts` - The composition table for `RelationType` — a literal 8×8 matrix.
 
 **Internal Dependencies:**
@@ -7676,10 +7690,11 @@ graph TD
     end
 
     subgraph Relations
-        N59[composition-table]
-        N60[conventions]
-        N61[regime]
-        N62[types]
+        N59[category]
+        N60[composition-table]
+        N61[conventions]
+        N62[regime]
+        N63[types]
     end
 
     N0 --> N48
@@ -7687,7 +7702,7 @@ graph TD
     N4 --> N3
     N10 --> N39
     N12 --> N50
-    N12 --> N62
+    N12 --> N63
     N13 --> N50
     N14 --> N12
     N14 --> N50
@@ -7720,17 +7735,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 409 |
+| Total TypeScript Files | 410 |
 | Total Modules | 13 |
-| Total Lines of Code | 89508 |
-| Total Exports | 2923 |
+| Total Lines of Code | 89553 |
+| Total Exports | 2924 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
-| Total Interfaces | 462 |
-| Total Functions | 752 |
+| Total Interfaces | 464 |
+| Total Functions | 753 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 546 |
+| Type-only Imports | 547 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
