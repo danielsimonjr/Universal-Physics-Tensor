@@ -1,10 +1,10 @@
 # Universal Physics Tensor Framework: Complete Formal Specification - Part II
 
-> **Status note:** This document catalogs Bridge Equations 21-54 (BE-21–50 from the original spec catalog; BE-51–54 are post-original-spec catalog extensions documented in §V-B). Equations span a wide range of physical credibility: some (e.g., Eq 21 AdS/CMT; Eq 26 WKB tunneling; Eq 35 conformal bootstrap) are established results from mainstream physics; others (e.g., Eq 25 consciousness, Eq 42 firewall, Eq 46 multiverse, Eq 50 retrocausal QFT) are highly speculative. Each equation should carry a **Status** line indicating this; where one is missing, treat the equation as unvalidated. Several equations have known issues flagged in their Status notes (Eqs 22, 23, 24, 25, 31, 37, 38, 50). The mathematical formulations reproduced here are drawn from the literature (where cited) or are original proposals; formal citations are being retroactively added — see the Part-VI conclusion for the current citation-completeness status.
+> **Status note:** This document catalogs Bridge Equations 21-65 (BE-21–50 from the original spec catalog; BE-51–54 in §V-B; BE-55–65 in §V-C). Equations span a wide range of physical credibility: some (e.g., Eq 21 AdS/CMT; Eq 26 WKB tunneling; Eq 35 conformal bootstrap; Eqs 55–65) are established results from mainstream physics; others (e.g., Eq 25 consciousness, Eq 42 firewall, Eq 46 multiverse, Eq 50 retrocausal QFT) are highly speculative. Each equation should carry a **Status** line indicating this; where one is missing, treat the equation as unvalidated. Several equations have known issues flagged in their Status notes (Eqs 22, 23, 24, 25, 31, 37, 38, 50). The mathematical formulations reproduced here are drawn from the literature (where cited) or are original proposals; formal citations are being retroactively added — see the Part-VI conclusion for the current citation-completeness status.
 
-> **Spec-scope note (catalog count):** The specification catalogs **44 bridge equations, IDs 11–54** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-54). The original spec catalog was 40 bridges (IDs 11–50); BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. All four extensions are catalogued in §V-B below, matching the shipped codebase catalog (`src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **44 entries, IDs 11–54**). The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog. Status distribution across the 44-bridge catalog at HEAD: 8 established · 33 speculative · 3 highly-speculative · 0 invalid.
+> **Spec-scope note (catalog count):** The specification catalogs **55 bridge equations, IDs 11–65** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-65: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–65). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05 and are written up in §V-C. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **55 entries, IDs 11–65**. Entries 51 and 53–65 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, and prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C. Status distribution across the 55-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 19 established · 33 speculative · 3 highly-speculative · 0 invalid.
 
-## V. Extended Catalog of Bridging Equations (21-54)
+## V. Extended Catalog of Bridging Equations (21-50)
 
 ### Category F: Condensed Matter - High Energy Bridges
 
@@ -703,6 +703,358 @@ where:
 
 **Rationale**: Exercises the `FriedmannEquationNode` `'brane'` variant slot, giving the catalog a second early-universe high-density correction structurally distinct from LQC (BE-19) and vacuum energy (BE-20).
 
+## V-C. Catalog extensions (BE-55–65)
+
+> **Provenance.** These eleven rows were added to `BRIDGE_EQUATIONS` on 2026-07-05 as closed-form evaluators, the same pattern as BE-51/52: a catalog entry plus an evaluator, and no AST round-trip. BE-55–58 are the first four. BE-59–62 are the condensed-matter cluster. BE-63–65 are the astrophysics cluster. Each row keeps `source_part: 'III'`. This section is the Bridge Equation heading. The catalog entry remains authoritative for `notes`. A bare `e` in the formulas below is the elementary charge. Euler's number is written `\exp`. §VI.6.1 does not assign a tensor index to BE-55–65. That assignment is not in the catalog, in PhysJS at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`, in `NOTES.md`, or in `docs/planning/Bridge-Gap-Inference.md`.
+
+**Bridge Equation 55: Integer Quantum Hall effect / TKNN (topological Hall conductance)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.QuantumHall.reciprocal`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/QuantumHall.lean) states that for a nonzero integer `C` and `e ≠ 0`, `σ_xy = C e²/h`, `R_H = h/(C e²)`, and `R_K = h/e²`, so `σ_xy R_H = 1` and `R_H = R_K/C`. The shifted index `C+1` is a different conductance. Replacing `e²` by `e` fails the product when `e ≠ 1`. The lemma is not TKNN.
+
+> **Evaluator:** [`src/bridges/be55-quantum-hall.ts`](../../src/bridges/be55-quantum-hall.ts) (`evaluateQuantumHall`)
+
+- **Status**: Established. The Hall conductance of a two-dimensional electron gas in a strong magnetic field is quantized in integer multiples of `e²/h`. `C` is the TKNN/Chern integer of the filled bands (Thouless, Kohmoto, Nightingale & den Nijs 1982). von Klitzing, Dorda & Pepper 1980 (Nobel Prize 1985). The catalog records the quantization as the derivation's result.
+- **Context**: Bridges a topological invariant to an electrical-transport observable, and populates the catalog's Topology axis. The bridges tuple is `quantum` → `classical`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Csigma_%7Bxy%7D%20%3D%20C%20%5Cfrac%7Be%5E2%7D%7Bh%7D%2C%20%5Cquad%20R_H%20%3D%20%5Cfrac%7BR_K%7D%7BC%7D%2C%20%5Cquad%20R_K%20%3D%20%5Cfrac%7Bh%7D%7Be%5E2%7D" alt="\sigma_{xy} = C \frac{e^2}{h}, \quad R_H = \frac{R_K}{C}, \quad R_K = \frac{h}{e^2}" />
+
+where:
+
+- `σ_xy` is the Hall conductance, in siemens
+- `C` is a nonzero integer, the plateau index
+- `e` is the elementary charge, in coulombs, and `h` is Planck's constant, in joule-seconds
+- `R_H` is the Hall resistance, in ohms, and `R_K = h/e²` is the von Klitzing constant. The catalog context states `R_K ≈ 25812.807 Ω`
+
+**Dimensions**: The catalog signature is `[L^-2 M^-1 T^3 I^2]`. Charge has dimension `[I T]` and `h` has dimension `[M L^2 T^-1]`, so `e²/h` has dimension `[I^2 T^3 M^-1 L^-2]`. `C` is dimensionless. `R_H` is the reciprocal of `σ_xy`. The catalog comment records that `σ_xy = C e²/h` has the same form in Gaussian units, and that the ohm and siemens values on this row are the SI reading.
+
+**Domain**: The evaluator accepts a nonzero integer `C` and rejects every other `C`. Post-2019, `R_K = h/e²` is exact in the SI, so a comparison of `R_H` with `h/(C e²)` does not test the formula. The catalog confrontation is material-independence: Janssen et al. 2012 report graphene and GaAs agreeing to a relative `8.6×10⁻¹¹`.
+
+**References**:
+
+- von Klitzing, Dorda & Pepper 1980 *Phys. Rev. Lett.* 45:494.
+- Thouless, Kohmoto, Nightingale & den Nijs 1982 *Phys. Rev. Lett.* 49:405.
+- Janssen et al. 2012 *Metrologia* 49:294, arXiv:1105.4055.
+
+**Rationale**: The integer in the conductance is a Chern number of the filled bands, and the same constant is measured in different materials.
+
+**Bridge Equation 56: Casimir effect (quantum-vacuum force between plates)** *(Category A: Quantum-Classical Bridges)*
+
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. PhysJS main at that commit has no Casimir file. The missing piece is the mode sum that produces `π²/240`. Units give `F/A = C ℏ c / d⁴` and do not fix `C = −π²/240`. That unfixed constant is not a Lean derivation-step at this pin.
+
+> **Evaluator:** [`src/bridges/be56-casimir.ts`](../../src/bridges/be56-casimir.ts) (`evaluateCasimir`)
+
+- **Status**: Established. Two neutral parallel conducting plates in vacuum attract because the boundary conditions restrict the electromagnetic vacuum modes between them. Casimir 1948. The ideal formula is perfect conductors at zero temperature. Lamoreaux 1997 reported agreement at about 5 percent, and Mohideen & Roy 1998 at about 1 percent, both after corrections. The catalog records the confrontation as systematics-dominated agreement with the corrected theory, and as a consistency record whose printed difference is 0.
+- **Context**: Bridges the quantum vacuum to a classical macroscopic force. The bridges tuple is `quantum` → `classical`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Cfrac%7BF%7D%7BA%7D%20%3D%20-%5Cfrac%7B%5Cpi%5E2%20%5Chbar%20c%7D%7B240%5C%2C%20d%5E4%7D" alt="\frac{F}{A} = -\frac{\pi^2 \hbar c}{240\, d^4}" />
+
+where:
+
+- `F/A` is the force per unit area, in pascals. The sign is attractive
+- `ℏ` is the reduced Planck constant, `c` is the speed of light, and `d` is the plate separation, in metres
+- `π²/240` is dimensionless
+
+**Dimensions**: The catalog signature is `[L^-1 M T^-2]`, pressure. `ℏ` has dimension `[M L^2 T^-1]` and `c` has dimension `[L T^-1]`, so `ℏ c / d⁴` has dimension `[M L^-1 T^-2]`.
+
+**Domain**: The evaluator requires `d > 0`. The ideal formula is the leading term. Real measurements use sphere-plate geometry and subtract finite-conductivity, roughness, temperature, and electrostatic-patch corrections. A formula for those corrections is not in the catalog equation, and a numerical ideal pressure at a stated separation is not in the catalog, in PhysJS, in `NOTES.md`, or in the gap list.
+
+**References**:
+
+- Casimir 1948 *Proc. K. Ned. Akad. Wet.* 51:793.
+- Lamoreaux 1997 *Phys. Rev. Lett.* 78:5.
+- Mohideen & Roy 1998 *Phys. Rev. Lett.* 81:4549, arXiv:physics/9805038.
+
+**Rationale**: The boundary condition on the vacuum modes produces a macroscopic pressure.
+
+**Bridge Equation 57: Unruh effect (acceleration-induced thermality)** *(Category I: Emergent Spacetime)*
+
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. [`PhysJS.HawkingUnruh.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/HawkingUnruh.lean) is the catalog formalRef on BE-42. It names BE-57 and states `T_U(a) = ℏ a / (2π c k_B)` together with `T_U(c⁴/(4 G M)) = T_H(M)`. `T_U(c⁴/(2 G M))` is not `T_H(M)`. The lemma is not the Unruh effect as a theorem about the Rindler wedge. Units give `T = C ℏ a / (c k_B)`. `C = 1/(2π)` is not fixed by units, and that monomial is not a derivation-step on this id.
+
+> **Evaluator:** [`src/bridges/be57-unruh.ts`](../../src/bridges/be57-unruh.ts) (`evaluateUnruh`)
+
+- **Status**: Established on the theoretical formula. A uniformly accelerated observer in the Minkowski vacuum perceives a thermal bath at the Unruh temperature. Fulling 1973, Davies 1975, Unruh 1976. The catalog has no confrontation: laboratory accelerations give `T ≈ 4×10⁻²⁰ K` at `1 g`, which the notes call unmeasurable, and analog-gravity results are called indirect. No analog dataset is among the three references.
+- **Context**: Bridges proper acceleration to a temperature, with the same `2π` that BE-42 uses for surface gravity. The bridges tuple is `quantum` → `classical`. The catalog dependency is BE-42. BE-57 does not receive a second key for the BE-42 cross-check.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/T%20%3D%20%5Cfrac%7B%5Chbar%20a%7D%7B2%5Cpi%20c%20k_B%7D" alt="T = \frac{\hbar a}{2\pi c k_B}" />
+
+where:
+
+- `T` is the Unruh temperature, in kelvin
+- `a` is the proper acceleration, in metres per second squared
+- `ℏ`, `c`, and `k_B` are the reduced Planck constant, the speed of light, and Boltzmann's constant
+
+**Dimensions**: The catalog signature is `[temperature]`. It does not record a seven-base tuple for this id. `ℏ a / c` has dimension `[M L^2 T^-2]`, energy, and dividing by `k_B` (energy per kelvin) leaves temperature. The factor `1/(2π)` is dimensionless and is not fixed by that cancellation.
+
+**Domain**: The evaluator requires `a ≥ 0`. The proper acceleration that would bring `T` to a stated laboratory scale is not given in the catalog, in PhysJS, in `NOTES.md`, or in the gap list. The catalog states the `1 g` temperature above and defers the confrontation.
+
+**References**:
+
+- Unruh 1976 *Phys. Rev. D* 14:870.
+- Davies 1975 *J. Phys. A* 8:609.
+- Fulling 1973 *Phys. Rev. D* 7:2850.
+
+**Rationale**: Uniform acceleration assigns a temperature to the Minkowski vacuum, with the factor that matches Hawking's temperature at `a = c⁴/(4 G M)` under the BE-42 dictionary.
+
+**Bridge Equation 58: Johnson-Nyquist noise / fluctuation-dissipation theorem** *(Category H: Non-Equilibrium Statistical Mechanics)*
+
+> **Proof status as of 2026-10-01.** Kind is `limit`. [`PhysJS.JohnsonNyquist.tendsto_classical`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/JohnsonNyquist.lean) states that `S_V = 4 k_B T R` is the `ω → 0⁺` limit of the quantum parent `S_V^q(ω) = 4 R ℏ ω / (exp(ℏ ω / (k_B T)) − 1)`, for `k_B T > 0` and `ℏ ≠ 0`. The same expression with `+ 1` in the denominator does not tend to `4 k_B T R`. The lemma is not the fluctuation–dissipation theorem. The parent is a premise. Units do not derive the exponential.
+
+> **Evaluator:** [`src/bridges/be58-johnson-nyquist.ts`](../../src/bridges/be58-johnson-nyquist.ts) (`evaluateJohnsonNyquist`)
+
+- **Status**: Established. A resistor in thermal equilibrium generates a fluctuating voltage whose one-sided power spectral density is fixed by `R` and `T`. Johnson 1928 measured it. Nyquist 1928 derived `S_V = 4 k_B T R` from the second law, transmission-line mode counting, and equipartition. The catalog comment says that reading Nyquist's classical formula as the `h f ≪ k_B T` limit of his Planck-weighted formula is this repository's gloss. Flowers-Jacobs et al. 2017 determined `k_B` by Johnson noise thermometry. The catalog notes record the factor 4 as confirmed, and `NOTES.md` records a printed difference of 0 for the consistency record.
+- **Context**: Bridges thermal fluctuation to electrical dissipation. BE-27 is the catalog's speculative active-matter violation of the fluctuation–dissipation theorem. BE-58 is the theorem that entry names. The bridges tuple is `quantum` → `classical`. The catalog dependency is BE-27.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/S_V%20%3D%204%20k_B%20T%20R" alt="S_V = 4 k_B T R" />
+
+<img src="https://i.upmath.me/svg/S_V%5E%7Bq%7D%28%5Comega%29%20%3D%20%5Cfrac%7B4%20R%20%5Chbar%20%5Comega%7D%7B%5Cexp%28%5Chbar%20%5Comega%2F%28k_B%20T%29%29-1%7D" alt="S_V^{q}(\omega) = \frac{4 R \hbar \omega}{\exp(\hbar \omega/(k_B T))-1}" />
+
+where:
+
+- `S_V` is the one-sided voltage-noise power spectral density, in volt squared per hertz
+- `T` is the temperature, in kelvin, and `R` is the resistance, in ohms
+- `k_B` is Boltzmann's constant
+- the second display is the quantum parent in PhysJS. `ω` is angular frequency. `\exp` is the exponential. The catalog equation is the classical limit, not the parent
+
+**Dimensions**: The catalog signature is `[L^4 M^2 T^-5 I^-2]`. `k_B T` has dimension energy, `[M L^2 T^-2]`, and resistance has dimension `[M L^2 T^-3 I^-2]`, so the product has dimension `[M^2 L^4 T^-5 I^-2]`. The factor 4 is the one-sided spectrum. The catalog comment records that the one-sided choice is what makes the prefactor 4 rather than 2, and that `Conventions` has no field for that choice.
+
+**Domain**: The evaluator requires `T ≥ 0` and `R ≥ 0`. The classical formula is the low-frequency regime. The relation overlay states that regime as `h f ≪ k_B T` and does not type it as an approximation, because no Lipschitz constant, error, and horizon for that truncation are sourced. A numerical bound on `h f / k_B T` is not in the catalog.
+
+**References**:
+
+- Johnson 1928 *Phys. Rev.* 32:97.
+- Nyquist 1928 *Phys. Rev.* 32:110.
+- Flowers-Jacobs et al. 2017 *Metrologia* 54:730.
+
+**Rationale**: Equilibrium voltage fluctuations of a resistor are fixed by its resistance and its temperature.
+
+**Bridge Equation 59: AC Josephson effect (quantum voltage standard)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Josephson.frequency_eq`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/Josephson.lean) states `f = (2e/h) V`, `K_J = 2e/h`, and `f = K_J V`. Clearing `h` recovers `2e`. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing `2e` by `e` fails. The lemma is not the tunneling Hamiltonian.
+
+> **Evaluator:** [`src/bridges/be59-ac-josephson.ts`](../../src/bridges/be59-ac-josephson.ts) (`evaluateACJosephson`)
+
+- **Status**: Established. A Josephson junction biased at a DC voltage `V` emits radiation at `f = K_J V`. Josephson 1962 (Nobel Prize 1973). The catalog comment records that the 1962 letter was not read (paywalled) and that the 1973 Nobel Lecture states the phase relation and a frequency `2eV/h`. Shapiro 1963 measured the constant-voltage steps. With BE-55 and BE-58 this entry is the catalog's quantum metrology triangle. The confrontation is universality of the Josephson volt, and is not a test of the post-2019 value of `K_J`. The catalog notes state that scale as about `1×10⁻¹⁰`. The confrontation file records a conservative bound of `1×10⁻⁹` and says the best comparisons reach about `1×10⁻¹⁰` to `1×10⁻¹¹`.
+- **Context**: Bridges a macroscopic phase of a Cooper-pair condensate to a frequency. The bridges tuple is `quantum` → `classical`. The catalog dependencies are BE-55 and BE-58.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/f%20%3D%20%5Cfrac%7B2e%7D%7Bh%7D%20V%2C%20%5Cquad%20K_J%20%3D%20%5Cfrac%7B2e%7D%7Bh%7D" alt="f = \frac{2e}{h} V, \quad K_J = \frac{2e}{h}" />
+
+where:
+
+- `f` is the emitted frequency, in hertz
+- `V` is the DC bias, in volts
+- `e` is the elementary charge and `h` is Planck's constant
+- `K_J = 2e/h` is the Josephson constant, in hertz per volt. The catalog context states `483597.8484 GHz/V` to 10 significant figures. The catalog comment states that this is the exact quotient `2e/h` rounded, and that the SI Brochure states the abrogated conventional value `K_{J-90}` and does not state `K_J = 2e/h`
+
+**Dimensions**: The catalog signature is `[frequency]`. The product of charge and voltage is energy, and energy divided by `h` (action) is a frequency. The factor 2 is dimensionless.
+
+**Domain**: The evaluator requires a finite `V`. The sign of `V` is not restricted. The tunneling Hamiltonian is outside the lemma.
+
+**References**:
+
+- Josephson 1962 *Phys. Lett.* 1:251. The catalog records this paper as unread.
+- Shapiro 1963 *Phys. Rev. Lett.* 11:80.
+- Kautz 1996 *Rep. Prog. Phys.* 59:935.
+
+**Rationale**: The pair charge `2e` converts a DC voltage into a frequency, which is the quantum standard of the volt.
+
+**Bridge Equation 60: Fractional Quantum Hall effect (Laughlin ν=1/3)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Laughlin.filling_fraction`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/Laughlin.lean) states that for nonzero integers `p` and `q`, with `ν = p/q`, `σ_xy = ν e²/h` and `R_xy = R_K/ν = (q/p) h/e²`. The charge and `h` are not assumed nonzero. Oddness of `q` is the Laughlin selection rule and is not this identity. The lemma is not the Laughlin wavefunction, and it is not the quasiparticle charge `e/3`.
+
+> **Evaluator:** [`src/bridges/be60-fractional-qh.ts`](../../src/bridges/be60-fractional-qh.ts) (`evaluateFractionalQH`)
+
+- **Status**: Established. At filling `ν = p/q` the Hall conductance is `ν e²/h`. Tsui, Störmer & Gossard 1982 (Nobel Prize 1998) measured the fractional plateaux. Laughlin 1983 described the incompressible fluid. de-Picciotto et al. 1997 measured the quasiparticle charge `e/3` by shot noise. The catalog says the empirical content of the confrontation is the fraction, `R_xy = 3 R_K` at `ν = 1/3`, and not the post-2019 value of `R_K`.
+- **Context**: Bridges a fractional filling of a correlated electron liquid to a Hall conductance. The integer effect is BE-55. The bridges tuple is `quantum` → `classical`. The catalog dependency is BE-55. At `ν = 1` the formula is the integer plateau `C = 1`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Csigma_%7Bxy%7D%20%3D%20%5Cnu%20%5Cfrac%7Be%5E2%7D%7Bh%7D%2C%20%5Cquad%20R_%7Bxy%7D%20%3D%20%5Cfrac%7BR_K%7D%7B%5Cnu%7D%20%3D%20%5Cfrac%7Bq%7D%7Bp%7D%5Cfrac%7Bh%7D%7Be%5E2%7D" alt="\sigma_{xy} = \nu \frac{e^2}{h}, \quad R_{xy} = \frac{R_K}{\nu} = \frac{q}{p}\frac{h}{e^2}" />
+
+where:
+
+- `ν = p/q` is the filling fraction. The catalog context states `q` odd for the Laughlin sequence. The Lean identity does not use that oddness
+- `σ_xy` is the Hall conductance, in siemens, and `R_xy` is the Hall resistance, in ohms
+- `e` is the elementary charge, `h` is Planck's constant, and `R_K = h/e²` is the von Klitzing constant of BE-55
+
+**Dimensions**: The catalog signature is `[L^-2 M^-1 T^3 I^2]`, the same conductance signature as BE-55. `ν` is dimensionless, so `ν e²/h` has the dimension of `e²/h`.
+
+**Domain**: The evaluator requires a finite `ν > 0`. It does not require `ν` to be a ratio of integers, and it does not require `q` odd. The wavefunction and the charge `e/3` are outside the lemma. The catalog, PhysJS, `NOTES.md`, and the gap list do not state a measured resistance in ohms for the `ν = 1/3` plateau beyond `R_xy = 3 R_K`.
+
+**References**:
+
+- Tsui, Störmer & Gossard 1982 *Phys. Rev. Lett.* 48:1559.
+- Laughlin 1983 *Phys. Rev. Lett.* 50:1395.
+- de-Picciotto et al. 1997 *Nature* 389:162.
+
+**Rationale**: A rational filling fixes the Hall conductance in units of `e²/h`. The fraction `1/3` is the principal Laughlin state named in the catalog.
+
+**Bridge Equation 61: Wiedemann-Franz law (Lorenz number)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Sommerfeld.integral_eq`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/Sommerfeld.lean) states that `∫_ℝ x² exp(x) / (1 + exp(x))² dx = π²/3`. The integrand is even, so the integral over the positive half-line is half of `π²/3`. Claiming the half-line equals `π²/3` fails. The lemma is not the transport law that identifies the Lorenz number with that integral. Units give `L = C (k_B/e)²` and do not give `C = π²/3`.
+
+> **Evaluator:** [`src/bridges/be61-wiedemann-franz.ts`](../../src/bridges/be61-wiedemann-franz.ts) (`evaluateWiedemannFranz`)
+
+- **Status**: Established, as a consistency statement with a degenerate-limit caveat. The ratio of thermal conductivity to electrical conductivity in a metal is `L_0 T`, with the Sommerfeld Lorenz number `L_0 = (π²/3)(k_B/e)²`. Wiedemann & Franz 1853 stated the empirical proportionality. The catalog context dates Sommerfeld's derivation to 1927. The references line dates the free-electron paper to 1928 *Z. Phys.* 47:1. This section uses the references line for the citation and does not resolve the year. The catalog context states `L_0 ≈ 2.44×10⁻⁸ W·Ω·K⁻²`. The references record copper at `0 °C` near `2.23×10⁻⁸`, about 9 percent below `L_0`, and silver at low temperature recovering `L_0`. The catalog notes say the statistics tag was removed. `NOTES.md` records that the observed Lorenz number in this confrontation is the predicted constant by construction, so the record cannot show a discrepancy, and that the printed difference is 0.
+- **Context**: Bridges charge transport and heat transport by the same carriers at the Fermi surface. The bridges tuple is `quantum` → `classical`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Cfrac%7B%5Ckappa%7D%7B%5Csigma%20T%7D%20%3D%20L_0%20%3D%20%5Cfrac%7B%5Cpi%5E2%7D%7B3%7D%5Cleft%28%5Cfrac%7Bk_B%7D%7Be%7D%5Cright%29%5E2" alt="\frac{\kappa}{\sigma T} = L_0 = \frac{\pi^2}{3}\left(\frac{k_B}{e}\right)^2" />
+
+where:
+
+- `κ` is the thermal conductivity and `σ` is the electrical conductivity
+- `T` is the temperature, in kelvin
+- `L_0` is the Lorenz number, in watt-ohm per kelvin squared
+- `k_B` is Boltzmann's constant and `e` is the elementary charge
+- `π²/3` is the value of the Sommerfeld integral proved in PhysJS. The transport step that inserts it into `L_0` is the gap
+
+**Dimensions**: The catalog signature is `[L^4 M^2 T^-6 I^-2 Theta^-2]`. `k_B` has dimension `[M L^2 T^-2 Θ^-1]` and `e` has dimension `[I T]`, so `(k_B/e)²` has dimension `[M^2 L^4 T^-6 I^-2 Θ^-2]`. `π²/3` is dimensionless. The evaluator returns `κ = L_0 σ T`.
+
+**Domain**: The evaluator requires finite `σ ≥ 0` and `T ≥ 0`. The law is the degenerate, elastic-scattering limit. Inelastic scattering suppresses `L` at intermediate temperature. A single crossover temperature is not stated in the catalog, in PhysJS, in `NOTES.md`, or in the gap list. The copper and silver examples above are the stated regimes.
+
+**References**:
+
+- Wiedemann & Franz 1853 *Ann. Phys.* 165:497.
+- Sommerfeld 1928 *Z. Phys.* 47:1.
+- Kumar, Auton et al. 2023, arXiv:2308.12349. Kittel, *Introduction to Solid State Physics*, for the copper figure in the catalog reference.
+
+**Rationale**: The same degenerate carriers carry charge and heat, so `κ/(σ T)` is a constant built from `k_B` and `e`.
+
+**Bridge Equation 62: BCS gap ratio (weak-coupling superconductivity)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. PhysJS main at that commit has no BCS file. The missing piece is the weak-coupling gap equation whose root is `2π exp(−γ)`. The decimal `3.528` is that root. The ratio is dimensionless, and units do not choose it. That number is not a Lean derivation-step at this pin.
+
+> **Evaluator:** [`src/bridges/be62-bcs-gap.ts`](../../src/bridges/be62-bcs-gap.ts) (`evaluateBCSGap`)
+
+- **Status**: Established, as a weak-coupling consistency statement. BCS theory predicts `2Δ(0)/(k_B T_c) = 2π exp(−γ)`, with `γ` the Euler–Mascheroni constant, and `Δ(0) = 1.764 k_B T_c`. Bardeen, Cooper & Schrieffer 1957 (Nobel Prize 1972). The catalog `formula_latex` writes the Euler factor as `e^{γ}` in the denominator. In this specification that factor is `\exp(−γ)`, and `e` remains the elementary charge. The module computes `(2π) / exp(γ)`. The confrontation compares the weak-coupling class (tin near `3.5`, aluminium near `3.4`, agreement bound `0.05`) with the ideal ratio. Carbotte 1990 records lead near `4.3` in strong coupling. The catalog notes say the statistics tag was removed. `NOTES.md` records a printed difference of `−0.787%` for the consistency record.
+- **Context**: Bridges the zero-temperature gap to the critical temperature. The bridges tuple is `quantum` → `classical`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Cfrac%7B2%5CDelta%280%29%7D%7Bk_B%20T_c%7D%20%3D%202%5Cpi%5Cexp%28-%5Cgamma%29%20%5Capprox%203.528" alt="\frac{2\Delta(0)}{k_B T_c} = 2\pi\exp(-\gamma) \approx 3.528" />
+
+where:
+
+- `Δ(0)` is the superconducting gap at zero temperature, in joules
+- `T_c` is the critical temperature, in kelvin
+- `k_B` is Boltzmann's constant
+- `γ` is the Euler–Mascheroni constant. The module stores `0.5772156649015329`
+- `3.528` is the catalog's rounding of `2π exp(−γ)`. The gap list records the unrounded value as about `3.52775`
+
+**Dimensions**: The displayed ratio is dimensionless. The catalog signature is `[energy]`, the dimension of `Δ(0)`. The evaluator returns `Δ(0) = (ratio/2) k_B T_c`, which is an energy. A seven-base expansion of that energy beyond the catalog word `[energy]` is the energy dimension of `k_B T_c`.
+
+**Domain**: The evaluator requires finite `T_c ≥ 0`. The ratio is the weak-coupling limit. The catalog states the measured range of conventional superconductors as about `3.5` to `5` in the notes, and the confrontation provenance states aluminium near `3.4` through lead near `4.3`. The gap-equation integral that produces `exp(−γ)` is not in PhysJS.
+
+**References**:
+
+- Bardeen, Cooper & Schrieffer 1957 *Phys. Rev.* 108:1175.
+- Tinkham 1996 *Introduction to Superconductivity*, 2nd ed., §3.4.
+- Carbotte 1990 *Rev. Mod. Phys.* 62:1027.
+
+**Rationale**: Weak-coupling BCS theory fixes the gap and the critical temperature as one dimensionless ratio.
+
+**Bridge Equation 63: Chandrasekhar mass (white-dwarf degeneracy limit)** *(Category I: Emergent Spacetime)*
+
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Chandrasekhar.prefactor`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/Chandrasekhar.lean) states that with `n = ρ/(μ_e m_u)`, `p_F = ℏ (3π² n)^{1/3}`, and `P = (1/4) n p_F c`, the pressure is `P = K_ρ ρ^{4/3}`, and for the `n = 3` Lane–Emden scale the central density cancels, leaving `M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}`. `ω₃⁰` stays symbolic. The decimal `2.01824` is not in the theorem. `√π/2` in place of `√(3π)/2` fails when `ω₃⁰ ≠ 0`, and dropping `ω₃⁰` fails when `ω₃⁰ ≠ 1`. The lemma is not stellar rotation or magnetic support.
+
+> **Evaluator:** [`src/bridges/be63-chandrasekhar-mass.ts`](../../src/bridges/be63-chandrasekhar-mass.ts) (`evaluateChandrasekharMass`)
+
+- **Status**: Established, as an upper-bound consistency statement. The maximum mass of a white dwarf supported by electron degeneracy pressure is the Chandrasekhar mass. Chandrasekhar 1931 (Nobel Prize 1983). The catalog context states `≈ 1.44 M_⊙` at `μ_e = 2`. The evaluator notes state `≈ 1.456 M_⊙` at `μ_e = 2` under the module's atomic-mass constant. The confrontation uses an observed white-dwarf maximum of about `1.35 M_⊙` and an agreement bound `0.12`. `NOTES.md` records a printed difference of `−7.27%`. Super-Chandrasekhar supernovae in the catalog references reach about `2.4–2.8 M_⊙` with rotation or magnetic support. Both reviewers marked the tight reading yellow.
+- **Context**: Bridges quantum degeneracy pressure to a gravitational stellar-structure limit. The bridges tuple is `quantum` → `classical`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/M_%7BCh%7D%20%3D%20%5Cfrac%7B%5Comega_3%5E0%20%5Csqrt%7B3%5Cpi%7D%7D%7B2%7D%5Cleft%28%5Cfrac%7B%5Chbar%20c%7D%7BG%7D%5Cright%29%5E%7B3%2F2%7D%5Cfrac%7B1%7D%7B%28%5Cmu_e%20m_u%29%5E2%7D" alt="M_{Ch} = \frac{\omega_3^0 \sqrt{3\pi}}{2}\left(\frac{\hbar c}{G}\right)^{3/2}\frac{1}{(\mu_e m_u)^2}" />
+
+where:
+
+- `M_Ch` is the limiting mass
+- `ω₃⁰` is the Lane–Emden `n = 3` surface constant, `−ξ² θ'` at the first zero. The catalog context states `≈ 2.018`. The evaluator stores `2.01824`. The theorem leaves the symbol unexpanded
+- `ℏ`, `c`, and `G` are the reduced Planck constant, the speed of light, and Newton's constant
+- `μ_e` is the mean molecular weight per electron, dimensionless (`2` for carbon/oxygen). `m_u` is the atomic mass constant, in kilograms
+
+**Dimensions**: The catalog signature is `[mass]`. `ℏ c / G` has dimension `[M²]`, so `(ℏ c / G)^{3/2}` has dimension `[M³]`. Dividing by `(μ_e m_u)²`, dimension `[M²]`, leaves mass. `ω₃⁰` and `√(3π)/2` are dimensionless.
+
+**Domain**: The evaluator requires `μ_e > 0`. The ideal limit omits rotation and magnetic support. Those supports are the catalog's stated reason the observed supernova progenitors can lie above the ideal mass. The numerical value of `ω₃⁰` is an input of the evaluator and is not a theorem.
+
+**References**:
+
+- Chandrasekhar 1931 *Astrophys. J.* 74:81.
+- Shapiro & Teukolsky 1983 *Black Holes, White Dwarfs and Neutron Stars*, §3.
+- Howell et al. 2006 *Nature* 443:308.
+
+**Rationale**: Electron degeneracy pressure supports a white dwarf only up to a mass fixed by `ℏ`, `c`, `G`, and the composition, once the Lane–Emden factor is given.
+
+**Bridge Equation 64: Eddington luminosity (radiation-pressure limit)** *(Category I: Emergent Spacetime)*
+
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Eddington.balance_iff`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/Eddington.lean) states that, for `r > 0`, `σ_T > 0`, and `c > 0`, `L σ_T / (4π r² c) = G M m_p / r²` if and only if `L = 4π G M m_p c / σ_T`. The Thomson force and the gravitational force are premises. Twice that luminosity fails the same balance when the constants in the formula are positive. The lemma is not a claim that the luminosity is a hard cap. Once both forces are inverse-square, the `r²` cancellation is the lemma. Units do not say the balance is a maximum.
+
+> **Evaluator:** [`src/bridges/be64-eddington-luminosity.ts`](../../src/bridges/be64-eddington-luminosity.ts) (`evaluateEddingtonLuminosity`)
+
+- **Status**: Established, as a spherical-symmetry scale with a super-Eddington caveat. The luminosity at which radiation pressure on ionized hydrogen balances gravity is the Eddington luminosity. Eddington 1926. The catalog context states `L_Edd ≈ 1.26×10³¹ W · (M/M_⊙)`. The evaluator notes state `≈ 1.257×10³¹ W` per solar mass. The catalog records that most accreting sources respect this scale and that super-Eddington sources exist, including the ultraluminous X-ray pulsar of Bachetti et al. 2014. `NOTES.md` records a printed difference of 0 for the consistency record. The reviewers split on calling the scale tight, and the catalog resolved that split as consistency with the caveat.
+- **Context**: Bridges a gravitational mass to a radiative luminosity through the Thomson cross-section. The bridges tuple is `quantum` → `classical`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/L_%7BEdd%7D%20%3D%20%5Cfrac%7B4%5Cpi%20G%20M%20m_p%20c%7D%7B%5Csigma_T%7D" alt="L_{Edd} = \frac{4\pi G M m_p c}{\sigma_T}" />
+
+<img src="https://i.upmath.me/svg/%5Cfrac%7BL%20%5Csigma_T%7D%7B4%5Cpi%20r%5E2%20c%7D%20%3D%20%5Cfrac%7BG%20M%20m_p%7D%7Br%5E2%7D" alt="\frac{L \sigma_T}{4\pi r^2 c} = \frac{G M m_p}{r^2}" />
+
+where:
+
+- `L_Edd` is the luminosity, in watts
+- `M` is the mass, in kilograms
+- `m_p` is the proton mass. The evaluator stores `1.67262192369×10⁻²⁷ kg`
+- `σ_T` is the Thomson cross-section. The evaluator stores `6.6524587321×10⁻²⁹ m²`
+- `G` and `c` are Newton's constant and the speed of light
+- `r` is the radius at which the two forces are compared. It cancels
+- the second display is the force balance the lemma proves equivalent to the luminosity. Both forces are premises
+
+**Dimensions**: The catalog signature is `[power]`. `G M m_p c` has dimension `[M L^4 T^-3]`. Dividing by `σ_T`, dimension `[L²]`, leaves `[M L^2 T^-3]`, which is power. `4π` is dimensionless. The two sides of the force balance are accelerations times mass, and `r²` is common.
+
+**Domain**: The evaluator requires `M > 0`. The balance is the spherical inverse-square comparison. Beaming and anisotropy are the catalog's stated setting for sources above `L_Edd`. A luminosity threshold that separates those sources is not given as a formula in the catalog, in PhysJS, in `NOTES.md`, or in the gap list.
+
+**References**:
+
+- Eddington 1926 *The Internal Constitution of the Stars*.
+- Rybicki & Lightman 1979 *Radiative Processes in Astrophysics*, §1.
+- Bachetti et al. 2014 *Nature* 514:202.
+
+**Rationale**: Equating the Thomson force on the electrons to the gravitational force on the protons cancels the radius and leaves a luminosity proportional to mass.
+
+**Bridge Equation 65: Jeans mass (gravitational collapse criterion)** *(Category I: Emergent Spacetime)*
+
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Jeans.mass_eq`](https://github.com/danielsimonjr/PhysJS/blob/dd35202920bf19c39f71f15d9ee740a6d28ec173/PhysJS/Jeans.lean) derives the encoded mass from the virial convention `3 M k T / (μ m_u) = 3 G M² / (5 R)` and `M = 4π R³ ρ / 3`, with positive parameters. The catalog writes that `k` as `k_B`. Replacing `5` by `3` fails. The lemma is not the virial theorem. Units give the monomial `M ∼ (k_B T / (G μ m_u))^{3/2} ρ^{−1/2}`. The `5` and the `3/(4π)` are not fixed by units.
+
+> **Evaluator:** [`src/bridges/be65-jeans-mass.ts`](../../src/bridges/be65-jeans-mass.ts) (`evaluateJeansMass`)
+
+- **Status**: Established, as an order-of-magnitude collapse scale. The critical mass above which a self-gravitating gas cloud collapses against thermal pressure is the Jeans mass. Jeans 1902. The numerical factor `5` is convention-dependent, which the catalog notes, the confrontation, and the Lean negative control all record. The confrontation evaluates dense-core conditions `T = 10 K`, `ρ ≈ 3.8×10⁻¹⁶ kg/m³`, `μ = 2.3`, against an observed core mass of `1 M_⊙`, with fractional agreement `1.5`. The module comment says the agreement is a factor of a few. A bound of `1.5` places the lower edge below zero, so a non-negative observed mass cannot fail the low side of this record. `NOTES.md` records a printed difference of `−43.7%` and states that the `±150%` reading of this bound accepts any observed value from `0` to `4.44 M_⊙`. Turbulence, magnetic fields, and rotation are named in the confrontation and are not in the formula.
+- **Context**: Bridges thermal pressure to gravitational collapse. The bridges tuple is `quantum` → `classical`. The catalog comment records that a neutron-star maximum mass was deferred and is not BE-66 in this catalog.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/M_J%20%3D%20%5Cleft%28%5Cfrac%7B5%20k_B%20T%7D%7BG%20%5Cmu%20m_u%7D%5Cright%29%5E%7B3%2F2%7D%5Cleft%28%5Cfrac%7B3%7D%7B4%5Cpi%5Crho%7D%5Cright%29%5E%7B1%2F2%7D" alt="M_J = \left(\frac{5 k_B T}{G \mu m_u}\right)^{3/2}\left(\frac{3}{4\pi\rho}\right)^{1/2}" />
+
+where:
+
+- `M_J` is the Jeans mass, in kilograms
+- `T` is the temperature, in kelvin, and `ρ` is the mass density, in kilograms per cubic metre
+- `μ` is the mean molecular weight, dimensionless. The confrontation uses `2.3` for molecular hydrogen and helium. That value is an input, not a derived constant
+- `m_u` is the atomic mass constant, `k_B` is Boltzmann's constant, and `G` is Newton's constant
+- the `5` is the virial convention in the theorem. The `3/(4π)` is the uniform-sphere mass `M = 4π R³ ρ / 3` solved for the radius
+
+**Dimensions**: The catalog signature is `[mass]`. `k_B T / (G μ m_u)` has dimension `[M L^-1]`. Raised to `3/2` and multiplied by `ρ^{−1/2}`, dimension `[M^{-1/2} L^{3/2}]`, the product is mass. The pure numbers `5` and `3/(4π)` do not enter that cancellation.
+
+**Domain**: The evaluator requires `T > 0`, `ρ > 0`, and `μ > 0`. The theorem also requires a positive radius and a positive mass satisfying the two premises. The cloud-average regime, in which the module comment says `M_J` is tens of solar masses, is a different density from the dense-core confrontation. A single formula that adds turbulence or a magnetic field is not in the catalog.
+
+**References**:
+
+- Jeans 1902 *Phil. Trans. R. Soc. A* 199:1.
+- Binney & Tremaine 2008 *Galactic Dynamics*, 2nd ed., §5.
+
+**Rationale**: Balancing thermal energy against self-gravity, under the stated virial factor and a uniform sphere, fixes a mass in terms of temperature, density, and composition.
+
+
 ## VI. Integration with Universal Physics Tensor
 
 These additional equations fill crucial gaps in the tensor structure according to the following mapping:
@@ -726,6 +1078,8 @@ Each bridge equation type maps to specific tensor components:
 6. **Cosmological Puzzles (45-47)**:
    Bridge Equations 45 (Trans-Planckian Censorship), 46 (Multiverse Measure), and 47 (BBN Dark Sector) connect cosmological phenomena and do not cleanly fit groups 1-5.
 
+7. **Catalog extensions (55–65)**: written up in §V-C. No tensor-index assignment for these ids is stated in the catalog, in PhysJS at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`, in `NOTES.md`, or in `docs/planning/Bridge-Gap-Inference.md`.
+
 ### 6.2 Consistency Matrix
 
 > **Known-issue note (see also Part-V §19.2):** The consistency requirements below — `det(C) != 0` AND all eigenvalues `lambda_k >= 0` — are **not simultaneously satisfiable in general** given the allowed {-1, 0, +1} entry values. For a real symmetric matrix with off-diagonal entries in {-1, 0, +1}, requiring positive-semi-definiteness (all eigenvalues >= 0) combined with non-singularity (det != 0) is equivalent to strict positive-definiteness, which generally rules out configurations with -1 off-diagonal entries. Treat this definition as **aspirational / target-for-future-reformulation**, not as an operational criterion. See Part-V §19.2 for the **canonical replacement (balance-theoretic, Harary 1953)**; the Gram-form alternative was retired because the embedding was unspecified, leaving the check parametric. Use the balance-theoretic check exclusively.
@@ -740,7 +1094,7 @@ The bridge equations form a consistency matrix <img src="https://i.upmath.me/svg
 
 #### 6.2.1 Entry-construction recipe — illustrative
 
-> **Why this is needed:** the balance-theoretic check that replaced `det(C) != 0 ∧ λ_k ≥ 0` is well-defined as a structural test (Harary 1953), but it is **operationally empty** without a recipe for assigning the actual `C_ij ∈ {-1, 0, +1}` to the 780 off-diagonal pairs. "Mutually reinforcing / independent / contradictory" is not an operational predicate — it requires per-pair physics judgment. The candidate recipe below applies to two worked example pairs and is **illustrative, not authoritative**: full population of the 780-entry matrix requires the per-pair physics judgment of a domain expert, which is precisely the deep open question the framework is supposed to address.
+> **Why this is needed:** the balance-theoretic check that replaced `det(C) != 0 ∧ λ_k ≥ 0` is well-defined as a structural test (Harary 1953), but it is **operationally empty** without a recipe for assigning the actual `C_ij ∈ {-1, 0, +1}` to the 1485 off-diagonal pairs (55·54/2; 780 under the original 40-bridge catalog). "Mutually reinforcing / independent / contradictory" is not an operational predicate — it requires per-pair physics judgment. The candidate recipe below applies to two worked example pairs and is **illustrative, not authoritative**: full population of the 780-entry matrix requires the per-pair physics judgment of a domain expert, which is precisely the deep open question the framework is supposed to address.
 
 **Candidate recipe (illustrative).** Given two bridge equations `BE_i` and `BE_j`, assign:
 
@@ -770,7 +1124,7 @@ The bridge equations form a consistency matrix <img src="https://i.upmath.me/svg
 | Mutual inconsistency? | None known; BE-22 is a special-case-of pattern of BE-14 in low dimension. |
 | **`C_{BE-22, BE-14}` (illustrative)** | **`+1`** (mutually reinforcing — both express the same area-scaling principle in different dimensional regimes). |
 
-**Caveat.** The two worked examples above demonstrate that the recipe can be applied operationally for at least some pairs, but they do not constitute a *proof* that the recipe is well-defined for all 946 off-diagonal entries (44·43/2 unordered pairs; 780 under the original 40-bridge catalog). In practice, populating the full matrix requires:
+**Caveat.** The two worked examples above demonstrate that the recipe can be applied operationally for at least some pairs, but they do not constitute a *proof* that the recipe is well-defined for all 1485 off-diagonal entries (55·54/2 unordered pairs; 946 under the 44-entry write-up, IDs 11–54; 780 under the original 40-bridge catalog). In practice, populating the full matrix requires:
 - a per-pair physics judgment (domain expertise; not all pairs admit a clean verdict),
 - a tie-breaking convention for borderline cases (e.g., whether marginal symbol-family overlap counts as `+1` or `0`),
 - and a versioning convention for entries that change as bridge equations themselves are reformulated (e.g., BE-30 `R3 invalid` makes all `C_{30, *}` entries undefined; the matrix must be re-evaluated when canonical forms change).

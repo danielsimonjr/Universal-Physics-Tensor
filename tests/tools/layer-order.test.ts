@@ -16,8 +16,10 @@ import {
   gate,
   isUpward,
   judge,
+  readAllowlist,
   resolveSpecifier,
   scanFileImports,
+  scanRepository,
   tierOf,
   type Allowlist,
   type Found,
@@ -27,6 +29,19 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
 const extra = 'src/core/tensor.ts -> src/atlas/types.ts';
 const row = 'src/core/labeled-tensor.ts -> src/numerical/tensor-engine.ts';
+
+/** The three catalog/graph rows step 2 of the bridge-discovery note deletes. */
+const deletedJoinRows = [
+  'src/bridges/confrontation-coverage.ts -> src/composition/catalog-graph.ts',
+  'src/bridges/descriptor.ts -> src/composition/catalog-graph.ts',
+  'src/bridges/descriptor.ts -> src/composition/edge.ts',
+] as const;
+
+const remainingAllowlist = [
+  'src/canonical/linkage.ts -> src/composition/expr-eval.ts',
+  'src/core/labeled-tensor.ts -> src/dimensional/errors.ts',
+  'src/core/labeled-tensor.ts -> src/numerical/tensor-engine.ts',
+];
 const cycle = [
   'src/dimensional/curvature.ts',
   'src/numerical/index.ts',
@@ -156,6 +171,14 @@ describe('layer-order judge', () => {
     expect(result.errors).toContain(`allowlist edge is not in the tree: ${row}`);
   });
 
+  it('fails on a stale copy of a deleted catalog/graph row and names it', () => {
+    for (const edge of deletedJoinRows) {
+      const result = judge(found({}), allow({ edges: [edge] }), null);
+      expect(result.ok).toBe(false);
+      expect(result.errors).toContain(`allowlist edge is not in the tree: ${edge}`);
+    }
+  });
+
   it('fails when the allowlist grows past the base and names the row', () => {
     const result = judge(found({ edges: [row] }), allow({ edges: [row] }), allow({}));
     expect(result.ok).toBe(false);
@@ -242,6 +265,19 @@ describe('layer-order live tree', () => {
     const result = gate(root);
     expect(result.errors).toEqual([]);
     expect(result.ok).toBe(true);
+  });
+
+  it('the catalog/graph join rows are gone, and a stale copy of one fails', () => {
+    const { found } = scanRepository(root);
+    const allow = readAllowlist(join(root, 'tools/layer-order/allowlist.json'));
+    expect(allow.edges).toEqual(remainingAllowlist);
+    expect(allow.cycles).toEqual([]);
+    for (const edge of deletedJoinRows) {
+      expect(found.edges).not.toContain(edge);
+      const stale = judge(found, { edges: [...allow.edges, edge], cycles: allow.cycles }, null);
+      expect(stale.ok).toBe(false);
+      expect(stale.errors).toContain(`allowlist edge is not in the tree: ${edge}`);
+    }
   });
 
   it('long-tests fetches origin/master before the suite', () => {

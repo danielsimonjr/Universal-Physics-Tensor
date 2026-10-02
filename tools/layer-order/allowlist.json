@@ -1,8 +1,5 @@
 {
   "edges": [
-    "src/bridges/confrontation-coverage.ts -> src/composition/catalog-graph.ts",
-    "src/bridges/descriptor.ts -> src/composition/catalog-graph.ts",
-    "src/bridges/descriptor.ts -> src/composition/edge.ts",
     "src/canonical/linkage.ts -> src/composition/expr-eval.ts",
     "src/core/labeled-tensor.ts -> src/dimensional/errors.ts",
     "src/core/labeled-tensor.ts -> src/numerical/tensor-engine.ts"

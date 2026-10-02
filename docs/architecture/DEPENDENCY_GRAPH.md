@@ -39,18 +39,18 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 68 files
-- **bridges**: 91 files
+- **bridges**: 90 files
 - **canonical**: 18 files
 - **cases**: 9 files
 - **cli**: 49 files
 - **root**: 1 file
-- **composition**: 75 files
+- **composition**: 77 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
 - **entry**: 1 file
 - **numerical**: 42 files
-- **relations**: 4 files
+- **relations**: 5 files
 
 ---
 
@@ -1769,17 +1769,14 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/confrontation-coverage.ts` - Empirical-spine coverage audit (Direction 4).
+### `src/bridges/confrontation-coverage.ts` - Catalog ids with a committed real-data confrontation.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./index.js` | `BRIDGE_EQUATIONS` | Import |
-| `../composition/catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./confrontations.js` | `CONFRONTATIONS` | Import |
 
 **Exports:**
-- Functions: `auditCoverage`
 - Constants: `DATA_CONFRONTED_IDS`
 
 ---
@@ -1815,23 +1812,6 @@ The codebase is organized into the following modules:
 - Interfaces: `ConfrontationEntry`
 - Functions: `confrontationRigor`, `rigorDistribution`, `listConfrontations`, `runConfrontation`
 - Constants: `CONFRONTATION_RIGOR`, `BCS_GAP_RATIO`, `CONFRONTATIONS`
-
----
-
-### `src/bridges/descriptor.ts` - Unified per-bridge descriptor — one lookup that JOINS the catalog's three
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./index.js` | `BRIDGE_EQUATIONS, BridgeEquationEntry` | Import |
-| `./rhs-registry.js` | `BRIDGE_RHS_BY_ID, parseBridgeId` | Import |
-| `../composition/catalog-graph.js` | `CATALOG_GRAPH` | Import |
-| `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
-| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-
-**Exports:**
-- Functions: `getBridge`
-- Constants: `BRIDGE_DESCRIPTORS`
 
 ---
 
@@ -4094,7 +4074,7 @@ The codebase is organized into the following modules:
 | `./composition/frontier-account.js` | `catalogFrontierAccount, formatFrontierAccount` | Re-export |
 | `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
-| `./bridges/confrontation-coverage.js` | `auditCoverage` | Re-export |
+| `./composition/audit-coverage.js` | `auditCoverage` | Re-export |
 | `./bridges/confrontations.js` | `CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution` | Re-export |
 | `./bridges/be53-yang-mills-confrontation.js` | `requestYangMillsConfrontation` | Re-export |
 | `./bridges/confrontations.js` | `ConfrontationEntry, RigorTier` | Re-export |
@@ -4208,6 +4188,20 @@ The codebase is organized into the following modules:
 - Interfaces: `CandidateAdjudication`
 - Functions: `candidateId`, `adjudicationFor`, `annotateAdjudications`
 - Constants: `ADJUDICATIONS`
+
+---
+
+### `src/composition/audit-coverage.ts` - Empirical-spine coverage audit (Direction 4).
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+| `../bridges/confrontation-coverage.js` | `DATA_CONFRONTED_IDS` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
+
+**Exports:**
+- Functions: `auditCoverage`
 
 ---
 
@@ -4453,6 +4447,23 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `consistencyRatio`
+
+---
+
+### `src/composition/descriptor.ts` - Unified per-bridge descriptor — one lookup that JOINS the catalog's three
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/index.js` | `BRIDGE_EQUATIONS, BridgeEquationEntry` | Import |
+| `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID, parseBridgeId` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+
+**Exports:**
+- Functions: `getBridge`
+- Constants: `BRIDGE_DESCRIPTORS`
 
 ---
 
@@ -7467,6 +7478,20 @@ The codebase is organized into the following modules:
 
 ## Relations Dependencies
 
+### `src/relations/category.ts` - Objects and morphisms of the regime category.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Regime, RelationType` | Import (type-only) |
+| `./composition-table.js` | `composeRelation, CompositionResult` | Import |
+
+**Exports:**
+- Interfaces: `CategoryObject`, `CategoryMorphism`
+- Functions: `composeMorphisms`
+
+---
+
 ### `src/relations/composition-table.ts` - The composition table for `RelationType` — a literal 8×8 matrix.
 
 **Internal Dependencies:**
@@ -7584,7 +7609,7 @@ graph TD
         N8[be23-planckian-confrontation]
         N9[be35-bootstrap-confrontation]
         N10[be36-gw170817-confrontation]
-        N11[...86 more]
+        N11[...85 more]
     end
 
     subgraph Canonical
@@ -7620,11 +7645,11 @@ graph TD
 
     subgraph Composition
         N31[adjudication]
-        N32[axes]
-        N33[axis-audit]
-        N34[bridge-analysis]
-        N35[bridge-prediction]
-        N36[...70 more]
+        N32[audit-coverage]
+        N33[axes]
+        N34[axis-audit]
+        N35[bridge-analysis]
+        N36[...72 more]
     end
 
     subgraph Core
@@ -7665,10 +7690,11 @@ graph TD
     end
 
     subgraph Relations
-        N59[composition-table]
-        N60[conventions]
-        N61[regime]
-        N62[types]
+        N59[category]
+        N60[composition-table]
+        N61[conventions]
+        N62[regime]
+        N63[types]
     end
 
     N0 --> N48
@@ -7676,7 +7702,7 @@ graph TD
     N4 --> N3
     N10 --> N39
     N12 --> N50
-    N12 --> N62
+    N12 --> N63
     N13 --> N50
     N14 --> N12
     N14 --> N50
@@ -7709,17 +7735,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 408 |
+| Total TypeScript Files | 410 |
 | Total Modules | 13 |
-| Total Lines of Code | 89518 |
-| Total Exports | 2924 |
+| Total Lines of Code | 89583 |
+| Total Exports | 2925 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
-| Total Interfaces | 462 |
-| Total Functions | 753 |
+| Total Interfaces | 464 |
+| Total Functions | 754 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 546 |
+| Type-only Imports | 547 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

@@ -60,7 +60,7 @@ export { predictMissingBridges } from './composition/bridge-prediction.js';
 export { catalogFrontierAccount, formatFrontierAccount } from './composition/frontier-account.js';
 export { rankDiscoveries, ANCHOR_DEFAULT } from './composition/discovery.js';
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
-export { auditCoverage } from './bridges/confrontation-coverage.js';
+export { auditCoverage } from './composition/audit-coverage.js';
 export {
   CONFRONTATIONS,
   listConfrontations,
