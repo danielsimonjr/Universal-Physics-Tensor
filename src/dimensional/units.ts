@@ -25,7 +25,7 @@ import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
 import { C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../core/constants.js';
 
-/** A unit, as a scale to SI base units and a dimension. @internal */
+/** A unit, as a scale to SI base units and a dimension. @public */
 export interface ParsedUnit {
   readonly scale: number;
   readonly dim: Dimension;
@@ -33,7 +33,7 @@ export interface ParsedUnit {
   readonly affine?: 'celsius';
 }
 
-/** Thrown for any input that does not parse as a value with a known unit. @internal */
+/** Thrown for any input that does not parse as a value with a known unit. @public */
 export class UnitError extends Error {
   constructor(message: string) {
     super(message);
@@ -152,7 +152,7 @@ export function unitConventionNotes(given: string): string[] {
   return notes;
 }
 
-/** Parse a unit expression; the empty string is dimensionless. @internal */
+/** Parse a unit expression; the empty string is dimensionless. @public */
 export function parseUnit(text: string): ParsedUnit {
   const t = text.trim();
   if (t === '' || t === '1') return { scale: 1, dim: DIMENSIONLESS };
@@ -167,7 +167,7 @@ export function parseUnit(text: string): ParsedUnit {
   return { scale: num.scale * den.scale, dim: multiply(num.dim, den.dim) };
 }
 
-/** How a temperature value is read: as a point on the scale, or as a difference. @internal */
+/** How a temperature value is read: as a point on the scale, or as a difference. @public */
 export type TemperatureReading = 'absolute' | 'difference';
 
 /**
@@ -175,7 +175,7 @@ export type TemperatureReading = 'absolute' | 'difference';
  * number is taken to be in `target` already. The dimensions must agree.
  *
  * @returns the value in `target`, and the unit the user gave (`''` for none).
- * @internal
+ * @public
  */
 export function convertValue(
   raw: string,

@@ -103,7 +103,7 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         linkage map after it. --equation-only is the same verdict and errors
         when --equation is missing (with --json: no "linkage" field).
         A bare e in the formula is the elementary charge. E is energy.
-        Euler's number is exp(1) or euler.
+        Euler's number is exp(x), for example exp(1). The name euler is refused.
         --natural sets ħ = c = 1 for a dimension difference that is a power of
         those constants; --geometrized also allows powers of G. The SI default
         still refuses rest_energy = mass.

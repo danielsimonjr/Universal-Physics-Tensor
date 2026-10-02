@@ -166,5 +166,13 @@ describe('BE-42 Hawking temperature — Tier 5 AST encoding', () => {
       expect(() => evaluateHawkingTemperature({ M_kg: Number.NaN })).toThrow(RangeError);
       expect(() => evaluateHawkingTemperature({ M_kg: Number.POSITIVE_INFINITY })).toThrow(RangeError);
     });
+
+    it('rejects a finite mass whose temperature is not finite', () => {
+      expect(() => evaluateHawkingTemperature({ M_kg: 1e-300 })).toThrow(RangeError);
+      expect(() => evaluateHawkingTemperature({ M_kg: 1e-300 })).toThrow(/not a finite number/);
+      const finite = evaluateHawkingTemperature({ M_kg: 1e-200 });
+      expect(Number.isFinite(finite)).toBe(true);
+      expect(JSON.stringify(finite)).not.toBe('null');
+    });
   });
 });

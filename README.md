@@ -107,7 +107,7 @@ the MathTS packages as devDependencies, so that path uses MathTS. A published
 uses the builtin parser. The two are not the same language: MathTS accepts
 `factorial`, `erf`, `gamma()`, and juxtaposition such as `2pi`; the builtin
 parser does not. Both read a bare `e` as the elementary charge, `E` as energy,
-and Euler's number only as `exp(1)` or `euler`. On a machine that has Node
+and Euler's number only as `exp(x)`, for example `exp(1)`. The name `euler` is refused. On a machine that has Node
 and not Bun, the clone path is `npm install`, `npm run build`, then
 `node bin/upt.mjs <command>`. UPT keeps
 **zero hard dependencies**; the MathTS packages and `@viz-js/viz` are optional peers, which a
@@ -220,6 +220,15 @@ import { composeEdges, be42Edge, be16Edge, M_SUN_KG } from 'universal-physics-te
 const erasureCost = composeEdges(be42Edge, be16Edge);
 erasureCost.evaluate({ mass: M_SUN_KG }); // ≈ 5.9e-31 J — E_min(M) = ℏc³ln2/(8πGM)
 erasureCost.confidence;                   // 'highly-speculative' (min of the operands)
+```
+
+`GM_SUN_SI` is the IAU 2015 nominal solar gravitational parameter, `1.3271244e20` m³/s². It is not `G_SI * M_SUN_SI`. `parseUnit`, `convertValue`, and `UnitError` read a number with a unit:
+
+```typescript
+import { GM_SUN_SI, convertValue } from 'universal-physics-tensor';
+
+GM_SUN_SI;                    // 1.3271244e20
+convertValue('25degC', 'K'); // { value: 298.15, given: 'degC' }
 ```
 
 That derived relation — the minimum erasure cost at a black-hole

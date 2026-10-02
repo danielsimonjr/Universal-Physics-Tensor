@@ -16,6 +16,7 @@ import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 import { UnitError } from '../../dimensional/units.js';
 import { readBinding } from '../../numerical/binding-value.js';
+import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none' },
@@ -58,11 +59,12 @@ const HELP = `upt eval "<formula>" name=value ...
         sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
         or log2 for base 10 or 2. A bare e is the elementary charge (the
         CODATA value). E is energy: pass E=<number>. Euler's number is
-        exp(1) or euler, never a bare e. e_charge is the same charge.
+        exp(x), for example exp(1), never a bare e and never the name euler.
+        e_charge is the same charge.
         An explicit e=<number> replaces the CODATA value. CODATA
         names are filled in when you omit them: every registered constant
         (G, c, hbar, h, k_B, e, ln2, epsilon_0, sigma_sb, b, GM_sun, Msun_iau)
-        and the aliases e_charge, euler, m_e, eps0, mu0, mu_0, kB, M_sun. A bare
+        and the aliases e_charge, m_e, eps0, mu0, mu_0, kB, M_sun. A bare
         sigma is not the Stefan–Boltzmann constant; write sigma_sb. A value may be a
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
         constants and units (v=0.6*c, theta=pi/2). Bindings use the built-in
@@ -121,6 +123,16 @@ async function run(ctx: CommandCtx): Promise<number> {
         kind,
       ),
     );
+  }
+
+  // A bare e is the CODATA charge. Subtracting it from a number is not
+  // eccentricity, and the numeric result is indistinguishable from 1.
+  // A caller who bound e chose a different quantity.
+  if (!('e' in parsed.scope)) {
+    const checked = builtinFormulaDimensionChecker().check(expr, {});
+    if (!checked.ok && checked.error?.includes('elementary charge')) {
+      throw new UsageError(withParser(checked.error, kind));
+    }
   }
 
   const notes: string[] = [...parsed.notes];
