@@ -118,31 +118,34 @@ intersects tags of existing records. The pipeline does not use that
 intersection as the status of the new statement. The new statement has a
 tag when its own reviewed reference exists, and not before.
 
-## Policies
+## Decisions
 
-Daniel can replace any of these. Until he does, the steps implement them.
+Daniel decided (a) and (b). The steps implement them. They are not open
+questions.
 
-**(a) Confirm, or stay provisional.** A chain whose normal form matches an
-existing catalog id confirms that entry. The run reports the id. It writes
-nothing: no catalog row, no overlay entry, no tag. A chain the registry
-pre-declared with `restatesBridge` is a restatement, the F4 guard's
-existing word, and it is not a new equation. A chain that matches neither
-receives a provisional id, `chain-` followed by the ordered edge ids. That
-id is not a `be-` id, not an `ab-` id, and not a `CE-` id. `parseBridgeId`
-rejects it. It enters `BRIDGE_EQUATIONS` and the formal-reference overlay
-when a PhysJS proof of that statement has been vendored by the
-`WORKFLOWS.md` procedure, and the catalog id is assigned then.
+**(a) A new chain stays provisional until Lean proves it.** A chain whose
+normal form matches an existing catalog id confirms that entry. The run
+reports the id. It writes nothing: no catalog row, no overlay entry, no
+tag. A chain the registry pre-declared with `restatesBridge` is a
+restatement, the F4 guard's existing word, and it is not a new equation.
+A new bridge found by chaining receives a provisional id, `chain-`
+followed by the ordered edge ids. That id is not a `be-` id, not an
+`ab-` id, and not a `CE-` id. `parseBridgeId` rejects it. The provisional
+id enters `BRIDGE_EQUATIONS` and the formal-reference overlay only once
+Lean has proved the statement and that proof has been vendored by the
+`WORKFLOWS.md` procedure. The catalog id is assigned then.
 
-**(b) Dimensional analysis fixes the form.** A unique monomial is the
-exponent tuple times a dimensionless constant. The constant is the
-hypothesis, named as `PhysJS.Dimensional.monomial_form`'s unfixed
-`f(1,…,1)`, and the exponent vector is a hypothesis of that theorem too.
-One remaining ratio names `ratio_shape`. A product of two independent
-magnitudes names `product_shape`. An unfixed real power names
-`ratio_power_invariant`. The covers line begins with `derivation-step:`
-and includes that hypothesis. The kind stays `derivation-step` until a
-later theorem discharges the hypothesis and states the equation. A
-`derivation-step` does not light `formally-proved`. Milestone 3's decoy,
+**(b) A units-only result is partial.** Dimensional analysis fixes the
+form and leaves a dimensionless constant. That result is a
+`derivation-step`. The covers line begins with `derivation-step:` and
+names the hypothesis: the constant is unfixed. A unique monomial names
+`PhysJS.Dimensional.monomial_form` and its unfixed `f(1,…,1)`. The
+exponent vector, and the assumption that a unit change can reach every
+positive tuple, are hypotheses of that theorem and are named on the same
+line. One remaining ratio names `ratio_shape`. A product of two
+independent magnitudes names `product_shape`. An unfixed real power names
+`ratio_power_invariant`. The kind stays `derivation-step` until Lean pins
+the constant. It never counts as `formally-proved`. Milestone 3's decoy,
 a free π-group, remains the negative control for a uniqueness claim.
 
 **(c) A bridge is a PhysJS proof.** Lean 4, in PhysJS, axioms
@@ -202,7 +205,7 @@ narrows only the discovery reading.
   existing table. This note does not widen it. Milestone 3 stays the
   Buckingham monomials. A provisional chain is not a milestone 3 row.
 - The catalog formal-reference note. One id, one reference. A second
-  statement is a nested manifest object. A confirmation (policy a) does
+  statement is a nested manifest object. A confirmation under decision (a) does
   not become that second reference.
 - `docs/planning/Bridge-Inference-Epistemics-Note.md`. Dimensional matching
   filters. The generator is the chain of proved statements.
@@ -329,7 +332,7 @@ A function in `src/composition/`, calling `dimensionallyDetermines` and
 nothing that reimplements the null space. It does not call
 `src/composition/probe/generator.ts`. The record uses the existing result
 type, which has no constant field, and names the `PhysJS.Dimensional`
-theorem for the shape policy (b) lists.
+theorem for the shape decision (b) names.
 
 A chain that is not homogeneous is absent.
 
@@ -347,7 +350,7 @@ and the `restatesBridge` guard — moves into a module under
 the allowlist row from `linkage.ts` to `expr-eval.ts` stays.
 `composition/` calls the structural function. That edge points downward.
 
-Policy (a) uses this function. Numerical agreement is not a confirmation.
+Decision (a) uses this function. Numerical agreement is not a confirmation.
 
 Tests. A normal-form match to an existing catalog right-hand side
 confirms that id. A match the registry pre-declared with `restatesBridge`
@@ -381,7 +384,7 @@ sorts in the order above. Control: two adjacent classes swapped fail.
 
 `src/atlas/proof-target.ts` takes a candidate and the theorem name of each
 seed step, read through the existing manifest copy, and returns text: the
-Lean statement skeleton and the theorem chain in order. When policy (b)
+Lean statement skeleton and the theorem chain in order. When decision (b)
 applies, the covers line begins with `derivation-step:` and names the
 hypothesis. The text includes the import `PhysJS.Dimensional` when the
 filter named one of its theorems.
@@ -435,34 +438,29 @@ Running Lean, or writing a proof into PhysJS from this repository.
 
 ## Open questions
 
-1. **The provisional prefix.** `chain-` plus the ordered edge ids is the
-   default in policy (a). A different prefix is a one-line change to step
-   7.
-2. **Canon formulas with no kind-`bridge` reference.** The default is that
-   they are not seeds. Treating the L-layer as proved would break policy
-   (c).
-3. **Identity and 2-cells.** Part IX leaves identity unspecified. The
-   default is to omit both. A non-commuting pair stays two chains.
-4. **Where the stub goes.** The default is that step 9 returns text. UPT
-   does not write the vendored manifest and does not run Lean. Writing a
-   file into a PhysJS checkout is a later decision.
-5. **A command.** The default is no `upt` command in these steps. A
-   command is a `cli` change after the orchestrator is internal and
-   tested.
-6. **Phases B through D.** The owner decision in `ACTIVE.md` stands. These
+Decisions (a) and (b) are closed. The questions below are the ones this
+note still leaves open.
+
+1. **Canon formulas with no kind-`bridge` reference.** They are not seeds.
+   Treating the L-layer as proved would break (c).
+2. **Identity and 2-cells.** Part IX leaves identity unspecified. This note
+   omits both. A non-commuting pair stays two chains.
+3. **Where the stub goes.** Step 9 returns text. UPT does not write the
+   vendored manifest and does not run Lean. Writing a file into a PhysJS
+   checkout is a later decision.
+4. **A command.** These steps add no `upt` command. A command is a `cli`
+   change after the orchestrator is internal and tested.
+5. **Phases B through D.** The owner decision in `ACTIVE.md` stands. These
    steps do not implement either reading.
-7. **A second statement on an id that was only confirmed.** Policy (a)
-   writes nothing. Promoting a confirmation into a nested manifest object
-   is the multi-statement decision the catalog formal-reference note
-   already leaves open.
-8. **The reachability hypothesis.** `monomial_form` assumes a unit change
-   can reach every positive tuple. The default is to name that hypothesis
-   on the covers line and keep kind `derivation-step` until a proof
-   discharges it.
-9. **Seven bases.** UPT's dimension is the seven named SI bases.
-   `PhysJS.Dimensional.Dim` is `Fin n → ℚ`. The default stub fixes `n = 7`
-   in the order `src/dimensional/types.ts` declares. A different `n` is a
-   change to the covers line and to the filter.
-10. **Step 4 refused.** If the category module is declined, steps 5 and 10
-    call `composeRelation` directly. The junction check in step 3 still
-    stands. The table is still the one table.
+6. **A later Lean statement about an id that was only confirmed.**
+   Decision (a) writes nothing: the match confirms the entry. Whether a
+   subsequent proof becomes a nested manifest object is the
+   multi-statement question the catalog formal-reference note already
+   leaves open.
+7. **Seven bases.** UPT's dimension is the seven named SI bases.
+   `PhysJS.Dimensional.Dim` is `Fin n → ℚ`. The stub fixes `n = 7` in the
+   order `src/dimensional/types.ts` declares. A different `n` is a change
+   to the covers line and to the filter.
+8. **Step 4 declined.** If the category module is declined, steps 5 and 10
+   call `composeRelation` directly. The junction check in step 3 still
+   stands. The table is still the one table.
