@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Rename the CLI uncertainty helper so it is not the public uncertainty function. Design: `docs/planning/refactor-integration-phase.md`, step 6.
+  Done: the helper in `src/cli/commands/evaluate.ts` is `propagateEvaluatorUncertainty`. Correlations and the curvature ratio stay. It does not call the graph-layer `propagateUncertainty`. The public name stays the graph-layer function. Before the rename, the new test failed with `expected true to be false` because the CLI module still exported `propagateUncertainty`, and with `TypeError: propagateEvaluatorUncertainty is not a function`. Importing the old CLI name then failed typecheck with `has no exported member 'propagateUncertainty'`.
 - [x] Build the proof-target draft as a typed object and render the existing text from it. Design: `docs/planning/refactor-integration-phase.md`, step 4.
   Done: `proofTargetDraft` is the object whose fields are `key`, `bridgeId`, `theorem`, `covers`, `coverage`, `leanProof`, and `axioms`. `leanProof` is `absent`. `emitProofTarget` renders the comment block from that object. The markers stay. The rendered text of the monomial fixture is unchanged. The object is not written to the vendored manifest and is not passed to `deriveEvidence`. A copy whose `leanProof` is `complete` still fails `physjsManifestProblems`. The package barrel and `src/atlas/public.ts` do not export the name.
 - [x] Make category composition refuse morphisms that do not meet, and record that result on the chain without dropping proof targets. Design: `docs/planning/refactor-integration-phase.md`, step 3.
