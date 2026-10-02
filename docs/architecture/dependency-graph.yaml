@@ -3,7 +3,7 @@ metadata:
   version: 1.0.1
   totalFiles: 411
   totalModules: 13
-  totalExports: 2925
+  totalExports: 2926
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2173,11 +2173,13 @@ modules:
           typeOnly: true
       exports:
         - PHYSJS_COMMIT
+        - bridgeSeedKeys
         - physjsFormalRef
         - physjsManifestProblems
       interfaces:
         - PhysjsManifestFile
       functions:
+        - bridgeSeedKeys
         - physjsFormalRef
         - physjsManifestProblems
       constants:
@@ -19808,11 +19810,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 411
   totalModules: 13
-  totalLinesOfCode: 89626
-  totalExports: 2925
+  totalLinesOfCode: 89656
+  totalExports: 2926
   totalClasses: 60
   totalInterfaces: 465
-  totalFunctions: 754
+  totalFunctions: 755
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
