@@ -16,6 +16,7 @@ import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
 import { UnitError } from '../../dimensional/units.js';
 import { readBinding } from '../../numerical/binding-value.js';
+import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none' },
@@ -122,6 +123,16 @@ async function run(ctx: CommandCtx): Promise<number> {
         kind,
       ),
     );
+  }
+
+  // A bare e is the CODATA charge. Subtracting it from a number is not
+  // eccentricity, and the numeric result is indistinguishable from 1.
+  // A caller who bound e chose a different quantity.
+  if (!('e' in parsed.scope)) {
+    const checked = builtinFormulaDimensionChecker().check(expr, {});
+    if (!checked.ok && checked.error?.includes('elementary charge')) {
+      throw new UsageError(withParser(checked.error, kind));
+    }
   }
 
   const notes: string[] = [...parsed.notes];

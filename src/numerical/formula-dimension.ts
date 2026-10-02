@@ -17,7 +17,7 @@
 
 import type { Dimension } from '../dimensional/types.js';
 import { CHARGE, DIMENSIONLESS, ENERGY } from '../dimensional/types.js';
-import { equals, format } from '../dimensional/algebra.js';
+import { equals, format, multiply } from '../dimensional/algebra.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/validator.js';
 import { validate } from '../dimensional/validator.js';
 import { sym } from '../dimensional/ast-builders.js';
@@ -87,6 +87,34 @@ function resolveSymbol(name: string, dims: Readonly<Record<string, Dimension>>):
     `undeclared symbol '${name}' — declare its dimension (a separate name:dimension argument, for example x:length)`,
   );
 }
+
+const CHARGE_SQUARED = multiply(CHARGE, CHARGE);
+
+/** A bare `e`, not `exp`, `e_charge`, `eps0`, or the exponent in `1e-19`. */
+function formulaHasBareE(expr: string): boolean {
+  return /(?<![A-Za-z0-9_])e(?![A-Za-z0-9_])/.test(expr);
+}
+
+/**
+ * `e` is the elementary charge when the caller did not give it another
+ * dimension. A declared dimensionless `e` is not this case.
+ */
+function eIsElementaryCharge(dims: Readonly<Record<string, Dimension>>): boolean {
+  return !('e' in dims) || equals(dims.e, CHARGE);
+}
+
+function dimensionIsCharge(dim: Dimension): boolean {
+  return equals(dim, CHARGE) || equals(dim, CHARGE_SQUARED);
+}
+
+/**
+ * What to say when a bare `e` was the elementary charge inside a sum that is
+ * not homogeneous. Declaring or binding `e` keeps a different quantity.
+ * Euler's number is `exp(x)`.
+ * @internal
+ */
+export const ELEMENTARY_CHARGE_MIX_MESSAGE =
+  'e is the elementary charge and is not dimensionless here. Declare it or bind a value (e=<number>) if you mean a different quantity, or write Euler\'s number as exp(x). The catalog writes the eccentricity factor as one_minus_e_sq.';
 
 /** Inferred dimension of an `ExprNode`, or throw if not homogeneous. */
 function dimensionOf(node: ExprNode): Dimension {
@@ -278,7 +306,12 @@ function createFormulaDimensionChecker(
     }
     const r = validate(exprNode);
     if (!r.ok || r.inferredDimension === null) {
-      throw new FormulaDimensionError(r.violations[0]?.note ?? 'not dimensionally homogeneous');
+      const note = r.violations[0]?.note ?? 'not dimensionally homogeneous';
+      const chargeMixed =
+        formulaHasBareE(expr) &&
+        eIsElementaryCharge(dims) &&
+        r.violations.some((v) => dimensionIsCharge(v.expected) || dimensionIsCharge(v.actual));
+      throw new FormulaDimensionError(chargeMixed ? `${ELEMENTARY_CHARGE_MIX_MESSAGE} ${note}` : note);
     }
     return { expr: exprNode, dimension: r.inferredDimension };
   };

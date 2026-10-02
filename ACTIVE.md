@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] An undeclared `1-e^2` on `upt eval` and `upt map` says `e` is the elementary charge and must be declared or bound, or written as `exp(x)`. The map message names `one_minus_e_sq`. A declared dimensionless `e` stays dimensionless.
 - [x] Refuse a non-finite Hawking temperature. A finite mass whose SI evaluation overflows throws RangeError instead of returning Infinity.
 - [x] Refuse the formula name `euler`. Euler's number is `exp(x)`, for example `exp(1)`. A bare `e` stays the elementary charge and `E` stays energy. The error names `exp(x)`.
 - [x] Add src/relations/category.ts. An object is an id together with a Regime. A morphism is an id pair plus a RelationType. composeMorphisms delegates to composeRelation and returns no-composite-claim unchanged. No identity morphisms and no 2-cells. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 4.
