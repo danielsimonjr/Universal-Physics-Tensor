@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.2",
-    "totalFiles": 416,
+    "totalFiles": 417,
     "totalModules": 13,
-    "totalExports": 2946
+    "totalExports": 2947
   },
   "entryPoints": [
     {
@@ -525,6 +525,115 @@
         ],
         "functions": [
           "catalogFormalRef"
+        ]
+      },
+      "src/atlas/chain-pipeline.ts": {
+        "description": "Internal bridge-discovery pipeline.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../composition/edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../composition/enumerate.js",
+            "imports": [
+              "enumerateCompositions"
+            ]
+          },
+          {
+            "file": "../composition/buckingham-filter.js",
+            "imports": [
+              "buckinghamFilter"
+            ]
+          },
+          {
+            "file": "../composition/buckingham-filter.js",
+            "imports": [
+              "BuckinghamFilterRecord"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../composition/chain-match.js",
+            "imports": [
+              "matchChain"
+            ]
+          },
+          {
+            "file": "../composition/chain-candidate.js",
+            "imports": [
+              "orderChainCandidates",
+              "ChainCandidate"
+            ]
+          },
+          {
+            "file": "../canonical/structural.js",
+            "imports": [
+              "ChainClassification"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./physjs-ref.js",
+            "imports": [
+              "bridgeSeedKeys",
+              "physjsTheorem"
+            ]
+          },
+          {
+            "file": "./proof-target.js",
+            "imports": [
+              "emitProofTarget"
+            ]
+          }
+        ],
+        "exports": [
+          "runChainPipeline"
+        ],
+        "interfaces": [
+          "ChainConfirmationRecord",
+          "ChainRestatementRecord",
+          "ChainStubRecord"
+        ],
+        "functions": [
+          "runChainPipeline"
         ]
       },
       "src/atlas/composition-table.ts": {
@@ -28134,6 +28243,7 @@
           "src/atlas/benchmark/study.ts",
           "src/atlas/benchmark/types.ts",
           "src/atlas/catalog-formal-ref.ts",
+          "src/atlas/chain-pipeline.ts",
           "src/atlas/composition-table.ts",
           "src/atlas/conventions.ts",
           "src/atlas/coverage.ts",
@@ -28603,18 +28713,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 416,
+    "totalTypeScriptFiles": 417,
     "totalModules": 13,
-    "totalLinesOfCode": 90431,
-    "totalExports": 2946,
+    "totalLinesOfCode": 90640,
+    "totalExports": 2947,
     "totalClasses": 60,
-    "totalInterfaces": 471,
-    "totalFunctions": 765,
+    "totalInterfaces": 474,
+    "totalFunctions": 766,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 727,
     "totalReExports": 1395,
-    "totalTypeOnlyImports": 554,
+    "totalTypeOnlyImports": 559,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
