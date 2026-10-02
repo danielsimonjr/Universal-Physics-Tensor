@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 69 files
+- **atlas**: 70 files
 - **bridges**: 91 files
 - **canonical**: 19 files
 - **cases**: 9 files
@@ -230,6 +230,32 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `catalogFormalRef`
+
+---
+
+### `src/atlas/chain-pipeline.ts` - Internal bridge-discovery pipeline.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
+| `../composition/enumerate.js` | `enumerateCompositions` | Import |
+| `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
+| `../composition/buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
+| `../composition/chain-match.js` | `matchChain` | Import |
+| `../composition/chain-candidate.js` | `orderChainCandidates, ChainCandidate` | Import |
+| `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
+| `./physjs-ref.js` | `bridgeSeedKeys, physjsTheorem` | Import |
+| `./proof-target.js` | `emitProofTarget` | Import |
+
+**Exports:**
+- Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`
+- Functions: `runChainPipeline`
 
 ---
 
@@ -7651,6 +7677,7 @@ The codebase is organized into the following modules:
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
 | `catalog-formal-ref` | 2 files | 1 files |
+| `chain-pipeline` | 12 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
@@ -7668,7 +7695,6 @@ The codebase is organized into the following modules:
 | `index` | 38 files | 0 files |
 | `link-prediction` | 2 files | 1 files |
 | `model` | 2 files | 12 files |
-| `bridges-coarse` | 5 files | 2 files |
 
 ---
 
@@ -7687,7 +7713,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...64 more]
+        N5[...65 more]
     end
 
     subgraph Bridges
@@ -7822,17 +7848,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 416 |
+| Total TypeScript Files | 417 |
 | Total Modules | 13 |
-| Total Lines of Code | 90431 |
-| Total Exports | 2946 |
+| Total Lines of Code | 90640 |
+| Total Exports | 2947 |
 | Total Re-exports | 1395 |
 | Total Classes | 60 |
-| Total Interfaces | 471 |
-| Total Functions | 765 |
+| Total Interfaces | 474 |
+| Total Functions | 766 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 554 |
+| Type-only Imports | 559 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
