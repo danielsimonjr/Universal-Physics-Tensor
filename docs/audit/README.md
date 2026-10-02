@@ -1,5 +1,7 @@
 # CLI applied-physics audit archive
 
+> **Status as of 2026-10-01.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and thirteen catalog ids (be-12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `dd35202920bf19c39f71f15d9ee740a6d28ec173`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](../planning/Bridge-Gap-Inference.md). The report's formal-reference lines, including fidelity `sanity-lemmas` and `formally-proved`, are that 2026-09-26 session.
+
 This is an **AI model-persona audit**, not an independent human physicist review,
 peer review, or experimental validation. It records a CLI-only exploration of
 UPT 0.47.1 at commit `c2c9dfce905f14f2cce48526bab1417b38c62541` on 2026-09-26.

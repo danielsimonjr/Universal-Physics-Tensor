@@ -1,8 +1,6 @@
 # Phase 4 formalRef scoping
 
-> **Banner.** The measurements below are the 2026-09-24 scoping record. The live count is in
-> `NOTES.md`: atlas bridges and catalog equations are separate, each `system: 'lean4-physjs'`,
-> vendored from public PhysJS (`private: false`). The search tables stay as that day's record.
+> **Status as of 2026-10-01.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and thirteen catalog ids (be-12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `dd35202920bf19c39f71f15d9ee740a6d28ec173`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](../planning/Bridge-Gap-Inference.md). §4.3's sentence that no Lean proof has been written in this fleet is that day's size-class estimate; the rank-1 atlas rows now have PhysJS theorems, and the search tables stay as the 2026-09-24 record.
 
 A scoping report, not code. It answers five questions from Mothership (2026-09-24) about the Phase 4
 exit criterion "≥ 5 with a reviewed `formalRef`". The count is ~~1~~ ~~six~~ ~~ten~~ the split in

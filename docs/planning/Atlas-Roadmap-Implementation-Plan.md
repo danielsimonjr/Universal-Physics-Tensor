@@ -1,5 +1,7 @@
 # Atlas Roadmap — subagent-driven implementation plan
 
+> **Status as of 2026-10-01.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and thirteen catalog ids (be-12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `dd35202920bf19c39f71f15d9ee740a6d28ec173`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). The S4.3 line that `formally-proved` holds iff `formalRef.fidelity !== 'unreviewed'` is the rule this plan specified.
+
 **Executes:** [`ROADMAP.md`](../../ROADMAP.md) (2026-09-20), phases 0–6.
 **Baseline:** `universal-physics-tensor@0.45.2`, `master`, suite ≈ 3,700 passing across ~353 files.
 **Revision 2**, after an independent adversarial review and a codebase-consistency audit of

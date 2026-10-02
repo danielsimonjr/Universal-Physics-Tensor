@@ -1,5 +1,7 @@
 # Layering refactor
 
+> **Status as of 2026-10-01.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and thirteen catalog ids (be-12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `dd35202920bf19c39f71f15d9ee740a6d28ec173`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). Stage 4 still says a catalog reference passed into `deriveEvidence` lights `formally-proved`, including a property and a cross-check, and the fifteen `physjsFormalRef` keys are this note's starting allowlist.
+
 This note specifies a staged refactor of import direction. It changes no
 code, no public export, and no cell of the composition table. Approval is
 recorded outside this file. Landing the note does not authorize a stage.
