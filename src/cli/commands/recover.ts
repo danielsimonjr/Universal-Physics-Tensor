@@ -7,7 +7,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { scanCompositionRecovery } from '../../composition/composition-recovery.js';
+import { scanCompositionRecovery } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [JSON_FLAG];
 

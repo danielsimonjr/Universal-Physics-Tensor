@@ -11,12 +11,17 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
-import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
-import { C_SI, G_SI } from '../../core/constants.js';
+import {
+  type AppliedCase,
+  type CaseResult,
+  bindingInUnit,
+  C_SI,
+  type EvaluatorParameter,
+  G_SI,
+  missingEvaluatorMessage,
+} from '../../cli-api.js';
 import { JEANS_FORMULA_NOTE } from '../conventions.js';
 import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
-import { bindingInUnit } from '../../numerical/binding-value.js';
-import { missingEvaluatorMessage } from '../../bridges/evaluators.js';
 
 const FLAGS: FlagSpec[] = [
   {

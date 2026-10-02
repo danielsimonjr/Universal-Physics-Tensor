@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 420 |
-| Total Test Files | 584 |
+| Total Test Files | 585 |
 | Source Files with Tests | 410 |
 | Source Files without Tests | 10 |
 | Coverage | 97.6% |
@@ -61,7 +61,7 @@ The following 10 source files are not directly imported by any test file:
 | `benchmark/stats.ts` | `barrel-completeness.test.ts`, `benchmark-model-set.test.ts`, `benchmark-stats.test.ts`, `link-prediction.test.ts`, `criterion3-run.test.ts` |
 | `benchmark/study.ts` | `barrel-completeness.test.ts`, `benchmark-ablation.test.ts`, `benchmark-study.test.ts` |
 | `benchmark/types.ts` | `barrel-completeness.test.ts`, `benchmark-ablation.test.ts`, `benchmark-preregistration.test.ts`, `benchmark-run-atlas.test.ts`, `benchmark.test.ts` |
-| `atlas/catalog-formal-ref.ts` | `catalog-formal-ref.test.ts`, `coverage.test.ts`, `formalref-kind.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `bucket-a-formal-sanity.test.ts`, `catalog-formal-sanity.test.ts`, `catalog-json.test.ts`, `structural-classifier.test.ts`, `atlas-command.test.ts` |
+| `atlas/catalog-formal-ref.ts` | `catalog-formal-ref.test.ts`, `coverage.test.ts`, `formalref-kind.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `bucket-a-formal-sanity.test.ts`, `catalog-formal-sanity.test.ts`, `catalog-json.test.ts`, `structural-classifier.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/chain-pipeline.ts` | `chain-pipeline-catalog.test.ts`, `chain-pipeline.test.ts`, `chain-result.test.ts`, `chain-regime.test.ts` |
 | `atlas/composition-table.ts` | `barrel-completeness.test.ts`, `composition-table.test.ts`, `path-bound.test.ts`, `relations-shim.test.ts`, `transported-norm-demo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/conventions.ts` | `conventions.test.ts`, `relations-shim.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
@@ -300,7 +300,7 @@ The following 10 source files are not directly imported by any test file:
 | `composition/compose-surface.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `composition/compose-symbolic.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `collect-symbols-transcendental.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `symbolic-simplification.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `composition/compose.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `identifiability.test.ts`, `junction-dimension.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `composition/composition-recovery.ts` | `composition-recovery.test.ts` |
+| `composition/composition-recovery.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `composition-recovery.test.ts` |
 | `composition/consequence.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `consequence.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `composition/consistency.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `composition/descriptor.ts` | `descriptor-consistency.test.ts` |
@@ -418,7 +418,7 @@ The following 10 source files are not directly imported by any test file:
 | `src/index.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `numerical/be37-covariant-eikonal.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-deferred-arms.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/bianchi-residual.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `bianchi-residual.test.ts`, `minkowski-curvature.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `numerical/binding-value.ts` | `binding-value.test.ts`, `euler-rejected.test.ts` |
+| `numerical/binding-value.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `binding-value.test.ts`, `euler-rejected.test.ts` |
 | `numerical/christoffel-flat.ts` | `christoffel-flat-indexing.test.ts`, `christoffel-flat.test.ts` |
 | `numerical/connection-lowering-helpers.ts` | `christoffel-precompute.test.ts`, `connection-lowering-helpers.test.ts`, `connection-lowering-nonfinite.test.ts`, `flatten-na-accuracy.test.ts`, `foreach-multi-index.test.ts`, `lowering-strategy-cast.test.ts` |
 | `numerical/curvature-lowering-helpers.ts` | `bianchi-residual.test.ts`, `schwarzschild-riemann.test.ts`, `geometrized-schwarzschild-equivalence.test.ts`, `kretschmann-factored-raising.test.ts`, `kretschmann-horizon.test.ts`, `kretschmann-schwarzschild.test.ts`, `lower-first-index-n4-unroll.test.ts`, `painleve-gullstrand-curvature.test.ts`, `weyl-schwarzschild.test.ts` |
@@ -450,7 +450,7 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/pderiv.ts` | `metric-deriv-supplied.test.ts`, `pderiv-flatten-consolidation.test.ts`, `pderiv-order-default.test.ts`, `pderiv-order.test.ts`, `pderiv.test.ts` |
 | `numerical/perihelion-finder.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `perihelion-precession.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-deferred-arms.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `perihelion-finder-roundtrip.test.ts`, `perihelion-finder.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/quadrature.ts` | `finiteness-guards.test.ts`, `integral-quadrature.test.ts` |
-| `numerical/spacetime-metrics.ts` | `spacetime-metrics.test.ts` |
+| `numerical/spacetime-metrics.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `spacetime-metrics.test.ts` |
 | `numerical/strides.ts` | `strides.test.ts` |
 | `numerical/tensor-engine.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `be-26-ad.test.ts`, `bridge-ast-gradient-byid.test.ts`, `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-gradient.test.ts`, `bridge-ast-reencode-batch.test.ts`, `bridge-ast-reencode.test.ts`, `bridge-gradient.test.ts`, `integral-ad.test.ts`, `covariant-derivative-preview.test.ts`, `dimensionful-power-ad.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `einsum-precompute.test.ts`, `engine-capability.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `float64-autograd.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-deferred-arms.test.ts`, `lowering-strategy-cast.test.ts`, `mathts-autograd.test.ts`, `mathts-engine-typing.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-engine-types.test.ts`, `tensor.test.ts` |
 | `numerical/types.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `connection-lowering-helpers.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-deferred-arms.test.ts`, `lowering-strategy-cast.test.ts`, `lowering-utils.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `pderiv.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-engine-types.test.ts`, `tensor-partial-derivative-lowering.test.ts`, `tensor.test.ts` |
@@ -696,11 +696,12 @@ The following 10 source files are not directly imported by any test file:
 | `cli/applied-physics-audit.test.ts` | 30 files |
 | `cli/args.test.ts` | 2 files |
 | `cli/atlas-command.test.ts` | 48 files |
-| `cli/atlas-evidence.test.ts` | 221 files |
-| `cli/audit-improvements.test.ts` | 221 files |
+| `cli/atlas-evidence.test.ts` | 225 files |
+| `cli/audit-improvements.test.ts` | 225 files |
 | `cli/binding-expressions.test.ts` | 31 files |
 | `cli/canonical-compare-cli.test.ts` | 30 files |
 | `cli/chain-command.test.ts` | 30 files |
+| `cli/cli-api-commands.test.ts` | 0 files |
 | `cli/cli-from-src.test.ts` | 30 files |
 | `cli/cli-reference.test.ts` | 32 files |
 | `cli/closed-stdout.test.ts` | 0 files |
@@ -721,15 +722,15 @@ The following 10 source files are not directly imported by any test file:
 | `cli/explain-not-covered.test.ts` | 30 files |
 | `cli/frontier.test.ts` | 30 files |
 | `cli/gr-dogfood-cli.test.ts` | 31 files |
-| `cli/graphs.test.ts` | 191 files |
+| `cli/graphs.test.ts` | 195 files |
 | `cli/hardening.test.ts` | 0 files |
 | `cli/help-covers-registry.test.ts` | 31 files |
 | `cli/help-flags.test.ts` | 31 files |
 | `cli/inprocess-golden.test.ts` | 30 files |
 | `cli/json-contract.test.ts` | 30 files |
 | `cli/main-dispatch.test.ts` | 33 files |
-| `cli/map-atlas-results.test.ts` | 220 files |
-| `cli/map-atlas-views.test.ts` | 219 files |
+| `cli/map-atlas-results.test.ts` | 224 files |
+| `cli/map-atlas-views.test.ts` | 223 files |
 | `cli/map-filters.test.ts` | 30 files |
 | `cli/new-commands.test.ts` | 30 files |
 | `cli/output.test.ts` | 3 files |
@@ -742,11 +743,11 @@ The following 10 source files are not directly imported by any test file:
 | `cli/probe.test.ts` | 30 files |
 | `cli/proved-counterexample.test.ts` | 32 files |
 | `cli/quantity-name-collision.test.ts` | 30 files |
-| `cli/record-builtin-parser.test.ts` | 219 files |
+| `cli/record-builtin-parser.test.ts` | 223 files |
 | `cli/record-hardening.test.ts` | 31 files |
 | `cli/record-inputs.test.ts` | 30 files |
 | `cli/record-replay.test.ts` | 30 files |
-| `cli/recover-conventions.test.ts` | 220 files |
+| `cli/recover-conventions.test.ts` | 224 files |
 | `cli/regime-at-resolution.test.ts` | 30 files |
 | `cli/regime.test.ts` | 30 files |
 | `cli/retrieve.test.ts` | 32 files |

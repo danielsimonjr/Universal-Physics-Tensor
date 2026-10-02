@@ -31,7 +31,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
-import { catalogFormalRef } from '../../atlas/catalog-formal-ref.js';
+import { catalogFormalRef } from '../../cli-api.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 
 const FLAGS: FlagSpec[] = [

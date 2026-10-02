@@ -19,7 +19,7 @@ import {
   kerrTurningPointOrbit,
   schwarzschildCircularOrbit,
   type MetricId,
-} from '../../numerical/spacetime-metrics.js';
+} from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   JSON_FLAG,

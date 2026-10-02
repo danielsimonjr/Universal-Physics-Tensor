@@ -22,7 +22,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
-import { readBinding } from '../../numerical/binding-value.js';
+import { readBinding } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   {

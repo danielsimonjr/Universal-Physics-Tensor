@@ -15,9 +15,7 @@ import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
-import { UnitError } from '../../dimensional/units.js';
-import { readBinding } from '../../numerical/binding-value.js';
-import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
+import { builtinFormulaDimensionChecker, readBinding, UnitError } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },

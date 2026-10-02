@@ -30,7 +30,7 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
-import { readBinding } from '../../numerical/binding-value.js';
+import { readBinding } from '../../cli-api.js';
 import { explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, type RouteClaim } from './_atlas-route.js';
 
 const FLAGS: FlagSpec[] = [

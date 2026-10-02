@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Move command-module library imports onto the CLI barrel. Design: `docs/planning/refactor-integration-phase.md`, step 7.
+  Done: the finding-5 command modules import `catalogFormalRef`, `scanCompositionRecovery`, the metric integrators, `readBinding`, `bindingInUnit`, `builtinFormulaDimensionChecker`, `missingEvaluatorMessage`, `C_SI`, `G_SI`, and the map types from `src/cli-api.ts`. `withCatalogEvidence` stays a CLI-module import. The barrel does not import a command. The root barrel is unchanged. The layer-order allowlist stays 3 upward edges and 0 cycles. Before the move, the new test failed because those modules still imported the library files.
 - [x] Rename the CLI uncertainty helper so it is not the public uncertainty function. Design: `docs/planning/refactor-integration-phase.md`, step 6.
   Done: the helper in `src/cli/commands/evaluate.ts` is `propagateEvaluatorUncertainty`. Correlations and the curvature ratio stay. It does not call the graph-layer `propagateUncertainty`. The public name stays the graph-layer function. Before the rename, the new test failed with `expected true to be false` because the CLI module still exported `propagateUncertainty`, and with `TypeError: propagateEvaluatorUncertainty is not a function`. Importing the old CLI name then failed typecheck with `has no exported member 'propagateUncertainty'`.
 - [x] Build the proof-target draft as a typed object and render the existing text from it. Design: `docs/planning/refactor-integration-phase.md`, step 4.

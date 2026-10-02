@@ -4,7 +4,7 @@
     "version": "1.0.4",
     "totalFiles": 423,
     "totalModules": 13,
-    "totalExports": 2992
+    "totalExports": 3012
   },
   "entryPoints": [
     {
@@ -11292,7 +11292,7 @@
             ]
           },
           {
-            "file": "../../atlas/catalog-formal-ref.js",
+            "file": "../../cli-api.js",
             "imports": [
               "catalogFormalRef"
             ]
@@ -11897,21 +11897,11 @@
             "typeOnly": true
           },
           {
-            "file": "../../dimensional/units.js",
+            "file": "../../cli-api.js",
             "imports": [
+              "builtinFormulaDimensionChecker",
+              "readBinding",
               "UnitError"
-            ]
-          },
-          {
-            "file": "../../numerical/binding-value.js",
-            "imports": [
-              "readBinding"
-            ]
-          },
-          {
-            "file": "../../numerical/formula-dimension.js",
-            "imports": [
-              "builtinFormulaDimensionChecker"
             ]
           }
         ],
@@ -11972,15 +11962,11 @@
             "imports": [
               "AppliedCase",
               "CaseResult",
-              "EvaluatorParameter"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../../core/constants.js",
-            "imports": [
+              "bindingInUnit",
               "C_SI",
-              "G_SI"
+              "EvaluatorParameter",
+              "G_SI",
+              "missingEvaluatorMessage"
             ]
           },
           {
@@ -11993,18 +11979,6 @@
             "file": "../eval-numbers.js",
             "imports": [
               "HBAR_TRUNCATION_NOTE"
-            ]
-          },
-          {
-            "file": "../../numerical/binding-value.js",
-            "imports": [
-              "bindingInUnit"
-            ]
-          },
-          {
-            "file": "../../bridges/evaluators.js",
-            "imports": [
-              "missingEvaluatorMessage"
             ]
           }
         ],
@@ -12443,25 +12417,15 @@
             ]
           },
           {
-            "file": "../../composition/edge.js",
+            "file": "../../cli-api.js",
             "imports": [
-              "BridgeEdge"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../../composition/graph-viz.js",
-            "imports": [
+              "BridgeEdge",
+              "CanonicalComparison",
+              "EquationAnalysis",
+              "EvidenceTag",
+              "RelationType",
               "VizJunction",
               "VizModel"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../../atlas/types.js",
-            "imports": [
-              "EvidenceTag",
-              "RelationType"
             ],
             "typeOnly": true
           },
@@ -12469,20 +12433,6 @@
             "file": "../graphs.js",
             "imports": [
               "SourceName"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../../composition/user-equation.js",
-            "imports": [
-              "EquationAnalysis"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../../composition/canonical-compare.js",
-            "imports": [
-              "CanonicalComparison"
             ],
             "typeOnly": true
           },
@@ -12558,7 +12508,7 @@
             ]
           },
           {
-            "file": "../../numerical/spacetime-metrics.js",
+            "file": "../../cli-api.js",
             "imports": [
               "curvatureReport",
               "kerrEquatorialCircular",
@@ -12626,7 +12576,7 @@
             ]
           },
           {
-            "file": "../../numerical/binding-value.js",
+            "file": "../../cli-api.js",
             "imports": [
               "readBinding"
             ]
@@ -12862,7 +12812,7 @@
             ]
           },
           {
-            "file": "../../composition/composition-recovery.js",
+            "file": "../../cli-api.js",
             "imports": [
               "scanCompositionRecovery"
             ]
@@ -12917,7 +12867,7 @@
             ]
           },
           {
-            "file": "../../numerical/binding-value.js",
+            "file": "../../cli-api.js",
             "imports": [
               "readBinding"
             ]
@@ -14527,6 +14477,92 @@
               "ModelId"
             ],
             "reExport": true
+          },
+          {
+            "file": "./atlas/catalog-formal-ref.js",
+            "imports": [
+              "catalogFormalRef"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/composition-recovery.js",
+            "imports": [
+              "scanCompositionRecovery"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./numerical/spacetime-metrics.js",
+            "imports": [
+              "curvatureReport",
+              "kerrEquatorialCircular",
+              "kerrGeodesic",
+              "kerrTurningPointOrbit",
+              "schwarzschildCircularOrbit",
+              "type MetricId"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./numerical/binding-value.js",
+            "imports": [
+              "readBinding",
+              "bindingInUnit"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./numerical/formula-dimension.js",
+            "imports": [
+              "builtinFormulaDimensionChecker"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/evaluators.js",
+            "imports": [
+              "missingEvaluatorMessage"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./index.js",
+            "imports": [
+              "C_SI",
+              "G_SI"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/graph-viz.js",
+            "imports": [
+              "VizJunction",
+              "VizModel"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./atlas/types.js",
+            "imports": [
+              "EvidenceTag",
+              "RelationType"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/user-equation.js",
+            "imports": [
+              "EquationAnalysis"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -14664,6 +14700,20 @@
           "routeEntryModels",
           "composeRelation",
           "MissingLipschitzError",
+          "catalogFormalRef",
+          "scanCompositionRecovery",
+          "curvatureReport",
+          "kerrEquatorialCircular",
+          "kerrGeodesic",
+          "kerrTurningPointOrbit",
+          "schwarzschildCircularOrbit",
+          "type MetricId",
+          "readBinding",
+          "bindingInUnit",
+          "builtinFormulaDimensionChecker",
+          "missingEvaluatorMessage",
+          "C_SI",
+          "G_SI",
           "ConfrontationEntry",
           "RigorTier",
           "ConfrontationOutcome",
@@ -14700,7 +14750,13 @@
           "RegimeInequality",
           "Witness",
           "AtlasModel",
-          "ModelId"
+          "ModelId",
+          "BridgeEdge",
+          "VizJunction",
+          "VizModel",
+          "EvidenceTag",
+          "RelationType",
+          "EquationAnalysis"
         ],
         "reExported": [
           "explainQuantity",
@@ -14873,7 +14929,27 @@
           "Witness",
           "MissingLipschitzError",
           "AtlasModel",
-          "ModelId"
+          "ModelId",
+          "catalogFormalRef",
+          "scanCompositionRecovery",
+          "curvatureReport",
+          "kerrEquatorialCircular",
+          "kerrGeodesic",
+          "kerrTurningPointOrbit",
+          "schwarzschildCircularOrbit",
+          "type MetricId",
+          "readBinding",
+          "bindingInUnit",
+          "builtinFormulaDimensionChecker",
+          "missingEvaluatorMessage",
+          "C_SI",
+          "G_SI",
+          "BridgeEdge",
+          "VizJunction",
+          "VizModel",
+          "EvidenceTag",
+          "RelationType",
+          "EquationAnalysis"
         ]
       }
     },
@@ -29396,16 +29472,16 @@
   "statistics": {
     "totalTypeScriptFiles": 423,
     "totalModules": 13,
-    "totalLinesOfCode": 92295,
-    "totalExports": 2992,
+    "totalLinesOfCode": 92370,
+    "totalExports": 3012,
     "totalClasses": 61,
     "totalInterfaces": 481,
     "totalFunctions": 780,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 756,
-    "totalReExports": 1396,
-    "totalTypeOnlyImports": 572,
+    "totalReExports": 1416,
+    "totalTypeOnlyImports": 567,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
