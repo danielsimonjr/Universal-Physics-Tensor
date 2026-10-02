@@ -4,7 +4,7 @@
     "version": "1.0.1",
     "totalFiles": 411,
     "totalModules": 13,
-    "totalExports": 2926
+    "totalExports": 2927
   },
   "entryPoints": [
     {
@@ -15068,6 +15068,13 @@
             ]
           },
           {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge",
@@ -15127,6 +15134,7 @@
           "SOURCE_ALIAS_DISPOSITIONS",
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "interfaces": [
@@ -15137,6 +15145,7 @@
         "functions": [
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "constants": [
@@ -16482,6 +16491,13 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge"
@@ -16506,6 +16522,12 @@
               "ComposeOptions"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./compose-symbolic.js",
+            "imports": [
+              "composeSymbolic"
+            ]
           }
         ],
         "exports": [
@@ -28337,16 +28359,16 @@
   "statistics": {
     "totalTypeScriptFiles": 411,
     "totalModules": 13,
-    "totalLinesOfCode": 89656,
-    "totalExports": 2926,
+    "totalLinesOfCode": 89731,
+    "totalExports": 2927,
     "totalClasses": 60,
     "totalInterfaces": 465,
-    "totalFunctions": 755,
+    "totalFunctions": 756,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 721,
     "totalReExports": 1389,
-    "totalTypeOnlyImports": 547,
+    "totalTypeOnlyImports": 549,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

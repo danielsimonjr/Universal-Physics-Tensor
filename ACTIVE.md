@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Seed-filtered symbolic enumeration in `src/composition/enumerate.ts`. A caller-supplied set of edge ids. The module does not import `atlas/`. A proof target is a pair `composeSymbolic` accepts and carries an expression. A pair that only `composeEdges` accepts is not a proof target and is listed as not substitutable. The default call, with no seed set, keeps the pairs the existing enumeration tests pin. Design: `docs/planning/Bridge-Discovery-Pipeline-Design.md` step 5.
+  Done: `enumerateCompositions` takes `seedIds`. An id outside that set is not walked. A symbolic seed pair is a proof target. A numeric-only seed pair is not substitutable. The default call still finds the registered pairs and leaves both new lists empty.
+- [x] Name the dimension junction check in `src/composition/compose.ts`. The existing `equals` check on the pipe becomes a named function. Behavior is unchanged. `CompositionDimensionError` stays the failure. Design: `docs/planning/Bridge-Discovery-Pipeline-Design.md` step 3.
+  Done: `junctionDimensionsMatch`. A matching pair is true. A mismatched pair is false, and `composeEdges` still throws `CompositionDimensionError`.
 - [x] Seed predicate next to `formalRefKind`: the manifest keys whose derived kind is `bridge`. A covers word of `derivation-step`, `reduction`, `limit`, `property`, or `cross-check` is not a seed. A canonical id is a seed only when that same kind function says the overlay reference is `bridge`. Design: `docs/planning/Bridge-Discovery-Pipeline-Design.md` step 1.
   Done: `bridgeSeedKeys` in `src/atlas/physjs-ref.ts`. The live list is the ten `ab-` keys and the thirteen catalog keys whose theorem states the equation. `src/atlas/public.ts` is unchanged.
 - [x] Add src/relations/category.ts. An object is an id together with a Regime. A morphism is an id pair plus a RelationType. composeMorphisms delegates to composeRelation and returns no-composite-claim unchanged. No identity morphisms and no 2-cells. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 4.
