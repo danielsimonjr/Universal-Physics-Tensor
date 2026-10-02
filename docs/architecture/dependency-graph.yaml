@@ -11097,6 +11097,10 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -11111,6 +11115,9 @@ modules:
           imports:
             - ComposeOptions
           typeOnly: true
+        - file: ./compose-symbolic.js
+          imports:
+            - composeSymbolic
       exports:
         - REGISTERED_COMPOSITION_IDS
         - enumerateCompositions
@@ -19819,7 +19826,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 411
   totalModules: 13
-  totalLinesOfCode: 89681
+  totalLinesOfCode: 89742
   totalExports: 2929
   totalClasses: 60
   totalInterfaces: 464
@@ -19828,7 +19835,7 @@ statistics:
   totalEnums: 0
   totalConstants: 723
   totalReExports: 1389
-  totalTypeOnlyImports: 548
+  totalTypeOnlyImports: 549
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

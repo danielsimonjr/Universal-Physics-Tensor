@@ -17,10 +17,12 @@
  * @module composition/enumerate
  */
 
+import type { ExprNode } from '../dimensional/validator.js';
 import type { BridgeEdge } from './edge.js';
 import { CompositionAliasError } from './edge.js';
 import { composeEdges } from './compose.js';
 import type { ComposeOptions } from './compose.js';
+import { composeSymbolic } from './compose-symbolic.js';
 
 /** One successful pairwise composition found by the enumerator. @public */
 export interface CompositionCandidate {
@@ -47,6 +49,27 @@ export interface DispositionRequired {
   readonly message: string;
 }
 
+/**
+ * A pair `composeSymbolic` accepts. The expression is the substituted
+ * scalar formula. A pair that only `composeEdges` accepts is not one of
+ * these. Inlined on {@link EnumerationReport} so the package barrel gains
+ * no name.
+ */
+interface SymbolicProofTarget {
+  readonly first: BridgeEdge;
+  readonly second: BridgeEdge;
+  readonly expr: ExprNode;
+}
+
+/**
+ * A pair `composeEdges` accepts and `composeSymbolic` refuses. Unclassified:
+ * the gap note owns the reading. Not a proof target.
+ */
+interface NotSubstitutablePair {
+  readonly first: BridgeEdge;
+  readonly second: BridgeEdge;
+}
+
 /** Enumeration report. @public */
 export interface EnumerationReport {
   readonly all: ReadonlyArray<CompositionCandidate>;
@@ -54,6 +77,23 @@ export interface EnumerationReport {
   readonly novel: ReadonlyArray<CompositionCandidate>;
   /** v0.11: name-colliding pairs awaiting an AliasDisposition. */
   readonly requiresDisposition: ReadonlyArray<DispositionRequired>;
+  /**
+   * Pairs `composeSymbolic` accepts, when a seed set was supplied.
+   * Empty on the default call.
+   */
+  readonly proofTargets: ReadonlyArray<{
+    readonly first: BridgeEdge;
+    readonly second: BridgeEdge;
+    readonly expr: ExprNode;
+  }>;
+  /**
+   * Pairs only `composeEdges` accepts, when a seed set was supplied.
+   * Empty on the default call. Unclassified.
+   */
+  readonly notSubstitutable: ReadonlyArray<{
+    readonly first: BridgeEdge;
+    readonly second: BridgeEdge;
+  }>;
 }
 
 /**
@@ -78,15 +118,24 @@ export function enumerateCompositions(
   edges: ReadonlyArray<BridgeEdge>,
   opts: ComposeOptions & {
     readonly registeredIds?: ReadonlySet<string>;
+    /** When set, only these edge ids are walked, and symbolic pairs are split. */
+    readonly seedIds?: ReadonlySet<string>;
   } = {},
 ): EnumerationReport {
   const registeredIds = opts.registeredIds ?? REGISTERED_COMPOSITION_IDS;
   const all: CompositionCandidate[] = [];
   const requiresDisposition: DispositionRequired[] = [];
+  const proofTargets: SymbolicProofTarget[] = [];
+  const notSubstitutable: NotSubstitutablePair[] = [];
+  const seeded = opts.seedIds !== undefined;
+  const inSeed = (edge: BridgeEdge): boolean =>
+    opts.seedIds === undefined || opts.seedIds.has(edge.id);
 
   for (const first of edges) {
+    if (!inSeed(first)) continue;
     for (const second of edges) {
       if (first === second) continue;
+      if (!inSeed(second)) continue;
       let edge: BridgeEdge;
       try {
         edge = composeEdges(first, second, opts);
@@ -109,6 +158,16 @@ export function enumerateCompositions(
         edge,
         novel: !registeredIds.has(edge.id),
       });
+      if (!seeded) continue;
+      try {
+        proofTargets.push({
+          first,
+          second,
+          expr: composeSymbolic(first, second, opts).expr,
+        });
+      } catch {
+        notSubstitutable.push({ first, second });
+      }
     }
   }
 
@@ -117,5 +176,7 @@ export function enumerateCompositions(
     registered: all.filter((c) => !c.novel),
     novel: all.filter((c) => c.novel),
     requiresDisposition,
+    proofTargets,
+    notSubstitutable,
   };
 }
