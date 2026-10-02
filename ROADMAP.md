@@ -363,12 +363,11 @@ reproducible witness, and the statement-fidelity safeguard applied to every form
   version.
 - Symbolic witnesses through `compose-symbolic.ts` / `expr-simplify.ts` and the optional
   `mathts-expression` peer; a timeout or peer absence yields `unresolved`, never a pass.
-- `formalRef?: { system: 'lean4-physlib' | …; statement: string; version: string; axioms:
-  string[]; fidelity: 'two-formalizers' | 'back-translation' | 'sanity-lemmas' | 'unreviewed' }`.
-  At least five bridges carry a `formalRef` with fidelity other than `unreviewed`. The proof
+- `formalRef?: { system: 'lean4-physlib' | 'lean4-physjs' | 'other'; statement: string; version: string; axioms:
+  string[]; fidelity: 'two-formalizers' | 'back-translation' | 'sanity-lemmas' | 'unreviewed'; kind: 'bridge' | 'property' | 'cross-check' | 'reduction' | 'limit' | 'derivation-step'; url: string; covers: string }`.
+  The live references are `lean4-physjs`. At least five bridges carry a `formalRef` with fidelity other than `unreviewed`. `formally-proved` is derived only when `kind` is `bridge` and the fidelity is other than `unreviewed`. A property and a cross-check derive their own labels. A reduction, a limit, and a derivation-step derive none of those. The proof
   itself lives out of tree; UPT does not run a proof assistant.
-- CI demotes a bridge whose witness fails: `formally-proved` and `symbolically-checked` tags
-  are recomputed from witness results, never hand-set.
+- CI demotes a bridge whose witness fails: `symbolically-checked` is recomputed from witness results. `formally-proved` is recomputed from `kind` and `fidelity`, never from a witness and never hand-set.
 - Families beyond oscillators: elementary diffusion and elementary waves (the proposal's
   first release scope), using the existing `fluids-waves.ts` entries as the L-layer.
 
@@ -495,7 +494,7 @@ record of the run that happened. The remaining engineering item is the public-AP
 | 1 — Relation contracts overlay | overlay shipped; "zero fabricated assumptions" MET (Mothership's ruling, after a mechanical quote check) | Every quoted span in the 15 `// source:` comments matches its source exactly (`bun run atlas:quote-check`: 43 MATCH, 44 negative controls held). Disclosed by name: BE-11 checked on search-snippet access, not full text; C6 (Josephson 1962, paywalled) unverifiable; two equation numbers not confirmed by machine, von Klitzing eq. 4 (publisher bot wall) and Shapiro's printed label (1) (not machine-readable), both deferred by the owner on 2026-09-24 (they were for the owner to check in a browser). [`docs/research/phase-1-citation-check.md`](docs/research/phase-1-citation-check.md) |
 | 2 — Regimes and error-carrying paths | shipped | Uniformity gate on `boundPath` (reason `uniformity-unanalysed`). The table was not widened. [`NOTES.md`](NOTES.md) |
 | 3 — Hyperedges, models, poster index | shipped | `8 → 12` is one approximation (`d-8-to-12`) and its direction is unresolved. [`NOTES.md`](NOTES.md) |
-| 4 — Verification workflow, checked bridges | closed | 20 bridges / 6 types. Atlas reviewed `formalRef` is 10, which meets the ≥5 gate. Catalog counted `formalRef`s are 9. Catalog cross-check `formalRef`s are 3 and catalog property `formalRef`s are 3; the owner admitted both kinds on 2026-10-01, and neither lights `formally-proved`. Per-bridge curation cost is not an exit criterion (owner, 2026-10-01). [`NOTES.md`](NOTES.md) |
+| 4 — Verification workflow, checked bridges | closed | 20 bridges / 6 types. Atlas reviewed `formalRef` is 10, kind `bridge`, which meets the ≥5 gate. Catalog kind `bridge` is 13. Catalog references that stay a reduction, a limit, or a derivation-step are 16 and do not light `formally-proved`. Catalog cross-check `formalRef`s are 3. Catalog property `formalRef`s are 4, counting `be-28`, whose covers line begins with `derivation-step`. Only kind `bridge` lights `formally-proved`, and only when the reference is passed to `deriveEvidence`. The catalog path does not pass it. Per-bridge curation cost is not an exit criterion (owner, 2026-10-01). The pin and the ids are [`NOTES.md`](NOTES.md). |
 | 5 — Invalid-bridge benchmark | closed; harness kept | The human study was dropped by the owner on 2026-10-01. Human κ and independent item authors are not exit criteria. The harness is unchanged. [`ACTIVE.md`](ACTIVE.md) |
 | 6 — Study and scoped release | closed except the public-API move | S6.1/S6.2 scoring was dropped by the owner on 2026-10-01. The harness stays. The run that already happened is in [`NOTES.md`](NOTES.md) and [`docs/research/atlas-study-results.md`](docs/research/atlas-study-results.md). S6.7 is an open task in [`ACTIVE.md`](ACTIVE.md). |
 
@@ -515,7 +514,7 @@ record of the run that happened. The remaining engineering item is the public-AP
 
 **Cross-family `upt path`** (persona finding C3). Design: [`docs/design/tier-10-cross-family-path.md`](docs/design/tier-10-cross-family-path.md). ~~A route is searched inside one family.~~ The cross-family rule is that design note. What landed is in `CHANGELOG.md` and `NOTES.md`.
 
-**Lean-proved bridges.** Design: [`docs/design/roadmap-lean-proven-bridges.md`](docs/design/roadmap-lean-proven-bridges.md). Which statements are in reach is [`docs/research/phase-4-formalref-scoping.md`](docs/research/phase-4-formalref-scoping.md). Owner, 2026-10-01: a cross-check and a property may be a catalog `formalRef`. The covers word is the kind. The three counts are the phase 4 cell. Nested statements stay nested.
+**Lean-proved bridges.** Design: [`docs/design/roadmap-lean-proven-bridges.md`](docs/design/roadmap-lean-proven-bridges.md). Which statements are in reach is [`docs/research/phase-4-formalref-scoping.md`](docs/research/phase-4-formalref-scoping.md). Owner, 2026-10-01: a cross-check and a property may be a catalog `formalRef`. The covers word is the kind, except where the theorem states the catalogued equation (kind `bridge`) and except `be-28` (kind `property`). The counts are the phase 4 cell. Nested statements stay nested. What is still missing is [`docs/planning/Bridge-Gap-Inference.md`](docs/planning/Bridge-Gap-Inference.md).
 
 Subagent-driven execution plan for all seven phases:
 [`docs/planning/Atlas-Roadmap-Implementation-Plan.md`](docs/planning/Atlas-Roadmap-Implementation-Plan.md).

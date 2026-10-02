@@ -43,14 +43,17 @@ The manifest keeps the fields it already has.
 ` — `, which is how `physjsFormalRef` already builds the string. The gate
 requires both pieces. This note adds no field.
 
-`deriveEvidence` reads a reference for `fidelity` only. A fidelity other
-than `unreviewed` lights `formally-proved` on that record, and the
-predicate does not consult `covers`. `deriveEvidenceForVerdict` is the
-same predicate for a catalog row. A catalog id is not passed to either
-predicate. Storing a `formalRef` on `BridgeEquationEntry` or on
-`CanonicalEquation` does not light a tag. The field, when it is added, is
-the existing `FormalRef`, optional. The covers word says which kind
-occupies it.
+`deriveEvidence` lights `formally-proved` only when `kind` is `bridge` and
+`fidelity` is other than `unreviewed`. A property lights
+`formally-proved-property`. A cross-check lights
+`formally-proved-cross-check`. A reduction, a limit, and a derivation-step
+light none of the three. `deriveEvidenceForVerdict` is the same predicate
+for a catalog row. A catalog id is not passed to either predicate. Storing
+a `formalRef` on `BridgeEquationEntry` or on `CanonicalEquation` does not
+light a tag. The catalog reference lives in the atlas overlay
+`catalogFormalRef`, not as a second copy on the row. The covers word says
+which kind occupies the reference, except for the two cases in the Kinds
+section.
 
 ## Keying
 
@@ -124,13 +127,16 @@ the catalog case of that schedule's conflict 2.
 ## Kinds
 
 Three kinds. They are not one count. Each may occupy the one catalog
-`formalRef`. The first word of `covers` is the kind, except where the
-theorem states the catalogued equation. In that case the kind is
-`bridge` and the covers line stays the text PhysJS wrote. A theorem that
-proves a weaker or partial statement keeps the covers word. Passing a
-`bridge` reference to `deriveEvidence` lights `formally-proved`. The
-catalog path does not pass the reference, so none of these kinds lights
-that tag on the catalog path.
+`formalRef`. The first word of `covers` is the kind, with two exceptions.
+Where the theorem states the catalogued equation, the kind is `bridge`
+and the covers line stays the text PhysJS wrote, including a line that
+still begins with `derivation-step`. Where the id is `be-28`, the kind is
+`property` even though the covers line begins with `derivation-step`: the
+theorem is non-negativity of the defining sum, not the variational
+principle. A theorem that proves a weaker or partial statement keeps the
+covers word. Passing a `bridge` reference to `deriveEvidence` lights
+`formally-proved`. The catalog path does not pass the reference, so none
+of these kinds lights that tag on the catalog path.
 
 **Counted reduction, limit, or derivation-step.** The `covers` word is
 `reduction`, `limit`, or `derivation-step`. One id is one reference. The
@@ -182,10 +188,11 @@ a milestone 2b target.
 
 ### BE-38 rename
 
-Specified here. This note does not apply it. `formula_latex` is
+The catalog name and the Part II heading are `Milgrom MOND interpolation ν(z)`.
+The sentences below are the rename as specified. `formula_latex` is
 `F = F_N · ν(z)` with `ν(z) = √((1 + √(1 + 4/z²)) / 2)` and
-`z = F_N / (m a_0)`. The module encodes that force. The `name`, and the
-spec heading, are `Entropic Gravity Correction Term`. `context` is
+`z = F_N / (m a_0)`. The module encodes that force. When this note was written, the `name` and the
+spec heading were `Entropic Gravity Correction Term`. `context` is
 `Verlinde's emergent gravity with dark matter effects`. The formula is
 Milgrom's `ν`, not an entropic correction. Proposed name: `Milgrom MOND
 interpolation ν(z)`. Verlinde stays in `references` and in the framing
@@ -221,7 +228,7 @@ A history file keeps the name it recorded.
 
 ### BE-38 deep-MOND limit, a prerequisite
 
-The Lean row in milestone 2b waits on a prose fix. The encoded
+`PhysJS.Mond.tendsto_nu_limits` is the catalog reference, kind `limit`. It states `ν √z → 1`, not `ν → √(2/z)`. The prose correction named in `ACTIVE.md` has landed. The arithmetic below is why the old comment is not the theorem. The encoded
 formula and the evaluator are the function below. The comment is not.
 
 ```
@@ -252,8 +259,8 @@ known-issue text and the notes of id 38 in `src/bridges/index.ts`, and in
 sentence, and the historical-form paragraph. With `m = 1` the dropped
 factor is invisible. The theorem uses `√(m · F_N · a_0)`.
 
-The implementing change corrects those sentences before the Lean proof is
-attached. It does not change the formula, the evaluator, or the encoding
+The prose fix named above corrected those sentences before the Lean proof was
+attached. The limit reference is now attached. The fix does not change the formula, the evaluator, or the encoding
 test. History files that quote the old sentence stay, including
 `CHANGELOG.md`, `docs/planning/Bridge-Remediation-Plan.md`, and
 `docs/architecture/archive/bridge-audit/`. The prose fix does not clear
