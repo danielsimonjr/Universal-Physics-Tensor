@@ -26,6 +26,7 @@ import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { substitute } from './expr-subst.js';
 import { evalExpr, SymbolicEvalError } from './expr-eval.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { scalarSymbolsFromMathTs } from './mathts-scalar-symbols.js';
 
 /**
  * A composed quantity carrying its SYMBOLIC form and an executable
@@ -94,47 +95,11 @@ function findJunctionName(
   );
 }
 
-/** Collect the distinct leaf-symbol names of a scalar ExprNode. */
-function collectSymbols(expr: ExprNode, out: Set<string>): void {
-  switch (expr.kind) {
-    case 'symbol':
-      out.add(expr.name);
-      return;
-    case 'op':
-      for (const a of expr.args) collectSymbols(a, out);
-      return;
-    case 'integral':
-      collectSymbols(expr.over, out);
-      collectSymbols(expr.integrand, out);
-      return;
-    case 'derivative':
-      collectSymbols(expr.of, out);
-      collectSymbols(expr.wrt, out);
-      return;
-    case 'transcendental':
-    case 'abs':
-    case 'dirac-delta':
-      // Scalar arms carrying a single inner expression — their leaves are real
-      // inputs (e.g. BE-37 ln(R_far/R_near), BE-26 exp(−WKB), BE-41 |φ−φ₀|).
-      collectSymbols(expr.arg, out);
-      return;
-    case 'variational-derivative':
-      collectSymbols(expr.functional, out);
-      collectSymbols(expr.field, out);
-      collectSymbols(expr.over, out);
-      return;
-    default:
-      // Tensor arms cannot reach here (substitute would have thrown first).
-      return;
-  }
-}
-
 /** Free leaves = symbols that are neither registered constants nor numeric
- *  literals (those are not inputs). */
+ *  literals (those are not inputs). The names are the MathTS symbol filter. */
 function freeLeaves(expr: ExprNode): string[] {
-  const all = new Set<string>();
-  collectSymbols(expr, all);
-  return [...all]
+  return scalarSymbolsFromMathTs(expr)
+    .map((leaf) => leaf.name)
     .filter((n) => !(n in CONSTANTS) && !Number.isFinite(Number(n)))
     .sort();
 }

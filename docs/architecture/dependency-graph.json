@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.4",
-    "totalFiles": 424,
+    "totalFiles": 425,
     "totalModules": 13,
-    "totalExports": 3012
+    "totalExports": 3015
   },
   "entryPoints": [
     {
@@ -630,9 +630,16 @@
             "imports": [
               "emitProofTarget"
             ]
+          },
+          {
+            "file": "../composition/mathts-scalar-symbols.js",
+            "imports": [
+              "scalarSymbolsFromMathTs"
+            ]
           }
         ],
         "exports": [
+          "governingOf",
           "categoryCompositionForChain",
           "renderChainRecord",
           "runChainPipeline"
@@ -643,6 +650,7 @@
           "ChainStubRecord"
         ],
         "functions": [
+          "governingOf",
           "categoryCompositionForChain",
           "renderChainRecord",
           "runChainPipeline"
@@ -15815,6 +15823,12 @@
             "imports": [
               "CONSTANTS"
             ]
+          },
+          {
+            "file": "./mathts-scalar-symbols.js",
+            "imports": [
+              "scalarSymbolsFromMathTs"
+            ]
           }
         ],
         "exports": [
@@ -17684,6 +17698,12 @@
             "imports": [
               "makeObservable"
             ]
+          },
+          {
+            "file": "./mathts-scalar-symbols.js",
+            "imports": [
+              "renderScalarLeaf"
+            ]
           }
         ],
         "exports": [
@@ -18513,6 +18533,51 @@
           "equationLanding",
           "analyzeUserEquation",
           "UserEquationError"
+        ]
+      },
+      "src/composition/mathts-scalar-symbols.ts": {
+        "description": "Scalar leaves of an `ExprNode`, read from a MathTS AST.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "module",
+            "imports": [
+              "createRequire"
+            ]
+          },
+          {
+            "module": "url",
+            "imports": [
+              "fileURLToPath"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "renderScalarLeaf",
+          "scalarSymbolsFromMathTs"
+        ],
+        "interfaces": [
+          "ScalarSymbol"
+        ],
+        "functions": [
+          "renderScalarLeaf",
+          "scalarSymbolsFromMathTs"
         ]
       },
       "src/composition/not-composable-seeds.ts": {
@@ -29281,6 +29346,7 @@
           "src/composition/grounding.ts",
           "src/composition/identifiability.ts",
           "src/composition/index.ts",
+          "src/composition/mathts-scalar-symbols.ts",
           "src/composition/not-composable-seeds.ts",
           "src/composition/probe/backend-protocol.ts",
           "src/composition/probe/candidate-store.ts",
@@ -29454,18 +29520,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 424,
+    "totalTypeScriptFiles": 425,
     "totalModules": 13,
-    "totalLinesOfCode": 92407,
-    "totalExports": 3012,
+    "totalLinesOfCode": 92539,
+    "totalExports": 3015,
     "totalClasses": 61,
-    "totalInterfaces": 481,
-    "totalFunctions": 780,
+    "totalInterfaces": 482,
+    "totalFunctions": 783,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 756,
     "totalReExports": 1416,
-    "totalTypeOnlyImports": 571,
+    "totalTypeOnlyImports": 573,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

@@ -33,6 +33,7 @@ import {
 import { joinRegimeMismatch, type ChainRegimeMismatch } from '../composition/chain-regime.js';
 import { bridgeSeedKeys, physjsTheorem } from './physjs-ref.js';
 import { emitProofTarget } from './proof-target.js';
+import { scalarSymbolsFromMathTs } from '../composition/mathts-scalar-symbols.js';
 
 /** A chain whose normal form matches a catalog equation. Nothing was written. @internal */
 export interface ChainConfirmationRecord {
@@ -74,41 +75,20 @@ function isDimensionlessConstant(name: string): boolean {
   return registered !== undefined && equals(registered.dim, DIMENSIONLESS);
 }
 
-function collectSymbols(expr: ExprNode, out: Map<string, Dimension>): void {
-  switch (expr.kind) {
-    case 'symbol':
-      out.set(expr.name, expr.dim);
-      return;
-    case 'op':
-      for (const arg of expr.args) collectSymbols(arg, out);
-      return;
-    case 'integral':
-      collectSymbols(expr.over, out);
-      collectSymbols(expr.integrand, out);
-      return;
-    case 'derivative':
-      collectSymbols(expr.of, out);
-      collectSymbols(expr.wrt, out);
-      return;
-    case 'transcendental':
-    case 'abs':
-    case 'dirac-delta':
-      collectSymbols(expr.arg, out);
-      return;
-    default:
-      return;
-  }
-}
-
-/** Dimensioned leaves of the composed formula, excluding the target name. */
-function governingOf(expr: ExprNode, targetName: string): { name: string; dim: Dimension }[] {
-  const dims = new Map<string, Dimension>();
-  collectSymbols(expr, dims);
+/**
+ * Dimensioned leaves of the composed formula, excluding the target name.
+ * The names are the MathTS symbol filter. A dimensionless constant is not
+ * a governing symbol. The elementary charge is, because its dimension is
+ * charge.
+ *
+ * @internal
+ */
+export function governingOf(expr: ExprNode, targetName: string): { name: string; dim: Dimension }[] {
   const vars: { name: string; dim: Dimension }[] = [];
-  for (const [name, dim] of dims) {
-    if (name === targetName) continue;
-    if (isNumericName(name) || isDimensionlessConstant(name)) continue;
-    vars.push({ name, dim });
+  for (const leaf of scalarSymbolsFromMathTs(expr)) {
+    if (leaf.name === targetName) continue;
+    if (isNumericName(leaf.name) || isDimensionlessConstant(leaf.name)) continue;
+    vars.push(leaf);
   }
   vars.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
   return vars;

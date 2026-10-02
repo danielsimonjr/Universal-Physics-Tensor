@@ -36,6 +36,7 @@ import { evalExpr } from './expr-eval.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { Observable } from './compose-symbolic.js';
 import { makeObservable } from './compose-symbolic.js';
+import { renderScalarLeaf } from './mathts-scalar-symbols.js';
 
 /** A simplification completed but produced a dimensionally/numerically wrong
  *  result (a real bug — not a graceful no-op). @internal */
@@ -163,16 +164,8 @@ function renderGensym(
   meta: Map<string, LeafMeta>,
 ): string {
   switch (expr.kind) {
-    case 'symbol': {
-      if (isLiteral(expr.name)) return String(Number(expr.name));
-      let g = gensymOf.get(expr.name);
-      if (g === undefined) {
-        g = `g${gensymOf.size}`;
-        gensymOf.set(expr.name, g);
-        meta.set(g, { name: expr.name, dim: expr.dim });
-      }
-      return g;
-    }
+    case 'symbol':
+      return renderScalarLeaf(expr, gensymOf, meta);
     case 'op': {
       if (expr.op === '^') {
         const exp = expr.args[1];
