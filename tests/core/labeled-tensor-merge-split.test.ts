@@ -16,9 +16,9 @@ import {
 } from '../../src/core/labeled-tensor.js';
 import { Axes } from '../../src/core/axes-registry.js';
 import { makeIndex } from '../../src/core/universal-index.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 const merged = (name: string) => makeIndex('scale', name);
 
 // A 2×2×2 tensor with identifiable row-major data 0..7.

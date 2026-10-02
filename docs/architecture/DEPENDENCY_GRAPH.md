@@ -49,7 +49,7 @@ The codebase is organized into the following modules:
 - **diff**: 3 files
 - **dimensional**: 36 files
 - **entry**: 1 file
-- **numerical**: 42 files
+- **numerical**: 38 files
 - **relations**: 6 files
 
 ---
@@ -4432,7 +4432,7 @@ The codebase is organized into the following modules:
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
-| `../numerical/formula.js` | `CompiledFormula` | Import (type-only) |
+| `../numerical/formula-contract.js` | `CompiledFormula` | Import (type-only) |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
 
@@ -5661,7 +5661,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
 | `../../dimensional/algebra.js` | `equals, format` | Import |
 | `../../dimensional/units.js` | `convertValue, parseUnit, UnitError` | Import |
-| `../../numerical/formula.js` | `parseFormula` | Import |
+| `../../numerical/formula-mathts.js` | `parseFormula` | Import |
 | `../../numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 | `../expr-eval.js` | `evalExpr` | Import |
 | `./types.js` | `SearchBudget, SearchStopReason` | Import (type-only) |
@@ -6860,7 +6860,7 @@ The codebase is organized into the following modules:
 | `./dimensional/curvature-invariants.js` | `KretschmannScalarNode, KretschmannScalarValidationResult` | Re-export |
 | `./dimensional/curvature-invariants.js` | `validateKretschmannScalar` | Re-export |
 | `./numerical/kretschmann.js` | `computeKretschmann` | Re-export |
-| `./numerical/index.js` | `evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, Float64ReferenceEngine, getActiveEngine, setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport, evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion` | Re-export |
+| `./numerical/index.js` | `evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport, evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion` | Re-export |
 | `./numerical/index.js` | `NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options, PerihelionResult, FindPerihelionOptions` | Re-export |
 | `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge, be21Edge, be48Edge, be53Edge, be54Edge` | Re-export |
 | `./composition/index.js` | `BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
@@ -7014,13 +7014,12 @@ The codebase is organized into the following modules:
   evaluateEinsteinEquationResidual, EinsteinEquationResidualInput, MetricClosure, Vec4,
   validateEinsteinFieldEquation, EinsteinFieldEquationNode, EinsteinFieldEquationValidationResult,
   KretschmannScalarNode, KretschmannScalarValidationResult, validateKretschmannScalar,
-  computeKretschmann, evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse,
-  Float64ReferenceEngine, getActiveEngine, setActiveEngine, NumericalBackendError,
-  DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
-  evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion, NumericalResult,
-  NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec,
-  NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options,
-  PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
+  computeKretschmann, evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine,
+  setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError,
+  hasAutogradSupport, evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion,
+  NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor,
+  EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot,
+  GL4Options, PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
   minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError,
   CompositionJunctionError, DomainViolationError, be11ZurekEdge, be12Edge, be16Edge, be37Edge,
   be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge,
@@ -7135,7 +7134,8 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
 | `../dimensional/units.js` | `convertValue, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
-| `./formula.js` | `callBuiltinFunction, FormulaError, parseFormulaToAst, FormulaAstNode` | Import |
+| `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
+| `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
 **Exports:**
 - Interfaces: `BindingValue`
@@ -7239,7 +7239,7 @@ The codebase is organized into the following modules:
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./types.js` | `NumericalInputs, NestedArray` | Import (type-only) |
 | `./lowering.js` | `lowerNode` | Import |
-| `./float64-engine.js` | `Float64ReferenceEngine` | Import |
+| `./mathts-engine.js` | `MathTSEngine` | Import |
 | `../dimensional/metric.js` | `metric` | Import |
 | `../dimensional/tensor.js` | `tsym` | Import |
 | `../dimensional/types.js` | `LENGTH, DIMENSIONLESS` | Import |
@@ -7252,13 +7252,13 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/numerical/engine-registry.ts` - Engine registry — selects the active TensorEngine. v0.4.0: when both
+### `src/numerical/engine-registry.ts` - Engine registry — the active TensorEngine is `MathTSEngine`.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./tensor-engine.js` | `TensorEngine` | Import (type-only) |
-| `./float64-engine.js` | `Float64ReferenceEngine` | Import |
+| `./mathts-engine.js` | `MathTSEngine` | Import |
 
 **Exports:**
 - Functions: `getActiveEngine`, `setActiveEngine`, `resetEngineForTesting`
@@ -7277,22 +7277,22 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/numerical/float64-engine.ts` - Float64ReferenceEngine — the pure-TypeScript, Float64Array-backed
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./tensor-engine.js` | `EngineTensor, TensorEngine, EinsumSpec, ForwardGradResult, ReverseGradResult` | Import (type-only) |
-| `./types.js` | `NestedArray` | Import (type-only) |
-| `./errors.js` | `NumericalBackendError` | Import |
-| `./strides.js` | `rowMajorStrides, flatIndex, sameShape` | Import |
+### `src/numerical/formula-contract.ts` - Scalar-formula contract shared by the MathTS parser.
 
 **Exports:**
-- Classes: `Float64ReferenceEngine`
+- Classes: `FormulaError`
+- Interfaces: `CompiledFormula`, `FormulaParser`
+- Functions: `unknownFunctionMessage`, `callBuiltinFunction`
+- Constants: `EULER_NUMBER_ERROR`, `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`
 
 ---
 
 ### `src/numerical/formula-dimension.ts` - Formula dimensional check (MathTS Phase 2 — see
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `parse` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -7303,60 +7303,49 @@ The codebase is organized into the following modules:
 | `../dimensional/validator.js` | `ExprNode, TranscendentalFn` | Import (type-only) |
 | `../dimensional/validator.js` | `validate` | Import |
 | `../dimensional/ast-builders.js` | `sym` | Import |
-| `./formula.js` | `FormulaAstNode` | Import (type-only) |
-| `./formula.js` | `EULER_NUMBER_ERROR, parseFormulaToAst` | Import |
+| `./formula-contract.js` | `EULER_NUMBER_ERROR, FormulaError` | Import |
 
 **Exports:**
 - Classes: `FormulaDimensionError`
 - Interfaces: `ParsedPhysics`, `FormulaDimensionChecker`
-- Functions: `formulaSymbolDimension`, `builtinFormulaDimensionChecker`, `loadFormulaDimensionChecker`
+- Functions: `formulaSymbolDimension`, `parseFormulaPNode`, `builtinFormulaDimensionChecker`
 - Constants: `ELEMENTARY_CHARGE_MIX_MESSAGE`
 
 ---
 
-### `src/numerical/formula-mathts.ts` - MathTS-backed scalar-formula parser (Path A — see
+### `src/numerical/formula-mathts.ts` - MathTS-backed scalar-formula parser.
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `parse` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./formula.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
-| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage` | Import |
+| `./formula-contract.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
+| `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage` | Import |
 | `../core/constants.js` | `E_SI` | Import |
 
 **Exports:**
-- Functions: `loadMathtsFormulaParser`
+- Functions: `parseFormula`
+- Constants: `mathtsFormulaParser`
 
 ---
 
-### `src/numerical/formula-registry.ts` - Formula-parser registry (Path A selector — mirrors `engine-registry.ts`).
+### `src/numerical/formula-registry.ts` - Formula-parser registry.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./formula.js` | `FormulaParser` | Import (type-only) |
-| `./formula.js` | `defaultFormulaParser` | Import |
-| `./formula-mathts.js` | `loadMathtsFormulaParser` | Import |
+| `./formula-contract.js` | `FormulaParser` | Import (type-only) |
+| `./formula-mathts.js` | `mathtsFormulaParser` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `./formula-dimension.js` | `FormulaDimensionChecker, ParsedPhysics` | Import (type-only) |
-| `./formula-dimension.js` | `loadFormulaDimensionChecker, builtinFormulaDimensionChecker` | Import |
+| `./formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 
 **Exports:**
 - Functions: `getFormulaParser`, `getFormulaParserKind`, `getFormulaDimensionChecker`, `parsePhysics`
-
----
-
-### `src/numerical/formula.ts` - Self-contained scalar-formula parser/evaluator (Path B).
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../core/constants.js` | `E_SI` | Import |
-
-**Exports:**
-- Classes: `FormulaError`
-- Interfaces: `CompiledFormula`, `FormulaParser`
-- Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `parseFormula`
-- Constants: `EULER_NUMBER_ERROR`, `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
 
 ---
 
@@ -7432,7 +7421,6 @@ The codebase is organized into the following modules:
 | `./tensor-engine.js` | `hasAutogradSupport, EngineCapabilityError` | Re-export |
 | `./types.js` | `NumericalInputs, NestedArray` | Re-export |
 | `./grid-field.js` | `GridField` | Re-export |
-| `./float64-engine.js` | `Float64ReferenceEngine` | Re-export |
 | `./engine-registry.js` | `getActiveEngine, setActiveEngine` | Re-export |
 | `./errors.js` | `NumericalBackendError` | Re-export |
 | `../dimensional/errors.js` | `DuplicateCoordinateWarning` | Re-export |
@@ -7450,11 +7438,10 @@ The codebase is organized into the following modules:
 
   ```text
   TensorEngine, EngineTensor, EinsumSpec, ForwardGradResult, ReverseGradResult, hasAutogradSupport,
-  EngineCapabilityError, NumericalInputs, NestedArray, GridField, Float64ReferenceEngine,
-  getActiveEngine, setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning,
-  evaluateBE37CovariantEikonalNumerical, BE37CovariantEikonalInputs, BE37CovariantEikonalResult,
-  integrateGeodesicGL4, GL4State, GL4Snapshot, GL4Options, findPerihelion, PerihelionResult,
-  FindPerihelionOptions
+  EngineCapabilityError, NumericalInputs, NestedArray, GridField, getActiveEngine, setActiveEngine,
+  NumericalBackendError, DuplicateCoordinateWarning, evaluateBE37CovariantEikonalNumerical,
+  BE37CovariantEikonalInputs, BE37CovariantEikonalResult, integrateGeodesicGL4, GL4State, GL4Snapshot,
+  GL4Options, findPerihelion, PerihelionResult, FindPerihelionOptions
   ```
 
 
@@ -7523,7 +7510,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../tests/fixtures/schwarzschild.js` | `` | Import |
 | `../src/numerical/curvature-lowering-helpers.js` | `riemannLowerAt` | Import |
-| `../src/numerical/float64-engine.js` | `Float64ReferenceEngine` | Import |
+| `../src/numerical/mathts-engine.js` | `MathTSEngine` | Import |
 
 **Exports:**
 - Functions: `computeKretschmann`
@@ -7578,10 +7565,6 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/numerical/mathts-autograd.ambient.d.ts` - Ambient module declaration for the optional peer dependency
-
----
-
 ### `src/numerical/mathts-engine.ts` - MathTSEngine — a TensorEngine implementation backed by
 
 **External Dependencies:**
@@ -7599,18 +7582,6 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `MathTSEngine`
-
----
-
-### `src/numerical/mathts-functions.ambient.d.ts` - Ambient declaration for the OPTIONAL peer @danielsimonjr/mathts-functions
-
----
-
-### `src/numerical/mathts-tensor.ambient.d.ts` - Ambient module declaration for the optional peer dependency
-
-**Exports:**
-- Interfaces: `Tensor`
-- Constants: `Tensor`
 
 ---
 
@@ -7736,7 +7707,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/numerical/tensor-engine.ts` - The TensorEngine contract — the compute interface both v0.3.5 engines
+### `src/numerical/tensor-engine.ts` - The TensorEngine contract. `MathTSEngine` implements it. See docs/planning/
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -7981,7 +7952,7 @@ graph TD
         N55[binding-value]
         N56[christoffel-flat]
         N57[connection-lowering-helpers]
-        N58[...37 more]
+        N58[...33 more]
     end
 
     subgraph Relations
@@ -8031,17 +8002,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 425 |
+| Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 92539 |
-| Total Exports | 3015 |
-| Total Re-exports | 1416 |
-| Total Classes | 61 |
-| Total Interfaces | 482 |
-| Total Functions | 783 |
+| Total Lines of Code | 91275 |
+| Total Exports | 3009 |
+| Total Re-exports | 1414 |
+| Total Classes | 60 |
+| Total Interfaces | 481 |
+| Total Functions | 782 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 573 |
+| Type-only Imports | 570 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

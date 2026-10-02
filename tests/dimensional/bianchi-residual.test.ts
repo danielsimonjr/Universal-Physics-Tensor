@@ -48,7 +48,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { bianchiResidual } from '../../src/numerical/bianchi-residual.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { RiemannTensorNode } from '../../src/dimensional/validator.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { metric } from '../../src/dimensional/metric.js';
@@ -158,7 +158,7 @@ function bianchiScaleAt(
   gFn: (xs: ReadonlyArray<number>) => number[][],
   gInverseFn: (xs: ReadonlyArray<number>) => number[][],
   N: number,
-  engine: Float64ReferenceEngine,
+  engine: MathTSEngine,
 ): number {
   const Rlow = riemannLowerAt(x, gFn, gInverseFn, N, engine);
   let maxR = 0;
@@ -229,7 +229,7 @@ describe('bianchiResidual() helper', () => {
     const gInverseFn = geometrizedSchwarzschildGInverseFn(r_s);
     // Silence the unused-imports lint — keep these around for reference.
     void schwarzschildGFn; void schwarzschildGInverseFn; void schwarzschildRs;
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
 
     const inputs = {
       tensors: new Map<string, number[] | number[][]>([
@@ -267,7 +267,7 @@ describe('bianchiResidual() helper', () => {
     const gFn = geometrizedDeSitterGFn(Lambda);
     const gInverseFn = geometrizedDeSitterGInverseFn(Lambda);
     void deSitterGFn; void deSitterGInverseFn;
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
 
     const inputs = {
       tensors: new Map<string, number[] | number[][]>([
@@ -316,7 +316,7 @@ describe('bianchiResidual() helper', () => {
     const Lambda = 1.0;
     const x = [0, 1.0, Math.PI / 2, 0];
     const N = 4;
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
     const gFn = geometrizedDeSitterGFn(Lambda);
     const gInverseFn = geometrizedDeSitterGInverseFn(Lambda);
 

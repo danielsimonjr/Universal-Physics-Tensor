@@ -29,7 +29,7 @@ import {
   dGammaAt,
   buildRiemann,
 } from '../../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import {
   painleveGullstrandGFn,
   painleveGullstrandGInverseFn,
@@ -42,7 +42,7 @@ const r_s = (2 * G_SI * M_SUN) / (C_SI * C_SI);
 const gFn = painleveGullstrandGFn(M_SUN);
 const gInvFn = painleveGullstrandGInverseFn(M_SUN);
 const N = 4;
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 /** Closed-form Schwarzschild Kretschmann K(r) = 48 G² M² / (c⁴ r⁶).
  *  Coordinate-INDEPENDENT (scalar invariant); PG must reproduce it. */

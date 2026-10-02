@@ -30,11 +30,11 @@ import {
 import { schwarzschildRs } from '../tests/fixtures/schwarzschild.js';
 import { riemannLowerAt } from '../src/numerical/curvature-lowering-helpers.js';
 import { computeKretschmann } from '../src/numerical/kretschmann.js';
-import { Float64ReferenceEngine } from '../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../src/numerical/mathts-engine.js';
 
 const M_KG = 1.989e30;
 const r_s = schwarzschildRs(M_KG);
-const ENGINE = new Float64ReferenceEngine();
+const ENGINE = new MathTSEngine();
 const N = 4;
 
 const PG_G = painleveGullstrandGFn(M_KG);

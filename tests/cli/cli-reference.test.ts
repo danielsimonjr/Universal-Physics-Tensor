@@ -87,7 +87,7 @@ describe('dispatcher flag contract', () => {
   it('upt eval --help prints the flag spec and does not evaluate', async () => {
     const help = await capture(['eval', '--help']);
     expect(help.code).toBe(0);
-    expect(help.out).toContain('Print mathts or builtin');
+    expect(help.out).toContain('Print mathts.');
     expect(help.out).not.toMatch(/^2\n/);
   });
 

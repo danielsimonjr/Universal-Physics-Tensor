@@ -8,10 +8,10 @@ import {
   DEFERRED_EVALUATOR_REGISTRY,
   lowerNode,
 } from '../../src/numerical/lowering.js';
-import { Float64ReferenceEngine } from '../../src/numerical/index.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 const inputs = { tensors: new Map(), dimension: 4 } as const;
 
 const DEFERRED_KINDS = [

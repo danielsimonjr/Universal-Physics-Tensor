@@ -649,8 +649,7 @@ major and do not each open a new major. Steps 9, 10, and 11 merged on 1.x
 before that break.
 
 Daniel approved this amendment on 2026-10-02. The table is the record of
-which steps have a merge commit. A row marked next waits for the MathTS
-release and is not started.
+which steps have a merge commit. A row marked next is not started.
 
 | Step | Work | State | Pull request | Merge |
 |---|---|---|---|---|
@@ -658,7 +657,7 @@ release and is not started.
 | 2 | One internal chain record | done | #305 | `5629cc826af6a6cb53fc5d66e908e27e43aa485f` |
 | 3 | Category composition checks that the morphisms meet | done | #306 | `b2862a34abf4336e24821eaa485de30aad6d8bf0` |
 | 4 | Typed proof draft | done | #307 | `c8d7d54d41736c16a28ab9ea38c8a883828c01ff` |
-| 5 | The scalar walk is MathTS's | next | — | — |
+| 5 | The scalar walk is MathTS's | done | #311 | `85f806329371aeaa2caaa4b1ec9e22c1724607e9` |
 | 6 | MathTS required; delete Path B and `Float64ReferenceEngine` | next, and this row is 2.0.0 | — | — |
 | 7 | Unit conversion and quadrature call MathTS | next | — | — |
 | 8 | ODE calls MathTS where the method exists | next | — | — |
@@ -955,8 +954,8 @@ this repository.
 Step 6 is a 2.0.0. The package gains required dependencies and loses the
 zero-dependency parser and the zero-dependency tensor engine. Steps 1
 through 4, and steps 9 through 11, merged on 1.x. The step table names the
-commits. Step 5 is next: the scalar walk is MathTS's. Steps 6, 7, 8, and
-12 are next and wait for the MathTS release. Steps 7, 8, and 12 ship on
+commits. Step 5 merged: the scalar walk is MathTS's. Steps 6, 7, 8, and
+12 are next. Steps 7, 8, and 12 ship on
 the 2.0.0 line and do not each bump the major again.
 
 The migration note that ships with step 6 states:

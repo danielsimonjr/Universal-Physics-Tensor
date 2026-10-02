@@ -11,7 +11,7 @@
  *   - AxisMismatchError, IdentityConflictError, RankPreservationError
  *   - Triple-contraction rejection (Eve red-team carry-forward)
  *
- * Engine-agnostic conformance: runs against Float64ReferenceEngine.
+ * Engine-agnostic conformance: runs against MathTSEngine.
  * MathTSEngine is gated on the optional dep and tested separately
  * (skipped here if @danielsimonjr/mathts-tensor is unavailable).
  *
@@ -30,9 +30,9 @@ import {
 } from '../../src/core/labeled-tensor.js';
 import { Axes } from '../../src/core/axes-registry.js';
 import { makeIndex } from '../../src/core/universal-index.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 // ---------------------------------------------------------------------------
 // Construction
@@ -311,7 +311,7 @@ describe('LabeledTensor.contract — Phase 3 error surface', () => {
   });
 
   it('throws on engine mismatch', () => {
-    const other = new Float64ReferenceEngine();
+    const other = new MathTSEngine();
     const a = new LabeledTensor(
       engine.fromNested([1, 2], [2]),
       engine,

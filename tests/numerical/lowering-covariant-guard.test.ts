@@ -12,14 +12,14 @@
  */
 import { describe, it, expect } from 'vitest';
 import { NumericalBackendError } from '../../src/numerical/errors.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import { lowerNode } from '../../src/numerical/lowering.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 import type { NumericalInputs } from '../../src/numerical/types.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 
 describe('lowering: CovariantDerivativeNode.of runtime guard (TS-2)', () => {
-  const engine = new Float64ReferenceEngine();
+  const engine = new MathTSEngine();
   const inputs: NumericalInputs = {
     tensors: new Map(),
     dimension: 4,

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { EinsumSpec } from '../../src/numerical/tensor-engine.js';
 
-describe('Float64ReferenceEngine.einsum: precompute regression', () => {
-  const engine = new Float64ReferenceEngine();
+describe('MathTSEngine.einsum: precompute regression', () => {
+  const engine = new MathTSEngine();
 
   it('matrix multiply [2,3] x [3,2] via einsum', () => {
     // A[i,k] * B[k,j] → C[i,j]

@@ -1,5 +1,5 @@
 /**
- * Parameterized TensorEngine conformance suite. Both Float64ReferenceEngine
+ * Parameterized TensorEngine conformance suite. Both MathTSEngine
  * and MathTSEngine must pass this identical suite — it is the contract that
  * makes the two-repo parallel development safe (v0.3.5-Design.md §9).
  *

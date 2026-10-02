@@ -1,12 +1,11 @@
 /**
  * MathTSEngine — a TensorEngine implementation backed by
- * @danielsimonjr/mathts-tensor's rank-N Tensor. Became UPT's default in
- * v0.4.0 when both optional peers (@danielsimonjr/mathts-tensor and
- * @danielsimonjr/mathts-autograd) are installed; see engine-registry.ts.
+ * @danielsimonjr/mathts-tensor's rank-N Tensor. It is the only engine.
+ * The MathTS packages are required dependencies; see engine-registry.ts.
  *
  * Thin adapter: it translates the TensorEngine contract onto the MathTS
- * Tensor's methods. Both engines pass the identical engine-conformance
- * suite, which is what guarantees behavioural parity across the two repos.
+ * Tensor's methods. The engine-conformance suite is what checks that
+ * translation.
  *
  * @module numerical/mathts-engine
  */
@@ -30,11 +29,9 @@ function unwrap(t: EngineTensor, op: string): Tensor {
 }
 
 /**
- * Minimal structural interface for the @danielsimonjr/mathts-autograd
- * optional dependency. This is NOT a full import — mathts-autograd is
- * optional and not present during tsc (the `@ts-ignore` below remains
- * necessary for the dynamic import line; this interface covers the
- * call-site types only).
+ * Call-site shape for `@danielsimonjr/mathts-autograd`. The package is a
+ * required dependency and is loaded at the call, so this interface covers
+ * the dynamic-import result only.
  * @internal
  */
 interface MathTSAutograd {
@@ -51,18 +48,18 @@ interface MathTSAutograd {
 
 /**
  * `TensorEngine` backed by `@danielsimonjr/mathts-tensor`'s rank-N Tensor.
- * Became UPT's default in v0.4.0 when both optional peers are installed.
+ * The MathTS packages are required dependencies.
  *
  * @public — reachable only via the
- * `universal-physics-tensor/numerical/mathts-engine` exports subpath; requires
- * the `@danielsimonjr/mathts-tensor` optional dependency. Intentionally NOT
- * re-exported from the root barrel.
+ * `universal-physics-tensor/numerical/mathts-engine` exports subpath.
+ * Intentionally NOT re-exported from the root barrel.
  */
 export class MathTSEngine implements TensorEngine {
   readonly name = 'MathTSEngine';
 
   fromNested(data: NestedArray, shape: ReadonlyArray<number>): EngineTensor {
-    return new MathTSEngineTensor(Tensor.fromNested(data, shape));
+    // UPT's NestedArray and MathTS's are the same shape; the type parameters differ.
+    return new MathTSEngineTensor(Tensor.fromNested(data as never, shape));
   }
   toNested(t: EngineTensor): NestedArray {
     return unwrap(t, 'toNested').toNested();
@@ -83,9 +80,8 @@ export class MathTSEngine implements TensorEngine {
   }
 
   add(a: EngineTensor, b: EngineTensor): EngineTensor {
-    // AD dispatch: DualTensor (forward-mode) — duck-typed since mathts-autograd
-    // is an optional peer; cannot `import { DualTensor }` at module load (peer
-    // may be absent). Mirrors Float64ReferenceEngine.add's instanceof dispatch.
+    // AD dispatch: DualTensor (forward-mode), duck-typed so this method can
+    // accept the wrapped tensor autograd passes in.
     if ('tangent' in a && 'tangent' in b) {
       return (a as unknown as { add(o: unknown): EngineTensor }).add(b);
     }
@@ -147,8 +143,8 @@ export class MathTSEngine implements TensorEngine {
 
   /**
    * Forward-mode automatic differentiation via a lazy-imported
-   * `@danielsimonjr/mathts-autograd`. Throws `EngineCapabilityError` if the
-   * optional dependency is absent.
+   * `@danielsimonjr/mathts-autograd`. Throws `EngineCapabilityError` if that
+   * import fails.
    *
    * S1 fix: `fn` is passed UNCHANGED to `autograd.forwardGrad`. The autograd
    * package wraps `x` as a DualTensor internally; MathTSEngine's arithmetic
@@ -163,18 +159,15 @@ export class MathTSEngine implements TensorEngine {
   ): Promise<ForwardGradResult> {
     let autograd: MathTSAutograd;
     try {
-      // v0.5.1 TS-4: prior `@ts-ignore` replaced by the ambient module
-      // declaration at numerical/mathts-autograd.ambient.d.ts; cast through
-      // `unknown` to the local MathTSAutograd shape (the ambient declares
-      // the module as having no exports — narrowing happens here).
+      // Narrow the dynamic import to the local call-site shape.
       autograd = await import('@danielsimonjr/mathts-autograd') as unknown as MathTSAutograd;
     } catch { throw new EngineCapabilityError('MathTSEngine', 'forwardGrad'); }
 
     // S1 fix: pass fn UNCHANGED. autograd.forwardGrad wraps x as a DualTensor;
     // MathTSEngine's arithmetic methods (mul/add/sub/scale) MUST dispatch
-    // DualTensor inputs to mathts-autograd's dual arithmetic (same dispatch
-    // story Float64ReferenceEngine has, via `'tangent' in arg`). Wrapping fn
-    // at the boundary strips the instrumentation — the v0 sketch's bug.
+    // DualTensor inputs to mathts-autograd's dual arithmetic via
+    // `'tangent' in arg`. Wrapping fn at the boundary strips the
+    // instrumentation — the v0 sketch's bug.
     const xMathts = this.toMathTSTensor(x);
     const { value, jacobian } = await autograd.forwardGrad(fn, xMathts);
     return {
@@ -189,8 +182,8 @@ export class MathTSEngine implements TensorEngine {
 
   /**
    * Reverse-mode automatic differentiation via a lazy-imported
-   * `@danielsimonjr/mathts-autograd`. Throws `EngineCapabilityError` if the
-   * optional dependency is absent.
+   * `@danielsimonjr/mathts-autograd`. Throws `EngineCapabilityError` if that
+   * import fails.
    *
    * S1 fix: `fn` is passed UNCHANGED (see forwardGrad note above). The
    * autograd package wraps `x` as a TapedTensor; MathTSEngine's op methods
@@ -204,10 +197,7 @@ export class MathTSEngine implements TensorEngine {
   ): Promise<ReverseGradResult> {
     let autograd: MathTSAutograd;
     try {
-      // v0.5.1 TS-4: prior `@ts-ignore` replaced by the ambient module
-      // declaration at numerical/mathts-autograd.ambient.d.ts; cast through
-      // `unknown` to the local MathTSAutograd shape (the ambient declares
-      // the module as having no exports — narrowing happens here).
+      // Narrow the dynamic import to the local call-site shape.
       autograd = await import('@danielsimonjr/mathts-autograd') as unknown as MathTSAutograd;
     } catch { throw new EngineCapabilityError('MathTSEngine', 'reverseGrad'); }
 

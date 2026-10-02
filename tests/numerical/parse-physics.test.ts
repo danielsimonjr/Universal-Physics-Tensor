@@ -11,27 +11,18 @@
 import { describe, it, expect } from 'vitest';
 import {
   builtinFormulaDimensionChecker,
-  loadFormulaDimensionChecker,
   FormulaDimensionError,
 } from '../../src/numerical/formula-dimension.js';
 import { parsePhysics } from '../../src/numerical/formula-registry.js';
 import { CHARGE, ENERGY as ENERGY_NAMED, LENGTH, TIME, DIMENSIONLESS } from '../../src/dimensional/types.js';
 import { equals, format, multiply } from '../../src/dimensional/algebra.js';
 import { E_SI } from '../../src/core/constants.js';
-import { defaultFormulaParser } from '../../src/numerical/formula.js';
+import { mathtsFormulaParser as defaultFormulaParser } from '../../src/numerical/formula-mathts.js';
 
 const ENERGY = { L: 2, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 const b = builtinFormulaDimensionChecker();
 
-// Is the optional MathTS peer available? (the second front-end)
-let mathtsChecker: Awaited<ReturnType<typeof loadFormulaDimensionChecker>> | null = null;
-try {
-  mathtsChecker = await loadFormulaDimensionChecker();
-} catch {
-  mathtsChecker = null;
-}
-
-describe('builtin checker .parse — ExprNode + dimension', () => {
+describe('MathTS checker .parse — ExprNode + dimension', () => {
   it('returns the op node and its dimension for a product', () => {
     const { expr, dimension } = b.parse('a*b', { a: LENGTH, b: TIME });
     expect(expr.kind).toBe('op');
@@ -104,7 +95,7 @@ describe('SI names — elementary charge, energy, Euler', () => {
   });
 });
 
-describe('parsePhysics — registry front-end (MathTS or built-in)', () => {
+describe('parsePhysics — MathTS front-end', () => {
   it('parses to expr + dimension', async () => {
     const { expr, dimension } = await parsePhysics('a*b', { a: LENGTH, b: TIME });
     expect(expr).toBeDefined();
@@ -116,15 +107,4 @@ describe('parsePhysics — registry front-end (MathTS or built-in)', () => {
     expect(expr.kind).toBe('transcendental');
     await expect(parsePhysics('exp(x)', { x: ENERGY })).rejects.toThrow(FormulaDimensionError);
   });
-});
-
-describe.skipIf(!mathtsChecker)('front-ends converge on identical ExprNode (one transpiler)', () => {
-  const DIMS = { a: LENGTH, b: TIME, x: DIMENSIONLESS };
-  for (const expr of ['a*b', 'a/b^2', 'sqrt(a)', 'exp(x)', '2*a + 3*a', 'abs(a)', 'a*b/(a+a)']) {
-    it(`'${expr}' transpiles identically via both front-ends`, () => {
-      const builtin = b.parse(expr, DIMS).expr;
-      const mathts = mathtsChecker!.parse(expr, DIMS).expr;
-      expect(mathts).toEqual(builtin);
-    });
-  }
 });

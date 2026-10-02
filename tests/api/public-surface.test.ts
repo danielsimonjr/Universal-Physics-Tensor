@@ -38,7 +38,7 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'inferDimensionForBridge',
   // v0.3.5 numerical surface
   'evaluateNumerical', 'evaluateNumericalRaw', 'evaluateMetricInverse',
-  'Float64ReferenceEngine', 'getActiveEngine', 'setActiveEngine',
+  'getActiveEngine', 'setActiveEngine',
   'NumericalBackendError',
   // v0.4.0 bridge implementations
   'evaluateGravitationalLensing',

@@ -16,8 +16,8 @@
  * @module tests/numerical/formula-conformance
  */
 import { describe, it, expect } from 'vitest';
-import type { FormulaParser } from '../../src/numerical/formula.js';
-import { FUNCTION_EQUIVALENTS } from '../../src/numerical/formula.js';
+import type { FormulaParser } from '../../src/numerical/formula-contract.js';
+import { FUNCTION_EQUIVALENTS } from '../../src/numerical/formula-contract.js';
 import { E_SI } from '../../src/core/constants.js';
 
 /** (expr, scope) → expected scalar value — both parsers must agree. */

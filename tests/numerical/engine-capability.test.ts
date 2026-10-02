@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { EngineTensor, TensorEngine, EinsumSpec } from '../../src/numerical/tensor-engine.js';
 import { hasAutogradSupport, EngineCapabilityError } from '../../src/numerical/tensor-engine.js';
 
@@ -26,14 +26,14 @@ describe('TensorEngine AD capability detection', () => {
     expect(hasAutogradSupport(engine)).toBe(false);
   });
 
-  it('hasAutogradSupport returns true on Float64ReferenceEngine (Task 9)', () => {
-    const engine = new Float64ReferenceEngine();
+  it('hasAutogradSupport returns true on MathTSEngine (Task 9)', () => {
+    const engine = new MathTSEngine();
     expect(hasAutogradSupport(engine)).toBe(true);
   });
 
   it('EngineCapabilityError carries engine name + missing-method name', () => {
-    const err = new EngineCapabilityError('Float64ReferenceEngine', 'forwardGrad');
-    expect(err.message).toMatch(/Float64ReferenceEngine/);
+    const err = new EngineCapabilityError('MathTSEngine', 'forwardGrad');
+    expect(err.message).toMatch(/MathTSEngine/);
     expect(err.message).toMatch(/forwardGrad/);
     expect(err.name).toBe('EngineCapabilityError');
     expect(err instanceof EngineCapabilityError).toBe(true);

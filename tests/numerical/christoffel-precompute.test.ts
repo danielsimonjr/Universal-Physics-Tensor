@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { computeChristoffelTensor } from '../../src/numerical/connection-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 
 describe('computeChristoffelTensor: precompute regression', () => {
   it('flat metric (g_μν = η_μν) produces zero Christoffel symbols', () => {
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
     const N = 4;
     // Minkowski metric: diag(1, -1, -1, -1), inverse: diag(1, -1, -1, -1)
     const eta = [1, 0, 0, 0,  0, -1, 0, 0,  0, 0, -1, 0,  0, 0, 0, -1];
@@ -25,7 +25,7 @@ describe('computeChristoffelTensor: precompute regression', () => {
   });
 
   it('Christoffel is symmetric in lower indices: Γ^α_{μν} = Γ^α_{νμ}', () => {
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
     const N = 2;
     // 2D toy metric: g = [[1+x, 0], [0, 1]] with constant ∂_0 g = [[1, 0], [0, 0]]
     const gInvFlat = [1, 0, 0, 1]; // simplified inverse (not exact but fine for symmetry test)

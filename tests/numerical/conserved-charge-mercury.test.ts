@@ -94,7 +94,7 @@ describe('Conserved-charge Mercury 10-orbit drift (Phase 1 Task 1.7)', () => {
     // --- Integration window: 2 orbits (CI-practical) ---
     const T_orbit = 2 * Math.PI * Math.sqrt((a_m * a_m * a_m) / (G * M_SUN));
     // E-4 measure-then-lock pattern: Windows Picard cost on
-    // Float64ReferenceEngine is ~28 ms/step, so 50k steps timed out at
+    // MathTSEngine is ~28 ms/step, so 50k steps timed out at
     // 10 min. Reduced to 2 orbits / 2000 steps total (~1k/orbit) for CI;
     // full 10-orbit test available via env override.
     const orbits  = parseInt(process.env.GL4_LONG_ORBITS ?? '2', 10);

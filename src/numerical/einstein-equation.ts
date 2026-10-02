@@ -25,7 +25,7 @@
 import type { ExprNode } from '../dimensional/validator.js';
 import type { NumericalInputs, NestedArray } from './types.js';
 import { lowerNode } from './lowering.js';
-import { Float64ReferenceEngine } from './float64-engine.js';
+import { MathTSEngine } from './mathts-engine.js';
 import { metric } from '../dimensional/metric.js';
 import { tsym } from '../dimensional/tensor.js';
 import { LENGTH, DIMENSIONLESS } from '../dimensional/types.js';
@@ -68,8 +68,8 @@ export interface EinsteinEquationResidualInput {
   x: Vec4;
 }
 
-/** Shared engine instance (stateless Float64ReferenceEngine, safe to reuse). */
-const _engine = new Float64ReferenceEngine();
+/** Shared engine instance (stateless MathTSEngine, safe to reuse). */
+const _engine = new MathTSEngine();
 
 /**
  * Build the EinsteinTensorNode AST that the lowering layer understands.

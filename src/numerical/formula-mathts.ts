@@ -1,25 +1,24 @@
 /**
- * MathTS-backed scalar-formula parser (Path A — see
- * docs/planning/MathTS-Formula-Integration-Design-Note.md).
+ * MathTS-backed scalar-formula parser.
  *
- * Implements the same {@link FormulaParser} contract as the self-contained
- * Path B parser (`formula.ts`), backed by `@danielsimonjr/mathts-functions`'s
- * assembled mathjs-style engine (`parse(expr) → Node`, `node.evaluate(scope)`).
- * The optional peer is loaded dynamically (it is NOT present at tsc time —
- * the ambient declaration in `mathts-functions.ambient.d.ts` covers it), so
- * the package still builds and runs without it; the registry
- * (`formula-registry.ts`) falls back to Path B when it is absent.
+ * Backed by `@danielsimonjr/mathts-functions` (`parse(expr) → Node`,
+ * `node.evaluate(scope)`). The package is a required dependency.
  *
  * SCALAR-ONLY guard: the CLI/inference contract returns a `number`. If a
  * formula evaluates to a non-number (matrix, complex, unit, function), this
  * throws a {@link FormulaError} rather than leaking MathTS types through the
- * seam — keeping the two parsers interchangeable.
+ * seam.
+ *
+ * Bare `e` is the elementary charge. MathTS evaluates that symbol as Euler's
+ * number; the scope injected here replaces it with `E_SI`. Euler's number is
+ * `exp(x)`. The name `euler` is refused. `E` stays unbound.
  *
  * @module numerical/formula-mathts
  */
 
-import type { CompiledFormula, FormulaParser } from './formula.js';
-import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage } from './formula.js';
+import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
+import type { CompiledFormula, FormulaParser } from './formula-contract.js';
+import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage } from './formula-contract.js';
 import { E_SI } from '../core/constants.js';
 
 /**
@@ -180,17 +179,14 @@ function describeNonFinite(result: unknown): string {
   return typeof result;
 }
 
-/**
- * Dynamically load the optional peer and build the MathTS-backed parser.
- * Throws if the peer is absent or fails to assemble — the registry catches
- * this and falls back to the self-contained Path B parser.
- */
-export async function loadMathtsFormulaParser(): Promise<FormulaParser> {
-  const mod = (await import(
-    '@danielsimonjr/mathts-functions'
-  )) as unknown as MathtsFunctionsModule;
-  if (typeof mod.parse !== 'function') {
-    throw new FormulaError('mathts-functions: no parse() export');
-  }
-  return createMathtsFormulaParser(mod);
+const mathTsModule: MathtsFunctionsModule = {
+  parse: (expr) => parseMathTs(expr) as unknown as MathNode,
+};
+
+/** The MathTS formula parser. @internal */
+export const mathtsFormulaParser: FormulaParser = createMathtsFormulaParser(mathTsModule);
+
+/** Parse a scalar formula. @internal */
+export function parseFormula(expr: string): CompiledFormula {
+  return mathtsFormulaParser.parse(expr);
 }

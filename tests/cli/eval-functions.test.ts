@@ -6,7 +6,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
-import { BUILTIN_FUNCTION_LIST } from '../../dist/numerical/formula.js';
+import { BUILTIN_FUNCTION_LIST } from '../../dist/numerical/formula-contract.js';
 
 async function run(argv: string[]) {
   const o = { stdout: '', stderr: '' };

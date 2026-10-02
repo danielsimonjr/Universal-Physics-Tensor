@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.4",
-    "totalFiles": 425,
+    "totalFiles": 421,
     "totalModules": 13,
-    "totalExports": 3015
+    "totalExports": 3009
   },
   "entryPoints": [
     {
@@ -15340,7 +15340,7 @@
             ]
           },
           {
-            "file": "../numerical/formula.js",
+            "file": "../numerical/formula-contract.js",
             "imports": [
               "CompiledFormula"
             ],
@@ -20411,7 +20411,7 @@
             ]
           },
           {
-            "file": "../../numerical/formula.js",
+            "file": "../../numerical/formula-mathts.js",
             "imports": [
               "parseFormula"
             ]
@@ -24763,7 +24763,6 @@
               "evaluateNumerical",
               "evaluateNumericalRaw",
               "evaluateMetricInverse",
-              "Float64ReferenceEngine",
               "getActiveEngine",
               "setActiveEngine",
               "NumericalBackendError",
@@ -25828,7 +25827,6 @@
           "evaluateNumerical",
           "evaluateNumericalRaw",
           "evaluateMetricInverse",
-          "Float64ReferenceEngine",
           "getActiveEngine",
           "setActiveEngine",
           "NumericalBackendError",
@@ -26452,7 +26450,6 @@
           "evaluateNumerical",
           "evaluateNumericalRaw",
           "evaluateMetricInverse",
-          "Float64ReferenceEngine",
           "getActiveEngine",
           "setActiveEngine",
           "NumericalBackendError",
@@ -26908,12 +26905,18 @@
             ]
           },
           {
-            "file": "./formula.js",
+            "file": "./formula-contract.js",
             "imports": [
               "callBuiltinFunction",
-              "FormulaError",
-              "parseFormulaToAst",
-              "FormulaAstNode"
+              "EULER_NUMBER_ERROR",
+              "FormulaError"
+            ]
+          },
+          {
+            "file": "./formula-dimension.js",
+            "imports": [
+              "parseFormulaPNode",
+              "FormulaPNode"
             ]
           }
         ],
@@ -27253,9 +27256,9 @@
             ]
           },
           {
-            "file": "./float64-engine.js",
+            "file": "./mathts-engine.js",
             "imports": [
-              "Float64ReferenceEngine"
+              "MathTSEngine"
             ]
           },
           {
@@ -27300,7 +27303,7 @@
         ]
       },
       "src/numerical/engine-registry.ts": {
-        "description": "Engine registry — selects the active TensorEngine. v0.4.0: when both",
+        "description": "Engine registry — the active TensorEngine is `MathTSEngine`.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -27312,9 +27315,9 @@
             "typeOnly": true
           },
           {
-            "file": "./float64-engine.js",
+            "file": "./mathts-engine.js",
             "imports": [
-              "Float64ReferenceEngine"
+              "MathTSEngine"
             ]
           }
         ],
@@ -27352,54 +27355,48 @@
           "GL4ConvergenceError"
         ]
       },
-      "src/numerical/float64-engine.ts": {
-        "description": "Float64ReferenceEngine — the pure-TypeScript, Float64Array-backed",
+      "src/numerical/formula-contract.ts": {
+        "description": "Scalar-formula contract shared by the MathTS parser.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "./tensor-engine.js",
-            "imports": [
-              "EngineTensor",
-              "TensorEngine",
-              "EinsumSpec",
-              "ForwardGradResult",
-              "ReverseGradResult"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "./types.js",
-            "imports": [
-              "NestedArray"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "./errors.js",
-            "imports": [
-              "NumericalBackendError"
-            ]
-          },
-          {
-            "file": "./strides.js",
-            "imports": [
-              "rowMajorStrides",
-              "flatIndex",
-              "sameShape"
-            ]
-          }
-        ],
+        "internalDependencies": [],
         "exports": [
-          "Float64ReferenceEngine"
+          "EULER_NUMBER_ERROR",
+          "BUILTIN_FUNCTION_NAMES",
+          "FUNCTION_EQUIVALENTS",
+          "BUILTIN_FUNCTION_LIST",
+          "unknownFunctionMessage",
+          "callBuiltinFunction",
+          "FormulaError"
         ],
         "classes": [
-          "Float64ReferenceEngine"
+          "FormulaError"
+        ],
+        "interfaces": [
+          "CompiledFormula",
+          "FormulaParser"
+        ],
+        "functions": [
+          "unknownFunctionMessage",
+          "callBuiltinFunction"
+        ],
+        "constants": [
+          "EULER_NUMBER_ERROR",
+          "BUILTIN_FUNCTION_NAMES",
+          "FUNCTION_EQUIVALENTS",
+          "BUILTIN_FUNCTION_LIST"
         ]
       },
       "src/numerical/formula-dimension.ts": {
         "description": "Formula dimensional check (MathTS Phase 2 — see",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "parse"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -27446,25 +27443,18 @@
             ]
           },
           {
-            "file": "./formula.js",
-            "imports": [
-              "FormulaAstNode"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "./formula.js",
+            "file": "./formula-contract.js",
             "imports": [
               "EULER_NUMBER_ERROR",
-              "parseFormulaToAst"
+              "FormulaError"
             ]
           }
         ],
         "exports": [
           "ELEMENTARY_CHARGE_MIX_MESSAGE",
           "formulaSymbolDimension",
+          "parseFormulaPNode",
           "builtinFormulaDimensionChecker",
-          "loadFormulaDimensionChecker",
           "FormulaDimensionError"
         ],
         "classes": [
@@ -27476,20 +27466,27 @@
         ],
         "functions": [
           "formulaSymbolDimension",
-          "builtinFormulaDimensionChecker",
-          "loadFormulaDimensionChecker"
+          "parseFormulaPNode",
+          "builtinFormulaDimensionChecker"
         ],
         "constants": [
           "ELEMENTARY_CHARGE_MIX_MESSAGE"
         ]
       },
       "src/numerical/formula-mathts.ts": {
-        "description": "MathTS-backed scalar-formula parser (Path A — see",
-        "externalDependencies": [],
+        "description": "MathTS-backed scalar-formula parser.",
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "parse"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./formula.js",
+            "file": "./formula-contract.js",
             "imports": [
               "CompiledFormula",
               "FormulaParser"
@@ -27497,7 +27494,7 @@
             "typeOnly": true
           },
           {
-            "file": "./formula.js",
+            "file": "./formula-contract.js",
             "imports": [
               "BUILTIN_FUNCTION_NAMES",
               "callBuiltinFunction",
@@ -27514,34 +27511,32 @@
           }
         ],
         "exports": [
-          "loadMathtsFormulaParser"
+          "mathtsFormulaParser",
+          "parseFormula"
         ],
         "functions": [
-          "loadMathtsFormulaParser"
+          "parseFormula"
+        ],
+        "constants": [
+          "mathtsFormulaParser"
         ]
       },
       "src/numerical/formula-registry.ts": {
-        "description": "Formula-parser registry (Path A selector — mirrors `engine-registry.ts`).",
+        "description": "Formula-parser registry.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./formula.js",
+            "file": "./formula-contract.js",
             "imports": [
               "FormulaParser"
             ],
             "typeOnly": true
           },
           {
-            "file": "./formula.js",
-            "imports": [
-              "defaultFormulaParser"
-            ]
-          },
-          {
             "file": "./formula-mathts.js",
             "imports": [
-              "loadMathtsFormulaParser"
+              "mathtsFormulaParser"
             ]
           },
           {
@@ -27562,7 +27557,6 @@
           {
             "file": "./formula-dimension.js",
             "imports": [
-              "loadFormulaDimensionChecker",
               "builtinFormulaDimensionChecker"
             ]
           }
@@ -27578,51 +27572,6 @@
           "getFormulaParserKind",
           "getFormulaDimensionChecker",
           "parsePhysics"
-        ]
-      },
-      "src/numerical/formula.ts": {
-        "description": "Self-contained scalar-formula parser/evaluator (Path B).",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "E_SI"
-            ]
-          }
-        ],
-        "exports": [
-          "EULER_NUMBER_ERROR",
-          "BUILTIN_FUNCTION_NAMES",
-          "FUNCTION_EQUIVALENTS",
-          "BUILTIN_FUNCTION_LIST",
-          "defaultFormulaParser",
-          "parseFormulaToAst",
-          "unknownFunctionMessage",
-          "callBuiltinFunction",
-          "parseFormula",
-          "FormulaError"
-        ],
-        "classes": [
-          "FormulaError"
-        ],
-        "interfaces": [
-          "CompiledFormula",
-          "FormulaParser"
-        ],
-        "functions": [
-          "unknownFunctionMessage",
-          "callBuiltinFunction",
-          "parseFormula"
-        ],
-        "constants": [
-          "EULER_NUMBER_ERROR",
-          "BUILTIN_FUNCTION_NAMES",
-          "FUNCTION_EQUIVALENTS",
-          "BUILTIN_FUNCTION_LIST",
-          "defaultFormulaParser",
-          "parseFormulaToAst"
         ]
       },
       "src/numerical/geodesic-integrator.ts": {
@@ -27846,13 +27795,6 @@
             "reExport": true
           },
           {
-            "file": "./float64-engine.js",
-            "imports": [
-              "Float64ReferenceEngine"
-            ],
-            "reExport": true
-          },
-          {
             "file": "./engine-registry.js",
             "imports": [
               "getActiveEngine",
@@ -27924,7 +27866,6 @@
         "exports": [
           "hasAutogradSupport",
           "EngineCapabilityError",
-          "Float64ReferenceEngine",
           "getActiveEngine",
           "setActiveEngine",
           "NumericalBackendError",
@@ -27962,7 +27903,6 @@
           "NumericalInputs",
           "NestedArray",
           "GridField",
-          "Float64ReferenceEngine",
           "getActiveEngine",
           "setActiveEngine",
           "NumericalBackendError",
@@ -28136,9 +28076,9 @@
             ]
           },
           {
-            "file": "../src/numerical/float64-engine.js",
+            "file": "../src/numerical/mathts-engine.js",
             "imports": [
-              "Float64ReferenceEngine"
+              "MathTSEngine"
             ]
           }
         ],
@@ -28382,13 +28322,6 @@
           "DEFERRED_EVALUATOR_REGISTRY"
         ]
       },
-      "src/numerical/mathts-autograd.ambient.d.ts": {
-        "description": "Ambient module declaration for the optional peer dependency",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": []
-      },
       "src/numerical/mathts-engine.ts": {
         "description": "MathTSEngine — a TensorEngine implementation backed by",
         "externalDependencies": [
@@ -28437,28 +28370,6 @@
         ],
         "classes": [
           "MathTSEngine"
-        ]
-      },
-      "src/numerical/mathts-functions.ambient.d.ts": {
-        "description": "Ambient declaration for the OPTIONAL peer @danielsimonjr/mathts-functions",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": []
-      },
-      "src/numerical/mathts-tensor.ambient.d.ts": {
-        "description": "Ambient module declaration for the optional peer dependency",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [],
-        "exports": [
-          "Tensor"
-        ],
-        "interfaces": [
-          "Tensor"
-        ],
-        "constants": [
-          "Tensor"
         ]
       },
       "src/numerical/metric-inverse.ts": {
@@ -28769,7 +28680,7 @@
         ]
       },
       "src/numerical/tensor-engine.ts": {
-        "description": "The TensorEngine contract — the compute interface both v0.3.5 engines",
+        "description": "The TensorEngine contract. `MathTSEngine` implements it. See docs/planning/",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -29472,11 +29383,10 @@
           "src/numerical/einstein-equation.ts",
           "src/numerical/engine-registry.ts",
           "src/numerical/errors.ts",
-          "src/numerical/float64-engine.ts",
+          "src/numerical/formula-contract.ts",
           "src/numerical/formula-dimension.ts",
           "src/numerical/formula-mathts.ts",
           "src/numerical/formula-registry.ts",
-          "src/numerical/formula.ts",
           "src/numerical/geodesic-integrator.ts",
           "src/numerical/geometrized.ts",
           "src/numerical/gl4-integrator.ts",
@@ -29488,10 +29398,7 @@
           "src/numerical/kretschmann.ts",
           "src/numerical/lowering-utils.ts",
           "src/numerical/lowering.ts",
-          "src/numerical/mathts-autograd.ambient.d.ts",
           "src/numerical/mathts-engine.ts",
-          "src/numerical/mathts-functions.ambient.d.ts",
-          "src/numerical/mathts-tensor.ambient.d.ts",
           "src/numerical/metric-inverse.ts",
           "src/numerical/null-ic.ts",
           "src/numerical/null-ray-integrator.ts",
@@ -29520,18 +29427,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 425,
+    "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 92539,
-    "totalExports": 3015,
-    "totalClasses": 61,
-    "totalInterfaces": 482,
-    "totalFunctions": 783,
+    "totalLinesOfCode": 91275,
+    "totalExports": 3009,
+    "totalClasses": 60,
+    "totalInterfaces": 481,
+    "totalFunctions": 782,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 756,
-    "totalReExports": 1416,
-    "totalTypeOnlyImports": 573,
+    "totalConstants": 754,
+    "totalReExports": 1414,
+    "totalTypeOnlyImports": 570,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

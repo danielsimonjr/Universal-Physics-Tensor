@@ -32,7 +32,7 @@ import { DIMENSIONLESS, type Dimension } from '../../dimensional/types.js';
 import type { ExprNode } from '../../dimensional/ast-types.js';
 import { equals, format } from '../../dimensional/algebra.js';
 import { convertValue, parseUnit, UnitError } from '../../dimensional/units.js';
-import { parseFormula } from '../../numerical/formula.js';
+import { parseFormula } from '../../numerical/formula-mathts.js';
 import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
 import { evalExpr } from '../expr-eval.js';
 import type { SearchBudget, SearchStopReason } from './types.js';

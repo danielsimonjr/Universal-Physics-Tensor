@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 
-const e = new Float64ReferenceEngine();
+const e = new MathTSEngine();
 const rand2x2 = () => e.fromNested(
   [[Math.random(), Math.random()], [Math.random(), Math.random()]], [2, 2],
 );
 
-describe('einsum algebraic properties (engine-level — Float64ReferenceEngine, not the AST pipeline)', () => {
+describe('einsum algebraic properties (engine-level — MathTSEngine, not the AST pipeline)', () => {
   it('tr(AB) = tr(BA) for random 2×2 matrices', () => {
     const A = rand2x2();
     const B = rand2x2();

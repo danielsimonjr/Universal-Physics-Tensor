@@ -13,7 +13,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { integrateGaussLegendre } from '../../src/numerical/quadrature.js';
-import { parseFormula } from '../../src/numerical/formula.js';
+import { parseFormula } from '../../src/numerical/formula-mathts.js';
 
 describe('integrateGaussLegendre — finiteness', () => {
   it('integrates a finite integrand normally', () => {
@@ -37,10 +37,10 @@ describe('formula evaluator — finiteness', () => {
   });
 
   it('throws on a non-finite result (division by zero)', () => {
-    expect(() => parseFormula('1 / 0').evaluate({})).toThrow(/non-finite value/);
+    expect(() => parseFormula('1 / 0').evaluate({})).toThrow(/not evaluate to a finite number/);
   });
 
   it('throws on a NaN result (0^0 is fine, but 0/0 is NaN)', () => {
-    expect(() => parseFormula('x / y').evaluate({ x: 0, y: 0 })).toThrow(/non-finite value/);
+    expect(() => parseFormula('x / y').evaluate({ x: 0, y: 0 })).toThrow(/not evaluate to a finite number/);
   });
 });

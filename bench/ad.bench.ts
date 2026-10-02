@@ -2,7 +2,7 @@
  * AD forward + reverse mode benchmark.
  *
  * Function: fn(x) = x * x  (element-wise self-multiplication)
- * Engines: Float64ReferenceEngine (always), MathTSEngine (optional — skipped
+ * Engines: MathTSEngine (always), MathTSEngine (optional — skipped
  *   if @danielsimonjr/mathts-tensor or @danielsimonjr/mathts-autograd is absent)
  * Shapes: [10], [100], [10, 10], [100, 100]
  *
@@ -11,7 +11,7 @@
  * Bench discipline (F4): tensors are pre-built OUTSIDE the bench callback
  * to measure AD cost, not allocator/GC cost.
  *
- * fromNested is sync on Float64ReferenceEngine (no async wrapper overhead).
+ * fromNested is sync on MathTSEngine (no async wrapper overhead).
  * forwardGrad / reverseGrad are async per the v0.4.0 contract (Promise
  * overhead is included in the measurement — there is no internal sync path
  * exposed on the public API).
@@ -26,7 +26,7 @@
  * conditional wrapper that no-ops when the engine is unavailable.
  */
 import { bench, describe } from 'vitest';
-import { Float64ReferenceEngine } from '../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../src/numerical/mathts-engine.js';
 import { hasAutogradSupport } from '../src/numerical/tensor-engine.js';
 import type { TensorEngine, EngineTensor } from '../src/numerical/tensor-engine.js';
 
@@ -34,7 +34,7 @@ import type { TensorEngine, EngineTensor } from '../src/numerical/tensor-engine.
 // Engine setup (hoisted outside all bench loops)
 // ---------------------------------------------------------------------------
 
-const f64 = new Float64ReferenceEngine();
+const f64 = new MathTSEngine();
 
 let mathts: TensorEngine | null = null;
 let mathtsAvailable = false;
@@ -62,7 +62,7 @@ function ones(shape: number[]): number | number[] | number[][] {
 // Bench suites — one per shape.
 // All tensors are pre-built outside the bench callback so the bench loop
 // measures AD cost only, not allocator / GC cost (F4 requirement).
-// fromNested is sync on Float64ReferenceEngine — no await needed.
+// fromNested is sync on MathTSEngine — no await needed.
 // ---------------------------------------------------------------------------
 
 for (const shape of [[10], [100], [10, 10], [100, 100]] as number[][]) {

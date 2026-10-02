@@ -1,109 +1,43 @@
 /**
- * Engine registry — selects the active TensorEngine. v0.4.0: when both
- * @danielsimonjr/mathts-tensor AND @danielsimonjr/mathts-autograd are
- * installed, getActiveEngine() returns MathTSEngine. Falls back to
- * Float64ReferenceEngine (the zero-dep default) with a one-time
- * console.warn (suppressible via UPT_QUIET_FALLBACK=1) when either dep
- * is absent.
+ * Engine registry — the active TensorEngine is `MathTSEngine`.
  *
- * HONEST FRAMING: both engines run the same naive O(n) algorithms in
- * v0.4.0. This default flip is a dep-shape + code-path-signal change,
- * NOT a performance win. MathTSEngine becomes the default because that
- * is where the autograd capability (AD) lives.
+ * The MathTS packages are required dependencies. There is no absent-peer
+ * branch.
  *
- * I4 fix (Promise-cache): the Promise itself is cached, not the resolved
- * instance. Two concurrent first-time callers therefore observe the same
- * in-flight Promise and never race to create separate engine instances.
- *
- * I5 fix (browser guard): `process` is undefined in browser bundlers.
- * All access is guarded by `typeof process !== 'undefined'`.
+ * The Promise itself is cached, so concurrent first-time callers share one
+ * resolution. `setActiveEngine` replaces that promise, including one that
+ * has not been awaited yet.
  *
  * @module numerical/engine-registry
  */
 import type { TensorEngine } from './tensor-engine.js';
-import { Float64ReferenceEngine } from './float64-engine.js';
+import { MathTSEngine } from './mathts-engine.js';
 
-// Module-level cache. Stores a Promise so that concurrent first-time calls
-// to getActiveEngine() both await the same in-flight detection, never racing
-// to construct two separate engine instances (I4 fix).
 let _activeEngineP: Promise<TensorEngine> | undefined;
 
-// Cache the detection result so we don't re-import on every getActiveEngine()
-// call after the first. Reset by resetEngineForTesting() in tests.
-let _resolvedDefault: 'mathts' | 'float64' | undefined;
-
-// Synchronous record of an explicit setActiveEngine override. An in-flight
-// detection (started by an earlier getActiveEngine) reads this AFTER its async
-// import resolves, so a setActiveEngine that lands mid-detection wins for the
-// in-flight awaiter too — not just for later callers. Without it, the in-flight
-// promise resolves to the stale auto-detected engine.
+// An explicit setActiveEngine override. Read when the cached promise is
+// created, so a set that lands first wins for the first awaiter.
 let _override: TensorEngine | undefined;
-
-/**
- * Attempt to import both optional peer deps. Returns 'mathts' when both are
- * present; 'float64' otherwise. Emits a one-time console.warn on fallback
- * (suppressible via UPT_QUIET_FALLBACK=1).
- */
-async function detectDefault(): Promise<'mathts' | 'float64'> {
-  if (_resolvedDefault !== undefined) return _resolvedDefault;
-  try {
-    await import('@danielsimonjr/mathts-tensor');
-    // v0.5.1 TS-4: the prior `@ts-ignore` is replaced by the ambient module
-    // declaration at the top of this file; the try-catch still handles the
-    // runtime-absent case (Promise rejection from the bundler/loader).
-    await import('@danielsimonjr/mathts-autograd');
-    _resolvedDefault = 'mathts';
-  } catch {
-    // I5 fix: `process` is undefined in browser bundlers; guard before reading.
-    const quiet =
-      typeof process !== 'undefined' && process.env?.UPT_QUIET_FALLBACK === '1';
-    if (!quiet) {
-      console.warn(
-        '[universal-physics-tensor] @danielsimonjr/mathts-tensor and/or '
-        + '@danielsimonjr/mathts-autograd not installed. '
-        + 'Falling back to Float64ReferenceEngine. '
-        + 'Install both peers for MathTS-default + autograd (AD) support. '
-        + '(Suppress this warning with UPT_QUIET_FALLBACK=1.)',
-      );
-    }
-    _resolvedDefault = 'float64';
-  }
-  return _resolvedDefault;
-}
 
 // @public: getActiveEngine/setActiveEngine are part of the consumer-facing
 // engine-switching contract (re-exported from the root barrel).
 
 /**
- * The TensorEngine currently used by the `evaluateNumerical*` entry points
- * when no per-call `EvaluateOptions.engine` is supplied.
- *
- * v0.4.0: returns MathTSEngine when both @danielsimonjr/mathts-tensor AND
- * @danielsimonjr/mathts-autograd are installed; otherwise Float64ReferenceEngine.
- *
- * I4: returns a cached Promise — concurrent first-time callers share the
- * same in-flight resolution, so at most one MathTSEngine is ever constructed.
+ * The TensorEngine used by the `evaluateNumerical*` entry points when no
+ * per-call `EvaluateOptions.engine` is supplied. Always a `MathTSEngine`
+ * unless {@link setActiveEngine} replaced it.
  *
  * @public
  */
 export async function getActiveEngine(): Promise<TensorEngine> {
-  _activeEngineP ??= (async () => {
-    const choice = await detectDefault();
-    // A setActiveEngine that landed while detection was in flight wins.
-    if (_override !== undefined) return _override;
-    if (choice === 'mathts') {
-      const { MathTSEngine } = await import('./mathts-engine.js');
-      return new MathTSEngine();
-    }
-    return new Float64ReferenceEngine();
-  })();
+  _activeEngineP ??= Promise.resolve(_override ?? new MathTSEngine());
   return _activeEngineP;
 }
 
 /**
- * Set the process-wide active TensorEngine (e.g. to `MathTSEngine`).
+ * Set the process-wide active TensorEngine.
  * Wraps the engine in a resolved Promise to match the async getActiveEngine
- * contract and invalidate any prior in-flight detection.
+ * contract.
  * @public
  */
 export function setActiveEngine(engine: TensorEngine): void {
@@ -112,12 +46,11 @@ export function setActiveEngine(engine: TensorEngine): void {
 }
 
 /**
- * Reset the Promise-cache and detection state for testing purposes only.
+ * Reset the Promise-cache for testing purposes only.
  * Not part of the public API surface; NOT exported from the root barrel.
  * @internal
  */
 export function resetEngineForTesting(): void {
   _activeEngineP = undefined;
-  _resolvedDefault = undefined;
   _override = undefined;
 }
