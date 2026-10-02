@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **dimensional**: 36 files
 - **entry**: 1 file
 - **numerical**: 42 files
-- **relations**: 4 files
+- **relations**: 5 files
 
 ---
 
@@ -851,7 +851,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PhysjsManifestFile`
-- Functions: `physjsFormalRef`, `physjsManifestProblems`
+- Functions: `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
 - Constants: `PHYSJS_COMMIT`
 
 ---
@@ -4403,6 +4403,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/algebra.js` | `equals, format` | Import |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `./edge.js` | `BridgeEdge, EdgeConfidence` | Import (type-only) |
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../dimensional/unit-convention.js` | `conventionFactor` | Import |
@@ -4413,7 +4414,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `QuantityIdentification`, `AliasDisposition`, `ComposeOptions`
-- Functions: `effectiveAttributes`, `minConfidence`, `composeEdges`
+- Functions: `effectiveAttributes`, `minConfidence`, `junctionDimensionsMatch`, `composeEdges`
 - Constants: `QUANTITY_IDENTIFICATIONS`, `SOURCE_ALIAS_DISPOSITIONS`
 
 ---
@@ -4728,10 +4729,12 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./edge.js` | `CompositionAliasError` | Import |
 | `./compose.js` | `composeEdges` | Import |
 | `./compose.js` | `ComposeOptions` | Import (type-only) |
+| `./compose-symbolic.js` | `composeSymbolic` | Import |
 
 **Exports:**
 - Interfaces: `CompositionCandidate`, `DispositionRequired`, `EnumerationReport`
@@ -7494,6 +7497,20 @@ The codebase is organized into the following modules:
 
 ## Relations Dependencies
 
+### `src/relations/category.ts` - Objects and morphisms of the regime category.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Regime, RelationType` | Import (type-only) |
+| `./composition-table.js` | `composeRelation, CompositionResult` | Import |
+
+**Exports:**
+- Interfaces: `CategoryObject`, `CategoryMorphism`
+- Functions: `composeMorphisms`
+
+---
+
 ### `src/relations/composition-table.ts` - The composition table for `RelationType` — a literal 8×8 matrix.
 
 **Internal Dependencies:**
@@ -7692,10 +7709,11 @@ graph TD
     end
 
     subgraph Relations
-        N59[composition-table]
-        N60[conventions]
-        N61[regime]
-        N62[types]
+        N59[category]
+        N60[composition-table]
+        N61[conventions]
+        N62[regime]
+        N63[types]
     end
 
     N0 --> N48
@@ -7703,7 +7721,7 @@ graph TD
     N4 --> N3
     N10 --> N39
     N12 --> N50
-    N12 --> N62
+    N12 --> N63
     N13 --> N50
     N14 --> N12
     N14 --> N50
@@ -7736,17 +7754,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 410 |
+| Total TypeScript Files | 411 |
 | Total Modules | 13 |
-| Total Lines of Code | 89619 |
-| Total Exports | 2924 |
+| Total Lines of Code | 89769 |
+| Total Exports | 2927 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
-| Total Interfaces | 463 |
-| Total Functions | 753 |
+| Total Interfaces | 465 |
+| Total Functions | 756 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 547 |
+| Type-only Imports | 550 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

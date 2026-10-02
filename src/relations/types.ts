@@ -1,11 +1,9 @@
 /**
  * Shared relation vocabulary.
  *
- * The seed a later category layer would be written in: objects, morphisms,
- * and a functor are the open question in
- * `docs/planning/Layering-Refactor-Design.md`. `src/atlas/types.ts` re-exports
- * these names, so the public `atlas` namespace and the atlas subpath are
- * unchanged.
+ * Objects and morphisms are `./category.ts`. Composition delegates to
+ * `composeRelation`. `src/atlas/types.ts` re-exports these names, so the
+ * public `atlas` namespace and the atlas subpath are unchanged.
  *
  * @module relations/types
  */

@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.1
-  totalFiles: 410
+  totalFiles: 411
   totalModules: 13
-  totalExports: 2924
+  totalExports: 2927
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2173,11 +2173,13 @@ modules:
           typeOnly: true
       exports:
         - PHYSJS_COMMIT
+        - bridgeSeedKeys
         - physjsFormalRef
         - physjsManifestProblems
       interfaces:
         - PhysjsManifestFile
       functions:
+        - bridgeSeedKeys
         - physjsFormalRef
         - physjsManifestProblems
       constants:
@@ -10133,6 +10135,10 @@ modules:
           imports:
             - equals
             - format
+        - file: ../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -10171,6 +10177,7 @@ modules:
         - SOURCE_ALIAS_DISPOSITIONS
         - effectiveAttributes
         - minConfidence
+        - junctionDimensionsMatch
         - composeEdges
       interfaces:
         - QuantityIdentification
@@ -10179,6 +10186,7 @@ modules:
       functions:
         - effectiveAttributes
         - minConfidence
+        - junctionDimensionsMatch
         - composeEdges
       constants:
         - QUANTITY_IDENTIFICATIONS
@@ -11101,6 +11109,10 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -11115,6 +11127,9 @@ modules:
           imports:
             - ComposeOptions
           typeOnly: true
+        - file: ./compose-symbolic.js
+          imports:
+            - composeSymbolic
       exports:
         - REGISTERED_COMPOSITION_IDS
         - enumerateCompositions
@@ -19262,6 +19277,27 @@ modules:
       functions:
         - computeWeylTensor
   relations:
+    src/relations/category.ts:
+      description: Objects and morphisms of the regime category.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - Regime
+            - RelationType
+          typeOnly: true
+        - file: ./composition-table.js
+          imports:
+            - composeRelation
+            - CompositionResult
+      exports:
+        - composeMorphisms
+      interfaces:
+        - CategoryObject
+        - CategoryMorphism
+      functions:
+        - composeMorphisms
     src/relations/composition-table.ts:
       description: The composition table for `RelationType` — a literal 8×8 matrix.
       externalDependencies: []
@@ -19794,23 +19830,24 @@ dependencyGraph:
         - src/numerical/weyl-lowering.ts
     - name: Relations
       files:
+        - src/relations/category.ts
         - src/relations/composition-table.ts
         - src/relations/conventions.ts
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 410
+  totalTypeScriptFiles: 411
   totalModules: 13
-  totalLinesOfCode: 89619
-  totalExports: 2924
+  totalLinesOfCode: 89769
+  totalExports: 2927
   totalClasses: 60
-  totalInterfaces: 463
-  totalFunctions: 753
+  totalInterfaces: 465
+  totalFunctions: 756
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
   totalReExports: 1389
-  totalTypeOnlyImports: 547
+  totalTypeOnlyImports: 550
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
