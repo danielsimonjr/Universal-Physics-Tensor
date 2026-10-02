@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the npm 1.0.2 dogfood. The report is `docs/dogfood/2026-10-02-npm-1.0.2.md`. The session does not change `src/`.
 - [x] Pin PhysJS at c6958650f0be66b21f5cc3992d5474bf97ad5094. `be-16` is `PhysJS.Landauer.erasure_eq` (⟨E⟩ − F = k_B T log 2 for T > 0, equal-level two-state ensemble). The proof is complete and the axioms are propext, Classical.choice, and Quot.sound, so the kind is bridge and `be-16` is a catalog-equation seed. BE-42 stays a cross-check: the Hawking temperature is not proved.
   Done: the vendored manifest and the compiled copy match PhysJS `manifest/bridges.json` at that commit. The only entry that changed since `dd35202920bf19c39f71f15d9ee740a6d28ec173` is `be-16`. `equal_levels` is not a nested reference. Passing the reference to `deriveEvidence` lights `formally-proved`. The catalog path does not. Unequal levels fail the deficit. PhysJS `docs/feasibility/be-42.md` records that PhysLean has no Schwarzschild surface gravity and no KMS condition. `PhysJS.HawkingUnruh.dictionary` remains the theorem. The kind stays `cross-check`. After the regime join gate, `runChainPipeline(CATALOG_GRAPH)` returns the two rejections `be-63`/`be-12` and `be-63`/`be-37`, quantity `mass`, and no stub. No enumerated pair includes `be-16`.
 - [x] Specify the regime-aware join gate for a chain that meets on a quantity name. The note is `docs/planning/Regime-Aware-Join-Gate-Design.md`. It does not change the pipeline.
