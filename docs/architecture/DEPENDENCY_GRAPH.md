@@ -40,11 +40,11 @@ The codebase is organized into the following modules:
 
 - **atlas**: 68 files
 - **bridges**: 90 files
-- **canonical**: 18 files
+- **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 49 files
 - **root**: 1 file
-- **composition**: 78 files
+- **composition**: 79 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -2994,6 +2994,7 @@ The codebase is organized into the following modules:
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `./registry.js` | `CANONICAL_EQUATIONS, canonicalById` | Import |
 | `./normal-form.js` | `canonicalQuantityName, normalForm` | Import |
+| `./structural.js` | `classifyStructure` | Import |
 
 **Exports:**
 - Interfaces: `RecoveryOutcome`, `LinkageResult`
@@ -3067,6 +3068,24 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `canonicalToLaw`, `seedCanonicalLaws`
 - Constants: `CANONICAL_TENSOR_CONFIG`
+
+---
+
+### `src/canonical/structural.ts` - Structural half of a bridge↔canonical comparison, shared with the chain
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/validator.js` | `validate` | Import |
+| `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID` | Import |
+| `./registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `./normal-form.js` | `normalForm` | Import |
+
+**Exports:**
+- Interfaces: `StructuralPair`, `StructuralRelation`, `ChainConfirmation`, `ChainRestatement`, `ChainProvisional`
+- Functions: `classifyStructure`, `classifyStructure`, `classifyStructure`
 
 ---
 
@@ -4358,6 +4377,19 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Constants: `CATALOG_GRAPH`
+
+---
+
+### `src/composition/chain-match.ts` - Pipeline match for a chain of proved edges.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../canonical/structural.js` | `classifyStructure, ChainClassification` | Import |
+
+**Exports:**
+- Functions: `matchChain`
 
 ---
 
@@ -7643,7 +7675,7 @@ graph TD
         N14[_l1-build]
         N15[atomic]
         N16[condensed-matter]
-        N17[...13 more]
+        N17[...14 more]
     end
 
     subgraph Cases
@@ -7674,7 +7706,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...73 more]
+        N36[...74 more]
     end
 
     subgraph Core
@@ -7760,17 +7792,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 411 |
+| Total TypeScript Files | 413 |
 | Total Modules | 13 |
-| Total Lines of Code | 89864 |
-| Total Exports | 2936 |
+| Total Lines of Code | 90093 |
+| Total Exports | 2938 |
 | Total Re-exports | 1395 |
 | Total Classes | 60 |
-| Total Interfaces | 465 |
-| Total Functions | 757 |
+| Total Interfaces | 470 |
+| Total Functions | 761 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 550 |
+| Type-only Imports | 553 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

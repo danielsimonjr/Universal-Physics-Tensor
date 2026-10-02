@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.2
-  totalFiles: 411
+  totalFiles: 413
   totalModules: 13
-  totalExports: 2936
+  totalExports: 2938
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6804,6 +6804,9 @@ modules:
           imports:
             - canonicalQuantityName
             - normalForm
+        - file: ./structural.js
+          imports:
+            - classifyStructure
       exports:
         - classifyLinkage
         - scanLinkages
@@ -6951,6 +6954,43 @@ modules:
         - seedCanonicalLaws
       constants:
         - CANONICAL_TENSOR_CONFIG
+    src/canonical/structural.ts:
+      description: Structural half of a bridge↔canonical comparison, shared with the chain
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
+        - file: ../dimensional/validator.js
+          imports:
+            - validate
+        - file: ../bridges/rhs-registry.js
+          imports:
+            - BRIDGE_RHS_BY_ID
+        - file: ./registry.js
+          imports:
+            - CANONICAL_EQUATIONS
+        - file: ./normal-form.js
+          imports:
+            - normalForm
+      exports:
+        - classifyStructure
+      interfaces:
+        - StructuralPair
+        - StructuralRelation
+        - ChainConfirmation
+        - ChainRestatement
+        - ChainProvisional
+      functions:
+        - classifyStructure
+        - classifyStructure
+        - classifyStructure
   cases:
     src/cases/brownian-sphere.ts:
       description: "Applied case: a Brownian sphere tracked in a fluid — the diffusion"
@@ -10050,6 +10090,23 @@ modules:
         - CATALOG_GRAPH
       constants:
         - CATALOG_GRAPH
+    src/composition/chain-match.ts:
+      description: Pipeline match for a chain of proved edges.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../canonical/structural.js
+          imports:
+            - classifyStructure
+            - ChainClassification
+      exports:
+        - matchChain
+      functions:
+        - matchChain
     src/composition/compose-surface.ts:
       description: v0.11 surface barrel for the namespacing-gate symbols (keeps
       externalDependencies: []
@@ -19620,6 +19677,7 @@ dependencyGraph:
         - src/canonical/registry.ts
         - src/canonical/residual.ts
         - src/canonical/seed-l-layer.ts
+        - src/canonical/structural.ts
     - name: Cases
       files:
         - src/cases/brownian-sphere.ts
@@ -19698,6 +19756,7 @@ dependencyGraph:
         - src/composition/canonical-graph.ts
         - src/composition/canonical-prefactors.ts
         - src/composition/catalog-graph.ts
+        - src/composition/chain-match.ts
         - src/composition/compose-surface.ts
         - src/composition/compose-symbolic.ts
         - src/composition/compose.ts
@@ -19876,18 +19935,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 411
+  totalTypeScriptFiles: 413
   totalModules: 13
-  totalLinesOfCode: 89864
-  totalExports: 2936
+  totalLinesOfCode: 90093
+  totalExports: 2938
   totalClasses: 60
-  totalInterfaces: 465
-  totalFunctions: 757
+  totalInterfaces: 470
+  totalFunctions: 761
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 723
   totalReExports: 1395
-  totalTypeOnlyImports: 550
+  totalTypeOnlyImports: 553
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

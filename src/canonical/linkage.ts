@@ -6,10 +6,13 @@
  *   2. are they the same relation up to dimensionless factors? (`normalForm`)
  *   3. (best-effort) do they agree numerically up to a constant ratio?
  *
- * The **F4 circularity guard**: a structural match is reported as
- * `restates-canonical` (a trivial X≡X, NOT a discovery) only when the canonical
- * entry's `restatesBridge` actually names that bridge. A structural match the
- * registry did NOT pre-declare is a genuine `recovers` correspondence.
+ * The structural half — same dimension, `normalForm`, and the F4
+ * `restatesBridge` guard — is `classifyStructure` in `structural.ts`. This
+ * module calls that function and then runs numerical recovery. A structural
+ * match is `restates-canonical` (a trivial X≡X, NOT a discovery) only when
+ * the canonical entry's `restatesBridge` actually names that bridge. A
+ * structural match the registry did NOT pre-declare is a genuine `recovers`
+ * correspondence. Numerical agreement is not a confirmation.
  *
  * @module canonical/linkage
  */
@@ -22,6 +25,7 @@ import { BRIDGE_RHS_BY_ID } from '../bridges/rhs-registry.js';
 import type { CanonicalEquation } from './canonical-equation.js';
 import { CANONICAL_EQUATIONS, canonicalById } from './registry.js';
 import { canonicalQuantityName, normalForm } from './normal-form.js';
+import { classifyStructure } from './structural.js';
 
 /** Best-effort numerical-recovery outcome. */
 export interface RecoveryOutcome {
@@ -47,15 +51,6 @@ export interface LinkageResult {
     | 'dimensional-only'
     | 'unrelated';
 }
-
-const dimEqual = (a: Dimension, b: Dimension): boolean =>
-  a.L === b.L &&
-  a.M === b.M &&
-  a.T === b.T &&
-  a.I === b.I &&
-  a.Theta === b.Theta &&
-  a.N === b.N &&
-  a.J === b.J;
 
 const isDimensionless = (d: Dimension): boolean =>
   d.L === 0 &&
@@ -174,20 +169,22 @@ function classifyAgainst(
   bridgeId: number,
   bridge: BridgePrecomp,
 ): LinkageResult {
-  const dimMatch =
-    bridge.dim != null && dimEqual(bridge.dim, canon.dimensional.target.dim);
-  const structuralMatch = canonNormal === bridge.normal;
-  const recovery = structuralMatch
-    ? numericalRecovery(canonAst, bridge.rhs)
-    : null;
+  const relation = classifyStructure({
+    left: canonAst,
+    leftDim: canon.dimensional.target.dim,
+    leftNormal: canonNormal,
+    right: bridge.rhs,
+    rightDim: bridge.dim,
+    rightNormal: bridge.normal,
+    restatesBridge: canon.restatesBridge,
+    bridgeId: String(bridgeId),
+  });
+  const recovery = relation.structuralMatch ? numericalRecovery(canonAst, bridge.rhs) : null;
 
   let classification: LinkageResult['classification'];
-  if (structuralMatch) {
-    classification =
-      canon.restatesBridge === String(bridgeId)
-        ? 'restates-canonical'
-        : 'recovers';
-  } else if (dimMatch) {
+  if (relation.structuralMatch) {
+    classification = relation.restates ? 'restates-canonical' : 'recovers';
+  } else if (relation.dimMatch) {
     classification = 'dimensional-only';
   } else {
     classification = 'unrelated';
@@ -196,8 +193,8 @@ function classifyAgainst(
   return {
     canonicalId: canon.id,
     bridgeId,
-    dimMatch,
-    structuralMatch,
+    dimMatch: relation.dimMatch,
+    structuralMatch: relation.structuralMatch,
     recovery,
     classification,
   };
