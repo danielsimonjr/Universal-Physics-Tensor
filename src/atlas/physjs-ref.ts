@@ -783,6 +783,36 @@ function formalRefKind(key: string, covers: string): FormalRefKind | undefined {
 }
 
 /**
+ * Manifest keys whose derived kind is `bridge`.
+ *
+ * An `ab-` key is a bridge. A catalog key is a bridge when `formalRefKind`
+ * says the theorem states the catalogued equation. A canonical id uses that
+ * same function: it is a seed when this table, or a caller-supplied overlay
+ * entry, has derived kind `bridge`. A textbook covers word is not a seed.
+ * One function, so a second list cannot drift.
+ *
+ * `kind`, when supplied, is that derived kind for an overlay reference the
+ * compiled table does not carry. The live call omits it. The return value
+ * is not stored on a bridge.
+ *
+ * @internal
+ */
+export function bridgeSeedKeys(
+  entries: readonly {
+    readonly key: string;
+    readonly covers: string;
+    readonly kind?: FormalRefKind;
+  }[] = PHYSJS_ENTRIES,
+): readonly string[] {
+  const keys: string[] = [];
+  for (const entry of entries) {
+    const kind = entry.kind ?? formalRefKind(entry.key, entry.covers);
+    if (kind === 'bridge') keys.push(entry.key);
+  }
+  return keys;
+}
+
+/**
  * The reviewed reference for a manifest key. Throws when the key is not an
  * entry, so a typo cannot ship a bridge with no reference.
  *

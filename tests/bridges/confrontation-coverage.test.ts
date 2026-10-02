@@ -6,8 +6,8 @@
  * catalog/graph only — no fabricated data.
  */
 import { describe, it, expect } from 'vitest';
-import { auditCoverage } from '../../src/bridges/confrontation-coverage.js';
-import type { GroundingTier } from '../../src/bridges/confrontation-coverage.js';
+import { auditCoverage } from '../../src/composition/audit-coverage.js';
+import type { GroundingTier } from '../../src/composition/audit-coverage.js';
 
 const TIERS: GroundingTier[] = [
   'data-confronted',
