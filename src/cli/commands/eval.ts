@@ -10,7 +10,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { UsageError } from '../errors.js';
+import { CliError, UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
@@ -32,8 +32,10 @@ const FLAGS: FlagSpec[] = [
 ];
 
 /**
- * Reject malformed `name=value` bindings. A value is a number, a unit
- * (`1Msun`), or an expression of constants and units (`0.6*c`, `pi/2`).
+ * Read `name=value` bindings. A missing `=` is a usage error (exit 2).
+ * A value that is not a finite number or a known unit is a bad value
+ * (exit 1), the same code `upt evaluate` uses. A value is a number, a
+ * unit (`1Msun`), or an expression of constants and units (`0.6*c`, `pi/2`).
  */
 function parseScope(args: readonly string[], mode: UnitMode): { scope: Record<string, number>; notes: string[] } {
   const scope: Record<string, number> = {};
@@ -51,7 +53,7 @@ function parseScope(args: readonly string[], mode: UnitMode): { scope: Record<st
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
       const msg = e instanceof UnitError ? e.message : (e as Error).message;
-      throw new UsageError(`upt eval: '${a}' is not a finite number or a known unit. ${msg}`);
+      throw new CliError(`upt eval: '${a}' is not a finite number or a known unit. ${msg}`);
     }
   }
   return { scope, notes };

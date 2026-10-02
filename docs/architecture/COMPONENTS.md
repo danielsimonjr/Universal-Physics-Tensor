@@ -795,7 +795,7 @@ The command registry and contract. A `Command` is self-contained: its own `FlagS
 
 ### `UsageError` / `CliError` (`src/cli/errors.ts`)
 
-The two exit-code-bearing error classes `runCli` maps: `UsageError` → exit 2 (malformed invocation — bad/missing/unknown flags), `CliError` → exit 1 (a well-formed invocation that failed at runtime).
+The two exit-code-bearing error classes `runCli` maps: `UsageError` → exit 2 (malformed invocation — bad/missing/unknown flags, unparseable expression syntax, a binding with no `=`), `CliError` → exit 1 (a well-formed invocation that failed at runtime, including a non-numeric `upt eval` or `upt evaluate` binding value).
 
 ### `sanitize` / `emitJson` / `JsonEnvelope` (`src/cli/output.ts`)
 

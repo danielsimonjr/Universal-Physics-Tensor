@@ -3567,7 +3567,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../errors.js` | `UsageError` | Import |
+| `../errors.js` | `CliError, UsageError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
@@ -7980,7 +7980,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 422 |
 | Total Modules | 13 |
-| Total Lines of Code | 92067 |
+| Total Lines of Code | 92069 |
 | Total Exports | 2986 |
 | Total Re-exports | 1396 |
 | Total Classes | 61 |

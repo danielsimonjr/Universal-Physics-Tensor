@@ -5,7 +5,9 @@
  *   - positional without `=` was ignored;
  *   - `mass=abc` (NaN) was stored as NaN;
  *   - `mass=` coerced to 0; `mass=1e500` flowed in as Infinity.
- * The CLI now rejects malformed inputs with exit code 2.
+ * A binding with no `=` is a usage error (exit 2). A value that is not a
+ * finite number or a known unit is a bad value (exit 1), the same code
+ * `upt evaluate` uses for `mu_e=nope`.
  *
  * @module tests/cli/upt-eval-inputs
  */
@@ -31,22 +33,28 @@ function run(args: string[]): { status: number; stderr: string } {
 }
 
 describe('upt eval — input validation', () => {
-  it('rejects a non-numeric value (b=abc)', () => {
+  it('rejects a non-numeric value (b=abc) as a bad value', () => {
     const { status } = run(['eval', 'a*b', 'a=2', 'b=abc']);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
   });
 
-  it('rejects an empty value (b=)', () => {
+  it('rejects x=nope as a bad value', () => {
+    const { status, stderr } = run(['eval', 'x', 'x=nope']);
+    expect(status).toBe(1);
+    expect(stderr).toMatch(/x=nope/);
+  });
+
+  it('rejects an empty value (b=) as a bad value', () => {
     const { status } = run(['eval', 'a*b', 'a=2', 'b=']);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
   });
 
-  it('rejects a non-finite value (b=1e500 → Infinity)', () => {
+  it('rejects a non-finite value (b=1e500 → Infinity) as a bad value', () => {
     const { status } = run(['eval', 'a*b', 'a=2', 'b=1e500']);
-    expect(status).toBe(2);
+    expect(status).toBe(1);
   });
 
-  it('rejects a positional without = (bare name)', () => {
+  it('rejects a positional without = (bare name) as usage', () => {
     const { status } = run(['eval', 'a*b', 'a=2', 'b']);
     expect(status).toBe(2);
   });
