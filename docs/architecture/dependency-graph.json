@@ -16476,6 +16476,13 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge"
@@ -16500,6 +16507,12 @@
               "ComposeOptions"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./compose-symbolic.js",
+            "imports": [
+              "composeSymbolic"
+            ]
           }
         ],
         "exports": [
@@ -28330,7 +28343,7 @@
   "statistics": {
     "totalTypeScriptFiles": 410,
     "totalModules": 13,
-    "totalLinesOfCode": 89597,
+    "totalLinesOfCode": 89658,
     "totalExports": 2926,
     "totalClasses": 60,
     "totalInterfaces": 464,
@@ -28339,7 +28352,7 @@
     "totalEnums": 0,
     "totalConstants": 721,
     "totalReExports": 1389,
-    "totalTypeOnlyImports": 548,
+    "totalTypeOnlyImports": 549,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
