@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Seed-filtered symbolic enumeration in `src/composition/enumerate.ts`. A caller-supplied set of edge ids. The module does not import `atlas/`. A proof target is a pair `composeSymbolic` accepts and carries an expression. A pair that only `composeEdges` accepts is not a proof target and is listed as not substitutable. The default call, with no seed set, keeps the pairs the existing enumeration tests pin. Design: `docs/planning/Bridge-Discovery-Pipeline-Design.md` step 5.
+  Done: `enumerateCompositions` takes `seedIds`. An id outside that set is not walked. A symbolic seed pair is a proof target. A numeric-only seed pair is not substitutable. The default call still finds the registered pairs and leaves both new lists empty.
 - [x] Sweep stale bridge-equation documents so counts, kinds, theorem names, and the BE-13 name match the PhysJS pin in `src/atlas/physjs-ref.ts`. The gap list is `docs/planning/Bridge-Gap-Inference.md`. Historical audits, dogfood reports, and changelog entries keep their original text and gain a dated note.
 - [x] Set package.json to 1.0.0. The major is the parser change that makes a bare e the elementary charge. The changelog lists the breaking changes. No tag is pushed. Publishing stays the owner's job.
 - [x] Rename catalog equation 13 to Einstein trace reduction. The id stays 13. The module file stays. Jacobson stays in the context and notes. The proposal is docs/planning/BE-13-name-proposal.md.
