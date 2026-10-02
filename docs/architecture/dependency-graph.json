@@ -11857,6 +11857,7 @@
           {
             "file": "../errors.js",
             "imports": [
+              "CliError",
               "UsageError"
             ]
           },
@@ -29327,7 +29328,7 @@
   "statistics": {
     "totalTypeScriptFiles": 422,
     "totalModules": 13,
-    "totalLinesOfCode": 92067,
+    "totalLinesOfCode": 92069,
     "totalExports": 2986,
     "totalClasses": 61,
     "totalInterfaces": 477,

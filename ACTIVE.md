@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A malformed variable value exits 1 in both `upt eval` and `upt evaluate`.
+  Done: `upt eval x x=nope` throws `CliError`. `upt evaluate be-63 mu_e=nope` already did. A missing `=`, a bad flag, a missing argument, and unparseable expression syntax stay exit 2. `upt eval ln(x) x=-1` stays exit 2.
 - [x] Bring the pre-push doc gates onto current master and stop a GitHub-UI merge from bypassing the code-docs ratchet.
   Done: merged `origin/master` at `d22aed69` (1.0.3), then again at `9022d73` (#298). `src/`-scope architecture prose follows `bun run docs:deps`. Catalog graph prose says 46 edges. Whole-repository Verification tables were not re-measured (`repo_map.py` absent). `.githooks/code-docs-baseline.txt` stays 152. CI job `code-docs ratchet (non-required)` checks new export-summary debt on pull requests and does not run `repo_map.py`. Branch protection is unchanged.
 - [x] Document and exercise every `upt` command, subcommand, and flag. The reference is `docs/CLI.md`, generated from the command registry. The dogfood is `docs/dogfood/2026-10-02-cli-coverage.md`.

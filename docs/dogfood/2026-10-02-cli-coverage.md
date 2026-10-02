@@ -94,6 +94,8 @@ These matched neither the first driver's guessed exit 2 nor a crash. They match 
 
 `upt eval` and `upt evaluate` do not use the same exit code for a non-numeric value. `upt eval x x=nope` exits 2: `'x=nope' is not a finite number or a known unit`. `upt evaluate be-63 mu_e=nope` exits 1, and the command's comment says a bad value is exit 1. The exit-code table calls a parse error exit 2 and a malformed `--at` exit 1. Both behaviors are tested. Changing either one would contradict a written contract. That choice is the owner's.
 
+The owner later decided a bad value exits 1 in both commands. The sentences above are the record of this run, before that decision. A missing `=`, a bad flag, a missing argument, and unparseable expression syntax stay exit 2.
+
 ## Offline paths
 
 | Invocation | Exit | What happened |

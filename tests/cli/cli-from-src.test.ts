@@ -32,9 +32,19 @@ describe('runCli from src — coverage path', () => {
     expect(text(d)).toMatch(/hawking-temperature/);
   });
 
-  it('eval rejects bad bindings (exit 2)', async () => {
+  it('eval rejects a bad value (exit 1) and a missing = (exit 2)', async () => {
+    const bad = capture();
+    expect(await runCli(['eval', 'x', 'x=nope'], bad.io)).toBe(1);
+    expect(text(bad)).toMatch(/x=nope/);
+
+    const usage = capture();
+    expect(await runCli(['eval', 'x', 'x'], usage.io)).toBe(2);
+  });
+
+  it('evaluate rejects a bad value (exit 1)', async () => {
     const c = capture();
-    expect(await runCli(['eval', 'a*b', 'a=2', 'b=abc'], c.io)).toBe(2);
+    expect(await runCli(['evaluate', 'be-63', 'mu_e=nope'], c.io)).toBe(1);
+    expect(text(c)).toMatch(/mu_e=nope|nope/);
   });
 
   it('evaluate lists bridges and evaluates be-55', async () => {
