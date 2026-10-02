@@ -15,6 +15,7 @@ import { C_SI, G_SI } from '../../core/constants.js';
 import { JEANS_FORMULA_NOTE } from '../conventions.js';
 import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
 import { bindingInUnit } from '../../numerical/binding-value.js';
+import { missingEvaluatorMessage } from '../../bridges/evaluators.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--sigma', valueStyle: 'either', repeatable: true },
@@ -488,9 +489,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const id = Number(m[1]);
   const spec = api.BRIDGE_EVALUATORS.get(id);
   if (spec === undefined) {
-    throw new CliError(
-      `evaluateBridge: be-${id} has no evaluator (only closed-form + spacetime bridges do — see \`upt evaluate\` with no args)`,
-    );
+    throw new CliError(missingEvaluatorMessage(id));
   }
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 

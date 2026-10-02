@@ -10,8 +10,8 @@
  *
  * KNOWN, ACCEPTED divergence (deliberately NOT in the shared cases):
  * factorial, erf, gamma() and juxtaposition such as `2pi` are MathTS-only.
- * Both parsers read a bare `e` as the elementary charge and `euler` / `exp(1)`
- * as Euler's number.
+ * Both parsers read a bare `e` as the elementary charge and `exp(1)` as
+ * Euler's number. The name `euler` is refused.
  *
  * @module tests/numerical/formula-conformance
  */
@@ -34,7 +34,6 @@ const VALUE_CASES: ReadonlyArray<
   ['e', {}, E_SI],
   ['e^2', {}, E_SI * E_SI],
   ['exp(1)', {}, Math.E],
-  ['euler', {}, Math.E],
   ['sqrt(16)', {}, 4],
   ['log(exp(3))', {}, 3], // log = natural
   // Every function the built-in parser documents must evaluate in both
@@ -106,6 +105,9 @@ export function runFormulaConformance(
     });
     it('an unknown function still fails rather than being reinterpreted', () => {
       expect(() => parser.parse('lnn(2)').evaluate({})).toThrow();
+    });
+    it('the name euler is refused and the error names exp(x)', () => {
+      expect(() => parser.parse('euler')).toThrow(/exp\(x\)/);
     });
     // Audit I4: a name from another convention fails, and the message names the documented
     // function that computes it. The suggestion is a message, never a silent reinterpretation.

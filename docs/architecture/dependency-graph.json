@@ -1,10 +1,10 @@
 {
   "metadata": {
     "name": "universal-physics-tensor",
-    "version": "1.0.1",
-    "totalFiles": 412,
+    "version": "1.0.2",
+    "totalFiles": 414,
     "totalModules": 13,
-    "totalExports": 2928
+    "totalExports": 2939
   },
   "entryPoints": [
     {
@@ -8553,6 +8553,7 @@
         ],
         "exports": [
           "BRIDGE_EVALUATORS",
+          "missingEvaluatorMessage",
           "evaluateBridge"
         ],
         "interfaces": [
@@ -8561,6 +8562,7 @@
           "EvaluatorSpec"
         ],
         "functions": [
+          "missingEvaluatorMessage",
           "evaluateBridge"
         ],
         "constants": [
@@ -10052,6 +10054,12 @@
               "canonicalQuantityName",
               "normalForm"
             ]
+          },
+          {
+            "file": "./structural.js",
+            "imports": [
+              "classifyStructure"
+            ]
           }
         ],
         "exports": [
@@ -10290,6 +10298,66 @@
         ],
         "constants": [
           "CANONICAL_TENSOR_CONFIG"
+        ]
+      },
+      "src/canonical/structural.ts": {
+        "description": "Structural half of a bridge↔canonical comparison, shared with the chain",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "validate"
+            ]
+          },
+          {
+            "file": "../bridges/rhs-registry.js",
+            "imports": [
+              "BRIDGE_RHS_BY_ID"
+            ]
+          },
+          {
+            "file": "./registry.js",
+            "imports": [
+              "CANONICAL_EQUATIONS"
+            ]
+          },
+          {
+            "file": "./normal-form.js",
+            "imports": [
+              "normalForm"
+            ]
+          }
+        ],
+        "exports": [
+          "classifyStructure"
+        ],
+        "interfaces": [
+          "StructuralPair",
+          "StructuralRelation",
+          "ChainConfirmation",
+          "ChainRestatement",
+          "ChainProvisional"
+        ],
+        "functions": [
+          "classifyStructure",
+          "classifyStructure",
+          "classifyStructure"
         ]
       }
     },
@@ -11544,6 +11612,12 @@
             "imports": [
               "readBinding"
             ]
+          },
+          {
+            "file": "../../numerical/formula-dimension.js",
+            "imports": [
+              "builtinFormulaDimensionChecker"
+            ]
           }
         ],
         "exports": [
@@ -11623,6 +11697,12 @@
             "file": "../../numerical/binding-value.js",
             "imports": [
               "bindingInUnit"
+            ]
+          },
+          {
+            "file": "../../bridges/evaluators.js",
+            "imports": [
+              "missingEvaluatorMessage"
             ]
           }
         ],
@@ -14960,6 +15040,33 @@
         ],
         "functions": [
           "orderChainCandidates"
+        ]
+      },
+      "src/composition/chain-match.ts": {
+        "description": "Pipeline match for a chain of proved edges.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../canonical/structural.js",
+            "imports": [
+              "classifyStructure",
+              "ChainClassification"
+            ]
+          }
+        ],
+        "exports": [
+          "matchChain"
+        ],
+        "functions": [
+          "matchChain"
         ]
       },
       "src/composition/compose-surface.ts": {
@@ -23105,6 +23212,7 @@
               "T_P_SI",
               "H0_SI",
               "M_SUN_SI",
+              "GM_SUN_SI",
               "M_E_SI",
               "B_WIEN_SI"
             ],
@@ -23579,6 +23687,23 @@
             "file": "./dimensional/types.js",
             "imports": [
               "Dimension"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "convertValue",
+              "parseUnit",
+              "UnitError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "ParsedUnit",
+              "TemperatureReading"
             ],
             "reExport": true
           },
@@ -24613,6 +24738,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "PhysicalConstants",
@@ -24728,6 +24854,9 @@
           "validateGaugeField",
           "validateTimeSymmetryPredicate",
           "validateKleinGordonEquation",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -24985,6 +25114,8 @@
           "KleinGordonEquationNode",
           "KleinGordonEquationValidationResult",
           "Dimension",
+          "ParsedUnit",
+          "TemperatureReading",
           "ExprNode",
           "TranscendentalFn",
           "ValidationResult",
@@ -25152,6 +25283,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "TensorConfig",
@@ -25332,6 +25464,11 @@
           "KleinGordonEquationValidationResult",
           "validateKleinGordonEquation",
           "Dimension",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
+          "ParsedUnit",
+          "TemperatureReading",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -26346,7 +26483,8 @@
             "file": "../dimensional/algebra.js",
             "imports": [
               "equals",
-              "format"
+              "format",
+              "multiply"
             ]
           },
           {
@@ -26379,11 +26517,13 @@
           {
             "file": "./formula.js",
             "imports": [
+              "EULER_NUMBER_ERROR",
               "parseFormulaToAst"
             ]
           }
         ],
         "exports": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE",
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker",
@@ -26400,6 +26540,9 @@
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker"
+        ],
+        "constants": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE"
         ]
       },
       "src/numerical/formula-mathts.ts": {
@@ -26420,6 +26563,7 @@
             "imports": [
               "BUILTIN_FUNCTION_NAMES",
               "callBuiltinFunction",
+              "EULER_NUMBER_ERROR",
               "FormulaError",
               "unknownFunctionMessage"
             ]
@@ -26511,6 +26655,7 @@
           }
         ],
         "exports": [
+          "EULER_NUMBER_ERROR",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST",
@@ -26534,6 +26679,7 @@
           "parseFormula"
         ],
         "constants": [
+          "EULER_NUMBER_ERROR",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST",
@@ -28109,7 +28255,8 @@
           "src/canonical/normal-form.ts",
           "src/canonical/registry.ts",
           "src/canonical/residual.ts",
-          "src/canonical/seed-l-layer.ts"
+          "src/canonical/seed-l-layer.ts",
+          "src/canonical/structural.ts"
         ]
       },
       {
@@ -28201,6 +28348,7 @@
           "src/composition/canonical-prefactors.ts",
           "src/composition/catalog-graph.ts",
           "src/composition/chain-candidate.ts",
+          "src/composition/chain-match.ts",
           "src/composition/compose-surface.ts",
           "src/composition/compose-symbolic.ts",
           "src/composition/compose.ts",
@@ -28401,21 +28549,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 412,
+    "totalTypeScriptFiles": 414,
     "totalModules": 13,
-    "totalLinesOfCode": 89842,
-    "totalExports": 2928,
+    "totalLinesOfCode": 90166,
+    "totalExports": 2939,
     "totalClasses": 60,
-    "totalInterfaces": 466,
-    "totalFunctions": 757,
+    "totalInterfaces": 471,
+    "totalFunctions": 762,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 721,
-    "totalReExports": 1389,
-    "totalTypeOnlyImports": 550,
+    "totalConstants": 723,
+    "totalReExports": 1395,
+    "totalTypeOnlyImports": 553,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 70
+    "unusedExportsCount": 71
   }
 }
