@@ -4,7 +4,7 @@
     "version": "1.0.1",
     "totalFiles": 411,
     "totalModules": 13,
-    "totalExports": 2928
+    "totalExports": 2929
   },
   "entryPoints": [
     {
@@ -15071,6 +15071,13 @@
             ]
           },
           {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge",
@@ -15130,6 +15137,7 @@
           "SOURCE_ALIAS_DISPOSITIONS",
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "interfaces": [
@@ -15140,6 +15148,7 @@
         "functions": [
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "constants": [
@@ -28340,16 +28349,16 @@
   "statistics": {
     "totalTypeScriptFiles": 411,
     "totalModules": 13,
-    "totalLinesOfCode": 89667,
-    "totalExports": 2928,
+    "totalLinesOfCode": 89681,
+    "totalExports": 2929,
     "totalClasses": 60,
     "totalInterfaces": 464,
-    "totalFunctions": 755,
+    "totalFunctions": 756,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 723,
     "totalReExports": 1389,
-    "totalTypeOnlyImports": 547,
+    "totalTypeOnlyImports": 548,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
