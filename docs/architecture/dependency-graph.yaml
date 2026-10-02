@@ -3,7 +3,7 @@ metadata:
   version: 1.0.1
   totalFiles: 410
   totalModules: 13
-  totalExports: 2925
+  totalExports: 2926
 entryPoints:
   - file: src/index.ts
     type: main
@@ -10109,6 +10109,10 @@ modules:
           imports:
             - equals
             - format
+        - file: ../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -10147,6 +10151,7 @@ modules:
         - SOURCE_ALIAS_DISPOSITIONS
         - effectiveAttributes
         - minConfidence
+        - junctionDimensionsMatch
         - composeEdges
       interfaces:
         - QuantityIdentification
@@ -10155,6 +10160,7 @@ modules:
       functions:
         - effectiveAttributes
         - minConfidence
+        - junctionDimensionsMatch
         - composeEdges
       constants:
         - QUANTITY_IDENTIFICATIONS
@@ -19798,16 +19804,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 410
   totalModules: 13
-  totalLinesOfCode: 89583
-  totalExports: 2925
+  totalLinesOfCode: 89597
+  totalExports: 2926
   totalClasses: 60
   totalInterfaces: 464
-  totalFunctions: 754
+  totalFunctions: 755
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
   totalReExports: 1389
-  totalTypeOnlyImports: 547
+  totalTypeOnlyImports: 548
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
