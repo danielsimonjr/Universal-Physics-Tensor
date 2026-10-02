@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.2
-  totalFiles: 414
+  totalFiles: 415
   totalModules: 13
-  totalExports: 2939
+  totalExports: 2943
 entryPoints:
   - file: src/index.ts
     type: main
@@ -2173,12 +2173,14 @@ modules:
           typeOnly: true
       exports:
         - PHYSJS_COMMIT
+        - physjsTheorem
         - bridgeSeedKeys
         - physjsFormalRef
         - physjsManifestProblems
       interfaces:
         - PhysjsManifestFile
       functions:
+        - physjsTheorem
         - bridgeSeedKeys
         - physjsFormalRef
         - physjsManifestProblems
@@ -2296,6 +2298,27 @@ modules:
         - SUPPORTING_STATEMENTS
         - POSTER_ALL_STATEMENTS
         - POSTER_REGISTRY
+    src/atlas/proof-target.ts:
+      description: Lean statement skeleton for one chain candidate.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../composition/chain-candidate.js
+          imports:
+            - ChainCandidate
+          typeOnly: true
+        - file: ./physjs-ref.js
+          imports:
+            - physjsTheorem
+      exports:
+        - PROOF_TARGET_DRAFT_BEGIN
+        - PROOF_TARGET_DRAFT_END
+        - emitProofTarget
+      functions:
+        - emitProofTarget
+      constants:
+        - PROOF_TARGET_DRAFT_BEGIN
+        - PROOF_TARGET_DRAFT_END
     src/atlas/public.ts:
       description: The PUBLIC atlas surface — reached as the `atlas` namespace of the package
       externalDependencies:
@@ -19557,6 +19580,7 @@ dependencyGraph:
         - src/atlas/poster/associations.ts
         - src/atlas/poster/derivations.ts
         - src/atlas/poster/statements.ts
+        - src/atlas/proof-target.ts
         - src/atlas/public.ts
         - src/atlas/regime.ts
         - src/atlas/serialize.ts
@@ -19947,18 +19971,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 414
+  totalTypeScriptFiles: 415
   totalModules: 13
-  totalLinesOfCode: 90166
-  totalExports: 2939
+  totalLinesOfCode: 90347
+  totalExports: 2943
   totalClasses: 60
   totalInterfaces: 471
-  totalFunctions: 762
+  totalFunctions: 764
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 723
+  totalConstants: 725
   totalReExports: 1395
-  totalTypeOnlyImports: 553
+  totalTypeOnlyImports: 554
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 411,
-    "totalTestFiles": 569,
-    "testedCount": 401,
+    "totalSourceFiles": 412,
+    "totalTestFiles": 570,
+    "testedCount": 402,
     "untestedCount": 10,
     "coveragePercent": "97.6"
   },
@@ -68,6 +68,7 @@
     "src/atlas/poster/associations.ts",
     "src/atlas/poster/derivations.ts",
     "src/atlas/poster/statements.ts",
+    "src/atlas/proof-target.ts",
     "src/atlas/regime.ts",
     "src/atlas/serialize.ts",
     "src/atlas/statement.ts",
@@ -486,6 +487,7 @@
       "tests/atlas/coverage.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
       "tests/bridges/catalog-json.test.ts",
@@ -617,6 +619,7 @@
       "tests/atlas/path-bound.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/atlas/regime-admission.test.ts",
       "tests/atlas/relative-norm-convention.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
@@ -761,7 +764,8 @@
       "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
-      "tests/atlas/physjs-manifest.test.ts"
+      "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts"
     ],
     "src/atlas/poster/associations.ts": [
       "tests/atlas/poster.test.ts"
@@ -771,6 +775,9 @@
     ],
     "src/atlas/poster/statements.ts": [
       "tests/atlas/poster.test.ts"
+    ],
+    "src/atlas/proof-target.ts": [
+      "tests/atlas/proof-target.test.ts"
     ],
     "src/atlas/public.ts": [],
     "src/atlas/regime.ts": [
@@ -1154,6 +1161,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1233,6 +1241,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1294,6 +1303,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1372,6 +1382,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1451,6 +1462,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1530,6 +1542,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1609,6 +1622,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1688,6 +1702,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1767,6 +1782,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1847,6 +1863,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -1926,6 +1943,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -2310,6 +2328,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -2372,6 +2391,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -2476,6 +2496,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-11-fix.test.ts",
       "tests/bridges/be-14-ryu-takayanagi.test.ts",
       "tests/bridges/be-18-fix.test.ts",
@@ -4849,6 +4870,7 @@
       "tests/tensor.test.ts"
     ],
     "src/composition/chain-candidate.ts": [
+      "tests/atlas/proof-target.test.ts",
       "tests/composition/chain-candidate.test.ts"
     ],
     "src/composition/chain-match.ts": [
@@ -9376,6 +9398,27 @@
       "src/atlas/poster/derivations.ts",
       "src/atlas/poster/associations.ts",
       "src/atlas/oscillators/models.ts"
+    ],
+    "tests/atlas/proof-target.test.ts": [
+      "src/atlas/families.ts",
+      "src/atlas/catalog-formal-ref.ts",
+      "src/atlas/proof-target.ts",
+      "src/atlas/physjs-ref.ts",
+      "src/bridges/index.ts",
+      "src/bridges/gravitational-lensing.ts",
+      "src/bridges/perihelion-precession.ts",
+      "src/bridges/be55-quantum-hall.ts",
+      "src/bridges/be56-casimir.ts",
+      "src/bridges/be57-unruh.ts",
+      "src/bridges/be58-johnson-nyquist.ts",
+      "src/bridges/be59-ac-josephson.ts",
+      "src/bridges/be60-fractional-qh.ts",
+      "src/bridges/be61-wiedemann-franz.ts",
+      "src/bridges/be62-bcs-gap.ts",
+      "src/bridges/be63-chandrasekhar-mass.ts",
+      "src/bridges/be64-eddington-luminosity.ts",
+      "src/bridges/be65-jeans-mass.ts",
+      "src/composition/chain-candidate.ts"
     ],
     "tests/atlas/quantum-support.test.ts": [
       "src/atlas/witnesses/quantum-support.ts"

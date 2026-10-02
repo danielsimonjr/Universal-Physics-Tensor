@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 68 files
+- **atlas**: 69 files
 - **bridges**: 90 files
 - **canonical**: 19 files
 - **cases**: 9 files
@@ -851,7 +851,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PhysjsManifestFile`
-- Functions: `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
+- Functions: `physjsTheorem`, `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
 - Constants: `PHYSJS_COMMIT`
 
 ---
@@ -901,6 +901,20 @@ The codebase is organized into the following modules:
 - Interfaces: `PosterEntry`
 - Functions: `buildPosterRegistry`, `posterEntry`, `posterId`
 - Constants: `POSTER_MODEL_UNRECORDED`, `UNIDENTIFIED`, `POSTER_5_IDENTIFICATION_NOTE`, `POSTER_ENTRIES`, `HIDDEN_NODES`, `SUPPORTING_STATEMENTS`, `POSTER_ALL_STATEMENTS`, `POSTER_REGISTRY`
+
+---
+
+### `src/atlas/proof-target.ts` - Lean statement skeleton for one chain candidate.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../composition/chain-candidate.js` | `ChainCandidate` | Import (type-only) |
+| `./physjs-ref.js` | `physjsTheorem` | Import |
+
+**Exports:**
+- Functions: `emitProofTarget`
+- Constants: `PROOF_TARGET_DRAFT_BEGIN`, `PROOF_TARGET_DRAFT_END`
 
 ---
 
@@ -7665,7 +7679,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...63 more]
+        N5[...64 more]
     end
 
     subgraph Bridges
@@ -7800,17 +7814,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 414 |
+| Total TypeScript Files | 415 |
 | Total Modules | 13 |
-| Total Lines of Code | 90166 |
-| Total Exports | 2939 |
+| Total Lines of Code | 90347 |
+| Total Exports | 2943 |
 | Total Re-exports | 1395 |
 | Total Classes | 60 |
 | Total Interfaces | 471 |
-| Total Functions | 762 |
+| Total Functions | 764 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 553 |
+| Type-only Imports | 554 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
