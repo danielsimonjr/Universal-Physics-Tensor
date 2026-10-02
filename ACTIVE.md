@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Specify the regime-aware join gate for a chain that meets on a quantity name. The note is `docs/planning/Regime-Aware-Join-Gate-Design.md`. It does not change the pipeline.
 - [x] Add composition edges for the proved seeds that `runChainPipeline(CATALOG_GRAPH)` cannot see, and align quantity names where two edges name one quantity.
   The fifteen seeds with no edge are the ten atlas keys and be-40, be-55, be-59, be-60, be-63. An atlas bridge that is an equation-to-equation analogy stays out of the graph, with the reason recorded. A catalog seed gets an edge in the existing `BridgeEdge` form. Quantity renames are only for one physical quantity spelled two ways. The pipeline, the seed rule, `discovery.ts`, the probe, `src/atlas/public.ts`, and the package barrel stay as they are.
   Done: the ten atlas seeds stay out of the graph, with the reason in `NOT_COMPOSABLE_SEEDS`. be-40, be-55, be-59, be-60, and be-63 are edges. be-27, be-37, be-43, be-50, and be-54 carry the equation the theorem states, including Λ/3 on be-54 and the Wheeler–Feynman average on be-50. be-21 stays a constant. No quantity was renamed. `runChainPipeline(CATALOG_GRAPH)` returns two stubs, `chain-be-63-be-12` and `chain-be-63-be-37`, and writes nothing.
