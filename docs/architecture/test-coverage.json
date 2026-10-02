@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 414,
-    "totalTestFiles": 572,
-    "testedCount": 404,
+    "totalSourceFiles": 416,
+    "totalTestFiles": 574,
+    "testedCount": 406,
     "untestedCount": 10,
     "coveragePercent": "97.6"
   },
@@ -280,6 +280,7 @@
     "src/composition/edges/catalog-gravitation-cosmology.ts",
     "src/composition/edges/catalog-quantum.ts",
     "src/composition/edges/catalog-tranche.ts",
+    "src/composition/edges/proved-seeds.ts",
     "src/composition/enumerate.ts",
     "src/composition/explain.ts",
     "src/composition/expr-eval.ts",
@@ -291,6 +292,7 @@
     "src/composition/grounding.ts",
     "src/composition/identifiability.ts",
     "src/composition/index.ts",
+    "src/composition/not-composable-seeds.ts",
     "src/composition/probe/backend-protocol.ts",
     "src/composition/probe/candidate-store.ts",
     "src/composition/probe/corpus.ts",
@@ -497,6 +499,7 @@
       "tests/cli/atlas-command.test.ts"
     ],
     "src/atlas/chain-pipeline.ts": [
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts"
     ],
     "src/atlas/composition-table.ts": [
@@ -771,7 +774,8 @@
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
-      "tests/atlas/proof-target.test.ts"
+      "tests/atlas/proof-target.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/atlas/poster/associations.ts": [
       "tests/atlas/poster.test.ts"
@@ -1162,6 +1166,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1244,6 +1249,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1308,6 +1314,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1389,6 +1396,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1471,6 +1479,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1553,6 +1562,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1635,6 +1645,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1717,6 +1728,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1799,6 +1811,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1882,6 +1895,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -1964,6 +1978,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -2351,6 +2366,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -2416,6 +2432,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -2523,6 +2540,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -4858,6 +4876,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/audited-catalog.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
@@ -4901,6 +4920,7 @@
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/retrodiction.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/stress-tests.test.ts",
       "tests/composition/symbolic-composition.test.ts",
@@ -5517,6 +5537,9 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/composition/edges/proved-seeds.ts": [
+      "tests/composition/seed-edges.test.ts"
+    ],
     "src/composition/enumerate.ts": [
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
@@ -5645,6 +5668,7 @@
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/retrodiction.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/stress-tests.test.ts",
       "tests/composition/symbolic-composition.test.ts",
@@ -5877,6 +5901,9 @@
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
+    ],
+    "src/composition/not-composable-seeds.ts": [
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/composition/probe/backend-protocol.ts": [
       "tests/cli/atlas-evidence.test.ts",
@@ -6207,37 +6234,43 @@
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
       "tests/composition/composition-recovery.test.ts",
-      "tests/composition/quantities.test.ts"
+      "tests/composition/quantities.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/composition/quantities/condensed-matter.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
       "tests/composition/composition-recovery.test.ts",
-      "tests/composition/quantities.test.ts"
+      "tests/composition/quantities.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/composition/quantities/fields.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
       "tests/composition/composition-recovery.test.ts",
-      "tests/composition/quantities.test.ts"
+      "tests/composition/quantities.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/composition/quantities/gravitation-cosmology.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
       "tests/composition/composition-recovery.test.ts",
-      "tests/composition/quantities.test.ts"
+      "tests/composition/quantities.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/composition/quantities/quantum.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
       "tests/composition/composition-recovery.test.ts",
-      "tests/composition/quantities.test.ts"
+      "tests/composition/quantities.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/composition/quantities.ts": [
       "tests/atlas/association.test.ts",
       "tests/composition/attribute-audit.test.ts",
       "tests/composition/composition-recovery.test.ts",
-      "tests/composition/quantities.test.ts"
+      "tests/composition/quantities.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/composition/quantity.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -6279,6 +6312,7 @@
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/quantities.test.ts",
       "tests/composition/retrodiction.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/stress-tests.test.ts",
       "tests/composition/symbolic-composition.test.ts",
@@ -6811,6 +6845,7 @@
       "tests/composition/discovery-canonical-kind.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/proposed-bridges.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/composition/symbolic-simplification.test.ts",
       "tests/dimensional/algebra-properties.test.ts",
@@ -6947,6 +6982,7 @@
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/proposed-bridges.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/composition/symbolic-simplification.test.ts",
@@ -7361,6 +7397,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/composition/symbolic-constants-extra.test.ts"
     ],
@@ -7515,6 +7552,7 @@
       "tests/composition/probe/modules.test.ts",
       "tests/composition/probe/parse-expr-json.test.ts",
       "tests/composition/retrodiction.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/suggest-ranking.test.ts",
       "tests/composition/symbolic-composition.test.ts",
@@ -7695,6 +7733,7 @@
       "tests/composition/composition-recovery.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/proposed-bridges.test.ts",
+      "tests/composition/seed-edges.test.ts",
       "tests/composition/seed-enumeration.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/composition/symbolic-simplification.test.ts",
@@ -9135,6 +9174,24 @@
       "src/bridges/be64-eddington-luminosity.ts",
       "src/bridges/be65-jeans-mass.ts",
       "src/cli/map-evidence.ts"
+    ],
+    "tests/atlas/chain-pipeline-catalog.test.ts": [
+      "src/bridges/index.ts",
+      "src/bridges/gravitational-lensing.ts",
+      "src/bridges/perihelion-precession.ts",
+      "src/bridges/be55-quantum-hall.ts",
+      "src/bridges/be56-casimir.ts",
+      "src/bridges/be57-unruh.ts",
+      "src/bridges/be58-johnson-nyquist.ts",
+      "src/bridges/be59-ac-josephson.ts",
+      "src/bridges/be60-fractional-qh.ts",
+      "src/bridges/be61-wiedemann-franz.ts",
+      "src/bridges/be62-bcs-gap.ts",
+      "src/bridges/be63-chandrasekhar-mass.ts",
+      "src/bridges/be64-eddington-luminosity.ts",
+      "src/bridges/be65-jeans-mass.ts",
+      "src/composition/catalog-graph.ts",
+      "src/atlas/chain-pipeline.ts"
     ],
     "tests/atlas/chain-pipeline.test.ts": [
       "src/atlas/chain-pipeline.ts",
@@ -15331,6 +15388,25 @@
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/seed-edges.test.ts": [
+      "src/atlas/physjs-ref.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/edges/proved-seeds.ts",
+      "src/composition/not-composable-seeds.ts",
+      "src/composition/quantities.ts",
+      "src/composition/quantities/quantum.ts",
+      "src/composition/quantities/gravitation-cosmology.ts",
+      "src/composition/quantities/fields.ts",
+      "src/composition/quantities/condensed-matter.ts",
+      "src/composition/quantities/common.ts",
+      "src/composition/quantity.ts",
+      "src/dimensional/symbolic-constants.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts",
+      "src/composition/expr-eval.ts"
     ],
     "tests/composition/seed-enumeration.test.ts": [
       "src/dimensional/ast-builders.ts",

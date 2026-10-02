@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.2",
-    "totalFiles": 417,
+    "totalFiles": 419,
     "totalModules": 13,
-    "totalExports": 2947
+    "totalExports": 2971
   },
   "entryPoints": [
     {
@@ -5364,7 +5364,8 @@
               "HBAR_SI",
               "C_SI",
               "G_SI",
-              "M_SUN_SI"
+              "M_SUN_SI",
+              "M_U_SI"
             ]
           }
         ],
@@ -15138,7 +15139,7 @@
         ]
       },
       "src/composition/catalog-graph.ts": {
-        "description": "The full composition graph as a single constant — the 41 `BridgeEdge`s",
+        "description": "The full composition graph as a single constant — the 46 `BridgeEdge`s",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -15178,6 +15179,12 @@
             "file": "./edges/catalog-full.js",
             "imports": [
               "CATALOG_FULL_EDGES"
+            ]
+          },
+          {
+            "file": "./edges/proved-seeds.js",
+            "imports": [
+              "PROVED_SEED_EDGES"
             ]
           }
         ],
@@ -16072,6 +16079,32 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "TEMPERATURE"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
             "file": "../../bridges/equations/be-15-emergence.js",
             "imports": [
               "evaluateCoarseningLength"
@@ -16449,6 +16482,31 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
             "file": "../../bridges/equations/be-47-bbn-dark-sector.js",
             "imports": [
               "evaluateBBNDark"
@@ -16622,12 +16680,6 @@
             ]
           },
           {
-            "file": "../../bridges/equations/be-50-wheeler-feynman.js",
-            "imports": [
-              "evaluateWFTimeSymmetry"
-            ]
-          },
-          {
             "file": "../edge.js",
             "imports": [
               "BridgeEdge"
@@ -16661,7 +16713,7 @@
               "ricciScalarQ",
               "stressEnergyTraceQ",
               "systemEnvironmentCouplingQ",
-              "timeSymmetryResidualQ",
+              "timeSymmetricFieldAmplitudeQ",
               "totalMutualInformationQ",
               "tunnelingMassQ"
             ]
@@ -16697,6 +16749,25 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
           {
             "file": "../../dimensional/types.js",
             "imports": [
@@ -16794,6 +16865,119 @@
           "be48Edge",
           "be53Edge",
           "be54Edge"
+        ]
+      },
+      "src/composition/edges/proved-seeds.ts": {
+        "description": "Composition edges for proved catalog seeds that had no graph edge.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../../core/constants.js",
+            "imports": [
+              "C_SI",
+              "G_SI",
+              "HBAR_SI",
+              "M_U_SI"
+            ]
+          },
+          {
+            "file": "../../bridges/equations/be-40-composite-higgs.js",
+            "imports": [
+              "evaluateCompositeHiggs"
+            ]
+          },
+          {
+            "file": "../../bridges/be55-quantum-hall.js",
+            "imports": [
+              "evaluateQuantumHall"
+            ]
+          },
+          {
+            "file": "../../bridges/be59-ac-josephson.js",
+            "imports": [
+              "evaluateACJosephson"
+            ]
+          },
+          {
+            "file": "../../bridges/be60-fractional-qh.js",
+            "imports": [
+              "evaluateFractionalQH"
+            ]
+          },
+          {
+            "file": "../edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../quantity.js",
+            "imports": [
+              "Quantity"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../quantities.js",
+            "imports": [
+              "chernNumberQ",
+              "compositeHiggsAlphaQ",
+              "compositeHiggsBetaQ",
+              "compositeHiggsPotentialQ",
+              "fillingFractionQ",
+              "frequencyQ",
+              "hallConductanceQ",
+              "higgsDecayConstantQ",
+              "higgsFieldQ",
+              "laneEmdenOmega3Q",
+              "massQ",
+              "meanMolecularWeightPerElectronQ",
+              "voltageQ"
+            ]
+          }
+        ],
+        "exports": [
+          "be40Edge",
+          "be55Edge",
+          "be59Edge",
+          "be60Edge",
+          "be63Edge",
+          "PROVED_SEED_EDGES"
+        ],
+        "constants": [
+          "be40Edge",
+          "be55Edge",
+          "be59Edge",
+          "be60Edge",
+          "be63Edge",
+          "PROVED_SEED_EDGES"
         ]
       },
       "src/composition/enumerate.ts": {
@@ -17863,6 +18047,21 @@
           "equationLanding",
           "analyzeUserEquation",
           "UserEquationError"
+        ]
+      },
+      "src/composition/not-composable-seeds.ts": {
+        "description": "Proved atlas seeds that are not composition-graph edges.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "NOT_COMPOSABLE_SEEDS"
+        ],
+        "interfaces": [
+          "NotComposableSeed"
+        ],
+        "constants": [
+          "NOT_COMPOSABLE_SEEDS"
         ]
       },
       "src/composition/probe/backend-protocol.ts": {
@@ -20058,7 +20257,10 @@
           "COUPLING_PREFACTOR_SQUARED",
           "TORSION_CONTRACTION",
           "SPIN_DENSITY_SQUARED",
-          "ENERGY_DIM2"
+          "ENERGY_DIM2",
+          "CONDUCTANCE",
+          "VOLTAGE",
+          "ENERGY4"
         ],
         "constants": [
           "ENERGY_DIM",
@@ -20076,7 +20278,10 @@
           "COUPLING_PREFACTOR_SQUARED",
           "TORSION_CONTRACTION",
           "SPIN_DENSITY_SQUARED",
-          "ENERGY_DIM2"
+          "ENERGY_DIM2",
+          "CONDUCTANCE",
+          "VOLTAGE",
+          "ENERGY4"
         ]
       },
       "src/composition/quantities/common.ts": {
@@ -20196,6 +20401,7 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "DIMENSIONLESS",
+              "FREQUENCY",
               "LENGTH",
               "MASS",
               "TEMPERATURE",
@@ -20209,7 +20415,9 @@
               "MOBILITY",
               "RESISTIVITY",
               "NUMBER_DENSITY",
-              "ENERGY_DIM2"
+              "ENERGY_DIM2",
+              "CONDUCTANCE",
+              "VOLTAGE"
             ]
           }
         ],
@@ -20239,7 +20447,12 @@
           "spatialDimensionQ",
           "defectRestMassQ",
           "reheatingTemperatureQ",
-          "defectDensityQ"
+          "defectDensityQ",
+          "chernNumberQ",
+          "fillingFractionQ",
+          "hallConductanceQ",
+          "voltageQ",
+          "frequencyQ"
         ],
         "constants": [
           "temperatureQ",
@@ -20267,7 +20480,12 @@
           "spatialDimensionQ",
           "defectRestMassQ",
           "reheatingTemperatureQ",
-          "defectDensityQ"
+          "defectDensityQ",
+          "chernNumberQ",
+          "fillingFractionQ",
+          "hallConductanceQ",
+          "voltageQ",
+          "frequencyQ"
         ]
       },
       "src/composition/quantities/fields.ts": {
@@ -20286,6 +20504,7 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "DIMENSIONLESS",
+              "ENERGY",
               "FORCE",
               "MASS"
             ]
@@ -20296,7 +20515,8 @@
               "COUPLING_PREFACTOR_SQUARED",
               "TORSION_CONTRACTION",
               "SPIN_DENSITY_SQUARED",
-              "ENERGY_DIM2"
+              "ENERGY_DIM2",
+              "ENERGY4"
             ]
           }
         ],
@@ -20324,7 +20544,12 @@
           "scalarFieldValueQ",
           "scalarFieldReferenceQ",
           "planckMassQ",
-          "swamplandTowerMassQ"
+          "swamplandTowerMassQ",
+          "higgsFieldQ",
+          "higgsDecayConstantQ",
+          "compositeHiggsAlphaQ",
+          "compositeHiggsBetaQ",
+          "compositeHiggsPotentialQ"
         ],
         "constants": [
           "massQ",
@@ -20350,7 +20575,12 @@
           "scalarFieldValueQ",
           "scalarFieldReferenceQ",
           "planckMassQ",
-          "swamplandTowerMassQ"
+          "swamplandTowerMassQ",
+          "higgsFieldQ",
+          "higgsDecayConstantQ",
+          "compositeHiggsAlphaQ",
+          "compositeHiggsBetaQ",
+          "compositeHiggsPotentialQ"
         ]
       },
       "src/composition/quantities/gravitation-cosmology.ts": {
@@ -20413,7 +20643,9 @@
           "darkReactionRateCoefficientQ",
           "darkSpeciesDensityQ",
           "transferEfficiencyQ",
-          "nucleonYieldRateQ"
+          "nucleonYieldRateQ",
+          "laneEmdenOmega3Q",
+          "meanMolecularWeightPerElectronQ"
         ],
         "constants": [
           "causalSetCount0Q",
@@ -20443,7 +20675,9 @@
           "darkReactionRateCoefficientQ",
           "darkSpeciesDensityQ",
           "transferEfficiencyQ",
-          "nucleonYieldRateQ"
+          "nucleonYieldRateQ",
+          "laneEmdenOmega3Q",
+          "meanMolecularWeightPerElectronQ"
         ]
       },
       "src/composition/quantities/quantum.ts": {
@@ -20502,7 +20736,8 @@
           "fragmentMutualInformationQ",
           "retardedFieldAmplitudeQ",
           "advancedFieldAmplitudeQ",
-          "timeSymmetryResidualQ"
+          "timeSymmetryResidualQ",
+          "timeSymmetricFieldAmplitudeQ"
         ],
         "constants": [
           "decoherenceRateQ",
@@ -20529,7 +20764,8 @@
           "fragmentMutualInformationQ",
           "retardedFieldAmplitudeQ",
           "advancedFieldAmplitudeQ",
-          "timeSymmetryResidualQ"
+          "timeSymmetryResidualQ",
+          "timeSymmetricFieldAmplitudeQ"
         ]
       },
       "src/composition/quantities.ts": {
@@ -20948,7 +21184,8 @@
           "GM_SUN_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
-          "B_WIEN_SI"
+          "B_WIEN_SI",
+          "M_U_SI"
         ],
         "constants": [
           "C_SI",
@@ -20966,7 +21203,8 @@
           "GM_SUN_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
-          "B_WIEN_SI"
+          "B_WIEN_SI",
+          "M_U_SI"
         ]
       },
       "src/core/flux-rules.ts": {
@@ -22715,6 +22953,7 @@
               "ACTION",
               "CHARGE",
               "DIMENSIONLESS",
+              "MASS",
               "VELOCITY"
             ]
           },
@@ -22728,7 +22967,8 @@
               "HBAR_SI",
               "H_SI",
               "K_B_SI",
-              "B_WIEN_SI"
+              "B_WIEN_SI",
+              "M_U_SI"
             ]
           }
         ],
@@ -28531,6 +28771,7 @@
           "src/composition/edges/catalog-gravitation-cosmology.ts",
           "src/composition/edges/catalog-quantum.ts",
           "src/composition/edges/catalog-tranche.ts",
+          "src/composition/edges/proved-seeds.ts",
           "src/composition/enumerate.ts",
           "src/composition/explain.ts",
           "src/composition/expr-eval.ts",
@@ -28542,6 +28783,7 @@
           "src/composition/grounding.ts",
           "src/composition/identifiability.ts",
           "src/composition/index.ts",
+          "src/composition/not-composable-seeds.ts",
           "src/composition/probe/backend-protocol.ts",
           "src/composition/probe/candidate-store.ts",
           "src/composition/probe/corpus.ts",
@@ -28713,21 +28955,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 417,
+    "totalTypeScriptFiles": 419,
     "totalModules": 13,
-    "totalLinesOfCode": 90640,
-    "totalExports": 2947,
+    "totalLinesOfCode": 91321,
+    "totalExports": 2971,
     "totalClasses": 60,
-    "totalInterfaces": 474,
+    "totalInterfaces": 475,
     "totalFunctions": 766,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 727,
+    "totalConstants": 751,
     "totalReExports": 1395,
-    "totalTypeOnlyImports": 559,
+    "totalTypeOnlyImports": 565,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 71
+    "unusedExportsCount": 76
   }
 }

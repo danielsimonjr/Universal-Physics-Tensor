@@ -7,6 +7,10 @@
  * @module composition/edges/catalog-condensed-matter
  */
 
+import type { ExprNode } from '../../dimensional/validator.js';
+import { DIMENSIONLESS, TEMPERATURE } from '../../dimensional/types.js';
+import { sym } from '../../dimensional/ast-builders.js';
+import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
 import { evaluateCoarseningLength } from '../../bridges/equations/be-15-emergence.js';
 import { evaluateEffectiveTemperature } from '../../bridges/equations/be-27-effective-temperature.js';
 import { evaluateHertzMillis } from '../../bridges/equations/be-33-hertz-millis.js';
@@ -154,11 +158,39 @@ export const be23Edge: BridgeEdge = {
  * BE-27 Cugliandolo-Kurchan effective temperature: (temperature,
  * active-noise-energy) → T_eff = T(1 + Σ_active/(k_B T)). Wraps
  * `evaluateEffectiveTemperature` (T in K, Σ in J; returns K). Reuses the
- * canonical `temperature` node.
+ * canonical `temperature` node. The symbolic form is the same algebra,
+ * T·(1 + Σ_active/(k_B T)).
  *
  * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
  * export for the 26-edge tranche — root-surface budget decision).
  */
+const BE27_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '*',
+  args: [
+    sym('temperature', TEMPERATURE),
+    {
+      kind: 'op',
+      op: '+',
+      args: [
+        sym('1', DIMENSIONLESS),
+        {
+          kind: 'op',
+          op: '/',
+          args: [
+            sym('active-noise-energy', activeNoiseEnergyQ.dim),
+            {
+              kind: 'op',
+              op: '*',
+              args: [sym('k_B', CONSTANTS.k_B.dim), sym('temperature', TEMPERATURE)],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
 export const be27Edge: BridgeEdge = {
   id: 'be-27',
   beId: 27,
@@ -179,6 +211,7 @@ export const be27Edge: BridgeEdge = {
       T_K: i['temperature'],
       Sigma_active_J: i['active-noise-energy'],
     }),
+  symbolic: BE27_SYMBOLIC,
   citation: 'Cugliandolo & Kurchan 1993 J. Phys. A 26:L401',
 };
 

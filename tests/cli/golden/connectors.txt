@@ -1,7 +1,7 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 118 established-confidence edge(s) of the 150 in this graph
+  anchored core: the clusters holding at least one of the 123 established-confidence edge(s) of the 155 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster
   radius is not a Schwarzschild radius). Same-kind (shared name token) = stronger.
 
@@ -36,7 +36,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         attempt-frequency ≟ angular-frequency                  [[frequency]]  → CE-lc-resonance
         attempt-frequency ≟ cyclotron-frequency                [[frequency]]  → CE-cyclotron-frequency
         attempt-frequency ≟ debye-frequency                    [[frequency]]  → CE-debye-frequency
-        attempt-frequency ≟ frequency                          [[frequency]]  → CE-wave-speed
+        attempt-frequency ≟ frequency                          [[frequency]]  → be-59
         attempt-frequency ≟ photon-frequency                   [[frequency]]  → CE-photoelectric
         attempt-frequency ≟ plasma-frequency                   [[frequency]]  → CE-plasma-frequency
         mutation-rate ≟ decoherence-rate                       [[frequency]]  → be-11-zurek

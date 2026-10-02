@@ -15,10 +15,12 @@
  * `mass`. BE-13 and BE-31 share the `ricci-scalar` target (both produce the
  * scalar curvature R [L⁻²]).
  *
- * NOT-A-BRIDGE entries — NO edges created (per src/bridges/rejected.ts
+ * NOT-A-BRIDGE entries — NO edges in this array (per src/bridges/rejected.ts
  * REJECTED_BRIDGE_IDS): BE-28 (Onsager/MEPP), BE-29 (Jarzynski), BE-32
  * (quantum reference frames), BE-35 (conformal bootstrap), BE-40 (composite
- * Higgs). Rejected adjudications are not bridges and get no graph edge.
+ * Higgs). Rejected adjudications are not bridges. BE-40's proved potential
+ * is a law edge in `proved-seeds.ts`, outside this array: the rejection is
+ * the single-regime adjudication, and the theorem still states V(h).
  *
  * Other skips (no scalar-Record evaluator): BE-44 soft-hair — its evaluator
  * `evaluateBE44SoftHairCharge` takes a `number[]` news-sample array + grid

@@ -45,5 +45,11 @@ export const TORSION_CONTRACTION: Dimension = { L: -4, M: 0, T: 2, I: 0, Theta: 
 export const SPIN_DENSITY_SQUARED: Dimension = { L: -2, M: 2, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 /** Energy [M L² T⁻²] — joule (BE-18 VEV/mass, natural-units energy). */
 export const ENERGY_DIM2: Dimension = ENERGY_DIM;
+/** Electrical conductance [I² T³ M⁻¹ L⁻²] (siemens) — Hall conductance σ_xy. */
+export const CONDUCTANCE: Dimension = { L: -2, M: -1, T: 3, I: 2, Theta: 0, N: 0, J: 0 };
+/** Electric potential difference [M L² T⁻³ I⁻¹] (volt). */
+export const VOLTAGE: Dimension = { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 };
+/** Energy⁴ [M⁴ L⁸ T⁻⁸] — natural-unit potential density (composite Higgs V). */
+export const ENERGY4: Dimension = { L: 8, M: 4, T: -8, I: 0, Theta: 0, N: 0, J: 0 };
 
 /** Canonical node for `boundary-entanglement-entropy`. */

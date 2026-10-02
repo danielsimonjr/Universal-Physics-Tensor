@@ -68,8 +68,7 @@ const SYMBOLIC_EDGES: Array<{ edge: BridgeEdge; probe: Record<string, number> }>
   { edge: be20Edge, probe: { 'cosmological-constant-curvature': 1.1e-52 } },
   { edge: be30Edge, probe: { 'modular-hamiltonian-variation': 0.5 } },
   { edge: be36Edge, probe: { 'gravitational-wave-speed': 1.1 * C_SI } },
-  // Established closed forms evalExpr can already run. be-37 stays
-  // numeric-only: its ln is outside evalExpr, so a drift guard could not bind it.
+  // Established closed forms evalExpr can already run, including ln and sin.
   {
     edge: be11Edge,
     probe: { 'relaxation-rate': 2, 'system-environment-coupling': 3, 'reference-coupling': 4 },
@@ -165,6 +164,9 @@ describe('symbolic forms — leaf-dimension + name-disjointness guards', () => {
   const leavesOf = (n: ExprNode, acc: Array<{ name: string; dim: Dimension }> = []) => {
     if (n.kind === 'symbol') acc.push({ name: n.name, dim: n.dim });
     else if (n.kind === 'op') for (const a of n.args) leavesOf(a, acc);
+    else if (n.kind === 'transcendental' || n.kind === 'abs' || n.kind === 'dirac-delta') {
+      leavesOf(n.arg, acc);
+    }
     return acc;
   };
 

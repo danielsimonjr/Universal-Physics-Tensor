@@ -60,9 +60,9 @@ const rowOf = (id: number) => {
 };
 
 describe('S1.5 — the ten audited catalog rows', () => {
-  it('registers exactly 55 rows and 41 edges: the overlay changes CONTENT, never count', () => {
+  it('registers 55 catalog rows and 46 graph edges', () => {
     expect(BRIDGE_EQUATIONS).toHaveLength(55);
-    expect(CATALOG_GRAPH).toHaveLength(41);
+    expect(CATALOG_GRAPH).toHaveLength(46);
   });
 
   it.each(AUDITED)('BE-%i carries a relation', (id) => {
@@ -117,8 +117,8 @@ describe('S1.5 — row and edge cannot disagree', () => {
     const withEdges = AUDITED.filter((id) =>
       CATALOG_GRAPH.some((e) => e.beId === id),
     );
-    // Measured at bfb168a: BE-11 (two edges), 21, 37, 48, 51, 52.
-    expect(withEdges).toStrictEqual([11, 21, 37, 48, 51, 52]);
+    // BE-11 (two edges), 21, 37, 48, 51, 52, plus 55 and 59 once those seeds had edges.
+    expect(withEdges).toStrictEqual([11, 21, 37, 48, 51, 52, 55, 59]);
     for (const id of withEdges) {
       const edges = CATALOG_GRAPH.filter((e) => e.beId === id);
       for (const edge of edges) {

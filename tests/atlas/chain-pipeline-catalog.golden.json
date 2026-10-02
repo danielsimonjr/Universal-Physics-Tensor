@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "stub",
+    "id": "chain-be-63-be-12",
+    "edgeIds": [
+      "be-63",
+      "be-12"
+    ],
+    "text": "-- PROOF TARGET\n-- statement skeleton only\n-- proof body absent\n-- not a catalog entry\n-- not a formalRef\n\n-- theorem chain\n-- theorem: PhysJS.Chandrasekhar.prefactor\n-- theorem: PhysJS.ThermalDeBroglie.wavelength_eq\n\n-- covers: derivation-step: the constant is unfixed.\n\n-- target id: chain-be-63-be-12\n-- statement: PhysJS.ProofTarget.chain_be_63_be_12 : Prop\n\nPROOF-TARGET-DRAFT-BEGIN\n{\n  \"key\": \"chain-be-63-be-12\",\n  \"bridgeId\": \"chain-be-63-be-12\",\n  \"theorem\": \"PhysJS.ProofTarget.chain_be_63_be_12\",\n  \"covers\": \"derivation-step: the constant is unfixed.\",\n  \"coverage\": \"statement skeleton only\",\n  \"leanProof\": \"absent\",\n  \"axioms\": []\n}\nPROOF-TARGET-DRAFT-END\n"
+  },
+  {
+    "kind": "stub",
+    "id": "chain-be-63-be-37",
+    "edgeIds": [
+      "be-63",
+      "be-37"
+    ],
+    "text": "-- PROOF TARGET\n-- statement skeleton only\n-- proof body absent\n-- not a catalog entry\n-- not a formalRef\n\n-- theorem chain\n-- theorem: PhysJS.Chandrasekhar.prefactor\n-- theorem: PhysJS.Shapiro.radial_integral\n\n-- covers: derivation-step: the constant is unfixed.\n\n-- target id: chain-be-63-be-37\n-- statement: PhysJS.ProofTarget.chain_be_63_be_37 : Prop\n\nPROOF-TARGET-DRAFT-BEGIN\n{\n  \"key\": \"chain-be-63-be-37\",\n  \"bridgeId\": \"chain-be-63-be-37\",\n  \"theorem\": \"PhysJS.ProofTarget.chain_be_63_be_37\",\n  \"covers\": \"derivation-step: the constant is unfixed.\",\n  \"coverage\": \"statement skeleton only\",\n  \"leanProof\": \"absent\",\n  \"axioms\": []\n}\nPROOF-TARGET-DRAFT-END\n"
+  }
+]

@@ -16,7 +16,6 @@ import { evaluateEinsteinTrace } from '../../bridges/equations/be-13-einstein-tr
 import { evaluateFRETEfficiency } from '../../bridges/equations/be-24-foerster-fret.js';
 import { evaluateIntrinsicInformation } from '../../bridges/equations/be-25-iit-phi.js';
 import { evaluateQuantumDarwinism } from '../../bridges/equations/be-49-quantum-darwinism.js';
-import { evaluateWFTimeSymmetry } from '../../bridges/equations/be-50-wheeler-feynman.js';
 import type { BridgeEdge } from '../edge.js';
 import {
   advancedFieldAmplitudeQ,
@@ -43,7 +42,7 @@ import {
   ricciScalarQ,
   stressEnergyTraceQ,
   systemEnvironmentCouplingQ,
-  timeSymmetryResidualQ,
+  timeSymmetricFieldAmplitudeQ,
   totalMutualInformationQ,
   tunnelingMassQ,
 } from '../quantities.js';
@@ -303,34 +302,46 @@ export const be49Edge: BridgeEdge = {
 };
 
 /**
- * BE-50 Wheeler-Feynman time-symmetry residual: (retarded-field-amplitude,
- * advanced-field-amplitude) → r_TS = (A_ret − A_adv)/(A_ret + A_adv). Wraps
- * `evaluateWFTimeSymmetry` (any consistent amplitude unit; returns
- * dimensionless). The evaluator throws RangeError when A_ret + A_adv = 0; the
- * domain rejects that case so `evaluateEdge` surfaces DomainViolationError.
+ * BE-50 Wheeler-Feynman time-symmetric field:
+ * A = (A_ret + A_adv)/2. This is the catalog `formula_latex` and the
+ * PhysJS statement. The residual r = (A_ret − A_adv)/(A_ret + A_adv)
+ * remains `evaluateWFTimeSymmetry` and `time-symmetry-residual`; it is
+ * not the theorem, so the edge no longer evaluates it.
  *
  * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
  * export for the 26-edge tranche — root-surface budget decision).
  */
+const BE50_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '/',
+  args: [
+    {
+      kind: 'op',
+      op: '+',
+      args: [
+        sym(retardedFieldAmplitudeQ.name, retardedFieldAmplitudeQ.dim),
+        sym(advancedFieldAmplitudeQ.name, advancedFieldAmplitudeQ.dim),
+      ],
+    },
+    sym('2', DIMENSIONLESS),
+  ],
+};
+
 export const be50Edge: BridgeEdge = {
   id: 'be-50',
   beId: 50,
   kind: 'bridge',
-  label: 'Wheeler-Feynman residual r_TS = (A_ret − A_adv)/(A_ret + A_adv)',
+  label: 'Wheeler-Feynman A = (A_ret + A_adv)/2',
   sources: [retardedFieldAmplitudeQ, advancedFieldAmplitudeQ],
-  target: timeSymmetryResidualQ,
+  target: timeSymmetricFieldAmplitudeQ,
   confidence: 'highly-speculative',
   domain: {
-    description: 'A_ret, A_adv finite and A_ret + A_adv ≠ 0',
+    description: 'A_ret and A_adv finite',
     predicate: (i) =>
-      isFin(i['retarded-field-amplitude']) &&
-      isFin(i['advanced-field-amplitude']) &&
-      i['retarded-field-amplitude'] + i['advanced-field-amplitude'] !== 0,
+      isFin(i['retarded-field-amplitude']) && isFin(i['advanced-field-amplitude']),
   },
   evaluate: (i) =>
-    evaluateWFTimeSymmetry({
-      A_retarded: i['retarded-field-amplitude'],
-      A_advanced: i['advanced-field-amplitude'],
-    }),
+    (i['retarded-field-amplitude'] + i['advanced-field-amplitude']) / 2,
+  symbolic: BE50_SYMBOLIC,
   citation: 'Wheeler & Feynman 1945 RMP 17:157; Cramer 1986 RMP 58:647',
 };

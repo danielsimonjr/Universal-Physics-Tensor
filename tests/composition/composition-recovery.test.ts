@@ -73,10 +73,18 @@ describe('scanCompositionRecovery', () => {
       'be-12->be-11-zurek',
       'be-42->be-12',
       'be-42->be-16',
+      'be-42->be-27',
       'be-42->be-33',
       'be-42-via-rs->be-12',
       'be-42-via-rs->be-16',
+      'be-42-via-rs->be-27',
       'be-42-via-rs->be-33',
+      'be-63->be-12',
+      'be-63->be-37',
+      'be-63->be-42',
+      'be-63->be-51',
+      'be-63->be-52',
+      'be-63->law-schwarzschild-radius',
       'law-schwarzschild-radius->be-42-via-rs',
     ]);
     expect(scan.hits).toEqual([]);

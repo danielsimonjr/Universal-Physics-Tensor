@@ -220,3 +220,17 @@ export const nucleonYieldRateQ: Quantity = {
   dim: NUMBER_DENSITY_RATE,
   attributes: { scale: 'cosmological' },
 };
+/** Canonical node for `lane-emden-omega-3` (ω₃⁰, dimensionless Lane-Emden n=3 surface value). */
+export const laneEmdenOmega3Q: Quantity = {
+  name: 'lane-emden-omega-3',
+  symbol: 'ω₃⁰',
+  dim: DIMENSIONLESS,
+  attributes: {},
+};
+/** Canonical node for `mean-molecular-weight-per-electron` (μ_e, dimensionless). */
+export const meanMolecularWeightPerElectronQ: Quantity = {
+  name: 'mean-molecular-weight-per-electron',
+  symbol: 'μ_e',
+  dim: DIMENSIONLESS,
+  attributes: {},
+};

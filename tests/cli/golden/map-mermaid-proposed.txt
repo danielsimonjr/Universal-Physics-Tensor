@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (111)"]
+  subgraph cl_0["anchored cluster (113)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -150,6 +150,17 @@ flowchart LR
     q_transfer_efficiency --> j_be_47
     q_nucleon_yield_rate(["nucleon-yield-rate"]):::qty
     j_be_47 --> q_nucleon_yield_rate
+    j_be_59["BE-59"]:::established
+    q_voltage(["voltage"]):::qty
+    q_voltage --> j_be_59
+    q_frequency(["frequency"]):::qty
+    j_be_59 --> q_frequency
+    j_be_63["BE-63"]:::established
+    q_lane_emden_omega_3(["lane-emden-omega-3"]):::qty
+    q_lane_emden_omega_3 --> j_be_63
+    q_mean_molecular_weight_per_electron(["mean-molecular-weight-per-electron"]):::qty
+    q_mean_molecular_weight_per_electron --> j_be_63
+    j_be_63 --> q_mass
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
     q_length --> j_CE_pendulum_period
@@ -291,7 +302,6 @@ flowchart LR
     q_current --> j_CE_ohm_law
     q_resistance(["resistance"]):::qty
     q_resistance --> j_CE_ohm_law
-    q_voltage(["voltage"]):::qty
     j_CE_ohm_law --> q_voltage
     j_CE_electrical_power["Electrical power"]:::law
     q_current --> j_CE_electrical_power
@@ -417,7 +427,6 @@ flowchart LR
     q_speed --> j_CE_stokes_drag
     j_CE_stokes_drag --> q_force
     j_CE_wave_speed["Wave relation (v = fλ)"]:::law
-    q_frequency(["frequency"]):::qty
     q_frequency --> j_CE_wave_speed
     q_wavelength(["wavelength"]):::qty
     q_wavelength --> j_CE_wave_speed
@@ -712,6 +721,7 @@ flowchart LR
     q_mass_density --> j_be_54
     q_brane_tension(["brane-tension"]):::qty
     q_brane_tension --> j_be_54
+    q_rescaled_cosmological_constant --> j_be_54
     j_be_54 --> q_hubble_rate_squared
     j_CE_friedmann_curvature["Friedmann equation (with curvature)"]:::law
     q_rho(["rho"]):::qty
@@ -745,6 +755,18 @@ flowchart LR
   end
   subgraph cl_4["anchored cluster (2)"]
     direction LR
+    j_be_55["BE-55"]:::established
+    q_chern_number(["chern-number"]):::qty
+    q_chern_number --> j_be_55
+    q_hall_conductance(["hall-conductance"]):::qty
+    j_be_55 --> q_hall_conductance
+    j_be_60["BE-60"]:::established
+    q_filling_fraction(["filling-fraction"]):::qty
+    q_filling_fraction --> j_be_60
+    j_be_60 --> q_hall_conductance
+  end
+  subgraph cl_5["anchored cluster (2)"]
+    direction LR
     j_CE_classical_electron_radius["Classical electron radius"]:::law
     q_classical_electron_radius(["classical-electron-radius"]):::qty
     j_CE_classical_electron_radius --> q_classical_electron_radius
@@ -753,7 +775,7 @@ flowchart LR
     q_thomson_cross_section(["thomson-cross-section"]):::qty
     j_CE_thomson_cross_section --> q_thomson_cross_section
   end
-  subgraph cl_5["anchored cluster (2)"]
+  subgraph cl_6["anchored cluster (2)"]
     direction LR
     j_CE_half_life["Radioactive half-life"]:::law
     q_decay_constant(["decay-constant"]):::qty
@@ -769,7 +791,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (31)"]
+  subgraph cl_iso["isolated (32)"]
     direction LR
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
@@ -845,6 +867,17 @@ flowchart LR
     q_truncation_coefficient_c --> j_be_39
     q_newton_coupling_beta(["newton-coupling-beta"]):::qty
     j_be_39 --> q_newton_coupling_beta
+    j_be_40["BE-40"]:::law
+    q_higgs_field(["higgs-field"]):::qty
+    q_higgs_field --> j_be_40
+    q_higgs_decay_constant(["higgs-decay-constant"]):::qty
+    q_higgs_decay_constant --> j_be_40
+    q_composite_higgs_alpha(["composite-higgs-alpha"]):::qty
+    q_composite_higgs_alpha --> j_be_40
+    q_composite_higgs_beta(["composite-higgs-beta"]):::qty
+    q_composite_higgs_beta --> j_be_40
+    q_composite_higgs_potential(["composite-higgs-potential"]):::qty
+    j_be_40 --> q_composite_higgs_potential
     j_be_43["BE-43"]:::speculative
     q_wormhole_cross_section_area(["wormhole-cross-section-area"]):::qty
     q_wormhole_cross_section_area --> j_be_43
@@ -886,8 +919,8 @@ flowchart LR
     q_retarded_field_amplitude --> j_be_50
     q_advanced_field_amplitude(["advanced-field-amplitude"]):::qty
     q_advanced_field_amplitude --> j_be_50
-    q_time_symmetry_residual(["time-symmetry-residual"]):::qty
-    j_be_50 --> q_time_symmetry_residual
+    q_time_symmetric_field_amplitude(["time-symmetric-field-amplitude"]):::qty
+    j_be_50 --> q_time_symmetric_field_amplitude
     j_be_53["BE-53"]:::established
     q_gauge_coupling(["gauge-coupling"]):::qty
     q_gauge_coupling --> j_be_53

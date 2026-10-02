@@ -15,10 +15,7 @@
  *
  * @module bridges/be63-chandrasekhar-mass
  */
-import { HBAR_SI, C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
-
-/** Unified atomic mass unit (mass per nucleon), kg. */
-const M_U_SI = 1.66053906660e-27;
+import { HBAR_SI, C_SI, G_SI, M_SUN_SI, M_U_SI } from '../core/constants.js';
 /** Lane-Emden n=3 surface constant ω₃⁰ = −ξ²θ'(ξ)|_surface. @public */
 export const LANE_EMDEN_OMEGA3 = 2.01824;
 

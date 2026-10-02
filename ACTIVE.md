@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Add composition edges for the proved seeds that `runChainPipeline(CATALOG_GRAPH)` cannot see, and align quantity names where two edges name one quantity.
+  The fifteen seeds with no edge are the ten atlas keys and be-40, be-55, be-59, be-60, be-63. An atlas bridge that is an equation-to-equation analogy stays out of the graph, with the reason recorded. A catalog seed gets an edge in the existing `BridgeEdge` form. Quantity renames are only for one physical quantity spelled two ways. The pipeline, the seed rule, `discovery.ts`, the probe, `src/atlas/public.ts`, and the package barrel stay as they are.
+  Done: the ten atlas seeds stay out of the graph, with the reason in `NOT_COMPOSABLE_SEEDS`. be-40, be-55, be-59, be-60, and be-63 are edges. be-27, be-37, be-43, be-50, and be-54 carry the equation the theorem states, including Λ/3 on be-54 and the Wheeler–Feynman average on be-50. be-21 stays a constant. No quantity was renamed. `runChainPipeline(CATALOG_GRAPH)` returns two stubs, `chain-be-63-be-12` and `chain-be-63-be-37`, and writes nothing.
 - [x] Assign §VI.6.1 tensor indices for BE-55 through BE-65 by the category-cluster rule that places BE-11 through BE-50, and keep that map in `src/bridges/tensor-index.ts` so the specification and the catalog agree.
   Done: the component is the catalog category letter. BE-55, BE-59, BE-60, BE-61, and BE-62 are the scale-transition index. BE-56 is the quantum-classical index. BE-57, BE-63, BE-64, and BE-65 are the information-geometry index. BE-58 is the emergence index. Category N stays unassigned. ζ is not pinned for the Chern rows. Ids 51–54 were blank in the original lists and now follow the same rule.
 - [x] Set package.json to 1.0.2. No tag is pushed. Publishing stays the owner's job.
