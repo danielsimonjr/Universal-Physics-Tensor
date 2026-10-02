@@ -8,7 +8,10 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 /-!
-`be-40`. Derivation step. `V/f⁴` depends only on `h/f`.
+`be-40`. Bridge. `V/f⁴` depends only on `h/f`.
+
+UPT stores a `formalRef` of kind `bridge` on `PhysJS.CompositeHiggs.scale_free`.
+The covers line still begins with `derivation-step`.
 
 With `θ = h/f` and `f ≠ 0`,
 
@@ -38,7 +41,8 @@ noncomputable def potential (alpha beta f h : ℝ) : ℝ :=
 
 /-- `V/f⁴` depends on `h` only through `θ = h/f`, and both terms carry `f⁴`.
 
-Covers the derivation step of `be-40`. Not a SILH matching. -/
+Kind `bridge` on `PhysJS.CompositeHiggs.scale_free`. The covers line still
+begins with `derivation-step`. Not a SILH matching. -/
 theorem scale_free (alpha beta f h f' h' : ℝ) (hf : f ≠ 0) (hf' : f' ≠ 0)
     (hθ : h / f = h' / f') :
     potential alpha beta f h / f ^ 4 = reduced alpha beta (h / f) ∧

@@ -7,7 +7,10 @@ import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.FieldSimp
 
 /-!
-`be-50`. The catalog half-sum, and the time-symmetric residual.
+`be-50`. Bridge. The catalog half-sum, and the time-symmetric residual.
+
+UPT stores a `formalRef` of kind `bridge` on `PhysJS.TimeSymmetric.wheeler_feynman`.
+The covers line still begins with `derivation-step`.
 
 When `A_ret + A_adv ≠ 0`,
 
@@ -59,7 +62,9 @@ theorem wheeler_feynman {X : Type*} (Aret Aadv : X → Fin 4 → ℝ) (x : X) (�
 
 /-- The residual vanishes if and only if `A_ret = A_adv`.
 
-Covers the derivation step of `be-50`. Not the absorber theory. -/
+`residual_iff` is separate from the formalRef. `be-50` is kind `bridge`
+on `wheeler_feynman`. The covers line still begins with `derivation-step`.
+Not the absorber theory. -/
 theorem residual_iff (Aret Aadv : ℝ) (hsum : Aret + Aadv ≠ 0) :
     2 * symmetricField Aret Aadv = Aret + Aadv ∧
       (residual Aret Aadv = 0 ↔ Aret = Aadv) := by

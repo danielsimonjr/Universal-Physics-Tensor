@@ -9,7 +9,10 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 /-!
-`be-59`. Derivation step. The Josephson frequency, not the tunneling Hamiltonian.
+`be-59`. Bridge. The Josephson frequency, not the tunneling Hamiltonian.
+
+UPT stores a `formalRef` of kind `bridge` on `PhysJS.Josephson.frequency_eq`.
+The covers line still begins with `derivation-step`.
 
 The encoded scalar is
 
@@ -40,7 +43,8 @@ noncomputable def singleElectron (e h V : ℝ) : ℝ :=
 
 The factor `2` is the pair charge.
 
-Covers the derivation step of `be-59`. Not the tunneling Hamiltonian. -/
+Kind `bridge` on `PhysJS.Josephson.frequency_eq`. The covers line still
+begins with `derivation-step`. Not the tunneling Hamiltonian. -/
 theorem frequency_eq (e h V : ℝ) (hh : h ≠ 0) :
     frequency e h V = (2 * e / h) * V ∧
       josephsonConstant e h = 2 * e / h ∧

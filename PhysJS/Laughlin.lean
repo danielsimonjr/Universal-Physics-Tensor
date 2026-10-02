@@ -8,7 +8,10 @@ import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.NormNum
 
 /-!
-`be-60`. The catalog filling fraction, and the `ν = 1/3` case.
+`be-60`. Bridge. The catalog filling fraction, and the `ν = 1/3` case.
+
+UPT stores a `formalRef` of kind `bridge` on `PhysJS.Laughlin.filling_fraction`.
+The covers line still begins with `derivation-step`.
 
 The encoded scalar at filling `ν = 1/3` is
 
@@ -70,7 +73,9 @@ theorem filling_fraction (p q : ℤ) (e h : ℝ) (hp : p ≠ 0) (hq : q ≠ 0) :
 /-- At `ν = 1/3`, `R_xy = 3 R_K = 3 h / e²`, and the product is `1`.
 At `ν = 1` the conductance and resistance are the integer plateau `C = 1`.
 
-Covers the derivation step of `be-60`. Not the Laughlin wavefunction. -/
+`fraction` is separate from the formalRef. `be-60` is kind `bridge` on
+`filling_fraction`. The covers line still begins with `derivation-step`.
+Not the Laughlin wavefunction. -/
 theorem fraction (e h : ℝ) (he : e ≠ 0) (hh : h ≠ 0) :
     sigma e h = (1 / 3) * e ^ 2 / h ∧
       resistance e h = 3 * vonKlitzing e h ∧

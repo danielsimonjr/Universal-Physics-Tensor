@@ -11,7 +11,10 @@ import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Ring
 
 /-!
-`be-12`. Derivation step. The two writings of the thermal wavelength.
+`be-12`. Bridge. The two writings of the thermal wavelength.
+
+UPT stores a `formalRef` of kind `bridge` on `PhysJS.ThermalDeBroglie.wavelength_eq`.
+The covers line still begins with `derivation-step`.
 
 The encoded scalar is
 
@@ -47,7 +50,8 @@ noncomputable def droppedTwo (ℏ m kB T : ℝ) : ℝ :=
 
 /-- The two writings agree when `h = 2π ℏ` and `ℏ > 0`.
 
-Covers the derivation step of `be-12`. Not Caldeira–Leggett dephasing. -/
+Kind `bridge` on `PhysJS.ThermalDeBroglie.wavelength_eq`. The covers line
+still begins with `derivation-step`. Not Caldeira–Leggett dephasing. -/
 theorem wavelength_eq (ℏ h m kB T : ℝ) (hm : 0 < m) (hkB : 0 < kB) (hT : 0 < T)
     (hℏ : 0 < ℏ) (hh : h = 2 * π * ℏ) :
     wavelength ℏ m kB T = wavelengthH h m kB T := by
