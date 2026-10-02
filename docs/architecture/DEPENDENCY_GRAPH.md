@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 51 files
 - **root**: 1 file
-- **composition**: 83 files
+- **composition**: 84 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -246,17 +246,16 @@ The codebase is organized into the following modules:
 | `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
 | `../composition/enumerate.js` | `enumerateCompositions` | Import |
 | `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
-| `../composition/buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
 | `../composition/chain-match.js` | `matchChain` | Import |
-| `../composition/chain-candidate.js` | `compareChainEdgeIds, orderChainCandidates, ChainCandidate` | Import |
-| `../composition/chain-regime.js` | `joinRegimeMismatch, ChainRegimeMismatch` | Import |
-| `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
+| `../composition/chain-candidate.js` | `compareChainEdgeIds, ChainCandidate` | Import |
+| `../composition/chain-result.js` | `chainOrderKey, orderChainRecords, ChainRecord` | Import |
+| `../composition/chain-regime.js` | `joinRegimeMismatch` | Import |
 | `./physjs-ref.js` | `bridgeSeedKeys, physjsTheorem` | Import |
 | `./proof-target.js` | `emitProofTarget` | Import |
 
 **Exports:**
 - Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`
-- Functions: `runChainPipeline`
+- Functions: `renderChainRecord`, `runChainPipeline`
 
 ---
 
@@ -4527,6 +4526,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/chain-result.ts` - One internal chain record.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
+| `./buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
+| `./chain-candidate.js` | `compareChainEdgeIds, ChainCandidateKind` | Import |
+| `./chain-regime.js` | `ChainRegimeMismatch` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `ChainRecord`
+- Functions: `chainOrderKey`, `orderChainRecords`
+
+---
+
 ### `src/composition/compose-surface.ts` - v0.11 surface barrel for the namespacing-gate symbols (keeps
 
 **Internal Dependencies:**
@@ -7892,7 +7907,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...78 more]
+        N36[...79 more]
     end
 
     subgraph Core
@@ -7978,17 +7993,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 422 |
+| Total TypeScript Files | 423 |
 | Total Modules | 13 |
-| Total Lines of Code | 92069 |
-| Total Exports | 2986 |
+| Total Lines of Code | 92160 |
+| Total Exports | 2989 |
 | Total Re-exports | 1396 |
 | Total Classes | 61 |
-| Total Interfaces | 477 |
-| Total Functions | 774 |
+| Total Interfaces | 478 |
+| Total Functions | 777 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 569 |
+| Type-only Imports | 570 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
