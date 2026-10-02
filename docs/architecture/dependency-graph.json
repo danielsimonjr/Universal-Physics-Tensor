@@ -4,7 +4,7 @@
     "version": "1.0.4",
     "totalFiles": 422,
     "totalModules": 13,
-    "totalExports": 2986
+    "totalExports": 2987
   },
   "entryPoints": [
     {
@@ -17364,7 +17364,8 @@
           {
             "file": "./edge.js",
             "imports": [
-              "CompositionAliasError"
+              "CompositionAliasError",
+              "UndefinedCompositionError"
             ]
           },
           {
@@ -17389,15 +17390,19 @@
         ],
         "exports": [
           "REGISTERED_COMPOSITION_IDS",
-          "enumerateCompositions"
+          "enumerateCompositions",
+          "enumerateCompositionsWithRefusals"
         ],
         "interfaces": [
           "CompositionCandidate",
           "DispositionRequired",
+          "RelationTableRefusal",
+          "EnumerationWithRefusals",
           "EnumerationReport"
         ],
         "functions": [
-          "enumerateCompositions"
+          "enumerateCompositions",
+          "enumerateCompositionsWithRefusals"
         ],
         "constants": [
           "REGISTERED_COMPOSITION_IDS"
@@ -29328,11 +29333,11 @@
   "statistics": {
     "totalTypeScriptFiles": 422,
     "totalModules": 13,
-    "totalLinesOfCode": 92069,
-    "totalExports": 2986,
+    "totalLinesOfCode": 92137,
+    "totalExports": 2987,
     "totalClasses": 61,
-    "totalInterfaces": 477,
-    "totalFunctions": 774,
+    "totalInterfaces": 479,
+    "totalFunctions": 775,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 756,
@@ -29341,6 +29346,6 @@
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 79
+    "unusedExportsCount": 80
   }
 }
