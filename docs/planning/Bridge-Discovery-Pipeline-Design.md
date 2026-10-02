@@ -224,6 +224,10 @@ decision recorded in `ACTIVE.md`. The operators those phases named are
 those functions. They do not pick a reading, and they do not re-run the
 calibration set.
 
+Whether a name junction is a compatible regime is
+`docs/planning/Regime-Aware-Join-Gate-Design.md`. This note does not
+state that rule.
+
 ## Refactor steps
 
 Easiest first. Each step is one pull request, with tests, and green CI.
