@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record composition-table refusals from enumeration as their own list, without changing which pairs are proof targets. Design: `docs/planning/refactor-integration-phase.md`, step 1.
+  Done: `enumerateCompositionsWithRefusals` returns the same `EnumerationReport` as `enumerateCompositions` plus `relationRefusals`. That list is `UndefinedCompositionError` only. `CompositionAliasError` stays `requiresDisposition`. A dimension or junction failure stays a silent non-pair. `proofTargets` is unchanged. `EnumerationReport` gains no field. The root barrel and `src/composition/index.ts` do not export the new names. The `composeEdges` comment names the nine catalog edges that carry a relation; those nine stay.
 - [x] Prepare package 1.0.4 from what merged since `v1.0.3`. No tag is pushed with this commit. Publishing stays the owner's job.
   Done: package version is 1.0.4. The [Unreleased] notes for #298, #299, and #300 are the [1.0.4] section. `git log v1.0.3..origin/master` is those three commits. Version-stamped artifacts carry 1.0.4. The `v1.0.4` tag is not pushed.
 - [x] A malformed variable value exits 1 in both `upt eval` and `upt evaluate`.

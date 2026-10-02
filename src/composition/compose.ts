@@ -437,10 +437,17 @@ export function composeEdges(
   const id = `${first.id}>>${second.id}`;
 
   // ── Atlas Phase 1 (S1.2b): the relation overlay, and NOTHING else. ────────
-  // Entered only when BOTH operands carry a `relation`. Every edge in
-  // `CATALOG_GRAPH` carries none, so every composition that works today skips
-  // this block entirely and the composed edge below is byte-identical —
-  // `relation`/`relationDerivedFrom` are not even present as keys.
+  // Entered only when BOTH operands carry a `relation`. An operand with no
+  // relation skips this block, and the composed edge then has no `relation`
+  // key. Nine edges in `CATALOG_GRAPH` do carry one: `be-11-master` and
+  // `be-11-zurek` (`coarse-graining`), and `be-21`, `be-37`, `be-48`,
+  // `be-51`, `be-52`, `be-55`, and `be-59` (`derivation`). Those nine stay.
+  // When both operands carry a relation, a silent table cell throws
+  // `UndefinedCompositionError`. The approximation cell throws the same
+  // error, because an edge relation carries no norm transport and this
+  // layer does not invent a bound. `enumerateCompositionsWithRefusals`
+  // records that throw on its own list. A dimension or junction failure
+  // is a different error and is not that list.
   let relationOverlay: Pick<
     BridgeEdge,
     'relation' | 'relationDerivedFrom' | 'conventions'
