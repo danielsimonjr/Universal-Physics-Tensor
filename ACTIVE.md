@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Refuse the formula name `euler`. Euler's number is `exp(x)`, for example `exp(1)`. A bare `e` stays the elementary charge and `E` stays energy. The error names `exp(x)`.
 - [x] Add src/relations/category.ts. An object is an id together with a Regime. A morphism is an id pair plus a RelationType. composeMorphisms delegates to composeRelation and returns no-composite-claim unchanged. No identity morphisms and no 2-cells. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 4.
 - [x] Move BRIDGE_DESCRIPTORS, getBridge, and the CATALOG_GRAPH scan inside auditCoverage from src/bridges/ into src/composition/, beside catalog-graph.ts. DATA_CONFRONTED_IDS stays in src/bridges/confrontation-coverage.ts. cli-api retargets auditCoverage at the composition module. The layer-order allowlist drops the three bridges-to-composition rows. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 2.
 - [x] Add a Bridge Equation section for each of BE-55 through BE-65 in the specification, in the house format of the existing sections, with the PhysJS proof-status block under each heading.

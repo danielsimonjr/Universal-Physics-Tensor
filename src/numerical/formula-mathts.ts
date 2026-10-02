@@ -19,18 +19,18 @@
  */
 
 import type { CompiledFormula, FormulaParser } from './formula.js';
-import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError, unknownFunctionMessage } from './formula.js';
+import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage } from './formula.js';
 import { E_SI } from '../core/constants.js';
 
 /**
  * Values injected ahead of the caller scope. MathTS's own `e` is Euler's
  * number; the physics reading is the elementary charge, and a scope entry
- * replaces it. `euler` is not a MathTS constant.
+ * replaces it. The name `euler` is refused: Euler's number is `exp(x)`.
  */
-const PHYSICS_VALUES: Readonly<Record<string, number>> = { e: E_SI, euler: Math.E };
+const PHYSICS_VALUES: Readonly<Record<string, number>> = { e: E_SI };
 
 /** Names that are constants here even when MathTS does not know them. */
-const PHYSICS_CONSTANT_NAMES: ReadonlySet<string> = new Set(['e', 'euler']);
+const PHYSICS_CONSTANT_NAMES: ReadonlySet<string> = new Set(['e']);
 
 /** Minimal structural shape of a MathTS AST node (the bits we use). */
 interface MathNode {
@@ -77,7 +77,7 @@ function createMathtsFormulaParser(
   // `sqrt(gamma*pressure/density)` died as "undeclared symbol 'gamma'".
   // Only a name that evaluates to a number is a MathTS constant (`pi`, `tau`).
   // Bare `e` is one of those, and evaluation replaces MathTS's Euler value
-  // with the elementary charge. `euler` is added below; MathTS does not know it.
+  // with the elementary charge. The name `euler` is refused below.
   // A call such as `gamma(5)` is still a callee, decided separately.
   const valueConstantCache = new Map<string, boolean>();
   const isValueConstant = (name: string): boolean => {
@@ -124,6 +124,13 @@ function createMathtsFormulaParser(
       );
       // A callee MathTS does not resolve and no shim supplies: evaluation would fail with MathTS's
       // own "Undefined function", so it fails with the shared diagnostic instead (audit I4).
+      const symbolNames = node
+        .filter((n) => n.isSymbolNode === true)
+        .map((n) => n.name)
+        .filter((n): n is string => typeof n === 'string');
+      if (symbolNames.includes('euler') || callees.has('euler')) {
+        throw new FormulaError(EULER_NUMBER_ERROR);
+      }
       const unknownCallee = [...callees].find((n) => !(n in shims) && !isBuiltin(n));
       const variables = [
         ...new Set(
