@@ -3,7 +3,7 @@ metadata:
   version: 1.0.4
   totalFiles: 423
   totalModules: 13
-  totalExports: 2990
+  totalExports: 2991
 entryPoints:
   - file: src/index.ts
     type: main
@@ -391,6 +391,10 @@ modules:
         - file: ../composition/enumerate.js
           imports:
             - enumerateCompositions
+        - file: ../relations/composition-table.js
+          imports:
+            - CompositionResult
+          typeOnly: true
         - file: ../composition/buckingham-filter.js
           imports:
             - buckinghamFilter
@@ -418,6 +422,7 @@ modules:
           imports:
             - emitProofTarget
       exports:
+        - categoryCompositionForChain
         - renderChainRecord
         - runChainPipeline
       interfaces:
@@ -425,6 +430,7 @@ modules:
         - ChainRestatementRecord
         - ChainStubRecord
       functions:
+        - categoryCompositionForChain
         - renderChainRecord
         - runChainPipeline
     src/atlas/composition-table.ts:
@@ -10451,6 +10457,10 @@ modules:
         - file: ../canonical/structural.js
           imports:
             - ChainClassification
+          typeOnly: true
+        - file: ../relations/composition-table.js
+          imports:
+            - CompositionResult
           typeOnly: true
         - file: ./buckingham-filter.js
           imports:
@@ -20482,16 +20492,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 423
   totalModules: 13
-  totalLinesOfCode: 92228
-  totalExports: 2990
+  totalLinesOfCode: 92260
+  totalExports: 2991
   totalClasses: 61
   totalInterfaces: 480
-  totalFunctions: 778
+  totalFunctions: 779
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 756
   totalReExports: 1396
-  totalTypeOnlyImports: 570
+  totalTypeOnlyImports: 572
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

@@ -4,7 +4,7 @@
     "version": "1.0.4",
     "totalFiles": 423,
     "totalModules": 13,
-    "totalExports": 2990
+    "totalExports": 2991
   },
   "entryPoints": [
     {
@@ -578,6 +578,13 @@
             ]
           },
           {
+            "file": "../relations/composition-table.js",
+            "imports": [
+              "CompositionResult"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "../composition/buckingham-filter.js",
             "imports": [
               "buckinghamFilter"
@@ -626,6 +633,7 @@
           }
         ],
         "exports": [
+          "categoryCompositionForChain",
           "renderChainRecord",
           "runChainPipeline"
         ],
@@ -635,6 +643,7 @@
           "ChainStubRecord"
         ],
         "functions": [
+          "categoryCompositionForChain",
           "renderChainRecord",
           "runChainPipeline"
         ]
@@ -15607,6 +15616,13 @@
             "typeOnly": true
           },
           {
+            "file": "../relations/composition-table.js",
+            "imports": [
+              "CompositionResult"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./buckingham-filter.js",
             "imports": [
               "BuckinghamFilterRecord"
@@ -29375,16 +29391,16 @@
   "statistics": {
     "totalTypeScriptFiles": 423,
     "totalModules": 13,
-    "totalLinesOfCode": 92228,
-    "totalExports": 2990,
+    "totalLinesOfCode": 92260,
+    "totalExports": 2991,
     "totalClasses": 61,
     "totalInterfaces": 480,
-    "totalFunctions": 778,
+    "totalFunctions": 779,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 756,
     "totalReExports": 1396,
-    "totalTypeOnlyImports": 570,
+    "totalTypeOnlyImports": 572,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
