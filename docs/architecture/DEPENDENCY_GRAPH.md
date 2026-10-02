@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 0.47.1
+**Version**: 1.0.3
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -26,10 +26,11 @@ This document provides a comprehensive dependency graph of all files, components
 11. [Dimensional Dependencies](#dimensional-dependencies)
 12. [Entry Dependencies](#entry-dependencies)
 13. [Numerical Dependencies](#numerical-dependencies)
-14. [Dependency Matrix](#dependency-matrix)
-15. [Circular Dependency Analysis](#circular-dependency-analysis)
-16. [Visual Dependency Graph](#visual-dependency-graph)
-17. [Summary Statistics](#summary-statistics)
+14. [Relations Dependencies](#relations-dependencies)
+15. [Dependency Matrix](#dependency-matrix)
+16. [Circular Dependency Analysis](#circular-dependency-analysis)
+17. [Visual Dependency Graph](#visual-dependency-graph)
+18. [Summary Statistics](#summary-statistics)
 
 ---
 
@@ -37,18 +38,19 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 67 files
+- **atlas**: 70 files
 - **bridges**: 91 files
-- **canonical**: 18 files
+- **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 47 files
+- **cli**: 50 files
 - **root**: 1 file
-- **composition**: 80 files
+- **composition**: 83 files
 - **core**: 11 files
 - **diff**: 3 files
-- **dimensional**: 32 files
+- **dimensional**: 36 files
 - **entry**: 1 file
-- **numerical**: 41 files
+- **numerical**: 42 files
+- **relations**: 5 files
 
 ---
 
@@ -218,28 +220,68 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/composition-table.ts` - The composition table for `RelationType` — a literal 8×8 matrix.
+### `src/atlas/catalog-formal-ref.ts` - Catalog formal references, keyed by bridge id.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `RelationType` | Import (type-only) |
+| `../relations/types.js` | `FormalRef` | Import (type-only) |
+| `./physjs-ref.js` | `physjsFormalRef` | Import |
 
 **Exports:**
-- Functions: `composeRelation`
-- Constants: `NO_COMPOSITE_CLAIM`, `COMPOSITION_TABLE`
+- Functions: `catalogFormalRef`
 
 ---
 
-### `src/atlas/conventions.ts` - Atlas Phase 1 — convention comparison.
+### `src/atlas/chain-pipeline.ts` - Internal bridge-discovery pipeline.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `Conventions` | Import (type-only) |
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
+| `../composition/enumerate.js` | `enumerateCompositions` | Import |
+| `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
+| `../composition/buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
+| `../composition/chain-match.js` | `matchChain` | Import |
+| `../composition/chain-candidate.js` | `compareChainEdgeIds, orderChainCandidates, ChainCandidate` | Import |
+| `../composition/chain-regime.js` | `joinRegimeMismatch, ChainRegimeMismatch` | Import |
+| `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
+| `./physjs-ref.js` | `bridgeSeedKeys, physjsTheorem` | Import |
+| `./proof-target.js` | `emitProofTarget` | Import |
 
 **Exports:**
-- Functions: `checkConventions`, `unknownConventionKeys`
+- Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`
+- Functions: `runChainPipeline`
+
+---
+
+### `src/atlas/composition-table.ts` - Re-export of the composition table. The table lives in
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../relations/composition-table.js` | `COMPOSITION_TABLE, composeRelation, NO_COMPOSITE_CLAIM` | Import |
+
+**Exports:**
+- Constants: `NO_COMPOSITE_CLAIM`, `COMPOSITION_TABLE`, `composeRelation`
+
+---
+
+### `src/atlas/conventions.ts` - Re-export of the convention comparison. The implementation lives in
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../relations/conventions.js` | `checkConventions, unknownConventionKeys` | Re-export |
+| `../relations/conventions.js` | `ConventionKey` | Re-export |
+
+**Exports:**
+- Re-exports: `checkConventions`, `unknownConventionKeys`, `ConventionKey`
 
 ---
 
@@ -286,7 +328,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `WitnessLike`, `CounterexampleLike`, `RejectionLike`, `EvidenceInput`
-- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `catalogEvidenceInput`, `deriveEvidenceForVerdict`, `deriveCompositeEvidence`
+- Functions: `counterexamplesWithRejection`, `deriveEvidence`, `provedWithUnresolvedCounterexample`, `catalogEvidenceInput`, `deriveEvidenceForVerdict`, `deriveCompositeEvidence`
 - Constants: `NO_PASSING_WITNESSES`
 
 ---
@@ -450,7 +492,7 @@ The codebase is organized into the following modules:
 | `./types.js` | `RelationType, EvidenceTag, LimitCharacter, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind, NormTransport` | Re-export |
 | `./types.js` | `MissingHorizonError, MissingLipschitzError` | Re-export |
 | `./types.js` | `ALL_EVIDENCE_TAGS` | Re-export |
-| `./derive-evidence.js` | `deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Re-export |
+| `./derive-evidence.js` | `deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample` | Re-export |
 | `./derive-evidence.js` | `CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike` | Re-export |
 | `./composition-table.js` | `composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM` | Re-export |
 | `./composition-table.js` | `CompositionResult, NoCompositeClaim` | Re-export |
@@ -521,25 +563,26 @@ The codebase is organized into the following modules:
   Counterexample, AtlasBridge, AtlasRejection, FormalFidelity, FormalRef, FormalRefKind,
   NormTransport, MissingHorizonError, MissingLipschitzError, ALL_EVIDENCE_TAGS,
   deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES,
-  CounterexampleLike, EvidenceInput, MembershipVerdict, RejectionLike, WitnessLike, composeRelation,
-  COMPOSITION_TABLE, NO_COMPOSITE_CLAIM, CompositionResult, NoCompositeClaim, boundPath,
-  findAtlasPath, findPath, horizonOnRoute, routeEntryModels, AppliedTransport, NoClaimReason,
-  PathBoundClaim, PathBoundResult, PathNoClaim, AtlasModel, ModelId, composeBounds, composeBoundPath,
-  IDENTITY_BOUND, BoundPair, ComposedPath, deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE,
-  CUBIC_STIFFNESS, DAMPING, INDUCTANCE, RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel,
-  OSCILLATOR_FAMILY, AtlasFamily, toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson,
-  JsonValue, blockingFindings, checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind,
-  ApplicabilityInput, ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult,
-  WitnessStatus, ATLAS_FAMILIES, runLinkPrediction, ATLAS_ID_PREFIX, toAtlasJsonLd,
-  toCombinedAtlasJson, QudtResolution, LinkPredictionResult, LinkPredictionTrial, DIFFUSION_FAMILY,
-  BRIDGE_HEAT_DIFFUSION, BRIDGE_SCHRODINGER_DIFFUSION, BRIDGE_WALK_DIFFUSION, DIFFUSION_BRIDGES,
-  DIFFUSION_MODELS, getDiffusionModel, WAVES_FAMILY, BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_SOUND_SPEED,
-  BRIDGE_STRING_WAVE, BRIDGE_WAVE_DALEMBERT, WAVE_BRIDGES, WAVE_MODELS, DIFFUSION_CLOSURE_BRIDGES,
-  WAVE_CLOSURE_BRIDGES, FAILURE_KINDS, HELD_OUT_FAMILY, HELD_OUT_MARKERS, Authorship, BenchmarkItem,
-  BenchmarkSplit, FailureKind, checkRenamedVariants, findCrossSplitLeakage, leakageKey,
-  LeakageCollision, VariantProblem, ABLATION_CONFIGS, FULL_CONFIG, runAtlasCondition, runAtlasOnItem,
-  AtlasRunConfig, AtlasVerdict, rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK,
-  CorpusRecord, Ranking, RetrievalQuery, ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS,
+  provedWithUnresolvedCounterexample, CounterexampleLike, EvidenceInput, MembershipVerdict,
+  RejectionLike, WitnessLike, composeRelation, COMPOSITION_TABLE, NO_COMPOSITE_CLAIM,
+  CompositionResult, NoCompositeClaim, boundPath, findAtlasPath, findPath, horizonOnRoute,
+  routeEntryModels, AppliedTransport, NoClaimReason, PathBoundClaim, PathBoundResult, PathNoClaim,
+  AtlasModel, ModelId, composeBounds, composeBoundPath, IDENTITY_BOUND, BoundPair, ComposedPath,
+  deriveRegimeGroups, regimeHolds, RegimeCheck, CAPACITANCE, CUBIC_STIFFNESS, DAMPING, INDUCTANCE,
+  RESISTANCE, SPRING_CONSTANT, ATLAS_MODELS, getAtlasModel, OSCILLATOR_FAMILY, AtlasFamily,
+  toAtlasJson, ATLAS_RECORD_SCHEMA_VERSION, AtlasRecordJson, JsonValue, blockingFindings,
+  checkApplicability, ApplicabilityFinding, ApplicabilityFindingKind, ApplicabilityInput,
+  ApplicabilitySeverity, passingWitnessIds, UnresolvedReason, WitnessRunResult, WitnessStatus,
+  ATLAS_FAMILIES, runLinkPrediction, ATLAS_ID_PREFIX, toAtlasJsonLd, toCombinedAtlasJson,
+  QudtResolution, LinkPredictionResult, LinkPredictionTrial, DIFFUSION_FAMILY, BRIDGE_HEAT_DIFFUSION,
+  BRIDGE_SCHRODINGER_DIFFUSION, BRIDGE_WALK_DIFFUSION, DIFFUSION_BRIDGES, DIFFUSION_MODELS,
+  getDiffusionModel, WAVES_FAMILY, BRIDGE_KLEIN_GORDON_WAVE, BRIDGE_SOUND_SPEED, BRIDGE_STRING_WAVE,
+  BRIDGE_WAVE_DALEMBERT, WAVE_BRIDGES, WAVE_MODELS, DIFFUSION_CLOSURE_BRIDGES, WAVE_CLOSURE_BRIDGES,
+  FAILURE_KINDS, HELD_OUT_FAMILY, HELD_OUT_MARKERS, Authorship, BenchmarkItem, BenchmarkSplit,
+  FailureKind, checkRenamedVariants, findCrossSplitLeakage, leakageKey, LeakageCollision,
+  VariantProblem, ABLATION_CONFIGS, FULL_CONFIG, runAtlasCondition, runAtlasOnItem, AtlasRunConfig,
+  AtlasVerdict, rankBySymbolOverlap, rankByStructure, rankByTextOverlap, recallAtK, CorpusRecord,
+  Ranking, RetrievalQuery, ATLAS_ONLY_NOTE, EMBEDDING_INSTRUCTION, FROZEN_VECTOR_DIMS,
   FROZEN_VECTOR_SHA256, OLLAMA_EMBEDDING_MODEL, OLLAMA_TIMEOUT_MS, PROPOSAL_NOTE,
   EmbeddingUnavailable, canonicalRetrievalCorpus, cosine, decodeFloat32, ollamaEmbedder, queryInput,
   rankByCosine, retrieveHybrid, stubEmbedder, stubVector, Embedder, EmbeddingFallbackReason,
@@ -835,7 +878,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PhysjsManifestFile`
-- Functions: `physjsFormalRef`, `physjsManifestProblems`
+- Functions: `physjsTheorem`, `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
 - Constants: `PHYSJS_COMMIT`
 
 ---
@@ -888,6 +931,20 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/atlas/proof-target.ts` - Lean statement skeleton for one chain candidate.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../composition/chain-candidate.js` | `ChainCandidate` | Import (type-only) |
+| `./physjs-ref.js` | `physjsTheorem` | Import |
+
+**Exports:**
+- Functions: `emitProofTarget`
+- Constants: `PROOF_TARGET_DRAFT_BEGIN`, `PROOF_TARGET_DRAFT_END`
+
+---
+
 ### `src/atlas/public.ts` - The PUBLIC atlas surface — reached as the `atlas` namespace of the package
 
 **External Dependencies:**
@@ -921,20 +978,21 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/regime.ts` - Regime derivation — π-groups as the coordinates a regime is written in.
+### `src/atlas/regime.ts` - Regime admission, and the re-export of the vocabulary half.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/buckingham.js` | `buckinghamPi` | Import |
-| `../dimensional/buckingham.js` | `DimensionalVariable, PiGroup` | Import (type-only) |
-| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../relations/regime.js` | `regimeHolds` | Import |
+| `./types.js` | `AtlasBridge` | Import (type-only) |
 | `./types.js` | `MissingDeltaAtError, MissingHorizonError` | Import |
-| `./types.js` | `AtlasBridge, Regime, RegimeInequality` | Import (type-only) |
+| `../relations/regime.js` | `collidingRegimeGroups, deriveRegimeGroups, intersectRegimes, regimeOverlap, uncoveredRegions` | Re-export |
+| `../relations/regime.js` | `RegimeBearing, RegimeOverlap, RegionSample` | Re-export |
 
 **Exports:**
-- Interfaces: `RegimeCheck`, `RegionSample`, `RegimeBearing`
-- Functions: `deriveRegimeGroups`, `regimeHolds`, `intersectRegimes`, `collidingRegimeGroups`, `regimeOverlap`, `uncoveredRegions`, `admitApproximation`
+- Functions: `admitApproximation`
+- Constants: `regimeHolds`
+- Re-exports: `collidingRegimeGroups`, `deriveRegimeGroups`, `intersectRegimes`, `regimeOverlap`, `uncoveredRegions`, `RegimeBearing`, `RegimeOverlap`, `RegionSample`
 
 ---
 
@@ -1002,23 +1060,19 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/atlas/types.ts` - Atlas Phase 0 pilot types (oscillator pilot).
+### `src/atlas/types.ts` - Atlas record types.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../dimensional/buckingham.js` | `DimensionalVariable, PiGroup` | Import (type-only) |
+| `../relations/types.js` | `FormalRef` | Import (type-only) |
+| `../relations/types.js` | `Conventions, FormalFidelity, FormalRef, FormalRefKind, RelationContract` | Re-export |
+| `../relations/types.js` | `ALL_EVIDENCE_TAGS` | Re-export |
 
 **Exports:**
 - Classes: `MissingHorizonError`, `MissingDeltaAtError`, `MissingLipschitzError`
-- Interfaces:
-
-  ```text
-  FormalRef, RegimeInequality, Regime, ApproximationBound, Witness, Counterexample, NormTransport,
-  AtlasBridge, AtlasRejection, Conventions
-  ```
-
-- Constants: `ALL_EVIDENCE_TAGS`
+- Interfaces: `Witness`, `NormTransport`, `AtlasBridge`, `AtlasRejection`
+- Re-exports: `Conventions`, `FormalFidelity`, `FormalRef`, `FormalRefKind`, `RelationContract`, `ALL_EVIDENCE_TAGS`
 
 ---
 
@@ -1605,7 +1659,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `HBAR_SI, C_SI, G_SI, M_SUN_SI` | Import |
+| `../core/constants.js` | `HBAR_SI, C_SI, G_SI, M_SUN_SI, M_U_SI` | Import |
 
 **Exports:**
 - Interfaces: `ChandrasekharInputs`, `ChandrasekharResult`
@@ -1756,17 +1810,14 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/confrontation-coverage.ts` - Empirical-spine coverage audit (Direction 4).
+### `src/bridges/confrontation-coverage.ts` - Catalog ids with a committed real-data confrontation.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./index.js` | `BRIDGE_EQUATIONS` | Import |
-| `../composition/catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./confrontations.js` | `CONFRONTATIONS` | Import |
 
 **Exports:**
-- Functions: `auditCoverage`
 - Constants: `DATA_CONFRONTED_IDS`
 
 ---
@@ -1802,23 +1853,6 @@ The codebase is organized into the following modules:
 - Interfaces: `ConfrontationEntry`
 - Functions: `confrontationRigor`, `rigorDistribution`, `listConfrontations`, `runConfrontation`
 - Constants: `CONFRONTATION_RIGOR`, `BCS_GAP_RATIO`, `CONFRONTATIONS`
-
----
-
-### `src/bridges/descriptor.ts` - Unified per-bridge descriptor — one lookup that JOINS the catalog's three
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `./index.js` | `BRIDGE_EQUATIONS, BridgeEquationEntry` | Import |
-| `./rhs-registry.js` | `BRIDGE_RHS_BY_ID, parseBridgeId` | Import |
-| `../composition/catalog-graph.js` | `CATALOG_GRAPH` | Import |
-| `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
-| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-
-**Exports:**
-- Functions: `getBridge`
-- Constants: `BRIDGE_DESCRIPTORS`
 
 ---
 
@@ -1871,7 +1905,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/bridges/equations/be-13-einstein-trace.ts` - Bridge Equation 13 — Trace of Einstein equations (Jacobson 1995
+### `src/bridges/equations/be-13-einstein-trace.ts` - Bridge Equation 13 — Einstein trace reduction.
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -2588,7 +2622,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
-- Functions: `evaluateBridge`
+- Functions: `missingEvaluatorMessage`, `evaluateBridge`
 - Constants: `BRIDGE_EVALUATORS`
 
 ---
@@ -2611,9 +2645,8 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../atlas/types.js` | `Conventions, Counterexample, FormalRef, Regime, RelationContract` | Import (type-only) |
-| `../atlas/physjs-ref.js` | `physjsFormalRef` | Import |
-| `../atlas/regime.js` | `deriveRegimeGroups` | Import |
+| `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
+| `../relations/regime.js` | `deriveRegimeGroups` | Import |
 | `../dimensional/types.js` | `LENGTH, VELOCITY` | Import |
 | `./be52-mercury-confrontation.js` | `MERCURY` | Import |
 | `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
@@ -2787,6 +2820,14 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/bridges/tensor-index.ts` - §VI.6.1 tensor-index component for a catalog category.
+
+**Exports:**
+- Functions: `tensorIndexComponent`
+- Constants: `TENSOR_INDEX_PATTERN`, `TENSOR_INDEX_BY_CATEGORY`
+
+---
+
 ## Canonical Dependencies
 
 ### `src/canonical/canonical-equation.ts` - Canonical (textbook) physics equations — the ground-truth L-layer of the
@@ -2798,7 +2839,7 @@ The codebase is organized into the following modules:
 | `../dimensional/buckingham.js` | `DimensionalVariable` | Import (type-only) |
 | `../core/types.js` | `TensorIndices` | Import (type-only) |
 | `../dimensional/einstein-equation.js` | `EinsteinFieldEquationNode` | Import (type-only) |
-| `../atlas/types.js` | `Conventions` | Import (type-only) |
+| `../relations/types.js` | `Conventions` | Import (type-only) |
 
 ---
 
@@ -2997,11 +3038,12 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/validator.js` | `validate` | Import |
 | `../composition/expr-eval.js` | `evalExpr` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID` | Import |
 | `./canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `./registry.js` | `CANONICAL_EQUATIONS, canonicalById` | Import |
 | `./normal-form.js` | `canonicalQuantityName, normalForm` | Import |
+| `./structural.js` | `classifyStructure` | Import |
 
 **Exports:**
 - Interfaces: `RecoveryOutcome`, `LinkageResult`
@@ -3018,7 +3060,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `MASS, TEMPERATURE` | Import |
 | `../dimensional/algebra.js` | `equals` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
 - Functions: `canonicalQuantityName`, `normalForm`, `structurallyEqual`
@@ -3075,6 +3117,24 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `canonicalToLaw`, `seedCanonicalLaws`
 - Constants: `CANONICAL_TENSOR_CONFIG`
+
+---
+
+### `src/canonical/structural.ts` - Structural half of a bridge↔canonical comparison, shared with the chain
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/validator.js` | `validate` | Import |
+| `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID` | Import |
+| `./registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `./normal-form.js` | `normalForm` | Import |
+
+**Exports:**
+- Interfaces: `StructuralPair`, `StructuralRelation`, `ChainConfirmation`, `ChainRestatement`, `ChainProvisional`
+- Functions: `classifyStructure`, `classifyStructure`, `classifyStructure`
 
 ---
 
@@ -3324,6 +3384,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../../atlas/catalog-formal-ref.js` | `catalogFormalRef` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 
 **Exports:**
@@ -3385,6 +3446,19 @@ The codebase is organized into the following modules:
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../output.js` | `emitJson` | Import |
+
+**Exports:**
+- Constants: `command`
+
+---
+
+### `src/cli/commands/chain.ts` - `upt chain` names the chain orchestrator and does not run it.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3485,9 +3559,10 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
-| `../../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/units.js` | `UnitError` | Import |
 | `../../numerical/binding-value.js` | `readBinding` | Import |
+| `../../numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3509,6 +3584,7 @@ The codebase is organized into the following modules:
 | `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
 | `../../numerical/binding-value.js` | `bindingInUnit` | Import |
+| `../../bridges/evaluators.js` | `missingEvaluatorMessage` | Import |
 
 **Exports:**
 - Functions: `weakFieldDomainNote`, `propagateUncertainty`
@@ -3593,6 +3669,7 @@ The codebase is organized into the following modules:
 | `./regime.js` | `*` | Import |
 | `./path.js` | `*` | Import |
 | `./atlas.js` | `*` | Import |
+| `./chain.js` | `*` | Import |
 | `./search.js` | `*` | Import |
 | `./retrieve.js` | `*` | Import |
 | `./metric.js` | `*` | Import |
@@ -3624,7 +3701,8 @@ The codebase is organized into the following modules:
 | `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
 | `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
-| `../../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../map-evidence.js` | `withCatalogEvidence` | Import |
 
 **Exports:**
 - Functions: `neighbourhood`
@@ -3846,9 +3924,9 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `E_SI, M_E_SI, M_SUN_SI` | Import |
-| `../composition/formula-names.js` | `MU0_SI` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
-| `../composition/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../dimensional/formula-names.js` | `MU0_SI` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 
 **Exports:**
 - Functions: `codataScope`
@@ -3905,6 +3983,21 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/map-evidence.ts` - Catalog evidence for `upt map`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../relations/types.js` | `EvidenceTag` | Import (type-only) |
+| `../atlas/derive-evidence.js` | `catalogEvidenceInput, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Import |
+| `../bridges/membership.js` | `adjudicateBridgeEntry` | Import |
+| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+
+**Exports:**
+- Functions: `deriveEdgeEvidence`, `withCatalogEvidence`
+
+---
+
 ### `src/cli/output.ts` - JSON output envelope for the UPT CLI.
 
 **Internal Dependencies:**
@@ -3916,6 +4009,23 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `JsonEnvelope`
 - Functions: `sanitize`, `emitJson`
+
+---
+
+### `src/cli/poster-source.ts` - The POSTER source for the physics map — turn the Atlas Phase 3 poster index
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../atlas/association.js` | `Association` | Import (type-only) |
+| `../atlas/derivation.js` | `Derivation, DerivationId` | Import (type-only) |
+| `../atlas/statement.js` | `Statement, StatementId` | Import (type-only) |
+| `../composition/graph-viz.js` | `VizJunction` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `PosterGraph`, `DanglingPremise`, `PosterValidation`
+- Functions: `validatePoster`, `posterJunctions`, `describePosterSource`
+- Constants: `POSTER_GRAPH`
 
 ---
 
@@ -3954,7 +4064,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../composition/canonical-graph.js` | `CANONICAL_CONSTANTS` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/units.js` | `unitTables` | Import |
 
@@ -4048,7 +4158,7 @@ The codebase is organized into the following modules:
 | `./composition/frontier-account.js` | `catalogFrontierAccount, formatFrontierAccount` | Re-export |
 | `./composition/discovery.js` | `rankDiscoveries, ANCHOR_DEFAULT` | Re-export |
 | `./bridges/index.js` | `BRIDGE_EQUATIONS` | Re-export |
-| `./bridges/confrontation-coverage.js` | `auditCoverage` | Re-export |
+| `./composition/audit-coverage.js` | `auditCoverage` | Re-export |
 | `./bridges/confrontations.js` | `CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution` | Re-export |
 | `./bridges/be53-yang-mills-confrontation.js` | `requestYangMillsConfrontation` | Re-export |
 | `./bridges/confrontations.js` | `ConfrontationEntry, RigorTier` | Re-export |
@@ -4070,9 +4180,10 @@ The codebase is organized into the following modules:
 | `./canonical/linkage.js` | `scanLinkages` | Re-export |
 | `./composition/proposed-bridges.js` | `deriveProposedBridges` | Re-export |
 | `./composition/consequence.js` | `describeDerivedClaim` | Re-export |
-| `./composition/graph-viz.js` | `filterEdges, deriveEdgeEvidence, formatFilterLegend` | Re-export |
-| `./composition/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
-| `./composition/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
+| `./composition/graph-viz.js` | `filterEdges, formatFilterLegend` | Re-export |
+| `./cli/map-evidence.js` | `deriveEdgeEvidence` | Re-export |
+| `./cli/poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
+| `./cli/poster-source.js` | `PosterGraph, PosterValidation` | Re-export |
 | `./composition/probe/index.js` | `DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch, formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy, formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds, runFalsification, rankPareto` | Re-export |
 | `./composition/adjudication.js` | `annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS` | Re-export |
 | `./composition/adjudication.js` | `AnnotatedCandidate, CandidateAdjudication` | Re-export |
@@ -4084,11 +4195,11 @@ The codebase is organized into the following modules:
 | `./composition/representative-values.js` | `REPRESENTATIVE_VALUES` | Re-export |
 | `./composition/canonical-compare.js` | `compareWithCanonical, compareUserEquation, describeComparison, describeComparisons` | Re-export |
 | `./composition/canonical-compare.js` | `CanonicalComparison` | Re-export |
-| `./composition/symbolic-constants.js` | `CONSTANTS, CONSTANT_PROVENANCE` | Re-export |
+| `./dimensional/symbolic-constants.js` | `CONSTANTS, CONSTANT_PROVENANCE` | Re-export |
 | `./composition/grounding.js` | `CandidateGrounding, CandidateReadiness` | Re-export |
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
 | `./atlas/families.js` | `ATLAS_FAMILIES` | Re-export |
-| `./atlas/derive-evidence.js` | `deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES` | Re-export |
+| `./atlas/derive-evidence.js` | `deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample` | Re-export |
 | `./atlas/coverage.js` | `summarizeEvidence, ALL_EVIDENCE_TAGS` | Re-export |
 | `./atlas/witness-artifact.js` | `runWitnessRegistry` | Re-export |
 | `./atlas/witness-specs.js` | `WITNESS_REGISTRY` | Re-export |
@@ -4122,8 +4233,8 @@ The codebase is organized into the following modules:
   EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck,
   CaseResult, convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
   simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
-  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, deriveEdgeEvidence,
-  formatFilterLegend, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
+  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
+  deriveEdgeEvidence, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
   PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap,
   expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap,
   loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
@@ -4135,14 +4246,14 @@ The codebase is organized into the following modules:
   describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
   compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
   CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
-  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, summarizeEvidence, ALL_EVIDENCE_TAGS,
-  runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness, OBSERVABLE_CARRIAGES,
-  OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf, ObservableCarriage,
-  ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups, regimeHolds, regimeOverlap,
-  uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample, familyChangeBlocksHorizon, findPath,
-  findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels, composeRelation,
-  PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport, AtlasBridge, RegimeInequality,
-  Witness, MissingLipschitzError, AtlasModel, ModelId
+  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample,
+  summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
+  OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
+  ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups,
+  regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample,
+  familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
+  routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
+  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
   ```
 
 
@@ -4161,6 +4272,20 @@ The codebase is organized into the following modules:
 - Interfaces: `CandidateAdjudication`
 - Functions: `candidateId`, `adjudicationFor`, `annotateAdjudications`
 - Constants: `ADJUDICATIONS`
+
+---
+
+### `src/composition/audit-coverage.ts` - Empirical-spine coverage audit (Direction 4).
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+| `../bridges/confrontation-coverage.js` | `DATA_CONFRONTED_IDS` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
+
+**Exports:**
+- Functions: `auditCoverage`
 
 ---
 
@@ -4229,6 +4354,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/buckingham-filter.ts` - Buckingham filter for one target and the variables that govern it.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/buckingham.js` | `DimensionalDeterminationResult, DimensionalVariable` | Import (type-only) |
+| `../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+
+**Exports:**
+- Interfaces: `BuckinghamFilterRecord`
+- Functions: `buckinghamFilter`
+
+---
+
 ### `src/composition/canonical-compare.ts` - Compare a user's formula with the canonical (textbook) equation it restates.
 
 **Internal Dependencies:**
@@ -4239,10 +4380,10 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
-| `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
-| `./formula-names.js` | `formulaNameDimensions` | Import |
+| `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
@@ -4265,7 +4406,7 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../core/constants.js` | `E_SI, M_E_SI` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../core/types.js` | `InformationMeasure` | Import (type-only) |
@@ -4287,7 +4428,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 41 `BridgeEdge`s
+### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 46 `BridgeEdge`s
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -4296,9 +4437,51 @@ The codebase is organized into the following modules:
 | `./edges/calibration.js` | `be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius` | Import |
 | `./edges/catalog-tranche.js` | `be14Edge, be19Edge, be21Edge, be48Edge, be53Edge, be54Edge` | Import |
 | `./edges/catalog-full.js` | `CATALOG_FULL_EDGES` | Import |
+| `./edges/proved-seeds.js` | `PROVED_SEED_EDGES` | Import |
 
 **Exports:**
 - Constants: `CATALOG_GRAPH`
+
+---
+
+### `src/composition/chain-candidate.ts` - A chain candidate and the order the pipeline reads candidates in.
+
+**Exports:**
+- Interfaces: `ChainCandidate`
+- Functions: `compareChainEdgeIds`, `orderChainCandidates`
+
+---
+
+### `src/composition/chain-match.ts` - Pipeline match for a chain of proved edges.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../canonical/structural.js` | `classifyStructure, ChainClassification` | Import |
+
+**Exports:**
+- Functions: `matchChain`
+
+---
+
+### `src/composition/chain-regime.ts` - Regime gate for a chain that meets on a quantity name.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+| `../bridges/tensor-index.js` | `tensorIndexComponent, TensorIndexComponent` | Import |
+| `../relations/regime.js` | `regimeOverlap` | Import |
+| `./axes.js` | `GATE_AXES` | Import |
+| `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `./quantity.js` | `Quantity` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `ChainRegimeMismatch`
+- Functions: `joinRegimeMismatch`
+- Constants: `REGIME_MISMATCH_KIND`
 
 ---
 
@@ -4331,7 +4514,7 @@ The codebase is organized into the following modules:
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
 | `./expr-subst.js` | `substitute` | Import |
 | `./expr-eval.js` | `evalExpr, SymbolicEvalError` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 
 **Exports:**
 - Classes: `SymbolicCompositionError`
@@ -4346,17 +4529,18 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/algebra.js` | `equals, format` | Import |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `./edge.js` | `BridgeEdge, EdgeConfidence` | Import (type-only) |
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
-| `./unit-convention.js` | `conventionFactor` | Import |
+| `../dimensional/unit-convention.js` | `conventionFactor` | Import |
 | `./edge.js` | `CompositionAliasError, CompositionDimensionError, CompositionJunctionError, DomainViolationError, UndefinedCompositionError` | Import |
-| `../atlas/composition-table.js` | `composeRelation, NO_COMPOSITE_CLAIM` | Import |
-| `../atlas/conventions.js` | `checkConventions` | Import |
-| `../atlas/types.js` | `Conventions, RelationContract, RelationType` | Import (type-only) |
+| `../relations/composition-table.js` | `composeRelation, NO_COMPOSITE_CLAIM` | Import |
+| `../relations/conventions.js` | `checkConventions` | Import |
+| `../relations/types.js` | `Conventions, RelationContract, RelationType` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `QuantityIdentification`, `AliasDisposition`, `ComposeOptions`
-- Functions: `effectiveAttributes`, `minConfidence`, `composeEdges`
+- Functions: `effectiveAttributes`, `minConfidence`, `junctionDimensionsMatch`, `composeEdges`
 - Constants: `QUANTITY_IDENTIFICATIONS`, `SOURCE_ALIAS_DISPOSITIONS`
 
 ---
@@ -4409,6 +4593,23 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/descriptor.ts` - Unified per-bridge descriptor — one lookup that JOINS the catalog's three
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/index.js` | `BRIDGE_EQUATIONS, BridgeEquationEntry` | Import |
+| `../bridges/rhs-registry.js` | `BRIDGE_RHS_BY_ID, parseBridgeId` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+
+**Exports:**
+- Functions: `getBridge`
+- Constants: `BRIDGE_DESCRIPTORS`
+
+---
+
 ### `src/composition/dimension-adjacency.ts` - Dimension-adjacency — a review surface for quantities that are absent from a
 
 **Internal Dependencies:**
@@ -4441,7 +4642,7 @@ The codebase is organized into the following modules:
 | `./edges/calibration.js` | `M_SUN_KG` | Import |
 | `./representative-values.js` | `REPRESENTATIVE_VALUES` | Import |
 | `./representative-values.js` | `RepresentativeValue` | Import (type-only) |
-| `./unit-convention.js` | `conventionScaleToSI` | Import |
+| `../dimensional/unit-convention.js` | `conventionScaleToSI` | Import |
 | `./quantities.js` | `* as REGISTRY_QUANTITIES` | Import |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 | `../dimensional/algebra.js` | `format` | Import |
@@ -4460,7 +4661,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./quantity.js` | `Quantity` | Import (type-only) |
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `../atlas/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
+| `../relations/types.js` | `Conventions, Counterexample, Regime, RelationContract` | Import (type-only) |
 
 **Exports:**
 - Classes: `CompositionJunctionError`, `CompositionDimensionError`, `DomainViolationError`, `CompositionAliasError`, `UndefinedCompositionError`
@@ -4520,6 +4721,10 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS, TEMPERATURE` | Import |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../bridges/equations/be-15-emergence.js` | `evaluateCoarseningLength` | Import |
 | `../../bridges/equations/be-27-effective-temperature.js` | `evaluateEffectiveTemperature` | Import |
 | `../../bridges/equations/be-33-hertz-millis.js` | `evaluateHertzMillis` | Import |
@@ -4588,6 +4793,10 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../bridges/equations/be-47-bbn-dark-sector.js` | `evaluateBBNDark` | Import |
 | `../../bridges/equations/be-31-causal-set-bd.js` | `evaluateBenincasaDowker` | Import |
 | `../../bridges/equations/be-20-vacuum-energy.js` | `evaluateCosmologicalConstantDensity` | Import |
@@ -4618,9 +4827,8 @@ The codebase is organized into the following modules:
 | `../../bridges/equations/be-24-foerster-fret.js` | `evaluateFRETEfficiency` | Import |
 | `../../bridges/equations/be-25-iit-phi.js` | `evaluateIntrinsicInformation` | Import |
 | `../../bridges/equations/be-49-quantum-darwinism.js` | `evaluateQuantumDarwinism` | Import |
-| `../../bridges/equations/be-50-wheeler-feynman.js` | `evaluateWFTimeSymmetry` | Import |
 | `../edge.js` | `BridgeEdge` | Import (type-only) |
-| `../quantities.js` | `advancedFieldAmplitudeQ, attemptFrequencyQ, barrierHeightQ, barrierWidthQ, biologicalRateCorrectionQ, conditionalProbabilityQ, cosmologicalConstantCurvatureQ, darwinismDecayExponentQ, darwinismMagnitudeQ, decoherenceRateQ, donorAcceptorDistanceQ, foersterRadiusQ, fragmentCountQ, fragmentMutualInformationQ, fretEfficiencyQ, intrinsicInformationQ, marginalProbabilityQ, mutationRateQ, referenceCouplingQ, relaxationRateQ, retardedFieldAmplitudeQ, ricciScalarQ, stressEnergyTraceQ, systemEnvironmentCouplingQ, timeSymmetryResidualQ, totalMutualInformationQ, tunnelingMassQ` | Import |
+| `../quantities.js` | `advancedFieldAmplitudeQ, attemptFrequencyQ, barrierHeightQ, barrierWidthQ, biologicalRateCorrectionQ, conditionalProbabilityQ, cosmologicalConstantCurvatureQ, darwinismDecayExponentQ, darwinismMagnitudeQ, decoherenceRateQ, donorAcceptorDistanceQ, foersterRadiusQ, fragmentCountQ, fragmentMutualInformationQ, fretEfficiencyQ, intrinsicInformationQ, marginalProbabilityQ, mutationRateQ, referenceCouplingQ, relaxationRateQ, retardedFieldAmplitudeQ, ricciScalarQ, stressEnergyTraceQ, systemEnvironmentCouplingQ, timeSymmetricFieldAmplitudeQ, totalMutualInformationQ, tunnelingMassQ` | Import |
 | `./_catalog-helpers.js` | `isFin` | Import |
 
 **Exports:**
@@ -4633,6 +4841,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../dimensional/types.js` | `DIMENSIONLESS, AREA, ENTROPY, FREQUENCY, MASS` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../../bridges/equations/be-14-ryu-takayanagi.js` | `evaluateRyuTakayanagi` | Import |
@@ -4649,15 +4860,40 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/edges/proved-seeds.ts` - Composition edges for proved catalog seeds that had no graph edge.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../../core/constants.js` | `C_SI, G_SI, HBAR_SI, M_U_SI` | Import |
+| `../../bridges/equations/be-40-composite-higgs.js` | `evaluateCompositeHiggs` | Import |
+| `../../bridges/be55-quantum-hall.js` | `evaluateQuantumHall` | Import |
+| `../../bridges/be59-ac-josephson.js` | `evaluateACJosephson` | Import |
+| `../../bridges/be60-fractional-qh.js` | `evaluateFractionalQH` | Import |
+| `../edge.js` | `BridgeEdge` | Import (type-only) |
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../quantities.js` | `chernNumberQ, compositeHiggsAlphaQ, compositeHiggsBetaQ, compositeHiggsPotentialQ, fillingFractionQ, frequencyQ, hallConductanceQ, higgsDecayConstantQ, higgsFieldQ, laneEmdenOmega3Q, massQ, meanMolecularWeightPerElectronQ, voltageQ` | Import |
+
+**Exports:**
+- Constants: `be40Edge`, `be55Edge`, `be59Edge`, `be60Edge`, `be63Edge`, `PROVED_SEED_EDGES`
+
+---
+
 ### `src/composition/enumerate.ts` - Phase-D novel-candidate enumeration (v0.10.0 T3 — Part-IX §6's
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./edge.js` | `CompositionAliasError` | Import |
 | `./compose.js` | `composeEdges` | Import |
 | `./compose.js` | `ComposeOptions` | Import (type-only) |
+| `./compose-symbolic.js` | `composeSymbolic` | Import |
 
 **Exports:**
 - Interfaces: `CompositionCandidate`, `DispositionRequired`, `EnumerationReport`
@@ -4694,7 +4930,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `./symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
 - Classes: `SymbolicEvalError`
@@ -4713,7 +4949,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `./compose-symbolic.js` | `Observable` | Import (type-only) |
 | `./compose-symbolic.js` | `makeObservable` | Import |
 
@@ -4732,22 +4968,6 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `substitute`
-
----
-
-### `src/composition/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}.
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
-| `../core/constants.js` | `C_SI, E_SI, M_E_SI` | Import |
-
-**Exports:**
-- Interfaces: `FormulaName`
-- Functions: `formulaNameDimensions`
-- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
 
 ---
 
@@ -4787,14 +5007,11 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
-| `../atlas/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
-| `../atlas/derive-evidence.js` | `catalogEvidenceInput, deriveEvidenceForVerdict, NO_PASSING_WITNESSES` | Import |
-| `../bridges/membership.js` | `adjudicateBridgeEntry` | Import |
-| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+| `../relations/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `VizJunction`, `VizFilterStats`, `VizCluster`, `VizOptions`, `VizModel`
-- Functions: `edgeToJunction`, `deriveEdgeEvidence`, `filterEdges`, `formatFilterLegend`, `buildVizModel`
+- Functions: `edgeToJunction`, `filterEdges`, `formatFilterLegend`, `buildVizModel`
 - Constants: `ALL_VIZ_STATUSES`
 
 ---
@@ -4861,8 +5078,6 @@ The codebase is organized into the following modules:
 | `./expr-eval.js` | `SymbolicEvalError` | Re-export |
 | `./graph-viz.js` | `VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats` | Re-export |
 | `./graph-viz.js` | `buildVizModel, edgeToJunction` | Re-export |
-| `./poster-source.js` | `PosterGraph, PosterValidation, DanglingPremise` | Re-export |
-| `./poster-source.js` | `POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource` | Re-export |
 | `./graph-viz-svg.js` | `renderDotToSvg, SvgRendererUnavailableError` | Re-export |
 | `./dimension-adjacency.js` | `DimensionAdjacency` | Re-export |
 | `./dimension-adjacency.js` | `dimensionAdjacency` | Re-export |
@@ -4891,43 +5106,19 @@ The codebase is organized into the following modules:
   DerivationExplanation, ExplainOptions, QuantityExplanation, explainQuantity, Observable,
   ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, VizStatus,
   VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel, edgeToJunction,
-  PosterGraph, PosterValidation, DanglingPremise, POSTER_GRAPH, posterJunctions, validatePoster,
-  describePosterSource, renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency,
-  dimensionAdjacency, UserEquation, EquationLanding, EquationAnalysis, EquationHint,
-  parseUserEquation, resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding,
-  analyzeUserEquation, UserEquationError
+  renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation,
+  EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, resolveToCatalogName,
+  suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
   ```
 
 
 ---
 
-### `src/composition/natural-units.ts` - Opt-in natural units. The default comparison stays SI: an energy written as
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+### `src/composition/not-composable-seeds.ts` - Proved atlas seeds that are not composition-graph edges.
 
 **Exports:**
-- Interfaces: `NaturalPowers`
-- Functions: `naturalConstantOverrides`, `naturalPowers`, `naturalNote`
-
----
-
-### `src/composition/poster-source.ts` - The POSTER source for the physics map — turn the Atlas Phase 3 poster index
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../atlas/association.js` | `Association` | Import (type-only) |
-| `../atlas/derivation.js` | `Derivation, DerivationId` | Import (type-only) |
-| `../atlas/statement.js` | `Statement, StatementId` | Import (type-only) |
-| `./graph-viz.js` | `VizJunction` | Import (type-only) |
-
-**Exports:**
-- Interfaces: `PosterGraph`, `DanglingPremise`, `PosterValidation`
-- Functions: `validatePoster`, `posterJunctions`, `describePosterSource`
-- Constants: `POSTER_GRAPH`
+- Interfaces: `NotComposableSeed`
+- Constants: `NOT_COMPOSABLE_SEEDS`
 
 ---
 
@@ -5461,7 +5652,7 @@ The codebase is organized into the following modules:
 | `../bridges/index.js` | `KnownIssue` | Import (type-only) |
 | `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
 | `../canonical/normal-form.js` | `normalForm` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./discovery.js` | `rankDiscoveries` | Import |
 | `./discovery.js` | `VettedCandidate` | Import (type-only) |
@@ -5490,7 +5681,7 @@ The codebase is organized into the following modules:
   ```text
   ENERGY_DIM, FREQUENCY_DIM, MASS_DENSITY, T_INV2, INV_AREA, INV_LENGTH, ENERGY_DENSITY, MOBILITY,
   RESISTIVITY, NUMBER_DENSITY, NUMBER_DENSITY_RATE, VECTOR_POTENTIAL, COUPLING_PREFACTOR_SQUARED,
-  TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2
+  TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2, CONDUCTANCE, VOLTAGE, ENERGY4
   ```
 
 
@@ -5527,8 +5718,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../quantity.js` | `Quantity` | Import (type-only) |
-| `../../dimensional/types.js` | `DIMENSIONLESS, LENGTH, MASS, TEMPERATURE, TIME` | Import |
-| `./_dims.js` | `INV_LENGTH, MOBILITY, RESISTIVITY, NUMBER_DENSITY, ENERGY_DIM2` | Import |
+| `../../dimensional/types.js` | `DIMENSIONLESS, FREQUENCY, LENGTH, MASS, TEMPERATURE, TIME` | Import |
+| `./_dims.js` | `INV_LENGTH, MOBILITY, RESISTIVITY, NUMBER_DENSITY, ENERGY_DIM2, CONDUCTANCE, VOLTAGE` | Import |
 
 **Exports:**
 - Constants:
@@ -5539,7 +5730,8 @@ The codebase is organized into the following modules:
   effectiveMassQ, carrierDensityQ, sykCoefficientQ, resistivityQ, activeNoiseEnergyQ,
   effectiveTemperatureQ, referenceCorrelationLengthQ, referenceTemperatureQ, staticExponentNuQ,
   dynamicExponentZQ, quantumCorrelationLengthQ, quenchTimescaleQ, microscopicRelaxationTimeQ,
-  spatialDimensionQ, defectRestMassQ, reheatingTemperatureQ, defectDensityQ
+  spatialDimensionQ, defectRestMassQ, reheatingTemperatureQ, defectDensityQ, chernNumberQ,
+  fillingFractionQ, hallConductanceQ, voltageQ, frequencyQ
   ```
 
 
@@ -5551,8 +5743,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../quantity.js` | `Quantity` | Import (type-only) |
-| `../../dimensional/types.js` | `DIMENSIONLESS, FORCE, MASS` | Import |
-| `./_dims.js` | `COUPLING_PREFACTOR_SQUARED, TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2` | Import |
+| `../../dimensional/types.js` | `DIMENSIONLESS, ENERGY, FORCE, MASS` | Import |
+| `./_dims.js` | `COUPLING_PREFACTOR_SQUARED, TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2, ENERGY4` | Import |
 
 **Exports:**
 - Constants:
@@ -5563,7 +5755,8 @@ The codebase is organized into the following modules:
   newtonianForceQ, mondAccelerationScaleQ, mondForceQ, newtonCouplingQ,
   cosmologicalConstantDimensionlessQ, truncationCoefficientAQ, truncationCoefficientBQ,
   truncationCoefficientCQ, newtonCouplingBetaQ, referenceMassQ, swamplandCoefficientQ,
-  scalarFieldValueQ, scalarFieldReferenceQ, planckMassQ, swamplandTowerMassQ
+  scalarFieldValueQ, scalarFieldReferenceQ, planckMassQ, swamplandTowerMassQ, higgsFieldQ,
+  higgsDecayConstantQ, compositeHiggsAlphaQ, compositeHiggsBetaQ, compositeHiggsPotentialQ
   ```
 
 
@@ -5588,7 +5781,8 @@ The codebase is organized into the following modules:
   tensorToScalarRatioQ, tccCorrectionCoefficientQ, maxEfoldsQ, measureNormalizationQ,
   anthropicModelParameterQ, landscapeParameterQ, anthropicProbabilityQ, hubbleRateQ,
   nucleonYieldDensityQ, smReactionRateCoefficientQ, protonDensityQ, neutronDensityQ,
-  darkReactionRateCoefficientQ, darkSpeciesDensityQ, transferEfficiencyQ, nucleonYieldRateQ
+  darkReactionRateCoefficientQ, darkSpeciesDensityQ, transferEfficiencyQ, nucleonYieldRateQ,
+  laneEmdenOmega3Q, meanMolecularWeightPerElectronQ
   ```
 
 
@@ -5612,7 +5806,8 @@ The codebase is organized into the following modules:
   conditionalProbabilityQ, marginalProbabilityQ, intrinsicInformationQ, attemptFrequencyQ,
   tunnelingMassQ, barrierHeightQ, barrierWidthQ, biologicalRateCorrectionQ, mutationRateQ,
   totalMutualInformationQ, darwinismMagnitudeQ, fragmentCountQ, darwinismDecayExponentQ,
-  fragmentMutualInformationQ, retardedFieldAmplitudeQ, advancedFieldAmplitudeQ, timeSymmetryResidualQ
+  fragmentMutualInformationQ, retardedFieldAmplitudeQ, advancedFieldAmplitudeQ, timeSymmetryResidualQ,
+  timeSymmetricFieldAmplitudeQ
   ```
 
 
@@ -5666,28 +5861,12 @@ The codebase is organized into the following modules:
 | `./edge.js` | `evaluateEdge` | Import |
 | `./compose.js` | `QuantityIdentification` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
-| `./unit-convention.js` | `conventionFactor` | Import |
+| `../dimensional/unit-convention.js` | `conventionFactor` | Import |
 | `./identifiability.js` | `classifyAll` | Import |
 
 **Exports:**
 - Interfaces: `RetrodictionPrediction`, `RetrodictionOptions`, `RetrodictionResult`, `RetrodictionReport`
 - Functions: `forwardEvaluate`, `retrodictNode`, `retrodict`
-
----
-
-### `src/composition/symbolic-constants.ts` - Symbolic-composition constant registry (v0.12 symbolic composition).
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `ACTION, CHARGE, DIMENSIONLESS, VELOCITY` | Import |
-| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
-
-**Exports:**
-- Interfaces: `ConstantProvenance`
-- Functions: `piMultipleValue`
-- Constants: `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -5698,25 +5877,11 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./edge.js` | `evaluateEdge` | Import |
-| `../atlas/types.js` | `ApproximationBound` | Import (type-only) |
+| `../relations/types.js` | `ApproximationBound` | Import (type-only) |
 
 **Exports:**
 - Interfaces: `UncertaintyOptions`, `UncertaintyResult`
 - Functions: `propagateUncertainty`
-
----
-
-### `src/composition/unit-convention.ts` - Per-quantity unit convention for the quantities whose dimension does not
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/algebra.js` | `equals` | Import |
-| `../dimensional/units.js` | `parseUnit` | Import |
-
-**Exports:**
-- Functions: `quantityConventionUnit`, `conventionScaleToSI`, `conventionFactor`
-- Constants: `QUANTITY_CONVENTION_UNIT`
 
 ---
 
@@ -5727,9 +5892,9 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
-| `./symbolic-constants.js` | `CONSTANTS` | Import |
-| `./formula-names.js` | `formulaNameDimensions` | Import |
-| `./natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
+| `../dimensional/natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
 | `./graph-viz.js` | `VizModel, VizJunction` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -5756,7 +5921,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/universal-physics-tensor` | `Axes` |
+| `universal-physics-tensor` | `Axes` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -5791,7 +5956,7 @@ The codebase is organized into the following modules:
 
   ```text
   C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, GM_SUN_SI,
-  GM_SUN_SOURCE, M_E_SI, B_WIEN_SI
+  GM_SUN_SOURCE, M_E_SI, B_WIEN_SI, M_U_SI
   ```
 
 
@@ -5823,7 +5988,13 @@ The codebase is organized into the following modules:
 | `./universal-index.js` | `AxisName, UniversalIndex, UniversalIndexId` | Import (type-only) |
 
 **Exports:**
-- Classes: `LabeledTensorConstructionError`, `AxisMismatchError`, `IdentityConflictError`, `RankPreservationError`, `AxisOrderError`, `AxisMergeError`, `AxisSplitError`, `LabeledTensor`
+- Classes:
+
+  ```text
+  LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, IndexNameMismatchError,
+  RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError, LabeledTensor
+  ```
+
 - Functions: `canonicalLabelOrder`
 
 ---
@@ -6099,7 +6270,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/dimensional/curvature.ts` - Curvature-derived helpers — Ricci, Einstein, Bianchi (v0.5.0 Phase 1d).
+### `src/dimensional/curvature.ts` - Curvature-derived helpers — Ricci and Einstein (v0.5.0 Phase 1d).
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -6107,12 +6278,10 @@ The codebase is organized into the following modules:
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./ast-types.js` | `ExprNode, CovariantIndex, RiemannTensorNode, MetricTensorNode, RicciTensorNode, EinsteinTensorNode, BianchiResidualNode` | Import (type-only) |
 | `./errors.js` | `IndexLabelCollisionError` | Import |
-| `../numerical/tensor-engine.js` | `TensorEngine` | Import (type-only) |
-| `../numerical/types.js` | `NumericalInputs, NestedArray` | Import (type-only) |
 | `./ast-types.js` | `RicciTensorNode, EinsteinTensorNode, BianchiResidualNode` | Re-export |
 
 **Exports:**
-- Functions: `validateRicciTensor`, `ricci`, `validateEinsteinTensor`, `einstein`, `validateBianchiResidual`, `bianchiResidual`
+- Functions: `validateRicciTensor`, `ricci`, `validateEinsteinTensor`, `einstein`, `validateBianchiResidual`
 - Re-exports: `RicciTensorNode`, `EinsteinTensorNode`, `BianchiResidualNode`
 
 ---
@@ -6201,6 +6370,22 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `validateFreeIndexLabelMatch`, `validateComponentDimension`, `validateTensorSymmetry`
+
+---
+
+### `src/dimensional/formula-names.ts` - Names a formula may use that are not leaves of {@link CONSTANTS}.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Dimension` | Import (type-only) |
+| `./types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
+| `../core/constants.js` | `C_SI, E_SI, M_E_SI` | Import |
+
+**Exports:**
+- Interfaces: `FormulaName`
+- Functions: `formulaNameDimensions`
+- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
 
 ---
 
@@ -6309,6 +6494,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/dimensional/natural-units.ts` - Opt-in natural units. The default comparison stays SI: an energy written as
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `NaturalPowers`
+- Functions: `naturalConstantOverrides`, `naturalPowers`, `naturalNote`
+
+---
+
 ### `src/dimensional/rg-flow.ts` - Renormalization-group (RG) flow primitives — `RGCouplingNode` +
 
 **Internal Dependencies:**
@@ -6338,6 +6536,22 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `validateStressEnergyTensor`, `validateCosmologicalConstant`
 - Re-exports: `StressEnergyTensorNode`, `CosmologicalConstantNode`
+
+---
+
+### `src/dimensional/symbolic-constants.ts` - Symbolic-composition constant registry (v0.12 symbolic composition).
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Dimension` | Import (type-only) |
+| `./types.js` | `ACTION, CHARGE, DIMENSIONLESS, MASS, VELOCITY` | Import |
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI, M_U_SI` | Import |
+
+**Exports:**
+- Interfaces: `ConstantProvenance`
+- Functions: `piMultipleValue`
+- Constants: `CONSTANTS`, `CONSTANT_PROVENANCE`
 
 ---
 
@@ -6386,6 +6600,20 @@ The codebase is organized into the following modules:
   ACTION, TEMPERATURE, ENTROPY, CHARGE, NAMED_DIMENSIONS
   ```
 
+
+---
+
+### `src/dimensional/unit-convention.ts` - Per-quantity unit convention for the quantities whose dimension does not
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./algebra.js` | `equals` | Import |
+| `./units.js` | `parseUnit` | Import |
+
+**Exports:**
+- Functions: `quantityConventionUnit`, `conventionScaleToSI`, `conventionFactor`
+- Constants: `QUANTITY_CONVENTION_UNIT`
 
 ---
 
@@ -6484,7 +6712,7 @@ The codebase is organized into the following modules:
 | `./core/regime-rule-install.js` | `*` | Import |
 | `./core/regimes-builtins.js` | `*` | Import |
 | `./core/tensor.js` | `UniversalTensor` | Re-export |
-| `./core/constants.js` | `C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_E_SI, B_WIEN_SI` | Re-export |
+| `./core/constants.js` | `C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, GM_SUN_SI, M_E_SI, B_WIEN_SI` | Re-export |
 | `./core/types.js` | `TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation, EmergentPhenomenon, PhysicalScale, Force, Symmetry, InformationMeasure` | Re-export |
 | `./core/types.js` | `PhysicalConstants` | Re-export |
 | `./core/cell.js` | `Cell, CellBase, CellConfidence, LawCell, BridgeCell, EmergenceCell` | Re-export |
@@ -6497,7 +6725,7 @@ The codebase is organized into the following modules:
 | `./core/universal-index.js` | `makeIndex` | Re-export |
 | `./core/axes-registry.js` | `AxesRegistry` | Re-export |
 | `./core/axes-registry.js` | `Axes` | Re-export |
-| `./core/labeled-tensor.js` | `LabeledTensor, LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError` | Re-export |
+| `./core/labeled-tensor.js` | `LabeledTensor, LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, IndexNameMismatchError, RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError` | Re-export |
 | `./core/regime-registry.js` | `RegimeProvenance, RegimeValueBase, RegimeSpec` | Re-export |
 | `./core/regime-registry.js` | `defineRegime, defineScale, defineForce, defineSymmetry, defineInformation, defineDimension, defineTopology, lookupRegime, listRegimesByAxis, provenanceFor, attachRegimesToCell, getCellRegimes, RegimeCollisionError` | Re-export |
 | `./diff/bridge-gradient.js` | `BridgeDiffSpec, BridgeGradientResult, BridgeNumericalGradientResult` | Re-export |
@@ -6517,7 +6745,7 @@ The codebase is organized into the following modules:
 | `./dimensional/validator.js` | `RicciTensorNode` | Re-export |
 | `./dimensional/curvature.js` | `einstein` | Re-export |
 | `./dimensional/validator.js` | `EinsteinTensorNode` | Re-export |
-| `./dimensional/curvature.js` | `bianchiResidual` | Re-export |
+| `./numerical/bianchi-residual.js` | `bianchiResidual` | Re-export |
 | `./dimensional/validator.js` | `BianchiResidualNode` | Re-export |
 | `./numerical/killing.js` | `verifyKillingEquation, checkKillingEquation, evaluateConservedCharge` | Re-export |
 | `./numerical/killing.js` | `KillingEquationOptions, KillingEquationCheck, ChristoffelAccess` | Re-export |
@@ -6534,6 +6762,8 @@ The codebase is organized into the following modules:
 | `./dimensional/klein-gordon-equation.js` | `ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult` | Re-export |
 | `./dimensional/klein-gordon-equation.js` | `validateKleinGordonEquation` | Re-export |
 | `./dimensional/types.js` | `Dimension` | Re-export |
+| `./dimensional/units.js` | `convertValue, parseUnit, UnitError` | Re-export |
+| `./dimensional/units.js` | `ParsedUnit, TemperatureReading` | Re-export |
 | `./dimensional/types.js` | `DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE` | Re-export |
 | `./dimensional/algebra.js` | `multiply, divide, power, add, subtract, equals, format, DimensionMismatchError` | Re-export |
 | `./dimensional/validator.js` | `ExprNode, TranscendentalFn, ValidationResult, Violation` | Re-export |
@@ -6652,30 +6882,31 @@ The codebase is organized into the following modules:
 
   ```text
   UniversalTensor, C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI,
-  M_SUN_SI, M_E_SI, B_WIEN_SI, TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation,
+  M_SUN_SI, GM_SUN_SI, M_E_SI, B_WIEN_SI, TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation,
   EmergentPhenomenon, PhysicalScale, Force, Symmetry, InformationMeasure, PhysicalConstants, Cell,
   CellBase, CellConfidence, LawCell, BridgeCell, EmergenceCell, compose, FluxDiagnostic, FluxReport,
   FluxViolationError, CatalogEntryStatus, CatalogIngestionReport, catalogToCells, scanCatalog,
   ingestCatalog, ingestionReportToFluxReport, CatalogIngestionError, AxisName, UniversalIndex,
   UniversalIndexId, MakeIndexOptions, makeIndex, AxesRegistry, Axes, LabeledTensor,
-  LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, RankPreservationError,
-  AxisOrderError, AxisMergeError, AxisSplitError, RegimeProvenance, RegimeValueBase, RegimeSpec,
-  defineRegime, defineScale, defineForce, defineSymmetry, defineInformation, defineDimension,
-  defineTopology, lookupRegime, listRegimesByAxis, provenanceFor, attachRegimesToCell, getCellRegimes,
-  RegimeCollisionError, BridgeDiffSpec, BridgeGradientResult, BridgeNumericalGradientResult,
-  bridgeGradient, bridgeGradientNumerical, gradientToNamed, ASTGradientResult, bridgeGradientAST,
-  bridgeGradientASTById, astDifferentiableBridgeIds, BE37_SHAPIRO_DIFF, BE52_PERIHELION_DIFF,
-  BE42_HAWKING_DIFF, BE11_DECOHERENCE_DIFF, DIFFERENTIABLE_BRIDGE_SPECS, BRIDGE_EQUATIONS,
-  BridgeEquationEntry, BridgeEquationStatus, BridgeIssueSeverity, BridgeIssueFixable, KnownIssue,
-  evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult,
-  evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult,
-  evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult,
-  evaluateCasimir, type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs,
-  type UnruhResult, evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult,
-  evaluateACJosephson, JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult,
-  evaluateFractionalQH, type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz,
-  LORENZ_NUMBER_SI, type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap,
-  BCS_GAP_RATIO, type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3,
+  LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, IndexNameMismatchError,
+  RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError, RegimeProvenance,
+  RegimeValueBase, RegimeSpec, defineRegime, defineScale, defineForce, defineSymmetry,
+  defineInformation, defineDimension, defineTopology, lookupRegime, listRegimesByAxis, provenanceFor,
+  attachRegimesToCell, getCellRegimes, RegimeCollisionError, BridgeDiffSpec, BridgeGradientResult,
+  BridgeNumericalGradientResult, bridgeGradient, bridgeGradientNumerical, gradientToNamed,
+  ASTGradientResult, bridgeGradientAST, bridgeGradientASTById, astDifferentiableBridgeIds,
+  BE37_SHAPIRO_DIFF, BE52_PERIHELION_DIFF, BE42_HAWKING_DIFF, BE11_DECOHERENCE_DIFF,
+  DIFFERENTIABLE_BRIDGE_SPECS, BRIDGE_EQUATIONS, BridgeEquationEntry, BridgeEquationStatus,
+  BridgeIssueSeverity, BridgeIssueFixable, KnownIssue, evaluateGravitationalLensing,
+  type GravitationalLensingInputs, type GravitationalLensingResult, evaluatePerihelionPrecession,
+  type PerihelionPrecessionInputs, type PerihelionPrecessionResult, evaluateQuantumHall,
+  VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult, evaluateCasimir,
+  type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs, type UnruhResult,
+  evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult, evaluateACJosephson,
+  JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult, evaluateFractionalQH,
+  type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz, LORENZ_NUMBER_SI,
+  type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap, BCS_GAP_RATIO,
+  type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3,
   type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity,
   THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass,
   type JeansInputs, type JeansResult, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
@@ -6691,16 +6922,17 @@ The codebase is organized into the following modules:
   validateBetaFunction, ArrowOfTime, GaugeFieldNode, TimeSymmetryPredicateNode,
   TimeSymmetryPredicateValidationResult, validateGaugeField, validateTimeSymmetryPredicate,
   ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult,
-  validateKleinGordonEquation, Dimension, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS,
-  VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply,
-  divide, power, add, subtract, equals, format, DimensionMismatchError, ExprNode, TranscendentalFn,
-  ValidationResult, Violation, validate, validateEquation, validateInverseMetricPair,
-  inferDimensionForBridge, evaluateEinsteinEquationResidual, EinsteinEquationResidualInput,
-  MetricClosure, Vec4, validateEinsteinFieldEquation, EinsteinFieldEquationNode,
-  EinsteinFieldEquationValidationResult, KretschmannScalarNode, KretschmannScalarValidationResult,
-  validateKretschmannScalar, computeKretschmann, evaluateNumerical, evaluateNumericalRaw,
-  evaluateMetricInverse, Float64ReferenceEngine, getActiveEngine, setActiveEngine,
-  NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
+  validateKleinGordonEquation, Dimension, convertValue, parseUnit, UnitError, ParsedUnit,
+  TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION,
+  FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply, divide, power, add, subtract,
+  equals, format, DimensionMismatchError, ExprNode, TranscendentalFn, ValidationResult, Violation,
+  validate, validateEquation, validateInverseMetricPair, inferDimensionForBridge,
+  evaluateEinsteinEquationResidual, EinsteinEquationResidualInput, MetricClosure, Vec4,
+  validateEinsteinFieldEquation, EinsteinFieldEquationNode, EinsteinFieldEquationValidationResult,
+  KretschmannScalarNode, KretschmannScalarValidationResult, validateKretschmannScalar,
+  computeKretschmann, evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse,
+  Float64ReferenceEngine, getActiveEngine, setActiveEngine, NumericalBackendError,
+  DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
   evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion, NumericalResult,
   NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec,
   NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options,
@@ -6791,16 +7023,31 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/numerical/bianchi-residual.ts` - Evaluator for the second-Bianchi-identity residual.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/ast-types.js` | `BianchiResidualNode, ExprNode, RiemannTensorNode` | Import (type-only) |
+| `./tensor-engine.js` | `TensorEngine` | Import (type-only) |
+| `./types.js` | `NumericalInputs, NestedArray` | Import (type-only) |
+| `./index.js` | `evaluateNumerical` | Import |
+
+**Exports:**
+- Functions: `bianchiResidual`
+
+---
+
 ### `src/numerical/binding-value.ts` - A binding value: a bare number, a number with a unit, or an expression of
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `M_SUN_SI` | Import |
-| `../composition/formula-names.js` | `FORMULA_NAMED` | Import |
-| `../composition/unit-convention.js` | `quantityConventionUnit` | Import |
-| `../composition/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
-| `../composition/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
+| `../dimensional/unit-convention.js` | `quantityConventionUnit` | Import |
+| `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
 | `../dimensional/units.js` | `convertValue, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
@@ -6968,17 +7215,18 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, ENERGY` | Import |
-| `../dimensional/algebra.js` | `equals, format` | Import |
+| `../dimensional/algebra.js` | `equals, format, multiply` | Import |
 | `../dimensional/validator.js` | `ExprNode, TranscendentalFn` | Import (type-only) |
 | `../dimensional/validator.js` | `validate` | Import |
 | `../dimensional/ast-builders.js` | `sym` | Import |
 | `./formula.js` | `FormulaAstNode` | Import (type-only) |
-| `./formula.js` | `parseFormulaToAst` | Import |
+| `./formula.js` | `EULER_NUMBER_ERROR, parseFormulaToAst` | Import |
 
 **Exports:**
 - Classes: `FormulaDimensionError`
 - Interfaces: `ParsedPhysics`, `FormulaDimensionChecker`
 - Functions: `formulaSymbolDimension`, `builtinFormulaDimensionChecker`, `loadFormulaDimensionChecker`
+- Constants: `ELEMENTARY_CHARGE_MIX_MESSAGE`
 
 ---
 
@@ -6988,7 +7236,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./formula.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
-| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError, unknownFunctionMessage` | Import |
+| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage` | Import |
 | `../core/constants.js` | `E_SI` | Import |
 
 **Exports:**
@@ -7024,7 +7272,7 @@ The codebase is organized into the following modules:
 - Classes: `FormulaError`
 - Interfaces: `CompiledFormula`, `FormulaParser`
 - Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `parseFormula`
-- Constants: `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
+- Constants: `EULER_NUMBER_ERROR`, `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
 
 ---
 
@@ -7429,6 +7677,76 @@ The codebase is organized into the following modules:
 
 ---
 
+## Relations Dependencies
+
+### `src/relations/category.ts` - Objects and morphisms of the regime category.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Regime, RelationType` | Import (type-only) |
+| `./composition-table.js` | `composeRelation, CompositionResult` | Import |
+
+**Exports:**
+- Interfaces: `CategoryObject`, `CategoryMorphism`
+- Functions: `composeMorphisms`
+
+---
+
+### `src/relations/composition-table.ts` - The composition table for `RelationType` — a literal 8×8 matrix.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `RelationType` | Import (type-only) |
+
+**Exports:**
+- Functions: `composeRelation`
+- Constants: `NO_COMPOSITE_CLAIM`, `COMPOSITION_TABLE`
+
+---
+
+### `src/relations/conventions.ts` - Atlas Phase 1 — convention comparison.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Conventions` | Import (type-only) |
+
+**Exports:**
+- Functions: `checkConventions`, `unknownConventionKeys`
+
+---
+
+### `src/relations/regime.ts` - Regime derivation — π-groups as the coordinates a regime is written in.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/buckingham.js` | `buckinghamPi` | Import |
+| `../dimensional/buckingham.js` | `DimensionalVariable, PiGroup` | Import (type-only) |
+| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `./types.js` | `Regime, RegimeInequality` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `RegimeCheck`, `RegionSample`, `RegimeBearing`
+- Functions: `deriveRegimeGroups`, `regimeHolds`, `intersectRegimes`, `collidingRegimeGroups`, `regimeOverlap`, `uncoveredRegions`
+
+---
+
+### `src/relations/types.ts` - Shared relation vocabulary.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/buckingham.js` | `PiGroup` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `FormalRef`, `RegimeInequality`, `Regime`, `ApproximationBound`, `Counterexample`, `Conventions`
+- Constants: `ALL_EVIDENCE_TAGS`
+
+---
+
 ## Dependency Matrix
 
 ### File Import/Export Matrix
@@ -7446,8 +7764,10 @@ The codebase is organized into the following modules:
 | `stats` | 0 files | 2 files |
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
-| `composition-table` | 1 files | 7 files |
-| `conventions` | 1 files | 4 files |
+| `catalog-formal-ref` | 2 files | 1 files |
+| `chain-pipeline` | 13 files | 0 files |
+| `composition-table` | 1 files | 6 files |
+| `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
 | `derivation` | 3 files | 3 files |
 | `derive-evidence` | 1 files | 3 files |
@@ -7463,8 +7783,6 @@ The codebase is organized into the following modules:
 | `index` | 38 files | 0 files |
 | `link-prediction` | 2 files | 1 files |
 | `model` | 2 files | 12 files |
-| `bridges-coarse` | 5 files | 2 files |
-| `bridges-exact` | 5 files | 3 files |
 
 ---
 
@@ -7483,7 +7801,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...62 more]
+        N5[...65 more]
     end
 
     subgraph Bridges
@@ -7501,7 +7819,7 @@ graph TD
         N14[_l1-build]
         N15[atomic]
         N16[condensed-matter]
-        N17[...13 more]
+        N17[...14 more]
     end
 
     subgraph Cases
@@ -7519,7 +7837,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...42 more]
+        N29[...45 more]
     end
 
     subgraph Root
@@ -7528,11 +7846,11 @@ graph TD
 
     subgraph Composition
         N31[adjudication]
-        N32[axes]
-        N33[axis-audit]
-        N34[bridge-analysis]
-        N35[bridge-prediction]
-        N36[...75 more]
+        N32[audit-coverage]
+        N33[axes]
+        N34[axis-audit]
+        N35[bridge-analysis]
+        N36[...78 more]
     end
 
     subgraph Core
@@ -7556,7 +7874,7 @@ graph TD
         N48[ast-types]
         N49[bridge-check]
         N50[buckingham]
-        N51[...27 more]
+        N51[...31 more]
     end
 
     subgraph Entry
@@ -7565,11 +7883,19 @@ graph TD
 
     subgraph Numerical
         N53[be37-covariant-eikonal]
-        N54[binding-value]
-        N55[christoffel-flat]
-        N56[connection-lowering-helpers]
-        N57[curvature-lowering-helpers]
-        N58[...36 more]
+        N54[bianchi-residual]
+        N55[binding-value]
+        N56[christoffel-flat]
+        N57[connection-lowering-helpers]
+        N58[...37 more]
+    end
+
+    subgraph Relations
+        N59[category]
+        N60[composition-table]
+        N61[conventions]
+        N62[regime]
+        N63[types]
     end
 
     N0 --> N48
@@ -7577,6 +7903,7 @@ graph TD
     N4 --> N3
     N10 --> N39
     N12 --> N50
+    N12 --> N63
     N13 --> N50
     N14 --> N12
     N14 --> N50
@@ -7601,7 +7928,6 @@ graph TD
     N26 --> N27
     N27 --> N25
     N27 --> N30
-    N28 --> N24
 ```
 
 ---
@@ -7610,20 +7936,20 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 401 |
-| Total Modules | 12 |
-| Total Lines of Code | 88979 |
-| Total Exports | 2904 |
-| Total Re-exports | 1377 |
-| Total Classes | 60 |
-| Total Interfaces | 462 |
-| Total Functions | 749 |
+| Total TypeScript Files | 421 |
+| Total Modules | 13 |
+| Total Lines of Code | 91581 |
+| Total Exports | 2977 |
+| Total Re-exports | 1396 |
+| Total Classes | 61 |
+| Total Interfaces | 476 |
+| Total Functions | 768 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 541 |
+| Type-only Imports | 568 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
 ---
 
-*Version*: 0.47.1
+*Version*: 1.0.3

@@ -102,16 +102,17 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // "admits a unique dimensional closure" ⟺ 0 free dimensionless
     // parameters (dimensionalFreedom === 0).
     const closable = ALL_EDGES.filter((e) => dimensionalFreedom(e) === 0);
-    // 16 of 41 admit SOME dimensional closure; 25 admit none.
-    expect(closable.length).toBe(16);
-    expect(ALL_EDGES.length - closable.length).toBe(25);
+    // 17 of 46 admit SOME dimensional closure; 29 admit none.
+    // be-59 (f = 2eV/h) is the added closure.
+    expect(closable.length).toBe(17);
+    expect(ALL_EDGES.length - closable.length).toBe(29);
   });
 
   it('dimensional analysis is a weak filter: a small minority are genuine monomial derivations', () => {
     const derived = ALL_EDGES.filter((e) => attemptDerivation(e).status === 'derived');
     // The form-matching subset (verified against each evaluator).
-    expect(derived.length).toBeGreaterThanOrEqual(9);
-    expect(derived.length).toBeLessThanOrEqual(11);
+    // be-59 joined this set: f = (2e/h) V is a monomial.
+    expect(derived.length).toBe(12);
   });
 });
 
@@ -144,13 +145,13 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     expect(free('be-39')).toBe(5); // asymptotic safety
   });
 
-  it('the spectrum histogram is pinned (16 at 0; max 6)', () => {
+  it('the spectrum histogram is pinned (17 at 0; max 6)', () => {
     const hist: Record<number, number> = {};
     for (const e of ALL_EDGES) hist[dimensionalFreedom(e)] = (hist[dimensionalFreedom(e)] ?? 0) + 1;
-    expect(hist[0]).toBe(16); // the dimensionally-pinned set (derived + decoy)
+    expect(hist[0]).toBe(17); // the dimensionally-pinned set (derived + decoy)
     expect(Math.max(...Object.keys(hist).map(Number))).toBe(6);
-    // 11 bridges are exactly one dimensionless ratio away from a monomial
-    expect(hist[1]).toBe(11);
+    // 13 bridges are exactly one dimensionless ratio away from a monomial
+    expect(hist[1]).toBe(13);
   });
 
   it('complexity is ORTHOGONAL to status: an established bridge sits at complexity 1', () => {

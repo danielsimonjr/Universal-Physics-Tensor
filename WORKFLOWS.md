@@ -116,8 +116,9 @@ not published.
    record the dependency-health snapshot under the release header in `CHANGELOG.md`.
 5. Commit, merge to `master`, and wait until CI on that commit is green.
 6. Tag that commit `vX.Y.Z` (`X.Y.Z` is `package.json`'s `version`) and push the tag. The
-   workflow checks out the tag, installs, builds, typechecks, runs the test suite, and fails
-   the job when the tag version (the leading `v` removed) is not `package.json`'s version.
+   workflow checks out the tag, fetches `origin/master` (the layer-order gate reads that ref,
+   and a tag checkout does not have it), installs, builds, typechecks, runs the test suite, and
+   fails the job when the tag version (the leading `v` removed) is not `package.json`'s version.
    It then runs `npm publish --provenance --access public` (`TOOLS.md`, Publish).
 7. Verify against the REGISTRY: `npm view universal-physics-tensor version --prefer-online`.
    Plain `npm view` serves a stale cache right after a publish.

@@ -1,8 +1,8 @@
 /**
  * Scalar `ExprNode` value evaluator (v0.12 symbolic composition).
  *
- * Numerically evaluates a SCALAR `ExprNode` (the `symbol` / `op` / `integral`
- * / `derivative` arms) given leaf values. The dimensional validator infers
+ * Numerically evaluates a SCALAR `ExprNode` (the `symbol` / `op` /
+ * `transcendental` / `abs` arms) given leaf values. The dimensional validator infers
  * dimensions but never computes values, and the formula parser evaluates a
  * DIFFERENT AST — so this is the missing primitive that makes a bridge's
  * `symbolic` form executable.
@@ -10,8 +10,9 @@
  * Leaf resolution order (Adam A-1, A-5): caller `values` win, then the
  * `CONSTANTS` registry, then a base-10 numeric-literal symbol (`'2'`, `'3'`);
  * an unresolved or non-finite leaf throws. `^` reads its exponent from the
- * second arg's `name` via `Number(...)` (matching validator.ts) and uses
- * `Math.pow`. Tensor / integral / derivative arms are out of scope and throw.
+ * second arg's value and uses `Math.pow`. `transcendental` and `abs` evaluate
+ * their scalar argument. Tensor / integral / derivative arms are out of scope
+ * and throw.
  *
  * INTERNAL — not on the public surface.
  *
@@ -19,7 +20,7 @@
  */
 
 import type { ExprNode } from '../dimensional/validator.js';
-import { CONSTANTS, piMultipleValue } from './symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 
 /** A scalar `ExprNode` could not be evaluated (unsupported arm / unresolved
  *  leaf / non-finite result). @public */
@@ -88,12 +89,45 @@ export function evalExpr(
       return finite(acc, node);
     }
 
+    case 'transcendental':
+      return finite(applyTranscendental(node.fn, evalExpr(node.arg, values)), node);
+
+    case 'abs':
+      return finite(Math.abs(evalExpr(node.arg, values)), node);
+
     default:
       throw new SymbolicEvalError(
         `evalExpr: node kind '${node.kind}' is out of scope (scalar ` +
-          `symbol/op only; integral/derivative/tensor nodes are not ` +
+          `symbol/op/transcendental/abs only; integral/derivative/tensor nodes are not ` +
           `numerically evaluable here).`,
       );
+  }
+}
+
+function applyTranscendental(fn: string, arg: number): number {
+  switch (fn) {
+    case 'exp':
+      return Math.exp(arg);
+    case 'ln':
+      return Math.log(arg);
+    case 'log2':
+      return Math.log2(arg);
+    case 'log10':
+      return Math.log10(arg);
+    case 'sin':
+      return Math.sin(arg);
+    case 'cos':
+      return Math.cos(arg);
+    case 'tan':
+      return Math.tan(arg);
+    case 'sinh':
+      return Math.sinh(arg);
+    case 'cosh':
+      return Math.cosh(arg);
+    case 'tanh':
+      return Math.tanh(arg);
+    default:
+      throw new SymbolicEvalError(`evalExpr: unknown transcendental '${fn}'.`);
   }
 }
 

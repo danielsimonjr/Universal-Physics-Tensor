@@ -27,7 +27,8 @@ import type { SourceName } from '../graphs.js';
 import type { EquationAnalysis } from '../../composition/user-equation.js';
 import type { CanonicalComparison } from '../../composition/canonical-compare.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
-import { naturalConstantOverrides, type UnitMode } from '../../composition/natural-units.js';
+import { naturalConstantOverrides, type UnitMode } from '../../dimensional/natural-units.js';
+import { withCatalogEvidence } from '../map-evidence.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--source', valueStyle: 'attached' },
@@ -102,7 +103,7 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         linkage map after it. --equation-only is the same verdict and errors
         when --equation is missing (with --json: no "linkage" field).
         A bare e in the formula is the elementary charge. E is energy.
-        Euler's number is exp(1) or euler.
+        Euler's number is exp(x), for example exp(1). The name euler is refused.
         --natural sets ħ = c = 1 for a dimension difference that is a power of
         those constants; --geometrized also allows powers of G. The SI default
         still refuses rest_energy = mass.
@@ -540,10 +541,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   // value costs nothing and always exits 1.
   const relation = parseFilter(lastValue(args.flags, 'relation'), RELATION_TYPES, '--relation');
   const evidence = parseFilter(lastValue(args.flags, 'evidence'), EVIDENCE_TAGS, '--evidence');
-  const filterOpts = {
+  const filterOpts = withCatalogEvidence({
     ...(relation !== undefined ? { relation } : {}),
     ...(evidence !== undefined ? { evidence } : {}),
-  };
+  });
   // The TEXT and JSON paths filter the edge list here, because `linkageMap`
   // consumes edges. The VISUAL path hands `buildVizModel` the FULL graph with
   // the same options, so the model also judges the --proposed / --equation

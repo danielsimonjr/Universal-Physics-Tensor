@@ -89,12 +89,12 @@ describe('SI names — elementary charge, energy, Euler', () => {
     expect(equals(b.parse('e^2', {}).dimension, chargeSquared)).toBe(true);
   });
 
-  it('exp(1) and euler are Euler\'s number, and a declared dimension still wins', async () => {
+  it('exp(1) is Euler\'s number, euler is refused, and a declared dimension still wins', async () => {
     const exp1 = await parsePhysics('exp(1)', {});
     expect(equals(exp1.dimension, DIMENSIONLESS)).toBe(true);
     expect(format(exp1.dimension)).toBe('[1]');
     expect(defaultFormulaParser.parse('exp(1)').evaluate({})).toBeCloseTo(Math.E, 12);
-    expect(defaultFormulaParser.parse('euler').evaluate({})).toBeCloseTo(Math.E, 12);
+    await expect(parsePhysics('euler', {})).rejects.toThrow(/exp\(x\)/);
     expect(defaultFormulaParser.parse('e').evaluate({})).toBeCloseTo(E_SI, 15);
     expect(defaultFormulaParser.parse('e^2').evaluate({})).toBeCloseTo(E_SI * E_SI, 30);
     const named = await parsePhysics('E', {});

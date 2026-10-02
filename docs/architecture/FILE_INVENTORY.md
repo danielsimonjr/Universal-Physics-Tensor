@@ -14,8 +14,9 @@ filesystem and counted a gitignored scratch file under `.remember/tmp/` as sourc
 it as dead code.
 
 The scope of this document is the **whole repository**. The `src`-only figures in the other
-documents come from this repository's own generator (`bun run docs:deps`) and are smaller by
-construction. Both are correct; each states its scope.
+documents come from this repository's own generator (`bun run docs:deps`: 421 files) and are
+smaller by construction. The zone and disposition tables below are the last `repo_map.py`
+census. They were not re-measured in this change, because that tool is not in this environment.
 
 ## By zone
 

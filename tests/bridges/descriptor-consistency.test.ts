@@ -18,7 +18,7 @@ import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import {
   BRIDGE_DESCRIPTORS,
   getBridge,
-} from '../../src/bridges/descriptor.js';
+} from '../../src/composition/descriptor.js';
 
 const catalogIds = new Set(BRIDGE_EQUATIONS.map((e) => e.id));
 
@@ -67,5 +67,16 @@ describe('bridge descriptor — cross-registry consistency', () => {
 
   it('getBridge throws on an uncatalogued id', () => {
     expect(() => getBridge(9999)).toThrow(/no catalogued bridge/);
+  });
+
+  it('control: an id in one registry and absent from another is the mismatch', () => {
+    const absent = 9999;
+    expect(catalogIds.has(absent)).toBe(false);
+    const rhsMismatch = [...BRIDGE_RHS_BY_ID.keys(), absent].filter((id) => !catalogIds.has(id));
+    expect(rhsMismatch).toEqual([absent]);
+    const edgeMismatch = [absent].filter((id) => !catalogIds.has(id));
+    expect(edgeMismatch).toEqual([absent]);
+    const dropped = [...BRIDGE_DESCRIPTORS.keys()].filter((id) => id !== BRIDGE_EQUATIONS[0]!.id);
+    expect(dropped.sort((a, b) => a - b)).not.toEqual([...catalogIds].sort((a, b) => a - b));
   });
 });

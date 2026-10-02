@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 70
+- **Potentially unused exports**: 77
 
 ## Potentially Unused Files
 
@@ -134,6 +134,18 @@ These exports are not imported by any other file in the codebase:
 - `sha256` (constant)
 - `argvFingerprint` (constant)
 
+### `src/composition/chain-regime.ts`
+
+- `REGIME_MISMATCH_KIND` (constant)
+
+### `src/composition/edges/proved-seeds.ts`
+
+- `be40Edge` (constant)
+- `be55Edge` (constant)
+- `be59Edge` (constant)
+- `be60Edge` (constant)
+- `be63Edge` (constant)
+
 ### `src/composition/frontier-account.ts`
 
 - `CONTESTED_BRIDGE_IDS` (constant)
@@ -142,13 +154,17 @@ These exports are not imported by any other file in the codebase:
 
 - `exprToInfix` (function)
 
-### `src/composition/unit-convention.ts`
+### `src/dimensional/unit-convention.ts`
 
 - `QUANTITY_CONVENTION_UNIT` (constant)
 
 ### `src/dimensional/units.ts`
 
 - `unitDimension` (function)
+
+### `src/numerical/formula-dimension.ts`
+
+- `ELEMENTARY_CHARGE_MIX_MESSAGE` (constant)
 
 ### `src/numerical/spacetime-metrics.ts`
 

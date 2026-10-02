@@ -31,9 +31,10 @@
  */
 
 import { equals, format } from '../dimensional/algebra.js';
+import type { Dimension } from '../dimensional/types.js';
 import type { BridgeEdge, EdgeConfidence } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
-import { conventionFactor } from './unit-convention.js';
+import { conventionFactor } from '../dimensional/unit-convention.js';
 import {
   CompositionAliasError,
   CompositionDimensionError,
@@ -44,9 +45,9 @@ import {
 // Atlas Phase 1 overlay. The composition table is a leaf module (pure, no
 // registry reads, no import from `src/composition/`), so this does not close a
 // cycle — same rule as the type-only atlas import in `./edge.ts`.
-import { composeRelation, NO_COMPOSITE_CLAIM } from '../atlas/composition-table.js';
-import { checkConventions } from '../atlas/conventions.js';
-import type { Conventions, RelationContract, RelationType } from '../atlas/types.js';
+import { composeRelation, NO_COMPOSITE_CLAIM } from '../relations/composition-table.js';
+import { checkConventions } from '../relations/conventions.js';
+import type { Conventions, RelationContract, RelationType } from '../relations/types.js';
 
 /**
  * The `RelationContract` a composed edge carries, given the composite TYPE the
@@ -297,6 +298,19 @@ function findJunction(
 }
 
 /**
+ * The two sides of a composition pipe have the same dimension.
+ *
+ * This is the check `composeEdges` already applied: `equals` on the seven
+ * SI bases, including that function's exponent tolerance. A mismatch is
+ * still {@link CompositionDimensionError}.
+ *
+ * @internal
+ */
+export function junctionDimensionsMatch(left: Dimension, right: Dimension): boolean {
+  return equals(left, right);
+}
+
+/**
  * Compose two edges into a new edge (sequential composition through a
  * shared quantity). See module docs for the definedness conditions.
  *
@@ -322,7 +336,7 @@ export function composeEdges(
     identifications,
   );
 
-  if (!equals(first.target.dim, junction.dim)) {
+  if (!junctionDimensionsMatch(first.target.dim, junction.dim)) {
     throw new CompositionDimensionError(
       `Cannot compose ${first.id} -> ${second.id}: junction dimension ` +
         `mismatch — ${first.target.name} is ${format(first.target.dim)} ` +

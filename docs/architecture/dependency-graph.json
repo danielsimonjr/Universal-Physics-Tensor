@@ -1,10 +1,10 @@
 {
   "metadata": {
     "name": "universal-physics-tensor",
-    "version": "0.47.1",
-    "totalFiles": 401,
-    "totalModules": 12,
-    "totalExports": 2904
+    "version": "1.0.3",
+    "totalFiles": 421,
+    "totalModules": 13,
+    "totalExports": 2977
   },
   "entryPoints": [
     {
@@ -501,17 +501,161 @@
           "HELD_OUT_MARKERS"
         ]
       },
-      "src/atlas/composition-table.ts": {
-        "description": "The composition table for `RelationType` — a literal 8×8 matrix.",
+      "src/atlas/catalog-formal-ref.ts": {
+        "description": "Catalog formal references, keyed by bridge id.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./types.js",
+            "file": "../relations/types.js",
             "imports": [
-              "RelationType"
+              "FormalRef"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./physjs-ref.js",
+            "imports": [
+              "physjsFormalRef"
+            ]
+          }
+        ],
+        "exports": [
+          "catalogFormalRef"
+        ],
+        "functions": [
+          "catalogFormalRef"
+        ]
+      },
+      "src/atlas/chain-pipeline.ts": {
+        "description": "Internal bridge-discovery pipeline.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../composition/edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../composition/enumerate.js",
+            "imports": [
+              "enumerateCompositions"
+            ]
+          },
+          {
+            "file": "../composition/buckingham-filter.js",
+            "imports": [
+              "buckinghamFilter"
+            ]
+          },
+          {
+            "file": "../composition/buckingham-filter.js",
+            "imports": [
+              "BuckinghamFilterRecord"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../composition/chain-match.js",
+            "imports": [
+              "matchChain"
+            ]
+          },
+          {
+            "file": "../composition/chain-candidate.js",
+            "imports": [
+              "compareChainEdgeIds",
+              "orderChainCandidates",
+              "ChainCandidate"
+            ]
+          },
+          {
+            "file": "../composition/chain-regime.js",
+            "imports": [
+              "joinRegimeMismatch",
+              "ChainRegimeMismatch"
+            ]
+          },
+          {
+            "file": "../canonical/structural.js",
+            "imports": [
+              "ChainClassification"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./physjs-ref.js",
+            "imports": [
+              "bridgeSeedKeys",
+              "physjsTheorem"
+            ]
+          },
+          {
+            "file": "./proof-target.js",
+            "imports": [
+              "emitProofTarget"
+            ]
+          }
+        ],
+        "exports": [
+          "runChainPipeline"
+        ],
+        "interfaces": [
+          "ChainConfirmationRecord",
+          "ChainRestatementRecord",
+          "ChainStubRecord"
+        ],
+        "functions": [
+          "runChainPipeline"
+        ]
+      },
+      "src/atlas/composition-table.ts": {
+        "description": "Re-export of the composition table. The table lives in",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../relations/composition-table.js",
+            "imports": [
+              "COMPOSITION_TABLE",
+              "composeRelation",
+              "NO_COMPOSITE_CLAIM"
+            ]
           }
         ],
         "exports": [
@@ -519,34 +663,42 @@
           "COMPOSITION_TABLE",
           "composeRelation"
         ],
-        "functions": [
-          "composeRelation"
-        ],
         "constants": [
           "NO_COMPOSITE_CLAIM",
-          "COMPOSITION_TABLE"
+          "COMPOSITION_TABLE",
+          "composeRelation"
         ]
       },
       "src/atlas/conventions.ts": {
-        "description": "Atlas Phase 1 — convention comparison.",
+        "description": "Re-export of the convention comparison. The implementation lives in",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "./types.js",
+            "file": "../relations/conventions.js",
             "imports": [
-              "Conventions"
+              "checkConventions",
+              "unknownConventionKeys"
             ],
-            "typeOnly": true
+            "reExport": true
+          },
+          {
+            "file": "../relations/conventions.js",
+            "imports": [
+              "ConventionKey"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
           "checkConventions",
-          "unknownConventionKeys"
+          "unknownConventionKeys",
+          "ConventionKey"
         ],
-        "functions": [
+        "reExported": [
           "checkConventions",
-          "unknownConventionKeys"
+          "unknownConventionKeys",
+          "ConventionKey"
         ]
       },
       "src/atlas/coverage.ts": {
@@ -676,6 +828,7 @@
           "NO_PASSING_WITNESSES",
           "counterexamplesWithRejection",
           "deriveEvidence",
+          "provedWithUnresolvedCounterexample",
           "catalogEvidenceInput",
           "deriveEvidenceForVerdict",
           "deriveCompositeEvidence"
@@ -689,6 +842,7 @@
         "functions": [
           "counterexamplesWithRejection",
           "deriveEvidence",
+          "provedWithUnresolvedCounterexample",
           "catalogEvidenceInput",
           "deriveEvidenceForVerdict",
           "deriveCompositeEvidence"
@@ -1192,7 +1346,8 @@
               "deriveCompositeEvidence",
               "deriveEvidence",
               "deriveEvidenceForVerdict",
-              "NO_PASSING_WITNESSES"
+              "NO_PASSING_WITNESSES",
+              "provedWithUnresolvedCounterexample"
             ],
             "reExport": true
           },
@@ -1752,6 +1907,7 @@
           "deriveEvidence",
           "deriveEvidenceForVerdict",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "composeRelation",
           "COMPOSITION_TABLE",
           "NO_COMPOSITE_CLAIM",
@@ -1970,6 +2126,7 @@
           "deriveEvidence",
           "deriveEvidenceForVerdict",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "CounterexampleLike",
           "EvidenceInput",
           "MembershipVerdict",
@@ -2979,6 +3136,8 @@
         ],
         "exports": [
           "PHYSJS_COMMIT",
+          "physjsTheorem",
+          "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
         ],
@@ -2986,6 +3145,8 @@
           "PhysjsManifestFile"
         ],
         "functions": [
+          "physjsTheorem",
+          "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
         ],
@@ -3152,6 +3313,38 @@
           "POSTER_REGISTRY"
         ]
       },
+      "src/atlas/proof-target.ts": {
+        "description": "Lean statement skeleton for one chain candidate.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../composition/chain-candidate.js",
+            "imports": [
+              "ChainCandidate"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./physjs-ref.js",
+            "imports": [
+              "physjsTheorem"
+            ]
+          }
+        ],
+        "exports": [
+          "PROOF_TARGET_DRAFT_BEGIN",
+          "PROOF_TARGET_DRAFT_END",
+          "emitProofTarget"
+        ],
+        "functions": [
+          "emitProofTarget"
+        ],
+        "constants": [
+          "PROOF_TARGET_DRAFT_BEGIN",
+          "PROOF_TARGET_DRAFT_END"
+        ]
+      },
       "src/atlas/public.ts": {
         "description": "The PUBLIC atlas surface — reached as the `atlas` namespace of the package",
         "externalDependencies": [
@@ -3297,29 +3490,22 @@
         ]
       },
       "src/atlas/regime.ts": {
-        "description": "Regime derivation — π-groups as the coordinates a regime is written in.",
+        "description": "Regime admission, and the re-export of the vocabulary half.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../dimensional/buckingham.js",
+            "file": "../relations/regime.js",
             "imports": [
-              "buckinghamPi"
+              "regimeHolds"
             ]
           },
           {
-            "file": "../dimensional/buckingham.js",
+            "file": "./types.js",
             "imports": [
-              "DimensionalVariable",
-              "PiGroup"
+              "AtlasBridge"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "DIMENSIONLESS"
-            ]
           },
           {
             "file": "./types.js",
@@ -3329,37 +3515,53 @@
             ]
           },
           {
-            "file": "./types.js",
+            "file": "../relations/regime.js",
             "imports": [
-              "AtlasBridge",
-              "Regime",
-              "RegimeInequality"
+              "collidingRegimeGroups",
+              "deriveRegimeGroups",
+              "intersectRegimes",
+              "regimeOverlap",
+              "uncoveredRegions"
             ],
-            "typeOnly": true
+            "reExport": true
+          },
+          {
+            "file": "../relations/regime.js",
+            "imports": [
+              "RegimeBearing",
+              "RegimeOverlap",
+              "RegionSample"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
-          "deriveRegimeGroups",
-          "regimeHolds",
-          "intersectRegimes",
           "collidingRegimeGroups",
+          "deriveRegimeGroups",
+          "intersectRegimes",
           "regimeOverlap",
           "uncoveredRegions",
-          "admitApproximation"
+          "regimeHolds",
+          "admitApproximation",
+          "RegimeBearing",
+          "RegimeOverlap",
+          "RegionSample"
         ],
-        "interfaces": [
-          "RegimeCheck",
-          "RegionSample",
-          "RegimeBearing"
+        "reExported": [
+          "collidingRegimeGroups",
+          "deriveRegimeGroups",
+          "intersectRegimes",
+          "regimeOverlap",
+          "uncoveredRegions",
+          "RegimeBearing",
+          "RegimeOverlap",
+          "RegionSample"
         ],
         "functions": [
-          "deriveRegimeGroups",
-          "regimeHolds",
-          "intersectRegimes",
-          "collidingRegimeGroups",
-          "regimeOverlap",
-          "uncoveredRegions",
           "admitApproximation"
+        ],
+        "constants": [
+          "regimeHolds"
         ]
       },
       "src/atlas/serialize.ts": {
@@ -3572,24 +3774,54 @@
         ]
       },
       "src/atlas/types.ts": {
-        "description": "Atlas Phase 0 pilot types (oscillator pilot).",
+        "description": "Atlas record types.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../dimensional/buckingham.js",
+            "file": "../relations/types.js",
             "imports": [
-              "DimensionalVariable",
-              "PiGroup"
+              "FormalRef"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../relations/types.js",
+            "imports": [
+              "Conventions",
+              "FormalFidelity",
+              "FormalRef",
+              "FormalRefKind",
+              "RelationContract"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "../relations/types.js",
+            "imports": [
+              "ALL_EVIDENCE_TAGS"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
           "ALL_EVIDENCE_TAGS",
           "MissingHorizonError",
           "MissingDeltaAtError",
-          "MissingLipschitzError"
+          "MissingLipschitzError",
+          "Conventions",
+          "FormalFidelity",
+          "FormalRef",
+          "FormalRefKind",
+          "RelationContract"
+        ],
+        "reExported": [
+          "Conventions",
+          "FormalFidelity",
+          "FormalRef",
+          "FormalRefKind",
+          "RelationContract",
+          "ALL_EVIDENCE_TAGS"
         ],
         "classes": [
           "MissingHorizonError",
@@ -3597,19 +3829,10 @@
           "MissingLipschitzError"
         ],
         "interfaces": [
-          "FormalRef",
-          "RegimeInequality",
-          "Regime",
-          "ApproximationBound",
           "Witness",
-          "Counterexample",
           "NormTransport",
           "AtlasBridge",
-          "AtlasRejection",
-          "Conventions"
-        ],
-        "constants": [
-          "ALL_EVIDENCE_TAGS"
+          "AtlasRejection"
         ]
       },
       "src/atlas/waves/bridges-closure.ts": {
@@ -5149,7 +5372,8 @@
               "HBAR_SI",
               "C_SI",
               "G_SI",
-              "M_SUN_SI"
+              "M_SUN_SI",
+              "M_U_SI"
             ]
           }
         ],
@@ -5707,22 +5931,10 @@
         ]
       },
       "src/bridges/confrontation-coverage.ts": {
-        "description": "Empirical-spine coverage audit (Direction 4).",
+        "description": "Catalog ids with a committed real-data confrontation.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
-          {
-            "file": "./index.js",
-            "imports": [
-              "BRIDGE_EQUATIONS"
-            ]
-          },
-          {
-            "file": "../composition/catalog-graph.js",
-            "imports": [
-              "CATALOG_GRAPH"
-            ]
-          },
           {
             "file": "./confrontations.js",
             "imports": [
@@ -5731,11 +5943,7 @@
           }
         ],
         "exports": [
-          "DATA_CONFRONTED_IDS",
-          "auditCoverage"
-        ],
-        "functions": [
-          "auditCoverage"
+          "DATA_CONFRONTED_IDS"
         ],
         "constants": [
           "DATA_CONFRONTED_IDS"
@@ -5899,57 +6107,6 @@
           "CONFRONTATIONS"
         ]
       },
-      "src/bridges/descriptor.ts": {
-        "description": "Unified per-bridge descriptor — one lookup that JOINS the catalog's three",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "./index.js",
-            "imports": [
-              "BRIDGE_EQUATIONS",
-              "BridgeEquationEntry"
-            ]
-          },
-          {
-            "file": "./rhs-registry.js",
-            "imports": [
-              "BRIDGE_RHS_BY_ID",
-              "parseBridgeId"
-            ]
-          },
-          {
-            "file": "../composition/catalog-graph.js",
-            "imports": [
-              "CATALOG_GRAPH"
-            ]
-          },
-          {
-            "file": "../composition/edge.js",
-            "imports": [
-              "BridgeEdge"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../dimensional/validator.js",
-            "imports": [
-              "ExprNode"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "BRIDGE_DESCRIPTORS",
-          "getBridge"
-        ],
-        "functions": [
-          "getBridge"
-        ],
-        "constants": [
-          "BRIDGE_DESCRIPTORS"
-        ]
-      },
       "src/bridges/equations/_be-helpers.ts": {
         "description": "Shared helpers for the 43 BE-NN bridge-equation modules in",
         "externalDependencies": [],
@@ -6106,7 +6263,7 @@
         ]
       },
       "src/bridges/equations/be-13-einstein-trace.ts": {
-        "description": "Bridge Equation 13 — Trace of Einstein equations (Jacobson 1995",
+        "description": "Bridge Equation 13 — Einstein trace reduction.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -8548,6 +8705,7 @@
         ],
         "exports": [
           "BRIDGE_EVALUATORS",
+          "missingEvaluatorMessage",
           "evaluateBridge"
         ],
         "interfaces": [
@@ -8556,6 +8714,7 @@
           "EvaluatorSpec"
         ],
         "functions": [
+          "missingEvaluatorMessage",
           "evaluateBridge"
         ],
         "constants": [
@@ -8592,24 +8751,17 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions",
               "Counterexample",
-              "FormalRef",
               "Regime",
               "RelationContract"
             ],
             "typeOnly": true
           },
           {
-            "file": "../atlas/physjs-ref.js",
-            "imports": [
-              "physjsFormalRef"
-            ]
-          },
-          {
-            "file": "../atlas/regime.js",
+            "file": "../relations/regime.js",
             "imports": [
               "deriveRegimeGroups"
             ]
@@ -9340,6 +9492,24 @@
         "functions": [
           "decidingMeasurement"
         ]
+      },
+      "src/bridges/tensor-index.ts": {
+        "description": "§VI.6.1 tensor-index component for a catalog category.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "TENSOR_INDEX_PATTERN",
+          "TENSOR_INDEX_BY_CATEGORY",
+          "tensorIndexComponent"
+        ],
+        "functions": [
+          "tensorIndexComponent"
+        ],
+        "constants": [
+          "TENSOR_INDEX_PATTERN",
+          "TENSOR_INDEX_BY_CATEGORY"
+        ]
       }
     },
     "canonical": {
@@ -9377,7 +9547,7 @@
             "typeOnly": true
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions"
             ],
@@ -10023,7 +10193,7 @@
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -10053,6 +10223,12 @@
             "imports": [
               "canonicalQuantityName",
               "normalForm"
+            ]
+          },
+          {
+            "file": "./structural.js",
+            "imports": [
+              "classifyStructure"
             ]
           }
         ],
@@ -10102,7 +10278,7 @@
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "piMultipleValue"
@@ -10292,6 +10468,66 @@
         ],
         "constants": [
           "CANONICAL_TENSOR_CONFIG"
+        ]
+      },
+      "src/canonical/structural.ts": {
+        "description": "Structural half of a bridge↔canonical comparison, shared with the chain",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "validate"
+            ]
+          },
+          {
+            "file": "../bridges/rhs-registry.js",
+            "imports": [
+              "BRIDGE_RHS_BY_ID"
+            ]
+          },
+          {
+            "file": "./registry.js",
+            "imports": [
+              "CANONICAL_EQUATIONS"
+            ]
+          },
+          {
+            "file": "./normal-form.js",
+            "imports": [
+              "normalForm"
+            ]
+          }
+        ],
+        "exports": [
+          "classifyStructure"
+        ],
+        "interfaces": [
+          "StructuralPair",
+          "StructuralRelation",
+          "ChainConfirmation",
+          "ChainRestatement",
+          "ChainProvisional"
+        ],
+        "functions": [
+          "classifyStructure",
+          "classifyStructure",
+          "classifyStructure"
         ]
       }
     },
@@ -11039,6 +11275,12 @@
             ]
           },
           {
+            "file": "../../atlas/catalog-formal-ref.js",
+            "imports": [
+              "catalogFormalRef"
+            ]
+          },
+          {
             "file": "./_atlas-map.js",
             "imports": [
               "atlasEvidenceText",
@@ -11206,6 +11448,33 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          }
+        ],
+        "exports": [
+          "command"
+        ],
+        "constants": [
+          "command"
+        ]
+      },
+      "src/cli/commands/chain.ts": {
+        "description": "`upt chain` names the chain orchestrator and does not run it.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../command.js",
+            "imports": [
+              "registerCommand",
+              "Command"
             ]
           }
         ],
@@ -11523,7 +11792,7 @@
             ]
           },
           {
-            "file": "../../composition/natural-units.js",
+            "file": "../../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
             ],
@@ -11539,6 +11808,12 @@
             "file": "../../numerical/binding-value.js",
             "imports": [
               "readBinding"
+            ]
+          },
+          {
+            "file": "../../numerical/formula-dimension.js",
+            "imports": [
+              "builtinFormulaDimensionChecker"
             ]
           }
         ],
@@ -11619,6 +11894,12 @@
             "file": "../../numerical/binding-value.js",
             "imports": [
               "bindingInUnit"
+            ]
+          },
+          {
+            "file": "../../bridges/evaluators.js",
+            "imports": [
+              "missingEvaluatorMessage"
             ]
           }
         ],
@@ -11928,6 +12209,12 @@
             ]
           },
           {
+            "file": "./chain.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
             "file": "./search.js",
             "imports": [
               "*"
@@ -12071,10 +12358,16 @@
             ]
           },
           {
-            "file": "../../composition/natural-units.js",
+            "file": "../../dimensional/natural-units.js",
             "imports": [
               "naturalConstantOverrides",
               "UnitMode"
+            ]
+          },
+          {
+            "file": "../map-evidence.js",
+            "imports": [
+              "withCatalogEvidence"
             ]
           }
         ],
@@ -12723,19 +13016,19 @@
             ]
           },
           {
-            "file": "../composition/formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "MU0_SI"
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
           },
           {
-            "file": "../composition/natural-units.js",
+            "file": "../dimensional/natural-units.js",
             "imports": [
               "UnitMode"
             ],
@@ -12909,6 +13202,48 @@
           "runCli"
         ]
       },
+      "src/cli/map-evidence.ts": {
+        "description": "Catalog evidence for `upt map`.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../relations/types.js",
+            "imports": [
+              "EvidenceTag"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../atlas/derive-evidence.js",
+            "imports": [
+              "catalogEvidenceInput",
+              "deriveEvidenceForVerdict",
+              "NO_PASSING_WITNESSES"
+            ]
+          },
+          {
+            "file": "../bridges/membership.js",
+            "imports": [
+              "adjudicateBridgeEntry"
+            ]
+          },
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS"
+            ]
+          }
+        ],
+        "exports": [
+          "deriveEdgeEvidence",
+          "withCatalogEvidence"
+        ],
+        "functions": [
+          "deriveEdgeEvidence",
+          "withCatalogEvidence"
+        ]
+      },
       "src/cli/output.ts": {
         "description": "JSON output envelope for the UPT CLI.",
         "externalDependencies": [],
@@ -12938,6 +13273,62 @@
         "functions": [
           "sanitize",
           "emitJson"
+        ]
+      },
+      "src/cli/poster-source.ts": {
+        "description": "The POSTER source for the physics map — turn the Atlas Phase 3 poster index",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../atlas/association.js",
+            "imports": [
+              "Association"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../atlas/derivation.js",
+            "imports": [
+              "Derivation",
+              "DerivationId"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../atlas/statement.js",
+            "imports": [
+              "Statement",
+              "StatementId"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../composition/graph-viz.js",
+            "imports": [
+              "VizJunction"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "POSTER_GRAPH",
+          "validatePoster",
+          "posterJunctions",
+          "describePosterSource"
+        ],
+        "interfaces": [
+          "PosterGraph",
+          "DanglingPremise",
+          "PosterValidation"
+        ],
+        "functions": [
+          "validatePoster",
+          "posterJunctions",
+          "describePosterSource"
+        ],
+        "constants": [
+          "POSTER_GRAPH"
         ]
       },
       "src/cli/record-reach.ts": {
@@ -13036,7 +13427,7 @@
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -13399,7 +13790,7 @@
             "reExport": true
           },
           {
-            "file": "./bridges/confrontation-coverage.js",
+            "file": "./composition/audit-coverage.js",
             "imports": [
               "auditCoverage"
             ],
@@ -13569,13 +13960,19 @@
             "file": "./composition/graph-viz.js",
             "imports": [
               "filterEdges",
-              "deriveEdgeEvidence",
               "formatFilterLegend"
             ],
             "reExport": true
           },
           {
-            "file": "./composition/poster-source.js",
+            "file": "./cli/map-evidence.js",
+            "imports": [
+              "deriveEdgeEvidence"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./cli/poster-source.js",
             "imports": [
               "POSTER_GRAPH",
               "posterJunctions",
@@ -13585,7 +13982,7 @@
             "reExport": true
           },
           {
-            "file": "./composition/poster-source.js",
+            "file": "./cli/poster-source.js",
             "imports": [
               "PosterGraph",
               "PosterValidation"
@@ -13702,7 +14099,7 @@
             "reExport": true
           },
           {
-            "file": "./composition/symbolic-constants.js",
+            "file": "./dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "CONSTANT_PROVENANCE"
@@ -13736,7 +14133,8 @@
             "imports": [
               "deriveEvidence",
               "deriveCompositeEvidence",
-              "NO_PASSING_WITNESSES"
+              "NO_PASSING_WITNESSES",
+              "provedWithUnresolvedCounterexample"
             ],
             "reExport": true
           },
@@ -13932,8 +14330,8 @@
           "deriveProposedBridges",
           "describeDerivedClaim",
           "filterEdges",
-          "deriveEdgeEvidence",
           "formatFilterLegend",
+          "deriveEdgeEvidence",
           "POSTER_GRAPH",
           "posterJunctions",
           "validatePoster",
@@ -13981,6 +14379,7 @@
           "deriveEvidence",
           "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "summarizeEvidence",
           "ALL_EVIDENCE_TAGS",
           "runWitnessRegistry",
@@ -14114,8 +14513,8 @@
           "deriveProposedBridges",
           "describeDerivedClaim",
           "filterEdges",
-          "deriveEdgeEvidence",
           "formatFilterLegend",
+          "deriveEdgeEvidence",
           "POSTER_GRAPH",
           "posterJunctions",
           "validatePoster",
@@ -14174,6 +14573,7 @@
           "deriveEvidence",
           "deriveCompositeEvidence",
           "NO_PASSING_WITNESSES",
+          "provedWithUnresolvedCounterexample",
           "summarizeEvidence",
           "ALL_EVIDENCE_TAGS",
           "runWitnessRegistry",
@@ -14246,6 +14646,37 @@
         ],
         "constants": [
           "ADJUDICATIONS"
+        ]
+      },
+      "src/composition/audit-coverage.ts": {
+        "description": "Empirical-spine coverage audit (Direction 4).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS"
+            ]
+          },
+          {
+            "file": "../bridges/confrontation-coverage.js",
+            "imports": [
+              "DATA_CONFRONTED_IDS"
+            ]
+          },
+          {
+            "file": "./catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
+            ]
+          }
+        ],
+        "exports": [
+          "auditCoverage"
+        ],
+        "functions": [
+          "auditCoverage"
         ]
       },
       "src/composition/axes.ts": {
@@ -14473,6 +14904,49 @@
           "predictMissingBridges"
         ]
       },
+      "src/composition/buckingham-filter.ts": {
+        "description": "Buckingham filter for one target and the variables that govern it.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "DimensionalDeterminationResult",
+              "DimensionalVariable"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "buckinghamPi",
+              "dimensionallyDetermines"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          }
+        ],
+        "exports": [
+          "buckinghamFilter"
+        ],
+        "interfaces": [
+          "BuckinghamFilterRecord"
+        ],
+        "functions": [
+          "buckinghamFilter"
+        ]
+      },
       "src/composition/canonical-compare.ts": {
         "description": "Compare a user's formula with the canonical (textbook) equation it restates.",
         "externalDependencies": [],
@@ -14512,7 +14986,7 @@
             "typeOnly": true
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "piMultipleValue"
@@ -14532,7 +15006,7 @@
             ]
           },
           {
-            "file": "./formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "formulaNameDimensions"
             ]
@@ -14628,7 +15102,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -14706,7 +15180,7 @@
         ]
       },
       "src/composition/catalog-graph.ts": {
-        "description": "The full composition graph as a single constant — the 41 `BridgeEdge`s",
+        "description": "The full composition graph as a single constant — the 46 `BridgeEdge`s",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -14747,6 +15221,12 @@
             "imports": [
               "CATALOG_FULL_EDGES"
             ]
+          },
+          {
+            "file": "./edges/proved-seeds.js",
+            "imports": [
+              "PROVED_SEED_EDGES"
+            ]
           }
         ],
         "exports": [
@@ -14754,6 +15234,115 @@
         ],
         "constants": [
           "CATALOG_GRAPH"
+        ]
+      },
+      "src/composition/chain-candidate.ts": {
+        "description": "A chain candidate and the order the pipeline reads candidates in.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "compareChainEdgeIds",
+          "orderChainCandidates"
+        ],
+        "interfaces": [
+          "ChainCandidate"
+        ],
+        "functions": [
+          "compareChainEdgeIds",
+          "orderChainCandidates"
+        ]
+      },
+      "src/composition/chain-match.ts": {
+        "description": "Pipeline match for a chain of proved edges.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../canonical/structural.js",
+            "imports": [
+              "classifyStructure",
+              "ChainClassification"
+            ]
+          }
+        ],
+        "exports": [
+          "matchChain"
+        ],
+        "functions": [
+          "matchChain"
+        ]
+      },
+      "src/composition/chain-regime.ts": {
+        "description": "Regime gate for a chain that meets on a quantity name.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS"
+            ]
+          },
+          {
+            "file": "../bridges/tensor-index.js",
+            "imports": [
+              "tensorIndexComponent",
+              "TensorIndexComponent"
+            ]
+          },
+          {
+            "file": "../relations/regime.js",
+            "imports": [
+              "regimeOverlap"
+            ]
+          },
+          {
+            "file": "./axes.js",
+            "imports": [
+              "GATE_AXES"
+            ]
+          },
+          {
+            "file": "./compose.js",
+            "imports": [
+              "QUANTITY_IDENTIFICATIONS"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./quantity.js",
+            "imports": [
+              "Quantity"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "REGIME_MISMATCH_KIND",
+          "joinRegimeMismatch"
+        ],
+        "interfaces": [
+          "ChainRegimeMismatch"
+        ],
+        "functions": [
+          "joinRegimeMismatch"
+        ],
+        "constants": [
+          "REGIME_MISMATCH_KIND"
         ]
       },
       "src/composition/compose-surface.ts": {
@@ -14869,7 +15458,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -14905,6 +15494,13 @@
             ]
           },
           {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge",
@@ -14921,7 +15517,7 @@
             "typeOnly": true
           },
           {
-            "file": "./unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "conventionFactor"
             ]
@@ -14937,20 +15533,20 @@
             ]
           },
           {
-            "file": "../atlas/composition-table.js",
+            "file": "../relations/composition-table.js",
             "imports": [
               "composeRelation",
               "NO_COMPOSITE_CLAIM"
             ]
           },
           {
-            "file": "../atlas/conventions.js",
+            "file": "../relations/conventions.js",
             "imports": [
               "checkConventions"
             ]
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions",
               "RelationContract",
@@ -14964,6 +15560,7 @@
           "SOURCE_ALIAS_DISPOSITIONS",
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "interfaces": [
@@ -14974,6 +15571,7 @@
         "functions": [
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "constants": [
@@ -15117,6 +15715,57 @@
           "consistencyRatio"
         ]
       },
+      "src/composition/descriptor.ts": {
+        "description": "Unified per-bridge descriptor — one lookup that JOINS the catalog's three",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS",
+              "BridgeEquationEntry"
+            ]
+          },
+          {
+            "file": "../bridges/rhs-registry.js",
+            "imports": [
+              "BRIDGE_RHS_BY_ID",
+              "parseBridgeId"
+            ]
+          },
+          {
+            "file": "./catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "BRIDGE_DESCRIPTORS",
+          "getBridge"
+        ],
+        "functions": [
+          "getBridge"
+        ],
+        "constants": [
+          "BRIDGE_DESCRIPTORS"
+        ]
+      },
       "src/composition/dimension-adjacency.ts": {
         "description": "Dimension-adjacency — a review surface for quantities that are absent from a",
         "externalDependencies": [],
@@ -15238,7 +15887,7 @@
             "typeOnly": true
           },
           {
-            "file": "./unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "conventionScaleToSI"
             ]
@@ -15301,7 +15950,7 @@
             "typeOnly": true
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "Conventions",
               "Counterexample",
@@ -15537,6 +16186,32 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "TEMPERATURE"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
           {
             "file": "../../bridges/equations/be-15-emergence.js",
             "imports": [
@@ -15915,6 +16590,31 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
             "file": "../../bridges/equations/be-47-bbn-dark-sector.js",
             "imports": [
               "evaluateBBNDark"
@@ -16088,12 +16788,6 @@
             ]
           },
           {
-            "file": "../../bridges/equations/be-50-wheeler-feynman.js",
-            "imports": [
-              "evaluateWFTimeSymmetry"
-            ]
-          },
-          {
             "file": "../edge.js",
             "imports": [
               "BridgeEdge"
@@ -16127,7 +16821,7 @@
               "ricciScalarQ",
               "stressEnergyTraceQ",
               "systemEnvironmentCouplingQ",
-              "timeSymmetryResidualQ",
+              "timeSymmetricFieldAmplitudeQ",
               "totalMutualInformationQ",
               "tunnelingMassQ"
             ]
@@ -16163,6 +16857,25 @@
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
           {
             "file": "../../dimensional/types.js",
             "imports": [
@@ -16262,11 +16975,131 @@
           "be54Edge"
         ]
       },
+      "src/composition/edges/proved-seeds.ts": {
+        "description": "Composition edges for proved catalog seeds that had no graph edge.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../../dimensional/ast-builders.js",
+            "imports": [
+              "sym"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../../core/constants.js",
+            "imports": [
+              "C_SI",
+              "G_SI",
+              "HBAR_SI",
+              "M_U_SI"
+            ]
+          },
+          {
+            "file": "../../bridges/equations/be-40-composite-higgs.js",
+            "imports": [
+              "evaluateCompositeHiggs"
+            ]
+          },
+          {
+            "file": "../../bridges/be55-quantum-hall.js",
+            "imports": [
+              "evaluateQuantumHall"
+            ]
+          },
+          {
+            "file": "../../bridges/be59-ac-josephson.js",
+            "imports": [
+              "evaluateACJosephson"
+            ]
+          },
+          {
+            "file": "../../bridges/be60-fractional-qh.js",
+            "imports": [
+              "evaluateFractionalQH"
+            ]
+          },
+          {
+            "file": "../edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../quantity.js",
+            "imports": [
+              "Quantity"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../quantities.js",
+            "imports": [
+              "chernNumberQ",
+              "compositeHiggsAlphaQ",
+              "compositeHiggsBetaQ",
+              "compositeHiggsPotentialQ",
+              "fillingFractionQ",
+              "frequencyQ",
+              "hallConductanceQ",
+              "higgsDecayConstantQ",
+              "higgsFieldQ",
+              "laneEmdenOmega3Q",
+              "massQ",
+              "meanMolecularWeightPerElectronQ",
+              "voltageQ"
+            ]
+          }
+        ],
+        "exports": [
+          "be40Edge",
+          "be55Edge",
+          "be59Edge",
+          "be60Edge",
+          "be63Edge",
+          "PROVED_SEED_EDGES"
+        ],
+        "constants": [
+          "be40Edge",
+          "be55Edge",
+          "be59Edge",
+          "be60Edge",
+          "be63Edge",
+          "PROVED_SEED_EDGES"
+        ]
+      },
       "src/composition/enumerate.ts": {
         "description": "Phase-D novel-candidate enumeration (v0.10.0 T3 — Part-IX §6's",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
           {
             "file": "./edge.js",
             "imports": [
@@ -16292,6 +17125,12 @@
               "ComposeOptions"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./compose-symbolic.js",
+            "imports": [
+              "composeSymbolic"
+            ]
           }
         ],
         "exports": [
@@ -16408,7 +17247,7 @@
             "typeOnly": true
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
               "piMultipleValue"
@@ -16470,7 +17309,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -16524,54 +17363,6 @@
         ],
         "functions": [
           "substitute"
-        ]
-      },
-      "src/composition/formula-names.ts": {
-        "description": "Names a formula may use that are not leaves of {@link CONSTANTS}.",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "CHARGE",
-              "DIMENSIONLESS",
-              "LENGTH",
-              "MASS"
-            ]
-          },
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "C_SI",
-              "E_SI",
-              "M_E_SI"
-            ]
-          }
-        ],
-        "exports": [
-          "EPS0_SI",
-          "MU0_SI",
-          "FORMULA_NAMED",
-          "formulaNameDimensions"
-        ],
-        "interfaces": [
-          "FormulaName"
-        ],
-        "functions": [
-          "formulaNameDimensions"
-        ],
-        "constants": [
-          "EPS0_SI",
-          "MU0_SI",
-          "FORMULA_NAMED"
         ]
       },
       "src/composition/frontier-account.ts": {
@@ -16691,38 +17482,17 @@
             ]
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "EvidenceTag",
               "RelationType"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../atlas/derive-evidence.js",
-            "imports": [
-              "catalogEvidenceInput",
-              "deriveEvidenceForVerdict",
-              "NO_PASSING_WITNESSES"
-            ]
-          },
-          {
-            "file": "../bridges/membership.js",
-            "imports": [
-              "adjudicateBridgeEntry"
-            ]
-          },
-          {
-            "file": "../bridges/index.js",
-            "imports": [
-              "BRIDGE_EQUATIONS"
-            ]
           }
         ],
         "exports": [
           "ALL_VIZ_STATUSES",
           "edgeToJunction",
-          "deriveEdgeEvidence",
           "filterEdges",
           "formatFilterLegend",
           "buildVizModel"
@@ -16736,7 +17506,6 @@
         ],
         "functions": [
           "edgeToJunction",
-          "deriveEdgeEvidence",
           "filterEdges",
           "formatFilterLegend",
           "buildVizModel"
@@ -17096,25 +17865,6 @@
             "reExport": true
           },
           {
-            "file": "./poster-source.js",
-            "imports": [
-              "PosterGraph",
-              "PosterValidation",
-              "DanglingPremise"
-            ],
-            "reExport": true
-          },
-          {
-            "file": "./poster-source.js",
-            "imports": [
-              "POSTER_GRAPH",
-              "posterJunctions",
-              "validatePoster",
-              "describePosterSource"
-            ],
-            "reExport": true
-          },
-          {
             "file": "./graph-viz-svg.js",
             "imports": [
               "renderDotToSvg",
@@ -17240,10 +17990,6 @@
           "SymbolicEvalError",
           "buildVizModel",
           "edgeToJunction",
-          "POSTER_GRAPH",
-          "posterJunctions",
-          "validatePoster",
-          "describePosterSource",
           "renderDotToSvg",
           "SvgRendererUnavailableError",
           "dimensionAdjacency",
@@ -17284,9 +18030,6 @@
           "VizOptions",
           "VizModel",
           "VizFilterStats",
-          "PosterGraph",
-          "PosterValidation",
-          "DanglingPremise",
           "DimensionAdjacency",
           "UserEquation",
           "EquationLanding",
@@ -17397,13 +18140,6 @@
           "VizFilterStats",
           "buildVizModel",
           "edgeToJunction",
-          "PosterGraph",
-          "PosterValidation",
-          "DanglingPremise",
-          "POSTER_GRAPH",
-          "posterJunctions",
-          "validatePoster",
-          "describePosterSource",
           "renderDotToSvg",
           "SvgRendererUnavailableError",
           "DimensionAdjacency",
@@ -17421,87 +18157,19 @@
           "UserEquationError"
         ]
       },
-      "src/composition/natural-units.ts": {
-        "description": "Opt-in natural units. The default comparison stays SI: an energy written as",
+      "src/composition/not-composable-seeds.ts": {
+        "description": "Proved atlas seeds that are not composition-graph edges.",
         "externalDependencies": [],
         "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
-          }
-        ],
+        "internalDependencies": [],
         "exports": [
-          "naturalConstantOverrides",
-          "naturalPowers",
-          "naturalNote"
+          "NOT_COMPOSABLE_SEEDS"
         ],
         "interfaces": [
-          "NaturalPowers"
-        ],
-        "functions": [
-          "naturalConstantOverrides",
-          "naturalPowers",
-          "naturalNote"
-        ]
-      },
-      "src/composition/poster-source.ts": {
-        "description": "The POSTER source for the physics map — turn the Atlas Phase 3 poster index",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../atlas/association.js",
-            "imports": [
-              "Association"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../atlas/derivation.js",
-            "imports": [
-              "Derivation",
-              "DerivationId"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../atlas/statement.js",
-            "imports": [
-              "Statement",
-              "StatementId"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "./graph-viz.js",
-            "imports": [
-              "VizJunction"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "POSTER_GRAPH",
-          "validatePoster",
-          "posterJunctions",
-          "describePosterSource"
-        ],
-        "interfaces": [
-          "PosterGraph",
-          "DanglingPremise",
-          "PosterValidation"
-        ],
-        "functions": [
-          "validatePoster",
-          "posterJunctions",
-          "describePosterSource"
+          "NotComposableSeed"
         ],
         "constants": [
-          "POSTER_GRAPH"
+          "NOT_COMPOSABLE_SEEDS"
         ]
       },
       "src/composition/probe/backend-protocol.ts": {
@@ -19593,7 +20261,7 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -19697,7 +20365,10 @@
           "COUPLING_PREFACTOR_SQUARED",
           "TORSION_CONTRACTION",
           "SPIN_DENSITY_SQUARED",
-          "ENERGY_DIM2"
+          "ENERGY_DIM2",
+          "CONDUCTANCE",
+          "VOLTAGE",
+          "ENERGY4"
         ],
         "constants": [
           "ENERGY_DIM",
@@ -19715,7 +20386,10 @@
           "COUPLING_PREFACTOR_SQUARED",
           "TORSION_CONTRACTION",
           "SPIN_DENSITY_SQUARED",
-          "ENERGY_DIM2"
+          "ENERGY_DIM2",
+          "CONDUCTANCE",
+          "VOLTAGE",
+          "ENERGY4"
         ]
       },
       "src/composition/quantities/common.ts": {
@@ -19835,6 +20509,7 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "DIMENSIONLESS",
+              "FREQUENCY",
               "LENGTH",
               "MASS",
               "TEMPERATURE",
@@ -19848,7 +20523,9 @@
               "MOBILITY",
               "RESISTIVITY",
               "NUMBER_DENSITY",
-              "ENERGY_DIM2"
+              "ENERGY_DIM2",
+              "CONDUCTANCE",
+              "VOLTAGE"
             ]
           }
         ],
@@ -19878,7 +20555,12 @@
           "spatialDimensionQ",
           "defectRestMassQ",
           "reheatingTemperatureQ",
-          "defectDensityQ"
+          "defectDensityQ",
+          "chernNumberQ",
+          "fillingFractionQ",
+          "hallConductanceQ",
+          "voltageQ",
+          "frequencyQ"
         ],
         "constants": [
           "temperatureQ",
@@ -19906,7 +20588,12 @@
           "spatialDimensionQ",
           "defectRestMassQ",
           "reheatingTemperatureQ",
-          "defectDensityQ"
+          "defectDensityQ",
+          "chernNumberQ",
+          "fillingFractionQ",
+          "hallConductanceQ",
+          "voltageQ",
+          "frequencyQ"
         ]
       },
       "src/composition/quantities/fields.ts": {
@@ -19925,6 +20612,7 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "DIMENSIONLESS",
+              "ENERGY",
               "FORCE",
               "MASS"
             ]
@@ -19935,7 +20623,8 @@
               "COUPLING_PREFACTOR_SQUARED",
               "TORSION_CONTRACTION",
               "SPIN_DENSITY_SQUARED",
-              "ENERGY_DIM2"
+              "ENERGY_DIM2",
+              "ENERGY4"
             ]
           }
         ],
@@ -19963,7 +20652,12 @@
           "scalarFieldValueQ",
           "scalarFieldReferenceQ",
           "planckMassQ",
-          "swamplandTowerMassQ"
+          "swamplandTowerMassQ",
+          "higgsFieldQ",
+          "higgsDecayConstantQ",
+          "compositeHiggsAlphaQ",
+          "compositeHiggsBetaQ",
+          "compositeHiggsPotentialQ"
         ],
         "constants": [
           "massQ",
@@ -19989,7 +20683,12 @@
           "scalarFieldValueQ",
           "scalarFieldReferenceQ",
           "planckMassQ",
-          "swamplandTowerMassQ"
+          "swamplandTowerMassQ",
+          "higgsFieldQ",
+          "higgsDecayConstantQ",
+          "compositeHiggsAlphaQ",
+          "compositeHiggsBetaQ",
+          "compositeHiggsPotentialQ"
         ]
       },
       "src/composition/quantities/gravitation-cosmology.ts": {
@@ -20052,7 +20751,9 @@
           "darkReactionRateCoefficientQ",
           "darkSpeciesDensityQ",
           "transferEfficiencyQ",
-          "nucleonYieldRateQ"
+          "nucleonYieldRateQ",
+          "laneEmdenOmega3Q",
+          "meanMolecularWeightPerElectronQ"
         ],
         "constants": [
           "causalSetCount0Q",
@@ -20082,7 +20783,9 @@
           "darkReactionRateCoefficientQ",
           "darkSpeciesDensityQ",
           "transferEfficiencyQ",
-          "nucleonYieldRateQ"
+          "nucleonYieldRateQ",
+          "laneEmdenOmega3Q",
+          "meanMolecularWeightPerElectronQ"
         ]
       },
       "src/composition/quantities/quantum.ts": {
@@ -20141,7 +20844,8 @@
           "fragmentMutualInformationQ",
           "retardedFieldAmplitudeQ",
           "advancedFieldAmplitudeQ",
-          "timeSymmetryResidualQ"
+          "timeSymmetryResidualQ",
+          "timeSymmetricFieldAmplitudeQ"
         ],
         "constants": [
           "decoherenceRateQ",
@@ -20168,7 +20872,8 @@
           "fragmentMutualInformationQ",
           "retardedFieldAmplitudeQ",
           "advancedFieldAmplitudeQ",
-          "timeSymmetryResidualQ"
+          "timeSymmetryResidualQ",
+          "timeSymmetricFieldAmplitudeQ"
         ]
       },
       "src/composition/quantities.ts": {
@@ -20308,7 +21013,7 @@
             ]
           },
           {
-            "file": "./unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "conventionFactor"
             ]
@@ -20337,57 +21042,6 @@
           "retrodict"
         ]
       },
-      "src/composition/symbolic-constants.ts": {
-        "description": "Symbolic-composition constant registry (v0.12 symbolic composition).",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "Dimension"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "ACTION",
-              "CHARGE",
-              "DIMENSIONLESS",
-              "VELOCITY"
-            ]
-          },
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "C_SI",
-              "E_SI",
-              "G_SI",
-              "GM_SUN_SI",
-              "HBAR_SI",
-              "H_SI",
-              "K_B_SI",
-              "B_WIEN_SI"
-            ]
-          }
-        ],
-        "exports": [
-          "CONSTANTS",
-          "CONSTANT_PROVENANCE",
-          "piMultipleValue"
-        ],
-        "interfaces": [
-          "ConstantProvenance"
-        ],
-        "functions": [
-          "piMultipleValue"
-        ],
-        "constants": [
-          "CONSTANTS",
-          "CONSTANT_PROVENANCE"
-        ]
-      },
       "src/composition/uncertainty.ts": {
         "description": "First-order uncertainty propagation through composition edges",
         "externalDependencies": [],
@@ -20407,7 +21061,7 @@
             ]
           },
           {
-            "file": "../atlas/types.js",
+            "file": "../relations/types.js",
             "imports": [
               "ApproximationBound"
             ],
@@ -20423,39 +21077,6 @@
         ],
         "functions": [
           "propagateUncertainty"
-        ]
-      },
-      "src/composition/unit-convention.ts": {
-        "description": "Per-quantity unit convention for the quantities whose dimension does not",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/algebra.js",
-            "imports": [
-              "equals"
-            ]
-          },
-          {
-            "file": "../dimensional/units.js",
-            "imports": [
-              "parseUnit"
-            ]
-          }
-        ],
-        "exports": [
-          "QUANTITY_CONVENTION_UNIT",
-          "quantityConventionUnit",
-          "conventionScaleToSI",
-          "conventionFactor"
-        ],
-        "functions": [
-          "quantityConventionUnit",
-          "conventionScaleToSI",
-          "conventionFactor"
-        ],
-        "constants": [
-          "QUANTITY_CONVENTION_UNIT"
         ]
       },
       "src/composition/user-equation.ts": {
@@ -20477,19 +21098,19 @@
             ]
           },
           {
-            "file": "./symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
           },
           {
-            "file": "./formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "formulaNameDimensions"
             ]
           },
           {
-            "file": "./natural-units.js",
+            "file": "../dimensional/natural-units.js",
             "imports": [
               "naturalNote",
               "naturalPowers",
@@ -20571,7 +21192,7 @@
         "description": "`Axes` singleton registry — module-load-stable `UniversalIndex`",
         "externalDependencies": [
           {
-            "package": "@danielsimonjr/universal-physics-tensor",
+            "package": "universal-physics-tensor",
             "imports": [
               "Axes"
             ]
@@ -20671,7 +21292,8 @@
           "GM_SUN_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
-          "B_WIEN_SI"
+          "B_WIEN_SI",
+          "M_U_SI"
         ],
         "constants": [
           "C_SI",
@@ -20689,7 +21311,8 @@
           "GM_SUN_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
-          "B_WIEN_SI"
+          "B_WIEN_SI",
+          "M_U_SI"
         ]
       },
       "src/core/flux-rules.ts": {
@@ -20777,6 +21400,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -20787,6 +21411,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -21609,7 +22234,7 @@
         ]
       },
       "src/dimensional/curvature.ts": {
-        "description": "Curvature-derived helpers — Ricci, Einstein, Bianchi (v0.5.0 Phase 1d).",
+        "description": "Curvature-derived helpers — Ricci and Einstein (v0.5.0 Phase 1d).",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -21640,21 +22265,6 @@
             ]
           },
           {
-            "file": "../numerical/tensor-engine.js",
-            "imports": [
-              "TensorEngine"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../numerical/types.js",
-            "imports": [
-              "NumericalInputs",
-              "NestedArray"
-            ],
-            "typeOnly": true
-          },
-          {
             "file": "./ast-types.js",
             "imports": [
               "RicciTensorNode",
@@ -21670,7 +22280,6 @@
           "validateEinsteinTensor",
           "einstein",
           "validateBianchiResidual",
-          "bianchiResidual",
           "RicciTensorNode",
           "EinsteinTensorNode",
           "BianchiResidualNode"
@@ -21685,8 +22294,7 @@
           "ricci",
           "validateEinsteinTensor",
           "einstein",
-          "validateBianchiResidual",
-          "bianchiResidual"
+          "validateBianchiResidual"
         ]
       },
       "src/dimensional/dimension-inference.ts": {
@@ -21923,6 +22531,54 @@
           "validateFreeIndexLabelMatch",
           "validateComponentDimension",
           "validateTensorSymmetry"
+        ]
+      },
+      "src/dimensional/formula-names.ts": {
+        "description": "Names a formula may use that are not leaves of {@link CONSTANTS}.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "CHARGE",
+              "DIMENSIONLESS",
+              "LENGTH",
+              "MASS"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "E_SI",
+              "M_E_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "EPS0_SI",
+          "MU0_SI",
+          "FORMULA_NAMED",
+          "formulaNameDimensions"
+        ],
+        "interfaces": [
+          "FormulaName"
+        ],
+        "functions": [
+          "formulaNameDimensions"
+        ],
+        "constants": [
+          "EPS0_SI",
+          "MU0_SI",
+          "FORMULA_NAMED"
         ]
       },
       "src/dimensional/fresh-label.ts": {
@@ -22263,6 +22919,33 @@
           "lower"
         ]
       },
+      "src/dimensional/natural-units.ts": {
+        "description": "Opt-in natural units. The default comparison stays SI: an energy written as",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "naturalConstantOverrides",
+          "naturalPowers",
+          "naturalNote"
+        ],
+        "interfaces": [
+          "NaturalPowers"
+        ],
+        "functions": [
+          "naturalConstantOverrides",
+          "naturalPowers",
+          "naturalNote"
+        ]
+      },
       "src/dimensional/rg-flow.ts": {
         "description": "Renormalization-group (RG) flow primitives — `RGCouplingNode` +",
         "externalDependencies": [],
@@ -22360,6 +23043,59 @@
         "functions": [
           "validateStressEnergyTensor",
           "validateCosmologicalConstant"
+        ]
+      },
+      "src/dimensional/symbolic-constants.ts": {
+        "description": "Symbolic-composition constant registry (v0.12 symbolic composition).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "ACTION",
+              "CHARGE",
+              "DIMENSIONLESS",
+              "MASS",
+              "VELOCITY"
+            ]
+          },
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI",
+              "E_SI",
+              "G_SI",
+              "GM_SUN_SI",
+              "HBAR_SI",
+              "H_SI",
+              "K_B_SI",
+              "B_WIEN_SI",
+              "M_U_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "CONSTANTS",
+          "CONSTANT_PROVENANCE",
+          "piMultipleValue"
+        ],
+        "interfaces": [
+          "ConstantProvenance"
+        ],
+        "functions": [
+          "piMultipleValue"
+        ],
+        "constants": [
+          "CONSTANTS",
+          "CONSTANT_PROVENANCE"
         ]
       },
       "src/dimensional/tensor-trace.ts": {
@@ -22532,6 +23268,39 @@
           "ENTROPY",
           "CHARGE",
           "NAMED_DIMENSIONS"
+        ]
+      },
+      "src/dimensional/unit-convention.ts": {
+        "description": "Per-quantity unit convention for the quantities whose dimension does not",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "./units.js",
+            "imports": [
+              "parseUnit"
+            ]
+          }
+        ],
+        "exports": [
+          "QUANTITY_CONVENTION_UNIT",
+          "quantityConventionUnit",
+          "conventionScaleToSI",
+          "conventionFactor"
+        ],
+        "functions": [
+          "quantityConventionUnit",
+          "conventionScaleToSI",
+          "conventionFactor"
+        ],
+        "constants": [
+          "QUANTITY_CONVENTION_UNIT"
         ]
       },
       "src/dimensional/units.ts": {
@@ -22954,6 +23723,7 @@
               "T_P_SI",
               "H0_SI",
               "M_SUN_SI",
+              "GM_SUN_SI",
               "M_E_SI",
               "B_WIEN_SI"
             ],
@@ -23072,6 +23842,7 @@
               "LabeledTensorConstructionError",
               "AxisMismatchError",
               "IdentityConflictError",
+              "IndexNameMismatchError",
               "RankPreservationError",
               "AxisOrderError",
               "AxisMergeError",
@@ -23289,7 +24060,7 @@
             "reExport": true
           },
           {
-            "file": "./dimensional/curvature.js",
+            "file": "./numerical/bianchi-residual.js",
             "imports": [
               "bianchiResidual"
             ],
@@ -23428,6 +24199,23 @@
             "file": "./dimensional/types.js",
             "imports": [
               "Dimension"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "convertValue",
+              "parseUnit",
+              "UnitError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "ParsedUnit",
+              "TemperatureReading"
             ],
             "reExport": true
           },
@@ -24462,6 +25250,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "PhysicalConstants",
@@ -24478,6 +25267,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -24577,6 +25367,9 @@
           "validateGaugeField",
           "validateTimeSymmetryPredicate",
           "validateKleinGordonEquation",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -24834,6 +25627,8 @@
           "KleinGordonEquationNode",
           "KleinGordonEquationValidationResult",
           "Dimension",
+          "ParsedUnit",
+          "TemperatureReading",
           "ExprNode",
           "TranscendentalFn",
           "ValidationResult",
@@ -25001,6 +25796,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "TensorConfig",
@@ -25041,6 +25837,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -25181,6 +25978,11 @@
           "KleinGordonEquationValidationResult",
           "validateKleinGordonEquation",
           "Dimension",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
+          "ParsedUnit",
+          "TemperatureReading",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -25574,6 +26376,49 @@
           "evaluateBE37CovariantEikonalNumerical"
         ]
       },
+      "src/numerical/bianchi-residual.ts": {
+        "description": "Evaluator for the second-Bianchi-identity residual.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/ast-types.js",
+            "imports": [
+              "BianchiResidualNode",
+              "ExprNode",
+              "RiemannTensorNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./tensor-engine.js",
+            "imports": [
+              "TensorEngine"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "NumericalInputs",
+              "NestedArray"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./index.js",
+            "imports": [
+              "evaluateNumerical"
+            ]
+          }
+        ],
+        "exports": [
+          "bianchiResidual"
+        ],
+        "functions": [
+          "bianchiResidual"
+        ]
+      },
       "src/numerical/binding-value.ts": {
         "description": "A binding value: a bare number, a number with a unit, or an expression of",
         "externalDependencies": [],
@@ -25586,26 +26431,26 @@
             ]
           },
           {
-            "file": "../composition/formula-names.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
               "FORMULA_NAMED"
             ]
           },
           {
-            "file": "../composition/unit-convention.js",
+            "file": "../dimensional/unit-convention.js",
             "imports": [
               "quantityConventionUnit"
             ]
           },
           {
-            "file": "../composition/natural-units.js",
+            "file": "../dimensional/natural-units.js",
             "imports": [
               "naturalConstantOverrides",
               "UnitMode"
             ]
           },
           {
-            "file": "../composition/symbolic-constants.js",
+            "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS"
             ]
@@ -26152,7 +26997,8 @@
             "file": "../dimensional/algebra.js",
             "imports": [
               "equals",
-              "format"
+              "format",
+              "multiply"
             ]
           },
           {
@@ -26185,11 +27031,13 @@
           {
             "file": "./formula.js",
             "imports": [
+              "EULER_NUMBER_ERROR",
               "parseFormulaToAst"
             ]
           }
         ],
         "exports": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE",
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker",
@@ -26206,6 +27054,9 @@
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker"
+        ],
+        "constants": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE"
         ]
       },
       "src/numerical/formula-mathts.ts": {
@@ -26226,6 +27077,7 @@
             "imports": [
               "BUILTIN_FUNCTION_NAMES",
               "callBuiltinFunction",
+              "EULER_NUMBER_ERROR",
               "FormulaError",
               "unknownFunctionMessage"
             ]
@@ -26317,6 +27169,7 @@
           }
         ],
         "exports": [
+          "EULER_NUMBER_ERROR",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST",
@@ -26340,6 +27193,7 @@
           "parseFormula"
         ],
         "constants": [
+          "EULER_NUMBER_ERROR",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST",
@@ -27550,6 +28404,172 @@
           "computeWeylTensor"
         ]
       }
+    },
+    "relations": {
+      "src/relations/category.ts": {
+        "description": "Objects and morphisms of the regime category.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Regime",
+              "RelationType"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./composition-table.js",
+            "imports": [
+              "composeRelation",
+              "CompositionResult"
+            ]
+          }
+        ],
+        "exports": [
+          "composeMorphisms"
+        ],
+        "interfaces": [
+          "CategoryObject",
+          "CategoryMorphism"
+        ],
+        "functions": [
+          "composeMorphisms"
+        ]
+      },
+      "src/relations/composition-table.ts": {
+        "description": "The composition table for `RelationType` — a literal 8×8 matrix.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "RelationType"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "NO_COMPOSITE_CLAIM",
+          "COMPOSITION_TABLE",
+          "composeRelation"
+        ],
+        "functions": [
+          "composeRelation"
+        ],
+        "constants": [
+          "NO_COMPOSITE_CLAIM",
+          "COMPOSITION_TABLE"
+        ]
+      },
+      "src/relations/conventions.ts": {
+        "description": "Atlas Phase 1 — convention comparison.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Conventions"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "checkConventions",
+          "unknownConventionKeys"
+        ],
+        "functions": [
+          "checkConventions",
+          "unknownConventionKeys"
+        ]
+      },
+      "src/relations/regime.ts": {
+        "description": "Regime derivation — π-groups as the coordinates a regime is written in.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "buckinghamPi"
+            ]
+          },
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "DimensionalVariable",
+              "PiGroup"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "Regime",
+              "RegimeInequality"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "deriveRegimeGroups",
+          "regimeHolds",
+          "intersectRegimes",
+          "collidingRegimeGroups",
+          "regimeOverlap",
+          "uncoveredRegions"
+        ],
+        "interfaces": [
+          "RegimeCheck",
+          "RegionSample",
+          "RegimeBearing"
+        ],
+        "functions": [
+          "deriveRegimeGroups",
+          "regimeHolds",
+          "intersectRegimes",
+          "collidingRegimeGroups",
+          "regimeOverlap",
+          "uncoveredRegions"
+        ]
+      },
+      "src/relations/types.ts": {
+        "description": "Shared relation vocabulary.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "PiGroup"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "ALL_EVIDENCE_TAGS"
+        ],
+        "interfaces": [
+          "FormalRef",
+          "RegimeInequality",
+          "Regime",
+          "ApproximationBound",
+          "Counterexample",
+          "Conventions"
+        ],
+        "constants": [
+          "ALL_EVIDENCE_TAGS"
+        ]
+      }
     }
   },
   "dependencyGraph": {
@@ -27575,6 +28595,8 @@
           "src/atlas/benchmark/stats.ts",
           "src/atlas/benchmark/study.ts",
           "src/atlas/benchmark/types.ts",
+          "src/atlas/catalog-formal-ref.ts",
+          "src/atlas/chain-pipeline.ts",
           "src/atlas/composition-table.ts",
           "src/atlas/conventions.ts",
           "src/atlas/coverage.ts",
@@ -27612,6 +28634,7 @@
           "src/atlas/poster/associations.ts",
           "src/atlas/poster/derivations.ts",
           "src/atlas/poster/statements.ts",
+          "src/atlas/proof-target.ts",
           "src/atlas/public.ts",
           "src/atlas/regime.ts",
           "src/atlas/serialize.ts",
@@ -27671,7 +28694,6 @@
           "src/bridges/catalog-adapter.ts",
           "src/bridges/confrontation-coverage.ts",
           "src/bridges/confrontations.ts",
-          "src/bridges/descriptor.ts",
           "src/bridges/equations/_be-helpers.ts",
           "src/bridges/equations/be-11-decoherence-master.ts",
           "src/bridges/equations/be-12-coherence-length.ts",
@@ -27726,7 +28748,8 @@
           "src/bridges/perihelion-precession.ts",
           "src/bridges/rejected.ts",
           "src/bridges/rhs-registry.ts",
-          "src/bridges/sensitivity.ts"
+          "src/bridges/sensitivity.ts",
+          "src/bridges/tensor-index.ts"
         ]
       },
       {
@@ -27749,7 +28772,8 @@
           "src/canonical/normal-form.ts",
           "src/canonical/registry.ts",
           "src/canonical/residual.ts",
-          "src/canonical/seed-l-layer.ts"
+          "src/canonical/seed-l-layer.ts",
+          "src/canonical/structural.ts"
         ]
       },
       {
@@ -27779,6 +28803,7 @@
           "src/cli/commands/axes.ts",
           "src/cli/commands/candidates.ts",
           "src/cli/commands/canonical.ts",
+          "src/cli/commands/chain.ts",
           "src/cli/commands/confront.ts",
           "src/cli/commands/connectors.ts",
           "src/cli/commands/coverage.ts",
@@ -27809,7 +28834,9 @@
           "src/cli/expr-print.ts",
           "src/cli/graphs.ts",
           "src/cli/main.ts",
+          "src/cli/map-evidence.ts",
           "src/cli/output.ts",
+          "src/cli/poster-source.ts",
           "src/cli/record-reach.ts",
           "src/cli/record-tables.ts",
           "src/cli/record.ts",
@@ -27828,20 +28855,26 @@
         "name": "Composition",
         "files": [
           "src/composition/adjudication.ts",
+          "src/composition/audit-coverage.ts",
           "src/composition/axes.ts",
           "src/composition/axis-audit.ts",
           "src/composition/bridge-analysis.ts",
           "src/composition/bridge-prediction.ts",
+          "src/composition/buckingham-filter.ts",
           "src/composition/canonical-compare.ts",
           "src/composition/canonical-graph.ts",
           "src/composition/canonical-prefactors.ts",
           "src/composition/catalog-graph.ts",
+          "src/composition/chain-candidate.ts",
+          "src/composition/chain-match.ts",
+          "src/composition/chain-regime.ts",
           "src/composition/compose-surface.ts",
           "src/composition/compose-symbolic.ts",
           "src/composition/compose.ts",
           "src/composition/composition-recovery.ts",
           "src/composition/consequence.ts",
           "src/composition/consistency.ts",
+          "src/composition/descriptor.ts",
           "src/composition/dimension-adjacency.ts",
           "src/composition/discovery.ts",
           "src/composition/edge.ts",
@@ -27853,20 +28886,19 @@
           "src/composition/edges/catalog-gravitation-cosmology.ts",
           "src/composition/edges/catalog-quantum.ts",
           "src/composition/edges/catalog-tranche.ts",
+          "src/composition/edges/proved-seeds.ts",
           "src/composition/enumerate.ts",
           "src/composition/explain.ts",
           "src/composition/expr-eval.ts",
           "src/composition/expr-simplify.ts",
           "src/composition/expr-subst.ts",
-          "src/composition/formula-names.ts",
           "src/composition/frontier-account.ts",
           "src/composition/graph-viz-svg.ts",
           "src/composition/graph-viz.ts",
           "src/composition/grounding.ts",
           "src/composition/identifiability.ts",
           "src/composition/index.ts",
-          "src/composition/natural-units.ts",
-          "src/composition/poster-source.ts",
+          "src/composition/not-composable-seeds.ts",
           "src/composition/probe/backend-protocol.ts",
           "src/composition/probe/candidate-store.ts",
           "src/composition/probe/corpus.ts",
@@ -27903,9 +28935,7 @@
           "src/composition/quantity.ts",
           "src/composition/representative-values.ts",
           "src/composition/retrodiction.ts",
-          "src/composition/symbolic-constants.ts",
           "src/composition/uncertainty.ts",
-          "src/composition/unit-convention.ts",
           "src/composition/user-equation.ts"
         ]
       },
@@ -27952,6 +28982,7 @@
           "src/dimensional/einstein-equation.ts",
           "src/dimensional/errors.ts",
           "src/dimensional/field-equation-helpers.ts",
+          "src/dimensional/formula-names.ts",
           "src/dimensional/fresh-label.ts",
           "src/dimensional/friedmann-equation.ts",
           "src/dimensional/gauge-field.ts",
@@ -27959,11 +28990,14 @@
           "src/dimensional/klein-gordon-equation.ts",
           "src/dimensional/metric-validators.ts",
           "src/dimensional/metric.ts",
+          "src/dimensional/natural-units.ts",
           "src/dimensional/rg-flow.ts",
           "src/dimensional/stress-energy-validators.ts",
+          "src/dimensional/symbolic-constants.ts",
           "src/dimensional/tensor-trace.ts",
           "src/dimensional/tensor.ts",
           "src/dimensional/types.ts",
+          "src/dimensional/unit-convention.ts",
           "src/dimensional/units.ts",
           "src/dimensional/validator-registry.ts",
           "src/dimensional/validator.ts",
@@ -27980,6 +29014,7 @@
         "name": "Numerical",
         "files": [
           "src/numerical/be37-covariant-eikonal.ts",
+          "src/numerical/bianchi-residual.ts",
           "src/numerical/binding-value.ts",
           "src/numerical/christoffel-flat.ts",
           "src/numerical/connection-lowering-helpers.ts",
@@ -28021,25 +29056,35 @@
           "src/numerical/types.ts",
           "src/numerical/weyl-lowering.ts"
         ]
+      },
+      {
+        "name": "Relations",
+        "files": [
+          "src/relations/category.ts",
+          "src/relations/composition-table.ts",
+          "src/relations/conventions.ts",
+          "src/relations/regime.ts",
+          "src/relations/types.ts"
+        ]
       }
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 401,
-    "totalModules": 12,
-    "totalLinesOfCode": 88979,
-    "totalExports": 2904,
-    "totalClasses": 60,
-    "totalInterfaces": 462,
-    "totalFunctions": 749,
+    "totalTypeScriptFiles": 421,
+    "totalModules": 13,
+    "totalLinesOfCode": 91581,
+    "totalExports": 2977,
+    "totalClasses": 61,
+    "totalInterfaces": 476,
+    "totalFunctions": 768,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 717,
-    "totalReExports": 1377,
-    "totalTypeOnlyImports": 541,
+    "totalConstants": 753,
+    "totalReExports": 1396,
+    "totalTypeOnlyImports": 568,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 70
+    "unusedExportsCount": 77
   }
 }

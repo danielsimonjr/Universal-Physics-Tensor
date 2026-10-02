@@ -7,7 +7,7 @@
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
 import { codataScope } from '../../src/cli/eval-numbers.js';
-import { CONSTANTS } from '../../src/composition/symbolic-constants.js';
+import { CONSTANTS } from '../../src/dimensional/symbolic-constants.js';
 
 function capture() {
   const stdout: string[] = [];
@@ -41,7 +41,7 @@ describe('formula scope is the constant registry', () => {
     // Natural and geometrized overrides still replace the SI values of c, ħ, h and G.
     expect(codataScope('si').e).toBe(CONSTANTS.e.value);
     expect(codataScope('natural').e).toBe(CONSTANTS.e.value);
-    expect(codataScope('natural').euler).toBe(Math.E);
+    expect(codataScope('natural')).not.toHaveProperty('euler');
     expect(codataScope('natural').c).toBe(1);
     expect(codataScope('natural').hbar).toBe(1);
     expect(codataScope('natural').h).toBe(2 * Math.PI);

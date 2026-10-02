@@ -10,14 +10,17 @@
  *
  * With no id it lists every bridge of every registered family.
  *
- * A catalog id (`be-<n>`, any letter case) is not an atlas bridge. When that
- * catalog equation carries a `formalRef`, this command prints the stored
- * reference. It does not derive `formally-proved` from it. A catalog equation
- * with no reference says so. An id in neither registry stays an unknown bridge.
+ * A catalog id (`be-<n>`, any letter case) is not an atlas bridge. When the
+ * atlas overlay has a formal reference for that id, this command prints it.
+ * It does not derive `formally-proved` from it. A catalog equation with no
+ * reference says so. An id in neither registry stays an unknown bridge.
  *
  * ## The two derived tags, shown honestly
  *
  * `formally-proved` is derived here from the record's `formalRef`.
+ * When that tag and `contradicted` are both derived, the report prints
+ * `proved, with unresolved counterexample: yes`. The proof stays and the
+ * counterexample stays unresolved.
  * `symbolically-checked` is derived from `data/atlas/witness-results.json`, a
  * repository artifact that is NOT shipped in the package, so this command lists
  * the symbolic witnesses and says where the tag is decided rather than printing
@@ -27,6 +30,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
+import { catalogFormalRef } from '../../atlas/catalog-formal-ref.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 
 const FLAGS: FlagSpec[] = [
@@ -72,13 +76,19 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         One atlas bridge with every qualification visible: relation, premises
         and conclusion, transformation and inverse, side conditions, regime
         inequalities, bound with its horizon and uniformity, what it preserves and loses,
-        witnesses, counterexamples, formal reference and review status. Empty
-        sections print as "none stated", never disappear. With no id, lists
+        witnesses, counterexamples, formal reference and review status.
+        review status is the record's review mark (proposed or reviewed).
+        It is not an evidence tag. formally-proved is derived from the
+        formal reference and does not depend on that mark. Empty
+        sections print as "none stated", never disappear. When derived
+        evidence is both formally-proved and contradicted, the report prints
+        proved, with unresolved counterexample: yes. The proof stays and the
+        counterexample stays unresolved. With no id, lists
         every bridge of every family.
         A catalog id be-<n> (either letter case) is not an atlas bridge. When
-        that catalog equation has a formalRef, the command prints the stored
-        reference and does not derive formally-proved from it. A catalog
-        equation with no formalRef says so. --run applies only to an atlas bridge.
+        the atlas overlay has a formal reference for that id, the command
+        prints it and does not derive formally-proved from it. A catalog
+        equation with no formal reference says so. --run applies only to an atlas bridge.
         Evidence is shown BY CLAIM (correspondence, regime, bound, horizon,
         preserves), each citing only what the record's structure links to it;
         a witness is listed under the bound (sharp, or at one point for a bound
@@ -117,7 +127,7 @@ function catalogEquationNumber(raw: string): number | undefined {
  * `formally-proved` tag.
  */
 function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: CommandCtx): number {
-  const ref = entry.formalRef;
+  const ref = catalogFormalRef(entry.id);
   if (ref === undefined) {
     throw new CliError(`upt atlas: be-${entry.id} is a catalog equation and has no formalRef (\`upt atlas\` lists atlas bridges)`);
   }
@@ -199,7 +209,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     out(`\n${listing.length} atlas bridges across ${families.length} families:`);
     for (const l of listing) out(`  ${l.id.padEnd(28)} ${l.relation.padEnd(22)} [${l.family}]`);
     out('\nRun `upt atlas <bridge-id>` for one bridge with every qualification, or `upt atlas --evidence` for every bridge\'s derived evidence.');
-    out('A catalog equation with a formalRef is `upt atlas be-<n>`.');
+    out('A catalog equation with a stored formal reference is `upt atlas be-<n>`.');
     return 0;
   }
 
@@ -224,6 +234,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const b = row.bridge;
   const derived = api.deriveEvidence(b, api.NO_PASSING_WITNESSES);
+  const derivedEvidence = api.ALL_EVIDENCE_TAGS.filter((tag) => derived.has(tag));
+  const unresolvedCounterexample = api.provedWithUnresolvedCounterexample(derived);
   const symbolic = b.witnesses.filter((w) => w.kind === 'symbolic').map((w) => w.id);
   const familyOf = (modelId: string): string => models.get(modelId)?.family ?? 'UNKNOWN';
 
@@ -383,6 +395,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     doesNotPreserve: [...b.doesNotPreserve],
     storedEvidence: [...b.evidence].sort(),
     formallyProved: derived.has('formally-proved'),
+    derivedEvidence,
+    provedWithUnresolvedCounterexample: unresolvedCounterexample,
     symbolicWitnesses: symbolic,
     witnesses: b.witnesses.map((w) => ({ id: w.id, kind: w.kind, test: w.test, tolerance: w.tolerance ?? null })),
     counterexamples: b.counterexamples.map((c) => ({ description: c.description, witness: c.witness })),
@@ -438,6 +452,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   list('preserves', b.preserves);
   list('does NOT preserve', b.doesNotPreserve);
   out(`stored evidence: ${report.storedEvidence.join(', ') || 'none'}`);
+  out(`derived evidence: ${report.derivedEvidence.join(', ') || 'none'}`);
   out(
     `formally-proved (derived from formalRef): ${
       report.formallyProved
@@ -445,6 +460,11 @@ async function run(ctx: CommandCtx): Promise<number> {
           'NOT the bound, regime, horizon or side conditions unless the statement says so'
         : 'no'
     }`,
+  );
+  out(
+    report.provedWithUnresolvedCounterexample
+      ? 'proved, with unresolved counterexample: yes — formally-proved stands; the counterexample is not resolved'
+      : 'proved, with unresolved counterexample: no',
   );
   out(
     symbolic.length === 0
@@ -532,7 +552,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
   list('citations', b.citations);
-  out(`review status: ${b.reviewStatus}`);
+  out(
+    `review status: ${b.reviewStatus} — the record's review mark (proposed or reviewed), ` +
+      'not an evidence tag. formally-proved is derived from the formal reference and does not depend on this mark.',
+  );
   return exitCode;
 }
 

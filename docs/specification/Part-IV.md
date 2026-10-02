@@ -105,7 +105,7 @@ where <img src="https://i.upmath.me/svg/%5Cphi_n(x)" alt="\phi_n(x)" /> are quan
 
 **10.3.4 Information-Gravity Duality**
 
-- **Target**: Bridge Equations 13, 14 (Information-Geometry, Holographic QEC)
+- **Target**: Bridge Equations 13, 14 (Einstein trace reduction, Holographic QEC)
 - **Method**: Quantum computer simulations of AdS/CFT
 - **Observable**: Holographic entanglement entropy scaling
 - **Computational Requirements**: <img src="https://i.upmath.me/svg/%3E%2010%5E6" alt="> 10^6" /> qubits with <img src="https://i.upmath.me/svg/%3E%2099.9%5C%25" alt="> 99.9\%" /> fidelity
@@ -754,7 +754,7 @@ This is a question for philosophers, ethicists, and eventually (if ever) for the
 | `⟨Πᵢ\|Πⱼ⟩` (inner product) | `match(cell_i, cell_j)`: a binary equivalence-or-relation predicate over labels and/or contents. No bilinear form on `Π`. |
 | `Tr[Π†OΠ]` (trace of operator-conjugation) | `Σ_{cells c} O(c)`: a sum-over-populated-cells of a per-cell scalar `O(c)`, where `O` is a *cell-indexed* function, not a Hilbert-space operator. |
 | `‖Π‖_F` (Frobenius norm) | `(Σ_{cells c} ‖content(c)‖²)^{1/2}` *only when each cell content is itself a normable object* (e.g., a density matrix in BE-11). The aggregate is meaningful only as a per-cell sum, not as a Hilbert-space norm of `Π`. |
-| `‖Π_∞‖² < ∞` (square-summability of infinite Π) | The catalog is **finite** (44 BE entries, IDs 11–54; see the Part-II §V spec-scope note — × 6 label sets). The displayed infinite-rank version (Part-V §24.1.1) is a per-cell convergence statement: for every cell `c` whose content is in a Hilbert space, `‖content(c)‖² < ∞`. There is no global infinite-tensor-product structure on `Π`. |
+| `‖Π_∞‖² < ∞` (square-summability of infinite Π) | The catalog is **finite** (55 BE entries, IDs 11–65; see the Part-II preamble spec-scope note — × 6 label sets). The displayed infinite-rank version (Part-V §24.1.1) is a per-cell convergence statement: for every cell `c` whose content is in a Hilbert space, `‖content(c)‖² < ∞`. There is no global infinite-tensor-product structure on `Π`. |
 | `lim_{ℏ→0} Π_quantum = Π_classical` (correspondence) | Per-bridge predicate (Part-I §1.3 invariant 4): for every BE that contains `ℏ` and has a stated classical limit, `lim_{ℏ→0}` reduces *the BE's formula content* to the cited classical equation. The catalog `Π` itself has no aggregate `ℏ → 0` operation. |
 | `F: 𝒫 → ℋ` (Part-V §17.1 functor) | Per-cell mapping: for every cell `c` whose physical phenomenon is in `𝒫`, `F(c)` lands in a Hilbert space appropriate to `c`. The functor does not apply to `Π` as a whole; the categories `𝒫` and `ℋ` are themselves underspecified (per the Part-V §17.1 scope note). |
 | `Π = ⊗_{n=0}^∞ ℋ_n` (Part-V §17.2 higher tensor product) | Notational analogy for higher-categorical *cell content*. The catalog `Π` is a finite Cartesian product of finite label sets; the displayed infinite tensor product is not a structural property of `Π`. |

@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import type { AtlasBridge } from '../../src/atlas/types.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 
 async function run(argv: string[]): Promise<{ code: number; out: string; err: string }> {
@@ -42,42 +43,44 @@ describe('upt atlas — listing', () => {
 });
 
 describe('catalog formalRef — upt atlas be-<n>', () => {
-  const withRef = BRIDGE_EQUATIONS.filter((e) => e.formalRef !== undefined);
+  const withRef = BRIDGE_EQUATIONS.filter((e) => catalogFormalRef(e.id) !== undefined);
 
   it('the catalog has formalRefs to look up (otherwise the next tests pass vacuously)', () => {
     expect(withRef.length).toBeGreaterThan(0);
     expect(withRef.some((e) => e.id === 16)).toBe(true);
     expect(withRef.some((e) => e.id === 13)).toBe(true);
-    expect(BRIDGE_EQUATIONS.some((e) => e.formalRef === undefined)).toBe(true);
+    expect(BRIDGE_EQUATIONS.some((e) => catalogFormalRef(e.id) === undefined)).toBe(true);
   });
 
   it('upt atlas be-16 prints that catalog formalRef and does not call it an unknown bridge', async () => {
     const entry = BRIDGE_EQUATIONS.find((e) => e.id === 16)!;
+    const ref = catalogFormalRef(16)!;
     const r = await run(['atlas', 'be-16']);
     expect(r.code).toBe(0);
     expect(r.err).not.toContain('unknown bridge');
     expect(r.out).toContain('catalog equation');
     expect(r.out).toContain(entry.name);
-    expect(r.out).toContain(entry.formalRef!.statement);
-    expect(r.out).toContain(entry.formalRef!.covers);
-    expect(r.out).toContain(`kind: ${entry.formalRef!.kind}`);
-    expect(r.out).toContain(entry.formalRef!.url);
+    expect(r.out).toContain(ref.statement);
+    expect(r.out).toContain(ref.covers);
+    expect(r.out).toContain(`kind: ${ref.kind}`);
+    expect(r.out).toContain(ref.url);
     expect(r.out).not.toContain('formally-proved-property');
   });
 
   it('BE-16 is found with either letter case', async () => {
-    const entry = BRIDGE_EQUATIONS.find((e) => e.id === 16)!;
+    const ref = catalogFormalRef(16)!;
     const r = await run(['atlas', 'BE-16']);
     expect(r.code).toBe(0);
-    expect(r.out).toContain(entry.formalRef!.statement);
+    expect(r.out).toContain(ref.statement);
   });
 
   it('every catalog id with a formalRef prints that reference', async () => {
     for (const entry of withRef) {
+      const ref = catalogFormalRef(entry.id)!;
       const r = await run(['atlas', `be-${entry.id}`]);
       expect(r.code, `be-${entry.id}`).toBe(0);
-      expect(r.out, `be-${entry.id} statement`).toContain(entry.formalRef!.statement);
-      expect(r.out, `be-${entry.id} covers`).toContain(entry.formalRef!.covers);
+      expect(r.out, `be-${entry.id} statement`).toContain(ref.statement);
+      expect(r.out, `be-${entry.id} covers`).toContain(ref.covers);
       expect(r.out, `be-${entry.id} name`).toContain(entry.name);
     }
   });
@@ -91,7 +94,7 @@ describe('catalog formalRef — upt atlas be-<n>', () => {
   });
 
   it('a catalog id with no formalRef names that absence and is not an unknown atlas bridge', async () => {
-    const bare = BRIDGE_EQUATIONS.find((e) => e.formalRef === undefined)!;
+    const bare = BRIDGE_EQUATIONS.find((e) => catalogFormalRef(e.id) === undefined)!;
     const r = await run(['atlas', `be-${bare.id}`]);
     expect(r.code).not.toBe(0);
     expect(r.err).not.toContain('unknown bridge');
@@ -101,6 +104,7 @@ describe('catalog formalRef — upt atlas be-<n>', () => {
 
   it('--json carries the stored catalog formalRef', async () => {
     const entry = BRIDGE_EQUATIONS.find((e) => e.id === 16)!;
+    const ref = catalogFormalRef(16)!;
     const r = await run(['atlas', 'be-16', '--json']);
     expect(r.code).toBe(0);
     const env = JSON.parse(r.out) as {
@@ -109,8 +113,8 @@ describe('catalog formalRef — upt atlas be-<n>', () => {
     expect(env.result.source).toBe('catalog');
     expect(env.result.id).toBe('be-16');
     expect(env.result.name).toBe(entry.name);
-    expect(env.result.formalRef.statement).toBe(entry.formalRef!.statement);
-    expect(env.result.formalRef.covers).toBe(entry.formalRef!.covers);
+    expect(env.result.formalRef.statement).toBe(ref.statement);
+    expect(env.result.formalRef.covers).toBe(ref.covers);
   });
 
   it('--run does not apply to a catalog formalRef', async () => {
@@ -143,6 +147,7 @@ describe('Eve E6 — no output hides a qualification (three bridges vs their sou
         expect(r.out).toContain(b.bound.domain);
       }
       expect(r.out).toContain(`review status: ${b.reviewStatus}`);
+      expect(r.out).toContain('not an evidence tag');
     });
   }
 

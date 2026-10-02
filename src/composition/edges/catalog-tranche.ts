@@ -23,6 +23,9 @@
  * @module composition/edges/catalog-tranche
  */
 
+import type { ExprNode } from '../../dimensional/validator.js';
+import { sym } from '../../dimensional/ast-builders.js';
+import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
 import {
   DIMENSIONLESS,
   AREA,
@@ -269,18 +272,67 @@ export const be53Edge: BridgeEdge = {
   citation: 'Gross & Wilczek 1973 PRL 30:1343; Politzer 1973 PRL 30:1346',
 };
 
+const BE54_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '+',
+  args: [
+    {
+      kind: 'op',
+      op: '*',
+      args: [
+        {
+          kind: 'op',
+          op: '/',
+          args: [
+            {
+              kind: 'op',
+              op: '*',
+              args: [sym('8pi', CONSTANTS['8pi'].dim), sym('G', CONSTANTS.G.dim)],
+            },
+            sym('3', DIMENSIONLESS),
+          ],
+        },
+        sym('mass-density', massDensityQ.dim),
+        {
+          kind: 'op',
+          op: '+',
+          args: [
+            sym('1', DIMENSIONLESS),
+            {
+              kind: 'op',
+              op: '/',
+              args: [
+                sym('mass-density', massDensityQ.dim),
+                {
+                  kind: 'op',
+                  op: '*',
+                  args: [sym('2', DIMENSIONLESS), sym('brane-tension', braneTensionQ.dim)],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      kind: 'op',
+      op: '/',
+      args: [
+        sym('rescaled-cosmological-constant', rescaledCosmologicalConstantQ.dim),
+        sym('3', DIMENSIONLESS),
+      ],
+    },
+  ],
+};
+
 /**
  * BE-54 Randall-Sundrum brane cosmology as a graph edge:
- * (mass-density, brane-tension) → H² = (8πG/3) ρ (1 + ρ/(2σ)).
- * Wraps `evaluateRandallSundrumH2` (SI kg/m³ inputs; returns s⁻²).
- * Shares the `mass-density` source and `hubble-rate-squared` target
- * quantity nodes with {@link be19Edge} — both are modified-Friedmann
- * edges over the same physical quantities.
- *
- * Adaptation note: the wrapped evaluator drops the Λ/3 term and the
- * dark-radiation (Weyl) term — documented omissions in the BE-54
- * module — so unlike BE-19 this edge takes no cosmological-constant
- * source.
+ * (mass-density, brane-tension, rescaled-cosmological-constant) →
+ * H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3.
+ * The wrapped evaluator drops Λ/3 and the Weyl C/a⁴ term. The edge
+ * adds Λ/3, the term the theorem and `formula_latex` include, using
+ * the same `rescaled-cosmological-constant` node as {@link be19Edge}.
+ * The Weyl term stays out: it is not in the theorem.
  *
  * @public
  */
@@ -288,22 +340,24 @@ export const be54Edge: BridgeEdge = {
   id: 'be-54',
   beId: 54,
   kind: 'bridge',
-  label: 'Randall-Sundrum brane H² = (8πG/3) ρ (1 + ρ/(2σ))',
-  sources: [massDensityQ, braneTensionQ],
+  label: 'Randall-Sundrum brane H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3',
+  sources: [massDensityQ, braneTensionQ, rescaledCosmologicalConstantQ],
   target: hubbleRateSquaredQ,
   confidence: 'speculative',
   domain: {
-    description: 'ρ ≥ 0 and σ > 0 (brane tension positive, all SI)',
+    description: 'ρ ≥ 0, σ > 0, Λ finite (all SI)',
     predicate: (i) =>
       Number.isFinite(i['mass-density']) &&
       i['mass-density'] >= 0 &&
       Number.isFinite(i['brane-tension']) &&
-      i['brane-tension'] > 0,
+      i['brane-tension'] > 0 &&
+      Number.isFinite(i['rescaled-cosmological-constant']),
   },
   evaluate: (i) =>
     evaluateRandallSundrumH2({
       rho_kg_per_m3: i['mass-density'],
       sigma_kg_per_m3: i['brane-tension'],
-    }),
+    }) + i['rescaled-cosmological-constant'] / 3,
+  symbolic: BE54_SYMBOLIC,
   citation: 'Randall & Sundrum 1999 PRL 83:4690; Binétruy et al. 2000 PLB 477:285',
 };

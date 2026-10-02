@@ -1,14 +1,17 @@
 /**
  * Sanity lemmas for the catalog `formalRef`s.
  *
- * The nine counted references and the six labeled references (three
- * cross-checks, three properties) each instantiate the top-level PhysJS
- * statement on a known case and show the negative control fails. The nested
- * theorems are not these references. A catalog reference does not light
- * `formally-proved`.
+ * The nine counted references, the catalog-equation reference on be-16,
+ * and the five labeled references (three cross-checks, two properties)
+ * each instantiate the top-level PhysJS statement on a known case and
+ * show the negative control fails. The nested theorems are not these
+ * references. A catalog reference does not light `formally-proved` on
+ * the catalog path. Passing the be-16 reference does, because the kind
+ * is bridge.
  */
 
 import { describe, expect, it } from 'vitest';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { C_SI, E_SI, G_SI, HBAR_SI, K_B_SI } from '../../src/core/constants.js';
 import { evaluateHawkingTemperature } from '../../src/bridges/equations/be-42-hawking-temperature.js';
@@ -25,7 +28,7 @@ import { evaluateKibbleZurek } from '../../src/bridges/equations/be-34-kibble-zu
 import { evaluateJeansMass } from '../../src/bridges/be65-jeans-mass.js';
 import { evaluateGravitationalLensing } from '../../src/bridges/gravitational-lensing.js';
 import { LORENZ_NUMBER_SI } from '../../src/bridges/be61-wiedemann-franz.js';
-import { deriveEdgeEvidence } from '../../src/composition/graph-viz.js';
+import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
 const COUNTED = [
   [64, 'PhysJS.Eddington.balance_iff'],
@@ -42,7 +45,7 @@ const COUNTED = [
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
   expect(entry, `be-${id}`).toBeDefined();
-  return entry!;
+  return { ...entry!, formalRef: catalogFormalRef(id) };
 }
 
 describe('catalog formalRef sanity lemmas', () => {
@@ -231,7 +234,6 @@ const LABELED = [
   [42, 'PhysJS.HawkingUnruh.dictionary', 'cross-check'],
   [24, 'PhysJS.Fret.dictionary', 'cross-check'],
   [19, 'PhysJS.QuantumBounce.dictionary', 'cross-check'],
-  [16, 'PhysJS.Landauer.equal_levels', 'property'],
   [29, 'PhysJS.Jarzynski.jensen_work', 'property'],
   [11, 'PhysJS.Lindblad.preserve', 'property'],
 ] as const;
@@ -310,8 +312,8 @@ function gksl(H: Mat, L: Mat, rho: Mat, gamma: number, anticommutator: boolean):
 }
 
 describe('labeled catalog formalRef sanity lemmas', () => {
-  it('three cross-checks and three properties are sanity-lemmas and do not tag the row', () => {
-    expect(LABELED.map(([id]) => id)).toEqual([42, 24, 19, 16, 29, 11]);
+  it('three cross-checks and two properties are sanity-lemmas and do not tag the row', () => {
+    expect(LABELED.map(([id]) => id)).toEqual([42, 24, 19, 29, 11]);
     for (const [id, statement, kind] of LABELED) {
       const entry = row(id);
       expect(entry.formalRef?.fidelity).toBe('sanity-lemmas');
@@ -323,7 +325,8 @@ describe('labeled catalog formalRef sanity lemmas', () => {
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     expect(row(57).formalRef).toBeUndefined();
-    expect(row(54).formalRef).toBeUndefined();
+    expect(row(54).formalRef?.statement).toBe('PhysJS.RandallSundrum.brane_friedmann');
+    expect(row(54).formalRef?.statement).not.toBe('PhysJS.QuantumBounce.dictionary');
   });
 
   it('BE-42: the Hawking–Unruh dictionary holds, and T_U(c⁴/(2GM)) does not', () => {
@@ -368,7 +371,8 @@ describe('labeled catalog formalRef sanity lemmas', () => {
     expect(row(19).formalRef?.statement).toBe('PhysJS.QuantumBounce.dictionary');
     expect(row(19).formalRef?.covers).toContain('naming BE-54');
     expect(row(19).formalRef?.covers).toContain('not a physical Randall–Sundrum brane');
-    expect(row(54).formalRef).toBeUndefined();
+    expect(row(54).formalRef?.statement).toBe('PhysJS.RandallSundrum.brane_friedmann');
+    expect(row(54).formalRef?.kind).toBe('bridge');
     const rho = 4;
     const rhoC = 8;
     const friedmann = ((8 * Math.PI * G_SI) / 3) * rho;
@@ -387,17 +391,22 @@ describe('labeled catalog formalRef sanity lemmas', () => {
     expect(Math.abs(wideRs - friedmann) / Math.abs(friedmann)).toBeLessThan(1e-5);
   });
 
-  it('BE-16: equal levels have entropy k_B log 2, and unequal levels do not', () => {
-    expect(row(16).formalRef?.statement).toBe('PhysJS.Landauer.equal_levels');
-    expect(row(16).formalRef?.covers).toContain('k_B log 2');
-    expect(row(16).formalRef?.covers).toContain('Not E ≥ T ΔS');
+  it('BE-16: the equal-level deficit is k_B T log 2, and unequal levels are not', () => {
+    expect(row(16).formalRef?.statement).toBe('PhysJS.Landauer.erasure_eq');
+    expect(row(16).formalRef?.kind).toBe('bridge');
+    expect(row(16).formalRef?.axioms).toEqual(['propext', 'Classical.choice', 'Quot.sound']);
+    expect(row(16).formalRef?.covers).toContain('⟨E⟩ − F = k_B T log 2');
+    expect(row(16).formalRef?.covers).toContain('Not E ≥ T ΔS for an arbitrary protocol');
     expect(row(16).formalRef?.covers).toContain('not the Bérut confrontation');
+    expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(false);
     const temperature = 300;
     const level = 1e-20;
-    const equal = twoStateEntropy(level, level, temperature);
-    expect(Math.abs(equal - K_B_SI * Math.LN2) / (K_B_SI * Math.LN2)).toBeLessThan(1e-12);
-    const unequal = twoStateEntropy(level, level + 1e-20, temperature);
-    expect(Math.abs(unequal - K_B_SI * Math.LN2) / (K_B_SI * Math.LN2)).toBeGreaterThan(1e-3);
+    const equalEntropy = twoStateEntropy(level, level, temperature);
+    const equalDeficit = equalEntropy * temperature;
+    expect(Math.abs(equalEntropy - K_B_SI * Math.LN2) / (K_B_SI * Math.LN2)).toBeLessThan(1e-12);
+    expect(Math.abs(equalDeficit - K_B_SI * temperature * Math.LN2) / (K_B_SI * temperature * Math.LN2)).toBeLessThan(1e-12);
+    const unequalDeficit = twoStateEntropy(level, level + 1e-20, temperature) * temperature;
+    expect(Math.abs(unequalDeficit - K_B_SI * temperature * Math.LN2) / (K_B_SI * temperature * Math.LN2)).toBeGreaterThan(1e-3);
   });
 
   it('BE-29: Jensen gives ⟨W⟩ ≥ ΔF, and the reversed inequality fails on unequal work', () => {

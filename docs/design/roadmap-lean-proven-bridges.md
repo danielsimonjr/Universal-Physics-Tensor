@@ -107,8 +107,10 @@ bridge. BE-36 is a measured speed bound and is not a row. Its MOND/TeVeS
 title is the framing the design note records, and this milestone does not
 rename it.
 
-Size letters are the bands in scoping §4.3. No proof of these rows has
-been written, so each letter is an estimate, as that section already says.
+Size letters are the bands in scoping §4.3. Each letter is an estimate of
+the work as that section described it. Whether a row has a PhysJS theorem
+is `NOTES.md` and `src/atlas/physjs-ref.ts`. This schedule does not restate
+that record.
 `M` there is Physlib `Time` work. A row marked "plain reals" or "matrices"
 is the band only. This repository does not contain the Physlib tree. The
 cosmology, orbit, and open-system rows are stated on `ℝ` or on matrices

@@ -47,7 +47,7 @@ import type { BridgeEdge, ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
-import { CONSTANTS } from './symbolic-constants.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { E_SI, M_E_SI } from '../core/constants.js';
 import type { Dimension } from '../dimensional/types.js';
 import type { InformationMeasure } from '../core/types.js';

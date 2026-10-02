@@ -15,17 +15,18 @@
  *
  * INTERNAL — not on the public surface.
  *
- * @module composition/symbolic-constants
+ * @module dimensional/symbolic-constants
  */
 
-import type { Dimension } from '../dimensional/types.js';
+import type { Dimension } from './types.js';
 import {
   ACTION,
   CHARGE,
   DIMENSIONLESS,
+  MASS,
   VELOCITY,
-} from '../dimensional/types.js';
-import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI } from '../core/constants.js';
+} from './types.js';
+import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI, M_U_SI } from '../core/constants.js';
 
 const dim = (L = 0, M = 0, T = 0, Theta = 0): Dimension => ({
   L,
@@ -84,6 +85,7 @@ export const CONSTANTS: Readonly<Record<string, NamedConstantValue>> = {
   // IAU 2015 nominal solar parameter. M_sun in eval stays the rounded kilogram M_SUN_SI.
   GM_sun: { value: GM_SUN_SI, dim: dim(3, 0, -2) },
   Msun_iau: { value: GM_SUN_SI / G_SI, dim: dim(0, 1, 0) },
+  m_u: { value: M_U_SI, dim: MASS },
 };
 
 /** What a registered constant is, its SI unit, and where its value comes from (audit I10). @internal */
@@ -135,5 +137,10 @@ export const CONSTANT_PROVENANCE: Readonly<Record<string, ConstantProvenance>> =
     meaning: 'IAU solar mass (GM)☉/G, the mass that reproduces GM_sun with G_SI',
     unit: 'kg',
     source: 'GM_SUN_SI/G_SI (core/constants.ts)',
+  },
+  m_u: {
+    meaning: 'unified atomic mass unit (atomic mass constant)',
+    unit: 'kg',
+    source: 'CODATA 2018 (core/constants.ts M_U_SI)',
   },
 };

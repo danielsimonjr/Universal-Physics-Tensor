@@ -1,0 +1,8 @@
+{
+  "edges": [
+    "src/canonical/linkage.ts -> src/composition/expr-eval.ts",
+    "src/core/labeled-tensor.ts -> src/dimensional/errors.ts",
+    "src/core/labeled-tensor.ts -> src/numerical/tensor-engine.ts"
+  ],
+  "cycles": []
+}

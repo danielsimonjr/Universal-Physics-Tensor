@@ -10,6 +10,7 @@
 import type { Quantity } from '../quantity.js';
 import {
   DIMENSIONLESS,
+  FREQUENCY,
   LENGTH,
   MASS,
   TEMPERATURE,
@@ -21,6 +22,8 @@ import {
   RESISTIVITY,
   NUMBER_DENSITY,
   ENERGY_DIM2,
+  CONDUCTANCE,
+  VOLTAGE,
 } from './_dims.js';
 
 /** Canonical node for `temperature`. */
@@ -216,4 +219,45 @@ export const defectDensityQ: Quantity = {
   symbol: 'n_defect',
   dim: DIMENSIONLESS,
   attributes: { scale: 'cosmological' },
+};
+/** Canonical node for `chern-number` (C, TKNN integer). Not the fractional filling. */
+export const chernNumberQ: Quantity = {
+  name: 'chern-number',
+  symbol: 'C',
+  dim: DIMENSIONLESS,
+  attributes: { scale: 'quantum', topology: 'chern' },
+};
+/** Canonical node for `filling-fraction` (ν = p/q). Not the integer Chern number. */
+export const fillingFractionQ: Quantity = {
+  name: 'filling-fraction',
+  symbol: 'ν',
+  dim: DIMENSIONLESS,
+  attributes: { scale: 'quantum', topology: 'chern' },
+};
+/** Canonical node for `hall-conductance` (σ_xy, siemens). Shared by the integer and fractional Hall relations. */
+export const hallConductanceQ: Quantity = {
+  name: 'hall-conductance',
+  symbol: 'σ_xy',
+  dim: CONDUCTANCE,
+  attributes: { scale: 'classical', force: 'electromagnetic' },
+};
+/** Canonical node for `voltage` (V, volt). Electric potential difference. */
+export const voltageQ: Quantity = {
+  name: 'voltage',
+  symbol: 'V',
+  dim: VOLTAGE,
+  attributes: { scale: 'classical', force: 'electromagnetic' },
+};
+/**
+ * Canonical node for `frequency` (f, hertz).
+ * The same node as the wave relation v = fλ. Attributes stay empty:
+ * a classical wave and the Josephson frequency are one quantity, and a
+ * scale tag on the shared node would mark every use of it.
+ * Distinct from `attempt-frequency`, a molecular kinetic prefactor.
+ */
+export const frequencyQ: Quantity = {
+  name: 'frequency',
+  symbol: 'f',
+  dim: FREQUENCY,
+  attributes: {},
 };

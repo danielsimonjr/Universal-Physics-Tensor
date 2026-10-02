@@ -13,15 +13,18 @@
 import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { PHYSJS_COMMIT, physjsFormalRef, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PROPERTIES = [11, 16, 29] as const;
+const PROPERTIES = [11, 29] as const;
 const CROSS_CHECKS = [19, 24, 42] as const;
-const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61] as const;
+const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61, 14, 17, 22, 15, 32, 35, 30] as const;
+/** Theorem states the catalogued equation. Covers still begins with derivation-step. */
+const CATALOG_EQUATION = [12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63] as const;
 
 /** Namespaces that are not their own Lean file at the pinned commit. */
 const FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
@@ -31,8 +34,9 @@ const FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
 
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
-  if (entry?.formalRef === undefined) throw new Error(`be-${id} has no formalRef`);
-  return entry;
+  const formalRef = catalogFormalRef(id);
+  if (entry === undefined || formalRef === undefined) throw new Error(`be-${id} has no formalRef`);
+  return { ...entry, formalRef };
 }
 
 function fileFor(statement: string): string {
@@ -42,8 +46,8 @@ function fileFor(statement: string): string {
 }
 
 describe('formalRef kind — formally-proved is a bridge only', () => {
-  it('the fifteen catalog references exist (otherwise the next assertions pass vacuously)', () => {
-    expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED].every((id) => row(id).formalRef !== undefined)).toBe(true);
+  it('the catalog references exist (otherwise the next assertions pass vacuously)', () => {
+    expect([...PROPERTIES, ...CROSS_CHECKS, ...COUNTED, ...CATALOG_EQUATION, 28].every((id) => row(id).formalRef !== undefined)).toBe(true);
   });
 
   it('a property derives its own label and not formally-proved', () => {
@@ -66,6 +70,22 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     }
   });
 
+  it('a catalog theorem that states the catalogued equation is kind bridge', () => {
+    for (const id of CATALOG_EQUATION) {
+      const tags = deriveEvidence(row(id), NO_PASSING_WITNESSES);
+      expect(row(id).formalRef?.kind, `be-${id}`).toBe('bridge');
+      expect(row(id).formalRef?.covers.startsWith('derivation-step:'), `be-${id}`).toBe(true);
+      expect(tags.has('formally-proved'), `be-${id}`).toBe(true);
+    }
+  });
+
+  it('BE-28 derives the property label and not formally-proved', () => {
+    const tags = deriveEvidence(row(28), NO_PASSING_WITNESSES);
+    expect(row(28).formalRef?.kind).toBe('property');
+    expect(tags.has('formally-proved')).toBe(false);
+    expect(tags.has('formally-proved-property')).toBe(true);
+  });
+
   it('a counted catalog reference derives neither label', () => {
     for (const id of COUNTED) {
       const tags = deriveEvidence(row(id), NO_PASSING_WITNESSES);
@@ -78,7 +98,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
   });
 
   it('CONTROL: the same property lights formally-proved when its kind is bridge', () => {
-    const property = row(16).formalRef!;
+    const property = row(29).formalRef!;
     expect(deriveEvidence({ formalRef: property }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
     const asBridge = { ...property, kind: 'bridge' as const };
     expect(deriveEvidence({ formalRef: asBridge }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
@@ -107,9 +127,12 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
       ...ATLAS_FAMILIES.flatMap((family) => family.bridges).flatMap((bridge) =>
         bridge.formalRef === undefined ? [] : [bridge.formalRef],
       ),
-      ...BRIDGE_EQUATIONS.flatMap((entry) => (entry.formalRef === undefined ? [] : [entry.formalRef])),
+      ...BRIDGE_EQUATIONS.flatMap((entry) => {
+        const formalRef = catalogFormalRef(entry.id);
+        return formalRef === undefined ? [] : [formalRef];
+      }),
     ];
-    expect(refs.length).toBe(25);
+    expect(refs.length).toBe(46);
     for (const ref of refs) {
       const file = fileFor(ref.statement);
       expect(ref.url).toBe(
@@ -128,15 +151,15 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
     const bridges = [
       ...ATLAS_FAMILIES.flatMap((family) => family.bridges),
-      ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: entry.formalRef })),
+      ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
     ];
     expect(physjsManifestProblems({ manifest, bridges })).toEqual([]);
     const lied = bridges.map((bridge) =>
       bridge.id === 'be-16' && bridge.formalRef !== undefined
-        ? { ...bridge, formalRef: { ...bridge.formalRef, kind: 'bridge' as const } }
+        ? { ...bridge, formalRef: { ...bridge.formalRef, kind: 'property' as const } }
         : bridge,
     );
-    expect(physjsManifestProblems({ manifest, bridges: lied }).join('\n')).toMatch(/kind is 'bridge', expected 'property'/);
-    expect(physjsFormalRef('be-16').kind).toBe('property');
+    expect(physjsManifestProblems({ manifest, bridges: lied }).join('\n')).toMatch(/kind is 'property', expected 'bridge'/);
+    expect(physjsFormalRef('be-16').kind).toBe('bridge');
   });
 });

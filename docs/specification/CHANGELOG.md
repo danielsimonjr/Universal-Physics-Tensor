@@ -1,5 +1,21 @@
 # UPT Specification — Revision History
 
+> **Proof status as of 2026-10-02.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The first 2026-10-02 entry adds the BE-55–65 headings at an earlier pin. The second retargets BE-16 and records that BE-42's Hawking temperature is not proved, at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The third moves the permalinks to PhysJS #54. The theorems are unchanged.
+
+## 2026-10-02 — PhysJS #54 comment pin
+
+- Parts I and II permalinks now name commit `2e09357f9674bc60b60b378155a1623c27dc7b04`. The vendored manifest entries are the same as at `c6958650f0be66b21f5cc3992d5474bf97ad5094`. PhysJS #54 fixes the five module comments that said the reference is not a formalRef, and the Landauer comment that said `Derivation step`.
+
+## 2026-10-02 — BE-16 erasure scale, BE-42 feasibility
+
+- Part-I Bridge Equation 16 — kind `bridge`. The theorem is `PhysJS.Landauer.erasure_eq` at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`: ⟨E⟩ − F = k_B T log 2 for T > 0 on the equal-level two-state ensemble. The covers line still begins with derivation-step. The arbitrary-protocol inequality and the Bérut confrontation stay out.
+- Part-II Bridge Equation 42 — kind stays `cross-check`. `PhysJS.HawkingUnruh.dictionary` remains the theorem. PhysJS `docs/feasibility/be-42.md` records that the Hawking temperature is not proved: no Schwarzschild surface gravity and no KMS condition in PhysLean.
+
+## 2026-10-02 — BE-55–65 write-up
+
+- Part-II §V-C — a Bridge Equation section for each of BE-55 through BE-65, in the house format, with the same PhysJS proof-status blockquote under the heading. Kind, theorem, and the missing piece are read from `src/atlas/physjs-ref.ts` and `docs/planning/Bridge-Gap-Inference.md` at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. A bare `e` in those formulas is the elementary charge. Euler's number is `\exp`.
+- Living catalog counts in the specification index and in Parts I, II, IV, V, and VI now say 55 equations, IDs 11–65. The 2026-06-10 line below that says the catalog was harmonized to 44 bridges is the state of that day.
+
 Provenance ledger for the formal specification (`docs/specification/Part-*.md`).
 
 The spec was hardened across a series of 2026-05 adversarial-review

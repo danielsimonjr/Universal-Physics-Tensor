@@ -1,5 +1,9 @@
 # UPT TODO
 
+## Bridge-equation document sweep (2026-10-01)
+
+- [x] Living status files, the Lean roadmap, the catalog formal-reference note, and the specification write-ups now follow the PhysJS pin in `src/atlas/physjs-ref.ts`. Dated audits and the changelog entries below this section keep their original text and carry a status note. The gap list is `docs/planning/Bridge-Gap-Inference.md`. No version bump.
+
 ## PhysJS milestone 2 formalRefs (2026-09-30)
 
 - [x] Link PhysJS milestone 2 proofs: pin the vendored manifest at `d1c1b18fb54d5fe3aa14f8307b5349b0d672d70c` and add reviewed `lean4-physjs` formalRefs for the bridges whose theorems certify the transformation.

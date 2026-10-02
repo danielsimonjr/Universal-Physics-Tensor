@@ -24,7 +24,7 @@ import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { MASS, TEMPERATURE } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
-import { CONSTANTS, piMultipleValue } from '../composition/symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 
 const isDimensionless = (d: Dimension): boolean =>
   d.L === 0 &&

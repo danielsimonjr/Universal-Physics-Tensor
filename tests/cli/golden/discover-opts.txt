@@ -5,8 +5,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  132 candidates  →  7 promising  ·  35 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  70 axis-clash
-  readiness of the 7 promising: 0 mechanism-tested · 0 data-tested · 6 without magnitude evidence · 5 with axis unresolved · 0 with an entailed consequence
+  funnel:  152 candidates  →  10 promising  ·  46 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  76 axis-clash
+  readiness of the 10 promising: 0 mechanism-tested · 0 data-tested · 9 without magnitude evidence · 8 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   PROMISING (merges disconnected physics, unlocks quantities, stays consistent):
@@ -31,6 +31,27 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: landauer-erasure-energy and inflation-hubble-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: inflation-hubble-energy · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
         [observation: measure landauer-erasure-energy and inflation-hubble-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    grw-localization-rate ≟ frequency                    [[frequency]]  score 6
+        unlocks: frequency
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: grw-localization-rate and frequency are the same physical quantity, not only both [frequency] · needs a representative magnitude for: frequency · needs a stated scale regime for: frequency · needs a stated force regime for: grw-localization-rate, frequency · needs a consequence that re-derives a known law]
+        [observation: measure grw-localization-rate and frequency in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    landauer-erasure-energy ≟ higgs-decay-constant       [[energy]]  score 6
+        unlocks: higgs-decay-constant
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and higgs-decay-constant are the same physical quantity, not only both [energy] · needs a representative magnitude for: higgs-decay-constant · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and higgs-decay-constant in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    landauer-erasure-energy ≟ higgs-field                [[energy]]  score 6
+        unlocks: higgs-field
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and higgs-field are the same physical quantity, not only both [energy] · needs a representative magnitude for: higgs-field · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and higgs-field in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     mass ≟ scalar-field-reference                        [[mass]]  score 6
         unlocks: scalar-field-reference
         [consequence: inconclusive]
@@ -83,12 +104,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     vacuum-expectation-value ≟ planck-mass-energy        ~16.7 orders apart
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
+    attempt-frequency ≟ frequency                        [[frequency]]
     mass ≟ reference-mass                                [[mass]]
     mass ≟ swampland-tower-mass                          [[mass]]
     mass-density ≟ lambda-mass-density                   [[L^-3 M]]
     time ≟ microscopic-relaxation-time                   [[time]]
 
   AXIS-CLASH (stated scale/force labels differ: a regime-label prior, not a physical test):
+    active-noise-energy ≟ higgs-decay-constant           force: emergent ≠ weak; scale: mesoscopic ≠ quantum
+    active-noise-energy ≟ higgs-field                    force: emergent ≠ weak; scale: mesoscopic ≠ quantum
     active-noise-energy ≟ inflation-hubble-energy        force: emergent ≠ gravitational; scale: mesoscopic ≠ cosmological
     active-noise-energy ≟ planck-mass-energy             force: emergent ≠ gravitational; scale: mesoscopic ≠ quantum
     barrier-height ≟ active-noise-energy                 scale: quantum ≠ mesoscopic
@@ -136,6 +160,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     impact-parameter ≟ donor-acceptor-distance           force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     impact-parameter ≟ foerster-radius                   force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     impact-parameter ≟ planck-length                     scale: classical ≠ quantum
+    inflation-hubble-energy ≟ higgs-decay-constant       force: gravitational ≠ weak; scale: cosmological ≠ quantum
+    inflation-hubble-energy ≟ higgs-field                force: gravitational ≠ weak; scale: cosmological ≠ quantum
     minimal-surface-area ≟ wormhole-cross-section-area   scale: classical ≠ quantum
     mutation-rate ≟ hubble-rate                          scale: mesoscopic ≠ cosmological
     near-radius ≟ barrier-width                          scale: classical ≠ quantum
@@ -144,6 +170,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     near-radius ≟ donor-acceptor-distance                force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     near-radius ≟ foerster-radius                        force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     near-radius ≟ planck-length                          scale: classical ≠ quantum
+    planck-mass-energy ≟ higgs-decay-constant            force: gravitational ≠ weak
+    planck-mass-energy ≟ higgs-field                     force: gravitational ≠ weak
     schwarzschild-radius ≟ boundary-length               scale: classical ≠ quantum
     schwarzschild-radius ≟ coarsening-length             force: gravitational ≠ emergent; scale: classical ≠ mesoscopic
     semi-major-axis ≟ barrier-width                      scale: classical ≠ quantum

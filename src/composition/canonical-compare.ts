@@ -28,10 +28,10 @@ import type { Dimension } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
-import { CONSTANTS, piMultipleValue } from './symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { evalExpr } from './expr-eval.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
-import { formulaNameDimensions } from './formula-names.js';
+import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
@@ -387,7 +387,7 @@ function overrideLabel(overrides: Readonly<Record<string, number>> | undefined):
   return bits.length === 0 ? undefined : bits.join(', ');
 }
 
-/** Compare a user expression against the canonical equations that share its target and source quantities, evaluating each with the supplied function. */
+/** Compare a user expression against the canonical equations that share its target and source quantities. `evaluateUser` is called only for the user's expression; each canonical value comes from that entry's `scalarAst` or from its registry monomial. */
 export function compareWithCanonical(
   target: string,
   sources: readonly ComparisonSource[],

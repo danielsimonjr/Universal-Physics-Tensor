@@ -3,7 +3,8 @@
  *
  * `substitute(expr, name, replacement)` replaces every `{kind:'symbol', name}`
  * leaf with `replacement`, recursing the scalar arms (`op` / `integral` /
- * `derivative`). It returns the new tree AND the occurrence count — the count
+ * `derivative` / `transcendental` / `abs` / `dirac-delta`). It returns the new
+ * tree AND the occurrence count — the count
  * is load-bearing: `composeSymbolic` rejects a ZERO-occurrence substitution
  * (a silent no-op that would yield a dimensionally-valid but physics-wrong
  * composition ignoring the first operand — Adam A-3). Tensor arms are out of
@@ -68,10 +69,17 @@ export function substitute(
       };
     }
 
+    case 'transcendental':
+    case 'abs':
+    case 'dirac-delta': {
+      const inner = substitute(expr.arg, name, replacement);
+      return { expr: { ...expr, arg: inner.expr }, count: inner.count };
+    }
+
     default:
       throw new SymbolicEvalError(
         `substitute: node kind '${expr.kind}' is out of scope (scalar ` +
-          `symbol/op/integral/derivative only; tensor nodes are not ` +
+          `symbol/op/integral/derivative/transcendental/abs/dirac-delta only; tensor nodes are not ` +
           `substitutable here).`,
       );
   }

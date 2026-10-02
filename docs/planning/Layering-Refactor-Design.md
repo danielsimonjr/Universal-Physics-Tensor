@@ -1,5 +1,7 @@
 # Layering refactor
 
+> **Status as of 2026-10-02.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and fourteen catalog ids (be-12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `2e09357f9674bc60b60b378155a1623c27dc7b04`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). Stage 4 still says a catalog reference passed into `deriveEvidence` lights `formally-proved`, including a property and a cross-check, and the fifteen `physjsFormalRef` keys are this note's starting allowlist.
+
 This note specifies a staged refactor of import direction. It changes no
 code, no public export, and no cell of the composition table. Approval is
 recorded outside this file. Landing the note does not authorize a stage.
@@ -221,15 +223,15 @@ so existing import paths keep working:
 | Moves | Why it is in the set |
 |---|---|
 | `RelationType`, `EvidenceTag`, `ALL_EVIDENCE_TAGS` | The contract and the tag union. The const is the value list of the union; leaving it behind splits them. |
-| `FormalFidelity`, `FormalRef` | `FormalRef.fidelity` is `FormalFidelity`. Moving the interface without the union leaves `relations` importing `atlas`. |
+| `FormalFidelity`, `FormalRefKind`, `FormalRef` | `FormalRef.fidelity` is `FormalFidelity` and `FormalRef.kind` is `FormalRefKind`. Moving the interface without either union leaves `relations` importing `atlas`. |
 | `RegimeInequality`, `Regime` | `Regime.inequalities` is `RegimeInequality`. |
-| `ApproximationBound` | Named by `RelationContract` and by `uncertainty.ts`. |
+| `LimitCharacter`, `ApproximationBound` | `ApproximationBound.limitCharacter` is `LimitCharacter`. The bound is named by `RelationContract` and by `uncertainty.ts`. Moving the bound without the union leaves `relations` importing `atlas`. |
 | `Counterexample` | `witness` is a string, so `Witness` can stay. |
 | `RelationContract` | The Phase 1 overlay union. |
 | `Conventions` | The sign and unit record. |
 
 Stay in `src/atlas/types.ts`, and import the moved names from `relations`
-(a downward edge): `LimitCharacter`, `Witness`, `NormTransport`,
+(a downward edge): `Witness`, `NormTransport`,
 `AtlasBridge`, `AtlasRejection`, `MissingHorizonError`,
 `MissingDeltaAtError`, `MissingLipschitzError`. The two public error
 classes stay on `src/atlas/public.ts` through the existing re-export.

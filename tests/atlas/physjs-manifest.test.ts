@@ -13,7 +13,8 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
-import { deriveEdgeEvidence } from '../../src/composition/graph-viz.js';
+import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import {
   PHYSJS_COMMIT,
@@ -27,10 +28,10 @@ const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.j
 const atlasBridges = ATLAS_FAMILIES.flatMap((family) => family.bridges);
 const carriers = [
   ...atlasBridges,
-  ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: entry.formalRef })),
+  ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `57a9ecbc851952d539882400a7176926d2990d34`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `2e09357f9674bc60b60b378155a1623c27dc7b04`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -81,8 +82,8 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
   ],
   [
     'be-16',
-    'PhysJS.Landauer.equal_levels',
-    'property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation',
+    'PhysJS.Landauer.erasure_eq',
+    'derivation-step: for T > 0, the equal-level two-state ensemble has ⟨E⟩ − F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+δ do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation',
   ],
   [
     'be-29',
@@ -109,6 +110,27 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
     'PhysJS.Sommerfeld.integral_eq',
     'derivation-step: ∫_ℝ x² e^x / (1+e^x)² dx = π²/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of π²/3. Claiming the half-line equals π²/3 fails. Not the transport law',
   ],
+  ['be-12', 'PhysJS.ThermalDeBroglie.wavelength_eq', 'derivation-step: √(2π ℏ²/(m k_B T)) = h/√(2π m k_B T) for h = 2πℏ and ℏ > 0. The non-negative square root needs ℏ > 0. The Wave Q form ℏ/√(m k_B T), with ℏ in the numerator and no √(2π), fails, as does ℏ/√(2 m k_B T). Not Caldeira–Leggett dephasing'],
+  ['be-59', 'PhysJS.Josephson.frequency_eq', 'derivation-step: f = (2e/h) V, K_J = 2e/h, and f = K_J V. Clearing h recovers 2e. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing 2e by e fails. Not the tunneling Hamiltonian'],
+  ['be-55', 'PhysJS.QuantumHall.reciprocal', 'derivation-step: for a nonzero integer C and e ≠ 0, σ_xy = C e²/h, R_H = h/(C e²), and R_K = h/e², so σ_xy R_H = 1 and R_H = R_K/C. The shifted index C+1 is a different conductance. Replacing e² by e fails the product when e ≠ 1. Not TKNN'],
+  ['be-60', 'PhysJS.Laughlin.filling_fraction', 'derivation-step: for integers p ≠ 0 and q ≠ 0, with ν = p/q, σ_xy = ν e²/h and R_xy = R_K/ν = (q/p) h/e². The charge and Planck\'s constant are not assumed nonzero. Oddness of q is the Laughlin selection rule and is not this identity. Not the Laughlin wavefunction, and not the anyon charge e/3'],
+  ['be-21', 'PhysJS.Kss.saturating', 'derivation-step: η/s = ℏ/(4π k_B) is the equality 4π k_B (η/s) = ℏ for k_B ≠ 0. The Hawking factor 8π in place of 4π is 2ℏ, not ℏ, once ℏ ≠ 0. Not the inequality η/s ≥ ℏ/(4π k_B)'],
+  ['be-14', 'PhysJS.PlanckArea.area_law', 'derivation-step: k_B c³ A/(4 G ℏ) = k_B A/(4 ℓ_P²) for ℓ_P² = ℏ G/c³. The area is an input. ℓ_P² = ℏ G/c² fails when c ≠ 1. The factor 2 in place of 4 fails. The same lemma is be-43. Not the minimal-surface theorem'],
+  ['be-43', 'PhysJS.PlanckArea.area_law', 'derivation-step: the be-14 lemma on a wormhole area. k_B A/(4 ℓ_P²) equals k_B c³ A/(4 G ℏ) for ℓ_P² = ℏ G/c³. ℓ_P² = ℏ G/c² fails when c ≠ 1, and the factor 2 fails. Not ER=EPR'],
+  ['be-37', 'PhysJS.Shapiro.radial_integral', 'derivation-step: for 0 < R_near < R_far and c ≠ 0, ∫_{R_near}^{R_far} (2 G M / c³) (dr / r) = (2 G M / c³) ln(R_far / R_near). The factor 1 in place of 2 is half, once G ≠ 0 and M ≠ 0. log₁₀ of the radius ratio is not ln. Not the impact-parameter formula, and not the Cassini measurement'],
+  ['be-54', 'PhysJS.RandallSundrum.brane_friedmann', 'derivation-step: for σ ≠ 0, H²_RS = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3, which equals the Friedmann term plus (8πG/3) ρ²/(2σ). Not a derivation from the five-dimensional Einstein equation'],
+  ['be-17', 'PhysJS.EinsteinCartan.inversion', 'derivation-step: if κ = 8πG/c⁴ ≠ 0 and every component satisfies T = κ S, then S·S = T·T / κ² = (c⁴/(8πG))² T·T. κ² in the numerator is the inversion backwards, and it fails when T·T ≠ 0 and κ⁴ ≠ 1. Not the Einstein–Cartan field equation, and not a Newtonian limit'],
+  ['be-27', 'PhysJS.EffectiveTemperature.sum_eq', 'derivation-step: for T ≠ 0 and k_B ≠ 0, T (1 + Σ_active/(k_B T)) = T + Σ_active/k_B, and this equals T iff Σ_active = 0. The product T · Σ_active/(k_B T), with the 1 omitted, is not that sum. Not the frequency-dependent Cugliandolo–Kurchan T_eff(ω)'],
+  ['be-22', 'PhysJS.ToricCode.toric', 'derivation-step: four anyons of quantum dimension 1 have D = √4 = 2 and γ = ln 2 in nats. The encoded decomposition is S = α L − γ, with the O(L⁻¹) term dropped. log₂ 2 = 1 is the bit convention, not ln 2. D = √2 is one anyon pair, not the toric code. Not the Kitaev–Preskill theorem, and not a quantum-gravity boundary'],
+  ['be-15', 'PhysJS.Coarsening.exponent_iff', 'derivation-step: for Γ = L₀²/t₀ > 0, t > 0, t ≠ t₀, and z > 0, L(t) = L₀ (t/t₀)^{1/z} obeys L(t)² = Γ t iff z = 2. At t = t₀ the ratio holds for every z. Model B\'s z = 3 gives L³ ∝ t and fails L² = Γ t. Not the Model A Langevin equation. The Langevin kinetic coefficient is a different Γ'],
+  ['be-33', 'PhysJS.QuantumCritical.thermal_scaling', 'derivation-step: ξ(T) = ξ₀ (T/T₀)^{−1/z}, and at z = 1 this is ξ(T) = ξ₀ (T/T₀)^{−1} = ξ₀ T₀/T for T > 0 and T₀ > 0. Not Hertz–Millis theory, and not a universality class'],
+  ['be-50', 'PhysJS.TimeSymmetric.wheeler_feynman', 'derivation-step: A_μ(x) = (A_μ^ret(x) + A_μ^adv(x))/2, and twice that component is the sum. The id is contested. This lemma does not decide the contest. Not the absorber boundary condition as a theory of radiation reaction'],
+  ['be-32', 'PhysJS.BornOverlap.modulus_sq', 'derivation-step: |c + s i|² = c² + s², which is normSq of one complex matrix element. A sum of squares above 1 is not a probability in [0, 1], the module\'s rejection of c² + s² > 1. c² − s² is not that square when s ≠ 0. Not the Giacomini–Castro-Ruiz–Brukner transformation, and not a Haar integral. The catalog records this id as not-a-bridge; this lemma does not decide that'],
+  ['be-28', 'PhysJS.EntropyProduction.nonneg', 'derivation-step: σ = Σ_i J_i X_i is the definition of σ. If every product is ≥ 0 then σ ≥ 0. One flipped sign, with the other products zero and the flipped product strictly positive, is not σ, and that flipped sum is negative. Not the variational maximum-entropy-production principle. The catalog records this id as not-a-bridge; this lemma does not decide that'],
+  ['be-40', 'PhysJS.CompositeHiggs.scale_free', 'derivation-step: for f ≠ 0 and θ = h/f, V(h)/f⁴ = −α sin²θ + β [sin⁴θ − sin²θ cos²θ]. Both terms carry f⁴, so the ratio depends on h only through θ. The pre-correction first term −α f² sin²θ, divided by f⁴, is −α sin²θ / f². It depends on f, and it agrees with −α sin²θ only when f² = 1. Not SILH matching onto a confining theory. The catalog records this id as not-a-bridge; this lemma does not decide that'],
+  ['be-35', 'PhysJS.Crossing.antisymmetry', 'derivation-step: for a real function g, g(u,v) − g(v,u) = −(g(v,u) − g(u,v)). The swap is the negation of a difference. The residual is 0 for every g when u = v, including u = v = 1/4, so that point is not a control. A block that is not symmetric does not vanish at u = 1/2, v = 1/4. Not the infinite sum over (Δ, ℓ), and not positivity or unitarity. The catalog records this id as not-a-bridge; this lemma does not decide that'],
+  ['be-63', 'PhysJS.Chandrasekhar.prefactor', 'derivation-step: with n = ρ/(μ_e m_u), p_F = ℏ (3π² n)^{1/3}, and P = (1/4) n p_F c, one has P = K_ρ ρ^{4/3} where K_ρ = K_n/(μ_e m_u)^{4/3} and K_n = (ℏ c/4)(3π²)^{1/3}. For the n = 3 Lane–Emden scale the central density cancels, and M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}. ω₃⁰ stays symbolic; the decimal 2.01824 is not in the theorem. With ℏ = c = μ_e = m_u = 1 both routes give the same K. √π/2 in place of √(3π)/2 fails when ω₃⁰ ≠ 0, and dropping ω₃⁰ fails when ω₃⁰ ≠ 1. Not stellar rotation or magnetic support'],
+  ['be-30', 'PhysJS.Entanglement.first_variation', 'derivation-step: for a smooth curve of full-rank density matrices that stay diagonal in a fixed basis and have trace 1, d/dt S(ρ(t)) = −⟪ρ̇(t), log ρ(t)⟫, the trace inner product. The modular Hamiltonian K = −log ρ is frozen at the base point, and that derivative equals d/dt ⟨K⟩. A finite jump from diag(1/2, 1/2) to diag(3/4, 1/4) leaves ⟨K⟩ unchanged and changes S. Not the holographic first law that identifies K with an area variation'],
 ];
 
 const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
@@ -124,8 +146,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit 57a9ecbc851952d539882400a7176926d2990d34, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('57a9ecbc851952d539882400a7176926d2990d34');
+  it('records commit 2e09357f9674bc60b60b378155a1623c27dc7b04, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('2e09357f9674bc60b60b378155a1623c27dc7b04');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -133,7 +155,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the twenty-five theorems and keys, in manifest order', () => {
+  it('names the forty-six theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -269,6 +291,14 @@ describe('vendored PhysJS manifest', () => {
       ['be-53', 'oneLoop', 'PhysJS.YangMills.alphaRun_hasDerivAt'],
       ['be-38', 'inversion', 'PhysJS.Mond.mu_inversion'],
       ['be-13', 'vacuum', 'PhysJS.Einstein.vacuum_density'],
+      ['be-13', 'corollary', 'PhysJS.Einstein.friedmann_corollary'],
+      ['be-54', 'friedmann', 'PhysJS.RandallSundrum.flat_friedmann'],
+      ['be-15', 'lengthMonomial', 'PhysJS.Coarsening.length_monomial_at'],
+      ['be-17', 'torsionMonomial', 'PhysJS.EinsteinCartan.torsion_monomial'],
+      ['be-17', 'coefficientNotFixed', 'PhysJS.EinsteinCartan.coefficient_not_fixed'],
+      ['be-17', 'unitCoefficient', 'PhysJS.EinsteinCartan.inversion_of_unit_coefficient'],
+      ['be-33', 'scalingShape', 'PhysJS.QuantumCritical.scaling_shape'],
+      ['be-33', 'everyPower', 'PhysJS.QuantumCritical.every_power_homogeneous'],
     ];
     for (const [key, field, theorem] of nested) {
       const entry = manifest.entries.find((candidate) => candidate.key === key) as
@@ -276,12 +306,34 @@ describe('vendored PhysJS manifest', () => {
         | undefined;
       expect(entry?.[field]?.theorem).toBe(theorem);
       expect(entry?.[field]?.covers?.split(':')[0]).toMatch(/^(reduction|limit|derivation-step)$/);
-      const row = BRIDGE_EQUATIONS.find((candidate) => candidate.id === Number(key.slice(3)));
-      expect(row?.formalRef?.statement).toBe(entry?.theorem);
-      expect(row?.formalRef?.statement).not.toBe(theorem);
+      const formalRef = catalogFormalRef(Number(key.slice(3)));
+      expect(formalRef?.statement).toBe(entry?.theorem);
+      expect(formalRef?.statement).not.toBe(theorem);
     }
-    expect(BRIDGE_EQUATIONS.find((entry) => entry.id === 20)?.formalRef).toBeUndefined();
+    expect(catalogFormalRef(20)).toBeUndefined();
     expect(manifest.entries.some((entry) => entry.key === 'be-20')).toBe(false);
+  });
+
+  it('the Buckingham nested covers name the assumed hypothesis', () => {
+    const named: readonly (readonly [string, string, readonly string[]])[] = [
+      ['be-15', 'lengthMonomial', ['dimensionally homogeneous', '[Γ] = L^z T⁻¹', 'C is not fixed', 'z = 2 is not derived']],
+      ['be-17', 'torsionMonomial', ['dimensionally homogeneous', 'C is not fixed']],
+      ['be-17', 'coefficientNotFixed', ['A factor other than 1 is not the catalog coefficient']],
+      ['be-17', 'unitCoefficient', ['C = 1 is a hypothesis']],
+      ['be-33', 'scalingShape', ['dimensionally homogeneous', 'φ is not fixed']],
+      ['be-33', 'everyPower', ['The exponent p is not chosen']],
+    ];
+    for (const [key, field, phrases] of named) {
+      const entry = manifest.entries.find((candidate) => candidate.key === key) as
+        | (PhysjsManifestFile['entries'][number] & Record<string, { covers?: string } | undefined>)
+        | undefined;
+      const covers = entry?.[field]?.covers ?? '';
+      expect(covers.startsWith('derivation-step: '), `${key} ${field}`).toBe(true);
+      for (const phrase of phrases) {
+        expect(covers, `${key} ${field}`).toContain(phrase);
+      }
+      expect(catalogFormalRef(Number(key.slice(3)))?.statement).not.toContain(field);
+    }
   });
 
   it('fails when a nested catalog statement is dropped or named as the formalRef', () => {
@@ -317,10 +369,10 @@ describe('vendored PhysJS manifest', () => {
     const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
     const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
     const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-65', 'be-51', 'be-61']);
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30']);
     expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
-    expect(properties.map((entry) => entry.key)).toEqual(['be-16', 'be-29', 'be-11']);
-    expect(counted.length + crossChecks.length + properties.length).toBe(15);
+    expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
+    expect(counted.length + crossChecks.length + properties.length).toBe(36);
 
     const unlabeled = {
       ...manifest,
@@ -348,27 +400,36 @@ describe('vendored PhysJS manifest', () => {
 
   it('catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
     const countedIds = [64, 53, 58, 38, 13, 34, 65, 51, 61];
-    const labeledIds = [42, 24, 19, 16, 29, 11];
+    const labeledIds = [42, 24, 19, 29, 11];
     for (const id of countedIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
-      expect(row?.formalRef?.system).toBe('lean4-physjs');
-      expect(row?.formalRef?.covers).toMatch(/^(reduction|limit|derivation-step): /);
-      expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
+      const formalRef = catalogFormalRef(id);
+      expect(formalRef?.system).toBe('lean4-physjs');
+      expect(formalRef?.covers).toMatch(/^(reduction|limit|derivation-step): /);
+      expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
     for (const id of labeledIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
-      expect(row?.formalRef?.system).toBe('lean4-physjs');
-      expect(row?.formalRef?.covers).toMatch(/^(property|cross-check): /);
-      expect(deriveEvidence(row!, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
+      const formalRef = catalogFormalRef(id);
+      expect(formalRef?.system).toBe('lean4-physjs');
+      expect(formalRef?.covers).toMatch(/^(property|cross-check): /);
+      expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
+    const landauer = catalogFormalRef(16);
+    expect(landauer?.statement).toBe('PhysJS.Landauer.erasure_eq');
+    expect(landauer?.kind).toBe('bridge');
+    expect(landauer?.axioms).toEqual(['propext', 'Classical.choice', 'Quot.sound']);
+    expect(landauer?.covers.startsWith('derivation-step: ')).toBe(true);
+    expect(deriveEvidence({ formalRef: landauer }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
+    expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(false);
     const reviewed = atlasBridges.filter(
       (bridge) => bridge.formalRef !== undefined && bridge.formalRef.fidelity !== 'unreviewed',
     );
     expect(reviewed).toHaveLength(10);
-    for (const id of [36, 20, 57, 54]) {
-      expect(BRIDGE_EQUATIONS.find((entry) => entry.id === id)?.formalRef).toBeUndefined();
+    for (const id of [36, 20, 57]) {
+      expect(catalogFormalRef(id)).toBeUndefined();
       expect(manifest.entries.some((entry) => entry.key === `be-${id}`)).toBe(false);
     }
     const be36 = BRIDGE_EQUATIONS.find((entry) => entry.id === 36);

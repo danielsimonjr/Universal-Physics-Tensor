@@ -83,14 +83,14 @@ const b = new LabeledTensor(
 );
 
 // a and b's indices have the same `axis` and `name` strings but
-// DIFFERENT `id`s. They do NOT contract — the result is an outer
-// product (rank 2).
-const outer = a.contract(b);
-// outer.tensor.shape === [2, 2]
+// DIFFERENT `id`s. contract throws IndexNameMismatchError and the
+// message names both ids. It does not return an outer product.
+a.contract(b);
 ```
 
-Use the `Axes` registry for stable identity across import sites;
-use `makeIndex` only when you genuinely want a fresh local index.
+Use the `Axes` registry for stable identity across import sites.
+`makeIndex` mints a fresh id. Two fresh calls with one name are not
+one index, and they are not a silent outer product.
 
 ### Cross-axis contractions fail loudly
 
@@ -129,8 +129,9 @@ The full design is in
   fields (`id`, `axis`, `name`, `tags?`, `limits?`, `notes?`).
   `prime` and `arrow` (ITensor-style) are not implemented.
 - **Decision #3 (identity matching).** `contract` matches by
-  `UniversalIndexId` equality only. Same `axis` + `name` with
-  different `id`s = different physics axes.
+  `UniversalIndexId` equality only. The same `name` with different
+  `id`s throws `IndexNameMismatchError` and the message names both
+  ids. Distinct names stay free axes (an outer product).
 - **Decision #7 (runtime axis-mismatch).** Caught by
   `AxisMismatchError` at runtime; compile-time detection via
   template literal types is not implemented.

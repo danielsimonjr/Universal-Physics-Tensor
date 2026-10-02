@@ -24,6 +24,8 @@ export {
   H0_SI,
   // v0.8.0 punch-list — promoted from the calibration-edges module
   M_SUN_SI,
+  // IAU 2015 nominal solar GM. Not G_SI * M_SUN_SI.
+  GM_SUN_SI,
   // v0.11 — electron mass (namespacing criterion-3 pin)
   M_E_SI,
   // canonical registry — Wien displacement constant (CE-wien)
@@ -93,6 +95,7 @@ export {
   LabeledTensorConstructionError,
   AxisMismatchError,
   IdentityConflictError,
+  IndexNameMismatchError,
   RankPreservationError,
   AxisOrderError,
   AxisMergeError,
@@ -259,8 +262,9 @@ export type { EinsteinTensorNode } from './dimensional/validator.js';
 
 // v0.5.0 curvature layer — Bianchi residual helper (Task 9). `bianchiResidual(R)`
 // returns {residual, evaluate, evaluateMax} for the cyclic second-Bianchi-identity
-// check ∇_{[λ} R_{μν]ρσ} = 0. Closes Phase 1 — Foundations.
-export { bianchiResidual } from './dimensional/curvature.js';
+// check ∇_{[λ} R_{μν]ρσ} = 0. The evaluator lives in numerical so curvature.ts
+// does not import it. Closes Phase 1 — Foundations.
+export { bianchiResidual } from './numerical/bianchi-residual.js';
 export type { BianchiResidualNode } from './dimensional/validator.js';
 
 // v0.6.0 Phase 1 — Killing-vector machinery (Task 1.3).
@@ -345,6 +349,12 @@ export { validateKleinGordonEquation } from './dimensional/klein-gordon-equation
 // Every symbol re-exported in this block is `@public` — the consumer-facing
 // dimensional/metric surface (stabilised in v0.3.0).
 export type { Dimension } from './dimensional/types.js';
+export {
+  convertValue,
+  parseUnit,
+  UnitError,
+} from './dimensional/units.js';
+export type { ParsedUnit, TemperatureReading } from './dimensional/units.js';
 export {
   DIMENSIONLESS,
   LENGTH,

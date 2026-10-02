@@ -86,7 +86,7 @@ const EXPECTED_RUNTIME_EXPORTS = [
   // v0.7 Proposal 1 — Intelligent Index layer (Phase 4 Task 4)
   'makeIndex', 'Axes', 'LabeledTensor',
   'LabeledTensorConstructionError', 'AxisMismatchError',
-  'IdentityConflictError', 'RankPreservationError', 'AxisOrderError',
+  'IdentityConflictError', 'IndexNameMismatchError', 'RankPreservationError', 'AxisOrderError',
   'AxisMergeError', 'AxisSplitError',
   // v0.8 Proposal 5 — RegimeType extension system
   'defineRegime', 'defineScale', 'defineForce', 'defineSymmetry',
@@ -125,6 +125,11 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'confrontBE52', 'MERCURY',
   // v0.8.0 punch-list — solar mass promoted to core constants
   'M_SUN_SI',
+  // IAU 2015 solar GM, and the unit reader the CLI uses
+  'GM_SUN_SI',
+  'parseUnit',
+  'convertValue',
+  'UnitError',
   // v0.10.0 T3/T4 — Phase-D enumeration + uncertainty propagation
   'enumerateCompositions', 'REGISTERED_COMPOSITION_IDS',
   'propagateUncertainty', 'confrontBE36WithUncertainty',

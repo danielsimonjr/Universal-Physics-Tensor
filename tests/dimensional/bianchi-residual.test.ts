@@ -47,7 +47,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { bianchiResidual } from '../../src/dimensional/curvature.js';
+import { bianchiResidual } from '../../src/numerical/bianchi-residual.js';
 import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
 import type { RiemannTensorNode } from '../../src/dimensional/validator.js';
 import { tsym } from '../../src/dimensional/tensor.js';

@@ -3,16 +3,16 @@
  * the CODATA names a script should not have to paste.
  *
  * Bare `e` is the elementary charge, taken from the constant registry.
- * Euler's number is `euler`. `E` is energy and is not filled in.
+ * Euler's number is `exp(x)`. `E` is energy and is not filled in.
  *
  * @module cli/eval-numbers
  * @internal
  */
 
 import { E_SI, M_E_SI, M_SUN_SI } from '../core/constants.js';
-import { MU0_SI } from '../composition/formula-names.js';
-import { CONSTANTS } from '../composition/symbolic-constants.js';
-import type { UnitMode } from '../composition/natural-units.js';
+import { MU0_SI } from '../dimensional/formula-names.js';
+import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import type { UnitMode } from '../dimensional/natural-units.js';
 
 /** ħ in eval is the exact quotient H_SI/(2π). */
 export const HBAR_TRUNCATION_NOTE =
@@ -34,7 +34,6 @@ export function codataScope(mode: UnitMode): Record<string, number> {
   const scope: Record<string, number> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) scope[name] = c.value;
   scope.e_charge = E_SI;
-  scope.euler = Math.E;
   scope.m_e = M_E_SI;
   scope.eps0 = CONSTANTS.epsilon_0.value;
   scope.mu0 = MU0_SI;

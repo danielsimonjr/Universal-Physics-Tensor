@@ -60,13 +60,13 @@ const qc = BRIDGE_EQUATIONS.filter(e =>
 );
 ```
 
-### Formal references on a catalog entry
+### Formal references for a catalog id
 
-A `BRIDGE_EQUATIONS` entry may carry `formalRef`. The object has `kind` and `url` in addition to `system`, `statement`, `version`, `axioms`, `fidelity`, and `covers`.
+A `BRIDGE_EQUATIONS` entry does not carry `formalRef`. The reference for a catalog id is `catalogFormalRef` in `src/atlas/catalog-formal-ref.ts`. That function is not a package-root export. The object has `kind` and `url` in addition to `system`, `statement`, `version`, `axioms`, `fidelity`, and `covers`.
 
-`kind` is `property`, `cross-check`, `reduction`, `limit`, or `derivation-step` on a catalog entry. `url` is a permalink to that theorem's Lean file at the commit named in `version`. `SpringLc` and `DampedRlc` are namespaces inside `PhysJS/OscillatorDictionary.lean`.
+`kind` is `bridge`, `property`, `cross-check`, `reduction`, `limit`, or `derivation-step`. `url` is a permalink to that theorem's Lean file at the commit named in `version`. `SpringLc` and `DampedRlc` are namespaces inside `PhysJS/OscillatorDictionary.lean`.
 
-Passing the reference to `deriveEvidence` (the atlas subpath) lights `formally-proved` only when `kind` is `bridge`. A property lights `formally-proved-property`. A cross-check lights `formally-proved-cross-check`. Those two labels are shown and are not a proved bridge. A reduction, a limit, and a derivation-step light none of the three. The catalog evidence path still omits `formalRef`, so a catalog row stays `proposed` or `contradicted`.
+Passing the reference to `deriveEvidence` (the atlas subpath) lights `formally-proved` only when `kind` is `bridge`. A property lights `formally-proved-property`. A cross-check lights `formally-proved-cross-check`. Those two labels are shown and are not a proved bridge. A reduction, a limit, and a derivation-step light none of the three. The catalog evidence path still omits the reference, so a catalog row stays `proposed` or `contradicted`.
 
 ### `isActiveStatus(s)` — function
 
@@ -465,7 +465,7 @@ Wraps a `RiemannTensorNode` plus a metric pair and produces the composite Einste
 
 ### `bianchiResidual(R)` — function
 
-Returns `{ residual, evaluate, evaluateMax }` for the cyclic second-Bianchi-identity check ∇_{[λ} R_{μν]ρσ} = 0.
+Returns `{ residual, evaluate, evaluateMax }` for the cyclic second-Bianchi-identity check ∇_{[λ} R_{μν]ρσ} = 0. Defined in `src/numerical/bianchi-residual.ts`.
 
 **Kind**: function
 **Stability**: `@public`
@@ -556,7 +556,7 @@ This layer holds the composition graph (`src/composition/`), the computable brid
 - **`minConfidence(...)`** / **`QUANTITY_IDENTIFICATIONS`** — confidence combination and quantity-identification table used by `composeEdges`.
 - **`CompositionDimensionError`** / **`CompositionJunctionError`** / **`DomainViolationError`** — error classes for incompatible compositions.
 - **Calibration edges** — `be16Edge`, `be42Edge`, `be42ViaRsEdge`, `be51Edge`, `be52Edge`, `lawSchwarzschildRadius` (the first diagonal-law edge), and the `M_SUN_KG` anchor constant, plus `be12Edge`, `be11ZurekEdge` (CT-3), and `be37Edge` (CT-4). The CT-1 target derives E_min(M) = ℏc³ln2/(8πGM) from BE-42∘BE-16.
-- **Catalog edges** — the tranche `be14Edge`/`be19Edge`/`be21Edge`/`be48Edge`/`be53Edge`/`be54Edge` is individually on the root surface. The `CATALOG_FULL_EDGES` array adds 26 more edges: the array is on the root surface, and the per-edge exports stay at the composition barrel. Together they bring the graph to 41 edges. See [§11](#phase-cd-analysis-namespacing-gate-and-related-exports).
+- **Catalog edges** — the tranche `be14Edge`/`be19Edge`/`be21Edge`/`be48Edge`/`be53Edge`/`be54Edge` is individually on the root surface. The `CATALOG_FULL_EDGES` array adds 26 more edges: the array is on the root surface, and the per-edge exports stay at the composition barrel. Together with the 5 proved-seed edges they bring the graph to 46 edges. See [§11](#phase-cd-analysis-namespacing-gate-and-related-exports).
 
 ```typescript
 import { composeEdges, be42Edge, be16Edge } from 'universal-physics-tensor';

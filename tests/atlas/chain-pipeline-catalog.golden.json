@@ -1,0 +1,14 @@
+[
+  {
+    "kind": "rejected: regime mismatch",
+    "edgeIds": ["be-63", "be-12"],
+    "quantity": "mass",
+    "reasons": ["domain: information-geometry ≠ quantum-classical"]
+  },
+  {
+    "kind": "rejected: regime mismatch",
+    "edgeIds": ["be-63", "be-37"],
+    "quantity": "mass",
+    "reasons": ["domain: information-geometry ≠ field-unification"]
+  }
+]

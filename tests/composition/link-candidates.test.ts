@@ -16,15 +16,15 @@ const has = (a: string, b: string) =>
   cands.some((c) => (c.a === a && c.b === b) || (c.a === b && c.b === a));
 
 describe('proposeLinkCandidates — generator', () => {
-  it('produces the cross-cluster same-dimension pool (132) — quantified noise', () => {
-    expect(cands.length).toBe(132);
+  it('produces the cross-cluster same-dimension pool (152) — quantified noise', () => {
+    expect(cands.length).toBe(152);
   });
 
   it('the funnel narrows: most touch the core, fewer are same-kind', () => {
     const core = cands.filter((c) => c.touchesCore).length;
     const ck = cands.filter((c) => c.touchesCore && c.sameKind).length;
-    expect(core).toBe(98);
-    expect(ck).toBe(36);
+    expect(core).toBe(118);
+    expect(ck).toBe(37);
     expect(ck).toBeLessThan(core); // the filters genuinely narrow
   });
 

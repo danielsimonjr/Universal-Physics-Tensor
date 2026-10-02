@@ -7,13 +7,16 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `57a9ecbc851952d539882400a7176926d2990d34`.
+ * The commit is PhysJS `main` `2e09357f9674bc60b60b378155a1623c27dc7b04`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
- * atlas entries. Milestone 2b adds fifteen catalog entries, keyed `be-<n>`:
- * nine counted rows and six labeled rows. A counted covers line begins with
+ * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
+ * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
+ * `corollary` on `be-13` and has no key. A counted covers line begins with
  * `reduction`, `limit`, or `derivation-step`. A labeled covers line begins
  * with `property` or `cross-check`. A nested object (`planeWave`, `oneLoop`,
- * `inversion`, `vacuum`) is recorded and is not a `formalRef`.
+ * `inversion`, `vacuum`, `corollary`, `friedmann`, `lengthMonomial`,
+ * `torsionMonomial`, `coefficientNotFixed`, `unitCoefficient`, `scalingShape`,
+ * `everyPower`) is recorded and is not a `formalRef`.
  *
  * @module atlas/physjs-ref
  */
@@ -21,7 +24,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '57a9ecbc851952d539882400a7176926d2990d34';
+export const PHYSJS_COMMIT = '2e09357f9674bc60b60b378155a1623c27dc7b04';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -51,7 +54,20 @@ interface PhysjsNestedStatement {
 }
 
 /** Nested objects the manifest schema records. A new name is a problem. */
-const NESTED_FIELDS = ['planeWave', 'oneLoop', 'inversion', 'vacuum'] as const;
+const NESTED_FIELDS = [
+  'planeWave',
+  'oneLoop',
+  'inversion',
+  'vacuum',
+  'corollary',
+  'friedmann',
+  'lengthMonomial',
+  'torsionMonomial',
+  'coefficientNotFixed',
+  'unitCoefficient',
+  'scalingShape',
+  'everyPower',
+] as const;
 
 type NestedField = (typeof NESTED_FIELDS)[number];
 
@@ -95,6 +111,25 @@ interface PhysjsEntry {
   readonly inversion?: PhysjsNestedStatement;
   /** BE-13. The BE-20 vacuum density. Not a reference, and not a `be-20` key. */
   readonly vacuum?: PhysjsNestedStatement;
+  /** BE-13. The Friedmann corollary of that density. Not a reference, and not a `be-20` key. */
+  readonly corollary?: PhysjsNestedStatement;
+  /** BE-54. The flat Friedmann identification. Not the reference. */
+  readonly friedmann?: PhysjsNestedStatement;
+  /**
+   * BE-15. L = C (Γ t)^{1/z} under dimensional homogeneity with [Γ] = L^z T⁻¹.
+   * C is not fixed, and z = 2 is not derived. Not the reference.
+   */
+  readonly lengthMonomial?: PhysjsNestedStatement;
+  /** BE-17. T = C κ S from dimensions. C is not fixed. Not the reference. */
+  readonly torsionMonomial?: PhysjsNestedStatement;
+  /** BE-17. A factor other than 1 is not the catalog coefficient. Not the reference. */
+  readonly coefficientNotFixed?: PhysjsNestedStatement;
+  /** BE-17. Inversion under the hypothesis C = 1. Not the reference. */
+  readonly unitCoefficient?: PhysjsNestedStatement;
+  /** BE-33. ξ = ξ₀ φ(T/T₀). φ is not fixed. Not the reference. */
+  readonly scalingShape?: PhysjsNestedStatement;
+  /** BE-33. Every real power of the temperature ratio is homogeneous. The exponent is not chosen. Not the reference. */
+  readonly everyPower?: PhysjsNestedStatement;
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -127,7 +162,7 @@ function planeWave(namespace: string): PhysjsNestedStatement {
 }
 
 /**
- * The twenty-five entries, in manifest order. A bridge obtains its reference by key
+ * The forty-six entries, in manifest order. A bridge obtains its reference by key
  * through {@link physjsFormalRef}; it does not name a theorem of its own.
  * A nested object is recorded and is not that reference.
  */
@@ -299,6 +334,14 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
       leanProof: 'complete',
       axioms: PHYSJS_AXIOMS,
     },
+    corollary: {
+      theorem: 'PhysJS.Einstein.friedmann_corollary',
+      covers:
+        'derivation-step: the vacuum density gives (8πG/3) ρ = Λ c² / 3, the cosmological term of FirstOrderFriedmann. A fluid of this density added to matter, with the explicit Λ set to zero, is that equation at k = 0. The Einstein-static density Λ c²/(4π G) is twice that term. Dropping c² fails when c² ≠ 1. The density is not reproved. BE-20 has no reference of its own',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
   },
   {
     key: 'be-34',
@@ -343,9 +386,9 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
   {
     key: 'be-16',
     bridgeId: 'be-16',
-    theorem: 'PhysJS.Landauer.equal_levels',
+    theorem: 'PhysJS.Landauer.erasure_eq',
     covers:
-      'property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation',
+      'derivation-step: for T > 0, the equal-level two-state ensemble has ⟨E⟩ − F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+δ do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation',
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
@@ -400,9 +443,288 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
+
+  {
+    key: 'be-12',
+    bridgeId: 'be-12',
+    theorem: 'PhysJS.ThermalDeBroglie.wavelength_eq',
+    covers:
+      'derivation-step: √(2π ℏ²/(m k_B T)) = h/√(2π m k_B T) for h = 2πℏ and ℏ > 0. The non-negative square root needs ℏ > 0. The Wave Q form ℏ/√(m k_B T), with ℏ in the numerator and no √(2π), fails, as does ℏ/√(2 m k_B T). Not Caldeira–Leggett dephasing',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-59',
+    bridgeId: 'be-59',
+    theorem: 'PhysJS.Josephson.frequency_eq',
+    covers:
+      'derivation-step: f = (2e/h) V, K_J = 2e/h, and f = K_J V. Clearing h recovers 2e. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing 2e by e fails. Not the tunneling Hamiltonian',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-55',
+    bridgeId: 'be-55',
+    theorem: 'PhysJS.QuantumHall.reciprocal',
+    covers:
+      'derivation-step: for a nonzero integer C and e ≠ 0, σ_xy = C e²/h, R_H = h/(C e²), and R_K = h/e², so σ_xy R_H = 1 and R_H = R_K/C. The shifted index C+1 is a different conductance. Replacing e² by e fails the product when e ≠ 1. Not TKNN',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-60',
+    bridgeId: 'be-60',
+    theorem: 'PhysJS.Laughlin.filling_fraction',
+    covers:
+      'derivation-step: for integers p ≠ 0 and q ≠ 0, with ν = p/q, σ_xy = ν e²/h and R_xy = R_K/ν = (q/p) h/e². The charge and Planck\'s constant are not assumed nonzero. Oddness of q is the Laughlin selection rule and is not this identity. Not the Laughlin wavefunction, and not the anyon charge e/3',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-21',
+    bridgeId: 'be-21',
+    theorem: 'PhysJS.Kss.saturating',
+    covers:
+      'derivation-step: η/s = ℏ/(4π k_B) is the equality 4π k_B (η/s) = ℏ for k_B ≠ 0. The Hawking factor 8π in place of 4π is 2ℏ, not ℏ, once ℏ ≠ 0. Not the inequality η/s ≥ ℏ/(4π k_B)',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-14',
+    bridgeId: 'be-14',
+    theorem: 'PhysJS.PlanckArea.area_law',
+    covers:
+      'derivation-step: k_B c³ A/(4 G ℏ) = k_B A/(4 ℓ_P²) for ℓ_P² = ℏ G/c³. The area is an input. ℓ_P² = ℏ G/c² fails when c ≠ 1. The factor 2 in place of 4 fails. The same lemma is be-43. Not the minimal-surface theorem',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-43',
+    bridgeId: 'be-43',
+    theorem: 'PhysJS.PlanckArea.area_law',
+    covers:
+      'derivation-step: the be-14 lemma on a wormhole area. k_B A/(4 ℓ_P²) equals k_B c³ A/(4 G ℏ) for ℓ_P² = ℏ G/c³. ℓ_P² = ℏ G/c² fails when c ≠ 1, and the factor 2 fails. Not ER=EPR',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-37',
+    bridgeId: 'be-37',
+    theorem: 'PhysJS.Shapiro.radial_integral',
+    covers:
+      'derivation-step: for 0 < R_near < R_far and c ≠ 0, ∫_{R_near}^{R_far} (2 G M / c³) (dr / r) = (2 G M / c³) ln(R_far / R_near). The factor 1 in place of 2 is half, once G ≠ 0 and M ≠ 0. log₁₀ of the radius ratio is not ln. Not the impact-parameter formula, and not the Cassini measurement',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-54',
+    bridgeId: 'be-54',
+    theorem: 'PhysJS.RandallSundrum.brane_friedmann',
+    covers:
+      'derivation-step: for σ ≠ 0, H²_RS = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3, which equals the Friedmann term plus (8πG/3) ρ²/(2σ). Not a derivation from the five-dimensional Einstein equation',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    friedmann: {
+      theorem: 'PhysJS.RandallSundrum.flat_friedmann',
+      covers:
+        'derivation-step: H²_FRW with the module Λ equal to Physlib\'s Λ c² is FirstOrderFriedmann at k = 0. Identifying the two Λ symbols and dropping c² fails when c² ≠ 1 and Λ ≠ 0',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: 'be-17',
+    bridgeId: 'be-17',
+    theorem: 'PhysJS.EinsteinCartan.inversion',
+    covers:
+      'derivation-step: if κ = 8πG/c⁴ ≠ 0 and every component satisfies T = κ S, then S·S = T·T / κ² = (c⁴/(8πG))² T·T. κ² in the numerator is the inversion backwards, and it fails when T·T ≠ 0 and κ⁴ ≠ 1. Not the Einstein–Cartan field equation, and not a Newtonian limit',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    torsionMonomial: {
+      theorem: 'PhysJS.EinsteinCartan.torsion_monomial',
+      covers:
+        'derivation-step: [κ] and [S] are independent base dimensions and [T] = [κ][S]. If a positive component is dimensionally homogeneous in those dimensions, every positive pair is a unit change of (1, 1) and T = C κ S with C = f(1, 1). C is not fixed. Not the Einstein–Cartan field equation',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+    coefficientNotFixed: {
+      theorem: 'PhysJS.EinsteinCartan.coefficient_not_fixed',
+      covers:
+        'derivation-step: if C ≠ 1 and κ S ≠ 0, then C κ S ≠ κ S. A factor other than 1 is not the catalog coefficient',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+    unitCoefficient: {
+      theorem: 'PhysJS.EinsteinCartan.inversion_of_unit_coefficient',
+      covers:
+        'derivation-step: if C = 1 and every component satisfies T = C κ S, then inversion gives S·S = T·T / κ². C = 1 is a hypothesis. The Einstein trace stays a hypothesis of PhysJS.Einstein.trace_eq',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: 'be-27',
+    bridgeId: 'be-27',
+    theorem: 'PhysJS.EffectiveTemperature.sum_eq',
+    covers:
+      'derivation-step: for T ≠ 0 and k_B ≠ 0, T (1 + Σ_active/(k_B T)) = T + Σ_active/k_B, and this equals T iff Σ_active = 0. The product T · Σ_active/(k_B T), with the 1 omitted, is not that sum. Not the frequency-dependent Cugliandolo–Kurchan T_eff(ω)',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-22',
+    bridgeId: 'be-22',
+    theorem: 'PhysJS.ToricCode.toric',
+    covers:
+      'derivation-step: four anyons of quantum dimension 1 have D = √4 = 2 and γ = ln 2 in nats. The encoded decomposition is S = α L − γ, with the O(L⁻¹) term dropped. log₂ 2 = 1 is the bit convention, not ln 2. D = √2 is one anyon pair, not the toric code. Not the Kitaev–Preskill theorem, and not a quantum-gravity boundary',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-15',
+    bridgeId: 'be-15',
+    theorem: 'PhysJS.Coarsening.exponent_iff',
+    covers:
+      'derivation-step: for Γ = L₀²/t₀ > 0, t > 0, t ≠ t₀, and z > 0, L(t) = L₀ (t/t₀)^{1/z} obeys L(t)² = Γ t iff z = 2. At t = t₀ the ratio holds for every z. Model B\'s z = 3 gives L³ ∝ t and fails L² = Γ t. Not the Model A Langevin equation. The Langevin kinetic coefficient is a different Γ',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    lengthMonomial: {
+      theorem: 'PhysJS.Coarsening.length_monomial_at',
+      covers:
+        'derivation-step: if L is a dimensionally homogeneous function of Γ and t alone and [Γ] = L^z T⁻¹ for a positive rational z, then L = C (Γ t)^{1/z} with C = f(1, 1). C is not fixed. Every positive rational z is allowed, so z = 2 is not derived. Not the Model A Langevin equation',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: 'be-33',
+    bridgeId: 'be-33',
+    theorem: 'PhysJS.QuantumCritical.thermal_scaling',
+    covers:
+      'derivation-step: ξ(T) = ξ₀ (T/T₀)^{−1/z}, and at z = 1 this is ξ(T) = ξ₀ (T/T₀)^{−1} = ξ₀ T₀/T for T > 0 and T₀ > 0. Not Hertz–Millis theory, and not a universality class',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    scalingShape: {
+      theorem: 'PhysJS.QuantumCritical.scaling_shape',
+      covers:
+        'derivation-step: if ξ is a dimensionally homogeneous function of a length ξ₀ and two temperatures, then ξ = ξ₀ φ(T/T₀) with φ(u) = f(1, u, 1). φ is not fixed. Not Hertz–Millis theory',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+    everyPower: {
+      theorem: 'PhysJS.QuantumCritical.every_power_homogeneous',
+      covers:
+        'derivation-step: for every real p and positive scale factors, (λ_s ξ₀) ((λ_e T)/(λ_e T₀))^p = λ_s (ξ₀ (T/T₀)^p). The exponent p is not chosen. Not Hertz–Millis theory',
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: 'be-50',
+    bridgeId: 'be-50',
+    theorem: 'PhysJS.TimeSymmetric.wheeler_feynman',
+    covers:
+      'derivation-step: A_μ(x) = (A_μ^ret(x) + A_μ^adv(x))/2, and twice that component is the sum. The id is contested. This lemma does not decide the contest. Not the absorber boundary condition as a theory of radiation reaction',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-32',
+    bridgeId: 'be-32',
+    theorem: 'PhysJS.BornOverlap.modulus_sq',
+    covers:
+      'derivation-step: |c + s i|² = c² + s², which is normSq of one complex matrix element. A sum of squares above 1 is not a probability in [0, 1], the module\'s rejection of c² + s² > 1. c² − s² is not that square when s ≠ 0. Not the Giacomini–Castro-Ruiz–Brukner transformation, and not a Haar integral. The catalog records this id as not-a-bridge; this lemma does not decide that',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-28',
+    bridgeId: 'be-28',
+    theorem: 'PhysJS.EntropyProduction.nonneg',
+    covers:
+      'derivation-step: σ = Σ_i J_i X_i is the definition of σ. If every product is ≥ 0 then σ ≥ 0. One flipped sign, with the other products zero and the flipped product strictly positive, is not σ, and that flipped sum is negative. Not the variational maximum-entropy-production principle. The catalog records this id as not-a-bridge; this lemma does not decide that',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-40',
+    bridgeId: 'be-40',
+    theorem: 'PhysJS.CompositeHiggs.scale_free',
+    covers:
+      'derivation-step: for f ≠ 0 and θ = h/f, V(h)/f⁴ = −α sin²θ + β [sin⁴θ − sin²θ cos²θ]. Both terms carry f⁴, so the ratio depends on h only through θ. The pre-correction first term −α f² sin²θ, divided by f⁴, is −α sin²θ / f². It depends on f, and it agrees with −α sin²θ only when f² = 1. Not SILH matching onto a confining theory. The catalog records this id as not-a-bridge; this lemma does not decide that',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-35',
+    bridgeId: 'be-35',
+    theorem: 'PhysJS.Crossing.antisymmetry',
+    covers:
+      'derivation-step: for a real function g, g(u,v) − g(v,u) = −(g(v,u) − g(u,v)). The swap is the negation of a difference. The residual is 0 for every g when u = v, including u = v = 1/4, so that point is not a control. A block that is not symmetric does not vanish at u = 1/2, v = 1/4. Not the infinite sum over (Δ, ℓ), and not positivity or unitarity. The catalog records this id as not-a-bridge; this lemma does not decide that',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-63',
+    bridgeId: 'be-63',
+    theorem: 'PhysJS.Chandrasekhar.prefactor',
+    covers:
+      'derivation-step: with n = ρ/(μ_e m_u), p_F = ℏ (3π² n)^{1/3}, and P = (1/4) n p_F c, one has P = K_ρ ρ^{4/3} where K_ρ = K_n/(μ_e m_u)^{4/3} and K_n = (ℏ c/4)(3π²)^{1/3}. For the n = 3 Lane–Emden scale the central density cancels, and M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}. ω₃⁰ stays symbolic; the decimal 2.01824 is not in the theorem. With ℏ = c = μ_e = m_u = 1 both routes give the same K. √π/2 in place of √(3π)/2 fails when ω₃⁰ ≠ 0, and dropping ω₃⁰ fails when ω₃⁰ ≠ 1. Not stellar rotation or magnetic support',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-30',
+    bridgeId: 'be-30',
+    theorem: 'PhysJS.Entanglement.first_variation',
+    covers:
+      'derivation-step: for a smooth curve of full-rank density matrices that stay diagonal in a fixed basis and have trace 1, d/dt S(ρ(t)) = −⟪ρ̇(t), log ρ(t)⟫, the trace inner product. The modular Hamiltonian K = −log ρ is frozen at the base point, and that derivative equals d/dt ⟨K⟩. A finite jump from diag(1/2, 1/2) to diag(3/4, 1/4) leaves ⟨K⟩ unchanged and changes S. Not the holographic first law that identifies K with an area variation',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
 ];
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
+
+/**
+ * Theorem name on the compiled manifest copy for `key`.
+ *
+ * This reads the compiled table. It does not build a formal reference
+ * and it does not derive an evidence tag.
+ *
+ * @internal
+ */
+export function physjsTheorem(key: string): string | undefined {
+  return entryByKey.get(key)?.theorem;
+}
 
 /** `formalRef.version` for the pinned manifest. */
 function physjsVersion(): string {
@@ -411,8 +733,8 @@ function physjsVersion(): string {
 
 /**
  * Namespaces whose theorems live in another Lean file at this pin.
- * Measured against PhysJS `57a9ecbc`: `SpringLc` and `DampedRlc` are
- * namespaces inside `OscillatorDictionary.lean`, not their own files.
+ * `SpringLc` and `DampedRlc` are namespaces inside `OscillatorDictionary.lean`,
+ * not their own files. Rechecked at this pin.
  */
 const PHYSJS_FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
   SpringLc: 'OscillatorDictionary.lean',
@@ -429,9 +751,37 @@ function physjsStatementUrl(theorem: string): string {
   return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/PhysJS/${file}`;
 }
 
-/** Atlas keys are bridges. A catalog key's kind is the covers prefix. */
+/**
+ * Catalog keys whose theorem states the catalogued equation.
+ * The PhysJS covers line still begins with `derivation-step`.
+ * The kind is bridge because that equation is the theorem.
+ */
+const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
+  'be-12',
+  'be-16',
+  'be-21',
+  'be-27',
+  'be-33',
+  'be-37',
+  'be-40',
+  'be-43',
+  'be-50',
+  'be-54',
+  'be-55',
+  'be-59',
+  'be-60',
+  'be-63',
+]);
+
+/**
+ * Atlas keys are bridges. A catalog key whose theorem states the catalogued
+ * equation is a bridge. BE-28 is a property of the defining sum. Every other
+ * catalog key's kind is the covers prefix.
+ */
 function formalRefKind(key: string, covers: string): FormalRefKind | undefined {
   if (key.startsWith('ab-')) return 'bridge';
+  if (CATALOG_EQUATION_KEYS.has(key)) return 'bridge';
+  if (key === 'be-28') return 'property';
   const word = covers.split(':')[0];
   if (
     word === 'property' ||
@@ -443,6 +793,36 @@ function formalRefKind(key: string, covers: string): FormalRefKind | undefined {
     return word;
   }
   return undefined;
+}
+
+/**
+ * Manifest keys whose derived kind is `bridge`.
+ *
+ * An `ab-` key is a bridge. A catalog key is a bridge when `formalRefKind`
+ * says the theorem states the catalogued equation. A canonical id uses that
+ * same function: it is a seed when this table, or a caller-supplied overlay
+ * entry, has derived kind `bridge`. A textbook covers word is not a seed.
+ * One function, so a second list cannot drift.
+ *
+ * `kind`, when supplied, is that derived kind for an overlay reference the
+ * compiled table does not carry. The live call omits it. The return value
+ * is not stored on a bridge.
+ *
+ * @internal
+ */
+export function bridgeSeedKeys(
+  entries: readonly {
+    readonly key: string;
+    readonly covers: string;
+    readonly kind?: FormalRefKind;
+  }[] = PHYSJS_ENTRIES,
+): readonly string[] {
+  const keys: string[] = [];
+  for (const entry of entries) {
+    const kind = entry.kind ?? formalRefKind(entry.key, entry.covers);
+    if (kind === 'bridge') keys.push(entry.key);
+  }
+  return keys;
 }
 
 /**

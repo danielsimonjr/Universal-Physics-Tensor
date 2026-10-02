@@ -39,6 +39,10 @@ describe('help documents every accepted flag', async () => {
     expect(names).toContain('map');
   });
 
+  // `upt chain` is registered and is not in the top-level help. `upt help chain`
+  // is the status. It accepts no flags. A second omitted command fails the set below.
+  const unadvertised = new Set(['chain']);
+
   for (const name of names) {
     const flags = resolveCommand(name)!.flags.map((f) => f.name).filter((f) => f !== '--json');
     it(`upt help ${name} names each of its ${flags.length} flag(s)`, async () => {
@@ -47,11 +51,19 @@ describe('help documents every accepted flag', async () => {
     });
     it(`the top-level block for ${name} is complete or points to upt help ${name}`, () => {
       const block = topBlock(top, name);
+      if (unadvertised.has(name)) {
+        expect(block).toBeNull();
+        return;
+      }
       expect(block, `no top-level block for ${name}`).not.toBeNull();
       if (pointer(name).test(block!)) return;
       expect(flags.filter((f) => !block!.includes(f))).toEqual([]);
     });
   }
+
+  it('chain is the only command omitted from the top-level help', () => {
+    expect(names.filter((name) => topBlock(top, name) === null)).toEqual(['chain']);
+  });
 
   it('control: the block check fails on a block that omits a flag and has no pointer', () => {
     const fake = '\n  upt map [--source=catalog]\n        Map things.\n\n  upt next\n';

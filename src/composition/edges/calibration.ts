@@ -553,6 +553,34 @@ export const be11ZurekEdge: BridgeEdge = {
 
 // --- CT-4 (C5 completion) edge — registered in v0.8.0-Design.md §10 BEFORE this code ---
 
+const BE37_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '*',
+  args: [
+    {
+      kind: 'op',
+      op: '/',
+      args: [
+        {
+          kind: 'op',
+          op: '*',
+          args: [sym('2', DIMENSIONLESS), sym('G', GRAV_DIM), sym('mass', MASS)],
+        },
+        { kind: 'op', op: '^', args: [sym('c', VELOCITY), sym('3', DIMENSIONLESS)] },
+      ],
+    },
+    {
+      kind: 'transcendental',
+      fn: 'ln',
+      arg: {
+        kind: 'op',
+        op: '/',
+        args: [sym('far-radius', LENGTH), sym('near-radius', LENGTH)],
+      },
+    },
+  ],
+};
+
 /**
  * BE-37 Shapiro gravitational time delay as a graph edge:
  * (mass, far-radius, near-radius) → Δt = (2GM/c³)·ln(R_far/R_near).
@@ -586,6 +614,7 @@ export const be37Edge: BridgeEdge = {
       R_far_m: i['far-radius'],
       R_near_m: i['near-radius'],
     }),
+  symbolic: BE37_SYMBOLIC,
   citation: 'Shapiro 1964 PRL 13:789',
   // -- Atlas Phase 1 overlay: mirrors BRIDGE_EQUATIONS' row, which carries the
   // full '// source:' citation. tests/atlas/audited-catalog.test.ts deep-equals

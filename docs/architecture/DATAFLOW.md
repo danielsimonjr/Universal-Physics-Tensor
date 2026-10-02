@@ -488,7 +488,7 @@ The `verifyKillingEquation` flow is analogous. It takes caller-supplied exact Ch
 
 ## Flow 8: Bridge-Edge Composition
 
-**Purpose**: Chain two bridge edges through a shared quantity into a derived relation. The pool of composable edges is the 41-edge graph (9 calibration + 6 catalog-tranche + 26 catalog-full).
+**Purpose**: Chain two bridge edges through a shared quantity into a derived relation. The pool of composable edges is the 46-edge graph (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds).
 
 **Entry point**: `composeEdges(first: BridgeEdge, second: BridgeEdge, opts?: ComposeOptions): BridgeEdge`
 

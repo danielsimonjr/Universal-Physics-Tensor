@@ -169,7 +169,7 @@ tags; predicate nodes assert relations over them.
 | RG flow | `beta-function`, `rg-coupling` | `src/dimensional/rg-flow.ts` | BE-39 (asymptotic-safety NGFP), BE-53 (Yang-Mills asymptotic freedom) |
 | Modified Friedmann | `friedmann-equation` (variant: `classical \| lqc \| brane \| dgp \| massive`) | `src/dimensional/friedmann-equation.ts` | BE-19 (`lqc`), BE-54 (`brane`) |
 | Time symmetry | `gauge-field` (arrowOfTime: `retarded \| advanced \| symmetric`), `time-symmetry-predicate` | `src/dimensional/gauge-field.ts` | BE-50 (Wheeler-Feynman absorber condition) |
-| Tensor trace | `tensor-trace` over the structural `TracableTensorNode` interface | `src/dimensional/tensor-trace.ts` | BE-13 (Einstein-trace `R = −(8πG/c⁴)T`) |
+| Tensor trace | `tensor-trace` over the structural `TracableTensorNode` interface | `src/dimensional/tensor-trace.ts` | BE-13 (Einstein trace reduction, `R = 4Λ − (8πG/c⁴) T`) |
 
 Key rules:
 

@@ -127,7 +127,7 @@ Usage:
         (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
         sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
         or log2 for base 10 or 2. A bare e is the elementary charge. E is
-        energy: pass E=<number>. Euler's number is exp(1) or euler.
+        energy: pass E=<number>. Euler's number is exp(x), for example exp(1).
         e_charge is the same charge. A value may be a number,
         a unit, or an expression (v=0.6*c). `upt help eval` describes every flag.
         e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \
@@ -226,13 +226,18 @@ Usage:
   upt atlas --evidence [--stored | --run]
         One atlas bridge with EVERY qualification visible: relation, side
         conditions, regime, bound and horizon, witnesses, counterexamples and
-        formal reference. Empty sections print as "none stated". Evidence is
-        shown by claim, and each witness with its execution status; --run
-        executes the in-process registered witnesses (exit 3 if refuted).
+        formal reference. review status is the record's review mark
+        (proposed or reviewed), not an evidence tag; formally-proved does
+        not depend on it. Empty sections print as "none stated". A proved
+        bridge that also derives contradicted prints proved, with unresolved
+        counterexample: yes. The proof stays and the counterexample stays
+        unresolved. Evidence is shown by claim, and each witness with its
+        execution status; --run executes the in-process registered witnesses
+        (exit 3 if refuted).
         With no id, lists every bridge of every family; --evidence (or
         --stored / --run with no id) shows every bridge's derived evidence,
         per-tag counts and the witness results it observes.
-        A catalog id be-<n> whose entry has a formalRef prints that stored
+        A catalog id be-<n> with a stored formal reference prints that
         reference. It is a catalog equation, not an atlas bridge, and the
         command does not derive formally-proved from it.
         e.g.  upt atlas ab-pendulum-linear

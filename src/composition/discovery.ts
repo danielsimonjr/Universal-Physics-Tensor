@@ -45,7 +45,7 @@ import type { LinkCandidate } from './bridge-analysis.js';
 import { M_SUN_KG } from './edges/calibration.js';
 import { REPRESENTATIVE_VALUES } from './representative-values.js';
 import type { RepresentativeValue } from './representative-values.js';
-import { conventionScaleToSI } from './unit-convention.js';
+import { conventionScaleToSI } from '../dimensional/unit-convention.js';
 import * as REGISTRY_QUANTITIES from './quantities.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { format } from '../dimensional/algebra.js';

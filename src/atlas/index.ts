@@ -11,9 +11,9 @@
  * `src/composition/` must not import THIS FILE — `src/atlas/` imports
  * `bridges/*` and `composition/*`, so a barrel import closes a cycle that
  * `bun run docs:deps` reports. Importing a leaf module (`./types.js`,
- * `./regime.js`, `./composition-table.js`, …) is fine and the tree has always
- * done it, VALUES INCLUDED: `bridges/index.ts:40`, `composition/compose.ts`,
- * `composition/graph-viz.ts`.
+ * `./regime.js`, `./composition-table.js`, …) is fine. `src/bridges/` does
+ * not import this directory. Catalog formal references live in
+ * `src/atlas/catalog-formal-ref.ts`.
  *
  * This comment used to say "TYPES ONLY, and only from `src/atlas/types.js`",
  * which the tree HAS NEVER SATISFIED while `docs:deps` reported 0 cycles.
@@ -47,7 +47,7 @@ export { ALL_EVIDENCE_TAGS } from './types.js';
 // The Phase 1–3 core. Absent from this barrel until the S6.7 API review found
 // the gap: subpath users could not reach evidence derivation, the composition
 // table or path bounding at all (tests/atlas/barrel-completeness.test.ts).
-export { deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES } from './derive-evidence.js';
+export { deriveCompositeEvidence, deriveEvidence, deriveEvidenceForVerdict, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample } from './derive-evidence.js';
 export type {
   CounterexampleLike,
   EvidenceInput,

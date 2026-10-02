@@ -23,9 +23,9 @@ against the SI dimension system before entering the bridge-equation index.
 ```ts
 import {
   validateEquation,
-  ExprNode,
   MASS, ACCELERATION, FORCE,
 } from 'universal-physics-tensor';
+import type { ExprNode } from 'universal-physics-tensor';
 
 const sym = (name: string, dim: any): ExprNode => ({ kind: 'symbol', name, dim });
 
@@ -59,34 +59,46 @@ const r = validate({
 
 ## How it consumes the bridge index
 
-The 44-entry catalog in `src/bridges/index.ts` (IDs 11–54) carries
-`formula_latex` strings; the `dimensional_signature` field is populated
-for AST-encoded entries (now the large majority of the catalog — see
-`src/bridges/equations/`) and `null` for the few not yet encoded as
-`ExprNode` ASTs.
+The catalog in `src/bridges/index.ts` has 55 entries, ids 11–65. Each
+carries `formula_latex`. `dimensional_signature` is populated for every
+entry.
 
 `inferDimensionForBridge(id, expr)` runs the analyzer on a supplied AST
 and, if `id` is registered in `EXPECTED_DIMENSION_BY_BRIDGE`, also
 cross-checks the inferred dim against the per-bridge expected dim
-(returning `null` on mismatch). `EXPECTED_DIMENSION_BY_BRIDGE` covers 42
-entries (IDs 11–50, 53, 54); BE-51/52 are closed-form evaluators without
-AST encodings and are not registered there. The two encoded modules
-(BE-11 and BE-14) call `validate` / `validateEquation` directly inside
-their own `validate*Dimensions()` helpers; `inferDimensionForBridge` is
-the entry point recommended for downstream consumers that don't want to
-import each per-bridge module separately.
+(returning `null` on mismatch). That map registers every id except 51
+and 52. BE-51 and BE-52 are closed-form evaluators and are not in the
+map. `inferDimensionForBridge` is the entry point for a caller that
+does not import each per-bridge module.
 
-## Encoding transcendental functions (the dimensionless-stub convention)
+## Transcendental nodes
 
-The current AST has no `exp`, `log`, `sin`, `cos`, `tanh`, etc. as primitives — the validator treats these as opaque scalar functions. To encode a formula like `m₀ · exp(-α|φ-φ₀|/M_P)` honestly:
+`ExprNode` includes `kind: 'transcendental'`. The `fn` is one of `exp`,
+`ln`, `log2`, `log10`, `sin`, `cos`, `tan`, `sinh`, `cosh`, `tanh`. The
+argument must be dimensionless, and the result is dimensionless.
+`sqrt` and `cbrt` are not in that list: a fractional dimension is a
+`^` with a numeric exponent. `abs` is its own kind and keeps the
+argument's dimension.
 
-1. Encode the formula as `m₀ · ε` where `ε` is a dimensionless `symbol` node with `name` set to the rendered function (`'exp(-α|φ-φ₀|/M_P)'` or any human-readable form). The dim is `DIMENSIONLESS`.
-2. Expose the inner argument as a separate `ExprNode` export named `<MODULE>_<FN>_ARG`, where `<FN>` is `EXP`, `LOG`, `WKB`, etc. The exposed name acts as the lemma anchor.
-3. Add a lemma test `it('<fn> argument <expr> is dimensionless (lemma)', ...)` that runs `validate()` on `<MODULE>_<FN>_ARG` and asserts `format(inferredDimension)` equals `'[1]'`.
+```ts
+import { validate, DIMENSIONLESS } from 'universal-physics-tensor';
 
-This is **honest** in the sense that the AST captures only what it can verify (the multiplicative structure and the dimensional balance of the argument), and **explicit** in the sense that future readers can see what is being treated as opaque vs. structural. Promotion to a real `transcendental` node kind is deferred until at least three independent encodings demand it; until then this stub pattern is the recommended approach.
+const r = validate({
+  kind: 'transcendental',
+  fn: 'sin',
+  arg: { kind: 'symbol', name: 'x', dim: DIMENSIONLESS },
+});
+// r.ok === true
+```
 
-Used in:
+`exp` of a length is not ok: the note is
+`transcendental 'exp' requires a dimensionless argument`.
+
+Some older encodings still expose a dimensionless argument node and a
+lemma test (`validate` on that argument, `format(inferredDimension)`
+equals `'[1]'`) beside a symbol that stands for the whole function.
+That pattern is a lemma for the argument. It is not the AST's only way
+to write `exp` or `sin`. Examples that still use the lemma:
 
 - BE-26 (WKB factor): `DNA_TUNNELING_WKB_ARG` for the WKB integral `(2/ℏ)∫√(2m(V−E))dx`.
 - BE-34 (Boltzmann factor): `KIBBLE_ZUREK_EXP_ARG` for `m c²/(k_B T_reh)`.
@@ -96,8 +108,9 @@ Used in:
 
 The "What it does" section above describes the original Tier-4 **scalar**
 dimensional analyzer. Since then the `ExprNode` union has grown well beyond
-the four scalar primitives — the live union in `validator.ts` carries **21
-node kinds**. The added layers, each with its own per-kind validator module:
+the four scalar primitives. The live `ExprNode` union in `ast-types.ts`
+carries 25 `kind`s, including `transcendental` and `abs`. The added
+layers, each with its own per-kind validator module:
 
 - **v0.2.0–v0.3.0 — tensor algebra + metric layer.** `tensor.ts`
   (`tensor-symbol`, `tensor-product`; variance-typed indices, Einstein
@@ -157,26 +170,24 @@ than producing a violation.
   `^` factor as a single dimensionless-stub symbol (named like
   `'r^{2Δ-d}'`) rather than as a structural `^` op. The argument's
   dimensionlessness is then verified via the lemma-test pattern
-  (see "Encoding transcendental functions" above).
+  (see "Transcendental nodes" above).
 - A future AST extension could add `kind: 'op-pow-symbolic'` that accepts
   a non-literal exponent and tags the result `dim_indeterminate`. Filed
   as a Tier-5 followup.
 
 ## What's NOT in MVP
 
-- **Tensor index / rank tracking.** Catching Bridge Eq 17's index-structure
-  mismatch (`R_{μν}^{λρ} = … + g_{μν} F_{αβ} F^{αβ}`) requires extending
-  `Dimension` with a free-index list. Filed as Tier 4.5 follow-up.
-- **Special functions.** `log`, `exp`, `sin`, `cos`, etc., must take
-  dimensionless arguments — not yet enforced. Their results are
-  dimensionless (when the argument is) but no node kind is provided yet.
-- **General tensor algebra.** Contractions, raising/lowering, symmetric/
-  antisymmetric parts — out of scope for Tier 4.
+The list below is what this module still does not do. Tensor indices,
+contractions, raising and lowering, and the transcendental node have
+landed; the older "not yet" wording for those is withdrawn.
+
 - **LaTeX → ExprNode parser.** Bridges in the index are stored as LaTeX;
-  consumers must hand-encode the AST. A parser is a separate piece of work
-  and is not on the Tier-5 critical path.
-- **Serialization** (YAML/JSON load of ExprNode) — deferred.
-- **CLI / web UI** — deferred.
+  this module does not parse that LaTeX. Callers hand-encode the AST, or
+  they use the formula parser behind `upt derive` / `upt map`, which is a
+  different surface.
+- **Serialization** (YAML/JSON load of ExprNode) — not in this module.
+- **A dimensional CLI of its own.** `upt derive` and `upt map` call the
+  analyzer. This directory does not ship a separate command.
 
 ## References
 

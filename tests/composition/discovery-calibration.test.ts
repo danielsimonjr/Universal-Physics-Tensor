@@ -38,8 +38,11 @@ describe('discovery calibration benchmark', () => {
   // which stays populated regardless of which falsifier wins), and exactly
   // the predicted 5-of-12 promising→axis-clash flip (pinned below,
   // machine-readable).
+  // 2026-10-02: proved-seed edges on the catalog graph. total 132 → 152,
+  // promising 7 → 10, inert 35 → 46, axis-clash 70 → 76. magnitude-clash
+  // stays 20. The would-clash sum is 86 = 76 axis-clash + 10 still shadowed.
   const EXPECTED = {
-    catalog: { total: 132, promising: 7, inert: 35, clash: 20, contradictory: 0, axisClash: 70 },
+    catalog: { total: 152, promising: 10, inert: 46, clash: 20, contradictory: 0, axisClash: 76 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -52,7 +55,7 @@ describe('discovery calibration benchmark', () => {
     expect(count(cands, 'axis-clash')).toBe(EXPECTED.catalog.axisClash);
   });
 
-  it('the 80 would-clash pairs decompose as 70 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
+  it('the 86 would-clash pairs decompose as 76 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
     const cands = rankDiscoveries(CATALOG_GRAPH);
     // `axisClashes` stays populated regardless of which falsifier wins, so
     // the shadowed pairs are exactly the magnitude-clash candidates whose
@@ -61,7 +64,7 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(80);
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(86);
     expect(shadowed.length).toBe(10);
   });
 

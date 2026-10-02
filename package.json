@@ -1,6 +1,6 @@
 {
   "name": "universal-physics-tensor",
-  "version": "0.47.1",
+  "version": "1.0.3",
   "description": "Computational framework for exploring unified physics through tensor formalism",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -53,6 +53,7 @@
     "bench:ci": "vitest bench --reporter=verbose",
     "docs:deps": "bun tools/create-dependency-graph/create-dependency-graph.ts --root=. --include-tests",
     "audit:plans": "bun tools/plan-doc-audit/audit.ts",
+    "layer:check": "bun tools/layer-order/check.ts",
     "atlas:formal-gate": "bun tools/formalref-axiom-gate/gate.ts",
     "atlas:quote-check": "bun tools/citation-quote-check/check.ts",
     "atlas:c3-export": "bun tools/criterion3-export/export.ts",

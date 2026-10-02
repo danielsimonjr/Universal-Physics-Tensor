@@ -4,8 +4,10 @@
  * Design note: `docs/planning/Atlas-Phase-4-Design.md` §3.
  *
  * The literals `'formally-proved'` and `'symbolically-checked'` may appear
- * under `src/atlas/` in exactly two files: `types.ts` (where the union and the
- * tag list are declared) and `derive-evidence.ts` (where each is derived).
+ * in exactly three files: `src/relations/types.ts` (where the union and the
+ * tag list are declared), `src/atlas/types.ts` (`NormTransport.basis` names
+ * `symbolically-checked`), and `src/atlas/derive-evidence.ts` (where each tag
+ * is derived).
  *
  * **An allow-list of FILES, not a heuristic over initializers.** A check that
  * inspected how a tag is assigned (`evidence: new Set([...])`, a helper call,
@@ -19,7 +21,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, relative, resolve } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const atlasDir = resolve(here, '../../src/atlas');
+const srcDir = resolve(here, '../../src');
+const scanRoots = [resolve(srcDir, 'atlas'), resolve(srcDir, 'relations')];
 
 const DERIVED_TAGS = [
   'formally-proved',
@@ -27,7 +30,11 @@ const DERIVED_TAGS = [
   'formally-proved-cross-check',
   'symbolically-checked',
 ] as const;
-const ALLOWED = new Set(['types.ts', 'derive-evidence.ts']);
+const ALLOWED = new Set([
+  'atlas/derive-evidence.ts',
+  'atlas/types.ts',
+  'relations/types.ts',
+]);
 
 function tsFiles(dir: string): string[] {
   const out: string[] = [];
@@ -55,20 +62,22 @@ function spellsDerivedTag(source: string): boolean {
   return DERIVED_TAGS.some((tag) => ["'", '"', '`'].some((q) => code.includes(`${q}${tag}${q}`)));
 }
 
-/** Files under `src/atlas/` whose code contains a derived tag as a literal. */
+/** Files under `src/atlas/` and `src/relations/` whose code contains a derived tag as a literal. */
 function filesSpellingDerivedTags(): string[] {
   const hits: string[] = [];
-  for (const file of tsFiles(atlasDir)) {
-    if (spellsDerivedTag(readFileSync(file, 'utf-8'))) {
-      hits.push(relative(atlasDir, file).replaceAll('\\', '/'));
+  for (const root of scanRoots) {
+    for (const file of tsFiles(root)) {
+      if (spellsDerivedTag(readFileSync(file, 'utf-8'))) {
+        hits.push(relative(srcDir, file).replaceAll('\\', '/'));
+      }
     }
   }
   return hits.sort();
 }
 
 describe('derived evidence tags — file allow-list', () => {
-  it('the scan walks the atlas tree (a scan over no files would pass vacuously)', () => {
-    expect(tsFiles(atlasDir).length).toBeGreaterThan(20);
+  it('the scan walks the atlas tree and the relations vocabulary (a scan over no files would pass vacuously)', () => {
+    expect(scanRoots.flatMap((root) => tsFiles(root)).length).toBeGreaterThan(20);
   });
 
   it('MATCHER CONTROLS: every quote style in code is caught; a comment is not', () => {
@@ -85,10 +94,12 @@ describe('derived evidence tags — file allow-list', () => {
   it('POSITIVE CONTROL: the scanner finds the literals where they are allowed', () => {
     // If this fails the matcher is broken, and the real assertion below would
     // pass for the wrong reason.
-    expect(filesSpellingDerivedTags()).toEqual(expect.arrayContaining(['derive-evidence.ts', 'types.ts']));
+    expect(filesSpellingDerivedTags()).toEqual(
+      expect.arrayContaining(['atlas/derive-evidence.ts', 'atlas/types.ts', 'relations/types.ts']),
+    );
   });
 
-  it("'formally-proved' and 'symbolically-checked' appear ONLY in types.ts and derive-evidence.ts", () => {
+  it('the derived-tag literals appear only in the vocabulary, NormTransport.basis, and derive-evidence.ts', () => {
     const offenders = filesSpellingDerivedTags().filter((f) => !ALLOWED.has(f));
     expect(offenders).toEqual([]);
   });

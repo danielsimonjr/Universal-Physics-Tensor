@@ -80,7 +80,7 @@ export const M_SUN_SI = 1.989e30;
  * than `G_SI × M_SUN_SI`: that product is 3.0e-4 too high, five times the VLBI
  * 1σ on the solar-limb deflection. A mass that some evaluator requires in kg
  * is `GM_SUN_SI / G_SI`, which reproduces G·M = GM☉ exactly.
- * @internal
+ * @public
  */
 export const GM_SUN_SI = 1.3271244e20;
 
@@ -101,3 +101,11 @@ export const M_E_SI = 9.1093837015e-31;
  * @public
  */
 export const B_WIEN_SI = 2.897771955e-3;
+
+/**
+ * Unified atomic mass unit (kg). CODATA 2018 atomic mass constant.
+ * One value for the Chandrasekhar evaluator and the symbolic constant `m_u`.
+ * Kept off the package barrel: callers use `m_u` in the symbolic registry.
+ * @internal
+ */
+export const M_U_SI = 1.66053906660e-27;

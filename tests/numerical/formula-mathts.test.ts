@@ -4,7 +4,7 @@
  *
  * Pins the scalar-only seam guard (a non-number result is rejected rather
  * than leaking MathTS types). Bare `e` is the elementary charge on this
- * parser too; Euler's number is `exp(1)` or `euler`.
+ * parser too; Euler's number is `exp(1)`. The name `euler` is refused.
  */
 import { describe, it, expect } from 'vitest';
 import { E_SI } from '../../src/core/constants.js';
