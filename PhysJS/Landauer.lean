@@ -9,17 +9,22 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
 import Physlib.StatisticalMechanics.CanonicalEnsemble.TwoState
 
 /-!
-`be-16`, the `ln 2` only. Property. Not a formalRef.
+`be-16`. Derivation step. The encoded Landauer scale.
 
-Physlib's two-state canonical ensemble has
+The encoded scalar is
 
 ```
-(twoState E E).thermodynamicEntropy T = k_B log 2
+E_min = k_B T log 2
 ```
 
-for every temperature, including zero. At `T ≠ 0`, levels `E` and `E + δ`
-are not that value. At `T = 0`, `β = 0`, so the same closed form does not
-separate the levels. The inequality `E ≥ T ΔS` needs Clausius and is not
+Read here as the free-energy deficit `⟨E⟩ − F` of Physlib's equal-level
+two-state ensemble. `equal_levels` is the entropy step,
+`thermodynamicEntropy = k_B log 2`. For `T > 0` the closed forms of
+`meanEnergy` and `helmholtzFreeEnergy` give `⟨E⟩ − F = T S`, so the
+deficit is `k_B T log 2`. The common level cancels. At `T > 0`, levels
+`E` and `E + δ` are not that deficit. At `T = 0`, `β = 0`, so the
+Helmholtz closed form does not separate the levels. The inequality
+`E ≥ T ΔS` for an arbitrary erasure protocol needs Clausius and is not
 this entry. The Bérut confrontation is not this entry.
 -/
 
@@ -83,11 +88,56 @@ lemma entropyGap_lt_zero {x : ℝ} (hx : x ≠ 0) : entropyGap x < 0 := by
 
 /-- Equal levels give thermodynamic entropy `k_B log 2`.
 
-Covers the property of `be-16`. Not `E ≥ T ΔS`, and not the Bérut confrontation. -/
+The entropy step of `be-16`. Not `E ≥ T ΔS`, and not the Bérut confrontation. -/
 theorem equal_levels (E : ℝ) (T : Temperature) :
     (twoState E E).thermodynamicEntropy T = kB * log 2 := by
   rw [twoState_entropy_eq]
   simp [cosh_zero, tanh_zero, mul_one, mul_zero, sub_zero]
+
+/-- Encoded scale, read as `⟨E⟩ − F` of the equal-level two-state ensemble. -/
+noncomputable def erasureEnergy (E : ℝ) (T : Temperature) : ℝ :=
+  (twoState E E).meanEnergy T - (twoState E E).helmholtzFreeEnergy T
+
+lemma temp_ne_of_pos {T : Temperature} (hT : 0 < T.val) : T ≠ 0 := by
+  intro hEq
+  have hval : T.val ≠ 0 := hT.ne'
+  rw [hEq] at hval
+  exact hval rfl
+
+/-- For any two levels and `T > 0`, `⟨E⟩ − F = T S`. -/
+lemma deficit_eq_temp_mul_entropy (E₀ E₁ : ℝ) (T : Temperature) (hT : 0 < T.val) :
+    (twoState E₀ E₁).meanEnergy T - (twoState E₀ E₁).helmholtzFreeEnergy T =
+      (T.val : ℝ) * (twoState E₀ E₁).thermodynamicEntropy T := by
+  have hTne : T ≠ 0 := temp_ne_of_pos hT
+  have hβ : (β T : ℝ) ≠ 0 := (beta_pos T hT).ne'
+  have hT0 : (T.val : ℝ) ≠ 0 := by exact_mod_cast hT.ne'
+  have hinv : (T.val : ℝ) * kB = 1 / (β T : ℝ) := by
+    have hkβ : (kB : ℝ) * (β T : ℝ) = 1 / (T.val : ℝ) := kB_mul_beta T hT
+    field_simp [hβ, hT0, kB_ne_zero] at hkβ ⊢
+    linarith
+  rw [twoState_meanEnergy_eq, twoState_helmholtzFreeEnergy_eq_T_neq_zero E₀ E₁ T hTne,
+    twoState_entropy_eq]
+  set x : ℝ := (β T : ℝ) * (E₁ - E₀) / 2
+  have hhalf : (E₁ - E₀) / 2 = x / (β T : ℝ) := by
+    unfold x
+    field_simp [hβ]
+  rw [hhalf]
+  have hassoc : (T.val : ℝ) * (kB * (log (2 * cosh x) - x * tanh x)) =
+      ((T.val : ℝ) * kB) * (log (2 * cosh x) - x * tanh x) := by
+    ring
+  rw [hassoc, hinv]
+  field_simp [hβ]
+  ring
+
+/-- The equal-level deficit is the encoded scale `k_B T log 2`.
+
+Covers the derivation step of `be-16`. Not `E ≥ T ΔS` for an arbitrary
+protocol, and not the Bérut confrontation. -/
+theorem erasure_eq (E : ℝ) (T : Temperature) (hT : 0 < T.val) :
+    erasureEnergy E T = kB * (T.val : ℝ) * log 2 := by
+  unfold erasureEnergy
+  rw [deficit_eq_temp_mul_entropy E E T hT, equal_levels]
+  ring
 
 /-- At `T ≠ 0`, unequal levels are not `k_B log 2`. At `T = 0` this fails,
 because `β 0 = 0`. -/
@@ -117,5 +167,23 @@ theorem wrong_dictionary_unequal (E δ : ℝ) (T : Temperature) (hT : T ≠ 0) (
     rw [hsplit] at hinner
     linarith
   exact (entropyGap_lt_zero hx).ne hgap
+
+/-- At `T > 0`, unequal levels are not `k_B T log 2`. At `T = 0` the
+Helmholtz closed form divides by `β = 0`. -/
+theorem wrong_dictionary_deficit (E δ : ℝ) (T : Temperature) (hT : 0 < T.val) (hδ : δ ≠ 0) :
+    (twoState E (E + δ)).meanEnergy T - (twoState E (E + δ)).helmholtzFreeEnergy T ≠
+      kB * (T.val : ℝ) * log 2 := by
+  intro hEq
+  have hdef := deficit_eq_temp_mul_entropy E (E + δ) T hT
+  have hT0 : (T.val : ℝ) ≠ 0 := by exact_mod_cast hT.ne'
+  have hTne : T ≠ 0 := temp_ne_of_pos hT
+  have hS : (twoState E (E + δ)).thermodynamicEntropy T = kB * log 2 := by
+    apply mul_left_cancel₀ hT0
+    have hscaled : (T.val : ℝ) * (twoState E (E + δ)).thermodynamicEntropy T =
+        kB * (T.val : ℝ) * log 2 := by
+      rw [← hdef]
+      exact hEq
+    simpa [mul_assoc, mul_left_comm, mul_comm] using hscaled
+  exact wrong_dictionary_unequal E δ T hTne hδ hS
 
 end PhysJS.Landauer
