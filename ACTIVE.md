@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Export `GM_SUN_SI`, `parseUnit`, `convertValue`, `UnitError`, `ParsedUnit`, and `TemperatureReading` from the package root. `GM_SUN_SI` stays the IAU value, not `G_SI * M_SUN_SI`.
 - [x] `evaluateBridge(42)` and `upt evaluate be-42` name `BridgeEquations.hawkingTemperature({ M_kg })` and `upt explain hawking-temperature mass=1.989e30`, both of which return a finite Hawking temperature. An id with no evaluator still points at `upt evaluate` with no args.
 - [x] An undeclared `1-e^2` on `upt eval` and `upt map` says `e` is the elementary charge and must be declared or bound, or written as `exp(x)`. The map message names `one_minus_e_sq`. A declared dimensionless `e` stays dimensionless.
 - [x] Refuse a non-finite Hawking temperature. A finite mass whose SI evaluation overflows throws RangeError instead of returning Infinity.
