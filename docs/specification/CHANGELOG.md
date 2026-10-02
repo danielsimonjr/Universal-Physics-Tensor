@@ -1,5 +1,7 @@
 # UPT Specification — Revision History
 
+> **Proof status as of 2026-10-01.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. Those lines are the current proof reading. The wave entries below are history and are unchanged.
+
 Provenance ledger for the formal specification (`docs/specification/Part-*.md`).
 
 The spec was hardened across a series of 2026-05 adversarial-review
