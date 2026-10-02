@@ -152,9 +152,13 @@ interface Contribution {
  * propagation: u² = Σᵢⱼ cᵢ cⱼ ρᵢⱼ uᵢ uⱼ, with cᵢ by central difference. Each
  * input is also stepped by ±uᵢ, so a curvature term comparable to the linear
  * term is reported rather than hidden in a small-looking σ.
+ *
+ * This is not the public graph-layer `propagateUncertainty`. That function
+ * takes a bridge edge and does not fold correlations or a curvature ratio.
+ *
  * @internal
  */
-export function propagateUncertainty(
+export function propagateEvaluatorUncertainty(
   f: (inputs: Record<string, number>) => Record<string, unknown>,
   inputs: Readonly<Record<string, number>>,
   sigma: Readonly<Record<string, number>>,
@@ -169,7 +173,7 @@ export function propagateUncertainty(
   };
   const base = f({ ...inputs });
   const keys = Object.keys(sigma);
-  const out: ReturnType<typeof propagateUncertainty> = {};
+  const out: ReturnType<typeof propagateEvaluatorUncertainty> = {};
   for (const [name, v] of Object.entries(base)) {
     if (typeof v !== 'number' || name in inputs) continue;
     const contributions: Record<string, Contribution> = {};
@@ -289,7 +293,7 @@ const CASE_NOT_INCLUDED =
 
 interface Uncertainty {
   readonly block: Record<string, unknown>;
-  readonly propagated: ReturnType<typeof propagateUncertainty>;
+  readonly propagated: ReturnType<typeof propagateEvaluatorUncertainty>;
   readonly exactInputs: string[];
   readonly notIncluded: string;
 }
@@ -306,7 +310,7 @@ function uncertaintyOf(
   if (sigmaArgs.length === 0 && corrArgs.length > 0) throw new CliError('upt evaluate: --corr needs --sigma for both inputs');
   if (sigmaArgs.length === 0) return null;
   const { sigma, corr } = parseUncertainty(ctx.api, spec, sigmaArgs, corrArgs, inputs);
-  const propagated = propagateUncertainty(f, inputs, sigma, corr);
+  const propagated = propagateEvaluatorUncertainty(f, inputs, sigma, corr);
   const exactInputs = Object.keys(inputs).filter((k) => !(k in sigma));
   return {
     block: {

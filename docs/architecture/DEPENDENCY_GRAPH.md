@@ -3601,7 +3601,7 @@ The codebase is organized into the following modules:
 | `../../bridges/evaluators.js` | `missingEvaluatorMessage` | Import |
 
 **Exports:**
-- Functions: `weakFieldDomainNote`, `propagateUncertainty`
+- Functions: `weakFieldDomainNote`, `propagateEvaluatorUncertainty`
 - Constants: `command`
 
 ---
@@ -7998,7 +7998,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 423 |
 | Total Modules | 13 |
-| Total Lines of Code | 92291 |
+| Total Lines of Code | 92295 |
 | Total Exports | 2992 |
 | Total Re-exports | 1396 |
 | Total Classes | 61 |

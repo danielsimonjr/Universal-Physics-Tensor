@@ -12011,11 +12011,11 @@
         "exports": [
           "command",
           "weakFieldDomainNote",
-          "propagateUncertainty"
+          "propagateEvaluatorUncertainty"
         ],
         "functions": [
           "weakFieldDomainNote",
-          "propagateUncertainty"
+          "propagateEvaluatorUncertainty"
         ],
         "constants": [
           "command"
@@ -29396,7 +29396,7 @@
   "statistics": {
     "totalTypeScriptFiles": 423,
     "totalModules": 13,
-    "totalLinesOfCode": 92291,
+    "totalLinesOfCode": 92295,
     "totalExports": 2992,
     "totalClasses": 61,
     "totalInterfaces": 481,
