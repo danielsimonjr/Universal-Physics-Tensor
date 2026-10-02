@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.2
-  totalFiles: 410
+  totalFiles: 411
   totalModules: 13
-  totalExports: 2935
+  totalExports: 2936
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9847,6 +9847,32 @@ modules:
         - placeQuantity
         - buildRegimeTensor
         - predictMissingBridges
+    src/composition/buckingham-filter.ts:
+      description: Buckingham filter for one target and the variables that govern it.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/algebra.js
+          imports:
+            - equals
+        - file: ../dimensional/buckingham.js
+          imports:
+            - DimensionalDeterminationResult
+            - DimensionalVariable
+          typeOnly: true
+        - file: ../dimensional/buckingham.js
+          imports:
+            - buckinghamPi
+            - dimensionallyDetermines
+        - file: ../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+      exports:
+        - buckinghamFilter
+      interfaces:
+        - BuckinghamFilterRecord
+      functions:
+        - buckinghamFilter
     src/composition/canonical-compare.ts:
       description: Compare a user's formula with the canonical (textbook) equation it restates.
       externalDependencies: []
@@ -11091,6 +11117,10 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
         - file: ./edge.js
           imports:
             - BridgeEdge
@@ -11105,6 +11135,9 @@ modules:
           imports:
             - ComposeOptions
           typeOnly: true
+        - file: ./compose-symbolic.js
+          imports:
+            - composeSymbolic
       exports:
         - REGISTERED_COMPOSITION_IDS
         - enumerateCompositions
@@ -19660,6 +19693,7 @@ dependencyGraph:
         - src/composition/axis-audit.ts
         - src/composition/bridge-analysis.ts
         - src/composition/bridge-prediction.ts
+        - src/composition/buckingham-filter.ts
         - src/composition/canonical-compare.ts
         - src/composition/canonical-graph.ts
         - src/composition/canonical-prefactors.ts
@@ -19842,18 +19876,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 410
+  totalTypeScriptFiles: 411
   totalModules: 13
-  totalLinesOfCode: 89692
-  totalExports: 2935
+  totalLinesOfCode: 89864
+  totalExports: 2936
   totalClasses: 60
-  totalInterfaces: 464
-  totalFunctions: 756
+  totalInterfaces: 465
+  totalFunctions: 757
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 723
   totalReExports: 1395
-  totalTypeOnlyImports: 548
+  totalTypeOnlyImports: 550
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
