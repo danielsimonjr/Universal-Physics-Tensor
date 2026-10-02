@@ -714,6 +714,18 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
 
+/**
+ * Theorem name on the compiled manifest copy for `key`.
+ *
+ * This reads the compiled table. It does not build a formal reference
+ * and it does not derive an evidence tag.
+ *
+ * @internal
+ */
+export function physjsTheorem(key: string): string | undefined {
+  return entryByKey.get(key)?.theorem;
+}
+
 /** `formalRef.version` for the pinned manifest. */
 function physjsVersion(): string {
   return `physjs@${PHYSJS_COMMIT} ${PHYSJS_TOOLCHAIN} mathlib:${PHYSJS_MATHLIB} physlib@${PHYSJS_PHYS_LIB}`;
