@@ -8,8 +8,8 @@
  * 4. Querying the tensor
  */
 
-import { UniversalTensor, PhysicalConstants } from '../src/index.js';
-import type { PhysicalLaw, BridgeEquation } from '../src/index.js';
+import { UniversalTensor, PhysicalConstants } from 'universal-physics-tensor';
+import type { PhysicalLaw, BridgeEquation } from 'universal-physics-tensor';
 
 // Create a simple rank-3 tensor with quantum and classical scales
 const tensor = new UniversalTensor({

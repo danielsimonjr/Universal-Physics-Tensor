@@ -76,7 +76,10 @@ const HELP = `upt atlas [<bridge-id>] [--run] [--json]
         One atlas bridge with every qualification visible: relation, premises
         and conclusion, transformation and inverse, side conditions, regime
         inequalities, bound with its horizon and uniformity, what it preserves and loses,
-        witnesses, counterexamples, formal reference and review status. Empty
+        witnesses, counterexamples, formal reference and review status.
+        review status is the record's review mark (proposed or reviewed).
+        It is not an evidence tag. formally-proved is derived from the
+        formal reference and does not depend on that mark. Empty
         sections print as "none stated", never disappear. When derived
         evidence is both formally-proved and contradicted, the report prints
         proved, with unresolved counterexample: yes. The proof stays and the
@@ -549,7 +552,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
   list('citations', b.citations);
-  out(`review status: ${b.reviewStatus}`);
+  out(
+    `review status: ${b.reviewStatus} — the record's review mark (proposed or reviewed), ` +
+      'not an evidence tag. formally-proved is derived from the formal reference and does not depend on this mark.',
+  );
   return exitCode;
 }
 

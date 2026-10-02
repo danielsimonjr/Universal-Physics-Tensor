@@ -1,10 +1,10 @@
 {
   "metadata": {
     "name": "universal-physics-tensor",
-    "version": "1.0.2",
-    "totalFiles": 420,
+    "version": "1.0.3",
+    "totalFiles": 421,
     "totalModules": 13,
-    "totalExports": 2974
+    "totalExports": 2977
   },
   "entryPoints": [
     {
@@ -11458,6 +11458,33 @@
           "command"
         ]
       },
+      "src/cli/commands/chain.ts": {
+        "description": "`upt chain` names the chain orchestrator and does not run it.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../command.js",
+            "imports": [
+              "registerCommand",
+              "Command"
+            ]
+          }
+        ],
+        "exports": [
+          "command"
+        ],
+        "constants": [
+          "command"
+        ]
+      },
       "src/cli/commands/confront.ts": {
         "description": "`upt confront` — run the catalog's committed real-data confrontations and",
         "externalDependencies": [],
@@ -12177,6 +12204,12 @@
           },
           {
             "file": "./atlas.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
+            "file": "./chain.js",
             "imports": [
               "*"
             ]
@@ -21159,7 +21192,7 @@
         "description": "`Axes` singleton registry — module-load-stable `UniversalIndex`",
         "externalDependencies": [
           {
-            "package": "@danielsimonjr/universal-physics-tensor",
+            "package": "universal-physics-tensor",
             "imports": [
               "Axes"
             ]
@@ -21367,6 +21400,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -21377,6 +21411,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -23807,6 +23842,7 @@
               "LabeledTensorConstructionError",
               "AxisMismatchError",
               "IdentityConflictError",
+              "IndexNameMismatchError",
               "RankPreservationError",
               "AxisOrderError",
               "AxisMergeError",
@@ -25231,6 +25267,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -25800,6 +25837,7 @@
           "LabeledTensorConstructionError",
           "AxisMismatchError",
           "IdentityConflictError",
+          "IndexNameMismatchError",
           "RankPreservationError",
           "AxisOrderError",
           "AxisMergeError",
@@ -28765,6 +28803,7 @@
           "src/cli/commands/axes.ts",
           "src/cli/commands/candidates.ts",
           "src/cli/commands/canonical.ts",
+          "src/cli/commands/chain.ts",
           "src/cli/commands/confront.ts",
           "src/cli/commands/connectors.ts",
           "src/cli/commands/coverage.ts",
@@ -29031,18 +29070,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 420,
+    "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 91463,
-    "totalExports": 2974,
-    "totalClasses": 60,
+    "totalLinesOfCode": 91576,
+    "totalExports": 2977,
+    "totalClasses": 61,
     "totalInterfaces": 476,
     "totalFunctions": 768,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 752,
-    "totalReExports": 1395,
-    "totalTypeOnlyImports": 567,
+    "totalConstants": 753,
+    "totalReExports": 1396,
+    "totalTypeOnlyImports": 568,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

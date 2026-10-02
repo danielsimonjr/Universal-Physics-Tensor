@@ -1,6 +1,6 @@
 # Atlas Roadmap — subagent-driven implementation plan
 
-> **Status as of 2026-10-02.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and fourteen catalog ids (be-12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `c6958650f0be66b21f5cc3992d5474bf97ad5094`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). The S4.3 line that `formally-proved` holds iff `formalRef.fidelity !== 'unreviewed'` is the rule this plan specified.
+> **Status as of 2026-10-02.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and fourteen catalog ids (be-12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `2e09357f9674bc60b60b378155a1623c27dc7b04`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). The S4.3 line that `formally-proved` holds iff `formalRef.fidelity !== 'unreviewed'` is the rule this plan specified.
 
 **Executes:** [`ROADMAP.md`](../../ROADMAP.md) (2026-09-20), phases 0–6.
 **Baseline:** `universal-physics-tensor@0.45.2`, `master`, suite ≈ 3,700 passing across ~353 files.

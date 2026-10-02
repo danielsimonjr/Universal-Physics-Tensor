@@ -27,6 +27,7 @@ import './probe.js';
 import './regime.js';
 import './path.js';
 import './atlas.js';
+import './chain.js';
 import './search.js';
 import './retrieve.js';
 import './metric.js';

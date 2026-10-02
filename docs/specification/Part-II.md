@@ -10,7 +10,7 @@
 
 **Bridge Equation 21: AdS/CMT Correspondence Equation**
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Kss.saturating`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Kss.lean) states the equality η/s = ℏ/(4π k_B). The inequality η/s ≥ ℏ/(4π k_B) is a different statement.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Kss.saturating`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Kss.lean) states the equality η/s = ℏ/(4π k_B). The inequality η/s ≥ ℏ/(4π k_B) is a different statement.
 
 - **Status**: Established. The holographic dictionary for retarded Green's functions in AdS/CMT (anti-de Sitter / condensed matter correspondence) is a well-understood result (Son and Starinets 2002, *JHEP* 0209:042, arXiv:hep-th/0205051 — the canonical two-author paper; the formula below is the retarded-Green's-function recipe from that paper). The companion three-author paper (Policastro-Son-Starinets 2002, *JHEP* 0209:043, arXiv:hep-th/0205052) applies the recipe to AdS hydrodynamics. See also Iqbal and Liu 2009 (arXiv 0903.2596, *Fortsch. Phys.* 57). The canonical momentum-space dimension is `[L]^{d−2Δ}`. Derivation: the boundary two-point function ⟨O(x)O(0)⟩_R of an operator of conformal dimension Δ scales as `|x|^{−2Δ}` (dim `[L]^{−2Δ}`), and Fourier-transforming with measure `dt d^{d−1}x` (dim `[L]^d`) gives `G_R(ω,k)` dim `[L]^{d−2Δ}`. The `r^{2Δ−d}` factor in the displayed formula is the bulk-radial scaling that exactly cancels the bulk-field's leading-mode `r^{−(d−Δ)}` to extract the boundary correlator's coefficient — that radial factor has dim `[L]^{2Δ−d}` but is *internal* to the limit; the *result* G_R(ω,k) has dim `[L]^{d−2Δ}`.
 - **Context**: Holographic duality between strongly correlated electrons and gravitational systems
@@ -32,7 +32,7 @@ where:
 
 **Bridge Equation 22: Topological Entanglement Entropy - Quantum Gravity Link**
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.ToricCode.toric`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/ToricCode.lean) states that four anyons of quantum dimension 1 have D = 2 and γ = ln 2. The Kitaev–Preskill theorem is missing in Mathlib. The lemma is not a quantum-gravity boundary.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.ToricCode.toric`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/ToricCode.lean) states that four anyons of quantum dimension 1 have D = 2 and γ = ln 2. The Kitaev–Preskill theorem is missing in Mathlib. The lemma is not a quantum-gravity boundary.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-22-topological-entanglement.ts`](../../src/bridges/equations/be-22-topological-entanglement.ts)
 
@@ -59,7 +59,7 @@ where:
 
 **Bridge Equation 23: Strange Metal - Black Hole Duality (SYK Planckian dissipation)**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the SYK Planckian linear-in-T resistivity.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the SYK Planckian linear-in-T resistivity.
 
 - **Status**: Speculative. **Reformulated 2026-05-06.** Replaced the algebraically-vacuous `ρ(T) = ρ_0 + AT + B √(ℏ/(k_B T τ_P))` form (where the third term collapses to `B · 1` under the definitional identity `τ_P · k_B T = ℏ`) with the canonical SYK / Planckian-dissipation linear-in-T resistivity. The `m*` carrier effective-mass prefactor is required by the canonical Drude+Planckian decomposition; without it SI dimensional analysis yields `m³/(s·C²)` rather than the required `Ω·m = kg·m³/(s·C²)`. The remaining `phenomenological-ansatz` known_issue is for the *bridge-equation framing* (using SYK Planckian dissipation as the condensed-matter ↔ holography duality), not for the linear-in-T phenomenology itself, which is empirically established (Bruin 2013 *Science* 339:804; Legros 2019 *Nature Phys.* 15:142). Maldacena-Stanford 2016 (arXiv:1604.07818) gives the emergent SL(2,R) conformal symmetry; the explicit Green's function form follows standard SYK textbook references.
 - **Context**: Planckian dissipation in strange metals: linear-in-T resistivity from a SYK / holographic relaxation rate `ℏ/τ ~ k_B T` (Sachdev-Ye-Kitaev limit; Hartnoll-Hofman holographic strange-metal phenomenology).
@@ -81,7 +81,7 @@ This form (i) recovers the empirical linear-in-T strange-metal resistivity, (ii)
 
 **Bridge Equation 24: Quantum Coherence in Photosynthesis Efficiency (Förster FRET)**
 
-> **Proof status as of 2026-10-01.** Kind is `cross-check`. [`PhysJS.Fret.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Fret.lean) states that the three writings of η agree. The lemma is not the dipole–dipole law.
+> **Proof status as of 2026-10-01.** Kind is `cross-check`. [`PhysJS.Fret.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Fret.lean) states that the three writings of η agree. The lemma is not the dipole–dipole law.
 
 - **Status**: Speculative. **Reformulated 2026-05-06.** Replaced the bound-violating multiplicative `η_classical(1 + κ exp(-t/τ_coh) |⟨ψ_d|ψ_a⟩|²)` form (admits `η > 1` for `κ ∈ [0.1, 0.3]` and `η_classical ≈ 1`) with the canonical Förster (1948) FRET dipole-dipole rate `k_FRET = (1/τ_D)(R_0/R)⁶` and the bound-respecting transfer efficiency `η = R_0⁶/(R_0⁶ + R⁶) = 1/(1 + (R/R_0)⁶) ∈ [0,1]` by construction. The remaining `phenomenological-ansatz` known_issue is for the *bridge-equation framing* — interpreting FRET in photosynthetic light-harvesting complexes (FMO, LH2, LHCII) as a UPT quantum ↔ biological bridge — not for the FRET formulas themselves which are textbook-canonical (Lakowicz 2006). FRET is incoherent: it does not encode "quantum-coherent enhancement," and the contested-coherence question (Cao 2020 *Sci. Adv.* 6:eaaz4888 / Duan 2017 *PNAS* 114:8493 / Thyrhaug 2018 *Nat. Chem.* 10:780) is documented in the references list.
 - **Context**: Förster resonance energy transfer (FRET): dipole-dipole transfer rate and transfer efficiency for donor-acceptor pairs separated by distance `R`, with Förster radius `R_0` (typically 2-10 nm) at which `η = 1/2`.
@@ -102,7 +102,7 @@ where:
 
 **Bridge Equation 25: Consciousness - Information Integration Bridge (IIT Φ)**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is Φ_max, the integrated information under the minimum information partition.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is Φ_max, the integrated information under the minimum information partition.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-25-iit-phi.ts`](../../src/bridges/equations/be-25-iit-phi.ts) — the **live** BE-25 encoding (the IIT Φ_max form; `dimensional_signature: '[1]'`, since Φ is dimensionless / measured in bits when log₂ is used). The earlier module [`src/bridges/equations/be-25-orch-or.ts`](../../src/bridges/equations/be-25-orch-or.ts) is **archived**: it encodes the dropped Penrose-Hameroff `t_OR` form, is no longer load-bearing for any BE-25 dimensional claim under the IIT Φ_max reformulation, and is preserved only with an archive banner for historical traceability. The archived module has been removed from `EXPECTED_DIMENSION_BY_BRIDGE` and from the round-trip catalog test. (Note: Φ_max is exponential in system size, so the encoding is tractable only for small substrates — see the **Tractability** note below.)
 
@@ -132,7 +132,7 @@ where:
 
 **Bridge Equation 26: DNA Mutation - Quantum Tunneling Rate**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the WKB mutation-rate integral.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the WKB mutation-rate integral.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-26-dna-tunneling.ts`](../../src/bridges/equations/be-26-dna-tunneling.ts)
 
@@ -152,7 +152,7 @@ where:
 
 **Bridge Equation 27: Fluctuation-Dissipation Violation in Active Matter**
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.EffectiveTemperature.sum_eq`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/EffectiveTemperature.lean) is the sum form of T_eff. The lemma is not the frequency-dependent Cugliandolo–Kurchan T_eff(ω).
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.EffectiveTemperature.sum_eq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/EffectiveTemperature.lean) is the sum form of T_eff. The lemma is not the frequency-dependent Cugliandolo–Kurchan T_eff(ω).
 
 - **Status**: Speculative extension. Frequency-dependent effective temperature is a standard concept in active-matter / non-equilibrium statistical mechanics (Cugliandolo 2011, J. Phys. A 44:483001). The specific functional form used here is phenomenological. The classical FDT (Kubo 1966, Rep. Prog. Phys. 29:255; Callen-Welton 1951, Phys. Rev. 83:34) relates the response function χ(ω) to a correlation via the canonical form `χ''(ω) = (1/2k_B T) · S_FF(ω)` (Kubo) or equivalently `χ(ω) = (1/k_B T) · ∫dt e^{iωt} d/dt⟨δx(t)δx(0)⟩` (Callen-Welton form). The form displayed below uses the `1/(k_B T_eff(ω))` prefactor outside an integral over `⟨δF(t)δx(0)⟩` — a non-standard cross-correlator; standard FDT uses either the auto-correlator `⟨δx(t)δx(0)⟩` (Callen-Welton) or `⟨δF(t)δF(0)⟩` (force-noise form). Treat the displayed integral as schematic; for any operational use, replace with the canonical `χ''(ω) = (1/2k_B T_eff(ω)) S(ω)` plus the active-matter `Σ_active` correction.
 - **Context**: Living systems violate equilibrium relations
@@ -168,7 +168,7 @@ where:
 
 **Bridge Equation 28: Maximum Entropy Production Principle**
 
-> **Proof status as of 2026-10-01.** Kind is `property`, even though the covers line begins with derivation-step. [`PhysJS.EntropyProduction.nonneg`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/EntropyProduction.lean) is the non-negativity of σ = Σ_i J_i X_i when every product is ≥ 0. The lemma is not the variational principle. Catalog membership stays not-a-bridge.
+> **Proof status as of 2026-10-01.** Kind is `property`, even though the covers line begins with derivation-step. [`PhysJS.EntropyProduction.nonneg`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/EntropyProduction.lean) is the non-negativity of σ = Σ_i J_i X_i when every product is ≥ 0. The lemma is not the variational principle. Catalog membership stays not-a-bridge.
 
 - **Status**: Contested principle. Maximum Entropy Production (MEPP) is a proposed but contested principle in non-equilibrium thermodynamics (Dewar 2005; rebutted by Grinstein and Linsker 2007). It conflicts with Prigogine's minimum entropy production for near-equilibrium linear systems. Treat as speculative.
 - **Context**: Why nature chooses specific non-equilibrium steady states
@@ -184,7 +184,7 @@ subject to constraints, where:
 
 **Bridge Equation 29: Jarzynski Equality Extension to Gravity**
 
-> **Proof status as of 2026-10-01.** Kind is `property`. [`PhysJS.Jarzynski.jensen_work`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Jarzynski.lean) gives ⟨W⟩ ≥ ΔF by Jensen. The lemma is not Jarzynski's equality and it is not a gravity extension.
+> **Proof status as of 2026-10-01.** Kind is `property`. [`PhysJS.Jarzynski.jensen_work`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Jarzynski.lean) gives ⟨W⟩ ≥ ΔF by Jensen. The lemma is not Jarzynski's equality and it is not a gravity extension.
 
 - **Status**: Speculative extension. The Jarzynski equality for free-energy differences from non-equilibrium work (Jarzynski 1997, Phys. Rev. Lett. 78:2690) is established in flat-spacetime statistical mechanics. The curved-spacetime extension proposed here, where the gravitational work is the matter-action variation under metric perturbation, is novel to this framework and requires independent derivation.
 - **Context**: Work fluctuations in gravitational fields
@@ -201,7 +201,7 @@ where the second exponential includes gravitational work contributions:
 
 **Bridge Equation 30: Entanglement - Geometry Equation (FLM first-law / linear-response)**
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Entanglement.first_variation`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Entanglement.lean) is d/dt of S along a smooth curve of full-rank density matrices that stay diagonal in a fixed basis. The lemma is not the holographic first law. Ryu–Takayanagi is not in Mathlib, and chaining the area-law lemma does not identify the modular Hamiltonian with an area variation.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Entanglement.first_variation`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Entanglement.lean) is d/dt of S along a smooth curve of full-rank density matrices that stay diagonal in a fixed basis. The lemma is not the holographic first law. Ryu–Takayanagi is not in Mathlib, and chaining the area-law lemma does not identify the modular Hamiltonian with an area variation.
 
 - **Status**: **Speculative (canonical formula, speculative QG-emergence framing). Reformulated 2026-05-06.** The previous form `g_{μν}(x) = η_{μν} + κ Σ_{ij} ⟨x|Tr_j(ρ_{ij} log ρ_{ij})|x⟩` was structurally ill-formed (rank-2 LHS vs scalar RHS, non-normalizable `|x⟩`, dimensionally wrong κ); replaced with the canonical **first-law-of-entanglement / FLM linear-response form**: `δS_EE(R) = ⟨δH_R⟩` where H_R is the modular Hamiltonian of the reduced density matrix on region R. Blanco-Casini-Hung-Myers 2013 (arXiv:1305.3182) states the form explicitly: "ΔS = ΔH for the first order variation of the entanglement entropy ΔS and the expectation value of the modular Hamiltonian ΔH". FLM 2013 (arXiv:1307.2892) uses this as the linear-response input to bulk one-loop corrections in AdS/CFT. The framework keeps `speculative` (not `established`) because the linear-response identity is canonical only inside its derivation domain (AdS/CFT, ball-shaped regions in conformally-flat space, etc.); the *use* of this identity as the basis for ER=EPR-style entanglement-geometry equivalence outside the strict AdS/CFT regime — which is the framing UPT proposes — remains conjectural. The phenomenological-ansatz tag is for the framing extension, not the linear-response math itself. See `tests/bridges/be-30-reformulation.test.ts` for the reformulation pin.
 - **Context**: How spacetime emerges from quantum entanglement (FLM first-law / linear-response form)
@@ -218,7 +218,7 @@ where:
 
 **Bridge Equation 31: Causal Set - Continuum Limit**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the Benincasa–Dowker d = 4 discrete Ricci scalar.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the Benincasa–Dowker d = 4 discrete Ricci scalar.
 
 - **Status**: Speculative. Benincasa-Dowker (arXiv:1001.2725) established discrete-to-continuum limits for causal set action and Ricci scalar. **Reformulated 2026-05-05:** replaced the originally-stated `R = (2/√π)(N/V^{2/4} - k_1 - k_2(ρ²ℓ_P⁴)^{1/4})` form — which contained both a `V^{2/4}→V^{1/2}` typo and a dimensional mismatch in the `(ρ²ℓ_P⁴)^{1/4}` term against Ricci-scalar dimensions `[L^{-2}]` — with the canonical Benincasa-Dowker d=4 inclusion-exclusion formula. The published Benincasa-Dowker (2010 *Phys. Rev. Lett.* 104:181301) form is additive (no sprinkling-density division). Status remains *speculative* because (a) the d≠4 generalization requires re-deriving coefficients and (b) using BD's discrete Ricci scalar as a *bridge equation* between causal-set discreteness and continuum spacetime — i.e., committing to causal-set dynamics as UPT's microstructure — is original to this catalog and is not in BD itself.
 - **Context**: Discrete to continuous spacetime transition
@@ -241,7 +241,7 @@ contained the `V^{2/4}→V^{1/2}` typo and the dimensionally-mismatched `(ρ²�
 
 **Bridge Equation 32: Quantum Reference Frame Transformation**
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.BornOverlap.modulus_sq`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/BornOverlap.lean) states |c + si|² = c² + s². The lemma is not the frame transformation and it is not a Haar integral, and catalog membership stays not-a-bridge.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.BornOverlap.modulus_sq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/BornOverlap.lean) states |c + si|² = c² + s². The lemma is not the frame transformation and it is not a Haar integral, and catalog membership stays not-a-bridge.
 
 - **Status**: Active research. Quantum Reference Frames (QRF) formalism -- where reference frames are themselves quantum systems that can be in superposition -- is a legitimate active research area (Giacomini, Castro-Ruiz and Brukner, *Nat. Commun.* 10, 494 (2019), arXiv:1712.07207; de la Hamette and Galley, arXiv:2004.14292). The transformation formula captures the essential structure: changing reference frame integrates over group elements weighted by a unitary representation, tensored with the frame's quantum state. The formalism is well-defined but currently lacks direct experimental verification.
 - **Context**: How physics transforms between quantum reference frames
@@ -259,7 +259,7 @@ where:
 
 **Bridge Equation 33: Quantum-Classical Critical Point Mapping (Hertz-Millis canonical scaling, 3D Heisenberg)**
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: [`PhysJS.QuantumCritical.thermal_scaling`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/QuantumCritical.lean) states the catalogued equation ξ(T) = ξ₀ (T/T₀)^{−1/z}, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. The lemma is not Hertz–Millis theory. Nested on this id, and not the reference, are [`PhysJS.QuantumCritical.scaling_shape`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/QuantumCritical.lean) and [`PhysJS.QuantumCritical.every_power_homogeneous`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/QuantumCritical.lean), which use [`PhysJS.Dimensional.monomial_form`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Dimensional.lean) and fix only the shape ξ = ξ₀ φ(T/T₀). Units fix that form only up to the dimensionless profile φ, so φ and the exponent are not chosen, and z = 1 in the catalog display is a specialization and is not derived from units.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: [`PhysJS.QuantumCritical.thermal_scaling`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/QuantumCritical.lean) states the catalogued equation ξ(T) = ξ₀ (T/T₀)^{−1/z}, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. The lemma is not Hertz–Millis theory. Nested on this id, and not the reference, are [`PhysJS.QuantumCritical.scaling_shape`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/QuantumCritical.lean) and [`PhysJS.QuantumCritical.every_power_homogeneous`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/QuantumCritical.lean), which use [`PhysJS.Dimensional.monomial_form`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Dimensional.lean) and fix only the shape ξ = ξ₀ φ(T/T₀). Units fix that form only up to the dimensionless profile φ, so φ and the exponent are not chosen, and z = 1 in the catalog display is a specialization and is not derived from units.
 
 - **Status**: **Speculative (canonical scaling form, framework-pin to 3D Heisenberg). Corrected on 2026-05-20:** the finite-T correlation-length exponent was changed from `−ν/z` (pinned −0.71) to `−1/z` (pinned −1 for z=1). At a quantum critical point `ξ ~ T^{−1/z}`: z alone sets the temperature dependence; ν governs the separate T=0 tuning-parameter axis. Literature anchor: `cond-mat/0503298` states `ξ ~ (T/Tc)^{−1/z}` explicitly. The mathematical formulation below reflects the corrected form. **Reformulated 2026-05-06.** The previous ansatz `ξ_quantum(T) = ξ_classical / √(1 + (E_0/k_B T)²)` was broken (gave the wrong T → 0 limit ξ → 0 instead of the required QCP divergence; missing dynamic exponent z). Replaced with the canonical **Hertz-Millis scaling form** (Hertz 1976 *Phys. Rev. B* 14:1165; Millis 1993 *Phys. Rev. B* 48:7183; Sondhi-Girvin-Carini-Shahar 1997 *Rev. Mod. Phys.* 69:315; Sachdev 2011 *Quantum Phase Transitions* 2nd ed., Ch. 11), pinned to **3D Heisenberg universality class (z = 1)** as the canonical reference case. The `ν` parameter remains in the AST node interface for API stability but the corrected scaling no longer depends on it. See `tests/bridges/be-33-reformulation.test.ts` for the reformulation pin.
 - **Context**: Relates d-dimensional quantum to (d+z)-dimensional classical transitions via Hertz-Millis canonical scaling
@@ -277,7 +277,7 @@ where:
 
 **Bridge Equation 34: Kibble-Zurek Mechanism in Curved Spacetime**
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.KibbleZurek.exponent`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/KibbleZurek.lean) is the freeze-out power only. The lemma does not include the Boltzmann factor and does not repair the missing 1/a^d.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.KibbleZurek.exponent`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/KibbleZurek.lean) is the freeze-out power only. The lemma does not include the Boltzmann factor and does not repair the missing 1/a^d.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-34-kibble-zurek.ts`](../../src/bridges/equations/be-34-kibble-zurek.ts)
 
@@ -296,7 +296,7 @@ where:
 
 **Bridge Equation 35: Conformal Bootstrap - Physical Operator Equation**
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Crossing.antisymmetry`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Crossing.lean) states that g(u, v) − g(v, u) is the negation of the swap. The lemma is not the infinite sum over (Δ, ℓ), and catalog membership stays not-a-bridge.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Crossing.antisymmetry`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Crossing.lean) states that g(u, v) − g(v, u) is the negation of the swap. The lemma is not the infinite sum over (Δ, ℓ), and catalog membership stays not-a-bridge.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-35-conformal-bootstrap.ts`](../../src/bridges/equations/be-35-conformal-bootstrap.ts)
 
@@ -325,7 +325,7 @@ where u and v are cross-ratios and g_{Δ,ℓ} is the conformal block of an excha
 
 **Bridge Equation 36: MOND / TeVeS — GW170817 graviton-speed bound**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the GW170817 graviton-speed bound |c_GW − c|/c ≤ 10^{−15}.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the GW170817 graviton-speed bound |c_GW − c|/c ≤ 10^{−15}.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-36-gw-speed-bound.ts`](../../src/bridges/equations/be-36-gw-speed-bound.ts)
 
@@ -344,7 +344,7 @@ where:
 
 **Bridge Equation 37: Modified light-propagation — Shapiro gravitational time delay**
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Shapiro.radial_integral`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Shapiro.lean) is the radial integral (2GM/c³) ln(R_far/R_near). The lemma is not the impact-parameter formula and it is not the Cassini measurement.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Shapiro.radial_integral`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Shapiro.lean) is the radial integral (2GM/c³) ln(R_far/R_near). The lemma is not the impact-parameter formula and it is not the Cassini measurement.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-37-shapiro-delay.ts`](../../src/bridges/equations/be-37-shapiro-delay.ts)
 
@@ -366,7 +366,7 @@ References: Shapiro 1964 *Phys. Rev. Lett.* 13:789 (original prediction); Bertot
 
 **Bridge Equation 38: Milgrom MOND interpolation ν(z)**
 
-> **Proof status as of 2026-10-01.** Kind is `limit`. [`PhysJS.Mond.tendsto_nu_limits`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Mond.lean) states that ν → 1 as z → ∞ and that ν√z → 1 as z → 0⁺. Nested [`PhysJS.Mond.mu_inversion`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Mond.lean) is not the reference, and the lemma does not state ν → √(2/z) and does not include the SPARC confrontation. The catalog name is Milgrom MOND interpolation ν(z).
+> **Proof status as of 2026-10-01.** Kind is `limit`. [`PhysJS.Mond.tendsto_nu_limits`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Mond.lean) states that ν → 1 as z → ∞ and that ν√z → 1 as z → 0⁺. Nested [`PhysJS.Mond.mu_inversion`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Mond.lean) is not the reference, and the lemma does not state ν → √(2/z) and does not include the SPARC confrontation. The catalog name is Milgrom MOND interpolation ν(z).
 
 - **Status**: Speculative. Based on Verlinde (arXiv:1001.0785). Contested; not accepted as mainstream physics. **Reformulated 2026-05-05:** replaced the originally-stated `F = F_N[1 + α√(a₀/a) tanh(√(a/a₀))]` interpolation — which fails the deep-MOND limit (the `a → 0` limit yields `F → F_N(1+α) ~` Newtonian rather than the required `F → √(m F_N a₀)`) — with the canonical Milgrom 1983 MOND interpolation `μ(x) = x/√(1+x²)`, where `x = a/a₀`. This recovers Newtonian scaling for `a >> a₀` and deep-MOND scaling `F → √(m F_N a₀)` for `a << a₀` by construction. The Verlinde 2017 mass-correction variant (*SciPost Phys.* 2:016; arXiv:1611.02269) and TeVeS relativistic completion (Bekenstein 2004 *Phys. Rev. D* 70:083509) are documented in `references[]` for future work but are non-equivalent reformulation paths. The remaining `phenomenological-ansatz` known_issue is for the *bridge-equation framing* (using MOND as the Newtonian-dark-sector link), not for the interpolation function itself which is canonical.
 - **Context**: Verlinde's emergent gravity with dark matter effects
@@ -393,7 +393,7 @@ failed the deep-MOND limit (in the `a → 0` limit `√(a₀/a) → ∞` and `ta
 
 **Bridge Equation 39: Asymptotic Safety in Quantum Gravity**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the asymptotic-safety beta system and its non-Gaussian fixed point.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the asymptotic-safety beta system and its non-Gaussian fixed point.
 
 - **Status**: Speculative (active research). Asymptotic safety (Weinberg 1979; Reuter 1998 *Phys. Rev. D* 57:971, arXiv:hep-th/9605030) is an active research program proposing a UV-finite gravity. The functional renormalization group flow equation as written is at the schematic level; specific truncation choices (Einstein-Hilbert, f(R), etc.) are required for computation. Not yet experimentally confirmed. **Sign-convention note:** the displayed `+A g²` term in `β_g` follows the convention where `A > 0` is required for the non-Gaussian UV fixed point at `g_* > 0` to attract the flow from below — i.e., for the canonical Reuter (1998) Einstein-Hilbert truncation, scheme conventions yield `A > 0`. The "−Cg²λ" minus is conventional given the sign of the Λ-coupling cross-term in the Wetterich equation (Reuter-Weyer 2009 *Gen. Rel. Grav.* 41:983 fix the explicit values). Different sign conventions in the literature (including Codello-Percacci-Rahmede 2009) absorb factors of 2π or `1/(16π)` differently; the schematic form here is convention-light. For any operational use, fix the convention by reference to a specific truncation paper.
 - **Context**: UV-complete theory via non-Gaussian fixed point
@@ -414,7 +414,7 @@ where:
 
 **Bridge Equation 40: Composite Higgs Potential**
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.CompositeHiggs.scale_free`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/CompositeHiggs.lean) states that V(h)/f⁴ depends on h only through θ = h/f. Catalog membership stays not-a-bridge, and the lemma does not decide that membership. The lemma is not SILH matching.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.CompositeHiggs.scale_free`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/CompositeHiggs.lean) states that V(h)/f⁴ depends on h only through θ = h/f. Catalog membership stays not-a-bridge, and the lemma does not decide that membership. The lemma is not SILH matching.
 
 - **Status**: Established form (after correction). Standard composite Higgs potentials (Kaplan-Georgi 1984 *Phys. Lett. B* 136:183; Giudice-Grojean-Pomarol-Rattazzi 2007 "The Strongly-Interacting Light Higgs" *JHEP* 0706:045, arXiv:hep-ph/0703164) have the structure V(h) ∼ α f⁴ sin²(h/f) + β f⁴ sin⁴(h/f) with α and β dimensionless Wilson coefficients and all terms of dimension [E]⁴. **Corrected on 2026-05-05:** the previous draft had `-α f²` in the first term, making it carry [E]² while β f⁴[...] carries [E]⁴ — dimensionally inhomogeneous. Replaced f² with f⁴. The canonical author list for arXiv:hep-ph/0703164 is **Giudice-Grojean-Pomarol-Rattazzi 2007** (verified against arXiv abstract and JHEP record).
 - **Context**: Higgs as pseudo-Goldstone boson
@@ -432,7 +432,7 @@ where:
 
 **Bridge Equation 41: Swampland Distance Conjecture Equation**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the swampland distance-conjecture mass tower.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the swampland distance-conjecture mass tower.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-41-swampland.ts`](../../src/bridges/equations/be-41-swampland.ts)
 
@@ -452,7 +452,7 @@ where:
 
 **Bridge Equation 42: Firewall Complement Principle**
 
-> **Proof status as of 2026-10-02.** Kind is `cross-check`. [`PhysJS.HawkingUnruh.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/HawkingUnruh.lean) remains the manifest theorem. It names BE-57 and states T_H(2GM/c²) = T_H(M) together with T_U(c⁴/(4GM)) = T_H(M). The Hawking temperature is not proved: PhysJS `docs/feasibility/be-42.md` at this pin records that PhysLean has no Schwarzschild surface gravity and no KMS condition. A units monomial leaves the coefficient unfixed, and assuming surface gravity together with the KMS factor repeats the dictionary. Neither partial was taken. The kind stays `cross-check`. BE-57 has no PhysJS formalRef of its own at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`.
+> **Proof status as of 2026-10-02.** Kind is `cross-check`. [`PhysJS.HawkingUnruh.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/HawkingUnruh.lean) remains the manifest theorem. It names BE-57 and states T_H(2GM/c²) = T_H(M) together with T_U(c⁴/(4GM)) = T_H(M). The Hawking temperature is not proved: PhysJS `docs/feasibility/be-42.md` at this pin records that PhysLean has no Schwarzschild surface gravity and no KMS condition. A units monomial leaves the coefficient unfixed, and assuming surface gravity together with the KMS factor repeats the dictionary. Neither partial was taken. The kind stays `cross-check`. BE-57 has no PhysJS formalRef of its own at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`.
 
 - **Status**: Highly speculative. Firewall paradox is unresolved. The specific "complement principle" formulation here is not a standard result; the decomposition |psi> = a|smooth> + b|firewall> is a tautological superposition without physics content unless f(observer, protocol) is independently specified.
 - **Context**: Black hole information without firewalls
@@ -465,7 +465,7 @@ with observer-dependent state decomposition:
 
 **Bridge Equation 43: ER=EPR Wormhole-Entropy Bound**
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.PlanckArea.area_law`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/PlanckArea.lean) states k_B A/(4 ℓ_P²) = k_B c³ A/(4 G ℏ) for ℓ_P² = ℏ G/c³. The lemma is not ER=EPR.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.PlanckArea.area_law`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/PlanckArea.lean) states k_B A/(4 ℓ_P²) = k_B c³ A/(4 G ℏ) for ℓ_P² = ℏ G/c³. The lemma is not ER=EPR.
 
 - **Status**: **Speculative (canonical Bekenstein-Hawking bound, ER=EPR framing remains conjectural). Reformulated 2026-05-06.** The previous form `dℓ_wormhole/dt = -γ S_entanglement + δ ∫ T_μν u^μ u^ν dV` was structurally malformed (sign-backwards from the standard ER=EPR heuristic; entropy + stress-energy-integral cannot combine into length/time without unphysical coefficient roles for γ and δ). Replaced with the canonical **ER=EPR wormhole-entropy-bound form**: `S_entanglement ~ A_wormhole / (4 ℓ_P²)` — the Bekenstein-Hawking entropy bound (Bekenstein 1973 *Phys. Rev. D* 7:2333; Hawking 1975 *Commun. Math. Phys.* 43:199) applied to the minimal cross-section of an Einstein-Rosen bridge. Maldacena-Susskind 2013 (arXiv:1306.0533) states the canonical ER=EPR equivalence: "two distant black holes are connected through the interior via a wormhole, or Einstein-Rosen bridge...interpreted as maximally entangled states of two black holes that form a complex EPR pair." Stanford-Susskind 2014 *Phys. Rev. D* 90:126007 (arXiv:1406.2678, "Complexity and Shock Wave Geometries") develops complexity-volume duality on top; the companion Susskind-Zhao 2014 paper (arXiv:1408.2823, "Switchbacks and the Bridge to Nowhere") extends to switchback geometries. Status remains `speculative` because the ER=EPR conjecture itself remains conjectural outside the strict eternal-black-hole / thermofield-double AdS/CFT regime; the bound formula is canonical Bekenstein-Hawking, the framing is the speculative element. See `tests/bridges/be-43-reformulation.test.ts` for the reformulation pin.
 - **Context**: Entanglement-wormhole equivalence: entanglement entropy bounded by wormhole cross-section area (ER=EPR canonical form)
@@ -482,7 +482,7 @@ where:
 
 **Bridge Equation 44: Soft Hair on Black Holes**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the BMS soft charge at null infinity.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the BMS soft charge at null infinity.
 
 - **Status**: Speculative. Soft-hair-on-black-holes proposals (Hawking-Perry-Strominger 2016, arXiv:1601.00921) suggest that BMS supertranslation charges can store information that would otherwise be lost. Influential but unresolved within the black-hole information paradox literature; no experimental test is currently possible.
 - **Context**: Infinite conservation laws on the horizon
@@ -501,7 +501,7 @@ where:
 
 **Bridge Equation 45: Trans-Planckian Censorship Constraint**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the trans-Planckian censorship bound on the number of inflationary e-foldings.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the trans-Planckian censorship bound on the number of inflationary e-foldings.
 
 - **Status**: Speculative / non-standard. The Trans-Planckian Censorship Conjecture (Bedroya-Vafa 2019, arXiv:1909.11063) bounds inflationary e-foldings via `N_e < ln(M_P / H_inf)`. The formula as written here adds an extra term `-gamma log(r / 0.01)` with no derivation; this extension is original to this framework and has no published reference. Additionally, the log base is unspecified — TCC uses natural logarithm (ln), not log base 10. Revisions should cite arXiv:1909.11063 and either remove the extra term or derive it.
 - **Context**: Quantum gravity constraints on inflation
@@ -520,7 +520,7 @@ where:
 
 **Bridge Equation 46: Multiverse Measure Problem**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is a determined weighting factor for the multiverse measure.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is a determined weighting factor for the multiverse measure.
 
 - **Status**: Highly speculative. The multiverse measure problem is an unsolved fundamental issue in cosmology. Specific measure proposals are untestable without further theoretical development.
 - **Context**: Probability distribution over universes
@@ -537,7 +537,7 @@ where:
 
 **Bridge Equation 47: Big Bang Nucleosynthesis - Dark Sector Coupling**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the dark-sector transfer term in the light-element abundance equation.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the dark-sector transfer term in the light-element abundance equation.
 
 > **AST encoding (Tier 5):** [`src/bridges/equations/be-47-bbn-dark-sector.ts`](../../src/bridges/equations/be-47-bbn-dark-sector.ts)
 
@@ -561,7 +561,7 @@ where:
 
 **Bridge Equation 48: Objective Collapse Equation (GRW extension)**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the GRW mass-amplified localization rate λ_GRW(m) = λ_0 (m/m_0).
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the GRW mass-amplified localization rate λ_GRW(m) = λ_0 (m/m_0).
 
 - **Status**: Established (within GRW class). Ghirardi-Rimini-Weber-Pearle spontaneous collapse models (Ghirardi-Rimini-Weber 1986, Phys. Rev. D 34:470; CSL: Pearle 1989, Ghirardi-Pearle-Rimini 1990) propose modifications to the Schroedinger equation. **Note on rate:** the canonical GRW rate is `lambda ~ 1e-16 s^-1`; the value `1e-17 s^-1` previously written here corresponds to a specific CSL-variant bound. Current experimental bounds on the CSL collapse rate span roughly 1e-17 to 1e-8 s^-1 depending on coupling assumptions (see Bassi-Ghirardi 2003 review, Phys. Rep. 379:257, arXiv:quant-ph/0302164; Bassi et al. 2013 Rev. Mod. Phys. 85:471). The `sigma ~ 1e-7 m` localization length matches standard GRW.
 - **Context**: Spontaneous wavefunction collapse
@@ -580,7 +580,7 @@ with collapse rate <img src="https://i.upmath.me/svg/%5Clambda%20%5Csim%2010%5E%
 
 **Bridge Equation 49: Quantum Darwinism Redundancy**
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the quantum-Darwinism redundancy relation for environmental fragments.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the quantum-Darwinism redundancy relation for environmental fragments.
 
 - **Status**: Speculative extension. Quantum Darwinism (Zurek 2009, Nat. Phys. 5:181) is established as an interpretational framework. The specific algebraic decay form `I(S:F_k) = I(S:E) − O(k^{-α})` is a phenomenological ansatz not derived from the Zurek formalism; the exponent α is a free parameter.
 - **Context**: Classical reality from quantum substrate
@@ -596,7 +596,7 @@ where:
 
 **Bridge Equation 50: Retrocausal QFT (Wheeler-Feynman half-retarded-plus-half-advanced)**
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.TimeSymmetric.wheeler_feynman`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/TimeSymmetric.lean) states A = (A_ret + A_adv)/2. The id remains contested, and the lemma does not decide the contest. The lemma is not radiation reaction.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.TimeSymmetric.wheeler_feynman`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/TimeSymmetric.lean) states A = (A_ret + A_adv)/2. The id remains contested, and the lemma does not decide the contest. The lemma is not radiation reaction.
 
 - **Status**: **Highly speculative (canonical Wheeler-Feynman form, untested absorber boundary condition in QFT). Reformulated 2026-05-06.** The previous form `S = ∫d⁴x [L_forward(φ_+) + L_backward(φ_-) + λφ_+ φ_- δ⁴(x − x_m)]` was variationally ill-posed at the δ⁴ single-point interaction (δ-function source terms in equations of motion are not finite-action solutions; boundary conditions for the backward-evolving sector were unspecified). Replaced with the canonical **Wheeler-Feynman 1945 absorber-theory form**: the gauge field expressed as the half-retarded-plus-half-advanced symmetric sum `A_μ(x) = (1/2)[A_μ^ret(x) + A_μ^adv(x)]`; the action is then standard Maxwell + matter + interaction with this gauge-field expression. The retrocausal claim is that the **absorber boundary condition** — every emitted radiation is absorbed somewhere in the universe — makes the half-retarded-plus-half-advanced symmetric form physically equivalent to standard retarded-only Maxwell, per Wheeler & Feynman's original argument. Status remains `highly-speculative` because the absorber boundary condition is empirically untested in QFT (works in classical electrodynamics under cosmological total absorption, but its quantum-field-theoretic extension is conjectural). Cramer 1986 *Rev. Mod. Phys.* 58:647 transactional interpretation is the canonical modern lineage; it remains a minority interpretation. The W-F form itself is rigorously defined, hence the reformulation lifts BE-50 from R3-invalid to highly-speculative. See `tests/bridges/be-50-reformulation.test.ts` for the reformulation pin.
 - **Context**: Time-symmetric formulation: half-retarded-plus-half-advanced gauge field with absorber boundary condition (Wheeler-Feynman 1945)
@@ -617,7 +617,7 @@ where:
 
 **Bridge Equation 51: Gravitational Lensing — Eddington 1919 weak-field deflection** *(Category I: Emergent Spacetime)*
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Deflection.line_integral`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Deflection.lean) states that the given integrand integrates to 4GM/(b c²) at γ = 1. The lemma is not a geodesic.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Deflection.line_integral`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Deflection.lean) states that the given integrand integrates to 4GM/(b c²) at γ = 1. The lemma is not a geodesic.
 
 > **Evaluator:** [`src/bridges/gravitational-lensing.ts`](../../src/bridges/gravitational-lensing.ts) (`evaluateGravitationalLensing`)
 
@@ -639,7 +639,7 @@ where:
 
 **Bridge Equation 52: Mercury Perihelion Precession — Einstein 1915 closed-form** *(Category I: Emergent Spacetime)*
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The missing piece is the Einstein 1915 perihelion advance Δφ = 6πGM/(a(1 − e²)c²).
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the Einstein 1915 perihelion advance Δφ = 6πGM/(a(1 − e²)c²).
 
 > **Evaluator:** [`src/bridges/perihelion-precession.ts`](../../src/bridges/perihelion-precession.ts) (`evaluatePerihelionPrecession`)
 
@@ -661,7 +661,7 @@ where:
 
 **Bridge Equation 53: Yang-Mills One-Loop β-Function (Asymptotic Freedom)** *(Category L: Quantum Field Theory Extensions)*
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.YangMills.b0_pos_iff_nf_le`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/YangMills.lean) states that b₀ > 0 if and only if N_f ≤ 16 for SU(3). Nested [`PhysJS.YangMills.alphaRun_hasDerivAt`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/YangMills.lean) is the one-loop solution and is not the reference. The lemma is not a running procedure past one loop.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.YangMills.b0_pos_iff_nf_le`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/YangMills.lean) states that b₀ > 0 if and only if N_f ≤ 16 for SU(3). Nested [`PhysJS.YangMills.alphaRun_hasDerivAt`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/YangMills.lean) is the one-loop solution and is not the reference. The lemma is not a running procedure past one loop.
 
 > **AST encoding:** [`src/bridges/equations/be-53-yang-mills-beta.ts`](../../src/bridges/equations/be-53-yang-mills-beta.ts) (`BetaFunctionNode`, single-coupling form)
 
@@ -683,7 +683,7 @@ where:
 
 **Bridge Equation 54: Randall-Sundrum Brane Cosmology (Modified Friedmann)** *(Category E: Cosmological-Quantum Bridges)*
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.RandallSundrum.brane_friedmann`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/RandallSundrum.lean) states H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3 for σ ≠ 0. The equality is not derived from the five-dimensional Einstein equation. Nested [`PhysJS.RandallSundrum.flat_friedmann`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/RandallSundrum.lean) is not the reference.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.RandallSundrum.brane_friedmann`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/RandallSundrum.lean) states H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3 for σ ≠ 0. The equality is not derived from the five-dimensional Einstein equation. Nested [`PhysJS.RandallSundrum.flat_friedmann`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/RandallSundrum.lean) is not the reference.
 
 > **AST encoding:** [`src/bridges/equations/be-54-randall-sundrum-brane.ts`](../../src/bridges/equations/be-54-randall-sundrum-brane.ts) (`FriedmannEquationNode`, `variant: 'brane'`)
 
@@ -705,11 +705,11 @@ where:
 
 ## V-C. Catalog extensions (BE-55–65)
 
-> **Provenance.** These eleven rows were added to `BRIDGE_EQUATIONS` on 2026-07-05 as closed-form evaluators, the same pattern as BE-51/52: a catalog entry plus an evaluator, and no AST round-trip. BE-55–58 are the first four. BE-59–62 are the condensed-matter cluster. BE-63–65 are the astrophysics cluster. Each row keeps `source_part: 'III'`. This section is the Bridge Equation heading. The catalog entry remains authoritative for `notes`. A bare `e` in the formulas below is the elementary charge. Euler's number is written `\exp`. §VI.6.1 assigns each of these ids the tensor index of its catalog category. The map is [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). PhysJS at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`, `NOTES.md`, and `docs/planning/Bridge-Gap-Inference.md` still do not state an index; the assignment is this specification applying the category cluster already used for ids 11–50.
+> **Provenance.** These eleven rows were added to `BRIDGE_EQUATIONS` on 2026-07-05 as closed-form evaluators, the same pattern as BE-51/52: a catalog entry plus an evaluator, and no AST round-trip. BE-55–58 are the first four. BE-59–62 are the condensed-matter cluster. BE-63–65 are the astrophysics cluster. Each row keeps `source_part: 'III'`. This section is the Bridge Equation heading. The catalog entry remains authoritative for `notes`. A bare `e` in the formulas below is the elementary charge. Euler's number is written `\exp`. §VI.6.1 assigns each of these ids the tensor index of its catalog category. The map is [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). PhysJS at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`, `NOTES.md`, and `docs/planning/Bridge-Gap-Inference.md` still do not state an index; the assignment is this specification applying the category cluster already used for ids 11–50.
 
 **Bridge Equation 55: Integer Quantum Hall effect / TKNN (topological Hall conductance)** *(Category F: Condensed Matter - High Energy Bridges)*
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.QuantumHall.reciprocal`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/QuantumHall.lean) states that for a nonzero integer `C` and `e ≠ 0`, `σ_xy = C e²/h`, `R_H = h/(C e²)`, and `R_K = h/e²`, so `σ_xy R_H = 1` and `R_H = R_K/C`. The shifted index `C+1` is a different conductance. Replacing `e²` by `e` fails the product when `e ≠ 1`. The lemma is not TKNN.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.QuantumHall.reciprocal`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/QuantumHall.lean) states that for a nonzero integer `C` and `e ≠ 0`, `σ_xy = C e²/h`, `R_H = h/(C e²)`, and `R_K = h/e²`, so `σ_xy R_H = 1` and `R_H = R_K/C`. The shifted index `C+1` is a different conductance. Replacing `e²` by `e` fails the product when `e ≠ 1`. The lemma is not TKNN.
 
 > **Evaluator:** [`src/bridges/be55-quantum-hall.ts`](../../src/bridges/be55-quantum-hall.ts) (`evaluateQuantumHall`)
 
@@ -740,7 +740,7 @@ where:
 
 **Bridge Equation 56: Casimir effect (quantum-vacuum force between plates)** *(Category A: Quantum-Classical Bridges)*
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. PhysJS main at that commit has no Casimir file. The missing piece is the mode sum that produces `π²/240`. Units give `F/A = C ℏ c / d⁴` and do not fix `C = −π²/240`. That unfixed constant is not a Lean derivation-step at this pin.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. PhysJS main at that commit has no Casimir file. The missing piece is the mode sum that produces `π²/240`. Units give `F/A = C ℏ c / d⁴` and do not fix `C = −π²/240`. That unfixed constant is not a Lean derivation-step at this pin.
 
 > **Evaluator:** [`src/bridges/be56-casimir.ts`](../../src/bridges/be56-casimir.ts) (`evaluateCasimir`)
 
@@ -770,7 +770,7 @@ where:
 
 **Bridge Equation 57: Unruh effect (acceleration-induced thermality)** *(Category I: Emergent Spacetime)*
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. [`PhysJS.HawkingUnruh.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/HawkingUnruh.lean) is the catalog formalRef on BE-42. It names BE-57 and states `T_U(a) = ℏ a / (2π c k_B)` together with `T_U(c⁴/(4 G M)) = T_H(M)`. `T_U(c⁴/(2 G M))` is not `T_H(M)`. The lemma is not the Unruh effect as a theorem about the Rindler wedge. Units give `T = C ℏ a / (c k_B)`. `C = 1/(2π)` is not fixed by units, and that monomial is not a derivation-step on this id.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. [`PhysJS.HawkingUnruh.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/HawkingUnruh.lean) is the catalog formalRef on BE-42. It names BE-57 and states `T_U(a) = ℏ a / (2π c k_B)` together with `T_U(c⁴/(4 G M)) = T_H(M)`. `T_U(c⁴/(2 G M))` is not `T_H(M)`. The lemma is not the Unruh effect as a theorem about the Rindler wedge. Units give `T = C ℏ a / (c k_B)`. `C = 1/(2π)` is not fixed by units, and that monomial is not a derivation-step on this id.
 
 > **Evaluator:** [`src/bridges/be57-unruh.ts`](../../src/bridges/be57-unruh.ts) (`evaluateUnruh`)
 
@@ -800,7 +800,7 @@ where:
 
 **Bridge Equation 58: Johnson-Nyquist noise / fluctuation-dissipation theorem** *(Category H: Non-Equilibrium Statistical Mechanics)*
 
-> **Proof status as of 2026-10-01.** Kind is `limit`. [`PhysJS.JohnsonNyquist.tendsto_classical`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/JohnsonNyquist.lean) states that `S_V = 4 k_B T R` is the `ω → 0⁺` limit of the quantum parent `S_V^q(ω) = 4 R ℏ ω / (exp(ℏ ω / (k_B T)) − 1)`, for `k_B T > 0` and `ℏ ≠ 0`. The same expression with `+ 1` in the denominator does not tend to `4 k_B T R`. The lemma is not the fluctuation–dissipation theorem. The parent is a premise. Units do not derive the exponential.
+> **Proof status as of 2026-10-01.** Kind is `limit`. [`PhysJS.JohnsonNyquist.tendsto_classical`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/JohnsonNyquist.lean) states that `S_V = 4 k_B T R` is the `ω → 0⁺` limit of the quantum parent `S_V^q(ω) = 4 R ℏ ω / (exp(ℏ ω / (k_B T)) − 1)`, for `k_B T > 0` and `ℏ ≠ 0`. The same expression with `+ 1` in the denominator does not tend to `4 k_B T R`. The lemma is not the fluctuation–dissipation theorem. The parent is a premise. Units do not derive the exponential.
 
 > **Evaluator:** [`src/bridges/be58-johnson-nyquist.ts`](../../src/bridges/be58-johnson-nyquist.ts) (`evaluateJohnsonNyquist`)
 
@@ -833,7 +833,7 @@ where:
 
 **Bridge Equation 59: AC Josephson effect (quantum voltage standard)** *(Category F: Condensed Matter - High Energy Bridges)*
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Josephson.frequency_eq`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Josephson.lean) states `f = (2e/h) V`, `K_J = 2e/h`, and `f = K_J V`. Clearing `h` recovers `2e`. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing `2e` by `e` fails. The lemma is not the tunneling Hamiltonian.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Josephson.frequency_eq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Josephson.lean) states `f = (2e/h) V`, `K_J = 2e/h`, and `f = K_J V`. Clearing `h` recovers `2e`. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing `2e` by `e` fails. The lemma is not the tunneling Hamiltonian.
 
 > **Evaluator:** [`src/bridges/be59-ac-josephson.ts`](../../src/bridges/be59-ac-josephson.ts) (`evaluateACJosephson`)
 
@@ -864,7 +864,7 @@ where:
 
 **Bridge Equation 60: Fractional Quantum Hall effect (Laughlin ν=1/3)** *(Category F: Condensed Matter - High Energy Bridges)*
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Laughlin.filling_fraction`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Laughlin.lean) states that for nonzero integers `p` and `q`, with `ν = p/q`, `σ_xy = ν e²/h` and `R_xy = R_K/ν = (q/p) h/e²`. The charge and `h` are not assumed nonzero. Oddness of `q` is the Laughlin selection rule and is not this identity. The lemma is not the Laughlin wavefunction, and it is not the quasiparticle charge `e/3`.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Laughlin.filling_fraction`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Laughlin.lean) states that for nonzero integers `p` and `q`, with `ν = p/q`, `σ_xy = ν e²/h` and `R_xy = R_K/ν = (q/p) h/e²`. The charge and `h` are not assumed nonzero. Oddness of `q` is the Laughlin selection rule and is not this identity. The lemma is not the Laughlin wavefunction, and it is not the quasiparticle charge `e/3`.
 
 > **Evaluator:** [`src/bridges/be60-fractional-qh.ts`](../../src/bridges/be60-fractional-qh.ts) (`evaluateFractionalQH`)
 
@@ -894,7 +894,7 @@ where:
 
 **Bridge Equation 61: Wiedemann-Franz law (Lorenz number)** *(Category F: Condensed Matter - High Energy Bridges)*
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Sommerfeld.integral_eq`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Sommerfeld.lean) states that `∫_ℝ x² exp(x) / (1 + exp(x))² dx = π²/3`. The integrand is even, so the integral over the positive half-line is half of `π²/3`. Claiming the half-line equals `π²/3` fails. The lemma is not the transport law that identifies the Lorenz number with that integral. Units give `L = C (k_B/e)²` and do not give `C = π²/3`.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Sommerfeld.integral_eq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Sommerfeld.lean) states that `∫_ℝ x² exp(x) / (1 + exp(x))² dx = π²/3`. The integrand is even, so the integral over the positive half-line is half of `π²/3`. Claiming the half-line equals `π²/3` fails. The lemma is not the transport law that identifies the Lorenz number with that integral. Units give `L = C (k_B/e)²` and do not give `C = π²/3`.
 
 > **Evaluator:** [`src/bridges/be61-wiedemann-franz.ts`](../../src/bridges/be61-wiedemann-franz.ts) (`evaluateWiedemannFranz`)
 
@@ -926,7 +926,7 @@ where:
 
 **Bridge Equation 62: BCS gap ratio (weak-coupling superconductivity)** *(Category F: Condensed Matter - High Energy Bridges)*
 
-> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. PhysJS main at that commit has no BCS file. The missing piece is the weak-coupling gap equation whose root is `2π exp(−γ)`. The decimal `3.528` is that root. The ratio is dimensionless, and units do not choose it. That number is not a Lean derivation-step at this pin.
+> **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. PhysJS main at that commit has no BCS file. The missing piece is the weak-coupling gap equation whose root is `2π exp(−γ)`. The decimal `3.528` is that root. The ratio is dimensionless, and units do not choose it. That number is not a Lean derivation-step at this pin.
 
 > **Evaluator:** [`src/bridges/be62-bcs-gap.ts`](../../src/bridges/be62-bcs-gap.ts) (`evaluateBCSGap`)
 
@@ -958,7 +958,7 @@ where:
 
 **Bridge Equation 63: Chandrasekhar mass (white-dwarf degeneracy limit)** *(Category I: Emergent Spacetime)*
 
-> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Chandrasekhar.prefactor`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Chandrasekhar.lean) states that with `n = ρ/(μ_e m_u)`, `p_F = ℏ (3π² n)^{1/3}`, and `P = (1/4) n p_F c`, the pressure is `P = K_ρ ρ^{4/3}`, and for the `n = 3` Lane–Emden scale the central density cancels, leaving `M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}`. `ω₃⁰` stays symbolic. The decimal `2.01824` is not in the theorem. `√π/2` in place of `√(3π)/2` fails when `ω₃⁰ ≠ 0`, and dropping `ω₃⁰` fails when `ω₃⁰ ≠ 1`. The lemma is not stellar rotation or magnetic support.
+> **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.Chandrasekhar.prefactor`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Chandrasekhar.lean) states that with `n = ρ/(μ_e m_u)`, `p_F = ℏ (3π² n)^{1/3}`, and `P = (1/4) n p_F c`, the pressure is `P = K_ρ ρ^{4/3}`, and for the `n = 3` Lane–Emden scale the central density cancels, leaving `M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}`. `ω₃⁰` stays symbolic. The decimal `2.01824` is not in the theorem. `√π/2` in place of `√(3π)/2` fails when `ω₃⁰ ≠ 0`, and dropping `ω₃⁰` fails when `ω₃⁰ ≠ 1`. The lemma is not stellar rotation or magnetic support.
 
 > **Evaluator:** [`src/bridges/be63-chandrasekhar-mass.ts`](../../src/bridges/be63-chandrasekhar-mass.ts) (`evaluateChandrasekharMass`)
 
@@ -989,7 +989,7 @@ where:
 
 **Bridge Equation 64: Eddington luminosity (radiation-pressure limit)** *(Category I: Emergent Spacetime)*
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Eddington.balance_iff`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Eddington.lean) states that, for `r > 0`, `σ_T > 0`, and `c > 0`, `L σ_T / (4π r² c) = G M m_p / r²` if and only if `L = 4π G M m_p c / σ_T`. The Thomson force and the gravitational force are premises. Twice that luminosity fails the same balance when the constants in the formula are positive. The lemma is not a claim that the luminosity is a hard cap. Once both forces are inverse-square, the `r²` cancellation is the lemma. Units do not say the balance is a maximum.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Eddington.balance_iff`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Eddington.lean) states that, for `r > 0`, `σ_T > 0`, and `c > 0`, `L σ_T / (4π r² c) = G M m_p / r²` if and only if `L = 4π G M m_p c / σ_T`. The Thomson force and the gravitational force are premises. Twice that luminosity fails the same balance when the constants in the formula are positive. The lemma is not a claim that the luminosity is a hard cap. Once both forces are inverse-square, the `r²` cancellation is the lemma. Units do not say the balance is a maximum.
 
 > **Evaluator:** [`src/bridges/be64-eddington-luminosity.ts`](../../src/bridges/be64-eddington-luminosity.ts) (`evaluateEddingtonLuminosity`)
 
@@ -1025,7 +1025,7 @@ where:
 
 **Bridge Equation 65: Jeans mass (gravitational collapse criterion)** *(Category I: Emergent Spacetime)*
 
-> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Jeans.mass_eq`](https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Jeans.lean) derives the encoded mass from the virial convention `3 M k T / (μ m_u) = 3 G M² / (5 R)` and `M = 4π R³ ρ / 3`, with positive parameters. The catalog writes that `k` as `k_B`. Replacing `5` by `3` fails. The lemma is not the virial theorem. Units give the monomial `M ∼ (k_B T / (G μ m_u))^{3/2} ρ^{−1/2}`. The `5` and the `3/(4π)` are not fixed by units.
+> **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Jeans.mass_eq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Jeans.lean) derives the encoded mass from the virial convention `3 M k T / (μ m_u) = 3 G M² / (5 R)` and `M = 4π R³ ρ / 3`, with positive parameters. The catalog writes that `k` as `k_B`. Replacing `5` by `3` fails. The lemma is not the virial theorem. Units give the monomial `M ∼ (k_B T / (G μ m_u))^{3/2} ρ^{−1/2}`. The `5` and the `3/(4π)` are not fixed by units.
 
 > **Evaluator:** [`src/bridges/be65-jeans-mass.ts`](../../src/bridges/be65-jeans-mass.ts) (`evaluateJeansMass`)
 

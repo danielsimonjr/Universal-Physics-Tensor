@@ -95,13 +95,13 @@ const informationAxes: InformationAxes = Object.freeze({
  * sites; entry references stable across all reads.
  *
  * Usage:
- *   import { Axes } from '@danielsimonjr/universal-physics-tensor';
+ *   import { Axes } from 'universal-physics-tensor';
  *   const myIdx = Axes.scale.quantum; // UniversalIndex<'scale'>
  *
  * Two `LabeledTensor`s contracting on `Axes.scale.quantum` produce
- * a contraction; two `LabeledTensor`s constructing fresh indices
- * via `makeIndex('scale', 'quantum')` do NOT contract together —
- * use the registry for shared identity (Decision #4).
+ * a contraction. Two fresh `makeIndex('scale', 'quantum')` calls are
+ * different ids: `contract` throws `IndexNameMismatchError` and names
+ * both ids. Use the registry for shared identity (Decision #4).
  *
  * @public
  */

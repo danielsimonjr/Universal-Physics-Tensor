@@ -1,6 +1,6 @@
 # Atlas invalid-bridge benchmark — pre-registration
 
-> **Status as of 2026-10-02.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and fourteen catalog ids (be-12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `c6958650f0be66b21f5cc3992d5474bf97ad5094`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](../planning/Bridge-Gap-Inference.md). Criterion 1 still says `formally-proved` is derived from `formalRef.fidelity`, and Amendment 10 still reports the reviewed-formalRef count as 1 of 5.
+> **Status as of 2026-10-02.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and fourteen catalog ids (be-12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `2e09357f9674bc60b60b378155a1623c27dc7b04`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](../planning/Bridge-Gap-Inference.md). Criterion 1 still says `formally-proved` is derived from `formalRef.fidelity`, and Amendment 10 still reports the reviewed-formalRef count as 1 of 5.
 
 **Status: REGISTERED 2026-09-22, thresholds FROZEN, item set EMPTY. No condition has been run.**
 
