@@ -4,7 +4,7 @@
     "version": "1.0.1",
     "totalFiles": 408,
     "totalModules": 13,
-    "totalExports": 2923
+    "totalExports": 2924
   },
   "entryPoints": [
     {
@@ -26282,6 +26282,7 @@
           {
             "file": "./formula.js",
             "imports": [
+              "EULER_NUMBER_ERROR",
               "parseFormulaToAst"
             ]
           }
@@ -26323,6 +26324,7 @@
             "imports": [
               "BUILTIN_FUNCTION_NAMES",
               "callBuiltinFunction",
+              "EULER_NUMBER_ERROR",
               "FormulaError",
               "unknownFunctionMessage"
             ]
@@ -26414,6 +26416,7 @@
           }
         ],
         "exports": [
+          "EULER_NUMBER_ERROR",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST",
@@ -26437,6 +26440,7 @@
           "parseFormula"
         ],
         "constants": [
+          "EULER_NUMBER_ERROR",
           "BUILTIN_FUNCTION_NAMES",
           "FUNCTION_EQUIVALENTS",
           "BUILTIN_FUNCTION_LIST",
@@ -28270,14 +28274,14 @@
   "statistics": {
     "totalTypeScriptFiles": 408,
     "totalModules": 13,
-    "totalLinesOfCode": 89488,
-    "totalExports": 2923,
+    "totalLinesOfCode": 89507,
+    "totalExports": 2924,
     "totalClasses": 60,
     "totalInterfaces": 462,
     "totalFunctions": 752,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 721,
+    "totalConstants": 722,
     "totalReExports": 1389,
     "totalTypeOnlyImports": 546,
     "runtimeCircularDeps": 0,

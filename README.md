@@ -107,7 +107,7 @@ the MathTS packages as devDependencies, so that path uses MathTS. A published
 uses the builtin parser. The two are not the same language: MathTS accepts
 `factorial`, `erf`, `gamma()`, and juxtaposition such as `2pi`; the builtin
 parser does not. Both read a bare `e` as the elementary charge, `E` as energy,
-and Euler's number only as `exp(1)` or `euler`. On a machine that has Node
+and Euler's number only as `exp(x)`, for example `exp(1)`. The name `euler` is refused. On a machine that has Node
 and not Bun, the clone path is `npm install`, `npm run build`, then
 `node bin/upt.mjs <command>`. UPT keeps
 **zero hard dependencies**; the MathTS packages and `@viz-js/viz` are optional peers, which a

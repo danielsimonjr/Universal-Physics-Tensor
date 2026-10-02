@@ -7009,7 +7009,7 @@ The codebase is organized into the following modules:
 | `../dimensional/validator.js` | `validate` | Import |
 | `../dimensional/ast-builders.js` | `sym` | Import |
 | `./formula.js` | `FormulaAstNode` | Import (type-only) |
-| `./formula.js` | `parseFormulaToAst` | Import |
+| `./formula.js` | `EULER_NUMBER_ERROR, parseFormulaToAst` | Import |
 
 **Exports:**
 - Classes: `FormulaDimensionError`
@@ -7024,7 +7024,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./formula.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
-| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, FormulaError, unknownFunctionMessage` | Import |
+| `./formula.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage` | Import |
 | `../core/constants.js` | `E_SI` | Import |
 
 **Exports:**
@@ -7060,7 +7060,7 @@ The codebase is organized into the following modules:
 - Classes: `FormulaError`
 - Interfaces: `CompiledFormula`, `FormulaParser`
 - Functions: `unknownFunctionMessage`, `callBuiltinFunction`, `parseFormula`
-- Constants: `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
+- Constants: `EULER_NUMBER_ERROR`, `BUILTIN_FUNCTION_NAMES`, `FUNCTION_EQUIVALENTS`, `BUILTIN_FUNCTION_LIST`, `defaultFormulaParser`, `parseFormulaToAst`
 
 ---
 
@@ -7711,8 +7711,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 408 |
 | Total Modules | 13 |
-| Total Lines of Code | 89488 |
-| Total Exports | 2923 |
+| Total Lines of Code | 89507 |
+| Total Exports | 2924 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |

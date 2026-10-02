@@ -41,7 +41,7 @@ describe('formula parsers agree on common arithmetic', () => {
 });
 
 describe('formula parsers agree on the elementary charge and on Euler', () => {
-  it('bare e is the elementary charge, and exp(1) and euler are Euler\'s number', async () => {
+  it('bare e is the elementary charge, exp(1) is Euler\'s number, and euler is refused', async () => {
     const { mathts } = await both();
     for (const parser of [builtin, mathts]) {
       const charge = parser.parse('e');
@@ -50,9 +50,7 @@ describe('formula parsers agree on the elementary charge and on Euler', () => {
       expect(parser.parse('e^2').evaluate({})).toBeCloseTo(E_SI * E_SI, 30);
       expect(parser.parse('e').evaluate({ e: 3 })).toBe(3);
       expect(parser.parse('exp(1)').evaluate({})).toBeCloseTo(Math.E, 12);
-      const euler = parser.parse('euler');
-      expect(euler.variables).not.toContain('euler');
-      expect(euler.evaluate({})).toBeCloseTo(Math.E, 12);
+      expect(() => parser.parse('euler')).toThrow(/exp\(x\)/);
       expect(parser.parse('m_e').variables).toContain('m_e');
       expect(parser.parse('e_charge').variables).toContain('e_charge');
       expect(parser.parse('1.6e-19').evaluate({})).toBeCloseTo(1.6e-19, 24);

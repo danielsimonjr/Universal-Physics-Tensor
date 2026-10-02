@@ -3,7 +3,7 @@
  * registered constants and unit literals (`pi/2`, `0.6*c`, `2*1km`).
  *
  * The built-in formula parser evaluates the expression. MathTS is not used.
- * A bare `e` is the elementary charge. Euler's number is `euler` or `exp(1)`.
+ * A bare `e` is the elementary charge. Euler's number is `exp(x)`.
  * A published install has no MathTS. A bare number, or an expression whose result is
  * dimensionless and contains no unit literal, is already in the caller's
  * unit. Anything else is an SI quantity: the caller converts it into the
@@ -68,7 +68,6 @@ function scopeFor(mode: UnitMode): Map<string, Qty> {
   };
   put('pi', Math.PI, DIMENSIONLESS);
   put('tau', 2 * Math.PI, DIMENSIONLESS);
-  put('euler', Math.E, DIMENSIONLESS);
   for (const [name, c] of Object.entries(SYMBOLIC)) put(name, c.value, c.dim);
   for (const n of FORMULA_NAMED) put(n.name, n.value, n.dim);
   const eps = m.get('epsilon_0');
@@ -300,7 +299,9 @@ export function readBinding(
     ast = parseFormulaToAst(spliced.expr);
   } catch (e) {
     if (e instanceof FormulaError) {
-      // `abc` is not an expression. A token with an operator (`2*`) is.
+      // `euler` names the refused constant. Keep that sentence; a bare unknown
+      // word is not an expression, and a token with an operator (`2*`) is.
+      if (e.message.includes('exp(x)')) throw new UnitError(e.message);
       if (!/[+\-*/^()]/.test(trimmed)) throw new UnitError(`'${trimmed}' is not a number with an optional unit`);
       throw new UnitError(e.message);
     }
