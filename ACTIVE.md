@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Name the dimension junction check in `src/composition/compose.ts`. The existing `equals` check on the pipe becomes a named function. Behavior is unchanged. `CompositionDimensionError` stays the failure. Design: `docs/planning/Bridge-Discovery-Pipeline-Design.md` step 3.
+  Done: `junctionDimensionsMatch`. A matching pair is true. A mismatched pair is false, and `composeEdges` still throws `CompositionDimensionError`.
+- [x] Seed predicate next to `formalRefKind`: the manifest keys whose derived kind is `bridge`. A covers word of `derivation-step`, `reduction`, `limit`, `property`, or `cross-check` is not a seed. A canonical id is a seed only when that same kind function says the overlay reference is `bridge`. Design: `docs/planning/Bridge-Discovery-Pipeline-Design.md` step 1.
+  Done: `bridgeSeedKeys` in `src/atlas/physjs-ref.ts`. The live list is the ten `ab-` keys and the thirteen catalog keys whose theorem states the equation. `src/atlas/public.ts` is unchanged.
 - [x] Add src/relations/category.ts. An object is an id together with a Regime. A morphism is an id pair plus a RelationType. composeMorphisms delegates to composeRelation and returns no-composite-claim unchanged. No identity morphisms and no 2-cells. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 4.
 - [x] Move BRIDGE_DESCRIPTORS, getBridge, and the CATALOG_GRAPH scan inside auditCoverage from src/bridges/ into src/composition/, beside catalog-graph.ts. DATA_CONFRONTED_IDS stays in src/bridges/confrontation-coverage.ts. cli-api retargets auditCoverage at the composition module. The layer-order allowlist drops the three bridges-to-composition rows. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 2.
 - [x] Add a Bridge Equation section for each of BE-55 through BE-65 in the specification, in the house format of the existing sections, with the PhysJS proof-status block under each heading.

@@ -4,7 +4,7 @@
     "version": "1.0.1",
     "totalFiles": 412,
     "totalModules": 13,
-    "totalExports": 2926
+    "totalExports": 2928
   },
   "entryPoints": [
     {
@@ -3019,6 +3019,7 @@
         ],
         "exports": [
           "PHYSJS_COMMIT",
+          "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
         ],
@@ -3026,6 +3027,7 @@
           "PhysjsManifestFile"
         ],
         "functions": [
+          "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
         ],
@@ -15144,6 +15146,13 @@
             ]
           },
           {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge",
@@ -15203,6 +15212,7 @@
           "SOURCE_ALIAS_DISPOSITIONS",
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "interfaces": [
@@ -15213,6 +15223,7 @@
         "functions": [
           "effectiveAttributes",
           "minConfidence",
+          "junctionDimensionsMatch",
           "composeEdges"
         ],
         "constants": [
@@ -28414,16 +28425,16 @@
   "statistics": {
     "totalTypeScriptFiles": 412,
     "totalModules": 13,
-    "totalLinesOfCode": 89782,
-    "totalExports": 2926,
+    "totalLinesOfCode": 89826,
+    "totalExports": 2928,
     "totalClasses": 60,
     "totalInterfaces": 469,
-    "totalFunctions": 757,
+    "totalFunctions": 759,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 721,
     "totalReExports": 1389,
-    "totalTypeOnlyImports": 550,
+    "totalTypeOnlyImports": 551,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

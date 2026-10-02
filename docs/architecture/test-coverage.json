@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 409,
-    "totalTestFiles": 560,
+    "totalTestFiles": 562,
     "testedCount": 399,
     "untestedCount": 10,
     "coveragePercent": "97.6"
@@ -534,6 +534,7 @@
     ],
     "src/atlas/derive-evidence.ts": [
       "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -599,6 +600,7 @@
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/benchmark.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/delta-at-proven.test.ts",
       "tests/atlas/evidence-rule.test.ts",
@@ -753,6 +755,7 @@
       "tests/cli/recover-conventions.test.ts"
     ],
     "src/atlas/physjs-ref.ts": [
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-manifest.test.ts"
@@ -4813,6 +4816,7 @@
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/namespacing.test.ts",
@@ -4987,6 +4991,7 @@
       "tests/composition/frontier-account.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/namespacing.test.ts",
@@ -6020,6 +6025,7 @@
       "tests/composition/frontier-account.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/namespacing.test.ts",
@@ -7201,6 +7207,7 @@
       "tests/composition/gr-formula-compare.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
@@ -8627,6 +8634,11 @@
       "src/atlas/path-bound.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
+    ],
+    "tests/atlas/bridge-seed-keys.test.ts": [
+      "src/atlas/families.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/physjs-ref.ts"
     ],
     "tests/atlas/canonical-links.test.ts": [
       "src/atlas/families.ts",
@@ -14323,6 +14335,12 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts",
+      "src/dimensional/types.ts"
+    ],
+    "tests/composition/junction-dimension.test.ts": [
+      "src/composition/compose.ts",
+      "src/composition/edge.ts",
+      "src/composition/quantity.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/link-candidates.test.ts": [
