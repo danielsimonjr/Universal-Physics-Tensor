@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Add src/relations/category.ts. An object is an id together with a Regime. A morphism is an id pair plus a RelationType. composeMorphisms delegates to composeRelation and returns no-composite-claim unchanged. No identity morphisms and no 2-cells. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 4.
 - [x] Sweep stale bridge-equation documents so counts, kinds, theorem names, and the BE-13 name match the PhysJS pin in `src/atlas/physjs-ref.ts`. The gap list is `docs/planning/Bridge-Gap-Inference.md`. Historical audits, dogfood reports, and changelog entries keep their original text and gain a dated note.
 - [x] Set package.json to 1.0.0. The major is the parser change that makes a bare e the elementary charge. The changelog lists the breaking changes. No tag is pushed. Publishing stays the owner's job.
 - [x] Rename catalog equation 13 to Einstein trace reduction. The id stays 13. The module file stays. Jacobson stays in the context and notes. The proposal is docs/planning/BE-13-name-proposal.md.

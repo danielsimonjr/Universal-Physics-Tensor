@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.1
-  totalFiles: 408
+  totalFiles: 409
   totalModules: 13
-  totalExports: 2923
+  totalExports: 2924
 entryPoints:
   - file: src/index.ts
     type: main
@@ -19227,6 +19227,27 @@ modules:
       functions:
         - computeWeylTensor
   relations:
+    src/relations/category.ts:
+      description: Objects and morphisms of the regime category.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./types.js
+          imports:
+            - Regime
+            - RelationType
+          typeOnly: true
+        - file: ./composition-table.js
+          imports:
+            - composeRelation
+            - CompositionResult
+      exports:
+        - composeMorphisms
+      interfaces:
+        - CategoryObject
+        - CategoryMorphism
+      functions:
+        - composeMorphisms
     src/relations/composition-table.ts:
       description: The composition table for `RelationType` — a literal 8×8 matrix.
       externalDependencies: []
@@ -19757,23 +19778,24 @@ dependencyGraph:
         - src/numerical/weyl-lowering.ts
     - name: Relations
       files:
+        - src/relations/category.ts
         - src/relations/composition-table.ts
         - src/relations/conventions.ts
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 408
+  totalTypeScriptFiles: 409
   totalModules: 13
-  totalLinesOfCode: 89488
-  totalExports: 2923
+  totalLinesOfCode: 89533
+  totalExports: 2924
   totalClasses: 60
-  totalInterfaces: 462
-  totalFunctions: 752
+  totalInterfaces: 464
+  totalFunctions: 753
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
   totalReExports: 1389
-  totalTypeOnlyImports: 546
+  totalTypeOnlyImports: 547
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
