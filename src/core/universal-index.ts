@@ -115,8 +115,9 @@ function generateId(): UniversalIndexId {
  * Factory: construct a fresh `UniversalIndex<Axis>` with a freshly
  * generated UUID. Each call returns a NEW identity — two consecutive
  * `makeIndex('scale', 'quantum')` calls produce two distinct
- * `UniversalIndex` values that will NOT contract together (per
- * Decision #3).
+ * `UniversalIndex` values. `LabeledTensor.contract` throws
+ * `IndexNameMismatchError` and names both ids (Decision #3). It does
+ * not treat that pair as an outer product.
  *
  * For stable consumer-facing identities, use the `Axes` registry
  * (`src/core/axes-registry.ts`) — `Axes.scale.quantum` is the same

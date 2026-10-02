@@ -67,6 +67,7 @@ exports[`Public API stability — v0.4.0 surface > runtime exports match the v0.
   "H_SI",
   "ISING_PELISSETTO_VICARI_2002",
   "IdentityConflictError",
+  "IndexNameMismatchError",
   "JNT_FLOWERS_JACOBS_2017",
   "JOSEPHSON_CONSTANT_SI",
   "JOSEPHSON_UNIVERSALITY_BIPM",

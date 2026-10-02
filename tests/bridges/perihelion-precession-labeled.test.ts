@@ -18,7 +18,7 @@ import { describe, it, expect } from 'vitest';
 import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
 import { evaluatePerihelionPrecession } from '../../src/bridges/perihelion-precession.js';
 import { evaluatePerihelionPrecessionLabeled } from '../../src/bridges/perihelion-precession-labeled.js';
-import { LabeledTensor } from '../../src/core/labeled-tensor.js';
+import { IndexNameMismatchError, LabeledTensor } from '../../src/core/labeled-tensor.js';
 import { Axes } from '../../src/core/axes-registry.js';
 import { makeIndex } from '../../src/core/universal-index.js';
 
@@ -91,7 +91,7 @@ describe('Cross-bridge LabeledTensor contraction via singleton identity', () => 
     expect(result).toBeCloseTo(raw.dphi_rad_per_orbit);
   });
 
-  it('does NOT contract with a fresh non-singleton scale.classical index', () => {
+  it('throws when a fresh scale.classical index shares the name and not the id', () => {
     const { labeled: perihelion } = evaluatePerihelionPrecessionLabeled(MERCURY, engine);
     // Manually-constructed index with the same axis/name but a
     // FRESH id — Decision #3 says this is NOT the same physics axis.
@@ -101,8 +101,15 @@ describe('Cross-bridge LabeledTensor contraction via singleton identity', () => 
       engine,
       { scale: freshScale }, // different id from Axes.scale.classical
     );
-    const result = perihelion.contract(other);
-    // Outer product → rank-2 shape [3, 3], NOT a scalar.
-    expect(result.tensor.shape).toEqual([3, 3]);
+    expect(() => perihelion.contract(other)).toThrow(IndexNameMismatchError);
+    try {
+      perihelion.contract(other);
+    } catch (error) {
+      expect(error).toBeInstanceOf(IndexNameMismatchError);
+      const mismatch = error as IndexNameMismatchError;
+      expect(mismatch.message).toContain(freshScale.id);
+      expect(mismatch.message).toContain(Axes.scale.classical.id);
+      expect(mismatch.indexName).toBe('classical');
+    }
   });
 });

@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 1.0.2
+**Version**: 1.0.3
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 91 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 49 files
+- **cli**: 50 files
 - **root**: 1 file
 - **composition**: 83 files
 - **core**: 11 files
@@ -3452,6 +3452,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/commands/chain.ts` - `upt chain` names the chain orchestrator and does not run it.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../args.js` | `FlagSpec` | Import (type-only) |
+| `../command.js` | `registerCommand, Command` | Import |
+
+**Exports:**
+- Constants: `command`
+
+---
+
 ### `src/cli/commands/confront.ts` - `upt confront` — run the catalog's committed real-data confrontations and
 
 **Internal Dependencies:**
@@ -3656,6 +3669,7 @@ The codebase is organized into the following modules:
 | `./regime.js` | `*` | Import |
 | `./path.js` | `*` | Import |
 | `./atlas.js` | `*` | Import |
+| `./chain.js` | `*` | Import |
 | `./search.js` | `*` | Import |
 | `./retrieve.js` | `*` | Import |
 | `./metric.js` | `*` | Import |
@@ -5907,7 +5921,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/universal-physics-tensor` | `Axes` |
+| `universal-physics-tensor` | `Axes` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -5974,7 +5988,13 @@ The codebase is organized into the following modules:
 | `./universal-index.js` | `AxisName, UniversalIndex, UniversalIndexId` | Import (type-only) |
 
 **Exports:**
-- Classes: `LabeledTensorConstructionError`, `AxisMismatchError`, `IdentityConflictError`, `RankPreservationError`, `AxisOrderError`, `AxisMergeError`, `AxisSplitError`, `LabeledTensor`
+- Classes:
+
+  ```text
+  LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, IndexNameMismatchError,
+  RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError, LabeledTensor
+  ```
+
 - Functions: `canonicalLabelOrder`
 
 ---
@@ -6705,7 +6725,7 @@ The codebase is organized into the following modules:
 | `./core/universal-index.js` | `makeIndex` | Re-export |
 | `./core/axes-registry.js` | `AxesRegistry` | Re-export |
 | `./core/axes-registry.js` | `Axes` | Re-export |
-| `./core/labeled-tensor.js` | `LabeledTensor, LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError` | Re-export |
+| `./core/labeled-tensor.js` | `LabeledTensor, LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, IndexNameMismatchError, RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError` | Re-export |
 | `./core/regime-registry.js` | `RegimeProvenance, RegimeValueBase, RegimeSpec` | Re-export |
 | `./core/regime-registry.js` | `defineRegime, defineScale, defineForce, defineSymmetry, defineInformation, defineDimension, defineTopology, lookupRegime, listRegimesByAxis, provenanceFor, attachRegimesToCell, getCellRegimes, RegimeCollisionError` | Re-export |
 | `./diff/bridge-gradient.js` | `BridgeDiffSpec, BridgeGradientResult, BridgeNumericalGradientResult` | Re-export |
@@ -6868,24 +6888,25 @@ The codebase is organized into the following modules:
   FluxViolationError, CatalogEntryStatus, CatalogIngestionReport, catalogToCells, scanCatalog,
   ingestCatalog, ingestionReportToFluxReport, CatalogIngestionError, AxisName, UniversalIndex,
   UniversalIndexId, MakeIndexOptions, makeIndex, AxesRegistry, Axes, LabeledTensor,
-  LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, RankPreservationError,
-  AxisOrderError, AxisMergeError, AxisSplitError, RegimeProvenance, RegimeValueBase, RegimeSpec,
-  defineRegime, defineScale, defineForce, defineSymmetry, defineInformation, defineDimension,
-  defineTopology, lookupRegime, listRegimesByAxis, provenanceFor, attachRegimesToCell, getCellRegimes,
-  RegimeCollisionError, BridgeDiffSpec, BridgeGradientResult, BridgeNumericalGradientResult,
-  bridgeGradient, bridgeGradientNumerical, gradientToNamed, ASTGradientResult, bridgeGradientAST,
-  bridgeGradientASTById, astDifferentiableBridgeIds, BE37_SHAPIRO_DIFF, BE52_PERIHELION_DIFF,
-  BE42_HAWKING_DIFF, BE11_DECOHERENCE_DIFF, DIFFERENTIABLE_BRIDGE_SPECS, BRIDGE_EQUATIONS,
-  BridgeEquationEntry, BridgeEquationStatus, BridgeIssueSeverity, BridgeIssueFixable, KnownIssue,
-  evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult,
-  evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult,
-  evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult,
-  evaluateCasimir, type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs,
-  type UnruhResult, evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult,
-  evaluateACJosephson, JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult,
-  evaluateFractionalQH, type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz,
-  LORENZ_NUMBER_SI, type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap,
-  BCS_GAP_RATIO, type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3,
+  LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, IndexNameMismatchError,
+  RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError, RegimeProvenance,
+  RegimeValueBase, RegimeSpec, defineRegime, defineScale, defineForce, defineSymmetry,
+  defineInformation, defineDimension, defineTopology, lookupRegime, listRegimesByAxis, provenanceFor,
+  attachRegimesToCell, getCellRegimes, RegimeCollisionError, BridgeDiffSpec, BridgeGradientResult,
+  BridgeNumericalGradientResult, bridgeGradient, bridgeGradientNumerical, gradientToNamed,
+  ASTGradientResult, bridgeGradientAST, bridgeGradientASTById, astDifferentiableBridgeIds,
+  BE37_SHAPIRO_DIFF, BE52_PERIHELION_DIFF, BE42_HAWKING_DIFF, BE11_DECOHERENCE_DIFF,
+  DIFFERENTIABLE_BRIDGE_SPECS, BRIDGE_EQUATIONS, BridgeEquationEntry, BridgeEquationStatus,
+  BridgeIssueSeverity, BridgeIssueFixable, KnownIssue, evaluateGravitationalLensing,
+  type GravitationalLensingInputs, type GravitationalLensingResult, evaluatePerihelionPrecession,
+  type PerihelionPrecessionInputs, type PerihelionPrecessionResult, evaluateQuantumHall,
+  VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult, evaluateCasimir,
+  type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs, type UnruhResult,
+  evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult, evaluateACJosephson,
+  JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult, evaluateFractionalQH,
+  type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz, LORENZ_NUMBER_SI,
+  type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap, BCS_GAP_RATIO,
+  type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3,
   type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity,
   THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass,
   type JeansInputs, type JeansResult, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
@@ -7816,7 +7837,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...44 more]
+        N29[...45 more]
     end
 
     subgraph Root
@@ -7915,20 +7936,20 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 420 |
+| Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 91463 |
-| Total Exports | 2974 |
-| Total Re-exports | 1395 |
-| Total Classes | 60 |
+| Total Lines of Code | 91576 |
+| Total Exports | 2977 |
+| Total Re-exports | 1396 |
+| Total Classes | 61 |
 | Total Interfaces | 476 |
 | Total Functions | 768 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 567 |
+| Type-only Imports | 568 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
 ---
 
-*Version*: 1.0.2
+*Version*: 1.0.3

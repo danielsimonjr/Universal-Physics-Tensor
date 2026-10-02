@@ -41,8 +41,22 @@ describe('upt --help covers the command registry', () => {
     expect(listCommandNames().length).toBeGreaterThan(20);
   });
 
-  it('every registered command has a help entry', async () => {
+  it('every registered command has a help entry, except upt chain', async () => {
     const help = await helpText();
-    expect(undocumented(listCommandNames(), help)).toEqual([]);
+    // `upt chain` is registered so the name is not "Unknown command". It is
+    // not listed in `upt help`: the command-count prose counts that text, and
+    // the command does not run the chain orchestrator. `upt help chain` is
+    // the status.
+    expect(undocumented(listCommandNames(), help)).toEqual(['chain']);
+    expect(help).not.toMatch(/^ {2}upt chain(?![\w-])/m);
+    const lines: string[] = [];
+    const code = await runCli(['help', 'chain'], {
+      out: (s: string) => lines.push(s),
+      err: () => {},
+    } as never);
+    expect(code).toBe(0);
+    const chainHelp = lines.join('\n');
+    expect(chainHelp).toContain('provisional');
+    expect(chainHelp).toContain('not written to the catalog');
   });
 });

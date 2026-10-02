@@ -4,7 +4,8 @@
  * Covers:
  *   - Construction guard (rank vs label count)
  *   - Identity contraction (shared id → contracted)
- *   - Non-identity contraction (distinct ids → outer product)
+ *   - Non-identity contraction (distinct names → outer product)
+ *   - Same name and unequal ids → IndexNameMismatchError naming both ids
  *   - transpose passthrough (key-permutation drives engine.transpose)
  *   - reshape rank-preservation guard
  *   - AxisMismatchError, IdentityConflictError, RankPreservationError
@@ -23,6 +24,7 @@ import {
   LabeledTensorConstructionError,
   AxisMismatchError,
   IdentityConflictError,
+  IndexNameMismatchError,
   RankPreservationError,
   canonicalLabelOrder,
 } from '../../src/core/labeled-tensor.js';
@@ -137,10 +139,10 @@ describe('LabeledTensor.contract — identity match', () => {
     expect(Object.keys(c.labels)).toHaveLength(2);
   });
 
-  it('two distinct makeIndex calls with same axis/name do NOT contract', () => {
+  it('two distinct makeIndex calls with the same name throw and name both ids', () => {
     const i1 = makeIndex('scale', 'quantum');
     const i2 = makeIndex('scale', 'quantum');
-    expect(i1.id).not.toBe(i2.id); // Sanity.
+    expect(i1.id).not.toBe(i2.id);
     const a = new LabeledTensor(
       engine.fromNested([1, 2], [2]),
       engine,
@@ -151,9 +153,51 @@ describe('LabeledTensor.contract — identity match', () => {
       engine,
       { j: i2 },
     );
-    const c = a.contract(b);
-    // Outer product (no contraction).
-    expect(c.tensor.shape).toEqual([2, 2]);
+    expect(() => a.contract(b)).toThrow(IndexNameMismatchError);
+    try {
+      a.contract(b);
+      expect.fail('same name and unequal id must throw');
+    } catch (e) {
+      expect(e).toBeInstanceOf(IndexNameMismatchError);
+      if (e instanceof IndexNameMismatchError) {
+        expect(e.message).toContain(i1.id);
+        expect(e.message).toContain(i2.id);
+        expect(e.indexName).toBe('quantum');
+      }
+    }
+  });
+
+  it('a matrix–vector product on two makeIndex calls named j names both ids and does not outer-product', () => {
+    const jLeft = makeIndex('dimension', 'j');
+    const jRight = makeIndex('dimension', 'j');
+    const matrix = new LabeledTensor(
+      engine.fromNested([[100, 20], [30, 40]], [2, 2]),
+      engine,
+      { i: makeIndex('dimension', 'i'), j: jLeft },
+    );
+    const vector = new LabeledTensor(
+      engine.fromNested([10, -5], [2]),
+      engine,
+      { j: jRight },
+    );
+    expect(() => matrix.contract(vector)).toThrow(IndexNameMismatchError);
+    try {
+      matrix.contract(vector);
+    } catch (e) {
+      expect(e).toBeInstanceOf(IndexNameMismatchError);
+      if (e instanceof IndexNameMismatchError) {
+        expect(e.ids).toEqual(expect.arrayContaining([jLeft.id, jRight.id]));
+        expect(e.message).toContain(jLeft.id);
+        expect(e.message).toContain(jRight.id);
+      }
+    }
+    const contracted = matrix.contract(new LabeledTensor(
+      engine.fromNested([10, -5], [2]),
+      engine,
+      { j: jLeft },
+    ));
+    expect([...contracted.axisOrder]).toEqual(['i']);
+    expect(engine.toNested(contracted.tensor)).toEqual([900, 100]);
   });
 });
 

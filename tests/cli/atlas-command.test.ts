@@ -147,6 +147,7 @@ describe('Eve E6 — no output hides a qualification (three bridges vs their sou
         expect(r.out).toContain(b.bound.domain);
       }
       expect(r.out).toContain(`review status: ${b.reviewStatus}`);
+      expect(r.out).toContain('not an evidence tag');
     });
   }
 

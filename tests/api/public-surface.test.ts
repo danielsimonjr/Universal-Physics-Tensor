@@ -86,7 +86,7 @@ const EXPECTED_RUNTIME_EXPORTS = [
   // v0.7 Proposal 1 — Intelligent Index layer (Phase 4 Task 4)
   'makeIndex', 'Axes', 'LabeledTensor',
   'LabeledTensorConstructionError', 'AxisMismatchError',
-  'IdentityConflictError', 'RankPreservationError', 'AxisOrderError',
+  'IdentityConflictError', 'IndexNameMismatchError', 'RankPreservationError', 'AxisOrderError',
   'AxisMergeError', 'AxisSplitError',
   // v0.8 Proposal 5 — RegimeType extension system
   'defineRegime', 'defineScale', 'defineForce', 'defineSymmetry',

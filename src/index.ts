@@ -95,6 +95,7 @@ export {
   LabeledTensorConstructionError,
   AxisMismatchError,
   IdentityConflictError,
+  IndexNameMismatchError,
   RankPreservationError,
   AxisOrderError,
   AxisMergeError,

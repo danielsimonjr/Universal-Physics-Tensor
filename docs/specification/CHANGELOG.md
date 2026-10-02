@@ -1,6 +1,10 @@
 # UPT Specification — Revision History
 
-> **Proof status as of 2026-10-02.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The first 2026-10-02 entry adds the BE-55–65 headings at the previous pin. The second retargets BE-16 and records that BE-42's Hawking temperature is not proved. The other proof readings are the same statements at the new pin.
+> **Proof status as of 2026-10-02.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The first 2026-10-02 entry adds the BE-55–65 headings at an earlier pin. The second retargets BE-16 and records that BE-42's Hawking temperature is not proved, at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The third moves the permalinks to PhysJS #54. The theorems are unchanged.
+
+## 2026-10-02 — PhysJS #54 comment pin
+
+- Parts I and II permalinks now name commit `2e09357f9674bc60b60b378155a1623c27dc7b04`. The vendored manifest entries are the same as at `c6958650f0be66b21f5cc3992d5474bf97ad5094`. PhysJS #54 fixes the five module comments that said the reference is not a formalRef, and the Landauer comment that said `Derivation step`.
 
 ## 2026-10-02 — BE-16 erasure scale, BE-42 feasibility
 

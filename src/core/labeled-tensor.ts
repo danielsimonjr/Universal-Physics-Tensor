@@ -9,8 +9,11 @@
  * a `TensorEngine`, and a labels record. The engine handle is the
  * boundary — `LabeledTensor` doesn't reach into the underlying
  * Float64Array / MathTS handle. Contract matching is strictly
- * `UniversalIndexId` equality (Decision #3) — two indices with the
- * same `axis` and `name` but distinct `id`s do NOT contract.
+ * `UniversalIndexId` equality (Decision #3). Two indices that share a
+ * `name` and not an `id` are refused: `contract` throws
+ * `IndexNameMismatchError` and the message names both ids. It does not
+ * contract them and it does not return their outer product. Indices
+ * whose names differ stay free axes.
  *
  * Design: `docs/planning/v0.7-Proposal-1-Design.md` Decisions
  * #1, #3, #5, #6, #7, #9.
@@ -108,6 +111,42 @@ export class IdentityConflictError extends UPTError {
     this.name = 'IdentityConflictError';
     this.indexId = indexId;
     Object.setPrototypeOf(this, IdentityConflictError.prototype);
+  }
+}
+
+/**
+ * Thrown by `contract` when both operands carry the same index `name`
+ * and those occurrences do not all share one `UniversalIndexId`.
+ *
+ * Decision #3 matches by id. A second `makeIndex` call with the same
+ * name is a different index. Returning the outer product hid that: the
+ * caller who meant one index got a higher-rank tensor and no ids.
+ * The error names every id. Distinct names stay an outer product.
+ *
+ * @public
+ */
+export class IndexNameMismatchError extends UPTError {
+  public readonly indexName: string;
+  public readonly ids: readonly UniversalIndexId[];
+  constructor(
+    indexName: string,
+    occurrences: readonly { id: UniversalIndexId; axis: AxisName }[],
+  ) {
+    const ids = [...new Set(occurrences.map((o) => o.id))];
+    const described = occurrences
+      .map((o) => `'${o.id}' (axis '${o.axis}')`)
+      .join(' and ');
+    super(
+      `LabeledTensor.contract: index name '${indexName}' is carried by ` +
+      `unequal ids ${described}. Contraction matches UniversalIndexId, ` +
+      `not the name. Reuse one UniversalIndex object, or take it from ` +
+      `the Axes registry. A second makeIndex call with the same name is ` +
+      `a different index and is not an outer product.`,
+    );
+    this.name = 'IndexNameMismatchError';
+    this.indexName = indexName;
+    this.ids = ids;
+    Object.setPrototypeOf(this, IndexNameMismatchError.prototype);
   }
 }
 
@@ -299,6 +338,8 @@ export class LabeledTensor<
    * `other`-second canonical order.
    *
    * Throws:
+   *   - `IndexNameMismatchError` if both operands use one `name` and
+   *     the ids differ. The message names both ids.
    *   - `AxisMismatchError` if a shared id disagrees on axis.
    *   - `IdentityConflictError` if a non-shared id appears free on
    *     both operands.
@@ -320,6 +361,32 @@ export class LabeledTensor<
     // from a prior transpose/contract).
     const leftOrder = this.axisOrder;
     const rightOrder = other.axisOrder;
+
+    // Same name on both operands is one index only when the ids match.
+    // A fresh makeIndex with that name is a different id; the outer
+    // product of that pair is the footgun Decision #3 exists to stop.
+    const byName = new Map<string, Array<{ id: UniversalIndexId; axis: AxisName; side: 0 | 1 }>>();
+    const noteName = (
+      side: 0 | 1,
+      order: readonly string[],
+      labels: Record<string, UniversalIndex<AxisName>>,
+    ): void => {
+      for (const key of order) {
+        const idx = labels[key];
+        const list = byName.get(idx.name) ?? [];
+        list.push({ id: idx.id, axis: idx.axis, side });
+        byName.set(idx.name, list);
+      }
+    };
+    noteName(0, leftOrder, this.labels);
+    noteName(1, rightOrder, other.labels);
+    for (const [indexName, occurrences] of byName) {
+      const onLeft = occurrences.some((o) => o.side === 0);
+      const onRight = occurrences.some((o) => o.side === 1);
+      if (!onLeft || !onRight) continue;
+      const ids = new Set(occurrences.map((o) => o.id));
+      if (ids.size > 1) throw new IndexNameMismatchError(indexName, occurrences);
+    }
 
     // Build id → (operand, axis-position) sites.
     const sites = new Map<UniversalIndexId, Array<{ operand: 0 | 1; axis: number; key: string; axisName: AxisName }>>();

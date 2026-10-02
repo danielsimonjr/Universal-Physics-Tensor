@@ -7,7 +7,7 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `c6958650f0be66b21f5cc3992d5474bf97ad5094`.
+ * The commit is PhysJS `main` `2e09357f9674bc60b60b378155a1623c27dc7b04`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -24,7 +24,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = 'c6958650f0be66b21f5cc3992d5474bf97ad5094';
+export const PHYSJS_COMMIT = '2e09357f9674bc60b60b378155a1623c27dc7b04';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';

@@ -34,10 +34,10 @@ counterexamples:
   - the approximation is non-uniform in time: at θ0 = 0.2 the phase drift reaches π/2 after ~100 cycles, however small the per-cycle error is (witness W7b)
 formal reference:
   lean4-physjs: PhysJS.Pendulum.linearizedEquationOfMotion_iff
-  version physjs@c6958650f0be66b21f5cc3992d5474bf97ad5094 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940; axioms propext, Classical.choice, Quot.sound
+  version physjs@2e09357f9674bc60b60b378155a1623c27dc7b04 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940; axioms propext, Classical.choice, Quot.sound
   fidelity: sanity-lemmas
   kind: bridge
-  url: https://github.com/danielsimonjr/PhysJS/blob/c6958650f0be66b21f5cc3992d5474bf97ad5094/PhysJS/Pendulum.lean
+  url: https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Pendulum.lean
   covers: the transformation, not bound.delta — covers its statement only
 evidence by claim (derived from the record's structure):
   correspondence: formal reference lean4-physjs, fidelity sanity-lemmas — covers its statement only
@@ -52,4 +52,4 @@ witness execution, witnesses not attributed to a claim:
 citations:
   - Landau & Lifshitz, Mechanics §11 (pendulum period as a complete elliptic integral)
   - Abramowitz & Stegun §17.6 (AGM evaluation of K)
-review status: proposed
+review status: proposed — the record's review mark (proposed or reviewed), not an evidence tag. formally-proved is derived from the formal reference and does not depend on this mark.

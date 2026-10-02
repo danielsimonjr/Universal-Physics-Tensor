@@ -16,6 +16,7 @@ pointed at the wrong thing.
 | Smoke | `bun run smoke` | runs `test-example.js` against the built `dist/` (via Node) |
 | CLI | `node bin/upt.mjs <cmd>` (or `bun run upt --`) | needs `bun run build` first; reference in `cli/README.md` |
 | Dependency graph and doc counts | `bun run docs:deps` | regenerates `docs/architecture/`; the `docs-fresh` CI job fails when it was not run |
+| README and ROADMAP counts | `bun scripts/readme-status.ts` | rewrites the marked spans in `README.md` and `ROADMAP.md` from the registries and from the generated architecture reports. `--check` exits 1 when a span is stale. `docs-fresh` runs it after `docs:deps`. A span stamped before `docs:deps` records the previous unused-analysis counts |
 | Bench | `bun run bench` / `bun run bench:ci` | vitest bench; baselines in `docs/architecture/benchmarks.md` |
 | Audit | `bun audit` | replaces `npm audit` (needs `bun.lock`) |
 | Plan-ledger audit | `bun run audit:plans` | audits `ACTIVE.md`; a release gate inside `validate` |
