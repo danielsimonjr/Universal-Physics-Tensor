@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] `evaluateBridge(42)` and `upt evaluate be-42` name `BridgeEquations.hawkingTemperature({ M_kg })` and `upt explain hawking-temperature mass=1.989e30`, both of which return a finite Hawking temperature. An id with no evaluator still points at `upt evaluate` with no args.
 - [x] An undeclared `1-e^2` on `upt eval` and `upt map` says `e` is the elementary charge and must be declared or bound, or written as `exp(x)`. The map message names `one_minus_e_sq`. A declared dimensionless `e` stays dimensionless.
 - [x] Refuse a non-finite Hawking temperature. A finite mass whose SI evaluation overflows throws RangeError instead of returning Infinity.
 - [x] Refuse the formula name `euler`. Euler's number is `exp(x)`, for example `exp(1)`. A bare `e` stays the elementary charge and `E` stays energy. The error names `exp(x)`.
