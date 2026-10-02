@@ -21,11 +21,26 @@ export interface CommandCtx {
   write: (s: string) => void; // raw stdout write, no newline (diagram output only)
 }
 
+/** README / docs/CLI.md grouping. The generator is the only reader. */
+export type CommandGroup = 'evaluate' | 'explore' | 'discovery' | 'data' | 'utilities';
+
+export interface CommandSub {
+  readonly name: string;
+  readonly summary: string;
+}
+
 export interface Command {
   name: string;
   aliases: string[];
   flags: FlagSpec[];
-  help: string; // per-command usage block (verbatim from today's help text section)
+  help: string; // per-command usage block; the Flags section is renderFlagCatalog(flags)
+  /** One line for the README table and docs/CLI.md. */
+  summary?: string;
+  /** One real invocation, including the `upt` word. */
+  example?: string;
+  group?: CommandGroup;
+  /** Subverbs, when the command has them. `probe` is the one that does. */
+  subcommands?: readonly CommandSub[];
   run(ctx: CommandCtx): Promise<number>; // 0 on success; throws UsageError/CliError otherwise
 }
 

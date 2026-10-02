@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.3",
-    "totalFiles": 421,
+    "totalFiles": 422,
     "totalModules": 13,
-    "totalExports": 2977
+    "totalExports": 2986
   },
   "entryPoints": [
     {
@@ -10993,6 +10993,7 @@
         ],
         "interfaces": [
           "CommandCtx",
+          "CommandSub",
           "Command"
         ],
         "functions": [
@@ -11262,6 +11263,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../errors.js",
             "imports": [
               "CliError",
@@ -11323,6 +11331,14 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
+            ]
+          },
+          {
             "file": "../graphs.js",
             "imports": [
               "resolveGraph"
@@ -11369,6 +11385,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../output.js",
             "imports": [
               "emitJson"
@@ -11400,6 +11423,14 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
             ]
           },
           {
@@ -11445,6 +11476,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../output.js",
             "imports": [
               "emitJson"
@@ -11476,6 +11514,12 @@
               "registerCommand",
               "Command"
             ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp"
+            ]
           }
         ],
         "exports": [
@@ -11503,6 +11547,13 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
             ]
           },
           {
@@ -11544,6 +11595,14 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
             ]
           },
           {
@@ -11589,6 +11648,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../output.js",
             "imports": [
               "emitJson"
@@ -11620,6 +11686,13 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
             ]
           },
           {
@@ -11687,6 +11760,14 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
             ]
           },
           {
@@ -11758,6 +11839,13 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
             ]
           },
           {
@@ -11842,6 +11930,13 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
             ]
           },
           {
@@ -11937,6 +12032,14 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
+            ]
+          },
+          {
             "file": "../graphs.js",
             "imports": [
               "resolveGraph"
@@ -11996,6 +12099,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../output.js",
             "imports": [
               "emitJson"
@@ -12027,6 +12137,14 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
             ]
           },
           {
@@ -12270,6 +12388,14 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
+            ]
+          },
+          {
             "file": "../graphs.js",
             "imports": [
               "resolveGraph",
@@ -12403,6 +12529,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../output.js",
             "imports": [
               "emitJson"
@@ -12454,10 +12587,18 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../errors.js",
             "imports": [
               "CliError",
-              "EXIT_CHECK_FAILED"
+              "EXIT_CHECK_FAILED",
+              "UsageError"
             ]
           },
           {
@@ -12535,6 +12676,14 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
+            ]
+          },
+          {
             "file": "../graphs.js",
             "imports": [
               "resolveGraph"
@@ -12572,6 +12721,14 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
             ]
           },
           {
@@ -12620,6 +12777,14 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG",
+              "sourceFlag"
             ]
           },
           {
@@ -12674,6 +12839,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../output.js",
             "imports": [
               "emitJson"
@@ -12714,10 +12886,18 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../errors.js",
             "imports": [
               "CliError",
-              "EXIT_CHECK_FAILED"
+              "EXIT_CHECK_FAILED",
+              "UsageError"
             ]
           },
           {
@@ -12769,6 +12949,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../errors.js",
             "imports": [
               "UsageError"
@@ -12814,6 +13001,13 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
             ]
           },
           {
@@ -12868,6 +13062,13 @@
             ]
           },
           {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
+            ]
+          },
+          {
             "file": "../output.js",
             "imports": [
               "emitJson"
@@ -12917,6 +13118,13 @@
               "registerCommand",
               "Command",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "../flag-help.js",
+            "imports": [
+              "commandHelp",
+              "JSON_FLAG"
             ]
           },
           {
@@ -13085,6 +13293,42 @@
           "printEval"
         ]
       },
+      "src/cli/flag-help.ts": {
+        "description": "Flag text for `upt help` and for `docs/CLI.md`.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "JSON_FLAG",
+          "GLOBAL_FLAGS",
+          "BUILTIN_VERBS",
+          "sourceFlag",
+          "flagHeading",
+          "renderFlagCatalog",
+          "commandHelp",
+          "undocumentedFlags"
+        ],
+        "functions": [
+          "sourceFlag",
+          "flagHeading",
+          "renderFlagCatalog",
+          "commandHelp",
+          "undocumentedFlags"
+        ],
+        "constants": [
+          "JSON_FLAG",
+          "GLOBAL_FLAGS",
+          "BUILTIN_VERBS"
+        ]
+      },
       "src/cli/graphs.ts": {
         "description": "Shared `--source=catalog|canonical|both` graph resolution — replaces",
         "externalDependencies": [],
@@ -13177,6 +13421,13 @@
             "imports": [
               "resolveCommand",
               "CommandCtx"
+            ]
+          },
+          {
+            "file": "./flag-help.js",
+            "imports": [
+              "GLOBAL_FLAGS",
+              "renderFlagCatalog"
             ]
           },
           {
@@ -14633,6 +14884,7 @@
         "exports": [
           "ADJUDICATIONS",
           "candidateId",
+          "candidateIdIfSlug",
           "adjudicationFor",
           "annotateAdjudications"
         ],
@@ -14641,6 +14893,7 @@
         ],
         "functions": [
           "candidateId",
+          "candidateIdIfSlug",
           "adjudicationFor",
           "annotateAdjudications"
         ],
@@ -18636,7 +18889,8 @@
           {
             "file": "../adjudication.js",
             "imports": [
-              "candidateId"
+              "candidateId",
+              "candidateIdIfSlug"
             ]
           },
           {
@@ -28832,6 +29086,7 @@
           "src/cli/euler-guard.ts",
           "src/cli/eval-numbers.ts",
           "src/cli/expr-print.ts",
+          "src/cli/flag-help.ts",
           "src/cli/graphs.ts",
           "src/cli/main.ts",
           "src/cli/map-evidence.ts",
@@ -29070,21 +29325,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 421,
+    "totalTypeScriptFiles": 422,
     "totalModules": 13,
-    "totalLinesOfCode": 91581,
-    "totalExports": 2977,
+    "totalLinesOfCode": 92067,
+    "totalExports": 2986,
     "totalClasses": 61,
-    "totalInterfaces": 476,
-    "totalFunctions": 768,
+    "totalInterfaces": 477,
+    "totalFunctions": 774,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 753,
+    "totalConstants": 756,
     "totalReExports": 1396,
-    "totalTypeOnlyImports": 568,
+    "totalTypeOnlyImports": 569,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 77
+    "unusedExportsCount": 79
   }
 }

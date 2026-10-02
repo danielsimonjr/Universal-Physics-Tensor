@@ -90,6 +90,8 @@ jobs:
           echo "docs/architecture/ matches a fresh generation."
       - name: Fail when README and ROADMAP status spans are stale
         run: bun scripts/readme-status.ts --check
+      - name: Fail when the CLI reference is stale
+        run: bun scripts/cli-reference.ts --check
 
   # Non-required on purpose. The local pre-push hook still runs the private
   # code_docs.py against .githooks/code-docs-baseline.txt. A GitHub-UI merge

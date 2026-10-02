@@ -26,19 +26,37 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
+import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
 import { readBinding } from '../../numerical/binding-value.js';
 import { explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, type RouteClaim } from './_atlas-route.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--at', valueStyle: 'either', repeatable: true },
-  { name: '--sweep', valueStyle: 'either' },
-  { name: '--compare', valueStyle: 'either' },
-  { name: '--csv', valueStyle: 'none' },
-  { name: '--tolerance', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
+  {
+    name: '--at',
+    valueStyle: 'either',
+    repeatable: true,
+    description: 'State one regime coordinate as group=value. A value may be an expression such as pi/2.',
+  },
+  {
+    name: '--sweep',
+    valueStyle: 'either',
+    description: 'Sample one coordinate as name=lo:hi:n or name=lo:hi:n:log, with n from 2 to 200.',
+  },
+  {
+    name: '--compare',
+    valueStyle: 'either',
+    description: 'Sweep a second route from the same source to this model id and mark NEITHER where no limit applies.',
+  },
+  { name: '--csv', valueStyle: 'none', description: 'Write sweep rows as CSV.' },
+  {
+    name: '--tolerance',
+    valueStyle: 'attached',
+    description: 'Judge adequacy against EPS in the bound\'s norm, or name:EPS through a declared translation. Exit 3 when inadequate.',
+  },
+  JSON_FLAG,
 ];
 
 const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observable:]EPS]
@@ -1083,7 +1101,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const assignments = [...(args.flags.get('at') ?? []), ...args.positionals.filter((p) => p.includes('='))];
 
   if (endpoints.length !== 2) {
-    throw new CliError(
+    throw new UsageError(
       `upt path: exactly two model ids are required (got ${endpoints.length}); e.g. ` +
         '`upt path model-pendulum model-spring`',
     );
@@ -1371,5 +1389,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   return exitCode;
 }
 
-export const command: Command = { name: 'path', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'path',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Show the bridge chain between two models and whether a bound is claimed there.',
+  example: 'upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10',
+  group: 'explore',
+  run,
+};
 registerCommand(command);

@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 91 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 50 files
+- **cli**: 51 files
 - **root**: 1 file
 - **composition**: 83 files
 - **core**: 11 files
@@ -3299,7 +3299,7 @@ The codebase is organized into the following modules:
 | `../cli-api.js` | `* as cliApi` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `CommandCtx`, `Command`
+- Interfaces: `CommandCtx`, `CommandSub`, `Command`
 - Functions: `registerCommand`, `resolveCommand`, `listCommandNames`, `registerForTest`, `clearRegistryForTest`
 
 ---
@@ -3382,6 +3382,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../atlas/catalog-formal-ref.js` | `catalogFormalRef` | Import |
@@ -3400,6 +3401,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../statuses.js` | `statusMeaning` | Import |
@@ -3416,6 +3418,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3430,6 +3433,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
 
@@ -3445,6 +3449,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3459,6 +3464,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command` | Import |
+| `../flag-help.js` | `commandHelp` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3472,6 +3478,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 
@@ -3487,6 +3494,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
 
@@ -3502,6 +3510,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3516,6 +3525,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, EXIT_CHECK_FAILED` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
@@ -3535,6 +3545,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, groundTruthAnchor, groundTruthLine` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
@@ -3554,6 +3565,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
@@ -3576,6 +3588,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
@@ -3599,6 +3612,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
@@ -3617,6 +3631,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -3631,6 +3646,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, groundTruthAnchor, groundTruthLine, SourceName` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
@@ -3689,6 +3705,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec, ParsedArgs` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine, AnchorScope` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError, EXIT_CHECK_FAILED` | Import |
@@ -3717,6 +3734,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../../numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, MetricId` | Import |
@@ -3733,7 +3751,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
+| `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
 | `../../numerical/binding-value.js` | `readBinding` | Import |
@@ -3753,6 +3772,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 
@@ -3768,6 +3788,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 
@@ -3788,6 +3809,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
@@ -3805,6 +3827,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../composition/composition-recovery.js` | `scanCompositionRecovery` | Import |
 
@@ -3820,7 +3843,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
-| `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
+| `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../numerical/binding-value.js` | `readBinding` | Import |
 
@@ -3837,6 +3861,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../atlas/benchmark/hybrid-retrieval.js` | `canonicalRetrievalCorpus, ollamaEmbedder, retrieveHybrid` | Import |
@@ -3853,6 +3878,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../search-index.js` | `buildSearchIndex, fold, matchEveryWord, SEARCH_SECTIONS, STOP_WORDS` | Import |
@@ -3869,6 +3895,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../expr-print.js` | `EVAL_STUBS, printDisplay, printEval, printLatex, latexName, siUnitOf` | Import |
@@ -3885,6 +3912,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
+| `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../../cases/types.js` | `AppliedCase` | Import (type-only) |
@@ -3948,6 +3976,19 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/flag-help.ts` - Flag text for `upt help` and for `docs/CLI.md`.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./args.js` | `FlagSpec` | Import (type-only) |
+
+**Exports:**
+- Functions: `sourceFlag`, `flagHeading`, `renderFlagCatalog`, `commandHelp`, `undocumentedFlags`
+- Constants: `JSON_FLAG`, `GLOBAL_FLAGS`, `BUILTIN_VERBS`
+
+---
+
 ### `src/cli/graphs.ts` - Shared `--source=catalog|canonical|both` graph resolution — replaces
 
 **Internal Dependencies:**
@@ -3975,6 +4016,7 @@ The codebase is organized into the following modules:
 | `./version.js` | `packageVersion` | Import |
 | `./statuses.js` | `glossaryText` | Import |
 | `./command.js` | `resolveCommand, CommandCtx` | Import |
+| `./flag-help.js` | `GLOBAL_FLAGS, renderFlagCatalog` | Import |
 | `./record.js` | `recordInvocation, replayRecord, showRecord, Io` | Import |
 | `./commands/index.js` | `*` | Import |
 
@@ -4270,7 +4312,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `CandidateAdjudication`
-- Functions: `candidateId`, `adjudicationFor`, `annotateAdjudications`
+- Functions: `candidateId`, `candidateIdIfSlug`, `adjudicationFor`, `annotateAdjudications`
 - Constants: `ADJUDICATIONS`
 
 ---
@@ -5283,7 +5325,7 @@ The codebase is organized into the following modules:
 | `../bridge-analysis.js` | `proposeLinkCandidates, proposeOrphanConnectors` | Import |
 | `../bridge-prediction.js` | `predictMissingBridges` | Import |
 | `../compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
-| `../adjudication.js` | `candidateId` | Import |
+| `../adjudication.js` | `candidateId, candidateIdIfSlug` | Import |
 | `../edge.js` | `BridgeEdge` | Import (type-only) |
 | `./types.js` | `FrontierGap, ProbeDataset, SearchProblem` | Import (type-only) |
 
@@ -7837,7 +7879,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...45 more]
+        N29[...46 more]
     end
 
     subgraph Root
@@ -7936,17 +7978,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 421 |
+| Total TypeScript Files | 422 |
 | Total Modules | 13 |
-| Total Lines of Code | 91581 |
-| Total Exports | 2977 |
+| Total Lines of Code | 92067 |
+| Total Exports | 2986 |
 | Total Re-exports | 1396 |
 | Total Classes | 61 |
-| Total Interfaces | 476 |
-| Total Functions | 768 |
+| Total Interfaces | 477 |
+| Total Functions | 774 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 568 |
+| Type-only Imports | 569 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

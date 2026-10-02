@@ -7,7 +7,7 @@
 import { proposeLinkCandidates, proposeOrphanConnectors } from '../bridge-analysis.js';
 import { predictMissingBridges } from '../bridge-prediction.js';
 import { QUANTITY_IDENTIFICATIONS } from '../compose.js';
-import { candidateId } from '../adjudication.js';
+import { candidateId, candidateIdIfSlug } from '../adjudication.js';
 import type { BridgeEdge } from '../edge.js';
 import type { FrontierGap, ProbeDataset, SearchProblem } from './types.js';
 
@@ -15,8 +15,20 @@ const ALIAS_PAIRS = new Set(
   QUANTITY_IDENTIFICATIONS.map((id) => candidateId(id.from, id.to)),
 );
 
+/**
+ * Stable pair token. Slug pairs keep the ledger id. Other symbols are
+ * length-prefixed under `raw:` so a `~` inside a name cannot alias two
+ * pairs, and the token cannot collide with a kebab `candidateId`.
+ */
+function gapPairToken(a: string, b: string): string {
+  const slug = candidateIdIfSlug(a, b);
+  if (slug !== undefined) return slug;
+  const [x, y] = a <= b ? [a, b] : [b, a];
+  return `raw:${x.length}:${x}~${y.length}:${y}`;
+}
+
 function linkGapId(a: string, b: string): string {
-  return `fg-link-${candidateId(a, b)}`;
+  return `fg-link-${gapPairToken(a, b)}`;
 }
 
 /**
@@ -28,7 +40,8 @@ function linkGapId(a: string, b: string): string {
 export function wrapRelationLinkGaps(edges: readonly BridgeEdge[]): FrontierGap[] {
   const out: FrontierGap[] = [];
   for (const c of proposeLinkCandidates(edges)) {
-    if (ALIAS_PAIRS.has(candidateId(c.a, c.b))) continue;
+    const slug = candidateIdIfSlug(c.a, c.b);
+    if (slug !== undefined && ALIAS_PAIRS.has(slug)) continue;
     out.push({
       id: linkGapId(c.a, c.b),
       kind: 'relation-link',
@@ -65,7 +78,7 @@ export function wrapRelationLinkGaps(edges: readonly BridgeEdge[]): FrontierGap[
 export function wrapConnectorGaps(edges: readonly BridgeEdge[]): FrontierGap[] {
   const report = proposeOrphanConnectors(edges);
   return report.connectors.map((c) => ({
-    id: `fg-conn-${candidateId(c.orphanQuantity, c.coreQuantity)}`,
+    id: `fg-conn-${gapPairToken(c.orphanQuantity, c.coreQuantity)}`,
     kind: 'relation-link' as const,
     participants: [
       { kind: 'quantity-identification' as const, id: c.orphanQuantity },

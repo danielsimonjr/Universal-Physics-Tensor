@@ -331,10 +331,15 @@ describe('upt path', () => {
     expect(cap.lines.join('')).not.toMatch(/family 'oscillators'/);
   });
 
-  it('a wrong number of endpoints → exit 1', async () => {
-    const cap = capture();
-    expect(await runCli(['path', 'model-spring'], cap.io)).toBe(1);
-    expect(await runCli(['path', 'a', 'b', 'c'], cap.io)).toBe(1);
+  it('a wrong number of endpoints is a missing argument → exit 2', async () => {
+    const one = capture();
+    expect(await runCli(['path', 'model-spring'], one.io)).toBe(2);
+    expect(one.lines.join('')).toMatch(/exactly two model ids/);
+    const none = capture();
+    expect(await runCli(['path'], none.io)).toBe(2);
+    const three = capture();
+    expect(await runCli(['path', 'a', 'b', 'c'], three.io)).toBe(2);
+    expect(three.lines.join('')).toMatch(/exactly two model ids/);
   });
 
   it('a non-finite --at value → exit 1', async () => {

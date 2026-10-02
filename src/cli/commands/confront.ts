@@ -5,15 +5,20 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--bridge', valueStyle: 'attached' },
-  { name: '--sensitivity', valueStyle: 'none' },
-  { name: '--rigor', valueStyle: 'attached' },
-  { name: '--frontier', valueStyle: 'none' },
-  { name: '--json', valueStyle: 'none' },
+  { name: '--bridge', valueStyle: 'attached', description: 'Select one bridge id, the same selection as a positional be-XX.' },
+  { name: '--sensitivity', valueStyle: 'none', description: 'Rank the prediction\'s input elasticities. Value-kind records only.' },
+  { name: '--rigor', valueStyle: 'attached', description: 'Show one rigor tier: stringent, moderate, or loose.' },
+  {
+    name: '--frontier',
+    valueStyle: 'none',
+    description: 'Rank the σ-tests by margin to this tool\'s 1σ acceptance line. That line is a software criterion.',
+  },
+  JSON_FLAG,
 ];
 
 const HELP = `upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|loose] [--frontier] [--sensitivity] [--json]
@@ -396,5 +401,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   return 0;
 }
 
-export const command: Command = { name: 'confront', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'confront',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Run the committed predicted-versus-observed confrontations.',
+  example: 'upt confront be-58',
+  group: 'data',
+  run,
+};
 registerCommand(command);

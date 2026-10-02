@@ -38,6 +38,19 @@ export function candidateId(a: string, b: string): string {
 }
 
 /**
+ * `candidateId` when both names are kebab-case slugs; otherwise `undefined`.
+ * Graphs carry symbols that are not slugs (`A`, `impact_parameter`). Those
+ * names are not ledger keys, and routing them through `candidateId` throws.
+ * The ledger path keeps the throw. Callers that only need an id skip it.
+ *
+ * @internal
+ */
+export function candidateIdIfSlug(a: string, b: string): string | undefined {
+  if (!SLUG.test(a) || !SLUG.test(b)) return undefined;
+  return candidateId(a, b);
+}
+
+/**
  * Verdict of a human adjudication OF THE IDENTIFICATION `a ≡ b` (never of a
  * specific derived equation — derived equations inherit this as context):
  * - `genuine`  — real physics AND a new link (nothing seeded qualifies yet).

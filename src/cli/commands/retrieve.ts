@@ -8,6 +8,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import {
@@ -17,9 +18,18 @@ import {
 } from '../../atlas/benchmark/hybrid-retrieval.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--json', valueStyle: 'none' },
-  { name: '--embed', valueStyle: 'none' },
-  { name: '--ollama-url', valueStyle: 'attached' },
+  JSON_FLAG,
+  {
+    name: '--embed',
+    valueStyle: 'none',
+    description: 'Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0.',
+  },
+  {
+    name: '--ollama-url',
+    valueStyle: 'attached',
+    description: 'Ollama base URL. Used only with --embed.',
+    defaultValue: 'http://127.0.0.1:11434',
+  },
 ];
 
 const HELP = `upt retrieve <claim> [--embed] [--ollama-url=URL]
@@ -80,5 +90,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   return 0;
 }
 
-export const command: Command = { name: 'retrieve', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'retrieve',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Search the atlas for a claim. --embed asks a local Ollama model and does not accept that order.',
+  example: 'upt retrieve period of a pendulum',
+  group: 'data',
+  run,
+};
 registerCommand(command);

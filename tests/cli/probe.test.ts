@@ -26,6 +26,16 @@ describe('upt probe', () => {
     expect(text(c)).toMatch(/subverb/);
   });
 
+  it('scan --json --source=canonical returns a JSON envelope instead of throwing', async () => {
+    const c = capture();
+    const code = await runCli(['probe', '--json', 'scan', '--source=canonical'], c.io);
+    expect(code).toBe(0);
+    const parsed = JSON.parse(text(c));
+    expect(parsed.command).toBe('probe');
+    expect(parsed.source).toBe('canonical');
+    expect(Array.isArray(parsed.result)).toBe(true);
+  });
+
   it('scan defaults to searchable expression gaps and hides relation-link wrappers', async () => {
     const c = capture();
     expect(await runCli(['probe', 'scan'], c.io)).toBe(0);

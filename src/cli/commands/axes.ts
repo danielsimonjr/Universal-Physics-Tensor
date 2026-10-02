@@ -7,9 +7,10 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 
-const FLAGS: FlagSpec[] = [{ name: '--json', valueStyle: 'none' }];
+const FLAGS: FlagSpec[] = [JSON_FLAG];
 
 const HELP = `upt axes
         Axis-discrimination audit — which tensor classification axes actually
@@ -50,7 +51,10 @@ export const command: Command = {
   name: 'axes',
   aliases: ['axis-audit'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Report which tensor classification axes gate the discovery funnel.',
+  example: 'upt axes',
+  group: 'discovery',
   run,
 };
 

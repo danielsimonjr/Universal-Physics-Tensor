@@ -22,7 +22,7 @@
 
 ## Overview
 
-UPT follows a layered architecture. The 421 TypeScript files under `src/` fall into thirteen modules. Each module keeps a strictly separated responsibility.
+UPT follows a layered architecture. The 422 TypeScript files under `src/` fall into thirteen modules. Each module keeps a strictly separated responsibility.
 
 `atlas` holds typed relations between physical models (see Atlas Module). `bridges` catalogs, evaluates, and adjudicates established equations, and confronts them against real data through the evidence-spine registry. `canonical` is the textbook L-layer registry that bridges are validated against. The registry has 109 equations, spanning a monomial L0 tier, a non-monomial L1-sum tier, and a condensed-matter domain. `composition` is the graph-lite bridge-composition layer: the 46-edge catalog graph, the canonical-only graph, the discovery-hardening funnel, and the epistemic-grounding ledger. `dimensional` provides the symbolic layer, including the connection and curvature AST. `numerical` provides the compute layer, including the GR integrators and evaluators. `core` holds legacy high-level utilities, the flat constants, and the intelligent-index / regime layer. `diff` is the bridge-gradient layer. `relations` holds the shared relation vocabulary. `cases` holds qualified applied-case evaluators. `cli` is the typed CLI command tree behind the `bin/upt.mjs` shim. `entry` is the public re-export surface. `root` is the one-file `cli-api` barrel at the `src/` root.
 
@@ -33,7 +33,7 @@ UPT follows a layered architecture. The 421 TypeScript files under `src/` fall i
 │  cli/              │  Typed CLI command tree — main/args/      │
 │                    │  output/graphs + 28 per-command           │
 │                    │  modules behind the bin/upt.mjs shim      │
-│                    │  (50 files); the 1-file cli-api barrel    │
+│                    │  (51 files); the 1-file cli-api barrel    │
 │                    │  at src/ root is its sole runtime seam    │
 │                    │  into internals                           │
 ├────────────────────────────────────────────────────────────────┤
@@ -91,7 +91,7 @@ UPT follows a layered architecture. The 421 TypeScript files under `src/` fall i
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**Total** (`src/` scope): 421 TypeScript files, 2977 exports (1396 re-exports), and 55 bridge catalog entries. The catalog spans IDs 11–65: 19 established, 33 speculative, 3 highly-speculative. The scope also has 46 composition-graph edges, plus 109 canonical-only `law` edges through `CANONICAL_GRAPH`. The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
+**Total** (`src/` scope): 422 TypeScript files, 2986 exports (1396 re-exports), and 55 bridge catalog entries. The catalog spans IDs 11–65: 19 established, 33 speculative, 3 highly-speculative. The scope also has 46 composition-graph edges, plus 109 canonical-only `law` edges through `CANONICAL_GRAPH`. The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
 
 (The `src/`-scope file and export counts come from the Summary Statistics in `docs/architecture/DEPENDENCY_GRAPH.md`, which `bun run docs:deps` regenerates. The catalog, canonical, graph and confrontation counts come from the built package; see Verification below.)
 
@@ -942,7 +942,7 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 421 files, 2977 exports, 1396 of them re-exports. The whole-repository
+(`bun run docs:deps`): 422 files, 2986 exports, 1396 of them re-exports. The whole-repository
 table above was last filled by `repo_map.py` and was not re-measured in this change: that tool
 is not in this environment. The two scopes answer different questions. Every figure states its scope.
 
