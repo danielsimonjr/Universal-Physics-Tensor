@@ -48,7 +48,13 @@ function classIndex(kind: ChainCandidateKind): number {
   }
 }
 
-function compareEdgeIds(left: readonly string[], right: readonly string[]): -1 | 0 | 1 {
+/**
+ * Shorter chain first, then lexicographic edge ids.
+ *
+ * The regime-mismatch list uses this same comparison. It is not a class
+ * inside {@link orderChainCandidates}.
+ */
+export function compareChainEdgeIds(left: readonly string[], right: readonly string[]): -1 | 0 | 1 {
   if (left.length !== right.length) return left.length < right.length ? -1 : 1;
   for (let i = 0; i < left.length; i++) {
     const a = left[i] as string;
@@ -67,6 +73,6 @@ export function orderChainCandidates(candidates: readonly ChainCandidate[]): Cha
   return [...candidates].sort((a, b) => {
     const byClass = classIndex(a.kind) - classIndex(b.kind);
     if (byClass !== 0) return byClass < 0 ? -1 : 1;
-    return compareEdgeIds(a.edgeIds, b.edgeIds);
+    return compareChainEdgeIds(a.edgeIds, b.edgeIds);
   });
 }
