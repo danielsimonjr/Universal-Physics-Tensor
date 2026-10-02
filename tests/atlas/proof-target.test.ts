@@ -17,6 +17,7 @@ import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import {
   emitProofTarget,
+  proofTargetDraft,
   PROOF_TARGET_DRAFT_BEGIN,
   PROOF_TARGET_DRAFT_END,
 } from '../../src/atlas/proof-target.js';
@@ -174,6 +175,30 @@ describe('emitProofTarget', () => {
       expect(covers, shape.theorem).toContain(shape.needle);
       expect(text, shape.theorem).toContain('import PhysJS.Dimensional');
     }
+  });
+
+  it('the comment block is the draft object', () => {
+    const theorems = [thermal as string, hall as string];
+    const draft = proofTargetDraft(monomial, theorems);
+    const text = emitProofTarget(monomial, theorems);
+    expect(draft.leanProof).toBe('absent');
+    expect(draft.axioms).toEqual([]);
+    expect(draftEntry(text)).toEqual(draft);
+    expect(coversOf(text)).toBe(draft.covers);
+    expect(text).toContain(`-- target id: ${draft.key}`);
+    expect(text).toContain(`-- statement: ${draft.theorem} : Prop`);
+    const start = text.indexOf(PROOF_TARGET_DRAFT_BEGIN);
+    const end = text.indexOf(PROOF_TARGET_DRAFT_END);
+    expect(text.slice(start + PROOF_TARGET_DRAFT_BEGIN.length, end).trim()).toBe(
+      JSON.stringify(draft, null, 2),
+    );
+    const mutated = { ...draft, leanProof: 'complete' as const, axioms: [...THREE_AXIOMS] };
+    expect(leanProofProblem(problemsFor(mutated))).toBe(false);
+    expect(problemsFor(mutated).length).toBeGreaterThan(0);
+    const index = readFileSync(resolve(root, 'src/index.ts'), 'utf8');
+    const atlasPublic = readFileSync(resolve(root, 'src/atlas/public.ts'), 'utf8');
+    expect(index).not.toContain('proofTargetDraft');
+    expect(atlasPublic).not.toContain('proofTargetDraft');
   });
 
   it('the manifest checker reports a leanProof problem on the stub', () => {
