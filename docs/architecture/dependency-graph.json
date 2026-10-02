@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.4",
-    "totalFiles": 422,
+    "totalFiles": 423,
     "totalModules": 13,
-    "totalExports": 2987
+    "totalExports": 2990
   },
   "entryPoints": [
     {
@@ -584,13 +584,6 @@
             ]
           },
           {
-            "file": "../composition/buckingham-filter.js",
-            "imports": [
-              "BuckinghamFilterRecord"
-            ],
-            "typeOnly": true
-          },
-          {
             "file": "../composition/chain-match.js",
             "imports": [
               "matchChain"
@@ -600,8 +593,15 @@
             "file": "../composition/chain-candidate.js",
             "imports": [
               "compareChainEdgeIds",
-              "orderChainCandidates",
               "ChainCandidate"
+            ]
+          },
+          {
+            "file": "../composition/chain-result.js",
+            "imports": [
+              "chainOrderKey",
+              "orderChainRecords",
+              "ChainRecord"
             ]
           },
           {
@@ -610,13 +610,6 @@
               "joinRegimeMismatch",
               "ChainRegimeMismatch"
             ]
-          },
-          {
-            "file": "../canonical/structural.js",
-            "imports": [
-              "ChainClassification"
-            ],
-            "typeOnly": true
           },
           {
             "file": "./physjs-ref.js",
@@ -633,6 +626,7 @@
           }
         ],
         "exports": [
+          "renderChainRecord",
           "runChainPipeline"
         ],
         "interfaces": [
@@ -641,6 +635,7 @@
           "ChainStubRecord"
         ],
         "functions": [
+          "renderChainRecord",
           "runChainPipeline"
         ]
       },
@@ -15599,6 +15594,52 @@
           "REGIME_MISMATCH_KIND"
         ]
       },
+      "src/composition/chain-result.ts": {
+        "description": "One internal chain record.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../canonical/structural.js",
+            "imports": [
+              "ChainClassification"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./buckingham-filter.js",
+            "imports": [
+              "BuckinghamFilterRecord"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./chain-candidate.js",
+            "imports": [
+              "compareChainEdgeIds",
+              "ChainCandidateKind"
+            ]
+          },
+          {
+            "file": "./chain-regime.js",
+            "imports": [
+              "ChainRegimeMismatch"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "chainOrderKey",
+          "orderChainRecords"
+        ],
+        "interfaces": [
+          "ChainRecord"
+        ],
+        "functions": [
+          "chainOrderKey",
+          "orderChainRecords"
+        ]
+      },
       "src/composition/compose-surface.ts": {
         "description": "v0.11 surface barrel for the namespacing-gate symbols (keeps",
         "externalDependencies": [],
@@ -29129,6 +29170,7 @@
           "src/composition/chain-candidate.ts",
           "src/composition/chain-match.ts",
           "src/composition/chain-regime.ts",
+          "src/composition/chain-result.ts",
           "src/composition/compose-surface.ts",
           "src/composition/compose-symbolic.ts",
           "src/composition/compose.ts",
@@ -29331,21 +29373,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 422,
+    "totalTypeScriptFiles": 423,
     "totalModules": 13,
-    "totalLinesOfCode": 92137,
-    "totalExports": 2987,
+    "totalLinesOfCode": 92228,
+    "totalExports": 2990,
     "totalClasses": 61,
-    "totalInterfaces": 479,
-    "totalFunctions": 775,
+    "totalInterfaces": 480,
+    "totalFunctions": 778,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 756,
     "totalReExports": 1396,
-    "totalTypeOnlyImports": 569,
+    "totalTypeOnlyImports": 570,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 79
+    "unusedExportsCount": 78
   }
 }

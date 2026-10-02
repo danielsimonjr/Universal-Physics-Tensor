@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Use one internal chain-result type in the classifier, the orderer, and the orchestrator. Design: `docs/planning/refactor-integration-phase.md`, step 2.
+  Done: `ChainRecord` in `src/composition/chain-result.ts` carries the classification, the filter theorem, the regime mismatch, and the edge ids. `chainOrderKey` and `renderChainRecord` are functions of that record. A confirmation stays a confirmation even when a mismatch is attached. `runChainPipeline(CATALOG_GRAPH)` is unchanged. `toCandidate` and `emit` are gone. The package barrel is unchanged.
 - [x] Record composition-table refusals from enumeration as their own list, without changing which pairs are proof targets. Design: `docs/planning/refactor-integration-phase.md`, step 1.
   Done: `enumerateCompositionsWithRefusals` returns the same `EnumerationReport` as `enumerateCompositions` plus `relationRefusals`. That list is `UndefinedCompositionError` only. `CompositionAliasError` stays `requiresDisposition`. A dimension or junction failure stays a silent non-pair. `proofTargets` is unchanged. `EnumerationReport` gains no field. The root barrel and `src/composition/index.ts` do not export the new names. The `composeEdges` comment names the nine catalog edges that carry a relation; those nine stay.
 - [x] Prepare package 1.0.4 from what merged since `v1.0.3`. No tag is pushed with this commit. Publishing stays the owner's job.
