@@ -4,7 +4,7 @@
     "version": "1.0.1",
     "totalFiles": 408,
     "totalModules": 13,
-    "totalExports": 2923
+    "totalExports": 2924
   },
   "entryPoints": [
     {
@@ -11608,6 +11608,12 @@
             "file": "../../numerical/binding-value.js",
             "imports": [
               "readBinding"
+            ]
+          },
+          {
+            "file": "../../numerical/formula-dimension.js",
+            "imports": [
+              "builtinFormulaDimensionChecker"
             ]
           }
         ],
@@ -26249,7 +26255,8 @@
             "file": "../dimensional/algebra.js",
             "imports": [
               "equals",
-              "format"
+              "format",
+              "multiply"
             ]
           },
           {
@@ -26287,6 +26294,7 @@
           }
         ],
         "exports": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE",
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker",
@@ -26303,6 +26311,9 @@
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker"
+        ],
+        "constants": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE"
         ]
       },
       "src/numerical/formula-mathts.ts": {
@@ -28270,19 +28281,19 @@
   "statistics": {
     "totalTypeScriptFiles": 408,
     "totalModules": 13,
-    "totalLinesOfCode": 89488,
-    "totalExports": 2923,
+    "totalLinesOfCode": 89532,
+    "totalExports": 2924,
     "totalClasses": 60,
     "totalInterfaces": 462,
     "totalFunctions": 752,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 721,
+    "totalConstants": 722,
     "totalReExports": 1389,
     "totalTypeOnlyImports": 546,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 70
+    "unusedExportsCount": 71
   }
 }

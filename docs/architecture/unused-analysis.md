@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 70
+- **Potentially unused exports**: 71
 
 ## Potentially Unused Files
 
@@ -149,6 +149,10 @@ These exports are not imported by any other file in the codebase:
 ### `src/dimensional/units.ts`
 
 - `unitDimension` (function)
+
+### `src/numerical/formula-dimension.ts`
+
+- `ELEMENTARY_CHARGE_MIX_MESSAGE` (constant)
 
 ### `src/numerical/spacetime-metrics.ts`
 

@@ -3501,6 +3501,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
 | `../../dimensional/units.js` | `UnitError` | Import |
 | `../../numerical/binding-value.js` | `readBinding` | Import |
+| `../../numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -7004,7 +7005,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, ENERGY` | Import |
-| `../dimensional/algebra.js` | `equals, format` | Import |
+| `../dimensional/algebra.js` | `equals, format, multiply` | Import |
 | `../dimensional/validator.js` | `ExprNode, TranscendentalFn` | Import (type-only) |
 | `../dimensional/validator.js` | `validate` | Import |
 | `../dimensional/ast-builders.js` | `sym` | Import |
@@ -7015,6 +7016,7 @@ The codebase is organized into the following modules:
 - Classes: `FormulaDimensionError`
 - Interfaces: `ParsedPhysics`, `FormulaDimensionChecker`
 - Functions: `formulaSymbolDimension`, `builtinFormulaDimensionChecker`, `loadFormulaDimensionChecker`
+- Constants: `ELEMENTARY_CHARGE_MIX_MESSAGE`
 
 ---
 
@@ -7711,8 +7713,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 408 |
 | Total Modules | 13 |
-| Total Lines of Code | 89488 |
-| Total Exports | 2923 |
+| Total Lines of Code | 89532 |
+| Total Exports | 2924 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
