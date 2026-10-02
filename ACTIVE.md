@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Use one internal chain-result type in the classifier, the orderer, and the orchestrator. Design: `docs/planning/refactor-integration-phase.md`, step 2.
+  Done: `ChainRecord` in `src/composition/chain-result.ts` carries the classification, the filter theorem, the regime mismatch, and the edge ids. `chainOrderKey` and `renderChainRecord` are functions of that record. A confirmation stays a confirmation even when a mismatch is attached. `runChainPipeline(CATALOG_GRAPH)` is unchanged. `toCandidate` and `emit` are gone. The package barrel is unchanged.
 - [x] Prepare package 1.0.4 from what merged since `v1.0.3`. No tag is pushed with this commit. Publishing stays the owner's job.
   Done: package version is 1.0.4. The [Unreleased] notes for #298, #299, and #300 are the [1.0.4] section. `git log v1.0.3..origin/master` is those three commits. Version-stamped artifacts carry 1.0.4. The `v1.0.4` tag is not pushed.
 - [x] A malformed variable value exits 1 in both `upt eval` and `upt evaluate`.
