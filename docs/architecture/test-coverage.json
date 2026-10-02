@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 405,
-    "totalTestFiles": 557,
+    "totalTestFiles": 558,
     "testedCount": 395,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -6222,6 +6222,7 @@
       "tests/numerical/einstein-desitter.test.ts",
       "tests/numerical/einstein-flrw.test.ts",
       "tests/numerical/einstein-vacuum-schwarzschild.test.ts",
+      "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/formula-mathts.test.ts",
       "tests/numerical/formula-parsers-agree.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
@@ -6514,6 +6515,7 @@
       "tests/dimensional/tensor-partial-derivative.test.ts",
       "tests/dimensional/transcendental-validation.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/parse-physics.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -7231,6 +7233,7 @@
       "tests/internal/helper-coverage.test.ts",
       "tests/numerical/binding-value.test.ts",
       "tests/numerical/correctness.test.ts",
+      "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/evaluate.test.ts",
       "tests/numerical/formula-dimension.test.ts",
       "tests/numerical/geometrized-schwarzschild-equivalence.test.ts",
@@ -7473,7 +7476,8 @@
       "tests/tensor.test.ts"
     ],
     "src/numerical/binding-value.ts": [
-      "tests/numerical/binding-value.test.ts"
+      "tests/numerical/binding-value.test.ts",
+      "tests/numerical/euler-rejected.test.ts"
     ],
     "src/numerical/christoffel-flat.ts": [
       "tests/numerical/christoffel-flat-indexing.test.ts",
@@ -7686,6 +7690,7 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/formula-registry.test.ts",
       "tests/numerical/parse-physics.test.ts",
       "tests/tensor.test.ts"
@@ -7693,6 +7698,7 @@
     "src/numerical/formula.ts": [
       "tests/cli/eval-functions.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/finiteness-guards.test.ts",
       "tests/numerical/formula-conformance.builtin.test.ts",
       "tests/numerical/formula-mathts.test.ts",
@@ -15617,6 +15623,14 @@
     "tests/numerical/errors.test.ts": [
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts"
+    ],
+    "tests/numerical/euler-rejected.test.ts": [
+      "src/core/constants.ts",
+      "src/numerical/formula.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/algebra.ts",
+      "src/numerical/formula-registry.ts",
+      "src/numerical/binding-value.ts"
     ],
     "tests/numerical/evaluate.test.ts": [
       "src/numerical/index.ts",
