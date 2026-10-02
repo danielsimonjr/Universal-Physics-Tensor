@@ -10,19 +10,19 @@
 
 import type { FormalRef } from '../relations/types.js';
 
-/** @public */
+/** The relation a bridge asserts between its premises and its conclusion. @public */
 export type RelationType = import('../relations/types.js').RelationType;
-/** @public */
+/** What kind of support a record carries. Carried only if its witness passes. @public */
 export type EvidenceTag = import('../relations/types.js').EvidenceTag;
-/** @public */
+/** Whether the limit a bridge takes is regular or singular. @public */
 export type LimitCharacter = import('../relations/types.js').LimitCharacter;
-/** @public */
+/** One inequality on a regime coordinate, a π-group or a dimensionless input. @public */
 export type RegimeInequality = import('../relations/types.js').RegimeInequality;
-/** @public */
+/** Where in parameter space a model or bridge is claimed to apply. @public */
 export type Regime = import('../relations/types.js').Regime;
-/** @public */
+/** A Lipschitz-plus-offset error bound with a mandatory horizon. @public */
 export type ApproximationBound = import('../relations/types.js').ApproximationBound;
-/** @public */
+/** A case a bridge does not cover, and the witness that shows it. @public */
 export type Counterexample = import('../relations/types.js').Counterexample;
 
 export type {

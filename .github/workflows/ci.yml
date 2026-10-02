@@ -93,6 +93,37 @@ jobs:
       - name: Fail when the CLI reference is stale
         run: bun scripts/cli-reference.ts --check
 
+  # Non-required on purpose. The local pre-push hook still runs the private
+  # code_docs.py against .githooks/code-docs-baseline.txt. A GitHub-UI merge
+  # never runs that hook, so this job runs the in-repo --paths stand-in: a
+  # changed src file may not add an export whose immediately preceding JSDoc
+  # has no summary, and may not drop a summary the base ref had. Pre-existing
+  # debt does not fail the job. The job does not read the baseline and does
+  # not raise it.
+  #
+  # repo_map.py stays out of CI. It lives in a private repository, which is
+  # the recorded decision (the pre-push hook says the same). This job does
+  # not change branch protection. The check name says non-required so a
+  # reader does not mistake it for one of the required contexts.
+  code-docs-ratchet:
+    name: code-docs ratchet (non-required)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: '1.4.2'
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - name: Fail when this pull request adds an undocumented export
+        run: bun tools/code-docs-ratchet/check.ts --base "origin/${{ github.base_ref }}"
+
   # Does this PR touch the numerical core? The accuracy suite below is expensive, so it is
   # schedule/dispatch-only -- but that meant a pull request could change floating-point code and
   # merge with the one suite that would catch a regression never having run. v0.44.3 was exactly

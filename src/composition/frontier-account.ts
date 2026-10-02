@@ -34,24 +34,24 @@ export const CANDIDATE_NOT_A_BRIDGE_REASON =
  */
 export const CONTESTED_BRIDGE_IDS: readonly string[] = ['be-44', 'be-46', 'be-50'];
 
-/** @internal */
+/** Why an entry cannot be confronted yet: no comparison exists, or its data is absent. @internal */
 export type ConfrontationMarkStatus = 'unconfrontable' | 'data-pending';
 
-/** @internal */
+/** One entry's confrontation status, with the reason that entry already carries. @internal */
 export interface ConfrontationMark {
   readonly id: string;
   readonly status: ConfrontationMarkStatus;
   readonly reason: string;
 }
 
-/** @internal */
+/** One record that was examined and did not become an accepted connection, and where that finding came from. @internal */
 export interface NullResultRow {
   readonly id: string;
   readonly reason: string;
   readonly source: 'membership-rejection' | 'candidate' | 'confrontation';
 }
 
-/** @internal */
+/** One connection the catalog does not contain, named by the two quantities it would join. @internal */
 export interface FrontierAccountRow {
   readonly id: string;
   readonly left: string;
@@ -61,13 +61,13 @@ export interface FrontierAccountRow {
   readonly observation: string;
 }
 
-/** @internal */
+/** The two lists together: the null results, and the frontier the catalog does not cover. @internal */
 export interface FrontierAccount {
   readonly nullResults: readonly NullResultRow[];
   readonly frontier: readonly FrontierAccountRow[];
 }
 
-/** @internal */
+/** Inputs the account reads rather than derives: rejections, contested ids, confrontation marks, and whether catalog-wide expression gaps count. @internal */
 export interface FrontierAccountOptions {
   readonly rejections?: readonly { id: string; reason: string }[];
   readonly contestedIds?: readonly string[];

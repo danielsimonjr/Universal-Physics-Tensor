@@ -58,13 +58,13 @@ UPT is organized into five conceptual layers that build on each other:
 
 A bridge equation module at Layer 1 builds AST nodes at Layer 2 and validates them with the dimensional algebra. The module optionally raises/lowers indices using Layer 3 metric primitives, and Layer 4 can evaluate the module numerically. Layer 5 (the curvature / general-relativity layer) is built on top of Layers 2–4. Its curvature node kinds are `ExprNode` members with their own validators and lowering arms. Its integrators reuse the same Christoffel-closure convention as the Layer-4 RK4 solver. Callers who only want catalog metadata (status, known issues, references) never touch layers 2–5.
 
-Beside the layers sits a **composition graph** (`src/composition/`). The graph holds bridges as `BridgeEdge` objects over `Quantity` endpoints, composable via `composeEdges`. The pre-registered calibration edges include the first diagonal-law edge, `lawSchwarzschildRadius`. Its first derived result (CT-1) chains BE-42∘BE-16 to E_min(M) = ℏc³ln2/(8πGM). Catalog membership is computable (`src/bridges/membership.ts` + the `src/bridges/rejected.ts` negative catalog — see `v0.8.0-catalog-adjudication.md`), and GW170817 vs. BE-36 is a real-data confrontation. The graph has **41 edges**. The graph also has:
+Beside the layers sits a **composition graph** (`src/composition/`). The graph holds bridges as `BridgeEdge` objects over `Quantity` endpoints, composable via `composeEdges`. The pre-registered calibration edges include the first diagonal-law edge, `lawSchwarzschildRadius`. Its first derived result (CT-1) chains BE-42∘BE-16 to E_min(M) = ℏc³ln2/(8πGM). Catalog membership is computable (`src/bridges/membership.ts` + the `src/bridges/rejected.ts` negative catalog — see `v0.8.0-catalog-adjudication.md`), and GW170817 vs. BE-36 is a real-data confrontation. The graph has **46 edges**. The graph also has:
 
 - a Phase-D candidate enumerator (`enumerateCompositions`);
 - first-order uncertainty propagation (`propagateUncertainty`);
 - a name-collision namespacing gate (`CompositionAliasError` + `SOURCE_ALIAS_DISPOSITIONS` over 131 centralized `Quantity` nodes in `quantities.ts`).
 
-BE-23 vs. cuprate Planckian dissipation is another data confrontation. The 55-bridge catalog (41 graph edges) is validated against the **canonical L-layer** (`src/canonical/`, 109 equations). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** of 19 (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` + the per-bridge `be*-confrontation.ts` evaluators carry the spine.
+BE-23 vs. cuprate Planckian dissipation is another data confrontation. The 55-bridge catalog (46 graph edges) is validated against the **canonical L-layer** (`src/canonical/`, 109 equations). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** of 19 (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` + the per-bridge `be*-confrontation.ts` evaluators carry the spine.
 
 ---
 
@@ -90,8 +90,8 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 976 | dependency-graph.json |
-| totalExports | 3533 | dependency-graph.json |
+| totalSourceFiles | 1025 | dependency-graph.json |
+| totalExports | 3697 | dependency-graph.json |
 | entryRoots | 5 | dependency-graph.json |
 
 **Lines of code are not a gated claim.** They change on almost every edit, so a gated figure
@@ -102,8 +102,9 @@ change when the STRUCTURE changes.
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 392 files, 2824 exports, 1341 of them re-exports. 976 and 392 do not
-contradict each other; they answer different questions. Every figure states its scope.
+(`bun run docs:deps`): 422 files, 2986 exports, 1396 of them re-exports. The whole-repository
+table above was last filled by `repo_map.py` and was not re-measured in this change: that tool
+is not in this environment. The two scopes answer different questions. Every figure states its scope.
 
 > The `src/`-scope figures above are read from `statistics` in the generated
 > `dependency-graph.json`, and **must be re-read from it after any regeneration** — they are the
@@ -116,7 +117,7 @@ not of the dependency graph:
 
 - 55 bridge entries (IDs 11–65; 19 established, 33 speculative, 3 highly-speculative);
 - 109 canonical equations;
-- 41 composition-graph edges;
+- 46 composition-graph edges;
 - 19 real-data confrontations.
 
 They were measured by importing the built package and reading

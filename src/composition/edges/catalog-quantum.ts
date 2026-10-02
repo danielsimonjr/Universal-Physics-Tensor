@@ -301,16 +301,6 @@ export const be49Edge: BridgeEdge = {
   citation: 'Zurek 2009 Nat. Phys. 5:181; Blume-Kohout & Zurek 2006 PRA 73:062310',
 };
 
-/**
- * BE-50 Wheeler-Feynman time-symmetric field:
- * A = (A_ret + A_adv)/2. This is the catalog `formula_latex` and the
- * PhysJS statement. The residual r = (A_ret − A_adv)/(A_ret + A_adv)
- * remains `evaluateWFTimeSymmetry` and `time-symmetry-residual`; it is
- * not the theorem, so the edge no longer evaluates it.
- *
- * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
- * export for the 26-edge tranche — root-surface budget decision).
- */
 const BE50_SYMBOLIC: ExprNode = {
   kind: 'op',
   op: '/',
@@ -327,6 +317,16 @@ const BE50_SYMBOLIC: ExprNode = {
   ],
 };
 
+/**
+ * BE-50 Wheeler-Feynman time-symmetric field:
+ * A = (A_ret + A_adv)/2. This is the catalog `formula_latex` and the
+ * PhysJS statement. The residual r = (A_ret − A_adv)/(A_ret + A_adv)
+ * remains `evaluateWFTimeSymmetry` and `time-symmetry-residual`; it is
+ * not the theorem, so the edge no longer evaluates it.
+ *
+ * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
+ * export for the 26-edge tranche — root-surface budget decision).
+ */
 export const be50Edge: BridgeEdge = {
   id: 'be-50',
   beId: 50,

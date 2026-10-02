@@ -22,36 +22,36 @@
 
 ## Overview
 
-UPT follows a layered architecture. The 392 TypeScript files under `src/` fall into twelve modules. Each module keeps a strictly separated responsibility.
+UPT follows a layered architecture. The 422 TypeScript files under `src/` fall into thirteen modules. Each module keeps a strictly separated responsibility.
 
-`atlas` holds typed relations between physical models (see Atlas Module). `bridges` catalogs, evaluates, and adjudicates established equations, and confronts them against real data through the evidence-spine registry. `canonical` is the textbook L-layer registry that bridges are validated against. The registry has 109 equations, spanning a monomial L0 tier, a non-monomial L1-sum tier, and a condensed-matter domain. `composition` is the graph-lite bridge-composition layer: the 41-edge catalog graph, the canonical-only graph, the discovery-hardening funnel, and the epistemic-grounding ledger. `dimensional` provides the symbolic layer, including the connection and curvature AST. `numerical` provides the compute layer, including the GR integrators and evaluators. `core` holds legacy high-level utilities, the flat constants, and the intelligent-index / regime layer. `diff` is the bridge-gradient layer. `cases` holds qualified applied-case evaluators. `cli` is the typed CLI command tree behind the `bin/upt.mjs` shim. `entry` is the public re-export surface. `root` is the one-file `cli-api` barrel at the `src/` root.
+`atlas` holds typed relations between physical models (see Atlas Module). `bridges` catalogs, evaluates, and adjudicates established equations, and confronts them against real data through the evidence-spine registry. `canonical` is the textbook L-layer registry that bridges are validated against. The registry has 109 equations, spanning a monomial L0 tier, a non-monomial L1-sum tier, and a condensed-matter domain. `composition` is the graph-lite bridge-composition layer: the 46-edge catalog graph, the canonical-only graph, the discovery-hardening funnel, and the epistemic-grounding ledger. `dimensional` provides the symbolic layer, including the connection and curvature AST. `numerical` provides the compute layer, including the GR integrators and evaluators. `core` holds legacy high-level utilities, the flat constants, and the intelligent-index / regime layer. `diff` is the bridge-gradient layer. `relations` holds the shared relation vocabulary. `cases` holds qualified applied-case evaluators. `cli` is the typed CLI command tree behind the `bin/upt.mjs` shim. `entry` is the public re-export surface. `root` is the one-file `cli-api` barrel at the `src/` root.
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │  entry/            │  Public re-export surface (1 file)        │
 ├────────────────────────────────────────────────────────────────┤
 │  cli/              │  Typed CLI command tree — main/args/      │
-│                    │  output/graphs + 25 per-command           │
+│                    │  output/graphs + 28 per-command           │
 │                    │  modules behind the bin/upt.mjs shim      │
-│                    │  (45 files); the 1-file cli-api barrel    │
+│                    │  (51 files); the 1-file cli-api barrel    │
 │                    │  at src/ root is its sole runtime seam    │
 │                    │  into internals                           │
 ├────────────────────────────────────────────────────────────────┤
 │  atlas/            │  Typed model-to-model relations: types /  │
 │                    │  error algebra / regime / composition     │
 │                    │  table / witnesses / families / export    │
-│                    │  + invalid-bridge benchmark (65 files)    │
+│                    │  + invalid-bridge benchmark (70 files)    │
 ├────────────────────────────────────────────────────────────────┤
 │  bridges/          │  Catalog index + per-bridge evaluators +  │
 │                    │  membership criterion / negative catalog  │
 │                    │  + the CONFRONTATIONS evidence-spine      │
 │                    │  registry (19 data-confronted bridges)    │
-│                    │  (90 files)                               │
+│                    │  (91 files)                               │
 ├────────────────────────────────────────────────────────────────┤
 │  canonical/        │  Canonical L-layer registry + entries +   │
 │                    │  dimensional fields + normal-form hash +  │
 │                    │  bridge↔canonical linkage (F4 guard) +    │
-│                    │  tensor seeder (18 files; 109             │
+│                    │  tensor seeder (19 files; 109             │
 │                    │  equations incl. the L1-sum non-monomial  │
 │                    │  tier + condensed-matter domain)          │
 ├────────────────────────────────────────────────────────────────┤
@@ -61,17 +61,17 @@ UPT follows a layered architecture. The 392 TypeScript files under `src/` fall i
 │                    │  + identifiability + retrodiction +       │
 │                    │  explainQuantity + bridge-analysis +      │
 │                    │  discovery + CATALOG_GRAPH + the          │
-│                    │  epistemic-grounding ledger (77 files)    │
+│                    │  epistemic-grounding ledger (83 files)    │
 ├────────────────────────────────────────────────────────────────┤
 │  dimensional/      │  SI types / algebra / AST / validator /   │
 │                    │  metric, connection, curvature layer +    │
-│                    │  Buckingham-π + dim-spec (32 files)       │
+│                    │  Buckingham-π + dim-spec (36 files)       │
 ├────────────────────────────────────────────────────────────────┤
 │  numerical/        │  TensorEngine / engines / lowering /      │
 │                    │  RK4 + GL4 integrators / perihelion       │
 │                    │  finder / Killing / Einstein / Kretschmann│
 │                    │  / Klein-Gordon / formula / geometrized   │
-│                    │  (40 files)                               │
+│                    │  (42 files)                               │
 ├────────────────────────────────────────────────────────────────┤
 │  cases/            │  Qualified applied-case evaluators        │
 │                    │  (9 files)                                │
@@ -83,11 +83,15 @@ UPT follows a layered architecture. The 392 TypeScript files under `src/` fall i
 │  diff/             │  bridgeGradient + AST gradient + bridge   │
 │                    │  specs (3 files)                          │
 ├────────────────────────────────────────────────────────────────┤
+│  relations/        │  Shared relation vocabulary: types,      │
+│                    │  composition table, regime algebra,      │
+│                    │  conventions, and category (5 files)     │
+├────────────────────────────────────────────────────────────────┤
 │  root              │  cli-api barrel (1 file)                  │
 └────────────────────────────────────────────────────────────────┘
 ```
 
-**Total** (`src/` scope): 392 TypeScript files, 2824 exports (1341 re-exports), and 55 bridge catalog entries. The catalog spans IDs 11–65: 19 established, 33 speculative, 3 highly-speculative. The scope also has 41 composition-graph edges, plus 109 canonical-only `law` edges through `CANONICAL_GRAPH`. The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
+**Total** (`src/` scope): 422 TypeScript files, 2986 exports (1396 re-exports), and 55 bridge catalog entries. The catalog spans IDs 11–65: 19 established, 33 speculative, 3 highly-speculative. The scope also has 46 composition-graph edges, plus 109 canonical-only `law` edges through `CANONICAL_GRAPH`. The scope has 19 real-data confrontations: BE-11, BE-21, BE-23, BE-35, BE-36, BE-37, BE-48, BE-51, BE-52, BE-55, BE-56, BE-58, BE-59, BE-60, BE-61, BE-62, BE-63, BE-64, BE-65.
 
 (The `src/`-scope file and export counts come from the Summary Statistics in `docs/architecture/DEPENDENCY_GRAPH.md`, which `bun run docs:deps` regenerates. The catalog, canonical, graph and confrontation counts come from the built package; see Verification below.)
 
@@ -183,7 +187,7 @@ Together, be-52 (Mercury perihelion), be-51 (light deflection) and be-37 (Shapir
 
 ## Composition Module
 
-The graph-lite bridge-composition layer (`src/composition/`): bridges as typed graph edges over physical quantities, composable into multi-bridge chains. 71 files; the graph has **41 edges** (9 calibration + 6 catalog-tranche + 26 catalog-full).
+The graph-lite bridge-composition layer (`src/composition/`): bridges as typed graph edges over physical quantities, composable into multi-bridge chains. 83 files; the graph has **46 edges** (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds).
 
 ### `Quantity` / `RegimeAttributes` / `regimesDiffer` (`src/composition/quantity.ts`)
 
@@ -207,7 +211,7 @@ The home of every graph endpoint: **131** `Quantity` constants (`export const *Q
 
 ### `enumerateCompositions(...)` (`src/composition/enumerate.ts`)
 
-The candidate enumerator walks all ordered edge pairs and attempts composition. The enumerator returns an `EnumerationReport`. The report partitions the pairs into three groups: valid `CompositionCandidate`s (split against `REGISTERED_COMPOSITION_IDS` into registered and novel), dimension/junction failures, and `requiresDisposition` entries. Each such entry (`DispositionRequired[]`) is an alias collision correctly held at the namespacing gate. Over the 41-edge graph it finds 11 compositions, 7 of them novel candidates (`docs/research/v0.11.0-novel-candidates.md`).
+The candidate enumerator walks all ordered edge pairs and attempts composition. The enumerator returns an `EnumerationReport`. The report partitions the pairs into three groups: valid `CompositionCandidate`s (split against `REGISTERED_COMPOSITION_IDS` into registered and novel), dimension/junction failures, and `requiresDisposition` entries. Each such entry (`DispositionRequired[]`) is an alias collision correctly held at the namespacing gate. `enumerateCompositions(CATALOG_GRAPH)` returns 19 compositions: 4 registered and 15 novel, plus 1 pair held for an alias disposition. The composition count is pinned by `tests/composition/linkage-map.test.ts`. The 11-composition figure in `docs/research/v0.11.0-novel-candidates.md` is that note's measurement of the earlier graph.
 
 ### `propagateUncertainty(...)` (`src/composition/uncertainty.ts`)
 
@@ -243,11 +247,11 @@ A meta/analysis layer, like the catalog adjudicator, that combines the dimension
 
 Deliberately NOT re-exported from `src/index.ts`. **Explicitly a review/confrontation-priority ranking, NOT a credibility score** — the signals are orthogonal to whether a bridge is true (the docstring and `docs/research/Bridge-Priority-Scorecard.md` carry the caveat). Surfaced by `npm run bridge-priority`; pinned by `tests/composition/bridge-priority.test.ts`.
 
-The module also hosts `linkageMap(edges)`, the connected-component map of the catalog graph (edges linked by shared quantities, honoring `QUANTITY_IDENTIFICATIONS`). The map has three parts. The parts are: clusters (largest first, each with its status mix, link hubs, and an `anchored` flag), the isolated tail, and the composition count. The map reveals the catalog's hub-and-spoke structure: one dominant anchored cluster of 16 hubbed on `mass`/`temperature`, two small thematic clusters, and 20 isolated edges. Surfaced by `upt map`; recorded in `docs/research/Catalog-Linkage-Map.md`; pinned by `tests/composition/linkage-map.test.ts`. This map is structural, NOT a credibility signal.
+The module also hosts `linkageMap(edges)`, the connected-component map of the catalog graph (edges linked by shared quantities, honoring `QUANTITY_IDENTIFICATIONS`). The map has three parts. The parts are: clusters (largest first, each with its status mix, link hubs, and an `anchored` flag), the isolated tail, and the composition count. The map reveals the catalog's hub-and-spoke structure: one dominant anchored cluster of 17 hubbed on `mass`/`temperature`, smaller clusters (cosmological-constant, Friedmann/Hubble, and the Hall pair), and 22 isolated edges. Surfaced by `upt map`; the earlier 23-component reading is `docs/research/Catalog-Linkage-Map.md`; the live split is pinned by `tests/composition/linkage-map.test.ts`. This map is structural, NOT a credibility signal.
 
 `proposeLinkCandidates(edges)` uses the map to propose candidate identifications. A candidate is every pair of quantities in DIFFERENT clusters that share a non-dimensionless dimension — the kind of link that the Hawking-temperature ≡ temperature identification is. Each candidate is tagged with `touchesCore` and `sameKind` (shared name token).
 
-⚠ The result is a coincidence-heavy REVIEW SURFACE, NOT a list of discovered bridges. Of 132 candidates, 98 touch the anchored core, and 36 of those are also same-kind. Of the same-kind candidates, ~34 are still coincidences (`decoherence-rate ≟ hubble-rate`) or pairs the catalog deliberately keeps distinct (`effective-mass ≠ mass`). The genuinely-motivated few — e.g. `coarsening-length ≟ quantum-correlation-length`, linking the isolated Model-A coarsening bridge to the Kibble–Zurek cluster — go to human review.
+⚠ The result is a coincidence-heavy REVIEW SURFACE, NOT a list of discovered bridges. `proposeLinkCandidates(CATALOG_GRAPH)` returns 152 candidates. 118 touch the anchored core, and 37 of those are also same-kind. Same-kind pairs still include coincidences (`decoherence-rate ≟ hubble-rate`) and pairs the catalog deliberately keeps distinct (`effective-mass ≠ mass`). The genuinely-motivated few — e.g. `coarsening-length ≟ quantum-correlation-length`, linking the isolated Model-A coarsening bridge to the Kibble–Zurek cluster — go to human review.
 
 Surfaced by `upt candidates`; written up in `docs/research/Linkage-Candidate-Proposals.md`; pinned by `tests/composition/link-candidates.test.ts`.
 
@@ -291,17 +295,17 @@ Six catalog-backed edges wrap existing validated evaluators: `be14Edge`, `be19Ed
 
 ### Catalog-full edges (`src/composition/edges/catalog-full.ts`)
 
-26 further edges (`CATALOG_FULL_EDGES`), one per catalog bridge, which bring the graph to 41 edges. BE-11 is among them and also has `be11ZurekEdge`. Each wraps an existing validated catalog evaluator (the catalog stays authoritative) and carries a first-class validity domain mirroring what the wrapped evaluator enforces. No edges exist for the NOT-A-BRIDGE entries BE-28/29/32/35/40 (per `rejected.ts`). BE-44 is skipped honestly: its evaluator takes a `number[]` news-sample array, incompatible with the scalar-Record edge contract. BE-55…65 have no graph edge either, so 17 catalog bridges have no edge in total.
+26 further edges (`CATALOG_FULL_EDGES`), one per catalog bridge. BE-11 is among them and also has `be11ZurekEdge`. Each wraps an existing validated catalog evaluator (the catalog stays authoritative) and carries a first-class validity domain mirroring what the wrapped evaluator enforces. No edges exist for the NOT-A-BRIDGE entries BE-28, BE-29, BE-32, and BE-35 (per `rejected.ts`). BE-40 is also not-a-bridge and is a proved-seed law edge, outside `CATALOG_FULL_EDGES`. BE-44 is skipped honestly: its evaluator takes a `number[]` news-sample array, incompatible with the scalar-Record edge contract. Proved-seed edges add BE-40, BE-55, BE-59, BE-60, and BE-63. The catalog ids with no edge are 28, 29, 32, 35, 44, 56, 57, 58, 61, 62, 64, and 65.
 
 ### Assembled graph (`src/composition/catalog-graph.ts`)
 
-`CATALOG_GRAPH` — the 9 calibration + 6 catalog-tranche + 26 catalog-full edges assembled once into a single `readonly BridgeEdge[]`. The result is the public, canonical 41-edge graph. The CLI reads it through the `cli-api` barrel (`src/cli/graphs.ts`). The composition test suites import it directly, rather than each rebuilding the edge list from its constituent imports.
+`CATALOG_GRAPH` — the 9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved-seed edges assembled once into a single `readonly BridgeEdge[]`. The result is the public 46-edge graph. The CLI reads it through the `cli-api` barrel (`src/cli/graphs.ts`). The composition test suites import it directly, rather than each rebuilding the edge list from its constituent imports.
 
 ---
 
 ## Canonical Module
 
-The textbook **L-layer** registry (`src/canonical/`, 17 files): the standard-physics "answer key" the catalog bridges are validated against (Π = L + B + E). **109 canonical equations** (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier), grouped into per-domain `entries/` modules.
+The textbook **L-layer** registry (`src/canonical/`, 19 files): the standard-physics "answer key" the catalog bridges are validated against (Π = L + B + E). **109 canonical equations** (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier), grouped into per-domain `entries/` modules.
 
 ### `CanonicalEquation` type (`src/canonical/canonical-equation.ts`)
 
@@ -931,19 +935,20 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 976 | dependency-graph.json |
-| totalExports | 3533 | dependency-graph.json |
-| totalTypeOnlyImports | 949 | dependency-graph.json |
+| totalSourceFiles | 1025 | dependency-graph.json |
+| totalExports | 3697 | dependency-graph.json |
+| totalTypeOnlyImports | 981 | dependency-graph.json |
 
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 392 files, 2824 exports, 1341 of them re-exports. 976 and 392 do not
-contradict each other; they answer different questions. Every figure states its scope.
+(`bun run docs:deps`): 422 files, 2986 exports, 1396 of them re-exports. The whole-repository
+table above was last filled by `repo_map.py` and was not re-measured in this change: that tool
+is not in this environment. The two scopes answer different questions. Every figure states its scope.
 
 **Claims the gate cannot hold.** Catalog figures are properties of the physics catalog,
 not of the dependency graph. These figures are: 55 bridge entries (IDs 11–65; 19
-established, 33 speculative, 3 highly-speculative), 109 canonical equations, 41
+established, 33 speculative, 3 highly-speculative), 109 canonical equations, 46
 composition-graph edges, and 19 real-data confrontations. They were measured by importing the built package and reading
 `BRIDGE_EQUATIONS`, `CANONICAL_EQUATIONS`, `CATALOG_GRAPH` and `listConfrontations()` directly,
 not taken from any metric. Re-measure the same way; `repo_map` cannot check them.

@@ -553,15 +553,6 @@ export const be11ZurekEdge: BridgeEdge = {
 
 // --- CT-4 (C5 completion) edge — registered in v0.8.0-Design.md §10 BEFORE this code ---
 
-/**
- * BE-37 Shapiro gravitational time delay as a graph edge:
- * (mass, far-radius, near-radius) → Δt = (2GM/c³)·ln(R_far/R_near).
- * Paired with {@link be52Edge} in CT-4: their shared-source quotient
- * a(1−e²)ln(R_far/R_near)/(3πc) is parameter-free in (G, M) — the
- * Part-IX C5 weak-field cross-observable consistency relation.
- *
- * @public
- */
 const BE37_SYMBOLIC: ExprNode = {
   kind: 'op',
   op: '*',
@@ -590,6 +581,15 @@ const BE37_SYMBOLIC: ExprNode = {
   ],
 };
 
+/**
+ * BE-37 Shapiro gravitational time delay as a graph edge:
+ * (mass, far-radius, near-radius) → Δt = (2GM/c³)·ln(R_far/R_near).
+ * Paired with {@link be52Edge} in CT-4: their shared-source quotient
+ * a(1−e²)ln(R_far/R_near)/(3πc) is parameter-free in (G, M) — the
+ * Part-IX C5 weak-field cross-observable consistency relation.
+ *
+ * @public
+ */
 export const be37Edge: BridgeEdge = {
   id: 'be-37',
   beId: 37,

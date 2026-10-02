@@ -36,6 +36,7 @@ export const METRIC_SIGNATURE_NOTE =
   'and as the canonical Einstein-equation metric node. ' +
   'The Kretschmann scalar does not depend on that choice.';
 
+/** The spacetime metrics the curvature reports cover. */
 export type MetricId = 'minkowski' | 'schwarzschild' | 'flrw' | 'kerr';
 
 /** One nonzero component, for text output. @internal */

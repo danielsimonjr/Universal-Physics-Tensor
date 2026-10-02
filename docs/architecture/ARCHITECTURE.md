@@ -65,12 +65,12 @@ Numbers extracted from `docs/architecture/DEPENDENCY_GRAPH.md` Summary Statistic
 
 | Metric | Value |
 |--------|-------|
-| Source files | 392 TypeScript files under `src/` (976 across the whole repository, including tests and tooling) |
-| Modules | 12 (`atlas`, `bridges`, `canonical`, `cases`, `cli`, `composition`, `core`, `diff`, `dimensional`, `entry`, `numerical`, `root`) |
-| Total exports | 2824 (1341 re-exports) |
+| Source files | 422 TypeScript files under `src/` (the whole-repository file count is the Verification table; it was not re-measured in this change) |
+| Modules | 13 (`atlas`, `bridges`, `canonical`, `cases`, `cli`, `composition`, `core`, `diff`, `dimensional`, `entry`, `numerical`, `relations`, `root`) |
+| Total exports | 2986 (1396 re-exports) |
 | Bridge catalog entries | 55 (IDs 11–65) |
 | Per-bridge evaluator modules | see `bridge-coverage-audit.md` |
-| Composition-graph edges | 41 `BridgeEdge` constants (9 calibration + 6 catalog-tranche + 26 catalog-full), assembled once as the public `CATALOG_GRAPH` |
+| Composition-graph edges | 46 `BridgeEdge` constants (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds), assembled once as the public `CATALOG_GRAPH` |
 | Canonical equations | 109 (`node bin/upt.mjs canonical`) |
 | Data-confronted bridges | 19 — BE-11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65 (`listConfrontations()`) |
 | TensorEngine implementations | 2 (`Float64ReferenceEngine`, `MathTSEngine`) |
@@ -79,17 +79,18 @@ Numbers extracted from `docs/architecture/DEPENDENCY_GRAPH.md` Summary Statistic
 
 | Module | Files | Responsibility |
 |--------|-------|----------------|
-| `bridges/` | 90 | Bridge catalog index + per-bridge evaluator modules + the `BridgeEquations` convenience facade gathering every `evaluate*()` under readable method names + membership criterion / negative catalog + the (internal) empirical-coverage audit + the unified `upt confront` evidence-spine subsystem (`confrontations.ts` + per-bridge `be*-confrontation.ts` modules — 19 data-confronted bridges, `listConfrontations()`) |
-| `cli/` | 45 | The typed CLI — `runCli` (returns an exit code, never calls `process.exit`), the `FlagSpec` args parser, the `--json` envelope + non-finite-safe sanitizer (`output.ts`), and the per-command registry (`command.ts`, `commands/`). Every command reaches internals only via the injected `CommandCtx.api`, itself sourced from the `src/cli-api.ts` barrel (a separate 1-file module the dependency-graph tool classifies as `root`). `bin/upt.mjs` is a 28-line shim that resolves `dist/cli/main.js` and maps the returned exit code onto `process.exitCode` |
-| `canonical/` | 18 | Canonical-equation registry — the textbook **L-layer** ground truth bridges are validated against: the `CanonicalEquation` type (L0/L1/L2 fidelity), the assembled registry + accessors + coverage helpers, the Buckingham-derived L0 fields, the per-equation entry modules, the structural normal-form hash + bridge↔canonical linkage (the F4 circularity guard; stub-identity-tagged so `ln2` ≠ `ln⟨e^−βW⟩`), and the tensor seeder. **109 equations** across per-domain `entries/` modules (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier) |
-| `atlas/` | 65 | Typed relations between physical models: relation types, regimes, error bounds with a machine horizon, the composition table, derived evidence, the witness runners and registry, the model families, versioned export, and the invalid-bridge benchmark. The public set is the root `atlas` namespace (`public.ts`); every other symbol is `@internal` on the `universal-physics-tensor/atlas` subpath. See `COMPONENTS.md`, Atlas Module |
-| `composition/` | 77 | Graph-lite `Quantity`/`BridgeEdge`/`composeEdges` layer + centralized quantity nodes, alias dispositions, Phase-D enumerator, uncertainty propagation, the identifiability classifier, the retrodiction harness, the unified `explainQuantity` entry point, the (internal) bridge-analysis triage + linkage-map + link-candidate layer, the 41-edge graph assembled as `CATALOG_GRAPH`, the canonical-only graph `CANONICAL_GRAPH` that runs the discovery funnel on standard physics alone, the internal `UniversalTensor`-backed bridge-prediction + the candidate-vetting discovery loop (with anchor-derived + sourced representative-value magnitude gating), the **identity-consequence surfacer** `proposed-bridges.ts` (`deriveProposedBridges`/`PROPOSED_BRIDGES` — `upt discover --derive`), the **physics-map visualization** `graph-viz.ts` (+ `graph-viz-svg.ts` for SVG via the optional `@viz-js/viz` peer — `upt map --format=mermaid|dot|svg`), **user-equation injection + dimensional analysis** `user-equation.ts` (`analyzeUserEquation` — `upt map --equation`), the **canonical comparison** `canonical-compare.ts` (`compareWithCanonical` — a user formula against the canonical equation with the same target and variables, at fixed points: agrees, differs by a factor, differs in form, or prefactor not checked; `upt map --equation`, `upt derive --formula`), the **sourced prefactor table** `canonical-prefactors.ts` (exact prefactors, with a verbatim quote and a revision-pinned locator, for entries `src/canonical` records only up to a constant; it lives outside that pinned tree), the **dimension-adjacency review surface** `dimension-adjacency.ts` (`dimensionAdjacency` — same-dimension, name-divergent candidates), and SYMBOLIC composition — `composeSymbolic` over optional `symbolic` ExprNode forms, the Observable contract, the scalar `evalExpr` + `substitute` primitives, and the optional MathTS-backed `simplifyExpr`/`simplifyObservable` |
-| `dimensional/` | 32 | SI dimensional types, algebra, AST, validator, metric + connection + curvature layer + the Buckingham-π enumerator + the (internal) dimension-spec parser + single-unknown `dimension-inference` |
-| `numerical/` | 40 | TensorEngine interface, engines, lowering, geodesic + GL4 integrators, perihelion finder, Killing/Einstein/Kretschmann evaluators, Klein-Gordon dispersion evaluator, the (internal) scalar-formula parser — self-contained (Path B) + MathTS-backed (Path A) behind a `FormulaParser` registry, plus the formula dimensional checker (default-on via either parser AST), the geometrized-units boundary adapters (`toGeometrized`/`fromGeometrized`/`geometrizedFactor`, dimension-functor-driven `G^M·c^(T−2M)`) — public — and the `input-validation.ts` leaf (the input validator, which keeps `numerical/` free of an upward dependency on `bridges/`; `grid-field.ts` is a thin re-export, and `GridField` lives in `numerical/types.ts`) |
+| `bridges/` | 91 | Bridge catalog index + per-bridge evaluator modules + the `BridgeEquations` convenience facade gathering every `evaluate*()` under readable method names + membership criterion / negative catalog + the (internal) empirical-coverage audit + the unified `upt confront` evidence-spine subsystem (`confrontations.ts` + per-bridge `be*-confrontation.ts` modules — 19 data-confronted bridges, `listConfrontations()`) |
+| `cli/` | 51 | The typed CLI — `runCli` (returns an exit code, never calls `process.exit`), the `FlagSpec` args parser, the `--json` envelope + non-finite-safe sanitizer (`output.ts`), and the per-command registry (`command.ts`, `commands/`). Every command reaches internals only via the injected `CommandCtx.api`, itself sourced from the `src/cli-api.ts` barrel (a separate 1-file module the dependency-graph tool classifies as `root`). `bin/upt.mjs` is a 28-line shim that resolves `dist/cli/main.js` and maps the returned exit code onto `process.exitCode` |
+| `canonical/` | 19 | Canonical-equation registry — the textbook **L-layer** ground truth bridges are validated against: the `CanonicalEquation` type (L0/L1/L2 fidelity), the assembled registry + accessors + coverage helpers, the Buckingham-derived L0 fields, the per-equation entry modules, the structural normal-form hash + bridge↔canonical linkage (the F4 circularity guard; stub-identity-tagged so `ln2` ≠ `ln⟨e^−βW⟩`), and the tensor seeder. **109 equations** across per-domain `entries/` modules (mechanics, EM/circuits, fluids/waves, thermo, quantum/atomic, gravitation, cosmology, condensed-matter, + the L1-sum non-monomial tier) |
+| `atlas/` | 70 | Typed relations between physical models: relation types, regimes, error bounds with a machine horizon, the composition table, derived evidence, the witness runners and registry, the model families, versioned export, and the invalid-bridge benchmark. The public set is the root `atlas` namespace (`public.ts`); every other symbol is `@internal` on the `universal-physics-tensor/atlas` subpath. See `COMPONENTS.md`, Atlas Module |
+| `composition/` | 83 | Graph-lite `Quantity`/`BridgeEdge`/`composeEdges` layer + centralized quantity nodes, alias dispositions, Phase-D enumerator, uncertainty propagation, the identifiability classifier, the retrodiction harness, the unified `explainQuantity` entry point, the (internal) bridge-analysis triage + linkage-map + link-candidate layer, the 46-edge graph assembled as `CATALOG_GRAPH`, the canonical-only graph `CANONICAL_GRAPH` that runs the discovery funnel on standard physics alone, the internal `UniversalTensor`-backed bridge-prediction + the candidate-vetting discovery loop (with anchor-derived + sourced representative-value magnitude gating), the **identity-consequence surfacer** `proposed-bridges.ts` (`deriveProposedBridges`/`PROPOSED_BRIDGES` — `upt discover --derive`), the **physics-map visualization** `graph-viz.ts` (+ `graph-viz-svg.ts` for SVG via the optional `@viz-js/viz` peer — `upt map --format=mermaid|dot|svg`), **user-equation injection + dimensional analysis** `user-equation.ts` (`analyzeUserEquation` — `upt map --equation`), the **canonical comparison** `canonical-compare.ts` (`compareWithCanonical` — a user formula against the canonical equation with the same target and variables, at fixed points: agrees, differs by a factor, differs in form, or prefactor not checked; `upt map --equation`, `upt derive --formula`), the **sourced prefactor table** `canonical-prefactors.ts` (exact prefactors, with a verbatim quote and a revision-pinned locator, for entries `src/canonical` records only up to a constant; it lives outside that pinned tree), the **dimension-adjacency review surface** `dimension-adjacency.ts` (`dimensionAdjacency` — same-dimension, name-divergent candidates), and SYMBOLIC composition — `composeSymbolic` over optional `symbolic` ExprNode forms, the Observable contract, the scalar `evalExpr` + `substitute` primitives, and the optional MathTS-backed `simplifyExpr`/`simplifyObservable` |
+| `dimensional/` | 36 | SI dimensional types, algebra, AST, validator, metric + connection + curvature layer + the Buckingham-π enumerator + the (internal) dimension-spec parser + single-unknown `dimension-inference` |
+| `numerical/` | 42 | TensorEngine interface, engines, lowering, geodesic + GL4 integrators, perihelion finder, Killing/Einstein/Kretschmann evaluators, Klein-Gordon dispersion evaluator, the (internal) scalar-formula parser — self-contained (Path B) + MathTS-backed (Path A) behind a `FormulaParser` registry, plus the formula dimensional checker (default-on via either parser AST), the geometrized-units boundary adapters (`toGeometrized`/`fromGeometrized`/`geometrizedFactor`, dimension-functor-driven `G^M·c^(T−2M)`) — public — and the `input-validation.ts` leaf (the input validator, which keeps `numerical/` free of an upward dependency on `bridges/`; `grid-field.ts` is a thin re-export, and `GridField` lives in `numerical/types.ts`) |
 | `core/` | 11 | `UniversalTensor` class, `PhysicalConstants` lookup, flat `*_SI` constants, the `LabeledTensor`/`Cell`/regime-registry layer (flux Rule 3 is ERROR-tier; `LabeledTensor` has an explicit `axisOrder` invariant + `axisOf` and the `mergeAxes`/`splitAxis` rank-changing reshape) |
 | `diff/` | 3 | Bridge-gradient layer — `bridgeGradient` (for functions written in engine ops), `bridgeGradientNumerical` (central finite differences, for plain-JS bridges), the AST-gradient path (`bridgeGradientAST`, exact AD over a bridge's RHS AST), and the bridge specs |
 | `cases/` | 9 | Qualified applied cases that connect catalog reductions to end-to-end CLI scenarios |
 | `entry/` | 1 | `src/index.ts` — public re-export surface |
+| `relations/` | 5 | Shared relation vocabulary: types, composition table, regime algebra, convention check, and category morphisms. `src/atlas/` re-exports the names that moved. |
 | `root` | 1 | `src/cli-api.ts` — the CLI API barrel that command modules consume through `CommandCtx` |
 
 ---
@@ -116,7 +117,7 @@ The `TensorEngine` interface decouples the evaluation surface from any particula
 
 ## Module Organization
 
-### `bridges/` (90 files)
+### `bridges/` (91 files)
 
 The bridges module has two distinct layers that should not be confused:
 
@@ -128,7 +129,7 @@ The bridges module has two distinct layers that should not be confused:
 
 **Confrontation layer**: `src/bridges/be36-gw170817-confrontation.ts` confronts GW170817 against the BE-36 GW-speed bound (also `confrontBE36WithUncertainty`). `src/bridges/be23-planckian-confrontation.ts` confronts BE-23 SYK Planckian dissipation against overdoped-cuprate data (Legros et al. 2019; honest-aggregate encoding), `confrontBE23` / `confrontBE23WithUncertainty`.
 
-### `composition/` (74 files)
+### `composition/` (83 files)
 
 The graph-lite composition layer:
 
@@ -147,9 +148,10 @@ The graph-lite composition layer:
 - The edge files under `edges/`:
   - `calibration.ts` (9 edges — `be11ZurekEdge`, `be12Edge`, `be16Edge`, `be37Edge`, `be42Edge`, `be42ViaRsEdge`, `be51Edge`, `be52Edge`, plus `lawSchwarzschildRadius`, the first diagonal-law edge);
   - `catalog-tranche.ts` (6 edges: BE-14/19/21/48/53/54);
-  - `catalog-full.ts` (26 edges, `CATALOG_FULL_EDGES` — a barrel over the four per-domain files `catalog-{quantum,gravitation-cosmology,fields,condensed-matter}.ts`).
+  - `catalog-full.ts` (26 edges, `CATALOG_FULL_EDGES` — a barrel over the four per-domain files `catalog-{quantum,gravitation-cosmology,fields,condensed-matter}.ts`);
+  - `proved-seeds.ts` (5 edges: BE-40, BE-55, BE-59, BE-60, BE-63).
 
-`catalog-graph.ts` assembles the three entry files into the single public `CATALOG_GRAPH` constant. The constant is the one source of truth the CLI and tests consume instead of rebuilding the edge list. `canonical-graph.ts` is the bridge-free counterpart. The module projects the canonical-equation registry into the same `BridgeEdge` vocabulary as `CANONICAL_GRAPH` (constants baked into the evaluators, dimension-guarded). As a result, the discovery/analysis funnel can run on standard physics alone (`upt discover --source=canonical`). Total graph: **41 edges**. BE-28/29/32/35/40 get no edges (NOT-A-BRIDGE per the negative catalog); BE-44 is skipped (array-input evaluator incompatible with the scalar-Record edge contract). The CT-1 calibration target derives E_min(M) = ℏc³ln2/(8πGM) from the BE-42∘BE-16 chain; CT-3 derives the Zurek decoherence scaling from BE-12∘BE-11.
+`catalog-graph.ts` assembles those entry files into the single public `CATALOG_GRAPH` constant. The constant is the one source of truth the CLI and tests consume instead of rebuilding the edge list. `canonical-graph.ts` is the bridge-free counterpart. The module projects the canonical-equation registry into the same `BridgeEdge` vocabulary as `CANONICAL_GRAPH` (constants baked into the evaluators, dimension-guarded). As a result, the discovery/analysis funnel can run on standard physics alone (`upt discover --source=canonical`). Total graph: **46 edges**. BE-28, BE-29, BE-32, and BE-35 get no edges (NOT-A-BRIDGE per the negative catalog). BE-40 is also not-a-bridge and is a proved-seed law edge, outside `CATALOG_FULL_EDGES`. BE-44 is skipped (array-input evaluator incompatible with the scalar-Record edge contract). The catalog ids with no edge are 28, 29, 32, 35, 44, 56, 57, 58, 61, 62, 64, and 65. The CT-1 calibration target derives E_min(M) = ℏc³ln2/(8πGM) from the BE-42∘BE-16 chain; CT-3 derives the Zurek decoherence scaling from BE-12∘BE-11.
 
 The discovery-hardening pieces are:
 
@@ -161,7 +163,7 @@ The discovery-hardening pieces are:
 
 **`probe/` (Product B, experimental):** expression/residual search under `src/composition/probe/`. Types, enumerator, budgets, fingerprints, MHC/holdout fit, corpus comparison (`normalForm`), falsification batteries, optional NDJSON workers, and `upt probe`. Not re-exported from `src/index.ts`. Does not mutate `rankDiscoveries` / `VettedCandidate`. Structure probes never flip `axes.ts` `gated`.
 
-### `dimensional/` (32 files)
+### `dimensional/` (36 files)
 
 The dimensional module is the heart of UPT's symbolic layer. Its responsibilities span four areas:
 
@@ -185,7 +187,7 @@ The validator is a recursive tree-walker that calls the algebra functions to inf
 
 **Curvature layer** (`curvature.ts`, `curvature-composite.ts`, `curvature-invariants.ts`, `weyl-validators.ts`, `einstein-equation.ts`): The GR curvature AST. `curvature.ts` houses the Ricci/Einstein/Bianchi validators and the `ricci`/`einstein` helpers. `bianchiResidual` lives in `src/numerical/bianchi-residual.ts`. `curvature-composite.ts` is the shipped `CurvatureCompositeNode<K,S>` factory + `CURVATURE_KIND_REGISTRY` that all six curvature node kinds (Riemann, Ricci, Einstein, Bianchi, Weyl, Kretschmann) are built from. `curvature-invariants.ts` holds the Kretschmann validator, `weyl-validators.ts` the Weyl validator, and `einstein-equation.ts` `validateEinsteinFieldEquation`. The node types themselves (`KretschmannScalarNode`, `WeylTensorNode`, `EinsteinFieldEquationNode`) are declared in `ast-types.ts`.
 
-### `numerical/` (39 files)
+### `numerical/` (42 files)
 
 The numerical module implements the evaluation backend.
 
@@ -391,13 +393,14 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 976 | dependency-graph.json |
-| totalExports | 3533 | dependency-graph.json |
+| totalSourceFiles | 1025 | dependency-graph.json |
+| totalExports | 3697 | dependency-graph.json |
 | runtimeCircularDeps | 0 | dependency-graph.json |
 | typeOnlyCircularDeps | 0 | dependency-graph.json |
 
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 392 files, 2824 exports, 1341 of them re-exports. 976 and 392 do not
-contradict each other; they answer different questions. Every figure states its scope.
+(`bun run docs:deps`): 422 files, 2986 exports, 1396 of them re-exports. The whole-repository
+table above was last filled by `repo_map.py` and was not re-measured in this change: that tool
+is not in this environment. The two scopes answer different questions. Every figure states its scope.

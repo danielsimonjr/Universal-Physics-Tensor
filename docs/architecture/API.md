@@ -556,7 +556,7 @@ This layer holds the composition graph (`src/composition/`), the computable brid
 - **`minConfidence(...)`** / **`QUANTITY_IDENTIFICATIONS`** — confidence combination and quantity-identification table used by `composeEdges`.
 - **`CompositionDimensionError`** / **`CompositionJunctionError`** / **`DomainViolationError`** — error classes for incompatible compositions.
 - **Calibration edges** — `be16Edge`, `be42Edge`, `be42ViaRsEdge`, `be51Edge`, `be52Edge`, `lawSchwarzschildRadius` (the first diagonal-law edge), and the `M_SUN_KG` anchor constant, plus `be12Edge`, `be11ZurekEdge` (CT-3), and `be37Edge` (CT-4). The CT-1 target derives E_min(M) = ℏc³ln2/(8πGM) from BE-42∘BE-16.
-- **Catalog edges** — the tranche `be14Edge`/`be19Edge`/`be21Edge`/`be48Edge`/`be53Edge`/`be54Edge` is individually on the root surface. The `CATALOG_FULL_EDGES` array adds 26 more edges: the array is on the root surface, and the per-edge exports stay at the composition barrel. Together they bring the graph to 41 edges. See [§11](#phase-cd-analysis-namespacing-gate-and-related-exports).
+- **Catalog edges** — the tranche `be14Edge`/`be19Edge`/`be21Edge`/`be48Edge`/`be53Edge`/`be54Edge` is individually on the root surface. The `CATALOG_FULL_EDGES` array adds 26 more edges: the array is on the root surface, and the per-edge exports stay at the composition barrel. Together with the 5 proved-seed edges they bring the graph to 46 edges. See [§11](#phase-cd-analysis-namespacing-gate-and-related-exports).
 
 ```typescript
 import { composeEdges, be42Edge, be16Edge } from 'universal-physics-tensor';
@@ -1030,8 +1030,8 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalExports | 3533 | dependency-graph.json |
-| unusedExportsCount | 172 | dependency-graph.json |
+| totalExports | 3697 | dependency-graph.json |
+| unusedExportsCount | 198 | dependency-graph.json |
 
 **`unusedExportsCount` is not a deletion list.** It counts exports with no importer *inside
 this repository*. The package is a published library: its public surface exists for consumers who are

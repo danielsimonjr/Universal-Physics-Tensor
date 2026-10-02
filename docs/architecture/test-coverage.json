@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 419,
-    "totalTestFiles": 580,
+    "totalTestFiles": 581,
     "testedCount": 409,
     "untestedCount": 10,
     "coveragePercent": "97.6"
@@ -17308,6 +17308,7 @@
     ],
     "tests/tools/api-surface.test.ts": [],
     "tests/tools/citation-quote-check.test.ts": [],
+    "tests/tools/code-docs-ratchet.test.ts": [],
     "tests/tools/criterion3-embedding.test.ts": [
       "src/atlas/benchmark/baselines.ts"
     ],

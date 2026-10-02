@@ -272,17 +272,6 @@ export const be53Edge: BridgeEdge = {
   citation: 'Gross & Wilczek 1973 PRL 30:1343; Politzer 1973 PRL 30:1346',
 };
 
-/**
- * BE-54 Randall-Sundrum brane cosmology as a graph edge:
- * (mass-density, brane-tension, rescaled-cosmological-constant) →
- * H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3.
- * The wrapped evaluator drops Λ/3 and the Weyl C/a⁴ term. The edge
- * adds Λ/3, the term the theorem and `formula_latex` include, using
- * the same `rescaled-cosmological-constant` node as {@link be19Edge}.
- * The Weyl term stays out: it is not in the theorem.
- *
- * @public
- */
 const BE54_SYMBOLIC: ExprNode = {
   kind: 'op',
   op: '+',
@@ -336,6 +325,17 @@ const BE54_SYMBOLIC: ExprNode = {
   ],
 };
 
+/**
+ * BE-54 Randall-Sundrum brane cosmology as a graph edge:
+ * (mass-density, brane-tension, rescaled-cosmological-constant) →
+ * H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3.
+ * The wrapped evaluator drops Λ/3 and the Weyl C/a⁴ term. The edge
+ * adds Λ/3, the term the theorem and `formula_latex` include, using
+ * the same `rescaled-cosmological-constant` node as {@link be19Edge}.
+ * The Weyl term stays out: it is not in the theorem.
+ *
+ * @public
+ */
 export const be54Edge: BridgeEdge = {
   id: 'be-54',
   beId: 54,

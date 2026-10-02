@@ -387,6 +387,7 @@ function overrideLabel(overrides: Readonly<Record<string, number>> | undefined):
   return bits.length === 0 ? undefined : bits.join(', ');
 }
 
+/** Compare a user expression against the canonical equations that share its target and source quantities. `evaluateUser` is called only for the user's expression; each canonical value comes from that entry's `scalarAst` or from its registry monomial. */
 export function compareWithCanonical(
   target: string,
   sources: readonly ComparisonSource[],

@@ -154,16 +154,6 @@ export const be23Edge: BridgeEdge = {
   citation: 'Sachdev & Ye 1993 PRL 70:3339; Hartnoll 2015 Nature Phys. 11:54',
 };
 
-/**
- * BE-27 Cugliandolo-Kurchan effective temperature: (temperature,
- * active-noise-energy) → T_eff = T(1 + Σ_active/(k_B T)). Wraps
- * `evaluateEffectiveTemperature` (T in K, Σ in J; returns K). Reuses the
- * canonical `temperature` node. The symbolic form is the same algebra,
- * T·(1 + Σ_active/(k_B T)).
- *
- * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
- * export for the 26-edge tranche — root-surface budget decision).
- */
 const BE27_SYMBOLIC: ExprNode = {
   kind: 'op',
   op: '*',
@@ -191,6 +181,16 @@ const BE27_SYMBOLIC: ExprNode = {
   ],
 };
 
+/**
+ * BE-27 Cugliandolo-Kurchan effective temperature: (temperature,
+ * active-noise-energy) → T_eff = T(1 + Σ_active/(k_B T)). Wraps
+ * `evaluateEffectiveTemperature` (T in K, Σ in J; returns K). Reuses the
+ * canonical `temperature` node. The symbolic form is the same algebra,
+ * T·(1 + Σ_active/(k_B T)).
+ *
+ * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
+ * export for the 26-edge tranche — root-surface budget decision).
+ */
 export const be27Edge: BridgeEdge = {
   id: 'be-27',
   beId: 27,

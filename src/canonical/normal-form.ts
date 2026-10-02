@@ -61,8 +61,9 @@ const NAMED_DIMENSIONLESS_CONSTANTS = new Set(['ln_2_constant']);
  * `m_1`, `m_2`). The registry uses one name. The structural hash treats the
  * short spelling as that name when the dimension is the quantity's dimension,
  * so a time coordinate named `T` stays a different symbol.
+ *
+ * @internal
  */
-/** @internal */
 export function canonicalQuantityName(name: string, dim: Dimension): string {
   if (name === 'T' && equals(dim, TEMPERATURE)) return 'temperature';
   if ((name === 'M' || name === 'm_1') && equals(dim, MASS)) return 'mass';

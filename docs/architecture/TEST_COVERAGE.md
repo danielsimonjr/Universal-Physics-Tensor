@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 419 |
-| Total Test Files | 580 |
+| Total Test Files | 581 |
 | Source Files with Tests | 409 |
 | Source Files without Tests | 10 |
 | Coverage | 97.6% |
@@ -1029,6 +1029,7 @@ The following 10 source files are not directly imported by any test file:
 | `tests/tensor.test.ts` | 130 files |
 | `tools/api-surface.test.ts` | 0 files |
 | `tools/citation-quote-check.test.ts` | 0 files |
+| `tools/code-docs-ratchet.test.ts` | 0 files |
 | `tools/criterion3-embedding.test.ts` | 1 files |
 | `tools/criterion3-export.test.ts` | 2 files |
 | `tools/criterion3-labels.test.ts` | 0 files |

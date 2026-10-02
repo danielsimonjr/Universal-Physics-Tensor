@@ -148,17 +148,6 @@ export const be31Edge: BridgeEdge = {
   citation: 'Benincasa & Dowker 2010 PRL 104:181301',
 };
 
-/**
- * BE-43 ER=EPR wormhole-entropy bound: wormhole-cross-section-area →
- * S = k_B A / (4 ℓ_P²). Wraps `evaluateEREPRBound` (A in m²; returns J/K).
- * Mirrors BE-14's SI convention; uses a distinct `wormhole-*` source/target so
- * it does not silently fuse with the BE-14 Ryu-Takayanagi nodes (different
- * geometry: bulk minimal surface vs. ER bridge cross-section).
- * S = k_B c³ A / (4 G ℏ), which is k_B A / (4 ℓ_P²).
- *
- * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
- * export for the 26-edge tranche — root-surface budget decision).
- */
 const BE43_SYMBOLIC: ExprNode = {
   kind: 'op',
   op: '/',
@@ -184,6 +173,17 @@ const BE43_SYMBOLIC: ExprNode = {
   ],
 };
 
+/**
+ * BE-43 ER=EPR wormhole-entropy bound: wormhole-cross-section-area →
+ * S = k_B A / (4 ℓ_P²). Wraps `evaluateEREPRBound` (A in m²; returns J/K).
+ * Mirrors BE-14's SI convention; uses a distinct `wormhole-*` source/target so
+ * it does not silently fuse with the BE-14 Ryu-Takayanagi nodes (different
+ * geometry: bulk minimal surface vs. ER bridge cross-section).
+ * S = k_B c³ A / (4 G ℏ), which is k_B A / (4 ℓ_P²).
+ *
+ * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
+ * export for the 26-edge tranche — root-surface budget decision).
+ */
 export const be43Edge: BridgeEdge = {
   id: 'be-43',
   beId: 43,

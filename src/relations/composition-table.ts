@@ -45,7 +45,7 @@ export type NoCompositeClaim = 'no-composite-claim';
 /** The result of composing two relations. @public */
 export type CompositionResult = RelationType | NoCompositeClaim;
 
-/** @public */
+/** The `'no-composite-claim'` value `composeRelation` returns when the chain asserts nothing. @public */
 export const NO_COMPOSITE_CLAIM: NoCompositeClaim = 'no-composite-claim';
 
 /**

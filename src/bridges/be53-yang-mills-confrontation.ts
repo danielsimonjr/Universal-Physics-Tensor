@@ -73,7 +73,7 @@ export interface YangMillsConfrontationHit {
   readonly outcome: Extract<ConfrontationOutcome, { kind: 'value' }>;
 }
 
-/** @public */
+/** A Yang-Mills confrontation either refuses, naming the missing or invalid inputs in `missing`, or reports a value outcome. @public */
 export type YangMillsConfrontationResult = YangMillsConfrontationRefusal | YangMillsConfrontationHit;
 
 function blank(value: string | undefined): boolean {

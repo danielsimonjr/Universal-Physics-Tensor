@@ -21,10 +21,10 @@ import { regimeHolds as regimeHoldsValue } from '../relations/regime.js';
 import type { AtlasBridge } from './types.js';
 import { MissingDeltaAtError, MissingHorizonError } from './types.js';
 
-/** @public */
+/** Whether a regime's inequalities were satisfied, violated, or could not be checked. @public */
 export type RegimeCheck = import('../relations/regime.js').RegimeCheck;
 
-/** @public */
+/** Check a regime at supplied group values. A missing coordinate is unknown, not a pass. @public */
 export const regimeHolds = regimeHoldsValue;
 
 /**

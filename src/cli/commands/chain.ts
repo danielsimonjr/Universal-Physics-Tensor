@@ -31,6 +31,7 @@ async function run(ctx: { err: (line?: string) => void }): Promise<number> {
   return 2;
 }
 
+/** The `upt chain` command. It names the internal orchestrator, writes nothing, and exits 2. */
 export const command: Command = {
   name: 'chain',
   aliases: [],
