@@ -3,10 +3,11 @@
 This note specifies a refactor-and-integration phase for the library as it
 stands after the layering refactor and the bridge-discovery pipeline. It
 changes no code, no public export, and no cell of the composition table.
-Approval is recorded outside this file. Landing the note does not authorize
-a step. A step becomes work when Daniel accepts this note and an `ACTIVE.md`
-task names that step. Publishing the package is the owner's job and is not
-part of any step.
+Daniel approved this amendment on 2026-10-02. The step table in the
+sequenced plan records which steps have a merge commit. A row marked next
+is not started. Those steps wait for the MathTS release. A next step
+becomes work when an `ACTIVE.md` task names it. Publishing the package is
+the owner's job and is not part of any step.
 
 Live pins, evidence counts, and package version stay in `NOTES.md`. Figures
 below were read from the source while this note was written. They are
@@ -642,10 +643,29 @@ tree before the production change, per the law in `AGENTS.md`.
 Steps 1 through 4 are the joint this note already specified. They do not
 import MathTS and they do not delete an engine. Step 5 is the expression
 walk, and it is MathTS's walk. Steps 6 through 8 are the migration the
-earlier draft held out. Steps 9 through 12 are the old steps 6 through 9,
-moved so they land after the break and stay one concern each. The release
-that contains step 6 is 2.0.0. Steps 7 through 12 ship on that major. They
-do not each open a new major.
+earlier draft held out. Steps 9 through 12 are the old steps 6 through 9.
+The release that contains step 6 is 2.0.0. Steps 7, 8, and 12 ship on that
+major and do not each open a new major. Steps 9, 10, and 11 merged on 1.x
+before that break.
+
+Daniel approved this amendment on 2026-10-02. The table is the record of
+which steps have a merge commit. A row marked next waits for the MathTS
+release and is not started.
+
+| Step | Work | State | Pull request | Merge |
+|---|---|---|---|---|
+| 1 | Record composition-table refusals | done | #303 | `f965d308a518cb44beea9ee44c64a9ebfa9af9c8` |
+| 2 | One internal chain record | done | #305 | `5629cc826af6a6cb53fc5d66e908e27e43aa485f` |
+| 3 | Category composition checks that the morphisms meet | done | #306 | `b2862a34abf4336e24821eaa485de30aad6d8bf0` |
+| 4 | Typed proof draft | done | #307 | `c8d7d54d41736c16a28ab9ea38c8a883828c01ff` |
+| 5 | The scalar walk is MathTS's | next | — | — |
+| 6 | MathTS required; delete Path B and `Float64ReferenceEngine` | next, and this row is 2.0.0 | — | — |
+| 7 | Unit conversion and quadrature call MathTS | next | — | — |
+| 8 | ODE calls MathTS where the method exists | next | — | — |
+| 9 | Rename the CLI uncertainty helper | done | #308 | `d4606c804f98d2ed0c0f1b49da812e110fdc39dc` |
+| 10 | Commands go through `cli-api` | done | #309 | `6196b639fc2bd96df0a50a69ee98ac469f2abc1e` |
+| 11 | Name the three regimes in one module | done | #310 | `d7f7630dea00cbb5a89fc41c19af8b02d26f1f06` |
+| 12 | Exit-code alignment for the metric geodesic | next | — | — |
 
 ### Step 1 — Record why a pair was not a proof target
 
@@ -834,7 +854,7 @@ Risk. Low. The public `propagateUncertainty` stays the graph-layer function.
 Tests. The CLI evaluate uncertainty cases still pass under the new name. A
 test that imports the old CLI name fails to compile.
 
-Public API. Unchanged. Ships on 2.0.0.
+Public API. Unchanged. Merged on 1.x. The step table names the commit.
 
 ### Step 10 — Commands go through `cli-api`
 
@@ -851,7 +871,7 @@ the barrel; the barrel does not import commands.
 Tests. Existing CLI tests. `bun run layer:check` stays green. The allowlist
 does not grow.
 
-Public API. Unchanged. Ships on 2.0.0.
+Public API. Unchanged. Merged on 1.x. The step table names the commit.
 
 ### Step 11 — Name the three regimes in one module
 
@@ -870,7 +890,7 @@ in `src/relations/regime.ts` instead of a new import.
 Tests. A test lists the three names and fails if a fourth export appears.
 It does not assert that the three are equal.
 
-Public API. Unchanged. Ships on 2.0.0.
+Public API. Unchanged. Merged on 1.x. The step table names the commit.
 
 ### Step 12 — Exit-code alignment for the metric geodesic
 
@@ -934,8 +954,10 @@ this repository.
 
 Step 6 is a 2.0.0. The package gains required dependencies and loses the
 zero-dependency parser and the zero-dependency tensor engine. Steps 1
-through 5 can merge on 1.x. They add no dependency and delete no engine.
-Steps 7 through 12 merge after 2.0.0 and do not each bump the major again.
+through 4, and steps 9 through 11, merged on 1.x. The step table names the
+commits. Step 5 is next: the scalar walk is MathTS's. Steps 6, 7, 8, and
+12 are next and wait for the MathTS release. Steps 7, 8, and 12 ship on
+the 2.0.0 line and do not each bump the major again.
 
 The migration note that ships with step 6 states:
 
@@ -986,16 +1008,18 @@ deferred and is not this 2.0.0.
 
 ## Amendment proposal
 
-The text below is the proposal. This note does not edit `ACTIVE.md` or
-`ROADMAP.md`. Those files change only after Daniel accepts a step and the
-corresponding task is filed. This amendment itself waits for Daniel's
-approval. Landing the note does not authorize a step.
+Daniel approved this amendment on 2026-10-02. This note does not edit
+`ACTIVE.md` or `ROADMAP.md`. The tasks for the done rows were filed with
+those pull requests. Rows marked next are not started here. They wait for
+the MathTS release. Landing the note does not start them.
 
 ### Proposed `ACTIVE.md` tasks
 
 File these under open tasks, easiest first, and only the steps Daniel
 accepts. Each line is the task title. The body of the task points back at
-this note's step and does not restate the design.
+this note's step and does not restate the design. Tasks 1–4 and 9–11 are
+the done rows of the step table. Tasks 5–8 and 12 are next and are not
+started. They wait for the MathTS release.
 
 1. Record composition-table refusals from enumeration as their own list,
    without changing which pairs are proof targets. Design:
