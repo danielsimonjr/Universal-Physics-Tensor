@@ -11,7 +11,9 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
+import { enumerateCompositions } from '../../src/composition/enumerate.js';
 import { runChainPipeline } from '../../src/atlas/chain-pipeline.js';
+import { bridgeSeedKeys } from '../../src/atlas/physjs-ref.js';
 
 const SNAPSHOT: unknown = JSON.parse(
   readFileSync(fileURLToPath(new URL('./chain-pipeline-catalog.golden.json', import.meta.url)), 'utf8'),
@@ -33,6 +35,22 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
     const stubs = result.filter((row) => row.kind === 'stub');
     expect(confirmations).toEqual([]);
     expect(restatements).toEqual([]);
-    expect(stubs.map((row) => row.id)).toEqual(['chain-be-63-be-12', 'chain-be-63-be-37']);
+    expect(stubs).toEqual([]);
+    const rejected = result.filter((row) => row.kind === 'rejected: regime mismatch');
+    expect(rejected.map((row) => row.edgeIds)).toEqual([
+      ['be-63', 'be-12'],
+      ['be-63', 'be-37'],
+    ]);
+  });
+
+  it('still proposes the rejected pairs as proof targets', () => {
+    const seeded = enumerateCompositions(CATALOG_GRAPH, { seedIds: new Set(bridgeSeedKeys()) });
+    const pairs = seeded.proofTargets.map((target) => [target.first.id, target.second.id]);
+    expect(pairs).toEqual(
+      expect.arrayContaining([
+        ['be-63', 'be-12'],
+        ['be-63', 'be-37'],
+      ]),
+    );
   });
 });

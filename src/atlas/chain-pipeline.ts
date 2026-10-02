@@ -2,10 +2,12 @@
  * Internal bridge-discovery pipeline.
  *
  * Seeds, then seed-filtered symbolic enumeration, the Buckingham filter,
- * the structural classifier, the chain order, and the proof-target stub.
+ * the structural classifier, the regime join gate, the chain order,
+ * and the proof-target stub.
  * A confirmation reports the catalog id. A restatement reports the
- * pre-declared canonical equation. Any other survivor is a statement
- * skeleton. Nothing is written into the catalog.
+ * pre-declared canonical equation. A regime mismatch is recorded and
+ * is not a stub. Any other survivor is a statement skeleton. Nothing
+ * is written into the catalog.
  *
  * No command calls this. `discovery.ts` and the probe are not inputs.
  *
@@ -23,9 +25,14 @@ import { buckinghamFilter } from '../composition/buckingham-filter.js';
 import type { BuckinghamFilterRecord } from '../composition/buckingham-filter.js';
 import { matchChain } from '../composition/chain-match.js';
 import {
+  compareChainEdgeIds,
   orderChainCandidates,
   type ChainCandidate,
 } from '../composition/chain-candidate.js';
+import {
+  joinRegimeMismatch,
+  type ChainRegimeMismatch,
+} from '../composition/chain-regime.js';
 import type { ChainClassification } from '../canonical/structural.js';
 import { bridgeSeedKeys, physjsTheorem } from './physjs-ref.js';
 import { emitProofTarget } from './proof-target.js';
@@ -53,11 +60,12 @@ export interface ChainStubRecord {
   readonly text: string;
 }
 
-/** One ordered survivor. @internal */
+/** One ordered survivor, or a recorded regime rejection. @internal */
 export type ChainPipelineResult =
   | ChainConfirmationRecord
   | ChainRestatementRecord
-  | ChainStubRecord;
+  | ChainStubRecord
+  | ChainRegimeMismatch;
 
 function isNumericName(name: string): boolean {
   return /^\d+(\.\d+)?$/.test(name);
@@ -186,7 +194,9 @@ function emit(candidate: ChainCandidate): ChainPipelineResult {
  * Run the pipeline on `edges`.
  *
  * A manifest key whose derived kind is not `bridge` is not a premise.
- * A chain the Buckingham filter drops is absent. The catalog array is
+ * A chain the Buckingham filter drops is absent. A confirmation or a
+ * restatement is not sent to the regime gate. Any other mismatch is
+ * `rejected: regime mismatch` and is not a stub. The catalog array is
  * not modified.
  *
  * @internal
@@ -195,6 +205,7 @@ export function runChainPipeline(edges: readonly BridgeEdge[]): readonly ChainPi
   const seedIds = new Set(bridgeSeedKeys());
   const report = enumerateCompositions(edges, { seedIds });
   const candidates: ChainCandidate[] = [];
+  const rejections: ChainRegimeMismatch[] = [];
   for (const target of report.proofTargets) {
     const filtered = buckinghamFilter(
       { name: target.second.target.name, dim: target.second.target.dim },
@@ -202,7 +213,19 @@ export function runChainPipeline(edges: readonly BridgeEdge[]): readonly ChainPi
     );
     if (filtered === undefined) continue;
     const classification = matchChain(target.expr, [target.first.id, target.second.id]);
+    if (classification.kind === 'confirmation' || classification.kind === 'restatement') {
+      candidates.push(toCandidate(classification, filtered));
+      continue;
+    }
+    const mismatch = joinRegimeMismatch(target.first, target.second);
+    if (mismatch !== undefined) {
+      rejections.push(mismatch);
+      continue;
+    }
     candidates.push(toCandidate(classification, filtered));
   }
-  return orderChainCandidates(candidates).map(emit);
+  const orderedRejections = [...rejections].sort((a, b) =>
+    compareChainEdgeIds(a.edgeIds, b.edgeIds),
+  );
+  return [...orderChainCandidates(candidates).map(emit), ...orderedRejections];
 }

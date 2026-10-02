@@ -229,6 +229,7 @@ describe('runChainPipeline', () => {
         '../composition/buckingham-filter.js',
         '../composition/chain-match.js',
         '../composition/chain-candidate.js',
+        '../composition/chain-regime.js',
       ]),
     );
     for (const word of ['discovery', 'probe', 'cli/', 'upt ']) {
@@ -242,7 +243,14 @@ describe('runChainPipeline', () => {
     expect(commands.includes('runChainPipeline')).toBe(false);
     const publicSurface = readFileSync(resolve(root, 'src/atlas/public.ts'), 'utf8');
     expect(publicSurface.includes('runChainPipeline')).toBe(false);
+    expect(publicSurface.includes('chain-regime')).toBe(false);
+    const barrel = readFileSync(resolve(root, 'src/index.ts'), 'utf8');
+    expect(barrel.includes('chain-regime')).toBe(false);
+    expect(barrel.includes('joinRegimeMismatch')).toBe(false);
     const discovery = readFileSync(resolve(root, 'src/composition/discovery.ts'), 'utf8');
     expect(discovery.includes('runChainPipeline')).toBe(false);
+    expect(discovery.includes('chain-regime')).toBe(false);
+    const probe = readFileSync(resolve(root, 'src/composition/probe/pipeline.ts'), 'utf8');
+    expect(probe.includes('chain-regime')).toBe(false);
   });
 });
