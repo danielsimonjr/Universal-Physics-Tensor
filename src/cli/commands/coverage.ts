@@ -5,9 +5,10 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 
-const FLAGS: FlagSpec[] = [{ name: '--json', valueStyle: 'none' }];
+const FLAGS: FlagSpec[] = [JSON_FLAG];
 
 const HELP = `upt coverage
         Audit the catalog's empirical grounding — which bridges are
@@ -47,7 +48,10 @@ export const command: Command = {
   name: 'coverage',
   aliases: ['grounding'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Count catalog bridges by empirical grounding tier.',
+  example: 'upt coverage',
+  group: 'data',
   run,
 };
 

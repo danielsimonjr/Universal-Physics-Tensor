@@ -7,6 +7,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, groundTruthAnchor, groundTruthLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
@@ -25,13 +26,36 @@ type FullyAnnotatedCandidate = AnnotatedCandidate & {
 };
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--max-orders', valueStyle: 'attached' },
-  { name: '--anchor', valueStyle: 'attached', repeatable: true },
-  { name: '--derive', valueStyle: 'none' },
-  { name: '--show-adjudicated', valueStyle: 'none' },
-  { name: '--require-falsifier', valueStyle: 'none' },
-  { name: '--json', valueStyle: 'none' },
+  sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both. canonical excludes bridges.'),
+  {
+    name: '--max-orders',
+    valueStyle: 'attached',
+    description: 'Magnitude-clash threshold. A larger value keeps more pairs promising.',
+    defaultValue: '3',
+  },
+  {
+    name: '--anchor',
+    valueStyle: 'attached',
+    repeatable: true,
+    description: 'Override a numeric anchor as k=v or k=v,k2=v2.',
+    defaultValue: 'mass=M_sun',
+  },
+  {
+    name: '--derive',
+    valueStyle: 'none',
+    description: 'For each promising identification, print the one algebraic relation it implies. That relation is not a bridge.',
+  },
+  {
+    name: '--show-adjudicated',
+    valueStyle: 'none',
+    description: 'List candidates a physicist has already adjudicated, with the recorded verdict.',
+  },
+  {
+    name: '--require-falsifier',
+    valueStyle: 'none',
+    description: 'Hide promising rows that no independent falsifier ran on and survived.',
+  },
+  JSON_FLAG,
 ];
 
 const HELP = `upt discover [--source=catalog|canonical|both]
@@ -419,7 +443,10 @@ export const command: Command = {
   name: 'discover',
   aliases: ['discovery'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Vet quantity identifications and rank them promising, inert, or contradictory.',
+  example: 'upt discover --source=canonical',
+  group: 'discovery',
   run,
 };
 

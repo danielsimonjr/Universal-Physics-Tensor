@@ -9,11 +9,16 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--json', valueStyle: 'none' },
-  { name: '--vars', valueStyle: 'none' },
+  JSON_FLAG,
+  {
+    name: '--vars',
+    valueStyle: 'none',
+    description: 'Also print each entry\'s target and governing variable names.',
+  },
 ];
 
 const HELP = `upt canonical [--vars]
@@ -75,7 +80,10 @@ export const command: Command = {
   name: 'canonical',
   aliases: ['laws'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'List the canonical-equation registry, its fidelity, and the coverage gap.',
+  example: 'upt canonical --vars',
+  group: 'explore',
   run,
 };
 

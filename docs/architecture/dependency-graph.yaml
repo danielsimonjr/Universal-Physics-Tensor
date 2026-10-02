@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.3
-  totalFiles: 421
+  totalFiles: 422
   totalModules: 13
-  totalExports: 2977
+  totalExports: 2986
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7422,6 +7422,7 @@ modules:
         - clearRegistryForTest
       interfaces:
         - CommandCtx
+        - CommandSub
         - Command
       functions:
         - registerCommand
@@ -7615,6 +7616,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../errors.js
           imports:
             - CliError
@@ -7653,6 +7658,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -7680,6 +7690,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -7701,6 +7715,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -7727,6 +7746,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -7747,6 +7770,9 @@ modules:
           imports:
             - registerCommand
             - Command
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
       exports:
         - command
       constants:
@@ -7765,6 +7791,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../errors.js
           imports:
             - CliError
@@ -7790,6 +7820,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -7816,6 +7851,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -7837,6 +7876,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -7876,6 +7919,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -7919,6 +7967,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -7966,6 +8018,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -8020,6 +8076,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -8054,6 +8115,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -8075,6 +8140,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -8203,6 +8273,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -8283,6 +8358,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -8315,10 +8394,15 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../errors.js
           imports:
             - CliError
             - EXIT_CHECK_FAILED
+            - UsageError
         - file: ../output.js
           imports:
             - emitJson
@@ -8369,6 +8453,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -8393,6 +8482,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -8421,6 +8515,11 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
+            - sourceFlag
         - file: ../graphs.js
           imports:
             - resolveGraph
@@ -8452,6 +8551,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -8476,10 +8579,15 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../errors.js
           imports:
             - CliError
             - EXIT_CHECK_FAILED
+            - UsageError
         - file: ../output.js
           imports:
             - emitJson
@@ -8511,6 +8619,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../errors.js
           imports:
             - UsageError
@@ -8540,6 +8652,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../errors.js
           imports:
             - CliError
@@ -8572,6 +8688,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -8605,6 +8725,10 @@ modules:
             - registerCommand
             - Command
             - CommandCtx
+        - file: ../flag-help.js
+          imports:
+            - commandHelp
+            - JSON_FLAG
         - file: ../output.js
           imports:
             - emitJson
@@ -8716,6 +8840,34 @@ modules:
         - EVAL_STUBS
         - printDisplay
         - printEval
+    src/cli/flag-help.ts:
+      description: Flag text for `upt help` and for `docs/CLI.md`.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./args.js
+          imports:
+            - FlagSpec
+          typeOnly: true
+      exports:
+        - JSON_FLAG
+        - GLOBAL_FLAGS
+        - BUILTIN_VERBS
+        - sourceFlag
+        - flagHeading
+        - renderFlagCatalog
+        - commandHelp
+        - undocumentedFlags
+      functions:
+        - sourceFlag
+        - flagHeading
+        - renderFlagCatalog
+        - commandHelp
+        - undocumentedFlags
+      constants:
+        - JSON_FLAG
+        - GLOBAL_FLAGS
+        - BUILTIN_VERBS
     src/cli/graphs.ts:
       description: Shared `--source=catalog|canonical|both` graph resolution — replaces
       externalDependencies: []
@@ -8775,6 +8927,10 @@ modules:
           imports:
             - resolveCommand
             - CommandCtx
+        - file: ./flag-help.js
+          imports:
+            - GLOBAL_FLAGS
+            - renderFlagCatalog
         - file: ./record.js
           imports:
             - recordInvocation
@@ -9843,12 +9999,14 @@ modules:
       exports:
         - ADJUDICATIONS
         - candidateId
+        - candidateIdIfSlug
         - adjudicationFor
         - annotateAdjudications
       interfaces:
         - CandidateAdjudication
       functions:
         - candidateId
+        - candidateIdIfSlug
         - adjudicationFor
         - annotateAdjudications
       constants:
@@ -12539,6 +12697,7 @@ modules:
         - file: ../adjudication.js
           imports:
             - candidateId
+            - candidateIdIfSlug
         - file: ../edge.js
           imports:
             - BridgeEdge
@@ -20076,6 +20235,7 @@ dependencyGraph:
         - src/cli/euler-guard.ts
         - src/cli/eval-numbers.ts
         - src/cli/expr-print.ts
+        - src/cli/flag-help.ts
         - src/cli/graphs.ts
         - src/cli/main.ts
         - src/cli/map-evidence.ts
@@ -20286,19 +20446,19 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 421
+  totalTypeScriptFiles: 422
   totalModules: 13
-  totalLinesOfCode: 91576
-  totalExports: 2977
+  totalLinesOfCode: 92062
+  totalExports: 2986
   totalClasses: 61
-  totalInterfaces: 476
-  totalFunctions: 768
+  totalInterfaces: 477
+  totalFunctions: 774
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 753
+  totalConstants: 756
   totalReExports: 1396
-  totalTypeOnlyImports: 568
+  totalTypeOnlyImports: 569
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 77
+  unusedExportsCount: 79

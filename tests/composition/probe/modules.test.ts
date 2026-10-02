@@ -38,6 +38,8 @@ import {
   problemFromResidualGap,
 } from '../../../src/composition/probe/frontier.js';
 import { CATALOG_GRAPH } from '../../../src/composition/catalog-graph.js';
+import { CANONICAL_GRAPH } from '../../../src/composition/canonical-graph.js';
+import { candidateId } from '../../../src/composition/adjudication.js';
 import { fitPrefactor } from '../../../src/composition/probe/fit.js';
 import { scoreCandidate, rankPareto } from '../../../src/composition/probe/scoring.js';
 import { compareToCorpus, corpusRelativeWording } from '../../../src/composition/probe/corpus.js';
@@ -213,6 +215,17 @@ describe('frontier', () => {
   it('refuses to build a Product B problem from a relation-link gap', () => {
     const gap = wrapRelationLinkGaps(CATALOG_GRAPH)[0]!;
     expect(() => problemFromResidualGap(gap, period, [length, gravity])).toThrow(/not a Product B/);
+  });
+  it('keeps the ledger slug guard and still lists a canonical symbol that is not a slug', () => {
+    expect(() => candidateId('A', 'area')).toThrow(/kebab-case slugs/);
+    const links = wrapRelationLinkGaps(CANONICAL_GRAPH);
+    const hit = links.find(
+      (g) => g.participants.some((p) => p.id === 'A') && g.participants.some((p) => p.id === 'area'),
+    );
+    expect(hit?.id.startsWith('fg-link-raw:')).toBe(true);
+    expect(hit?.searchability.searchable).toBe(false);
+    expect(() => scanFrontier(CANONICAL_GRAPH)).not.toThrow();
+    expect(wrapRelationLinkGaps(CATALOG_GRAPH).every((g) => !g.id.includes('raw:'))).toBe(true);
   });
   it('refuses relation-link and regime-transition and points at upt discover', () => {
     const link = wrapRelationLinkGaps(CATALOG_GRAPH)[0]!;

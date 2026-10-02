@@ -16,11 +16,12 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import { buildSearchIndex, fold, matchEveryWord, SEARCH_SECTIONS, STOP_WORDS } from '../search-index.js';
 
-const FLAGS: FlagSpec[] = [{ name: '--json', valueStyle: 'none' }];
+const FLAGS: FlagSpec[] = [JSON_FLAG];
 
 const HELP = `upt search <word> ...
         Find a catalog bridge, canonical equation, atlas model, atlas bridge,
@@ -90,5 +91,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   return 0;
 }
 
-export const command: Command = { name: 'search', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'search',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Find a bridge, equation, model, quantity, or case by the words in its record.',
+  example: 'upt search thermal noise',
+  group: 'explore',
+  run,
+};
 registerCommand(command);

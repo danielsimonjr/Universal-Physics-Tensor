@@ -8,6 +8,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
@@ -19,11 +20,15 @@ import { readBinding } from '../../numerical/binding-value.js';
 import { builtinFormulaDimensionChecker } from '../../numerical/formula-dimension.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--debug', valueStyle: 'none' },
-  { name: '--json', valueStyle: 'none' },
-  { name: '--show-parser', valueStyle: 'none' },
-  { name: '--natural', valueStyle: 'none' },
-  { name: '--geometrized', valueStyle: 'none' },
+  { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
+  JSON_FLAG,
+  {
+    name: '--show-parser',
+    valueStyle: 'none',
+    description: 'Print mathts or builtin. With no formula, that is the whole output and the exit code is 0.',
+  },
+  { name: '--natural', valueStyle: 'none', description: 'Set ħ = c = 1 (and h = 2π) when reading values.' },
+  { name: '--geometrized', valueStyle: 'none', description: 'Set ħ = c = G = 1 when reading values.' },
 ];
 
 /**
@@ -165,7 +170,10 @@ export const command: Command = {
   name: 'eval',
   aliases: ['calc'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Evaluate a scalar formula. A bare e is the elementary charge; Euler\'s number is exp(x).',
+  example: 'upt eval "2*pi*sqrt(1/9.81)"',
+  group: 'evaluate',
   run,
 };
 

@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Document and exercise every `upt` command, subcommand, and flag. The reference is `docs/CLI.md`, generated from the command registry. The dogfood is `docs/dogfood/2026-10-02-cli-coverage.md`.
+  Done: the registry is 28 commands, 106 parsed flags, 9 `probe` subcommands, and 6 globals. `docs/CLI.md` and the README tables are generated from that registry. A packed install outside the repo ran 239 invocations; each flag, subcommand, and global was in some argv. `upt probe scan --source=canonical` no longer throws on the quantity name `A`. `upt path` and `upt regime` exit 2 when a required argument is missing. `upt evaluate` with a non-numeric value stays exit 1, and so does `upt confront` with a positional that is not a bridge id. `upt chain` still exits 2 and does not run the orchestrator.
 - [x] Fix the npm 1.0.2 dogfood findings that live in this repo and prepare 1.0.3. The report is `docs/dogfood/2026-10-02-npm-1.0.2.md`. No tag is pushed. Publishing stays the owner's job.
   Done: a shared index name with unequal ids throws `IndexNameMismatchError` and names both ids. README and ROADMAP counts are stamped by `scripts/readme-status.ts`. The dimensional README and `examples/basic-usage.ts` match the package. `upt chain` exits 2 and does not run the orchestrator. `review status` names the review mark. Package version is 1.0.3. PhysJS is pinned at `2e09357f9674bc60b60b378155a1623c27dc7b04`.
 - [x] Pin PhysJS at 2e09357f9674bc60b60b378155a1623c27dc7b04. PhysJS #54 fixes the five module comments that said the reference is not a formalRef, and the Landauer comment that said `Derivation step`. The manifest entries are unchanged.

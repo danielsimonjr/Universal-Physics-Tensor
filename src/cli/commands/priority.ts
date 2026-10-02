@@ -6,12 +6,13 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
+  sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both.'),
+  JSON_FLAG,
 ];
 
 const HELP = `upt priority [--source=catalog|canonical|both]
@@ -79,7 +80,10 @@ export const command: Command = {
   name: 'priority',
   aliases: ['prioritize', 'triage'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Triage speculative bridges by structural decidability, not by credibility.',
+  example: 'upt priority',
+  group: 'discovery',
   run,
 };
 

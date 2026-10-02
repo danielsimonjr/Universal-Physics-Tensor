@@ -7,28 +7,40 @@
 import { readFileSync, statSync } from 'node:fs';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 
-const SUBVERBS = ['scan', 'show', 'run', 'candidates', 'falsify', 'rank', 'design', 'reproduce', 'study'] as const;
+const PROBE_SUBCOMMANDS = [
+  { name: 'scan', summary: 'List typed frontier gaps. The default listing is the searchable ones.' },
+  { name: 'show', summary: 'Print one gap by id.' },
+  { name: 'run', summary: 'Run a bounded search from a problem file.' },
+  { name: 'candidates', summary: 'Run the search and list stored statuses.' },
+  { name: 'falsify', summary: 'Run the search and print the falsification batteries.' },
+  { name: 'rank', summary: 'Run the search and print the Pareto front.' },
+  { name: 'design', summary: 'Suggest a discriminating experiment from two hypotheses and bounds.' },
+  { name: 'reproduce', summary: 'Re-run a problem file under the same stop contract.' },
+  { name: 'study', summary: 'Fit exploratory rows only, then test on withheld holdout and replication rows.' },
+] as const;
+const SUBVERBS = PROBE_SUBCOMMANDS.map((s) => s.name);
 type Subverb = (typeof SUBVERBS)[number];
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
-  { name: '--problem', valueStyle: 'attached' },
-  { name: '--budget-ms', valueStyle: 'attached' },
-  { name: '--holdout-tol', valueStyle: 'attached' },
-  { name: '--worker', valueStyle: 'attached' },
-  { name: '--bounds', valueStyle: 'attached' },
-  { name: '--h1', valueStyle: 'attached' },
-  { name: '--h2', valueStyle: 'attached' },
-  { name: '--searchable-only', valueStyle: 'none' },
-  { name: '--all', valueStyle: 'none' },
-  { name: '--data', valueStyle: 'attached' },
-  { name: '--replication', valueStyle: 'attached' },
-  { name: '--alpha', valueStyle: 'attached' },
+  sourceFlag('catalog', 'Which graph a subverb reads: catalog, canonical, or both.'),
+  JSON_FLAG,
+  { name: '--problem', valueStyle: 'attached', description: 'Problem JSON file for run, candidates, falsify, rank, and reproduce.' },
+  { name: '--budget-ms', valueStyle: 'attached', description: 'Wall-clock cap in milliseconds.', defaultValue: '5000' },
+  { name: '--holdout-tol', valueStyle: 'attached', description: 'Relative holdout RMSE cap.', defaultValue: '0.15' },
+  { name: '--worker', valueStyle: 'attached', description: 'Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file.' },
+  { name: '--bounds', valueStyle: 'attached', description: 'Bounds for design, as the design subverb reads them.' },
+  { name: '--h1', valueStyle: 'attached', description: 'First hypothesis for design.' },
+  { name: '--h2', valueStyle: 'attached', description: 'Second hypothesis for design.' },
+  { name: '--searchable-only', valueStyle: 'none', description: 'scan: list only Product-B-searchable gaps. This is the default.' },
+  { name: '--all', valueStyle: 'none', description: 'scan: include Product A wrappers, which are not searchable here.' },
+  { name: '--data', valueStyle: 'attached', description: 'Study file (JSON, or CSV when the name ends in .csv) for study.' },
+  { name: '--replication', valueStyle: 'attached', description: 'study: replication rows from a separate JSON or CSV file.' },
+  { name: '--alpha', valueStyle: 'attached', description: 'study: χ² test level.', defaultValue: 'the file\'s alpha, else 0.001' },
 ];
 
 /**
@@ -507,7 +519,11 @@ export const command: Command = {
   name: 'probe',
   aliases: [],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Search expressions and residuals. This is not `upt discover`.',
+  example: 'upt probe scan',
+  group: 'discovery',
+  subcommands: PROBE_SUBCOMMANDS,
   run,
 };
 

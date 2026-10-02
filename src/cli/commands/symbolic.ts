@@ -6,13 +6,18 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import { EVAL_STUBS, printDisplay, printEval, printLatex, latexName, siUnitOf } from '../expr-print.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--simplify', valueStyle: 'none' },
-  { name: '--json', valueStyle: 'none' },
+  {
+    name: '--simplify',
+    valueStyle: 'none',
+    description: 'Fold each composed AST with MathTS, then check the fold dimensionally and numerically.',
+  },
+  JSON_FLAG,
 ];
 
 const HELP = `upt symbolic [--simplify]
@@ -227,7 +232,10 @@ export const command: Command = {
   name: 'symbolic',
   aliases: ['compose-symbolic'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Compose the symbolic forms of the registered bridge chains.',
+  example: 'upt symbolic',
+  group: 'evaluate',
   run,
 };
 

@@ -90,6 +90,8 @@ jobs:
           echo "docs/architecture/ matches a fresh generation."
       - name: Fail when README and ROADMAP status spans are stale
         run: bun scripts/readme-status.ts --check
+      - name: Fail when the CLI reference is stale
+        run: bun scripts/cli-reference.ts --check
 
   # Does this PR touch the numerical core? The accuracy suite below is expensive, so it is
   # schedule/dispatch-only -- but that meant a pull request could change floating-point code and

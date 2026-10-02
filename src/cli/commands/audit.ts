@@ -6,13 +6,14 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { statusMeaning } from '../statuses.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
+  sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both.'),
+  JSON_FLAG,
 ];
 
 const HELP = `upt audit [--source=catalog|canonical|both]
@@ -90,7 +91,10 @@ export const command: Command = {
   name: 'audit',
   aliases: [],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Derive every bridge equation by dimensions and sort derived, decoy, and open.',
+  example: 'upt audit',
+  group: 'evaluate',
   run,
 };
 

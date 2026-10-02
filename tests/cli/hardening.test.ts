@@ -114,9 +114,18 @@ describe('upt derive — non-graph command rejects --source', () => {
 });
 
 describe('upt — no-args demo takes no flags', () => {
-  it("'upt --json' treats --json as an unrecognized top-level command (demo has no flags)", () => {
-    const { status, stderr } = run(['--json']);
+  it("'upt --json' does not run the demo", () => {
+    const { status, stderr, stdout } = run(['--json']);
     expect(status).toBe(2);
-    expect(stderr).toContain("Unknown command '--json'");
+    expect(stderr).toContain("'--json' requires a command");
+    expect(stdout).toBe('');
+  });
+
+  it("'upt --json eval' emits a JSON envelope", () => {
+    const { status, stdout } = run(['--json', 'eval', '1+1']);
+    expect(status).toBe(0);
+    const parsed = JSON.parse(stdout) as { command: string; result: { value: number } };
+    expect(parsed.command).toBe('eval');
+    expect(parsed.result.value).toBe(2);
   });
 });

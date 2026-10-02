@@ -14,6 +14,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
@@ -24,8 +25,8 @@ import { readNamedBinding } from '../../numerical/binding-value.js';
 const SEARCH_HITS_SHOWN = 5;
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
+  sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both.'),
+  JSON_FLAG,
 ];
 
 const HELP = `upt explain <quantity> [name=value | name] ...
@@ -190,7 +191,10 @@ export const command: Command = {
   name: 'explain',
   aliases: [],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Show how the graph determines a quantity, or say that it does not cover that name.',
+  example: 'upt explain hawking-temperature mass=1Msun',
+  group: 'explore',
   run,
 };
 

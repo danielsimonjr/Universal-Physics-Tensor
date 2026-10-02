@@ -15,6 +15,7 @@
 import { writeFileSync } from 'node:fs';
 import type { FlagSpec, ParsedArgs } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine, type AnchorScope } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError, EXIT_CHECK_FAILED } from '../errors.js';
@@ -31,33 +32,33 @@ import { naturalConstantOverrides, type UnitMode } from '../../dimensional/natur
 import { withCatalogEvidence } from '../map-evidence.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--format', valueStyle: 'attached' },
-  { name: '--out', valueStyle: 'attached' },
-  { name: '--max-orders', valueStyle: 'attached' },
-  { name: '--anchor', valueStyle: 'attached', repeatable: true },
-  { name: '--proposed', valueStyle: 'none' },
-  { name: '--relation', valueStyle: 'attached' },
-  { name: '--evidence', valueStyle: 'attached' },
-  { name: '--around', valueStyle: 'either' },
-  { name: '--depth', valueStyle: 'attached' },
-  { name: '--route', valueStyle: 'either' },
-  { name: '--all-routes', valueStyle: 'none' },
-  { name: '--max-routes', valueStyle: 'attached' },
-  { name: '--family', valueStyle: 'either' },
-  { name: '--observable', valueStyle: 'either' },
-  { name: '--stored', valueStyle: 'none' },
-  { name: '--run', valueStyle: 'none' },
+  sourceFlag('both', 'Which graph to draw: catalog, canonical, both, or poster. poster is the Atlas Phase 3 statement index and is valid only here. This command defaults to both.'),
+  { name: '--format', valueStyle: 'attached', description: 'Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer.', defaultValue: 'text' },
+  { name: '--out', valueStyle: 'attached', description: 'Write the report to PATH instead of stdout.' },
+  { name: '--max-orders', valueStyle: 'attached', description: 'Magnitude-clash threshold for the --proposed overlay.', defaultValue: '3' },
+  { name: '--anchor', valueStyle: 'attached', repeatable: true, description: 'Override a numeric anchor as k=v for the --proposed overlay.', defaultValue: 'mass=M_sun' },
+  { name: '--proposed', valueStyle: 'none', description: 'Overlay unadjudicated identity-consequence relations.' },
+  { name: '--relation', valueStyle: 'attached', description: 'Keep atlas edges whose recorded relation is TYPE.' },
+  { name: '--evidence', valueStyle: 'attached', description: 'Keep atlas edges whose derived evidence set contains TAG.' },
+  { name: '--around', valueStyle: 'either', description: 'Keep edges within --depth shared-quantity hops of QUANTITY.' },
+  { name: '--depth', valueStyle: 'attached', description: 'Hop count for --around.', defaultValue: '1' },
+  { name: '--route', valueStyle: 'either', description: 'Map the atlas route FROM,TO instead of the equation graph.' },
+  { name: '--all-routes', valueStyle: 'none', description: 'With --route, list every simple route, shortest first.' },
+  { name: '--max-routes', valueStyle: 'attached', description: 'Cap on --all-routes. The maximum accepted is 1000.', defaultValue: '20' },
+  { name: '--family', valueStyle: 'either', description: 'Map one atlas family by name.' },
+  { name: '--observable', valueStyle: 'either', description: 'Map bridges whose recorded text names this observable.' },
+  { name: '--stored', valueStyle: 'none', description: 'Derive evidence from data/atlas/witness-results.json. That file is not in the published package; the command then names --run.' },
+  { name: '--run', valueStyle: 'none', description: 'Run the shown bridges\' in-process witnesses now. Exit 3 if one is refuted.' },
   // optionalValue: a bare trailing --equation stores '' so the empty-check in
   // run() owns the diagnostic (old-CLI fidelity: bin/upt.mjs did `a[i+1] ?? ''`
   // and let mapCmd emit `upt: --equation requires "TARGET = EXPR"`, exit 2).
-  { name: '--equation', valueStyle: 'either', optionalValue: true },
-  { name: '--equation-only', valueStyle: 'none' },
-  { name: '--verbose', valueStyle: 'none' },
-  { name: '--bind-short', valueStyle: 'none' },
-  { name: '--natural', valueStyle: 'none' },
-  { name: '--geometrized', valueStyle: 'none' },
-  { name: '--json', valueStyle: 'none' },
+  { name: '--equation', valueStyle: 'either', optionalValue: true, description: 'Inject TARGET = EXPR as a user node and report where it lands.' },
+  { name: '--equation-only', valueStyle: 'none', description: 'Print only the equation verdict. Errors when --equation is missing.' },
+  { name: '--verbose', valueStyle: 'none', description: 'With --equation, also print the linkage map.' },
+  { name: '--bind-short', valueStyle: 'none', description: 'Bind a one-letter catalog name in --equation. Without it, those names are reported and not bound.' },
+  { name: '--natural', valueStyle: 'none', description: 'Set ħ = c = 1 when a dimension difference is a power of those constants.' },
+  { name: '--geometrized', valueStyle: 'none', description: 'With the natural-unit rules, also set G = 1.' },
+  JSON_FLAG,
 ];
 
 const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
@@ -780,7 +781,10 @@ export const command: Command = {
   name: 'map',
   aliases: ['linkage'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Show how equations link, or where your own equation lands on that graph.',
+  example: 'upt map --equation "period = 2*pi*sqrt(length/gravity)"',
+  group: 'explore',
   run,
 };
 

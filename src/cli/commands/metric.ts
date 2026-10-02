@@ -9,6 +9,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import {
@@ -21,8 +22,12 @@ import {
 } from '../../numerical/spacetime-metrics.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--json', valueStyle: 'none' },
-  { name: '--geodesic', valueStyle: 'none' },
+  JSON_FLAG,
+  {
+    name: '--geodesic',
+    valueStyle: 'none',
+    description: 'Integrate a short Schwarzschild circular orbit, or a Kerr geodesic at the given θ.',
+  },
 ];
 
 const NAMES = ['minkowski', 'schwarzschild', 'flrw', 'kerr'] as const;
@@ -164,7 +169,10 @@ export const command: Command = {
   name: 'metric',
   aliases: ['curvature'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Print Christoffel symbols and curvature scalars for one exact metric.',
+  example: 'upt metric schwarzschild M=1Msun r=1e8 theta=pi/2',
+  group: 'evaluate',
   run,
 };
 

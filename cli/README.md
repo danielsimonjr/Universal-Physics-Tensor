@@ -1,5 +1,9 @@
 # `upt` — Universal Physics Tensor CLI
 
+Every flag, with its default, is generated into [`docs/CLI.md`](../docs/CLI.md) from the command
+registry (`bun scripts/cli-reference.ts`). This file keeps the exit codes, the input syntax, and
+the troubleshooting notes.
+
 A small command-line interface over the UPT bridge-inference and
 canonical-physics suite, for exploring the catalog and the composition graph
 **without reading any TypeScript**.

@@ -7,12 +7,13 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
+  sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both.'),
+  JSON_FLAG,
 ];
 
 const HELP = `upt predict [--source=catalog|canonical|both]
@@ -67,7 +68,10 @@ export const command: Command = {
   name: 'predict',
   aliases: ['predictions'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Rank empty regime cells as undiscovered-connection hypotheses.',
+  example: 'upt predict',
+  group: 'discovery',
   run,
 };
 
