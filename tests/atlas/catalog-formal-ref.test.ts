@@ -69,7 +69,7 @@ describe('catalog formalRef overlay', () => {
   });
 
   it('CONTROL: rewriting kind changes the tag set', () => {
-    const property = catalogFormalRef(16);
+    const property = catalogFormalRef(29);
     expect(property?.kind).toBe('property');
     const asProperty = tags({ formalRef: property });
     const asBridge = tags({ formalRef: { ...property!, kind: 'bridge' } });
