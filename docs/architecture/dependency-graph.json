@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.1",
-    "totalFiles": 410,
+    "totalFiles": 411,
     "totalModules": 13,
-    "totalExports": 2925
+    "totalExports": 2928
   },
   "entryPoints": [
     {
@@ -9337,6 +9337,24 @@
         ],
         "functions": [
           "decidingMeasurement"
+        ]
+      },
+      "src/bridges/tensor-index.ts": {
+        "description": "§VI.6.1 tensor-index component for a catalog category.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "TENSOR_INDEX_PATTERN",
+          "TENSOR_INDEX_BY_CATEGORY",
+          "tensorIndexComponent"
+        ],
+        "functions": [
+          "tensorIndexComponent"
+        ],
+        "constants": [
+          "TENSOR_INDEX_PATTERN",
+          "TENSOR_INDEX_BY_CATEGORY"
         ]
       }
     },
@@ -28006,7 +28024,8 @@
           "src/bridges/perihelion-precession.ts",
           "src/bridges/rejected.ts",
           "src/bridges/rhs-registry.ts",
-          "src/bridges/sensitivity.ts"
+          "src/bridges/sensitivity.ts",
+          "src/bridges/tensor-index.ts"
         ]
       },
       {
@@ -28319,16 +28338,16 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 410,
+    "totalTypeScriptFiles": 411,
     "totalModules": 13,
-    "totalLinesOfCode": 89583,
-    "totalExports": 2925,
+    "totalLinesOfCode": 89667,
+    "totalExports": 2928,
     "totalClasses": 60,
     "totalInterfaces": 464,
-    "totalFunctions": 754,
+    "totalFunctions": 755,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 721,
+    "totalConstants": 723,
     "totalReExports": 1389,
     "totalTypeOnlyImports": 547,
     "runtimeCircularDeps": 0,

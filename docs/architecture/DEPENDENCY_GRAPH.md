@@ -39,7 +39,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 68 files
-- **bridges**: 90 files
+- **bridges**: 91 files
 - **canonical**: 18 files
 - **cases**: 9 files
 - **cli**: 49 files
@@ -2776,6 +2776,14 @@ The codebase is organized into the following modules:
 **Exports:**
 - Interfaces: `Elasticity`
 - Functions: `decidingMeasurement`
+
+---
+
+### `src/bridges/tensor-index.ts` - §VI.6.1 tensor-index component for a catalog category.
+
+**Exports:**
+- Functions: `tensorIndexComponent`
+- Constants: `TENSOR_INDEX_PATTERN`, `TENSOR_INDEX_BY_CATEGORY`
 
 ---
 
@@ -7609,7 +7617,7 @@ graph TD
         N8[be23-planckian-confrontation]
         N9[be35-bootstrap-confrontation]
         N10[be36-gw170817-confrontation]
-        N11[...85 more]
+        N11[...86 more]
     end
 
     subgraph Canonical
@@ -7735,14 +7743,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 410 |
+| Total TypeScript Files | 411 |
 | Total Modules | 13 |
-| Total Lines of Code | 89583 |
-| Total Exports | 2925 |
+| Total Lines of Code | 89667 |
+| Total Exports | 2928 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 464 |
-| Total Functions | 754 |
+| Total Functions | 755 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 547 |
