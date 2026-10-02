@@ -1,6 +1,8 @@
 # BE-13 name
 
-The catalog name of equation 13 is `Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)`.
+> **Status as of 2026-10-01.** The catalog name is `Einstein trace reduction`. The id is still 13. The module file is still `src/bridges/equations/be-13-einstein-trace.ts`. Jacobson stays in the context, the notes, and the references. `PhysJS.Einstein.trace_eq` is kind `reduction` and declines Jacobson's thermodynamic derivation. The paragraphs below are the proposal as written, before that rename.
+
+The catalog name this proposal was written against is `Information-Geometry Equation (Jacobson 1995 thermodynamic derivation)`.
 
 The equation the entry encodes is the scalar trace `R = 4Λ − (8πG/c⁴) T`. The stored `formalRef` is `PhysJS.Einstein.trace_eq`. Its covers line begins `reduction:` and says that contracting `G_μν + Λ g_μν = κ T_μν` in four dimensions gives `R = 4Λ − κ T`, and that this is not Jacobson's thermodynamic derivation.
 
