@@ -113,11 +113,54 @@ function assertTheorems(candidate: ChainCandidate, seedTheorems: readonly string
 }
 
 /**
- * Lean 4 statement skeleton and the theorem chain it would compose.
+ * The draft the comment block renders.
+ *
+ * The fields are the ones the comment's JSON already carries.
+ * `leanProof` stays `absent`. This value is not a manifest entry.
+ *
+ * @internal
+ */
+export interface ProofTargetDraft {
+  readonly key: string;
+  readonly bridgeId: string;
+  readonly theorem: string;
+  readonly covers: string;
+  readonly coverage: string;
+  readonly leanProof: 'absent';
+  readonly axioms: readonly string[];
+}
+
+/**
+ * The draft `emitProofTarget` renders into the comment block.
  *
  * `seedTheorems` is one PhysJS theorem name per seed step, in chain order.
  * A name that disagrees with the compiled manifest copy is refused.
- * The returned text is not written anywhere.
+ * The object is not written anywhere.
+ *
+ * @internal
+ */
+export function proofTargetDraft(
+  candidate: ChainCandidate,
+  seedTheorems: readonly string[],
+): ProofTargetDraft {
+  assertTheorems(candidate, seedTheorems);
+  const key = targetKey(candidate);
+  return {
+    key,
+    bridgeId: key,
+    theorem: leanIdent(key),
+    covers: coversLine(candidate),
+    coverage: 'statement skeleton only',
+    leanProof: 'absent',
+    axioms: [],
+  };
+}
+
+/**
+ * Lean 4 statement skeleton and the theorem chain it would compose.
+ *
+ * The comment lines and the JSON between the markers are
+ * {@link proofTargetDraft}. The returned text is not written anywhere.
  *
  * @internal
  */
@@ -125,11 +168,8 @@ export function emitProofTarget(
   candidate: ChainCandidate,
   seedTheorems: readonly string[],
 ): string {
-  assertTheorems(candidate, seedTheorems);
-  const key = targetKey(candidate);
-  const covers = coversLine(candidate);
+  const draft = proofTargetDraft(candidate, seedTheorems);
   const theorem = dimensionalTheorem(candidate);
-  const statement = leanIdent(key);
   const lines: string[] = [
     '-- PROOF TARGET',
     '-- statement skeleton only',
@@ -145,7 +185,7 @@ export function emitProofTarget(
   for (const name of seedTheorems) {
     lines.push(`-- theorem: ${name}`);
   }
-  lines.push('', `-- covers: ${covers}`, '');
+  lines.push('', `-- covers: ${draft.covers}`, '');
   if (theorem !== undefined) {
     lines.push(
       '-- Dim : Fin 7 → ℚ',
@@ -153,16 +193,7 @@ export function emitProofTarget(
       '',
     );
   }
-  lines.push(`-- target id: ${key}`, `-- statement: ${statement} : Prop`, '');
-  const draft = {
-    key,
-    bridgeId: key,
-    theorem: statement,
-    covers,
-    coverage: 'statement skeleton only',
-    leanProof: 'absent',
-    axioms: [] as string[],
-  };
+  lines.push(`-- target id: ${draft.key}`, `-- statement: ${draft.theorem} : Prop`, '');
   lines.push(PROOF_TARGET_DRAFT_BEGIN, JSON.stringify(draft, null, 2), PROOF_TARGET_DRAFT_END, '');
   return lines.join('\n');
 }

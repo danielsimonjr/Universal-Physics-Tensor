@@ -12,11 +12,8 @@ import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
-import { C_SI, G_SI } from '../../core/constants.js';
 import { JEANS_FORMULA_NOTE } from '../conventions.js';
 import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
-import { bindingInUnit } from '../../numerical/binding-value.js';
-import { missingEvaluatorMessage } from '../../bridges/evaluators.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -105,12 +102,13 @@ const NONLINEAR_FRACTION = 0.1;
  * @internal
  */
 export function weakFieldDomainNote(
+  api: CommandCtx['api'],
   bridgeId: number,
   inputs: Readonly<Record<string, number>>,
 ): string | undefined {
   const mass = inputs.M_kg;
   if (!(mass > 0) || !Number.isFinite(mass)) return undefined;
-  const rs = (2 * G_SI * mass) / (C_SI * C_SI);
+  const rs = (2 * api.G_SI * mass) / (api.C_SI * api.C_SI);
   if (!(rs > 0) || !Number.isFinite(rs)) return undefined;
   if (bridgeId === 51) {
     const b = inputs.b_m;
@@ -152,9 +150,13 @@ interface Contribution {
  * propagation: u² = Σᵢⱼ cᵢ cⱼ ρᵢⱼ uᵢ uⱼ, with cᵢ by central difference. Each
  * input is also stepped by ±uᵢ, so a curvature term comparable to the linear
  * term is reported rather than hidden in a small-looking σ.
+ *
+ * This is not the public graph-layer `propagateUncertainty`. That function
+ * takes a bridge edge and does not fold correlations or a curvature ratio.
+ *
  * @internal
  */
-export function propagateUncertainty(
+export function propagateEvaluatorUncertainty(
   f: (inputs: Record<string, number>) => Record<string, unknown>,
   inputs: Readonly<Record<string, number>>,
   sigma: Readonly<Record<string, number>>,
@@ -169,7 +171,7 @@ export function propagateUncertainty(
   };
   const base = f({ ...inputs });
   const keys = Object.keys(sigma);
-  const out: ReturnType<typeof propagateUncertainty> = {};
+  const out: ReturnType<typeof propagateEvaluatorUncertainty> = {};
   for (const [name, v] of Object.entries(base)) {
     if (typeof v !== 'number' || name in inputs) continue;
     const contributions: Record<string, Contribution> = {};
@@ -255,7 +257,7 @@ function parseUncertainty(
     if (m !== null) {
       const p = spec.parameters.find((x) => x.key === m[1])!;
       try {
-        u = bindingInUnit(m[2]!, p.unit, 'difference').value;
+        u = api.bindingInUnit(m[2]!, p.unit, 'difference').value;
       } catch (e) {
         if (!(e instanceof api.UnitError)) throw e;
         if (!/is not a (finite )?number/.test(e.message)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);
@@ -289,7 +291,7 @@ const CASE_NOT_INCLUDED =
 
 interface Uncertainty {
   readonly block: Record<string, unknown>;
-  readonly propagated: ReturnType<typeof propagateUncertainty>;
+  readonly propagated: ReturnType<typeof propagateEvaluatorUncertainty>;
   readonly exactInputs: string[];
   readonly notIncluded: string;
 }
@@ -306,7 +308,7 @@ function uncertaintyOf(
   if (sigmaArgs.length === 0 && corrArgs.length > 0) throw new CliError('upt evaluate: --corr needs --sigma for both inputs');
   if (sigmaArgs.length === 0) return null;
   const { sigma, corr } = parseUncertainty(ctx.api, spec, sigmaArgs, corrArgs, inputs);
-  const propagated = propagateUncertainty(f, inputs, sigma, corr);
+  const propagated = propagateEvaluatorUncertainty(f, inputs, sigma, corr);
   const exactInputs = Object.keys(inputs).filter((k) => !(k in sigma));
   return {
     block: {
@@ -500,7 +502,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const id = Number(m[1]);
   const spec = api.BRIDGE_EVALUATORS.get(id);
   if (spec === undefined) {
-    throw new CliError(missingEvaluatorMessage(id));
+    throw new CliError(api.missingEvaluatorMessage(id));
   }
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 
@@ -513,7 +515,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => api.evaluateBridge(id, i) as Record<string, unknown>, NOT_INCLUDED);
-  const domainNote = weakFieldDomainNote(id, inputs);
+  const domainNote = weakFieldDomainNote(api, id, inputs);
   const formulaNote = id === 65 ? JEANS_FORMULA_NOTE : undefined;
   const hbarNote = id === 56 ? HBAR_TRUNCATION_NOTE : undefined;
 

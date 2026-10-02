@@ -84,6 +84,16 @@ describe('composeMorphisms', () => {
     expect(sameAsComposeRelation(viaMorphisms)).toEqual([]);
   });
 
+  it('a non-adjacent pair is no-composite-claim even when the cell is derivation', () => {
+    expect(composeRelation('derivation', 'derivation')).toBe('derivation');
+    expect(
+      composeMorphisms(morphism('derivation', 'left', 'mid'), morphism('derivation', 'other', 'right')),
+    ).toBe('no-composite-claim');
+    expect(
+      composeMorphisms(morphism('derivation', 'left', 'Mid'), morphism('derivation', 'mid', 'right')),
+    ).toBe('no-composite-claim');
+  });
+
   it('control: a one-line wrapper that returns a relation on a silent cell fails', () => {
     const mismatches = sameAsComposeRelation(relationOnSilentCell);
     expect(mismatches).not.toEqual([]);

@@ -21,19 +21,16 @@ import { equals } from '../dimensional/algebra.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { BridgeEdge } from '../composition/edge.js';
 import { enumerateCompositions } from '../composition/enumerate.js';
+import type { CompositionResult } from '../relations/composition-table.js';
 import { buckinghamFilter } from '../composition/buckingham-filter.js';
-import type { BuckinghamFilterRecord } from '../composition/buckingham-filter.js';
 import { matchChain } from '../composition/chain-match.js';
+import { compareChainEdgeIds, type ChainCandidate } from '../composition/chain-candidate.js';
 import {
-  compareChainEdgeIds,
-  orderChainCandidates,
-  type ChainCandidate,
-} from '../composition/chain-candidate.js';
-import {
-  joinRegimeMismatch,
-  type ChainRegimeMismatch,
-} from '../composition/chain-regime.js';
-import type { ChainClassification } from '../canonical/structural.js';
+  chainOrderKey,
+  orderChainRecords,
+  type ChainRecord,
+} from '../composition/chain-result.js';
+import { joinRegimeMismatch, type ChainRegimeMismatch } from '../composition/chain-regime.js';
 import { bridgeSeedKeys, physjsTheorem } from './physjs-ref.js';
 import { emitProofTarget } from './proof-target.js';
 
@@ -117,38 +114,22 @@ function governingOf(expr: ExprNode, targetName: string): { name: string; dim: D
   return vars;
 }
 
-function toCandidate(
-  classification: ChainClassification,
-  filter: BuckinghamFilterRecord,
-): ChainCandidate {
-  const theorem = filter.theorem ?? undefined;
-  const carried = theorem === undefined ? {} : { theorem };
-  if (classification.kind === 'confirmation') {
-    return {
-      kind: 'confirmation',
-      edgeIds: classification.edgeIds,
-      catalogId: classification.catalogId,
-      ...carried,
-    };
-  }
-  if (classification.kind === 'restatement') {
-    return {
-      kind: 'restatement',
-      edgeIds: classification.edgeIds,
-      canonicalId: classification.canonicalId,
-      restatesBridge: classification.restatesBridge,
-      ...carried,
-    };
-  }
-  const kind = filter.theorem === 'PhysJS.Dimensional.monomial_form'
-    ? 'unique-monomial'
-    : 'unfixed-shape';
-  return {
-    kind,
-    edgeIds: classification.edgeIds,
-    id: classification.id,
-    ...carried,
-  };
+/**
+ * The category claim recorded for two quantity edges.
+ *
+ * A quantity edge stores a quantity name, not a category object id.
+ * This step does not invent that id, so the recorded result is unset
+ * even when both edges store a relation. The pair is not dropped.
+ *
+ * @internal
+ */
+export function categoryCompositionForChain(
+  first: BridgeEdge,
+  second: BridgeEdge,
+): CompositionResult | undefined {
+  const relationsAreStored = first.relation !== undefined && second.relation !== undefined;
+  if (!relationsAreStored) return undefined;
+  return undefined;
 }
 
 function theoremsFor(edgeIds: readonly string[]): string[] {
@@ -161,32 +142,72 @@ function theoremsFor(edgeIds: readonly string[]): string[] {
   });
 }
 
-function emit(candidate: ChainCandidate): ChainPipelineResult {
-  if (candidate.kind === 'confirmation' && candidate.catalogId !== undefined) {
+function proofCandidate(record: ChainRecord): ChainCandidate {
+  const kind = chainOrderKey(record);
+  const theorem = record.theorem ?? undefined;
+  const carried = theorem === undefined ? {} : { theorem };
+  if (record.classification.kind === 'confirmation') {
+    return {
+      kind,
+      edgeIds: record.edgeIds,
+      catalogId: record.classification.catalogId,
+      ...carried,
+    };
+  }
+  if (record.classification.kind === 'restatement') {
+    return {
+      kind,
+      edgeIds: record.edgeIds,
+      canonicalId: record.classification.canonicalId,
+      restatesBridge: record.classification.restatesBridge,
+      ...carried,
+    };
+  }
+  return {
+    kind,
+    edgeIds: record.edgeIds,
+    id: record.classification.id,
+    ...carried,
+  };
+}
+
+/**
+ * The orchestrator view of one {@link ChainRecord}.
+ *
+ * A confirmation and a restatement ignore `mismatch`. A provisional
+ * record with a mismatch is that rejection. Any other provisional record
+ * is a stub whose id and theorem come from the same record the order key
+ * reads.
+ *
+ * @internal
+ */
+export function renderChainRecord(
+  record: ChainRecord,
+  seedTheorems: readonly string[] = [],
+): ChainPipelineResult {
+  if (record.classification.kind === 'confirmation') {
     return {
       kind: 'confirmation',
-      catalogId: candidate.catalogId,
-      edgeIds: candidate.edgeIds,
+      catalogId: record.classification.catalogId,
+      edgeIds: record.edgeIds,
     };
   }
-  if (
-    candidate.kind === 'restatement' &&
-    candidate.canonicalId !== undefined &&
-    candidate.restatesBridge !== undefined
-  ) {
+  if (record.classification.kind === 'restatement') {
     return {
       kind: 'restatement',
-      canonicalId: candidate.canonicalId,
-      restatesBridge: candidate.restatesBridge,
-      edgeIds: candidate.edgeIds,
+      canonicalId: record.classification.canonicalId,
+      restatesBridge: record.classification.restatesBridge,
+      edgeIds: record.edgeIds,
     };
   }
-  const id = candidate.id ?? `chain-${candidate.edgeIds.join('-')}`;
+  if (record.mismatch !== undefined) return record.mismatch;
+  const candidate = proofCandidate(record);
+  const id = candidate.id ?? `chain-${record.edgeIds.join('-')}`;
   return {
     kind: 'stub',
     id,
-    edgeIds: candidate.edgeIds,
-    text: emitProofTarget({ ...candidate, id }, theoremsFor(candidate.edgeIds)),
+    edgeIds: record.edgeIds,
+    text: emitProofTarget({ ...candidate, id }, seedTheorems),
   };
 }
 
@@ -204,8 +225,8 @@ function emit(candidate: ChainCandidate): ChainPipelineResult {
 export function runChainPipeline(edges: readonly BridgeEdge[]): readonly ChainPipelineResult[] {
   const seedIds = new Set(bridgeSeedKeys());
   const report = enumerateCompositions(edges, { seedIds });
-  const candidates: ChainCandidate[] = [];
-  const rejections: ChainRegimeMismatch[] = [];
+  const records: ChainRecord[] = [];
+  const rejections: ChainRecord[] = [];
   for (const target of report.proofTargets) {
     const filtered = buckinghamFilter(
       { name: target.second.target.name, dim: target.second.target.dim },
@@ -213,19 +234,32 @@ export function runChainPipeline(edges: readonly BridgeEdge[]): readonly ChainPi
     );
     if (filtered === undefined) continue;
     const classification = matchChain(target.expr, [target.first.id, target.second.id]);
+    const edgeIds = [target.first.id, target.second.id];
+    const record: ChainRecord = {
+      edgeIds,
+      classification,
+      theorem: filtered.theorem,
+      mismatch: undefined,
+      categoryComposition: categoryCompositionForChain(target.first, target.second),
+    };
     if (classification.kind === 'confirmation' || classification.kind === 'restatement') {
-      candidates.push(toCandidate(classification, filtered));
+      records.push(record);
       continue;
     }
     const mismatch = joinRegimeMismatch(target.first, target.second);
     if (mismatch !== undefined) {
-      rejections.push(mismatch);
+      rejections.push({ ...record, mismatch });
       continue;
     }
-    candidates.push(toCandidate(classification, filtered));
+    records.push(record);
   }
   const orderedRejections = [...rejections].sort((a, b) =>
     compareChainEdgeIds(a.edgeIds, b.edgeIds),
   );
-  return [...orderChainCandidates(candidates).map(emit), ...orderedRejections];
+  return [
+    ...orderChainRecords(records).map((record) =>
+      renderChainRecord(record, theoremsFor(record.edgeIds)),
+    ),
+    ...orderedRejections.map((record) => renderChainRecord(record)),
+  ];
 }

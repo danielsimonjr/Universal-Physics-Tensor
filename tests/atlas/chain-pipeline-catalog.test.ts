@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { CATALOG_GRAPH } from '../../src/composition/catalog-graph.js';
 import { enumerateCompositions } from '../../src/composition/enumerate.js';
-import { runChainPipeline } from '../../src/atlas/chain-pipeline.js';
+import { categoryCompositionForChain, runChainPipeline } from '../../src/atlas/chain-pipeline.js';
 import { bridgeSeedKeys } from '../../src/atlas/physjs-ref.js';
 
 const SNAPSHOT: unknown = JSON.parse(
@@ -52,5 +52,13 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
         ['be-63', 'be-37'],
       ]),
     );
+  });
+
+  it('records an unset category claim and does not change the stub list', () => {
+    const seeded = enumerateCompositions(CATALOG_GRAPH, { seedIds: new Set(bridgeSeedKeys()) });
+    for (const target of seeded.proofTargets) {
+      expect(categoryCompositionForChain(target.first, target.second)).toBeUndefined();
+    }
+    expect(result.filter((row) => row.kind === 'stub')).toEqual([]);
   });
 });

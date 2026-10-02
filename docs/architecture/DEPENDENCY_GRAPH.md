@@ -44,13 +44,13 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 51 files
 - **root**: 1 file
-- **composition**: 83 files
+- **composition**: 84 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
 - **entry**: 1 file
 - **numerical**: 42 files
-- **relations**: 5 files
+- **relations**: 6 files
 
 ---
 
@@ -245,18 +245,18 @@ The codebase is organized into the following modules:
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
 | `../composition/enumerate.js` | `enumerateCompositions` | Import |
+| `../relations/composition-table.js` | `CompositionResult` | Import (type-only) |
 | `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
-| `../composition/buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
 | `../composition/chain-match.js` | `matchChain` | Import |
-| `../composition/chain-candidate.js` | `compareChainEdgeIds, orderChainCandidates, ChainCandidate` | Import |
+| `../composition/chain-candidate.js` | `compareChainEdgeIds, ChainCandidate` | Import |
+| `../composition/chain-result.js` | `chainOrderKey, orderChainRecords, ChainRecord` | Import |
 | `../composition/chain-regime.js` | `joinRegimeMismatch, ChainRegimeMismatch` | Import |
-| `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
 | `./physjs-ref.js` | `bridgeSeedKeys, physjsTheorem` | Import |
 | `./proof-target.js` | `emitProofTarget` | Import |
 
 **Exports:**
 - Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`
-- Functions: `runChainPipeline`
+- Functions: `categoryCompositionForChain`, `renderChainRecord`, `runChainPipeline`
 
 ---
 
@@ -940,7 +940,8 @@ The codebase is organized into the following modules:
 | `./physjs-ref.js` | `physjsTheorem` | Import |
 
 **Exports:**
-- Functions: `emitProofTarget`
+- Interfaces: `ProofTargetDraft`
+- Functions: `proofTargetDraft`, `emitProofTarget`
 - Constants: `PROOF_TARGET_DRAFT_BEGIN`, `PROOF_TARGET_DRAFT_END`
 
 ---
@@ -3385,7 +3386,6 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../atlas/catalog-formal-ref.js` | `catalogFormalRef` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 
 **Exports:**
@@ -3572,9 +3572,6 @@ The codebase is organized into the following modules:
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
-| `../../dimensional/units.js` | `UnitError` | Import |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
-| `../../numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3593,14 +3590,11 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
-| `../../core/constants.js` | `C_SI, G_SI` | Import |
 | `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
-| `../../numerical/binding-value.js` | `bindingInUnit` | Import |
-| `../../bridges/evaluators.js` | `missingEvaluatorMessage` | Import |
 
 **Exports:**
-- Functions: `weakFieldDomainNote`, `propagateUncertainty`
+- Functions: `weakFieldDomainNote`, `propagateEvaluatorUncertainty`
 - Constants: `command`
 
 ---
@@ -3711,12 +3705,8 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError, CliError, EXIT_CHECK_FAILED` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `./_atlas-map.js` | `* as atlasMap` | Import |
-| `../../composition/edge.js` | `BridgeEdge` | Import (type-only) |
-| `../../composition/graph-viz.js` | `VizJunction, VizModel` | Import (type-only) |
-| `../../atlas/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
+| `../../cli-api.js` | `BridgeEdge, CanonicalComparison, EquationAnalysis, EvidenceTag, RelationType, VizJunction, VizModel` | Import (type-only) |
 | `../graphs.js` | `SourceName` | Import (type-only) |
-| `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
-| `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../map-evidence.js` | `withCatalogEvidence` | Import |
@@ -3737,7 +3727,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
-| `../../numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, MetricId` | Import |
+| `../../cli-api.js` | `MetricId` | Import (type-only) |
 
 **Exports:**
 - Constants: `command`
@@ -3755,7 +3745,6 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
 | `./_atlas-route.js` | `explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, RouteClaim` | Import |
 
 **Exports:**
@@ -3829,7 +3818,6 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../composition/composition-recovery.js` | `scanCompositionRecovery` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3846,7 +3834,6 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
 
 **Exports:**
 - Functions: `parseAt`, `resolveAtPoint`, `showInequality`
@@ -4257,6 +4244,17 @@ The codebase is organized into the following modules:
 | `./atlas/types.js` | `AtlasBridge, RegimeInequality, Witness` | Re-export |
 | `./atlas/types.js` | `MissingLipschitzError` | Re-export |
 | `./atlas/model.js` | `AtlasModel, ModelId` | Re-export |
+| `./atlas/catalog-formal-ref.js` | `catalogFormalRef` | Re-export |
+| `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
+| `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
+| `./numerical/binding-value.js` | `readBinding, bindingInUnit` | Re-export |
+| `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
+| `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
+| `./core/constants.js` | `C_SI, G_SI` | Re-export |
+| `./composition/edge.js` | `BridgeEdge` | Re-export |
+| `./composition/graph-viz.js` | `VizJunction, VizModel` | Re-export |
+| `./atlas/types.js` | `EvidenceTag, RelationType` | Re-export |
+| `./composition/user-equation.js` | `EquationAnalysis` | Re-export |
 
 **Exports:**
 - Re-exports:
@@ -4295,7 +4293,11 @@ The codebase is organized into the following modules:
   regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample,
   familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
   routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
-  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
+  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
+  catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
+  kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding, bindingInUnit,
+  builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -4524,6 +4526,23 @@ The codebase is organized into the following modules:
 - Interfaces: `ChainRegimeMismatch`
 - Functions: `joinRegimeMismatch`
 - Constants: `REGIME_MISMATCH_KIND`
+
+---
+
+### `src/composition/chain-result.ts` - One internal chain record.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
+| `../relations/composition-table.js` | `CompositionResult` | Import (type-only) |
+| `./buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
+| `./chain-candidate.js` | `compareChainEdgeIds, ChainCandidateKind` | Import |
+| `./chain-regime.js` | `ChainRegimeMismatch` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `ChainRecord`
+- Functions: `chainOrderKey`, `orderChainRecords`
 
 ---
 
@@ -4932,14 +4951,14 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
-| `./edge.js` | `CompositionAliasError` | Import |
+| `./edge.js` | `CompositionAliasError, UndefinedCompositionError` | Import |
 | `./compose.js` | `composeEdges` | Import |
 | `./compose.js` | `ComposeOptions` | Import (type-only) |
 | `./compose-symbolic.js` | `composeSymbolic` | Import |
 
 **Exports:**
-- Interfaces: `CompositionCandidate`, `DispositionRequired`, `EnumerationReport`
-- Functions: `enumerateCompositions`
+- Interfaces: `CompositionCandidate`, `DispositionRequired`, `RelationTableRefusal`, `EnumerationWithRefusals`, `EnumerationReport`
+- Functions: `enumerateCompositions`, `enumerateCompositionsWithRefusals`
 - Constants: `REGISTERED_COMPOSITION_IDS`
 
 ---
@@ -7760,6 +7779,16 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/relations/regime-vocabularies.ts` - Names for the three regime vocabularies. They are not one type, and
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/regime-registry.js` | `RegimeValueBase` | Import (type-only) |
+| `./types.js` | `Regime` | Import (type-only) |
+
+---
+
 ### `src/relations/regime.ts` - Regime derivation — π-groups as the coordinates a regime is written in.
 
 **Internal Dependencies:**
@@ -7807,7 +7836,7 @@ The codebase is organized into the following modules:
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
 | `catalog-formal-ref` | 2 files | 1 files |
-| `chain-pipeline` | 13 files | 0 files |
+| `chain-pipeline` | 14 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
@@ -7892,7 +7921,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...78 more]
+        N36[...79 more]
     end
 
     subgraph Core
@@ -7936,8 +7965,9 @@ graph TD
         N59[category]
         N60[composition-table]
         N61[conventions]
-        N62[regime]
-        N63[types]
+        N62[regime-vocabularies]
+        N63[regime]
+        N64[...1 more]
     end
 
     N0 --> N48
@@ -7945,7 +7975,6 @@ graph TD
     N4 --> N3
     N10 --> N39
     N12 --> N50
-    N12 --> N63
     N13 --> N50
     N14 --> N12
     N14 --> N50
@@ -7970,6 +7999,7 @@ graph TD
     N26 --> N27
     N27 --> N25
     N27 --> N30
+    N28 --> N24
 ```
 
 ---
@@ -7978,17 +8008,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 422 |
+| Total TypeScript Files | 424 |
 | Total Modules | 13 |
-| Total Lines of Code | 92069 |
-| Total Exports | 2986 |
-| Total Re-exports | 1396 |
+| Total Lines of Code | 92407 |
+| Total Exports | 3012 |
+| Total Re-exports | 1416 |
 | Total Classes | 61 |
-| Total Interfaces | 477 |
-| Total Functions | 774 |
+| Total Interfaces | 481 |
+| Total Functions | 780 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 569 |
+| Type-only Imports | 571 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

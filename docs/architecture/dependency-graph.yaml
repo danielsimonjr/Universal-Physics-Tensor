@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.4
-  totalFiles: 422
+  totalFiles: 424
   totalModules: 13
-  totalExports: 2986
+  totalExports: 3012
 entryPoints:
   - file: src/index.ts
     type: main
@@ -391,29 +391,29 @@ modules:
         - file: ../composition/enumerate.js
           imports:
             - enumerateCompositions
+        - file: ../relations/composition-table.js
+          imports:
+            - CompositionResult
+          typeOnly: true
         - file: ../composition/buckingham-filter.js
           imports:
             - buckinghamFilter
-        - file: ../composition/buckingham-filter.js
-          imports:
-            - BuckinghamFilterRecord
-          typeOnly: true
         - file: ../composition/chain-match.js
           imports:
             - matchChain
         - file: ../composition/chain-candidate.js
           imports:
             - compareChainEdgeIds
-            - orderChainCandidates
             - ChainCandidate
+        - file: ../composition/chain-result.js
+          imports:
+            - chainOrderKey
+            - orderChainRecords
+            - ChainRecord
         - file: ../composition/chain-regime.js
           imports:
             - joinRegimeMismatch
             - ChainRegimeMismatch
-        - file: ../canonical/structural.js
-          imports:
-            - ChainClassification
-          typeOnly: true
         - file: ./physjs-ref.js
           imports:
             - bridgeSeedKeys
@@ -422,12 +422,16 @@ modules:
           imports:
             - emitProofTarget
       exports:
+        - categoryCompositionForChain
+        - renderChainRecord
         - runChainPipeline
       interfaces:
         - ChainConfirmationRecord
         - ChainRestatementRecord
         - ChainStubRecord
       functions:
+        - categoryCompositionForChain
+        - renderChainRecord
         - runChainPipeline
     src/atlas/composition-table.ts:
       description: Re-export of the composition table. The table lives in
@@ -2380,8 +2384,12 @@ modules:
       exports:
         - PROOF_TARGET_DRAFT_BEGIN
         - PROOF_TARGET_DRAFT_END
+        - proofTargetDraft
         - emitProofTarget
+      interfaces:
+        - ProofTargetDraft
       functions:
+        - proofTargetDraft
         - emitProofTarget
       constants:
         - PROOF_TARGET_DRAFT_BEGIN
@@ -7627,9 +7635,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../atlas/catalog-formal-ref.js
-          imports:
-            - catalogFormalRef
         - file: ./_atlas-map.js
           imports:
             - atlasEvidenceText
@@ -7992,15 +7997,6 @@ modules:
           imports:
             - UnitMode
           typeOnly: true
-        - file: ../../dimensional/units.js
-          imports:
-            - UnitError
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readBinding
-        - file: ../../numerical/formula-dimension.js
-          imports:
-            - builtinFormulaDimensionChecker
       exports:
         - command
       constants:
@@ -8038,29 +8034,19 @@ modules:
             - CaseResult
             - EvaluatorParameter
           typeOnly: true
-        - file: ../../core/constants.js
-          imports:
-            - C_SI
-            - G_SI
         - file: ../conventions.js
           imports:
             - JEANS_FORMULA_NOTE
         - file: ../eval-numbers.js
           imports:
             - HBAR_TRUNCATION_NOTE
-        - file: ../../numerical/binding-value.js
-          imports:
-            - bindingInUnit
-        - file: ../../bridges/evaluators.js
-          imports:
-            - missingEvaluatorMessage
       exports:
         - command
         - weakFieldDomainNote
-        - propagateUncertainty
+        - propagateEvaluatorUncertainty
       functions:
         - weakFieldDomainNote
-        - propagateUncertainty
+        - propagateEvaluatorUncertainty
       constants:
         - command
     src/cli/commands/explain.ts:
@@ -8301,31 +8287,19 @@ modules:
         - file: ./_atlas-map.js
           imports:
             - "* as atlasMap"
-        - file: ../../composition/edge.js
+        - file: ../../cli-api.js
           imports:
             - BridgeEdge
-          typeOnly: true
-        - file: ../../composition/graph-viz.js
-          imports:
-            - VizJunction
-            - VizModel
-          typeOnly: true
-        - file: ../../atlas/types.js
-          imports:
+            - CanonicalComparison
+            - EquationAnalysis
             - EvidenceTag
             - RelationType
+            - VizJunction
+            - VizModel
           typeOnly: true
         - file: ../graphs.js
           imports:
             - SourceName
-          typeOnly: true
-        - file: ../../composition/user-equation.js
-          imports:
-            - EquationAnalysis
-          typeOnly: true
-        - file: ../../composition/canonical-compare.js
-          imports:
-            - CanonicalComparison
           typeOnly: true
         - file: ../conventions.js
           imports:
@@ -8369,14 +8343,10 @@ modules:
         - file: ../errors.js
           imports:
             - UsageError
-        - file: ../../numerical/spacetime-metrics.js
+        - file: ../../cli-api.js
           imports:
-            - curvatureReport
-            - kerrEquatorialCircular
-            - kerrGeodesic
-            - kerrTurningPointOrbit
-            - schwarzschildCircularOrbit
             - MetricId
+          typeOnly: true
       exports:
         - command
       constants:
@@ -8412,9 +8382,6 @@ modules:
             - parseAt
             - resolveAtPoint
             - showInequality
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readBinding
         - file: ./_atlas-route.js
           imports:
             - explainsRefusal
@@ -8559,9 +8526,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../composition/composition-recovery.js
-          imports:
-            - scanCompositionRecovery
       exports:
         - command
       constants:
@@ -8592,9 +8556,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readBinding
       exports:
         - command
         - parseAt
@@ -9643,6 +9604,59 @@ modules:
             - AtlasModel
             - ModelId
           reExport: true
+        - file: ./atlas/catalog-formal-ref.js
+          imports:
+            - catalogFormalRef
+          reExport: true
+        - file: ./composition/composition-recovery.js
+          imports:
+            - scanCompositionRecovery
+          reExport: true
+        - file: ./numerical/spacetime-metrics.js
+          imports:
+            - curvatureReport
+            - kerrEquatorialCircular
+            - kerrGeodesic
+            - kerrTurningPointOrbit
+            - schwarzschildCircularOrbit
+            - type MetricId
+          reExport: true
+        - file: ./numerical/binding-value.js
+          imports:
+            - readBinding
+            - bindingInUnit
+          reExport: true
+        - file: ./numerical/formula-dimension.js
+          imports:
+            - builtinFormulaDimensionChecker
+          reExport: true
+        - file: ./bridges/evaluators.js
+          imports:
+            - missingEvaluatorMessage
+          reExport: true
+        - file: ./core/constants.js
+          imports:
+            - C_SI
+            - G_SI
+          reExport: true
+        - file: ./composition/edge.js
+          imports:
+            - BridgeEdge
+          reExport: true
+        - file: ./composition/graph-viz.js
+          imports:
+            - VizJunction
+            - VizModel
+          reExport: true
+        - file: ./atlas/types.js
+          imports:
+            - EvidenceTag
+            - RelationType
+          reExport: true
+        - file: ./composition/user-equation.js
+          imports:
+            - EquationAnalysis
+          reExport: true
       exports:
         - explainQuantity
         - CATALOG_GRAPH
@@ -9778,6 +9792,20 @@ modules:
         - routeEntryModels
         - composeRelation
         - MissingLipschitzError
+        - catalogFormalRef
+        - scanCompositionRecovery
+        - curvatureReport
+        - kerrEquatorialCircular
+        - kerrGeodesic
+        - kerrTurningPointOrbit
+        - schwarzschildCircularOrbit
+        - type MetricId
+        - readBinding
+        - bindingInUnit
+        - builtinFormulaDimensionChecker
+        - missingEvaluatorMessage
+        - C_SI
+        - G_SI
         - ConfrontationEntry
         - RigorTier
         - ConfrontationOutcome
@@ -9815,6 +9843,12 @@ modules:
         - Witness
         - AtlasModel
         - ModelId
+        - BridgeEdge
+        - VizJunction
+        - VizModel
+        - EvidenceTag
+        - RelationType
+        - EquationAnalysis
       reExported:
         - explainQuantity
         - CATALOG_GRAPH
@@ -9987,6 +10021,26 @@ modules:
         - MissingLipschitzError
         - AtlasModel
         - ModelId
+        - catalogFormalRef
+        - scanCompositionRecovery
+        - curvatureReport
+        - kerrEquatorialCircular
+        - kerrGeodesic
+        - kerrTurningPointOrbit
+        - schwarzschildCircularOrbit
+        - type MetricId
+        - readBinding
+        - bindingInUnit
+        - builtinFormulaDimensionChecker
+        - missingEvaluatorMessage
+        - C_SI
+        - G_SI
+        - BridgeEdge
+        - VizJunction
+        - VizModel
+        - EvidenceTag
+        - RelationType
+        - EquationAnalysis
   composition:
     src/composition/adjudication.ts:
       description: Adjudication ledger for machine-surfaced discovery candidates.
@@ -10445,6 +10499,39 @@ modules:
         - joinRegimeMismatch
       constants:
         - REGIME_MISMATCH_KIND
+    src/composition/chain-result.ts:
+      description: One internal chain record.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../canonical/structural.js
+          imports:
+            - ChainClassification
+          typeOnly: true
+        - file: ../relations/composition-table.js
+          imports:
+            - CompositionResult
+          typeOnly: true
+        - file: ./buckingham-filter.js
+          imports:
+            - BuckinghamFilterRecord
+          typeOnly: true
+        - file: ./chain-candidate.js
+          imports:
+            - compareChainEdgeIds
+            - ChainCandidateKind
+        - file: ./chain-regime.js
+          imports:
+            - ChainRegimeMismatch
+          typeOnly: true
+      exports:
+        - chainOrderKey
+        - orderChainRecords
+      interfaces:
+        - ChainRecord
+      functions:
+        - chainOrderKey
+        - orderChainRecords
     src/composition/compose-surface.ts:
       description: v0.11 surface barrel for the namespacing-gate symbols (keeps
       externalDependencies: []
@@ -11630,6 +11717,7 @@ modules:
         - file: ./edge.js
           imports:
             - CompositionAliasError
+            - UndefinedCompositionError
         - file: ./compose.js
           imports:
             - composeEdges
@@ -11643,12 +11731,16 @@ modules:
       exports:
         - REGISTERED_COMPOSITION_IDS
         - enumerateCompositions
+        - enumerateCompositionsWithRefusals
       interfaces:
         - CompositionCandidate
         - DispositionRequired
+        - RelationTableRefusal
+        - EnumerationWithRefusals
         - EnumerationReport
       functions:
         - enumerateCompositions
+        - enumerateCompositionsWithRefusals
       constants:
         - REGISTERED_COMPOSITION_IDS
     src/composition/explain.ts:
@@ -19931,6 +20023,20 @@ modules:
       functions:
         - checkConventions
         - unknownConventionKeys
+    src/relations/regime-vocabularies.ts:
+      description: Names for the three regime vocabularies. They are not one type, and
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/regime-registry.js
+          imports:
+            - RegimeValueBase
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - Regime
+          typeOnly: true
+      exports: []
     src/relations/regime.ts:
       description: Regime derivation — π-groups as the coordinates a regime is written in.
       externalDependencies: []
@@ -20267,6 +20373,7 @@ dependencyGraph:
         - src/composition/chain-candidate.ts
         - src/composition/chain-match.ts
         - src/composition/chain-regime.ts
+        - src/composition/chain-result.ts
         - src/composition/compose-surface.ts
         - src/composition/compose-symbolic.ts
         - src/composition/compose.ts
@@ -20444,22 +20551,23 @@ dependencyGraph:
         - src/relations/category.ts
         - src/relations/composition-table.ts
         - src/relations/conventions.ts
+        - src/relations/regime-vocabularies.ts
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 422
+  totalTypeScriptFiles: 424
   totalModules: 13
-  totalLinesOfCode: 92069
-  totalExports: 2986
+  totalLinesOfCode: 92407
+  totalExports: 3012
   totalClasses: 61
-  totalInterfaces: 477
-  totalFunctions: 774
+  totalInterfaces: 481
+  totalFunctions: 780
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 756
-  totalReExports: 1396
-  totalTypeOnlyImports: 569
+  totalReExports: 1416
+  totalTypeOnlyImports: 571
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 79
+  unusedExportsCount: 78
