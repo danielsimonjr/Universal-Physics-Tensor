@@ -1,5 +1,7 @@
 # Bridge Equation Remediation Plan
 
+> **Status as of 2026-10-01.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and thirteen catalog ids (be-12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `dd35202920bf19c39f71f15d9ee740a6d28ec173`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](Bridge-Gap-Inference.md). The BE-13 heading still names the equation Information-Geometry Equation (Jacobson 1995 thermodynamic derivation).
+
 > Status: 2026-05-04 | Source: `src/bridges/index.ts` @c276282 + `docs/specification/Part-I.md`, `Part-II.md` | Audit method: programmatic extract via compiled `dist/bridges/index.js` (40 entries, schema-conformant), tier classifier applied per the brief, narrative-concern (R4) gate verified by spot-reading `notes` text per equation.
 
 This document is a prioritized work queue for fixing or dispositioning each of

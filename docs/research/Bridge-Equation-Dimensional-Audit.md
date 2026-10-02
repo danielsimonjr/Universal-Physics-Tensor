@@ -1,5 +1,7 @@
 # Deriving the Bridge Equations — a Dimensional-Analysis Audit
 
+> **Status as of 2026-10-01.** This file keeps the counts, names, and pins it was written with. The live split is [`NOTES.md`](../../NOTES.md): ten atlas bridges and thirteen catalog ids (be-12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63) are Lean kind `bridge` at PhysJS `dd35202920bf19c39f71f15d9ee740a6d28ec173`. `formally-proved` means that kind only. BE-13's catalog name is Einstein trace reduction. The gap list is [`docs/planning/Bridge-Gap-Inference.md`](../planning/Bridge-Gap-Inference.md). The be-15 row (exponent 1/2, recovered prefactor 1.000) and the be-17 row (recovered prefactor 1.000) are the Buckingham engine matched to the evaluator. The Lean route is `PhysJS.Dimensional.monomial_form` plus the nested theorem, and that fixes the form only up to a dimensionless constant: z=2 is not derived for be-15, and C=1 is a hypothesis for be-17.
+
 > **Provenance:** 2026-06-13 (branch
 > `claude/bridge-equations-specs-review-4mfy38`). Points the Buckingham-π
 > engine (`src/dimensional/buckingham.ts`) at all 41 bridge edges and
