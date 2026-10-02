@@ -15,7 +15,6 @@ import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
-import { builtinFormulaDimensionChecker, readBinding, UnitError } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
@@ -35,7 +34,11 @@ const FLAGS: FlagSpec[] = [
  * (exit 1), the same code `upt evaluate` uses. A value is a number, a
  * unit (`1Msun`), or an expression of constants and units (`0.6*c`, `pi/2`).
  */
-function parseScope(args: readonly string[], mode: UnitMode): { scope: Record<string, number>; notes: string[] } {
+function parseScope(
+  api: CommandCtx['api'],
+  args: readonly string[],
+  mode: UnitMode,
+): { scope: Record<string, number>; notes: string[] } {
   const scope: Record<string, number> = {};
   const notes: string[] = [];
   for (const a of args) {
@@ -46,11 +49,11 @@ function parseScope(args: readonly string[], mode: UnitMode): { scope: Record<st
     const name = a.slice(0, eq);
     const raw = a.slice(eq + 1);
     try {
-      const read = readBinding(raw, { mode });
+      const read = api.readBinding(raw, { mode });
       scope[name] = read.value;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
-      const msg = e instanceof UnitError ? e.message : (e as Error).message;
+      const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
       throw new CliError(`upt eval: '${a}' is not a finite number or a known unit. ${msg}`);
     }
   }
@@ -114,7 +117,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const mode: UnitMode = args.flags.has('geometrized') ? 'geometrized' : args.flags.has('natural') ? 'natural' : 'si';
-  const parsed = parseScope(positionals.slice(1), mode);
+  const parsed = parseScope(api, positionals.slice(1), mode);
   const scope = { ...codataScope(mode), ...parsed.scope };
 
   const missing = cf.variables.filter((v) => !(v in scope));
@@ -134,7 +137,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   // eccentricity, and the numeric result is indistinguishable from 1.
   // A caller who bound e chose a different quantity.
   if (!('e' in parsed.scope)) {
-    const checked = builtinFormulaDimensionChecker().check(expr, {});
+    const checked = api.builtinFormulaDimensionChecker().check(expr, {});
     if (!checked.ok && checked.error?.includes('elementary charge')) {
       throw new UsageError(withParser(checked.error, kind));
     }

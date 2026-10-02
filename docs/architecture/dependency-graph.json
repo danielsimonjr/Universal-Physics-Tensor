@@ -11292,12 +11292,6 @@
             ]
           },
           {
-            "file": "../../cli-api.js",
-            "imports": [
-              "catalogFormalRef"
-            ]
-          },
-          {
             "file": "./_atlas-map.js",
             "imports": [
               "atlasEvidenceText",
@@ -11895,14 +11889,6 @@
               "UnitMode"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../../cli-api.js",
-            "imports": [
-              "builtinFormulaDimensionChecker",
-              "readBinding",
-              "UnitError"
-            ]
           }
         ],
         "exports": [
@@ -11962,12 +11948,9 @@
             "imports": [
               "AppliedCase",
               "CaseResult",
-              "bindingInUnit",
-              "C_SI",
-              "EvaluatorParameter",
-              "G_SI",
-              "missingEvaluatorMessage"
-            ]
+              "EvaluatorParameter"
+            ],
+            "typeOnly": true
           },
           {
             "file": "../conventions.js",
@@ -12510,13 +12493,9 @@
           {
             "file": "../../cli-api.js",
             "imports": [
-              "curvatureReport",
-              "kerrEquatorialCircular",
-              "kerrGeodesic",
-              "kerrTurningPointOrbit",
-              "schwarzschildCircularOrbit",
               "MetricId"
-            ]
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -12573,12 +12552,6 @@
               "parseAt",
               "resolveAtPoint",
               "showInequality"
-            ]
-          },
-          {
-            "file": "../../cli-api.js",
-            "imports": [
-              "readBinding"
             ]
           },
           {
@@ -12810,12 +12783,6 @@
             "imports": [
               "emitJson"
             ]
-          },
-          {
-            "file": "../../cli-api.js",
-            "imports": [
-              "scanCompositionRecovery"
-            ]
           }
         ],
         "exports": [
@@ -12864,12 +12831,6 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
-            ]
-          },
-          {
-            "file": "../../cli-api.js",
-            "imports": [
-              "readBinding"
             ]
           }
         ],
@@ -14527,7 +14488,7 @@
             "reExport": true
           },
           {
-            "file": "./index.js",
+            "file": "./core/constants.js",
             "imports": [
               "C_SI",
               "G_SI"
@@ -29472,7 +29433,7 @@
   "statistics": {
     "totalTypeScriptFiles": 423,
     "totalModules": 13,
-    "totalLinesOfCode": 92370,
+    "totalLinesOfCode": 92363,
     "totalExports": 3012,
     "totalClasses": 61,
     "totalInterfaces": 481,
@@ -29481,7 +29442,7 @@
     "totalEnums": 0,
     "totalConstants": 756,
     "totalReExports": 1416,
-    "totalTypeOnlyImports": 567,
+    "totalTypeOnlyImports": 569,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

@@ -3386,7 +3386,6 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../cli-api.js` | `catalogFormalRef` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 
 **Exports:**
@@ -3573,7 +3572,6 @@ The codebase is organized into the following modules:
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
-| `../../cli-api.js` | `builtinFormulaDimensionChecker, readBinding, UnitError` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3591,7 +3589,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
-| `../../cli-api.js` | `AppliedCase, CaseResult, bindingInUnit, C_SI, EvaluatorParameter, G_SI, missingEvaluatorMessage` | Import |
+| `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
 | `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
 
@@ -3729,7 +3727,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
-| `../../cli-api.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, MetricId` | Import |
+| `../../cli-api.js` | `MetricId` | Import (type-only) |
 
 **Exports:**
 - Constants: `command`
@@ -3747,7 +3745,6 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
-| `../../cli-api.js` | `readBinding` | Import |
 | `./_atlas-route.js` | `explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, RouteClaim` | Import |
 
 **Exports:**
@@ -3821,7 +3818,6 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../cli-api.js` | `scanCompositionRecovery` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3838,7 +3834,6 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../cli-api.js` | `readBinding` | Import |
 
 **Exports:**
 - Functions: `parseAt`, `resolveAtPoint`, `showInequality`
@@ -4255,7 +4250,7 @@ The codebase is organized into the following modules:
 | `./numerical/binding-value.js` | `readBinding, bindingInUnit` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
-| `./index.js` | `C_SI, G_SI` | Re-export |
+| `./core/constants.js` | `C_SI, G_SI` | Re-export |
 | `./composition/edge.js` | `BridgeEdge` | Re-export |
 | `./composition/graph-viz.js` | `VizJunction, VizModel` | Re-export |
 | `./atlas/types.js` | `EvidenceTag, RelationType` | Re-export |
@@ -8004,7 +7999,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 423 |
 | Total Modules | 13 |
-| Total Lines of Code | 92370 |
+| Total Lines of Code | 92363 |
 | Total Exports | 3012 |
 | Total Re-exports | 1416 |
 | Total Classes | 61 |
@@ -8012,7 +8007,7 @@ graph TD
 | Total Functions | 780 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 567 |
+| Type-only Imports | 569 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

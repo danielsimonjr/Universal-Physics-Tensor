@@ -259,7 +259,7 @@ export { missingEvaluatorMessage } from './bridges/evaluators.js';
  *
  * @internal
  */
-export { C_SI, G_SI } from './index.js';
+export { C_SI, G_SI } from './core/constants.js';
 
 /** Quantity-graph edge type for `upt map`. @internal */
 export type { BridgeEdge } from './composition/edge.js';

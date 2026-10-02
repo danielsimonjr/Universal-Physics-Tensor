@@ -22,7 +22,6 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
-import { readBinding } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -84,7 +83,12 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
  *   which is exactly the reading this command exists to keep honest.
  * @internal
  */
-export function parseAt(raw: readonly string[], command: string, notes?: string[]): Record<string, number> {
+export function parseAt(
+  api: CommandCtx['api'],
+  raw: readonly string[],
+  command: string,
+  notes?: string[],
+): Record<string, number> {
   const point: Record<string, number> = {};
   for (const token of raw) {
     const eq = token.indexOf('=');
@@ -94,7 +98,7 @@ export function parseAt(raw: readonly string[], command: string, notes?: string[
     const name = token.slice(0, eq);
     const rawValue = token.slice(eq + 1);
     try {
-      const read = readBinding(rawValue);
+      const read = api.readBinding(rawValue);
       if (rawValue === '' || !Number.isFinite(read.value)) {
         throw new CliError(`upt ${command}: '${token}' is not a finite number`);
       }
@@ -187,7 +191,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const atNotes: string[] = [];
-  const point = parseAt(assignments, 'regime', atNotes);
+  const point = parseAt(api, assignments, 'regime', atNotes);
   for (const note of atNotes) err(note);
   const stated = Object.keys(point);
   const assume = args.flags.get('assume') ?? [];

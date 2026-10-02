@@ -12,14 +12,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
-import {
-  curvatureReport,
-  kerrEquatorialCircular,
-  kerrGeodesic,
-  kerrTurningPointOrbit,
-  schwarzschildCircularOrbit,
-  type MetricId,
-} from '../../cli-api.js';
+import type { MetricId } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
   JSON_FLAG,
@@ -58,7 +51,7 @@ function isMetric(s: string | undefined): s is MetricId {
 }
 
 async function run(ctx: CommandCtx): Promise<number> {
-  const { args, out } = ctx;
+  const { args, api, out } = ctx;
   const name = args.positionals[0];
   if (!isMetric(name)) {
     throw new UsageError(
@@ -68,7 +61,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const pairs = args.positionals.slice(1);
   let report;
   try {
-    report = curvatureReport(name, pairs);
+    report = api.curvatureReport(name, pairs);
   } catch (e) {
     throw new UsageError((e as Error).message);
   }
@@ -96,7 +89,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       if (name === 'schwarzschild') {
         const M = report.parameters.M;
         const r = report.parameters.r;
-        const orbit = schwarzschildCircularOrbit({
+        const orbit = api.schwarzschildCircularOrbit({
           ...(M === undefined ? {} : { M }),
           ...(r === undefined ? {} : { r }),
         });
@@ -113,13 +106,13 @@ async function run(ctx: CommandCtx): Promise<number> {
         const shared = { M: Mgeom, aOverM, rOverM, fraction: 0.005, steps: 40 };
         geodesic =
           Math.abs(theta - Math.PI / 2) < 1e-6
-            ? { kind: 'circular' as const, ...kerrEquatorialCircular(shared) }
+            ? { kind: 'circular' as const, ...api.kerrEquatorialCircular(shared) }
             : {
                 kind: 'inclined' as const,
-                ...kerrGeodesic({
+                ...api.kerrGeodesic({
                   ...shared,
                   theta,
-                  ...kerrTurningPointOrbit({ M: Mgeom, aOverM, rOverM, theta }),
+                  ...api.kerrTurningPointOrbit({ M: Mgeom, aOverM, rOverM, theta }),
                   mu2: 1,
                 }),
               };

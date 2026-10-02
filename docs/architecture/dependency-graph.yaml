@@ -7635,9 +7635,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../cli-api.js
-          imports:
-            - catalogFormalRef
         - file: ./_atlas-map.js
           imports:
             - atlasEvidenceText
@@ -8000,11 +7997,6 @@ modules:
           imports:
             - UnitMode
           typeOnly: true
-        - file: ../../cli-api.js
-          imports:
-            - builtinFormulaDimensionChecker
-            - readBinding
-            - UnitError
       exports:
         - command
       constants:
@@ -8040,11 +8032,8 @@ modules:
           imports:
             - AppliedCase
             - CaseResult
-            - bindingInUnit
-            - C_SI
             - EvaluatorParameter
-            - G_SI
-            - missingEvaluatorMessage
+          typeOnly: true
         - file: ../conventions.js
           imports:
             - JEANS_FORMULA_NOTE
@@ -8356,12 +8345,8 @@ modules:
             - UsageError
         - file: ../../cli-api.js
           imports:
-            - curvatureReport
-            - kerrEquatorialCircular
-            - kerrGeodesic
-            - kerrTurningPointOrbit
-            - schwarzschildCircularOrbit
             - MetricId
+          typeOnly: true
       exports:
         - command
       constants:
@@ -8397,9 +8382,6 @@ modules:
             - parseAt
             - resolveAtPoint
             - showInequality
-        - file: ../../cli-api.js
-          imports:
-            - readBinding
         - file: ./_atlas-route.js
           imports:
             - explainsRefusal
@@ -8544,9 +8526,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../cli-api.js
-          imports:
-            - scanCompositionRecovery
       exports:
         - command
       constants:
@@ -8577,9 +8556,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../cli-api.js
-          imports:
-            - readBinding
       exports:
         - command
         - parseAt
@@ -9658,7 +9634,7 @@ modules:
           imports:
             - missingEvaluatorMessage
           reExport: true
-        - file: ./index.js
+        - file: ./core/constants.js
           imports:
             - C_SI
             - G_SI
@@ -20566,7 +20542,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 423
   totalModules: 13
-  totalLinesOfCode: 92370
+  totalLinesOfCode: 92363
   totalExports: 3012
   totalClasses: 61
   totalInterfaces: 481
@@ -20575,7 +20551,7 @@ statistics:
   totalEnums: 0
   totalConstants: 756
   totalReExports: 1416
-  totalTypeOnlyImports: 567
+  totalTypeOnlyImports: 569
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

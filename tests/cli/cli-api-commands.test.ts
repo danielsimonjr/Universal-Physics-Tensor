@@ -1,7 +1,9 @@
 /**
- * The command modules in the integration note's finding 5 import library
- * names from `src/cli-api.ts`, or from other CLI modules. The barrel does
- * not import a command.
+ * The command modules in the integration note's finding 5 do not import
+ * those library files. Values are read from `ctx.api`. A value import of
+ * `cli-api` is refused, because loading the barrel follows every re-export.
+ * `import type` from the barrel is allowed. The barrel does not import a
+ * command.
  */
 
 import { readFileSync } from 'node:fs';
@@ -38,28 +40,58 @@ const LIBRARY_SPECIFIERS: Record<string, readonly string[]> = {
   ],
 };
 
-function importsOf(path: string): string[] {
-  return scanFileImports(readFileSync(resolve(root, path), 'utf8'));
+/** Value names each command reads from `ctx.api`. */
+const VALUE_NAMES: Record<string, readonly string[]> = {
+  'src/cli/commands/atlas.ts': ['catalogFormalRef'],
+  'src/cli/commands/recover.ts': ['scanCompositionRecovery'],
+  'src/cli/commands/metric.ts': [
+    'curvatureReport',
+    'kerrEquatorialCircular',
+    'kerrGeodesic',
+    'kerrTurningPointOrbit',
+    'schwarzschildCircularOrbit',
+  ],
+  'src/cli/commands/eval.ts': ['builtinFormulaDimensionChecker', 'readBinding', 'UnitError'],
+  'src/cli/commands/evaluate.ts': ['bindingInUnit', 'C_SI', 'G_SI', 'missingEvaluatorMessage'],
+  'src/cli/commands/regime.ts': ['readBinding'],
+  'src/cli/commands/path.ts': ['readBinding'],
+  'src/cli/commands/map.ts': [],
+};
+
+function sourceOf(path: string): string {
+  return readFileSync(resolve(root, path), 'utf8');
 }
 
-describe('commands import library names through cli-api', () => {
-  it('the finding-5 modules do not import those library files', () => {
+/** A value import of the barrel. `import type` does not load it. */
+function valueImportsCliApi(source: string): boolean {
+  const statements = source.match(/^\s*import[\s\S]*?from\s+['"][^'"]+['"]/gm) ?? [];
+  return statements.some((stmt) => /cli-api\.js['"]/.test(stmt) && !/^\s*import\s+type\b/.test(stmt));
+}
+
+describe('commands read finding-5 names from ctx.api', () => {
+  it('the finding-5 modules do not import those library files or the barrel as a value', () => {
     const hits: string[] = [];
     for (const [path, forbidden] of Object.entries(LIBRARY_SPECIFIERS)) {
-      const specs = new Set(importsOf(path));
+      const text = sourceOf(path);
+      const specs = new Set(scanFileImports(text));
       for (const spec of forbidden) {
         if (specs.has(spec)) hits.push(`${path} -> ${spec}`);
       }
-      if (!specs.has('../../cli-api.js')) hits.push(`${path} -> cli-api`);
+      if (valueImportsCliApi(text)) hits.push(`${path} value-imports cli-api`);
+      for (const name of VALUE_NAMES[path] ?? []) {
+        if (!text.includes(`api.${name}`)) hits.push(`${path} missing api.${name}`);
+      }
     }
     expect(hits).toEqual([]);
   });
 
   it('cli-api does not import a command, and the root barrel does not export it', () => {
-    const specs = importsOf('src/cli-api.ts');
+    const specs = scanFileImports(sourceOf('src/cli-api.ts'));
     expect(specs.some((spec) => spec.includes('/commands/'))).toBe(false);
-    const index = readFileSync(resolve(root, 'src/index.ts'), 'utf8');
+    const index = sourceOf('src/index.ts');
     expect(index).not.toContain("from './cli-api.js'");
     expect(index).not.toContain('from "./cli-api.js"');
+    expect(sourceOf('src/cli-api.ts')).toContain("export { C_SI, G_SI } from './core/constants.js'");
+    expect(sourceOf('src/cli-api.ts')).not.toContain("export { C_SI, G_SI } from './index.js'");
   });
 });

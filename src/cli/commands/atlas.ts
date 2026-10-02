@@ -31,7 +31,6 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
-import { catalogFormalRef } from '../../cli-api.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 
 const FLAGS: FlagSpec[] = [
@@ -140,7 +139,7 @@ function catalogEquationNumber(raw: string): number | undefined {
  * `formally-proved` tag.
  */
 function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: CommandCtx): number {
-  const ref = catalogFormalRef(entry.id);
+  const ref = ctx.api.catalogFormalRef(entry.id);
   if (ref === undefined) {
     throw new CliError(`upt atlas: be-${entry.id} is a catalog equation and has no formalRef (\`upt atlas\` lists atlas bridges)`);
   }

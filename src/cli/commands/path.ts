@@ -30,7 +30,6 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import { parseAt, resolveAtPoint, showInequality } from './regime.js';
-import { readBinding } from '../../cli-api.js';
 import { explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, type RouteClaim } from './_atlas-route.js';
 
 const FLAGS: FlagSpec[] = [
@@ -174,13 +173,16 @@ interface HorizonReport {
 const MAX_SAMPLES = 200;
 
 /** `name=lo:hi:n` or `name=lo:hi:n:log`, bounded; the endpoints are both sampled. */
-export function parseSweep(spec: string): { name: string; values: number[]; spacing: 'linear' | 'log' } {
+export function parseSweep(
+  api: CommandCtx['api'],
+  spec: string,
+): { name: string; values: number[]; spacing: 'linear' | 'log' } {
   const m = /^([^=\s]+)=([^:]+):([^:]+):([^:]+)(?::(linear|log))?$/.exec(spec);
   if (m === null) throw new CliError(`upt path: --sweep '${spec}' is not name=lo:hi:n[:log], e.g. --sweep theta0=0.05:0.9:18`);
   const [, name, loS, hiS, nS, sp] = m as unknown as [string, string, string, string, string, string | undefined];
   const endpoint = (raw: string): number => {
     try {
-      return readBinding(raw).value;
+      return api.readBinding(raw).value;
     } catch {
       return Number.NaN;
     }
@@ -354,7 +356,7 @@ export interface ToleranceRequest {
 }
 
 /** Read a `--tolerance` argument as `EPS` or `<observable>:EPS`. Returns null when the flag is absent, and throws a {@link CliError} when it is present and malformed. */
-export function parseTolerance(raw: string | undefined): ToleranceRequest | null {
+export function parseTolerance(api: CommandCtx['api'], raw: string | undefined): ToleranceRequest | null {
   if (raw === undefined) return null;
   const colon = raw.indexOf(':');
   const observable = colon === -1 ? null : raw.slice(0, colon);
@@ -364,7 +366,7 @@ export function parseTolerance(raw: string | undefined): ToleranceRequest | null
   }
   let v = Number.NaN;
   try {
-    if (number !== '') v = readBinding(number).value;
+    if (number !== '') v = api.readBinding(number).value;
   } catch {
     v = Number.NaN;
   }
@@ -722,8 +724,8 @@ function sweepCell(e: Evaluation, result: SweepResult) {
   return { regime, horizon, error, reason };
 }
 
-function checkSweep(spec: string, point: Readonly<Record<string, number>>) {
-  const sweep = parseSweep(spec);
+function checkSweep(api: CommandCtx['api'], spec: string, point: Readonly<Record<string, number>>) {
+  const sweep = parseSweep(api, spec);
   if (sweep.name in point) {
     throw new CliError(`upt path: '${sweep.name}' is both swept and fixed by --at; give it one role`);
   }
@@ -758,7 +760,7 @@ function runSweep(
   },
 ): number {
   const { out, args } = ctx;
-  const sweep = checkSweep(s.spec, s.point);
+  const sweep = checkSweep(ctx.api, s.spec, s.point);
   const rows = sweep.values.map((value) => {
     const at = { ...s.point, [sweep.name]: value };
     const e = s.evaluateAt(at);
@@ -896,7 +898,7 @@ interface CompareSide {
  */
 function runCompare(ctx: CommandCtx, from: string, point: Readonly<Record<string, number>>, spec: string, sides: readonly CompareSide[]): number {
   const { out, args } = ctx;
-  const sweep = checkSweep(spec, point);
+  const sweep = checkSweep(ctx.api, spec, point);
   const rows = sweep.values.map((value) => {
     const at = { ...point, [sweep.name]: value };
     const paths = sides.map((side) => {
@@ -1108,7 +1110,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const [from, to] = endpoints as [string, string];
   const atNotes: string[] = [];
-  const point = parseAt(assignments, 'path', atNotes);
+  const point = parseAt(api, assignments, 'path', atNotes);
   for (const note of atNotes) err(note);
   const t = point['t'];
 
@@ -1159,7 +1161,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const evaluateAt = makeEvaluator(api, bridges, result);
   const tolValues = args.flags.get('tolerance');
-  const tolerance = parseTolerance(tolValues === undefined ? undefined : tolValues[tolValues.length - 1]);
+  const tolerance = parseTolerance(api, tolValues === undefined ? undefined : tolValues[tolValues.length - 1]);
   const scope = toleranceScope(api, bridges);
   const found = tolerance?.observable == null ? null : pathTranslation(api, bridges, tolerance.observable);
   const translation = found?.tr ?? undefined;

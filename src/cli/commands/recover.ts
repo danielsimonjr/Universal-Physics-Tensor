@@ -7,7 +7,6 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { scanCompositionRecovery } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [JSON_FLAG];
 
@@ -48,7 +47,7 @@ function conventionAdvisory(
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const all = api.scanLinkages();
-  const composition = scanCompositionRecovery();
+  const composition = api.scanCompositionRecovery();
 
   if (args.flags.has('json')) {
     emitJson(
