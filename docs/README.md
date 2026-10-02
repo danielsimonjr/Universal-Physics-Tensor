@@ -7,14 +7,14 @@ Index of this repository's documents. A count that moves is recorded in `NOTES.m
 Eleven parts. The reader's map, including which claims are speculative, is [`specification/README.md`](specification/README.md).
 
 - **[Part I](specification/Part-I.md)** — foundation, and Bridge Equations 11–20.
-- **[Part II](specification/Part-II.md)** — Bridge Equations 21–54.
+- **[Part II](specification/Part-II.md)** — Bridge Equations 21–65.
 - **[Part III](specification/Part-III.md)** — algorithms and information-theoretic definitions. The numbered pseudocode remains a specification.
 - **[Part IV](specification/Part-IV.md)** — validation pathways.
 - **[Part V](specification/Part-V.md)** — advanced mathematics. Read its status note first.
 - **[Part VI](specification/Part-VI.md)** — implementation framing and the Status-Promotion Protocol.
 - **[Parts VII–XI](specification/README.md)** — tensor algebra, the metric layer, composition, curvature and field equations, and proposed equations (Part XI is non-normative).
 
-The runtime catalog is `BRIDGE_EQUATIONS` in `src/bridges/index.ts`: 55 entries, ids 11–65, 19 established, 33 speculative, 3 highly-speculative. Parts I–II write up ids 11–54. Ids 55–65 are runtime catalog entries filed with `source_part: 'III'` and have no Bridge Equation heading in Parts I–II. Re-count from the array. `NOTES.md` is the rolling note.
+The runtime catalog is `BRIDGE_EQUATIONS` in `src/bridges/index.ts`: 55 entries, ids 11–65, 19 established, 33 speculative, 3 highly-speculative. Parts I–II write up those ids. Part II §V-C is BE-55–65. Entries 51 and 53–65 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. Re-count from the array. `NOTES.md` is the rolling note.
 
 ## Atlas, roadmap, and formal references
 

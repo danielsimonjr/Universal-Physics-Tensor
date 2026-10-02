@@ -1,6 +1,11 @@
 # UPT Specification — Revision History
 
-> **Proof status as of 2026-10-01.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. Those lines are the current proof reading. The wave entries below are history and are unchanged.
+> **Proof status as of 2026-10-01.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The 2026-10-02 entry adds the BE-55–65 headings. It does not change the proof reading of BE-11–54.
+
+## 2026-10-02 — BE-55–65 write-up
+
+- Part-II §V-C — a Bridge Equation section for each of BE-55 through BE-65, in the house format, with the same PhysJS proof-status blockquote under the heading. Kind, theorem, and the missing piece are read from `src/atlas/physjs-ref.ts` and `docs/planning/Bridge-Gap-Inference.md` at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. A bare `e` in those formulas is the elementary charge. Euler's number is `\exp`.
+- Living catalog counts in the specification index and in Parts I, II, IV, V, and VI now say 55 equations, IDs 11–65. The 2026-06-10 line below that says the catalog was harmonized to 44 bridges is the state of that day.
 
 Provenance ledger for the formal specification (`docs/specification/Part-*.md`).
 

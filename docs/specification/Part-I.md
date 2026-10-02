@@ -596,9 +596,9 @@ This enhanced version maintains all the mathematical rigor of your original docu
 
 ## Appendix A — Notation Glossary
 
-The bridge-equation catalog (Parts I-II, BE-11 through BE-50) reuses several Greek and Latin symbols across distinct physical contexts. The table below catalogs the per-bridge meaning for symbols whose reuse could plausibly confuse a reader. Where a symbol carries the *same* canonical meaning across multiple bridges (e.g., `ℏ`, `c`, `G`, `k_B`), it is omitted as unambiguous; only the *polyvalent* symbols are listed.
+The bridge-equation catalog (Parts I-II, BE-11 through BE-65) reuses several Greek and Latin symbols across distinct physical contexts. The table below catalogs the per-bridge meaning for symbols whose reuse could plausibly confuse a reader. Where a symbol carries the *same* canonical meaning across multiple bridges (e.g., `ℏ`, `c`, `G`, `k_B`), it is omitted as unambiguous; only the *polyvalent* symbols are listed.
 
-> **Spec-scope note:** "BE-11 through BE-50" was the *original* formal spec catalog (40 bridges). The catalog now spans **44 bridges, IDs 11–54**: BE-51 (gravitational lensing) and BE-52 (Mercury perihelion) were added in v0.4.0, BE-53 (Yang-Mills β-function) and BE-54 (Randall-Sundrum brane cosmology) in v0.7 — all four are catalogued in Part-II §V-B and shipped in `src/bridges/index.ts`; see the Part-II §V preamble spec-scope note.
+> **Spec-scope note:** "BE-11 through BE-50" was the *original* formal spec catalog (40 bridges). The catalog now spans **55 bridges, IDs 11–65**: BE-51 (gravitational lensing) and BE-52 (Mercury perihelion) were added in v0.4.0, BE-53 (Yang-Mills β-function) and BE-54 (Randall-Sundrum brane cosmology) in v0.7, and BE-55–65 in the 2026-07-05 catalog expansion. BE-51–54 are catalogued in Part-II §V-B and BE-55–65 in Part-II §V-C, and all of them are shipped in `src/bridges/index.ts`; see the Part-II preamble spec-scope note.
 
 This table does not replace the per-bridge `where:` clauses — those remain authoritative for the local-scope meaning. The glossary's purpose is solely to flag the polyvalence so that a reader who sees `ξ` in BE-12 and `ξ` in BE-43 has a place to confirm they refer to different physical quantities.
 
@@ -617,6 +617,7 @@ This table does not replace the per-bridge `where:` clauses — those remain aut
 | γ | BE-22 | topological entanglement entropy (= log D, dimensionless) | Kitaev-Preskill 2006 |
 | γ | BE-27 | viscous-relaxation rate in the active-matter T_eff(ω) form | Cugliandolo 2011 |
 | γ | BE-39 | universal R-G factor in asymptotic safety | Reuter 1998 |
+| γ | BE-62 | Euler–Mascheroni constant in the weak-coupling gap ratio `2π exp(−γ)`. The catalog `formula_latex` writes the same factor as `e^{γ}` in the denominator. In this specification `e` is the elementary charge and Euler's number is `\exp` | Bardeen, Cooper & Schrieffer 1957 |
 | η | BE-24 | photosynthetic transfer efficiency (dimensionless, ∈ [0,1]) | Engel et al. 2007 |
 | η | BE-30 | Minkowski metric η_{μν} (appears inside the ER=EPR generalized entanglement-geometry equation) | standard GR |
 | λ | BE-11 | system-environment coupling strength (dimensionful, generic) | Caldeira-Leggett 1983 |
@@ -624,14 +625,18 @@ This table does not replace the per-bridge `where:` clauses — those remain aut
 | λ | BE-50 | retrocausal coupling `λ φ_+ φ_- δ^4(x − x_m)` | Wheeler-Feynman |
 | μ | BE-28 | Lagrange multiplier in MEPP variational principle | Dewar 2003 |
 | μ | BE-38 | MOND interpolation function `μ(x) = x/√(1+x²)` | Milgrom 1983 |
+| μ | BE-63, BE-65 | mean molecular weight (`μ_e` per electron in BE-63; `μ` per particle in BE-65) | Chandrasekhar 1931; Jeans 1902 |
 | ν | BE-26 | attempt frequency `ν_0 ~ 10^{13} Hz` in WKB tunneling | Gamow 1928 |
 | ν | BE-22, BE-33, BE-34 | static correlation-length exponent in critical scaling (`ξ ~ T^{-ν/z}`) | Sondhi et al. 1997 |
+| ν | BE-60 | Landau-level filling fraction `ν = p/q` | Tsui, Störmer & Gossard 1982 |
 | ρ | BE-11, BE-19, BE-29, BE-30 | density matrix or matter-energy density (context-distinguished — quantum vs cosmological) | various |
 | ρ | BE-23 | electrical resistivity ρ(T) in strange-metal scaling | Sachdev 2011 |
 | σ | BE-27 | active-matter response function index | Cugliandolo 2011 |
 | σ | BE-15 | implicit RG/diffusion spread parameter (informal) | Hohenberg-Halperin 1977 |
 | σ | BE-48 | localization length `σ ~ 10⁻⁷ m` in GRW spontaneous-collapse | Ghirardi-Rimini-Weber 1986 |
 | σ | Part-IV §10.1.4 | dark-matter direct-detection cross section `σ_SI` | standard particle physics |
+| σ | BE-61 | electrical conductivity in the Wiedemann–Franz ratio `κ/(σ T)` | Sommerfeld 1928 |
+| σ | BE-64 | Thomson cross-section `σ_T` in the Eddington luminosity | Eddington 1926 |
 | A | BE-23 | linear-in-T resistivity slope coefficient | Sachdev 2011 |
 | A | Part-I §3.2, Part-IV §11.1.2 | horizon area in Bekenstein-Hawking bound `S ≤ A/(4ℓ_P²)`; the cosmological holographic bound of Conjecture 8.1 (Part-III §VIII) uses the Hubble-horizon area `A_H = 4π c²/H₀²` (Gibbons-Hawking 1977; the de Sitter horizon has proper radius `c/H₀`, giving `A_H = 4π(c/H₀)² = 4π c²/H₀²` in SI). | Bekenstein 1973; Gibbons-Hawking 1977 |
 | A | BE-44 | implicit asymptotic-shear-derived quantity (BMS context) | Hawking-Perry-Strominger 2016 |
@@ -655,6 +660,7 @@ This table does not replace the per-bridge `where:` clauses — those remain aut
 | a | BE-37 (invalidated) | cosmic scale factor `a(t)` in modified Friedmann | standard cosmology |
 | a | BE-36, BE-38 | acceleration `a` and MOND scale `a_0 ≈ 1.2×10⁻¹⁰ m/s²` | Milgrom 1983 |
 | a | BE-34 | implicit microscopic-length / lattice-spacing prefactor `1/a^d` | Kibble 1976 / Zurek 1985 |
+| a | BE-57 | proper acceleration in the Unruh temperature | Unruh 1976 |
 | τ | BE-23 | Planckian dissipation time `τ_P = ℏ/(k_B T)` | Sachdev-Ye-Kitaev |
 | τ | BE-24 | coherence-decay time `τ_coh ~ 100 fs` | Engel et al. 2007 |
 | τ | BE-27 | active-matter velocity-correlation time | Cugliandolo 2011 |
@@ -672,10 +678,12 @@ This table does not replace the per-bridge `where:` clauses — those remain aut
 | ζ | BE-20 | UV-cutoff regularization function `ζ(k/k_UV)` in vacuum-fluctuation integral | standard QFT |
 | Δ | BE-21 | conformal dimension of boundary operator in AdS/CMT | Son-Starinets 2002 |
 | Δ | BE-25 | superposition mass/separation Δm, Δx (Penrose-Hameroff Orch-OR) | Penrose 1996 |
+| Δ | BE-62 | superconducting energy gap `Δ(0)` at zero temperature | Bardeen, Cooper & Schrieffer 1957 |
 | Λ | BE-19, BE-29 | cosmological constant Λ in Friedmann / curved-spacetime extensions | standard cosmology |
 | κ | BE-24 | quantum enhancement factor κ ∈ [0.1, 0.3] | Engel et al. 2007 |
 | κ | BE-30 | entanglement-geometry coupling κ ~ ℓ_P² | Van Raamsdonk 2010 |
-| T | BE-11, BE-12, BE-13, BE-15, BE-23, BE-26, BE-27, BE-29, BE-33, BE-34 | **temperature** (kelvin); appears in thermal factors `k_B T`, in Arrhenius / Boltzmann suppressions, in Planckian dissipation `τ_P = ℏ/(k_B T)`, etc. | various; standard usage |
+| κ | BE-61 | thermal conductivity in the Wiedemann–Franz ratio `κ/(σ T)` | Wiedemann & Franz 1853 |
+| T | BE-11, BE-12, BE-13, BE-15, BE-23, BE-26, BE-27, BE-29, BE-33, BE-34, BE-57, BE-58, BE-61, BE-62, BE-65 | **temperature** (kelvin); appears in thermal factors `k_B T`, in Arrhenius / Boltzmann suppressions, in Planckian dissipation `τ_P = ℏ/(k_B T)`, and as the Unruh temperature | various; standard usage |
 | T | BE-13, BE-29, BE-30, BE-43 | **stress-energy tensor** `T_{μν}` (energy/length³ in SI, or per the Einstein-equation prefactor) | standard GR |
 | T | BE-50 | **time** in retrocausal-QFT context (e.g., t → ±∞ boundary-condition specification) | self-flagged |
 | T | Part-I §1.3 invariant 4 | **time** in `lim_{ℏ→0}` correspondence-principle predicate | standard QM |
@@ -687,6 +695,8 @@ This table does not replace the per-bridge `where:` clauses — those remain aut
 | k | BE-13, BE-22, BE-29 | **Boltzmann constant `k_B`** in thermal factors (always written `k_B`, never bare `k`) | standard |
 | k | BE-19, BE-21, BE-24, BE-39, BE-44 | **mode/momentum index** in Fourier / RG / soft-modes contexts | standard |
 | α_fs | BE-17 (invalidated), various | **fine-structure constant** `α_fs ≈ 1/137.036` (dimensionless) — distinct from per-bridge α coefficients listed above | CODATA 2018 |
+| e | BE-52 | orbital eccentricity in the perihelion advance `Δφ = 6π G M / (a (1 − e²) c²)` | Einstein 1915 |
+| e | BE-55, BE-59, BE-60, BE-61 | elementary charge. Euler's number in these sections is written `\exp`, including the BE-62 factor the catalog stores as `e^{γ}` | catalog formulas; the parser reads a bare `e` as this charge |
 
 **Notes:**
 - Symbols not listed here either have a single canonical meaning across the catalog (e.g., `ℏ`, `c`, `G`, `k_B`, `ε_0`, `μ_0`, `M_P`, `ℓ_P`) or appear in only one bridge (no ambiguity).
