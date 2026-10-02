@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 407,
-    "totalTestFiles": 562,
-    "testedCount": 397,
+    "totalSourceFiles": 408,
+    "totalTestFiles": 563,
+    "testedCount": 398,
     "untestedCount": 10,
     "coveragePercent": "97.5"
   },
@@ -251,6 +251,7 @@
     "src/composition/axis-audit.ts",
     "src/composition/bridge-analysis.ts",
     "src/composition/bridge-prediction.ts",
+    "src/composition/buckingham-filter.ts",
     "src/composition/canonical-compare.ts",
     "src/composition/canonical-graph.ts",
     "src/composition/canonical-prefactors.ts",
@@ -550,7 +551,8 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/proved-counterexample.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
-      "tests/cli/recover-conventions.test.ts"
+      "tests/cli/recover-conventions.test.ts",
+      "tests/composition/buckingham-filter.test.ts"
     ],
     "src/atlas/diffusion/bridges-closure.ts": [
       "tests/atlas/barrel-completeness.test.ts",
@@ -4584,6 +4586,9 @@
       "tests/composition/attribute-audit.test.ts",
       "tests/composition/bridge-prediction.test.ts"
     ],
+    "src/composition/buckingham-filter.ts": [
+      "tests/composition/buckingham-filter.test.ts"
+    ],
     "src/composition/canonical-compare.ts": [
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -6766,6 +6771,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/composition/buckingham-filter.test.ts",
       "tests/dimensional/buckingham.test.ts",
       "tests/dimensional/derivation-benchmark.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -7185,6 +7191,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/axis-gate.test.ts",
       "tests/composition/bridge-prediction.test.ts",
+      "tests/composition/buckingham-filter.test.ts",
       "tests/composition/calibration-targets.test.ts",
       "tests/composition/canonical-compare-pairing.test.ts",
       "tests/composition/canonical-graph-information-axis.test.ts",
@@ -13833,6 +13840,12 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts"
+    ],
+    "tests/composition/buckingham-filter.test.ts": [
+      "src/atlas/derive-evidence.ts",
+      "src/composition/buckingham-filter.ts",
+      "src/dimensional/buckingham.ts",
+      "src/dimensional/types.ts"
     ],
     "tests/composition/calibration-targets.test.ts": [
       "src/composition/index.ts",

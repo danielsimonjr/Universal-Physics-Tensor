@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 49 files
 - **root**: 1 file
-- **composition**: 77 files
+- **composition**: 78 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -4270,6 +4270,22 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/buckingham-filter.ts` - Buckingham filter for one target and the variables that govern it.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/buckingham.js` | `DimensionalDeterminationResult, DimensionalVariable` | Import (type-only) |
+| `../dimensional/buckingham.js` | `buckinghamPi, dimensionallyDetermines` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+
+**Exports:**
+- Interfaces: `BuckinghamFilterRecord`
+- Functions: `buckinghamFilter`
+
+---
+
 ### `src/composition/canonical-compare.ts` - Compare a user's formula with the canonical (textbook) equation it restates.
 
 **Internal Dependencies:**
@@ -7652,7 +7668,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...72 more]
+        N36[...73 more]
     end
 
     subgraph Core
@@ -7738,17 +7754,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 410 |
+| Total TypeScript Files | 411 |
 | Total Modules | 13 |
-| Total Lines of Code | 89658 |
-| Total Exports | 2926 |
+| Total Lines of Code | 89769 |
+| Total Exports | 2927 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
-| Total Interfaces | 464 |
-| Total Functions | 755 |
+| Total Interfaces | 465 |
+| Total Functions | 756 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 549 |
+| Type-only Imports | 550 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

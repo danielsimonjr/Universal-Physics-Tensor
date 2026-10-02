@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.1",
-    "totalFiles": 410,
+    "totalFiles": 411,
     "totalModules": 13,
-    "totalExports": 2926
+    "totalExports": 2927
   },
   "entryPoints": [
     {
@@ -14621,6 +14621,49 @@
           "predictMissingBridges"
         ]
       },
+      "src/composition/buckingham-filter.ts": {
+        "description": "Buckingham filter for one target and the variables that govern it.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "DimensionalDeterminationResult",
+              "DimensionalVariable"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/buckingham.js",
+            "imports": [
+              "buckinghamPi",
+              "dimensionallyDetermines"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          }
+        ],
+        "exports": [
+          "buckinghamFilter"
+        ],
+        "interfaces": [
+          "BuckinghamFilterRecord"
+        ],
+        "functions": [
+          "buckinghamFilter"
+        ]
+      },
       "src/composition/canonical-compare.ts": {
         "description": "Compare a user's formula with the canonical (textbook) equation it restates.",
         "externalDependencies": [],
@@ -28137,6 +28180,7 @@
           "src/composition/axis-audit.ts",
           "src/composition/bridge-analysis.ts",
           "src/composition/bridge-prediction.ts",
+          "src/composition/buckingham-filter.ts",
           "src/composition/canonical-compare.ts",
           "src/composition/canonical-graph.ts",
           "src/composition/canonical-prefactors.ts",
@@ -28341,18 +28385,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 410,
+    "totalTypeScriptFiles": 411,
     "totalModules": 13,
-    "totalLinesOfCode": 89658,
-    "totalExports": 2926,
+    "totalLinesOfCode": 89769,
+    "totalExports": 2927,
     "totalClasses": 60,
-    "totalInterfaces": 464,
-    "totalFunctions": 755,
+    "totalInterfaces": 465,
+    "totalFunctions": 756,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 721,
     "totalReExports": 1389,
-    "totalTypeOnlyImports": 549,
+    "totalTypeOnlyImports": 550,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
