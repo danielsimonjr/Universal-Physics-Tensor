@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.2",
-    "totalFiles": 419,
+    "totalFiles": 420,
     "totalModules": 13,
-    "totalExports": 2971
+    "totalExports": 2974
   },
   "entryPoints": [
     {
@@ -599,8 +599,16 @@
           {
             "file": "../composition/chain-candidate.js",
             "imports": [
+              "compareChainEdgeIds",
               "orderChainCandidates",
               "ChainCandidate"
+            ]
+          },
+          {
+            "file": "../composition/chain-regime.js",
+            "imports": [
+              "joinRegimeMismatch",
+              "ChainRegimeMismatch"
             ]
           },
           {
@@ -15201,12 +15209,14 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
+          "compareChainEdgeIds",
           "orderChainCandidates"
         ],
         "interfaces": [
           "ChainCandidate"
         ],
         "functions": [
+          "compareChainEdgeIds",
           "orderChainCandidates"
         ]
       },
@@ -15235,6 +15245,71 @@
         ],
         "functions": [
           "matchChain"
+        ]
+      },
+      "src/composition/chain-regime.ts": {
+        "description": "Regime gate for a chain that meets on a quantity name.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS"
+            ]
+          },
+          {
+            "file": "../bridges/tensor-index.js",
+            "imports": [
+              "tensorIndexComponent",
+              "TensorIndexComponent"
+            ]
+          },
+          {
+            "file": "../relations/regime.js",
+            "imports": [
+              "regimeOverlap"
+            ]
+          },
+          {
+            "file": "./axes.js",
+            "imports": [
+              "GATE_AXES"
+            ]
+          },
+          {
+            "file": "./compose.js",
+            "imports": [
+              "QUANTITY_IDENTIFICATIONS"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./quantity.js",
+            "imports": [
+              "Quantity"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "REGIME_MISMATCH_KIND",
+          "joinRegimeMismatch"
+        ],
+        "interfaces": [
+          "ChainRegimeMismatch"
+        ],
+        "functions": [
+          "joinRegimeMismatch"
+        ],
+        "constants": [
+          "REGIME_MISMATCH_KIND"
         ]
       },
       "src/composition/compose-surface.ts": {
@@ -28753,6 +28828,7 @@
           "src/composition/catalog-graph.ts",
           "src/composition/chain-candidate.ts",
           "src/composition/chain-match.ts",
+          "src/composition/chain-regime.ts",
           "src/composition/compose-surface.ts",
           "src/composition/compose-symbolic.ts",
           "src/composition/compose.ts",
@@ -28955,21 +29031,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 419,
+    "totalTypeScriptFiles": 420,
     "totalModules": 13,
-    "totalLinesOfCode": 91321,
-    "totalExports": 2971,
+    "totalLinesOfCode": 91462,
+    "totalExports": 2974,
     "totalClasses": 60,
-    "totalInterfaces": 475,
-    "totalFunctions": 766,
+    "totalInterfaces": 476,
+    "totalFunctions": 768,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 751,
+    "totalConstants": 752,
     "totalReExports": 1395,
-    "totalTypeOnlyImports": 565,
+    "totalTypeOnlyImports": 567,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 76
+    "unusedExportsCount": 77
   }
 }

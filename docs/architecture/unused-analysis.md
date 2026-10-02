@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 76
+- **Potentially unused exports**: 77
 
 ## Potentially Unused Files
 
@@ -133,6 +133,10 @@ These exports are not imported by any other file in the codebase:
 - `RECORD_SCHEMA` (constant)
 - `sha256` (constant)
 - `argvFingerprint` (constant)
+
+### `src/composition/chain-regime.ts`
+
+- `REGIME_MISMATCH_KIND` (constant)
 
 ### `src/composition/edges/proved-seeds.ts`
 

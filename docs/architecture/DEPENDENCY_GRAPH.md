@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 49 files
 - **root**: 1 file
-- **composition**: 82 files
+- **composition**: 83 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -248,7 +248,8 @@ The codebase is organized into the following modules:
 | `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
 | `../composition/buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
 | `../composition/chain-match.js` | `matchChain` | Import |
-| `../composition/chain-candidate.js` | `orderChainCandidates, ChainCandidate` | Import |
+| `../composition/chain-candidate.js` | `compareChainEdgeIds, orderChainCandidates, ChainCandidate` | Import |
+| `../composition/chain-regime.js` | `joinRegimeMismatch, ChainRegimeMismatch` | Import |
 | `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
 | `./physjs-ref.js` | `bridgeSeedKeys, physjsTheorem` | Import |
 | `./proof-target.js` | `emitProofTarget` | Import |
@@ -4433,7 +4434,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ChainCandidate`
-- Functions: `orderChainCandidates`
+- Functions: `compareChainEdgeIds`, `orderChainCandidates`
 
 ---
 
@@ -4447,6 +4448,26 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `matchChain`
+
+---
+
+### `src/composition/chain-regime.ts` - Regime gate for a chain that meets on a quantity name.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
+| `../bridges/tensor-index.js` | `tensorIndexComponent, TensorIndexComponent` | Import |
+| `../relations/regime.js` | `regimeOverlap` | Import |
+| `./axes.js` | `GATE_AXES` | Import |
+| `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `./quantity.js` | `Quantity` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `ChainRegimeMismatch`
+- Functions: `joinRegimeMismatch`
+- Constants: `REGIME_MISMATCH_KIND`
 
 ---
 
@@ -7723,7 +7744,7 @@ The codebase is organized into the following modules:
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
 | `catalog-formal-ref` | 2 files | 1 files |
-| `chain-pipeline` | 12 files | 0 files |
+| `chain-pipeline` | 13 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
@@ -7808,7 +7829,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...77 more]
+        N36[...78 more]
     end
 
     subgraph Core
@@ -7894,17 +7915,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 419 |
+| Total TypeScript Files | 420 |
 | Total Modules | 13 |
-| Total Lines of Code | 91321 |
-| Total Exports | 2971 |
+| Total Lines of Code | 91462 |
+| Total Exports | 2974 |
 | Total Re-exports | 1395 |
 | Total Classes | 60 |
-| Total Interfaces | 475 |
-| Total Functions | 766 |
+| Total Interfaces | 476 |
+| Total Functions | 768 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 565 |
+| Type-only Imports | 567 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
