@@ -7,6 +7,10 @@
  * @module composition/edges/catalog-gravitation-cosmology
  */
 
+import type { ExprNode } from '../../dimensional/validator.js';
+import { DIMENSIONLESS } from '../../dimensional/types.js';
+import { sym } from '../../dimensional/ast-builders.js';
+import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
 import { evaluateBBNDark } from '../../bridges/equations/be-47-bbn-dark-sector.js';
 import { evaluateBenincasaDowker } from '../../bridges/equations/be-31-causal-set-bd.js';
 import { evaluateCosmologicalConstantDensity } from '../../bridges/equations/be-20-vacuum-energy.js';
@@ -150,10 +154,36 @@ export const be31Edge: BridgeEdge = {
  * Mirrors BE-14's SI convention; uses a distinct `wormhole-*` source/target so
  * it does not silently fuse with the BE-14 Ryu-Takayanagi nodes (different
  * geometry: bulk minimal surface vs. ER bridge cross-section).
+ * S = k_B c³ A / (4 G ℏ), which is k_B A / (4 ℓ_P²).
  *
  * Root-reachable via the {@link CATALOG_FULL_EDGES} array (one root
  * export for the 26-edge tranche — root-surface budget decision).
  */
+const BE43_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '/',
+  args: [
+    {
+      kind: 'op',
+      op: '*',
+      args: [
+        sym('k_B', CONSTANTS.k_B.dim),
+        { kind: 'op', op: '^', args: [sym('c', CONSTANTS.c.dim), sym('3', DIMENSIONLESS)] },
+        sym(wormholeCrossSectionAreaQ.name, wormholeCrossSectionAreaQ.dim),
+      ],
+    },
+    {
+      kind: 'op',
+      op: '*',
+      args: [
+        sym('4', DIMENSIONLESS),
+        sym('G', CONSTANTS.G.dim),
+        sym('hbar', CONSTANTS.hbar.dim),
+      ],
+    },
+  ],
+};
+
 export const be43Edge: BridgeEdge = {
   id: 'be-43',
   beId: 43,
@@ -170,6 +200,7 @@ export const be43Edge: BridgeEdge = {
   },
   evaluate: (i) =>
     evaluateEREPRBound({ area_m2: i['wormhole-cross-section-area'] }),
+  symbolic: BE43_SYMBOLIC,
   citation: 'Maldacena & Susskind 2013 Fortschr. Phys. 61:781; Bekenstein 1973 PRD 7:2333',
 };
 

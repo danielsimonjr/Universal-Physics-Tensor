@@ -12,24 +12,24 @@ const GRAPH = CATALOG_GRAPH;
 const m = linkageMap(GRAPH);
 
 describe('linkageMap — component structure', () => {
-  it('partitions the 41-edge graph into 23 components (20 isolated)', () => {
-    expect(m.componentCount).toBe(23);
-    expect(m.isolated.length).toBe(20);
+  it('partitions the 46-edge graph into 26 components (22 isolated)', () => {
+    expect(m.componentCount).toBe(26);
+    expect(m.isolated.length).toBe(22);
     expect(m.clusters.reduce((n, c) => n + c.size, 0)).toBe(GRAPH.length);
   });
 
-  it('reports the 11 directed compositions over the graph', () => {
-    expect(m.compositions).toBe(11);
+  it('reports the 19 directed compositions over the graph', () => {
+    expect(m.compositions).toBe(19);
   });
 
-  it('has one dominant ANCHORED cluster of 16, hubbed on mass + temperature', () => {
+  it('has one dominant ANCHORED cluster of 17, hubbed on mass + temperature', () => {
     const big = m.clusters[0];
-    expect(big.size).toBe(16);
+    expect(big.size).toBe(17);
     expect(big.anchored).toBe(true);
     expect(big.hubs).toEqual(expect.arrayContaining(['mass', 'temperature', 'schwarzschild-radius']));
     // it links established GR to speculative thermal/quantum bridges
-    expect(big.edges).toEqual(expect.arrayContaining(['be-42', 'be-51', 'be-52', 'be-16', 'be-12']));
-    expect(big.statusMix.established).toBe(5);
+    expect(big.edges).toEqual(expect.arrayContaining(['be-42', 'be-51', 'be-52', 'be-16', 'be-12', 'be-63']));
+    expect(big.statusMix.established).toBe(6);
   });
 
   it('has the cosmological-constant cluster (be-13/be-20/be-31)', () => {
@@ -45,8 +45,17 @@ describe('linkageMap — component structure', () => {
     expect(fr?.edges).toEqual(expect.arrayContaining(['be-19', 'be-54']));
   });
 
+  it('joins the integer and fractional Hall edges on hall-conductance', () => {
+    const hall = m.clusters.find((c) => c.edges.includes('be-55'));
+    expect(hall?.size).toBe(2);
+    expect(hall?.edges).toEqual(expect.arrayContaining(['be-55', 'be-60']));
+    expect(hall?.hubs).toEqual(['hall-conductance']);
+  });
+
   it('lists the isolated bridges (e.g. nucleosynthesis, swampland, Yang-Mills)', () => {
-    expect(m.isolated).toEqual(expect.arrayContaining(['be-47', 'be-41', 'be-53']));
+    expect(m.isolated).toEqual(expect.arrayContaining(['be-47', 'be-41', 'be-53', 'be-40', 'be-59']));
+    expect(m.isolated).not.toContain('be-63');
+    expect(m.isolated).not.toContain('be-55');
     // clusters are sorted largest-first
     for (let i = 1; i < m.clusters.length; i++) {
       expect(m.clusters[i].size).toBeLessThanOrEqual(m.clusters[i - 1].size);

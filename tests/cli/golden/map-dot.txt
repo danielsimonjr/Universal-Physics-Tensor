@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (101)";
+    label="anchored cluster (103)";
     j_be_11_zurek [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-11"];
     q_relaxation_rate [shape=ellipse,label="relaxation-rate"];
     q_relaxation_rate -> j_be_11_zurek;
@@ -126,6 +126,17 @@ digraph PhysicsMap {
     q_mond_acceleration_scale -> j_be_38;
     q_mond_force [shape=ellipse,label="mond-force"];
     j_be_38 -> q_mond_force;
+    j_be_59 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-59"];
+    q_voltage [shape=ellipse,label="voltage"];
+    q_voltage -> j_be_59;
+    q_frequency [shape=ellipse,label="frequency"];
+    j_be_59 -> q_frequency;
+    j_be_63 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-63"];
+    q_lane_emden_omega_3 [shape=ellipse,label="lane-emden-omega-3"];
+    q_lane_emden_omega_3 -> j_be_63;
+    q_mean_molecular_weight_per_electron [shape=ellipse,label="mean-molecular-weight-per-electron"];
+    q_mean_molecular_weight_per_electron -> j_be_63;
+    j_be_63 -> q_mass;
     j_CE_pendulum_period [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Pendulum period"];
     q_length [shape=ellipse,label="length"];
     q_length -> j_CE_pendulum_period;
@@ -267,7 +278,6 @@ digraph PhysicsMap {
     q_current -> j_CE_ohm_law;
     q_resistance [shape=ellipse,label="resistance"];
     q_resistance -> j_CE_ohm_law;
-    q_voltage [shape=ellipse,label="voltage"];
     j_CE_ohm_law -> q_voltage;
     j_CE_electrical_power [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Electrical power"];
     q_current -> j_CE_electrical_power;
@@ -393,7 +403,6 @@ digraph PhysicsMap {
     q_speed -> j_CE_stokes_drag;
     j_CE_stokes_drag -> q_force;
     j_CE_wave_speed [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Wave relation (v = fλ)"];
-    q_frequency [shape=ellipse,label="frequency"];
     q_frequency -> j_CE_wave_speed;
     q_wavelength [shape=ellipse,label="wavelength"];
     q_wavelength -> j_CE_wave_speed;
@@ -659,6 +668,7 @@ digraph PhysicsMap {
     q_mass_density -> j_be_54;
     q_brane_tension [shape=ellipse,label="brane-tension"];
     q_brane_tension -> j_be_54;
+    q_rescaled_cosmological_constant -> j_be_54;
     j_be_54 -> q_hubble_rate_squared;
     j_CE_friedmann_curvature [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Friedmann equation (with curvature)"];
     q_rho [shape=ellipse,label="rho"];
@@ -718,6 +728,18 @@ digraph PhysicsMap {
   }
   subgraph cluster_5 {
     label="anchored cluster (2)";
+    j_be_55 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-55"];
+    q_chern_number [shape=ellipse,label="chern-number"];
+    q_chern_number -> j_be_55;
+    q_hall_conductance [shape=ellipse,label="hall-conductance"];
+    j_be_55 -> q_hall_conductance;
+    j_be_60 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-60"];
+    q_filling_fraction [shape=ellipse,label="filling-fraction"];
+    q_filling_fraction -> j_be_60;
+    j_be_60 -> q_hall_conductance;
+  }
+  subgraph cluster_6 {
+    label="anchored cluster (2)";
     j_CE_classical_electron_radius [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Classical electron radius"];
     q_classical_electron_radius [shape=ellipse,label="classical-electron-radius"];
     j_CE_classical_electron_radius -> q_classical_electron_radius;
@@ -726,7 +748,7 @@ digraph PhysicsMap {
     q_thomson_cross_section [shape=ellipse,label="thomson-cross-section"];
     j_CE_thomson_cross_section -> q_thomson_cross_section;
   }
-  subgraph cluster_6 {
+  subgraph cluster_7 {
     label="anchored cluster (2)";
     j_CE_half_life [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Radioactive half-life"];
     q_decay_constant [shape=ellipse,label="decay-constant"];
@@ -743,7 +765,7 @@ digraph PhysicsMap {
     j_CE_radioactive_decay -> q_remaining_nuclei;
   }
   subgraph cluster_iso {
-    label="isolated (33)";
+    label="isolated (34)";
     j_be_14 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-14"];
     q_minimal_surface_area [shape=ellipse,label="minimal-surface-area"];
     q_minimal_surface_area -> j_be_14;
@@ -825,6 +847,17 @@ digraph PhysicsMap {
     q_truncation_coefficient_c -> j_be_39;
     q_newton_coupling_beta [shape=ellipse,label="newton-coupling-beta"];
     j_be_39 -> q_newton_coupling_beta;
+    j_be_40 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-40"];
+    q_higgs_field [shape=ellipse,label="higgs-field"];
+    q_higgs_field -> j_be_40;
+    q_higgs_decay_constant [shape=ellipse,label="higgs-decay-constant"];
+    q_higgs_decay_constant -> j_be_40;
+    q_composite_higgs_alpha [shape=ellipse,label="composite-higgs-alpha"];
+    q_composite_higgs_alpha -> j_be_40;
+    q_composite_higgs_beta [shape=ellipse,label="composite-higgs-beta"];
+    q_composite_higgs_beta -> j_be_40;
+    q_composite_higgs_potential [shape=ellipse,label="composite-higgs-potential"];
+    j_be_40 -> q_composite_higgs_potential;
     j_be_43 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-43"];
     q_wormhole_cross_section_area [shape=ellipse,label="wormhole-cross-section-area"];
     q_wormhole_cross_section_area -> j_be_43;
@@ -866,8 +899,8 @@ digraph PhysicsMap {
     q_retarded_field_amplitude -> j_be_50;
     q_advanced_field_amplitude [shape=ellipse,label="advanced-field-amplitude"];
     q_advanced_field_amplitude -> j_be_50;
-    q_time_symmetry_residual [shape=ellipse,label="time-symmetry-residual"];
-    j_be_50 -> q_time_symmetry_residual;
+    q_time_symmetric_field_amplitude [shape=ellipse,label="time-symmetric-field-amplitude"];
+    j_be_50 -> q_time_symmetric_field_amplitude;
     j_be_53 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-53"];
     q_gauge_coupling [shape=ellipse,label="gauge-coupling"];
     q_gauge_coupling -> j_be_53;

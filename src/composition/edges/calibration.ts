@@ -562,6 +562,34 @@ export const be11ZurekEdge: BridgeEdge = {
  *
  * @public
  */
+const BE37_SYMBOLIC: ExprNode = {
+  kind: 'op',
+  op: '*',
+  args: [
+    {
+      kind: 'op',
+      op: '/',
+      args: [
+        {
+          kind: 'op',
+          op: '*',
+          args: [sym('2', DIMENSIONLESS), sym('G', GRAV_DIM), sym('mass', MASS)],
+        },
+        { kind: 'op', op: '^', args: [sym('c', VELOCITY), sym('3', DIMENSIONLESS)] },
+      ],
+    },
+    {
+      kind: 'transcendental',
+      fn: 'ln',
+      arg: {
+        kind: 'op',
+        op: '/',
+        args: [sym('far-radius', LENGTH), sym('near-radius', LENGTH)],
+      },
+    },
+  ],
+};
+
 export const be37Edge: BridgeEdge = {
   id: 'be-37',
   beId: 37,
@@ -586,6 +614,7 @@ export const be37Edge: BridgeEdge = {
       R_far_m: i['far-radius'],
       R_near_m: i['near-radius'],
     }),
+  symbolic: BE37_SYMBOLIC,
   citation: 'Shapiro 1964 PRL 13:789',
   // -- Atlas Phase 1 overlay: mirrors BRIDGE_EQUATIONS' row, which carries the
   // full '// source:' citation. tests/atlas/audited-catalog.test.ts deep-equals

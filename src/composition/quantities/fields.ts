@@ -10,6 +10,7 @@
 import type { Quantity } from '../quantity.js';
 import {
   DIMENSIONLESS,
+  ENERGY,
   FORCE,
   MASS,
 } from '../../dimensional/types.js';
@@ -18,6 +19,7 @@ import {
   TORSION_CONTRACTION,
   SPIN_DENSITY_SQUARED,
   ENERGY_DIM2,
+  ENERGY4,
 } from './_dims.js';
 
 /** Canonical node for `mass`. */
@@ -191,4 +193,39 @@ export const swamplandTowerMassQ: Quantity = {
   symbol: 'm(φ)',
   dim: MASS,
   attributes: { scale: 'quantum' },
+};
+/** Canonical node for `higgs-field` (h, energy). Shared electroweak scale with the decay constant. */
+export const higgsFieldQ: Quantity = {
+  name: 'higgs-field',
+  symbol: 'h',
+  dim: ENERGY,
+  attributes: { scale: 'quantum', force: 'weak' },
+};
+/** Canonical node for `higgs-decay-constant` (f, energy). */
+export const higgsDecayConstantQ: Quantity = {
+  name: 'higgs-decay-constant',
+  symbol: 'f',
+  dim: ENERGY,
+  attributes: { scale: 'quantum', force: 'weak' },
+};
+/** Canonical node for `composite-higgs-alpha` (α, dimensionless Wilson coefficient). */
+export const compositeHiggsAlphaQ: Quantity = {
+  name: 'composite-higgs-alpha',
+  symbol: 'α',
+  dim: DIMENSIONLESS,
+  attributes: { scale: 'quantum', force: 'weak' },
+};
+/** Canonical node for `composite-higgs-beta` (β, dimensionless Wilson coefficient). */
+export const compositeHiggsBetaQ: Quantity = {
+  name: 'composite-higgs-beta',
+  symbol: 'β',
+  dim: DIMENSIONLESS,
+  attributes: { scale: 'quantum', force: 'weak' },
+};
+/** Canonical node for `composite-higgs-potential` (V, energy⁴). */
+export const compositeHiggsPotentialQ: Quantity = {
+  name: 'composite-higgs-potential',
+  symbol: 'V',
+  dim: ENERGY4,
+  attributes: { scale: 'quantum', force: 'weak' },
 };

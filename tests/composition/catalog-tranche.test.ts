@@ -148,14 +148,15 @@ describe('BE-53 — Yang-Mills β-function edge', () => {
 });
 
 describe('BE-54 — Randall-Sundrum brane edge', () => {
-  it('matches H² = (8πG/3) ρ (1 + ρ/(2σ)) to relErr ≤ 1e-12', () => {
+  it('matches H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3 to relErr ≤ 1e-12', () => {
     const sigma = 1e90;
-    for (const rho of [1e-26, 1e89, 2e90]) {
+    for (const [rho, lambda] of [[1e-26, 0], [1e89, 0], [2e90, 0], [1e-26, 3e-35]] as const) {
       const expected =
-        ((8 * Math.PI * G) / 3) * rho * (1 + rho / (2 * sigma));
+        ((8 * Math.PI * G) / 3) * rho * (1 + rho / (2 * sigma)) + lambda / 3;
       const actual = evaluateEdge(be54Edge, {
         'mass-density': rho,
         'brane-tension': sigma,
+        'rescaled-cosmological-constant': lambda,
       });
       expect(relErr(actual, expected)).toBeLessThanOrEqual(1e-12);
     }

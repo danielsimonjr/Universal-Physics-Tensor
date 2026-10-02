@@ -201,3 +201,10 @@ export const timeSymmetryResidualQ: Quantity = {
   dim: DIMENSIONLESS,
   attributes: { force: 'electromagnetic' },
 };
+/** Canonical node for `time-symmetric-field-amplitude` (A = (A_ret + A_adv)/2). */
+export const timeSymmetricFieldAmplitudeQ: Quantity = {
+  name: 'time-symmetric-field-amplitude',
+  symbol: 'A_TS',
+  dim: VECTOR_POTENTIAL,
+  attributes: { force: 'electromagnetic' },
+};

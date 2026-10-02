@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 49 files
 - **root**: 1 file
-- **composition**: 80 files
+- **composition**: 82 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -1658,7 +1658,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `HBAR_SI, C_SI, G_SI, M_SUN_SI` | Import |
+| `../core/constants.js` | `HBAR_SI, C_SI, G_SI, M_SUN_SI, M_U_SI` | Import |
 
 **Exports:**
 - Interfaces: `ChandrasekharInputs`, `ChandrasekharResult`
@@ -4413,7 +4413,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 41 `BridgeEdge`s
+### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 46 `BridgeEdge`s
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -4422,6 +4422,7 @@ The codebase is organized into the following modules:
 | `./edges/calibration.js` | `be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius` | Import |
 | `./edges/catalog-tranche.js` | `be14Edge, be19Edge, be21Edge, be48Edge, be53Edge, be54Edge` | Import |
 | `./edges/catalog-full.js` | `CATALOG_FULL_EDGES` | Import |
+| `./edges/proved-seeds.js` | `PROVED_SEED_EDGES` | Import |
 
 **Exports:**
 - Constants: `CATALOG_GRAPH`
@@ -4685,6 +4686,10 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS, TEMPERATURE` | Import |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../bridges/equations/be-15-emergence.js` | `evaluateCoarseningLength` | Import |
 | `../../bridges/equations/be-27-effective-temperature.js` | `evaluateEffectiveTemperature` | Import |
 | `../../bridges/equations/be-33-hertz-millis.js` | `evaluateHertzMillis` | Import |
@@ -4753,6 +4758,10 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../bridges/equations/be-47-bbn-dark-sector.js` | `evaluateBBNDark` | Import |
 | `../../bridges/equations/be-31-causal-set-bd.js` | `evaluateBenincasaDowker` | Import |
 | `../../bridges/equations/be-20-vacuum-energy.js` | `evaluateCosmologicalConstantDensity` | Import |
@@ -4783,9 +4792,8 @@ The codebase is organized into the following modules:
 | `../../bridges/equations/be-24-foerster-fret.js` | `evaluateFRETEfficiency` | Import |
 | `../../bridges/equations/be-25-iit-phi.js` | `evaluateIntrinsicInformation` | Import |
 | `../../bridges/equations/be-49-quantum-darwinism.js` | `evaluateQuantumDarwinism` | Import |
-| `../../bridges/equations/be-50-wheeler-feynman.js` | `evaluateWFTimeSymmetry` | Import |
 | `../edge.js` | `BridgeEdge` | Import (type-only) |
-| `../quantities.js` | `advancedFieldAmplitudeQ, attemptFrequencyQ, barrierHeightQ, barrierWidthQ, biologicalRateCorrectionQ, conditionalProbabilityQ, cosmologicalConstantCurvatureQ, darwinismDecayExponentQ, darwinismMagnitudeQ, decoherenceRateQ, donorAcceptorDistanceQ, foersterRadiusQ, fragmentCountQ, fragmentMutualInformationQ, fretEfficiencyQ, intrinsicInformationQ, marginalProbabilityQ, mutationRateQ, referenceCouplingQ, relaxationRateQ, retardedFieldAmplitudeQ, ricciScalarQ, stressEnergyTraceQ, systemEnvironmentCouplingQ, timeSymmetryResidualQ, totalMutualInformationQ, tunnelingMassQ` | Import |
+| `../quantities.js` | `advancedFieldAmplitudeQ, attemptFrequencyQ, barrierHeightQ, barrierWidthQ, biologicalRateCorrectionQ, conditionalProbabilityQ, cosmologicalConstantCurvatureQ, darwinismDecayExponentQ, darwinismMagnitudeQ, decoherenceRateQ, donorAcceptorDistanceQ, foersterRadiusQ, fragmentCountQ, fragmentMutualInformationQ, fretEfficiencyQ, intrinsicInformationQ, marginalProbabilityQ, mutationRateQ, referenceCouplingQ, relaxationRateQ, retardedFieldAmplitudeQ, ricciScalarQ, stressEnergyTraceQ, systemEnvironmentCouplingQ, timeSymmetricFieldAmplitudeQ, totalMutualInformationQ, tunnelingMassQ` | Import |
 | `./_catalog-helpers.js` | `isFin` | Import |
 
 **Exports:**
@@ -4798,6 +4806,9 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../dimensional/types.js` | `DIMENSIONLESS, AREA, ENTROPY, FREQUENCY, MASS` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../../bridges/equations/be-14-ryu-takayanagi.js` | `evaluateRyuTakayanagi` | Import |
@@ -4811,6 +4822,29 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Constants: `be14Edge`, `be19Edge`, `be21Edge`, `be48Edge`, `be53Edge`, `be54Edge`
+
+---
+
+### `src/composition/edges/proved-seeds.ts` - Composition edges for proved catalog seeds that had no graph edge.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../../core/constants.js` | `C_SI, G_SI, HBAR_SI, M_U_SI` | Import |
+| `../../bridges/equations/be-40-composite-higgs.js` | `evaluateCompositeHiggs` | Import |
+| `../../bridges/be55-quantum-hall.js` | `evaluateQuantumHall` | Import |
+| `../../bridges/be59-ac-josephson.js` | `evaluateACJosephson` | Import |
+| `../../bridges/be60-fractional-qh.js` | `evaluateFractionalQH` | Import |
+| `../edge.js` | `BridgeEdge` | Import (type-only) |
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../quantities.js` | `chernNumberQ, compositeHiggsAlphaQ, compositeHiggsBetaQ, compositeHiggsPotentialQ, fillingFractionQ, frequencyQ, hallConductanceQ, higgsDecayConstantQ, higgsFieldQ, laneEmdenOmega3Q, massQ, meanMolecularWeightPerElectronQ, voltageQ` | Import |
+
+**Exports:**
+- Constants: `be40Edge`, `be55Edge`, `be59Edge`, `be60Edge`, `be63Edge`, `PROVED_SEED_EDGES`
 
 ---
 
@@ -5042,6 +5076,14 @@ The codebase is organized into the following modules:
   suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
   ```
 
+
+---
+
+### `src/composition/not-composable-seeds.ts` - Proved atlas seeds that are not composition-graph edges.
+
+**Exports:**
+- Interfaces: `NotComposableSeed`
+- Constants: `NOT_COMPOSABLE_SEEDS`
 
 ---
 
@@ -5604,7 +5646,7 @@ The codebase is organized into the following modules:
   ```text
   ENERGY_DIM, FREQUENCY_DIM, MASS_DENSITY, T_INV2, INV_AREA, INV_LENGTH, ENERGY_DENSITY, MOBILITY,
   RESISTIVITY, NUMBER_DENSITY, NUMBER_DENSITY_RATE, VECTOR_POTENTIAL, COUPLING_PREFACTOR_SQUARED,
-  TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2
+  TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2, CONDUCTANCE, VOLTAGE, ENERGY4
   ```
 
 
@@ -5641,8 +5683,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../quantity.js` | `Quantity` | Import (type-only) |
-| `../../dimensional/types.js` | `DIMENSIONLESS, LENGTH, MASS, TEMPERATURE, TIME` | Import |
-| `./_dims.js` | `INV_LENGTH, MOBILITY, RESISTIVITY, NUMBER_DENSITY, ENERGY_DIM2` | Import |
+| `../../dimensional/types.js` | `DIMENSIONLESS, FREQUENCY, LENGTH, MASS, TEMPERATURE, TIME` | Import |
+| `./_dims.js` | `INV_LENGTH, MOBILITY, RESISTIVITY, NUMBER_DENSITY, ENERGY_DIM2, CONDUCTANCE, VOLTAGE` | Import |
 
 **Exports:**
 - Constants:
@@ -5653,7 +5695,8 @@ The codebase is organized into the following modules:
   effectiveMassQ, carrierDensityQ, sykCoefficientQ, resistivityQ, activeNoiseEnergyQ,
   effectiveTemperatureQ, referenceCorrelationLengthQ, referenceTemperatureQ, staticExponentNuQ,
   dynamicExponentZQ, quantumCorrelationLengthQ, quenchTimescaleQ, microscopicRelaxationTimeQ,
-  spatialDimensionQ, defectRestMassQ, reheatingTemperatureQ, defectDensityQ
+  spatialDimensionQ, defectRestMassQ, reheatingTemperatureQ, defectDensityQ, chernNumberQ,
+  fillingFractionQ, hallConductanceQ, voltageQ, frequencyQ
   ```
 
 
@@ -5665,8 +5708,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../quantity.js` | `Quantity` | Import (type-only) |
-| `../../dimensional/types.js` | `DIMENSIONLESS, FORCE, MASS` | Import |
-| `./_dims.js` | `COUPLING_PREFACTOR_SQUARED, TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2` | Import |
+| `../../dimensional/types.js` | `DIMENSIONLESS, ENERGY, FORCE, MASS` | Import |
+| `./_dims.js` | `COUPLING_PREFACTOR_SQUARED, TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2, ENERGY4` | Import |
 
 **Exports:**
 - Constants:
@@ -5677,7 +5720,8 @@ The codebase is organized into the following modules:
   newtonianForceQ, mondAccelerationScaleQ, mondForceQ, newtonCouplingQ,
   cosmologicalConstantDimensionlessQ, truncationCoefficientAQ, truncationCoefficientBQ,
   truncationCoefficientCQ, newtonCouplingBetaQ, referenceMassQ, swamplandCoefficientQ,
-  scalarFieldValueQ, scalarFieldReferenceQ, planckMassQ, swamplandTowerMassQ
+  scalarFieldValueQ, scalarFieldReferenceQ, planckMassQ, swamplandTowerMassQ, higgsFieldQ,
+  higgsDecayConstantQ, compositeHiggsAlphaQ, compositeHiggsBetaQ, compositeHiggsPotentialQ
   ```
 
 
@@ -5702,7 +5746,8 @@ The codebase is organized into the following modules:
   tensorToScalarRatioQ, tccCorrectionCoefficientQ, maxEfoldsQ, measureNormalizationQ,
   anthropicModelParameterQ, landscapeParameterQ, anthropicProbabilityQ, hubbleRateQ,
   nucleonYieldDensityQ, smReactionRateCoefficientQ, protonDensityQ, neutronDensityQ,
-  darkReactionRateCoefficientQ, darkSpeciesDensityQ, transferEfficiencyQ, nucleonYieldRateQ
+  darkReactionRateCoefficientQ, darkSpeciesDensityQ, transferEfficiencyQ, nucleonYieldRateQ,
+  laneEmdenOmega3Q, meanMolecularWeightPerElectronQ
   ```
 
 
@@ -5726,7 +5771,8 @@ The codebase is organized into the following modules:
   conditionalProbabilityQ, marginalProbabilityQ, intrinsicInformationQ, attemptFrequencyQ,
   tunnelingMassQ, barrierHeightQ, barrierWidthQ, biologicalRateCorrectionQ, mutationRateQ,
   totalMutualInformationQ, darwinismMagnitudeQ, fragmentCountQ, darwinismDecayExponentQ,
-  fragmentMutualInformationQ, retardedFieldAmplitudeQ, advancedFieldAmplitudeQ, timeSymmetryResidualQ
+  fragmentMutualInformationQ, retardedFieldAmplitudeQ, advancedFieldAmplitudeQ, timeSymmetryResidualQ,
+  timeSymmetricFieldAmplitudeQ
   ```
 
 
@@ -5875,7 +5921,7 @@ The codebase is organized into the following modules:
 
   ```text
   C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, GM_SUN_SI,
-  GM_SUN_SOURCE, M_E_SI, B_WIEN_SI
+  GM_SUN_SOURCE, M_E_SI, B_WIEN_SI, M_U_SI
   ```
 
 
@@ -6458,8 +6504,8 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./types.js` | `ACTION, CHARGE, DIMENSIONLESS, VELOCITY` | Import |
-| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI` | Import |
+| `./types.js` | `ACTION, CHARGE, DIMENSIONLESS, MASS, VELOCITY` | Import |
+| `../core/constants.js` | `C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI, M_U_SI` | Import |
 
 **Exports:**
 - Interfaces: `ConstantProvenance`
@@ -7762,7 +7808,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...75 more]
+        N36[...77 more]
     end
 
     subgraph Core
@@ -7848,17 +7894,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 417 |
+| Total TypeScript Files | 419 |
 | Total Modules | 13 |
-| Total Lines of Code | 90640 |
-| Total Exports | 2947 |
+| Total Lines of Code | 91321 |
+| Total Exports | 2971 |
 | Total Re-exports | 1395 |
 | Total Classes | 60 |
-| Total Interfaces | 474 |
+| Total Interfaces | 475 |
 | Total Functions | 766 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 559 |
+| Type-only Imports | 565 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

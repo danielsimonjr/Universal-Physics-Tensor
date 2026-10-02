@@ -471,10 +471,10 @@ describe('BE-49 — quantum Darwinism edge', () => {
   });
 });
 
-describe('BE-50 — Wheeler-Feynman residual edge', () => {
-  it('matches r_TS = (A_ret − A_adv)/(A_ret + A_adv) to relErr ≤ 1e-12', () => {
+describe('BE-50 — Wheeler-Feynman time-symmetric field', () => {
+  it('matches A = (A_ret + A_adv)/2 to relErr ≤ 1e-12', () => {
     const Aret = 3, Aadv = 1;
-    const expected = (Aret - Aadv) / (Aret + Aadv);
+    const expected = (Aret + Aadv) / 2;
     expect(
       relErr(
         evaluateEdge(be50Edge, {

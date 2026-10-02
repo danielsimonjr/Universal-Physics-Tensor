@@ -101,3 +101,11 @@ export const M_E_SI = 9.1093837015e-31;
  * @public
  */
 export const B_WIEN_SI = 2.897771955e-3;
+
+/**
+ * Unified atomic mass unit (kg). CODATA 2018 atomic mass constant.
+ * One value for the Chandrasekhar evaluator and the symbolic constant `m_u`.
+ * Kept off the package barrel: callers use `m_u` in the symbolic registry.
+ * @internal
+ */
+export const M_U_SI = 1.66053906660e-27;

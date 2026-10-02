@@ -1,14 +1,15 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (55-bridge)]
-  anchored core: the clusters holding at least one of the 9 established-confidence edge(s) of the 41 in this graph
+  anchored core: the clusters holding at least one of the 14 established-confidence edge(s) of the 46 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  132 total  →  98 touch the anchored core  →  36 also same-kind
+  funnel:  152 total  →  118 touch the anchored core  →  37 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     active-noise-energy ≟ inflation-hubble-energy            [energy]
     active-noise-energy ≟ planck-mass-energy                 [energy]
+    attempt-frequency ≟ frequency                            [frequency]
     boundary-length ≟ quantum-correlation-length             [length]
     boundary-length ≟ reference-correlation-length           [length]
     carrier-density ≟ dark-species-density                   [density]

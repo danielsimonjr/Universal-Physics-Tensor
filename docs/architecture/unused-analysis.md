@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 71
+- **Potentially unused exports**: 76
 
 ## Potentially Unused Files
 
@@ -133,6 +133,14 @@ These exports are not imported by any other file in the codebase:
 - `RECORD_SCHEMA` (constant)
 - `sha256` (constant)
 - `argvFingerprint` (constant)
+
+### `src/composition/edges/proved-seeds.ts`
+
+- `be40Edge` (constant)
+- `be55Edge` (constant)
+- `be59Edge` (constant)
+- `be60Edge` (constant)
+- `be63Edge` (constant)
 
 ### `src/composition/frontier-account.ts`
 

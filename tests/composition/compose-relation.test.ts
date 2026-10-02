@@ -7,11 +7,10 @@
  * the existing suite would only prove the suite still passes, which is a weaker
  * claim than "the output is unchanged".
  *
- * The proof: `compose-relation.golden.json` was generated from `CATALOG_GRAPH`
- * by `snapshotAllPairs` against the UNMODIFIED `composeEdges`, BEFORE the guard
- * was written (41 edges → 1681 ordered pairs, 11 of them composable, the rest
- * recorded with their exact refusal message). The test re-runs the same
- * serializer against the live operator and deep-equals it. `extraKeys` records
+ * The proof: `compose-relation.golden.json` is `snapshotAllPairs` over
+ * `CATALOG_GRAPH` (46 edges, 2116 ordered pairs, 19 of them composable).
+ * The test re-runs the same serializer against the live operator and
+ * deep-equals it. `extraKeys` records
  * every own key of each composed edge, so an unconditionally-set `relation`
  * fails even though no field of the old set changed.
  *
@@ -97,12 +96,12 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
     // composed edge, so a newly DERIVED relation would fail it. It passes.
     const bearing = CATALOG_GRAPH.filter((e) => e.relation !== undefined).map((e) => e.id);
     expect([...bearing].sort()).toEqual(
-      ['be-11-zurek', 'be-11-master', 'be-21', 'be-37', 'be-48', 'be-51', 'be-52'].sort(),
+      ['be-11-zurek', 'be-11-master', 'be-21', 'be-37', 'be-48', 'be-51', 'be-52', 'be-55', 'be-59'].sort(),
     );
-    expect(CATALOG_GRAPH.length).toBe(41);
+    expect(CATALOG_GRAPH.length).toBe(46);
   });
 
-  it('reproduces the pre-change golden snapshot of all 1681 ordered pairs', () => {
+  it('reproduces the golden snapshot of all 2116 ordered pairs', () => {
     // evaluateAtOnes was refreshed when HBAR_SI became H_SI/(2π). Pair structure was not.
     const live = snapshotAllPairs(CATALOG_GRAPH, composeEdges);
     expect(live.length).toBe(GOLDEN.length);
@@ -112,8 +111,8 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
   });
 
   it('the golden is a real proof, not a vacuous one (it has composable pairs)', () => {
-    expect(GOLDEN.length).toBe(1681);
-    expect(GOLDEN.filter((s) => s.outcome === 'composed').length).toBe(11);
+    expect(GOLDEN.length).toBe(2116);
+    expect(GOLDEN.filter((s) => s.outcome === 'composed').length).toBe(19);
   });
 });
 
