@@ -10,9 +10,9 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 420 |
-| Total Test Files | 585 |
-| Source Files with Tests | 410 |
+| Total Source Files | 421 |
+| Total Test Files | 586 |
+| Source Files with Tests | 411 |
 | Source Files without Tests | 10 |
 | Coverage | 97.6% |
 
@@ -458,6 +458,7 @@ The following 10 source files are not directly imported by any test file:
 | `relations/category.ts` | `category.test.ts` |
 | `relations/composition-table.ts` | `relations-shim.test.ts`, `category.test.ts` |
 | `relations/conventions.ts` | `conventions.test.ts`, `relations-shim.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `relations/regime-vocabularies.ts` | `regime-vocabularies.test.ts` |
 | `relations/regime.ts` | `barrel-completeness.test.ts`, `bound-machine-form.test.ts`, `closure.test.ts`, `diffusion.test.ts`, `gr-spine-regime.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `relations-shim.test.ts`, `stokes-einstein-regime.test.ts`, `waves.test.ts`, `witness-claims.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `relations/types.ts` | `applicability.test.ts`, `audited-catalog.test.ts`, `barrel-completeness.test.ts`, `bound-machine-form.test.ts`, `catalog-formal-ref.test.ts`, `composition-table.test.ts`, `conventions.test.ts`, `coverage.test.ts`, `error-algebra.test.ts`, `evidence-rule.test.ts`, `formal-sanity.test.ts`, `gr-spine-regime.test.ts`, `link-prediction.test.ts`, `oscillators-limits.test.ts`, `overlay-types.test.ts`, `path-bound.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `statement-derivation.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `witness-results.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `chain-regime.test.ts`, `compose-relation.test.ts`, `graph-viz-filters.test.ts`, `relation-refusal.test.ts`, `category.test.ts` |
 
@@ -1031,6 +1032,7 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/weyl-schwarzschild.test.ts` | 4 files |
 | `tests/peers-required.test.ts` | 0 files |
 | `relations/category.test.ts` | 3 files |
+| `relations/regime-vocabularies.test.ts` | 1 files |
 | `tests/tensor.test.ts` | 130 files |
 | `tools/api-surface.test.ts` | 0 files |
 | `tools/citation-quote-check.test.ts` | 0 files |

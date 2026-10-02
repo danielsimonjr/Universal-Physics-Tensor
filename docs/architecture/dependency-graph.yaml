@@ -1,7 +1,7 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.4
-  totalFiles: 423
+  totalFiles: 424
   totalModules: 13
   totalExports: 3012
 entryPoints:
@@ -20023,6 +20023,20 @@ modules:
       functions:
         - checkConventions
         - unknownConventionKeys
+    src/relations/regime-vocabularies.ts:
+      description: Names for the three regime vocabularies. They are not one type, and
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/regime-registry.js
+          imports:
+            - RegimeValueBase
+          typeOnly: true
+        - file: ./types.js
+          imports:
+            - Regime
+          typeOnly: true
+      exports: []
     src/relations/regime.ts:
       description: Regime derivation — π-groups as the coordinates a regime is written in.
       externalDependencies: []
@@ -20537,12 +20551,13 @@ dependencyGraph:
         - src/relations/category.ts
         - src/relations/composition-table.ts
         - src/relations/conventions.ts
+        - src/relations/regime-vocabularies.ts
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 423
+  totalTypeScriptFiles: 424
   totalModules: 13
-  totalLinesOfCode: 92363
+  totalLinesOfCode: 92407
   totalExports: 3012
   totalClasses: 61
   totalInterfaces: 481
@@ -20551,7 +20566,7 @@ statistics:
   totalEnums: 0
   totalConstants: 756
   totalReExports: 1416
-  totalTypeOnlyImports: 569
+  totalTypeOnlyImports: 571
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
