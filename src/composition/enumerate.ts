@@ -19,7 +19,7 @@
 
 import type { ExprNode } from '../dimensional/validator.js';
 import type { BridgeEdge } from './edge.js';
-import { CompositionAliasError } from './edge.js';
+import { CompositionAliasError, UndefinedCompositionError } from './edge.js';
 import { composeEdges } from './compose.js';
 import type { ComposeOptions } from './compose.js';
 import { composeSymbolic } from './compose-symbolic.js';
@@ -70,6 +70,33 @@ interface NotSubstitutablePair {
   readonly second: BridgeEdge;
 }
 
+/**
+ * A pair both of whose edges carry a relation, refused by the composition table.
+ *
+ * This is {@link UndefinedCompositionError} only. A dimension or junction
+ * failure is not one of these, and neither is {@link CompositionAliasError}.
+ *
+ * @internal
+ */
+export interface RelationTableRefusal {
+  readonly first: BridgeEdge;
+  readonly second: BridgeEdge;
+  /** `${first.id}>>${second.id}`. */
+  readonly composedId: string;
+  readonly message: string;
+}
+
+/**
+ * The report {@link enumerateCompositions} returns, plus the table refusals
+ * that report does not carry.
+ *
+ * @internal
+ */
+export interface EnumerationWithRefusals {
+  readonly report: EnumerationReport;
+  readonly relationRefusals: readonly RelationTableRefusal[];
+}
+
 /** Enumeration report. @public */
 export interface EnumerationReport {
   readonly all: ReadonlyArray<CompositionCandidate>;
@@ -109,22 +136,45 @@ export const REGISTERED_COMPOSITION_IDS: ReadonlySet<string> = new Set([
   'be-12>>be-11-zurek', // CT-3
 ]);
 
+type EnumerationOptions = ComposeOptions & {
+  readonly registeredIds?: ReadonlySet<string>;
+  /** When set, only these edge ids are walked, and symbolic pairs are split. */
+  readonly seedIds?: ReadonlySet<string>;
+};
+
 /**
  * Enumerate all valid ordered pairwise compositions over `edges`.
+ *
+ * A table refusal is not in this report. {@link enumerateCompositionsWithRefusals}
+ * returns the same report plus that list.
  *
  * @public
  */
 export function enumerateCompositions(
   edges: ReadonlyArray<BridgeEdge>,
-  opts: ComposeOptions & {
-    readonly registeredIds?: ReadonlySet<string>;
-    /** When set, only these edge ids are walked, and symbolic pairs are split. */
-    readonly seedIds?: ReadonlySet<string>;
-  } = {},
+  opts: EnumerationOptions = {},
 ): EnumerationReport {
+  return enumerateCompositionsWithRefusals(edges, opts).report;
+}
+
+/**
+ * The pairs {@link enumerateCompositions} returns, plus each
+ * {@link UndefinedCompositionError} on its own list.
+ *
+ * `report.proofTargets` is that function's list. A refused pair is not
+ * moved onto it. A dimension or junction failure stays a silent non-pair:
+ * absent from `relationRefusals` and from `report`.
+ *
+ * @internal
+ */
+export function enumerateCompositionsWithRefusals(
+  edges: ReadonlyArray<BridgeEdge>,
+  opts: EnumerationOptions = {},
+): EnumerationWithRefusals {
   const registeredIds = opts.registeredIds ?? REGISTERED_COMPOSITION_IDS;
   const all: CompositionCandidate[] = [];
   const requiresDisposition: DispositionRequired[] = [];
+  const relationRefusals: RelationTableRefusal[] = [];
   const proofTargets: SymbolicProofTarget[] = [];
   const notSubstitutable: NotSubstitutablePair[] = [];
   const seeded = opts.seedIds !== undefined;
@@ -149,8 +199,16 @@ export function enumerateCompositions(
             composedId: `${first.id}>>${second.id}`,
             message: err.message,
           });
+        } else if (err instanceof UndefinedCompositionError) {
+          relationRefusals.push({
+            first,
+            second,
+            composedId: `${first.id}>>${second.id}`,
+            message: err.message,
+          });
         }
-        continue; // junction / dimension refusals are silent non-pairs
+        // A dimension or junction failure stays a silent non-pair.
+        continue;
       }
       all.push({
         first,
@@ -172,11 +230,14 @@ export function enumerateCompositions(
   }
 
   return {
-    all,
-    registered: all.filter((c) => !c.novel),
-    novel: all.filter((c) => c.novel),
-    requiresDisposition,
-    proofTargets,
-    notSubstitutable,
+    report: {
+      all,
+      registered: all.filter((c) => !c.novel),
+      novel: all.filter((c) => c.novel),
+      requiresDisposition,
+      proofTargets,
+      notSubstitutable,
+    },
+    relationRefusals,
   };
 }

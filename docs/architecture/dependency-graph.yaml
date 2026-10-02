@@ -3,7 +3,7 @@ metadata:
   version: 1.0.4
   totalFiles: 423
   totalModules: 13
-  totalExports: 2989
+  totalExports: 2990
 entryPoints:
   - file: src/index.ts
     type: main
@@ -11657,6 +11657,7 @@ modules:
         - file: ./edge.js
           imports:
             - CompositionAliasError
+            - UndefinedCompositionError
         - file: ./compose.js
           imports:
             - composeEdges
@@ -11670,12 +11671,16 @@ modules:
       exports:
         - REGISTERED_COMPOSITION_IDS
         - enumerateCompositions
+        - enumerateCompositionsWithRefusals
       interfaces:
         - CompositionCandidate
         - DispositionRequired
+        - RelationTableRefusal
+        - EnumerationWithRefusals
         - EnumerationReport
       functions:
         - enumerateCompositions
+        - enumerateCompositionsWithRefusals
       constants:
         - REGISTERED_COMPOSITION_IDS
     src/composition/explain.ts:
@@ -20477,11 +20482,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 423
   totalModules: 13
-  totalLinesOfCode: 92160
-  totalExports: 2989
+  totalLinesOfCode: 92228
+  totalExports: 2990
   totalClasses: 61
-  totalInterfaces: 478
-  totalFunctions: 777
+  totalInterfaces: 480
+  totalFunctions: 778
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 756
