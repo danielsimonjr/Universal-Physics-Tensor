@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.1
-  totalFiles: 408
+  totalFiles: 409
   totalModules: 13
-  totalExports: 2923
+  totalExports: 2924
 entryPoints:
   - file: src/index.ts
     type: main
@@ -10036,6 +10036,17 @@ modules:
         - CATALOG_GRAPH
       constants:
         - CATALOG_GRAPH
+    src/composition/chain-candidate.ts:
+      description: A chain candidate and the order the pipeline reads candidates in.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - orderChainCandidates
+      interfaces:
+        - ChainCandidate
+      functions:
+        - orderChainCandidates
     src/composition/compose-surface.ts:
       description: v0.11 surface barrel for the namespacing-gate symbols (keeps
       externalDependencies: []
@@ -19586,6 +19597,7 @@ dependencyGraph:
         - src/composition/canonical-graph.ts
         - src/composition/canonical-prefactors.ts
         - src/composition/catalog-graph.ts
+        - src/composition/chain-candidate.ts
         - src/composition/compose-surface.ts
         - src/composition/compose-symbolic.ts
         - src/composition/compose.ts
@@ -19762,13 +19774,13 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 408
+  totalTypeScriptFiles: 409
   totalModules: 13
-  totalLinesOfCode: 89489
-  totalExports: 2923
+  totalLinesOfCode: 89562
+  totalExports: 2924
   totalClasses: 60
-  totalInterfaces: 462
-  totalFunctions: 752
+  totalInterfaces: 463
+  totalFunctions: 753
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721

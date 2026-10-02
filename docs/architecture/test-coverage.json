@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 405,
-    "totalTestFiles": 557,
-    "testedCount": 395,
+    "totalSourceFiles": 406,
+    "totalTestFiles": 558,
+    "testedCount": 396,
     "untestedCount": 10,
     "coveragePercent": "97.5"
   },
@@ -255,6 +255,7 @@
     "src/composition/canonical-graph.ts",
     "src/composition/canonical-prefactors.ts",
     "src/composition/catalog-graph.ts",
+    "src/composition/chain-candidate.ts",
     "src/composition/compose-surface.ts",
     "src/composition/compose-symbolic.ts",
     "src/composition/compose.ts",
@@ -4700,6 +4701,9 @@
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
+    ],
+    "src/composition/chain-candidate.ts": [
+      "tests/composition/chain-candidate.test.ts"
     ],
     "src/composition/compose-surface.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -13928,6 +13932,9 @@
       "src/bridges/be64-eddington-luminosity.ts",
       "src/bridges/be65-jeans-mass.ts",
       "src/core/types.ts"
+    ],
+    "tests/composition/chain-candidate.test.ts": [
+      "src/composition/chain-candidate.ts"
     ],
     "tests/composition/collect-symbols-transcendental.test.ts": [
       "src/composition/compose-symbolic.ts",
