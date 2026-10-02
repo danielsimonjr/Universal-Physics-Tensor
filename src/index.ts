@@ -24,6 +24,8 @@ export {
   H0_SI,
   // v0.8.0 punch-list — promoted from the calibration-edges module
   M_SUN_SI,
+  // IAU 2015 nominal solar GM. Not G_SI * M_SUN_SI.
+  GM_SUN_SI,
   // v0.11 — electron mass (namespacing criterion-3 pin)
   M_E_SI,
   // canonical registry — Wien displacement constant (CE-wien)
@@ -346,6 +348,12 @@ export { validateKleinGordonEquation } from './dimensional/klein-gordon-equation
 // Every symbol re-exported in this block is `@public` — the consumer-facing
 // dimensional/metric surface (stabilised in v0.3.0).
 export type { Dimension } from './dimensional/types.js';
+export {
+  convertValue,
+  parseUnit,
+  UnitError,
+} from './dimensional/units.js';
+export type { ParsedUnit, TemperatureReading } from './dimensional/units.js';
 export {
   DIMENSIONLESS,
   LENGTH,

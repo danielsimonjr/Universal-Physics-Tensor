@@ -53,20 +53,27 @@ export interface FormulaParser {
 // --- built-ins ------------------------------------------------------------
 
 /**
+ * The name `euler` is not Euler's number. Write `exp(x)`, for example `exp(1)`.
+ * A bare `e` is the elementary charge. `E` is energy.
+ * @internal
+ */
+export const EULER_NUMBER_ERROR =
+  "euler is not Euler's number. Write it as exp(x), for example exp(1). A bare e is the elementary charge. E is energy.";
+
+/**
  * Baked numeric constants. `e` is the elementary charge (CODATA / ISO 80000),
- * not Euler's number. Euler's number is `euler` or `exp(1)`. `pi` and `tau`
- * ignore a scope value. `e` and `euler` do not: an explicit `name=` replaces
- * the baked value, the same way a filled CODATA name does.
+ * not Euler's number. Euler's number is `exp(x)`. `pi` and `tau` ignore a
+ * scope value. `e` does not: an explicit `name=` replaces the baked value,
+ * the same way a filled CODATA name does.
  */
 const CONSTANTS: Readonly<Record<string, number>> = {
   pi: Math.PI,
   tau: 2 * Math.PI,
   e: E_SI,
-  euler: Math.E,
 };
 
 /** Scope replaces the baked value for these names only. */
-const SCOPE_WINS: ReadonlySet<string> = new Set(['e', 'euler']);
+const SCOPE_WINS: ReadonlySet<string> = new Set(['e']);
 
 type Fn = (args: number[]) => number;
 const arity1 = (f: (x: number) => number): Fn => (a) => {
@@ -269,6 +276,7 @@ function parseToAst(src: string): Node {
     }
     if (tk.t === 'name') {
       eat();
+      if (tk.v === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
       if (isOp('(')) {
         eat('(');
         const args: Node[] = [];

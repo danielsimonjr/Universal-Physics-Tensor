@@ -12,6 +12,11 @@ from v0.1.0 onward.
 
 ### Fixed
 
+- **`GM_SUN_SI` and unit conversion are on the package root.** `GM_SUN_SI` was `@internal`, and `parseUnit`, `convertValue`, and `UnitError` were reachable only by a deep import that `package.json` does not export. They are re-exported from `src/index.ts`, with `ParsedUnit` and `TemperatureReading` so the signatures stay closed. `GM_SUN_SI` is `1.3271244e20`, the IAU 2015 nominal solar gravitational parameter, and it is not `G_SI * M_SUN_SI`. `convertValue('25degC', 'K')` is 298.15 K. An unknown unit throws `UnitError`.
+- **`evaluateBridge(42)` names a Hawking temperature that can be computed.** The error said to see `upt evaluate` with no args. That command lists the id-keyed evaluators and does not include be-42, and `upt evaluate be-42` threw the same sentence. The error now names `BridgeEquations.hawkingTemperature({ M_kg })` and `upt explain hawking-temperature mass=1.989e30`. Both return a finite solar-mass temperature. An id that has no evaluator still points at `upt evaluate` with no args.
+- **An undeclared `1-e^2` names the elementary charge.** `upt eval 1-e^2` printed `1`, because a bare `e` is the CODATA charge and `e^2` is negligible next to 1. `upt map` stopped at `Cannot subtract [T^2 I^2] with running [1]`. Both now say `e` is the elementary charge, that it must be declared or bound (`e=<number>`), and that Euler's number is `exp(x)`. The map message also names the catalog factor `one_minus_e_sq`. A bound `e=0.2` still evaluates. A bare `upt eval e` is still the CODATA charge. `exp(1)` is still Euler's number. A declared dimensionless `e` stays dimensionless.
+- **A non-finite Hawking temperature is a RangeError.** `evaluateHawkingTemperature({ M_kg: 1e-300 })` returned `Infinity`. `JSON.stringify` of that value is `null`. A finite positive mass whose SI evaluation overflows now throws `RangeError` and names the mass. `M_kg: 1e-200` stays a finite temperature. A non-finite mass was already refused.
+- **The name `euler` is not Euler's number.** The builtin parser and the MathTS parser accepted `euler` as `Math.E`. Under the physics convention a bare `e` is the elementary charge, `E` is energy, and Euler's number is only `exp(x)`, for example `exp(1)`. `upt eval euler`, `parsePhysics('euler', {})`, and a binding value `euler` now fail and the message names `exp(x)`. `exp(1)` still evaluates to Euler's number. An explicit `e=<number>` still replaces the CODATA charge. `--allow-euler` is still not a flag.
 - **Bridge-equation documents match the PhysJS pin.** Stale counts, theorem names, and the BE-13 name in the living status files, the Lean roadmap, and the catalog formal-reference note now follow `src/atlas/physjs-ref.ts`. The specification write-ups are a separate change. Dated audits, dogfood reports, and the entries already in this file keep their original text. A derivation-step stays a derivation-step. Dimensional analysis is named where it only fixes a form up to a dimensionless constant (`PhysJS.Dimensional.monomial_form` on be-15, be-17, and the nested shape theorems on be-33). `docs/planning/Bridge-Gap-Inference.md` lists every catalog id that is not kind `bridge`, what is missing, and whether units or a chain through a proved theorem could close it.
 - **A bucket-A kind is bridge when the theorem states the catalogued equation.** The covers line stays the PhysJS text, which begins with `derivation-step`. Kind is `bridge` for `be-12`, `be-59`, `be-55`, `be-21`, `be-43`, `be-37`, `be-27`, `be-40`, and `be-63`: each theorem states `formula_latex`. Passing that reference to `deriveEvidence` lights `formally-proved`. Kind stays `derivation-step` for `be-14`, `be-60`, `be-54`, `be-17`, `be-22`, `be-15`, `be-33`, `be-50`, `be-32`, `be-35`, and `be-30`: each theorem proves a part of the catalogued equation and leaves the rest out. `be-28` is kind `property`: the theorem is non-negativity of the defining sum, not the variational principle. `be-28`, `be-32`, `be-35`, and `be-40` stay not-a-bridge. The catalog path still omits the reference, so `deriveEdgeEvidence` does not light `formally-proved` or `formally-proved-property`. ~~Architecture docs were regenerated: 406 files, 2919 exports, 1387 re-exports, 89381 lines, 0 circular dependencies.~~ ~~Architecture test-coverage docs count 552 test files.~~ ~~After merging the binding-value move, architecture test-coverage docs count 553 test files.~~ ~~After merging the proved-counterexample change, architecture docs were regenerated: 406 files, 2922 exports, 1389 re-exports, 89413 lines, 0 circular dependencies. Architecture test-coverage docs count 554 test files.~~
 
@@ -665,6 +670,24 @@ from v0.1.0 onward.
     reverted. L4 holds without it, because resolution maps `T` either way.]**
   - **Q1** — discover PROMISING lists consequence/magnitude before bare inconclusive.
   - **Q2** — CONTRIBUTING.md catalog count 44 → 55.
+
+## [1.0.2] - 2026-10-02
+
+Dogfood round 2 on the published package `universal-physics-tensor@1.0.1`. No tag is pushed. Publishing stays the owner's job. `bun.lock` does not record this package's version.
+
+### Fixed
+
+- **The name `euler` is not Euler's number.** A bare `e` is the elementary charge, `E` is energy, and Euler's number is only `exp(x)`.
+- **A non-finite Hawking temperature is a RangeError.** `evaluateHawkingTemperature({ M_kg: 1e-300 })` no longer returns `Infinity` (`null` in JSON).
+- **An undeclared `1-e^2` names the elementary charge.** `upt eval` no longer prints `1`, and `upt map` no longer stops at a charge-squared mismatch. Declare or bind `e`, or write `exp(x)`. The map message names `one_minus_e_sq`.
+- **`evaluateBridge(42)` names a Hawking temperature that can be computed.** The error names `BridgeEquations.hawkingTemperature({ M_kg })` and `upt explain hawking-temperature mass=1.989e30`.
+- **`GM_SUN_SI` and unit conversion are on the package root.** `GM_SUN_SI`, `parseUnit`, `convertValue`, `UnitError`, `ParsedUnit`, and `TemperatureReading` are re-exported from `src/index.ts`. `GM_SUN_SI` is the IAU value, not `G_SI * M_SUN_SI`.
+
+The Part VIII check requires `1.0.2`. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `1.0.2`. Architecture docs were regenerated: 411 files, 2936 exports, 1395 re-exports, 89864 lines, 0 circular dependencies. Architecture test-coverage docs count 567 test files.
+
+The six PhysJS module comments named in the dogfood report (`Lindblad.lean`, `Landauer.lean`, `Jarzynski.lean`, `QuantumBounce.lean`, `Fret.lean`, `HawkingUnruh.lean`) still say they are not a formalRef on PhysJS main `dd35202920bf19c39f71f15d9ee740a6d28ec173`, which is the pin. Those files are not in this repository.
+
+**Dependency health, measured for this release:** `bun audit` finds 0 vulnerabilities in 142 packages. `bun outdated` lists `@types/node` 26.5.1 → 26.6.4, `fast-check` 4.10.0 → 4.10.2, and `@viz-js/viz` 3.30.0 → 3.31.0. `vitest` and `@vitest/coverage-v8` stay 4.1.11 inside the current range; latest is 5.0.3. `tree-sitter` stays 0.22.4 inside the current range; latest is 0.25.1. None of these is a HIGH or CRITICAL advisory.
 
 ## [1.0.1] - 2026-10-01
 

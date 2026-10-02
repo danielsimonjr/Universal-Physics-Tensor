@@ -80,7 +80,7 @@ export const M_SUN_SI = 1.989e30;
  * than `G_SI × M_SUN_SI`: that product is 3.0e-4 too high, five times the VLBI
  * 1σ on the solar-limb deflection. A mass that some evaluator requires in kg
  * is `GM_SUN_SI / G_SI`, which reproduces G·M = GM☉ exactly.
- * @internal
+ * @public
  */
 export const GM_SUN_SI = 1.3271244e20;
 

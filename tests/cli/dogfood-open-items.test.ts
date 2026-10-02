@@ -19,7 +19,7 @@ function capture() {
 const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 
 describe('upt eval — unbound e, CODATA names, units, parser', () => {
-  it('reads bare e as the elementary charge, exp(1) and euler as Euler, and refuses --allow-euler', async () => {
+  it('reads bare e as the elementary charge, exp(1) as Euler, refuses euler, and refuses --allow-euler', async () => {
     const charge = capture();
     expect(await runCli(['eval', 'e'], charge.io)).toBe(0);
     expect(Number(text(charge).trim())).toBeCloseTo(E_SI, 15);
@@ -34,8 +34,8 @@ describe('upt eval — unbound e, CODATA names, units, parser', () => {
     expect(await runCli(['eval', 'exp(1)'], euler.io)).toBe(0);
     expect(Number(text(euler).trim())).toBeCloseTo(Math.E, 12);
     const spelled = capture();
-    expect(await runCli(['eval', 'euler'], spelled.io)).toBe(0);
-    expect(Number(text(spelled).trim())).toBeCloseTo(Math.E, 12);
+    expect(await runCli(['eval', 'euler'], spelled.io)).toBe(2);
+    expect(spelled.err.join('')).toMatch(/exp\(x\)/);
     const energy = capture();
     expect(await runCli(['eval', 'E'], energy.io)).toBe(2);
     expect(energy.err.join('')).toMatch(/E is energy/);

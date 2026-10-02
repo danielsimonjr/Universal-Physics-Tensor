@@ -30,7 +30,8 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         (power/(area*temperature^4)); pressure, density, volume, viscosity,
         resistance and magnetic_field are names; mass/length^3 and M/L^3 work.
         In --formula, a bare e is the elementary charge and E is energy.
-        Euler's number is exp(1) or euler. With --formula, also verify it and
+        Euler's number is exp(x), for example exp(1). The name euler is refused.
+        With --formula, also verify it and
         recover the dimensionless prefactor. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
