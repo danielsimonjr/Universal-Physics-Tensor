@@ -6516,7 +6516,7 @@ The codebase is organized into the following modules:
 | `./core/regime-rule-install.js` | `*` | Import |
 | `./core/regimes-builtins.js` | `*` | Import |
 | `./core/tensor.js` | `UniversalTensor` | Re-export |
-| `./core/constants.js` | `C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, M_E_SI, B_WIEN_SI` | Re-export |
+| `./core/constants.js` | `C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, GM_SUN_SI, M_E_SI, B_WIEN_SI` | Re-export |
 | `./core/types.js` | `TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation, EmergentPhenomenon, PhysicalScale, Force, Symmetry, InformationMeasure` | Re-export |
 | `./core/types.js` | `PhysicalConstants` | Re-export |
 | `./core/cell.js` | `Cell, CellBase, CellConfidence, LawCell, BridgeCell, EmergenceCell` | Re-export |
@@ -6566,6 +6566,8 @@ The codebase is organized into the following modules:
 | `./dimensional/klein-gordon-equation.js` | `ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult` | Re-export |
 | `./dimensional/klein-gordon-equation.js` | `validateKleinGordonEquation` | Re-export |
 | `./dimensional/types.js` | `Dimension` | Re-export |
+| `./dimensional/units.js` | `convertValue, parseUnit, UnitError` | Re-export |
+| `./dimensional/units.js` | `ParsedUnit, TemperatureReading` | Re-export |
 | `./dimensional/types.js` | `DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE` | Re-export |
 | `./dimensional/algebra.js` | `multiply, divide, power, add, subtract, equals, format, DimensionMismatchError` | Re-export |
 | `./dimensional/validator.js` | `ExprNode, TranscendentalFn, ValidationResult, Violation` | Re-export |
@@ -6684,7 +6686,7 @@ The codebase is organized into the following modules:
 
   ```text
   UniversalTensor, C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI,
-  M_SUN_SI, M_E_SI, B_WIEN_SI, TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation,
+  M_SUN_SI, GM_SUN_SI, M_E_SI, B_WIEN_SI, TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation,
   EmergentPhenomenon, PhysicalScale, Force, Symmetry, InformationMeasure, PhysicalConstants, Cell,
   CellBase, CellConfidence, LawCell, BridgeCell, EmergenceCell, compose, FluxDiagnostic, FluxReport,
   FluxViolationError, CatalogEntryStatus, CatalogIngestionReport, catalogToCells, scanCatalog,
@@ -6723,16 +6725,17 @@ The codebase is organized into the following modules:
   validateBetaFunction, ArrowOfTime, GaugeFieldNode, TimeSymmetryPredicateNode,
   TimeSymmetryPredicateValidationResult, validateGaugeField, validateTimeSymmetryPredicate,
   ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult,
-  validateKleinGordonEquation, Dimension, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS,
-  VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply,
-  divide, power, add, subtract, equals, format, DimensionMismatchError, ExprNode, TranscendentalFn,
-  ValidationResult, Violation, validate, validateEquation, validateInverseMetricPair,
-  inferDimensionForBridge, evaluateEinsteinEquationResidual, EinsteinEquationResidualInput,
-  MetricClosure, Vec4, validateEinsteinFieldEquation, EinsteinFieldEquationNode,
-  EinsteinFieldEquationValidationResult, KretschmannScalarNode, KretschmannScalarValidationResult,
-  validateKretschmannScalar, computeKretschmann, evaluateNumerical, evaluateNumericalRaw,
-  evaluateMetricInverse, Float64ReferenceEngine, getActiveEngine, setActiveEngine,
-  NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
+  validateKleinGordonEquation, Dimension, convertValue, parseUnit, UnitError, ParsedUnit,
+  TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION,
+  FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply, divide, power, add, subtract,
+  equals, format, DimensionMismatchError, ExprNode, TranscendentalFn, ValidationResult, Violation,
+  validate, validateEquation, validateInverseMetricPair, inferDimensionForBridge,
+  evaluateEinsteinEquationResidual, EinsteinEquationResidualInput, MetricClosure, Vec4,
+  validateEinsteinFieldEquation, EinsteinFieldEquationNode, EinsteinFieldEquationValidationResult,
+  KretschmannScalarNode, KretschmannScalarValidationResult, validateKretschmannScalar,
+  computeKretschmann, evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse,
+  Float64ReferenceEngine, getActiveEngine, setActiveEngine, NumericalBackendError,
+  DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
   evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion, NumericalResult,
   NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec,
   NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options,
@@ -7722,9 +7725,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 409 |
 | Total Modules | 13 |
-| Total Lines of Code | 89508 |
-| Total Exports | 2923 |
-| Total Re-exports | 1389 |
+| Total Lines of Code | 89516 |
+| Total Exports | 2929 |
+| Total Re-exports | 1395 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
 | Total Functions | 752 |

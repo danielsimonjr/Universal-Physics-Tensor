@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 406,
-    "totalTestFiles": 558,
+    "totalTestFiles": 559,
     "testedCount": 396,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -940,6 +940,7 @@
     ],
     "src/bridges/be11-decoherence-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be11-decoherence-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -957,6 +958,7 @@
     ],
     "src/bridges/be21-kss-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be21-kss-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -974,6 +976,7 @@
     ],
     "src/bridges/be23-planckian-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be23-planckian-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -990,6 +993,7 @@
     ],
     "src/bridges/be35-bootstrap-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be35-bootstrap-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1006,6 +1010,7 @@
     ],
     "src/bridges/be36-gw170817-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be36-gw170817-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1023,6 +1028,7 @@
     ],
     "src/bridges/be37-cassini-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be37-cassini.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1040,6 +1046,7 @@
     ],
     "src/bridges/be48-collapse-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be48-collapse.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1056,6 +1063,7 @@
     ],
     "src/bridges/be51-lensing-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be51-lensing-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1073,6 +1081,7 @@
     ],
     "src/bridges/be52-mercury-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/be52-mercury-confrontation.test.ts",
@@ -1091,6 +1100,7 @@
     ],
     "src/bridges/be53-yang-mills-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1107,6 +1117,7 @@
     ],
     "src/bridges/be55-quantum-hall-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-55-quantum-hall.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1124,6 +1135,7 @@
     ],
     "src/bridges/be55-quantum-hall.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1183,6 +1195,7 @@
     ],
     "src/bridges/be56-casimir-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-56-casimir.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1200,6 +1213,7 @@
     ],
     "src/bridges/be56-casimir.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1259,6 +1273,7 @@
     ],
     "src/bridges/be57-unruh.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1318,6 +1333,7 @@
     ],
     "src/bridges/be58-johnson-nyquist-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-58-johnson-nyquist.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1334,6 +1350,7 @@
     ],
     "src/bridges/be58-johnson-nyquist.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1393,6 +1410,7 @@
     ],
     "src/bridges/be59-ac-josephson-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-59-ac-josephson.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1410,6 +1428,7 @@
     ],
     "src/bridges/be59-ac-josephson.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1469,6 +1488,7 @@
     ],
     "src/bridges/be60-fractional-qh-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-60-fractional-qh.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1486,6 +1506,7 @@
     ],
     "src/bridges/be60-fractional-qh.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1545,6 +1566,7 @@
     ],
     "src/bridges/be61-wiedemann-franz-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-61-wiedemann-franz.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1562,6 +1584,7 @@
     ],
     "src/bridges/be61-wiedemann-franz.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1621,6 +1644,7 @@
     ],
     "src/bridges/be62-bcs-gap-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-62-bcs-gap.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1638,6 +1662,7 @@
     ],
     "src/bridges/be62-bcs-gap.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1697,6 +1722,7 @@
     ],
     "src/bridges/be63-chandrasekhar-mass-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-63-chandrasekhar-mass.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1714,6 +1740,7 @@
     ],
     "src/bridges/be63-chandrasekhar-mass.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1774,6 +1801,7 @@
     ],
     "src/bridges/be64-eddington-luminosity-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-64-eddington-luminosity.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1791,6 +1819,7 @@
     ],
     "src/bridges/be64-eddington-luminosity.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1850,6 +1879,7 @@
     ],
     "src/bridges/be65-jeans-mass-confrontation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1867,6 +1897,7 @@
     ],
     "src/bridges/be65-jeans-mass.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -1926,6 +1957,7 @@
     ],
     "src/bridges/bridge-equations.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-35-encoding.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -1943,6 +1975,7 @@
     ],
     "src/bridges/catalog-adapter.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
@@ -1980,6 +2013,7 @@
     ],
     "src/bridges/confrontations.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-55-quantum-hall.test.ts",
       "tests/bridges/be-56-casimir.test.ts",
@@ -2190,6 +2224,7 @@
     ],
     "src/bridges/equations/be-53-yang-mills-beta.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-53-encoding.test.ts",
       "tests/bridges/be53-yang-mills-confrontation.test.ts",
@@ -2225,6 +2260,7 @@
     ],
     "src/bridges/evaluators.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/evaluators.test.ts",
@@ -2242,6 +2278,7 @@
     ],
     "src/bridges/gravitational-lensing.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -2302,6 +2339,7 @@
     ],
     "src/bridges/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -2361,6 +2399,7 @@
     ],
     "src/bridges/membership.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -2380,6 +2419,7 @@
     ],
     "src/bridges/observations/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/confrontation-consistency-gap.test.ts",
@@ -2402,6 +2442,7 @@
     ],
     "src/bridges/perihelion-precession.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/audited-catalog.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
@@ -2463,6 +2504,7 @@
     ],
     "src/bridges/rejected.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -2494,6 +2536,7 @@
     ],
     "src/bridges/sensitivity.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -2510,6 +2553,7 @@
     ],
     "src/canonical/canonical-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -2565,6 +2609,7 @@
     ],
     "src/canonical/linkage.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -2581,6 +2626,7 @@
     ],
     "src/canonical/normal-form.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -2597,6 +2643,7 @@
     ],
     "src/canonical/registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/audited-catalog.test.ts",
@@ -2643,6 +2690,7 @@
     ],
     "src/canonical/seed-l-layer.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -4501,6 +4549,7 @@
     ],
     "src/composition/adjudication.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -4597,6 +4646,7 @@
     ],
     "src/composition/canonical-graph.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -4649,6 +4699,7 @@
     ],
     "src/composition/catalog-graph.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/audited-catalog.test.ts",
@@ -4703,6 +4754,7 @@
     ],
     "src/composition/compose-surface.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -4718,6 +4770,7 @@
     ],
     "src/composition/compose-symbolic.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -4760,6 +4813,7 @@
     ],
     "src/composition/compose.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -4803,6 +4857,7 @@
     ],
     "src/composition/consequence.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -4819,6 +4874,7 @@
     ],
     "src/composition/consistency.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -4862,6 +4918,7 @@
     ],
     "src/composition/dimension-adjacency.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -4903,6 +4960,7 @@
     ],
     "src/composition/discovery.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -4928,6 +4986,7 @@
     ],
     "src/composition/edge.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/overlay-types.test.ts",
@@ -4978,6 +5037,7 @@
     ],
     "src/composition/edges/calibration.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
@@ -5023,6 +5083,7 @@
     ],
     "src/composition/edges/catalog-condensed-matter.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5063,6 +5124,7 @@
     ],
     "src/composition/edges/catalog-fields.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5103,6 +5165,7 @@
     ],
     "src/composition/edges/catalog-full.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5143,6 +5206,7 @@
     ],
     "src/composition/edges/catalog-gravitation-cosmology.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5183,6 +5247,7 @@
     ],
     "src/composition/edges/catalog-quantum.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5223,6 +5288,7 @@
     ],
     "src/composition/edges/catalog-tranche.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5263,6 +5329,7 @@
     ],
     "src/composition/enumerate.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5303,6 +5370,7 @@
     ],
     "src/composition/explain.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5343,6 +5411,7 @@
     ],
     "src/composition/expr-eval.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/canonical-links.test.ts",
@@ -5419,6 +5488,7 @@
     ],
     "src/composition/graph-viz-svg.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5460,6 +5530,7 @@
     ],
     "src/composition/graph-viz.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5506,6 +5577,7 @@
     ],
     "src/composition/grounding.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -5522,6 +5594,7 @@
     ],
     "src/composition/identifiability.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5562,6 +5635,7 @@
     ],
     "src/composition/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -5963,6 +6037,7 @@
     ],
     "src/composition/quantity.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/overlay-types.test.ts",
@@ -6018,6 +6093,7 @@
     ],
     "src/composition/retrodiction.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -6058,6 +6134,7 @@
     ],
     "src/composition/uncertainty.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/path-bound.test.ts",
@@ -6099,6 +6176,7 @@
     ],
     "src/composition/user-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -6144,6 +6222,7 @@
     ],
     "src/core/axes-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/perihelion-precession-labeled.test.ts",
@@ -6164,6 +6243,7 @@
     ],
     "src/core/cell.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6184,6 +6264,7 @@
     ],
     "src/core/constants.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/bridges/be-26-encoding.test.ts",
@@ -6245,6 +6326,7 @@
     ],
     "src/core/flux-rules.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6263,6 +6345,7 @@
     ],
     "src/core/labeled-tensor.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/perihelion-precession-labeled.test.ts",
@@ -6282,6 +6365,7 @@
     ],
     "src/core/regime-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6300,6 +6384,7 @@
     ],
     "src/core/regime-rule-install.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6310,6 +6395,7 @@
     ],
     "src/core/regimes-builtins.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6321,6 +6407,7 @@
     ],
     "src/core/tensor.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/catalog-adapter.test.ts",
@@ -6341,6 +6428,7 @@
     ],
     "src/core/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-12-encoding.test.ts",
       "tests/bridges/be-13-encoding.test.ts",
@@ -6380,6 +6468,7 @@
     ],
     "src/core/universal-index.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/perihelion-precession-labeled.test.ts",
@@ -6399,6 +6488,7 @@
     ],
     "src/diff/bridge-ast-gradient.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6422,6 +6512,7 @@
     ],
     "src/diff/bridge-gradient.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6439,6 +6530,7 @@
     ],
     "src/diff/bridge-specs.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6456,6 +6548,7 @@
     ],
     "src/dimensional/algebra.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/diffusion.test.ts",
       "tests/bridges/be-11-fix.test.ts",
@@ -6545,6 +6638,7 @@
     ],
     "src/dimensional/ast-types.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/applicability.test.ts",
       "tests/atlas/benchmark-ablation.test.ts",
@@ -6703,6 +6797,7 @@
     ],
     "src/dimensional/bridge-check.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6719,6 +6814,7 @@
     ],
     "src/dimensional/buckingham.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/oscillators-coarse.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -6745,6 +6841,7 @@
     ],
     "src/dimensional/connection.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6769,6 +6866,7 @@
     ],
     "src/dimensional/curvature-invariants.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6787,6 +6885,7 @@
     ],
     "src/dimensional/curvature.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6807,6 +6906,7 @@
     ],
     "src/dimensional/dimension-inference.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6834,6 +6934,7 @@
     ],
     "src/dimensional/einstein-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6851,6 +6952,7 @@
     ],
     "src/dimensional/errors.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6908,6 +7010,7 @@
     ],
     "src/dimensional/friedmann-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-19-encoding.test.ts",
       "tests/bridges/be-54-encoding.test.ts",
@@ -6926,6 +7029,7 @@
     ],
     "src/dimensional/gauge-field.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6945,6 +7049,7 @@
     ],
     "src/dimensional/klein-gordon-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -6998,6 +7103,7 @@
     "src/dimensional/natural-units.ts": [],
     "src/dimensional/rg-flow.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-39-encoding.test.ts",
       "tests/bridges/be-53-encoding.test.ts",
@@ -7037,6 +7143,7 @@
     ],
     "src/dimensional/tensor-trace.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/be-13-encoding.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
@@ -7087,6 +7194,7 @@
     ],
     "src/dimensional/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/models.test.ts",
@@ -7253,7 +7361,12 @@
       "tests/composition/retrodiction.test.ts"
     ],
     "src/dimensional/units.ts": [
+      "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/public-surface.test.ts",
+      "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/evaluators.test.ts",
+      "tests/bridges/public-api-stability.test.ts",
       "tests/cases/applied-cases.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -7264,13 +7377,16 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/symbolic-latex.test.ts",
       "tests/dimensional/units.test.ts",
-      "tests/numerical/binding-value.test.ts"
+      "tests/fixtures/confrontation-golden.test.ts",
+      "tests/numerical/binding-value.test.ts",
+      "tests/tensor.test.ts"
     ],
     "src/dimensional/validator-registry.ts": [
       "tests/dimensional/validator-registry.test.ts"
     ],
     "src/dimensional/validator.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/diffusion.test.ts",
       "tests/bridges/be-11-fix.test.ts",
@@ -7412,6 +7528,7 @@
     ],
     "src/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7427,6 +7544,7 @@
     ],
     "src/numerical/be37-covariant-eikonal.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7460,6 +7578,7 @@
     ],
     "src/numerical/bianchi-residual.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7506,6 +7625,7 @@
     ],
     "src/numerical/einstein-equation.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7524,6 +7644,7 @@
     ],
     "src/numerical/engine-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7557,6 +7678,7 @@
     ],
     "src/numerical/errors.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7593,6 +7715,7 @@
     ],
     "src/numerical/float64-engine.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/perihelion-precession-labeled.test.ts",
@@ -7655,6 +7778,7 @@
     ],
     "src/numerical/formula-dimension.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7678,6 +7802,7 @@
     ],
     "src/numerical/formula-registry.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7705,6 +7830,7 @@
     ],
     "src/numerical/geodesic-integrator.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/gravitational-lensing.test.ts",
@@ -7723,6 +7849,7 @@
     ],
     "src/numerical/geometrized.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7740,6 +7867,7 @@
     ],
     "src/numerical/gl4-integrator.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/perihelion-precession.test.ts",
@@ -7780,6 +7908,7 @@
     ],
     "src/numerical/grid-field.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7814,6 +7943,7 @@
     ],
     "src/numerical/index.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7850,6 +7980,7 @@
     ],
     "src/numerical/killing.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7868,6 +7999,7 @@
     ],
     "src/numerical/klein-gordon.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7884,6 +8016,7 @@
     ],
     "src/numerical/kretschmann.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -7950,6 +8083,7 @@
     ],
     "src/numerical/perihelion-finder.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/perihelion-precession.test.ts",
@@ -7996,6 +8130,7 @@
     ],
     "src/numerical/tensor-engine.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8044,6 +8179,7 @@
     ],
     "src/numerical/types.ts": [
       "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -8188,6 +8324,139 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/bridge-check.ts",
+      "src/numerical/einstein-equation.ts",
+      "src/dimensional/einstein-equation.ts",
+      "src/dimensional/curvature-invariants.ts",
+      "src/numerical/kretschmann.ts",
+      "src/numerical/index.ts",
+      "src/composition/index.ts",
+      "src/bridges/membership.ts",
+      "src/bridges/be36-gw170817-confrontation.ts",
+      "src/bridges/be52-mercury-confrontation.ts",
+      "src/numerical/formula-registry.ts",
+      "src/numerical/formula-dimension.ts",
+      "src/dimensional/dimension-inference.ts",
+      "src/dimensional/buckingham.ts",
+      "src/composition/compose-surface.ts",
+      "src/numerical/klein-gordon.ts",
+      "src/bridges/be23-planckian-confrontation.ts",
+      "src/canonical/registry.ts",
+      "src/canonical/seed-l-layer.ts",
+      "src/canonical/canonical-equation.ts",
+      "src/canonical/normal-form.ts",
+      "src/canonical/linkage.ts",
+      "src/composition/adjudication.ts",
+      "src/composition/consequence.ts",
+      "src/composition/grounding.ts",
+      "src/composition/discovery.ts",
+      "src/bridges/observations/types.ts",
+      "src/bridges/be37-cassini-confrontation.ts",
+      "src/bridges/be51-lensing-confrontation.ts",
+      "src/bridges/equations/be-53-yang-mills-beta.ts",
+      "src/bridges/be53-yang-mills-confrontation.ts",
+      "src/bridges/be21-kss-confrontation.ts",
+      "src/bridges/be35-bootstrap-confrontation.ts",
+      "src/bridges/be11-decoherence-confrontation.ts",
+      "src/bridges/be55-quantum-hall-confrontation.ts",
+      "src/bridges/be56-casimir-confrontation.ts",
+      "src/bridges/be58-johnson-nyquist-confrontation.ts",
+      "src/bridges/be59-ac-josephson-confrontation.ts",
+      "src/bridges/be60-fractional-qh-confrontation.ts",
+      "src/bridges/be61-wiedemann-franz-confrontation.ts",
+      "src/bridges/be62-bcs-gap-confrontation.ts",
+      "src/bridges/be63-chandrasekhar-mass-confrontation.ts",
+      "src/bridges/be64-eddington-luminosity-confrontation.ts",
+      "src/bridges/be65-jeans-mass-confrontation.ts",
+      "src/bridges/be48-collapse-confrontation.ts",
+      "src/bridges/confrontations.ts",
+      "src/bridges/sensitivity.ts",
+      "src/bridges/gravitational-lensing.ts",
+      "src/bridges/perihelion-precession.ts",
+      "src/bridges/be55-quantum-hall.ts",
+      "src/bridges/be56-casimir.ts",
+      "src/bridges/be57-unruh.ts",
+      "src/bridges/be58-johnson-nyquist.ts",
+      "src/bridges/be59-ac-josephson.ts",
+      "src/bridges/be60-fractional-qh.ts",
+      "src/bridges/be61-wiedemann-franz.ts",
+      "src/bridges/be62-bcs-gap.ts",
+      "src/bridges/be63-chandrasekhar-mass.ts",
+      "src/bridges/be64-eddington-luminosity.ts",
+      "src/bridges/be65-jeans-mass.ts",
+      "src/dimensional/ast-types.ts",
+      "src/numerical/tensor-engine.ts",
+      "src/numerical/types.ts",
+      "src/numerical/grid-field.ts",
+      "src/numerical/float64-engine.ts",
+      "src/numerical/engine-registry.ts",
+      "src/numerical/errors.ts",
+      "src/dimensional/errors.ts",
+      "src/numerical/be37-covariant-eikonal.ts",
+      "src/numerical/gl4-integrator.ts",
+      "src/numerical/perihelion-finder.ts",
+      "src/composition/quantity.ts",
+      "src/composition/edge.ts",
+      "src/composition/compose.ts",
+      "src/composition/consistency.ts",
+      "src/composition/edges/calibration.ts",
+      "src/composition/edges/catalog-tranche.ts",
+      "src/composition/edges/catalog-full.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/canonical-graph.ts",
+      "src/composition/enumerate.ts",
+      "src/composition/uncertainty.ts",
+      "src/composition/identifiability.ts",
+      "src/composition/retrodiction.ts",
+      "src/composition/explain.ts",
+      "src/composition/compose-symbolic.ts",
+      "src/composition/expr-eval.ts",
+      "src/composition/graph-viz.ts",
+      "src/composition/graph-viz-svg.ts",
+      "src/composition/dimension-adjacency.ts",
+      "src/composition/user-equation.ts",
+      "src/composition/edges/catalog-quantum.ts",
+      "src/composition/edges/catalog-gravitation-cosmology.ts",
+      "src/composition/edges/catalog-fields.ts",
+      "src/composition/edges/catalog-condensed-matter.ts",
+      "src/bridges/rejected.ts",
+      "src/core/regime-rule-install.ts",
+      "src/core/regimes-builtins.ts"
+    ],
+    "tests/api/gm-sun-units-public.test.ts": [
+      "src/index.ts",
+      "src/core/tensor.ts",
+      "src/core/constants.ts",
+      "src/core/types.ts",
+      "src/core/cell.ts",
+      "src/core/flux-rules.ts",
+      "src/bridges/catalog-adapter.ts",
+      "src/core/universal-index.ts",
+      "src/core/axes-registry.ts",
+      "src/core/labeled-tensor.ts",
+      "src/core/regime-registry.ts",
+      "src/diff/bridge-gradient.ts",
+      "src/diff/bridge-ast-gradient.ts",
+      "src/diff/bridge-specs.ts",
+      "src/bridges/index.ts",
+      "src/bridges/evaluators.ts",
+      "src/bridges/bridge-equations.ts",
+      "src/dimensional/connection.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/curvature.ts",
+      "src/numerical/bianchi-residual.ts",
+      "src/numerical/killing.ts",
+      "src/numerical/geodesic-integrator.ts",
+      "src/numerical/geometrized.ts",
+      "src/dimensional/tensor-trace.ts",
+      "src/dimensional/friedmann-equation.ts",
+      "src/dimensional/rg-flow.ts",
+      "src/dimensional/gauge-field.ts",
+      "src/dimensional/klein-gordon-equation.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
@@ -8321,6 +8590,7 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
@@ -9804,6 +10074,7 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
@@ -10269,6 +10540,7 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
@@ -15364,6 +15636,7 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",
@@ -16020,6 +16293,7 @@
       "src/dimensional/gauge-field.ts",
       "src/dimensional/klein-gordon-equation.ts",
       "src/dimensional/types.ts",
+      "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
       "src/dimensional/bridge-check.ts",
       "src/numerical/einstein-equation.ts",

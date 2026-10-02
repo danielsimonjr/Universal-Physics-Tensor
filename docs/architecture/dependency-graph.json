@@ -4,7 +4,7 @@
     "version": "1.0.1",
     "totalFiles": 409,
     "totalModules": 13,
-    "totalExports": 2923
+    "totalExports": 2929
   },
   "entryPoints": [
     {
@@ -23023,6 +23023,7 @@
               "T_P_SI",
               "H0_SI",
               "M_SUN_SI",
+              "GM_SUN_SI",
               "M_E_SI",
               "B_WIEN_SI"
             ],
@@ -23497,6 +23498,23 @@
             "file": "./dimensional/types.js",
             "imports": [
               "Dimension"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "convertValue",
+              "parseUnit",
+              "UnitError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "ParsedUnit",
+              "TemperatureReading"
             ],
             "reExport": true
           },
@@ -24531,6 +24549,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "PhysicalConstants",
@@ -24646,6 +24665,9 @@
           "validateGaugeField",
           "validateTimeSymmetryPredicate",
           "validateKleinGordonEquation",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -24903,6 +24925,8 @@
           "KleinGordonEquationNode",
           "KleinGordonEquationValidationResult",
           "Dimension",
+          "ParsedUnit",
+          "TemperatureReading",
           "ExprNode",
           "TranscendentalFn",
           "ValidationResult",
@@ -25070,6 +25094,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "TensorConfig",
@@ -25250,6 +25275,11 @@
           "KleinGordonEquationValidationResult",
           "validateKleinGordonEquation",
           "Dimension",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
+          "ParsedUnit",
+          "TemperatureReading",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -28286,15 +28316,15 @@
   "statistics": {
     "totalTypeScriptFiles": 409,
     "totalModules": 13,
-    "totalLinesOfCode": 89508,
-    "totalExports": 2923,
+    "totalLinesOfCode": 89516,
+    "totalExports": 2929,
     "totalClasses": 60,
     "totalInterfaces": 462,
     "totalFunctions": 752,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 721,
-    "totalReExports": 1389,
+    "totalReExports": 1395,
     "totalTypeOnlyImports": 546,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

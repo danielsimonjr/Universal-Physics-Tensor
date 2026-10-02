@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Export `GM_SUN_SI`, `parseUnit`, `convertValue`, `UnitError`, `ParsedUnit`, and `TemperatureReading` from the package root. `GM_SUN_SI` stays the IAU value, not `G_SI * M_SUN_SI`.
 - [x] Move BRIDGE_DESCRIPTORS, getBridge, and the CATALOG_GRAPH scan inside auditCoverage from src/bridges/ into src/composition/, beside catalog-graph.ts. DATA_CONFRONTED_IDS stays in src/bridges/confrontation-coverage.ts. cli-api retargets auditCoverage at the composition module. The layer-order allowlist drops the three bridges-to-composition rows. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 2.
 - [x] Add a Bridge Equation section for each of BE-55 through BE-65 in the specification, in the house format of the existing sections, with the PhysJS proof-status block under each heading.
 - [x] Sweep stale bridge-equation documents so counts, kinds, theorem names, and the BE-13 name match the PhysJS pin in `src/atlas/physjs-ref.ts`. The gap list is `docs/planning/Bridge-Gap-Inference.md`. Historical audits, dogfood reports, and changelog entries keep their original text and gain a dated note.

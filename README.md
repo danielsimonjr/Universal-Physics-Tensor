@@ -222,6 +222,15 @@ erasureCost.evaluate({ mass: M_SUN_KG }); // ≈ 5.9e-31 J — E_min(M) = ℏc³
 erasureCost.confidence;                   // 'highly-speculative' (min of the operands)
 ```
 
+`GM_SUN_SI` is the IAU 2015 nominal solar gravitational parameter, `1.3271244e20` m³/s². It is not `G_SI * M_SUN_SI`. `parseUnit`, `convertValue`, and `UnitError` read a number with a unit:
+
+```typescript
+import { GM_SUN_SI, convertValue } from 'universal-physics-tensor';
+
+GM_SUN_SI;                    // 1.3271244e20
+convertValue('25degC', 'K'); // { value: 298.15, given: 'degC' }
+```
+
 That derived relation — the minimum erasure cost at a black-hole
 horizon — is the framework's first **derived** (rather than encoded)
 literature-anchored result, pre-registered before implementation and
