@@ -2,7 +2,7 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.1",
-    "totalFiles": 409,
+    "totalFiles": 410,
     "totalModules": 13,
     "totalExports": 2924
   },
@@ -5777,22 +5777,10 @@
         ]
       },
       "src/bridges/confrontation-coverage.ts": {
-        "description": "Empirical-spine coverage audit (Direction 4).",
+        "description": "Catalog ids with a committed real-data confrontation.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
-          {
-            "file": "./index.js",
-            "imports": [
-              "BRIDGE_EQUATIONS"
-            ]
-          },
-          {
-            "file": "../composition/catalog-graph.js",
-            "imports": [
-              "CATALOG_GRAPH"
-            ]
-          },
           {
             "file": "./confrontations.js",
             "imports": [
@@ -5801,11 +5789,7 @@
           }
         ],
         "exports": [
-          "DATA_CONFRONTED_IDS",
-          "auditCoverage"
-        ],
-        "functions": [
-          "auditCoverage"
+          "DATA_CONFRONTED_IDS"
         ],
         "constants": [
           "DATA_CONFRONTED_IDS"
@@ -5967,57 +5951,6 @@
           "CONFRONTATION_RIGOR",
           "BCS_GAP_RATIO",
           "CONFRONTATIONS"
-        ]
-      },
-      "src/bridges/descriptor.ts": {
-        "description": "Unified per-bridge descriptor — one lookup that JOINS the catalog's three",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "./index.js",
-            "imports": [
-              "BRIDGE_EQUATIONS",
-              "BridgeEquationEntry"
-            ]
-          },
-          {
-            "file": "./rhs-registry.js",
-            "imports": [
-              "BRIDGE_RHS_BY_ID",
-              "parseBridgeId"
-            ]
-          },
-          {
-            "file": "../composition/catalog-graph.js",
-            "imports": [
-              "CATALOG_GRAPH"
-            ]
-          },
-          {
-            "file": "../composition/edge.js",
-            "imports": [
-              "BridgeEdge"
-            ],
-            "typeOnly": true
-          },
-          {
-            "file": "../dimensional/validator.js",
-            "imports": [
-              "ExprNode"
-            ],
-            "typeOnly": true
-          }
-        ],
-        "exports": [
-          "BRIDGE_DESCRIPTORS",
-          "getBridge"
-        ],
-        "functions": [
-          "getBridge"
-        ],
-        "constants": [
-          "BRIDGE_DESCRIPTORS"
         ]
       },
       "src/bridges/equations/_be-helpers.ts": {
@@ -13572,7 +13505,7 @@
             "reExport": true
           },
           {
-            "file": "./bridges/confrontation-coverage.js",
+            "file": "./composition/audit-coverage.js",
             "imports": [
               "auditCoverage"
             ],
@@ -14428,6 +14361,37 @@
         ],
         "constants": [
           "ADJUDICATIONS"
+        ]
+      },
+      "src/composition/audit-coverage.ts": {
+        "description": "Empirical-spine coverage audit (Direction 4).",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS"
+            ]
+          },
+          {
+            "file": "../bridges/confrontation-coverage.js",
+            "imports": [
+              "DATA_CONFRONTED_IDS"
+            ]
+          },
+          {
+            "file": "./catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
+            ]
+          }
+        ],
+        "exports": [
+          "auditCoverage"
+        ],
+        "functions": [
+          "auditCoverage"
         ]
       },
       "src/composition/axes.ts": {
@@ -15340,6 +15304,57 @@
         ],
         "functions": [
           "consistencyRatio"
+        ]
+      },
+      "src/composition/descriptor.ts": {
+        "description": "Unified per-bridge descriptor — one lookup that JOINS the catalog's three",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/index.js",
+            "imports": [
+              "BRIDGE_EQUATIONS",
+              "BridgeEquationEntry"
+            ]
+          },
+          {
+            "file": "../bridges/rhs-registry.js",
+            "imports": [
+              "BRIDGE_RHS_BY_ID",
+              "parseBridgeId"
+            ]
+          },
+          {
+            "file": "./catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "./edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "BRIDGE_DESCRIPTORS",
+          "getBridge"
+        ],
+        "functions": [
+          "getBridge"
+        ],
+        "constants": [
+          "BRIDGE_DESCRIPTORS"
         ]
       },
       "src/composition/dimension-adjacency.ts": {
@@ -27946,7 +27961,6 @@
           "src/bridges/catalog-adapter.ts",
           "src/bridges/confrontation-coverage.ts",
           "src/bridges/confrontations.ts",
-          "src/bridges/descriptor.ts",
           "src/bridges/equations/_be-helpers.ts",
           "src/bridges/equations/be-11-decoherence-master.ts",
           "src/bridges/equations/be-12-coherence-length.ts",
@@ -28105,6 +28119,7 @@
         "name": "Composition",
         "files": [
           "src/composition/adjudication.ts",
+          "src/composition/audit-coverage.ts",
           "src/composition/axes.ts",
           "src/composition/axis-audit.ts",
           "src/composition/bridge-analysis.ts",
@@ -28120,6 +28135,7 @@
           "src/composition/composition-recovery.ts",
           "src/composition/consequence.ts",
           "src/composition/consistency.ts",
+          "src/composition/descriptor.ts",
           "src/composition/dimension-adjacency.ts",
           "src/composition/discovery.ts",
           "src/composition/edge.ts",
@@ -28312,9 +28328,9 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 409,
+    "totalTypeScriptFiles": 410,
     "totalModules": 13,
-    "totalLinesOfCode": 89600,
+    "totalLinesOfCode": 89619,
     "totalExports": 2924,
     "totalClasses": 60,
     "totalInterfaces": 463,
