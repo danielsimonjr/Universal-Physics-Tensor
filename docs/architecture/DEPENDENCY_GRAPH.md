@@ -3386,7 +3386,6 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../atlas/catalog-formal-ref.js` | `catalogFormalRef` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
 
 **Exports:**
@@ -3573,9 +3572,6 @@ The codebase is organized into the following modules:
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
-| `../../dimensional/units.js` | `UnitError` | Import |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
-| `../../numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3594,11 +3590,8 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
-| `../../core/constants.js` | `C_SI, G_SI` | Import |
 | `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
-| `../../numerical/binding-value.js` | `bindingInUnit` | Import |
-| `../../bridges/evaluators.js` | `missingEvaluatorMessage` | Import |
 
 **Exports:**
 - Functions: `weakFieldDomainNote`, `propagateEvaluatorUncertainty`
@@ -3712,12 +3705,8 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError, CliError, EXIT_CHECK_FAILED` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `./_atlas-map.js` | `* as atlasMap` | Import |
-| `../../composition/edge.js` | `BridgeEdge` | Import (type-only) |
-| `../../composition/graph-viz.js` | `VizJunction, VizModel` | Import (type-only) |
-| `../../atlas/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
+| `../../cli-api.js` | `BridgeEdge, CanonicalComparison, EquationAnalysis, EvidenceTag, RelationType, VizJunction, VizModel` | Import (type-only) |
 | `../graphs.js` | `SourceName` | Import (type-only) |
-| `../../composition/user-equation.js` | `EquationAnalysis` | Import (type-only) |
-| `../../composition/canonical-compare.js` | `CanonicalComparison` | Import (type-only) |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
 | `../../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../map-evidence.js` | `withCatalogEvidence` | Import |
@@ -3738,7 +3727,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError` | Import |
-| `../../numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, MetricId` | Import |
+| `../../cli-api.js` | `MetricId` | Import (type-only) |
 
 **Exports:**
 - Constants: `command`
@@ -3756,7 +3745,6 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./regime.js` | `parseAt, resolveAtPoint, showInequality` | Import |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
 | `./_atlas-route.js` | `explainsRefusal, missingForComposite, routeClaim, selectRoute, transportReport, RouteClaim` | Import |
 
 **Exports:**
@@ -3830,7 +3818,6 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../composition/composition-recovery.js` | `scanCompositionRecovery` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3847,7 +3834,6 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../../numerical/binding-value.js` | `readBinding` | Import |
 
 **Exports:**
 - Functions: `parseAt`, `resolveAtPoint`, `showInequality`
@@ -4258,6 +4244,17 @@ The codebase is organized into the following modules:
 | `./atlas/types.js` | `AtlasBridge, RegimeInequality, Witness` | Re-export |
 | `./atlas/types.js` | `MissingLipschitzError` | Re-export |
 | `./atlas/model.js` | `AtlasModel, ModelId` | Re-export |
+| `./atlas/catalog-formal-ref.js` | `catalogFormalRef` | Re-export |
+| `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
+| `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
+| `./numerical/binding-value.js` | `readBinding, bindingInUnit` | Re-export |
+| `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
+| `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
+| `./core/constants.js` | `C_SI, G_SI` | Re-export |
+| `./composition/edge.js` | `BridgeEdge` | Re-export |
+| `./composition/graph-viz.js` | `VizJunction, VizModel` | Re-export |
+| `./atlas/types.js` | `EvidenceTag, RelationType` | Re-export |
+| `./composition/user-equation.js` | `EquationAnalysis` | Re-export |
 
 **Exports:**
 - Re-exports:
@@ -4296,7 +4293,11 @@ The codebase is organized into the following modules:
   regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample,
   familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
   routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
-  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId
+  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
+  catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
+  kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding, bindingInUnit,
+  builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -7998,15 +7999,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 423 |
 | Total Modules | 13 |
-| Total Lines of Code | 92295 |
-| Total Exports | 2992 |
-| Total Re-exports | 1396 |
+| Total Lines of Code | 92363 |
+| Total Exports | 3012 |
+| Total Re-exports | 1416 |
 | Total Classes | 61 |
 | Total Interfaces | 481 |
 | Total Functions | 780 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 572 |
+| Type-only Imports | 569 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

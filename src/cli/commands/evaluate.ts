@@ -12,11 +12,8 @@ import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
-import { C_SI, G_SI } from '../../core/constants.js';
 import { JEANS_FORMULA_NOTE } from '../conventions.js';
 import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
-import { bindingInUnit } from '../../numerical/binding-value.js';
-import { missingEvaluatorMessage } from '../../bridges/evaluators.js';
 
 const FLAGS: FlagSpec[] = [
   {
@@ -105,12 +102,13 @@ const NONLINEAR_FRACTION = 0.1;
  * @internal
  */
 export function weakFieldDomainNote(
+  api: CommandCtx['api'],
   bridgeId: number,
   inputs: Readonly<Record<string, number>>,
 ): string | undefined {
   const mass = inputs.M_kg;
   if (!(mass > 0) || !Number.isFinite(mass)) return undefined;
-  const rs = (2 * G_SI * mass) / (C_SI * C_SI);
+  const rs = (2 * api.G_SI * mass) / (api.C_SI * api.C_SI);
   if (!(rs > 0) || !Number.isFinite(rs)) return undefined;
   if (bridgeId === 51) {
     const b = inputs.b_m;
@@ -259,7 +257,7 @@ function parseUncertainty(
     if (m !== null) {
       const p = spec.parameters.find((x) => x.key === m[1])!;
       try {
-        u = bindingInUnit(m[2]!, p.unit, 'difference').value;
+        u = api.bindingInUnit(m[2]!, p.unit, 'difference').value;
       } catch (e) {
         if (!(e instanceof api.UnitError)) throw e;
         if (!/is not a (finite )?number/.test(e.message)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);
@@ -504,7 +502,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const id = Number(m[1]);
   const spec = api.BRIDGE_EVALUATORS.get(id);
   if (spec === undefined) {
-    throw new CliError(missingEvaluatorMessage(id));
+    throw new CliError(api.missingEvaluatorMessage(id));
   }
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 
@@ -517,7 +515,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => api.evaluateBridge(id, i) as Record<string, unknown>, NOT_INCLUDED);
-  const domainNote = weakFieldDomainNote(id, inputs);
+  const domainNote = weakFieldDomainNote(api, id, inputs);
   const formulaNote = id === 65 ? JEANS_FORMULA_NOTE : undefined;
   const hbarNote = id === 56 ? HBAR_TRUNCATION_NOTE : undefined;
 

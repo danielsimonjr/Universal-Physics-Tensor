@@ -204,3 +204,71 @@ export type { PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport } f
 export type { AtlasBridge, RegimeInequality, Witness } from './atlas/types.js';
 export { MissingLipschitzError } from './atlas/types.js';
 export type { AtlasModel, ModelId } from './atlas/model.js';
+
+/**
+ * Catalog formal reference for `upt atlas`.
+ *
+ * @internal
+ */
+export { catalogFormalRef } from './atlas/catalog-formal-ref.js';
+
+/**
+ * Composition recovery scan for `upt recover`.
+ *
+ * @internal
+ */
+export { scanCompositionRecovery } from './composition/composition-recovery.js';
+
+/**
+ * Exact metrics and geodesic integrators for `upt metric`.
+ *
+ * @internal
+ */
+export {
+  curvatureReport,
+  kerrEquatorialCircular,
+  kerrGeodesic,
+  kerrTurningPointOrbit,
+  schwarzschildCircularOrbit,
+  type MetricId,
+} from './numerical/spacetime-metrics.js';
+
+/**
+ * Binding readers for `upt eval`, `upt evaluate`, `upt regime`, and `upt path`.
+ *
+ * @internal
+ */
+export { readBinding, bindingInUnit } from './numerical/binding-value.js';
+
+/**
+ * Builtin dimension checker for `upt eval`.
+ *
+ * @internal
+ */
+export { builtinFormulaDimensionChecker } from './numerical/formula-dimension.js';
+
+/**
+ * Missing-evaluator message for `upt evaluate`.
+ *
+ * @internal
+ */
+export { missingEvaluatorMessage } from './bridges/evaluators.js';
+
+/**
+ * SI constants the evaluate command uses in the weak-field note.
+ *
+ * @internal
+ */
+export { C_SI, G_SI } from './core/constants.js';
+
+/** Quantity-graph edge type for `upt map`. @internal */
+export type { BridgeEdge } from './composition/edge.js';
+
+/** Visual map types for `upt map`. @internal */
+export type { VizJunction, VizModel } from './composition/graph-viz.js';
+
+/** Relation vocabulary types for `upt map`. @internal */
+export type { EvidenceTag, RelationType } from './atlas/types.js';
+
+/** User-equation analysis type for `upt map`. @internal */
+export type { EquationAnalysis } from './composition/user-equation.js';

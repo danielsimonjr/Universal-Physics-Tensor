@@ -3,7 +3,7 @@ metadata:
   version: 1.0.4
   totalFiles: 423
   totalModules: 13
-  totalExports: 2992
+  totalExports: 3012
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7635,9 +7635,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../atlas/catalog-formal-ref.js
-          imports:
-            - catalogFormalRef
         - file: ./_atlas-map.js
           imports:
             - atlasEvidenceText
@@ -8000,15 +7997,6 @@ modules:
           imports:
             - UnitMode
           typeOnly: true
-        - file: ../../dimensional/units.js
-          imports:
-            - UnitError
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readBinding
-        - file: ../../numerical/formula-dimension.js
-          imports:
-            - builtinFormulaDimensionChecker
       exports:
         - command
       constants:
@@ -8046,22 +8034,12 @@ modules:
             - CaseResult
             - EvaluatorParameter
           typeOnly: true
-        - file: ../../core/constants.js
-          imports:
-            - C_SI
-            - G_SI
         - file: ../conventions.js
           imports:
             - JEANS_FORMULA_NOTE
         - file: ../eval-numbers.js
           imports:
             - HBAR_TRUNCATION_NOTE
-        - file: ../../numerical/binding-value.js
-          imports:
-            - bindingInUnit
-        - file: ../../bridges/evaluators.js
-          imports:
-            - missingEvaluatorMessage
       exports:
         - command
         - weakFieldDomainNote
@@ -8309,31 +8287,19 @@ modules:
         - file: ./_atlas-map.js
           imports:
             - "* as atlasMap"
-        - file: ../../composition/edge.js
+        - file: ../../cli-api.js
           imports:
             - BridgeEdge
-          typeOnly: true
-        - file: ../../composition/graph-viz.js
-          imports:
-            - VizJunction
-            - VizModel
-          typeOnly: true
-        - file: ../../atlas/types.js
-          imports:
+            - CanonicalComparison
+            - EquationAnalysis
             - EvidenceTag
             - RelationType
+            - VizJunction
+            - VizModel
           typeOnly: true
         - file: ../graphs.js
           imports:
             - SourceName
-          typeOnly: true
-        - file: ../../composition/user-equation.js
-          imports:
-            - EquationAnalysis
-          typeOnly: true
-        - file: ../../composition/canonical-compare.js
-          imports:
-            - CanonicalComparison
           typeOnly: true
         - file: ../conventions.js
           imports:
@@ -8377,14 +8343,10 @@ modules:
         - file: ../errors.js
           imports:
             - UsageError
-        - file: ../../numerical/spacetime-metrics.js
+        - file: ../../cli-api.js
           imports:
-            - curvatureReport
-            - kerrEquatorialCircular
-            - kerrGeodesic
-            - kerrTurningPointOrbit
-            - schwarzschildCircularOrbit
             - MetricId
+          typeOnly: true
       exports:
         - command
       constants:
@@ -8420,9 +8382,6 @@ modules:
             - parseAt
             - resolveAtPoint
             - showInequality
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readBinding
         - file: ./_atlas-route.js
           imports:
             - explainsRefusal
@@ -8567,9 +8526,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../composition/composition-recovery.js
-          imports:
-            - scanCompositionRecovery
       exports:
         - command
       constants:
@@ -8600,9 +8556,6 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
-        - file: ../../numerical/binding-value.js
-          imports:
-            - readBinding
       exports:
         - command
         - parseAt
@@ -9651,6 +9604,59 @@ modules:
             - AtlasModel
             - ModelId
           reExport: true
+        - file: ./atlas/catalog-formal-ref.js
+          imports:
+            - catalogFormalRef
+          reExport: true
+        - file: ./composition/composition-recovery.js
+          imports:
+            - scanCompositionRecovery
+          reExport: true
+        - file: ./numerical/spacetime-metrics.js
+          imports:
+            - curvatureReport
+            - kerrEquatorialCircular
+            - kerrGeodesic
+            - kerrTurningPointOrbit
+            - schwarzschildCircularOrbit
+            - type MetricId
+          reExport: true
+        - file: ./numerical/binding-value.js
+          imports:
+            - readBinding
+            - bindingInUnit
+          reExport: true
+        - file: ./numerical/formula-dimension.js
+          imports:
+            - builtinFormulaDimensionChecker
+          reExport: true
+        - file: ./bridges/evaluators.js
+          imports:
+            - missingEvaluatorMessage
+          reExport: true
+        - file: ./core/constants.js
+          imports:
+            - C_SI
+            - G_SI
+          reExport: true
+        - file: ./composition/edge.js
+          imports:
+            - BridgeEdge
+          reExport: true
+        - file: ./composition/graph-viz.js
+          imports:
+            - VizJunction
+            - VizModel
+          reExport: true
+        - file: ./atlas/types.js
+          imports:
+            - EvidenceTag
+            - RelationType
+          reExport: true
+        - file: ./composition/user-equation.js
+          imports:
+            - EquationAnalysis
+          reExport: true
       exports:
         - explainQuantity
         - CATALOG_GRAPH
@@ -9786,6 +9792,20 @@ modules:
         - routeEntryModels
         - composeRelation
         - MissingLipschitzError
+        - catalogFormalRef
+        - scanCompositionRecovery
+        - curvatureReport
+        - kerrEquatorialCircular
+        - kerrGeodesic
+        - kerrTurningPointOrbit
+        - schwarzschildCircularOrbit
+        - type MetricId
+        - readBinding
+        - bindingInUnit
+        - builtinFormulaDimensionChecker
+        - missingEvaluatorMessage
+        - C_SI
+        - G_SI
         - ConfrontationEntry
         - RigorTier
         - ConfrontationOutcome
@@ -9823,6 +9843,12 @@ modules:
         - Witness
         - AtlasModel
         - ModelId
+        - BridgeEdge
+        - VizJunction
+        - VizModel
+        - EvidenceTag
+        - RelationType
+        - EquationAnalysis
       reExported:
         - explainQuantity
         - CATALOG_GRAPH
@@ -9995,6 +10021,26 @@ modules:
         - MissingLipschitzError
         - AtlasModel
         - ModelId
+        - catalogFormalRef
+        - scanCompositionRecovery
+        - curvatureReport
+        - kerrEquatorialCircular
+        - kerrGeodesic
+        - kerrTurningPointOrbit
+        - schwarzschildCircularOrbit
+        - type MetricId
+        - readBinding
+        - bindingInUnit
+        - builtinFormulaDimensionChecker
+        - missingEvaluatorMessage
+        - C_SI
+        - G_SI
+        - BridgeEdge
+        - VizJunction
+        - VizModel
+        - EvidenceTag
+        - RelationType
+        - EquationAnalysis
   composition:
     src/composition/adjudication.ts:
       description: Adjudication ledger for machine-surfaced discovery candidates.
@@ -20496,16 +20542,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 423
   totalModules: 13
-  totalLinesOfCode: 92295
-  totalExports: 2992
+  totalLinesOfCode: 92363
+  totalExports: 3012
   totalClasses: 61
   totalInterfaces: 481
   totalFunctions: 780
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 756
-  totalReExports: 1396
-  totalTypeOnlyImports: 572
+  totalReExports: 1416
+  totalTypeOnlyImports: 569
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

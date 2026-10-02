@@ -21,12 +21,16 @@ import { emitJson } from '../output.js';
 import { UsageError, CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import * as atlasMap from './_atlas-map.js';
-import type { BridgeEdge } from '../../composition/edge.js';
-import type { VizJunction, VizModel } from '../../composition/graph-viz.js';
-import type { EvidenceTag, RelationType } from '../../atlas/types.js';
+import type {
+  BridgeEdge,
+  CanonicalComparison,
+  EquationAnalysis,
+  EvidenceTag,
+  RelationType,
+  VizJunction,
+  VizModel,
+} from '../../cli-api.js';
 import type { SourceName } from '../graphs.js';
-import type { EquationAnalysis } from '../../composition/user-equation.js';
-import type { CanonicalComparison } from '../../composition/canonical-compare.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import { naturalConstantOverrides, type UnitMode } from '../../dimensional/natural-units.js';
 import { withCatalogEvidence } from '../map-evidence.js';
