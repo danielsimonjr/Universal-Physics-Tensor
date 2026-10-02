@@ -2601,7 +2601,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
-- Functions: `evaluateBridge`
+- Functions: `missingEvaluatorMessage`, `evaluateBridge`
 - Constants: `BRIDGE_EVALUATORS`
 
 ---
@@ -3522,6 +3522,7 @@ The codebase is organized into the following modules:
 | `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
 | `../../numerical/binding-value.js` | `bindingInUnit` | Import |
+| `../../bridges/evaluators.js` | `missingEvaluatorMessage` | Import |
 
 **Exports:**
 - Functions: `weakFieldDomainNote`, `propagateUncertainty`
@@ -7711,12 +7712,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 408 |
 | Total Modules | 13 |
-| Total Lines of Code | 89489 |
-| Total Exports | 2923 |
+| Total Lines of Code | 89504 |
+| Total Exports | 2924 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
-| Total Functions | 752 |
+| Total Functions | 753 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 546 |

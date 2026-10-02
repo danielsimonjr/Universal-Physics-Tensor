@@ -3,7 +3,7 @@ metadata:
   version: 1.0.1
   totalFiles: 408
   totalModules: 13
-  totalExports: 2923
+  totalExports: 2924
 entryPoints:
   - file: src/index.ts
     type: main
@@ -5868,12 +5868,14 @@ modules:
             - evaluateJeansMass
       exports:
         - BRIDGE_EVALUATORS
+        - missingEvaluatorMessage
         - evaluateBridge
       interfaces:
         - ParameterAlternate
         - EvaluatorParameter
         - EvaluatorSpec
       functions:
+        - missingEvaluatorMessage
         - evaluateBridge
       constants:
         - BRIDGE_EVALUATORS
@@ -7865,6 +7867,9 @@ modules:
         - file: ../../numerical/binding-value.js
           imports:
             - bindingInUnit
+        - file: ../../bridges/evaluators.js
+          imports:
+            - missingEvaluatorMessage
       exports:
         - command
         - weakFieldDomainNote
@@ -19764,11 +19769,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 408
   totalModules: 13
-  totalLinesOfCode: 89489
-  totalExports: 2923
+  totalLinesOfCode: 89504
+  totalExports: 2924
   totalClasses: 60
   totalInterfaces: 462
-  totalFunctions: 752
+  totalFunctions: 753
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
