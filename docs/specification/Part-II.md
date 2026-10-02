@@ -705,7 +705,7 @@ where:
 
 ## V-C. Catalog extensions (BE-55–65)
 
-> **Provenance.** These eleven rows were added to `BRIDGE_EQUATIONS` on 2026-07-05 as closed-form evaluators, the same pattern as BE-51/52: a catalog entry plus an evaluator, and no AST round-trip. BE-55–58 are the first four. BE-59–62 are the condensed-matter cluster. BE-63–65 are the astrophysics cluster. Each row keeps `source_part: 'III'`. This section is the Bridge Equation heading. The catalog entry remains authoritative for `notes`. A bare `e` in the formulas below is the elementary charge. Euler's number is written `\exp`. §VI.6.1 does not assign a tensor index to BE-55–65. That assignment is not in the catalog, in PhysJS at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`, in `NOTES.md`, or in `docs/planning/Bridge-Gap-Inference.md`.
+> **Provenance.** These eleven rows were added to `BRIDGE_EQUATIONS` on 2026-07-05 as closed-form evaluators, the same pattern as BE-51/52: a catalog entry plus an evaluator, and no AST round-trip. BE-55–58 are the first four. BE-59–62 are the condensed-matter cluster. BE-63–65 are the astrophysics cluster. Each row keeps `source_part: 'III'`. This section is the Bridge Equation heading. The catalog entry remains authoritative for `notes`. A bare `e` in the formulas below is the elementary charge. Euler's number is written `\exp`. §VI.6.1 assigns each of these ids the tensor index of its catalog category. The map is [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). PhysJS at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`, `NOTES.md`, and `docs/planning/Bridge-Gap-Inference.md` still do not state an index; the assignment is this specification applying the category cluster already used for ids 11–50.
 
 **Bridge Equation 55: Integer Quantum Hall effect / TKNN (topological Hall conductance)** *(Category F: Condensed Matter - High Energy Bridges)*
 
@@ -1061,24 +1061,47 @@ These additional equations fill crucial gaps in the tensor structure according t
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components:
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–65 take the pattern of their category. No new pattern is introduced.
 
-1. **Quantum-Classical Bridges (11-12, 33-35)**:
+1. **Quantum-Classical Bridges (11-12, 33-35, 56)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
-2. **Information-Geometry Bridges (13-14, 30-32, 42-44)**:
+   Categories A and J. The scale pair is named `quantum`, `classical`. The other four indices stay free.
+2. **Information-Geometry Bridges (13-14, 30-32, 42-44, 51-52, 57, 63-65)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Cbeta%2C%5Ctext%7BPoincar%C3%A9%7D%2C%5Ctext%7Binfo%7D%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\beta,\text{Poincaré},\text{info},\epsilon,\zeta}" />
-3. **Emergence Patterns (15-16, 27-29, 48-50)**:
+   Categories B, I, and M. The symmetry slot is Poincaré and the information slot is occupied. Scale and force stay free.
+3. **Emergence Patterns (15-16, 27-29, 48-50, 58)**:
    Higher-rank correlations <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%5Cbeta%5Cgamma%5Cdelta%5Cepsilon%5Czeta%E2%80%A6%7D" alt="\boldsymbol{\Pi}^{\alpha\beta\gamma\delta\epsilon\zeta…}" />
-4. **Field Unification (17-18, 36-41)**:
+   Categories C, H, and O. The ellipsis is the mark of this cluster (Part I §1.2, the emergent component). A scalar formula in the cluster keeps the ellipsis: BE-27's encoded form is a scalar and is already in this list.
+4. **Field Unification (17-18, 36-41, 53)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
-5. **Scale Transitions (19-26)**:
+   Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
+5. **Scale Transitions (19-26, 54, 55, 59-62)**:
    Off-diagonal elements <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bscale%7D_i%2C%5Ctext%7Bscale%7D_j%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{scale}_i,\text{scale}_j,\gamma,\delta,\epsilon,\zeta}" />
-
-
+   Categories E, F, and G. The scale pair stays symbolic. The cluster's domains are not one pair: quantum–cosmological, quantum–condensed-matter, condensed-matter–holography, quantum–biological.
 6. **Cosmological Puzzles (45-47)**:
-   Bridge Equations 45 (Trans-Planckian Censorship), 46 (Multiverse Measure), and 47 (BBN Dark Sector) connect cosmological phenomena and do not cleanly fit groups 1-5.
+   Bridge Equations 45 (Trans-Planckian Censorship), 46 (Multiverse Measure), and 47 (BBN Dark Sector) connect cosmological phenomena and do not cleanly fit groups 1-5. Category N. The component is unassigned. No index is displayed.
 
-7. **Catalog extensions (55–65)**: written up in §V-C. No tensor-index assignment for these ids is stated in the catalog, in PhysJS at pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`, in `NOTES.md`, or in `docs/planning/Bridge-Gap-Inference.md`.
+**Ids added to the lists.** Each row names the category-cluster rule and the catalog fields that were checked against it. `e` in a conductance formula is the elementary charge.
+
+| ID | Category | Index | Why this pattern |
+|---|---|---|---|
+| 51 | I | information-geometry, Poincaré and info | Category I, with BE-30–32. Gravitational lensing. Signature `[1]`, a dimensionless angle. The bridges tuple is Newtonian gravity → general relativity. The tuple does not select the component. |
+| 52 | I | information-geometry, Poincaré and info | Category I. Perihelion advance. Signature `[1]`. Same cluster as BE-51. |
+| 53 | L | field-unification, force and symmetry | Category L, with BE-39–41. Yang-Mills β-function. Signature `[1]`, the same dimensionless slot as BE-39. The bridges tuple is `quantum` → `classical`, which is the BE-39 precedent for staying out of the quantum-classical component. |
+| 54 | E | scale-transition, `scale_i`, `scale_j` | Category E, with BE-19–20. Randall-Sundrum correction. Signature `[T^-2]`, the same signature family as BE-19. The bridges tuple is `quantum` → `cosmological`. |
+| 55 | F | scale-transition, `scale_i`, `scale_j` | Category F, with BE-21–23. Integer quantum Hall. The catalog signature is the conductance `[L^-2 M^-1 T^3 I^2]` of the single component `σ_xy`, a scalar. A scalar signature does not select a component. The bridges tuple is `quantum` → `classical`; category F keeps the symbolic scale pair, as BE-39's tuple does not move category L. |
+| 56 | A | quantum-classical, `quantum`, `classical` | Category A, with BE-11 and BE-12. Casimir pressure. Signature `[L^-1 M T^-2]`. The bridges tuple `quantum` → `classical` agrees with the cluster. A pressure scalar does not add an index. |
+| 57 | I | information-geometry, Poincaré and info | Category I. Unruh temperature. Signature `[temperature]`. The dependency on BE-42 is the same component (category M) and is not a second rule. |
+| 58 | H | emergence, higher-rank ellipsis | Category H, with BE-27–29. Johnson-Nyquist spectral density. Signature `[L^4 M^2 T^-5 I^-2]`. The catalog names BE-58 as the theorem BE-27 refers to, and BE-27 is already in this component. The formula is a scalar. The ellipsis stays, as it does for BE-27's scalar encoded form. |
+| 59 | F | scale-transition, `scale_i`, `scale_j` | Category F. Josephson frequency. Signature `[frequency]`. BE-11 carries the same signature in the quantum-classical component, so the signature does not decide. The bridges tuple is `quantum` → `classical`. |
+| 60 | F | scale-transition, `scale_i`, `scale_j` | Category F. Fractional quantum Hall. The same conductance signature as BE-55. The dependency on BE-55 keeps it in category F's component. |
+| 61 | F | scale-transition, `scale_i`, `scale_j` | Category F. Wiedemann-Franz Lorenz number. Signature `[L^4 M^2 T^-6 I^-2 Theta^-2]`. The temperature base in that signature does not pin the dimension index; group 5 leaves it free, as it does for BE-23's resistivity. |
+| 62 | F | scale-transition, `scale_i`, `scale_j` | Category F. BCS gap. The catalog signature is `[energy]`, the dimension of the gap. The displayed ratio is dimensionless. Neither signature selects a component: BE-16 and BE-18 both carry `[energy]` and sit in different clusters. |
+| 63 | I | information-geometry, Poincaré and info | Category I. Chandrasekhar mass. Signature `[mass]`. The bridges tuple is `quantum` → `classical`. BE-31 is already in this component with a different tuple (`quantum` → `cosmological`), so the tuple does not move BE-63 either. |
+| 64 | I | information-geometry, Poincaré and info | Category I. Eddington luminosity. Signature `[power]`. Same cluster as BE-63. |
+| 65 | I | information-geometry, Poincaré and info | Category I. Jeans mass. Signature `[mass]`, the same signature word as BE-63. The formula balances thermal energy against Newtonian gravity. That content stays in category I's pattern. |
+
+**Topology slot left free.** BE-55 and BE-60 name a Chern number, and the BE-55 catalog text says the row populates the Topology axis. In the rank-6 order of Part I §1.1 that axis is the last index, ζ. Group 5 leaves ζ free, as it does for BE-22, whose area law carries a topological constant and is already in category F's list. A per-equation index that pins ζ to a Chern label is not a pattern the lists for ids 11–50 use. It is not introduced here.
 
 ### 6.2 Consistency Matrix
 
