@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 406,
-    "totalTestFiles": 559,
-    "testedCount": 396,
+    "totalSourceFiles": 407,
+    "totalTestFiles": 560,
+    "testedCount": 397,
     "untestedCount": 10,
     "coveragePercent": "97.5"
   },
@@ -411,6 +411,7 @@
     "src/numerical/tensor-engine.ts",
     "src/numerical/types.ts",
     "src/numerical/weyl-lowering.ts",
+    "src/relations/category.ts",
     "src/relations/composition-table.ts",
     "src/relations/conventions.ts",
     "src/relations/regime.ts",
@@ -8223,8 +8224,12 @@
       "tests/numerical/weyl-reference.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts"
     ],
+    "src/relations/category.ts": [
+      "tests/relations/category.test.ts"
+    ],
     "src/relations/composition-table.ts": [
-      "tests/atlas/relations-shim.test.ts"
+      "tests/atlas/relations-shim.test.ts",
+      "tests/relations/category.test.ts"
     ],
     "src/relations/conventions.ts": [
       "tests/atlas/conventions.test.ts",
@@ -8289,7 +8294,8 @@
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/composition/compose-relation.test.ts",
-      "tests/composition/graph-viz-filters.test.ts"
+      "tests/composition/graph-viz-filters.test.ts",
+      "tests/relations/category.test.ts"
     ]
   },
   "testToSourceMap": {
@@ -16262,6 +16268,11 @@
       "src/core/constants.ts"
     ],
     "tests/peers-required.test.ts": [],
+    "tests/relations/category.test.ts": [
+      "src/relations/composition-table.ts",
+      "src/relations/types.ts",
+      "src/relations/category.ts"
+    ],
     "tests/tensor.test.ts": [
       "src/index.ts",
       "src/core/tensor.ts",
