@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Prepare package 1.0.4 from what merged since `v1.0.3`. No tag is pushed with this commit. Publishing stays the owner's job.
+  Done: package version is 1.0.4. The [Unreleased] notes for #298, #299, and #300 are the [1.0.4] section. `git log v1.0.3..origin/master` is those three commits. Version-stamped artifacts carry 1.0.4. The `v1.0.4` tag is not pushed.
 - [x] A malformed variable value exits 1 in both `upt eval` and `upt evaluate`.
   Done: `upt eval x x=nope` throws `CliError`. `upt evaluate be-63 mu_e=nope` already did. A missing `=`, a bad flag, a missing argument, and unparseable expression syntax stay exit 2. `upt eval ln(x) x=-1` stays exit 2.
 - [x] Bring the pre-push doc gates onto current master and stop a GitHub-UI merge from bypassing the code-docs ratchet.
