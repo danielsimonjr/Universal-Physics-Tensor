@@ -103,6 +103,9 @@ export interface HawkingTemperatureInputs {
  *   T_H = ℏ c³ / (8π G M k_B)
  *
  * @returns Hawking temperature in K (SI).
+ * @throws {RangeError} when `M_kg` is not a finite positive number, or when
+ *   the SI evaluation overflows to a non-finite temperature. A non-finite
+ *   return would become `null` under `JSON.stringify`.
  */
 export function evaluateHawkingTemperature(input: HawkingTemperatureInputs): number {
   validateFiniteInputs(
@@ -112,7 +115,13 @@ export function evaluateHawkingTemperature(input: HawkingTemperatureInputs): num
   );
   const { M_kg } = input;
   const { hbar, c, G, kB } = PhysicalConstants;
-  return (hbar * c * c * c) / (8 * Math.PI * G * M_kg * kB);
+  const temperature = (hbar * c * c * c) / (8 * Math.PI * G * M_kg * kB);
+  if (!Number.isFinite(temperature)) {
+    throw new RangeError(
+      `evaluateHawkingTemperature: T_H is not a finite number for M_kg=${M_kg} (the SI evaluation overflowed to ${temperature}).`,
+    );
+  }
+  return temperature;
 }
 
 // --- Self-validation ---
