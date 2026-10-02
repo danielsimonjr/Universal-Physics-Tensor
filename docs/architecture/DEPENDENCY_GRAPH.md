@@ -4393,6 +4393,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/algebra.js` | `equals, format` | Import |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `./edge.js` | `BridgeEdge, EdgeConfidence` | Import (type-only) |
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../dimensional/unit-convention.js` | `conventionFactor` | Import |
@@ -4403,7 +4404,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `QuantityIdentification`, `AliasDisposition`, `ComposeOptions`
-- Functions: `effectiveAttributes`, `minConfidence`, `composeEdges`
+- Functions: `effectiveAttributes`, `minConfidence`, `junctionDimensionsMatch`, `composeEdges`
 - Constants: `QUANTITY_IDENTIFICATIONS`, `SOURCE_ALIAS_DISPOSITIONS`
 
 ---
@@ -7711,15 +7712,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 408 |
 | Total Modules | 13 |
-| Total Lines of Code | 89488 |
-| Total Exports | 2923 |
+| Total Lines of Code | 89502 |
+| Total Exports | 2924 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
 | Total Interfaces | 462 |
-| Total Functions | 752 |
+| Total Functions | 753 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 546 |
+| Type-only Imports | 547 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

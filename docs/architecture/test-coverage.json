@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 405,
-    "totalTestFiles": 557,
+    "totalTestFiles": 558,
     "testedCount": 395,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -4785,6 +4785,7 @@
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/namespacing.test.ts",
@@ -4956,6 +4957,7 @@
       "tests/composition/frontier-account.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/namespacing.test.ts",
@@ -5989,6 +5991,7 @@
       "tests/composition/frontier-account.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
       "tests/composition/namespacing.test.ts",
@@ -7167,6 +7170,7 @@
       "tests/composition/gr-formula-compare.test.ts",
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
+      "tests/composition/junction-dimension.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
@@ -14255,6 +14259,12 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts",
+      "src/dimensional/types.ts"
+    ],
+    "tests/composition/junction-dimension.test.ts": [
+      "src/composition/compose.ts",
+      "src/composition/edge.ts",
+      "src/composition/quantity.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/link-candidates.test.ts": [
