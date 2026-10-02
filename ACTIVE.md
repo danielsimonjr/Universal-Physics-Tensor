@@ -20,6 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Share one structural classifier between canonical linkage and a chain of proved edges. A normal-form match to a catalog right-hand side confirms that catalog id and writes nothing. A match the registry pre-declared with restatesBridge is a restatement. Any other chain gets a provisional chain- id that parseBridgeId rejects and that stays out of the catalog until a vendored PhysJS proof. The design is docs/planning/Bridge-Discovery-Pipeline-Design.md step 7.
 - [x] Sweep stale bridge-equation documents so counts, kinds, theorem names, and the BE-13 name match the PhysJS pin in `src/atlas/physjs-ref.ts`. The gap list is `docs/planning/Bridge-Gap-Inference.md`. Historical audits, dogfood reports, and changelog entries keep their original text and gain a dated note.
 - [x] Set package.json to 1.0.0. The major is the parser change that makes a bare e the elementary charge. The changelog lists the breaking changes. No tag is pushed. Publishing stays the owner's job.
 - [x] Rename catalog equation 13 to Einstein trace reduction. The id stays 13. The module file stays. Jacobson stays in the context and notes. The proposal is docs/planning/BE-13-name-proposal.md.
