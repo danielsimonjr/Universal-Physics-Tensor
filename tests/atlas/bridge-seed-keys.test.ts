@@ -17,9 +17,9 @@ import { bridgeSeedKeys, physjsFormalRef } from '../../src/atlas/physjs-ref.js';
 const DERIVATION_STEP = ['be-14', 'be-65', 'be-51', 'be-61', 'be-17', 'be-22', 'be-15', 'be-32', 'be-35', 'be-30', 'be-64', 'be-53', 'be-34'] as const;
 const REDUCTION = ['be-13'] as const;
 const LIMIT = ['be-38', 'be-58'] as const;
-const PROPERTY = ['be-11', 'be-16', 'be-28', 'be-29'] as const;
+const PROPERTY = ['be-11', 'be-28', 'be-29'] as const;
 const CROSS_CHECK = ['be-19', 'be-24', 'be-42'] as const;
-const CATALOG_EQUATION = ['be-12', 'be-21', 'be-27', 'be-33', 'be-37', 'be-40', 'be-43', 'be-50', 'be-54', 'be-55', 'be-59', 'be-60', 'be-63'] as const;
+const CATALOG_EQUATION = ['be-12', 'be-16', 'be-21', 'be-27', 'be-33', 'be-37', 'be-40', 'be-43', 'be-50', 'be-54', 'be-55', 'be-59', 'be-60', 'be-63'] as const;
 const ATLAS = [
   'ab-kg-schrodinger',
   'ab-klein-gordon-wave',
@@ -68,6 +68,7 @@ describe('bridge seeds are kind bridge only', () => {
   it('the live list is those keys in manifest order, and no canonical id is a seed yet', () => {
     expect(seeds).toEqual([
       ...ATLAS,
+      'be-16',
       'be-12',
       'be-59',
       'be-55',

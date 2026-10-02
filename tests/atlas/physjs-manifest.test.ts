@@ -31,7 +31,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `dd35202920bf19c39f71f15d9ee740a6d28ec173`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `c6958650f0be66b21f5cc3992d5474bf97ad5094`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -82,8 +82,8 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
   ],
   [
     'be-16',
-    'PhysJS.Landauer.equal_levels',
-    'property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation',
+    'PhysJS.Landauer.erasure_eq',
+    'derivation-step: for T > 0, the equal-level two-state ensemble has ⟨E⟩ − F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+δ do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation',
   ],
   [
     'be-29',
@@ -146,8 +146,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit dd35202920bf19c39f71f15d9ee740a6d28ec173, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('dd35202920bf19c39f71f15d9ee740a6d28ec173');
+  it('records commit c6958650f0be66b21f5cc3992d5474bf97ad5094, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('c6958650f0be66b21f5cc3992d5474bf97ad5094');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -369,9 +369,9 @@ describe('vendored PhysJS manifest', () => {
     const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
     const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
     const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30']);
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30']);
     expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
-    expect(properties.map((entry) => entry.key)).toEqual(['be-16', 'be-29', 'be-11']);
+    expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
     expect(counted.length + crossChecks.length + properties.length).toBe(36);
 
     const unlabeled = {
@@ -400,7 +400,7 @@ describe('vendored PhysJS manifest', () => {
 
   it('catalog formalRefs do not light formally-proved, and the atlas ten still do', () => {
     const countedIds = [64, 53, 58, 38, 13, 34, 65, 51, 61];
-    const labeledIds = [42, 24, 19, 16, 29, 11];
+    const labeledIds = [42, 24, 19, 29, 11];
     for (const id of countedIds) {
       const row = BRIDGE_EQUATIONS.find((entry) => entry.id === id);
       const formalRef = catalogFormalRef(id);
@@ -417,6 +417,13 @@ describe('vendored PhysJS manifest', () => {
       expect(deriveEvidence({ ...row!, formalRef }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
       expect(deriveEdgeEvidence(id).has('formally-proved')).toBe(false);
     }
+    const landauer = catalogFormalRef(16);
+    expect(landauer?.statement).toBe('PhysJS.Landauer.erasure_eq');
+    expect(landauer?.kind).toBe('bridge');
+    expect(landauer?.axioms).toEqual(['propext', 'Classical.choice', 'Quot.sound']);
+    expect(landauer?.covers.startsWith('derivation-step: ')).toBe(true);
+    expect(deriveEvidence({ formalRef: landauer }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
+    expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(false);
     const reviewed = atlasBridges.filter(
       (bridge) => bridge.formalRef !== undefined && bridge.formalRef.fidelity !== 'unreviewed',
     );

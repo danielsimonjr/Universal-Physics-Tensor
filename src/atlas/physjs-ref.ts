@@ -7,7 +7,7 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `dd35202920bf19c39f71f15d9ee740a6d28ec173`.
+ * The commit is PhysJS `main` `c6958650f0be66b21f5cc3992d5474bf97ad5094`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -24,7 +24,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = 'dd35202920bf19c39f71f15d9ee740a6d28ec173';
+export const PHYSJS_COMMIT = 'c6958650f0be66b21f5cc3992d5474bf97ad5094';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -386,9 +386,9 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
   {
     key: 'be-16',
     bridgeId: 'be-16',
-    theorem: 'PhysJS.Landauer.equal_levels',
+    theorem: 'PhysJS.Landauer.erasure_eq',
     covers:
-      'property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation',
+      'derivation-step: for T > 0, the equal-level two-state ensemble has ⟨E⟩ − F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+δ do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation',
     coverage: PHYSJS_COVERAGE,
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
@@ -758,6 +758,7 @@ function physjsStatementUrl(theorem: string): string {
  */
 const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-12',
+  'be-16',
   'be-21',
   'be-27',
   'be-33',

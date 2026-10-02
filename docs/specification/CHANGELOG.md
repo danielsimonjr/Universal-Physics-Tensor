@@ -1,6 +1,11 @@
 # UPT Specification — Revision History
 
-> **Proof status as of 2026-10-01.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `dd35202920bf19c39f71f15d9ee740a6d28ec173`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The 2026-10-02 entry adds the BE-55–65 headings. It does not change the proof reading of BE-11–54.
+> **Proof status as of 2026-10-02.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The first 2026-10-02 entry adds the BE-55–65 headings at the previous pin. The second retargets BE-16 and records that BE-42's Hawking temperature is not proved. The other proof readings are the same statements at the new pin.
+
+## 2026-10-02 — BE-16 erasure scale, BE-42 feasibility
+
+- Part-I Bridge Equation 16 — kind `bridge`. The theorem is `PhysJS.Landauer.erasure_eq` at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`: ⟨E⟩ − F = k_B T log 2 for T > 0 on the equal-level two-state ensemble. The covers line still begins with derivation-step. The arbitrary-protocol inequality and the Bérut confrontation stay out.
+- Part-II Bridge Equation 42 — kind stays `cross-check`. `PhysJS.HawkingUnruh.dictionary` remains the theorem. PhysJS `docs/feasibility/be-42.md` records that the Hawking temperature is not proved: no Schwarzschild surface gravity and no KMS condition in PhysLean.
 
 ## 2026-10-02 — BE-55–65 write-up
 

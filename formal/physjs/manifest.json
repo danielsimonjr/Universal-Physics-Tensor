@@ -354,8 +354,8 @@
     {
       "key": "be-16",
       "bridgeId": "be-16",
-      "theorem": "PhysJS.Landauer.equal_levels",
-      "covers": "property: equal two-state levels have thermodynamic entropy k_B log 2. At T ≠ 0, levels E and E+δ are not that value. At T = 0 the closed form does not separate the levels. Not E ≥ T ΔS, and not the Bérut confrontation",
+      "theorem": "PhysJS.Landauer.erasure_eq",
+      "covers": "derivation-step: for T > 0, the equal-level two-state ensemble has ⟨E⟩ − F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+δ do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -780,5 +780,5 @@
       ]
     }
   ],
-  "commit": "dd35202920bf19c39f71f15d9ee740a6d28ec173"
+  "commit": "c6958650f0be66b21f5cc3992d5474bf97ad5094"
 }
