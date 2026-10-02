@@ -20,11 +20,11 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PROPERTIES = [11, 16, 29] as const;
+const PROPERTIES = [11, 29] as const;
 const CROSS_CHECKS = [19, 24, 42] as const;
 const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61, 14, 17, 22, 15, 32, 35, 30] as const;
 /** Theorem states the catalogued equation. Covers still begins with derivation-step. */
-const CATALOG_EQUATION = [12, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63] as const;
+const CATALOG_EQUATION = [12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63] as const;
 
 /** Namespaces that are not their own Lean file at the pinned commit. */
 const FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
@@ -98,7 +98,7 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
   });
 
   it('CONTROL: the same property lights formally-proved when its kind is bridge', () => {
-    const property = row(16).formalRef!;
+    const property = row(29).formalRef!;
     expect(deriveEvidence({ formalRef: property }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(false);
     const asBridge = { ...property, kind: 'bridge' as const };
     expect(deriveEvidence({ formalRef: asBridge }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
@@ -156,10 +156,10 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     expect(physjsManifestProblems({ manifest, bridges })).toEqual([]);
     const lied = bridges.map((bridge) =>
       bridge.id === 'be-16' && bridge.formalRef !== undefined
-        ? { ...bridge, formalRef: { ...bridge.formalRef, kind: 'bridge' as const } }
+        ? { ...bridge, formalRef: { ...bridge.formalRef, kind: 'property' as const } }
         : bridge,
     );
-    expect(physjsManifestProblems({ manifest, bridges: lied }).join('\n')).toMatch(/kind is 'bridge', expected 'property'/);
-    expect(physjsFormalRef('be-16').kind).toBe('property');
+    expect(physjsManifestProblems({ manifest, bridges: lied }).join('\n')).toMatch(/kind is 'property', expected 'bridge'/);
+    expect(physjsFormalRef('be-16').kind).toBe('bridge');
   });
 });
