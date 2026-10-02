@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 1.0.1
-  totalFiles: 408
+  totalFiles: 409
   totalModules: 13
-  totalExports: 2923
+  totalExports: 2924
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9859,6 +9859,32 @@ modules:
         - placeQuantity
         - buildRegimeTensor
         - predictMissingBridges
+    src/composition/buckingham-filter.ts:
+      description: Buckingham filter for one target and the variables that govern it.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/algebra.js
+          imports:
+            - equals
+        - file: ../dimensional/buckingham.js
+          imports:
+            - DimensionalDeterminationResult
+            - DimensionalVariable
+          typeOnly: true
+        - file: ../dimensional/buckingham.js
+          imports:
+            - buckinghamPi
+            - dimensionallyDetermines
+        - file: ../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+      exports:
+        - buckinghamFilter
+      interfaces:
+        - BuckinghamFilterRecord
+      functions:
+        - buckinghamFilter
     src/composition/canonical-compare.ts:
       description: Compare a user's formula with the canonical (textbook) equation it restates.
       externalDependencies: []
@@ -19582,6 +19608,7 @@ dependencyGraph:
         - src/composition/axis-audit.ts
         - src/composition/bridge-analysis.ts
         - src/composition/bridge-prediction.ts
+        - src/composition/buckingham-filter.ts
         - src/composition/canonical-compare.ts
         - src/composition/canonical-graph.ts
         - src/composition/canonical-prefactors.ts
@@ -19762,18 +19789,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 408
+  totalTypeScriptFiles: 409
   totalModules: 13
-  totalLinesOfCode: 89489
-  totalExports: 2923
+  totalLinesOfCode: 89600
+  totalExports: 2924
   totalClasses: 60
-  totalInterfaces: 462
-  totalFunctions: 752
+  totalInterfaces: 463
+  totalFunctions: 753
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 721
   totalReExports: 1389
-  totalTypeOnlyImports: 546
+  totalTypeOnlyImports: 547
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
