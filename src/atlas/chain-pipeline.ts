@@ -29,7 +29,7 @@ import {
   orderChainRecords,
   type ChainRecord,
 } from '../composition/chain-result.js';
-import { joinRegimeMismatch } from '../composition/chain-regime.js';
+import { joinRegimeMismatch, type ChainRegimeMismatch } from '../composition/chain-regime.js';
 import { bridgeSeedKeys, physjsTheorem } from './physjs-ref.js';
 import { emitProofTarget } from './proof-target.js';
 
