@@ -249,7 +249,7 @@ The codebase is organized into the following modules:
 | `../composition/chain-match.js` | `matchChain` | Import |
 | `../composition/chain-candidate.js` | `compareChainEdgeIds, ChainCandidate` | Import |
 | `../composition/chain-result.js` | `chainOrderKey, orderChainRecords, ChainRecord` | Import |
-| `../composition/chain-regime.js` | `joinRegimeMismatch` | Import |
+| `../composition/chain-regime.js` | `joinRegimeMismatch, ChainRegimeMismatch` | Import |
 | `./physjs-ref.js` | `bridgeSeedKeys, physjsTheorem` | Import |
 | `./proof-target.js` | `emitProofTarget` | Import |
 

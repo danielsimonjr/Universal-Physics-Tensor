@@ -409,6 +409,7 @@ modules:
         - file: ../composition/chain-regime.js
           imports:
             - joinRegimeMismatch
+            - ChainRegimeMismatch
         - file: ./physjs-ref.js
           imports:
             - bridgeSeedKeys

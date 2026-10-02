@@ -607,7 +607,8 @@
           {
             "file": "../composition/chain-regime.js",
             "imports": [
-              "joinRegimeMismatch"
+              "joinRegimeMismatch",
+              "ChainRegimeMismatch"
             ]
           },
           {
