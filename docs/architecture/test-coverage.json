@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 407,
-    "totalTestFiles": 560,
+    "totalTestFiles": 563,
     "testedCount": 397,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -2831,6 +2831,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -2891,6 +2892,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -2951,6 +2953,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3011,6 +3014,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3071,6 +3075,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3131,6 +3136,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3191,6 +3197,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3251,6 +3258,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3311,6 +3319,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3371,6 +3380,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3431,6 +3441,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3491,6 +3502,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3551,6 +3563,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3611,6 +3624,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3671,6 +3685,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3731,6 +3746,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3791,6 +3807,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3851,6 +3868,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3911,6 +3929,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -3971,6 +3990,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4031,6 +4051,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4092,6 +4113,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4152,6 +4174,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4212,6 +4235,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4272,6 +4296,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4332,6 +4357,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4392,6 +4418,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4452,6 +4479,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -4528,6 +4556,7 @@
       "tests/cli/statuses.test.ts",
       "tests/cli/suggest-ranking-cli.test.ts",
       "tests/cli/symbolic-latex.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6322,6 +6351,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/composition/canonical-compare.test.ts",
       "tests/composition/canonical-graph.test.ts",
       "tests/composition/dogfood-compare.test.ts",
@@ -7291,6 +7321,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/composition/axis-gate.test.ts",
       "tests/composition/bridge-prediction.test.ts",
       "tests/composition/calibration-targets.test.ts",
@@ -7825,6 +7856,7 @@
       "tests/cli/map-atlas-views.test.ts",
       "tests/cli/record-builtin-parser.test.ts",
       "tests/cli/recover-conventions.test.ts",
+      "tests/cli/undeclared-e-charge.test.ts",
       "tests/dimensional/dimension-inference.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/numerical/formula-dimension.test.ts",
@@ -13926,6 +13958,40 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts"
+    ],
+    "tests/cli/undeclared-e-charge.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts",
+      "src/core/constants.ts",
+      "src/dimensional/types.ts",
+      "src/numerical/formula-dimension.ts"
     ],
     "tests/cli/unit-convention-binding.test.ts": [
       "src/cli/main.ts",

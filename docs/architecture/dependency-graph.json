@@ -1,10 +1,10 @@
 {
   "metadata": {
     "name": "universal-physics-tensor",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "totalFiles": 410,
     "totalModules": 13,
-    "totalExports": 2925
+    "totalExports": 2933
   },
   "entryPoints": [
     {
@@ -8551,6 +8551,7 @@
         ],
         "exports": [
           "BRIDGE_EVALUATORS",
+          "missingEvaluatorMessage",
           "evaluateBridge"
         ],
         "interfaces": [
@@ -8559,6 +8560,7 @@
           "EvaluatorSpec"
         ],
         "functions": [
+          "missingEvaluatorMessage",
           "evaluateBridge"
         ],
         "constants": [
@@ -11542,6 +11544,12 @@
             "imports": [
               "readBinding"
             ]
+          },
+          {
+            "file": "../../numerical/formula-dimension.js",
+            "imports": [
+              "builtinFormulaDimensionChecker"
+            ]
           }
         ],
         "exports": [
@@ -11621,6 +11629,12 @@
             "file": "../../numerical/binding-value.js",
             "imports": [
               "bindingInUnit"
+            ]
+          },
+          {
+            "file": "../../bridges/evaluators.js",
+            "imports": [
+              "missingEvaluatorMessage"
             ]
           }
         ],
@@ -23023,6 +23037,7 @@
               "T_P_SI",
               "H0_SI",
               "M_SUN_SI",
+              "GM_SUN_SI",
               "M_E_SI",
               "B_WIEN_SI"
             ],
@@ -23497,6 +23512,23 @@
             "file": "./dimensional/types.js",
             "imports": [
               "Dimension"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "convertValue",
+              "parseUnit",
+              "UnitError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/units.js",
+            "imports": [
+              "ParsedUnit",
+              "TemperatureReading"
             ],
             "reExport": true
           },
@@ -24531,6 +24563,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "PhysicalConstants",
@@ -24646,6 +24679,9 @@
           "validateGaugeField",
           "validateTimeSymmetryPredicate",
           "validateKleinGordonEquation",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -24903,6 +24939,8 @@
           "KleinGordonEquationNode",
           "KleinGordonEquationValidationResult",
           "Dimension",
+          "ParsedUnit",
+          "TemperatureReading",
           "ExprNode",
           "TranscendentalFn",
           "ValidationResult",
@@ -25070,6 +25108,7 @@
           "T_P_SI",
           "H0_SI",
           "M_SUN_SI",
+          "GM_SUN_SI",
           "M_E_SI",
           "B_WIEN_SI",
           "TensorConfig",
@@ -25250,6 +25289,11 @@
           "KleinGordonEquationValidationResult",
           "validateKleinGordonEquation",
           "Dimension",
+          "convertValue",
+          "parseUnit",
+          "UnitError",
+          "ParsedUnit",
+          "TemperatureReading",
           "DIMENSIONLESS",
           "LENGTH",
           "AREA",
@@ -26264,7 +26308,8 @@
             "file": "../dimensional/algebra.js",
             "imports": [
               "equals",
-              "format"
+              "format",
+              "multiply"
             ]
           },
           {
@@ -26303,6 +26348,7 @@
           }
         ],
         "exports": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE",
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker",
@@ -26319,6 +26365,9 @@
           "formulaSymbolDimension",
           "builtinFormulaDimensionChecker",
           "loadFormulaDimensionChecker"
+        ],
+        "constants": [
+          "ELEMENTARY_CHARGE_MIX_MESSAGE"
         ]
       },
       "src/numerical/formula-mathts.ts": {
@@ -28323,19 +28372,19 @@
   "statistics": {
     "totalTypeScriptFiles": 410,
     "totalModules": 13,
-    "totalLinesOfCode": 89572,
-    "totalExports": 2925,
+    "totalLinesOfCode": 89648,
+    "totalExports": 2933,
     "totalClasses": 60,
     "totalInterfaces": 464,
-    "totalFunctions": 753,
+    "totalFunctions": 754,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 722,
-    "totalReExports": 1389,
+    "totalConstants": 723,
+    "totalReExports": 1395,
     "totalTypeOnlyImports": 547,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
-    "unusedExportsCount": 70
+    "unusedExportsCount": 71
   }
 }

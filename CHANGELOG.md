@@ -666,6 +666,24 @@ from v0.1.0 onward.
   - **Q1** — discover PROMISING lists consequence/magnitude before bare inconclusive.
   - **Q2** — CONTRIBUTING.md catalog count 44 → 55.
 
+## [1.0.2] - 2026-10-02
+
+Dogfood round 2 on the published package `universal-physics-tensor@1.0.1`. No tag is pushed. Publishing stays the owner's job. `bun.lock` does not record this package's version.
+
+### Fixed
+
+- **The name `euler` is not Euler's number.** A bare `e` is the elementary charge, `E` is energy, and Euler's number is only `exp(x)`.
+- **A non-finite Hawking temperature is a RangeError.** `evaluateHawkingTemperature({ M_kg: 1e-300 })` no longer returns `Infinity` (`null` in JSON).
+- **An undeclared `1-e^2` names the elementary charge.** `upt eval` no longer prints `1`, and `upt map` no longer stops at a charge-squared mismatch. Declare or bind `e`, or write `exp(x)`. The map message names `one_minus_e_sq`.
+- **`evaluateBridge(42)` names a Hawking temperature that can be computed.** The error names `BridgeEquations.hawkingTemperature({ M_kg })` and `upt explain hawking-temperature mass=1.989e30`.
+- **`GM_SUN_SI` and unit conversion are on the package root.** `GM_SUN_SI`, `parseUnit`, `convertValue`, `UnitError`, `ParsedUnit`, and `TemperatureReading` are re-exported from `src/index.ts`. `GM_SUN_SI` is the IAU value, not `G_SI * M_SUN_SI`.
+
+The Part VIII check requires `1.0.2`. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `1.0.2`. Architecture docs were regenerated: 410 files, 2933 exports, 1395 re-exports, 89648 lines, 0 circular dependencies. Architecture test-coverage docs count 563 test files.
+
+The six PhysJS module comments named in the dogfood report (`Lindblad.lean`, `Landauer.lean`, `Jarzynski.lean`, `QuantumBounce.lean`, `Fret.lean`, `HawkingUnruh.lean`) still say they are not a formalRef on PhysJS main `dd35202920bf19c39f71f15d9ee740a6d28ec173`, which is the pin. Those files are not in this repository.
+
+**Dependency health, measured for this release:** `bun audit` finds 0 vulnerabilities in 142 packages. `bun outdated` lists `@types/node` 26.5.1 → 26.6.4, `fast-check` 4.10.0 → 4.10.2, and `@viz-js/viz` 3.30.0 → 3.31.0. `vitest` and `@vitest/coverage-v8` stay 4.1.11 inside the current range; latest is 5.0.3. `tree-sitter` stays 0.22.4 inside the current range; latest is 0.25.1. None of these is a HIGH or CRITICAL advisory.
+
 ## [1.0.1] - 2026-10-01
 
 `v1.0.0` was tagged and never published to npm. The publish job on that tag (run 36937984815) failed before `npm publish`. 1.0.1 is the first 1.x release. It includes everything listed under [1.0.0], the four Lean-proven catalog bridges `be-54`, `be-50`, `be-33`, and `be-60` (#266), and the publish-workflow fix (#267). The `v1.0.0` tag is left where it is.
