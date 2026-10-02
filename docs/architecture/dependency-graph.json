@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "1.0.2",
-    "totalFiles": 413,
+    "totalFiles": 414,
     "totalModules": 13,
-    "totalExports": 2938
+    "totalExports": 2939
   },
   "entryPoints": [
     {
@@ -15027,6 +15027,21 @@
           "CATALOG_GRAPH"
         ]
       },
+      "src/composition/chain-candidate.ts": {
+        "description": "A chain candidate and the order the pipeline reads candidates in.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "orderChainCandidates"
+        ],
+        "interfaces": [
+          "ChainCandidate"
+        ],
+        "functions": [
+          "orderChainCandidates"
+        ]
+      },
       "src/composition/chain-match.ts": {
         "description": "Pipeline match for a chain of proved edges.",
         "externalDependencies": [],
@@ -28332,6 +28347,7 @@
           "src/composition/canonical-graph.ts",
           "src/composition/canonical-prefactors.ts",
           "src/composition/catalog-graph.ts",
+          "src/composition/chain-candidate.ts",
           "src/composition/chain-match.ts",
           "src/composition/compose-surface.ts",
           "src/composition/compose-symbolic.ts",
@@ -28533,13 +28549,13 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 413,
+    "totalTypeScriptFiles": 414,
     "totalModules": 13,
-    "totalLinesOfCode": 90093,
-    "totalExports": 2938,
+    "totalLinesOfCode": 90166,
+    "totalExports": 2939,
     "totalClasses": 60,
-    "totalInterfaces": 470,
-    "totalFunctions": 761,
+    "totalInterfaces": 471,
+    "totalFunctions": 762,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 723,

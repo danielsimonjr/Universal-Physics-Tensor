@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 49 files
 - **root**: 1 file
-- **composition**: 79 files
+- **composition**: 80 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -4380,6 +4380,14 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/chain-candidate.ts` - A chain candidate and the order the pipeline reads candidates in.
+
+**Exports:**
+- Interfaces: `ChainCandidate`
+- Functions: `orderChainCandidates`
+
+---
+
 ### `src/composition/chain-match.ts` - Pipeline match for a chain of proved edges.
 
 **Internal Dependencies:**
@@ -7706,7 +7714,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...74 more]
+        N36[...75 more]
     end
 
     subgraph Core
@@ -7792,14 +7800,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 413 |
+| Total TypeScript Files | 414 |
 | Total Modules | 13 |
-| Total Lines of Code | 90093 |
-| Total Exports | 2938 |
+| Total Lines of Code | 90166 |
+| Total Exports | 2939 |
 | Total Re-exports | 1395 |
 | Total Classes | 60 |
-| Total Interfaces | 470 |
-| Total Functions | 761 |
+| Total Interfaces | 471 |
+| Total Functions | 762 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 553 |
