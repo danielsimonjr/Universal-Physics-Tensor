@@ -20,12 +20,12 @@ import {
   enumerateCompositions,
   enumerateCompositionsWithRefusals,
 } from '../../src/composition/enumerate.js';
-import type { BridgeEdge, Quantity } from '../../src/composition/edge.js';
+import type { BridgeEdge } from '../../src/composition/edge.js';
 import type { RelationContract } from '../../src/relations/types.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
-function quantity(name: string, dim: Dimension): Quantity {
+function quantity(name: string, dim: Dimension) {
   return { name, symbol: name, dim, attributes: {} };
 }
 
