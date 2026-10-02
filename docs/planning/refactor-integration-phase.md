@@ -3,10 +3,11 @@
 This note specifies a refactor-and-integration phase for the library as it
 stands after the layering refactor and the bridge-discovery pipeline. It
 changes no code, no public export, and no cell of the composition table.
-Approval is recorded outside this file. Landing the note does not authorize
-a step. A step becomes work when Daniel accepts this note and an `ACTIVE.md`
-task names that step. Publishing the package is the owner's job and is not
-part of any step.
+Daniel approved this amendment on 2026-10-02. The step table in the
+sequenced plan records which steps have a merge commit. A row marked next
+is not started. Those steps wait for the MathTS release. A next step
+becomes work when an `ACTIVE.md` task names it. Publishing the package is
+the owner's job and is not part of any step.
 
 Live pins, evidence counts, and package version stay in `NOTES.md`. Figures
 below were read from the source while this note was written. They are
@@ -61,13 +62,13 @@ Product A (`src/composition/discovery.ts`) and Product B
 (`src/composition/probe/`) stay what they are. The chain pipeline stays a
 third question. It does not enter either module.
 
-`@danielsimonjr/mathts-*` stays a family of optional peers. No step
-republishes, repackages, or vendors MathTS. The zero-dependency engines stay:
-Path B in `src/numerical/formula.ts` and `Float64ReferenceEngine` in
-`src/numerical/float64-engine.ts`. They exist so the package runs when the
-peers are absent. The conformance suites are the lockstep. Collapsing either
-pair into the MathTS implementation would make a peer mandatory, which this
-phase does not do.
+`@danielsimonjr/mathts-*` is a required dependency. UPT does not implement
+mathematics that MathTS already exports. No step republishes, repackages, or
+vendors MathTS. A gap in MathTS is filed in `danielsimonjr/MathTS`, not
+filled by a second implementation here. Path B and `Float64ReferenceEngine`
+are the copies this phase removes. The package does not run without the
+peers. That removal is the 2.0.0 break, with the migration note in the
+semver section.
 
 Bare `e` stays the elementary charge. `E` stays energy. Euler's number stays
 `exp(x)`.
@@ -95,10 +96,10 @@ barrel re-exports on the order of five hundred names. Two functions named
 weak-field cut the graph edge already encodes, and several commands import
 past `src/cli-api.ts`.
 
-The phase is a sequence of small internal steps that make those contracts
-meet, plus an explicit decision about the public surface. The default
-sequence does not require a 2.0.0. A shrink or rename of the root barrel
-does, and that shrink is not a step until Daniel says so.
+The phase is a sequence of small pull requests that make those contracts
+meet, then a migration that makes MathTS the mathematics. That migration is
+a 2.0.0. A shrink or rename of the root barrel is still not a step until
+Daniel says so. The atlas public namespace stays as it is.
 
 Rough size, `src/` only, comments included: about 420 TypeScript files and
 about 92 000 lines. The large areas are `src/bridges/` (91 files, about
@@ -389,7 +390,8 @@ This note does not propose the removal.
 
 ### 7. MathTS and PhysJS are wrapped where the seam is clean, and re-derived where it is a string
 
-Clean seams, which this phase leaves alone:
+Clean seams in the tree today. The migration section removes the fallback
+beside each of them:
 
 - `src/numerical/formula-mathts.ts` (about 200 lines) implements
   `FormulaParser` over `@danielsimonjr/mathts-functions`. Path B
@@ -417,9 +419,10 @@ String seams, which are the integration debt:
 - `emitProofTarget` checks seed theorem names against `physjsTheorem` and
   then emits text. The check is real. The artifact is not a manifest entry.
 
-Impact: low if the peers stay optional and the string seam stays unlabeled
-as proof. High if a later change treats the theorem string as a reference.
-This phase forbids that treatment.
+The string seam stays unlabeled as proof. This phase forbids treating a
+theorem name as a `formalRef`. The optional-peer fallback described above
+is what the tree does today. The migration section is the decision that
+removes it.
 
 ### 8. Tests cover the pieces and do not cover the joint
 
@@ -533,8 +536,102 @@ flowchart TB
 
 `deriveEvidence` stays off the pipeline arrow. `Cell` regimes stay off the
 join-gate arrow until an owner decision says a cell axis is a π-group, which
-this note does not say. MathTS stays behind `TensorEngine` and
-`FormulaParser` and is not a node in the chain.
+this note does not say. MathTS is the mathematics under the formula parser
+and the tensor engine. It is not a node the chain calls, and it is not an
+evidence tag.
+
+## Mathematics moves to MathTS
+
+Daniel's decision, recorded here so the sequence below can follow it: the
+`@danielsimonjr/mathts-*` packages already published on npm are required.
+UPT stops implementing mathematics those packages export, and calls them.
+This repository does not republish, repackage, or vendor MathTS. A missing
+MathTS operation is a gap. The change that fills it belongs in
+`danielsimonjr/MathTS`. Until that package exports it, UPT keeps the one
+routine and does not grow a second copy beside it.
+
+Physics stays here. A dimension and the meaning of a mismatch, a natural-unit
+policy, a quantity's unit convention, a relation, a regime, a bridge, a
+catalog row, a canonical equation, and an evidence tag are not MathTS
+objects. A curvature node, a field-equation predicate, and the rank-6
+product space in `src/core/tensor.ts` stay. The arithmetic under those
+nodes moves.
+
+The peers this note means are the ones `package.json` already names:
+`@danielsimonjr/mathts-core`, `@danielsimonjr/mathts-expression`,
+`@danielsimonjr/mathts-functions`, `@danielsimonjr/mathts-matrix`,
+`@danielsimonjr/mathts-tensor`, `@danielsimonjr/mathts-autograd`,
+`@danielsimonjr/mathts-parallel`, `@danielsimonjr/mathts-wasm`, and
+`@danielsimonjr/mathts-workerpool`. `@danielsimonjr/mathts-functions` also
+depends on `@danielsimonjr/mathts-gpu`, which is not a direct peer today.
+Making the family required pulls that package in as MathTS's own
+dependency. UPT does not re-export it.
+
+### Parser convention
+
+Bare `e` stays the elementary charge. `E` stays energy. Euler's number stays
+`exp(x)`, for example `exp(1)`. The name `euler` stays refused.
+
+Checked against `@danielsimonjr/mathts-functions` `parse` and `evaluate`
+with an empty scope:
+
+- `e` evaluates to `2.718281828459045`.
+- `exp(1)` evaluates to the same number.
+- `1 - e ^ 2` evaluates to `-6.3890560989306495`.
+- `E` and `euler` are undefined symbols.
+- `elementaryCharge` is a `Unit` whose value is `1.602176634e-19` C. It is
+  not what the symbol `e` evaluates to.
+- `config` has no switch that rebinds `e`.
+
+MathTS's parser does not implement the physics convention. Path A in
+`src/numerical/formula-mathts.ts` already hides that by injecting the
+elementary charge under the name `e` before evaluation, and by refusing
+`euler`. That override stays for as long as the symbol `e` means Euler
+inside MathTS. Deleting it when Path B is removed would make `1-e^2` a
+large negative number. The fix on the MathTS side is a physics binding in
+`danielsimonjr/MathTS`: the symbol `e` is the elementary charge, and Euler's
+number is only `exp(x)`. This note does not patch MathTS.
+
+### Inventory
+
+Each row is a place UPT does mathematics, the MathTS export that covers it,
+and what the migration does. "Keep" means the physics reading stays in UPT
+even when the arithmetic underneath moves.
+
+| UPT | Mathematics it implements | MathTS | Migration |
+|---|---|---|---|
+| `src/numerical/formula.ts` | Recursive-descent scalar parser and evaluator (Path B), including builtins | `@danielsimonjr/mathts-functions` `parse`, `evaluate`; AST from `@danielsimonjr/mathts-expression` | Delete once the peer is required. Path A is the only parser. |
+| `src/numerical/formula-mathts.ts` | Adapter over `parse`, plus the `e` override and the `ln` shim | `parse`, `evaluate` | Stays as the adapter. The override stays until MathTS binds `e`. |
+| `src/numerical/formula-registry.ts` | Chooses Path A when the peer loads, else Path B | — | The fallback goes. Absence of the package is an install failure. |
+| `src/numerical/formula-dimension.ts` | Turns a parsed scalar into an `ExprNode` and checks SI dimension | No dimension type | Keep. Dimensional semantics. |
+| `src/numerical/binding-value.ts` | A bare number, a glued unit literal (`1km`, `25degC`), or an expression of constants | `unit` parses `1km`, `25degC`, `1um`, `1 kohm`, and `3.8e-16 kg/m^3`, and `toSI` converts them. `evaluate('1 km')` throws `Undefined symbol km` | A unit literal calls `unit`. A constant expression calls `parse`. Gap: the evaluator does not see unit symbols, so the split stays in UPT. |
+| `src/composition/expr-simplify.ts` | Renders a scalar `ExprNode`, calls the MathTS simplifier, then checks dimension, symbol set, and a numeric probe | `simplify`, `casSimplify`, `fullSimplify`, `simplifyConstant` | Already delegated. The checks stay. |
+| `src/composition/expr-eval.ts`, `src/composition/expr-subst.ts` | Evaluate and substitute scalar `ExprNode` arms | `evaluate` on a rendered MathTS node | Scalar arms delegate. Tensor and curvature arms stay. |
+| `governingOf` in `src/atlas/chain-pipeline.ts` and the symbol walk in `src/composition/compose-symbolic.ts` | A hand walk of scalar leaves | Symbol filter on the MathTS AST the renderer already builds | One walk, and it is MathTS's. Step 5. No new UPT walker. |
+| `src/canonical/normal-form.ts` | Structural hash of a scalar up to a dimensionless factor | `simplify` does not know that physics equivalence | Keep. It is the linkage rule, not a CAS. |
+| `src/numerical/float64-engine.ts` | Dense `Float64Array` tensor algebra and a dual-number forward mode | `@danielsimonjr/mathts-tensor`, `@danielsimonjr/mathts-matrix` (`svd`, `qr`, `det`, `transpose`), `@danielsimonjr/mathts-autograd` | Delete when `MathTSEngine` is the only engine. |
+| `src/numerical/mathts-engine.ts`, `src/numerical/tensor-engine.ts`, `src/numerical/engine-registry.ts` | The `TensorEngine` seam and the optional MathTS adapter | `@danielsimonjr/mathts-tensor` | The adapter becomes the engine. The registry's zero-dependency fallback goes. |
+| `src/numerical/lowering.ts` and the connection, curvature, derivative, and Weyl lowering modules | Walk a physics `ExprNode` into engine calls | The arithmetic is the engine | Keep the walk. It is the physics AST. |
+| `src/numerical/strides.ts` | Row-major index arithmetic for the float64 engine | Tensor storage in `@danielsimonjr/mathts-tensor` | Leaves with the float64 engine. |
+| `src/numerical/metric-inverse.ts` | Infinity-norm of `g⁻¹ g − I` | Matrix multiply through the engine | Through `MathTSEngine`. |
+| `src/dimensional/buckingham.ts` | Exact rational `rref` and `nullSpace` over a fraction type, then the π-group reading | `nullspace` is numeric. No exact-fraction null space is exported | Gap. Keep the rational routine. Do not substitute the float `nullspace`. The π-group reading stays. File the exact routine in MathTS. |
+| `src/core/tensor.ts`, `src/core/labeled-tensor.ts` | The physics product space and axis-tagged contraction | `@danielsimonjr/mathts-tensor` is rank-N storage, not `L + B + E` | Keep. |
+| `src/numerical/quadrature.ts` | A fixed 16-point Gauss–Legendre rule | `gaussQuad`, `rootsLegendre`, `quad` | Delegate. A test pins the polynomial degree the node uses today. |
+| `src/numerical/pderiv.ts` | Centered finite differences on a grid and on a function | `derivativeAt`, `numericJacobian`, `partialDerivative` | Delegate the function case. The grid sampler stays. |
+| `src/numerical/geodesic-integrator.ts`, `src/numerical/null-ray-integrator.ts` | Fixed-step classical RK4 for a geodesic ODE | `solveODE`, `solveODESystem`, `odeAdaptiveStep` | Delegate when the golden orbit still matches. |
+| `src/numerical/gl4-integrator.ts` | Implicit symplectic Gauss–Legendre 4, with its Butcher tableau | No symplectic or GL4 export. `gaussQuad` is a quadrature rule, not that tableau | Gap. Keep this integrator. Do not add a second generic ODE solver next to `solveODE`. File the tableau in MathTS. |
+| `src/numerical/perihelion-finder.ts` | Bisection on a cubic Hermite of cached samples | No cubic-Hermite root finder in the export list | Gap. Keep. It is post-processing of the integrator's samples. |
+| `src/composition/uncertainty.ts` | First-order propagation along a composition edge | No uncertainty export | Gap. Stays. The contract stays the graph-layer one. |
+| `src/cli/commands/evaluate.ts` `propagateUncertainty` | A second contract under the same name | None | Rename. Do not merge the two contracts, and do not invent the function in UPT while waiting on MathTS. |
+| `src/dimensional/units.ts` | Parse `1um`, `25degC`, `1 kohm`, products and powers, and convert | `unit`, `toSI`, `to`, `compareUnits`, `splitUnit`, `createUnit` | Delegate conversion. `unit('25degC').toSI()` is `298.15 K`. |
+| `src/dimensional/algebra.ts` | Add and subtract the seven SI exponents | A MathTS `Unit` dimension vector has length 10. Metre sits at index 1 | Keep `Dimension`. Do not replace it with that vector. A mapping between the two vectors is a MathTS gap if one object is ever wanted. |
+| `src/dimensional/natural-units.ts`, `src/numerical/geometrized.ts`, `src/dimensional/unit-convention.ts` | `ħ = c = 1`, `G = 1`, and which unit a quantity is written in | No natural-unit or geometrized mode | Keep. Policy, not unit arithmetic. |
+| `src/core/constants.ts` | Bare CODATA numbers the bridges multiply | `elementaryCharge`, `speedOfLight`, `boltzmann`, and the other named `Unit` objects | Keep the bare-number table. `elementaryCharge` matches `1.602176634e-19` and is a `Unit`, which a bridge formula does not accept in place of a number. |
+| Curvature, Einstein, Klein–Gordon, Friedmann, Killing, and Weyl modules under `src/dimensional/` | Physics predicates and index structure | No Riemann node, no field-equation node | Keep. Residuals call the engine. |
+
+`src/composition/discovery.ts` and `src/composition/probe/` stay out of this
+migration, as the original sequence required. The probe's grammar enumerator
+already calls `dimensionallyDetermines`. It does not gain its own null space.
 
 ## Sequenced plan
 
@@ -542,6 +639,33 @@ Each step is one pull request, mergeable on its own, and safe to stop after.
 A later step does not start by assuming an earlier step widened the
 composition table or the public barrel. Tests are written to fail on the
 tree before the production change, per the law in `AGENTS.md`.
+
+Steps 1 through 4 are the joint this note already specified. They do not
+import MathTS and they do not delete an engine. Step 5 is the expression
+walk, and it is MathTS's walk. Steps 6 through 8 are the migration the
+earlier draft held out. Steps 9 through 12 are the old steps 6 through 9.
+The release that contains step 6 is 2.0.0. Steps 7, 8, and 12 ship on that
+major and do not each open a new major. Steps 9, 10, and 11 merged on 1.x
+before that break.
+
+Daniel approved this amendment on 2026-10-02. The table is the record of
+which steps have a merge commit. A row marked next waits for the MathTS
+release and is not started.
+
+| Step | Work | State | Pull request | Merge |
+|---|---|---|---|---|
+| 1 | Record composition-table refusals | done | #303 | `f965d308a518cb44beea9ee44c64a9ebfa9af9c8` |
+| 2 | One internal chain record | done | #305 | `5629cc826af6a6cb53fc5d66e908e27e43aa485f` |
+| 3 | Category composition checks that the morphisms meet | done | #306 | `b2862a34abf4336e24821eaa485de30aad6d8bf0` |
+| 4 | Typed proof draft | done | #307 | `c8d7d54d41736c16a28ab9ea38c8a883828c01ff` |
+| 5 | The scalar walk is MathTS's | next | — | — |
+| 6 | MathTS required; delete Path B and `Float64ReferenceEngine` | next, and this row is 2.0.0 | — | — |
+| 7 | Unit conversion and quadrature call MathTS | next | — | — |
+| 8 | ODE calls MathTS where the method exists | next | — | — |
+| 9 | Rename the CLI uncertainty helper | done | #308 | `d4606c804f98d2ed0c0f1b49da812e110fdc39dc` |
+| 10 | Commands go through `cli-api` | done | #309 | `6196b639fc2bd96df0a50a69ee98ac469f2abc1e` |
+| 11 | Name the three regimes in one module | done | #310 | `d7f7630dea00cbb5a89fc41c19af8b02d26f1f06` |
+| 12 | Exit-code alignment for the metric geodesic | next | — | — |
 
 ### Step 1 — Record why a pair was not a proof target
 
@@ -629,50 +753,110 @@ the manifest problem check, as it does now.
 
 Public API. Unchanged.
 
-### Step 5 — One expression-leaf walk
+### Step 5 — The scalar walk is MathTS's
 
-Scope. One internal walker over scalar `ExprNode` leaves, used by
-`governingOf` in `chain-pipeline.ts` and by the symbol collector in
-`compose-symbolic.ts`. The formula parser's walk over its own parse `Node`
-stays in `formula.ts`: that tree is not an `ExprNode`. Tensor and curvature
-node kinds stay ignored by the scalar walk, which is what `governingOf`
-does today (`default: return`).
+Scope. `governingOf` and the symbol collector in `compose-symbolic.ts` read
+leaves from the MathTS AST that `expr-simplify.ts` already renders, using
+that node's symbol filter. UPT does not add a walker over `ExprNode`. The
+dimension check, the symbol-set check, and the numeric probe after
+`simplify` stay in `expr-simplify.ts`. Tensor and curvature node kinds
+still contribute no governing symbol. The Path A override that binds `e`
+to the elementary charge stays in force for this walk.
 
-Risk. Low. A wrong default arm that starts visiting tensor nodes would
-change Buckingham inputs. The test must show a curvature node contributes
-no governing symbol.
+Risk. Low for the leaf set if the characterization test pins today's names.
+Medium if the rendered AST treats `e` as Euler and a governing symbol
+disappears or appears. The red case is a formula whose only special name
+is `e`: it is the charge, and it is not a free leaf the way `x` is.
 
-Tests. A scalar formula with a nested transcendental yields the same name
-set from both call sites. A tensor-kind node yields none. The test fails
-before the shared walker exists, by importing a walker that is not there
-yet, or by duplicating the assertion against a temporary exported helper
-that the old copies do not use. Prefer a characterization test on
-`governingOf`'s current output, then switch the implementation and show a
-mutated walker fails it.
+Tests. A scalar with a nested transcendental yields the same name set from
+both call sites. A curvature node yields none. A formula `exp(1)` does not
+add a leaf named `e`. The test fails before the shared MathTS read exists.
 
 Public API. Unchanged.
 
-### Step 6 — Rename the CLI uncertainty helper
+### Step 6 — MathTS is required, and the two fallbacks go
+
+Scope. The MathTS peers move from optional `peerDependencies` to
+dependencies. `src/numerical/formula.ts` (Path B) and
+`Float64ReferenceEngine` go. `getFormulaParser` and `getActiveEngine` no
+longer have an absent-peer branch. The ambient declarations that exist so
+`tsc` can typecheck without the packages go with them. `mathts-engine.ts`
+and `formula-mathts.ts` stay, including the `e` override. No MathTS
+package is republished. The changelog migration note for the release that
+contains this step says: install the MathTS packages named above; the
+library does not start without them; bare `e` is still the elementary
+charge; Euler's number is still `exp(x)`; a deep import of the deleted
+parser or the deleted engine fails.
+
+Risk. High for anyone who installed UPT without the peers. That is the
+break. Medium if a conformance test compared the two engines and has
+nothing left to compare: the oracle becomes a fixture of values, not the
+deleted engine.
+
+Tests. A formula `1-e^2` with no binding evaluates near `1`, and `exp(1)`
+evaluates to Euler's number. Importing the deleted modules fails. The
+engine conformance cases run on `MathTSEngine` alone. The red control is
+the current tree: `getActiveEngine` still constructs `Float64ReferenceEngine`
+when the peer is hidden, and that test fails once the fallback is gone.
+
+Public API. Breaking. This step is 2.0.0. The root barrel's names for
+`parsePhysics` and the engine stay if they still point at the MathTS
+implementations. Names that were only the deleted classes go, and the
+migration note lists them.
+
+### Step 7 — Unit conversion and quadrature call MathTS
+
+Scope. `src/dimensional/units.ts` conversion calls `unit` and `toSI`.
+`src/numerical/quadrature.ts` calls `gaussQuad` or `quad` at the degree the
+integral node uses today. `Dimension`, `natural-units.ts`,
+`unit-convention.ts`, and `geometrized.ts` stay. `buckingham.ts` keeps its
+exact rational null space. Numeric `nullspace` is the wrong tool for an
+exponent vector.
+
+Risk. Medium where a glued literal (`25degC`, `1 kohm`) converts to a
+different SI number than today. The red test is that pair of values before
+the call switches. Low for quadrature if the degree is pinned.
+
+Tests. `convertValue('25degC', 'K')` stays `298.15`. A 16-point integral
+the suite already pins stays that value. A float `nullspace` substituted
+for the rational one fails the Buckingham exponent test.
+
+Public API. The conversion functions stay. Their implementation moves.
+Ships on 2.0.0, after step 6.
+
+### Step 8 — ODE calls MathTS where the method exists
+
+Scope. The fixed-step RK4 geodesic integrators call `solveODE` when the
+existing golden orbit matches. `gl4-integrator.ts` stays, and so does
+`perihelion-finder.ts`. `composition/uncertainty.ts` stays. This step does
+not add an ODE solver, a Hermite finder, or an uncertainty function.
+
+Risk. Medium for the RK4 replacement if an adaptive `solveODE` drifts off
+the golden samples. The step keeps the fixed step, or it does not switch.
+The GL4 runs stay byte-identical.
+
+Tests. The geodesic golden matches, or the call is not switched. A test
+names `gl4-integrator.ts` as still present. The uncertainty fixture's
+numbers are unchanged.
+
+Public API. Unchanged beyond step 6. Ships on 2.0.0.
+
+### Step 9 — Rename the CLI uncertainty helper
 
 Scope. The function in `src/cli/commands/evaluate.ts` gets a name that is
 not `propagateUncertainty`. Behavior, correlations, and the curvature ratio
-stay. It still does not call the graph-layer function: the contracts differ,
-and folding them is a physics decision this step does not make.
-`docs/architecture/duplicate-symbols.md` is generated; this step does not
-hand-edit it. The next `bun run docs:deps` drops the name from the duplicate
-group if the generator keys on the export name.
+stay. It still does not call the graph-layer function. MathTS has nothing
+to call. `docs/architecture/duplicate-symbols.md` is generated; this step
+does not hand-edit it.
 
-Risk. Low. Tests that import the CLI function must be updated in the same
-pull request. A search at the time of this note found no such import. The
-public `propagateUncertainty` stays the graph-layer function.
+Risk. Low. The public `propagateUncertainty` stays the graph-layer function.
 
 Tests. The CLI evaluate uncertainty cases still pass under the new name. A
-test that imports the old CLI name fails to compile, which is the red
-control.
+test that imports the old CLI name fails to compile.
 
-Public API. Unchanged.
+Public API. Unchanged. Merged on 1.x. The step table names the commit.
 
-### Step 7 — Commands go through `cli-api`
+### Step 10 — Commands go through `cli-api`
 
 Scope. The direct imports in the table under finding 5 become re-exports on
 `src/cli-api.ts`, and the command modules import types and values from that
@@ -687,9 +871,9 @@ the barrel; the barrel does not import commands.
 Tests. Existing CLI tests. `bun run layer:check` stays green. The allowlist
 does not grow.
 
-Public API. Unchanged.
+Public API. Unchanged. Merged on 1.x. The step table names the commit.
 
-### Step 8 — Name the three regimes in one module
+### Step 11 — Name the three regimes in one module
 
 Scope. A short internal module under `src/relations/` that exports nothing
 but type aliases and a comment naming the three vocabularies in finding 4,
@@ -706,32 +890,27 @@ in `src/relations/regime.ts` instead of a new import.
 Tests. A test lists the three names and fails if a fourth export appears.
 It does not assert that the three are equal.
 
-Public API. Unchanged.
+Public API. Unchanged. Merged on 1.x. The step table names the commit.
 
-### Step 9 — Exit-code alignment for the metric geodesic, only with a failing test of today's code
+### Step 12 — Exit-code alignment for the metric geodesic
 
 Scope. `upt metric` geodesic failures that are a bad value (non-positive
 mass, `|a|` above the bound) become `CliError` (exit 1). A missing
-subcommand argument stays `UsageError` (exit 2). This step is independent
-of steps 1–8 and can land first. It changes a CLI contract that a script
-could have pinned.
+subcommand argument stays `UsageError` (exit 2). This step changes a CLI
+contract. It ships inside 2.0.0, so it does not need a major of its own.
 
 Risk. Medium, because it is a behavior change. The red test is the current
 exit code, recorded, then the assertion is updated only after that failure
-is in the pull request's history as the reason. Do not "fix" other exit
+is in the pull request's history as the reason. Do not change other exit
 codes in the same pull request.
 
 Tests. `tests/cli/exit-codes.test.ts` gains the Kerr cases. The first
 commit of the test expects today's exit 2 and fails once the command
 returns 1, or the test is written against the desired code and shown red
-on unchanged `metric.ts` before the edit. Either order satisfies the
-fail-first rule if the red output is kept.
+on unchanged `metric.ts` before the edit.
 
 Public API. The library barrel is unchanged. The CLI contract changes.
-That is a minor, with a changelog line, if Daniel treats the CLI as
-additive-compatible when the docs and the tests move together. It is not
-a 2.0.0 by itself. If Daniel treats every exit-code change as breaking,
-this step waits. That choice is an open question below.
+Covered by the 2.0.0 migration note in one line.
 
 ### Held out of the sequence
 
@@ -740,48 +919,66 @@ These are real, and they are not steps of this phase:
 - A `upt chain` that calls `runChainPipeline`. The pipeline note left the
   orchestrator internal. Step 1's refusal list is what a future read-only
   command would print. The command itself waits for an owner decision.
-- Shrinking or renaming the root barrel. `docs/planning/Atlas-API-Review.md`
-  already owns the promotion question. Demotion is the inverse and needs
-  its own decision.
-- Merging `BridgeEquations` with `BRIDGE_EVALUATORS`. Worth doing only
-  after the message and the registry agree about which ids evaluate. That
-  is a behavior change for `evaluateBridge` and a public-surface edit.
-- Merging the two `propagateUncertainty` contracts. Correlations and a
-  deterministic bound are different objects. Folding them repeats the
-  mistake the graph-layer function's comment already retracts.
-- Replacing Path B or `Float64ReferenceEngine` with MathTS. That makes a
-  peer mandatory.
+- Shrinking or renaming the root barrel beyond names that step 6 deletes
+  because the module is gone. `docs/planning/Atlas-API-Review.md` still
+  owns the promotion question.
+- Merging `BridgeEquations` with `BRIDGE_EVALUATORS`.
+- Merging the two `propagateUncertainty` contracts. MathTS does not offer
+  one function that could be the merge.
 - Republishing or repackaging MathTS.
+- Filling a gap inside this repository: exact rational null space, a
+  symplectic GL4 tableau, a cubic-Hermite finder, uncertainty propagation,
+  a physics binding for the symbol `e`, a length-7 dimension vector, and
+  unit symbols inside `evaluate`. Those are `danielsimonjr/MathTS`.
 - Running Lean, writing a manifest, or calling `deriveEvidence` on a stub.
 - Widening the composition table.
 - Unifying cell regimes with π-groups.
 - Editing `src/composition/discovery.ts` or `src/composition/probe/`.
 
+### MathTS gaps to file
+
+File these in `danielsimonjr/MathTS`. None of them is a pull request in
+this repository.
+
+1. Physics binding: symbol `e` is the elementary charge; Euler's number is
+   only `exp(x)`; `euler` is not a constant; `E` stays unbound.
+2. Exact rational null space, so Buckingham exponent vectors need not stay
+   on a private fraction type.
+3. Symplectic Gauss–Legendre 4 as an ODE method, distinct from `gaussQuad`.
+4. First-order uncertainty propagation.
+5. `evaluate` resolving a unit symbol the way `unit('1 km')` already does.
+6. A dimension vector that is the seven SI bases, or a documented map from
+   the length-10 vector onto those seven.
+
 ## Semver
 
-The default sequence does not need a 2.0.0.
+Step 6 is a 2.0.0. The package gains required dependencies and loses the
+zero-dependency parser and the zero-dependency tensor engine. Steps 1
+through 4, and steps 9 through 11, merged on 1.x. The step table names the
+commits. Step 5 is next: the scalar walk is MathTS's. Steps 6, 7, 8, and
+12 are next and wait for the MathTS release. Steps 7, 8, and 12 ship on
+the 2.0.0 line and do not each bump the major again.
 
-Steps 1 through 8 add no root export, remove no root export, and do not
-change `src/atlas/public.ts`. They are patch-level inside the 1.x line, or
-a minor if the changelog wants them visible. They ship as ordinary
-pull requests. They do not require a major tag.
+The migration note that ships with step 6 states:
 
-Step 9 changes a CLI exit code. It still does not need a 2.0.0 unless
-Daniel rules that CLI exit codes are a frozen contract. The recommendation
-here is a minor, one command, with the red test in the history.
+- Install `@danielsimonjr/mathts-core`, `@danielsimonjr/mathts-expression`,
+  `@danielsimonjr/mathts-functions`, `@danielsimonjr/mathts-matrix`,
+  `@danielsimonjr/mathts-tensor`, `@danielsimonjr/mathts-autograd`,
+  `@danielsimonjr/mathts-parallel`, `@danielsimonjr/mathts-wasm`, and
+  `@danielsimonjr/mathts-workerpool`. `@danielsimonjr/mathts-gpu` arrives
+  as MathTS's dependency, not as a UPT package.
+- The library does not start when those packages are absent.
+- Bare `e` is the elementary charge. `exp(1)` is Euler's number. `E` is
+  energy. The name `euler` is refused. MathTS itself still evaluates `e`
+  as Euler; UPT's adapter overrides that until gap 1 lands.
+- A deep import of Path B or `Float64ReferenceEngine` fails.
+- This repository does not publish a MathTS tarball.
 
-A 2.0.0 is the right major if, and only if, a later owner decision does one
-of these:
-
-- removes or renames a name on `src/index.ts` or `src/atlas/public.ts`;
-- changes `composeEdges` so a pair that succeeds today throws;
-- changes `enumerateCompositions` so `proofTargets` or `all` lose a pair
-  the current tests pin;
-- makes a MathTS peer a required dependency.
-
-None of those are steps above. The barrel-shrink question in
-`docs/planning/Atlas-API-Review.md` remains the nearest reason to open a
-major, and it is still deferred.
+A later removal or rename of a name on `src/index.ts` or
+`src/atlas/public.ts`, beyond a class that existed only to be the deleted
+engine, is still its own major. Step 6 lists the names it actually deletes.
+The atlas Tier 2 decision in `docs/planning/Atlas-API-Review.md` stays
+deferred and is not this 2.0.0.
 
 ## Open questions for Daniel
 
@@ -789,41 +986,40 @@ major, and it is still deferred.
    dimension mismatch, or should step 1's refusal list become the permanent
    record? The recommendation is the refusal list, without dropping any
    pair the pipeline already returns.
-2. Does `upt chain` stay a non-run that exits 2, or should a later note
-   specify a read-only report that prints the pipeline result and writes
-   nothing? This note does not specify that command.
-3. Is the root barrel frozen at its current names until a 2.0.0, and is
-   that 2.0.0 the Atlas API review's Tier 2 decision rather than this
-   phase? The recommendation is yes: this phase does not touch the barrel.
-4. Do the three regime vocabularies stay three, with step 8 only naming
+2. Does `upt chain` stay a non-run that exits 2? This note does not specify
+   that command.
+3. The 2.0.0 in this note is the MathTS requirement. The atlas Tier 2
+   review stays a separate decision. Confirm that step 6 does not also
+   shrink the root barrel.
+4. Do the three regime vocabularies stay three, with step 11 only naming
    them? The recommendation is yes.
-5. Are CLI exit codes a frozen contract? If they are, step 9 waits for a
-   major. If they are not, step 9 is a minor limited to the metric
-   geodesic.
-6. Should the two uncertainty functions ever share an implementation? The
-   recommendation is no. They should stop sharing a name, which is step 6,
-   and keep both contracts.
-7. Is `composeMorphisms` worth keeping once it checks endpoints, or should
-   the pipeline call `composeRelation` and delete the category wrapper?
-   The recommendation is to keep it and make the endpoint check real,
-   because the pipeline note already placed the category in `src/relations/`.
-   Deleting it is an alternative Daniel can choose instead of step 3.
-8. The comment in `composeEdges` that says no catalog edge carries
-   `relation` is false. Confirm that correcting the comment and recording
-   the nine edges is in scope for step 1, and that those nine relations
-   stay. This note does not remove them.
+5. Step 12 changes one CLI exit code inside the 2.0.0 line. Confirm it
+   waits for that major and does not land on 1.x.
+6. The two uncertainty functions stay two contracts. MathTS has no
+   function to share. Confirm the CLI rename in step 9 is the whole of
+   that work.
+7. Is `composeMorphisms` worth keeping once it checks endpoints? The
+   recommendation is to keep it. Deleting it is an alternative to step 3.
+8. The nine catalog edges that carry `relation` stay. Step 1 records the
+   false comment and does not remove the relations.
+9. For each gap in the list above, confirm UPT keeps the local routine
+   until MathTS exports it, and does not reimplement it under a new name
+   in the meantime.
 
 ## Amendment proposal
 
-The text below is the proposal. This pull request does not edit `ACTIVE.md`
-or `ROADMAP.md`. Those files change only after Daniel accepts a step and
-the corresponding task is filed.
+Daniel approved this amendment on 2026-10-02. This note does not edit
+`ACTIVE.md` or `ROADMAP.md`. The tasks for the done rows were filed with
+those pull requests. Rows marked next are not started here. They wait for
+the MathTS release. Landing the note does not start them.
 
 ### Proposed `ACTIVE.md` tasks
 
 File these under open tasks, easiest first, and only the steps Daniel
 accepts. Each line is the task title. The body of the task points back at
-this note's step and does not restate the design.
+this note's step and does not restate the design. Tasks 1–4 and 9–11 are
+the done rows of the step table. Tasks 5–8 and 12 are next and are not
+started. They wait for the MathTS release.
 
 1. Record composition-table refusals from enumeration as their own list,
    without changing which pairs are proof targets. Design:
@@ -834,22 +1030,30 @@ this note's step and does not restate the design.
    that result on the chain without dropping proof targets. Design: step 3.
 4. Build the proof-target draft as a typed object and render the existing
    text from it. Design: step 4.
-5. Share one scalar expression-leaf walk between the chain pipeline and
-   symbolic composition. Design: step 5.
-6. Rename the CLI uncertainty helper so it is not the public uncertainty
-   function. Design: step 6.
-7. Move command-module library imports onto the CLI barrel. Design: step 7.
-8. Name the three regime vocabularies from the relations layer without
-   merging them and without a new upward edge. Design: step 8.
-9. Map a bad Kerr geodesic value to exit 1, after a test that fails on
-   today's exit 2. Design: step 9. Hold this task if exit codes are frozen.
+5. Read scalar leaves through the MathTS AST, and do not add a UPT walker.
+   Design: step 5.
+6. Make the MathTS packages required dependencies and remove Path B and
+   `Float64ReferenceEngine`. Design: step 6. This task is the 2.0.0.
+7. Delegate unit conversion and quadrature to MathTS, and keep the exact
+   Buckingham null space. Design: step 7.
+8. Delegate a geodesic RK4 to `solveODE` only when the golden matches, and
+   leave the GL4 integrator in place. Design: step 8.
+9. Rename the CLI uncertainty helper so it is not the public uncertainty
+   function. Design: step 9.
+10. Move command-module library imports onto the CLI barrel. Design: step 10.
+11. Name the three regime vocabularies from the relations layer without
+    merging them and without a new upward edge. Design: step 11.
+12. Map a bad Kerr geodesic value to exit 1, on the 2.0.0 line. Design:
+    step 12.
 
 Leave these unfiled until a separate owner decision:
 
 - A read-only chain command.
-- Any edit to the root barrel or to `src/atlas/public.ts`.
+- Any edit to the root barrel beyond the classes step 6 deletes, or any
+  edit to `src/atlas/public.ts`.
 - Merging the evaluator facade with the evaluator registry.
-- Any MathTS packaging change.
+- A MathTS change. That work is `danielsimonjr/MathTS`.
+- Republishing or repackaging MathTS.
 
 ### Proposed `ROADMAP.md` paragraph
 
@@ -858,12 +1062,13 @@ number. Do not renumber Phases 0–6. Do not mark a phase met in that file.
 
 > Integration of the catalog, the quantity graph, the relation table, the
 > regime join, the proof overlay, and the CLI is a refactor phase specified
-> in `docs/planning/refactor-integration-phase.md`. It is authorized only by
-> open tasks in `ACTIVE.md` that name a step of that note. It does not
-> reopen Phases 0–6, does not widen the composition table, does not add a
-> public export, and does not republish the MathTS packages. A major version
-> is in scope only for a later decision that removes or renames a public
-> export or makes a MathTS peer mandatory.
+> in `docs/planning/refactor-integration-phase.md`. Mathematics in that
+> phase is delegated to the published `@danielsimonjr/mathts-*` packages.
+> The release that removes the zero-dependency parser and tensor engine is
+> 2.0.0. The phase is authorized only by open tasks in `ACTIVE.md` that
+> name a step of that note. It does not reopen Phases 0–6, does not widen
+> the composition table, does not republish MathTS, and does not add a
+> public export except where step 6 must drop a deleted class.
 
 ## What this note does not do
 
@@ -872,4 +1077,5 @@ claim a coverage percentage, a cycle count beyond the allowlist cited above,
 or a catalog count. Those live in `NOTES.md` and in the generated
 architecture reports. It does not authorize PhysJS work. A proof target
 becomes a proof in that repository, then a vendored reference through
-`WORKFLOWS.md`, and only then an evidence tag.
+`WORKFLOWS.md`, and only then an evidence tag. It does not publish a MathTS
+package and it does not vendor one.
