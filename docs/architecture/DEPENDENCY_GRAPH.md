@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **dimensional**: 36 files
 - **entry**: 1 file
 - **numerical**: 42 files
-- **relations**: 5 files
+- **relations**: 6 files
 
 ---
 
@@ -7779,6 +7779,16 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/relations/regime-vocabularies.ts` - Names for the three regime vocabularies. They are not one type, and
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/regime-registry.js` | `RegimeValueBase` | Import (type-only) |
+| `./types.js` | `Regime` | Import (type-only) |
+
+---
+
 ### `src/relations/regime.ts` - Regime derivation — π-groups as the coordinates a regime is written in.
 
 **Internal Dependencies:**
@@ -7955,8 +7965,9 @@ graph TD
         N59[category]
         N60[composition-table]
         N61[conventions]
-        N62[regime]
-        N63[types]
+        N62[regime-vocabularies]
+        N63[regime]
+        N64[...1 more]
     end
 
     N0 --> N48
@@ -7964,7 +7975,6 @@ graph TD
     N4 --> N3
     N10 --> N39
     N12 --> N50
-    N12 --> N63
     N13 --> N50
     N14 --> N12
     N14 --> N50
@@ -7989,6 +7999,7 @@ graph TD
     N26 --> N27
     N27 --> N25
     N27 --> N30
+    N28 --> N24
 ```
 
 ---
@@ -7997,9 +8008,9 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 423 |
+| Total TypeScript Files | 424 |
 | Total Modules | 13 |
-| Total Lines of Code | 92363 |
+| Total Lines of Code | 92407 |
 | Total Exports | 3012 |
 | Total Re-exports | 1416 |
 | Total Classes | 61 |
@@ -8007,7 +8018,7 @@ graph TD
 | Total Functions | 780 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 569 |
+| Type-only Imports | 571 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
