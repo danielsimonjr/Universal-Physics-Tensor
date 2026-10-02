@@ -10,6 +10,7 @@
  */
 
 import type { ChainClassification } from '../canonical/structural.js';
+import type { CompositionResult } from '../relations/composition-table.js';
 import type { BuckinghamFilterRecord } from './buckingham-filter.js';
 import { compareChainEdgeIds, type ChainCandidateKind } from './chain-candidate.js';
 import type { ChainRegimeMismatch } from './chain-regime.js';
@@ -20,6 +21,9 @@ import type { ChainRegimeMismatch } from './chain-regime.js';
  * `classification` is the structural result. `theorem` is the Buckingham
  * filter's named shape, or null when the filter named none. `mismatch`
  * is set only for a provisional chain the regime gate refused.
+ * `categoryComposition` is the category claim for the two steps. It is
+ * unset when the edges have no stored category object ids. A recorded
+ * `no-composite-claim` does not change the order key.
  *
  * @internal
  */
@@ -28,6 +32,7 @@ export interface ChainRecord {
   readonly classification: ChainClassification;
   readonly theorem: BuckinghamFilterRecord['theorem'];
   readonly mismatch: ChainRegimeMismatch | undefined;
+  readonly categoryComposition: CompositionResult | undefined;
 }
 
 /**

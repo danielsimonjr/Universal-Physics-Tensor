@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Make category composition refuse morphisms that do not meet, and record that result on the chain without dropping proof targets. Design: `docs/planning/refactor-integration-phase.md`, step 3.
+  Done: `composeMorphisms` returns `no-composite-claim` when `first.target !== second.source`. Adjacent morphisms still match `composeRelation`. `ChainRecord.categoryComposition` records that result. A quantity edge has no category object id, so the recorded claim stays unset. A recorded `no-composite-claim` still renders as a stub. `runChainPipeline(CATALOG_GRAPH)` is unchanged. The package barrel and `src/atlas/public.ts` do not export the names.
 - [x] Use one internal chain-result type in the classifier, the orderer, and the orchestrator. Design: `docs/planning/refactor-integration-phase.md`, step 2.
   Done: `ChainRecord` in `src/composition/chain-result.ts` carries the classification, the filter theorem, the regime mismatch, and the edge ids. `chainOrderKey` and `renderChainRecord` are functions of that record. A confirmation stays a confirmation even when a mismatch is attached. `runChainPipeline(CATALOG_GRAPH)` is unchanged. `toCandidate` and `emit` are gone. The package barrel is unchanged.
 - [x] Record composition-table refusals from enumeration as their own list, without changing which pairs are proof targets. Design: `docs/planning/refactor-integration-phase.md`, step 1.

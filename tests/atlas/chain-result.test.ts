@@ -23,6 +23,7 @@ const confirmation: ChainRecord = {
   classification: { kind: 'confirmation', catalogId: 12, edgeIds: ['be-a', 'be-b'] },
   theorem: 'PhysJS.Dimensional.monomial_form',
   mismatch: undefined,
+  categoryComposition: undefined,
 };
 
 const restatement: ChainRecord = {
@@ -35,6 +36,7 @@ const restatement: ChainRecord = {
   },
   theorem: null,
   mismatch: undefined,
+  categoryComposition: undefined,
 };
 
 const monomial: ChainRecord = {
@@ -42,6 +44,7 @@ const monomial: ChainRecord = {
   classification: { kind: 'provisional', id: 'chain-be-e-be-f', edgeIds: ['be-e', 'be-f'] },
   theorem: 'PhysJS.Dimensional.monomial_form',
   mismatch: undefined,
+  categoryComposition: undefined,
 };
 
 const unfixed: ChainRecord = {
@@ -49,6 +52,7 @@ const unfixed: ChainRecord = {
   classification: { kind: 'provisional', id: 'chain-be-g-be-h', edgeIds: ['be-g', 'be-h'] },
   theorem: 'PhysJS.Dimensional.product_shape',
   mismatch: undefined,
+  categoryComposition: undefined,
 };
 
 const rejected: ChainRecord = {
@@ -61,6 +65,7 @@ const rejected: ChainRecord = {
     quantity: 'mass',
     reasons: ['domain: information-geometry ≠ quantum-classical'],
   },
+  categoryComposition: undefined,
 };
 
 const STUB_THEOREMS = ['PhysJS.Fixture.left', 'PhysJS.Fixture.right'] as const;
@@ -121,6 +126,12 @@ describe('one internal chain record', () => {
     expect(chainOrderKey(unfixed)).toBe('unfixed-shape');
     expect(renderChainRecord(unfixed, STUB_THEOREMS).kind).toBe('stub');
     expect(renderedAgrees(unfixed)).toBe(true);
+  });
+
+  it('a recorded no-composite-claim still renders as a stub', () => {
+    const claimed: ChainRecord = { ...monomial, categoryComposition: 'no-composite-claim' };
+    expect(chainOrderKey(claimed)).toBe('unique-monomial');
+    expect(renderChainRecord(claimed, STUB_THEOREMS).kind).toBe('stub');
   });
 
   it('a regime mismatch renders as a rejection and is not a stub', () => {

@@ -245,6 +245,7 @@ The codebase is organized into the following modules:
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
 | `../composition/enumerate.js` | `enumerateCompositions` | Import |
+| `../relations/composition-table.js` | `CompositionResult` | Import (type-only) |
 | `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
 | `../composition/chain-match.js` | `matchChain` | Import |
 | `../composition/chain-candidate.js` | `compareChainEdgeIds, ChainCandidate` | Import |
@@ -255,7 +256,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`
-- Functions: `renderChainRecord`, `runChainPipeline`
+- Functions: `categoryCompositionForChain`, `renderChainRecord`, `runChainPipeline`
 
 ---
 
@@ -4532,6 +4533,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../canonical/structural.js` | `ChainClassification` | Import (type-only) |
+| `../relations/composition-table.js` | `CompositionResult` | Import (type-only) |
 | `./buckingham-filter.js` | `BuckinghamFilterRecord` | Import (type-only) |
 | `./chain-candidate.js` | `compareChainEdgeIds, ChainCandidateKind` | Import |
 | `./chain-regime.js` | `ChainRegimeMismatch` | Import (type-only) |
@@ -7822,7 +7824,7 @@ The codebase is organized into the following modules:
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
 | `catalog-formal-ref` | 2 files | 1 files |
-| `chain-pipeline` | 13 files | 0 files |
+| `chain-pipeline` | 14 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
@@ -7995,15 +7997,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 423 |
 | Total Modules | 13 |
-| Total Lines of Code | 92228 |
-| Total Exports | 2990 |
+| Total Lines of Code | 92260 |
+| Total Exports | 2991 |
 | Total Re-exports | 1396 |
 | Total Classes | 61 |
 | Total Interfaces | 480 |
-| Total Functions | 778 |
+| Total Functions | 779 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 570 |
+| Type-only Imports | 572 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
