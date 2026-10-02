@@ -66,8 +66,7 @@ describe('readBinding', () => {
     expect(readBinding('e').value).toBeCloseTo(E_SI, 15);
     expect(readBinding('e').dimension).toEqual(CHARGE);
     expect(readBinding('e').dimensioned).toBe(true);
-    expect(readBinding('euler').value).toBeCloseTo(Math.E, 12);
-    expect(readBinding('euler').dimensioned).toBe(false);
+    expect(() => readBinding('euler')).toThrow(/exp\(x\)/);
     expect(readBinding('exp(1)').value).toBeCloseTo(Math.E, 12);
     expect(() => readBinding('sigma')).toThrow(/is not a number with an optional unit/);
     expect(readBinding('sigma_sb').value).toBeGreaterThan(5e-8);

@@ -20,6 +20,12 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Set package.json to 1.0.2. No tag is pushed. Publishing stays the owner's job.
+- [x] Export `GM_SUN_SI`, `parseUnit`, `convertValue`, `UnitError`, `ParsedUnit`, and `TemperatureReading` from the package root. `GM_SUN_SI` stays the IAU value, not `G_SI * M_SUN_SI`.
+- [x] `evaluateBridge(42)` and `upt evaluate be-42` name `BridgeEquations.hawkingTemperature({ M_kg })` and `upt explain hawking-temperature mass=1.989e30`, both of which return a finite Hawking temperature. An id with no evaluator still points at `upt evaluate` with no args.
+- [x] An undeclared `1-e^2` on `upt eval` and `upt map` says `e` is the elementary charge and must be declared or bound, or written as `exp(x)`. The map message names `one_minus_e_sq`. A declared dimensionless `e` stays dimensionless.
+- [x] Refuse a non-finite Hawking temperature. A finite mass whose SI evaluation overflows throws RangeError instead of returning Infinity.
+- [x] Refuse the formula name `euler`. Euler's number is `exp(x)`, for example `exp(1)`. A bare `e` stays the elementary charge and `E` stays energy. The error names `exp(x)`.
 - [x] Buckingham filter in src/composition. It calls dimensionallyDetermines and buckinghamPi, names the PhysJS.Dimensional theorem for the shape, and leaves a units-only result as a derivation-step whose covers line names the unfixed constant. A chain that is not homogeneous is absent. A free pi-group is not a unique monomial. Design: docs/planning/Bridge-Discovery-Pipeline-Design.md step 6.
   Done: `buckinghamFilter` in `src/composition/buckingham-filter.ts`. A determined monomial names `PhysJS.Dimensional.monomial_form` and records the exponent tuple. A product of two magnitudes names `product_shape`. One remaining ratio names `ratio_shape`. An unfixed real power names `ratio_power_invariant`. A free pi-group is not a unique monomial. A target outside the span is absent. The package barrel is unchanged.
 - [x] Seed-filtered symbolic enumeration in `src/composition/enumerate.ts`. A caller-supplied set of edge ids. The module does not import `atlas/`. A proof target is a pair `composeSymbolic` accepts and carries an expression. A pair that only `composeEdges` accepts is not a proof target and is listed as not substitutable. The default call, with no seed set, keeps the pairs the existing enumeration tests pin. Design: `docs/planning/Bridge-Discovery-Pipeline-Design.md` step 5.
