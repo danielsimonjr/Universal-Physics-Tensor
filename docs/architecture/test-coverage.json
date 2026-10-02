@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 407,
-    "totalTestFiles": 559,
+    "totalTestFiles": 560,
     "testedCount": 397,
     "untestedCount": 10,
     "coveragePercent": "97.5"
@@ -531,6 +531,7 @@
     ],
     "src/atlas/derive-evidence.ts": [
       "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/derive-evidence.test.ts",
@@ -596,6 +597,7 @@
       "tests/atlas/barrel-completeness.test.ts",
       "tests/atlas/benchmark.test.ts",
       "tests/atlas/bound-machine-form.test.ts",
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/delta-at-proven.test.ts",
       "tests/atlas/evidence-rule.test.ts",
@@ -750,6 +752,7 @@
       "tests/cli/recover-conventions.test.ts"
     ],
     "src/atlas/physjs-ref.ts": [
+      "tests/atlas/bridge-seed-keys.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/physjs-manifest.test.ts"
@@ -8596,6 +8599,11 @@
       "src/atlas/path-bound.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
+    ],
+    "tests/atlas/bridge-seed-keys.test.ts": [
+      "src/atlas/families.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/physjs-ref.ts"
     ],
     "tests/atlas/canonical-links.test.ts": [
       "src/atlas/families.ts",
