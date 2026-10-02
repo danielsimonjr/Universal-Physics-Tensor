@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 405,
-    "totalTestFiles": 558,
-    "testedCount": 395,
+    "totalSourceFiles": 406,
+    "totalTestFiles": 559,
+    "testedCount": 396,
     "untestedCount": 10,
     "coveragePercent": "97.5"
   },
@@ -121,7 +121,6 @@
     "src/bridges/catalog-adapter.ts",
     "src/bridges/confrontation-coverage.ts",
     "src/bridges/confrontations.ts",
-    "src/bridges/descriptor.ts",
     "src/bridges/equations/_be-helpers.ts",
     "src/bridges/equations/be-11-decoherence-master.ts",
     "src/bridges/equations/be-12-coherence-length.ts",
@@ -247,6 +246,7 @@
     "src/cli/statuses.ts",
     "src/cli/version.ts",
     "src/composition/adjudication.ts",
+    "src/composition/audit-coverage.ts",
     "src/composition/axes.ts",
     "src/composition/axis-audit.ts",
     "src/composition/bridge-analysis.ts",
@@ -261,6 +261,7 @@
     "src/composition/composition-recovery.ts",
     "src/composition/consequence.ts",
     "src/composition/consistency.ts",
+    "src/composition/descriptor.ts",
     "src/composition/dimension-adjacency.ts",
     "src/composition/discovery.ts",
     "src/composition/edge.ts",
@@ -1975,16 +1976,8 @@
       "tests/bridges/be37-cassini.test.ts",
       "tests/bridges/be48-collapse.test.ts",
       "tests/bridges/be51-lensing-confrontation.test.ts",
-      "tests/bridges/confrontation-coverage.test.ts",
       "tests/bridges/confrontation-registry.test.ts",
-      "tests/bridges/confrontation-rigor.test.ts",
-      "tests/cli/atlas-evidence.test.ts",
-      "tests/cli/audit-improvements.test.ts",
-      "tests/cli/graphs.test.ts",
-      "tests/cli/map-atlas-results.test.ts",
-      "tests/cli/map-atlas-views.test.ts",
-      "tests/cli/record-builtin-parser.test.ts",
-      "tests/cli/recover-conventions.test.ts"
+      "tests/bridges/confrontation-rigor.test.ts"
     ],
     "src/bridges/confrontations.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -2022,9 +2015,6 @@
       "tests/composition/frontier-account.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
-    ],
-    "src/bridges/descriptor.ts": [
-      "tests/bridges/descriptor-consistency.test.ts"
     ],
     "src/bridges/equations/_be-helpers.ts": [
       "tests/bridges/equations/_be-helpers.test.ts"
@@ -4561,6 +4551,16 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/composition/audit-coverage.ts": [
+      "tests/bridges/confrontation-coverage.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/record-builtin-parser.test.ts",
+      "tests/cli/recover-conventions.test.ts"
+    ],
     "src/composition/axes.ts": [
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -4887,6 +4887,9 @@
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
+    ],
+    "src/composition/descriptor.ts": [
+      "tests/bridges/descriptor-consistency.test.ts"
     ],
     "src/composition/dimension-adjacency.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -9936,6 +9939,7 @@
       "src/bridges/equations/be-21-kss-bound.ts",
       "src/bridges/equations/be-16-landauer.ts"
     ],
+    "tests/bridges/bridges-composition-imports.test.ts": [],
     "tests/bridges/bucket-a-formal-sanity.test.ts": [
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
@@ -10082,7 +10086,7 @@
       "src/bridges/be65-jeans-mass-confrontation.ts"
     ],
     "tests/bridges/confrontation-coverage.test.ts": [
-      "src/bridges/confrontation-coverage.ts"
+      "src/composition/audit-coverage.ts"
     ],
     "tests/bridges/confrontation-registry.test.ts": [
       "src/bridges/confrontations.ts",
@@ -10133,7 +10137,7 @@
       "src/bridges/be65-jeans-mass.ts",
       "src/bridges/rhs-registry.ts",
       "src/composition/catalog-graph.ts",
-      "src/bridges/descriptor.ts"
+      "src/composition/descriptor.ts"
     ],
     "tests/bridges/dimensional-signature-catalog.test.ts": [
       "src/bridges/index.ts",
@@ -10757,7 +10761,7 @@
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
       "src/bridges/index.ts",
-      "src/bridges/confrontation-coverage.ts",
+      "src/composition/audit-coverage.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/be53-yang-mills-confrontation.ts",
       "src/bridges/observations/types.ts",
@@ -10974,7 +10978,7 @@
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
       "src/bridges/index.ts",
-      "src/bridges/confrontation-coverage.ts",
+      "src/composition/audit-coverage.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/be53-yang-mills-confrontation.ts",
       "src/bridges/observations/types.ts",
@@ -11740,7 +11744,7 @@
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
       "src/bridges/index.ts",
-      "src/bridges/confrontation-coverage.ts",
+      "src/composition/audit-coverage.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/be53-yang-mills-confrontation.ts",
       "src/bridges/observations/types.ts",
@@ -12121,7 +12125,7 @@
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
       "src/bridges/index.ts",
-      "src/bridges/confrontation-coverage.ts",
+      "src/composition/audit-coverage.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/be53-yang-mills-confrontation.ts",
       "src/bridges/observations/types.ts",
@@ -12342,7 +12346,7 @@
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
       "src/bridges/index.ts",
-      "src/bridges/confrontation-coverage.ts",
+      "src/composition/audit-coverage.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/be53-yang-mills-confrontation.ts",
       "src/bridges/observations/types.ts",
@@ -12883,7 +12887,7 @@
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
       "src/bridges/index.ts",
-      "src/bridges/confrontation-coverage.ts",
+      "src/composition/audit-coverage.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/be53-yang-mills-confrontation.ts",
       "src/bridges/observations/types.ts",
@@ -13197,7 +13201,7 @@
       "src/composition/frontier-account.ts",
       "src/composition/discovery.ts",
       "src/bridges/index.ts",
-      "src/bridges/confrontation-coverage.ts",
+      "src/composition/audit-coverage.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/be53-yang-mills-confrontation.ts",
       "src/bridges/observations/types.ts",
