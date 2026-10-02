@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 51 files
 - **root**: 1 file
-- **composition**: 84 files
+- **composition**: 85 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -253,10 +253,11 @@ The codebase is organized into the following modules:
 | `../composition/chain-regime.js` | `joinRegimeMismatch, ChainRegimeMismatch` | Import |
 | `./physjs-ref.js` | `bridgeSeedKeys, physjsTheorem` | Import |
 | `./proof-target.js` | `emitProofTarget` | Import |
+| `../composition/mathts-scalar-symbols.js` | `scalarSymbolsFromMathTs` | Import |
 
 **Exports:**
 - Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`
-- Functions: `categoryCompositionForChain`, `renderChainRecord`, `runChainPipeline`
+- Functions: `governingOf`, `categoryCompositionForChain`, `renderChainRecord`, `runChainPipeline`
 
 ---
 
@@ -4576,6 +4577,7 @@ The codebase is organized into the following modules:
 | `./expr-subst.js` | `substitute` | Import |
 | `./expr-eval.js` | `evalExpr, SymbolicEvalError` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `./mathts-scalar-symbols.js` | `scalarSymbolsFromMathTs` | Import |
 
 **Exports:**
 - Classes: `SymbolicCompositionError`
@@ -5013,6 +5015,7 @@ The codebase is organized into the following modules:
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `./compose-symbolic.js` | `Observable` | Import (type-only) |
 | `./compose-symbolic.js` | `makeObservable` | Import |
+| `./mathts-scalar-symbols.js` | `renderScalarLeaf` | Import |
 
 **Exports:**
 - Functions: `isSimplifierAvailable`, `simplifyExpr`, `simplifyObservable`
@@ -5172,6 +5175,26 @@ The codebase is organized into the following modules:
   suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
   ```
 
+
+---
+
+### `src/composition/mathts-scalar-symbols.ts` - Scalar leaves of an `ExprNode`, read from a MathTS AST.
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `module` | `createRequire` |
+| `url` | `fileURLToPath` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `ScalarSymbol`
+- Functions: `renderScalarLeaf`, `scalarSymbolsFromMathTs`
 
 ---
 
@@ -7836,7 +7859,7 @@ The codebase is organized into the following modules:
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
 | `catalog-formal-ref` | 2 files | 1 files |
-| `chain-pipeline` | 14 files | 0 files |
+| `chain-pipeline` | 15 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
@@ -7921,7 +7944,7 @@ graph TD
         N33[axes]
         N34[axis-audit]
         N35[bridge-analysis]
-        N36[...79 more]
+        N36[...80 more]
     end
 
     subgraph Core
@@ -8008,17 +8031,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 424 |
+| Total TypeScript Files | 425 |
 | Total Modules | 13 |
-| Total Lines of Code | 92407 |
-| Total Exports | 3012 |
+| Total Lines of Code | 92539 |
+| Total Exports | 3015 |
 | Total Re-exports | 1416 |
 | Total Classes | 61 |
-| Total Interfaces | 481 |
-| Total Functions | 780 |
+| Total Interfaces | 482 |
+| Total Functions | 783 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 571 |
+| Type-only Imports | 573 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

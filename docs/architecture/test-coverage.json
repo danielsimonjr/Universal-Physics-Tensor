@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 421,
-    "totalTestFiles": 586,
-    "testedCount": 411,
+    "totalSourceFiles": 422,
+    "totalTestFiles": 587,
+    "testedCount": 412,
     "untestedCount": 10,
     "coveragePercent": "97.6"
   },
@@ -296,6 +296,7 @@
     "src/composition/grounding.ts",
     "src/composition/identifiability.ts",
     "src/composition/index.ts",
+    "src/composition/mathts-scalar-symbols.ts",
     "src/composition/not-composable-seeds.ts",
     "src/composition/probe/backend-protocol.ts",
     "src/composition/probe/candidate-store.ts",
@@ -514,7 +515,8 @@
       "tests/atlas/chain-pipeline-catalog.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/chain-result.test.ts",
-      "tests/composition/chain-regime.test.ts"
+      "tests/composition/chain-regime.test.ts",
+      "tests/composition/mathts-scalar-symbols.test.ts"
     ],
     "src/atlas/composition-table.ts": [
       "tests/atlas/barrel-completeness.test.ts",
@@ -5159,6 +5161,7 @@
       "tests/composition/identifiability.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
+      "tests/composition/mathts-scalar-symbols.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/quantities.test.ts",
@@ -6122,6 +6125,9 @@
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
+    ],
+    "src/composition/mathts-scalar-symbols.ts": [
+      "tests/composition/mathts-scalar-symbols.test.ts"
     ],
     "src/composition/not-composable-seeds.ts": [
       "tests/composition/seed-edges.test.ts"
@@ -7210,6 +7216,7 @@
       "tests/composition/chain-regime.test.ts",
       "tests/composition/collect-symbols-transcendental.test.ts",
       "tests/composition/composition-recovery.test.ts",
+      "tests/composition/mathts-scalar-symbols.test.ts",
       "tests/composition/probe/corpus-prefactor.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/family-b.test.ts",
@@ -7777,6 +7784,7 @@
       "tests/composition/graph-viz.test.ts",
       "tests/composition/identifiability.test.ts",
       "tests/composition/junction-dimension.test.ts",
+      "tests/composition/mathts-scalar-symbols.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/probe/coverage-backfill.test.ts",
@@ -7967,6 +7975,7 @@
       "tests/composition/chain-regime.test.ts",
       "tests/composition/collect-symbols-transcendental.test.ts",
       "tests/composition/composition-recovery.test.ts",
+      "tests/composition/mathts-scalar-symbols.test.ts",
       "tests/composition/probe/family-b.test.ts",
       "tests/composition/proposed-bridges.test.ts",
       "tests/composition/relation-refusal.test.ts",
@@ -15567,6 +15576,14 @@
       "src/composition/edges/catalog-gravitation-cosmology.ts",
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts"
+    ],
+    "tests/composition/mathts-scalar-symbols.test.ts": [
+      "src/atlas/chain-pipeline.ts",
+      "src/composition/compose-symbolic.ts",
+      "src/composition/mathts-scalar-symbols.ts",
+      "src/dimensional/types.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts"
     ],
     "tests/composition/namespacing.test.ts": [
       "src/composition/index.ts",
