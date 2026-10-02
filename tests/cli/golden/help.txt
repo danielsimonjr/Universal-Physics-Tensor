@@ -289,22 +289,21 @@ Usage:
 Run with no arguments for a short demo.
 
   upt version     Show the installed CLI/package version.
-  --json          Global flag: emit a machine-readable JSON envelope instead of
-                  text (where the command supports it).
+  upt <command> --help
+                  Show that command's usage and flags.
 
-  --record=FILE <command> ...
-                  Run the command unchanged and append one JSONL entry to FILE:
-                  arguments, stdout, stderr, exit code, versions, parser, each
-                  constant table by name, the constants the command's code can
-                  reach, the files it reads and its modules' sources, and hashes
-                  of each. Failed invocations are recorded too.
-  --replay=FILE [--json]
-                  Re-run every entry of FILE; report each as reproduced, differs
-                  (naming the stream and first differing line) or not replayable,
-                  name every changed version, parser, constant or module (and
-                  whether the entry's command can reach it), and flag edits. A
-                  file written with --out is replayed to a temporary path and
-                  compared by hash. Exit 0 all reproduced unchanged, 3 any
-                  differs, 1 otherwise.
-  --show-record=FILE [--json]
-                  Print FILE as a readable transcript, running nothing.
+Place --json before the command or after it. `upt --json` with no command
+is an error. `upt version` and `upt help` do not take --json.
+Global options:
+  --help
+        Show this command list, or `upt help <command>` for one command. `-h` is the same. `upt <command> --help` prints that command.
+  --version
+        Print the package version as one semver line and exit. `-v` and `upt version` are the same. Neither takes --json.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+  --record=VALUE
+        Run the following command unchanged and append one JSONL entry to FILE: arguments, stdout, stderr, exit code, versions, and hashes. A failed run is recorded too.
+  --replay=VALUE
+        Re-run every entry of FILE and report reproduced, differs, or not replayable. Takes no command. `--json` after it selects the JSON report. Exit 0 when every entry is reproduced and unchanged, 3 when any differs, 1 otherwise.
+  --show-record=VALUE
+        Print FILE as a transcript and run nothing. Takes no command. `--json` after it selects the JSON report.

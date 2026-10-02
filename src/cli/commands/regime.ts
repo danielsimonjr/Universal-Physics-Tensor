@@ -19,15 +19,31 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
-import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
+import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
 import { readBinding } from '../../numerical/binding-value.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--at', valueStyle: 'either', repeatable: true },
-  { name: '--assume', valueStyle: 'either', repeatable: true },
-  { name: '--deny', valueStyle: 'either', repeatable: true },
-  { name: '--json', valueStyle: 'none' },
+  {
+    name: '--at',
+    valueStyle: 'either',
+    repeatable: true,
+    description: 'State one regime coordinate as group=value. A value may be an expression such as pi/2.',
+  },
+  {
+    name: '--assume',
+    valueStyle: 'either',
+    repeatable: true,
+    description: 'Record a prose premise as your declaration. It is not evidence and it is not evaluated.',
+  },
+  {
+    name: '--deny',
+    valueStyle: 'either',
+    repeatable: true,
+    description: 'Mark one prose premise contradicted. The others stay unspecified.',
+  },
+  JSON_FLAG,
 ];
 
 const HELP = `upt regime <family> [--at group=value ...] [--json]
@@ -155,10 +171,10 @@ async function run(ctx: CommandCtx): Promise<number> {
   const assignments = [...(args.flags.get('at') ?? []), ...args.positionals.filter((p) => p.includes('='))];
 
   if (familyArg === undefined) {
-    throw new CliError('upt regime: a family is required (e.g. `upt regime oscillators`)');
+    throw new UsageError('upt regime: a family is required (e.g. `upt regime oscillators`)');
   }
   if (rest.length > 0) {
-    throw new CliError(`upt regime: unexpected argument '${rest[0]}' (one family at a time)`);
+    throw new UsageError(`upt regime: unexpected argument '${rest[0]}' (one family at a time)`);
   }
   // Every registered family, not one by name: this command used to hard-code
   // the oscillator family and so could not report the diffusion or wave
@@ -385,5 +401,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   return verdicts.some((v) => v.ok === false) ? EXIT_CHECK_FAILED : 0;
 }
 
-export const command: Command = { name: 'regime', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'regime',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Report where a family\'s models are valid, violated, or unknown.',
+  example: 'upt regime oscillators --at theta0=0.2',
+  group: 'explore',
+  run,
+};
 registerCommand(command);

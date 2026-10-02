@@ -17,6 +17,13 @@ export interface FlagSpec {
    * exists for old-CLI fidelity (--equation's empty-value diagnostic belongs to
    * the command, not the parser). */
   optionalValue?: boolean;
+  /**
+   * One sentence printed by `upt help` and by `docs/CLI.md`.
+   * A registered command's flags set this. The parser does not read it.
+   */
+  description?: string;
+  /** Printed default, when the command has one. Omit when there is no default. */
+  defaultValue?: string;
 }
 
 export interface ParsedArgs {

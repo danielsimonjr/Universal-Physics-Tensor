@@ -42,88 +42,135 @@ Think of this as:
 
 ## Quick Start
 
-From npm, the CLI is `upt`:
-
 ```bash
 npm install universal-physics-tensor
 npx upt help
-npx upt explain hawking-temperature mass=1.989e30
 ```
 
-The npm package ships `dist/`, `bin/`, this README and the licence. The documentation, the examples
-and the test fixtures linked below live in the GitHub repository. The steps below work from a clone
-of it:
+The npm package ships `dist/`, `bin/`, this README and the licence. The documentation and the
+examples live in the GitHub repository. From a clone, Bun is the package manager (`package.json`
+pins `bun@1.4.2`). Node does not install it: `corepack prepare bun@1.4.2 --activate` fails with
+`Unsupported package manager specification`. Install that Bun from <https://bun.sh/install>, then
+`bun install` and `bun run build`. On a machine that has Node and not Bun, the clone path is
+`npm install`, `npm run build`, then `node bin/upt.mjs <command>`.
+
+A clone install uses the MathTS parser. A published `npm install` does not install the optional
+peers and uses the builtin parser. The two are not the same language: MathTS accepts `factorial`,
+`erf`, `gamma()`, and juxtaposition such as `2pi`; the builtin parser does not. Both read a bare
+`e` as the elementary charge, `E` as energy, and Euler's number only as `exp(x)`, for example
+`exp(1)`. The name `euler` is refused. `upt eval --debug` names the parser. `upt version` stays a
+bare semver line. `@danielsimonjr/mathts-functions` and `@viz-js/viz` (`upt map --format=svg`) are
+optional peers. The package keeps zero hard dependencies.
+
+## First five minutes
 
 ```bash
-# Clone the repository
-git clone https://github.com/danielsimonjr/universal-physics-tensor.git
-cd universal-physics-tensor
-
-# Install dependencies (Bun is the local/CI package manager; Node ≥ 18 is the runtime).
-# Bun is not installed by Node. `corepack prepare bun@1.4.2 --activate` fails
-# ("Unsupported package manager specification"). Install the pinned Bun from
-# https://bun.sh/install (this repo pins bun@1.4.2), then:
-bun install
-
-# Build the project
-bun run build
-
-# Run the smoke test
-node test-example.js
-
-# Bridge-inference CLI (no TypeScript needed) — `upt` subcommands:
-bun run upt -- explain hawking-temperature mass=1.989e30   # explain a built-in quantity
-bun run upt -- priority                                    # triage speculative bridges
-bun run upt -- audit                                       # derive the bridges by dimensions
-bun run upt -- predict                                     # empty regime cells as link hypotheses
-bun run upt -- discover                                    # vet link candidates (merge/unlock/consistency)
-bun run upt -- discover --source=canonical                 # run the funnel on standard physics ALONE (no bridges)
-bun run upt -- discover --derive                           # surface machine-derived identity consequences (--max-orders / --anchor flags available)
-bun run upt -- probe scan                                  # experimental expression/residual frontier (Product B; not `upt discover`)
-bun run upt -- probe run --problem=tests/fixtures/discovery/pendulum-scaling/public/problem.json   # a fixture in the clone
-bun run upt -- connectors                                  # which isolated bridges can connect to the core
-bun run upt -- coverage                                    # audit each bridge's empirical grounding
-bun run upt -- canonical                                   # the standard-physics L-layer registry (answer key)
-bun run upt -- recover                                     # validate bridges against standard physics
-bun run upt -- symbolic --simplify                         # compose + fold bridges' SYMBOLIC forms (MathTS simplify)
-bun run upt -- confront                                    # run the catalog's committed real-data confrontations (predicted vs observed)
-bun run upt -- map --source=both --format=mermaid          # VISUAL map of the graph (Mermaid; also --format=dot|svg, --proposed, --out=PATH)
-bun run upt -- map --equation "period = 2*pi*sqrt(length/gravity)"   # drop YOUR OWN equation onto the map: dimensional check + where it lands
-# ...and YOUR OWN equations:
-bun run upt -- eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
-bun run upt -- derive period:time length:length gravity:acceleration --formula "2*pi*sqrt(length/gravity)"
-#   → period ∝ length^0.5·gravity^-0.5 ; formula dimension: [time] ✓ matches target ;
-#     formula MATCHES, recovered prefactor ≈ 6.2832 (2π)
-bun run upt -- help
-# From an npm install, run the same commands as `npx upt <cmd>`.
-# (`bun run explain` and `bun run bridge-priority` remain as aliases.)
+npx upt eval "2*pi*sqrt(1/9.81)"
+npx upt derive period:time length:length gravity:acceleration --formula "2*pi*sqrt(length/gravity)"
+npx upt explain hawking-temperature mass=1Msun
+npx upt evaluate be-63 mu_e=2
+npx upt search pendulum
 ```
 
-`eval`/`derive --formula` use the MathTS expression engine
-(`@danielsimonjr/mathts-functions`) when the optional peers are installed,
-and a built-in, dependency-free parser otherwise — transparently, via a
-`FormulaParser` registry (`upt eval --debug` prints which is active; `upt version`
-stays a bare semver line). A clone's `bun install` or `npm install` installs
-the MathTS packages as devDependencies, so that path uses MathTS. A published
-`npm install universal-physics-tensor` does not install the optional peers and
-uses the builtin parser. The two are not the same language: MathTS accepts
-`factorial`, `erf`, `gamma()`, and juxtaposition such as `2pi`; the builtin
-parser does not. Both read a bare `e` as the elementary charge, `E` as energy,
-and Euler's number only as `exp(x)`, for example `exp(1)`. The name `euler` is refused. On a machine that has Node
-and not Bun, the clone path is `npm install`, `npm run build`, then
-`node bin/upt.mjs <command>`. UPT keeps
-**zero hard dependencies**; the MathTS packages and `@viz-js/viz` are optional peers, which a
-default install does not pull in. Add the ones you want, for example
-`npm install @danielsimonjr/mathts-functions` for the MathTS parser, or `npm install @viz-js/viz`
-for `upt map --format=svg`. The `universal-physics-tensor/numerical/mathts-engine` subpath imports
-`@danielsimonjr/mathts-tensor` directly, so importing it without that peer fails with
-`ERR_MODULE_NOT_FOUND`. That is the opt-in, not a bug: install the peer to use the engine. The main
-entry point never loads that subpath.
+`upt eval "2*pi*sqrt(1/9.81)"` prints the small-angle period of a 1 m pendulum, in seconds:
 
-See [`cli/README.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/cli/README.md) for the full CLI reference — every command
-and alias, the `--source=catalog|canonical|both` flag, input syntax, exit codes,
-and troubleshooting. [`docs/architecture/PHYSICS_MAP.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/PHYSICS_MAP.md)
-shows the rendered map (`upt map --format=mermaid|dot|svg`).
+```text
+2.0060666807106475
+```
+
+`upt derive` recovers the dimensionless prefactor of that formula (2π) and names the canonical entry:
+
+```text
+  dimensionally determined up to a constant:  period ∝ length^0.5·gravity^-0.5
+  formula dimension: [time]  ✓ homogeneous, matches target
+  formula MATCHES the dimensional form — recovered prefactor ≈ 6.2832e+0
+  ✓ agrees with CE-pendulum-period (Pendulum period), prefactor included: yours/canonical = 1 at 3 fixed points
+```
+
+`upt explain hawking-temperature mass=1Msun` recovers `6.1684e-8` by the two routes of BE-42.
+`upt evaluate be-63 mu_e=2` prints `M_Ch_solar = 1.4558683960704613` for an ideal degenerate gas
+with `M_sun = 1.989e30` kg. `upt search pendulum` names the commands that open the pendulum
+records. Every flag of every command is in [`docs/CLI.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/CLI.md).
+
+## Commands
+
+<!-- cli-reference:commands -->
+30 commands: 28 registered, plus `help` and `version`.
+
+**Evaluate and check**
+
+| Command | What it does |
+|---|---|
+| `audit` | Derive every bridge equation by dimensions and sort derived, decoy, and open. |
+| `derive` (`dim`) | Derive the dimensional form of your own equation and, with --formula, the prefactor. |
+| `eval` (`calc`) | Evaluate a scalar formula. A bare e is the elementary charge; Euler's number is exp(x). |
+| `evaluate` | Evaluate a closed-form bridge or an applied case, with units on every input. |
+| `metric` (`curvature`) | Print Christoffel symbols and curvature scalars for one exact metric. |
+| `symbolic` (`compose-symbolic`) | Compose the symbolic forms of the registered bridge chains. |
+
+**Explore bridges and the atlas**
+
+| Command | What it does |
+|---|---|
+| `atlas` | Show one atlas bridge with its relation, regime, bound, witnesses, and formal reference. |
+| `canonical` (`laws`) | List the canonical-equation registry, its fidelity, and the coverage gap. |
+| `explain` | Show how the graph determines a quantity, or say that it does not cover that name. |
+| `map` (`linkage`) | Show how equations link, or where your own equation lands on that graph. |
+| `path` | Show the bridge chain between two models and whether a bound is claimed there. |
+| `recover` (`recovery`, `validate`) | Classify each bridge-to-canonical link as restates, recovers, or dimensional-only. |
+| `regime` | Report where a family's models are valid, violated, or unknown. |
+| `search` | Find a bridge, equation, model, quantity, or case by the words in its record. |
+
+**Discovery and probes**
+
+| Command | What it does |
+|---|---|
+| `axes` (`axis-audit`) | Report which tensor classification axes gate the discovery funnel. |
+| `candidates` (`propose`) | Propose same-dimension links between clusters for physicist review. |
+| `connectors` (`orphans`) | Find same-dimension identifications that would pull an isolated bridge into the core. |
+| `discover` (`discovery`) | Vet quantity identifications and rank them promising, inert, or contradictory. |
+| `frontier` | Print null results and missing connections as two lists, neither of them a score. |
+| `ground` | Show which falsifiers ran on one discovery candidate, and which abstained. |
+| `predict` (`predictions`) | Rank empty regime cells as undiscovered-connection hypotheses. |
+| `priority` (`prioritize`, `triage`) | Triage speculative bridges by structural decidability, not by credibility. |
+| `probe` | Search expressions and residuals. This is not `upt discover`. |
+
+**Data and confrontation**
+
+| Command | What it does |
+|---|---|
+| `confront` | Run the committed predicted-versus-observed confrontations. |
+| `coverage` (`grounding`) | Count catalog bridges by empirical grounding tier. |
+| `retrieve` | Search the atlas for a claim. --embed asks a local Ollama model and does not accept that order. |
+| `testplan` | Print the measurement plan stored on a confrontation or an applied case. |
+
+**Utilities**
+
+| Command | What it does |
+|---|---|
+| `help` | Show every command, or one command's usage and flags. `upt help statuses` defines the status words. |
+| `version` | Print the installed package version as one semver line. |
+| `chain` | Name the internal chain orchestrator and exit 2. It does not run it. |
+<!-- /cli-reference:commands -->
+
+## Global options
+
+<!-- cli-reference:globals -->
+| Option | Default | What it does |
+|---|---|---|
+| `--help` |  | Show this command list, or `upt help <command>` for one command. `-h` is the same. `upt <command> --help` prints that command. |
+| `--version` |  | Print the package version as one semver line and exit. `-v` and `upt version` are the same. Neither takes --json. |
+| `--json` |  | Write a JSON envelope to stdout instead of the text report. |
+| `--record` |  | Run the following command unchanged and append one JSONL entry to FILE: arguments, stdout, stderr, exit code, versions, and hashes. A failed run is recorded too. |
+| `--replay` |  | Re-run every entry of FILE and report reproduced, differs, or not replayable. Takes no command. `--json` after it selects the JSON report. Exit 0 when every entry is reproduced and unchanged, 3 when any differs, 1 otherwise. |
+| `--show-record` |  | Print FILE as a transcript and run nothing. Takes no command. `--json` after it selects the JSON report. |
+<!-- /cli-reference:globals -->
+
+`upt <command> --help` prints that command. An unknown flag exits 2 and names the flag.
+[`docs/CLI.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/CLI.md) is the flag reference: every command, every flag, one example each.
+[`cli/README.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/cli/README.md) keeps the exit-code and input-syntax notes.
+[`docs/architecture/PHYSICS_MAP.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/docs/architecture/PHYSICS_MAP.md) is the rendered map
+(`upt map --format=mermaid|dot|svg`).
 
 ## Installation
 

@@ -12,16 +12,28 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, groundTruthAnchor, groundTruthLine, type SourceName } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--anchor', valueStyle: 'attached', repeatable: true },
-  { name: '--max-orders', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
+  sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both. Use the same value as the discover run.'),
+  {
+    name: '--anchor',
+    valueStyle: 'attached',
+    repeatable: true,
+    description: 'Override a numeric anchor as k=v or k=v,k2=v2.',
+    defaultValue: 'mass=M_sun',
+  },
+  {
+    name: '--max-orders',
+    valueStyle: 'attached',
+    description: 'Magnitude-clash threshold. A larger value keeps more pairs promising.',
+    defaultValue: '3',
+  },
+  JSON_FLAG,
 ];
 
 const HELP = `upt ground <quantityA> <quantityB> [--source=catalog|canonical|both]
@@ -96,7 +108,10 @@ export const command: Command = {
   name: 'ground',
   aliases: [],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Show which falsifiers ran on one discovery candidate, and which abstained.',
+  example: 'upt ground temperature mass',
+  group: 'discovery',
   run,
 };
 

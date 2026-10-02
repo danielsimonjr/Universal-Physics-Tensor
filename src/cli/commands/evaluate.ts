@@ -7,6 +7,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
@@ -18,9 +19,19 @@ import { bindingInUnit } from '../../numerical/binding-value.js';
 import { missingEvaluatorMessage } from '../../bridges/evaluators.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--sigma', valueStyle: 'either', repeatable: true },
-  { name: '--corr', valueStyle: 'either', repeatable: true },
-  { name: '--json', valueStyle: 'none' },
+  {
+    name: '--sigma',
+    valueStyle: 'either',
+    repeatable: true,
+    description: 'One input uncertainty as key=u, in the input\'s unit. A temperature uncertainty in degC is a difference.',
+  },
+  {
+    name: '--corr',
+    valueStyle: 'either',
+    repeatable: true,
+    description: 'A pairwise correlation as a,b=rho, used with --sigma.',
+  },
+  JSON_FLAG,
 ];
 
 const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
@@ -542,7 +553,10 @@ export const command: Command = {
   name: 'evaluate',
   aliases: [],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Evaluate a closed-form bridge or an applied case, with units on every input.',
+  example: 'upt evaluate be-63 mu_e=2',
+  group: 'evaluate',
   run,
 };
 

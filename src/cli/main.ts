@@ -20,6 +20,7 @@ import { parseArgs } from './args.js';
 import { packageVersion } from './version.js';
 import { glossaryText } from './statuses.js';
 import { resolveCommand, type CommandCtx } from './command.js';
+import { GLOBAL_FLAGS, renderFlagCatalog } from './flag-help.js';
 import { recordInvocation, replayRecord, showRecord, type Io } from './record.js';
 // Side-effect import: registers every ported command (see commands/index.ts).
 import './commands/index.js';
@@ -339,25 +340,11 @@ Usage:
 Run with no arguments for a short demo.
 
   upt version     Show the installed CLI/package version.
-  --json          Global flag: emit a machine-readable JSON envelope instead of
-                  text (where the command supports it).
+  upt <command> --help
+                  Show that command's usage and flags.
 
-  --record=FILE <command> ...
-                  Run the command unchanged and append one JSONL entry to FILE:
-                  arguments, stdout, stderr, exit code, versions, parser, each
-                  constant table by name, the constants the command's code can
-                  reach, the files it reads and its modules' sources, and hashes
-                  of each. Failed invocations are recorded too.
-  --replay=FILE [--json]
-                  Re-run every entry of FILE; report each as reproduced, differs
-                  (naming the stream and first differing line) or not replayable,
-                  name every changed version, parser, constant or module (and
-                  whether the entry's command can reach it), and flag edits. A
-                  file written with --out is replayed to a temporary path and
-                  compared by hash. Exit 0 all reproduced unchanged, 3 any
-                  differs, 1 otherwise.
-  --show-record=FILE [--json]
-                  Print FILE as a readable transcript, running nothing.`;
+Place --json before the command or after it. \`upt --json\` with no command
+is an error. \`upt version\` and \`upt help\` do not take --json.`;
 
 const GLOBAL_FILE_OPTION = /^--(record|replay|show-record)(?:=(.*))?$/;
 
@@ -366,9 +353,12 @@ const GLOBAL_FILE_OPTION = /^--(record|replay|show-record)(?:=(.*))?$/;
  * `process.argv` — callers slice off the node/script prefix themselves, as
  * `bin/upt.mjs` did with `process.argv.slice(2)`).
  *
- * Leading `--record=FILE` / `--replay=FILE` / `--show-record=FILE` are global
- * options (see `record.ts`); anything else goes to `dispatch` unchanged.
+ * Leading `--record=FILE` / `--replay=FILE` / `--show-record=FILE` / `--json`
+ * are global options. `--json` is moved onto the command so the command's
+ * own flag spec parses it. `upt <command> --help` prints that command.
  */
+const NO_JSON_VERBS = new Set(['help', '--help', '-h', 'version', '--version', '-v']);
+
 export async function runCli(argv: string[], io: Io = defaultIo): Promise<number> {
   const files: Partial<Record<'record' | 'replay' | 'show-record', string>> = {};
   let json = false;
@@ -381,23 +371,35 @@ export async function runCli(argv: string[], io: Io = defaultIo): Promise<number
         if (!m[2]) throw new UsageError(`upt: '--${name}' requires '--${name}=FILE'`);
         if (files[name] !== undefined) throw new UsageError(`upt: '--${name}' given more than once`);
         files[name] = m[2];
-      } else if (argv[i] === '--json' && (files.replay !== undefined || files['show-record'] !== undefined)) {
+      } else if (argv[i] === '--json') {
+        if (json) throw new UsageError(`upt: '--json' given more than once`);
         json = true;
       } else {
         break;
       }
     }
-    if (i === 0) return await dispatch(argv, io);
-    const rest = argv.slice(i);
+    let rest = argv.slice(i);
+    if (json && (files.replay !== undefined || files['show-record'] !== undefined)) {
+      // `--replay` / `--show-record` consume --json themselves and take no command.
+    } else if (json) {
+      if (rest.length === 0) throw new UsageError(`upt: '--json' requires a command`);
+      const verb = rest[0]!;
+      if (NO_JSON_VERBS.has(verb)) throw new UsageError(`upt: '${verb}' does not take --json`);
+      rest = [verb, '--json', ...rest.slice(1)];
+    }
+    if (i === 0 && !json) return await dispatch(argv, io);
     if (Object.keys(files).length > 1) {
       throw new UsageError('upt: use one of --record, --replay and --show-record at a time');
     }
     if (files.record !== undefined) return await recordInvocation(files.record, rest, dispatch, io, api);
-    if (rest.length > 0) {
-      throw new UsageError(`upt: '--${files.replay !== undefined ? 'replay' : 'show-record'}' takes no command (got '${rest[0]}')`);
+    if (files.replay !== undefined || files['show-record'] !== undefined) {
+      if (rest.length > 0) {
+        throw new UsageError(`upt: '--${files.replay !== undefined ? 'replay' : 'show-record'}' takes no command (got '${rest[0]}')`);
+      }
+      if (files.replay !== undefined) return await replayRecord(files.replay, json, dispatch, io, api);
+      return showRecord(files['show-record']!, json, io);
     }
-    if (files.replay !== undefined) return await replayRecord(files.replay, json, dispatch, io, api);
-    return showRecord(files['show-record']!, json, io);
+    return await dispatch(rest, io);
   } catch (e) {
     if (e instanceof UsageError) {
       io.err(e.message);
@@ -442,6 +444,7 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
     }
 
     if (cmd === 'help' || cmd === '--help' || cmd === '-h') {
+      if (rest.length > 1) throw new UsageError('upt help takes at most one command name');
       const target = rest[0];
       if (target === 'statuses') {
         out(glossaryText());
@@ -453,11 +456,12 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
         out(command.help);
         return 0;
       }
-      out(HELP_TEXT);
+      out(`${HELP_TEXT}\n${renderFlagCatalog(GLOBAL_FLAGS, 'Global options:')}`);
       return 0;
     }
 
     if (cmd === 'version' || cmd === '--version' || cmd === '-v') {
+      if (rest.length > 0) throw new UsageError('upt version takes no arguments');
       out(packageVersion());
       return 0;
     }
@@ -466,6 +470,11 @@ async function dispatch(argv: string[], io: Io): Promise<number> {
     if (!command) {
       err(unknownCommandMessage(cmd));
       return 2;
+    }
+
+    if (rest.includes('--help')) {
+      out(command.help);
+      return 0;
     }
 
     const parsed = parseArgs(command.name, rest, command.flags);

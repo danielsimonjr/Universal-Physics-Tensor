@@ -8,6 +8,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command } from '../command.js';
+import { commandHelp } from '../flag-help.js';
 
 const FLAGS: FlagSpec[] = [];
 
@@ -30,5 +31,14 @@ async function run(ctx: { err: (line?: string) => void }): Promise<number> {
   return 2;
 }
 
-export const command: Command = { name: 'chain', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'chain',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Name the internal chain orchestrator and exit 2. It does not run it.',
+  example: 'upt chain',
+  group: 'utilities',
+  run,
+};
 registerCommand(command);

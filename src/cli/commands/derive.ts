@@ -8,6 +8,7 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { UsageError, EXIT_CHECK_FAILED } from '../errors.js';
 import { formulaParserLabel } from '../version.js';
@@ -16,9 +17,13 @@ import { canonicalCheckFailed, conventionLines } from '../conventions.js';
 import type { Dimension } from '../../dimensional/types.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--formula', valueStyle: 'next' },
-  { name: '--debug', valueStyle: 'none' },
-  { name: '--json', valueStyle: 'none' },
+  {
+    name: '--formula',
+    valueStyle: 'next',
+    description: 'Check EXPR against the declared dimensions and recover the dimensionless prefactor.',
+  },
+  { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
+  JSON_FLAG,
 ];
 
 const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
@@ -213,7 +218,10 @@ export const command: Command = {
   name: 'derive',
   aliases: ['dim'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Derive the dimensional form of your own equation and, with --formula, the prefactor.',
+  example: 'upt derive period:time length:length gravity:acceleration --formula "2*pi*sqrt(length/gravity)"',
+  group: 'evaluate',
   run,
 };
 

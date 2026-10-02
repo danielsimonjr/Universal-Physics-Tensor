@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 77
+- **Potentially unused exports**: 79
 
 ## Potentially Unused Files
 
@@ -120,6 +120,11 @@ These exports are not imported by any other file in the codebase:
 - `STORED_RESULTS_PATH` (constant)
 - `DEFAULT_MAX_ROUTES` (constant)
 - `MAX_ROUTES_CEILING` (constant)
+
+### `src/cli/flag-help.ts`
+
+- `flagHeading` (function)
+- `BUILTIN_VERBS` (constant)
 
 ### `src/cli/record-reach.ts`
 

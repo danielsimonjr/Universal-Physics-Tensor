@@ -7,12 +7,13 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import type { AppliedCase } from '../../cases/types.js';
 import type { ConfrontationOutcome } from '../../bridges/observations/types.js';
 
-const FLAGS: FlagSpec[] = [{ name: '--json', valueStyle: 'none' }];
+const FLAGS: FlagSpec[] = [JSON_FLAG];
 
 const HELP = `upt testplan <be-NN | case-id> [--json]
         The measurement plan for one bridge confrontation or one applied case:
@@ -159,5 +160,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   return 0;
 }
 
-export const command: Command = { name: 'testplan', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'testplan',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Print the measurement plan stored on a confrontation or an applied case.',
+  example: 'upt testplan be-58',
+  group: 'data',
+  run,
+};
 registerCommand(command);

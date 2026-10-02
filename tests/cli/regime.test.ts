@@ -62,9 +62,16 @@ describe('upt regime', () => {
     expect(text).toMatch(/every inequality is UNCHECKED, which is not a pass/);
   });
 
-  it('a missing family is a bad invocation value → exit 1', async () => {
+  it('a missing family is a missing argument → exit 2', async () => {
     const cap = capture();
-    expect(await runCli(['regime'], cap.io)).toBe(1);
+    expect(await runCli(['regime'], cap.io)).toBe(2);
+    expect(cap.lines.join('')).toMatch(/a family is required/);
+  });
+
+  it('an extra positional is a usage error → exit 2', async () => {
+    const cap = capture();
+    expect(await runCli(['regime', 'oscillators', 'waves'], cap.io)).toBe(2);
+    expect(cap.lines.join('')).toMatch(/unexpected argument/);
   });
 
   it('an unknown family → exit 1', async () => {

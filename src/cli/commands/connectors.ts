@@ -7,12 +7,13 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, coreAnchor, coreLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--source', valueStyle: 'attached' },
-  { name: '--json', valueStyle: 'none' },
+  sourceFlag('both', 'Which graph to read: catalog, canonical, or both. This command defaults to both.'),
+  JSON_FLAG,
 ];
 
 const HELP = `upt connectors [--source=catalog|canonical|both]
@@ -72,7 +73,10 @@ export const command: Command = {
   name: 'connectors',
   aliases: ['orphans'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Find same-dimension identifications that would pull an isolated bridge into the core.',
+  example: 'upt connectors',
+  group: 'discovery',
   run,
 };
 

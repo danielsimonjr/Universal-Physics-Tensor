@@ -5,10 +5,11 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { scanCompositionRecovery } from '../../composition/composition-recovery.js';
 
-const FLAGS: FlagSpec[] = [{ name: '--json', valueStyle: 'none' }];
+const FLAGS: FlagSpec[] = [JSON_FLAG];
 
 const HELP = `upt recover
         Validate bridges against standard physics: classify each bridge↔
@@ -101,7 +102,10 @@ export const command: Command = {
   name: 'recover',
   aliases: ['recovery', 'validate'],
   flags: FLAGS,
-  help: HELP,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Classify each bridge-to-canonical link as restates, recovers, or dimensional-only.',
+  example: 'upt recover',
+  group: 'explore',
   run,
 };
 

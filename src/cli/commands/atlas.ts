@@ -28,16 +28,29 @@
  */
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
+import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { catalogFormalRef } from '../../atlas/catalog-formal-ref.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
 
 const FLAGS: FlagSpec[] = [
-  { name: '--run', valueStyle: 'none' },
-  { name: '--evidence', valueStyle: 'none' },
-  { name: '--stored', valueStyle: 'none' },
-  { name: '--json', valueStyle: 'none' },
+  {
+    name: '--run',
+    valueStyle: 'none',
+    description: 'Execute the in-process registered witnesses. Exit 3 if one is refuted.',
+  },
+  {
+    name: '--evidence',
+    valueStyle: 'none',
+    description: 'With no bridge id, list every bridge\'s derived evidence and the witness results it observes.',
+  },
+  {
+    name: '--stored',
+    valueStyle: 'none',
+    description: 'Read witness results from data/atlas/witness-results.json. That file is not in the published package; the command then names --run.',
+  },
+  JSON_FLAG,
 ];
 
 /** One witness run as `runWitnessRegistry` reports it. */
@@ -559,5 +572,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   return exitCode;
 }
 
-export const command: Command = { name: 'atlas', aliases: [], flags: FLAGS, help: HELP, run };
+export const command: Command = {
+  name: 'atlas',
+  aliases: [],
+  flags: FLAGS,
+  help: commandHelp(HELP, FLAGS),
+  summary: 'Show one atlas bridge with its relation, regime, bound, witnesses, and formal reference.',
+  example: 'upt atlas ab-pendulum-linear',
+  group: 'explore',
+  run,
+};
 registerCommand(command);
