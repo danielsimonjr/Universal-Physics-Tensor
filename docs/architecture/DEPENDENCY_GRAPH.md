@@ -851,7 +851,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `PhysjsManifestFile`
-- Functions: `physjsFormalRef`, `physjsManifestProblems`
+- Functions: `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
 - Constants: `PHYSJS_COMMIT`
 
 ---
@@ -7743,12 +7743,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 410 |
 | Total Modules | 13 |
-| Total Lines of Code | 89648 |
-| Total Exports | 2933 |
+| Total Lines of Code | 89678 |
+| Total Exports | 2934 |
 | Total Re-exports | 1395 |
 | Total Classes | 60 |
 | Total Interfaces | 464 |
-| Total Functions | 754 |
+| Total Functions | 755 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 547 |

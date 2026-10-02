@@ -4,7 +4,7 @@
     "version": "1.0.2",
     "totalFiles": 410,
     "totalModules": 13,
-    "totalExports": 2933
+    "totalExports": 2934
   },
   "entryPoints": [
     {
@@ -3019,6 +3019,7 @@
         ],
         "exports": [
           "PHYSJS_COMMIT",
+          "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
         ],
@@ -3026,6 +3027,7 @@
           "PhysjsManifestFile"
         ],
         "functions": [
+          "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
         ],
@@ -28372,11 +28374,11 @@
   "statistics": {
     "totalTypeScriptFiles": 410,
     "totalModules": 13,
-    "totalLinesOfCode": 89648,
-    "totalExports": 2933,
+    "totalLinesOfCode": 89678,
+    "totalExports": 2934,
     "totalClasses": 60,
     "totalInterfaces": 464,
-    "totalFunctions": 754,
+    "totalFunctions": 755,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 723,

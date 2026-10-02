@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 407 |
-| Total Test Files | 563 |
+| Total Test Files | 564 |
 | Source Files with Tests | 397 |
 | Source Files without Tests | 10 |
 | Coverage | 97.5% |
@@ -66,7 +66,7 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/conventions.ts` | `conventions.test.ts`, `relations-shim.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/coverage.ts` | `audited-catalog.test.ts`, `coverage.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `atlas/derivation.ts` | `barrel-completeness.test.ts`, `poster.test.ts`, `statement-derivation.test.ts`, `poster-source.test.ts` |
-| `atlas/derive-evidence.ts` | `barrel-completeness.test.ts`, `catalog-formal-ref.test.ts`, `coverage.test.ts`, `derive-evidence.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `physjs-manifest.test.ts`, `spring-lc-phase-carriage.test.ts`, `witness-results.test.ts`, `bucket-a-formal-sanity.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `proved-counterexample.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
+| `atlas/derive-evidence.ts` | `barrel-completeness.test.ts`, `bridge-seed-keys.test.ts`, `catalog-formal-ref.test.ts`, `coverage.test.ts`, `derive-evidence.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `pendulum-phase-translation.test.ts`, `pendulum-position-translation.test.ts`, `physjs-manifest.test.ts`, `spring-lc-phase-carriage.test.ts`, `witness-results.test.ts`, `bucket-a-formal-sanity.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `proved-counterexample.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
 | `diffusion/bridges-closure.ts` | `barrel-completeness.test.ts`, `closure.test.ts`, `formal-sanity.test.ts`, `stokes-einstein-regime.test.ts`, `witness-results.test.ts` |
 | `diffusion/bridges.ts` | `barrel-completeness.test.ts`, `diffusion.test.ts`, `witness-results.test.ts` |
 | `diffusion/dimensions.ts` | `diffusion.test.ts`, `negative-controls.test.ts` |
@@ -75,7 +75,7 @@ The following 10 source files are not directly imported by any test file:
 | `diffusion/numerics.ts` | `closure.test.ts`, `diffusion.test.ts`, `formal-sanity.test.ts`, `negative-controls.test.ts` |
 | `atlas/error-algebra.ts` | `barrel-completeness.test.ts`, `error-algebra.test.ts`, `path-bound.test.ts` |
 | `atlas/export.ts` | `barrel-completeness.test.ts`, `export.test.ts` |
-| `atlas/families.ts` | `atlas-json.test.ts`, `barrel-completeness.test.ts`, `benchmark.test.ts`, `bound-machine-form.test.ts`, `canonical-links.test.ts`, `delta-at-proven.test.ts`, `evidence-rule.test.ts`, `export.test.ts`, `families.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `lc-analogy-text.test.ts`, `link-prediction.test.ts`, `oscillators-coarse.test.ts`, `path-bound.test.ts`, `pendulum-phase-translation.test.ts`, `physjs-manifest.test.ts`, `regime-admission.test.ts`, `relative-norm-convention.test.ts`, `spring-lc-phase-carriage.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `applied-cases.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `proved-counterexample.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `formalref-axiom-gate.test.ts` |
+| `atlas/families.ts` | `atlas-json.test.ts`, `barrel-completeness.test.ts`, `benchmark.test.ts`, `bound-machine-form.test.ts`, `bridge-seed-keys.test.ts`, `canonical-links.test.ts`, `delta-at-proven.test.ts`, `evidence-rule.test.ts`, `export.test.ts`, `families.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `lc-analogy-text.test.ts`, `link-prediction.test.ts`, `oscillators-coarse.test.ts`, `path-bound.test.ts`, `pendulum-phase-translation.test.ts`, `physjs-manifest.test.ts`, `regime-admission.test.ts`, `relative-norm-convention.test.ts`, `spring-lc-phase-carriage.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `applied-cases.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `proved-counterexample.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts`, `formalref-axiom-gate.test.ts` |
 | `atlas/index.ts` | `barrel-completeness.test.ts` |
 | `atlas/link-prediction.ts` | `barrel-completeness.test.ts`, `link-prediction.test.ts` |
 | `atlas/model.ts` | `applicability.test.ts`, `barrel-completeness.test.ts`, `canonical-links.test.ts`, `link-prediction.test.ts`, `model.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
@@ -95,7 +95,7 @@ The following 10 source files are not directly imported by any test file:
 | `oscillators/position-translation.ts` | `pendulum-position-translation.test.ts` |
 | `oscillators/rejections.ts` | `oscillators-coarse.test.ts` |
 | `atlas/path-bound.ts` | `barrel-completeness.test.ts`, `bound-machine-form.test.ts`, `path-bound.test.ts`, `transported-norm-demo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `record-builtin-parser.test.ts`, `recover-conventions.test.ts` |
-| `atlas/physjs-ref.ts` | `formal-sanity.test.ts`, `formalref-kind.test.ts`, `physjs-manifest.test.ts` |
+| `atlas/physjs-ref.ts` | `bridge-seed-keys.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `physjs-manifest.test.ts` |
 | `poster/associations.ts` | `poster.test.ts` |
 | `poster/derivations.ts` | `poster.test.ts` |
 | `poster/statements.ts` | `poster.test.ts` |
@@ -474,6 +474,7 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/benchmark-study.test.ts` | 1 files |
 | `atlas/benchmark.test.ts` | 6 files |
 | `atlas/bound-machine-form.test.ts` | 8 files |
+| `atlas/bridge-seed-keys.test.ts` | 3 files |
 | `atlas/canonical-links.test.ts` | 6 files |
 | `atlas/catalog-formal-ref.test.ts` | 18 files |
 | `atlas/closure.test.ts` | 9 files |
