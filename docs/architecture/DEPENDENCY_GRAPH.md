@@ -4745,10 +4745,12 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./edge.js` | `CompositionAliasError` | Import |
 | `./compose.js` | `composeEdges` | Import |
 | `./compose.js` | `ComposeOptions` | Import (type-only) |
+| `./compose-symbolic.js` | `composeSymbolic` | Import |
 
 **Exports:**
 - Interfaces: `CompositionCandidate`, `DispositionRequired`, `EnumerationReport`
@@ -7770,7 +7772,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 412 |
 | Total Modules | 13 |
-| Total Lines of Code | 89826 |
+| Total Lines of Code | 89887 |
 | Total Exports | 2928 |
 | Total Re-exports | 1389 |
 | Total Classes | 60 |
@@ -7778,7 +7780,7 @@ graph TD
 | Total Functions | 759 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 551 |
+| Type-only Imports | 552 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
