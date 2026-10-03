@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the design note for the three applied-physicist candidate bridges. The note is `docs/planning/Applied-Physicist-Candidate-Bridges-Design.md`. It does not change `src/`.
+  Done: the note is that file. The three candidates stay unproven. No catalog row, no composition edge, and no evaluator is added. The owner assigned be-66, be-67, and be-68. Radiation pressure includes `(I/c)(1+R)cos²θ`. Tolman–Ehrenfest is `T√(−g_00)`. The Alfvén default is the total mass density.
+
 - [x] Record the applied-physicist dogfood of published `universal-physics-tensor@2.0.0`. The report is `docs/dogfood/2026-10-03-applied-physicist-bridges.md`. The session does not change `src/`.
   Done: the report is that file. npm `2.0.0` gitHead is `283fdb93d84f251270dfe3fcfe2cf4d7bb1741e4`. Annotated tag `v2.0.0` (object `b17412ac19fadd33aebb27e935a784e1d3dae719`) points at that commit. Candidates stay unproven. No code fix is in this change.
 
