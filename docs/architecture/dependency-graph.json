@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "3.0.0",
-    "totalFiles": 429,
+    "totalFiles": 431,
     "totalModules": 13,
-    "totalExports": 3078
+    "totalExports": 3081
   },
   "entryPoints": [
     {
@@ -14192,6 +14192,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "./relations/domain-regimes.js",
+            "imports": [
+              "*"
+            ]
+          },
+          {
             "file": "./index.js",
             "imports": [
               "explainQuantity",
@@ -14703,6 +14709,13 @@
             "reExport": true
           },
           {
+            "file": "./relations/regime-registration.js",
+            "imports": [
+              "domainRegimeRegistrations"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./atlas/regime.js",
             "imports": [
               "RegimeCheck",
@@ -14981,6 +14994,7 @@
           "regimeHolds",
           "regimeOverlap",
           "uncoveredRegions",
+          "domainRegimeRegistrations",
           "familyChangeBlocksHorizon",
           "findPath",
           "findAtlasPath",
@@ -15202,6 +15216,7 @@
           "regimeHolds",
           "regimeOverlap",
           "uncoveredRegions",
+          "domainRegimeRegistrations",
           "RegimeCheck",
           "RegimeOverlap",
           "RegionSample",
@@ -29520,6 +29535,53 @@
           "unknownConventionKeys"
         ]
       },
+      "src/relations/domain-regimes.ts": {
+        "description": "Domains whose inequality list is empty.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./regime-registration.js",
+            "imports": [
+              "registerRegimeDomain"
+            ]
+          },
+          {
+            "file": "./types.js",
+            "imports": [
+              "Regime"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": []
+      },
+      "src/relations/regime-registration.ts": {
+        "description": "Names `upt regime` can survey that are not atlas families.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./types.js",
+            "imports": [
+              "Regime"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "registerRegimeDomain",
+          "domainRegimeRegistrations"
+        ],
+        "interfaces": [
+          "RegimeDomainRecord",
+          "RegimeDomainRegistration"
+        ],
+        "functions": [
+          "registerRegimeDomain",
+          "domainRegimeRegistrations"
+        ]
+      },
       "src/relations/regime-vocabularies.ts": {
         "description": "Names for the three regime vocabularies. They are not one type, and",
         "externalDependencies": [],
@@ -30126,6 +30188,8 @@
           "src/relations/category.ts",
           "src/relations/composition-table.ts",
           "src/relations/conventions.ts",
+          "src/relations/domain-regimes.ts",
+          "src/relations/regime-registration.ts",
           "src/relations/regime-vocabularies.ts",
           "src/relations/regime.ts",
           "src/relations/types.ts"
@@ -30134,18 +30198,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 429,
+    "totalTypeScriptFiles": 431,
     "totalModules": 13,
-    "totalLinesOfCode": 92355,
-    "totalExports": 3078,
+    "totalLinesOfCode": 92437,
+    "totalExports": 3081,
     "totalClasses": 60,
-    "totalInterfaces": 488,
-    "totalFunctions": 797,
+    "totalInterfaces": 490,
+    "totalFunctions": 799,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 769,
-    "totalReExports": 1453,
-    "totalTypeOnlyImports": 575,
+    "totalReExports": 1454,
+    "totalTypeOnlyImports": 577,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

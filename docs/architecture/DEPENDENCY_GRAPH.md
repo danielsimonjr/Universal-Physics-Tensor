@@ -50,7 +50,7 @@ The codebase is organized into the following modules:
 - **dimensional**: 36 files
 - **entry**: 1 file
 - **numerical**: 38 files
-- **relations**: 6 files
+- **relations**: 8 files
 
 ---
 
@@ -4267,6 +4267,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `./relations/domain-regimes.js` | `*` | Import |
 | `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
 | `./index.js` | `composeEdges` | Re-export |
 | `./composition/user-equation.js` | `formatConnectedSummary` | Re-export |
@@ -4327,6 +4328,7 @@ The codebase is organized into the following modules:
 | `./atlas/translation.js` | `ObservableCarriage, ObservableTranslation, PointCheck` | Re-export |
 | `./atlas/oscillators/index.js` | `AtlasFamily` | Re-export |
 | `./atlas/regime.js` | `collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions` | Re-export |
+| `./relations/regime-registration.js` | `domainRegimeRegistrations` | Re-export |
 | `./atlas/regime.js` | `RegimeCheck, RegimeOverlap, RegionSample` | Re-export |
 | `./atlas/path-bound.js` | `familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels` | Re-export |
 | `./atlas/composition-table.js` | `composeRelation` | Re-export |
@@ -4380,13 +4382,13 @@ The codebase is organized into the following modules:
   summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
   OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
   ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups,
-  regimeHolds, regimeOverlap, uncoveredRegions, RegimeCheck, RegimeOverlap, RegionSample,
-  familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute,
-  routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim, AppliedTransport,
-  AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
-  catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
-  kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding, bindingInUnit,
-  alignTemperatureBinding, boltzmannBindingScale, builtinFormulaDimensionChecker,
+  regimeHolds, regimeOverlap, uncoveredRegions, domainRegimeRegistrations, RegimeCheck, RegimeOverlap,
+  RegionSample, familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath,
+  horizonOnRoute, routeEntryModels, composeRelation, PathBoundResult, PathBoundClaim, PathNoClaim,
+  AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
+  ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
+  kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding,
+  bindingInUnit, alignTemperatureBinding, boltzmannBindingScale, builtinFormulaDimensionChecker,
   missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
   EquationAnalysis
   ```
@@ -7967,6 +7969,29 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/relations/domain-regimes.ts` - Domains whose inequality list is empty.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./regime-registration.js` | `registerRegimeDomain` | Import |
+| `./types.js` | `Regime` | Import (type-only) |
+
+---
+
+### `src/relations/regime-registration.ts` - Names `upt regime` can survey that are not atlas families.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./types.js` | `Regime` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `RegimeDomainRecord`, `RegimeDomainRegistration`
+- Functions: `registerRegimeDomain`, `domainRegimeRegistrations`
+
+---
+
 ### `src/relations/regime-vocabularies.ts` - Names for the three regime vocabularies. They are not one type, and
 
 **Internal Dependencies:**
@@ -8153,9 +8178,9 @@ graph TD
         N59[category]
         N60[composition-table]
         N61[conventions]
-        N62[regime-vocabularies]
-        N63[regime]
-        N64[...1 more]
+        N62[domain-regimes]
+        N63[regime-registration]
+        N64[...3 more]
     end
 
     N0 --> N48
@@ -8196,17 +8221,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 429 |
+| Total TypeScript Files | 431 |
 | Total Modules | 13 |
-| Total Lines of Code | 92355 |
-| Total Exports | 3078 |
-| Total Re-exports | 1453 |
+| Total Lines of Code | 92437 |
+| Total Exports | 3081 |
+| Total Re-exports | 1454 |
 | Total Classes | 60 |
-| Total Interfaces | 488 |
-| Total Functions | 797 |
+| Total Interfaces | 490 |
+| Total Functions | 799 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 575 |
+| Type-only Imports | 577 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

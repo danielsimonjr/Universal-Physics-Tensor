@@ -65,7 +65,7 @@ describe('upt regime', () => {
   it('a missing family is a missing argument → exit 2', async () => {
     const cap = capture();
     expect(await runCli(['regime'], cap.io)).toBe(2);
-    expect(cap.lines.join('')).toMatch(/a family is required/);
+    expect(cap.lines.join('')).toMatch(/a name is required/);
   });
 
   it('an extra positional is a usage error → exit 2', async () => {

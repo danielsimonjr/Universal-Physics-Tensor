@@ -70,8 +70,8 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
         no violated record exit 0.
         A value is a number, a unit, or a constant expression (theta0=pi/2,
         t=1s). A bare number is already in the coordinate's unit.
-        e.g.  upt regime oscillators --at theta0=0.2
-              upt regime oscillators --deny lossless`;
+        e.g.  upt regime <name> --at theta0=0.2
+              upt regime <name> --deny lossless`;
 
 /**
  * Collect `group=value` assignments from `--at` values and from bare
@@ -175,18 +175,38 @@ async function run(ctx: CommandCtx): Promise<number> {
   const assignments = [...(args.flags.get('at') ?? []), ...args.positionals.filter((p) => p.includes('='))];
 
   if (familyArg === undefined) {
-    throw new UsageError('upt regime: a family is required (e.g. `upt regime oscillators`)');
+    throw new UsageError('upt regime: a name is required (e.g. `upt regime <name>`)');
   }
   if (rest.length > 0) {
     throw new UsageError(`upt regime: unexpected argument '${rest[0]}' (one family at a time)`);
   }
-  // Every registered family, not one by name: this command used to hard-code
-  // the oscillator family and so could not report the diffusion or wave
-  // families at all once they existed.
-  const family = api.ATLAS_FAMILIES.find((f) => f.family === familyArg);
-  if (family === undefined) {
+  // Atlas families project into the same registry a domain module adds to.
+  // This command used to read the family array alone, so a name that was not
+  // one of those families had nowhere to put an inequality.
+  const registrations = [
+    ...api.ATLAS_FAMILIES.map((family) => ({
+      name: family.family,
+      records: [
+        ...family.models.map((m) => ({
+          id: m.id,
+          kind: 'model' as const,
+          regime: m.regime,
+          sideConditions: undefined as readonly string[] | undefined,
+        })),
+        ...family.bridges.map((b) => ({
+          id: b.id,
+          kind: 'bridge' as const,
+          regime: b.regime,
+          sideConditions: b.sideConditions,
+        })),
+      ],
+    })),
+    ...api.domainRegimeRegistrations(),
+  ];
+  const registration = registrations.find((entry) => entry.name === familyArg);
+  if (registration === undefined) {
     throw new CliError(
-      `upt regime: unknown family '${familyArg}' (known: ${api.ATLAS_FAMILIES.map((f) => f.family).join(', ')})`,
+      `upt regime: unknown family '${familyArg}' (known: ${registrations.map((entry) => entry.name).join(', ')})`,
     );
   }
 
@@ -209,20 +229,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   // would print nine confident 'valid's that were never checked against
   // anything — the tri-state's `true` is vacuous when there is nothing to
   // check, so that case is labelled rather than left to read as a pass.
-  const records: {
-    id: string;
-    kind: 'model' | 'bridge';
-    regime: typeof family.models[number]['regime'];
-    sideConditions?: readonly string[];
-  }[] = [
-    ...family.models.map((m) => ({ id: m.id, kind: 'model' as const, regime: m.regime })),
-    ...family.bridges.map((b) => ({
-      id: b.id,
-      kind: 'bridge' as const,
-      regime: b.regime,
-      sideConditions: b.sideConditions,
-    })),
-  ];
+  const records = registration.records;
 
   const { values: resolved, unknown } = resolveAtPoint(point, records.map((r) => r.regime));
   const unmatched = [
@@ -303,7 +310,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   // would make coverage vacuously total and the report would answer nothing.
   const constraining = records.filter((r) => r.regime.inequalities.length > 0);
   const uncovered =
-    stated.length === 0 ? null : api.uncoveredRegions(family.family, constraining, samples);
+    stated.length === 0 ? null : api.uncoveredRegions(registration.name, constraining, samples);
 
   if (wantJson) {
     emitJson(
@@ -313,7 +320,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           "an 'unknown' verdict is a failure to confirm validity, NEVER validity: a coordinate the " +
           'point did not supply was not checked, and an unchecked inequality is not a satisfied one. ' +
           'Uncovered regions are reported only over the box --at states; none is synthesized.',
-        options: { family: family.family, at: point, assume, deny },
+        options: { family: registration.name, at: point, assume, deny },
         result: {
           resolvedPoint: resolved,
           unknownCoordinates: unknown,
@@ -331,7 +338,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     return verdicts.some((v) => v.ok === false) ? EXIT_CHECK_FAILED : 0;
   }
 
-  out(`\nRegimes of family '${family.family}'`);
+  out(`\nRegimes of family '${registration.name}'`);
   out(
     stated.length === 0
       ? '(no --at point supplied: every inequality is UNCHECKED, which is not a pass)'
@@ -339,12 +346,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   );
   if (unknown.length > 0) {
     out(
-      `unknown coordinate(s): ${unknown.join(', ')} — no record in family '${family.family}' uses ` +
+      `unknown coordinate(s): ${unknown.join(', ')} — no record in family '${registration.name}' uses ` +
         `${unknown.length === 1 ? 'it' : 'them'}; ignored`,
     );
   }
   for (const { flag, d } of unmatched) {
-    out(`${flag} '${d}' matches no side condition in family '${family.family}'; ignored`);
+    out(`${flag} '${d}' matches no side condition in family '${registration.name}'; ignored`);
   }
   out('');
   for (const m of verdicts) {
@@ -411,7 +418,7 @@ export const command: Command = {
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
   summary: 'Report where a family\'s models are valid, violated, or unknown.',
-  example: 'upt regime oscillators --at theta0=0.2',
+  example: 'upt regime <name>',
   group: 'explore',
   run,
 };
