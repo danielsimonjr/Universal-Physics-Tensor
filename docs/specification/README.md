@@ -34,7 +34,7 @@ part carries status notes marking superseded or speculative content.
   laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) and are not
   individually catalogued. Reviewed `formalRef`s use `lean4-physjs`
   and name public PhysJS; the atlas and catalog counts are in `NOTES.md`, not in this catalog.
-  Kind `bridge` is the only kind that would light `formally-proved` if passed to `deriveEvidence`; the catalog path does not pass it, and the thirteen kind-bridge catalog ids and the partials are listed in `NOTES.md`.
+  Kind `bridge` is the only kind that lights `formally-proved`. The catalog path passes that reference, except an unadjudicated row stays `proposed`. The ids and the partials are listed in `NOTES.md`.
 - **Revision provenance**: the 2026-05 adversarial-review iterations
   ("Wave X Tier Y, per Reviewer Z") were relocated to
   [CHANGELOG.md](CHANGELOG.md) on 2026-06-10 so the spec reads as a clean

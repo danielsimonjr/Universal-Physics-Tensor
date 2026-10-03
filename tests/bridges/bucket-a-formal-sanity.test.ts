@@ -4,9 +4,9 @@
  * Each top-level statement is instantiated on a known case, and the
  * negative control named in its covers line fails. Kind is `bridge`
  * when the theorem states the catalogued equation, and a weaker kind
- * when it proves only part of that equation. The catalog path still
- * omits the reference. BE-20 stays a nested corollary on be-13. The
- * four not-a-bridge ids stay that membership.
+ * when it proves only part of that equation. The catalog path passes a
+ * kind-`bridge` reference and omits every other kind. BE-20 stays a
+ * nested corollary on be-13. The four not-a-bridge ids stay that membership.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -84,13 +84,15 @@ function apart(actual: number, expected: number, rel = 1e-3): void {
 }
 
 describe('bucket-A catalog formalRefs', () => {
-  it('twenty-one references exist, and the catalog path does not pass them', () => {
+  it('twenty-one references exist, and only an adjudicated kind-bridge row is formally-proved', () => {
     expect(BUCKET_A).toHaveLength(21);
     expect(EQUATION.length + PARTIAL.length + 1).toBe(21);
     for (const [id, statement] of BUCKET_A) {
       const entry = row(id);
       expect(entry.formalRef?.statement, `be-${id}`).toBe(statement);
-      expect(deriveEdgeEvidence(id).has('formally-proved'), `be-${id}`).toBe(false);
+      const proved =
+        entry.formalRef?.kind === 'bridge' && adjudicateBridgeEntry(entry) !== 'unadjudicated';
+      expect(deriveEdgeEvidence(id).has('formally-proved'), `be-${id}`).toBe(proved);
       expect(deriveEdgeEvidence(id).has('formally-proved-property'), `be-${id}`).toBe(false);
     }
   });
@@ -137,6 +139,9 @@ describe('bucket-A catalog formalRefs', () => {
   it('the four not-a-bridge ids stay not-a-bridge', () => {
     for (const id of NOT_A_BRIDGE) {
       expect(adjudicateBridgeEntry(row(id)), `be-${id}`).toBe('not-a-bridge');
+    }
+    expect(deriveEdgeEvidence(40).has('formally-proved')).toBe(true);
+    for (const id of [28, 32, 35]) {
       expect(deriveEdgeEvidence(id).has('formally-proved'), `be-${id}`).toBe(false);
     }
   });

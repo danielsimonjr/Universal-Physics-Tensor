@@ -115,8 +115,9 @@ file, `tests/relations/category.test.ts`.
 A catalog id is a row in `BRIDGE_EQUATIONS` (`src/bridges/index.ts`, about
 2 800 lines). Its PhysJS reference, when it has one, is not on that row. It
 is `catalogFormalRef` in `src/atlas/catalog-formal-ref.ts`. `upt atlas`
-prints that reference. The catalog path does not pass it to `deriveEvidence`,
-so a catalog reference does not light `formally-proved`. An atlas bridge
+prints that reference. The catalog path passes a kind-`bridge` reference
+to `deriveEvidence`, so that row lights `formally-proved` unless the verdict
+is unadjudicated. A derivation-step is not passed. An atlas bridge
 (`ab-*`) carries its own `formalRef`, and `deriveEvidence` lights the tag
 only for kind `bridge`.
 

@@ -426,7 +426,7 @@ describe('vendored PhysJS manifest', () => {
     expect(landauer?.axioms).toEqual(['propext', 'Classical.choice', 'Quot.sound']);
     expect(landauer?.covers.startsWith('derivation-step: ')).toBe(true);
     expect(deriveEvidence({ formalRef: landauer }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
-    expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(false);
+    expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(true);
     const reviewed = atlasBridges.filter(
       (bridge) => bridge.formalRef !== undefined && bridge.formalRef.fidelity !== 'unreviewed',
     );

@@ -561,6 +561,9 @@ modules:
             - FormalFidelity
             - FormalRefKind
           typeOnly: true
+        - file: ./catalog-formal-ref.js
+          imports:
+            - catalogFormalRef
       exports:
         - NO_PASSING_WITNESSES
         - counterexamplesWithRejection
@@ -20895,7 +20898,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 426
   totalModules: 13
-  totalLinesOfCode: 92029
+  totalLinesOfCode: 92040
   totalExports: 3071
   totalClasses: 60
   totalInterfaces: 487

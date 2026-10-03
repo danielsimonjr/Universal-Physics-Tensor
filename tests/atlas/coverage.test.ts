@@ -82,9 +82,10 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
     ).length;
     expect(report.records).toBe(58);
     expect(report.byTag.contradicted).toBe(refuted);
-    expect(report.byTag.proposed).toBe(58 - refuted);
+    expect(report.byTag['formally-proved']).toBe(16);
+    expect(report.byTag.proposed).toBe(58 - refuted - 16);
     for (const tag of ALL_EVIDENCE_TAGS) {
-      if (tag === 'proposed' || tag === 'contradicted') continue;
+      if (tag === 'proposed' || tag === 'contradicted' || tag === 'formally-proved') continue;
       expect(report.byTag[tag]).toBe(0);
     }
   });
@@ -145,6 +146,6 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
         deriveEvidenceForVerdict(adjudicateBridgeEntry(entry), catalogEvidenceInput(entry), NO_PASSING_WITNESSES),
       ),
     );
-    expect(report.byTag['formally-proved']).toBe(0);
+    expect(report.byTag['formally-proved']).toBe(16);
   });
 });

@@ -4,9 +4,9 @@
  * The vendored manifest is the check. A hand-set theorem, axiom list, or
  * covers line that disagrees with that file fails here. Passing the
  * reference to `deriveEvidence` lights `formally-proved`. The catalog
- * path still omits it, so `deriveEdgeEvidence` does not. Edge confidence
- * stays `established`: the grade is the catalog status, and a proof does
- * not promote it.
+ * path passes a kind-`bridge` reference, so `deriveEdgeEvidence` does too.
+ * Edge confidence stays `established`: the grade is the catalog status,
+ * and a proof does not promote it.
  *
  * Before the pin, this file failed because `catalogFormalRef(66)` was
  * undefined and the manifest commit was still
@@ -54,7 +54,7 @@ describe('PhysJS proofs for be-66, be-67, and be-68', () => {
     }
   });
 
-  it('each formalRef is the manifest line, kind bridge, and the catalog path does not light formally-proved', () => {
+  it('each formalRef is the manifest line, kind bridge, and both paths light formally-proved', () => {
     for (const row of ROWS) {
       const entry = manifest.entries.find((candidate) => candidate.key === `be-${row.id}`);
       const ref = catalogFormalRef(row.id);
@@ -69,8 +69,8 @@ describe('PhysJS proofs for be-66, be-67, and be-68', () => {
       expect(ref?.url).toBe(`https://github.com/danielsimonjr/PhysJS/blob/${SHA}/PhysJS/${row.file}`);
       expect(ref?.covers).toBe(`${entry?.covers} — covers its statement only`);
       expect(deriveEvidence({ formalRef: ref }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
-      expect(deriveEdgeEvidence(row.id).has('formally-proved')).toBe(false);
-      expect(deriveEdgeEvidence(row.id).has('proposed')).toBe(true);
+      expect(deriveEdgeEvidence(row.id).has('formally-proved')).toBe(true);
+      expect(deriveEdgeEvidence(row.id).has('proposed')).toBe(false);
       expect(row.edge.confidence).toBe('established');
       expect(row.edge.kind).toBe('law');
       expect(bridgeSeedKeys()).toContain(`be-${row.id}`);

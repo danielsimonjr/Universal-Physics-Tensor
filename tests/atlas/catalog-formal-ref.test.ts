@@ -5,7 +5,7 @@
  * stored on the catalog entry: kind, url, covers, and the rest.
  * `catalogFormalRef` is the same reference after the move.
  * `deriveEvidence` of one must match `deriveEvidence` of the other.
- * The catalog path still omits the reference.
+ * The catalog path passes a kind-`bridge` reference and omits every other kind.
  *
  * A control rewrites kind. If that rewrite left the tag set alone, the
  * equality above would not be reading kind.
@@ -19,10 +19,12 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import {
   catalogEvidenceInput,
   deriveEvidence,
+  deriveEvidenceForVerdict,
   NO_PASSING_WITNESSES,
 } from '../../src/atlas/derive-evidence.js';
 import type { FormalRef } from '../../src/relations/types.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { adjudicateBridgeEntry } from '../../src/bridges/membership.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -62,7 +64,14 @@ describe('catalog formalRef overlay', () => {
       });
       expect(after, `be-${live.id}`).toEqual(before);
       const catalogPath = [...deriveEdgeEvidence(live.id)].sort();
-      expect(catalogPath, `be-${live.id} catalog path`).toEqual(tags(catalogEvidenceInput(live)));
+      const fromInput = [
+        ...deriveEvidenceForVerdict(
+          adjudicateBridgeEntry(live),
+          catalogEvidenceInput(live),
+          NO_PASSING_WITNESSES,
+        ),
+      ].sort();
+      expect(catalogPath, `be-${live.id} catalog path`).toEqual(fromInput);
       if (before.join('|') !== catalogPath.join('|')) differedFromCatalogPath += 1;
     }
     expect(differedFromCatalogPath).toBeGreaterThan(0);

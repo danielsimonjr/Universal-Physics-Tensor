@@ -2716,7 +2716,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dependencies: [],
   dimensional_signature: `[L^-1 M T^-2]`,
   tractability_class: 'closed-form',
-  notes: `Closed-form evaluator evaluateRadiationPressure({I_W_per_m2, R, theta_rad}) → {P_Pa} in src/bridges/be66-radiation-pressure.ts. The overlay formalRef is PhysJS.RadiationPressure.pressure_eq, kind bridge. The catalog path does not pass it to deriveEvidence, so deriveEdgeEvidence stays proposed. The edge confidence stays established. Buckingham on {P, I, c} leaves the constant unfixed; the theorem states the opaque-surface factor. No confrontation: the printed I = 10^6 W/m² stand-ins are arithmetic, not measurements.`,
+  notes: `Closed-form evaluator evaluateRadiationPressure({I_W_per_m2, R, theta_rad}) → {P_Pa} in src/bridges/be66-radiation-pressure.ts. The overlay formalRef is PhysJS.RadiationPressure.pressure_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Buckingham on {P, I, c} leaves the constant unfixed; the theorem states the opaque-surface factor. No confrontation: the printed I = 10^6 W/m² stand-ins are arithmetic, not measurements.`,
 },
 {
   id: 67,
@@ -2737,7 +2737,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dependencies: [],
   dimensional_signature: `[velocity]`,
   tractability_class: 'closed-form',
-  notes: `Closed-form evaluator evaluateAlfvenSpeed({B_T, rho_kg_per_m3}) → {v_m_per_s} in src/bridges/be67-alfven-speed.ts. rho_kg_per_m3 is the total mass density. alfvenProtonOnlyDensity(n_per_m3) = n m_p is the named special case; passing a number density as rho_kg_per_m3 is not that case. The overlay formalRef is PhysJS.AlfvenSpeed.speed_eq, kind bridge. The catalog path does not pass it to deriveEvidence, so deriveEdgeEvidence stays proposed. The edge confidence stays established. The 69.95 km/s figure is the proton-only stand-in at B = 12 nT and n = 14 cm⁻³. It does not close a ~60 km/s sentence, and a helium fraction is not claimed to close it. No confrontation.`,
+  notes: `Closed-form evaluator evaluateAlfvenSpeed({B_T, rho_kg_per_m3}) → {v_m_per_s} in src/bridges/be67-alfven-speed.ts. rho_kg_per_m3 is the total mass density. alfvenProtonOnlyDensity(n_per_m3) = n m_p is the named special case; passing a number density as rho_kg_per_m3 is not that case. The overlay formalRef is PhysJS.AlfvenSpeed.speed_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. The 69.95 km/s figure is the proton-only stand-in at B = 12 nT and n = 14 cm⁻³. It does not close a ~60 km/s sentence, and a helium fraction is not claimed to close it. No confrontation.`,
 },
 {
   id: 68,
@@ -2758,7 +2758,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dependencies: [],
   dimensional_signature: `[temperature]`,
   tractability_class: 'closed-form',
-  notes: `Closed-form evaluator evaluateTolmanEhrenfest({T_K, g_00}) → {invariant_K} in src/bridges/be68-tolman-ehrenfest.ts. Requires T > 0 and g_00 < 0. Math.sqrt(g_00) is NaN for g_00 < 0 and is not the formula. tolmanTemperatureAt(invariant, g_00) recovers T. The overlay formalRef is PhysJS.TolmanEhrenfest.hydrostatic_constant, kind bridge. The catalog path does not pass it to deriveEvidence, so deriveEdgeEvidence stays proposed. The edge confidence stays established. Not chained through be-42. No confrontation.`,
+  notes: `Closed-form evaluator evaluateTolmanEhrenfest({T_K, g_00}) → {invariant_K} in src/bridges/be68-tolman-ehrenfest.ts. Requires T > 0 and g_00 < 0. Math.sqrt(g_00) is NaN for g_00 < 0 and is not the formula. tolmanTemperatureAt(invariant, g_00) recovers T. The overlay formalRef is PhysJS.TolmanEhrenfest.hydrostatic_constant, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not chained through be-42. No confrontation.`,
 }
 
 ];
