@@ -44,3 +44,6 @@ import PhysJS.CompositeHiggs
 import PhysJS.Crossing
 import PhysJS.Chandrasekhar
 import PhysJS.Entanglement
+import PhysJS.RadiationPressure
+import PhysJS.AlfvenSpeed
+import PhysJS.TolmanEhrenfest
