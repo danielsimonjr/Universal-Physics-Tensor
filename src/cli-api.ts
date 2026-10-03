@@ -22,6 +22,7 @@ export {
   CANONICAL_GRAPH,
   M_SUN_KG,
   composeSymbolic,
+  composeEdges,
   be42Edge,
   be16Edge,
   lawSchwarzschildRadius,

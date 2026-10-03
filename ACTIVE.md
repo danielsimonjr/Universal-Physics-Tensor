@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Point `upt chain` at a document a published tarball can open, and point the Landauer edge grade at the atlas formalRef.
+  Done: `upt chain` exits 2 and names the GitHub URL of `docs/planning/Bridge-Discovery-Pipeline-Design.md`. It does not run the orchestrator. `be16Edge.confidence` stays `speculative`. `composeEdges(be42Edge, be16Edge).confidence` stays `highly-speculative`. `upt atlas be-16` and `upt symbolic` say those are different facts. Before the URL, `upt chain` named the repository path and `upt symbolic` did not print the grade. Package version stays 2.0.0.
+
 - [x] `upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy`.
   Done: the error names `BridgeEquations.landauerEnergy({ temperature_K })` and `upt explain landauer-erasure-energy temperature=300`. Both return `k_B T ln 2`. An id with no such command still points at `upt evaluate` with no args. Before the sentence, `evaluateBridge(16)` said to see `upt evaluate` with no args. Package version stays 2.0.0.
 

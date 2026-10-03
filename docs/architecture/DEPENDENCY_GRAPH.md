@@ -4184,7 +4184,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
+| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, composeEdges, be42Edge, be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
 | `./composition/user-equation.js` | `formatConnectedSummary` | Re-export |
 | `./composition/bridge-analysis.js` | `bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors` | Re-export |
 | `./numerical/formula-registry.js` | `getFormulaParser, getFormulaParserKind, getFormulaDimensionChecker` | Re-export |
@@ -4266,24 +4266,24 @@ The codebase is organized into the following modules:
 - Re-exports:
 
   ```text
-  explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge,
-  lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding,
-  analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi, dimensionallyDetermines,
-  formatConnectedSummary, bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap,
-  proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser, getFormulaParserKind,
-  getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, catalogFrontierAccount,
-  formatFrontierAccount, rankDiscoveries, ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage,
-  CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution,
-  requestYangMillsConfrontation, ConfrontationEntry, RigorTier, consistencyComparison,
-  ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
-  EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase, AppliedCase, CaseCheck,
-  CaseResult, convertValue, UnitError, auditAxisDiscrimination, AxisDiscrimination, AXES, AxisSpec,
-  simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS, bridgesWithoutCanonicalPartner,
-  scanLinkages, deriveProposedBridges, describeDerivedClaim, filterEdges, formatFilterLegend,
-  deriveEdgeEvidence, POSTER_GRAPH, posterJunctions, validatePoster, describePosterSource,
-  PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier, findFrontierGap,
-  expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap, makeResidualGap,
-  loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
+  explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, composeEdges, be42Edge,
+  be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg,
+  equationLanding, analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi,
+  dimensionallyDetermines, formatConnectedSummary, bridgePriority, attemptDerivation,
+  dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser,
+  getFormulaParserKind, getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges,
+  catalogFrontierAccount, formatFrontierAccount, rankDiscoveries, ANCHOR_DEFAULT, BRIDGE_EQUATIONS,
+  auditCoverage, CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor,
+  rigorDistribution, requestYangMillsConfrontation, ConfrontationEntry, RigorTier,
+  consistencyComparison, ConfrontationOutcome, decidingMeasurement, BRIDGE_EVALUATORS, evaluateBridge,
+  EvaluatorSpec, EvaluatorParameter, resolveEvaluatorInputs, APPLIED_CASES, runAppliedCase,
+  AppliedCase, CaseCheck, CaseResult, convertValue, UnitError, auditAxisDiscrimination,
+  AxisDiscrimination, AXES, AxisSpec, simplifyObservable, isSimplifierAvailable, CANONICAL_EQUATIONS,
+  bridgesWithoutCanonicalPartner, scanLinkages, deriveProposedBridges, describeDerivedClaim,
+  filterEdges, formatFilterLegend, deriveEdgeEvidence, POSTER_GRAPH, posterJunctions, validatePoster,
+  describePosterSource, PosterGraph, PosterValidation, DEFAULT_SEARCH_BUDGET, scanFrontier,
+  findFrontierGap, expressionSearchGaps, scanWithExpressionGaps, problemFromResidualGap,
+  makeResidualGap, loadSearchProblemFromJson, resolveObservationsPath, parseExprJson, runProbeSearch,
   formatProbeReport, loadStudyFromJson, loadStudyFile, runProbeStudy, formatProbeStudy,
   formatFrontierScan, formatFrontierGap, suggestDiscriminatingPoint, parseDesignBounds,
   runFalsification, rankPareto, annotateAdjudications, adjudicationFor, candidateId, ADJUDICATIONS,
@@ -8048,9 +8048,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 91221 |
-| Total Exports | 3014 |
-| Total Re-exports | 1419 |
+| Total Lines of Code | 91244 |
+| Total Exports | 3015 |
+| Total Re-exports | 1420 |
 | Total Classes | 60 |
 | Total Interfaces | 481 |
 | Total Functions | 785 |

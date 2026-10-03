@@ -210,6 +210,13 @@ async function run(ctx: CommandCtx): Promise<number> {
       out(`      dimension: ${api.format(obs.dim)}   (validated on the composed AST)`);
       out(`      value @ mass = M_sun:  ${num.toExponential(4)}`);
     }
+    if (!isJson && (first.beId === 16 || second.beId === 16)) {
+      const composed = api.composeEdges(first, second);
+      out(
+        `      confidence: ${composed.confidence}. This chain stays provisional. ` +
+          'upt atlas be-16 shows the kind-bridge formalRef; that page is not this grade.',
+      );
+    }
     if (!isJson) out('');
   }
 

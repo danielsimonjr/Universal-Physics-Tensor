@@ -11,6 +11,8 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-10-03
 
+- **`upt chain` cites the design on GitHub and does not run the orchestrator.** `be16Edge.confidence` is `speculative`. `composeEdges(be42Edge, be16Edge)` is `highly-speculative`. `upt atlas be-16` prints the kind-`bridge` formalRef and says that grade does not make the chain `formally-proved`. `upt symbolic` prints the same grade beside CT-1. The sentence that the command cites `docs/planning/Bridge-Discovery-Pipeline-Design.md` is the record from the 2026-10-03 dogfood.
+
 - **`upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy temperature=300`.** Both return `k_B T ln 2`. The sentence that told the reader to see `upt evaluate` with no args is the record from before this hint.
 
 - **A temperature binding refuses a unit that is not a temperature, and reads an energy as `k_B T`.** `upt eval "k_B*T/e" T=22eV` is 22. `T=1m` exits 1. `T=300K` and `T=25degC` stay absolute kelvin. The lines `3.0374278e-22` and `4.866495848622025e-41` are the record from before this conversion.

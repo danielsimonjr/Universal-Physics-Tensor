@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "totalFiles": 421,
     "totalModules": 13,
-    "totalExports": 3014
+    "totalExports": 3015
   },
   "entryPoints": [
     {
@@ -13896,6 +13896,7 @@
               "CANONICAL_GRAPH",
               "M_SUN_KG",
               "composeSymbolic",
+              "composeEdges",
               "be42Edge",
               "be16Edge",
               "lawSchwarzschildRadius",
@@ -14550,6 +14551,7 @@
           "CANONICAL_GRAPH",
           "M_SUN_KG",
           "composeSymbolic",
+          "composeEdges",
           "be42Edge",
           "be16Edge",
           "lawSchwarzschildRadius",
@@ -14745,6 +14747,7 @@
           "CANONICAL_GRAPH",
           "M_SUN_KG",
           "composeSymbolic",
+          "composeEdges",
           "be42Edge",
           "be16Edge",
           "lawSchwarzschildRadius",
@@ -29527,15 +29530,15 @@
   "statistics": {
     "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 91221,
-    "totalExports": 3014,
+    "totalLinesOfCode": 91244,
+    "totalExports": 3015,
     "totalClasses": 60,
     "totalInterfaces": 481,
     "totalFunctions": 785,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 751,
-    "totalReExports": 1419,
+    "totalReExports": 1420,
     "totalTypeOnlyImports": 571,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
