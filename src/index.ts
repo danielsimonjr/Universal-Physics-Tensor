@@ -226,6 +226,21 @@ export {
   type JeansInputs,
   type JeansResult,
 } from './bridges/index.js';
+/** Radiation pressure, the Alfvén speed, and the Tolman–Ehrenfest invariant. */
+export {
+  evaluateRadiationPressure,
+  type RadiationPressureInputs,
+  type RadiationPressureResult,
+  evaluateAlfvenSpeed,
+  alfvenProtonOnlyDensity,
+  M_PROTON_SI,
+  type AlfvenInputs,
+  type AlfvenResult,
+  evaluateTolmanEhrenfest,
+  tolmanTemperatureAt,
+  type TolmanInputs,
+  type TolmanResult,
+} from './bridges/index.js';
 
 // Bridge-evaluator dispatch registry (`upt evaluate`) — id → evaluator.
 export { BRIDGE_EVALUATORS, evaluateBridge } from './bridges/evaluators.js';
@@ -502,6 +517,13 @@ export {
   be48Edge,
   be53Edge,
   be54Edge,
+} from './composition/index.js';
+/** Composition edges for radiation pressure, the Alfvén speed, and Tolman–Ehrenfest. */
+export {
+  be66Edge,
+  be67Edge,
+  be68Edge,
+  APPLIED_PHYSICIST_EDGES,
 } from './composition/index.js';
 export type {
   BridgeEdge,

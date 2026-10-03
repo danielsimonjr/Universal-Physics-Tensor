@@ -23,6 +23,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] `magnetic-flux-density` evaluates the cyclotron frequency.
   Done: `upt explain cyclotron-frequency charge=1.602176634e-19 magnetic-flux-density=12e-9 mass=1.67262192369e-27 --source=canonical` recovers `e B / m`. The same call with `magnetic-field` recovers the same number. The answer does not say there is no derivation path and does not suggest the wire law. Before the shared name, the flux-density call exited 0 and asked for `current`, `distance`, `magnetic-field`, `mu_0`. Package version stays 2.0.0.
 
+- [x] Encode be-66, be-67, and be-68 in the catalog from the applied-physicist design note.
+  Done: radiation pressure, Alfvén speed, and Tolman–Ehrenfest are `BRIDGE_EQUATIONS` 66–68, category D, D, and I. Evaluators, composition edges, and Part-II §V-C are in. No `formalRef`. The Lean sketches stay in the design note. Open notes stay notes. Package version stays 2.0.0.
+
 - [x] Read `nT` and `uT` as tesla, and add `m_p`, `N_A`, the Faraday constant, and the dimension `permeability`.
   Done: `upt eval B B=12nT` is `12e-9`. `B=12uT` is `12e-6`. `t=1Ts` is `1e12` and does not mention the tesla. `upt eval m_p` and `m_proton` are `1.67262192369e-27`. `N_A` is `6.02214076e23`. `F` is `N_A * e`. An explicit `F=2` stays 2. `upt eval sigma` exits 2. `upt eval "12e-9/sqrt(mu0*14e6*m_p)"` exits 0. `upt derive velocity:velocity B:magnetic_field mu0:permeability rho:density --formula "B/sqrt(mu0*rho)"` exits 0 and recovers prefactor 1. Before the change, `B=12nT` exited 1, `m_p` exited 2, the Alfvén command exited 2, and permeability exited 2 with `unknown base dimension 'permeability'`. Package version stays 2.0.0.
 

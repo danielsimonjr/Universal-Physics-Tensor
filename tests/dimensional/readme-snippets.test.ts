@@ -30,7 +30,7 @@ function runFence(source: string): { status: number; stdout: string; stderr: str
 
 describe('src/dimensional/README.md', () => {
   it('describes the live catalog and the transcendental node', () => {
-    expect(readme).toContain('55 entries, ids 11–65');
+    expect(readme).toContain('58 entries, ids 11–68');
     expect(readme).not.toContain('44 entries');
     expect(readme).toContain("fn: 'sin'");
     expect(readme).toContain('import type { ExprNode }');
