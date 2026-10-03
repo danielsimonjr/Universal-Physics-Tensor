@@ -48,7 +48,7 @@ import {
   dGammaAt,
   buildRiemann,
 } from '../../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import { C_SI, G_SI } from '../../src/core/constants.js';
 
 // Silence unused-import TS guard — constants discipline.
@@ -59,7 +59,7 @@ const r_s = schwarzschildRs(M_SUN);
 const gFn = schwarzschildGFn(M_SUN);
 const gInvFn = schwarzschildGInverseFn(M_SUN);
 const analyticRiemannFn = schwarzschildRiemannFn(M_SUN);
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 const N = 4;
 
 /** Measure-then-lock tolerance for non-zero analytic entries. */

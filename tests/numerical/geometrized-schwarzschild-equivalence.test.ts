@@ -14,7 +14,7 @@
 import { describe, it, expect } from 'vitest';
 import { computeKretschmann } from '../../src/numerical/kretschmann.js';
 import { riemannLowerAt } from '../../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import { toGeometrized, geometrizedFactor } from '../../src/numerical/geometrized.js';
 import { MASS } from '../../src/dimensional/types.js';
 import { C_SI, G_SI } from '../../src/core/constants.js';
@@ -28,7 +28,7 @@ import {
 
 const M_SUN = 1.989e30; // kg
 const N = 4;
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 // The adapter does the c/G work on the mass: M_geom = G·M_kg/c² (a length).
 const M_geom = toGeometrized(M_SUN, MASS);

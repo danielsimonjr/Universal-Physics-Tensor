@@ -427,14 +427,13 @@ export { computeKretschmann } from './numerical/kretschmann.js';
 // Numerical-contraction backend (v0.3.5+). See docs/planning/v0.3.5-Design.md
 // and docs/planning/v0.4.0-Implementation-Plan.md (v0.4.0 additions below).
 // Every symbol below is `@public` — the consumer-facing (TensorJS) surface.
-// `MathTSEngine` is intentionally NOT re-exported here: it lives behind the
-// `@danielsimonjr/mathts-tensor` optionalDependency and is reachable only via
-// the `universal-physics-tensor/numerical/mathts-engine` exports subpath.
+// `MathTSEngine` is intentionally NOT re-exported here. It is reachable only
+// via the `universal-physics-tensor/numerical/mathts-engine` subpath. The
+// MathTS packages are required dependencies.
 export {
   evaluateNumerical,
   evaluateNumericalRaw,
   evaluateMetricInverse,
-  Float64ReferenceEngine,
   getActiveEngine,
   setActiveEngine,
   NumericalBackendError,

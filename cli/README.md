@@ -31,7 +31,7 @@ and it never mutates the catalog.
   node bin/upt.mjs help
   ```
 
-  `npm install` in a clone installs the MathTS packages (they are devDependencies), so formula commands use the MathTS parser. A published `npm install universal-physics-tensor` does not install those optional peers and uses the builtin parser. The two are not the same language. `upt eval --debug` names the one that is active.
+  The MathTS packages are required dependencies, so formula commands use the MathTS parser. `upt eval --debug` names it.
 
   If you skip the build you'll see:
 
@@ -125,7 +125,7 @@ pure connectivity questions (see [The `--source` flag](#the---source-flag)).
 
 | Command (aliases) | What it does |
 |---|---|
-| `eval "<formula>" name=value …` (`calc`) | Evaluate **your own** scalar formula (safe — arithmetic only). Knows `pi`/`tau` and `sqrt`/`exp`/`ln`/`sin`/…, plus every registered constant (`G`, `c`, `hbar`, `h`, `k_B`, `e`, `ln2`, `epsilon_0`, `sigma_sb`, `b`, `GM_sun`, `Msun_iau`) and the aliases `e_charge`, `m_e`, `eps0`, `mu0`, `mu_0`, `kB`, `M_sun`. A bare `e` is the elementary charge. `E` is energy and is not filled in. Euler's number is `exp(x)`, for example `exp(1)`. The name `euler` is refused. A bare `sigma` is not filled in. A value may be a number, a unit (`M=1Msun`, `x=1AU`, `B=1T`) or an expression of constants and units (`v=0.6*c`, `theta=pi/2`), read by the built-in parser. An explicit `e=<number>` replaces the CODATA charge. `--natural` sets ħ = c = 1; `--geometrized` also sets G = 1. `--show-parser` prints `mathts` or `builtin`; with `--json` and no formula that answer is a JSON envelope. `upt version` stays a bare semver. |
+| `eval "<formula>" name=value …` (`calc`) | Evaluate **your own** scalar formula (safe — arithmetic only). Knows `pi`/`tau` and `sqrt`/`exp`/`ln`/`sin`/…, plus every registered constant (`G`, `c`, `hbar`, `h`, `k_B`, `e`, `ln2`, `epsilon_0`, `sigma_sb`, `b`, `GM_sun`, `Msun_iau`) and the aliases `e_charge`, `m_e`, `eps0`, `mu0`, `mu_0`, `kB`, `M_sun`. A bare `e` is the elementary charge. `E` is energy and is not filled in. Euler's number is `exp(x)`, for example `exp(1)`. The name `euler` is refused. A bare `sigma` is not filled in. A value may be a number, a unit (`M=1Msun`, `x=1AU`, `B=1T`) or an expression of constants and units (`v=0.6*c`, `theta=pi/2`), read by the MathTS parser. An explicit `e=<number>` replaces the CODATA charge. `--natural` sets ħ = c = 1; `--geometrized` also sets G = 1. `--show-parser` prints `mathts`; with `--json` and no formula that answer is a JSON envelope. `upt version` stays a bare semver. |
 | `derive <target:dim> <var:dim> … [--formula "<expr>"]` (`dim`) | Derive **your own** equation's dimensional form, and (with `--formula`) verify it and recover the dimensionless prefactor. `<dim>` may be a named dimension (`pressure`, `density`, `volume`, `viscosity`, `resistance`, `magnetic_field`), a constant, a grouped product (`power/(area*temperature^4)`, `mass/volume`, `M/L^3`), or explicit bases (`L^3.M^-1.T^-2`). With `--formula` it also compares the formula with the canonical equation of the same target and variables, at fixed points: agrees, differs by a constant factor, differs in form, or the prefactor is NOT checked because the registry holds the law only up to a constant. `upt map --equation` reports the same comparison. |
 
 ### Data confrontation
@@ -321,7 +321,7 @@ node bin/upt.mjs map --json --format=mermaid
 stderr and exit code) and appends one JSON line to FILE: the arguments as given
 and as parsed, stdout, stderr, the exit code, and the environment — package
 version, Node version, the active formula parser, whether the MathTS simplifier
-is available, each optional peer's installed version, and every constant table,
+is available, each MathTS package's installed version, the optional `@viz-js/viz` version, and every constant table,
 each named by its source module (`core/constants`, `dimensional/units`,
 `dimensional/symbolic-constants`, `composition/canonical-graph`, and each
 `bridges/*` or `cases/*` module that exports a number) with its own fingerprint.

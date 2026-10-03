@@ -10,11 +10,9 @@
  *
  * Per P8 Decision #1, this lives in `src/diff/` (NOT in
  * `src/bridges/`), keeping bridge evaluators untouched. The AD
- * dependency `mathts-autograd` is an optional peer dependency. Note this
- * gives `bridgeGradient` TWO failure modes, not graceful success: when
- * the peer is ABSENT it throws `EngineCapabilityError`; when the peer is
- * PRESENT it still throws (see the AD limitation below) — installing the
- * peer does not make AD of the plain-JS bridges work.
+ * dependency `mathts-autograd` is a required dependency. Installing it
+ * does not make AD of the plain-JS bridges work: the tape still cannot
+ * trace `Math.*` (see the AD limitation below).
  *
  * IMPORTANT — AD limitation (verified empirically): `bridgeGradient`
  * does NOT actually differentiate the catalog evaluators. Because P8
@@ -22,9 +20,8 @@
  * (`Math.*` / raw arithmetic on numbers), neither reverse-mode (tape)
  * nor forward-mode (dual) AD can trace them — the tape/dual instrument
  * only sees ops routed through engine-traced tensors. With
- * `Float64ReferenceEngine` the AD path throws; with `MathTSEngine` it
- * also throws (the autograd `TapedTensor` does not survive
- * `engine.toNested`). `bridgeGradient` therefore only works for
+ * `MathTSEngine` the autograd `TapedTensor` does not survive
+ * `engine.toNested`. `bridgeGradient` therefore only works for
  * functions written in engine ops — not the plain-JS bridges.
  *
  * The SUPPORTED way to differentiate a plain-JS bridge evaluator is

@@ -99,16 +99,18 @@
     "url": "https://github.com/danielsimonjr/universal-physics-tensor/issues"
   },
   "homepage": "https://github.com/danielsimonjr/universal-physics-tensor#readme",
-  "devDependencies": {
-    "@danielsimonjr/mathts-autograd": "^0.3.15",
-    "@danielsimonjr/mathts-core": "^0.15.5",
-    "@danielsimonjr/mathts-expression": "^0.8.2",
-    "@danielsimonjr/mathts-functions": "^0.65.0",
-    "@danielsimonjr/mathts-matrix": "^0.7.5",
-    "@danielsimonjr/mathts-parallel": "^0.6.7",
-    "@danielsimonjr/mathts-tensor": "^0.2.21",
+  "dependencies": {
+    "@danielsimonjr/mathts-autograd": "^0.3.16",
+    "@danielsimonjr/mathts-core": "^0.16.0",
+    "@danielsimonjr/mathts-expression": "^0.9.0",
+    "@danielsimonjr/mathts-functions": "^0.66.0",
+    "@danielsimonjr/mathts-matrix": "^0.7.6",
+    "@danielsimonjr/mathts-parallel": "^0.6.8",
+    "@danielsimonjr/mathts-tensor": "^0.2.22",
     "@danielsimonjr/mathts-wasm": "^0.3.0",
-    "@danielsimonjr/mathts-workerpool": "^0.2.6",
+    "@danielsimonjr/mathts-workerpool": "^0.2.6"
+  },
+  "devDependencies": {
     "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^4.1.7",
     "@viz-js/viz": "^3.28.0",
@@ -120,45 +122,9 @@
     "vitest": "^4.1.7"
   },
   "peerDependencies": {
-    "@danielsimonjr/mathts-autograd": "^0.3.15",
-    "@danielsimonjr/mathts-core": "^0.15.5",
-    "@danielsimonjr/mathts-expression": "^0.8.2",
-    "@danielsimonjr/mathts-functions": "^0.65.0",
-    "@danielsimonjr/mathts-matrix": "^0.7.5",
-    "@danielsimonjr/mathts-parallel": "^0.6.7",
-    "@danielsimonjr/mathts-tensor": "^0.2.21",
-    "@danielsimonjr/mathts-wasm": "^0.3.0",
-    "@danielsimonjr/mathts-workerpool": "^0.2.6",
     "@viz-js/viz": "^3.28.0"
   },
   "peerDependenciesMeta": {
-    "@danielsimonjr/mathts-autograd": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-core": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-expression": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-functions": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-matrix": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-parallel": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-tensor": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-wasm": {
-      "optional": true
-    },
-    "@danielsimonjr/mathts-workerpool": {
-      "optional": true
-    },
     "@viz-js/viz": {
       "optional": true
     }

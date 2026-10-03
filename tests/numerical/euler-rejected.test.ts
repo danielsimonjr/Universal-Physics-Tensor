@@ -4,7 +4,8 @@
  */
 import { describe, expect, it } from 'vitest';
 import { E_SI } from '../../src/core/constants.js';
-import { FormulaError, defaultFormulaParser } from '../../src/numerical/formula.js';
+import { FormulaError } from '../../src/numerical/formula-contract.js';
+import { mathtsFormulaParser as defaultFormulaParser } from '../../src/numerical/formula-mathts.js';
 import { ENERGY, DIMENSIONLESS } from '../../src/dimensional/types.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import { parsePhysics } from '../../src/numerical/formula-registry.js';

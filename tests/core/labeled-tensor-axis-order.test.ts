@@ -11,16 +11,16 @@
  * docs/planning/v0.14-LabeledTensor-AxisOrder-Design.md.
  *
  * MathTS engine free-axis order is verified only in the gated optional-dep
- * suite; these run against Float64ReferenceEngine (the default, verifiable
+ * suite; these run against MathTSEngine (the default, verifiable
  * engine). The current `contract` already depends on `spec.free` ordering for
  * both engines, so the fix introduces no new cross-engine assumption.
  */
 import { describe, it, expect } from 'vitest';
 import { LabeledTensor, AxisOrderError } from '../../src/core/labeled-tensor.js';
 import { Axes } from '../../src/core/axes-registry.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 describe('axisOrder — default and explicit', () => {
   it('defaults to sorted key order (backward-compatible)', () => {

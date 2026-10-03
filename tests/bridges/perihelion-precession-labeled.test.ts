@@ -15,14 +15,14 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import { evaluatePerihelionPrecession } from '../../src/bridges/perihelion-precession.js';
 import { evaluatePerihelionPrecessionLabeled } from '../../src/bridges/perihelion-precession-labeled.js';
 import { IndexNameMismatchError, LabeledTensor } from '../../src/core/labeled-tensor.js';
 import { Axes } from '../../src/core/axes-registry.js';
 import { makeIndex } from '../../src/core/universal-index.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 // Mercury's orbital parameters (textbook values).
 const MERCURY = {

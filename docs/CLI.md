@@ -69,7 +69,7 @@ upt eval "<formula>" name=value ...
 |---|---|---|---|
 | `--debug` | no |  | Print the formula parser name and version on stderr. |
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
-| `--show-parser` | no |  | Print mathts or builtin. With no formula, that is the whole output and the exit code is 0. |
+| `--show-parser` | no |  | Print mathts. With no formula, that is the whole output and the exit code is 0. |
 | `--natural` | no |  | Set ħ = c = 1 (and h = 2π) when reading values. |
 | `--geometrized` | no |  | Set ħ = c = G = 1 when reading values. |
 

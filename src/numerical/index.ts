@@ -23,8 +23,6 @@ export type { NumericalInputs, NestedArray } from './types.js';
 /** @public — part of the `NumericalInputs.grids` public contract. */
 export type { GridField } from './grid-field.js';
 /** @public */
-export { Float64ReferenceEngine } from './float64-engine.js';
-/** @public */
 export { getActiveEngine, setActiveEngine } from './engine-registry.js';
 /** @public */
 export { NumericalBackendError } from './errors.js';

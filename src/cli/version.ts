@@ -18,15 +18,24 @@ export function packageVersion(): string {
   return pkg.version;
 }
 
-/** Installed version of each optional peer the package declares, `null` when absent. Reads the
- * peer's own package.json from the resolution paths, because a peer's `exports` may not expose it. */
+/**
+ * Installed version of each MathTS dependency and each optional peer, `null`
+ * when absent. Reads the package's own package.json from the resolution
+ * paths, because a package's `exports` may not expose it. MathTS is required;
+ * the record still names those versions so a replay can see a parser change.
+ */
 export function peerVersions(): Record<string, string | null> {
   const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as {
+    dependencies?: Record<string, string>;
     peerDependencies?: Record<string, string>;
   };
+  const names = [
+    ...Object.keys(pkg.dependencies ?? {}).filter((n) => n.startsWith('@danielsimonjr/')),
+    ...Object.keys(pkg.peerDependencies ?? {}),
+  ];
   const require = createRequire(import.meta.url);
   const peers: Record<string, string | null> = {};
-  for (const name of Object.keys(pkg.peerDependencies ?? {}).sort()) {
+  for (const name of [...new Set(names)].sort()) {
     peers[name] = null;
     for (const dir of require.resolve.paths(name) ?? []) {
       const manifest = join(dir, name, 'package.json');

@@ -27,7 +27,7 @@
 import { describe, it, expect } from 'vitest';
 import { computeKretschmann } from '../../src/numerical/kretschmann.js';
 import { riemannLowerAt } from '../../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import {
   schwarzschildRs,
   schwarzschildGFn,
@@ -41,7 +41,7 @@ import {
 const M_SUN = 1.989e30; // kg
 const r_s = schwarzschildRs(M_SUN);
 const N = 4;
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 /**
  * REFERENCE: the original naive O(4⁸) implementation, copied verbatim from

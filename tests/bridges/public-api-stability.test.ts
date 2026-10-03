@@ -74,7 +74,6 @@ describe('Public API stability — v0.3.5 numerical surface', () => {
       'evaluateNumerical',
       'evaluateNumericalRaw',
       'evaluateMetricInverse',
-      'Float64ReferenceEngine',
       'getActiveEngine',
       'setActiveEngine',
       'NumericalBackendError',

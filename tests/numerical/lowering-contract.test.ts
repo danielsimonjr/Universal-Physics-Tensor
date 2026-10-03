@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { lowerNode } from '../../src/numerical/lowering.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { NumericalInputs } from '../../src/numerical/types.js';
 import type { ExprNode } from '../../src/dimensional/validator.js';
 import { tsym, contract } from '../../src/dimensional/tensor.js';
 import { LENGTH, DIMENSIONLESS } from '../../src/dimensional/types.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 describe('lowerNode', () => {
   it('lowers a scalar symbol to a rank-0 tensor', () => {

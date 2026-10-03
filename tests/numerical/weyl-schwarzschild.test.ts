@@ -44,7 +44,7 @@ import {
   buildRiemann,
   contractRiemannJS,
 } from '../../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import {
   schwarzschildRs,
   schwarzschildGFn,
@@ -84,7 +84,7 @@ const samplePoints: [number, number, number, number][] = [
 ];
 
 const N = 4;
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 /** Sample all curvature inputs at coordinate x.
  *  O-4 (2026-06-11): WeylInputs.metricInverse now accepts the fixture's

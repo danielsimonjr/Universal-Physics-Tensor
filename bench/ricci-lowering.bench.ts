@@ -34,7 +34,7 @@ import {
   buildRiemann,
   contractRiemannJS,
 } from '../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../src/numerical/mathts-engine.js';
 
 // ---------------------------------------------------------------------------
 // Schwarzschild fixture — Mercury-orbit point r = 3·r_s (M_sun).
@@ -47,7 +47,7 @@ const X0: readonly number[] = [0, 3 * r_s, Math.PI / 2, 0];
 const G_FN = schwarzschildGFn(M_KG);
 const G_INV_FN = schwarzschildGInverseFn(M_KG);
 const N = 4;
-const ENGINE = new Float64ReferenceEngine();
+const ENGINE = new MathTSEngine();
 
 // Helper that runs the FD pipeline + assembles Riemann (used by both benches).
 function buildRiemannAtPoint(): number[][][][] {

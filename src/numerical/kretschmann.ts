@@ -71,14 +71,14 @@
  *   schwarzschildRs,
  * } from '../tests/fixtures/schwarzschild.js';
  * import { riemannLowerAt } from '../src/numerical/curvature-lowering-helpers.js';
- * import { Float64ReferenceEngine } from '../src/numerical/float64-engine.js';
+ * import { MathTSEngine } from '../src/numerical/mathts-engine.js';
  *
  * const M = 1.989e30;
  * const r_s = schwarzschildRs(M);
  * const r = 5 * r_s;
  * const x: [number, number, number, number] = [0, r, Math.PI / 2, 0];
  *
- * const engine = new Float64ReferenceEngine();
+ * const engine = new MathTSEngine();
  * const rLower = riemannLowerAt(x, schwarzschildGFn(M), schwarzschildGInverseFn(M), 4, engine);
  * const gInv = schwarzschildGInverseFn(M)(x); // Float64Array(16) — accepted directly
  * const K = computeKretschmann(rLower, gInv);

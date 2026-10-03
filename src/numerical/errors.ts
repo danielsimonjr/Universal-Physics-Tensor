@@ -21,8 +21,7 @@ export class NumericalBackendError extends UPTError {
 
 /**
  * Thrown when a TensorEngine method required for an operation is not
- * implemented by the active engine (e.g. forwardGrad/reverseGrad on
- * Float64ReferenceEngine). Call `hasAutogradSupport(engine)` before
+ * implemented by the active engine. Call `hasAutogradSupport(engine)` before
  * invoking AD methods to avoid this error.
  * @public
  */

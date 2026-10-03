@@ -14,7 +14,6 @@ exports[`Public API stability — v0.3.5 numerical surface > the src/numerical/ 
 [
   "DuplicateCoordinateWarning",
   "EngineCapabilityError",
-  "Float64ReferenceEngine",
   "NumericalBackendError",
   "evaluateBE37CovariantEikonalNumerical",
   "evaluateMetricInverse",

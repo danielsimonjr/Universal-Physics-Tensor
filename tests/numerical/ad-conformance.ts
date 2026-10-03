@@ -1,5 +1,5 @@
 /**
- * Parameterized AD conformance suite. Both Float64ReferenceEngine and
+ * Parameterized AD conformance suite. Both MathTSEngine and
  * MathTSEngine must pass this identical suite — it is the cross-repo
  * AD contract (v0.4.0-Implementation-Plan.md Task 11).
  *

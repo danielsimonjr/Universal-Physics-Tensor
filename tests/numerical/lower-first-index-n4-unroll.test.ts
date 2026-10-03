@@ -18,7 +18,7 @@ import {
   dGammaAt,
   buildRiemann,
 } from '../../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import {
   schwarzschildRs,
   schwarzschildGFn,
@@ -30,7 +30,7 @@ import {
 } from '../../src/numerical/painleve-gullstrand-metric.js';
 
 const N = 4;
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 const M_SUN = 1.989e30;
 const r_s = schwarzschildRs(M_SUN);
 

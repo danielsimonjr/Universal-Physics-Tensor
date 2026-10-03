@@ -1,5 +1,5 @@
 /**
- * Self-contained scalar-formula parser (src/numerical/formula.ts, Path B).
+ * MathTS scalar-formula parser.
  * Pins arithmetic, precedence (incl. right-assoc `^` and `-2^2 = -4`),
  * scientific notation, functions/constants, free-variable collection,
  * safety (unknown symbol → error, no implicit globals), and that real
@@ -7,11 +7,8 @@
  * reproducing the catalog evaluator's value.
  */
 import { describe, it, expect } from 'vitest';
-import {
-  parseFormula,
-  defaultFormulaParser,
-  FormulaError,
-} from '../../src/numerical/formula.js';
+import { FormulaError } from '../../src/numerical/formula-contract.js';
+import { mathtsFormulaParser, parseFormula } from '../../src/numerical/formula-mathts.js';
 
 const ev = (expr: string, scope: Record<string, number> = {}) =>
   parseFormula(expr).evaluate(scope);
@@ -76,26 +73,26 @@ describe('formula parser — variables, constants, functions', () => {
 describe('formula parser — safety & errors', () => {
   it('rejects an unknown variable rather than reaching a global', () => {
     expect(() => ev('x + 1')).toThrow(FormulaError);
-    expect(() => ev('process')).toThrow(/unknown variable/);
+    expect(() => ev('process')).toThrow(/Undefined symbol process/);
   });
 
   it('rejects unknown functions and bad syntax', () => {
     expect(() => ev('frobnicate(2)')).toThrow(/unknown function/);
     expect(() => ev('2 +')).toThrow(FormulaError);
     expect(() => ev('(2 + 3')).toThrow(FormulaError);
-    expect(() => ev('2 3')).toThrow(/trailing/);
+    expect(() => ev('2 3')).toThrow(FormulaError);
     expect(() => ev('')).toThrow(FormulaError);
   });
 
   it('enforces function arity', () => {
     expect(() => ev('sqrt(1, 2)')).toThrow(FormulaError);
-    expect(() => ev('pow(2)')).toThrow(/pow expects 2/);
+    expect(() => ev('pow(2)')).toThrow(/Too few arguments in function pow/);
   });
 });
 
 describe('FormulaParser interface (the Path A swap point)', () => {
   it('defaultFormulaParser implements parse → CompiledFormula', () => {
-    const f = defaultFormulaParser.parse('a + b');
+    const f = mathtsFormulaParser.parse('a + b');
     expect(f.source).toBe('a + b');
     expect(f.variables).toEqual(['a', 'b']);
     expect(f.evaluate({ a: 1, b: 2 })).toBe(3);

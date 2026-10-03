@@ -28,9 +28,9 @@
  */
 import { describe, it, expect } from 'vitest';
 import { computeChristoffelTensor, contractChristoffelWithOperand } from '../../src/numerical/connection-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 const N = 4;
 
 /** Identity-like diagonal inverse metric: off-diagonal entries are exactly 0. */

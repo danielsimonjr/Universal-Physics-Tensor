@@ -8,11 +8,11 @@ import { describe, it, expect } from 'vitest';
 import { lowerTensorPartialDerivative } from '../../src/numerical/derivative-lowering.js';
 import { pderiv, metric } from '../../src/dimensional/metric.js';
 import { tsym } from '../../src/dimensional/tensor.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { NumericalInputs } from '../../src/numerical/types.js';
 import { DIMENSIONLESS, LENGTH } from '../../src/dimensional/types.js';
 
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 const xCoord = tsym('x', [{ label: 'α', variance: 'upper' }], LENGTH, 'coordinate');
 const wrt = { label: 'μ', variance: 'lower' } as const;
 const lowerIdx = [

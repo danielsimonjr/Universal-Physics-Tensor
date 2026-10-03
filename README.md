@@ -54,13 +54,11 @@ pins `bun@1.4.2`). Node does not install it: `corepack prepare bun@1.4.2 --activ
 `bun install` and `bun run build`. On a machine that has Node and not Bun, the clone path is
 `npm install`, `npm run build`, then `node bin/upt.mjs <command>`.
 
-A clone install uses the MathTS parser. A published `npm install` does not install the optional
-peers and uses the builtin parser. The two are not the same language: MathTS accepts `factorial`,
-`erf`, `gamma()`, and juxtaposition such as `2pi`; the builtin parser does not. Both read a bare
-`e` as the elementary charge, `E` as energy, and Euler's number only as `exp(x)`, for example
-`exp(1)`. The name `euler` is refused. `upt eval --debug` names the parser. `upt version` stays a
-bare semver line. `@danielsimonjr/mathts-functions` and `@viz-js/viz` (`upt map --format=svg`) are
-optional peers. The package keeps zero hard dependencies.
+The library requires the published `@danielsimonjr/mathts-*` packages. There is no
+second parser. MathTS accepts `factorial`, `erf`, `gamma()`, and juxtaposition such as `2pi`.
+A bare `e` is the elementary charge, `E` is energy, and Euler's number is only `exp(x)`, for
+example `exp(1)`. The name `euler` is refused. `upt eval --debug` names the parser. `upt version`
+stays a bare semver line. `@viz-js/viz` (`upt map --format=svg`) stays an optional peer.
 
 ## First five minutes
 

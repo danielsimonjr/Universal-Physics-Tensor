@@ -1,8 +1,7 @@
 /**
  * Shared stride and flat-index utilities for row-major tensor storage.
  *
- * Used by both float64-engine.ts (Float64Tensor) and
- * connection-lowering-helpers.ts (Christoffel / contraction loops).
+ * Used by connection-lowering-helpers.ts (Christoffel / contraction loops).
  * Extracted in v0.4.6 to eliminate duplicate implementations.
  *
  * @module numerical/strides

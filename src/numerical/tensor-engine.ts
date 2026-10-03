@@ -1,6 +1,5 @@
 /**
- * The TensorEngine contract — the compute interface both v0.3.5 engines
- * (Float64ReferenceEngine, MathTSEngine) satisfy. See docs/planning/
+ * The TensorEngine contract. `MathTSEngine` implements it. See docs/planning/
  * v0.3.5-Design.md §3, §5.
  *
  * `EngineTensor` is an opaque handle; consumers operate on it only through
@@ -64,7 +63,7 @@ export interface ReverseGradResult {
   readonly gradient: EngineTensor;
 }
 
-/** The compute contract. Float64ReferenceEngine and MathTSEngine implement it.
+/** The compute contract. MathTSEngine implements it.
  *  @public */
 export interface TensorEngine {
   readonly name: string;

@@ -143,8 +143,7 @@ function quietlySync<T>(fn: () => T): T {
   }
 }
 
-/** Load `parse` at the call, not at module load. A static import would make
- *  an absent optional peer fail `import 'universal-physics-tensor'`. */
+/** Load `parse` at the call. This walk does not add its own static import. */
 function mathTsParse(): MathtsFunctionsModule['parse'] {
   if (cachedParse !== undefined) return cachedParse;
   let url: string;

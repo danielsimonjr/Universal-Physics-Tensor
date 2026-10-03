@@ -35,7 +35,7 @@ import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
-import type { CompiledFormula } from '../numerical/formula.js';
+import type { CompiledFormula } from '../numerical/formula-contract.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
 

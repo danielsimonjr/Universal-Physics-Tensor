@@ -7,22 +7,20 @@
  * dimensionally HOMOGENEOUS and what dimension it has — unifying string→AST
  * with AST→dimension.
  *
- * Works with BOTH parsers: the MathTS AST (Path A) and the self-contained
- * Path B AST. Each has its own small transpiler over a shared core
- * (`createFormulaDimensionChecker` + the dimensional helpers), so the check
- * is available WITHOUT the MathTS peer (`builtinFormulaDimensionChecker`).
+ * The MathTS AST is the only front-end. It adapts to a normalized `PNode`,
+ * and the dimensional transpilation lives on that node.
  *
  * @module numerical/formula-dimension
  */
 
+import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import type { Dimension } from '../dimensional/types.js';
 import { CHARGE, DIMENSIONLESS, ENERGY } from '../dimensional/types.js';
 import { equals, format, multiply } from '../dimensional/algebra.js';
 import type { ExprNode, TranscendentalFn } from '../dimensional/validator.js';
 import { validate } from '../dimensional/validator.js';
 import { sym } from '../dimensional/ast-builders.js';
-import type { FormulaAstNode } from './formula.js';
-import { EULER_NUMBER_ERROR, parseFormulaToAst } from './formula.js';
+import { EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
 
 /** A formula cannot be dimensionally analyzed (undeclared symbol, variable
  *  exponent, transcendental of a dimensional argument, unsupported node).
@@ -157,7 +155,7 @@ interface MathNode {
   readonly fn?: { readonly name?: string };
 }
 
-/** Normalized parse node — the common shape both front-ends adapt to. */
+/** Normalized parse node — the shape the MathTS AST adapts to. @internal */
 type PNode =
   | { kind: 'num'; value: number }
   | { kind: 'sym'; name: string }
@@ -165,6 +163,9 @@ type PNode =
   | { kind: 'op'; op: '+' | '-' | '*' | '/'; args: PNode[] }
   | { kind: 'pow'; base: PNode; exp: PNode } // exp must fold to a constant
   | { kind: 'call'; fn: string; args: PNode[] };
+
+/** The normalized node {@link parseFormulaPNode} returns. @internal */
+export type FormulaPNode = PNode;
 
 /** Adapt a MathTS AST node to a `PNode` (pure shape map; no dimensions). */
 function mathtsToPNode(node: MathNode): PNode {
@@ -188,26 +189,6 @@ function mathtsToPNode(node: MathNode): PNode {
       return { kind: 'call', fn: node.fn?.name ?? node.name ?? '', args: (node.args ?? []).map(mathtsToPNode) };
     default:
       throw new FormulaDimensionError(`unsupported node '${node.type}'`);
-  }
-}
-
-/** Adapt a built-in `FormulaAstNode` to a `PNode` (pure shape map). */
-function pathBToPNode(node: FormulaAstNode): PNode {
-  switch (node.kind) {
-    case 'num':
-      return { kind: 'num', value: node.value };
-    case 'sym':
-      return { kind: 'sym', name: node.name };
-    case 'unary':
-      return node.op === '-'
-        ? { kind: 'neg', arg: pathBToPNode(node.arg) }
-        : pathBToPNode(node.arg); // unary '+' is identity
-    case 'bin':
-      return node.op === '^'
-        ? { kind: 'pow', base: pathBToPNode(node.left), exp: pathBToPNode(node.right) }
-        : { kind: 'op', op: node.op, args: [pathBToPNode(node.left), pathBToPNode(node.right)] };
-    case 'call':
-      return { kind: 'call', fn: node.fn, args: node.args.map(pathBToPNode) };
   }
 }
 
@@ -327,26 +308,50 @@ function createFormulaDimensionChecker(
   };
 }
 
-/** The built-in (Path B) dimensional checker — always available, no peer. */
-export function builtinFormulaDimensionChecker(): FormulaDimensionChecker {
-  return createFormulaDimensionChecker((expr, dims) => normToExpr(pathBToPNode(parseFormulaToAst(expr)), dims));
-}
-
-interface MathtsFunctionsModule {
-  parse(expr: string): MathNode;
+function parsedMathNode(expr: string): MathNode {
+  try {
+    return parseMathTs(expr) as unknown as MathNode;
+  } catch (e) {
+    throw new FormulaError(`parse error: ${e instanceof Error ? e.message : String(e)}`);
+  }
 }
 
 /**
- * Dynamically load the optional MathTS peer and build a dimensional checker
- * over its AST. Throws if the peer is absent — the registry catches and
- * falls back to {@link builtinFormulaDimensionChecker}.
+ * Parse a formula to the normalized node the binding reader evaluates.
+ * `euler` is refused here so a binding never becomes Math.E.
+ * @internal
  */
-export async function loadFormulaDimensionChecker(): Promise<FormulaDimensionChecker> {
-  const mod = (await import(
-    '@danielsimonjr/mathts-functions'
-  )) as unknown as MathtsFunctionsModule;
-  if (typeof mod.parse !== 'function') {
-    throw new FormulaDimensionError('mathts-functions: no parse() export');
+export function parseFormulaPNode(expr: string): PNode {
+  const node = mathtsToPNode(parsedMathNode(expr));
+  refuseEuler(node);
+  return node;
+}
+
+function refuseEuler(node: PNode): void {
+  switch (node.kind) {
+    case 'sym':
+      if (node.name === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
+      return;
+    case 'neg':
+      refuseEuler(node.arg);
+      return;
+    case 'op':
+      for (const a of node.args) refuseEuler(a);
+      return;
+    case 'pow':
+      refuseEuler(node.base);
+      refuseEuler(node.exp);
+      return;
+    case 'call':
+      if (node.fn === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
+      for (const a of node.args) refuseEuler(a);
+      return;
+    case 'num':
+      return;
   }
-  return createFormulaDimensionChecker((expr, dims) => normToExpr(mathtsToPNode(mod.parse(expr)), dims));
+}
+
+/** The dimensional checker over the MathTS AST. The historical name stays. */
+export function builtinFormulaDimensionChecker(): FormulaDimensionChecker {
+  return createFormulaDimensionChecker((expr, dims) => normToExpr(mathtsToPNode(parsedMathNode(expr)), dims));
 }

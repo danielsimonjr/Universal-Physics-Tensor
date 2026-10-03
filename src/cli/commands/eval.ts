@@ -22,7 +22,7 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--show-parser',
     valueStyle: 'none',
-    description: 'Print mathts or builtin. With no formula, that is the whole output and the exit code is 0.',
+    description: 'Print mathts. With no formula, that is the whole output and the exit code is 0.',
   },
   { name: '--natural', valueStyle: 'none', description: 'Set ħ = c = 1 (and h = 2π) when reading values.' },
   { name: '--geometrized', valueStyle: 'none', description: 'Set ħ = c = G = 1 when reading values.' },
@@ -78,7 +78,7 @@ const HELP = `upt eval "<formula>" name=value ...
         constants and units (v=0.6*c, theta=pi/2). Bindings use the built-in
         parser, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
-        sets G = 1. --show-parser prints mathts or builtin and, with no
+        sets G = 1. --show-parser prints mathts and, with no
         formula, exits 0. With --json that answer is a JSON envelope.
         --debug prints the parser and its version to stderr.
         An unknown function fails and names a documented equivalent where one

@@ -2,9 +2,9 @@
  * A binding value: a bare number, a number with a unit, or an expression of
  * registered constants and unit literals (`pi/2`, `0.6*c`, `2*1km`).
  *
- * The built-in formula parser evaluates the expression. MathTS is not used.
- * A bare `e` is the elementary charge. Euler's number is `exp(x)`.
- * A published install has no MathTS. A bare number, or an expression whose result is
+ * The MathTS parser produces the node this module evaluates, so a unit
+ * literal keeps its dimension. A bare `e` is the elementary charge.
+ * Euler's number is `exp(x)`. A bare number, or an expression whose result is
  * dimensionless and contains no unit literal, is already in the caller's
  * unit. Anything else is an SI quantity: the caller converts it into the
  * declared unit when the dimensions agree.
@@ -30,12 +30,8 @@ import {
   UnitError,
   type TemperatureReading,
 } from '../dimensional/units.js';
-import {
-  callBuiltinFunction,
-  FormulaError,
-  parseFormulaToAst,
-  type FormulaAstNode,
-} from './formula.js';
+import { callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
+import { parseFormulaPNode, type FormulaPNode } from './formula-dimension.js';
 
 /** A value read from a binding, in SI when `dimensioned` is set. @internal */
 export interface BindingValue {
@@ -154,44 +150,68 @@ function spliceUnits(src: string): Splice {
   return { expr: out, slots, notes };
 }
 
-function evalAst(node: FormulaAstNode, scope: ReadonlyMap<string, Qty>, slots: ReadonlyMap<string, Qty>): Qty {
+function evalAst(node: FormulaPNode, scope: ReadonlyMap<string, Qty>, slots: ReadonlyMap<string, Qty>): Qty {
   switch (node.kind) {
     case 'num':
       return { value: node.value, dim: DIMENSIONLESS };
     case 'sym': {
+      if (node.name === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
       const slot = slots.get(node.name);
       if (slot !== undefined) return slot;
       const known = scope.get(node.name);
       if (known !== undefined) return known;
       throw new UnitError(`unknown name '${node.name}'`);
     }
-    case 'unary': {
+    case 'neg': {
       const a = evalAst(node.arg, scope, slots);
-      return { value: node.op === '-' ? -a.value : a.value, dim: a.dim };
+      return { value: -a.value, dim: a.dim };
     }
-    case 'bin': {
-      const l = evalAst(node.left, scope, slots);
-      const r = evalAst(node.right, scope, slots);
-      switch (node.op) {
-        case '+':
-        case '-':
-          if (!equals(l.dim, r.dim)) {
-            throw new UnitError(`cannot ${node.op === '+' ? 'add' : 'subtract'} ${format(l.dim)} and ${format(r.dim)}`);
-          }
-          return { value: node.op === '+' ? l.value + r.value : l.value - r.value, dim: l.dim };
-        case '*':
-          return { value: l.value * r.value, dim: multiply(l.dim, r.dim) };
-        case '/':
-          return { value: l.value / r.value, dim: divide(l.dim, r.dim) };
-        case '^':
-          if (!equals(r.dim, DIMENSIONLESS)) throw new UnitError('an exponent must be dimensionless');
-          return { value: Math.pow(l.value, r.value), dim: power(l.dim, r.value) };
-      }
+    case 'op':
+      return evalOp(node.op, node.args.map((a) => evalAst(a, scope, slots)));
+    case 'pow': {
+      const base = evalAst(node.base, scope, slots);
+      const exp = evalAst(node.exp, scope, slots);
+      if (!equals(exp.dim, DIMENSIONLESS)) throw new UnitError('an exponent must be dimensionless');
+      return { value: Math.pow(base.value, exp.value), dim: power(base.dim, exp.value) };
     }
-    // eslint-disable-next-line no-fallthrough
     case 'call':
+      if (node.fn === 'euler') throw new FormulaError(EULER_NUMBER_ERROR);
       return evalCall(node.fn, node.args.map((a) => evalAst(a, scope, slots)));
   }
+}
+
+function evalOp(op: '+' | '-' | '*' | '/', args: readonly Qty[]): Qty {
+  if (args.length === 0) throw new UnitError(`cannot ${op}`);
+  if (op === '+' || op === '-') {
+    const first = args[0]!;
+    if (args.length === 1) {
+      return op === '-' ? { value: -first.value, dim: first.dim } : first;
+    }
+    let value = first.value;
+    for (const next of args.slice(1)) {
+      if (!equals(first.dim, next.dim)) {
+        throw new UnitError(`cannot ${op === '+' ? 'add' : 'subtract'} ${format(first.dim)} and ${format(next.dim)}`);
+      }
+      value = op === '+' ? value + next.value : value - next.value;
+    }
+    return { value, dim: first.dim };
+  }
+  if (op === '*') {
+    let value = 1;
+    let dim = DIMENSIONLESS;
+    for (const a of args) {
+      value *= a.value;
+      dim = multiply(dim, a.dim);
+    }
+    return { value, dim };
+  }
+  let value = args[0]!.value;
+  let dim = args[0]!.dim;
+  for (const next of args.slice(1)) {
+    value /= next.value;
+    dim = divide(dim, next.dim);
+  }
+  return { value, dim };
 }
 
 function evalCall(fn: string, args: readonly Qty[]): Qty {
@@ -294,9 +314,9 @@ export function readBinding(
   if (plain !== null) return plain;
 
   const spliced = spliceUnits(trimmed);
-  let ast: FormulaAstNode;
+  let ast: FormulaPNode;
   try {
-    ast = parseFormulaToAst(spliced.expr);
+    ast = parseFormulaPNode(spliced.expr);
   } catch (e) {
     if (e instanceof FormulaError) {
       // `euler` names the refused constant. Keep that sentence; a bare unknown

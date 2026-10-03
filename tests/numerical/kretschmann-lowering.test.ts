@@ -3,7 +3,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { lowerNode } from '../../src/numerical/lowering.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { KretschmannScalarNode } from '../../src/dimensional/curvature-invariants.js';
 import type { RiemannTensorNode } from '../../src/dimensional/connection-validators.js';
 import type { MetricTensorNode } from '../../src/dimensional/metric-validators.js';
@@ -82,7 +82,7 @@ describe('kretschmann-scalar lowering', () => {
       metric: makeMetric(),
     };
 
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
     const gInvFlat = gInvFn(x);
     const gInvNested = Array.from({ length: 4 }, (_, mu) =>
       Array.from({ length: 4 }, (_, nu) => gInvFlat[mu * 4 + nu]),
@@ -121,7 +121,7 @@ describe('kretschmann-scalar lowering', () => {
       riemann: makeRiemann(),
       metric: makeMetric(),
     };
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
     expect(() =>
       lowerNode(node, { tensors: new Map([['x', [0, 1, 0, 0]]]), dimension: 4 }, engine),
     ).toThrow(/kretschmann-scalar requires coordinate-dependent metric closures/);

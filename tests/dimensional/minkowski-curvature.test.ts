@@ -35,7 +35,7 @@ import { describe, it, expect } from 'vitest';
 import { ricci, einstein } from '../../src/dimensional/curvature.js';
 import { bianchiResidual } from '../../src/numerical/bianchi-residual.js';
 import { evaluateNumerical } from '../../src/numerical/index.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import type { ExprNode, RiemannTensorNode } from '../../src/dimensional/validator.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { metric } from '../../src/dimensional/metric.js';
@@ -256,7 +256,7 @@ describe('Minkowski curvature zero-tests (NEW-1: flat-spacetime sanity)', () => 
     const br = bianchiResidual(R);
     const gFn = minkowskiGFn();
     const gInverseFn = minkowskiGInverseFn();
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
 
     const inputs = {
       tensors: new Map<string, number[] | number[][]>([

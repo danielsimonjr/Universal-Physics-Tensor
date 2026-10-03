@@ -27,7 +27,7 @@ import {
   BE11_DECOHERENCE_DIFF,
   DIFFERENTIABLE_BRIDGE_SPECS,
 } from '../../src/diff/bridge-specs.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import { hasAutogradSupport } from '../../src/numerical/tensor-engine.js';
 import { EngineCapabilityError } from '../../src/numerical/errors.js';
 
@@ -65,7 +65,7 @@ describe('BridgeDiffSpec — shape', () => {
 
 describe('bridgeGradient — graceful degradation when AD absent', () => {
   // Mock engine WITHOUT forwardGrad/reverseGrad methods to simulate
-  // an engine lacking AD support. Real engines (Float64ReferenceEngine
+  // an engine lacking AD support. Real engines (MathTSEngine
   // + MathTSEngine) both implement the AD methods, but neither can trace
   // a plain-JS bridge evaluator: tape/dual AD only sees ops routed through
   // engine-traced tensors, and the bridges use raw `Math.*` arithmetic
@@ -111,15 +111,15 @@ describe('bridgeGradient — graceful degradation when AD absent', () => {
   });
 });
 
-describe('bridgeGradient — Float64ReferenceEngine AD limitation (P8 honest scope)', () => {
-  // Float64ReferenceEngine's dual-number AD can ONLY trace functions
+describe('bridgeGradient — MathTSEngine AD limitation (P8 honest scope)', () => {
+  // MathTSEngine's dual-number AD can ONLY trace functions
   // that use engine-traced operations (engine.add, engine.mul, ...).
   // Bridge evaluators are plain-JS arithmetic on raw numbers; they
   // strip the dual-number tracking, so the AD path throws. MathTSEngine
   // has the same limitation (verified in the MathTSEngine describe below):
   // tape AD also cannot trace raw Math.*. Use bridgeGradientNumerical.
 
-  const engine = new Float64ReferenceEngine();
+  const engine = new MathTSEngine();
 
   it('hasAutogradSupport returns true (Float64 implements AD methods)', () => {
     expect(hasAutogradSupport(engine)).toBe(true);
@@ -178,7 +178,7 @@ describe('bridgeGradient — param validation', () => {
 });
 
 describe('gradientToNamed — unpack helper', () => {
-  const engine = new Float64ReferenceEngine();
+  const engine = new MathTSEngine();
 
   it('unpacks a 1-D gradient tensor into a named record', () => {
     const grad = engine.fromNested([1.0, 2.0, 3.0], [3]);
@@ -277,18 +277,12 @@ describe('bridgeGradientNumerical — analytic cross-checks', () => {
 // ---------------------------------------------------------------------------
 // Honest limitation: reverse-mode AD of a plain-JS bridge is unsupported.
 // Documents (and guards) that bridgeGradient throws even with MathTSEngine —
-// correcting the prior optimistic claim that the autograd peer "would handle
-// this case". Gated on the optional peer so CI without it still runs the file.
+// correcting the prior optimistic claim that the autograd package "would handle
+// this case".
 // ---------------------------------------------------------------------------
 
 describe('bridgeGradient — plain-JS bridges are not AD-traceable (MathTSEngine)', () => {
-  it('throws even with MathTSEngine + mathts-autograd (tape cannot trace plain-JS)', async () => {
-    let MathTSEngine: (new () => import('../../src/numerical/tensor-engine.js').TensorEngine) | null = null;
-    try {
-      ({ MathTSEngine } = await import('../../src/numerical/mathts-engine.js'));
-    } catch {
-      return; // optional peer absent — nothing to assert
-    }
+  it('throws even with MathTSEngine (tape cannot trace plain-JS)', async () => {
     await expect(
       bridgeGradient(BE42_HAWKING_DIFF, new MathTSEngine(), { M_kg: 1.989e30 }),
     ).rejects.toThrow();

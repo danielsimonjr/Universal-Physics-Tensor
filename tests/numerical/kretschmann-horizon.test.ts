@@ -56,7 +56,7 @@ import {
   dGammaAt,
   buildRiemann,
 } from '../../src/numerical/curvature-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import {
   schwarzschildRs,
   schwarzschildGFn,
@@ -70,7 +70,7 @@ const r_s = schwarzschildRs(M_SUN);
 const gFn = schwarzschildGFn(M_SUN);
 const gInvFn = schwarzschildGInverseFn(M_SUN);
 const N = 4;
-const engine = new Float64ReferenceEngine();
+const engine = new MathTSEngine();
 
 /** Closed-form K(r) = 48 G² M² / (c⁴ r⁶) — formula A. */
 function kClosedA(r: number): number {

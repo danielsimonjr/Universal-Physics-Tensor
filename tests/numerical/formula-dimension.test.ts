@@ -7,10 +7,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import type { Dimension } from '../../src/dimensional/types.js';
-import {
-  builtinFormulaDimensionChecker,
-  loadFormulaDimensionChecker,
-} from '../../src/numerical/formula-dimension.js';
+import { builtinFormulaDimensionChecker } from '../../src/numerical/formula-dimension.js';
 import type { FormulaDimensionChecker } from '../../src/numerical/formula-dimension.js';
 import { D } from '../fixtures/dimension.js';
 
@@ -46,30 +43,4 @@ function runChecks(checker: FormulaDimensionChecker, label: string): void {
   });
 }
 
-// Path B — ALWAYS runs (no optional peer).
-runChecks(builtinFormulaDimensionChecker(), 'builtin');
-
-// Path A — runs when the MathTS peer is present; must agree case-for-case.
-let mathts: FormulaDimensionChecker | null = null;
-try {
-  mathts = await loadFormulaDimensionChecker();
-  mathts.check('1', {});
-} catch {
-  mathts = null;
-}
-if (mathts) {
-  runChecks(mathts, 'mathts');
-  describe('builtin ↔ mathts dimensional-check parity', () => {
-    const builtin = builtinFormulaDimensionChecker();
-    for (const [expr, dims] of CASES) {
-      it(`agrees on ${expr}`, () => {
-        const b = builtin.check(expr, dims);
-        const m = mathts!.check(expr, dims);
-        expect(m.ok).toBe(b.ok);
-        if (b.ok) expect(m.dim).toEqual(b.dim);
-      });
-    }
-  });
-} else {
-  describe.skip('mathts dimensional check (skipped: optional dep absent)', () => {});
-}
+runChecks(builtinFormulaDimensionChecker(), 'mathts');

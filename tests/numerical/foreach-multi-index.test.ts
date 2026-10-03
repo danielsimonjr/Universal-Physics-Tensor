@@ -6,12 +6,12 @@
 // produces identical results after the spread removal.
 import { describe, it, expect } from 'vitest';
 import { computeChristoffelTensor } from '../../src/numerical/connection-lowering-helpers.js';
-import { Float64ReferenceEngine } from '../../src/numerical/float64-engine.js';
+import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 
 describe('forEachMultiIndex: spread removal regression', () => {
   it('Christoffel contraction output unchanged after visitor receives idx by reference', () => {
     // Schwarzschild-like: non-trivial metric to ensure contraction uses idx correctly
-    const engine = new Float64ReferenceEngine();
+    const engine = new MathTSEngine();
     const N = 2;
     // g = [[2, 0], [0, 3]], g_inv = [[0.5, 0], [0, 1/3]]
     const gInvFlat = [0.5, 0, 0, 1/3];

@@ -26,8 +26,8 @@ export const HBAR_TRUNCATION_NOTE =
  * `sigma_sb`. Explicit `name=` wins over these.
  *
  * `2pi`, `4pi` and `8pi` are in the scope. The MathTS parser reads those
- * spellings as n·pi before the scope is consulted; the builtin parser
- * tokenizes a leading digit as a number. The values match either way.
+ * spellings as n·pi before the scope is consulted. The scope values match
+ * that reading.
  * @internal
  */
 export function codataScope(mode: UnitMode): Record<string, number> {
