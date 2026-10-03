@@ -11,6 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-10-03
 
+- **`upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy temperature=300`.** Both return `k_B T ln 2`. The sentence that told the reader to see `upt evaluate` with no args is the record from before this hint.
 - **Package version 2.0.0 is on npm.** `npm view universal-physics-tensor@2.0.0 version gitHead` printed `2.0.0` and `283fdb93d84f251270dfe3fcfe2cf4d7bb1741e4`. Annotated tag `v2.0.0` is object `b17412ac19fadd33aebb27e935a784e1d3dae719` and its target is that commit. The sentence that the tag is not pushed is the record from before that measurement. Publishing further releases stays the owner's job.
 - **Applied-physicist dogfood, 2026-10-03.** The session log, the candidate bridges, and the bugs are `docs/dogfood/2026-10-03-applied-physicist-bridges.md`. Model persona on the published package, not a human reviewer. The candidates are unproven. The session does not change `src/`.
 - **Bare `e` is the elementary charge through MathTS `{ physics: true, charge: 'scalar' }`.** `@danielsimonjr/mathts-functions` is ^0.67.0. `1-e^2` with no binding stays near 1. `{ physics: true }` without `charge: 'scalar'` is still the coulomb Unit. `exp(1)` is Euler's number. `E` is energy. The name `euler` is refused. The 2026-10-03 sentence that the adapter kept `{ e: E_SI }` is the record from before 0.67.0.
