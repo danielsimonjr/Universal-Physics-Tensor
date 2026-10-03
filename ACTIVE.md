@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the applied-physicist dogfood of published `universal-physics-tensor@2.0.1`. The report is `docs/dogfood/2026-10-03-applied-physicist-bridges-r2.md`. The session does not change `src/`.
+  Done: the report is that file. npm `2.0.1` gitHead is `b2abf1bca457635b76bf28a2c9d3da7b1e27703c`. Annotated tag `v2.0.1` (object `c7974de9d95306621c3f12d854058d2ad3fce50a`) points at that commit. The re-run marks each 2.0.0 repro. New candidates stay unproven. No code fix is in this change.
+
 - [x] Group the open dogfood defects by the mechanism that produces them, in `docs/planning/root-cause-analysis-2026-10-03.md`.
   Done: the note names eight causes. The re-run in `docs/dogfood/2026-10-03-applied-physicist-bridges-r2.md` is folded in. Each cause lists the symptoms it explains, the file and line, the fix at that mechanism, what that fix replaces, and the risk. The causes, in implementation order: a published citation is a repository path or a section number; a name is a private list in each command; a check that did not establish a result exits 0; a regime is a slot in a closed family array; usage prose is copied beside the command; a connector is called motivated because two names share a hyphen token; a displayed number is formatted in the command that prints it; derive and map do not share one known-relation report.
 
