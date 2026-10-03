@@ -188,9 +188,9 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
 
 /**
  * What to say when an id is not in {@link BRIDGE_EVALUATORS}.
- * be-42 is the Hawking temperature. `upt evaluate` does not run it.
- * `BridgeEquations.hawkingTemperature({ M_kg })` and
- * `upt explain hawking-temperature mass=1.989e30` do.
+ * be-42 is the Hawking temperature and be-16 is the Landauer energy.
+ * `upt evaluate` does not run either. The named `BridgeEquations` function
+ * and the named `upt explain` command do.
  * @internal
  */
 export function missingEvaluatorMessage(bridgeId: number): string {
@@ -199,6 +199,13 @@ export function missingEvaluatorMessage(bridgeId: number): string {
       'evaluateBridge: be-42 has no id-keyed evaluator. ' +
       'Hawking temperature is BridgeEquations.hawkingTemperature({ M_kg }). ' +
       'From the CLI: upt explain hawking-temperature mass=1.989e30'
+    );
+  }
+  if (bridgeId === 16) {
+    return (
+      'evaluateBridge: be-16 has no id-keyed evaluator. ' +
+      'Landauer energy is BridgeEquations.landauerEnergy({ temperature_K }). ' +
+      'From the CLI: upt explain landauer-erasure-energy temperature=300'
     );
   }
   return `evaluateBridge: be-${bridgeId} has no evaluator (only closed-form + spacetime bridges do — see \`upt evaluate\` with no args)`;
