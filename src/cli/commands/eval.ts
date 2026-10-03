@@ -33,6 +33,8 @@ const FLAGS: FlagSpec[] = [
  * A value that is not a finite number or a known unit is a bad value
  * (exit 1), the same code `upt evaluate` uses. A value is a number, a
  * unit (`1Msun`), or an expression of constants and units (`0.6*c`, `pi/2`).
+ * `T`, `temperature`, `temp`, and `T_K` speak kelvin. An energy on that
+ * name is `k_B T`, using the explicit `k_B` when there is one.
  */
 function parseScope(
   api: CommandCtx['api'],
@@ -41,6 +43,12 @@ function parseScope(
 ): { scope: Record<string, number>; notes: string[] } {
   const scope: Record<string, number> = {};
   const notes: string[] = [];
+  const pending: {
+    name: string;
+    raw: string;
+    assignment: string;
+    read: ReturnType<CommandCtx['api']['readBinding']>;
+  }[] = [];
   for (const a of args) {
     const eq = a.indexOf('=');
     if (eq < 0) {
@@ -49,12 +57,21 @@ function parseScope(
     const name = a.slice(0, eq);
     const raw = a.slice(eq + 1);
     try {
-      const read = api.readBinding(raw, { mode });
-      scope[name] = read.value;
-      for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
+      pending.push({ name, raw, assignment: a, read: api.readBinding(raw, { mode }) });
     } catch (e) {
       const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
       throw new CliError(`upt eval: '${a}' is not a finite number or a known unit. ${msg}`);
+    }
+  }
+  const kB = api.boltzmannBindingScale(pending);
+  for (const p of pending) {
+    try {
+      const read = api.alignTemperatureBinding(p.name, p.raw, p.read, kB);
+      scope[p.name] = read.value;
+      for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
+    } catch (e) {
+      const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
+      throw new CliError(`upt eval: '${p.assignment}' is not a finite number or a known unit. ${msg}`);
     }
   }
   return { scope, notes };
@@ -75,7 +92,9 @@ const HELP = `upt eval "<formula>" name=value ...
         and the aliases e_charge, m_e, eps0, mu0, mu_0, kB, M_sun. A bare
         sigma is not the Stefan–Boltzmann constant; write sigma_sb. A value may be a
         number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
-        constants and units (v=0.6*c, theta=pi/2). Bindings use the built-in
+        constants and units (v=0.6*c, theta=pi/2). T, temperature, temp, and
+        T_K are kelvin: an energy on that name is k_B T, and any other
+        dimension is an error. Bindings use the built-in
         parser, so write 2*pi; a bare e there is the elementary charge.
         --natural sets ħ = c = 1 (h = 2π); --geometrized also
         sets G = 1. --show-parser prints mathts and, with no

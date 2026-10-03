@@ -11,18 +11,20 @@
  *
  * A unit literal is recognized only where it is glued to a number (`1km`,
  * `1h`, `1G`). A bare name is a constant (`h`, `G`, `c`), never that unit.
+ * A temperature name (`T`, `temperature`, `temp`, `T_K`) speaks kelvin. An
+ * energy on that name is `k_B T`. Any other dimension on that name is an error.
  *
  * @module numerical/binding-value
  * @internal
  */
 
-import { M_SUN_SI } from '../core/constants.js';
+import { K_B_SI, M_SUN_SI } from '../core/constants.js';
 import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 import { quantityConventionUnit } from '../dimensional/unit-convention.js';
 import { naturalConstantOverrides, type UnitMode } from '../dimensional/natural-units.js';
 import { CONSTANTS as SYMBOLIC } from '../dimensional/symbolic-constants.js';
 import { divide, equals, format, multiply, power } from '../dimensional/algebra.js';
-import { DIMENSIONLESS, MASS, type Dimension } from '../dimensional/types.js';
+import { DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, type Dimension } from '../dimensional/types.js';
 import {
   convertValue,
   mathTsAgreedQuantity,
@@ -33,6 +35,58 @@ import {
 } from '../dimensional/units.js';
 import { callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
 import { parseFormulaPNode, type FormulaPNode } from './formula-dimension.js';
+
+/** Names that speak kelvin. A bare number is already kelvin. `t` is not here: a lowercase t is not this temperature. */
+const TEMPERATURE_BINDING_NAMES = new Set(['T', 'temperature', 'temp', 'T_K']);
+
+/**
+ * A temperature binding speaks kelvin. An energy is `k_B T` (the joules
+ * divided by `kB`). Any other dimension is refused. A bare number, a
+ * temperature, and a name that is not a temperature are unchanged.
+ * @internal
+ */
+export function alignTemperatureBinding(
+  name: string,
+  raw: string,
+  read: BindingValue,
+  kB: number = K_B_SI,
+): BindingValue {
+  if (!TEMPERATURE_BINDING_NAMES.has(name) || !read.dimensioned || equals(read.dimension, TEMPERATURE)) {
+    return read;
+  }
+  if (equals(read.dimension, ENERGY)) {
+    if (!(kB > 0) || !Number.isFinite(kB)) {
+      throw new UnitError(`cannot read '${raw.trim()}' as a temperature: k_B is not a positive finite number`);
+    }
+    const kelvin = read.value / kB;
+    return {
+      value: kelvin,
+      dimensioned: true,
+      dimension: TEMPERATURE,
+      notes: [
+        ...read.notes,
+        `${name}=${raw.trim()} is read as k_B T, so ${name} is ${kelvin.toExponential(6)} K`,
+      ],
+    };
+  }
+  throw new UnitError(
+    `'${raw.trim()}' is ${format(read.dimension)}, but ${name} is a temperature. An energy on a temperature is k_B T.`,
+  );
+}
+
+/**
+ * Joules per kelvin for {@link alignTemperatureBinding}. An explicit `k_B`
+ * or `kB` binding wins when it is a bare number or already in J/K.
+ * @internal
+ */
+export function boltzmannBindingScale(
+  pending: readonly { name: string; read: BindingValue }[],
+): number {
+  const hit = pending.find((p) => p.name === 'k_B') ?? pending.find((p) => p.name === 'kB');
+  if (hit === undefined) return K_B_SI;
+  if (!hit.read.dimensioned || equals(hit.read.dimension, SYMBOLIC.k_B.dim)) return hit.read.value;
+  return K_B_SI;
+}
 
 /** A value read from a binding, in SI when `dimensioned` is set. @internal */
 export interface BindingValue {
