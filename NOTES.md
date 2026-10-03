@@ -13,6 +13,8 @@ nothing validates prose and the next reader cannot tell.
 
 - **`upt search` breaks a query on spaces and hyphens.** `upt search "radiation pressure"` matches be-64. `upt search magnetic-field` matches that name. `upt search be-16` matches be-16. The three exit-1 results are the record from before this split.
 
+- **`upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy temperature=300`.** Both return `k_B T ln 2`. The sentence that told the reader to see `upt evaluate` with no args is the record from before this hint.
+
 - **A temperature binding refuses a unit that is not a temperature, and reads an energy as `k_B T`.** `upt eval "k_B*T/e" T=22eV` is 22. `T=1m` exits 1. `T=300K` and `T=25degC` stay absolute kelvin. The lines `3.0374278e-22` and `4.866495848622025e-41` are the record from before this conversion.
 - **Canonical Landauer is `k_B T ln 2`.** `CE-landauer` and `be-16` agree. `upt explain --source=both` prints `erasure-energy` and `landauer-erasure-energy`. `upt audit --source=canonical` reports `CE-landauer ×6.931e-1`. The coefficient is applied only when the canonical entry restates a catalog bridge. `CE-rydberg-energy` and `CE-bohr-radius` stay the G-closure factors from the 2026-10-03 dogfood. The lines `4.1419e-21` and `×1.000e+0` for `CE-landauer` are the record from before this coefficient.
 - **Package version 2.0.0 is on npm.** `npm view universal-physics-tensor@2.0.0 version gitHead` printed `2.0.0` and `283fdb93d84f251270dfe3fcfe2cf4d7bb1741e4`. Annotated tag `v2.0.0` is object `b17412ac19fadd33aebb27e935a784e1d3dae719` and its target is that commit. The sentence that the tag is not pushed is the record from before that measurement. Publishing further releases stays the owner's job.

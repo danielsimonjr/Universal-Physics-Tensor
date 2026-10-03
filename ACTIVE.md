@@ -23,6 +23,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] `upt search` splits a quoted phrase and a hyphen into words.
   Done: `upt search "radiation pressure"` matches be-64, the same words as two arguments. `upt search magnetic-field` matches that quantity name. `upt search be-16` still matches be-16. Before the split, all three exited 1. Package version stays 2.0.0.
 
+- [x] `upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy`.
+  Done: the error names `BridgeEquations.landauerEnergy({ temperature_K })` and `upt explain landauer-erasure-energy temperature=300`. Both return `k_B T ln 2`. An id with no such command still points at `upt evaluate` with no args. Before the sentence, `evaluateBridge(16)` said to see `upt evaluate` with no args. Package version stays 2.0.0.
+
 - [x] An energy on a temperature binding is `k_B T`, and any other dimension on that name exits 1.
   Done: `upt eval "k_B*T/e" T=22eV` prints 22. `upt eval "k_B*T" T=22eV` prints `22 * e` joules. `T`, `temperature`, `temp`, and `T_K` speak kelvin. A bare number and `K` / `degC` stay absolute temperatures. `T=1m` exits 1. An explicit `k_B` is the conversion constant, so `k_B*T/e` stays the voltage. Before the conversion, both ratios equalled `k_B` (`1.380649e-23`) and `T=1m` exited 0. Package version stays 2.0.0.
 
