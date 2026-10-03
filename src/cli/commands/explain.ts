@@ -43,6 +43,8 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         A value is a number, a unit (mass=1Msun) or a constant expression
         (mass=1*M_sun). A bare number is already in the quantity's unit.
         A tagged quantity converts into that unit (GeV, bit, nat, J/K).
+        magnetic-field and magnetic-flux-density are one vacuum B: a value
+        given under either name is available under the other.
         e.g.  upt explain hawking-temperature mass=1.989e30`;
 
 /**
@@ -52,6 +54,38 @@ const HELP = `upt explain <quantity> [name=value | name] ...
  * `mass=1e500`→∞, and a bare name alongside a valued one were all silent
  * wrong-physics footguns.
  */
+/**
+ * Vacuum B is one quantity. The wire, cyclotron, and Larmor laws name it
+ * `magnetic-field`. The Poynting law names it `magnetic-flux-density`. A
+ * value supplied under either name is the same field for every graph node
+ * that uses the other name. Two explicit values are left as given.
+ */
+const MAGNETIC_FIELD_NAMES = ['magnetic-field', 'magnetic-flux-density'] as const;
+
+function shareMagneticFieldName(
+  known: string[] | Record<string, number>,
+  graphNames: ReadonlySet<string>,
+): string[] | Record<string, number> {
+  if (Array.isArray(known)) {
+    const hit = MAGNETIC_FIELD_NAMES.filter((n) => known.includes(n));
+    if (hit.length === 0) return known;
+    const extra = MAGNETIC_FIELD_NAMES.filter((n) => graphNames.has(n) && !known.includes(n));
+    return extra.length === 0 ? known : [...known, ...extra];
+  }
+  const hit = MAGNETIC_FIELD_NAMES.filter((n) => Object.hasOwn(known, n));
+  if (hit.length !== 1) return known;
+  const source = hit[0]!;
+  const out: Record<string, number> = { ...known };
+  let added = false;
+  for (const n of MAGNETIC_FIELD_NAMES) {
+    if (graphNames.has(n) && !Object.hasOwn(out, n)) {
+      out[n] = known[source]!;
+      added = true;
+    }
+  }
+  return added ? out : known;
+}
+
 function parseKnown(args: readonly string[]): string[] | Record<string, number> {
   const valued = args.filter((a) => a.includes('='));
   if (valued.length === 0) return [...args]; // names mode
@@ -217,7 +251,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         searchLine,
     );
   }
-  const known = parseKnown(rest);
+  const known = shareMagneticFieldName(parseKnown(rest), names);
   const x = api.explainQuantity(graph, resolvedTarget, known);
   const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;
   const partnerKnown = partner !== null && names.has(partner.name);

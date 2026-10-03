@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] `magnetic-flux-density` evaluates the cyclotron frequency.
+  Done: `upt explain cyclotron-frequency charge=1.602176634e-19 magnetic-flux-density=12e-9 mass=1.67262192369e-27 --source=canonical` recovers `e B / m`. The same call with `magnetic-field` recovers the same number. The answer does not say there is no derivation path and does not suggest the wire law. Before the shared name, the flux-density call exited 0 and asked for `current`, `distance`, `magnetic-field`, `mu_0`. Package version stays 2.0.0.
+
 - [x] `upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy`.
   Done: the error names `BridgeEquations.landauerEnergy({ temperature_K })` and `upt explain landauer-erasure-energy temperature=300`. Both return `k_B T ln 2`. An id with no such command still points at `upt evaluate` with no args. Before the sentence, `evaluateBridge(16)` said to see `upt evaluate` with no args. Package version stays 2.0.0.
 
