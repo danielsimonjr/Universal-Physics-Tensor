@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Set the package version to 2.0.0. No tag is pushed with this commit. Publishing stays the owner's job.
+  Done: `package.json` is 2.0.0. The migration note is the [2.0.0] section. Version-stamped artifacts carry 2.0.0. The `v2.0.0` tag is not pushed. Bare `e` stays the elementary charge through `{ e: E_SI }`. MathTS `{ physics: true }` returns a Unit, and `1-e^2` then throws, so the scalar parser does not switch.
 - [x] Map a bad Kerr geodesic value to exit 1, on the 2.0.0 line. Design: `docs/planning/refactor-integration-phase.md`, step 12.
   Done: `upt metric kerr --geodesic` throws `CliError` for a non-positive mass and for `|a|` above GM/c². The messages stay. A missing metric name stays exit 2. A Kerr finite-difference refusal stays exit 2. A spin inside the bound still exits 0. Before the class change, `M=0`, `M=-1`, and `a=2000` with `r=1e8` exited 2; the new test expected 1. Package version stays 1.0.4.
 - [x] Delegate a geodesic RK4 to MathTS only when the golden matches, and leave the GL4 integrator in place. Design: `docs/planning/refactor-integration-phase.md`, step 8.

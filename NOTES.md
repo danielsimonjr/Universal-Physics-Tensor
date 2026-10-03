@@ -9,12 +9,17 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-10-03
+
+- **Package version 2.0.0.** MathTS is required. The `v2.0.0` tag is not pushed. Publishing stays the owner's job.
+- **Bare `e` stays the elementary charge through the numeric override.** MathTS `{ physics: true }` returns the Unit `1.602176634e-19 C`, and `1-e^2` then throws. `formula-mathts.ts` keeps `{ e: E_SI }`. `exp(1)` is Euler's number. `E` is energy. The name `euler` is refused.
+
 ## As of 2026-10-02
 
 - **A bad Kerr geodesic value exits 1.** `upt metric kerr --geodesic` with a non-positive mass, or with `|a|` above GM/c², is `CliError`. A missing metric name stays exit 2. A finite-difference refusal stays exit 2. Package version in this tree is still 1.0.4.
 - **The fixed-step geodesic RK4 calls MathTS.** `integrateGeodesic` and `integrateRK4` use `solveODESystem` with `dt`. `solveODE` is adaptive and is not that call. `gl4-integrator.ts` and `composition/uncertainty.ts` stay. Package version in this tree is still 1.0.4.
 - **Unit conversion and the 16-point rule call MathTS.** `convertValue` uses `unit` and `toSI` when that SI ratio matches the local scale. A temperature difference does not. `bit` stays ln 2 nat. Buckingham-π stays the local exact rational null space. `integrateGaussLegendre` uses `rootsLegendre(16)`. `gaussQuad` is not that degree. Package version in this tree is still 1.0.4.
-- **MathTS is required.** The nine `@danielsimonjr/mathts-*` packages are dependencies: autograd ^0.3.16, core ^0.16.0, expression ^0.9.0, functions ^0.66.0, matrix ^0.7.6, parallel ^0.6.8, tensor ^0.2.22, wasm ^0.3.0, workerpool ^0.2.6. `@viz-js/viz` stays an optional peer. The 2026-09-29 sentence that they are still optional peers is the record from that date. This repository does not publish a MathTS tarball. Package version in this tree is still 1.0.4 until the 2.0.0 release commit.
+- **MathTS is required.** The nine `@danielsimonjr/mathts-*` packages are dependencies: autograd ^0.3.16, core ^0.16.0, expression ^0.9.0, functions ^0.66.0, matrix ^0.7.6, parallel ^0.6.8, tensor ^0.2.22, wasm ^0.3.0, workerpool ^0.2.6. `@viz-js/viz` stays an optional peer. The 2026-09-29 sentence that they are still optional peers is the record from that date. This repository does not publish a MathTS tarball. The 2.0.0 release commit is the package version. The `v2.0.0` tag is not pushed.
 - **npm 1.0.3.** Published. git `d22aed695c8cb1426e9e611c5528008406a22b79`, Publish run 37021003665. `npm view universal-physics-tensor version` is `1.0.3`. The sentence under 2026-10-01 that npm 1.0.2 is the published release is the record from that date. Package version in this tree is 1.0.4. The `v1.0.4` tag is not pushed with the release commit.
 - **Index names.** `LabeledTensor.contract` matches `UniversalIndexId`. A name that appears on both operands with more than one id throws `IndexNameMismatchError` and names both ids. Distinct names stay an outer product. The same id still contracts.
 - **`upt chain`.** Registered. `upt help` does not list it. Running it prints that the orchestrator stays internal, that a chain is provisional and is not written to the catalog, and exits 2. `runChainPipeline` is not a public export. `upt help chain` prints that status.

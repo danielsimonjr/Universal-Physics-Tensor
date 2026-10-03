@@ -664,7 +664,7 @@ which steps have a merge commit. A row marked next is not started.
 | 9 | Rename the CLI uncertainty helper | done | #308 | `d4606c804f98d2ed0c0f1b49da812e110fdc39dc` |
 | 10 | Commands go through `cli-api` | done | #309 | `6196b639fc2bd96df0a50a69ee98ac469f2abc1e` |
 | 11 | Name the three regimes in one module | done | #310 | `d7f7630dea00cbb5a89fc41c19af8b02d26f1f06` |
-| 12 | Exit-code alignment for the metric geodesic | next | — | — |
+| 12 | Exit-code alignment for the metric geodesic | done | #315 | `ee962ee714c8985af35126dfbc938776f76d3086` |
 
 ### Step 1 — Record why a pair was not a proof target
 
@@ -956,7 +956,7 @@ zero-dependency parser and the zero-dependency tensor engine. Steps 1
 through 4, and steps 9 through 11, merged on 1.x. The step table names the
 commits. Step 5 merged: the scalar walk is MathTS's. Step 6 merged:
 MathTS is required. Step 7 merged: unit conversion and the 16-point rule
-call MathTS. Step 8 merged: the fixed-step RK4 calls MathTS. Step 12 is next. Steps 7, 8, and 12 ship on
+call MathTS. Step 8 merged: the fixed-step RK4 calls MathTS. Step 12 merged: a bad Kerr geodesic value exits 1. Steps 7, 8, and 12 ship on
 the 2.0.0 line and do not each bump the major again.
 
 The migration note that ships with step 6 states:
@@ -970,7 +970,10 @@ The migration note that ships with step 6 states:
 - The library does not start when those packages are absent.
 - Bare `e` is the elementary charge. `exp(1)` is Euler's number. `E` is
   energy. The name `euler` is refused. MathTS itself still evaluates `e`
-  as Euler; UPT's adapter overrides that until gap 1 lands.
+  as Euler. `{ physics: true }` reads bare `e` as a Unit, and `1-e^2` then
+  throws. The adapter keeps the numeric charge.
+- A Kerr geodesic with a non-positive mass, or with `|a|` above GM/c²,
+  exits 1. A missing `upt metric` name stays exit 2.
 - A deep import of Path B or `Float64ReferenceEngine` fails.
 - This repository does not publish a MathTS tarball.
 
