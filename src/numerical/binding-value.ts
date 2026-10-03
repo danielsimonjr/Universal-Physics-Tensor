@@ -74,6 +74,20 @@ export function alignTemperatureBinding(
   );
 }
 
+/**
+ * Joules per kelvin for {@link alignTemperatureBinding}. An explicit `k_B`
+ * or `kB` binding wins when it is a bare number or already in J/K.
+ * @internal
+ */
+export function boltzmannBindingScale(
+  pending: readonly { name: string; read: BindingValue }[],
+): number {
+  const hit = pending.find((p) => p.name === 'k_B') ?? pending.find((p) => p.name === 'kB');
+  if (hit === undefined) return K_B_SI;
+  if (!hit.read.dimensioned || equals(hit.read.dimension, SYMBOLIC.k_B.dim)) return hit.read.value;
+  return K_B_SI;
+}
+
 /** A value read from a binding, in SI when `dimensioned` is set. @internal */
 export interface BindingValue {
   readonly value: number;

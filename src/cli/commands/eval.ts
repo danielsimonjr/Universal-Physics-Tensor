@@ -15,10 +15,6 @@ import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
 import type { UnitMode } from '../../dimensional/natural-units.js';
-import { K_B_SI } from '../../core/constants.js';
-import { equals } from '../../dimensional/algebra.js';
-import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
-import { alignTemperatureBinding, readBinding, type BindingValue } from '../../numerical/binding-value.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--debug', valueStyle: 'none', description: 'Print the formula parser name and version on stderr.' },
@@ -37,21 +33,9 @@ const FLAGS: FlagSpec[] = [
  * A value that is not a finite number or a known unit is a bad value
  * (exit 1), the same code `upt evaluate` uses. A value is a number, a
  * unit (`1Msun`), or an expression of constants and units (`0.6*c`, `pi/2`).
+ * `T`, `temperature`, `temp`, and `T_K` speak kelvin. An energy on that
+ * name is `k_B T`, using the explicit `k_B` when there is one.
  */
-/**
- * The joules-per-kelvin the formula will multiply. An explicit `k_B` or `kB`
- * binding wins when it is a bare number or already in J/K. The temperature
- * conversion uses that same number, so `k_B*T` stays the energy.
- */
-function boltzmannForConversion(
-  pending: readonly { name: string; read: BindingValue }[],
-): number {
-  const hit = pending.find((p) => p.name === 'k_B') ?? pending.find((p) => p.name === 'kB');
-  if (hit === undefined) return K_B_SI;
-  if (!hit.read.dimensioned || equals(hit.read.dimension, CONSTANTS.k_B.dim)) return hit.read.value;
-  return K_B_SI;
-}
-
 function parseScope(
   api: CommandCtx['api'],
   args: readonly string[],
@@ -59,7 +43,12 @@ function parseScope(
 ): { scope: Record<string, number>; notes: string[] } {
   const scope: Record<string, number> = {};
   const notes: string[] = [];
-  const pending: { name: string; raw: string; assignment: string; read: BindingValue }[] = [];
+  const pending: {
+    name: string;
+    raw: string;
+    assignment: string;
+    read: ReturnType<CommandCtx['api']['readBinding']>;
+  }[] = [];
   for (const a of args) {
     const eq = a.indexOf('=');
     if (eq < 0) {
@@ -68,16 +57,16 @@ function parseScope(
     const name = a.slice(0, eq);
     const raw = a.slice(eq + 1);
     try {
-      pending.push({ name, raw, assignment: a, read: readBinding(raw, { mode }) });
+      pending.push({ name, raw, assignment: a, read: api.readBinding(raw, { mode }) });
     } catch (e) {
       const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
       throw new CliError(`upt eval: '${a}' is not a finite number or a known unit. ${msg}`);
     }
   }
-  const kB = boltzmannForConversion(pending);
+  const kB = api.boltzmannBindingScale(pending);
   for (const p of pending) {
     try {
-      const read = alignTemperatureBinding(p.name, p.raw, p.read, kB);
+      const read = api.alignTemperatureBinding(p.name, p.raw, p.read, kB);
       scope[p.name] = read.value;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {

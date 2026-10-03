@@ -238,7 +238,7 @@ export {
  *
  * @internal
  */
-export { readBinding, bindingInUnit } from './numerical/binding-value.js';
+export { readBinding, bindingInUnit, alignTemperatureBinding, boltzmannBindingScale } from './numerical/binding-value.js';
 
 /**
  * Builtin dimension checker for `upt eval`.

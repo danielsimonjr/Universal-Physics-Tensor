@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "totalFiles": 421,
     "totalModules": 13,
-    "totalExports": 3011
+    "totalExports": 3014
   },
   "entryPoints": [
     {
@@ -11897,32 +11897,6 @@
               "UnitMode"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../../core/constants.js",
-            "imports": [
-              "K_B_SI"
-            ]
-          },
-          {
-            "file": "../../dimensional/algebra.js",
-            "imports": [
-              "equals"
-            ]
-          },
-          {
-            "file": "../../dimensional/symbolic-constants.js",
-            "imports": [
-              "CONSTANTS"
-            ]
-          },
-          {
-            "file": "../../numerical/binding-value.js",
-            "imports": [
-              "alignTemperatureBinding",
-              "readBinding",
-              "BindingValue"
-            ]
           }
         ],
         "exports": [
@@ -14511,7 +14485,9 @@
             "file": "./numerical/binding-value.js",
             "imports": [
               "readBinding",
-              "bindingInUnit"
+              "bindingInUnit",
+              "alignTemperatureBinding",
+              "boltzmannBindingScale"
             ],
             "reExport": true
           },
@@ -14713,6 +14689,8 @@
           "type MetricId",
           "readBinding",
           "bindingInUnit",
+          "alignTemperatureBinding",
+          "boltzmannBindingScale",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "C_SI",
@@ -14943,6 +14921,8 @@
           "type MetricId",
           "readBinding",
           "bindingInUnit",
+          "alignTemperatureBinding",
+          "boltzmannBindingScale",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "C_SI",
@@ -26995,6 +26975,7 @@
         ],
         "exports": [
           "alignTemperatureBinding",
+          "boltzmannBindingScale",
           "readNamedBinding",
           "readBinding",
           "bindingInUnit",
@@ -27005,6 +26986,7 @@
         ],
         "functions": [
           "alignTemperatureBinding",
+          "boltzmannBindingScale",
           "readNamedBinding",
           "readBinding",
           "bindingInUnit",
@@ -29536,15 +29518,15 @@
   "statistics": {
     "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 91038,
-    "totalExports": 3011,
+    "totalLinesOfCode": 91041,
+    "totalExports": 3014,
     "totalClasses": 60,
     "totalInterfaces": 481,
-    "totalFunctions": 784,
+    "totalFunctions": 785,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 751,
-    "totalReExports": 1417,
+    "totalReExports": 1419,
     "totalTypeOnlyImports": 570,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
