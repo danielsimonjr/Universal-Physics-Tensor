@@ -47,3 +47,8 @@ import PhysJS.Entanglement
 import PhysJS.RadiationPressure
 import PhysJS.AlfvenSpeed
 import PhysJS.TolmanEhrenfest
+import PhysJS.FastMagnetosonic
+import PhysJS.EinsteinRelation
+import PhysJS.Clapeyron
+import PhysJS.GravitationalRedshift
+import PhysJS.KelvinRelation
