@@ -1,7 +1,7 @@
 /**
  * Bridge-evaluator registry — the single dispatch surface for `upt evaluate`.
  *
- * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…65) carry plain-JS
+ * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…68) carry plain-JS
  * evaluators but were, until now, unreachable from the CLI (`upt eval` is
  * user-formula-only; `upt explain <be-NN>` even redirected to a capability that did
  * not exist). This registry maps each bridge id to its evaluator, its input keys,
@@ -22,6 +22,9 @@ import { evaluateBCSGap } from './be62-bcs-gap.js';
 import { evaluateChandrasekharMass } from './be63-chandrasekhar-mass.js';
 import { evaluateEddingtonLuminosity } from './be64-eddington-luminosity.js';
 import { evaluateJeansMass } from './be65-jeans-mass.js';
+import { evaluateRadiationPressure } from './be66-radiation-pressure.js';
+import { evaluateAlfvenSpeed } from './be67-alfven-speed.js';
+import { evaluateTolmanEhrenfest } from './be68-tolman-ehrenfest.js';
 
 /**
  * What a length input measures. Two lengths of one dimension are not
@@ -182,6 +185,34 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
         P('mu', 'mean molecular weight', 'μ', '', '≈ 2.3 for molecular H₂/He clouds'),
       ],
       (i) => evaluateJeansMass({ T_K: i.T_K, rho_kg_per_m3: i.rho_kg_per_m3, mu: i.mu }),
+    ),
+    spec(
+      66,
+      'Radiation pressure',
+      [
+        P('I_W_per_m2', 'intensity', 'I', 'W/m^2', 'time-averaged Poynting-flux magnitude, ≥ 0'),
+        P('R', 'reflectance', 'R', '', 'intensity reflectance on [0, 1]; transmission is 0'),
+        P('theta_rad', 'incidence angle', 'θ', '', 'angle from the outward normal, radians'),
+      ],
+      (i) => evaluateRadiationPressure({ I_W_per_m2: i.I_W_per_m2, R: i.R, theta_rad: i.theta_rad }),
+    ),
+    spec(
+      67,
+      'Alfvén speed',
+      [
+        P('B_T', 'magnetic flux density', 'B', 'T', 'background field, ≥ 0'),
+        P('rho_kg_per_m3', 'total mass density', 'ρ', 'kg/m^3', 'total mass density, not a number density'),
+      ],
+      (i) => evaluateAlfvenSpeed({ B_T: i.B_T, rho_kg_per_m3: i.rho_kg_per_m3 }),
+    ),
+    spec(
+      68,
+      'Tolman–Ehrenfest',
+      [
+        temperature('T_K', 'proper temperature', 'T', 'proper temperature, > 0 K'),
+        P('g_00', 'metric component', 'g_00', '', 'static g_00, must be negative'),
+      ],
+      (i) => evaluateTolmanEhrenfest({ T_K: i.T_K, g_00: i.g_00 }),
     ),
   ].map((s) => [s.bridgeId, s]),
 );

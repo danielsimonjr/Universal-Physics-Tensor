@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "2.0.0",
-    "totalFiles": 421,
+    "totalFiles": 426,
     "totalModules": 13,
-    "totalExports": 3018
+    "totalExports": 3070
   },
   "entryPoints": [
     {
@@ -5524,6 +5524,79 @@
           "evaluateJeansMass"
         ]
       },
+      "src/bridges/be66-radiation-pressure.ts": {
+        "description": "BE-66 — Radiation pressure of a beam on an opaque surface,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "C_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateRadiationPressure"
+        ],
+        "interfaces": [
+          "RadiationPressureInputs",
+          "RadiationPressureResult"
+        ],
+        "functions": [
+          "evaluateRadiationPressure"
+        ]
+      },
+      "src/bridges/be67-alfven-speed.ts": {
+        "description": "BE-67 — Alfvén speed in SI,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "M_PROTON_SI"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "MU0_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "M_PROTON_SI",
+          "alfvenProtonOnlyDensity",
+          "evaluateAlfvenSpeed"
+        ],
+        "interfaces": [
+          "AlfvenInputs",
+          "AlfvenResult"
+        ],
+        "functions": [
+          "alfvenProtonOnlyDensity",
+          "evaluateAlfvenSpeed"
+        ]
+      },
+      "src/bridges/be68-tolman-ehrenfest.ts": {
+        "description": "BE-68 — Tolman–Ehrenfest invariant in the repository signature,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateTolmanEhrenfest",
+          "tolmanTemperatureAt"
+        ],
+        "interfaces": [
+          "TolmanInputs",
+          "TolmanResult"
+        ],
+        "functions": [
+          "evaluateTolmanEhrenfest",
+          "tolmanTemperatureAt"
+        ]
+      },
       "src/bridges/bridge-equations.ts": {
         "description": "`BridgeEquations` — a convenience facade over the per-bridge evaluators.",
         "externalDependencies": [],
@@ -5861,6 +5934,24 @@
             "file": "./be65-jeans-mass.js",
             "imports": [
               "evaluateJeansMass"
+            ]
+          },
+          {
+            "file": "./be66-radiation-pressure.js",
+            "imports": [
+              "evaluateRadiationPressure"
+            ]
+          },
+          {
+            "file": "./be67-alfven-speed.js",
+            "imports": [
+              "evaluateAlfvenSpeed"
+            ]
+          },
+          {
+            "file": "./be68-tolman-ehrenfest.js",
+            "imports": [
+              "evaluateTolmanEhrenfest"
             ]
           }
         ],
@@ -8719,6 +8810,24 @@
             "imports": [
               "evaluateJeansMass"
             ]
+          },
+          {
+            "file": "./be66-radiation-pressure.js",
+            "imports": [
+              "evaluateRadiationPressure"
+            ]
+          },
+          {
+            "file": "./be67-alfven-speed.js",
+            "imports": [
+              "evaluateAlfvenSpeed"
+            ]
+          },
+          {
+            "file": "./be68-tolman-ehrenfest.js",
+            "imports": [
+              "evaluateTolmanEhrenfest"
+            ]
           }
         ],
         "exports": [
@@ -8927,6 +9036,36 @@
               "type JeansResult"
             ],
             "reExport": true
+          },
+          {
+            "file": "./be66-radiation-pressure.js",
+            "imports": [
+              "evaluateRadiationPressure",
+              "type RadiationPressureInputs",
+              "type RadiationPressureResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be67-alfven-speed.js",
+            "imports": [
+              "evaluateAlfvenSpeed",
+              "alfvenProtonOnlyDensity",
+              "M_PROTON_SI",
+              "type AlfvenInputs",
+              "type AlfvenResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be68-tolman-ehrenfest.js",
+            "imports": [
+              "evaluateTolmanEhrenfest",
+              "tolmanTemperatureAt",
+              "type TolmanInputs",
+              "type TolmanResult"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -8975,6 +9114,18 @@
           "evaluateJeansMass",
           "type JeansInputs",
           "type JeansResult",
+          "evaluateRadiationPressure",
+          "type RadiationPressureInputs",
+          "type RadiationPressureResult",
+          "evaluateAlfvenSpeed",
+          "alfvenProtonOnlyDensity",
+          "M_PROTON_SI",
+          "type AlfvenInputs",
+          "type AlfvenResult",
+          "evaluateTolmanEhrenfest",
+          "tolmanTemperatureAt",
+          "type TolmanInputs",
+          "type TolmanResult",
           "BE37_REGIME",
           "BE51_REGIME",
           "BE52_REGIME",
@@ -9027,7 +9178,19 @@
           "type EddingtonResult",
           "evaluateJeansMass",
           "type JeansInputs",
-          "type JeansResult"
+          "type JeansResult",
+          "evaluateRadiationPressure",
+          "type RadiationPressureInputs",
+          "type RadiationPressureResult",
+          "evaluateAlfvenSpeed",
+          "alfvenProtonOnlyDensity",
+          "M_PROTON_SI",
+          "type AlfvenInputs",
+          "type AlfvenResult",
+          "evaluateTolmanEhrenfest",
+          "tolmanTemperatureAt",
+          "type TolmanInputs",
+          "type TolmanResult"
         ],
         "interfaces": [
           "KnownIssue",
@@ -15518,7 +15681,7 @@
         ]
       },
       "src/composition/catalog-graph.ts": {
-        "description": "The full composition graph as a single constant — the 46 `BridgeEdge`s",
+        "description": "The full composition graph as a single constant — the 49 `BridgeEdge`s",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -15564,6 +15727,12 @@
             "file": "./edges/proved-seeds.js",
             "imports": [
               "PROVED_SEED_EDGES"
+            ]
+          },
+          {
+            "file": "./edges/applied-physicist.js",
+            "imports": [
+              "APPLIED_PHYSICIST_EDGES"
             ]
           }
         ],
@@ -16423,6 +16592,65 @@
           "BE30_SYMBOLIC",
           "BE36_SYMBOLIC",
           "BE33_HERTZ_MILLIS_SYMBOLIC"
+        ]
+      },
+      "src/composition/edges/applied-physicist.ts": {
+        "description": "Composition edges for BE-66, BE-67, and BE-68.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../bridges/be66-radiation-pressure.js",
+            "imports": [
+              "evaluateRadiationPressure"
+            ]
+          },
+          {
+            "file": "../../bridges/be67-alfven-speed.js",
+            "imports": [
+              "evaluateAlfvenSpeed"
+            ]
+          },
+          {
+            "file": "../../bridges/be68-tolman-ehrenfest.js",
+            "imports": [
+              "evaluateTolmanEhrenfest"
+            ]
+          },
+          {
+            "file": "../edge.js",
+            "imports": [
+              "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../quantities.js",
+            "imports": [
+              "alfvenSpeedQ",
+              "incidenceAngleQ",
+              "magneticFluxDensityQ",
+              "metricG00Q",
+              "plasmaMassDensityQ",
+              "poyntingFluxQ",
+              "properTemperatureQ",
+              "radiationPressureQ",
+              "reflectanceQ",
+              "tolmanInvariantQ"
+            ]
+          }
+        ],
+        "exports": [
+          "be66Edge",
+          "be67Edge",
+          "be68Edge",
+          "APPLIED_PHYSICIST_EDGES"
+        ],
+        "constants": [
+          "be66Edge",
+          "be67Edge",
+          "be68Edge",
+          "APPLIED_PHYSICIST_EDGES"
         ]
       },
       "src/composition/edges/calibration.ts": {
@@ -18098,6 +18326,16 @@
             "reExport": true
           },
           {
+            "file": "./edges/applied-physicist.js",
+            "imports": [
+              "be66Edge",
+              "be67Edge",
+              "be68Edge",
+              "APPLIED_PHYSICIST_EDGES"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./edges/catalog-full.js",
             "imports": [
               "be11Edge",
@@ -18353,6 +18591,10 @@
           "be48Edge",
           "be53Edge",
           "be54Edge",
+          "be66Edge",
+          "be67Edge",
+          "be68Edge",
+          "APPLIED_PHYSICIST_EDGES",
           "be11Edge",
           "be13Edge",
           "be15Edge",
@@ -18481,6 +18723,10 @@
           "be48Edge",
           "be53Edge",
           "be54Edge",
+          "be66Edge",
+          "be67Edge",
+          "be68Edge",
+          "APPLIED_PHYSICIST_EDGES",
           "be11Edge",
           "be13Edge",
           "be15Edge",
@@ -20846,6 +21092,59 @@
           "ENERGY4"
         ]
       },
+      "src/composition/quantities/applied-physicist.ts": {
+        "description": "Quantity nodes for BE-66, BE-67, and BE-68.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../quantity.js",
+            "imports": [
+              "Quantity"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "TEMPERATURE",
+              "VELOCITY"
+            ]
+          },
+          {
+            "file": "./_dims.js",
+            "imports": [
+              "ENERGY_DENSITY",
+              "MASS_DENSITY"
+            ]
+          }
+        ],
+        "exports": [
+          "poyntingFluxQ",
+          "reflectanceQ",
+          "incidenceAngleQ",
+          "radiationPressureQ",
+          "magneticFluxDensityQ",
+          "plasmaMassDensityQ",
+          "alfvenSpeedQ",
+          "properTemperatureQ",
+          "metricG00Q",
+          "tolmanInvariantQ"
+        ],
+        "constants": [
+          "poyntingFluxQ",
+          "reflectanceQ",
+          "incidenceAngleQ",
+          "radiationPressureQ",
+          "magneticFluxDensityQ",
+          "plasmaMassDensityQ",
+          "alfvenSpeedQ",
+          "properTemperatureQ",
+          "metricG00Q",
+          "tolmanInvariantQ"
+        ]
+      },
       "src/composition/quantities/common.ts": {
         "description": "Centralized Quantity nodes shared across domains or consumed only by",
         "externalDependencies": [],
@@ -21369,6 +21668,13 @@
               "*"
             ],
             "reExport": true
+          },
+          {
+            "file": "./quantities/applied-physicist.js",
+            "imports": [
+              "*"
+            ],
+            "reExport": true
           }
         ],
         "exports": [],
@@ -21377,7 +21683,8 @@
           "* from ./quantities/gravitation-cosmology.js",
           "* from ./quantities/fields.js",
           "* from ./quantities/condensed-matter.js",
-          "* from ./quantities/common.js"
+          "* from ./quantities/common.js",
+          "* from ./quantities/applied-physicist.js"
         ]
       },
       "src/composition/quantity.ts": {
@@ -22395,7 +22702,8 @@
               "LENGTH",
               "AREA",
               "FORCE",
-              "TEMPERATURE"
+              "TEMPERATURE",
+              "VELOCITY"
             ]
           },
           {
@@ -24491,6 +24799,24 @@
             "reExport": true
           },
           {
+            "file": "./bridges/index.js",
+            "imports": [
+              "evaluateRadiationPressure",
+              "type RadiationPressureInputs",
+              "type RadiationPressureResult",
+              "evaluateAlfvenSpeed",
+              "alfvenProtonOnlyDensity",
+              "M_PROTON_SI",
+              "type AlfvenInputs",
+              "type AlfvenResult",
+              "evaluateTolmanEhrenfest",
+              "tolmanTemperatureAt",
+              "type TolmanInputs",
+              "type TolmanResult"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./bridges/evaluators.js",
             "imports": [
               "BRIDGE_EVALUATORS",
@@ -24899,6 +25225,16 @@
               "be48Edge",
               "be53Edge",
               "be54Edge"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/index.js",
+            "imports": [
+              "be66Edge",
+              "be67Edge",
+              "be68Edge",
+              "APPLIED_PHYSICIST_EDGES"
             ],
             "reExport": true
           },
@@ -25839,6 +26175,18 @@
           "evaluateJeansMass",
           "type JeansInputs",
           "type JeansResult",
+          "evaluateRadiationPressure",
+          "type RadiationPressureInputs",
+          "type RadiationPressureResult",
+          "evaluateAlfvenSpeed",
+          "alfvenProtonOnlyDensity",
+          "M_PROTON_SI",
+          "type AlfvenInputs",
+          "type AlfvenResult",
+          "evaluateTolmanEhrenfest",
+          "tolmanTemperatureAt",
+          "type TolmanInputs",
+          "type TolmanResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "BridgeEquations",
@@ -25935,6 +26283,10 @@
           "be48Edge",
           "be53Edge",
           "be54Edge",
+          "be66Edge",
+          "be67Edge",
+          "be68Edge",
+          "APPLIED_PHYSICIST_EDGES",
           "adjudicateBridgeEntry",
           "adjudicateCatalog",
           "REJECTED_BRIDGE_ADJUDICATIONS",
@@ -26420,6 +26772,18 @@
           "evaluateJeansMass",
           "type JeansInputs",
           "type JeansResult",
+          "evaluateRadiationPressure",
+          "type RadiationPressureInputs",
+          "type RadiationPressureResult",
+          "evaluateAlfvenSpeed",
+          "alfvenProtonOnlyDensity",
+          "M_PROTON_SI",
+          "type AlfvenInputs",
+          "type AlfvenResult",
+          "evaluateTolmanEhrenfest",
+          "tolmanTemperatureAt",
+          "type TolmanInputs",
+          "type TolmanResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "EvaluatorSpec",
@@ -26574,6 +26938,10 @@
           "be48Edge",
           "be53Edge",
           "be54Edge",
+          "be66Edge",
+          "be67Edge",
+          "be68Edge",
+          "APPLIED_PHYSICIST_EDGES",
           "BridgeEdge",
           "ComposeOptions",
           "EdgeConfidence",
@@ -29161,6 +29529,9 @@
           "src/bridges/be64-eddington-luminosity.ts",
           "src/bridges/be65-jeans-mass-confrontation.ts",
           "src/bridges/be65-jeans-mass.ts",
+          "src/bridges/be66-radiation-pressure.ts",
+          "src/bridges/be67-alfven-speed.ts",
+          "src/bridges/be68-tolman-ehrenfest.ts",
           "src/bridges/bridge-equations.ts",
           "src/bridges/catalog-adapter.ts",
           "src/bridges/confrontation-coverage.ts",
@@ -29352,6 +29723,7 @@
           "src/composition/discovery.ts",
           "src/composition/edge.ts",
           "src/composition/edges/_catalog-helpers.ts",
+          "src/composition/edges/applied-physicist.ts",
           "src/composition/edges/calibration.ts",
           "src/composition/edges/catalog-condensed-matter.ts",
           "src/composition/edges/catalog-fields.ts",
@@ -29400,6 +29772,7 @@
           "src/composition/probe/types.ts",
           "src/composition/proposed-bridges.ts",
           "src/composition/quantities/_dims.ts",
+          "src/composition/quantities/applied-physicist.ts",
           "src/composition/quantities/common.ts",
           "src/composition/quantities/condensed-matter.ts",
           "src/composition/quantities/fields.ts",
@@ -29541,18 +29914,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 421,
+    "totalTypeScriptFiles": 426,
     "totalModules": 13,
-    "totalLinesOfCode": 91277,
-    "totalExports": 3018,
+    "totalLinesOfCode": 91886,
+    "totalExports": 3070,
     "totalClasses": 60,
-    "totalInterfaces": 481,
-    "totalFunctions": 786,
+    "totalInterfaces": 487,
+    "totalFunctions": 791,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 754,
-    "totalReExports": 1419,
-    "totalTypeOnlyImports": 571,
+    "totalConstants": 768,
+    "totalReExports": 1452,
+    "totalTypeOnlyImports": 573,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

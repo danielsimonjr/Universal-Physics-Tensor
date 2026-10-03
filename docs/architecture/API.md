@@ -43,7 +43,7 @@ All symbols in this document are `@public` unless annotated otherwise.
 
 ### `BRIDGE_EQUATIONS` — constant array
 
-The 55-entry bridge-equation catalog (IDs 11–65). Also published as a generated JSON artifact, `data/bridge-catalog.json` (`npm run catalog:json`).
+The 58-entry bridge-equation catalog (IDs 11–68). Also published as a generated JSON artifact, `data/bridge-catalog.json` (`npm run catalog:json`).
 
 **Kind**: constant (`BridgeEquationEntry[]`)
 **Stability**: `@public`

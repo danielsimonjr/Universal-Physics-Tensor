@@ -1,17 +1,10 @@
 # Candidate bridges from the applied-physicist dogfood
 
-This note drafts the specification sections for three candidates named in
+This note records the decisions, the composition refusals, the Lean targets,
+and the open notes for three candidates named in
 [`docs/dogfood/2026-10-03-applied-physicist-bridges.md`](../dogfood/2026-10-03-applied-physicist-bridges.md).
-It changes no code, no row of `BRIDGE_EQUATIONS`, no cell of `CATALOG_GRAPH`,
-no formal-reference overlay, and no evaluator. Landing the note does not
-change the pipeline. A change that implements a section is a separate pull
-request, and it is work when an `ACTIVE.md` task names this note and the
-owner has approved that section.
-
-Part II still catalogs 55 bridge equations, ids 11–65. These drafts are the
-text that would later be inserted into §V-C and the §VI.6.1 table. They are
-not inserted now. Part XI is the machine-derived coincidence list and is the
-wrong home for a literature candidate.
+The catalog text is Part II §V-C. Part XI is the machine-derived coincidence
+list and is the wrong home for a literature candidate.
 
 The three statements are unproven. None has a PhysJS key, a `formalRef`, or
 a `leanProof`. Kind is not `bridge`. Passing a units result to
@@ -72,9 +65,9 @@ signature does not move it. The category name on the catalog is "Field
 Unification Bridges". That name is the historical cluster name. It is not a
 unification claim. BE-17 dropped the claim that torsion is sourced by the
 electromagnetic field. Filing these two rows under D does not reopen that
-claim. The `bridges` tuple, if written `classical` → `classical`, does not
-select the component: BE-39's tuple is `quantum` → `classical` and category L
-stays in this same component.
+claim. The bridges tuples are `optics` → `continuum` and `fluid` → `plasma`.
+A tuple does not select the component: BE-39's tuple is `quantum` → `classical`
+and category L stays in this same component.
 
 **be-68, letter I.** The owner accepted the letter. Category I is
 `information-geometry`, with B and M. The displayed index is
@@ -107,29 +100,28 @@ through BE-65: a `BRIDGE_EQUATIONS` row, a §V-C section, and the §VI.6.1
 index of the category letter. They are not `CE-*` rows. A new category
 letter stays out of scope: `tensorIndexComponent` throws.
 
-**Proposed rows for the §VI.6.1 table, not added to Part II.**
+**Rows in the §VI.6.1 table.** Part II is the catalog text.
 
 | Proposed id | Category | Index | Why this pattern |
 |---|---|---|---|
-| 66 | D | field-unification, force and symmetry | Category D, with BE-17 and BE-18. Radiation pressure. Signature `[L^-1 M T^-2]`, the pressure signature BE-56 already carries in a different cluster, so the signature does not decide. The bridges tuple, if `classical` → `classical`, does not select the component. |
+| 66 | D | field-unification, force and symmetry | Category D, with BE-17 and BE-18. Radiation pressure. Signature `[L^-1 M T^-2]`, the pressure signature BE-56 already carries in a different cluster, so the signature does not decide. The bridges tuple is `optics` → `continuum`. The tuple does not select the component. |
 | 67 | D | field-unification, force and symmetry | Category D. Alfvén speed. Signature `[velocity]`. BE-11 and BE-48 both carry `[frequency]` and do not share a component, so a speed signature does not decide either. Same cluster as the proposed radiation-pressure row. The MHD coupling is not a new pattern. |
-| 68 | I | information-geometry, Poincaré and info | Category I, with BE-57 and BE-63–65. Tolman–Ehrenfest. Signature `[1]` on the product `T √(-g_00)` once the signature of `g_00` is fixed, or temperature on `T` alone. BE-51 is already in this component with signature `[1]`. The dependency is not BE-42. |
+| 68 | I | information-geometry, Poincaré and info | Category I, with BE-57 and BE-63–65. Tolman–Ehrenfest. The catalog signature is `[temperature]`. The bridges tuple is `gravitation` → `thermodynamics`. The dependency is not BE-42. |
 
 ## Candidate sections
 
-Each section has no evaluator. The status word is proposed. The proof block
-records that the statement is unproven until Lean proves it.
+The proof block records that the statement is unproven until Lean proves it.
 
 ### Radiation pressure — proposed be-66
 
-**Bridge Equation 66: Radiation pressure (optics to continuum)** *(Category D: Field Unification Bridges)* — proposed, not in the catalog.
+**Bridge Equation 66: Radiation pressure (optics to continuum)** *(Category D: Field Unification Bridges)* — catalog text is Part II.
 
 > **Unproven.** There is no PhysJS key. `leanProof` is `absent`. The axiom list is empty. Kind is not `bridge`. [`PhysJS.Dimensional.monomial_form`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Dimensional.lean) would give `P = C I / c` with `C = f(1,…,1)` unfixed. The absorber hypothesis `C = 1`, the normal-incidence reflector hypothesis `C = 2`, and the opaque-surface hypothesis `C = (1+R) \cos^2\theta` are not that monomial. [`PhysJS.Eddington.balance_iff`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Eddington.lean) is the `r²` cancellation of BE-64. [`PhysJS.Eddington.wrong_dictionary_factor_two`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Eddington.lean) doubles the luminosity and keeps the Thomson force. That factor of 2 is a different hypothesis from the mirror factor.
 
-> **Evaluator:** none. This note does not add one.
+> **Evaluator:** `evaluateRadiationPressure` in `src/bridges/be66-radiation-pressure.ts`.
 
-- **Status**: Proposed. Unproven until a vendored PhysJS proof of the statement below exists.
-- **Context**: The time-averaged pressure of a beam on a surface. The bridges tuple, if the row is catalogued, is `classical` → `classical`. The relation is the local force law BE-64 assumes, with factor 1. It is not the Eddington luminosity.
+- **Status**: The catalog row is established. The statement stays unproven until a vendored PhysJS proof exists.
+- **Context**: The time-averaged pressure of a beam on a surface. The bridges tuple is `optics` → `continuum`. The relation is the local force law BE-64 assumes, with factor 1. It is not the Eddington luminosity.
 - **Mathematical formulation**:
 
 <img src="https://i.upmath.me/svg/P%20%3D%20%5Cbegin%7Bcases%7D%20I%2Fc%20%26%20%5Ctext%7Bperfect%20absorber%2C%20normal%20incidence%7D%20%5C%5C%202I%2Fc%20%26%20%5Ctext%7Bperfect%20reflector%2C%20normal%20incidence%7D%20%5Cend%7Bcases%7D" alt="P = \begin{cases} I/c & \text{perfect absorber, normal incidence} \\ 2I/c & \text{perfect reflector, normal incidence} \end{cases}" />
@@ -187,9 +179,9 @@ new regime family, unless a later task adds one.
 
 **Numeric sanity check**: Computed from `C_SI = 299792458`. Illustrative, not a measurement. `I = 10^6 W/m²` gives `I/c = 0.0033356409519815205 Pa` and `2I/c = 0.006671281903963041 Pa`. Those are the dogfood's printed stand-ins. They show the factor 2 in the arithmetic. They do not choose which surface the factor belongs to.
 
-**Composition edges**: Not added.
+**Composition edges**: `be-66` is on `CATALOG_GRAPH`. Kind `law`. Not a seed.
 
-- A future quantity `poynting-flux` would have dimension intensity and attributes `{ scale: 'classical', force: 'electromagnetic' }`. `CE-poynting-flux` is `S = E B / μ0`, fully quantitative, regime classical and electromagnetic, and not a seed. The canonical name is not a `Quantity` node on `CATALOG_GRAPH`.
+- `poynting-flux` has dimension intensity and attributes `{ scale: 'classical', force: 'electromagnetic' }`. `CE-poynting-flux` is `S = E B / μ0`, fully quantitative, regime classical and electromagnetic, and not a seed. The canonical name is not a `Quantity` node on `CATALOG_GRAPH`.
 - `c` is a constant, not a source. `R` and `θ` are hypotheses, not dimensional sources.
 - The target is a new quantity `radiation-pressure`, dimension pressure. If its attributes are the same classical electromagnetic pair, the edge is `kind: 'law'`. The existing canonical target name `pressure` is the hydrostatic and force-per-area rows. Reusing that name would join this edge to `CE-hydrostatic-pressure`, whose regime force is gravitational.
 - `CE-poynting-flux` is not a seed, so a chain through it receives a `chain-` id and stays provisional under decision (a).
@@ -267,14 +259,14 @@ When a future proof is complete, the axiom list must be only `propext`,
 
 ### Alfvén speed — proposed be-67
 
-**Bridge Equation 67: Alfvén speed (fluid to plasma)** *(Category D: Field Unification Bridges)* — proposed, not in the catalog.
+**Bridge Equation 67: Alfvén speed (fluid to plasma)** *(Category D: Field Unification Bridges)* — catalog text is Part II.
 
 > **Unproven.** There is no PhysJS key. `leanProof` is `absent`. The axiom list is empty. Kind is not `bridge`. A unique monomial is `v = C B (μ0 ρ)^{-1/2}` with `C` unfixed. `C = 1` is the SI hypothesis. `ρ` is the total mass density. Proton-only is a named special case. The Gaussian factor `1/√(4π)` is a unit dictionary. None of those is an MHD theorem. `CE-plasma-frequency` is a dimensional canonical equation and is not this derivation.
 
-> **Evaluator:** none. This note does not add one.
+> **Evaluator:** `evaluateAlfvenSpeed` in `src/bridges/be67-alfven-speed.ts`. `alfvenProtonOnlyDensity` is the named special case.
 
-- **Status**: Proposed. Unproven until a vendored PhysJS proof of the statement below exists.
-- **Context**: The phase speed of an ideal-MHD wave along a uniform background field. The bridges tuple, if the row is catalogued, is `classical` → `classical`. The catalog gap sits beside `CE-plasma-frequency`, which is `ω_p ∝ √(n q² / (ε0 m))` and is not a wave speed.
+- **Status**: The catalog row is established. The statement stays unproven until a vendored PhysJS proof exists.
+- **Context**: The phase speed of an ideal-MHD wave along a uniform background field. The bridges tuple is `fluid` → `plasma`. The catalog gap sits beside `CE-plasma-frequency`, which is `ω_p ∝ √(n q² / (ε0 m))` and is not a wave speed.
 - **Mathematical formulation**:
 
 <img src="https://i.upmath.me/svg/v_A%20%3D%20%5Cfrac%7BB%7D%7B%5Csqrt%7B%5Cmu_0%20%5Crho%7D%7D%2C%20%5Cqquad%20%5Cmathbf%7Bv%7D_A%20%3D%20%5Cfrac%7B%5Cmathbf%7BB%7D%7D%7B%5Csqrt%7B%5Cmu_0%20%5Crho%7D%7D" alt="v_A = \frac{B}{\sqrt{\mu_0 \rho}}, \qquad \mathbf{v}_A = \frac{\mathbf{B}}{\sqrt{\mu_0 \rho}}" />
@@ -329,9 +321,9 @@ so this note does not attribute a list of hypotheses to the 1942 symbols.
 
 **Numeric sanity check**: Computed. Not a measurement. Constants: `B = 12×10^{-9} T`, `n = 14×10^6 m^{-3}`, `m_p = 1.67262192369×10^{-27} kg` (the value the BE-64 evaluator stores), `μ0 = MU0_SI = 1/(EPS0_SI C_SI²) = 1.2566370621200546×10^{-6}`. Proton-only `ρ_p = 2.3416706931660002×10^{-20} kg/m³` and `v_A = 69954.13706220593 m/s = 69.954 km/s`. The dogfood prints 69.95 km/s. The paper's own sentence, in the dogfood's reading, is `V_a ∼ 60 km/s`. The density that yields exactly 60 km/s at this `B` and this `μ0` is `3.183098860104967×10^{-20} kg/m³`, a ratio 1.359 against `ρ_p`. The speed ratio 69.954/60 is 1.166. The inputs carry tildes, so rounding alone can move the result. This is not a precision test.
 
-**Composition edges**: Not added.
+**Composition edges**: `be-67` is on `CATALOG_GRAPH`. Kind `law`. Not a seed.
 
-- The source of `B` is a new quantity `magnetic-flux-density`, attributes `{ scale: 'classical', force: 'electromagnetic' }`. The canonical name exists on `CE-poynting-flux` and on the cyclotron row. It is not a `Quantity` node. The dogfood records that `upt explain` accepts `magnetic-field` and does not accept `magnetic-flux-density` for the cyclotron path. This edge must not depend on that alias.
+- The source of `B` is `magnetic-flux-density`, attributes `{ scale: 'classical', force: 'electromagnetic' }`. The canonical name exists on `CE-poynting-flux` and on the cyclotron row. It is not a `Quantity` node. The dogfood records that `upt explain` accepts `magnetic-field` and does not accept `magnetic-flux-density` for the cyclotron path. This edge must not depend on that alias.
 - The density is a new quantity `plasma-mass-density`, same classical electromagnetic attributes. The default value is the total mass density. A proton-only input is the named special case and is a different number. The graph node `mass-density` has attributes `{ scale: 'cosmological', force: 'gravitational' }` because it is the BE-19 input. Reusing it would put a plasma density on a cosmological gravitational port. The regime gate would then reject a join on scale and on force if the other port states classical and electromagnetic, and it would abstain if the other port is silent. Abstention is not a reason to reuse the node.
 - `μ0` is a constant, not a source.
 - Do not chain through `CE-plasma-frequency`. That equation is dimensional, its regime scale is mesoscopic, and a chain id would be provisional and would not be an Alfvén theorem.
@@ -397,14 +389,14 @@ Draft object, not written to the manifest:
 
 ### Tolman–Ehrenfest — proposed be-68
 
-**Bridge Equation 68: Tolman–Ehrenfest (gravitation to thermodynamics)** *(Category I: Emergent Spacetime)* — proposed, not in the catalog.
+**Bridge Equation 68: Tolman–Ehrenfest (gravitation to thermodynamics)** *(Category I: Emergent Spacetime)* — catalog text is Part II.
 
 > **Unproven.** There is no PhysJS key. `leanProof` is `absent`. The axiom list is empty. Kind is not `bridge`. The statement is not a monomial. `{d ln T, g, c, dr}` has two invariants, so `buckinghamFilter` must not emit this row as a unique-monomial survivor. [`PhysJS.HawkingUnruh.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/HawkingUnruh.lean) assumes the Hawking and Unruh temperatures and does not derive this equilibrium criterion. BE-57 does not receive a second key for that cross-check, and this row does not either.
 
-> **Evaluator:** none. This note does not add one.
+> **Evaluator:** `evaluateTolmanEhrenfest` in `src/bridges/be68-tolman-ehrenfest.ts`. `tolmanTemperatureAt` recovers `T` from the invariant.
 
-- **Status**: Proposed. Unproven until a vendored PhysJS proof of the statement below exists.
-- **Context**: Proper temperature in static thermal equilibrium. The bridges tuple, if the row is catalogued, is `classical` → `classical`. UPT has the Hawking temperature at infinity on be-42, a cross-check, and does not have this gradient.
+- **Status**: The catalog row is established. The statement stays unproven until a vendored PhysJS proof exists.
+- **Context**: Proper temperature in static thermal equilibrium. The bridges tuple is `gravitation` → `thermodynamics`. UPT has the Hawking temperature at infinity on be-42, a cross-check. This row does not chain through it.
 - **Mathematical formulation**:
 
 <img src="https://i.upmath.me/svg/T_0%5Csqrt%7Bg_%7B44%7D%7D%20%3D%20%5Cmathrm%7Bconst%7D" alt="T_0\sqrt{g_{44}} = \mathrm{const}" />
@@ -433,9 +425,9 @@ The index form of the later stationary statement, opened on arXiv:1005.2985 and 
 
 **Numeric sanity check**: No laboratory gradient was opened. Computed weak-field scale at `R = 6.957×10^8 m`, the radius the dogfood used. The IAU resolution PDF was not opened. `GM_SUN_SI / (R C_SI²) = 2.1225025701453566×10^{-6}`. `G_SI M_SUN_SI / (R C_SI²) = 2.1231324960869663×10^{-6}`. `GM_SUN_SI` is the IAU 2015 nominal parameter and is not `G_SI * M_SUN_SI`. Both figures are the fractional scale of the linearization `ΔT/T ~ GM/(R c²)`. They are not a measured `ΔT/T`. The dogfood prints the same two numbers (the last digit of the `GM_SUN_SI` figure rounds to the digit the dogfood shows).
 
-**Composition edges**: Not added.
+**Composition edges**: `be-68` is on `CATALOG_GRAPH`. Kind `law`. Not a seed. No identification row was added.
 
-- The target must be a new quantity `proper-temperature`, dimension temperature, attributes `{ scale: 'classical', force: 'gravitational' }`.
+- The temperature port is `proper-temperature`, dimension temperature, attributes `{ scale: 'classical', force: 'gravitational' }`. The target of the edge is `tolman-invariant`, the same attributes.
 - Do not use `hawking-temperature`. That node is `{ scale: 'quantum', force: 'gravitational' }`.
 - Do not use the generic `temperature` node. Its attributes are empty, so scale and force would abstain. `QUANTITY_IDENTIFICATIONS` folds `hawking-temperature` onto `temperature`. A junction through that fold meets be-42. Categories I and M share the information-geometry component, so the domain facet would not reject the pair. Abstention on the empty `temperature` attributes would not reject it either. be-42 is not a seed, and a chain would stay provisional, and the identification is still the wrong port. This note adds no identification row.
 - `g_00` is a metric component, not an existing quantity. A chain that starts from `CE-einstein-field-eq` does not entail thermal equilibrium.
@@ -546,9 +538,12 @@ thermopower) stay in that report. They are not sections of this note.
 
 ## Decisions
 
-The owner decided these five points on the draft of this note. They are the
-catalog text. The three statements stay unproven until a vendored PhysJS
-proof exists. This note still does not edit `src/`.
+The owner decided these five points. They are the catalog text in Part II
+§V-C. The three statements stay unproven until a vendored PhysJS proof
+exists. The bridges tuples are `optics` → `continuum`, `fluid` → `plasma`,
+and `gravitation` → `thermodynamics`, so the membership criterion counts
+them as bridges. The composition edges are kind `law` because the quantity
+attributes match.
 
 1. The ids are be-66 radiation pressure, be-67 Alfvén speed, and be-68 Tolman–Ehrenfest. There is no gap. Integer 66 is radiation pressure. The deferred Tolman–Oppenheimer–Volkoff mass stays deferred and does not occupy 66.
 2. All three are `be-*` catalog entries, in the form of BE-55 through BE-65. They are not `CE-*` rows. The letters are D, D, and I.
@@ -558,8 +553,7 @@ proof exists. This note still does not edit `src/`.
 
 ## What this note does not do
 
-It does not edit `src/`, Part II, `tensor-index.ts`, `CATALOG_GRAPH`,
-`QUANTITY_IDENTIFICATIONS`, or `formal/physjs/manifest.json`. It does not
-call `deriveEvidence`. It does not assign `formally-proved`. It does not
-treat a `chain-` id as a catalog id. It does not treat a units monomial as a
-proof.
+It does not write `formal/physjs/manifest.json`. It does not call
+`deriveEvidence` to light `formally-proved`. It does not treat a `chain-`
+id as a catalog id. It does not treat a units monomial as a proof. The
+open notes below stay notes.

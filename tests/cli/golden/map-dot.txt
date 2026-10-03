@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (103)";
+    label="anchored cluster (105)";
     j_be_11_zurek [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-11"];
     q_relaxation_rate [shape=ellipse,label="relaxation-rate"];
     q_relaxation_rate -> j_be_11_zurek;
@@ -137,6 +137,22 @@ digraph PhysicsMap {
     q_mean_molecular_weight_per_electron [shape=ellipse,label="mean-molecular-weight-per-electron"];
     q_mean_molecular_weight_per_electron -> j_be_63;
     j_be_63 -> q_mass;
+    j_be_66 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-66"];
+    q_poynting_flux [shape=ellipse,label="poynting-flux"];
+    q_poynting_flux -> j_be_66;
+    q_reflectance [shape=ellipse,label="reflectance"];
+    q_reflectance -> j_be_66;
+    q_incidence_angle [shape=ellipse,label="incidence-angle"];
+    q_incidence_angle -> j_be_66;
+    q_radiation_pressure [shape=ellipse,label="radiation-pressure"];
+    j_be_66 -> q_radiation_pressure;
+    j_be_67 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-67"];
+    q_magnetic_flux_density [shape=ellipse,label="magnetic-flux-density"];
+    q_magnetic_flux_density -> j_be_67;
+    q_plasma_mass_density [shape=ellipse,label="plasma-mass-density"];
+    q_plasma_mass_density -> j_be_67;
+    q_alfven_speed [shape=ellipse,label="alfven-speed"];
+    j_be_67 -> q_alfven_speed;
     j_CE_pendulum_period [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Pendulum period"];
     q_length [shape=ellipse,label="length"];
     q_length -> j_CE_pendulum_period;
@@ -350,10 +366,8 @@ digraph PhysicsMap {
     j_CE_rc_time_constant -> q_rc_time_constant;
     j_CE_poynting_flux [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Poynting vector (magnitude)"];
     q_electric_field -> j_CE_poynting_flux;
-    q_magnetic_flux_density [shape=ellipse,label="magnetic-flux-density"];
     q_magnetic_flux_density -> j_CE_poynting_flux;
     q_mu_0 -> j_CE_poynting_flux;
-    q_poynting_flux [shape=ellipse,label="poynting-flux"];
     j_CE_poynting_flux -> q_poynting_flux;
     j_CE_solenoid_field [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Solenoid magnetic field"];
     q_mu_0 -> j_CE_solenoid_field;
@@ -765,7 +779,7 @@ digraph PhysicsMap {
     j_CE_radioactive_decay -> q_remaining_nuclei;
   }
   subgraph cluster_iso {
-    label="isolated (34)";
+    label="isolated (35)";
     j_be_14 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-14"];
     q_minimal_surface_area [shape=ellipse,label="minimal-surface-area"];
     q_minimal_surface_area -> j_be_14;
@@ -910,6 +924,13 @@ digraph PhysicsMap {
     q_flavor_number -> j_be_53;
     q_yang_mills_beta [shape=ellipse,label="yang-mills-beta"];
     j_be_53 -> q_yang_mills_beta;
+    j_be_68 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-68"];
+    q_proper_temperature [shape=ellipse,label="proper-temperature"];
+    q_proper_temperature -> j_be_68;
+    q_metric_g00 [shape=ellipse,label="metric-g00"];
+    q_metric_g00 -> j_be_68;
+    q_tolman_invariant [shape=ellipse,label="tolman-invariant"];
+    j_be_68 -> q_tolman_invariant;
     j_CE_bekenstein_hawking [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bekenstein–Hawking entropy"];
     q_A [shape=ellipse,label="A"];
     q_A -> j_CE_bekenstein_hawking;
