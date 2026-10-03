@@ -25,11 +25,12 @@ interface GaussLegendreNode {
   readonly weight: number;
 }
 
+const legendre16 = rootsLegendre(16);
+
 /**
  * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2), from
  * MathTS `rootsLegendre(16)`.
  */
-const legendre16 = rootsLegendre(16);
 export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = legendre16.nodes.map(
   (node, i) => ({ node, weight: legendre16.weights[i]! }),
 );
