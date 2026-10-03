@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Set the package version to 2.0.1. No tag is pushed with this commit. Publishing stays the owner's job.
+  Done: `package.json` is 2.0.1. The patch note is the [2.0.1] section. Version-stamped artifacts carry 2.0.1. The `v2.0.1` tag is not pushed. The Part VIII check requires 2.0.1. Before the bump it required 2.0.0.
+
 - [x] Point `upt chain` at a document a published tarball can open, and point the Landauer edge grade at the atlas formalRef.
   Done: `upt chain` exits 2 and names the GitHub URL of `docs/planning/Bridge-Discovery-Pipeline-Design.md`. It does not run the orchestrator. `be16Edge.confidence` stays `speculative`. `composeEdges(be42Edge, be16Edge).confidence` stays `highly-speculative`. `upt atlas be-16` and `upt symbolic` say those are different facts. Before the URL, `upt chain` named the repository path and `upt symbolic` did not print the grade. Package version stays 2.0.0.
 

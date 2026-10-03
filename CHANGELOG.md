@@ -720,6 +720,29 @@ from v0.1.0 onward.
   - **Q1** — discover PROMISING lists consequence/magnitude before bare inconclusive.
   - **Q2** — CONTRIBUTING.md catalog count 44 → 55.
 
+## [2.0.1] - 2026-10-03
+
+Patch for the applied-physicist dogfood of published 2.0.0. No tag is pushed with this commit. Publishing stays the owner's job. `upt chain` does not call the pipeline.
+
+### Fixed
+
+- **Canonical Landauer is `k_B T ln 2`.** `CE-landauer` agrees with `be-16`. `upt explain --source=both` prints `erasure-energy` and `landauer-erasure-energy`. The canonical audit reports `CE-landauer ×6.931e-1`. The coefficient applies only to a fully-quantitative restatement of a catalog bridge.
+- **An energy on a temperature binding is `k_B T`.** `upt eval "k_B*T/e" T=22eV` is 22. A length on `T` exits 1. `T=300K` and `T=25degC` stay absolute temperatures.
+- **`upt evaluate be-16` names the command that works.** The error names `BridgeEquations.landauerEnergy({ temperature_K })` and `upt explain landauer-erasure-energy temperature=300`.
+- **Search breaks a query on spaces and hyphens.** `upt search "radiation pressure"` and `upt search magnetic-field` match. `upt search be-16` still matches be-16.
+- **`nT` and `uT` are tesla.** `m_p`, `m_proton`, `N_A`, and Faraday `F` evaluate. `permeability` is `L M T^-2 I^-2`. `Ts` stays a terasecond. Bare `sigma` stays unbound.
+- **A canonical G-closure is not a recovered prefactor.** `CE-rydberg-energy`, `CE-classical-electron-radius`, `CE-bohr-magneton`, `CE-bohr-radius`, and `CE-field-energy-density` are dimensional-reconstruction mismatches. Stefan–Boltzmann and Wien stay empirical/tuned. Planck–Einstein and de Broglie stay `×6.283`. Canonical counts are DERIVED 79, DECOY 7, OPEN 23. Catalog `be-48` stays derived.
+- **`magnetic-flux-density` evaluates the cyclotron frequency.** One supplied vacuum B is available under `magnetic-field` and `magnetic-flux-density`. The graph nodes stay distinct.
+- **`upt chain` cites the design on GitHub.** The command still exits 2 and does not run the orchestrator. `be16Edge.confidence` stays `speculative`. `composeEdges(be42Edge, be16Edge)` stays `highly-speculative`. `upt atlas be-16` and `upt symbolic` say that grade is not the kind-`bridge` formalRef.
+
+### Added
+
+- **BE-66, BE-67, and BE-68.** Radiation pressure, the Alfvén speed, and Tolman–Ehrenfest are catalog ids 66–68. No `formalRef`. Evidence stays proposed.
+
+The Part VIII check requires `2.0.1`. Before the bump it required `2.0.0` and failed on this package version. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `2.0.1`. Architecture docs were regenerated: 426 files, 3071 exports, 1453 re-exports, 91960 lines, 0 circular dependencies. Architecture test-coverage docs count 594 test files. The unused-analysis report lists 1 file and 78 exports. The `v2.0.1` tag is not pushed.
+
+**Dependency health, measured for this release:** `bun audit` finds 0 vulnerabilities in 142 packages. `bun outdated` lists `@types/node` 26.5.1 → 26.6.4, `fast-check` 4.10.0 → 4.10.2, and `@viz-js/viz` 3.30.0 → 3.31.0. `vitest` and `@vitest/coverage-v8` stay 4.1.11 inside the current range; latest is 5.0.3. `tree-sitter` stays 0.22.4 inside the current range; latest is 0.25.1. None of these is a HIGH or CRITICAL advisory.
+
 ## [2.0.0] - 2026-10-03
 
 MathTS is required. Path B (`src/numerical/formula.ts`) and `Float64ReferenceEngine` are deleted. The nine `@danielsimonjr/mathts-*` packages are dependencies. No tag is pushed with this commit. Publishing stays the owner's job. `upt chain` does not call the pipeline.
