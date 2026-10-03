@@ -29,11 +29,14 @@
  *     path and no delta to measure.
  *   - Evaluator: the dimensional MONOMIAL gives the power law over the variable
  *     sources, times the baked constant factor. A fully-quantitative scalar
- *     AST whose extra factors are a closed dimensionless coefficient (ln 2,
- *     8π, ¼, …) multiplies that coefficient in, so the number matches the
- *     recorded formula. An entry with no such coefficient — no AST, a sum, an
- *     unresolved stub, or only `scalar-up-to-constant` — still takes the
- *     leading factor as 1. Where dimensions cannot pin a monomial
+ *     AST that restates a catalog bridge, and whose extra factors are a closed
+ *     dimensionless coefficient (ln 2, …), multiplies that coefficient in, so
+ *     the number matches the catalog evaluator of the same law. Every other
+ *     entry still takes the leading factor as 1: the discovery surface is
+ *     correct up to an O(1) factor, and a G-closure is not given a second
+ *     constant here. An entry with no such coefficient — no AST, no
+ *     restatement, a sum, an unresolved stub, or only `scalar-up-to-constant`
+ *     — is that case. Where dimensions cannot pin a monomial
  *     (`monomial: null`, e.g. Newton's two same-dim masses), the edge carries a
  *     NaN evaluator; `retrodict` accepts only finite derivations, so it
  *     abstains cleanly rather than polluting the consistency check.
@@ -193,6 +196,11 @@ function hasUnresolvedStub(node: ExprNode, governing: ReadonlySet<string>): bool
  * (no AST, not fully quantitative, a stub, a sum, or a factor of ±1).
  */
 function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undefined {
+  // Only a declared restatement has a catalog evaluator to agree with. Other
+  // fully-quantitative coefficients stay out of this evaluator: folding
+  // 1/(32π²) into CE-rydberg-energy moved a pinned magnitude by 2.5 orders
+  // and is not the Landauer disagreement.
+  if (eq.restatesBridge === undefined) return undefined;
   if (eq.epistemicStatus !== 'fully-quantitative' || eq.scalarAst === undefined) return undefined;
   const governing = new Set(eq.dimensional.governing.map((g) => g.name));
   if (hasUnresolvedStub(eq.scalarAst, governing)) return undefined;
@@ -205,8 +213,8 @@ function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undef
 /**
  * Build the evaluator for one canonical equation, keyed by its VARIABLE source
  * names. Variables carry the monomial exponent from `inputs`; constants
- * contribute a fixed baked factor. A fully-quantitative AST multiplies its
- * recorded dimensionless coefficient. Returns NaN when the monomial is null
+ * contribute a fixed baked factor. A fully-quantitative restatement multiplies
+ * its recorded dimensionless coefficient. Returns NaN when the monomial is null
  * (dimensions underdetermine the form) — `retrodict` then abstains.
  */
 function makeEvaluate(
