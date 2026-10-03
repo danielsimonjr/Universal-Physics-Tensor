@@ -23,6 +23,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] Read `nT` and `uT` as tesla, and add `m_p`, `N_A`, the Faraday constant, and the dimension `permeability`.
   Done: `upt eval B B=12nT` is `12e-9`. `B=12uT` is `12e-6`. `t=1Ts` is `1e12` and does not mention the tesla. `upt eval m_p` and `m_proton` are `1.67262192369e-27`. `N_A` is `6.02214076e23`. `F` is `N_A * e`. An explicit `F=2` stays 2. `upt eval sigma` exits 2. `upt eval "12e-9/sqrt(mu0*14e6*m_p)"` exits 0. `upt derive velocity:velocity B:magnetic_field mu0:permeability rho:density --formula "B/sqrt(mu0*rho)"` exits 0 and recovers prefactor 1. Before the change, `B=12nT` exited 1, `m_p` exited 2, the Alfvén command exited 2, and permeability exited 2 with `unknown base dimension 'permeability'`. Package version stays 2.0.0.
 
+- [x] `upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy`.
+  Done: the error names `BridgeEquations.landauerEnergy({ temperature_K })` and `upt explain landauer-erasure-energy temperature=300`. Both return `k_B T ln 2`. An id with no such command still points at `upt evaluate` with no args. Before the sentence, `evaluateBridge(16)` said to see `upt evaluate` with no args. Package version stays 2.0.0.
+
 - [x] An energy on a temperature binding is `k_B T`, and any other dimension on that name exits 1.
   Done: `upt eval "k_B*T/e" T=22eV` prints 22. `upt eval "k_B*T" T=22eV` prints `22 * e` joules. `T`, `temperature`, `temp`, and `T_K` speak kelvin. A bare number and `K` / `degC` stay absolute temperatures. `T=1m` exits 1. An explicit `k_B` is the conversion constant, so `k_B*T/e` stays the voltage. Before the conversion, both ratios equalled `k_B` (`1.380649e-23`) and `T=1m` exited 0. Package version stays 2.0.0.
 
