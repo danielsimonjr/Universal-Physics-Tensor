@@ -3,7 +3,7 @@ metadata:
   version: 2.0.0
   totalFiles: 426
   totalModules: 13
-  totalExports: 3069
+  totalExports: 3070
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8753,6 +8753,7 @@ modules:
             - buildSearchIndex
             - fold
             - matchEveryWord
+            - queryWords
             - SEARCH_SECTIONS
             - STOP_WORDS
       exports:
@@ -9300,6 +9301,7 @@ modules:
         - SEARCH_SECTIONS
         - STOP_WORDS
         - fold
+        - queryWords
         - buildSearchIndex
         - matchEveryWord
         - searchNameWords
@@ -9307,6 +9309,7 @@ modules:
         - SearchEntry
         - SearchMatch
       functions:
+        - queryWords
         - buildSearchIndex
         - matchEveryWord
         - searchNameWords
@@ -20872,11 +20875,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 426
   totalModules: 13
-  totalLinesOfCode: 91900
-  totalExports: 3069
+  totalLinesOfCode: 91920
+  totalExports: 3070
   totalClasses: 60
   totalInterfaces: 487
-  totalFunctions: 790
+  totalFunctions: 791
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 768

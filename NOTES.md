@@ -13,6 +13,8 @@ nothing validates prose and the next reader cannot tell.
 
 - **`magnetic-flux-density` evaluates the cyclotron frequency.** It is the same vacuum B as `magnetic-field`. The 2026-10-03 dogfood line that the flux-density call has no derivation path and suggests the wire law is the record from before this shared name.
 
+- **`upt search` breaks a query on spaces and hyphens.** `upt search "radiation pressure"` matches be-64. `upt search magnetic-field` matches that name. `upt search be-16` matches be-16. The three exit-1 results are the record from before this split.
+
 - **`nT` and `uT` are tesla. `m_p`, `N_A`, and `F` evaluate. `permeability` is a dimension.** `B=12nT` is `12e-9` T. `B=12uT` is `12e-6` T. `Ts` stays a terasecond. `sigma` stays free. `mu0:permeability` is `L M T^-2 I^-2`. The 2026-10-03 dogfood lines that those commands fail are the record from before this change.
 
 - **`upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy temperature=300`.** Both return `k_B T ln 2`. The sentence that told the reader to see `upt evaluate` with no args is the record from before this hint.

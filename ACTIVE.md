@@ -23,6 +23,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] `magnetic-flux-density` evaluates the cyclotron frequency.
   Done: `upt explain cyclotron-frequency charge=1.602176634e-19 magnetic-flux-density=12e-9 mass=1.67262192369e-27 --source=canonical` recovers `e B / m`. The same call with `magnetic-field` recovers the same number. The answer does not say there is no derivation path and does not suggest the wire law. Before the shared name, the flux-density call exited 0 and asked for `current`, `distance`, `magnetic-field`, `mu_0`. Package version stays 2.0.0.
 
+- [x] `upt search` splits a quoted phrase and a hyphen into words.
+  Done: `upt search "radiation pressure"` matches be-64, the same words as two arguments. `upt search magnetic-field` matches that quantity name. `upt search be-16` still matches be-16. Before the split, all three exited 1. Package version stays 2.0.0.
+
 - [x] Encode be-66, be-67, and be-68 in the catalog from the applied-physicist design note.
   Done: radiation pressure, Alfvén speed, and Tolman–Ehrenfest are `BRIDGE_EQUATIONS` 66–68, category D, D, and I. Evaluators, composition edges, and Part-II §V-C are in. No `formalRef`. The Lean sketches stay in the design note. Open notes stay notes. Package version stays 2.0.0.
 
