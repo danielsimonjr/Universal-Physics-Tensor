@@ -31,7 +31,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `2e09357f9674bc60b60b378155a1623c27dc7b04`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `d917fa328039d19c3659f74ea73569effb3ed4fb`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -131,6 +131,9 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['be-35', 'PhysJS.Crossing.antisymmetry', 'derivation-step: for a real function g, g(u,v) − g(v,u) = −(g(v,u) − g(u,v)). The swap is the negation of a difference. The residual is 0 for every g when u = v, including u = v = 1/4, so that point is not a control. A block that is not symmetric does not vanish at u = 1/2, v = 1/4. Not the infinite sum over (Δ, ℓ), and not positivity or unitarity. The catalog records this id as not-a-bridge; this lemma does not decide that'],
   ['be-63', 'PhysJS.Chandrasekhar.prefactor', 'derivation-step: with n = ρ/(μ_e m_u), p_F = ℏ (3π² n)^{1/3}, and P = (1/4) n p_F c, one has P = K_ρ ρ^{4/3} where K_ρ = K_n/(μ_e m_u)^{4/3} and K_n = (ℏ c/4)(3π²)^{1/3}. For the n = 3 Lane–Emden scale the central density cancels, and M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}. ω₃⁰ stays symbolic; the decimal 2.01824 is not in the theorem. With ℏ = c = μ_e = m_u = 1 both routes give the same K. √π/2 in place of √(3π)/2 fails when ω₃⁰ ≠ 0, and dropping ω₃⁰ fails when ω₃⁰ ≠ 1. Not stellar rotation or magnetic support'],
   ['be-30', 'PhysJS.Entanglement.first_variation', 'derivation-step: for a smooth curve of full-rank density matrices that stay diagonal in a fixed basis and have trace 1, d/dt S(ρ(t)) = −⟪ρ̇(t), log ρ(t)⟫, the trace inner product. The modular Hamiltonian K = −log ρ is frozen at the base point, and that derivative equals d/dt ⟨K⟩. A finite jump from diag(1/2, 1/2) to diag(3/4, 1/4) leaves ⟨K⟩ unchanged and changes S. Not the holographic first law that identifies K with an area variation'],
+  ['be-66', 'PhysJS.RadiationPressure.pressure_eq', 'derivation-step: foreshortening I cos θ, normal momentum per energy (cos θ)/c, and an opaque split that deposits the absorbed fraction once and the specular fraction twice give P_n = (I/c)(1+R) cos²θ. R = 0, θ = 0 is I/c and R = 1, θ = 0 is 2I/c. A single cosine is not that pressure when cos θ is neither 0 nor 1. Homogeneity in I and c gives P = C I/c with C = f(1,1) unfixed. Not the Maxwell stress tensor, and not the Eddington luminosity'],
+  ['be-67', 'PhysJS.AlfvenSpeed.speed_eq', 'derivation-step: one transverse monochromatic polarization along a uniform field, with ∂b/∂t = B ∂v/∂z and ρ ∂v/∂t = (B/μ0) ∂b/∂z, has phase speed |ω/k| = B/√(μ0 ρ) for B > 0, μ0 > 0, ρ > 0, and k ≠ 0. ρ is the density in that momentum premise, read as the total mass density. Proton-only n m_p is a different density when electrons contribute, and a density r ρ with r ≠ 1 is a different speed. Inserting tesla and the SI density into B/√(4πρ) is not the SI speed. 4π×10^{-7} is the permeability stand-in, not a measured μ0. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation'],
+  ['be-68', 'PhysJS.TolmanEhrenfest.hydrostatic_constant', 'derivation-step: on a static interval with g_00 < 0, hydrostatic balance dp = -(ρ+p) d ln √(-g_00) and the equilibrium Gibbs relation dp = (ρ+p) d ln T, with ρ+p ≠ 0, give T √(-g_00) equal at the endpoints. The 1930 writing T √g_44 agrees when g_44 = -g_00. Real.sqrt g_00 = 0 when g_00 < 0, so the product without the minus is 0. d ln T = 0 is not g dr/c². Not a horizon temperature and not PhysJS.HawkingUnruh.dictionary. T ‖ξ‖ = const is out of scope. The hydrostatic equation is not derived from ∇_μ T^{μν} = 0, and the Gibbs relation is not derived from an equation of state'],
 ];
 
 const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
@@ -146,8 +149,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit 2e09357f9674bc60b60b378155a1623c27dc7b04, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('2e09357f9674bc60b60b378155a1623c27dc7b04');
+  it('records commit d917fa328039d19c3659f74ea73569effb3ed4fb, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('d917fa328039d19c3659f74ea73569effb3ed4fb');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -155,7 +158,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the forty-six theorems and keys, in manifest order', () => {
+  it('names the forty-nine theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -369,10 +372,10 @@ describe('vendored PhysJS manifest', () => {
     const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
     const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
     const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30']);
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68']);
     expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
     expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
-    expect(counted.length + crossChecks.length + properties.length).toBe(36);
+    expect(counted.length + crossChecks.length + properties.length).toBe(39);
 
     const unlabeled = {
       ...manifest,

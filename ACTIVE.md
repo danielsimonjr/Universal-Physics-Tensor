@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Vendor the PhysJS #55 proofs for be-66, be-67, and be-68. The manifest pin is `d917fa328039d19c3659f74ea73569effb3ed4fb`. Kind is `bridge`. The catalog path still omits the reference.
+  Done: `formal/physjs/manifest.json` is that commit. `catalogFormalRef` is `PhysJS.RadiationPressure.pressure_eq`, `PhysJS.AlfvenSpeed.speed_eq`, and `PhysJS.TolmanEhrenfest.hydrostatic_constant`. Each is kind `bridge`, fidelity `sanity-lemmas`, and the formalRef check is empty against the vendored manifest. Before the pin, `catalogFormalRef(66)` was undefined and the commit was `2e09357f9674bc60b60b378155a1623c27dc7b04`. `deriveEvidence` of the overlay reference lights `formally-proved`. `deriveEdgeEvidence` stays `proposed`. Edge confidence stays `established`.
+
 - [x] Set the package version to 2.0.1. No tag is pushed with this commit. Publishing stays the owner's job.
   Done: `package.json` is 2.0.1. The patch note is the [2.0.1] section. Version-stamped artifacts carry 2.0.1. The `v2.0.1` tag is not pushed. The Part VIII check requires 2.0.1. Before the bump it required 2.0.0.
 

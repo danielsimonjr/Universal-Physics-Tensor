@@ -42,7 +42,7 @@ describe('BE-68 Tolman–Ehrenfest', () => {
     expect(names).not.toContain('tolman-invariant->temperature');
   });
 
-  it('catalog row is established, has no formalRef, and the edge is a law', () => {
+  it('catalog row is established, the edge is a law, and confidence stays established', () => {
     const entry = BRIDGE_EQUATIONS.find((e) => e.id === 68)!;
     expect(entry.status).toBe('established');
     expect(entry.category).toBe('I');
@@ -50,9 +50,11 @@ describe('BE-68 Tolman–Ehrenfest', () => {
     expect(entry.dimensional_signature).toBe('[temperature]');
     expect(entry.dependencies).toEqual([]);
     expect(entry.counterexamples ?? []).toEqual([]);
-    expect(catalogFormalRef(68)).toBeUndefined();
+    expect(catalogFormalRef(68)?.statement).toBe('PhysJS.TolmanEhrenfest.hydrostatic_constant');
+    expect(catalogFormalRef(68)?.kind).toBe('bridge');
     expect(be68Edge.kind).toBe('law');
-    expect(be68Edge.symbolic).toBeUndefined();
+    expect(be68Edge.confidence).toBe('established');
+    expect(be68Edge.symbolic).toBeDefined();
     expect(regimesDiffer(be68Edge.sources[0].attributes, be68Edge.target.attributes)).toBe(false);
     expect(be68Edge.sources.map((q) => q.name)).toEqual(['proper-temperature', 'metric-g00']);
     expect(be68Edge.target.name).toBe('tolman-invariant');

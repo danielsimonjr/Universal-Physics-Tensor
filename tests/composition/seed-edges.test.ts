@@ -205,6 +205,9 @@ describe('symbolic forms agree with the edge evaluator', () => {
     'be-59': { voltage: 1e-6 },
     'be-60': { 'filling-fraction': 1 / 3 },
     'be-63': { 'mean-molecular-weight-per-electron': 2, 'lane-emden-omega-3': 2.01824 },
+    'be-66': { 'poynting-flux': 1e6, reflectance: 0.4, 'incidence-angle': Math.PI / 5 },
+    'be-67': { 'magnetic-flux-density': 12e-9, 'plasma-mass-density': 14e6 * 1.67262192369e-27 },
+    'be-68': { 'proper-temperature': 300, 'metric-g00': -0.8 },
   };
 
   for (const [id, probe] of Object.entries(probes)) {

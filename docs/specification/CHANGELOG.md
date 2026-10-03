@@ -1,10 +1,14 @@
 # UPT Specification — Revision History
 
+## PhysJS #55 — BE-66, BE-67, and BE-68
+
+- Part-II Bridge Equations 66, 67, and 68 are kind `bridge` at pin `d917fa328039d19c3659f74ea73569effb3ed4fb`. The theorems are `PhysJS.RadiationPressure.pressure_eq`, `PhysJS.AlfvenSpeed.speed_eq`, and `PhysJS.TolmanEhrenfest.hydrostatic_constant`. Each covers line still begins with derivation-step. The catalog path does not pass the reference to deriveEvidence. Edge confidence stays `established`. The 2026-10-03 line below that says none of the three has a `formalRef` is the record from before this pin.
+
 ## BE-66–68 catalog write-up
 
 - Part-II §V-C adds Bridge Equations 66 (radiation pressure), 67 (Alfvén speed), and 68 (Tolman–Ehrenfest). None has a `formalRef`. The Lean sketches stay in `docs/planning/Applied-Physicist-Candidate-Bridges-Design.md`. Living catalog counts in the specification index and in Parts I, II, IV, V, and VI now say 58 equations, IDs 11–68. The 2026-10-02 line below that says 55 equations, IDs 11–65, is the state of that day.
 
-> **Proof status as of 2026-10-02.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The first 2026-10-02 entry adds the BE-55–65 headings at an earlier pin. The second retargets BE-16 and records that BE-42's Hawking temperature is not proved, at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The third moves the permalinks to PhysJS #54. The theorems are unchanged.
+> **Proof status as of 2026-10-02.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The sentence that those lines are the current proof reading is the record from before PhysJS #55. Bridge Equations 66, 67, and 68 are the section above. The wave entries below are history and are unchanged. The first 2026-10-02 entry adds the BE-55–65 headings at an earlier pin. The second retargets BE-16 and records that BE-42's Hawking temperature is not proved, at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The third moves the permalinks to PhysJS #54. The theorems are unchanged.
 
 ## 2026-10-02 — PhysJS #54 comment pin
 

@@ -4811,7 +4811,11 @@ The codebase is organized into the following modules:
 | `../../bridges/be66-radiation-pressure.js` | `evaluateRadiationPressure` | Import |
 | `../../bridges/be67-alfven-speed.js` | `evaluateAlfvenSpeed` | Import |
 | `../../bridges/be68-tolman-ehrenfest.js` | `evaluateTolmanEhrenfest` | Import |
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../edge.js` | `BridgeEdge` | Import (type-only) |
+| `../quantity.js` | `Quantity` | Import (type-only) |
 | `../quantities.js` | `alfvenSpeedQ, incidenceAngleQ, magneticFluxDensityQ, metricG00Q, plasmaMassDensityQ, poyntingFluxQ, properTemperatureQ, radiationPressureQ, reflectanceQ, tolmanInvariantQ` | Import |
 
 **Exports:**
@@ -8142,7 +8146,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 426 |
 | Total Modules | 13 |
-| Total Lines of Code | 91960 |
+| Total Lines of Code | 92029 |
 | Total Exports | 3071 |
 | Total Re-exports | 1453 |
 | Total Classes | 60 |
@@ -8150,7 +8154,7 @@ graph TD
 | Total Functions | 791 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 573 |
+| Type-only Imports | 575 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
