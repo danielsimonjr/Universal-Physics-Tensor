@@ -38,6 +38,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
+import { publishedUrl } from '../published-url.js';
 import type { AppliedTransport, AtlasBridge, AtlasModel } from '../../cli-api.js';
 import type { EvidenceTag, RelationType } from '../../atlas/types.js';
 import { showInequality } from './regime.js';
@@ -106,7 +107,8 @@ export interface WitnessResultRow {
 
 /** Where stored witness results came from and whether the artifact changed since its last commit. */
 export interface StoredProvenance {
-  path: string;
+  /** GitHub blob URL of the artifact. The file itself is not in the published package. */
+  url: string;
   schemaVersion: string;
   /** What the artifact itself records about when it was produced. */
   carries: string;
@@ -169,13 +171,13 @@ export function loadStoredResults(command = 'upt map'): WitnessResults {
     raw = readFileSync(file, 'utf8');
   } catch {
     throw new CliError(
-      `${command}: --stored reads ${STORED_RESULTS_PATH}, a repository artifact not shipped in the package, and it is not ` +
-        'present here; --run executes the in-process registered witnesses instead',
+      `${command}: --stored reads ${publishedUrl(STORED_RESULTS_PATH)}. That artifact is not in the published package, and it is not ` +
+        'present here. --run executes the in-process registered witnesses instead',
     );
   }
   const artifact = JSON.parse(raw) as { schemaVersion?: string; results?: WitnessResultRow[] };
   if (artifact.schemaVersion !== '0' || !Array.isArray(artifact.results)) {
-    throw new CliError(`${command}: ${STORED_RESULTS_PATH} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`);
+    throw new CliError(`${command}: ${publishedUrl(STORED_RESULTS_PATH)} has schemaVersion '${String(artifact.schemaVersion)}'; this command reads '0'`);
   }
   const log = git(['log', '-1', '--format=%H %cI', '--', STORED_RESULTS_PATH], root);
   const [hash, date] = log === null || log === '' ? [] : log.split(' ');
@@ -184,7 +186,7 @@ export function loadStoredResults(command = 'upt map'): WitnessResults {
   return {
     mode: 'stored',
     provenance: {
-      path: STORED_RESULTS_PATH,
+      url: publishedUrl(STORED_RESULTS_PATH),
       schemaVersion: artifact.schemaVersion,
       carries: ARTIFACT_CARRIES,
       lastCommit,
@@ -435,7 +437,7 @@ export interface CompositeEvidenceView {
 const COMPOSITE_RULE =
   'derived from the parts (every step and every transport applied): a positive tag survives only if every part ' +
   "carries it, contradicted if any part does; a transport contributes its basis when its witness checks, else 'proposed' " +
-  '(docs/planning/ADR-transported-norm-composition.md §4)';
+  `(${publishedUrl('docs/planning/ADR-transported-norm-composition.md')} §4)`;
 
 function transportResult(nt: { id: string; witness: { id: string } }, results: WitnessResults | null): TransportResult {
   const row = results?.rows.find((r) => r.recordId === nt.id && r.witnessId === nt.witness.id);
@@ -868,7 +870,7 @@ export function formatAtlasFilterLegend(s: AtlasFilterStats | null): string | nu
 
 const UNOBSERVED: Record<ResultsMode | 'none', string> = {
   none: 'depends on witness results this command does not observe',
-  stored: `depends on witnesses with no result in ${STORED_RESULTS_PATH}`,
+  stored: `depends on witnesses with no result in ${publishedUrl(STORED_RESULTS_PATH)}`,
   run: 'depends on witnesses not registered to run in-process',
 };
 
@@ -989,7 +991,7 @@ export function resultsLine(t: ResultsTally | undefined): string | null {
       ? 'no commit of it found (git unavailable, or the file is not committed)'
       : `last commit touching it ${p.lastCommit.hash.slice(0, 12)} (${p.lastCommit.date})` +
         (p.modifiedSinceCommit === true ? ', and the working-tree file is MODIFIED since' : '');
-  return `witness results: stored — ${p.path} (schemaVersion ${p.schemaVersion}; ${p.carries}; ${when}); ${counts}`;
+  return `witness results: stored — ${p.url} (schemaVersion ${p.schemaVersion}; ${p.carries}; ${when}); ${counts}`;
 }
 
 function bridgeLines(b: BridgeView, indent: string): string[] {

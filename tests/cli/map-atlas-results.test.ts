@@ -195,12 +195,12 @@ describe('witness results: --stored', () => {
     const v = (await json(['map', '--route=model-spring,model-lc', '--stored'])).result;
     expect(v.witnessResults.mode).toBe('stored');
     expect(v.witnessResults.provenance).toMatchObject({
-      path: 'data/atlas/witness-results.json',
+      url: 'https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json',
       schemaVersion: '0',
       carries: 'the artifact records no commit or date of its own',
     });
     const { stdout } = await run(['map', '--route=model-spring,model-lc', '--stored']);
-    expect(stdout).toMatch(/witness results: stored — data\/atlas\/witness-results\.json \(schemaVersion 0; /);
+    expect(stdout).toMatch(/witness results: stored — https:\/\/github.com\/danielsimonjr\/Universal-Physics-Tensor\/blob\/master\/data\/atlas\/witness-results\.json \(schemaVersion 0; /);
     expect(stdout).toContain('witnesses (stored): checked W1s · refuted none · unresolved none · no result W1, W1a, W1b, W2b');
     expect((await run(['map', '--route=model-spring,model-lc', '--stored', '--run'])).stderr).toMatch(/pick one witness-results source/);
   });
@@ -220,7 +220,7 @@ describe('witness results: what counts as a pass', () => {
   // ab-damped-rlc's only symbolic witness is W2s, so symbolically-checked turns on it alone.
   const source = (status: 'checked' | 'refuted' | 'unresolved', witnessId = 'W2s'): WitnessResults => ({
     mode: 'stored',
-    provenance: { path: 'test', schemaVersion: '0', carries: 'test', lastCommit: null, modifiedSinceCommit: null },
+    provenance: { url: 'test', schemaVersion: '0', carries: 'test', lastCommit: null, modifiedSinceCommit: null },
     rows: [{ recordId: 'ab-damped-rlc', witnessId, status, ...(status === 'unresolved' ? { reason: 'timeout' } : {}) }],
   });
   const rlcOf = (results: WitnessResults, filter = {}) => {

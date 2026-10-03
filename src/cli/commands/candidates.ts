@@ -9,6 +9,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, coreAnchor, coreLine } from '../graphs.js';
 import { emitJson } from '../output.js';
+import { publishedUrl } from '../published-url.js';
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('catalog', 'Which graph to read: catalog, canonical, or both.'),
@@ -47,7 +48,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   out('  deliberately keeps distinct (effective-mass ≠ mass). The genuinely motivated few —');
   out('  e.g. coarsening-length ≟ quantum-correlation-length (links the isolated Model-A');
   out('  coarsening bridge to the Kibble-Zurek criticality cluster) — are written up in');
-  out('  docs/research/Linkage-Candidate-Proposals.md.');
+  out(`  ${publishedUrl('docs/research/Linkage-Candidate-Proposals.md')}`);
   return 0;
 }
 

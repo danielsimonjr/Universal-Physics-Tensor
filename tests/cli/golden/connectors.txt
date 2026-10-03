@@ -234,4 +234,4 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
 
   Physicist-reasoned ranking + the genuinely-motivated few (e.g. coarsening-length ≟
   quantum-correlation-length; tunneling-mass ≟ effective-mass) are written up in
-  docs/research/Orphan-Connector-Analysis.md and proposed in spec Part-IX §9.
+  https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md and proposed in spec Part-IX §9.

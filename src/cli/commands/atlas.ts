@@ -32,6 +32,9 @@ import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { emitJson } from '../output.js';
 import { atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, type WitnessResults } from './_atlas-map.js';
+import { publishedUrl } from '../published-url.js';
+
+const WITNESS_RESULTS_URL = publishedUrl('data/atlas/witness-results.json');
 
 const FLAGS: FlagSpec[] = [
   {
@@ -47,7 +50,7 @@ const FLAGS: FlagSpec[] = [
   {
     name: '--stored',
     valueStyle: 'none',
-    description: 'Read witness results from data/atlas/witness-results.json. That file is not in the published package; the command then names --run.',
+    description: `Read witness results from ${WITNESS_RESULTS_URL}. That file is not in the published package; the command then names --run.`,
   },
   JSON_FLAG,
 ];
@@ -349,7 +352,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       kind: w.kind,
       claim: claimOf(w.id),
       status: registeredIds.has(w.id) ? ('runnable' as const) : ('not-observed' as const),
-      rerun: `bunx vitest run ${w.test}`,
+      rerun: publishedUrl(w.test),
     };
   });
   const runSummary = ran === null ? null : summarizeWitnessRuns(ran);
@@ -417,7 +420,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     derivedEvidence,
     provedWithUnresolvedCounterexample: unresolvedCounterexample,
     symbolicWitnesses: symbolic,
-    witnesses: b.witnesses.map((w) => ({ id: w.id, kind: w.kind, test: w.test, tolerance: w.tolerance ?? null })),
+    witnesses: b.witnesses.map((w) => ({ id: w.id, kind: w.kind, test: publishedUrl(w.test), tolerance: w.tolerance ?? null })),
     counterexamples: b.counterexamples.map((c) => ({ description: c.description, witness: c.witness })),
     formalRef: b.formalRef ?? null,
     formalRefCovers: b.formalRef === undefined ? null : b.formalRef.covers,
@@ -436,7 +439,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         command: 'atlas',
         epistemics:
           'Every qualification is included; empty lists mean "none stated", not "none needed". ' +
-          'symbolically-checked is decided by data/atlas/witness-results.json, which is not shipped in ' +
+          `symbolically-checked is decided by ${WITNESS_RESULTS_URL}, which is not shipped in ` +
           'the package; symbolicWitnesses names the witnesses it is decided over.',
         options: { id, run: ran !== null },
         result: report,
@@ -488,13 +491,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(
     symbolic.length === 0
       ? 'symbolically-checked: no symbolic witness'
-      : `symbolically-checked: decided by data/atlas/witness-results.json over ${symbolic.join(', ')} ` +
-          '(repository artifact, not shipped in the package)',
+      : `symbolically-checked: decided by ${WITNESS_RESULTS_URL} over ${symbolic.join(', ')} ` +
+          '(not shipped in the package)',
   );
   out('witnesses:');
   if (b.witnesses.length === 0) out('  none stated');
   for (const w of b.witnesses) {
-    out(`  - ${w.id} [${w.kind}] ${w.test}${w.tolerance === undefined ? '' : ` — ${w.tolerance}`}`);
+    out(`  - ${w.id} [${w.kind}] ${publishedUrl(w.test)}${w.tolerance === undefined ? '' : ` — ${w.tolerance}`}`);
   }
   out('counterexamples:');
   if (b.counterexamples.length === 0) out('  none stated');
@@ -515,7 +518,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (!('rerun' in w)) return `${w.status}${'reason' in w ? ` (${w.reason})` : ''} (run now) — ${w.detail}`;
     return w.status === 'runnable'
       ? `registered in-process, not run — \`upt atlas ${b.id} --run\` runs it`
-      : `result not observed by this command — its repository test file: ${w.rerun}`;
+      : `result not observed by this command — ${w.rerun}`;
   };
   out("evidence by claim (derived from the record's structure):");
   out(`  correspondence: ${claims.correspondence.text}`);
@@ -565,7 +568,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         nt.status === 'runnable'
           ? `registered in-process, not run — \`upt atlas ${b.id} --run\` runs it`
           : nt.status === 'not-observed'
-            ? `result not observed by this command — its repository test file: bunx vitest run ${nt.witness.test}`
+            ? `result not observed by this command — ${publishedUrl(nt.witness.test)}`
             : `${nt.status}${'reason' in nt ? ` (${nt.reason})` : ''} (run now)`;
       out(`    witness ${nt.witness.id} [${nt.witness.kind}; ${nt.basis} when it checks]: ${status}`);
     }

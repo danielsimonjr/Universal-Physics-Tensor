@@ -143,7 +143,7 @@ upt atlas [<bridge-id>] [--run] [--json]
 |---|---|---|---|
 | `--run` | no |  | Execute the in-process registered witnesses. Exit 3 if one is refuted. |
 | `--evidence` | no |  | With no bridge id, list every bridge's derived evidence and the witness results it observes. |
-| `--stored` | no |  | Read witness results from data/atlas/witness-results.json. That file is not in the published package; the command then names --run. |
+| `--stored` | no |  | Read witness results from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. That file is not in the published package; the command then names --run. |
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 
 ```
@@ -209,7 +209,7 @@ upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
 | `--max-routes=VALUE` | `=` value | 20 | Cap on --all-routes. The maximum accepted is 1000. |
 | `--family=VALUE (or --family VALUE)` | `=` or next token |  | Map one atlas family by name. |
 | `--observable=VALUE (or --observable VALUE)` | `=` or next token |  | Map bridges whose recorded text names this observable. |
-| `--stored` | no |  | Derive evidence from data/atlas/witness-results.json. That file is not in the published package; the command then names --run. |
+| `--stored` | no |  | Derive evidence from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. That file is not in the published package; the command then names --run. |
 | `--run` | no |  | Run the shown bridges' in-process witnesses now. Exit 3 if one is refuted. |
 | `--equation=VALUE (or --equation VALUE)` | `=` or next token |  | Inject TARGET = EXPR as a user node and report where it lands. |
 | `--equation-only` | no |  | Print only the equation verdict. Errors when --equation is missing. |

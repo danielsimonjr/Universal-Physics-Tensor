@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 2.0.1
+**Version**: 3.0.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 94 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 51 files
+- **cli**: 52 files
 - **root**: 1 file
 - **composition**: 87 files
 - **core**: 11 files
@@ -3369,6 +3369,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../command.js` | `CommandCtx` | Import (type-only) |
 | `../errors.js` | `CliError` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 | `../../cli-api.js` | `AppliedTransport, AtlasBridge, AtlasModel` | Import (type-only) |
 | `../../atlas/types.js` | `EvidenceTag, RelationType` | Import (type-only) |
 | `./regime.js` | `showInequality` | Import |
@@ -3404,6 +3405,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `CommandCtx` | Import (type-only) |
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedTransport, AtlasBridge` | Import (type-only) |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Functions: `selectRoute`, `routeClaim`, `missingForComposite`, `explainsRefusal`, `transportReport`, `claimReport`
@@ -3436,6 +3438,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED` | Import |
 | `../output.js` | `emitJson` | Import |
 | `./_atlas-map.js` | `atlasEvidenceText, buildAtlasEvidenceView, loadStoredResults, runResults, WitnessResults` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Functions: `summarizeWitnessRuns`
@@ -3469,6 +3472,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3485,6 +3489,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3514,6 +3519,7 @@ The codebase is organized into the following modules:
 | `../args.js` | `FlagSpec` | Import (type-only) |
 | `../command.js` | `registerCommand, Command` | Import |
 | `../flag-help.js` | `commandHelp` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3530,6 +3536,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3546,6 +3553,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -3599,7 +3607,8 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `../../composition/discovery.js` | `VettedCandidate` | Import (type-only) |
-| `../../composition/adjudication.js` | `AnnotatedCandidate, AdjudicationVerdict` | Import (type-only) |
+| `../../composition/adjudication.js` | `ADJUDICATIONS, AnnotatedCandidate, AdjudicationVerdict` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 | `../../composition/consequence.js` | `ConsequenceSignal, ConsequenceEvidence` | Import (type-only) |
 
 **Exports:**
@@ -3756,6 +3765,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine, AnchorScope` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 | `../errors.js` | `UsageError, CliError, EXIT_CHECK_FAILED` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `./_atlas-map.js` | `* as atlasMap` | Import |
@@ -3856,6 +3866,7 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
+| `../published-url.js` | `publishedUrl` | Import |
 
 **Exports:**
 - Functions: `emptySearchableWarning`
@@ -4109,6 +4120,13 @@ The codebase is organized into the following modules:
 - Interfaces: `PosterGraph`, `DanglingPremise`, `PosterValidation`
 - Functions: `validatePoster`, `posterJunctions`, `describePosterSource`
 - Constants: `POSTER_GRAPH`
+
+---
+
+### `src/cli/published-url.ts` - A path in this repository, as a GitHub blob URL on `master`.
+
+**Exports:**
+- Functions: `publishedUrl`
 
 ---
 
@@ -8045,7 +8063,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...46 more]
+        N29[...47 more]
     end
 
     subgraph Root
@@ -8145,20 +8163,20 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 426 |
+| Total TypeScript Files | 427 |
 | Total Modules | 13 |
-| Total Lines of Code | 92040 |
-| Total Exports | 3071 |
+| Total Lines of Code | 92075 |
+| Total Exports | 3072 |
 | Total Re-exports | 1453 |
 | Total Classes | 60 |
 | Total Interfaces | 487 |
-| Total Functions | 791 |
+| Total Functions | 792 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 575 |
+| Type-only Imports | 574 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
 ---
 
-*Version*: 2.0.1
+*Version*: 3.0.0

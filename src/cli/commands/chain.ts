@@ -10,11 +10,11 @@
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command } from '../command.js';
 import { commandHelp } from '../flag-help.js';
+import { publishedUrl } from '../published-url.js';
 
 const FLAGS: FlagSpec[] = [];
 
-const DESIGN_URL =
-  'https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/planning/Bridge-Discovery-Pipeline-Design.md';
+const DESIGN_URL = publishedUrl('docs/planning/Bridge-Discovery-Pipeline-Design.md');
 
 const HELP = `upt chain
         Not a catalog command. The chain orchestrator stays internal.

@@ -11,6 +11,7 @@ import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
+import { publishedUrl } from '../published-url.js';
 
 const PROBE_SUBCOMMANDS = [
   { name: 'scan', summary: 'List typed frontier gaps. The default listing is the searchable ones.' },
@@ -185,7 +186,7 @@ const HELP = `upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|
         no-replication-data | not-tested). A candidate
         is credible only if it passes on exploratory rows AND a constant model
         is rejected there. A fit is not a mechanism.
-        Synthetic controls: tests/fixtures/probe-study/*.synthetic.{json,csv}.
+        Synthetic controls: ${publishedUrl('tests/fixtures/probe-study')}/*.synthetic.{json,csv}.
         Every one was designed knowing its generating law, so a recovery shows
         the method recovers that law; none is a blind test of finding an
         unknown one, and UPT ships no blind control.`;

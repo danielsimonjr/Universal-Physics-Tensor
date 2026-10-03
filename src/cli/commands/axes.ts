@@ -9,6 +9,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
+import { publishedUrl } from '../published-url.js';
 
 const FLAGS: FlagSpec[] = [JSON_FLAG];
 
@@ -19,7 +20,7 @@ const HELP = `upt axes
         the rank-7 measurement (topology/statistics/symmetry classify but don't gate).`;
 
 const EPISTEMICS =
-  '(rank grows on measured evidence: an axis gates only when it fires — docs/research/rank7-axis-measurement.md)';
+  `(rank grows on measured evidence: an axis gates only when it fires — ${publishedUrl('docs/research/rank7-axis-measurement.md')})`;
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;

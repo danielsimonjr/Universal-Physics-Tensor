@@ -5,6 +5,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { publishedUrl } from '../../src/cli/published-url.js';
 import { measuredHorizon } from '../atlas/_phase-drift.js';
 
 function capture() {
@@ -783,7 +784,7 @@ describe('I14 — each confrontation names its statistical object, criterion and
       return lines[0].slice(`    ${field}: `.length);
     };
     const src = (refs: any[]) =>
-      `[source: ${refs.map((q) => (q.quote !== undefined ? `${q.file} "${q.quote}"` : `${q.file} #${q.symbol}`)).join('; ')}]`;
+      `[source: ${refs.map((q) => (q.quote !== undefined ? `${publishedUrl(q.file)} "${q.quote}"` : `${publishedUrl(q.file)} #${q.symbol}`)).join('; ')}]`;
     let notRecorded = 0;
     for (const r of env.result) {
       const pre = lineOf(r.bridgeId, 'preprocessing');
@@ -855,7 +856,7 @@ describe('I15 — evidence by claim, and a witness name is not its result', () =
     expect(s).toMatch(
       /\n {2}bound: basis closed-form \(deltaAt is the exact error\); the formal reference is not attributed to it\n {4}- W7 \[numeric\] tests it at theta0 = 0\.2 \(its error there is the bound's norm; tolerance ≤ delta\): registered in-process, not run — `upt atlas ab-pendulum-linear --run` runs it\n/,
     );
-    expect(s).toMatch(/\nwitness execution, witnesses not attributed to a claim:\n {2}- W7b \[numeric\]: result not observed by this command — its repository test file: bunx vitest run tests\/atlas\/oscillators-limits\.test\.ts\n/);
+    expect(s).toMatch(/\nwitness execution, witnesses not attributed to a claim:\n {2}- W7b \[numeric\]: result not observed by this command — https:\/\/github.com\/danielsimonjr\/Universal-Physics-Tensor\/blob\/master\/tests\/atlas\/oscillators-limits\.test\.ts\n/);
     expect(s).not.toMatch(/W7.*checked/);
   });
 

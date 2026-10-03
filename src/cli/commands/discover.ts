@@ -12,7 +12,8 @@ import { resolveGraph, groundTruthAnchor, groundTruthLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import type { VettedCandidate } from '../../composition/discovery.js';
-import type { AnnotatedCandidate, AdjudicationVerdict } from '../../composition/adjudication.js';
+import { ADJUDICATIONS, type AnnotatedCandidate, type AdjudicationVerdict } from '../../composition/adjudication.js';
+import { publishedUrl } from '../published-url.js';
 import type { ConsequenceSignal, ConsequenceEvidence } from '../../composition/consequence.js';
 
 /** `annotated` (adjudication layer) composed with the consequence layer —
@@ -58,6 +59,8 @@ const FLAGS: FlagSpec[] = [
   JSON_FLAG,
 ];
 
+const ADJUDICATION_URLS = [...new Set(ADJUDICATIONS.map((a) => publishedUrl(a.source)))].join('\n        ');
+
 const HELP = `upt discover [--source=catalog|canonical|both]
         VET the link candidates through the inference suite: hypothesise
         each identification a≡b and test whether it merges disconnected
@@ -74,7 +77,8 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
         --derive consumes.
-        Candidates a physicist has already adjudicated (docs/research/*-adjudication.md)
+        Candidates a physicist has already adjudicated
+        (${ADJUDICATION_URLS})
         fold out of the PROMISING list by default (decoy/entailed verdicts only —
         review memory, not a re-litigation prompt); --show-adjudicated lists them
         again with their recorded verdict.
