@@ -3,7 +3,7 @@ metadata:
   version: 2.0.0
   totalFiles: 426
   totalModules: 13
-  totalExports: 3062
+  totalExports: 3066
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9746,6 +9746,8 @@ modules:
           imports:
             - readBinding
             - bindingInUnit
+            - alignTemperatureBinding
+            - boltzmannBindingScale
           reExport: true
         - file: ./numerical/formula-dimension.js
           imports:
@@ -9923,6 +9925,8 @@ modules:
         - type MetricId
         - readBinding
         - bindingInUnit
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - C_SI
@@ -10152,6 +10156,8 @@ modules:
         - type MetricId
         - readBinding
         - bindingInUnit
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - C_SI
@@ -18986,6 +18992,7 @@ modules:
       internalDependencies:
         - file: ../core/constants.js
           imports:
+            - K_B_SI
             - M_SUN_SI
         - file: ../dimensional/formula-names.js
           imports:
@@ -19010,7 +19017,9 @@ modules:
         - file: ../dimensional/types.js
           imports:
             - DIMENSIONLESS
+            - ENERGY
             - MASS
+            - TEMPERATURE
             - Dimension
         - file: ../dimensional/units.js
           imports:
@@ -19030,6 +19039,8 @@ modules:
             - parseFormulaPNode
             - FormulaPNode
       exports:
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - readNamedBinding
         - readBinding
         - bindingInUnit
@@ -19037,6 +19048,8 @@ modules:
       interfaces:
         - BindingValue
       functions:
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - readNamedBinding
         - readBinding
         - bindingInUnit
@@ -20839,15 +20852,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 426
   totalModules: 13
-  totalLinesOfCode: 91722
-  totalExports: 3062
+  totalLinesOfCode: 91795
+  totalExports: 3066
   totalClasses: 60
   totalInterfaces: 487
-  totalFunctions: 788
+  totalFunctions: 790
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 766
-  totalReExports: 1450
+  totalReExports: 1452
   totalTypeOnlyImports: 573
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
