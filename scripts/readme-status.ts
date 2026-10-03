@@ -191,7 +191,7 @@ export function formalCell(facts: StatusFacts): string {
     `**${facts.provedAtlas}** atlas bridges derive \`formally-proved\` from a reviewed \`lean4-physjs\` reference. ` +
     `**${facts.counted}** catalog equations carry a counted reference and do not light that tag. ` +
     `**${facts.kindBridge}** state the catalogued equation, so the kind is \`bridge\` while the covers line still begins with \`derivation-step\`; ` +
-    'passing one to `deriveEvidence` lights `formally-proved`, and the catalog path still omits it. ' +
+    'the catalog path passes that reference, so catalog evidence and edge evidence include `formally-proved`, except an unadjudicated row, which stays `proposed`. ' +
     `**${facts.crossCheck}** carry a cross-check and **${facts.plainProperty}** carry a property` +
     `${propertyClause(facts)}. Nested statements are not second references. The pin and the split are ` +
     '[`NOTES.md`](https://github.com/danielsimonjr/universal-physics-tensor/blob/master/NOTES.md)'
@@ -257,8 +257,7 @@ export function phase4Sentence(facts: StatusFacts): string {
     `Catalog references that stay a reduction, a limit, or a derivation-step are ${facts.counted} and do not light \`formally-proved\`. ` +
     `Catalog cross-check \`formalRef\`s are ${facts.crossCheck}. ` +
     `Catalog property \`formalRef\`s are ${facts.property}${including}. ` +
-    'Only kind `bridge` lights `formally-proved`, and only when the reference is passed to `deriveEvidence`. ' +
-    'The catalog path does not pass it.'
+    'Only kind `bridge` lights `formally-proved`. The catalog path passes that reference, except an unadjudicated row stays `proposed`. '
   );
 }
 

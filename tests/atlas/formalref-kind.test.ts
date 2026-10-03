@@ -3,8 +3,8 @@
  *
  * `deriveEvidence` used to light `formally-proved` from fidelity alone. A
  * property, a cross-check, and a counted catalog statement then read as a
- * proved bridge whenever a caller passed the reference in. The catalog path
- * omits the field; this test passes it on purpose.
+ * proved bridge whenever a caller passed the reference in. This test passes
+ * the reference on purpose. The catalog path passes only kind `bridge`.
  *
  * The first assertion was run before the kind check existed. It failed on
  * be-11: the set contained `formally-proved`.

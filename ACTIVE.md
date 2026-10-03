@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A kind-`bridge` catalog formalRef is `formally-proved` on the catalog path and on the edge path. A derivation-step stays off that tag. A chain keeps its weaker grade.
+  Done: `catalogEvidenceInput` passes a manifest-checked `lean4-physjs` reference of kind `bridge`. `be-16`, `be-63`, and `be-66` are `formally-proved` on both paths. Before the change both paths were `proposed` while `deriveEvidence` of the reference was `formally-proved`. `be-30` stays `proposed`. `be-35` stays `contradicted`. `be-50` stays `proposed`. `be-40` is `formally-proved` and stays not-a-bridge. `composeEdges(be42Edge, be16Edge)` stays `highly-speculative`.
+
 - [x] Vendor the PhysJS #55 proofs for be-66, be-67, and be-68. The manifest pin is `d917fa328039d19c3659f74ea73569effb3ed4fb`. Kind is `bridge`. The catalog path still omits the reference.
   Done: `formal/physjs/manifest.json` is that commit. `catalogFormalRef` is `PhysJS.RadiationPressure.pressure_eq`, `PhysJS.AlfvenSpeed.speed_eq`, and `PhysJS.TolmanEhrenfest.hydrostatic_constant`. Each is kind `bridge`, fidelity `sanity-lemmas`, and the formalRef check is empty against the vendored manifest. Before the pin, `catalogFormalRef(66)` was undefined and the commit was `2e09357f9674bc60b60b378155a1623c27dc7b04`. `deriveEvidence` of the overlay reference lights `formally-proved`. `deriveEdgeEvidence` stays `proposed`. Edge confidence stays `established`.
 

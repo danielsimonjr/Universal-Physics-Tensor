@@ -57,22 +57,21 @@ describe('upt map — filter flags', () => {
     expect(kept).toBeGreaterThan(0);
     // Edges with no numeric beId cannot be evaluated at all: they are MISSING,
     // never "did not match". That distinction is the point of the two counts.
+    // Kind-bridge catalog edges derive formally-proved, so they do not match.
     expect(missing).toBeGreaterThan(0);
-    expect(notMatching).toBe(0);
+    expect(notMatching).toBeGreaterThan(0);
     expect(kept + notMatching + missing).toBe(total);
   });
 
-  it('the zero case is PRINTED, not omitted', async () => {
-    // On `--source=catalog --evidence=proposed` nothing FAILS to match: every
-    // catalog row derives `proposed` today. The legend still prints that zero
-    // rather than dropping the clause, because an omitted count and a zero
-    // count are indistinguishable to a reader. (The mirror case — a zero
-    // lacking-metadata count — is pinned in
-    // `tests/composition/graph-viz-filters.test.ts`, since every real graph
-    // here contains at least one beId-less law edge.)
+  it('a catalog proposed filter drops the kind-bridge edges and still prints both drop counts', async () => {
+    // The legend prints a zero rather than dropping the clause. The mirror
+    // case — a zero lacking-metadata count — is pinned in
+    // `tests/composition/graph-viz-filters.test.ts`. Kind-bridge edges do
+    // not match `proposed`, so the did-not-match count is not zero.
     const { code, text } = await run(['map', '--source=catalog', '--evidence=proposed']);
     expect(code).toBe(0);
-    expect(text).toContain('0 dropped (did not match)');
+    expect(text).toMatch(/dropped \(did not match\)/);
+    expect(text).not.toContain('0 dropped (did not match)');
     expect(text).toMatch(/\d+ dropped \(no overlay metadata\)/);
   });
 

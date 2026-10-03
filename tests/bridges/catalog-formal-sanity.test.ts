@@ -6,8 +6,8 @@
  * each instantiate the top-level PhysJS statement on a known case and
  * show the negative control fails. The nested theorems are not these
  * references. A catalog reference does not light `formally-proved` on
- * the catalog path. Passing the be-16 reference does, because the kind
- * is bridge.
+ * the catalog path when the kind is not `bridge`. Passing the be-16
+ * reference does, and the catalog path does too, because the kind is bridge.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -398,7 +398,7 @@ describe('labeled catalog formalRef sanity lemmas', () => {
     expect(row(16).formalRef?.covers).toContain('⟨E⟩ − F = k_B T log 2');
     expect(row(16).formalRef?.covers).toContain('Not E ≥ T ΔS for an arbitrary protocol');
     expect(row(16).formalRef?.covers).toContain('not the Bérut confrontation');
-    expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(false);
+    expect(deriveEdgeEvidence(16).has('formally-proved')).toBe(true);
     const temperature = 300;
     const level = 1e-20;
     const equalEntropy = twoStateEntropy(level, level, temperature);

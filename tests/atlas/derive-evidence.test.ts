@@ -22,6 +22,7 @@ import {
   type EvidenceInput,
   type WitnessLike,
 } from '../../src/atlas/derive-evidence.js';
+import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { adjudicateBridgeEntry, type BridgeVerdict } from '../../src/bridges/membership.js';
 import { REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS } from '../../src/bridges/rejected.js';
@@ -215,33 +216,33 @@ describe('adjudication precedence — THREE verdicts, from REAL catalog entries 
   });
 });
 
-describe('TRUTHFUL MIGRATION — the overlay adds evidence to NO existing catalog row', () => {
-  it('every one of the 55 rows derives {proposed}, or {contradicted} iff it is rejected', () => {
+describe('catalog rows derive from the artifacts they carry', () => {
+  it('kind bridge is formally-proved, except an unadjudicated row, and a partial stays proposed or contradicted', () => {
     expect(BRIDGE_EQUATIONS.length).toBe(58);
     const offenders: string[] = [];
+    let proved = 0;
     for (const entry of BRIDGE_EQUATIONS) {
       const verdict = adjudicateBridgeEntry(entry);
-      // Explicit: no catalog row carries a witness overlay, so nothing is
-      // verified. This argument was defaulted until Eve E1 showed that a
-      // defaulted empty set makes this whole loop unfalsifiable — the expected
-      // values below would hold even if every row were full of passing
-      // evidence. The positive control in coverage.test.ts is what gives this
-      // assertion its meaning.
       const tags = sorted(deriveEvidenceForVerdict(verdict, catalogEvidenceInput(entry), NO_PASSING_WITNESSES));
-      // CORRECTED after Eve E1: the expectation keys off the ARTIFACT the row
-      // actually carries, not off its membership verdict. Only a row with an
-      // unresolved counterexample is 'contradicted'. BE-35 is the single rejected
-      // row that has one; BE-28/29/32/40 are rejected and carry none, and the old
-      // expectation INVENTED a refutation for all four.
-      // The real `Counterexample` type has NO `resolvedBy` field yet, so any
-      // counterexample on a catalog row is unresolved by construction.
+      const ref = catalogFormalRef(entry.id);
+      const provedBridge =
+        ref?.system === 'lean4-physjs' &&
+        ref.fidelity !== 'unreviewed' &&
+        ref.kind === 'bridge' &&
+        verdict !== 'unadjudicated';
       const hasUnresolved = (entry.counterexamples ?? []).length > 0;
-      const expected = hasUnresolved ? ['contradicted'] : ['proposed'];
+      const expected = [
+        ...(provedBridge ? ['formally-proved'] : []),
+        ...(hasUnresolved ? ['contradicted'] : []),
+      ];
+      if (expected.length === 0) expected.push('proposed');
+      if (provedBridge) proved += 1;
       if (JSON.stringify(tags) !== JSON.stringify(expected)) {
         offenders.push(`BE-${entry.id} (${verdict}) => ${tags.join(',')}`);
       }
     }
     expect(offenders).toEqual([]);
+    expect(proved).toBe(16);
   });
 });
 

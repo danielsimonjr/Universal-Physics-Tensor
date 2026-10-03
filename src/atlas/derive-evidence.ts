@@ -50,6 +50,7 @@
  */
 
 import type { Conventions, EvidenceTag, FormalFidelity, FormalRefKind } from './types.js';
+import { catalogFormalRef } from './catalog-formal-ref.js';
 
 /**
  * The verdict of `adjudicateBridgeEntry` (`src/bridges/membership.ts`),
@@ -291,20 +292,29 @@ export function provedWithUnresolvedCounterexample(tags: ReadonlySet<EvidenceTag
 /**
  * The artifacts a catalog row may be judged on.
  *
- * `formalRef` is absent on purpose. A catalog reference certifies one part.
- * Passing it to {@link deriveEvidence} would light `formally-proved` on the
- * whole row. The predicate still lights that tag when a caller passes a
- * reference; this function is what keeps the catalog path from doing so.
+ * A manifest-checked `lean4-physjs` reference of kind `bridge` is included.
+ * {@link deriveEvidence} then lights `formally-proved`. A reduction, a limit,
+ * a derivation-step, a property, and a cross-check are left off this input,
+ * so those rows keep the grade they had. An unadjudicated verdict still
+ * returns `proposed` and does not read this reference.
  *
  * @internal
  */
 export function catalogEvidenceInput(row: {
+  readonly id?: number;
   readonly conventions?: Conventions;
   readonly counterexamples?: readonly CounterexampleLike[];
 }): EvidenceInput {
+  const formalRef = row.id === undefined ? undefined : catalogFormalRef(row.id);
+  const provedBridge =
+    formalRef !== undefined &&
+    formalRef.system === 'lean4-physjs' &&
+    formalRef.fidelity !== 'unreviewed' &&
+    formalRef.kind === 'bridge';
   return {
     ...(row.conventions !== undefined ? { conventions: row.conventions } : {}),
     ...(row.counterexamples !== undefined ? { counterexamples: row.counterexamples } : {}),
+    ...(provedBridge ? { formalRef } : {}),
   };
 }
 

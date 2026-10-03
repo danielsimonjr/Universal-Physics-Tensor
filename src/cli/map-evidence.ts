@@ -30,7 +30,8 @@ import { BRIDGE_EQUATIONS } from '../bridges/index.js';
  * `NO_PASSING_WITNESSES` is passed deliberately: catalog rows declare no
  * `witnesses` at all, so no witness-backed tag can be earned from them today,
  * and saying so explicitly is required by `deriveEvidence`'s own contract.
- * A catalog `formalRef` is not passed. A proof of one part does not tag the row.
+ * {@link catalogEvidenceInput} passes a kind-`bridge` formalRef, so that row
+ * derives `formally-proved`. A derivation-step is not passed.
  *
  * @internal — CLI support, reached through `src/cli-api.ts`. Not on the
  * published surface: `tests/api/public-surface.test.ts` pins that surface and

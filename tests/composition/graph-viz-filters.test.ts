@@ -105,14 +105,22 @@ describe('buildVizModel — evidence filter', () => {
     expect(() => buildVizModel(BOTH, { evidence: 'proposed' })).toThrow(/no deriveEvidence/);
   });
 
-  it('every catalog-backed edge derives `proposed` today, so that tag keeps them', () => {
+  it('proposed keeps edges that are still proposed, and formally-proved keeps the kind-bridge edges', () => {
+    const withBeId = BOTH.filter((e) => e.beId != null);
+    const proposed = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('proposed'));
+    const proved = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('formally-proved'));
+    expect(proposed.length).toBeGreaterThan(0);
+    expect(proved.length).toBe(16);
+    expect(proposed.length + proved.length).toBe(withBeId.length);
     const model = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'proposed' }));
-    const withBeId = BOTH.filter((e) => e.beId != null).length;
-    expect(model.filterStats.kept).toBe(withBeId);
+    expect(model.filterStats.kept).toBe(proposed.length);
+    expect(model.filterStats.droppedNotMatching).toBe(proved.length);
     // Law/canonical edges have `beId: null` — they cannot be evaluated, so they
     // are MISSING metadata, never "not matching".
-    expect(model.filterStats.droppedMissingMetadata).toBe(BOTH.length - withBeId);
-    expect(model.filterStats.droppedNotMatching).toBe(0);
+    expect(model.filterStats.droppedMissingMetadata).toBe(BOTH.length - withBeId.length);
+    const provedModel = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'formally-proved' }));
+    expect(provedModel.filterStats.kept).toBe(proved.length);
+    expect(provedModel.filterStats.droppedNotMatching).toBe(proposed.length);
   });
 
   it('`contradicted` selects nothing on the live graph (BE-35 has no edge)', () => {

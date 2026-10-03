@@ -326,6 +326,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Conventions, EvidenceTag, FormalFidelity, FormalRefKind` | Import (type-only) |
+| `./catalog-formal-ref.js` | `catalogFormalRef` | Import |
 
 **Exports:**
 - Interfaces: `WitnessLike`, `CounterexampleLike`, `RejectionLike`, `EvidenceInput`
@@ -7971,13 +7972,13 @@ The codebase is organized into the following modules:
 | `stats` | 0 files | 2 files |
 | `study` | 2 files | 1 files |
 | `types` | 2 files | 5 files |
-| `catalog-formal-ref` | 2 files | 1 files |
+| `catalog-formal-ref` | 2 files | 2 files |
 | `chain-pipeline` | 15 files | 0 files |
 | `composition-table` | 1 files | 6 files |
 | `conventions` | 1 files | 3 files |
 | `coverage` | 1 files | 1 files |
 | `derivation` | 3 files | 3 files |
-| `derive-evidence` | 1 files | 3 files |
+| `derive-evidence` | 2 files | 3 files |
 | `bridges-closure` | 10 files | 2 files |
 | `bridges` | 5 files | 2 files |
 | `dimensions` | 2 files | 6 files |
@@ -8146,7 +8147,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 426 |
 | Total Modules | 13 |
-| Total Lines of Code | 92029 |
+| Total Lines of Code | 92040 |
 | Total Exports | 3071 |
 | Total Re-exports | 1453 |
 | Total Classes | 60 |
