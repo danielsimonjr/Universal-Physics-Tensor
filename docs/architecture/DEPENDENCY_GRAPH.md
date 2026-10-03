@@ -7356,6 +7356,11 @@ The codebase is organized into the following modules:
 
 ### `src/numerical/geodesic-integrator.ts` - Fixed-step RK4 integrator for the geodesic equation in an arbitrary
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `solveODESystem` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -7616,6 +7621,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/numerical/null-ray-integrator.ts` - Fixed-step classical RK4 integrator for affine-parameterized null
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `solveODESystem` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -8014,7 +8024,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 91311 |
+| Total Lines of Code | 91279 |
 | Total Exports | 3009 |
 | Total Re-exports | 1414 |
 | Total Classes | 60 |

@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 421 |
-| Total Test Files | 580 |
+| Total Test Files | 581 |
 | Source Files with Tests | 411 |
 | Source Files without Tests | 10 |
 | Coverage | 97.6% |
@@ -1007,6 +1007,7 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/null-ic.test.ts` | 1 files |
 | `numerical/null-ray-integrator.test.ts` | 1 files |
 | `numerical/numerical-composition-imports.test.ts` | 0 files |
+| `numerical/ode-delegation.test.ts` | 0 files |
 | `numerical/painleve-gullstrand-curvature.test.ts` | 5 files |
 | `numerical/parse-physics.test.ts` | 6 files |
 | `numerical/pderiv-flatten-consolidation.test.ts` | 1 files |
