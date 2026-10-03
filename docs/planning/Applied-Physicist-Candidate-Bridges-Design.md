@@ -37,12 +37,12 @@ A chain whose endpoints meet does not become a catalog id. The proposed
 `be-*` ids below are names for a future catalog row. They are not `chain-`
 ids, and they are not assigned by this note.
 
-## Proposed ids
+## Ids
 
-The catalog sequence ends at 65. The next free integers are 66, 67, and 68.
-This note proposes:
+The catalog sequence ends at 65. The owner assigned the next three integers
+with no gap:
 
-| Proposed id | Statement | Recommended category letter |
+| Id | Statement | Category letter |
 |---|---|---|
 | be-66 | Radiation pressure | D |
 | be-67 | Alfvén speed | D |
@@ -50,9 +50,8 @@ This note proposes:
 
 The astrophysics-cluster design deferred a Tolman–Oppenheimer–Volkoff maximum
 mass and called that unused integer 66. Part II §V-C records that the deferred
-mass is not BE-66 in this catalog. Whether 66 stays unused is an owner
-decision. If it stays unused, these three are be-67, be-68, and be-69, in the
-same order. The letters below do not depend on that numbering.
+mass is not BE-66 in this catalog. The owner assigned 66 to radiation pressure
+anyway. The deferred mass stays deferred. It does not occupy 66.
 
 ## Category letters and the §VI.6.1 index
 
@@ -61,7 +60,7 @@ the patterns for ids 11–65. No new pattern is introduced. The catalog Π is a
 labeled index. The Maxwell stress, the MHD wave, and the metric are the
 physics tensors of the formulas. They are not that index.
 
-**be-66 and be-67, letter D, if the owner accepts the letter.** Category D is
+**be-66 and be-67, letter D.** The owner accepted the letter. Category D is
 `field-unification`, with K and L. The displayed index is
 
 <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
@@ -77,7 +76,7 @@ claim. The `bridges` tuple, if written `classical` → `classical`, does not
 select the component: BE-39's tuple is `quantum` → `classical` and category L
 stays in this same component.
 
-**be-68, letter I, if the owner accepts the letter.** Category I is
+**be-68, letter I.** The owner accepted the letter. Category I is
 `information-geometry`, with B and M. The displayed index is
 
 <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Cbeta%2C%5Ctext%7BPoincar%C3%A9%7D%2C%5Ctext%7Binfo%7D%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\beta,\text{Poincaré},\text{info},\epsilon,\zeta}" />
@@ -98,14 +97,15 @@ Eddington luminosity, and it is not an emergent-spacetime limit. Sharing a
 component with BE-64 would follow the dependency rule only if the two
 equations were one physics. They are not.
 
-**Why a canonical id is the live alternative for be-66 and be-67.** A
+**The three rows are catalog ids, in the form of BE-55 through BE-65.** A
 `BridgeEdge` is a bridge when the endpoints differ in regime and a law when
-they share regime attributes. Both proposed ports of each of these two
-relations are classical and electromagnetic. That is a diagonal law, the
-shape of a `CE-*` row, with `beId: null` until a catalog id exists. The
-dogfood's next step for the Alfvén speed is `CE-alfven-speed`. This note
-still proposes `be-*` ids, because that is the catalog sequence the sections
-are written for. The owner chooses the home.
+they share regime attributes. Both ports of radiation pressure and of the
+Alfvén speed are classical and electromagnetic, which is the shape of a
+diagonal law. The dogfood's next step for the Alfvén speed was
+`CE-alfven-speed`. The owner chose `be-*` entries instead, matching BE-55
+through BE-65: a `BRIDGE_EQUATIONS` row, a §V-C section, and the §VI.6.1
+index of the category letter. They are not `CE-*` rows. A new category
+letter stays out of scope: `tensorIndexComponent` throws.
 
 **Proposed rows for the §VI.6.1 table, not added to Part II.**
 
@@ -143,7 +143,7 @@ where:
 - `c` is the speed of light
 - `R` is the intensity reflectance, dimensionless, with transmission taken to be zero, so the absorbed fraction is `1 − R`
 - `θ` is the angle between the propagation direction and the outward normal
-- the second display is the normal pressure under those hypotheses. It is this note's assembly of the normal-incidence factor `(1+R)` with the oblique factor `\cos^2\theta`. It is not a quotation of one source. Whether it is in the catalog equation is an owner decision. The two normal-incidence endpoints are the minimum statement
+- the second display is the catalog equation. The owner included it. `R = 0` and `θ = 0` is the absorber endpoint `I/c`. `R = 1` and `θ = 0` is the reflector endpoint `2I/c`. The display is this note's assembly of the normal-incidence factor `(1+R)` with the oblique factor `\cos^2\theta`. It is not a quotation of one source. Transmission is zero. The sail paper's `P` is a pressure, the `I/c` scale, not the intensity
 
 The physics tensor, distinct from the catalog index, is the Maxwell stress in SI,
 
@@ -269,7 +269,7 @@ When a future proof is complete, the axiom list must be only `propext`,
 
 **Bridge Equation 67: Alfvén speed (fluid to plasma)** *(Category D: Field Unification Bridges)* — proposed, not in the catalog.
 
-> **Unproven.** There is no PhysJS key. `leanProof` is `absent`. The axiom list is empty. Kind is not `bridge`. A unique monomial is `v = C B (μ0 ρ)^{-1/2}` with `C` unfixed. `C = 1` is the SI hypothesis. The density definition is a second hypothesis. The Gaussian factor `1/√(4π)` is a unit dictionary. None of those is an MHD theorem. `CE-plasma-frequency` is a dimensional canonical equation and is not this derivation.
+> **Unproven.** There is no PhysJS key. `leanProof` is `absent`. The axiom list is empty. Kind is not `bridge`. A unique monomial is `v = C B (μ0 ρ)^{-1/2}` with `C` unfixed. `C = 1` is the SI hypothesis. `ρ` is the total mass density. Proton-only is a named special case. The Gaussian factor `1/√(4π)` is a unit dictionary. None of those is an MHD theorem. `CE-plasma-frequency` is a dimensional canonical equation and is not this derivation.
 
 > **Evaluator:** none. This note does not add one.
 
@@ -284,7 +284,7 @@ where:
 - `v_A` is the speed, in metres per second. The vector form points along `B`
 - `B` is the magnetic flux density, in tesla
 - `μ0` is the vacuum permeability, in SI
-- `ρ` is the mass density that the hypothesis names, in kilograms per cubic metre
+- `ρ` is the total mass density, in kilograms per cubic metre. Proton-only density is a named special case, not the default
 
 The incompressible ideal-MHD wave with wavevector parallel to a uniform `B`
 has phase speed `|v_A|`. That sentence is the regime, not a theorem of this
@@ -308,10 +308,10 @@ static, and the velocity perturbation is incompressible. The dogfood states
 that regime as ideal MHD. Alfvén 1942 was not opened past the Nature abstract,
 so this note does not attribute a list of hypotheses to the 1942 symbols.
 
-**Mass density**:
+**Mass density**: The owner set the default to the total mass density. Proton-only is a named special case.
 
-- Proton-only: `ρ_p = n m_p`.
-- Total ions, the definition the PlasmaPy 2026.2.0 `Alfven_speed` page states: `ρ = n_i m_i + n_e m_e`, with `n_e = Z n_i` under quasineutrality. That page cites Alfvén 1942. The citation is theirs. The 1942 text opened here does not display the formula.
+- Default: `ρ = n_i m_i + n_e m_e`, the definition the PlasmaPy 2026.2.0 `Alfven_speed` page states, with `n_e = Z n_i` under quasineutrality. That page cites Alfvén 1942. The citation is theirs. The 1942 text opened here does not display the formula. Helium and any other ion sit in `n_i m_i`. The evaluator takes `ρ`. It does not invent an abundance.
+- Named special case, proton-only: `ρ_p = n m_p`. The Louarn stand-in below uses this case and says so. It is not the default.
 - Electrons at the rounded solar-wind inputs below change the speed from 69.954 km/s to 69.935 km/s (`m_e / m_p = 5.446×10^{-4}` with `M_E_SI`). That is not the gap.
 - A helium loading that would hit 60 km/s at the exact rounded inputs is a density ratio `ρ/ρ_p = 1.359`. This note does not invent an abundance that produces 1.359. A 4 percent helium number fraction is not in the paragraph the dogfood read, and `1 + 4×0.04 = 1.16` does not close 1.359. The density choice is a hypothesis of the row. It does not by itself turn `∼ 60` into a helium measurement.
 
@@ -332,7 +332,7 @@ so this note does not attribute a list of hypotheses to the 1942 symbols.
 **Composition edges**: Not added.
 
 - The source of `B` is a new quantity `magnetic-flux-density`, attributes `{ scale: 'classical', force: 'electromagnetic' }`. The canonical name exists on `CE-poynting-flux` and on the cyclotron row. It is not a `Quantity` node. The dogfood records that `upt explain` accepts `magnetic-field` and does not accept `magnetic-flux-density` for the cyclotron path. This edge must not depend on that alias.
-- The density is a new quantity `plasma-mass-density`, same classical electromagnetic attributes, defined by the hypothesis (proton-only or total ions). The graph node `mass-density` has attributes `{ scale: 'cosmological', force: 'gravitational' }` because it is the BE-19 input. Reusing it would put a plasma density on a cosmological gravitational port. The regime gate would then reject a join on scale and on force if the other port states classical and electromagnetic, and it would abstain if the other port is silent. Abstention is not a reason to reuse the node.
+- The density is a new quantity `plasma-mass-density`, same classical electromagnetic attributes. The default value is the total mass density. A proton-only input is the named special case and is a different number. The graph node `mass-density` has attributes `{ scale: 'cosmological', force: 'gravitational' }` because it is the BE-19 input. Reusing it would put a plasma density on a cosmological gravitational port. The regime gate would then reject a join on scale and on force if the other port states classical and electromagnetic, and it would abstain if the other port is silent. Abstention is not a reason to reuse the node.
 - `μ0` is a constant, not a source.
 - Do not chain through `CE-plasma-frequency`. That equation is dimensional, its regime scale is mesoscopic, and a chain id would be provisional and would not be an Alfvén theorem.
 - If both ports share the classical electromagnetic attributes, the edge is `kind: 'law'`.
@@ -388,7 +388,7 @@ Draft object, not written to the manifest:
   "key": "be-67",
   "bridgeId": "be-67",
   "theorem": "PhysJS.AlfvenSpeed.coefficient_not_fixed",
-  "covers": "derivation-step: the constant is unfixed. v = C B (μ0 ρ)^{-1/2}. f(1,…,1) is C. C = 1 is the SI hypothesis. The density definition, proton-only or total ions, is a separate hypothesis. The Gaussian factor 1/sqrt(4π) is a unit dictionary, not a second law. The exponent vector and the unit-change hypothesis are hypotheses of monomial_form.",
+  "covers": "derivation-step: the constant is unfixed. v = C B (μ0 ρ)^{-1/2}. f(1,…,1) is C. C = 1 is the SI hypothesis. ρ is the total mass density. Proton-only ρ = n m_p is a named special case, not the default. The Gaussian factor 1/sqrt(4π) is a unit dictionary, not a second law. The exponent vector and the unit-change hypothesis are hypotheses of monomial_form.",
   "coverage": "statement skeleton only",
   "leanProof": "absent",
   "axioms": []
@@ -416,9 +416,9 @@ where:
 - `T0` is the proper temperature measured by a local observer at rest
 - in the 1930 line element, `g_44` is the positive coefficient of `dt²`, and the first display is the criterion the abstract states
 - the repository metric signature is `(−,+,+,+)`, the signature `upt metric` and the canonical Einstein-equation node both use, so `g_00 < 0` outside a horizon and the second display is the same criterion with a minus under the square root
-- the translation between `T0 √g_44` and `T √(-g_00)` is a signature hypothesis. It is not a new law. Which display the catalog equation uses is an owner decision
+- the catalog equation is the second display, `T √(-g_00) = const`, the repository signature `(−,+,+,+)`. The first display, `T0 √g_44 = const`, is the 1930 writing and stays in the section as a reference. The minus sign is the signature translation. It is not a new law
 
-The index form of the later stationary statement, opened on arXiv:1005.2985 and not in the 1930 paper as read for this note, is `T ‖ξ‖ = const` for a timelike Killing field `ξ`, with `‖ξ‖ = √(g_{ab} ξ^a ξ^b)`. Whether that generalization is in scope is an owner decision. The 1930 static line element is the minimum statement.
+The index form of the later stationary statement, opened on arXiv:1005.2985 and not in the 1930 paper as read for this note, is `T ‖ξ‖ = const` for a timelike Killing field `ξ`, with `‖ξ‖ = √(g_{ab} ξ^a ξ^b)`. The owner left that generalization out of scope. The catalog equation is the static repository form only.
 
 **Dimensions**: `T` is a temperature. `g_00` is dimensionless in the coordinate writing where `c` has been left explicit in `ds²`, and it is not dimensionless in every convention. The product that is constant is therefore not a seven-base monomial until the convention is fixed. The differential form people write in the weak field, `d ln T = g dr / c²`, has two dimensionless groupings of `{d ln T, g, c, dr}`: `d ln T` itself, and `g c^{-2} dr`. Dimensions do not identify them. Units alone cannot entail the criterion. A unique-monomial covers line would be a false claim.
 
@@ -484,7 +484,7 @@ with a unique-monomial claim:
   "key": "be-68",
   "bridgeId": "be-68",
   "theorem": "PhysJS.TolmanEhrenfest.units_do_not_entail",
-  "covers": "The static equilibrium criterion only. Units give two invariants, d ln T and g c^{-2} dr, and do not identify them. Not a horizon temperature. Not PhysJS.HawkingUnruh.dictionary. The 1930 writing is T0 sqrt(g_44) = const with g_44 > 0. The repository signature (-,+,+,+) writes T sqrt(-g_00) = const. That minus sign is a signature hypothesis.",
+  "covers": "The static equilibrium criterion only, in the repository signature: T sqrt(-g_00) = const. Units give two invariants, d ln T and g c^{-2} dr, and do not identify them. Not a horizon temperature. Not PhysJS.HawkingUnruh.dictionary. The 1930 writing T0 sqrt(g_44) = const, with g_44 > 0, is a reference for the signature translation. T ||ξ|| = const is out of scope.",
   "coverage": "statement skeleton only",
   "leanProof": "absent",
   "axioms": []
@@ -544,14 +544,17 @@ the section.
 The dogfood's other rows (Debye length as a composition, plasma β, Mott
 thermopower) stay in that report. They are not sections of this note.
 
-## Decisions for the owner
+## Decisions
 
-1. Whether integer 66 is radiation pressure, or stays unused because the deferred Tolman–Oppenheimer–Volkoff design used that number, in which case these rows are 67, 68, and 69.
-2. Whether the letters are D, D, and I, or whether radiation pressure and the Alfvén speed are canonical equations `CE-radiation-pressure` and `CE-alfven-speed` and only Tolman–Ehrenfest receives a `be-*` id. A new category letter is out of scope: `tensorIndexComponent` throws.
-3. Whether the catalog equation for radiation pressure includes `P_n = (I/c)(1+R)\cos^2\theta`, or only the normal-incidence endpoints `I/c` and `2I/c`. The sail paper uses `P` as a pressure, not as an intensity.
-4. Whether Tolman–Ehrenfest is catalogued as `T0 √g_44 = const` in the 1930 signature, as `T √(-g_00) = const` in the repository signature, or as both with the minus sign named as a hypothesis. Whether `T ‖ξ‖ = const` is in scope.
-5. Whether proton-only density is a named special case of the Alfvén speed rather than the default. The 69.95 km/s versus `∼ 60 km/s` gap is not closed by electrons. A helium fraction was not in the paragraph the dogfood read, and a 4 percent number fraction does not produce the factor 1.359.
-6. Approval of any section before it is implemented. This note authorizes nothing.
+The owner decided these five points on the draft of this note. They are the
+catalog text. The three statements stay unproven until a vendored PhysJS
+proof exists. This note still does not edit `src/`.
+
+1. The ids are be-66 radiation pressure, be-67 Alfvén speed, and be-68 Tolman–Ehrenfest. There is no gap. Integer 66 is radiation pressure. The deferred Tolman–Oppenheimer–Volkoff mass stays deferred and does not occupy 66.
+2. All three are `be-*` catalog entries, in the form of BE-55 through BE-65. They are not `CE-*` rows. The letters are D, D, and I.
+3. The radiation-pressure equation is `P_n = (I/c)(1+R)\cos^2\theta`. The absorber `I/c` and the reflector `2I/c` are the endpoints `R = 0`, `θ = 0` and `R = 1`, `θ = 0`.
+4. Tolman–Ehrenfest uses the repository form `T √(-g_00) = const`. The 1930 form `T0 √g_44 = const` stays as a reference for the signature translation. `T ‖ξ‖ = const` is out of scope.
+5. The Alfvén default is the total mass density. Proton-only `ρ = n m_p` is a named special case. The 69.95 km/s stand-in is that special case. It is not the default, and it does not close the `∼ 60 km/s` sentence.
 
 ## What this note does not do
 
