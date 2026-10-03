@@ -1,6 +1,6 @@
 /**
  * `upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /
- * spacetime bridge (BE-51/52/55…65) via its registered evaluator. Closes the gap
+ * spacetime bridge (the registered evaluators) via its registered evaluator. Closes the gap
  * where `upt explain <be-NN>` redirected to a "evaluated directly" capability that
  * did not exist. With no bridge id, lists the evaluable bridges + their inputs.
  * `upt evaluate case-<id> …` runs an applied case (`src/cases/`).
@@ -14,6 +14,7 @@ import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
 import { JEANS_FORMULA_NOTE } from '../conventions.js';
+import { closedFormRangeLabel } from '../closed-form-range.js';
 import { HBAR_TRUNCATION_NOTE } from '../eval-numbers.js';
 
 const FLAGS: FlagSpec[] = [
@@ -33,7 +34,7 @@ const FLAGS: FlagSpec[] = [
 ];
 
 const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
-        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65),
+        Numerically evaluate a closed-form / spacetime bridge (${closedFormRangeLabel()}),
         or an applied case: a whole measurement problem with its parent and
         scalar equations, observable, conditions, regime checks and a route
         to a measurement comparison. A case whose regime check fails prints

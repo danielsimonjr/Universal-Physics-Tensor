@@ -1,17 +1,16 @@
 /**
  * Every REGISTERED command is documented in `upt --help`.
  *
- * `--help` is a static text in `src/cli/main.ts`, not generated from the
- * registry. `command-count-prose.test.ts` counts commands by parsing that text,
- * so a command registered WITHOUT a help entry was runnable and invisible to it:
- * on 2026-09-22 `upt atlas` ran while `upt help` did not list it, and the count
- * gate could not have noticed. This test compares the registry itself against the
- * help text, which closes that gap.
+ * `--help` is each registered command's own help. `command-count-prose.test.ts`
+ * counts commands by parsing that text, so a command registered WITHOUT a help
+ * entry was runnable and invisible to it: on 2026-09-22 `upt atlas` ran while
+ * `upt help` did not list it, and the count gate could not have noticed. This
+ * test compares the registry itself against the help text, which closes that gap.
  */
 
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-import { listCommandNames } from '../../src/cli/command.js';
+import { listCommandNames, resolveCommand } from '../../src/cli/command.js';
 
 async function helpText(): Promise<string> {
   const lines: string[] = [];
@@ -58,5 +57,23 @@ describe('upt --help covers the command registry', () => {
     const chainHelp = lines.join('\n');
     expect(chainHelp).toContain('provisional');
     expect(chainHelp).toContain('not written to the catalog');
+  });
+
+  it('top-level help is each command\'s own help, and the eval binding is its own argument', async () => {
+    const help = await helpText();
+    for (const name of listCommandNames()) {
+      if (name === 'chain') continue;
+      const command = resolveCommand(name);
+      expect(command, name).toBeDefined();
+      for (const line of command!.help.split('\n')) {
+        const sentence = line.trim();
+        if (sentence === '') continue;
+        expect(help, sentence).toContain(sentence);
+      }
+    }
+    expect(help).toContain('upt eval E E=1eV');
+    expect(help).not.toMatch(/E=<number>/);
+    expect(help).toMatch(/BE-51\/52\/55\.\.68/);
+    expect(help).not.toMatch(/55\.\.65/);
   });
 });

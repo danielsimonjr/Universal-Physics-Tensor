@@ -120,9 +120,11 @@ The line then says what is included and what is left out. It ends, in the
 joined `FormalRef.covers` string, with `covers its statement only`.
 
 A proof of one part never tags the bridge `formally-proved`. The coverage
-line is not a whole-bridge claim, and the evidence predicate is not given
-the reference. Milestone 1's atlas lines stay as they are. This rule is
-the catalog case of that schedule's conflict 2.
+line is not a whole-bridge claim. `catalogEvidenceInput` passes a
+kind-`bridge` reference and does not pass a reduction, a limit, a
+derivation-step, a property, or a cross-check. Milestone 1's atlas lines
+stay as they are. This rule is the catalog case of that schedule's
+conflict 2.
 
 ## Kinds
 
@@ -135,8 +137,9 @@ still begins with `derivation-step`. Where the id is `be-28`, the kind is
 theorem is non-negativity of the defining sum, not the variational
 principle. A theorem that proves a weaker or partial statement keeps the
 covers word. Passing a `bridge` reference to `deriveEvidence` lights
-`formally-proved`. The catalog path does not pass the reference, so none
-of these kinds lights that tag on the catalog path.
+`formally-proved`. `catalogEvidenceInput` passes that kind and does not
+pass a derivation-step, a property, or a cross-check, so those kinds do
+not light the tag.
 
 **Counted reduction, limit, or derivation-step.** The `covers` word is
 `reduction`, `limit`, or `derivation-step`. One id is one reference. The
@@ -154,9 +157,9 @@ names the partner. The partner does not receive a second reference.
 
 **Property.** The word is `property`. Scoping §4.2 withheld a
 property-level reference because `deriveEvidence` would attach
-`formally-proved` to the whole record. The catalog path does not pass the
-reference, so the tag stays off, and the covers word keeps the property
-from reading as a reduction, a limit, or a derivation-step. The covers
+`formally-proved` to the whole record. `catalogEvidenceInput` does not
+pass a property, so the tag stays off, and the covers word keeps the
+property from reading as a reduction, a limit, or a derivation-step. The covers
 line says which property, and what is left out. BE-16 is the equal-levels
 entropy `k_B log 2`, not Landauer's bound `E ≥ T ΔS` and not the Bérut
 confrontation. BE-29 is `⟨W⟩ ≥ ΔF` by Jensen's inequality, not Jarzynski's

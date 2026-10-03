@@ -10,17 +10,17 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 431 |
-| Total Test Files | 601 |
-| Source Files with Tests | 419 |
-| Source Files without Tests | 12 |
-| Coverage | 97.2% |
+| Total Source Files | 433 |
+| Total Test Files | 602 |
+| Source Files with Tests | 420 |
+| Source Files without Tests | 13 |
+| Coverage | 97.0% |
 
 ---
 
 ## Source Files Without Test Coverage
 
-The following 12 source files are not directly imported by any test file:
+The following 13 source files are not directly imported by any test file:
 
 ### atlas/
 
@@ -40,6 +40,7 @@ The following 12 source files are not directly imported by any test file:
 - `src/cli/record-tables.ts` → Expected test: `tests/unit/cli/record-tables.test.ts`
 - `src/cli/record.ts` → Expected test: `tests/unit/cli/record.test.ts`
 - `src/cli/search-index.ts` → Expected test: `tests/unit/cli/search-index.test.ts`
+- `src/cli/top-level-help.ts` → Expected test: `tests/unit/cli/top-level-help.test.ts`
 
 ### composition/
 
@@ -247,6 +248,7 @@ The following 12 source files are not directly imported by any test file:
 | `cases/types.ts` | `evaluators.test.ts`, `applied-cases.test.ts`, `applied-cases.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `expression-gaps.test.ts` |
 | `src/cli-api.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts` |
 | `cli/args.ts` | `args.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `main-dispatch.test.ts` |
+| `cli/closed-form-range.ts` | `closed-form-range.test.ts` |
 | `cli/command.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `cli-reference.test.ts`, `help-covers-registry.test.ts`, `help-flags.test.ts`, `main-dispatch.test.ts`, `record-hardening.test.ts`, `recover-conventions.test.ts` |
 | `commands/_atlas-map.ts` | `map-atlas-results.test.ts` |
 | `commands/_discovery-opts.ts` | `helper-coverage.test.ts` |
@@ -725,6 +727,7 @@ The following 12 source files are not directly imported by any test file:
 | `cli/cli-api-commands.test.ts` | 0 files |
 | `cli/cli-from-src.test.ts` | 30 files |
 | `cli/cli-reference.test.ts` | 32 files |
+| `cli/closed-form-range.test.ts` | 1 files |
 | `cli/closed-stdout.test.ts` | 0 files |
 | `cli/command-count-prose.test.ts` | 30 files |
 | `cli/confront.test.ts` | 30 files |

@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 94 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 53 files
+- **cli**: 55 files
 - **root**: 1 file
 - **composition**: 88 files
 - **core**: 11 files
@@ -3340,6 +3340,18 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/cli/closed-form-range.ts` - The closed-form range `upt evaluate` prints, read from the evaluator
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS` | Import |
+
+**Exports:**
+- Functions: `formatClosedFormRange`, `closedFormRangeLabel`
+
+---
+
 ### `src/cli/command.ts` - Command registry + the `Command`/`CommandCtx` contract for the UPT CLI.
 
 **Internal Dependencies:**
@@ -3655,6 +3667,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
 | `../conventions.js` | `JEANS_FORMULA_NOTE` | Import |
+| `../closed-form-range.js` | `closedFormRangeLabel` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE` | Import |
 
 **Exports:**
@@ -4084,8 +4097,9 @@ The codebase is organized into the following modules:
 | `./args.js` | `parseArgs` | Import |
 | `./version.js` | `packageVersion` | Import |
 | `./statuses.js` | `glossaryText` | Import |
-| `./command.js` | `resolveCommand, CommandCtx` | Import |
-| `./flag-help.js` | `GLOBAL_FLAGS, renderFlagCatalog` | Import |
+| `./command.js` | `listCommandNames, resolveCommand, Command, CommandCtx` | Import |
+| `./flag-help.js` | `GLOBAL_FLAGS` | Import |
+| `./top-level-help.js` | `renderTopLevelHelp` | Import |
 | `./record.js` | `recordInvocation, replayRecord, showRecord, Io` | Import |
 | `./commands/index.js` | `*` | Import |
 
@@ -4243,6 +4257,20 @@ The codebase is organized into the following modules:
 - Interfaces: `StatusDefinition`
 - Functions: `definitionsFor`, `statusMeaning`, `glossaryText`
 - Constants: `STATUS_GLOSSARY`
+
+---
+
+### `src/cli/top-level-help.ts` - `upt --help` is the registered commands' own help, not a second copy.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./args.js` | `FlagSpec` | Import (type-only) |
+| `./command.js` | `Command` | Import (type-only) |
+| `./flag-help.js` | `renderFlagCatalog` | Import |
+
+**Exports:**
+- Functions: `renderTopLevelHelp`
 
 ---
 
@@ -8117,11 +8145,11 @@ graph TD
 
     subgraph Cli
         N24[args]
-        N25[command]
-        N26[_atlas-map]
-        N27[_atlas-route]
-        N28[_discovery-opts]
-        N29[...48 more]
+        N25[closed-form-range]
+        N26[command]
+        N27[_atlas-map]
+        N28[_atlas-route]
+        N29[...50 more]
     end
 
     subgraph Root
@@ -8205,14 +8233,14 @@ graph TD
     N20 --> N22
     N21 --> N39
     N22 --> N39
-    N25 --> N24
-    N25 --> N30
-    N26 --> N25
+    N26 --> N24
     N26 --> N30
-    N26 --> N27
-    N27 --> N25
+    N27 --> N26
     N27 --> N30
-    N28 --> N24
+    N27 --> N28
+    N28 --> N26
+    N28 --> N30
+    N30 --> N62
 ```
 
 ---
@@ -8221,17 +8249,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 431 |
+| Total TypeScript Files | 433 |
 | Total Modules | 13 |
-| Total Lines of Code | 92437 |
-| Total Exports | 3081 |
+| Total Lines of Code | 92226 |
+| Total Exports | 3084 |
 | Total Re-exports | 1454 |
 | Total Classes | 60 |
 | Total Interfaces | 490 |
-| Total Functions | 799 |
+| Total Functions | 802 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 577 |
+| Type-only Imports | 579 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

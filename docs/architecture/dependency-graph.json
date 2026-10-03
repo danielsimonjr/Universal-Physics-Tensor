@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "3.0.0",
-    "totalFiles": 431,
+    "totalFiles": 433,
     "totalModules": 13,
-    "totalExports": 3081
+    "totalExports": 3084
   },
   "entryPoints": [
     {
@@ -11150,6 +11150,27 @@
           "parseArgs"
         ]
       },
+      "src/cli/closed-form-range.ts": {
+        "description": "The closed-form range `upt evaluate` prints, read from the evaluator",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../bridges/evaluators.js",
+            "imports": [
+              "BRIDGE_EVALUATORS"
+            ]
+          }
+        ],
+        "exports": [
+          "formatClosedFormRange",
+          "closedFormRangeLabel"
+        ],
+        "functions": [
+          "formatClosedFormRange",
+          "closedFormRangeLabel"
+        ]
+      },
       "src/cli/command.ts": {
         "description": "Command registry + the `Command`/`CommandCtx` contract for the UPT CLI.",
         "externalDependencies": [],
@@ -12200,6 +12221,12 @@
             "file": "../conventions.js",
             "imports": [
               "JEANS_FORMULA_NOTE"
+            ]
+          },
+          {
+            "file": "../closed-form-range.js",
+            "imports": [
+              "closedFormRangeLabel"
             ]
           },
           {
@@ -13645,15 +13672,22 @@
           {
             "file": "./command.js",
             "imports": [
+              "listCommandNames",
               "resolveCommand",
+              "Command",
               "CommandCtx"
             ]
           },
           {
             "file": "./flag-help.js",
             "imports": [
-              "GLOBAL_FLAGS",
-              "renderFlagCatalog"
+              "GLOBAL_FLAGS"
+            ]
+          },
+          {
+            "file": "./top-level-help.js",
+            "imports": [
+              "renderTopLevelHelp"
             ]
           },
           {
@@ -14146,6 +14180,39 @@
         ],
         "constants": [
           "STATUS_GLOSSARY"
+        ]
+      },
+      "src/cli/top-level-help.ts": {
+        "description": "`upt --help` is the registered commands' own help, not a second copy.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./args.js",
+            "imports": [
+              "FlagSpec"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./command.js",
+            "imports": [
+              "Command"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "./flag-help.js",
+            "imports": [
+              "renderFlagCatalog"
+            ]
+          }
+        ],
+        "exports": [
+          "renderTopLevelHelp"
+        ],
+        "functions": [
+          "renderTopLevelHelp"
         ]
       },
       "src/cli/version.ts": {
@@ -29915,6 +29982,7 @@
         "name": "Cli",
         "files": [
           "src/cli/args.ts",
+          "src/cli/closed-form-range.ts",
           "src/cli/command.ts",
           "src/cli/commands/_atlas-map.ts",
           "src/cli/commands/_atlas-route.ts",
@@ -29966,6 +30034,7 @@
           "src/cli/record.ts",
           "src/cli/search-index.ts",
           "src/cli/statuses.ts",
+          "src/cli/top-level-help.ts",
           "src/cli/version.ts"
         ]
       },
@@ -30198,18 +30267,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 431,
+    "totalTypeScriptFiles": 433,
     "totalModules": 13,
-    "totalLinesOfCode": 92437,
-    "totalExports": 3081,
+    "totalLinesOfCode": 92226,
+    "totalExports": 3084,
     "totalClasses": 60,
     "totalInterfaces": 490,
-    "totalFunctions": 799,
+    "totalFunctions": 802,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 769,
     "totalReExports": 1454,
-    "totalTypeOnlyImports": 577,
+    "totalTypeOnlyImports": 579,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

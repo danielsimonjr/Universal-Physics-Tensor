@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "totalSourceFiles": 431,
-    "totalTestFiles": 601,
-    "testedCount": 419,
-    "untestedCount": 12,
-    "coveragePercent": "97.2"
+    "totalSourceFiles": 433,
+    "totalTestFiles": 602,
+    "testedCount": 420,
+    "untestedCount": 13,
+    "coveragePercent": "97.0"
   },
   "untestedFiles": [
     "src/atlas/public.ts",
@@ -17,6 +17,7 @@
     "src/cli/record-tables.ts",
     "src/cli/record.ts",
     "src/cli/search-index.ts",
+    "src/cli/top-level-help.ts",
     "src/composition/aliases.ts",
     "src/dimensional/natural-units.ts"
   ],
@@ -213,6 +214,7 @@
     "src/cases/types.ts",
     "src/cli-api.ts",
     "src/cli/args.ts",
+    "src/cli/closed-form-range.ts",
     "src/cli/command.ts",
     "src/cli/commands/_atlas-map.ts",
     "src/cli/commands/_discovery-opts.ts",
@@ -3120,6 +3122,9 @@
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/main-dispatch.test.ts"
     ],
+    "src/cli/closed-form-range.ts": [
+      "tests/cli/closed-form-range.test.ts"
+    ],
     "src/cli/command.ts": [
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
@@ -5358,6 +5363,7 @@
       "tests/cli/output.test.ts",
       "tests/cli/statuses.test.ts"
     ],
+    "src/cli/top-level-help.ts": [],
     "src/cli/version.ts": [
       "tests/cli/output.test.ts"
     ],
@@ -13026,6 +13032,9 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts"
+    ],
+    "tests/cli/closed-form-range.test.ts": [
+      "src/cli/closed-form-range.ts"
     ],
     "tests/cli/closed-stdout.test.ts": [],
     "tests/cli/command-count-prose.test.ts": [
