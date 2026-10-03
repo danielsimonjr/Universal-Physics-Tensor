@@ -17,6 +17,8 @@ nothing validates prose and the next reader cannot tell.
 
 - **Package version in this tree is 3.0.0.** The `v3.0.0` tag is not pushed. npm `2.0.1` remains the published release until the owner publishes. The sentence that the package version is 2.0.1 is the record from before this bump.
 
+- **Evaluate, explain, map, derive, and search read one alias registry.** An evaluate key is an alias of that edge's graph quantity. `upt explain debye-length` names `CE-debye-frequency` and does not suggest `planck-length`. `temperatur` is `temperature`. A supplied name that does not resolve exits 1. `mu_0` as a dimension term is permeability. The lines that explain of `I`, `R`, and `theta` exits 0 with no derivation path are the record from before this registry.
+
 - **`upt chain` cites the design on GitHub and does not run the orchestrator.** `be16Edge.confidence` is `speculative`. `composeEdges(be42Edge, be16Edge)` is `highly-speculative`. `upt atlas be-16` prints the kind-`bridge` formalRef and says that grade does not make the chain `formally-proved`. `upt symbolic` prints the same grade beside CT-1. The sentence that the command cites `docs/planning/Bridge-Discovery-Pipeline-Design.md` is the record from the 2026-10-03 dogfood.
 
 - **`magnetic-flux-density` evaluates the cyclotron frequency.** It is the same vacuum B as `magnetic-field`. The 2026-10-03 dogfood line that the flux-density call has no derivation path and suggests the wire law is the record from before this shared name.
