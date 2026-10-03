@@ -9371,7 +9371,6 @@ modules:
             - CANONICAL_GRAPH
             - M_SUN_KG
             - composeSymbolic
-            - composeEdges
             - be42Edge
             - be16Edge
             - lawSchwarzschildRadius
@@ -9385,6 +9384,10 @@ modules:
             - suggestQuantities
             - buckinghamPi
             - dimensionallyDetermines
+          reExport: true
+        - file: ./index.js
+          imports:
+            - composeEdges
           reExport: true
         - file: ./composition/user-equation.js
           imports:
@@ -9795,7 +9798,6 @@ modules:
         - CANONICAL_GRAPH
         - M_SUN_KG
         - composeSymbolic
-        - composeEdges
         - be42Edge
         - be16Edge
         - lawSchwarzschildRadius
@@ -9809,6 +9811,7 @@ modules:
         - suggestQuantities
         - buckinghamPi
         - dimensionallyDetermines
+        - composeEdges
         - formatConnectedSummary
         - bridgePriority
         - attemptDerivation
@@ -9990,7 +9993,6 @@ modules:
         - CANONICAL_GRAPH
         - M_SUN_KG
         - composeSymbolic
-        - composeEdges
         - be42Edge
         - be16Edge
         - lawSchwarzschildRadius
@@ -10004,6 +10006,7 @@ modules:
         - suggestQuantities
         - buckinghamPi
         - dimensionallyDetermines
+        - composeEdges
         - formatConnectedSummary
         - bridgePriority
         - attemptDerivation
@@ -20878,7 +20881,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 426
   totalModules: 13
-  totalLinesOfCode: 91925
+  totalLinesOfCode: 91960
   totalExports: 3071
   totalClasses: 60
   totalInterfaces: 487

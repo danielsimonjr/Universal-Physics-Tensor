@@ -13,6 +13,8 @@ nothing validates prose and the next reader cannot tell.
 
 - **`upt chain` cites the design on GitHub and does not run the orchestrator.** `be16Edge.confidence` is `speculative`. `composeEdges(be42Edge, be16Edge)` is `highly-speculative`. `upt atlas be-16` prints the kind-`bridge` formalRef and says that grade does not make the chain `formally-proved`. `upt symbolic` prints the same grade beside CT-1. The sentence that the command cites `docs/planning/Bridge-Discovery-Pipeline-Design.md` is the record from the 2026-10-03 dogfood.
 
+- **`magnetic-flux-density` evaluates the cyclotron frequency.** It is the same vacuum B as `magnetic-field`. The 2026-10-03 dogfood line that the flux-density call has no derivation path and suggests the wire law is the record from before this shared name.
+
 - **Canonical G-closures are not derived prefactors.** `upt audit --source=canonical` reports DERIVED 79, DECOY 7, OPEN 23. `CE-rydberg-energy`, `CE-bohr-radius`, `CE-classical-electron-radius`, `CE-bohr-magneton`, and `CE-field-energy-density` are reconstruction mismatches. Stefan–Boltzmann and Wien stay empirical/tuned. Planck–Einstein and de Broglie stay `×6.283`. The 2026-10-03 dogfood counts DERIVED 84, DECOY 2, OPEN 23 are the record from before this gate.
 
 - **`upt search` breaks a query on spaces and hyphens.** `upt search "radiation pressure"` matches be-64. `upt search magnetic-field` matches that name. `upt search be-16` matches be-16. The three exit-1 results are the record from before this split.

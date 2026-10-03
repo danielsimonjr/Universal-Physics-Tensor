@@ -23,6 +23,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] Point `upt chain` at a document a published tarball can open, and point the Landauer edge grade at the atlas formalRef.
   Done: `upt chain` exits 2 and names the GitHub URL of `docs/planning/Bridge-Discovery-Pipeline-Design.md`. It does not run the orchestrator. `be16Edge.confidence` stays `speculative`. `composeEdges(be42Edge, be16Edge).confidence` stays `highly-speculative`. `upt atlas be-16` and `upt symbolic` say those are different facts. Before the URL, `upt chain` named the repository path and `upt symbolic` did not print the grade. Package version stays 2.0.0.
 
+- [x] `magnetic-flux-density` evaluates the cyclotron frequency.
+  Done: `upt explain cyclotron-frequency charge=1.602176634e-19 magnetic-flux-density=12e-9 mass=1.67262192369e-27 --source=canonical` recovers `e B / m`. The same call with `magnetic-field` recovers the same number. The answer does not say there is no derivation path and does not suggest the wire law. Before the shared name, the flux-density call exited 0 and asked for `current`, `distance`, `magnetic-field`, `mu_0`. Package version stays 2.0.0.
+
 - [x] A canonical G-closure of an atomic law is not a derived prefactor.
   Done: `upt audit --source=canonical` no longer lists `CE-rydberg-energy`, `CE-classical-electron-radius`, `CE-bohr-magneton`, `CE-bohr-radius`, or `CE-field-energy-density` under DERIVED. They are dimensional-reconstruction mismatches. Stefan–Boltzmann stays `×1.645e-1` and Wien stays `×1.265e+0`, both empirical/tuned. Planck–Einstein and de Broglie stay `×6.283`. The counts are DERIVED 79, DECOY 7, OPEN 23. The catalog line for `be-48` stays. Before the gate, those five were DERIVED and the counts were 84, 2, and 23. Package version stays 2.0.0.
 
