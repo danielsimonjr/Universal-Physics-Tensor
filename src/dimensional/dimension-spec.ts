@@ -80,6 +80,7 @@ const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
   viscosity: d(-1, 1, -1),
   resistance: d(2, 1, -3, 0, -2),
   magnetic_field: d(0, 1, -2, 0, -1),
+  permeability: d(1, 1, -2, 0, -2),
 };
 
 /** Fundamental constants by their SI dimension — matched EXACT-case, so

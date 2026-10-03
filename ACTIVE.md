@@ -23,6 +23,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] Point `upt chain` at a document a published tarball can open, and point the Landauer edge grade at the atlas formalRef.
   Done: `upt chain` exits 2 and names the GitHub URL of `docs/planning/Bridge-Discovery-Pipeline-Design.md`. It does not run the orchestrator. `be16Edge.confidence` stays `speculative`. `composeEdges(be42Edge, be16Edge).confidence` stays `highly-speculative`. `upt atlas be-16` and `upt symbolic` say those are different facts. Before the URL, `upt chain` named the repository path and `upt symbolic` did not print the grade. Package version stays 2.0.0.
 
+- [x] Read `nT` and `uT` as tesla, and add `m_p`, `N_A`, the Faraday constant, and the dimension `permeability`.
+  Done: `upt eval B B=12nT` is `12e-9`. `B=12uT` is `12e-6`. `t=1Ts` is `1e12` and does not mention the tesla. `upt eval m_p` and `m_proton` are `1.67262192369e-27`. `N_A` is `6.02214076e23`. `F` is `N_A * e`. An explicit `F=2` stays 2. `upt eval sigma` exits 2. `upt eval "12e-9/sqrt(mu0*14e6*m_p)"` exits 0. `upt derive velocity:velocity B:magnetic_field mu0:permeability rho:density --formula "B/sqrt(mu0*rho)"` exits 0 and recovers prefactor 1. Before the change, `B=12nT` exited 1, `m_p` exited 2, the Alfvén command exited 2, and permeability exited 2 with `unknown base dimension 'permeability'`. Package version stays 2.0.0.
+
 - [x] `upt evaluate be-16` names `BridgeEquations.landauerEnergy` and `upt explain landauer-erasure-energy`.
   Done: the error names `BridgeEquations.landauerEnergy({ temperature_K })` and `upt explain landauer-erasure-energy temperature=300`. Both return `k_B T ln 2`. An id with no such command still points at `upt evaluate` with no args. Before the sentence, `evaluateBridge(16)` said to see `upt evaluate` with no args. Package version stays 2.0.0.
 

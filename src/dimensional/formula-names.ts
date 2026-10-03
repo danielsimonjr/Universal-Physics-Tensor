@@ -10,11 +10,15 @@
 
 import type { Dimension } from './types.js';
 import { CHARGE, DIMENSIONLESS, LENGTH, MASS } from './types.js';
-import { C_SI, E_SI, M_E_SI } from '../core/constants.js';
+import { C_SI, E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, N_A_SI } from '../core/constants.js';
 
 const PERMITTIVITY: Dimension = { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };
 /** μ₀ = 1/(ε₀ c²), [M L T⁻² I⁻²]. */
 const PERMEABILITY: Dimension = { L: 1, M: 1, T: -2, I: -2, Theta: 0, N: 0, J: 0 };
+/** N_A — [N⁻¹]. */
+const PER_AMOUNT: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: -1, J: 0 };
+/** Faraday constant — charge per amount, [T I N⁻¹]. */
+const FARADAY: Dimension = { L: 0, M: 0, T: 1, I: 1, Theta: 0, N: -1, J: 0 };
 
 /** Vacuum permittivity, the same CODATA value `CONSTANTS.epsilon_0` holds. */
 export const EPS0_SI = 8.8541878128e-12;
@@ -39,6 +43,10 @@ export const FORMULA_NAMED: readonly FormulaName[] = [
   { name: 'electron_mass', dim: MASS, value: M_E_SI },
   { name: 'e_charge', dim: CHARGE, value: E_SI },
   { name: 'mu_0', dim: PERMEABILITY, value: MU0_SI },
+  { name: 'm_p', dim: MASS, value: M_PROTON_SI },
+  { name: 'm_proton', dim: MASS, value: M_PROTON_SI },
+  { name: 'N_A', dim: PER_AMOUNT, value: N_A_SI },
+  { name: 'F', dim: FARADAY, value: FARADAY_SI },
   { name: 'curvature_k', dim: DIMENSIONLESS, value: 0 },
   { name: 'scale_factor', dim: LENGTH, value: 1 },
 ];
