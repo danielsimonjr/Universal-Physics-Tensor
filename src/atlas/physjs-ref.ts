@@ -7,7 +7,7 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `2e09357f9674bc60b60b378155a1623c27dc7b04`.
+ * The commit is PhysJS `main` `d917fa328039d19c3659f74ea73569effb3ed4fb`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -24,7 +24,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '2e09357f9674bc60b60b378155a1623c27dc7b04';
+export const PHYSJS_COMMIT = 'd917fa328039d19c3659f74ea73569effb3ed4fb';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -162,7 +162,7 @@ function planeWave(namespace: string): PhysjsNestedStatement {
 }
 
 /**
- * The forty-six entries, in manifest order. A bridge obtains its reference by key
+ * The forty-nine entries, in manifest order. A bridge obtains its reference by key
  * through {@link physjsFormalRef}; it does not name a theorem of its own.
  * A nested object is recorded and is not that reference.
  */
@@ -710,6 +710,36 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
+  {
+    key: 'be-66',
+    bridgeId: 'be-66',
+    theorem: 'PhysJS.RadiationPressure.pressure_eq',
+    covers:
+      'derivation-step: foreshortening I cos θ, normal momentum per energy (cos θ)/c, and an opaque split that deposits the absorbed fraction once and the specular fraction twice give P_n = (I/c)(1+R) cos²θ. R = 0, θ = 0 is I/c and R = 1, θ = 0 is 2I/c. A single cosine is not that pressure when cos θ is neither 0 nor 1. Homogeneity in I and c gives P = C I/c with C = f(1,1) unfixed. Not the Maxwell stress tensor, and not the Eddington luminosity',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-67',
+    bridgeId: 'be-67',
+    theorem: 'PhysJS.AlfvenSpeed.speed_eq',
+    covers:
+      'derivation-step: one transverse monochromatic polarization along a uniform field, with ∂b/∂t = B ∂v/∂z and ρ ∂v/∂t = (B/μ0) ∂b/∂z, has phase speed |ω/k| = B/√(μ0 ρ) for B > 0, μ0 > 0, ρ > 0, and k ≠ 0. ρ is the density in that momentum premise, read as the total mass density. Proton-only n m_p is a different density when electrons contribute, and a density r ρ with r ≠ 1 is a different speed. Inserting tesla and the SI density into B/√(4πρ) is not the SI speed. 4π×10^{-7} is the permeability stand-in, not a measured μ0. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: 'be-68',
+    bridgeId: 'be-68',
+    theorem: 'PhysJS.TolmanEhrenfest.hydrostatic_constant',
+    covers:
+      'derivation-step: on a static interval with g_00 < 0, hydrostatic balance dp = -(ρ+p) d ln √(-g_00) and the equilibrium Gibbs relation dp = (ρ+p) d ln T, with ρ+p ≠ 0, give T √(-g_00) equal at the endpoints. The 1930 writing T √g_44 agrees when g_44 = -g_00. Real.sqrt g_00 = 0 when g_00 < 0, so the product without the minus is 0. d ln T = 0 is not g dr/c². Not a horizon temperature and not PhysJS.HawkingUnruh.dictionary. T ‖ξ‖ = const is out of scope. The hydrostatic equation is not derived from ∇_μ T^{μν} = 0, and the Gibbs relation is not derived from an equation of state',
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
 ];
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
@@ -771,6 +801,9 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-59',
   'be-60',
   'be-63',
+  'be-66',
+  'be-67',
+  'be-68',
 ]);
 
 /**

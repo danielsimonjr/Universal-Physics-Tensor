@@ -8,9 +8,10 @@
  * of the normal-incidence `(1+R)` with the oblique `cos²θ`. It is not a
  * quotation of one source.
  *
- * Unproven. There is no PhysJS key and no `formalRef`. The factor of 2
- * in `PhysJS.Eddington.wrong_dictionary_factor_two` doubles a luminosity
- * and is not this mirror factor. BE-64's encoded force uses factor 1.
+ * The overlay formalRef is `PhysJS.RadiationPressure.pressure_eq`.
+ * The factor of 2 in `PhysJS.Eddington.wrong_dictionary_factor_two`
+ * doubles a luminosity and is not this mirror factor. BE-64's encoded
+ * force uses factor 1.
  *
  * @module bridges/be66-radiation-pressure
  */

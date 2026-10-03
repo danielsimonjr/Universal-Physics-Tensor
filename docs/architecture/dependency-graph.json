@@ -16627,9 +16627,35 @@
             ]
           },
           {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
             "file": "../edge.js",
             "imports": [
               "BridgeEdge"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../quantity.js",
+            "imports": [
+              "Quantity"
             ],
             "typeOnly": true
           },
@@ -29925,7 +29951,7 @@
   "statistics": {
     "totalTypeScriptFiles": 426,
     "totalModules": 13,
-    "totalLinesOfCode": 91960,
+    "totalLinesOfCode": 92029,
     "totalExports": 3071,
     "totalClasses": 60,
     "totalInterfaces": 487,
@@ -29934,7 +29960,7 @@
     "totalEnums": 0,
     "totalConstants": 768,
     "totalReExports": 1453,
-    "totalTypeOnlyImports": 573,
+    "totalTypeOnlyImports": 575,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

@@ -1056,11 +1056,11 @@ where:
 
 **Bridge Equation 66: Radiation pressure (opaque surface)** *(Category D: Field Unification Bridges)*
 
-> **Proof status as of 2026-10-03.** There is no PhysJS key and no `formalRef`. `leanProof` is absent. Kind is not `bridge`. [`PhysJS.Dimensional.monomial_form`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Dimensional.lean) would give `P = C I / c` with `C` unfixed. The absorber hypothesis `C = 1`, the reflector hypothesis `C = 2`, and the opaque-surface hypothesis `C = (1+R) cos²θ` are not that monomial. [`PhysJS.Eddington.balance_iff`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Eddington.lean) is the `r²` cancellation of BE-64. [`PhysJS.Eddington.wrong_dictionary_factor_two`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Eddington.lean) doubles the luminosity. That factor of 2 is not the mirror factor. The statement sketches are `PhysJS.RadiationPressure.coefficient_unfixed`, `reflector_not_absorber`, and `oblique_endpoints` in `docs/planning/Applied-Physicist-Candidate-Bridges-Design.md`.
+> **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.RadiationPressure.pressure_eq`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/RadiationPressure.lean) states `P_n = (I/c)(1+R) cos²θ`. `R = 0`, `θ = 0` is `I/c` and `R = 1`, `θ = 0` is `2I/c`. A single cosine is not that pressure when `cos θ` is neither 0 nor 1. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Buckingham on `{P, I, c}` still leaves `C = f(1,1)` unfixed; the theorem is the opaque split, not that monomial. The lemma is not the Maxwell stress tensor and not the Eddington luminosity. [`PhysJS.Eddington.wrong_dictionary_factor_two`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/Eddington.lean) doubles a luminosity. That factor of 2 is not the mirror factor.
 
 > **Evaluator:** [`src/bridges/be66-radiation-pressure.ts`](../../src/bridges/be66-radiation-pressure.ts) (`evaluateRadiationPressure`)
 
-- **Status**: Established as a textbook beam-pressure law. Unproven until a vendored PhysJS proof of the statement exists. The catalog equation is `P_n = (I/c)(1+R) cos²θ`. `R = 0` and `θ = 0` is `I/c`. `R = 1` and `θ = 0` is `2I/c`.
+- **Status**: Established as a textbook beam-pressure law. The edge confidence stays `established`. The catalog equation is `P_n = (I/c)(1+R) cos²θ`. `R = 0` and `θ = 0` is `I/c`. `R = 1` and `θ = 0` is `2I/c`.
 - **Context**: Bridges an optical intensity to a continuum pressure. The bridges tuple is `optics` → `continuum`. Category D selects the field-unification component. The tuple does not. BE-64's encoded force uses factor 1. This row is not the Eddington luminosity.
 - **Mathematical Formulation**:
 
@@ -1088,11 +1088,11 @@ where:
 
 **Bridge Equation 67: Alfvén speed (ideal MHD)** *(Category D: Field Unification Bridges)*
 
-> **Proof status as of 2026-10-03.** There is no PhysJS key and no `formalRef`. `leanProof` is absent. Kind is not `bridge`. A unique monomial is `v = C B (μ0 ρ)^{-1/2}` with `C` unfixed. `C = 1` is the SI hypothesis. `ρ` is the total mass density. Proton-only density is a named special case. The Gaussian factor `1/√(4π)` is a unit dictionary. The statement sketches are `PhysJS.AlfvenSpeed.coefficient_not_fixed`, `proton_only_differs`, and `gaussian_needs_dictionary` in `docs/planning/Applied-Physicist-Candidate-Bridges-Design.md`.
+> **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.AlfvenSpeed.speed_eq`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/AlfvenSpeed.lean) states that one transverse monochromatic polarization along a uniform field has phase speed `|ω/k| = B/√(μ0 ρ)` for `B > 0`, `μ0 > 0`, `ρ > 0`, and `k ≠ 0`. `ρ` is the total mass density. Proton-only `n m_p` is a different density when electrons contribute. Inserting tesla and the SI density into `B/√(4πρ)` is not the SI speed. A factor `C ≠ 1` is not the catalog speed. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The lemma is not a kinetic dispersion relation.
 
 > **Evaluator:** [`src/bridges/be67-alfven-speed.ts`](../../src/bridges/be67-alfven-speed.ts) (`evaluateAlfvenSpeed`, `alfvenProtonOnlyDensity`)
 
-- **Status**: Established as the ideal-MHD phase speed. Unproven until a vendored PhysJS proof exists. The default density is the total mass density.
+- **Status**: Established as the ideal-MHD phase speed. The edge confidence stays `established`. The default density is the total mass density.
 - **Context**: Bridges a fluid mass density to a plasma wave speed. The bridges tuple is `fluid` → `plasma`. Category D selects the field-unification component. `CE-plasma-frequency` is not this speed.
 - **Mathematical Formulation**:
 
@@ -1118,11 +1118,11 @@ where:
 
 **Bridge Equation 68: Tolman–Ehrenfest effect (static thermal equilibrium)** *(Category I: Emergent Spacetime)*
 
-> **Proof status as of 2026-10-03.** There is no PhysJS key and no `formalRef`. `leanProof` is absent. Kind is not `bridge`. Units give two invariants, `d ln T` and `g c^{-2} dr`, and do not identify them. A constant temperature has `d ln T = 0` while `g dr / c²` need not vanish. The repository form is `T √(−g_00)`. `Math.sqrt` of a negative `g_00` is `NaN`, so dropping the minus is not the formula. The 1930 form `T0 √g_44` is the mostly-minus reference. `T ‖ξ‖ = const` is out of scope. The statement sketches are `PhysJS.TolmanEhrenfest.units_do_not_entail` and `mostly_plus_needs_the_minus` in `docs/planning/Applied-Physicist-Candidate-Bridges-Design.md`.
+> **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path does not pass this reference to deriveEvidence. [`PhysJS.TolmanEhrenfest.hydrostatic_constant`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/TolmanEhrenfest.lean) states that on a static interval with `g_00 < 0`, hydrostatic balance and the equilibrium Gibbs relation give `T √(−g_00)` equal at the endpoints. The 1930 writing `T √g_44` agrees when `g_44 = −g_00`. `Real.sqrt g_00 = 0` when `g_00 < 0`, so the product without the minus is 0. `d ln T = 0` is not `g dr/c²`. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The lemma is not a horizon temperature and not `PhysJS.HawkingUnruh.dictionary`. `T ‖ξ‖ = const` is out of scope. The hydrostatic equation is not derived from `∇_μ T^{μν} = 0`, and the Gibbs relation is not derived from an equation of state.
 
 > **Evaluator:** [`src/bridges/be68-tolman-ehrenfest.ts`](../../src/bridges/be68-tolman-ehrenfest.ts) (`evaluateTolmanEhrenfest`, `tolmanTemperatureAt`)
 
-- **Status**: Established as the static equilibrium gradient. Unproven until a vendored PhysJS proof exists. Not a horizon temperature.
+- **Status**: Established as the static equilibrium gradient. The edge confidence stays `established`. Not a horizon temperature.
 - **Context**: Bridges a gravitational metric component to a thermodynamic temperature. The bridges tuple is `gravitation` → `thermodynamics`. Category I selects the information-geometry component, with BE-57 and BE-63–65. That shared component does not admit a chain through BE-42. The proper temperature is not `hawking-temperature` and is not `temperature`.
 - **Mathematical Formulation**:
 

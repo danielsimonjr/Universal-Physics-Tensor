@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 426,
-    "totalTestFiles": 594,
+    "totalTestFiles": 595,
     "testedCount": 416,
     "untestedCount": 10,
     "coveragePercent": "97.7"
@@ -500,6 +500,7 @@
       "tests/atlas/catalog-formal-ref.test.ts",
       "tests/atlas/coverage.test.ts",
       "tests/atlas/formalref-kind.test.ts",
+      "tests/atlas/physjs-be66-68.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
       "tests/bridges/be-66-radiation-pressure.test.ts",
@@ -573,6 +574,7 @@
       "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/pendulum-phase-translation.test.ts",
       "tests/atlas/pendulum-position-translation.test.ts",
+      "tests/atlas/physjs-be66-68.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/spring-lc-phase-carriage.test.ts",
       "tests/atlas/witness-results.test.ts",
@@ -788,6 +790,7 @@
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/formal-sanity.test.ts",
       "tests/atlas/formalref-kind.test.ts",
+      "tests/atlas/physjs-be66-68.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/atlas/proof-target.test.ts",
       "tests/composition/seed-edges.test.ts"
@@ -5168,6 +5171,7 @@
     ],
     "src/cli/map-evidence.ts": [
       "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/physjs-be66-68.test.ts",
       "tests/atlas/physjs-manifest.test.ts",
       "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
@@ -5752,6 +5756,7 @@
       "tests/api/public-surface.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/physjs-be66-68.test.ts",
       "tests/bridges/be-66-radiation-pressure.test.ts",
       "tests/bridges/be-67-alfven-speed.test.ts",
       "tests/bridges/be-68-tolman-ehrenfest.test.ts",
@@ -10089,6 +10094,13 @@
       "src/atlas/derive-evidence.ts",
       "src/atlas/translation-registry.ts",
       "src/atlas/witness-dominance.ts"
+    ],
+    "tests/atlas/physjs-be66-68.test.ts": [
+      "src/atlas/catalog-formal-ref.ts",
+      "src/atlas/derive-evidence.ts",
+      "src/atlas/physjs-ref.ts",
+      "src/cli/map-evidence.ts",
+      "src/composition/edges/applied-physicist.ts"
     ],
     "tests/atlas/physjs-manifest.test.ts": [
       "src/atlas/families.ts",

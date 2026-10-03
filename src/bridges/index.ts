@@ -2706,7 +2706,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   context: `The time-averaged normal pressure of a beam on an opaque surface: P_n = (I/c)(1+R) cos²θ. The absorber endpoint is I/c (R = 0, θ = 0) and the reflector endpoint is 2I/c (R = 1, θ = 0). Bridges an optical intensity to a continuum pressure. The factor of 2 is the mirror factor. BE-64's encoded Thomson force uses factor 1, and PhysJS.Eddington.wrong_dictionary_factor_two doubles a luminosity. Those are different hypotheses. Transmission is zero. The combined (1+R) cos²θ factor is this catalog's assembly of the normal-incidence factor with the oblique factor.`,
   formula_latex: `P_n = \\frac{I}{c}(1+R)\\cos^2\\theta`,
   source_part: 'III',
-  source_section: `Applied-physicist catalog (be-66) — established textbook relation, unproven in PhysJS`,
+  source_section: `Applied-physicist catalog (be-66) — established textbook relation, PhysJS.RadiationPressure.pressure_eq`,
   known_issues: [],
   references: [
     `OpenStax University Physics Volume 2, §16.5 "Momentum and Radiation Pressure" (LibreTexts reproduction): absorber pressure u = I/c, perfect reflector at normal incidence 2I/c. The dogfood cites §16.4 for the same two formulas. The section numbers are not reconciled here.`,
@@ -2716,7 +2716,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dependencies: [],
   dimensional_signature: `[L^-1 M T^-2]`,
   tractability_class: 'closed-form',
-  notes: `Closed-form evaluator evaluateRadiationPressure({I_W_per_m2, R, theta_rad}) → {P_Pa} in src/bridges/be66-radiation-pressure.ts. No formalRef. Unproven until a vendored PhysJS proof exists. The Lean targets are PhysJS.RadiationPressure.coefficient_unfixed, reflector_not_absorber, and oblique_endpoints, sketched in docs/planning/Applied-Physicist-Candidate-Bridges-Design.md. Buckingham on {P, I, c} leaves the constant unfixed. No confrontation: the printed I = 10^6 W/m² stand-ins are arithmetic, not measurements.`,
+  notes: `Closed-form evaluator evaluateRadiationPressure({I_W_per_m2, R, theta_rad}) → {P_Pa} in src/bridges/be66-radiation-pressure.ts. The overlay formalRef is PhysJS.RadiationPressure.pressure_eq, kind bridge. The catalog path does not pass it to deriveEvidence, so deriveEdgeEvidence stays proposed. The edge confidence stays established. Buckingham on {P, I, c} leaves the constant unfixed; the theorem states the opaque-surface factor. No confrontation: the printed I = 10^6 W/m² stand-ins are arithmetic, not measurements.`,
 },
 {
   id: 67,
@@ -2728,7 +2728,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   context: `The phase speed of an ideal-MHD wave along a uniform background field: v_A = B / √(μ0 ρ), with ρ the total mass density. Proton-only ρ = n m_p is a named special case (alfvenProtonOnlyDensity), not the default. Bridges a fluid mass density to a plasma wave speed. The SI coefficient C = 1 is a hypothesis units do not fix. The Gaussian factor 1/√(4π) is a unit dictionary, not a second law. CE-plasma-frequency is a different equation.`,
   formula_latex: `v_A = \\frac{B}{\\sqrt{\\mu_0 \\rho}}`,
   source_part: 'III',
-  source_section: `Applied-physicist catalog (be-67) — established textbook relation, unproven in PhysJS`,
+  source_section: `Applied-physicist catalog (be-67) — established textbook relation, PhysJS.AlfvenSpeed.speed_eq`,
   known_issues: [],
   references: [
     `Alfvén 1942 *Nature* 150:405–406, doi:10.1038/150405d0. The abstract describes a combined electromagnetic-hydrodynamic wave and does not display the speed formula.`,
@@ -2737,7 +2737,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dependencies: [],
   dimensional_signature: `[velocity]`,
   tractability_class: 'closed-form',
-  notes: `Closed-form evaluator evaluateAlfvenSpeed({B_T, rho_kg_per_m3}) → {v_m_per_s} in src/bridges/be67-alfven-speed.ts. rho_kg_per_m3 is the total mass density. alfvenProtonOnlyDensity(n_per_m3) = n m_p is the named special case; passing a number density as rho_kg_per_m3 is not that case. No formalRef. Unproven until a vendored PhysJS proof exists. The Lean targets are PhysJS.AlfvenSpeed.coefficient_not_fixed, proton_only_differs, and gaussian_needs_dictionary, sketched in docs/planning/Applied-Physicist-Candidate-Bridges-Design.md. The 69.95 km/s figure is the proton-only stand-in at B = 12 nT and n = 14 cm⁻³. It does not close a ~60 km/s sentence, and a helium fraction is not claimed to close it. No confrontation.`,
+  notes: `Closed-form evaluator evaluateAlfvenSpeed({B_T, rho_kg_per_m3}) → {v_m_per_s} in src/bridges/be67-alfven-speed.ts. rho_kg_per_m3 is the total mass density. alfvenProtonOnlyDensity(n_per_m3) = n m_p is the named special case; passing a number density as rho_kg_per_m3 is not that case. The overlay formalRef is PhysJS.AlfvenSpeed.speed_eq, kind bridge. The catalog path does not pass it to deriveEvidence, so deriveEdgeEvidence stays proposed. The edge confidence stays established. The 69.95 km/s figure is the proton-only stand-in at B = 12 nT and n = 14 cm⁻³. It does not close a ~60 km/s sentence, and a helium fraction is not claimed to close it. No confrontation.`,
 },
 {
   id: 68,
@@ -2749,7 +2749,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   context: `In static thermal equilibrium the proper temperature satisfies T √(−g_00) = const, with g_00 < 0 in the repository signature. Bridges a gravitational metric component to a thermodynamic temperature. The 1930 form T0 √g_44 is the mostly-minus reference for the sign. T ‖ξ‖ = const is out of scope. This is not a horizon temperature and is not a dependency of BE-42. Units produce two invariants and do not identify them, so a constant-T reading is a different claim.`,
   formula_latex: `T\\sqrt{-g_{00}} = \\mathrm{const}`,
   source_part: 'III',
-  source_section: `Applied-physicist catalog (be-68) — established textbook relation, unproven in PhysJS`,
+  source_section: `Applied-physicist catalog (be-68) — established textbook relation, PhysJS.TolmanEhrenfest.hydrostatic_constant`,
   known_issues: [],
   references: [
     `Tolman & Ehrenfest 1930 *Phys. Rev.* 36:1791, doi:10.1103/PhysRev.36.1791. The abstract states that T0 √g_44 is constant. This session did not re-open the PDF; that abstract reading is the dogfood's.`,
@@ -2758,7 +2758,7 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dependencies: [],
   dimensional_signature: `[temperature]`,
   tractability_class: 'closed-form',
-  notes: `Closed-form evaluator evaluateTolmanEhrenfest({T_K, g_00}) → {invariant_K} in src/bridges/be68-tolman-ehrenfest.ts. Requires T > 0 and g_00 < 0. Math.sqrt(g_00) is NaN for g_00 < 0 and is not the formula. tolmanTemperatureAt(invariant, g_00) recovers T. No formalRef. Unproven until a vendored PhysJS proof exists. The Lean targets are PhysJS.TolmanEhrenfest.units_do_not_entail and mostly_plus_needs_the_minus, sketched in docs/planning/Applied-Physicist-Candidate-Bridges-Design.md. Not chained through be-42. No confrontation.`,
+  notes: `Closed-form evaluator evaluateTolmanEhrenfest({T_K, g_00}) → {invariant_K} in src/bridges/be68-tolman-ehrenfest.ts. Requires T > 0 and g_00 < 0. Math.sqrt(g_00) is NaN for g_00 < 0 and is not the formula. tolmanTemperatureAt(invariant, g_00) recovers T. The overlay formalRef is PhysJS.TolmanEhrenfest.hydrostatic_constant, kind bridge. The catalog path does not pass it to deriveEvidence, so deriveEdgeEvidence stays proposed. The edge confidence stays established. Not chained through be-42. No confrontation.`,
 }
 
 ];

@@ -7,7 +7,7 @@
  * `C = 1` is the SI hypothesis. Units do not fix it. The Gaussian
  * `1/√(4π)` is a unit dictionary and is not a second evaluator.
  *
- * Unproven. There is no PhysJS key and no `formalRef`.
+ * The overlay formalRef is `PhysJS.AlfvenSpeed.speed_eq`.
  *
  * @module bridges/be67-alfven-speed
  */

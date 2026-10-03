@@ -8,8 +8,8 @@
  * `Math.sqrt(g_00)` is not this formula: for `g_00 < 0` that square root
  * is `NaN`. Units give two invariants and do not identify them.
  *
- * Unproven. There is no PhysJS key and no `formalRef`. Not a horizon
- * temperature, and not a chain through be-42.
+ * The overlay formalRef is `PhysJS.TolmanEhrenfest.hydrostatic_constant`.
+ * Not a horizon temperature, and not a chain through be-42.
  *
  * @module bridges/be68-tolman-ehrenfest
  */

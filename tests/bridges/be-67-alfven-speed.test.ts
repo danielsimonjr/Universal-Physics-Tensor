@@ -53,16 +53,18 @@ describe('BE-67 Alfvén speed', () => {
     expect(() => alfvenProtonOnlyDensity(-1)).toThrow(/n_per_m3/);
   });
 
-  it('catalog row is established, has no formalRef, and the edge is a law', () => {
+  it('catalog row is established, the edge is a law, and confidence stays established', () => {
     const entry = BRIDGE_EQUATIONS.find((e) => e.id === 67)!;
     expect(entry.status).toBe('established');
     expect(entry.category).toBe('D');
     expect(entry.bridges).toEqual(['fluid', 'plasma']);
     expect(entry.dimensional_signature).toBe('[velocity]');
     expect(entry.counterexamples ?? []).toEqual([]);
-    expect(catalogFormalRef(67)).toBeUndefined();
+    expect(catalogFormalRef(67)?.statement).toBe('PhysJS.AlfvenSpeed.speed_eq');
+    expect(catalogFormalRef(67)?.kind).toBe('bridge');
     expect(be67Edge.kind).toBe('law');
-    expect(be67Edge.symbolic).toBeUndefined();
+    expect(be67Edge.confidence).toBe('established');
+    expect(be67Edge.symbolic).toBeDefined();
     expect(regimesDiffer(be67Edge.sources[0].attributes, be67Edge.target.attributes)).toBe(false);
   });
 });

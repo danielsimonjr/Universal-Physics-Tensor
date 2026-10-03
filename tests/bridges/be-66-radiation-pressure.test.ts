@@ -39,16 +39,18 @@ describe('BE-66 radiation pressure', () => {
     expect(() => evaluateRadiationPressure({ I_W_per_m2: I, R: 0, theta_rad: Number.NaN })).toThrow(/theta_rad/);
   });
 
-  it('catalog row is established, has no formalRef, and the edge is a law', () => {
+  it('catalog row is established, the edge is a law, and confidence stays established', () => {
     const entry = BRIDGE_EQUATIONS.find((e) => e.id === 66)!;
     expect(entry.status).toBe('established');
     expect(entry.category).toBe('D');
     expect(entry.bridges).toEqual(['optics', 'continuum']);
     expect(entry.dimensional_signature).toBe('[L^-1 M T^-2]');
     expect(entry.counterexamples ?? []).toEqual([]);
-    expect(catalogFormalRef(66)).toBeUndefined();
+    expect(catalogFormalRef(66)?.statement).toBe('PhysJS.RadiationPressure.pressure_eq');
+    expect(catalogFormalRef(66)?.kind).toBe('bridge');
     expect(be66Edge.kind).toBe('law');
-    expect(be66Edge.symbolic).toBeUndefined();
+    expect(be66Edge.confidence).toBe('established');
+    expect(be66Edge.symbolic).toBeDefined();
     expect(regimesDiffer(be66Edge.sources[0].attributes, be66Edge.target.attributes)).toBe(false);
     expect(
       regimesDiffer(be66Edge.sources[0].attributes, { scale: 'classical', force: 'gravitational' }),
