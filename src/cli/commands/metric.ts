@@ -11,7 +11,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { UsageError } from '../errors.js';
+import { CliError, UsageError } from '../errors.js';
 import type { MetricId } from '../../cli-api.js';
 
 const FLAGS: FlagSpec[] = [
@@ -99,10 +99,10 @@ async function run(ctx: CommandCtx): Promise<number> {
         const a = report.parameters.a ?? 0;
         const r = report.parameters.r;
         const theta = report.parameters.theta ?? Math.PI / 2;
-        if (Mgeom === undefined || !(Mgeom > 0)) throw new Error('Kerr geodesic needs a positive mass');
+        if (Mgeom === undefined || !(Mgeom > 0)) throw new CliError('Kerr geodesic needs a positive mass');
         const rOverM = (r ?? 10 * Mgeom) / Mgeom;
         const aOverM = a / Mgeom;
-        if (!(Math.abs(aOverM) <= 1)) throw new Error('Kerr geodesic wants |a| ≤ GM/c²');
+        if (!(Math.abs(aOverM) <= 1)) throw new CliError('Kerr geodesic wants |a| ≤ GM/c²');
         const shared = { M: Mgeom, aOverM, rOverM, fraction: 0.005, steps: 40 };
         geodesic =
           Math.abs(theta - Math.PI / 2) < 1e-6
@@ -120,7 +120,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         throw new UsageError('upt metric: --geodesic is for schwarzschild or kerr.');
       }
     } catch (e) {
-      if (e instanceof UsageError) throw e;
+      if (e instanceof UsageError || e instanceof CliError) throw e;
       throw new UsageError((e as Error).message);
     }
   }

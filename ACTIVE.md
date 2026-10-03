@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Map a bad Kerr geodesic value to exit 1, on the 2.0.0 line. Design: `docs/planning/refactor-integration-phase.md`, step 12.
+  Done: `upt metric kerr --geodesic` throws `CliError` for a non-positive mass and for `|a|` above GM/c². The messages stay. A missing metric name stays exit 2. A Kerr finite-difference refusal stays exit 2. A spin inside the bound still exits 0. Before the class change, `M=0`, `M=-1`, and `a=2000` with `r=1e8` exited 2; the new test expected 1. Package version stays 1.0.4.
 - [x] Delegate a geodesic RK4 to MathTS only when the golden matches, and leave the GL4 integrator in place. Design: `docs/planning/refactor-integration-phase.md`, step 8.
   Done: `integrateGeodesic` and `integrateRK4` call `solveODESystem` with `dt` equal to the existing fixed step. `solveODE` is adaptive and is not that call. `gl4-integrator.ts`, `perihelion-finder.ts`, and `composition/uncertainty.ts` stay. The Schwarzschild radial infall of 5000 steps still meets the cycloid radius. The `solveODESystem` final radius matched the local RK4 (difference 0) and differed from the cycloid by 8.73e-10. Before the call, `geodesic-integrator.ts` did not contain `solveODESystem`. Package version stays 1.0.4.
 - [x] Call MathTS for unit conversion and for the 16-point quadrature rule. Design: `docs/planning/refactor-integration-phase.md`, step 7.

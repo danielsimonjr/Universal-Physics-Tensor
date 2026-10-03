@@ -660,7 +660,7 @@ which steps have a merge commit. A row marked next is not started.
 | 5 | The scalar walk is MathTS's | done | #311 | `85f806329371aeaa2caaa4b1ec9e22c1724607e9` |
 | 6 | MathTS required; delete Path B and `Float64ReferenceEngine` | done, and this row is 2.0.0 | #312 | `e6d2dcefaa159eced0f60d9d1e87b2e60bf39859` |
 | 7 | Unit conversion and quadrature call MathTS | done | #313 | `9954ff9a3a907d813a6d3de4a951e4f748a7381f` |
-| 8 | ODE calls MathTS where the method exists | next | — | — |
+| 8 | ODE calls MathTS where the method exists | done | #314 | `b3151fca2956e0aecedee7dc144c67f8a6521b8d` |
 | 9 | Rename the CLI uncertainty helper | done | #308 | `d4606c804f98d2ed0c0f1b49da812e110fdc39dc` |
 | 10 | Commands go through `cli-api` | done | #309 | `6196b639fc2bd96df0a50a69ee98ac469f2abc1e` |
 | 11 | Name the three regimes in one module | done | #310 | `d7f7630dea00cbb5a89fc41c19af8b02d26f1f06` |
@@ -956,7 +956,7 @@ zero-dependency parser and the zero-dependency tensor engine. Steps 1
 through 4, and steps 9 through 11, merged on 1.x. The step table names the
 commits. Step 5 merged: the scalar walk is MathTS's. Step 6 merged:
 MathTS is required. Step 7 merged: unit conversion and the 16-point rule
-call MathTS. Steps 8 and 12 are next. Steps 7, 8, and 12 ship on
+call MathTS. Step 8 merged: the fixed-step RK4 calls MathTS. Step 12 is next. Steps 7, 8, and 12 ship on
 the 2.0.0 line and do not each bump the major again.
 
 The migration note that ships with step 6 states:
