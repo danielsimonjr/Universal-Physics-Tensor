@@ -38,7 +38,7 @@ The fixes below are the work. This note does not change a command.
   `docs/planning/` notes.
 - `upt chain` is the exception that shows the contract. It prints a GitHub
   blob URL because `docs/planning/` is not in the tarball.
-- The re-run's citation row. `be-67`'s edge string says OpenStax University
+- The re-run's citation row. `be-66`'s edge string says OpenStax University
   Physics Volume 2 §16.5. The OpenStax site numbers that radiation-pressure
   section 16.4. LibreTexts numbers the same chapter 16.5. A section number
   is not a stable handle when two mirrors disagree.
