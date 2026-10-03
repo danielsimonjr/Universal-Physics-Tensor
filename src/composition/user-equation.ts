@@ -22,9 +22,12 @@
 
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
+import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
+import { aliasesForTarget, rewriteInputKey } from './aliases.js';
+import { CATALOG_GRAPH } from './catalog-graph.js';
 import type { VizModel, VizJunction } from './graph-viz.js';
 import type { Dimension } from '../dimensional/types.js';
 import { DIMENSIONLESS } from '../dimensional/types.js';
@@ -130,20 +133,23 @@ export function hyphenSubtractHint(
 }
 
 /**
- * Spellings that must not be a bare `e`: `1-eccentricity^2` is the perihelion
- * factor `one_minus_e_sq`, `eps0` and `epsilon0` are `epsilon_0`, and `mu0` is
- * `mu_0`. `upt eval` already accepts `eps0` and `mu0`; this is the equation path.
+ * Spellings that must not be a bare `e`. Constant aliases come from
+ * {@link CONSTANT_SPELLINGS}. `1-eccentricity^2` is the perihelion factor
+ * `one_minus_e_sq`.
  */
 function rewriteFormulaSpellings(text: string): string {
-  return text
-    .replace(/(?<![A-Za-z0-9_])eps0(?![A-Za-z0-9_])/g, 'epsilon_0')
-    .replace(/(?<![A-Za-z0-9_])epsilon0(?![A-Za-z0-9_])/g, 'epsilon_0')
-    .replace(/(?<![A-Za-z0-9_])mu0(?![A-Za-z0-9_])/g, 'mu_0')
-    .replace(/(?<![A-Za-z0-9_])kB(?![A-Za-z0-9_])/g, 'k_B')
-    .replace(
-      /(?<![A-Za-z0-9_])1\s*-\s*eccentricity\s*(?:\^|\*\*)\s*2(?![A-Za-z0-9_])/g,
-      'one_minus_e_sq',
-    );
+  let out = text;
+  for (const { names } of CONSTANT_SPELLINGS) {
+    const canonical = names[0]!;
+    for (const alias of names.slice(1)) {
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(alias)) continue;
+      out = out.replace(new RegExp(`(?<![A-Za-z0-9_])${alias}(?![A-Za-z0-9_])`, 'g'), canonical);
+    }
+  }
+  return out.replace(
+    /(?<![A-Za-z0-9_])1\s*-\s*eccentricity\s*(?:\^|\*\*)\s*2(?![A-Za-z0-9_])/g,
+    'one_minus_e_sq',
+  );
 }
 
 /** Options for {@link analyzeUserEquation}. @internal */
@@ -515,9 +521,16 @@ export async function analyzeUserEquation(
   const eq = await parseUserEquation(equation, catalogNames);
   const literalShort = (n: string): string | null =>
     n.length === 1 && catalogNames.has(n) ? n : null;
-  const resolve = (n: string): string | null => {
+  const resolveCatalog = (n: string): string | null => {
     if (!bindShort && literalShort(n) !== null) return null;
     return resolveToCatalogName(n, catalogNames);
+  };
+  // Evaluate keys are aliases of this target's sources. `R` is reflectance
+  // on radiation-pressure and is not a global name.
+  const aliasMap = aliasesForTarget(CATALOG_GRAPH, resolveCatalog(eq.target) ?? '');
+  const resolve = (n: string): string | null => {
+    if (!bindShort && literalShort(n) !== null) return null;
+    return rewriteInputKey(n, aliasMap, catalogNames) ?? resolveToCatalogName(n, catalogNames);
   };
 
   // dims for parsePhysics: physics constants carry their REAL dimensions; matched

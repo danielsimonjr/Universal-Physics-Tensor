@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 3.0.0
-  totalFiles: 427
+  totalFiles: 428
   totalModules: 13
-  totalExports: 3072
+  totalExports: 3077
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8236,6 +8236,12 @@ modules:
         - file: ../../numerical/binding-value.js
           imports:
             - readNamedBinding
+        - file: ../../composition/aliases.js
+          imports:
+            - aliasesForTarget
+            - nearQuantityNames
+            - rewriteInputKey
+            - shareSynonyms
       exports:
         - command
       constants:
@@ -8920,6 +8926,9 @@ modules:
             - M_PROTON_SI
             - M_SUN_SI
             - N_A_SI
+        - file: ../dimensional/dimension-spec.js
+          imports:
+            - CONSTANT_SPELLINGS
         - file: ../dimensional/formula-names.js
           imports:
             - MU0_SI
@@ -10252,6 +10261,25 @@ modules:
         - annotateAdjudications
       constants:
         - ADJUDICATIONS
+    src/composition/aliases.ts:
+      description: One record of what a typed name means on a graph edge.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ./edge.js
+          imports:
+            - BridgeEdge
+          typeOnly: true
+      exports:
+        - aliasesForTarget
+        - rewriteInputKey
+        - nearQuantityNames
+        - shareSynonyms
+      functions:
+        - aliasesForTarget
+        - rewriteInputKey
+        - nearQuantityNames
+        - shareSynonyms
     src/composition/audit-coverage.ts:
       description: Empirical-spine coverage audit (Direction 4).
       externalDependencies: []
@@ -14985,6 +15013,9 @@ modules:
         - file: ../numerical/formula-dimension.js
           imports:
             - formulaSymbolDimension
+        - file: ../dimensional/dimension-spec.js
+          imports:
+            - CONSTANT_SPELLINGS
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
@@ -14996,6 +15027,13 @@ modules:
             - naturalNote
             - naturalPowers
             - UnitMode
+        - file: ./aliases.js
+          imports:
+            - aliasesForTarget
+            - rewriteInputKey
+        - file: ./catalog-graph.js
+          imports:
+            - CATALOG_GRAPH
         - file: ./graph-viz.js
           imports:
             - VizModel
@@ -15902,12 +15940,15 @@ modules:
             - multiply
             - power
       exports:
+        - CONSTANT_SPELLINGS
         - parseDimensionSpec
         - DimensionSpecError
       classes:
         - DimensionSpecError
       functions:
         - parseDimensionSpec
+      constants:
+        - CONSTANT_SPELLINGS
     src/dimensional/einstein-equation.ts:
       description: Einstein field equation AST node (v0.6.0 Phase 2, Task 2.3).
       externalDependencies:
@@ -20745,6 +20786,7 @@ dependencyGraph:
     - name: Composition
       files:
         - src/composition/adjudication.ts
+        - src/composition/aliases.ts
         - src/composition/audit-coverage.ts
         - src/composition/axes.ts
         - src/composition/axis-audit.ts
@@ -20939,18 +20981,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 427
+  totalTypeScriptFiles: 428
   totalModules: 13
-  totalLinesOfCode: 92075
-  totalExports: 3072
+  totalLinesOfCode: 92269
+  totalExports: 3077
   totalClasses: 60
   totalInterfaces: 487
-  totalFunctions: 792
+  totalFunctions: 796
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 768
+  totalConstants: 769
   totalReExports: 1453
-  totalTypeOnlyImports: 574
+  totalTypeOnlyImports: 575
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 52 files
 - **root**: 1 file
-- **composition**: 87 files
+- **composition**: 88 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -3675,6 +3675,7 @@ The codebase is organized into the following modules:
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../search-index.js` | `searchNameWords` | Import |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
+| `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -4004,6 +4005,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI` | Import |
+| `../dimensional/dimension-spec.js` | `CONSTANT_SPELLINGS` | Import |
 | `../dimensional/formula-names.js` | `MU0_SI` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
@@ -4390,6 +4392,18 @@ The codebase is organized into the following modules:
 - Interfaces: `CandidateAdjudication`
 - Functions: `candidateId`, `candidateIdIfSlug`, `adjudicationFor`, `annotateAdjudications`
 - Constants: `ADJUDICATIONS`
+
+---
+
+### `src/composition/aliases.ts` - One record of what a typed name means on a graph edge.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./edge.js` | `BridgeEdge` | Import (type-only) |
+
+**Exports:**
+- Functions: `aliasesForTarget`, `rewriteInputKey`, `nearQuantityNames`, `shareSynonyms`
 
 ---
 
@@ -6099,9 +6113,12 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
+| `../dimensional/dimension-spec.js` | `CONSTANT_SPELLINGS` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `../dimensional/natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
+| `./aliases.js` | `aliasesForTarget, rewriteInputKey` | Import |
+| `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./graph-viz.js` | `VizModel, VizJunction` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
@@ -6527,6 +6544,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `DimensionSpecError`
 - Functions: `parseDimensionSpec`
+- Constants: `CONSTANT_SPELLINGS`
 
 ---
 
@@ -8072,11 +8090,11 @@ graph TD
 
     subgraph Composition
         N31[adjudication]
-        N32[audit-coverage]
-        N33[axes]
-        N34[axis-audit]
-        N35[bridge-analysis]
-        N36[...82 more]
+        N32[aliases]
+        N33[audit-coverage]
+        N34[axes]
+        N35[axis-audit]
+        N36[...83 more]
     end
 
     subgraph Core
@@ -8163,17 +8181,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 427 |
+| Total TypeScript Files | 428 |
 | Total Modules | 13 |
-| Total Lines of Code | 92075 |
-| Total Exports | 3072 |
+| Total Lines of Code | 92269 |
+| Total Exports | 3077 |
 | Total Re-exports | 1453 |
 | Total Classes | 60 |
 | Total Interfaces | 487 |
-| Total Functions | 792 |
+| Total Functions | 796 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 574 |
+| Type-only Imports | 575 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

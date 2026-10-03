@@ -10,6 +10,7 @@
  */
 
 import { E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI } from '../core/constants.js';
+import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
 import { MU0_SI } from '../dimensional/formula-names.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { UnitMode } from '../dimensional/natural-units.js';
@@ -37,15 +38,21 @@ export function codataScope(mode: UnitMode): Record<string, number> {
   for (const [name, c] of Object.entries(CONSTANTS)) scope[name] = c.value;
   scope.e_charge = E_SI;
   scope.m_e = M_E_SI;
-  scope.eps0 = CONSTANTS.epsilon_0.value;
-  scope.mu0 = MU0_SI;
-  scope.mu_0 = MU0_SI;
   scope.m_p = M_PROTON_SI;
   scope.m_proton = M_PROTON_SI;
   scope.N_A = N_A_SI;
   scope.F = FARADAY_SI;
-  scope.kB = CONSTANTS.k_B.value;
   scope.M_sun = M_SUN_SI;
+  for (const { names } of CONSTANT_SPELLINGS) {
+    const canonical = names[0]!;
+    const fromRegistry = (CONSTANTS as Record<string, { value: number } | undefined>)[canonical]?.value;
+    const value = fromRegistry ?? (canonical === 'mu_0' ? MU0_SI : undefined);
+    if (value === undefined) continue;
+    for (const alias of names) {
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(alias)) continue;
+      if (scope[alias] === undefined) scope[alias] = value;
+    }
+  }
   if (mode !== 'si') {
     scope.c = 1;
     scope.hbar = 1;

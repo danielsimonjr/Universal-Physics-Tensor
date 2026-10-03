@@ -66,6 +66,12 @@ export interface BridgeEdge {
   readonly label: string;
   /** Input quantities (n-ary). */
   readonly sources: readonly Quantity[];
+  /**
+   * Evaluator keys and the symbols a reader copies, keyed by source name.
+   * `evaluate` stays keyed by the source name. Explain, search, map, and
+   * derive read this record instead of a private spelling list.
+   */
+  readonly aliases?: Readonly<Record<string, readonly string[]>>;
   /** Output quantity. */
   readonly target: Quantity;
   readonly confidence: EdgeConfidence;

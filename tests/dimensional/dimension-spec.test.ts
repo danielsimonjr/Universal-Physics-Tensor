@@ -37,6 +37,10 @@ describe('parseDimensionSpec — constants (exact-case)', () => {
     expect(parseDimensionSpec('G')).toEqual({
       L: 3, M: -1, T: -2, I: 0, Theta: 0, N: 0, J: 0,
     });
+    expect(parseDimensionSpec('mu_0')).toEqual(parseDimensionSpec('permeability'));
+    expect(parseDimensionSpec('mu0')).toEqual(parseDimensionSpec('permeability'));
+    expect(parseDimensionSpec('eps0')).toEqual(parseDimensionSpec('epsilon_0'));
+    expect(parseDimensionSpec('epsilon0')).toEqual(parseDimensionSpec('epsilon_0'));
   });
 
   it('does NOT confuse G (Newton constant) with g (acceleration)', () => {

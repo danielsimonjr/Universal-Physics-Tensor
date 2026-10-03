@@ -83,17 +83,28 @@ const NAMED_DIMS: Readonly<Record<string, Dimension>> = {
   permeability: d(1, 1, -2, 0, -2),
 };
 
+/**
+ * One constant's exact-case spellings. The first name is the formula name
+ * the equation path rewrites the others to. `upt eval` binds the same
+ * names. A dimension term reads this record; it does not keep a second list.
+ *
+ * @internal
+ */
+export const CONSTANT_SPELLINGS: readonly { readonly names: readonly string[]; readonly dim: Dimension }[] = [
+  { names: ['hbar', 'ℏ'], dim: ACTION },
+  { names: ['c'], dim: VELOCITY },
+  { names: ['G'], dim: d(3, -1, -2) },
+  { names: ['k_B', 'kB'], dim: ENTROPY },
+  { names: ['e'], dim: CHARGE },
+  { names: ['mu_0', 'mu0'], dim: d(1, 1, -2, 0, -2) },
+  { names: ['epsilon_0', 'epsilon0', 'eps0'], dim: d(-3, -1, 4, 0, 2) },
+];
+
 /** Fundamental constants by their SI dimension — matched EXACT-case, so
  *  `G` (Newton's constant) is never confused with `g` (acceleration). */
-const CONST_DIMS: Readonly<Record<string, Dimension>> = {
-  hbar: ACTION,
-  'ℏ': ACTION,
-  c: VELOCITY,
-  G: d(3, -1, -2),
-  k_B: ENTROPY, // Boltzmann (J/K)
-  kB: ENTROPY,
-  e: CHARGE, // elementary charge (A·s)
-};
+const CONST_DIMS: Readonly<Record<string, Dimension>> = Object.fromEntries(
+  CONSTANT_SPELLINGS.flatMap(({ names, dim }) => names.map((name) => [name, dim])),
+);
 
 const BASES: Record<string, keyof Dimension> = {
   L: 'L',
