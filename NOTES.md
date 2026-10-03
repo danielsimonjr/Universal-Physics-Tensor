@@ -403,11 +403,11 @@ Those are different claims and merging them produces a false green.
   2026-09-23 at `67caf85`. Not gated; see `docs/architecture/OVERVIEW.md`.
 - **Toolchain:** TypeScript `^7.0.2` (verified 2026-09-22). The full suite ran 4,659 tests at
   `cbf2e40` (2026-09-22); it took about 58 s warm when measured on 2026-09-21.
-- **Bridge catalog** (measured 2026-09-21 from the built registries): 55 bridges, IDs 11–65, which
-  project to 41 composition-graph edges. 13 are AST-less (BE-51, 52, 55…65), and 17 have no graph
-  edge (BE-28, 29, 32, 35, 40, 44, 55…65). `upt map` finds 23 connected components: one anchored
-  cluster of 16, two small clusters, and 20 isolated bridges. Status distribution (re-tallied
-  2026-07-05): 19 established, 33 speculative, 3 highly speculative, 0 invalid.
+- **Bridge catalog** (re-counted from `BRIDGE_EQUATIONS` and `CATALOG_GRAPH`): 58 bridges, IDs 11–68.
+  Status: 22 established, 33 speculative, 3 highly speculative, 0 invalid. The graph has 49 edges.
+  16 are AST-less (BE-51, 52, 55…68). 17 have no graph edge (BE-28, 29, 32, 35, 40, 44, 55…65).
+  BE-66, BE-67, and BE-68 have edges and no `formalRef`. The 2026-09-21 sentence that said 55 bridges
+  and 41 edges is the count from that day.
 - **Axes:** `RegimeAttributes` carries six axes (scale, force, information, symmetry, topology,
   statistics). `GATE_AXES` is scale and force; topology, symmetry and statistics are typed and
   wired but ungated, for thin coverage.

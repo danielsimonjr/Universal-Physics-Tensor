@@ -102,10 +102,12 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // "admits a unique dimensional closure" ⟺ 0 free dimensionless
     // parameters (dimensionalFreedom === 0).
     const closable = ALL_EDGES.filter((e) => dimensionalFreedom(e) === 0);
-    // 17 of 46 admit SOME dimensional closure; 29 admit none.
-    // be-59 (f = 2eV/h) is the added closure.
-    expect(closable.length).toBe(17);
-    expect(ALL_EDGES.length - closable.length).toBe(29);
+    // 18 of 49 admit SOME dimensional closure; 31 admit none.
+    // be-59 (f = 2eV/h) is a closure. be-67 (v_A = B/√(μ0 ρ)) is another,
+    // and attemptDerivation calls it a decoy: the SI coefficient is not
+    // fixed by the monomial match against the evaluator's samples.
+    expect(closable.length).toBe(18);
+    expect(ALL_EDGES.length - closable.length).toBe(31);
   });
 
   it('dimensional analysis is a weak filter: a small minority are genuine monomial derivations', () => {
@@ -145,13 +147,14 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     expect(free('be-39')).toBe(5); // asymptotic safety
   });
 
-  it('the spectrum histogram is pinned (17 at 0; max 6)', () => {
+  it('the spectrum histogram is pinned (18 at 0; max 6)', () => {
     const hist: Record<number, number> = {};
     for (const e of ALL_EDGES) hist[dimensionalFreedom(e)] = (hist[dimensionalFreedom(e)] ?? 0) + 1;
-    expect(hist[0]).toBe(17); // the dimensionally-pinned set (derived + decoy)
+    expect(hist[0]).toBe(18); // the dimensionally-pinned set (derived + decoy)
     expect(Math.max(...Object.keys(hist).map(Number))).toBe(6);
-    // 13 bridges are exactly one dimensionless ratio away from a monomial
-    expect(hist[1]).toBe(13);
+    // 14 bridges are exactly one dimensionless ratio away from a monomial.
+    // be-68 is one: g_00 is dimensionless, so T √(−g_00) is temperature times one ratio.
+    expect(hist[1]).toBe(14);
   });
 
   it('complexity is ORTHOGONAL to status: an established bridge sits at complexity 1', () => {

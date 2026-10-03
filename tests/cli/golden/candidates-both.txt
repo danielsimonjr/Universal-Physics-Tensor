@@ -1,10 +1,10 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 123 established-confidence edge(s) of the 155 in this graph
+  anchored core: the clusters holding at least one of the 126 established-confidence edge(s) of the 158 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  943 total  →  928 touch the anchored core  →  246 also same-kind
+  funnel:  967 total  →  952 touch the anchored core  →  258 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     active-noise-energy ≟ inflation-hubble-energy            [energy]
@@ -41,6 +41,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     coulomb-force ≟ lorentz-force                            [force]
     critical-density ≟ density                               [density]
     critical-density ≟ lambda-mass-density                   [density]
+    critical-density ≟ plasma-mass-density                   [density]
     cross-sectional-area ≟ thomson-cross-section             [cross]
     dark-reaction-rate-coefficient ≟ volume-flow-rate        [rate]
     dark-species-density ≟ number-density                    [density]
@@ -61,6 +62,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     effective-mass ≟ tunneling-mass                          [mass]
     effective-temperature ≟ cold-reservoir-temperature       [temperature]
     effective-temperature ≟ hot-reservoir-temperature        [temperature]
+    effective-temperature ≟ proper-temperature               [temperature]
     energy ≟ internal-energy-change                          [energy]
     energy ≟ photon-energy                                   [energy]
     energy ≟ rydberg-energy                                  [energy]
@@ -86,6 +88,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     gravitational-potential-energy ≟ internal-energy-change  [energy]
     gravitational-potential-energy ≟ photon-energy           [energy]
     gravitational-potential-energy ≟ rydberg-energy          [energy]
+    gravitational-wave-speed ≟ alfven-speed                  [speed]
     gravitational-wave-speed ≟ most-probable-speed           [speed]
     gravitational-wave-speed ≟ sound-speed                   [speed]
     gravitational-wave-speed ≟ speed                         [speed]
@@ -118,6 +121,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     kinetic-energy ≟ photon-energy                           [energy]
     kinetic-energy ≟ rydberg-energy                          [energy]
     lambda-mass-density ≟ density                            [density]
+    lambda-mass-density ≟ plasma-mass-density                [mass]
     landauer-erasure-energy ≟ inflation-hubble-energy        [energy]
     landauer-erasure-energy ≟ internal-energy-change         [energy]
     landauer-erasure-energy ≟ photon-energy                  [energy]
@@ -137,6 +141,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     mass ≟ tunneling-mass                                    [mass]
     mass-density ≟ density                                   [density]
     mass-density ≟ lambda-mass-density                       [mass]
+    mass-density ≟ plasma-mass-density                       [mass]
     microscopic-relaxation-time ≟ elapsed-time               [time]
     microscopic-relaxation-time ≟ planck-time                [time]
     minimal-surface-area ≟ area                              [area]
@@ -186,7 +191,11 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     planck-time ≟ rc-time-constant                           [time]
     planck-time ≟ relaxation-time                            [time]
     pressure ≟ laplace-pressure                              [pressure]
+    proper-temperature ≟ cold-reservoir-temperature          [temperature]
+    proper-temperature ≟ hot-reservoir-temperature           [temperature]
+    proper-temperature ≟ temperature-change                  [temperature]
     proton-density ≟ number-density                          [density]
+    radiation-pressure ≟ laplace-pressure                    [pressure]
     radius ≟ bohr-radius                                     [radius]
     radius ≟ classical-electron-radius                       [radius]
     radius ≟ droplet-radius                                  [radius]
@@ -196,8 +205,10 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     reference-mass ≟ secondary-mass                          [mass]
     reference-temperature ≟ cold-reservoir-temperature       [temperature]
     reference-temperature ≟ hot-reservoir-temperature        [temperature]
+    reference-temperature ≟ proper-temperature               [temperature]
     reheating-temperature ≟ cold-reservoir-temperature       [temperature]
     reheating-temperature ≟ hot-reservoir-temperature        [temperature]
+    reheating-temperature ≟ proper-temperature               [temperature]
     relaxation-rate ≟ hubble-rate                            [rate]
     relaxation-rate ≟ mutation-rate                          [rate]
     relaxation-time ≟ elapsed-time                           [time]
@@ -232,6 +243,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     swampland-tower-mass ≟ secondary-mass                    [mass]
     temperature ≟ cold-reservoir-temperature                 [temperature]
     temperature ≟ hot-reservoir-temperature                  [temperature]
+    temperature ≟ proper-temperature                         [temperature]
     temperature-change ≟ cold-reservoir-temperature          [temperature]
     temperature-change ≟ hot-reservoir-temperature           [temperature]
     thermal-energy ≟ internal-energy-change                  [energy]

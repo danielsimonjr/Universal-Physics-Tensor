@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (113)"]
+  subgraph cl_0["anchored cluster (115)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -161,6 +161,22 @@ flowchart LR
     q_mean_molecular_weight_per_electron(["mean-molecular-weight-per-electron"]):::qty
     q_mean_molecular_weight_per_electron --> j_be_63
     j_be_63 --> q_mass
+    j_be_66["BE-66"]:::law
+    q_poynting_flux(["poynting-flux"]):::qty
+    q_poynting_flux --> j_be_66
+    q_reflectance(["reflectance"]):::qty
+    q_reflectance --> j_be_66
+    q_incidence_angle(["incidence-angle"]):::qty
+    q_incidence_angle --> j_be_66
+    q_radiation_pressure(["radiation-pressure"]):::qty
+    j_be_66 --> q_radiation_pressure
+    j_be_67["BE-67"]:::law
+    q_magnetic_flux_density(["magnetic-flux-density"]):::qty
+    q_magnetic_flux_density --> j_be_67
+    q_plasma_mass_density(["plasma-mass-density"]):::qty
+    q_plasma_mass_density --> j_be_67
+    q_alfven_speed(["alfven-speed"]):::qty
+    j_be_67 --> q_alfven_speed
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
     q_length --> j_CE_pendulum_period
@@ -374,10 +390,8 @@ flowchart LR
     j_CE_rc_time_constant --> q_rc_time_constant
     j_CE_poynting_flux["Poynting vector (magnitude)"]:::law
     q_electric_field --> j_CE_poynting_flux
-    q_magnetic_flux_density(["magnetic-flux-density"]):::qty
     q_magnetic_flux_density --> j_CE_poynting_flux
     q_mu_0 --> j_CE_poynting_flux
-    q_poynting_flux(["poynting-flux"]):::qty
     j_CE_poynting_flux --> q_poynting_flux
     j_CE_solenoid_field["Solenoid magnetic field"]:::law
     q_mu_0 --> j_CE_solenoid_field
@@ -791,7 +805,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (32)"]
+  subgraph cl_iso["isolated (33)"]
     direction LR
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
@@ -930,6 +944,13 @@ flowchart LR
     q_flavor_number --> j_be_53
     q_yang_mills_beta(["yang-mills-beta"]):::qty
     j_be_53 --> q_yang_mills_beta
+    j_be_68["BE-68"]:::law
+    q_proper_temperature(["proper-temperature"]):::qty
+    q_proper_temperature --> j_be_68
+    q_metric_g00(["metric-g00"]):::qty
+    q_metric_g00 --> j_be_68
+    q_tolman_invariant(["tolman-invariant"]):::qty
+    j_be_68 --> q_tolman_invariant
     j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
     q_A(["A"]):::qty
     q_A --> j_CE_bekenstein_hawking
