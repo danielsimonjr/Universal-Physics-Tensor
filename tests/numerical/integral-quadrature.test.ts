@@ -4,7 +4,9 @@
  *
  * @module tests/numerical/integral-quadrature
  */
+import { readFileSync } from 'node:fs';
 import { describe, it, expect } from 'vitest';
+import { gaussQuad } from '@danielsimonjr/mathts-functions';
 import { integrateGaussLegendre } from '../../src/numerical/quadrature.js';
 import { evaluateNumerical } from '../../src/numerical/index.js';
 import type { NumericalInputs } from '../../src/numerical/types.js';
@@ -26,6 +28,19 @@ describe('integrateGaussLegendre (16-point)', () => {
 
   it('signed: ∫₁⁰ x dx = −1/2 (b < a)', () => {
     expect(integrateGaussLegendre((x) => x, 1, 0)).toBeCloseTo(-0.5, 12);
+  });
+
+  it('∫₀¹ x^31 dx stays the 16-point value 1/32', () => {
+    // A 16-point rule is exact through degree 31. gaussQuad's single-interval
+    // order stops at 5, and n=16 is sixteen panels of that order.
+    expect(integrateGaussLegendre((x) => x ** 31, 0, 1)).toBeCloseTo(1 / 32, 12);
+    expect(gaussQuad((x) => x ** 31, 0, 1, 5)).not.toBeCloseTo(1 / 32, 4);
+    expect(gaussQuad((x) => x ** 31, 0, 1, 16)).not.toBeCloseTo(1 / 32, 12);
+  });
+
+  it('the 16-point nodes come from MathTS rootsLegendre', () => {
+    const src = readFileSync(new URL('../../src/numerical/quadrature.ts', import.meta.url), 'utf8');
+    expect(src).toMatch(/rootsLegendre\(16\)/);
   });
 });
 

@@ -21,6 +21,7 @@
  *
  * @module dimensional/units
  */
+import { unit } from '@danielsimonjr/mathts-functions';
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
 import { C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../core/constants.js';
@@ -195,7 +196,50 @@ export function convertValue(
     throw new UnitError(`'${given}' is ${format(from.dim)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`);
   }
   const offset = from.affine === 'celsius' && reading === 'absolute' ? CELSIUS_OFFSET_K : 0;
-  return { value: (v * from.scale + offset) / to.scale, given };
+  const local = (v * from.scale + offset) / to.scale;
+  // MathTS `unit` + `toSI` is the conversion when it reads the same quantity.
+  // A temperature difference must not take the absolute offset `toSI` adds.
+  // `bit` is ln 2 nat here; MathTS reads `bit` as 1. Symbols MathTS does not
+  // have (a solar mass, a Julian year, the gauss) stay on the table above.
+  const via = mathTsRatio(v, given, target);
+  if (via !== undefined && sameQuantity(via, local)) return { value: via, given };
+  return { value: local, given };
+}
+
+/** Spellings MathTS's unit parser accepts for the same UPT symbol. */
+function mathTsSpelling(text: string): string {
+  return text
+    .replaceAll('µ', 'u')
+    .replaceAll('μ', 'u')
+    .replaceAll('Ω', 'ohm')
+    .replaceAll('Å', 'angstrom')
+    .replaceAll('°C', 'degC');
+}
+
+/** SI magnitude of `value` in `unitText`, from MathTS `unit` and `toSI`. */
+function mathTsSi(value: number, unitText: string): number {
+  // `unit` is a typed-function; its declared return is `unknown`.
+  const created = unit(value, mathTsSpelling(unitText)) as { toSI(): { value: unknown } };
+  const si = created.toSI();
+  const n = Number(si.value);
+  if (!Number.isFinite(n)) throw new Error('non-finite SI magnitude');
+  return n;
+}
+
+function mathTsRatio(value: number, given: string, target: string): number | undefined {
+  try {
+    const from = mathTsSi(value, given);
+    const to = mathTsSi(1, target);
+    if (to === 0) return undefined;
+    return from / to;
+  } catch {
+    return undefined;
+  }
+}
+
+function sameQuantity(got: number, expected: number): boolean {
+  const scale = Math.max(Math.abs(got), Math.abs(expected));
+  return Math.abs(got - expected) <= 1e-9 * scale;
 }
 
 /** The dimension of a declared unit expression. @internal */

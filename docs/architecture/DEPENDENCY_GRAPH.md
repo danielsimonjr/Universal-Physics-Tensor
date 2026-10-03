@@ -6703,6 +6703,11 @@ The codebase is organized into the following modules:
 
 ### `src/dimensional/units.ts` - Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `unit` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -7670,6 +7675,11 @@ The codebase is organized into the following modules:
 
 ### `src/numerical/quadrature.ts` - Gauss–Legendre quadrature — shared between the numerical AST lowering and the
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `rootsLegendre` |
+
 **Exports:**
 - Functions: `integrateGaussLegendre`
 - Constants: `GAUSS_LEGENDRE_16`
@@ -8004,7 +8014,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 91275 |
+| Total Lines of Code | 91310 |
 | Total Exports | 3009 |
 | Total Re-exports | 1414 |
 | Total Classes | 60 |
