@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] `upt search` splits a quoted phrase and a hyphen into words.
+  Done: `upt search "radiation pressure"` matches be-64, the same words as two arguments. `upt search magnetic-field` matches that quantity name. `upt search be-16` still matches be-16. Before the split, all three exited 1. Package version stays 2.0.0.
+
 - [x] Make canonical Landauer `k_B T ln 2`, and make `upt explain --source=both` show both names. The audit prefactor is that factor, not ×1.
   Done: `CE-landauer` evaluates to `k_B T ln 2`, the same number as `be-16`. `--source=both` prints `erasure-energy` and `landauer-erasure-energy` and says whether the values agree. `upt audit --source=canonical` reports `CE-landauer ×6.931e-1`. The coefficient applies only to a fully-quantitative restatement of a catalog bridge. Applying it to `CE-rydberg-energy` moved a discovery golden from 62.4 to 64.9 orders; that entry is unchanged. Before the coefficient, `canonical / (k_B T ln 2)` was 1.442695 and the audit prefactor was 1. Package version stays 2.0.0.
 

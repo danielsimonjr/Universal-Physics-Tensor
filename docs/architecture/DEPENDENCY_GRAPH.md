@@ -3874,7 +3874,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../search-index.js` | `buildSearchIndex, fold, matchEveryWord, SEARCH_SECTIONS, STOP_WORDS` | Import |
+| `../search-index.js` | `buildSearchIndex, fold, matchEveryWord, queryWords, SEARCH_SECTIONS, STOP_WORDS` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -4149,7 +4149,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `SearchEntry`, `SearchMatch`
-- Functions: `buildSearchIndex`, `matchEveryWord`, `searchNameWords`
+- Functions: `queryWords`, `buildSearchIndex`, `matchEveryWord`, `searchNameWords`
 - Constants: `SEARCH_SECTIONS`, `STOP_WORDS`, `fold`
 
 ---
@@ -8047,12 +8047,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 91141 |
-| Total Exports | 3010 |
+| Total Lines of Code | 91156 |
+| Total Exports | 3011 |
 | Total Re-exports | 1417 |
 | Total Classes | 60 |
 | Total Interfaces | 481 |
-| Total Functions | 783 |
+| Total Functions | 784 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 571 |

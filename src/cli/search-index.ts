@@ -57,7 +57,18 @@ export interface SearchMatch {
 export const STOP_WORDS: ReadonlySet<string> = new Set(['of', 'the', 'and', 'for', 'in', 'an']);
 
 export const fold = (s: string): string => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
-const words = (s: string): string[] => fold(s).split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 0);
+const WORD_BREAK = /[^\p{L}\p{N}]+/u;
+const words = (s: string): string[] => fold(s).split(WORD_BREAK).filter((w) => w.length > 0);
+
+/**
+ * Query words from the positionals. A space inside one argument and a hyphen
+ * are the same break the index uses, so `"radiation pressure"` and
+ * `magnetic-field` are two words each.
+ * @internal
+ */
+export function queryWords(positionals: readonly string[]): string[] {
+  return positionals.flatMap(words);
+}
 
 /** The fields of `e` that `q` matches, or `null` when it matches none. */
 function matchWord(q: string, e: SearchEntry): string[] | null {

@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "totalFiles": 421,
     "totalModules": 13,
-    "totalExports": 3010
+    "totalExports": 3011
   },
   "entryPoints": [
     {
@@ -12966,6 +12966,7 @@
               "buildSearchIndex",
               "fold",
               "matchEveryWord",
+              "queryWords",
               "SEARCH_SECTIONS",
               "STOP_WORDS"
             ]
@@ -13803,6 +13804,7 @@
           "SEARCH_SECTIONS",
           "STOP_WORDS",
           "fold",
+          "queryWords",
           "buildSearchIndex",
           "matchEveryWord",
           "searchNameWords"
@@ -13812,6 +13814,7 @@
           "SearchMatch"
         ],
         "functions": [
+          "queryWords",
           "buildSearchIndex",
           "matchEveryWord",
           "searchNameWords"
@@ -29514,11 +29517,11 @@
   "statistics": {
     "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 91141,
-    "totalExports": 3010,
+    "totalLinesOfCode": 91156,
+    "totalExports": 3011,
     "totalClasses": 60,
     "totalInterfaces": 481,
-    "totalFunctions": 783,
+    "totalFunctions": 784,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 751,
