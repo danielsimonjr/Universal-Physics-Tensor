@@ -23,6 +23,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] Point `upt chain` at a document a published tarball can open, and point the Landauer edge grade at the atlas formalRef.
   Done: `upt chain` exits 2 and names the GitHub URL of `docs/planning/Bridge-Discovery-Pipeline-Design.md`. It does not run the orchestrator. `be16Edge.confidence` stays `speculative`. `composeEdges(be42Edge, be16Edge).confidence` stays `highly-speculative`. `upt atlas be-16` and `upt symbolic` say those are different facts. Before the URL, `upt chain` named the repository path and `upt symbolic` did not print the grade. Package version stays 2.0.0.
 
+- [x] `upt search` splits a quoted phrase and a hyphen into words.
+  Done: `upt search "radiation pressure"` matches be-64, the same words as two arguments. `upt search magnetic-field` matches that quantity name. `upt search be-16` still matches be-16. Before the split, all three exited 1. Package version stays 2.0.0.
+
 - [x] Encode be-66, be-67, and be-68 in the catalog from the applied-physicist design note.
   Done: radiation pressure, Alfvén speed, and Tolman–Ehrenfest are `BRIDGE_EQUATIONS` 66–68, category D, D, and I. Evaluators, composition edges, and Part-II §V-C are in. No `formalRef`. The Lean sketches stay in the design note. Open notes stay notes. Package version stays 2.0.0.
 

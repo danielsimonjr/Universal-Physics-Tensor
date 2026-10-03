@@ -19,7 +19,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
-import { buildSearchIndex, fold, matchEveryWord, SEARCH_SECTIONS, STOP_WORDS } from '../search-index.js';
+import { buildSearchIndex, fold, matchEveryWord, queryWords, SEARCH_SECTIONS, STOP_WORDS } from '../search-index.js';
 
 const FLAGS: FlagSpec[] = [JSON_FLAG];
 
@@ -27,7 +27,9 @@ const HELP = `upt search <word> ...
         Find a catalog bridge, canonical equation, atlas model, atlas bridge,
         quantity or applied case by the words in its name, id, symbol, alias
         or bridge description, and print the command that inspects each match. Every
-        word must match. An equal dimension is never a match (a radius is not
+        word must match. A space inside one argument, and a hyphen, are word
+        breaks, so a quoted phrase and a hyphenated name are several words.
+        An equal dimension is never a match (a radius is not
         a wavelength). A word of one or two letters matches a symbol or alias
         exactly. No match exits 1 and names the registries searched.
         e.g.  upt search Schrödinger
@@ -37,7 +39,9 @@ const PER_SECTION = 10;
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
-  const query = [...args.positionals];
+  const raw = [...args.positionals];
+  if (raw.length === 0) throw new UsageError('upt search: give at least one word, e.g. `upt search thermal noise`');
+  const query = queryWords(raw);
   if (query.length === 0) throw new UsageError('upt search: give at least one word, e.g. `upt search thermal noise`');
   const index = buildSearchIndex(api);
   const significant = query.length > 1 ? query.filter((q) => !STOP_WORDS.has(fold(q))) : query;
