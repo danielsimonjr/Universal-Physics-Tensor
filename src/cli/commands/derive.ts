@@ -10,7 +10,8 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
-import { UsageError, EXIT_CHECK_FAILED } from '../errors.js';
+import { UsageError } from '../errors.js';
+import { classifyDetermination } from '../determination.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
@@ -37,7 +38,8 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         In --formula, a bare e is the elementary charge and E is energy.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
-        recover the dimensionless prefactor. --debug prints the formula parser
+        recover the dimensionless prefactor. A target that is not a unique
+        monomial of the variables exits 3. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
                        --formula "2*pi*sqrt(length/gravity)"`;
@@ -182,7 +184,13 @@ async function run(ctx: CommandCtx): Promise<number> {
       textOut('  formula given, but with no unique monomial there is no single prefactor to recover.');
       printComparisons();
       if (isJson) emitEnvelope();
-      return failed ? EXIT_CHECK_FAILED : 0;
+      return classifyDetermination({
+        asked: true,
+        agrees: canonicalComparisons.some((c) => c.kind === 'agrees'),
+        checkFailed: failed,
+        notUnique: true,
+        unresolved: [],
+      }).exit;
     }
 
     const ratios: number[] = [];
@@ -211,7 +219,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
 
   if (isJson) emitEnvelope();
-  return failed ? EXIT_CHECK_FAILED : 0;
+  return classifyDetermination({
+    asked: true,
+    agrees: (canonicalComparisons ?? []).some((c) => c.kind === 'agrees'),
+    checkFailed: failed,
+    notUnique: !det.determined,
+    unresolved: [],
+  }).exit;
 }
 
 export const command: Command = {

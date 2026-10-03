@@ -20,6 +20,7 @@ import { resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine,
 import { emitJson } from '../output.js';
 import { publishedUrl } from '../published-url.js';
 import { UsageError, CliError, EXIT_CHECK_FAILED } from '../errors.js';
+import { classifyDetermination, type Determination } from '../determination.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import * as atlasMap from './_atlas-map.js';
 import type {
@@ -100,8 +101,10 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         reports nearest equations by shared-quantity overlap (not a full edge
         dump). Multi-word names may use underscores or catalog hyphens
         (planck_length / planck-length). Unknown names get a "did you mean?",
-        and a registered constant of the inferred dimension (sigma → sigma_sb);
-        a one-letter catalog name (a, r, …) is reported and not bound; --bind-short
+        and a registered constant of the inferred dimension (sigma → sigma_sb).
+        A catalog target whose dimension depends on an unresolved name exits 3
+        and does not quote that placeholder, unless a canonical comparison agreed.
+        A one-letter catalog name (a, r, …) is reported and not bound; --bind-short
         binds it. The alias T → temperature still binds.
         An all-constant right-hand side (the Planck length) is compared at the
         SI constant values when its target is a catalog quantity.
@@ -274,6 +277,35 @@ async function analyzeEquation(
   return { user, comparisons };
 }
 
+function unresolvedNames(user: EquationAnalysis): string[] {
+  const placeholderNames = [
+    ...(user.placeholders ?? []),
+    ...(user.shortBindings ?? []).filter((b) => b.bound === false).map((b) => b.name),
+  ];
+  return [...new Set([...(user.hints ?? []).map((h) => h.name), ...placeholderNames])];
+}
+
+/** The exit `upt derive` uses for the same question. */
+function equationDetermination(
+  user: EquationAnalysis,
+  comparisons: readonly CanonicalComparison[],
+): Determination {
+  const unresolved = unresolvedNames(user);
+  const asked = user.targetDimension != null;
+  return classifyDetermination({
+    asked,
+    agrees: comparisons.some((c) => c.kind === 'agrees'),
+    checkFailed:
+      (user.consistent === false && unresolved.length === 0) || canonicalCheckFailed(comparisons),
+    notUnique: false,
+    unresolved,
+  });
+}
+
+function tainted(user: EquationAnalysis): boolean {
+  return unresolvedNames(user).length > 0;
+}
+
 // Print the dimensional verdict, where the equation landed, and any hints.
 // `out` is ctx.out (text mode → stdout) or ctx.err (visual → stderr).
 function printEquationReport(
@@ -284,22 +316,18 @@ function printEquationReport(
   comparisons: readonly CanonicalComparison[] = [],
 ): void {
   out('');
-  const placeholderNames = [
-    ...(user.placeholders ?? []),
-    ...(user.shortBindings ?? []).filter((b) => b.bound === false).map((b) => b.name),
-  ];
-  const unresolved = [...new Set([...(user.hints ?? []).map((h) => h.name), ...placeholderNames])];
+  const unresolved = unresolvedNames(user);
+  const verdict = equationDetermination(user, comparisons);
   if (user.consistent === true) {
     out(`  ✓ dimensionally consistent: ${api.format(user.rhsDimension!)}`);
-  } else if (user.consistent === false && unresolved.length > 0) {
-    // An unknown name is checked as a dimensionless placeholder, so this mismatch is not a real
-    // check and does not fail the command (exit 0). Say so on the line itself (persona finding N3).
+  } else if (verdict.report === 'not-established') {
     const names = unresolved.map((n) => `'${n}'`).join(', ');
     out(
-      `  · UNKNOWN: RHS is ${api.format(user.rhsDimension!)} but the target is ${api.format(user.targetDimension!)}; ` +
-        `the mismatch involves the unresolved placeholder${unresolved.length > 1 ? 's' : ''} ${names} ` +
-        `(taken as dimensionless), so it is not a failed check`,
+      `  · NOT ESTABLISHED: ${names} ${unresolved.length > 1 ? 'have' : 'has'} no catalog dimension, ` +
+        'so the right-hand side dimension was not established and is not reported.',
     );
+  } else if (verdict.report === 'established' && unresolved.length > 0) {
+    // A canonical agreement ran. The placeholder dimension is not that result.
   } else if (user.consistent === false) {
     out(
       `  ⚠ dimensional MISMATCH: RHS is ${api.format(user.rhsDimension!)} but the target is ${api.format(
@@ -309,8 +337,7 @@ function printEquationReport(
   } else if (user.rhsDimension && (user.placeholders ?? []).length > 0) {
     const names = user.placeholders.map((n) => `'${n}'`).join(', ');
     out(
-      `  · UNKNOWN: RHS is ${api.format(user.rhsDimension)} only because ${names} ` +
-        `${user.placeholders.length === 1 ? 'was' : 'were'} taken as dimensionless. ` +
+      `  · UNKNOWN: ${names} ${user.placeholders.length === 1 ? 'was' : 'were'} taken as dimensionless. ` +
         'That is not the dimension of the formula, and the target is not a bound catalog name, so nothing was checked',
     );
   } else if (user.rhsDimension) {
@@ -608,19 +635,9 @@ async function run(ctx: CommandCtx): Promise<number> {
     }
   }
 
-  // A user equation whose dimension mismatches, or that differs from its
-  // canonical equation, is a failed check: exit 3 (persona finding F2). A
-  // mismatch counts only when every name resolved: an unknown name is checked
-  // as a dimensionless placeholder, so its "mismatch" is not a real check.
-  const exitCode =
-    user !== null &&
-    ((user.consistent === false &&
-      (user.hints ?? []).length === 0 &&
-      (user.placeholders ?? []).length === 0 &&
-      !(user.shortBindings ?? []).some((b) => b.bound === false)) ||
-      canonicalCheckFailed(comparisons))
-      ? EXIT_CHECK_FAILED
-      : 0;
+  // The same classification `upt derive` uses. A canonical agreement stays 0.
+  // A catalog target that was not established exits 3. An unbound target stays 0.
+  const exitCode = user === null ? 0 : equationDetermination(user, comparisons).exit;
 
   const overlay = (extra: VizJunction[]): VizJunction[] => [
     // Ranked from the UNFILTERED graph: the proposal set is a property of the
@@ -647,8 +664,8 @@ async function run(ctx: CommandCtx): Promise<number> {
       landing = api.equationLanding(model, 'user-equation');
       userEquation = {
         equation: user.junction.label,
-        consistent: user.consistent,
-        rhsDimension: user.rhsDimension,
+        consistent: tainted(user) ? null : user.consistent,
+        rhsDimension: tainted(user) ? null : user.rhsDimension,
         targetDimension: user.targetDimension,
         hints: user.hints,
         shortBindings: user.shortBindings,

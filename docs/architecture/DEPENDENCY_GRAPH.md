@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 94 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 52 files
+- **cli**: 53 files
 - **root**: 1 file
 - **composition**: 88 files
 - **core**: 11 files
@@ -3584,7 +3584,8 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../errors.js` | `UsageError, EXIT_CHECK_FAILED` | Import |
+| `../errors.js` | `UsageError` | Import |
+| `../determination.js` | `classifyDetermination` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
@@ -3768,6 +3769,7 @@ The codebase is organized into the following modules:
 | `../output.js` | `emitJson` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
 | `../errors.js` | `UsageError, CliError, EXIT_CHECK_FAILED` | Import |
+| `../determination.js` | `classifyDetermination, Determination` | Import |
 | `./_discovery-opts.js` | `parseDiscoveryOpts` | Import |
 | `./_atlas-map.js` | `* as atlasMap` | Import |
 | `../../cli-api.js` | `BridgeEdge, CanonicalComparison, EquationAnalysis, EvidenceTag, RelationType, VizJunction, VizModel` | Import (type-only) |
@@ -3981,6 +3983,19 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `canonicalCheckFailed`, `conventionLines`
 - Constants: `JEANS_FORMULA_NOTE`
+
+---
+
+### `src/cli/determination.ts` - One exit for a result the user asked to have determined.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./errors.js` | `EXIT_CHECK_FAILED` | Import |
+
+**Exports:**
+- Interfaces: `Determination`
+- Functions: `classifyDetermination`
 
 ---
 
@@ -8081,7 +8096,7 @@ graph TD
         N26[_atlas-map]
         N27[_atlas-route]
         N28[_discovery-opts]
-        N29[...47 more]
+        N29[...48 more]
     end
 
     subgraph Root
@@ -8181,14 +8196,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 428 |
+| Total TypeScript Files | 429 |
 | Total Modules | 13 |
-| Total Lines of Code | 92269 |
-| Total Exports | 3077 |
+| Total Lines of Code | 92355 |
+| Total Exports | 3078 |
 | Total Re-exports | 1453 |
 | Total Classes | 60 |
-| Total Interfaces | 487 |
-| Total Functions | 796 |
+| Total Interfaces | 488 |
+| Total Functions | 797 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 575 |
