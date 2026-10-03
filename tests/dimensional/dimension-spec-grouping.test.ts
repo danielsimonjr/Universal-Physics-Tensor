@@ -20,6 +20,7 @@ describe('dimension specs with grouping and lab names', () => {
     expect(parseDimensionSpec('viscosity')).toEqual(parseDimensionSpec('M.L^-1.T^-1'));
     expect(parseDimensionSpec('resistance')).toEqual(parseDimensionSpec('M.L^2.T^-3.I^-2'));
     expect(parseDimensionSpec('magnetic_field')).toEqual(parseDimensionSpec('M.T^-2.I^-1'));
+    expect(parseDimensionSpec('permeability')).toEqual(parseDimensionSpec('L.M.T^-2.I^-2'));
   });
 
   it('still reads a fractional base exponent', () => {

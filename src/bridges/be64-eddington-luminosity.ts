@@ -15,10 +15,7 @@
  *
  * @module bridges/be64-eddington-luminosity
  */
-import { G_SI, C_SI } from '../core/constants.js';
-
-/** Proton mass, kg. */
-const M_PROTON_SI = 1.67262192369e-27;
+import { G_SI, C_SI, M_PROTON_SI } from '../core/constants.js';
 /** Thomson cross-section σ_T, m². @public */
 export const THOMSON_CROSS_SECTION_SI = 6.6524587321e-29;
 
