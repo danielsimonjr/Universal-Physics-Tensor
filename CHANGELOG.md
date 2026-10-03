@@ -12,7 +12,7 @@ from v0.1.0 onward.
 
 ### Documented
 
-- **The open dogfood defects are grouped by mechanism.** `docs/planning/root-cause-analysis-2026-10-03.md` names six causes: a published citation is a repository path; search, explain, and suggest each resolve a name on their own; a check that did not establish a result exits 0; a regime is a slot in a closed family array; usage prose is copied beside the command; a connector is called motivated because two names share a hyphen token. Each cause records the symptoms, the file and line, the fix at that mechanism, what the fix replaces, and the risk. This commit does not change the commands.
+- **The open dogfood defects are grouped by mechanism.** `docs/planning/root-cause-analysis-2026-10-03.md` names eight causes: a published citation is a repository path or a section number; a name is a private list in each command; a check that did not establish a result exits 0, and a failed lookup is that case; a regime is a slot in a closed family array; usage prose is copied beside the command; a connector is called motivated because two names share a hyphen token; a displayed number is formatted in the command that prints it; derive and map do not share one known-relation report. The re-run `docs/dogfood/2026-10-03-applied-physicist-bridges-r2.md` is folded in. Each cause records the symptoms, the file and line, the fix at that mechanism, what the fix replaces, and the risk. This commit does not change the commands.
 
 ### Fixed
 
