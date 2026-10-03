@@ -63,11 +63,16 @@ const words = (s: string): string[] => fold(s).split(WORD_BREAK).filter((w) => w
 /**
  * Query words from the positionals. A space inside one argument and a hyphen
  * are the same break the index uses, so `"radiation pressure"` and
- * `magnetic-field` are two words each.
+ * `magnetic-field` are two words each. Case stays, so a one-letter symbol
+ * such as `T` still matches that exact alias.
  * @internal
  */
 export function queryWords(positionals: readonly string[]): string[] {
-  return positionals.flatMap(words);
+  const out: string[] = [];
+  for (const p of positionals) {
+    for (const w of p.split(WORD_BREAK)) if (w.length > 0) out.push(w);
+  }
+  return out;
 }
 
 /** The fields of `e` that `q` matches, or `null` when it matches none. */
