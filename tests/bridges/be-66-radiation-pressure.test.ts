@@ -12,6 +12,8 @@ import { be66Edge } from '../../src/composition/edges/applied-physicist.js';
 import { regimesDiffer } from '../../src/composition/quantity.js';
 
 const I = 1e6;
+const OPENSTAX_PAGE =
+  'https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure';
 
 describe('BE-66 radiation pressure', () => {
   it('R = 0, θ = 0 is I/c and R = 1, θ = 0 is 2I/c', () => {
@@ -55,5 +57,14 @@ describe('BE-66 radiation pressure', () => {
     expect(
       regimesDiffer(be66Edge.sources[0].attributes, { scale: 'classical', force: 'gravitational' }),
     ).toBe(true);
+  });
+
+  it('cites the OpenStax page, not a section number two mirrors disagree on', () => {
+    const entry = BRIDGE_EQUATIONS.find((e) => e.id === 66)!;
+    const cited = [be66Edge.citation, ...entry.references].join('\n');
+    expect(be66Edge.citation).toContain(OPENSTAX_PAGE);
+    expect(be66Edge.citation).toContain("(1+R) cos²θ factor is this catalog's assembly");
+    expect(entry.references.some((r) => r.includes(OPENSTAX_PAGE))).toBe(true);
+    expect(cited).not.toMatch(/§16\.[45]/);
   });
 });
