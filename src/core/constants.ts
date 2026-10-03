@@ -96,6 +96,25 @@ export const GM_SUN_SOURCE = 'IAU 2015 Resolution B3, nominal solar mass paramet
 export const M_E_SI = 9.1093837015e-31;
 
 /**
+ * Proton mass (kg). CODATA 2018. Shared by the Eddington evaluator and
+ * `upt eval` (`m_p`, `m_proton`). Not the Planck mass `M_P_SI`.
+ * @internal
+ */
+export const M_PROTON_SI = 1.67262192369e-27;
+
+/**
+ * Avogadro constant (mol⁻¹). Exact in the 2019 SI.
+ * @internal
+ */
+export const N_A_SI = 6.02214076e23;
+
+/**
+ * Faraday constant (C·mol⁻¹), `N_A * e`.
+ * @internal
+ */
+export const FARADAY_SI = N_A_SI * E_SI;
+
+/**
  * Wien displacement-law constant b = λ_max·T (m·K). CODATA 2018.
  *
  * @public

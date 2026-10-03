@@ -84,8 +84,9 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   ['Msun', [M_SUN_SI, D({ M: 1 }), false]],
   // GM☉/G, so G × Msun_iau is the IAU solar mass parameter.
   ['Msun_iau', [GM_SUN_SI / G_SI, D({ M: 1 }), false]],
-  // Tesla. Exact, so it is not a prefix: `Ts` is a terasecond, `T` is a tesla.
-  ['T', [1, D({ M: 1, T: -2, I: -1 }), false]],
+  // Tesla. An exact `T` still wins over the tera prefix, so `Ts` is a
+  // terasecond. The prefix flag is what lets `nT` and `uT` parse.
+  ['T', [1, D({ M: 1, T: -2, I: -1 }), true]],
   // Gauss = 10⁻⁴ T. Exact, so `GPa` stays gigapascal (prefix G + Pa) and bare `G` is gauss.
   ['G', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
   ['bar', [1e5, D({ L: -1, M: 1, T: -2 }), true]],
