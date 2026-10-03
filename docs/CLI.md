@@ -276,7 +276,7 @@ upt regime <family> [--at group=value ...] [--json]
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 
 ```
-upt regime oscillators --at theta0=0.2
+upt regime <name>
 ```
 
 ### `search`

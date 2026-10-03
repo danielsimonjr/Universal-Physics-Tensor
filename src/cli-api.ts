@@ -15,6 +15,9 @@
  * @module cli-api
  */
 
+// Domain names register when this barrel loads. The command reads the list.
+import './relations/domain-regimes.js';
+
 // Public-API symbols (already on the root surface).
 export {
   explainQuantity,
@@ -199,6 +202,7 @@ export {
 export type { ObservableCarriage, ObservableTranslation, PointCheck } from './atlas/translation.js';
 export type { AtlasFamily } from './atlas/oscillators/index.js';
 export { collidingRegimeGroups, regimeHolds, regimeOverlap, uncoveredRegions } from './atlas/regime.js';
+export { domainRegimeRegistrations } from './relations/regime-registration.js';
 export type { RegimeCheck, RegimeOverlap, RegionSample } from './atlas/regime.js';
 export { familyChangeBlocksHorizon, findPath, findAtlasPath, enumerateAtlasRoutes, boundPath, horizonOnRoute, routeEntryModels } from './atlas/path-bound.js';
 export { composeRelation } from './atlas/composition-table.js';
