@@ -25,6 +25,7 @@ import { divide, equals, format, multiply, power } from '../dimensional/algebra.
 import { DIMENSIONLESS, MASS, type Dimension } from '../dimensional/types.js';
 import {
   convertValue,
+  mathTsAgreedQuantity,
   parseUnit,
   unitConventionNotes,
   UnitError,
@@ -137,8 +138,9 @@ function spliceUnits(src: string): Splice {
     if (parsed.affine !== undefined) {
       throw new UnitError('degC is affine and cannot be part of an expression; give the temperature alone, or use K');
     }
+    const agreed = mathTsAgreedQuantity(1, unit, parsed);
     const name = `__u${slots.size}`;
-    slots.set(name, { value: parsed.scale, dim: parsed.dim });
+    slots.set(name, { value: agreed?.value ?? parsed.scale, dim: agreed?.dim ?? parsed.dim });
     for (const note of unitConventionNotes(unit)) {
       if (!notes.includes(note)) notes.push(note);
     }
@@ -262,10 +264,11 @@ function plainUnit(raw: string, reading: TemperatureReading): BindingValue | nul
   }
   const v = finite(raw, Number(m[1]));
   const offset = unit.affine === 'celsius' && reading === 'absolute' ? CELSIUS_OFFSET_K : 0;
+  const agreed = offset === 0 ? mathTsAgreedQuantity(v, m[2], unit) : undefined;
   return {
-    value: v * unit.scale + offset,
+    value: agreed?.value ?? v * unit.scale + offset,
     dimensioned: true,
-    dimension: unit.dim,
+    dimension: agreed?.dim ?? unit.dim,
     notes: unitConventionNotes(m[2]),
   };
 }

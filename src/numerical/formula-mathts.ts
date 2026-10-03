@@ -9,27 +9,21 @@
  * throws a {@link FormulaError} rather than leaking MathTS types through the
  * seam.
  *
- * Bare `e` is the elementary charge. MathTS evaluates that symbol as Euler's
- * number; the scope injected here replaces it with `E_SI`. Euler's number is
- * `exp(x)`. The name `euler` is refused. `E` stays unbound.
+ * Bare `e` is the elementary charge. MathTS `{ physics: true, charge: 'scalar' }`
+ * binds that symbol to the SI magnitude `1.602176634e-19`, so `1-e^2` is
+ * ordinary arithmetic. `{ physics: true }` without `charge: 'scalar'` is a
+ * Unit, and subtract does not accept it. Euler's number is `exp(x)`. The name
+ * `euler` is refused. `E` stays unbound.
  *
  * @module numerical/formula-mathts
  */
 
-import { parse as parseMathTs } from '@danielsimonjr/mathts-functions';
+import { compileExpr, parse as parseMathTs } from '@danielsimonjr/mathts-functions';
 import type { CompiledFormula, FormulaParser } from './formula-contract.js';
 import { BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage } from './formula-contract.js';
-import { E_SI } from '../core/constants.js';
 
-/**
- * Values injected ahead of the caller scope. MathTS's own `e` is Euler's
- * number; the physics reading is the elementary charge, and a scope entry
- * replaces it. The name `euler` is refused: Euler's number is `exp(x)`.
- */
-const PHYSICS_VALUES: Readonly<Record<string, number>> = { e: E_SI };
-
-/** Names that are constants here even when MathTS does not know them. */
-const PHYSICS_CONSTANT_NAMES: ReadonlySet<string> = new Set(['e']);
+/** Bare `e` is the SI magnitude, not the coulomb Unit. */
+const PHYSICS_SCALAR = { physics: true, charge: 'scalar' } as const;
 
 /** Minimal structural shape of a MathTS AST node (the bits we use). */
 interface MathNode {
@@ -75,8 +69,9 @@ function createMathtsFormulaParser(
   // treating it as a built-in dropped it from the free-variable list, so
   // `sqrt(gamma*pressure/density)` died as "undeclared symbol 'gamma'".
   // Only a name that evaluates to a number is a MathTS constant (`pi`, `tau`).
-  // Bare `e` is one of those, and evaluation replaces MathTS's Euler value
-  // with the elementary charge. The name `euler` is refused below.
+  // Bare `e` is one of those under MathTS's default (Euler's number). Evaluation
+  // below reads it as the elementary charge through `{ physics: true, charge: 'scalar' }`.
+  // An explicit scope `e` still wins. The name `euler` is refused below.
   // A call such as `gamma(5)` is still a callee, decided separately.
   const valueConstantCache = new Map<string, boolean>();
   const isValueConstant = (name: string): boolean => {
@@ -137,10 +132,13 @@ function createMathtsFormulaParser(
             .filter((n) => n.isSymbolNode === true)
             .map((n) => n.name)
             .filter((n): n is string => typeof n === 'string')
-            .filter((n) => !callees.has(n) && !isValueConstant(n) && !PHYSICS_CONSTANT_NAMES.has(n)),
+            .filter((n) => !callees.has(n) && !isValueConstant(n)),
         ),
       ].sort();
 
+      // `compileExpr` applies `{ physics: true, charge: 'scalar' }` on each
+      // evaluation, so bare `e` is the SI magnitude and a scope entry for `e` wins.
+      const compiled = compileExpr(expr, PHYSICS_SCALAR);
       return {
         source: expr,
         variables,
@@ -148,7 +146,7 @@ function createMathtsFormulaParser(
           if (unknownCallee !== undefined) throw new FormulaError(unknownFunctionMessage(unknownCallee));
           let result: unknown;
           try {
-            result = node.evaluate({ ...shims, ...PHYSICS_VALUES, ...scope } as Record<string, number>);
+            result = compiled.evaluate({ ...shims, ...scope });
           } catch (err) {
             throw new FormulaError(
               err instanceof Error ? err.message : String(err),

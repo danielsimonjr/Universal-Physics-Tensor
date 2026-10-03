@@ -88,7 +88,9 @@ describe('buckinghamPi — π-count theorem', () => {
     expect(mass).toBeCloseTo(-0.5, 12);
     expect(grav).toBeCloseTo(-0.5, 12);
     const src = readFileSync(new URL('../../src/dimensional/buckingham.ts', import.meta.url), 'utf8');
-    expect(src).not.toMatch(/from '@danielsimonjr\/mathts-functions'/);
+    // The integer basis is MathTS `rationalNullspace`. The numeric `nullspace` above is not that call.
+    expect(src).toMatch(/rationalNullspace/);
+    expect(src).not.toMatch(/\bnullspace\(/);
   });
 
   it('dimensionally-independent set has zero π-groups', () => {

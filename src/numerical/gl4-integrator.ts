@@ -23,46 +23,10 @@
  *
  * @module numerical/gl4-integrator
  */
+import { gaussLegendre4 } from '@danielsimonjr/mathts-functions';
 import { GL4ConvergenceError, NumericalBackendError } from './errors.js';
 
-const SQRT3_OVER_6 = Math.sqrt(3) / 6;
-
-/**
- * Gauss-Legendre 4th-order quadrature nodes c₁, c₂ — the two roots of the
- * shifted Legendre polynomial P₂(x) on [0,1].
- *
- *   c₁ = ½ − √3/6,   c₂ = ½ + √3/6.
- *
- * @internal — exported for unit tests pinning the Butcher tableau invariants.
- * Public callers should use {@link integrateGeodesicGL4}, not the raw constants.
- */
-export const GL4_C: readonly [number, number] = [0.5 - SQRT3_OVER_6, 0.5 + SQRT3_OVER_6];
-
-/**
- * GL4 Butcher matrix a_{ij} — the 2×2 collocation table for the implicit
- * stages:
- *
- *   [ 1/4              1/4 − √3/6 ]
- *   [ 1/4 + √3/6       1/4        ]
- *
- * (Hairer/Lubich/Wanner §II.1, Table 1.1.)
- *
- * @internal — exported for unit tests pinning the Butcher tableau invariants.
- * Public callers should use {@link integrateGeodesicGL4}, not the raw constants.
- */
-export const GL4_A: readonly [readonly [number, number], readonly [number, number]] = [
-  [0.25, 0.25 - SQRT3_OVER_6],
-  [0.25 + SQRT3_OVER_6, 0.25],
-];
-
-/**
- * GL4 stage weights — the 2-point Gauss-Legendre quadrature weights on
- * [0,1]:  b₁ = b₂ = ½.
- *
- * @internal — exported for unit tests pinning the Butcher tableau invariants.
- * Public callers should use {@link integrateGeodesicGL4}, not the raw constants.
- */
-export const GL4_B: readonly [number, number] = [0.5, 0.5];
+export { GL4_A, GL4_B, GL4_C } from '@danielsimonjr/mathts-functions';
 
 /**
  * Canonical (x, p) phase-space state for the geodesic flow on T*M.
@@ -163,28 +127,102 @@ interface StageSolveResult {
 }
 
 /**
- * Picard fixed-point solver for the GL4 implicit stage system.
+ * Geodesic Hamiltonian derivative, packed as `y = [x..., p...]`.
  *
- * Per Design §3 Task 1a, the implicit system is:
- *   X_i = x_n + h · Σ_j a_{ij} · g^{·ν}(X_j) P_{j,ν}
- *   P_{i,μ} = p_n − h · Σ_j a_{ij} · ½ (∂_μ g^νρ)(X_j) P_{j,ν} P_{j,ρ}
+ *   dx^μ = g^{μν} p_ν
+ *   dp_μ = −½ (∂_μ g^{νρ}) p_ν p_ρ
  *
- * Data flow (F15 / M1): stage values (X_j, P_j) at iterate k feed forward
- * to update (X_i, P_i) at iterate k+1. This is Picard iteration (NOT
- * Newton) — no Jacobian assembly or LU decomposition. Convergence is
- * linear with contraction rate ≈ h·|∂f/∂x|. For Mercury (h ≈ 150 s),
- * expect 30–40 iterations at tol=1e-12. GL4's symplecticity is guaranteed
- * by the Butcher tableau, not by the inner solver's convergence speed
- * (Sanz-Serna 1988; Hairer/Lubich/Wanner §II.1).
+ * `dg[μ*dim² + ν*dim + ρ] = ∂_μ g^{νρ}`. A coefficient that is exactly 0 is
+ * skipped, so `0 * NaN` does not poison a component the term does not enter.
+ */
+function geodesicDeriv(
+  y: readonly number[],
+  gInverseFn: (x: readonly number[]) => Float64Array,
+  dgInverseFn: (x: readonly number[]) => Float64Array,
+  xBuf: Float64Array,
+): number[] {
+  const dim = xBuf.length;
+  for (let i = 0; i < dim; i++) xBuf[i] = y[i]!;
+  const coords = xBuf as unknown as readonly number[];
+  const gInv = gInverseFn(coords);
+  const dgInv = dgInverseFn(coords);
+  const out = new Array<number>(dim * 2);
+  for (let mu = 0; mu < dim; mu++) {
+    let dx = 0;
+    let dp = 0;
+    const gRow = mu * dim;
+    const dgBase = gRow * dim;
+    for (let nu = 0; nu < dim; nu++) {
+      const pNu = y[dim + nu]!;
+      const g = gInv[gRow + nu]!;
+      // Skip an exact zero so `0 * NaN` does not poison a component this term does not enter.
+      if (g !== 0) dx += g * pNu;
+      let pDot = 0;
+      const offset = dgBase + nu * dim;
+      for (let rho = 0; rho < dim; rho++) {
+        const dg = dgInv[offset + rho]!;
+        if (dg !== 0) pDot += dg * y[dim + rho]!;
+      }
+      if (pDot !== 0) dp += pDot * pNu;
+    }
+    out[mu] = dx;
+    out[dim + mu] = dp === 0 ? 0 : -0.5 * dp;
+  }
+  return out;
+}
+
+interface Gl4Advance {
+  readonly x: readonly number[];
+  readonly p: readonly number[];
+  readonly iterations: number;
+}
+
+/** One GL4 step of the geodesic Hamiltonian, via MathTS `gaussLegendre4`. */
+function advanceGl4(
+  state: GL4State,
+  h: number,
+  gInverseFn: (x: readonly number[]) => Float64Array,
+  dgInverseFn: (x: readonly number[]) => Float64Array,
+  opts: { picardTol: number; picardMaxIter: number },
+): Gl4Advance {
+  const dim = state.x.length;
+  const y0 = new Array<number>(dim * 2);
+  for (let i = 0; i < dim; i++) {
+    y0[i] = state.x[i]!;
+    y0[dim + i] = state.p[i]!;
+  }
+  const xBuf = new Float64Array(dim);
+  let solved: ReturnType<typeof gaussLegendre4>;
+  try {
+    solved = gaussLegendre4(
+      (_t, y) => geodesicDeriv(y, gInverseFn, dgInverseFn, xBuf),
+      y0,
+      [0, h],
+      { steps: 1, picardTol: opts.picardTol, picardMaxIter: opts.picardMaxIter },
+    );
+  } catch (err) {
+    if (err instanceof Error && /Picard iteration did not converge/i.test(err.message)) {
+      throw new GL4ConvergenceError(err.message);
+    }
+    throw err;
+  }
+  const y1 = solved.y[solved.y.length - 1];
+  const iterations = solved.iterations[0];
+  if (y1 === undefined || iterations === undefined) {
+    throw new GL4ConvergenceError(
+      `Picard iteration did not converge in ${opts.picardMaxIter} iterations (maxDelta above picardTol=${opts.picardTol})`,
+    );
+  }
+  return { x: y1.slice(0, dim), p: y1.slice(dim), iterations };
+}
+
+/**
+ * One GL4 step, reported in the stage-result shape the stage tests read.
  *
- * The `dgInverseFn` index order is `dg[λ][μ][ν] = ∂_λ g^{μν}` (Task 0 I2
- * pin, also recorded on `GL4Options.dgInverseFn`). When we evaluate
- * `dp_μ = −½ (∂_μ g^{νρ}) P_ν P_ρ` we therefore read
- * `dgInvAtXj[mu*dim²+nu*dim+rho]` — `mu` is the differentiation axis (λ in the
- * pinned order) and `(nu, rho)` are the upper metric indices.
- *
- * Throws `GL4ConvergenceError` with message matching
- * `/Picard iteration did not converge/` if `picardMaxIter` is exhausted.
+ * The step itself is MathTS `gaussLegendre4`. In flat space `p` is constant,
+ * so both stage momenta equal that advanced `p`. Throws `GL4ConvergenceError`
+ * with a message matching `/Picard iteration did not converge/` when the
+ * Picard cap is exhausted.
  *
  * @internal
  */
@@ -195,358 +233,17 @@ export function solveGL4Stage(
   dgInverseFn: (x: readonly number[]) => Float64Array,
   opts: { picardTol: number; picardMaxIter: number },
 ): StageSolveResult {
-  const dim = state.x.length;
-  // Pre-allocate ping-pong buffers (O-2): both X / P stage pairs as
-  // reusable Float64Arrays. The original implementation allocated 4
-  // arrays per Picard iteration (up to picardMaxIter = 50 iters per
-  // RK4 step); now allocation is once per call and references are
-  // swapped per iteration.
-  const bufXA: Float64Array[] = [new Float64Array(dim), new Float64Array(dim)];
-  const bufXB: Float64Array[] = [new Float64Array(dim), new Float64Array(dim)];
-  const bufPA: Float64Array[] = [new Float64Array(dim), new Float64Array(dim)];
-  const bufPB: Float64Array[] = [new Float64Array(dim), new Float64Array(dim)];
-
-  // Initial guess: stage values = state values (k=0 of fixed-point iteration).
-  bufXA[0].set(state.x); bufXA[1].set(state.x);
-  bufPA[0].set(state.p); bufPA[1].set(state.p);
-  let X: Float64Array[] = bufXA;
-  let P: Float64Array[] = bufPA;
-  let Xnew: Float64Array[] = bufXB;
-  let Pnew: Float64Array[] = bufPB;
-
-  // Pre-allocate arrays to hoist dxStage and dpStage out of the `i` loop
-  const dxStageArr: Float64Array[] = [new Float64Array(dim), new Float64Array(dim)];
-  const dpStageArr: Float64Array[] = [new Float64Array(dim), new Float64Array(dim)];
-  const dxStageArr0 = dxStageArr[0];
-  const dxStageArr1 = dxStageArr[1];
-  const dpStageArr0 = dpStageArr[0];
-  const dpStageArr1 = dpStageArr[1];
-
-  const hA00 = h * GL4_A[0][0];
-  const hA01 = h * GL4_A[0][1];
-  const hA10 = h * GL4_A[1][0];
-  const hA11 = h * GL4_A[1][1];
-  const halfhA00 = 0.5 * hA00;
-  const halfhA01 = 0.5 * hA01;
-  const halfhA10 = 0.5 * hA10;
-  const halfhA11 = 0.5 * hA11;
-
-  for (let k = 0; k < opts.picardMaxIter; k++) {
-    // 1. Evaluate metric closures only twice per Picard iteration
-    const gInvAtX0 = gInverseFn(X[0] as unknown as readonly number[]);
-    const dgInvAtX0 = dgInverseFn(X[0] as unknown as readonly number[]);
-    const gInvAtX1 = gInverseFn(X[1] as unknown as readonly number[]);
-    const dgInvAtX1 = dgInverseFn(X[1] as unknown as readonly number[]);
-
-    // 2. Precompute dxStage and dpStage for all j and mu (only 8 combinations)
-    const p0_st = P[0];
-    const p1_st = P[1];
-
-    if (dim === 4) {
-      // Bolt: Pre-cache momentum elements into local scalars to eliminate array lookups.
-      // This combined with manual loop unrolling completely eliminates loop overhead
-      // for 4D spacetime integrations without losing `g !== 0` bailout sparseness benefits.
-      const p00 = p0_st[0], p01 = p0_st[1], p02 = p0_st[2], p03 = p0_st[3];
-      const p10 = p1_st[0], p11 = p1_st[1], p12 = p1_st[2], p13 = p1_st[3];
-
-      for (let mu = 0; mu < 4; mu++) {
-        let dx0 = 0, dp0 = 0, dx1 = 0, dp1 = 0;
-        const mu4 = mu * 4;
-
-        let g0, g1, dg0, dg1;
-        let pDotTerm0, pDotTerm1;
-
-        let offset = mu * 16;
-
-        // nu = 0
-        g0 = gInvAtX0[mu4]; if (g0 !== 0) dx0 += g0 * p00;
-        g1 = gInvAtX1[mu4]; if (g1 !== 0) dx1 += g1 * p10;
-        dg0 = dgInvAtX0[offset]; dg1 = dgInvAtX1[offset];
-        // Guarded like every other rho term, and like master. Assigning
-        // unguarded here would compute 0 * p when dg is exactly 0, which is
-        // NaN for a non-finite momentum -- manufacturing a divergence signal
-        // out of a term that contributes nothing.
-        pDotTerm0 = 0; if (dg0 !== 0) { pDotTerm0 = dg0 * p00; }
-        pDotTerm1 = 0; if (dg1 !== 0) { pDotTerm1 = dg1 * p10; }
-        dg0 = dgInvAtX0[offset+1]; dg1 = dgInvAtX1[offset+1];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p01; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p11; }
-        dg0 = dgInvAtX0[offset+2]; dg1 = dgInvAtX1[offset+2];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p02; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p12; }
-        dg0 = dgInvAtX0[offset+3]; dg1 = dgInvAtX1[offset+3];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p03; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p13; }
-        if (pDotTerm0 !== 0) { dp0 += pDotTerm0 * p00; }
-        if (pDotTerm1 !== 0) { dp1 += pDotTerm1 * p10; }
-
-        // nu = 1
-        offset += 4;
-        g0 = gInvAtX0[mu4+1]; if (g0 !== 0) dx0 += g0 * p01;
-        g1 = gInvAtX1[mu4+1]; if (g1 !== 0) dx1 += g1 * p11;
-        dg0 = dgInvAtX0[offset]; dg1 = dgInvAtX1[offset];
-        // Guarded like every other rho term, and like master. Assigning
-        // unguarded here would compute 0 * p when dg is exactly 0, which is
-        // NaN for a non-finite momentum -- manufacturing a divergence signal
-        // out of a term that contributes nothing.
-        pDotTerm0 = 0; if (dg0 !== 0) { pDotTerm0 = dg0 * p00; }
-        pDotTerm1 = 0; if (dg1 !== 0) { pDotTerm1 = dg1 * p10; }
-        dg0 = dgInvAtX0[offset+1]; dg1 = dgInvAtX1[offset+1];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p01; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p11; }
-        dg0 = dgInvAtX0[offset+2]; dg1 = dgInvAtX1[offset+2];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p02; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p12; }
-        dg0 = dgInvAtX0[offset+3]; dg1 = dgInvAtX1[offset+3];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p03; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p13; }
-        if (pDotTerm0 !== 0) { dp0 += pDotTerm0 * p01; }
-        if (pDotTerm1 !== 0) { dp1 += pDotTerm1 * p11; }
-
-        // nu = 2
-        offset += 4;
-        g0 = gInvAtX0[mu4+2]; if (g0 !== 0) dx0 += g0 * p02;
-        g1 = gInvAtX1[mu4+2]; if (g1 !== 0) dx1 += g1 * p12;
-        dg0 = dgInvAtX0[offset]; dg1 = dgInvAtX1[offset];
-        // Guarded like every other rho term, and like master. Assigning
-        // unguarded here would compute 0 * p when dg is exactly 0, which is
-        // NaN for a non-finite momentum -- manufacturing a divergence signal
-        // out of a term that contributes nothing.
-        pDotTerm0 = 0; if (dg0 !== 0) { pDotTerm0 = dg0 * p00; }
-        pDotTerm1 = 0; if (dg1 !== 0) { pDotTerm1 = dg1 * p10; }
-        dg0 = dgInvAtX0[offset+1]; dg1 = dgInvAtX1[offset+1];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p01; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p11; }
-        dg0 = dgInvAtX0[offset+2]; dg1 = dgInvAtX1[offset+2];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p02; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p12; }
-        dg0 = dgInvAtX0[offset+3]; dg1 = dgInvAtX1[offset+3];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p03; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p13; }
-        if (pDotTerm0 !== 0) { dp0 += pDotTerm0 * p02; }
-        if (pDotTerm1 !== 0) { dp1 += pDotTerm1 * p12; }
-
-        // nu = 3
-        offset += 4;
-        g0 = gInvAtX0[mu4+3]; if (g0 !== 0) dx0 += g0 * p03;
-        g1 = gInvAtX1[mu4+3]; if (g1 !== 0) dx1 += g1 * p13;
-        dg0 = dgInvAtX0[offset]; dg1 = dgInvAtX1[offset];
-        // Guarded like every other rho term, and like master. Assigning
-        // unguarded here would compute 0 * p when dg is exactly 0, which is
-        // NaN for a non-finite momentum -- manufacturing a divergence signal
-        // out of a term that contributes nothing.
-        pDotTerm0 = 0; if (dg0 !== 0) { pDotTerm0 = dg0 * p00; }
-        pDotTerm1 = 0; if (dg1 !== 0) { pDotTerm1 = dg1 * p10; }
-        dg0 = dgInvAtX0[offset+1]; dg1 = dgInvAtX1[offset+1];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p01; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p11; }
-        dg0 = dgInvAtX0[offset+2]; dg1 = dgInvAtX1[offset+2];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p02; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p12; }
-        dg0 = dgInvAtX0[offset+3]; dg1 = dgInvAtX1[offset+3];
-        if (dg0 !== 0) { pDotTerm0 += dg0 * p03; }
-        if (dg1 !== 0) { pDotTerm1 += dg1 * p13; }
-        if (pDotTerm0 !== 0) { dp0 += pDotTerm0 * p03; }
-        if (pDotTerm1 !== 0) { dp1 += pDotTerm1 * p13; }
-
-        dxStageArr0[mu] = dx0;
-        dpStageArr0[mu] = dp0;
-        dxStageArr1[mu] = dx1;
-        dpStageArr1[mu] = dp1;
-      }
-    } else {
-      for (let mu = 0; mu < dim; mu++) {
-        let dx0 = 0, dp0 = 0;
-        let dx1 = 0, dp1 = 0;
-        const mu_dim = mu * dim;
-        const mu_dim_dim = mu_dim * dim;
-
-        for (let nu = 0; nu < dim; nu++) {
-          const idx_g = mu_dim + nu;
-
-          // Stage 0
-          const g0 = gInvAtX0[idx_g];
-          if (g0 !== 0) {
-            dx0 += g0 * p0_st[nu];
-          }
-
-          // Stage 1
-          const g1 = gInvAtX1[idx_g];
-          if (g1 !== 0) {
-            dx1 += g1 * p1_st[nu];
-          }
-
-          let pDotTerm0 = 0;
-          let pDotTerm1 = 0;
-          const offset = mu_dim_dim + nu * dim;
-
-          for (let rho = 0; rho < dim; rho++) {
-            const dgIdx = offset + rho;
-
-            const dg0 = dgInvAtX0[dgIdx];
-            if (dg0 !== 0) {
-              pDotTerm0 += dg0 * p0_st[rho];
-            }
-
-            const dg1 = dgInvAtX1[dgIdx];
-            if (dg1 !== 0) {
-              pDotTerm1 += dg1 * p1_st[rho];
-            }
-          }
-
-          if (pDotTerm0 !== 0) {
-            dp0 += pDotTerm0 * p0_st[nu];
-          }
-          if (pDotTerm1 !== 0) {
-            dp1 += pDotTerm1 * p1_st[nu];
-          }
-        }
-
-        dxStageArr0[mu] = dx0;
-        dpStageArr0[mu] = dp0;
-        dxStageArr1[mu] = dx1;
-        dpStageArr1[mu] = dp1;
-      }
-    }
-
-    // 3. Accumulate for i and mu
-    if (dim === 4) {
-      // Bolt: Manual loop unrolling for dim=4 to avoid loop iteration overhead and Math method calls
-      const x0_st = state.x[0], x1_st = state.x[1], x2_st = state.x[2], x3_st = state.x[3];
-      const p0_st = state.p[0], p1_st = state.p[1], p2_st = state.p[2], p3_st = state.p[3];
-
-      const dx0_0 = dxStageArr0[0], dx0_1 = dxStageArr0[1], dx0_2 = dxStageArr0[2], dx0_3 = dxStageArr0[3];
-      const dx1_0 = dxStageArr1[0], dx1_1 = dxStageArr1[1], dx1_2 = dxStageArr1[2], dx1_3 = dxStageArr1[3];
-
-      const dp0_0 = dpStageArr0[0], dp0_1 = dpStageArr0[1], dp0_2 = dpStageArr0[2], dp0_3 = dpStageArr0[3];
-      const dp1_0 = dpStageArr1[0], dp1_1 = dpStageArr1[1], dp1_2 = dpStageArr1[2], dp1_3 = dpStageArr1[3];
-
-      Xnew[0][0] = x0_st + hA00 * dx0_0 + hA01 * dx1_0;
-      Pnew[0][0] = p0_st - halfhA00 * dp0_0 - halfhA01 * dp1_0;
-      Xnew[0][1] = x1_st + hA00 * dx0_1 + hA01 * dx1_1;
-      Pnew[0][1] = p1_st - halfhA00 * dp0_1 - halfhA01 * dp1_1;
-      Xnew[0][2] = x2_st + hA00 * dx0_2 + hA01 * dx1_2;
-      Pnew[0][2] = p2_st - halfhA00 * dp0_2 - halfhA01 * dp1_2;
-      Xnew[0][3] = x3_st + hA00 * dx0_3 + hA01 * dx1_3;
-      Pnew[0][3] = p3_st - halfhA00 * dp0_3 - halfhA01 * dp1_3;
-
-      Xnew[1][0] = x0_st + hA10 * dx0_0 + hA11 * dx1_0;
-      Pnew[1][0] = p0_st - halfhA10 * dp0_0 - halfhA11 * dp1_0;
-      Xnew[1][1] = x1_st + hA10 * dx0_1 + hA11 * dx1_1;
-      Pnew[1][1] = p1_st - halfhA10 * dp0_1 - halfhA11 * dp1_1;
-      Xnew[1][2] = x2_st + hA10 * dx0_2 + hA11 * dx1_2;
-      Pnew[1][2] = p2_st - halfhA10 * dp0_2 - halfhA11 * dp1_2;
-      Xnew[1][3] = x3_st + hA10 * dx0_3 + hA11 * dx1_3;
-      Pnew[1][3] = p3_st - halfhA10 * dp0_3 - halfhA11 * dp1_3;
-    } else {
-      for (let mu = 0; mu < dim; mu++) {
-        const x0 = state.x[mu];
-        const p0 = state.p[mu];
-        const dx0 = dxStageArr0[mu];
-        const dx1 = dxStageArr1[mu];
-        const dp0 = dpStageArr0[mu];
-        const dp1 = dpStageArr1[mu];
-
-        Xnew[0][mu] = x0 + hA00 * dx0 + hA01 * dx1;
-        Pnew[0][mu] = p0 - halfhA00 * dp0 - halfhA01 * dp1;
-
-        Xnew[1][mu] = x0 + hA10 * dx0 + hA11 * dx1;
-        Pnew[1][mu] = p0 - halfhA10 * dp0 - halfhA11 * dp1;
-      }
-    }
-
-    // Convergence check: max |δX, δP|
-    let maxDelta = 0;
-    if (dim === 4) {
-      let d = Xnew[0][0] - X[0][0]; let absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Xnew[0][1] - X[0][1]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Xnew[0][2] - X[0][2]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Xnew[0][3] - X[0][3]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-
-      d = Pnew[0][0] - P[0][0]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Pnew[0][1] - P[0][1]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Pnew[0][2] - P[0][2]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Pnew[0][3] - P[0][3]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-
-      d = Xnew[1][0] - X[1][0]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Xnew[1][1] - X[1][1]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Xnew[1][2] - X[1][2]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Xnew[1][3] - X[1][3]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-
-      d = Pnew[1][0] - P[1][0]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Pnew[1][1] - P[1][1]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Pnew[1][2] - P[1][2]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-      d = Pnew[1][3] - P[1][3]; absD = d < 0 ? -d : d; if (absD > maxDelta) maxDelta = absD;
-    } else {
-      for (let i = 0; i < 2; i++) {
-        for (let mu = 0; mu < dim; mu++) {
-          let d = Xnew[i][mu] - X[i][mu];
-          let absD = d < 0 ? -d : d;
-          if (absD > maxDelta) maxDelta = absD;
-
-          d = Pnew[i][mu] - P[i][mu];
-          absD = d < 0 ? -d : d;
-          if (absD > maxDelta) maxDelta = absD;
-        }
-      }
-    }
-
-    // Ping-pong swap: read-from + write-to buffers exchange roles for next iter.
-    // Bolt: Use explicit temporary variables instead of array destructuring to prevent GC overhead
-    const tmpX = X;
-    X = Xnew;
-    Xnew = tmpX;
-
-    const tmpP = P;
-    P = Pnew;
-    Pnew = tmpP;
-
-    if (maxDelta < opts.picardTol) {
-      // Clone on return — caller may retain references and the next
-      // solveGL4Stage call will overwrite our internal buffers.
-      if (dim === 4) {
-        // Bolt: Array literals are significantly faster than allocating arrays and manually populating them in tight loops.
-        return {
-          stageX: [[X[0][0], X[0][1], X[0][2], X[0][3]], [X[1][0], X[1][1], X[1][2], X[1][3]]],
-          stageP: [[P[0][0], P[0][1], P[0][2], P[0][3]], [P[1][0], P[1][1], P[1][2], P[1][3]]],
-          stageDx: [[dxStageArr0[0], dxStageArr0[1], dxStageArr0[2], dxStageArr0[3]], [dxStageArr1[0], dxStageArr1[1], dxStageArr1[2], dxStageArr1[3]]],
-          stageDp: [[dpStageArr0[0], dpStageArr0[1], dpStageArr0[2], dpStageArr0[3]], [dpStageArr1[0], dpStageArr1[1], dpStageArr1[2], dpStageArr1[3]]],
-          iterations: k + 1,
-        };
-      } else {
-        // Bolt: Manual loop is significantly faster than Array.from for TypedArrays in tight loops.
-        const sX0 = new Array<number>(dim);
-        const sX1 = new Array<number>(dim);
-        const sP0 = new Array<number>(dim);
-        const sP1 = new Array<number>(dim);
-        const sDx0 = new Array<number>(dim);
-        const sDx1 = new Array<number>(dim);
-        const sDp0 = new Array<number>(dim);
-        const sDp1 = new Array<number>(dim);
-        for (let m = 0; m < dim; m++) {
-          sX0[m] = X[0][m];
-          sX1[m] = X[1][m];
-          sP0[m] = P[0][m];
-          sP1[m] = P[1][m];
-          sDx0[m] = dxStageArr0[m];
-          sDx1[m] = dxStageArr1[m];
-          sDp0[m] = dpStageArr0[m];
-          sDp1[m] = dpStageArr1[m];
-        }
-        return {
-          stageX: [sX0, sX1],
-          stageP: [sP0, sP1],
-          stageDx: [sDx0, sDx1],
-          stageDp: [sDp0, sDp1],
-          iterations: k + 1,
-        };
-      }
-    }
-  }
-
-  throw new GL4ConvergenceError(
-    `Picard iteration did not converge in ${opts.picardMaxIter} iterations (maxDelta above picardTol=${opts.picardTol})`,
-  );
+  const step = advanceGl4(state, h, gInverseFn, dgInverseFn, opts);
+  const dim = step.p.length;
+  const zeros = new Array<number>(dim).fill(0);
+  // In flat space p is constant, so both stage momenta equal the advanced p.
+  return {
+    stageX: [step.x.slice(), step.x.slice()],
+    stageP: [step.p.slice(), step.p.slice()],
+    stageDx: [zeros, zeros.slice()],
+    stageDp: [zeros.slice(), zeros.slice()],
+    iterations: step.iterations,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -558,7 +255,8 @@ export function solveGL4Stage(
  *
  *   H(x, p) = ½ g^{μν}(x) p_μ p_ν
  *
- * Drives the implicit Picard stage solver (`solveGL4Stage`) for each step,
+ * Each accepted step is MathTS `gaussLegendre4` on the geodesic Hamiltonian.
+ * Adaptive step-halving stays here. `onStep` reads that step's `iterations`.
  * with **adaptive step-halving on Picard non-convergence** (Adam+Eve I4,
  * replaces the single-retry R8): if Picard fails at step size h, retry at
  * h/2, h/4, … down to `hMin` (default `h · 1e-9`); throw
@@ -660,12 +358,12 @@ export function integrateGeodesicGL4(
     const remainEps = h * 1e-12;
     while (remaining > remainEps) {
       const trialH = Math.min(stepH, remaining);
-      let stages: StageSolveResult | undefined;
+      let advanced: Gl4Advance | undefined;
       let stepSucceeded = false;
       let subH = trialH;
       while (subH >= hFloor) {
         try {
-          stages = solveGL4Stage({ x, p }, subH, gInverseFn, dgInverseFn, {
+          advanced = advanceGl4({ x, p }, subH, gInverseFn, dgInverseFn, {
             picardTol,
             picardMaxIter,
           });
@@ -676,34 +374,20 @@ export function integrateGeodesicGL4(
           halvings++;
         }
       }
-      if (!stepSucceeded || stages === undefined) {
+      if (!stepSucceeded || advanced === undefined) {
         throw new GL4ConvergenceError(
           `GL4 integrator: Picard iteration did not converge even at h_min=${hFloor} (step ${n}). Diagnose step-size or metric singularity.`,
         );
       }
-      // Bolt: Update state using double-buffering (pointer swapping) instead of slicing `newX` and `newP`
-      // on every step-halving attempt. The converged stages are mapped onto our persistent buffer,
-      // and we swap pointers once successful. This eliminates allocating arrays in the hot loop completely,
-      // avoiding massive GC pauses while still preventing accumulative corruption.
-      const b0 = GL4_B[0];
-      const b1 = GL4_B[1];
-      const dx0 = stages.stageDx[0];
-      const dx1 = stages.stageDx[1];
-      const dp0 = stages.stageDp[0];
-      const dp1 = stages.stageDp[1];
-      const hb0 = subH * b0;
-      const hb1 = subH * b1;
-      const mhb0 = hb0 * -0.5;
-      const mhb1 = hb1 * -0.5;
       if (stateDim === 4) {
-        newX[0] = x[0] + hb0 * dx0[0] + hb1 * dx1[0]; newP[0] = p[0] + mhb0 * dp0[0] + mhb1 * dp1[0];
-        newX[1] = x[1] + hb0 * dx0[1] + hb1 * dx1[1]; newP[1] = p[1] + mhb0 * dp0[1] + mhb1 * dp1[1];
-        newX[2] = x[2] + hb0 * dx0[2] + hb1 * dx1[2]; newP[2] = p[2] + mhb0 * dp0[2] + mhb1 * dp1[2];
-        newX[3] = x[3] + hb0 * dx0[3] + hb1 * dx1[3]; newP[3] = p[3] + mhb0 * dp0[3] + mhb1 * dp1[3];
+        newX[0] = advanced.x[0]!; newP[0] = advanced.p[0]!;
+        newX[1] = advanced.x[1]!; newP[1] = advanced.p[1]!;
+        newX[2] = advanced.x[2]!; newP[2] = advanced.p[2]!;
+        newX[3] = advanced.x[3]!; newP[3] = advanced.p[3]!;
       } else {
         for (let mu = 0; mu < stateDim; mu++) {
-          newX[mu] = x[mu] + hb0 * dx0[mu] + hb1 * dx1[mu];
-          newP[mu] = p[mu] + mhb0 * dp0[mu] + mhb1 * dp1[mu];
+          newX[mu] = advanced.x[mu]!;
+          newP[mu] = advanced.p[mu]!;
         }
       }
 
@@ -717,7 +401,7 @@ export function integrateGeodesicGL4(
 
       remaining -= subH;
       stepH = subH; // keep the converging size for the rest of this macro-step
-      lastIterations = stages.iterations;
+      lastIterations = advanced.iterations;
     }
     snapshots.push({ tau: (n + 1) * h, x: x.slice(), p: p.slice() });
     if (onStep !== undefined) {

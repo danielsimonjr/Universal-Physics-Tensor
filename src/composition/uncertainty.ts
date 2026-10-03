@@ -7,8 +7,8 @@
  *   σ_out² = Σᵢ (∂f/∂xᵢ · σᵢ)²        (independent-input Gaussian,
  *                                       first order)
  *
- * Partials are central differences with a relative step
- * h = 1e-6·max(|xᵢ|, 1e-30). Because composed edges ARE `BridgeEdge`s
+ * Partials are MathTS central differences with `relativeStep` `1e-6`
+ * (`h = 1e-6·max(|xᵢ|, 1e-30)`). Because composed edges ARE `BridgeEdge`s
  * (design D-2 closure), chains need no extra machinery — propagate on
  * the composed edge directly.
  *
@@ -20,6 +20,7 @@
  * @module composition/uncertainty
  */
 
+import { propagateUncertainty as propagateScalarUncertainty } from '@danielsimonjr/mathts-functions';
 import type { BridgeEdge } from './edge.js';
 import { evaluateEdge } from './edge.js';
 import type { ApproximationBound } from '../relations/types.js';
@@ -104,9 +105,8 @@ export function propagateUncertainty(
 ): UncertaintyResult {
   const value = evaluateEdge(edge, inputs);
 
-  const partials: Record<string, number> = {};
-  let variance = 0;
-
+  const point: Record<string, number> = {};
+  const usedSigmas: Record<string, number> = {};
   for (const source of edge.sources) {
     const name = source.name;
     const x = inputs[name];
@@ -115,24 +115,30 @@ export function propagateUncertainty(
         `propagateUncertainty: input '${name}' is not a finite number`,
       );
     }
-    const h = 1e-6 * Math.max(Math.abs(x), 1e-30);
-    const plus = edge.evaluate({ ...inputs, [name]: x + h });
-    const minus = edge.evaluate({ ...inputs, [name]: x - h });
-    const partial = (plus - minus) / (2 * h);
-    partials[name] = partial;
-
     const sigma = sigmas[name] ?? 0;
     if (sigma < 0 || !Number.isFinite(sigma)) {
       throw new RangeError(
         `propagateUncertainty: sigma for '${name}' must be finite and ≥ 0`,
       );
     }
-    if (sigma > 0) variance += partial * partial * sigma * sigma;
+    point[name] = x;
+    usedSigmas[name] = sigma;
   }
+
+  // The stencil is the raw evaluator. `value` above is domain-checked.
+  // `bound.delta` is not an input to this call: it stays a separate field.
+  const stat = propagateScalarUncertainty(
+    (vals) => edge.evaluate(vals),
+    point,
+    usedSigmas,
+    { relativeStep: 1e-6 },
+  );
+  const partials = stat.partials;
+  const sigma = stat.sigma;
 
   const bound = opts?.bound;
   if (bound === undefined) {
-    return { value, sigma: Math.sqrt(variance), partials };
+    return { value, sigma, partials };
   }
   if (!Number.isFinite(bound.delta) || bound.delta < 0) {
     throw new RangeError(
@@ -160,7 +166,7 @@ export function propagateUncertainty(
   // the k it picked.
   return {
     value,
-    sigma: Math.sqrt(variance),
+    sigma,
     delta: bound.delta,
     partials,
     bound,

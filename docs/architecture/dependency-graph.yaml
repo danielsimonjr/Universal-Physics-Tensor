@@ -3,7 +3,7 @@ metadata:
   version: 2.0.0
   totalFiles: 421
   totalModules: 13
-  totalExports: 3009
+  totalExports: 3010
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8008,7 +8008,10 @@ modules:
         - command
     src/cli/commands/evaluate.ts:
       description: "`upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /"
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - propagateUncertainty
       nodeDependencies: []
       internalDependencies:
         - file: ../args.js
@@ -14646,7 +14649,10 @@ modules:
         - retrodict
     src/composition/uncertainty.ts:
       description: First-order uncertainty propagation through composition edges
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - propagateUncertainty
       nodeDependencies: []
       internalDependencies:
         - file: ./edge.js
@@ -15292,7 +15298,13 @@ modules:
         - EXPECTED_DIMENSION_BY_BRIDGE
     src/dimensional/buckingham.ts:
       description: Buckingham-π enumerator (build target 1 of
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - Fraction
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - rationalNullspace
       nodeDependencies: []
       internalDependencies:
         - file: ./types.js
@@ -16222,6 +16234,9 @@ modules:
     src/dimensional/units.ts:
       description: "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`."
       externalDependencies:
+        - package: "@danielsimonjr/mathts-core"
+          imports:
+            - toSiDimensionVector
         - package: "@danielsimonjr/mathts-functions"
           imports:
             - unit
@@ -16248,6 +16263,7 @@ modules:
         - unitConventionNotes
         - parseUnit
         - convertValue
+        - mathTsAgreedQuantity
         - unitDimension
         - unitTables
         - UnitError
@@ -16259,6 +16275,7 @@ modules:
         - unitConventionNotes
         - parseUnit
         - convertValue
+        - mathTsAgreedQuantity
         - unitDimension
         - unitTables
     src/dimensional/validator-registry.ts:
@@ -18728,6 +18745,7 @@ modules:
         - file: ../dimensional/units.js
           imports:
             - convertValue
+            - mathTsAgreedQuantity
             - parseUnit
             - unitConventionNotes
             - UnitError
@@ -19108,6 +19126,7 @@ modules:
       externalDependencies:
         - package: "@danielsimonjr/mathts-functions"
           imports:
+            - compileExpr
             - parse
       nodeDependencies: []
       internalDependencies:
@@ -19123,9 +19142,6 @@ modules:
             - EULER_NUMBER_ERROR
             - FormulaError
             - unknownFunctionMessage
-        - file: ../core/constants.js
-          imports:
-            - E_SI
       exports:
         - mathtsFormulaParser
         - parseFormula
@@ -19214,19 +19230,32 @@ modules:
         - fromGeometrized
     src/numerical/gl4-integrator.ts:
       description: Gauss-Legendre 4th-order (GL4) symplectic integrator — types + Butcher
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - gaussLegendre4
       nodeDependencies: []
       internalDependencies:
         - file: ./errors.js
           imports:
             - GL4ConvergenceError
             - NumericalBackendError
+        - file: "@danielsimonjr/mathts-functions"
+          imports:
+            - GL4_A
+            - GL4_B
+            - GL4_C
+          reExport: true
       exports:
-        - GL4_C
         - GL4_A
         - GL4_B
+        - GL4_C
         - solveGL4Stage
         - integrateGeodesicGL4
+      reExported:
+        - GL4_A
+        - GL4_B
+        - GL4_C
       interfaces:
         - GL4State
         - GL4Snapshot
@@ -19234,10 +19263,6 @@ modules:
       functions:
         - solveGL4Stage
         - integrateGeodesicGL4
-      constants:
-        - GL4_C
-        - GL4_A
-        - GL4_B
     src/numerical/grid-field.ts:
       description: GridField — a sampled field on a regular grid, for the 'grid' numericalForm
       externalDependencies: []
@@ -20539,15 +20564,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 421
   totalModules: 13
-  totalLinesOfCode: 91279
-  totalExports: 3009
+  totalLinesOfCode: 90958
+  totalExports: 3010
   totalClasses: 60
   totalInterfaces: 481
-  totalFunctions: 782
+  totalFunctions: 783
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 754
-  totalReExports: 1414
+  totalConstants: 751
+  totalReExports: 1417
   totalTypeOnlyImports: 570
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

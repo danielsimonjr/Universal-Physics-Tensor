@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "totalFiles": 421,
     "totalModules": 13,
-    "totalExports": 3009
+    "totalExports": 3010
   },
   "entryPoints": [
     {
@@ -11908,7 +11908,14 @@
       },
       "src/cli/commands/evaluate.ts": {
         "description": "`upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "propagateUncertainty"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -21469,7 +21476,14 @@
       },
       "src/composition/uncertainty.ts": {
         "description": "First-order uncertainty propagation through composition edges",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "propagateUncertainty"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -22385,7 +22399,20 @@
       },
       "src/dimensional/buckingham.ts": {
         "description": "Buckingham-π enumerator (build target 1 of",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "Fraction"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "rationalNullspace"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -23732,6 +23759,12 @@
         "description": "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.",
         "externalDependencies": [
           {
+            "package": "@danielsimonjr/mathts-core",
+            "imports": [
+              "toSiDimensionVector"
+            ]
+          },
+          {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
               "unit"
@@ -23771,6 +23804,7 @@
           "unitConventionNotes",
           "parseUnit",
           "convertValue",
+          "mathTsAgreedQuantity",
           "unitDimension",
           "unitTables",
           "UnitError"
@@ -23785,6 +23819,7 @@
           "unitConventionNotes",
           "parseUnit",
           "convertValue",
+          "mathTsAgreedQuantity",
           "unitDimension",
           "unitTables"
         ]
@@ -26906,6 +26941,7 @@
             "file": "../dimensional/units.js",
             "imports": [
               "convertValue",
+              "mathTsAgreedQuantity",
               "parseUnit",
               "unitConventionNotes",
               "UnitError",
@@ -27487,6 +27523,7 @@
           {
             "package": "@danielsimonjr/mathts-functions",
             "imports": [
+              "compileExpr",
               "parse"
             ]
           }
@@ -27509,12 +27546,6 @@
               "EULER_NUMBER_ERROR",
               "FormulaError",
               "unknownFunctionMessage"
-            ]
-          },
-          {
-            "file": "../core/constants.js",
-            "imports": [
-              "E_SI"
             ]
           }
         ],
@@ -27655,7 +27686,14 @@
       },
       "src/numerical/gl4-integrator.ts": {
         "description": "Gauss-Legendre 4th-order (GL4) symplectic integrator — types + Butcher",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "gaussLegendre4"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -27664,14 +27702,28 @@
               "GL4ConvergenceError",
               "NumericalBackendError"
             ]
+          },
+          {
+            "file": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "GL4_A",
+              "GL4_B",
+              "GL4_C"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
-          "GL4_C",
           "GL4_A",
           "GL4_B",
+          "GL4_C",
           "solveGL4Stage",
           "integrateGeodesicGL4"
+        ],
+        "reExported": [
+          "GL4_A",
+          "GL4_B",
+          "GL4_C"
         ],
         "interfaces": [
           "GL4State",
@@ -27681,11 +27733,6 @@
         "functions": [
           "solveGL4Stage",
           "integrateGeodesicGL4"
-        ],
-        "constants": [
-          "GL4_C",
-          "GL4_A",
-          "GL4_B"
         ]
       },
       "src/numerical/grid-field.ts": {
@@ -29458,15 +29505,15 @@
   "statistics": {
     "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 91279,
-    "totalExports": 3009,
+    "totalLinesOfCode": 90958,
+    "totalExports": 3010,
     "totalClasses": 60,
     "totalInterfaces": 481,
-    "totalFunctions": 782,
+    "totalFunctions": 783,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 754,
-    "totalReExports": 1414,
+    "totalConstants": 751,
+    "totalReExports": 1417,
     "totalTypeOnlyImports": 570,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

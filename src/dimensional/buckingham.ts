@@ -25,6 +25,8 @@
  * @module dimensional/buckingham
  */
 
+import { Fraction } from '@danielsimonjr/mathts-core';
+import { rationalNullspace } from '@danielsimonjr/mathts-functions';
 import type { Dimension } from './types.js';
 
 const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
@@ -141,92 +143,29 @@ function toFrac(x: number): Frac {
   );
 }
 
-const fAdd = (a: Frac, b: Frac): Frac => frac(a.n * b.d + b.n * a.d, a.d * b.d);
-const fSub = (a: Frac, b: Frac): Frac => frac(a.n * b.d - b.n * a.d, a.d * b.d);
-const fMul = (a: Frac, b: Frac): Frac => frac(a.n * b.n, a.d * b.d);
-const fDiv = (a: Frac, b: Frac): Frac => {
-  if (b.n === 0) throw new RationalizationError('division by zero fraction');
-  return frac(a.n * b.d, a.d * b.n);
-};
 const fZero = (a: Frac): boolean => a.n === 0;
 
-function lcm(a: number, b: number): number {
-  return Math.abs(a * b) / gcd(a, b);
-}
-
-// ---------------------------------------------------------------------------
-// Linear algebra: RREF + null-space basis over exact fractions.
-// ---------------------------------------------------------------------------
-
-/** Reduce `M` (rows × cols of Frac) to RREF in place; return pivot columns. */
-function rref(M: Frac[][], rows: number, cols: number): number[] {
-  const pivotCols: number[] = [];
-  let r = 0;
-  for (let c = 0; c < cols && r < rows; c++) {
-    let p = -1;
-    for (let i = r; i < rows; i++) {
-      if (!fZero(M[i][c])) {
-        p = i;
-        break;
+/**
+ * Exact null space of the dimension matrix. Exponents pass through as
+ * {@link Fraction} values after {@link toFrac}, so an irrational is still
+ * {@link RationalizationError} and is not accepted by a continued fraction.
+ * A matrix with no rows is `0×n`: `{ columns: n }` is the standard basis.
+ * MathTS integerizes each vector (content 1, first nonzero entry positive).
+ */
+function nullSpace(matrix: Frac[][], cols: number): { basis: number[][]; rank: number } {
+  const entries = matrix.map((row) => row.map((f) => new Fraction(f.n, f.d)));
+  const solved = rationalNullspace(entries, { columns: cols });
+  const basis = solved.basis.map((vec) =>
+    vec.map((entry) => {
+      if (entry.denominator !== 1n) {
+        throw new RationalizationError(
+          `null-space entry ${entry.toString()} is not an integer`,
+        );
       }
-    }
-    if (p === -1) continue;
-    [M[r], M[p]] = [M[p], M[r]];
-    const pivot = M[r][c];
-    for (let j = 0; j < cols; j++) M[r][j] = fDiv(M[r][j], pivot);
-    for (let i = 0; i < rows; i++) {
-      if (i === r || fZero(M[i][c])) continue;
-      const factor = M[i][c];
-      for (let j = 0; j < cols; j++) {
-        M[i][j] = fSub(M[i][j], fMul(factor, M[r][j]));
-      }
-    }
-    pivotCols.push(c);
-    r++;
-  }
-  return pivotCols;
-}
-
-/** Integerize a fraction vector: scale by the LCM of denominators, then
- *  normalize the sign so the first nonzero entry is positive. */
-function integerize(vec: Frac[]): number[] {
-  let L = 1;
-  for (const f of vec) if (!fZero(f)) L = lcm(L, f.d);
-  // exact integer: L is a multiple of every denominator.
-  const out = vec.map((f) => f.n * (L / f.d));
-  const g = out.reduce((acc, x) => (x ? gcd(acc, x) : acc), 0) || 1;
-  for (let i = 0; i < out.length; i++) out[i] = out[i] / g;
-  const firstNonZero = out.find((x) => x !== 0) ?? 0;
-  if (firstNonZero < 0) for (let i = 0; i < out.length; i++) out[i] = -out[i];
-  return out;
-}
-
-/** Null-space basis of the dimension matrix as integer exponent vectors,
- *  one per free column (variable). */
-function nullSpace(
-  matrix: Frac[][],
-  rows: number,
-  cols: number,
-): { basis: number[][]; rank: number } {
-  const M = matrix.map((row) => row.slice());
-  const pivotCols = rref(M, rows, cols);
-  const pivotSet = new Set(pivotCols);
-  const freeCols = [];
-  for (let c = 0; c < cols; c++) if (!pivotSet.has(c)) freeCols.push(c);
-
-  const basis: number[][] = [];
-  for (const f of freeCols) {
-    const vec: Frac[] = new Array(cols);
-    for (let j = 0; j < cols; j++) vec[j] = { n: 0, d: 1 };
-    vec[f] = { n: 1, d: 1 };
-    for (let i = 0; i < pivotCols.length; i++) {
-      vec[pivotCols[i]] = fSub({ n: 0, d: 1 }, M[i][f]); // -M[pivotRow_i][f]
-    }
-    basis.push(integerize(vec));
-  }
-  // rank = number of pivot columns — derived from the SAME RREF, so the caller
-  // need not run a second reduction just to learn the rank.
-  return { basis, rank: pivotCols.length };
+      return Number(entry.numerator);
+    }),
+  );
+  return { basis, rank: solved.rank };
 }
 
 function buildMatrix(variables: readonly DimensionalVariable[]): {
@@ -280,12 +219,8 @@ export function buckinghamPi(
 
   const n = variables.length;
   const { matrix, spannedBases } = buildMatrix(variables);
-  const rows = matrix.length;
 
-  // One RREF: the null-space reduction also yields the rank (pivot count),
-  // so the whole dimensional layer (audit / priority / derive) halves its
-  // linear-algebra cost per call.
-  const { basis, rank } = nullSpace(matrix, rows, n);
+  const { basis, rank } = nullSpace(matrix, n);
   const piGroups: PiGroup[] = basis.map((vec) => {
     const exponents: Record<string, number> = {};
     for (let j = 0; j < n; j++) exponents[names[j]] = vec[j];
