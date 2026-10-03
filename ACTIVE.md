@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the applied-physicist dogfood of published `universal-physics-tensor@2.0.1`. The report is `docs/dogfood/2026-10-03-applied-physicist-bridges-r2.md`. The session does not change `src/`.
+  Done: the report is that file. npm `2.0.1` gitHead is `b2abf1bca457635b76bf28a2c9d3da7b1e27703c`. Annotated tag `v2.0.1` (object `c7974de9d95306621c3f12d854058d2ad3fce50a`) points at that commit. The re-run marks each 2.0.0 repro. New candidates stay unproven. No code fix is in this change.
+
 - [x] A kind-`bridge` catalog formalRef is `formally-proved` on the catalog path and on the edge path. A derivation-step stays off that tag. A chain keeps its weaker grade.
   Done: `catalogEvidenceInput` passes a manifest-checked `lean4-physjs` reference of kind `bridge`. `be-16`, `be-63`, and `be-66` are `formally-proved` on both paths. Before the change both paths were `proposed` while `deriveEvidence` of the reference was `formally-proved`. `be-30` stays `proposed`. `be-35` stays `contradicted`. `be-50` stays `proposed`. `be-40` is `formally-proved` and stays not-a-bridge. `composeEdges(be42Edge, be16Edge)` stays `highly-speculative`.
 
