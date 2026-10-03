@@ -67,7 +67,7 @@ Numbers extracted from `docs/architecture/DEPENDENCY_GRAPH.md` Summary Statistic
 |--------|-------|
 | Source files | 426 TypeScript files under `src/` (the whole-repository file count is the Verification table; it was not re-measured in this change) |
 | Modules | 13 (`atlas`, `bridges`, `canonical`, `cases`, `cli`, `composition`, `core`, `diff`, `dimensional`, `entry`, `numerical`, `relations`, `root`) |
-| Total exports | 3066 (1452 re-exports) |
+| Total exports | 3069 (1452 re-exports) |
 | Bridge catalog entries | 58 (IDs 11–68) |
 | Per-bridge evaluator modules | see `bridge-coverage-audit.md` |
 | Composition-graph edges | 49 `BridgeEdge` constants (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds + 3 applied-physicist), assembled once as the public `CATALOG_GRAPH` |

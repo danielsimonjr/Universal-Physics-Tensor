@@ -11,13 +11,14 @@
  *
  * @module bridges/be67-alfven-speed
  */
+import { M_PROTON_SI } from '../core/constants.js';
 import { MU0_SI } from '../dimensional/formula-names.js';
 
 /**
- * Proton mass, kg. The same CODATA value stored privately by BE-64.
+ * Proton mass in kilograms. The core CODATA value that BE-64 and `upt eval` `m_p` use.
  * @public
  */
-export const M_PROTON_SI = 1.67262192369e-27;
+export { M_PROTON_SI };
 
 /**
  * Inputs for {@link evaluateAlfvenSpeed}.

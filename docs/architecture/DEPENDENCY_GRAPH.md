@@ -1689,7 +1689,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `G_SI, C_SI` | Import |
+| `../core/constants.js` | `G_SI, C_SI, M_PROTON_SI` | Import |
 
 **Exports:**
 - Interfaces: `EddingtonInputs`, `EddingtonResult`
@@ -1744,12 +1744,12 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../core/constants.js` | `M_PROTON_SI` | Import |
 | `../dimensional/formula-names.js` | `MU0_SI` | Import |
 
 **Exports:**
 - Interfaces: `AlfvenInputs`, `AlfvenResult`
 - Functions: `alfvenProtonOnlyDensity`, `evaluateAlfvenSpeed`
-- Constants: `M_PROTON_SI`
 
 ---
 
@@ -3991,7 +3991,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `E_SI, M_E_SI, M_SUN_SI` | Import |
+| `../core/constants.js` | `E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI` | Import |
 | `../dimensional/formula-names.js` | `MU0_SI` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
@@ -6139,7 +6139,7 @@ The codebase is organized into the following modules:
 
   ```text
   C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, GM_SUN_SI,
-  GM_SUN_SOURCE, M_E_SI, B_WIEN_SI, M_U_SI
+  GM_SUN_SOURCE, M_E_SI, M_PROTON_SI, N_A_SI, FARADAY_SI, B_WIEN_SI, M_U_SI
   ```
 
 
@@ -6569,7 +6569,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
 | `./types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
-| `../core/constants.js` | `C_SI, E_SI, M_E_SI` | Import |
+| `../core/constants.js` | `C_SI, E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, N_A_SI` | Import |
 
 **Exports:**
 - Interfaces: `FormulaName`
@@ -8141,8 +8141,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 426 |
 | Total Modules | 13 |
-| Total Lines of Code | 91829 |
-| Total Exports | 3066 |
+| Total Lines of Code | 91866 |
+| Total Exports | 3069 |
 | Total Re-exports | 1452 |
 | Total Classes | 60 |
 | Total Interfaces | 487 |

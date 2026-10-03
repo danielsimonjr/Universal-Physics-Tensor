@@ -102,7 +102,7 @@ change when the STRUCTURE changes.
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 426 files, 3066 exports, 1452 of them re-exports. The whole-repository
+(`bun run docs:deps`): 426 files, 3069 exports, 1452 of them re-exports. The whole-repository
 table above was last filled by `repo_map.py` and was not re-measured in this change: that tool
 is not in this environment. The two scopes answer different questions. Every figure states its scope.
 

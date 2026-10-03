@@ -9,7 +9,7 @@
  * @internal
  */
 
-import { E_SI, M_E_SI, M_SUN_SI } from '../core/constants.js';
+import { E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, M_SUN_SI, N_A_SI } from '../core/constants.js';
 import { MU0_SI } from '../dimensional/formula-names.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { UnitMode } from '../dimensional/natural-units.js';
@@ -22,8 +22,10 @@ export const HBAR_TRUNCATION_NOTE =
 /**
  * Registered constants an eval may omit, taken from {@link CONSTANTS} so a
  * new registry leaf is a formula name without a second list. Aliases below
- * are spellings that are not registry keys. Bare `sigma` is not an alias of
- * `sigma_sb`. Explicit `name=` wins over these.
+ * are spellings that are not registry keys. `m_p` and `m_proton` are the
+ * proton mass, `N_A` is the Avogadro constant, and `F` is the Faraday
+ * constant `N_A * e`. Bare `sigma` is not an alias of `sigma_sb`. Explicit
+ * `name=` wins over these.
  *
  * `2pi`, `4pi` and `8pi` are in the scope. The MathTS parser reads those
  * spellings as n·pi before the scope is consulted. The scope values match
@@ -38,6 +40,10 @@ export function codataScope(mode: UnitMode): Record<string, number> {
   scope.eps0 = CONSTANTS.epsilon_0.value;
   scope.mu0 = MU0_SI;
   scope.mu_0 = MU0_SI;
+  scope.m_p = M_PROTON_SI;
+  scope.m_proton = M_PROTON_SI;
+  scope.N_A = N_A_SI;
+  scope.F = FARADAY_SI;
   scope.kB = CONSTANTS.k_B.value;
   scope.M_sun = M_SUN_SI;
   if (mode !== 'si') {

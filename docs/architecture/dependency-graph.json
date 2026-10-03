@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "totalFiles": 426,
     "totalModules": 13,
-    "totalExports": 3066
+    "totalExports": 3069
   },
   "entryPoints": [
     {
@@ -5446,7 +5446,8 @@
             "file": "../core/constants.js",
             "imports": [
               "G_SI",
-              "C_SI"
+              "C_SI",
+              "M_PROTON_SI"
             ]
           }
         ],
@@ -5552,6 +5553,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../core/constants.js",
+            "imports": [
+              "M_PROTON_SI"
+            ]
+          },
+          {
             "file": "../dimensional/formula-names.js",
             "imports": [
               "MU0_SI"
@@ -5570,9 +5577,6 @@
         "functions": [
           "alfvenProtonOnlyDensity",
           "evaluateAlfvenSpeed"
-        ],
-        "constants": [
-          "M_PROTON_SI"
         ]
       },
       "src/bridges/be68-tolman-ehrenfest.ts": {
@@ -13316,8 +13320,11 @@
             "file": "../core/constants.js",
             "imports": [
               "E_SI",
+              "FARADAY_SI",
               "M_E_SI",
-              "M_SUN_SI"
+              "M_PROTON_SI",
+              "M_SUN_SI",
+              "N_A_SI"
             ]
           },
           {
@@ -22050,6 +22057,9 @@
           "GM_SUN_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
+          "M_PROTON_SI",
+          "N_A_SI",
+          "FARADAY_SI",
           "B_WIEN_SI",
           "M_U_SI"
         ],
@@ -22069,6 +22079,9 @@
           "GM_SUN_SI",
           "GM_SUN_SOURCE",
           "M_E_SI",
+          "M_PROTON_SI",
+          "N_A_SI",
+          "FARADAY_SI",
           "B_WIEN_SI",
           "M_U_SI"
         ]
@@ -23331,7 +23344,10 @@
             "imports": [
               "C_SI",
               "E_SI",
-              "M_E_SI"
+              "FARADAY_SI",
+              "M_E_SI",
+              "M_PROTON_SI",
+              "N_A_SI"
             ]
           }
         ],
@@ -29897,14 +29913,14 @@
   "statistics": {
     "totalTypeScriptFiles": 426,
     "totalModules": 13,
-    "totalLinesOfCode": 91829,
-    "totalExports": 3066,
+    "totalLinesOfCode": 91866,
+    "totalExports": 3069,
     "totalClasses": 60,
     "totalInterfaces": 487,
     "totalFunctions": 790,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 766,
+    "totalConstants": 768,
     "totalReExports": 1452,
     "totalTypeOnlyImports": 573,
     "runtimeCircularDeps": 0,
