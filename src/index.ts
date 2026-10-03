@@ -225,6 +225,9 @@ export {
   evaluateJeansMass,
   type JeansInputs,
   type JeansResult,
+} from './bridges/index.js';
+/** Radiation pressure, the Alfvén speed, and the Tolman–Ehrenfest invariant. */
+export {
   evaluateRadiationPressure,
   type RadiationPressureInputs,
   type RadiationPressureResult,
@@ -514,7 +517,9 @@ export {
   be48Edge,
   be53Edge,
   be54Edge,
-  // Applied-physicist edges (BE-66 radiation pressure, BE-67 Alfvén speed, BE-68 Tolman–Ehrenfest)
+} from './composition/index.js';
+/** Composition edges for radiation pressure, the Alfvén speed, and Tolman–Ehrenfest. */
+export {
   be66Edge,
   be67Edge,
   be68Edge,

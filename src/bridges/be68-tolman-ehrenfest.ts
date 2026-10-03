@@ -14,7 +14,10 @@
  * @module bridges/be68-tolman-ehrenfest
  */
 
-/** @public */
+/**
+ * Inputs for {@link evaluateTolmanEhrenfest}.
+ * @public
+ */
 export interface TolmanInputs {
   /** Proper temperature, kelvin. */
   readonly T_K: number;
@@ -22,7 +25,10 @@ export interface TolmanInputs {
   readonly g_00: number;
 }
 
-/** @public */
+/**
+ * Result of {@link evaluateTolmanEhrenfest}.
+ * @public
+ */
 export interface TolmanResult {
   readonly T_K: number;
   readonly g_00: number;

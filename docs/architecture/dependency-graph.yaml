@@ -16971,6 +16971,9 @@ modules:
             - evaluateJeansMass
             - type JeansInputs
             - type JeansResult
+          reExport: true
+        - file: ./bridges/index.js
+          imports:
             - evaluateRadiationPressure
             - type RadiationPressureInputs
             - type RadiationPressureResult
@@ -17266,6 +17269,9 @@ modules:
             - be48Edge
             - be53Edge
             - be54Edge
+          reExport: true
+        - file: ./composition/index.js
+          imports:
             - be66Edge
             - be67Edge
             - be68Edge
@@ -20852,7 +20858,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 426
   totalModules: 13
-  totalLinesOfCode: 91802
+  totalLinesOfCode: 91829
   totalExports: 3066
   totalClasses: 60
   totalInterfaces: 487

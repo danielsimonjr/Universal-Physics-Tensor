@@ -56,6 +56,7 @@ export {
   be54Edge,
 } from './edges/catalog-tranche.js';
 
+/** Composition edges for radiation pressure, the Alfvén speed, and Tolman–Ehrenfest. */
 export {
   be66Edge,
   be67Edge,

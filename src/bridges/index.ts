@@ -2846,11 +2846,13 @@ export {
   type JeansResult,
 } from './be65-jeans-mass.js';
 
+/** Radiation pressure of an opaque surface, `P_n = (I/c)(1+R) cos²θ`. */
 export {
   evaluateRadiationPressure,
   type RadiationPressureInputs,
   type RadiationPressureResult,
 } from './be66-radiation-pressure.js';
+/** Alfvén speed `B/√(μ0 ρ)` for a total mass density, plus the proton-only helper. */
 export {
   evaluateAlfvenSpeed,
   alfvenProtonOnlyDensity,
@@ -2858,6 +2860,7 @@ export {
   type AlfvenInputs,
   type AlfvenResult,
 } from './be67-alfven-speed.js';
+/** Tolman–Ehrenfest invariant `T √(−g_00)` and the temperature recovered from it. */
 export {
   evaluateTolmanEhrenfest,
   tolmanTemperatureAt,

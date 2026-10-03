@@ -19,7 +19,10 @@ import { MU0_SI } from '../dimensional/formula-names.js';
  */
 export const M_PROTON_SI = 1.67262192369e-27;
 
-/** @public */
+/**
+ * Inputs for {@link evaluateAlfvenSpeed}.
+ * @public
+ */
 export interface AlfvenInputs {
   /** Magnetic flux density, tesla. */
   readonly B_T: number;
@@ -27,7 +30,10 @@ export interface AlfvenInputs {
   readonly rho_kg_per_m3: number;
 }
 
-/** @public */
+/**
+ * Result of {@link evaluateAlfvenSpeed}.
+ * @public
+ */
 export interface AlfvenResult {
   readonly B_T: number;
   readonly rho_kg_per_m3: number;

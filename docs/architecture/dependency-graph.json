@@ -24775,7 +24775,13 @@
               "type EddingtonResult",
               "evaluateJeansMass",
               "type JeansInputs",
-              "type JeansResult",
+              "type JeansResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./bridges/index.js",
+            "imports": [
               "evaluateRadiationPressure",
               "type RadiationPressureInputs",
               "type RadiationPressureResult",
@@ -25199,7 +25205,13 @@
               "be21Edge",
               "be48Edge",
               "be53Edge",
-              "be54Edge",
+              "be54Edge"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/index.js",
+            "imports": [
               "be66Edge",
               "be67Edge",
               "be68Edge",
@@ -29885,7 +29897,7 @@
   "statistics": {
     "totalTypeScriptFiles": 426,
     "totalModules": 13,
-    "totalLinesOfCode": 91802,
+    "totalLinesOfCode": 91829,
     "totalExports": 3066,
     "totalClasses": 60,
     "totalInterfaces": 487,
