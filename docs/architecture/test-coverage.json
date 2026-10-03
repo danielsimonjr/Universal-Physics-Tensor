@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 421,
-    "totalTestFiles": 580,
+    "totalTestFiles": 581,
     "testedCount": 411,
     "untestedCount": 10,
     "coveragePercent": "97.6"
@@ -16563,6 +16563,7 @@
       "src/numerical/null-ray-integrator.ts"
     ],
     "tests/numerical/numerical-composition-imports.test.ts": [],
+    "tests/numerical/ode-delegation.test.ts": [],
     "tests/numerical/painleve-gullstrand-curvature.test.ts": [
       "src/numerical/kretschmann.ts",
       "src/numerical/curvature-lowering-helpers.ts",

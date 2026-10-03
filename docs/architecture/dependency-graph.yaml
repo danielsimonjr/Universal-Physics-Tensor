@@ -19168,7 +19168,10 @@ modules:
         - parsePhysics
     src/numerical/geodesic-integrator.ts:
       description: Fixed-step RK4 integrator for the geodesic equation in an arbitrary
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - solveODESystem
       nodeDependencies: []
       internalDependencies:
         - file: ./errors.js
@@ -19734,7 +19737,10 @@ modules:
         - reconstructNullPr
     src/numerical/null-ray-integrator.ts:
       description: Fixed-step classical RK4 integrator for affine-parameterized null
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - solveODESystem
       nodeDependencies: []
       internalDependencies:
         - file: ./errors.js
@@ -20532,7 +20538,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 421
   totalModules: 13
-  totalLinesOfCode: 91311
+  totalLinesOfCode: 91279
   totalExports: 3009
   totalClasses: 60
   totalInterfaces: 481

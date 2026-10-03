@@ -13,13 +13,16 @@
  *
  * The Christoffel symbol Γ^μ_{νρ} is supplied as a plain-JS closure that
  * maps a 4-coordinate array to a [4][4][4] tensor.  No TensorEngine
- * dependency — the integrator is self-contained.
+ * dependency — the integrator is self-contained. The fixed steps are
+ * MathTS `solveODESystem` with `dt` set, which is that library's classical
+ * RK4. Adaptive `solveODE` is not this step.
  *
  * Validated against the cycloid parametric form for radial Schwarzschild
  * infall to ±1e-6 (Task 14 test, η = 0.5).
  *
  * @module numerical/geodesic-integrator
  */
+import { solveODESystem } from '@danielsimonjr/mathts-functions';
 import { NumericalBackendError } from './errors.js';
 
 /**
@@ -98,23 +101,6 @@ export interface GeodesicIntegratorResult {
 // ---------------------------------------------------------------------------
 
 type Vec4 = [number, number, number, number];
-
-function addScaled4(a: Vec4, b: Vec4, k: number): Vec4 {
-  return [a[0] + k * b[0], a[1] + k * b[1], a[2] + k * b[2], a[3] + k * b[3]];
-}
-
-function combineRK4(
-  y: Vec4,
-  k1: Vec4, k2: Vec4, k3: Vec4, k4: Vec4,
-  h: number,
-): Vec4 {
-  return [
-    y[0] + (h / 6) * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]),
-    y[1] + (h / 6) * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]),
-    y[2] + (h / 6) * (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2]),
-    y[3] + (h / 6) * (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3]),
-  ];
-}
 
 /**
  * Evaluate the Christoffel acceleration −Γ^μ_{νρ} v^ν v^ρ at position x
@@ -225,43 +211,38 @@ export function integrateGeodesic(
   }
 
   const h = (tauEnd - tauStart) / steps;
-  let x: Vec4 = [x0[0], x0[1], x0[2], x0[3]];
-  let v: Vec4 = [v0[0], v0[1], v0[2], v0[3]];
-
-  const sampleEvery = Math.max(1, Math.floor(steps / 100));
-  const trajectory: Vec4[] = [[...x] as Vec4];
+  const y0 = [x0[0], x0[1], x0[2], x0[3], v0[0], v0[1], v0[2], v0[3]];
 
   // One scratch buffer reused across all Christoffel evaluations (4 per step).
   // Each geodesicRHS consumes its Γ before the next call, so reuse is safe and
   // avoids ~4·steps Float64Array(64) allocations per integration.
   const scratch = new Float64Array(64);
+  const sol = solveODESystem(
+    (_tau, y) => {
+      const x: Vec4 = [y[0], y[1], y[2], y[3]];
+      const v: Vec4 = [y[4], y[5], y[6], y[7]];
+      const s = geodesicRHS(christoffelFn, x, v, scratch);
+      return [s.dx[0], s.dx[1], s.dx[2], s.dx[3], s.dv[0], s.dv[1], s.dv[2], s.dv[3]];
+    },
+    y0,
+    [tauStart, tauEnd],
+    { dt: h },
+  );
 
+  const asVec4 = (row: readonly number[]): Vec4 => [row[0], row[1], row[2], row[3]];
+  const sampleEvery = Math.max(1, Math.floor(steps / 100));
+  const trajectory: Vec4[] = [asVec4(sol.y[0] ?? y0)];
   for (let i = 0; i < steps; i++) {
-    const s1 = geodesicRHS(christoffelFn, x, v, scratch);
-    const x2 = addScaled4(x, s1.dx, h / 2);
-    const v2 = addScaled4(v, s1.dv, h / 2);
-
-    const s2 = geodesicRHS(christoffelFn, x2, v2, scratch);
-    const x3 = addScaled4(x, s2.dx, h / 2);
-    const v3 = addScaled4(v, s2.dv, h / 2);
-
-    const s3 = geodesicRHS(christoffelFn, x3, v3, scratch);
-    const x4 = addScaled4(x, s3.dx, h);
-    const v4 = addScaled4(v, s3.dv, h);
-
-    const s4 = geodesicRHS(christoffelFn, x4, v4, scratch);
-
-    x = combineRK4(x, s1.dx, s2.dx, s3.dx, s4.dx, h);
-    v = combineRK4(v, s1.dv, s2.dv, s3.dv, s4.dv, h);
-
     if ((i + 1) % sampleEvery === 0) {
-      trajectory.push([...x] as Vec4);
+      const row = sol.y[i + 1] ?? sol.y[sol.y.length - 1] ?? y0;
+      trajectory.push(asVec4(row));
     }
   }
+  const last = sol.y[sol.y.length - 1] ?? y0;
 
   return {
-    xFinal: x,
-    vFinal: v,
+    xFinal: asVec4(last),
+    vFinal: [last[4], last[5], last[6], last[7]],
     trajectory,
   };
 }
