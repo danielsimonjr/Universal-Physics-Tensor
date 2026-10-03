@@ -3,7 +3,7 @@ metadata:
   version: 2.0.0
   totalFiles: 421
   totalModules: 13
-  totalExports: 3010
+  totalExports: 3014
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9634,6 +9634,8 @@ modules:
           imports:
             - readBinding
             - bindingInUnit
+            - alignTemperatureBinding
+            - boltzmannBindingScale
           reExport: true
         - file: ./numerical/formula-dimension.js
           imports:
@@ -9811,6 +9813,8 @@ modules:
         - type MetricId
         - readBinding
         - bindingInUnit
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - C_SI
@@ -10040,6 +10044,8 @@ modules:
         - type MetricId
         - readBinding
         - bindingInUnit
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - C_SI
@@ -10355,6 +10361,7 @@ modules:
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
+            - piMultipleValue
         - file: ../core/constants.js
           imports:
             - E_SI
@@ -10370,10 +10377,15 @@ modules:
         - file: ../dimensional/types.js
           imports:
             - CHARGE
+            - DIMENSIONLESS
             - MASS
         - file: ../dimensional/algebra.js
           imports:
             - equals
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
       exports:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
@@ -18716,6 +18728,7 @@ modules:
       internalDependencies:
         - file: ../core/constants.js
           imports:
+            - K_B_SI
             - M_SUN_SI
         - file: ../dimensional/formula-names.js
           imports:
@@ -18740,7 +18753,9 @@ modules:
         - file: ../dimensional/types.js
           imports:
             - DIMENSIONLESS
+            - ENERGY
             - MASS
+            - TEMPERATURE
             - Dimension
         - file: ../dimensional/units.js
           imports:
@@ -18760,6 +18775,8 @@ modules:
             - parseFormulaPNode
             - FormulaPNode
       exports:
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - readNamedBinding
         - readBinding
         - bindingInUnit
@@ -18767,6 +18784,8 @@ modules:
       interfaces:
         - BindingValue
       functions:
+        - alignTemperatureBinding
+        - boltzmannBindingScale
         - readNamedBinding
         - readBinding
         - bindingInUnit
@@ -20564,16 +20583,16 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 421
   totalModules: 13
-  totalLinesOfCode: 90975
-  totalExports: 3010
+  totalLinesOfCode: 91221
+  totalExports: 3014
   totalClasses: 60
   totalInterfaces: 481
-  totalFunctions: 783
+  totalFunctions: 785
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 751
-  totalReExports: 1417
-  totalTypeOnlyImports: 570
+  totalReExports: 1419
+  totalTypeOnlyImports: 571
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

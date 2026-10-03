@@ -4253,7 +4253,7 @@ The codebase is organized into the following modules:
 | `./atlas/catalog-formal-ref.js` | `catalogFormalRef` | Re-export |
 | `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
 | `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
-| `./numerical/binding-value.js` | `readBinding, bindingInUnit` | Re-export |
+| `./numerical/binding-value.js` | `readBinding, bindingInUnit, alignTemperatureBinding, boltzmannBindingScale` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./core/constants.js` | `C_SI, G_SI` | Re-export |
@@ -4302,8 +4302,9 @@ The codebase is organized into the following modules:
   AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel, ModelId,
   catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular, kerrGeodesic,
   kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding, bindingInUnit,
-  builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction,
-  VizModel, EvidenceTag, RelationType, EquationAnalysis
+  alignTemperatureBinding, boltzmannBindingScale, builtinFormulaDimensionChecker,
+  missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
+  EquationAnalysis
   ```
 
 
@@ -4456,12 +4457,13 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `../core/constants.js` | `E_SI, M_E_SI` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../core/types.js` | `InformationMeasure` | Import (type-only) |
-| `../dimensional/types.js` | `CHARGE, MASS` | Import |
+| `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, MASS` | Import |
 | `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 
 **Exports:**
 - Functions: `canonicalToEdges`
@@ -7148,20 +7150,20 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `M_SUN_SI` | Import |
+| `../core/constants.js` | `K_B_SI, M_SUN_SI` | Import |
 | `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
 | `../dimensional/unit-convention.js` | `quantityConventionUnit` | Import |
 | `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
-| `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, Dimension` | Import |
 | `../dimensional/units.js` | `convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
 | `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
 | `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
 **Exports:**
 - Interfaces: `BindingValue`
-- Functions: `readNamedBinding`, `readBinding`, `bindingInUnit`, `readParameter`
+- Functions: `alignTemperatureBinding`, `boltzmannBindingScale`, `readNamedBinding`, `readBinding`, `bindingInUnit`, `readParameter`
 
 ---
 
@@ -8046,15 +8048,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 90975 |
-| Total Exports | 3010 |
-| Total Re-exports | 1417 |
+| Total Lines of Code | 91221 |
+| Total Exports | 3014 |
+| Total Re-exports | 1419 |
 | Total Classes | 60 |
 | Total Interfaces | 481 |
-| Total Functions | 783 |
+| Total Functions | 785 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 570 |
+| Type-only Imports | 571 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
