@@ -99,7 +99,7 @@ export const be66Edge: BridgeEdge = {
     }).P_Pa,
   symbolic: BE66_SYMBOLIC,
   citation:
-    'OpenStax University Physics Vol. 2 §16.5 (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog\'s assembly.',
+    'OpenStax University Physics Volume 2, https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog\'s assembly.',
 };
 
 /**
