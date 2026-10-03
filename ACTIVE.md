@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A canonical G-closure of an atomic law is not a derived prefactor.
+  Done: `upt audit --source=canonical` no longer lists `CE-rydberg-energy`, `CE-classical-electron-radius`, `CE-bohr-magneton`, `CE-bohr-radius`, or `CE-field-energy-density` under DERIVED. They are dimensional-reconstruction mismatches. Stefan–Boltzmann stays `×1.645e-1` and Wien stays `×1.265e+0`, both empirical/tuned. Planck–Einstein and de Broglie stay `×6.283`. The counts are DERIVED 79, DECOY 7, OPEN 23. The catalog line for `be-48` stays. Before the gate, those five were DERIVED and the counts were 84, 2, and 23. Package version stays 2.0.0.
+
 - [x] `upt search` splits a quoted phrase and a hyphen into words.
   Done: `upt search "radiation pressure"` matches be-64, the same words as two arguments. `upt search magnetic-field` matches that quantity name. `upt search be-16` still matches be-16. Before the split, all three exited 1. Package version stays 2.0.0.
 
