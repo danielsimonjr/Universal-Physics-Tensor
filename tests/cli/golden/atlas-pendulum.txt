@@ -27,9 +27,9 @@ formally-proved (derived from formalRef): YES — for the formal-reference state
 proved, with unresolved counterexample: yes — formally-proved stands; the counterexample is not resolved
 symbolically-checked: no symbolic witness
 witnesses:
-  - W7 [numeric] tests/atlas/oscillators-limits.test.ts — T/T0 − 1 ∈ [0.002505, 0.002507]; residual ∈ [5.70e-6, 5.76e-6] at θ0 = 0.2
-  - W7b [numeric] tests/atlas/oscillators-limits.test.ts — cycles to π/2 drift ∈ [99, 101] at θ0 = 0.2
-  - W7c [numeric] tests/atlas/oscillators-limits.test.ts — RK4 zero-crossing lag within 0.05° of the elliptic prediction 89.98°
+  - W7 [numeric] https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-limits.test.ts — T/T0 − 1 ∈ [0.002505, 0.002507]; residual ∈ [5.70e-6, 5.76e-6] at θ0 = 0.2
+  - W7b [numeric] https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-limits.test.ts — cycles to π/2 drift ∈ [99, 101] at θ0 = 0.2
+  - W7c [numeric] https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-limits.test.ts — RK4 zero-crossing lag within 0.05° of the elliptic prediction 89.98°
 counterexamples:
   - the approximation is non-uniform in time: at θ0 = 0.2 the phase drift reaches π/2 after ~100 cycles, however small the per-cycle error is (witness W7b)
 formal reference:
@@ -47,8 +47,8 @@ evidence by claim (derived from the record's structure):
   horizon: machine form recorded; the formal reference is not attributed to it
   preserves: no evidence is attributed to a preserved property
 witness execution, witnesses not attributed to a claim:
-  - W7b [numeric]: result not observed by this command — its repository test file: bunx vitest run tests/atlas/oscillators-limits.test.ts
-  - W7c [numeric]: result not observed by this command — its repository test file: bunx vitest run tests/atlas/oscillators-limits.test.ts
+  - W7b [numeric]: result not observed by this command — https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-limits.test.ts
+  - W7c [numeric]: result not observed by this command — https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/atlas/oscillators-limits.test.ts
 citations:
   - Landau & Lifshitz, Mechanics §11 (pendulum period as a complete elliptic integral)
   - Abramowitz & Stegun §17.6 (AGM evaluation of K)

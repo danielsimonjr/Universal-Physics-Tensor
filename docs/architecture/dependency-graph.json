@@ -1,10 +1,10 @@
 {
   "metadata": {
     "name": "universal-physics-tensor",
-    "version": "2.0.1",
-    "totalFiles": 426,
+    "version": "3.0.0",
+    "totalFiles": 427,
     "totalModules": 13,
-    "totalExports": 3071
+    "totalExports": 3072
   },
   "entryPoints": [
     {
@@ -11235,6 +11235,12 @@
             ]
           },
           {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
+            ]
+          },
+          {
             "file": "../../cli-api.js",
             "imports": [
               "AppliedTransport",
@@ -11371,6 +11377,12 @@
               "AtlasBridge"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
+            ]
           }
         ],
         "exports": [
@@ -11478,6 +11490,12 @@
               "runResults",
               "WitnessResults"
             ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
+            ]
           }
         ],
         "exports": [
@@ -11577,6 +11595,12 @@
             "imports": [
               "emitJson"
             ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
+            ]
           }
         ],
         "exports": [
@@ -11626,6 +11650,12 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
             ]
           }
         ],
@@ -11701,6 +11731,12 @@
             "imports": [
               "commandHelp"
             ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
+            ]
           }
         ],
         "exports": [
@@ -11748,6 +11784,12 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
             ]
           }
         ],
@@ -11798,6 +11840,12 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
             ]
           }
         ],
@@ -11981,10 +12029,16 @@
           {
             "file": "../../composition/adjudication.js",
             "imports": [
+              "ADJUDICATIONS",
               "AnnotatedCandidate",
               "AdjudicationVerdict"
-            ],
-            "typeOnly": true
+            ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
+            ]
           },
           {
             "file": "../../composition/consequence.js",
@@ -12565,6 +12619,12 @@
             ]
           },
           {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
+            ]
+          },
+          {
             "file": "../errors.js",
             "imports": [
               "UsageError",
@@ -12923,6 +12983,12 @@
             "imports": [
               "UsageError",
               "CliError"
+            ]
+          },
+          {
+            "file": "../published-url.js",
+            "imports": [
+              "publishedUrl"
             ]
           }
         ],
@@ -13691,6 +13757,18 @@
         ],
         "constants": [
           "POSTER_GRAPH"
+        ]
+      },
+      "src/cli/published-url.ts": {
+        "description": "A path in this repository, as a GitHub blob URL on `master`.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "publishedUrl"
+        ],
+        "functions": [
+          "publishedUrl"
         ]
       },
       "src/cli/record-reach.ts": {
@@ -29721,6 +29799,7 @@
           "src/cli/map-evidence.ts",
           "src/cli/output.ts",
           "src/cli/poster-source.ts",
+          "src/cli/published-url.ts",
           "src/cli/record-reach.ts",
           "src/cli/record-tables.ts",
           "src/cli/record.ts",
@@ -29955,18 +30034,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 426,
+    "totalTypeScriptFiles": 427,
     "totalModules": 13,
-    "totalLinesOfCode": 92040,
-    "totalExports": 3071,
+    "totalLinesOfCode": 92075,
+    "totalExports": 3072,
     "totalClasses": 60,
     "totalInterfaces": 487,
-    "totalFunctions": 791,
+    "totalFunctions": 792,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 768,
     "totalReExports": 1453,
-    "totalTypeOnlyImports": 575,
+    "totalTypeOnlyImports": 574,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

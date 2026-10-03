@@ -8,6 +8,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, UsageError } from '../errors.js';
 import { emitJson } from '../output.js';
+import { publishedUrl } from '../published-url.js';
 
 const FLAGS: FlagSpec[] = [
   { name: '--bridge', valueStyle: 'attached', description: 'Select one bridge id, the same selection as a positional be-XX.' },
@@ -38,9 +39,9 @@ const HELP = `upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|
         applied, whether the observed number is derived, its preprocessing,
         its independence from the prediction (no fitted parameter, a shared
         input, or not recorded — never implied), and the record's notes.
-        Each statement cites a repository file with a verbatim quote or a
-        declared symbol; that the cited text exists does not make the
-        statement true.
+        Each statement cites the GitHub URL of the file it quotes, with a
+        verbatim quote or a declared symbol; that the cited text exists
+        does not make the statement true.
         Consistency ratios are counted apart and never as precision tests;
         each prints its actual difference (observed − predicted)/predicted
         separately from its stated agreement bound.
@@ -163,7 +164,7 @@ const NOT_RECORDED = 'not recorded — the record states nothing on this; that i
 type SourceRefs = Extract<Outcome['preprocessing'], { state: 'recorded' }>['source'];
 
 function sourceLine(refs: SourceRefs): string {
-  return `[source: ${refs.map((r) => ('quote' in r ? `${r.file} "${r.quote}"` : `${r.file} #${r.symbol}`)).join('; ')}]`;
+  return `[source: ${refs.map((r) => ('quote' in r ? `${publishedUrl(r.file)} "${r.quote}"` : `${publishedUrl(r.file)} #${r.symbol}`)).join('; ')}]`;
 }
 
 function preprocessingLine(o: Outcome): string {

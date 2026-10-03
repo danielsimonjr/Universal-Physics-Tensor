@@ -10,6 +10,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, coreAnchor, coreLine } from '../graphs.js';
 import { emitJson } from '../output.js';
+import { publishedUrl } from '../published-url.js';
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('both', 'Which graph to read: catalog, canonical, or both. This command defaults to both.'),
@@ -65,7 +66,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`\n  truly unconnected (no same-dimension bridge into them): ${r.unconnectedOrphans.join(', ')}`);
   out('\n  Physicist-reasoned ranking + the genuinely-motivated few (e.g. coarsening-length ≟');
   out('  quantum-correlation-length; tunneling-mass ≟ effective-mass) are written up in');
-  out('  docs/research/Orphan-Connector-Analysis.md and proposed in spec Part-IX §9.');
+  out(`  ${publishedUrl('docs/research/Orphan-Connector-Analysis.md')} and proposed in spec Part-IX §9.`);
   return 0;
 }
 

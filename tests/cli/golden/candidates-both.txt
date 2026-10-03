@@ -270,4 +270,4 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
   deliberately keeps distinct (effective-mass ≠ mass). The genuinely motivated few —
   e.g. coarsening-length ≟ quantum-correlation-length (links the isolated Model-A
   coarsening bridge to the Kibble-Zurek criticality cluster) — are written up in
-  docs/research/Linkage-Candidate-Proposals.md.
+  https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Linkage-Candidate-Proposals.md

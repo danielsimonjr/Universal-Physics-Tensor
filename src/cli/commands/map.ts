@@ -18,6 +18,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, coreAnchor, coreLine, groundTruthAnchor, groundTruthLine, type AnchorScope } from '../graphs.js';
 import { emitJson } from '../output.js';
+import { publishedUrl } from '../published-url.js';
 import { UsageError, CliError, EXIT_CHECK_FAILED } from '../errors.js';
 import { parseDiscoveryOpts } from './_discovery-opts.js';
 import * as atlasMap from './_atlas-map.js';
@@ -51,7 +52,7 @@ const FLAGS: FlagSpec[] = [
   { name: '--max-routes', valueStyle: 'attached', description: 'Cap on --all-routes. The maximum accepted is 1000.', defaultValue: '20' },
   { name: '--family', valueStyle: 'either', description: 'Map one atlas family by name.' },
   { name: '--observable', valueStyle: 'either', description: 'Map bridges whose recorded text names this observable.' },
-  { name: '--stored', valueStyle: 'none', description: 'Derive evidence from data/atlas/witness-results.json. That file is not in the published package; the command then names --run.' },
+  { name: '--stored', valueStyle: 'none', description: `Derive evidence from ${publishedUrl('data/atlas/witness-results.json')}. That file is not in the published package; the command then names --run.` },
   { name: '--run', valueStyle: 'none', description: 'Run the shown bridges\' in-process witnesses now. Exit 3 if one is refuted.' },
   // optionalValue: a bare trailing --equation stores '' so the empty-check in
   // run() owns the diagnostic (old-CLI fidelity: bin/upt.mjs did `a[i+1] ?? ''`
@@ -146,7 +147,7 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         preserved, and counts the bridges that record nothing about it;
         --relation/--evidence filter it as they filter a family.
         --stored derives evidence from the committed witness results
-        (data/atlas/witness-results.json; a repository file, not shipped),
+        (${publishedUrl('data/atlas/witness-results.json')}; not in the published package),
         labelled with the last commit that touched it; --run runs the shown
         bridges' in-process registered witnesses now (exit 3 if any is
         refuted). Either resolves a tag once its witnesses have results; a

@@ -23,7 +23,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] Group the open dogfood defects by the mechanism that produces them, in `docs/planning/root-cause-analysis-2026-10-03.md`.
   Done: the note names six causes. Each cause lists the symptoms it explains, the file and line, the fix at that mechanism, what that fix replaces, and the risk. The causes, in implementation order: a published citation is a repository path; search, explain, and suggest each resolve a name on their own; a check that did not establish a result exits 0; a regime is a slot in a closed family array; usage prose is copied beside the command; a connector is called motivated because two names share a hyphen token.
 
-- [ ] Published command text that names a repository file uses one citation helper, the same GitHub blob URL `upt chain` already prints. Delete the per-command path strings.
+- [x] Published command text that names a repository file uses one citation helper, the same GitHub blob URL `upt chain` already prints. Delete the per-command path strings.
+  Done: `publishedUrl` is the only builder. Connectors, candidates, axes, probe, discover, confront, atlas, map, and route refusals print that URL. A witness rerun line is the URL of the test file. `--stored` provenance is `url`. The bare path strings in those sentences are gone.
 - [ ] `upt search`, `upt explain`, and the quantity suggestion share one name resolver. Delete the path where explain ranks by edit distance before the word index.
 - [ ] `upt derive` and `upt map` share one exit rule for a result that was not established. A non-unique monomial and a placeholder dimension are failed checks. A canonical agreement stays a passed check.
 - [ ] A regime is a registration any domain module can add. `upt regime` reads that registry. It does not keep its own list of family names.

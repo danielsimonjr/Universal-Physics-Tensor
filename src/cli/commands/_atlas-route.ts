@@ -6,6 +6,7 @@
 import type { CommandCtx } from '../command.js';
 import { CliError } from '../errors.js';
 import type { AppliedTransport, AtlasBridge } from '../../cli-api.js';
+import { publishedUrl } from '../published-url.js';
 
 /** What composing an atlas route yields: `boundPath`'s claim or refusal, or a refusal for a missing Lipschitz constant. */
 export type RouteClaim =
@@ -92,7 +93,7 @@ export function missingForComposite(api: CommandCtx['api'], bridges: readonly At
     if (composed === 'no-composite-claim') {
       missing.push(
         `a composition-table cell for ${relation} then ${next.relation} (silent by design; widening it is a ` +
-          'reviewed act, docs/planning/Atlas-Phase-1-Design.md §2.2)',
+          `reviewed act, ${publishedUrl('docs/planning/Atlas-Phase-1-Design.md')} §2.2)`,
       );
       break;
     }
@@ -117,7 +118,7 @@ export function missingForComposite(api: CommandCtx['api'], bridges: readonly At
     }
     missing.push(
       `'${b.id}' to declare a norm transport of '${norm}' for ${entry ?? '?'} → ${exit ?? '?'}, with its own ` +
-        'witness (docs/planning/ADR-transported-norm-composition.md); an exact map carries no norm without one',
+        `witness (${publishedUrl('docs/planning/ADR-transported-norm-composition.md')}); an exact map carries no norm without one`,
     );
   });
   for (let i = 0; i < bridges.length; i++) {
