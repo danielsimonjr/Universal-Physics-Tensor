@@ -26,6 +26,13 @@
 import { gaussLegendre4 } from '@danielsimonjr/mathts-functions';
 import { GL4ConvergenceError, NumericalBackendError } from './errors.js';
 
+/**
+ * Gauss–Legendre order-4 Butcher tableau from MathTS. `GL4_A` is the 2×2
+ * stage matrix, `GL4_B` the weights (both ½), and `GL4_C` the two nodes.
+ * `integrateGeodesicGL4` does not read these names; the tableau tests do.
+ *
+ * @internal
+ */
 export { GL4_A, GL4_B, GL4_C } from '@danielsimonjr/mathts-functions';
 
 /**
