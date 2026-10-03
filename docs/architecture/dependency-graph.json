@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "totalFiles": 426,
     "totalModules": 13,
-    "totalExports": 3070
+    "totalExports": 3071
   },
   "entryPoints": [
     {
@@ -14083,6 +14083,13 @@
             "reExport": true
           },
           {
+            "file": "./index.js",
+            "imports": [
+              "composeEdges"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./composition/user-equation.js",
             "imports": [
               "formatConnectedSummary"
@@ -14733,6 +14740,7 @@
           "suggestQuantities",
           "buckinghamPi",
           "dimensionallyDetermines",
+          "composeEdges",
           "formatConnectedSummary",
           "bridgePriority",
           "attemptDerivation",
@@ -14928,6 +14936,7 @@
           "suggestQuantities",
           "buckinghamPi",
           "dimensionallyDetermines",
+          "composeEdges",
           "formatConnectedSummary",
           "bridgePriority",
           "attemptDerivation",
@@ -29916,15 +29925,15 @@
   "statistics": {
     "totalTypeScriptFiles": 426,
     "totalModules": 13,
-    "totalLinesOfCode": 91936,
-    "totalExports": 3070,
+    "totalLinesOfCode": 91960,
+    "totalExports": 3071,
     "totalClasses": 60,
     "totalInterfaces": 487,
     "totalFunctions": 791,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 768,
-    "totalReExports": 1452,
+    "totalReExports": 1453,
     "totalTypeOnlyImports": 573,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

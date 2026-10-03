@@ -36,6 +36,8 @@ export {
   buckinghamPi,
   dimensionallyDetermines,
 } from './index.js';
+/** Numeric composition of two graph edges. The grade is the lower of the two, and a chain stays provisional. */
+export { composeEdges } from './index.js';
 // Landing-report summariser (persona W3) — internal, not on the public barrel.
 export { formatConnectedSummary } from './composition/user-equation.js';
 

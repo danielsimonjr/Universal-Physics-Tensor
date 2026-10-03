@@ -83,8 +83,8 @@ also accepts `--json` for a machine-readable envelope instead of text — see
 not list it. Running it prints that the chain orchestrator stays internal,
 that a chain is provisional and is not written to the catalog, and that the
 command does not run the orchestrator, then exits 2. The design is
-`docs/planning/Bridge-Discovery-Pipeline-Design.md`. `upt help chain` prints
-that same status.
+`https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/planning/Bridge-Discovery-Pipeline-Design.md`.
+`upt help chain` prints that same status.
 
 ### Graph analysis & discovery
 
