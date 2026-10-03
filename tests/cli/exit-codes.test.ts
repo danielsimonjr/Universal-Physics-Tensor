@@ -4,7 +4,10 @@
  * `derive` with a dimension mismatch, `map --equation` with a mismatch, and `path` with a violated
  * regime or horizon all printed the failure and exited 0, so a script could not tell a failed check
  * from a passed one. The convention now: 0 success, 1 runtime error, 2 usage error, 3 the command
- * ran and its check came out negative. An UNKNOWN (unchecked) result is not a failure: it stays 0.
+ * ran and its check came out negative. A path or regime UNKNOWN (a coordinate not
+ * supplied) is not a failure: it stays 0. A map equation whose catalog target
+ * was compared through an unresolved name exits 3. A derive that is not a
+ * unique monomial exits 3.
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
@@ -61,9 +64,9 @@ describe('exit 0: the check passed, or could not run', () => {
   });
 });
 
-describe('an unknown name is not a failed check', () => {
-  it('map --equation with an unresolved name exits 0: its mismatch is a placeholder artifact', async () => {
-    expect(await code(['map', '--equation', 'period = uu / gravity'])).toBe(0);
+describe('an unresolved name on a catalog target is not a passed check', () => {
+  it('map --equation with an unresolved name exits 3 and does not quote the placeholder dimension', async () => {
+    expect(await code(['map', '--equation', 'period = uu / gravity'])).toBe(3);
   });
 });
 

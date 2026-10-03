@@ -175,20 +175,19 @@ describe('N1: a velocity/speed synonym no longer switches the prefactor check of
   });
 
   it('map: an unresolved name stays unresolved, and the prefactor is NOT checked', async () => {
-    const t = await text(['map', '--equation', 'kinetic_energy = mass*vel^2']);
+    const t = await text(['map', '--equation', 'kinetic_energy = mass*vel^2'], 3);
     expect(t).toMatch(/no canonical equation has this target and these variables, so the prefactor is NOT checked/);
   });
 });
 
-// 0.47.0 persona finding N3: an unknown name is checked as a dimensionless placeholder, so its
-// "mismatch" is not a real check and exits 0 (F2). The line said "⚠ dimensional MISMATCH" anyway,
-// which reads as a failed check with a success exit. It now says UNKNOWN and names the placeholder.
+// 0.47.0 persona finding N3 named the placeholder instead of printing MISMATCH. The 2026-10-03
+// dogfood: quoting the placeholder dimension (`[L^-0.5 T]`) and exiting 0 let a reader record it.
+// The line names the unresolved name, does not quote that dimension, and exits 3.
 describe('N3: a mismatch caused by an unresolved placeholder is reported as UNKNOWN', () => {
-  it('map: `lenght` is named as the placeholder, the line says UNKNOWN, and the exit stays 0', async () => {
-    const t = await text(['map', '--equation', 'period = 2*pi*sqrt(lenght/gravity)']);
-    expect(t).toMatch(
-      /· UNKNOWN: RHS is \[L\^-0\.5 T\] but the target is \[time\]; the mismatch involves the unresolved placeholder 'lenght' \(taken as dimensionless\), so it is not a failed check/,
-    );
+  it('map: `lenght` is named, the placeholder dimension is not quoted, and the exit is 3', async () => {
+    const t = await text(['map', '--equation', 'period = 2*pi*sqrt(lenght/gravity)'], 3);
+    expect(t).toMatch(/· UNKNOWN: 'lenght' has no catalog dimension, so the right-hand side dimension was not established and is not reported/);
+    expect(t).not.toMatch(/\[L\^-0\.5 T\]/);
     expect(t).not.toMatch(/dimensional MISMATCH/);
   });
 
@@ -280,7 +279,7 @@ describe('persona retest: what map --equation prints', () => {
   });
 
   it('L5: sigma suggests the registered constant sigma_sb by its inferred dimension', async () => {
-    const t = await text(['map', '--equation', 'radiative_flux = sigma*temperature^4']);
+    const t = await text(['map', '--equation', 'radiative_flux = sigma*temperature^4'], 3);
     expect(t).toMatch(/'sigma' has the inferred dimension of the registered constant sigma_sb; write that name to use its SI value/);
     expect(await text(['map', '--equation', 'radiative_flux = sigma_sb*temperature^4'])).toMatch(/✓ agrees with CE-stefan-boltzmann/);
   });

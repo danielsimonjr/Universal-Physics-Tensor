@@ -37,7 +37,8 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         In --formula, a bare e is the elementary charge and E is energy.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
-        recover the dimensionless prefactor. --debug prints the formula parser
+        recover the dimensionless prefactor. A target that is not a unique
+        monomial of the variables exits 3. --debug prints the formula parser
         and its version to stderr.
         e.g.  upt derive period:time length:length gravity:acceleration \\
                        --formula "2*pi*sqrt(length/gravity)"`;
@@ -121,6 +122,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     textOut(`  NOT a unique monomial — ${full.piGroupCount} free dimensionless group(s) (${full.verdict}):`);
     for (const g of full.piGroups) textOut(`     ${g.formula}`);
     textOut(`  (${det.reason})`);
+    // The check ran. "Not unique" is a negative result, not an absent one.
+    failed = true;
   }
 
   if (formula) {

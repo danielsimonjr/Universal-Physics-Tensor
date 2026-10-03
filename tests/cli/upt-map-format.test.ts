@@ -108,13 +108,14 @@ describe.skipIf(!existsSync(distIndex))('upt map --format', () => {
       expect(r.stdout).toMatch(/mismatch/i);
     });
 
-    it('prints a dimension-based "did you mean?" for an inferable unknown', () => {
-      const out = run([
-        'map', '--source=canonical',
-        '--equation', 'period = uu / gravity', // uu must be a velocity
-      ]);
-      expect(out).toMatch(/did you mean/i);
-      expect(out).toContain('speed');
+    it('prints a dimension-based "did you mean?" for an inferable unknown, and exits 3', () => {
+      const r = spawnSync('node', [cli, 'map', '--source=canonical', '--equation', 'period = uu / gravity'], {
+        encoding: 'utf8',
+      });
+      expect(r.status).toBe(3);
+      expect(r.stdout).toMatch(/did you mean/i);
+      expect(r.stdout).toContain('speed');
+      expect(r.stdout).not.toMatch(/\[L\^-1 T\^2\]/);
     });
 
     it('exits non-zero on a malformed equation (no "=")', () => {

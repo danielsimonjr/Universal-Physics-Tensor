@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A derive that is not a unique monomial, and a map equation whose dimension depends on an unresolved name, exit 3. The map line does not quote the placeholder dimension.
+  Done: the Debye derive exits 3 and still prints the two groups and formula dimension `[length]`. `pressure = intensity/c` exits 3 and does not print `[L^-1 T]`. `pressure = N*k_B*temperature/V` still agrees with `CE-ideal-gas` and exits 0. A unique monomial (`intensity/c`) still exits 0. Before the change both dogfood commands exited 0, and the map line quoted the placeholder dimension.
+
 - [x] A kind-`bridge` catalog formalRef is `formally-proved` on the catalog path and on the edge path. A derivation-step stays off that tag. A chain keeps its weaker grade.
   Done: `catalogEvidenceInput` passes a manifest-checked `lean4-physjs` reference of kind `bridge`. `be-16`, `be-63`, and `be-66` are `formally-proved` on both paths. Before the change both paths were `proposed` while `deriveEvidence` of the reference was `formally-proved`. `be-30` stays `proposed`. `be-35` stays `contradicted`. `be-50` stays `proposed`. `be-40` is `formally-proved` and stays not-a-bridge. `composeEdges(be42Edge, be16Edge)` stays `highly-speculative`.
 

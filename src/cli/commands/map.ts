@@ -99,7 +99,9 @@ const HELP = `upt map [--source=catalog|canonical|both|poster] [--format=text|me
         reports nearest equations by shared-quantity overlap (not a full edge
         dump). Multi-word names may use underscores or catalog hyphens
         (planck_length / planck-length). Unknown names get a "did you mean?",
-        and a registered constant of the inferred dimension (sigma → sigma_sb);
+        and a registered constant of the inferred dimension (sigma → sigma_sb).
+        A name with no catalog dimension is not reported as the formula's
+        dimension. That equation exits 3 unless a canonical comparison agreed.
         a one-letter catalog name (a, r, …) is reported and not bound; --bind-short
         binds it. The alias T → temperature still binds.
         An all-constant right-hand side (the Planck length) is compared at the
@@ -291,13 +293,13 @@ function printEquationReport(
   if (user.consistent === true) {
     out(`  ✓ dimensionally consistent: ${api.format(user.rhsDimension!)}`);
   } else if (user.consistent === false && unresolved.length > 0) {
-    // An unknown name is checked as a dimensionless placeholder, so this mismatch is not a real
-    // check and does not fail the command (exit 0). Say so on the line itself (persona finding N3).
+    // The placeholder dimension is not the formula's dimension. Quoting it
+    // (`[L^-1 T]` for `intensity`) is a number a reader would record. The
+    // catalog target was not checked, so the command exits 3.
     const names = unresolved.map((n) => `'${n}'`).join(', ');
     out(
-      `  · UNKNOWN: RHS is ${api.format(user.rhsDimension!)} but the target is ${api.format(user.targetDimension!)}; ` +
-        `the mismatch involves the unresolved placeholder${unresolved.length > 1 ? 's' : ''} ${names} ` +
-        `(taken as dimensionless), so it is not a failed check`,
+      `  · UNKNOWN: ${names} ${unresolved.length > 1 ? 'have' : 'has'} no catalog dimension, ` +
+        'so the right-hand side dimension was not established and is not reported.',
     );
   } else if (user.consistent === false) {
     out(
@@ -308,8 +310,7 @@ function printEquationReport(
   } else if (user.rhsDimension && (user.placeholders ?? []).length > 0) {
     const names = user.placeholders.map((n) => `'${n}'`).join(', ');
     out(
-      `  · UNKNOWN: RHS is ${api.format(user.rhsDimension)} only because ${names} ` +
-        `${user.placeholders.length === 1 ? 'was' : 'were'} taken as dimensionless. ` +
+      `  · UNKNOWN: ${names} ${user.placeholders.length === 1 ? 'was' : 'were'} taken as dimensionless. ` +
         'That is not the dimension of the formula, and the target is not a bound catalog name, so nothing was checked',
     );
   } else if (user.rhsDimension) {
@@ -609,14 +610,19 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   // A user equation whose dimension mismatches, or that differs from its
   // canonical equation, is a failed check: exit 3 (persona finding F2). A
-  // mismatch counts only when every name resolved: an unknown name is checked
-  // as a dimensionless placeholder, so its "mismatch" is not a real check.
+  // catalog target whose dimension depends on an unresolved name is the same
+  // exit, unless a canonical comparison agreed: that agreement is a check that
+  // ran. An unbound target (`consistent` null) was not compared and stays 0.
+  const unresolvedDimension =
+    user !== null &&
+    user.consistent === false &&
+    ((user.hints ?? []).length > 0 ||
+      (user.placeholders ?? []).length > 0 ||
+      (user.shortBindings ?? []).some((b) => b.bound === false));
+  const canonicalAgreed = comparisons.some((c) => c.kind === 'agrees');
   const exitCode =
     user !== null &&
-    ((user.consistent === false &&
-      (user.hints ?? []).length === 0 &&
-      (user.placeholders ?? []).length === 0 &&
-      !(user.shortBindings ?? []).some((b) => b.bound === false)) ||
+    ((user.consistent === false && !(unresolvedDimension && canonicalAgreed)) ||
       canonicalCheckFailed(comparisons))
       ? EXIT_CHECK_FAILED
       : 0;
@@ -647,7 +653,14 @@ async function run(ctx: CommandCtx): Promise<number> {
       userEquation = {
         equation: user.junction.label,
         consistent: user.consistent,
-        rhsDimension: user.rhsDimension,
+        // A placeholder-tainted comparison has no established dimension.
+        rhsDimension:
+          user.consistent === false &&
+          ((user.hints ?? []).length > 0 ||
+            user.placeholders.length > 0 ||
+            (user.shortBindings ?? []).some((b) => b.bound === false))
+            ? null
+            : user.rhsDimension,
         targetDimension: user.targetDimension,
         hints: user.hints,
         shortBindings: user.shortBindings,

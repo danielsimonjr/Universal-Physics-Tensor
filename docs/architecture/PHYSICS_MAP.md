@@ -734,7 +734,7 @@ node bin/upt.mjs map --source=canonical --equation "period = 2*pi*sqrt(length/gr
 node bin/upt.mjs map --source=canonical --equation "period = mass"
 #   ⚠ dimensional MISMATCH: RHS is [mass] but the target is [time]
 node bin/upt.mjs map --source=canonical --equation "period = uu / gravity"
-#   · UNKNOWN: RHS is [L^-1 T^2] but the target is [time]; the mismatch involves the unresolved placeholder 'uu' (taken as dimensionless), so it is not a failed check
+#   · UNKNOWN: 'uu' has no catalog dimension, so the right-hand side dimension was not established and is not reported.
 #   ⚠ 'uu' is unknown — by its inferred dimension, did you mean: v, speed, velocity, sound-speed, flow-velocity?
 ```
 
