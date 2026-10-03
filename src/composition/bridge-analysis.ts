@@ -136,6 +136,22 @@ const CLEAN_PREFACTORS: readonly number[] = [
 const isCleanPrefactor = (p: number): boolean =>
   CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);
 
+/**
+ * A canonical closure more than ten times away from 1 is not a recovered
+ * prefactor. Stefan–Boltzmann (≈0.1645) and Wien (≈1.265) stay inside that
+ * window and keep the empirical/tuned mark. A G-closure of an atomic law
+ * (10^21–10^25) and the ℏ, c, e stand-in for the field energy density
+ * (≈10.9) do not. A recognized constant (2π, ln 2, 4π, …) stays even when
+ * it sits outside the window. Catalog bridges are not canonical ids, so an
+ * empirical scale such as be-48 stays where the catalog audit put it.
+ */
+function recoveredCanonicalPrefactor(id: string, prefactor: number): boolean {
+  if (!id.startsWith('CE-') || isCleanPrefactor(prefactor)) return true;
+  const mag = Math.abs(prefactor);
+  if (!(mag > 0) || !Number.isFinite(mag)) return false;
+  return Math.abs(Math.log10(mag)) <= 1;
+}
+
 /** The outcome of trying to derive a bridge dimensionally + verify it. */
 type DerivationStatus = 'derived' | 'decoy' | 'open' | 'no-samples';
 interface DerivationResult {
@@ -171,7 +187,7 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
     const cv =
       Math.sqrt(ratios.reduce((a, b) => a + (b - mean) ** 2, 0) / ratios.length) /
       Math.abs(mean);
-    if (cv < 1e-9) {
+    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean)) {
       return {
         status: 'derived',
         subset: S.map((x) => x.name),
