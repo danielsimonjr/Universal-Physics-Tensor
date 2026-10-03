@@ -3573,6 +3573,10 @@ The codebase is organized into the following modules:
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
 | `../../dimensional/natural-units.js` | `UnitMode` | Import (type-only) |
+| `../../core/constants.js` | `K_B_SI` | Import |
+| `../../dimensional/algebra.js` | `equals` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../../numerical/binding-value.js` | `alignTemperatureBinding, readBinding, BindingValue` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -7148,20 +7152,20 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../core/constants.js` | `M_SUN_SI` | Import |
+| `../core/constants.js` | `K_B_SI, M_SUN_SI` | Import |
 | `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
 | `../dimensional/unit-convention.js` | `quantityConventionUnit` | Import |
 | `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
-| `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, Dimension` | Import |
 | `../dimensional/units.js` | `convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
 | `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
 | `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
 **Exports:**
 - Interfaces: `BindingValue`
-- Functions: `readNamedBinding`, `readBinding`, `bindingInUnit`, `readParameter`
+- Functions: `alignTemperatureBinding`, `readNamedBinding`, `readBinding`, `bindingInUnit`, `readParameter`
 
 ---
 
@@ -8046,12 +8050,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 90968 |
-| Total Exports | 3010 |
+| Total Lines of Code | 91038 |
+| Total Exports | 3011 |
 | Total Re-exports | 1417 |
 | Total Classes | 60 |
 | Total Interfaces | 481 |
-| Total Functions | 783 |
+| Total Functions | 784 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 570 |
