@@ -3,7 +3,7 @@ metadata:
   version: 2.0.0
   totalFiles: 421
   totalModules: 13
-  totalExports: 3015
+  totalExports: 3018
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3810,6 +3810,7 @@ modules:
           imports:
             - G_SI
             - C_SI
+            - M_PROTON_SI
       exports:
         - THOMSON_CROSS_SECTION_SI
         - evaluateEddingtonLuminosity
@@ -8765,8 +8766,11 @@ modules:
         - file: ../core/constants.js
           imports:
             - E_SI
+            - FARADAY_SI
             - M_E_SI
+            - M_PROTON_SI
             - M_SUN_SI
+            - N_A_SI
         - file: ../dimensional/formula-names.js
           imports:
             - MU0_SI
@@ -14838,6 +14842,9 @@ modules:
         - GM_SUN_SI
         - GM_SUN_SOURCE
         - M_E_SI
+        - M_PROTON_SI
+        - N_A_SI
+        - FARADAY_SI
         - B_WIEN_SI
         - M_U_SI
       constants:
@@ -14856,6 +14863,9 @@ modules:
         - GM_SUN_SI
         - GM_SUN_SOURCE
         - M_E_SI
+        - M_PROTON_SI
+        - N_A_SI
+        - FARADAY_SI
         - B_WIEN_SI
         - M_U_SI
     src/core/flux-rules.ts:
@@ -15731,7 +15741,10 @@ modules:
           imports:
             - C_SI
             - E_SI
+            - FARADAY_SI
             - M_E_SI
+            - M_PROTON_SI
+            - N_A_SI
       exports:
         - EPS0_SI
         - MU0_SI
@@ -20586,14 +20599,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 421
   totalModules: 13
-  totalLinesOfCode: 91241
-  totalExports: 3015
+  totalLinesOfCode: 91277
+  totalExports: 3018
   totalClasses: 60
   totalInterfaces: 481
   totalFunctions: 786
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 751
+  totalConstants: 754
   totalReExports: 1419
   totalTypeOnlyImports: 571
   runtimeCircularDeps: 0

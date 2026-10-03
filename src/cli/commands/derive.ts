@@ -33,7 +33,7 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         product/quotient (power/area, length*temperature),
         or explicit (L^3.M^-1.T^-2). Parentheses group a factor
         (power/(area*temperature^4)); pressure, density, volume, viscosity,
-        resistance and magnetic_field are names; mass/length^3 and M/L^3 work.
+        resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
         In --formula, a bare e is the elementary charge and E is energy.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
