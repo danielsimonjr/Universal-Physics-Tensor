@@ -51,11 +51,11 @@ describe('src parses with tree-sitter', () => {
 
   it('the scan covers the source tree', () => {
     expect(files.some((f) => f.endsWith(join('src', 'cli', 'commands', 'path.ts')))).toBe(true);
-    expect(files.some((f) => f.endsWith('mathts-tensor.ambient.d.ts'))).toBe(true);
+    expect(files.some((f) => f.endsWith(join('src', 'numerical', 'formula-contract.ts')))).toBe(true);
     expect(files.length).toBeGreaterThan(100);
   });
 
-  it('rejects the constructs that hid path.ts and the tensor ambient', () => {
+  it('rejects the constructs that hid path.ts and the deleted tensor ambient', () => {
     const parser = new Parser();
     parser.setLanguage(grammars.typescript as unknown as Parameters<Parser['setLanguage']>[0]);
     const readonlyImport = parser.parse("type Bridges = readonly import('./x.js').AtlasBridge[];");
