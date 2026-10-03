@@ -21,6 +21,7 @@
  *
  * @module dimensional/units
  */
+import { toSiDimensionVector } from '@danielsimonjr/mathts-core';
 import { unit } from '@danielsimonjr/mathts-functions';
 import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
@@ -216,22 +217,59 @@ function mathTsSpelling(text: string): string {
     .replaceAll('°C', 'degC');
 }
 
-/** SI magnitude of `value` in `unitText`, from MathTS `unit` and `toSI`. */
-function mathTsSi(value: number, unitText: string): number {
+interface MathTsUnit {
+  toSI(): { value: unknown };
+  dimensions: readonly number[];
+}
+
+/** The 7-base record for a MathTS length-10 exponent vector. Angle, bit, and solid angle are dropped. */
+function dimensionFromUnitVector(vector: readonly number[]): Dimension {
+  const v = toSiDimensionVector(vector, { ignoreExtra: true });
+  return { L: v[0], M: v[1], T: v[2], I: v[3], Theta: v[4], N: v[5], J: v[6] };
+}
+
+function mathTsReading(value: number, unitText: string): { si: number; dim: Dimension } {
   // `unit` is a typed-function; its declared return is `unknown`.
-  const created = unit(value, mathTsSpelling(unitText)) as { toSI(): { value: unknown } };
-  const si = created.toSI();
-  const n = Number(si.value);
+  const created = unit(value, mathTsSpelling(unitText)) as MathTsUnit;
+  const n = Number(created.toSI().value);
   if (!Number.isFinite(n)) throw new Error('non-finite SI magnitude');
-  return n;
+  return { si: n, dim: dimensionFromUnitVector(created.dimensions) };
 }
 
 function mathTsRatio(value: number, given: string, target: string): number | undefined {
   try {
-    const from = mathTsSi(value, given);
-    const to = mathTsSi(1, target);
-    if (to === 0) return undefined;
-    return from / to;
+    const from = mathTsReading(value, given);
+    const to = mathTsReading(1, target);
+    if (to.si === 0) return undefined;
+    // A scale match is not enough when the 7-base dimensions differ.
+    if (!equals(from.dim, parseUnit(given).dim)) return undefined;
+    if (!equals(to.dim, parseUnit(target).dim)) return undefined;
+    return from.si / to.si;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * MathTS's SI value for `magnitude` of `unitText`, when that value and the
+ * 7-base dimension agree with `local`. Affine °C stays on the local offset.
+ * A symbol MathTS lacks, or a scale it disagrees with (`bit` is 1 there and
+ * ln 2 here; a solar mass, a Julian year, and the gauss are absent), returns
+ * undefined so the caller keeps the local table.
+ *
+ * @internal
+ */
+export function mathTsAgreedQuantity(
+  magnitude: number,
+  unitText: string,
+  local: ParsedUnit,
+): { value: number; dim: Dimension } | undefined {
+  if (local.affine !== undefined) return undefined;
+  try {
+    const read = mathTsReading(magnitude, unitText);
+    if (!sameQuantity(read.si, magnitude * local.scale)) return undefined;
+    if (!equals(read.dim, local.dim)) return undefined;
+    return { value: read.si, dim: read.dim };
   } catch {
     return undefined;
   }

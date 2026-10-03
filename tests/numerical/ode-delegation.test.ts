@@ -1,6 +1,7 @@
 /**
- * The fixed-step RK4 geodesic integrators call MathTS. The symplectic GL4
- * integrator and the uncertainty function stay.
+ * The fixed-step RK4 geodesic integrators call MathTS `solveODESystem`.
+ * The symplectic GL4 integrator calls MathTS `gaussLegendre4`.
+ * Neither that integrator nor the uncertainty function calls `solveODE`.
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';

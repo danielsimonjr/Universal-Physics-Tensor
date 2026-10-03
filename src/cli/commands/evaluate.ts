@@ -5,6 +5,7 @@
  * did not exist. With no bridge id, lists the evaluable bridges + their inputs.
  * `upt evaluate case-<id> …` runs an applied case (`src/cases/`).
  */
+import { propagateUncertainty as propagateScalarUncertainty } from '@danielsimonjr/mathts-functions';
 import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
@@ -162,13 +163,6 @@ export function propagateEvaluatorUncertainty(
   sigma: Readonly<Record<string, number>>,
   corr: ReadonlyMap<string, number>,
 ): Record<string, { value: number; u: number | null; relative: number | null; contributions: Record<string, Contribution>; unreliable: string[] }> {
-  const at = (key: string, dx: number): Record<string, unknown> | null => {
-    try {
-      return f({ ...inputs, [key]: inputs[key]! + dx });
-    } catch {
-      return null;
-    }
-  };
   const base = f({ ...inputs });
   const keys = Object.keys(sigma);
   const out: ReturnType<typeof propagateEvaluatorUncertainty> = {};
@@ -179,27 +173,50 @@ export function propagateEvaluatorUncertainty(
     const unreliable: string[] = [];
     for (const k of keys) {
       const u = sigma[k]!;
-      const h = u > 0 ? u * 1e-3 : Math.abs(inputs[k]!) * 1e-6 || 1e-6;
-      const plus = at(k, h)?.[name];
-      const minus = at(k, -h)?.[name];
-      if (typeof plus !== 'number' || typeof minus !== 'number') {
+      const x = inputs[k]!;
+      // The CLI step is per input (`u·10⁻³`, or a relative step when u is 0).
+      // MathTS differentiates every key of `values` with one `relativeStep`, so
+      // this call's values object is only `k`. The callback puts the other
+      // inputs back. Passing them as values would step an exact input (f_lo = 0
+      // goes negative) and discard this partial. The correlation sum stays here.
+      const h = u > 0 ? u * 1e-3 : Math.abs(x) * 1e-6 || 1e-6;
+      const relativeStep = h / Math.max(Math.abs(x), 1e-30);
+      let probed: ReturnType<typeof propagateScalarUncertainty> | undefined;
+      try {
+        probed = propagateScalarUncertainty(
+          (vals) => {
+            const out = f({ ...inputs, ...vals })[name];
+            if (typeof out !== 'number' || !Number.isFinite(out)) throw new Error('non-numeric');
+            return out;
+          },
+          { [k]: x },
+          { [k]: u },
+          u > 0
+            ? { relativeStep, curvatureOffsets: { [k]: u } }
+            : { relativeStep },
+        );
+      } catch {
+        probed = undefined;
+      }
+      const ck = probed?.partials[k];
+      if (probed === undefined || typeof ck !== 'number' || !Number.isFinite(ck)) {
         c[k] = null;
         contributions[k] = { sensitivity: null, contribution: null, curvatureRatio: null, note: 'the evaluator is undefined next to this input' };
         unreliable.push(k);
         continue;
       }
-      const ck = (plus - minus) / (2 * h);
       c[k] = ck;
-      const up = at(k, u)?.[name];
-      const down = at(k, -u)?.[name];
       let curvatureRatio: number | null = null;
       let note: string | undefined;
-      if (typeof up !== 'number' || typeof down !== 'number') {
-        note = '±u reaches outside the evaluator\'s domain';
-        unreliable.push(k);
-      } else if (ck * u !== 0) {
-        curvatureRatio = Math.abs(up + down - 2 * v) / 2 / Math.abs(ck * u);
-        if (curvatureRatio > NONLINEAR_FRACTION) unreliable.push(k);
+      if (u > 0 && ck * u !== 0) {
+        const reported = probed.curvature?.[k];
+        if (reported === undefined || reported === null || !Number.isFinite(reported)) {
+          note = '±u reaches outside the evaluator\'s domain';
+          unreliable.push(k);
+        } else {
+          curvatureRatio = reported;
+          if (curvatureRatio > NONLINEAR_FRACTION) unreliable.push(k);
+        }
       }
       contributions[k] = { sensitivity: ck, contribution: ck * u, curvatureRatio, ...(note === undefined ? {} : { note }) };
     }

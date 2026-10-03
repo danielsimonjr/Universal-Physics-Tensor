@@ -3581,6 +3581,11 @@ The codebase is organized into the following modules:
 
 ### `src/cli/commands/evaluate.ts` - `upt evaluate <be-NN | case-id> key=value …` — numerically evaluate a closed-form /
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `propagateUncertainty` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -5956,6 +5961,11 @@ The codebase is organized into the following modules:
 
 ### `src/composition/uncertainty.ts` - First-order uncertainty propagation through composition edges
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `propagateUncertainty` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -6263,6 +6273,12 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/dimensional/buckingham.ts` - Buckingham-π enumerator (build target 1 of
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-core` | `Fraction` |
+| `@danielsimonjr/mathts-functions` | `rationalNullspace` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -6706,6 +6722,7 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
+| `@danielsimonjr/mathts-core` | `toSiDimensionVector` |
 | `@danielsimonjr/mathts-functions` | `unit` |
 
 **Internal Dependencies:**
@@ -6718,7 +6735,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `UnitError`
 - Interfaces: `ParsedUnit`
-- Functions: `unitConventionNotes`, `parseUnit`, `convertValue`, `unitDimension`, `unitTables`
+- Functions: `unitConventionNotes`, `parseUnit`, `convertValue`, `mathTsAgreedQuantity`, `unitDimension`, `unitTables`
 
 ---
 
@@ -7138,7 +7155,7 @@ The codebase is organized into the following modules:
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, MASS, Dimension` | Import |
-| `../dimensional/units.js` | `convertValue, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
+| `../dimensional/units.js` | `convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
 | `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
 | `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
@@ -7323,14 +7340,13 @@ The codebase is organized into the following modules:
 **External Dependencies:**
 | Package | Import |
 |---------|--------|
-| `@danielsimonjr/mathts-functions` | `parse` |
+| `@danielsimonjr/mathts-functions` | `compileExpr, parse` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./formula-contract.js` | `CompiledFormula, FormulaParser` | Import (type-only) |
 | `./formula-contract.js` | `BUILTIN_FUNCTION_NAMES, callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError, unknownFunctionMessage` | Import |
-| `../core/constants.js` | `E_SI` | Import |
 
 **Exports:**
 - Functions: `parseFormula`
@@ -7389,15 +7405,21 @@ The codebase is organized into the following modules:
 
 ### `src/numerical/gl4-integrator.ts` - Gauss-Legendre 4th-order (GL4) symplectic integrator — types + Butcher
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `gaussLegendre4` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./errors.js` | `GL4ConvergenceError, NumericalBackendError` | Import |
+| `@danielsimonjr/mathts-functions` | `GL4_A, GL4_B, GL4_C` | Re-export |
 
 **Exports:**
 - Interfaces: `GL4State`, `GL4Snapshot`, `GL4Options`
 - Functions: `solveGL4Stage`, `integrateGeodesicGL4`
-- Constants: `GL4_C`, `GL4_A`, `GL4_B`
+- Re-exports: `GL4_A`, `GL4_B`, `GL4_C`
 
 ---
 
@@ -8024,12 +8046,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 91279 |
-| Total Exports | 3009 |
-| Total Re-exports | 1414 |
+| Total Lines of Code | 90968 |
+| Total Exports | 3010 |
+| Total Re-exports | 1417 |
 | Total Classes | 60 |
 | Total Interfaces | 481 |
-| Total Functions | 782 |
+| Total Functions | 783 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 570 |
