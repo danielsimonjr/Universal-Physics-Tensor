@@ -98,12 +98,15 @@ describe('runCli from src — coverage path', () => {
       ['candidates', '--json'],
       ['predict', '--json'],
       ['eval', '2+2', '--json'],
-      ['derive', 'x:time', '--json'],
     ] as const) {
       const c = capture();
       const code = await runCli([...args], c.io);
       expect(code).toBe(0);
       expect(() => JSON.parse(text(c))).not.toThrow();
     }
+    const underdetermined = capture();
+    const underdeterminedCode = await runCli(['derive', 'x:time', '--json'], underdetermined.io);
+    expect(underdeterminedCode).toBe(3);
+    expect(() => JSON.parse(text(underdetermined))).not.toThrow();
   });
 });

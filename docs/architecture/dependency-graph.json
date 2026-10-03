@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "3.0.0",
-    "totalFiles": 428,
+    "totalFiles": 429,
     "totalModules": 13,
-    "totalExports": 3077
+    "totalExports": 3078
   },
   "entryPoints": [
     {
@@ -11933,8 +11933,13 @@
           {
             "file": "../errors.js",
             "imports": [
-              "UsageError",
-              "EXIT_CHECK_FAILED"
+              "UsageError"
+            ]
+          },
+          {
+            "file": "../determination.js",
+            "imports": [
+              "classifyDetermination"
             ]
           },
           {
@@ -12639,6 +12644,13 @@
               "UsageError",
               "CliError",
               "EXIT_CHECK_FAILED"
+            ]
+          },
+          {
+            "file": "../determination.js",
+            "imports": [
+              "classifyDetermination",
+              "Determination"
             ]
           },
           {
@@ -13361,6 +13373,28 @@
         ],
         "constants": [
           "JEANS_FORMULA_NOTE"
+        ]
+      },
+      "src/cli/determination.ts": {
+        "description": "One exit for a result the user asked to have determined.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "./errors.js",
+            "imports": [
+              "EXIT_CHECK_FAILED"
+            ]
+          }
+        ],
+        "exports": [
+          "classifyDetermination"
+        ],
+        "interfaces": [
+          "Determination"
+        ],
+        "functions": [
+          "classifyDetermination"
         ]
       },
       "src/cli/errors.ts": {
@@ -29853,6 +29887,7 @@
           "src/cli/commands/symbolic.ts",
           "src/cli/commands/testplan.ts",
           "src/cli/conventions.ts",
+          "src/cli/determination.ts",
           "src/cli/errors.ts",
           "src/cli/euler-guard.ts",
           "src/cli/eval-numbers.ts",
@@ -30099,13 +30134,13 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 428,
+    "totalTypeScriptFiles": 429,
     "totalModules": 13,
-    "totalLinesOfCode": 92269,
-    "totalExports": 3077,
+    "totalLinesOfCode": 92355,
+    "totalExports": 3078,
     "totalClasses": 60,
-    "totalInterfaces": 487,
-    "totalFunctions": 796,
+    "totalInterfaces": 488,
+    "totalFunctions": 797,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 769,

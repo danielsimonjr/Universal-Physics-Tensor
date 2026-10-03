@@ -16,7 +16,7 @@ async function run(args: string[]): Promise<{ code: number; text: string }> {
 describe('upt map and upt explain rank suggestions by edit distance first', () => {
   it('map: the typo `lenght` suggests `length` first (by its inferred dimension)', async () => {
     const r = await run(['map', '--equation', 'period = 2*pi*sqrt(lenght/gravity)']);
-    expect(r.code).toBe(0);
+    expect(r.code).toBe(3);
     expect(r.text).toMatch(/'lenght' is unknown — by its inferred dimension, did you mean: length,/);
   });
 
