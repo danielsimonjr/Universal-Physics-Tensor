@@ -82,6 +82,9 @@ import { evaluateBCSGap } from './be62-bcs-gap.js';
 import { evaluateChandrasekharMass } from './be63-chandrasekhar-mass.js';
 import { evaluateEddingtonLuminosity } from './be64-eddington-luminosity.js';
 import { evaluateJeansMass } from './be65-jeans-mass.js';
+import { evaluateRadiationPressure } from './be66-radiation-pressure.js';
+import { evaluateAlfvenSpeed } from './be67-alfven-speed.js';
+import { evaluateTolmanEhrenfest } from './be68-tolman-ehrenfest.js';
 
 /**
  * Root-level facade keyed by readable method names. Each value is a re-export of
@@ -150,4 +153,7 @@ export const BridgeEquations = {
   chandrasekharMass: evaluateChandrasekharMass,             // BE-63
   eddingtonLuminosity: evaluateEddingtonLuminosity,         // BE-64
   jeansMass: evaluateJeansMass,                             // BE-65
+  radiationPressure: evaluateRadiationPressure,             // BE-66
+  alfvenSpeed: evaluateAlfvenSpeed,                         // BE-67
+  tolmanEhrenfest: evaluateTolmanEhrenfest,                 // BE-68
 } as const;

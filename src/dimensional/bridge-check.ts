@@ -29,6 +29,7 @@ import {
   AREA,
   FORCE,
   TEMPERATURE,
+  VELOCITY,
 } from './types.js';
 import { ExprNode, validate } from './validator.js';
 import { equals, multiply, power } from './algebra.js';
@@ -167,12 +168,15 @@ export const EXPECTED_DIMENSION_BY_BRIDGE: ReadonlyMap<number, Dimension> = new 
   [63, MASS], // BE-63 Chandrasekhar mass M_Ch ≈ 1.44 M_⊙ — astrophysics cluster 2026-07-05.
   [64, POWER], // BE-64 Eddington luminosity L_Edd = 4πGMm_p c/σ_T — astrophysics cluster 2026-07-05.
   [65, MASS], // BE-65 Jeans mass M_J — astrophysics cluster 2026-07-05.
+  [66, PRESSURE], // BE-66 radiation pressure P_n = (I/c)(1+R) cos²θ.
+  [67, VELOCITY], // BE-67 Alfvén speed v_A = B / √(μ0 ρ).
+  [68, TEMPERATURE], // BE-68 Tolman–Ehrenfest invariant T √(−g_00).
 ]);
 
 /**
  * Infer the SI dimensional signature of a bridge equation expression.
  *
- * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..65). If present
+ * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..68). If present
  *                  in `EXPECTED_DIMENSION_BY_BRIDGE` the inferred dim
  *                  is cross-checked against the expected; mismatch =>
  *                  null. If absent, the inferred dim is returned as-is.

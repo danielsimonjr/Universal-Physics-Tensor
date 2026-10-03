@@ -12,9 +12,9 @@ const GRAPH = CATALOG_GRAPH;
 const m = linkageMap(GRAPH);
 
 describe('linkageMap — component structure', () => {
-  it('partitions the 46-edge graph into 26 components (22 isolated)', () => {
-    expect(m.componentCount).toBe(26);
-    expect(m.isolated.length).toBe(22);
+  it('partitions the 49-edge graph into 29 components (25 isolated)', () => {
+    expect(m.componentCount).toBe(29);
+    expect(m.isolated.length).toBe(25);
     expect(m.clusters.reduce((n, c) => n + c.size, 0)).toBe(GRAPH.length);
   });
 

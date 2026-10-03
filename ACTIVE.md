@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Encode be-66, be-67, and be-68 in the catalog from the applied-physicist design note.
+  Done: radiation pressure, Alfvén speed, and Tolman–Ehrenfest are `BRIDGE_EQUATIONS` 66–68, category D, D, and I. Evaluators, composition edges, and Part-II §V-C are in. No `formalRef`. The Lean sketches stay in the design note. Open notes stay notes. Package version stays 2.0.0.
+
 - [x] Record the design note for the three applied-physicist candidate bridges. The note is `docs/planning/Applied-Physicist-Candidate-Bridges-Design.md`. It does not change `src/`.
   Done: the note is that file. The three candidates stay unproven. No catalog row, no composition edge, and no evaluator is added. The owner assigned be-66, be-67, and be-68. Radiation pressure includes `(I/c)(1+R)cos²θ`. Tolman–Ehrenfest is `T√(−g_00)`. The Alfvén default is the total mass density.
 

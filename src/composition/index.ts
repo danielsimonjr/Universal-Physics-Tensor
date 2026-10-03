@@ -57,6 +57,13 @@ export {
 } from './edges/catalog-tranche.js';
 
 export {
+  be66Edge,
+  be67Edge,
+  be68Edge,
+  APPLIED_PHYSICIST_EDGES,
+} from './edges/applied-physicist.js';
+
+export {
   be11Edge,
   be13Edge,
   be15Edge,

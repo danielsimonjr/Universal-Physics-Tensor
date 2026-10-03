@@ -117,5 +117,5 @@ the textbook "answer key" bridge equations are validated against.
    L1   statistical         CE-normal-distribution   —
 
   tip: `upt canonical --vars` lists the variable names formulas must use
-  coverage: 47 catalog bridges have no canonical partner yet
+  coverage: 50 catalog bridges have no canonical partner yet
   (fidelity: L0 dimensional · L1 scalar-AST · L2 field-equation; "=NN" = restatesBridge)

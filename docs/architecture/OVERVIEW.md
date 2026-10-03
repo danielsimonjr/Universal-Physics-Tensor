@@ -4,7 +4,7 @@
 
 ## What Is This?
 
-Universal Physics Tensor (UPT) is a **TypeScript dimensional-analyzer and bridge-equation library** for exploring unified physics through tensor formalism. The library provides machine-readable encoding of 55 bridge equations that connect distinct physics regimes (quantum to classical, gravity to gauge, thermodynamics to information theory). A layered computational backend can validate, symbolically analyze, and numerically evaluate those equations.
+Universal Physics Tensor (UPT) is a **TypeScript dimensional-analyzer and bridge-equation library** for exploring unified physics through tensor formalism. The library provides machine-readable encoding of 58 bridge equations that connect distinct physics regimes (quantum to classical, gravity to gauge, thermodynamics to information theory). A layered computational backend can validate, symbolically analyze, and numerically evaluate those equations.
 
 The library serves two audiences. Researchers want to query the bridge-equation catalog and catch dimensional errors in novel formulations. Implementors want to evaluate tensor contractions numerically, compute Christoffel symbols, or integrate geodesics in an arbitrary Lorentzian manifold.
 
@@ -14,7 +14,7 @@ The library serves two audiences. Researchers want to query the bridge-equation 
 
 Four goals govern every design choice in UPT:
 
-1. **Bridges drive the work.** The 55 bridge equations in `src/bridges/` are the scientific core. Tooling, tests, and new capabilities exist to serve the catalog, not the other way around. A new feature earns its place by enabling or improving a bridge encoding.
+1. **Bridges drive the work.** The 58 bridge equations in `src/bridges/` are the scientific core. Tooling, tests, and new capabilities exist to serve the catalog, not the other way around. A new feature earns its place by enabling or improving a bridge encoding.
 
 2. **MathTS first-class.** `@danielsimonjr/mathts-tensor` is the preferred numerical backend. The `TensorEngine` interface keeps UPT backend-agnostic. Even so, MathTSEngine is the intended default when the optional dep is present. The selection is a deliberate signal about the dependency shape of the ecosystem, not a performance claim.
 
@@ -50,7 +50,7 @@ UPT is organized into five conceptual layers that build on each other:
 │  SI Dimension algebra (multiply / divide / power / format)   │
 ├──────────────────────────────────────────────────────────────┤
 │  Layer 1: Bridge Catalog                                     │
-│  BRIDGE_EQUATIONS (55 entries) + per-bridge evaluator        │
+│  BRIDGE_EQUATIONS (58 entries) + per-bridge evaluator        │
 │  modules (be-*.ts) + BridgeEquationEntry metadata type +     │
 │  membership criterion / negative catalog                     │
 └──────────────────────────────────────────────────────────────┘
@@ -102,7 +102,7 @@ change when the STRUCTURE changes.
 **Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
 every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
 document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 422 files, 2986 exports, 1396 of them re-exports. The whole-repository
+(`bun run docs:deps`): 426 files, 3062 exports, 1450 of them re-exports. The whole-repository
 table above was last filled by `repo_map.py` and was not re-measured in this change: that tool
 is not in this environment. The two scopes answer different questions. Every figure states its scope.
 
@@ -115,9 +115,9 @@ is not in this environment. The two scopes answer different questions. Every fig
 **Claims the gate cannot hold.** These catalog figures are properties of the physics catalog,
 not of the dependency graph:
 
-- 55 bridge entries (IDs 11–65; 19 established, 33 speculative, 3 highly-speculative);
+- 58 bridge entries (IDs 11–68; 22 established, 33 speculative, 3 highly-speculative);
 - 109 canonical equations;
-- 46 composition-graph edges;
+- 49 composition-graph edges;
 - 19 real-data confrontations.
 
 They were measured by importing the built package and reading

@@ -58,6 +58,9 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   63, // BE-63 Chandrasekhar mass M_Ch ≈ 1.44 M_⊙ (2026-07-05): closed-form evaluator, no AST.
   64, // BE-64 Eddington luminosity L_Edd = 4πGMm_p c/σ_T (2026-07-05): closed-form evaluator, no AST.
   65, // BE-65 Jeans mass M_J (2026-07-05): closed-form evaluator, no AST.
+  66, // BE-66 radiation pressure: closed-form evaluator, no AST.
+  67, // BE-67 Alfvén speed: closed-form evaluator, no AST.
+  68, // BE-68 Tolman–Ehrenfest: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -73,11 +76,11 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has thirteen entries (BE-51/52 + BE-55..65 closed-form)', () => {
+    it('orphan allowlist has sixteen entries (BE-51/52 + BE-55..68 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(13);
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(16);
     });
 
     for (const id of ORPHAN_DIMENSIONAL_SIGNATURES) {
@@ -142,11 +145,10 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
       ).toEqual([]);
     });
 
-    it('orphan allowlist is BE-51/52 + BE-55..65 (closed-form evaluators)', () => {
-      // BE-51/52 (v0.4.0) and BE-55 quantum Hall, BE-56 Casimir, BE-57 Unruh,
-      // BE-58 Johnson-Nyquist (2026-07-05) have dim_sigs but closed-form
-      // evaluators, not AST modules.
-      expect([...ORPHAN_DIMENSIONAL_SIGNATURES].sort((a, b) => a - b)).toEqual([51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65]);
+    it('orphan allowlist is BE-51/52 + BE-55..68 (closed-form evaluators)', () => {
+      expect([...ORPHAN_DIMENSIONAL_SIGNATURES].sort((a, b) => a - b)).toEqual([
+        51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+      ]);
     });
   });
 });

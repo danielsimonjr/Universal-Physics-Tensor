@@ -80,9 +80,9 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
     const refuted = BRIDGE_EQUATIONS.filter(
       (e) => (e.counterexamples ?? []).length > 0,
     ).length;
-    expect(report.records).toBe(55);
+    expect(report.records).toBe(58);
     expect(report.byTag.contradicted).toBe(refuted);
-    expect(report.byTag.proposed).toBe(55 - refuted);
+    expect(report.byTag.proposed).toBe(58 - refuted);
     for (const tag of ALL_EVIDENCE_TAGS) {
       if (tag === 'proposed' || tag === 'contradicted') continue;
       expect(report.byTag[tag]).toBe(0);

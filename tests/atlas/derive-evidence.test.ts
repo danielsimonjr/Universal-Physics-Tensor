@@ -217,7 +217,7 @@ describe('adjudication precedence — THREE verdicts, from REAL catalog entries 
 
 describe('TRUTHFUL MIGRATION — the overlay adds evidence to NO existing catalog row', () => {
   it('every one of the 55 rows derives {proposed}, or {contradicted} iff it is rejected', () => {
-    expect(BRIDGE_EQUATIONS.length).toBe(55);
+    expect(BRIDGE_EQUATIONS.length).toBe(58);
     const offenders: string[] = [];
     for (const entry of BRIDGE_EQUATIONS) {
       const verdict = adjudicateBridgeEntry(entry);

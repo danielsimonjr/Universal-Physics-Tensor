@@ -225,6 +225,18 @@ export {
   evaluateJeansMass,
   type JeansInputs,
   type JeansResult,
+  evaluateRadiationPressure,
+  type RadiationPressureInputs,
+  type RadiationPressureResult,
+  evaluateAlfvenSpeed,
+  alfvenProtonOnlyDensity,
+  M_PROTON_SI,
+  type AlfvenInputs,
+  type AlfvenResult,
+  evaluateTolmanEhrenfest,
+  tolmanTemperatureAt,
+  type TolmanInputs,
+  type TolmanResult,
 } from './bridges/index.js';
 
 // Bridge-evaluator dispatch registry (`upt evaluate`) — id → evaluator.
@@ -502,6 +514,11 @@ export {
   be48Edge,
   be53Edge,
   be54Edge,
+  // Applied-physicist edges (BE-66 radiation pressure, BE-67 Alfvén speed, BE-68 Tolman–Ehrenfest)
+  be66Edge,
+  be67Edge,
+  be68Edge,
+  APPLIED_PHYSICIST_EDGES,
 } from './composition/index.js';
 export type {
   BridgeEdge,

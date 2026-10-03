@@ -1,5 +1,9 @@
 # UPT Specification — Revision History
 
+## BE-66–68 catalog write-up
+
+- Part-II §V-C adds Bridge Equations 66 (radiation pressure), 67 (Alfvén speed), and 68 (Tolman–Ehrenfest). None has a `formalRef`. The Lean sketches stay in `docs/planning/Applied-Physicist-Candidate-Bridges-Design.md`. Living catalog counts in the specification index and in Parts I, II, IV, V, and VI now say 58 equations, IDs 11–68. The 2026-10-02 line below that says 55 equations, IDs 11–65, is the state of that day.
+
 > **Proof status as of 2026-10-02.** Parts I and II carry a proof-status blockquote under each Bridge Equation heading, read from PhysJS pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. Those lines are the current proof reading. The wave entries below are history and are unchanged. The first 2026-10-02 entry adds the BE-55–65 headings at an earlier pin. The second retargets BE-16 and records that BE-42's Hawking temperature is not proved, at pin `c6958650f0be66b21f5cc3992d5474bf97ad5094`. The third moves the permalinks to PhysJS #54. The theorems are unchanged.
 
 ## 2026-10-02 — PhysJS #54 comment pin

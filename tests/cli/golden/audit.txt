@@ -16,11 +16,11 @@ Deriving the bridge equations by dimensions
     be-36                  +[]  ×-1.000e+0
     be-59                  +[ℏ,e]  ×3.183e-1  (empirical/tuned constant)
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 5) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 6) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
-  OPEN (29) — irreducible free dimensionless group(s); by complexity:
+  OPEN (31) — irreducible free dimensionless group(s); by complexity:
     cplx=1  be-11-zurek
     cplx=1  be-37
     cplx=1  be-52
@@ -34,11 +34,13 @@ Deriving the bridge equations by dimensions
     cplx=1  be-50
     cplx=1  be-55
     cplx=1  be-60
+    cplx=1  be-68
     cplx=2  be-11-master
     cplx=2  be-22
     cplx=2  be-25
     cplx=2  be-26
     cplx=2  be-63
+    cplx=2  be-66
     cplx=3  be-53
     cplx=3  be-33
     cplx=3  be-45

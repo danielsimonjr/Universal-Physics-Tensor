@@ -138,7 +138,7 @@ describe('F09 — a proof badge carries its theorem scope', () => {
 // Already true when the audit ran (it read the text view only); pinned across every export so a
 // later change cannot merge "no overlay metadata" into "did not match".
 describe('F10 — an evidence-filtered export keeps absent evidence apart from non-matching evidence', () => {
-  const split = /0 of 155 kept; 45 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
+  const split = /0 of 158 kept; 48 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
   for (const format of ['text', 'mermaid', 'dot']) {
     it(`--format=${format}`, async () => {
       const { text } = await run(['map', '--source=both', '--evidence=formally-proved', `--format=${format}`]);
@@ -149,9 +149,9 @@ describe('F10 — an evidence-filtered export keeps absent evidence apart from n
     const c = capture();
     await runCli(['map', '--source=both', '--evidence=formally-proved', '--json'], c.io);
     expect(JSON.parse(c.lines.join('')).result.filter).toEqual({
-      total: 155,
+      total: 158,
       kept: 0,
-      droppedNotMatching: 45,
+      droppedNotMatching: 48,
       droppedMissingMetadata: 110,
       evidence: 'formally-proved',
     });
@@ -162,7 +162,7 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
   it('the heading names the reconstruction that failed and disclaims refutation', async () => {
     const { text } = await run(['audit']);
     expect(text).toMatch(
-      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 5\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
+      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 6\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
     );
     expect(text).toMatch(/NOT a physical refutation/);
     expect(text).not.toMatch(/DECOY \(5\) — dimensionally valid but wrong form/);
