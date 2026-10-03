@@ -6,7 +6,9 @@
  * path, and the honest boundary (mass alone does NOT determine r_s; the
  * constant is never returned).
  */
+import { readFileSync } from 'node:fs';
 import { describe, it, expect } from 'vitest';
+import { nullspace } from '@danielsimonjr/mathts-functions';
 import {
   buckinghamPi,
   dimensionallyDetermines,
@@ -69,6 +71,24 @@ describe('buckinghamPi — π-count theorem', () => {
     expect(g['G']).toBe(-1);
     expect(g['mass']).toBe(-1);
     expect(g['c']).toBe(2);
+  });
+
+  it('a float nullspace is not that exponent vector', () => {
+    // Columns: radius, mass, G, c. Rows: L, M, T. The numeric nullspace
+    // returns a scaled vector whose entries are not the integers above.
+    const numeric = nullspace([
+      [1, 0, 3, 1],
+      [0, 1, -1, 0],
+      [0, 0, -2, -1],
+    ]);
+    expect(numeric).toHaveLength(1);
+    const [radius, mass, grav, c] = numeric[0]!;
+    expect(radius).not.toBe(1);
+    expect(c).not.toBe(2);
+    expect(mass).toBeCloseTo(-0.5, 12);
+    expect(grav).toBeCloseTo(-0.5, 12);
+    const src = readFileSync(new URL('../../src/dimensional/buckingham.ts', import.meta.url), 'utf8');
+    expect(src).not.toMatch(/from '@danielsimonjr\/mathts-functions'/);
   });
 
   it('dimensionally-independent set has zero π-groups', () => {

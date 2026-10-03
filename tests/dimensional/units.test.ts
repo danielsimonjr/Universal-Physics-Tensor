@@ -3,6 +3,7 @@
  * only when the dimensions agree, °C is read as absolute or as a difference,
  * and a radius is never taken for a diameter.
  */
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { convertValue, parseUnit, UnitError } from '../../src/dimensional/units.js';
 import { C_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../../src/core/constants.js';
@@ -82,8 +83,16 @@ describe('convertValue', () => {
 
   it('°C: an absolute temperature adds 273.15 K; a difference does not', () => {
     expect(convertValue('25degC', 'K', 'absolute').value).toBeCloseTo(298.15, 12);
+    expect(convertValue('25degC', 'K').value).toBeCloseTo(298.15, 12);
+    expect(convertValue('1 kohm', 'ohm').value).toBe(1000);
     expect(convertValue('25degC', 'K', 'difference').value).toBe(25);
     expect(convertValue('25 K', 'K', 'difference').value).toBe(25);
+  });
+
+  it('conversion calls MathTS unit and toSI', () => {
+    const src = readFileSync(new URL('../../src/dimensional/units.ts', import.meta.url), 'utf8');
+    expect(src).toMatch(/\.toSI\(/);
+    expect(src).toMatch(/\bunit\(/);
   });
 
   it('an angle is dimensionless: rad (prefixable) and deg read at their stated values', () => {

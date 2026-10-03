@@ -23729,7 +23729,14 @@
       },
       "src/dimensional/units.ts": {
         "description": "Unit parsing for numeric inputs: `1um`, `25degC`, `1 kohm`, `3.8e-16 kg/m^3`.",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "unit"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -28570,7 +28577,14 @@
       },
       "src/numerical/quadrature.ts": {
         "description": "Gauss–Legendre quadrature — shared between the numerical AST lowering and the",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "rootsLegendre"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
@@ -29429,7 +29443,7 @@
   "statistics": {
     "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 91275,
+    "totalLinesOfCode": 91311,
     "totalExports": 3009,
     "totalClasses": 60,
     "totalInterfaces": 481,

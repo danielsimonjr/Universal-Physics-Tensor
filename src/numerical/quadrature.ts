@@ -11,8 +11,13 @@
  * (b−a)/2, so ∫ₐᵇ f dx ≈ (b−a)/2 · Σᵢ wᵢ·f(xᵢ). For b < a the (b−a)/2 factor is
  * negative, giving the correct signed integral (∫ₐᵇ = −∫ᵦᵃ).
  *
+ * The nodes are MathTS `rootsLegendre(16)`. `gaussQuad` is not this rule: its
+ * single-interval order is only 2–5, and a larger `n` is that many panels of
+ * order 5. `quad` is adaptive Gauss–Kronrod, not a fixed degree.
+ *
  * @module numerical/quadrature
  */
+import { rootsLegendre } from '@danielsimonjr/mathts-functions';
 
 /** A Gauss–Legendre abscissa/weight pair on the reference interval [−1, 1]. @internal */
 interface GaussLegendreNode {
@@ -20,28 +25,15 @@ interface GaussLegendreNode {
   readonly weight: number;
 }
 
+const legendre16 = rootsLegendre(16);
+
 /**
- * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2). Standard
- * tabulated values (Abramowitz & Stegun Table 25.4); symmetric about 0.
+ * 16-point Gauss–Legendre nodes and weights on [−1, 1] (Σ weights = 2), from
+ * MathTS `rootsLegendre(16)`.
  */
-export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = [
-  { node: -0.9894009349916499, weight: 0.0271524594117541 },
-  { node: -0.9445750230732326, weight: 0.0622535239386479 },
-  { node: -0.8656312023878318, weight: 0.0951585116824928 },
-  { node: -0.755404408355003, weight: 0.1246289712555339 },
-  { node: -0.6178762444026438, weight: 0.1495959888165767 },
-  { node: -0.4580167776572274, weight: 0.1691565193950025 },
-  { node: -0.2816035507792589, weight: 0.1826034150449236 },
-  { node: -0.0950125098376374, weight: 0.1894506104550685 },
-  { node: 0.0950125098376374, weight: 0.1894506104550685 },
-  { node: 0.2816035507792589, weight: 0.1826034150449236 },
-  { node: 0.4580167776572274, weight: 0.1691565193950025 },
-  { node: 0.6178762444026438, weight: 0.1495959888165767 },
-  { node: 0.755404408355003, weight: 0.1246289712555339 },
-  { node: 0.8656312023878318, weight: 0.0951585116824928 },
-  { node: 0.9445750230732326, weight: 0.0622535239386479 },
-  { node: 0.9894009349916499, weight: 0.0271524594117541 },
-];
+export const GAUSS_LEGENDRE_16: ReadonlyArray<GaussLegendreNode> = legendre16.nodes.map(
+  (node, i) => ({ node, weight: legendre16.weights[i]! }),
+);
 
 /**
  * Evaluate the definite integral ∫ₐᵇ f(x) dx by 16-point Gauss–Legendre
