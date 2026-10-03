@@ -126,12 +126,14 @@ function makeInputs(e: BridgeEdge): Array<Record<string, number>> {
   return sets;
 }
 
-/** Recognizable dimensionless prefactors (small rationals, 1/nπ, √, π). */
+/** Recognizable dimensionless prefactors (small rationals, 1/nπ, √, π, ln 2). */
 const CLEAN_PREFACTORS: readonly number[] = [
   1, 2, 3, 4, 0.5, 0.25, Math.log(2),
   1 / (2 * Math.PI), 1 / (4 * Math.PI), 1 / (8 * Math.PI),
+  1 / (32 * Math.PI * Math.PI),
   Math.sqrt(2 * Math.PI), Math.sqrt(Math.PI),
-  Math.PI, 2 * Math.PI, 4 * Math.PI, 6 * Math.PI,
+  Math.PI, 2 * Math.PI, 4 * Math.PI, 6 * Math.PI, 8 * Math.PI,
+  (8 * Math.PI) / 3,
 ];
 const isCleanPrefactor = (p: number): boolean =>
   CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);

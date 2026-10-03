@@ -28,10 +28,12 @@
  *     The information-axis mapping is annotation-only; there is no edge-kind
  *     path and no delta to measure.
  *   - Evaluator: the dimensional MONOMIAL gives the power law over the variable
- *     sources, times the baked constant factor. The leading DIMENSIONLESS
- *     constant (2π, ¼, …) is not pinned by dimensions, so it is taken as 1 —
- *     values are correct up to an O(1) factor, which is all the same-dimension
- *     discovery surface needs. Where dimensions cannot pin a monomial
+ *     sources, times the baked constant factor. A fully-quantitative scalar
+ *     AST whose extra factors are a closed dimensionless coefficient (ln 2,
+ *     8π, ¼, …) multiplies that coefficient in, so the number matches the
+ *     recorded formula. An entry with no such coefficient — no AST, a sum, an
+ *     unresolved stub, or only `scalar-up-to-constant` — still takes the
+ *     leading factor as 1. Where dimensions cannot pin a monomial
  *     (`monomial: null`, e.g. Newton's two same-dim masses), the edge carries a
  *     NaN evaluator; `retrodict` accepts only finite derivations, so it
  *     abstains cleanly rather than polluting the consistency check.
@@ -47,12 +49,13 @@ import type { BridgeEdge, ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
-import { CONSTANTS } from '../dimensional/symbolic-constants.js';
+import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { E_SI, M_E_SI } from '../core/constants.js';
 import type { Dimension } from '../dimensional/types.js';
 import type { InformationMeasure } from '../core/types.js';
-import { CHARGE, MASS } from '../dimensional/types.js';
+import { CHARGE, DIMENSIONLESS, MASS } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
+import type { ExprNode } from '../dimensional/validator.js';
 
 /** A universal constant a canonical `governing` list may name: SI value + dim. */
 interface ConstantDef {
@@ -119,10 +122,91 @@ const PERMISSIVE_DOMAIN: ValidityDomain = {
   predicate: () => true,
 };
 
+/** A registered or literal dimensionless number, or undefined when `name` is not one. */
+function dimensionlessLeaf(name: string): number | undefined {
+  const c = CONSTANTS[name];
+  if (c !== undefined && equals(c.dim, DIMENSIONLESS)) return c.value;
+  const pi = piMultipleValue(name);
+  if (pi !== undefined) return pi;
+  const n = Number(name);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+/**
+ * The dimensionless coefficient of a product or quotient. Dimensionful symbols
+ * contribute 1 — the monomial evaluator already carries them. A sum, a
+ * non-scalar arm, or a non-literal exponent is not a closed coefficient.
+ */
+function dimensionlessCoefficient(node: ExprNode): number | undefined {
+  if (node.kind === 'symbol') {
+    const v = dimensionlessLeaf(node.name);
+    return v !== undefined ? v : 1;
+  }
+  if (node.kind !== 'op') return undefined;
+  if (node.op === '*') {
+    let acc = 1;
+    for (const a of node.args) {
+      const c = dimensionlessCoefficient(a);
+      if (c === undefined) return undefined;
+      acc *= c;
+    }
+    return acc;
+  }
+  if (node.op === '/') {
+    if (node.args.length !== 2) return undefined;
+    const n = dimensionlessCoefficient(node.args[0]!);
+    const d = dimensionlessCoefficient(node.args[1]!);
+    if (n === undefined || d === undefined || d === 0) return undefined;
+    return n / d;
+  }
+  if (node.op === '^') {
+    const base = node.args[0];
+    const exp = node.args[1];
+    if (base === undefined || exp === undefined || exp.kind !== 'symbol') return undefined;
+    const e = Number(exp.name);
+    if (!Number.isFinite(e)) return undefined;
+    if (base.kind === 'symbol') {
+      const v = dimensionlessLeaf(base.name);
+      return v !== undefined ? Math.pow(v, e) : 1;
+    }
+    const inner = dimensionlessCoefficient(base);
+    return inner === undefined ? undefined : Math.pow(inner, e);
+  }
+  return undefined;
+}
+
+/** A symbol the coefficient walker would treat as 1 but that is not a constant or a governing name. */
+function hasUnresolvedStub(node: ExprNode, governing: ReadonlySet<string>): boolean {
+  if (node.kind === 'symbol') {
+    if (dimensionlessLeaf(node.name) !== undefined) return false;
+    if (governing.has(node.name)) return false;
+    if (node.name in CONSTANTS) return false;
+    return true;
+  }
+  if (node.kind === 'op') return node.args.some((a) => hasUnresolvedStub(a, governing));
+  return true;
+}
+
+/**
+ * The closed dimensionless factor a fully-quantitative AST records in front of
+ * its dimensional monomial. `undefined` when there is nothing to multiply
+ * (no AST, not fully quantitative, a stub, a sum, or a factor of ±1).
+ */
+function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undefined {
+  if (eq.epistemicStatus !== 'fully-quantitative' || eq.scalarAst === undefined) return undefined;
+  const governing = new Set(eq.dimensional.governing.map((g) => g.name));
+  if (hasUnresolvedStub(eq.scalarAst, governing)) return undefined;
+  const c = dimensionlessCoefficient(eq.scalarAst);
+  if (c === undefined || !Number.isFinite(c) || c === 0) return undefined;
+  if (Math.abs(Math.abs(c) - 1) < 1e-12) return undefined;
+  return c;
+}
+
 /**
  * Build the evaluator for one canonical equation, keyed by its VARIABLE source
  * names. Variables carry the monomial exponent from `inputs`; constants
- * contribute a fixed baked factor. Returns NaN when the monomial is null
+ * contribute a fixed baked factor. A fully-quantitative AST multiplies its
+ * recorded dimensionless coefficient. Returns NaN when the monomial is null
  * (dimensions underdetermine the form) — `retrodict` then abstains.
  */
 function makeEvaluate(
@@ -139,8 +223,9 @@ function makeEvaluate(
     if (cv !== null) constFactor *= Math.pow(cv, exp);
     else varExps.push([name, exp]);
   }
+  const recorded = recordedDimensionlessCoefficient(eq) ?? 1;
   return (inputs: Record<string, number>): number => {
-    let v = constFactor;
+    let v = constFactor * recorded;
     for (const [name, exp] of varExps) v *= Math.pow(inputs[name], exp);
     return v;
   };
