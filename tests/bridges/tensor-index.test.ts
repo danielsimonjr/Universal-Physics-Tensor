@@ -73,8 +73,8 @@ describe('§VI.6.1 tensor index', () => {
   const listed = specTensorIndex(readFileSync(SPEC, 'utf8'));
 
   it('places every catalog id in exactly one component, matching its category', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(55);
-    expect(listed.size).toBe(55);
+    expect(BRIDGE_EQUATIONS).toHaveLength(58);
+    expect(listed.size).toBe(58);
     for (const entry of BRIDGE_EQUATIONS) {
       expect(
         listed.get(entry.id),
@@ -111,7 +111,7 @@ describe('§VI.6.1 tensor index', () => {
     }
   });
 
-  it('files BE-55 through BE-65 with their category cluster', () => {
+  it('files BE-55 through BE-68 with their category cluster', () => {
     const expected: Record<number, TensorIndexComponent> = {
       55: 'scale-transition',
       56: 'quantum-classical',
@@ -124,6 +124,9 @@ describe('§VI.6.1 tensor index', () => {
       63: 'information-geometry',
       64: 'information-geometry',
       65: 'information-geometry',
+      66: 'field-unification',
+      67: 'field-unification',
+      68: 'information-geometry',
     };
     for (const [id, component] of Object.entries(expected)) {
       const entry = BRIDGE_EQUATIONS.find((e) => e.id === Number(id));

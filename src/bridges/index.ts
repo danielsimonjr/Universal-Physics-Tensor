@@ -2,7 +2,7 @@
  * Universal Physics Tensor — Bridge Equation Index
  *
  * Machine-readable catalog of all bridge equations (IDs from 11) from the UPT
- * specification (Parts I-VI; BE-51–54 catalogued in Part-II §V-B; BE-55–65
+ * specification (Parts I-VI; BE-51–54 catalogued in Part-II §V-B; BE-55–68
  * catalogued in Part-II §V-C). Each entry
  * preserves the spec's stated status, known issues, references, and
  * dependencies on other bridge equations.
@@ -13,11 +13,11 @@
  * Source-of-truth files: docs/specification/Part-{I-VI}.md
  *
  * Honest-claude: fields not explicitly stated in the spec are null (not guessed).
- * - dimensional_signature is populated for all 55 entries. 53 of them (all
+ * - dimensional_signature is populated for all 58 entries. 56 of them (all
  *   except BE-51 and BE-52) are registered in `EXPECTED_DIMENSION_BY_BRIDGE`
  *   (`src/dimensional/bridge-check.ts`); 42 (IDs 11-50, 53, 54) also have AST
  *   encodings under `src/bridges/equations/`. BE-51/52 are closed-form evaluator
- *   bridges, and BE-55-65 have evaluator modules in `src/bridges/`; none of
+ *   bridges, and BE-55-68 have evaluator modules in `src/bridges/`; none of
  *   them has an AST encoding. Populated values are exactly what
  *   `format()` produces for the inferred Dimension shape; never free-form prose.
  * - known_issues are extracted ONLY from explicit issue-markers in the spec
@@ -178,7 +178,7 @@ export interface KnownIssue {
  * deleting it would erase the record that the claim was made and refuted.
  */
 export interface BridgeEquationEntry {
-  /** Equation number, 11-65. */
+  /** Equation number, 11-68. */
   id: number;
   /** Verbatim heading text from the spec. */
   name: string;
@@ -2694,7 +2694,71 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dependencies: [],
   dimensional_signature: `[mass]`,
   tractability_class: 'closed-form',
-  notes: `Added 2026-07-05 (astrophysics cluster): Jeans mass. Closed-form evaluator evaluateJeansMass({T_K, rho_kg_per_m3, mu}) → {M_J_kg} in src/bridges/be65-jeans-mass.ts. Confronted via be65-jeans-mass-confrontation.ts (ORDER-OF-MAGNITUDE consistency: the collapse mass scale of molecular clouds; the numerical prefactor '5' is convention-dependent). Adam/Eve vet 2026-07-05: GREEN(Adam)/YELLOW(Eve). NOTE: BE-66 TOV neutron-star max mass was DEFERRED (both reviewers) — EOS-dependent, not a single-constant bridge.`,
+  notes: `Added 2026-07-05 (astrophysics cluster): Jeans mass. Closed-form evaluator evaluateJeansMass({T_K, rho_kg_per_m3, mu}) → {M_J_kg} in src/bridges/be65-jeans-mass.ts. Confronted via be65-jeans-mass-confrontation.ts (ORDER-OF-MAGNITUDE consistency: the collapse mass scale of molecular clouds; the numerical prefactor '5' is convention-dependent). Adam/Eve vet 2026-07-05: GREEN(Adam)/YELLOW(Eve). NOTE: A Tolman–Oppenheimer–Volkoff neutron-star maximum mass was deferred (both reviewers) — EOS-dependent, not a single-constant bridge. It does not occupy id 66. Id 66 is radiation pressure.`,
+},
+{
+  id: 66,
+  name: `Radiation pressure (opaque surface)`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`optics`, `continuum`] as [string, string],
+  status: 'established',
+  context: `The time-averaged normal pressure of a beam on an opaque surface: P_n = (I/c)(1+R) cos²θ. The absorber endpoint is I/c (R = 0, θ = 0) and the reflector endpoint is 2I/c (R = 1, θ = 0). Bridges an optical intensity to a continuum pressure. The factor of 2 is the mirror factor. BE-64's encoded Thomson force uses factor 1, and PhysJS.Eddington.wrong_dictionary_factor_two doubles a luminosity. Those are different hypotheses. Transmission is zero. The combined (1+R) cos²θ factor is this catalog's assembly of the normal-incidence factor with the oblique factor.`,
+  formula_latex: `P_n = \\frac{I}{c}(1+R)\\cos^2\\theta`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-66) — established textbook relation, unproven in PhysJS`,
+  known_issues: [],
+  references: [
+    `OpenStax University Physics Volume 2, §16.5 "Momentum and Radiation Pressure" (LibreTexts reproduction): absorber pressure u = I/c, perfect reflector at normal incidence 2I/c. The dogfood cites §16.4 for the same two formulas. The section numbers are not reconciled here.`,
+    `Simo & McInnes, AAS 16-483 (2016), Glasgow eprint 129011: ideal sail F = 2 P A cos²γ, where their P is already a pressure (the I/c scale).`,
+    `Eddington 1926 and Rybicki & Lightman 1979 remain the BE-64 citations. The encoded BE-64 force is I σ_T / c.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-1 M T^-2]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateRadiationPressure({I_W_per_m2, R, theta_rad}) → {P_Pa} in src/bridges/be66-radiation-pressure.ts. No formalRef. Unproven until a vendored PhysJS proof exists. The Lean targets are PhysJS.RadiationPressure.coefficient_unfixed, reflector_not_absorber, and oblique_endpoints, sketched in docs/planning/Applied-Physicist-Candidate-Bridges-Design.md. Buckingham on {P, I, c} leaves the constant unfixed. No confrontation: the printed I = 10^6 W/m² stand-ins are arithmetic, not measurements.`,
+},
+{
+  id: 67,
+  name: `Alfvén speed (ideal MHD)`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`fluid`, `plasma`] as [string, string],
+  status: 'established',
+  context: `The phase speed of an ideal-MHD wave along a uniform background field: v_A = B / √(μ0 ρ), with ρ the total mass density. Proton-only ρ = n m_p is a named special case (alfvenProtonOnlyDensity), not the default. Bridges a fluid mass density to a plasma wave speed. The SI coefficient C = 1 is a hypothesis units do not fix. The Gaussian factor 1/√(4π) is a unit dictionary, not a second law. CE-plasma-frequency is a different equation.`,
+  formula_latex: `v_A = \\frac{B}{\\sqrt{\\mu_0 \\rho}}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-67) — established textbook relation, unproven in PhysJS`,
+  known_issues: [],
+  references: [
+    `Alfvén 1942 *Nature* 150:405–406, doi:10.1038/150405d0. The abstract describes a combined electromagnetic-hydrodynamic wave and does not display the speed formula.`,
+    `PlasmaPy 2026.2.0 Alfven_speed: B/√(μ0 ρ) with ρ = n_i m_i + n_e m_e. That documentation cites Alfvén 1942; the citation is not a quotation of the 1942 formula.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[velocity]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateAlfvenSpeed({B_T, rho_kg_per_m3}) → {v_m_per_s} in src/bridges/be67-alfven-speed.ts. rho_kg_per_m3 is the total mass density. alfvenProtonOnlyDensity(n_per_m3) = n m_p is the named special case; passing a number density as rho_kg_per_m3 is not that case. No formalRef. Unproven until a vendored PhysJS proof exists. The Lean targets are PhysJS.AlfvenSpeed.coefficient_not_fixed, proton_only_differs, and gaussian_needs_dictionary, sketched in docs/planning/Applied-Physicist-Candidate-Bridges-Design.md. The 69.95 km/s figure is the proton-only stand-in at B = 12 nT and n = 14 cm⁻³. It does not close a ~60 km/s sentence, and a helium fraction is not claimed to close it. No confrontation.`,
+},
+{
+  id: 68,
+  name: `Tolman–Ehrenfest effect (static thermal equilibrium)`,
+  category: `I`,
+  category_name: `Emergent Spacetime`,
+  bridges: [`gravitation`, `thermodynamics`] as [string, string],
+  status: 'established',
+  context: `In static thermal equilibrium the proper temperature satisfies T √(−g_00) = const, with g_00 < 0 in the repository signature. Bridges a gravitational metric component to a thermodynamic temperature. The 1930 form T0 √g_44 is the mostly-minus reference for the sign. T ‖ξ‖ = const is out of scope. This is not a horizon temperature and is not a dependency of BE-42. Units produce two invariants and do not identify them, so a constant-T reading is a different claim.`,
+  formula_latex: `T\\sqrt{-g_{00}} = \\mathrm{const}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-68) — established textbook relation, unproven in PhysJS`,
+  known_issues: [],
+  references: [
+    `Tolman & Ehrenfest 1930 *Phys. Rev.* 36:1791, doi:10.1103/PhysRev.36.1791. The abstract states that T0 √g_44 is constant. This session did not re-open the PDF; that abstract reading is the dogfood's.`,
+    `Rovelli & Smerlak, arXiv:1005.2985. The Killing form T ‖ξ‖ = const is recorded there and is out of scope here. Journal pagination was not on the HTML that was opened.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[temperature]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateTolmanEhrenfest({T_K, g_00}) → {invariant_K} in src/bridges/be68-tolman-ehrenfest.ts. Requires T > 0 and g_00 < 0. Math.sqrt(g_00) is NaN for g_00 < 0 and is not the formula. tolmanTemperatureAt(invariant, g_00) recovers T. No formalRef. Unproven until a vendored PhysJS proof exists. The Lean targets are PhysJS.TolmanEhrenfest.units_do_not_entail and mostly_plus_needs_the_minus, sketched in docs/planning/Applied-Physicist-Candidate-Bridges-Design.md. Not chained through be-42. No confrontation.`,
 }
 
 ];
@@ -2781,5 +2845,27 @@ export {
   type JeansInputs,
   type JeansResult,
 } from './be65-jeans-mass.js';
+
+/** Radiation pressure of an opaque surface, `P_n = (I/c)(1+R) cos²θ`. */
+export {
+  evaluateRadiationPressure,
+  type RadiationPressureInputs,
+  type RadiationPressureResult,
+} from './be66-radiation-pressure.js';
+/** Alfvén speed `B/√(μ0 ρ)` for a total mass density, plus the proton-only helper. */
+export {
+  evaluateAlfvenSpeed,
+  alfvenProtonOnlyDensity,
+  M_PROTON_SI,
+  type AlfvenInputs,
+  type AlfvenResult,
+} from './be67-alfven-speed.js';
+/** Tolman–Ehrenfest invariant `T √(−g_00)` and the temperature recovered from it. */
+export {
+  evaluateTolmanEhrenfest,
+  tolmanTemperatureAt,
+  type TolmanInputs,
+  type TolmanResult,
+} from './be68-tolman-ehrenfest.js';
 
 export default BRIDGE_EQUATIONS;

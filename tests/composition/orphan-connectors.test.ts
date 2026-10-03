@@ -13,13 +13,16 @@ import { CATALOG_GRAPH } from '../../src/composition/index.js';
 const report = proposeOrphanConnectors(CATALOG_GRAPH);
 
 describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
-  it('partitions the 20 isolated bridges into 7 connectable (same-kind) + 12 unconnected', () => {
+  it('partitions isolated bridges into same-kind connectors and the unconnected remainder', () => {
+    // be-36 ↔ be-67 shares the token "speed" (gravitational-wave speed and
+    // Alfvén speed). be-68 ↔ temperature shares the token "temperature".
+    // Both are review-surface decoys. Neither is a quantity identification.
     expect(report.connectedOrphans).toEqual([
-      'be-15', 'be-22', 'be-24', 'be-26', 'be-41', 'be-45', 'be-47',
+      'be-15', 'be-22', 'be-24', 'be-26', 'be-36', 'be-41', 'be-45', 'be-47', 'be-68',
     ]);
     expect(report.unconnectedOrphans).toEqual([
-      'be-14', 'be-17', 'be-21', 'be-25', 'be-30', 'be-36',
-      'be-39', 'be-43', 'be-46', 'be-49', 'be-50', 'be-53',
+      'be-14', 'be-17', 'be-21', 'be-25', 'be-30',
+      'be-39', 'be-43', 'be-46', 'be-49', 'be-50', 'be-53', 'be-66', 'be-67',
     ]);
     // every isolated bridge is accounted for (connected ∪ unconnected, no overlap)
     const both = new Set([...report.connectedOrphans, ...report.unconnectedOrphans]);

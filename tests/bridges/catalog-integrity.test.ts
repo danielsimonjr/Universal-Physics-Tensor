@@ -86,13 +86,13 @@ function findGeodesicTestForEvaluator(evaluatorName: string): string | null {
 }
 
 describe('Bridge catalog: suite-level invariants', () => {
-  it('exactly 55 bridges exist in BRIDGE_EQUATIONS (+BE-59..62, +BE-63..65)', () => {
+  it('exactly 58 bridges exist in BRIDGE_EQUATIONS (+BE-59..62, +BE-63..68)', () => {
     // Authoritative registry, not a filesystem scan: spec-vs-index drift is
     // already pinned by `tests/bridges/spec-vs-index.test.ts`.
     // Updated 2026-05-24: 42 → 44 (BE-53 Yang-Mills β, BE-54 Randall-Sundrum).
     // Updated 2026-07-05: 44 → 48 (PI-instrument bridge expansion — BE-55
     // quantum Hall, BE-56 Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist).
-    expect(BRIDGE_EQUATIONS.length).toBe(55);
+    expect(BRIDGE_EQUATIONS.length).toBe(58);
   });
 
   it('every bridge has at least one tests/bridges/be-NN-*.test.ts file', () => {

@@ -296,7 +296,7 @@ import { BRIDGE_EQUATIONS } from 'universal-physics-tensor';
 ┌─────────────────────────────────────────────────────────────┐
 │ ACCESS METADATA FIELDS                                       │
 │                                                             │
-│ entry.id                  // 11–65                          │
+│ entry.id                  // 11–68                          │
 │ entry.name                // verbatim spec heading          │
 │ entry.status              // BridgeEquationStatus           │
 │ entry.formula_latex       // primary equation as LaTeX      │
@@ -488,7 +488,7 @@ The `verifyKillingEquation` flow is analogous. It takes caller-supplied exact Ch
 
 ## Flow 8: Bridge-Edge Composition
 
-**Purpose**: Chain two bridge edges through a shared quantity into a derived relation. The pool of composable edges is the 46-edge graph (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds).
+**Purpose**: Chain two bridge edges through a shared quantity into a derived relation. The pool of composable edges is the 49-edge graph (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds + 3 applied-physicist).
 
 **Entry point**: `composeEdges(first: BridgeEdge, second: BridgeEdge, opts?: ComposeOptions): BridgeEdge`
 

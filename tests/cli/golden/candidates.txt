@@ -1,10 +1,10 @@
 
-Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (55-bridge)]
-  anchored core: the clusters holding at least one of the 14 established-confidence edge(s) of the 46 in this graph
+Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (58-bridge)]
+  anchored core: the clusters holding at least one of the 17 established-confidence edge(s) of the 49 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  152 total  →  118 touch the anchored core  →  37 also same-kind
+  funnel:  166 total  →  132 touch the anchored core  →  45 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     active-noise-energy ≟ inflation-hubble-energy            [energy]
@@ -18,6 +18,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     carrier-density ≟ proton-density                         [density]
     coarsening-length ≟ quantum-correlation-length           [length]
     coarsening-length ≟ reference-correlation-length         [length]
+    critical-density ≟ plasma-mass-density                   [density]
     decoherence-rate ≟ hubble-rate                           [rate]
     decoherence-rate ≟ mutation-rate                         [rate]
     defect-rest-mass ≟ planck-mass                           [mass]
@@ -27,21 +28,28 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     effective-mass ≟ reference-mass                          [mass]
     effective-mass ≟ swampland-tower-mass                    [mass]
     effective-mass ≟ tunneling-mass                          [mass]
+    effective-temperature ≟ proper-temperature               [temperature]
     far-radius ≟ foerster-radius                             [radius]
+    gravitational-wave-speed ≟ alfven-speed                  [speed]
     grw-localization-rate ≟ hubble-rate                      [rate]
     grw-localization-rate ≟ mutation-rate                    [rate]
+    lambda-mass-density ≟ plasma-mass-density                [mass]
     landauer-erasure-energy ≟ inflation-hubble-energy        [energy]
     landauer-erasure-energy ≟ planck-mass-energy             [energy]
     mass ≟ planck-mass                                       [mass]
     mass ≟ reference-mass                                    [mass]
     mass ≟ swampland-tower-mass                              [mass]
     mass ≟ tunneling-mass                                    [mass]
+    mass-density ≟ plasma-mass-density                       [mass]
     near-radius ≟ foerster-radius                            [radius]
     planck-length ≟ quantum-correlation-length               [length]
     planck-length ≟ reference-correlation-length             [length]
+    reference-temperature ≟ proper-temperature               [temperature]
+    reheating-temperature ≟ proper-temperature               [temperature]
     relaxation-rate ≟ hubble-rate                            [rate]
     relaxation-rate ≟ mutation-rate                          [rate]
     schwarzschild-radius ≟ foerster-radius                   [radius]
+    temperature ≟ proper-temperature                         [temperature]
     time ≟ microscopic-relaxation-time                       [time]
     tunneling-mass ≟ defect-rest-mass                        [mass]
 
