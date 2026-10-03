@@ -11,6 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-10-02
 
+- **A bad Kerr geodesic value exits 1.** `upt metric kerr --geodesic` with a non-positive mass, or with `|a|` above GM/c², is `CliError`. A missing metric name stays exit 2. A finite-difference refusal stays exit 2. Package version in this tree is still 1.0.4.
 - **The fixed-step geodesic RK4 calls MathTS.** `integrateGeodesic` and `integrateRK4` use `solveODESystem` with `dt`. `solveODE` is adaptive and is not that call. `gl4-integrator.ts` and `composition/uncertainty.ts` stay. Package version in this tree is still 1.0.4.
 - **Unit conversion and the 16-point rule call MathTS.** `convertValue` uses `unit` and `toSI` when that SI ratio matches the local scale. A temperature difference does not. `bit` stays ln 2 nat. Buckingham-π stays the local exact rational null space. `integrateGaussLegendre` uses `rootsLegendre(16)`. `gaussQuad` is not that degree. Package version in this tree is still 1.0.4.
 - **MathTS is required.** The nine `@danielsimonjr/mathts-*` packages are dependencies: autograd ^0.3.16, core ^0.16.0, expression ^0.9.0, functions ^0.66.0, matrix ^0.7.6, parallel ^0.6.8, tensor ^0.2.22, wasm ^0.3.0, workerpool ^0.2.6. `@viz-js/viz` stays an optional peer. The 2026-09-29 sentence that they are still optional peers is the record from that date. This repository does not publish a MathTS tarball. Package version in this tree is still 1.0.4 until the 2.0.0 release commit.

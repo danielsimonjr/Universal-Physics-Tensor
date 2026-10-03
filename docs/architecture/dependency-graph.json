@@ -12495,6 +12495,7 @@
           {
             "file": "../errors.js",
             "imports": [
+              "CliError",
               "UsageError"
             ]
           },

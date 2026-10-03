@@ -88,3 +88,22 @@ describe('path --at: every spelling of a point gives the same verdict', () => {
     }
   });
 });
+
+describe('Kerr geodesic values', () => {
+  it('a non-positive mass is a bad value and exits 1', async () => {
+    expect(await code(['metric', 'kerr', '--geodesic', 'M=0', 'r=1e8'])).toBe(1);
+    expect(await code(['metric', 'kerr', '--geodesic', 'M=-1', 'r=1e8'])).toBe(1);
+  });
+  it('|a| above GM/c² is a bad value and exits 1', async () => {
+    expect(await code(['metric', 'kerr', '--geodesic', 'a=2000', 'r=1e8'])).toBe(1);
+  });
+  it('a missing metric name stays a usage error and exits 2', async () => {
+    expect(await code(['metric'])).toBe(2);
+  });
+  it('a Kerr finite-difference refusal stays a usage error and exits 2', async () => {
+    expect(await code(['metric', 'kerr', '--geodesic', 'a=1e9', 'r=1e8'])).toBe(2);
+  });
+  it('a spin inside the bound still exits 0', async () => {
+    expect(await code(['metric', 'kerr', '--geodesic', 'a=1000', 'r=1e8'])).toBe(0);
+  });
+});

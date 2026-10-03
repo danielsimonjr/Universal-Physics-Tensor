@@ -3727,7 +3727,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
-| `../errors.js` | `UsageError` | Import |
+| `../errors.js` | `CliError, UsageError` | Import |
 | `../../cli-api.js` | `MetricId` | Import (type-only) |
 
 **Exports:**
