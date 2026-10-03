@@ -148,9 +148,10 @@ function createMathtsFormulaParser(
           try {
             result = compiled.evaluate({ ...shims, ...scope });
           } catch (err) {
-            throw new FormulaError(
-              err instanceof Error ? err.message : String(err),
-            );
+            // `compileExpr` quotes the name (`Undefined symbol "process"`).
+            // The interpreter path reports `Undefined symbol process`.
+            const message = err instanceof Error ? err.message : String(err);
+            throw new FormulaError(message.replace(/^Undefined symbol "([^"]+)"$/, 'Undefined symbol $1'));
           }
           if (typeof result !== 'number' || !Number.isFinite(result)) {
             // typeof Infinity and NaN is "number", which reads as a type error.

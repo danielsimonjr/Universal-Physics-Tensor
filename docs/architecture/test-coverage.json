@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 421,
-    "totalTestFiles": 581,
+    "totalTestFiles": 582,
     "testedCount": 411,
     "untestedCount": 10,
     "coveragePercent": "97.6"
@@ -6569,6 +6569,7 @@
       "tests/numerical/kretschmann-horizon.test.ts",
       "tests/numerical/kretschmann-lowering.test.ts",
       "tests/numerical/kretschmann-schwarzschild.test.ts",
+      "tests/numerical/mathts-067-delegation.test.ts",
       "tests/numerical/painleve-gullstrand-curvature.test.ts",
       "tests/numerical/parse-physics.test.ts",
       "tests/numerical/schwarzschild-radial-geodesic.test.ts",
@@ -7086,6 +7087,7 @@
       "tests/dimensional/buckingham.test.ts",
       "tests/dimensional/derivation-benchmark.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/numerical/mathts-067-delegation.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/dimensional/connection-validators.ts": [
@@ -7601,6 +7603,7 @@
       "tests/numerical/lowering-contract.test.ts",
       "tests/numerical/lowering-covariant-guard.test.ts",
       "tests/numerical/lowering-utils.test.ts",
+      "tests/numerical/mathts-067-delegation.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/parse-physics.test.ts",
@@ -7999,6 +8002,7 @@
       "tests/numerical/formula-conformance.mathts.test.ts",
       "tests/numerical/formula-mathts.test.ts",
       "tests/numerical/formula.test.ts",
+      "tests/numerical/mathts-067-delegation.test.ts",
       "tests/numerical/parse-physics.test.ts"
     ],
     "src/numerical/formula-registry.ts": [
@@ -16505,6 +16509,12 @@
       "src/numerical/types.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/numerical/mathts-067-delegation.test.ts": [
+      "src/core/constants.ts",
+      "src/dimensional/buckingham.ts",
+      "src/dimensional/types.ts",
+      "src/numerical/formula-mathts.ts"
     ],
     "tests/numerical/mathts-autograd.test.ts": [
       "src/numerical/tensor-engine.ts",

@@ -175,19 +175,21 @@ export function propagateEvaluatorUncertainty(
       const u = sigma[k]!;
       const x = inputs[k]!;
       // The CLI step is per input (`u·10⁻³`, or a relative step when u is 0).
-      // MathTS takes one `relativeStep` for every name, so each input is its own call.
-      // The correlation sum below stays here: one MathTS call cannot use those steps together.
+      // MathTS differentiates every key of `values` with one `relativeStep`, so
+      // this call's values object is only `k`. The callback puts the other
+      // inputs back. Passing them as values would step an exact input (f_lo = 0
+      // goes negative) and discard this partial. The correlation sum stays here.
       const h = u > 0 ? u * 1e-3 : Math.abs(x) * 1e-6 || 1e-6;
       const relativeStep = h / Math.max(Math.abs(x), 1e-30);
       let probed: ReturnType<typeof propagateScalarUncertainty> | undefined;
       try {
         probed = propagateScalarUncertainty(
           (vals) => {
-            const out = f(vals)[name];
+            const out = f({ ...inputs, ...vals })[name];
             if (typeof out !== 'number' || !Number.isFinite(out)) throw new Error('non-numeric');
             return out;
           },
-          inputs,
+          { [k]: x },
           { [k]: u },
           u > 0
             ? { relativeStep, curvatureOffsets: { [k]: u } }
