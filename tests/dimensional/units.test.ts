@@ -44,6 +44,8 @@ describe('parseUnit', () => {
 
   it('reads the lab units a script reaches for, and keeps prefix rules', () => {
     expect(parseUnit('T')).toMatchObject({ scale: 1, dim: { M: 1, T: -2, I: -1 } });
+    expect(parseUnit('nT').scale).toBe(1e-9);
+    expect(parseUnit('uT').scale).toBe(1e-6);
     expect(parseUnit('Ts').scale).toBe(1e12);
     expect(parseUnit('G').scale).toBe(1e-4);
     expect(parseUnit('GPa').scale).toBe(1e9);
