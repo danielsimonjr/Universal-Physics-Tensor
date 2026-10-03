@@ -4456,12 +4456,13 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `../core/constants.js` | `E_SI, M_E_SI` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../core/types.js` | `InformationMeasure` | Import (type-only) |
-| `../dimensional/types.js` | `CHARGE, MASS` | Import |
+| `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, MASS` | Import |
 | `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 
 **Exports:**
 - Functions: `canonicalToEdges`
@@ -8046,7 +8047,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 421 |
 | Total Modules | 13 |
-| Total Lines of Code | 90968 |
+| Total Lines of Code | 91141 |
 | Total Exports | 3010 |
 | Total Re-exports | 1417 |
 | Total Classes | 60 |
@@ -8054,7 +8055,7 @@ graph TD
 | Total Functions | 783 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 570 |
+| Type-only Imports | 571 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

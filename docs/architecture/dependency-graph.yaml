@@ -10355,6 +10355,7 @@ modules:
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
+            - piMultipleValue
         - file: ../core/constants.js
           imports:
             - E_SI
@@ -10370,10 +10371,15 @@ modules:
         - file: ../dimensional/types.js
           imports:
             - CHARGE
+            - DIMENSIONLESS
             - MASS
         - file: ../dimensional/algebra.js
           imports:
             - equals
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
       exports:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
@@ -20564,7 +20570,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 421
   totalModules: 13
-  totalLinesOfCode: 90968
+  totalLinesOfCode: 91141
   totalExports: 3010
   totalClasses: 60
   totalInterfaces: 481
@@ -20573,7 +20579,7 @@ statistics:
   totalEnums: 0
   totalConstants: 751
   totalReExports: 1417
-  totalTypeOnlyImports: 570
+  totalTypeOnlyImports: 571
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1

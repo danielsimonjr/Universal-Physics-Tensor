@@ -37,6 +37,9 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         graph is reported NOT COVERED, with near names and what \`upt search\`
         finds for its words, and exits 1. --source picks the graph (default
         catalog); the result names the source it used.
+        --source=both also prints the other quantity name when a canonical
+        equation restates a catalog bridge under a different name, and says
+        whether the two recovered values agree.
         A value is a number, a unit (mass=1Msun) or a constant expression
         (mass=1*M_sun). A bare number is already in the quantity's unit.
         A tagged quantity converts into that unit (GeV, bit, nat, J/K).
@@ -114,6 +117,59 @@ function bridgeRedirect(
   };
 }
 
+/** A canonical equation and the catalog bridge it restates, when those two target names differ. */
+function restatementPartner(
+  api: CommandCtx['api'],
+  target: string,
+): { name: string; canonicalId: string; bridgeId: number } | null {
+  const norm = (s: string): string => s.replaceAll('_', '-').toLowerCase();
+  const want = norm(target);
+  for (const eq of api.CANONICAL_EQUATIONS) {
+    if (eq.restatesBridge === undefined) continue;
+    const bridgeId = Number(eq.restatesBridge);
+    if (!Number.isInteger(bridgeId)) continue;
+    const catalog = api.CATALOG_GRAPH.find((e) => e.beId === bridgeId);
+    if (catalog === undefined) continue;
+    const canonName = eq.dimensional.target.name;
+    const catName = catalog.target.name;
+    if (norm(canonName) === norm(catName)) continue;
+    if (norm(canonName) === want) return { name: catName, canonicalId: eq.id, bridgeId };
+    if (norm(catName) === want) return { name: canonName, canonicalId: eq.id, bridgeId };
+  }
+  return null;
+}
+
+function printExplanation(
+  out: CommandCtx['out'],
+  target: string,
+  label: string,
+  x: ReturnType<CommandCtx['api']['explainQuantity']>,
+): void {
+  out(`\n● ${target}  [source: ${label}]`);
+  out(`  ${x.summary}`);
+  if (x.derivations.length) {
+    out('  derivations:');
+    for (const d of x.derivations) {
+      const val = d.value !== undefined ? ` = ${d.value.toExponential(4)}` : '';
+      const chain =
+        d.leafInputs.join(',') !== d.sources.join(',') ? `  [from leaves: ${d.leafInputs.join(', ')}]` : '';
+      out(`    - ${d.edge} (${d.label})${val}${chain}`);
+      if (d.dimensionalForm) out(`        ${d.dimensionalForm.formula}`);
+    }
+  }
+  if (x.blockingFrontier.length) {
+    out(`  to determine it, also supply: ${x.blockingFrontier.join(', ')}`);
+  }
+}
+
+/** Relative agreement of two recovered values. Absent when either value is missing. */
+function valuesAgree(a: number | undefined, b: number | undefined): boolean | undefined {
+  if (a === undefined || b === undefined || !Number.isFinite(a) || !Number.isFinite(b)) return undefined;
+  const scale = Math.max(Math.abs(a), Math.abs(b));
+  if (scale === 0) return a === b;
+  return Math.abs(a - b) / scale <= 1e-6;
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
 
@@ -163,26 +219,50 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const known = parseKnown(rest);
   const x = api.explainQuantity(graph, resolvedTarget, known);
+  const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;
+  const partnerKnown = partner !== null && names.has(partner.name);
+  const partnerExplanation = partnerKnown ? api.explainQuantity(graph, partner!.name, known) : undefined;
+  const agree = valuesAgree(x.recoveredValue, partnerExplanation?.recoveredValue);
 
   if (args.flags.has('json')) {
-    emitJson({ command: 'explain', source, result: x }, ctx.write);
+    emitJson(
+      {
+        command: 'explain',
+        source,
+        result:
+          partner !== null && partnerExplanation !== undefined
+            ? {
+                ...x,
+                restatement: {
+                  canonicalId: partner.canonicalId,
+                  bridgeId: partner.bridgeId,
+                  otherName: partner.name,
+                  valuesAgree: agree,
+                  explanation: partnerExplanation,
+                },
+              }
+            : x,
+      },
+      ctx.write,
+    );
     return 0;
   }
 
-  out(`\n● ${target}  [source: ${label}]`);
-  out(`  ${x.summary}`);
-  if (x.derivations.length) {
-    out('  derivations:');
-    for (const d of x.derivations) {
-      const val = d.value !== undefined ? ` = ${d.value.toExponential(4)}` : '';
-      const chain =
-        d.leafInputs.join(',') !== d.sources.join(',') ? `  [from leaves: ${d.leafInputs.join(', ')}]` : '';
-      out(`    - ${d.edge} (${d.label})${val}${chain}`);
-      if (d.dimensionalForm) out(`        ${d.dimensionalForm.formula}`);
+  printExplanation(out, target, label, x);
+  if (partner !== null && partnerExplanation !== undefined) {
+    printExplanation(out, partner.name, label, partnerExplanation);
+    const who = `${partner.canonicalId} restates be-${partner.bridgeId}`;
+    if (agree === true) {
+      out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}). Values agree.`);
+    } else if (agree === false) {
+      const ratio = x.recoveredValue! / partnerExplanation.recoveredValue!;
+      out(
+        `  ${resolvedTarget} and ${partner.name} are one restatement (${who}). ` +
+          `Values DISAGREE: ${resolvedTarget} / ${partner.name} = ${ratio.toExponential(4)}.`,
+      );
+    } else {
+      out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}).`);
     }
-  }
-  if (x.blockingFrontier.length) {
-    out(`  to determine it, also supply: ${x.blockingFrontier.join(', ')}`);
   }
   return 0;
 }

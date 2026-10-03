@@ -15420,7 +15420,8 @@
           {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
-              "CONSTANTS"
+              "CONSTANTS",
+              "piMultipleValue"
             ]
           },
           {
@@ -15448,6 +15449,7 @@
             "file": "../dimensional/types.js",
             "imports": [
               "CHARGE",
+              "DIMENSIONLESS",
               "MASS"
             ]
           },
@@ -15456,6 +15458,13 @@
             "imports": [
               "equals"
             ]
+          },
+          {
+            "file": "../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
           }
         ],
         "exports": [
@@ -29505,7 +29514,7 @@
   "statistics": {
     "totalTypeScriptFiles": 421,
     "totalModules": 13,
-    "totalLinesOfCode": 90968,
+    "totalLinesOfCode": 91141,
     "totalExports": 3010,
     "totalClasses": 60,
     "totalInterfaces": 481,
@@ -29514,7 +29523,7 @@
     "totalEnums": 0,
     "totalConstants": 751,
     "totalReExports": 1417,
-    "totalTypeOnlyImports": 570,
+    "totalTypeOnlyImports": 571,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
