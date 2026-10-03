@@ -503,11 +503,11 @@ where <img src="https://i.upmath.me/svg/f" alt="f" /> is a cutoff function and <
 >
 > The Gram-form alternative (`v_i ∈ ℝ^d`, require `G_ij = ⟨v_i, v_j⟩` to agree in sign pattern with `C`) was not adopted because the embedding `v_i` was unspecified, leaving the check parametric.
 >
-> **Catalog-framing scope note:** Per Part-I §1.1, `Π` is a labeled multi-index catalog. The consistency matrix `C` is a **derived 55×55 matrix on the discrete index of bridge equations** — it is a relation on catalog cells, not an operation that requires Hilbert-space structure on `Π`. The balance-theoretic check is well-defined as graph combinatorics on the signed-graph view of `C`.
+> **Catalog-framing scope note:** Per Part-I §1.1, `Π` is a labeled multi-index catalog. The consistency matrix `C` is a **derived 58×58 matrix on the discrete index of bridge equations** — it is a relation on catalog cells, not an operation that requires Hilbert-space structure on `Π`. The balance-theoretic check is well-defined as graph combinatorics on the signed-graph view of `C`.
 >
-> **Entry-construction recipe:** see **Part-II §6.2.1** for an illustrative recipe and two worked example pairs (BE-11 vs BE-19 → `0`; BE-22 vs BE-14 → `+1`). The recipe is illustrative, not authoritative; full population of the 1485 off-diagonal entries (55·54/2 unordered pairs; 946 under the 44-entry write-up, IDs 11–54) requires per-pair physics judgment that is currently out of scope. The balance-theoretic check is **structurally well-defined but operationally inactive** until a fuller entry-construction recipe is adopted.
+> **Entry-construction recipe:** see **Part-II §6.2.1** for an illustrative recipe and two worked example pairs (BE-11 vs BE-19 → `0`; BE-22 vs BE-14 → `+1`). The recipe is illustrative, not authoritative; full population of the 1653 off-diagonal entries (58·57/2 unordered pairs; 1485 under the 55-entry write-up, IDs 11–65; 946 under the 44-entry write-up, IDs 11–54) requires per-pair physics judgment that is currently out of scope. The balance-theoretic check is **structurally well-defined but operationally inactive** until a fuller entry-construction recipe is adopted.
 
-The **Bridge Consistency Matrix** <img src="https://i.upmath.me/svg/%5Cmathbf%7BC%7D" alt="\mathbf{C}" /> is a <img src="https://i.upmath.me/svg/55%20%5Ctimes%2055" alt="55 \times 55" /> matrix indexed by the 55 catalogued bridge equations (11-65) where:
+The **Bridge Consistency Matrix** <img src="https://i.upmath.me/svg/%5Cmathbf%7BC%7D" alt="\mathbf{C}" /> is a <img src="https://i.upmath.me/svg/58%20%5Ctimes%2058" alt="58 \times 58" /> matrix indexed by the 58 catalogued bridge equations (11-68) where:
 
 <img src="https://i.upmath.me/svg/C_%7Bij%7D%20%3D%20%5Cbegin%7Bcases%7D%0A%2B1%20%26%20%5Ctext%7Bif%20bridge%20equations%20%7D%20i%20%5Ctext%7B%20and%20%7D%20j%20%5Ctext%7B%20are%20mutually%20reinforcing%7D%20%5C%5C%0A0%20%26%20%5Ctext%7Bif%20they%20are%20logically%20independent%7D%20%5C%5C%0A-1%20%26%20%5Ctext%7Bif%20they%20are%20contradictory%7D%20%5C%5C%0A%5Ctext%7Bcomplex%7D%20%26%20%5Ctext%7Bif%20relationship%20is%20context-dependent%7D%0A%5Cend%7Bcases%7D" alt="C_{ij} = \begin{cases}
 +1 & \text{if bridge equations } i \text{ and } j \text{ are mutually reinforcing} \\
@@ -641,10 +641,10 @@ where <img src="https://i.upmath.me/svg/z_%7B%5Cbeta%7D" alt="z_{\beta}" /> corr
 
 **20.1.2 Multiple Testing Correction**
 
-Testing 55 catalogued bridge equations (numbered 11-65) simultaneously requires correction for multiple comparisons:
+Testing 58 catalogued bridge equations (numbered 11-68) simultaneously requires correction for multiple comparisons:
 
 **Bonferroni Correction**:
-<img src="https://i.upmath.me/svg/%5Calpha_%7B%5Ctext%7Bcorrected%7D%7D%20%3D%20%5Cfrac%7B%5Calpha%7D%7B55%7D" alt="\alpha_{\text{corrected}} = \frac{\alpha}{55}" />
+<img src="https://i.upmath.me/svg/%5Calpha_%7B%5Ctext%7Bcorrected%7D%7D%20%3D%20%5Cfrac%7B%5Calpha%7D%7B58%7D" alt="\alpha_{\text{corrected}} = \frac{\alpha}{58}" />
 
 **False Discovery Rate (FDR) Control**:
 <img src="https://i.upmath.me/svg/%5Calpha_%7B%5Ctext%7BFDR%7D%7D%20%3D%20%5Cfrac%7Bi%7D%7B55%7D%20%5Calpha" alt="\alpha_{\text{FDR}} = \frac{i}{55} \alpha" />
@@ -1078,6 +1078,6 @@ This specification (core Parts I-VI, with later supplements in Parts VII-IX) out
 
 **Framework Statistics:**
 - Total size: see authoritative figure in Part-VI §29 "Framework Statistics (honest)" (single source of truth).
-- Bridge equations specified: 55 (numbered 11-65; BE-51–54 are Part-II §V-B; BE-55–65 are Part-II §V-C)
+- Bridge equations specified: 58 (numbered 11-68; BE-51–54 are Part-II §V-B; BE-55–68 are Part-II §V-C)
 - Algorithm pseudocode blocks across all six parts: ~23 (Part-I: 3, Part-III: 6, Part-IV: 3, Part-V: 8, Part-VI: 3; none implemented). Of the formally numbered ones, 12 distinct sections exist (Algorithms 1, 2, 3A, 3B, 4, 5, 6, 7, 8, 9, 10, 11) — the 3A/3B split makes it 12 not 11.
 - Note: Equations 1-10 represent the "diagonal" known laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) that are implicit in L and not catalogued individually.

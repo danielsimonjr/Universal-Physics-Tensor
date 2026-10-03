@@ -27,3 +27,4 @@ export * from './quantities/gravitation-cosmology.js';
 export * from './quantities/fields.js';
 export * from './quantities/condensed-matter.js';
 export * from './quantities/common.js';
+export * from './quantities/applied-physicist.js';

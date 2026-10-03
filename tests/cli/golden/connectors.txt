@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 123 established-confidence edge(s) of the 155 in this graph
+  anchored core: the clusters holding at least one of the 126 established-confidence edge(s) of the 158 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster
   radius is not a Schwarzschild radius). Same-kind (shared name token) = stronger.
 
-  19 of the isolated bridges have a same-kind connector; 11 are truly unconnected.
+  20 of the isolated bridges have a same-kind connector; 11 are truly unconnected.
 
   SAME-KIND connectors (the motivated set — orphan ≟ core via shared token):
     ── be-14 (isolated):
@@ -53,6 +53,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         tunneling-mass ≟ secondary-mass                        [[mass]]  → CE-newton-gravitation
         tunneling-mass ≟ swampland-tower-mass                  [[mass]]  → be-41
     ── be-36 (isolated):
+        gravitational-wave-speed ≟ alfven-speed                [[velocity]]  → be-67
         gravitational-wave-speed ≟ most-probable-speed         [[velocity]]  → CE-mb-most-probable-speed
         gravitational-wave-speed ≟ sound-speed                 [[velocity]]  → CE-debye-frequency
         gravitational-wave-speed ≟ speed                       [[velocity]]  → CE-string-wave-speed
@@ -103,6 +104,14 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         planck-mass-energy ≟ spring-potential-energy           [[energy]]  → CE-spring-potential-energy
         planck-mass-energy ≟ state-energy                      [[energy]]  → CE-boltzmann-factor
         planck-mass-energy ≟ thermal-energy                    [[energy]]  → CE-equipartition
+    ── be-68 (isolated):
+        proper-temperature ≟ cold-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
+        proper-temperature ≟ effective-temperature             [[temperature]]  → be-27
+        proper-temperature ≟ hot-reservoir-temperature         [[temperature]]  → CE-carnot-efficiency
+        proper-temperature ≟ reference-temperature             [[temperature]]  → be-33
+        proper-temperature ≟ reheating-temperature             [[temperature]]  → be-34
+        proper-temperature ≟ temperature                       [[temperature]]  → be-12
+        proper-temperature ≟ temperature-change                [[temperature]]  → CE-heat-capacity
     ── CE-bekenstein-hawking (isolated):
         bh-entropy ≟ boltzmann-entropy                         [[entropy]]  → CE-boltzmann-entropy
         bh-entropy ≟ entropy-change                            [[entropy]]  → CE-clausius-entropy
@@ -165,6 +174,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         laplace-pressure ≟ dynamic-pressure                    [[L^-1 M T^-2]]  → CE-dynamic-pressure
         laplace-pressure ≟ kinetic-pressure                    [[L^-1 M T^-2]]  → CE-kinetic-pressure
         laplace-pressure ≟ pressure                            [[L^-1 M T^-2]]  → CE-hydrostatic-pressure
+        laplace-pressure ≟ radiation-pressure                  [[L^-1 M T^-2]]  → be-66
         laplace-pressure ≟ static-pressure                     [[L^-1 M T^-2]]  → CE-bernoulli
     ── CE-lorentz-force (isolated):
         lorentz-force ≟ coulomb-force                          [[force]]  → CE-coulomb

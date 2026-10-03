@@ -116,6 +116,7 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'lawSchwarzschildRadius', 'M_SUN_KG',
   // v0.10.0 T5 — catalog-tranche edges (BE-14/19/21/48/53/54)
   'be14Edge', 'be19Edge', 'be21Edge', 'be48Edge', 'be53Edge', 'be54Edge',
+  'be66Edge', 'be67Edge', 'be68Edge', 'APPLIED_PHYSICIST_EDGES',
   // v0.8.0 — membership criterion + negative catalog (G-2 / P-4)
   'adjudicateBridgeEntry', 'adjudicateCatalog',
   'REJECTED_BRIDGE_ADJUDICATIONS', 'REJECTED_BRIDGE_IDS',

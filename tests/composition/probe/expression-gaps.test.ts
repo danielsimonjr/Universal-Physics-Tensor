@@ -69,11 +69,11 @@ describe('expression search gaps', () => {
       return counts;
     };
     expect(extra).toHaveLength(6);
-    expect(wrappers).toHaveLength(271);
-    expect(byKind(wrappers)).toEqual({ 'relation-link': 256, 'regime-transition': 15 });
+    expect(wrappers).toHaveLength(294);
+    expect(byKind(wrappers)).toEqual({ 'relation-link': 279, 'regime-transition': 15 });
     expect(wrappers.every((g) => g.searchability.searchable === false)).toBe(true);
     expect(byKind(scanWithExpressionGaps(CATALOG_GRAPH))).toEqual({
-      'relation-link': 256,
+      'relation-link': 279,
       'regime-transition': 15,
       'prediction-residual': 6,
     });
