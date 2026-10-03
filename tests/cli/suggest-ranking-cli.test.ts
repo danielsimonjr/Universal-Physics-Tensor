@@ -23,6 +23,6 @@ describe('upt map and upt explain rank suggestions by edit distance first', () =
   it('explain: `hawkng-temperature` suggests `hawking-temperature` first', async () => {
     const r = await run(['explain', 'hawkng-temperature']);
     expect(r.code).toBe(1);
-    expect(r.text).toMatch(/did you mean: hawking-temperature,/);
+    expect(r.text).toMatch(/did you mean: hawking-temperature/);
   });
 });

@@ -20,6 +20,12 @@ import { emitJson } from '../output.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
 import { readNamedBinding } from '../../numerical/binding-value.js';
+import {
+  aliasesForTarget,
+  nearQuantityNames,
+  rewriteInputKey,
+  shareSynonyms,
+} from '../../composition/aliases.js';
 
 /** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
 const SEARCH_HITS_SHOWN = 5;
@@ -34,8 +40,11 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         Explain how the graph determines a quantity: the identifiability
         verdict, recovered value, derivation chains, and whether the inputs
         are dimensionally sufficient. A name that is not a quantity of the
-        graph is reported NOT COVERED, with near names and what \`upt search\`
-        finds for its words, and exits 1. --source picks the graph (default
+        graph is reported NOT COVERED, with a one-edit name and what \`upt search\`
+        finds for its words, and exits 1. A shared token such as \`length\` is
+        not a near name. An evaluate key (\`I_W_per_m2\`, \`B_T\`, \`T_K\`, \`g_00\`)
+        is the graph quantity that edge records. A name that does not resolve
+        exits 1. --source picks the graph (default
         catalog); the result names the source it used.
         --source=both also prints the other quantity name when a canonical
         equation restates a catalog bridge under a different name, and says
@@ -54,38 +63,6 @@ const HELP = `upt explain <quantity> [name=value | name] ...
  * `mass=1e500`→∞, and a bare name alongside a valued one were all silent
  * wrong-physics footguns.
  */
-/**
- * Vacuum B is one quantity. The wire, cyclotron, and Larmor laws name it
- * `magnetic-field`. The Poynting law names it `magnetic-flux-density`. A
- * value supplied under either name is the same field for every graph node
- * that uses the other name. Two explicit values are left as given.
- */
-const MAGNETIC_FIELD_NAMES = ['magnetic-field', 'magnetic-flux-density'] as const;
-
-function shareMagneticFieldName(
-  known: string[] | Record<string, number>,
-  graphNames: ReadonlySet<string>,
-): string[] | Record<string, number> {
-  if (Array.isArray(known)) {
-    const hit = MAGNETIC_FIELD_NAMES.filter((n) => known.includes(n));
-    if (hit.length === 0) return known;
-    const extra = MAGNETIC_FIELD_NAMES.filter((n) => graphNames.has(n) && !known.includes(n));
-    return extra.length === 0 ? known : [...known, ...extra];
-  }
-  const hit = MAGNETIC_FIELD_NAMES.filter((n) => Object.hasOwn(known, n));
-  if (hit.length !== 1) return known;
-  const source = hit[0]!;
-  const out: Record<string, number> = { ...known };
-  let added = false;
-  for (const n of MAGNETIC_FIELD_NAMES) {
-    if (graphNames.has(n) && !Object.hasOwn(out, n)) {
-      out[n] = known[source]!;
-      added = true;
-    }
-  }
-  return added ? out : known;
-}
-
 function parseKnown(args: readonly string[]): string[] | Record<string, number> {
   const valued = args.filter((a) => a.includes('='));
   if (valued.length === 0) return [...args]; // names mode
@@ -204,6 +181,33 @@ function valuesAgree(a: number | undefined, b: number | undefined): boolean | un
   return Math.abs(a - b) / scale <= 1e-6;
 }
 
+function rebind(
+  known: string[] | Record<string, number>,
+  aliases: ReadonlyMap<string, string>,
+  graphNames: ReadonlySet<string>,
+): string[] | Record<string, number> {
+  const rewrite = (key: string): string => {
+    const hit = rewriteInputKey(key, aliases, graphNames);
+    if (hit === null) {
+      throw new CliError(
+        `upt explain: '${key}' did not resolve to a quantity. ` +
+          'A failed lookup is not a derivation, and this command does not exit 0.',
+      );
+    }
+    return hit;
+  };
+  if (Array.isArray(known)) return known.map(rewrite);
+  const out: Record<string, number> = {};
+  for (const [key, value] of Object.entries(known)) {
+    const name = rewrite(key);
+    if (Object.hasOwn(out, name) && out[name] !== value) {
+      throw new CliError(`upt explain: '${name}' is given twice.`);
+    }
+    out[name] = value;
+  }
+  return out;
+}
+
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
 
@@ -230,11 +234,19 @@ async function run(ctx: CommandCtx): Promise<number> {
   // C4). It used to get the same "no derivation path" answer as a real quantity
   // the inputs cannot reach, and exit 0. Underscores resolve like hyphens.
   const names = new Set(graph.flatMap((e) => [e.target.name, ...e.sources.map((s) => s.name)]));
-  const resolvedTarget = api.resolveToCatalogName(target, names);
+  let resolvedTarget = api.resolveToCatalogName(target, names);
   if (resolvedTarget === null) {
-    const near = api.suggestQuantities(target, names, 5);
+    const near = nearQuantityNames(target, names);
+    // A single token one edit from exactly one quantity is that quantity.
+    // A hyphenated miss stays a suggestion: `hawkng-temperature` exits 1.
+    if (!/[-_\s]/.test(target) && near.length === 1) {
+      resolvedTarget = near[0]!;
+    }
+  }
+  if (resolvedTarget === null) {
+    const near = nearQuantityNames(target, names);
     // Audit I5: a law or model name (`schrodinger-equation`) is not a quantity; name what
-    // `upt search` finds for its words, beside the near quantity names.
+    // `upt search` finds for its words. A shared token is not a near name.
     const found = searchNameWords(api, target);
     const shown = found?.matches.slice(0, SEARCH_HITS_SHOWN) ?? [];
     const searchLine =
@@ -251,7 +263,10 @@ async function run(ctx: CommandCtx): Promise<number> {
         searchLine,
     );
   }
-  const known = shareMagneticFieldName(parseKnown(rest), names);
+  const aliases = aliasesForTarget(graph, resolvedTarget);
+  const parsed = parseKnown(rest);
+  const rebound = rebind(parsed, aliases, names);
+  const known = shareSynonyms(rebound, names);
   const x = api.explainQuantity(graph, resolvedTarget, known);
   const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;
   const partnerKnown = partner !== null && names.has(partner.name);

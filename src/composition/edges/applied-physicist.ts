@@ -74,6 +74,11 @@ export const be66Edge: BridgeEdge = {
   kind: 'law',
   label: 'Radiation pressure P_n = (I/c) (1+R) cos²θ',
   sources: [poyntingFluxQ, reflectanceQ, incidenceAngleQ],
+  aliases: {
+    'poynting-flux': ['I_W_per_m2', 'I'],
+    reflectance: ['R'],
+    'incidence-angle': ['theta_rad', 'theta'],
+  },
   target: radiationPressureQ,
   confidence: 'established',
   domain: {
@@ -111,6 +116,10 @@ export const be67Edge: BridgeEdge = {
   kind: 'law',
   label: 'Alfvén speed v_A = B / √(μ0 ρ)',
   sources: [magneticFluxDensityQ, plasmaMassDensityQ],
+  aliases: {
+    'magnetic-flux-density': ['B_T'],
+    'plasma-mass-density': ['rho_kg_per_m3'],
+  },
   target: alfvenSpeedQ,
   confidence: 'established',
   domain: {
@@ -144,6 +153,10 @@ export const be68Edge: BridgeEdge = {
   kind: 'law',
   label: 'Tolman–Ehrenfest invariant T √(−g_00)',
   sources: [properTemperatureQ, metricG00Q],
+  aliases: {
+    'proper-temperature': ['T_K'],
+    'metric-g00': ['g_00'],
+  },
   target: tolmanInvariantQ,
   confidence: 'established',
   domain: {

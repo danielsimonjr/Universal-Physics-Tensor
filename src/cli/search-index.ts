@@ -156,17 +156,22 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
 
   // A quantity keeps every dimension it carries in every graph that names it,
   // so a name used with two dimensions shows both rather than one silently.
-  const quantities = new Map<string, { symbols: Set<string>; dims: Set<string>; graphs: Set<string> }>();
-  const addQ = (q: { name: string; symbol: string; dim: Parameters<typeof fmt>[0] }, graph: string): void => {
-    const cur = quantities.get(q.name) ?? { symbols: new Set(), dims: new Set(), graphs: new Set() };
+  const quantities = new Map<string, { symbols: Set<string>; dims: Set<string>; graphs: Set<string>; aliases: Set<string> }>();
+  const addQ = (
+    q: { name: string; symbol: string; dim: Parameters<typeof fmt>[0] },
+    graph: string,
+    aliases: readonly string[] = [],
+  ): void => {
+    const cur = quantities.get(q.name) ?? { symbols: new Set(), dims: new Set(), graphs: new Set(), aliases: new Set() };
     cur.symbols.add(q.symbol);
     cur.dims.add(fmt(q.dim));
     cur.graphs.add(graph);
+    for (const a of aliases) cur.aliases.add(a);
     quantities.set(q.name, cur);
   };
   for (const [graph, edges] of [['catalog', api.CATALOG_GRAPH], ['canonical', api.CANONICAL_GRAPH]] as const) {
     for (const e of edges) {
-      for (const s of e.sources) addQ(s, graph);
+      for (const s of e.sources) addQ(s, graph, e.aliases?.[s.name] ?? []);
       addQ(e.target, graph);
     }
   }
@@ -193,8 +198,8 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       command: `upt explain ${name} --source=${graphs.length === 2 ? 'both' : graphs[0]}`,
       commandLabel: 'inspect',
       fields: [
-        { label: 'name', text: name, exact: [name] },
-        { label: 'symbol', text: [...q.symbols].join(' '), exact: [...q.symbols] },
+        { label: 'name', text: name, exact: [name, ...q.aliases] },
+        { label: 'symbol', text: [...q.symbols, ...q.aliases].join(' '), exact: [...q.symbols, ...q.aliases] },
       ],
     });
   }
@@ -214,8 +219,13 @@ export function matchEveryWord(
     if (resolved !== null && resolved !== q) aliasTargets.set(resolved, q);
   }
 
+  const glued = significant.join('_');
   const matches: SearchMatch[] = [];
   for (const e of index) {
+    if (glued.includes('_') && e.fields.some((f) => (f.exact ?? []).includes(glued))) {
+      matches.push({ entry: e, matchedIn: ['alias'], alias: glued });
+      continue;
+    }
     const alias = e.kind === 'quantity' ? aliasTargets.get(e.id) : undefined;
     const labels = new Set<string>();
     let all = true;
