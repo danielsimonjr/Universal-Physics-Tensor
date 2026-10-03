@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/atlas-record.v0.json",
   "schemaVersion": "0",
-  "packageVersion": "1.0.4",
+  "packageVersion": "2.0.0",
   "family": "waves",
   "models": [
     {
