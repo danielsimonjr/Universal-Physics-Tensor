@@ -117,7 +117,7 @@ records. Every flag of every command is in [`docs/CLI.md`](https://github.com/da
 | `path` | Show the bridge chain between two models and whether a bound is claimed there. |
 | `recover` (`recovery`, `validate`) | Classify each bridge-to-canonical link as restates, recovers, or dimensional-only. |
 | `regime` | Report where a family's models are valid, violated, or unknown. |
-| `search` | Find a bridge, equation, model, quantity, or case by the words in its record. |
+| `search` | Find a bridge, equation, model, quantity, case, or regime by the words in its record. |
 
 **Discovery and probes**
 

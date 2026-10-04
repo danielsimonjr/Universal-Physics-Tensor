@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Search does not index domain regime registrations.
+  Done: `upt search piezoelectric` and `upt search piezo` name `upt regime piezoelectricity`. Plasma and Tolman do too. The line says the registration is vacuous when it states no inequality. A miss names the regime registry.
 - [x] The {ℏ, c, e} closure of μ0 through α is tagged empirical.
   Done: `upt audit` tags be-74 `(vacuum constant; μ0 rewritten through α)`. JSON `cleanPrefactor` stays false. Stefan–Boltzmann, Wien, and be-48 stay empirical.
 

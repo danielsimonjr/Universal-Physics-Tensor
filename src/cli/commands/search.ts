@@ -25,7 +25,7 @@ const FLAGS: FlagSpec[] = [JSON_FLAG];
 
 const HELP = `upt search <word> ...
         Find a catalog bridge, canonical equation, atlas model, atlas bridge,
-        quantity or applied case by the words in its name, id, symbol, alias
+        quantity, applied case, or regime registration by the words in its name, id, symbol, alias
         or bridge description, and print the command that inspects each match. Every
         word must match. A space inside one argument, and a hyphen, are word
         breaks, so a quoted phrase and a hyphenated name are several words.
@@ -100,7 +100,7 @@ export const command: Command = {
   aliases: [],
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
-  summary: 'Find a bridge, equation, model, quantity, or case by the words in its record.',
+  summary: 'Find a bridge, equation, model, quantity, case, or regime by the words in its record.',
   example: 'upt search thermal noise',
   group: 'explore',
   run,
