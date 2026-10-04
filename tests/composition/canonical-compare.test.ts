@@ -72,13 +72,24 @@ describe('compareWithCanonical — entries that record no prefactor', () => {
     expect(r?.kind).toBe('form');
   });
 
-  it('U = L·I² has the form of CE-inductor-energy, which the registry records only up to a constant', () => {
+});
+
+describe('compareWithCanonical — CE-inductor-energy carries 1/2', () => {
+  it('U = L·I² is twice the sourced energy', () => {
     const r = find(
       compareWithCanonical('energy', ['inductance', 'current'], (v) => v['inductance']! * v['current']! ** 2),
       'CE-inductor-energy',
     );
-    expect(r?.kind).toBe('prefactor-unchecked');
-    expect(r?.detail).toMatch(/up to a constant/);
+    expect(r?.kind).toBe('factor');
+    expect(r?.ratio).toBeCloseTo(2, 6);
+  });
+
+  it('U = ½ L·I² agrees, prefactor included', () => {
+    const r = find(
+      compareWithCanonical('energy', ['inductance', 'current'], (v) => 0.5 * v['inductance']! * v['current']! ** 2),
+      'CE-inductor-energy',
+    );
+    expect(r?.kind).toBe('agrees');
   });
 });
 
