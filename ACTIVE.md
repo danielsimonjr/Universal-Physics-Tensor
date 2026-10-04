@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A synonym is one governing variable.
+  `upt explain cyclotron-frequency` with `magnetic-field` also lists `magnetic-flux-density` and says the inputs do not fix a unique monomial. The derivation line is already `∝ charge·magnetic-field·mass^-1`.
+  Done: that command exits 0, prints `Recovered value: -175882001077.216`, and says `{charge, magnetic-field, mass}` fix it up to a dimensionless constant: `cyclotron-frequency ∝ charge·magnetic-field·mass^-1`. It does not name `magnetic-flux-density`. Larmor radius at `speed=1e6` and positive `q` prints `0.00000568563010356572` and the same unique-monomial sentence. `magnetic-flux-density=1` still recovers the positive cyclotron frequency. Two different values of the pair stay two inputs.
+
 - [x] Record the condensed-matter dogfood of published `universal-physics-tensor@4.0.0`. The report is `docs/dogfood/2026-10-04-condensed-matter-bridges-r5.md`. The session does not change `src/`.
   Done: the report is that file. npm `4.0.0` gitHead is `9e7dfa279be3c56d83c1f9436cd3034687f00e3f`. Annotated tag `v4.0.0` (object `956f2159c6c25830195aa22f81973b39ed07074c`) points at that commit. Publish run `37227889987` succeeded. New candidates stay unproven. The bugs are filed as issues 370–376 and are not fixed in this change.
 
