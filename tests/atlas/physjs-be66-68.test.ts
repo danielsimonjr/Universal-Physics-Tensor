@@ -23,7 +23,7 @@ import { bridgeSeedKeys, physjsFileUrl, physjsFormalRef, physjsManifestProblems,
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 import { be66Edge, be67Edge, be68Edge } from '../../src/composition/edges/applied-physicist.js';
 
-const SHA = 'ee753df77bd5b29b7207443181606b6004bfcf6a';
+const SHA = '92f87257a1e3086a48cdc19fe4361cc1c5909d49';
 const VERSION = `physjs@${SHA} leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940`;
 const AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 

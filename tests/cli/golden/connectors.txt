@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 134 established-confidence edge(s) of the 166 in this graph
+  anchored core: the clusters holding at least one of the 145 established-confidence edge(s) of the 177 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  22 of the isolated bridges share a name token with the core; 12 are truly unconnected.
+  30 of the isolated bridges share a name token with the core; 13 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -37,9 +37,12 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         boundary-entanglement-entropy ≟ entropy-change         [[entropy]]  → CE-clausius-entropy
         minimal-surface-area ≟ area                            [[area]]  → CE-resistance-material
         minimal-surface-area ≟ cross-sectional-area            [[area]]  → CE-volume-flow-rate
+        minimal-surface-area ≟ pull-in-area                    [[area]]  → be-79
     ── be-22 (isolated):
         boundary-length ≟ coarsening-length                    [[length]]  → be-15
+        boundary-length ≟ column-length                        [[length]]  → be-78
         boundary-length ≟ length                               [[length]]  → CE-pendulum-period
+        boundary-length ≟ pipe-length                          [[length]]  → be-77
         boundary-length ≟ planck-length                        [[length]]  → be-31
         boundary-length ≟ quantum-correlation-length           [[length]]  → be-33
         boundary-length ≟ reference-correlation-length         [[length]]  → be-33
@@ -53,6 +56,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         foerster-radius ≟ larmor-radius                        [[length]]  → CE-larmor-radius
         foerster-radius ≟ near-radius                          [[length]]  → be-37
         foerster-radius ≟ particle-radius                      [[length]]  → CE-stokes-einstein
+        foerster-radius ≟ pipe-radius                          [[length]]  → be-77
         foerster-radius ≟ radius                               [[length]]  → CE-schwarzschild-radius
     ── be-26 (isolated):
         attempt-frequency ≟ angular-frequency                  [[frequency]]  → CE-lc-resonance
@@ -64,6 +68,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         mutation-rate ≟ grw-localization-rate                  [[frequency]]  → be-48
         mutation-rate ≟ hubble-rate                            [[frequency]]  → be-47
         mutation-rate ≟ relaxation-rate                        [[frequency]]  → be-11-zurek
+        tunneling-mass ≟ child-carrier-mass                    [[mass]]  → be-81
         tunneling-mass ≟ defect-rest-mass                      [[mass]]  → be-34
         tunneling-mass ≟ electron-mass                         [[mass]]  → CE-compton-shift
         tunneling-mass ≟ mass                                  [[mass]]  → be-12
@@ -82,6 +87,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-43 (isolated):
         wormhole-cross-section-area ≟ area                     [[area]]  → CE-resistance-material
         wormhole-cross-section-area ≟ cross-sectional-area     [[area]]  → CE-volume-flow-rate
+        wormhole-cross-section-area ≟ pull-in-area             [[area]]  → be-79
         wormhole-cross-section-area ≟ thomson-cross-section    [[area]]  → CE-thomson-cross-section
         wormhole-entanglement-entropy ≟ bh-entropy             [[entropy]]  → CE-bekenstein-hawking
         wormhole-entanglement-entropy ≟ boltzmann-entropy      [[entropy]]  → CE-boltzmann-entropy
@@ -126,6 +132,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         planck-mass-energy ≟ state-energy                      [[energy]]  → CE-boltzmann-factor
         planck-mass-energy ≟ thermal-energy                    [[energy]]  → CE-equipartition
     ── be-68 (isolated):
+        proper-temperature ≟ capacitor-temperature             [[temperature]]  → be-87
         proper-temperature ≟ clapeyron-temperature             [[temperature]]  → be-71
         proper-temperature ≟ cold-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
         proper-temperature ≟ effective-temperature             [[temperature]]  → be-27
@@ -134,11 +141,14 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         proper-temperature ≟ peltier-temperature               [[temperature]]  → be-73
         proper-temperature ≟ reference-temperature             [[temperature]]  → be-33
         proper-temperature ≟ reheating-temperature             [[temperature]]  → be-34
+        proper-temperature ≟ shockley-temperature              [[temperature]]  → be-82
         proper-temperature ≟ temperature                       [[temperature]]  → be-12
         proper-temperature ≟ temperature-change                [[temperature]]  → CE-heat-capacity
+        proper-temperature ≟ thomson-temperature               [[temperature]]  → be-83
     ── be-70 (isolated):
         carrier-charge ≟ charge                                [[charge]]  → CE-cyclotron-frequency
         diffusivity ≟ thermal-diffusivity                      [[L^2 T^-1]]  → CE-thermal-diffusivity
+        einstein-temperature ≟ capacitor-temperature           [[temperature]]  → be-87
         einstein-temperature ≟ clapeyron-temperature           [[temperature]]  → be-71
         einstein-temperature ≟ cold-reservoir-temperature      [[temperature]]  → CE-carnot-efficiency
         einstein-temperature ≟ effective-temperature           [[temperature]]  → be-27
@@ -146,18 +156,95 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         einstein-temperature ≟ peltier-temperature             [[temperature]]  → be-73
         einstein-temperature ≟ reference-temperature           [[temperature]]  → be-33
         einstein-temperature ≟ reheating-temperature           [[temperature]]  → be-34
+        einstein-temperature ≟ shockley-temperature            [[temperature]]  → be-82
         einstein-temperature ≟ temperature                     [[temperature]]  → be-12
         einstein-temperature ≟ temperature-change              [[temperature]]  → CE-heat-capacity
+        einstein-temperature ≟ thomson-temperature             [[temperature]]  → be-83
         electrical-mobility ≟ carrier-mobility                 [[M^-1 T^2 I]]  → CE-carrier-mobility
+        electrical-mobility ≟ mott-mobility                    [[M^-1 T^2 I]]  → be-80
     ── be-73 (isolated):
+        peltier-temperature ≟ capacitor-temperature            [[temperature]]  → be-87
         peltier-temperature ≟ clapeyron-temperature            [[temperature]]  → be-71
         peltier-temperature ≟ cold-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
         peltier-temperature ≟ effective-temperature            [[temperature]]  → be-27
         peltier-temperature ≟ hot-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
         peltier-temperature ≟ reference-temperature            [[temperature]]  → be-33
         peltier-temperature ≟ reheating-temperature            [[temperature]]  → be-34
+        peltier-temperature ≟ shockley-temperature             [[temperature]]  → be-82
         peltier-temperature ≟ temperature                      [[temperature]]  → be-12
         peltier-temperature ≟ temperature-change               [[temperature]]  → CE-heat-capacity
+        peltier-temperature ≟ thomson-temperature              [[temperature]]  → be-83
+        seebeck-coefficient ≟ thomson-coefficient              [[L^2 M T^-3 I^-1 Theta^-1]]  → be-83
+    ── be-78 (isolated):
+        column-length ≟ coarsening-length                      [[length]]  → be-15
+        column-length ≟ length                                 [[length]]  → CE-pendulum-period
+        column-length ≟ pipe-length                            [[length]]  → be-77
+        column-length ≟ planck-length                          [[length]]  → be-31
+        column-length ≟ quantum-correlation-length             [[length]]  → be-33
+        column-length ≟ reference-correlation-length           [[length]]  → be-33
+    ── be-79 (isolated):
+        pull-in-area ≟ area                                    [[area]]  → CE-resistance-material
+        pull-in-area ≟ cross-sectional-area                    [[area]]  → CE-volume-flow-rate
+        pull-in-gap ≟ child-gap                                [[length]]  → be-81
+        pull-in-voltage ≟ child-voltage                        [[L^2 M T^-3 I^-1]]  → be-81
+        pull-in-voltage ≟ four-point-voltage                   [[L^2 M T^-3 I^-1]]  → be-84
+        pull-in-voltage ≟ mott-voltage                         [[L^2 M T^-3 I^-1]]  → be-80
+        pull-in-voltage ≟ shockley-voltage                     [[L^2 M T^-3 I^-1]]  → be-82
+        pull-in-voltage ≟ voltage                              [[L^2 M T^-3 I^-1]]  → be-59
+    ── be-80 (isolated):
+        mott-gurney-current ≟ child-langmuir-current           [[L^-2 I]]  → be-81
+        mott-mobility ≟ carrier-mobility                       [[M^-1 T^2 I]]  → CE-carrier-mobility
+        mott-permittivity ≟ vacuum-permittivity                [[L^-3 M^-1 T^4 I^2]]  → CE-plasma-frequency
+        mott-voltage ≟ child-voltage                           [[L^2 M T^-3 I^-1]]  → be-81
+        mott-voltage ≟ four-point-voltage                      [[L^2 M T^-3 I^-1]]  → be-84
+        mott-voltage ≟ shockley-voltage                        [[L^2 M T^-3 I^-1]]  → be-82
+        mott-voltage ≟ voltage                                 [[L^2 M T^-3 I^-1]]  → be-59
+    ── be-81 (isolated):
+        child-carrier-mass ≟ defect-rest-mass                  [[mass]]  → be-34
+        child-carrier-mass ≟ effective-mass                    [[mass]]  → be-23
+        child-carrier-mass ≟ electron-mass                     [[mass]]  → CE-compton-shift
+        child-carrier-mass ≟ mass                              [[mass]]  → be-12
+        child-carrier-mass ≟ molecular-mass                    [[mass]]  → CE-kinetic-pressure
+        child-carrier-mass ≟ planck-mass                       [[mass]]  → be-41
+        child-carrier-mass ≟ reference-mass                    [[mass]]  → be-41
+        child-carrier-mass ≟ secondary-mass                    [[mass]]  → CE-newton-gravitation
+        child-carrier-mass ≟ swampland-tower-mass              [[mass]]  → be-41
+        child-voltage ≟ four-point-voltage                     [[L^2 M T^-3 I^-1]]  → be-84
+        child-voltage ≟ shockley-voltage                       [[L^2 M T^-3 I^-1]]  → be-82
+        child-voltage ≟ voltage                                [[L^2 M T^-3 I^-1]]  → be-59
+    ── be-82 (isolated):
+        shockley-current ≟ current                             [[I]]  → CE-ohm-law
+        shockley-current ≟ four-point-current                  [[I]]  → be-84
+        shockley-current ≟ shot-current                        [[I]]  → be-85
+        shockley-temperature ≟ capacitor-temperature           [[temperature]]  → be-87
+        shockley-temperature ≟ clapeyron-temperature           [[temperature]]  → be-71
+        shockley-temperature ≟ cold-reservoir-temperature      [[temperature]]  → CE-carnot-efficiency
+        shockley-temperature ≟ effective-temperature           [[temperature]]  → be-27
+        shockley-temperature ≟ hot-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        shockley-temperature ≟ reference-temperature           [[temperature]]  → be-33
+        shockley-temperature ≟ reheating-temperature           [[temperature]]  → be-34
+        shockley-temperature ≟ temperature                     [[temperature]]  → be-12
+        shockley-temperature ≟ temperature-change              [[temperature]]  → CE-heat-capacity
+        shockley-temperature ≟ thomson-temperature             [[temperature]]  → be-83
+        shockley-voltage ≟ four-point-voltage                  [[L^2 M T^-3 I^-1]]  → be-84
+        shockley-voltage ≟ voltage                             [[L^2 M T^-3 I^-1]]  → be-59
+    ── be-83 (isolated):
+        thomson-temperature ≟ capacitor-temperature            [[temperature]]  → be-87
+        thomson-temperature ≟ clapeyron-temperature            [[temperature]]  → be-71
+        thomson-temperature ≟ cold-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        thomson-temperature ≟ effective-temperature            [[temperature]]  → be-27
+        thomson-temperature ≟ hot-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
+        thomson-temperature ≟ reference-temperature            [[temperature]]  → be-33
+        thomson-temperature ≟ reheating-temperature            [[temperature]]  → be-34
+        thomson-temperature ≟ temperature                      [[temperature]]  → be-12
+        thomson-temperature ≟ temperature-change               [[temperature]]  → CE-heat-capacity
+    ── be-84 (isolated):
+        four-point-current ≟ current                           [[I]]  → CE-ohm-law
+        four-point-current ≟ shot-current                      [[I]]  → be-85
+        four-point-voltage ≟ voltage                           [[L^2 M T^-3 I^-1]]  → be-59
+        sheet-resistance ≟ resistance                          [[L^2 M T^-3 I^-2]]  → CE-ohm-law
+    ── be-85 (isolated):
+        shot-current ≟ current                                 [[I]]  → CE-ohm-law
     ── CE-bekenstein-hawking (isolated):
         bh-entropy ≟ boltzmann-entropy                         [[entropy]]  → CE-boltzmann-entropy
         bh-entropy ≟ entropy-change                            [[entropy]]  → CE-clausius-entropy
@@ -167,15 +254,18 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         bohr-radius ≟ larmor-radius                            [[length]]  → CE-larmor-radius
         bohr-radius ≟ near-radius                              [[length]]  → be-37
         bohr-radius ≟ particle-radius                          [[length]]  → CE-stokes-einstein
+        bohr-radius ≟ pipe-radius                              [[length]]  → be-77
         bohr-radius ≟ radius                                   [[length]]  → CE-schwarzschild-radius
         bohr-radius ≟ schwarzschild-radius                     [[length]]  → be-42-via-rs
     ── CE-carnot-efficiency (isolated):
+        cold-reservoir-temperature ≟ capacitor-temperature     [[temperature]]  → be-87
         cold-reservoir-temperature ≟ clapeyron-temperature     [[temperature]]  → be-71
         cold-reservoir-temperature ≟ effective-temperature     [[temperature]]  → be-27
         cold-reservoir-temperature ≟ reference-temperature     [[temperature]]  → be-33
         cold-reservoir-temperature ≟ reheating-temperature     [[temperature]]  → be-34
         cold-reservoir-temperature ≟ temperature               [[temperature]]  → be-12
         cold-reservoir-temperature ≟ temperature-change        [[temperature]]  → CE-heat-capacity
+        hot-reservoir-temperature ≟ capacitor-temperature      [[temperature]]  → be-87
         hot-reservoir-temperature ≟ clapeyron-temperature      [[temperature]]  → be-71
         hot-reservoir-temperature ≟ effective-temperature      [[temperature]]  → be-27
         hot-reservoir-temperature ≟ reference-temperature      [[temperature]]  → be-33
@@ -216,12 +306,14 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         droplet-radius ≟ larmor-radius                         [[length]]  → CE-larmor-radius
         droplet-radius ≟ near-radius                           [[length]]  → be-37
         droplet-radius ≟ particle-radius                       [[length]]  → CE-stokes-einstein
+        droplet-radius ≟ pipe-radius                           [[length]]  → be-77
         droplet-radius ≟ radius                                [[length]]  → CE-schwarzschild-radius
         droplet-radius ≟ schwarzschild-radius                  [[length]]  → be-42-via-rs
         laplace-pressure ≟ bernoulli-total-pressure            [[L^-1 M T^-2]]  → CE-bernoulli
         laplace-pressure ≟ dynamic-pressure                    [[L^-1 M T^-2]]  → CE-dynamic-pressure
         laplace-pressure ≟ kinetic-pressure                    [[L^-1 M T^-2]]  → CE-kinetic-pressure
         laplace-pressure ≟ magnetic-pressure                   [[L^-1 M T^-2]]  → be-74
+        laplace-pressure ≟ pipe-pressure-drop                  [[L^-1 M T^-2]]  → be-77
         laplace-pressure ≟ pressure                            [[L^-1 M T^-2]]  → CE-hydrostatic-pressure
         laplace-pressure ≟ radiation-pressure                  [[L^-1 M T^-2]]  → be-66
         laplace-pressure ≟ static-pressure                     [[L^-1 M T^-2]]  → CE-bernoulli
@@ -278,6 +370,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         position-momentum-uncertainty-product ≟ angular-momentum [[action]]  → CE-angular-momentum
 
 
-  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72
+  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86
 
   The isolated-bridge review is written up in https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md.

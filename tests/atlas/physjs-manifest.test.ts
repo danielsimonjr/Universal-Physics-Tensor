@@ -31,7 +31,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `ee753df77bd5b29b7207443181606b6004bfcf6a`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `92f87257a1e3086a48cdc19fe4361cc1c5909d49`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -144,6 +144,17 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['be-74', 'PhysJS.MagneticPressure.pressure_eq', 'derivation-step: a linear inductor with dU/dI = L I and U(0) = 0 stores U = (L/2) I². A long solenoid with B = μ0 n I and flux linkage Λ = (n ℓ) B A has L = μ0 n² V. At fixed current the battery supplies I ΔΛ. The stored energy rises by half of that, and the difference is the mechanical work p ΔV, so p = B²/(2 μ0). Homogeneity in B and μ0 gives p = C B²/μ0 with C unfixed. C = 1 is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor. Ampere\'s law, the flux linkage, and the quasistatic work balance are hypotheses'],
   ['be-75', 'PhysJS.LondonPenetration.depth_eq', 'derivation-step: on B(x) = B0 exp(−x/λ) with λ > 0, Ampere\'s law j = −(1/μ0) dB/dx and the London equation dj/dx = −(n e²/m) B give λ = √(m/(μ0 n e²)). e is the elementary charge. The dimension matrix of {m, μ0, n, e} admits both that monomial and μ0 e²/m, so units do not choose. Those lengths disagree when n (μ0 e²/m)³ ≠ 1. The growing exponential is not the screened field. Replacing e by 2e at the same n and m fails, and dropping the square on e fails when e ≠ 1. A factor C ≠ 1 is not this depth. Not the classical skin depth. The London equation and Ampere\'s law are hypotheses'],
   ['be-76', 'PhysJS.PlasmaBeta.beta_eq', 'derivation-step: β = p_gas / p_B where p_B is PhysJS.MagneticPressure.pressure_eq, so β = p_gas / (B²/(2 μ0)) = 2 μ0 p_gas / B². The ideal-gas closure p_gas = n k_B T gives β = 2 μ0 n k_B T / B². B ≠ 0. Using B²/μ0 in place of the magnetic pressure is a different ratio. The constant 1 is dimensionless and is not this beta when the ratio is not 1. A factor C ≠ 1 is not this beta. Dropping p = n k_B T fails. Not a unique monomial, and not a plasma-β inequality'],
+  ["be-77", "PhysJS.HagenPoiseuille.flow_eq", "derivation-step: steady axisymmetric Newtonian flow with d/dr (r du/dr) = (G/\u03bc) r, centerline slope 0, and no-slip u(R) = 0 integrates to u = (G/(4\u03bc))(r\u00b2\u2212R\u00b2). With G = \u2212\u0394P/L the flux Q = \u222b u 2\u03c0 r dr is \u03c0 R\u2074 \u0394P/(8 \u03bc L). Darcy's definition then gives f_D Re = 64. The same wall shear with the Fanning normalization is 16. A factor other than 8 is not this flux. Not a square duct. The axial balance, no-slip, and the Darcy definitions are hypotheses"],
+  ["be-78", "PhysJS.EulerBuckling.critical_load", "derivation-step: the Euler\u2013Bernoulli balance y'' = \u2212\u03c9\u00b2 y with \u03c9\u00b2 = P/(E I) and pinned ends y(0) = y(L) = 0 has the eigenfunction sin(\u03c0 x/L) at P = \u03c0\u00b2 E I/L\u00b2, and every nontrivial solution has \u03c9 L = n \u03c0 for a nonzero integer n, so the load is at least that value. The clamped-free column is \u03c0\u00b2 E I/(4 L\u00b2). That factor is not the pinned load. Not read off from units. The beam equation is a hypothesis"],
+  ["be-79", "PhysJS.PullIn.pull_in_eq", "derivation-step: C = \u03b50 A/g has dC/dg = \u2212\u03b50 A/g\u00b2. Equilibrium of a linear spring against the coenergy force is k(g0\u2212g) = \u03b50 A V\u00b2/(2 g\u00b2), so V\u00b2 is proportional to (g0\u2212g) g\u00b2. The derivative 2 g0 g \u2212 3 g\u00b2 vanishes only at g = 0 and g = 2 g0/3, and the second derivative at the fold is \u22122 g0. Substituting the gap gives V_pi\u00b2 = 8 k g0\u00b3/(27 \u03b50 A) = 8 k g0\u00b2/(27 C0) with C0 = \u03b50 A/g0. g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses"],
+  ["be-80", "PhysJS.MottGurney.current_eq", "derivation-step: drift J = q n \u03bc E and Poisson dE/dx = q n/\u03b5 give E dE/dx = J/(\u03b5 \u03bc). With E(0) = 0 the integral is E\u00b2/2 = J x/(\u03b5 \u03bc). The nonnegative root integrated from 0 to d is V = sqrt(2 J/(\u03b5 \u03bc)) (2/3) d^{3/2}, so J = (9/8) \u03b5 \u03bc V\u00b2/d\u00b3. A factor other than 9/8 is not this current. Not Child\u2013Langmuir. Drift, Poisson, and the injecting contact are hypotheses"],
+  ["be-81", "PhysJS.ChildLangmuir.current_eq", "derivation-step: collisionless energy (1/2) m v\u00b2 = e \u03c6, J = \u03c1 v, and Poisson \u03c6'' = \u03c1/\u03b50 give J = \u03b50 \u03c6'' v. A power \u03c6 \u221d x^\u03b1 makes \u03c6'' v independent of x only for \u03b1 = 4/3. The profile \u03c6 = V (x/d)^{4/3} has \u03c6(0) = 0, \u03c6(d) = V, and cathode field 0, and for x > 0 its current is (4 \u03b50/9) sqrt(2 e/m) V^{3/2}/d\u00b2. e is the elementary charge. The Mott\u2013Gurney exponent 3/2 does not cancel. Poisson is not claimed at x = 0. Not a drift-only solid"],
+  ["be-82", "PhysJS.ShockleyDiode.shockley_eq", "derivation-step: quasi-equilibrium multiplies the equilibrium flux by exp(e V/(\u03b7 k_B T)). Ideality 1 sets \u03b7 = 1. Detailed balance sets the reverse flux equal to the forward flux at V = 0, and low injection keeps that reverse flux under bias. The net current is I = I_s (exp(e V/(k_B T)) \u2212 1). Zero bias carries zero current. Ideality 2 is not this current when e V \u2260 0. e is the elementary charge. Not a diffusion-length ODE"],
+  ["be-83", "PhysJS.Thomson.thomson_eq", "derivation-step: the Kelvin relation \u03a0(t) = S(t) t, which is PhysJS.KelvinRelation.peltier_eq read along temperature, and the Thomson split \u03bc = d\u03a0/dT \u2212 S, give \u03bc = T dS/dT by the product rule. d\u03a0/dT is not \u03bc when S T \u2260 0. Not a second copy of \u03a0 = S T. The functional Kelvin relation and the Thomson split are hypotheses"],
+  ["be-84", "PhysJS.FourPoint.sheet_eq", "derivation-step: on an infinite sheet the radial field of a point current is (I R_s)/(2 \u03c0 r), and the potential drop is the integral of 1/r. Probes at 0, s, 2s, and 3s, with current in at 0 and out at 3s, each contribute (I R_s/(2 \u03c0)) ln 2 on the inner pair. Superposition gives R_s = (\u03c0/ln 2)(V/I). A sink at 4s gives 2\u03c0/ln 3 instead. Not PhysJS.Crossing.antisymmetry. The Laplace field and linear superposition are hypotheses"],
+  ["be-85", "PhysJS.ShotNoise.shot_eq", "derivation-step: in a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e\u00b2 and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is \u0394f = 1/(2 T), and S_I = Var(I)/\u0394f is 2 e I. The two-sided bandwidth \u0394f = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson\u2013Nyquist. The Poisson variance and the one-sided convention are hypotheses"],
+  ["be-86", "PhysJS.ReynoldsAnalogy.reynolds_eq", "derivation-step: wall fluxes \u03c4 = \u03bc du/dy and q = k dT/dy, with C_f = \u03c4/(\u03c1 U\u00b2/2), h = q/\u0394T, St = h/(\u03c1 U c_p), and Pr = \u03bc c_p/k, satisfy St Pr = C_f/2 when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At Pr = 1, St = C_f/2. Pr \u2260 1 with nonzero skin friction is not this equality. Not a Nusselt correlation"],
+  ["be-87", "PhysJS.CapacitorNoise.noise_eq", "derivation-step: dU/dV = C V and U(0) = 0 integrate to U = (C/2) V\u00b2. The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance k_B T/C, because the partition function is the Gaussian integral. The mean square on that law is k_B T/C, and (C/2) of it is (1/2) k_B T. (3/2) k_B T/C is not this variance. Dropping the energy half replaces it by k_B T/(2 C). Not three kinetic degrees of freedom"],
 ];
 
 const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
@@ -159,8 +170,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit ee753df77bd5b29b7207443181606b6004bfcf6a, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('ee753df77bd5b29b7207443181606b6004bfcf6a');
+  it('records commit 92f87257a1e3086a48cdc19fe4361cc1c5909d49, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('92f87257a1e3086a48cdc19fe4361cc1c5909d49');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -168,7 +179,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the fifty-seven theorems and keys, in manifest order', () => {
+  it('names the sixty-eight theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -382,10 +393,10 @@ describe('vendored PhysJS manifest', () => {
     const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
     const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
     const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76']);
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76', 'be-77', 'be-78', 'be-79', 'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-85', 'be-86', 'be-87']);
     expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
     expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
-    expect(counted.length + crossChecks.length + properties.length).toBe(47);
+    expect(counted.length + crossChecks.length + properties.length).toBe(58);
 
     const unlabeled = {
       ...manifest,

@@ -110,7 +110,8 @@ describe('buildVizModel — evidence filter', () => {
     const proposed = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('proposed'));
     const proved = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('formally-proved'));
     expect(proposed.length).toBeGreaterThan(0);
-    expect(proved.length).toBe(24);
+    // 24 is the record from before be-77..87. Each new edge derives formally-proved.
+    expect(proved.length).toBe(35);
     expect(proposed.length + proved.length).toBe(withBeId.length);
     const model = buildVizModel(BOTH, withCatalogEvidence({ evidence: 'proposed' }));
     expect(model.filterStats.kept).toBe(proposed.length);

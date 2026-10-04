@@ -24,7 +24,7 @@ const PROPERTIES = [11, 29] as const;
 const CROSS_CHECKS = [19, 24, 42] as const;
 const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61, 14, 17, 22, 15, 32, 35, 30] as const;
 /** Theorem states the catalogued equation. Covers still begins with derivation-step. */
-const CATALOG_EQUATION = [12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63, 66, 67, 68, 69, 70, 71, 72, 73] as const;
+const CATALOG_EQUATION = [12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87] as const;
 
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
@@ -120,7 +120,8 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
         return formalRef === undefined ? [] : [formalRef];
       }),
     ];
-    expect(refs.length).toBe(57);
+    // 57 is the record from before be-77..87 each added a catalog formalRef.
+    expect(refs.length).toBe(68);
     for (const ref of refs) {
       expect(ref.url).toBe(physjsFileUrl(physjsLeanFile(ref.statement)));
       expect(ref.url).toContain(`/blob/${PHYSJS_COMMIT}/lean/`);

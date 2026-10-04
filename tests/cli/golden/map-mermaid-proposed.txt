@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (120)"]
+  subgraph cl_0["anchored cluster (122)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -208,6 +208,24 @@ flowchart LR
     q_magnetic_pressure --> j_be_76
     q_plasma_beta(["plasma-beta"]):::qty
     j_be_76 --> q_plasma_beta
+    j_be_77["BE-77"]:::law
+    q_pipe_radius(["pipe-radius"]):::qty
+    q_pipe_radius --> j_be_77
+    q_pipe_pressure_drop(["pipe-pressure-drop"]):::qty
+    q_pipe_pressure_drop --> j_be_77
+    q_dynamic_viscosity(["dynamic-viscosity"]):::qty
+    q_dynamic_viscosity --> j_be_77
+    q_pipe_length(["pipe-length"]):::qty
+    q_pipe_length --> j_be_77
+    q_poiseuille_flow(["poiseuille-flow"]):::qty
+    j_be_77 --> q_poiseuille_flow
+    j_be_87["BE-87"]:::law
+    q_capacitor_temperature(["capacitor-temperature"]):::qty
+    q_capacitor_temperature --> j_be_87
+    q_capacitance(["capacitance"]):::qty
+    q_capacitance --> j_be_87
+    q_capacitor_voltage_variance(["capacitor-voltage-variance"]):::qty
+    j_be_87 --> q_capacitor_voltage_variance
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
     q_length --> j_CE_pendulum_period
@@ -363,7 +381,6 @@ flowchart LR
     j_CE_capacitance_parallel_plate["Parallel-plate capacitance"]:::law
     q_area --> j_CE_capacitance_parallel_plate
     q_distance --> j_CE_capacitance_parallel_plate
-    q_capacitance(["capacitance"]):::qty
     j_CE_capacitance_parallel_plate --> q_capacitance
     j_CE_capacitor_energy["Capacitor stored energy"]:::law
     q_capacitance --> j_CE_capacitor_energy
@@ -488,7 +505,6 @@ flowchart LR
     q_volume_flow_rate(["volume-flow-rate"]):::qty
     j_CE_volume_flow_rate --> q_volume_flow_rate
     j_CE_shear_stress["Shear stress (Newtonian fluid)"]:::law
-    q_dynamic_viscosity(["dynamic-viscosity"]):::qty
     q_dynamic_viscosity --> j_CE_shear_stress
     q_velocity_gradient(["velocity-gradient"]):::qty
     q_velocity_gradient --> j_CE_shear_stress
@@ -834,7 +850,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (36)"]
+  subgraph cl_iso["isolated (45)"]
     direction LR
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
@@ -1003,6 +1019,77 @@ flowchart LR
     q_peltier_temperature --> j_be_73
     q_peltier_coefficient(["peltier-coefficient"]):::qty
     j_be_73 --> q_peltier_coefficient
+    j_be_78["BE-78"]:::law
+    q_youngs_modulus(["youngs-modulus"]):::qty
+    q_youngs_modulus --> j_be_78
+    q_area_moment(["area-moment"]):::qty
+    q_area_moment --> j_be_78
+    q_column_length(["column-length"]):::qty
+    q_column_length --> j_be_78
+    q_buckling_load(["buckling-load"]):::qty
+    j_be_78 --> q_buckling_load
+    j_be_79["BE-79"]:::law
+    q_pull_in_stiffness(["pull-in-stiffness"]):::qty
+    q_pull_in_stiffness --> j_be_79
+    q_pull_in_gap(["pull-in-gap"]):::qty
+    q_pull_in_gap --> j_be_79
+    q_pull_in_area(["pull-in-area"]):::qty
+    q_pull_in_area --> j_be_79
+    q_pull_in_voltage(["pull-in-voltage"]):::qty
+    j_be_79 --> q_pull_in_voltage
+    j_be_80["BE-80"]:::law
+    q_mott_permittivity(["mott-permittivity"]):::qty
+    q_mott_permittivity --> j_be_80
+    q_mott_mobility(["mott-mobility"]):::qty
+    q_mott_mobility --> j_be_80
+    q_mott_voltage(["mott-voltage"]):::qty
+    q_mott_voltage --> j_be_80
+    q_mott_thickness(["mott-thickness"]):::qty
+    q_mott_thickness --> j_be_80
+    q_mott_gurney_current(["mott-gurney-current"]):::qty
+    j_be_80 --> q_mott_gurney_current
+    j_be_81["BE-81"]:::law
+    q_child_carrier_mass(["child-carrier-mass"]):::qty
+    q_child_carrier_mass --> j_be_81
+    q_child_voltage(["child-voltage"]):::qty
+    q_child_voltage --> j_be_81
+    q_child_gap(["child-gap"]):::qty
+    q_child_gap --> j_be_81
+    q_child_langmuir_current(["child-langmuir-current"]):::qty
+    j_be_81 --> q_child_langmuir_current
+    j_be_82["BE-82"]:::law
+    q_shockley_saturation(["shockley-saturation"]):::qty
+    q_shockley_saturation --> j_be_82
+    q_shockley_voltage(["shockley-voltage"]):::qty
+    q_shockley_voltage --> j_be_82
+    q_shockley_temperature(["shockley-temperature"]):::qty
+    q_shockley_temperature --> j_be_82
+    q_shockley_current(["shockley-current"]):::qty
+    j_be_82 --> q_shockley_current
+    j_be_83["BE-83"]:::law
+    q_thomson_temperature(["thomson-temperature"]):::qty
+    q_thomson_temperature --> j_be_83
+    q_seebeck_slope(["seebeck-slope"]):::qty
+    q_seebeck_slope --> j_be_83
+    q_thomson_coefficient(["thomson-coefficient"]):::qty
+    j_be_83 --> q_thomson_coefficient
+    j_be_84["BE-84"]:::law
+    q_four_point_voltage(["four-point-voltage"]):::qty
+    q_four_point_voltage --> j_be_84
+    q_four_point_current(["four-point-current"]):::qty
+    q_four_point_current --> j_be_84
+    q_sheet_resistance(["sheet-resistance"]):::qty
+    j_be_84 --> q_sheet_resistance
+    j_be_85["BE-85"]:::law
+    q_shot_current(["shot-current"]):::qty
+    q_shot_current --> j_be_85
+    q_shot_noise(["shot-noise"]):::qty
+    j_be_85 --> q_shot_noise
+    j_be_86["BE-86"]:::law
+    q_skin_friction(["skin-friction"]):::qty
+    q_skin_friction --> j_be_86
+    q_stanton_number(["stanton-number"]):::qty
+    j_be_86 --> q_stanton_number
     j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
     q_A(["A"]):::qty
     q_A --> j_CE_bekenstein_hawking

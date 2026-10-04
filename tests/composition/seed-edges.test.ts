@@ -222,6 +222,17 @@ describe('symbolic forms agree with the edge evaluator', () => {
     'be-71': { 'specific-latent-heat': 2.26e6, 'clapeyron-temperature': 373.15, 'specific-volume-change': 1.672 },
     'be-72': { 'redshift-metric-g00-1': -1, 'redshift-metric-g00-2': -4 },
     'be-73': { 'seebeck-coefficient': 2e-4, 'peltier-temperature': 300 },
+    'be-77': { 'pipe-radius': 0.01, 'pipe-pressure-drop': 1000, 'dynamic-viscosity': 0.001, 'pipe-length': 1 },
+    'be-78': { 'youngs-modulus': 2e11, 'area-moment': 1e-8, 'column-length': 1 },
+    'be-79': { 'pull-in-stiffness': 1, 'pull-in-gap': 1e-6, 'pull-in-area': 1e-6 },
+    'be-80': { 'mott-permittivity': 1e-11, 'mott-mobility': 1e-8, 'mott-voltage': 1, 'mott-thickness': 1e-6 },
+    'be-81': { 'child-carrier-mass': 9.1093837015e-31, 'child-voltage': 1, 'child-gap': 1e-3 },
+    'be-82': { 'shockley-saturation': 1e-12, 'shockley-voltage': 0.2, 'shockley-temperature': 300 },
+    'be-83': { 'thomson-temperature': 300, 'seebeck-slope': 1e-6 },
+    'be-84': { 'four-point-voltage': 1e-3, 'four-point-current': 1e-3 },
+    'be-85': { 'shot-current': 1e-3 },
+    'be-86': { 'skin-friction': 0.004 },
+    'be-87': { 'capacitor-temperature': 300, capacitance: 1e-12 },
   };
 
   for (const [id, probe] of Object.entries(probes)) {

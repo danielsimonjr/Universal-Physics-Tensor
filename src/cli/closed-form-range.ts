@@ -8,7 +8,7 @@
 import { BRIDGE_EVALUATORS } from '../bridges/evaluators.js';
 
 /**
- * `BE-51/52/55..76` for the ids that are registered. A run of three or more
+ * `BE-51/52/55..87` for the ids that are registered. A run of three or more
  * consecutive ids is `start..end`. A shorter run is joined with `/`.
  *
  * @internal

@@ -82,6 +82,19 @@ export function queryWords(positionals: readonly string[]): string[] {
   return out;
 }
 
+/**
+ * Drop a sentence that denies an identity. "Not the classical skin depth"
+ * is not a claim about skin depth. "is a different equation" is not that
+ * equation. A sentence that states the claim and also says "not an axiom"
+ * stays, because it does not open with Not and it is not "a different" identity.
+ */
+function affirmativeSentences(text: string): string {
+  return text
+    .split(/(?<=[.!?])\s+/)
+    .filter((sentence) => !/^\s*not\b/i.test(sentence) && !/\bis a different\b/i.test(sentence))
+    .join(' ');
+}
+
 /** The fields of `e` that `q` matches, or `null` when it matches none. */
 function matchWord(q: string, e: SearchEntry): string[] | null {
   const short = q.length <= 2;
@@ -113,7 +126,7 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       fields: [
         { label: 'id', text: `be ${b.id}`, exact: [`be-${b.id}`] },
         { label: 'name', text: b.name },
-        { label: 'description', text: b.context ?? '' },
+        { label: 'description', text: affirmativeSentences(b.context ?? '') },
       ],
     });
   }
