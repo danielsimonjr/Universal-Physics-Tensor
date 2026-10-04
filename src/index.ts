@@ -249,6 +249,7 @@ export {
   evaluateEinsteinRelation,
   type EinsteinRelationInputs,
   type EinsteinRelationResult,
+  CarrierSignError,
   evaluateClapeyron,
   type ClapeyronInputs,
   type ClapeyronResult,
