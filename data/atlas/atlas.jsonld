@@ -5,7 +5,7 @@
     "qudt": "http://qudt.org/schema/qudt/",
     "dcterms": "http://purl.org/dc/terms/"
   },
-  "@id": "urn:upt:atlas:release:3.1.0",
+  "@id": "urn:upt:atlas:release:4.0.0",
   "upt:qudtProbedAt": "2026-09-22",
   "@graph": [
     {

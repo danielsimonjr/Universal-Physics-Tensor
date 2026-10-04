@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 from v0.1.0 onward.
 
+## [4.0.0] - 2026-10-04
+
+Major release. `evaluateEinsteinRelation` throws when μ and q have opposite signs. The canonical graph evaluator multiplies the sourced dimensionless prefactor, so recovered values that dropped that factor change. The package root adds the BE-77 through BE-87 evaluators, their input and result types, and `be77Edge` through `be87Edge`. npm `3.1.0` remains the published release until the tag workflow.
+
+### Migration
+
+`evaluateEinsteinRelation({ mu_m2_per_Vs: 0.14, T_K: 300, q_C: -1.602176634e-19 })` returned `D_m2_per_s = -0.0036192799701009757`. It now throws `mu_m2_per_Vs and q_C must have the same sign`. `upt evaluate be-70` with those inputs exits 1. `μ = 0` stays `D = 0`. Both signs negative stay the positive diffusivity `0.0036192799701009757`. `q = 0` stays rejected. `T < 0` with matching signs is unchanged. `PhysJS.EinsteinRelation.diffusion_eq` is unchanged.
+
+`upt explain --source=canonical` of a law whose sourced prefactor was dropped now multiplies that factor. Stokes drag at viscosity `1e-3`, radius `1e-6`, and speed `1e-4` prints `Recovered value: 1.88495559215388e-12`, not `1e-13`. Dynamic pressure at density 1000 and flow velocity 2 prints `2000`, not `4000`. Laplace pressure at surface tension `0.072` and radius `1e-3` prints `144`, not `72`. The Schwarzschild radius carries the 2, so `upt discover --source=canonical` moves the radius gaps by log10(2): bohr `~13.7`, classical electron `~16.9`, Planck `~38.3`. `U = L I²` differs from CE-inductor-energy by a factor of 2. `½ L I²` agrees.
+
+### Added
+
+- **PhysJS #64 proves be-77 through be-87.** The package root exports `evaluateHagenPoiseuille`, `evaluateEulerBuckling`, `evaluatePullIn`, `evaluateMottGurney`, `evaluateChildLangmuir`, `evaluateShockleyDiode`, `evaluateThomsonCoefficient`, `evaluateFourPointSheet`, `evaluateShotNoise`, `evaluateReynoldsAnalogy`, and `evaluateCapacitorNoise`, their input and result types, and `be77Edge` through `be87Edge`. No export was removed. The evaluate range is `BE-51/52/55..87`.
+
+### Breaking
+
+- **Einstein relation rejects opposite signs of μ and q.** A caller that accepted a negative `D_m2_per_s` from opposite signs now sees the throw.
+- **The canonical graph evaluator multiplies the sourced prefactor.** A caller that matched a recovered value computed with that factor taken as 1 now matches the sourced factor.
+
+The Part VIII check requires `4.0.0`. Before the bump it required `3.1.0` and failed on this package version. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `4.0.0`. Architecture docs were regenerated: 453 files, 3344 exports, 1609 re-exports, 96533 lines, 0 circular dependencies. Architecture test-coverage docs count 639 test files. The unused-analysis report lists 1 file and 78 exports.
+
+**Dependency health, measured for this release:** `bun audit` finds 0 vulnerabilities in 142 packages. `bun outdated` lists `@types/node` 26.5.1 → 26.6.4, `fast-check` 4.10.0 → 4.10.2, and `@viz-js/viz` 3.30.0 → 3.31.0. `vitest` and `@vitest/coverage-v8` stay 4.1.11 inside the current range; latest is 5.0.3. `tree-sitter` stays 0.22.4 inside the current range; latest is 0.25.1. None of these is a HIGH or CRITICAL advisory.
+
 ## [3.1.0] - 2026-10-04
 
 Minor release. The catalog adds three formally proved bridges. The package root exports `evaluateMagneticPressure`, `evaluateLondonPenetration`, and `evaluatePlasmaBeta`, their input and result types, and `be74Edge`, `be75Edge`, and `be76Edge`. No export was removed and no signature changed. npm `3.0.0` remains the published release until the tag workflow.
