@@ -83,7 +83,7 @@ const HELP = `upt eval "<formula>" name=value ...
         (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
         sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
         or log2 for base 10 or 2. A bare e is the elementary charge (the
-        CODATA value). E is energy: pass E=<number>. Euler's number is
+        CODATA value). E is energy: the binding is its own argument, \`upt eval E E=1eV\`. Euler's number is
         exp(x), for example exp(1), never a bare e and never the name euler.
         e_charge is the same charge.
         An explicit e=<number> replaces the CODATA value. CODATA
@@ -146,7 +146,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const missing = cf.variables.filter((v) => !(v in scope));
   if (missing.length) {
     const energyHint = missing.includes('E')
-      ? ' E is energy. Pass E=<number> in joules, or with a unit (E=1eV).'
+      ? ' E is energy. The binding is its own argument: upt eval E E=1eV.'
       : '';
     throw new UsageError(
       withParser(

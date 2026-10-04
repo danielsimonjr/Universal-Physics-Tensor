@@ -1,69 +1,184 @@
 upt — Universal Physics Tensor bridge-inference CLI
 
 Usage:
-  upt explain <quantity> [name=value | name] ...
-              [--source=catalog|canonical|both] [--json]
-        Explain how the graph determines a quantity: the identifiability
-        verdict, recovered value, derivation chains, and whether the inputs
-        are dimensionally sufficient. A name that is not a quantity of the
-        graph is reported NOT COVERED, with near names and what `upt search`
-        finds for its words, and exits 1. --source picks the graph (default
-        catalog); the result names the source it used.
-        e.g.  upt explain hawking-temperature mass=1.989e30
-
-  upt priority [--source=catalog|canonical|both]
-        Triage the speculative bridges by structural DECIDABILITY against
-        established physics (Tiers 1-3). NOT a credibility ranking.
+  upt atlas [<bridge-id>] [--run] [--json]
+       upt atlas --evidence [--stored | --run] [--json]
+        One atlas bridge with every qualification visible: relation, premises
+        and conclusion, transformation and inverse, side conditions, regime
+        inequalities, bound with its horizon and uniformity, what it preserves and loses,
+        witnesses, counterexamples, formal reference and review status.
+        review status is the record's review mark (proposed or reviewed).
+        It is not an evidence tag. formally-proved is derived from the
+        formal reference and does not depend on that mark. Empty
+        sections print as "none stated", never disappear. When derived
+        evidence is both formally-proved and contradicted, the report prints
+        proved, with unresolved counterexample: yes. The proof stays and the
+        counterexample stays unresolved. With no id, lists
+        every bridge of every family.
+        A catalog id be-<n> (either letter case) is not an atlas bridge. When
+        the atlas overlay has a formal reference for that id, the command
+        prints it and does not derive formally-proved from it. A catalog
+        equation with no formal reference says so. --run applies only to an atlas bridge.
+        Evidence is shown BY CLAIM (correspondence, regime, bound, horizon,
+        preserves), each citing only what the record's structure links to it;
+        a witness is listed under the bound (sharp, or at one point for a bound
+        that is not sharp) or under a preserved property only where the witness
+        registry attributes it, and the rest are listed apart. Every witness shows its
+        execution status: a witness's name is not
+        its result. --run executes the bridge's in-process registered
+        witnesses now and reports checked / refuted / unresolved separately
+        (exit 3 if any is refuted).
+        --evidence, with no id, is the atlas-wide evidence view: every bridge of
+        every family with its DERIVED evidence, the tags undecided without
+        witness results, per-tag counts (zeros included) and each declared norm
+        transport's witness. --stored derives it from the committed witness
+        results, --run from every registered witness run now (exit 3 if any is
+        refuted); either implies --evidence when no id is given.
+        e.g.  upt atlas ab-pendulum-linear
+              upt atlas be-16
+              upt atlas ab-walk-diffusion --run
+              upt atlas --evidence --run
+Flags:
+  --run
+        Execute the in-process registered witnesses. Exit 3 if one is refuted.
+  --evidence
+        With no bridge id, list every bridge's derived evidence and the witness results it observes.
+  --stored
+        Read witness results from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. That file is not in the published package; the command then names --run.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
   upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
-        which are decoys (a failed dimensional reconstruction, not a physical
-        refutation), which are dimensionally open.
+        which are decoys, which are dimensionally open.
+        A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
+        closes the dimensions, but its monomial does not reproduce the
+        bridge's evaluator. It is not a physical refutation of the formula.
+        --source picks the graph (default catalog).
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. Default: catalog.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
-  upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
-          [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
-          [--equation "TARGET = EXPR" [--equation-only]] [--around=QUANTITY [--depth=N]]
-          [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
-          [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
-        Map how the equations LINK: connected components (clusters) of the
-        graph by shared quantities, the anchored core, the link hubs, and
-        the isolated tail.
-        --format=mermaid|dot|svg emits the VISUAL map (quantities = nodes,
-        equations = junctions colored by status, one subgraph per component).
-        text (default) is the unchanged linkage printout. svg renders the dot
-        layout via the optional @viz-js/viz peer (npm i @viz-js/viz; or pipe
-        dot through "dot -Tsvg"). --proposed overlays the unadjudicated
-        identity-consequence relations (gray dashed). --out writes to a file
-        (default stdout).
-        --equation "TARGET = EXPR" injects YOUR OWN equation as a violet 'user'
-        node and reports where it lands (which cluster / shared quantities), with
-        a "did you mean?" hint for names that miss the catalog vocabulary. Use
-        underscores for multi-word quantities (photon_energy -> photon-energy).
-        --around=QUANTITY [--depth=N] focuses on the edges within N hops of one
-        quantity and states how many of the source's edges it kept.
-        --relation / --evidence filter edges by their Atlas relation or derived
-        evidence; --route, --family and --observable map the ATLAS (models and
-        the bridges between them) instead, and --stored / --run resolve their
-        evidence from witness results. `upt help map` describes every flag.
-        e.g.  upt map --equation "period = 2*pi*sqrt(length/gravity)"
+  upt axes
+        Axis-discrimination audit — which tensor classification axes actually
+        GATE the discovery funnel. Each axis measures FIRES (candidate clashes)
+        vs ABSTAINS over the funnel; an axis gates only when it fires. Reproduces
+        the rank-7 measurement (topology/statistics/symmetry classify but don't gate).
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
   upt candidates [--source=catalog|canonical|both]
         Propose candidate cross-cluster links (quantities of the same
         dimension in different clusters) for PHYSICIST REVIEW — a
         coincidence-heavy surface, not discovered bridges.
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. Default: catalog.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
-  upt frontier [--json]
-        Print two lists apart: null results (records already examined that
-        did not become an accepted connection) and the frontier (connections
-        the catalog does not contain). An empty list is printed as empty.
-        Neither list is a verdict and neither list changes a score.
+  upt canonical [--vars]
+        List the canonical-equation registry — the standard-physics L-layer
+        (textbook "answer key") with each entry's fidelity (L0/L1/L2),
+        domain, and bridge partners, plus the coverage gap.
+        --vars   also print each entry's target and governing variable names
+                 (the vocabulary for `upt map --equation` / `upt derive`).
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+  --vars
+        Also print each entry's target and governing variable names.
 
-  upt predict [--source=catalog|canonical|both]
-        Project the catalog onto the (scale × force) regime plane and rank
-        the EMPTY regime cells as undiscovered-connection hypotheses
-        (triadic closure). Makes the namesake tensor operational. Review
-        surface, not discovered bridges.
+  upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|loose] [--frontier] [--sensitivity] [--json]
+        Run the catalog's committed real-data confrontations (predicted vs
+        observed), each tagged with its RIGOR tier. A positional be-XX is the
+        same selection as --bridge (the form `upt explain be-XX` prints);
+        the two must name the same bridge when both are given. A positional
+        that is not a bridge id is an error. It is not ignored.
+        --rigor=<tier> shows only that tier (the precision core, or the loose
+        tail that needs better data); --frontier ranks the σ-tests by margin to
+        this tool's 1σ acceptance threshold (a software criterion, not a
+        scientific exclusion level; the smallest margin is the most at-risk
+        under new data);
+        --sensitivity adds an input-elasticity ranking (value-kind only).
+        Each record states its statistical object (point estimate ± 1σ,
+        one-sided limit, or a consistency ratio with no σ), the criterion
+        applied, whether the observed number is derived, its preprocessing,
+        its independence from the prediction (no fitted parameter, a shared
+        input, or not recorded — never implied), and the record's notes.
+        Each statement cites the GitHub URL of the file it quotes, with a
+        verbatim quote or a declared symbol; that the cited text exists
+        does not make the statement true.
+        Consistency ratios are counted apart and never as precision tests;
+        each prints its actual difference (observed − predicted)/predicted
+        separately from its stated agreement bound.
+        be-53 is not in that registry. `upt confront be-53` refuses: a
+        confrontation needs a caller-supplied measured-coupling table and a
+        running procedure (requestYangMillsConfrontation). The refusal names
+        each missing input, prints no residual, and does not change the
+        catalog status. It is not a pass and not a fail. The one-loop
+        coefficient's sign is oneLoopCoefficientStatement, not this command.
+Flags:
+  --bridge=VALUE
+        Select one bridge id, the same selection as a positional be-XX.
+  --sensitivity
+        Rank the prediction's input elasticities. Value-kind records only.
+  --rigor=VALUE
+        Show one rigor tier: stringent, moderate, or loose.
+  --frontier
+        Rank the σ-tests by margin to this tool's 1σ acceptance line. That line is a software criterion.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt connectors [--source=catalog|canonical|both]
+        Of the graph's ISOLATED bridges/laws, which could connect to the
+        anchored core via a same-dimension identification? The structural
+        frontier — same-kind connectors are the motivated set for
+        physicist review.
+        --source defaults to 'both' (catalog + canonical) for the honest,
+        all-known-physics answer; --source=catalog isolates the catalog-only
+        tail. The isolated count is printed for the source selected.
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. This command defaults to both. Default: both.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt coverage
+        Audit the catalog's empirical grounding — which bridges are
+        data-confronted vs graph-computable vs encoded-only vs thin — to
+        target the physicist review. Fabricates nothing.
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
+        Derive YOUR OWN equation's dimensional form. <dim> is a named
+        dimension (length, time, mass, velocity, ...), a constant (hbar, c,
+        G, k_B, e — e here is the elementary charge's dimension), a named
+        product/quotient (power/area, length*temperature),
+        or explicit (L^3.M^-1.T^-2). Parentheses group a factor
+        (power/(area*temperature^4)); pressure, density, volume, viscosity,
+        resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
+        In --formula, a bare e is the elementary charge and E is energy.
+        Euler's number is exp(x), for example exp(1). The name euler is refused.
+        With --formula, also verify it and
+        recover the dimensionless prefactor. A target that is not a unique
+        monomial of the variables exits 3. --debug prints the formula parser
+        and its version to stderr.
+        e.g.  upt derive period:time length:length gravity:acceleration \
+                       --formula "2*pi*sqrt(length/gravity)"
+Flags:
+  --formula VALUE
+        Check EXPR against the declared dimensions and recover the dimensionless prefactor.
+  --debug
+        Print the formula parser name and version on stderr.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
   upt discover [--source=catalog|canonical|both]
         VET the link candidates through the inference suite: hypothesise
@@ -80,29 +195,599 @@ Usage:
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
-        --derive consumes. Adjudicated candidates fold out of the promising
-        list; --show-adjudicated lists them with their recorded verdict.
-        Each promising row states which independent falsifiers ran and which
-        abstained, and what would make it testable; --require-falsifier lists
-        only rows one of them ran on and survived.
+        --derive consumes.
+        Candidates a physicist has already adjudicated
+        (https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
+        https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md)
+        fold out of the PROMISING list by default (decoy/entailed verdicts only —
+        review memory, not a re-litigation prompt); --show-adjudicated lists them
+        again with their recorded verdict.
+        Each PROMISING row states its readiness dimension by dimension —
+        structure, kind, which independent falsifiers (magnitude, axis,
+        consequence) ran and survived or abstained — and what would make it
+        testable: the identity premise, the missing magnitudes and regimes,
+        and the observation that would test it. An abstention is a missing
+        test, never a pass. --require-falsifier hides promising rows that no
+        independent falsifier ran on and survived, counts them, and lists the
+        encoded bridges that already carry a falsifier (a confrontation, a
+        counterexample, or a regime inequality).
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. canonical excludes bridges. Default: catalog.
+  --max-orders=VALUE
+        Magnitude-clash threshold. A larger value keeps more pairs promising. Default: 3.
+  --anchor=VALUE (repeatable)
+        Override a numeric anchor as k=v or k=v,k2=v2. Default: mass=M_sun.
+  --derive
+        For each promising identification, print the one algebraic relation it implies. That relation is not a bridge.
+  --show-adjudicated
+        List candidates a physicist has already adjudicated, with the recorded verdict.
+  --require-falsifier
+        Hide promising rows that no independent falsifier ran on and survived.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
-  upt connectors [--source=catalog|canonical|both]
-        Of the graph's ISOLATED bridges (how many depends on --source, default
-        both; the command prints the count), which could connect to the
-        anchored core via a same-dimension identification? The structural
-        frontier — same-kind connectors are the motivated set for physicist
-        review.
+  upt eval "<formula>" name=value ...
+        Evaluate YOUR OWN scalar formula (safe — arithmetic only). Knows the
+        constants pi and tau and the functions sqrt, cbrt, exp, ln, log
+        (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
+        sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
+        or log2 for base 10 or 2. A bare e is the elementary charge (the
+        CODATA value). E is energy: the binding is its own argument, `upt eval E E=1eV`. Euler's number is
+        exp(x), for example exp(1), never a bare e and never the name euler.
+        e_charge is the same charge.
+        An explicit e=<number> replaces the CODATA value. CODATA
+        names are filled in when you omit them: every registered constant
+        (G, c, hbar, h, k_B, e, ln2, epsilon_0, sigma_sb, b, GM_sun, Msun_iau)
+        and the aliases e_charge, m_e, m_p, m_proton, N_A, F, eps0, mu0, mu_0, kB, M_sun.
+        m_p and m_proton are the proton mass. N_A is the Avogadro constant.
+        F is the Faraday constant, N_A times the elementary charge. A bare
+        sigma is not the Stefan–Boltzmann constant; write sigma_sb. The tesla
+        takes an SI prefix (12nT, 12uT); a bare T is still the tesla and Ts is
+        still a terasecond. A value may be a
+        number, a unit (M=1Msun, B=1T, x=1AU) or an expression of those
+        constants and units (v=0.6*c, theta=pi/2). T, temperature, temp, and
+        T_K are kelvin: an energy on that name is k_B T, and any other
+        dimension is an error. Bindings use the built-in
+        parser, so write 2*pi; a bare e there is the elementary charge.
+        --natural sets ħ = c = 1 (h = 2π); --geometrized also
+        sets G = 1. --show-parser prints mathts and, with no
+        formula, exits 0. With --json that answer is a JSON envelope.
+        --debug prints the parser and its version to stderr.
+        An unknown function fails and names a documented equivalent where one
+        exists (lg → log10).
+        e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \
+                       c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
+Flags:
+  --debug
+        Print the formula parser name and version on stderr.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+  --show-parser
+        Print mathts. With no formula, that is the whole output and the exit code is 0.
+  --natural
+        Set ħ = c = 1 (and h = 2π) when reading values.
+  --geometrized
+        Set ħ = c = G = 1 when reading values.
 
-  upt coverage
-        Audit the catalog's empirical grounding — which bridges are
-        data-confronted vs graph-computable vs encoded-only vs thin — to
-        target the physicist review. Fabricates nothing.
+  upt evaluate <be-NN | case-id> key=value[unit] ...
+        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..68),
+        or an applied case: a whole measurement problem with its parent and
+        scalar equations, observable, conditions, regime checks and a route
+        to a measurement comparison. A case whose regime check fails prints
+        its outputs as NOT QUALIFIED and exits 3.
+        e.g.  upt evaluate case-resistor-noise T_K=300 R_ohm=1kohm
+              R_in_ohm=1Mohm C_in_F=20pF f_lo_Hz=0 f_hi_Hz=10kHz t_avg_s=10
+        Every input is declared: its unit, its meaning, and for a length what
+        it measures (a radius, a separation, a semi-major axis). A value may
+        carry a unit (d_m=1um, R_ohm=1kohm, T_yr=88d, M_kg=1Msun) or an
+        expression of constants and units (M_kg=1*M_sun, v=0.6*c); it is
+        converted into the declared unit only when the dimensions agree, and a
+        bare number is in the declared unit. The same reader accepts --sigma. An absolute temperature in degC
+        adds 273.15 K; a --sigma in degC is a difference and does not. degF is
+        refused. An undeclared key exits 1 instead of being ignored. A declared
+        alternate (major_axis_m for a_m) is converted exactly and said so.
+        e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_⊙
+              (ideal degenerate gas, with m_u and M_⊙ = 1.989e30 kg)
+              upt evaluate be-55 C=1      → quantum Hall R_H = von Klitzing constant
+        With no bridge id, lists the evaluable bridges and their declared inputs.
+        --sigma key=u (repeatable) gives an input's standard uncertainty;
+        --corr a,b=rho its correlation. Propagated to first order (GUM law,
+        central-difference sensitivities), with a curvature check per input
+        that flags where the linearization is unreliable. An input without
+        --sigma is treated as exact. Not included: the evaluator's numerical
+        error and model discrepancy (whether the bridge applies).
+        e.g.  upt evaluate be-58 T_K=300 R_ohm=1000 --sigma T_K=3 --sigma R_ohm=10
+        be-51 and be-52 are weak-field formulas. When the impact parameter, or
+        the periapsis a(1-e), is not above 10 Schwarzschild radii, the number
+        is still printed and a warning names that cut (the same b ≥ 10 r_s cut
+        be-51's graph domain already uses). Exit stays 0.
+Flags:
+  --sigma=VALUE (repeatable) (or --sigma VALUE)
+        One input uncertainty as key=u, in the input's unit. A temperature uncertainty in degC is a difference.
+  --corr=VALUE (repeatable) (or --corr VALUE)
+        A pairwise correlation as a,b=rho, used with --sigma.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
-  upt canonical [--vars]
-        List the canonical-equation registry — the standard-physics L-layer
-        (textbook "answer key") with each entry's fidelity (L0/L1/L2),
-        domain, and bridge partners, plus the coverage gap. --vars also prints
-        each entry's target and governing variable names.
+  upt explain <quantity> [name=value | name] ...
+            [--source=catalog|canonical|both] [--json]
+        Explain how the graph determines a quantity: the identifiability
+        verdict, recovered value, derivation chains, and whether the inputs
+        are dimensionally sufficient. A name that is not a quantity of the
+        graph is reported NOT COVERED, with a one-edit name and what `upt search`
+        finds for its words, and exits 1. A shared token such as `length` is
+        not a near name. An evaluate key (`I_W_per_m2`, `B_T`, `T_K`, `g_00`)
+        is the graph quantity that edge records. A name that does not resolve
+        exits 1. --source picks the graph (default
+        catalog); the result names the source it used.
+        --source=both also prints the other quantity name when a canonical
+        equation restates a catalog bridge under a different name, and says
+        whether the two recovered values agree.
+        A value is a number, a unit (mass=1Msun) or a constant expression
+        (mass=1*M_sun). A bare number is already in the quantity's unit.
+        A tagged quantity converts into that unit (GeV, bit, nat, J/K).
+        magnetic-field and magnetic-flux-density are one vacuum B: a value
+        given under either name is available under the other.
+        e.g.  upt explain hawking-temperature mass=1.989e30
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. Default: catalog.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt frontier [--json]
+        Two lists, printed apart. Null results: records already examined
+        that did not become an accepted connection, each with the reason
+        the program already states. Frontier: connections the catalog does
+        not contain, each with a reason the graph already computes and,
+        when one is registered, the observation that would test it.
+        An empty list is printed as empty. Neither list is a verdict and
+        neither list changes a score. A missing observation stays missing.
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt ground <quantityA> <quantityB> [--source=catalog|canonical|both]
+                 [--anchor=k=v,...] [--max-orders=N] [--json]
+        The epistemic-grounding ledger for one discovery candidate a≡b: which
+        falsifiers PASSED, which ABSTAINED (gaps), and the honest ceiling — no
+        mechanism test, no data test (permanent for a dimensional candidate;
+        real mechanism/data live in `upt confront`).
+        Pass the same --source (default catalog), --anchor and --max-orders
+        as the `upt discover` run that listed the pair.
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. Use the same value as the discover run. Default: catalog.
+  --anchor=VALUE (repeatable)
+        Override a numeric anchor as k=v or k=v,k2=v2. Default: mass=M_sun.
+  --max-orders=VALUE
+        Magnitude-clash threshold. A larger value keeps more pairs promising. Default: 3.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt map [--source=catalog|canonical|both|poster] [--format=text|mermaid|dot|svg]
+        [--proposed [--anchor=k=v,...] [--max-orders=N]] [--out=PATH]
+        [--equation "TARGET = EXPR" [--equation-only] [--verbose] [--bind-short]
+        [--natural] [--geometrized]] [--around=QUANTITY [--depth=N]]
+        [--relation=TYPE] [--evidence=TAG] [--route=FROM,TO [--all-routes
+        [--max-routes=N]]] [--family=NAME] [--observable=NAME] [--stored | --run]
+        Map how the equations LINK: connected components (clusters) of the
+        graph by shared quantities, the anchored core, the link hubs, and
+        the isolated tail.
+        --source defaults to 'both' (catalog + canonical) — a pure
+        connectivity question gets the honest, all-known-physics answer by
+        default; --source=catalog shows the bridge-catalog view alone.
+        --source=poster draws the ATLAS PHASE 3 POSTER INDEX instead of the
+        bridge graph: nodes are STATEMENTS (including the hidden supporting
+        nodes — action principle, Noether, the full Maxwell system, the
+        Lorentz group, the central limit theorem) and boxes are DERIVATIONS
+        (premises in, conclusion out). Associations are drawn DASHED because
+        they assert no relation at all. It also reports any premise naming a
+        statement the registry does not define, and says so out loud when the
+        index is not registered in this build rather than printing an empty
+        map as an answer.
+        --format=mermaid|dot|svg emits the VISUAL map (quantities = nodes,
+        equations = junctions colored by status, one subgraph per component).
+        text (default) is the unchanged linkage printout. svg renders the dot
+        layout via the optional @viz-js/viz peer (npm i @viz-js/viz; or pipe
+        dot through "dot -Tsvg"). --proposed overlays the unadjudicated
+        identity-consequence relations (gray dashed); --anchor and --max-orders
+        tune the discovery funnel that derives them, as in `upt discover`.
+        --out writes to a file (default stdout).
+        --equation "TARGET = EXPR" injects YOUR OWN equation as a violet 'user'
+        node, dimensionally checks it, compares with the canonical registry, and
+        reports nearest equations by shared-quantity overlap (not a full edge
+        dump). Multi-word names may use underscores or catalog hyphens
+        (planck_length / planck-length). Unknown names get a "did you mean?",
+        and a registered constant of the inferred dimension (sigma → sigma_sb).
+        A catalog target whose dimension depends on an unresolved name exits 3
+        and does not quote that placeholder, unless a canonical comparison agreed.
+        A one-letter catalog name (a, r, …) is reported and not bound; --bind-short
+        binds it. The alias T → temperature still binds.
+        An all-constant right-hand side (the Planck length) is compared at the
+        SI constant values when its target is a catalog quantity.
+        With --equation, the default is the verdict only. --verbose prints the
+        linkage map after it. --equation-only is the same verdict and errors
+        when --equation is missing (with --json: no "linkage" field).
+        A bare e in the formula is the elementary charge. E is energy.
+        Euler's number is exp(x), for example exp(1). The name euler is refused.
+        --natural sets ħ = c = 1 for a dimension difference that is a power of
+        those constants; --geometrized also allows powers of G. The SI default
+        still refuses rest_energy = mass.
+        --relation=TYPE keeps only edges whose recorded Atlas relation is that
+        type; --evidence=TAG keeps only edges whose evidence set, DERIVED from
+        the catalog row at read time, contains that tag.
+        ⚠ Filtering changes what a missing overlay means: unfiltered, an edge
+        with no overlay is KEPT; filtered, it is DROPPED, because nothing shows
+        it satisfies the filter. Those drops are counted and printed separately
+        from the edges that simply did not match — an unaudited graph must not
+        render as a complete answer.
+        --around=QUANTITY [--depth=N] keeps only the edges within N
+        shared-quantity hops of QUANTITY (default 1: the edges that use it),
+        in every output form, and prints how many of the source's edges it
+        kept: the others are omitted from the view, not absent from the graph.
+        --route=FROM,TO and --family=NAME map the ATLAS instead: models and
+        the recorded bridges between them, not shared quantities. --route
+        shows the route `upt path` reports, each bridge's relation,
+        assumptions, regime, bound and derived evidence, the composition
+        step by step (and where the table yields no composite claim), and
+        the equations each model records. --family shows one family's
+        models, its bridges, the bridges from other families that touch it,
+        and its rejections; --relation/--evidence filter its bridges, and a
+        bridge whose tag depends on witness results is counted as undecided,
+        not as a mismatch. A model's equations are only those its
+        canonicalRefs record; nothing is inferred from shared quantities.
+        --route=FROM,TO --all-routes lists every simple route (no model
+        visited twice), shortest first, each with its composition and route
+        claim, and counts the claims; --max-routes=N (default 20, at most
+        1000) bounds the list, and a list cut short says so and says up to
+        which bridge count it is complete.
+        --observable=NAME maps the bridges whose RECORDED preserves text, or
+        declared bound translation, names that observable (a whole-word text
+        match, nothing inferred), lists apart those recording it as NOT
+        preserved, and counts the bridges that record nothing about it;
+        --relation/--evidence filter it as they filter a family.
+        --stored derives evidence from the committed witness results
+        (https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json; not in the published package),
+        labelled with the last commit that touched it; --run runs the shown
+        bridges' in-process registered witnesses now (exit 3 if any is
+        refuted). Either resolves a tag once its witnesses have results; a
+        witness with no result leaves it undecided, and checked, refuted and
+        unresolved are counted apart.
+        Every atlas view states how many of the atlas's models and bridges it
+        shows, in text, --json and --format=mermaid|dot|svg.
+        e.g.  upt map --relation=derivation --source=both
+              upt map --around=temperature --depth=2 --source=catalog
+              upt map --route=model-pendulum,model-lc
+              upt map --route=model-string,model-dalembert --all-routes --stored
+              upt map --family=oscillators --evidence=formally-proved
+              upt map --observable=frequency --run
+Flags:
+  --source=VALUE
+        Which graph to draw: catalog, canonical, both, or poster. poster is the Atlas Phase 3 statement index and is valid only here. This command defaults to both. Default: both.
+  --format=VALUE
+        Output form: text, mermaid, dot, or svg. svg needs the optional @viz-js/viz peer. Default: text.
+  --out=VALUE
+        Write the report to PATH instead of stdout.
+  --max-orders=VALUE
+        Magnitude-clash threshold for the --proposed overlay. Default: 3.
+  --anchor=VALUE (repeatable)
+        Override a numeric anchor as k=v for the --proposed overlay. Default: mass=M_sun.
+  --proposed
+        Overlay unadjudicated identity-consequence relations.
+  --relation=VALUE
+        Keep atlas edges whose recorded relation is TYPE.
+  --evidence=VALUE
+        Keep atlas edges whose derived evidence set contains TAG.
+  --around=VALUE (or --around VALUE)
+        Keep edges within --depth shared-quantity hops of QUANTITY.
+  --depth=VALUE
+        Hop count for --around. Default: 1.
+  --route=VALUE (or --route VALUE)
+        Map the atlas route FROM,TO instead of the equation graph.
+  --all-routes
+        With --route, list every simple route, shortest first.
+  --max-routes=VALUE
+        Cap on --all-routes. The maximum accepted is 1000. Default: 20.
+  --family=VALUE (or --family VALUE)
+        Map one atlas family by name.
+  --observable=VALUE (or --observable VALUE)
+        Map bridges whose recorded text names this observable.
+  --stored
+        Derive evidence from https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/data/atlas/witness-results.json. That file is not in the published package; the command then names --run.
+  --run
+        Run the shown bridges' in-process witnesses now. Exit 3 if one is refuted.
+  --equation=VALUE (or --equation VALUE)
+        Inject TARGET = EXPR as a user node and report where it lands.
+  --equation-only
+        Print only the equation verdict. Errors when --equation is missing.
+  --verbose
+        With --equation, also print the linkage map.
+  --bind-short
+        Bind a one-letter catalog name in --equation. Without it, those names are reported and not bound.
+  --natural
+        Set ħ = c = 1 when a dimension difference is a power of those constants.
+  --geometrized
+        With the natural-unit rules, also set G = 1.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
+        Christoffel symbols, the Ricci tensor, the Ricci scalar and the
+        Kretschmann scalar of one exact metric. Alias: upt curvature.
+        Signature of the line element is (-,+,+,+), the same mostly-plus
+        signature as the canonical Einstein-equation metric node.
+        Schwarzschild Kretschmann is checked against 48 G² M² / (c⁴ r⁶).
+        FLRW prints the Friedmann equation including the curvature term
+        −k c²/a² and Λ. Kerr Kretschmann uses the Boyer–Lindquist closed form.
+        --geodesic integrates a short Schwarzschild circular orbit, or a Kerr
+        geodesic (equatorial and circular at θ = π/2; inclined, with that
+        polar turning point, at any other θ). Kerr's a is a length in metres;
+        the report prints a/M = a/(GM/c²). A Ricci scalar that has a closed
+        form is that form; a vacuum finite-difference residual is not listed
+        as Ricci. A parameter is a number, a unit (M=1Msun, r=1km) or a
+        constant expression (theta=pi/2). A bare number is already in the
+        parameter's SI unit; a dimensioned quantity must match it.
+        `upt help metric` describes every flag.
+        e.g.  upt metric schwarzschild M=1Msun r=1e8 theta=pi/2
+              upt metric flrw k=1 t=2
+              upt curvature kerr a=1000 r=1e8 theta=1.2
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+  --geodesic
+        Integrate a short Schwarzschild circular orbit, or a Kerr geodesic at the given θ.
+
+  upt path <from> <to> [--at group=value ...] [--tolerance=[observable:]EPS]
+        [--sweep name=lo:hi:n[:log]] [--compare=<to2>] [--csv] [--json]
+        The chain of bridges from one model to another (across families when
+        a bridge ends in another family's model), the relation the chain
+        composes to, the composed (K, delta) with the norm it holds in,
+        whether every bridge's REGIME holds at --at (the bound is claimed only
+        inside it), and whether every horizon still holds (pass t=<time> plus
+        the parameters, e.g. --at theta0=0.2 T0=1 t=10).
+        When the composition table declines to compose the relations, the path
+        carries NO bound: the command prints 'no composite claim' and exits 0.
+        That refusal is the answer, and no number is invented in its place.
+        An exact equivalence carries a bound only in a norm it DECLARES a
+        transport of, in the declared direction, with a witness (ab-spring-lc:
+        relative period error, spring → lc; the horizon is restated on the
+        circuit clock). Any other norm or direction is refused as
+        'norm-not-stated', and the refusal names the missing declaration.
+        --at values are numbers, units, or constant expressions (theta0=pi/2).
+        A regime or horizon that was checked and failed prints no bound
+        number: the domain supremum is not a claim at that point.
+        --sweep name=lo:hi:n[:log] evaluates the path at n samples (2 to 200,
+        endpoints included) of one parameter not fixed by --at: per row the
+        regime, the horizon and the closed-form point error. A row outside a
+        regime or past a horizon carries no error, because no bound is claimed
+        there. A sweep exits 0: each row is its own verdict. --csv writes the
+        rows as CSV.
+        --compare=<to2> (with --sweep) sweeps a second route from the same
+        source beside the first: per row each route's regime, horizon and
+        error in its OWN norm (never compared with the other's), and NEITHER,
+        with no number, where no encoded limit applies.
+        --tolerance=EPS asks whether the path is accurate enough: ADEQUATE only
+        when every regime holds, every horizon holds at the given t, and the
+        closed-form point error is <= EPS; INADEQUATE (exit 3) when any of
+        them fails; UNDETERMINED when the point does not settle it. EPS is in
+        the bound's own norm. With --sweep, each row is judged.
+        --tolerance=<observable>:EPS asks in ANOTHER observable, only through
+        a translation the first bridge declares (ab-pendulum-linear: phase, the
+        exact accumulated error, and position, an upper bound on |θ − θ_lin|;
+        both in rad, t in the unit of T0), carried past each later bridge only
+        by that bridge's declared carriage (ab-spring-lc carries phase). It
+        reports the horizon t* at which the error reaches EPS, ADEQUATE iff
+        t <= t* (inclusive; past t* an upper bound is UNDETERMINED, not
+        INADEQUATE), and the evidence of the translation and of each carriage,
+        derived by running their witnesses, plus the translation's witness
+        run at this point with a control. Otherwise it is UNDETERMINED.
+        A route may cross families. A bound crosses only through the relation,
+        uniformity, Lipschitz, and norm gates, and, across families, only
+        through a witnessed norm transport; a matching norm name is not one
+        (reason cross-family-unmapped, still exit 0).
+        A bridge with two or more premises is named when both models appear
+        among its premises and its conclusion. That line is the bridge; it is
+        not a step of the chain, and a missing chain still exits 0.
+        e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
+              upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
+              upt path model-pendulum model-lc --at theta0=0.3 T0=2 t=5 --tolerance=phase:0.1
+              upt path model-telegraph model-fick --compare=model-wave-1d --at D=1 q=1 t=1 --sweep tau=0.001:1000:13:log
+Flags:
+  --at=VALUE (repeatable) (or --at VALUE)
+        State one regime coordinate as group=value. A value may be an expression such as pi/2.
+  --sweep=VALUE (or --sweep VALUE)
+        Sample one coordinate as name=lo:hi:n or name=lo:hi:n:log, with n from 2 to 200.
+  --compare=VALUE (or --compare VALUE)
+        Sweep a second route from the same source to this model id and mark NEITHER where no limit applies.
+  --csv
+        Write sweep rows as CSV.
+  --tolerance=VALUE
+        Judge adequacy against EPS in the bound's norm, or name:EPS through a declared translation. Exit 3 when inadequate.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt predict [--source=catalog|canonical|both]
+        Project the catalog onto the (scale × force) regime plane and rank
+        the EMPTY regime cells as undiscovered-connection hypotheses
+        (triadic closure). Makes the namesake tensor operational. Review
+        surface, not discovered bridges.
+        --source picks the graph (default catalog).
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. Default: catalog.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt priority [--source=catalog|canonical|both]
+        Triage the speculative bridges by structural DECIDABILITY against
+        established physics (Tiers 1-3). NOT a credibility ranking.
+        --source picks the graph (default catalog).
+Flags:
+  --source=VALUE
+        Which graph to read: catalog, canonical, or both. Default: catalog.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
+        Experimental expression/residual search (Product B). Orthogonal to
+        `upt discover`, which vets quantity identifications a≡b and is frozen.
+        Relation-link / regime-transition gaps are not searchable here — use
+        `upt discover`.
+        An `fg-expr-<case id>` gap is a searchable expression handle: one
+        prediction-residual record per applied case, observations empty, built
+        from the case id and title. It carries no named baseline and no
+        dataset. Scientific-Bridge-Discovery-v1 admits a prediction-residual
+        scanner only when both exist, so this listing is not a detected
+        residual and not a fitted formula. `upt probe run` still requires
+        `--problem=FILE`. The id is not that file.
+        scan                 typed frontier gaps (default: searchable only)
+        show <gap-id>        one gap
+        run --problem=FILE   bounded native search (MHC / holdout / budget)
+        candidates           same as run; list stored statuses
+        falsify              run + print falsification batteries
+        rank                 run + Pareto front
+        design --h1= --h2= --bounds=   discriminating experiment suggestion
+        reproduce --problem=FILE       re-run a problem (same stop contract)
+        study --data=FILE    search + fit on exploratory rows only, then χ²-test
+                             the candidate and declared baselines on withheld
+                             holdout / replication rows; suggest a discriminating
+                             measurement (see STUDY FILE below)
+        --replication=FILE   study: replication rows from a separate file (JSON
+                             or CSV) with its own provenance
+        --searchable-only    scan: only Product-B-searchable gaps (default)
+        --all                scan: include Product A wrappers (not searchable)
+        --budget-ms=N        wall-clock cap (default 5000)
+        --holdout-tol=X      relative holdout RMSE cap (default 0.15)
+        --worker=PATH        optional NDJSON worker (spawned as node PATH)
+        --source=catalog|canonical|both   the graph a subverb reads (default catalog)
+        --alpha=X            study: χ² test level (default: the file's, else 0.001)
+        --json               machine envelope
+
+        PROBLEM FILE (--problem=FILE, JSON)
+        target       {"name", "dim"}: the observable to explain. "dim" is a named
+                     dimension (time, length, mass, acceleration, ...) or explicit
+                     L^a.M^b.T^c (e.g. "L^3.M^-1.T^-2").
+        governing    [{"name", "dim"}, ...]: the candidate inputs.
+        exploratory  {"observable", "rows": [{name: value, ...}, ...]}: the fit data.
+        holdout      the same shape: the locked data the fit must also pass. A row
+                     that also appears in exploratory is refused as a leak.
+        gap          optional {"id", "kind", "summary"}. "id" must start with "fg-".
+                     "kind" is one of prediction-residual, relation-link,
+                     regime-transition, parameter-tension, assumption-conflict,
+                     missing-operator, unexplained-observation (default),
+                     model-disagreement, causal-mechanism, other.
+        role         optional on a dataset: exploratory-fit (default for
+                     exploratory), validation-holdout (default for holdout),
+                     external-replication, falsification-only.
+        observationsPath  optional: a separate JSON file with the datasets.
+        A dimensionless governing variable is written with "dim": "dimensionless".
+        Minimal example (small-angle pendulum):
+        {
+          "target": {"name": "period", "dim": "time"},
+          "governing": [{"name": "length", "dim": "length"},
+                        {"name": "gravity", "dim": "acceleration"}],
+          "exploratory": {"observable": "period", "rows": [
+            {"length": 1, "gravity": 9.81, "period": 2.006},
+            {"length": 2, "gravity": 9.81, "period": 2.837},
+            {"length": 0.5, "gravity": 1.62, "period": 3.491}]},
+          "holdout": {"observable": "period", "rows": [
+            {"length": 1.5, "gravity": 3.71, "period": 3.995}]}
+        }
+
+        STUDY FILE (--data=FILE, JSON, or CSV when FILE ends in .csv)
+        provenance   {"synthetic": true|false (required, never inferred),
+                     "source", "acquisition"?, "calibration"?}
+        target       {"name", "unit", "sigma"?}  sigma: default row uncertainty
+        governing    [{"name", "unit", "sigma"?}, ...]  "unit": "" when
+                     dimensionless; "sigma": default input uncertainty
+        observations [{"id"?, "role", "values": {input: value}, "observed",
+                     "sigma"?, "inputSigma"?: {input: σ}, "source"?}, ...].
+                     A bare number is in the declared unit; "120 cm" is
+                     converted; a dimension mismatch, a missing σ or an
+                     undeclared key refuses the file.
+        input σ      propagated by effective variance: σ_eff² = σ_y² +
+                     Σ (∂f/∂x_i · σ_x_i)², with each model's own slopes; the
+                     report states which inputs carry σ. First order in σ_x.
+        role         exploratory (the only rows searched and fit) | holdout
+                     (withheld test, e.g. a change of regime) | replication
+                     (independent acquisition, withheld). A withheld row that
+                     repeats an exploratory row's inputs, or a replication row
+                     sharing an exploratory row's source, refuses the file.
+        baselines    optional [{"name", "formula", "fitPrefactor"?}]: competing
+                     models over the governing names in SI units, e.g.
+                     "2*pi*sqrt(length/gravity)"; must have the target's dimension.
+                     fitPrefactor (default false) fits one scale on exploratory rows.
+        criterion    optional {"alpha"} (default 0.001)
+        design       optional {"variables": {input: {"min", "max", "steps"?}}}
+        correction   optional {"input": <dimensionless input u>, "powers": [2, 4]},
+                     or a list of them, one per input (at most 6 powers in all):
+                     also search m(x)·(1 + c₁u² + c₂u⁴ + …) for each monomial m,
+                     fit on exploratory rows only. Terms are admitted in the
+                     declared order, family by family, while each passes an
+                     extra-sum-of-squares F test at p < α; the first term a
+                     family fails ends that family. The families are additive:
+                     no cross term (u·v) and no other function is searched.
+        CSV          '# key: value' lines above the header declare the study:
+                     '# target: <column>', '# target.sigma: 2 ms',
+                     '# governing.<input>.sigma: σ', '# provenance.synthetic: true',
+                     '# provenance.source: ...', and any other key above as a
+                     dotted path; a value is JSON when it parses, else text.
+                     Header: name[unit] quantity columns (name[] when
+                     dimensionless), and id, role, source, sigma, sigma(<input>),
+                     note. An empty cell is absent. Refused for the same
+                     reasons as the JSON it compiles to.
+        REPLICATION FILE (--replication=FILE): provenance, target, governing
+                     and replication rows only. Refused if its source or
+                     acquisition is the study's (ignoring case, spacing and
+                     punctuation), or if a row repeats a study row's data
+                     exactly (the same data renamed).
+        closeness    replication rows at a study row's inputs are tested for
+                     agreement too good to be true: identity (Σz² on ν = n) and
+                     affine (y_rep = a + b·y_study, ν = n − 2), each a lower-tail
+                     χ² test at α/2. Either firing makes replication too-close:
+                     a copy, or an overstated σ. Rows at other inputs are not
+                     tested, so a copy at altered inputs is not caught.
+        Verdicts: no-credible-candidate | refuted-on-holdout | survives-holdout |
+        untested-on-holdout; replication is reported separately
+        (survives-replication | refuted-on-replication | too-close |
+        no-replication-data | not-tested). A candidate
+        is credible only if it passes on exploratory rows AND a constant model
+        is rejected there. A fit is not a mechanism.
+        Synthetic controls: https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/tests/fixtures/probe-study/*.synthetic.{json,csv}.
+        Every one was designed knowing its generating law, so a recovery shows
+        the method recovers that law; none is a blind test of finding an
+        unknown one, and UPT ships no blind control.
+Flags:
+  --source=VALUE
+        Which graph a subverb reads: catalog, canonical, or both. Default: catalog.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+  --problem=VALUE
+        Problem JSON file for run, candidates, falsify, rank, and reproduce.
+  --budget-ms=VALUE
+        Wall-clock cap in milliseconds. Default: 5000.
+  --holdout-tol=VALUE
+        Relative holdout RMSE cap. Default: 0.15.
+  --worker=VALUE
+        Optional NDJSON worker, spawned as node PATH. The path must be a .js, .mjs, or .cjs file.
+  --bounds=VALUE
+        Bounds for design, as the design subverb reads them.
+  --h1=VALUE
+        First hypothesis for design.
+  --h2=VALUE
+        Second hypothesis for design.
+  --searchable-only
+        scan: list only Product-B-searchable gaps. This is the default.
+  --all
+        scan: include Product A wrappers, which are not searchable here.
+  --data=VALUE
+        Study file (JSON, or CSV when the name ends in .csv) for study.
+  --replication=VALUE
+        study: replication rows from a separate JSON or CSV file.
+  --alpha=VALUE
+        study: χ² test level. Default: the file's alpha, else 0.001.
 
   upt recover
         Validate bridges against standard physics: classify each bridge↔
@@ -111,189 +796,121 @@ Usage:
         dimensional-only. A chain of two symbolic edges is reported
         separately. That comparison does not cancel dimensionful constants,
         and a chain is never restates-canonical.
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt regime <family> [--at group=value ...] [--json]
+        Where in parameter space a family's models are claimed to apply.
+        --at states a point in REGIME COORDINATES (π-group formulas, or a
+        dimensionless input's own name, e.g. --at theta0=0.2). Every model AND
+        bridge is reported as valid, violated (naming the failed inequality),
+        or UNKNOWN — a coordinate the point never supplied is NOT a pass, and a
+        regime that states no inequality reads 'no machine condition evaluated
+        (VACUOUS …)' rather than passed (`upt help statuses` defines each word).
+        Each inequality is listed as satisfied, violated or unchecked. A
+        bridge's prose side conditions (lossless, no-slip, ...) are never
+        evaluated: they are listed as premises not machine-checked unless you
+        --assume one (recorded as your declaration, not as evidence) or --deny
+        one (the record then does not apply as stated). Both match a side
+        condition by case-insensitive substring and never change the
+        inequality verdict.
+        A group can be given by its formula (spaces ignored, * read as ·, so
+        --at "tau*D*q^2=1" works) or through its parameters: --at tau=1 D=1
+        q=1 derives tau · D · q^2 = 1. A key that no record uses is named, and
+        ignored.
+        Also prints the pairwise overlap of the regimes and, over the box --at
+        states, the points no CONSTRAINING regime covers.
+        Exit 3 when any record is VIOLATED. VACUOUS, UNKNOWN and a survey with
+        no violated record exit 0.
+        A value is a number, a unit, or a constant expression (theta0=pi/2,
+        t=1s). A bare number is already in the coordinate's unit.
+        e.g.  upt regime <name> --at theta0=0.2
+              upt regime <name> --deny lossless
+Flags:
+  --at=VALUE (repeatable) (or --at VALUE)
+        State one regime coordinate as group=value. A value may be an expression such as pi/2.
+  --assume=VALUE (repeatable) (or --assume VALUE)
+        Record a prose premise as your declaration. It is not evidence and it is not evaluated.
+  --deny=VALUE (repeatable) (or --deny VALUE)
+        Mark one prose premise contradicted. The others stay unspecified.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+
+  upt retrieve <claim> [--embed] [--ollama-url=URL]
+        Propose canonical relations for a claim. The default is the atlas
+        search (rankByStructure) and does not call out of process. The output
+        says so. --embed asks a local Ollama model, qwen3-embedding:4b, for
+        an order. That order is a proposal, not evidence. Acceptance stays
+        the atlas search, and cosine similarity does not enter its score.
+        If Ollama cannot be used, the same atlas search is printed and the
+        reason is named: the process is not there, the model is not there,
+        the reply is not a vector or its length is not the length stored in
+        the frozen file, or the call does not finish. A fallback exits 0.
+        --ollama-url is used only with --embed (default http://127.0.0.1:11434).
+        A claim is text. It has no expression, so the structural score is
+        zero and the atlas order is by id. The command does not invent one.
+        e.g.  upt retrieve period of a pendulum
+              upt retrieve period of a pendulum --embed
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
+  --embed
+        Ask a local Ollama model for an order. Acceptance stays the atlas search. A failure of Ollama still prints that search and exits 0.
+  --ollama-url=VALUE
+        Ollama base URL. Used only with --embed. Default: http://127.0.0.1:11434.
+
+  upt search <word> ...
+        Find a catalog bridge, canonical equation, atlas model, atlas bridge,
+        quantity or applied case by the words in its name, id, symbol, alias
+        or bridge description, and print the command that inspects each match. Every
+        word must match. A space inside one argument, and a hyphen, are word
+        breaks, so a quoted phrase and a hyphenated name are several words.
+        An equal dimension is never a match (a radius is not
+        a wavelength). A word of one or two letters matches a symbol or alias
+        exactly. No match exits 1 and names the registries searched.
+        e.g.  upt search Schrödinger
+              upt search thermal noise
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
   upt symbolic [--simplify]
         Compose bridges' SYMBOLIC (AST) forms, not just their numeric
         evaluators (the Observable contract). Shows the CT-1 / CT-1b chains
         composed by substitution, dimensionally validated and evaluable.
         With --simplify, folds the composed AST via MathTS (k_B cancels),
-        re-validated dimensionally + numerically. Each chain also prints a
-        runnable `upt eval` form, a LaTeX form (\frac for every division)
-        and a symbol table: meaning, value, SI unit and source of each symbol.
-
-  upt eval "<formula>" name=value ...
-        Evaluate YOUR OWN scalar formula (safe — arithmetic only). Knows the
-        constants pi and tau and the functions sqrt, cbrt, exp, ln, log
-        (natural, = ln), log10, log2, abs, sin, cos, tan, asin, acos, atan,
-        sinh, cosh, tanh, pow, atan2. log is the NATURAL logarithm: use log10
-        or log2 for base 10 or 2. A bare e is the elementary charge. E is
-        energy: pass E=<number>. Euler's number is exp(x), for example exp(1).
-        e_charge is the same charge. A value may be a number,
-        a unit, or an expression (v=0.6*c). `upt help eval` describes every flag.
-        e.g.  upt eval "hbar*c^3/(8*pi*G*M*k_B)" hbar=1.054571817e-34 \
-                       c=299792458 G=6.6743e-11 M=1.989e30 k_B=1.380649e-23
-
-  upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debug]
-        Derive YOUR OWN equation's dimensional form. <dim> is a named
-        dimension (length, time, mass, velocity, ...), a constant (hbar, c,
-        G, k_B, e), or explicit (L^3.M^-1.T^-2). With --formula, also verify
-        it and recover the dimensionless prefactor. `upt help derive` describes every flag.
-        e.g.  upt derive period:time length:length gravity:acceleration \
-                       --formula "2*pi*sqrt(length/gravity)"
-
-  upt confront [be-XX] [--bridge=be-XX] [--rigor=stringent|moderate|loose]
-               [--frontier] [--sensitivity]
-        Run the catalog's committed real-data confrontations (predicted vs
-        observed), each tagged with its RIGOR tier. A positional be-XX selects
-        that bridge, the same as --bridge (this is the command `upt explain be-XX`
-        prints). A positional that is not a bridge id is an error. --rigor filters to one tier
-        (the precision core, or the loose tail that needs better data); --frontier
-        ranks the σ-tests by margin to the 1σ acceptance threshold (a software
-        criterion, not a scientific exclusion level; tightest = most at-risk under
-        new data); --sensitivity ranks the prediction's input elasticities.
-        Each record names its statistical object, criterion and data origin;
-        consistency ratios (no σ) are counted apart from the σ-tests.
-        be-53 is not a registered confrontation. `upt confront be-53` refuses
-        and names the missing table and running procedure. It prints no
-        residual and does not change the catalog status.
-
-  upt axes
-        Axis-discrimination audit — which tensor classification axes GATE the
-        discovery funnel (an axis gates only when it MEASURABLY fires). Reproduces
-        the rank-7 result (topology/statistics/symmetry classify but do not gate).
-
-  upt evaluate <be-NN | case-id> key=value[unit] ... [--sigma key=u ...] [--corr a,b=rho ...]
-        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..65),
-        or an applied case (resistor noise, Brownian sphere, damped resonator):
-        parent and scalar equations, observable, regime checks and a route to
-        measurement; a violated regime check prints NOT QUALIFIED and exits 3.
-        Every input declares its unit and meaning; a value may carry a unit
-        (d_m=1um, T_K=25degC) or an expression (M_kg=1*M_sun) and converts
-        only when the dimensions agree.
-        With no id, lists the evaluable bridges and cases and their inputs.
-        --sigma/--corr propagate input uncertainties to first order, with a
-        curvature check that flags an unreliable linearization. be-51 and be-52
-        also warn when the ray or the periapsis is not above 10 Schwarzschild
-        radii; the number printed is still the weak-field formula.
-        e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_sun
-              (ideal degenerate gas, with m_u and M_sun = 1.989e30 kg)
-
-  upt ground <quantityA> <quantityB> [--source=catalog|canonical|both]
-        The epistemic-grounding ledger for one discovery candidate a=b: which
-        falsifiers passed, which abstained (gaps), and the honest ceiling.
-        Pass the --source (and --anchor/--max-orders) of the discover run that
-        listed the pair.
-
-  upt regime <family> [--at group=value ...] [--assume premise] [--deny premise]
-        Where in parameter space a family's models are claimed to apply. Each
-        model reads valid, VIOLATED (naming the failed inequality), or UNKNOWN
-        — a coordinate --at never supplied is NOT a pass; one that states no
-        inequality reads 'no machine condition evaluated (VACUOUS …)'. Prose premises are
-        never evaluated: --assume records your declaration (not evidence),
-        --deny marks one contradicted, the rest stay unspecified. Also prints the
-        pairwise regime overlap and, over the box --at states, the uncovered
-        points. A group can be given by name (spaces ignored, * for ·) or
-        through its parameters (--at tau=1 D=1 q=1 gives tau · D · q^2 = 1);
-        a key no record uses is named and ignored. Exit 3 when any record is
-        VIOLATED. VACUOUS, UNKNOWN and a survey with no violated record exit 0.
-        e.g.  upt regime oscillators --at theta0=0.2
-
-  upt path <from> <to> [--at group=value ...] [--tolerance=[observable:]EPS]
-           [--sweep name=lo:hi:n[:log]] [--compare=<to2>] [--csv]
-        The chain of bridges between two models (across families when a
-        bridge ends in another family's model), the relation it composes to,
-        the composed (K, delta) with its norm, and whether every bridge's regime
-        and every horizon still holds at --at (a bound outside its regime is
-        not claimed, and a failed check prints no bound number). Values may
-        be expressions (theta0=pi/2). When the composition table declines to compose, the path
-        carries no bound: it prints 'no composite claim', names what composing
-        would need, and exits 0. Across families a matching norm name is not a
-        transport (reason cross-family-unmapped, still exit 0). A multi-premise
-        bridge is named and is not a step. Exit 3 is a regime or horizon that
-        was checked and failed, including under --json. --sweep evaluates the same verdict at 2–200
-        samples of one parameter (a row outside a regime or past a horizon
-        carries no error); --csv writes the rows as CSV; --compare=<to2> sweeps
-        a second route from the same source beside it and marks NEITHER, with
-        no number, where no encoded limit applies. --tolerance=EPS judges
-        adequacy in the bound's own norm (exit 3 if inadequate);
-        --tolerance=phase:EPS or position:EPS judges it through a translation
-        a bridge declares (ab-pendulum-linear), carried only by a later
-        bridge's declared carriage (ab-spring-lc carries phase).
-        e.g.  upt path model-pendulum model-spring --at theta0=0.2 T0=1 t=10
-              upt path model-pendulum model-spring --at T0=1 t=10 --sweep theta0=0.1:0.8:8
-
-  upt atlas [<bridge-id>] [--run]
-  upt atlas --evidence [--stored | --run]
-        One atlas bridge with EVERY qualification visible: relation, side
-        conditions, regime, bound and horizon, witnesses, counterexamples and
-        formal reference. review status is the record's review mark
-        (proposed or reviewed), not an evidence tag; formally-proved does
-        not depend on it. Empty sections print as "none stated". A proved
-        bridge that also derives contradicted prints proved, with unresolved
-        counterexample: yes. The proof stays and the counterexample stays
-        unresolved. Evidence is shown by claim, and each witness with its
-        execution status; --run executes the in-process registered witnesses
-        (exit 3 if refuted).
-        With no id, lists every bridge of every family; --evidence (or
-        --stored / --run with no id) shows every bridge's derived evidence,
-        per-tag counts and the witness results it observes.
-        A catalog id be-<n> with a stored formal reference prints that
-        reference. It is a catalog equation, not an atlas bridge, and the
-        command does not derive formally-proved from it.
-        e.g.  upt atlas ab-pendulum-linear
-              upt atlas be-16
-
-  upt search <word> ...
-        Find a catalog bridge, canonical equation, atlas model or bridge,
-        quantity or applied case by name, id, symbol, alias or description,
-        with the command that inspects each. An equal dimension is never a match.
-        e.g.  upt search thermal noise
-              upt search skin
-
-  upt retrieve <claim>
-        Atlas search for a claim. The default does not call out of process.
-        --embed asks a local Ollama model for a proposal; acceptance stays
-        the atlas search. If Ollama cannot be used, the atlas search is
-        still printed and the reason is named. Exit 0.
-        `upt help retrieve` lists every flag.
-        e.g.  upt retrieve period of a pendulum
-
-  upt metric <minkowski|schwarzschild|flrw|kerr> [key=value ...] [--geodesic] [--json]
-        Christoffel symbols, Ricci, the Ricci scalar and the Kretschmann
-        scalar. Parameters accept units and constant expressions (M=1Msun,
-        theta=pi/2). Alias: upt curvature. `upt help metric` describes every flag.
-        e.g.  upt metric schwarzschild M=1Msun r=1e8 theta=pi/2
+        re-validated dimensionally + numerically. Each chain also prints an
+        'eval form': a runnable `upt eval` command, fully grouped, that
+        reproduces the printed value, a LaTeX form (\frac for every
+        division) and a symbol table: each symbol's meaning, value, SI unit
+        and the source of a constant or the point an input is evaluated at.
+Flags:
+  --simplify
+        Fold each composed AST with MathTS, then check the fold dimensionally and numerically.
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
   upt testplan <be-NN | case-id> [--json]
-        The measurement plan stored on a confrontation or an applied case.
-        `upt help testplan` describes every flag.
+        The measurement plan for one bridge confrontation or one applied case:
+        the observable, the confirm and falsify criteria the record already
+        states, what is not included, and the links. Markdown by default,
+        JSON with --json. `upt help testplan` describes every flag.
         e.g.  upt testplan be-58
-
-  upt probe <scan|show|run|candidates|falsify|rank|design|reproduce|study>
-        Experimental expression/residual search (Product B). Orthogonal to
-        `upt discover`, which vets quantity identifications a≡b and is frozen.
-        Relation-link gaps are not searchable here — use `upt discover`.
-        `study --data=FILE` fits calibrated observations (units, σ) on
-        exploratory rows only and tests on withheld holdout/replication rows.
-        `upt help probe` lists every flag.
+              upt testplan case-brownian-sphere
+              upt testplan case-skin-depth --json
+Flags:
+  --json
+        Write a JSON envelope to stdout instead of the text report.
 
   upt help        Show this message.
   upt help <command>
                   Show one command's usage and flags.
   upt help statuses
-                  Define every status word the commands print (VACUOUS,
-                  UNKNOWN, VIOLATED, ADEQUATE, NEITHER, DECOY, NOT COVERED, …).
-                  Each --json envelope carries the definitions of the statuses
-                  its command can emit, under `definitions`.
+                  Define every status word the commands print.
+  upt version     Show the installed CLI/package version.
 
 Run with no arguments for a short demo.
-
-  upt version     Show the installed CLI/package version.
-  upt <command> --help
-                  Show that command's usage and flags.
-
-Place --json before the command or after it. `upt --json` with no command
-is an error. `upt version` and `upt help` do not take --json.
 Global options:
   --help
         Show this command list, or `upt help <command>` for one command. `-h` is the same. `upt <command> --help` prints that command.

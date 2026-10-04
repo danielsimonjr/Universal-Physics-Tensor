@@ -104,7 +104,8 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observab
         run at this point with a control. Otherwise it is UNDETERMINED.
         A route may cross families. A bound crosses only through the relation,
         uniformity, Lipschitz, and norm gates, and, across families, only
-        through a witnessed norm transport; a matching norm name is not one.
+        through a witnessed norm transport; a matching norm name is not one
+        (reason cross-family-unmapped, still exit 0).
         A bridge with two or more premises is named when both models appear
         among its premises and its conclusion. That line is the bridge; it is
         not a step of the chain, and a missing chain still exits 0.

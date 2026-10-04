@@ -20,7 +20,8 @@ describe('the be-63 example in the evaluate help', () => {
     expect(printed).toBeCloseTo(1.45587, 5);
   });
 
-  for (const file of ['src/cli/main.ts', 'src/cli/commands/evaluate.ts']) {
+  // Top-level help is this command's own help. There is no second copy in main.ts.
+  for (const file of ['src/cli/commands/evaluate.ts']) {
     it(`${file} quotes the printed value, to three decimals`, () => {
       const text = readFileSync(resolve(root, file), 'utf-8');
       const m = text.match(/upt evaluate be-63 mu_e=2 +→ Chandrasekhar mass ≈ ([\d.]+) M/);

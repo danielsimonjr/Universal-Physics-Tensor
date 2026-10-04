@@ -62,9 +62,10 @@ export function resolveCommand(nameOrAlias: string): Command | undefined {
 /**
  * The PRIMARY names of every registered command, sorted (aliases excluded).
  *
- * The authority on what the CLI can run. `upt --help` is a static text in
- * `main.ts`, so a command registered without a help entry would be runnable and
- * invisible; `tests/cli/help-covers-registry.test.ts` compares the two.
+ * The authority on what the CLI can run. `upt --help` is this list, each
+ * command's own `help`, so a command registered without a help entry is still
+ * named; `tests/cli/help-covers-registry.test.ts` compares the two. `upt chain`
+ * is registered and omitted from that text.
  */
 export function listCommandNames(): string[] {
   return [...new Set([...registry.values()].map((c) => c.name))].sort();
