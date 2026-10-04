@@ -23,6 +23,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] The canonical graph evaluator ignores sourced dimensionless prefactors.
   Done: explain of Stokes drag recovers `1.88495559215388e-12`. Dynamic pressure recovers `2000`. Laplace pressure recovers `144`. Field energy stays a decoy. Stokes–Einstein stays derived at `1/(6π)`.
 
+- [x] Einstein relation diffusivity is negative when μ and q have opposite signs.
+  Done: `evaluateEinsteinRelation` throws when the product is negative. `upt evaluate be-70 mu_m2_per_Vs=0.14 T_K=300 q_C=-1.602176634e-19` exits 1. Both signs negative print `D_m2_per_s = 0.0036192799701009757`. `μ = 0` stays `D = 0`. The Lean theorem is unchanged.
 - [x] A comparison residual is value/reference − 1. Its glossary says signed relative difference, including when the residual is negative.
   Done: `signedRelativeDifference` is that glossary. The poor-conductor skin-depth line prints `maxwell_deviation = -0.0487572085250777` beside that phrase. The copper lumped-cooling line prints `parent_deviation = -0.000052203242016934936` beside it. Resistor-noise and Brownian residuals use the same phrase. Kepler's `(1 + q)^{2/3} − 1` still says excess.
 - [x] Vendor PhysJS `92f87257a1e3086a48cdc19fe4361cc1c5909d49`. Lean files stay `lean/<File>.lean`. Add BE-77 through BE-87 as formally proved. BE-83 reads the Kelvin relation along temperature and does not compose with BE-73. A denial sentence is not a search hit.

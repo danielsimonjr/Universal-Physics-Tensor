@@ -4,7 +4,8 @@
  * where drift cancels diffusion on a Boltzmann profile. Dropping `q`
  * is a different diffusivity. `μ` is the electrical mobility (drift
  * speed per electric field). The force-mobility writing needs
- * `μ_force = μ/q` and is not this function.
+ * `μ_force = μ/q` and is not this function. `μ` and `q` have the
+ * same sign: opposite signs are not a negative diffusivity.
  *
  * Onsager reciprocity is not an input. Stokes–Einstein is a different
  * equation. The overlay formalRef is `PhysJS.EinsteinRelation.diffusion_eq`.
@@ -22,7 +23,7 @@ export interface EinsteinRelationInputs {
   readonly mu_m2_per_Vs: number;
   /** Absolute temperature, kelvin. */
   readonly T_K: number;
-  /** Carrier charge, coulomb. Nonzero. */
+  /** Carrier charge, coulomb. Nonzero, and the same sign as `mu_m2_per_Vs`. */
   readonly q_C: number;
 }
 
@@ -56,6 +57,9 @@ export function evaluateEinsteinRelation({
   }
   if (!Number.isFinite(q_C) || q_C === 0) {
     throw new Error('evaluateEinsteinRelation: q_C must be finite and nonzero');
+  }
+  if (mu_m2_per_Vs * q_C < 0) {
+    throw new Error('evaluateEinsteinRelation: mu_m2_per_Vs and q_C must have the same sign');
   }
   const D_m2_per_s = (mu_m2_per_Vs * K_B_SI * T_K) / q_C;
   return { mu_m2_per_Vs, T_K, q_C, D_m2_per_s };
