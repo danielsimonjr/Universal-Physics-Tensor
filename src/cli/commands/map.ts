@@ -343,7 +343,9 @@ function printEquationReport(
   } else if (user.rhsDimension) {
     out(`  · RHS dimension: ${api.format(user.rhsDimension)} (target not in the catalog, so no comparison)`);
   }
-  for (const line of api.describeComparisons(comparisons)) out(`  ${line}`);
+  for (const line of api.describeKnownRelation(comparisons, user.junction.target, [...user.junction.sources])) {
+    out(`  ${line}`);
+  }
   for (const line of conventionLines(comparisons.map((c) => c.id))) out(`  ${line}`);
   if (user.naturalNote) out(`  ${user.naturalNote}`);
   const L = api.equationLanding(model, 'user-equation');
@@ -671,6 +673,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         shortBindings: user.shortBindings,
         ...(user.placeholders.length === 0 ? {} : { placeholders: user.placeholders }),
         canonicalComparisons: comparisons,
+        catalogEdges: api.matchingCatalogEdges(user.junction.target, [...user.junction.sources]),
       };
     }
     emitJson(

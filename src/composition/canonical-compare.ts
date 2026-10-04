@@ -680,6 +680,120 @@ export function describeComparisons(cs: readonly CanonicalComparison[]): string[
     : cs.map(describeComparison);
 }
 
+/** A catalog edge named because the formula's quantities are that edge. @internal */
+export interface CatalogEdgeMatch {
+  readonly id: string;
+  readonly label: string;
+  /** `exact` when every source is present. `dimensionful` when every omitted source is dimensionless. */
+  readonly fit: 'exact' | 'dimensionful';
+}
+
+/** The slice of a catalog edge this report reads. */
+interface FormulaEdge {
+  readonly id: string;
+  readonly label: string;
+  readonly target: { readonly name: string };
+  readonly sources: readonly { readonly name: string; readonly dim: Dimension }[];
+  readonly aliases?: Readonly<Record<string, readonly string[]>>;
+}
+
+function registeredConstant(name: string, dim: Dimension | undefined): boolean {
+  const c = CONSTANTS[name];
+  if (c === undefined) return false;
+  return dim === undefined || equals(c.dim, dim);
+}
+
+function resolvedFormulaSources(
+  edge: FormulaEdge,
+  sources: readonly { readonly name: string; readonly dim?: Dimension }[],
+): string[] {
+  const alias = new Map<string, string>();
+  for (const [quantity, keys] of Object.entries(edge.aliases ?? {})) {
+    for (const key of keys) alias.set(normalize(key), normalize(quantity));
+  }
+  const out: string[] = [];
+  for (const source of sources) {
+    const name = normalize(source.name);
+    if (registeredConstant(name, source.dim)) continue;
+    out.push(alias.get(name) ?? name);
+  }
+  return out;
+}
+
+function sameSet(a: readonly string[], b: ReadonlySet<string>): boolean {
+  if (a.length !== b.size) return false;
+  const seen = new Set<string>();
+  for (const name of a) {
+    if (!b.has(name) || seen.has(name)) return false;
+    seen.add(name);
+  }
+  return true;
+}
+
+/**
+ * Catalog edges whose target and sources are this formula.
+ *
+ * A registered constant (`c`, `k_B`) is not a source. An omitted source that
+ * is dimensionless is not a different edge: it cannot appear in a unique
+ * monomial. An omitted or extra dimensionful source is a different edge.
+ * Two edges that both fit only by dropping a dimensionless source are not
+ * named: a shared quantity is not this report.
+ * @internal
+ */
+export function matchingCatalogEdges(
+  target: string,
+  sources: readonly ({ readonly name: string; readonly dim?: Dimension } | string)[],
+  edges: readonly FormulaEdge[] = CATALOG_GRAPH,
+): CatalogEdgeMatch[] {
+  const given = sources.map((source) => (typeof source === 'string' ? { name: source } : source));
+  const want = normalize(target);
+  const exact: CatalogEdgeMatch[] = [];
+  const dimensionful: CatalogEdgeMatch[] = [];
+  for (const edge of edges) {
+    if (normalize(edge.target.name) !== want) continue;
+    const got = resolvedFormulaSources(edge, given);
+    if (got.length === 0) continue;
+    const all = new Set(edge.sources.map((source) => normalize(source.name)));
+    if (sameSet(got, all)) {
+      exact.push({ id: edge.id, label: edge.label, fit: 'exact' });
+      continue;
+    }
+    const dimensional = new Set(
+      edge.sources.filter((source) => !equals(source.dim, DIMENSIONLESS)).map((source) => normalize(source.name)),
+    );
+    const omitted = edge.sources.filter((source) => !got.includes(normalize(source.name)));
+    if (sameSet(got, dimensional) && omitted.every((source) => equals(source.dim, DIMENSIONLESS))) {
+      dimensionful.push({ id: edge.id, label: edge.label, fit: 'dimensionful' });
+    }
+  }
+  if (exact.length > 0) return exact;
+  return dimensionful.length === 1 ? dimensionful : [];
+}
+
+/**
+ * The known-relation report: the canonical comparison, then a catalog edge
+ * whose target and sources are the formula. Both `upt derive` and `upt map`
+ * print this. The canonical sentence stays when that half has nothing to check.
+ * @internal
+ */
+export function describeKnownRelation(
+  comparisons: readonly CanonicalComparison[],
+  target: string,
+  sources: readonly ({ readonly name: string; readonly dim?: Dimension } | string)[],
+  edges: readonly FormulaEdge[] = CATALOG_GRAPH,
+): string[] {
+  const lines = describeComparisons(comparisons);
+  for (const edge of matchingCatalogEdges(target, sources, edges)) {
+    const who = `${edge.id} (${edge.label})`;
+    lines.push(
+      edge.fit === 'exact'
+        ? `● ${who}: the target and the sources are this catalog edge`
+        : `● ${who}: the target and the dimensionful sources are this catalog edge`,
+    );
+  }
+  return lines;
+}
+
 /** One report line per comparison. @internal */
 export function describeComparison(c: CanonicalComparison): string {
   const pairs = [
