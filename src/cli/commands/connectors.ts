@@ -11,6 +11,7 @@ import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph, coreAnchor, coreLine } from '../graphs.js';
 import { emitJson } from '../output.js';
 import { publishedUrl } from '../published-url.js';
+import { adjudicationFor, candidateIdIfSlug } from '../../composition/adjudication.js';
 
 const FLAGS: FlagSpec[] = [
   sourceFlag('both', 'Which graph to read: catalog, canonical, or both. This command defaults to both.'),
@@ -20,15 +21,16 @@ const FLAGS: FlagSpec[] = [
 const HELP = `upt connectors [--source=catalog|canonical|both]
         Of the graph's ISOLATED bridges/laws, which could connect to the
         anchored core via a same-dimension identification? The structural
-        frontier — same-kind connectors are the motivated set for
-        physicist review.
+        frontier. A recorded decoy or entailed pair is printed under that
+        verdict, with the ledger's grounds. A pair with no ledger row is
+        unadjudicated. A shared name token is a token.
         --source defaults to 'both' (catalog + canonical) for the honest,
         all-known-physics answer; --source=catalog isolates the catalog-only
         tail. The isolated count is printed for the source selected.`;
 
 const EPISTEMICS =
-  '⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster\n' +
-  '  radius is not a Schwarzschild radius). Same-kind (shared name token) = stronger.';
+  '⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.\n' +
+  '  A recorded verdict is the ledger.';
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -48,26 +50,55 @@ async function run(ctx: CommandCtx): Promise<number> {
   out('\nOrphan connectors — same-dimension identifications that would pull an ISOLATED');
   out(`bridge into the anchored core (the graph's structural frontier).  [source: ${label}]`);
   out(`  ${coreLine(coreAnchor(graph))}`);
-  out('⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster');
-  out('  radius is not a Schwarzschild radius). Same-kind (shared name token) = stronger.\n');
+  out('⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.');
+  out('  A recorded verdict is the ledger.\n');
   out(
-    `  ${r.connectedOrphans.length} of the isolated bridges have a same-kind connector; ` +
+    `  ${r.connectedOrphans.length} of the isolated bridges share a name token with the core; ` +
       `${r.unconnectedOrphans.length} are truly unconnected.\n`
   );
-  out('  SAME-KIND connectors (the motivated set — orphan ≟ core via shared token):');
+  const rows = r.connectors;
+  const verdict = (c: (typeof rows)[number]) => {
+    if (candidateIdIfSlug(c.orphanQuantity, c.coreQuantity) === undefined) return undefined;
+    return adjudicationFor(c.orphanQuantity, c.coreQuantity);
+  };
+  printVerdict(out, '  DECOY (recorded verdict):', rows.filter((c) => verdict(c)?.verdict === 'decoy'));
+  printVerdict(out, '  ENTAILED (recorded verdict):', rows.filter((c) => verdict(c)?.verdict === 'entailed'));
+  printVerdict(
+    out,
+    '  UNADJUDICATED (a shared token is a token):',
+    rows.filter((c) => c.sameKind && verdict(c) === undefined),
+  );
+  out(`\n  truly unconnected (no same-dimension bridge into them): ${r.unconnectedOrphans.join(', ')}`);
+  out(`\n  The isolated-bridge review is written up in ${publishedUrl('docs/research/Orphan-Connector-Analysis.md')}.`);
+  return 0;
+}
+
+function printVerdict(
+  out: (line?: string) => void,
+  heading: string,
+  rows: readonly {
+    orphanEdge: string;
+    orphanQuantity: string;
+    coreQuantity: string;
+    coreEdge: string;
+    dim: string;
+  }[],
+): void {
+  if (rows.length === 0) return;
+  out(heading);
   let lastOrphan = '';
-  for (const c of r.connectors.filter((x) => x.sameKind)) {
+  for (const c of rows) {
     if (c.orphanEdge !== lastOrphan) {
       out(`    ── ${c.orphanEdge} (isolated):`);
       lastOrphan = c.orphanEdge;
     }
     out(`        ${(c.orphanQuantity + ' ≟ ' + c.coreQuantity).padEnd(54)} [${c.dim}]  → ${c.coreEdge}`);
+    const row = candidateIdIfSlug(c.orphanQuantity, c.coreQuantity) === undefined
+      ? undefined
+      : adjudicationFor(c.orphanQuantity, c.coreQuantity);
+    if (row !== undefined) out(`          ${row.grounds}`);
   }
-  out(`\n  truly unconnected (no same-dimension bridge into them): ${r.unconnectedOrphans.join(', ')}`);
-  out('\n  Physicist-reasoned ranking + the genuinely-motivated few (e.g. coarsening-length ≟');
-  out('  quantum-correlation-length; tunneling-mass ≟ effective-mass) are written up in');
-  out(`  ${publishedUrl('docs/research/Orphan-Connector-Analysis.md')} and proposed in spec Part-IX §9.`);
-  return 0;
+  out('');
 }
 
 export const command: Command = {

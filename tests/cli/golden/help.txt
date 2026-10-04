@@ -137,8 +137,9 @@ Flags:
   upt connectors [--source=catalog|canonical|both]
         Of the graph's ISOLATED bridges/laws, which could connect to the
         anchored core via a same-dimension identification? The structural
-        frontier — same-kind connectors are the motivated set for
-        physicist review.
+        frontier. A recorded decoy or entailed pair is printed under that
+        verdict, with the ledger's grounds. A pair with no ledger row is
+        unadjudicated. A shared name token is a token.
         --source defaults to 'both' (catalog + canonical) for the honest,
         all-known-physics answer; --source=catalog isolates the catalog-only
         tail. The isolated count is printed for the source selected.
@@ -198,7 +199,8 @@ Flags:
         --derive consumes.
         Candidates a physicist has already adjudicated
         (https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
-        https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md)
+        https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md
+        https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md)
         fold out of the PROMISING list by default (decoy/entailed verdicts only —
         review memory, not a re-litigation prompt); --show-adjudicated lists them
         again with their recorded verdict.

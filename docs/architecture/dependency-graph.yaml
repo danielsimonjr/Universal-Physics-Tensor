@@ -7998,6 +7998,10 @@ modules:
         - file: ../published-url.js
           imports:
             - publishedUrl
+        - file: ../../composition/adjudication.js
+          imports:
+            - adjudicationFor
+            - candidateIdIfSlug
       exports:
         - command
       constants:
@@ -21089,7 +21093,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 433
   totalModules: 13
-  totalLinesOfCode: 92227
+  totalLinesOfCode: 92272
   totalExports: 3084
   totalClasses: 60
   totalInterfaces: 490

@@ -3,11 +3,12 @@
  * the catalog's 20 isolated bridges could connect to the anchored core via a
  * same-dimension quantity identification. Pins the structural frontier: 7
  * orphans have a same-kind connector, 12 are truly unconnected, and the
- * flagship CI-1 (coarsening-length ≟ quantum-correlation-length) + the newly
- * surfaced tunneling-mass ≟ effective-mass are present. A REVIEW SURFACE.
+ * coarsening pair and the tunneling pair are present as shared tokens. The
+ * ledger calls both decoys. A REVIEW SURFACE.
  */
 import { describe, it, expect } from 'vitest';
 import { proposeOrphanConnectors } from '../../src/composition/bridge-analysis.js';
+import { adjudicationFor } from '../../src/composition/adjudication.js';
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
 
 const report = proposeOrphanConnectors(CATALOG_GRAPH);
@@ -52,16 +53,25 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
       (c) => c.orphanEdge === orphan && c.orphanQuantity === oq && c.coreQuantity === cq && c.sameKind,
     );
 
-  it('surfaces the flagship CI-1 (coarsening-length ≟ quantum-correlation-length, BE-15→BE-33)', () => {
+  it('coarsening-length ≟ quantum-correlation-length shares a token and keeps its ledger grounds', () => {
     expect(has('be-15', 'coarsening-length', 'quantum-correlation-length')).toBe(true);
+    const row = adjudicationFor('coarsening-length', 'quantum-correlation-length');
+    expect(row?.verdict).toBe('decoy');
+    expect(row?.grounds.startsWith('Non-equilibrium vs equilibrium length')).toBe(true);
   });
 
-  it('surfaces the newly-motivated tunneling-mass ≟ effective-mass (BE-26→BE-23)', () => {
+  it('tunneling-mass ≟ effective-mass shares a token and the ledger calls it a decoy', () => {
     expect(has('be-26', 'tunneling-mass', 'effective-mass')).toBe(true);
+    const row = adjudicationFor('tunneling-mass', 'effective-mass');
+    expect(row?.verdict).toBe('decoy');
+    expect(row?.grounds.startsWith('Different particles/Hamiltonians')).toBe(true);
   });
 
-  it('still surfaces the documented decoy (foerster-radius ≟ schwarzschild-radius) for honest review', () => {
-    // a FRET radius is NOT a black-hole horizon — same dimension is weak.
+  it('foerster-radius ≟ schwarzschild-radius is a ledger decoy and still shares the token', () => {
     expect(has('be-24', 'foerster-radius', 'schwarzschild-radius')).toBe(true);
+    expect(adjudicationFor('foerster-radius', 'schwarzschild-radius')).toMatchObject({
+      verdict: 'decoy',
+      grounds: 'a Förster radius is not a Schwarzschild radius',
+    });
   });
 });

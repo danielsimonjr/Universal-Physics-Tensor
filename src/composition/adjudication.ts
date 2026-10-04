@@ -148,6 +148,13 @@ export const ADJUDICATIONS: readonly CandidateAdjudication[] = [
     source: 'docs/research/orphan-connector-adjudication.md',
     date: '2026-06-21',
   },
+  {
+    id: candidateId('foerster-radius', 'schwarzschild-radius'),
+    verdict: 'decoy',
+    grounds: 'a Förster radius is not a Schwarzschild radius',
+    source: 'docs/research/Orphan-Connector-Analysis.md',
+    date: '2026-06-15',
+  },
 ];
 
 const BY_ID: ReadonlyMap<string, CandidateAdjudication> = new Map(

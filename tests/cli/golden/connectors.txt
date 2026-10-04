@@ -2,12 +2,35 @@
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
   anchored core: the clusters holding at least one of the 126 established-confidence edge(s) of the 158 in this graph
-⚠ A REVIEW SURFACE: same dimension is a WEAK prior; most are decoys (a Förster
-  radius is not a Schwarzschild radius). Same-kind (shared name token) = stronger.
+⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
+  A recorded verdict is the ledger.
 
-  20 of the isolated bridges have a same-kind connector; 11 are truly unconnected.
+  20 of the isolated bridges share a name token with the core; 11 are truly unconnected.
 
-  SAME-KIND connectors (the motivated set — orphan ≟ core via shared token):
+  DECOY (recorded verdict):
+    ── be-24 (isolated):
+        foerster-radius ≟ schwarzschild-radius                 [[length]]  → be-42-via-rs
+          a Förster radius is not a Schwarzschild radius
+    ── be-26 (isolated):
+        mutation-rate ≟ decoherence-rate                       [[frequency]]  → be-11-zurek
+          Same units, no shared meaning; unanimous. A decoherence rate (loss of quantum phase to the environment) vs. a mutation rate (frequency of a permanent, classical change to a DNA sequence). Same units, no shared physical meaning — decoherence may precede a mutation, but they are not one quantity.
+        tunneling-mass ≟ effective-mass                        [[mass]]  → be-23
+          Different particles/Hamiltonians; unanimous. A proton's inertia in a specific biomolecular potential vs. an emergent electronic quasiparticle's effective mass in a strongly-correlated metal. Different particles, different Hamiltonians, unrelated scales.
+    ── CE-planck-einstein (isolated):
+        photon-energy ≟ erasure-energy                         [[energy]]  → CE-landauer
+          Dimensional coincidence; no mechanism. Landauer's k_B·T·ln2 is a statistical lower bound on heat dissipated to a reservoir; equating it to a single photon's hν has no universal mechanism — it rewrites thermal energy in frequency units.
+    ── be-18 (isolated):
+        dark-fermion-mass ≟ erasure-energy                     [[energy]]  → CE-landauer
+          Dimensional coincidence; no mechanism. A speculative hidden-sector mass m = gv set equal to a context-dependent erasure energy — no model links a particle mass to an arbitrary processor's temperature.
+        dark-fermion-mass ≟ rest-energy                        [[energy]]  → CE-mass-energy
+          Trivial/definitional. m = vg/c² re-expresses the dark-fermion mass via E=mc² instead of via Landauer (cf. PE-2) — a definitional application, not a new bridge.
+
+  ENTAILED (recorded verdict):
+    ── CE-planck-einstein (isolated):
+        photon-energy ≟ rest-energy                            [[energy]]  → CE-mass-energy
+          Real physics, already entailed by the L-layer via CE-planck-einstein (E=hν) and CE-mass-energy (E=mc²); not a new link. Both Adam and Eve agree it is not a new discovery.
+
+  UNADJUDICATED (a shared token is a token):
     ── be-14 (isolated):
         boundary-entanglement-entropy ≟ bh-entropy             [[entropy]]  → CE-bekenstein-hawking
         boundary-entanglement-entropy ≟ boltzmann-entropy      [[entropy]]  → CE-boltzmann-entropy
@@ -31,7 +54,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         foerster-radius ≟ near-radius                          [[length]]  → be-37
         foerster-radius ≟ particle-radius                      [[length]]  → CE-stokes-einstein
         foerster-radius ≟ radius                               [[length]]  → CE-schwarzschild-radius
-        foerster-radius ≟ schwarzschild-radius                 [[length]]  → be-42-via-rs
     ── be-26 (isolated):
         attempt-frequency ≟ angular-frequency                  [[frequency]]  → CE-lc-resonance
         attempt-frequency ≟ cyclotron-frequency                [[frequency]]  → CE-cyclotron-frequency
@@ -39,12 +61,10 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         attempt-frequency ≟ frequency                          [[frequency]]  → be-59
         attempt-frequency ≟ photon-frequency                   [[frequency]]  → CE-photoelectric
         attempt-frequency ≟ plasma-frequency                   [[frequency]]  → CE-plasma-frequency
-        mutation-rate ≟ decoherence-rate                       [[frequency]]  → be-11-zurek
         mutation-rate ≟ grw-localization-rate                  [[frequency]]  → be-48
         mutation-rate ≟ hubble-rate                            [[frequency]]  → be-47
         mutation-rate ≟ relaxation-rate                        [[frequency]]  → be-11-zurek
         tunneling-mass ≟ defect-rest-mass                      [[mass]]  → be-34
-        tunneling-mass ≟ effective-mass                        [[mass]]  → be-23
         tunneling-mass ≟ electron-mass                         [[mass]]  → CE-compton-shift
         tunneling-mass ≟ mass                                  [[mass]]  → be-12
         tunneling-mass ≟ molecular-mass                        [[mass]]  → CE-kinetic-pressure
@@ -187,7 +207,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── CE-planck-einstein (isolated):
         photon-energy ≟ active-noise-energy                    [[energy]]  → be-27
         photon-energy ≟ energy                                 [[energy]]  → CE-capacitor-energy
-        photon-energy ≟ erasure-energy                         [[energy]]  → CE-landauer
         photon-energy ≟ fermi-energy                           [[energy]]  → CE-fermi-energy
         photon-energy ≟ free-energy-difference                 [[energy]]  → CE-jarzynski
         photon-energy ≟ gravitational-potential-energy         [[energy]]  → CE-gravitational-potential-energy
@@ -197,7 +216,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         photon-energy ≟ landauer-erasure-energy                [[energy]]  → be-16
         photon-energy ≟ oscillator-energy                      [[energy]]  → CE-oscillator-energy
         photon-energy ≟ photoelectron-max-energy               [[energy]]  → CE-photoelectric
-        photon-energy ≟ rest-energy                            [[energy]]  → CE-mass-energy
         photon-energy ≟ rotational-kinetic-energy              [[energy]]  → CE-rotational-kinetic-energy
         photon-energy ≟ spring-potential-energy                [[energy]]  → CE-spring-potential-energy
         photon-energy ≟ state-energy                           [[energy]]  → CE-boltzmann-factor
@@ -230,8 +248,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── CE-uncertainty-principle (isolated):
         position-momentum-uncertainty-product ≟ angular-momentum [[action]]  → CE-angular-momentum
 
+
   truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53
 
-  Physicist-reasoned ranking + the genuinely-motivated few (e.g. coarsening-length ≟
-  quantum-correlation-length; tunneling-mass ≟ effective-mass) are written up in
-  https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md and proposed in spec Part-IX §9.
+  The isolated-bridge review is written up in https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md.
