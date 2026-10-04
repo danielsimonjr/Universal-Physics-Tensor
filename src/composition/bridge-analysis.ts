@@ -196,7 +196,13 @@ function recoveredCanonicalPrefactor(
  * `not-a-monomial` means the encoded formula adds dimensionful terms, so a
  * monomial reconstruction does not apply. It is not a failed reconstruction.
  */
-type DerivationStatus = 'derived' | 'decoy' | 'open' | 'no-samples' | 'not-a-monomial';
+type DerivationStatus =
+  | 'derived'
+  | 'decoy'
+  | 'open'
+  | 'no-samples'
+  | 'not-a-monomial'
+  | 'coefficient-unset';
 interface DerivationResult {
   readonly status: DerivationStatus;
   readonly subset?: readonly string[];
@@ -217,6 +223,9 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
   if (e.symbolic !== undefined && formulaShape(e.symbolic) === 'dimensional-sum') {
     return { status: 'not-a-monomial' };
   }
+  // A missing coefficient is not the constant 1. The evaluator still
+  // multiplies by 1, and matching that 1 does not recover a prefactor.
+  if (e.coefficientUnset === true) return { status: 'coefficient-unset' };
   const { target, sources } = asVars(e);
   const inputs = makeInputs(e);
   const need = e.sources.length === 0 ? 1 : 2;

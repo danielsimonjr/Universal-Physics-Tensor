@@ -8713,6 +8713,9 @@ modules:
           imports:
             - canonicalCheckFailed
             - conventionLines
+        - file: ../../composition/user-equation.js
+          imports:
+            - rewriteCatalogHyphens
         - file: ../../dimensional/types.js
           imports:
             - Dimension
@@ -22398,7 +22401,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 454
   totalModules: 13
-  totalLinesOfCode: 96677
+  totalLinesOfCode: 96766
   totalExports: 3351
   totalClasses: 61
   totalInterfaces: 529

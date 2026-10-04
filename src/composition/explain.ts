@@ -225,6 +225,13 @@ function formatMonomial(m: Readonly<Record<string, number>>): string {
   return parts.join('·') || '1';
 }
 
+/** Textbook factors the unit monomial is not. Disclosure, not a formalRef. */
+const UNSET_FACTOR: Readonly<Record<string, string>> = {
+  'CE-fermi-energy': 'The standard factor (1/2)(3π²)^{2/3} is not this 1.',
+  'CE-fermi-velocity': 'The standard factor (3π²)^{1/3} is not this 1.',
+  'CE-debye-frequency': 'The standard factor (6π²)^{1/3} is not this 1.',
+};
+
 function buildSummary(
   target: string,
   id: IdentifiabilityResult,
@@ -235,6 +242,7 @@ function buildSummary(
   knownNames: readonly string[],
   formulaIsSum: boolean,
   encodedMatchesMonomial: boolean,
+  unsetSentence: string | undefined,
 ): string {
   const known = knownNames.length
     ? `{${knownNames.join(', ')}}`
@@ -308,6 +316,7 @@ function buildSummary(
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional?.determined && dimensional.monomial) {
     s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial)}.`;
+    if (unsetSentence !== undefined) s += ` ${unsetSentence}`;
   } else if (dimensional?.outsideGoverningSpan && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional && !dimensional.determined && knownNames.length) {
@@ -452,6 +461,15 @@ export function explainQuantity(
       ? encodedMatchesMonomial(edges, target, knownNames, dimensional.monomial, identifications)
       : true;
 
+  const unsetEdge = derivations
+    .map((d) => byId.get(d.edge))
+    .find((e) => e?.coefficientUnset === true);
+  const unsetSentence =
+    unsetEdge === undefined
+      ? undefined
+      : 'The printed value sets the dimensionless constant to 1. That 1 was not recovered.' +
+        (UNSET_FACTOR[unsetEdge.id] !== undefined ? ` ${UNSET_FACTOR[unsetEdge.id]}` : '');
+
   const summary = buildSummary(
     target,
     identifiability,
@@ -462,6 +480,7 @@ export function explainQuantity(
     knownNames,
     formulaIsSum,
     encodedAgrees,
+    unsetSentence,
   );
 
   return {

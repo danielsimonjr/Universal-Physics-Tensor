@@ -20,6 +20,12 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A dimensional entry with no sourced prefactor is not a recovered factor of 1.
+  `upt explain fermi-energy` prints the unit monomial and the audit lists `CE-fermi-energy`, `CE-fermi-velocity`, `CE-plasma-frequency`, and `CE-debye-frequency` as DERIVED `×1`.
+  Done: the canonical audit is DERIVED 73, COEFFICIENT UNSET 6, DECOY 7, OPEN 23. The unset rows are `CE-thermal-de-broglie`, `CE-sound-speed`, `CE-fermi-energy`, `CE-fermi-velocity`, `CE-debye-frequency`, and `CE-mb-most-probable-speed`. Fermi explain still prints `2.35460972213968e-19` and says the constant was set to 1, which is not `(1/2)(3π²)^{2/3}`. Velocity names `(3π²)^{1/3}`. Debye names `(6π²)^{1/3}`. `CE-plasma-frequency` is the angular formula and stays DERIVED `×1`. `CE-simple-harmonic-frequency` stays DERIVED because the table sources the 1.
+- [x] A hyphenated name in `upt derive --formula` is the symbol the dimension argument accepted.
+  `upt derive fermi-energy:energy reduced-planck-constant:action mass:mass carrier-density:L^-3 --formula "(reduced-planck-constant^2/(2*mass))*(3*pi^2*carrier-density)^(2/3)"` exits 2 with `undeclared symbol 'reduced'`.
+  Done: that command exits 0 and the recovered prefactor is `4.7854e+0`. The same formula with `reduced-planck-constant` left undeclared still names `reduced`, and the line says a hyphen between names is subtraction.
 - [x] be-83 labels dS/dT in V/K^2, and `V/K2` converts.
   `upt evaluate be-83 T_K=300 dS_dT_V_per_K2=1e-6` prints `[dimensionless]`. `dS_dT_V_per_K2=1e-6V/K2` exits 1 with `unknown name 'K2'`.
   Done: the input line is `dS_dT_V_per_K2 [V/K^2]`. Both the bare number and `1e-6V/K2` print `mu_V_per_K = 0.0003`.

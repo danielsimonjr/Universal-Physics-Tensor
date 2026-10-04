@@ -10,11 +10,11 @@
  * in `electromagnetism.ts` — it is omitted here to avoid a duplicate registry
  * entry for the same textbook relation (see the PILOT report for detail).
  *
- * 5 of the remaining laws are clean integer monomials with an exact prefactor
- * (`scalarAst` included, `fully-quantitative`); 4 are fractional-power
- * monomials (Fermi energy/velocity, plasma/Debye frequency) — `scalarAst` is
- * OMITTED and `epistemicStatus` is `dimensional`, exactly like the SHM/pendulum
- * √-laws in `mechanics.ts` / `electromagnetism.ts`.
+ * 6 of the remaining laws are fully-quantitative. Five are clean integer
+ * monomials. The angular plasma frequency is `√(n q²/(ε₀ m))`, so its factor
+ * is 1 and it carries a `scalarAst`. Fermi energy, Fermi velocity, and the
+ * Debye frequency omit `scalarAst` and stay `dimensional`: the unit monomial
+ * is not those textbook factors.
  *
  * @module canonical/entries/condensed-matter
  */
@@ -174,8 +174,15 @@ export const CONDENSED_MATTER: readonly CanonicalEquation[] = [
     id: 'CE-plasma-frequency',
     name: 'Plasma frequency',
     domain: 'condensed-matter',
-    formula_latex: '\\omega_p \\propto \\sqrt{n q^2/(\\varepsilon_0 m)}',
-    epistemicStatus: 'dimensional',
+    formula_latex: '\\omega_p = \\sqrt{n q^2/(\\varepsilon_0 m)}',
+    epistemicStatus: 'fully-quantitative',
+    scalarAst: pow(
+      op('/', [
+        op('*', [sym('carrier-density', CARRIER_DENSITY), pow(sym('charge', CHARGE), '2')]),
+        op('*', [sym('vacuum-permittivity', VACUUM_PERMITTIVITY), sym('mass', MASS)]),
+      ]),
+      '0.5',
+    ),
     regime: { scale: 'mesoscopic', force: 'electromagnetic' },
     assumptions: ['free-electron gas', 'long-wavelength (q→0) limit'],
     references: ['Kittel, Introduction to Solid State Physics', 'Ashcroft & Mermin, Solid State Physics'],
