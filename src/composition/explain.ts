@@ -44,6 +44,7 @@ export function formatQuantity(value: number): string {
 }
 import type { DimensionalDeterminationResult } from '../dimensional/buckingham.js';
 import { dimensionallyDetermines } from '../dimensional/buckingham.js';
+import { formulaShape } from './formula-shape.js';
 
 /** One structural derivation of the target, with the recovered value when
  *  ground-truth values were supplied. @public */
@@ -187,6 +188,7 @@ function buildSummary(
   recoveredValue: number | undefined,
   dimensional: DimensionalDeterminationResult | undefined,
   knownNames: readonly string[],
+  formulaIsSum: boolean,
 ): string {
   const known = knownNames.length
     ? `{${knownNames.join(', ')}}`
@@ -254,7 +256,9 @@ function buildSummary(
     }
   }
 
-  if (dimensional?.determined && dimensional.monomial) {
+  if (dimensional?.determined && dimensional.monomial && formulaIsSum) {
+    s += ` The encoded formula adds dimensionful terms, so it is not a proportionality.`;
+  } else if (dimensional?.determined && dimensional.monomial) {
     s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial)}.`;
   } else if (dimensional && !dimensional.determined && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
@@ -345,7 +349,9 @@ export function explainQuantity(
           { name: target, dim: targetDimForChain },
           governing,
         );
-        if (det.determined && det.monomial) {
+        const symbolic = e?.symbolic;
+        const sum = symbolic !== undefined && formulaShape(symbolic) === 'dimensional-sum';
+        if (!sum && det.determined && det.monomial) {
           dimensionalForm = {
             monomial: det.monomial,
             formula: `${target} ∝ ${formatMonomial(det.monomial)}`,
@@ -374,6 +380,11 @@ export function explainQuantity(
     dimensional = dimensionallyDetermines({ name: target, dim: targetDim }, governing);
   }
 
+  const formulaIsSum = identifiability.derivations.some((eid) => {
+    const symbolic = byId.get(eid)?.symbolic;
+    return symbolic !== undefined && formulaShape(symbolic) === 'dimensional-sum';
+  });
+
   const summary = buildSummary(
     target,
     identifiability,
@@ -382,6 +393,7 @@ export function explainQuantity(
     recoveredValue,
     dimensional,
     knownNames,
+    formulaIsSum,
   );
 
   return {

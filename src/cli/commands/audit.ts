@@ -19,13 +19,18 @@ const FLAGS: FlagSpec[] = [
 const HELP = `upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
-        which are decoys, which are dimensionally open.
+        which are decoys, which add dimensionful terms (not a monomial),
+        which are dimensionally open.
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.
+        NOT A MONOMIAL means the encoded formula adds dimensionful terms, so
+        a monomial reconstruction does not apply. It is not a failed
+        reconstruction and not a physical refutation.
         --source picks the graph (default catalog).`;
 
 const DECOY_DEFINITION = statusMeaning('decoy');
+const NOT_A_MONOMIAL_DEFINITION = statusMeaning('not-a-monomial');
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
@@ -33,12 +38,14 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const derived: Array<{ e: (typeof graph)[number]; d: ReturnType<typeof api.attemptDerivation>; c: number }> = [];
   const decoy: Array<{ e: (typeof graph)[number]; c: number }> = [];
+  const notAMonomial: Array<{ e: (typeof graph)[number]; c: number }> = [];
   const open: Array<{ e: (typeof graph)[number]; c: number }> = [];
   for (const e of graph) {
     const d = api.attemptDerivation(e);
     const c = api.dimensionalFreedom(e);
     if (d.status === 'derived') derived.push({ e, d, c });
     else if (d.status === 'decoy') decoy.push({ e, c });
+    else if (d.status === 'not-a-monomial') notAMonomial.push({ e, c });
     else open.push({ e, c });
   }
 
@@ -57,8 +64,9 @@ async function run(ctx: CommandCtx): Promise<number> {
             complexity: c,
           })),
           decoy: decoy.map(({ e, c }) => ({ id: e.id, complexity: c })),
+          notAMonomial: notAMonomial.map(({ e, c }) => ({ id: e.id, complexity: c })),
           open: openSorted.map(({ e, c }) => ({ id: e.id, complexity: c })),
-          definitions: { decoy: DECOY_DEFINITION },
+          definitions: { decoy: DECOY_DEFINITION, 'not-a-monomial': NOT_A_MONOMIAL_DEFINITION },
         },
       },
       ctx.write
@@ -79,6 +87,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   );
   out('    ' + decoy.map((x) => x.e.id).join(', '));
   out('    (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)');
+  out(
+    `\n  NOT A MONOMIAL (${notAMonomial.length}) — the encoded formula adds dimensionful terms, so it is not a proportionality. ` +
+      'A monomial reconstruction does not apply:',
+  );
+  out('    ' + notAMonomial.map((x) => x.e.id).join(', '));
+  out('    (not a failed reconstruction of a monomial, and not a physical refutation)');
   out(`\n  OPEN (${open.length}) — irreducible free dimensionless group(s); by complexity:`);
   for (const { e, c } of [...open].sort((a, b) => a.c - b.c)) {
     out(`    cplx=${c}  ${e.id}`);
@@ -92,7 +106,7 @@ export const command: Command = {
   aliases: [],
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
-  summary: 'Derive every bridge equation by dimensions and sort derived, decoy, and open.',
+  summary: 'Derive every bridge equation by dimensions and sort derived, decoy, not a monomial, and open.',
   example: 'upt audit',
   group: 'evaluate',
   run,

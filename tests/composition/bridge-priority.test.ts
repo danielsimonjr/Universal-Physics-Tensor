@@ -34,10 +34,14 @@ describe('bridge-priority — tier partition', () => {
     expect(board.find((e) => e.id === 'be-52')).toBeUndefined(); // perihelion, established
   });
 
-  it('partitions the speculative bridges 8 / 6 / 18 across the three tiers', () => {
+  it('partitions the speculative bridges 8 / 5 / 19 across the three tiers', () => {
     const t: Record<number, number> = { 1: 0, 2: 0, 3: 0 };
     for (const e of board) t[e.tier]++;
-    expect(t).toEqual({ 1: 8, 2: 6, 3: 18 });
+    // be-36 was tier 2 while the audit called (c_GW − c)/c grounded. The
+    // prefactor −1 is the sample with v ≪ c, not a monomial. The formula
+    // adds dimensionful terms, the bridge is isolated, and the tier is 3.
+    // The 8 / 6 / 18 sentence is the record from before that classification.
+    expect(t).toEqual({ 1: 8, 2: 5, 3: 19 });
   });
 
   it('is sorted best-first (non-decreasing tier)', () => {

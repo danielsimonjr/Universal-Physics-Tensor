@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 55 files
 - **root**: 1 file
-- **composition**: 88 files
+- **composition**: 89 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -4577,6 +4577,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals, format` | Import |
 | `../dimensional/ast-builders.js` | `dim` | Import |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `./formula-shape.js` | `formulaShape` | Import |
 | `../bridges/index.js` | `BRIDGE_EQUATIONS` | Import |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
 | `./enumerate.js` | `enumerateCompositions` | Import |
@@ -5217,6 +5218,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/buckingham.js` | `DimensionalDeterminationResult` | Import (type-only) |
 | `../dimensional/buckingham.js` | `dimensionallyDetermines` | Import |
+| `./formula-shape.js` | `formulaShape` | Import |
 
 **Exports:**
 - Interfaces: `DerivationExplanation`, `ExplainOptions`, `QuantityExplanation`
@@ -5269,6 +5271,21 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Functions: `substitute`
+
+---
+
+### `src/composition/formula-shape.ts` - Whether an encoded formula is a product of powers, or a sum of dimensionful terms.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/ast-types.js` | `ExprNode` | Import (type-only) |
+| `../dimensional/algebra.js` | `divide, equals, multiply, power` | Import |
+| `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/types.js` | `DIMENSIONLESS` | Import |
+
+**Exports:**
+- Functions: `formulaShape`
 
 ---
 
@@ -8256,7 +8273,7 @@ graph TD
         N33[audit-coverage]
         N34[axes]
         N35[axis-audit]
-        N36[...83 more]
+        N36[...84 more]
     end
 
     subgraph Core
@@ -8343,17 +8360,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 438 |
+| Total TypeScript Files | 439 |
 | Total Modules | 13 |
-| Total Lines of Code | 93438 |
-| Total Exports | 3158 |
+| Total Lines of Code | 93600 |
+| Total Exports | 3159 |
 | Total Re-exports | 1497 |
 | Total Classes | 60 |
 | Total Interfaces | 501 |
-| Total Functions | 812 |
+| Total Functions | 813 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 579 |
+| Type-only Imports | 581 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

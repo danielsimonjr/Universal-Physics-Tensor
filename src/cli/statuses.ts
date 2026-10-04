@@ -144,6 +144,14 @@ export const STATUS_GLOSSARY: readonly StatusDefinition[] = [
     commands: ['audit'],
   },
   {
+    key: 'not-a-monomial',
+    words: ['NOT A MONOMIAL'],
+    meaning:
+      'the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction ' +
+      'does not apply. This is not a failed reconstruction of a monomial, and not a physical refutation',
+    commands: ['audit'],
+  },
+  {
     key: 'adjudicated-decoy',
     words: ['decoy'],
     meaning:

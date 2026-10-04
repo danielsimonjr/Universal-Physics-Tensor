@@ -94,7 +94,7 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     expect(derive('be-42').status).toBe('decoy');
   });
 
-  it('be-27 effective-temperature is a DECOY: additive (T + noise/k_B), not a monomial', () => {
+  it('be-27 effective-temperature stays a DECOY: the plus is dimensionless, and the monomial does not match', () => {
     expect(derive('be-27').status).toBe('decoy');
   });
 
@@ -117,9 +117,11 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     const derived = ALL_EDGES.filter((e) => attemptDerivation(e).status === 'derived');
     // The form-matching subset (verified against each evaluator).
     // be-59 joined this set: f = (2e/h) V is a monomial.
-    // be-70, be-71, and be-73 match their evaluators. be-69 is a decoy.
-    // The count of 12 is the record from before be-69..73.
-    expect(derived.length).toBe(15);
+    // be-70, be-71, and be-73 match their evaluators.
+    // be-36 left it: (c_GW − c)/c adds dimensionful terms, and the constant
+    // −1 was the sample v ≪ c. be-69 is the same shape, not a derivation.
+    // The count of 15 is the record from before that classification.
+    expect(derived.length).toBe(14);
   });
 });
 

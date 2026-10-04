@@ -2,7 +2,7 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (15) — recognized monomial, prefactor recovered:
+  DERIVED (14) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.507e+0
     be-16                  +[k_B]  ×6.931e-1
     be-42-via-rs           +[ℏ,c,k_B]  ×7.958e-2
@@ -13,28 +13,29 @@ Deriving the bridge equations by dimensions
     be-15                  +[]  ×1.000e+0
     be-17                  +[]  ×1.000e+0
     be-20                  +[c,G]  ×3.979e-2
-    be-36                  +[]  ×-1.000e+0
     be-59                  +[ℏ,e]  ×3.183e-1  (empirical/tuned constant)
     be-70                  +[k_B]  ×1.000e+0
     be-71                  +[]  ×1.000e+0
     be-73                  +[]  ×1.000e+0
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 7) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67, be-69
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 6) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
-  OPEN (32) — irreducible free dimensionless group(s); by complexity:
+  NOT A MONOMIAL (5) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
+    be-54, be-36, be-50, be-40, be-69
+    (not a failed reconstruction of a monomial, and not a physical refutation)
+
+  OPEN (29) — irreducible free dimensionless group(s); by complexity:
     cplx=1  be-11-zurek
     cplx=1  be-37
     cplx=1  be-52
     cplx=1  be-19
-    cplx=1  be-54
     cplx=1  be-18
     cplx=1  be-23
     cplx=1  be-24
     cplx=1  be-30
     cplx=1  be-38
-    cplx=1  be-50
     cplx=1  be-55
     cplx=1  be-60
     cplx=1  be-68
@@ -49,7 +50,6 @@ Deriving the bridge equations by dimensions
     cplx=3  be-33
     cplx=3  be-45
     cplx=3  be-46
-    cplx=3  be-40
     cplx=4  be-31
     cplx=4  be-34
     cplx=4  be-41

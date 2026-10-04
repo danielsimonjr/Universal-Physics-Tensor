@@ -162,7 +162,7 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
   it('the heading names the reconstruction that failed and disclaims refutation', async () => {
     const { text } = await run(['audit']);
     expect(text).toMatch(
-      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 7\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
+      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 6\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
     );
     expect(text).toMatch(/NOT a physical refutation/);
     expect(text).not.toMatch(/DECOY \(5\) — dimensionally valid but wrong form/);
@@ -173,7 +173,10 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
     await runCli(['audit', '--json'], c.io);
     const r = JSON.parse(c.lines.join('')).result;
     expect(r.decoy.map((d: { id: string }) => d.id)).toContain('be-51');
+    expect(r.decoy.map((d: { id: string }) => d.id)).not.toContain('be-69');
+    expect(r.notAMonomial.map((d: { id: string }) => d.id)).toContain('be-69');
     expect(r.definitions.decoy).toMatch(/not a physical refutation/);
+    expect(r.definitions['not-a-monomial']).toMatch(/not a proportionality/);
   });
 });
 

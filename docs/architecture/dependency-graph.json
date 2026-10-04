@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "3.0.0",
-    "totalFiles": 438,
+    "totalFiles": 439,
     "totalModules": 13,
-    "totalExports": 3158
+    "totalExports": 3159
   },
   "entryPoints": [
     {
@@ -15807,6 +15807,12 @@
             "typeOnly": true
           },
           {
+            "file": "./formula-shape.js",
+            "imports": [
+              "formulaShape"
+            ]
+          },
+          {
             "file": "../bridges/index.js",
             "imports": [
               "BRIDGE_EQUATIONS"
@@ -18442,6 +18448,12 @@
             "imports": [
               "dimensionallyDetermines"
             ]
+          },
+          {
+            "file": "./formula-shape.js",
+            "imports": [
+              "formulaShape"
+            ]
           }
         ],
         "exports": [
@@ -18593,6 +18605,48 @@
         ],
         "functions": [
           "substitute"
+        ]
+      },
+      "src/composition/formula-shape.ts": {
+        "description": "Whether an encoded formula is a product of powers, or a sum of dimensionful terms.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/ast-types.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "divide",
+              "equals",
+              "multiply",
+              "power"
+            ]
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "Dimension"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          }
+        ],
+        "exports": [
+          "formulaShape"
+        ],
+        "functions": [
+          "formulaShape"
         ]
       },
       "src/composition/frontier-account.ts": {
@@ -30524,6 +30578,7 @@
           "src/composition/expr-eval.ts",
           "src/composition/expr-simplify.ts",
           "src/composition/expr-subst.ts",
+          "src/composition/formula-shape.ts",
           "src/composition/frontier-account.ts",
           "src/composition/graph-viz-svg.ts",
           "src/composition/graph-viz.ts",
@@ -30703,18 +30758,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 438,
+    "totalTypeScriptFiles": 439,
     "totalModules": 13,
-    "totalLinesOfCode": 93438,
-    "totalExports": 3158,
+    "totalLinesOfCode": 93600,
+    "totalExports": 3159,
     "totalClasses": 60,
     "totalInterfaces": 501,
-    "totalFunctions": 812,
+    "totalFunctions": 813,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 790,
     "totalReExports": 1497,
-    "totalTypeOnlyImports": 579,
+    "totalTypeOnlyImports": 581,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,
