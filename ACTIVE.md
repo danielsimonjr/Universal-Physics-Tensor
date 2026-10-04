@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A suggestion query drops a hyphen token shorter than three letters. Explicit search of a one-letter symbol stays.
+  Done: `searchNameWords` drops those tokens. `upt explain not-a-quantity-xyz` does not search `a`. `upt search a` still finds the quantity `a`. `schrodinger-equation` still searches `schrodinger`.
+
 - [x] Classify an encoded formula that adds dimensionful terms as not a monomial. Explain does not print a proportionality for that shape. The audit lists it apart from a failed reconstruction. The formally-proved map filter still reads the Lean kind.
   Done: `formulaShape` is the classifier. be-69, be-36, be-40, be-50, and be-54 are `not-a-monomial`. be-27 and be-67 stay decoys. The catalog audit is DERIVED 14, DECOY 6, NOT A MONOMIAL 5, OPEN 29. `deriveEdgeEvidence(69)` still contains `formally-proved`.
 

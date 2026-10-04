@@ -56,6 +56,13 @@ export interface SearchMatch {
 
 export const STOP_WORDS: ReadonlySet<string> = new Set(['of', 'the', 'and', 'for', 'in', 'an']);
 
+/**
+ * A suggestion query is not an explicit search. One- and two-letter hyphen
+ * fragments are symbols (`a`, `T`), and the fewest-match rule would pick
+ * them over the real word. Explicit `queryWords` still accepts them.
+ */
+const MIN_SUGGESTION_TOKEN = 3;
+
 export const fold = (s: string): string => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 const WORD_BREAK = /[^\p{L}\p{N}]+/u;
 const words = (s: string): string[] => fold(s).split(WORD_BREAK).filter((w) => w.length > 0);
@@ -252,13 +259,18 @@ export function matchEveryWord(
  * the name splits on `-`, `_` and spaces, stop words drop, and the words are searched together. When
  * no entry matches every word, the largest set of the words that some entry does match is used
  * instead, the one with the fewest matches when sets tie (so the rarer word `schrodinger` beats the
- * common word `equation`). Returns `null` when no word matches anything. At most six words are tried.
+ * common word `equation`). A token shorter than three letters is dropped: it is a symbol, and
+ * `not-a-quantity-xyz` must not search `a`. Returns `null` when no word matches anything. At most
+ * six words are tried.
  */
 export function searchNameWords(
   api: CommandCtx['api'],
   name: string,
 ): { readonly words: readonly string[]; readonly matches: readonly SearchMatch[] } | null {
-  const all = name.split(/[-_\s]+/).filter((w) => w.length > 0 && !STOP_WORDS.has(fold(w))).slice(0, 6);
+  const all = name
+    .split(/[-_\s]+/)
+    .filter((w) => w.length >= MIN_SUGGESTION_TOKEN && !STOP_WORDS.has(fold(w)))
+    .slice(0, 6);
   if (all.length === 0) return null;
   const index = buildSearchIndex(api);
   let best: { words: string[]; matches: SearchMatch[] } | null = null;
