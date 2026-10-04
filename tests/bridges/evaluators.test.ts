@@ -52,6 +52,7 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_m2_per_Vs$/, 'm^2/(V·s)'],
       [/_m3_per_kg$/, 'm^3/kg'],
       [/_J_per_kg$/, 'J/kg'],
+      [/_V_per_K2$/, 'V/K^2'],
       [/_V_per_K$/, 'V/K'],
       [/_m_per_s$/, 'm/s'],
       [/_J_per_kg_K$/, 'J/(kg*K)'],

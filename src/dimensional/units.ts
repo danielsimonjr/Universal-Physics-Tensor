@@ -12,8 +12,10 @@
  * converted.
  *
  * An exact symbol wins over a prefix: `T` is the tesla and `Ts` is a
- * terasecond; `G` is the gauss and `GPa` is a gigapascal. `AU` is the same
- * exact metre count as `au`. `Msun` is `M_SUN_SI` kilograms; `Msun_iau` is
+ * terasecond; `G` is the gauss and `GPa` is a gigapascal. A glued positive
+ * exponent is that power when the letters are already a unit, so `K2` and
+ * `K²` are `K^2`. An unknown token that ends in a digit stays unknown.
+ * `AU` is the same exact metre count as `au`. `Msun` is `M_SUN_SI` kilograms; `Msun_iau` is
  * `GM_SUN_SI / G_SI`. `myr` is a milliyear because `m` is the SI prefix.
  * `eV` takes an SI prefix, so `GeV` is 10⁹ eV in joules. `nat` is the
  * coherent information unit (scale 1); `bit` is ln 2 nat. Neither takes a
@@ -121,14 +123,39 @@ function parseSymbol(sym: string): readonly [number, Dimension] {
   throw new UnitError(`unknown unit '${sym}'`);
 }
 
+const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3 };
+
+/**
+ * A factor is `symbol`, `symbol^n`, `symbol²`, or `symbol` with a glued
+ * positive exponent (`K2` is K²). The glued form is read only when the
+ * letters are already a unit, so an unknown token stays unknown.
+ */
+function factorExponent(factor: string): { base: string; exp: number } {
+  const caret = /^([^\^]+)(?:\^([+-]?\d+))?$/.exec(factor);
+  if (caret !== null && caret[2] !== undefined) return { base: caret[1]!, exp: Number(caret[2]) };
+  const uni = /^(.*?)([¹²³])$/.exec(factor);
+  const superExp = uni === null ? undefined : SUPERSCRIPT[uni[2]!];
+  if (uni !== null && superExp !== undefined && uni[1]!.length > 0) return { base: uni[1]!, exp: superExp };
+  const glued = /^(.*?)([1-9]\d*)$/.exec(factor);
+  if (glued !== null && glued[1]!.length > 0) {
+    try {
+      parseSymbol(glued[1]!);
+      return { base: glued[1]!, exp: Number(glued[2]) };
+    } catch (e) {
+      if (!(e instanceof UnitError)) throw e;
+    }
+  }
+  if (caret === null) throw new UnitError(`cannot read unit factor '${factor}'`);
+  return { base: caret[1]!, exp: 1 };
+}
+
 function parseFactors(text: string, sign: 1 | -1): { scale: number; dim: Dimension } {
   let scale = 1;
   let dim = DIMENSIONLESS;
   for (const f of text.split(/[*·\s]+/).filter((x) => x.length > 0)) {
-    const m = /^([^\^]+)(?:\^([+-]?\d+))?$/.exec(f);
-    if (m === null) throw new UnitError(`cannot read unit factor '${f}'`);
-    const n = sign * (m[2] === undefined ? 1 : Number(m[2]));
-    const [s, d] = parseSymbol(m[1]!);
+    const { base, exp } = factorExponent(f);
+    const n = sign * exp;
+    const [s, d] = parseSymbol(base);
     scale *= s ** n;
     dim = multiply(dim, power(d, n));
   }

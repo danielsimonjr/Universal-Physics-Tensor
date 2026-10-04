@@ -29,7 +29,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] Search for coherence length shows the thermal-wavelength formula, and `landau` says it matched Landauer.
   `upt search "coherence length"` routes to `upt explain be-12`, which prints no formula. `upt search landau` exits 0 on Landauer's principle.
   Done: coherence length routes to `upt atlas be-12` and the hit quotes `Not Caldeira–Leggett dephasing`. `upt search landau` says `landau is a prefix of landauer`. `upt search "landau diamagnetism"` exits 1.
-
+- [x] be-83 labels dS/dT in V/K^2, and `V/K2` converts.
+  `upt evaluate be-83 T_K=300 dS_dT_V_per_K2=1e-6` prints `[dimensionless]`. `dS_dT_V_per_K2=1e-6V/K2` exits 1 with `unknown name 'K2'`.
+  Done: the input line is `dS_dT_V_per_K2 [V/K^2]`. Both the bare number and `1e-6V/K2` print `mu_V_per_K = 0.0003`.
 - [x] A synonym is one governing variable.
   `upt explain cyclotron-frequency` with `magnetic-field` also lists `magnetic-flux-density` and says the inputs do not fix a unique monomial. The derivation line is already `∝ charge·magnetic-field·mass^-1`.
   Done: that command exits 0, prints `Recovered value: -175882001077.216`, and says `{charge, magnetic-field, mass}` fix it up to a dimensionless constant: `cyclotron-frequency ∝ charge·magnetic-field·mass^-1`. It does not name `magnetic-flux-density`. Larmor radius at `speed=1e6` and positive `q` prints `0.00000568563010356572` and the same unique-monomial sentence. `magnetic-flux-density=1` still recovers the positive cyclotron frequency. Two different values of the pair stay two inputs.
