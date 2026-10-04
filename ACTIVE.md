@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the engineering-physicist dogfood of published `universal-physics-tensor@3.1.0`. The report is `docs/dogfood/2026-10-04-engineering-physicist-bridges-r4.md`. The session does not change `src/`.
+  Done: the report is that file. npm `3.1.0` gitHead is `d5db9af65c27c3796d9bde37b7f286923ef12c9d`. Annotated tag `v3.1.0` (object `8d110b6d26cbe3e40ef608446aa2bd0a17cb573c`) points at that commit. Publish run `37209533226` succeeded. New candidates stay unproven. The bugs are filed as issues 351–358 and are not fixed in this change.
+
 - [x] Set the package version to 3.1.0. The public surface adds the BE-74, BE-75, and BE-76 exports and does not remove one.
   Done: `package.json` is 3.1.0. The minor note is the [3.1.0] section. Version-stamped artifacts carry 3.1.0. The Part VIII check requires 3.1.0. Before the bump it required 3.0.0. npm `3.0.0` remains the published release until the tag workflow.
 
