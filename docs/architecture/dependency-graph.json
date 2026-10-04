@@ -4,7 +4,7 @@
     "version": "3.1.0",
     "totalFiles": 453,
     "totalModules": 13,
-    "totalExports": 3342
+    "totalExports": 3343
   },
   "entryPoints": [
     {
@@ -11645,6 +11645,7 @@
             "imports": [
               "check",
               "requirePositive",
+              "signedRelativeDifference",
               "AppliedCase"
             ]
           }
@@ -11868,6 +11869,7 @@
             "imports": [
               "check",
               "requirePositive",
+              "signedRelativeDifference",
               "AppliedCase"
             ]
           }
@@ -11937,6 +11939,7 @@
             "imports": [
               "check",
               "requirePositive",
+              "signedRelativeDifference",
               "AppliedCase"
             ]
           }
@@ -11970,6 +11973,7 @@
             "imports": [
               "check",
               "requirePositive",
+              "signedRelativeDifference",
               "AppliedCase"
             ]
           }
@@ -12012,6 +12016,7 @@
         ],
         "exports": [
           "check",
+          "signedRelativeDifference",
           "requirePositive"
         ],
         "interfaces": [
@@ -12023,6 +12028,7 @@
           "AppliedCase"
         ],
         "functions": [
+          "signedRelativeDifference",
           "requirePositive"
         ],
         "constants": [
@@ -31899,11 +31905,11 @@
   "statistics": {
     "totalTypeScriptFiles": 453,
     "totalModules": 13,
-    "totalLinesOfCode": 96409,
-    "totalExports": 3342,
+    "totalLinesOfCode": 96423,
+    "totalExports": 3343,
     "totalClasses": 60,
     "totalInterfaces": 529,
-    "totalFunctions": 828,
+    "totalFunctions": 829,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 846,

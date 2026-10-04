@@ -20,7 +20,7 @@
  */
 import { K_B_SI } from '../core/constants.js';
 import { adaptiveSimpson } from './quadrature.js';
-import { check, requirePositive, type AppliedCase } from './types.js';
+import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-brownian-sphere';
 
@@ -195,7 +195,7 @@ export const BROWNIAN_SPHERE_CASE: AppliedCase = {
     { key: 'v_sed_m_per_s', symbol: 'v_s', unit: 'm/s', meaning: 'Stokes sedimentation speed (2/9)(ρ_p − ρ_f) g a²/η; negative means the sphere rises' },
     { key: 'Re', symbol: 'Re', unit: '', meaning: 'ρ_f a max(√(k_BT/m), |v_s|)/η — radius-based; a diameter-based Re is twice this' },
     { key: 'MSD_langevin_m2', symbol: '⟨|Δr|²⟩_L', unit: 'm^2', meaning: 'the Langevin parent: 2dD[t − τ(1 − e^{−t/τ})], τ = m/γ (bare mass)' },
-    { key: 'langevin_deviation', symbol: 'MSD/MSD_L − 1', unit: '', meaning: 'relative excess of the diffusive MSD over the Langevin one' },
+    { key: 'langevin_deviation', symbol: 'MSD/MSD_L − 1', unit: '', meaning: signedRelativeDifference('diffusive MSD', 'Langevin one') },
     {
       key: 'MSD_hydro_m2',
       symbol: '⟨|Δr|²⟩_H',
@@ -203,7 +203,7 @@ export const BROWNIAN_SPHERE_CASE: AppliedCase = {
       meaning: 'the Langevin–Basset parent: added mass and hydrodynamic memory, unbounded incompressible fluid (branch-cut integral of its Laplace-domain VACF)',
     },
     { key: 'hydro_correction_m2', symbol: '⟨|Δr|²⟩_H − ⟨|Δr|²⟩', unit: 'm^2', meaning: 'what inertia and memory change in the MSD at t; ≈ −4dD√(τ_f t/π) at t ≫ τ_f' },
-    { key: 'hydro_deviation', symbol: 'MSD/MSD_H − 1', unit: '', meaning: 'relative excess of the diffusive MSD over the Langevin–Basset one' },
+    { key: 'hydro_deviation', symbol: 'MSD/MSD_H − 1', unit: '', meaning: signedRelativeDifference('diffusive MSD', 'Langevin–Basset one') },
     {
       key: 'memory_correction',
       symbol: 'MSD_H/MSD_OU − 1',
@@ -213,7 +213,7 @@ export const BROWNIAN_SPHERE_CASE: AppliedCase = {
     { key: 'D_parallel_m2_per_s', symbol: 'D_∥', unit: 'm^2/s', meaning: 'D beside the wall, parallel to it: D·(Faxén series in a/h); null without h_m' },
     { key: 'D_perp_m2_per_s', symbol: 'D_⊥', unit: 'm^2/s', meaning: 'D normal to the wall: D/λ, λ from Brenner\'s exact series; null without h_m' },
     { key: 'MSD_wall_m2', symbol: '⟨|Δr|²⟩_w', unit: 'm^2', meaning: '2t(d_∥ D_∥ + d_⊥ D_⊥): the tracked horizontal axes parallel to the wall, a third one normal to it; null without h_m' },
-    { key: 'wall_deviation', symbol: 'MSD/MSD_w − 1', unit: '', meaning: 'relative excess of the unbounded-fluid MSD over the wall-corrected one; null without h_m' },
+    { key: 'wall_deviation', symbol: 'MSD/MSD_w − 1', unit: '', meaning: signedRelativeDifference('unbounded-fluid MSD', 'wall-corrected one', 'null without h_m') },
   ],
   comparison: {
     reference: 'the parent Langevin model (bare mass, white noise; it has neither added mass nor hydrodynamic memory)',
