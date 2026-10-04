@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the condensed-matter dogfood of published `universal-physics-tensor@4.0.0`. The report is `docs/dogfood/2026-10-04-condensed-matter-bridges-r5.md`. The session does not change `src/`.
+  Done: the report is that file. npm `4.0.0` gitHead is `9e7dfa279be3c56d83c1f9436cd3034687f00e3f`. Annotated tag `v4.0.0` (object `956f2159c6c25830195aa22f81973b39ed07074c`) points at that commit. Publish run `37227889987` succeeded. New candidates stay unproven. The bugs are filed as issues 370–376 and are not fixed in this change.
+
 - [x] Record that `universal-physics-tensor@4.0.0` is the published release.
   Done: npm `latest` is `4.0.0`, gitHead `9e7dfa279be3c56d83c1f9436cd3034687f00e3f`. Annotated tag `v4.0.0` points at that commit. Publish run `37227889987` succeeded. The GitHub release is `https://github.com/danielsimonjr/Universal-Physics-Tensor/releases/tag/v4.0.0`.
 
