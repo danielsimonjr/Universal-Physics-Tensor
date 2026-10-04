@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Set the package version to 5.0.0. Published `4.0.0` is `9e7dfa27`. Since that tag, opposite carrier signs throw, an unsourced dimensional 1 is COEFFICIENT UNSET, search of a catalog bridge with no evaluator names the formula, and be-83 is `V/K^2`. PhysJS `03e8bb77` adds BE-88 through BE-102.
+  Done: `package.json` is 5.0.0. The major note is the [5.0.0] section. Version-stamped artifacts carry 5.0.0. The Part VIII check requires 5.0.0. Before the bump it required 4.0.0. npm `4.0.0` remains the published release until the tag workflow.
 - [x] A dimensional entry with no sourced prefactor is not a recovered factor of 1.
   `upt explain fermi-energy` prints the unit monomial and the audit lists `CE-fermi-energy`, `CE-fermi-velocity`, `CE-plasma-frequency`, and `CE-debye-frequency` as DERIVED `×1`.
   Done: the canonical audit is DERIVED 73, COEFFICIENT UNSET 6, DECOY 7, OPEN 23. The unset rows are `CE-thermal-de-broglie`, `CE-sound-speed`, `CE-fermi-energy`, `CE-fermi-velocity`, `CE-debye-frequency`, and `CE-mb-most-probable-speed`. Fermi explain still prints `2.35460972213968e-19` and says the constant was set to 1, which is not `(1/2)(3π²)^{2/3}`. Velocity names `(3π²)^{1/3}`. Debye names `(6π²)^{1/3}`. `CE-plasma-frequency` is the angular formula and stays DERIVED `×1`. `CE-simple-harmonic-frequency` stays DERIVED because the table sources the 1.

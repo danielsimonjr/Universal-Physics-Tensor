@@ -6,6 +6,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 from v0.1.0 onward.
 
+## [5.0.0] - 2026-10-04
+
+Major release. The breaks below landed after published `4.0.0` (`9e7dfa279be3c56d83c1f9436cd3034687f00e3f`). The package root adds the BE-88 through BE-102 evaluators, their input and result types, and `be88Edge` through `be102Edge`. npm `4.0.0` remains the published release until the tag workflow.
+
+### Migration
+
+`upt explain electrical-conductivity carrier-density=8.47e28 charge=-1.602176634e-19 carrier-mobility=0.003 --source=canonical` printed `Recovered value: -40711308.26994`. It now exits 1 with `charge and carrier-mobility must have the same sign`. `explainQuantity` and that canonical edge throw `CarrierSignError`. The package root exports `CarrierSignError`. Both signs negative (`carrier-mobility=-0.00439705002693041`) print `Recovered value: 59669886.374904`. A zero mobility stays 0. A Hall coefficient `1/(n q)` and a cyclotron frequency `q B / m` stay signed. `evaluateEinsteinRelation` still throws `mu_m2_per_Vs and q_C must have the same sign`.
+
+`upt audit --source=canonical` listed `CE-fermi-energy`, `CE-fermi-velocity`, `CE-debye-frequency`, and `CE-plasma-frequency` as DERIVED `×1.000e+0`. The first three, with `CE-thermal-de-broglie`, `CE-sound-speed`, and `CE-mb-most-probable-speed`, are now COEFFICIENT UNSET. The counts are DERIVED 73, COEFFICIENT UNSET 6, DECOY 7, OPEN 23. JSON gains `coefficientUnset`. `upt explain fermi-energy` still prints `Recovered value: 2.35460972213968e-19` and says that 1 was not recovered. `CE-plasma-frequency` stays DERIVED `×1`. A sourced factor of 1 stays DERIVED.
+
+`upt explain cyclotron-frequency charge=-1.602176634e-19 magnetic-field=1 mass=9.1093837015e-31 --source=canonical` listed `{charge, magnetic-field, mass, magnetic-flux-density}` and said the inputs do not fix a unique monomial. The known set is now `{charge, magnetic-field, mass}`, and the sentence is `cyclotron-frequency ∝ charge·magnetic-field·mass^-1`. The recovered value stays `-175882001077.216`. `magnetic-flux-density=1` still recovers the positive frequency. Two different values of that pair stay two inputs.
+
+`upt search "coherence length"` exited 0 and routed to `upt explain be-12`, which prints no formula. The route is now `upt atlas be-12`, and the hit quotes the covers line, including `Not Caldeira–Leggett dephasing`. `upt search landau` still exits 0 on Landauer's principle and says `landau is a prefix of landauer`. `upt search "landau diamagnetism"` stays exit 1.
+
+`upt evaluate be-83 T_K=300 dS_dT_V_per_K2=1e-6` labeled the slope `[dimensionless]` and JSON `unit` was `""`. The text line is `dS_dT_V_per_K2 [V/K^2]`. `dS_dT_V_per_K2=1e-6V/K2` used to exit 1 with `unknown name 'K2'`. It now converts and `mu_V_per_K` stays `0.0003`.
+
+`upt derive fermi-energy:energy reduced-planck-constant:action mass:mass carrier-density:L^-3 --formula "(reduced-planck-constant^2/(2*mass))*(3*pi^2*carrier-density)^(2/3)"` exited 2 with `undeclared symbol 'reduced'`. That name is now one symbol. The command exits 0 and the recovered prefactor is `4.7854e+0`. A hyphen that is not a declared name stays subtraction.
+
+### Added
+
+- **PhysJS #65 proves be-88 through be-102.** `formal/physjs/manifest.json` is PhysJS `03e8bb77c952f720bdd2730af2afc6a7f2d36243`. Lean files stay `lean/<File>.lean`. The package root exports `evaluateFermiSea`, `evaluateDebyeCutoff`, `evaluateDebyeHeat`, `evaluateEinsteinSolid`, `evaluateSommerfeldHeat`, `evaluateCurieWeiss`, `evaluatePauliParamagnetism`, `evaluateGinzburgLandau`, `evaluateUpperCritical`, `evaluateAmbegaokarBaratoff`, `evaluateBcsJump`, `evaluateMassAction`, `evaluateLyddaneSachsTeller`, `evaluateBktJump`, and `evaluateLandauerConductance`, their input and result types, and `be88Edge` through `be102Edge`. No export was removed. The evaluate range is `BE-51/52/55..102`. BE-90 assumes the Bose integral `π⁴/15` and does not evaluate it. BE-95 is the sign of one trial wall, not every minimizer. BE-97 is the `T = 0` case only. BE-98 reads `ζ` as the GL quartic coefficient. BE-101 is the energy-entropy argument, not the RG flow. Landau diamagnetism `χ_L = −χ_P/3` and the BCS coherence length `ξ₀ = ℏ v_F/(π Δ)` have no bridge id and no formalRef. The r5 dogfood count `3·(4π/3) k_D³/(2π)³ = n` gives `k_D³ = 2 π² n`. The proved count is 3n states, `k_D = (6 π² n)^{1/3}`.
+
+### Breaking
+
+- **A monomial odd in both carrier charge and mobility rejects opposite signs.** A caller of `CANONICAL_GRAPH` or `explainQuantity` that accepted the negative siemens per metre now sees `CarrierSignError`. `upt explain` exits 1. Hall and cyclotron stay signed.
+- **An unsourced dimensional coefficient is not a recovered 1.** A caller that matched DERIVED `×1` for those six canonical rows now matches COEFFICIENT UNSET. JSON gains `coefficientUnset`.
+- **A synonym is one governing variable.** A caller that matched the cyclotron sentence that the inputs do not fix a unique monomial now matches the proportionality.
+- **Search of a catalog bridge with no evaluator names the formula.** A caller that matched `upt explain be-12` for `coherence length` now matches `upt atlas be-12`. `upt search landau` names the prefix.
+- **be-83's Seebeck slope is V/K^2.** A caller that matched unit `""` or `[dimensionless]` for `dS_dT_V_per_K2` now matches `V/K^2`. `V/K2` converts.
+
+### Fixed
+
+- **A declared hyphenated name is one symbol in `upt derive --formula`.** The command that exited 2 on `reduced-planck-constant` exits 0. A hyphen that is not a declared name stays subtraction.
+
+The Part VIII check requires `5.0.0`. Before the bump it required `4.0.0` and failed on this package version. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `5.0.0`. Architecture docs were regenerated: 471 files, 3553 exports, 1734 re-exports, 99578 lines, 0 circular dependencies. Architecture test-coverage docs count 662 test files. The unused-analysis report lists 1 file and 78 exports.
+
+**Dependency health, measured for this release:** `bun audit` finds 0 vulnerabilities in 142 packages. `bun outdated` lists `@types/node` 26.5.1 → 26.6.4, `fast-check` 4.10.0 → 4.10.2, and `@viz-js/viz` 3.30.0 → 3.31.0. `vitest` and `@vitest/coverage-v8` stay 4.1.11 inside the current range; latest is 5.0.3. `tree-sitter` stays 0.22.4 inside the current range; latest is 0.25.1. None of these is a HIGH or CRITICAL advisory.
+
 ## [4.0.0] - 2026-10-04
 
 Major release. `evaluateEinsteinRelation` throws when μ and q have opposite signs. The canonical graph evaluator multiplies the sourced dimensionless prefactor, so recovered values that dropped that factor change. The package root adds the BE-77 through BE-87 evaluators, their input and result types, and `be77Edge` through `be87Edge`. npm `3.1.0` remains the published release until the tag workflow.
