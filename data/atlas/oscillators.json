@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/atlas-record.v0.json",
   "schemaVersion": "0",
-  "packageVersion": "3.1.0",
+  "packageVersion": "4.0.0",
   "family": "oscillators",
   "models": [
     {
