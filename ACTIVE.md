@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Re-pin the vendored PhysJS manifest to `4ea35872513f8d4d12a01bfac225156bdddb87a9`. PhysJS #61 moved Lean sources to `lean/PhysJS/<File>.lean`. `physjsFileUrl` is the permalink builder. Stored catalog and atlas JSON are regenerated from it.
+  Done: the manifest commit is that sha. Theorem names and the manifest entries are unchanged. Every emitted URL is `https://github.com/danielsimonjr/PhysJS/blob/4ea35872513f8d4d12a01bfac225156bdddb87a9/lean/PhysJS/<File>.lean`, and that file is listed in `formal/physjs/lean-files.json`.
+
 - [x] Record the applied-physicist dogfood of published `universal-physics-tensor@3.0.0`. The report is `docs/dogfood/2026-10-04-applied-physicist-bridges-r3.md`. The session does not change `src/`.
   Done: the report is that file. npm `3.0.0` gitHead is `9ea1990899b44807e8d2fa37aba7c2dda9780b68`. Annotated tag `v3.0.0` (object `a6fd7a29904e40483dd743c4d0e213e1bb245e9b`) points at that commit. The re-run marks each earlier repro. New candidates stay unproven. No code fix is in this change.
 

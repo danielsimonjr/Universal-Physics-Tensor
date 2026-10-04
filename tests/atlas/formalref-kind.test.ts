@@ -14,7 +14,7 @@ import { describe, expect, it } from 'vitest';
 import { ATLAS_FAMILIES } from '../../src/atlas/families.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
-import { PHYSJS_COMMIT, physjsFormalRef, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
+import { PHYSJS_COMMIT, physjsFileUrl, physjsFormalRef, physjsLeanFile, physjsManifestProblems, type PhysjsManifestFile } from '../../src/atlas/physjs-ref.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -26,23 +26,11 @@ const COUNTED = [64, 53, 58, 38, 13, 34, 65, 51, 61, 14, 17, 22, 15, 32, 35, 30]
 /** Theorem states the catalogued equation. Covers still begins with derivation-step. */
 const CATALOG_EQUATION = [12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63, 66, 67, 68, 69, 70, 71, 72, 73] as const;
 
-/** Namespaces that are not their own Lean file at the pinned commit. */
-const FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
-  SpringLc: 'OscillatorDictionary.lean',
-  DampedRlc: 'OscillatorDictionary.lean',
-};
-
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
   const formalRef = catalogFormalRef(id);
   if (entry === undefined || formalRef === undefined) throw new Error(`be-${id} has no formalRef`);
   return { ...entry, formalRef };
-}
-
-function fileFor(statement: string): string {
-  const namespace = statement.split('.')[1];
-  if (namespace === undefined) throw new Error(statement);
-  return FILE_BY_NAMESPACE[namespace] ?? `${namespace}.lean`;
 }
 
 describe('formalRef kind — formally-proved is a bridge only', () => {
@@ -134,16 +122,14 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
     ];
     expect(refs.length).toBe(54);
     for (const ref of refs) {
-      const file = fileFor(ref.statement);
-      expect(ref.url).toBe(
-        `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/PhysJS/${file}`,
-      );
+      expect(ref.url).toBe(physjsFileUrl(physjsLeanFile(ref.statement)));
+      expect(ref.url).toContain(`/blob/${PHYSJS_COMMIT}/lean/PhysJS/`);
     }
     const spring = refs.find((ref) => ref.statement === 'PhysJS.SpringLc.time_rescale_equationOfMotion');
-    expect(spring?.url).toContain('/PhysJS/OscillatorDictionary.lean');
-    expect(spring?.url).not.toContain('/PhysJS/SpringLc.lean');
+    expect(spring?.url).toContain('/lean/PhysJS/OscillatorDictionary.lean');
+    expect(spring?.url?.includes('/lean/PhysJS/SpringLc.lean')).toBe(false);
     const damped = refs.find((ref) => ref.statement === 'PhysJS.DampedRlc.time_rescale_equationOfMotion');
-    expect(damped?.url).toContain('/PhysJS/OscillatorDictionary.lean');
+    expect(damped?.url).toContain('/lean/PhysJS/OscillatorDictionary.lean');
   });
 
   it('a kind that does not match the covers line is a manifest problem', () => {
