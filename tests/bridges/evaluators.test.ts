@@ -8,10 +8,11 @@ import { parseUnit } from '../../src/dimensional/units.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
 
 describe('BRIDGE_EVALUATORS', () => {
-  it('covers the closed-form / spacetime bridges (51/52/55..87)', () => {
+  it('covers the closed-form / spacetime bridges (51/52/55..102)', () => {
     expect([...BRIDGE_EVALUATORS.keys()].sort((a, b) => a - b)).toEqual([
       51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
-      77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
+      77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
+      101, 102,
     ]);
   });
 
@@ -52,8 +53,10 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_m2_per_Vs$/, 'm^2/(V·s)'],
       [/_m3_per_kg$/, 'm^3/kg'],
       [/_J_per_kg$/, 'J/kg'],
+      [/_J_per_T$/, 'J/T'],
       [/_V_per_K2$/, 'V/K^2'],
       [/_V_per_K$/, 'V/K'],
+      [/_J$/, 'J'],
       [/_m_per_s$/, 'm/s'],
       [/_J_per_kg_K$/, 'J/(kg*K)'],
       [/_W_per_m_K$/, 'W/(m*K)'],
@@ -104,6 +107,10 @@ describe('BRIDGE_EVALUATORS', () => {
       R_m: 0.01, deltaP_Pa: 1000, mu_Pa_s: 0.001, L_m: 1,
       E_Pa: 2e11, I_m4: 1e-8, k_N_per_m: 1, g0_m: 1e-6, A_m2: 1e-6,
       eps: 8.8541878128e-12, I_s_A: 1e-12, dS_dT_V_per_K2: 1e-6,
+      N: 1, v_m_per_s: 1e3, thetaD_K: 200, thetaE_K: 200, E_F_J: 1e-18,
+      g: 2, spin: 0.5, muB_J_per_T: 9.274e-24, theta_K: 10, kappa: 1,
+      xi_m: 1e-7, Delta_J: 1e-22, zeta: 1, N_c_per_m3: 1e25, N_v_per_m3: 1e25,
+      E_g_J: 1e-19, eps_static: 10, eps_inf: 2, J_J: 1e-21, sum_Tn: 1,
       I_A: 1e-3, C_f: 0.004, C_F: 1e-12,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {

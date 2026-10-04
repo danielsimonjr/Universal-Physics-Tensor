@@ -101,6 +101,7 @@ Candidates named in the earlier dogfood reports and still absent are not re-prop
 - **Formula.** `ω_D = v_s (6 π² n)^{1/3}` for three acoustic branches and one speed.
 - **Why units are not enough.** `upt derive wD:frequency vs:velocity n:L^-3 --formula "vs*(6*pi^2*n)^(1/3)"` exits 0. Unique monomial `wD ∝ vs · n^{1/3}`. Recovered prefactor `3.8978e+0`, which is `(6π²)^{1/3}` because it was typed. CE-debye-frequency is that monomial with the constant unset. `upt search phonon` exits 1.
 - **Proof-sketch premises.** Three linear acoustic branches, one atom per primitive cell, mode count equal to the atom density. `3 · (4π/3) k_D³ / (2π)³ = n` is the count. A different branch count changes the number.
+- **Arithmetic correction.** That written count, `3 · (4π/3) k_D³ / (2π)³ = n`, gives `k_D³ = 2 π² n`. The correct count is 3n states, one for each acoustic branch, and that gives `k_D = (6 π² n)^{1/3}`. The formula line above already uses `(6 π² n)^{1/3}`. The premise line equated the three-branch sum to `n`.
 - **Opened.** No phonon density of states.
 
 ### 3. Debye T³ law — phonons ↔ heat capacity — unproven

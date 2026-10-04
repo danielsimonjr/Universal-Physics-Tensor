@@ -1536,13 +1536,229 @@ where:
 - **Rationale**: The two halves cancel. Three kinetic degrees of freedom are a different variance.
 
 
+**Bridge Equation 88: Fermi wavevector (two spins)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.FermiSea.fermi_sea`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/FermiSea.lean) states that two spin states times the sphere (4π/3) k_F³/(2π)³ give n, so k_F³ = 3 π² n and the nonnegative root is k_F = (3 π² n)^{1/3}. The isotropic parabola E = ℏ² k²/(2 m*) is E_F at k_F. Its first derivative is v_F = ℏ k_F/m*, and ℏ⁻² times the second derivative is 1/m*. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be88-fermi-sea.ts`](../../src/bridges/be88-fermi-sea.ts) (`evaluateFermiSea`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: two spin states times the sphere (4π/3) k_F³/(2π)³ give n, so k_F³ = 3 π² n and the nonnegative root is k_F = (3 π² n)^{1/3}. The isotropic parabola E = ℏ² k²/(2 m*) is E_F at k_F. Its first derivative is v_F = ℏ k_F/m*, and ℏ⁻² times the second derivative is 1/m*. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses
+- **Mathematical Formulation**: `k_F = (3 π² n)^{1/3}`.
+- **Dimensions**: The catalog signature is `[L^-1]`.
+- **Domain**: n > 0, m* > 0. The band, the two-spin count, and T = 0 are hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.FermiSea.fermi_sea`.
+- **Rationale**: The two-spin sphere fixes 3 π². One spin is 6 π².
+
+**Bridge Equation 89: Debye cutoff (three acoustic branches)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.DebyeCutoff.debye_cutoff`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/DebyeCutoff.lean) states that three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be89-debye-cutoff.ts`](../../src/bridges/be89-debye-cutoff.ts) (`evaluateDebyeCutoff`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses
+- **Mathematical Formulation**: `ω_D = v_s (6 π² n)^{1/3}`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: v_s > 0, n > 0. Three branches and one speed are hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.DebyeCutoff.debye_cutoff`.
+- **Rationale**: Equating the three-branch sum to n gives k_D³ = 2 π² n.
+
+**Bridge Equation 90: Debye heat capacity** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.DebyeHeat.debye_heat`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/DebyeHeat.lean) states that the mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity. The phonon integral, the extension to infinity, and π⁴/15 are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be90-debye-heat.ts`](../../src/bridges/be90-debye-heat.ts) (`evaluateDebyeHeat`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity. The phonon integral, the extension to infinity, and π⁴/15 are hypotheses
+- **Mathematical Formulation**: `C_V = (12 π⁴ / 5) N k_B (T / θ_D)³`.
+- **Dimensions**: The catalog signature is `[entropy]`.
+- **Domain**: N > 0, T > 0, θ_D > 0. I = π⁴/15 is a hypothesis, not an evaluation of the Bose integral.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.DebyeHeat.debye_heat`.
+- **Rationale**: The energy prefactor 3 π⁴/5 is not this heat capacity.
+
+**Bridge Equation 91: Einstein solid heat capacity** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.EinsteinSolid.einstein_heat`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/EinsteinSolid.lean) states that three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be91-einstein-solid.ts`](../../src/bridges/be91-einstein-solid.ts) (`evaluateEinsteinSolid`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses
+- **Mathematical Formulation**: `C_V = 3 N k_B (θ_E/T)² exp(θ_E/T) / (exp(θ_E/T) − 1)²`.
+- **Dimensions**: The catalog signature is `[entropy]`.
+- **Domain**: N > 0, T > 0, θ_E > 0. Three oscillators and the Einstein spectrum are hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.EinsteinSolid.einstein_heat`.
+- **Rationale**: The high-temperature limit is 3 N k_B. One oscillator tends to N k_B. The zero-point is constant.
+
+**Bridge Equation 92: Sommerfeld electronic heat capacity** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.SommerfeldHeat.electronic_heat`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/SommerfeldHeat.lean) states that the Sommerfeld energy correction δU = (π²/6) (k_B T)² g(E_F) is a hypothesis, and its temperature derivative is c_V = (π²/3) k_B² T g(E_F). PhysJS.FermiSea.dos_factor is g(E_F) = (3/2) n/E_F for a √E density, so c_V = (π²/2) n k_B² T/E_F. A flat density g = n/E_F leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be92-sommerfeld-heat.ts`](../../src/bridges/be92-sommerfeld-heat.ts) (`evaluateSommerfeldHeat`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the Sommerfeld energy correction δU = (π²/6) (k_B T)² g(E_F) is a hypothesis, and its temperature derivative is c_V = (π²/3) k_B² T g(E_F). PhysJS.FermiSea.dos_factor is g(E_F) = (3/2) n/E_F for a √E density, so c_V = (π²/2) n k_B² T/E_F. A flat density g = n/E_F leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61
+- **Mathematical Formulation**: `c_V = (π² / 2) n k_B² T / E_F`.
+- **Dimensions**: The catalog signature is `[L^-1 M T^-2 Theta^-1]`.
+- **Domain**: n > 0, T > 0, E_F > 0. The correction δU and the √E density are hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.SommerfeldHeat.electronic_heat`.
+- **Rationale**: A flat density leaves π²/3. This is not the Wiedemann–Franz law and not a second proof of BE-61.
+
+**Bridge Equation 93: Curie–Weiss susceptibility** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.CurieWeiss.curie_weiss`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/CurieWeiss.lean) states that linear response χ k_B T = μ₀ n (g μ_B)² ⟨S_z²⟩ with the high-temperature moment ⟨S_z²⟩ = S(S+1)/3 gives the Curie constant C = μ₀ n g² μ_B² S(S+1)/(3 k_B). Equal weights on m = ±1/2 give 1/4 = S(S+1)/3 at S = 1/2. Mean field B_eff = B + λ M with θ = C λ/μ₀ gives χ = C/(T−θ). θ = 0 is C/T. A classical moment uses μ²/3. The second moment and the mean-field shift are hypotheses. Not an su(2) derivation. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be93-curie-weiss.ts`](../../src/bridges/be93-curie-weiss.ts) (`evaluateCurieWeiss`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: linear response χ k_B T = μ₀ n (g μ_B)² ⟨S_z²⟩ with the high-temperature moment ⟨S_z²⟩ = S(S+1)/3 gives the Curie constant C = μ₀ n g² μ_B² S(S+1)/(3 k_B). Equal weights on m = ±1/2 give 1/4 = S(S+1)/3 at S = 1/2. Mean field B_eff = B + λ M with θ = C λ/μ₀ gives χ = C/(T−θ). θ = 0 is C/T. A classical moment uses μ²/3. The second moment and the mean-field shift are hypotheses. Not an su(2) derivation
+- **Mathematical Formulation**: `χ = C / (T − θ)` with `C = μ₀ n g² μ_B² S(S+1) / (3 k_B)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: n > 0, μ_B > 0, S ≥ 0, T ≠ θ. The second moment and the mean-field shift are hypotheses. μ_B is an input.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.CurieWeiss.curie_weiss`.
+- **Rationale**: θ = 0 is C/T. Equal weights at S = 1/2 give 1/4. This is not an su(2) derivation.
+
+**Bridge Equation 94: Pauli paramagnetism** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.PauliParamagnetism.pauli`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/PauliParamagnetism.lean) states that the Zeeman imbalance M = μ_B² g(E_F) B is a hypothesis, and χ_P = μ₀ M/B is μ₀ μ_B² g(E_F). PhysJS.FermiSea.dos_factor supplies g(E_F) = (3/2) n/E_F, so χ_P = μ₀ μ_B² (3 n)/(2 E_F). A flat density leaves the factor 1. Not Landau diamagnetism. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be94-pauli-paramagnetism.ts`](../../src/bridges/be94-pauli-paramagnetism.ts) (`evaluatePauliParamagnetism`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the Zeeman imbalance M = μ_B² g(E_F) B is a hypothesis, and χ_P = μ₀ M/B is μ₀ μ_B² g(E_F). PhysJS.FermiSea.dos_factor supplies g(E_F) = (3/2) n/E_F, so χ_P = μ₀ μ_B² (3 n)/(2 E_F). A flat density leaves the factor 1. Not Landau diamagnetism
+- **Mathematical Formulation**: `χ_P = μ₀ μ_B² (3 n) / (2 E_F)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: n > 0, E_F > 0, μ_B > 0. The Zeeman imbalance is a hypothesis.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.PauliParamagnetism.pauli`.
+- **Rationale**: A flat density leaves the factor 1. This is not Landau diamagnetism.
+
+**Bridge Equation 95: Ginzburg–Landau trial-wall factor** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.GinzburgLandau.type_boundary`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/GinzburgLandau.lean) states that in the normalization with gradient coefficient 1/κ², quartic (1/2)(1−f²)², and field B², the density at κ² = 1/2 is (√2 f' − a f)² + (B + (1−f²)/√2)² minus √2 times the derivative of a(1−f²). Vanishing squares and equal endpoints make that wall integral zero. A trial profile with that critical integral has energy (1/κ² − 2) times the gradient integral: negative when κ > 1/√2, zero at κ = 1/√2, and positive when κ < 1/√2. The positive side is this trial, not every minimizer. The GL density and the profile are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be95-ginzburg-landau.ts`](../../src/bridges/be95-ginzburg-landau.ts) (`evaluateGinzburgLandau`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: in the normalization with gradient coefficient 1/κ², quartic (1/2)(1−f²)², and field B², the density at κ² = 1/2 is (√2 f' − a f)² + (B + (1−f²)/√2)² minus √2 times the derivative of a(1−f²). Vanishing squares and equal endpoints make that wall integral zero. A trial profile with that critical integral has energy (1/κ² − 2) times the gradient integral: negative when κ > 1/√2, zero at κ = 1/√2, and positive when κ < 1/√2. The positive side is this trial, not every minimizer. The GL density and the profile are hypotheses
+- **Mathematical Formulation**: `1/κ² − 2`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: κ > 0. The factor multiplies one trial profile.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.GinzburgLandau.type_boundary`.
+- **Rationale**: Negative when κ > 1/√2, zero at κ = 1/√2, positive when κ < 1/√2. The positive side is this trial, not every minimizer.
+
+**Bridge Equation 96: Upper critical field** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.UpperCritical.critical_field`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/UpperCritical.lean) states that the linearized GL instability sets the Landau-level ground energy ℏ q B/(2 m*) of charge q = 2e equal to |α| = ℏ²/(2 m* ξ²). That level is a hypothesis, not the spectrum of the covariant Laplacian. The field is B = ℏ/(2 e ξ²). With Φ₀ = h/(2e) and h = 2 π ℏ this is B_c2 = Φ₀/(2 π ξ²). Charge e instead of 2e is a different field. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be96-upper-critical.ts`](../../src/bridges/be96-upper-critical.ts) (`evaluateUpperCritical`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the linearized GL instability sets the Landau-level ground energy ℏ q B/(2 m*) of charge q = 2e equal to |α| = ℏ²/(2 m* ξ²). That level is a hypothesis, not the spectrum of the covariant Laplacian. The field is B = ℏ/(2 e ξ²). With Φ₀ = h/(2e) and h = 2 π ℏ this is B_c2 = Φ₀/(2 π ξ²). Charge e instead of 2e is a different field
+- **Mathematical Formulation**: `B_c2 = ℏ / (2 e ξ²)`.
+- **Dimensions**: The catalog signature is `[M T^-2 I^-1]`.
+- **Domain**: ξ > 0. Charge q = 2e. The Landau-level ground energy is a hypothesis, not the spectrum of the covariant Laplacian.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.UpperCritical.critical_field`.
+- **Rationale**: Charge e instead of 2e is a different field.
+
+**Bridge Equation 97: Ambegaokar–Baratoff product at zero temperature** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/AmbegaokarBaratoff.lean) states that the chain rule along E = Δ cosh t pulls the coherence-factor integrand back to sech t for t > 0. ∫₀^T sech = arctan(sinh T), and the limit T → ∞ is π/2. The tunnel Hamiltonian at zero temperature and identical gaps is the hypothesis that e I_c R_n is Δ times that improper integral, so I_c R_n = π Δ/(2 e). A coefficient other than π/2 fails. Not the finite-temperature tanh factor. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be97-ambegaokar-baratoff.ts`](../../src/bridges/be97-ambegaokar-baratoff.ts) (`evaluateAmbegaokarBaratoff`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the chain rule along E = Δ cosh t pulls the coherence-factor integrand back to sech t for t > 0. ∫₀^T sech = arctan(sinh T), and the limit T → ∞ is π/2. The tunnel Hamiltonian at zero temperature and identical gaps is the hypothesis that e I_c R_n is Δ times that improper integral, so I_c R_n = π Δ/(2 e). A coefficient other than π/2 fails. Not the finite-temperature tanh factor
+- **Mathematical Formulation**: `I_c R_n = π Δ / (2 e)`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1]`.
+- **Domain**: Δ > 0. Zero temperature and identical gaps are hypotheses. There is no temperature input.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff`.
+- **Rationale**: A coefficient other than π/2 fails. This is not the finite-temperature tanh factor.
+
+**Bridge Equation 98: BCS heat-capacity jump** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.BcsJump.heat_jump`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/BcsJump.lean) states that the weak-coupling excess free energy F = N(0) (T−T_c)/T_c · Δ² + 7 ζ N(0)/(16 π² T_c²) · Δ⁴ is a hypothesis, with k_B = 1. Its minimum is −α₀² (T−T_c)²/(4 β), and −T ∂²F/∂T² at T_c is ΔC = T_c α₀²/(2 β) = 8 π² N(0) T_c/(7 ζ). The normal heat capacity C_n = (2 π²/3) N(0) T_c is the both-spin Sommerfeld value, a hypothesis. The ratio is 12/(7 ζ). ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio. Not 2π exp(−γ). The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be98-bcs-jump.ts`](../../src/bridges/be98-bcs-jump.ts) (`evaluateBcsJump`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the weak-coupling excess free energy F = N(0) (T−T_c)/T_c · Δ² + 7 ζ N(0)/(16 π² T_c²) · Δ⁴ is a hypothesis, with k_B = 1. Its minimum is −α₀² (T−T_c)²/(4 β), and −T ∂²F/∂T² at T_c is ΔC = T_c α₀²/(2 β) = 8 π² N(0) T_c/(7 ζ). The normal heat capacity C_n = (2 π²/3) N(0) T_c is the both-spin Sommerfeld value, a hypothesis. The ratio is 12/(7 ζ). ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio. Not 2π exp(−γ)
+- **Mathematical Formulation**: `ΔC / C_n = 12 / (7 ζ)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: ζ finite and nonzero. ζ is the GL quartic coefficient, not a series evaluation.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.BcsJump.heat_jump`.
+- **Rationale**: ζ = 1 gives 12/7. One spin in C_n misses the ratio. This is not 2π exp(−γ).
+
+**Bridge Equation 99: Mass-action intrinsic density** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.MassAction.mass_action`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/MassAction.lean) states that the Boltzmann tails n = N_c exp(−(E_c−μ)/(k_B T)) and p = N_v exp(−(μ−E_v)/(k_B T)), with E_g = E_c − E_v, multiply to N_c N_v exp(−E_g/(k_B T)). That product is the square of n_i = √(N_c N_v) exp(−E_g/(2 k_B T)). Dropping the 2 in the exponent is a different density. The tails are hypotheses. Not a Fermi–Dirac integral. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be99-mass-action.ts`](../../src/bridges/be99-mass-action.ts) (`evaluateMassAction`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the Boltzmann tails n = N_c exp(−(E_c−μ)/(k_B T)) and p = N_v exp(−(μ−E_v)/(k_B T)), with E_g = E_c − E_v, multiply to N_c N_v exp(−E_g/(k_B T)). That product is the square of n_i = √(N_c N_v) exp(−E_g/(2 k_B T)). Dropping the 2 in the exponent is a different density. The tails are hypotheses. Not a Fermi–Dirac integral
+- **Mathematical Formulation**: `n_i = √(N_c N_v) exp(−E_g / (2 k_B T))`.
+- **Dimensions**: The catalog signature is `[L^-3]`.
+- **Domain**: N_c > 0, N_v > 0, T > 0. The Boltzmann tails are hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.MassAction.mass_action`.
+- **Rationale**: Dropping the 2 in the exponent is a different density. This is not a Fermi–Dirac integral.
+
+**Bridge Equation 100: Lyddane–Sachs–Teller relation** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.LyddaneSachsTeller.lst`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/LyddaneSachsTeller.lean) states that the undamped oscillator ε(ω) = ε(∞) + S/(ω_TO² − ω²) has a zero at ω_LO, which fixes S, and ε(0) is the same function at zero frequency. The ratio is ω_LO²/ω_TO² = ε(0)/ε(∞). The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be100-lyddane-sachs-teller.ts`](../../src/bridges/be100-lyddane-sachs-teller.ts) (`evaluateLyddaneSachsTeller`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the undamped oscillator ε(ω) = ε(∞) + S/(ω_TO² − ω²) has a zero at ω_LO, which fixes S, and ε(0) is the same function at zero frequency. The ratio is ω_LO²/ω_TO² = ε(0)/ε(∞). The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis
+- **Mathematical Formulation**: `ω_LO² / ω_TO² = ε(0) / ε(∞)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: ε(∞) ≠ 0. No damping is a hypothesis. The evaluator takes the dielectric constants.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LyddaneSachsTeller.lst`.
+- **Rationale**: The unsquared frequency ratio fails when ω_LO ≠ ω_TO.
+
+**Bridge Equation 101: BKT unbinding temperature** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.BktJump.bkt_jump`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/BktJump.lean) states that the phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be101-bkt-jump.ts`](../../src/bridges/be101-bkt-jump.ts) (`evaluateBktJump`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow
+- **Mathematical Formulation**: `k_B T = π J / 2`.
+- **Dimensions**: The catalog signature is `[temperature]`.
+- **Domain**: J > 0. The entropy is the area of core positions. This is the energy-entropy argument, not the renormalization-group flow.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.BktJump.bkt_jump`.
+- **Rationale**: Circumference entropy unbinds at π J.
+
+**Bridge Equation 102: Landauer conductance (two spins)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.LandauerConductance.conductance_eq`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/LandauerConductance.lean) states that a one-dimensional mode of speed v in a length L has density of states L/(h v) per spin, and the flux times v/L cancels to 1/h. Current is spin · e · (Σ T_n) · (1/h) · Δμ with spin = 2 and Δμ = e V, so G = (2 e²/h) Σ T_n. One spin is e²/h. The transmissions and the bias window are hypotheses. Not the Hall conductance and not Landauer erasure. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be102-landauer-conductance.ts`](../../src/bridges/be102-landauer-conductance.ts) (`evaluateLandauerConductance`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: a one-dimensional mode of speed v in a length L has density of states L/(h v) per spin, and the flux times v/L cancels to 1/h. Current is spin · e · (Σ T_n) · (1/h) · Δμ with spin = 2 and Δμ = e V, so G = (2 e²/h) Σ T_n. One spin is e²/h. The transmissions and the bias window are hypotheses. Not the Hall conductance and not Landauer erasure
+- **Mathematical Formulation**: `G = (2 e² / h) Σ T_n`.
+- **Dimensions**: The catalog signature is `[L^-2 M^-1 T^3 I^2]`.
+- **Domain**: Σ T_n finite. Two spins and Δμ = e V are hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LandauerConductance.conductance_eq`.
+- **Rationale**: One spin is e²/h. This is not the Hall conductance and not Landauer erasure.
+
+**Open candidates, unproved.** These two statements have no bridge id and no `formalRef`.
+
+- **Landau diamagnetism.** `χ_L = −χ_P / 3` for free electrons in three dimensions. No Lean theorem in the pinned PhysJS manifest states it. It is not BE-94. BE-94 is the Pauli spin susceptibility.
+- **BCS coherence length.** `ξ₀ = ℏ v_F / (π Δ)`. No Lean theorem in the pinned PhysJS manifest states it. It is not BE-12 and not BE-75. BE-96 takes a coherence length as an input and does not derive this length.
+
+
 ## VI. Integration with Universal Physics Tensor
 
 These additional equations fill crucial gaps in the tensor structure according to the following mapping:
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–87 take the pattern of their category. No new pattern is introduced.
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. No new pattern is introduced.
 
 1. **Quantum-Classical Bridges (11-12, 33-35, 56, 71)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
@@ -1556,7 +1772,7 @@ Each bridge equation type maps to specific tensor components. The component is t
 4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
    Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
-5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84)**:
+5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84, 88-102)**:
    Off-diagonal elements <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bscale%7D_i%2C%5Ctext%7Bscale%7D_j%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{scale}_i,\text{scale}_j,\gamma,\delta,\epsilon,\zeta}" />
    Categories E, F, and G. The scale pair stays symbolic. The cluster's domains are not one pair: quantum–cosmological, quantum–condensed-matter, condensed-matter–holography, quantum–biological.
 6. **Cosmological Puzzles (45-47)**:
@@ -1600,6 +1816,22 @@ Each bridge equation type maps to specific tensor components. The component is t
 | 85 | H | emergence, higher-rank ellipsis | Category H, with BE-58. One-sided shot noise. Signature `[T I^2]`. The bridges tuple is `quantum` → `classical`. The formula is a scalar. The ellipsis stays. |
 | 86 | D | field-unification, force and symmetry | Category D. Reynolds analogy at Prandtl number 1. Signature `[1]`. The bridges tuple is `fluid` → `thermal`. |
 | 87 | H | emergence, higher-rank ellipsis | Category H, with BE-70. Capacitor voltage variance. Signature `[L^4 M^2 T^-6 I^-2]`. The bridges tuple is `thermal` → `electrical`. The formula is a scalar. The ellipsis stays. |
+
+| 88 | F | scale-transition, `scale_i`, `scale_j` | Category F. Fermi wavevector. Signature `[L^-1]`. The bridges tuple is `quantum` → `condensed`. |
+| 89 | F | scale-transition, `scale_i`, `scale_j` | Category F. Debye cutoff. Signature `[frequency]`. The bridges tuple is `condensed` → `continuum`. |
+| 90 | F | scale-transition, `scale_i`, `scale_j` | Category F. Debye heat capacity. Signature `[entropy]`. The bridges tuple is `condensed` → `thermal`. π⁴/15 is a hypothesis. |
+| 91 | F | scale-transition, `scale_i`, `scale_j` | Category F. Einstein solid. Signature `[entropy]`, the same heat-capacity signature as BE-90. The bridges tuple is `condensed` → `thermal`. |
+| 92 | F | scale-transition, `scale_i`, `scale_j` | Category F. Sommerfeld heat. Signature `[L^-1 M T^-2 Theta^-1]`. The bridges tuple is `condensed` → `thermal`. Not BE-61. |
+| 93 | F | scale-transition, `scale_i`, `scale_j` | Category F. Curie–Weiss susceptibility. Signature `[1]`. The bridges tuple is `magnetic` → `thermal`. |
+| 94 | F | scale-transition, `scale_i`, `scale_j` | Category F. Pauli susceptibility. Signature `[1]`. The bridges tuple is `magnetic` → `condensed`. Not Landau diamagnetism. |
+| 95 | F | scale-transition, `scale_i`, `scale_j` | Category F. Trial-wall factor. Signature `[1]`. The bridges tuple is `condensed` → `magnetic`. The positive side is this trial. |
+| 96 | F | scale-transition, `scale_i`, `scale_j` | Category F. Upper critical field. Signature `[M T^-2 I^-1]`. The bridges tuple is `electromagnetic` → `condensed`. Charge is 2e. |
+| 97 | F | scale-transition, `scale_i`, `scale_j` | Category F. Ambegaokar–Baratoff product at T = 0. Signature `[L^2 M T^-3 I^-1]`. The bridges tuple is `quantum` → `condensed`. |
+| 98 | F | scale-transition, `scale_i`, `scale_j` | Category F. BCS heat jump. Signature `[1]`. The bridges tuple is `condensed` → `thermal`. ζ is the quartic coefficient. |
+| 99 | F | scale-transition, `scale_i`, `scale_j` | Category F. Mass-action density. Signature `[L^-3]`. The bridges tuple is `condensed` → `statistical`. |
+| 100 | F | scale-transition, `scale_i`, `scale_j` | Category F. Lyddane–Sachs–Teller ratio. Signature `[1]`. The bridges tuple is `condensed` → `electromagnetic`. |
+| 101 | F | scale-transition, `scale_i`, `scale_j` | Category F. BKT temperature. Signature `[temperature]`. The bridges tuple is `thermal` → `condensed`. Energy and entropy, not the RG flow. |
+| 102 | F | scale-transition, `scale_i`, `scale_j` | Category F. Landauer channel conductance. Signature `[L^-2 M^-1 T^3 I^2]`, the same conductance signature as BE-55, so the signature does not decide. The bridges tuple is `quantum` → `condensed`. Not BE-16. |
 
 **Topology slot left free.** BE-55 and BE-60 name a Chern number, and the BE-55 catalog text says the row populates the Topology axis. In the rank-6 order of Part I §1.1 that axis is the last index, ζ. Group 5 leaves ζ free, as it does for BE-22, whose area law carries a topological constant and is already in category F's list. A per-equation index that pins ζ to a Chern label is not a pattern the lists for ids 11–50 use. It is not introduced here.
 

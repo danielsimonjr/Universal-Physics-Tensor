@@ -83,6 +83,26 @@ export {
   APPLIED_PHYSICIST_EDGES,
 } from './edges/applied-physicist.js';
 
+/** Composition edges for BE-88 through BE-102. */
+export {
+  be88Edge,
+  be89Edge,
+  be90Edge,
+  be91Edge,
+  be92Edge,
+  be93Edge,
+  be94Edge,
+  be95Edge,
+  be96Edge,
+  be97Edge,
+  be98Edge,
+  be99Edge,
+  be100Edge,
+  be101Edge,
+  be102Edge,
+  CONDENSED_R5_EDGES,
+} from './edges/condensed-r5.js';
+
 export {
   be11Edge,
   be13Edge,

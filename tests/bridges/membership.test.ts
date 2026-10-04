@@ -47,12 +47,14 @@ describe('adjudicateBridgeEntry (graph-native criterion, tuple proxy)', () => {
 describe('adjudicateCatalog (whole-catalog tallies)', () => {
   const report = adjudicateCatalog(BRIDGE_EQUATIONS);
 
-  it('77 entries split 69 bridges / 5 not-a-bridge / 3 unadjudicated', () => {
+  it('92 entries split 84 bridges / 5 not-a-bridge / 3 unadjudicated', () => {
     // 2026-07-05: +4 established bridges (BE-55..58) → 36 → 40 bridges.
     // BE-66..68 differ in their tuples, so they are bridges.
     // BE-74..76 differ in their tuples, so they are bridges. 55 is the
     // count from before those three rows.
-    expect(report.bridges).toHaveLength(69);
+    // BE-88..102 differ in their tuples, so they are bridges. 69 is the
+    // count from before those fifteen rows.
+    expect(report.bridges).toHaveLength(84);
     expect(report.notABridges).toHaveLength(5);
     expect(report.unadjudicated).toHaveLength(3);
     expect(

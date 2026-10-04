@@ -3139,6 +3139,306 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dimensional_signature: `[L^4 M^2 T^-6 I^-2]`,
   tractability_class: 'closed-form',
   notes: `Closed-form evaluator evaluateCapacitorNoise({T_K, C_F}) → {v2_V2} in src/bridges/be87-capacitor-noise.ts. The two halves cancel. The overlay formalRef is PhysJS.CapacitorNoise.noise_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not (3/2) k_B T/C. No confrontation.`,
+},
+{
+  id: 88,
+  name: `Fermi wavevector (two spins)`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`quantum`, `condensed`] as [string, string],
+  status: 'established',
+  context: `Two spin states times the sphere (4π/3) k_F³/(2π)³ give n, so k_F³ = 3 π² n and the nonnegative root is k_F = (3 π² n)^{1/3}. The isotropic parabola E = ℏ² k²/(2 m*) is E_F at k_F. Its first derivative is v_F = ℏ k_F/m*. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses.`,
+  formula_latex: `k_F = (3\\pi^2 n)^{1/3}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-88) — established textbook relation, PhysJS.FermiSea.fermi_sea`,
+  known_issues: [],
+  references: [
+    `The two-spin count, the band, and T = 0 are the hypotheses of PhysJS.FermiSea.fermi_sea. The parabola is a hypothesis. One spin is a different wavevector.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateFermiSea({n_per_m3, m_kg}) → {k_F_per_m, E_F_J, v_F_m_per_s} in src/bridges/be88-fermi-sea.ts. The edge value is k_F. The overlay formalRef is PhysJS.FermiSea.fermi_sea, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a lattice band. No confrontation.`,
+},
+{
+  id: 89,
+  name: `Debye cutoff (three acoustic branches)`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `continuum`] as [string, string],
+  status: 'established',
+  context: `Three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses.`,
+  formula_latex: `\\omega_D = v_s (6\\pi^2 n)^{1/3}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-89) — established textbook relation, PhysJS.DebyeCutoff.debye_cutoff`,
+  known_issues: [],
+  references: [
+    `Three branches and one speed are the hypotheses of PhysJS.DebyeCutoff.debye_cutoff. The count 3n is the hypothesis that fixes 6 π².`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[frequency]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateDebyeCutoff({v_m_per_s, n_per_m3}) → {omega_D_rad_per_s} in src/bridges/be89-debye-cutoff.ts. The overlay formalRef is PhysJS.DebyeCutoff.debye_cutoff, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Equating the three-branch sum to n is a different cutoff. No confrontation.`,
+},
+{
+  id: 90,
+  name: `Debye heat capacity (Bose integral assumed)`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `thermal`] as [string, string],
+  status: 'established',
+  context: `The mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity.`,
+  formula_latex: `C_V = \\frac{12\\pi^4}{5} N k_B \\left(\\frac{T}{\\theta_D}\\right)^3`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-90) — established textbook relation, PhysJS.DebyeHeat.debye_heat`,
+  known_issues: [],
+  references: [
+    `The phonon integral, the extension to infinity, and π⁴/15 are the hypotheses of PhysJS.DebyeHeat.debye_heat. The Bose integral is not evaluated.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[entropy]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateDebyeHeat({N, T_K, thetaD_K}) → {C_V_J_per_K} in src/bridges/be90-debye-heat.ts. The overlay formalRef is PhysJS.DebyeHeat.debye_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. π⁴/15 is assumed. No confrontation.`,
+},
+{
+  id: 91,
+  name: `Einstein solid heat capacity`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `thermal`] as [string, string],
+  status: 'established',
+  context: `Three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses.`,
+  formula_latex: `C_V = 3 N k_B \\left(\\frac{\\theta_E}{T}\\right)^2 \\frac{\\exp(\\theta_E/T)}{(\\exp(\\theta_E/T)-1)^2}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-91) — established textbook relation, PhysJS.EinsteinSolid.einstein_heat`,
+  known_issues: [],
+  references: [
+    `Three oscillators and the Einstein spectrum are the hypotheses of PhysJS.EinsteinSolid.einstein_heat. The zero-point does not contribute to C_V.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[entropy]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateEinsteinSolid({N, T_K, thetaE_K}) → {C_V_J_per_K} in src/bridges/be91-einstein-solid.ts. The overlay formalRef is PhysJS.EinsteinSolid.einstein_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. One oscillator is a different heat capacity. No confrontation.`,
+},
+{
+  id: 92,
+  name: `Sommerfeld electronic heat capacity`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `thermal`] as [string, string],
+  status: 'established',
+  context: `The Sommerfeld energy correction δU = (π²/6) (k_B T)² g(E_F) is a hypothesis, and its temperature derivative is c_V = (π²/3) k_B² T g(E_F). PhysJS.FermiSea.dos_factor is g(E_F) = (3/2) n/E_F for a √E density, so c_V = (π²/2) n k_B² T/E_F. A flat density g = n/E_F leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61.`,
+  formula_latex: `c_V = \\frac{\\pi^2}{2} \\frac{n k_B^2 T}{E_F}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-92) — established textbook relation, PhysJS.SommerfeldHeat.electronic_heat`,
+  known_issues: [],
+  references: [
+    `δU = (π²/6) (k_B T)² g(E_F) is the hypothesis of PhysJS.SommerfeldHeat.electronic_heat. The √E density is dos_factor.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-1 M T^-2 Theta^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateSommerfeldHeat({n_per_m3, T_K, E_F_J}) → {c_V_J_per_K_m3} in src/bridges/be92-sommerfeld-heat.ts. The overlay formalRef is PhysJS.SommerfeldHeat.electronic_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not be-61. No confrontation.`,
+},
+{
+  id: 93,
+  name: `Curie–Weiss susceptibility`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`magnetic`, `thermal`] as [string, string],
+  status: 'established',
+  context: `Linear response χ k_B T = μ₀ n (g μ_B)² ⟨S_z²⟩ with the high-temperature moment ⟨S_z²⟩ = S(S+1)/3 gives the Curie constant C = μ₀ n g² μ_B² S(S+1)/(3 k_B). Equal weights on m = ±1/2 give 1/4 = S(S+1)/3 at S = 1/2. Mean field B_eff = B + λ M with θ = C λ/μ₀ gives χ = C/(T−θ). θ = 0 is C/T. A classical moment uses μ²/3. The second moment and the mean-field shift are hypotheses. Not an su(2) derivation. μ_B is an input.`,
+  formula_latex: `\\chi = \\frac{C}{T-\\theta},\\quad C = \\frac{\\mu_0 n g^2 \\mu_B^2 S(S+1)}{3 k_B}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-93) — established textbook relation, PhysJS.CurieWeiss.curie_weiss`,
+  known_issues: [],
+  references: [
+    `The second moment and the mean-field shift are the hypotheses of PhysJS.CurieWeiss.curie_weiss. μ_B is not derived here.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateCurieWeiss({n_per_m3, g, spin, muB_J_per_T, T_K, theta_K}) → {C_K, chi} in src/bridges/be93-curie-weiss.ts. The edge value is χ. The overlay formalRef is PhysJS.CurieWeiss.curie_weiss, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not an su(2) derivation. No confrontation.`,
+},
+{
+  id: 94,
+  name: `Pauli paramagnetism`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`magnetic`, `condensed`] as [string, string],
+  status: 'established',
+  context: `The Zeeman imbalance M = μ_B² g(E_F) B is a hypothesis, and χ_P = μ₀ M/B is μ₀ μ_B² g(E_F). PhysJS.FermiSea.dos_factor supplies g(E_F) = (3/2) n/E_F, so χ_P = μ₀ μ_B² (3 n)/(2 E_F). A flat density leaves the factor 1. Not Landau diamagnetism. μ_B is an input.`,
+  formula_latex: `\\chi_P = \\mu_0 \\mu_B^2 \\frac{3 n}{2 E_F}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-94) — established textbook relation, PhysJS.PauliParamagnetism.pauli`,
+  known_issues: [],
+  references: [
+    `The Zeeman imbalance is the hypothesis of PhysJS.PauliParamagnetism.pauli. Landau diamagnetism is not this susceptibility.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluatePauliParamagnetism({n_per_m3, E_F_J, muB_J_per_T}) → {chi_P} in src/bridges/be94-pauli-paramagnetism.ts. The overlay formalRef is PhysJS.PauliParamagnetism.pauli, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Landau diamagnetism. No confrontation.`,
+},
+{
+  id: 95,
+  name: `Ginzburg–Landau trial-wall factor`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `magnetic`] as [string, string],
+  status: 'established',
+  context: `In the normalization with gradient coefficient 1/κ², quartic (1/2)(1−f²)², and field B², the density at κ² = 1/2 is (√2 f' − a f)² + (B + (1−f²)/√2)² minus √2 times the derivative of a(1−f²). Vanishing squares and equal endpoints make that wall integral zero. A trial profile with that critical integral has energy (1/κ² − 2) times the gradient integral: negative when κ > 1/√2, zero at κ = 1/√2, and positive when κ < 1/√2. The positive side is this trial, not every minimizer. The GL density and the profile are hypotheses.`,
+  formula_latex: `\\frac{1}{\\kappa^2} - 2`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-95) — established textbook relation, PhysJS.GinzburgLandau.type_boundary`,
+  known_issues: [],
+  references: [
+    `The GL density and the trial profile are the hypotheses of PhysJS.GinzburgLandau.type_boundary. The sign is this trial's sign.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateGinzburgLandau({kappa}) → {trial_factor} in src/bridges/be95-ginzburg-landau.ts. The overlay formalRef is PhysJS.GinzburgLandau.type_boundary, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not every minimizer. No confrontation.`,
+},
+{
+  id: 96,
+  name: `Upper critical field`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`electromagnetic`, `condensed`] as [string, string],
+  status: 'established',
+  context: `The linearized GL instability sets the Landau-level ground energy ℏ q B/(2 m*) of charge q = 2e equal to |α| = ℏ²/(2 m* ξ²). That level is a hypothesis, not the spectrum of the covariant Laplacian. The field is B = ℏ/(2 e ξ²). With Φ₀ = h/(2e) and h = 2 π ℏ this is B_c2 = Φ₀/(2 π ξ²). Charge e instead of 2e is a different field.`,
+  formula_latex: `B_{c2} = \\frac{\\hbar}{2 e \\xi^2}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-96) — established textbook relation, PhysJS.UpperCritical.critical_field`,
+  known_issues: [],
+  references: [
+    `The Landau-level ground energy is the hypothesis of PhysJS.UpperCritical.critical_field. e is the elementary charge. The charge in the level is 2e.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[M T^-2 I^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateUpperCritical({xi_m}) → {B_c2_T} in src/bridges/be96-upper-critical.ts. e is E_SI. The overlay formalRef is PhysJS.UpperCritical.critical_field, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Charge e is a different field. No confrontation.`,
+},
+{
+  id: 97,
+  name: `Ambegaokar–Baratoff product at zero temperature`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`quantum`, `condensed`] as [string, string],
+  status: 'established',
+  context: `The chain rule along E = Δ cosh t pulls the coherence-factor integrand back to sech t for t > 0. ∫₀^T sech = arctan(sinh T), and the limit T → ∞ is π/2. The tunnel Hamiltonian at zero temperature and identical gaps is the hypothesis that e I_c R_n is Δ times that improper integral, so I_c R_n = π Δ/(2 e). A coefficient other than π/2 fails. Not the finite-temperature tanh factor.`,
+  formula_latex: `I_c R_n = \\frac{\\pi \\Delta}{2 e}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-97) — established textbook relation, PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff`,
+  known_issues: [],
+  references: [
+    `Zero temperature and identical gaps are the hypotheses of PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff. There is no temperature input.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^2 M T^-3 I^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateAmbegaokarBaratoff({Delta_J}) → {IcRn_V} in src/bridges/be97-ambegaokar-baratoff.ts. e is E_SI. The overlay formalRef is PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. T = 0 only. No confrontation.`,
+},
+{
+  id: 98,
+  name: `BCS heat-capacity jump`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `thermal`] as [string, string],
+  status: 'established',
+  context: `The weak-coupling excess free energy F = N(0) (T−T_c)/T_c · Δ² + 7 ζ N(0)/(16 π² T_c²) · Δ⁴ is a hypothesis, with k_B = 1. Its minimum is −α₀² (T−T_c)²/(4 β), and −T ∂²F/∂T² at T_c is ΔC = T_c α₀²/(2 β) = 8 π² N(0) T_c/(7 ζ). The normal heat capacity C_n = (2 π²/3) N(0) T_c is the both-spin Sommerfeld value, a hypothesis. The ratio is 12/(7 ζ). ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio. Not 2π exp(−γ).`,
+  formula_latex: `\\frac{\\Delta C}{C_n} = \\frac{12}{7\\zeta}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-98) — established textbook relation, PhysJS.BcsJump.heat_jump`,
+  known_issues: [],
+  references: [
+    `The excess free energy and the both-spin normal heat are the hypotheses of PhysJS.BcsJump.heat_jump. ζ is an input.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateBcsJump({zeta}) → {ratio} in src/bridges/be98-bcs-jump.ts. The overlay formalRef is PhysJS.BcsJump.heat_jump, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. ζ is not evaluated as a series. No confrontation.`,
+},
+{
+  id: 99,
+  name: `Mass-action intrinsic density`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `statistical`] as [string, string],
+  status: 'established',
+  context: `The Boltzmann tails n = N_c exp(−(E_c−μ)/(k_B T)) and p = N_v exp(−(μ−E_v)/(k_B T)), with E_g = E_c − E_v, multiply to N_c N_v exp(−E_g/(k_B T)). That product is the square of n_i = √(N_c N_v) exp(−E_g/(2 k_B T)). Dropping the 2 in the exponent is a different density. The tails are hypotheses. Not a Fermi–Dirac integral.`,
+  formula_latex: `n_i = \\sqrt{N_c N_v}\\,\\exp\\!\\left(-\\frac{E_g}{2 k_B T}\\right)`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-99) — established textbook relation, PhysJS.MassAction.mass_action`,
+  known_issues: [],
+  references: [
+    `The Boltzmann tails are the hypotheses of PhysJS.MassAction.mass_action. The factor 2 in the exponent is the square root of the product.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-3]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateMassAction({N_c_per_m3, N_v_per_m3, E_g_J, T_K}) → {n_i_per_m3} in src/bridges/be99-mass-action.ts. The overlay formalRef is PhysJS.MassAction.mass_action, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Dropping the 2 is a different density. No confrontation.`,
+},
+{
+  id: 100,
+  name: `Lyddane–Sachs–Teller relation`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`condensed`, `electromagnetic`] as [string, string],
+  status: 'established',
+  context: `The undamped oscillator ε(ω) = ε(∞) + S/(ω_TO² − ω²) has a zero at ω_LO, which fixes S, and ε(0) is the same function at zero frequency. The ratio is ω_LO²/ω_TO² = ε(0)/ε(∞). The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis.`,
+  formula_latex: `\\frac{\\omega_{LO}^2}{\\omega_{TO}^2} = \\frac{\\varepsilon(0)}{\\varepsilon(\\infty)}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-100) — established textbook relation, PhysJS.LyddaneSachsTeller.lst`,
+  known_issues: [],
+  references: [
+    `No damping is the hypothesis of PhysJS.LyddaneSachsTeller.lst. The evaluator takes the dielectric constants.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateLyddaneSachsTeller({eps_static, eps_inf}) → {frequency_ratio_sq} in src/bridges/be100-lyddane-sachs-teller.ts. The overlay formalRef is PhysJS.LyddaneSachsTeller.lst, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. The unsquared ratio is a different statement. No confrontation.`,
+},
+{
+  id: 101,
+  name: `BKT unbinding temperature`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`thermal`, `condensed`] as [string, string],
+  status: 'established',
+  context: `The phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow.`,
+  formula_latex: `k_B T = \\frac{\\pi J}{2}`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-101) — established textbook relation, PhysJS.BktJump.bkt_jump`,
+  known_issues: [],
+  references: [
+    `The area of core positions is the entropy hypothesis of PhysJS.BktJump.bkt_jump. The renormalization-group flow is not this temperature.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[temperature]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateBktJump({J_J}) → {T_K} in src/bridges/be101-bkt-jump.ts. The overlay formalRef is PhysJS.BktJump.bkt_jump, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the RG flow. No confrontation.`,
+},
+{
+  id: 102,
+  name: `Landauer conductance (two spins)`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`quantum`, `condensed`] as [string, string],
+  status: 'established',
+  context: `A one-dimensional mode of speed v in a length L has density of states L/(h v) per spin, and the flux times v/L cancels to 1/h. Current is spin · e · (Σ T_n) · (1/h) · Δμ with spin = 2 and Δμ = e V, so G = (2 e²/h) Σ T_n. One spin is e²/h. The transmissions and the bias window are hypotheses. Not the Hall conductance and not Landauer erasure.`,
+  formula_latex: `G = \\frac{2 e^2}{h} \\sum_n T_n`,
+  source_part: 'III',
+  source_section: `Condensed-matter catalog (be-102) — established textbook relation, PhysJS.LandauerConductance.conductance_eq`,
+  known_issues: [],
+  references: [
+    `The transmissions and the bias window are the hypotheses of PhysJS.LandauerConductance.conductance_eq. e is the elementary charge. Spin is 2.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-2 M^-1 T^3 I^2]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateLandauerConductance({sum_Tn}) → {G_S} in src/bridges/be102-landauer-conductance.ts. e is E_SI. The overlay formalRef is PhysJS.LandauerConductance.conductance_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not be-55 and not be-16. No confrontation.`,
 }
 
 ];
@@ -3363,5 +3663,51 @@ export {
   type CapacitorNoiseInputs,
   type CapacitorNoiseResult,
 } from './be87-capacitor-noise.js';
+/** Two-spin Fermi wavevector. */
+export { evaluateFermiSea, type FermiSeaInputs, type FermiSeaResult } from './be88-fermi-sea.js';
+/** Debye cutoff of three acoustic branches. */
+export { evaluateDebyeCutoff, type DebyeCutoffInputs, type DebyeCutoffResult } from './be89-debye-cutoff.js';
+/** Debye heat capacity. π⁴/15 is assumed. */
+export { evaluateDebyeHeat, type DebyeHeatInputs, type DebyeHeatResult } from './be90-debye-heat.js';
+/** Einstein solid heat capacity. */
+export { evaluateEinsteinSolid, type EinsteinSolidInputs, type EinsteinSolidResult } from './be91-einstein-solid.js';
+/** Sommerfeld electronic heat capacity. */
+export { evaluateSommerfeldHeat, type SommerfeldHeatInputs, type SommerfeldHeatResult } from './be92-sommerfeld-heat.js';
+/** Curie–Weiss susceptibility. */
+export { evaluateCurieWeiss, type CurieWeissInputs, type CurieWeissResult } from './be93-curie-weiss.js';
+/** Pauli paramagnetism. */
+export {
+  evaluatePauliParamagnetism,
+  type PauliParamagnetismInputs,
+  type PauliParamagnetismResult,
+} from './be94-pauli-paramagnetism.js';
+/** Ginzburg–Landau trial-wall factor. */
+export { evaluateGinzburgLandau, type GinzburgLandauInputs, type GinzburgLandauResult } from './be95-ginzburg-landau.js';
+/** Upper critical field of charge 2e. */
+export { evaluateUpperCritical, type UpperCriticalInputs, type UpperCriticalResult } from './be96-upper-critical.js';
+/** Ambegaokar–Baratoff product at T = 0. */
+export {
+  evaluateAmbegaokarBaratoff,
+  type AmbegaokarBaratoffInputs,
+  type AmbegaokarBaratoffResult,
+} from './be97-ambegaokar-baratoff.js';
+/** BCS heat-capacity jump. ζ is the quartic coefficient. */
+export { evaluateBcsJump, type BcsJumpInputs, type BcsJumpResult } from './be98-bcs-jump.js';
+/** Mass-action intrinsic density. */
+export { evaluateMassAction, type MassActionInputs, type MassActionResult } from './be99-mass-action.js';
+/** Lyddane–Sachs–Teller ratio. */
+export {
+  evaluateLyddaneSachsTeller,
+  type LyddaneSachsTellerInputs,
+  type LyddaneSachsTellerResult,
+} from './be100-lyddane-sachs-teller.js';
+/** BKT unbinding temperature from energy and entropy. */
+export { evaluateBktJump, type BktJumpInputs, type BktJumpResult } from './be101-bkt-jump.js';
+/** Two-spin Landauer conductance. */
+export {
+  evaluateLandauerConductance,
+  type LandauerConductanceInputs,
+  type LandauerConductanceResult,
+} from './be102-landauer-conductance.js';
 
 export default BRIDGE_EQUATIONS;

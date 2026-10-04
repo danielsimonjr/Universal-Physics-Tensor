@@ -80,6 +80,21 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   85, // BE-85 shot noise: closed-form evaluator, no AST.
   86, // BE-86 Reynolds analogy: closed-form evaluator, no AST.
   87, // BE-87 capacitor noise: closed-form evaluator, no AST.
+  88, // BE-88 Fermi wavevector: closed-form evaluator, no AST.
+  89, // BE-89 Debye cutoff: closed-form evaluator, no AST.
+  90, // BE-90 Debye heat: closed-form evaluator, no AST.
+  91, // BE-91 Einstein solid: closed-form evaluator, no AST.
+  92, // BE-92 Sommerfeld heat: closed-form evaluator, no AST.
+  93, // BE-93 Curie–Weiss: closed-form evaluator, no AST.
+  94, // BE-94 Pauli paramagnetism: closed-form evaluator, no AST.
+  95, // BE-95 GL trial wall: closed-form evaluator, no AST.
+  96, // BE-96 upper critical field: closed-form evaluator, no AST.
+  97, // BE-97 Ambegaokar–Baratoff: closed-form evaluator, no AST.
+  98, // BE-98 BCS heat jump: closed-form evaluator, no AST.
+  99, // BE-99 mass action: closed-form evaluator, no AST.
+  100, // BE-100 Lyddane–Sachs–Teller: closed-form evaluator, no AST.
+  101, // BE-101 BKT jump: closed-form evaluator, no AST.
+  102, // BE-102 Landauer conductance: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -95,11 +110,12 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has thirty-five entries (BE-51/52 + BE-55..87 closed-form)', () => {
+    it('orphan allowlist has fifty entries (BE-51/52 + BE-55..102 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(35);
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(50);
+      // 35 is the record from before be-88..102.
     });
 
     for (const id of ORPHAN_DIMENSIONAL_SIGNATURES) {
@@ -164,10 +180,11 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
       ).toEqual([]);
     });
 
-    it('orphan allowlist is BE-51/52 + BE-55..87 (closed-form evaluators)', () => {
+    it('orphan allowlist is BE-51/52 + BE-55..102 (closed-form evaluators)', () => {
       expect([...ORPHAN_DIMENSIONAL_SIGNATURES].sort((a, b) => a - b)).toEqual([
         51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
-        77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
+        77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
+        101, 102,
       ]);
     });
   });

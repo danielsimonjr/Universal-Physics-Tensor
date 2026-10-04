@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "4.0.0",
-    "totalFiles": 454,
+    "totalFiles": 471,
     "totalModules": 13,
-    "totalExports": 3351
+    "totalExports": 3553
   },
   "entryPoints": [
     {
@@ -4570,6 +4570,69 @@
       }
     },
     "bridges": {
+      "src/bridges/be100-lyddane-sachs-teller.ts": {
+        "description": "BE-100 — Lyddane–Sachs–Teller relation,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateLyddaneSachsTeller"
+        ],
+        "interfaces": [
+          "LyddaneSachsTellerInputs",
+          "LyddaneSachsTellerResult"
+        ],
+        "functions": [
+          "evaluateLyddaneSachsTeller"
+        ]
+      },
+      "src/bridges/be101-bkt-jump.ts": {
+        "description": "BE-101 — Berezinskii–Kosterlitz–Thouless unbinding from energy and entropy,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateBktJump"
+        ],
+        "interfaces": [
+          "BktJumpInputs",
+          "BktJumpResult"
+        ],
+        "functions": [
+          "evaluateBktJump"
+        ]
+      },
+      "src/bridges/be102-landauer-conductance.ts": {
+        "description": "BE-102 — two-spin Landauer conductance,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI",
+              "H_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateLandauerConductance"
+        ],
+        "interfaces": [
+          "LandauerConductanceInputs",
+          "LandauerConductanceResult"
+        ],
+        "functions": [
+          "evaluateLandauerConductance"
+        ]
+      },
       "src/bridges/be11-decoherence-confrontation.ts": {
         "description": "BE-11 × matter-wave interferometry — confront the decoherence master equation",
         "externalDependencies": [],
@@ -6000,6 +6063,268 @@
           "evaluateCapacitorNoise"
         ]
       },
+      "src/bridges/be88-fermi-sea.ts": {
+        "description": "BE-88 — two-spin Fermi sphere,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "HBAR_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateFermiSea"
+        ],
+        "interfaces": [
+          "FermiSeaInputs",
+          "FermiSeaResult"
+        ],
+        "functions": [
+          "evaluateFermiSea"
+        ]
+      },
+      "src/bridges/be89-debye-cutoff.ts": {
+        "description": "BE-89 — Debye cutoff of three acoustic branches,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateDebyeCutoff"
+        ],
+        "interfaces": [
+          "DebyeCutoffInputs",
+          "DebyeCutoffResult"
+        ],
+        "functions": [
+          "evaluateDebyeCutoff"
+        ]
+      },
+      "src/bridges/be90-debye-heat.ts": {
+        "description": "BE-90 — Debye heat capacity at low temperature,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateDebyeHeat"
+        ],
+        "interfaces": [
+          "DebyeHeatInputs",
+          "DebyeHeatResult"
+        ],
+        "functions": [
+          "evaluateDebyeHeat"
+        ]
+      },
+      "src/bridges/be91-einstein-solid.ts": {
+        "description": "BE-91 — Einstein solid heat capacity,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateEinsteinSolid"
+        ],
+        "interfaces": [
+          "EinsteinSolidInputs",
+          "EinsteinSolidResult"
+        ],
+        "functions": [
+          "evaluateEinsteinSolid"
+        ]
+      },
+      "src/bridges/be92-sommerfeld-heat.ts": {
+        "description": "BE-92 — electronic heat capacity of a √E density of states,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateSommerfeldHeat"
+        ],
+        "interfaces": [
+          "SommerfeldHeatInputs",
+          "SommerfeldHeatResult"
+        ],
+        "functions": [
+          "evaluateSommerfeldHeat"
+        ]
+      },
+      "src/bridges/be93-curie-weiss.ts": {
+        "description": "BE-93 — Curie–Weiss susceptibility,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "MU0_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateCurieWeiss"
+        ],
+        "interfaces": [
+          "CurieWeissInputs",
+          "CurieWeissResult"
+        ],
+        "functions": [
+          "evaluateCurieWeiss"
+        ]
+      },
+      "src/bridges/be94-pauli-paramagnetism.ts": {
+        "description": "BE-94 — Pauli paramagnetism for a √E density of states,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "MU0_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluatePauliParamagnetism"
+        ],
+        "interfaces": [
+          "PauliParamagnetismInputs",
+          "PauliParamagnetismResult"
+        ],
+        "functions": [
+          "evaluatePauliParamagnetism"
+        ]
+      },
+      "src/bridges/be95-ginzburg-landau.ts": {
+        "description": "BE-95 — sign of one Ginzburg–Landau trial wall,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateGinzburgLandau"
+        ],
+        "interfaces": [
+          "GinzburgLandauInputs",
+          "GinzburgLandauResult"
+        ],
+        "functions": [
+          "evaluateGinzburgLandau"
+        ]
+      },
+      "src/bridges/be96-upper-critical.ts": {
+        "description": "BE-96 — upper critical field of charge q = 2e,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI",
+              "HBAR_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateUpperCritical"
+        ],
+        "interfaces": [
+          "UpperCriticalInputs",
+          "UpperCriticalResult"
+        ],
+        "functions": [
+          "evaluateUpperCritical"
+        ]
+      },
+      "src/bridges/be97-ambegaokar-baratoff.ts": {
+        "description": "BE-97 — Ambegaokar–Baratoff product at zero temperature,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateAmbegaokarBaratoff"
+        ],
+        "interfaces": [
+          "AmbegaokarBaratoffInputs",
+          "AmbegaokarBaratoffResult"
+        ],
+        "functions": [
+          "evaluateAmbegaokarBaratoff"
+        ]
+      },
+      "src/bridges/be98-bcs-jump.ts": {
+        "description": "BE-98 — BCS heat-capacity jump,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateBcsJump"
+        ],
+        "interfaces": [
+          "BcsJumpInputs",
+          "BcsJumpResult"
+        ],
+        "functions": [
+          "evaluateBcsJump"
+        ]
+      },
+      "src/bridges/be99-mass-action.ts": {
+        "description": "BE-99 — intrinsic carrier density from Boltzmann tails,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateMassAction"
+        ],
+        "interfaces": [
+          "MassActionInputs",
+          "MassActionResult"
+        ],
+        "functions": [
+          "evaluateMassAction"
+        ]
+      },
       "src/bridges/bridge-equations.ts": {
         "description": "`BridgeEquations` — a convenience facade over the per-bridge evaluators.",
         "externalDependencies": [],
@@ -6469,6 +6794,96 @@
             "file": "./be87-capacitor-noise.js",
             "imports": [
               "evaluateCapacitorNoise"
+            ]
+          },
+          {
+            "file": "./be88-fermi-sea.js",
+            "imports": [
+              "evaluateFermiSea"
+            ]
+          },
+          {
+            "file": "./be89-debye-cutoff.js",
+            "imports": [
+              "evaluateDebyeCutoff"
+            ]
+          },
+          {
+            "file": "./be90-debye-heat.js",
+            "imports": [
+              "evaluateDebyeHeat"
+            ]
+          },
+          {
+            "file": "./be91-einstein-solid.js",
+            "imports": [
+              "evaluateEinsteinSolid"
+            ]
+          },
+          {
+            "file": "./be92-sommerfeld-heat.js",
+            "imports": [
+              "evaluateSommerfeldHeat"
+            ]
+          },
+          {
+            "file": "./be93-curie-weiss.js",
+            "imports": [
+              "evaluateCurieWeiss"
+            ]
+          },
+          {
+            "file": "./be94-pauli-paramagnetism.js",
+            "imports": [
+              "evaluatePauliParamagnetism"
+            ]
+          },
+          {
+            "file": "./be95-ginzburg-landau.js",
+            "imports": [
+              "evaluateGinzburgLandau"
+            ]
+          },
+          {
+            "file": "./be96-upper-critical.js",
+            "imports": [
+              "evaluateUpperCritical"
+            ]
+          },
+          {
+            "file": "./be97-ambegaokar-baratoff.js",
+            "imports": [
+              "evaluateAmbegaokarBaratoff"
+            ]
+          },
+          {
+            "file": "./be98-bcs-jump.js",
+            "imports": [
+              "evaluateBcsJump"
+            ]
+          },
+          {
+            "file": "./be99-mass-action.js",
+            "imports": [
+              "evaluateMassAction"
+            ]
+          },
+          {
+            "file": "./be100-lyddane-sachs-teller.js",
+            "imports": [
+              "evaluateLyddaneSachsTeller"
+            ]
+          },
+          {
+            "file": "./be101-bkt-jump.js",
+            "imports": [
+              "evaluateBktJump"
+            ]
+          },
+          {
+            "file": "./be102-landauer-conductance.js",
+            "imports": [
+              "evaluateLandauerConductance"
             ]
           }
         ],
@@ -9479,6 +9894,96 @@
             "imports": [
               "evaluateCapacitorNoise"
             ]
+          },
+          {
+            "file": "./be88-fermi-sea.js",
+            "imports": [
+              "evaluateFermiSea"
+            ]
+          },
+          {
+            "file": "./be89-debye-cutoff.js",
+            "imports": [
+              "evaluateDebyeCutoff"
+            ]
+          },
+          {
+            "file": "./be90-debye-heat.js",
+            "imports": [
+              "evaluateDebyeHeat"
+            ]
+          },
+          {
+            "file": "./be91-einstein-solid.js",
+            "imports": [
+              "evaluateEinsteinSolid"
+            ]
+          },
+          {
+            "file": "./be92-sommerfeld-heat.js",
+            "imports": [
+              "evaluateSommerfeldHeat"
+            ]
+          },
+          {
+            "file": "./be93-curie-weiss.js",
+            "imports": [
+              "evaluateCurieWeiss"
+            ]
+          },
+          {
+            "file": "./be94-pauli-paramagnetism.js",
+            "imports": [
+              "evaluatePauliParamagnetism"
+            ]
+          },
+          {
+            "file": "./be95-ginzburg-landau.js",
+            "imports": [
+              "evaluateGinzburgLandau"
+            ]
+          },
+          {
+            "file": "./be96-upper-critical.js",
+            "imports": [
+              "evaluateUpperCritical"
+            ]
+          },
+          {
+            "file": "./be97-ambegaokar-baratoff.js",
+            "imports": [
+              "evaluateAmbegaokarBaratoff"
+            ]
+          },
+          {
+            "file": "./be98-bcs-jump.js",
+            "imports": [
+              "evaluateBcsJump"
+            ]
+          },
+          {
+            "file": "./be99-mass-action.js",
+            "imports": [
+              "evaluateMassAction"
+            ]
+          },
+          {
+            "file": "./be100-lyddane-sachs-teller.js",
+            "imports": [
+              "evaluateLyddaneSachsTeller"
+            ]
+          },
+          {
+            "file": "./be101-bkt-jump.js",
+            "imports": [
+              "evaluateBktJump"
+            ]
+          },
+          {
+            "file": "./be102-landauer-conductance.js",
+            "imports": [
+              "evaluateLandauerConductance"
+            ]
           }
         ],
         "exports": [
@@ -9895,6 +10400,141 @@
               "type CapacitorNoiseResult"
             ],
             "reExport": true
+          },
+          {
+            "file": "./be88-fermi-sea.js",
+            "imports": [
+              "evaluateFermiSea",
+              "type FermiSeaInputs",
+              "type FermiSeaResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be89-debye-cutoff.js",
+            "imports": [
+              "evaluateDebyeCutoff",
+              "type DebyeCutoffInputs",
+              "type DebyeCutoffResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be90-debye-heat.js",
+            "imports": [
+              "evaluateDebyeHeat",
+              "type DebyeHeatInputs",
+              "type DebyeHeatResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be91-einstein-solid.js",
+            "imports": [
+              "evaluateEinsteinSolid",
+              "type EinsteinSolidInputs",
+              "type EinsteinSolidResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be92-sommerfeld-heat.js",
+            "imports": [
+              "evaluateSommerfeldHeat",
+              "type SommerfeldHeatInputs",
+              "type SommerfeldHeatResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be93-curie-weiss.js",
+            "imports": [
+              "evaluateCurieWeiss",
+              "type CurieWeissInputs",
+              "type CurieWeissResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be94-pauli-paramagnetism.js",
+            "imports": [
+              "evaluatePauliParamagnetism",
+              "type PauliParamagnetismInputs",
+              "type PauliParamagnetismResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be95-ginzburg-landau.js",
+            "imports": [
+              "evaluateGinzburgLandau",
+              "type GinzburgLandauInputs",
+              "type GinzburgLandauResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be96-upper-critical.js",
+            "imports": [
+              "evaluateUpperCritical",
+              "type UpperCriticalInputs",
+              "type UpperCriticalResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be97-ambegaokar-baratoff.js",
+            "imports": [
+              "evaluateAmbegaokarBaratoff",
+              "type AmbegaokarBaratoffInputs",
+              "type AmbegaokarBaratoffResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be98-bcs-jump.js",
+            "imports": [
+              "evaluateBcsJump",
+              "type BcsJumpInputs",
+              "type BcsJumpResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be99-mass-action.js",
+            "imports": [
+              "evaluateMassAction",
+              "type MassActionInputs",
+              "type MassActionResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be100-lyddane-sachs-teller.js",
+            "imports": [
+              "evaluateLyddaneSachsTeller",
+              "type LyddaneSachsTellerInputs",
+              "type LyddaneSachsTellerResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be101-bkt-jump.js",
+            "imports": [
+              "evaluateBktJump",
+              "type BktJumpInputs",
+              "type BktJumpResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be102-landauer-conductance.js",
+            "imports": [
+              "evaluateLandauerConductance",
+              "type LandauerConductanceInputs",
+              "type LandauerConductanceResult"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -10013,6 +10653,51 @@
           "evaluateCapacitorNoise",
           "type CapacitorNoiseInputs",
           "type CapacitorNoiseResult",
+          "evaluateFermiSea",
+          "type FermiSeaInputs",
+          "type FermiSeaResult",
+          "evaluateDebyeCutoff",
+          "type DebyeCutoffInputs",
+          "type DebyeCutoffResult",
+          "evaluateDebyeHeat",
+          "type DebyeHeatInputs",
+          "type DebyeHeatResult",
+          "evaluateEinsteinSolid",
+          "type EinsteinSolidInputs",
+          "type EinsteinSolidResult",
+          "evaluateSommerfeldHeat",
+          "type SommerfeldHeatInputs",
+          "type SommerfeldHeatResult",
+          "evaluateCurieWeiss",
+          "type CurieWeissInputs",
+          "type CurieWeissResult",
+          "evaluatePauliParamagnetism",
+          "type PauliParamagnetismInputs",
+          "type PauliParamagnetismResult",
+          "evaluateGinzburgLandau",
+          "type GinzburgLandauInputs",
+          "type GinzburgLandauResult",
+          "evaluateUpperCritical",
+          "type UpperCriticalInputs",
+          "type UpperCriticalResult",
+          "evaluateAmbegaokarBaratoff",
+          "type AmbegaokarBaratoffInputs",
+          "type AmbegaokarBaratoffResult",
+          "evaluateBcsJump",
+          "type BcsJumpInputs",
+          "type BcsJumpResult",
+          "evaluateMassAction",
+          "type MassActionInputs",
+          "type MassActionResult",
+          "evaluateLyddaneSachsTeller",
+          "type LyddaneSachsTellerInputs",
+          "type LyddaneSachsTellerResult",
+          "evaluateBktJump",
+          "type BktJumpInputs",
+          "type BktJumpResult",
+          "evaluateLandauerConductance",
+          "type LandauerConductanceInputs",
+          "type LandauerConductanceResult",
           "BE37_REGIME",
           "BE51_REGIME",
           "BE52_REGIME",
@@ -10135,7 +10820,52 @@
           "type ReynoldsAnalogyResult",
           "evaluateCapacitorNoise",
           "type CapacitorNoiseInputs",
-          "type CapacitorNoiseResult"
+          "type CapacitorNoiseResult",
+          "evaluateFermiSea",
+          "type FermiSeaInputs",
+          "type FermiSeaResult",
+          "evaluateDebyeCutoff",
+          "type DebyeCutoffInputs",
+          "type DebyeCutoffResult",
+          "evaluateDebyeHeat",
+          "type DebyeHeatInputs",
+          "type DebyeHeatResult",
+          "evaluateEinsteinSolid",
+          "type EinsteinSolidInputs",
+          "type EinsteinSolidResult",
+          "evaluateSommerfeldHeat",
+          "type SommerfeldHeatInputs",
+          "type SommerfeldHeatResult",
+          "evaluateCurieWeiss",
+          "type CurieWeissInputs",
+          "type CurieWeissResult",
+          "evaluatePauliParamagnetism",
+          "type PauliParamagnetismInputs",
+          "type PauliParamagnetismResult",
+          "evaluateGinzburgLandau",
+          "type GinzburgLandauInputs",
+          "type GinzburgLandauResult",
+          "evaluateUpperCritical",
+          "type UpperCriticalInputs",
+          "type UpperCriticalResult",
+          "evaluateAmbegaokarBaratoff",
+          "type AmbegaokarBaratoffInputs",
+          "type AmbegaokarBaratoffResult",
+          "evaluateBcsJump",
+          "type BcsJumpInputs",
+          "type BcsJumpResult",
+          "evaluateMassAction",
+          "type MassActionInputs",
+          "type MassActionResult",
+          "evaluateLyddaneSachsTeller",
+          "type LyddaneSachsTellerInputs",
+          "type LyddaneSachsTellerResult",
+          "evaluateBktJump",
+          "type BktJumpInputs",
+          "type BktJumpResult",
+          "evaluateLandauerConductance",
+          "type LandauerConductanceInputs",
+          "type LandauerConductanceResult"
         ],
         "interfaces": [
           "KnownIssue",
@@ -16944,7 +17674,7 @@
         ]
       },
       "src/composition/catalog-graph.ts": {
-        "description": "The full composition graph as a single constant — the 68 `BridgeEdge`s",
+        "description": "The full composition graph as a single constant — the 83 `BridgeEdge`s",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -16996,6 +17726,12 @@
             "file": "./edges/applied-physicist.js",
             "imports": [
               "APPLIED_PHYSICIST_EDGES"
+            ]
+          },
+          {
+            "file": "./edges/condensed-r5.js",
+            "imports": [
+              "CONDENSED_R5_EDGES"
             ]
           }
         ],
@@ -19110,6 +19846,226 @@
           "be54Edge"
         ]
       },
+      "src/composition/edges/condensed-r5.ts": {
+        "description": "Composition edges for BE-88 through BE-102.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../../bridges/be88-fermi-sea.js",
+            "imports": [
+              "evaluateFermiSea"
+            ]
+          },
+          {
+            "file": "../../bridges/be89-debye-cutoff.js",
+            "imports": [
+              "evaluateDebyeCutoff"
+            ]
+          },
+          {
+            "file": "../../bridges/be90-debye-heat.js",
+            "imports": [
+              "evaluateDebyeHeat"
+            ]
+          },
+          {
+            "file": "../../bridges/be91-einstein-solid.js",
+            "imports": [
+              "evaluateEinsteinSolid"
+            ]
+          },
+          {
+            "file": "../../bridges/be92-sommerfeld-heat.js",
+            "imports": [
+              "evaluateSommerfeldHeat"
+            ]
+          },
+          {
+            "file": "../../bridges/be93-curie-weiss.js",
+            "imports": [
+              "evaluateCurieWeiss"
+            ]
+          },
+          {
+            "file": "../../bridges/be94-pauli-paramagnetism.js",
+            "imports": [
+              "evaluatePauliParamagnetism"
+            ]
+          },
+          {
+            "file": "../../bridges/be95-ginzburg-landau.js",
+            "imports": [
+              "evaluateGinzburgLandau"
+            ]
+          },
+          {
+            "file": "../../bridges/be96-upper-critical.js",
+            "imports": [
+              "evaluateUpperCritical"
+            ]
+          },
+          {
+            "file": "../../bridges/be97-ambegaokar-baratoff.js",
+            "imports": [
+              "evaluateAmbegaokarBaratoff"
+            ]
+          },
+          {
+            "file": "../../bridges/be98-bcs-jump.js",
+            "imports": [
+              "evaluateBcsJump"
+            ]
+          },
+          {
+            "file": "../../bridges/be99-mass-action.js",
+            "imports": [
+              "evaluateMassAction"
+            ]
+          },
+          {
+            "file": "../../bridges/be100-lyddane-sachs-teller.js",
+            "imports": [
+              "evaluateLyddaneSachsTeller"
+            ]
+          },
+          {
+            "file": "../../bridges/be101-bkt-jump.js",
+            "imports": [
+              "evaluateBktJump"
+            ]
+          },
+          {
+            "file": "../../bridges/be102-landauer-conductance.js",
+            "imports": [
+              "evaluateLandauerConductance"
+            ]
+          },
+          {
+            "file": "../../dimensional/validator.js",
+            "imports": [
+              "ExprNode"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../edge.js",
+            "imports": [
+              "withBoundAliases",
+              "BridgeEdge"
+            ]
+          },
+          {
+            "file": "../quantity.js",
+            "imports": [
+              "Quantity"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../quantities.js",
+            "imports": [
+              "ambegaokarGapQ",
+              "ambegaokarProductQ",
+              "bcsHeatJumpQ",
+              "bcsQuarticQ",
+              "bktStiffnessQ",
+              "bktTemperatureQ",
+              "conductionDosQ",
+              "curieDensityQ",
+              "curieGFactorQ",
+              "curieMagnetonQ",
+              "curieSpinQ",
+              "curieTemperatureQ",
+              "curieWeissSusceptibilityQ",
+              "debyeAtomCountQ",
+              "debyeAtomDensityQ",
+              "debyeCutoffFrequencyQ",
+              "debyeHeatCapacityQ",
+              "debyeSoundSpeedQ",
+              "debyeTemperatureQ",
+              "debyeThetaQ",
+              "einsteinAtomCountQ",
+              "einsteinHeatCapacityQ",
+              "einsteinSolidTemperatureQ",
+              "einsteinThetaQ",
+              "fermiSeaDensityQ",
+              "fermiSeaMassQ",
+              "fermiWavevectorQ",
+              "glKappaQ",
+              "glTrialFactorQ",
+              "landauerChannelConductanceQ",
+              "landauerTransmissionQ",
+              "lstInfinityQ",
+              "lstRatioQ",
+              "lstStaticQ",
+              "massActionDensityQ",
+              "massActionGapQ",
+              "massActionTemperatureQ",
+              "pauliDensityQ",
+              "pauliFermiEnergyQ",
+              "pauliMagnetonQ",
+              "pauliSusceptibilityQ",
+              "sommerfeldDensityQ",
+              "sommerfeldFermiEnergyQ",
+              "sommerfeldHeatCapacityQ",
+              "sommerfeldTemperatureQ",
+              "upperCriticalFieldQ",
+              "upperCriticalLengthQ",
+              "valenceDosQ",
+              "weissTemperatureQ"
+            ]
+          }
+        ],
+        "exports": [
+          "be88Edge",
+          "be89Edge",
+          "be90Edge",
+          "be91Edge",
+          "be92Edge",
+          "be93Edge",
+          "be94Edge",
+          "be95Edge",
+          "be96Edge",
+          "be97Edge",
+          "be98Edge",
+          "be99Edge",
+          "be100Edge",
+          "be101Edge",
+          "be102Edge",
+          "CONDENSED_R5_EDGES"
+        ],
+        "constants": [
+          "be88Edge",
+          "be89Edge",
+          "be90Edge",
+          "be91Edge",
+          "be92Edge",
+          "be93Edge",
+          "be94Edge",
+          "be95Edge",
+          "be96Edge",
+          "be97Edge",
+          "be98Edge",
+          "be99Edge",
+          "be100Edge",
+          "be101Edge",
+          "be102Edge",
+          "CONDENSED_R5_EDGES"
+        ]
+      },
       "src/composition/edges/proved-seeds.ts": {
         "description": "Composition edges for proved catalog seeds that had no graph edge.",
         "externalDependencies": [],
@@ -19921,6 +20877,28 @@
             "reExport": true
           },
           {
+            "file": "./edges/condensed-r5.js",
+            "imports": [
+              "be88Edge",
+              "be89Edge",
+              "be90Edge",
+              "be91Edge",
+              "be92Edge",
+              "be93Edge",
+              "be94Edge",
+              "be95Edge",
+              "be96Edge",
+              "be97Edge",
+              "be98Edge",
+              "be99Edge",
+              "be100Edge",
+              "be101Edge",
+              "be102Edge",
+              "CONDENSED_R5_EDGES"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./edges/catalog-full.js",
             "imports": [
               "be11Edge",
@@ -20199,6 +21177,22 @@
           "be86Edge",
           "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
+          "be88Edge",
+          "be89Edge",
+          "be90Edge",
+          "be91Edge",
+          "be92Edge",
+          "be93Edge",
+          "be94Edge",
+          "be95Edge",
+          "be96Edge",
+          "be97Edge",
+          "be98Edge",
+          "be99Edge",
+          "be100Edge",
+          "be101Edge",
+          "be102Edge",
+          "CONDENSED_R5_EDGES",
           "be11Edge",
           "be13Edge",
           "be15Edge",
@@ -20350,6 +21344,22 @@
           "be86Edge",
           "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
+          "be88Edge",
+          "be89Edge",
+          "be90Edge",
+          "be91Edge",
+          "be92Edge",
+          "be93Edge",
+          "be94Edge",
+          "be95Edge",
+          "be96Edge",
+          "be97Edge",
+          "be98Edge",
+          "be99Edge",
+          "be100Edge",
+          "be101Edge",
+          "be102Edge",
+          "CONDENSED_R5_EDGES",
           "be11Edge",
           "be13Edge",
           "be15Edge",
@@ -23089,6 +24099,140 @@
           "frequencyQ"
         ]
       },
+      "src/composition/quantities/condensed-r5.ts": {
+        "description": "Quantity nodes for BE-88 through BE-102.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../quantity.js",
+            "imports": [
+              "Quantity"
+            ],
+            "typeOnly": true
+          },
+          {
+            "file": "../../dimensional/types.js",
+            "imports": [
+              "DIMENSIONLESS",
+              "FREQUENCY",
+              "MASS",
+              "TEMPERATURE",
+              "VELOCITY"
+            ]
+          },
+          {
+            "file": "./_dims.js",
+            "imports": [
+              "ENERGY_DIM",
+              "INV_LENGTH",
+              "NUMBER_DENSITY"
+            ]
+          }
+        ],
+        "exports": [
+          "fermiSeaDensityQ",
+          "fermiSeaMassQ",
+          "fermiWavevectorQ",
+          "debyeSoundSpeedQ",
+          "debyeAtomDensityQ",
+          "debyeCutoffFrequencyQ",
+          "debyeAtomCountQ",
+          "debyeTemperatureQ",
+          "debyeThetaQ",
+          "debyeHeatCapacityQ",
+          "einsteinAtomCountQ",
+          "einsteinSolidTemperatureQ",
+          "einsteinThetaQ",
+          "einsteinHeatCapacityQ",
+          "sommerfeldDensityQ",
+          "sommerfeldTemperatureQ",
+          "sommerfeldFermiEnergyQ",
+          "sommerfeldHeatCapacityQ",
+          "curieDensityQ",
+          "curieGFactorQ",
+          "curieSpinQ",
+          "curieMagnetonQ",
+          "curieTemperatureQ",
+          "weissTemperatureQ",
+          "curieWeissSusceptibilityQ",
+          "pauliDensityQ",
+          "pauliFermiEnergyQ",
+          "pauliMagnetonQ",
+          "pauliSusceptibilityQ",
+          "glKappaQ",
+          "glTrialFactorQ",
+          "upperCriticalLengthQ",
+          "upperCriticalFieldQ",
+          "ambegaokarGapQ",
+          "ambegaokarProductQ",
+          "bcsQuarticQ",
+          "bcsHeatJumpQ",
+          "conductionDosQ",
+          "valenceDosQ",
+          "massActionGapQ",
+          "massActionTemperatureQ",
+          "massActionDensityQ",
+          "lstStaticQ",
+          "lstInfinityQ",
+          "lstRatioQ",
+          "bktStiffnessQ",
+          "bktTemperatureQ",
+          "landauerTransmissionQ",
+          "landauerChannelConductanceQ"
+        ],
+        "constants": [
+          "fermiSeaDensityQ",
+          "fermiSeaMassQ",
+          "fermiWavevectorQ",
+          "debyeSoundSpeedQ",
+          "debyeAtomDensityQ",
+          "debyeCutoffFrequencyQ",
+          "debyeAtomCountQ",
+          "debyeTemperatureQ",
+          "debyeThetaQ",
+          "debyeHeatCapacityQ",
+          "einsteinAtomCountQ",
+          "einsteinSolidTemperatureQ",
+          "einsteinThetaQ",
+          "einsteinHeatCapacityQ",
+          "sommerfeldDensityQ",
+          "sommerfeldTemperatureQ",
+          "sommerfeldFermiEnergyQ",
+          "sommerfeldHeatCapacityQ",
+          "curieDensityQ",
+          "curieGFactorQ",
+          "curieSpinQ",
+          "curieMagnetonQ",
+          "curieTemperatureQ",
+          "weissTemperatureQ",
+          "curieWeissSusceptibilityQ",
+          "pauliDensityQ",
+          "pauliFermiEnergyQ",
+          "pauliMagnetonQ",
+          "pauliSusceptibilityQ",
+          "glKappaQ",
+          "glTrialFactorQ",
+          "upperCriticalLengthQ",
+          "upperCriticalFieldQ",
+          "ambegaokarGapQ",
+          "ambegaokarProductQ",
+          "bcsQuarticQ",
+          "bcsHeatJumpQ",
+          "conductionDosQ",
+          "valenceDosQ",
+          "massActionGapQ",
+          "massActionTemperatureQ",
+          "massActionDensityQ",
+          "lstStaticQ",
+          "lstInfinityQ",
+          "lstRatioQ",
+          "bktStiffnessQ",
+          "bktTemperatureQ",
+          "landauerTransmissionQ",
+          "landauerChannelConductanceQ"
+        ]
+      },
       "src/composition/quantities/fields.ts": {
         "description": "Centralized Quantity nodes — field-theory / gravity-modification / swampland domain.",
         "externalDependencies": [],
@@ -23415,6 +24559,13 @@
               "*"
             ],
             "reExport": true
+          },
+          {
+            "file": "./quantities/condensed-r5.js",
+            "imports": [
+              "*"
+            ],
+            "reExport": true
           }
         ],
         "exports": [],
@@ -23424,7 +24575,8 @@
           "* from ./quantities/fields.js",
           "* from ./quantities/condensed-matter.js",
           "* from ./quantities/common.js",
-          "* from ./quantities/applied-physicist.js"
+          "* from ./quantities/applied-physicist.js",
+          "* from ./quantities/condensed-r5.js"
         ]
       },
       "src/composition/quantity.ts": {
@@ -26645,7 +27797,52 @@
               "type ReynoldsAnalogyResult",
               "evaluateCapacitorNoise",
               "type CapacitorNoiseInputs",
-              "type CapacitorNoiseResult"
+              "type CapacitorNoiseResult",
+              "evaluateFermiSea",
+              "type FermiSeaInputs",
+              "type FermiSeaResult",
+              "evaluateDebyeCutoff",
+              "type DebyeCutoffInputs",
+              "type DebyeCutoffResult",
+              "evaluateDebyeHeat",
+              "type DebyeHeatInputs",
+              "type DebyeHeatResult",
+              "evaluateEinsteinSolid",
+              "type EinsteinSolidInputs",
+              "type EinsteinSolidResult",
+              "evaluateSommerfeldHeat",
+              "type SommerfeldHeatInputs",
+              "type SommerfeldHeatResult",
+              "evaluateCurieWeiss",
+              "type CurieWeissInputs",
+              "type CurieWeissResult",
+              "evaluatePauliParamagnetism",
+              "type PauliParamagnetismInputs",
+              "type PauliParamagnetismResult",
+              "evaluateGinzburgLandau",
+              "type GinzburgLandauInputs",
+              "type GinzburgLandauResult",
+              "evaluateUpperCritical",
+              "type UpperCriticalInputs",
+              "type UpperCriticalResult",
+              "evaluateAmbegaokarBaratoff",
+              "type AmbegaokarBaratoffInputs",
+              "type AmbegaokarBaratoffResult",
+              "evaluateBcsJump",
+              "type BcsJumpInputs",
+              "type BcsJumpResult",
+              "evaluateMassAction",
+              "type MassActionInputs",
+              "type MassActionResult",
+              "evaluateLyddaneSachsTeller",
+              "type LyddaneSachsTellerInputs",
+              "type LyddaneSachsTellerResult",
+              "evaluateBktJump",
+              "type BktJumpInputs",
+              "type BktJumpResult",
+              "evaluateLandauerConductance",
+              "type LandauerConductanceInputs",
+              "type LandauerConductanceResult"
             ],
             "reExport": true
           },
@@ -27087,6 +28284,28 @@
               "be86Edge",
               "be87Edge",
               "APPLIED_PHYSICIST_EDGES"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/index.js",
+            "imports": [
+              "be88Edge",
+              "be89Edge",
+              "be90Edge",
+              "be91Edge",
+              "be92Edge",
+              "be93Edge",
+              "be94Edge",
+              "be95Edge",
+              "be96Edge",
+              "be97Edge",
+              "be98Edge",
+              "be99Edge",
+              "be100Edge",
+              "be101Edge",
+              "be102Edge",
+              "CONDENSED_R5_EDGES"
             ],
             "reExport": true
           },
@@ -28097,6 +29316,51 @@
           "evaluateCapacitorNoise",
           "type CapacitorNoiseInputs",
           "type CapacitorNoiseResult",
+          "evaluateFermiSea",
+          "type FermiSeaInputs",
+          "type FermiSeaResult",
+          "evaluateDebyeCutoff",
+          "type DebyeCutoffInputs",
+          "type DebyeCutoffResult",
+          "evaluateDebyeHeat",
+          "type DebyeHeatInputs",
+          "type DebyeHeatResult",
+          "evaluateEinsteinSolid",
+          "type EinsteinSolidInputs",
+          "type EinsteinSolidResult",
+          "evaluateSommerfeldHeat",
+          "type SommerfeldHeatInputs",
+          "type SommerfeldHeatResult",
+          "evaluateCurieWeiss",
+          "type CurieWeissInputs",
+          "type CurieWeissResult",
+          "evaluatePauliParamagnetism",
+          "type PauliParamagnetismInputs",
+          "type PauliParamagnetismResult",
+          "evaluateGinzburgLandau",
+          "type GinzburgLandauInputs",
+          "type GinzburgLandauResult",
+          "evaluateUpperCritical",
+          "type UpperCriticalInputs",
+          "type UpperCriticalResult",
+          "evaluateAmbegaokarBaratoff",
+          "type AmbegaokarBaratoffInputs",
+          "type AmbegaokarBaratoffResult",
+          "evaluateBcsJump",
+          "type BcsJumpInputs",
+          "type BcsJumpResult",
+          "evaluateMassAction",
+          "type MassActionInputs",
+          "type MassActionResult",
+          "evaluateLyddaneSachsTeller",
+          "type LyddaneSachsTellerInputs",
+          "type LyddaneSachsTellerResult",
+          "evaluateBktJump",
+          "type BktJumpInputs",
+          "type BktJumpResult",
+          "evaluateLandauerConductance",
+          "type LandauerConductanceInputs",
+          "type LandauerConductanceResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "BridgeEquations",
@@ -28216,6 +29480,22 @@
           "be86Edge",
           "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
+          "be88Edge",
+          "be89Edge",
+          "be90Edge",
+          "be91Edge",
+          "be92Edge",
+          "be93Edge",
+          "be94Edge",
+          "be95Edge",
+          "be96Edge",
+          "be97Edge",
+          "be98Edge",
+          "be99Edge",
+          "be100Edge",
+          "be101Edge",
+          "be102Edge",
+          "CONDENSED_R5_EDGES",
           "adjudicateBridgeEntry",
           "adjudicateCatalog",
           "REJECTED_BRIDGE_ADJUDICATIONS",
@@ -28771,6 +30051,51 @@
           "evaluateCapacitorNoise",
           "type CapacitorNoiseInputs",
           "type CapacitorNoiseResult",
+          "evaluateFermiSea",
+          "type FermiSeaInputs",
+          "type FermiSeaResult",
+          "evaluateDebyeCutoff",
+          "type DebyeCutoffInputs",
+          "type DebyeCutoffResult",
+          "evaluateDebyeHeat",
+          "type DebyeHeatInputs",
+          "type DebyeHeatResult",
+          "evaluateEinsteinSolid",
+          "type EinsteinSolidInputs",
+          "type EinsteinSolidResult",
+          "evaluateSommerfeldHeat",
+          "type SommerfeldHeatInputs",
+          "type SommerfeldHeatResult",
+          "evaluateCurieWeiss",
+          "type CurieWeissInputs",
+          "type CurieWeissResult",
+          "evaluatePauliParamagnetism",
+          "type PauliParamagnetismInputs",
+          "type PauliParamagnetismResult",
+          "evaluateGinzburgLandau",
+          "type GinzburgLandauInputs",
+          "type GinzburgLandauResult",
+          "evaluateUpperCritical",
+          "type UpperCriticalInputs",
+          "type UpperCriticalResult",
+          "evaluateAmbegaokarBaratoff",
+          "type AmbegaokarBaratoffInputs",
+          "type AmbegaokarBaratoffResult",
+          "evaluateBcsJump",
+          "type BcsJumpInputs",
+          "type BcsJumpResult",
+          "evaluateMassAction",
+          "type MassActionInputs",
+          "type MassActionResult",
+          "evaluateLyddaneSachsTeller",
+          "type LyddaneSachsTellerInputs",
+          "type LyddaneSachsTellerResult",
+          "evaluateBktJump",
+          "type BktJumpInputs",
+          "type BktJumpResult",
+          "evaluateLandauerConductance",
+          "type LandauerConductanceInputs",
+          "type LandauerConductanceResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "EvaluatorSpec",
@@ -28948,6 +30273,22 @@
           "be86Edge",
           "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
+          "be88Edge",
+          "be89Edge",
+          "be90Edge",
+          "be91Edge",
+          "be92Edge",
+          "be93Edge",
+          "be94Edge",
+          "be95Edge",
+          "be96Edge",
+          "be97Edge",
+          "be98Edge",
+          "be99Edge",
+          "be100Edge",
+          "be101Edge",
+          "be102Edge",
+          "CONDENSED_R5_EDGES",
           "BridgeEdge",
           "ComposeOptions",
           "EdgeConfidence",
@@ -31551,6 +32892,9 @@
       {
         "name": "Bridges",
         "files": [
+          "src/bridges/be100-lyddane-sachs-teller.ts",
+          "src/bridges/be101-bkt-jump.ts",
+          "src/bridges/be102-landauer-conductance.ts",
           "src/bridges/be11-decoherence-confrontation.ts",
           "src/bridges/be21-kss-confrontation.ts",
           "src/bridges/be23-planckian-confrontation.ts",
@@ -31604,6 +32948,18 @@
           "src/bridges/be85-shot-noise.ts",
           "src/bridges/be86-reynolds-analogy.ts",
           "src/bridges/be87-capacitor-noise.ts",
+          "src/bridges/be88-fermi-sea.ts",
+          "src/bridges/be89-debye-cutoff.ts",
+          "src/bridges/be90-debye-heat.ts",
+          "src/bridges/be91-einstein-solid.ts",
+          "src/bridges/be92-sommerfeld-heat.ts",
+          "src/bridges/be93-curie-weiss.ts",
+          "src/bridges/be94-pauli-paramagnetism.ts",
+          "src/bridges/be95-ginzburg-landau.ts",
+          "src/bridges/be96-upper-critical.ts",
+          "src/bridges/be97-ambegaokar-baratoff.ts",
+          "src/bridges/be98-bcs-jump.ts",
+          "src/bridges/be99-mass-action.ts",
           "src/bridges/bridge-equations.ts",
           "src/bridges/carrier-sign.ts",
           "src/bridges/catalog-adapter.ts",
@@ -31809,6 +33165,7 @@
           "src/composition/edges/catalog-gravitation-cosmology.ts",
           "src/composition/edges/catalog-quantum.ts",
           "src/composition/edges/catalog-tranche.ts",
+          "src/composition/edges/condensed-r5.ts",
           "src/composition/edges/proved-seeds.ts",
           "src/composition/enumerate.ts",
           "src/composition/explain.ts",
@@ -31854,6 +33211,7 @@
           "src/composition/quantities/applied-physicist.ts",
           "src/composition/quantities/common.ts",
           "src/composition/quantities/condensed-matter.ts",
+          "src/composition/quantities/condensed-r5.ts",
           "src/composition/quantities/fields.ts",
           "src/composition/quantities/gravitation-cosmology.ts",
           "src/composition/quantities/quantum.ts",
@@ -31995,18 +33353,18 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 454,
+    "totalTypeScriptFiles": 471,
     "totalModules": 13,
-    "totalLinesOfCode": 96815,
-    "totalExports": 3351,
+    "totalLinesOfCode": 99578,
+    "totalExports": 3553,
     "totalClasses": 61,
-    "totalInterfaces": 530,
-    "totalFunctions": 834,
+    "totalInterfaces": 560,
+    "totalFunctions": 849,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 846,
-    "totalReExports": 1611,
-    "totalTypeOnlyImports": 580,
+    "totalConstants": 911,
+    "totalReExports": 1734,
+    "totalTypeOnlyImports": 583,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

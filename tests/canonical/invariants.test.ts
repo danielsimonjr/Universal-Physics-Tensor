@@ -121,13 +121,14 @@ describe('OPEN-bridge coverage (F2 — gaps are logged, not silent)', () => {
 
   it('un-partnered catalog bridges are enumerated and the count is pinned', () => {
     const gap = bridgesWithoutCanonicalPartner();
-    // 77 catalog bridges − 8 partnered. Shrinking this is a deliberate act
+    // 92 catalog bridges − 8 partnered. Shrinking this is a deliberate act
     // (add a canonical partner, then update this number). Most remaining gap
     // bridges are SPECULATIVE — they correctly have no standard-physics partner.
     // The sentence that the gap is 55 is the record from before be-74..76.
     // The sentence that the gap is 58 is the record from before be-77..87.
-    // None of those eleven has a canonical partner.
-    expect(gap.length).toBe(69);
+    // The sentence that the gap is 69 is the record from before be-88..102.
+    // None of those fifteen has a canonical partner.
+    expect(gap.length).toBe(84);
     // every gap id is a real catalog id (and none is partnered)
     const partnered = partneredBridgeIds();
     for (const id of gap) {

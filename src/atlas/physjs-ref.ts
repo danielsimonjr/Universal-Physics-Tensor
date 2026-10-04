@@ -7,16 +7,19 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `92f87257a1e3086a48cdc19fe4361cc1c5909d49`.
+ * The commit is PhysJS `main` `03e8bb77c952f720bdd2730af2afc6a7f2d36243`.
  * PhysJS #63 stores each Lean file at `lean/<File>.lean`. The sentence that
- * the pin is `ee753df77bd5b29b7207443181606b6004bfcf6a` is the record from
+ * the pin is `92f87257a1e3086a48cdc19fe4361cc1c5909d49` is the record from
+ * before PhysJS #65. The sentence that the pin is
+ * `ee753df77bd5b29b7207443181606b6004bfcf6a` is the record from
  * before PhysJS #64. The sentence that the pin is
  * `4ea35872513f8d4d12a01bfac225156bdddb87a9` and that the path is
  * `lean/PhysJS/<File>.lean` is the record from before that flatten. The
  * sentence that the pin is `3af15b49be09442350510e7c7f56f4aab92ea3bc` and
  * that the path is `PhysJS/<File>.lean` is the record from before PhysJS #61.
  * Theorem names of the earlier entries are unchanged. PhysJS #62 adds be-74,
- * be-75, and be-76. PhysJS #64 adds be-77 through be-87.
+ * be-75, and be-76. PhysJS #64 adds be-77 through be-87. PhysJS #65 adds
+ * be-88 through be-102.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -34,7 +37,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '92f87257a1e3086a48cdc19fe4361cc1c5909d49';
+export const PHYSJS_COMMIT = '03e8bb77c952f720bdd2730af2afc6a7f2d36243';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -962,6 +965,156 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
+  {
+    key: "be-88",
+    bridgeId: "be-88",
+    theorem: "PhysJS.FermiSea.fermi_sea",
+    covers:
+      "derivation-step: two spin states times the sphere (4π/3) k_F³/(2π)³ give n, so k_F³ = 3 π² n and the nonnegative root is k_F = (3 π² n)^{1/3}. The isotropic parabola E = ℏ² k²/(2 m*) is E_F at k_F. Its first derivative is v_F = ℏ k_F/m*, and ℏ⁻² times the second derivative is 1/m*. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-89",
+    bridgeId: "be-89",
+    theorem: "PhysJS.DebyeCutoff.debye_cutoff",
+    covers:
+      "derivation-step: three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-90",
+    bridgeId: "be-90",
+    theorem: "PhysJS.DebyeHeat.debye_heat",
+    covers:
+      "derivation-step: the mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity. The phonon integral, the extension to infinity, and π⁴/15 are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-91",
+    bridgeId: "be-91",
+    theorem: "PhysJS.EinsteinSolid.einstein_heat",
+    covers:
+      "derivation-step: three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-92",
+    bridgeId: "be-92",
+    theorem: "PhysJS.SommerfeldHeat.electronic_heat",
+    covers:
+      "derivation-step: the Sommerfeld energy correction δU = (π²/6) (k_B T)² g(E_F) is a hypothesis, and its temperature derivative is c_V = (π²/3) k_B² T g(E_F). PhysJS.FermiSea.dos_factor is g(E_F) = (3/2) n/E_F for a √E density, so c_V = (π²/2) n k_B² T/E_F. A flat density g = n/E_F leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-93",
+    bridgeId: "be-93",
+    theorem: "PhysJS.CurieWeiss.curie_weiss",
+    covers:
+      "derivation-step: linear response χ k_B T = μ₀ n (g μ_B)² ⟨S_z²⟩ with the high-temperature moment ⟨S_z²⟩ = S(S+1)/3 gives the Curie constant C = μ₀ n g² μ_B² S(S+1)/(3 k_B). Equal weights on m = ±1/2 give 1/4 = S(S+1)/3 at S = 1/2. Mean field B_eff = B + λ M with θ = C λ/μ₀ gives χ = C/(T−θ). θ = 0 is C/T. A classical moment uses μ²/3. The second moment and the mean-field shift are hypotheses. Not an su(2) derivation",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-94",
+    bridgeId: "be-94",
+    theorem: "PhysJS.PauliParamagnetism.pauli",
+    covers:
+      "derivation-step: the Zeeman imbalance M = μ_B² g(E_F) B is a hypothesis, and χ_P = μ₀ M/B is μ₀ μ_B² g(E_F). PhysJS.FermiSea.dos_factor supplies g(E_F) = (3/2) n/E_F, so χ_P = μ₀ μ_B² (3 n)/(2 E_F). A flat density leaves the factor 1. Not Landau diamagnetism",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-95",
+    bridgeId: "be-95",
+    theorem: "PhysJS.GinzburgLandau.type_boundary",
+    covers:
+      "derivation-step: in the normalization with gradient coefficient 1/κ², quartic (1/2)(1−f²)², and field B², the density at κ² = 1/2 is (√2 f' − a f)² + (B + (1−f²)/√2)² minus √2 times the derivative of a(1−f²). Vanishing squares and equal endpoints make that wall integral zero. A trial profile with that critical integral has energy (1/κ² − 2) times the gradient integral: negative when κ > 1/√2, zero at κ = 1/√2, and positive when κ < 1/√2. The positive side is this trial, not every minimizer. The GL density and the profile are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-96",
+    bridgeId: "be-96",
+    theorem: "PhysJS.UpperCritical.critical_field",
+    covers:
+      "derivation-step: the linearized GL instability sets the Landau-level ground energy ℏ q B/(2 m*) of charge q = 2e equal to |α| = ℏ²/(2 m* ξ²). That level is a hypothesis, not the spectrum of the covariant Laplacian. The field is B = ℏ/(2 e ξ²). With Φ₀ = h/(2e) and h = 2 π ℏ this is B_c2 = Φ₀/(2 π ξ²). Charge e instead of 2e is a different field",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-97",
+    bridgeId: "be-97",
+    theorem: "PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff",
+    covers:
+      "derivation-step: the chain rule along E = Δ cosh t pulls the coherence-factor integrand back to sech t for t > 0. ∫₀^T sech = arctan(sinh T), and the limit T → ∞ is π/2. The tunnel Hamiltonian at zero temperature and identical gaps is the hypothesis that e I_c R_n is Δ times that improper integral, so I_c R_n = π Δ/(2 e). A coefficient other than π/2 fails. Not the finite-temperature tanh factor",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-98",
+    bridgeId: "be-98",
+    theorem: "PhysJS.BcsJump.heat_jump",
+    covers:
+      "derivation-step: the weak-coupling excess free energy F = N(0) (T−T_c)/T_c · Δ² + 7 ζ N(0)/(16 π² T_c²) · Δ⁴ is a hypothesis, with k_B = 1. Its minimum is −α₀² (T−T_c)²/(4 β), and −T ∂²F/∂T² at T_c is ΔC = T_c α₀²/(2 β) = 8 π² N(0) T_c/(7 ζ). The normal heat capacity C_n = (2 π²/3) N(0) T_c is the both-spin Sommerfeld value, a hypothesis. The ratio is 12/(7 ζ). ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio. Not 2π exp(−γ)",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-99",
+    bridgeId: "be-99",
+    theorem: "PhysJS.MassAction.mass_action",
+    covers:
+      "derivation-step: the Boltzmann tails n = N_c exp(−(E_c−μ)/(k_B T)) and p = N_v exp(−(μ−E_v)/(k_B T)), with E_g = E_c − E_v, multiply to N_c N_v exp(−E_g/(k_B T)). That product is the square of n_i = √(N_c N_v) exp(−E_g/(2 k_B T)). Dropping the 2 in the exponent is a different density. The tails are hypotheses. Not a Fermi–Dirac integral",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-100",
+    bridgeId: "be-100",
+    theorem: "PhysJS.LyddaneSachsTeller.lst",
+    covers:
+      "derivation-step: the undamped oscillator ε(ω) = ε(∞) + S/(ω_TO² − ω²) has a zero at ω_LO, which fixes S, and ε(0) is the same function at zero frequency. The ratio is ω_LO²/ω_TO² = ε(0)/ε(∞). The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-101",
+    bridgeId: "be-101",
+    theorem: "PhysJS.BktJump.bkt_jump",
+    covers:
+      "derivation-step: the phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-102",
+    bridgeId: "be-102",
+    theorem: "PhysJS.LandauerConductance.conductance_eq",
+    covers:
+      "derivation-step: a one-dimensional mode of speed v in a length L has density of states L/(h v) per spin, and the flux times v/L cancels to 1/h. Current is spin · e · (Σ T_n) · (1/h) · Δμ with spin = 2 and Δμ = e V, so G = (2 e²/h) Σ T_n. One spin is e²/h. The transmissions and the bias window are hypotheses. Not the Hall conductance and not Landauer erasure",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
 ];
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
@@ -1067,6 +1220,21 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-85',
   'be-86',
   'be-87',
+  'be-88',
+  'be-89',
+  'be-90',
+  'be-91',
+  'be-92',
+  'be-93',
+  'be-94',
+  'be-95',
+  'be-96',
+  'be-97',
+  'be-98',
+  'be-99',
+  'be-100',
+  'be-101',
+  'be-102',
 ]);
 
 /**

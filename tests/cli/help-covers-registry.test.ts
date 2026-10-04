@@ -74,7 +74,7 @@ describe('upt --help covers the command registry', () => {
     expect(help).toContain('upt eval E E=1eV');
     expect(help).not.toMatch(/E=<number>/);
     // 55..76 is the record from before be-77..87.
-    expect(help).toMatch(/BE-51\/52\/55\.\.87/);
+    expect(help).toMatch(/BE-51\/52\/55\.\.102/);
     expect(help).not.toMatch(/55\.\.65/);
   });
 });

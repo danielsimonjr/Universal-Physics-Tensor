@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 145 established-confidence edge(s) of the 177 in this graph
+  anchored core: the clusters holding at least one of the 160 established-confidence edge(s) of the 192 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  30 of the isolated bridges share a name token with the core; 13 are truly unconnected.
+  43 of the isolated bridges share a name token with the core; 16 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -31,6 +31,18 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
           Real physics, already entailed by the L-layer via CE-planck-einstein (E=hν) and CE-mass-energy (E=mc²); not a new link. Both Adam and Eve agree it is not a new discovery.
 
   UNADJUDICATED (a shared token is a token):
+    ── be-101 (isolated):
+        bkt-temperature ≟ capacitor-temperature                [[temperature]]  → be-87
+        bkt-temperature ≟ clapeyron-temperature                [[temperature]]  → be-71
+        bkt-temperature ≟ cold-reservoir-temperature           [[temperature]]  → CE-carnot-efficiency
+        bkt-temperature ≟ effective-temperature                [[temperature]]  → be-27
+        bkt-temperature ≟ hot-reservoir-temperature            [[temperature]]  → CE-carnot-efficiency
+        bkt-temperature ≟ reference-temperature                [[temperature]]  → be-33
+        bkt-temperature ≟ reheating-temperature                [[temperature]]  → be-34
+        bkt-temperature ≟ temperature                          [[temperature]]  → be-12
+        bkt-temperature ≟ temperature-change                   [[temperature]]  → CE-heat-capacity
+    ── be-102 (isolated):
+        landauer-channel-conductance ≟ hall-conductance        [[L^-2 M^-1 T^3 I^2]]  → be-55
     ── be-14 (isolated):
         boundary-entanglement-entropy ≟ bh-entropy             [[entropy]]  → CE-bekenstein-hawking
         boundary-entanglement-entropy ≟ boltzmann-entropy      [[entropy]]  → CE-boltzmann-entropy
@@ -38,6 +50,8 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         minimal-surface-area ≟ area                            [[area]]  → CE-resistance-material
         minimal-surface-area ≟ cross-sectional-area            [[area]]  → CE-volume-flow-rate
         minimal-surface-area ≟ pull-in-area                    [[area]]  → be-79
+    ── be-18 (isolated):
+        dark-fermion-mass ≟ mass-action-gap                    [[energy]]  → be-99
     ── be-22 (isolated):
         boundary-length ≟ coarsening-length                    [[length]]  → be-15
         boundary-length ≟ column-length                        [[length]]  → be-78
@@ -46,6 +60,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         boundary-length ≟ planck-length                        [[length]]  → be-31
         boundary-length ≟ quantum-correlation-length           [[length]]  → be-33
         boundary-length ≟ reference-correlation-length         [[length]]  → be-33
+        boundary-length ≟ upper-critical-length                [[length]]  → be-96
     ── be-24 (isolated):
         donor-acceptor-distance ≟ distance                     [[length]]  → CE-work
         donor-acceptor-distance ≟ hubble-distance              [[length]]  → CE-hubble-distance
@@ -61,6 +76,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
     ── be-26 (isolated):
         attempt-frequency ≟ angular-frequency                  [[frequency]]  → CE-lc-resonance
         attempt-frequency ≟ cyclotron-frequency                [[frequency]]  → CE-cyclotron-frequency
+        attempt-frequency ≟ debye-cutoff-frequency             [[frequency]]  → be-89
         attempt-frequency ≟ debye-frequency                    [[frequency]]  → CE-debye-frequency
         attempt-frequency ≟ frequency                          [[frequency]]  → be-59
         attempt-frequency ≟ photon-frequency                   [[frequency]]  → CE-photoelectric
@@ -71,6 +87,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         tunneling-mass ≟ child-carrier-mass                    [[mass]]  → be-81
         tunneling-mass ≟ defect-rest-mass                      [[mass]]  → be-34
         tunneling-mass ≟ electron-mass                         [[mass]]  → CE-compton-shift
+        tunneling-mass ≟ fermi-sea-mass                        [[mass]]  → be-88
         tunneling-mass ≟ mass                                  [[mass]]  → be-12
         tunneling-mass ≟ molecular-mass                        [[mass]]  → CE-kinetic-pressure
         tunneling-mass ≟ planck-mass                           [[mass]]  → be-41
@@ -79,6 +96,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         tunneling-mass ≟ swampland-tower-mass                  [[mass]]  → be-41
     ── be-36 (isolated):
         gravitational-wave-speed ≟ alfven-speed                [[velocity]]  → be-67
+        gravitational-wave-speed ≟ debye-sound-speed           [[velocity]]  → be-89
         gravitational-wave-speed ≟ fast-magnetosonic-speed     [[velocity]]  → be-69
         gravitational-wave-speed ≟ most-probable-speed         [[velocity]]  → CE-mb-most-probable-speed
         gravitational-wave-speed ≟ sound-speed                 [[velocity]]  → be-69
@@ -104,11 +122,13 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         inflation-hubble-energy ≟ kinetic-energy               [[energy]]  → CE-kinetic-energy
         inflation-hubble-energy ≟ landauer-erasure-energy      [[energy]]  → be-16
         inflation-hubble-energy ≟ oscillator-energy            [[energy]]  → CE-oscillator-energy
+        inflation-hubble-energy ≟ pauli-fermi-energy           [[energy]]  → be-94
         inflation-hubble-energy ≟ photoelectron-max-energy     [[energy]]  → CE-photoelectric
         inflation-hubble-energy ≟ photon-energy                [[energy]]  → CE-planck-einstein
         inflation-hubble-energy ≟ rest-energy                  [[energy]]  → CE-mass-energy
         inflation-hubble-energy ≟ rotational-kinetic-energy    [[energy]]  → CE-rotational-kinetic-energy
         inflation-hubble-energy ≟ rydberg-energy               [[energy]]  → CE-rydberg-energy
+        inflation-hubble-energy ≟ sommerfeld-fermi-energy      [[energy]]  → be-92
         inflation-hubble-energy ≟ spring-potential-energy      [[energy]]  → CE-spring-potential-energy
         inflation-hubble-energy ≟ state-energy                 [[energy]]  → CE-boltzmann-factor
         inflation-hubble-energy ≟ thermal-energy               [[energy]]  → CE-equipartition
@@ -122,58 +142,83 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         planck-mass-energy ≟ internal-energy-change            [[energy]]  → CE-first-law-thermodynamics
         planck-mass-energy ≟ kinetic-energy                    [[energy]]  → CE-kinetic-energy
         planck-mass-energy ≟ landauer-erasure-energy           [[energy]]  → be-16
+        planck-mass-energy ≟ mass-action-gap                   [[energy]]  → be-99
         planck-mass-energy ≟ oscillator-energy                 [[energy]]  → CE-oscillator-energy
+        planck-mass-energy ≟ pauli-fermi-energy                [[energy]]  → be-94
         planck-mass-energy ≟ photoelectron-max-energy          [[energy]]  → CE-photoelectric
         planck-mass-energy ≟ photon-energy                     [[energy]]  → CE-planck-einstein
         planck-mass-energy ≟ rest-energy                       [[energy]]  → CE-mass-energy
         planck-mass-energy ≟ rotational-kinetic-energy         [[energy]]  → CE-rotational-kinetic-energy
         planck-mass-energy ≟ rydberg-energy                    [[energy]]  → CE-rydberg-energy
+        planck-mass-energy ≟ sommerfeld-fermi-energy           [[energy]]  → be-92
         planck-mass-energy ≟ spring-potential-energy           [[energy]]  → CE-spring-potential-energy
         planck-mass-energy ≟ state-energy                      [[energy]]  → CE-boltzmann-factor
         planck-mass-energy ≟ thermal-energy                    [[energy]]  → CE-equipartition
     ── be-68 (isolated):
+        proper-temperature ≟ bkt-temperature                   [[temperature]]  → be-101
         proper-temperature ≟ capacitor-temperature             [[temperature]]  → be-87
         proper-temperature ≟ clapeyron-temperature             [[temperature]]  → be-71
         proper-temperature ≟ cold-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
+        proper-temperature ≟ curie-temperature                 [[temperature]]  → be-93
+        proper-temperature ≟ debye-temperature                 [[temperature]]  → be-90
         proper-temperature ≟ effective-temperature             [[temperature]]  → be-27
+        proper-temperature ≟ einstein-solid-temperature        [[temperature]]  → be-91
         proper-temperature ≟ einstein-temperature              [[temperature]]  → be-70
         proper-temperature ≟ hot-reservoir-temperature         [[temperature]]  → CE-carnot-efficiency
+        proper-temperature ≟ mass-action-temperature           [[temperature]]  → be-99
         proper-temperature ≟ peltier-temperature               [[temperature]]  → be-73
         proper-temperature ≟ reference-temperature             [[temperature]]  → be-33
         proper-temperature ≟ reheating-temperature             [[temperature]]  → be-34
         proper-temperature ≟ shockley-temperature              [[temperature]]  → be-82
+        proper-temperature ≟ sommerfeld-temperature            [[temperature]]  → be-92
         proper-temperature ≟ temperature                       [[temperature]]  → be-12
         proper-temperature ≟ temperature-change                [[temperature]]  → CE-heat-capacity
         proper-temperature ≟ thomson-temperature               [[temperature]]  → be-83
+        proper-temperature ≟ weiss-temperature                 [[temperature]]  → be-93
     ── be-70 (isolated):
         carrier-charge ≟ charge                                [[charge]]  → CE-cyclotron-frequency
         diffusivity ≟ thermal-diffusivity                      [[L^2 T^-1]]  → CE-thermal-diffusivity
+        einstein-temperature ≟ bkt-temperature                 [[temperature]]  → be-101
         einstein-temperature ≟ capacitor-temperature           [[temperature]]  → be-87
         einstein-temperature ≟ clapeyron-temperature           [[temperature]]  → be-71
         einstein-temperature ≟ cold-reservoir-temperature      [[temperature]]  → CE-carnot-efficiency
+        einstein-temperature ≟ curie-temperature               [[temperature]]  → be-93
+        einstein-temperature ≟ debye-temperature               [[temperature]]  → be-90
         einstein-temperature ≟ effective-temperature           [[temperature]]  → be-27
+        einstein-temperature ≟ einstein-solid-temperature      [[temperature]]  → be-91
+        einstein-temperature ≟ einstein-theta                  [[temperature]]  → be-91
         einstein-temperature ≟ hot-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        einstein-temperature ≟ mass-action-temperature         [[temperature]]  → be-99
         einstein-temperature ≟ peltier-temperature             [[temperature]]  → be-73
         einstein-temperature ≟ reference-temperature           [[temperature]]  → be-33
         einstein-temperature ≟ reheating-temperature           [[temperature]]  → be-34
         einstein-temperature ≟ shockley-temperature            [[temperature]]  → be-82
+        einstein-temperature ≟ sommerfeld-temperature          [[temperature]]  → be-92
         einstein-temperature ≟ temperature                     [[temperature]]  → be-12
         einstein-temperature ≟ temperature-change              [[temperature]]  → CE-heat-capacity
         einstein-temperature ≟ thomson-temperature             [[temperature]]  → be-83
+        einstein-temperature ≟ weiss-temperature               [[temperature]]  → be-93
         electrical-mobility ≟ carrier-mobility                 [[M^-1 T^2 I]]  → CE-carrier-mobility
         electrical-mobility ≟ mott-mobility                    [[M^-1 T^2 I]]  → be-80
     ── be-73 (isolated):
+        peltier-temperature ≟ bkt-temperature                  [[temperature]]  → be-101
         peltier-temperature ≟ capacitor-temperature            [[temperature]]  → be-87
         peltier-temperature ≟ clapeyron-temperature            [[temperature]]  → be-71
         peltier-temperature ≟ cold-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        peltier-temperature ≟ curie-temperature                [[temperature]]  → be-93
+        peltier-temperature ≟ debye-temperature                [[temperature]]  → be-90
         peltier-temperature ≟ effective-temperature            [[temperature]]  → be-27
+        peltier-temperature ≟ einstein-solid-temperature       [[temperature]]  → be-91
         peltier-temperature ≟ hot-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
+        peltier-temperature ≟ mass-action-temperature          [[temperature]]  → be-99
         peltier-temperature ≟ reference-temperature            [[temperature]]  → be-33
         peltier-temperature ≟ reheating-temperature            [[temperature]]  → be-34
         peltier-temperature ≟ shockley-temperature             [[temperature]]  → be-82
+        peltier-temperature ≟ sommerfeld-temperature           [[temperature]]  → be-92
         peltier-temperature ≟ temperature                      [[temperature]]  → be-12
         peltier-temperature ≟ temperature-change               [[temperature]]  → CE-heat-capacity
         peltier-temperature ≟ thomson-temperature              [[temperature]]  → be-83
+        peltier-temperature ≟ weiss-temperature                [[temperature]]  → be-93
         seebeck-coefficient ≟ thomson-coefficient              [[L^2 M T^-3 I^-1 Theta^-1]]  → be-83
     ── be-78 (isolated):
         column-length ≟ coarsening-length                      [[length]]  → be-15
@@ -182,6 +227,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         column-length ≟ planck-length                          [[length]]  → be-31
         column-length ≟ quantum-correlation-length             [[length]]  → be-33
         column-length ≟ reference-correlation-length           [[length]]  → be-33
+        column-length ≟ upper-critical-length                  [[length]]  → be-96
     ── be-79 (isolated):
         pull-in-area ≟ area                                    [[area]]  → CE-resistance-material
         pull-in-area ≟ cross-sectional-area                    [[area]]  → CE-volume-flow-rate
@@ -203,6 +249,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         child-carrier-mass ≟ defect-rest-mass                  [[mass]]  → be-34
         child-carrier-mass ≟ effective-mass                    [[mass]]  → be-23
         child-carrier-mass ≟ electron-mass                     [[mass]]  → CE-compton-shift
+        child-carrier-mass ≟ fermi-sea-mass                    [[mass]]  → be-88
         child-carrier-mass ≟ mass                              [[mass]]  → be-12
         child-carrier-mass ≟ molecular-mass                    [[mass]]  → CE-kinetic-pressure
         child-carrier-mass ≟ planck-mass                       [[mass]]  → be-41
@@ -216,28 +263,42 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         shockley-current ≟ current                             [[I]]  → CE-ohm-law
         shockley-current ≟ four-point-current                  [[I]]  → be-84
         shockley-current ≟ shot-current                        [[I]]  → be-85
+        shockley-temperature ≟ bkt-temperature                 [[temperature]]  → be-101
         shockley-temperature ≟ capacitor-temperature           [[temperature]]  → be-87
         shockley-temperature ≟ clapeyron-temperature           [[temperature]]  → be-71
         shockley-temperature ≟ cold-reservoir-temperature      [[temperature]]  → CE-carnot-efficiency
+        shockley-temperature ≟ curie-temperature               [[temperature]]  → be-93
+        shockley-temperature ≟ debye-temperature               [[temperature]]  → be-90
         shockley-temperature ≟ effective-temperature           [[temperature]]  → be-27
+        shockley-temperature ≟ einstein-solid-temperature      [[temperature]]  → be-91
         shockley-temperature ≟ hot-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        shockley-temperature ≟ mass-action-temperature         [[temperature]]  → be-99
         shockley-temperature ≟ reference-temperature           [[temperature]]  → be-33
         shockley-temperature ≟ reheating-temperature           [[temperature]]  → be-34
+        shockley-temperature ≟ sommerfeld-temperature          [[temperature]]  → be-92
         shockley-temperature ≟ temperature                     [[temperature]]  → be-12
         shockley-temperature ≟ temperature-change              [[temperature]]  → CE-heat-capacity
         shockley-temperature ≟ thomson-temperature             [[temperature]]  → be-83
+        shockley-temperature ≟ weiss-temperature               [[temperature]]  → be-93
         shockley-voltage ≟ four-point-voltage                  [[L^2 M T^-3 I^-1]]  → be-84
         shockley-voltage ≟ voltage                             [[L^2 M T^-3 I^-1]]  → be-59
     ── be-83 (isolated):
+        thomson-temperature ≟ bkt-temperature                  [[temperature]]  → be-101
         thomson-temperature ≟ capacitor-temperature            [[temperature]]  → be-87
         thomson-temperature ≟ clapeyron-temperature            [[temperature]]  → be-71
         thomson-temperature ≟ cold-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        thomson-temperature ≟ curie-temperature                [[temperature]]  → be-93
+        thomson-temperature ≟ debye-temperature                [[temperature]]  → be-90
         thomson-temperature ≟ effective-temperature            [[temperature]]  → be-27
+        thomson-temperature ≟ einstein-solid-temperature       [[temperature]]  → be-91
         thomson-temperature ≟ hot-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
+        thomson-temperature ≟ mass-action-temperature          [[temperature]]  → be-99
         thomson-temperature ≟ reference-temperature            [[temperature]]  → be-33
         thomson-temperature ≟ reheating-temperature            [[temperature]]  → be-34
+        thomson-temperature ≟ sommerfeld-temperature           [[temperature]]  → be-92
         thomson-temperature ≟ temperature                      [[temperature]]  → be-12
         thomson-temperature ≟ temperature-change               [[temperature]]  → CE-heat-capacity
+        thomson-temperature ≟ weiss-temperature                [[temperature]]  → be-93
     ── be-84 (isolated):
         four-point-current ≟ current                           [[I]]  → CE-ohm-law
         four-point-current ≟ shot-current                      [[I]]  → be-85
@@ -245,6 +306,215 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         sheet-resistance ≟ resistance                          [[L^2 M T^-3 I^-2]]  → CE-ohm-law
     ── be-85 (isolated):
         shot-current ≟ current                                 [[I]]  → CE-ohm-law
+    ── be-88 (isolated):
+        fermi-sea-density ≟ carrier-density                    [[L^-3]]  → be-23
+        fermi-sea-density ≟ curie-density                      [[L^-3]]  → be-93
+        fermi-sea-density ≟ dark-species-density               [[L^-3]]  → be-47
+        fermi-sea-density ≟ debye-atom-density                 [[L^-3]]  → be-89
+        fermi-sea-density ≟ mass-action-density                [[L^-3]]  → be-99
+        fermi-sea-density ≟ neutron-density                    [[L^-3]]  → be-47
+        fermi-sea-density ≟ nucleon-yield-density              [[L^-3]]  → be-47
+        fermi-sea-density ≟ number-density                     [[L^-3]]  → CE-debye-frequency
+        fermi-sea-density ≟ pauli-density                      [[L^-3]]  → be-94
+        fermi-sea-density ≟ proton-density                     [[L^-3]]  → be-47
+        fermi-sea-density ≟ sommerfeld-density                 [[L^-3]]  → be-92
+        fermi-sea-mass ≟ defect-rest-mass                      [[mass]]  → be-34
+        fermi-sea-mass ≟ effective-mass                        [[mass]]  → be-23
+        fermi-sea-mass ≟ electron-mass                         [[mass]]  → CE-compton-shift
+        fermi-sea-mass ≟ mass                                  [[mass]]  → be-12
+        fermi-sea-mass ≟ molecular-mass                        [[mass]]  → CE-kinetic-pressure
+        fermi-sea-mass ≟ planck-mass                           [[mass]]  → be-41
+        fermi-sea-mass ≟ reference-mass                        [[mass]]  → be-41
+        fermi-sea-mass ≟ secondary-mass                        [[mass]]  → CE-newton-gravitation
+        fermi-sea-mass ≟ swampland-tower-mass                  [[mass]]  → be-41
+    ── be-89 (isolated):
+        debye-atom-density ≟ carrier-density                   [[L^-3]]  → be-23
+        debye-atom-density ≟ curie-density                     [[L^-3]]  → be-93
+        debye-atom-density ≟ dark-species-density              [[L^-3]]  → be-47
+        debye-atom-density ≟ mass-action-density               [[L^-3]]  → be-99
+        debye-atom-density ≟ neutron-density                   [[L^-3]]  → be-47
+        debye-atom-density ≟ nucleon-yield-density             [[L^-3]]  → be-47
+        debye-atom-density ≟ number-density                    [[L^-3]]  → CE-debye-frequency
+        debye-atom-density ≟ pauli-density                     [[L^-3]]  → be-94
+        debye-atom-density ≟ proton-density                    [[L^-3]]  → be-47
+        debye-atom-density ≟ sommerfeld-density                [[L^-3]]  → be-92
+        debye-cutoff-frequency ≟ angular-frequency             [[frequency]]  → CE-lc-resonance
+        debye-cutoff-frequency ≟ cyclotron-frequency           [[frequency]]  → CE-cyclotron-frequency
+        debye-cutoff-frequency ≟ debye-frequency               [[frequency]]  → CE-debye-frequency
+        debye-cutoff-frequency ≟ frequency                     [[frequency]]  → be-59
+        debye-cutoff-frequency ≟ photon-frequency              [[frequency]]  → CE-photoelectric
+        debye-cutoff-frequency ≟ plasma-frequency              [[frequency]]  → CE-plasma-frequency
+        debye-sound-speed ≟ alfven-speed                       [[velocity]]  → be-67
+        debye-sound-speed ≟ fast-magnetosonic-speed            [[velocity]]  → be-69
+        debye-sound-speed ≟ most-probable-speed                [[velocity]]  → CE-mb-most-probable-speed
+        debye-sound-speed ≟ sound-speed                        [[velocity]]  → be-69
+        debye-sound-speed ≟ speed                              [[velocity]]  → CE-string-wave-speed
+        debye-sound-speed ≟ speed-of-light                     [[velocity]]  → CE-larmor-power
+    ── be-90 (isolated):
+        debye-heat-capacity ≟ einstein-heat-capacity           [[entropy]]  → be-91
+        debye-temperature ≟ bkt-temperature                    [[temperature]]  → be-101
+        debye-temperature ≟ capacitor-temperature              [[temperature]]  → be-87
+        debye-temperature ≟ clapeyron-temperature              [[temperature]]  → be-71
+        debye-temperature ≟ cold-reservoir-temperature         [[temperature]]  → CE-carnot-efficiency
+        debye-temperature ≟ curie-temperature                  [[temperature]]  → be-93
+        debye-temperature ≟ effective-temperature              [[temperature]]  → be-27
+        debye-temperature ≟ einstein-solid-temperature         [[temperature]]  → be-91
+        debye-temperature ≟ hot-reservoir-temperature          [[temperature]]  → CE-carnot-efficiency
+        debye-temperature ≟ mass-action-temperature            [[temperature]]  → be-99
+        debye-temperature ≟ reference-temperature              [[temperature]]  → be-33
+        debye-temperature ≟ reheating-temperature              [[temperature]]  → be-34
+        debye-temperature ≟ sommerfeld-temperature             [[temperature]]  → be-92
+        debye-temperature ≟ temperature                        [[temperature]]  → be-12
+        debye-temperature ≟ temperature-change                 [[temperature]]  → CE-heat-capacity
+        debye-temperature ≟ weiss-temperature                  [[temperature]]  → be-93
+        debye-theta ≟ einstein-theta                           [[temperature]]  → be-91
+    ── be-91 (isolated):
+        einstein-solid-temperature ≟ bkt-temperature           [[temperature]]  → be-101
+        einstein-solid-temperature ≟ capacitor-temperature     [[temperature]]  → be-87
+        einstein-solid-temperature ≟ clapeyron-temperature     [[temperature]]  → be-71
+        einstein-solid-temperature ≟ cold-reservoir-temperature [[temperature]]  → CE-carnot-efficiency
+        einstein-solid-temperature ≟ curie-temperature         [[temperature]]  → be-93
+        einstein-solid-temperature ≟ effective-temperature     [[temperature]]  → be-27
+        einstein-solid-temperature ≟ hot-reservoir-temperature [[temperature]]  → CE-carnot-efficiency
+        einstein-solid-temperature ≟ mass-action-temperature   [[temperature]]  → be-99
+        einstein-solid-temperature ≟ reference-temperature     [[temperature]]  → be-33
+        einstein-solid-temperature ≟ reheating-temperature     [[temperature]]  → be-34
+        einstein-solid-temperature ≟ sommerfeld-temperature    [[temperature]]  → be-92
+        einstein-solid-temperature ≟ temperature               [[temperature]]  → be-12
+        einstein-solid-temperature ≟ temperature-change        [[temperature]]  → CE-heat-capacity
+        einstein-solid-temperature ≟ weiss-temperature         [[temperature]]  → be-93
+    ── be-92 (isolated):
+        sommerfeld-density ≟ carrier-density                   [[L^-3]]  → be-23
+        sommerfeld-density ≟ curie-density                     [[L^-3]]  → be-93
+        sommerfeld-density ≟ dark-species-density              [[L^-3]]  → be-47
+        sommerfeld-density ≟ mass-action-density               [[L^-3]]  → be-99
+        sommerfeld-density ≟ neutron-density                   [[L^-3]]  → be-47
+        sommerfeld-density ≟ nucleon-yield-density             [[L^-3]]  → be-47
+        sommerfeld-density ≟ number-density                    [[L^-3]]  → CE-debye-frequency
+        sommerfeld-density ≟ pauli-density                     [[L^-3]]  → be-94
+        sommerfeld-density ≟ proton-density                    [[L^-3]]  → be-47
+        sommerfeld-fermi-energy ≟ active-noise-energy          [[energy]]  → be-27
+        sommerfeld-fermi-energy ≟ energy                       [[energy]]  → CE-capacitor-energy
+        sommerfeld-fermi-energy ≟ erasure-energy               [[energy]]  → CE-landauer
+        sommerfeld-fermi-energy ≟ fermi-energy                 [[energy]]  → CE-fermi-energy
+        sommerfeld-fermi-energy ≟ free-energy-difference       [[energy]]  → CE-jarzynski
+        sommerfeld-fermi-energy ≟ gravitational-potential-energy [[energy]]  → CE-gravitational-potential-energy
+        sommerfeld-fermi-energy ≟ heat-energy                  [[energy]]  → CE-heat-capacity
+        sommerfeld-fermi-energy ≟ internal-energy-change       [[energy]]  → CE-first-law-thermodynamics
+        sommerfeld-fermi-energy ≟ kinetic-energy               [[energy]]  → CE-kinetic-energy
+        sommerfeld-fermi-energy ≟ landauer-erasure-energy      [[energy]]  → be-16
+        sommerfeld-fermi-energy ≟ oscillator-energy            [[energy]]  → CE-oscillator-energy
+        sommerfeld-fermi-energy ≟ pauli-fermi-energy           [[energy]]  → be-94
+        sommerfeld-fermi-energy ≟ photoelectron-max-energy     [[energy]]  → CE-photoelectric
+        sommerfeld-fermi-energy ≟ photon-energy                [[energy]]  → CE-planck-einstein
+        sommerfeld-fermi-energy ≟ rest-energy                  [[energy]]  → CE-mass-energy
+        sommerfeld-fermi-energy ≟ rotational-kinetic-energy    [[energy]]  → CE-rotational-kinetic-energy
+        sommerfeld-fermi-energy ≟ rydberg-energy               [[energy]]  → CE-rydberg-energy
+        sommerfeld-fermi-energy ≟ spring-potential-energy      [[energy]]  → CE-spring-potential-energy
+        sommerfeld-fermi-energy ≟ state-energy                 [[energy]]  → CE-boltzmann-factor
+        sommerfeld-fermi-energy ≟ thermal-energy               [[energy]]  → CE-equipartition
+        sommerfeld-temperature ≟ bkt-temperature               [[temperature]]  → be-101
+        sommerfeld-temperature ≟ capacitor-temperature         [[temperature]]  → be-87
+        sommerfeld-temperature ≟ clapeyron-temperature         [[temperature]]  → be-71
+        sommerfeld-temperature ≟ cold-reservoir-temperature    [[temperature]]  → CE-carnot-efficiency
+        sommerfeld-temperature ≟ curie-temperature             [[temperature]]  → be-93
+        sommerfeld-temperature ≟ effective-temperature         [[temperature]]  → be-27
+        sommerfeld-temperature ≟ hot-reservoir-temperature     [[temperature]]  → CE-carnot-efficiency
+        sommerfeld-temperature ≟ mass-action-temperature       [[temperature]]  → be-99
+        sommerfeld-temperature ≟ reference-temperature         [[temperature]]  → be-33
+        sommerfeld-temperature ≟ reheating-temperature         [[temperature]]  → be-34
+        sommerfeld-temperature ≟ temperature                   [[temperature]]  → be-12
+        sommerfeld-temperature ≟ temperature-change            [[temperature]]  → CE-heat-capacity
+        sommerfeld-temperature ≟ weiss-temperature             [[temperature]]  → be-93
+    ── be-93 (isolated):
+        curie-density ≟ carrier-density                        [[L^-3]]  → be-23
+        curie-density ≟ dark-species-density                   [[L^-3]]  → be-47
+        curie-density ≟ mass-action-density                    [[L^-3]]  → be-99
+        curie-density ≟ neutron-density                        [[L^-3]]  → be-47
+        curie-density ≟ nucleon-yield-density                  [[L^-3]]  → be-47
+        curie-density ≟ number-density                         [[L^-3]]  → CE-debye-frequency
+        curie-density ≟ pauli-density                          [[L^-3]]  → be-94
+        curie-density ≟ proton-density                         [[L^-3]]  → be-47
+        curie-magneton ≟ bohr-magneton                         [[L^2 I]]  → CE-bohr-magneton
+        curie-magneton ≟ pauli-magneton                        [[L^2 I]]  → be-94
+        curie-temperature ≟ bkt-temperature                    [[temperature]]  → be-101
+        curie-temperature ≟ capacitor-temperature              [[temperature]]  → be-87
+        curie-temperature ≟ clapeyron-temperature              [[temperature]]  → be-71
+        curie-temperature ≟ cold-reservoir-temperature         [[temperature]]  → CE-carnot-efficiency
+        curie-temperature ≟ effective-temperature              [[temperature]]  → be-27
+        curie-temperature ≟ hot-reservoir-temperature          [[temperature]]  → CE-carnot-efficiency
+        curie-temperature ≟ mass-action-temperature            [[temperature]]  → be-99
+        curie-temperature ≟ reference-temperature              [[temperature]]  → be-33
+        curie-temperature ≟ reheating-temperature              [[temperature]]  → be-34
+        curie-temperature ≟ temperature                        [[temperature]]  → be-12
+        curie-temperature ≟ temperature-change                 [[temperature]]  → CE-heat-capacity
+        weiss-temperature ≟ bkt-temperature                    [[temperature]]  → be-101
+        weiss-temperature ≟ capacitor-temperature              [[temperature]]  → be-87
+        weiss-temperature ≟ clapeyron-temperature              [[temperature]]  → be-71
+        weiss-temperature ≟ cold-reservoir-temperature         [[temperature]]  → CE-carnot-efficiency
+        weiss-temperature ≟ effective-temperature              [[temperature]]  → be-27
+        weiss-temperature ≟ hot-reservoir-temperature          [[temperature]]  → CE-carnot-efficiency
+        weiss-temperature ≟ mass-action-temperature            [[temperature]]  → be-99
+        weiss-temperature ≟ reference-temperature              [[temperature]]  → be-33
+        weiss-temperature ≟ reheating-temperature              [[temperature]]  → be-34
+        weiss-temperature ≟ temperature                        [[temperature]]  → be-12
+        weiss-temperature ≟ temperature-change                 [[temperature]]  → CE-heat-capacity
+    ── be-94 (isolated):
+        pauli-density ≟ carrier-density                        [[L^-3]]  → be-23
+        pauli-density ≟ dark-species-density                   [[L^-3]]  → be-47
+        pauli-density ≟ mass-action-density                    [[L^-3]]  → be-99
+        pauli-density ≟ neutron-density                        [[L^-3]]  → be-47
+        pauli-density ≟ nucleon-yield-density                  [[L^-3]]  → be-47
+        pauli-density ≟ number-density                         [[L^-3]]  → CE-debye-frequency
+        pauli-density ≟ proton-density                         [[L^-3]]  → be-47
+        pauli-fermi-energy ≟ active-noise-energy               [[energy]]  → be-27
+        pauli-fermi-energy ≟ energy                            [[energy]]  → CE-capacitor-energy
+        pauli-fermi-energy ≟ erasure-energy                    [[energy]]  → CE-landauer
+        pauli-fermi-energy ≟ fermi-energy                      [[energy]]  → CE-fermi-energy
+        pauli-fermi-energy ≟ free-energy-difference            [[energy]]  → CE-jarzynski
+        pauli-fermi-energy ≟ gravitational-potential-energy    [[energy]]  → CE-gravitational-potential-energy
+        pauli-fermi-energy ≟ heat-energy                       [[energy]]  → CE-heat-capacity
+        pauli-fermi-energy ≟ internal-energy-change            [[energy]]  → CE-first-law-thermodynamics
+        pauli-fermi-energy ≟ kinetic-energy                    [[energy]]  → CE-kinetic-energy
+        pauli-fermi-energy ≟ landauer-erasure-energy           [[energy]]  → be-16
+        pauli-fermi-energy ≟ oscillator-energy                 [[energy]]  → CE-oscillator-energy
+        pauli-fermi-energy ≟ photoelectron-max-energy          [[energy]]  → CE-photoelectric
+        pauli-fermi-energy ≟ photon-energy                     [[energy]]  → CE-planck-einstein
+        pauli-fermi-energy ≟ rest-energy                       [[energy]]  → CE-mass-energy
+        pauli-fermi-energy ≟ rotational-kinetic-energy         [[energy]]  → CE-rotational-kinetic-energy
+        pauli-fermi-energy ≟ rydberg-energy                    [[energy]]  → CE-rydberg-energy
+        pauli-fermi-energy ≟ spring-potential-energy           [[energy]]  → CE-spring-potential-energy
+        pauli-fermi-energy ≟ state-energy                      [[energy]]  → CE-boltzmann-factor
+        pauli-fermi-energy ≟ thermal-energy                    [[energy]]  → CE-equipartition
+        pauli-magneton ≟ bohr-magneton                         [[L^2 I]]  → CE-bohr-magneton
+    ── be-96 (isolated):
+        upper-critical-field ≟ magnetic-field                  [[M T^-2 I^-1]]  → CE-magnetic-field-wire
+        upper-critical-field ≟ solenoid-field                  [[M T^-2 I^-1]]  → CE-solenoid-field
+        upper-critical-length ≟ coarsening-length              [[length]]  → be-15
+        upper-critical-length ≟ length                         [[length]]  → CE-pendulum-period
+        upper-critical-length ≟ pipe-length                    [[length]]  → be-77
+        upper-critical-length ≟ planck-length                  [[length]]  → be-31
+        upper-critical-length ≟ quantum-correlation-length     [[length]]  → be-33
+        upper-critical-length ≟ reference-correlation-length   [[length]]  → be-33
+    ── be-97 (isolated):
+        ambegaokar-gap ≟ mass-action-gap                       [[energy]]  → be-99
+    ── be-99 (isolated):
+        mass-action-density ≟ carrier-density                  [[L^-3]]  → be-23
+        mass-action-density ≟ dark-species-density             [[L^-3]]  → be-47
+        mass-action-density ≟ neutron-density                  [[L^-3]]  → be-47
+        mass-action-density ≟ nucleon-yield-density            [[L^-3]]  → be-47
+        mass-action-density ≟ number-density                   [[L^-3]]  → CE-debye-frequency
+        mass-action-density ≟ proton-density                   [[L^-3]]  → be-47
+        mass-action-temperature ≟ bkt-temperature              [[temperature]]  → be-101
+        mass-action-temperature ≟ capacitor-temperature        [[temperature]]  → be-87
+        mass-action-temperature ≟ clapeyron-temperature        [[temperature]]  → be-71
+        mass-action-temperature ≟ cold-reservoir-temperature   [[temperature]]  → CE-carnot-efficiency
+        mass-action-temperature ≟ effective-temperature        [[temperature]]  → be-27
+        mass-action-temperature ≟ hot-reservoir-temperature    [[temperature]]  → CE-carnot-efficiency
+        mass-action-temperature ≟ reference-temperature        [[temperature]]  → be-33
+        mass-action-temperature ≟ reheating-temperature        [[temperature]]  → be-34
+        mass-action-temperature ≟ temperature                  [[temperature]]  → be-12
+        mass-action-temperature ≟ temperature-change           [[temperature]]  → CE-heat-capacity
     ── CE-bekenstein-hawking (isolated):
         bh-entropy ≟ boltzmann-entropy                         [[entropy]]  → CE-boltzmann-entropy
         bh-entropy ≟ entropy-change                            [[entropy]]  → CE-clausius-entropy
@@ -370,6 +640,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         position-momentum-uncertainty-product ≟ angular-momentum [[action]]  → CE-angular-momentum
 
 
-  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86
+  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-100, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86, be-95, be-98
 
   The isolated-bridge review is written up in https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md.

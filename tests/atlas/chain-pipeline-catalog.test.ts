@@ -29,7 +29,8 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
 
   it('leaves the catalog array unchanged', () => {
     expect(BRIDGE_EQUATIONS.map((row) => row.id)).toEqual(before);
-    expect(BRIDGE_EQUATIONS).toHaveLength(77);
+    expect(BRIDGE_EQUATIONS).toHaveLength(92);
+    // 77 is the record from before be-88..102.
   });
 
   it('matches the recorded confirmations, restatements, and stubs', () => {

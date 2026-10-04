@@ -12,11 +12,11 @@ const GRAPH = CATALOG_GRAPH;
 const m = linkageMap(GRAPH);
 
 describe('linkageMap — component structure', () => {
-  it('partitions the 68-edge graph into 43 components (39 isolated)', () => {
-    // 32 components and 28 isolated edges are the record from before be-77..87.
-    // Each of those eleven edges uses quantities that meet no other edge.
-    expect(m.componentCount).toBe(43);
-    expect(m.isolated.length).toBe(39);
+  it('partitions the 83-edge graph into 58 components (54 isolated)', () => {
+    // 43 components and 39 isolated edges are the record from before be-88..102.
+    // Each of those fifteen edges uses quantities that meet no other edge.
+    expect(m.componentCount).toBe(58);
+    expect(m.isolated.length).toBe(54);
     expect(m.clusters.reduce((n, c) => n + c.size, 0)).toBe(GRAPH.length);
   });
 

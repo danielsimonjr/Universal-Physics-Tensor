@@ -71,8 +71,13 @@ describe('upt map — filter flags', () => {
     const { code, text } = await run(['map', '--source=catalog', '--evidence=proposed']);
     expect(code).toBe(0);
     expect(text).toMatch(/dropped \(did not match\)/);
-    expect(text).not.toContain('0 dropped (did not match)');
-    expect(text).toMatch(/\d+ dropped \(no overlay metadata\)/);
+    // A count of 50 contains the characters "0 dropped". Match a count that is zero.
+    const drops = /filter: evidence=proposed — (\d+) of (\d+) kept; (\d+) dropped \(did not match\); (\d+) dropped \(no overlay metadata\)/.exec(
+      text,
+    );
+    expect(drops).not.toBeNull();
+    expect(Number(drops![3])).toBeGreaterThan(0);
+    expect(Number(drops![4])).toBeGreaterThan(0);
   });
 
   it('--json carries the filter stats in the envelope', async () => {

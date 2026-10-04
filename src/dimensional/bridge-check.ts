@@ -190,12 +190,27 @@ export const EXPECTED_DIMENSION_BY_BRIDGE: ReadonlyMap<number, Dimension> = new 
   [85, { L: 0, M: 0, T: 1, I: 2, Theta: 0, N: 0, J: 0 }], // BE-85 one-sided shot noise.
   [86, DIMENSIONLESS], // BE-86 Reynolds analogy at Pr = 1.
   [87, { L: 4, M: 2, T: -6, I: -2, Theta: 0, N: 0, J: 0 }], // BE-87 capacitor ⟨v²⟩.
+  [88, { L: -1, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 }], // BE-88 Fermi wavevector.
+  [89, FREQUENCY], // BE-89 Debye cutoff.
+  [90, { L: 2, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 }], // BE-90 Debye heat capacity.
+  [91, { L: 2, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 }], // BE-91 Einstein heat capacity.
+  [92, { L: -1, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 }], // BE-92 Sommerfeld heat capacity per volume.
+  [93, DIMENSIONLESS], // BE-93 Curie–Weiss susceptibility.
+  [94, DIMENSIONLESS], // BE-94 Pauli susceptibility.
+  [95, DIMENSIONLESS], // BE-95 GL trial-wall factor.
+  [96, { L: 0, M: 1, T: -2, I: -1, Theta: 0, N: 0, J: 0 }], // BE-96 upper critical field.
+  [97, { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 }], // BE-97 Ambegaokar–Baratoff product.
+  [98, DIMENSIONLESS], // BE-98 BCS heat jump.
+  [99, { L: -3, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 }], // BE-99 intrinsic density.
+  [100, DIMENSIONLESS], // BE-100 Lyddane–Sachs–Teller ratio.
+  [101, TEMPERATURE], // BE-101 BKT temperature.
+  [102, HALL_CONDUCTANCE], // BE-102 Landauer conductance.
 ]);
 
 /**
  * Infer the SI dimensional signature of a bridge equation expression.
  *
- * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..87). If present
+ * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..102). If present
  *                  in `EXPECTED_DIMENSION_BY_BRIDGE` the inferred dim
  *                  is cross-checked against the expected; mismatch =>
  *                  null. If absent, the inferred dim is returned as-is.

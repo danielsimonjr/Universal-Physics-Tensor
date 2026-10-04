@@ -28,3 +28,4 @@ export * from './quantities/fields.js';
 export * from './quantities/condensed-matter.js';
 export * from './quantities/common.js';
 export * from './quantities/applied-physicist.js';
+export * from './quantities/condensed-r5.js';

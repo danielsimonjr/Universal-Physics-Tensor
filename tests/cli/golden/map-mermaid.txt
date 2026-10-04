@@ -821,8 +821,25 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (47)"]
+  subgraph cl_iso["isolated (62)"]
     direction LR
+    j_be_100["BE-100"]:::law
+    q_lst_static(["lst-static"]):::qty
+    q_lst_static --> j_be_100
+    q_lst_infinity(["lst-infinity"]):::qty
+    q_lst_infinity --> j_be_100
+    q_lst_ratio(["lst-ratio"]):::qty
+    j_be_100 --> q_lst_ratio
+    j_be_101["BE-101"]:::law
+    q_bkt_stiffness(["bkt-stiffness"]):::qty
+    q_bkt_stiffness --> j_be_101
+    q_bkt_temperature(["bkt-temperature"]):::qty
+    j_be_101 --> q_bkt_temperature
+    j_be_102["BE-102"]:::law
+    q_landauer_transmission(["landauer-transmission"]):::qty
+    q_landauer_transmission --> j_be_102
+    q_landauer_channel_conductance(["landauer-channel-conductance"]):::qty
+    j_be_102 --> q_landauer_channel_conductance
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
     q_minimal_surface_area --> j_be_14
@@ -1068,6 +1085,102 @@ flowchart LR
     q_skin_friction --> j_be_86
     q_stanton_number(["stanton-number"]):::qty
     j_be_86 --> q_stanton_number
+    j_be_88["BE-88"]:::law
+    q_fermi_sea_density(["fermi-sea-density"]):::qty
+    q_fermi_sea_density --> j_be_88
+    q_fermi_sea_mass(["fermi-sea-mass"]):::qty
+    q_fermi_sea_mass --> j_be_88
+    q_fermi_wavevector(["fermi-wavevector"]):::qty
+    j_be_88 --> q_fermi_wavevector
+    j_be_89["BE-89"]:::law
+    q_debye_sound_speed(["debye-sound-speed"]):::qty
+    q_debye_sound_speed --> j_be_89
+    q_debye_atom_density(["debye-atom-density"]):::qty
+    q_debye_atom_density --> j_be_89
+    q_debye_cutoff_frequency(["debye-cutoff-frequency"]):::qty
+    j_be_89 --> q_debye_cutoff_frequency
+    j_be_90["BE-90"]:::law
+    q_debye_atom_count(["debye-atom-count"]):::qty
+    q_debye_atom_count --> j_be_90
+    q_debye_temperature(["debye-temperature"]):::qty
+    q_debye_temperature --> j_be_90
+    q_debye_theta(["debye-theta"]):::qty
+    q_debye_theta --> j_be_90
+    q_debye_heat_capacity(["debye-heat-capacity"]):::qty
+    j_be_90 --> q_debye_heat_capacity
+    j_be_91["BE-91"]:::law
+    q_einstein_atom_count(["einstein-atom-count"]):::qty
+    q_einstein_atom_count --> j_be_91
+    q_einstein_solid_temperature(["einstein-solid-temperature"]):::qty
+    q_einstein_solid_temperature --> j_be_91
+    q_einstein_theta(["einstein-theta"]):::qty
+    q_einstein_theta --> j_be_91
+    q_einstein_heat_capacity(["einstein-heat-capacity"]):::qty
+    j_be_91 --> q_einstein_heat_capacity
+    j_be_92["BE-92"]:::law
+    q_sommerfeld_density(["sommerfeld-density"]):::qty
+    q_sommerfeld_density --> j_be_92
+    q_sommerfeld_temperature(["sommerfeld-temperature"]):::qty
+    q_sommerfeld_temperature --> j_be_92
+    q_sommerfeld_fermi_energy(["sommerfeld-fermi-energy"]):::qty
+    q_sommerfeld_fermi_energy --> j_be_92
+    q_sommerfeld_heat_capacity(["sommerfeld-heat-capacity"]):::qty
+    j_be_92 --> q_sommerfeld_heat_capacity
+    j_be_93["BE-93"]:::law
+    q_curie_density(["curie-density"]):::qty
+    q_curie_density --> j_be_93
+    q_curie_g_factor(["curie-g-factor"]):::qty
+    q_curie_g_factor --> j_be_93
+    q_curie_spin(["curie-spin"]):::qty
+    q_curie_spin --> j_be_93
+    q_curie_magneton(["curie-magneton"]):::qty
+    q_curie_magneton --> j_be_93
+    q_curie_temperature(["curie-temperature"]):::qty
+    q_curie_temperature --> j_be_93
+    q_weiss_temperature(["weiss-temperature"]):::qty
+    q_weiss_temperature --> j_be_93
+    q_curie_weiss_susceptibility(["curie-weiss-susceptibility"]):::qty
+    j_be_93 --> q_curie_weiss_susceptibility
+    j_be_94["BE-94"]:::law
+    q_pauli_density(["pauli-density"]):::qty
+    q_pauli_density --> j_be_94
+    q_pauli_fermi_energy(["pauli-fermi-energy"]):::qty
+    q_pauli_fermi_energy --> j_be_94
+    q_pauli_magneton(["pauli-magneton"]):::qty
+    q_pauli_magneton --> j_be_94
+    q_pauli_susceptibility(["pauli-susceptibility"]):::qty
+    j_be_94 --> q_pauli_susceptibility
+    j_be_95["BE-95"]:::law
+    q_gl_kappa(["gl-kappa"]):::qty
+    q_gl_kappa --> j_be_95
+    q_gl_trial_factor(["gl-trial-factor"]):::qty
+    j_be_95 --> q_gl_trial_factor
+    j_be_96["BE-96"]:::law
+    q_upper_critical_length(["upper-critical-length"]):::qty
+    q_upper_critical_length --> j_be_96
+    q_upper_critical_field(["upper-critical-field"]):::qty
+    j_be_96 --> q_upper_critical_field
+    j_be_97["BE-97"]:::law
+    q_ambegaokar_gap(["ambegaokar-gap"]):::qty
+    q_ambegaokar_gap --> j_be_97
+    q_ambegaokar_product(["ambegaokar-product"]):::qty
+    j_be_97 --> q_ambegaokar_product
+    j_be_98["BE-98"]:::law
+    q_bcs_quartic(["bcs-quartic"]):::qty
+    q_bcs_quartic --> j_be_98
+    q_bcs_heat_jump(["bcs-heat-jump"]):::qty
+    j_be_98 --> q_bcs_heat_jump
+    j_be_99["BE-99"]:::law
+    q_conduction_dos(["conduction-dos"]):::qty
+    q_conduction_dos --> j_be_99
+    q_valence_dos(["valence-dos"]):::qty
+    q_valence_dos --> j_be_99
+    q_mass_action_gap(["mass-action-gap"]):::qty
+    q_mass_action_gap --> j_be_99
+    q_mass_action_temperature(["mass-action-temperature"]):::qty
+    q_mass_action_temperature --> j_be_99
+    q_mass_action_density(["mass-action-density"]):::qty
+    j_be_99 --> q_mass_action_density
     j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
     q_A(["A"]):::qty
     q_A --> j_CE_bekenstein_hawking
