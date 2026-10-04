@@ -1559,7 +1559,7 @@ where:
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses
 - **Mathematical Formulation**: `ω_D = v_s (6 π² n)^{1/3}`.
-- **Dimensions**: The catalog signature is `[T^-1]`.
+- **Dimensions**: The catalog signature is `[frequency]`.
 - **Domain**: v_s > 0, n > 0. Three branches and one speed are hypotheses.
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.DebyeCutoff.debye_cutoff`.
 - **Rationale**: Equating the three-branch sum to n gives k_D³ = 2 π² n.
@@ -1573,7 +1573,7 @@ where:
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity. The phonon integral, the extension to infinity, and π⁴/15 are hypotheses
 - **Mathematical Formulation**: `C_V = (12 π⁴ / 5) N k_B (T / θ_D)³`.
-- **Dimensions**: The catalog signature is `[L^2 M T^-2 Theta^-1]`.
+- **Dimensions**: The catalog signature is `[entropy]`.
 - **Domain**: N > 0, T > 0, θ_D > 0. I = π⁴/15 is a hypothesis, not an evaluation of the Bose integral.
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.DebyeHeat.debye_heat`.
 - **Rationale**: The energy prefactor 3 π⁴/5 is not this heat capacity.
@@ -1587,7 +1587,7 @@ where:
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses
 - **Mathematical Formulation**: `C_V = 3 N k_B (θ_E/T)² exp(θ_E/T) / (exp(θ_E/T) − 1)²`.
-- **Dimensions**: The catalog signature is `[L^2 M T^-2 Theta^-1]`.
+- **Dimensions**: The catalog signature is `[entropy]`.
 - **Domain**: N > 0, T > 0, θ_E > 0. Three oscillators and the Einstein spectrum are hypotheses.
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.EinsteinSolid.einstein_heat`.
 - **Rationale**: The high-temperature limit is 3 N k_B. One oscillator tends to N k_B. The zero-point is constant.
@@ -1727,7 +1727,7 @@ where:
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow
 - **Mathematical Formulation**: `k_B T = π J / 2`.
-- **Dimensions**: The catalog signature is `[Theta]`.
+- **Dimensions**: The catalog signature is `[temperature]`.
 - **Domain**: J > 0. The entropy is the area of core positions. This is the energy-entropy argument, not the renormalization-group flow.
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.BktJump.bkt_jump`.
 - **Rationale**: Circumference entropy unbinds at π J.
@@ -1818,9 +1818,9 @@ Each bridge equation type maps to specific tensor components. The component is t
 | 87 | H | emergence, higher-rank ellipsis | Category H, with BE-70. Capacitor voltage variance. Signature `[L^4 M^2 T^-6 I^-2]`. The bridges tuple is `thermal` → `electrical`. The formula is a scalar. The ellipsis stays. |
 
 | 88 | F | scale-transition, `scale_i`, `scale_j` | Category F. Fermi wavevector. Signature `[L^-1]`. The bridges tuple is `quantum` → `condensed`. |
-| 89 | F | scale-transition, `scale_i`, `scale_j` | Category F. Debye cutoff. Signature `[T^-1]`. The bridges tuple is `condensed` → `continuum`. |
-| 90 | F | scale-transition, `scale_i`, `scale_j` | Category F. Debye heat capacity. Signature `[L^2 M T^-2 Theta^-1]`. The bridges tuple is `condensed` → `thermal`. π⁴/15 is a hypothesis. |
-| 91 | F | scale-transition, `scale_i`, `scale_j` | Category F. Einstein solid. The same heat-capacity signature as BE-90. The bridges tuple is `condensed` → `thermal`. |
+| 89 | F | scale-transition, `scale_i`, `scale_j` | Category F. Debye cutoff. Signature `[frequency]`. The bridges tuple is `condensed` → `continuum`. |
+| 90 | F | scale-transition, `scale_i`, `scale_j` | Category F. Debye heat capacity. Signature `[entropy]`. The bridges tuple is `condensed` → `thermal`. π⁴/15 is a hypothesis. |
+| 91 | F | scale-transition, `scale_i`, `scale_j` | Category F. Einstein solid. Signature `[entropy]`, the same heat-capacity signature as BE-90. The bridges tuple is `condensed` → `thermal`. |
 | 92 | F | scale-transition, `scale_i`, `scale_j` | Category F. Sommerfeld heat. Signature `[L^-1 M T^-2 Theta^-1]`. The bridges tuple is `condensed` → `thermal`. Not BE-61. |
 | 93 | F | scale-transition, `scale_i`, `scale_j` | Category F. Curie–Weiss susceptibility. Signature `[1]`. The bridges tuple is `magnetic` → `thermal`. |
 | 94 | F | scale-transition, `scale_i`, `scale_j` | Category F. Pauli susceptibility. Signature `[1]`. The bridges tuple is `magnetic` → `condensed`. Not Landau diamagnetism. |
@@ -1830,7 +1830,7 @@ Each bridge equation type maps to specific tensor components. The component is t
 | 98 | F | scale-transition, `scale_i`, `scale_j` | Category F. BCS heat jump. Signature `[1]`. The bridges tuple is `condensed` → `thermal`. ζ is the quartic coefficient. |
 | 99 | F | scale-transition, `scale_i`, `scale_j` | Category F. Mass-action density. Signature `[L^-3]`. The bridges tuple is `condensed` → `statistical`. |
 | 100 | F | scale-transition, `scale_i`, `scale_j` | Category F. Lyddane–Sachs–Teller ratio. Signature `[1]`. The bridges tuple is `condensed` → `electromagnetic`. |
-| 101 | F | scale-transition, `scale_i`, `scale_j` | Category F. BKT temperature. Signature `[Theta]`. The bridges tuple is `thermal` → `condensed`. Energy and entropy, not the RG flow. |
+| 101 | F | scale-transition, `scale_i`, `scale_j` | Category F. BKT temperature. Signature `[temperature]`. The bridges tuple is `thermal` → `condensed`. Energy and entropy, not the RG flow. |
 | 102 | F | scale-transition, `scale_i`, `scale_j` | Category F. Landauer channel conductance. Signature `[L^-2 M^-1 T^3 I^2]`, the same conductance signature as BE-55, so the signature does not decide. The bridges tuple is `quantum` → `condensed`. Not BE-16. |
 
 **Topology slot left free.** BE-55 and BE-60 name a Chern number, and the BE-55 catalog text says the row populates the Topology axis. In the rank-6 order of Part I §1.1 that axis is the last index, ζ. Group 5 leaves ζ free, as it does for BE-22, whose area law carries a topological constant and is already in category F's list. A per-equation index that pins ζ to a Chern label is not a pattern the lists for ids 11–50 use. It is not introduced here.

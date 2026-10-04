@@ -3325,7 +3325,7 @@
         "Three branches and one speed are the hypotheses of PhysJS.DebyeCutoff.debye_cutoff. The count 3n is the hypothesis that fixes 6 π²."
       ],
       "dependencies": [],
-      "dimensional_signature": "[T^-1]",
+      "dimensional_signature": "[frequency]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateDebyeCutoff({v_m_per_s, n_per_m3}) → {omega_D_rad_per_s} in src/bridges/be89-debye-cutoff.ts. The overlay formalRef is PhysJS.DebyeCutoff.debye_cutoff, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Equating the three-branch sum to n is a different cutoff. No confrontation."
     },
@@ -3362,7 +3362,7 @@
         "The phonon integral, the extension to infinity, and π⁴/15 are the hypotheses of PhysJS.DebyeHeat.debye_heat. The Bose integral is not evaluated."
       ],
       "dependencies": [],
-      "dimensional_signature": "[L^2 M T^-2 Theta^-1]",
+      "dimensional_signature": "[entropy]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateDebyeHeat({N, T_K, thetaD_K}) → {C_V_J_per_K} in src/bridges/be90-debye-heat.ts. The overlay formalRef is PhysJS.DebyeHeat.debye_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. π⁴/15 is assumed. No confrontation."
     },
@@ -3399,7 +3399,7 @@
         "Three oscillators and the Einstein spectrum are the hypotheses of PhysJS.EinsteinSolid.einstein_heat. The zero-point does not contribute to C_V."
       ],
       "dependencies": [],
-      "dimensional_signature": "[L^2 M T^-2 Theta^-1]",
+      "dimensional_signature": "[entropy]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateEinsteinSolid({N, T_K, thetaE_K}) → {C_V_J_per_K} in src/bridges/be91-einstein-solid.ts. The overlay formalRef is PhysJS.EinsteinSolid.einstein_heat, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. One oscillator is a different heat capacity. No confrontation."
     },
@@ -3769,7 +3769,7 @@
         "The area of core positions is the entropy hypothesis of PhysJS.BktJump.bkt_jump. The renormalization-group flow is not this temperature."
       ],
       "dependencies": [],
-      "dimensional_signature": "[Theta]",
+      "dimensional_signature": "[temperature]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluateBktJump({J_J}) → {T_K} in src/bridges/be101-bkt-jump.ts. The overlay formalRef is PhysJS.BktJump.bkt_jump, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the RG flow. No confrontation."
     },
