@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 from v0.1.0 onward.
 
+## [3.1.0] - 2026-10-04
+
+Minor release. The catalog adds three formally proved bridges. The package root exports `evaluateMagneticPressure`, `evaluateLondonPenetration`, and `evaluatePlasmaBeta`, their input and result types, and `be74Edge`, `be75Edge`, and `be76Edge`. No export was removed and no signature changed. npm `3.0.0` remains the published release until the tag workflow.
+
+### Added
+
+- **PhysJS #62 proves be-74, be-75, and be-76.** `formal/physjs/manifest.json` is PhysJS `ee753df77bd5b29b7207443181606b6004bfcf6a`. The theorems are `PhysJS.MagneticPressure.pressure_eq`, `PhysJS.LondonPenetration.depth_eq`, and `PhysJS.PlasmaBeta.beta_eq`. Each proof is complete. The axioms are `propext`, `Classical.choice`, and `Quot.sound`. The kind is `bridge`. `p_B = B²/(2 μ0)`. The 2 is the inductor integral `U = (L/2) I²`. Units fix `p ∝ B²/μ0` and do not fix the 2. `λ_L = √(m/(μ0 n e²))`. `e` is the elementary charge. `{m, μ0, n, e}` also admits `μ0 e²/m`. `β = n k_B T / p_B`, and `composeEdges` of be-74 into be-76 meets on `magnetic-pressure`. Using `B²/μ0` in place of the magnetic pressure is half of this beta. Not a plasma-β inequality. `upt regime plasma` stays the vacuous registration. The evaluate range is `BE-51/52/55..76`.
+
+### Changed
+
+- **Lean permalinks are `lean/<File>.lean`.** `physjsFileUrl` emits `lean/${file}`. `SpringLc` and `DampedRlc` stay namespaces in `lean/OscillatorDictionary.lean`. There is no `lean/PhysJS/` directory and no `lean.lean`. The sentence that names `lean/PhysJS/<File>.lean` is the record from before PhysJS #63.
+- **Explain does not print `∝` when the Buckingham monomial is not the encoded formula.** A declared constant the evaluator already bakes in, such as `G` and `c` on the Schwarzschild radius, is still the proportionality. A sum of dimensionful terms is not a proportionality. A governing set that is dimensionally dependent, including two dimensionless metric components, says the inputs do not fix a unique monomial. A suggestion query drops a hyphen token shorter than three letters. Explicit `upt search a` still finds the quantity `a`.
+
+The Part VIII check requires `3.1.0`. Before the bump it required `3.0.0` and failed on this package version. Version-stamped artifacts (`data/bridge-catalog.json`, the atlas JSON files, and the architecture dependency graph) carry `3.1.0`. Architecture docs were regenerated: 442 files, 3192 exports, 1521 re-exports, 94176 lines, 0 circular dependencies. Architecture test-coverage docs count 621 test files. The unused-analysis report lists 1 file and 78 exports.
+
+**Dependency health, measured for this release:** `bun audit` finds 0 vulnerabilities in 142 packages. `bun outdated` lists `@types/node` 26.5.1 → 26.6.4, `fast-check` 4.10.0 → 4.10.2, and `@viz-js/viz` 3.30.0 → 3.31.0. `vitest` and `@vitest/coverage-v8` stay 4.1.11 inside the current range; latest is 5.0.3. `tree-sitter` stays 0.22.4 inside the current range; latest is 0.25.1. None of these is a HIGH or CRITICAL advisory.
+
 ## [3.0.0] - 2026-10-03
 
 ### Migration
