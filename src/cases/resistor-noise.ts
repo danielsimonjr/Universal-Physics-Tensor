@@ -16,7 +16,7 @@
 import { H_SI, K_B_SI } from '../core/constants.js';
 import { evaluateJohnsonNyquist } from '../bridges/be58-johnson-nyquist.js';
 import { adaptiveSimpson } from './quadrature.js';
-import { check, requirePositive, type AppliedCase } from './types.js';
+import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-resistor-noise';
 
@@ -95,7 +95,7 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     { key: 'V_rms_V', symbol: 'V_rms', unit: 'V', meaning: 'the RMS noise voltage the instrument reads (scalar model)' },
     { key: 'loading_ratio', symbol: 'V_rms/V_rms,0', unit: '', meaning: '√(R_in/(R + R_in)): what the input resistance removes' },
     { key: 'V_rms_parent_V', symbol: 'V_rms,parent', unit: 'V', meaning: 'the parent spectrum integrated over the band (adaptive Simpson)' },
-    { key: 'parent_deviation', symbol: 'V_rms/V_rms,parent − 1', unit: '', meaning: 'relative excess of the scalar result over the parent' },
+    { key: 'parent_deviation', symbol: 'V_rms/V_rms,parent − 1', unit: '', meaning: signedRelativeDifference('scalar result', 'parent') },
     { key: 'V_rms_rel_sigma', symbol: 'σ(V_rms)/V_rms', unit: '', meaning: 'statistical scatter of an RMS averaged over t_avg: 1/(2√(B t_avg)) (Dicke radiometer relation)' },
     { key: 'V_rms_total_V', symbol: 'V_rms,total', unit: 'V', meaning: 'what the instrument reads with its amplifier noise added in quadrature; null without e_n2/i_n2' },
     { key: 'resistor_fraction', symbol: 'φ', unit: '', meaning: "the thermal share of the read noise power, 4k_BTR_eff/(4k_BTR_eff + e_n² + i_n²R_eff²); null without e_n2/i_n2" },

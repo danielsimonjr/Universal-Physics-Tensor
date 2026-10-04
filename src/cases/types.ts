@@ -56,9 +56,23 @@ export interface CaseComparison {
   readonly reference: string;
   readonly valueKey: string;
   readonly referenceKey: string;
-  /** Output holding value/reference − 1. */
+  /**
+   * Output holding value/reference − 1. The glossary for that output is
+   * `signedRelativeDifference`: the residual is negative when the value is
+   * smaller than the reference.
+   */
   readonly deviationKey: string;
   readonly method: string;
+}
+
+/**
+ * Glossary for a comparison residual value/reference − 1.
+ * "Excess" would name a surplus. This residual is negative when `value` is smaller than `reference`.
+ * @internal
+ */
+export function signedRelativeDifference(value: string, reference: string, note?: string): string {
+  const base = `signed relative difference of the ${value} relative to the ${reference}`;
+  return note === undefined ? base : `${base}; ${note}`;
 }
 
 /** A worked invocation. `fails` lists exactly the checks it violates. @internal */
