@@ -22,3 +22,7 @@ rev = "af484f78ee0701290595f8bf892b157b10d64940"
 
 [[lean_lib]]
 name = "PhysJS"
+# Module PhysJS.Clapeyron is lean/PhysJS/Clapeyron.lean. The library name
+# stays PhysJS, so theorem names do not change. `lake build` still runs
+# from the repository root, where this file lives.
+srcDir = "lean"
