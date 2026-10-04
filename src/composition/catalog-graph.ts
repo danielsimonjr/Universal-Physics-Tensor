@@ -1,7 +1,7 @@
 /**
- * The full composition graph as a single constant — the 54 `BridgeEdge`s
+ * The full composition graph as a single constant — the 57 `BridgeEdge`s
  * (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds
- * + 8 applied-physicist).
+ * + 11 applied-physicist).
  *
  * Single source of truth for "the catalog as a graph": the CLI, the
  * analysis functions, and the test suites consume this rather than each
@@ -36,7 +36,7 @@ import { PROVED_SEED_EDGES } from './edges/proved-seeds.js';
 import { APPLIED_PHYSICIST_EDGES } from './edges/applied-physicist.js';
 
 /**
- * Every `BridgeEdge` in the composition graph (54 edges). The order is
+ * Every `BridgeEdge` in the composition graph (57 edges). The order is
  * calibration → tranche → catalog-full → proved seeds → applied-physicist.
  *
  * @public

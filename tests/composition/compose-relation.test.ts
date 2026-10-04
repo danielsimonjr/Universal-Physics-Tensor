@@ -8,7 +8,7 @@
  * claim than "the output is unchanged".
  *
  * The proof: `compose-relation.golden.json` is `snapshotAllPairs` over
- * `CATALOG_GRAPH` (54 edges, 2916 ordered pairs, 19 of them composable).
+ * `CATALOG_GRAPH` (57 edges). The ordered-pair count is the golden's length.
  * The test re-runs the same serializer against the live operator and
  * deep-equals it. `extraKeys` records
  * every own key of each composed edge, so an unconditionally-set `relation`
@@ -98,10 +98,10 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
     expect([...bearing].sort()).toEqual(
       ['be-11-zurek', 'be-11-master', 'be-21', 'be-37', 'be-48', 'be-51', 'be-52', 'be-55', 'be-59'].sort(),
     );
-    expect(CATALOG_GRAPH.length).toBe(54);
+    expect(CATALOG_GRAPH.length).toBe(57);
   });
 
-  it('reproduces the golden snapshot of all 2916 ordered pairs', () => {
+  it('reproduces the golden snapshot of all 3249 ordered pairs', () => {
     // evaluateAtOnes was refreshed when HBAR_SI became H_SI/(2π). Pair structure was not.
     const live = snapshotAllPairs(CATALOG_GRAPH, composeEdges);
     expect(live.length).toBe(GOLDEN.length);
@@ -111,8 +111,10 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
   });
 
   it('the golden is a real proof, not a vacuous one (it has composable pairs)', () => {
-    expect(GOLDEN.length).toBe(2916);
-    expect(GOLDEN.filter((s) => s.outcome === 'composed').length).toBe(19);
+    expect(GOLDEN.length).toBe(3249);
+    // 19 composed pairs is the record from before be-74..76. The three new
+    // pairs are be-74>>be-76, be-42>>be-76, and be-42-via-rs>>be-76.
+    expect(GOLDEN.filter((s) => s.outcome === 'composed').length).toBe(22);
   });
 });
 

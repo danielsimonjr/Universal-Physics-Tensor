@@ -2,7 +2,7 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (14) — recognized monomial, prefactor recovered:
+  DERIVED (15) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.507e+0
     be-16                  +[k_B]  ×6.931e-1
     be-42-via-rs           +[ℏ,c,k_B]  ×7.958e-2
@@ -17,9 +17,10 @@ Deriving the bridge equations by dimensions
     be-70                  +[k_B]  ×1.000e+0
     be-71                  +[]  ×1.000e+0
     be-73                  +[]  ×1.000e+0
+    be-74                  +[ℏ,c,e]  ×5.452e+0  (empirical/tuned constant)
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 6) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 8) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
   NOT A MONOMIAL (5) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:

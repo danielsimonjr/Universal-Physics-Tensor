@@ -1,10 +1,10 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 131 established-confidence edge(s) of the 163 in this graph
+  anchored core: the clusters holding at least one of the 134 established-confidence edge(s) of the 166 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  1003 total  →  988 touch the anchored core  →  284 also same-kind
+  funnel:  1018 total  →  1003 touch the anchored core  →  285 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     active-noise-energy ≟ inflation-hubble-energy            [energy]
@@ -149,6 +149,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     larmor-radius ≟ classical-electron-radius                [radius]
     larmor-radius ≟ droplet-radius                           [radius]
     latent-heat ≟ heat-added                                 [heat]
+    magnetic-pressure ≟ laplace-pressure                     [pressure]
     mass ≟ planck-mass                                       [mass]
     mass ≟ reference-mass                                    [mass]
     mass ≟ swampland-tower-mass                              [mass]

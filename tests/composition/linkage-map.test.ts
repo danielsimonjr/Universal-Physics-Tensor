@@ -12,24 +12,25 @@ const GRAPH = CATALOG_GRAPH;
 const m = linkageMap(GRAPH);
 
 describe('linkageMap — component structure', () => {
-  it('partitions the 54-edge graph into 33 components (28 isolated)', () => {
-    expect(m.componentCount).toBe(33);
+  it('partitions the 57-edge graph into 32 components (28 isolated)', () => {
+    expect(m.componentCount).toBe(32);
     expect(m.isolated.length).toBe(28);
     expect(m.clusters.reduce((n, c) => n + c.size, 0)).toBe(GRAPH.length);
   });
 
-  it('reports the 19 directed compositions over the graph', () => {
-    expect(m.compositions).toBe(19);
+  it('reports the 22 directed compositions over the graph', () => {
+    expect(m.compositions).toBe(22);
   });
 
-  it('has one dominant ANCHORED cluster of 17, hubbed on mass + temperature', () => {
+  it('has one dominant ANCHORED cluster of 22, hubbed on mass + temperature', () => {
     const big = m.clusters[0];
-    expect(big.size).toBe(17);
+    expect(big.size).toBe(22);
     expect(big.anchored).toBe(true);
     expect(big.hubs).toEqual(expect.arrayContaining(['mass', 'temperature', 'schwarzschild-radius']));
     // it links established GR to speculative thermal/quantum bridges
     expect(big.edges).toEqual(expect.arrayContaining(['be-42', 'be-51', 'be-52', 'be-16', 'be-12', 'be-63']));
-    expect(big.statusMix.established).toBe(6);
+    // 6 is the record from before be-67 and be-69 joined this cluster with be-74..76.
+    expect(big.statusMix.established).toBe(11);
   });
 
   it('has the cosmological-constant cluster (be-13/be-20/be-31)', () => {
@@ -45,13 +46,13 @@ describe('linkageMap — component structure', () => {
     expect(fr?.edges).toEqual(expect.arrayContaining(['be-19', 'be-54']));
   });
 
-  it('joins Alfvén and the fast mode on the shared field and density, and leaves redshift isolated from Tolman', () => {
-    const mhd = m.clusters.find((c) => c.edges.includes('be-67'));
-    expect(mhd?.size).toBe(2);
-    expect(mhd?.edges).toEqual(expect.arrayContaining(['be-67', 'be-69']));
+  it('joins Alfvén, the fast mode, and magnetic pressure in the anchored cluster, and leaves redshift isolated from Tolman', () => {
+    const big = m.clusters[0];
+    expect(big.edges).toEqual(expect.arrayContaining(['be-67', 'be-69', 'be-74', 'be-76']));
     expect(m.isolated).toContain('be-68');
     expect(m.isolated).toContain('be-72');
     expect(m.isolated).not.toContain('be-67');
+    expect(m.isolated).not.toContain('be-74');
   });
 
   it('joins the integer and fractional Hall edges on hall-conductance', () => {

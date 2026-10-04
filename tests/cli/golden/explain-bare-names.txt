@@ -1,5 +1,5 @@
 
-● hawking-temperature  [source: catalog (63-bridge)]
+● hawking-temperature  [source: catalog (66-bridge)]
   'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). The routes restate one bridge, so they carry no independent constraint. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
   derivations:
     - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B))

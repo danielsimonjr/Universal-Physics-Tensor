@@ -118,8 +118,10 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'be14Edge', 'be19Edge', 'be21Edge', 'be48Edge', 'be53Edge', 'be54Edge',
   'be66Edge', 'be67Edge', 'be68Edge',
   'be69Edge', 'be70Edge', 'be71Edge', 'be72Edge', 'be73Edge',
+  'be74Edge', 'be75Edge', 'be76Edge',
   'evaluateFastMagnetosonic', 'evaluateEinsteinRelation', 'evaluateClapeyron',
   'evaluateGravitationalRedshift', 'evaluateKelvinPeltier',
+  'evaluateMagneticPressure', 'evaluateLondonPenetration', 'evaluatePlasmaBeta',
   'APPLIED_PHYSICIST_EDGES',
   // v0.8.0 — membership criterion + negative catalog (G-2 / P-4)
   'adjudicateBridgeEntry', 'adjudicateCatalog',

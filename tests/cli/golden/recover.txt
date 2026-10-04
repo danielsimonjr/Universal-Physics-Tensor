@@ -15,4 +15,4 @@ Bridge↔canonical recovery — validating bridges against standard physics
 Composition-derived recovery — a chain of two symbolic edges
   Compared up to a dimensionless factor. Dimensionful cancellation is not applied.
   A chain is never restates-canonical.
-  16 pairs examined, 0 structural matches.
+  19 pairs examined, 0 structural matches.

@@ -911,7 +911,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.TelegraphDiffusion.covers_bound_delta",
-        "version": "physjs@4ea35872513f8d4d12a01bfac225156bdddb87a9 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -919,7 +919,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/4ea35872513f8d4d12a01bfac225156bdddb87a9/lean/PhysJS/TelegraphDiffusion.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/TelegraphDiffusion.lean",
         "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
       }
     },
@@ -1006,7 +1006,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.TelegraphWave.covers_bound_delta",
-        "version": "physjs@4ea35872513f8d4d12a01bfac225156bdddb87a9 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1014,7 +1014,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/4ea35872513f8d4d12a01bfac225156bdddb87a9/lean/PhysJS/TelegraphWave.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/TelegraphWave.lean",
         "covers": "bound.delta exactly, at the dispersion relation — covers its statement only"
       }
     },

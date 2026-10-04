@@ -1,14 +1,16 @@
 /**
  * Every PhysJS URL this library emits names a Lean file that exists at the
- * pinned commit under `lean/PhysJS/`.
+ * pinned commit as `lean/<File>.lean`.
  *
- * PhysJS #61 moved the sources. `formal/physjs/lean-files.json` is the tree
- * listing at that commit. The prefix `lean/PhysJS` is written here, not taken
- * from the permalink builder, so a builder that returns `/PhysJS/<File>.lean`
- * fails this file.
+ * PhysJS #63 flattened the sources. `formal/physjs/lean-files.json` is the
+ * tree listing at that commit. The path `lean/<File>.lean` is written here,
+ * not taken from the permalink builder, so a builder that returns
+ * `lean/PhysJS/<File>.lean` fails this file.
  *
  * The first run failed: `physjsFormalRef('ab-pendulum-linear').url` was
  * `https://github.com/danielsimonjr/PhysJS/blob/<commit>/PhysJS/Pendulum.lean`.
+ * After #61 it was `lean/PhysJS/Pendulum.lean`. That prefix is the record
+ * from before this flatten.
  */
 
 import { readFileSync } from 'node:fs';
@@ -25,9 +27,9 @@ const leanFiles = new Set(
   JSON.parse(readFileSync(resolve(root, 'formal/physjs/lean-files.json'), 'utf-8')) as readonly string[],
 );
 
-/** Hardcoded. A builder regression to `/PhysJS/` must not satisfy this. */
+/** Hardcoded. A builder regression to `lean/PhysJS/` must not satisfy this. */
 const URL_RE = new RegExp(
-  `^https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/lean/PhysJS/([^/]+\\.lean)$`,
+  `^https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/lean/([^/]+\\.lean)$`,
 );
 
 const STORED = [
@@ -65,25 +67,31 @@ function storedUrls(): string[] {
 function expectLeanFile(url: string): void {
   const match = URL_RE.exec(url);
   expect(match, url).not.toBeNull();
-  expect(leanFiles.has(`lean/PhysJS/${match?.[1]}`), url).toBe(true);
+  expect(leanFiles.has(`lean/${match?.[1]}`), url).toBe(true);
 }
 
 describe('PhysJS permalinks name the lean/ tree at the pin', () => {
-  it('the fixture lists lean/PhysJS and not the old root', () => {
-    expect(leanFiles.has('lean/PhysJS/Pendulum.lean')).toBe(true);
+  it('the fixture lists lean/<File>.lean and not a PhysJS directory', () => {
+    expect(leanFiles.has('lean/Pendulum.lean')).toBe(true);
+    expect(leanFiles.has('lean/PhysJS/Pendulum.lean')).toBe(false);
     expect(leanFiles.has('PhysJS/Pendulum.lean')).toBe(false);
-    expect(leanFiles.has('lean/PhysJS/OscillatorDictionary.lean')).toBe(true);
-    expect([...leanFiles].every((path) => path.startsWith('lean/PhysJS/') && path.endsWith('.lean'))).toBe(true);
-    expect(leanFiles.size).toBeGreaterThan(0);
+    expect(leanFiles.has('lean.lean')).toBe(false);
+    expect(leanFiles.has('lean/OscillatorDictionary.lean')).toBe(true);
+    expect(leanFiles.has('lean/MagneticPressure.lean')).toBe(true);
+    expect(leanFiles.has('lean/LondonPenetration.lean')).toBe(true);
+    expect(leanFiles.has('lean/PlasmaBeta.lean')).toBe(true);
+    expect([...leanFiles].every((path) => /^lean\/[^/]+\.lean$/.test(path))).toBe(true);
+    expect(leanFiles.size).toBe(60);
   });
 
   it('every formalRef URL is a file in that tree', () => {
     const urls = emittedUrls();
-    expect(urls.length).toBe(54);
+    expect(urls.length).toBe(57);
     for (const url of urls) expectLeanFile(url);
     const spring = physjsFormalRef('ab-spring-lc').url;
     expect(URL_RE.exec(spring)?.[1]).toBe('OscillatorDictionary.lean');
-    expect(spring.includes('/lean/PhysJS/SpringLc.lean')).toBe(false);
+    expect(spring.includes('/lean/PhysJS/')).toBe(false);
+    expect(spring.includes('/SpringLc.lean')).toBe(false);
   });
 
   it('every stored PhysJS URL is that same file', () => {

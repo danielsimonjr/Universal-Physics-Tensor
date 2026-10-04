@@ -597,7 +597,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.SpringLc.time_rescale_equationOfMotion",
-        "version": "physjs@4ea35872513f8d4d12a01bfac225156bdddb87a9 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -605,7 +605,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/4ea35872513f8d4d12a01bfac225156bdddb87a9/lean/PhysJS/OscillatorDictionary.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/OscillatorDictionary.lean",
         "covers": "the oscillator dictionary — covers its statement only"
       },
       "normTransports": [
@@ -724,7 +724,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.DampedRlc.time_rescale_equationOfMotion",
-        "version": "physjs@4ea35872513f8d4d12a01bfac225156bdddb87a9 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -732,7 +732,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/4ea35872513f8d4d12a01bfac225156bdddb87a9/lean/PhysJS/OscillatorDictionary.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/OscillatorDictionary.lean",
         "covers": "the oscillator dictionary — covers its statement only"
       }
     },
@@ -827,7 +827,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Pendulum.linearizedEquationOfMotion_iff",
-        "version": "physjs@4ea35872513f8d4d12a01bfac225156bdddb87a9 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -835,7 +835,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/4ea35872513f8d4d12a01bfac225156bdddb87a9/lean/PhysJS/Pendulum.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Pendulum.lean",
         "covers": "the transformation, not bound.delta — covers its statement only"
       }
     },

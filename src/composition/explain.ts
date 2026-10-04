@@ -115,6 +115,50 @@ export interface QuantityExplanation {
   readonly summary: string;
 }
 
+/**
+ * A Buckingham monomial is the encoded formula only when scaling each known
+ * input scales the recovered value by that exponent. A monomial such as
+ * `n^(-1/3)` or `∝ 1` can share the target's dimension and still not be the
+ * formula, because the formula carries constants the monomial did not use.
+ * Samples that the domain refuses leave the monomial in place: this check
+ * does not invent a second domain.
+ */
+function encodedMatchesMonomial(
+  edges: readonly BridgeEdge[],
+  target: string,
+  knownNames: readonly string[],
+  monomial: Readonly<Record<string, number>>,
+  identifications: readonly QuantityIdentification[],
+): boolean {
+  if (knownNames.length === 0) return true;
+  const base: Record<string, number> = {};
+  knownNames.forEach((name, i) => {
+    base[name] = 1.7 + 0.3 * i;
+  });
+  const read = (values: Record<string, number>): number | undefined => {
+    const retro = retrodictNode(edges, values, target, { identifications });
+    const hit = retro.predictions.find((prediction) => Number.isFinite(prediction.value) && prediction.value !== 0);
+    return hit?.value;
+  };
+  const origin = read(base);
+  if (origin === undefined) return true;
+  for (const name of knownNames) {
+    const current = base[name];
+    if (current === undefined) return true;
+    const next = read({ ...base, [name]: current * 4 });
+    if (next === undefined) return true;
+    const exponent = monomial[name] ?? 0;
+    // A known name the evaluator does not read (G declared beside a law that
+    // already bakes G in) does not move the value. That is not a mismatch.
+    const unchanged = Math.abs(next - origin) / Math.max(Math.abs(origin), 1e-300) < 1e-9;
+    if (unchanged && Math.abs(exponent) > 1e-9) continue;
+    const expected = origin * Math.pow(4, exponent);
+    const scale = Math.max(Math.abs(expected), Math.abs(next), 1e-300);
+    if (Math.abs(next - expected) / scale > 1e-6) return false;
+  }
+  return true;
+}
+
 function buildDimMap(
   edges: readonly BridgeEdge[],
   extra?: Readonly<Record<string, Dimension>>,
@@ -189,6 +233,7 @@ function buildSummary(
   dimensional: DimensionalDeterminationResult | undefined,
   knownNames: readonly string[],
   formulaIsSum: boolean,
+  encodedMatchesMonomial: boolean,
 ): string {
   const known = knownNames.length
     ? `{${knownNames.join(', ')}}`
@@ -258,6 +303,8 @@ function buildSummary(
 
   if (dimensional?.determined && dimensional.monomial && formulaIsSum) {
     s += ` The encoded formula adds dimensionful terms, so it is not a proportionality.`;
+  } else if (dimensional?.determined && dimensional.monomial && !encodedMatchesMonomial) {
+    s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional?.determined && dimensional.monomial) {
     s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial)}.`;
   } else if (dimensional?.outsideGoverningSpan && knownNames.length) {
@@ -353,7 +400,11 @@ export function explainQuantity(
         );
         const symbolic = e?.symbolic;
         const sum = symbolic !== undefined && formulaShape(symbolic) === 'dimensional-sum';
-        if (!sum && det.determined && det.monomial) {
+        const leaves = leafInputs.filter((name) => name !== target);
+        const agrees =
+          det.monomial !== undefined &&
+          encodedMatchesMonomial(edges, target, leaves, det.monomial, identifications);
+        if (!sum && det.determined && det.monomial && agrees) {
           dimensionalForm = {
             monomial: det.monomial,
             formula: `${target} ∝ ${formatMonomial(det.monomial)}`,
@@ -386,6 +437,10 @@ export function explainQuantity(
     const symbolic = byId.get(eid)?.symbolic;
     return symbolic !== undefined && formulaShape(symbolic) === 'dimensional-sum';
   });
+  const encodedAgrees =
+    dimensional?.determined === true && dimensional.monomial !== undefined
+      ? encodedMatchesMonomial(edges, target, knownNames, dimensional.monomial, identifications)
+      : true;
 
   const summary = buildSummary(
     target,
@@ -396,6 +451,7 @@ export function explainQuantity(
     dimensional,
     knownNames,
     formulaIsSum,
+    encodedAgrees,
   );
 
   return {

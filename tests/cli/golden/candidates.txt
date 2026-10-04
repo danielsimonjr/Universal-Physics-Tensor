@@ -1,10 +1,10 @@
 
-Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (63-bridge)]
-  anchored core: the clusters holding at least one of the 22 established-confidence edge(s) of the 54 in this graph
+Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (66-bridge)]
+  anchored core: the clusters holding at least one of the 25 established-confidence edge(s) of the 57 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  191 total  →  157 touch the anchored core  →  65 also same-kind
+  funnel:  199 total  →  165 touch the anchored core  →  66 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     active-noise-energy ≟ inflation-hubble-energy            [energy]
@@ -55,6 +55,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     proper-temperature ≟ clapeyron-temperature               [temperature]
     proper-temperature ≟ einstein-temperature                [temperature]
     proper-temperature ≟ peltier-temperature                 [temperature]
+    radiation-pressure ≟ magnetic-pressure                   [pressure]
     reference-temperature ≟ clapeyron-temperature            [temperature]
     reference-temperature ≟ einstein-temperature             [temperature]
     reference-temperature ≟ peltier-temperature              [temperature]

@@ -258,6 +258,15 @@ export {
   evaluateKelvinPeltier,
   type KelvinPeltierInputs,
   type KelvinPeltierResult,
+  evaluateMagneticPressure,
+  type MagneticPressureInputs,
+  type MagneticPressureResult,
+  evaluateLondonPenetration,
+  type LondonPenetrationInputs,
+  type LondonPenetrationResult,
+  evaluatePlasmaBeta,
+  type PlasmaBetaInputs,
+  type PlasmaBetaResult,
 } from './bridges/index.js';
 
 // Bridge-evaluator dispatch registry (`upt evaluate`) — id → evaluator.
@@ -546,6 +555,9 @@ export {
   be71Edge,
   be72Edge,
   be73Edge,
+  be74Edge,
+  be75Edge,
+  be76Edge,
   APPLIED_PHYSICIST_EDGES,
 } from './composition/index.js';
 export type {

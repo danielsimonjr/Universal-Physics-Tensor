@@ -20,8 +20,8 @@ describe('auditCoverage — catalog grounding profile', () => {
   const report = auditCoverage();
 
   it('audits all 58 catalogued bridges, sorted by id', () => {
-    expect(report.total).toBe(63);
-    expect(report.bridges).toHaveLength(63);
+    expect(report.total).toBe(66);
+    expect(report.bridges).toHaveLength(66);
     const ids = report.bridges.map((b) => b.id);
     expect(ids).toEqual([...ids].sort((a, b) => a - b));
   });
@@ -31,7 +31,8 @@ describe('auditCoverage — catalog grounding profile', () => {
       .filter((b) => b.hasDataConfrontation)
       .map((b) => b.id);
     expect(confronted).toEqual([11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65]);
-    expect(report.withoutDataConfrontation).toBe(44);
+    // 44 is the record from before be-74..76. None of those three is data-confronted.
+    expect(report.withoutDataConfrontation).toBe(47);
     for (const id of [11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65]) {
       expect(report.bridges.find((b) => b.id === id)?.tier).toBe('data-confronted');
     }
@@ -40,7 +41,7 @@ describe('auditCoverage — catalog grounding profile', () => {
   it('partitions every bridge into one tier; the tiers sum to 48', () => {
     for (const b of report.bridges) expect(TIERS).toContain(b.tier);
     const sum = TIERS.reduce((n, t) => n + report.byTier[t], 0);
-    expect(sum).toBe(63);
+    expect(sum).toBe(66);
     expect(report.byTier['data-confronted']).toBe(19);
   });
 

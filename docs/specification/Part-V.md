@@ -1078,6 +1078,6 @@ This specification (core Parts I-VI, with later supplements in Parts VII-IX) out
 
 **Framework Statistics:**
 - Total size: see authoritative figure in Part-VI §29 "Framework Statistics (honest)" (single source of truth).
-- Bridge equations specified: 63 (numbered 11-73; BE-51–54 are Part-II §V-B; BE-55–73 are Part-II §V-C)
+- Bridge equations specified: 66 (numbered 11-76; BE-51–54 are Part-II §V-B; BE-55–76 are Part-II §V-C)
 - Algorithm pseudocode blocks across all six parts: ~23 (Part-I: 3, Part-III: 6, Part-IV: 3, Part-V: 8, Part-VI: 3; none implemented). Of the formally numbered ones, 12 distinct sections exist (Algorithms 1, 2, 3A, 3B, 4, 5, 6, 7, 8, 9, 10, 11) — the 3A/3B split makes it 12 not 11.
 - Note: Equations 1-10 represent the "diagonal" known laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) that are implicit in L and not catalogued individually.

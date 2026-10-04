@@ -56,7 +56,7 @@ export {
   be54Edge,
 } from './edges/catalog-tranche.js';
 
-/** Composition edges for the applied-physicist catalog rows, BE-66 through BE-73. */
+/** Composition edges for the applied-physicist catalog rows, BE-66 through BE-76. */
 export {
   be66Edge,
   be67Edge,
@@ -66,6 +66,9 @@ export {
   be71Edge,
   be72Edge,
   be73Edge,
+  be74Edge,
+  be75Edge,
+  be76Edge,
   APPLIED_PHYSICIST_EDGES,
 } from './edges/applied-physicist.js';
 

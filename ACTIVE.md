@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Vendor PhysJS `ee753df77bd5b29b7207443181606b6004bfcf6a`. Lean files are `lean/<File>.lean`. Add BE-74, BE-75, and BE-76 as formally proved, with composition of BE-76 on BE-74.
+  Done: the manifest commit is that sha. `physjsFileUrl` emits `lean/${file}`. The theorems are `PhysJS.MagneticPressure.pressure_eq`, `PhysJS.LondonPenetration.depth_eq`, and `PhysJS.PlasmaBeta.beta_eq`. Each is kind `bridge`. Explain of magnetic pressure recovers `B²/(2 μ0)`. Explain of the London depth and of plasma beta says the formula carries dimensionful constants. `upt regime plasma` stays vacuous.
+
 - [x] The dimensionful-constants sentence is the Buckingham span failure. A dimensionally dependent governing set does not get that sentence.
   Done: `outsideGoverningSpan` is that field. `gravitational-frequency-ratio` from two dimensionless metric components says the inputs do not fix a unique monomial. Hawking temperature from mass alone still says the formula carries dimensionful constants.
 

@@ -2,7 +2,7 @@
  * Universal Physics Tensor — Bridge Equation Index
  *
  * Machine-readable catalog of all bridge equations (IDs from 11) from the UPT
- * specification (Parts I-VI; BE-51–54 catalogued in Part-II §V-B; BE-55–68
+ * specification (Parts I-VI; BE-51–54 catalogued in Part-II §V-B; BE-55–76
  * catalogued in Part-II §V-C). Each entry
  * preserves the spec's stated status, known issues, references, and
  * dependencies on other bridge equations.
@@ -2859,6 +2859,66 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dimensional_signature: `[L^2 M T^-3 I^-1]`,
   tractability_class: 'closed-form',
   notes: `Closed-form evaluator evaluateKelvinPeltier({S_V_per_K, T_K}) → {Pi_V} in src/bridges/be73-kelvin-peltier.ts. Onsager reciprocity is not a numeric input. The overlay formalRef is PhysJS.KelvinRelation.peltier_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the first Thomson relation. No confrontation.`,
+},
+{
+  id: 74,
+  name: `Magnetic pressure (solenoid)`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`electromagnetic`, `continuum`] as [string, string],
+  status: 'established',
+  context: `The magnetic pressure of a long solenoid is p_B = B²/(2 μ0). The 2 is the inductor integral U = (L/2) I²: at fixed current the battery supplies twice the rise in stored energy, and the difference is the mechanical work. Homogeneity in B and μ0 gives p = C B²/μ0 with C unfixed. C = 1 is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor.`,
+  formula_latex: `p_B = \\frac{B^2}{2\\mu_0}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-74) — established textbook relation, PhysJS.MagneticPressure.pressure_eq`,
+  known_issues: [],
+  references: [
+    `Ampere's law, the flux linkage of a long solenoid, and the quasistatic work balance are the hypotheses of PhysJS.MagneticPressure.pressure_eq.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-1 M T^-2]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateMagneticPressure({B_T}) → {p_Pa} in src/bridges/be74-magnetic-pressure.ts. The factor 2 is in the evaluator. Units fix p ∝ B²/μ0 and do not fix the 2. The overlay formalRef is PhysJS.MagneticPressure.pressure_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation.`,
+},
+{
+  id: 75,
+  name: `London penetration depth`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`quantum`, `classical`] as [string, string],
+  status: 'established',
+  context: `The London depth is λ_L = √(m/(μ0 n e²)), with e the elementary charge. On B(x) = B0 exp(−x/λ), Ampere's law and the London equation give that root. The dimension matrix of {m, μ0, n, e} also admits μ0 e²/m, so units do not choose. Those lengths disagree when n (μ0 e²/m)³ ≠ 1. Replacing e by 2e fails. Not the classical skin depth.`,
+  formula_latex: `\\lambda_L = \\sqrt{\\frac{m}{\\mu_0 n e^2}}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-75) — established textbook relation, PhysJS.LondonPenetration.depth_eq`,
+  known_issues: [],
+  references: [
+    `The London equation and Ampere's law are the hypotheses of PhysJS.LondonPenetration.depth_eq. e is the elementary charge.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[length]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateLondonPenetration({m_kg, n_per_m3}) → {lambda_m} in src/bridges/be75-london-penetration.ts. e is E_SI, not an input and not Euler's number. The overlay formalRef is PhysJS.LondonPenetration.depth_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the classical skin depth. No confrontation.`,
+},
+{
+  id: 76,
+  name: `Plasma beta`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`fluid`, `plasma`] as [string, string],
+  status: 'established',
+  context: `Plasma beta is β = p_gas / p_B, where p_B is the magnetic pressure of BE-74, so β = p_gas / (B²/(2 μ0)) = 2 μ0 p_gas / B². The ideal-gas closure p_gas = n k_B T gives β = 2 μ0 n k_B T / B². B ≠ 0. Using B²/μ0 in place of the magnetic pressure is half of this beta. Not a unique monomial of {n, T, B, μ0}, and not a plasma-β inequality.`,
+  formula_latex: `\\beta = \\frac{2 \\mu_0 n k_B T}{B^2}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-76) — established textbook relation, PhysJS.PlasmaBeta.beta_eq`,
+  known_issues: [],
+  references: [
+    `PhysJS.PlasmaBeta.beta_eq calls PhysJS.MagneticPressure.pressure_eq. The ideal-gas closure p = n k_B T is a hypothesis.`,
+  ],
+  dependencies: [74],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluatePlasmaBeta({n_per_m3, T_K, p_B_Pa}) → {beta} in src/bridges/be76-plasma-beta.ts. p_B_Pa is B²/(2 μ0). The overlay formalRef is PhysJS.PlasmaBeta.beta_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge composes with be-74 on magnetic-pressure. The edge confidence stays established. Not a plasma-β inequality. No confrontation.`,
 }
 
 ];
@@ -2997,5 +3057,23 @@ export {
   type KelvinPeltierInputs,
   type KelvinPeltierResult,
 } from './be73-kelvin-peltier.js';
+/** Magnetic pressure `p_B = B²/(2 μ0)`. The 2 is the inductor integral. */
+export {
+  evaluateMagneticPressure,
+  type MagneticPressureInputs,
+  type MagneticPressureResult,
+} from './be74-magnetic-pressure.js';
+/** London penetration depth `λ_L = √(m/(μ0 n e²))`. `e` is the elementary charge. */
+export {
+  evaluateLondonPenetration,
+  type LondonPenetrationInputs,
+  type LondonPenetrationResult,
+} from './be75-london-penetration.js';
+/** Plasma beta `β = n k_B T / p_B`, with `p_B` the BE-74 magnetic pressure. */
+export {
+  evaluatePlasmaBeta,
+  type PlasmaBetaInputs,
+  type PlasmaBetaResult,
+} from './be76-plasma-beta.js';
 
 export default BRIDGE_EQUATIONS;

@@ -68,8 +68,10 @@ describe('catalogToCells', () => {
     // reversed from NOT-A-BRIDGE to ['gravity','quantum'] under the
     // graph-native membership criterion — 'quantum' is mappable, so
     // submittable 22 → 23.
+    // BE-75 is quantum → classical, so it is submittable. BE-74 and BE-76 are not PhysicalScale.
+    // 34 is the record from before be-74..76.
     const cells = catalogToCells(BRIDGE_EQUATIONS);
-    expect(cells).toHaveLength(34);
+    expect(cells).toHaveLength(35);
   });
 
   it('assigns id as "BE-{number}" matching the catalog id field', () => {
@@ -107,7 +109,7 @@ describe('scanCatalog', () => {
     expect(report.entries).toHaveLength(BRIDGE_EQUATIONS.length);
     // Updated 2026-05-24 (parallel-agent dispatch): 42 → 44 after adding
     // BE-53 (Yang-Mills β) AND BE-54 (Randall-Sundrum).
-    expect(report.entries).toHaveLength(63);
+    expect(report.entries).toHaveLength(66);
   });
 
   it('counts unsubmitted entries as 21 (post-v0.8.0 adjudication)', () => {
@@ -128,7 +130,9 @@ describe('scanCatalog', () => {
     //   = 21 total unsubmitted.
     const report = scanCatalog(BRIDGE_EQUATIONS);
     // BE-69..73 tuples are not PhysicalScale, so they join the unsubmitted set: 24 → 29.
-    expect(report.unsubmitted).toHaveLength(29);
+    // BE-74 (electromagnetic/continuum) and BE-76 (fluid/plasma) join that set: 29 → 31.
+    // BE-75 is quantum → classical and is submitted.
+    expect(report.unsubmitted).toHaveLength(31);
   });
 
   it('counts submittable entries as 23 (44 - 21 with at least one PhysicalScale axis)', () => {
@@ -138,7 +142,7 @@ describe('scanCatalog', () => {
     // Updated 2026-06-11 (v0.8.0 Phase 4): 22 → 23 after the BE-42
     // adjudication reversal to ['gravity','quantum'].
     const report = scanCatalog(BRIDGE_EQUATIONS);
-    expect(report.submitted).toHaveLength(34);
+    expect(report.submitted).toHaveLength(35);
   });
 
   it('does NOT throw on a malformed entry', () => {
@@ -219,7 +223,7 @@ describe('ingestCatalog', () => {
     // BE-54 landed; was 20 after the 2026-05-23 BRIDGE-PHYSICS-AUDIT §3
     // naming pass).
     const cells = tensor.populatedCells().filter((c) => c.kind === 'bridge');
-    expect(cells).toHaveLength(34);
+    expect(cells).toHaveLength(35);
   });
 
   it('throws CatalogIngestionError on any Rule 1 error AND leaves tensor untouched', () => {

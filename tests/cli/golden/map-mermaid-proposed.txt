@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (117)"]
+  subgraph cl_0["anchored cluster (120)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -193,6 +193,21 @@ flowchart LR
     q_specific_volume_change --> j_be_71
     q_clapeyron_slope(["clapeyron-slope"]):::qty
     j_be_71 --> q_clapeyron_slope
+    j_be_74["BE-74"]:::law
+    q_magnetic_flux_density --> j_be_74
+    q_magnetic_pressure(["magnetic-pressure"]):::qty
+    j_be_74 --> q_magnetic_pressure
+    j_be_75["BE-75"]:::law
+    q_effective_mass --> j_be_75
+    q_carrier_density --> j_be_75
+    q_london_penetration_depth(["london-penetration-depth"]):::qty
+    j_be_75 --> q_london_penetration_depth
+    j_be_76["BE-76"]:::established
+    q_carrier_density --> j_be_76
+    q_temperature --> j_be_76
+    q_magnetic_pressure --> j_be_76
+    q_plasma_beta(["plasma-beta"]):::qty
+    j_be_76 --> q_plasma_beta
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
     q_length --> j_CE_pendulum_period

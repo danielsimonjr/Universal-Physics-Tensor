@@ -176,12 +176,15 @@ export const EXPECTED_DIMENSION_BY_BRIDGE: ReadonlyMap<number, Dimension> = new 
   [71, { L: -1, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 }], // BE-71 Clapeyron slope dP/dT = L/(T Δv).
   [72, DIMENSIONLESS], // BE-72 gravitational frequency ratio ν1/ν2 = √(g2/g1).
   [73, { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 }], // BE-73 Peltier coefficient Π = S T.
+  [74, PRESSURE], // BE-74 magnetic pressure p_B = B²/(2 μ0).
+  [75, LENGTH], // BE-75 London penetration depth λ_L = √(m/(μ0 n e²)).
+  [76, DIMENSIONLESS], // BE-76 plasma beta β = n k_B T / p_B.
 ]);
 
 /**
  * Infer the SI dimensional signature of a bridge equation expression.
  *
- * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..73). If present
+ * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..76). If present
  *                  in `EXPECTED_DIMENSION_BY_BRIDGE` the inferred dim
  *                  is cross-checked against the expected; mismatch =>
  *                  null. If absent, the inferred dim is returned as-is.
