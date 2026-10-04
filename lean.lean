@@ -55,3 +55,14 @@ import lean.KelvinRelation
 import lean.MagneticPressure
 import lean.LondonPenetration
 import lean.PlasmaBeta
+import lean.HagenPoiseuille
+import lean.EulerBuckling
+import lean.PullIn
+import lean.MottGurney
+import lean.ChildLangmuir
+import lean.ShockleyDiode
+import lean.Thomson
+import lean.FourPoint
+import lean.ShotNoise
+import lean.ReynoldsAnalogy
+import lean.CapacitorNoise
