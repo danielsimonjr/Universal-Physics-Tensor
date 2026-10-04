@@ -48,7 +48,8 @@ describe('canonical audit G-closures', () => {
     expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.265e\+0\s+\(empirical\/tuned constant\)/);
     expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
     expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
-    expect(text.stdout).toMatch(/DERIVED \(79\)/);
+    expect(text.stdout).toMatch(/DERIVED \(73\)/);
+    expect(text.stdout).toMatch(/COEFFICIENT UNSET \(6\)/);
     expect(text.stdout).toMatch(/DECOY, 7\)/);
     expect(text.stdout).toMatch(/OPEN \(23\)/);
     const decoy = text.stdout.split('OPEN (')[0] ?? '';

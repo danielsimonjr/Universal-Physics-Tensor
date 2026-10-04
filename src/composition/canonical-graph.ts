@@ -268,6 +268,9 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
     domain: PERMISSIVE_DOMAIN,
     evaluate: makeEvaluate(eq),
     citation: eq.references[0] ?? eq.id,
+    ...(eq.epistemicStatus === 'dimensional' && canonicalPrefactor(eq.id) === undefined
+      ? { coefficientUnset: true as const }
+      : {}),
   };
 }
 

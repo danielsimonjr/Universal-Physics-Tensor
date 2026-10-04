@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 454,
-    "totalTestFiles": 642,
+    "totalTestFiles": 643,
     "testedCount": 443,
     "untestedCount": 11,
     "coveragePercent": "97.6"
@@ -5453,6 +5453,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -5541,6 +5542,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -5629,6 +5631,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -5717,6 +5720,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -5805,6 +5809,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -5893,6 +5898,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -5981,6 +5987,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6069,6 +6076,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6157,6 +6165,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6245,6 +6254,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6333,6 +6343,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6421,6 +6432,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6510,6 +6522,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6598,6 +6611,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6686,6 +6700,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6774,6 +6789,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6862,6 +6878,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -6950,6 +6967,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7038,6 +7056,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7126,6 +7145,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7214,6 +7234,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7302,6 +7323,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7391,6 +7413,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7479,6 +7502,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7567,6 +7591,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7655,6 +7680,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7743,6 +7769,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7831,6 +7858,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -7919,6 +7947,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -8027,6 +8056,7 @@
       "tests/cli/symbolic-latex.test.ts",
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
+      "tests/cli/unset-coefficient-audit.test.ts",
       "tests/cli/upt-discover-opts.test.ts",
       "tests/composition/canonical-prefactor-eval.test.ts",
       "tests/composition/composition-recovery.test.ts"
@@ -21608,6 +21638,38 @@
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
       "src/composition/explain.ts"
+    ],
+    "tests/cli/unset-coefficient-audit.test.ts": [
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/upt-derive.test.ts": [],
     "tests/cli/upt-discover-opts.test.ts": [

@@ -99,7 +99,7 @@ records. Every flag of every command is in [`docs/CLI.md`](https://github.com/da
 
 | Command | What it does |
 |---|---|
-| `audit` | Derive every bridge equation by dimensions and sort derived, decoy, not a monomial, and open. |
+| `audit` | Derive every bridge equation by dimensions and sort derived, coefficient unset, decoy, not a monomial, and open. |
 | `derive` (`dim`) | Derive the dimensional form of your own equation and, with --formula, the prefactor. |
 | `eval` (`calc`) | Evaluate a scalar formula. A bare e is the elementary charge; Euler's number is exp(x). |
 | `evaluate` | Evaluate a closed-form bridge or an applied case, with units on every input. |

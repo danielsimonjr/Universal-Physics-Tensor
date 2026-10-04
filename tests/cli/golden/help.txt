@@ -51,8 +51,9 @@ Flags:
   upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
-        which are decoys, which add dimensionful terms (not a monomial),
-        which are dimensionally open.
+        which are dimensional with no sourced prefactor (the evaluator's 1
+        is that absence), which are decoys, which add dimensionful terms
+        (not a monomial), which are dimensionally open.
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.
