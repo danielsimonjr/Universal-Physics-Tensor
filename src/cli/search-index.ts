@@ -49,11 +49,19 @@ export interface SearchEntry {
   readonly fields: readonly Field[];
 }
 
+/** A query word that matched only as a proper prefix of a longer indexed word. */
+export interface PrefixMatch {
+  readonly query: string;
+  readonly word: string;
+}
+
 /** An entry that matched every query word, the fields it matched in, and the alias that resolved it, if one did. */
 export interface SearchMatch {
   readonly entry: SearchEntry;
   readonly matchedIn: readonly string[];
   readonly alias?: string;
+  /** Present when a query word is a proper prefix of the indexed word, not that word. */
+  readonly prefixes?: readonly PrefixMatch[];
 }
 
 export const STOP_WORDS: ReadonlySet<string> = new Set(['of', 'the', 'and', 'for', 'in', 'an']);
@@ -97,16 +105,36 @@ function affirmativeSentences(text: string): string {
     .join(' ');
 }
 
-/** The fields of `e` that `q` matches, or `null` when it matches none. */
-function matchWord(q: string, e: SearchEntry): string[] | null {
+/** The fields of `e` that `q` matches, or `null` when it matches none.
+ *  `prefixOf` is set only when no field contains `q` as a whole word. */
+function matchWord(q: string, e: SearchEntry): { labels: string[]; prefixOf?: string } | null {
   const short = q.length <= 2;
   const fq = fold(q);
-  const hit = e.fields.filter((f) =>
-    short
-      ? (f.exact ?? []).includes(q) || (f.label === 'id' && words(f.text).includes(fq))
-      : words(f.text).some((w) => w.startsWith(fq)),
-  );
-  return hit.length === 0 ? null : hit.map((f) => f.label);
+  if (short) {
+    const hit = e.fields.filter(
+      (f) => (f.exact ?? []).includes(q) || (f.label === 'id' && words(f.text).includes(fq)),
+    );
+    return hit.length === 0 ? null : { labels: hit.map((f) => f.label) };
+  }
+  const labels: string[] = [];
+  let exact = false;
+  let prefixOf: string | undefined;
+  for (const f of e.fields) {
+    const ws = words(f.text);
+    const exactHere = ws.includes(fq) || (f.exact ?? []).some((x) => fold(x) === fq);
+    if (exactHere) {
+      labels.push(f.label);
+      exact = true;
+      continue;
+    }
+    const pref = ws.find((w) => w.startsWith(fq) && w.length > fq.length);
+    if (pref !== undefined) {
+      labels.push(f.label);
+      prefixOf ??= pref;
+    }
+  }
+  if (labels.length === 0) return null;
+  return exact ? { labels } : { labels, ...(prefixOf === undefined ? {} : { prefixOf }) };
 }
 
 /** Index every registry the CLI exposes, including applied cases. */
@@ -116,15 +144,23 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
 
   for (const b of api.BRIDGE_EQUATIONS) {
     const ev = api.BRIDGE_EVALUATORS.get(b.id);
+    const ref = ev === undefined ? api.catalogFormalRef(b.id) : undefined;
+    const formulaRoute = ev === undefined && ref !== undefined;
     entries.push({
       kind: 'catalog-bridge',
       id: `be-${b.id}`,
       line: `be-${b.id} ${b.name} [${b.status}]`,
-      command: ev === undefined ? `upt explain be-${b.id}` : `upt evaluate be-${b.id} ${ev.inputKeys.map((k) => `${k}=…`).join(' ')}`,
-      commandLabel: ev === undefined ? 'no evaluator; route' : 'evaluate',
-      ...(ev === undefined
-        ? {}
-        : { note: `units: ${ev.parameters.map((p) => `${p.key} in ${p.unit || 'dimensionless'}`).join(', ')}; a value may carry its own unit` }),
+      command: ev !== undefined
+        ? `upt evaluate be-${b.id} ${ev.inputKeys.map((k) => `${k}=…`).join(' ')}`
+        : formulaRoute
+          ? `upt atlas be-${b.id}`
+          : `upt explain be-${b.id}`,
+      commandLabel: ev !== undefined ? 'evaluate' : formulaRoute ? 'formula' : 'no evaluator; route',
+      ...(ev !== undefined
+        ? { note: `units: ${ev.parameters.map((p) => `${p.key} in ${p.unit || 'dimensionless'}`).join(', ')}; a value may carry its own unit` }
+        : formulaRoute
+          ? { note: ref!.covers }
+          : {}),
       fields: [
         { label: 'id', text: `be ${b.id}`, exact: [`be-${b.id}`] },
         { label: 'name', text: b.name },
@@ -262,18 +298,25 @@ export function matchEveryWord(
     }
     const alias = e.kind === 'quantity' ? aliasTargets.get(e.id) : undefined;
     const labels = new Set<string>();
+    const prefixes: PrefixMatch[] = [];
     let all = true;
     for (const q of significant) {
-      const hit = alias === q ? ['alias'] : matchWord(q, e);
+      const hit = alias === q ? { labels: ['alias'] } : matchWord(q, e);
       if (hit === null) {
         all = false;
         break;
       }
-      for (const l of hit) labels.add(l);
+      for (const l of hit.labels) labels.add(l);
+      if (hit.prefixOf !== undefined) prefixes.push({ query: q, word: hit.prefixOf });
     }
     if (!all) continue;
     const order = e.fields.map((f) => f.label).concat('alias');
-    matches.push({ entry: e, matchedIn: order.filter((l) => labels.has(l)), ...(alias === undefined ? {} : { alias }) });
+    matches.push({
+      entry: e,
+      matchedIn: order.filter((l) => labels.has(l)),
+      ...(alias === undefined ? {} : { alias }),
+      ...(prefixes.length === 0 ? {} : { prefixes }),
+    });
   }
   // A match on a name or id reads before one found only in a description.
   const rank = (m: SearchMatch): number =>

@@ -874,7 +874,11 @@ Flags:
         breaks, so a quoted phrase and a hyphenated name are several words.
         An equal dimension is never a match (a radius is not
         a wavelength). A word of one or two letters matches a symbol or alias
-        exactly. No match exits 1 and names the registries searched.
+        exactly. A longer word that only continues the query is named as a
+        prefix, so landau is not reported as Landauer without saying so.
+        A catalog bridge with no evaluator and a formalRef routes to
+        upt atlas, and the hit quotes that reference's covers line.
+        No match exits 1 and names the registries searched.
         e.g.  upt search Schrödinger
               upt search thermal noise
 Flags:

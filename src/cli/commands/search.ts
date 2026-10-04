@@ -31,7 +31,11 @@ const HELP = `upt search <word> ...
         breaks, so a quoted phrase and a hyphenated name are several words.
         An equal dimension is never a match (a radius is not
         a wavelength). A word of one or two letters matches a symbol or alias
-        exactly. No match exits 1 and names the registries searched.
+        exactly. A longer word that only continues the query is named as a
+        prefix, so landau is not reported as Landauer without saying so.
+        A catalog bridge with no evaluator and a formalRef routes to
+        upt atlas, and the hit quotes that reference's covers line.
+        No match exits 1 and names the registries searched.
         e.g.  upt search Schrödinger
               upt search thermal noise`;
 
@@ -68,6 +72,7 @@ async function run(ctx: CommandCtx): Promise<number> {
             matchedIn: m.matchedIn,
             ...(m.alias === undefined ? {} : { alias: m.alias }),
             command: m.entry.command,
+            ...(m.prefixes === undefined ? {} : { prefixes: m.prefixes }),
           })),
         },
       },
@@ -86,7 +91,8 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (inKind.length === 0) continue;
     out(`\n${title}:`);
     for (const m of inKind.slice(0, PER_SECTION)) {
-      out(`  ${m.entry.line}${m.alias === undefined ? '' : ` (alias ${m.alias})`}  [words in: ${m.matchedIn.join(', ')}]`);
+      const prefix = (m.prefixes ?? []).map((p) => `${p.query} is a prefix of ${p.word}`).join('; ');
+      out(`  ${m.entry.line}${m.alias === undefined ? '' : ` (alias ${m.alias})`}  [words in: ${m.matchedIn.join(', ')}${prefix === '' ? '' : `; ${prefix}`}]`);
       out(`      ${m.entry.commandLabel}: ${m.entry.command}${m.entry.note === undefined ? '' : ` (${m.entry.note})`}`);
     }
     if (inKind.length > PER_SECTION) out(`  … and ${inKind.length - PER_SECTION} more (--json lists every match)`);
