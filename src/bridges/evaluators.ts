@@ -249,7 +249,7 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
       [
         P('mu_m2_per_Vs', 'electrical mobility', 'μ', 'm^2/(V·s)', 'drift speed per electric field'),
         temperature('T_K', 'temperature', 'T', 'absolute temperature, nonzero'),
-        P('q_C', 'carrier charge', 'q', 'C', 'carrier charge, nonzero'),
+        P('q_C', 'carrier charge', 'q', 'C', 'carrier charge, nonzero, same sign as μ'),
       ],
       (i) => evaluateEinsteinRelation({ mu_m2_per_Vs: i.mu_m2_per_Vs, T_K: i.T_K, q_C: i.q_C }),
     ),
