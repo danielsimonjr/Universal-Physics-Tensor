@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Set the package version to 3.1.0. The public surface adds the BE-74, BE-75, and BE-76 exports and does not remove one.
+  Done: `package.json` is 3.1.0. The minor note is the [3.1.0] section. Version-stamped artifacts carry 3.1.0. The Part VIII check requires 3.1.0. Before the bump it required 3.0.0. npm `3.0.0` remains the published release until the tag workflow.
+
 - [x] Vendor PhysJS `ee753df77bd5b29b7207443181606b6004bfcf6a`. Lean files are `lean/<File>.lean`. Add BE-74, BE-75, and BE-76 as formally proved, with composition of BE-76 on BE-74.
   Done: the manifest commit is that sha. `physjsFileUrl` emits `lean/${file}`. The theorems are `PhysJS.MagneticPressure.pressure_eq`, `PhysJS.LondonPenetration.depth_eq`, and `PhysJS.PlasmaBeta.beta_eq`. Each is kind `bridge`. Explain of magnetic pressure recovers `B²/(2 μ0)`. Explain of the London depth and of plasma beta says the formula carries dimensionful constants. `upt regime plasma` stays vacuous.
 
