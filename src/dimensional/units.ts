@@ -88,7 +88,10 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   // terasecond. The prefix flag is what lets `nT` and `uT` parse.
   ['T', [1, D({ M: 1, T: -2, I: -1 }), true]],
   // Gauss = 10⁻⁴ T. Exact, so `GPa` stays gigapascal (prefix G + Pa) and bare `G` is gauss.
+  // The spelled name is the same unit. It does not take a prefix (`kgauss` is not a kilogauss).
   ['G', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
+  ['gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
+  ['Gauss', [1e-4, D({ M: 1, T: -2, I: -1 }), false]],
   ['bar', [1e5, D({ L: -1, M: 1, T: -2 }), true]],
   ['atm', [101325, D({ L: -1, M: 1, T: -2 }), false]],
   ['angstrom', [1e-10, D({ L: 1 }), false]],

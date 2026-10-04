@@ -48,6 +48,8 @@ describe('parseUnit', () => {
     expect(parseUnit('uT').scale).toBe(1e-6);
     expect(parseUnit('Ts').scale).toBe(1e12);
     expect(parseUnit('G').scale).toBe(1e-4);
+    expect(parseUnit('gauss').scale).toBe(1e-4);
+    expect(parseUnit('Gauss').scale).toBe(1e-4);
     expect(parseUnit('GPa').scale).toBe(1e9);
     expect(parseUnit('bar').scale).toBe(1e5);
     expect(parseUnit('mbar').scale).toBe(100);
@@ -76,6 +78,8 @@ describe('parseUnit', () => {
 
 describe('convertValue', () => {
   it('converts into the declared unit and refuses a dimension mismatch', () => {
+    expect(convertValue('1 gauss', 'T').value).toBe(1e-4);
+    expect(convertValue('1gauss', 'T').value).toBe(convertValue('1G', 'T').value);
     expect(convertValue('1um', 'm').value).toBeCloseTo(1e-6, 20);
     expect(convertValue('88 d', 'yr').value).toBeCloseTo(88 / 365.25, 15);
     expect(convertValue('3', 'm')).toEqual({ value: 3, given: '' });
