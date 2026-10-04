@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 126 established-confidence edge(s) of the 158 in this graph
+  anchored core: the clusters holding at least one of the 131 established-confidence edge(s) of the 163 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  20 of the isolated bridges share a name token with the core; 11 are truly unconnected.
+  22 of the isolated bridges share a name token with the core; 12 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -74,8 +74,9 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         tunneling-mass ≟ swampland-tower-mass                  [[mass]]  → be-41
     ── be-36 (isolated):
         gravitational-wave-speed ≟ alfven-speed                [[velocity]]  → be-67
+        gravitational-wave-speed ≟ fast-magnetosonic-speed     [[velocity]]  → be-69
         gravitational-wave-speed ≟ most-probable-speed         [[velocity]]  → CE-mb-most-probable-speed
-        gravitational-wave-speed ≟ sound-speed                 [[velocity]]  → CE-debye-frequency
+        gravitational-wave-speed ≟ sound-speed                 [[velocity]]  → be-69
         gravitational-wave-speed ≟ speed                       [[velocity]]  → CE-string-wave-speed
         gravitational-wave-speed ≟ speed-of-light              [[velocity]]  → CE-larmor-power
     ── be-43 (isolated):
@@ -125,13 +126,38 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         planck-mass-energy ≟ state-energy                      [[energy]]  → CE-boltzmann-factor
         planck-mass-energy ≟ thermal-energy                    [[energy]]  → CE-equipartition
     ── be-68 (isolated):
+        proper-temperature ≟ clapeyron-temperature             [[temperature]]  → be-71
         proper-temperature ≟ cold-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
         proper-temperature ≟ effective-temperature             [[temperature]]  → be-27
+        proper-temperature ≟ einstein-temperature              [[temperature]]  → be-70
         proper-temperature ≟ hot-reservoir-temperature         [[temperature]]  → CE-carnot-efficiency
+        proper-temperature ≟ peltier-temperature               [[temperature]]  → be-73
         proper-temperature ≟ reference-temperature             [[temperature]]  → be-33
         proper-temperature ≟ reheating-temperature             [[temperature]]  → be-34
         proper-temperature ≟ temperature                       [[temperature]]  → be-12
         proper-temperature ≟ temperature-change                [[temperature]]  → CE-heat-capacity
+    ── be-70 (isolated):
+        carrier-charge ≟ charge                                [[charge]]  → CE-cyclotron-frequency
+        diffusivity ≟ thermal-diffusivity                      [[L^2 T^-1]]  → CE-thermal-diffusivity
+        einstein-temperature ≟ clapeyron-temperature           [[temperature]]  → be-71
+        einstein-temperature ≟ cold-reservoir-temperature      [[temperature]]  → CE-carnot-efficiency
+        einstein-temperature ≟ effective-temperature           [[temperature]]  → be-27
+        einstein-temperature ≟ hot-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        einstein-temperature ≟ peltier-temperature             [[temperature]]  → be-73
+        einstein-temperature ≟ reference-temperature           [[temperature]]  → be-33
+        einstein-temperature ≟ reheating-temperature           [[temperature]]  → be-34
+        einstein-temperature ≟ temperature                     [[temperature]]  → be-12
+        einstein-temperature ≟ temperature-change              [[temperature]]  → CE-heat-capacity
+        electrical-mobility ≟ carrier-mobility                 [[M^-1 T^2 I]]  → CE-carrier-mobility
+    ── be-73 (isolated):
+        peltier-temperature ≟ clapeyron-temperature            [[temperature]]  → be-71
+        peltier-temperature ≟ cold-reservoir-temperature       [[temperature]]  → CE-carnot-efficiency
+        peltier-temperature ≟ effective-temperature            [[temperature]]  → be-27
+        peltier-temperature ≟ hot-reservoir-temperature        [[temperature]]  → CE-carnot-efficiency
+        peltier-temperature ≟ reference-temperature            [[temperature]]  → be-33
+        peltier-temperature ≟ reheating-temperature            [[temperature]]  → be-34
+        peltier-temperature ≟ temperature                      [[temperature]]  → be-12
+        peltier-temperature ≟ temperature-change               [[temperature]]  → CE-heat-capacity
     ── CE-bekenstein-hawking (isolated):
         bh-entropy ≟ boltzmann-entropy                         [[entropy]]  → CE-boltzmann-entropy
         bh-entropy ≟ entropy-change                            [[entropy]]  → CE-clausius-entropy
@@ -144,11 +170,13 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         bohr-radius ≟ radius                                   [[length]]  → CE-schwarzschild-radius
         bohr-radius ≟ schwarzschild-radius                     [[length]]  → be-42-via-rs
     ── CE-carnot-efficiency (isolated):
+        cold-reservoir-temperature ≟ clapeyron-temperature     [[temperature]]  → be-71
         cold-reservoir-temperature ≟ effective-temperature     [[temperature]]  → be-27
         cold-reservoir-temperature ≟ reference-temperature     [[temperature]]  → be-33
         cold-reservoir-temperature ≟ reheating-temperature     [[temperature]]  → be-34
         cold-reservoir-temperature ≟ temperature               [[temperature]]  → be-12
         cold-reservoir-temperature ≟ temperature-change        [[temperature]]  → CE-heat-capacity
+        hot-reservoir-temperature ≟ clapeyron-temperature      [[temperature]]  → be-71
         hot-reservoir-temperature ≟ effective-temperature      [[temperature]]  → be-27
         hot-reservoir-temperature ≟ reference-temperature      [[temperature]]  → be-33
         hot-reservoir-temperature ≟ reheating-temperature      [[temperature]]  → be-34
@@ -249,6 +277,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         position-momentum-uncertainty-product ≟ angular-momentum [[action]]  → CE-angular-momentum
 
 
-  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53
+  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72
 
   The isolated-bridge review is written up in https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md.

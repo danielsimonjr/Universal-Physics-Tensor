@@ -10,7 +10,7 @@ part carries status notes marking superseded or speculative content.
 | Part | File | Scope | Status |
 |---|---|---|---|
 | I | [Part-I.md](Part-I.md) | Theoretical foundation: the rank-6 catalog `Π`, framing commitment, consistency invariants, Bridge Equations 11–20 | Core; wave-revised |
-| II | [Part-II.md](Part-II.md) | Bridge-equation catalog BE-21–68 (§V is 21–50; §V-B is BE-51–54; §V-C is BE-55–68) + tensor-integration mapping | Core; writes up BE-21–68. The runtime catalog is the same 58 entries (ids 11–68); see Conventions |
+| II | [Part-II.md](Part-II.md) | Bridge-equation catalog BE-21–73 (§V is 21–50; §V-B is BE-51–54; §V-C is BE-55–73) + tensor-integration mapping | Core; writes up BE-21–73. The runtime catalog is the same 63 entries (ids 11–73); see Conventions |
 | III | [Part-III.md](Part-III.md) | Algorithms + information-theoretic definitions (none of the §-numbered pseudocode algorithms are implemented) | Core; spec-only |
 | IV | [Part-IV.md](Part-IV.md) | Validation framework: experimental-validation roadmap (near/medium/long-term) + dimensional-validation protocol | Core; experimental targets aspirational |
 | V | [Part-V.md](Part-V.md) | Advanced mathematics: category theory, tensor networks, consistency matrix, experimental design (former §§XXI–XXII applications/risk essays → [`docs/essays/`](../essays/README.md)) | Core; largest + most speculative — read its status note first |
@@ -25,11 +25,11 @@ part carries status notes marking superseded or speculative content.
 
 ## Conventions
 
-- **Catalog count**: 58 bridge equations, IDs 11–68 with no gaps (22 established ·
+- **Catalog count**: 63 bridge equations, IDs 11–73 with no gaps (27 established ·
   33 speculative · 3 highly-speculative). Counted from each entry's `id` and
   `status` in `src/bridges/index.ts` (`BRIDGE_EQUATIONS`). Parts I–II write up
-  BE-11–68. Part I is BE-11–20. Part II §V is BE-21–50, §V-B is BE-51–54, and
-  §V-C is BE-55–68. Entries 51 and 53–68 keep `source_part: 'III'` in that array;
+  BE-11–73. Part I is BE-11–20. Part II §V is BE-21–50, §V-B is BE-51–54, and
+  §V-C is BE-55–73. Entries 51 and 53–73 keep `source_part: 'III'` in that array;
   BE-52 keeps `source_part: 'I'`. BE-1–10 are the implicit "diagonal"
   laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) and are not
   individually catalogued. Reviewed `formalRef`s use `lean4-physjs`

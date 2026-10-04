@@ -483,6 +483,74 @@ with a unique-monomial claim:
 }
 ```
 
+## Further rows: BE-69 through BE-73
+
+These five rows are the next integers after BE-68, with no gap. Each formalRef is the theorem named below. A nested field is not that reference. The bridges tuples differ on the two sides, so membership counts each row as a bridge. The composition edges are kind `law` because the quantity attributes match. The catalog text is Part II §V-C.
+
+| Id | Statement | Category letter | Tuple |
+|---|---|---|---|
+| be-69 | Perpendicular fast magnetosonic phase speed | D | `fluid` → `plasma` |
+| be-70 | Einstein relation | H | `kinetic` → `electromagnetic` |
+| be-71 | Clapeyron slope | J | `thermodynamics` → `continuum` |
+| be-72 | Gravitational frequency ratio | I | `gravitation` → `radiation` |
+| be-73 | Kelvin relation | F | `thermal` → `electrical` |
+
+Letter J selects the quantum-classical component, the same component letter BE-34 already uses. The tuple does not select the component.
+
+### Fast magnetosonic speed — be-69
+
+**Bridge Equation 69: perpendicular fast magnetosonic phase speed (fluid to plasma)** *(Category D: Field Unification Bridges)*
+
+`|ω/k| = √(c_s² + B²/(μ₀ ρ))` for a monochromatic compressional polarization perpendicular to a uniform field, from the linearized ideal-MHD premises. `μ₀ > 0`, `ρ > 0`, and `k ≠ 0`. `c_s² = γ p / ρ` is a reading of the closure, not an energy equation.
+
+The formalRef is `PhysJS.FastMagnetosonic.speed_eq`. The nested field `perpendicularQuartic` is `PhysJS.FastMagnetosonic.perpendicular_of_dispersion`, the quartic at `k_∥ = 0`. That theorem is not the formalRef. The oblique fast mode and a kinetic dispersion relation are out of scope.
+
+`c_s = 0` recovers `B/√(μ₀ ρ)`, the Alfvén number of a different polarization. The target is `fast-magnetosonic-speed`. It is not `alfven-speed`. The sources reuse `magnetic-flux-density` and `plasma-mass-density`, the same `B` and `ρ` as BE-67, and add `sound-speed`. Neither target is the other's source, so the two edges do not compose. `√(c_s² + v_A²)` is not `c_s`, not `v_A`, and not `c_s + v_A` when the other speed is nonzero.
+
+The evaluator is `evaluateFastMagnetosonic({ cs_m_per_s, B_T, rho_kg_per_m3 })`. `c_s` is finite and at least zero. `B` is finite. `ρ` is finite and positive.
+
+### Einstein relation — be-70
+
+**Bridge Equation 70: Einstein relation (kinetic to electromagnetic)** *(Category H: Non-Equilibrium Statistical Mechanics)*
+
+`D = μ k_B T / q`. `μ` is the electrical mobility, drift speed per electric field. The premises are a Boltzmann profile `n = n_ref exp(−q V/(k_B T))` and a nonzero field at which the drift flux cancels the diffusion flux. The force-mobility writing needs `μ_force = μ/q`. Dropping `q` fails when `q ≠ 1`. Stokes–Einstein and a Fermi-liquid form are different equations. There is no second formalRef for an entropy.
+
+The formalRef is `PhysJS.EinsteinRelation.diffusion_eq`.
+
+The ports are `electrical-mobility`, `einstein-temperature`, `carrier-charge`, and `diffusivity`. `einstein-temperature` is not `temperature` and not `proper-temperature`. `carrier-charge` is not the constant `e`. The evaluator is `evaluateEinsteinRelation({ mu_m2_per_Vs, T_K, q_C })`. `μ` is finite. `T` and `q` are finite and nonzero.
+
+### Clapeyron slope — be-71
+
+**Bridge Equation 71: Clapeyron slope (thermodynamics to continuum)** *(Category J: Phase Transitions and Criticality)*
+
+Where the specific Gibbs energies agree and each phase obeys `dg = −s dT + v dP`, `dP/dT = (s2−s1)/(v2−v1)`. With `L = T (s2−s1)`, `T ≠ 0`, and `Δv ≠ 0`, `dP/dT = L/(T Δv)`. The entropy slope is that companion reading inside `slope_eq`. It is not a second formalRef and not a second key. Dropping `T` fails when `T ≠ 1`. Replacing `Δv` by one phase volume fails when the other volume is nonzero. The ideal-gas integrated vapor-pressure law is not this slope. The Gibbs differential is a hypothesis, not a Legendre transform derived in the theorem.
+
+The formalRef is `PhysJS.Clapeyron.slope_eq`.
+
+`L` is specific, joules per kilogram. The source is `specific-latent-heat`. It is not `latent-heat`, the energy `Q = m L`. The other ports are `clapeyron-temperature`, `specific-volume-change`, and `clapeyron-slope`. The evaluator is `evaluateClapeyron({ L_J_per_kg, T_K, delta_v_m3_per_kg })`. `L` is finite. `T` and `Δv` are finite and nonzero.
+
+### Gravitational redshift — be-72
+
+**Bridge Equation 72: gravitational frequency ratio (gravitation to radiation)** *(Category I: Emergent Spacetime)*
+
+Two static observers of one coordinate period, with `ν √(−g_00) = 1/Δt` and both `g_00 < 0`, have `ν1/ν2 = √(g2/g1)`. This is not BE-68. The bridges tuple is `gravitation` → `radiation`, not `gravitation` → `thermodynamics`.
+
+The formalRef is `PhysJS.GravitationalRedshift.frequency_ratio`. The nested field `tolmanRatio` is `PhysJS.GravitationalRedshift.tolman_same_ratio`: if the Tolman products also agree, then `T1/T2 = ν1/ν2`. Neither factor is derived from the other. That nested theorem is not the formalRef, and it is not an equality edge from this row into BE-68.
+
+Equal temperatures on `g_00 = −1` and `g_00 = −4` are not a Tolman equilibrium. The frequency ratio at those components is 2. The ratio of the two Tolman products `T √(−g_00)` is also 2 when the temperatures are equal, and the products themselves are not equal. The frequency ratio is not the Tolman invariant.
+
+The ports are `redshift-metric-g00-1`, `redshift-metric-g00-2`, and `gravitational-frequency-ratio`. They are not `metric-g00`, `proper-temperature`, or `tolman-invariant`. `g_00` is not an alias of either redshift component. Category I is the same component as BE-68. That shared component is not a composition. `composeEdges` in either order has no shared quantity. The evaluator is `evaluateGravitationalRedshift({ g1, g2 })`. Both components are finite and negative. This is not a horizon temperature and not `PhysJS.HawkingUnruh.dictionary`.
+
+### Kelvin relation — be-73
+
+**Bridge Equation 73: Kelvin relation (thermal to electrical)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+For the linear fluxes `J_e` and `J_q`, the open-circuit Seebeck coefficient `S = E/∇T` and the isothermal Peltier coefficient `Π = J_q/J_e` satisfy `Π = S T` when `L12 = L21`. That equality is the structure field `ThermoelectricOnsager.onsager`. It names microscopic reversibility. It is not an axiom, and it is not a numeric evaluator input. Without it the two coefficients disagree. The first Thomson relation `μ = T dS/dT` is not this equation, and neither is a measured thermopower.
+
+The formalRef is `PhysJS.KelvinRelation.peltier_eq`.
+
+The ports are `seebeck-coefficient`, `peltier-temperature`, and `peltier-coefficient`. `peltier-coefficient` is a voltage. It is not the Josephson `voltage` node. The evaluator is `evaluateKelvinPeltier({ S_V_per_K, T_K })`. `S` is finite. `T` is finite and nonzero.
+
 ## Open notes
 
 These are not specification sections. They stay unresolved. The dogfood is

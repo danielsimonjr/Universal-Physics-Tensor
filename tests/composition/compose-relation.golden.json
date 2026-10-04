@@ -294,6 +294,36 @@
     "message": "Cannot compose be-11-zurek -> be-68: target quantity 'decoherence-rate' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-11-zurek>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-zurek -> be-69: target quantity 'decoherence-rate' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-zurek>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-zurek -> be-70: target quantity 'decoherence-rate' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-zurek>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-zurek -> be-71: target quantity 'decoherence-rate' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-zurek>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-zurek -> be-72: target quantity 'decoherence-rate' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-zurek>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-zurek -> be-73: target quantity 'decoherence-rate' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-12>>be-11-zurek",
     "outcome": "composed",
     "id": "be-12>>be-11-zurek",
@@ -616,6 +646,36 @@
     "message": "Cannot compose be-12 -> be-68: target quantity 'thermal-de-broglie-wavelength' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-12>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-12 -> be-69: target quantity 'thermal-de-broglie-wavelength' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-12>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-12 -> be-70: target quantity 'thermal-de-broglie-wavelength' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-12>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-12 -> be-71: target quantity 'thermal-de-broglie-wavelength' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-12>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-12 -> be-72: target quantity 'thermal-de-broglie-wavelength' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-12>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-12 -> be-73: target quantity 'thermal-de-broglie-wavelength' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-16>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -910,6 +970,36 @@
     "message": "Cannot compose be-16 -> be-68: target quantity 'landauer-erasure-energy' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-16>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-16 -> be-69: target quantity 'landauer-erasure-energy' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-16>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-16 -> be-70: target quantity 'landauer-erasure-energy' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-16>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-16 -> be-71: target quantity 'landauer-erasure-energy' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-16>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-16 -> be-72: target quantity 'landauer-erasure-energy' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-16>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-16 -> be-73: target quantity 'landauer-erasure-energy' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-37>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -1202,6 +1292,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-37 -> be-68: target quantity 'shapiro-delay' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-37>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-37 -> be-69: target quantity 'shapiro-delay' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-37>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-37 -> be-70: target quantity 'shapiro-delay' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-37>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-37 -> be-71: target quantity 'shapiro-delay' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-37>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-37 -> be-72: target quantity 'shapiro-delay' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-37>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-37 -> be-73: target quantity 'shapiro-delay' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-42>>be-11-zurek",
@@ -1609,6 +1729,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-42 -> be-68: target quantity 'hawking-temperature' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-42>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42 -> be-69: target quantity 'hawking-temperature' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-42>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42 -> be-70: target quantity 'hawking-temperature' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-42>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42 -> be-71: target quantity 'hawking-temperature' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-42>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42 -> be-72: target quantity 'hawking-temperature' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-42>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42 -> be-73: target quantity 'hawking-temperature' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-42-via-rs>>be-11-zurek",
@@ -2045,6 +2195,36 @@
     "message": "Cannot compose be-42-via-rs -> be-68: target quantity 'hawking-temperature' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-42-via-rs>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42-via-rs -> be-69: target quantity 'hawking-temperature' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-42-via-rs>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42-via-rs -> be-70: target quantity 'hawking-temperature' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-42-via-rs>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42-via-rs -> be-71: target quantity 'hawking-temperature' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-42-via-rs>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42-via-rs -> be-72: target quantity 'hawking-temperature' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-42-via-rs>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-42-via-rs -> be-73: target quantity 'hawking-temperature' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-51>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -2339,6 +2519,36 @@
     "message": "Cannot compose be-51 -> be-68: target quantity 'deflection-angle' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-51>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-51 -> be-69: target quantity 'deflection-angle' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-51>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-51 -> be-70: target quantity 'deflection-angle' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-51>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-51 -> be-71: target quantity 'deflection-angle' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-51>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-51 -> be-72: target quantity 'deflection-angle' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-51>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-51 -> be-73: target quantity 'deflection-angle' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-52>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -2631,6 +2841,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-52 -> be-68: target quantity 'perihelion-advance' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-52>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-52 -> be-69: target quantity 'perihelion-advance' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-52>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-52 -> be-70: target quantity 'perihelion-advance' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-52>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-52 -> be-71: target quantity 'perihelion-advance' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-52>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-52 -> be-72: target quantity 'perihelion-advance' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-52>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-52 -> be-73: target quantity 'perihelion-advance' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "law-schwarzschild-radius>>be-11-zurek",
@@ -2952,6 +3192,36 @@
     "message": "Cannot compose law-schwarzschild-radius -> be-68: target quantity 'schwarzschild-radius' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "law-schwarzschild-radius>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose law-schwarzschild-radius -> be-69: target quantity 'schwarzschild-radius' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "law-schwarzschild-radius>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose law-schwarzschild-radius -> be-70: target quantity 'schwarzschild-radius' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "law-schwarzschild-radius>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose law-schwarzschild-radius -> be-71: target quantity 'schwarzschild-radius' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "law-schwarzschild-radius>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose law-schwarzschild-radius -> be-72: target quantity 'schwarzschild-radius' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "law-schwarzschild-radius>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose law-schwarzschild-radius -> be-73: target quantity 'schwarzschild-radius' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-14>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -3244,6 +3514,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-14 -> be-68: target quantity 'boundary-entanglement-entropy' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-14>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-14 -> be-69: target quantity 'boundary-entanglement-entropy' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-14>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-14 -> be-70: target quantity 'boundary-entanglement-entropy' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-14>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-14 -> be-71: target quantity 'boundary-entanglement-entropy' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-14>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-14 -> be-72: target quantity 'boundary-entanglement-entropy' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-14>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-14 -> be-73: target quantity 'boundary-entanglement-entropy' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-19>>be-11-zurek",
@@ -3540,6 +3840,36 @@
     "message": "Cannot compose be-19 -> be-68: target quantity 'hubble-rate-squared' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-19>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-19 -> be-69: target quantity 'hubble-rate-squared' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-19>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-19 -> be-70: target quantity 'hubble-rate-squared' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-19>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-19 -> be-71: target quantity 'hubble-rate-squared' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-19>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-19 -> be-72: target quantity 'hubble-rate-squared' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-19>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-19 -> be-73: target quantity 'hubble-rate-squared' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-21>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -3832,6 +4162,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-21 -> be-68: target quantity 'viscosity-entropy-ratio' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-21>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-21 -> be-69: target quantity 'viscosity-entropy-ratio' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-21>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-21 -> be-70: target quantity 'viscosity-entropy-ratio' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-21>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-21 -> be-71: target quantity 'viscosity-entropy-ratio' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-21>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-21 -> be-72: target quantity 'viscosity-entropy-ratio' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-21>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-21 -> be-73: target quantity 'viscosity-entropy-ratio' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-48>>be-11-zurek",
@@ -4128,6 +4488,36 @@
     "message": "Cannot compose be-48 -> be-68: target quantity 'grw-localization-rate' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-48>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-48 -> be-69: target quantity 'grw-localization-rate' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-48>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-48 -> be-70: target quantity 'grw-localization-rate' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-48>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-48 -> be-71: target quantity 'grw-localization-rate' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-48>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-48 -> be-72: target quantity 'grw-localization-rate' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-48>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-48 -> be-73: target quantity 'grw-localization-rate' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-53>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -4420,6 +4810,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-53 -> be-68: target quantity 'yang-mills-beta' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-53>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-53 -> be-69: target quantity 'yang-mills-beta' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-53>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-53 -> be-70: target quantity 'yang-mills-beta' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-53>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-53 -> be-71: target quantity 'yang-mills-beta' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-53>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-53 -> be-72: target quantity 'yang-mills-beta' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-53>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-53 -> be-73: target quantity 'yang-mills-beta' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-54>>be-11-zurek",
@@ -4716,6 +5136,36 @@
     "message": "Cannot compose be-54 -> be-68: target quantity 'hubble-rate-squared' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-54>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-54 -> be-69: target quantity 'hubble-rate-squared' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-54>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-54 -> be-70: target quantity 'hubble-rate-squared' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-54>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-54 -> be-71: target quantity 'hubble-rate-squared' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-54>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-54 -> be-72: target quantity 'hubble-rate-squared' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-54>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-54 -> be-73: target quantity 'hubble-rate-squared' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-11-master>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -5008,6 +5458,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-11-master -> be-68: target quantity 'decoherence-rate' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-master>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-master -> be-69: target quantity 'decoherence-rate' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-master>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-master -> be-70: target quantity 'decoherence-rate' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-master>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-master -> be-71: target quantity 'decoherence-rate' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-master>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-master -> be-72: target quantity 'decoherence-rate' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-11-master>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-11-master -> be-73: target quantity 'decoherence-rate' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-13>>be-11-zurek",
@@ -5304,6 +5784,36 @@
     "message": "Cannot compose be-13 -> be-68: target quantity 'ricci-scalar' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-13>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-13 -> be-69: target quantity 'ricci-scalar' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-13>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-13 -> be-70: target quantity 'ricci-scalar' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-13>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-13 -> be-71: target quantity 'ricci-scalar' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-13>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-13 -> be-72: target quantity 'ricci-scalar' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-13>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-13 -> be-73: target quantity 'ricci-scalar' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-15>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -5596,6 +6106,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-15 -> be-68: target quantity 'coarsening-length' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-15>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-15 -> be-69: target quantity 'coarsening-length' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-15>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-15 -> be-70: target quantity 'coarsening-length' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-15>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-15 -> be-71: target quantity 'coarsening-length' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-15>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-15 -> be-72: target quantity 'coarsening-length' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-15>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-15 -> be-73: target quantity 'coarsening-length' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-17>>be-11-zurek",
@@ -5892,6 +6432,36 @@
     "message": "Cannot compose be-17 -> be-68: target quantity 'spin-density-squared' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-17>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-17 -> be-69: target quantity 'spin-density-squared' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-17>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-17 -> be-70: target quantity 'spin-density-squared' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-17>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-17 -> be-71: target quantity 'spin-density-squared' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-17>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-17 -> be-72: target quantity 'spin-density-squared' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-17>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-17 -> be-73: target quantity 'spin-density-squared' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-18>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -6184,6 +6754,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-18 -> be-68: target quantity 'dark-fermion-mass' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-18>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-18 -> be-69: target quantity 'dark-fermion-mass' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-18>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-18 -> be-70: target quantity 'dark-fermion-mass' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-18>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-18 -> be-71: target quantity 'dark-fermion-mass' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-18>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-18 -> be-72: target quantity 'dark-fermion-mass' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-18>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-18 -> be-73: target quantity 'dark-fermion-mass' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-20>>be-11-zurek",
@@ -6480,6 +7080,36 @@
     "message": "Cannot compose be-20 -> be-68: target quantity 'lambda-mass-density' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-20>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-20 -> be-69: target quantity 'lambda-mass-density' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-20>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-20 -> be-70: target quantity 'lambda-mass-density' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-20>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-20 -> be-71: target quantity 'lambda-mass-density' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-20>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-20 -> be-72: target quantity 'lambda-mass-density' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-20>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-20 -> be-73: target quantity 'lambda-mass-density' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-22>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -6772,6 +7402,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-22 -> be-68: target quantity 'subsystem-entanglement-entropy' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-22>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-22 -> be-69: target quantity 'subsystem-entanglement-entropy' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-22>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-22 -> be-70: target quantity 'subsystem-entanglement-entropy' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-22>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-22 -> be-71: target quantity 'subsystem-entanglement-entropy' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-22>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-22 -> be-72: target quantity 'subsystem-entanglement-entropy' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-22>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-22 -> be-73: target quantity 'subsystem-entanglement-entropy' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-23>>be-11-zurek",
@@ -7068,6 +7728,36 @@
     "message": "Cannot compose be-23 -> be-68: target quantity 'resistivity' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-23>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-23 -> be-69: target quantity 'resistivity' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-23>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-23 -> be-70: target quantity 'resistivity' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-23>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-23 -> be-71: target quantity 'resistivity' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-23>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-23 -> be-72: target quantity 'resistivity' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-23>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-23 -> be-73: target quantity 'resistivity' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-24>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -7360,6 +8050,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-24 -> be-68: target quantity 'fret-efficiency' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-24>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-24 -> be-69: target quantity 'fret-efficiency' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-24>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-24 -> be-70: target quantity 'fret-efficiency' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-24>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-24 -> be-71: target quantity 'fret-efficiency' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-24>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-24 -> be-72: target quantity 'fret-efficiency' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-24>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-24 -> be-73: target quantity 'fret-efficiency' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-25>>be-11-zurek",
@@ -7656,6 +8376,36 @@
     "message": "Cannot compose be-25 -> be-68: target quantity 'intrinsic-information' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-25>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-25 -> be-69: target quantity 'intrinsic-information' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-25>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-25 -> be-70: target quantity 'intrinsic-information' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-25>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-25 -> be-71: target quantity 'intrinsic-information' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-25>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-25 -> be-72: target quantity 'intrinsic-information' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-25>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-25 -> be-73: target quantity 'intrinsic-information' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-26>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -7948,6 +8698,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-26 -> be-68: target quantity 'mutation-rate' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-26>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-26 -> be-69: target quantity 'mutation-rate' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-26>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-26 -> be-70: target quantity 'mutation-rate' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-26>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-26 -> be-71: target quantity 'mutation-rate' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-26>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-26 -> be-72: target quantity 'mutation-rate' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-26>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-26 -> be-73: target quantity 'mutation-rate' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-27>>be-11-zurek",
@@ -8244,6 +9024,36 @@
     "message": "Cannot compose be-27 -> be-68: target quantity 'effective-temperature' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-27>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-27 -> be-69: target quantity 'effective-temperature' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-27>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-27 -> be-70: target quantity 'effective-temperature' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-27>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-27 -> be-71: target quantity 'effective-temperature' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-27>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-27 -> be-72: target quantity 'effective-temperature' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-27>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-27 -> be-73: target quantity 'effective-temperature' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-30>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -8536,6 +9346,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-30 -> be-68: target quantity 'entanglement-entropy-variation' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-30>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-30 -> be-69: target quantity 'entanglement-entropy-variation' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-30>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-30 -> be-70: target quantity 'entanglement-entropy-variation' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-30>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-30 -> be-71: target quantity 'entanglement-entropy-variation' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-30>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-30 -> be-72: target quantity 'entanglement-entropy-variation' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-30>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-30 -> be-73: target quantity 'entanglement-entropy-variation' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-31>>be-11-zurek",
@@ -8832,6 +9672,36 @@
     "message": "Cannot compose be-31 -> be-68: target quantity 'ricci-scalar' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-31>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-31 -> be-69: target quantity 'ricci-scalar' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-31>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-31 -> be-70: target quantity 'ricci-scalar' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-31>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-31 -> be-71: target quantity 'ricci-scalar' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-31>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-31 -> be-72: target quantity 'ricci-scalar' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-31>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-31 -> be-73: target quantity 'ricci-scalar' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-33>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -9124,6 +9994,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-33 -> be-68: target quantity 'quantum-correlation-length' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-33>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-33 -> be-69: target quantity 'quantum-correlation-length' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-33>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-33 -> be-70: target quantity 'quantum-correlation-length' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-33>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-33 -> be-71: target quantity 'quantum-correlation-length' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-33>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-33 -> be-72: target quantity 'quantum-correlation-length' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-33>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-33 -> be-73: target quantity 'quantum-correlation-length' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-34>>be-11-zurek",
@@ -9420,6 +10320,36 @@
     "message": "Cannot compose be-34 -> be-68: target quantity 'defect-density' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-34>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-34 -> be-69: target quantity 'defect-density' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-34>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-34 -> be-70: target quantity 'defect-density' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-34>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-34 -> be-71: target quantity 'defect-density' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-34>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-34 -> be-72: target quantity 'defect-density' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-34>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-34 -> be-73: target quantity 'defect-density' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-36>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -9712,6 +10642,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-36 -> be-68: target quantity 'gw-photon-speed-ratio' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-36>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-36 -> be-69: target quantity 'gw-photon-speed-ratio' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-36>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-36 -> be-70: target quantity 'gw-photon-speed-ratio' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-36>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-36 -> be-71: target quantity 'gw-photon-speed-ratio' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-36>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-36 -> be-72: target quantity 'gw-photon-speed-ratio' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-36>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-36 -> be-73: target quantity 'gw-photon-speed-ratio' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-38>>be-11-zurek",
@@ -10008,6 +10968,36 @@
     "message": "Cannot compose be-38 -> be-68: target quantity 'mond-force' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-38>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-38 -> be-69: target quantity 'mond-force' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-38>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-38 -> be-70: target quantity 'mond-force' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-38>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-38 -> be-71: target quantity 'mond-force' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-38>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-38 -> be-72: target quantity 'mond-force' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-38>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-38 -> be-73: target quantity 'mond-force' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-39>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -10300,6 +11290,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-39 -> be-68: target quantity 'newton-coupling-beta' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-39>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-39 -> be-69: target quantity 'newton-coupling-beta' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-39>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-39 -> be-70: target quantity 'newton-coupling-beta' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-39>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-39 -> be-71: target quantity 'newton-coupling-beta' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-39>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-39 -> be-72: target quantity 'newton-coupling-beta' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-39>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-39 -> be-73: target quantity 'newton-coupling-beta' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-41>>be-11-zurek",
@@ -10596,6 +11616,36 @@
     "message": "Cannot compose be-41 -> be-68: target quantity 'swampland-tower-mass' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-41>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-41 -> be-69: target quantity 'swampland-tower-mass' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-41>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-41 -> be-70: target quantity 'swampland-tower-mass' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-41>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-41 -> be-71: target quantity 'swampland-tower-mass' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-41>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-41 -> be-72: target quantity 'swampland-tower-mass' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-41>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-41 -> be-73: target quantity 'swampland-tower-mass' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-43>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -10888,6 +11938,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-43 -> be-68: target quantity 'wormhole-entanglement-entropy' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-43>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-43 -> be-69: target quantity 'wormhole-entanglement-entropy' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-43>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-43 -> be-70: target quantity 'wormhole-entanglement-entropy' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-43>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-43 -> be-71: target quantity 'wormhole-entanglement-entropy' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-43>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-43 -> be-72: target quantity 'wormhole-entanglement-entropy' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-43>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-43 -> be-73: target quantity 'wormhole-entanglement-entropy' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-45>>be-11-zurek",
@@ -11184,6 +12264,36 @@
     "message": "Cannot compose be-45 -> be-68: target quantity 'max-efolds' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-45>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-45 -> be-69: target quantity 'max-efolds' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-45>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-45 -> be-70: target quantity 'max-efolds' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-45>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-45 -> be-71: target quantity 'max-efolds' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-45>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-45 -> be-72: target quantity 'max-efolds' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-45>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-45 -> be-73: target quantity 'max-efolds' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-46>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -11476,6 +12586,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-46 -> be-68: target quantity 'anthropic-probability' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-46>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-46 -> be-69: target quantity 'anthropic-probability' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-46>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-46 -> be-70: target quantity 'anthropic-probability' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-46>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-46 -> be-71: target quantity 'anthropic-probability' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-46>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-46 -> be-72: target quantity 'anthropic-probability' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-46>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-46 -> be-73: target quantity 'anthropic-probability' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-47>>be-11-zurek",
@@ -11772,6 +12912,36 @@
     "message": "Cannot compose be-47 -> be-68: target quantity 'nucleon-yield-rate' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-47>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-47 -> be-69: target quantity 'nucleon-yield-rate' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-47>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-47 -> be-70: target quantity 'nucleon-yield-rate' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-47>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-47 -> be-71: target quantity 'nucleon-yield-rate' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-47>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-47 -> be-72: target quantity 'nucleon-yield-rate' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-47>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-47 -> be-73: target quantity 'nucleon-yield-rate' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-49>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -12064,6 +13234,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-49 -> be-68: target quantity 'fragment-mutual-information' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-49>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-49 -> be-69: target quantity 'fragment-mutual-information' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-49>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-49 -> be-70: target quantity 'fragment-mutual-information' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-49>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-49 -> be-71: target quantity 'fragment-mutual-information' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-49>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-49 -> be-72: target quantity 'fragment-mutual-information' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-49>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-49 -> be-73: target quantity 'fragment-mutual-information' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-50>>be-11-zurek",
@@ -12360,6 +13560,36 @@
     "message": "Cannot compose be-50 -> be-68: target quantity 'time-symmetric-field-amplitude' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-50>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-50 -> be-69: target quantity 'time-symmetric-field-amplitude' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-50>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-50 -> be-70: target quantity 'time-symmetric-field-amplitude' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-50>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-50 -> be-71: target quantity 'time-symmetric-field-amplitude' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-50>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-50 -> be-72: target quantity 'time-symmetric-field-amplitude' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-50>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-50 -> be-73: target quantity 'time-symmetric-field-amplitude' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-40>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -12652,6 +13882,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-40 -> be-68: target quantity 'composite-higgs-potential' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-40>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-40 -> be-69: target quantity 'composite-higgs-potential' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-40>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-40 -> be-70: target quantity 'composite-higgs-potential' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-40>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-40 -> be-71: target quantity 'composite-higgs-potential' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-40>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-40 -> be-72: target quantity 'composite-higgs-potential' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-40>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-40 -> be-73: target quantity 'composite-higgs-potential' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-55>>be-11-zurek",
@@ -12948,6 +14208,36 @@
     "message": "Cannot compose be-55 -> be-68: target quantity 'hall-conductance' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-55>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-55 -> be-69: target quantity 'hall-conductance' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-55>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-55 -> be-70: target quantity 'hall-conductance' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-55>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-55 -> be-71: target quantity 'hall-conductance' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-55>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-55 -> be-72: target quantity 'hall-conductance' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-55>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-55 -> be-73: target quantity 'hall-conductance' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-59>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -13242,6 +14532,36 @@
     "message": "Cannot compose be-59 -> be-68: target quantity 'frequency' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-59>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-59 -> be-69: target quantity 'frequency' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-59>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-59 -> be-70: target quantity 'frequency' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-59>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-59 -> be-71: target quantity 'frequency' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-59>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-59 -> be-72: target quantity 'frequency' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-59>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-59 -> be-73: target quantity 'frequency' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-60>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -13534,6 +14854,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-60 -> be-68: target quantity 'hall-conductance' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-60>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-60 -> be-69: target quantity 'hall-conductance' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-60>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-60 -> be-70: target quantity 'hall-conductance' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-60>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-60 -> be-71: target quantity 'hall-conductance' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-60>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-60 -> be-72: target quantity 'hall-conductance' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-60>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-60 -> be-73: target quantity 'hall-conductance' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-63>>be-11-zurek",
@@ -14046,6 +15396,36 @@
     "message": "Cannot compose be-63 -> be-68: target quantity 'mass' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-63>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-69: target quantity 'mass' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-63>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-70: target quantity 'mass' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-63>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-71: target quantity 'mass' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-63>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-72: target quantity 'mass' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-63>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-63 -> be-73: target quantity 'mass' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-66>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -14338,6 +15718,36 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-66 -> be-68: target quantity 'radiation-pressure' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-66>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-66 -> be-69: target quantity 'radiation-pressure' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-66>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-66 -> be-70: target quantity 'radiation-pressure' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-66>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-66 -> be-71: target quantity 'radiation-pressure' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-66>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-66 -> be-72: target quantity 'radiation-pressure' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-66>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-66 -> be-73: target quantity 'radiation-pressure' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   },
   {
     "pair": "be-67>>be-11-zurek",
@@ -14634,6 +16044,36 @@
     "message": "Cannot compose be-67 -> be-68: target quantity 'alfven-speed' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
   },
   {
+    "pair": "be-67>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-67 -> be-69: target quantity 'alfven-speed' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-67>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-67 -> be-70: target quantity 'alfven-speed' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-67>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-67 -> be-71: target quantity 'alfven-speed' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-67>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-67 -> be-72: target quantity 'alfven-speed' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-67>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-67 -> be-73: target quantity 'alfven-speed' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
     "pair": "be-68>>be-11-zurek",
     "outcome": "error",
     "error": "CompositionJunctionError",
@@ -14926,5 +16366,1655 @@
     "outcome": "error",
     "error": "CompositionJunctionError",
     "message": "Cannot compose be-68 -> be-68: target quantity 'tolman-invariant' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-68>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-68 -> be-69: target quantity 'tolman-invariant' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-68>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-68 -> be-70: target quantity 'tolman-invariant' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-68>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-68 -> be-71: target quantity 'tolman-invariant' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-68>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-68 -> be-72: target quantity 'tolman-invariant' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-68>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-68 -> be-73: target quantity 'tolman-invariant' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-11-zurek",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-11-zurek: target quantity 'fast-magnetosonic-speed' matches none of ['relaxation-rate', 'superposition-extent', 'thermal-de-broglie-wavelength'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-12",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-12: target quantity 'fast-magnetosonic-speed' matches none of ['mass', 'temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-16",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-16: target quantity 'fast-magnetosonic-speed' matches none of ['temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-37",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-37: target quantity 'fast-magnetosonic-speed' matches none of ['mass', 'far-radius', 'near-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-42",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-42: target quantity 'fast-magnetosonic-speed' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-42-via-rs",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-42-via-rs: target quantity 'fast-magnetosonic-speed' matches none of ['schwarzschild-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-51",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-51: target quantity 'fast-magnetosonic-speed' matches none of ['mass', 'impact-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-52",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-52: target quantity 'fast-magnetosonic-speed' matches none of ['mass', 'semi-major-axis', 'eccentricity'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>law-schwarzschild-radius",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> law-schwarzschild-radius: target quantity 'fast-magnetosonic-speed' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-14",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-14: target quantity 'fast-magnetosonic-speed' matches none of ['minimal-surface-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-19",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-19: target quantity 'fast-magnetosonic-speed' matches none of ['mass-density', 'critical-density', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-21",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-21: target quantity 'fast-magnetosonic-speed' matches none of [] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-48",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-48: target quantity 'fast-magnetosonic-speed' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-53",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-53: target quantity 'fast-magnetosonic-speed' matches none of ['gauge-coupling', 'color-number', 'flavor-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-54",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-54: target quantity 'fast-magnetosonic-speed' matches none of ['mass-density', 'brane-tension', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-11-master",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-11-master: target quantity 'fast-magnetosonic-speed' matches none of ['relaxation-rate', 'system-environment-coupling', 'reference-coupling'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-13",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-13: target quantity 'fast-magnetosonic-speed' matches none of ['cosmological-constant-curvature', 'stress-energy-trace'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-15",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-15: target quantity 'fast-magnetosonic-speed' matches none of ['model-a-mobility', 'time'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-17",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-17: target quantity 'fast-magnetosonic-speed' matches none of ['einstein-coupling-prefactor-squared', 'torsion-contraction-scalar'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-18",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-18: target quantity 'fast-magnetosonic-speed' matches none of ['yukawa-coupling', 'vacuum-expectation-value'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-20",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-20: target quantity 'fast-magnetosonic-speed' matches none of ['cosmological-constant-curvature'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-22",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-22: target quantity 'fast-magnetosonic-speed' matches none of ['area-law-coefficient', 'boundary-length', 'topological-entanglement-entropy'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-23",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-23: target quantity 'fast-magnetosonic-speed' matches none of ['residual-resistivity', 'effective-mass', 'carrier-density', 'temperature', 'syk-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-24",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-24: target quantity 'fast-magnetosonic-speed' matches none of ['donor-acceptor-distance', 'foerster-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-25",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-25: target quantity 'fast-magnetosonic-speed' matches none of ['conditional-probability', 'marginal-probability'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-26",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-26: target quantity 'fast-magnetosonic-speed' matches none of ['attempt-frequency', 'tunneling-mass', 'barrier-height', 'barrier-width', 'biological-rate-correction'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-27",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-27: target quantity 'fast-magnetosonic-speed' matches none of ['temperature', 'active-noise-energy'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-30",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-30: target quantity 'fast-magnetosonic-speed' matches none of ['modular-hamiltonian-variation'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-31",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-31: target quantity 'fast-magnetosonic-speed' matches none of ['causal-set-count-0', 'causal-set-count-1', 'causal-set-count-2', 'causal-set-count-3', 'planck-length'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-33",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-33: target quantity 'fast-magnetosonic-speed' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-34",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-34: target quantity 'fast-magnetosonic-speed' matches none of ['quench-timescale', 'microscopic-relaxation-time', 'spatial-dimension', 'static-exponent-nu', 'dynamic-exponent-z', 'defect-rest-mass', 'reheating-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-36",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-36: target quantity 'fast-magnetosonic-speed' matches none of ['gravitational-wave-speed'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-38",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-38: target quantity 'fast-magnetosonic-speed' matches none of ['newtonian-force', 'mass', 'mond-acceleration-scale'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-39",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-39: target quantity 'fast-magnetosonic-speed' matches none of ['newton-coupling-dimensionless', 'cosmological-constant-dimensionless', 'truncation-coefficient-a', 'truncation-coefficient-b', 'truncation-coefficient-c'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-41",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-41: target quantity 'fast-magnetosonic-speed' matches none of ['reference-mass', 'swampland-coefficient', 'scalar-field-value', 'scalar-field-reference', 'planck-mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-43",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-43: target quantity 'fast-magnetosonic-speed' matches none of ['wormhole-cross-section-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-45",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-45: target quantity 'fast-magnetosonic-speed' matches none of ['planck-mass-energy', 'inflation-hubble-energy', 'tensor-to-scalar-ratio', 'tcc-correction-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-46",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-46: target quantity 'fast-magnetosonic-speed' matches none of ['measure-normalization', 'anthropic-model-parameter', 'landscape-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-47",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-47: target quantity 'fast-magnetosonic-speed' matches none of ['hubble-rate', 'nucleon-yield-density', 'sm-reaction-rate-coefficient', 'proton-density', 'neutron-density', 'dark-reaction-rate-coefficient', 'dark-species-density', 'transfer-efficiency'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-49",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-49: target quantity 'fast-magnetosonic-speed' matches none of ['total-mutual-information', 'darwinism-magnitude', 'fragment-count', 'darwinism-decay-exponent'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-50",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-50: target quantity 'fast-magnetosonic-speed' matches none of ['retarded-field-amplitude', 'advanced-field-amplitude'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-40",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-40: target quantity 'fast-magnetosonic-speed' matches none of ['higgs-field', 'higgs-decay-constant', 'composite-higgs-alpha', 'composite-higgs-beta'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-55",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-55: target quantity 'fast-magnetosonic-speed' matches none of ['chern-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-59",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-59: target quantity 'fast-magnetosonic-speed' matches none of ['voltage'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-60",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-60: target quantity 'fast-magnetosonic-speed' matches none of ['filling-fraction'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-63",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-63: target quantity 'fast-magnetosonic-speed' matches none of ['lane-emden-omega-3', 'mean-molecular-weight-per-electron'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-66",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-66: target quantity 'fast-magnetosonic-speed' matches none of ['poynting-flux', 'reflectance', 'incidence-angle'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-67",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-67: target quantity 'fast-magnetosonic-speed' matches none of ['magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-68",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-68: target quantity 'fast-magnetosonic-speed' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-69: target quantity 'fast-magnetosonic-speed' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-70: target quantity 'fast-magnetosonic-speed' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-71: target quantity 'fast-magnetosonic-speed' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-72: target quantity 'fast-magnetosonic-speed' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-69>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-69 -> be-73: target quantity 'fast-magnetosonic-speed' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-11-zurek",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-11-zurek: target quantity 'diffusivity' matches none of ['relaxation-rate', 'superposition-extent', 'thermal-de-broglie-wavelength'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-12",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-12: target quantity 'diffusivity' matches none of ['mass', 'temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-16",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-16: target quantity 'diffusivity' matches none of ['temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-37",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-37: target quantity 'diffusivity' matches none of ['mass', 'far-radius', 'near-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-42",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-42: target quantity 'diffusivity' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-42-via-rs",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-42-via-rs: target quantity 'diffusivity' matches none of ['schwarzschild-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-51",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-51: target quantity 'diffusivity' matches none of ['mass', 'impact-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-52",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-52: target quantity 'diffusivity' matches none of ['mass', 'semi-major-axis', 'eccentricity'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>law-schwarzschild-radius",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> law-schwarzschild-radius: target quantity 'diffusivity' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-14",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-14: target quantity 'diffusivity' matches none of ['minimal-surface-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-19",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-19: target quantity 'diffusivity' matches none of ['mass-density', 'critical-density', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-21",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-21: target quantity 'diffusivity' matches none of [] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-48",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-48: target quantity 'diffusivity' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-53",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-53: target quantity 'diffusivity' matches none of ['gauge-coupling', 'color-number', 'flavor-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-54",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-54: target quantity 'diffusivity' matches none of ['mass-density', 'brane-tension', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-11-master",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-11-master: target quantity 'diffusivity' matches none of ['relaxation-rate', 'system-environment-coupling', 'reference-coupling'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-13",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-13: target quantity 'diffusivity' matches none of ['cosmological-constant-curvature', 'stress-energy-trace'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-15",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-15: target quantity 'diffusivity' matches none of ['model-a-mobility', 'time'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-17",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-17: target quantity 'diffusivity' matches none of ['einstein-coupling-prefactor-squared', 'torsion-contraction-scalar'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-18",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-18: target quantity 'diffusivity' matches none of ['yukawa-coupling', 'vacuum-expectation-value'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-20",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-20: target quantity 'diffusivity' matches none of ['cosmological-constant-curvature'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-22",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-22: target quantity 'diffusivity' matches none of ['area-law-coefficient', 'boundary-length', 'topological-entanglement-entropy'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-23",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-23: target quantity 'diffusivity' matches none of ['residual-resistivity', 'effective-mass', 'carrier-density', 'temperature', 'syk-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-24",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-24: target quantity 'diffusivity' matches none of ['donor-acceptor-distance', 'foerster-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-25",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-25: target quantity 'diffusivity' matches none of ['conditional-probability', 'marginal-probability'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-26",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-26: target quantity 'diffusivity' matches none of ['attempt-frequency', 'tunneling-mass', 'barrier-height', 'barrier-width', 'biological-rate-correction'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-27",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-27: target quantity 'diffusivity' matches none of ['temperature', 'active-noise-energy'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-30",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-30: target quantity 'diffusivity' matches none of ['modular-hamiltonian-variation'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-31",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-31: target quantity 'diffusivity' matches none of ['causal-set-count-0', 'causal-set-count-1', 'causal-set-count-2', 'causal-set-count-3', 'planck-length'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-33",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-33: target quantity 'diffusivity' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-34",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-34: target quantity 'diffusivity' matches none of ['quench-timescale', 'microscopic-relaxation-time', 'spatial-dimension', 'static-exponent-nu', 'dynamic-exponent-z', 'defect-rest-mass', 'reheating-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-36",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-36: target quantity 'diffusivity' matches none of ['gravitational-wave-speed'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-38",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-38: target quantity 'diffusivity' matches none of ['newtonian-force', 'mass', 'mond-acceleration-scale'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-39",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-39: target quantity 'diffusivity' matches none of ['newton-coupling-dimensionless', 'cosmological-constant-dimensionless', 'truncation-coefficient-a', 'truncation-coefficient-b', 'truncation-coefficient-c'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-41",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-41: target quantity 'diffusivity' matches none of ['reference-mass', 'swampland-coefficient', 'scalar-field-value', 'scalar-field-reference', 'planck-mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-43",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-43: target quantity 'diffusivity' matches none of ['wormhole-cross-section-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-45",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-45: target quantity 'diffusivity' matches none of ['planck-mass-energy', 'inflation-hubble-energy', 'tensor-to-scalar-ratio', 'tcc-correction-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-46",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-46: target quantity 'diffusivity' matches none of ['measure-normalization', 'anthropic-model-parameter', 'landscape-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-47",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-47: target quantity 'diffusivity' matches none of ['hubble-rate', 'nucleon-yield-density', 'sm-reaction-rate-coefficient', 'proton-density', 'neutron-density', 'dark-reaction-rate-coefficient', 'dark-species-density', 'transfer-efficiency'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-49",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-49: target quantity 'diffusivity' matches none of ['total-mutual-information', 'darwinism-magnitude', 'fragment-count', 'darwinism-decay-exponent'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-50",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-50: target quantity 'diffusivity' matches none of ['retarded-field-amplitude', 'advanced-field-amplitude'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-40",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-40: target quantity 'diffusivity' matches none of ['higgs-field', 'higgs-decay-constant', 'composite-higgs-alpha', 'composite-higgs-beta'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-55",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-55: target quantity 'diffusivity' matches none of ['chern-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-59",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-59: target quantity 'diffusivity' matches none of ['voltage'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-60",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-60: target quantity 'diffusivity' matches none of ['filling-fraction'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-63",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-63: target quantity 'diffusivity' matches none of ['lane-emden-omega-3', 'mean-molecular-weight-per-electron'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-66",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-66: target quantity 'diffusivity' matches none of ['poynting-flux', 'reflectance', 'incidence-angle'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-67",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-67: target quantity 'diffusivity' matches none of ['magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-68",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-68: target quantity 'diffusivity' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-69: target quantity 'diffusivity' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-70: target quantity 'diffusivity' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-71: target quantity 'diffusivity' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-72: target quantity 'diffusivity' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-70>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-70 -> be-73: target quantity 'diffusivity' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-11-zurek",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-11-zurek: target quantity 'clapeyron-slope' matches none of ['relaxation-rate', 'superposition-extent', 'thermal-de-broglie-wavelength'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-12",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-12: target quantity 'clapeyron-slope' matches none of ['mass', 'temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-16",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-16: target quantity 'clapeyron-slope' matches none of ['temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-37",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-37: target quantity 'clapeyron-slope' matches none of ['mass', 'far-radius', 'near-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-42",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-42: target quantity 'clapeyron-slope' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-42-via-rs",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-42-via-rs: target quantity 'clapeyron-slope' matches none of ['schwarzschild-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-51",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-51: target quantity 'clapeyron-slope' matches none of ['mass', 'impact-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-52",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-52: target quantity 'clapeyron-slope' matches none of ['mass', 'semi-major-axis', 'eccentricity'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>law-schwarzschild-radius",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> law-schwarzschild-radius: target quantity 'clapeyron-slope' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-14",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-14: target quantity 'clapeyron-slope' matches none of ['minimal-surface-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-19",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-19: target quantity 'clapeyron-slope' matches none of ['mass-density', 'critical-density', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-21",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-21: target quantity 'clapeyron-slope' matches none of [] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-48",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-48: target quantity 'clapeyron-slope' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-53",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-53: target quantity 'clapeyron-slope' matches none of ['gauge-coupling', 'color-number', 'flavor-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-54",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-54: target quantity 'clapeyron-slope' matches none of ['mass-density', 'brane-tension', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-11-master",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-11-master: target quantity 'clapeyron-slope' matches none of ['relaxation-rate', 'system-environment-coupling', 'reference-coupling'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-13",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-13: target quantity 'clapeyron-slope' matches none of ['cosmological-constant-curvature', 'stress-energy-trace'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-15",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-15: target quantity 'clapeyron-slope' matches none of ['model-a-mobility', 'time'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-17",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-17: target quantity 'clapeyron-slope' matches none of ['einstein-coupling-prefactor-squared', 'torsion-contraction-scalar'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-18",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-18: target quantity 'clapeyron-slope' matches none of ['yukawa-coupling', 'vacuum-expectation-value'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-20",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-20: target quantity 'clapeyron-slope' matches none of ['cosmological-constant-curvature'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-22",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-22: target quantity 'clapeyron-slope' matches none of ['area-law-coefficient', 'boundary-length', 'topological-entanglement-entropy'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-23",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-23: target quantity 'clapeyron-slope' matches none of ['residual-resistivity', 'effective-mass', 'carrier-density', 'temperature', 'syk-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-24",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-24: target quantity 'clapeyron-slope' matches none of ['donor-acceptor-distance', 'foerster-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-25",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-25: target quantity 'clapeyron-slope' matches none of ['conditional-probability', 'marginal-probability'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-26",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-26: target quantity 'clapeyron-slope' matches none of ['attempt-frequency', 'tunneling-mass', 'barrier-height', 'barrier-width', 'biological-rate-correction'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-27",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-27: target quantity 'clapeyron-slope' matches none of ['temperature', 'active-noise-energy'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-30",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-30: target quantity 'clapeyron-slope' matches none of ['modular-hamiltonian-variation'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-31",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-31: target quantity 'clapeyron-slope' matches none of ['causal-set-count-0', 'causal-set-count-1', 'causal-set-count-2', 'causal-set-count-3', 'planck-length'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-33",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-33: target quantity 'clapeyron-slope' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-34",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-34: target quantity 'clapeyron-slope' matches none of ['quench-timescale', 'microscopic-relaxation-time', 'spatial-dimension', 'static-exponent-nu', 'dynamic-exponent-z', 'defect-rest-mass', 'reheating-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-36",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-36: target quantity 'clapeyron-slope' matches none of ['gravitational-wave-speed'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-38",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-38: target quantity 'clapeyron-slope' matches none of ['newtonian-force', 'mass', 'mond-acceleration-scale'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-39",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-39: target quantity 'clapeyron-slope' matches none of ['newton-coupling-dimensionless', 'cosmological-constant-dimensionless', 'truncation-coefficient-a', 'truncation-coefficient-b', 'truncation-coefficient-c'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-41",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-41: target quantity 'clapeyron-slope' matches none of ['reference-mass', 'swampland-coefficient', 'scalar-field-value', 'scalar-field-reference', 'planck-mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-43",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-43: target quantity 'clapeyron-slope' matches none of ['wormhole-cross-section-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-45",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-45: target quantity 'clapeyron-slope' matches none of ['planck-mass-energy', 'inflation-hubble-energy', 'tensor-to-scalar-ratio', 'tcc-correction-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-46",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-46: target quantity 'clapeyron-slope' matches none of ['measure-normalization', 'anthropic-model-parameter', 'landscape-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-47",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-47: target quantity 'clapeyron-slope' matches none of ['hubble-rate', 'nucleon-yield-density', 'sm-reaction-rate-coefficient', 'proton-density', 'neutron-density', 'dark-reaction-rate-coefficient', 'dark-species-density', 'transfer-efficiency'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-49",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-49: target quantity 'clapeyron-slope' matches none of ['total-mutual-information', 'darwinism-magnitude', 'fragment-count', 'darwinism-decay-exponent'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-50",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-50: target quantity 'clapeyron-slope' matches none of ['retarded-field-amplitude', 'advanced-field-amplitude'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-40",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-40: target quantity 'clapeyron-slope' matches none of ['higgs-field', 'higgs-decay-constant', 'composite-higgs-alpha', 'composite-higgs-beta'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-55",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-55: target quantity 'clapeyron-slope' matches none of ['chern-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-59",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-59: target quantity 'clapeyron-slope' matches none of ['voltage'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-60",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-60: target quantity 'clapeyron-slope' matches none of ['filling-fraction'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-63",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-63: target quantity 'clapeyron-slope' matches none of ['lane-emden-omega-3', 'mean-molecular-weight-per-electron'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-66",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-66: target quantity 'clapeyron-slope' matches none of ['poynting-flux', 'reflectance', 'incidence-angle'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-67",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-67: target quantity 'clapeyron-slope' matches none of ['magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-68",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-68: target quantity 'clapeyron-slope' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-69: target quantity 'clapeyron-slope' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-70: target quantity 'clapeyron-slope' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-71: target quantity 'clapeyron-slope' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-72: target quantity 'clapeyron-slope' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-71>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-71 -> be-73: target quantity 'clapeyron-slope' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-11-zurek",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-11-zurek: target quantity 'gravitational-frequency-ratio' matches none of ['relaxation-rate', 'superposition-extent', 'thermal-de-broglie-wavelength'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-12",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-12: target quantity 'gravitational-frequency-ratio' matches none of ['mass', 'temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-16",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-16: target quantity 'gravitational-frequency-ratio' matches none of ['temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-37",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-37: target quantity 'gravitational-frequency-ratio' matches none of ['mass', 'far-radius', 'near-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-42",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-42: target quantity 'gravitational-frequency-ratio' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-42-via-rs",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-42-via-rs: target quantity 'gravitational-frequency-ratio' matches none of ['schwarzschild-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-51",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-51: target quantity 'gravitational-frequency-ratio' matches none of ['mass', 'impact-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-52",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-52: target quantity 'gravitational-frequency-ratio' matches none of ['mass', 'semi-major-axis', 'eccentricity'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>law-schwarzschild-radius",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> law-schwarzschild-radius: target quantity 'gravitational-frequency-ratio' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-14",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-14: target quantity 'gravitational-frequency-ratio' matches none of ['minimal-surface-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-19",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-19: target quantity 'gravitational-frequency-ratio' matches none of ['mass-density', 'critical-density', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-21",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-21: target quantity 'gravitational-frequency-ratio' matches none of [] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-48",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-48: target quantity 'gravitational-frequency-ratio' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-53",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-53: target quantity 'gravitational-frequency-ratio' matches none of ['gauge-coupling', 'color-number', 'flavor-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-54",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-54: target quantity 'gravitational-frequency-ratio' matches none of ['mass-density', 'brane-tension', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-11-master",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-11-master: target quantity 'gravitational-frequency-ratio' matches none of ['relaxation-rate', 'system-environment-coupling', 'reference-coupling'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-13",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-13: target quantity 'gravitational-frequency-ratio' matches none of ['cosmological-constant-curvature', 'stress-energy-trace'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-15",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-15: target quantity 'gravitational-frequency-ratio' matches none of ['model-a-mobility', 'time'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-17",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-17: target quantity 'gravitational-frequency-ratio' matches none of ['einstein-coupling-prefactor-squared', 'torsion-contraction-scalar'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-18",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-18: target quantity 'gravitational-frequency-ratio' matches none of ['yukawa-coupling', 'vacuum-expectation-value'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-20",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-20: target quantity 'gravitational-frequency-ratio' matches none of ['cosmological-constant-curvature'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-22",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-22: target quantity 'gravitational-frequency-ratio' matches none of ['area-law-coefficient', 'boundary-length', 'topological-entanglement-entropy'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-23",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-23: target quantity 'gravitational-frequency-ratio' matches none of ['residual-resistivity', 'effective-mass', 'carrier-density', 'temperature', 'syk-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-24",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-24: target quantity 'gravitational-frequency-ratio' matches none of ['donor-acceptor-distance', 'foerster-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-25",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-25: target quantity 'gravitational-frequency-ratio' matches none of ['conditional-probability', 'marginal-probability'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-26",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-26: target quantity 'gravitational-frequency-ratio' matches none of ['attempt-frequency', 'tunneling-mass', 'barrier-height', 'barrier-width', 'biological-rate-correction'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-27",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-27: target quantity 'gravitational-frequency-ratio' matches none of ['temperature', 'active-noise-energy'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-30",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-30: target quantity 'gravitational-frequency-ratio' matches none of ['modular-hamiltonian-variation'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-31",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-31: target quantity 'gravitational-frequency-ratio' matches none of ['causal-set-count-0', 'causal-set-count-1', 'causal-set-count-2', 'causal-set-count-3', 'planck-length'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-33",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-33: target quantity 'gravitational-frequency-ratio' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-34",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-34: target quantity 'gravitational-frequency-ratio' matches none of ['quench-timescale', 'microscopic-relaxation-time', 'spatial-dimension', 'static-exponent-nu', 'dynamic-exponent-z', 'defect-rest-mass', 'reheating-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-36",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-36: target quantity 'gravitational-frequency-ratio' matches none of ['gravitational-wave-speed'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-38",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-38: target quantity 'gravitational-frequency-ratio' matches none of ['newtonian-force', 'mass', 'mond-acceleration-scale'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-39",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-39: target quantity 'gravitational-frequency-ratio' matches none of ['newton-coupling-dimensionless', 'cosmological-constant-dimensionless', 'truncation-coefficient-a', 'truncation-coefficient-b', 'truncation-coefficient-c'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-41",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-41: target quantity 'gravitational-frequency-ratio' matches none of ['reference-mass', 'swampland-coefficient', 'scalar-field-value', 'scalar-field-reference', 'planck-mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-43",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-43: target quantity 'gravitational-frequency-ratio' matches none of ['wormhole-cross-section-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-45",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-45: target quantity 'gravitational-frequency-ratio' matches none of ['planck-mass-energy', 'inflation-hubble-energy', 'tensor-to-scalar-ratio', 'tcc-correction-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-46",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-46: target quantity 'gravitational-frequency-ratio' matches none of ['measure-normalization', 'anthropic-model-parameter', 'landscape-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-47",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-47: target quantity 'gravitational-frequency-ratio' matches none of ['hubble-rate', 'nucleon-yield-density', 'sm-reaction-rate-coefficient', 'proton-density', 'neutron-density', 'dark-reaction-rate-coefficient', 'dark-species-density', 'transfer-efficiency'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-49",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-49: target quantity 'gravitational-frequency-ratio' matches none of ['total-mutual-information', 'darwinism-magnitude', 'fragment-count', 'darwinism-decay-exponent'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-50",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-50: target quantity 'gravitational-frequency-ratio' matches none of ['retarded-field-amplitude', 'advanced-field-amplitude'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-40",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-40: target quantity 'gravitational-frequency-ratio' matches none of ['higgs-field', 'higgs-decay-constant', 'composite-higgs-alpha', 'composite-higgs-beta'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-55",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-55: target quantity 'gravitational-frequency-ratio' matches none of ['chern-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-59",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-59: target quantity 'gravitational-frequency-ratio' matches none of ['voltage'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-60",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-60: target quantity 'gravitational-frequency-ratio' matches none of ['filling-fraction'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-63",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-63: target quantity 'gravitational-frequency-ratio' matches none of ['lane-emden-omega-3', 'mean-molecular-weight-per-electron'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-66",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-66: target quantity 'gravitational-frequency-ratio' matches none of ['poynting-flux', 'reflectance', 'incidence-angle'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-67",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-67: target quantity 'gravitational-frequency-ratio' matches none of ['magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-68",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-68: target quantity 'gravitational-frequency-ratio' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-69: target quantity 'gravitational-frequency-ratio' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-70: target quantity 'gravitational-frequency-ratio' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-71: target quantity 'gravitational-frequency-ratio' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-72: target quantity 'gravitational-frequency-ratio' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-72>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-72 -> be-73: target quantity 'gravitational-frequency-ratio' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-11-zurek",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-11-zurek: target quantity 'peltier-coefficient' matches none of ['relaxation-rate', 'superposition-extent', 'thermal-de-broglie-wavelength'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-12",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-12: target quantity 'peltier-coefficient' matches none of ['mass', 'temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-16",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-16: target quantity 'peltier-coefficient' matches none of ['temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-37",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-37: target quantity 'peltier-coefficient' matches none of ['mass', 'far-radius', 'near-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-42",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-42: target quantity 'peltier-coefficient' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-42-via-rs",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-42-via-rs: target quantity 'peltier-coefficient' matches none of ['schwarzschild-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-51",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-51: target quantity 'peltier-coefficient' matches none of ['mass', 'impact-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-52",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-52: target quantity 'peltier-coefficient' matches none of ['mass', 'semi-major-axis', 'eccentricity'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>law-schwarzschild-radius",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> law-schwarzschild-radius: target quantity 'peltier-coefficient' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-14",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-14: target quantity 'peltier-coefficient' matches none of ['minimal-surface-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-19",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-19: target quantity 'peltier-coefficient' matches none of ['mass-density', 'critical-density', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-21",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-21: target quantity 'peltier-coefficient' matches none of [] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-48",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-48: target quantity 'peltier-coefficient' matches none of ['mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-53",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-53: target quantity 'peltier-coefficient' matches none of ['gauge-coupling', 'color-number', 'flavor-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-54",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-54: target quantity 'peltier-coefficient' matches none of ['mass-density', 'brane-tension', 'rescaled-cosmological-constant'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-11-master",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-11-master: target quantity 'peltier-coefficient' matches none of ['relaxation-rate', 'system-environment-coupling', 'reference-coupling'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-13",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-13: target quantity 'peltier-coefficient' matches none of ['cosmological-constant-curvature', 'stress-energy-trace'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-15",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-15: target quantity 'peltier-coefficient' matches none of ['model-a-mobility', 'time'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-17",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-17: target quantity 'peltier-coefficient' matches none of ['einstein-coupling-prefactor-squared', 'torsion-contraction-scalar'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-18",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-18: target quantity 'peltier-coefficient' matches none of ['yukawa-coupling', 'vacuum-expectation-value'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-20",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-20: target quantity 'peltier-coefficient' matches none of ['cosmological-constant-curvature'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-22",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-22: target quantity 'peltier-coefficient' matches none of ['area-law-coefficient', 'boundary-length', 'topological-entanglement-entropy'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-23",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-23: target quantity 'peltier-coefficient' matches none of ['residual-resistivity', 'effective-mass', 'carrier-density', 'temperature', 'syk-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-24",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-24: target quantity 'peltier-coefficient' matches none of ['donor-acceptor-distance', 'foerster-radius'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-25",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-25: target quantity 'peltier-coefficient' matches none of ['conditional-probability', 'marginal-probability'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-26",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-26: target quantity 'peltier-coefficient' matches none of ['attempt-frequency', 'tunneling-mass', 'barrier-height', 'barrier-width', 'biological-rate-correction'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-27",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-27: target quantity 'peltier-coefficient' matches none of ['temperature', 'active-noise-energy'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-30",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-30: target quantity 'peltier-coefficient' matches none of ['modular-hamiltonian-variation'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-31",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-31: target quantity 'peltier-coefficient' matches none of ['causal-set-count-0', 'causal-set-count-1', 'causal-set-count-2', 'causal-set-count-3', 'planck-length'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-33",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-33: target quantity 'peltier-coefficient' matches none of ['reference-correlation-length', 'temperature', 'reference-temperature', 'static-exponent-nu', 'dynamic-exponent-z'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-34",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-34: target quantity 'peltier-coefficient' matches none of ['quench-timescale', 'microscopic-relaxation-time', 'spatial-dimension', 'static-exponent-nu', 'dynamic-exponent-z', 'defect-rest-mass', 'reheating-temperature'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-36",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-36: target quantity 'peltier-coefficient' matches none of ['gravitational-wave-speed'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-38",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-38: target quantity 'peltier-coefficient' matches none of ['newtonian-force', 'mass', 'mond-acceleration-scale'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-39",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-39: target quantity 'peltier-coefficient' matches none of ['newton-coupling-dimensionless', 'cosmological-constant-dimensionless', 'truncation-coefficient-a', 'truncation-coefficient-b', 'truncation-coefficient-c'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-41",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-41: target quantity 'peltier-coefficient' matches none of ['reference-mass', 'swampland-coefficient', 'scalar-field-value', 'scalar-field-reference', 'planck-mass'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-43",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-43: target quantity 'peltier-coefficient' matches none of ['wormhole-cross-section-area'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-45",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-45: target quantity 'peltier-coefficient' matches none of ['planck-mass-energy', 'inflation-hubble-energy', 'tensor-to-scalar-ratio', 'tcc-correction-coefficient'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-46",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-46: target quantity 'peltier-coefficient' matches none of ['measure-normalization', 'anthropic-model-parameter', 'landscape-parameter'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-47",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-47: target quantity 'peltier-coefficient' matches none of ['hubble-rate', 'nucleon-yield-density', 'sm-reaction-rate-coefficient', 'proton-density', 'neutron-density', 'dark-reaction-rate-coefficient', 'dark-species-density', 'transfer-efficiency'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-49",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-49: target quantity 'peltier-coefficient' matches none of ['total-mutual-information', 'darwinism-magnitude', 'fragment-count', 'darwinism-decay-exponent'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-50",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-50: target quantity 'peltier-coefficient' matches none of ['retarded-field-amplitude', 'advanced-field-amplitude'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-40",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-40: target quantity 'peltier-coefficient' matches none of ['higgs-field', 'higgs-decay-constant', 'composite-higgs-alpha', 'composite-higgs-beta'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-55",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-55: target quantity 'peltier-coefficient' matches none of ['chern-number'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-59",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-59: target quantity 'peltier-coefficient' matches none of ['voltage'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-60",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-60: target quantity 'peltier-coefficient' matches none of ['filling-fraction'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-63",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-63: target quantity 'peltier-coefficient' matches none of ['lane-emden-omega-3', 'mean-molecular-weight-per-electron'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-66",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-66: target quantity 'peltier-coefficient' matches none of ['poynting-flux', 'reflectance', 'incidence-angle'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-67",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-67: target quantity 'peltier-coefficient' matches none of ['magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-68",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-68: target quantity 'peltier-coefficient' matches none of ['proper-temperature', 'metric-g00'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-69",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-69: target quantity 'peltier-coefficient' matches none of ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-70",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-70: target quantity 'peltier-coefficient' matches none of ['electrical-mobility', 'einstein-temperature', 'carrier-charge'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-71",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-71: target quantity 'peltier-coefficient' matches none of ['specific-latent-heat', 'clapeyron-temperature', 'specific-volume-change'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-72",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-72: target quantity 'peltier-coefficient' matches none of ['redshift-metric-g00-1', 'redshift-metric-g00-2'] by name or registered identification"
+  },
+  {
+    "pair": "be-73>>be-73",
+    "outcome": "error",
+    "error": "CompositionJunctionError",
+    "message": "Cannot compose be-73 -> be-73: target quantity 'peltier-coefficient' matches none of ['seebeck-coefficient', 'peltier-temperature'] by name or registered identification"
   }
 ]

@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 3.0.0
-  totalFiles: 433
+  totalFiles: 438
   totalModules: 13
-  totalExports: 3090
+  totalExports: 3156
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3912,6 +3912,72 @@ modules:
       functions:
         - evaluateTolmanEhrenfest
         - tolmanTemperatureAt
+    src/bridges/be69-fast-magnetosonic.ts:
+      description: BE-69 — perpendicular fast magnetosonic phase speed,
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/formula-names.js
+          imports:
+            - MU0_SI
+      exports:
+        - evaluateFastMagnetosonic
+      interfaces:
+        - FastMagnetosonicInputs
+        - FastMagnetosonicResult
+      functions:
+        - evaluateFastMagnetosonic
+    src/bridges/be70-einstein-relation.ts:
+      description: BE-70 — Einstein relation,
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - K_B_SI
+      exports:
+        - evaluateEinsteinRelation
+      interfaces:
+        - EinsteinRelationInputs
+        - EinsteinRelationResult
+      functions:
+        - evaluateEinsteinRelation
+    src/bridges/be71-clapeyron.ts:
+      description: BE-71 — Clapeyron slope,
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - evaluateClapeyron
+      interfaces:
+        - ClapeyronInputs
+        - ClapeyronResult
+      functions:
+        - evaluateClapeyron
+    src/bridges/be72-gravitational-redshift.ts:
+      description: BE-72 — gravitational frequency ratio of two static observers,
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - evaluateGravitationalRedshift
+      interfaces:
+        - GravitationalRedshiftInputs
+        - GravitationalRedshiftResult
+      functions:
+        - evaluateGravitationalRedshift
+    src/bridges/be73-kelvin-peltier.ts:
+      description: BE-73 — Kelvin relation,
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - evaluateKelvinPeltier
+      interfaces:
+        - KelvinPeltierInputs
+        - KelvinPeltierResult
+      functions:
+        - evaluateKelvinPeltier
     src/bridges/bridge-equations.ts:
       description: "`BridgeEquations` — a convenience facade over the per-bridge evaluators."
       externalDependencies: []
@@ -4095,6 +4161,21 @@ modules:
         - file: ./be68-tolman-ehrenfest.js
           imports:
             - evaluateTolmanEhrenfest
+        - file: ./be69-fast-magnetosonic.js
+          imports:
+            - evaluateFastMagnetosonic
+        - file: ./be70-einstein-relation.js
+          imports:
+            - evaluateEinsteinRelation
+        - file: ./be71-clapeyron.js
+          imports:
+            - evaluateClapeyron
+        - file: ./be72-gravitational-redshift.js
+          imports:
+            - evaluateGravitationalRedshift
+        - file: ./be73-kelvin-peltier.js
+          imports:
+            - evaluateKelvinPeltier
       exports:
         - BridgeEquations
       constants:
@@ -6004,6 +6085,21 @@ modules:
         - file: ./be68-tolman-ehrenfest.js
           imports:
             - evaluateTolmanEhrenfest
+        - file: ./be69-fast-magnetosonic.js
+          imports:
+            - evaluateFastMagnetosonic
+        - file: ./be70-einstein-relation.js
+          imports:
+            - evaluateEinsteinRelation
+        - file: ./be71-clapeyron.js
+          imports:
+            - evaluateClapeyron
+        - file: ./be72-gravitational-redshift.js
+          imports:
+            - evaluateGravitationalRedshift
+        - file: ./be73-kelvin-peltier.js
+          imports:
+            - evaluateKelvinPeltier
       exports:
         - BRIDGE_EVALUATORS
         - missingEvaluatorMessage
@@ -6165,6 +6261,36 @@ modules:
             - type TolmanInputs
             - type TolmanResult
           reExport: true
+        - file: ./be69-fast-magnetosonic.js
+          imports:
+            - evaluateFastMagnetosonic
+            - type FastMagnetosonicInputs
+            - type FastMagnetosonicResult
+          reExport: true
+        - file: ./be70-einstein-relation.js
+          imports:
+            - evaluateEinsteinRelation
+            - type EinsteinRelationInputs
+            - type EinsteinRelationResult
+          reExport: true
+        - file: ./be71-clapeyron.js
+          imports:
+            - evaluateClapeyron
+            - type ClapeyronInputs
+            - type ClapeyronResult
+          reExport: true
+        - file: ./be72-gravitational-redshift.js
+          imports:
+            - evaluateGravitationalRedshift
+            - type GravitationalRedshiftInputs
+            - type GravitationalRedshiftResult
+          reExport: true
+        - file: ./be73-kelvin-peltier.js
+          imports:
+            - evaluateKelvinPeltier
+            - type KelvinPeltierInputs
+            - type KelvinPeltierResult
+          reExport: true
       exports:
         - evaluateGravitationalLensing
         - type GravitationalLensingInputs
@@ -6223,6 +6349,21 @@ modules:
         - tolmanTemperatureAt
         - type TolmanInputs
         - type TolmanResult
+        - evaluateFastMagnetosonic
+        - type FastMagnetosonicInputs
+        - type FastMagnetosonicResult
+        - evaluateEinsteinRelation
+        - type EinsteinRelationInputs
+        - type EinsteinRelationResult
+        - evaluateClapeyron
+        - type ClapeyronInputs
+        - type ClapeyronResult
+        - evaluateGravitationalRedshift
+        - type GravitationalRedshiftInputs
+        - type GravitationalRedshiftResult
+        - evaluateKelvinPeltier
+        - type KelvinPeltierInputs
+        - type KelvinPeltierResult
         - BE37_REGIME
         - BE51_REGIME
         - BE52_REGIME
@@ -6287,6 +6428,21 @@ modules:
         - tolmanTemperatureAt
         - type TolmanInputs
         - type TolmanResult
+        - evaluateFastMagnetosonic
+        - type FastMagnetosonicInputs
+        - type FastMagnetosonicResult
+        - evaluateEinsteinRelation
+        - type EinsteinRelationInputs
+        - type EinsteinRelationResult
+        - evaluateClapeyron
+        - type ClapeyronInputs
+        - type ClapeyronResult
+        - evaluateGravitationalRedshift
+        - type GravitationalRedshiftInputs
+        - type GravitationalRedshiftResult
+        - evaluateKelvinPeltier
+        - type KelvinPeltierInputs
+        - type KelvinPeltierResult
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
@@ -10705,7 +10861,7 @@ modules:
         - CANONICAL_PREFACTORS
         - CANONICAL_GROUP_PREFACTORS
     src/composition/catalog-graph.ts:
-      description: The full composition graph as a single constant — the 49 `BridgeEdge`s
+      description: The full composition graph as a single constant — the 54 `BridgeEdge`s
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -11279,7 +11435,7 @@ modules:
         - BE36_SYMBOLIC
         - BE33_HERTZ_MILLIS_SYMBOLIC
     src/composition/edges/applied-physicist.ts:
-      description: Composition edges for BE-66, BE-67, and BE-68.
+      description: Composition edges for BE-66 through BE-73.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -11292,6 +11448,21 @@ modules:
         - file: ../../bridges/be68-tolman-ehrenfest.js
           imports:
             - evaluateTolmanEhrenfest
+        - file: ../../bridges/be69-fast-magnetosonic.js
+          imports:
+            - evaluateFastMagnetosonic
+        - file: ../../bridges/be70-einstein-relation.js
+          imports:
+            - evaluateEinsteinRelation
+        - file: ../../bridges/be71-clapeyron.js
+          imports:
+            - evaluateClapeyron
+        - file: ../../bridges/be72-gravitational-redshift.js
+          imports:
+            - evaluateGravitationalRedshift
+        - file: ../../bridges/be73-kelvin-peltier.js
+          imports:
+            - evaluateKelvinPeltier
         - file: ../../dimensional/validator.js
           imports:
             - ExprNode
@@ -11322,15 +11493,41 @@ modules:
             - radiationPressureQ
             - reflectanceQ
             - tolmanInvariantQ
+            - soundSpeedQ
+            - fastMagnetosonicSpeedQ
+            - electricalMobilityQ
+            - einsteinTemperatureQ
+            - carrierChargeQ
+            - diffusivityQ
+            - latentHeatQ
+            - clapeyronTemperatureQ
+            - specificVolumeChangeQ
+            - clapeyronSlopeQ
+            - redshiftMetricG00OneQ
+            - redshiftMetricG00TwoQ
+            - gravitationalFrequencyRatioQ
+            - seebeckCoefficientQ
+            - peltierTemperatureQ
+            - peltierCoefficientQ
       exports:
         - be66Edge
         - be67Edge
         - be68Edge
+        - be69Edge
+        - be70Edge
+        - be71Edge
+        - be72Edge
+        - be73Edge
         - APPLIED_PHYSICIST_EDGES
       constants:
         - be66Edge
         - be67Edge
         - be68Edge
+        - be69Edge
+        - be70Edge
+        - be71Edge
+        - be72Edge
+        - be73Edge
         - APPLIED_PHYSICIST_EDGES
     src/composition/edges/calibration.ts:
       description: Calibration edges — catalog-backed `BridgeEdge` wrappers for the
@@ -12473,6 +12670,11 @@ modules:
             - be66Edge
             - be67Edge
             - be68Edge
+            - be69Edge
+            - be70Edge
+            - be71Edge
+            - be72Edge
+            - be73Edge
             - APPLIED_PHYSICIST_EDGES
           reExport: true
         - file: ./edges/catalog-full.js
@@ -12661,6 +12863,11 @@ modules:
         - be66Edge
         - be67Edge
         - be68Edge
+        - be69Edge
+        - be70Edge
+        - be71Edge
+        - be72Edge
+        - be73Edge
         - APPLIED_PHYSICIST_EDGES
         - be11Edge
         - be13Edge
@@ -12792,6 +12999,11 @@ modules:
         - be66Edge
         - be67Edge
         - be68Edge
+        - be69Edge
+        - be70Edge
+        - be71Edge
+        - be72Edge
+        - be73Edge
         - APPLIED_PHYSICIST_EDGES
         - be11Edge
         - be13Edge
@@ -14499,7 +14711,7 @@ modules:
         - VOLTAGE
         - ENERGY4
     src/composition/quantities/applied-physicist.ts:
-      description: Quantity nodes for BE-66, BE-67, and BE-68.
+      description: Quantity nodes for BE-66 through BE-73.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -14527,6 +14739,22 @@ modules:
         - properTemperatureQ
         - metricG00Q
         - tolmanInvariantQ
+        - soundSpeedQ
+        - fastMagnetosonicSpeedQ
+        - electricalMobilityQ
+        - einsteinTemperatureQ
+        - carrierChargeQ
+        - diffusivityQ
+        - latentHeatQ
+        - clapeyronTemperatureQ
+        - specificVolumeChangeQ
+        - clapeyronSlopeQ
+        - redshiftMetricG00OneQ
+        - redshiftMetricG00TwoQ
+        - gravitationalFrequencyRatioQ
+        - seebeckCoefficientQ
+        - peltierTemperatureQ
+        - peltierCoefficientQ
       constants:
         - poyntingFluxQ
         - reflectanceQ
@@ -14538,6 +14766,22 @@ modules:
         - properTemperatureQ
         - metricG00Q
         - tolmanInvariantQ
+        - soundSpeedQ
+        - fastMagnetosonicSpeedQ
+        - electricalMobilityQ
+        - einsteinTemperatureQ
+        - carrierChargeQ
+        - diffusivityQ
+        - latentHeatQ
+        - clapeyronTemperatureQ
+        - specificVolumeChangeQ
+        - clapeyronSlopeQ
+        - redshiftMetricG00OneQ
+        - redshiftMetricG00TwoQ
+        - gravitationalFrequencyRatioQ
+        - seebeckCoefficientQ
+        - peltierTemperatureQ
+        - peltierCoefficientQ
     src/composition/quantities/common.ts:
       description: Centralized Quantity nodes shared across domains or consumed only by
       externalDependencies: []
@@ -17203,6 +17447,24 @@ modules:
             - type TolmanInputs
             - type TolmanResult
           reExport: true
+        - file: ./bridges/index.js
+          imports:
+            - evaluateFastMagnetosonic
+            - type FastMagnetosonicInputs
+            - type FastMagnetosonicResult
+            - evaluateEinsteinRelation
+            - type EinsteinRelationInputs
+            - type EinsteinRelationResult
+            - evaluateClapeyron
+            - type ClapeyronInputs
+            - type ClapeyronResult
+            - evaluateGravitationalRedshift
+            - type GravitationalRedshiftInputs
+            - type GravitationalRedshiftResult
+            - evaluateKelvinPeltier
+            - type KelvinPeltierInputs
+            - type KelvinPeltierResult
+          reExport: true
         - file: ./bridges/evaluators.js
           imports:
             - BRIDGE_EVALUATORS
@@ -17491,6 +17753,11 @@ modules:
             - be66Edge
             - be67Edge
             - be68Edge
+            - be69Edge
+            - be70Edge
+            - be71Edge
+            - be72Edge
+            - be73Edge
             - APPLIED_PHYSICIST_EDGES
           reExport: true
         - file: ./composition/index.js
@@ -18150,6 +18417,21 @@ modules:
         - tolmanTemperatureAt
         - type TolmanInputs
         - type TolmanResult
+        - evaluateFastMagnetosonic
+        - type FastMagnetosonicInputs
+        - type FastMagnetosonicResult
+        - evaluateEinsteinRelation
+        - type EinsteinRelationInputs
+        - type EinsteinRelationResult
+        - evaluateClapeyron
+        - type ClapeyronInputs
+        - type ClapeyronResult
+        - evaluateGravitationalRedshift
+        - type GravitationalRedshiftInputs
+        - type GravitationalRedshiftResult
+        - evaluateKelvinPeltier
+        - type KelvinPeltierInputs
+        - type KelvinPeltierResult
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - BridgeEquations
@@ -18249,6 +18531,11 @@ modules:
         - be66Edge
         - be67Edge
         - be68Edge
+        - be69Edge
+        - be70Edge
+        - be71Edge
+        - be72Edge
+        - be73Edge
         - APPLIED_PHYSICIST_EDGES
         - adjudicateBridgeEntry
         - adjudicateCatalog
@@ -18746,6 +19033,21 @@ modules:
         - tolmanTemperatureAt
         - type TolmanInputs
         - type TolmanResult
+        - evaluateFastMagnetosonic
+        - type FastMagnetosonicInputs
+        - type FastMagnetosonicResult
+        - evaluateEinsteinRelation
+        - type EinsteinRelationInputs
+        - type EinsteinRelationResult
+        - evaluateClapeyron
+        - type ClapeyronInputs
+        - type ClapeyronResult
+        - evaluateGravitationalRedshift
+        - type GravitationalRedshiftInputs
+        - type GravitationalRedshiftResult
+        - evaluateKelvinPeltier
+        - type KelvinPeltierInputs
+        - type KelvinPeltierResult
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - EvaluatorSpec
@@ -18903,6 +19205,11 @@ modules:
         - be66Edge
         - be67Edge
         - be68Edge
+        - be69Edge
+        - be70Edge
+        - be71Edge
+        - be72Edge
+        - be73Edge
         - APPLIED_PHYSICIST_EDGES
         - BridgeEdge
         - ComposeOptions
@@ -20758,6 +21065,11 @@ dependencyGraph:
         - src/bridges/be66-radiation-pressure.ts
         - src/bridges/be67-alfven-speed.ts
         - src/bridges/be68-tolman-ehrenfest.ts
+        - src/bridges/be69-fast-magnetosonic.ts
+        - src/bridges/be70-einstein-relation.ts
+        - src/bridges/be71-clapeyron.ts
+        - src/bridges/be72-gravitational-redshift.ts
+        - src/bridges/be73-kelvin-peltier.ts
         - src/bridges/bridge-equations.ts
         - src/bridges/catalog-adapter.ts
         - src/bridges/confrontation-coverage.ts
@@ -21110,17 +21422,17 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 433
+  totalTypeScriptFiles: 438
   totalModules: 13
-  totalLinesOfCode: 92408
-  totalExports: 3090
+  totalLinesOfCode: 93412
+  totalExports: 3156
   totalClasses: 60
-  totalInterfaces: 491
-  totalFunctions: 805
+  totalInterfaces: 501
+  totalFunctions: 810
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 769
-  totalReExports: 1457
+  totalConstants: 790
+  totalReExports: 1497
   totalTypeOnlyImports: 579
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

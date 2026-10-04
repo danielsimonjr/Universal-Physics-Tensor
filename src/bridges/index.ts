@@ -2759,6 +2759,106 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dimensional_signature: `[temperature]`,
   tractability_class: 'closed-form',
   notes: `Closed-form evaluator evaluateTolmanEhrenfest({T_K, g_00}) → {invariant_K} in src/bridges/be68-tolman-ehrenfest.ts. Requires T > 0 and g_00 < 0. Math.sqrt(g_00) is NaN for g_00 < 0 and is not the formula. tolmanTemperatureAt(invariant, g_00) recovers T. The overlay formalRef is PhysJS.TolmanEhrenfest.hydrostatic_constant, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not chained through be-42. No confrontation.`,
+},
+{
+  id: 69,
+  name: `Fast magnetosonic speed (perpendicular, ideal MHD)`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`fluid`, `plasma`] as [string, string],
+  status: 'established',
+  context: `The phase speed of a compressional polarization perpendicular to a uniform field: |ω/k| = √(c_s² + B²/(μ0 ρ)). Bridges a fluid sound speed to a plasma wave speed. c_s = 0 recovers B/√(μ0 ρ), the Alfvén number of a different polarization, and is not an identification with BE-67. The oblique fast mode and a kinetic dispersion relation are out of scope. The textbook quartic's ω = 0 root does not solve compressional induction.`,
+  formula_latex: `\\left|\\frac{\\omega}{k}\\right| = \\sqrt{c_s^2 + \\frac{B^2}{\\mu_0 \\rho}}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-69) — established textbook relation, PhysJS.FastMagnetosonic.speed_eq`,
+  known_issues: [],
+  references: [
+    `The linearized ideal-MHD premises are the hypotheses of PhysJS.FastMagnetosonic.speed_eq. c_s² = γ p / ρ is a reading of the closure, not an energy equation.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[velocity]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateFastMagnetosonic({cs_m_per_s, B_T, rho_kg_per_m3}) → {v_m_per_s} in src/bridges/be69-fast-magnetosonic.ts. The overlay formalRef is PhysJS.FastMagnetosonic.speed_eq, kind bridge. perpendicularQuartic (PhysJS.FastMagnetosonic.perpendicular_of_dispersion) is nested and is not the formalRef. The catalog path passes the top-level reference, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not composed into be-67. No confrontation.`,
+},
+{
+  id: 70,
+  name: `Einstein relation (drift–diffusion)`,
+  category: `H`,
+  category_name: `Non-Equilibrium Statistical Mechanics`,
+  bridges: [`kinetic`, `electromagnetic`] as [string, string],
+  status: 'established',
+  context: `On a Boltzmann profile, a field at which the drift flux cancels the diffusion flux gives D = μ k_B T / q. μ is the electrical mobility. The force-mobility writing needs μ_force = μ/q. Dropping q fails when q ≠ 1. Stokes–Einstein and the Fermi-liquid form are different equations.`,
+  formula_latex: `D = \\frac{\\mu k_B T}{q}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-70) — established textbook relation, PhysJS.EinsteinRelation.diffusion_eq`,
+  known_issues: [],
+  references: [
+    `The Boltzmann profile n = n_ref exp(−q V/(k_B T)) and the flux cancellation are the hypotheses of PhysJS.EinsteinRelation.diffusion_eq.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^2 T^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateEinsteinRelation({mu_m2_per_Vs, T_K, q_C}) → {D_m2_per_s} in src/bridges/be70-einstein-relation.ts. The overlay formalRef is PhysJS.EinsteinRelation.diffusion_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a master equation and not a Fermi liquid. No confrontation.`,
+},
+{
+  id: 71,
+  name: `Clapeyron slope (coexistence)`,
+  category: `J`,
+  category_name: `Phase Transitions and Criticality`,
+  bridges: [`thermodynamics`, `continuum`] as [string, string],
+  status: 'established',
+  context: `Along coexistence, dP/dT = L/(T Δv), with L = T (s2−s1) the specific latent heat. The entropy slope (s2−s1)/(v2−v1) is the companion reading inside that substitution. It is not a second catalog equation. Dropping T, or replacing Δv by one phase volume, is a different slope. The ideal-gas integrated vapor-pressure law is not this row.`,
+  formula_latex: `\\frac{\\mathrm{d}P}{\\mathrm{d}T} = \\frac{L}{T \\Delta v}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-71) — established textbook relation, PhysJS.Clapeyron.slope_eq`,
+  known_issues: [],
+  references: [
+    `The Gibbs differential dg = −s dT + v dP is a hypothesis of PhysJS.Clapeyron.slope_eq, not a Legendre transform derived in that theorem.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-1 M T^-2 Theta^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateClapeyron({L_J_per_kg, T_K, delta_v_m3_per_kg}) → {slope_Pa_per_K} in src/bridges/be71-clapeyron.ts. L is specific (J/kg) and Δv is a specific-volume change (m³/kg). The overlay formalRef is PhysJS.Clapeyron.slope_eq, kind bridge. There is no entropy_slope key. The catalog path passes the reference, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. No confrontation.`,
+},
+{
+  id: 72,
+  name: `Gravitational redshift (static observers)`,
+  category: `I`,
+  category_name: `Emergent Spacetime`,
+  bridges: [`gravitation`, `radiation`] as [string, string],
+  status: 'established',
+  context: `Two static observers of one coordinate period have ν1/ν2 = √(g2/g1), with both g_00 negative. This is not BE-68. If the Tolman products also agree, the temperature ratio equals the frequency ratio, and neither factor is derived from the other. Equal temperatures on g_00 = −1 and g_00 = −4 are not a Tolman equilibrium, while the frequency ratio is 2. Not a horizon temperature and not PhysJS.HawkingUnruh.dictionary.`,
+  formula_latex: `\\frac{\\nu_1}{\\nu_2} = \\sqrt{\\frac{g_2}{g_1}}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-72) — established textbook relation, PhysJS.GravitationalRedshift.frequency_ratio`,
+  known_issues: [],
+  references: [
+    `ν √(−g_00) = 1/Δt for static observers is the hypothesis of PhysJS.GravitationalRedshift.frequency_ratio. tolman_same_ratio is nested and is not this equation.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateGravitationalRedshift({g1, g2}) → {frequency_ratio} in src/bridges/be72-gravitational-redshift.ts. Both components must be negative. The overlay formalRef is PhysJS.GravitationalRedshift.frequency_ratio, kind bridge. tolmanRatio (PhysJS.GravitationalRedshift.tolman_same_ratio) is nested and is not the formalRef. The catalog path passes the top-level reference, so catalog evidence and edge evidence are formally-proved. The edge does not compose into be-68: the quantities are disjoint, and the frequency ratio is not the Tolman invariant. The edge confidence stays established. No confrontation.`,
+},
+{
+  id: 73,
+  name: `Kelvin relation (Peltier–Seebeck)`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`thermal`, `electrical`] as [string, string],
+  status: 'established',
+  context: `The isothermal Peltier coefficient and the open-circuit Seebeck coefficient satisfy Π = S T when the Onsager coefficients agree. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom and not a measured thermopower. Without it the two coefficients disagree. The first Thomson relation is a different equation.`,
+  formula_latex: `\\Pi = S T`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-73) — established textbook relation, PhysJS.KelvinRelation.peltier_eq`,
+  known_issues: [],
+  references: [
+    `The linear fluxes J_e and J_q are hypotheses of PhysJS.KelvinRelation.peltier_eq. L12 = L21 is the structure field ThermoelectricOnsager.onsager.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^2 M T^-3 I^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateKelvinPeltier({S_V_per_K, T_K}) → {Pi_V} in src/bridges/be73-kelvin-peltier.ts. Onsager reciprocity is not a numeric input. The overlay formalRef is PhysJS.KelvinRelation.peltier_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the first Thomson relation. No confrontation.`,
 }
 
 ];
@@ -2867,5 +2967,35 @@ export {
   type TolmanInputs,
   type TolmanResult,
 } from './be68-tolman-ehrenfest.js';
+/** Perpendicular fast magnetosonic speed `√(c_s² + B²/(μ0 ρ))`. */
+export {
+  evaluateFastMagnetosonic,
+  type FastMagnetosonicInputs,
+  type FastMagnetosonicResult,
+} from './be69-fast-magnetosonic.js';
+/** Einstein relation `D = μ k_B T / q`. */
+export {
+  evaluateEinsteinRelation,
+  type EinsteinRelationInputs,
+  type EinsteinRelationResult,
+} from './be70-einstein-relation.js';
+/** Clapeyron slope `dP/dT = L/(T Δv)`. */
+export {
+  evaluateClapeyron,
+  type ClapeyronInputs,
+  type ClapeyronResult,
+} from './be71-clapeyron.js';
+/** Gravitational frequency ratio `ν1/ν2 = √(g2/g1)`. Not BE-68. */
+export {
+  evaluateGravitationalRedshift,
+  type GravitationalRedshiftInputs,
+  type GravitationalRedshiftResult,
+} from './be72-gravitational-redshift.js';
+/** Kelvin relation `Π = S T`. Onsager reciprocity is not an input. */
+export {
+  evaluateKelvinPeltier,
+  type KelvinPeltierInputs,
+  type KelvinPeltierResult,
+} from './be73-kelvin-peltier.js';
 
 export default BRIDGE_EQUATIONS;

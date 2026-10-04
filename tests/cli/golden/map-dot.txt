@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (105)";
+    label="anchored cluster (107)";
     j_be_11_zurek [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-11"];
     q_relaxation_rate [shape=ellipse,label="relaxation-rate"];
     q_relaxation_rate -> j_be_11_zurek;
@@ -153,6 +153,22 @@ digraph PhysicsMap {
     q_plasma_mass_density -> j_be_67;
     q_alfven_speed [shape=ellipse,label="alfven-speed"];
     j_be_67 -> q_alfven_speed;
+    j_be_69 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-69"];
+    q_sound_speed [shape=ellipse,label="sound-speed"];
+    q_sound_speed -> j_be_69;
+    q_magnetic_flux_density -> j_be_69;
+    q_plasma_mass_density -> j_be_69;
+    q_fast_magnetosonic_speed [shape=ellipse,label="fast-magnetosonic-speed"];
+    j_be_69 -> q_fast_magnetosonic_speed;
+    j_be_71 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-71"];
+    q_specific_latent_heat [shape=ellipse,label="specific-latent-heat"];
+    q_specific_latent_heat -> j_be_71;
+    q_clapeyron_temperature [shape=ellipse,label="clapeyron-temperature"];
+    q_clapeyron_temperature -> j_be_71;
+    q_specific_volume_change [shape=ellipse,label="specific-volume-change"];
+    q_specific_volume_change -> j_be_71;
+    q_clapeyron_slope [shape=ellipse,label="clapeyron-slope"];
+    j_be_71 -> q_clapeyron_slope;
     j_CE_pendulum_period [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Pendulum period"];
     q_length [shape=ellipse,label="length"];
     q_length -> j_CE_pendulum_period;
@@ -481,7 +497,6 @@ digraph PhysicsMap {
     j_CE_wien -> q_peak_wavelength;
     j_CE_latent_heat [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Latent heat of phase transition"];
     q_mass -> j_CE_latent_heat;
-    q_specific_latent_heat [shape=ellipse,label="specific-latent-heat"];
     q_specific_latent_heat -> j_CE_latent_heat;
     q_latent_heat [shape=ellipse,label="latent-heat"];
     j_CE_latent_heat -> q_latent_heat;
@@ -558,7 +573,6 @@ digraph PhysicsMap {
     q_plasma_frequency [shape=ellipse,label="plasma-frequency"];
     j_CE_plasma_frequency -> q_plasma_frequency;
     j_CE_debye_frequency [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Debye frequency"];
-    q_sound_speed [shape=ellipse,label="sound-speed"];
     q_sound_speed -> j_CE_debye_frequency;
     q_number_density [shape=ellipse,label="number-density"];
     q_number_density -> j_CE_debye_frequency;
@@ -779,7 +793,7 @@ digraph PhysicsMap {
     j_CE_radioactive_decay -> q_remaining_nuclei;
   }
   subgraph cluster_iso {
-    label="isolated (35)";
+    label="isolated (38)";
     j_be_14 [shape=box,style="filled",fillcolor="#fdebc8",color="#c9881b",label="BE-14"];
     q_minimal_surface_area [shape=ellipse,label="minimal-surface-area"];
     q_minimal_surface_area -> j_be_14;
@@ -931,6 +945,29 @@ digraph PhysicsMap {
     q_metric_g00 -> j_be_68;
     q_tolman_invariant [shape=ellipse,label="tolman-invariant"];
     j_be_68 -> q_tolman_invariant;
+    j_be_70 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-70"];
+    q_electrical_mobility [shape=ellipse,label="electrical-mobility"];
+    q_electrical_mobility -> j_be_70;
+    q_einstein_temperature [shape=ellipse,label="einstein-temperature"];
+    q_einstein_temperature -> j_be_70;
+    q_carrier_charge [shape=ellipse,label="carrier-charge"];
+    q_carrier_charge -> j_be_70;
+    q_diffusivity [shape=ellipse,label="diffusivity"];
+    j_be_70 -> q_diffusivity;
+    j_be_72 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-72"];
+    q_redshift_metric_g00_1 [shape=ellipse,label="redshift-metric-g00-1"];
+    q_redshift_metric_g00_1 -> j_be_72;
+    q_redshift_metric_g00_2 [shape=ellipse,label="redshift-metric-g00-2"];
+    q_redshift_metric_g00_2 -> j_be_72;
+    q_gravitational_frequency_ratio [shape=ellipse,label="gravitational-frequency-ratio"];
+    j_be_72 -> q_gravitational_frequency_ratio;
+    j_be_73 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-73"];
+    q_seebeck_coefficient [shape=ellipse,label="seebeck-coefficient"];
+    q_seebeck_coefficient -> j_be_73;
+    q_peltier_temperature [shape=ellipse,label="peltier-temperature"];
+    q_peltier_temperature -> j_be_73;
+    q_peltier_coefficient [shape=ellipse,label="peltier-coefficient"];
+    j_be_73 -> q_peltier_coefficient;
     j_CE_bekenstein_hawking [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bekenstein–Hawking entropy"];
     q_A [shape=ellipse,label="A"];
     q_A -> j_CE_bekenstein_hawking;

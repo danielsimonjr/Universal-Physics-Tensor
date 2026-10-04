@@ -31,7 +31,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `d917fa328039d19c3659f74ea73569effb3ed4fb`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `3af15b49be09442350510e7c7f56f4aab92ea3bc`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -134,6 +134,12 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['be-66', 'PhysJS.RadiationPressure.pressure_eq', 'derivation-step: foreshortening I cos θ, normal momentum per energy (cos θ)/c, and an opaque split that deposits the absorbed fraction once and the specular fraction twice give P_n = (I/c)(1+R) cos²θ. R = 0, θ = 0 is I/c and R = 1, θ = 0 is 2I/c. A single cosine is not that pressure when cos θ is neither 0 nor 1. Homogeneity in I and c gives P = C I/c with C = f(1,1) unfixed. Not the Maxwell stress tensor, and not the Eddington luminosity'],
   ['be-67', 'PhysJS.AlfvenSpeed.speed_eq', 'derivation-step: one transverse monochromatic polarization along a uniform field, with ∂b/∂t = B ∂v/∂z and ρ ∂v/∂t = (B/μ0) ∂b/∂z, has phase speed |ω/k| = B/√(μ0 ρ) for B > 0, μ0 > 0, ρ > 0, and k ≠ 0. ρ is the density in that momentum premise, read as the total mass density. Proton-only n m_p is a different density when electrons contribute, and a density r ρ with r ≠ 1 is a different speed. Inserting tesla and the SI density into B/√(4πρ) is not the SI speed. 4π×10^{-7} is the permeability stand-in, not a measured μ0. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation'],
   ['be-68', 'PhysJS.TolmanEhrenfest.hydrostatic_constant', 'derivation-step: on a static interval with g_00 < 0, hydrostatic balance dp = -(ρ+p) d ln √(-g_00) and the equilibrium Gibbs relation dp = (ρ+p) d ln T, with ρ+p ≠ 0, give T √(-g_00) equal at the endpoints. The 1930 writing T √g_44 agrees when g_44 = -g_00. Real.sqrt g_00 = 0 when g_00 < 0, so the product without the minus is 0. d ln T = 0 is not g dr/c². Not a horizon temperature and not PhysJS.HawkingUnruh.dictionary. T ‖ξ‖ = const is out of scope. The hydrostatic equation is not derived from ∇_μ T^{μν} = 0, and the Gibbs relation is not derived from an equation of state'],
+
+  ['be-69', 'PhysJS.FastMagnetosonic.speed_eq', 'derivation-step: a monochromatic compressional polarization perpendicular to a uniform field, with ∂b/∂t = −B ∂v/∂x, ∂δρ/∂t = −ρ ∂v/∂x, δp = c_s² δρ, and ρ ∂v/∂t = −∂δp/∂x − (B/μ0) ∂b/∂x, has phase speed |ω/k| = √(c_s² + B²/(μ0 ρ)) for μ0 > 0, ρ > 0, and k ≠ 0. The velocity wave is not identically zero. c_s² = γ p / ρ is a reading of the closure, not an energy equation. The textbook quartic at k_∥ = 0 has roots ω² = 0 and ω² = (c_s² + v_A²) k²; ω = 0 does not solve compressional induction. √(c_s² + v_A²) is not c_s, not v_A, and not c_s + v_A when the other speed is nonzero. c_s = 0 recovers B/√(μ0 ρ), the Alfvén value of a different polarization. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation, and not the oblique fast mode. The linearized equations are hypotheses'],
+  ['be-70', 'PhysJS.EinsteinRelation.diffusion_eq', 'derivation-step: for the Boltzmann profile n = n_ref exp(−q V/(k_B T)) with n_ref > 0, k_B T ≠ 0, and q ≠ 0, a nonzero field E = −dV/dx at which the drift flux μ n E cancels the diffusion flux D dn/dx gives D = μ k_B T / q. The force-mobility writing D = μ_force k_B T needs μ_force = μ/q. Dropping q fails when q ≠ 1. The Fermi-liquid form μ E_F / q fails when E_F ≠ k_B T. Stokes–Einstein fails unless μ/q = 1/(6 π η a). A factor C ≠ 1 is not this diffusivity. Not a master equation, and not a Fermi liquid'],
+  ['be-71', 'PhysJS.Clapeyron.slope_eq', 'derivation-step: where the specific Gibbs energies agree along coexistence and each phase obeys dg = −s dT + v dP, dP/dT = (s2−s1)/(v2−v1). With L = T (s2−s1), T ≠ 0, and Δv ≠ 0, dP/dT = L/(T Δv). Dropping T fails when T ≠ 1. Replacing Δv by one phase volume fails when the other volume is nonzero. A factor C ≠ 1 is not this slope. Not the ideal-gas integrated vapor-pressure law. The Gibbs differential is a hypothesis, not a Legendre transform'],
+  ['be-72', 'PhysJS.GravitationalRedshift.frequency_ratio', 'derivation-step: two static observers of one coordinate period, with ν √(−g_00) = 1/Δt and g_00 < 0, have ν1/ν2 = √(−g2)/√(−g1) = √(g2/g1). If the Tolman products T √(−g_00) also agree, then T1/T2 = ν1/ν2. Equal temperatures on g_00 = −1 and g_00 = −4 are not a Tolman equilibrium, while the frequency ratio is 2. For g_00 = −(1+2Φ/c²) at c = 1, Φ = 0 and Φ = 4, the exact ratio is neither (Φ2−Φ1)/c² nor 1+(Φ2−Φ1)/c². z = 0 is not Φ/c². Not PhysJS.TolmanEhrenfest.hydrostatic_constant, not a horizon temperature, and not PhysJS.HawkingUnruh.dictionary'],
+  ['be-73', 'PhysJS.KelvinRelation.peltier_eq', 'derivation-step: for J_e = L11 E/T + L12 (−∇T)/T² and J_q = L21 E/T + L22 (−∇T)/T², the open-circuit Seebeck coefficient S = E/∇T and the isothermal Peltier coefficient Π = J_q/J_e satisfy Π = S T when L12 = L21. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. Not the first Thomson relation μ = T dS/dT, and not a measured thermopower. The linear fluxes are hypotheses'],
 ];
 
 const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
@@ -149,8 +155,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit d917fa328039d19c3659f74ea73569effb3ed4fb, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('d917fa328039d19c3659f74ea73569effb3ed4fb');
+  it('records commit 3af15b49be09442350510e7c7f56f4aab92ea3bc, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('3af15b49be09442350510e7c7f56f4aab92ea3bc');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -158,7 +164,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the forty-nine theorems and keys, in manifest order', () => {
+  it('names the fifty-four theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -372,10 +378,10 @@ describe('vendored PhysJS manifest', () => {
     const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
     const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
     const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68']);
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73']);
     expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
     expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
-    expect(counted.length + crossChecks.length + properties.length).toBe(39);
+    expect(counted.length + crossChecks.length + properties.length).toBe(44);
 
     const unlabeled = {
       ...manifest,

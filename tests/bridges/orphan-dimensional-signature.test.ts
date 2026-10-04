@@ -61,6 +61,11 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   66, // BE-66 radiation pressure: closed-form evaluator, no AST.
   67, // BE-67 Alfvén speed: closed-form evaluator, no AST.
   68, // BE-68 Tolman–Ehrenfest: closed-form evaluator, no AST.
+  69, // BE-69 fast magnetosonic speed: closed-form evaluator, no AST.
+  70, // BE-70 Einstein relation: closed-form evaluator, no AST.
+  71, // BE-71 Clapeyron slope: closed-form evaluator, no AST.
+  72, // BE-72 gravitational redshift: closed-form evaluator, no AST.
+  73, // BE-73 Kelvin relation: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -76,11 +81,11 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has sixteen entries (BE-51/52 + BE-55..68 closed-form)', () => {
+    it('orphan allowlist has twenty-one entries (BE-51/52 + BE-55..73 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(16);
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(21);
     });
 
     for (const id of ORPHAN_DIMENSIONAL_SIGNATURES) {
@@ -145,9 +150,9 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
       ).toEqual([]);
     });
 
-    it('orphan allowlist is BE-51/52 + BE-55..68 (closed-form evaluators)', () => {
+    it('orphan allowlist is BE-51/52 + BE-55..73 (closed-form evaluators)', () => {
       expect([...ORPHAN_DIMENSIONAL_SIGNATURES].sort((a, b) => a - b)).toEqual([
-        51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+        51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
       ]);
     });
   });

@@ -1,7 +1,7 @@
 /**
  * Bridge-evaluator registry — the single dispatch surface for `upt evaluate`.
  *
- * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…68) carry plain-JS
+ * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…73) carry plain-JS
  * evaluators but were, until now, unreachable from the CLI (`upt eval` is
  * user-formula-only; `upt explain <be-NN>` even redirected to a capability that did
  * not exist). This registry maps each bridge id to its evaluator, its input keys,
@@ -25,6 +25,11 @@ import { evaluateJeansMass } from './be65-jeans-mass.js';
 import { evaluateRadiationPressure } from './be66-radiation-pressure.js';
 import { evaluateAlfvenSpeed } from './be67-alfven-speed.js';
 import { evaluateTolmanEhrenfest } from './be68-tolman-ehrenfest.js';
+import { evaluateFastMagnetosonic } from './be69-fast-magnetosonic.js';
+import { evaluateEinsteinRelation } from './be70-einstein-relation.js';
+import { evaluateClapeyron } from './be71-clapeyron.js';
+import { evaluateGravitationalRedshift } from './be72-gravitational-redshift.js';
+import { evaluateKelvinPeltier } from './be73-kelvin-peltier.js';
 
 /**
  * What a length input measures. Two lengths of one dimension are not
@@ -213,6 +218,54 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
         P('g_00', 'metric component', 'g_00', '', 'static g_00, must be negative'),
       ],
       (i) => evaluateTolmanEhrenfest({ T_K: i.T_K, g_00: i.g_00 }),
+    ),
+    spec(
+      69,
+      'Fast magnetosonic speed',
+      [
+        P('cs_m_per_s', 'sound speed', 'c_s', 'm/s', 'sound speed, ≥ 0; zero recovers the Alfvén number of this polarization'),
+        P('B_T', 'magnetic flux density', 'B', 'T', 'background field; the formula uses B²'),
+        P('rho_kg_per_m3', 'total mass density', 'ρ', 'kg/m^3', 'total mass density, > 0'),
+      ],
+      (i) => evaluateFastMagnetosonic({ cs_m_per_s: i.cs_m_per_s, B_T: i.B_T, rho_kg_per_m3: i.rho_kg_per_m3 }),
+    ),
+    spec(
+      70,
+      'Einstein relation',
+      [
+        P('mu_m2_per_Vs', 'electrical mobility', 'μ', 'm^2/(V·s)', 'drift speed per electric field'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature, nonzero'),
+        P('q_C', 'carrier charge', 'q', 'C', 'carrier charge, nonzero'),
+      ],
+      (i) => evaluateEinsteinRelation({ mu_m2_per_Vs: i.mu_m2_per_Vs, T_K: i.T_K, q_C: i.q_C }),
+    ),
+    spec(
+      71,
+      'Clapeyron slope',
+      [
+        P('L_J_per_kg', 'specific latent heat', 'L', 'J/kg', 'L = T (s2 − s1)'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature on the coexistence curve, nonzero'),
+        P('delta_v_m3_per_kg', 'specific-volume change', 'Δv', 'm^3/kg', 'v2 − v1, nonzero'),
+      ],
+      (i) => evaluateClapeyron({ L_J_per_kg: i.L_J_per_kg, T_K: i.T_K, delta_v_m3_per_kg: i.delta_v_m3_per_kg }),
+    ),
+    spec(
+      72,
+      'Gravitational redshift',
+      [
+        P('g1', 'metric component at observer 1', 'g1', '', 'static g_00, must be negative'),
+        P('g2', 'metric component at observer 2', 'g2', '', 'static g_00, must be negative'),
+      ],
+      (i) => evaluateGravitationalRedshift({ g1: i.g1, g2: i.g2 }),
+    ),
+    spec(
+      73,
+      'Kelvin–Peltier',
+      [
+        P('S_V_per_K', 'Seebeck coefficient', 'S', 'V/K', 'open-circuit Seebeck coefficient'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature, nonzero'),
+      ],
+      (i) => evaluateKelvinPeltier({ S_V_per_K: i.S_V_per_K, T_K: i.T_K }),
     ),
   ].map((s) => [s.bridgeId, s]),
 );

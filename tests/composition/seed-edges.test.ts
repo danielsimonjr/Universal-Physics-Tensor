@@ -69,6 +69,15 @@ const DISTINCT: readonly (readonly [string, string])[] = [
   ['cosmological-constant-curvature', 'rescaled-cosmological-constant'],
   ['time', 'shapiro-delay'],
   ['time', 'quench-timescale'],
+  ['alfven-speed', 'fast-magnetosonic-speed'],
+  ['alfven-speed', 'sound-speed'],
+  ['temperature', 'einstein-temperature'],
+  ['temperature', 'clapeyron-temperature'],
+  ['temperature', 'peltier-temperature'],
+  ['proper-temperature', 'einstein-temperature'],
+  ['metric-g00', 'redshift-metric-g00-1'],
+  ['metric-g00', 'redshift-metric-g00-2'],
+  ['metric-g00', 'gravitational-frequency-ratio'],
 ];
 
 function leavesOf(node: ExprNode, acc: { name: string; dim: Dimension }[] = []): { name: string; dim: Dimension }[] {
@@ -208,6 +217,11 @@ describe('symbolic forms agree with the edge evaluator', () => {
     'be-66': { 'poynting-flux': 1e6, reflectance: 0.4, 'incidence-angle': Math.PI / 5 },
     'be-67': { 'magnetic-flux-density': 12e-9, 'plasma-mass-density': 14e6 * 1.67262192369e-27 },
     'be-68': { 'proper-temperature': 300, 'metric-g00': -0.8 },
+    'be-69': { 'sound-speed': 1e5, 'magnetic-flux-density': 1e-4, 'plasma-mass-density': 1e-6 },
+    'be-70': { 'electrical-mobility': 1e-8, 'einstein-temperature': 300, 'carrier-charge': 1.602176634e-19 },
+    'be-71': { 'specific-latent-heat': 2.26e6, 'clapeyron-temperature': 373.15, 'specific-volume-change': 1.672 },
+    'be-72': { 'redshift-metric-g00-1': -1, 'redshift-metric-g00-2': -4 },
+    'be-73': { 'seebeck-coefficient': 2e-4, 'peltier-temperature': 300 },
   };
 
   for (const [id, probe] of Object.entries(probes)) {

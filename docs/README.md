@@ -14,7 +14,7 @@ Eleven parts. The reader's map, including which claims are speculative, is [`spe
 - **[Part VI](specification/Part-VI.md)** — implementation framing and the Status-Promotion Protocol.
 - **[Parts VII–XI](specification/README.md)** — tensor algebra, the metric layer, composition, curvature and field equations, and proposed equations (Part XI is non-normative).
 
-The runtime catalog is `BRIDGE_EQUATIONS` in `src/bridges/index.ts`: 58 entries, ids 11–68, 22 established, 33 speculative, 3 highly-speculative. Parts I–II write up those ids. Part II §V-C is BE-55–68. Entries 51 and 53–68 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. Re-count from the array. `NOTES.md` is the rolling note.
+The runtime catalog is `BRIDGE_EQUATIONS` in `src/bridges/index.ts`: 63 entries, ids 11–73, 27 established, 33 speculative, 3 highly-speculative. Parts I–II write up those ids. Part II §V-C is BE-55–73. Entries 51 and 53–73 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. Re-count from the array. `NOTES.md` is the rolling note.
 
 ## Atlas, roadmap, and formal references
 

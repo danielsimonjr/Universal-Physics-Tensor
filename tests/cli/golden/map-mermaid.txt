@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (105)"]
+  subgraph cl_0["anchored cluster (107)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -151,6 +151,22 @@ flowchart LR
     q_plasma_mass_density --> j_be_67
     q_alfven_speed(["alfven-speed"]):::qty
     j_be_67 --> q_alfven_speed
+    j_be_69["BE-69"]:::law
+    q_sound_speed(["sound-speed"]):::qty
+    q_sound_speed --> j_be_69
+    q_magnetic_flux_density --> j_be_69
+    q_plasma_mass_density --> j_be_69
+    q_fast_magnetosonic_speed(["fast-magnetosonic-speed"]):::qty
+    j_be_69 --> q_fast_magnetosonic_speed
+    j_be_71["BE-71"]:::law
+    q_specific_latent_heat(["specific-latent-heat"]):::qty
+    q_specific_latent_heat --> j_be_71
+    q_clapeyron_temperature(["clapeyron-temperature"]):::qty
+    q_clapeyron_temperature --> j_be_71
+    q_specific_volume_change(["specific-volume-change"]):::qty
+    q_specific_volume_change --> j_be_71
+    q_clapeyron_slope(["clapeyron-slope"]):::qty
+    j_be_71 --> q_clapeyron_slope
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
     q_length --> j_CE_pendulum_period
@@ -479,7 +495,6 @@ flowchart LR
     j_CE_wien --> q_peak_wavelength
     j_CE_latent_heat["Latent heat of phase transition"]:::law
     q_mass --> j_CE_latent_heat
-    q_specific_latent_heat(["specific-latent-heat"]):::qty
     q_specific_latent_heat --> j_CE_latent_heat
     q_latent_heat(["latent-heat"]):::qty
     j_CE_latent_heat --> q_latent_heat
@@ -556,7 +571,6 @@ flowchart LR
     q_plasma_frequency(["plasma-frequency"]):::qty
     j_CE_plasma_frequency --> q_plasma_frequency
     j_CE_debye_frequency["Debye frequency"]:::law
-    q_sound_speed(["sound-speed"]):::qty
     q_sound_speed --> j_CE_debye_frequency
     q_number_density(["number-density"]):::qty
     q_number_density --> j_CE_debye_frequency
@@ -776,7 +790,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (35)"]
+  subgraph cl_iso["isolated (38)"]
     direction LR
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
@@ -929,6 +943,29 @@ flowchart LR
     q_metric_g00 --> j_be_68
     q_tolman_invariant(["tolman-invariant"]):::qty
     j_be_68 --> q_tolman_invariant
+    j_be_70["BE-70"]:::law
+    q_electrical_mobility(["electrical-mobility"]):::qty
+    q_electrical_mobility --> j_be_70
+    q_einstein_temperature(["einstein-temperature"]):::qty
+    q_einstein_temperature --> j_be_70
+    q_carrier_charge(["carrier-charge"]):::qty
+    q_carrier_charge --> j_be_70
+    q_diffusivity(["diffusivity"]):::qty
+    j_be_70 --> q_diffusivity
+    j_be_72["BE-72"]:::law
+    q_redshift_metric_g00_1(["redshift-metric-g00-1"]):::qty
+    q_redshift_metric_g00_1 --> j_be_72
+    q_redshift_metric_g00_2(["redshift-metric-g00-2"]):::qty
+    q_redshift_metric_g00_2 --> j_be_72
+    q_gravitational_frequency_ratio(["gravitational-frequency-ratio"]):::qty
+    j_be_72 --> q_gravitational_frequency_ratio
+    j_be_73["BE-73"]:::law
+    q_seebeck_coefficient(["seebeck-coefficient"]):::qty
+    q_seebeck_coefficient --> j_be_73
+    q_peltier_temperature(["peltier-temperature"]):::qty
+    q_peltier_temperature --> j_be_73
+    q_peltier_coefficient(["peltier-coefficient"]):::qty
+    j_be_73 --> q_peltier_coefficient
     j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
     q_A(["A"]):::qty
     q_A --> j_CE_bekenstein_hawking

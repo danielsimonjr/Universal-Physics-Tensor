@@ -39,7 +39,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 70 files
-- **bridges**: 94 files
+- **bridges**: 99 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
@@ -1762,6 +1762,56 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/bridges/be69-fast-magnetosonic.ts` - BE-69 — perpendicular fast magnetosonic phase speed,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/formula-names.js` | `MU0_SI` | Import |
+
+**Exports:**
+- Interfaces: `FastMagnetosonicInputs`, `FastMagnetosonicResult`
+- Functions: `evaluateFastMagnetosonic`
+
+---
+
+### `src/bridges/be70-einstein-relation.ts` - BE-70 — Einstein relation,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `K_B_SI` | Import |
+
+**Exports:**
+- Interfaces: `EinsteinRelationInputs`, `EinsteinRelationResult`
+- Functions: `evaluateEinsteinRelation`
+
+---
+
+### `src/bridges/be71-clapeyron.ts` - BE-71 — Clapeyron slope,
+
+**Exports:**
+- Interfaces: `ClapeyronInputs`, `ClapeyronResult`
+- Functions: `evaluateClapeyron`
+
+---
+
+### `src/bridges/be72-gravitational-redshift.ts` - BE-72 — gravitational frequency ratio of two static observers,
+
+**Exports:**
+- Interfaces: `GravitationalRedshiftInputs`, `GravitationalRedshiftResult`
+- Functions: `evaluateGravitationalRedshift`
+
+---
+
+### `src/bridges/be73-kelvin-peltier.ts` - BE-73 — Kelvin relation,
+
+**Exports:**
+- Interfaces: `KelvinPeltierInputs`, `KelvinPeltierResult`
+- Functions: `evaluateKelvinPeltier`
+
+---
+
 ### `src/bridges/bridge-equations.ts` - `BridgeEquations` — a convenience facade over the per-bridge evaluators.
 
 **Internal Dependencies:**
@@ -1825,6 +1875,11 @@ The codebase is organized into the following modules:
 | `./be66-radiation-pressure.js` | `evaluateRadiationPressure` | Import |
 | `./be67-alfven-speed.js` | `evaluateAlfvenSpeed` | Import |
 | `./be68-tolman-ehrenfest.js` | `evaluateTolmanEhrenfest` | Import |
+| `./be69-fast-magnetosonic.js` | `evaluateFastMagnetosonic` | Import |
+| `./be70-einstein-relation.js` | `evaluateEinsteinRelation` | Import |
+| `./be71-clapeyron.js` | `evaluateClapeyron` | Import |
+| `./be72-gravitational-redshift.js` | `evaluateGravitationalRedshift` | Import |
+| `./be73-kelvin-peltier.js` | `evaluateKelvinPeltier` | Import |
 
 **Exports:**
 - Constants: `BridgeEquations`
@@ -2663,6 +2718,11 @@ The codebase is organized into the following modules:
 | `./be66-radiation-pressure.js` | `evaluateRadiationPressure` | Import |
 | `./be67-alfven-speed.js` | `evaluateAlfvenSpeed` | Import |
 | `./be68-tolman-ehrenfest.js` | `evaluateTolmanEhrenfest` | Import |
+| `./be69-fast-magnetosonic.js` | `evaluateFastMagnetosonic` | Import |
+| `./be70-einstein-relation.js` | `evaluateEinsteinRelation` | Import |
+| `./be71-clapeyron.js` | `evaluateClapeyron` | Import |
+| `./be72-gravitational-redshift.js` | `evaluateGravitationalRedshift` | Import |
+| `./be73-kelvin-peltier.js` | `evaluateKelvinPeltier` | Import |
 
 **Exports:**
 - Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
@@ -2710,6 +2770,11 @@ The codebase is organized into the following modules:
 | `./be66-radiation-pressure.js` | `evaluateRadiationPressure, type RadiationPressureInputs, type RadiationPressureResult` | Re-export |
 | `./be67-alfven-speed.js` | `evaluateAlfvenSpeed, alfvenProtonOnlyDensity, M_PROTON_SI, type AlfvenInputs, type AlfvenResult` | Re-export |
 | `./be68-tolman-ehrenfest.js` | `evaluateTolmanEhrenfest, tolmanTemperatureAt, type TolmanInputs, type TolmanResult` | Re-export |
+| `./be69-fast-magnetosonic.js` | `evaluateFastMagnetosonic, type FastMagnetosonicInputs, type FastMagnetosonicResult` | Re-export |
+| `./be70-einstein-relation.js` | `evaluateEinsteinRelation, type EinsteinRelationInputs, type EinsteinRelationResult` | Re-export |
+| `./be71-clapeyron.js` | `evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult` | Re-export |
+| `./be72-gravitational-redshift.js` | `evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult` | Re-export |
+| `./be73-kelvin-peltier.js` | `evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult` | Re-export |
 
 **Exports:**
 - Interfaces: `KnownIssue`, `BridgeEquationEntry`
@@ -2732,7 +2797,11 @@ The codebase is organized into the following modules:
   type JeansInputs, type JeansResult, evaluateRadiationPressure, type RadiationPressureInputs,
   type RadiationPressureResult, evaluateAlfvenSpeed, alfvenProtonOnlyDensity, M_PROTON_SI,
   type AlfvenInputs, type AlfvenResult, evaluateTolmanEhrenfest, tolmanTemperatureAt,
-  type TolmanInputs, type TolmanResult
+  type TolmanInputs, type TolmanResult, evaluateFastMagnetosonic, type FastMagnetosonicInputs,
+  type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs,
+  type EinsteinRelationResult, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult,
+  evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult,
+  evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult
   ```
 
 - Default: `BRIDGE_EQUATIONS`
@@ -4609,7 +4678,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 49 `BridgeEdge`s
+### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 54 `BridgeEdge`s
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -4884,7 +4953,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/edges/applied-physicist.ts` - Composition edges for BE-66, BE-67, and BE-68.
+### `src/composition/edges/applied-physicist.ts` - Composition edges for BE-66 through BE-73.
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -4892,15 +4961,26 @@ The codebase is organized into the following modules:
 | `../../bridges/be66-radiation-pressure.js` | `evaluateRadiationPressure` | Import |
 | `../../bridges/be67-alfven-speed.js` | `evaluateAlfvenSpeed` | Import |
 | `../../bridges/be68-tolman-ehrenfest.js` | `evaluateTolmanEhrenfest` | Import |
+| `../../bridges/be69-fast-magnetosonic.js` | `evaluateFastMagnetosonic` | Import |
+| `../../bridges/be70-einstein-relation.js` | `evaluateEinsteinRelation` | Import |
+| `../../bridges/be71-clapeyron.js` | `evaluateClapeyron` | Import |
+| `../../bridges/be72-gravitational-redshift.js` | `evaluateGravitationalRedshift` | Import |
+| `../../bridges/be73-kelvin-peltier.js` | `evaluateKelvinPeltier` | Import |
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
 | `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../edge.js` | `BridgeEdge` | Import (type-only) |
 | `../quantity.js` | `Quantity` | Import (type-only) |
-| `../quantities.js` | `alfvenSpeedQ, incidenceAngleQ, magneticFluxDensityQ, metricG00Q, plasmaMassDensityQ, poyntingFluxQ, properTemperatureQ, radiationPressureQ, reflectanceQ, tolmanInvariantQ` | Import |
+| `../quantities.js` | `alfvenSpeedQ, incidenceAngleQ, magneticFluxDensityQ, metricG00Q, plasmaMassDensityQ, poyntingFluxQ, properTemperatureQ, radiationPressureQ, reflectanceQ, tolmanInvariantQ, soundSpeedQ, fastMagnetosonicSpeedQ, electricalMobilityQ, einsteinTemperatureQ, carrierChargeQ, diffusivityQ, latentHeatQ, clapeyronTemperatureQ, specificVolumeChangeQ, clapeyronSlopeQ, redshiftMetricG00OneQ, redshiftMetricG00TwoQ, gravitationalFrequencyRatioQ, seebeckCoefficientQ, peltierTemperatureQ, peltierCoefficientQ` | Import |
 
 **Exports:**
-- Constants: `be66Edge`, `be67Edge`, `be68Edge`, `APPLIED_PHYSICIST_EDGES`
+- Constants:
+
+  ```text
+  be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge, be72Edge, be73Edge,
+  APPLIED_PHYSICIST_EDGES
+  ```
+
 
 ---
 
@@ -5281,7 +5361,7 @@ The codebase is organized into the following modules:
 | `./consistency.js` | `consistencyRatio` | Re-export |
 | `./edges/calibration.js` | `be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG` | Re-export |
 | `./edges/catalog-tranche.js` | `be14Edge, be19Edge, be21Edge, be48Edge, be53Edge, be54Edge` | Re-export |
-| `./edges/applied-physicist.js` | `be66Edge, be67Edge, be68Edge, APPLIED_PHYSICIST_EDGES` | Re-export |
+| `./edges/applied-physicist.js` | `be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge, be72Edge, be73Edge, APPLIED_PHYSICIST_EDGES` | Re-export |
 | `./edges/catalog-full.js` | `be11Edge, be13Edge, be15Edge, be17Edge, be18Edge, be20Edge, be22Edge, be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge, be31Edge, be33Edge, be34Edge, be36Edge, be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge, be47Edge, be49Edge, be50Edge, CATALOG_FULL_EDGES` | Re-export |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Re-export |
 | `./canonical-graph.js` | `CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS` | Re-export |
@@ -5317,21 +5397,22 @@ The codebase is organized into the following modules:
   minConfidence, QUANTITY_IDENTIFICATIONS, SOURCE_ALIAS_DISPOSITIONS, AliasDisposition,
   consistencyRatio, be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge,
   be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge, be21Edge, be48Edge, be53Edge,
-  be54Edge, be66Edge, be67Edge, be68Edge, APPLIED_PHYSICIST_EDGES, be11Edge, be13Edge, be15Edge,
-  be17Edge, be18Edge, be20Edge, be22Edge, be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge,
-  be31Edge, be33Edge, be34Edge, be36Edge, be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge,
-  be47Edge, be49Edge, be50Edge, CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges,
-  CANONICAL_CONSTANTS, CompositionCandidate, EnumerationReport, enumerateCompositions,
-  REGISTERED_COMPOSITION_IDS, UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict,
-  IdentifiabilityResult, IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure,
-  RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionReport,
-  RetrodictionOptions, retrodict, retrodictNode, DerivationExplanation, ExplainOptions,
-  QuantityExplanation, explainQuantity, Observable, ComposeSymbolicOptions, composeSymbolic,
-  SymbolicCompositionError, SymbolicEvalError, VizStatus, VizJunction, VizCluster, VizOptions,
-  VizModel, VizFilterStats, buildVizModel, edgeToJunction, renderDotToSvg,
-  SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation, EquationLanding,
-  EquationAnalysis, EquationHint, parseUserEquation, resolveToCatalogName, suggestQuantities,
-  suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
+  be54Edge, be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge, be72Edge, be73Edge,
+  APPLIED_PHYSICIST_EDGES, be11Edge, be13Edge, be15Edge, be17Edge, be18Edge, be20Edge, be22Edge,
+  be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge, be31Edge, be33Edge, be34Edge, be36Edge,
+  be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge, be47Edge, be49Edge, be50Edge,
+  CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS,
+  CompositionCandidate, EnumerationReport, enumerateCompositions, REGISTERED_COMPOSITION_IDS,
+  UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict, IdentifiabilityResult,
+  IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure, RetrodictionOutcome,
+  RetrodictionPrediction, RetrodictionResult, RetrodictionReport, RetrodictionOptions, retrodict,
+  retrodictNode, DerivationExplanation, ExplainOptions, QuantityExplanation, explainQuantity,
+  Observable, ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError,
+  VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel,
+  edgeToJunction, renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency,
+  UserEquation, EquationLanding, EquationAnalysis, EquationHint, parseUserEquation,
+  resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation,
+  UserEquationError
   ```
 
 
@@ -5930,7 +6011,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/quantities/applied-physicist.ts` - Quantity nodes for BE-66, BE-67, and BE-68.
+### `src/composition/quantities/applied-physicist.ts` - Quantity nodes for BE-66 through BE-73.
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -5944,7 +6025,11 @@ The codebase is organized into the following modules:
 
   ```text
   poyntingFluxQ, reflectanceQ, incidenceAngleQ, radiationPressureQ, magneticFluxDensityQ,
-  plasmaMassDensityQ, alfvenSpeedQ, properTemperatureQ, metricG00Q, tolmanInvariantQ
+  plasmaMassDensityQ, alfvenSpeedQ, properTemperatureQ, metricG00Q, tolmanInvariantQ, soundSpeedQ,
+  fastMagnetosonicSpeedQ, electricalMobilityQ, einsteinTemperatureQ, carrierChargeQ, diffusivityQ,
+  latentHeatQ, clapeyronTemperatureQ, specificVolumeChangeQ, clapeyronSlopeQ, redshiftMetricG00OneQ,
+  redshiftMetricG00TwoQ, gravitationalFrequencyRatioQ, seebeckCoefficientQ, peltierTemperatureQ,
+  peltierCoefficientQ
   ```
 
 
@@ -7022,6 +7107,7 @@ The codebase is organized into the following modules:
 | `./bridges/index.js` | `BridgeEquationEntry, BridgeEquationStatus, BridgeIssueSeverity, BridgeIssueFixable, KnownIssue` | Re-export |
 | `./bridges/index.js` | `evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult, evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult, evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult, evaluateCasimir, type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs, type UnruhResult, evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult, evaluateACJosephson, JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult, evaluateFractionalQH, type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz, LORENZ_NUMBER_SI, type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap, BCS_GAP_RATIO, type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3, type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity, THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass, type JeansInputs, type JeansResult` | Re-export |
 | `./bridges/index.js` | `evaluateRadiationPressure, type RadiationPressureInputs, type RadiationPressureResult, evaluateAlfvenSpeed, alfvenProtonOnlyDensity, M_PROTON_SI, type AlfvenInputs, type AlfvenResult, evaluateTolmanEhrenfest, tolmanTemperatureAt, type TolmanInputs, type TolmanResult` | Re-export |
+| `./bridges/index.js` | `evaluateFastMagnetosonic, type FastMagnetosonicInputs, type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs, type EinsteinRelationResult, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult, evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult, evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult` | Re-export |
 | `./bridges/evaluators.js` | `BRIDGE_EVALUATORS, evaluateBridge` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./bridges/bridge-equations.js` | `BridgeEquations` | Re-export |
@@ -7065,7 +7151,7 @@ The codebase is organized into the following modules:
 | `./numerical/index.js` | `evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport, evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion` | Re-export |
 | `./numerical/index.js` | `NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options, PerihelionResult, FindPerihelionOptions` | Re-export |
 | `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge, be21Edge, be48Edge, be53Edge, be54Edge` | Re-export |
-| `./composition/index.js` | `be66Edge, be67Edge, be68Edge, APPLIED_PHYSICIST_EDGES` | Re-export |
+| `./composition/index.js` | `be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge, be72Edge, be73Edge, APPLIED_PHYSICIST_EDGES` | Re-export |
 | `./composition/index.js` | `BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
 | `./bridges/membership.js` | `adjudicateBridgeEntry, adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS` | Re-export |
 | `./bridges/membership.js` | `BridgeVerdict, CatalogAdjudicationReport, RejectedBridgeAdjudication` | Re-export |
@@ -7199,73 +7285,78 @@ The codebase is organized into the following modules:
   type JeansInputs, type JeansResult, evaluateRadiationPressure, type RadiationPressureInputs,
   type RadiationPressureResult, evaluateAlfvenSpeed, alfvenProtonOnlyDensity, M_PROTON_SI,
   type AlfvenInputs, type AlfvenResult, evaluateTolmanEhrenfest, tolmanTemperatureAt,
-  type TolmanInputs, type TolmanResult, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec,
-  EvaluatorParameter, ParameterAlternate, GeometryRole, BridgeEquations, christoffel,
-  CovariantDerivativeNode, ricci, RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual,
-  BianchiResidualNode, verifyKillingEquation, checkKillingEquation, evaluateConservedCharge,
-  KillingEquationOptions, KillingEquationCheck, ChristoffelAccess, integrateGeodesic,
-  type GeodesicIntegratorInputs, type GeodesicIntegratorResult, toGeometrized, fromGeometrized,
-  geometrizedFactor, NonGeometrizableDimensionError, TracableTensorNode, TensorTraceNode,
-  TensorTraceValidationResult, TensorTraceOptions, validateTensorTrace, FriedmannVariant,
-  FriedmannEquationNode, FriedmannEquationValidationResult, validateFriedmannEquation, RGCouplingNode,
-  BetaFunctionNode, BetaFunctionValidationResult, rgCoupling, validateRGCoupling,
-  validateBetaFunction, ArrowOfTime, GaugeFieldNode, TimeSymmetryPredicateNode,
-  TimeSymmetryPredicateValidationResult, validateGaugeField, validateTimeSymmetryPredicate,
-  ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult,
-  validateKleinGordonEquation, Dimension, convertValue, parseUnit, UnitError, ParsedUnit,
-  TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION,
-  FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply, divide, power, add, subtract,
-  equals, format, DimensionMismatchError, ExprNode, TranscendentalFn, ValidationResult, Violation,
-  validate, validateEquation, validateInverseMetricPair, inferDimensionForBridge,
-  evaluateEinsteinEquationResidual, EinsteinEquationResidualInput, MetricClosure, Vec4,
-  validateEinsteinFieldEquation, EinsteinFieldEquationNode, EinsteinFieldEquationValidationResult,
-  KretschmannScalarNode, KretschmannScalarValidationResult, validateKretschmannScalar,
-  computeKretschmann, evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine,
-  setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError,
-  hasAutogradSupport, evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion,
-  NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor,
-  EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot,
-  GL4Options, PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
+  type TolmanInputs, type TolmanResult, evaluateFastMagnetosonic, type FastMagnetosonicInputs,
+  type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs,
+  type EinsteinRelationResult, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult,
+  evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult,
+  evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult, BRIDGE_EVALUATORS,
+  evaluateBridge, EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole,
+  BridgeEquations, christoffel, CovariantDerivativeNode, ricci, RicciTensorNode, einstein,
+  EinsteinTensorNode, bianchiResidual, BianchiResidualNode, verifyKillingEquation,
+  checkKillingEquation, evaluateConservedCharge, KillingEquationOptions, KillingEquationCheck,
+  ChristoffelAccess, integrateGeodesic, type GeodesicIntegratorInputs, type GeodesicIntegratorResult,
+  toGeometrized, fromGeometrized, geometrizedFactor, NonGeometrizableDimensionError,
+  TracableTensorNode, TensorTraceNode, TensorTraceValidationResult, TensorTraceOptions,
+  validateTensorTrace, FriedmannVariant, FriedmannEquationNode, FriedmannEquationValidationResult,
+  validateFriedmannEquation, RGCouplingNode, BetaFunctionNode, BetaFunctionValidationResult,
+  rgCoupling, validateRGCoupling, validateBetaFunction, ArrowOfTime, GaugeFieldNode,
+  TimeSymmetryPredicateNode, TimeSymmetryPredicateValidationResult, validateGaugeField,
+  validateTimeSymmetryPredicate, ScalarFieldNode, KleinGordonEquationNode,
+  KleinGordonEquationValidationResult, validateKleinGordonEquation, Dimension, convertValue,
+  parseUnit, UnitError, ParsedUnit, TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY,
+  MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply,
+  divide, power, add, subtract, equals, format, DimensionMismatchError, ExprNode, TranscendentalFn,
+  ValidationResult, Violation, validate, validateEquation, validateInverseMetricPair,
+  inferDimensionForBridge, evaluateEinsteinEquationResidual, EinsteinEquationResidualInput,
+  MetricClosure, Vec4, validateEinsteinFieldEquation, EinsteinFieldEquationNode,
+  EinsteinFieldEquationValidationResult, KretschmannScalarNode, KretschmannScalarValidationResult,
+  validateKretschmannScalar, computeKretschmann, evaluateNumerical, evaluateNumericalRaw,
+  evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError,
+  DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
+  evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion, NumericalResult,
+  NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec,
+  NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options,
+  PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
   minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError,
   CompositionJunctionError, DomainViolationError, be11ZurekEdge, be12Edge, be16Edge, be37Edge,
   be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge,
-  be21Edge, be48Edge, be53Edge, be54Edge, be66Edge, be67Edge, be68Edge, APPLIED_PHYSICIST_EDGES,
-  BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes,
-  ValidityDomain, adjudicateBridgeEntry, adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS,
-  REJECTED_BRIDGE_IDS, BridgeVerdict, CatalogAdjudicationReport, RejectedBridgeAdjudication,
-  confrontBE36, GW170817, BE36ConfrontationResult, GWSpeedObservation, confrontBE52, MERCURY,
-  BE52ConfrontationResult, PerihelionObservation, enumerateCompositions, REGISTERED_COMPOSITION_IDS,
-  propagateUncertainty, CompositionCandidate, EnumerationReport, UncertaintyResult,
-  classifyIdentifiability, classifyAll, forwardClosure, IdentifiabilityVerdict, IdentifiabilityResult,
-  IdentifiabilityOptions, retrodict, retrodictNode, RetrodictionOutcome, RetrodictionPrediction,
-  RetrodictionResult, RetrodictionReport, RetrodictionOptions, explainQuantity, DerivationExplanation,
-  ExplainOptions, QuantityExplanation, composeSymbolic, SymbolicCompositionError, SymbolicEvalError,
-  Observable, ComposeSymbolicOptions, buildVizModel, edgeToJunction, VizStatus, VizJunction,
-  VizCluster, VizOptions, VizModel, VizFilterStats, renderDotToSvg, SvgRendererUnavailableError,
-  parseUserEquation, resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding,
-  analyzeUserEquation, UserEquationError, UserEquation, EquationLanding, EquationAnalysis,
-  EquationHint, parsePhysics, FormulaDimensionError, ParsedPhysics, inferUnknownDimension,
-  substituteSymbolDim, dimensionAdjacency, DimensionAdjacency, confrontBE36WithUncertainty,
-  BE36ConfrontationWithUncertainty, buckinghamPi, dimensionallyDetermines, RationalizationError,
-  DimensionalVariable, PiGroup, BuckinghamVerdict, BuckinghamResult, DimensionalDeterminationResult,
-  CompositionAliasError, SOURCE_ALIAS_DISPOSITIONS, AliasDisposition, DispositionRequired,
-  evaluateKGDispersionResidual, verifyKleinGordonPlaneWave, KGDispersionResidualInput,
-  KGPlaneWaveVerifyInput, KGPlaneWaveVerifyResult, confrontBE23, confrontBE23WithUncertainty,
-  PLANCKIAN_CUPRATES, PLANCKIAN_O1_BAND, BE23ConfrontationResult, BE23ConfrontationWithUncertainty,
-  PlanckianObservation, CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges,
-  CANONICAL_CONSTANTS, CANONICAL_EQUATIONS, CANONICAL_BY_ID, canonicalById, canonicalByDomain,
-  partneredBridgeIds, bridgesWithoutCanonicalPartner, canonicalToLaw, seedCanonicalLaws,
-  CANONICAL_TENSOR_CONFIG, CanonicalEquation, CanonicalDomain, EpistemicStatus, CanonicalForms,
-  FieldEquationNode, normalForm, structurallyEqual, classifyLinkage, scanLinkages, LinkageResult,
-  RecoveryOutcome, candidateId, ADJUDICATIONS, adjudicationFor, annotateAdjudications,
-  AdjudicationVerdict, CandidateAdjudication, AnnotatedCandidate, annotateConsequences,
-  classifyProposal, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
-  describeGrounding, CandidateGrounding, rankDiscoveries, VettedCandidate, residualInSigma,
-  combineInQuadrature, consistencyComparison, ConsistencyComparison, ObservationProvenance,
-  SigmaComponent, ObservationKind, ConfrontationOutcome, ConfrontationDataHandling,
-  ConfrontationPreprocessing, ConfrontationIndependence, SourceRef, SourceRefs, confrontBE37, CASSINI,
-  CassiniObservation, BE37ConfrontationResult, confrontBE51, VLBI_LAMBERT_2009,
-  VLBIDeflectionObservation, BE51ConfrontationResult, oneLoopCoefficientStatement,
+  be21Edge, be48Edge, be53Edge, be54Edge, be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge,
+  be72Edge, be73Edge, APPLIED_PHYSICIST_EDGES, BridgeEdge, ComposeOptions, EdgeConfidence, Quantity,
+  QuantityIdentification, RegimeAttributes, ValidityDomain, adjudicateBridgeEntry, adjudicateCatalog,
+  REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, BridgeVerdict, CatalogAdjudicationReport,
+  RejectedBridgeAdjudication, confrontBE36, GW170817, BE36ConfrontationResult, GWSpeedObservation,
+  confrontBE52, MERCURY, BE52ConfrontationResult, PerihelionObservation, enumerateCompositions,
+  REGISTERED_COMPOSITION_IDS, propagateUncertainty, CompositionCandidate, EnumerationReport,
+  UncertaintyResult, classifyIdentifiability, classifyAll, forwardClosure, IdentifiabilityVerdict,
+  IdentifiabilityResult, IdentifiabilityOptions, retrodict, retrodictNode, RetrodictionOutcome,
+  RetrodictionPrediction, RetrodictionResult, RetrodictionReport, RetrodictionOptions,
+  explainQuantity, DerivationExplanation, ExplainOptions, QuantityExplanation, composeSymbolic,
+  SymbolicCompositionError, SymbolicEvalError, Observable, ComposeSymbolicOptions, buildVizModel,
+  edgeToJunction, VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats,
+  renderDotToSvg, SvgRendererUnavailableError, parseUserEquation, resolveToCatalogName,
+  suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError,
+  UserEquation, EquationLanding, EquationAnalysis, EquationHint, parsePhysics, FormulaDimensionError,
+  ParsedPhysics, inferUnknownDimension, substituteSymbolDim, dimensionAdjacency, DimensionAdjacency,
+  confrontBE36WithUncertainty, BE36ConfrontationWithUncertainty, buckinghamPi,
+  dimensionallyDetermines, RationalizationError, DimensionalVariable, PiGroup, BuckinghamVerdict,
+  BuckinghamResult, DimensionalDeterminationResult, CompositionAliasError, SOURCE_ALIAS_DISPOSITIONS,
+  AliasDisposition, DispositionRequired, evaluateKGDispersionResidual, verifyKleinGordonPlaneWave,
+  KGDispersionResidualInput, KGPlaneWaveVerifyInput, KGPlaneWaveVerifyResult, confrontBE23,
+  confrontBE23WithUncertainty, PLANCKIAN_CUPRATES, PLANCKIAN_O1_BAND, BE23ConfrontationResult,
+  BE23ConfrontationWithUncertainty, PlanckianObservation, CATALOG_FULL_EDGES, CATALOG_GRAPH,
+  CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS, CANONICAL_EQUATIONS, CANONICAL_BY_ID,
+  canonicalById, canonicalByDomain, partneredBridgeIds, bridgesWithoutCanonicalPartner,
+  canonicalToLaw, seedCanonicalLaws, CANONICAL_TENSOR_CONFIG, CanonicalEquation, CanonicalDomain,
+  EpistemicStatus, CanonicalForms, FieldEquationNode, normalForm, structurallyEqual, classifyLinkage,
+  scanLinkages, LinkageResult, RecoveryOutcome, candidateId, ADJUDICATIONS, adjudicationFor,
+  annotateAdjudications, AdjudicationVerdict, CandidateAdjudication, AnnotatedCandidate,
+  annotateConsequences, classifyProposal, ConsequenceAnnotatedCandidate, ConsequenceSignal,
+  ConsequenceEvidence, describeGrounding, CandidateGrounding, rankDiscoveries, VettedCandidate,
+  residualInSigma, combineInQuadrature, consistencyComparison, ConsistencyComparison,
+  ObservationProvenance, SigmaComponent, ObservationKind, ConfrontationOutcome,
+  ConfrontationDataHandling, ConfrontationPreprocessing, ConfrontationIndependence, SourceRef,
+  SourceRefs, confrontBE37, CASSINI, CassiniObservation, BE37ConfrontationResult, confrontBE51,
+  VLBI_LAMBERT_2009, VLBIDeflectionObservation, BE51ConfrontationResult, oneLoopCoefficientStatement,
   OneLoopCoefficientStatement, OneLoopCoefficientSign, requestYangMillsConfrontation,
   MeasuredCouplingRow, RunningProcedure, RunningProcedureRecord, YangMillsConfrontationRequest,
   YangMillsConfrontationRefusal, YangMillsConfrontationHit, YangMillsConfrontationResult,
@@ -8125,7 +8216,7 @@ graph TD
         N8[be23-planckian-confrontation]
         N9[be35-bootstrap-confrontation]
         N10[be36-gw170817-confrontation]
-        N11[...89 more]
+        N11[...94 more]
     end
 
     subgraph Canonical
@@ -8252,14 +8343,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 433 |
+| Total TypeScript Files | 438 |
 | Total Modules | 13 |
-| Total Lines of Code | 92408 |
-| Total Exports | 3090 |
-| Total Re-exports | 1457 |
+| Total Lines of Code | 93412 |
+| Total Exports | 3156 |
+| Total Re-exports | 1497 |
 | Total Classes | 60 |
-| Total Interfaces | 491 |
-| Total Functions | 805 |
+| Total Interfaces | 501 |
+| Total Functions | 810 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 579 |

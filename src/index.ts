@@ -241,6 +241,24 @@ export {
   type TolmanInputs,
   type TolmanResult,
 } from './bridges/index.js';
+/** Fast magnetosonic speed, Einstein relation, Clapeyron slope, gravitational frequency ratio, Kelvin–Peltier. */
+export {
+  evaluateFastMagnetosonic,
+  type FastMagnetosonicInputs,
+  type FastMagnetosonicResult,
+  evaluateEinsteinRelation,
+  type EinsteinRelationInputs,
+  type EinsteinRelationResult,
+  evaluateClapeyron,
+  type ClapeyronInputs,
+  type ClapeyronResult,
+  evaluateGravitationalRedshift,
+  type GravitationalRedshiftInputs,
+  type GravitationalRedshiftResult,
+  evaluateKelvinPeltier,
+  type KelvinPeltierInputs,
+  type KelvinPeltierResult,
+} from './bridges/index.js';
 
 // Bridge-evaluator dispatch registry (`upt evaluate`) — id → evaluator.
 export { BRIDGE_EVALUATORS, evaluateBridge } from './bridges/evaluators.js';
@@ -523,6 +541,11 @@ export {
   be66Edge,
   be67Edge,
   be68Edge,
+  be69Edge,
+  be70Edge,
+  be71Edge,
+  be72Edge,
+  be73Edge,
   APPLIED_PHYSICIST_EDGES,
 } from './composition/index.js';
 export type {
