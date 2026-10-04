@@ -267,7 +267,7 @@ operand — so promotions must be governed. The protocol:
 
 Through six parts, this specification has outlined:
 
-1. **An organizational schema**: 58 bridge equations catalogued (numbered 11-68) connecting different physics regimes, with status labels indicating their established / speculative nature.
+1. **An organizational schema**: 63 bridge equations catalogued (numbered 11-73) connecting different physics regimes, with status labels indicating their established / speculative nature.
 2. **Algorithmic specifications**: ~23 algorithm pseudocode blocks across all six parts (Part-I: 3, Part-III: 6, Part-IV: 3, Part-V: 8, Part-VI: 3). Of these, 12 are formally numbered (Algorithms 1, 2, 3A, 3B, 4, 5, 6, 7, 8, 9, 10, 11); the remainder are unnumbered blocks in Parts IV-VI — none yet implemented, and several (particularly SOLVE_TENSOR_COMPLETE_PROBLEM) without proven tractability bounds. The 3A/3B split (Algorithm 3A in Part-I §IV, Algorithm 3B in Part-III §VII) creates 12 distinct numbered sections, not 11.
 3. **Experimental pathways**: Proposed validation protocols for bridge equations that admit testing, spanning near-term to far-future timescales.
 4. **Speculative applications**: Consciousness engineering (Section 28.2) and cosmic engineering (Section 28.3), both explicitly flagged as highly speculative extrapolations, not engineering proposals.
@@ -281,7 +281,7 @@ The specification's size and statistics are recorded in the authoritative "Frame
 - **Peer review**: Theoretical physicists need to review Parts I-III for mathematical correctness.
 - **Equation corrections**: The catalog flags structured `known_issues` entries on a substantial fraction of the bridge equations. **The authoritative list is `src/bridges/index.ts`** — readers should query the index directly for the current set of BEs with non-empty `known_issues[]` arrays rather than referring to a hard-coded list here. A hard-coded list duplicated here would drift out of date; the index file is the single source of truth.
 - **Scope tightening**: Consciousness engineering and cosmic engineering sections should either be removed, relocated to a clearly-separate "speculative essays" companion document, or heavily caveated (as they now are).
-- **Bibliography**: The bridge equations reference many named results (Ryu-Takayanagi, Jarzynski, Verlinde, Penrose-Hameroff, etc.). The original 40 (IDs 11–50) still carry those names in Status notes rather than a formal citation list. BE-51–54 cite inside their Status lines. BE-55–68 carry a References list in Part-II §V-C. An appendix bibliography with arXiv IDs and DOIs is still needed.
+- **Bibliography**: The bridge equations reference many named results (Ryu-Takayanagi, Jarzynski, Verlinde, Penrose-Hameroff, etc.). The original 40 (IDs 11–50) still carry those names in Status notes rather than a formal citation list. BE-51–54 cite inside their Status lines. BE-55–73 carry a References list in Part-II §V-C. An appendix bibliography with arXiv IDs and DOIs is still needed.
 
 ### Honest statement of status
 
@@ -292,9 +292,9 @@ This framework is a **work in progress by a systems engineer, not a theoretical 
 **Framework Statistics (honest):**
 
 - Total document size: ~498,000 characters / ~28,000 prose words across 6 parts (the character count is dominated by URL-encoded LaTeX image tags, not prose; the earlier "~75,000 words" figure was an overcount)
-- Bridge equations specified: 58 (numbered 11-68; Equations 1-10 correspond to the implicit "diagonal" laws of known physics not individually catalogued; BE-51–54 are Part-II §V-B; BE-55–68 are Part-II §V-C)
+- Bridge equations specified: 63 (numbered 11-73; Equations 1-10 correspond to the implicit "diagonal" laws of known physics not individually catalogued; BE-51–54 are Part-II §V-B; BE-55–73 are Part-II §V-C)
 - Algorithm pseudocode blocks across all six parts: ~23 (counts include blocks physically relocated to docs/essays/ per G-4, 2026-06-11) (Part-I: 3, Part-III: 6, Part-IV: 3, Part-V: 8, Part-VI: 3; 0 implemented). Earlier drafts stated '11 algorithms', a count that reflected Parts I-III only.
 - Bridge equations with structured `known_issues[]` records: roughly two-thirds of the 40 entries; **the authoritative list is `src/bridges/index.ts`** (filter on non-empty `known_issues[]`); query the index directly rather than a hard-coded list here, which would drift out of date.
-- Bridge equations with no primary-literature citation in the spec body: the original 40 (IDs 11–50; references appear in Status notes only). BE-51–54 cite inside their Status lines. BE-55–68 carry a References list in Part-II §V-C.
+- Bridge equations with no primary-literature citation in the spec body: the original 40 (IDs 11–50; references appear in Status notes only). BE-51–54 cite inside their Status lines. BE-55–73 carry a References list in Part-II §V-C.
 
 The intellectual responsibility for the speculative sections rests with the author, who welcomes correction from qualified reviewers.

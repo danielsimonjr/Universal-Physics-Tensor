@@ -1,8 +1,8 @@
 # Universal Physics Tensor Framework: Complete Formal Specification - Part II
 
-> **Status note:** This document catalogs Bridge Equations 21-68 (BE-21–50 from the original spec catalog; BE-51–54 in §V-B; BE-55–68 in §V-C). Equations span a wide range of physical credibility: some (e.g., Eq 21 AdS/CMT; Eq 26 WKB tunneling; Eq 35 conformal bootstrap; Eqs 55–68) are established results from mainstream physics; others (e.g., Eq 25 consciousness, Eq 42 firewall, Eq 46 multiverse, Eq 50 retrocausal QFT) are highly speculative. Each equation should carry a **Status** line indicating this; where one is missing, treat the equation as unvalidated. Several equations have known issues flagged in their Status notes (Eqs 22, 23, 24, 25, 31, 37, 38, 50). The mathematical formulations reproduced here are drawn from the literature (where cited) or are original proposals; formal citations are being retroactively added — see the Part-VI conclusion for the current citation-completeness status.
+> **Status note:** This document catalogs Bridge Equations 21-73 (BE-21–50 from the original spec catalog; BE-51–54 in §V-B; BE-55–73 in §V-C). Equations span a wide range of physical credibility: some (e.g., Eq 21 AdS/CMT; Eq 26 WKB tunneling; Eq 35 conformal bootstrap; Eqs 55–73) are established results from mainstream physics; others (e.g., Eq 25 consciousness, Eq 42 firewall, Eq 46 multiverse, Eq 50 retrocausal QFT) are highly speculative. Each equation should carry a **Status** line indicating this; where one is missing, treat the equation as unvalidated. Several equations have known issues flagged in their Status notes (Eqs 22, 23, 24, 25, 31, 37, 38, 50). The mathematical formulations reproduced here are drawn from the literature (where cited) or are original proposals; formal citations are being retroactively added — see the Part-VI conclusion for the current citation-completeness status.
 
-> **Spec-scope note (catalog count):** The specification catalogs **58 bridge equations, IDs 11–68** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-68: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–68). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05 and BE-66–68 are written up in §V-C. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **58 entries, IDs 11–68**. Entries 51 and 53–68 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, and prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C. Status distribution across the 58-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 22 established · 33 speculative · 3 highly-speculative · 0 invalid.
+> **Spec-scope note (catalog count):** The specification catalogs **63 bridge equations, IDs 11–73** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-73: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–73). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05, BE-66–68 are written up in §V-C, and BE-69–73 are the PhysJS #57 rows in that same section. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **63 entries, IDs 11–73**. Entries 51 and 53–73 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C, and prose that says "58 equations" / "IDs 11–68" is the record from before BE-69–73. Status distribution across the 63-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 27 established · 33 speculative · 3 highly-speculative · 0 invalid.
 
 ## V. Extended Catalog of Bridging Equations (21-50)
 
@@ -703,7 +703,7 @@ where:
 
 **Rationale**: Exercises the `FriedmannEquationNode` `'brane'` variant slot, giving the catalog a second early-universe high-density correction structurally distinct from LQC (BE-19) and vacuum energy (BE-20).
 
-## V-C. Catalog extensions (BE-55–68)
+## V-C. Catalog extensions (BE-55–73)
 
 > **Provenance.** These eleven rows were added to `BRIDGE_EQUATIONS` on 2026-07-05 as closed-form evaluators, the same pattern as BE-51/52: a catalog entry plus an evaluator, and no AST round-trip. BE-55–58 are the first four. BE-59–62 are the condensed-matter cluster. BE-63–65 are the astrophysics cluster. Each row keeps `source_part: 'III'`. This section is the Bridge Equation heading. The catalog entry remains authoritative for `notes`. A bare `e` in the formulas below is the elementary charge. Euler's number is written `\exp`. §VI.6.1 assigns each of these ids the tensor index of its catalog category. The map is [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). PhysJS at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`, `NOTES.md`, and `docs/planning/Bridge-Gap-Inference.md` still do not state an index; the assignment is this specification applying the category cluster already used for ids 11–50.
 
@@ -1146,6 +1146,150 @@ where:
 
 **Rationale**: Thermal equilibrium in a static gravitational field holds the product `T √(−g_00)` fixed. Units alone do not force that identification.
 
+**Bridge Equation 69: Fast magnetosonic speed (perpendicular, ideal MHD)** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.FastMagnetosonic.speed_eq`](https://github.com/danielsimonjr/PhysJS/blob/3af15b49be09442350510e7c7f56f4aab92ea3bc/PhysJS/FastMagnetosonic.lean) states that a monochromatic compressional polarization perpendicular to a uniform field has phase speed `|ω/k| = √(c_s² + B²/(μ0 ρ))` for `μ0 > 0`, `ρ > 0`, and `k ≠ 0`. `c_s = 0` recovers `B/√(μ0 ρ)`, the Alfvén value of a different polarization. That recovery is not BE-67. `√(c_s² + v_A²)` is not `c_s`, not `v_A`, and not `c_s + v_A` when the other speed is nonzero. The nested theorem `PhysJS.FastMagnetosonic.perpendicular_of_dispersion` is the quartic at `k_∥ = 0` and is not the formalRef. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The linearized equations are hypotheses. The lemma is not a kinetic dispersion relation and not the oblique fast mode.
+
+> **Evaluator:** [`src/bridges/be69-fast-magnetosonic.ts`](../../src/bridges/be69-fast-magnetosonic.ts) (`evaluateFastMagnetosonic`)
+
+- **Status**: Established as the perpendicular fast phase speed. The edge confidence stays `established`. The target is `fast-magnetosonic-speed`, not `alfven-speed`.
+- **Context**: Bridges a fluid sound speed to a plasma wave speed. The bridges tuple is `fluid` → `plasma`, the same tuple as BE-67. The tuple does not identify the two speeds.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Cleft%7C%5Cfrac%7B%5Comega%7D%7Bk%7D%5Cright%7C%20%3D%20%5Csqrt%7Bc_s%5E2%20%2B%20%5Cfrac%7BB%5E2%7D%7B%5Cmu_0%20%5Crho%7D%7D" alt="|\frac{\omega}{k}| = \sqrt{c_s^2 + \frac{B^2}{\mu_0 \rho}}" />
+
+where:
+
+- `|ω/k|` is the phase speed, in metres per second
+- `c_s` is the sound speed. `c_s² = γ p / ρ` is a reading of the closure, not an energy equation
+- `B` is the magnetic flux density and `ρ` is the total mass density
+- `μ0` is `1/(ε0 c²)`, the same product the Alfvén evaluator uses
+
+**Dimensions**: The catalog signature is `[velocity]`. `c_s²` and `B²/(μ0 ρ)` are both squared velocities. The square root is a velocity.
+
+**Domain**: The evaluator requires `c_s ≥ 0`, a finite `B`, and `ρ > 0`. The regime is the perpendicular compressional polarization. The oblique fast mode is out of scope.
+
+**References**:
+
+- The premises are the linearized ideal-MHD equations named in the theorem. They are hypotheses.
+
+**Rationale**: Magnetic pressure and gas pressure add under the square root for this polarization. The Alfvén speed is the `c_s = 0` number of a different polarization.
+
+**Bridge Equation 70: Einstein relation (drift–diffusion)** *(Category H: Non-Equilibrium Statistical Mechanics)*
+
+> **Proof status as of 2026-10-03.** Kind is `bridge`. [`PhysJS.EinsteinRelation.diffusion_eq`](https://github.com/danielsimonjr/PhysJS/blob/3af15b49be09442350510e7c7f56f4aab92ea3bc/PhysJS/EinsteinRelation.lean) states that a nonzero field at which the drift flux `μ n E` cancels the diffusion flux `D dn/dx`, on the Boltzmann profile `n = n_ref exp(−q V/(k_B T))`, gives `D = μ k_B T / q`. Dropping `q` fails when `q ≠ 1`. The force-mobility writing needs `μ_force = μ/q`. Stokes–Einstein and the Fermi-liquid form are different equations. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be70-einstein-relation.ts`](../../src/bridges/be70-einstein-relation.ts) (`evaluateEinsteinRelation`)
+
+- **Status**: Established. The edge confidence stays `established`. `μ` is the electrical mobility.
+- **Context**: Bridges a kinetic mobility to an electromagnetic carrier charge. The bridges tuple is `kinetic` → `electromagnetic`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/D%20%3D%20%5Cfrac%7B%5Cmu%20k_B%20T%7D%7Bq%7D" alt="D = \frac{\mu k_B T}{q}" />
+
+where:
+
+- `D` is the diffusivity, in square metres per second
+- `μ` is the electrical mobility, drift speed per electric field
+- `T` is the absolute temperature and `q` is the carrier charge
+- `k_B` is Boltzmann's constant
+
+**Dimensions**: The catalog signature is `[L^2 T^-1]`. `μ k_B T / q` has that dimension when `μ` is a drift speed per electric field.
+
+**Domain**: The evaluator requires finite `μ`, nonzero `T`, and nonzero `q`. A master equation and a Fermi liquid are outside the statement.
+
+**References**:
+
+- The Boltzmann profile and the flux cancellation are the hypotheses of the theorem.
+
+**Rationale**: Drift and diffusion cancel on that profile only at this diffusivity. The charge in the denominator is part of the equation.
+
+**Bridge Equation 71: Clapeyron slope (coexistence)** *(Category J: Phase Transitions and Criticality)*
+
+> **Proof status as of 2026-10-03.** Kind is `bridge`. [`PhysJS.Clapeyron.slope_eq`](https://github.com/danielsimonjr/PhysJS/blob/3af15b49be09442350510e7c7f56f4aab92ea3bc/PhysJS/Clapeyron.lean) states that where the specific Gibbs energies agree and each phase obeys `dg = −s dT + v dP`, `dP/dT = (s2−s1)/(v2−v1)`. With `L = T (s2−s1)`, `T ≠ 0`, and `Δv ≠ 0`, `dP/dT = L/(T Δv)`. The entropy slope is that companion reading. It is not a second formalRef. Dropping `T` fails when `T ≠ 1`. Replacing `Δv` by one phase volume fails when the other volume is nonzero. The ideal-gas integrated vapor-pressure law is not this slope. The Gibbs differential is a hypothesis, not a Legendre transform. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be71-clapeyron.ts`](../../src/bridges/be71-clapeyron.ts) (`evaluateClapeyron`)
+
+- **Status**: Established. The edge confidence stays `established`. `L` is specific latent heat, joules per kilogram.
+- **Context**: Bridges thermodynamics to a continuum coexistence curve. The bridges tuple is `thermodynamics` → `continuum`. Category J selects the quantum-classical component. The tuple does not.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Cfrac%7B%5Cmathrm%7Bd%7DP%7D%7B%5Cmathrm%7Bd%7DT%7D%20%3D%20%5Cfrac%7BL%7D%7BT%20%5CDelta%20v%7D" alt="\frac{\mathrm{d}P}{\mathrm{d}T} = \frac{L}{T \Delta v}" />
+
+where:
+
+- `dP/dT` is the coexistence slope, in pascals per kelvin
+- `L = T (s2 − s1)` is the specific latent heat
+- `Δv = v2 − v1` is the specific-volume change
+- `T` is the absolute temperature on the coexistence curve
+
+**Dimensions**: The catalog signature is `[L^-1 M T^-2 Theta^-1]`, pressure per temperature. Specific `L` is `[L^2 T^-2]` and specific `Δv` is `[L^3 M^-1]`.
+
+**Domain**: The evaluator requires finite `L`, nonzero `T`, and nonzero `Δv`. The regime is coexistence of two phases that share a specific Gibbs energy.
+
+**References**:
+
+- The Gibbs differential is a hypothesis of the theorem.
+
+**Rationale**: The entropy jump and the volume jump fix the slope. Latent heat is that entropy jump times `T`.
+
+**Bridge Equation 72: Gravitational redshift (static observers)** *(Category I: Emergent Spacetime)*
+
+> **Proof status as of 2026-10-03.** Kind is `bridge`. This is not BE-68. [`PhysJS.GravitationalRedshift.frequency_ratio`](https://github.com/danielsimonjr/PhysJS/blob/3af15b49be09442350510e7c7f56f4aab92ea3bc/PhysJS/GravitationalRedshift.lean) states that two static observers of one coordinate period, with `ν √(−g_00) = 1/Δt` and `g_00 < 0`, have `ν1/ν2 = √(−g2)/√(−g1) = √(g2/g1)`. If the Tolman products also agree, then `T1/T2 = ν1/ν2`. Neither factor is derived from the other. Equal temperatures on `g_00 = −1` and `g_00 = −4` are not a Tolman equilibrium, while the frequency ratio is 2. The nested theorem `PhysJS.GravitationalRedshift.tolman_same_ratio` is not the formalRef. The lemma is not `PhysJS.TolmanEhrenfest.hydrostatic_constant`, not a horizon temperature, and not `PhysJS.HawkingUnruh.dictionary`. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be72-gravitational-redshift.ts`](../../src/bridges/be72-gravitational-redshift.ts) (`evaluateGravitationalRedshift`)
+
+- **Status**: Established. The edge confidence stays `established`. The quantities are `redshift-metric-g00-1`, `redshift-metric-g00-2`, and `gravitational-frequency-ratio`. They are not `metric-g00`, `proper-temperature`, or `tolman-invariant`.
+- **Context**: Bridges a gravitational metric component to a radiation frequency. The bridges tuple is `gravitation` → `radiation`. Category I is the same component as BE-68. That shared component is not a composition.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Cfrac%7B%5Cnu_1%7D%7B%5Cnu_2%7D%20%3D%20%5Csqrt%7B%5Cfrac%7Bg_2%7D%7Bg_1%7D%7D" alt="\frac{\nu_1}{\nu_2} = \sqrt{\frac{g_2}{g_1}}" />
+
+where:
+
+- `ν1/ν2` is the frequency ratio of the two static observers
+- `g1` and `g2` are the static `g_00` components, both negative
+- the equality `√(g2/g1) = √(−g2)/√(−g1)` is the sign hypothesis
+
+**Dimensions**: The catalog signature is `[1]`. Both metric components are dimensionless in this coordinate writing, and so is their ratio.
+
+**Domain**: The evaluator requires both components finite and negative. A chain that treats this ratio as the Tolman invariant is refused: `composeEdges` of this edge with BE-68 has no shared quantity.
+
+**References**:
+
+- `ν √(−g_00) = 1/Δt` is the hypothesis of the theorem.
+
+**Rationale**: One coordinate period fixes the frequency ratio of two static observers. Thermal equilibrium is a further hypothesis, and it is BE-68.
+
+**Bridge Equation 73: Kelvin relation (Peltier–Seebeck)** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-03.** Kind is `bridge`. [`PhysJS.KelvinRelation.peltier_eq`](https://github.com/danielsimonjr/PhysJS/blob/3af15b49be09442350510e7c7f56f4aab92ea3bc/PhysJS/KelvinRelation.lean) states that for the linear fluxes `J_e` and `J_q`, the open-circuit Seebeck coefficient `S = E/∇T` and the isothermal Peltier coefficient `Π = J_q/J_e` satisfy `Π = S T` when `L12 = L21`. That equality is `ThermoelectricOnsager.onsager`, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. The first Thomson relation `μ = T dS/dT` is not this equation, and neither is a measured thermopower. The linear fluxes are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be73-kelvin-peltier.ts`](../../src/bridges/be73-kelvin-peltier.ts) (`evaluateKelvinPeltier`)
+
+- **Status**: Established. The edge confidence stays `established`. Onsager reciprocity is not a numeric input.
+- **Context**: Bridges a thermal gradient to an electrical flux. The bridges tuple is `thermal` → `electrical`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5CPi%20%3D%20S%20T" alt="\Pi = S T" />
+
+where:
+
+- `Π` is the isothermal Peltier coefficient, in volts
+- `S` is the open-circuit Seebeck coefficient, in volts per kelvin
+- `T` is the absolute temperature
+- `L12 = L21` is the structure field, not a third input
+
+**Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1]`, the dimension of voltage. `S` carries an extra inverse temperature, and multiplying by `T` removes it.
+
+**Domain**: The evaluator requires finite `S` and nonzero `T`. The regime is the linear flux laws with the Onsager equality stated.
+
+**References**:
+
+- The linear fluxes are hypotheses of the theorem. The structure field is `ThermoelectricOnsager.onsager`.
+
+**Rationale**: Open-circuit thermopower and isothermal Peltier heat are the same coefficient times `T` when the cross coefficients agree.
+
 
 ## VI. Integration with Universal Physics Tensor
 
@@ -1153,21 +1297,21 @@ These additional equations fill crucial gaps in the tensor structure according t
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–68 take the pattern of their category. No new pattern is introduced.
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–73 take the pattern of their category. No new pattern is introduced.
 
-1. **Quantum-Classical Bridges (11-12, 33-35, 56)**:
+1. **Quantum-Classical Bridges (11-12, 33-35, 56, 71)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
    Categories A and J. The scale pair is named `quantum`, `classical`. The other four indices stay free.
-2. **Information-Geometry Bridges (13-14, 30-32, 42-44, 51-52, 57, 63-65, 68)**:
+2. **Information-Geometry Bridges (13-14, 30-32, 42-44, 51-52, 57, 63-65, 68, 72)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Cbeta%2C%5Ctext%7BPoincar%C3%A9%7D%2C%5Ctext%7Binfo%7D%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\beta,\text{Poincaré},\text{info},\epsilon,\zeta}" />
    Categories B, I, and M. The symmetry slot is Poincaré and the information slot is occupied. Scale and force stay free.
-3. **Emergence Patterns (15-16, 27-29, 48-50, 58)**:
+3. **Emergence Patterns (15-16, 27-29, 48-50, 58, 70)**:
    Higher-rank correlations <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%5Cbeta%5Cgamma%5Cdelta%5Cepsilon%5Czeta%E2%80%A6%7D" alt="\boldsymbol{\Pi}^{\alpha\beta\gamma\delta\epsilon\zeta…}" />
    Categories C, H, and O. The ellipsis is the mark of this cluster (Part I §1.2, the emergent component). A scalar formula in the cluster keeps the ellipsis: BE-27's encoded form is a scalar and is already in this list.
-4. **Field Unification (17-18, 36-41, 53, 66-67)**:
+4. **Field Unification (17-18, 36-41, 53, 66-67, 69)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
    Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
-5. **Scale Transitions (19-26, 54, 55, 59-62)**:
+5. **Scale Transitions (19-26, 54, 55, 59-62, 73)**:
    Off-diagonal elements <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bscale%7D_i%2C%5Ctext%7Bscale%7D_j%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{scale}_i,\text{scale}_j,\gamma,\delta,\epsilon,\zeta}" />
    Categories E, F, and G. The scale pair stays symbolic. The cluster's domains are not one pair: quantum–cosmological, quantum–condensed-matter, condensed-matter–holography, quantum–biological.
 6. **Cosmological Puzzles (45-47)**:
@@ -1195,6 +1339,11 @@ Each bridge equation type maps to specific tensor components. The component is t
 | 66 | D | field-unification, force and symmetry | Category D, with BE-17 and BE-18. Radiation pressure. Signature `[L^-1 M T^-2]`, the pressure signature BE-56 already carries in a different cluster, so the signature does not decide. The bridges tuple is `optics` → `continuum`. The tuple does not select the component. |
 | 67 | D | field-unification, force and symmetry | Category D. Alfvén speed. Signature `[velocity]`. The bridges tuple is `fluid` → `plasma`. A velocity signature does not select a component: BE-36's speed ratio is dimensionless and stays in this cluster for a different reason, and the tuple does not move BE-67. |
 | 68 | I | information-geometry, Poincaré and info | Category I, with BE-57 and BE-63–65. Tolman–Ehrenfest. Signature `[temperature]`, the same signature word as BE-57. The bridges tuple is `gravitation` → `thermodynamics`. The shared component with BE-42 is not a chain. |
+| 69 | D | field-unification, force and symmetry | Category D, with BE-66 and BE-67. Perpendicular fast magnetosonic speed. Signature `[velocity]`, the same signature word as BE-67. The bridges tuple is `fluid` → `plasma`. Sharing that tuple with BE-67 does not identify the two speeds. `c_s = 0` recovers the Alfvén number of a different polarization. |
+| 70 | H | emergence, higher-rank ellipsis | Category H, with BE-27–29 and BE-58. Einstein relation. Signature `[L^2 T^-1]`. The bridges tuple is `kinetic` → `electromagnetic`. The formula is a scalar. The ellipsis stays, as it does for BE-27. |
+| 71 | J | quantum-classical, `quantum`, `classical` | Category J, with BE-33–35. Clapeyron slope. Signature `[L^-1 M T^-2 Theta^-1]`. The bridges tuple is `thermodynamics` → `continuum`. The letter selects the component, as it does for BE-34, whose tuple is not `quantum` → `classical`. |
+| 72 | I | information-geometry, Poincaré and info | Category I, with BE-68. Gravitational frequency ratio. Signature `[1]`. The bridges tuple is `gravitation` → `radiation`. The shared component with BE-68 is not a composition: the frequency ratio is not the Tolman invariant. |
+| 73 | F | scale-transition, `scale_i`, `scale_j` | Category F, with BE-59–62. Kelvin relation. Signature `[L^2 M T^-3 I^-1]`, the voltage signature. BE-59's frequency and this voltage sit in the same cluster because the category letter says so. The bridges tuple is `thermal` → `electrical`. |
 
 **Topology slot left free.** BE-55 and BE-60 name a Chern number, and the BE-55 catalog text says the row populates the Topology axis. In the rank-6 order of Part I §1.1 that axis is the last index, ζ. Group 5 leaves ζ free, as it does for BE-22, whose area law carries a topological constant and is already in category F's list. A per-equation index that pins ζ to a Chern label is not a pattern the lists for ids 11–50 use. It is not introduced here.
 
@@ -1212,7 +1361,7 @@ The bridge equations form a consistency matrix <img src="https://i.upmath.me/svg
 
 #### 6.2.1 Entry-construction recipe — illustrative
 
-> **Why this is needed:** the balance-theoretic check that replaced `det(C) != 0 ∧ λ_k ≥ 0` is well-defined as a structural test (Harary 1953), but it is **operationally empty** without a recipe for assigning the actual `C_ij ∈ {-1, 0, +1}` to the 1653 off-diagonal pairs (58·57/2; 1485 under the 55-entry write-up; 780 under the original 40-bridge catalog). "Mutually reinforcing / independent / contradictory" is not an operational predicate — it requires per-pair physics judgment. The candidate recipe below applies to two worked example pairs and is **illustrative, not authoritative**: full population of the 1653-entry matrix requires the per-pair physics judgment of a domain expert, which is precisely the deep open question the framework is supposed to address.
+> **Why this is needed:** the balance-theoretic check that replaced `det(C) != 0 ∧ λ_k ≥ 0` is well-defined as a structural test (Harary 1953), but it is **operationally empty** without a recipe for assigning the actual `C_ij ∈ {-1, 0, +1}` to the 1953 off-diagonal pairs (63·62/2; 1653 under the 58-entry write-up; 1485 under the 55-entry write-up; 780 under the original 40-bridge catalog). "Mutually reinforcing / independent / contradictory" is not an operational predicate — it requires per-pair physics judgment. The candidate recipe below applies to two worked example pairs and is **illustrative, not authoritative**: full population of the 1953-entry matrix requires the per-pair physics judgment of a domain expert, which is precisely the deep open question the framework is supposed to address.
 
 **Candidate recipe (illustrative).** Given two bridge equations `BE_i` and `BE_j`, assign:
 
@@ -1242,7 +1391,7 @@ The bridge equations form a consistency matrix <img src="https://i.upmath.me/svg
 | Mutual inconsistency? | None known; BE-22 is a special-case-of pattern of BE-14 in low dimension. |
 | **`C_{BE-22, BE-14}` (illustrative)** | **`+1`** (mutually reinforcing — both express the same area-scaling principle in different dimensional regimes). |
 
-**Caveat.** The two worked examples above demonstrate that the recipe can be applied operationally for at least some pairs, but they do not constitute a *proof* that the recipe is well-defined for all 1653 off-diagonal entries (58·57/2 unordered pairs; 1485 under the 55-entry write-up, IDs 11–65; 946 under the 44-entry write-up, IDs 11–54; 780 under the original 40-bridge catalog). In practice, populating the full matrix requires:
+**Caveat.** The two worked examples above demonstrate that the recipe can be applied operationally for at least some pairs, but they do not constitute a *proof* that the recipe is well-defined for all 1953 off-diagonal entries (63·62/2 unordered pairs; 1653 under the 58-entry write-up, IDs 11–68; 1485 under the 55-entry write-up, IDs 11–65; 946 under the 44-entry write-up, IDs 11–54; 780 under the original 40-bridge catalog). In practice, populating the full matrix requires:
 - a per-pair physics judgment (domain expertise; not all pairs admit a clean verdict),
 - a tie-breaking convention for borderline cases (e.g., whether marginal symbol-family overlap counts as `+1` or `0`),
 - and a versioning convention for entries that change as bridge equations themselves are reformulated (e.g., BE-30 `R3 invalid` makes all `C_{30, *}` entries undefined; the matrix must be re-evaluated when canonical forms change).

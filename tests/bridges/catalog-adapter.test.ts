@@ -107,7 +107,7 @@ describe('scanCatalog', () => {
     expect(report.entries).toHaveLength(BRIDGE_EQUATIONS.length);
     // Updated 2026-05-24 (parallel-agent dispatch): 42 → 44 after adding
     // BE-53 (Yang-Mills β) AND BE-54 (Randall-Sundrum).
-    expect(report.entries).toHaveLength(58);
+    expect(report.entries).toHaveLength(63);
   });
 
   it('counts unsubmitted entries as 21 (post-v0.8.0 adjudication)', () => {
@@ -127,7 +127,8 @@ describe('scanCatalog', () => {
     //     information/consciousness, gravity/dark-sector, etc.)
     //   = 21 total unsubmitted.
     const report = scanCatalog(BRIDGE_EQUATIONS);
-    expect(report.unsubmitted).toHaveLength(24);
+    // BE-69..73 tuples are not PhysicalScale, so they join the unsubmitted set: 24 → 29.
+    expect(report.unsubmitted).toHaveLength(29);
   });
 
   it('counts submittable entries as 23 (44 - 21 with at least one PhysicalScale axis)', () => {

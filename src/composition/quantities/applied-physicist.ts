@@ -1,9 +1,13 @@
 /**
- * Quantity nodes for BE-66, BE-67, and BE-68.
+ * Quantity nodes for BE-66 through BE-73.
  *
  * Names are new. `mass-density` is the cosmological node. `temperature`
  * and `hawking-temperature` are the thermal nodes be-42 already uses.
  * Reusing either name would join these edges to a different law.
+ * BE-72 does not reuse `metric-g00` or `proper-temperature`: those are
+ * BE-68, and the frequency ratio is not the Tolman invariant.
+ * BE-69 does not reuse `alfven-speed`: `c_s = 0` recovers that number
+ * for a different polarization.
  *
  * @module composition/quantities/applied-physicist
  */
@@ -100,4 +104,154 @@ export const tolmanInvariantQ: Quantity = {
   symbol: 'T√(−g_00)',
   dim: TEMPERATURE,
   attributes: CLASSICAL_GRAV,
+};
+
+/** Sound speed of the compressional closure. Not `alfven-speed`. */
+export const soundSpeedQ: Quantity = {
+  name: 'sound-speed',
+  symbol: 'c_s',
+  dim: VELOCITY,
+  attributes: CLASSICAL_EM,
+};
+
+/** Perpendicular fast magnetosonic phase speed. Not `alfven-speed`. */
+export const fastMagnetosonicSpeedQ: Quantity = {
+  name: 'fast-magnetosonic-speed',
+  symbol: '|ω/k|',
+  dim: VELOCITY,
+  attributes: CLASSICAL_EM,
+};
+
+const ELECTRICAL_MOBILITY = { L: 0, M: -1, T: 2, I: 1, Theta: 0, N: 0, J: 0 } as const;
+/** Diffusivity [L² T⁻¹]. */
+const DIFFUSIVITY = { L: 2, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 } as const;
+
+/** Electrical mobility, drift speed per electric field. */
+export const electricalMobilityQ: Quantity = {
+  name: 'electrical-mobility',
+  symbol: 'μ',
+  dim: ELECTRICAL_MOBILITY,
+  attributes: CLASSICAL_EM,
+};
+
+/** Temperature in the Einstein relation. Not `temperature` and not `proper-temperature`. */
+export const einsteinTemperatureQ: Quantity = {
+  name: 'einstein-temperature',
+  symbol: 'T',
+  dim: TEMPERATURE,
+  attributes: CLASSICAL_EM,
+};
+
+/** Carrier charge in the Einstein relation. Not the constant `e`. */
+export const carrierChargeQ: Quantity = {
+  name: 'carrier-charge',
+  symbol: 'q',
+  dim: { L: 0, M: 0, T: 1, I: 1, Theta: 0, N: 0, J: 0 },
+  attributes: CLASSICAL_EM,
+};
+
+/** Diffusivity `D = μ k_B T / q`. */
+export const diffusivityQ: Quantity = {
+  name: 'diffusivity',
+  symbol: 'D',
+  dim: DIFFUSIVITY,
+  attributes: CLASSICAL_EM,
+};
+
+const CLASSICAL_PHASE = { scale: 'classical', force: 'emergent' } as const;
+/** Specific latent heat [L² T⁻²] (J/kg). */
+const SPECIFIC_ENERGY = { L: 2, M: 0, T: -2, I: 0, Theta: 0, N: 0, J: 0 } as const;
+/** Specific volume [L³ M⁻¹]. */
+const SPECIFIC_VOLUME = { L: 3, M: -1, T: 0, I: 0, Theta: 0, N: 0, J: 0 } as const;
+/** Pressure per temperature. */
+const CLAPEYRON_SLOPE = { L: -1, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 } as const;
+
+/**
+ * Specific latent heat `L = T (s2 − s1)`, joules per kilogram.
+ * Not `latent-heat`: that node is the energy `Q = m L`.
+ */
+export const latentHeatQ: Quantity = {
+  name: 'specific-latent-heat',
+  symbol: 'L',
+  dim: SPECIFIC_ENERGY,
+  attributes: CLASSICAL_PHASE,
+};
+
+/** Temperature on the coexistence curve. Not `temperature`. */
+export const clapeyronTemperatureQ: Quantity = {
+  name: 'clapeyron-temperature',
+  symbol: 'T',
+  dim: TEMPERATURE,
+  attributes: CLASSICAL_PHASE,
+};
+
+/** Specific-volume change `v2 − v1`. */
+export const specificVolumeChangeQ: Quantity = {
+  name: 'specific-volume-change',
+  symbol: 'Δv',
+  dim: SPECIFIC_VOLUME,
+  attributes: CLASSICAL_PHASE,
+};
+
+/** Clapeyron slope `dP/dT`. */
+export const clapeyronSlopeQ: Quantity = {
+  name: 'clapeyron-slope',
+  symbol: 'dP/dT',
+  dim: CLAPEYRON_SLOPE,
+  attributes: CLASSICAL_PHASE,
+};
+
+/**
+ * Static `g_00` of the first redshift observer. Not `metric-g00`.
+ * Sharing that name would let BE-72 compose into BE-68.
+ */
+export const redshiftMetricG00OneQ: Quantity = {
+  name: 'redshift-metric-g00-1',
+  symbol: 'g_1',
+  dim: DIMENSIONLESS,
+  attributes: CLASSICAL_GRAV,
+};
+
+/** Static `g_00` of the second redshift observer. Not `metric-g00`. */
+export const redshiftMetricG00TwoQ: Quantity = {
+  name: 'redshift-metric-g00-2',
+  symbol: 'g_2',
+  dim: DIMENSIONLESS,
+  attributes: CLASSICAL_GRAV,
+};
+
+/** Frequency ratio `ν1/ν2`. Not `tolman-invariant`. */
+export const gravitationalFrequencyRatioQ: Quantity = {
+  name: 'gravitational-frequency-ratio',
+  symbol: 'ν1/ν2',
+  dim: DIMENSIONLESS,
+  attributes: CLASSICAL_GRAV,
+};
+
+const SEEBECK = { L: 2, M: 1, T: -3, I: -1, Theta: -1, N: 0, J: 0 } as const;
+/** Peltier coefficient, dimension voltage. Not the Josephson `voltage` node. */
+const PELTIER = { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 } as const;
+
+/** Seebeck coefficient, voltage per temperature. */
+export const seebeckCoefficientQ: Quantity = {
+  name: 'seebeck-coefficient',
+  symbol: 'S',
+  dim: SEEBECK,
+  attributes: CLASSICAL_EM,
+};
+
+/** Temperature in the Kelvin relation. Not `temperature`. */
+export const peltierTemperatureQ: Quantity = {
+  name: 'peltier-temperature',
+  symbol: 'T',
+  dim: TEMPERATURE,
+  attributes: CLASSICAL_EM,
+};
+
+/** Isothermal Peltier coefficient `Π = S T`. */
+export const peltierCoefficientQ: Quantity = {
+  name: 'peltier-coefficient',
+  symbol: 'Π',
+  dim: PELTIER,
+  attributes: CLASSICAL_EM,
 };

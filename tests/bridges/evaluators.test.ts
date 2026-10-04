@@ -8,9 +8,9 @@ import { parseUnit } from '../../src/dimensional/units.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
 
 describe('BRIDGE_EVALUATORS', () => {
-  it('covers the 16 closed-form / spacetime bridges (51/52/55..68)', () => {
+  it('covers the closed-form / spacetime bridges (51/52/55..73)', () => {
     expect([...BRIDGE_EVALUATORS.keys()].sort((a, b) => a - b)).toEqual([
-      51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68,
+      51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73,
     ]);
   });
 
@@ -48,6 +48,10 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_kg_per_m3$/, 'kg/m^3'],
       [/_S_per_m$/, 'S/m'],
       [/_ohm_m$/, 'ohm*m'],
+      [/_m2_per_Vs$/, 'm^2/(V·s)'],
+      [/_m3_per_kg$/, 'm^3/kg'],
+      [/_J_per_kg$/, 'J/kg'],
+      [/_V_per_K$/, 'V/K'],
       [/_m_per_s$/, 'm/s'],
       [/_J_per_kg_K$/, 'J/(kg*K)'],
       [/_W_per_m_K$/, 'W/(m*K)'],
@@ -66,6 +70,7 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_volts$/, 'V'],
       [/_yr$/, 'yr'],
       [/_Hz$/, 'Hz'],
+      [/_C$/, 'C'],
       [/_F$/, 'F'],
       [/_s$/, 's'],
     ];
@@ -88,6 +93,9 @@ describe('BRIDGE_EVALUATORS', () => {
       C: 1, d_m: 1e-6, a_m_s2: 9.8, T_K: 300, R_ohm: 1000, V_volts: 1e-3,
       nu: 1 / 3, sigma_S_per_m: 6e7, T_c_K: 1.2, mu_e: 2, rho_kg_per_m3: 3.8e-16, mu: 2.3,
       I_W_per_m2: 1e6, R: 0, theta_rad: 0, B_T: 12e-9, g_00: -0.81,
+      cs_m_per_s: 1e5, mu_m2_per_Vs: 1e-8, q_C: 1.602176634e-19,
+      L_J_per_kg: 2.26e6, delta_v_m3_per_kg: 1.672,
+      g1: -1, g2: -4, S_V_per_K: 2e-4,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

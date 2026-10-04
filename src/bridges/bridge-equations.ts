@@ -85,6 +85,11 @@ import { evaluateJeansMass } from './be65-jeans-mass.js';
 import { evaluateRadiationPressure } from './be66-radiation-pressure.js';
 import { evaluateAlfvenSpeed } from './be67-alfven-speed.js';
 import { evaluateTolmanEhrenfest } from './be68-tolman-ehrenfest.js';
+import { evaluateFastMagnetosonic } from './be69-fast-magnetosonic.js';
+import { evaluateEinsteinRelation } from './be70-einstein-relation.js';
+import { evaluateClapeyron } from './be71-clapeyron.js';
+import { evaluateGravitationalRedshift } from './be72-gravitational-redshift.js';
+import { evaluateKelvinPeltier } from './be73-kelvin-peltier.js';
 
 /**
  * Root-level facade keyed by readable method names. Each value is a re-export of
@@ -156,4 +161,9 @@ export const BridgeEquations = {
   radiationPressure: evaluateRadiationPressure,             // BE-66
   alfvenSpeed: evaluateAlfvenSpeed,                         // BE-67
   tolmanEhrenfest: evaluateTolmanEhrenfest,                 // BE-68
+  fastMagnetosonic: evaluateFastMagnetosonic,               // BE-69
+  einsteinRelation: evaluateEinsteinRelation,               // BE-70
+  clapeyron: evaluateClapeyron,                             // BE-71
+  gravitationalRedshift: evaluateGravitationalRedshift,     // BE-72
+  kelvinPeltier: evaluateKelvinPeltier,                     // BE-73
 } as const;

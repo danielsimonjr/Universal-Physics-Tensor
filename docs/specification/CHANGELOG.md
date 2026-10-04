@@ -1,5 +1,9 @@
 # UPT Specification — Revision History
 
+## PhysJS #57 — BE-69 through BE-73
+
+- Part-II Bridge Equations 69 through 73 are kind `bridge` at pin `3af15b49be09442350510e7c7f56f4aab92ea3bc`. The theorems are `PhysJS.FastMagnetosonic.speed_eq`, `PhysJS.EinsteinRelation.diffusion_eq`, `PhysJS.Clapeyron.slope_eq`, `PhysJS.GravitationalRedshift.frequency_ratio`, and `PhysJS.KelvinRelation.peltier_eq`. Each covers line still begins with derivation-step. The catalog path passes the reference. Nested `perpendicular_of_dispersion` and `tolman_same_ratio` are not the formalRef. There is no entropy-slope key. BE-72 does not compose into BE-68. Living catalog counts now say 63 equations, IDs 11–73. The line below that says 58 equations, IDs 11–68, and that the catalog path does not pass the reference, is the record from before this pin.
+
 ## PhysJS #55 — BE-66, BE-67, and BE-68
 
 - Part-II Bridge Equations 66, 67, and 68 are kind `bridge` at pin `d917fa328039d19c3659f74ea73569effb3ed4fb`. The theorems are `PhysJS.RadiationPressure.pressure_eq`, `PhysJS.AlfvenSpeed.speed_eq`, and `PhysJS.TolmanEhrenfest.hydrostatic_constant`. Each covers line still begins with derivation-step. The catalog path does not pass the reference to deriveEvidence. Edge confidence stays `established`. The 2026-10-03 line below that says none of the three has a `formalRef` is the record from before this pin.

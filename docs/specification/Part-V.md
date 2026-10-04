@@ -505,7 +505,7 @@ where <img src="https://i.upmath.me/svg/f" alt="f" /> is a cutoff function and <
 >
 > **Catalog-framing scope note:** Per Part-I §1.1, `Π` is a labeled multi-index catalog. The consistency matrix `C` is a **derived 58×58 matrix on the discrete index of bridge equations** — it is a relation on catalog cells, not an operation that requires Hilbert-space structure on `Π`. The balance-theoretic check is well-defined as graph combinatorics on the signed-graph view of `C`.
 >
-> **Entry-construction recipe:** see **Part-II §6.2.1** for an illustrative recipe and two worked example pairs (BE-11 vs BE-19 → `0`; BE-22 vs BE-14 → `+1`). The recipe is illustrative, not authoritative; full population of the 1653 off-diagonal entries (58·57/2 unordered pairs; 1485 under the 55-entry write-up, IDs 11–65; 946 under the 44-entry write-up, IDs 11–54) requires per-pair physics judgment that is currently out of scope. The balance-theoretic check is **structurally well-defined but operationally inactive** until a fuller entry-construction recipe is adopted.
+> **Entry-construction recipe:** see **Part-II §6.2.1** for an illustrative recipe and two worked example pairs (BE-11 vs BE-19 → `0`; BE-22 vs BE-14 → `+1`). The recipe is illustrative, not authoritative; full population of the 1953 off-diagonal entries (63·62/2 unordered pairs; 1653 under the 58-entry write-up, IDs 11–68; 1485 under the 55-entry write-up, IDs 11–65; 946 under the 44-entry write-up, IDs 11–54) requires per-pair physics judgment that is currently out of scope. The balance-theoretic check is **structurally well-defined but operationally inactive** until a fuller entry-construction recipe is adopted.
 
 The **Bridge Consistency Matrix** <img src="https://i.upmath.me/svg/%5Cmathbf%7BC%7D" alt="\mathbf{C}" /> is a <img src="https://i.upmath.me/svg/58%20%5Ctimes%2058" alt="58 \times 58" /> matrix indexed by the 58 catalogued bridge equations (11-68) where:
 
@@ -1078,6 +1078,6 @@ This specification (core Parts I-VI, with later supplements in Parts VII-IX) out
 
 **Framework Statistics:**
 - Total size: see authoritative figure in Part-VI §29 "Framework Statistics (honest)" (single source of truth).
-- Bridge equations specified: 58 (numbered 11-68; BE-51–54 are Part-II §V-B; BE-55–68 are Part-II §V-C)
+- Bridge equations specified: 63 (numbered 11-73; BE-51–54 are Part-II §V-B; BE-55–73 are Part-II §V-C)
 - Algorithm pseudocode blocks across all six parts: ~23 (Part-I: 3, Part-III: 6, Part-IV: 3, Part-V: 8, Part-VI: 3; none implemented). Of the formally numbered ones, 12 distinct sections exist (Algorithms 1, 2, 3A, 3B, 4, 5, 6, 7, 8, 9, 10, 11) — the 3A/3B split makes it 12 not 11.
 - Note: Equations 1-10 represent the "diagonal" known laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) that are implicit in L and not catalogued individually.

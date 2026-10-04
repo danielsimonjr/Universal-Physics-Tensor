@@ -56,11 +56,16 @@ export {
   be54Edge,
 } from './edges/catalog-tranche.js';
 
-/** Composition edges for radiation pressure, the Alfvén speed, and Tolman–Ehrenfest. */
+/** Composition edges for the applied-physicist catalog rows, BE-66 through BE-73. */
 export {
   be66Edge,
   be67Edge,
   be68Edge,
+  be69Edge,
+  be70Edge,
+  be71Edge,
+  be72Edge,
+  be73Edge,
   APPLIED_PHYSICIST_EDGES,
 } from './edges/applied-physicist.js';
 

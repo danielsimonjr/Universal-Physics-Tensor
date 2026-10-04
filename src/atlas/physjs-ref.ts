@@ -7,7 +7,7 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `d917fa328039d19c3659f74ea73569effb3ed4fb`.
+ * The commit is PhysJS `main` `3af15b49be09442350510e7c7f56f4aab92ea3bc`.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -16,7 +16,8 @@
  * with `property` or `cross-check`. A nested object (`planeWave`, `oneLoop`,
  * `inversion`, `vacuum`, `corollary`, `friedmann`, `lengthMonomial`,
  * `torsionMonomial`, `coefficientNotFixed`, `unitCoefficient`, `scalingShape`,
- * `everyPower`) is recorded and is not a `formalRef`.
+ * `everyPower`, `perpendicularQuartic`, `tolmanRatio`) is recorded and is not
+ * a `formalRef`.
  *
  * @module atlas/physjs-ref
  */
@@ -24,7 +25,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = 'd917fa328039d19c3659f74ea73569effb3ed4fb';
+export const PHYSJS_COMMIT = '3af15b49be09442350510e7c7f56f4aab92ea3bc';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -67,6 +68,8 @@ const NESTED_FIELDS = [
   'unitCoefficient',
   'scalingShape',
   'everyPower',
+  'perpendicularQuartic',
+  'tolmanRatio',
 ] as const;
 
 type NestedField = (typeof NESTED_FIELDS)[number];
@@ -130,6 +133,10 @@ interface PhysjsEntry {
   readonly scalingShape?: PhysjsNestedStatement;
   /** BE-33. Every real power of the temperature ratio is homogeneous. The exponent is not chosen. Not the reference. */
   readonly everyPower?: PhysjsNestedStatement;
+  /** BE-69. The perpendicular root of the MHD quartic. Not the reference. */
+  readonly perpendicularQuartic?: PhysjsNestedStatement;
+  /** BE-72. Equal Tolman products imply equal ratios. Not the reference, and not BE-68. */
+  readonly tolmanRatio?: PhysjsNestedStatement;
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -162,7 +169,7 @@ function planeWave(namespace: string): PhysjsNestedStatement {
 }
 
 /**
- * The forty-nine entries, in manifest order. A bridge obtains its reference by key
+ * The fifty-four entries, in manifest order. A bridge obtains its reference by key
  * through {@link physjsFormalRef}; it does not name a theorem of its own.
  * A nested object is recorded and is not that reference.
  */
@@ -740,6 +747,70 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
+  {
+    key: "be-69",
+    bridgeId: "be-69",
+    theorem: "PhysJS.FastMagnetosonic.speed_eq",
+    covers:
+      "derivation-step: a monochromatic compressional polarization perpendicular to a uniform field, with ∂b/∂t = −B ∂v/∂x, ∂δρ/∂t = −ρ ∂v/∂x, δp = c_s² δρ, and ρ ∂v/∂t = −∂δp/∂x − (B/μ0) ∂b/∂x, has phase speed |ω/k| = √(c_s² + B²/(μ0 ρ)) for μ0 > 0, ρ > 0, and k ≠ 0. The velocity wave is not identically zero. c_s² = γ p / ρ is a reading of the closure, not an energy equation. The textbook quartic at k_∥ = 0 has roots ω² = 0 and ω² = (c_s² + v_A²) k²; ω = 0 does not solve compressional induction. √(c_s² + v_A²) is not c_s, not v_A, and not c_s + v_A when the other speed is nonzero. c_s = 0 recovers B/√(μ0 ρ), the Alfvén value of a different polarization. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation, and not the oblique fast mode. The linearized equations are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    perpendicularQuartic: {
+      theorem: "PhysJS.FastMagnetosonic.perpendicular_of_dispersion",
+      covers: "derivation-step: if ω⁴ − ω² k² (c_s² + v_A²) + c_s² v_A² k² k_∥² = 0 and k_∥ = 0, then ω² = 0 or ω² = (c_s² + v_A²) k². The quartic is a hypothesis. The compressional polarization selects the second root",
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: "be-70",
+    bridgeId: "be-70",
+    theorem: "PhysJS.EinsteinRelation.diffusion_eq",
+    covers:
+      "derivation-step: for the Boltzmann profile n = n_ref exp(−q V/(k_B T)) with n_ref > 0, k_B T ≠ 0, and q ≠ 0, a nonzero field E = −dV/dx at which the drift flux μ n E cancels the diffusion flux D dn/dx gives D = μ k_B T / q. The force-mobility writing D = μ_force k_B T needs μ_force = μ/q. Dropping q fails when q ≠ 1. The Fermi-liquid form μ E_F / q fails when E_F ≠ k_B T. Stokes–Einstein fails unless μ/q = 1/(6 π η a). A factor C ≠ 1 is not this diffusivity. Not a master equation, and not a Fermi liquid",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-71",
+    bridgeId: "be-71",
+    theorem: "PhysJS.Clapeyron.slope_eq",
+    covers:
+      "derivation-step: where the specific Gibbs energies agree along coexistence and each phase obeys dg = −s dT + v dP, dP/dT = (s2−s1)/(v2−v1). With L = T (s2−s1), T ≠ 0, and Δv ≠ 0, dP/dT = L/(T Δv). Dropping T fails when T ≠ 1. Replacing Δv by one phase volume fails when the other volume is nonzero. A factor C ≠ 1 is not this slope. Not the ideal-gas integrated vapor-pressure law. The Gibbs differential is a hypothesis, not a Legendre transform",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-72",
+    bridgeId: "be-72",
+    theorem: "PhysJS.GravitationalRedshift.frequency_ratio",
+    covers:
+      "derivation-step: two static observers of one coordinate period, with ν √(−g_00) = 1/Δt and g_00 < 0, have ν1/ν2 = √(−g2)/√(−g1) = √(g2/g1). If the Tolman products T √(−g_00) also agree, then T1/T2 = ν1/ν2. Equal temperatures on g_00 = −1 and g_00 = −4 are not a Tolman equilibrium, while the frequency ratio is 2. For g_00 = −(1+2Φ/c²) at c = 1, Φ = 0 and Φ = 4, the exact ratio is neither (Φ2−Φ1)/c² nor 1+(Φ2−Φ1)/c². z = 0 is not Φ/c². Not PhysJS.TolmanEhrenfest.hydrostatic_constant, not a horizon temperature, and not PhysJS.HawkingUnruh.dictionary",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+    tolmanRatio: {
+      theorem: "PhysJS.GravitationalRedshift.tolman_same_ratio",
+      covers: "derivation-step: if T √(−g_00) agrees at two static observers and the frequency ratio equals √(−g2)/√(−g1), then T1/T2 = ν1/ν2. Neither factor is derived from the other",
+      coverage: PHYSJS_COVERAGE,
+      leanProof: 'complete',
+      axioms: PHYSJS_AXIOMS,
+    },
+  },
+  {
+    key: "be-73",
+    bridgeId: "be-73",
+    theorem: "PhysJS.KelvinRelation.peltier_eq",
+    covers:
+      "derivation-step: for J_e = L11 E/T + L12 (−∇T)/T² and J_q = L21 E/T + L22 (−∇T)/T², the open-circuit Seebeck coefficient S = E/∇T and the isothermal Peltier coefficient Π = J_q/J_e satisfy Π = S T when L12 = L21. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. Not the first Thomson relation μ = T dS/dT, and not a measured thermopower. The linear fluxes are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
 ];
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
@@ -804,6 +875,11 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-66',
   'be-67',
   'be-68',
+  'be-69',
+  'be-70',
+  'be-71',
+  'be-72',
+  'be-73',
 ]);
 
 /**

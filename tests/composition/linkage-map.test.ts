@@ -12,9 +12,9 @@ const GRAPH = CATALOG_GRAPH;
 const m = linkageMap(GRAPH);
 
 describe('linkageMap — component structure', () => {
-  it('partitions the 49-edge graph into 29 components (25 isolated)', () => {
-    expect(m.componentCount).toBe(29);
-    expect(m.isolated.length).toBe(25);
+  it('partitions the 54-edge graph into 33 components (28 isolated)', () => {
+    expect(m.componentCount).toBe(33);
+    expect(m.isolated.length).toBe(28);
     expect(m.clusters.reduce((n, c) => n + c.size, 0)).toBe(GRAPH.length);
   });
 
@@ -43,6 +43,15 @@ describe('linkageMap — component structure', () => {
     const fr = m.clusters.find((c) => c.edges.includes('be-19'));
     expect(fr?.size).toBe(2);
     expect(fr?.edges).toEqual(expect.arrayContaining(['be-19', 'be-54']));
+  });
+
+  it('joins Alfvén and the fast mode on the shared field and density, and leaves redshift isolated from Tolman', () => {
+    const mhd = m.clusters.find((c) => c.edges.includes('be-67'));
+    expect(mhd?.size).toBe(2);
+    expect(mhd?.edges).toEqual(expect.arrayContaining(['be-67', 'be-69']));
+    expect(m.isolated).toContain('be-68');
+    expect(m.isolated).toContain('be-72');
+    expect(m.isolated).not.toContain('be-67');
   });
 
   it('joins the integer and fractional Hall edges on hall-conductance', () => {

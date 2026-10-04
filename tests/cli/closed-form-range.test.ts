@@ -17,6 +17,6 @@ describe('formatClosedFormRange', () => {
   });
 
   it('reads the live evaluator registry', () => {
-    expect(closedFormRangeLabel()).toBe('BE-51/52/55..68');
+    expect(closedFormRangeLabel()).toBe('BE-51/52/55..73');
   });
 });

@@ -1,5 +1,5 @@
 /**
- * Composition edges for BE-66, BE-67, and BE-68.
+ * Composition edges for BE-66 through BE-73.
  *
  * Each edge's endpoints state the same scale and force, so `kind` is
  * `law`. The overlay `formalRef` is kind `bridge`, so each id is a
@@ -14,6 +14,11 @@
 import { evaluateRadiationPressure } from '../../bridges/be66-radiation-pressure.js';
 import { evaluateAlfvenSpeed } from '../../bridges/be67-alfven-speed.js';
 import { evaluateTolmanEhrenfest } from '../../bridges/be68-tolman-ehrenfest.js';
+import { evaluateFastMagnetosonic } from '../../bridges/be69-fast-magnetosonic.js';
+import { evaluateEinsteinRelation } from '../../bridges/be70-einstein-relation.js';
+import { evaluateClapeyron } from '../../bridges/be71-clapeyron.js';
+import { evaluateGravitationalRedshift } from '../../bridges/be72-gravitational-redshift.js';
+import { evaluateKelvinPeltier } from '../../bridges/be73-kelvin-peltier.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import { DIMENSIONLESS } from '../../dimensional/types.js';
 import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
@@ -30,6 +35,22 @@ import {
   radiationPressureQ,
   reflectanceQ,
   tolmanInvariantQ,
+  soundSpeedQ,
+  fastMagnetosonicSpeedQ,
+  electricalMobilityQ,
+  einsteinTemperatureQ,
+  carrierChargeQ,
+  diffusivityQ,
+  latentHeatQ,
+  clapeyronTemperatureQ,
+  specificVolumeChangeQ,
+  clapeyronSlopeQ,
+  redshiftMetricG00OneQ,
+  redshiftMetricG00TwoQ,
+  gravitationalFrequencyRatioQ,
+  seebeckCoefficientQ,
+  peltierTemperatureQ,
+  peltierCoefficientQ,
 } from '../quantities.js';
 
 const finite = Number.isFinite;
@@ -177,5 +198,232 @@ export const be68Edge: BridgeEdge = {
     'Tolman & Ehrenfest 1930 Phys. Rev. 36:1791 (T0 √g_44). Catalog form T √(−g_00).',
 };
 
-/** The three applied-physicist edges, in catalog-id order. @public */
-export const APPLIED_PHYSICIST_EDGES: readonly BridgeEdge[] = [be66Edge, be67Edge, be68Edge];
+/** |ω/k| = √(c_s² + B²/(μ0 ρ)), with μ0 = 1/(ε0 c²). */
+const BE69_SYMBOLIC: ExprNode = pow(
+  plus(
+    pow(qsym(soundSpeedQ), lit(2)),
+    ratio(
+      pow(qsym(magneticFluxDensityQ), lit(2)),
+      prod(ratio(lit(1), prod(csym('epsilon_0'), pow(csym('c'), lit(2)))), qsym(plasmaMassDensityQ)),
+    ),
+  ),
+  lit(0.5),
+);
+
+/** D = μ k_B T / q. */
+const BE70_SYMBOLIC: ExprNode = ratio(
+  prod(qsym(electricalMobilityQ), csym('k_B'), qsym(einsteinTemperatureQ)),
+  qsym(carrierChargeQ),
+);
+
+/** dP/dT = L / (T Δv). */
+const BE71_SYMBOLIC: ExprNode = ratio(
+  qsym(latentHeatQ),
+  prod(qsym(clapeyronTemperatureQ), qsym(specificVolumeChangeQ)),
+);
+
+/** ν1/ν2 = √(g2/g1). Both components are negative, so the ratio is positive. */
+const BE72_SYMBOLIC: ExprNode = pow(ratio(qsym(redshiftMetricG00TwoQ), qsym(redshiftMetricG00OneQ)), lit(0.5));
+
+/** Π = S T. Onsager reciprocity is not a leaf. */
+const BE73_SYMBOLIC: ExprNode = prod(qsym(seebeckCoefficientQ), qsym(peltierTemperatureQ));
+
+/**
+ * BE-69 fast magnetosonic speed:
+ * (sound-speed, magnetic-flux-density, plasma-mass-density) →
+ * fast-magnetosonic-speed. `c_s = 0` recovers the Alfvén number and
+ * does not identify this target with `alfven-speed`.
+ *
+ * @public
+ */
+export const be69Edge: BridgeEdge = {
+  id: 'be-69',
+  beId: 69,
+  kind: 'law',
+  label: 'Fast magnetosonic speed |ω/k| = √(c_s² + B²/(μ0 ρ))',
+  sources: [soundSpeedQ, magneticFluxDensityQ, plasmaMassDensityQ],
+  aliases: {
+    'sound-speed': ['cs_m_per_s', 'c_s'],
+    'magnetic-flux-density': ['B_T'],
+    'plasma-mass-density': ['rho_kg_per_m3'],
+  },
+  target: fastMagnetosonicSpeedQ,
+  confidence: 'established',
+  domain: {
+    description: 'c_s ≥ 0, B finite, ρ > 0',
+    predicate: (i) =>
+      finite(i['sound-speed']) &&
+      i['sound-speed'] >= 0 &&
+      finite(i['magnetic-flux-density']) &&
+      finite(i['plasma-mass-density']) &&
+      i['plasma-mass-density'] > 0,
+  },
+  evaluate: (i) =>
+    evaluateFastMagnetosonic({
+      cs_m_per_s: i['sound-speed'],
+      B_T: i['magnetic-flux-density'],
+      rho_kg_per_m3: i['plasma-mass-density'],
+    }).v_m_per_s,
+  symbolic: BE69_SYMBOLIC,
+  citation:
+    'PhysJS.FastMagnetosonic.speed_eq. Perpendicular compressional phase speed. c_s = 0 is the Alfvén number of a different polarization.',
+};
+
+/**
+ * BE-70 Einstein relation: (electrical-mobility, einstein-temperature,
+ * carrier-charge) → diffusivity, `D = μ k_B T / q`.
+ *
+ * @public
+ */
+export const be70Edge: BridgeEdge = {
+  id: 'be-70',
+  beId: 70,
+  kind: 'law',
+  label: 'Einstein relation D = μ k_B T / q',
+  sources: [electricalMobilityQ, einsteinTemperatureQ, carrierChargeQ],
+  aliases: {
+    'electrical-mobility': ['mu_m2_per_Vs'],
+    'einstein-temperature': ['T_K'],
+    'carrier-charge': ['q_C'],
+  },
+  target: diffusivityQ,
+  confidence: 'established',
+  domain: {
+    description: 'μ finite, T ≠ 0, q ≠ 0',
+    predicate: (i) =>
+      finite(i['electrical-mobility']) &&
+      finite(i['einstein-temperature']) &&
+      i['einstein-temperature'] !== 0 &&
+      finite(i['carrier-charge']) &&
+      i['carrier-charge'] !== 0,
+  },
+  evaluate: (i) =>
+    evaluateEinsteinRelation({
+      mu_m2_per_Vs: i['electrical-mobility'],
+      T_K: i['einstein-temperature'],
+      q_C: i['carrier-charge'],
+    }).D_m2_per_s,
+  symbolic: BE70_SYMBOLIC,
+  citation: 'PhysJS.EinsteinRelation.diffusion_eq. Drift cancels diffusion on a Boltzmann profile.',
+};
+
+/**
+ * BE-71 Clapeyron slope: (specific-latent-heat, clapeyron-temperature,
+ * specific-volume-change) → clapeyron-slope, `dP/dT = L/(T Δv)`.
+ *
+ * @public
+ */
+export const be71Edge: BridgeEdge = {
+  id: 'be-71',
+  beId: 71,
+  kind: 'law',
+  label: 'Clapeyron slope dP/dT = L/(T Δv)',
+  sources: [latentHeatQ, clapeyronTemperatureQ, specificVolumeChangeQ],
+  aliases: {
+    'specific-latent-heat': ['L_J_per_kg'],
+    'clapeyron-temperature': ['T_K'],
+    'specific-volume-change': ['delta_v_m3_per_kg'],
+  },
+  target: clapeyronSlopeQ,
+  confidence: 'established',
+  domain: {
+    description: 'L finite, T ≠ 0, Δv ≠ 0',
+    predicate: (i) =>
+      finite(i['specific-latent-heat']) &&
+      finite(i['clapeyron-temperature']) &&
+      i['clapeyron-temperature'] !== 0 &&
+      finite(i['specific-volume-change']) &&
+      i['specific-volume-change'] !== 0,
+  },
+  evaluate: (i) =>
+    evaluateClapeyron({
+      L_J_per_kg: i['specific-latent-heat'],
+      T_K: i['clapeyron-temperature'],
+      delta_v_m3_per_kg: i['specific-volume-change'],
+    }).slope_Pa_per_K,
+  symbolic: BE71_SYMBOLIC,
+  citation: 'PhysJS.Clapeyron.slope_eq. L = T (s2−s1) is already substituted. The entropy slope is not a second edge.',
+};
+
+/**
+ * BE-72 gravitational redshift: (redshift-metric-g00-1,
+ * redshift-metric-g00-2) → gravitational-frequency-ratio,
+ * `ν1/ν2 = √(g2/g1)`. The quantities are not BE-68's, so this edge
+ * does not compose into the Tolman invariant.
+ *
+ * @public
+ */
+export const be72Edge: BridgeEdge = {
+  id: 'be-72',
+  beId: 72,
+  kind: 'law',
+  label: 'Gravitational redshift ν1/ν2 = √(g2/g1)',
+  sources: [redshiftMetricG00OneQ, redshiftMetricG00TwoQ],
+  aliases: {
+    'redshift-metric-g00-1': ['g1'],
+    'redshift-metric-g00-2': ['g2'],
+  },
+  target: gravitationalFrequencyRatioQ,
+  confidence: 'established',
+  domain: {
+    description: 'both static g_00 components are finite and negative',
+    predicate: (i) =>
+      finite(i['redshift-metric-g00-1']) &&
+      i['redshift-metric-g00-1'] < 0 &&
+      finite(i['redshift-metric-g00-2']) &&
+      i['redshift-metric-g00-2'] < 0,
+  },
+  evaluate: (i) =>
+    evaluateGravitationalRedshift({
+      g1: i['redshift-metric-g00-1'],
+      g2: i['redshift-metric-g00-2'],
+    }).frequency_ratio,
+  symbolic: BE72_SYMBOLIC,
+  citation:
+    'PhysJS.GravitationalRedshift.frequency_ratio. Not PhysJS.TolmanEhrenfest.hydrostatic_constant. tolman_same_ratio is nested and is not this edge.',
+};
+
+/**
+ * BE-73 Kelvin relation: (seebeck-coefficient, peltier-temperature) →
+ * peltier-coefficient, `Π = S T`. Onsager reciprocity is the structure
+ * field in the theorem, not a source.
+ *
+ * @public
+ */
+export const be73Edge: BridgeEdge = {
+  id: 'be-73',
+  beId: 73,
+  kind: 'law',
+  label: 'Kelvin relation Π = S T',
+  sources: [seebeckCoefficientQ, peltierTemperatureQ],
+  aliases: {
+    'seebeck-coefficient': ['S_V_per_K'],
+    'peltier-temperature': ['T_K'],
+  },
+  target: peltierCoefficientQ,
+  confidence: 'established',
+  domain: {
+    description: 'S finite and T ≠ 0',
+    predicate: (i) => finite(i['seebeck-coefficient']) && finite(i['peltier-temperature']) && i['peltier-temperature'] !== 0,
+  },
+  evaluate: (i) =>
+    evaluateKelvinPeltier({
+      S_V_per_K: i['seebeck-coefficient'],
+      T_K: i['peltier-temperature'],
+    }).Pi_V,
+  symbolic: BE73_SYMBOLIC,
+  citation:
+    'PhysJS.KelvinRelation.peltier_eq. L12 = L21 is ThermoelectricOnsager.onsager, a structure field, not an axiom and not an input.',
+};
+
+/** The applied-physicist edges, in catalog-id order. @public */
+export const APPLIED_PHYSICIST_EDGES: readonly BridgeEdge[] = [
+  be66Edge,
+  be67Edge,
+  be68Edge,
+  be69Edge,
+  be70Edge,
+  be71Edge,
+  be72Edge,
+  be73Edge,
+];

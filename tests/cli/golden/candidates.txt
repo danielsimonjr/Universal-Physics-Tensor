@@ -1,10 +1,10 @@
 
-Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (58-bridge)]
-  anchored core: the clusters holding at least one of the 17 established-confidence edge(s) of the 49 in this graph
+Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (63-bridge)]
+  anchored core: the clusters holding at least one of the 22 established-confidence edge(s) of the 54 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  166 total  →  132 touch the anchored core  →  45 also same-kind
+  funnel:  191 total  →  157 touch the anchored core  →  65 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     active-noise-energy ≟ inflation-hubble-energy            [energy]
@@ -16,6 +16,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     carrier-density ≟ neutron-density                        [density]
     carrier-density ≟ nucleon-yield-density                  [density]
     carrier-density ≟ proton-density                         [density]
+    clapeyron-temperature ≟ peltier-temperature              [temperature]
     coarsening-length ≟ quantum-correlation-length           [length]
     coarsening-length ≟ reference-correlation-length         [length]
     critical-density ≟ plasma-mass-density                   [density]
@@ -28,9 +29,16 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     effective-mass ≟ reference-mass                          [mass]
     effective-mass ≟ swampland-tower-mass                    [mass]
     effective-mass ≟ tunneling-mass                          [mass]
+    effective-temperature ≟ clapeyron-temperature            [temperature]
+    effective-temperature ≟ einstein-temperature             [temperature]
+    effective-temperature ≟ peltier-temperature              [temperature]
     effective-temperature ≟ proper-temperature               [temperature]
+    einstein-temperature ≟ clapeyron-temperature             [temperature]
+    einstein-temperature ≟ peltier-temperature               [temperature]
     far-radius ≟ foerster-radius                             [radius]
     gravitational-wave-speed ≟ alfven-speed                  [speed]
+    gravitational-wave-speed ≟ fast-magnetosonic-speed       [speed]
+    gravitational-wave-speed ≟ sound-speed                   [speed]
     grw-localization-rate ≟ hubble-rate                      [rate]
     grw-localization-rate ≟ mutation-rate                    [rate]
     lambda-mass-density ≟ plasma-mass-density                [mass]
@@ -44,11 +52,23 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     near-radius ≟ foerster-radius                            [radius]
     planck-length ≟ quantum-correlation-length               [length]
     planck-length ≟ reference-correlation-length             [length]
+    proper-temperature ≟ clapeyron-temperature               [temperature]
+    proper-temperature ≟ einstein-temperature                [temperature]
+    proper-temperature ≟ peltier-temperature                 [temperature]
+    reference-temperature ≟ clapeyron-temperature            [temperature]
+    reference-temperature ≟ einstein-temperature             [temperature]
+    reference-temperature ≟ peltier-temperature              [temperature]
     reference-temperature ≟ proper-temperature               [temperature]
+    reheating-temperature ≟ clapeyron-temperature            [temperature]
+    reheating-temperature ≟ einstein-temperature             [temperature]
+    reheating-temperature ≟ peltier-temperature              [temperature]
     reheating-temperature ≟ proper-temperature               [temperature]
     relaxation-rate ≟ hubble-rate                            [rate]
     relaxation-rate ≟ mutation-rate                          [rate]
     schwarzschild-radius ≟ foerster-radius                   [radius]
+    temperature ≟ clapeyron-temperature                      [temperature]
+    temperature ≟ einstein-temperature                       [temperature]
+    temperature ≟ peltier-temperature                        [temperature]
     temperature ≟ proper-temperature                         [temperature]
     time ≟ microscopic-relaxation-time                       [time]
     tunneling-mass ≟ defect-rest-mass                        [mass]

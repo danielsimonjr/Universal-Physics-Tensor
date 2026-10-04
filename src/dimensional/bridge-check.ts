@@ -171,12 +171,17 @@ export const EXPECTED_DIMENSION_BY_BRIDGE: ReadonlyMap<number, Dimension> = new 
   [66, PRESSURE], // BE-66 radiation pressure P_n = (I/c)(1+R) cos²θ.
   [67, VELOCITY], // BE-67 Alfvén speed v_A = B / √(μ0 ρ).
   [68, TEMPERATURE], // BE-68 Tolman–Ehrenfest invariant T √(−g_00).
+  [69, VELOCITY], // BE-69 perpendicular fast magnetosonic speed √(c_s² + B²/(μ0 ρ)).
+  [70, { L: 2, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 }], // BE-70 Einstein diffusivity D = μ k_B T / q.
+  [71, { L: -1, M: 1, T: -2, I: 0, Theta: -1, N: 0, J: 0 }], // BE-71 Clapeyron slope dP/dT = L/(T Δv).
+  [72, DIMENSIONLESS], // BE-72 gravitational frequency ratio ν1/ν2 = √(g2/g1).
+  [73, { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 }], // BE-73 Peltier coefficient Π = S T.
 ]);
 
 /**
  * Infer the SI dimensional signature of a bridge equation expression.
  *
- * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..68). If present
+ * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..73). If present
  *                  in `EXPECTED_DIMENSION_BY_BRIDGE` the inferred dim
  *                  is cross-checked against the expected; mismatch =>
  *                  null. If absent, the inferred dim is returned as-is.
