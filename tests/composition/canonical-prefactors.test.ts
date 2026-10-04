@@ -40,6 +40,13 @@ const EXPECTED: Record<string, number> = {
   'CE-larmor-power': 1 / (6 * Math.PI),
   'CE-field-energy-density': 0.5,
   'CE-compton-wavelength': 1,
+  'CE-dynamic-pressure': 0.5,
+  'CE-laplace-pressure': 2,
+  'CE-inductor-energy': 0.5,
+  'CE-equipartition': 1.5,
+  'CE-kinetic-pressure': 1 / 3,
+  'CE-half-life': Math.log(2),
+  'CE-thomson-cross-section': (8 * Math.PI) / 3,
 };
 
 /** A dimensionless number used as a FACTOR (not as an exponent) anywhere in the AST. */

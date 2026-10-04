@@ -31,12 +31,13 @@
  *     sources, times the baked constant factor. A fully-quantitative scalar
  *     AST that restates a catalog bridge, and whose extra factors are a closed
  *     dimensionless coefficient (ln 2, …), multiplies that coefficient in, so
- *     the number matches the catalog evaluator of the same law. Every other
- *     entry still takes the leading factor as 1: the discovery surface is
- *     correct up to an O(1) factor, and a G-closure is not given a second
- *     constant here. An entry with no such coefficient — no AST, no
- *     restatement, a sum, an unresolved stub, or only `scalar-up-to-constant`
- *     — is that case. Where dimensions cannot pin a monomial
+ *     the number matches the catalog evaluator of the same law. A sourced
+ *     prefactor from `canonicalPrefactor` multiplies as well. That table is
+ *     outside this tree. `scalar-up-to-constant` is not a license to drop ½,
+ *     2π, or 6π. An entry with no table row and no recorded coefficient — no
+ *     AST, no restatement, a sum, an unresolved stub — still takes the leading
+ *     factor as 1. A G-closure is not given a second constant here. Where
+ *     dimensions cannot pin a monomial
  *     (`monomial: null`, e.g. Newton's two same-dim masses), the edge carries a
  *     NaN evaluator; `retrodict` accepts only finite derivations, so it
  *     abstains cleanly rather than polluting the consistency check.
@@ -59,6 +60,7 @@ import type { InformationMeasure } from '../core/types.js';
 import { CHARGE, DIMENSIONLESS, MASS } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
+import { canonicalPrefactor } from './canonical-prefactors.js';
 
 /** A universal constant a canonical `governing` list may name: SI value + dim. */
 interface ConstantDef {
@@ -214,8 +216,9 @@ function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undef
  * Build the evaluator for one canonical equation, keyed by its VARIABLE source
  * names. Variables carry the monomial exponent from `inputs`; constants
  * contribute a fixed baked factor. A fully-quantitative restatement multiplies
- * its recorded dimensionless coefficient. Returns NaN when the monomial is null
- * (dimensions underdetermine the form) — `retrodict` then abstains.
+ * its recorded dimensionless coefficient and the sourced table prefactor.
+ * Returns NaN when the monomial is null (dimensions underdetermine the form)
+ * — `retrodict` then abstains.
  */
 function makeEvaluate(
   eq: CanonicalEquation,
@@ -232,8 +235,9 @@ function makeEvaluate(
     else varExps.push([name, exp]);
   }
   const recorded = recordedDimensionlessCoefficient(eq) ?? 1;
+  const tabled = canonicalPrefactor(eq.id) ?? 1;
   return (inputs: Record<string, number>): number => {
-    let v = constFactor * recorded;
+    let v = constFactor * recorded * tabled;
     for (const [name, exp] of varExps) v *= Math.pow(inputs[name], exp);
     return v;
   };

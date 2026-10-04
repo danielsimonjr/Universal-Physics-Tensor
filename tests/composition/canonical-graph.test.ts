@@ -96,8 +96,8 @@ describe('canonicalToEdges — adapter contract', () => {
     const e = byId('CE-schwarzschild-radius');
     expect(e.sources.map((s) => s.name)).toEqual(['mass']);
     expect(e.target.name).toBe('radius');
-    // monomial r ∝ G·M·c⁻²; leading dimensionless constant unknown ⇒ taken as 1.
-    const expected = (G_SI * M_SUN_KG) / C_SI ** 2;
+    // monomial r ∝ G·M·c⁻², times the sourced factor 2.
+    const expected = (2 * G_SI * M_SUN_KG) / C_SI ** 2;
     expect(e.evaluate({ mass: M_SUN_KG })).toBeCloseTo(expected, 6);
   });
 

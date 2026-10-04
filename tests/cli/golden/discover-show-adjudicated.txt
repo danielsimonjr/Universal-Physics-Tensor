@@ -436,9 +436,9 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
     planck-length ≟ classical-electron-radius            ~21.3 orders apart  (anchor-derived)
     planck-length ≟ compton-wavelength                   ~23.2 orders apart
     planck-length ≟ compton-wavelength-full              ~37.2 orders apart  (anchor-derived)
-    radius ≟ bohr-radius                                 ~13.4 orders apart  (anchor-derived)
-    radius ≟ classical-electron-radius                   ~16.6 orders apart  (anchor-derived)
-    radius ≟ planck-length                               ~38.0 orders apart  (anchor-derived)
+    radius ≟ bohr-radius                                 ~13.7 orders apart  (anchor-derived)
+    radius ≟ classical-electron-radius                   ~16.9 orders apart  (anchor-derived)
+    radius ≟ planck-length                               ~38.3 orders apart  (anchor-derived)
     rest-energy ≟ rydberg-energy                         ~62.4 orders apart  (anchor-derived)
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):

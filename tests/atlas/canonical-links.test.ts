@@ -663,7 +663,7 @@ describe('controls: the check fails on a wrong link', () => {
     expect(checkLink({ ...damped, samples: damped.samples.map((s) => ({ ...s, b: 0 })) })).toMatchObject({ ok: true });
   });
 
-  it('an entry with no sourced prefactor cannot be checked: model-lc → CE-inductor-energy', () => {
+  it('model-lc → CE-inductor-energy is the work to charge, which is ½ L I²', () => {
     const inductive: LinkCheck = {
       model: 'model-lc',
       canonical: 'CE-inductor-energy',
@@ -683,7 +683,19 @@ describe('controls: the check fails on a wrong link', () => {
       samples: [{ L: 1, C: 1, q0: 1 }],
       tolerance: 1e-6,
     };
-    expect(checkLink(inductive)).toMatchObject({ ok: false, reason: expect.stringMatching(/no sourced prefactor/) });
+    expect(checkLink(inductive)).toMatchObject({ ok: true });
+    const withoutTheHalf: LinkCheck = {
+      ...inductive,
+      bindings: {
+        ...inductive.bindings,
+        energy: {
+          observable: 'energy',
+          quantity: 'twice the work to charge, which drops the ½',
+          measure: (p) => simpson((s) => (2 * s) / p['C']!, 0, p['q0']!),
+        },
+      },
+    };
+    expect(checkLink(withoutTheHalf)).toMatchObject({ ok: false, reason: expect.stringMatching(/relative error .* exceeds/) });
   });
 
   it('a group prefactor with no group bound is refused, and so is a group that is not a dimensionless input', () => {

@@ -4872,6 +4872,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, MASS` | Import |
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `./canonical-prefactors.js` | `canonicalPrefactor` | Import |
 
 **Exports:**
 - Functions: `canonicalToEdges`
@@ -8608,7 +8609,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 453 |
 | Total Modules | 13 |
-| Total Lines of Code | 96469 |
+| Total Lines of Code | 96533 |
 | Total Exports | 3344 |
 | Total Re-exports | 1609 |
 | Total Classes | 60 |

@@ -20,6 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] The canonical graph evaluator ignores sourced dimensionless prefactors.
+  Done: explain of Stokes drag recovers `1.88495559215388e-12`. Dynamic pressure recovers `2000`. Laplace pressure recovers `144`. Field energy stays a decoy. Stokes–Einstein stays derived at `1/(6π)`.
 - [x] Search does not index domain regime registrations.
   Done: `upt search piezoelectric` and `upt search piezo` name `upt regime piezoelectricity`. Plasma and Tolman do too. The line says the registration is vacuous when it states no inequality. A miss names the regime registry.
 - [x] The {ℏ, c, e} closure of μ0 through α is tagged empirical.

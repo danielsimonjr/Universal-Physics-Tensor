@@ -11301,6 +11301,9 @@ modules:
           imports:
             - ExprNode
           typeOnly: true
+        - file: ./canonical-prefactors.js
+          imports:
+            - canonicalPrefactor
       exports:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
@@ -22349,7 +22352,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 453
   totalModules: 13
-  totalLinesOfCode: 96469
+  totalLinesOfCode: 96533
   totalExports: 3344
   totalClasses: 60
   totalInterfaces: 529
