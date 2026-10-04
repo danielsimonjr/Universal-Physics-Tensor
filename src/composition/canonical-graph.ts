@@ -53,6 +53,7 @@ import type { BridgeEdge, ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
+import { assertCarrierProductSign } from '../bridges/carrier-sign.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { E_SI, M_E_SI } from '../core/constants.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -237,6 +238,7 @@ function makeEvaluate(
   const recorded = recordedDimensionlessCoefficient(eq) ?? 1;
   const tabled = canonicalPrefactor(eq.id) ?? 1;
   return (inputs: Record<string, number>): number => {
+    assertCarrierProductSign(monomial, inputs);
     let v = constFactor * recorded * tabled;
     for (const [name, exp] of varExps) v *= Math.pow(inputs[name], exp);
     return v;

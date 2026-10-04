@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "4.0.0",
-    "totalFiles": 453,
+    "totalFiles": 454,
     "totalModules": 13,
-    "totalExports": 3344
+    "totalExports": 3350
   },
   "entryPoints": [
     {
@@ -5640,6 +5640,12 @@
             "imports": [
               "K_B_SI"
             ]
+          },
+          {
+            "file": "./carrier-sign.js",
+            "imports": [
+              "assertSameCarrierSign"
+            ]
           }
         ],
         "exports": [
@@ -6471,6 +6477,26 @@
         ],
         "constants": [
           "BridgeEquations"
+        ]
+      },
+      "src/bridges/carrier-sign.ts": {
+        "description": "One sign rule for a positive transport coefficient built from a carrier",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "sameCarrierSign",
+          "assertSameCarrierSign",
+          "assertCarrierProductSign",
+          "CarrierSignError"
+        ],
+        "classes": [
+          "CarrierSignError"
+        ],
+        "functions": [
+          "sameCarrierSign",
+          "assertSameCarrierSign",
+          "assertCarrierProductSign"
         ]
       },
       "src/bridges/catalog-adapter.ts": {
@@ -9711,6 +9737,13 @@
             "reExport": true
           },
           {
+            "file": "./carrier-sign.js",
+            "imports": [
+              "CarrierSignError"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./be71-clapeyron.js",
             "imports": [
               "evaluateClapeyron",
@@ -9928,6 +9961,7 @@
           "evaluateEinsteinRelation",
           "type EinsteinRelationInputs",
           "type EinsteinRelationResult",
+          "CarrierSignError",
           "evaluateClapeyron",
           "type ClapeyronInputs",
           "type ClapeyronResult",
@@ -10050,6 +10084,7 @@
           "evaluateEinsteinRelation",
           "type EinsteinRelationInputs",
           "type EinsteinRelationResult",
+          "CarrierSignError",
           "evaluateClapeyron",
           "type ClapeyronInputs",
           "type ClapeyronResult",
@@ -13210,6 +13245,12 @@
             "file": "../output.js",
             "imports": [
               "emitJson"
+            ]
+          },
+          {
+            "file": "../../bridges/carrier-sign.js",
+            "imports": [
+              "CarrierSignError"
             ]
           },
           {
@@ -16795,6 +16836,12 @@
             ]
           },
           {
+            "file": "../bridges/carrier-sign.js",
+            "imports": [
+              "assertCarrierProductSign"
+            ]
+          },
+          {
             "file": "../dimensional/symbolic-constants.js",
             "imports": [
               "CONSTANTS",
@@ -17908,6 +17955,12 @@
             "file": "../../bridges/be82-shockley-diode.js",
             "imports": [
               "evaluateShockleyDiode"
+            ]
+          },
+          {
+            "file": "../../bridges/carrier-sign.js",
+            "imports": [
+              "sameCarrierSign"
             ]
           },
           {
@@ -23420,6 +23473,12 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../bridges/carrier-sign.js",
+            "imports": [
+              "CarrierSignError"
+            ]
+          },
+          {
             "file": "./edge.js",
             "imports": [
               "BridgeEdge"
@@ -26520,6 +26579,7 @@
               "evaluateEinsteinRelation",
               "type EinsteinRelationInputs",
               "type EinsteinRelationResult",
+              "CarrierSignError",
               "evaluateClapeyron",
               "type ClapeyronInputs",
               "type ClapeyronResult",
@@ -27970,6 +28030,7 @@
           "evaluateEinsteinRelation",
           "type EinsteinRelationInputs",
           "type EinsteinRelationResult",
+          "CarrierSignError",
           "evaluateClapeyron",
           "type ClapeyronInputs",
           "type ClapeyronResult",
@@ -28643,6 +28704,7 @@
           "evaluateEinsteinRelation",
           "type EinsteinRelationInputs",
           "type EinsteinRelationResult",
+          "CarrierSignError",
           "evaluateClapeyron",
           "type ClapeyronInputs",
           "type ClapeyronResult",
@@ -31528,6 +31590,7 @@
           "src/bridges/be86-reynolds-analogy.ts",
           "src/bridges/be87-capacitor-noise.ts",
           "src/bridges/bridge-equations.ts",
+          "src/bridges/carrier-sign.ts",
           "src/bridges/catalog-adapter.ts",
           "src/bridges/confrontation-coverage.ts",
           "src/bridges/confrontations.ts",
@@ -31917,17 +31980,17 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 453,
+    "totalTypeScriptFiles": 454,
     "totalModules": 13,
-    "totalLinesOfCode": 96533,
-    "totalExports": 3344,
-    "totalClasses": 60,
+    "totalLinesOfCode": 96610,
+    "totalExports": 3350,
+    "totalClasses": 61,
     "totalInterfaces": 529,
-    "totalFunctions": 830,
+    "totalFunctions": 833,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 846,
-    "totalReExports": 1609,
+    "totalReExports": 1611,
     "totalTypeOnlyImports": 580,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

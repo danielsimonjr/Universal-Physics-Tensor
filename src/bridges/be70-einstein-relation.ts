@@ -13,6 +13,7 @@
  * @module bridges/be70-einstein-relation
  */
 import { K_B_SI } from '../core/constants.js';
+import { assertSameCarrierSign } from './carrier-sign.js';
 
 /**
  * Inputs for {@link evaluateEinsteinRelation}.
@@ -58,9 +59,7 @@ export function evaluateEinsteinRelation({
   if (!Number.isFinite(q_C) || q_C === 0) {
     throw new Error('evaluateEinsteinRelation: q_C must be finite and nonzero');
   }
-  if (mu_m2_per_Vs * q_C < 0) {
-    throw new Error('evaluateEinsteinRelation: mu_m2_per_Vs and q_C must have the same sign');
-  }
+  assertSameCarrierSign(mu_m2_per_Vs, q_C, 'evaluateEinsteinRelation: mu_m2_per_Vs', 'q_C');
   const D_m2_per_s = (mu_m2_per_Vs * K_B_SI * T_K) / q_C;
   return { mu_m2_per_Vs, T_K, q_C, D_m2_per_s };
 }

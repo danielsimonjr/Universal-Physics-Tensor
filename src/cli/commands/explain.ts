@@ -17,6 +17,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG, sourceFlag } from '../flag-help.js';
 import { resolveGraph } from '../graphs.js';
 import { emitJson } from '../output.js';
+import { CarrierSignError } from '../../bridges/carrier-sign.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
 import { readNamedBinding } from '../../numerical/binding-value.js';
@@ -268,7 +269,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   const parsed = parseKnown(rest);
   const rebound = rebind(parsed, aliases, names);
   const known = shareSynonyms(rebound, names);
-  const x = api.explainQuantity(graph, resolvedTarget, known);
+  let x;
+  try {
+    x = api.explainQuantity(graph, resolvedTarget, known);
+  } catch (e) {
+    if (e instanceof CarrierSignError) throw new CliError(`upt explain: ${e.message}`);
+    throw e;
+  }
   const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;
   const partnerKnown = partner !== null && names.has(partner.name);
   const partnerExplanation = partnerKnown ? api.explainQuantity(graph, partner!.name, known) : undefined;

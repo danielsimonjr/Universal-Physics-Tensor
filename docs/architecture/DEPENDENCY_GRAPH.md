@@ -39,7 +39,7 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 70 files
-- **bridges**: 113 files
+- **bridges**: 114 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
@@ -1781,6 +1781,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `K_B_SI` | Import |
+| `./carrier-sign.js` | `assertSameCarrierSign` | Import |
 
 **Exports:**
 - Interfaces: `EinsteinRelationInputs`, `EinsteinRelationResult`
@@ -2051,6 +2052,14 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Constants: `BridgeEquations`
+
+---
+
+### `src/bridges/carrier-sign.ts` - One sign rule for a positive transport coefficient built from a carrier
+
+**Exports:**
+- Classes: `CarrierSignError`
+- Functions: `sameCarrierSign`, `assertSameCarrierSign`, `assertCarrierProductSign`
 
 ---
 
@@ -2954,6 +2963,7 @@ The codebase is organized into the following modules:
 | `./be68-tolman-ehrenfest.js` | `evaluateTolmanEhrenfest, tolmanTemperatureAt, type TolmanInputs, type TolmanResult` | Re-export |
 | `./be69-fast-magnetosonic.js` | `evaluateFastMagnetosonic, type FastMagnetosonicInputs, type FastMagnetosonicResult` | Re-export |
 | `./be70-einstein-relation.js` | `evaluateEinsteinRelation, type EinsteinRelationInputs, type EinsteinRelationResult` | Re-export |
+| `./carrier-sign.js` | `CarrierSignError` | Re-export |
 | `./be71-clapeyron.js` | `evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult` | Re-export |
 | `./be72-gravitational-redshift.js` | `evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult` | Re-export |
 | `./be73-kelvin-peltier.js` | `evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult` | Re-export |
@@ -2995,16 +3005,17 @@ The codebase is organized into the following modules:
   type AlfvenInputs, type AlfvenResult, evaluateTolmanEhrenfest, tolmanTemperatureAt,
   type TolmanInputs, type TolmanResult, evaluateFastMagnetosonic, type FastMagnetosonicInputs,
   type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs,
-  type EinsteinRelationResult, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult,
-  evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult,
-  evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult, evaluateMagneticPressure,
-  type MagneticPressureInputs, type MagneticPressureResult, evaluateLondonPenetration,
-  type LondonPenetrationInputs, type LondonPenetrationResult, evaluatePlasmaBeta,
-  type PlasmaBetaInputs, type PlasmaBetaResult, evaluateHagenPoiseuille, type HagenPoiseuilleInputs,
-  type HagenPoiseuilleResult, evaluateEulerBuckling, type EulerBucklingInputs,
-  type EulerBucklingResult, evaluatePullIn, type PullInInputs, type PullInResult, evaluateMottGurney,
-  type MottGurneyInputs, type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs,
-  type ChildLangmuirResult, evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult,
+  type EinsteinRelationResult, CarrierSignError, evaluateClapeyron, type ClapeyronInputs,
+  type ClapeyronResult, evaluateGravitationalRedshift, type GravitationalRedshiftInputs,
+  type GravitationalRedshiftResult, evaluateKelvinPeltier, type KelvinPeltierInputs,
+  type KelvinPeltierResult, evaluateMagneticPressure, type MagneticPressureInputs,
+  type MagneticPressureResult, evaluateLondonPenetration, type LondonPenetrationInputs,
+  type LondonPenetrationResult, evaluatePlasmaBeta, type PlasmaBetaInputs, type PlasmaBetaResult,
+  evaluateHagenPoiseuille, type HagenPoiseuilleInputs, type HagenPoiseuilleResult,
+  evaluateEulerBuckling, type EulerBucklingInputs, type EulerBucklingResult, evaluatePullIn,
+  type PullInInputs, type PullInResult, evaluateMottGurney, type MottGurneyInputs,
+  type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs, type ChildLangmuirResult,
+  evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult,
   evaluateThomsonCoefficient, type ThomsonCoefficientInputs, type ThomsonCoefficientResult,
   evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise,
   type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs,
@@ -3965,6 +3976,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG, sourceFlag` | Import |
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../../bridges/carrier-sign.js` | `CarrierSignError` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../search-index.js` | `searchNameWords` | Import |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
@@ -4865,6 +4877,7 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `../bridges/carrier-sign.js` | `assertCarrierProductSign` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `../core/constants.js` | `E_SI, M_E_SI` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
@@ -5186,6 +5199,7 @@ The codebase is organized into the following modules:
 | `../../bridges/be80-mott-gurney.js` | `evaluateMottGurney` | Import |
 | `../../bridges/be81-child-langmuir.js` | `evaluateChildLangmuir` | Import |
 | `../../bridges/be82-shockley-diode.js` | `evaluateShockleyDiode` | Import |
+| `../../bridges/carrier-sign.js` | `sameCarrierSign` | Import |
 | `../../bridges/be83-thomson.js` | `evaluateThomsonCoefficient` | Import |
 | `../../bridges/be84-four-point.js` | `evaluateFourPointSheet` | Import |
 | `../../bridges/be85-shot-noise.js` | `evaluateShotNoise` | Import |
@@ -6457,6 +6471,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../bridges/carrier-sign.js` | `CarrierSignError` | Import |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `./edge.js` | `evaluateEdge` | Import |
 | `./compose.js` | `QuantityIdentification` | Import (type-only) |
@@ -7358,7 +7373,7 @@ The codebase is organized into the following modules:
 | `./bridges/index.js` | `BridgeEquationEntry, BridgeEquationStatus, BridgeIssueSeverity, BridgeIssueFixable, KnownIssue` | Re-export |
 | `./bridges/index.js` | `evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult, evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult, evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult, evaluateCasimir, type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs, type UnruhResult, evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult, evaluateACJosephson, JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult, evaluateFractionalQH, type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz, LORENZ_NUMBER_SI, type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap, BCS_GAP_RATIO, type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3, type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity, THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass, type JeansInputs, type JeansResult` | Re-export |
 | `./bridges/index.js` | `evaluateRadiationPressure, type RadiationPressureInputs, type RadiationPressureResult, evaluateAlfvenSpeed, alfvenProtonOnlyDensity, M_PROTON_SI, type AlfvenInputs, type AlfvenResult, evaluateTolmanEhrenfest, tolmanTemperatureAt, type TolmanInputs, type TolmanResult` | Re-export |
-| `./bridges/index.js` | `evaluateFastMagnetosonic, type FastMagnetosonicInputs, type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs, type EinsteinRelationResult, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult, evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult, evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult, evaluateMagneticPressure, type MagneticPressureInputs, type MagneticPressureResult, evaluateLondonPenetration, type LondonPenetrationInputs, type LondonPenetrationResult, evaluatePlasmaBeta, type PlasmaBetaInputs, type PlasmaBetaResult, evaluateHagenPoiseuille, type HagenPoiseuilleInputs, type HagenPoiseuilleResult, evaluateEulerBuckling, type EulerBucklingInputs, type EulerBucklingResult, evaluatePullIn, type PullInInputs, type PullInResult, evaluateMottGurney, type MottGurneyInputs, type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs, type ChildLangmuirResult, evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult, evaluateThomsonCoefficient, type ThomsonCoefficientInputs, type ThomsonCoefficientResult, evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise, type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs, type ReynoldsAnalogyResult, evaluateCapacitorNoise, type CapacitorNoiseInputs, type CapacitorNoiseResult` | Re-export |
+| `./bridges/index.js` | `evaluateFastMagnetosonic, type FastMagnetosonicInputs, type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs, type EinsteinRelationResult, CarrierSignError, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult, evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult, evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult, evaluateMagneticPressure, type MagneticPressureInputs, type MagneticPressureResult, evaluateLondonPenetration, type LondonPenetrationInputs, type LondonPenetrationResult, evaluatePlasmaBeta, type PlasmaBetaInputs, type PlasmaBetaResult, evaluateHagenPoiseuille, type HagenPoiseuilleInputs, type HagenPoiseuilleResult, evaluateEulerBuckling, type EulerBucklingInputs, type EulerBucklingResult, evaluatePullIn, type PullInInputs, type PullInResult, evaluateMottGurney, type MottGurneyInputs, type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs, type ChildLangmuirResult, evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult, evaluateThomsonCoefficient, type ThomsonCoefficientInputs, type ThomsonCoefficientResult, evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise, type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs, type ReynoldsAnalogyResult, evaluateCapacitorNoise, type CapacitorNoiseInputs, type CapacitorNoiseResult` | Re-export |
 | `./bridges/evaluators.js` | `BRIDGE_EVALUATORS, evaluateBridge` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./bridges/bridge-equations.js` | `BridgeEquations` | Re-export |
@@ -7538,16 +7553,17 @@ The codebase is organized into the following modules:
   type AlfvenInputs, type AlfvenResult, evaluateTolmanEhrenfest, tolmanTemperatureAt,
   type TolmanInputs, type TolmanResult, evaluateFastMagnetosonic, type FastMagnetosonicInputs,
   type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs,
-  type EinsteinRelationResult, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult,
-  evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult,
-  evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult, evaluateMagneticPressure,
-  type MagneticPressureInputs, type MagneticPressureResult, evaluateLondonPenetration,
-  type LondonPenetrationInputs, type LondonPenetrationResult, evaluatePlasmaBeta,
-  type PlasmaBetaInputs, type PlasmaBetaResult, evaluateHagenPoiseuille, type HagenPoiseuilleInputs,
-  type HagenPoiseuilleResult, evaluateEulerBuckling, type EulerBucklingInputs,
-  type EulerBucklingResult, evaluatePullIn, type PullInInputs, type PullInResult, evaluateMottGurney,
-  type MottGurneyInputs, type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs,
-  type ChildLangmuirResult, evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult,
+  type EinsteinRelationResult, CarrierSignError, evaluateClapeyron, type ClapeyronInputs,
+  type ClapeyronResult, evaluateGravitationalRedshift, type GravitationalRedshiftInputs,
+  type GravitationalRedshiftResult, evaluateKelvinPeltier, type KelvinPeltierInputs,
+  type KelvinPeltierResult, evaluateMagneticPressure, type MagneticPressureInputs,
+  type MagneticPressureResult, evaluateLondonPenetration, type LondonPenetrationInputs,
+  type LondonPenetrationResult, evaluatePlasmaBeta, type PlasmaBetaInputs, type PlasmaBetaResult,
+  evaluateHagenPoiseuille, type HagenPoiseuilleInputs, type HagenPoiseuilleResult,
+  evaluateEulerBuckling, type EulerBucklingInputs, type EulerBucklingResult, evaluatePullIn,
+  type PullInInputs, type PullInResult, evaluateMottGurney, type MottGurneyInputs,
+  type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs, type ChildLangmuirResult,
+  evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult,
   evaluateThomsonCoefficient, type ThomsonCoefficientInputs, type ThomsonCoefficientResult,
   evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise,
   type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs,
@@ -8480,7 +8496,7 @@ graph TD
         N8[be23-planckian-confrontation]
         N9[be35-bootstrap-confrontation]
         N10[be36-gw170817-confrontation]
-        N11[...108 more]
+        N11[...109 more]
     end
 
     subgraph Canonical
@@ -8607,14 +8623,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 453 |
+| Total TypeScript Files | 454 |
 | Total Modules | 13 |
-| Total Lines of Code | 96533 |
-| Total Exports | 3344 |
-| Total Re-exports | 1609 |
-| Total Classes | 60 |
+| Total Lines of Code | 96610 |
+| Total Exports | 3350 |
+| Total Re-exports | 1611 |
+| Total Classes | 61 |
 | Total Interfaces | 529 |
-| Total Functions | 830 |
+| Total Functions | 833 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 580 |
