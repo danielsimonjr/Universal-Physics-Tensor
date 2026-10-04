@@ -122,11 +122,11 @@ export const fastMagnetosonicSpeedQ: Quantity = {
   attributes: CLASSICAL_EM,
 };
 
-/** Electrical mobility, drift speed per electric field. */
 const ELECTRICAL_MOBILITY = { L: 0, M: -1, T: 2, I: 1, Theta: 0, N: 0, J: 0 } as const;
 /** Diffusivity [L² T⁻¹]. */
 const DIFFUSIVITY = { L: 2, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 } as const;
 
+/** Electrical mobility, drift speed per electric field. */
 export const electricalMobilityQ: Quantity = {
   name: 'electrical-mobility',
   symbol: 'μ',
@@ -228,11 +228,11 @@ export const gravitationalFrequencyRatioQ: Quantity = {
   attributes: CLASSICAL_GRAV,
 };
 
-/** Seebeck coefficient [V/K]. */
 const SEEBECK = { L: 2, M: 1, T: -3, I: -1, Theta: -1, N: 0, J: 0 } as const;
 /** Peltier coefficient, dimension voltage. Not the Josephson `voltage` node. */
 const PELTIER = { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 } as const;
 
+/** Seebeck coefficient, voltage per temperature. */
 export const seebeckCoefficientQ: Quantity = {
   name: 'seebeck-coefficient',
   symbol: 'S',
