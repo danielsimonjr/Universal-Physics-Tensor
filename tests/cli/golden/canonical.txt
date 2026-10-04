@@ -96,7 +96,7 @@ the textbook "answer key" bridge equations are validated against.
    L1   condensed-matter    CE-drift-velocity        —
    L0   condensed-matter    CE-fermi-energy          —
    L0   condensed-matter    CE-fermi-velocity        —
-   L0   condensed-matter    CE-plasma-frequency      —
+   L1   condensed-matter    CE-plasma-frequency      —
    L0   condensed-matter    CE-debye-frequency       —
    L1   statistical         CE-equipartition         —
    L1   statistical         CE-stokes-einstein       —
