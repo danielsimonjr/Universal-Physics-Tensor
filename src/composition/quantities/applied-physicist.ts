@@ -285,3 +285,347 @@ export const plasmaBetaQ: Quantity = {
   dim: DIMENSIONLESS,
   attributes: CLASSICAL_EM,
 };
+
+/** Continuum mechanics and pipe flow. Not the electromagnetic nodes above. */
+const CLASSICAL_CONTINUUM = { scale: 'classical', force: 'emergent' } as const;
+
+/** Volume flux [L³ T⁻¹]. */
+const VOLUME_FLUX = { L: 3, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 } as const;
+/** Dynamic viscosity [M L⁻¹ T⁻¹]. */
+const VISCOSITY = { L: -1, M: 1, T: -1, I: 0, Theta: 0, N: 0, J: 0 } as const;
+/** Second moment of area [L⁴]. */
+const AREA_MOMENT = { L: 4, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 } as const;
+/** Force [M L T⁻²]. */
+const FORCE_DIM = { L: 1, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 } as const;
+/** Stiffness [M T⁻²]. */
+const STIFFNESS = { L: 0, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 } as const;
+/** Voltage [M L² T⁻³ I⁻¹]. */
+const VOLTAGE_DIM = { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 } as const;
+/** Permittivity [M⁻¹ L⁻³ T⁴ I²]. */
+const PERMITTIVITY_DIM = { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 } as const;
+/** Current density [I L⁻²]. */
+const CURRENT_DENSITY = { L: -2, M: 0, T: 0, I: 1, Theta: 0, N: 0, J: 0 } as const;
+/** Current [I]. */
+const CURRENT_DIM = { L: 0, M: 0, T: 0, I: 1, Theta: 0, N: 0, J: 0 } as const;
+/** Resistance [M L² T⁻³ I⁻²]. */
+const RESISTANCE_DIM = { L: 2, M: 1, T: -3, I: -2, Theta: 0, N: 0, J: 0 } as const;
+/** Seebeck slope [voltage / temperature²]. */
+const SEEBECK_SLOPE = { L: 2, M: 1, T: -3, I: -1, Theta: -2, N: 0, J: 0 } as const;
+/** Current spectral density [I² T]. */
+const CURRENT_PSD = { L: 0, M: 0, T: 1, I: 2, Theta: 0, N: 0, J: 0 } as const;
+/** Capacitance [M⁻¹ L⁻² T⁴ I²]. */
+const CAPACITANCE_DIM = { L: -2, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 } as const;
+/** Mean square voltage [voltage²]. */
+const VOLTAGE_SQUARED = { L: 4, M: 2, T: -6, I: -2, Theta: 0, N: 0, J: 0 } as const;
+
+/** Pipe radius. Not a generic `length`. */
+export const pipeRadiusQ: Quantity = {
+  name: 'pipe-radius',
+  symbol: 'R',
+  dim: LENGTH,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Axial pressure drop of a straight pipe. Not `magnetic-pressure`. */
+export const pipePressureDropQ: Quantity = {
+  name: 'pipe-pressure-drop',
+  symbol: 'ΔP',
+  dim: ENERGY_DENSITY,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Newtonian dynamic viscosity of the Hagen–Poiseuille balance. */
+export const dynamicViscosityQ: Quantity = {
+  name: 'dynamic-viscosity',
+  symbol: 'μ',
+  dim: VISCOSITY,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Pipe length. Not `column-length`. */
+export const pipeLengthQ: Quantity = {
+  name: 'pipe-length',
+  symbol: 'L',
+  dim: LENGTH,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Hagen–Poiseuille volume flux `Q = π R⁴ ΔP / (8 μ L)`. */
+export const poiseuilleFlowQ: Quantity = {
+  name: 'poiseuille-flow',
+  symbol: 'Q',
+  dim: VOLUME_FLUX,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Young's modulus of a pinned column. */
+export const youngsModulusQ: Quantity = {
+  name: 'youngs-modulus',
+  symbol: 'E',
+  dim: ENERGY_DENSITY,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Second moment of area. Not a current. */
+export const areaMomentQ: Quantity = {
+  name: 'area-moment',
+  symbol: 'I',
+  dim: AREA_MOMENT,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Length between pinned ends. Not `pipe-length`. */
+export const columnLengthQ: Quantity = {
+  name: 'column-length',
+  symbol: 'L',
+  dim: LENGTH,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Lowest pinned–pinned Euler load `π² E I / L²`. */
+export const bucklingLoadQ: Quantity = {
+  name: 'buckling-load',
+  symbol: 'P_cr',
+  dim: FORCE_DIM,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Linear spring stiffness of a parallel-plate actuator. */
+export const pullInStiffnessQ: Quantity = {
+  name: 'pull-in-stiffness',
+  symbol: 'k',
+  dim: STIFFNESS,
+  attributes: CLASSICAL_EM,
+};
+
+/** Rest gap of a parallel-plate actuator. Not the fold gap. */
+export const pullInGapQ: Quantity = {
+  name: 'pull-in-gap',
+  symbol: 'g_0',
+  dim: LENGTH,
+  attributes: CLASSICAL_EM,
+};
+
+/** Parallel-plate area. Fringing is not this area. */
+export const pullInAreaQ: Quantity = {
+  name: 'pull-in-area',
+  symbol: 'A',
+  dim: { L: 2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
+  attributes: CLASSICAL_EM,
+};
+
+/** Pull-in voltage at the fold `g = 2 g0/3`. */
+export const pullInVoltageQ: Quantity = {
+  name: 'pull-in-voltage',
+  symbol: 'V_pi',
+  dim: VOLTAGE_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Permittivity in the Mott–Gurney solid. Not necessarily `ε0`. */
+export const mottPermittivityQ: Quantity = {
+  name: 'mott-permittivity',
+  symbol: 'ε',
+  dim: PERMITTIVITY_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Drift mobility of the Mott–Gurney law. Not `electrical-mobility`. */
+export const mottMobilityQ: Quantity = {
+  name: 'mott-mobility',
+  symbol: 'μ',
+  dim: ELECTRICAL_MOBILITY,
+  attributes: CLASSICAL_EM,
+};
+
+/** Voltage across the Mott–Gurney film. */
+export const mottVoltageQ: Quantity = {
+  name: 'mott-voltage',
+  symbol: 'V',
+  dim: VOLTAGE_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Film thickness. Not the Child–Langmuir gap. */
+export const mottThicknessQ: Quantity = {
+  name: 'mott-thickness',
+  symbol: 'd',
+  dim: LENGTH,
+  attributes: CLASSICAL_EM,
+};
+
+/** Mott–Gurney current density `(9/8) ε μ V² / d³`. */
+export const mottGurneyCurrentQ: Quantity = {
+  name: 'mott-gurney-current',
+  symbol: 'J',
+  dim: CURRENT_DENSITY,
+  attributes: CLASSICAL_EM,
+};
+
+/** Particle mass in the Child–Langmuir law. Not `effective-mass`. */
+export const childCarrierMassQ: Quantity = {
+  name: 'child-carrier-mass',
+  symbol: 'm',
+  dim: { L: 0, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
+  attributes: CLASSICAL_EM,
+};
+
+/** Anode voltage of a vacuum diode. */
+export const childVoltageQ: Quantity = {
+  name: 'child-voltage',
+  symbol: 'V',
+  dim: VOLTAGE_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Vacuum-diode gap. Not `mott-thickness`. */
+export const childGapQ: Quantity = {
+  name: 'child-gap',
+  symbol: 'd',
+  dim: LENGTH,
+  attributes: CLASSICAL_EM,
+};
+
+/** Child–Langmuir current density. Not `mott-gurney-current`. */
+export const childLangmuirCurrentQ: Quantity = {
+  name: 'child-langmuir-current',
+  symbol: 'J',
+  dim: CURRENT_DENSITY,
+  attributes: CLASSICAL_EM,
+};
+
+/** Shockley saturation current. */
+export const shockleySaturationQ: Quantity = {
+  name: 'shockley-saturation',
+  symbol: 'I_s',
+  dim: CURRENT_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Diode bias. Not `pull-in-voltage`. */
+export const shockleyVoltageQ: Quantity = {
+  name: 'shockley-voltage',
+  symbol: 'V',
+  dim: VOLTAGE_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Diode temperature. Not `peltier-temperature`. */
+export const shockleyTemperatureQ: Quantity = {
+  name: 'shockley-temperature',
+  symbol: 'T',
+  dim: TEMPERATURE,
+  attributes: CLASSICAL_EM,
+};
+
+/** Shockley current at ideality 1. */
+export const shockleyCurrentQ: Quantity = {
+  name: 'shockley-current',
+  symbol: 'I',
+  dim: CURRENT_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Temperature at which the Thomson coefficient is read. Not `peltier-temperature`. */
+export const thomsonTemperatureQ: Quantity = {
+  name: 'thomson-temperature',
+  symbol: 'T',
+  dim: TEMPERATURE,
+  attributes: CLASSICAL_EM,
+};
+
+/** dS/dT. Not the Seebeck coefficient itself. */
+export const seebeckSlopeQ: Quantity = {
+  name: 'seebeck-slope',
+  symbol: 'dS/dT',
+  dim: SEEBECK_SLOPE,
+  attributes: CLASSICAL_EM,
+};
+
+/** Thomson coefficient `μ_T = T dS/dT`. Not `peltier-coefficient`. */
+export const thomsonCoefficientQ: Quantity = {
+  name: 'thomson-coefficient',
+  symbol: 'μ_T',
+  dim: SEEBECK,
+  attributes: CLASSICAL_EM,
+};
+
+/** Inner-pair voltage of a collinear four-point probe. */
+export const fourPointVoltageQ: Quantity = {
+  name: 'four-point-voltage',
+  symbol: 'V',
+  dim: VOLTAGE_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Current of a collinear four-point probe. */
+export const fourPointCurrentQ: Quantity = {
+  name: 'four-point-current',
+  symbol: 'I',
+  dim: CURRENT_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Sheet resistance `(π / ln 2) (V/I)`. Not a conformal crossing. */
+export const sheetResistanceQ: Quantity = {
+  name: 'sheet-resistance',
+  symbol: 'R_s',
+  dim: RESISTANCE_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Current in the Poisson mean of shot noise. */
+export const shotCurrentQ: Quantity = {
+  name: 'shot-current',
+  symbol: 'I',
+  dim: CURRENT_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** One-sided shot-noise density `2 e I`. Not Johnson–Nyquist. */
+export const shotNoiseQ: Quantity = {
+  name: 'shot-noise',
+  symbol: 'S_I',
+  dim: CURRENT_PSD,
+  attributes: CLASSICAL_EM,
+};
+
+/** Skin-friction coefficient, already normalized by `ρ U²/2`. */
+export const skinFrictionQ: Quantity = {
+  name: 'skin-friction',
+  symbol: 'C_f',
+  dim: DIMENSIONLESS,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Stanton number at Pr = 1 with matched wall slopes. */
+export const stantonNumberQ: Quantity = {
+  name: 'stanton-number',
+  symbol: 'St',
+  dim: DIMENSIONLESS,
+  attributes: CLASSICAL_CONTINUUM,
+};
+
+/** Temperature of the capacitor Boltzmann weight. */
+export const capacitorTemperatureQ: Quantity = {
+  name: 'capacitor-temperature',
+  symbol: 'T',
+  dim: TEMPERATURE,
+  attributes: CLASSICAL_EM,
+};
+
+/** Capacitance of one quadratic energy term. */
+export const capacitanceQ: Quantity = {
+  name: 'capacitance',
+  symbol: 'C',
+  dim: CAPACITANCE_DIM,
+  attributes: CLASSICAL_EM,
+};
+
+/** Mean square voltage `k_B T / C`. Not `(3/2) k_B T / C`. */
+export const capacitorVoltageVarianceQ: Quantity = {
+  name: 'capacitor-voltage-variance',
+  symbol: '⟨v²⟩',
+  dim: VOLTAGE_SQUARED,
+  attributes: CLASSICAL_EM,
+};

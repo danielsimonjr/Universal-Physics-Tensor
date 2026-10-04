@@ -61,8 +61,8 @@ const rowOf = (id: number) => {
 
 describe('S1.5 — the ten audited catalog rows', () => {
   it('registers 63 catalog rows and 54 graph edges', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(66);
-    expect(CATALOG_GRAPH).toHaveLength(57);
+    expect(BRIDGE_EQUATIONS).toHaveLength(77);
+    expect(CATALOG_GRAPH).toHaveLength(68);
   });
 
   it.each(AUDITED)('BE-%i carries a relation', (id) => {

@@ -2,7 +2,7 @@
 
 > **Status note:** This document catalogs Bridge Equations 21-76 (BE-21–50 from the original spec catalog; BE-51–54 in §V-B; BE-55–76 in §V-C). Equations span a wide range of physical credibility: some (e.g., Eq 21 AdS/CMT; Eq 26 WKB tunneling; Eq 35 conformal bootstrap; Eqs 55–76) are established results from mainstream physics; others (e.g., Eq 25 consciousness, Eq 42 firewall, Eq 46 multiverse, Eq 50 retrocausal QFT) are highly speculative. Each equation should carry a **Status** line indicating this; where one is missing, treat the equation as unvalidated. Several equations have known issues flagged in their Status notes (Eqs 22, 23, 24, 25, 31, 37, 38, 50). The mathematical formulations reproduced here are drawn from the literature (where cited) or are original proposals; formal citations are being retroactively added — see the Part-VI conclusion for the current citation-completeness status.
 
-> **Spec-scope note (catalog count):** The specification catalogs **66 bridge equations, IDs 11–76** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-76: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–76). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05, BE-66–68 are written up in §V-C, BE-69–73 are the PhysJS #57 rows in that same section, and BE-74–76 are the PhysJS #62 rows. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **66 entries, IDs 11–76**. Entries 51 and 53–76 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C, prose that says "58 equations" / "IDs 11–68" is the record from before BE-69–73, and prose that says "63 equations" / "IDs 11–73" is the record from before BE-74–76. Status distribution across the 66-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 30 established · 33 speculative · 3 highly-speculative · 0 invalid.
+> **Spec-scope note (catalog count):** The specification catalogs **77 bridge equations, IDs 11–87** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-87: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–87). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05, BE-66–68 are written up in §V-C, BE-69–73 are the PhysJS #57 rows in that same section, and BE-74–76 are the PhysJS #62 rows, and BE-77–87 are the PhysJS #64 rows. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **77 entries, IDs 11–87**. Entries 51 and 53–87 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C, prose that says "58 equations" / "IDs 11–68" is the record from before BE-69–73, and prose that says "63 equations" / "IDs 11–73" is the record from before BE-74–76. Status distribution across the 66-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 30 established · 33 speculative · 3 highly-speculative · 0 invalid.
 
 ## V. Extended Catalog of Bridging Equations (21-50)
 
@@ -1380,13 +1380,169 @@ where:
 **Rationale**: The 2 lives in the magnetic pressure. A map of the expanded formula `2 μ0 n k_B T / B²` does not name this edge, because that source set is not `{n, T, p_B}`.
 
 
+
+**Bridge Equation 77: Hagen–Poiseuille flux** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.HagenPoiseuille.flow_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/HagenPoiseuille.lean) states that steady axisymmetric Newtonian flow with `d/dr (r du/dr) = (G/μ) r`, centerline slope 0, and no-slip `u(R) = 0` integrates to `u = (G/(4μ))(r²−R²)`. With `G = −ΔP/L` the flux `Q = ∫ u 2π r dr` is `π R⁴ ΔP/(8 μ L)`. Darcy's definition of that profile gives `f_D Re = 64`. The same wall shear with the Fanning normalization is 16. A factor other than 8 is not this flux. Not a square duct. The axial balance, no-slip, and the Darcy definitions are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be77-hagen-poiseuille.ts`](../../src/bridges/be77-hagen-poiseuille.ts) (`evaluateHagenPoiseuille`)
+
+- **Status**: Established. The edge confidence stays `established`. The evaluator returns the flux. The Darcy product is part of the theorem and is not a second catalog equation.
+- **Context**: Bridges a fluid pressure drop to a continuum flux. The bridges tuple is `fluid` → `continuum`. Category D is the same component as BE-74 and BE-76.
+- **Mathematical Formulation**: `Q = π R⁴ ΔP / (8 μ L)`.
+- **Dimensions**: The catalog signature is `[L^3 T^-1]`.
+- **Domain**: `R > 0`, `ΔP` finite, `μ ≠ 0`, `L ≠ 0`. A square duct is a different eigenvalue.
+- **References**: The axial balance, the centerline condition, and no-slip are the hypotheses of `PhysJS.HagenPoiseuille.flow_eq`.
+- **Rationale**: The 8 is the integral of the no-slip parabola. The Fanning factor 16 is the same shear under a different normalization.
+
+**Bridge Equation 78: Euler buckling load (pinned–pinned)** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.EulerBuckling.critical_load`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/EulerBuckling.lean) states that the Euler–Bernoulli balance `y'' = −ω² y` with `ω² = P/(E I)` and pinned ends `y(0) = y(L) = 0` has the eigenfunction `sin(π x/L)` at `P = π² E I/L²`, and every nontrivial solution has `ω L = n π` for a nonzero integer `n`, so the load is at least that value. The clamped-free column is `π² E I/(4 L²)`. That factor is not the pinned load. Not read off from units. The beam equation is a hypothesis. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be78-euler-buckling.ts`](../../src/bridges/be78-euler-buckling.ts) (`evaluateEulerBuckling`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Bridges a continuum beam to a mechanical load. The bridges tuple is `continuum` → `mechanical`.
+- **Mathematical Formulation**: `P_cr = π² E I / L²`.
+- **Dimensions**: The catalog signature is `[force]`.
+- **Domain**: `E > 0`, `I > 0`, `L > 0`, pinned ends.
+- **References**: The Euler–Bernoulli balance and the pinned ends are the hypotheses of `PhysJS.EulerBuckling.critical_load`.
+- **Rationale**: The catalog equation is the lowest pinned load. The cantilever load is a different boundary condition.
+
+**Bridge Equation 79: Parallel-plate pull-in voltage** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.PullIn.pull_in_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/PullIn.lean) states that `C = ε0 A/g` has `dC/dg = −ε0 A/g²`. Equilibrium of a linear spring against the coenergy force is `k(g0−g) = ε0 A V²/(2 g²)`, so `V²` is proportional to `(g0−g) g²`. The derivative `2 g0 g − 3 g²` vanishes only at `g = 0` and `g = 2 g0/3`, and the second derivative at the fold is `−2 g0`. Substituting the gap gives `V_pi² = 8 k g0³/(27 ε0 A)`. `g = g0/2` is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be79-pull-in.ts`](../../src/bridges/be79-pull-in.ts) (`evaluatePullIn`)
+
+- **Status**: Established. The edge confidence stays `established`. `ε0` is `EPS0_SI`.
+- **Context**: Bridges an electromagnetic gap force to a continuum spring. The bridges tuple is `electromagnetic` → `continuum`.
+- **Mathematical Formulation**: `V_pi = sqrt(8 k g0³ / (27 ε0 A))`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1]`.
+- **Domain**: `k > 0`, `g0 > 0`, `A > 0`. The fold is `g = 2 g0/3`.
+- **References**: The parallel-plate capacitance and the linear spring are the hypotheses of `PhysJS.PullIn.pull_in_eq`.
+- **Rationale**: The voltage at `g = g0/2` is the equilibrium at a different gap, not the fold.
+
+**Bridge Equation 80: Mott–Gurney current** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.MottGurney.current_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/MottGurney.lean) states that drift `J = q n μ E` and Poisson `dE/dx = q n/ε` give `E dE/dx = J/(ε μ)`. With `E(0) = 0` the integral is `E²/2 = J x/(ε μ)`. The nonnegative root integrated from 0 to `d` is `J = (9/8) ε μ V²/d³`. A factor other than `9/8` is not this current. Not Child–Langmuir. Drift, Poisson, and the injecting contact are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be80-mott-gurney.ts`](../../src/bridges/be80-mott-gurney.ts) (`evaluateMottGurney`)
+
+- **Status**: Established. The edge confidence stays `established`. `ε` is an input, not necessarily `ε0`.
+- **Context**: Bridges an electromagnetic field to a condensed-matter current. The bridges tuple is `electromagnetic` → `condensed`.
+- **Mathematical Formulation**: `J = (9/8) ε μ V² / d³`.
+- **Dimensions**: The catalog signature is `[L^-2 I]`.
+- **Domain**: `ε > 0`, `μ > 0`, `V` finite, `d > 0`, injecting contact `E(0) = 0`.
+- **References**: Drift, Poisson, and the injecting contact are the hypotheses of `PhysJS.MottGurney.current_eq`.
+- **Rationale**: The `9/8` is the integral of the injecting-contact field. Child–Langmuir is a collisionless vacuum current.
+
+**Bridge Equation 81: Child–Langmuir current** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ChildLangmuir.current_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ChildLangmuir.lean) states that collisionless energy `(1/2) m v² = e φ`, `J = ρ v`, and Poisson `φ'' = ρ/ε0` give a current independent of `x` only for `φ ∝ x^{4/3}`. The profile `φ = V (x/d)^{4/3}` has `φ(0) = 0`, `φ(d) = V`, and cathode field 0, and for `x > 0` its current is `J = (4 ε0/9) sqrt(2 e/m) V^{3/2}/d²`. `e` is the elementary charge. The Mott–Gurney exponent does not cancel. Poisson is not claimed at `x = 0`. Not a drift-only solid. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be81-child-langmuir.ts`](../../src/bridges/be81-child-langmuir.ts) (`evaluateChildLangmuir`)
+
+- **Status**: Established. The edge confidence stays `established`. `e` is `E_SI`, not an input and not Euler's number. `ε0` is `EPS0_SI`.
+- **Context**: Bridges an electromagnetic vacuum gap to a current. The bridges tuple is `electromagnetic` → `vacuum`.
+- **Mathematical Formulation**: `J = (4 ε0/9) sqrt(2 e/m) V^{3/2}/d²`.
+- **Dimensions**: The catalog signature is `[L^-2 I]`.
+- **Domain**: `m > 0`, `V > 0`, `d > 0`. Poisson is not claimed at the cathode.
+- **References**: Collisionless energy, `J = ρ v`, and Poisson away from the cathode are the hypotheses of `PhysJS.ChildLangmuir.current_eq`.
+- **Rationale**: The vacuum exponent is `4/3`. The Mott–Gurney solid is a different balance.
+
+**Bridge Equation 82: Shockley diode equation** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ShockleyDiode.shockley_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ShockleyDiode.lean) states that quasi-equilibrium multiplies the equilibrium flux by `exp(e V/(η k_B T))`. Ideality 1 sets `η = 1`. Detailed balance sets the reverse flux equal to the forward flux at `V = 0`, and low injection keeps that reverse flux under bias. The net current is `I = I_s (exp(e V/(k_B T)) − 1)`. Zero bias carries zero current. Ideality 2 is not this current when `e V ≠ 0`. `e` is the elementary charge. Not a diffusion-length ODE. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be82-shockley-diode.ts`](../../src/bridges/be82-shockley-diode.ts) (`evaluateShockleyDiode`)
+
+- **Status**: Established. The edge confidence stays `established`. Euler's number is written `exp`.
+- **Context**: Bridges an electromagnetic bias to a condensed-matter current. The bridges tuple is `electromagnetic` → `condensed`.
+- **Mathematical Formulation**: `I = I_s (exp(e V/(k_B T)) − 1)`.
+- **Dimensions**: The catalog signature is `[I]`.
+- **Domain**: `I_s` and `V` finite, `T ≠ 0`. Ideality is 1.
+- **References**: Quasi-equilibrium, detailed balance at zero bias, and low injection are the hypotheses of `PhysJS.ShockleyDiode.shockley_eq`.
+- **Rationale**: The minus one is the reverse flux. Ideality 2 is a different current when `e V ≠ 0`.
+
+**Bridge Equation 83: Thomson coefficient** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.Thomson.thomson_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Thomson.lean) states that the Kelvin relation `Π(t) = S(t) t`, which is `PhysJS.KelvinRelation.peltier_eq` read along temperature, and the Thomson split `μ = dΠ/dT − S`, give `μ = T dS/dT` by the product rule. `dΠ/dT` is not `μ` when `S T ≠ 0`. Not a second copy of `Π = S T`. The functional Kelvin relation and the Thomson split are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`. The file reads the Kelvin relation along temperature. The catalog dependency is Bridge Equation 73. The quantities do not meet, so the edges do not compose.
+
+> **Evaluator:** [`src/bridges/be83-thomson.ts`](../../src/bridges/be83-thomson.ts) (`evaluateThomsonCoefficient`)
+
+- **Status**: Established. The edge confidence stays `established`. `dS/dT` is an input, not a sampled difference of `S`.
+- **Context**: Bridges a thermal slope to an electrical coefficient. The bridges tuple is `thermal` → `electrical`. Category F is the same component as BE-73. This is the first Thomson relation. Search for the Thomson coefficient names this row. It does not name BE-73.
+- **Mathematical Formulation**: `μ_T = T dS/dT`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1 Theta^-1]`.
+- **Domain**: `T` and `dS/dT` finite.
+- **References**: `PhysJS.Thomson.thomson_eq` reads `PhysJS.KelvinRelation.peltier_eq` along temperature. The Thomson split is a hypothesis.
+- **Rationale**: The product rule removes the convected `S`. `dΠ/dT` still contains it.
+
+**Bridge Equation 84: Four-point sheet resistance** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.FourPoint.sheet_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/FourPoint.lean) states that on an infinite sheet the radial field of a point current is `(I R_s)/(2 π r)`, and the potential drop is the integral of `1/r`. Probes at `0`, `s`, `2s`, and `3s`, with current in at `0` and out at `3s`, each contribute `(I R_s/(2 π)) ln 2` on the inner pair. Superposition gives `R_s = (π/ln 2)(V/I)`. A sink at `4s` gives `2π/ln 3` instead. Not `PhysJS.Crossing.antisymmetry`. The Laplace field and linear superposition are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be84-four-point.ts`](../../src/bridges/be84-four-point.ts) (`evaluateFourPointSheet`)
+
+- **Status**: Established. The edge confidence stays `established`. The spacing `s` cancels.
+- **Context**: Bridges an electromagnetic probe pair to a condensed-matter sheet. The bridges tuple is `electromagnetic` → `condensed`. Not the conformal crossing BE-35.
+- **Mathematical Formulation**: `R_s = (π / ln 2) (V/I)`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-2]`.
+- **Domain**: `V` finite, `I ≠ 0`. The radial `1/r` potential is a premise, not a derived field.
+- **References**: The radial field `(I R_s)/(2 π r)` and linear superposition are the hypotheses of `PhysJS.FourPoint.sheet_eq`.
+- **Rationale**: Each inner drop is `ln 2`. A different sink spacing is a different factor.
+
+**Bridge Equation 85: Shot noise (one-sided)** *(Category H: Non-Equilibrium Statistical Mechanics)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ShotNoise.shot_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ShotNoise.lean) states that in a window of length `T` the count `N` has mean `(I/e) T`, and the Poisson premise is `Var(N) = mean(N)`. Charge `e` scales the variance by `e²` and the windowed current divides by `T`, so `Var(I) = e I/T`. The one-sided bandwidth of that window is `Δf = 1/(2 T)`, and `S_I = 2 e I`. The two-sided bandwidth `Δf = 1/T` gives `e I`. `e` is the elementary charge. Not a Fourier theorem and not Johnson–Nyquist. The Poisson variance and the one-sided convention are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be85-shot-noise.ts`](../../src/bridges/be85-shot-noise.ts) (`evaluateShotNoise`)
+
+- **Status**: Established. The edge confidence stays `established`. The formula is linear in `I`.
+- **Context**: Bridges a quantum count to a classical current spectrum. The bridges tuple is `quantum` → `classical`. Category H is the same component as BE-58. This is not the Johnson–Nyquist factor 4.
+- **Mathematical Formulation**: `S_I = 2 e I`.
+- **Dimensions**: The catalog signature is `[T I^2]`.
+- **Domain**: `I` finite. The one-sided window is a hypothesis, not an input.
+- **References**: The Poisson variance and `Δf = 1/(2 T)` are the hypotheses of `PhysJS.ShotNoise.shot_eq`.
+- **Rationale**: The two-sided convention is `e I`. This catalog equation is the one-sided spectrum.
+
+**Bridge Equation 86: Reynolds analogy (Prandtl number 1)** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ReynoldsAnalogy.reynolds_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ReynoldsAnalogy.lean) states that wall fluxes `τ = μ du/dy` and `q = k dT/dy`, with `C_f = τ/(ρ U²/2)`, `h = q/ΔT`, `St = h/(ρ U c_p)`, and `Pr = μ c_p/k`, satisfy `St Pr = C_f/2` when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At `Pr = 1`, `St = C_f/2`. `Pr ≠ 1` with nonzero skin friction is not this equality. Not a Nusselt correlation. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be86-reynolds-analogy.ts`](../../src/bridges/be86-reynolds-analogy.ts) (`evaluateReynoldsAnalogy`)
+
+- **Status**: Established. The edge confidence stays `established`. `Pr` and the wall slopes are not inputs.
+- **Context**: Bridges a fluid skin friction to a thermal Stanton number. The bridges tuple is `fluid` → `thermal`.
+- **Mathematical Formulation**: `St = C_f / 2`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: `C_f` finite. The matched-slope hypothesis and `Pr = 1` are premises. The evaluator does not accept a Prandtl number other than that premise.
+- **References**: Matched normalized wall gradients and `Pr = 1` are the hypotheses of `PhysJS.ReynoldsAnalogy.reynolds_eq`.
+- **Rationale**: The `1/2` is the skin-friction normalization. A Nusselt correlation is a different statement.
+
+**Bridge Equation 87: Capacitor voltage variance** *(Category H: Non-Equilibrium Statistical Mechanics)*
+
+> **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.CapacitorNoise.noise_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/CapacitorNoise.lean) states that `dU/dV = C V` and `U(0) = 0` integrate to `U = (C/2) V²`. The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance `k_B T/C`, because the partition function is the Gaussian integral. The mean square on that law is `⟨v²⟩ = k_B T/C`, and `(C/2)` of it is `(1/2) k_B T`. `(3/2) k_B T/C` is not this variance. Dropping the energy half replaces it by `k_B T/(2 C)`. Not three kinetic degrees of freedom. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/be87-capacitor-noise.ts`](../../src/bridges/be87-capacitor-noise.ts) (`evaluateCapacitorNoise`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Bridges a thermal energy to an electrical variance. The bridges tuple is `thermal` → `electrical`. Category H is the same component as BE-70.
+- **Mathematical Formulation**: `⟨v²⟩ = k_B T / C`.
+- **Dimensions**: The catalog signature is `[L^4 M^2 T^-6 I^-2]`.
+- **Domain**: `T` finite, `C > 0`. The energy is one quadratic term.
+- **References**: `U = (C/2) V²` and the Boltzmann weight of that term are the hypotheses of `PhysJS.CapacitorNoise.noise_eq`.
+- **Rationale**: The two halves cancel. Three kinetic degrees of freedom are a different variance.
+
+
 ## VI. Integration with Universal Physics Tensor
 
 These additional equations fill crucial gaps in the tensor structure according to the following mapping:
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–76 take the pattern of their category. No new pattern is introduced.
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–87 take the pattern of their category. No new pattern is introduced.
 
 1. **Quantum-Classical Bridges (11-12, 33-35, 56, 71)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
@@ -1394,13 +1550,13 @@ Each bridge equation type maps to specific tensor components. The component is t
 2. **Information-Geometry Bridges (13-14, 30-32, 42-44, 51-52, 57, 63-65, 68, 72)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Cbeta%2C%5Ctext%7BPoincar%C3%A9%7D%2C%5Ctext%7Binfo%7D%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\beta,\text{Poincaré},\text{info},\epsilon,\zeta}" />
    Categories B, I, and M. The symmetry slot is Poincaré and the information slot is occupied. Scale and force stay free.
-3. **Emergence Patterns (15-16, 27-29, 48-50, 58, 70)**:
+3. **Emergence Patterns (15-16, 27-29, 48-50, 58, 70, 85, 87)**:
    Higher-rank correlations <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%5Cbeta%5Cgamma%5Cdelta%5Cepsilon%5Czeta%E2%80%A6%7D" alt="\boldsymbol{\Pi}^{\alpha\beta\gamma\delta\epsilon\zeta…}" />
    Categories C, H, and O. The ellipsis is the mark of this cluster (Part I §1.2, the emergent component). A scalar formula in the cluster keeps the ellipsis: BE-27's encoded form is a scalar and is already in this list.
-4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76)**:
+4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
    Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
-5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75)**:
+5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84)**:
    Off-diagonal elements <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bscale%7D_i%2C%5Ctext%7Bscale%7D_j%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{scale}_i,\text{scale}_j,\gamma,\delta,\epsilon,\zeta}" />
    Categories E, F, and G. The scale pair stays symbolic. The cluster's domains are not one pair: quantum–cosmological, quantum–condensed-matter, condensed-matter–holography, quantum–biological.
 6. **Cosmological Puzzles (45-47)**:
@@ -1433,6 +1589,17 @@ Each bridge equation type maps to specific tensor components. The component is t
 | 71 | J | quantum-classical, `quantum`, `classical` | Category J, with BE-33–35. Clapeyron slope. Signature `[L^-1 M T^-2 Theta^-1]`. The bridges tuple is `thermodynamics` → `continuum`. The letter selects the component, as it does for BE-34, whose tuple is not `quantum` → `classical`. |
 | 72 | I | information-geometry, Poincaré and info | Category I, with BE-68. Gravitational frequency ratio. Signature `[1]`. The bridges tuple is `gravitation` → `radiation`. The shared component with BE-68 is not a composition: the frequency ratio is not the Tolman invariant. |
 | 73 | F | scale-transition, `scale_i`, `scale_j` | Category F, with BE-59–62. Kelvin relation. Signature `[L^2 M T^-3 I^-1]`, the voltage signature. BE-59's frequency and this voltage sit in the same cluster because the category letter says so. The bridges tuple is `thermal` → `electrical`. |
+| 77 | D | field-unification, force and symmetry | Category D, with BE-74 and BE-76. Hagen–Poiseuille flux. Signature `[L^3 T^-1]`. The bridges tuple is `fluid` → `continuum`. |
+| 78 | D | field-unification, force and symmetry | Category D. Pinned Euler load. Signature `[force]`. The bridges tuple is `continuum` → `mechanical`. |
+| 79 | D | field-unification, force and symmetry | Category D. Parallel-plate pull-in voltage. Signature `[L^2 M T^-3 I^-1]`. The bridges tuple is `electromagnetic` → `continuum`. |
+| 80 | F | scale-transition, `scale_i`, `scale_j` | Category F, with BE-73 and BE-75. Mott–Gurney current. Signature `[L^-2 I]`. The bridges tuple is `electromagnetic` → `condensed`. |
+| 81 | D | field-unification, force and symmetry | Category D. Child–Langmuir current. Signature `[L^-2 I]`, the same signature word as BE-80, so the signature does not decide. The bridges tuple is `electromagnetic` → `vacuum`. |
+| 82 | F | scale-transition, `scale_i`, `scale_j` | Category F. Shockley diode. Signature `[I]`. The bridges tuple is `electromagnetic` → `condensed`. |
+| 83 | F | scale-transition, `scale_i`, `scale_j` | Category F, with BE-73. Thomson coefficient. Signature `[L^2 M T^-3 I^-1 Theta^-1]`. The bridges tuple is `thermal` → `electrical`. The dependency on BE-73 is not a composition: the quantities do not meet. |
+| 84 | F | scale-transition, `scale_i`, `scale_j` | Category F. Four-point sheet resistance. Signature `[L^2 M T^-3 I^-2]`. The bridges tuple is `electromagnetic` → `condensed`. Not BE-35. |
+| 85 | H | emergence, higher-rank ellipsis | Category H, with BE-58. One-sided shot noise. Signature `[T I^2]`. The bridges tuple is `quantum` → `classical`. The formula is a scalar. The ellipsis stays. |
+| 86 | D | field-unification, force and symmetry | Category D. Reynolds analogy at Prandtl number 1. Signature `[1]`. The bridges tuple is `fluid` → `thermal`. |
+| 87 | H | emergence, higher-rank ellipsis | Category H, with BE-70. Capacitor voltage variance. Signature `[L^4 M^2 T^-6 I^-2]`. The bridges tuple is `thermal` → `electrical`. The formula is a scalar. The ellipsis stays. |
 
 **Topology slot left free.** BE-55 and BE-60 name a Chern number, and the BE-55 catalog text says the row populates the Topology axis. In the rank-6 order of Part I §1.1 that axis is the last index, ζ. Group 5 leaves ζ free, as it does for BE-22, whose area law carries a topological constant and is already in category F's list. A per-equation index that pins ζ to a Chern label is not a pattern the lists for ids 11–50 use. It is not introduced here.
 

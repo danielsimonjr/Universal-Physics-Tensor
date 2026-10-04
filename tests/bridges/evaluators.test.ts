@@ -8,9 +8,10 @@ import { parseUnit } from '../../src/dimensional/units.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
 
 describe('BRIDGE_EVALUATORS', () => {
-  it('covers the closed-form / spacetime bridges (51/52/55..76)', () => {
+  it('covers the closed-form / spacetime bridges (51/52/55..87)', () => {
     expect([...BRIDGE_EVALUATORS.keys()].sort((a, b) => a - b)).toEqual([
       51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
+      77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
     ]);
   });
 
@@ -99,6 +100,10 @@ describe('BRIDGE_EVALUATORS', () => {
       L_J_per_kg: 2.26e6, delta_v_m3_per_kg: 1.672,
       g1: -1, g2: -4, S_V_per_K: 2e-4,
       m_kg: 9.1093837015e-31, n_per_m3: 1e28, p_B_Pa: 1,
+      R_m: 0.01, deltaP_Pa: 1000, mu_Pa_s: 0.001, L_m: 1,
+      E_Pa: 2e11, I_m4: 1e-8, k_N_per_m: 1, g0_m: 1e-6, A_m2: 1e-6,
+      eps: 8.8541878128e-12, I_s_A: 1e-12, dS_dT_V_per_K2: 1e-6,
+      I_A: 1e-3, C_f: 0.004, C_F: 1e-12,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

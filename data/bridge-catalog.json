@@ -2,14 +2,14 @@
   "$schema": "./bridge-catalog.schema.json",
   "schemaVersion": 2,
   "packageVersion": "3.1.0",
-  "count": 66,
+  "count": 77,
   "entries": [
     {
       "id": 11,
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Lindblad.preserve",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -17,7 +17,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "property",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Lindblad.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Lindblad.lean",
         "covers": "property: one channel of the displayed GKSL generator has trace zero, and it is Hermitian when H and ρ are. L need not be Hermitian. Dropping the anticommutator makes the trace nonzero. Not Born–Markov coarse-graining — covers its statement only"
       },
       "name": "Decoherence Master Equation",
@@ -54,7 +54,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.ThermalDeBroglie.wavelength_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -62,7 +62,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/ThermalDeBroglie.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ThermalDeBroglie.lean",
         "covers": "derivation-step: √(2π ℏ²/(m k_B T)) = h/√(2π m k_B T) for h = 2πℏ and ℏ > 0. The non-negative square root needs ℏ > 0. The Wave Q form ℏ/√(m k_B T), with ℏ in the numerator and no √(2π), fails, as does ℏ/√(2 m k_B T). Not Caldeira–Leggett dephasing — covers its statement only"
       },
       "name": "Mesoscopic Coherence Length Equation (Caldeira-Leggett dephasing length)",
@@ -103,7 +103,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Einstein.trace_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -111,7 +111,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "reduction",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Einstein.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Einstein.lean",
         "covers": "reduction: contracting G_μν + Λ g_μν = κ T_μν in four dimensions gives R = 4Λ − κ T, not Jacobson's thermodynamic derivation — covers its statement only"
       },
       "name": "Einstein trace reduction",
@@ -159,7 +159,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.PlanckArea.area_law",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -167,7 +167,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/PlanckArea.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/PlanckArea.lean",
         "covers": "derivation-step: k_B c³ A/(4 G ℏ) = k_B A/(4 ℓ_P²) for ℓ_P² = ℏ G/c³. The area is an input. ℓ_P² = ℏ G/c² fails when c ≠ 1. The factor 2 in place of 4 fails. The same lemma is be-43. Not the minimal-surface theorem — covers its statement only"
       },
       "name": "Quantum Error Correction Holographic Mapping",
@@ -196,7 +196,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Coarsening.exponent_iff",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -204,7 +204,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Coarsening.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Coarsening.lean",
         "covers": "derivation-step: for Γ = L₀²/t₀ > 0, t > 0, t ≠ t₀, and z > 0, L(t) = L₀ (t/t₀)^{1/z} obeys L(t)² = Γ t iff z = 2. At t = t₀ the ratio holds for every z. Model B's z = 3 gives L³ ∝ t and fails L² = Γ t. Not the Model A Langevin equation. The Langevin kinetic coefficient is a different Γ — covers its statement only"
       },
       "name": "Universal Emergence Equation (Hohenberg-Halperin Model A gradient flow)",
@@ -247,7 +247,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Landauer.erasure_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -255,7 +255,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Landauer.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Landauer.lean",
         "covers": "derivation-step: for T > 0, the equal-level two-state ensemble has ⟨E⟩ − F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+δ do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation — covers its statement only"
       },
       "name": "Information-Thermodynamics Bridge (Landauer's principle)",
@@ -309,7 +309,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.EinsteinCartan.inversion",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -317,7 +317,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/EinsteinCartan.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/EinsteinCartan.lean",
         "covers": "derivation-step: if κ = 8πG/c⁴ ≠ 0 and every component satisfies T = κ S, then S·S = T·T / κ² = (c⁴/(8πG))² T·T. κ² in the numerator is the inversion backwards, and it fails when T·T ≠ 0 and κ⁴ ≠ 1. Not the Einstein–Cartan field equation, and not a Newtonian limit — covers its statement only"
       },
       "name": "Einstein-Cartan torsion-spin coupling",
@@ -390,7 +390,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.QuantumBounce.dictionary",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -398,7 +398,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "cross-check",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/QuantumBounce.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/QuantumBounce.lean",
         "covers": "cross-check: H²_LQC equals H²_RS at σ = −ρ_c/2, both tend to (8πG/3)ρ + Λ/3 at infinity, and H²_LQC = 0 at ρ = ρ_c and Λ = 0, naming BE-54. σ = +ρ_c/2 is not that polynomial. σ < 0 is not a physical Randall–Sundrum brane — covers its statement only"
       },
       "name": "Quantum Bounce Equation",
@@ -474,7 +474,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Kss.saturating",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -482,7 +482,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Kss.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Kss.lean",
         "covers": "derivation-step: η/s = ℏ/(4π k_B) is the equality 4π k_B (η/s) = ℏ for k_B ≠ 0. The Hawking factor 8π in place of 4π is 2ℏ, not ℏ, once ℏ ≠ 0. Not the inequality η/s ≥ ℏ/(4π k_B) — covers its statement only"
       },
       "name": "KSS viscosity-to-entropy bound (AdS/CFT universal lower bound)",
@@ -529,7 +529,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.ToricCode.toric",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -537,7 +537,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/ToricCode.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ToricCode.lean",
         "covers": "derivation-step: four anyons of quantum dimension 1 have D = √4 = 2 and γ = ln 2 in nats. The encoded decomposition is S = α L − γ, with the O(L⁻¹) term dropped. log₂ 2 = 1 is the bit convention, not ln 2. D = √2 is one anyon pair, not the toric code. Not the Kitaev–Preskill theorem, and not a quantum-gravity boundary — covers its statement only"
       },
       "name": "Topological Entanglement Entropy - Quantum Gravity Link",
@@ -624,7 +624,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Fret.dictionary",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -632,7 +632,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "cross-check",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Fret.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Fret.lean",
         "covers": "cross-check: η = R₀⁶/(R₀⁶+R⁶) = 1/(1+(R/R₀)⁶) = k_FRET/(k_FRET+1/τ_D), and η decreases on (0, ∞). At R = 2 R₀ the exponent 4 is not the exponent 6. Not the dipole–dipole law — covers its statement only"
       },
       "name": "Quantum Coherence in Photosynthesis Efficiency (Förster resonance energy transfer)",
@@ -745,7 +745,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.EffectiveTemperature.sum_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -753,7 +753,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/EffectiveTemperature.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/EffectiveTemperature.lean",
         "covers": "derivation-step: for T ≠ 0 and k_B ≠ 0, T (1 + Σ_active/(k_B T)) = T + Σ_active/k_B, and this equals T iff Σ_active = 0. The product T · Σ_active/(k_B T), with the 1 omitted, is not that sum. Not the frequency-dependent Cugliandolo–Kurchan T_eff(ω) — covers its statement only"
       },
       "name": "Fluctuation-Dissipation Violation in Active Matter",
@@ -793,7 +793,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.EntropyProduction.nonneg",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -801,7 +801,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "property",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/EntropyProduction.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/EntropyProduction.lean",
         "covers": "derivation-step: σ = Σ_i J_i X_i is the definition of σ. If every product is ≥ 0 then σ ≥ 0. One flipped sign, with the other products zero and the flipped product strictly positive, is not σ, and that flipped sum is negative. Not the variational maximum-entropy-production principle. The catalog records this id as not-a-bridge; this lemma does not decide that — covers its statement only"
       },
       "name": "Maximum Entropy Production Principle",
@@ -833,7 +833,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Jarzynski.jensen_work",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -841,7 +841,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "property",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Jarzynski.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Jarzynski.lean",
         "covers": "property: for a finite probability and β > 0, ∑ p_i W_i ≥ −(1/β) log(∑ p_i exp(−β W_i)). The reversed inequality fails on two unequal work values. Not Jarzynski's theorem, and not the Gaussian identity — covers its statement only"
       },
       "name": "Jarzynski free-energy equality (canonical 1997 form)",
@@ -882,7 +882,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Entanglement.first_variation",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -890,7 +890,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Entanglement.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Entanglement.lean",
         "covers": "derivation-step: for a smooth curve of full-rank density matrices that stay diagonal in a fixed basis and have trace 1, d/dt S(ρ(t)) = −⟪ρ̇(t), log ρ(t)⟫, the trace inner product. The modular Hamiltonian K = −log ρ is frozen at the base point, and that derivative equals d/dt ⟨K⟩. A finite jump from diag(1/2, 1/2) to diag(3/4, 1/4) leaves ⟨K⟩ unchanged and changes S. Not the holographic first law that identifies K with an area variation — covers its statement only"
       },
       "name": "Entanglement - Geometry Equation (FLM first-law / linear-response)",
@@ -963,7 +963,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.BornOverlap.modulus_sq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -971,7 +971,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/BornOverlap.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/BornOverlap.lean",
         "covers": "derivation-step: |c + s i|² = c² + s², which is normSq of one complex matrix element. A sum of squares above 1 is not a probability in [0, 1], the module's rejection of c² + s² > 1. c² − s² is not that square when s ≠ 0. Not the Giacomini–Castro-Ruiz–Brukner transformation, and not a Haar integral. The catalog records this id as not-a-bridge; this lemma does not decide that — covers its statement only"
       },
       "name": "Quantum Reference Frame Transformation",
@@ -1010,7 +1010,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.QuantumCritical.thermal_scaling",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1018,7 +1018,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/QuantumCritical.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/QuantumCritical.lean",
         "covers": "derivation-step: ξ(T) = ξ₀ (T/T₀)^{−1/z}, and at z = 1 this is ξ(T) = ξ₀ (T/T₀)^{−1} = ξ₀ T₀/T for T > 0 and T₀ > 0. Not Hertz–Millis theory, and not a universality class — covers its statement only"
       },
       "name": "Quantum-Classical Critical Point Mapping (Hertz-Millis canonical scaling, 3D Heisenberg)",
@@ -1062,7 +1062,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.KibbleZurek.exponent",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1070,7 +1070,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/KibbleZurek.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/KibbleZurek.lean",
         "covers": "derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor — covers its statement only"
       },
       "name": "Kibble-Zurek Mechanism in Curved Spacetime",
@@ -1107,7 +1107,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Crossing.antisymmetry",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1115,7 +1115,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Crossing.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Crossing.lean",
         "covers": "derivation-step: for a real function g, g(u,v) − g(v,u) = −(g(v,u) − g(u,v)). The swap is the negation of a difference. The residual is 0 for every g when u = v, including u = v = 1/4, so that point is not a control. A block that is not symmetric does not vanish at u = 1/2, v = 1/4. Not the infinite sum over (Δ, ℓ), and not positivity or unitarity. The catalog records this id as not-a-bridge; this lemma does not decide that — covers its statement only"
       },
       "name": "Conformal Bootstrap - Physical Operator Equation",
@@ -1209,7 +1209,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Shapiro.radial_integral",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1217,7 +1217,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Shapiro.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Shapiro.lean",
         "covers": "derivation-step: for 0 < R_near < R_far and c ≠ 0, ∫_{R_near}^{R_far} (2 G M / c³) (dr / r) = (2 G M / c³) ln(R_far / R_near). The factor 1 in place of 2 is half, once G ≠ 0 and M ≠ 0. log₁₀ of the radius ratio is not ln. Not the impact-parameter formula, and not the Cassini measurement — covers its statement only"
       },
       "name": "Modified light-propagation: Shapiro gravitational time delay",
@@ -1299,7 +1299,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Mond.tendsto_nu_limits",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1307,7 +1307,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "limit",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Mond.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Mond.lean",
         "covers": "limit: ν → 1 as z → ∞, ν √z → 1 as z → 0⁺, and F_N ν(z) / √(m F_N a₀) → 1 as F_N → 0⁺; not ν → √(2/z), and not the SPARC confrontation — covers its statement only"
       },
       "name": "Milgrom MOND interpolation ν(z)",
@@ -1391,7 +1391,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.CompositeHiggs.scale_free",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1399,7 +1399,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/CompositeHiggs.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/CompositeHiggs.lean",
         "covers": "derivation-step: for f ≠ 0 and θ = h/f, V(h)/f⁴ = −α sin²θ + β [sin⁴θ − sin²θ cos²θ]. Both terms carry f⁴, so the ratio depends on h only through θ. The pre-correction first term −α f² sin²θ, divided by f⁴, is −α sin²θ / f². It depends on f, and it agrees with −α sin²θ only when f² = 1. Not SILH matching onto a confining theory. The catalog records this id as not-a-bridge; this lemma does not decide that — covers its statement only"
       },
       "name": "Composite Higgs Potential",
@@ -1459,7 +1459,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.HawkingUnruh.dictionary",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1467,7 +1467,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "cross-check",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/HawkingUnruh.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/HawkingUnruh.lean",
         "covers": "cross-check: T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect — covers its statement only"
       },
       "name": "Hawking temperature (canonical 1975 derivation)",
@@ -1508,7 +1508,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.PlanckArea.area_law",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1516,7 +1516,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/PlanckArea.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/PlanckArea.lean",
         "covers": "derivation-step: the be-14 lemma on a wormhole area. k_B A/(4 ℓ_P²) equals k_B c³ A/(4 G ℏ) for ℓ_P² = ℏ G/c³. ℓ_P² = ℏ G/c² fails when c ≠ 1, and the factor 2 fails. Not ER=EPR — covers its statement only"
       },
       "name": "ER=EPR Wormhole-Entropy Bound",
@@ -1751,7 +1751,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.TimeSymmetric.wheeler_feynman",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1759,7 +1759,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/TimeSymmetric.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/TimeSymmetric.lean",
         "covers": "derivation-step: A_μ(x) = (A_μ^ret(x) + A_μ^adv(x))/2, and twice that component is the sum. The id is contested. This lemma does not decide the contest. Not the absorber boundary condition as a theory of radiation reaction — covers its statement only"
       },
       "name": "Retrocausal QFT (Wheeler-Feynman half-retarded-plus-half-advanced)",
@@ -1798,7 +1798,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Deflection.line_integral",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1806,7 +1806,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Deflection.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Deflection.lean",
         "covers": "derivation-step: (1+γ)/c² ∫_ℝ G M b / (b² + z²)^{3/2} dz = 2(1+γ) G M / (b c²), and at γ = 1 this is the encoded angle 4 G M / (b c²). γ = 0 is half. Not a geodesic — covers its statement only"
       },
       "name": "Gravitational Lensing — Eddington 1919 weak-field deflection",
@@ -1940,7 +1940,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.RandallSundrum.brane_friedmann",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1948,7 +1948,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/RandallSundrum.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/RandallSundrum.lean",
         "covers": "derivation-step: for σ ≠ 0, H²_RS = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3, which equals the Friedmann term plus (8πG/3) ρ²/(2σ). Not a derivation from the five-dimensional Einstein equation — covers its statement only"
       },
       "name": "Randall-Sundrum brane cosmology (modified Friedmann with brane-tension correction)",
@@ -1981,7 +1981,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.YangMills.b0_pos_iff_nf_le",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -1989,7 +1989,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/YangMills.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/YangMills.lean",
         "covers": "derivation-step: b₀ > 0 iff N_f ≤ 16 for SU(3), not a running procedure past one loop — covers its statement only"
       },
       "name": "Yang-Mills one-loop β-function (asymptotic freedom)",
@@ -2022,7 +2022,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.QuantumHall.reciprocal",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2030,7 +2030,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/QuantumHall.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/QuantumHall.lean",
         "covers": "derivation-step: for a nonzero integer C and e ≠ 0, σ_xy = C e²/h, R_H = h/(C e²), and R_K = h/e², so σ_xy R_H = 1 and R_H = R_K/C. The shifted index C+1 is a different conductance. Replacing e² by e fails the product when e ≠ 1. Not TKNN — covers its statement only"
       },
       "name": "Integer Quantum Hall effect / TKNN (topological Hall conductance)",
@@ -2120,7 +2120,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.JohnsonNyquist.tendsto_classical",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2128,7 +2128,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "limit",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/JohnsonNyquist.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/JohnsonNyquist.lean",
         "covers": "limit: the classical Johnson–Nyquist spectrum is the ω → 0⁺ limit of the quantum parent, not the fluctuation–dissipation theorem — covers its statement only"
       },
       "name": "Johnson-Nyquist noise / fluctuation-dissipation theorem",
@@ -2168,7 +2168,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Josephson.frequency_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2176,7 +2176,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Josephson.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Josephson.lean",
         "covers": "derivation-step: f = (2e/h) V, K_J = 2e/h, and f = K_J V. Clearing h recovers 2e. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing 2e by e fails. Not the tunneling Hamiltonian — covers its statement only"
       },
       "name": "AC Josephson effect (quantum voltage standard)",
@@ -2217,7 +2217,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Laughlin.filling_fraction",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2225,7 +2225,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Laughlin.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Laughlin.lean",
         "covers": "derivation-step: for integers p ≠ 0 and q ≠ 0, with ν = p/q, σ_xy = ν e²/h and R_xy = R_K/ν = (q/p) h/e². The charge and Planck's constant are not assumed nonzero. Oddness of q is the Laughlin selection rule and is not this identity. Not the Laughlin wavefunction, and not the anyon charge e/3 — covers its statement only"
       },
       "name": "Fractional Quantum Hall effect (Laughlin ν=1/3)",
@@ -2258,7 +2258,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Sommerfeld.integral_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2266,7 +2266,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Sommerfeld.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Sommerfeld.lean",
         "covers": "derivation-step: ∫_ℝ x² e^x / (1+e^x)² dx = π²/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of π²/3. Claiming the half-line equals π²/3 fails. Not the transport law — covers its statement only"
       },
       "name": "Wiedemann-Franz law (Lorenz number)",
@@ -2322,7 +2322,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Chandrasekhar.prefactor",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2330,7 +2330,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Chandrasekhar.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Chandrasekhar.lean",
         "covers": "derivation-step: with n = ρ/(μ_e m_u), p_F = ℏ (3π² n)^{1/3}, and P = (1/4) n p_F c, one has P = K_ρ ρ^{4/3} where K_ρ = K_n/(μ_e m_u)^{4/3} and K_n = (ℏ c/4)(3π²)^{1/3}. For the n = 3 Lane–Emden scale the central density cancels, and M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}. ω₃⁰ stays symbolic; the decimal 2.01824 is not in the theorem. With ℏ = c = μ_e = m_u = 1 both routes give the same K. √π/2 in place of √(3π)/2 fails when ω₃⁰ ≠ 0, and dropping ω₃⁰ fails when ω₃⁰ ≠ 1. Not stellar rotation or magnetic support — covers its statement only"
       },
       "name": "Chandrasekhar mass (white-dwarf degeneracy limit)",
@@ -2361,7 +2361,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Eddington.balance_iff",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2369,7 +2369,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Eddington.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Eddington.lean",
         "covers": "derivation-step: the r² cancellation in the Eddington force balance, not a hard cap — covers its statement only"
       },
       "name": "Eddington luminosity (radiation-pressure limit)",
@@ -2400,7 +2400,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Jeans.mass_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2408,7 +2408,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "derivation-step",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Jeans.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Jeans.lean",
         "covers": "derivation-step: the encoded Jeans mass (5 k T / (G μ m_u))^(3/2) (3 / (4 π ρ))^(1/2) follows from the virial convention with factor 5 and M = 4 π R³ ρ / 3. Replacing 5 by 3 fails. Not the virial theorem — covers its statement only"
       },
       "name": "Jeans mass (gravitational collapse criterion)",
@@ -2438,7 +2438,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.RadiationPressure.pressure_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2446,7 +2446,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/RadiationPressure.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/RadiationPressure.lean",
         "covers": "derivation-step: foreshortening I cos θ, normal momentum per energy (cos θ)/c, and an opaque split that deposits the absorbed fraction once and the specular fraction twice give P_n = (I/c)(1+R) cos²θ. R = 0, θ = 0 is I/c and R = 1, θ = 0 is 2I/c. A single cosine is not that pressure when cos θ is neither 0 nor 1. Homogeneity in I and c gives P = C I/c with C = f(1,1) unfixed. Not the Maxwell stress tensor, and not the Eddington luminosity — covers its statement only"
       },
       "name": "Radiation pressure (opaque surface)",
@@ -2477,7 +2477,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.AlfvenSpeed.speed_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2485,7 +2485,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/AlfvenSpeed.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/AlfvenSpeed.lean",
         "covers": "derivation-step: one transverse monochromatic polarization along a uniform field, with ∂b/∂t = B ∂v/∂z and ρ ∂v/∂t = (B/μ0) ∂b/∂z, has phase speed |ω/k| = B/√(μ0 ρ) for B > 0, μ0 > 0, ρ > 0, and k ≠ 0. ρ is the density in that momentum premise, read as the total mass density. Proton-only n m_p is a different density when electrons contribute, and a density r ρ with r ≠ 1 is a different speed. Inserting tesla and the SI density into B/√(4πρ) is not the SI speed. 4π×10^{-7} is the permeability stand-in, not a measured μ0. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation — covers its statement only"
       },
       "name": "Alfvén speed (ideal MHD)",
@@ -2515,7 +2515,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.TolmanEhrenfest.hydrostatic_constant",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2523,7 +2523,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/TolmanEhrenfest.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/TolmanEhrenfest.lean",
         "covers": "derivation-step: on a static interval with g_00 < 0, hydrostatic balance dp = -(ρ+p) d ln √(-g_00) and the equilibrium Gibbs relation dp = (ρ+p) d ln T, with ρ+p ≠ 0, give T √(-g_00) equal at the endpoints. The 1930 writing T √g_44 agrees when g_44 = -g_00. Real.sqrt g_00 = 0 when g_00 < 0, so the product without the minus is 0. d ln T = 0 is not g dr/c². Not a horizon temperature and not PhysJS.HawkingUnruh.dictionary. T ‖ξ‖ = const is out of scope. The hydrostatic equation is not derived from ∇_μ T^{μν} = 0, and the Gibbs relation is not derived from an equation of state — covers its statement only"
       },
       "name": "Tolman–Ehrenfest effect (static thermal equilibrium)",
@@ -2553,7 +2553,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.FastMagnetosonic.speed_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2561,7 +2561,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/FastMagnetosonic.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/FastMagnetosonic.lean",
         "covers": "derivation-step: a monochromatic compressional polarization perpendicular to a uniform field, with ∂b/∂t = −B ∂v/∂x, ∂δρ/∂t = −ρ ∂v/∂x, δp = c_s² δρ, and ρ ∂v/∂t = −∂δp/∂x − (B/μ0) ∂b/∂x, has phase speed |ω/k| = √(c_s² + B²/(μ0 ρ)) for μ0 > 0, ρ > 0, and k ≠ 0. The velocity wave is not identically zero. c_s² = γ p / ρ is a reading of the closure, not an energy equation. The textbook quartic at k_∥ = 0 has roots ω² = 0 and ω² = (c_s² + v_A²) k²; ω = 0 does not solve compressional induction. √(c_s² + v_A²) is not c_s, not v_A, and not c_s + v_A when the other speed is nonzero. c_s = 0 recovers B/√(μ0 ρ), the Alfvén value of a different polarization. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation, and not the oblique fast mode. The linearized equations are hypotheses — covers its statement only"
       },
       "name": "Fast magnetosonic speed (perpendicular, ideal MHD)",
@@ -2590,7 +2590,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.EinsteinRelation.diffusion_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2598,7 +2598,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/EinsteinRelation.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/EinsteinRelation.lean",
         "covers": "derivation-step: for the Boltzmann profile n = n_ref exp(−q V/(k_B T)) with n_ref > 0, k_B T ≠ 0, and q ≠ 0, a nonzero field E = −dV/dx at which the drift flux μ n E cancels the diffusion flux D dn/dx gives D = μ k_B T / q. The force-mobility writing D = μ_force k_B T needs μ_force = μ/q. Dropping q fails when q ≠ 1. The Fermi-liquid form μ E_F / q fails when E_F ≠ k_B T. Stokes–Einstein fails unless μ/q = 1/(6 π η a). A factor C ≠ 1 is not this diffusivity. Not a master equation, and not a Fermi liquid — covers its statement only"
       },
       "name": "Einstein relation (drift–diffusion)",
@@ -2627,7 +2627,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.Clapeyron.slope_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2635,7 +2635,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Clapeyron.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Clapeyron.lean",
         "covers": "derivation-step: where the specific Gibbs energies agree along coexistence and each phase obeys dg = −s dT + v dP, dP/dT = (s2−s1)/(v2−v1). With L = T (s2−s1), T ≠ 0, and Δv ≠ 0, dP/dT = L/(T Δv). Dropping T fails when T ≠ 1. Replacing Δv by one phase volume fails when the other volume is nonzero. A factor C ≠ 1 is not this slope. Not the ideal-gas integrated vapor-pressure law. The Gibbs differential is a hypothesis, not a Legendre transform — covers its statement only"
       },
       "name": "Clapeyron slope (coexistence)",
@@ -2664,7 +2664,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.GravitationalRedshift.frequency_ratio",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2672,7 +2672,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/GravitationalRedshift.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/GravitationalRedshift.lean",
         "covers": "derivation-step: two static observers of one coordinate period, with ν √(−g_00) = 1/Δt and g_00 < 0, have ν1/ν2 = √(−g2)/√(−g1) = √(g2/g1). If the Tolman products T √(−g_00) also agree, then T1/T2 = ν1/ν2. Equal temperatures on g_00 = −1 and g_00 = −4 are not a Tolman equilibrium, while the frequency ratio is 2. For g_00 = −(1+2Φ/c²) at c = 1, Φ = 0 and Φ = 4, the exact ratio is neither (Φ2−Φ1)/c² nor 1+(Φ2−Φ1)/c². z = 0 is not Φ/c². Not PhysJS.TolmanEhrenfest.hydrostatic_constant, not a horizon temperature, and not PhysJS.HawkingUnruh.dictionary — covers its statement only"
       },
       "name": "Gravitational redshift (static observers)",
@@ -2701,7 +2701,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.KelvinRelation.peltier_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2709,7 +2709,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/KelvinRelation.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/KelvinRelation.lean",
         "covers": "derivation-step: for J_e = L11 E/T + L12 (−∇T)/T² and J_q = L21 E/T + L22 (−∇T)/T², the open-circuit Seebeck coefficient S = E/∇T and the isothermal Peltier coefficient Π = J_q/J_e satisfy Π = S T when L12 = L21. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. Not the first Thomson relation μ = T dS/dT, and not a measured thermopower. The linear fluxes are hypotheses — covers its statement only"
       },
       "name": "Kelvin relation (Peltier–Seebeck)",
@@ -2738,7 +2738,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.MagneticPressure.pressure_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2746,7 +2746,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/MagneticPressure.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/MagneticPressure.lean",
         "covers": "derivation-step: a linear inductor with dU/dI = L I and U(0) = 0 stores U = (L/2) I². A long solenoid with B = μ0 n I and flux linkage Λ = (n ℓ) B A has L = μ0 n² V. At fixed current the battery supplies I ΔΛ. The stored energy rises by half of that, and the difference is the mechanical work p ΔV, so p = B²/(2 μ0). Homogeneity in B and μ0 gives p = C B²/μ0 with C unfixed. C = 1 is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor. Ampere's law, the flux linkage, and the quasistatic work balance are hypotheses — covers its statement only"
       },
       "name": "Magnetic pressure (solenoid)",
@@ -2775,7 +2775,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.LondonPenetration.depth_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2783,7 +2783,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/LondonPenetration.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/LondonPenetration.lean",
         "covers": "derivation-step: on B(x) = B0 exp(−x/λ) with λ > 0, Ampere's law j = −(1/μ0) dB/dx and the London equation dj/dx = −(n e²/m) B give λ = √(m/(μ0 n e²)). e is the elementary charge. The dimension matrix of {m, μ0, n, e} admits both that monomial and μ0 e²/m, so units do not choose. Those lengths disagree when n (μ0 e²/m)³ ≠ 1. The growing exponential is not the screened field. Replacing e by 2e at the same n and m fails, and dropping the square on e fails when e ≠ 1. A factor C ≠ 1 is not this depth. Not the classical skin depth. The London equation and Ampere's law are hypotheses — covers its statement only"
       },
       "name": "London penetration depth",
@@ -2812,7 +2812,7 @@
       "formalRef": {
         "system": "lean4-physjs",
         "statement": "PhysJS.PlasmaBeta.beta_eq",
-        "version": "physjs@ee753df77bd5b29b7207443181606b6004bfcf6a leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
         "axioms": [
           "propext",
           "Classical.choice",
@@ -2820,7 +2820,7 @@
         ],
         "fidelity": "sanity-lemmas",
         "kind": "bridge",
-        "url": "https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/PlasmaBeta.lean",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/PlasmaBeta.lean",
         "covers": "derivation-step: β = p_gas / p_B where p_B is PhysJS.MagneticPressure.pressure_eq, so β = p_gas / (B²/(2 μ0)) = 2 μ0 p_gas / B². The ideal-gas closure p_gas = n k_B T gives β = 2 μ0 n k_B T / B². B ≠ 0. Using B²/μ0 in place of the magnetic pressure is a different ratio. The constant 1 is dimensionless and is not this beta when the ratio is not 1. A factor C ≠ 1 is not this beta. Dropping p = n k_B T fails. Not a unique monomial, and not a plasma-β inequality — covers its statement only"
       },
       "name": "Plasma beta",
@@ -2845,6 +2845,415 @@
       "dimensional_signature": "[1]",
       "tractability_class": "closed-form",
       "notes": "Closed-form evaluator evaluatePlasmaBeta({n_per_m3, T_K, p_B_Pa}) → {beta} in src/bridges/be76-plasma-beta.ts. p_B_Pa is B²/(2 μ0). The overlay formalRef is PhysJS.PlasmaBeta.beta_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge composes with be-74 on magnetic-pressure. The edge confidence stays established. Not a plasma-β inequality. No confrontation."
+    },
+    {
+      "id": 77,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.HagenPoiseuille.flow_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/HagenPoiseuille.lean",
+        "covers": "derivation-step: steady axisymmetric Newtonian flow with d/dr (r du/dr) = (G/μ) r, centerline slope 0, and no-slip u(R) = 0 integrates to u = (G/(4μ))(r²−R²). With G = −ΔP/L the flux Q = ∫ u 2π r dr is π R⁴ ΔP/(8 μ L). Darcy's definition then gives f_D Re = 64. The same wall shear with the Fanning normalization is 16. A factor other than 8 is not this flux. Not a square duct. The axial balance, no-slip, and the Darcy definitions are hypotheses — covers its statement only"
+      },
+      "name": "Hagen–Poiseuille flux",
+      "category": "D",
+      "category_name": "Field Unification Bridges",
+      "bridges": [
+        "fluid",
+        "continuum"
+      ],
+      "status": "established",
+      "context": "Steady axisymmetric Newtonian flow in a straight circular pipe, with d/dr (r du/dr) = (G/μ) r, centerline slope 0, and no-slip u(R) = 0, integrates to Q = π R⁴ ΔP / (8 μ L) once G = −ΔP/L. Darcy's definitions of that same profile give f_D Re = 64. The Fanning normalization of the wall shear is 16. A square duct is a different eigenvalue. The axial balance, no-slip, and the Darcy definitions are hypotheses.",
+      "formula_latex": "Q = \\frac{\\pi R^4 \\Delta P}{8 \\mu L}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-77) — established textbook relation, PhysJS.HagenPoiseuille.flow_eq",
+      "known_issues": [],
+      "references": [
+        "The axial balance, the centerline condition, and no-slip are the hypotheses of PhysJS.HagenPoiseuille.flow_eq."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[L^3 T^-1]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateHagenPoiseuille({R_m, deltaP_Pa, mu_Pa_s, L_m}) → {Q_m3_per_s} in src/bridges/be77-hagen-poiseuille.ts. The 8 is the integral of the no-slip parabola. The overlay formalRef is PhysJS.HagenPoiseuille.flow_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a square duct and not the Fanning factor 16. No confrontation."
+    },
+    {
+      "id": 78,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.EulerBuckling.critical_load",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/EulerBuckling.lean",
+        "covers": "derivation-step: the Euler–Bernoulli balance y'' = −ω² y with ω² = P/(E I) and pinned ends y(0) = y(L) = 0 has the eigenfunction sin(π x/L) at P = π² E I/L², and every nontrivial solution has ω L = n π for a nonzero integer n, so the load is at least that value. The clamped-free column is π² E I/(4 L²). That factor is not the pinned load. Not read off from units. The beam equation is a hypothesis — covers its statement only"
+      },
+      "name": "Euler buckling load (pinned–pinned)",
+      "category": "D",
+      "category_name": "Field Unification Bridges",
+      "bridges": [
+        "continuum",
+        "mechanical"
+      ],
+      "status": "established",
+      "context": "The Euler–Bernoulli balance y'' = −ω² y with ω² = P/(E I) and pinned ends y(0) = y(L) = 0 has the eigenfunction sin(π x/L) at P = π² E I/L². Every nontrivial solution has ω L = n π for a nonzero integer n, so the load is at least that value. The clamped-free column is π² E I/(4 L²). That factor is not the pinned load. The beam equation is a hypothesis.",
+      "formula_latex": "P_{\\mathrm{cr}} = \\frac{\\pi^2 E I}{L^2}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-78) — established textbook relation, PhysJS.EulerBuckling.critical_load",
+      "known_issues": [],
+      "references": [
+        "The Euler–Bernoulli balance and the pinned ends are the hypotheses of PhysJS.EulerBuckling.critical_load."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[force]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateEulerBuckling({E_Pa, I_m4, L_m}) → {P_N} in src/bridges/be78-euler-buckling.ts. The overlay formalRef is PhysJS.EulerBuckling.critical_load, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the cantilever load. No confrontation."
+    },
+    {
+      "id": 79,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.PullIn.pull_in_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/PullIn.lean",
+        "covers": "derivation-step: C = ε0 A/g has dC/dg = −ε0 A/g². Equilibrium of a linear spring against the coenergy force is k(g0−g) = ε0 A V²/(2 g²), so V² is proportional to (g0−g) g². The derivative 2 g0 g − 3 g² vanishes only at g = 0 and g = 2 g0/3, and the second derivative at the fold is −2 g0. Substituting the gap gives V_pi² = 8 k g0³/(27 ε0 A) = 8 k g0²/(27 C0) with C0 = ε0 A/g0. g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses — covers its statement only"
+      },
+      "name": "Parallel-plate pull-in voltage",
+      "category": "D",
+      "category_name": "Field Unification Bridges",
+      "bridges": [
+        "electromagnetic",
+        "continuum"
+      ],
+      "status": "established",
+      "context": "C = ε0 A/g has dC/dg = −ε0 A/g². Equilibrium of a linear spring against the coenergy force is k(g0−g) = ε0 A V²/(2 g²). The fold of (g0−g) g² is g = 2 g0/3, and the voltage there is V_pi = sqrt(8 k g0³/(27 ε0 A)). g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses.",
+      "formula_latex": "V_{\\mathrm{pi}} = \\sqrt{\\frac{8 k g_0^3}{27 \\varepsilon_0 A}}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-79) — established textbook relation, PhysJS.PullIn.pull_in_eq",
+      "known_issues": [],
+      "references": [
+        "The parallel-plate capacitance and the linear spring are the hypotheses of PhysJS.PullIn.pull_in_eq."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[L^2 M T^-3 I^-1]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluatePullIn({k_N_per_m, g0_m, A_m2}) → {V_pi_V} in src/bridges/be79-pull-in.ts. ε0 is EPS0_SI. The overlay formalRef is PhysJS.PullIn.pull_in_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a fringing field. No confrontation."
+    },
+    {
+      "id": 80,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.MottGurney.current_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/MottGurney.lean",
+        "covers": "derivation-step: drift J = q n μ E and Poisson dE/dx = q n/ε give E dE/dx = J/(ε μ). With E(0) = 0 the integral is E²/2 = J x/(ε μ). The nonnegative root integrated from 0 to d is V = sqrt(2 J/(ε μ)) (2/3) d^{3/2}, so J = (9/8) ε μ V²/d³. A factor other than 9/8 is not this current. Not Child–Langmuir. Drift, Poisson, and the injecting contact are hypotheses — covers its statement only"
+      },
+      "name": "Mott–Gurney current",
+      "category": "F",
+      "category_name": "Condensed Matter - High Energy Bridges",
+      "bridges": [
+        "electromagnetic",
+        "condensed"
+      ],
+      "status": "established",
+      "context": "Drift J = q n μ E and Poisson dE/dx = q n/ε give E dE/dx = J/(ε μ). With E(0) = 0 the integral is E²/2 = J x/(ε μ), and the nonnegative root from 0 to d is J = (9/8) ε μ V²/d³. A factor other than 9/8 is not this current. Not Child–Langmuir. Drift, Poisson, and the injecting contact are hypotheses.",
+      "formula_latex": "J = \\frac{9}{8} \\varepsilon \\mu \\frac{V^2}{d^3}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-80) — established textbook relation, PhysJS.MottGurney.current_eq",
+      "known_issues": [],
+      "references": [
+        "Drift, Poisson, and the injecting contact E(0) = 0 are the hypotheses of PhysJS.MottGurney.current_eq."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[L^-2 I]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateMottGurney({eps, mu_m2_per_Vs, V_volts, d_m}) → {J_A_per_m2} in src/bridges/be80-mott-gurney.ts. eps is the solid permittivity in F/m, not necessarily ε0. The overlay formalRef is PhysJS.MottGurney.current_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Child–Langmuir. No confrontation."
+    },
+    {
+      "id": 81,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.ChildLangmuir.current_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ChildLangmuir.lean",
+        "covers": "derivation-step: collisionless energy (1/2) m v² = e φ, J = ρ v, and Poisson φ'' = ρ/ε0 give J = ε0 φ'' v. A power φ ∝ x^α makes φ'' v independent of x only for α = 4/3. The profile φ = V (x/d)^{4/3} has φ(0) = 0, φ(d) = V, and cathode field 0, and for x > 0 its current is (4 ε0/9) sqrt(2 e/m) V^{3/2}/d². e is the elementary charge. The Mott–Gurney exponent 3/2 does not cancel. Poisson is not claimed at x = 0. Not a drift-only solid — covers its statement only"
+      },
+      "name": "Child–Langmuir current",
+      "category": "D",
+      "category_name": "Field Unification Bridges",
+      "bridges": [
+        "electromagnetic",
+        "vacuum"
+      ],
+      "status": "established",
+      "context": "Collisionless energy (1/2) m v² = e φ, J = ρ v, and Poisson φ'' = ρ/ε0 give a current independent of x only for φ ∝ x^{4/3}. The profile φ = V (x/d)^{4/3} has φ(0) = 0, φ(d) = V, and cathode field 0, and for x > 0 its current is J = (4 ε0/9) sqrt(2 e/m) V^{3/2}/d². e is the elementary charge. The Mott–Gurney exponent does not cancel. Poisson is not claimed at x = 0. Not a drift-only solid.",
+      "formula_latex": "J = \\frac{4 \\varepsilon_0}{9} \\sqrt{\\frac{2 e}{m}} \\frac{V^{3/2}}{d^2}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-81) — established textbook relation, PhysJS.ChildLangmuir.current_eq",
+      "known_issues": [],
+      "references": [
+        "Collisionless energy, J = ρ v, and Poisson away from the cathode are the hypotheses of PhysJS.ChildLangmuir.current_eq. e is the elementary charge."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[L^-2 I]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateChildLangmuir({m_kg, V_volts, d_m}) → {J_A_per_m2} in src/bridges/be81-child-langmuir.ts. e is E_SI, not an input and not Euler's number. ε0 is EPS0_SI. The overlay formalRef is PhysJS.ChildLangmuir.current_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Mott–Gurney. No confrontation."
+    },
+    {
+      "id": 82,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.ShockleyDiode.shockley_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ShockleyDiode.lean",
+        "covers": "derivation-step: quasi-equilibrium multiplies the equilibrium flux by exp(e V/(η k_B T)). Ideality 1 sets η = 1. Detailed balance sets the reverse flux equal to the forward flux at V = 0, and low injection keeps that reverse flux under bias. The net current is I = I_s (exp(e V/(k_B T)) − 1). Zero bias carries zero current. Ideality 2 is not this current when e V ≠ 0. e is the elementary charge. Not a diffusion-length ODE — covers its statement only"
+      },
+      "name": "Shockley diode equation",
+      "category": "F",
+      "category_name": "Condensed Matter - High Energy Bridges",
+      "bridges": [
+        "electromagnetic",
+        "condensed"
+      ],
+      "status": "established",
+      "context": "Quasi-equilibrium multiplies the equilibrium flux by exp(e V/(η k_B T)). Ideality 1 sets η = 1. Detailed balance sets the reverse flux equal to the forward flux at V = 0, and low injection keeps that reverse flux under bias. The net current is I = I_s (exp(e V/(k_B T)) − 1). Zero bias carries zero current. Ideality 2 is not this current when e V ≠ 0. e is the elementary charge. Not a diffusion-length ODE.",
+      "formula_latex": "I = I_s \\left(\\exp\\left(\\frac{e V}{k_B T}\\right) - 1\\right)",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-82) — established textbook relation, PhysJS.ShockleyDiode.shockley_eq",
+      "known_issues": [],
+      "references": [
+        "Quasi-equilibrium, detailed balance at zero bias, and low injection are the hypotheses of PhysJS.ShockleyDiode.shockley_eq. e is the elementary charge."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[I]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateShockleyDiode({I_s_A, V_volts, T_K}) → {I_A} in src/bridges/be82-shockley-diode.ts. e is E_SI. Euler's number is written exp. The overlay formalRef is PhysJS.ShockleyDiode.shockley_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Ideality is 1. No confrontation."
+    },
+    {
+      "id": 83,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.Thomson.thomson_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Thomson.lean",
+        "covers": "derivation-step: the Kelvin relation Π(t) = S(t) t, which is PhysJS.KelvinRelation.peltier_eq read along temperature, and the Thomson split μ = dΠ/dT − S, give μ = T dS/dT by the product rule. dΠ/dT is not μ when S T ≠ 0. Not a second copy of Π = S T. The functional Kelvin relation and the Thomson split are hypotheses — covers its statement only"
+      },
+      "name": "Thomson coefficient",
+      "category": "F",
+      "category_name": "Condensed Matter - High Energy Bridges",
+      "bridges": [
+        "thermal",
+        "electrical"
+      ],
+      "status": "established",
+      "context": "The Kelvin relation Π(t) = S(t) t, read along temperature, and the Thomson split μ = dΠ/dT − S give μ_T = T dS/dT by the product rule. dΠ/dT is not μ_T when S T ≠ 0. This is the first Thomson relation. It is not a second copy of Π = S T. The functional Kelvin relation and the Thomson split are hypotheses.",
+      "formula_latex": "\\mu_T = T \\frac{\\mathrm{d}S}{\\mathrm{d}T}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-83) — established textbook relation, PhysJS.Thomson.thomson_eq",
+      "known_issues": [],
+      "references": [
+        "PhysJS.Thomson.thomson_eq reads PhysJS.KelvinRelation.peltier_eq along temperature. The Thomson split μ = dΠ/dT − S is a hypothesis."
+      ],
+      "dependencies": [
+        73
+      ],
+      "dimensional_signature": "[L^2 M T^-3 I^-1 Theta^-1]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateThomsonCoefficient({T_K, dS_dT_V_per_K2}) → {mu_V_per_K} in src/bridges/be83-thomson.ts. dS/dT is an input, not a sampled difference of S. The overlay formalRef is PhysJS.Thomson.thomson_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge does not compose with be-73: Π is not an input. The dependency is the Kelvin relation the theorem assumes. The edge confidence stays established. Not Π = S T. No confrontation."
+    },
+    {
+      "id": 84,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.FourPoint.sheet_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/FourPoint.lean",
+        "covers": "derivation-step: on an infinite sheet the radial field of a point current is (I R_s)/(2 π r), and the potential drop is the integral of 1/r. Probes at 0, s, 2s, and 3s, with current in at 0 and out at 3s, each contribute (I R_s/(2 π)) ln 2 on the inner pair. Superposition gives R_s = (π/ln 2)(V/I). A sink at 4s gives 2π/ln 3 instead. Not PhysJS.Crossing.antisymmetry. The Laplace field and linear superposition are hypotheses — covers its statement only"
+      },
+      "name": "Four-point sheet resistance",
+      "category": "F",
+      "category_name": "Condensed Matter - High Energy Bridges",
+      "bridges": [
+        "electromagnetic",
+        "condensed"
+      ],
+      "status": "established",
+      "context": "On an infinite sheet the radial field of a point current is (I R_s)/(2 π r), and the potential drop is the integral of 1/r. Probes at 0, s, 2s, and 3s, with current in at 0 and out at 3s, each contribute (I R_s/(2 π)) ln 2 on the inner pair. Superposition gives R_s = (π/ln 2)(V/I). A sink at 4s gives 2π/ln 3 instead. Not PhysJS.Crossing.antisymmetry. The Laplace field and linear superposition are hypotheses.",
+      "formula_latex": "R_s = \\frac{\\pi}{\\ln 2}\\frac{V}{I}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-84) — established textbook relation, PhysJS.FourPoint.sheet_eq",
+      "known_issues": [],
+      "references": [
+        "The radial field (I R_s)/(2 π r) and linear superposition are the hypotheses of PhysJS.FourPoint.sheet_eq."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[L^2 M T^-3 I^-2]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateFourPointSheet({V_volts, I_A}) → {R_s_ohm} in src/bridges/be84-four-point.ts. The spacing s cancels. The overlay formalRef is PhysJS.FourPoint.sheet_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the conformal crossing be-35. No confrontation."
+    },
+    {
+      "id": 85,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.ShotNoise.shot_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ShotNoise.lean",
+        "covers": "derivation-step: in a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e² and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is Δf = 1/(2 T), and S_I = Var(I)/Δf is 2 e I. The two-sided bandwidth Δf = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson–Nyquist. The Poisson variance and the one-sided convention are hypotheses — covers its statement only"
+      },
+      "name": "Shot noise (one-sided)",
+      "category": "H",
+      "category_name": "Non-Equilibrium Statistical Mechanics",
+      "bridges": [
+        "quantum",
+        "classical"
+      ],
+      "status": "established",
+      "context": "In a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e² and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is Δf = 1/(2 T), and S_I = 2 e I. The two-sided bandwidth Δf = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson–Nyquist. The Poisson variance and the one-sided convention are hypotheses.",
+      "formula_latex": "S_I = 2 e I",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-85) — established textbook relation, PhysJS.ShotNoise.shot_eq",
+      "known_issues": [],
+      "references": [
+        "The Poisson variance Var(N) = mean(N) and the one-sided window Δf = 1/(2 T) are the hypotheses of PhysJS.ShotNoise.shot_eq. e is the elementary charge."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[T I^2]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateShotNoise({I_A}) → {S_I_A2_per_Hz} in src/bridges/be85-shot-noise.ts. e is E_SI. The formula is linear in I. The overlay formalRef is PhysJS.ShotNoise.shot_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Johnson–Nyquist and not the two-sided spectrum e I. No confrontation."
+    },
+    {
+      "id": 86,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.ReynoldsAnalogy.reynolds_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ReynoldsAnalogy.lean",
+        "covers": "derivation-step: wall fluxes τ = μ du/dy and q = k dT/dy, with C_f = τ/(ρ U²/2), h = q/ΔT, St = h/(ρ U c_p), and Pr = μ c_p/k, satisfy St Pr = C_f/2 when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At Pr = 1, St = C_f/2. Pr ≠ 1 with nonzero skin friction is not this equality. Not a Nusselt correlation — covers its statement only"
+      },
+      "name": "Reynolds analogy (Prandtl number 1)",
+      "category": "D",
+      "category_name": "Field Unification Bridges",
+      "bridges": [
+        "fluid",
+        "thermal"
+      ],
+      "status": "established",
+      "context": "Wall fluxes τ = μ du/dy and q = k dT/dy, with C_f = τ/(ρ U²/2), h = q/ΔT, St = h/(ρ U c_p), and Pr = μ c_p/k, satisfy St Pr = C_f/2 when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At Pr = 1, St = C_f/2. Pr ≠ 1 with nonzero skin friction is not this equality. Not a Nusselt correlation.",
+      "formula_latex": "\\mathrm{St} = \\frac{C_f}{2}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-86) — established textbook relation, PhysJS.ReynoldsAnalogy.reynolds_eq",
+      "known_issues": [],
+      "references": [
+        "Matched normalized wall gradients and Pr = 1 are the hypotheses of PhysJS.ReynoldsAnalogy.reynolds_eq. The 1/2 is the skin-friction normalization."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[1]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateReynoldsAnalogy({C_f}) → {St} in src/bridges/be86-reynolds-analogy.ts. Pr and the wall slopes are not inputs. The overlay formalRef is PhysJS.ReynoldsAnalogy.reynolds_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a Nusselt correlation. No confrontation."
+    },
+    {
+      "id": 87,
+      "formalRef": {
+        "system": "lean4-physjs",
+        "statement": "PhysJS.CapacitorNoise.noise_eq",
+        "version": "physjs@92f87257a1e3086a48cdc19fe4361cc1c5909d49 leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940",
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "fidelity": "sanity-lemmas",
+        "kind": "bridge",
+        "url": "https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/CapacitorNoise.lean",
+        "covers": "derivation-step: dU/dV = C V and U(0) = 0 integrate to U = (C/2) V². The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance k_B T/C, because the partition function is the Gaussian integral. The mean square on that law is k_B T/C, and (C/2) of it is (1/2) k_B T. (3/2) k_B T/C is not this variance. Dropping the energy half replaces it by k_B T/(2 C). Not three kinetic degrees of freedom — covers its statement only"
+      },
+      "name": "Capacitor voltage variance",
+      "category": "H",
+      "category_name": "Non-Equilibrium Statistical Mechanics",
+      "bridges": [
+        "thermal",
+        "electrical"
+      ],
+      "status": "established",
+      "context": "dU/dV = C V and U(0) = 0 integrate to U = (C/2) V². The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance k_B T/C, because the partition function is the Gaussian integral. The mean square on that law is ⟨v²⟩ = k_B T/C, and (C/2) of it is (1/2) k_B T. (3/2) k_B T/C is not this variance. Dropping the energy half replaces it by k_B T/(2 C). Not three kinetic degrees of freedom.",
+      "formula_latex": "\\langle v^2 \\rangle = \\frac{k_B T}{C}",
+      "source_part": "III",
+      "source_section": "Applied-physicist catalog (be-87) — established textbook relation, PhysJS.CapacitorNoise.noise_eq",
+      "known_issues": [],
+      "references": [
+        "U = (C/2) V² and the Boltzmann weight of that one quadratic term are the hypotheses of PhysJS.CapacitorNoise.noise_eq."
+      ],
+      "dependencies": [],
+      "dimensional_signature": "[L^4 M^2 T^-6 I^-2]",
+      "tractability_class": "closed-form",
+      "notes": "Closed-form evaluator evaluateCapacitorNoise({T_K, C_F}) → {v2_V2} in src/bridges/be87-capacitor-noise.ts. The two halves cancel. The overlay formalRef is PhysJS.CapacitorNoise.noise_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not (3/2) k_B T/C. No confrontation."
     }
   ],
   "confrontations": [

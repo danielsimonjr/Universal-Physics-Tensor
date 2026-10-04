@@ -219,9 +219,10 @@ describe('vetLinkCandidate — generic↔specialization (subsuming) bar', () => 
 describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
   const ranked = rankDiscoveries(CATALOG_GRAPH);
 
-  it('vets every proposed candidate (199) and tags each with a verdict', () => {
+  it('vets every proposed candidate (389) and tags each with a verdict', () => {
     // 191 is the record from before be-74..76.
-    expect(ranked.length).toBe(199);
+    // 199 is the record from before be-77..87.
+    expect(ranked.length).toBe(389);
     const verdicts = new Set(ranked.map((r) => r.verdict));
     for (const v of verdicts) {
       expect(['promising', 'inert', 'contradictory', 'magnitude-clash', 'axis-clash']).toContain(v);
