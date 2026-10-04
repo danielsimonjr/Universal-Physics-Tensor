@@ -31,6 +31,7 @@ import { DIMENSIONLESS } from '../dimensional/types.js';
 import { equals, format } from '../dimensional/algebra.js';
 import { dim } from '../dimensional/ast-builders.js';
 import type { BridgeEdge } from './edge.js';
+import { formulaShape } from './formula-shape.js';
 import { BRIDGE_EQUATIONS } from '../bridges/index.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { enumerateCompositions } from './enumerate.js';
@@ -152,8 +153,12 @@ function recoveredCanonicalPrefactor(id: string, prefactor: number): boolean {
   return Math.abs(Math.log10(mag)) <= 1;
 }
 
-/** The outcome of trying to derive a bridge dimensionally + verify it. */
-type DerivationStatus = 'derived' | 'decoy' | 'open' | 'no-samples';
+/**
+ * The outcome of trying to derive a bridge dimensionally + verify it.
+ * `not-a-monomial` means the encoded formula adds dimensionful terms, so a
+ * monomial reconstruction does not apply. It is not a failed reconstruction.
+ */
+type DerivationStatus = 'derived' | 'decoy' | 'open' | 'no-samples' | 'not-a-monomial';
 interface DerivationResult {
   readonly status: DerivationStatus;
   readonly subset?: readonly string[];
@@ -168,6 +173,12 @@ interface DerivationResult {
  * closes the target AND reproduces the evaluator up to a constant ratio.
  */
 export function attemptDerivation(e: BridgeEdge): DerivationResult {
+  // A sum of dimensionful terms is not a proportionality. The constant search
+  // below would report a decoy, or a derived constant, for a monomial the
+  // formula is not. Proof status is separate and is not read here.
+  if (e.symbolic !== undefined && formulaShape(e.symbolic) === 'dimensional-sum') {
+    return { status: 'not-a-monomial' };
+  }
   const { target, sources } = asVars(e);
   const inputs = makeInputs(e);
   const need = e.sources.length === 0 ? 1 : 2;
@@ -261,6 +272,7 @@ function grounding(e: BridgeEdge): Grounding {
   const d = attemptDerivation(e);
   if (d.status === 'derived') return d.cleanPrefactor ? 'grounded' : 'empirical';
   if (d.status === 'decoy') return 'decoy';
+  // A dimensional sum has no recognized monomial. It is not a decoy.
   return 'open';
 }
 

@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Classify an encoded formula that adds dimensionful terms as not a monomial. Explain does not print a proportionality for that shape. The audit lists it apart from a failed reconstruction. The formally-proved map filter still reads the Lean kind.
+  Done: `formulaShape` is the classifier. be-69, be-36, be-40, be-50, and be-54 are `not-a-monomial`. be-27 and be-67 stay decoys. The catalog audit is DERIVED 14, DECOY 6, NOT A MONOMIAL 5, OPEN 29. `deriveEdgeEvidence(69)` still contains `formally-proved`.
+
 - [x] Re-pin the vendored PhysJS manifest to `4ea35872513f8d4d12a01bfac225156bdddb87a9`. PhysJS #61 moved Lean sources to `lean/PhysJS/<File>.lean`. `physjsFileUrl` is the permalink builder. Stored catalog and atlas JSON are regenerated from it.
   Done: the manifest commit is that sha. Theorem names and the manifest entries are unchanged. Every emitted URL is `https://github.com/danielsimonjr/PhysJS/blob/4ea35872513f8d4d12a01bfac225156bdddb87a9/lean/PhysJS/<File>.lean`, and that file is listed in `formal/physjs/lean-files.json`.
 
