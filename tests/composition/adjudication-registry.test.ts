@@ -6,8 +6,9 @@ import {
 } from '../../src/composition/adjudication.js';
 
 describe('ADJUDICATIONS registry', () => {
-  it('carries the 8 seeded verdicts', () => {
-    expect(ADJUDICATIONS).toHaveLength(8);
+  it('carries the seeded verdicts, including the Förster decoy', () => {
+    expect(ADJUDICATIONS.map((a) => a.id)).toContain('foerster-radius~schwarzschild-radius');
+    expect(ADJUDICATIONS).toHaveLength(9);
   });
   it('every entry has grounds, a source doc, and a date', () => {
     for (const a of ADJUDICATIONS) {

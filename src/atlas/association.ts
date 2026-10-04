@@ -150,6 +150,13 @@ export const ASSOCIATIONS: readonly Association[] = [
       'Same units, no shared meaning; unanimous. A decoherence rate (loss of quantum phase to the environment) vs. a mutation rate (frequency of a permanent, classical change to a DNA sequence). Same units, no shared physical meaning — decoherence may precede a mutation, but they are not one quantity.',
     citation: 'docs/research/orphan-connector-adjudication.md',
   },
+  {
+    id: 'foerster-radius~schwarzschild-radius',
+    kind: 'shared-structure',
+    between: ['foerster-radius', 'schwarzschild-radius'],
+    note: 'a Förster radius is not a Schwarzschild radius',
+    citation: 'docs/research/Orphan-Connector-Analysis.md',
+  },
 ];
 
 /** Look up an association by its `candidateId`-shaped key. @internal */

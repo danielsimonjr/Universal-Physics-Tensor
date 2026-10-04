@@ -3472,6 +3472,13 @@
       "grounds": "Same units, no shared meaning; unanimous. A decoherence rate (loss of quantum phase to the environment) vs. a mutation rate (frequency of a permanent, classical change to a DNA sequence). Same units, no shared physical meaning — decoherence may precede a mutation, but they are not one quantity.",
       "source": "docs/research/orphan-connector-adjudication.md",
       "date": "2026-06-21"
+    },
+    {
+      "id": "foerster-radius~schwarzschild-radius",
+      "verdict": "decoy",
+      "grounds": "a Förster radius is not a Schwarzschild radius",
+      "source": "docs/research/Orphan-Connector-Analysis.md",
+      "date": "2026-06-15"
     }
   ]
 }

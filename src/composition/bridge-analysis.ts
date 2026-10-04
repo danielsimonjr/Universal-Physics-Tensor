@@ -557,7 +557,7 @@ interface OrphanConnector {
   readonly coreEdge: string;
   /** Shared SI dimension (formatted). */
   readonly dim: string;
-  /** The two names share a word token (same physical KIND — a stronger prior). */
+  /** The two names share a word token. A token is not a verdict. */
   readonly sameKind: boolean;
   /** The shared token, when `sameKind`. */
   readonly sharedToken: string | null;
@@ -567,7 +567,7 @@ interface OrphanConnector {
 interface OrphanConnectorReport {
   /** Connectors, same-kind first then by orphan id. */
   readonly connectors: readonly OrphanConnector[];
-  /** Of those, the same-kind subset count (the motivated set). */
+  /** Of those, how many share a name token. A token is not a verdict. */
   readonly sameKindCount: number;
   /** Isolated bridges with ≥1 same-kind connector to the core, sorted. */
   readonly connectedOrphans: readonly string[];

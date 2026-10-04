@@ -33,7 +33,7 @@ describe('F14 — help states no fixed isolated-bridge count', () => {
     const both = await run(['connectors']);
     const catalog = await run(['connectors', '--source=catalog']);
     const count = (t: string) => {
-      const m = /(\d+) of the isolated bridges have a same-kind connector; (\d+) are truly unconnected/.exec(t);
+      const m = /(\d+) of the isolated bridges share a name token with the core; (\d+) are truly unconnected/.exec(t);
       return m === null ? null : Number(m[1]) + Number(m[2]);
     };
     expect(count(both.text)).not.toBeNull();

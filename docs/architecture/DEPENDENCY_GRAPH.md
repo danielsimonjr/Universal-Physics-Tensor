@@ -3566,6 +3566,7 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `resolveGraph, coreAnchor, coreLine` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../published-url.js` | `publishedUrl` | Import |
+| `../../composition/adjudication.js` | `adjudicationFor, candidateIdIfSlug` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -8251,7 +8252,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 433 |
 | Total Modules | 13 |
-| Total Lines of Code | 92227 |
+| Total Lines of Code | 92272 |
 | Total Exports | 3084 |
 | Total Re-exports | 1454 |
 | Total Classes | 60 |
