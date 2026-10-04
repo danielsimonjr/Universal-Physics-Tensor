@@ -26,6 +26,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [x] A hyphenated name in `upt derive --formula` is the symbol the dimension argument accepted.
   `upt derive fermi-energy:energy reduced-planck-constant:action mass:mass carrier-density:L^-3 --formula "(reduced-planck-constant^2/(2*mass))*(3*pi^2*carrier-density)^(2/3)"` exits 2 with `undeclared symbol 'reduced'`.
   Done: that command exits 0 and the recovered prefactor is `4.7854e+0`. The same formula with `reduced-planck-constant` left undeclared still names `reduced`, and the line says a hyphen between names is subtraction.
+- [x] Search for coherence length shows the thermal-wavelength formula, and `landau` says it matched Landauer.
+  `upt search "coherence length"` routes to `upt explain be-12`, which prints no formula. `upt search landau` exits 0 on Landauer's principle.
+  Done: coherence length routes to `upt atlas be-12` and the hit quotes `Not Caldeira–Leggett dephasing`. `upt search landau` says `landau is a prefix of landauer`. `upt search "landau diamagnetism"` exits 1.
 
 - [x] A synonym is one governing variable.
   `upt explain cyclotron-frequency` with `magnetic-field` also lists `magnetic-flux-density` and says the inputs do not fix a unique monomial. The derivation line is already `∝ charge·magnetic-field·mass^-1`.

@@ -10060,6 +10060,7 @@ modules:
         - searchNameWords
       interfaces:
         - SearchEntry
+        - PrefixMatch
         - SearchMatch
       functions:
         - queryWords
@@ -22401,10 +22402,10 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 454
   totalModules: 13
-  totalLinesOfCode: 96739
+  totalLinesOfCode: 96788
   totalExports: 3351
   totalClasses: 61
-  totalInterfaces: 529
+  totalInterfaces: 530
   totalFunctions: 834
   totalTypeGuards: 5
   totalEnums: 0
