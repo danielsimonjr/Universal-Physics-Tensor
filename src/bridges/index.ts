@@ -2,7 +2,7 @@
  * Universal Physics Tensor — Bridge Equation Index
  *
  * Machine-readable catalog of all bridge equations (IDs from 11) from the UPT
- * specification (Parts I-VI; BE-51–54 catalogued in Part-II §V-B; BE-55–76
+ * specification (Parts I-VI; BE-51–54 catalogued in Part-II §V-B; BE-55–87
  * catalogued in Part-II §V-C). Each entry
  * preserves the spec's stated status, known issues, references, and
  * dependencies on other bridge equations.
@@ -13,11 +13,11 @@
  * Source-of-truth files: docs/specification/Part-{I-VI}.md
  *
  * Honest-claude: fields not explicitly stated in the spec are null (not guessed).
- * - dimensional_signature is populated for all 58 entries. 56 of them (all
+ * - dimensional_signature is populated for all 77 entries. 75 of them (all
  *   except BE-51 and BE-52) are registered in `EXPECTED_DIMENSION_BY_BRIDGE`
  *   (`src/dimensional/bridge-check.ts`); 42 (IDs 11-50, 53, 54) also have AST
  *   encodings under `src/bridges/equations/`. BE-51/52 are closed-form evaluator
- *   bridges, and BE-55-68 have evaluator modules in `src/bridges/`; none of
+ *   bridges, and BE-55-87 have evaluator modules in `src/bridges/`; none of
  *   them has an AST encoding. Populated values are exactly what
  *   `format()` produces for the inferred Dimension shape; never free-form prose.
  * - known_issues are extracted ONLY from explicit issue-markers in the spec
@@ -2919,6 +2919,226 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
   dimensional_signature: `[1]`,
   tractability_class: 'closed-form',
   notes: `Closed-form evaluator evaluatePlasmaBeta({n_per_m3, T_K, p_B_Pa}) → {beta} in src/bridges/be76-plasma-beta.ts. p_B_Pa is B²/(2 μ0). The overlay formalRef is PhysJS.PlasmaBeta.beta_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge composes with be-74 on magnetic-pressure. The edge confidence stays established. Not a plasma-β inequality. No confrontation.`,
+},
+{
+  id: 77,
+  name: `Hagen–Poiseuille flux`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`fluid`, `continuum`] as [string, string],
+  status: 'established',
+  context: `Steady axisymmetric Newtonian flow in a straight circular pipe, with d/dr (r du/dr) = (G/μ) r, centerline slope 0, and no-slip u(R) = 0, integrates to Q = π R⁴ ΔP / (8 μ L) once G = −ΔP/L. Darcy's definitions of that same profile give f_D Re = 64. The Fanning normalization of the wall shear is 16. A square duct is a different eigenvalue. The axial balance, no-slip, and the Darcy definitions are hypotheses.`,
+  formula_latex: `Q = \\frac{\\pi R^4 \\Delta P}{8 \\mu L}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-77) — established textbook relation, PhysJS.HagenPoiseuille.flow_eq`,
+  known_issues: [],
+  references: [
+    `The axial balance, the centerline condition, and no-slip are the hypotheses of PhysJS.HagenPoiseuille.flow_eq.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^3 T^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateHagenPoiseuille({R_m, deltaP_Pa, mu_Pa_s, L_m}) → {Q_m3_per_s} in src/bridges/be77-hagen-poiseuille.ts. The 8 is the integral of the no-slip parabola. The overlay formalRef is PhysJS.HagenPoiseuille.flow_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a square duct and not the Fanning factor 16. No confrontation.`,
+},
+{
+  id: 78,
+  name: `Euler buckling load (pinned–pinned)`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`continuum`, `mechanical`] as [string, string],
+  status: 'established',
+  context: `The Euler–Bernoulli balance y'' = −ω² y with ω² = P/(E I) and pinned ends y(0) = y(L) = 0 has the eigenfunction sin(π x/L) at P = π² E I/L². Every nontrivial solution has ω L = n π for a nonzero integer n, so the load is at least that value. The clamped-free column is π² E I/(4 L²). That factor is not the pinned load. The beam equation is a hypothesis.`,
+  formula_latex: `P_{\\mathrm{cr}} = \\frac{\\pi^2 E I}{L^2}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-78) — established textbook relation, PhysJS.EulerBuckling.critical_load`,
+  known_issues: [],
+  references: [
+    `The Euler–Bernoulli balance and the pinned ends are the hypotheses of PhysJS.EulerBuckling.critical_load.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[force]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateEulerBuckling({E_Pa, I_m4, L_m}) → {P_N} in src/bridges/be78-euler-buckling.ts. The overlay formalRef is PhysJS.EulerBuckling.critical_load, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the cantilever load. No confrontation.`,
+},
+{
+  id: 79,
+  name: `Parallel-plate pull-in voltage`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`electromagnetic`, `continuum`] as [string, string],
+  status: 'established',
+  context: `C = ε0 A/g has dC/dg = −ε0 A/g². Equilibrium of a linear spring against the coenergy force is k(g0−g) = ε0 A V²/(2 g²). The fold of (g0−g) g² is g = 2 g0/3, and the voltage there is V_pi = sqrt(8 k g0³/(27 ε0 A)). g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses.`,
+  formula_latex: `V_{\\mathrm{pi}} = \\sqrt{\\frac{8 k g_0^3}{27 \\varepsilon_0 A}}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-79) — established textbook relation, PhysJS.PullIn.pull_in_eq`,
+  known_issues: [],
+  references: [
+    `The parallel-plate capacitance and the linear spring are the hypotheses of PhysJS.PullIn.pull_in_eq.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^2 M T^-3 I^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluatePullIn({k_N_per_m, g0_m, A_m2}) → {V_pi_V} in src/bridges/be79-pull-in.ts. ε0 is EPS0_SI. The overlay formalRef is PhysJS.PullIn.pull_in_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a fringing field. No confrontation.`,
+},
+{
+  id: 80,
+  name: `Mott–Gurney current`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`electromagnetic`, `condensed`] as [string, string],
+  status: 'established',
+  context: `Drift J = q n μ E and Poisson dE/dx = q n/ε give E dE/dx = J/(ε μ). With E(0) = 0 the integral is E²/2 = J x/(ε μ), and the nonnegative root from 0 to d is J = (9/8) ε μ V²/d³. A factor other than 9/8 is not this current. Not Child–Langmuir. Drift, Poisson, and the injecting contact are hypotheses.`,
+  formula_latex: `J = \\frac{9}{8} \\varepsilon \\mu \\frac{V^2}{d^3}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-80) — established textbook relation, PhysJS.MottGurney.current_eq`,
+  known_issues: [],
+  references: [
+    `Drift, Poisson, and the injecting contact E(0) = 0 are the hypotheses of PhysJS.MottGurney.current_eq.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-2 I]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateMottGurney({eps, mu_m2_per_Vs, V_volts, d_m}) → {J_A_per_m2} in src/bridges/be80-mott-gurney.ts. eps is the solid permittivity in F/m, not necessarily ε0. The overlay formalRef is PhysJS.MottGurney.current_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Child–Langmuir. No confrontation.`,
+},
+{
+  id: 81,
+  name: `Child–Langmuir current`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`electromagnetic`, `vacuum`] as [string, string],
+  status: 'established',
+  context: `Collisionless energy (1/2) m v² = e φ, J = ρ v, and Poisson φ'' = ρ/ε0 give a current independent of x only for φ ∝ x^{4/3}. The profile φ = V (x/d)^{4/3} has φ(0) = 0, φ(d) = V, and cathode field 0, and for x > 0 its current is J = (4 ε0/9) sqrt(2 e/m) V^{3/2}/d². e is the elementary charge. The Mott–Gurney exponent does not cancel. Poisson is not claimed at x = 0. Not a drift-only solid.`,
+  formula_latex: `J = \\frac{4 \\varepsilon_0}{9} \\sqrt{\\frac{2 e}{m}} \\frac{V^{3/2}}{d^2}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-81) — established textbook relation, PhysJS.ChildLangmuir.current_eq`,
+  known_issues: [],
+  references: [
+    `Collisionless energy, J = ρ v, and Poisson away from the cathode are the hypotheses of PhysJS.ChildLangmuir.current_eq. e is the elementary charge.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^-2 I]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateChildLangmuir({m_kg, V_volts, d_m}) → {J_A_per_m2} in src/bridges/be81-child-langmuir.ts. e is E_SI, not an input and not Euler's number. ε0 is EPS0_SI. The overlay formalRef is PhysJS.ChildLangmuir.current_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Mott–Gurney. No confrontation.`,
+},
+{
+  id: 82,
+  name: `Shockley diode equation`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`electromagnetic`, `condensed`] as [string, string],
+  status: 'established',
+  context: `Quasi-equilibrium multiplies the equilibrium flux by exp(e V/(η k_B T)). Ideality 1 sets η = 1. Detailed balance sets the reverse flux equal to the forward flux at V = 0, and low injection keeps that reverse flux under bias. The net current is I = I_s (exp(e V/(k_B T)) − 1). Zero bias carries zero current. Ideality 2 is not this current when e V ≠ 0. e is the elementary charge. Not a diffusion-length ODE.`,
+  formula_latex: `I = I_s \\left(\\exp\\left(\\frac{e V}{k_B T}\\right) - 1\\right)`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-82) — established textbook relation, PhysJS.ShockleyDiode.shockley_eq`,
+  known_issues: [],
+  references: [
+    `Quasi-equilibrium, detailed balance at zero bias, and low injection are the hypotheses of PhysJS.ShockleyDiode.shockley_eq. e is the elementary charge.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[I]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateShockleyDiode({I_s_A, V_volts, T_K}) → {I_A} in src/bridges/be82-shockley-diode.ts. e is E_SI. Euler's number is written exp. The overlay formalRef is PhysJS.ShockleyDiode.shockley_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Ideality is 1. No confrontation.`,
+},
+{
+  id: 83,
+  name: `Thomson coefficient`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`thermal`, `electrical`] as [string, string],
+  status: 'established',
+  context: `The Kelvin relation Π(t) = S(t) t, read along temperature, and the Thomson split μ = dΠ/dT − S give μ_T = T dS/dT by the product rule. dΠ/dT is not μ_T when S T ≠ 0. This is the first Thomson relation. It is not a second copy of Π = S T. The functional Kelvin relation and the Thomson split are hypotheses.`,
+  formula_latex: `\\mu_T = T \\frac{\\mathrm{d}S}{\\mathrm{d}T}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-83) — established textbook relation, PhysJS.Thomson.thomson_eq`,
+  known_issues: [],
+  references: [
+    `PhysJS.Thomson.thomson_eq reads PhysJS.KelvinRelation.peltier_eq along temperature. The Thomson split μ = dΠ/dT − S is a hypothesis.`,
+  ],
+  dependencies: [73],
+  dimensional_signature: `[L^2 M T^-3 I^-1 Theta^-1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateThomsonCoefficient({T_K, dS_dT_V_per_K2}) → {mu_V_per_K} in src/bridges/be83-thomson.ts. dS/dT is an input, not a sampled difference of S. The overlay formalRef is PhysJS.Thomson.thomson_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge does not compose with be-73: Π is not an input. The dependency is the Kelvin relation the theorem assumes. The edge confidence stays established. Not Π = S T. No confrontation.`,
+},
+{
+  id: 84,
+  name: `Four-point sheet resistance`,
+  category: `F`,
+  category_name: `Condensed Matter - High Energy Bridges`,
+  bridges: [`electromagnetic`, `condensed`] as [string, string],
+  status: 'established',
+  context: `On an infinite sheet the radial field of a point current is (I R_s)/(2 π r), and the potential drop is the integral of 1/r. Probes at 0, s, 2s, and 3s, with current in at 0 and out at 3s, each contribute (I R_s/(2 π)) ln 2 on the inner pair. Superposition gives R_s = (π/ln 2)(V/I). A sink at 4s gives 2π/ln 3 instead. Not PhysJS.Crossing.antisymmetry. The Laplace field and linear superposition are hypotheses.`,
+  formula_latex: `R_s = \\frac{\\pi}{\\ln 2}\\frac{V}{I}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-84) — established textbook relation, PhysJS.FourPoint.sheet_eq`,
+  known_issues: [],
+  references: [
+    `The radial field (I R_s)/(2 π r) and linear superposition are the hypotheses of PhysJS.FourPoint.sheet_eq.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^2 M T^-3 I^-2]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateFourPointSheet({V_volts, I_A}) → {R_s_ohm} in src/bridges/be84-four-point.ts. The spacing s cancels. The overlay formalRef is PhysJS.FourPoint.sheet_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not the conformal crossing be-35. No confrontation.`,
+},
+{
+  id: 85,
+  name: `Shot noise (one-sided)`,
+  category: `H`,
+  category_name: `Non-Equilibrium Statistical Mechanics`,
+  bridges: [`quantum`, `classical`] as [string, string],
+  status: 'established',
+  context: `In a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e² and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is Δf = 1/(2 T), and S_I = 2 e I. The two-sided bandwidth Δf = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson–Nyquist. The Poisson variance and the one-sided convention are hypotheses.`,
+  formula_latex: `S_I = 2 e I`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-85) — established textbook relation, PhysJS.ShotNoise.shot_eq`,
+  known_issues: [],
+  references: [
+    `The Poisson variance Var(N) = mean(N) and the one-sided window Δf = 1/(2 T) are the hypotheses of PhysJS.ShotNoise.shot_eq. e is the elementary charge.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[T I^2]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateShotNoise({I_A}) → {S_I_A2_per_Hz} in src/bridges/be85-shot-noise.ts. e is E_SI. The formula is linear in I. The overlay formalRef is PhysJS.ShotNoise.shot_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not Johnson–Nyquist and not the two-sided spectrum e I. No confrontation.`,
+},
+{
+  id: 86,
+  name: `Reynolds analogy (Prandtl number 1)`,
+  category: `D`,
+  category_name: `Field Unification Bridges`,
+  bridges: [`fluid`, `thermal`] as [string, string],
+  status: 'established',
+  context: `Wall fluxes τ = μ du/dy and q = k dT/dy, with C_f = τ/(ρ U²/2), h = q/ΔT, St = h/(ρ U c_p), and Pr = μ c_p/k, satisfy St Pr = C_f/2 when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At Pr = 1, St = C_f/2. Pr ≠ 1 with nonzero skin friction is not this equality. Not a Nusselt correlation.`,
+  formula_latex: `\\mathrm{St} = \\frac{C_f}{2}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-86) — established textbook relation, PhysJS.ReynoldsAnalogy.reynolds_eq`,
+  known_issues: [],
+  references: [
+    `Matched normalized wall gradients and Pr = 1 are the hypotheses of PhysJS.ReynoldsAnalogy.reynolds_eq. The 1/2 is the skin-friction normalization.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[1]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateReynoldsAnalogy({C_f}) → {St} in src/bridges/be86-reynolds-analogy.ts. Pr and the wall slopes are not inputs. The overlay formalRef is PhysJS.ReynoldsAnalogy.reynolds_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not a Nusselt correlation. No confrontation.`,
+},
+{
+  id: 87,
+  name: `Capacitor voltage variance`,
+  category: `H`,
+  category_name: `Non-Equilibrium Statistical Mechanics`,
+  bridges: [`thermal`, `electrical`] as [string, string],
+  status: 'established',
+  context: `dU/dV = C V and U(0) = 0 integrate to U = (C/2) V². The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance k_B T/C, because the partition function is the Gaussian integral. The mean square on that law is ⟨v²⟩ = k_B T/C, and (C/2) of it is (1/2) k_B T. (3/2) k_B T/C is not this variance. Dropping the energy half replaces it by k_B T/(2 C). Not three kinetic degrees of freedom.`,
+  formula_latex: `\\langle v^2 \\rangle = \\frac{k_B T}{C}`,
+  source_part: 'III',
+  source_section: `Applied-physicist catalog (be-87) — established textbook relation, PhysJS.CapacitorNoise.noise_eq`,
+  known_issues: [],
+  references: [
+    `U = (C/2) V² and the Boltzmann weight of that one quadratic term are the hypotheses of PhysJS.CapacitorNoise.noise_eq.`,
+  ],
+  dependencies: [],
+  dimensional_signature: `[L^4 M^2 T^-6 I^-2]`,
+  tractability_class: 'closed-form',
+  notes: `Closed-form evaluator evaluateCapacitorNoise({T_K, C_F}) → {v2_V2} in src/bridges/be87-capacitor-noise.ts. The two halves cancel. The overlay formalRef is PhysJS.CapacitorNoise.noise_eq, kind bridge. The catalog path passes it, so catalog evidence and edge evidence are formally-proved. The edge confidence stays established. Not (3/2) k_B T/C. No confrontation.`,
 }
 
 ];
@@ -3075,5 +3295,71 @@ export {
   type PlasmaBetaInputs,
   type PlasmaBetaResult,
 } from './be76-plasma-beta.js';
+/** Hagen–Poiseuille flux `Q = π R⁴ ΔP / (8 μ L)`. Not a square duct. */
+export {
+  evaluateHagenPoiseuille,
+  type HagenPoiseuilleInputs,
+  type HagenPoiseuilleResult,
+} from './be77-hagen-poiseuille.js';
+/** Pinned–pinned Euler load `P_cr = π² E I / L²`. */
+export {
+  evaluateEulerBuckling,
+  type EulerBucklingInputs,
+  type EulerBucklingResult,
+} from './be78-euler-buckling.js';
+/** Parallel-plate pull-in voltage. The fold is `g = 2 g0/3`. */
+export {
+  evaluatePullIn,
+  type PullInInputs,
+  type PullInResult,
+} from './be79-pull-in.js';
+/** Mott–Gurney current `J = (9/8) ε μ V² / d³`. Not Child–Langmuir. */
+export {
+  evaluateMottGurney,
+  type MottGurneyInputs,
+  type MottGurneyResult,
+} from './be80-mott-gurney.js';
+/** Child–Langmuir current. `e` is the elementary charge. */
+export {
+  evaluateChildLangmuir,
+  type ChildLangmuirInputs,
+  type ChildLangmuirResult,
+} from './be81-child-langmuir.js';
+/** Shockley diode at ideality 1, `I = I_s (exp(e V/(k_B T)) − 1)`. */
+export {
+  evaluateShockleyDiode,
+  type ShockleyDiodeInputs,
+  type ShockleyDiodeResult,
+} from './be82-shockley-diode.js';
+/** Thomson coefficient `μ_T = T dS/dT`. Builds on the Kelvin relation. */
+export {
+  evaluateThomsonCoefficient,
+  type ThomsonCoefficientInputs,
+  type ThomsonCoefficientResult,
+} from './be83-thomson.js';
+/** Collinear four-point sheet resistance `(π / ln 2) (V/I)`. */
+export {
+  evaluateFourPointSheet,
+  type FourPointSheetInputs,
+  type FourPointSheetResult,
+} from './be84-four-point.js';
+/** One-sided shot noise `S_I = 2 e I`. */
+export {
+  evaluateShotNoise,
+  type ShotNoiseInputs,
+  type ShotNoiseResult,
+} from './be85-shot-noise.js';
+/** Reynolds analogy `St = C_f / 2` at Pr = 1. */
+export {
+  evaluateReynoldsAnalogy,
+  type ReynoldsAnalogyInputs,
+  type ReynoldsAnalogyResult,
+} from './be86-reynolds-analogy.js';
+/** Capacitor mean square voltage `k_B T / C`. */
+export {
+  evaluateCapacitorNoise,
+  type CapacitorNoiseInputs,
+  type CapacitorNoiseResult,
+} from './be87-capacitor-noise.js';
 
 export default BRIDGE_EQUATIONS;

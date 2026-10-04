@@ -1,7 +1,7 @@
 /**
  * Bridge-evaluator registry — the single dispatch surface for `upt evaluate`.
  *
- * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…76) carry plain-JS
+ * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…87) carry plain-JS
  * evaluators but were, until now, unreachable from the CLI (`upt eval` is
  * user-formula-only; `upt explain <be-NN>` even redirected to a capability that did
  * not exist). This registry maps each bridge id to its evaluator, its input keys,
@@ -33,6 +33,17 @@ import { evaluateKelvinPeltier } from './be73-kelvin-peltier.js';
 import { evaluateMagneticPressure } from './be74-magnetic-pressure.js';
 import { evaluateLondonPenetration } from './be75-london-penetration.js';
 import { evaluatePlasmaBeta } from './be76-plasma-beta.js';
+import { evaluateHagenPoiseuille } from './be77-hagen-poiseuille.js';
+import { evaluateEulerBuckling } from './be78-euler-buckling.js';
+import { evaluatePullIn } from './be79-pull-in.js';
+import { evaluateMottGurney } from './be80-mott-gurney.js';
+import { evaluateChildLangmuir } from './be81-child-langmuir.js';
+import { evaluateShockleyDiode } from './be82-shockley-diode.js';
+import { evaluateThomsonCoefficient } from './be83-thomson.js';
+import { evaluateFourPointSheet } from './be84-four-point.js';
+import { evaluateShotNoise } from './be85-shot-noise.js';
+import { evaluateReynoldsAnalogy } from './be86-reynolds-analogy.js';
+import { evaluateCapacitorNoise } from './be87-capacitor-noise.js';
 
 /**
  * What a length input measures. Two lengths of one dimension are not
@@ -294,6 +305,107 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
         P('p_B_Pa', 'magnetic pressure', 'p_B', 'Pa', 'B²/(2 μ0), not B²/μ0; nonzero'),
       ],
       (i) => evaluatePlasmaBeta({ n_per_m3: i.n_per_m3, T_K: i.T_K, p_B_Pa: i.p_B_Pa }),
+    ),
+    spec(
+      77,
+      'Hagen–Poiseuille',
+      [
+        P('R_m', 'pipe radius', 'R', 'm', 'circular-pipe radius, > 0', { geometry: 'radius' }),
+        P('deltaP_Pa', 'pressure drop', 'ΔP', 'Pa', 'axial pressure drop'),
+        P('mu_Pa_s', 'dynamic viscosity', 'μ', 'Pa*s', 'Newtonian viscosity, nonzero'),
+        P('L_m', 'pipe length', 'L', 'm', 'pipe length, nonzero'),
+      ],
+      (i) => evaluateHagenPoiseuille({ R_m: i.R_m, deltaP_Pa: i.deltaP_Pa, mu_Pa_s: i.mu_Pa_s, L_m: i.L_m }),
+    ),
+    spec(
+      78,
+      'Euler buckling',
+      [
+        P('E_Pa', "Young's modulus", 'E', 'Pa', 'modulus, > 0'),
+        P('I_m4', 'second moment of area', 'I', '', 'metres to the fourth, > 0'),
+        P('L_m', 'column length', 'L', 'm', 'length between pinned ends, > 0'),
+      ],
+      (i) => evaluateEulerBuckling({ E_Pa: i.E_Pa, I_m4: i.I_m4, L_m: i.L_m }),
+    ),
+    spec(
+      79,
+      'Pull-in voltage',
+      [
+        P('k_N_per_m', 'spring stiffness', 'k', 'N/m', 'linear spring, > 0'),
+        P('g0_m', 'rest gap', 'g0', 'm', 'rest gap, > 0; the fold is 2 g0/3'),
+        P('A_m2', 'plate area', 'A', '', 'parallel-plate area in m², > 0'),
+      ],
+      (i) => evaluatePullIn({ k_N_per_m: i.k_N_per_m, g0_m: i.g0_m, A_m2: i.A_m2 }),
+    ),
+    spec(
+      80,
+      'Mott–Gurney',
+      [
+        P('eps', 'permittivity', 'ε', '', 'solid permittivity in F/m, > 0'),
+        P('mu_m2_per_Vs', 'drift mobility', 'μ', 'm^2/(V·s)', 'drift mobility, > 0'),
+        P('V_volts', 'voltage', 'V', 'V', 'the formula uses V²'),
+        P('d_m', 'thickness', 'd', 'm', 'film thickness, > 0', { geometry: 'separation' }),
+      ],
+      (i) => evaluateMottGurney({ eps: i.eps, mu_m2_per_Vs: i.mu_m2_per_Vs, V_volts: i.V_volts, d_m: i.d_m }),
+    ),
+    spec(
+      81,
+      'Child–Langmuir',
+      [
+        P('m_kg', 'particle mass', 'm', 'kg', 'particle mass, > 0'),
+        P('V_volts', 'anode voltage', 'V', 'V', 'anode voltage, > 0; e is the elementary charge'),
+        P('d_m', 'gap', 'd', 'm', 'gap, > 0; Poisson is not claimed at x = 0', { geometry: 'separation' }),
+      ],
+      (i) => evaluateChildLangmuir({ m_kg: i.m_kg, V_volts: i.V_volts, d_m: i.d_m }),
+    ),
+    spec(
+      82,
+      'Shockley diode',
+      [
+        P('I_s_A', 'saturation current', 'I_s', '', 'saturation current in amperes'),
+        P('V_volts', 'bias', 'V', 'V', 'bias voltage; ideality is 1'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature, nonzero'),
+      ],
+      (i) => evaluateShockleyDiode({ I_s_A: i.I_s_A, V_volts: i.V_volts, T_K: i.T_K }),
+    ),
+    spec(
+      83,
+      'Thomson coefficient',
+      [
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+        P('dS_dT_V_per_K2', 'Seebeck slope', 'dS/dT', '', 'volts per kelvin squared; not a sampled difference'),
+      ],
+      (i) => evaluateThomsonCoefficient({ T_K: i.T_K, dS_dT_V_per_K2: i.dS_dT_V_per_K2 }),
+    ),
+    spec(
+      84,
+      'Four-point sheet',
+      [
+        P('V_volts', 'inner-pair voltage', 'V', 'V', 'voltage on the inner pair'),
+        P('I_A', 'probe current', 'I', '', 'current in amperes, nonzero'),
+      ],
+      (i) => evaluateFourPointSheet({ V_volts: i.V_volts, I_A: i.I_A }),
+    ),
+    spec(
+      85,
+      'Shot noise',
+      [P('I_A', 'current', 'I', '', 'current in the Poisson mean, amperes; one-sided 2 e I')],
+      (i) => evaluateShotNoise({ I_A: i.I_A }),
+    ),
+    spec(
+      86,
+      'Reynolds analogy',
+      [P('C_f', 'skin friction', 'C_f', '', 'already normalized by ρ U²/2; Pr = 1 and matched slopes are hypotheses')],
+      (i) => evaluateReynoldsAnalogy({ C_f: i.C_f }),
+    ),
+    spec(
+      87,
+      'Capacitor noise',
+      [
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+        P('C_F', 'capacitance', 'C', 'F', 'capacitance, > 0; one quadratic term'),
+      ],
+      (i) => evaluateCapacitorNoise({ T_K: i.T_K, C_F: i.C_F }),
     ),
   ].map((s) => [s.bridgeId, s]),
 );

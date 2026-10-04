@@ -1,10 +1,10 @@
 
-Discovery — link candidates VETTED through the inference suite  [source: catalog (66-bridge)]
+Discovery — link candidates VETTED through the inference suite  [source: catalog (77-bridge)]
   anchor: mass=1.989e+30 (the default; --anchor=k=v replaces it)
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  199 candidates  →  10 promising  ·  51 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  118 axis-clash
+  funnel:  389 candidates  →  10 promising  ·  95 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  264 axis-clash
   readiness of the 10 promising: 0 mechanism-tested · 0 data-tested · 9 without magnitude evidence · 8 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
@@ -104,10 +104,16 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     attempt-frequency ≟ frequency                        [[frequency]]
+    mass ≟ child-carrier-mass                            [[mass]]
     mass ≟ reference-mass                                [[mass]]
     mass ≟ swampland-tower-mass                          [[mass]]
     mass-density ≟ lambda-mass-density                   [[L^-3 M]]
     time ≟ microscopic-relaxation-time                   [[time]]
+    voltage ≟ child-voltage                              [[L^2 M T^-3 I^-1]]
+    voltage ≟ four-point-voltage                         [[L^2 M T^-3 I^-1]]
+    voltage ≟ mott-voltage                               [[L^2 M T^-3 I^-1]]
+    voltage ≟ pull-in-voltage                            [[L^2 M T^-3 I^-1]]
+    voltage ≟ shockley-voltage                           [[L^2 M T^-3 I^-1]]
 
   AXIS-CLASH (stated scale/force labels differ: a regime-label prior, not a physical test):
     active-noise-energy ≟ higgs-decay-constant           force: emergent ≠ weak; scale: mesoscopic ≠ quantum
@@ -116,51 +122,99 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     active-noise-energy ≟ planck-mass-energy             force: emergent ≠ gravitational; scale: mesoscopic ≠ quantum
     barrier-height ≟ active-noise-energy                 scale: quantum ≠ mesoscopic
     barrier-height ≟ inflation-hubble-energy             scale: quantum ≠ cosmological
+    barrier-width ≟ child-gap                            scale: quantum ≠ classical
+    barrier-width ≟ column-length                        scale: quantum ≠ classical
+    barrier-width ≟ mott-thickness                       scale: quantum ≠ classical
+    barrier-width ≟ pipe-length                          scale: quantum ≠ classical
+    barrier-width ≟ pipe-radius                          scale: quantum ≠ classical
+    barrier-width ≟ pull-in-gap                          scale: quantum ≠ classical
+    boundary-length ≟ child-gap                          scale: quantum ≠ classical
+    boundary-length ≟ column-length                      scale: quantum ≠ classical
     boundary-length ≟ donor-acceptor-distance            scale: quantum ≠ mesoscopic
     boundary-length ≟ foerster-radius                    scale: quantum ≠ mesoscopic
+    boundary-length ≟ mott-thickness                     scale: quantum ≠ classical
+    boundary-length ≟ pipe-length                        scale: quantum ≠ classical
+    boundary-length ≟ pipe-radius                        scale: quantum ≠ classical
+    boundary-length ≟ pull-in-gap                        scale: quantum ≠ classical
     brane-tension ≟ plasma-mass-density                  force: gravitational ≠ electromagnetic
     carrier-density ≟ dark-species-density               scale: quantum ≠ cosmological
     carrier-density ≟ neutron-density                    scale: quantum ≠ cosmological
     carrier-density ≟ nucleon-yield-density              scale: quantum ≠ cosmological
     carrier-density ≟ proton-density                     scale: quantum ≠ cosmological
+    clapeyron-temperature ≟ capacitor-temperature        force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ peltier-temperature          force: emergent ≠ electromagnetic
+    clapeyron-temperature ≟ shockley-temperature         force: emergent ≠ electromagnetic
+    clapeyron-temperature ≟ thomson-temperature          force: emergent ≠ electromagnetic
     coarsening-length ≟ barrier-width                    scale: mesoscopic ≠ quantum
     coarsening-length ≟ boundary-length                  scale: mesoscopic ≠ quantum
+    coarsening-length ≟ child-gap                        force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    coarsening-length ≟ column-length                    scale: mesoscopic ≠ classical
     coarsening-length ≟ donor-acceptor-distance          force: emergent ≠ electromagnetic
     coarsening-length ≟ foerster-radius                  force: emergent ≠ electromagnetic
     coarsening-length ≟ london-penetration-depth         force: emergent ≠ electromagnetic; scale: mesoscopic ≠ quantum
+    coarsening-length ≟ mott-thickness                   force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    coarsening-length ≟ pipe-length                      scale: mesoscopic ≠ classical
+    coarsening-length ≟ pipe-radius                      scale: mesoscopic ≠ classical
     coarsening-length ≟ planck-length                    force: emergent ≠ gravitational; scale: mesoscopic ≠ quantum
+    coarsening-length ≟ pull-in-gap                      force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     coarsening-length ≟ quantum-correlation-length       scale: mesoscopic ≠ quantum
     coarsening-length ≟ reference-correlation-length     scale: mesoscopic ≠ quantum
+    column-length ≟ child-gap                            force: emergent ≠ electromagnetic
+    column-length ≟ mott-thickness                       force: emergent ≠ electromagnetic
+    column-length ≟ pull-in-gap                          force: emergent ≠ electromagnetic
     critical-density ≟ lambda-mass-density               scale: quantum ≠ cosmological
     critical-density ≟ plasma-mass-density               force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     dark-fermion-mass ≟ active-noise-energy              force: weak ≠ emergent; scale: quantum ≠ mesoscopic
     dark-fermion-mass ≟ inflation-hubble-energy          force: weak ≠ gravitational; scale: quantum ≠ cosmological
     dark-fermion-mass ≟ planck-mass-energy               force: weak ≠ gravitational
+    dark-reaction-rate-coefficient ≟ poiseuille-flow     scale: cosmological ≠ classical
+    defect-rest-mass ≟ child-carrier-mass                scale: cosmological ≠ classical
     defect-rest-mass ≟ planck-mass                       scale: cosmological ≠ quantum
     defect-rest-mass ≟ reference-mass                    scale: cosmological ≠ quantum
     defect-rest-mass ≟ scalar-field-reference            scale: cosmological ≠ quantum
     defect-rest-mass ≟ scalar-field-value                scale: cosmological ≠ quantum
     defect-rest-mass ≟ swampland-tower-mass              scale: cosmological ≠ quantum
     donor-acceptor-distance ≟ barrier-width              scale: mesoscopic ≠ quantum
+    donor-acceptor-distance ≟ child-gap                  scale: mesoscopic ≠ classical
+    donor-acceptor-distance ≟ column-length              force: electromagnetic ≠ emergent; scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ london-penetration-depth   scale: mesoscopic ≠ quantum
+    donor-acceptor-distance ≟ mott-thickness             scale: mesoscopic ≠ classical
+    donor-acceptor-distance ≟ pipe-length                force: electromagnetic ≠ emergent; scale: mesoscopic ≠ classical
+    donor-acceptor-distance ≟ pipe-radius                force: electromagnetic ≠ emergent; scale: mesoscopic ≠ classical
+    donor-acceptor-distance ≟ pull-in-gap                scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ quantum-correlation-length scale: mesoscopic ≠ quantum
     donor-acceptor-distance ≟ reference-correlation-length scale: mesoscopic ≠ quantum
+    effective-mass ≟ child-carrier-mass                  scale: quantum ≠ classical
     effective-mass ≟ planck-mass                         force: electromagnetic ≠ gravitational
+    effective-temperature ≟ capacitor-temperature        force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ clapeyron-temperature        scale: mesoscopic ≠ classical
     effective-temperature ≟ einstein-temperature         force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ peltier-temperature          force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ proper-temperature           force: emergent ≠ gravitational; scale: mesoscopic ≠ classical
+    effective-temperature ≟ shockley-temperature         force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    effective-temperature ≟ thomson-temperature          force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ tolman-invariant             force: emergent ≠ gravitational; scale: mesoscopic ≠ classical
     einstein-temperature ≟ clapeyron-temperature         force: electromagnetic ≠ emergent
     far-radius ≟ barrier-width                           scale: classical ≠ quantum
     far-radius ≟ boundary-length                         scale: classical ≠ quantum
+    far-radius ≟ child-gap                               force: gravitational ≠ electromagnetic
     far-radius ≟ coarsening-length                       force: gravitational ≠ emergent; scale: classical ≠ mesoscopic
+    far-radius ≟ column-length                           force: gravitational ≠ emergent
     far-radius ≟ donor-acceptor-distance                 force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     far-radius ≟ foerster-radius                         force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
+    far-radius ≟ mott-thickness                          force: gravitational ≠ electromagnetic
+    far-radius ≟ pipe-length                             force: gravitational ≠ emergent
+    far-radius ≟ pipe-radius                             force: gravitational ≠ emergent
     far-radius ≟ planck-length                           scale: classical ≠ quantum
+    far-radius ≟ pull-in-gap                             force: gravitational ≠ electromagnetic
     foerster-radius ≟ barrier-width                      scale: mesoscopic ≠ quantum
+    foerster-radius ≟ child-gap                          scale: mesoscopic ≠ classical
+    foerster-radius ≟ column-length                      force: electromagnetic ≠ emergent; scale: mesoscopic ≠ classical
     foerster-radius ≟ london-penetration-depth           scale: mesoscopic ≠ quantum
+    foerster-radius ≟ mott-thickness                     scale: mesoscopic ≠ classical
+    foerster-radius ≟ pipe-length                        force: electromagnetic ≠ emergent; scale: mesoscopic ≠ classical
+    foerster-radius ≟ pipe-radius                        force: electromagnetic ≠ emergent; scale: mesoscopic ≠ classical
+    foerster-radius ≟ pull-in-gap                        scale: mesoscopic ≠ classical
     foerster-radius ≟ quantum-correlation-length         scale: mesoscopic ≠ quantum
     foerster-radius ≟ reference-correlation-length       scale: mesoscopic ≠ quantum
     gravitational-wave-speed ≟ alfven-speed              force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
@@ -170,64 +224,162 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     grw-localization-rate ≟ mutation-rate                scale: quantum ≠ mesoscopic
     impact-parameter ≟ barrier-width                     scale: classical ≠ quantum
     impact-parameter ≟ boundary-length                   scale: classical ≠ quantum
+    impact-parameter ≟ child-gap                         force: gravitational ≠ electromagnetic
     impact-parameter ≟ coarsening-length                 force: gravitational ≠ emergent; scale: classical ≠ mesoscopic
+    impact-parameter ≟ column-length                     force: gravitational ≠ emergent
     impact-parameter ≟ donor-acceptor-distance           force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     impact-parameter ≟ foerster-radius                   force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
+    impact-parameter ≟ mott-thickness                    force: gravitational ≠ electromagnetic
+    impact-parameter ≟ pipe-length                       force: gravitational ≠ emergent
+    impact-parameter ≟ pipe-radius                       force: gravitational ≠ emergent
     impact-parameter ≟ planck-length                     scale: classical ≠ quantum
+    impact-parameter ≟ pull-in-gap                       force: gravitational ≠ electromagnetic
     inflation-hubble-energy ≟ higgs-decay-constant       force: gravitational ≠ weak; scale: cosmological ≠ quantum
     inflation-hubble-energy ≟ higgs-field                force: gravitational ≠ weak; scale: cosmological ≠ quantum
     lambda-mass-density ≟ plasma-mass-density            force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    london-penetration-depth ≟ child-gap                 scale: quantum ≠ classical
+    london-penetration-depth ≟ column-length             force: electromagnetic ≠ emergent; scale: quantum ≠ classical
+    london-penetration-depth ≟ mott-thickness            scale: quantum ≠ classical
+    london-penetration-depth ≟ pipe-length               force: electromagnetic ≠ emergent; scale: quantum ≠ classical
+    london-penetration-depth ≟ pipe-radius               force: electromagnetic ≠ emergent; scale: quantum ≠ classical
+    london-penetration-depth ≟ pull-in-gap               scale: quantum ≠ classical
+    magnetic-pressure ≟ pipe-pressure-drop               force: electromagnetic ≠ emergent
+    magnetic-pressure ≟ youngs-modulus                   force: electromagnetic ≠ emergent
     mass-density ≟ plasma-mass-density                   force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    minimal-surface-area ≟ pull-in-area                  force: gravitational ≠ electromagnetic
     minimal-surface-area ≟ wormhole-cross-section-area   scale: classical ≠ quantum
     model-a-mobility ≟ diffusivity                       force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    mond-force ≟ buckling-load                           force: gravitational ≠ emergent
     mutation-rate ≟ hubble-rate                          scale: mesoscopic ≠ cosmological
     near-radius ≟ barrier-width                          scale: classical ≠ quantum
     near-radius ≟ boundary-length                        scale: classical ≠ quantum
+    near-radius ≟ child-gap                              force: gravitational ≠ electromagnetic
     near-radius ≟ coarsening-length                      force: gravitational ≠ emergent; scale: classical ≠ mesoscopic
+    near-radius ≟ column-length                          force: gravitational ≠ emergent
     near-radius ≟ donor-acceptor-distance                force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     near-radius ≟ foerster-radius                        force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
+    near-radius ≟ mott-thickness                         force: gravitational ≠ electromagnetic
+    near-radius ≟ pipe-length                            force: gravitational ≠ emergent
+    near-radius ≟ pipe-radius                            force: gravitational ≠ emergent
     near-radius ≟ planck-length                          scale: classical ≠ quantum
+    near-radius ≟ pull-in-gap                            force: gravitational ≠ electromagnetic
+    newtonian-force ≟ buckling-load                      force: gravitational ≠ emergent
+    pipe-length ≟ child-gap                              force: emergent ≠ electromagnetic
+    pipe-length ≟ mott-thickness                         force: emergent ≠ electromagnetic
+    pipe-length ≟ pull-in-gap                            force: emergent ≠ electromagnetic
+    pipe-radius ≟ child-gap                              force: emergent ≠ electromagnetic
+    pipe-radius ≟ mott-thickness                         force: emergent ≠ electromagnetic
+    pipe-radius ≟ pull-in-gap                            force: emergent ≠ electromagnetic
+    planck-length ≟ child-gap                            force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-length ≟ column-length                        force: gravitational ≠ emergent; scale: quantum ≠ classical
     planck-length ≟ london-penetration-depth             force: gravitational ≠ electromagnetic
+    planck-length ≟ mott-thickness                       force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-length ≟ pipe-length                          force: gravitational ≠ emergent; scale: quantum ≠ classical
+    planck-length ≟ pipe-radius                          force: gravitational ≠ emergent; scale: quantum ≠ classical
+    planck-length ≟ pull-in-gap                          force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass ≟ child-carrier-mass                     force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass-energy ≟ higgs-decay-constant            force: gravitational ≠ weak
     planck-mass-energy ≟ higgs-field                     force: gravitational ≠ weak
+    proper-temperature ≟ capacitor-temperature           force: gravitational ≠ electromagnetic
     proper-temperature ≟ clapeyron-temperature           force: gravitational ≠ emergent
     proper-temperature ≟ einstein-temperature            force: gravitational ≠ electromagnetic
     proper-temperature ≟ peltier-temperature             force: gravitational ≠ electromagnetic
+    proper-temperature ≟ shockley-temperature            force: gravitational ≠ electromagnetic
+    proper-temperature ≟ thomson-temperature             force: gravitational ≠ electromagnetic
+    quantum-correlation-length ≟ child-gap               scale: quantum ≠ classical
+    quantum-correlation-length ≟ column-length           scale: quantum ≠ classical
+    quantum-correlation-length ≟ mott-thickness          scale: quantum ≠ classical
+    quantum-correlation-length ≟ pipe-length             scale: quantum ≠ classical
+    quantum-correlation-length ≟ pipe-radius             scale: quantum ≠ classical
+    quantum-correlation-length ≟ pull-in-gap             scale: quantum ≠ classical
+    radiation-pressure ≟ pipe-pressure-drop              force: electromagnetic ≠ emergent
+    radiation-pressure ≟ youngs-modulus                  force: electromagnetic ≠ emergent
+    reference-correlation-length ≟ child-gap             scale: quantum ≠ classical
+    reference-correlation-length ≟ column-length         scale: quantum ≠ classical
+    reference-correlation-length ≟ mott-thickness        scale: quantum ≠ classical
+    reference-correlation-length ≟ pipe-length           scale: quantum ≠ classical
+    reference-correlation-length ≟ pipe-radius           scale: quantum ≠ classical
+    reference-correlation-length ≟ pull-in-gap           scale: quantum ≠ classical
+    reference-mass ≟ child-carrier-mass                  scale: quantum ≠ classical
+    reference-temperature ≟ capacitor-temperature        scale: quantum ≠ classical
     reference-temperature ≟ clapeyron-temperature        scale: quantum ≠ classical
     reference-temperature ≟ einstein-temperature         scale: quantum ≠ classical
     reference-temperature ≟ peltier-temperature          scale: quantum ≠ classical
     reference-temperature ≟ proper-temperature           scale: quantum ≠ classical
+    reference-temperature ≟ shockley-temperature         scale: quantum ≠ classical
+    reference-temperature ≟ thomson-temperature          scale: quantum ≠ classical
     reference-temperature ≟ tolman-invariant             scale: quantum ≠ classical
+    reheating-temperature ≟ capacitor-temperature        scale: cosmological ≠ classical
     reheating-temperature ≟ clapeyron-temperature        scale: cosmological ≠ classical
     reheating-temperature ≟ einstein-temperature         scale: cosmological ≠ classical
     reheating-temperature ≟ peltier-temperature          scale: cosmological ≠ classical
     reheating-temperature ≟ proper-temperature           scale: cosmological ≠ classical
+    reheating-temperature ≟ shockley-temperature         scale: cosmological ≠ classical
+    reheating-temperature ≟ thomson-temperature          scale: cosmological ≠ classical
     reheating-temperature ≟ tolman-invariant             scale: cosmological ≠ classical
+    scalar-field-reference ≟ child-carrier-mass          scale: quantum ≠ classical
+    scalar-field-value ≟ child-carrier-mass              scale: quantum ≠ classical
     schwarzschild-radius ≟ boundary-length               scale: classical ≠ quantum
+    schwarzschild-radius ≟ child-gap                     force: gravitational ≠ electromagnetic
     schwarzschild-radius ≟ coarsening-length             force: gravitational ≠ emergent; scale: classical ≠ mesoscopic
+    schwarzschild-radius ≟ column-length                 force: gravitational ≠ emergent
+    schwarzschild-radius ≟ mott-thickness                force: gravitational ≠ electromagnetic
+    schwarzschild-radius ≟ pipe-length                   force: gravitational ≠ emergent
+    schwarzschild-radius ≟ pipe-radius                   force: gravitational ≠ emergent
+    schwarzschild-radius ≟ pull-in-gap                   force: gravitational ≠ electromagnetic
     semi-major-axis ≟ barrier-width                      scale: classical ≠ quantum
     semi-major-axis ≟ boundary-length                    scale: classical ≠ quantum
+    semi-major-axis ≟ child-gap                          force: gravitational ≠ electromagnetic
     semi-major-axis ≟ coarsening-length                  force: gravitational ≠ emergent; scale: classical ≠ mesoscopic
+    semi-major-axis ≟ column-length                      force: gravitational ≠ emergent
     semi-major-axis ≟ donor-acceptor-distance            force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
     semi-major-axis ≟ foerster-radius                    force: gravitational ≠ electromagnetic; scale: classical ≠ mesoscopic
+    semi-major-axis ≟ mott-thickness                     force: gravitational ≠ electromagnetic
+    semi-major-axis ≟ pipe-length                        force: gravitational ≠ emergent
+    semi-major-axis ≟ pipe-radius                        force: gravitational ≠ emergent
     semi-major-axis ≟ planck-length                      scale: classical ≠ quantum
+    semi-major-axis ≟ pull-in-gap                        force: gravitational ≠ electromagnetic
+    sm-reaction-rate-coefficient ≟ poiseuille-flow       scale: cosmological ≠ classical
     stress-energy-trace ≟ magnetic-pressure              force: gravitational ≠ electromagnetic
+    stress-energy-trace ≟ pipe-pressure-drop             force: gravitational ≠ emergent
     stress-energy-trace ≟ radiation-pressure             force: gravitational ≠ electromagnetic
+    stress-energy-trace ≟ youngs-modulus                 force: gravitational ≠ emergent
+    superposition-extent ≟ child-gap                     scale: quantum ≠ classical
     superposition-extent ≟ coarsening-length             scale: quantum ≠ mesoscopic
+    superposition-extent ≟ column-length                 scale: quantum ≠ classical
     superposition-extent ≟ donor-acceptor-distance       scale: quantum ≠ mesoscopic
     superposition-extent ≟ foerster-radius               scale: quantum ≠ mesoscopic
+    superposition-extent ≟ mott-thickness                scale: quantum ≠ classical
+    superposition-extent ≟ pipe-length                   scale: quantum ≠ classical
+    superposition-extent ≟ pipe-radius                   scale: quantum ≠ classical
+    superposition-extent ≟ pull-in-gap                   scale: quantum ≠ classical
+    swampland-tower-mass ≟ child-carrier-mass            scale: quantum ≠ classical
+    temperature ≟ capacitor-temperature                  force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ clapeyron-temperature                  force: gravitational ≠ emergent; scale: quantum ≠ classical
     temperature ≟ einstein-temperature                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ peltier-temperature                    force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ proper-temperature                     scale: quantum ≠ classical
+    temperature ≟ shockley-temperature                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    temperature ≟ thomson-temperature                    force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ tolman-invariant                       scale: quantum ≠ classical
+    thermal-wavelength ≟ child-gap                       scale: quantum ≠ classical
     thermal-wavelength ≟ coarsening-length               scale: quantum ≠ mesoscopic
+    thermal-wavelength ≟ column-length                   scale: quantum ≠ classical
+    thermal-wavelength ≟ mott-thickness                  scale: quantum ≠ classical
+    thermal-wavelength ≟ pipe-length                     scale: quantum ≠ classical
+    thermal-wavelength ≟ pipe-radius                     scale: quantum ≠ classical
+    thermal-wavelength ≟ pull-in-gap                     scale: quantum ≠ classical
+    tolman-invariant ≟ capacitor-temperature             force: gravitational ≠ electromagnetic
     tolman-invariant ≟ clapeyron-temperature             force: gravitational ≠ emergent
     tolman-invariant ≟ einstein-temperature              force: gravitational ≠ electromagnetic
     tolman-invariant ≟ peltier-temperature               force: gravitational ≠ electromagnetic
+    tolman-invariant ≟ shockley-temperature              force: gravitational ≠ electromagnetic
+    tolman-invariant ≟ thomson-temperature               force: gravitational ≠ electromagnetic
+    tunneling-mass ≟ child-carrier-mass                  scale: quantum ≠ classical
     tunneling-mass ≟ defect-rest-mass                    scale: quantum ≠ cosmological
     vacuum-expectation-value ≟ active-noise-energy       force: weak ≠ emergent; scale: quantum ≠ mesoscopic
     vacuum-expectation-value ≟ inflation-hubble-energy   force: weak ≠ gravitational; scale: quantum ≠ cosmological
+    wormhole-cross-section-area ≟ pull-in-area           force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
 
   (magnitude gate abstains where a representative value is unknown; weak priors on dimension.)
   (inspect one candidate: upt ground --source=catalog <a> <b>, with the same --anchor/--max-orders)

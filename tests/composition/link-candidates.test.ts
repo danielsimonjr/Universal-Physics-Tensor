@@ -16,17 +16,20 @@ const has = (a: string, b: string) =>
   cands.some((c) => (c.a === a && c.b === b) || (c.a === b && c.b === a));
 
 describe('proposeLinkCandidates — generator', () => {
-  it('produces the cross-cluster same-dimension pool (199) — quantified noise', () => {
+  it('produces the cross-cluster same-dimension pool (389) — quantified noise', () => {
     // 191 is the record from before be-74..76 joined the anchored cluster.
-    expect(cands.length).toBe(199);
+    // 199 is the record from before be-77..87. Those eleven edges are isolated,
+    // so each same-dimension pair with another component is a candidate.
+    expect(cands.length).toBe(389);
   });
 
   it('the funnel narrows: most touch the core, fewer are same-kind', () => {
     const core = cands.filter((c) => c.touchesCore).length;
     const ck = cands.filter((c) => c.touchesCore && c.sameKind).length;
     // 157 and 65 are the record from before be-74..76.
-    expect(core).toBe(165);
-    expect(ck).toBe(66);
+    // 165 and 66 are the record from before be-77..87.
+    expect(core).toBe(355);
+    expect(ck).toBe(141);
     expect(ck).toBeLessThan(core); // the filters genuinely narrow
   });
 

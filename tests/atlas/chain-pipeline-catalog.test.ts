@@ -29,7 +29,7 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
 
   it('leaves the catalog array unchanged', () => {
     expect(BRIDGE_EQUATIONS.map((row) => row.id)).toEqual(before);
-    expect(BRIDGE_EQUATIONS).toHaveLength(66);
+    expect(BRIDGE_EQUATIONS).toHaveLength(77);
   });
 
   it('matches the recorded confirmations, restatements, and stubs', () => {

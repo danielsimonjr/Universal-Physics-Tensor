@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Vendor PhysJS `92f87257a1e3086a48cdc19fe4361cc1c5909d49`. Lean files stay `lean/<File>.lean`. Add BE-77 through BE-87 as formally proved. BE-83 reads the Kelvin relation along temperature and does not compose with BE-73. A denial sentence is not a search hit.
+  Done: the manifest commit is that sha. The eleven theorems are kind `bridge`. Explain recovers each catalog equation. `upt search "thomson coefficient"` names be-83. `upt search "skin depth"` names `case-skin-depth` and does not name be-75. `onsager` still names be-73.
+
 - [x] An edge alias is an evaluate key. `edge.evaluate`, `evaluateEdge`, and a composed edge copy it onto the source name before the domain and the formula.
   Done: `be74Edge.evaluate({ B_T: 1 })` is `397887.35751312086`. `evaluateEdge` accepts the same key. `composeEdges(be74Edge, be76Edge).evaluate({ B_T: 1, n_per_m3: 1e20, T_K: 300 })` is `0.0000010409848219073948`. Every applied-physicist edge evaluates from its first alias. Disagreeing aliases name the source and do not run the formula.
 

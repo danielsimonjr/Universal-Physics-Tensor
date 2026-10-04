@@ -7,13 +7,16 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `ee753df77bd5b29b7207443181606b6004bfcf6a`.
+ * The commit is PhysJS `main` `92f87257a1e3086a48cdc19fe4361cc1c5909d49`.
  * PhysJS #63 stores each Lean file at `lean/<File>.lean`. The sentence that
- * the pin is `4ea35872513f8d4d12a01bfac225156bdddb87a9` and that the path is
+ * the pin is `ee753df77bd5b29b7207443181606b6004bfcf6a` is the record from
+ * before PhysJS #64. The sentence that the pin is
+ * `4ea35872513f8d4d12a01bfac225156bdddb87a9` and that the path is
  * `lean/PhysJS/<File>.lean` is the record from before that flatten. The
  * sentence that the pin is `3af15b49be09442350510e7c7f56f4aab92ea3bc` and
  * that the path is `PhysJS/<File>.lean` is the record from before PhysJS #61.
- * Theorem names are unchanged. PhysJS #62 adds be-74, be-75, and be-76.
+ * Theorem names of the earlier entries are unchanged. PhysJS #62 adds be-74,
+ * be-75, and be-76. PhysJS #64 adds be-77 through be-87.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -31,7 +34,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = 'ee753df77bd5b29b7207443181606b6004bfcf6a';
+export const PHYSJS_COMMIT = '92f87257a1e3086a48cdc19fe4361cc1c5909d49';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -848,6 +851,117 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
+
+  {
+    key: "be-77",
+    bridgeId: "be-77",
+    theorem: "PhysJS.HagenPoiseuille.flow_eq",
+    covers:
+      "derivation-step: steady axisymmetric Newtonian flow with d/dr (r du/dr) = (G/\u03bc) r, centerline slope 0, and no-slip u(R) = 0 integrates to u = (G/(4\u03bc))(r\u00b2\u2212R\u00b2). With G = \u2212\u0394P/L the flux Q = \u222b u 2\u03c0 r dr is \u03c0 R\u2074 \u0394P/(8 \u03bc L). Darcy's definition then gives f_D Re = 64. The same wall shear with the Fanning normalization is 16. A factor other than 8 is not this flux. Not a square duct. The axial balance, no-slip, and the Darcy definitions are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-78",
+    bridgeId: "be-78",
+    theorem: "PhysJS.EulerBuckling.critical_load",
+    covers:
+      "derivation-step: the Euler\u2013Bernoulli balance y'' = \u2212\u03c9\u00b2 y with \u03c9\u00b2 = P/(E I) and pinned ends y(0) = y(L) = 0 has the eigenfunction sin(\u03c0 x/L) at P = \u03c0\u00b2 E I/L\u00b2, and every nontrivial solution has \u03c9 L = n \u03c0 for a nonzero integer n, so the load is at least that value. The clamped-free column is \u03c0\u00b2 E I/(4 L\u00b2). That factor is not the pinned load. Not read off from units. The beam equation is a hypothesis",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-79",
+    bridgeId: "be-79",
+    theorem: "PhysJS.PullIn.pull_in_eq",
+    covers:
+      "derivation-step: C = \u03b50 A/g has dC/dg = \u2212\u03b50 A/g\u00b2. Equilibrium of a linear spring against the coenergy force is k(g0\u2212g) = \u03b50 A V\u00b2/(2 g\u00b2), so V\u00b2 is proportional to (g0\u2212g) g\u00b2. The derivative 2 g0 g \u2212 3 g\u00b2 vanishes only at g = 0 and g = 2 g0/3, and the second derivative at the fold is \u22122 g0. Substituting the gap gives V_pi\u00b2 = 8 k g0\u00b3/(27 \u03b50 A) = 8 k g0\u00b2/(27 C0) with C0 = \u03b50 A/g0. g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-80",
+    bridgeId: "be-80",
+    theorem: "PhysJS.MottGurney.current_eq",
+    covers:
+      "derivation-step: drift J = q n \u03bc E and Poisson dE/dx = q n/\u03b5 give E dE/dx = J/(\u03b5 \u03bc). With E(0) = 0 the integral is E\u00b2/2 = J x/(\u03b5 \u03bc). The nonnegative root integrated from 0 to d is V = sqrt(2 J/(\u03b5 \u03bc)) (2/3) d^{3/2}, so J = (9/8) \u03b5 \u03bc V\u00b2/d\u00b3. A factor other than 9/8 is not this current. Not Child\u2013Langmuir. Drift, Poisson, and the injecting contact are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-81",
+    bridgeId: "be-81",
+    theorem: "PhysJS.ChildLangmuir.current_eq",
+    covers:
+      "derivation-step: collisionless energy (1/2) m v\u00b2 = e \u03c6, J = \u03c1 v, and Poisson \u03c6'' = \u03c1/\u03b50 give J = \u03b50 \u03c6'' v. A power \u03c6 \u221d x^\u03b1 makes \u03c6'' v independent of x only for \u03b1 = 4/3. The profile \u03c6 = V (x/d)^{4/3} has \u03c6(0) = 0, \u03c6(d) = V, and cathode field 0, and for x > 0 its current is (4 \u03b50/9) sqrt(2 e/m) V^{3/2}/d\u00b2. e is the elementary charge. The Mott\u2013Gurney exponent 3/2 does not cancel. Poisson is not claimed at x = 0. Not a drift-only solid",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-82",
+    bridgeId: "be-82",
+    theorem: "PhysJS.ShockleyDiode.shockley_eq",
+    covers:
+      "derivation-step: quasi-equilibrium multiplies the equilibrium flux by exp(e V/(\u03b7 k_B T)). Ideality 1 sets \u03b7 = 1. Detailed balance sets the reverse flux equal to the forward flux at V = 0, and low injection keeps that reverse flux under bias. The net current is I = I_s (exp(e V/(k_B T)) \u2212 1). Zero bias carries zero current. Ideality 2 is not this current when e V \u2260 0. e is the elementary charge. Not a diffusion-length ODE",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-83",
+    bridgeId: "be-83",
+    theorem: "PhysJS.Thomson.thomson_eq",
+    covers:
+      "derivation-step: the Kelvin relation \u03a0(t) = S(t) t, which is PhysJS.KelvinRelation.peltier_eq read along temperature, and the Thomson split \u03bc = d\u03a0/dT \u2212 S, give \u03bc = T dS/dT by the product rule. d\u03a0/dT is not \u03bc when S T \u2260 0. Not a second copy of \u03a0 = S T. The functional Kelvin relation and the Thomson split are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-84",
+    bridgeId: "be-84",
+    theorem: "PhysJS.FourPoint.sheet_eq",
+    covers:
+      "derivation-step: on an infinite sheet the radial field of a point current is (I R_s)/(2 \u03c0 r), and the potential drop is the integral of 1/r. Probes at 0, s, 2s, and 3s, with current in at 0 and out at 3s, each contribute (I R_s/(2 \u03c0)) ln 2 on the inner pair. Superposition gives R_s = (\u03c0/ln 2)(V/I). A sink at 4s gives 2\u03c0/ln 3 instead. Not PhysJS.Crossing.antisymmetry. The Laplace field and linear superposition are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-85",
+    bridgeId: "be-85",
+    theorem: "PhysJS.ShotNoise.shot_eq",
+    covers:
+      "derivation-step: in a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e\u00b2 and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is \u0394f = 1/(2 T), and S_I = Var(I)/\u0394f is 2 e I. The two-sided bandwidth \u0394f = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson\u2013Nyquist. The Poisson variance and the one-sided convention are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-86",
+    bridgeId: "be-86",
+    theorem: "PhysJS.ReynoldsAnalogy.reynolds_eq",
+    covers:
+      "derivation-step: wall fluxes \u03c4 = \u03bc du/dy and q = k dT/dy, with C_f = \u03c4/(\u03c1 U\u00b2/2), h = q/\u0394T, St = h/(\u03c1 U c_p), and Pr = \u03bc c_p/k, satisfy St Pr = C_f/2 when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At Pr = 1, St = C_f/2. Pr \u2260 1 with nonzero skin friction is not this equality. Not a Nusselt correlation",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-87",
+    bridgeId: "be-87",
+    theorem: "PhysJS.CapacitorNoise.noise_eq",
+    covers:
+      "derivation-step: dU/dV = C V and U(0) = 0 integrate to U = (C/2) V\u00b2. The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance k_B T/C, because the partition function is the Gaussian integral. The mean square on that law is k_B T/C, and (C/2) of it is (1/2) k_B T. (3/2) k_B T/C is not this variance. Dropping the energy half replaces it by k_B T/(2 C). Not three kinetic degrees of freedom",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
 ];
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
@@ -942,6 +1056,17 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-74',
   'be-75',
   'be-76',
+  'be-77',
+  'be-78',
+  'be-79',
+  'be-80',
+  'be-81',
+  'be-82',
+  'be-83',
+  'be-84',
+  'be-85',
+  'be-86',
+  'be-87',
 ]);
 
 /**

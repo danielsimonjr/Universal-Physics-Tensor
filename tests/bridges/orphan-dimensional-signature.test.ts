@@ -69,6 +69,17 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   74, // BE-74 magnetic pressure: closed-form evaluator, no AST.
   75, // BE-75 London penetration depth: closed-form evaluator, no AST.
   76, // BE-76 plasma beta: closed-form evaluator, no AST.
+  77, // BE-77 Hagen–Poiseuille: closed-form evaluator, no AST.
+  78, // BE-78 Euler buckling: closed-form evaluator, no AST.
+  79, // BE-79 pull-in: closed-form evaluator, no AST.
+  80, // BE-80 Mott–Gurney: closed-form evaluator, no AST.
+  81, // BE-81 Child–Langmuir: closed-form evaluator, no AST.
+  82, // BE-82 Shockley diode: closed-form evaluator, no AST.
+  83, // BE-83 Thomson coefficient: closed-form evaluator, no AST.
+  84, // BE-84 four-point sheet: closed-form evaluator, no AST.
+  85, // BE-85 shot noise: closed-form evaluator, no AST.
+  86, // BE-86 Reynolds analogy: closed-form evaluator, no AST.
+  87, // BE-87 capacitor noise: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -84,11 +95,11 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has twenty-four entries (BE-51/52 + BE-55..76 closed-form)', () => {
+    it('orphan allowlist has thirty-five entries (BE-51/52 + BE-55..87 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(24);
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(35);
     });
 
     for (const id of ORPHAN_DIMENSIONAL_SIGNATURES) {
@@ -153,9 +164,10 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
       ).toEqual([]);
     });
 
-    it('orphan allowlist is BE-51/52 + BE-55..76 (closed-form evaluators)', () => {
+    it('orphan allowlist is BE-51/52 + BE-55..87 (closed-form evaluators)', () => {
       expect([...ORPHAN_DIMENSIONAL_SIGNATURES].sort((a, b) => a - b)).toEqual([
         51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
+        77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87,
       ]);
     });
   });

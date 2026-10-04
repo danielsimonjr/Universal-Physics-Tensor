@@ -69,6 +69,17 @@ export {
   be74Edge,
   be75Edge,
   be76Edge,
+  be77Edge,
+  be78Edge,
+  be79Edge,
+  be80Edge,
+  be81Edge,
+  be82Edge,
+  be83Edge,
+  be84Edge,
+  be85Edge,
+  be86Edge,
+  be87Edge,
   APPLIED_PHYSICIST_EDGES,
 } from './edges/applied-physicist.js';
 

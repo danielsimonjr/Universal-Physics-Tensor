@@ -93,6 +93,17 @@ import { evaluateKelvinPeltier } from './be73-kelvin-peltier.js';
 import { evaluateMagneticPressure } from './be74-magnetic-pressure.js';
 import { evaluateLondonPenetration } from './be75-london-penetration.js';
 import { evaluatePlasmaBeta } from './be76-plasma-beta.js';
+import { evaluateHagenPoiseuille } from './be77-hagen-poiseuille.js';
+import { evaluateEulerBuckling } from './be78-euler-buckling.js';
+import { evaluatePullIn } from './be79-pull-in.js';
+import { evaluateMottGurney } from './be80-mott-gurney.js';
+import { evaluateChildLangmuir } from './be81-child-langmuir.js';
+import { evaluateShockleyDiode } from './be82-shockley-diode.js';
+import { evaluateThomsonCoefficient } from './be83-thomson.js';
+import { evaluateFourPointSheet } from './be84-four-point.js';
+import { evaluateShotNoise } from './be85-shot-noise.js';
+import { evaluateReynoldsAnalogy } from './be86-reynolds-analogy.js';
+import { evaluateCapacitorNoise } from './be87-capacitor-noise.js';
 
 /**
  * Root-level facade keyed by readable method names. Each value is a re-export of
@@ -172,4 +183,15 @@ export const BridgeEquations = {
   magneticPressure: evaluateMagneticPressure,               // BE-74
   londonPenetration: evaluateLondonPenetration,             // BE-75
   plasmaBeta: evaluatePlasmaBeta,                           // BE-76
+  hagenPoiseuille: evaluateHagenPoiseuille,                 // BE-77
+  eulerBuckling: evaluateEulerBuckling,                     // BE-78
+  pullIn: evaluatePullIn,                                   // BE-79
+  mottGurney: evaluateMottGurney,                           // BE-80
+  childLangmuir: evaluateChildLangmuir,                     // BE-81
+  shockleyDiode: evaluateShockleyDiode,                     // BE-82
+  thomsonCoefficient: evaluateThomsonCoefficient,           // BE-83
+  fourPointSheet: evaluateFourPointSheet,                   // BE-84
+  shotNoise: evaluateShotNoise,                             // BE-85
+  reynoldsAnalogy: evaluateReynoldsAnalogy,                 // BE-86
+  capacitorNoise: evaluateCapacitorNoise,                   // BE-87
 } as const;

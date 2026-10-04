@@ -18,7 +18,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.KgSchrodinger.planeWave_iff_dispersion",
-        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "covers": "a plane wave solves the PDE iff \u03c9(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -42,7 +42,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.KleinGordonWave.planeWave_iff_dispersion",
-        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "covers": "a plane wave solves the PDE iff \u03c9(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -66,7 +66,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.StiffString.planeWave_iff_dispersion",
-        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "covers": "a plane wave solves the PDE iff \u03c9(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -90,7 +90,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.TelegraphDiffusion.planeWave_iff_dispersion",
-        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "covers": "a plane wave solves the PDE iff \u03c9(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -114,7 +114,7 @@
       ],
       "planeWave": {
         "theorem": "PhysJS.TelegraphWave.planeWave_iff_dispersion",
-        "covers": "a plane wave solves the PDE iff ω(k) obeys the dispersion relation",
+        "covers": "a plane wave solves the PDE iff \u03c9(k) obeys the dispersion relation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -194,7 +194,7 @@
       "key": "be-64",
       "bridgeId": "be-64",
       "theorem": "PhysJS.Eddington.balance_iff",
-      "covers": "derivation-step: the r² cancellation in the Eddington force balance, not a hard cap",
+      "covers": "derivation-step: the r\u00b2 cancellation in the Eddington force balance, not a hard cap",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -207,7 +207,7 @@
       "key": "be-53",
       "bridgeId": "be-53",
       "theorem": "PhysJS.YangMills.b0_pos_iff_nf_le",
-      "covers": "derivation-step: b₀ > 0 iff N_f ≤ 16 for SU(3), not a running procedure past one loop",
+      "covers": "derivation-step: b\u2080 > 0 iff N_f \u2264 16 for SU(3), not a running procedure past one loop",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -217,7 +217,7 @@
       ],
       "oneLoop": {
         "theorem": "PhysJS.YangMills.alphaRun_hasDerivAt",
-        "covers": "derivation-step: α(t) = α₀ / (1 + b₀ α₀ t / (2π)) solves the one-loop running equation where the denominator is positive",
+        "covers": "derivation-step: \u03b1(t) = \u03b1\u2080 / (1 + b\u2080 \u03b1\u2080 t / (2\u03c0)) solves the one-loop running equation where the denominator is positive",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -231,7 +231,7 @@
       "key": "be-58",
       "bridgeId": "be-58",
       "theorem": "PhysJS.JohnsonNyquist.tendsto_classical",
-      "covers": "limit: the classical Johnson–Nyquist spectrum is the ω → 0⁺ limit of the quantum parent, not the fluctuation–dissipation theorem",
+      "covers": "limit: the classical Johnson\u2013Nyquist spectrum is the \u03c9 \u2192 0\u207a limit of the quantum parent, not the fluctuation\u2013dissipation theorem",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -244,7 +244,7 @@
       "key": "be-38",
       "bridgeId": "be-38",
       "theorem": "PhysJS.Mond.tendsto_nu_limits",
-      "covers": "limit: ν → 1 as z → ∞, ν √z → 1 as z → 0⁺, and F_N ν(z) / √(m F_N a₀) → 1 as F_N → 0⁺; not ν → √(2/z), and not the SPARC confrontation",
+      "covers": "limit: \u03bd \u2192 1 as z \u2192 \u221e, \u03bd \u221az \u2192 1 as z \u2192 0\u207a, and F_N \u03bd(z) / \u221a(m F_N a\u2080) \u2192 1 as F_N \u2192 0\u207a; not \u03bd \u2192 \u221a(2/z), and not the SPARC confrontation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -254,7 +254,7 @@
       ],
       "inversion": {
         "theorem": "PhysJS.Mond.mu_inversion",
-        "covers": "derivation-step: for z > 0, y = z ν(z) satisfies y² / √(1 + y²) = z, which inverts μ(x) = x / √(1 + x²)",
+        "covers": "derivation-step: for z > 0, y = z \u03bd(z) satisfies y\u00b2 / \u221a(1 + y\u00b2) = z, which inverts \u03bc(x) = x / \u221a(1 + x\u00b2)",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -268,7 +268,7 @@
       "key": "be-13",
       "bridgeId": "be-13",
       "theorem": "PhysJS.Einstein.trace_eq",
-      "covers": "reduction: contracting G_μν + Λ g_μν = κ T_μν in four dimensions gives R = 4Λ − κ T, not Jacobson's thermodynamic derivation",
+      "covers": "reduction: contracting G_\u03bc\u03bd + \u039b g_\u03bc\u03bd = \u03ba T_\u03bc\u03bd in four dimensions gives R = 4\u039b \u2212 \u03ba T, not Jacobson's thermodynamic derivation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -278,7 +278,7 @@
       ],
       "vacuum": {
         "theorem": "PhysJS.Einstein.vacuum_density",
-        "covers": "reduction: with κ = 8πG/c⁴, T_μν = −ρ c² g_μν and Λ g = −κ T rearrange to ρ = c² Λ / (8π G). The opposite sign does not. This is the BE-20 density; BE-20 has no reference of its own",
+        "covers": "reduction: with \u03ba = 8\u03c0G/c\u2074, T_\u03bc\u03bd = \u2212\u03c1 c\u00b2 g_\u03bc\u03bd and \u039b g = \u2212\u03ba T rearrange to \u03c1 = c\u00b2 \u039b / (8\u03c0 G). The opposite sign does not. This is the BE-20 density; BE-20 has no reference of its own",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -289,7 +289,7 @@
       },
       "corollary": {
         "theorem": "PhysJS.Einstein.friedmann_corollary",
-        "covers": "derivation-step: the vacuum density gives (8πG/3) ρ = Λ c² / 3, the cosmological term of FirstOrderFriedmann. A fluid of this density added to matter, with the explicit Λ set to zero, is that equation at k = 0. The Einstein-static density Λ c²/(4π G) is twice that term. Dropping c² fails when c² ≠ 1. The density is not reproved. BE-20 has no reference of its own",
+        "covers": "derivation-step: the vacuum density gives (8\u03c0G/3) \u03c1 = \u039b c\u00b2 / 3, the cosmological term of FirstOrderFriedmann. A fluid of this density added to matter, with the explicit \u039b set to zero, is that equation at k = 0. The Einstein-static density \u039b c\u00b2/(4\u03c0 G) is twice that term. Dropping c\u00b2 fails when c\u00b2 \u2260 1. The density is not reproved. BE-20 has no reference of its own",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -303,7 +303,7 @@
       "key": "be-34",
       "bridgeId": "be-34",
       "theorem": "PhysJS.KibbleZurek.exponent",
-      "covers": "derivation-step: the freeze-out power ε̂ = (τ₀/τ_Q)^(1/(1+zν)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor",
+      "covers": "derivation-step: the freeze-out power \u03b5\u0302 = (\u03c4\u2080/\u03c4_Q)^(1/(1+z\u03bd)) and the defect density without the Boltzmann factor; omitting the 1 in the exponent fails. Not the reheating factor, and not a repair of the missing 1/a^d prefactor",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -316,7 +316,7 @@
       "key": "be-42",
       "bridgeId": "be-42",
       "theorem": "PhysJS.HawkingUnruh.dictionary",
-      "covers": "cross-check: T_H(2GM/c²) = T_H(M) and T_U(c⁴/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c⁴/(2GM)) is not T_H(M). Not the Hawking effect",
+      "covers": "cross-check: T_H(2GM/c\u00b2) = T_H(M) and T_U(c\u2074/(4GM)) = T_H(M), naming BE-57 and be-42-via-rs. T_U(c\u2074/(2GM)) is not T_H(M). Not the Hawking effect",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -329,7 +329,7 @@
       "key": "be-24",
       "bridgeId": "be-24",
       "theorem": "PhysJS.Fret.dictionary",
-      "covers": "cross-check: η = R₀⁶/(R₀⁶+R⁶) = 1/(1+(R/R₀)⁶) = k_FRET/(k_FRET+1/τ_D), and η decreases on (0, ∞). At R = 2 R₀ the exponent 4 is not the exponent 6. Not the dipole–dipole law",
+      "covers": "cross-check: \u03b7 = R\u2080\u2076/(R\u2080\u2076+R\u2076) = 1/(1+(R/R\u2080)\u2076) = k_FRET/(k_FRET+1/\u03c4_D), and \u03b7 decreases on (0, \u221e). At R = 2 R\u2080 the exponent 4 is not the exponent 6. Not the dipole\u2013dipole law",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -342,7 +342,7 @@
       "key": "be-19",
       "bridgeId": "be-19",
       "theorem": "PhysJS.QuantumBounce.dictionary",
-      "covers": "cross-check: H²_LQC equals H²_RS at σ = −ρ_c/2, both tend to (8πG/3)ρ + Λ/3 at infinity, and H²_LQC = 0 at ρ = ρ_c and Λ = 0, naming BE-54. σ = +ρ_c/2 is not that polynomial. σ < 0 is not a physical Randall–Sundrum brane",
+      "covers": "cross-check: H\u00b2_LQC equals H\u00b2_RS at \u03c3 = \u2212\u03c1_c/2, both tend to (8\u03c0G/3)\u03c1 + \u039b/3 at infinity, and H\u00b2_LQC = 0 at \u03c1 = \u03c1_c and \u039b = 0, naming BE-54. \u03c3 = +\u03c1_c/2 is not that polynomial. \u03c3 < 0 is not a physical Randall\u2013Sundrum brane",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -355,7 +355,7 @@
       "key": "be-16",
       "bridgeId": "be-16",
       "theorem": "PhysJS.Landauer.erasure_eq",
-      "covers": "derivation-step: for T > 0, the equal-level two-state ensemble has ⟨E⟩ − F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+δ do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E ≥ T ΔS for an arbitrary protocol, and not the Bérut confrontation",
+      "covers": "derivation-step: for T > 0, the equal-level two-state ensemble has \u27e8E\u27e9 \u2212 F = k_B T log 2. equal_levels remains the entropy k_B log 2. At T > 0, levels E and E+\u03b4 do not have that deficit. At T = 0 the Helmholtz closed form does not separate the levels. Not E \u2265 T \u0394S for an arbitrary protocol, and not the B\u00e9rut confrontation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -368,7 +368,7 @@
       "key": "be-29",
       "bridgeId": "be-29",
       "theorem": "PhysJS.Jarzynski.jensen_work",
-      "covers": "property: for a finite probability and β > 0, ∑ p_i W_i ≥ −(1/β) log(∑ p_i exp(−β W_i)). The reversed inequality fails on two unequal work values. Not Jarzynski's theorem, and not the Gaussian identity",
+      "covers": "property: for a finite probability and \u03b2 > 0, \u2211 p_i W_i \u2265 \u2212(1/\u03b2) log(\u2211 p_i exp(\u2212\u03b2 W_i)). The reversed inequality fails on two unequal work values. Not Jarzynski's theorem, and not the Gaussian identity",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -381,7 +381,7 @@
       "key": "be-11",
       "bridgeId": "be-11",
       "theorem": "PhysJS.Lindblad.preserve",
-      "covers": "property: one channel of the displayed GKSL generator has trace zero, and it is Hermitian when H and ρ are. L need not be Hermitian. Dropping the anticommutator makes the trace nonzero. Not Born–Markov coarse-graining",
+      "covers": "property: one channel of the displayed GKSL generator has trace zero, and it is Hermitian when H and \u03c1 are. L need not be Hermitian. Dropping the anticommutator makes the trace nonzero. Not Born\u2013Markov coarse-graining",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -394,7 +394,7 @@
       "key": "be-65",
       "bridgeId": "be-65",
       "theorem": "PhysJS.Jeans.mass_eq",
-      "covers": "derivation-step: the encoded Jeans mass (5 k T / (G μ m_u))^(3/2) (3 / (4 π ρ))^(1/2) follows from the virial convention with factor 5 and M = 4 π R³ ρ / 3. Replacing 5 by 3 fails. Not the virial theorem",
+      "covers": "derivation-step: the encoded Jeans mass (5 k T / (G \u03bc m_u))^(3/2) (3 / (4 \u03c0 \u03c1))^(1/2) follows from the virial convention with factor 5 and M = 4 \u03c0 R\u00b3 \u03c1 / 3. Replacing 5 by 3 fails. Not the virial theorem",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -407,7 +407,7 @@
       "key": "be-51",
       "bridgeId": "be-51",
       "theorem": "PhysJS.Deflection.line_integral",
-      "covers": "derivation-step: (1+γ)/c² ∫_ℝ G M b / (b² + z²)^{3/2} dz = 2(1+γ) G M / (b c²), and at γ = 1 this is the encoded angle 4 G M / (b c²). γ = 0 is half. Not a geodesic",
+      "covers": "derivation-step: (1+\u03b3)/c\u00b2 \u222b_\u211d G M b / (b\u00b2 + z\u00b2)^{3/2} dz = 2(1+\u03b3) G M / (b c\u00b2), and at \u03b3 = 1 this is the encoded angle 4 G M / (b c\u00b2). \u03b3 = 0 is half. Not a geodesic",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -420,7 +420,7 @@
       "key": "be-61",
       "bridgeId": "be-61",
       "theorem": "PhysJS.Sommerfeld.integral_eq",
-      "covers": "derivation-step: ∫_ℝ x² e^x / (1+e^x)² dx = π²/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of π²/3. Claiming the half-line equals π²/3 fails. Not the transport law",
+      "covers": "derivation-step: \u222b_\u211d x\u00b2 e^x / (1+e^x)\u00b2 dx = \u03c0\u00b2/3, the factor in the encoded Lorenz number. The integrand is even, so the half-line is half of \u03c0\u00b2/3. Claiming the half-line equals \u03c0\u00b2/3 fails. Not the transport law",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -433,7 +433,7 @@
       "key": "be-12",
       "bridgeId": "be-12",
       "theorem": "PhysJS.ThermalDeBroglie.wavelength_eq",
-      "covers": "derivation-step: √(2π ℏ²/(m k_B T)) = h/√(2π m k_B T) for h = 2πℏ and ℏ > 0. The non-negative square root needs ℏ > 0. The Wave Q form ℏ/√(m k_B T), with ℏ in the numerator and no √(2π), fails, as does ℏ/√(2 m k_B T). Not Caldeira–Leggett dephasing",
+      "covers": "derivation-step: \u221a(2\u03c0 \u210f\u00b2/(m k_B T)) = h/\u221a(2\u03c0 m k_B T) for h = 2\u03c0\u210f and \u210f > 0. The non-negative square root needs \u210f > 0. The Wave Q form \u210f/\u221a(m k_B T), with \u210f in the numerator and no \u221a(2\u03c0), fails, as does \u210f/\u221a(2 m k_B T). Not Caldeira\u2013Leggett dephasing",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -459,7 +459,7 @@
       "key": "be-55",
       "bridgeId": "be-55",
       "theorem": "PhysJS.QuantumHall.reciprocal",
-      "covers": "derivation-step: for a nonzero integer C and e ≠ 0, σ_xy = C e²/h, R_H = h/(C e²), and R_K = h/e², so σ_xy R_H = 1 and R_H = R_K/C. The shifted index C+1 is a different conductance. Replacing e² by e fails the product when e ≠ 1. Not TKNN",
+      "covers": "derivation-step: for a nonzero integer C and e \u2260 0, \u03c3_xy = C e\u00b2/h, R_H = h/(C e\u00b2), and R_K = h/e\u00b2, so \u03c3_xy R_H = 1 and R_H = R_K/C. The shifted index C+1 is a different conductance. Replacing e\u00b2 by e fails the product when e \u2260 1. Not TKNN",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -472,7 +472,7 @@
       "key": "be-60",
       "bridgeId": "be-60",
       "theorem": "PhysJS.Laughlin.filling_fraction",
-      "covers": "derivation-step: for integers p ≠ 0 and q ≠ 0, with ν = p/q, σ_xy = ν e²/h and R_xy = R_K/ν = (q/p) h/e². The charge and Planck's constant are not assumed nonzero. Oddness of q is the Laughlin selection rule and is not this identity. Not the Laughlin wavefunction, and not the anyon charge e/3",
+      "covers": "derivation-step: for integers p \u2260 0 and q \u2260 0, with \u03bd = p/q, \u03c3_xy = \u03bd e\u00b2/h and R_xy = R_K/\u03bd = (q/p) h/e\u00b2. The charge and Planck's constant are not assumed nonzero. Oddness of q is the Laughlin selection rule and is not this identity. Not the Laughlin wavefunction, and not the anyon charge e/3",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -485,7 +485,7 @@
       "key": "be-21",
       "bridgeId": "be-21",
       "theorem": "PhysJS.Kss.saturating",
-      "covers": "derivation-step: η/s = ℏ/(4π k_B) is the equality 4π k_B (η/s) = ℏ for k_B ≠ 0. The Hawking factor 8π in place of 4π is 2ℏ, not ℏ, once ℏ ≠ 0. Not the inequality η/s ≥ ℏ/(4π k_B)",
+      "covers": "derivation-step: \u03b7/s = \u210f/(4\u03c0 k_B) is the equality 4\u03c0 k_B (\u03b7/s) = \u210f for k_B \u2260 0. The Hawking factor 8\u03c0 in place of 4\u03c0 is 2\u210f, not \u210f, once \u210f \u2260 0. Not the inequality \u03b7/s \u2265 \u210f/(4\u03c0 k_B)",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -498,7 +498,7 @@
       "key": "be-14",
       "bridgeId": "be-14",
       "theorem": "PhysJS.PlanckArea.area_law",
-      "covers": "derivation-step: k_B c³ A/(4 G ℏ) = k_B A/(4 ℓ_P²) for ℓ_P² = ℏ G/c³. The area is an input. ℓ_P² = ℏ G/c² fails when c ≠ 1. The factor 2 in place of 4 fails. The same lemma is be-43. Not the minimal-surface theorem",
+      "covers": "derivation-step: k_B c\u00b3 A/(4 G \u210f) = k_B A/(4 \u2113_P\u00b2) for \u2113_P\u00b2 = \u210f G/c\u00b3. The area is an input. \u2113_P\u00b2 = \u210f G/c\u00b2 fails when c \u2260 1. The factor 2 in place of 4 fails. The same lemma is be-43. Not the minimal-surface theorem",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -511,7 +511,7 @@
       "key": "be-43",
       "bridgeId": "be-43",
       "theorem": "PhysJS.PlanckArea.area_law",
-      "covers": "derivation-step: the be-14 lemma on a wormhole area. k_B A/(4 ℓ_P²) equals k_B c³ A/(4 G ℏ) for ℓ_P² = ℏ G/c³. ℓ_P² = ℏ G/c² fails when c ≠ 1, and the factor 2 fails. Not ER=EPR",
+      "covers": "derivation-step: the be-14 lemma on a wormhole area. k_B A/(4 \u2113_P\u00b2) equals k_B c\u00b3 A/(4 G \u210f) for \u2113_P\u00b2 = \u210f G/c\u00b3. \u2113_P\u00b2 = \u210f G/c\u00b2 fails when c \u2260 1, and the factor 2 fails. Not ER=EPR",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -524,7 +524,7 @@
       "key": "be-37",
       "bridgeId": "be-37",
       "theorem": "PhysJS.Shapiro.radial_integral",
-      "covers": "derivation-step: for 0 < R_near < R_far and c ≠ 0, ∫_{R_near}^{R_far} (2 G M / c³) (dr / r) = (2 G M / c³) ln(R_far / R_near). The factor 1 in place of 2 is half, once G ≠ 0 and M ≠ 0. log₁₀ of the radius ratio is not ln. Not the impact-parameter formula, and not the Cassini measurement",
+      "covers": "derivation-step: for 0 < R_near < R_far and c \u2260 0, \u222b_{R_near}^{R_far} (2 G M / c\u00b3) (dr / r) = (2 G M / c\u00b3) ln(R_far / R_near). The factor 1 in place of 2 is half, once G \u2260 0 and M \u2260 0. log\u2081\u2080 of the radius ratio is not ln. Not the impact-parameter formula, and not the Cassini measurement",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -537,7 +537,7 @@
       "key": "be-54",
       "bridgeId": "be-54",
       "theorem": "PhysJS.RandallSundrum.brane_friedmann",
-      "covers": "derivation-step: for σ ≠ 0, H²_RS = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3, which equals the Friedmann term plus (8πG/3) ρ²/(2σ). Not a derivation from the five-dimensional Einstein equation",
+      "covers": "derivation-step: for \u03c3 \u2260 0, H\u00b2_RS = (8\u03c0G/3) \u03c1 (1 + \u03c1/(2\u03c3)) + \u039b/3, which equals the Friedmann term plus (8\u03c0G/3) \u03c1\u00b2/(2\u03c3). Not a derivation from the five-dimensional Einstein equation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -547,7 +547,7 @@
       ],
       "friedmann": {
         "theorem": "PhysJS.RandallSundrum.flat_friedmann",
-        "covers": "derivation-step: H²_FRW with the module Λ equal to Physlib's Λ c² is FirstOrderFriedmann at k = 0. Identifying the two Λ symbols and dropping c² fails when c² ≠ 1 and Λ ≠ 0",
+        "covers": "derivation-step: H\u00b2_FRW with the module \u039b equal to Physlib's \u039b c\u00b2 is FirstOrderFriedmann at k = 0. Identifying the two \u039b symbols and dropping c\u00b2 fails when c\u00b2 \u2260 1 and \u039b \u2260 0",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -561,7 +561,7 @@
       "key": "be-17",
       "bridgeId": "be-17",
       "theorem": "PhysJS.EinsteinCartan.inversion",
-      "covers": "derivation-step: if κ = 8πG/c⁴ ≠ 0 and every component satisfies T = κ S, then S·S = T·T / κ² = (c⁴/(8πG))² T·T. κ² in the numerator is the inversion backwards, and it fails when T·T ≠ 0 and κ⁴ ≠ 1. Not the Einstein–Cartan field equation, and not a Newtonian limit",
+      "covers": "derivation-step: if \u03ba = 8\u03c0G/c\u2074 \u2260 0 and every component satisfies T = \u03ba S, then S\u00b7S = T\u00b7T / \u03ba\u00b2 = (c\u2074/(8\u03c0G))\u00b2 T\u00b7T. \u03ba\u00b2 in the numerator is the inversion backwards, and it fails when T\u00b7T \u2260 0 and \u03ba\u2074 \u2260 1. Not the Einstein\u2013Cartan field equation, and not a Newtonian limit",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -571,7 +571,7 @@
       ],
       "torsionMonomial": {
         "theorem": "PhysJS.EinsteinCartan.torsion_monomial",
-        "covers": "derivation-step: [κ] and [S] are independent base dimensions and [T] = [κ][S]. If a positive component is dimensionally homogeneous in those dimensions, every positive pair is a unit change of (1, 1) and T = C κ S with C = f(1, 1). C is not fixed. Not the Einstein–Cartan field equation",
+        "covers": "derivation-step: [\u03ba] and [S] are independent base dimensions and [T] = [\u03ba][S]. If a positive component is dimensionally homogeneous in those dimensions, every positive pair is a unit change of (1, 1) and T = C \u03ba S with C = f(1, 1). C is not fixed. Not the Einstein\u2013Cartan field equation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -582,7 +582,7 @@
       },
       "coefficientNotFixed": {
         "theorem": "PhysJS.EinsteinCartan.coefficient_not_fixed",
-        "covers": "derivation-step: if C ≠ 1 and κ S ≠ 0, then C κ S ≠ κ S. A factor other than 1 is not the catalog coefficient",
+        "covers": "derivation-step: if C \u2260 1 and \u03ba S \u2260 0, then C \u03ba S \u2260 \u03ba S. A factor other than 1 is not the catalog coefficient",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -593,7 +593,7 @@
       },
       "unitCoefficient": {
         "theorem": "PhysJS.EinsteinCartan.inversion_of_unit_coefficient",
-        "covers": "derivation-step: if C = 1 and every component satisfies T = C κ S, then inversion gives S·S = T·T / κ². C = 1 is a hypothesis. The Einstein trace stays a hypothesis of PhysJS.Einstein.trace_eq",
+        "covers": "derivation-step: if C = 1 and every component satisfies T = C \u03ba S, then inversion gives S\u00b7S = T\u00b7T / \u03ba\u00b2. C = 1 is a hypothesis. The Einstein trace stays a hypothesis of PhysJS.Einstein.trace_eq",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -607,7 +607,7 @@
       "key": "be-27",
       "bridgeId": "be-27",
       "theorem": "PhysJS.EffectiveTemperature.sum_eq",
-      "covers": "derivation-step: for T ≠ 0 and k_B ≠ 0, T (1 + Σ_active/(k_B T)) = T + Σ_active/k_B, and this equals T iff Σ_active = 0. The product T · Σ_active/(k_B T), with the 1 omitted, is not that sum. Not the frequency-dependent Cugliandolo–Kurchan T_eff(ω)",
+      "covers": "derivation-step: for T \u2260 0 and k_B \u2260 0, T (1 + \u03a3_active/(k_B T)) = T + \u03a3_active/k_B, and this equals T iff \u03a3_active = 0. The product T \u00b7 \u03a3_active/(k_B T), with the 1 omitted, is not that sum. Not the frequency-dependent Cugliandolo\u2013Kurchan T_eff(\u03c9)",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -620,7 +620,7 @@
       "key": "be-22",
       "bridgeId": "be-22",
       "theorem": "PhysJS.ToricCode.toric",
-      "covers": "derivation-step: four anyons of quantum dimension 1 have D = √4 = 2 and γ = ln 2 in nats. The encoded decomposition is S = α L − γ, with the O(L⁻¹) term dropped. log₂ 2 = 1 is the bit convention, not ln 2. D = √2 is one anyon pair, not the toric code. Not the Kitaev–Preskill theorem, and not a quantum-gravity boundary",
+      "covers": "derivation-step: four anyons of quantum dimension 1 have D = \u221a4 = 2 and \u03b3 = ln 2 in nats. The encoded decomposition is S = \u03b1 L \u2212 \u03b3, with the O(L\u207b\u00b9) term dropped. log\u2082 2 = 1 is the bit convention, not ln 2. D = \u221a2 is one anyon pair, not the toric code. Not the Kitaev\u2013Preskill theorem, and not a quantum-gravity boundary",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -633,7 +633,7 @@
       "key": "be-15",
       "bridgeId": "be-15",
       "theorem": "PhysJS.Coarsening.exponent_iff",
-      "covers": "derivation-step: for Γ = L₀²/t₀ > 0, t > 0, t ≠ t₀, and z > 0, L(t) = L₀ (t/t₀)^{1/z} obeys L(t)² = Γ t iff z = 2. At t = t₀ the ratio holds for every z. Model B's z = 3 gives L³ ∝ t and fails L² = Γ t. Not the Model A Langevin equation. The Langevin kinetic coefficient is a different Γ",
+      "covers": "derivation-step: for \u0393 = L\u2080\u00b2/t\u2080 > 0, t > 0, t \u2260 t\u2080, and z > 0, L(t) = L\u2080 (t/t\u2080)^{1/z} obeys L(t)\u00b2 = \u0393 t iff z = 2. At t = t\u2080 the ratio holds for every z. Model B's z = 3 gives L\u00b3 \u221d t and fails L\u00b2 = \u0393 t. Not the Model A Langevin equation. The Langevin kinetic coefficient is a different \u0393",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -643,7 +643,7 @@
       ],
       "lengthMonomial": {
         "theorem": "PhysJS.Coarsening.length_monomial_at",
-        "covers": "derivation-step: if L is a dimensionally homogeneous function of Γ and t alone and [Γ] = L^z T⁻¹ for a positive rational z, then L = C (Γ t)^{1/z} with C = f(1, 1). C is not fixed. Every positive rational z is allowed, so z = 2 is not derived. Not the Model A Langevin equation",
+        "covers": "derivation-step: if L is a dimensionally homogeneous function of \u0393 and t alone and [\u0393] = L^z T\u207b\u00b9 for a positive rational z, then L = C (\u0393 t)^{1/z} with C = f(1, 1). C is not fixed. Every positive rational z is allowed, so z = 2 is not derived. Not the Model A Langevin equation",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -657,7 +657,7 @@
       "key": "be-33",
       "bridgeId": "be-33",
       "theorem": "PhysJS.QuantumCritical.thermal_scaling",
-      "covers": "derivation-step: ξ(T) = ξ₀ (T/T₀)^{−1/z}, and at z = 1 this is ξ(T) = ξ₀ (T/T₀)^{−1} = ξ₀ T₀/T for T > 0 and T₀ > 0. Not Hertz–Millis theory, and not a universality class",
+      "covers": "derivation-step: \u03be(T) = \u03be\u2080 (T/T\u2080)^{\u22121/z}, and at z = 1 this is \u03be(T) = \u03be\u2080 (T/T\u2080)^{\u22121} = \u03be\u2080 T\u2080/T for T > 0 and T\u2080 > 0. Not Hertz\u2013Millis theory, and not a universality class",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -667,7 +667,7 @@
       ],
       "scalingShape": {
         "theorem": "PhysJS.QuantumCritical.scaling_shape",
-        "covers": "derivation-step: if ξ is a dimensionally homogeneous function of a length ξ₀ and two temperatures, then ξ = ξ₀ φ(T/T₀) with φ(u) = f(1, u, 1). φ is not fixed. Not Hertz–Millis theory",
+        "covers": "derivation-step: if \u03be is a dimensionally homogeneous function of a length \u03be\u2080 and two temperatures, then \u03be = \u03be\u2080 \u03c6(T/T\u2080) with \u03c6(u) = f(1, u, 1). \u03c6 is not fixed. Not Hertz\u2013Millis theory",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -678,7 +678,7 @@
       },
       "everyPower": {
         "theorem": "PhysJS.QuantumCritical.every_power_homogeneous",
-        "covers": "derivation-step: for every real p and positive scale factors, (λ_s ξ₀) ((λ_e T)/(λ_e T₀))^p = λ_s (ξ₀ (T/T₀)^p). The exponent p is not chosen. Not Hertz–Millis theory",
+        "covers": "derivation-step: for every real p and positive scale factors, (\u03bb_s \u03be\u2080) ((\u03bb_e T)/(\u03bb_e T\u2080))^p = \u03bb_s (\u03be\u2080 (T/T\u2080)^p). The exponent p is not chosen. Not Hertz\u2013Millis theory",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -692,7 +692,7 @@
       "key": "be-50",
       "bridgeId": "be-50",
       "theorem": "PhysJS.TimeSymmetric.wheeler_feynman",
-      "covers": "derivation-step: A_μ(x) = (A_μ^ret(x) + A_μ^adv(x))/2, and twice that component is the sum. The id is contested. This lemma does not decide the contest. Not the absorber boundary condition as a theory of radiation reaction",
+      "covers": "derivation-step: A_\u03bc(x) = (A_\u03bc^ret(x) + A_\u03bc^adv(x))/2, and twice that component is the sum. The id is contested. This lemma does not decide the contest. Not the absorber boundary condition as a theory of radiation reaction",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -705,7 +705,7 @@
       "key": "be-32",
       "bridgeId": "be-32",
       "theorem": "PhysJS.BornOverlap.modulus_sq",
-      "covers": "derivation-step: |c + s i|² = c² + s², which is normSq of one complex matrix element. A sum of squares above 1 is not a probability in [0, 1], the module's rejection of c² + s² > 1. c² − s² is not that square when s ≠ 0. Not the Giacomini–Castro-Ruiz–Brukner transformation, and not a Haar integral. The catalog records this id as not-a-bridge; this lemma does not decide that",
+      "covers": "derivation-step: |c + s i|\u00b2 = c\u00b2 + s\u00b2, which is normSq of one complex matrix element. A sum of squares above 1 is not a probability in [0, 1], the module's rejection of c\u00b2 + s\u00b2 > 1. c\u00b2 \u2212 s\u00b2 is not that square when s \u2260 0. Not the Giacomini\u2013Castro-Ruiz\u2013Brukner transformation, and not a Haar integral. The catalog records this id as not-a-bridge; this lemma does not decide that",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -718,7 +718,7 @@
       "key": "be-28",
       "bridgeId": "be-28",
       "theorem": "PhysJS.EntropyProduction.nonneg",
-      "covers": "derivation-step: σ = Σ_i J_i X_i is the definition of σ. If every product is ≥ 0 then σ ≥ 0. One flipped sign, with the other products zero and the flipped product strictly positive, is not σ, and that flipped sum is negative. Not the variational maximum-entropy-production principle. The catalog records this id as not-a-bridge; this lemma does not decide that",
+      "covers": "derivation-step: \u03c3 = \u03a3_i J_i X_i is the definition of \u03c3. If every product is \u2265 0 then \u03c3 \u2265 0. One flipped sign, with the other products zero and the flipped product strictly positive, is not \u03c3, and that flipped sum is negative. Not the variational maximum-entropy-production principle. The catalog records this id as not-a-bridge; this lemma does not decide that",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -731,7 +731,7 @@
       "key": "be-40",
       "bridgeId": "be-40",
       "theorem": "PhysJS.CompositeHiggs.scale_free",
-      "covers": "derivation-step: for f ≠ 0 and θ = h/f, V(h)/f⁴ = −α sin²θ + β [sin⁴θ − sin²θ cos²θ]. Both terms carry f⁴, so the ratio depends on h only through θ. The pre-correction first term −α f² sin²θ, divided by f⁴, is −α sin²θ / f². It depends on f, and it agrees with −α sin²θ only when f² = 1. Not SILH matching onto a confining theory. The catalog records this id as not-a-bridge; this lemma does not decide that",
+      "covers": "derivation-step: for f \u2260 0 and \u03b8 = h/f, V(h)/f\u2074 = \u2212\u03b1 sin\u00b2\u03b8 + \u03b2 [sin\u2074\u03b8 \u2212 sin\u00b2\u03b8 cos\u00b2\u03b8]. Both terms carry f\u2074, so the ratio depends on h only through \u03b8. The pre-correction first term \u2212\u03b1 f\u00b2 sin\u00b2\u03b8, divided by f\u2074, is \u2212\u03b1 sin\u00b2\u03b8 / f\u00b2. It depends on f, and it agrees with \u2212\u03b1 sin\u00b2\u03b8 only when f\u00b2 = 1. Not SILH matching onto a confining theory. The catalog records this id as not-a-bridge; this lemma does not decide that",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -744,7 +744,7 @@
       "key": "be-35",
       "bridgeId": "be-35",
       "theorem": "PhysJS.Crossing.antisymmetry",
-      "covers": "derivation-step: for a real function g, g(u,v) − g(v,u) = −(g(v,u) − g(u,v)). The swap is the negation of a difference. The residual is 0 for every g when u = v, including u = v = 1/4, so that point is not a control. A block that is not symmetric does not vanish at u = 1/2, v = 1/4. Not the infinite sum over (Δ, ℓ), and not positivity or unitarity. The catalog records this id as not-a-bridge; this lemma does not decide that",
+      "covers": "derivation-step: for a real function g, g(u,v) \u2212 g(v,u) = \u2212(g(v,u) \u2212 g(u,v)). The swap is the negation of a difference. The residual is 0 for every g when u = v, including u = v = 1/4, so that point is not a control. A block that is not symmetric does not vanish at u = 1/2, v = 1/4. Not the infinite sum over (\u0394, \u2113), and not positivity or unitarity. The catalog records this id as not-a-bridge; this lemma does not decide that",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -757,7 +757,7 @@
       "key": "be-63",
       "bridgeId": "be-63",
       "theorem": "PhysJS.Chandrasekhar.prefactor",
-      "covers": "derivation-step: with n = ρ/(μ_e m_u), p_F = ℏ (3π² n)^{1/3}, and P = (1/4) n p_F c, one has P = K_ρ ρ^{4/3} where K_ρ = K_n/(μ_e m_u)^{4/3} and K_n = (ℏ c/4)(3π²)^{1/3}. For the n = 3 Lane–Emden scale the central density cancels, and M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}. ω₃⁰ stays symbolic; the decimal 2.01824 is not in the theorem. With ℏ = c = μ_e = m_u = 1 both routes give the same K. √π/2 in place of √(3π)/2 fails when ω₃⁰ ≠ 0, and dropping ω₃⁰ fails when ω₃⁰ ≠ 1. Not stellar rotation or magnetic support",
+      "covers": "derivation-step: with n = \u03c1/(\u03bc_e m_u), p_F = \u210f (3\u03c0\u00b2 n)^{1/3}, and P = (1/4) n p_F c, one has P = K_\u03c1 \u03c1^{4/3} where K_\u03c1 = K_n/(\u03bc_e m_u)^{4/3} and K_n = (\u210f c/4)(3\u03c0\u00b2)^{1/3}. For the n = 3 Lane\u2013Emden scale the central density cancels, and M = (\u03c9\u2083\u2070 \u221a(3\u03c0)/2) (\u210f c/G)^{3/2} (\u03bc_e m_u)^{\u22122}. \u03c9\u2083\u2070 stays symbolic; the decimal 2.01824 is not in the theorem. With \u210f = c = \u03bc_e = m_u = 1 both routes give the same K. \u221a\u03c0/2 in place of \u221a(3\u03c0)/2 fails when \u03c9\u2083\u2070 \u2260 0, and dropping \u03c9\u2083\u2070 fails when \u03c9\u2083\u2070 \u2260 1. Not stellar rotation or magnetic support",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -770,7 +770,7 @@
       "key": "be-30",
       "bridgeId": "be-30",
       "theorem": "PhysJS.Entanglement.first_variation",
-      "covers": "derivation-step: for a smooth curve of full-rank density matrices that stay diagonal in a fixed basis and have trace 1, d/dt S(ρ(t)) = −⟪ρ̇(t), log ρ(t)⟫, the trace inner product. The modular Hamiltonian K = −log ρ is frozen at the base point, and that derivative equals d/dt ⟨K⟩. A finite jump from diag(1/2, 1/2) to diag(3/4, 1/4) leaves ⟨K⟩ unchanged and changes S. Not the holographic first law that identifies K with an area variation",
+      "covers": "derivation-step: for a smooth curve of full-rank density matrices that stay diagonal in a fixed basis and have trace 1, d/dt S(\u03c1(t)) = \u2212\u27ea\u03c1\u0307(t), log \u03c1(t)\u27eb, the trace inner product. The modular Hamiltonian K = \u2212log \u03c1 is frozen at the base point, and that derivative equals d/dt \u27e8K\u27e9. A finite jump from diag(1/2, 1/2) to diag(3/4, 1/4) leaves \u27e8K\u27e9 unchanged and changes S. Not the holographic first law that identifies K with an area variation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -783,7 +783,7 @@
       "key": "be-66",
       "bridgeId": "be-66",
       "theorem": "PhysJS.RadiationPressure.pressure_eq",
-      "covers": "derivation-step: foreshortening I cos θ, normal momentum per energy (cos θ)/c, and an opaque split that deposits the absorbed fraction once and the specular fraction twice give P_n = (I/c)(1+R) cos²θ. R = 0, θ = 0 is I/c and R = 1, θ = 0 is 2I/c. A single cosine is not that pressure when cos θ is neither 0 nor 1. Homogeneity in I and c gives P = C I/c with C = f(1,1) unfixed. Not the Maxwell stress tensor, and not the Eddington luminosity",
+      "covers": "derivation-step: foreshortening I cos \u03b8, normal momentum per energy (cos \u03b8)/c, and an opaque split that deposits the absorbed fraction once and the specular fraction twice give P_n = (I/c)(1+R) cos\u00b2\u03b8. R = 0, \u03b8 = 0 is I/c and R = 1, \u03b8 = 0 is 2I/c. A single cosine is not that pressure when cos \u03b8 is neither 0 nor 1. Homogeneity in I and c gives P = C I/c with C = f(1,1) unfixed. Not the Maxwell stress tensor, and not the Eddington luminosity",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -796,7 +796,7 @@
       "key": "be-67",
       "bridgeId": "be-67",
       "theorem": "PhysJS.AlfvenSpeed.speed_eq",
-      "covers": "derivation-step: one transverse monochromatic polarization along a uniform field, with ∂b/∂t = B ∂v/∂z and ρ ∂v/∂t = (B/μ0) ∂b/∂z, has phase speed |ω/k| = B/√(μ0 ρ) for B > 0, μ0 > 0, ρ > 0, and k ≠ 0. ρ is the density in that momentum premise, read as the total mass density. Proton-only n m_p is a different density when electrons contribute, and a density r ρ with r ≠ 1 is a different speed. Inserting tesla and the SI density into B/√(4πρ) is not the SI speed. 4π×10^{-7} is the permeability stand-in, not a measured μ0. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation",
+      "covers": "derivation-step: one transverse monochromatic polarization along a uniform field, with \u2202b/\u2202t = B \u2202v/\u2202z and \u03c1 \u2202v/\u2202t = (B/\u03bc0) \u2202b/\u2202z, has phase speed |\u03c9/k| = B/\u221a(\u03bc0 \u03c1) for B > 0, \u03bc0 > 0, \u03c1 > 0, and k \u2260 0. \u03c1 is the density in that momentum premise, read as the total mass density. Proton-only n m_p is a different density when electrons contribute, and a density r \u03c1 with r \u2260 1 is a different speed. Inserting tesla and the SI density into B/\u221a(4\u03c0\u03c1) is not the SI speed. 4\u03c0\u00d710^{-7} is the permeability stand-in, not a measured \u03bc0. A factor C \u2260 1 is not the catalog speed. Not a kinetic dispersion relation",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -809,7 +809,7 @@
       "key": "be-68",
       "bridgeId": "be-68",
       "theorem": "PhysJS.TolmanEhrenfest.hydrostatic_constant",
-      "covers": "derivation-step: on a static interval with g_00 < 0, hydrostatic balance dp = -(ρ+p) d ln √(-g_00) and the equilibrium Gibbs relation dp = (ρ+p) d ln T, with ρ+p ≠ 0, give T √(-g_00) equal at the endpoints. The 1930 writing T √g_44 agrees when g_44 = -g_00. Real.sqrt g_00 = 0 when g_00 < 0, so the product without the minus is 0. d ln T = 0 is not g dr/c². Not a horizon temperature and not PhysJS.HawkingUnruh.dictionary. T ‖ξ‖ = const is out of scope. The hydrostatic equation is not derived from ∇_μ T^{μν} = 0, and the Gibbs relation is not derived from an equation of state",
+      "covers": "derivation-step: on a static interval with g_00 < 0, hydrostatic balance dp = -(\u03c1+p) d ln \u221a(-g_00) and the equilibrium Gibbs relation dp = (\u03c1+p) d ln T, with \u03c1+p \u2260 0, give T \u221a(-g_00) equal at the endpoints. The 1930 writing T \u221ag_44 agrees when g_44 = -g_00. Real.sqrt g_00 = 0 when g_00 < 0, so the product without the minus is 0. d ln T = 0 is not g dr/c\u00b2. Not a horizon temperature and not PhysJS.HawkingUnruh.dictionary. T \u2016\u03be\u2016 = const is out of scope. The hydrostatic equation is not derived from \u2207_\u03bc T^{\u03bc\u03bd} = 0, and the Gibbs relation is not derived from an equation of state",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -822,7 +822,7 @@
       "key": "be-69",
       "bridgeId": "be-69",
       "theorem": "PhysJS.FastMagnetosonic.speed_eq",
-      "covers": "derivation-step: a monochromatic compressional polarization perpendicular to a uniform field, with ∂b/∂t = −B ∂v/∂x, ∂δρ/∂t = −ρ ∂v/∂x, δp = c_s² δρ, and ρ ∂v/∂t = −∂δp/∂x − (B/μ0) ∂b/∂x, has phase speed |ω/k| = √(c_s² + B²/(μ0 ρ)) for μ0 > 0, ρ > 0, and k ≠ 0. The velocity wave is not identically zero. c_s² = γ p / ρ is a reading of the closure, not an energy equation. The textbook quartic at k_∥ = 0 has roots ω² = 0 and ω² = (c_s² + v_A²) k²; ω = 0 does not solve compressional induction. √(c_s² + v_A²) is not c_s, not v_A, and not c_s + v_A when the other speed is nonzero. c_s = 0 recovers B/√(μ0 ρ), the Alfvén value of a different polarization. A factor C ≠ 1 is not the catalog speed. Not a kinetic dispersion relation, and not the oblique fast mode. The linearized equations are hypotheses",
+      "covers": "derivation-step: a monochromatic compressional polarization perpendicular to a uniform field, with \u2202b/\u2202t = \u2212B \u2202v/\u2202x, \u2202\u03b4\u03c1/\u2202t = \u2212\u03c1 \u2202v/\u2202x, \u03b4p = c_s\u00b2 \u03b4\u03c1, and \u03c1 \u2202v/\u2202t = \u2212\u2202\u03b4p/\u2202x \u2212 (B/\u03bc0) \u2202b/\u2202x, has phase speed |\u03c9/k| = \u221a(c_s\u00b2 + B\u00b2/(\u03bc0 \u03c1)) for \u03bc0 > 0, \u03c1 > 0, and k \u2260 0. The velocity wave is not identically zero. c_s\u00b2 = \u03b3 p / \u03c1 is a reading of the closure, not an energy equation. The textbook quartic at k_\u2225 = 0 has roots \u03c9\u00b2 = 0 and \u03c9\u00b2 = (c_s\u00b2 + v_A\u00b2) k\u00b2; \u03c9 = 0 does not solve compressional induction. \u221a(c_s\u00b2 + v_A\u00b2) is not c_s, not v_A, and not c_s + v_A when the other speed is nonzero. c_s = 0 recovers B/\u221a(\u03bc0 \u03c1), the Alfv\u00e9n value of a different polarization. A factor C \u2260 1 is not the catalog speed. Not a kinetic dispersion relation, and not the oblique fast mode. The linearized equations are hypotheses",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -832,7 +832,7 @@
       ],
       "perpendicularQuartic": {
         "theorem": "PhysJS.FastMagnetosonic.perpendicular_of_dispersion",
-        "covers": "derivation-step: if ω⁴ − ω² k² (c_s² + v_A²) + c_s² v_A² k² k_∥² = 0 and k_∥ = 0, then ω² = 0 or ω² = (c_s² + v_A²) k². The quartic is a hypothesis. The compressional polarization selects the second root",
+        "covers": "derivation-step: if \u03c9\u2074 \u2212 \u03c9\u00b2 k\u00b2 (c_s\u00b2 + v_A\u00b2) + c_s\u00b2 v_A\u00b2 k\u00b2 k_\u2225\u00b2 = 0 and k_\u2225 = 0, then \u03c9\u00b2 = 0 or \u03c9\u00b2 = (c_s\u00b2 + v_A\u00b2) k\u00b2. The quartic is a hypothesis. The compressional polarization selects the second root",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -846,7 +846,7 @@
       "key": "be-70",
       "bridgeId": "be-70",
       "theorem": "PhysJS.EinsteinRelation.diffusion_eq",
-      "covers": "derivation-step: for the Boltzmann profile n = n_ref exp(−q V/(k_B T)) with n_ref > 0, k_B T ≠ 0, and q ≠ 0, a nonzero field E = −dV/dx at which the drift flux μ n E cancels the diffusion flux D dn/dx gives D = μ k_B T / q. The force-mobility writing D = μ_force k_B T needs μ_force = μ/q. Dropping q fails when q ≠ 1. The Fermi-liquid form μ E_F / q fails when E_F ≠ k_B T. Stokes–Einstein fails unless μ/q = 1/(6 π η a). A factor C ≠ 1 is not this diffusivity. Not a master equation, and not a Fermi liquid",
+      "covers": "derivation-step: for the Boltzmann profile n = n_ref exp(\u2212q V/(k_B T)) with n_ref > 0, k_B T \u2260 0, and q \u2260 0, a nonzero field E = \u2212dV/dx at which the drift flux \u03bc n E cancels the diffusion flux D dn/dx gives D = \u03bc k_B T / q. The force-mobility writing D = \u03bc_force k_B T needs \u03bc_force = \u03bc/q. Dropping q fails when q \u2260 1. The Fermi-liquid form \u03bc E_F / q fails when E_F \u2260 k_B T. Stokes\u2013Einstein fails unless \u03bc/q = 1/(6 \u03c0 \u03b7 a). A factor C \u2260 1 is not this diffusivity. Not a master equation, and not a Fermi liquid",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -859,7 +859,7 @@
       "key": "be-71",
       "bridgeId": "be-71",
       "theorem": "PhysJS.Clapeyron.slope_eq",
-      "covers": "derivation-step: where the specific Gibbs energies agree along coexistence and each phase obeys dg = −s dT + v dP, dP/dT = (s2−s1)/(v2−v1). With L = T (s2−s1), T ≠ 0, and Δv ≠ 0, dP/dT = L/(T Δv). Dropping T fails when T ≠ 1. Replacing Δv by one phase volume fails when the other volume is nonzero. A factor C ≠ 1 is not this slope. Not the ideal-gas integrated vapor-pressure law. The Gibbs differential is a hypothesis, not a Legendre transform",
+      "covers": "derivation-step: where the specific Gibbs energies agree along coexistence and each phase obeys dg = \u2212s dT + v dP, dP/dT = (s2\u2212s1)/(v2\u2212v1). With L = T (s2\u2212s1), T \u2260 0, and \u0394v \u2260 0, dP/dT = L/(T \u0394v). Dropping T fails when T \u2260 1. Replacing \u0394v by one phase volume fails when the other volume is nonzero. A factor C \u2260 1 is not this slope. Not the ideal-gas integrated vapor-pressure law. The Gibbs differential is a hypothesis, not a Legendre transform",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -872,7 +872,7 @@
       "key": "be-72",
       "bridgeId": "be-72",
       "theorem": "PhysJS.GravitationalRedshift.frequency_ratio",
-      "covers": "derivation-step: two static observers of one coordinate period, with ν √(−g_00) = 1/Δt and g_00 < 0, have ν1/ν2 = √(−g2)/√(−g1) = √(g2/g1). If the Tolman products T √(−g_00) also agree, then T1/T2 = ν1/ν2. Equal temperatures on g_00 = −1 and g_00 = −4 are not a Tolman equilibrium, while the frequency ratio is 2. For g_00 = −(1+2Φ/c²) at c = 1, Φ = 0 and Φ = 4, the exact ratio is neither (Φ2−Φ1)/c² nor 1+(Φ2−Φ1)/c². z = 0 is not Φ/c². Not PhysJS.TolmanEhrenfest.hydrostatic_constant, not a horizon temperature, and not PhysJS.HawkingUnruh.dictionary",
+      "covers": "derivation-step: two static observers of one coordinate period, with \u03bd \u221a(\u2212g_00) = 1/\u0394t and g_00 < 0, have \u03bd1/\u03bd2 = \u221a(\u2212g2)/\u221a(\u2212g1) = \u221a(g2/g1). If the Tolman products T \u221a(\u2212g_00) also agree, then T1/T2 = \u03bd1/\u03bd2. Equal temperatures on g_00 = \u22121 and g_00 = \u22124 are not a Tolman equilibrium, while the frequency ratio is 2. For g_00 = \u2212(1+2\u03a6/c\u00b2) at c = 1, \u03a6 = 0 and \u03a6 = 4, the exact ratio is neither (\u03a62\u2212\u03a61)/c\u00b2 nor 1+(\u03a62\u2212\u03a61)/c\u00b2. z = 0 is not \u03a6/c\u00b2. Not PhysJS.TolmanEhrenfest.hydrostatic_constant, not a horizon temperature, and not PhysJS.HawkingUnruh.dictionary",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -882,7 +882,7 @@
       ],
       "tolmanRatio": {
         "theorem": "PhysJS.GravitationalRedshift.tolman_same_ratio",
-        "covers": "derivation-step: if T √(−g_00) agrees at two static observers and the frequency ratio equals √(−g2)/√(−g1), then T1/T2 = ν1/ν2. Neither factor is derived from the other",
+        "covers": "derivation-step: if T \u221a(\u2212g_00) agrees at two static observers and the frequency ratio equals \u221a(\u2212g2)/\u221a(\u2212g1), then T1/T2 = \u03bd1/\u03bd2. Neither factor is derived from the other",
         "coverage": "covers its statement only",
         "leanProof": "complete",
         "axioms": [
@@ -896,7 +896,7 @@
       "key": "be-73",
       "bridgeId": "be-73",
       "theorem": "PhysJS.KelvinRelation.peltier_eq",
-      "covers": "derivation-step: for J_e = L11 E/T + L12 (−∇T)/T² and J_q = L21 E/T + L22 (−∇T)/T², the open-circuit Seebeck coefficient S = E/∇T and the isothermal Peltier coefficient Π = J_q/J_e satisfy Π = S T when L12 = L21. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. Not the first Thomson relation μ = T dS/dT, and not a measured thermopower. The linear fluxes are hypotheses",
+      "covers": "derivation-step: for J_e = L11 E/T + L12 (\u2212\u2207T)/T\u00b2 and J_q = L21 E/T + L22 (\u2212\u2207T)/T\u00b2, the open-circuit Seebeck coefficient S = E/\u2207T and the isothermal Peltier coefficient \u03a0 = J_q/J_e satisfy \u03a0 = S T when L12 = L21. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. Not the first Thomson relation \u03bc = T dS/dT, and not a measured thermopower. The linear fluxes are hypotheses",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -909,7 +909,7 @@
       "key": "be-74",
       "bridgeId": "be-74",
       "theorem": "PhysJS.MagneticPressure.pressure_eq",
-      "covers": "derivation-step: a linear inductor with dU/dI = L I and U(0) = 0 stores U = (L/2) I². A long solenoid with B = μ0 n I and flux linkage Λ = (n ℓ) B A has L = μ0 n² V. At fixed current the battery supplies I ΔΛ. The stored energy rises by half of that, and the difference is the mechanical work p ΔV, so p = B²/(2 μ0). Homogeneity in B and μ0 gives p = C B²/μ0 with C unfixed. C = 1 is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor. Ampere's law, the flux linkage, and the quasistatic work balance are hypotheses",
+      "covers": "derivation-step: a linear inductor with dU/dI = L I and U(0) = 0 stores U = (L/2) I\u00b2. A long solenoid with B = \u03bc0 n I and flux linkage \u039b = (n \u2113) B A has L = \u03bc0 n\u00b2 V. At fixed current the battery supplies I \u0394\u039b. The stored energy rises by half of that, and the difference is the mechanical work p \u0394V, so p = B\u00b2/(2 \u03bc0). Homogeneity in B and \u03bc0 gives p = C B\u00b2/\u03bc0 with C unfixed. C = 1 is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor. Ampere's law, the flux linkage, and the quasistatic work balance are hypotheses",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -922,7 +922,7 @@
       "key": "be-75",
       "bridgeId": "be-75",
       "theorem": "PhysJS.LondonPenetration.depth_eq",
-      "covers": "derivation-step: on B(x) = B0 exp(−x/λ) with λ > 0, Ampere's law j = −(1/μ0) dB/dx and the London equation dj/dx = −(n e²/m) B give λ = √(m/(μ0 n e²)). e is the elementary charge. The dimension matrix of {m, μ0, n, e} admits both that monomial and μ0 e²/m, so units do not choose. Those lengths disagree when n (μ0 e²/m)³ ≠ 1. The growing exponential is not the screened field. Replacing e by 2e at the same n and m fails, and dropping the square on e fails when e ≠ 1. A factor C ≠ 1 is not this depth. Not the classical skin depth. The London equation and Ampere's law are hypotheses",
+      "covers": "derivation-step: on B(x) = B0 exp(\u2212x/\u03bb) with \u03bb > 0, Ampere's law j = \u2212(1/\u03bc0) dB/dx and the London equation dj/dx = \u2212(n e\u00b2/m) B give \u03bb = \u221a(m/(\u03bc0 n e\u00b2)). e is the elementary charge. The dimension matrix of {m, \u03bc0, n, e} admits both that monomial and \u03bc0 e\u00b2/m, so units do not choose. Those lengths disagree when n (\u03bc0 e\u00b2/m)\u00b3 \u2260 1. The growing exponential is not the screened field. Replacing e by 2e at the same n and m fails, and dropping the square on e fails when e \u2260 1. A factor C \u2260 1 is not this depth. Not the classical skin depth. The London equation and Ampere's law are hypotheses",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -935,7 +935,150 @@
       "key": "be-76",
       "bridgeId": "be-76",
       "theorem": "PhysJS.PlasmaBeta.beta_eq",
-      "covers": "derivation-step: β = p_gas / p_B where p_B is PhysJS.MagneticPressure.pressure_eq, so β = p_gas / (B²/(2 μ0)) = 2 μ0 p_gas / B². The ideal-gas closure p_gas = n k_B T gives β = 2 μ0 n k_B T / B². B ≠ 0. Using B²/μ0 in place of the magnetic pressure is a different ratio. The constant 1 is dimensionless and is not this beta when the ratio is not 1. A factor C ≠ 1 is not this beta. Dropping p = n k_B T fails. Not a unique monomial, and not a plasma-β inequality",
+      "covers": "derivation-step: \u03b2 = p_gas / p_B where p_B is PhysJS.MagneticPressure.pressure_eq, so \u03b2 = p_gas / (B\u00b2/(2 \u03bc0)) = 2 \u03bc0 p_gas / B\u00b2. The ideal-gas closure p_gas = n k_B T gives \u03b2 = 2 \u03bc0 n k_B T / B\u00b2. B \u2260 0. Using B\u00b2/\u03bc0 in place of the magnetic pressure is a different ratio. The constant 1 is dimensionless and is not this beta when the ratio is not 1. A factor C \u2260 1 is not this beta. Dropping p = n k_B T fails. Not a unique monomial, and not a plasma-\u03b2 inequality",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-77",
+      "bridgeId": "be-77",
+      "theorem": "PhysJS.HagenPoiseuille.flow_eq",
+      "covers": "derivation-step: steady axisymmetric Newtonian flow with d/dr (r du/dr) = (G/\u03bc) r, centerline slope 0, and no-slip u(R) = 0 integrates to u = (G/(4\u03bc))(r\u00b2\u2212R\u00b2). With G = \u2212\u0394P/L the flux Q = \u222b u 2\u03c0 r dr is \u03c0 R\u2074 \u0394P/(8 \u03bc L). Darcy's definition then gives f_D Re = 64. The same wall shear with the Fanning normalization is 16. A factor other than 8 is not this flux. Not a square duct. The axial balance, no-slip, and the Darcy definitions are hypotheses",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-78",
+      "bridgeId": "be-78",
+      "theorem": "PhysJS.EulerBuckling.critical_load",
+      "covers": "derivation-step: the Euler\u2013Bernoulli balance y'' = \u2212\u03c9\u00b2 y with \u03c9\u00b2 = P/(E I) and pinned ends y(0) = y(L) = 0 has the eigenfunction sin(\u03c0 x/L) at P = \u03c0\u00b2 E I/L\u00b2, and every nontrivial solution has \u03c9 L = n \u03c0 for a nonzero integer n, so the load is at least that value. The clamped-free column is \u03c0\u00b2 E I/(4 L\u00b2). That factor is not the pinned load. Not read off from units. The beam equation is a hypothesis",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-79",
+      "bridgeId": "be-79",
+      "theorem": "PhysJS.PullIn.pull_in_eq",
+      "covers": "derivation-step: C = \u03b50 A/g has dC/dg = \u2212\u03b50 A/g\u00b2. Equilibrium of a linear spring against the coenergy force is k(g0\u2212g) = \u03b50 A V\u00b2/(2 g\u00b2), so V\u00b2 is proportional to (g0\u2212g) g\u00b2. The derivative 2 g0 g \u2212 3 g\u00b2 vanishes only at g = 0 and g = 2 g0/3, and the second derivative at the fold is \u22122 g0. Substituting the gap gives V_pi\u00b2 = 8 k g0\u00b3/(27 \u03b50 A) = 8 k g0\u00b2/(27 C0) with C0 = \u03b50 A/g0. g = g0/2 is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-80",
+      "bridgeId": "be-80",
+      "theorem": "PhysJS.MottGurney.current_eq",
+      "covers": "derivation-step: drift J = q n \u03bc E and Poisson dE/dx = q n/\u03b5 give E dE/dx = J/(\u03b5 \u03bc). With E(0) = 0 the integral is E\u00b2/2 = J x/(\u03b5 \u03bc). The nonnegative root integrated from 0 to d is V = sqrt(2 J/(\u03b5 \u03bc)) (2/3) d^{3/2}, so J = (9/8) \u03b5 \u03bc V\u00b2/d\u00b3. A factor other than 9/8 is not this current. Not Child\u2013Langmuir. Drift, Poisson, and the injecting contact are hypotheses",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-81",
+      "bridgeId": "be-81",
+      "theorem": "PhysJS.ChildLangmuir.current_eq",
+      "covers": "derivation-step: collisionless energy (1/2) m v\u00b2 = e \u03c6, J = \u03c1 v, and Poisson \u03c6'' = \u03c1/\u03b50 give J = \u03b50 \u03c6'' v. A power \u03c6 \u221d x^\u03b1 makes \u03c6'' v independent of x only for \u03b1 = 4/3. The profile \u03c6 = V (x/d)^{4/3} has \u03c6(0) = 0, \u03c6(d) = V, and cathode field 0, and for x > 0 its current is (4 \u03b50/9) sqrt(2 e/m) V^{3/2}/d\u00b2. e is the elementary charge. The Mott\u2013Gurney exponent 3/2 does not cancel. Poisson is not claimed at x = 0. Not a drift-only solid",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-82",
+      "bridgeId": "be-82",
+      "theorem": "PhysJS.ShockleyDiode.shockley_eq",
+      "covers": "derivation-step: quasi-equilibrium multiplies the equilibrium flux by exp(e V/(\u03b7 k_B T)). Ideality 1 sets \u03b7 = 1. Detailed balance sets the reverse flux equal to the forward flux at V = 0, and low injection keeps that reverse flux under bias. The net current is I = I_s (exp(e V/(k_B T)) \u2212 1). Zero bias carries zero current. Ideality 2 is not this current when e V \u2260 0. e is the elementary charge. Not a diffusion-length ODE",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-83",
+      "bridgeId": "be-83",
+      "theorem": "PhysJS.Thomson.thomson_eq",
+      "covers": "derivation-step: the Kelvin relation \u03a0(t) = S(t) t, which is PhysJS.KelvinRelation.peltier_eq read along temperature, and the Thomson split \u03bc = d\u03a0/dT \u2212 S, give \u03bc = T dS/dT by the product rule. d\u03a0/dT is not \u03bc when S T \u2260 0. Not a second copy of \u03a0 = S T. The functional Kelvin relation and the Thomson split are hypotheses",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-84",
+      "bridgeId": "be-84",
+      "theorem": "PhysJS.FourPoint.sheet_eq",
+      "covers": "derivation-step: on an infinite sheet the radial field of a point current is (I R_s)/(2 \u03c0 r), and the potential drop is the integral of 1/r. Probes at 0, s, 2s, and 3s, with current in at 0 and out at 3s, each contribute (I R_s/(2 \u03c0)) ln 2 on the inner pair. Superposition gives R_s = (\u03c0/ln 2)(V/I). A sink at 4s gives 2\u03c0/ln 3 instead. Not PhysJS.Crossing.antisymmetry. The Laplace field and linear superposition are hypotheses",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-85",
+      "bridgeId": "be-85",
+      "theorem": "PhysJS.ShotNoise.shot_eq",
+      "covers": "derivation-step: in a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e\u00b2 and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is \u0394f = 1/(2 T), and S_I = Var(I)/\u0394f is 2 e I. The two-sided bandwidth \u0394f = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson\u2013Nyquist. The Poisson variance and the one-sided convention are hypotheses",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-86",
+      "bridgeId": "be-86",
+      "theorem": "PhysJS.ReynoldsAnalogy.reynolds_eq",
+      "covers": "derivation-step: wall fluxes \u03c4 = \u03bc du/dy and q = k dT/dy, with C_f = \u03c4/(\u03c1 U\u00b2/2), h = q/\u0394T, St = h/(\u03c1 U c_p), and Pr = \u03bc c_p/k, satisfy St Pr = C_f/2 when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At Pr = 1, St = C_f/2. Pr \u2260 1 with nonzero skin friction is not this equality. Not a Nusselt correlation",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-87",
+      "bridgeId": "be-87",
+      "theorem": "PhysJS.CapacitorNoise.noise_eq",
+      "covers": "derivation-step: dU/dV = C V and U(0) = 0 integrate to U = (C/2) V\u00b2. The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance k_B T/C, because the partition function is the Gaussian integral. The mean square on that law is k_B T/C, and (C/2) of it is (1/2) k_B T. (3/2) k_B T/C is not this variance. Dropping the energy half replaces it by k_B T/(2 C). Not three kinetic degrees of freedom",
       "coverage": "covers its statement only",
       "leanProof": "complete",
       "axioms": [
@@ -945,5 +1088,5 @@
       ]
     }
   ],
-  "commit": "ee753df77bd5b29b7207443181606b6004bfcf6a"
+  "commit": "92f87257a1e3086a48cdc19fe4361cc1c5909d49"
 }

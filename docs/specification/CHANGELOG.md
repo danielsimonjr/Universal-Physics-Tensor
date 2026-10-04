@@ -1,5 +1,9 @@
 # UPT Specification — Revision History
 
+## PhysJS #64 — BE-77 through BE-87
+
+- The live pin is `92f87257a1e3086a48cdc19fe4361cc1c5909d49`. Lean files stay `lean/<File>.lean`. Part-II adds Bridge Equations 77 through 87. Each is kind `bridge`. BE-83 reads `PhysJS.KelvinRelation.peltier_eq` along temperature and does not compose with BE-73. Four-point takes the radial `1/r` field as a premise. Reynolds takes matched wall slopes and `Pr = 1`. Living catalog counts now say 77 equations, IDs 11–87, and 41 established. The PhysJS #62 section below keeps pin `ee753df77bd5b29b7207443181606b6004bfcf6a` and is the record from before this pin.
+
 ## PhysJS #62 and #63 — BE-74 through BE-76, flat Lean path
 
 - The live pin is `ee753df77bd5b29b7207443181606b6004bfcf6a`. Lean files are `lean/<File>.lean`. Theorem names are unchanged. Part-II adds Bridge Equations 74 (magnetic pressure), 75 (London penetration depth), and 76 (plasma beta). Each is kind `bridge`. BE-76 calls `PhysJS.MagneticPressure.pressure_eq`. Living proof-status links for Bridge Equations 69 through 73 name `lean/<File>.lean` at this pin. Living catalog counts now say 66 equations, IDs 11–76, and 30 established. The PhysJS #61 section below keeps pin `4ea35872513f8d4d12a01bfac225156bdddb87a9` and `lean/PhysJS/<File>.lean`, and is the record from before this flatten.

@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "3.1.0",
-    "totalFiles": 442,
+    "totalFiles": 453,
     "totalModules": 13,
-    "totalExports": 3193
+    "totalExports": 3342
   },
   "entryPoints": [
     {
@@ -5776,6 +5776,224 @@
           "evaluatePlasmaBeta"
         ]
       },
+      "src/bridges/be77-hagen-poiseuille.ts": {
+        "description": "BE-77 — Hagen–Poiseuille flux,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateHagenPoiseuille"
+        ],
+        "interfaces": [
+          "HagenPoiseuilleInputs",
+          "HagenPoiseuilleResult"
+        ],
+        "functions": [
+          "evaluateHagenPoiseuille"
+        ]
+      },
+      "src/bridges/be78-euler-buckling.ts": {
+        "description": "BE-78 — Euler buckling load of a pinned–pinned column,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateEulerBuckling"
+        ],
+        "interfaces": [
+          "EulerBucklingInputs",
+          "EulerBucklingResult"
+        ],
+        "functions": [
+          "evaluateEulerBuckling"
+        ]
+      },
+      "src/bridges/be79-pull-in.ts": {
+        "description": "BE-79 — parallel-plate pull-in voltage,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "EPS0_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluatePullIn"
+        ],
+        "interfaces": [
+          "PullInInputs",
+          "PullInResult"
+        ],
+        "functions": [
+          "evaluatePullIn"
+        ]
+      },
+      "src/bridges/be80-mott-gurney.ts": {
+        "description": "BE-80 — Mott–Gurney current,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateMottGurney"
+        ],
+        "interfaces": [
+          "MottGurneyInputs",
+          "MottGurneyResult"
+        ],
+        "functions": [
+          "evaluateMottGurney"
+        ]
+      },
+      "src/bridges/be81-child-langmuir.ts": {
+        "description": "BE-81 — Child–Langmuir current,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "EPS0_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateChildLangmuir"
+        ],
+        "interfaces": [
+          "ChildLangmuirInputs",
+          "ChildLangmuirResult"
+        ],
+        "functions": [
+          "evaluateChildLangmuir"
+        ]
+      },
+      "src/bridges/be82-shockley-diode.ts": {
+        "description": "BE-82 — Shockley diode equation at ideality 1,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI",
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateShockleyDiode"
+        ],
+        "interfaces": [
+          "ShockleyDiodeInputs",
+          "ShockleyDiodeResult"
+        ],
+        "functions": [
+          "evaluateShockleyDiode"
+        ]
+      },
+      "src/bridges/be83-thomson.ts": {
+        "description": "BE-83 — first Thomson relation,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateThomsonCoefficient"
+        ],
+        "interfaces": [
+          "ThomsonCoefficientInputs",
+          "ThomsonCoefficientResult"
+        ],
+        "functions": [
+          "evaluateThomsonCoefficient"
+        ]
+      },
+      "src/bridges/be84-four-point.ts": {
+        "description": "BE-84 — collinear four-point sheet resistance,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateFourPointSheet"
+        ],
+        "interfaces": [
+          "FourPointSheetInputs",
+          "FourPointSheetResult"
+        ],
+        "functions": [
+          "evaluateFourPointSheet"
+        ]
+      },
+      "src/bridges/be85-shot-noise.ts": {
+        "description": "BE-85 — one-sided shot noise,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateShotNoise"
+        ],
+        "interfaces": [
+          "ShotNoiseInputs",
+          "ShotNoiseResult"
+        ],
+        "functions": [
+          "evaluateShotNoise"
+        ]
+      },
+      "src/bridges/be86-reynolds-analogy.ts": {
+        "description": "BE-86 — Reynolds analogy at Prandtl number 1,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "evaluateReynoldsAnalogy"
+        ],
+        "interfaces": [
+          "ReynoldsAnalogyInputs",
+          "ReynoldsAnalogyResult"
+        ],
+        "functions": [
+          "evaluateReynoldsAnalogy"
+        ]
+      },
+      "src/bridges/be87-capacitor-noise.ts": {
+        "description": "BE-87 — mean-square voltage on one capacitor,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateCapacitorNoise"
+        ],
+        "interfaces": [
+          "CapacitorNoiseInputs",
+          "CapacitorNoiseResult"
+        ],
+        "functions": [
+          "evaluateCapacitorNoise"
+        ]
+      },
       "src/bridges/bridge-equations.ts": {
         "description": "`BridgeEquations` — a convenience facade over the per-bridge evaluators.",
         "externalDependencies": [],
@@ -6179,6 +6397,72 @@
             "file": "./be76-plasma-beta.js",
             "imports": [
               "evaluatePlasmaBeta"
+            ]
+          },
+          {
+            "file": "./be77-hagen-poiseuille.js",
+            "imports": [
+              "evaluateHagenPoiseuille"
+            ]
+          },
+          {
+            "file": "./be78-euler-buckling.js",
+            "imports": [
+              "evaluateEulerBuckling"
+            ]
+          },
+          {
+            "file": "./be79-pull-in.js",
+            "imports": [
+              "evaluatePullIn"
+            ]
+          },
+          {
+            "file": "./be80-mott-gurney.js",
+            "imports": [
+              "evaluateMottGurney"
+            ]
+          },
+          {
+            "file": "./be81-child-langmuir.js",
+            "imports": [
+              "evaluateChildLangmuir"
+            ]
+          },
+          {
+            "file": "./be82-shockley-diode.js",
+            "imports": [
+              "evaluateShockleyDiode"
+            ]
+          },
+          {
+            "file": "./be83-thomson.js",
+            "imports": [
+              "evaluateThomsonCoefficient"
+            ]
+          },
+          {
+            "file": "./be84-four-point.js",
+            "imports": [
+              "evaluateFourPointSheet"
+            ]
+          },
+          {
+            "file": "./be85-shot-noise.js",
+            "imports": [
+              "evaluateShotNoise"
+            ]
+          },
+          {
+            "file": "./be86-reynolds-analogy.js",
+            "imports": [
+              "evaluateReynoldsAnalogy"
+            ]
+          },
+          {
+            "file": "./be87-capacitor-noise.js",
+            "imports": [
+              "evaluateCapacitorNoise"
             ]
           }
         ],
@@ -9103,6 +9387,72 @@
             "imports": [
               "evaluatePlasmaBeta"
             ]
+          },
+          {
+            "file": "./be77-hagen-poiseuille.js",
+            "imports": [
+              "evaluateHagenPoiseuille"
+            ]
+          },
+          {
+            "file": "./be78-euler-buckling.js",
+            "imports": [
+              "evaluateEulerBuckling"
+            ]
+          },
+          {
+            "file": "./be79-pull-in.js",
+            "imports": [
+              "evaluatePullIn"
+            ]
+          },
+          {
+            "file": "./be80-mott-gurney.js",
+            "imports": [
+              "evaluateMottGurney"
+            ]
+          },
+          {
+            "file": "./be81-child-langmuir.js",
+            "imports": [
+              "evaluateChildLangmuir"
+            ]
+          },
+          {
+            "file": "./be82-shockley-diode.js",
+            "imports": [
+              "evaluateShockleyDiode"
+            ]
+          },
+          {
+            "file": "./be83-thomson.js",
+            "imports": [
+              "evaluateThomsonCoefficient"
+            ]
+          },
+          {
+            "file": "./be84-four-point.js",
+            "imports": [
+              "evaluateFourPointSheet"
+            ]
+          },
+          {
+            "file": "./be85-shot-noise.js",
+            "imports": [
+              "evaluateShotNoise"
+            ]
+          },
+          {
+            "file": "./be86-reynolds-analogy.js",
+            "imports": [
+              "evaluateReynoldsAnalogy"
+            ]
+          },
+          {
+            "file": "./be87-capacitor-noise.js",
+            "imports": [
+              "evaluateCapacitorNoise"
+            ]
           }
         ],
         "exports": [
@@ -9413,6 +9763,105 @@
               "type PlasmaBetaResult"
             ],
             "reExport": true
+          },
+          {
+            "file": "./be77-hagen-poiseuille.js",
+            "imports": [
+              "evaluateHagenPoiseuille",
+              "type HagenPoiseuilleInputs",
+              "type HagenPoiseuilleResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be78-euler-buckling.js",
+            "imports": [
+              "evaluateEulerBuckling",
+              "type EulerBucklingInputs",
+              "type EulerBucklingResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be79-pull-in.js",
+            "imports": [
+              "evaluatePullIn",
+              "type PullInInputs",
+              "type PullInResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be80-mott-gurney.js",
+            "imports": [
+              "evaluateMottGurney",
+              "type MottGurneyInputs",
+              "type MottGurneyResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be81-child-langmuir.js",
+            "imports": [
+              "evaluateChildLangmuir",
+              "type ChildLangmuirInputs",
+              "type ChildLangmuirResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be82-shockley-diode.js",
+            "imports": [
+              "evaluateShockleyDiode",
+              "type ShockleyDiodeInputs",
+              "type ShockleyDiodeResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be83-thomson.js",
+            "imports": [
+              "evaluateThomsonCoefficient",
+              "type ThomsonCoefficientInputs",
+              "type ThomsonCoefficientResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be84-four-point.js",
+            "imports": [
+              "evaluateFourPointSheet",
+              "type FourPointSheetInputs",
+              "type FourPointSheetResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be85-shot-noise.js",
+            "imports": [
+              "evaluateShotNoise",
+              "type ShotNoiseInputs",
+              "type ShotNoiseResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be86-reynolds-analogy.js",
+            "imports": [
+              "evaluateReynoldsAnalogy",
+              "type ReynoldsAnalogyInputs",
+              "type ReynoldsAnalogyResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be87-capacitor-noise.js",
+            "imports": [
+              "evaluateCapacitorNoise",
+              "type CapacitorNoiseInputs",
+              "type CapacitorNoiseResult"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -9497,6 +9946,39 @@
           "evaluatePlasmaBeta",
           "type PlasmaBetaInputs",
           "type PlasmaBetaResult",
+          "evaluateHagenPoiseuille",
+          "type HagenPoiseuilleInputs",
+          "type HagenPoiseuilleResult",
+          "evaluateEulerBuckling",
+          "type EulerBucklingInputs",
+          "type EulerBucklingResult",
+          "evaluatePullIn",
+          "type PullInInputs",
+          "type PullInResult",
+          "evaluateMottGurney",
+          "type MottGurneyInputs",
+          "type MottGurneyResult",
+          "evaluateChildLangmuir",
+          "type ChildLangmuirInputs",
+          "type ChildLangmuirResult",
+          "evaluateShockleyDiode",
+          "type ShockleyDiodeInputs",
+          "type ShockleyDiodeResult",
+          "evaluateThomsonCoefficient",
+          "type ThomsonCoefficientInputs",
+          "type ThomsonCoefficientResult",
+          "evaluateFourPointSheet",
+          "type FourPointSheetInputs",
+          "type FourPointSheetResult",
+          "evaluateShotNoise",
+          "type ShotNoiseInputs",
+          "type ShotNoiseResult",
+          "evaluateReynoldsAnalogy",
+          "type ReynoldsAnalogyInputs",
+          "type ReynoldsAnalogyResult",
+          "evaluateCapacitorNoise",
+          "type CapacitorNoiseInputs",
+          "type CapacitorNoiseResult",
           "BE37_REGIME",
           "BE51_REGIME",
           "BE52_REGIME",
@@ -9585,7 +10067,40 @@
           "type LondonPenetrationResult",
           "evaluatePlasmaBeta",
           "type PlasmaBetaInputs",
-          "type PlasmaBetaResult"
+          "type PlasmaBetaResult",
+          "evaluateHagenPoiseuille",
+          "type HagenPoiseuilleInputs",
+          "type HagenPoiseuilleResult",
+          "evaluateEulerBuckling",
+          "type EulerBucklingInputs",
+          "type EulerBucklingResult",
+          "evaluatePullIn",
+          "type PullInInputs",
+          "type PullInResult",
+          "evaluateMottGurney",
+          "type MottGurneyInputs",
+          "type MottGurneyResult",
+          "evaluateChildLangmuir",
+          "type ChildLangmuirInputs",
+          "type ChildLangmuirResult",
+          "evaluateShockleyDiode",
+          "type ShockleyDiodeInputs",
+          "type ShockleyDiodeResult",
+          "evaluateThomsonCoefficient",
+          "type ThomsonCoefficientInputs",
+          "type ThomsonCoefficientResult",
+          "evaluateFourPointSheet",
+          "type FourPointSheetInputs",
+          "type FourPointSheetResult",
+          "evaluateShotNoise",
+          "type ShotNoiseInputs",
+          "type ShotNoiseResult",
+          "evaluateReynoldsAnalogy",
+          "type ReynoldsAnalogyInputs",
+          "type ReynoldsAnalogyResult",
+          "evaluateCapacitorNoise",
+          "type CapacitorNoiseInputs",
+          "type CapacitorNoiseResult"
         ],
         "interfaces": [
           "KnownIssue",
@@ -16353,7 +16868,7 @@
         ]
       },
       "src/composition/catalog-graph.ts": {
-        "description": "The full composition graph as a single constant — the 57 `BridgeEdge`s",
+        "description": "The full composition graph as a single constant — the 68 `BridgeEdge`s",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -17340,6 +17855,72 @@
             ]
           },
           {
+            "file": "../../bridges/be77-hagen-poiseuille.js",
+            "imports": [
+              "evaluateHagenPoiseuille"
+            ]
+          },
+          {
+            "file": "../../bridges/be78-euler-buckling.js",
+            "imports": [
+              "evaluateEulerBuckling"
+            ]
+          },
+          {
+            "file": "../../bridges/be79-pull-in.js",
+            "imports": [
+              "evaluatePullIn"
+            ]
+          },
+          {
+            "file": "../../bridges/be80-mott-gurney.js",
+            "imports": [
+              "evaluateMottGurney"
+            ]
+          },
+          {
+            "file": "../../bridges/be81-child-langmuir.js",
+            "imports": [
+              "evaluateChildLangmuir"
+            ]
+          },
+          {
+            "file": "../../bridges/be82-shockley-diode.js",
+            "imports": [
+              "evaluateShockleyDiode"
+            ]
+          },
+          {
+            "file": "../../bridges/be83-thomson.js",
+            "imports": [
+              "evaluateThomsonCoefficient"
+            ]
+          },
+          {
+            "file": "../../bridges/be84-four-point.js",
+            "imports": [
+              "evaluateFourPointSheet"
+            ]
+          },
+          {
+            "file": "../../bridges/be85-shot-noise.js",
+            "imports": [
+              "evaluateShotNoise"
+            ]
+          },
+          {
+            "file": "../../bridges/be86-reynolds-analogy.js",
+            "imports": [
+              "evaluateReynoldsAnalogy"
+            ]
+          },
+          {
+            "file": "../../bridges/be87-capacitor-noise.js",
+            "imports": [
+              "evaluateCapacitorNoise"
+            ]
+          },
+          {
             "file": "../../dimensional/validator.js",
             "imports": [
               "ExprNode"
@@ -17406,7 +17987,46 @@
               "plasmaBetaQ",
               "carrierDensityQ",
               "effectiveMassQ",
-              "temperatureQ"
+              "temperatureQ",
+              "pipeRadiusQ",
+              "pipePressureDropQ",
+              "dynamicViscosityQ",
+              "pipeLengthQ",
+              "poiseuilleFlowQ",
+              "youngsModulusQ",
+              "areaMomentQ",
+              "columnLengthQ",
+              "bucklingLoadQ",
+              "pullInStiffnessQ",
+              "pullInGapQ",
+              "pullInAreaQ",
+              "pullInVoltageQ",
+              "mottPermittivityQ",
+              "mottMobilityQ",
+              "mottVoltageQ",
+              "mottThicknessQ",
+              "mottGurneyCurrentQ",
+              "childCarrierMassQ",
+              "childVoltageQ",
+              "childGapQ",
+              "childLangmuirCurrentQ",
+              "shockleySaturationQ",
+              "shockleyVoltageQ",
+              "shockleyTemperatureQ",
+              "shockleyCurrentQ",
+              "thomsonTemperatureQ",
+              "seebeckSlopeQ",
+              "thomsonCoefficientQ",
+              "fourPointVoltageQ",
+              "fourPointCurrentQ",
+              "sheetResistanceQ",
+              "shotCurrentQ",
+              "shotNoiseQ",
+              "skinFrictionQ",
+              "stantonNumberQ",
+              "capacitorTemperatureQ",
+              "capacitanceQ",
+              "capacitorVoltageVarianceQ"
             ]
           }
         ],
@@ -17422,6 +18042,17 @@
           "be74Edge",
           "be75Edge",
           "be76Edge",
+          "be77Edge",
+          "be78Edge",
+          "be79Edge",
+          "be80Edge",
+          "be81Edge",
+          "be82Edge",
+          "be83Edge",
+          "be84Edge",
+          "be85Edge",
+          "be86Edge",
+          "be87Edge",
           "APPLIED_PHYSICIST_EDGES"
         ],
         "constants": [
@@ -17436,6 +18067,17 @@
           "be74Edge",
           "be75Edge",
           "be76Edge",
+          "be77Edge",
+          "be78Edge",
+          "be79Edge",
+          "be80Edge",
+          "be81Edge",
+          "be82Edge",
+          "be83Edge",
+          "be84Edge",
+          "be85Edge",
+          "be86Edge",
+          "be87Edge",
           "APPLIED_PHYSICIST_EDGES"
         ]
       },
@@ -19175,6 +19817,17 @@
               "be74Edge",
               "be75Edge",
               "be76Edge",
+              "be77Edge",
+              "be78Edge",
+              "be79Edge",
+              "be80Edge",
+              "be81Edge",
+              "be82Edge",
+              "be83Edge",
+              "be84Edge",
+              "be85Edge",
+              "be86Edge",
+              "be87Edge",
               "APPLIED_PHYSICIST_EDGES"
             ],
             "reExport": true
@@ -19446,6 +20099,17 @@
           "be74Edge",
           "be75Edge",
           "be76Edge",
+          "be77Edge",
+          "be78Edge",
+          "be79Edge",
+          "be80Edge",
+          "be81Edge",
+          "be82Edge",
+          "be83Edge",
+          "be84Edge",
+          "be85Edge",
+          "be86Edge",
+          "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
           "be11Edge",
           "be13Edge",
@@ -19586,6 +20250,17 @@
           "be74Edge",
           "be75Edge",
           "be76Edge",
+          "be77Edge",
+          "be78Edge",
+          "be79Edge",
+          "be80Edge",
+          "be81Edge",
+          "be82Edge",
+          "be83Edge",
+          "be84Edge",
+          "be85Edge",
+          "be86Edge",
+          "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
           "be11Edge",
           "be13Edge",
@@ -22010,7 +22685,46 @@
           "peltierCoefficientQ",
           "magneticPressureQ",
           "londonPenetrationDepthQ",
-          "plasmaBetaQ"
+          "plasmaBetaQ",
+          "pipeRadiusQ",
+          "pipePressureDropQ",
+          "dynamicViscosityQ",
+          "pipeLengthQ",
+          "poiseuilleFlowQ",
+          "youngsModulusQ",
+          "areaMomentQ",
+          "columnLengthQ",
+          "bucklingLoadQ",
+          "pullInStiffnessQ",
+          "pullInGapQ",
+          "pullInAreaQ",
+          "pullInVoltageQ",
+          "mottPermittivityQ",
+          "mottMobilityQ",
+          "mottVoltageQ",
+          "mottThicknessQ",
+          "mottGurneyCurrentQ",
+          "childCarrierMassQ",
+          "childVoltageQ",
+          "childGapQ",
+          "childLangmuirCurrentQ",
+          "shockleySaturationQ",
+          "shockleyVoltageQ",
+          "shockleyTemperatureQ",
+          "shockleyCurrentQ",
+          "thomsonTemperatureQ",
+          "seebeckSlopeQ",
+          "thomsonCoefficientQ",
+          "fourPointVoltageQ",
+          "fourPointCurrentQ",
+          "sheetResistanceQ",
+          "shotCurrentQ",
+          "shotNoiseQ",
+          "skinFrictionQ",
+          "stantonNumberQ",
+          "capacitorTemperatureQ",
+          "capacitanceQ",
+          "capacitorVoltageVarianceQ"
         ],
         "constants": [
           "poyntingFluxQ",
@@ -22041,7 +22755,46 @@
           "peltierCoefficientQ",
           "magneticPressureQ",
           "londonPenetrationDepthQ",
-          "plasmaBetaQ"
+          "plasmaBetaQ",
+          "pipeRadiusQ",
+          "pipePressureDropQ",
+          "dynamicViscosityQ",
+          "pipeLengthQ",
+          "poiseuilleFlowQ",
+          "youngsModulusQ",
+          "areaMomentQ",
+          "columnLengthQ",
+          "bucklingLoadQ",
+          "pullInStiffnessQ",
+          "pullInGapQ",
+          "pullInAreaQ",
+          "pullInVoltageQ",
+          "mottPermittivityQ",
+          "mottMobilityQ",
+          "mottVoltageQ",
+          "mottThicknessQ",
+          "mottGurneyCurrentQ",
+          "childCarrierMassQ",
+          "childVoltageQ",
+          "childGapQ",
+          "childLangmuirCurrentQ",
+          "shockleySaturationQ",
+          "shockleyVoltageQ",
+          "shockleyTemperatureQ",
+          "shockleyCurrentQ",
+          "thomsonTemperatureQ",
+          "seebeckSlopeQ",
+          "thomsonCoefficientQ",
+          "fourPointVoltageQ",
+          "fourPointCurrentQ",
+          "sheetResistanceQ",
+          "shotCurrentQ",
+          "shotNoiseQ",
+          "skinFrictionQ",
+          "stantonNumberQ",
+          "capacitorTemperatureQ",
+          "capacitanceQ",
+          "capacitorVoltageVarianceQ"
         ]
       },
       "src/composition/quantities/common.ts": {
@@ -25764,7 +26517,40 @@
               "type LondonPenetrationResult",
               "evaluatePlasmaBeta",
               "type PlasmaBetaInputs",
-              "type PlasmaBetaResult"
+              "type PlasmaBetaResult",
+              "evaluateHagenPoiseuille",
+              "type HagenPoiseuilleInputs",
+              "type HagenPoiseuilleResult",
+              "evaluateEulerBuckling",
+              "type EulerBucklingInputs",
+              "type EulerBucklingResult",
+              "evaluatePullIn",
+              "type PullInInputs",
+              "type PullInResult",
+              "evaluateMottGurney",
+              "type MottGurneyInputs",
+              "type MottGurneyResult",
+              "evaluateChildLangmuir",
+              "type ChildLangmuirInputs",
+              "type ChildLangmuirResult",
+              "evaluateShockleyDiode",
+              "type ShockleyDiodeInputs",
+              "type ShockleyDiodeResult",
+              "evaluateThomsonCoefficient",
+              "type ThomsonCoefficientInputs",
+              "type ThomsonCoefficientResult",
+              "evaluateFourPointSheet",
+              "type FourPointSheetInputs",
+              "type FourPointSheetResult",
+              "evaluateShotNoise",
+              "type ShotNoiseInputs",
+              "type ShotNoiseResult",
+              "evaluateReynoldsAnalogy",
+              "type ReynoldsAnalogyInputs",
+              "type ReynoldsAnalogyResult",
+              "evaluateCapacitorNoise",
+              "type CapacitorNoiseInputs",
+              "type CapacitorNoiseResult"
             ],
             "reExport": true
           },
@@ -26194,6 +26980,17 @@
               "be74Edge",
               "be75Edge",
               "be76Edge",
+              "be77Edge",
+              "be78Edge",
+              "be79Edge",
+              "be80Edge",
+              "be81Edge",
+              "be82Edge",
+              "be83Edge",
+              "be84Edge",
+              "be85Edge",
+              "be86Edge",
+              "be87Edge",
               "APPLIED_PHYSICIST_EDGES"
             ],
             "reExport": true
@@ -27171,6 +27968,39 @@
           "evaluatePlasmaBeta",
           "type PlasmaBetaInputs",
           "type PlasmaBetaResult",
+          "evaluateHagenPoiseuille",
+          "type HagenPoiseuilleInputs",
+          "type HagenPoiseuilleResult",
+          "evaluateEulerBuckling",
+          "type EulerBucklingInputs",
+          "type EulerBucklingResult",
+          "evaluatePullIn",
+          "type PullInInputs",
+          "type PullInResult",
+          "evaluateMottGurney",
+          "type MottGurneyInputs",
+          "type MottGurneyResult",
+          "evaluateChildLangmuir",
+          "type ChildLangmuirInputs",
+          "type ChildLangmuirResult",
+          "evaluateShockleyDiode",
+          "type ShockleyDiodeInputs",
+          "type ShockleyDiodeResult",
+          "evaluateThomsonCoefficient",
+          "type ThomsonCoefficientInputs",
+          "type ThomsonCoefficientResult",
+          "evaluateFourPointSheet",
+          "type FourPointSheetInputs",
+          "type FourPointSheetResult",
+          "evaluateShotNoise",
+          "type ShotNoiseInputs",
+          "type ShotNoiseResult",
+          "evaluateReynoldsAnalogy",
+          "type ReynoldsAnalogyInputs",
+          "type ReynoldsAnalogyResult",
+          "evaluateCapacitorNoise",
+          "type CapacitorNoiseInputs",
+          "type CapacitorNoiseResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "BridgeEquations",
@@ -27278,6 +28108,17 @@
           "be74Edge",
           "be75Edge",
           "be76Edge",
+          "be77Edge",
+          "be78Edge",
+          "be79Edge",
+          "be80Edge",
+          "be81Edge",
+          "be82Edge",
+          "be83Edge",
+          "be84Edge",
+          "be85Edge",
+          "be86Edge",
+          "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
           "adjudicateBridgeEntry",
           "adjudicateCatalog",
@@ -27800,6 +28641,39 @@
           "evaluatePlasmaBeta",
           "type PlasmaBetaInputs",
           "type PlasmaBetaResult",
+          "evaluateHagenPoiseuille",
+          "type HagenPoiseuilleInputs",
+          "type HagenPoiseuilleResult",
+          "evaluateEulerBuckling",
+          "type EulerBucklingInputs",
+          "type EulerBucklingResult",
+          "evaluatePullIn",
+          "type PullInInputs",
+          "type PullInResult",
+          "evaluateMottGurney",
+          "type MottGurneyInputs",
+          "type MottGurneyResult",
+          "evaluateChildLangmuir",
+          "type ChildLangmuirInputs",
+          "type ChildLangmuirResult",
+          "evaluateShockleyDiode",
+          "type ShockleyDiodeInputs",
+          "type ShockleyDiodeResult",
+          "evaluateThomsonCoefficient",
+          "type ThomsonCoefficientInputs",
+          "type ThomsonCoefficientResult",
+          "evaluateFourPointSheet",
+          "type FourPointSheetInputs",
+          "type FourPointSheetResult",
+          "evaluateShotNoise",
+          "type ShotNoiseInputs",
+          "type ShotNoiseResult",
+          "evaluateReynoldsAnalogy",
+          "type ReynoldsAnalogyInputs",
+          "type ReynoldsAnalogyResult",
+          "evaluateCapacitorNoise",
+          "type CapacitorNoiseInputs",
+          "type CapacitorNoiseResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "EvaluatorSpec",
@@ -27965,6 +28839,17 @@
           "be74Edge",
           "be75Edge",
           "be76Edge",
+          "be77Edge",
+          "be78Edge",
+          "be79Edge",
+          "be80Edge",
+          "be81Edge",
+          "be82Edge",
+          "be83Edge",
+          "be84Edge",
+          "be85Edge",
+          "be86Edge",
+          "be87Edge",
           "APPLIED_PHYSICIST_EDGES",
           "BridgeEdge",
           "ComposeOptions",
@@ -30611,6 +31496,17 @@
           "src/bridges/be74-magnetic-pressure.ts",
           "src/bridges/be75-london-penetration.ts",
           "src/bridges/be76-plasma-beta.ts",
+          "src/bridges/be77-hagen-poiseuille.ts",
+          "src/bridges/be78-euler-buckling.ts",
+          "src/bridges/be79-pull-in.ts",
+          "src/bridges/be80-mott-gurney.ts",
+          "src/bridges/be81-child-langmuir.ts",
+          "src/bridges/be82-shockley-diode.ts",
+          "src/bridges/be83-thomson.ts",
+          "src/bridges/be84-four-point.ts",
+          "src/bridges/be85-shot-noise.ts",
+          "src/bridges/be86-reynolds-analogy.ts",
+          "src/bridges/be87-capacitor-noise.ts",
           "src/bridges/bridge-equations.ts",
           "src/bridges/catalog-adapter.ts",
           "src/bridges/confrontation-coverage.ts",
@@ -31001,17 +31897,17 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 442,
+    "totalTypeScriptFiles": 453,
     "totalModules": 13,
-    "totalLinesOfCode": 94245,
-    "totalExports": 3193,
+    "totalLinesOfCode": 96409,
+    "totalExports": 3342,
     "totalClasses": 60,
-    "totalInterfaces": 507,
-    "totalFunctions": 817,
+    "totalInterfaces": 529,
+    "totalFunctions": 828,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 796,
-    "totalReExports": 1521,
+    "totalConstants": 846,
+    "totalReExports": 1609,
     "totalTypeOnlyImports": 580,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

@@ -2,7 +2,7 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (15) — recognized monomial, prefactor recovered:
+  DERIVED (20) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.507e+0
     be-16                  +[k_B]  ×6.931e-1
     be-42-via-rs           +[ℏ,c,k_B]  ×7.958e-2
@@ -18,16 +18,22 @@ Deriving the bridge equations by dimensions
     be-71                  +[]  ×1.000e+0
     be-73                  +[]  ×1.000e+0
     be-74                  +[ℏ,c,e]  ×5.452e+0  (empirical/tuned constant)
+    be-80                  +[]  ×1.125e+0  (empirical/tuned constant)
+    be-83                  +[]  ×1.000e+0
+    be-84                  +[]  ×4.532e+0  (empirical/tuned constant)
+    be-85                  +[e]  ×2.000e+0
+    be-87                  +[k_B]  ×1.000e+0
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 8) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 9) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
   NOT A MONOMIAL (5) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
     be-54, be-36, be-50, be-40, be-69
     (not a failed reconstruction of a monomial, and not a physical refutation)
 
-  OPEN (29) — irreducible free dimensionless group(s); by complexity:
+  OPEN (34) — irreducible free dimensionless group(s); by complexity:
+    cplx=0  be-82
     cplx=1  be-11-zurek
     cplx=1  be-37
     cplx=1  be-52
@@ -40,6 +46,10 @@ Deriving the bridge equations by dimensions
     cplx=1  be-55
     cplx=1  be-60
     cplx=1  be-68
+    cplx=1  be-77
+    cplx=1  be-78
+    cplx=1  be-79
+    cplx=1  be-86
     cplx=2  be-11-master
     cplx=2  be-22
     cplx=2  be-25

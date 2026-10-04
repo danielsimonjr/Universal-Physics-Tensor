@@ -22,6 +22,17 @@ import { evaluateKelvinPeltier } from '../../bridges/be73-kelvin-peltier.js';
 import { evaluateMagneticPressure } from '../../bridges/be74-magnetic-pressure.js';
 import { evaluateLondonPenetration } from '../../bridges/be75-london-penetration.js';
 import { evaluatePlasmaBeta } from '../../bridges/be76-plasma-beta.js';
+import { evaluateHagenPoiseuille } from '../../bridges/be77-hagen-poiseuille.js';
+import { evaluateEulerBuckling } from '../../bridges/be78-euler-buckling.js';
+import { evaluatePullIn } from '../../bridges/be79-pull-in.js';
+import { evaluateMottGurney } from '../../bridges/be80-mott-gurney.js';
+import { evaluateChildLangmuir } from '../../bridges/be81-child-langmuir.js';
+import { evaluateShockleyDiode } from '../../bridges/be82-shockley-diode.js';
+import { evaluateThomsonCoefficient } from '../../bridges/be83-thomson.js';
+import { evaluateFourPointSheet } from '../../bridges/be84-four-point.js';
+import { evaluateShotNoise } from '../../bridges/be85-shot-noise.js';
+import { evaluateReynoldsAnalogy } from '../../bridges/be86-reynolds-analogy.js';
+import { evaluateCapacitorNoise } from '../../bridges/be87-capacitor-noise.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import { DIMENSIONLESS } from '../../dimensional/types.js';
 import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
@@ -60,6 +71,45 @@ import {
   carrierDensityQ,
   effectiveMassQ,
   temperatureQ,
+  pipeRadiusQ,
+  pipePressureDropQ,
+  dynamicViscosityQ,
+  pipeLengthQ,
+  poiseuilleFlowQ,
+  youngsModulusQ,
+  areaMomentQ,
+  columnLengthQ,
+  bucklingLoadQ,
+  pullInStiffnessQ,
+  pullInGapQ,
+  pullInAreaQ,
+  pullInVoltageQ,
+  mottPermittivityQ,
+  mottMobilityQ,
+  mottVoltageQ,
+  mottThicknessQ,
+  mottGurneyCurrentQ,
+  childCarrierMassQ,
+  childVoltageQ,
+  childGapQ,
+  childLangmuirCurrentQ,
+  shockleySaturationQ,
+  shockleyVoltageQ,
+  shockleyTemperatureQ,
+  shockleyCurrentQ,
+  thomsonTemperatureQ,
+  seebeckSlopeQ,
+  thomsonCoefficientQ,
+  fourPointVoltageQ,
+  fourPointCurrentQ,
+  sheetResistanceQ,
+  shotCurrentQ,
+  shotNoiseQ,
+  skinFrictionQ,
+  stantonNumberQ,
+  capacitorTemperatureQ,
+  capacitanceQ,
+  capacitorVoltageVarianceQ,
 } from '../quantities.js';
 
 const finite = Number.isFinite;
@@ -72,6 +122,9 @@ const ratio = (num: ExprNode, den: ExprNode): ExprNode => ({ kind: 'op', op: '/'
 const pow = (base: ExprNode, exp: ExprNode): ExprNode => ({ kind: 'op', op: '^', args: [base, exp] });
 /** μ0 = 1/(ε0 c²). The same product the Alfvén and magnetosonic formulas use. */
 const mu0: ExprNode = ratio(lit(1), prod(csym('epsilon_0'), pow(csym('c'), lit(2))));
+/** π as a dimensionless leaf. `piMultipleValue` resolves the name. */
+const pi: ExprNode = { kind: 'symbol', name: 'pi', dim: DIMENSIONLESS };
+const expOf = (arg: ExprNode): ExprNode => ({ kind: 'transcendental', fn: 'exp', arg });
 
 /** P_n = (I/c) (1+R) cos²θ. */
 const BE66_SYMBOLIC: ExprNode = prod(
@@ -544,6 +597,460 @@ export const be76Edge: BridgeEdge = withBoundAliases({
     'PhysJS.PlasmaBeta.beta_eq. p_B is PhysJS.MagneticPressure.pressure_eq. Using B²/μ0 is half of this beta. Not a plasma-β inequality.',
 });
 
+/** Q = π R⁴ ΔP / (8 μ L). The 8 is the no-slip integral. */
+const BE77_SYMBOLIC: ExprNode = ratio(
+  prod(pi, pow(qsym(pipeRadiusQ), lit(4)), qsym(pipePressureDropQ)),
+  prod(lit(8), qsym(dynamicViscosityQ), qsym(pipeLengthQ)),
+);
+
+/** P_cr = π² E I / L². Pinned ends. Not the cantilever load. */
+const BE78_SYMBOLIC: ExprNode = ratio(
+  prod(pow(pi, lit(2)), qsym(youngsModulusQ), qsym(areaMomentQ)),
+  pow(qsym(columnLengthQ), lit(2)),
+);
+
+/** V_pi = √(8 k g0³ / (27 ε0 A)). The fold is g = 2 g0/3. */
+const BE79_SYMBOLIC: ExprNode = pow(
+  ratio(
+    prod(lit(8), qsym(pullInStiffnessQ), pow(qsym(pullInGapQ), lit(3))),
+    prod(lit(27), csym('epsilon_0'), qsym(pullInAreaQ)),
+  ),
+  lit(0.5),
+);
+
+/** J = (9/8) ε μ V² / d³. Not Child–Langmuir. */
+const BE80_SYMBOLIC: ExprNode = ratio(
+  prod(lit(9), qsym(mottPermittivityQ), qsym(mottMobilityQ), pow(qsym(mottVoltageQ), lit(2))),
+  prod(lit(8), pow(qsym(mottThicknessQ), lit(3))),
+);
+
+/** J = (4 ε0 / 9) √(2 e / m) V^{3/2} / d². `e` is the elementary charge. */
+const BE81_SYMBOLIC: ExprNode = ratio(
+  prod(
+    lit(4),
+    csym('epsilon_0'),
+    pow(ratio(prod(lit(2), csym('e')), qsym(childCarrierMassQ)), lit(0.5)),
+    pow(qsym(childVoltageQ), lit(1.5)),
+  ),
+  prod(lit(9), pow(qsym(childGapQ), lit(2))),
+);
+
+/** I = I_s (exp(e V / (k_B T)) − 1). Ideality is 1. The minus is the literal −1. */
+const BE82_SYMBOLIC: ExprNode = prod(
+  qsym(shockleySaturationQ),
+  plus(
+    expOf(ratio(prod(csym('e'), qsym(shockleyVoltageQ)), prod(csym('k_B'), qsym(shockleyTemperatureQ)))),
+    lit(-1),
+  ),
+);
+
+/** μ_T = T dS/dT. Not Π = S T. */
+const BE83_SYMBOLIC: ExprNode = prod(qsym(thomsonTemperatureQ), qsym(seebeckSlopeQ));
+
+/** R_s = (π / ln 2) (V / I). The radial 1/r field is a hypothesis. */
+const BE84_SYMBOLIC: ExprNode = prod(
+  ratio(pi, csym('ln2')),
+  ratio(qsym(fourPointVoltageQ), qsym(fourPointCurrentQ)),
+);
+
+/** S_I = 2 e I. One-sided. `e` is the elementary charge. */
+const BE85_SYMBOLIC: ExprNode = prod(lit(2), csym('e'), qsym(shotCurrentQ));
+
+/** St = C_f / 2 at Pr = 1 with matched wall slopes. */
+const BE86_SYMBOLIC: ExprNode = ratio(qsym(skinFrictionQ), lit(2));
+
+/** ⟨v²⟩ = k_B T / C. One quadratic term. */
+const BE87_SYMBOLIC: ExprNode = ratio(prod(csym('k_B'), qsym(capacitorTemperatureQ)), qsym(capacitanceQ));
+
+/**
+ * BE-77 Hagen–Poiseuille: (radius, pressure drop, viscosity, length) →
+ * flux. The axial balance, centerline slope 0, and no-slip are hypotheses.
+ *
+ * @public
+ */
+export const be77Edge: BridgeEdge = withBoundAliases({
+  id: 'be-77',
+  beId: 77,
+  kind: 'law',
+  label: 'Hagen–Poiseuille flux Q = π R⁴ ΔP / (8 μ L)',
+  sources: [pipeRadiusQ, pipePressureDropQ, dynamicViscosityQ, pipeLengthQ],
+  aliases: {
+    'pipe-radius': ['R_m', 'R'],
+    'pipe-pressure-drop': ['deltaP_Pa', 'deltaP'],
+    'dynamic-viscosity': ['mu_Pa_s'],
+    'pipe-length': ['L_m', 'L'],
+  },
+  target: poiseuilleFlowQ,
+  confidence: 'established',
+  domain: {
+    description: 'R > 0, ΔP finite, μ ≠ 0, L ≠ 0; circular pipe, not a square duct',
+    predicate: (i) =>
+      finite(i['pipe-radius']) &&
+      i['pipe-radius'] > 0 &&
+      finite(i['pipe-pressure-drop']) &&
+      finite(i['dynamic-viscosity']) &&
+      i['dynamic-viscosity'] !== 0 &&
+      finite(i['pipe-length']) &&
+      i['pipe-length'] !== 0,
+  },
+  evaluate: (i) =>
+    evaluateHagenPoiseuille({
+      R_m: i['pipe-radius'],
+      deltaP_Pa: i['pipe-pressure-drop'],
+      mu_Pa_s: i['dynamic-viscosity'],
+      L_m: i['pipe-length'],
+    }).Q_m3_per_s,
+  symbolic: BE77_SYMBOLIC,
+  citation:
+    'PhysJS.HagenPoiseuille.flow_eq. f_D Re = 64 follows from Darcy definitions. The Fanning factor is 16. Not a square duct.',
+});
+
+/**
+ * BE-78 Euler buckling: (modulus, area moment, length) → pinned load.
+ * The cantilever load is a different factor.
+ *
+ * @public
+ */
+export const be78Edge: BridgeEdge = withBoundAliases({
+  id: 'be-78',
+  beId: 78,
+  kind: 'law',
+  label: 'Euler pinned load P_cr = π² E I / L²',
+  sources: [youngsModulusQ, areaMomentQ, columnLengthQ],
+  aliases: {
+    'youngs-modulus': ['E_Pa', 'E'],
+    'area-moment': ['I_m4'],
+    'column-length': ['L_m', 'L'],
+  },
+  target: bucklingLoadQ,
+  confidence: 'established',
+  domain: {
+    description: 'E > 0, I > 0, L > 0; pinned ends y(0) = y(L) = 0',
+    predicate: (i) =>
+      finite(i['youngs-modulus']) &&
+      i['youngs-modulus'] > 0 &&
+      finite(i['area-moment']) &&
+      i['area-moment'] > 0 &&
+      finite(i['column-length']) &&
+      i['column-length'] > 0,
+  },
+  evaluate: (i) =>
+    evaluateEulerBuckling({
+      E_Pa: i['youngs-modulus'],
+      I_m4: i['area-moment'],
+      L_m: i['column-length'],
+    }).P_N,
+  symbolic: BE78_SYMBOLIC,
+  citation:
+    'PhysJS.EulerBuckling.critical_load. The beam equation is a hypothesis. The clamped-free load is π² E I / (4 L²), not this load.',
+});
+
+/**
+ * BE-79 pull-in: (stiffness, rest gap, area) → voltage. Parallel-plate
+ * and quasi-static balance are hypotheses. Not a fringing field.
+ *
+ * @public
+ */
+export const be79Edge: BridgeEdge = withBoundAliases({
+  id: 'be-79',
+  beId: 79,
+  kind: 'law',
+  label: 'Pull-in voltage V_pi = √(8 k g0³ / (27 ε0 A))',
+  sources: [pullInStiffnessQ, pullInGapQ, pullInAreaQ],
+  aliases: {
+    'pull-in-stiffness': ['k_N_per_m', 'k'],
+    'pull-in-gap': ['g0_m', 'g0'],
+    'pull-in-area': ['A_m2', 'A'],
+  },
+  target: pullInVoltageQ,
+  confidence: 'established',
+  domain: {
+    description: 'k > 0, g0 > 0, A > 0; the fold is g = 2 g0/3, not g0/2',
+    predicate: (i) =>
+      finite(i['pull-in-stiffness']) &&
+      i['pull-in-stiffness'] > 0 &&
+      finite(i['pull-in-gap']) &&
+      i['pull-in-gap'] > 0 &&
+      finite(i['pull-in-area']) &&
+      i['pull-in-area'] > 0,
+  },
+  evaluate: (i) =>
+    evaluatePullIn({
+      k_N_per_m: i['pull-in-stiffness'],
+      g0_m: i['pull-in-gap'],
+      A_m2: i['pull-in-area'],
+    }).V_pi_V,
+  symbolic: BE79_SYMBOLIC,
+  citation:
+    'PhysJS.PullIn.pull_in_eq. C = ε0 A/g and the linear spring are hypotheses. g = g0/2 is not the fold.',
+});
+
+/**
+ * BE-80 Mott–Gurney: drift, Poisson, and an injecting contact. Not
+ * Child–Langmuir.
+ *
+ * @public
+ */
+export const be80Edge: BridgeEdge = withBoundAliases({
+  id: 'be-80',
+  beId: 80,
+  kind: 'law',
+  label: 'Mott–Gurney current J = (9/8) ε μ V² / d³',
+  sources: [mottPermittivityQ, mottMobilityQ, mottVoltageQ, mottThicknessQ],
+  aliases: {
+    'mott-permittivity': ['eps'],
+    'mott-mobility': ['mu_m2_per_Vs', 'mu'],
+    'mott-voltage': ['V_volts', 'V'],
+    'mott-thickness': ['d_m', 'd'],
+  },
+  target: mottGurneyCurrentQ,
+  confidence: 'established',
+  domain: {
+    description: 'ε > 0, μ > 0, V finite, d > 0; E(0) = 0',
+    predicate: (i) =>
+      finite(i['mott-permittivity']) &&
+      i['mott-permittivity'] > 0 &&
+      finite(i['mott-mobility']) &&
+      i['mott-mobility'] > 0 &&
+      finite(i['mott-voltage']) &&
+      finite(i['mott-thickness']) &&
+      i['mott-thickness'] > 0,
+  },
+  evaluate: (i) =>
+    evaluateMottGurney({
+      eps: i['mott-permittivity'],
+      mu_m2_per_Vs: i['mott-mobility'],
+      V_volts: i['mott-voltage'],
+      d_m: i['mott-thickness'],
+    }).J_A_per_m2,
+  symbolic: BE80_SYMBOLIC,
+  citation:
+    'PhysJS.MottGurney.current_eq. Drift, Poisson, and the injecting contact are hypotheses. Not Child–Langmuir.',
+});
+
+/**
+ * BE-81 Child–Langmuir. Collisionless energy, Poisson, and the 4/3
+ * profile. Poisson is not claimed at the cathode. `e` is elementary.
+ *
+ * @public
+ */
+export const be81Edge: BridgeEdge = withBoundAliases({
+  id: 'be-81',
+  beId: 81,
+  kind: 'law',
+  label: 'Child–Langmuir current J = (4 ε0/9) √(2 e/m) V^{3/2}/d²',
+  sources: [childCarrierMassQ, childVoltageQ, childGapQ],
+  aliases: {
+    'child-carrier-mass': ['m_kg', 'm'],
+    'child-voltage': ['V_volts', 'V'],
+    'child-gap': ['d_m', 'd'],
+  },
+  target: childLangmuirCurrentQ,
+  confidence: 'established',
+  domain: {
+    description: 'm > 0, V > 0, d > 0; cathode field 0; Poisson not at x = 0',
+    predicate: (i) =>
+      finite(i['child-carrier-mass']) &&
+      i['child-carrier-mass'] > 0 &&
+      finite(i['child-voltage']) &&
+      i['child-voltage'] > 0 &&
+      finite(i['child-gap']) &&
+      i['child-gap'] > 0,
+  },
+  evaluate: (i) =>
+    evaluateChildLangmuir({
+      m_kg: i['child-carrier-mass'],
+      V_volts: i['child-voltage'],
+      d_m: i['child-gap'],
+    }).J_A_per_m2,
+  symbolic: BE81_SYMBOLIC,
+  citation:
+    'PhysJS.ChildLangmuir.current_eq. e is the elementary charge. Not a drift-only solid.',
+});
+
+/**
+ * BE-82 Shockley diode at ideality 1. Not a diffusion-length ODE.
+ *
+ * @public
+ */
+export const be82Edge: BridgeEdge = withBoundAliases({
+  id: 'be-82',
+  beId: 82,
+  kind: 'law',
+  label: 'Shockley diode I = I_s (exp(e V/(k_B T)) − 1)',
+  sources: [shockleySaturationQ, shockleyVoltageQ, shockleyTemperatureQ],
+  aliases: {
+    'shockley-saturation': ['I_s_A', 'I_s'],
+    'shockley-voltage': ['V_volts', 'V'],
+    'shockley-temperature': ['T_K', 'T'],
+  },
+  target: shockleyCurrentQ,
+  confidence: 'established',
+  domain: {
+    description: 'I_s and V finite, T ≠ 0; ideality 1',
+    predicate: (i) =>
+      finite(i['shockley-saturation']) &&
+      finite(i['shockley-voltage']) &&
+      finite(i['shockley-temperature']) &&
+      i['shockley-temperature'] !== 0,
+  },
+  evaluate: (i) =>
+    evaluateShockleyDiode({
+      I_s_A: i['shockley-saturation'],
+      V_volts: i['shockley-voltage'],
+      T_K: i['shockley-temperature'],
+    }).I_A,
+  symbolic: BE82_SYMBOLIC,
+  citation:
+    'PhysJS.ShockleyDiode.shockley_eq. Quasi-equilibrium, detailed balance at V = 0, and low injection are hypotheses. Ideality 2 is not this current.',
+});
+
+/**
+ * BE-83 Thomson coefficient. Builds on the Kelvin relation read along
+ * temperature. The quantities do not meet be-73, so the edges do not compose.
+ *
+ * @public
+ */
+export const be83Edge: BridgeEdge = withBoundAliases({
+  id: 'be-83',
+  beId: 83,
+  kind: 'law',
+  label: 'Thomson coefficient μ_T = T dS/dT',
+  sources: [thomsonTemperatureQ, seebeckSlopeQ],
+  aliases: {
+    'thomson-temperature': ['T_K', 'T'],
+    'seebeck-slope': ['dS_dT_V_per_K2', 'dS_dT'],
+  },
+  target: thomsonCoefficientQ,
+  confidence: 'established',
+  domain: {
+    description: 'T and dS/dT finite; Kelvin along temperature and the Thomson split are hypotheses',
+    predicate: (i) => finite(i['thomson-temperature']) && finite(i['seebeck-slope']),
+  },
+  evaluate: (i) =>
+    evaluateThomsonCoefficient({
+      T_K: i['thomson-temperature'],
+      dS_dT_V_per_K2: i['seebeck-slope'],
+    }).mu_V_per_K,
+  symbolic: BE83_SYMBOLIC,
+  citation:
+    'PhysJS.Thomson.thomson_eq. Π(t) = S(t) t is PhysJS.KelvinRelation.peltier_eq read along temperature. Not a second copy of Π = S T.',
+});
+
+/**
+ * BE-84 four-point sheet resistance. The radial 1/r potential is a premise.
+ *
+ * @public
+ */
+export const be84Edge: BridgeEdge = withBoundAliases({
+  id: 'be-84',
+  beId: 84,
+  kind: 'law',
+  label: 'Four-point sheet resistance R_s = (π / ln 2) (V/I)',
+  sources: [fourPointVoltageQ, fourPointCurrentQ],
+  aliases: {
+    'four-point-voltage': ['V_volts', 'V'],
+    'four-point-current': ['I_A', 'I'],
+  },
+  target: sheetResistanceQ,
+  confidence: 'established',
+  domain: {
+    description: 'V finite, I ≠ 0; probes at 0, s, 2s, 3s; radial field (I R_s)/(2 π r)',
+    predicate: (i) => finite(i['four-point-voltage']) && finite(i['four-point-current']) && i['four-point-current'] !== 0,
+  },
+  evaluate: (i) =>
+    evaluateFourPointSheet({
+      V_volts: i['four-point-voltage'],
+      I_A: i['four-point-current'],
+    }).R_s_ohm,
+  symbolic: BE84_SYMBOLIC,
+  citation:
+    'PhysJS.FourPoint.sheet_eq. The Laplace field and linear superposition are hypotheses. A sink at 4s is 2π/ln 3. Not PhysJS.Crossing.antisymmetry.',
+});
+
+/**
+ * BE-85 one-sided shot noise. Not Johnson–Nyquist and not the two-sided e I.
+ *
+ * @public
+ */
+export const be85Edge: BridgeEdge = withBoundAliases({
+  id: 'be-85',
+  beId: 85,
+  kind: 'law',
+  label: 'Shot noise S_I = 2 e I',
+  sources: [shotCurrentQ],
+  aliases: {
+    'shot-current': ['I_A', 'I'],
+  },
+  target: shotNoiseQ,
+  confidence: 'established',
+  domain: {
+    description: 'I finite; Poisson Var(N) = mean(N); one-sided Δf = 1/(2 T)',
+    predicate: (i) => finite(i['shot-current']),
+  },
+  evaluate: (i) => evaluateShotNoise({ I_A: i['shot-current'] }).S_I_A2_per_Hz,
+  symbolic: BE85_SYMBOLIC,
+  citation:
+    'PhysJS.ShotNoise.shot_eq. e is the elementary charge. The two-sided bandwidth gives e I. Not Johnson–Nyquist.',
+});
+
+/**
+ * BE-86 Reynolds analogy. Matched wall slopes and Pr = 1 are hypotheses.
+ *
+ * @public
+ */
+export const be86Edge: BridgeEdge = withBoundAliases({
+  id: 'be-86',
+  beId: 86,
+  kind: 'law',
+  label: 'Reynolds analogy St = C_f / 2',
+  sources: [skinFrictionQ],
+  aliases: {
+    'skin-friction': ['C_f'],
+  },
+  target: stantonNumberQ,
+  confidence: 'established',
+  domain: {
+    description: 'C_f finite; normalized wall gradients agree and Pr = 1',
+    predicate: (i) => finite(i['skin-friction']),
+  },
+  evaluate: (i) => evaluateReynoldsAnalogy({ C_f: i['skin-friction'] }).St,
+  symbolic: BE86_SYMBOLIC,
+  citation:
+    'PhysJS.ReynoldsAnalogy.reynolds_eq. St Pr = C_f/2 when the slopes match. Pr = 1 is the hypothesis that drops Pr. Not a Nusselt correlation.',
+});
+
+/**
+ * BE-87 capacitor voltage variance. One quadratic term, not (3/2) k_B T/C.
+ *
+ * @public
+ */
+export const be87Edge: BridgeEdge = withBoundAliases({
+  id: 'be-87',
+  beId: 87,
+  kind: 'law',
+  label: 'Capacitor noise ⟨v²⟩ = k_B T / C',
+  sources: [capacitorTemperatureQ, capacitanceQ],
+  aliases: {
+    'capacitor-temperature': ['T_K', 'T'],
+    capacitance: ['C_F', 'C'],
+  },
+  target: capacitorVoltageVarianceQ,
+  confidence: 'established',
+  domain: {
+    description: 'T finite, C > 0; U = (C/2) V²',
+    predicate: (i) => finite(i['capacitor-temperature']) && finite(i['capacitance']) && i['capacitance'] > 0,
+  },
+  evaluate: (i) =>
+    evaluateCapacitorNoise({
+      T_K: i['capacitor-temperature'],
+      C_F: i['capacitance'],
+    }).v2_V2,
+  symbolic: BE87_SYMBOLIC,
+  citation:
+    'PhysJS.CapacitorNoise.noise_eq. (3/2) k_B T/C is not this variance. Dropping the energy half gives k_B T/(2 C).',
+});
+
 /** The applied-physicist edges, in catalog-id order. @public */
 export const APPLIED_PHYSICIST_EDGES: readonly BridgeEdge[] = [
   be66Edge,
@@ -557,4 +1064,15 @@ export const APPLIED_PHYSICIST_EDGES: readonly BridgeEdge[] = [
   be74Edge,
   be75Edge,
   be76Edge,
+  be77Edge,
+  be78Edge,
+  be79Edge,
+  be80Edge,
+  be81Edge,
+  be82Edge,
+  be83Edge,
+  be84Edge,
+  be85Edge,
+  be86Edge,
+  be87Edge,
 ];
