@@ -4741,7 +4741,7 @@ The codebase is organized into the following modules:
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 
 **Exports:**
-- Functions: `aliasesForTarget`, `rewriteInputKey`, `nearQuantityNames`, `shareSynonyms`
+- Functions: `aliasesForTarget`, `rewriteInputKey`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
 
 ---
 
@@ -5457,6 +5457,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/buckingham.js` | `DimensionalDeterminationResult` | Import (type-only) |
 | `../dimensional/buckingham.js` | `dimensionallyDetermines` | Import |
+| `./aliases.js` | `collapseSynonymGovernors` | Import |
 | `./formula-shape.js` | `formulaShape` | Import |
 
 **Exports:**
@@ -8625,12 +8626,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 454 |
 | Total Modules | 13 |
-| Total Lines of Code | 96610 |
-| Total Exports | 3350 |
+| Total Lines of Code | 96650 |
+| Total Exports | 3351 |
 | Total Re-exports | 1611 |
 | Total Classes | 61 |
 | Total Interfaces | 529 |
-| Total Functions | 833 |
+| Total Functions | 834 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 580 |

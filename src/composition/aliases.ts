@@ -116,3 +116,33 @@ export function shareSynonyms(
   }
   return added ? out : known;
 }
+
+/**
+ * One name per synonym pair in a governing set.
+ *
+ * Copying the value onto the other name lets either spelling evaluate.
+ * Both names are the same quantity, so Buckingham must see one of them.
+ * The name that is a source of the target stays. Two different values
+ * stay two inputs.
+ */
+export function collapseSynonymGovernors(
+  names: readonly string[],
+  sourceNames: ReadonlySet<string>,
+  values: Readonly<Record<string, number>> | null,
+): string[] {
+  const drop = new Set<string>();
+  for (const pair of QUANTITY_SYNONYMS) {
+    const present = pair.filter((n) => names.includes(n));
+    if (present.length < 2) continue;
+    if (values !== null) {
+      const nums = present.map((n) => values[n]);
+      if (nums.some((n) => n === undefined)) continue;
+      const first = nums[0]!;
+      if (nums.some((n) => n !== first)) continue;
+    }
+    const sources = present.filter((n) => sourceNames.has(n));
+    const keep = sources[0] ?? present[0]!;
+    for (const n of present) if (n !== keep) drop.add(n);
+  }
+  return names.filter((n) => !drop.has(n));
+}

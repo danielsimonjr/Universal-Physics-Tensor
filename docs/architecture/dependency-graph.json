@@ -4,7 +4,7 @@
     "version": "4.0.0",
     "totalFiles": 454,
     "totalModules": 13,
-    "totalExports": 3350
+    "totalExports": 3351
   },
   "entryPoints": [
     {
@@ -16360,13 +16360,15 @@
           "aliasesForTarget",
           "rewriteInputKey",
           "nearQuantityNames",
-          "shareSynonyms"
+          "shareSynonyms",
+          "collapseSynonymGovernors"
         ],
         "functions": [
           "aliasesForTarget",
           "rewriteInputKey",
           "nearQuantityNames",
-          "shareSynonyms"
+          "shareSynonyms",
+          "collapseSynonymGovernors"
         ]
       },
       "src/composition/audit-coverage.ts": {
@@ -19350,6 +19352,12 @@
             "file": "../dimensional/buckingham.js",
             "imports": [
               "dimensionallyDetermines"
+            ]
+          },
+          {
+            "file": "./aliases.js",
+            "imports": [
+              "collapseSynonymGovernors"
             ]
           },
           {
@@ -31982,11 +31990,11 @@
   "statistics": {
     "totalTypeScriptFiles": 454,
     "totalModules": 13,
-    "totalLinesOfCode": 96610,
-    "totalExports": 3350,
+    "totalLinesOfCode": 96650,
+    "totalExports": 3351,
     "totalClasses": 61,
     "totalInterfaces": 529,
-    "totalFunctions": 833,
+    "totalFunctions": 834,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 846,

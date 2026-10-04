@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A synonym is one governing variable.
+  `upt explain cyclotron-frequency` with `magnetic-field` also lists `magnetic-flux-density` and says the inputs do not fix a unique monomial. The derivation line is already `∝ charge·magnetic-field·mass^-1`.
+  Done: that command exits 0, prints `Recovered value: -175882001077.216`, and says `{charge, magnetic-field, mass}` fix it up to a dimensionless constant: `cyclotron-frequency ∝ charge·magnetic-field·mass^-1`. It does not name `magnetic-flux-density`. Larmor radius at `speed=1e6` and positive `q` prints `0.00000568563010356572` and the same unique-monomial sentence. `magnetic-flux-density=1` still recovers the positive cyclotron frequency. Two different values of the pair stay two inputs.
+
 - [x] A positive transport coefficient built from carrier charge and mobility rejects opposite signs.
   `upt explain electrical-conductivity` with a positive mobility and `q = −e` prints a negative siemens per metre. `evaluateEinsteinRelation` already throws for that sign pair. The canonical monomial evaluator does not.
   Done: `upt explain electrical-conductivity carrier-density=8.47e28 charge=-1.602176634e-19 carrier-mobility=0.003 --source=canonical` exits 1 with `charge and carrier-mobility must have the same sign`. Both signs negative (`carrier-mobility=-0.00439705002693041`) print `Recovered value: 59669886.374904`. A zero mobility stays 0. Hall and cyclotron stay signed. The check is any monomial odd in both `charge` and `carrier-mobility`. `PhysJS.EinsteinRelation.diffusion_eq` is unchanged.

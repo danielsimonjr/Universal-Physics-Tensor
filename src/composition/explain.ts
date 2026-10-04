@@ -44,6 +44,7 @@ export function formatQuantity(value: number): string {
 }
 import type { DimensionalDeterminationResult } from '../dimensional/buckingham.js';
 import { dimensionallyDetermines } from '../dimensional/buckingham.js';
+import { collapseSynonymGovernors } from './aliases.js';
 import { formulaShape } from './formula-shape.js';
 
 /** One structural derivation of the target, with the recovered value when
@@ -335,9 +336,18 @@ export function explainQuantity(
   const identifications = opts.identifications ?? QUANTITY_IDENTIFICATIONS;
   const hasValues = !Array.isArray(known);
   const values = hasValues ? (known as Record<string, number>) : null;
-  const knownNames = hasValues
+  const rawNames = hasValues
     ? Object.keys(values!)
     : [...new Set(known as string[])];
+  const sourceNames = new Set<string>();
+  for (const e of edges) {
+    if (e.target.name !== target) continue;
+    for (const s of e.sources) sourceNames.add(s.name);
+  }
+  // A copied synonym is the same quantity. Buckingham and the printed
+  // known set see one name. The value map still carries both spellings
+  // so the edge source evaluates.
+  const knownNames = collapseSynonymGovernors(rawNames, sourceNames, values);
 
   const identifiability = classifyIdentifiability(edges, knownNames, target, {
     identifications,
