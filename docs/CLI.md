@@ -281,7 +281,7 @@ upt regime <name>
 
 ### `search`
 
-Find a bridge, equation, model, quantity, or case by the words in its record.
+Find a bridge, equation, model, quantity, case, or regime by the words in its record.
 
 ```
 upt search <word> ...

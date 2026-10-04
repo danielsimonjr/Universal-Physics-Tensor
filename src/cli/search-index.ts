@@ -18,7 +18,8 @@ export type SearchKind =
   | 'atlas-model'
   | 'atlas-bridge'
   | 'quantity'
-  | 'applied-case';
+  | 'applied-case'
+  | 'regime';
 
 export const SEARCH_SECTIONS: readonly (readonly [SearchKind, string])[] = [
   ['catalog-bridge', 'catalog bridges'],
@@ -27,6 +28,7 @@ export const SEARCH_SECTIONS: readonly (readonly [SearchKind, string])[] = [
   ['atlas-bridge', 'atlas bridges'],
   ['quantity', 'quantities'],
   ['applied-case', 'applied cases'],
+  ['regime', 'regimes'],
 ];
 
 /** A searchable field: its label, its words, and the exact strings a short word may equal. */
@@ -195,6 +197,18 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       addQ(e.target, graph);
     }
   }
+  for (const registration of api.domainRegimeRegistrations()) {
+    const vacuous = registration.records.every((record) => record.regime.inequalities.length === 0);
+    entries.push({
+      kind: 'regime',
+      id: registration.name,
+      line: vacuous ? `${registration.name} — vacuous registration (no inequality)` : registration.name,
+      command: `upt regime ${registration.name}`,
+      commandLabel: 'inspect',
+      fields: [{ label: 'name', text: registration.name, exact: [registration.name] }],
+    });
+  }
+
   for (const c of api.APPLIED_CASES.values()) {
     entries.push({
       kind: 'applied-case',
