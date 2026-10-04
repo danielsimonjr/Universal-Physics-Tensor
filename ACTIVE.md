@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Einstein relation diffusivity is negative when μ and q have opposite signs.
+  Done: `evaluateEinsteinRelation` throws when the product is negative. `upt evaluate be-70 mu_m2_per_Vs=0.14 T_K=300 q_C=-1.602176634e-19` exits 1. Both signs negative print `D_m2_per_s = 0.0036192799701009757`. `μ = 0` stays `D = 0`. The Lean theorem is unchanged.
+
 - [x] Vendor PhysJS `92f87257a1e3086a48cdc19fe4361cc1c5909d49`. Lean files stay `lean/<File>.lean`. Add BE-77 through BE-87 as formally proved. BE-83 reads the Kelvin relation along temperature and does not compose with BE-73. A denial sentence is not a search hit.
   Done: the manifest commit is that sha. The eleven theorems are kind `bridge`. Explain recovers each catalog equation. `upt search "thomson coefficient"` names be-83. `upt search "skin depth"` names `case-skin-depth` and does not name be-75. `onsager` still names be-73.
 
