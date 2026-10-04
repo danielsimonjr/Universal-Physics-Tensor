@@ -4,7 +4,7 @@
     "version": "3.1.0",
     "totalFiles": 453,
     "totalModules": 13,
-    "totalExports": 3343
+    "totalExports": 3344
   },
   "entryPoints": [
     {
@@ -12485,6 +12485,12 @@
             "imports": [
               "statusMeaning"
             ]
+          },
+          {
+            "file": "../../composition/bridge-analysis.js",
+            "imports": [
+              "vacuumConstantThroughAlpha"
+            ]
           }
         ],
         "exports": [
@@ -16516,6 +16522,7 @@
         ],
         "exports": [
           "dimensionalFreedom",
+          "vacuumConstantThroughAlpha",
           "attemptDerivation",
           "anchoringDistance",
           "bridgePriority",
@@ -16528,6 +16535,7 @@
         ],
         "functions": [
           "dimensionalFreedom",
+          "vacuumConstantThroughAlpha",
           "attemptDerivation",
           "anchoringDistance",
           "bridgePriority",
@@ -31905,11 +31913,11 @@
   "statistics": {
     "totalTypeScriptFiles": 453,
     "totalModules": 13,
-    "totalLinesOfCode": 96442,
-    "totalExports": 3343,
+    "totalLinesOfCode": 96469,
+    "totalExports": 3344,
     "totalClasses": 60,
     "totalInterfaces": 529,
-    "totalFunctions": 829,
+    "totalFunctions": 830,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 846,
