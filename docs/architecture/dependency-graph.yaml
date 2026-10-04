@@ -3,7 +3,7 @@ metadata:
   version: 3.0.0
   totalFiles: 433
   totalModules: 13
-  totalExports: 3085
+  totalExports: 3090
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9748,10 +9748,13 @@ modules:
             - compareUserEquation
             - describeComparison
             - describeComparisons
+            - describeKnownRelation
+            - matchingCatalogEdges
           reExport: true
         - file: ./composition/canonical-compare.js
           imports:
             - CanonicalComparison
+            - CatalogEdgeMatch
           reExport: true
         - file: ./dimensional/symbolic-constants.js
           imports:
@@ -10026,6 +10029,8 @@ modules:
         - compareUserEquation
         - describeComparison
         - describeComparisons
+        - describeKnownRelation
+        - matchingCatalogEdges
         - CONSTANTS
         - CONSTANT_PROVENANCE
         - OSCILLATOR_FAMILY
@@ -10093,6 +10098,7 @@ modules:
         - ConsequenceEvidence
         - ConventionKey
         - CanonicalComparison
+        - CatalogEdgeMatch
         - CandidateGrounding
         - CandidateReadiness
         - ObservableCarriage
@@ -10240,7 +10246,10 @@ modules:
         - compareUserEquation
         - describeComparison
         - describeComparisons
+        - describeKnownRelation
+        - matchingCatalogEdges
         - CanonicalComparison
+        - CatalogEdgeMatch
         - CONSTANTS
         - CONSTANT_PROVENANCE
         - CandidateGrounding
@@ -10604,13 +10613,18 @@ modules:
         - compareWithCanonical
         - compareUserEquation
         - describeComparisons
+        - matchingCatalogEdges
+        - describeKnownRelation
         - describeComparison
       interfaces:
         - CanonicalComparison
+        - CatalogEdgeMatch
       functions:
         - compareWithCanonical
         - compareUserEquation
         - describeComparisons
+        - matchingCatalogEdges
+        - describeKnownRelation
         - describeComparison
     src/composition/canonical-graph.ts:
       description: Canonical-only graph — project the standard-physics L-layer
@@ -21098,15 +21112,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 433
   totalModules: 13
-  totalLinesOfCode: 92283
-  totalExports: 3085
+  totalLinesOfCode: 92408
+  totalExports: 3090
   totalClasses: 60
-  totalInterfaces: 490
-  totalFunctions: 803
+  totalInterfaces: 491
+  totalFunctions: 805
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 769
-  totalReExports: 1454
+  totalReExports: 1457
   totalTypeOnlyImports: 579
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

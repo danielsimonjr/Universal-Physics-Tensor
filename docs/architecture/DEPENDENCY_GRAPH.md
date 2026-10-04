@@ -4343,8 +4343,8 @@ The codebase is organized into the following modules:
 | `./atlas/conventions.js` | `ConventionKey` | Re-export |
 | `./composition/grounding.js` | `describeGrounding, describeReadiness` | Re-export |
 | `./composition/representative-values.js` | `REPRESENTATIVE_VALUES` | Re-export |
-| `./composition/canonical-compare.js` | `compareWithCanonical, compareUserEquation, describeComparison, describeComparisons` | Re-export |
-| `./composition/canonical-compare.js` | `CanonicalComparison` | Re-export |
+| `./composition/canonical-compare.js` | `compareWithCanonical, compareUserEquation, describeComparison, describeComparisons, describeKnownRelation, matchingCatalogEdges` | Re-export |
+| `./composition/canonical-compare.js` | `CanonicalComparison, CatalogEdgeMatch` | Re-export |
 | `./dimensional/symbolic-constants.js` | `CONSTANTS, CONSTANT_PROVENANCE` | Re-export |
 | `./composition/grounding.js` | `CandidateGrounding, CandidateReadiness` | Re-export |
 | `./atlas/oscillators/index.js` | `OSCILLATOR_FAMILY` | Re-export |
@@ -4406,9 +4406,10 @@ The codebase is organized into the following modules:
   AnnotatedCandidate, CandidateAdjudication, annotateConsequences, ConsequenceAnnotatedCandidate,
   ConsequenceSignal, ConsequenceEvidence, checkConventions, unknownConventionKeys, ConventionKey,
   describeGrounding, describeReadiness, REPRESENTATIVE_VALUES, compareWithCanonical,
-  compareUserEquation, describeComparison, describeComparisons, CanonicalComparison, CONSTANTS,
-  CONSTANT_PROVENANCE, CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES,
-  deriveEvidence, deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample,
+  compareUserEquation, describeComparison, describeComparisons, describeKnownRelation,
+  matchingCatalogEdges, CanonicalComparison, CatalogEdgeMatch, CONSTANTS, CONSTANT_PROVENANCE,
+  CandidateGrounding, CandidateReadiness, OSCILLATOR_FAMILY, ATLAS_FAMILIES, deriveEvidence,
+  deriveCompositeEvidence, NO_PASSING_WITNESSES, provedWithUnresolvedCounterexample,
   summarizeEvidence, ALL_EVIDENCE_TAGS, runWitnessRegistry, WITNESS_REGISTRY, runNumericWitness,
   OBSERVABLE_CARRIAGES, OBSERVABLE_TRANSLATIONS, carriageOf, runTranslationCheck, translationsOf,
   ObservableCarriage, ObservableTranslation, PointCheck, AtlasFamily, collidingRegimeGroups,
@@ -4571,8 +4572,8 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `DIMENSIONLESS` | Import |
 
 **Exports:**
-- Interfaces: `CanonicalComparison`
-- Functions: `compareWithCanonical`, `compareUserEquation`, `describeComparisons`, `describeComparison`
+- Interfaces: `CanonicalComparison`, `CatalogEdgeMatch`
+- Functions: `compareWithCanonical`, `compareUserEquation`, `describeComparisons`, `matchingCatalogEdges`, `describeKnownRelation`, `describeComparison`
 
 ---
 
@@ -8253,12 +8254,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 433 |
 | Total Modules | 13 |
-| Total Lines of Code | 92283 |
-| Total Exports | 3085 |
-| Total Re-exports | 1454 |
+| Total Lines of Code | 92408 |
+| Total Exports | 3090 |
+| Total Re-exports | 1457 |
 | Total Classes | 60 |
-| Total Interfaces | 490 |
-| Total Functions | 803 |
+| Total Interfaces | 491 |
+| Total Functions | 805 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 579 |

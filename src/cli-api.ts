@@ -178,8 +178,10 @@ export {
   compareUserEquation,
   describeComparison,
   describeComparisons,
+  describeKnownRelation,
+  matchingCatalogEdges,
 } from './composition/canonical-compare.js';
-export type { CanonicalComparison } from './composition/canonical-compare.js';
+export type { CanonicalComparison, CatalogEdgeMatch } from './composition/canonical-compare.js';
 export { CONSTANTS, CONSTANT_PROVENANCE } from './dimensional/symbolic-constants.js';
 export type { CandidateGrounding, CandidateReadiness } from './composition/grounding.js';
 

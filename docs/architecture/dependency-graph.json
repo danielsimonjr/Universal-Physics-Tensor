@@ -4,7 +4,7 @@
     "version": "3.0.0",
     "totalFiles": 433,
     "totalModules": 13,
-    "totalExports": 3085
+    "totalExports": 3090
   },
   "entryPoints": [
     {
@@ -14671,14 +14671,17 @@
               "compareWithCanonical",
               "compareUserEquation",
               "describeComparison",
-              "describeComparisons"
+              "describeComparisons",
+              "describeKnownRelation",
+              "matchingCatalogEdges"
             ],
             "reExport": true
           },
           {
             "file": "./composition/canonical-compare.js",
             "imports": [
-              "CanonicalComparison"
+              "CanonicalComparison",
+              "CatalogEdgeMatch"
             ],
             "reExport": true
           },
@@ -15052,6 +15055,8 @@
           "compareUserEquation",
           "describeComparison",
           "describeComparisons",
+          "describeKnownRelation",
+          "matchingCatalogEdges",
           "CONSTANTS",
           "CONSTANT_PROVENANCE",
           "OSCILLATOR_FAMILY",
@@ -15119,6 +15124,7 @@
           "ConsequenceEvidence",
           "ConventionKey",
           "CanonicalComparison",
+          "CatalogEdgeMatch",
           "CandidateGrounding",
           "CandidateReadiness",
           "ObservableCarriage",
@@ -15267,7 +15273,10 @@
           "compareUserEquation",
           "describeComparison",
           "describeComparisons",
+          "describeKnownRelation",
+          "matchingCatalogEdges",
           "CanonicalComparison",
+          "CatalogEdgeMatch",
           "CONSTANTS",
           "CONSTANT_PROVENANCE",
           "CandidateGrounding",
@@ -15810,15 +15819,20 @@
           "compareWithCanonical",
           "compareUserEquation",
           "describeComparisons",
+          "matchingCatalogEdges",
+          "describeKnownRelation",
           "describeComparison"
         ],
         "interfaces": [
-          "CanonicalComparison"
+          "CanonicalComparison",
+          "CatalogEdgeMatch"
         ],
         "functions": [
           "compareWithCanonical",
           "compareUserEquation",
           "describeComparisons",
+          "matchingCatalogEdges",
+          "describeKnownRelation",
           "describeComparison"
         ]
       },
@@ -30284,15 +30298,15 @@
   "statistics": {
     "totalTypeScriptFiles": 433,
     "totalModules": 13,
-    "totalLinesOfCode": 92283,
-    "totalExports": 3085,
+    "totalLinesOfCode": 92408,
+    "totalExports": 3090,
     "totalClasses": 60,
-    "totalInterfaces": 490,
-    "totalFunctions": 803,
+    "totalInterfaces": 491,
+    "totalFunctions": 805,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 769,
-    "totalReExports": 1454,
+    "totalReExports": 1457,
     "totalTypeOnlyImports": 579,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

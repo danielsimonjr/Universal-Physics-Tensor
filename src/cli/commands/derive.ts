@@ -96,6 +96,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   let formulaCheck: ReturnType<Awaited<ReturnType<typeof api.getFormulaDimensionChecker>>['check']> | undefined;
   let mean: number | undefined;
   let canonicalComparisons: ReturnType<typeof api.compareWithCanonical> | undefined;
+  let catalogEdges: ReturnType<typeof api.matchingCatalogEdges> | undefined;
   // The formula's checks: dimension, monomial, canonical comparison. Any failure exits 3.
   let failed = false;
 
@@ -109,6 +110,7 @@ async function run(ctx: CommandCtx): Promise<number> {
           ...(formulaCheck !== undefined ? { formulaCheck } : {}),
           ...(mean !== undefined ? { prefactor: mean } : {}),
           ...(canonicalComparisons !== undefined ? { canonicalComparisons } : {}),
+          ...(catalogEdges !== undefined ? { catalogEdges } : {}),
         },
       },
       ctx.write
@@ -174,8 +176,12 @@ async function run(ctx: CommandCtx): Promise<number> {
           ),
         ),
     );
+    const relationSources = variables.map((g) => ({ name: g.name, dim: g.dim }));
+    catalogEdges = api.matchingCatalogEdges(target.name, relationSources);
     const printComparisons = (): void => {
-      for (const line of api.describeComparisons(canonicalComparisons!)) textOut(`  ${line}`);
+      for (const line of api.describeKnownRelation(canonicalComparisons!, target.name, relationSources)) {
+        textOut(`  ${line}`);
+      }
       for (const line of conventionLines(canonicalComparisons!.map((c) => c.id))) textOut(`  ${line}`);
     };
     if (canonicalCheckFailed(canonicalComparisons)) failed = true;
