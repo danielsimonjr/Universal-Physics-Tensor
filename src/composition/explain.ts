@@ -260,8 +260,10 @@ function buildSummary(
     s += ` The encoded formula adds dimensionful terms, so it is not a proportionality.`;
   } else if (dimensional?.determined && dimensional.monomial) {
     s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial)}.`;
-  } else if (dimensional && !dimensional.determined && knownNames.length) {
+  } else if (dimensional?.outsideGoverningSpan && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
+  } else if (dimensional && !dimensional.determined && knownNames.length) {
+    s += ` Dimensionally, those inputs alone do not fix a unique monomial.`;
   }
   return s;
 }

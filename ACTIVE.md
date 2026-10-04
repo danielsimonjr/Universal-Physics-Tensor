@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] The dimensionful-constants sentence is the Buckingham span failure. A dimensionally dependent governing set does not get that sentence.
+  Done: `outsideGoverningSpan` is that field. `gravitational-frequency-ratio` from two dimensionless metric components says the inputs do not fix a unique monomial. Hawking temperature from mass alone still says the formula carries dimensionful constants.
+
 - [x] A suggestion query drops a hyphen token shorter than three letters. Explicit search of a one-letter symbol stays.
   Done: `searchNameWords` drops those tokens. `upt explain not-a-quantity-xyz` does not search `a`. `upt search a` still finds the quantity `a`. `schrodinger-equation` still searches `schrodinger`.
 
