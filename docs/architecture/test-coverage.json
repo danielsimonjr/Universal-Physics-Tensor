@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 442,
-    "totalTestFiles": 623,
+    "totalTestFiles": 624,
     "testedCount": 431,
     "untestedCount": 11,
     "coveragePercent": "97.5"
@@ -6794,6 +6794,7 @@
       "tests/composition/compose.test.ts",
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery.test.ts",
+      "tests/composition/edge-alias-binding.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/formula-shape.test.ts",
@@ -6999,6 +7000,7 @@
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery-magnitude.test.ts",
       "tests/composition/discovery.test.ts",
+      "tests/composition/edge-alias-binding.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/formula-shape.test.ts",
@@ -7063,6 +7065,7 @@
       "tests/composition/compose.test.ts",
       "tests/composition/dimensionful-constant.test.ts",
       "tests/composition/discovery.test.ts",
+      "tests/composition/edge-alias-binding.test.ts",
       "tests/composition/enumerate-uncertainty.test.ts",
       "tests/composition/explain.test.ts",
       "tests/composition/formula-shape.test.ts",
@@ -18756,6 +18759,11 @@
       "src/composition/canonical-compare.ts",
       "src/composition/user-equation.ts",
       "src/dimensional/types.ts"
+    ],
+    "tests/composition/edge-alias-binding.test.ts": [
+      "src/composition/compose.ts",
+      "src/composition/edge.ts",
+      "src/composition/edges/applied-physicist.ts"
     ],
     "tests/composition/enumerate-uncertainty.test.ts": [
       "src/composition/enumerate.ts",

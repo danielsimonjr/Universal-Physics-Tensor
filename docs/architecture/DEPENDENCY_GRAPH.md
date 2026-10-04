@@ -4988,7 +4988,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `CompositionJunctionError`, `CompositionDimensionError`, `DomainViolationError`, `CompositionAliasError`, `UndefinedCompositionError`
 - Interfaces: `ValidityDomain`, `BridgeEdge`
-- Functions: `evaluateEdge`
+- Functions: `withBoundAliases`, `evaluateEdge`
 
 ---
 
@@ -5025,7 +5025,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
 | `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
-| `../edge.js` | `BridgeEdge` | Import (type-only) |
+| `../edge.js` | `withBoundAliases, BridgeEdge` | Import |
 | `../quantity.js` | `Quantity` | Import (type-only) |
 | `../quantities.js` | `alfvenSpeedQ, incidenceAngleQ, magneticFluxDensityQ, metricG00Q, plasmaMassDensityQ, poyntingFluxQ, properTemperatureQ, radiationPressureQ, reflectanceQ, tolmanInvariantQ, soundSpeedQ, fastMagnetosonicSpeedQ, electricalMobilityQ, einsteinTemperatureQ, carrierChargeQ, diffusivityQ, latentHeatQ, clapeyronTemperatureQ, specificVolumeChangeQ, clapeyronSlopeQ, redshiftMetricG00OneQ, redshiftMetricG00TwoQ, gravitationalFrequencyRatioQ, seebeckCoefficientQ, peltierTemperatureQ, peltierCoefficientQ, magneticPressureQ, londonPenetrationDepthQ, plasmaBetaQ, carrierDensityQ, effectiveMassQ, temperatureQ` | Import |
 
@@ -8420,15 +8420,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 442 |
 | Total Modules | 13 |
-| Total Lines of Code | 94193 |
-| Total Exports | 3193 |
+| Total Lines of Code | 94259 |
+| Total Exports | 3194 |
 | Total Re-exports | 1521 |
 | Total Classes | 60 |
 | Total Interfaces | 507 |
-| Total Functions | 817 |
+| Total Functions | 818 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 581 |
+| Type-only Imports | 580 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

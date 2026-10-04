@@ -22,6 +22,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 - [x] A comparison residual is value/reference − 1. Its glossary says signed relative difference, including when the residual is negative.
   Done: `signedRelativeDifference` is that glossary. The poor-conductor skin-depth line prints `maxwell_deviation = -0.0487572085250777` beside that phrase. The copper lumped-cooling line prints `parent_deviation = -0.000052203242016934936` beside it. Resistor-noise and Brownian residuals use the same phrase. Kepler's `(1 + q)^{2/3} − 1` still says excess.
+- [x] An edge alias is an evaluate key. `edge.evaluate`, `evaluateEdge`, and a composed edge copy it onto the source name before the domain and the formula.
+  Done: `be74Edge.evaluate({ B_T: 1 })` is `397887.35751312086`. `evaluateEdge` accepts the same key. `composeEdges(be74Edge, be76Edge).evaluate({ B_T: 1, n_per_m3: 1e20, T_K: 300 })` is `0.0000010409848219073948`. Every applied-physicist edge evaluates from its first alias. Disagreeing aliases name the source and do not run the formula.
 
 - [x] The spelled unit `gauss` is the same 10⁻⁴ T as `G`. `GPa` stays a gigapascal. Bare `G` stays Newton's constant.
   Done: `gauss` and `Gauss` convert as `G`. `upt eval B B=1gauss` is `0.0001`. `GPa` is `1e9` Pa. Bare `G` is `G_SI`.
