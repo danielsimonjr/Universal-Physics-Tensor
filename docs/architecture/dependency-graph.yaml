@@ -3,7 +3,7 @@ metadata:
   version: 4.0.0
   totalFiles: 454
   totalModules: 13
-  totalExports: 3350
+  totalExports: 3351
 entryPoints:
   - file: src/index.ts
     type: main
@@ -11009,11 +11009,13 @@ modules:
         - rewriteInputKey
         - nearQuantityNames
         - shareSynonyms
+        - collapseSynonymGovernors
       functions:
         - aliasesForTarget
         - rewriteInputKey
         - nearQuantityNames
         - shareSynonyms
+        - collapseSynonymGovernors
     src/composition/audit-coverage.ts:
       description: Empirical-spine coverage audit (Direction 4).
       externalDependencies: []
@@ -12976,6 +12978,9 @@ modules:
         - file: ../dimensional/buckingham.js
           imports:
             - dimensionallyDetermines
+        - file: ./aliases.js
+          imports:
+            - collapseSynonymGovernors
         - file: ./formula-shape.js
           imports:
             - formulaShape
@@ -22393,11 +22398,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 454
   totalModules: 13
-  totalLinesOfCode: 96679
-  totalExports: 3350
+  totalLinesOfCode: 96719
+  totalExports: 3351
   totalClasses: 61
   totalInterfaces: 529
-  totalFunctions: 833
+  totalFunctions: 834
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 846
