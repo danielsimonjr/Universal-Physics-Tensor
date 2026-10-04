@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record that `universal-physics-tensor@4.0.0` is the published release.
+  Done: npm `latest` is `4.0.0`, gitHead `9e7dfa279be3c56d83c1f9436cd3034687f00e3f`. Annotated tag `v4.0.0` points at that commit. Publish run `37227889987` succeeded. The GitHub release is `https://github.com/danielsimonjr/Universal-Physics-Tensor/releases/tag/v4.0.0`.
+
 - [x] Set the package version to 4.0.0. `evaluateEinsteinRelation` throws when μ and q have opposite signs, and canonical explain multiplies the sourced prefactor. The public surface adds the BE-77 through BE-87 exports.
   Done: `package.json` is 4.0.0. The major note is the [4.0.0] section. Version-stamped artifacts carry 4.0.0. The Part VIII check requires 4.0.0. Before the bump it required 3.1.0. npm `3.1.0` remains the published release until the tag workflow.
 - [x] The canonical graph evaluator ignores sourced dimensionless prefactors.
