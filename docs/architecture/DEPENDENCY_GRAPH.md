@@ -3746,6 +3746,7 @@ The codebase is organized into the following modules:
 | `../graphs.js` | `resolveGraph` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../statuses.js` | `statusMeaning` | Import |
+| `../../composition/bridge-analysis.js` | `vacuumConstantThroughAlpha` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -4793,7 +4794,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `LinkCandidate`
-- Functions: `dimensionalFreedom`, `attemptDerivation`, `anchoringDistance`, `bridgePriority`, `linkageMap`, `proposeLinkCandidates`, `proposeOrphanConnectors`
+- Functions: `dimensionalFreedom`, `vacuumConstantThroughAlpha`, `attemptDerivation`, `anchoringDistance`, `bridgePriority`, `linkageMap`, `proposeLinkCandidates`, `proposeOrphanConnectors`
 
 ---
 
@@ -8607,12 +8608,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 453 |
 | Total Modules | 13 |
-| Total Lines of Code | 96428 |
-| Total Exports | 3343 |
+| Total Lines of Code | 96455 |
+| Total Exports | 3344 |
 | Total Re-exports | 1609 |
 | Total Classes | 60 |
 | Total Interfaces | 529 |
-| Total Functions | 829 |
+| Total Functions | 830 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 580 |

@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] The {ℏ, c, e} closure of μ0 through α is tagged empirical.
+  Done: `upt audit` tags be-74 `(vacuum constant; μ0 rewritten through α)`. JSON `cleanPrefactor` stays false. Stefan–Boltzmann, Wien, and be-48 stay empirical.
+
 - [x] Einstein relation diffusivity is negative when μ and q have opposite signs.
   Done: `evaluateEinsteinRelation` throws when the product is negative. `upt evaluate be-70 mu_m2_per_Vs=0.14 T_K=300 q_C=-1.602176634e-19` exits 1. Both signs negative print `D_m2_per_s = 0.0036192799701009757`. `μ = 0` stays `D = 0`. The Lean theorem is unchanged.
 - [x] A comparison residual is value/reference − 1. Its glossary says signed relative difference, including when the residual is negative.

@@ -138,6 +138,28 @@ const isCleanPrefactor = (p: number): boolean =>
   CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);
 
 /**
+ * CODATA fine-structure constant. `μ0 = 2 α h / (e² c)` rewrites a vacuum
+ * factor as a number times a monomial in `{ℏ, c, e}`.
+ */
+const ALPHA = 7.2973525693e-3;
+
+/**
+ * True when a derived prefactor on `{ℏ, c, e}` times `α` is a recognized
+ * constant. That factor is `μ0` rewritten through `α`. It is not an empirical
+ * scale. The printed prefactor is not itself the recognized constant, so
+ * `cleanPrefactor` stays false.
+ * @internal
+ */
+export function vacuumConstantThroughAlpha(
+  subset: readonly string[] | undefined,
+  prefactor: number | undefined,
+): boolean {
+  if (subset === undefined || prefactor === undefined || !Number.isFinite(prefactor)) return false;
+  if (subset.length !== 3 || !subset.includes('ℏ') || !subset.includes('c') || !subset.includes('e')) return false;
+  return isCleanPrefactor(Math.abs(prefactor) * ALPHA);
+}
+
+/**
  * A canonical closure more than ten times away from 1 is not a recovered
  * prefactor. Stefan–Boltzmann (≈0.1645) and Wien (≈1.265) stay inside that
  * window and keep the empirical/tuned mark. A G-closure of an atomic law
