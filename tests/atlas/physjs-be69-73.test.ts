@@ -46,7 +46,7 @@ import {
   be73Edge,
 } from '../../src/composition/edges/applied-physicist.js';
 
-const SHA = '4ea35872513f8d4d12a01bfac225156bdddb87a9';
+const SHA = 'ee753df77bd5b29b7207443181606b6004bfcf6a';
 const VERSION = `physjs@${SHA} leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940`;
 const AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 
@@ -65,7 +65,7 @@ describe('PhysJS proofs for be-69 through be-73', () => {
   it('the vendored manifest is PhysJS #57 and names the five theorems', () => {
     expect(PHYSJS_COMMIT).toBe(SHA);
     expect(manifest.commit).toBe(SHA);
-    expect(manifest.entries).toHaveLength(54);
+    expect(manifest.entries).toHaveLength(57);
     for (const row of ROWS) {
       const entry = manifest.entries.find((candidate) => candidate.key === `be-${row.id}`);
       expect(entry?.theorem, `be-${row.id}`).toBe(row.theorem);
@@ -90,7 +90,7 @@ describe('PhysJS proofs for be-69 through be-73', () => {
       expect(ref?.kind).toBe('bridge');
       expect(ref?.version).toBe(VERSION);
       expect(ref?.url).toBe(physjsFileUrl(row.file));
-      expect(ref?.url).toBe(`https://github.com/danielsimonjr/PhysJS/blob/${SHA}/lean/PhysJS/${row.file}`);
+      expect(ref?.url).toBe(`https://github.com/danielsimonjr/PhysJS/blob/${SHA}/lean/${row.file}`);
       expect(ref?.covers).toBe(`${entry?.covers} — covers its statement only`);
       expect(deriveEvidence({ formalRef: ref }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
       expect(deriveEdgeEvidence(row.id).has('formally-proved')).toBe(true);

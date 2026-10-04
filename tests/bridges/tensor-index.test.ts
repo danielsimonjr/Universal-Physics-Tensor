@@ -73,8 +73,8 @@ describe('§VI.6.1 tensor index', () => {
   const listed = specTensorIndex(readFileSync(SPEC, 'utf8'));
 
   it('places every catalog id in exactly one component, matching its category', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(63);
-    expect(listed.size).toBe(63);
+    expect(BRIDGE_EQUATIONS).toHaveLength(66);
+    expect(listed.size).toBe(66);
     for (const entry of BRIDGE_EQUATIONS) {
       expect(
         listed.get(entry.id),

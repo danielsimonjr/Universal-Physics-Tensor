@@ -3,7 +3,7 @@ Bridge prediction — empty (scale×force) regime cells as undiscovered-link HYP
 ⚠ STRUCTURAL hypotheses for physicist review, NOT discovered bridges. "Two regimes
   share bridge-neighbours but are not directly linked" (triadic closure) is a weak prior.
 
-  projected 51/54 edges onto 16 regimes; 15 regime-pairs already bridged.
+  projected 54/57 edges onto 16 regimes; 15 regime-pairs already bridged.
 
   predicted missing bridges (by shared-neighbour count):
     gravitational ⟷ quantum                        score 2  via {cosmological, quantum/gravitational}

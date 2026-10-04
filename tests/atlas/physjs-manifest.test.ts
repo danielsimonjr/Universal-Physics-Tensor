@@ -31,7 +31,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `4ea35872513f8d4d12a01bfac225156bdddb87a9`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `ee753df77bd5b29b7207443181606b6004bfcf6a`, in file order. A swapped theorem or key fails this list. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -140,6 +140,10 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['be-71', 'PhysJS.Clapeyron.slope_eq', 'derivation-step: where the specific Gibbs energies agree along coexistence and each phase obeys dg = −s dT + v dP, dP/dT = (s2−s1)/(v2−v1). With L = T (s2−s1), T ≠ 0, and Δv ≠ 0, dP/dT = L/(T Δv). Dropping T fails when T ≠ 1. Replacing Δv by one phase volume fails when the other volume is nonzero. A factor C ≠ 1 is not this slope. Not the ideal-gas integrated vapor-pressure law. The Gibbs differential is a hypothesis, not a Legendre transform'],
   ['be-72', 'PhysJS.GravitationalRedshift.frequency_ratio', 'derivation-step: two static observers of one coordinate period, with ν √(−g_00) = 1/Δt and g_00 < 0, have ν1/ν2 = √(−g2)/√(−g1) = √(g2/g1). If the Tolman products T √(−g_00) also agree, then T1/T2 = ν1/ν2. Equal temperatures on g_00 = −1 and g_00 = −4 are not a Tolman equilibrium, while the frequency ratio is 2. For g_00 = −(1+2Φ/c²) at c = 1, Φ = 0 and Φ = 4, the exact ratio is neither (Φ2−Φ1)/c² nor 1+(Φ2−Φ1)/c². z = 0 is not Φ/c². Not PhysJS.TolmanEhrenfest.hydrostatic_constant, not a horizon temperature, and not PhysJS.HawkingUnruh.dictionary'],
   ['be-73', 'PhysJS.KelvinRelation.peltier_eq', 'derivation-step: for J_e = L11 E/T + L12 (−∇T)/T² and J_q = L21 E/T + L22 (−∇T)/T², the open-circuit Seebeck coefficient S = E/∇T and the isothermal Peltier coefficient Π = J_q/J_e satisfy Π = S T when L12 = L21. That equality is ThermoelectricOnsager.onsager, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. Not the first Thomson relation μ = T dS/dT, and not a measured thermopower. The linear fluxes are hypotheses'],
+
+  ['be-74', 'PhysJS.MagneticPressure.pressure_eq', 'derivation-step: a linear inductor with dU/dI = L I and U(0) = 0 stores U = (L/2) I². A long solenoid with B = μ0 n I and flux linkage Λ = (n ℓ) B A has L = μ0 n² V. At fixed current the battery supplies I ΔΛ. The stored energy rises by half of that, and the difference is the mechanical work p ΔV, so p = B²/(2 μ0). Homogeneity in B and μ0 gives p = C B²/μ0 with C unfixed. C = 1 is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor. Ampere\'s law, the flux linkage, and the quasistatic work balance are hypotheses'],
+  ['be-75', 'PhysJS.LondonPenetration.depth_eq', 'derivation-step: on B(x) = B0 exp(−x/λ) with λ > 0, Ampere\'s law j = −(1/μ0) dB/dx and the London equation dj/dx = −(n e²/m) B give λ = √(m/(μ0 n e²)). e is the elementary charge. The dimension matrix of {m, μ0, n, e} admits both that monomial and μ0 e²/m, so units do not choose. Those lengths disagree when n (μ0 e²/m)³ ≠ 1. The growing exponential is not the screened field. Replacing e by 2e at the same n and m fails, and dropping the square on e fails when e ≠ 1. A factor C ≠ 1 is not this depth. Not the classical skin depth. The London equation and Ampere\'s law are hypotheses'],
+  ['be-76', 'PhysJS.PlasmaBeta.beta_eq', 'derivation-step: β = p_gas / p_B where p_B is PhysJS.MagneticPressure.pressure_eq, so β = p_gas / (B²/(2 μ0)) = 2 μ0 p_gas / B². The ideal-gas closure p_gas = n k_B T gives β = 2 μ0 n k_B T / B². B ≠ 0. Using B²/μ0 in place of the magnetic pressure is a different ratio. The constant 1 is dimensionless and is not this beta when the ratio is not 1. A factor C ≠ 1 is not this beta. Dropping p = n k_B T fails. Not a unique monomial, and not a plasma-β inequality'],
 ];
 
 const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
@@ -155,8 +159,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit 4ea35872513f8d4d12a01bfac225156bdddb87a9, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('4ea35872513f8d4d12a01bfac225156bdddb87a9');
+  it('records commit ee753df77bd5b29b7207443181606b6004bfcf6a, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('ee753df77bd5b29b7207443181606b6004bfcf6a');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -164,7 +168,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the fifty-four theorems and keys, in manifest order', () => {
+  it('names the fifty-seven theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -378,10 +382,10 @@ describe('vendored PhysJS manifest', () => {
     const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
     const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
     const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73']);
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76']);
     expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
     expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
-    expect(counted.length + crossChecks.length + properties.length).toBe(44);
+    expect(counted.length + crossChecks.length + properties.length).toBe(47);
 
     const unlabeled = {
       ...manifest,

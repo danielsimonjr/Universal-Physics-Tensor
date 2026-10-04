@@ -1,5 +1,5 @@
 /**
- * Composition edges for BE-66 through BE-73.
+ * Composition edges for BE-66 through BE-76.
  *
  * Each edge's endpoints state the same scale and force, so `kind` is
  * `law`. The overlay `formalRef` is kind `bridge`, so each id is a
@@ -19,6 +19,9 @@ import { evaluateEinsteinRelation } from '../../bridges/be70-einstein-relation.j
 import { evaluateClapeyron } from '../../bridges/be71-clapeyron.js';
 import { evaluateGravitationalRedshift } from '../../bridges/be72-gravitational-redshift.js';
 import { evaluateKelvinPeltier } from '../../bridges/be73-kelvin-peltier.js';
+import { evaluateMagneticPressure } from '../../bridges/be74-magnetic-pressure.js';
+import { evaluateLondonPenetration } from '../../bridges/be75-london-penetration.js';
+import { evaluatePlasmaBeta } from '../../bridges/be76-plasma-beta.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import { DIMENSIONLESS } from '../../dimensional/types.js';
 import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
@@ -51,6 +54,12 @@ import {
   seebeckCoefficientQ,
   peltierTemperatureQ,
   peltierCoefficientQ,
+  magneticPressureQ,
+  londonPenetrationDepthQ,
+  plasmaBetaQ,
+  carrierDensityQ,
+  effectiveMassQ,
+  temperatureQ,
 } from '../quantities.js';
 
 const finite = Number.isFinite;
@@ -61,6 +70,8 @@ const prod = (...args: ExprNode[]): ExprNode => ({ kind: 'op', op: '*', args });
 const plus = (a: ExprNode, b: ExprNode): ExprNode => ({ kind: 'op', op: '+', args: [a, b] });
 const ratio = (num: ExprNode, den: ExprNode): ExprNode => ({ kind: 'op', op: '/', args: [num, den] });
 const pow = (base: ExprNode, exp: ExprNode): ExprNode => ({ kind: 'op', op: '^', args: [base, exp] });
+/** μ0 = 1/(ε0 c²). The same product the Alfvén and magnetosonic formulas use. */
+const mu0: ExprNode = ratio(lit(1), prod(csym('epsilon_0'), pow(csym('c'), lit(2))));
 
 /** P_n = (I/c) (1+R) cos²θ. */
 const BE66_SYMBOLIC: ExprNode = prod(
@@ -416,6 +427,123 @@ export const be73Edge: BridgeEdge = {
     'PhysJS.KelvinRelation.peltier_eq. L12 = L21 is ThermoelectricOnsager.onsager, a structure field, not an axiom and not an input.',
 };
 
+/** p_B = B² / (2 μ0). The 2 is the inductor integral, not a Buckingham constant. */
+const BE74_SYMBOLIC: ExprNode = ratio(pow(qsym(magneticFluxDensityQ), lit(2)), prod(lit(2), mu0));
+
+/** λ_L = √(m / (μ0 n e²)). `e` is the elementary charge. */
+const BE75_SYMBOLIC: ExprNode = pow(
+  ratio(qsym(effectiveMassQ), prod(mu0, qsym(carrierDensityQ), pow(csym('e'), lit(2)))),
+  lit(0.5),
+);
+
+/** β = n k_B T / p_B. Substituting BE-74 yields 2 μ0 n k_B T / B². */
+const BE76_SYMBOLIC: ExprNode = ratio(
+  prod(qsym(carrierDensityQ), csym('k_B'), qsym(temperatureQ)),
+  qsym(magneticPressureQ),
+);
+
+/**
+ * BE-74 magnetic pressure: magnetic-flux-density → magnetic-pressure,
+ * `p_B = B²/(2 μ0)`. `μ0` is a constant. The endpoints share the
+ * classical electromagnetic attributes: a law.
+ *
+ * @public
+ */
+export const be74Edge: BridgeEdge = {
+  id: 'be-74',
+  beId: 74,
+  kind: 'law',
+  label: 'Magnetic pressure p_B = B²/(2 μ0)',
+  sources: [magneticFluxDensityQ],
+  aliases: {
+    'magnetic-flux-density': ['B_T', 'B'],
+  },
+  target: magneticPressureQ,
+  confidence: 'established',
+  domain: {
+    description: 'B finite; the factor 2 is the stored-energy half, not C = 1',
+    predicate: (i) => finite(i['magnetic-flux-density']),
+  },
+  evaluate: (i) => evaluateMagneticPressure({ B_T: i['magnetic-flux-density'] }).p_Pa,
+  symbolic: BE74_SYMBOLIC,
+  citation:
+    'PhysJS.MagneticPressure.pressure_eq. U = (L/2) I². C = 1 is the battery work per volume, not this pressure.',
+};
+
+/**
+ * BE-75 London penetration depth: (effective-mass, carrier-density) →
+ * london-penetration-depth, `λ_L = √(m/(μ0 n e²))`. `e` and `μ0` are
+ * constants. The endpoints share the carrier attributes: a law.
+ *
+ * @public
+ */
+export const be75Edge: BridgeEdge = {
+  id: 'be-75',
+  beId: 75,
+  kind: 'law',
+  label: 'London penetration depth λ_L = √(m/(μ0 n e²))',
+  sources: [effectiveMassQ, carrierDensityQ],
+  aliases: {
+    'effective-mass': ['m_kg', 'm'],
+    'carrier-density': ['n_per_m3', 'n'],
+  },
+  target: londonPenetrationDepthQ,
+  confidence: 'established',
+  domain: {
+    description: 'm > 0 and n > 0; e is the elementary charge',
+    predicate: (i) => finite(i['effective-mass']) && i['effective-mass'] > 0 && finite(i['carrier-density']) && i['carrier-density'] > 0,
+  },
+  evaluate: (i) =>
+    evaluateLondonPenetration({
+      m_kg: i['effective-mass'],
+      n_per_m3: i['carrier-density'],
+    }).lambda_m,
+  symbolic: BE75_SYMBOLIC,
+  citation:
+    'PhysJS.LondonPenetration.depth_eq. Units also admit μ0 e²/m. Not the classical skin depth.',
+};
+
+/**
+ * BE-76 plasma beta: (carrier-density, temperature, magnetic-pressure) →
+ * plasma-beta, `β = n k_B T / p_B`. The magnetic-pressure source is
+ * BE-74, so the edges compose. `carrier-density` is quantum and
+ * `magnetic-pressure` is classical, so the endpoints differ: a bridge.
+ * Not a plasma-β inequality.
+ *
+ * @public
+ */
+export const be76Edge: BridgeEdge = {
+  id: 'be-76',
+  beId: 76,
+  kind: 'bridge',
+  label: 'Plasma beta β = n k_B T / p_B',
+  sources: [carrierDensityQ, temperatureQ, magneticPressureQ],
+  aliases: {
+    'carrier-density': ['n_per_m3', 'n'],
+    temperature: ['T_K', 'T'],
+    'magnetic-pressure': ['p_B_Pa', 'p_B'],
+  },
+  target: plasmaBetaQ,
+  confidence: 'established',
+  domain: {
+    description: 'n and T finite, p_B ≠ 0; p_B is B²/(2 μ0)',
+    predicate: (i) =>
+      finite(i['carrier-density']) &&
+      finite(i['temperature']) &&
+      finite(i['magnetic-pressure']) &&
+      i['magnetic-pressure'] !== 0,
+  },
+  evaluate: (i) =>
+    evaluatePlasmaBeta({
+      n_per_m3: i['carrier-density'],
+      T_K: i['temperature'],
+      p_B_Pa: i['magnetic-pressure'],
+    }).beta,
+  symbolic: BE76_SYMBOLIC,
+  citation:
+    'PhysJS.PlasmaBeta.beta_eq. p_B is PhysJS.MagneticPressure.pressure_eq. Using B²/μ0 is half of this beta. Not a plasma-β inequality.',
+};
+
 /** The applied-physicist edges, in catalog-id order. @public */
 export const APPLIED_PHYSICIST_EDGES: readonly BridgeEdge[] = [
   be66Edge,
@@ -426,4 +554,7 @@ export const APPLIED_PHYSICIST_EDGES: readonly BridgeEdge[] = [
   be71Edge,
   be72Edge,
   be73Edge,
+  be74Edge,
+  be75Edge,
+  be76Edge,
 ];

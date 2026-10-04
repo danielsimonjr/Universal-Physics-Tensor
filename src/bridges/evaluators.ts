@@ -1,7 +1,7 @@
 /**
  * Bridge-evaluator registry — the single dispatch surface for `upt evaluate`.
  *
- * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…73) carry plain-JS
+ * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…76) carry plain-JS
  * evaluators but were, until now, unreachable from the CLI (`upt eval` is
  * user-formula-only; `upt explain <be-NN>` even redirected to a capability that did
  * not exist). This registry maps each bridge id to its evaluator, its input keys,
@@ -30,6 +30,9 @@ import { evaluateEinsteinRelation } from './be70-einstein-relation.js';
 import { evaluateClapeyron } from './be71-clapeyron.js';
 import { evaluateGravitationalRedshift } from './be72-gravitational-redshift.js';
 import { evaluateKelvinPeltier } from './be73-kelvin-peltier.js';
+import { evaluateMagneticPressure } from './be74-magnetic-pressure.js';
+import { evaluateLondonPenetration } from './be75-london-penetration.js';
+import { evaluatePlasmaBeta } from './be76-plasma-beta.js';
 
 /**
  * What a length input measures. Two lengths of one dimension are not
@@ -266,6 +269,31 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
         temperature('T_K', 'temperature', 'T', 'absolute temperature, nonzero'),
       ],
       (i) => evaluateKelvinPeltier({ S_V_per_K: i.S_V_per_K, T_K: i.T_K }),
+    ),
+    spec(
+      74,
+      'Magnetic pressure',
+      [P('B_T', 'magnetic flux density', 'B', 'T', 'the formula uses B²; the factor 2 is not from units')],
+      (i) => evaluateMagneticPressure({ B_T: i.B_T }),
+    ),
+    spec(
+      75,
+      'London penetration depth',
+      [
+        P('m_kg', 'carrier mass', 'm', 'kg', 'carrier mass'),
+        P('n_per_m3', 'carrier density', 'n', 'm^-3', 'number density; e is the elementary charge'),
+      ],
+      (i) => evaluateLondonPenetration({ m_kg: i.m_kg, n_per_m3: i.n_per_m3 }),
+    ),
+    spec(
+      76,
+      'Plasma beta',
+      [
+        P('n_per_m3', 'number density', 'n', 'm^-3', 'ideal-gas number density'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+        P('p_B_Pa', 'magnetic pressure', 'p_B', 'Pa', 'B²/(2 μ0), not B²/μ0; nonzero'),
+      ],
+      (i) => evaluatePlasmaBeta({ n_per_m3: i.n_per_m3, T_K: i.T_K, p_B_Pa: i.p_B_Pa }),
     ),
   ].map((s) => [s.bridgeId, s]),
 );

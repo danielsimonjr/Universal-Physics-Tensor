@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "3.0.0",
-    "totalFiles": 439,
+    "totalFiles": 442,
     "totalModules": 13,
-    "totalExports": 3159
+    "totalExports": 3192
   },
   "entryPoints": [
     {
@@ -5701,6 +5701,81 @@
           "evaluateKelvinPeltier"
         ]
       },
+      "src/bridges/be74-magnetic-pressure.ts": {
+        "description": "BE-74 — magnetic pressure of a long solenoid,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "MU0_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateMagneticPressure"
+        ],
+        "interfaces": [
+          "MagneticPressureInputs",
+          "MagneticPressureResult"
+        ],
+        "functions": [
+          "evaluateMagneticPressure"
+        ]
+      },
+      "src/bridges/be75-london-penetration.ts": {
+        "description": "BE-75 — London penetration depth,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "E_SI"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "MU0_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluateLondonPenetration"
+        ],
+        "interfaces": [
+          "LondonPenetrationInputs",
+          "LondonPenetrationResult"
+        ],
+        "functions": [
+          "evaluateLondonPenetration"
+        ]
+      },
+      "src/bridges/be76-plasma-beta.ts": {
+        "description": "BE-76 — plasma beta,",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../core/constants.js",
+            "imports": [
+              "K_B_SI"
+            ]
+          }
+        ],
+        "exports": [
+          "evaluatePlasmaBeta"
+        ],
+        "interfaces": [
+          "PlasmaBetaInputs",
+          "PlasmaBetaResult"
+        ],
+        "functions": [
+          "evaluatePlasmaBeta"
+        ]
+      },
       "src/bridges/bridge-equations.ts": {
         "description": "`BridgeEquations` — a convenience facade over the per-bridge evaluators.",
         "externalDependencies": [],
@@ -6086,6 +6161,24 @@
             "file": "./be73-kelvin-peltier.js",
             "imports": [
               "evaluateKelvinPeltier"
+            ]
+          },
+          {
+            "file": "./be74-magnetic-pressure.js",
+            "imports": [
+              "evaluateMagneticPressure"
+            ]
+          },
+          {
+            "file": "./be75-london-penetration.js",
+            "imports": [
+              "evaluateLondonPenetration"
+            ]
+          },
+          {
+            "file": "./be76-plasma-beta.js",
+            "imports": [
+              "evaluatePlasmaBeta"
             ]
           }
         ],
@@ -8992,6 +9085,24 @@
             "imports": [
               "evaluateKelvinPeltier"
             ]
+          },
+          {
+            "file": "./be74-magnetic-pressure.js",
+            "imports": [
+              "evaluateMagneticPressure"
+            ]
+          },
+          {
+            "file": "./be75-london-penetration.js",
+            "imports": [
+              "evaluateLondonPenetration"
+            ]
+          },
+          {
+            "file": "./be76-plasma-beta.js",
+            "imports": [
+              "evaluatePlasmaBeta"
+            ]
           }
         ],
         "exports": [
@@ -9275,6 +9386,33 @@
               "type KelvinPeltierResult"
             ],
             "reExport": true
+          },
+          {
+            "file": "./be74-magnetic-pressure.js",
+            "imports": [
+              "evaluateMagneticPressure",
+              "type MagneticPressureInputs",
+              "type MagneticPressureResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be75-london-penetration.js",
+            "imports": [
+              "evaluateLondonPenetration",
+              "type LondonPenetrationInputs",
+              "type LondonPenetrationResult"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./be76-plasma-beta.js",
+            "imports": [
+              "evaluatePlasmaBeta",
+              "type PlasmaBetaInputs",
+              "type PlasmaBetaResult"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -9350,6 +9488,15 @@
           "evaluateKelvinPeltier",
           "type KelvinPeltierInputs",
           "type KelvinPeltierResult",
+          "evaluateMagneticPressure",
+          "type MagneticPressureInputs",
+          "type MagneticPressureResult",
+          "evaluateLondonPenetration",
+          "type LondonPenetrationInputs",
+          "type LondonPenetrationResult",
+          "evaluatePlasmaBeta",
+          "type PlasmaBetaInputs",
+          "type PlasmaBetaResult",
           "BE37_REGIME",
           "BE51_REGIME",
           "BE52_REGIME",
@@ -9429,7 +9576,16 @@
           "type GravitationalRedshiftResult",
           "evaluateKelvinPeltier",
           "type KelvinPeltierInputs",
-          "type KelvinPeltierResult"
+          "type KelvinPeltierResult",
+          "evaluateMagneticPressure",
+          "type MagneticPressureInputs",
+          "type MagneticPressureResult",
+          "evaluateLondonPenetration",
+          "type LondonPenetrationInputs",
+          "type LondonPenetrationResult",
+          "evaluatePlasmaBeta",
+          "type PlasmaBetaInputs",
+          "type PlasmaBetaResult"
         ],
         "interfaces": [
           "KnownIssue",
@@ -16197,7 +16353,7 @@
         ]
       },
       "src/composition/catalog-graph.ts": {
-        "description": "The full composition graph as a single constant — the 54 `BridgeEdge`s",
+        "description": "The full composition graph as a single constant — the 57 `BridgeEdge`s",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -17111,7 +17267,7 @@
         ]
       },
       "src/composition/edges/applied-physicist.ts": {
-        "description": "Composition edges for BE-66 through BE-73.",
+        "description": "Composition edges for BE-66 through BE-76.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -17161,6 +17317,24 @@
             "file": "../../bridges/be73-kelvin-peltier.js",
             "imports": [
               "evaluateKelvinPeltier"
+            ]
+          },
+          {
+            "file": "../../bridges/be74-magnetic-pressure.js",
+            "imports": [
+              "evaluateMagneticPressure"
+            ]
+          },
+          {
+            "file": "../../bridges/be75-london-penetration.js",
+            "imports": [
+              "evaluateLondonPenetration"
+            ]
+          },
+          {
+            "file": "../../bridges/be76-plasma-beta.js",
+            "imports": [
+              "evaluatePlasmaBeta"
             ]
           },
           {
@@ -17224,7 +17398,13 @@
               "gravitationalFrequencyRatioQ",
               "seebeckCoefficientQ",
               "peltierTemperatureQ",
-              "peltierCoefficientQ"
+              "peltierCoefficientQ",
+              "magneticPressureQ",
+              "londonPenetrationDepthQ",
+              "plasmaBetaQ",
+              "carrierDensityQ",
+              "effectiveMassQ",
+              "temperatureQ"
             ]
           }
         ],
@@ -17237,6 +17417,9 @@
           "be71Edge",
           "be72Edge",
           "be73Edge",
+          "be74Edge",
+          "be75Edge",
+          "be76Edge",
           "APPLIED_PHYSICIST_EDGES"
         ],
         "constants": [
@@ -17248,6 +17431,9 @@
           "be71Edge",
           "be72Edge",
           "be73Edge",
+          "be74Edge",
+          "be75Edge",
+          "be76Edge",
           "APPLIED_PHYSICIST_EDGES"
         ]
       },
@@ -18984,6 +19170,9 @@
               "be71Edge",
               "be72Edge",
               "be73Edge",
+              "be74Edge",
+              "be75Edge",
+              "be76Edge",
               "APPLIED_PHYSICIST_EDGES"
             ],
             "reExport": true
@@ -19252,6 +19441,9 @@
           "be71Edge",
           "be72Edge",
           "be73Edge",
+          "be74Edge",
+          "be75Edge",
+          "be76Edge",
           "APPLIED_PHYSICIST_EDGES",
           "be11Edge",
           "be13Edge",
@@ -19389,6 +19581,9 @@
           "be71Edge",
           "be72Edge",
           "be73Edge",
+          "be74Edge",
+          "be75Edge",
+          "be76Edge",
           "APPLIED_PHYSICIST_EDGES",
           "be11Edge",
           "be13Edge",
@@ -21756,7 +21951,7 @@
         ]
       },
       "src/composition/quantities/applied-physicist.ts": {
-        "description": "Quantity nodes for BE-66 through BE-73.",
+        "description": "Quantity nodes for BE-66 through BE-76.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -21771,6 +21966,7 @@
             "file": "../../dimensional/types.js",
             "imports": [
               "DIMENSIONLESS",
+              "LENGTH",
               "TEMPERATURE",
               "VELOCITY"
             ]
@@ -21809,7 +22005,10 @@
           "gravitationalFrequencyRatioQ",
           "seebeckCoefficientQ",
           "peltierTemperatureQ",
-          "peltierCoefficientQ"
+          "peltierCoefficientQ",
+          "magneticPressureQ",
+          "londonPenetrationDepthQ",
+          "plasmaBetaQ"
         ],
         "constants": [
           "poyntingFluxQ",
@@ -21837,7 +22036,10 @@
           "gravitationalFrequencyRatioQ",
           "seebeckCoefficientQ",
           "peltierTemperatureQ",
-          "peltierCoefficientQ"
+          "peltierCoefficientQ",
+          "magneticPressureQ",
+          "londonPenetrationDepthQ",
+          "plasmaBetaQ"
         ]
       },
       "src/composition/quantities/common.ts": {
@@ -25551,7 +25753,16 @@
               "type GravitationalRedshiftResult",
               "evaluateKelvinPeltier",
               "type KelvinPeltierInputs",
-              "type KelvinPeltierResult"
+              "type KelvinPeltierResult",
+              "evaluateMagneticPressure",
+              "type MagneticPressureInputs",
+              "type MagneticPressureResult",
+              "evaluateLondonPenetration",
+              "type LondonPenetrationInputs",
+              "type LondonPenetrationResult",
+              "evaluatePlasmaBeta",
+              "type PlasmaBetaInputs",
+              "type PlasmaBetaResult"
             ],
             "reExport": true
           },
@@ -25978,6 +26189,9 @@
               "be71Edge",
               "be72Edge",
               "be73Edge",
+              "be74Edge",
+              "be75Edge",
+              "be76Edge",
               "APPLIED_PHYSICIST_EDGES"
             ],
             "reExport": true
@@ -26946,6 +27160,15 @@
           "evaluateKelvinPeltier",
           "type KelvinPeltierInputs",
           "type KelvinPeltierResult",
+          "evaluateMagneticPressure",
+          "type MagneticPressureInputs",
+          "type MagneticPressureResult",
+          "evaluateLondonPenetration",
+          "type LondonPenetrationInputs",
+          "type LondonPenetrationResult",
+          "evaluatePlasmaBeta",
+          "type PlasmaBetaInputs",
+          "type PlasmaBetaResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "BridgeEquations",
@@ -27050,6 +27273,9 @@
           "be71Edge",
           "be72Edge",
           "be73Edge",
+          "be74Edge",
+          "be75Edge",
+          "be76Edge",
           "APPLIED_PHYSICIST_EDGES",
           "adjudicateBridgeEntry",
           "adjudicateCatalog",
@@ -27563,6 +27789,15 @@
           "evaluateKelvinPeltier",
           "type KelvinPeltierInputs",
           "type KelvinPeltierResult",
+          "evaluateMagneticPressure",
+          "type MagneticPressureInputs",
+          "type MagneticPressureResult",
+          "evaluateLondonPenetration",
+          "type LondonPenetrationInputs",
+          "type LondonPenetrationResult",
+          "evaluatePlasmaBeta",
+          "type PlasmaBetaInputs",
+          "type PlasmaBetaResult",
           "BRIDGE_EVALUATORS",
           "evaluateBridge",
           "EvaluatorSpec",
@@ -27725,6 +27960,9 @@
           "be71Edge",
           "be72Edge",
           "be73Edge",
+          "be74Edge",
+          "be75Edge",
+          "be76Edge",
           "APPLIED_PHYSICIST_EDGES",
           "BridgeEdge",
           "ComposeOptions",
@@ -30368,6 +30606,9 @@
           "src/bridges/be71-clapeyron.ts",
           "src/bridges/be72-gravitational-redshift.ts",
           "src/bridges/be73-kelvin-peltier.ts",
+          "src/bridges/be74-magnetic-pressure.ts",
+          "src/bridges/be75-london-penetration.ts",
+          "src/bridges/be76-plasma-beta.ts",
           "src/bridges/bridge-equations.ts",
           "src/bridges/catalog-adapter.ts",
           "src/bridges/confrontation-coverage.ts",
@@ -30758,17 +30999,17 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 439,
+    "totalTypeScriptFiles": 442,
     "totalModules": 13,
-    "totalLinesOfCode": 93625,
-    "totalExports": 3159,
+    "totalLinesOfCode": 94176,
+    "totalExports": 3192,
     "totalClasses": 60,
-    "totalInterfaces": 501,
-    "totalFunctions": 813,
+    "totalInterfaces": 507,
+    "totalFunctions": 816,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 790,
-    "totalReExports": 1497,
+    "totalConstants": 796,
+    "totalReExports": 1521,
     "totalTypeOnlyImports": 581,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

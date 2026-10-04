@@ -218,7 +218,7 @@ describe('adjudication precedence — THREE verdicts, from REAL catalog entries 
 
 describe('catalog rows derive from the artifacts they carry', () => {
   it('kind bridge is formally-proved, except an unadjudicated row, and a partial stays proposed or contradicted', () => {
-    expect(BRIDGE_EQUATIONS.length).toBe(63);
+    expect(BRIDGE_EQUATIONS.length).toBe(66);
     const offenders: string[] = [];
     let proved = 0;
     for (const entry of BRIDGE_EQUATIONS) {
@@ -242,7 +242,7 @@ describe('catalog rows derive from the artifacts they carry', () => {
       }
     }
     expect(offenders).toEqual([]);
-    expect(proved).toBe(21);
+    expect(proved).toBe(24);
   });
 });
 

@@ -1,7 +1,7 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 131 established-confidence edge(s) of the 163 in this graph
+  anchored core: the clusters holding at least one of the 134 established-confidence edge(s) of the 166 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
@@ -221,6 +221,7 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         laplace-pressure ≟ bernoulli-total-pressure            [[L^-1 M T^-2]]  → CE-bernoulli
         laplace-pressure ≟ dynamic-pressure                    [[L^-1 M T^-2]]  → CE-dynamic-pressure
         laplace-pressure ≟ kinetic-pressure                    [[L^-1 M T^-2]]  → CE-kinetic-pressure
+        laplace-pressure ≟ magnetic-pressure                   [[L^-1 M T^-2]]  → be-74
         laplace-pressure ≟ pressure                            [[L^-1 M T^-2]]  → CE-hydrostatic-pressure
         laplace-pressure ≟ radiation-pressure                  [[L^-1 M T^-2]]  → be-66
         laplace-pressure ≟ static-pressure                     [[L^-1 M T^-2]]  → CE-bernoulli

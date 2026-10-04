@@ -120,16 +120,17 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
         return formalRef === undefined ? [] : [formalRef];
       }),
     ];
-    expect(refs.length).toBe(54);
+    expect(refs.length).toBe(57);
     for (const ref of refs) {
       expect(ref.url).toBe(physjsFileUrl(physjsLeanFile(ref.statement)));
-      expect(ref.url).toContain(`/blob/${PHYSJS_COMMIT}/lean/PhysJS/`);
+      expect(ref.url).toContain(`/blob/${PHYSJS_COMMIT}/lean/`);
+      expect(ref.url).not.toContain('/lean/PhysJS/');
     }
     const spring = refs.find((ref) => ref.statement === 'PhysJS.SpringLc.time_rescale_equationOfMotion');
-    expect(spring?.url).toContain('/lean/PhysJS/OscillatorDictionary.lean');
-    expect(spring?.url?.includes('/lean/PhysJS/SpringLc.lean')).toBe(false);
+    expect(spring?.url).toContain('/lean/OscillatorDictionary.lean');
+    expect(spring?.url?.includes('/SpringLc.lean')).toBe(false);
     const damped = refs.find((ref) => ref.statement === 'PhysJS.DampedRlc.time_rescale_equationOfMotion');
-    expect(damped?.url).toContain('/lean/PhysJS/OscillatorDictionary.lean');
+    expect(damped?.url).toContain('/lean/OscillatorDictionary.lean');
   });
 
   it('a kind that does not match the covers line is a manifest problem', () => {

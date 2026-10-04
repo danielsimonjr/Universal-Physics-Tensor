@@ -7,13 +7,13 @@ Bridge triage — structural decidability against established physics
 
    ── Tier 1: anchored + grounded/tractable — confront first
    T1     0   grounded     0        be-12                speculative
+   T1     0   grounded     0        be-16                speculative
    T1     0   grounded     0        be-42-via-rs         highly-speculative
    T1     0   empirical    0  DATA  be-48                speculative
+   T1     0   decoy        0        be-27                speculative
    T1     0   decoy        0        be-42                highly-speculative
+   T1     0   open         1  DATA  be-23                speculative
    T1     0   open         1        be-38                speculative
-   T1     1   grounded     0        be-16                speculative
-   T1     1   decoy        0        be-27                speculative
-   T1     1   open         1  DATA  be-23                speculative
 
    ── Tier 2: anchored OR grounded — second pass
    T2     0   open         3        be-33                speculative

@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (107)";
+    label="anchored cluster (110)";
     j_be_11_zurek [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-11"];
     q_relaxation_rate [shape=ellipse,label="relaxation-rate"];
     q_relaxation_rate -> j_be_11_zurek;
@@ -169,6 +169,21 @@ digraph PhysicsMap {
     q_specific_volume_change -> j_be_71;
     q_clapeyron_slope [shape=ellipse,label="clapeyron-slope"];
     j_be_71 -> q_clapeyron_slope;
+    j_be_74 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-74"];
+    q_magnetic_flux_density -> j_be_74;
+    q_magnetic_pressure [shape=ellipse,label="magnetic-pressure"];
+    j_be_74 -> q_magnetic_pressure;
+    j_be_75 [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="BE-75"];
+    q_effective_mass -> j_be_75;
+    q_carrier_density -> j_be_75;
+    q_london_penetration_depth [shape=ellipse,label="london-penetration-depth"];
+    j_be_75 -> q_london_penetration_depth;
+    j_be_76 [shape=box,style="filled",fillcolor="#cde7d3",color="#3f8f5b",label="BE-76"];
+    q_carrier_density -> j_be_76;
+    q_temperature -> j_be_76;
+    q_magnetic_pressure -> j_be_76;
+    q_plasma_beta [shape=ellipse,label="plasma-beta"];
+    j_be_76 -> q_plasma_beta;
     j_CE_pendulum_period [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Pendulum period"];
     q_length [shape=ellipse,label="length"];
     q_length -> j_CE_pendulum_period;

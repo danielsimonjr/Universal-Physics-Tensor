@@ -73,7 +73,7 @@ describe('upt --help covers the command registry', () => {
     }
     expect(help).toContain('upt eval E E=1eV');
     expect(help).not.toMatch(/E=<number>/);
-    expect(help).toMatch(/BE-51\/52\/55\.\.73/);
+    expect(help).toMatch(/BE-51\/52\/55\.\.76/);
     expect(help).not.toMatch(/55\.\.65/);
   });
 });

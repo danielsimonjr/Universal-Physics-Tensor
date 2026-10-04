@@ -102,14 +102,16 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // "admits a unique dimensional closure" ⟺ 0 free dimensionless
     // parameters (dimensionalFreedom === 0).
     const closable = ALL_EDGES.filter((e) => dimensionalFreedom(e) === 0);
-    // 22 of 54 admit SOME dimensional closure; 32 admit none.
+    // 25 of 57 admit SOME dimensional closure; 32 admit none.
     // be-59 (f = 2eV/h) is a closure. be-67 (v_A = B/√(μ0 ρ)) is another,
     // and attemptDerivation calls it a decoy: the SI coefficient is not
     // fixed by the monomial match against the evaluator's samples.
     // be-69 is the same decoy shape. be-70, be-71, and be-73 are closures.
     // be-72 is not: two dimensionless metric components leave a free ratio.
-    // The 18-of-49 sentence is the record from before be-69..73.
-    expect(closable.length).toBe(22);
+    // be-74 is a closure. be-75 and be-76 are freedom 0 and decoys: a
+    // constant subset closes the dimension, and the ratio is not constant.
+    // The 22-of-54 sentence is the record from before be-74..76.
+    expect(closable.length).toBe(25);
     expect(ALL_EDGES.length - closable.length).toBe(32);
   });
 
@@ -120,8 +122,11 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // be-70, be-71, and be-73 match their evaluators.
     // be-36 left it: (c_GW − c)/c adds dimensionful terms, and the constant
     // −1 was the sample v ≪ c. be-69 is the same shape, not a derivation.
-    // The count of 15 is the record from before that classification.
-    expect(derived.length).toBe(14);
+    // be-74 joins this set through {ℏ, c, e}. The recovered prefactor is
+    // 1/(8 π α) ≈ 5.45, which is 1/(2 μ0) rewritten with μ0 = 4 π α ℏ / (e² c).
+    // That ratio is not a clean 1/2. be-75 and be-76 stay decoys.
+    // The count of 14 is the record from before be-74.
+    expect(derived.length).toBe(15);
   });
 });
 
@@ -154,14 +159,14 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     expect(free('be-39')).toBe(5); // asymptotic safety
   });
 
-  it('the spectrum histogram is pinned (22 at 0; max 6)', () => {
+  it('the spectrum histogram is pinned (25 at 0; max 6)', () => {
     const hist: Record<number, number> = {};
     for (const e of ALL_EDGES) hist[dimensionalFreedom(e)] = (hist[dimensionalFreedom(e)] ?? 0) + 1;
-    expect(hist[0]).toBe(22); // the dimensionally-pinned set (derived + decoy)
+    expect(hist[0]).toBe(25); // the dimensionally-pinned set (derived + decoy)
     expect(Math.max(...Object.keys(hist).map(Number))).toBe(6);
     // 14 bridges are exactly one dimensionless ratio away from a monomial.
     // be-68 is one: g_00 is dimensionless, so T √(−g_00) is temperature times one ratio.
-    // be-72 sits at 2, not in this bin. The count of 18 at complexity 0 is the record from before be-69..73.
+    // be-72 sits at 2, not in this bin. The count of 22 at complexity 0 is the record from before be-74..76.
     expect(hist[1]).toBe(14);
   });
 

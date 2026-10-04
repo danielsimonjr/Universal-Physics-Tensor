@@ -69,12 +69,12 @@ describe('expression search gaps', () => {
       return counts;
     };
     expect(extra).toHaveLength(6);
-    // 294 wrappers and 279 relation-links are the record from before be-69..73.
-    expect(wrappers).toHaveLength(344);
-    expect(byKind(wrappers)).toEqual({ 'relation-link': 329, 'regime-transition': 15 });
+    // 344 wrappers and 329 relation-links are the record from before be-74..76.
+    expect(wrappers).toHaveLength(358);
+    expect(byKind(wrappers)).toEqual({ 'relation-link': 343, 'regime-transition': 15 });
     expect(wrappers.every((g) => g.searchability.searchable === false)).toBe(true);
     expect(byKind(scanWithExpressionGaps(CATALOG_GRAPH))).toEqual({
-      'relation-link': 329,
+      'relation-link': 343,
       'regime-transition': 15,
       'prediction-residual': 6,
     });

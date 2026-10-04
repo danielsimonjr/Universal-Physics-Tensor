@@ -1,5 +1,5 @@
 /**
- * Quantity nodes for BE-66 through BE-73.
+ * Quantity nodes for BE-66 through BE-76.
  *
  * Names are new. `mass-density` is the cosmological node. `temperature`
  * and `hawking-temperature` are the thermal nodes be-42 already uses.
@@ -12,7 +12,7 @@
  * @module composition/quantities/applied-physicist
  */
 import type { Quantity } from '../quantity.js';
-import { DIMENSIONLESS, TEMPERATURE, VELOCITY } from '../../dimensional/types.js';
+import { DIMENSIONLESS, LENGTH, TEMPERATURE, VELOCITY } from '../../dimensional/types.js';
 import { ENERGY_DENSITY, MASS_DENSITY } from './_dims.js';
 
 /** Intensity [M T⁻³] (W/m²). */
@@ -253,5 +253,35 @@ export const peltierCoefficientQ: Quantity = {
   name: 'peltier-coefficient',
   symbol: 'Π',
   dim: PELTIER,
+  attributes: CLASSICAL_EM,
+};
+
+/**
+ * Magnetic pressure `p_B = B²/(2 μ0)`. Not `radiation-pressure` and not
+ * the hydrostatic `pressure` node.
+ */
+export const magneticPressureQ: Quantity = {
+  name: 'magnetic-pressure',
+  symbol: 'p_B',
+  dim: ENERGY_DENSITY,
+  attributes: CLASSICAL_EM,
+};
+
+/**
+ * London penetration depth. The attributes match `effective-mass` and
+ * `carrier-density`, the carriers this length screens.
+ */
+export const londonPenetrationDepthQ: Quantity = {
+  name: 'london-penetration-depth',
+  symbol: 'λ_L',
+  dim: LENGTH,
+  attributes: { scale: 'quantum', force: 'electromagnetic', statistics: 'fermionic' },
+};
+
+/** Plasma beta `p_gas / p_B`. Dimensionless. Not a plasma-β inequality. */
+export const plasmaBetaQ: Quantity = {
+  name: 'plasma-beta',
+  symbol: 'β',
+  dim: DIMENSIONLESS,
   attributes: CLASSICAL_EM,
 };

@@ -59,7 +59,7 @@ const r = validate({
 
 ## How it consumes the bridge index
 
-The catalog in `src/bridges/index.ts` has 63 entries, ids 11–73. Each
+The catalog in `src/bridges/index.ts` has 66 entries, ids 11–76. Each
 carries `formula_latex`. `dimensional_signature` is populated for every
 entry.
 

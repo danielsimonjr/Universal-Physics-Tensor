@@ -7,11 +7,13 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `4ea35872513f8d4d12a01bfac225156bdddb87a9`.
- * PhysJS #61 stores each Lean file at `lean/PhysJS/<File>.lean`. The sentence
- * that the pin is `3af15b49be09442350510e7c7f56f4aab92ea3bc` and that the path
- * is `PhysJS/<File>.lean` is the record from before that move. Theorem names
- * are unchanged.
+ * The commit is PhysJS `main` `ee753df77bd5b29b7207443181606b6004bfcf6a`.
+ * PhysJS #63 stores each Lean file at `lean/<File>.lean`. The sentence that
+ * the pin is `4ea35872513f8d4d12a01bfac225156bdddb87a9` and that the path is
+ * `lean/PhysJS/<File>.lean` is the record from before that flatten. The
+ * sentence that the pin is `3af15b49be09442350510e7c7f56f4aab92ea3bc` and
+ * that the path is `PhysJS/<File>.lean` is the record from before PhysJS #61.
+ * Theorem names are unchanged. PhysJS #62 adds be-74, be-75, and be-76.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -29,7 +31,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '4ea35872513f8d4d12a01bfac225156bdddb87a9';
+export const PHYSJS_COMMIT = 'ee753df77bd5b29b7207443181606b6004bfcf6a';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -815,6 +817,37 @@ const PHYSJS_ENTRIES: readonly PhysjsEntry[] = [
     leanProof: 'complete',
     axioms: PHYSJS_AXIOMS,
   },
+
+  {
+    key: "be-74",
+    bridgeId: "be-74",
+    theorem: "PhysJS.MagneticPressure.pressure_eq",
+    covers:
+      "derivation-step: a linear inductor with dU/dI = L I and U(0) = 0 stores U = (L/2) I². A long solenoid with B = μ0 n I and flux linkage Λ = (n ℓ) B A has L = μ0 n² V. At fixed current the battery supplies I ΔΛ. The stored energy rises by half of that, and the difference is the mechanical work p ΔV, so p = B²/(2 μ0). Homogeneity in B and μ0 gives p = C B²/μ0 with C unfixed. C = 1 is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor. Ampere's law, the flux linkage, and the quasistatic work balance are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-75",
+    bridgeId: "be-75",
+    theorem: "PhysJS.LondonPenetration.depth_eq",
+    covers:
+      "derivation-step: on B(x) = B0 exp(−x/λ) with λ > 0, Ampere's law j = −(1/μ0) dB/dx and the London equation dj/dx = −(n e²/m) B give λ = √(m/(μ0 n e²)). e is the elementary charge. The dimension matrix of {m, μ0, n, e} admits both that monomial and μ0 e²/m, so units do not choose. Those lengths disagree when n (μ0 e²/m)³ ≠ 1. The growing exponential is not the screened field. Replacing e by 2e at the same n and m fails, and dropping the square on e fails when e ≠ 1. A factor C ≠ 1 is not this depth. Not the classical skin depth. The London equation and Ampere's law are hypotheses",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
+  {
+    key: "be-76",
+    bridgeId: "be-76",
+    theorem: "PhysJS.PlasmaBeta.beta_eq",
+    covers:
+      "derivation-step: β = p_gas / p_B where p_B is PhysJS.MagneticPressure.pressure_eq, so β = p_gas / (B²/(2 μ0)) = 2 μ0 p_gas / B². The ideal-gas closure p_gas = n k_B T gives β = 2 μ0 n k_B T / B². B ≠ 0. Using B²/μ0 in place of the magnetic pressure is a different ratio. The constant 1 is dimensionless and is not this beta when the ratio is not 1. A factor C ≠ 1 is not this beta. Dropping p = n k_B T fails. Not a unique monomial, and not a plasma-β inequality",
+    coverage: PHYSJS_COVERAGE,
+    leanProof: 'complete',
+    axioms: PHYSJS_AXIOMS,
+  },
 ];
 
 const entryByKey = new Map(PHYSJS_ENTRIES.map((entry) => [entry.key, entry]));
@@ -838,7 +871,7 @@ function physjsVersion(): string {
 
 /**
  * Namespaces whose theorems live in another Lean file at this pin.
- * `SpringLc` and `DampedRlc` are namespaces inside `lean/PhysJS/OscillatorDictionary.lean`,
+ * `SpringLc` and `DampedRlc` are namespaces inside `lean/OscillatorDictionary.lean`,
  * not their own files. Rechecked at this pin.
  */
 const PHYSJS_FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
@@ -864,13 +897,13 @@ export function physjsLeanFile(theorem: string): string {
 /**
  * Permalink to one Lean file at the pinned commit.
  *
- * PhysJS #61 stores sources under `lean/PhysJS/`. This is the only builder of
- * those URLs.
+ * PhysJS #63 stores sources at `lean/<File>.lean`. This is the only builder
+ * of those URLs.
  *
  * @internal
  */
 export function physjsFileUrl(file: string): string {
-  return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/lean/PhysJS/${file}`;
+  return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/lean/${file}`;
 }
 
 /** Permalink to the Lean file that contains `theorem` at the pinned commit. */
@@ -906,6 +939,9 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-71',
   'be-72',
   'be-73',
+  'be-74',
+  'be-75',
+  'be-76',
 ]);
 
 /**

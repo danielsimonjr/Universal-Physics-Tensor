@@ -16,16 +16,18 @@ const report = proposeOrphanConnectors(CATALOG_GRAPH);
 describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
   it('partitions isolated bridges into same-kind connectors and the unconnected remainder', () => {
     // be-36 shares the token "speed" with the core. be-68, be-70, be-71, and
-    // be-73 share the token "temperature". be-67 is not isolated: it shares
-    // magnetic-flux-density and plasma-mass-density with be-69. be-72 shares
-    // no name token with the core. A shared token is not a quantity identification.
+    // be-73 share the token "temperature". be-66 shares "pressure" with
+    // magnetic-pressure on be-74. be-67 is not isolated: it shares
+    // magnetic-flux-density with be-74 and plasma-mass-density with be-69.
+    // be-72 shares no name token with the core. A shared token is not a
+    // quantity identification.
     expect(report.connectedOrphans).toEqual([
-      'be-15', 'be-22', 'be-24', 'be-26', 'be-36', 'be-41', 'be-45', 'be-47', 'be-68',
-      'be-70', 'be-71', 'be-73',
+      'be-15', 'be-22', 'be-24', 'be-26', 'be-36', 'be-41', 'be-45', 'be-47', 'be-66',
+      'be-68', 'be-70', 'be-71', 'be-73',
     ]);
     expect(report.unconnectedOrphans).toEqual([
       'be-14', 'be-17', 'be-21', 'be-25', 'be-30',
-      'be-39', 'be-43', 'be-46', 'be-49', 'be-50', 'be-53', 'be-66', 'be-72',
+      'be-39', 'be-43', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
     ]);
     // every isolated bridge is accounted for (connected ∪ unconnected, no overlap)
     const both = new Set([...report.connectedOrphans, ...report.unconnectedOrphans]);

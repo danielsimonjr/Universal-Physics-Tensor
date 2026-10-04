@@ -90,6 +90,9 @@ import { evaluateEinsteinRelation } from './be70-einstein-relation.js';
 import { evaluateClapeyron } from './be71-clapeyron.js';
 import { evaluateGravitationalRedshift } from './be72-gravitational-redshift.js';
 import { evaluateKelvinPeltier } from './be73-kelvin-peltier.js';
+import { evaluateMagneticPressure } from './be74-magnetic-pressure.js';
+import { evaluateLondonPenetration } from './be75-london-penetration.js';
+import { evaluatePlasmaBeta } from './be76-plasma-beta.js';
 
 /**
  * Root-level facade keyed by readable method names. Each value is a re-export of
@@ -166,4 +169,7 @@ export const BridgeEquations = {
   clapeyron: evaluateClapeyron,                             // BE-71
   gravitationalRedshift: evaluateGravitationalRedshift,     // BE-72
   kelvinPeltier: evaluateKelvinPeltier,                     // BE-73
+  magneticPressure: evaluateMagneticPressure,               // BE-74
+  londonPenetration: evaluateLondonPenetration,             // BE-75
+  plasmaBeta: evaluatePlasmaBeta,                           // BE-76
 } as const;
