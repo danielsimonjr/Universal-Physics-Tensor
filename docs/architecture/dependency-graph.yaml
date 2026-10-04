@@ -3,7 +3,7 @@ metadata:
   version: 3.1.0
   totalFiles: 453
   totalModules: 13
-  totalExports: 3343
+  totalExports: 3344
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7853,6 +7853,7 @@ modules:
           imports:
             - check
             - requirePositive
+            - signedRelativeDifference
             - AppliedCase
       exports:
         - G_STANDARD
@@ -8011,6 +8012,7 @@ modules:
           imports:
             - check
             - requirePositive
+            - signedRelativeDifference
             - AppliedCase
       exports:
         - SIGMA_SB_SI
@@ -8059,6 +8061,7 @@ modules:
           imports:
             - check
             - requirePositive
+            - signedRelativeDifference
             - AppliedCase
       exports:
         - CLASSICAL_MAX_X
@@ -8082,6 +8085,7 @@ modules:
           imports:
             - check
             - requirePositive
+            - signedRelativeDifference
             - AppliedCase
       exports:
         - MU_0_SI
@@ -8113,6 +8117,7 @@ modules:
           typeOnly: true
       exports:
         - check
+        - signedRelativeDifference
         - requirePositive
       interfaces:
         - CaseOutput
@@ -8122,6 +8127,7 @@ modules:
         - CaseResult
         - AppliedCase
       functions:
+        - signedRelativeDifference
         - requirePositive
       constants:
         - check
@@ -22343,11 +22349,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 453
   totalModules: 13
-  totalLinesOfCode: 96436
-  totalExports: 3343
+  totalLinesOfCode: 96450
+  totalExports: 3344
   totalClasses: 60
   totalInterfaces: 529
-  totalFunctions: 829
+  totalFunctions: 830
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 846
