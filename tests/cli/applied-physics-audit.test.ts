@@ -162,7 +162,7 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
   it('the heading names the reconstruction that failed and disclaims refutation', async () => {
     const { text } = await run(['audit']);
     expect(text).toMatch(
-      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 8\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
+      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 9\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
     );
     expect(text).toMatch(/NOT a physical refutation/);
     expect(text).not.toMatch(/DECOY \(5\) — dimensionally valid but wrong form/);

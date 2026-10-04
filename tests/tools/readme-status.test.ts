@@ -53,7 +53,8 @@ describe('readme-status stamps', () => {
     expect(stamped.readme).not.toContain('TypeScript-6.0+');
     expect(phase4Sentence(facts)).toContain(`Catalog kind \`bridge\` is ${facts.kindBridge}`);
     expect(phase4Sentence(facts)).toContain(`Catalog property \`formalRef\`s are ${facts.property}`);
-    expect(facts.kindBridge).toBe(25);
+    // 25 is the record from before be-77..87. Each of those eleven is kind bridge.
+    expect(facts.kindBridge).toBe(36);
     expect(facts.property).toBe(3);
     expect(stamped.roadmap).toContain(phase4Sentence(facts));
   });
