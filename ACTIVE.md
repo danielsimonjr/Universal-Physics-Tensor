@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the applied-physicist dogfood of published `universal-physics-tensor@3.0.0`. The report is `docs/dogfood/2026-10-04-applied-physicist-bridges-r3.md`. The session does not change `src/`.
+  Done: the report is that file. npm `3.0.0` gitHead is `9ea1990899b44807e8d2fa37aba7c2dda9780b68`. Annotated tag `v3.0.0` (object `a6fd7a29904e40483dd743c4d0e213e1bb245e9b`) points at that commit. The re-run marks each earlier repro. New candidates stay unproven. No code fix is in this change.
+
 - [x] Record the applied-physicist dogfood of published `universal-physics-tensor@2.0.1`. The report is `docs/dogfood/2026-10-03-applied-physicist-bridges-r2.md`. The session does not change `src/`.
   Done: the report is that file. npm `2.0.1` gitHead is `b2abf1bca457635b76bf28a2c9d3da7b1e27703c`. Annotated tag `v2.0.1` (object `c7974de9d95306621c3f12d854058d2ad3fce50a`) points at that commit. The re-run marks each 2.0.0 repro. New candidates stay unproven. No code fix is in this change.
 

@@ -9,6 +9,11 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-10-04
+
+- **Package version 3.0.0 is on npm.** `npm view universal-physics-tensor version gitHead` printed `3.0.0` and `9ea1990899b44807e8d2fa37aba7c2dda9780b68`. Annotated tag `v3.0.0` is object `a6fd7a29904e40483dd743c4d0e213e1bb245e9b` and its target is that commit. Publish run `37173405878` succeeded. The GitHub release is `https://github.com/danielsimonjr/Universal-Physics-Tensor/releases/tag/v3.0.0`. The sentence that the `v3.0.0` tag is not pushed, and that npm `2.0.1` remains the published release, is the record from before that measurement.
+- **Applied-physicist dogfood, round 3, 2026-10-04.** The re-run, the BE-66 through BE-73 checks, the migration-note checks, the new candidates, and the new bugs are `docs/dogfood/2026-10-04-applied-physicist-bridges-r3.md`. Model persona on the published package, not a human reviewer. The fourteen bugs from the 2.0.0 report and N1–N5 from the 2.0.1 report behave as the 3.0.0 migration notes. The new bugs are recorded there and are not fixed in this change. The new candidates are unproven. The session does not change `src/`.
+
 ## As of 2026-10-03
 
 - **Package version 2.0.1 is on npm.** `npm view universal-physics-tensor@2.0.1 version gitHead` printed `2.0.1` and `b2abf1bca457635b76bf28a2c9d3da7b1e27703c`. Annotated tag `v2.0.1` is object `c7974de9d95306621c3f12d854058d2ad3fce50a` and its target is that commit. The sentence that the tag is not pushed, and that npm `2.0.0` remains the published release, is the record from before that measurement. Publishing further releases stays the owner's job.
