@@ -29,6 +29,7 @@
  * @module composition/retrodiction
  */
 
+import { CarrierSignError } from '../bridges/carrier-sign.js';
 import type { BridgeEdge } from './edge.js';
 import { evaluateEdge } from './edge.js';
 import type { QuantityIdentification } from './compose.js';
@@ -181,7 +182,10 @@ export function retrodictNode(
     let v: number;
     try {
       v = evaluateEdge(e, inputs);
-    } catch {
+    } catch (err) {
+      // A sign rejection is the answer for this target. Swallowing it would
+      // report the quantity as unrecoverable. A domain miss still skips.
+      if (err instanceof CarrierSignError) throw err;
       continue;
     }
     if (Number.isFinite(v)) predictions.push({ edge: e.id, value: v });

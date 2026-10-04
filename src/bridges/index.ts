@@ -3259,6 +3259,8 @@ export {
   type EinsteinRelationInputs,
   type EinsteinRelationResult,
 } from './be70-einstein-relation.js';
+/** Opposite signs of carrier charge and mobility on a positive transport product. */
+export { CarrierSignError } from './carrier-sign.js';
 /** Clapeyron slope `dP/dT = L/(T Δv)`. */
 export {
   evaluateClapeyron,
