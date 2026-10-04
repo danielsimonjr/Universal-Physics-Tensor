@@ -17,7 +17,7 @@
  * @module cases/skin-depth
  */
 import { C_SI } from '../core/constants.js';
-import { check, requirePositive, type AppliedCase } from './types.js';
+import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-skin-depth';
 
@@ -83,7 +83,7 @@ export const SKIN_DEPTH_CASE: AppliedCase = {
     { key: 'delta_m', symbol: 'δ', unit: 'm', meaning: 'classical skin depth √(2ρ/(ωμ)): the field and current fall by 1/e per δ' },
     { key: 'R_s_ohm', symbol: 'R_s', unit: 'ohm', meaning: 'surface resistance ρ/δ, per square (the real part of the surface impedance)' },
     { key: 'delta_maxwell_m', symbol: 'δ_M', unit: 'm', meaning: '1/Im k with the displacement current kept: the parent plane-wave penetration depth' },
-    { key: 'maxwell_deviation', symbol: 'δ/δ_M − 1', unit: '', meaning: 'relative excess of the classical δ over the parent penetration depth' },
+    { key: 'maxwell_deviation', symbol: 'δ/δ_M − 1', unit: '', meaning: signedRelativeDifference('classical δ', 'parent penetration depth') },
     { key: 'displacement_ratio', symbol: 'ωε/σ', unit: '', meaning: 'displacement current over conduction current' },
     { key: 'mfp_ratio', symbol: 'l/δ', unit: '', meaning: 'mean free path over skin depth' },
     { key: 'omega_tau', symbol: 'ωτ', unit: '', meaning: 'ω l/v: the drive period against the carrier relaxation time' },

@@ -20,7 +20,7 @@
  * @module cases/lumped-cooling
  */
 import { C_SI, H_SI, K_B_SI } from '../core/constants.js';
-import { check, requirePositive, type AppliedCase } from './types.js';
+import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
 const ID = 'case-lumped-cooling';
 
@@ -169,7 +169,7 @@ export const LUMPED_COOLING_CASE: AppliedCase = {
     { key: 'T_K', symbol: 'T(t)', unit: 'K', meaning: 'the lumped temperature at t: what a thermometer in or on the sphere reads' },
     { key: 'Q_J', symbol: 'Q', unit: 'J', meaning: 'heat released to the fluid by t, ρcV(T0 − T(t)) (negative when the sphere warms)' },
     { key: 'theta_parent_mean', symbol: 'θ̄/θ0', unit: '', meaning: 'volume-mean excess-temperature ratio of the series solution (convection only)' },
-    { key: 'parent_deviation', symbol: 'θ/θ̄ − 1', unit: '', meaning: 'relative excess of the lumped ratio over the parent\'s volume mean' },
+    { key: 'parent_deviation', symbol: 'θ/θ̄ − 1', unit: '', meaning: signedRelativeDifference('lumped ratio', "parent's volume mean") },
     { key: 'T_centre_K', symbol: 'T(0, t)', unit: 'K', meaning: 'temperature at the centre from the series solution' },
     { key: 'T_surface_K', symbol: 'T(a, t)', unit: 'K', meaning: 'temperature at the surface from the series solution' },
     { key: 'h_rad_max_W_per_m2_K', symbol: 'h_rad', unit: 'W/(m^2*K)', meaning: 'εσ_SB(T_s + T∞)(T_s² + T∞²) at the hotter of T0 and T∞: the largest linearized radiative coefficient over the run' },
