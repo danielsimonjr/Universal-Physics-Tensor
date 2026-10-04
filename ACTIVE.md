@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A dimensional entry with no sourced prefactor is not a recovered factor of 1.
+  `upt explain fermi-energy` prints the unit monomial and the audit lists `CE-fermi-energy`, `CE-fermi-velocity`, `CE-plasma-frequency`, and `CE-debye-frequency` as DERIVED `×1`.
+  Done: the canonical audit is DERIVED 73, COEFFICIENT UNSET 6, DECOY 7, OPEN 23. The unset rows are `CE-thermal-de-broglie`, `CE-sound-speed`, `CE-fermi-energy`, `CE-fermi-velocity`, `CE-debye-frequency`, and `CE-mb-most-probable-speed`. Fermi explain still prints `2.35460972213968e-19` and says the constant was set to 1, which is not `(1/2)(3π²)^{2/3}`. Velocity names `(3π²)^{1/3}`. Debye names `(6π²)^{1/3}`. `CE-plasma-frequency` is the angular formula and stays DERIVED `×1`. `CE-simple-harmonic-frequency` stays DERIVED because the table sources the 1.
+
 - [x] A positive transport coefficient built from carrier charge and mobility rejects opposite signs.
   `upt explain electrical-conductivity` with a positive mobility and `q = −e` prints a negative siemens per metre. `evaluateEinsteinRelation` already throws for that sign pair. The canonical monomial evaluator does not.
   Done: `upt explain electrical-conductivity carrier-density=8.47e28 charge=-1.602176634e-19 carrier-mobility=0.003 --source=canonical` exits 1 with `charge and carrier-mobility must have the same sign`. Both signs negative (`carrier-mobility=-0.00439705002693041`) print `Recovered value: 59669886.374904`. A zero mobility stays 0. Hall and cyclotron stay signed. The check is any monomial odd in both `charge` and `carrier-mobility`. `PhysJS.EinsteinRelation.diffusion_eq` is unchanged.

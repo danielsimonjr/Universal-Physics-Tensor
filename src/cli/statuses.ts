@@ -144,6 +144,14 @@ export const STATUS_GLOSSARY: readonly StatusDefinition[] = [
     commands: ['audit'],
   },
   {
+    key: 'coefficient-unset',
+    words: ['COEFFICIENT UNSET'],
+    meaning:
+      'the entry is dimensional and no sourced prefactor multiplies the monomial. The evaluator\'s leading 1 is ' +
+      'that absence, not a recovered constant. It is not a failed reconstruction and not a free dimensionless group',
+    commands: ['audit'],
+  },
+  {
     key: 'not-a-monomial',
     words: ['NOT A MONOMIAL'],
     meaning:
