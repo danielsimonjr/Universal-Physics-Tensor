@@ -4124,6 +4124,7 @@ The codebase is organized into the following modules:
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../conventions.js` | `canonicalCheckFailed, conventionLines` | Import |
+| `../../composition/user-equation.js` | `rewriteCatalogHyphens` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 
 **Exports:**
@@ -8945,7 +8946,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 471 |
 | Total Modules | 13 |
-| Total Lines of Code | 99413 |
+| Total Lines of Code | 99502 |
 | Total Exports | 3553 |
 | Total Re-exports | 1734 |
 | Total Classes | 61 |

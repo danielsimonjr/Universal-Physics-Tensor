@@ -51,8 +51,9 @@ Flags:
   upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
-        which are decoys, which add dimensionful terms (not a monomial),
-        which are dimensionally open.
+        which are dimensional with no sourced prefactor (the evaluator's 1
+        is that absence), which are decoys, which add dimensionful terms
+        (not a monomial), which are dimensionally open.
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.
@@ -170,6 +171,8 @@ Flags:
         (power/(area*temperature^4)); pressure, density, volume, viscosity,
         resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
         In --formula, a bare e is the elementary charge and E is energy.
+        A name from a dimension argument is one symbol, hyphens included.
+        A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
         recover the dimensionless prefactor. A target that is not a unique

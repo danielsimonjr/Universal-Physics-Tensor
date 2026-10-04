@@ -4614,7 +4614,115 @@
   },
   {
     "id": "CE-plasma-frequency",
-    "text": "Plasma frequency\ncondensed-matter\nfree-electron gas\nlong-wavelength (q→0) limit"
+    "text": "Plasma frequency\ncondensed-matter\nfree-electron gas\nlong-wavelength (q→0) limit",
+    "expr": {
+      "kind": "op",
+      "op": "^",
+      "args": [
+        {
+          "kind": "op",
+          "op": "/",
+          "args": [
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "carrier-density",
+                  "dim": {
+                    "L": -3,
+                    "M": 0,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "op",
+                  "op": "^",
+                  "args": [
+                    {
+                      "kind": "symbol",
+                      "name": "charge",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 1,
+                        "I": 1,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    },
+                    {
+                      "kind": "symbol",
+                      "name": "2",
+                      "dim": {
+                        "L": 0,
+                        "M": 0,
+                        "T": 0,
+                        "I": 0,
+                        "Theta": 0,
+                        "N": 0,
+                        "J": 0
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "kind": "op",
+              "op": "*",
+              "args": [
+                {
+                  "kind": "symbol",
+                  "name": "vacuum-permittivity",
+                  "dim": {
+                    "L": -3,
+                    "M": -1,
+                    "T": 4,
+                    "I": 2,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                },
+                {
+                  "kind": "symbol",
+                  "name": "mass",
+                  "dim": {
+                    "L": 0,
+                    "M": 1,
+                    "T": 0,
+                    "I": 0,
+                    "Theta": 0,
+                    "N": 0,
+                    "J": 0
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "symbol",
+          "name": "0.5",
+          "dim": {
+            "L": 0,
+            "M": 0,
+            "T": 0,
+            "I": 0,
+            "Theta": 0,
+            "N": 0,
+            "J": 0
+          }
+        }
+      ]
+    }
   },
   {
     "id": "CE-debye-frequency",

@@ -24,7 +24,7 @@ Accepted before the command name. `--json` may also follow the command name on a
 
 ### `audit`
 
-Derive every bridge equation by dimensions and sort derived, decoy, not a monomial, and open.
+Derive every bridge equation by dimensions and sort derived, coefficient unset, decoy, not a monomial, and open.
 
 ```
 upt audit [--source=catalog|canonical|both]

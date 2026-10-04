@@ -35,12 +35,12 @@ const SCALAR_AST_IDS = new Set([
   'CE-drude-resistivity',
   'CE-hall-coefficient',
   'CE-drift-velocity',
+  'CE-plasma-frequency',
 ]);
 
 const DIMENSIONAL_ONLY_IDS = new Set([
   'CE-fermi-energy',
   'CE-fermi-velocity',
-  'CE-plasma-frequency',
   'CE-debye-frequency',
 ]);
 
@@ -80,7 +80,7 @@ describe('CONDENSED_MATTER canonical entries', () => {
     ).toEqual([...SCALAR_AST_IDS].sort());
   });
 
-  it('the 4 fractional-monomial laws omit scalarAst and are dimensional-only', () => {
+  it('the 3 proportionalities omit scalarAst and are dimensional-only', () => {
     for (const e of CONDENSED_MATTER) {
       if (DIMENSIONAL_ONLY_IDS.has(e.id)) {
         expect(e.scalarAst, e.id).toBeUndefined();

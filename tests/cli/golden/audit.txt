@@ -29,6 +29,10 @@ Deriving the bridge equations by dimensions
     be-97                  +[e]  ×1.571e+0  (empirical/tuned constant)
     be-101                 +[k_B]  ×1.571e+0  (empirical/tuned constant)
 
+  COEFFICIENT UNSET (0) — dimensional, and no sourced prefactor multiplies the monomial. The evaluator's 1 is that absence, not a recovered constant:
+    
+    (not a recovered prefactor, not a failed reconstruction, and not a free dimensionless group)
+
   DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 11) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
     be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)

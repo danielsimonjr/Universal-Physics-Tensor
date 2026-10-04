@@ -20,6 +20,12 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A dimensional entry with no sourced prefactor is not a recovered factor of 1.
+  `upt explain fermi-energy` prints the unit monomial and the audit lists `CE-fermi-energy`, `CE-fermi-velocity`, `CE-plasma-frequency`, and `CE-debye-frequency` as DERIVED `×1`.
+  Done: the canonical audit is DERIVED 73, COEFFICIENT UNSET 6, DECOY 7, OPEN 23. The unset rows are `CE-thermal-de-broglie`, `CE-sound-speed`, `CE-fermi-energy`, `CE-fermi-velocity`, `CE-debye-frequency`, and `CE-mb-most-probable-speed`. Fermi explain still prints `2.35460972213968e-19` and says the constant was set to 1, which is not `(1/2)(3π²)^{2/3}`. Velocity names `(3π²)^{1/3}`. Debye names `(6π²)^{1/3}`. `CE-plasma-frequency` is the angular formula and stays DERIVED `×1`. `CE-simple-harmonic-frequency` stays DERIVED because the table sources the 1.
+- [x] A hyphenated name in `upt derive --formula` is the symbol the dimension argument accepted.
+  `upt derive fermi-energy:energy reduced-planck-constant:action mass:mass carrier-density:L^-3 --formula "(reduced-planck-constant^2/(2*mass))*(3*pi^2*carrier-density)^(2/3)"` exits 2 with `undeclared symbol 'reduced'`.
+  Done: that command exits 0 and the recovered prefactor is `4.7854e+0`. The same formula with `reduced-planck-constant` left undeclared still names `reduced`, and the line says a hyphen between names is subtraction.
 - [x] Vendor PhysJS `03e8bb77c952f720bdd2730af2afc6a7f2d36243`. Lean files stay `lean/<File>.lean`. Add BE-88 through BE-102 as formally proved. Landau diamagnetism and the BCS coherence length stay unproved and take no bridge id.
   Done: the manifest commit is that sha. The fifteen theorems are kind `bridge`. BE-90 assumes `π⁴/15`. BE-95 is one trial wall. BE-97 is `T = 0`. BE-98 reads `ζ` as the quartic coefficient. BE-101 is the energy-entropy argument. The r5 dogfood Debye premise that equates the three-branch sum to `n` is recorded as `k_D³ = 2 π² n`.
 

@@ -13671,6 +13671,12 @@
             ]
           },
           {
+            "file": "../../composition/user-equation.js",
+            "imports": [
+              "rewriteCatalogHyphens"
+            ]
+          },
+          {
             "file": "../../dimensional/types.js",
             "imports": [
               "Dimension"
@@ -33348,7 +33354,7 @@
   "statistics": {
     "totalTypeScriptFiles": 471,
     "totalModules": 13,
-    "totalLinesOfCode": 99413,
+    "totalLinesOfCode": 99502,
     "totalExports": 3553,
     "totalClasses": 61,
     "totalInterfaces": 559,
