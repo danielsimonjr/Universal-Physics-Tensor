@@ -1,5 +1,9 @@
 # UPT Specification — Revision History
 
+## PhysJS #61 — Lean path
+
+- The live pin is `4ea35872513f8d4d12a01bfac225156bdddb87a9`. Lean files are `lean/PhysJS/<File>.lean`. Theorem names are unchanged. Part-II proof-status links for Bridge Equations 69 through 73 name that path. The PhysJS #57 section below keeps pin `3af15b49be09442350510e7c7f56f4aab92ea3bc` and is the record from before this move. Older proof-status blocks that name an earlier commit stay at `PhysJS/<File>.lean`, which is where the file was at that commit.
+
 ## PhysJS #57 — BE-69 through BE-73
 
 - Part-II Bridge Equations 69 through 73 are kind `bridge` at pin `3af15b49be09442350510e7c7f56f4aab92ea3bc`. The theorems are `PhysJS.FastMagnetosonic.speed_eq`, `PhysJS.EinsteinRelation.diffusion_eq`, `PhysJS.Clapeyron.slope_eq`, `PhysJS.GravitationalRedshift.frequency_ratio`, and `PhysJS.KelvinRelation.peltier_eq`. Each covers line still begins with derivation-step. The catalog path passes the reference. Nested `perpendicular_of_dispersion` and `tolman_same_ratio` are not the formalRef. There is no entropy-slope key. BE-72 does not compose into BE-68. Living catalog counts now say 63 equations, IDs 11–73. The line below that says 58 equations, IDs 11–68, and that the catalog path does not pass the reference, is the record from before this pin.

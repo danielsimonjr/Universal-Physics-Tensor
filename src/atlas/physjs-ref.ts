@@ -7,7 +7,11 @@
  * the file and this copy disagree on the commit, a theorem, a key, or the
  * coverage phrase.
  *
- * The commit is PhysJS `main` `3af15b49be09442350510e7c7f56f4aab92ea3bc`.
+ * The commit is PhysJS `main` `4ea35872513f8d4d12a01bfac225156bdddb87a9`.
+ * PhysJS #61 stores each Lean file at `lean/PhysJS/<File>.lean`. The sentence
+ * that the pin is `3af15b49be09442350510e7c7f56f4aab92ea3bc` and that the path
+ * is `PhysJS/<File>.lean` is the record from before that move. Theorem names
+ * are unchanged.
  * Milestone 1's six top-level theorems are unchanged. Milestone 2 adds four
  * atlas entries. Milestone 2b adds fifteen catalog entries. Bucket A adds
  * twenty-one counted catalog entries, keyed `be-<n>`. BE-20 is the nested
@@ -25,7 +29,7 @@
 import type { FormalRef, FormalRefKind } from './types.js';
 
 /** PhysJS commit the vendored manifest records. @internal */
-export const PHYSJS_COMMIT = '3af15b49be09442350510e7c7f56f4aab92ea3bc';
+export const PHYSJS_COMMIT = '4ea35872513f8d4d12a01bfac225156bdddb87a9';
 
 /** Lean toolchain the vendored manifest records. */
 const PHYSJS_TOOLCHAIN = 'leanprover/lean4:v4.34.1';
@@ -834,7 +838,7 @@ function physjsVersion(): string {
 
 /**
  * Namespaces whose theorems live in another Lean file at this pin.
- * `SpringLc` and `DampedRlc` are namespaces inside `OscillatorDictionary.lean`,
+ * `SpringLc` and `DampedRlc` are namespaces inside `lean/PhysJS/OscillatorDictionary.lean`,
  * not their own files. Rechecked at this pin.
  */
 const PHYSJS_FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
@@ -842,14 +846,36 @@ const PHYSJS_FILE_BY_NAMESPACE: Readonly<Record<string, string>> = {
   DampedRlc: 'OscillatorDictionary.lean',
 };
 
-/** Permalink to the Lean file that contains `theorem` at the pinned commit. */
-function physjsStatementUrl(theorem: string): string {
+/**
+ * Lean file name that contains `theorem` at the pinned commit.
+ *
+ * `SpringLc` and `DampedRlc` are namespaces inside `OscillatorDictionary.lean`.
+ *
+ * @internal
+ */
+export function physjsLeanFile(theorem: string): string {
   const parts = theorem.split('.');
   if (parts.length < 3 || parts[0] !== 'PhysJS' || parts[1] === undefined) {
     throw new Error(`PhysJS theorem '${theorem}' is not PhysJS.<module>.<name>`);
   }
-  const file = PHYSJS_FILE_BY_NAMESPACE[parts[1]] ?? `${parts[1]}.lean`;
-  return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/PhysJS/${file}`;
+  return PHYSJS_FILE_BY_NAMESPACE[parts[1]] ?? `${parts[1]}.lean`;
+}
+
+/**
+ * Permalink to one Lean file at the pinned commit.
+ *
+ * PhysJS #61 stores sources under `lean/PhysJS/`. This is the only builder of
+ * those URLs.
+ *
+ * @internal
+ */
+export function physjsFileUrl(file: string): string {
+  return `https://github.com/danielsimonjr/PhysJS/blob/${PHYSJS_COMMIT}/lean/PhysJS/${file}`;
+}
+
+/** Permalink to the Lean file that contains `theorem` at the pinned commit. */
+function physjsStatementUrl(theorem: string): string {
+  return physjsFileUrl(physjsLeanFile(theorem));
 }
 
 /**

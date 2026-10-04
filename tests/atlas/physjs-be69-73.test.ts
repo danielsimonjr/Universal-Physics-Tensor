@@ -16,6 +16,7 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { deriveEvidence, NO_PASSING_WITNESSES } from '../../src/atlas/derive-evidence.js';
 import {
   bridgeSeedKeys,
+  physjsFileUrl,
   physjsFormalRef,
   physjsManifestProblems,
   PHYSJS_COMMIT,
@@ -45,7 +46,7 @@ import {
   be73Edge,
 } from '../../src/composition/edges/applied-physicist.js';
 
-const SHA = '3af15b49be09442350510e7c7f56f4aab92ea3bc';
+const SHA = '4ea35872513f8d4d12a01bfac225156bdddb87a9';
 const VERSION = `physjs@${SHA} leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940`;
 const AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 
@@ -88,7 +89,8 @@ describe('PhysJS proofs for be-69 through be-73', () => {
       expect(ref?.statement).toBe(row.theorem);
       expect(ref?.kind).toBe('bridge');
       expect(ref?.version).toBe(VERSION);
-      expect(ref?.url).toBe(`https://github.com/danielsimonjr/PhysJS/blob/${SHA}/PhysJS/${row.file}`);
+      expect(ref?.url).toBe(physjsFileUrl(row.file));
+      expect(ref?.url).toBe(`https://github.com/danielsimonjr/PhysJS/blob/${SHA}/lean/PhysJS/${row.file}`);
       expect(ref?.covers).toBe(`${entry?.covers} — covers its statement only`);
       expect(deriveEvidence({ formalRef: ref }, NO_PASSING_WITNESSES).has('formally-proved')).toBe(true);
       expect(deriveEdgeEvidence(row.id).has('formally-proved')).toBe(true);
