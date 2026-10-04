@@ -15121,6 +15121,7 @@
         ],
         "interfaces": [
           "SearchEntry",
+          "PrefixMatch",
           "SearchMatch"
         ],
         "functions": [
@@ -31996,10 +31997,10 @@
   "statistics": {
     "totalTypeScriptFiles": 454,
     "totalModules": 13,
-    "totalLinesOfCode": 96766,
+    "totalLinesOfCode": 96815,
     "totalExports": 3351,
     "totalClasses": 61,
-    "totalInterfaces": 529,
+    "totalInterfaces": 530,
     "totalFunctions": 834,
     "totalTypeGuards": 5,
     "totalEnums": 0,
