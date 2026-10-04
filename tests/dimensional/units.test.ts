@@ -11,6 +11,14 @@ import { resolveEvaluatorInputs } from '../../src/bridges/evaluator-inputs.js';
 import type { EvaluatorParameter } from '../../src/bridges/evaluators.js';
 
 describe('parseUnit', () => {
+  it('reads a glued exponent and a superscript as the caret form', () => {
+    expect(parseUnit('K2')).toEqual(parseUnit('K^2'));
+    expect(parseUnit('K²')).toEqual(parseUnit('K^2'));
+    expect(parseUnit('V/K2').dim).toEqual(parseUnit('V/K^2').dim);
+    expect(parseUnit('m2').dim).toEqual(parseUnit('m^2').dim);
+    expect(convertValue('1e-6V/K2', 'V/K^2').value).toBeCloseTo(1e-6, 20);
+  });
+
   it('reads prefixes, compounds and non-SI units by their stated values', () => {
     expect(parseUnit('um').scale).toBeCloseTo(1e-6, 20);
     expect(parseUnit('µm').scale).toBeCloseTo(1e-6, 20);

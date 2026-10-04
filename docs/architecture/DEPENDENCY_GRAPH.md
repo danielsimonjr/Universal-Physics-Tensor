@@ -4771,7 +4771,7 @@ The codebase is organized into the following modules:
 | `./command.js` | `CommandCtx` | Import (type-only) |
 
 **Exports:**
-- Interfaces: `SearchEntry`, `SearchMatch`
+- Interfaces: `SearchEntry`, `PrefixMatch`, `SearchMatch`
 - Functions: `queryWords`, `buildSearchIndex`, `matchEveryWord`, `searchNameWords`
 - Constants: `SEARCH_SECTIONS`, `STOP_WORDS`, `fold`
 
@@ -8946,11 +8946,11 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 471 |
 | Total Modules | 13 |
-| Total Lines of Code | 99502 |
+| Total Lines of Code | 99578 |
 | Total Exports | 3553 |
 | Total Re-exports | 1734 |
 | Total Classes | 61 |
-| Total Interfaces | 559 |
+| Total Interfaces | 560 |
 | Total Functions | 849 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
