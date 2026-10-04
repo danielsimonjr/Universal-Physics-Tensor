@@ -4,7 +4,7 @@
     "version": "3.0.0",
     "totalFiles": 433,
     "totalModules": 13,
-    "totalExports": 3084
+    "totalExports": 3085
   },
   "entryPoints": [
     {
@@ -12323,6 +12323,12 @@
               "rewriteInputKey",
               "shareSynonyms"
             ]
+          },
+          {
+            "file": "../../composition/explain.js",
+            "imports": [
+              "formatQuantity"
+            ]
           }
         ],
         "exports": [
@@ -18136,6 +18142,7 @@
           }
         ],
         "exports": [
+          "formatQuantity",
           "explainQuantity"
         ],
         "interfaces": [
@@ -18144,6 +18151,7 @@
           "QuantityExplanation"
         ],
         "functions": [
+          "formatQuantity",
           "explainQuantity"
         ]
       },
@@ -30276,11 +30284,11 @@
   "statistics": {
     "totalTypeScriptFiles": 433,
     "totalModules": 13,
-    "totalLinesOfCode": 92272,
-    "totalExports": 3084,
+    "totalLinesOfCode": 92283,
+    "totalExports": 3085,
     "totalClasses": 60,
     "totalInterfaces": 490,
-    "totalFunctions": 802,
+    "totalFunctions": 803,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 769,

@@ -3691,6 +3691,7 @@ The codebase is organized into the following modules:
 | `../search-index.js` | `searchNameWords` | Import |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 | `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms` | Import |
+| `../../composition/explain.js` | `formatQuantity` | Import |
 
 **Exports:**
 - Constants: `command`
@@ -5138,7 +5139,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `DerivationExplanation`, `ExplainOptions`, `QuantityExplanation`
-- Functions: `explainQuantity`
+- Functions: `formatQuantity`, `explainQuantity`
 
 ---
 
@@ -8252,12 +8253,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 433 |
 | Total Modules | 13 |
-| Total Lines of Code | 92272 |
-| Total Exports | 3084 |
+| Total Lines of Code | 92283 |
+| Total Exports | 3085 |
 | Total Re-exports | 1454 |
 | Total Classes | 60 |
 | Total Interfaces | 490 |
-| Total Functions | 802 |
+| Total Functions | 803 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 579 |

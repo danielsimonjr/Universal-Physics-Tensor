@@ -5,6 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
+import { formatQuantity } from '../../src/composition/explain.js';
 
 function capture() {
   const lines: string[] = [];
@@ -13,33 +14,46 @@ function capture() {
 }
 const text = (c: ReturnType<typeof capture>) => c.lines.join('\n');
 
+async function recovered(args: string[]): Promise<{ text: string; value: number }> {
+  const shown = capture();
+  expect(await runCli(args, shown.io)).toBe(0);
+  const json = capture();
+  expect(await runCli([...args, '--json'], json.io)).toBe(0);
+  const envelope = JSON.parse(json.lines.join('\n')) as { result: { recoveredValue: number } };
+  return { text: text(shown), value: envelope.result.recoveredValue };
+}
+
 describe('quantity unit conventions', () => {
   it('reads 1GeV as one GeV for the dark-fermion mass', async () => {
-    const c = capture();
-    expect(await runCli(['explain', 'dark-fermion-mass', 'yukawa-coupling=1', 'vacuum-expectation-value=1GeV'], c.io)).toBe(0);
-    expect(text(c)).toMatch(/Recovered value: 1\.0000e\+0/);
+    const r = await recovered(['explain', 'dark-fermion-mass', 'yukawa-coupling=1', 'vacuum-expectation-value=1GeV']);
+    expect(r.value).toBe(1);
+    expect(r.text).toContain(`Recovered value: ${formatQuantity(r.value)}.`);
+    expect(r.text).not.toContain('1.0000e+0');
   });
 
   it('converts 1J into GeV for that same mass', async () => {
-    const c = capture();
-    expect(await runCli(['explain', 'dark-fermion-mass', 'yukawa-coupling=1', 'vacuum-expectation-value=1J'], c.io)).toBe(0);
-    expect(text(c)).toMatch(/Recovered value: 6\.2415e\+9/);
+    const r = await recovered(['explain', 'dark-fermion-mass', 'yukawa-coupling=1', 'vacuum-expectation-value=1J']);
+    expect(r.value).toBeGreaterThan(6.24e9);
+    expect(r.value).toBeLessThan(6.25e9);
+    expect(r.text).toContain(`Recovered value: ${formatQuantity(r.value)}.`);
+    expect(r.text).not.toContain('6.2415e+9');
   });
 
   it('keeps a bare 246 in GeV, and a solar mass in kilograms', async () => {
-    const gev = capture();
-    expect(await runCli(['explain', 'dark-fermion-mass', 'yukawa-coupling=1', 'vacuum-expectation-value=246'], gev.io)).toBe(0);
-    expect(text(gev)).toMatch(/Recovered value: 2\.4600e\+2/);
-    const sun = capture();
-    expect(await runCli(['explain', 'hawking-temperature', 'mass=1Msun'], sun.io)).toBe(0);
-    expect(text(sun)).toMatch(/Recovered value: 6\.1684e-8/);
+    const gev = await recovered(['explain', 'dark-fermion-mass', 'yukawa-coupling=1', 'vacuum-expectation-value=246']);
+    expect(gev.value).toBe(246);
+    expect(gev.text).toContain(`Recovered value: ${formatQuantity(gev.value)}.`);
+    expect(gev.text).not.toContain('2.4600e+2');
+    const sun = await recovered(['explain', 'hawking-temperature', 'mass=1Msun']);
+    expect(Math.abs(sun.value - 6.1684e-8) / 6.1684e-8).toBeLessThan(1e-4);
+    expect(sun.text).toContain(`Recovered value: ${formatQuantity(sun.value)}.`);
+    expect(sun.text).not.toContain('6.1684e-8');
   });
 
   it('reads 1bit as ln 2 nats on the entanglement first law', async () => {
-    const c = capture();
-    expect(
-      await runCli(['explain', 'entanglement-entropy-variation', 'modular-hamiltonian-variation=1bit'], c.io),
-    ).toBe(0);
-    expect(text(c)).toContain(Math.LN2.toExponential(4));
+    const r = await recovered(['explain', 'entanglement-entropy-variation', 'modular-hamiltonian-variation=1bit']);
+    expect(r.value).toBeCloseTo(Math.LN2);
+    expect(r.text).toContain(formatQuantity(r.value));
+    expect(r.text).not.toContain(Math.LN2.toExponential(4));
   });
 });

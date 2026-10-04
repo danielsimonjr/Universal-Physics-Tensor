@@ -32,6 +32,16 @@ import { classifyIdentifiability, forwardClosure } from './identifiability.js';
 import type { RetrodictionResult } from './retrodiction.js';
 import { retrodictNode } from './retrodiction.js';
 import type { Dimension } from '../dimensional/types.js';
+
+/**
+ * Text form of a recovered quantity: 15 significant digits, the precision an
+ * evaluator input is already passed at. JSON keeps the number; this is only
+ * the printed form. An integer stays an integer (`1`, not `1.0000e+0`).
+ * @internal
+ */
+export function formatQuantity(value: number): string {
+  return String(Number(value.toPrecision(15)));
+}
 import type { DimensionalDeterminationResult } from '../dimensional/buckingham.js';
 import { dimensionallyDetermines } from '../dimensional/buckingham.js';
 
@@ -205,7 +215,7 @@ function buildSummary(
     case 'exactly-determined':
       s = `'${target}' is determined from ${known} via ${derivations[0]?.edge} (${derivations[0]?.label}).`;
       if (recoveredValue !== undefined) {
-        s += ` Recovered value: ${recoveredValue.toExponential(4)}.`;
+        s += ` Recovered value: ${formatQuantity(recoveredValue)}.`;
       }
       break;
     case 'over-determined':
@@ -238,7 +248,7 @@ function buildSummary(
         s += ` The ${id.surplusConstraints} surplus derivation(s) are falsifiable consistency constraints (supply values to check them).`;
       }
       if (recoveredValue !== undefined) {
-        s += ` Recovered value: ${recoveredValue.toExponential(4)}.`;
+        s += ` Recovered value: ${formatQuantity(recoveredValue)}.`;
       }
       break;
     }

@@ -9,6 +9,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { formatQuantity } from '../../src/composition/explain.js';
 
 async function run(args: string[]): Promise<{ code: number; text: string }> {
   const lines: string[] = [];
@@ -44,7 +45,11 @@ describe('upt explain — not covered vs not derivable', () => {
   it('underscores resolve like hyphens: hawking_temperature is covered', async () => {
     const r = await run(['explain', 'hawking_temperature', 'mass=1.989e30']);
     expect(r.code).toBe(0);
-    expect(r.text).toMatch(/Recovered value: 6\.1684e-8/);
+    const json = await run(['explain', 'hawking_temperature', 'mass=1.989e30', '--json']);
+    const raw = (JSON.parse(json.text) as { result: { recoveredValue: number } }).result.recoveredValue;
+    expect(Math.abs(raw - 6.1684e-8) / 6.1684e-8).toBeLessThan(1e-4);
+    expect(r.text).toContain(`Recovered value: ${formatQuantity(raw)}.`);
+    expect(r.text).not.toContain('6.1684e-8');
   });
 
   it('a real quantity that the inputs cannot reach is an answer: exit 0, and it says it IS in the graph', async () => {

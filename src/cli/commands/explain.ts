@@ -26,6 +26,7 @@ import {
   rewriteInputKey,
   shareSynonyms,
 } from '../../composition/aliases.js';
+import { formatQuantity } from '../../composition/explain.js';
 
 /** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
 const SEARCH_HITS_SHOWN = 5;
@@ -161,7 +162,7 @@ function printExplanation(
   if (x.derivations.length) {
     out('  derivations:');
     for (const d of x.derivations) {
-      const val = d.value !== undefined ? ` = ${d.value.toExponential(4)}` : '';
+      const val = d.value !== undefined ? ` = ${formatQuantity(d.value)}` : '';
       const chain =
         d.leafInputs.join(',') !== d.sources.join(',') ? `  [from leaves: ${d.leafInputs.join(', ')}]` : '';
       out(`    - ${d.edge} (${d.label})${val}${chain}`);
@@ -307,7 +308,7 @@ async function run(ctx: CommandCtx): Promise<number> {
       const ratio = x.recoveredValue! / partnerExplanation.recoveredValue!;
       out(
         `  ${resolvedTarget} and ${partner.name} are one restatement (${who}). ` +
-          `Values DISAGREE: ${resolvedTarget} / ${partner.name} = ${ratio.toExponential(4)}.`,
+          `Values DISAGREE: ${resolvedTarget} / ${partner.name} = ${formatQuantity(ratio)}.`,
       );
     } else {
       out(`  ${resolvedTarget} and ${partner.name} are one restatement (${who}).`);
