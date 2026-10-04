@@ -36,7 +36,7 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { PHYSJS_COMMIT } from '../../src/atlas/physjs-ref.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
-const SHA = '92f87257a1e3086a48cdc19fe4361cc1c5909d49';
+const SHA = '03e8bb77c952f720bdd2730af2afc6a7f2d36243';
 
 describe('BE-77 Hagen–Poiseuille', () => {
   const inputs = { R_m: 0.01, deltaP_Pa: 1000, mu_Pa_s: 0.001, L_m: 1 };

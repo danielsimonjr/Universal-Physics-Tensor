@@ -55,8 +55,16 @@ describe('discovery calibration benchmark', () => {
   // total 199 → 389, inert 51 → 95, axis-clash 118 → 264. promising stays 10,
   // magnitude-clash stays 20. The would-clash sum is 274 = 264 axis-clash + 10
   // still shadowed.
+  // 2026-10-04: BE-88 through BE-102 on the catalog graph. Each is an isolated
+  // edge. total 389 → 710, promising 10 → 15, inert 95 → 230, axis-clash
+  // 264 → 445. magnitude-clash stays 20. The would-clash sum is 455 = 445
+  // axis-clash + 10 still shadowed. The five new promising pairs each share
+  // a token with landauer-erasure-energy: ambegaokar-gap, bkt-stiffness,
+  // pauli-fermi-energy, sommerfeld-fermi-energy, and mass-action-gap. A
+  // shared energy token is not an identification. Entailed stays 0 and
+  // novel-consequence stays 1.
   const EXPECTED = {
-    catalog: { total: 389, promising: 10, inert: 95, clash: 20, contradictory: 0, axisClash: 264 },
+    catalog: { total: 710, promising: 15, inert: 230, clash: 20, contradictory: 0, axisClash: 445 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -69,7 +77,7 @@ describe('discovery calibration benchmark', () => {
     expect(count(cands, 'axis-clash')).toBe(EXPECTED.catalog.axisClash);
   });
 
-  it('the 274 would-clash pairs decompose as 264 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
+  it('the 455 would-clash pairs decompose as 445 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
     const cands = rankDiscoveries(CATALOG_GRAPH);
     // `axisClashes` stays populated regardless of which falsifier wins, so
     // the shadowed pairs are exactly the magnitude-clash candidates whose
@@ -78,7 +86,7 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(274);
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(455);
     expect(shadowed.length).toBe(10);
   });
 

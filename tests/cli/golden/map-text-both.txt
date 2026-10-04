@@ -1,7 +1,7 @@
 
 Linkage map — how the equations connect via shared quantities  [source: catalog + canonical]
-(55 components over 177 edges; 156 compose into chains)
-  anchored core: the clusters holding at least one of the 145 established-confidence edge(s) of the 177 in this graph
+(70 components over 192 edges; 156 compose into chains)
+  anchored core: the clusters holding at least one of the 160 established-confidence edge(s) of the 192 in this graph
 
   ● cluster of 112  [ANCHORED to known physics]
      edges:  be-11-zurek, be-12, be-16, be-37, be-42, be-42-via-rs, be-51, be-52, law-schwarzschild-radius, be-48, be-11-master, be-15, be-23, be-27, be-33, be-34, be-38, be-59, be-63, be-66, be-67, be-69, be-71, be-74, be-75, be-76, be-77, be-87, CE-pendulum-period, CE-kepler-third, CE-schwarzschild-radius, CE-string-wave-speed, CE-compton-wavelength, CE-thermal-de-broglie, CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-newton-gravitation, CE-newton-second-law, CE-mass-energy, CE-momentum, CE-kinetic-energy, CE-rotational-kinetic-energy, CE-gravitational-potential-energy, CE-work, CE-spring-potential-energy, CE-power, CE-centripetal-force, CE-hooke-law, CE-torque, CE-angular-momentum, CE-moment-of-inertia, CE-impulse, CE-simple-harmonic-frequency, CE-ohm-law, CE-electrical-power, CE-resistance-material, CE-capacitance-parallel-plate, CE-capacitor-energy, CE-inductor-energy, CE-magnetic-field-wire, CE-cyclotron-frequency, CE-larmor-radius, CE-point-charge-field, CE-lc-resonance, CE-coulomb, CE-rc-time-constant, CE-poynting-flux, CE-solenoid-field, CE-larmor-power, CE-field-energy-density, CE-hydrostatic-pressure, CE-pressure-definition, CE-density-definition, CE-buoyant-force, CE-stokes-drag, CE-wave-speed, CE-sound-speed, CE-volume-flow-rate, CE-shear-stress, CE-dynamic-pressure, CE-oscillator-energy, CE-heat-capacity, CE-landauer, CE-jarzynski, CE-stefan-boltzmann, CE-ideal-gas, CE-wien, CE-latent-heat, CE-clausius-entropy, CE-thermal-diffusivity, CE-de-broglie, CE-compton-wavelength-full, CE-carrier-mobility, CE-electrical-conductivity, CE-drude-resistivity, CE-hall-coefficient, CE-drift-velocity, CE-fermi-energy, CE-fermi-velocity, CE-plasma-frequency, CE-debye-frequency, CE-equipartition, CE-stokes-einstein, CE-kinetic-pressure, CE-mb-most-probable-speed, CE-bernoulli, CE-photoelectric, CE-boltzmann-factor, CE-lorentz-factor, CE-compton-shift, CE-boltzmann-entropy
@@ -43,7 +43,7 @@ Linkage map — how the equations connect via shared quantities  [source: catalo
      status: 2 law
      link hubs: decay-constant
 
-  ○ isolated (47) — share no quantity with any other edge:
-     CE-bekenstein-hawking, CE-bohr-magneton, CE-bohr-radius, CE-carnot-efficiency, CE-einstein-field-eq, CE-first-law-thermodynamics, CE-laplace-pressure, CE-lorentz-force, CE-malus-law, CE-normal-distribution, CE-planck-einstein, CE-planck-time, CE-rydberg-energy, CE-rydberg-formula, CE-snell-law, CE-uncertainty-principle, be-14, be-17, be-18, be-21, be-22, be-24, be-25, be-26, be-30, be-36, be-39, be-40, be-43, be-45, be-46, be-49, be-50, be-53, be-68, be-70, be-72, be-73, be-78, be-79, be-80, be-81, be-82, be-83, be-84, be-85, be-86
+  ○ isolated (62) — share no quantity with any other edge:
+     CE-bekenstein-hawking, CE-bohr-magneton, CE-bohr-radius, CE-carnot-efficiency, CE-einstein-field-eq, CE-first-law-thermodynamics, CE-laplace-pressure, CE-lorentz-force, CE-malus-law, CE-normal-distribution, CE-planck-einstein, CE-planck-time, CE-rydberg-energy, CE-rydberg-formula, CE-snell-law, CE-uncertainty-principle, be-100, be-101, be-102, be-14, be-17, be-18, be-21, be-22, be-24, be-25, be-26, be-30, be-36, be-39, be-40, be-43, be-45, be-46, be-49, be-50, be-53, be-68, be-70, be-72, be-73, be-78, be-79, be-80, be-81, be-82, be-83, be-84, be-85, be-86, be-88, be-89, be-90, be-91, be-92, be-93, be-94, be-95, be-96, be-97, be-98, be-99
 
   (a structural map — shared-quantity connectivity, NOT a credibility signal)

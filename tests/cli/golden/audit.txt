@@ -2,7 +2,7 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (20) — recognized monomial, prefactor recovered:
+  DERIVED (25) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.507e+0
     be-16                  +[k_B]  ×6.931e-1
     be-42-via-rs           +[ℏ,c,k_B]  ×7.958e-2
@@ -23,16 +23,21 @@ Deriving the bridge equations by dimensions
     be-84                  +[]  ×4.532e+0  (empirical/tuned constant)
     be-85                  +[e]  ×2.000e+0
     be-87                  +[k_B]  ×1.000e+0
+    be-88                  +[]  ×3.094e+0  (empirical/tuned constant)
+    be-89                  +[]  ×3.898e+0  (empirical/tuned constant)
+    be-96                  +[ℏ,e]  ×5.000e-1
+    be-97                  +[e]  ×1.571e+0  (empirical/tuned constant)
+    be-101                 +[k_B]  ×1.571e+0  (empirical/tuned constant)
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 9) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 11) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
-  NOT A MONOMIAL (5) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
-    be-54, be-36, be-50, be-40, be-69
+  NOT A MONOMIAL (6) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
+    be-54, be-36, be-50, be-40, be-69, be-93
     (not a failed reconstruction of a monomial, and not a physical refutation)
 
-  OPEN (34) — irreducible free dimensionless group(s); by complexity:
+  OPEN (41) — irreducible free dimensionless group(s); by complexity:
     cplx=0  be-82
     cplx=1  be-11-zurek
     cplx=1  be-37
@@ -50,6 +55,10 @@ Deriving the bridge equations by dimensions
     cplx=1  be-78
     cplx=1  be-79
     cplx=1  be-86
+    cplx=1  be-95
+    cplx=1  be-98
+    cplx=1  be-99
+    cplx=1  be-102
     cplx=2  be-11-master
     cplx=2  be-22
     cplx=2  be-25
@@ -57,6 +66,9 @@ Deriving the bridge equations by dimensions
     cplx=2  be-63
     cplx=2  be-66
     cplx=2  be-72
+    cplx=2  be-90
+    cplx=2  be-91
+    cplx=2  be-100
     cplx=3  be-53
     cplx=3  be-33
     cplx=3  be-45

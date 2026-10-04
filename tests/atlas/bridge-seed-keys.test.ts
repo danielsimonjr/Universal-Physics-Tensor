@@ -19,7 +19,7 @@ const REDUCTION = ['be-13'] as const;
 const LIMIT = ['be-38', 'be-58'] as const;
 const PROPERTY = ['be-11', 'be-28', 'be-29'] as const;
 const CROSS_CHECK = ['be-19', 'be-24', 'be-42'] as const;
-const CATALOG_EQUATION = ['be-12', 'be-16', 'be-21', 'be-27', 'be-33', 'be-37', 'be-40', 'be-43', 'be-50', 'be-54', 'be-55', 'be-59', 'be-60', 'be-63', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76', 'be-77', 'be-78', 'be-79', 'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-85', 'be-86', 'be-87'] as const;
+const CATALOG_EQUATION = ['be-12', 'be-16', 'be-21', 'be-27', 'be-33', 'be-37', 'be-40', 'be-43', 'be-50', 'be-54', 'be-55', 'be-59', 'be-60', 'be-63', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76', 'be-77', 'be-78', 'be-79', 'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-85', 'be-86', 'be-87', 'be-88', 'be-89', 'be-90', 'be-91', 'be-92', 'be-93', 'be-94', 'be-95', 'be-96', 'be-97', 'be-98', 'be-99', 'be-100', 'be-101', 'be-102'] as const;
 const ATLAS = [
   'ab-kg-schrodinger',
   'ab-klein-gordon-wave',
@@ -104,6 +104,21 @@ describe('bridge seeds are kind bridge only', () => {
       'be-85',
       'be-86',
       'be-87',
+      'be-88',
+      'be-89',
+      'be-90',
+      'be-91',
+      'be-92',
+      'be-93',
+      'be-94',
+      'be-95',
+      'be-96',
+      'be-97',
+      'be-98',
+      'be-99',
+      'be-100',
+      'be-101',
+      'be-102',
     ]);
   });
 

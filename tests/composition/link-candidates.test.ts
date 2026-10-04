@@ -18,9 +18,10 @@ const has = (a: string, b: string) =>
 describe('proposeLinkCandidates — generator', () => {
   it('produces the cross-cluster same-dimension pool (389) — quantified noise', () => {
     // 191 is the record from before be-74..76 joined the anchored cluster.
-    // 199 is the record from before be-77..87. Those eleven edges are isolated,
-    // so each same-dimension pair with another component is a candidate.
-    expect(cands.length).toBe(389);
+    // 199 is the record from before be-77..87. 389 is the record from before
+    // be-88..102. Those fifteen edges are isolated, so each same-dimension
+    // pair with another component is a candidate.
+    expect(cands.length).toBe(710);
   });
 
   it('the funnel narrows: most touch the core, fewer are same-kind', () => {
@@ -28,8 +29,9 @@ describe('proposeLinkCandidates — generator', () => {
     const ck = cands.filter((c) => c.touchesCore && c.sameKind).length;
     // 157 and 65 are the record from before be-74..76.
     // 165 and 66 are the record from before be-77..87.
-    expect(core).toBe(355);
-    expect(ck).toBe(141);
+    // 355 and 141 are the record from before be-88..102.
+    expect(core).toBe(676);
+    expect(ck).toBe(321);
     expect(ck).toBeLessThan(core); // the filters genuinely narrow
   });
 

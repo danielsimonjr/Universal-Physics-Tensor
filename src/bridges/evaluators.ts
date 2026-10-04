@@ -1,7 +1,7 @@
 /**
  * Bridge-evaluator registry — the single dispatch surface for `upt evaluate`.
  *
- * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…87) carry plain-JS
+ * The closed-form + Schwarzschild-spacetime bridges (BE-51/52/55…102) carry plain-JS
  * evaluators but were, until now, unreachable from the CLI (`upt eval` is
  * user-formula-only; `upt explain <be-NN>` even redirected to a capability that did
  * not exist). This registry maps each bridge id to its evaluator, its input keys,
@@ -44,6 +44,21 @@ import { evaluateFourPointSheet } from './be84-four-point.js';
 import { evaluateShotNoise } from './be85-shot-noise.js';
 import { evaluateReynoldsAnalogy } from './be86-reynolds-analogy.js';
 import { evaluateCapacitorNoise } from './be87-capacitor-noise.js';
+import { evaluateFermiSea } from './be88-fermi-sea.js';
+import { evaluateDebyeCutoff } from './be89-debye-cutoff.js';
+import { evaluateDebyeHeat } from './be90-debye-heat.js';
+import { evaluateEinsteinSolid } from './be91-einstein-solid.js';
+import { evaluateSommerfeldHeat } from './be92-sommerfeld-heat.js';
+import { evaluateCurieWeiss } from './be93-curie-weiss.js';
+import { evaluatePauliParamagnetism } from './be94-pauli-paramagnetism.js';
+import { evaluateGinzburgLandau } from './be95-ginzburg-landau.js';
+import { evaluateUpperCritical } from './be96-upper-critical.js';
+import { evaluateAmbegaokarBaratoff } from './be97-ambegaokar-baratoff.js';
+import { evaluateBcsJump } from './be98-bcs-jump.js';
+import { evaluateMassAction } from './be99-mass-action.js';
+import { evaluateLyddaneSachsTeller } from './be100-lyddane-sachs-teller.js';
+import { evaluateBktJump } from './be101-bkt-jump.js';
+import { evaluateLandauerConductance } from './be102-landauer-conductance.js';
 
 /**
  * What a length input measures. Two lengths of one dimension are not
@@ -406,6 +421,148 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
         P('C_F', 'capacitance', 'C', 'F', 'capacitance, > 0; one quadratic term'),
       ],
       (i) => evaluateCapacitorNoise({ T_K: i.T_K, C_F: i.C_F }),
+    ),
+    spec(
+      88,
+      'Fermi wavevector',
+      [
+        P('n_per_m3', 'electron density', 'n', 'm^-3', 'two-spin number density'),
+        P('m_kg', 'effective mass', 'm*', 'kg', 'isotropic band mass'),
+      ],
+      (i) => evaluateFermiSea({ n_per_m3: i.n_per_m3, m_kg: i.m_kg }),
+    ),
+    spec(
+      89,
+      'Debye cutoff',
+      [
+        P('v_m_per_s', 'sound speed', 'v_s', 'm/s', 'common acoustic speed'),
+        P('n_per_m3', 'atom density', 'n', 'm^-3', 'three branches fill 3n states'),
+      ],
+      (i) => evaluateDebyeCutoff({ v_m_per_s: i.v_m_per_s, n_per_m3: i.n_per_m3 }),
+    ),
+    spec(
+      90,
+      'Debye heat',
+      [
+        P('N', 'atom count', 'N', '', 'number of atoms'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+        temperature('thetaD_K', 'Debye temperature', 'θ_D', 'Debye temperature; π⁴/15 is assumed'),
+      ],
+      (i) => evaluateDebyeHeat({ N: i.N, T_K: i.T_K, thetaD_K: i.thetaD_K }),
+    ),
+    spec(
+      91,
+      'Einstein solid',
+      [
+        P('N', 'atom count', 'N', '', 'number of atoms; three oscillators each'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+        temperature('thetaE_K', 'Einstein temperature', 'θ_E', 'Einstein temperature'),
+      ],
+      (i) => evaluateEinsteinSolid({ N: i.N, T_K: i.T_K, thetaE_K: i.thetaE_K }),
+    ),
+    spec(
+      92,
+      'Sommerfeld heat',
+      [
+        P('n_per_m3', 'electron density', 'n', 'm^-3', '√E density of states'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+        P('E_F_J', 'Fermi energy', 'E_F', 'J', 'Fermi energy; the correction δU is a hypothesis'),
+      ],
+      (i) => evaluateSommerfeldHeat({ n_per_m3: i.n_per_m3, T_K: i.T_K, E_F_J: i.E_F_J }),
+    ),
+    spec(
+      93,
+      'Curie–Weiss',
+      [
+        P('n_per_m3', 'moment density', 'n', 'm^-3', 'moment density'),
+        P('g', 'Landé factor', 'g', '', 'Landé g-factor'),
+        P('spin', 'spin', 'S', '', 'spin in S(S+1)/3'),
+        P('muB_J_per_T', 'Bohr magneton', 'μ_B', 'J/T', 'supplied; not derived'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+        temperature('theta_K', 'Weiss temperature', 'θ', 'mean-field shift; zero is the Curie law'),
+      ],
+      (i) =>
+        evaluateCurieWeiss({
+          n_per_m3: i.n_per_m3,
+          g: i.g,
+          spin: i.spin,
+          muB_J_per_T: i.muB_J_per_T,
+          T_K: i.T_K,
+          theta_K: i.theta_K,
+        }),
+    ),
+    spec(
+      94,
+      'Pauli paramagnetism',
+      [
+        P('n_per_m3', 'electron density', 'n', 'm^-3', '√E density'),
+        P('E_F_J', 'Fermi energy', 'E_F', 'J', 'Fermi energy'),
+        P('muB_J_per_T', 'Bohr magneton', 'μ_B', 'J/T', 'supplied; not Landau diamagnetism'),
+      ],
+      (i) =>
+        evaluatePauliParamagnetism({ n_per_m3: i.n_per_m3, E_F_J: i.E_F_J, muB_J_per_T: i.muB_J_per_T }),
+    ),
+    spec(
+      95,
+      'GL trial wall',
+      [P('kappa', 'GL parameter', 'κ', '', 'trial wall, not every minimizer')],
+      (i) => evaluateGinzburgLandau({ kappa: i.kappa }),
+    ),
+    spec(
+      96,
+      'Upper critical field',
+      [P('xi_m', 'coherence length', 'ξ', 'm', 'charge 2e; the Landau level is a hypothesis')],
+      (i) => evaluateUpperCritical({ xi_m: i.xi_m }),
+    ),
+    spec(
+      97,
+      'Ambegaokar–Baratoff',
+      [P('Delta_J', 'gap', 'Δ', 'J', 'T = 0 and identical gaps')],
+      (i) => evaluateAmbegaokarBaratoff({ Delta_J: i.Delta_J }),
+    ),
+    spec(
+      98,
+      'BCS heat jump',
+      [P('zeta', 'quartic coefficient', 'ζ', '', 'GL quartic coefficient, not a series')],
+      (i) => evaluateBcsJump({ zeta: i.zeta }),
+    ),
+    spec(
+      99,
+      'Mass action',
+      [
+        P('N_c_per_m3', 'conduction density of states', 'N_c', 'm^-3', 'Boltzmann tail'),
+        P('N_v_per_m3', 'valence density of states', 'N_v', 'm^-3', 'Boltzmann tail'),
+        P('E_g_J', 'gap', 'E_g', 'J', 'E_c − E_v'),
+        temperature('T_K', 'temperature', 'T', 'absolute temperature'),
+      ],
+      (i) =>
+        evaluateMassAction({
+          N_c_per_m3: i.N_c_per_m3,
+          N_v_per_m3: i.N_v_per_m3,
+          E_g_J: i.E_g_J,
+          T_K: i.T_K,
+        }),
+    ),
+    spec(
+      100,
+      'Lyddane–Sachs–Teller',
+      [
+        P('eps_static', 'static dielectric constant', 'ε(0)', '', 'undamped'),
+        P('eps_inf', 'high-frequency dielectric constant', 'ε(∞)', '', 'nonzero'),
+      ],
+      (i) => evaluateLyddaneSachsTeller({ eps_static: i.eps_static, eps_inf: i.eps_inf }),
+    ),
+    spec(
+      101,
+      'BKT unbinding',
+      [P('J_J', 'vortex stiffness', 'J', 'J', 'energy-entropy argument, not the RG flow')],
+      (i) => evaluateBktJump({ J_J: i.J_J }),
+    ),
+    spec(
+      102,
+      'Landauer conductance',
+      [P('sum_Tn', 'transmission sum', 'Σ T_n', '', 'two spins; not the Hall conductance')],
+      (i) => evaluateLandauerConductance({ sum_Tn: i.sum_Tn }),
     ),
   ].map((s) => [s.bridgeId, s]),
 );

@@ -104,6 +104,21 @@ import { evaluateFourPointSheet } from './be84-four-point.js';
 import { evaluateShotNoise } from './be85-shot-noise.js';
 import { evaluateReynoldsAnalogy } from './be86-reynolds-analogy.js';
 import { evaluateCapacitorNoise } from './be87-capacitor-noise.js';
+import { evaluateFermiSea } from './be88-fermi-sea.js';
+import { evaluateDebyeCutoff } from './be89-debye-cutoff.js';
+import { evaluateDebyeHeat } from './be90-debye-heat.js';
+import { evaluateEinsteinSolid } from './be91-einstein-solid.js';
+import { evaluateSommerfeldHeat } from './be92-sommerfeld-heat.js';
+import { evaluateCurieWeiss } from './be93-curie-weiss.js';
+import { evaluatePauliParamagnetism } from './be94-pauli-paramagnetism.js';
+import { evaluateGinzburgLandau } from './be95-ginzburg-landau.js';
+import { evaluateUpperCritical } from './be96-upper-critical.js';
+import { evaluateAmbegaokarBaratoff } from './be97-ambegaokar-baratoff.js';
+import { evaluateBcsJump } from './be98-bcs-jump.js';
+import { evaluateMassAction } from './be99-mass-action.js';
+import { evaluateLyddaneSachsTeller } from './be100-lyddane-sachs-teller.js';
+import { evaluateBktJump } from './be101-bkt-jump.js';
+import { evaluateLandauerConductance } from './be102-landauer-conductance.js';
 
 /**
  * Root-level facade keyed by readable method names. Each value is a re-export of
@@ -194,4 +209,19 @@ export const BridgeEquations = {
   shotNoise: evaluateShotNoise,                             // BE-85
   reynoldsAnalogy: evaluateReynoldsAnalogy,                 // BE-86
   capacitorNoise: evaluateCapacitorNoise,                   // BE-87
+  fermiSea: evaluateFermiSea,                               // BE-88
+  debyeCutoff: evaluateDebyeCutoff,                         // BE-89
+  debyeHeat: evaluateDebyeHeat,                             // BE-90
+  einsteinSolid: evaluateEinsteinSolid,                     // BE-91
+  sommerfeldHeat: evaluateSommerfeldHeat,                   // BE-92
+  curieWeiss: evaluateCurieWeiss,                           // BE-93
+  pauliParamagnetism: evaluatePauliParamagnetism,           // BE-94
+  ginzburgLandau: evaluateGinzburgLandau,                   // BE-95
+  upperCritical: evaluateUpperCritical,                     // BE-96
+  ambegaokarBaratoff: evaluateAmbegaokarBaratoff,           // BE-97
+  bcsJump: evaluateBcsJump,                                 // BE-98
+  massAction: evaluateMassAction,                           // BE-99
+  lyddaneSachsTeller: evaluateLyddaneSachsTeller,           // BE-100
+  bktJump: evaluateBktJump,                                 // BE-101
+  landauerConductance: evaluateLandauerConductance,         // BE-102
 } as const;

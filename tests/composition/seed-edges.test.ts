@@ -233,6 +233,33 @@ describe('symbolic forms agree with the edge evaluator', () => {
     'be-85': { 'shot-current': 1e-3 },
     'be-86': { 'skin-friction': 0.004 },
     'be-87': { 'capacitor-temperature': 300, capacitance: 1e-12 },
+    'be-88': { 'fermi-sea-density': 1e28, 'fermi-sea-mass': 9.109e-31 },
+    'be-89': { 'debye-sound-speed': 1e3, 'debye-atom-density': 1e28 },
+    'be-90': { 'debye-atom-count': 1, 'debye-temperature': 10, 'debye-theta': 200 },
+    'be-91': { 'einstein-atom-count': 1, 'einstein-solid-temperature': 300, 'einstein-theta': 200 },
+    'be-92': { 'sommerfeld-density': 1e28, 'sommerfeld-temperature': 10, 'sommerfeld-fermi-energy': 1e-18 },
+    'be-93': {
+      'curie-density': 1e28,
+      'curie-g-factor': 2,
+      'curie-spin': 0.5,
+      'curie-magneton': 9.274e-24,
+      'curie-temperature': 300,
+      'weiss-temperature': 0,
+    },
+    'be-94': { 'pauli-density': 1e28, 'pauli-fermi-energy': 1e-18, 'pauli-magneton': 9.274e-24 },
+    'be-95': { 'gl-kappa': 1 },
+    'be-96': { 'upper-critical-length': 1e-7 },
+    'be-97': { 'ambegaokar-gap': 1e-22 },
+    'be-98': { 'bcs-quartic': 1 },
+    'be-99': {
+      'conduction-dos': 1e25,
+      'valence-dos': 1e25,
+      'mass-action-gap': 1e-19,
+      'mass-action-temperature': 300,
+    },
+    'be-100': { 'lst-static': 10, 'lst-infinity': 2 },
+    'be-101': { 'bkt-stiffness': 1e-21 },
+    'be-102': { 'landauer-transmission': 1 },
   };
 
   for (const [id, probe] of Object.entries(probes)) {

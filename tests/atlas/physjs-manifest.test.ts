@@ -31,7 +31,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `92f87257a1e3086a48cdc19fe4361cc1c5909d49`, in file order. A swapped theorem or key fails this list. */
+/** The manifest at PhysJS `main` `03e8bb77c952f720bdd2730af2afc6a7f2d36243`, in file order. A swapped theorem or key fails this list. The sentence that names `92f87257a1e3086a48cdc19fe4361cc1c5909d49` is the record from before PhysJS #65. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -155,6 +155,21 @@ const EXPECTED: readonly (readonly [string, string, string])[] = [
   ["be-85", "PhysJS.ShotNoise.shot_eq", "derivation-step: in a window of length T the count N has mean (I/e) T, and the Poisson premise is Var(N) = mean(N). Charge e scales the variance by e\u00b2 and the windowed current divides by T, so Var(I) = e I/T. The one-sided bandwidth of that window is \u0394f = 1/(2 T), and S_I = Var(I)/\u0394f is 2 e I. The two-sided bandwidth \u0394f = 1/T gives e I. e is the elementary charge. Not a Fourier theorem and not Johnson\u2013Nyquist. The Poisson variance and the one-sided convention are hypotheses"],
   ["be-86", "PhysJS.ReynoldsAnalogy.reynolds_eq", "derivation-step: wall fluxes \u03c4 = \u03bc du/dy and q = k dT/dy, with C_f = \u03c4/(\u03c1 U\u00b2/2), h = q/\u0394T, St = h/(\u03c1 U c_p), and Pr = \u03bc c_p/k, satisfy St Pr = C_f/2 when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At Pr = 1, St = C_f/2. Pr \u2260 1 with nonzero skin friction is not this equality. Not a Nusselt correlation"],
   ["be-87", "PhysJS.CapacitorNoise.noise_eq", "derivation-step: dU/dV = C V and U(0) = 0 integrate to U = (C/2) V\u00b2. The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance k_B T/C, because the partition function is the Gaussian integral. The mean square on that law is k_B T/C, and (C/2) of it is (1/2) k_B T. (3/2) k_B T/C is not this variance. Dropping the energy half replaces it by k_B T/(2 C). Not three kinetic degrees of freedom"],
+  ["be-88", "PhysJS.FermiSea.fermi_sea", "derivation-step: two spin states times the sphere (4π/3) k_F³/(2π)³ give n, so k_F³ = 3 π² n and the nonnegative root is k_F = (3 π² n)^{1/3}. The isotropic parabola E = ℏ² k²/(2 m*) is E_F at k_F. Its first derivative is v_F = ℏ k_F/m*, and ℏ⁻² times the second derivative is 1/m*. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses"],
+  ["be-89", "PhysJS.DebyeCutoff.debye_cutoff", "derivation-step: three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses"],
+  ["be-90", "PhysJS.DebyeHeat.debye_heat", "derivation-step: the mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity. The phonon integral, the extension to infinity, and π⁴/15 are hypotheses"],
+  ["be-91", "PhysJS.EinsteinSolid.einstein_heat", "derivation-step: three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses"],
+  ["be-92", "PhysJS.SommerfeldHeat.electronic_heat", "derivation-step: the Sommerfeld energy correction δU = (π²/6) (k_B T)² g(E_F) is a hypothesis, and its temperature derivative is c_V = (π²/3) k_B² T g(E_F). PhysJS.FermiSea.dos_factor is g(E_F) = (3/2) n/E_F for a √E density, so c_V = (π²/2) n k_B² T/E_F. A flat density g = n/E_F leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61"],
+  ["be-93", "PhysJS.CurieWeiss.curie_weiss", "derivation-step: linear response χ k_B T = μ₀ n (g μ_B)² ⟨S_z²⟩ with the high-temperature moment ⟨S_z²⟩ = S(S+1)/3 gives the Curie constant C = μ₀ n g² μ_B² S(S+1)/(3 k_B). Equal weights on m = ±1/2 give 1/4 = S(S+1)/3 at S = 1/2. Mean field B_eff = B + λ M with θ = C λ/μ₀ gives χ = C/(T−θ). θ = 0 is C/T. A classical moment uses μ²/3. The second moment and the mean-field shift are hypotheses. Not an su(2) derivation"],
+  ["be-94", "PhysJS.PauliParamagnetism.pauli", "derivation-step: the Zeeman imbalance M = μ_B² g(E_F) B is a hypothesis, and χ_P = μ₀ M/B is μ₀ μ_B² g(E_F). PhysJS.FermiSea.dos_factor supplies g(E_F) = (3/2) n/E_F, so χ_P = μ₀ μ_B² (3 n)/(2 E_F). A flat density leaves the factor 1. Not Landau diamagnetism"],
+  ["be-95", "PhysJS.GinzburgLandau.type_boundary", "derivation-step: in the normalization with gradient coefficient 1/κ², quartic (1/2)(1−f²)², and field B², the density at κ² = 1/2 is (√2 f' − a f)² + (B + (1−f²)/√2)² minus √2 times the derivative of a(1−f²). Vanishing squares and equal endpoints make that wall integral zero. A trial profile with that critical integral has energy (1/κ² − 2) times the gradient integral: negative when κ > 1/√2, zero at κ = 1/√2, and positive when κ < 1/√2. The positive side is this trial, not every minimizer. The GL density and the profile are hypotheses"],
+  ["be-96", "PhysJS.UpperCritical.critical_field", "derivation-step: the linearized GL instability sets the Landau-level ground energy ℏ q B/(2 m*) of charge q = 2e equal to |α| = ℏ²/(2 m* ξ²). That level is a hypothesis, not the spectrum of the covariant Laplacian. The field is B = ℏ/(2 e ξ²). With Φ₀ = h/(2e) and h = 2 π ℏ this is B_c2 = Φ₀/(2 π ξ²). Charge e instead of 2e is a different field"],
+  ["be-97", "PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff", "derivation-step: the chain rule along E = Δ cosh t pulls the coherence-factor integrand back to sech t for t > 0. ∫₀^T sech = arctan(sinh T), and the limit T → ∞ is π/2. The tunnel Hamiltonian at zero temperature and identical gaps is the hypothesis that e I_c R_n is Δ times that improper integral, so I_c R_n = π Δ/(2 e). A coefficient other than π/2 fails. Not the finite-temperature tanh factor"],
+  ["be-98", "PhysJS.BcsJump.heat_jump", "derivation-step: the weak-coupling excess free energy F = N(0) (T−T_c)/T_c · Δ² + 7 ζ N(0)/(16 π² T_c²) · Δ⁴ is a hypothesis, with k_B = 1. Its minimum is −α₀² (T−T_c)²/(4 β), and −T ∂²F/∂T² at T_c is ΔC = T_c α₀²/(2 β) = 8 π² N(0) T_c/(7 ζ). The normal heat capacity C_n = (2 π²/3) N(0) T_c is the both-spin Sommerfeld value, a hypothesis. The ratio is 12/(7 ζ). ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio. Not 2π exp(−γ)"],
+  ["be-99", "PhysJS.MassAction.mass_action", "derivation-step: the Boltzmann tails n = N_c exp(−(E_c−μ)/(k_B T)) and p = N_v exp(−(μ−E_v)/(k_B T)), with E_g = E_c − E_v, multiply to N_c N_v exp(−E_g/(k_B T)). That product is the square of n_i = √(N_c N_v) exp(−E_g/(2 k_B T)). Dropping the 2 in the exponent is a different density. The tails are hypotheses. Not a Fermi–Dirac integral"],
+  ["be-100", "PhysJS.LyddaneSachsTeller.lst", "derivation-step: the undamped oscillator ε(ω) = ε(∞) + S/(ω_TO² − ω²) has a zero at ω_LO, which fixes S, and ε(0) is the same function at zero frequency. The ratio is ω_LO²/ω_TO² = ε(0)/ε(∞). The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis"],
+  ["be-101", "PhysJS.BktJump.bkt_jump", "derivation-step: the phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow"],
+  ["be-102", "PhysJS.LandauerConductance.conductance_eq", "derivation-step: a one-dimensional mode of speed v in a length L has density of states L/(h v) per spin, and the flux times v/L cancels to 1/h. Current is spin · e · (Σ T_n) · (1/h) · Δμ with spin = 2 and Δμ = e V, so G = (2 e²/h) Σ T_n. One spin is e²/h. The transmissions and the bias window are hypotheses. Not the Hall conductance and not Landauer erasure"],
 ];
 
 const RANK1_PLANE_WAVE: readonly (readonly [string, string])[] = [
@@ -170,8 +185,8 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit 92f87257a1e3086a48cdc19fe4361cc1c5909d49, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('92f87257a1e3086a48cdc19fe4361cc1c5909d49');
+  it('records commit 03e8bb77c952f720bdd2730af2afc6a7f2d36243, and every coverage phrase says the reference covers its statement only', () => {
+    expect(manifest.commit).toBe('03e8bb77c952f720bdd2730af2afc6a7f2d36243');
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
     expect(manifest.commit).toBe(PHYSJS_COMMIT);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
@@ -179,7 +194,7 @@ describe('vendored PhysJS manifest', () => {
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
   });
 
-  it('names the sixty-eight theorems and keys, in manifest order', () => {
+  it('names the eighty-three theorems and keys, in manifest order', () => {
     expect(manifest.entries.map((entry) => [entry.key, entry.theorem, entry.covers])).toEqual(EXPECTED.map((row) => [...row]));
   });
 
@@ -393,10 +408,11 @@ describe('vendored PhysJS manifest', () => {
     const counted = manifest.entries.filter((entry) => /^(reduction|limit|derivation-step): /.test(entry.covers));
     const crossChecks = manifest.entries.filter((entry) => entry.covers.startsWith('cross-check: '));
     const properties = manifest.entries.filter((entry) => entry.covers.startsWith('property: '));
-    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76', 'be-77', 'be-78', 'be-79', 'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-85', 'be-86', 'be-87']);
+    expect(counted.map((entry) => entry.key)).toEqual(['be-64', 'be-53', 'be-58', 'be-38', 'be-13', 'be-34', 'be-16', 'be-65', 'be-51', 'be-61', 'be-12', 'be-59', 'be-55', 'be-60', 'be-21', 'be-14', 'be-43', 'be-37', 'be-54', 'be-17', 'be-27', 'be-22', 'be-15', 'be-33', 'be-50', 'be-32', 'be-28', 'be-40', 'be-35', 'be-63', 'be-30', 'be-66', 'be-67', 'be-68', 'be-69', 'be-70', 'be-71', 'be-72', 'be-73', 'be-74', 'be-75', 'be-76', 'be-77', 'be-78', 'be-79', 'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-85', 'be-86', 'be-87', 'be-88', 'be-89', 'be-90', 'be-91', 'be-92', 'be-93', 'be-94', 'be-95', 'be-96', 'be-97', 'be-98', 'be-99', 'be-100', 'be-101', 'be-102']);
     expect(crossChecks.map((entry) => entry.key)).toEqual(['be-42', 'be-24', 'be-19']);
     expect(properties.map((entry) => entry.key)).toEqual(['be-29', 'be-11']);
-    expect(counted.length + crossChecks.length + properties.length).toBe(58);
+    expect(counted.length + crossChecks.length + properties.length).toBe(73);
+    // 58 is the record from before be-88..102.
 
     const unlabeled = {
       ...manifest,

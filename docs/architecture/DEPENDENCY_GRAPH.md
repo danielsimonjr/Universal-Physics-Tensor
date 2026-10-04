@@ -39,12 +39,12 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 70 files
-- **bridges**: 114 files
+- **bridges**: 129 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
 - **root**: 1 file
-- **composition**: 89 files
+- **composition**: 91 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -1283,6 +1283,40 @@ The codebase is organized into the following modules:
 
 ## Bridges Dependencies
 
+### `src/bridges/be100-lyddane-sachs-teller.ts` - BE-100 — Lyddane–Sachs–Teller relation,
+
+**Exports:**
+- Interfaces: `LyddaneSachsTellerInputs`, `LyddaneSachsTellerResult`
+- Functions: `evaluateLyddaneSachsTeller`
+
+---
+
+### `src/bridges/be101-bkt-jump.ts` - BE-101 — Berezinskii–Kosterlitz–Thouless unbinding from energy and entropy,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `K_B_SI` | Import |
+
+**Exports:**
+- Interfaces: `BktJumpInputs`, `BktJumpResult`
+- Functions: `evaluateBktJump`
+
+---
+
+### `src/bridges/be102-landauer-conductance.ts` - BE-102 — two-spin Landauer conductance,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `E_SI, H_SI` | Import |
+
+**Exports:**
+- Interfaces: `LandauerConductanceInputs`, `LandauerConductanceResult`
+- Functions: `evaluateLandauerConductance`
+
+---
+
 ### `src/bridges/be11-decoherence-confrontation.ts` - BE-11 × matter-wave interferometry — confront the decoherence master equation
 
 **Internal Dependencies:**
@@ -1967,6 +2001,148 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/bridges/be88-fermi-sea.ts` - BE-88 — two-spin Fermi sphere,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `HBAR_SI` | Import |
+
+**Exports:**
+- Interfaces: `FermiSeaInputs`, `FermiSeaResult`
+- Functions: `evaluateFermiSea`
+
+---
+
+### `src/bridges/be89-debye-cutoff.ts` - BE-89 — Debye cutoff of three acoustic branches,
+
+**Exports:**
+- Interfaces: `DebyeCutoffInputs`, `DebyeCutoffResult`
+- Functions: `evaluateDebyeCutoff`
+
+---
+
+### `src/bridges/be90-debye-heat.ts` - BE-90 — Debye heat capacity at low temperature,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `K_B_SI` | Import |
+
+**Exports:**
+- Interfaces: `DebyeHeatInputs`, `DebyeHeatResult`
+- Functions: `evaluateDebyeHeat`
+
+---
+
+### `src/bridges/be91-einstein-solid.ts` - BE-91 — Einstein solid heat capacity,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `K_B_SI` | Import |
+
+**Exports:**
+- Interfaces: `EinsteinSolidInputs`, `EinsteinSolidResult`
+- Functions: `evaluateEinsteinSolid`
+
+---
+
+### `src/bridges/be92-sommerfeld-heat.ts` - BE-92 — electronic heat capacity of a √E density of states,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `K_B_SI` | Import |
+
+**Exports:**
+- Interfaces: `SommerfeldHeatInputs`, `SommerfeldHeatResult`
+- Functions: `evaluateSommerfeldHeat`
+
+---
+
+### `src/bridges/be93-curie-weiss.ts` - BE-93 — Curie–Weiss susceptibility,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `K_B_SI` | Import |
+| `../dimensional/formula-names.js` | `MU0_SI` | Import |
+
+**Exports:**
+- Interfaces: `CurieWeissInputs`, `CurieWeissResult`
+- Functions: `evaluateCurieWeiss`
+
+---
+
+### `src/bridges/be94-pauli-paramagnetism.ts` - BE-94 — Pauli paramagnetism for a √E density of states,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/formula-names.js` | `MU0_SI` | Import |
+
+**Exports:**
+- Interfaces: `PauliParamagnetismInputs`, `PauliParamagnetismResult`
+- Functions: `evaluatePauliParamagnetism`
+
+---
+
+### `src/bridges/be95-ginzburg-landau.ts` - BE-95 — sign of one Ginzburg–Landau trial wall,
+
+**Exports:**
+- Interfaces: `GinzburgLandauInputs`, `GinzburgLandauResult`
+- Functions: `evaluateGinzburgLandau`
+
+---
+
+### `src/bridges/be96-upper-critical.ts` - BE-96 — upper critical field of charge q = 2e,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `E_SI, HBAR_SI` | Import |
+
+**Exports:**
+- Interfaces: `UpperCriticalInputs`, `UpperCriticalResult`
+- Functions: `evaluateUpperCritical`
+
+---
+
+### `src/bridges/be97-ambegaokar-baratoff.ts` - BE-97 — Ambegaokar–Baratoff product at zero temperature,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `E_SI` | Import |
+
+**Exports:**
+- Interfaces: `AmbegaokarBaratoffInputs`, `AmbegaokarBaratoffResult`
+- Functions: `evaluateAmbegaokarBaratoff`
+
+---
+
+### `src/bridges/be98-bcs-jump.ts` - BE-98 — BCS heat-capacity jump,
+
+**Exports:**
+- Interfaces: `BcsJumpInputs`, `BcsJumpResult`
+- Functions: `evaluateBcsJump`
+
+---
+
+### `src/bridges/be99-mass-action.ts` - BE-99 — intrinsic carrier density from Boltzmann tails,
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `K_B_SI` | Import |
+
+**Exports:**
+- Interfaces: `MassActionInputs`, `MassActionResult`
+- Functions: `evaluateMassAction`
+
+---
+
 ### `src/bridges/bridge-equations.ts` - `BridgeEquations` — a convenience facade over the per-bridge evaluators.
 
 **Internal Dependencies:**
@@ -2049,6 +2225,21 @@ The codebase is organized into the following modules:
 | `./be85-shot-noise.js` | `evaluateShotNoise` | Import |
 | `./be86-reynolds-analogy.js` | `evaluateReynoldsAnalogy` | Import |
 | `./be87-capacitor-noise.js` | `evaluateCapacitorNoise` | Import |
+| `./be88-fermi-sea.js` | `evaluateFermiSea` | Import |
+| `./be89-debye-cutoff.js` | `evaluateDebyeCutoff` | Import |
+| `./be90-debye-heat.js` | `evaluateDebyeHeat` | Import |
+| `./be91-einstein-solid.js` | `evaluateEinsteinSolid` | Import |
+| `./be92-sommerfeld-heat.js` | `evaluateSommerfeldHeat` | Import |
+| `./be93-curie-weiss.js` | `evaluateCurieWeiss` | Import |
+| `./be94-pauli-paramagnetism.js` | `evaluatePauliParamagnetism` | Import |
+| `./be95-ginzburg-landau.js` | `evaluateGinzburgLandau` | Import |
+| `./be96-upper-critical.js` | `evaluateUpperCritical` | Import |
+| `./be97-ambegaokar-baratoff.js` | `evaluateAmbegaokarBaratoff` | Import |
+| `./be98-bcs-jump.js` | `evaluateBcsJump` | Import |
+| `./be99-mass-action.js` | `evaluateMassAction` | Import |
+| `./be100-lyddane-sachs-teller.js` | `evaluateLyddaneSachsTeller` | Import |
+| `./be101-bkt-jump.js` | `evaluateBktJump` | Import |
+| `./be102-landauer-conductance.js` | `evaluateLandauerConductance` | Import |
 
 **Exports:**
 - Constants: `BridgeEquations`
@@ -2914,6 +3105,21 @@ The codebase is organized into the following modules:
 | `./be85-shot-noise.js` | `evaluateShotNoise` | Import |
 | `./be86-reynolds-analogy.js` | `evaluateReynoldsAnalogy` | Import |
 | `./be87-capacitor-noise.js` | `evaluateCapacitorNoise` | Import |
+| `./be88-fermi-sea.js` | `evaluateFermiSea` | Import |
+| `./be89-debye-cutoff.js` | `evaluateDebyeCutoff` | Import |
+| `./be90-debye-heat.js` | `evaluateDebyeHeat` | Import |
+| `./be91-einstein-solid.js` | `evaluateEinsteinSolid` | Import |
+| `./be92-sommerfeld-heat.js` | `evaluateSommerfeldHeat` | Import |
+| `./be93-curie-weiss.js` | `evaluateCurieWeiss` | Import |
+| `./be94-pauli-paramagnetism.js` | `evaluatePauliParamagnetism` | Import |
+| `./be95-ginzburg-landau.js` | `evaluateGinzburgLandau` | Import |
+| `./be96-upper-critical.js` | `evaluateUpperCritical` | Import |
+| `./be97-ambegaokar-baratoff.js` | `evaluateAmbegaokarBaratoff` | Import |
+| `./be98-bcs-jump.js` | `evaluateBcsJump` | Import |
+| `./be99-mass-action.js` | `evaluateMassAction` | Import |
+| `./be100-lyddane-sachs-teller.js` | `evaluateLyddaneSachsTeller` | Import |
+| `./be101-bkt-jump.js` | `evaluateBktJump` | Import |
+| `./be102-landauer-conductance.js` | `evaluateLandauerConductance` | Import |
 
 **Exports:**
 - Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
@@ -2981,6 +3187,21 @@ The codebase is organized into the following modules:
 | `./be85-shot-noise.js` | `evaluateShotNoise, type ShotNoiseInputs, type ShotNoiseResult` | Re-export |
 | `./be86-reynolds-analogy.js` | `evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs, type ReynoldsAnalogyResult` | Re-export |
 | `./be87-capacitor-noise.js` | `evaluateCapacitorNoise, type CapacitorNoiseInputs, type CapacitorNoiseResult` | Re-export |
+| `./be88-fermi-sea.js` | `evaluateFermiSea, type FermiSeaInputs, type FermiSeaResult` | Re-export |
+| `./be89-debye-cutoff.js` | `evaluateDebyeCutoff, type DebyeCutoffInputs, type DebyeCutoffResult` | Re-export |
+| `./be90-debye-heat.js` | `evaluateDebyeHeat, type DebyeHeatInputs, type DebyeHeatResult` | Re-export |
+| `./be91-einstein-solid.js` | `evaluateEinsteinSolid, type EinsteinSolidInputs, type EinsteinSolidResult` | Re-export |
+| `./be92-sommerfeld-heat.js` | `evaluateSommerfeldHeat, type SommerfeldHeatInputs, type SommerfeldHeatResult` | Re-export |
+| `./be93-curie-weiss.js` | `evaluateCurieWeiss, type CurieWeissInputs, type CurieWeissResult` | Re-export |
+| `./be94-pauli-paramagnetism.js` | `evaluatePauliParamagnetism, type PauliParamagnetismInputs, type PauliParamagnetismResult` | Re-export |
+| `./be95-ginzburg-landau.js` | `evaluateGinzburgLandau, type GinzburgLandauInputs, type GinzburgLandauResult` | Re-export |
+| `./be96-upper-critical.js` | `evaluateUpperCritical, type UpperCriticalInputs, type UpperCriticalResult` | Re-export |
+| `./be97-ambegaokar-baratoff.js` | `evaluateAmbegaokarBaratoff, type AmbegaokarBaratoffInputs, type AmbegaokarBaratoffResult` | Re-export |
+| `./be98-bcs-jump.js` | `evaluateBcsJump, type BcsJumpInputs, type BcsJumpResult` | Re-export |
+| `./be99-mass-action.js` | `evaluateMassAction, type MassActionInputs, type MassActionResult` | Re-export |
+| `./be100-lyddane-sachs-teller.js` | `evaluateLyddaneSachsTeller, type LyddaneSachsTellerInputs, type LyddaneSachsTellerResult` | Re-export |
+| `./be101-bkt-jump.js` | `evaluateBktJump, type BktJumpInputs, type BktJumpResult` | Re-export |
+| `./be102-landauer-conductance.js` | `evaluateLandauerConductance, type LandauerConductanceInputs, type LandauerConductanceResult` | Re-export |
 
 **Exports:**
 - Interfaces: `KnownIssue`, `BridgeEquationEntry`
@@ -3020,7 +3241,19 @@ The codebase is organized into the following modules:
   evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise,
   type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs,
   type ReynoldsAnalogyResult, evaluateCapacitorNoise, type CapacitorNoiseInputs,
-  type CapacitorNoiseResult
+  type CapacitorNoiseResult, evaluateFermiSea, type FermiSeaInputs, type FermiSeaResult,
+  evaluateDebyeCutoff, type DebyeCutoffInputs, type DebyeCutoffResult, evaluateDebyeHeat,
+  type DebyeHeatInputs, type DebyeHeatResult, evaluateEinsteinSolid, type EinsteinSolidInputs,
+  type EinsteinSolidResult, evaluateSommerfeldHeat, type SommerfeldHeatInputs,
+  type SommerfeldHeatResult, evaluateCurieWeiss, type CurieWeissInputs, type CurieWeissResult,
+  evaluatePauliParamagnetism, type PauliParamagnetismInputs, type PauliParamagnetismResult,
+  evaluateGinzburgLandau, type GinzburgLandauInputs, type GinzburgLandauResult, evaluateUpperCritical,
+  type UpperCriticalInputs, type UpperCriticalResult, evaluateAmbegaokarBaratoff,
+  type AmbegaokarBaratoffInputs, type AmbegaokarBaratoffResult, evaluateBcsJump, type BcsJumpInputs,
+  type BcsJumpResult, evaluateMassAction, type MassActionInputs, type MassActionResult,
+  evaluateLyddaneSachsTeller, type LyddaneSachsTellerInputs, type LyddaneSachsTellerResult,
+  evaluateBktJump, type BktJumpInputs, type BktJumpResult, evaluateLandauerConductance,
+  type LandauerConductanceInputs, type LandauerConductanceResult
   ```
 
 - Default: `BRIDGE_EQUATIONS`
@@ -4902,7 +5135,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 68 `BridgeEdge`s
+### `src/composition/catalog-graph.ts` - The full composition graph as a single constant — the 83 `BridgeEdge`s
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -4913,6 +5146,7 @@ The codebase is organized into the following modules:
 | `./edges/catalog-full.js` | `CATALOG_FULL_EDGES` | Import |
 | `./edges/proved-seeds.js` | `PROVED_SEED_EDGES` | Import |
 | `./edges/applied-physicist.js` | `APPLIED_PHYSICIST_EDGES` | Import |
+| `./edges/condensed-r5.js` | `CONDENSED_R5_EDGES` | Import |
 
 **Exports:**
 - Constants: `CATALOG_GRAPH`
@@ -5400,6 +5634,44 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/edges/condensed-r5.ts` - Composition edges for BE-88 through BE-102.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../bridges/be88-fermi-sea.js` | `evaluateFermiSea` | Import |
+| `../../bridges/be89-debye-cutoff.js` | `evaluateDebyeCutoff` | Import |
+| `../../bridges/be90-debye-heat.js` | `evaluateDebyeHeat` | Import |
+| `../../bridges/be91-einstein-solid.js` | `evaluateEinsteinSolid` | Import |
+| `../../bridges/be92-sommerfeld-heat.js` | `evaluateSommerfeldHeat` | Import |
+| `../../bridges/be93-curie-weiss.js` | `evaluateCurieWeiss` | Import |
+| `../../bridges/be94-pauli-paramagnetism.js` | `evaluatePauliParamagnetism` | Import |
+| `../../bridges/be95-ginzburg-landau.js` | `evaluateGinzburgLandau` | Import |
+| `../../bridges/be96-upper-critical.js` | `evaluateUpperCritical` | Import |
+| `../../bridges/be97-ambegaokar-baratoff.js` | `evaluateAmbegaokarBaratoff` | Import |
+| `../../bridges/be98-bcs-jump.js` | `evaluateBcsJump` | Import |
+| `../../bridges/be99-mass-action.js` | `evaluateMassAction` | Import |
+| `../../bridges/be100-lyddane-sachs-teller.js` | `evaluateLyddaneSachsTeller` | Import |
+| `../../bridges/be101-bkt-jump.js` | `evaluateBktJump` | Import |
+| `../../bridges/be102-landauer-conductance.js` | `evaluateLandauerConductance` | Import |
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../edge.js` | `withBoundAliases, BridgeEdge` | Import |
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../quantities.js` | `ambegaokarGapQ, ambegaokarProductQ, bcsHeatJumpQ, bcsQuarticQ, bktStiffnessQ, bktTemperatureQ, conductionDosQ, curieDensityQ, curieGFactorQ, curieMagnetonQ, curieSpinQ, curieTemperatureQ, curieWeissSusceptibilityQ, debyeAtomCountQ, debyeAtomDensityQ, debyeCutoffFrequencyQ, debyeHeatCapacityQ, debyeSoundSpeedQ, debyeTemperatureQ, debyeThetaQ, einsteinAtomCountQ, einsteinHeatCapacityQ, einsteinSolidTemperatureQ, einsteinThetaQ, fermiSeaDensityQ, fermiSeaMassQ, fermiWavevectorQ, glKappaQ, glTrialFactorQ, landauerChannelConductanceQ, landauerTransmissionQ, lstInfinityQ, lstRatioQ, lstStaticQ, massActionDensityQ, massActionGapQ, massActionTemperatureQ, pauliDensityQ, pauliFermiEnergyQ, pauliMagnetonQ, pauliSusceptibilityQ, sommerfeldDensityQ, sommerfeldFermiEnergyQ, sommerfeldHeatCapacityQ, sommerfeldTemperatureQ, upperCriticalFieldQ, upperCriticalLengthQ, valenceDosQ, weissTemperatureQ` | Import |
+
+**Exports:**
+- Constants:
+
+  ```text
+  be88Edge, be89Edge, be90Edge, be91Edge, be92Edge, be93Edge, be94Edge, be95Edge, be96Edge, be97Edge,
+  be98Edge, be99Edge, be100Edge, be101Edge, be102Edge, CONDENSED_R5_EDGES
+  ```
+
+
+---
+
 ### `src/composition/edges/proved-seeds.ts` - Composition edges for proved catalog seeds that had no graph edge.
 
 **Internal Dependencies:**
@@ -5619,6 +5891,7 @@ The codebase is organized into the following modules:
 | `./edges/calibration.js` | `be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG` | Re-export |
 | `./edges/catalog-tranche.js` | `be14Edge, be19Edge, be21Edge, be48Edge, be53Edge, be54Edge` | Re-export |
 | `./edges/applied-physicist.js` | `be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge, be72Edge, be73Edge, be74Edge, be75Edge, be76Edge, be77Edge, be78Edge, be79Edge, be80Edge, be81Edge, be82Edge, be83Edge, be84Edge, be85Edge, be86Edge, be87Edge, APPLIED_PHYSICIST_EDGES` | Re-export |
+| `./edges/condensed-r5.js` | `be88Edge, be89Edge, be90Edge, be91Edge, be92Edge, be93Edge, be94Edge, be95Edge, be96Edge, be97Edge, be98Edge, be99Edge, be100Edge, be101Edge, be102Edge, CONDENSED_R5_EDGES` | Re-export |
 | `./edges/catalog-full.js` | `be11Edge, be13Edge, be15Edge, be17Edge, be18Edge, be20Edge, be22Edge, be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge, be31Edge, be33Edge, be34Edge, be36Edge, be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge, be47Edge, be49Edge, be50Edge, CATALOG_FULL_EDGES` | Re-export |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Re-export |
 | `./canonical-graph.js` | `CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS` | Re-export |
@@ -5656,21 +5929,23 @@ The codebase is organized into the following modules:
   be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge, be21Edge, be48Edge, be53Edge,
   be54Edge, be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge, be72Edge, be73Edge, be74Edge,
   be75Edge, be76Edge, be77Edge, be78Edge, be79Edge, be80Edge, be81Edge, be82Edge, be83Edge, be84Edge,
-  be85Edge, be86Edge, be87Edge, APPLIED_PHYSICIST_EDGES, be11Edge, be13Edge, be15Edge, be17Edge,
-  be18Edge, be20Edge, be22Edge, be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge, be31Edge,
-  be33Edge, be34Edge, be36Edge, be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge, be47Edge,
-  be49Edge, be50Edge, CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges,
-  CANONICAL_CONSTANTS, CompositionCandidate, EnumerationReport, enumerateCompositions,
-  REGISTERED_COMPOSITION_IDS, UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict,
-  IdentifiabilityResult, IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure,
-  RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionReport,
-  RetrodictionOptions, retrodict, retrodictNode, DerivationExplanation, ExplainOptions,
-  QuantityExplanation, explainQuantity, Observable, ComposeSymbolicOptions, composeSymbolic,
-  SymbolicCompositionError, SymbolicEvalError, VizStatus, VizJunction, VizCluster, VizOptions,
-  VizModel, VizFilterStats, buildVizModel, edgeToJunction, renderDotToSvg,
-  SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation, EquationLanding,
-  EquationAnalysis, EquationHint, parseUserEquation, resolveToCatalogName, suggestQuantities,
-  suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
+  be85Edge, be86Edge, be87Edge, APPLIED_PHYSICIST_EDGES, be88Edge, be89Edge, be90Edge, be91Edge,
+  be92Edge, be93Edge, be94Edge, be95Edge, be96Edge, be97Edge, be98Edge, be99Edge, be100Edge,
+  be101Edge, be102Edge, CONDENSED_R5_EDGES, be11Edge, be13Edge, be15Edge, be17Edge, be18Edge,
+  be20Edge, be22Edge, be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge, be31Edge, be33Edge,
+  be34Edge, be36Edge, be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge, be47Edge, be49Edge,
+  be50Edge, CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS,
+  CompositionCandidate, EnumerationReport, enumerateCompositions, REGISTERED_COMPOSITION_IDS,
+  UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict, IdentifiabilityResult,
+  IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure, RetrodictionOutcome,
+  RetrodictionPrediction, RetrodictionResult, RetrodictionReport, RetrodictionOptions, retrodict,
+  retrodictNode, DerivationExplanation, ExplainOptions, QuantityExplanation, explainQuantity,
+  Observable, ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError,
+  VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel,
+  edgeToJunction, renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency,
+  UserEquation, EquationLanding, EquationAnalysis, EquationHint, parseUserEquation,
+  resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation,
+  UserEquationError
   ```
 
 
@@ -6351,6 +6626,34 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/quantities/condensed-r5.ts` - Quantity nodes for BE-88 through BE-102.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS, FREQUENCY, MASS, TEMPERATURE, VELOCITY` | Import |
+| `./_dims.js` | `ENERGY_DIM, INV_LENGTH, NUMBER_DENSITY` | Import |
+
+**Exports:**
+- Constants:
+
+  ```text
+  fermiSeaDensityQ, fermiSeaMassQ, fermiWavevectorQ, debyeSoundSpeedQ, debyeAtomDensityQ,
+  debyeCutoffFrequencyQ, debyeAtomCountQ, debyeTemperatureQ, debyeThetaQ, debyeHeatCapacityQ,
+  einsteinAtomCountQ, einsteinSolidTemperatureQ, einsteinThetaQ, einsteinHeatCapacityQ,
+  sommerfeldDensityQ, sommerfeldTemperatureQ, sommerfeldFermiEnergyQ, sommerfeldHeatCapacityQ,
+  curieDensityQ, curieGFactorQ, curieSpinQ, curieMagnetonQ, curieTemperatureQ, weissTemperatureQ,
+  curieWeissSusceptibilityQ, pauliDensityQ, pauliFermiEnergyQ, pauliMagnetonQ, pauliSusceptibilityQ,
+  glKappaQ, glTrialFactorQ, upperCriticalLengthQ, upperCriticalFieldQ, ambegaokarGapQ,
+  ambegaokarProductQ, bcsQuarticQ, bcsHeatJumpQ, conductionDosQ, valenceDosQ, massActionGapQ,
+  massActionTemperatureQ, massActionDensityQ, lstStaticQ, lstInfinityQ, lstRatioQ, bktStiffnessQ,
+  bktTemperatureQ, landauerTransmissionQ, landauerChannelConductanceQ
+  ```
+
+
+---
+
 ### `src/composition/quantities/fields.ts` - Centralized Quantity nodes — field-theory / gravity-modification / swampland domain.
 
 **Internal Dependencies:**
@@ -6438,9 +6741,10 @@ The codebase is organized into the following modules:
 | `./quantities/condensed-matter.js` | `*` | Re-export |
 | `./quantities/common.js` | `*` | Re-export |
 | `./quantities/applied-physicist.js` | `*` | Re-export |
+| `./quantities/condensed-r5.js` | `*` | Re-export |
 
 **Exports:**
-- Re-exports: `* from ./quantities/quantum.js`, `* from ./quantities/gravitation-cosmology.js`, `* from ./quantities/fields.js`, `* from ./quantities/condensed-matter.js`, `* from ./quantities/common.js`, `* from ./quantities/applied-physicist.js`
+- Re-exports: `* from ./quantities/quantum.js`, `* from ./quantities/gravitation-cosmology.js`, `* from ./quantities/fields.js`, `* from ./quantities/condensed-matter.js`, `* from ./quantities/common.js`, `* from ./quantities/applied-physicist.js`, `* from ./quantities/condensed-r5.js`
 
 ---
 
@@ -7374,7 +7678,7 @@ The codebase is organized into the following modules:
 | `./bridges/index.js` | `BridgeEquationEntry, BridgeEquationStatus, BridgeIssueSeverity, BridgeIssueFixable, KnownIssue` | Re-export |
 | `./bridges/index.js` | `evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult, evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult, evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult, evaluateCasimir, type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs, type UnruhResult, evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult, evaluateACJosephson, JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult, evaluateFractionalQH, type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz, LORENZ_NUMBER_SI, type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap, BCS_GAP_RATIO, type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3, type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity, THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass, type JeansInputs, type JeansResult` | Re-export |
 | `./bridges/index.js` | `evaluateRadiationPressure, type RadiationPressureInputs, type RadiationPressureResult, evaluateAlfvenSpeed, alfvenProtonOnlyDensity, M_PROTON_SI, type AlfvenInputs, type AlfvenResult, evaluateTolmanEhrenfest, tolmanTemperatureAt, type TolmanInputs, type TolmanResult` | Re-export |
-| `./bridges/index.js` | `evaluateFastMagnetosonic, type FastMagnetosonicInputs, type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs, type EinsteinRelationResult, CarrierSignError, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult, evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult, evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult, evaluateMagneticPressure, type MagneticPressureInputs, type MagneticPressureResult, evaluateLondonPenetration, type LondonPenetrationInputs, type LondonPenetrationResult, evaluatePlasmaBeta, type PlasmaBetaInputs, type PlasmaBetaResult, evaluateHagenPoiseuille, type HagenPoiseuilleInputs, type HagenPoiseuilleResult, evaluateEulerBuckling, type EulerBucklingInputs, type EulerBucklingResult, evaluatePullIn, type PullInInputs, type PullInResult, evaluateMottGurney, type MottGurneyInputs, type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs, type ChildLangmuirResult, evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult, evaluateThomsonCoefficient, type ThomsonCoefficientInputs, type ThomsonCoefficientResult, evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise, type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs, type ReynoldsAnalogyResult, evaluateCapacitorNoise, type CapacitorNoiseInputs, type CapacitorNoiseResult` | Re-export |
+| `./bridges/index.js` | `evaluateFastMagnetosonic, type FastMagnetosonicInputs, type FastMagnetosonicResult, evaluateEinsteinRelation, type EinsteinRelationInputs, type EinsteinRelationResult, CarrierSignError, evaluateClapeyron, type ClapeyronInputs, type ClapeyronResult, evaluateGravitationalRedshift, type GravitationalRedshiftInputs, type GravitationalRedshiftResult, evaluateKelvinPeltier, type KelvinPeltierInputs, type KelvinPeltierResult, evaluateMagneticPressure, type MagneticPressureInputs, type MagneticPressureResult, evaluateLondonPenetration, type LondonPenetrationInputs, type LondonPenetrationResult, evaluatePlasmaBeta, type PlasmaBetaInputs, type PlasmaBetaResult, evaluateHagenPoiseuille, type HagenPoiseuilleInputs, type HagenPoiseuilleResult, evaluateEulerBuckling, type EulerBucklingInputs, type EulerBucklingResult, evaluatePullIn, type PullInInputs, type PullInResult, evaluateMottGurney, type MottGurneyInputs, type MottGurneyResult, evaluateChildLangmuir, type ChildLangmuirInputs, type ChildLangmuirResult, evaluateShockleyDiode, type ShockleyDiodeInputs, type ShockleyDiodeResult, evaluateThomsonCoefficient, type ThomsonCoefficientInputs, type ThomsonCoefficientResult, evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise, type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs, type ReynoldsAnalogyResult, evaluateCapacitorNoise, type CapacitorNoiseInputs, type CapacitorNoiseResult, evaluateFermiSea, type FermiSeaInputs, type FermiSeaResult, evaluateDebyeCutoff, type DebyeCutoffInputs, type DebyeCutoffResult, evaluateDebyeHeat, type DebyeHeatInputs, type DebyeHeatResult, evaluateEinsteinSolid, type EinsteinSolidInputs, type EinsteinSolidResult, evaluateSommerfeldHeat, type SommerfeldHeatInputs, type SommerfeldHeatResult, evaluateCurieWeiss, type CurieWeissInputs, type CurieWeissResult, evaluatePauliParamagnetism, type PauliParamagnetismInputs, type PauliParamagnetismResult, evaluateGinzburgLandau, type GinzburgLandauInputs, type GinzburgLandauResult, evaluateUpperCritical, type UpperCriticalInputs, type UpperCriticalResult, evaluateAmbegaokarBaratoff, type AmbegaokarBaratoffInputs, type AmbegaokarBaratoffResult, evaluateBcsJump, type BcsJumpInputs, type BcsJumpResult, evaluateMassAction, type MassActionInputs, type MassActionResult, evaluateLyddaneSachsTeller, type LyddaneSachsTellerInputs, type LyddaneSachsTellerResult, evaluateBktJump, type BktJumpInputs, type BktJumpResult, evaluateLandauerConductance, type LandauerConductanceInputs, type LandauerConductanceResult` | Re-export |
 | `./bridges/evaluators.js` | `BRIDGE_EVALUATORS, evaluateBridge` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./bridges/bridge-equations.js` | `BridgeEquations` | Re-export |
@@ -7419,6 +7723,7 @@ The codebase is organized into the following modules:
 | `./numerical/index.js` | `NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options, PerihelionResult, FindPerihelionOptions` | Re-export |
 | `./composition/index.js` | `composeEdges, consistencyRatio, evaluateEdge, minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError, CompositionJunctionError, DomainViolationError, be11ZurekEdge, be12Edge, be16Edge, be37Edge, be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge, be21Edge, be48Edge, be53Edge, be54Edge` | Re-export |
 | `./composition/index.js` | `be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge, be72Edge, be73Edge, be74Edge, be75Edge, be76Edge, be77Edge, be78Edge, be79Edge, be80Edge, be81Edge, be82Edge, be83Edge, be84Edge, be85Edge, be86Edge, be87Edge, APPLIED_PHYSICIST_EDGES` | Re-export |
+| `./composition/index.js` | `be88Edge, be89Edge, be90Edge, be91Edge, be92Edge, be93Edge, be94Edge, be95Edge, be96Edge, be97Edge, be98Edge, be99Edge, be100Edge, be101Edge, be102Edge, CONDENSED_R5_EDGES` | Re-export |
 | `./composition/index.js` | `BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
 | `./bridges/membership.js` | `adjudicateBridgeEntry, adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS` | Re-export |
 | `./bridges/membership.js` | `BridgeVerdict, CatalogAdjudicationReport, RejectedBridgeAdjudication` | Re-export |
@@ -7569,40 +7874,54 @@ The codebase is organized into the following modules:
   evaluateFourPointSheet, type FourPointSheetInputs, type FourPointSheetResult, evaluateShotNoise,
   type ShotNoiseInputs, type ShotNoiseResult, evaluateReynoldsAnalogy, type ReynoldsAnalogyInputs,
   type ReynoldsAnalogyResult, evaluateCapacitorNoise, type CapacitorNoiseInputs,
-  type CapacitorNoiseResult, BRIDGE_EVALUATORS, evaluateBridge, EvaluatorSpec, EvaluatorParameter,
-  ParameterAlternate, GeometryRole, BridgeEquations, christoffel, CovariantDerivativeNode, ricci,
-  RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual, BianchiResidualNode,
-  verifyKillingEquation, checkKillingEquation, evaluateConservedCharge, KillingEquationOptions,
-  KillingEquationCheck, ChristoffelAccess, integrateGeodesic, type GeodesicIntegratorInputs,
-  type GeodesicIntegratorResult, toGeometrized, fromGeometrized, geometrizedFactor,
-  NonGeometrizableDimensionError, TracableTensorNode, TensorTraceNode, TensorTraceValidationResult,
-  TensorTraceOptions, validateTensorTrace, FriedmannVariant, FriedmannEquationNode,
-  FriedmannEquationValidationResult, validateFriedmannEquation, RGCouplingNode, BetaFunctionNode,
-  BetaFunctionValidationResult, rgCoupling, validateRGCoupling, validateBetaFunction, ArrowOfTime,
-  GaugeFieldNode, TimeSymmetryPredicateNode, TimeSymmetryPredicateValidationResult,
-  validateGaugeField, validateTimeSymmetryPredicate, ScalarFieldNode, KleinGordonEquationNode,
-  KleinGordonEquationValidationResult, validateKleinGordonEquation, Dimension, convertValue,
-  parseUnit, UnitError, ParsedUnit, TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY,
-  MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply,
-  divide, power, add, subtract, equals, format, DimensionMismatchError, ExprNode, TranscendentalFn,
-  ValidationResult, Violation, validate, validateEquation, validateInverseMetricPair,
-  inferDimensionForBridge, evaluateEinsteinEquationResidual, EinsteinEquationResidualInput,
-  MetricClosure, Vec4, validateEinsteinFieldEquation, EinsteinFieldEquationNode,
-  EinsteinFieldEquationValidationResult, KretschmannScalarNode, KretschmannScalarValidationResult,
-  validateKretschmannScalar, computeKretschmann, evaluateNumerical, evaluateNumericalRaw,
-  evaluateMetricInverse, getActiveEngine, setActiveEngine, NumericalBackendError,
-  DuplicateCoordinateWarning, EngineCapabilityError, hasAutogradSupport,
-  evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion, NumericalResult,
-  NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor, EinsumSpec,
-  NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot, GL4Options,
-  PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
+  type CapacitorNoiseResult, evaluateFermiSea, type FermiSeaInputs, type FermiSeaResult,
+  evaluateDebyeCutoff, type DebyeCutoffInputs, type DebyeCutoffResult, evaluateDebyeHeat,
+  type DebyeHeatInputs, type DebyeHeatResult, evaluateEinsteinSolid, type EinsteinSolidInputs,
+  type EinsteinSolidResult, evaluateSommerfeldHeat, type SommerfeldHeatInputs,
+  type SommerfeldHeatResult, evaluateCurieWeiss, type CurieWeissInputs, type CurieWeissResult,
+  evaluatePauliParamagnetism, type PauliParamagnetismInputs, type PauliParamagnetismResult,
+  evaluateGinzburgLandau, type GinzburgLandauInputs, type GinzburgLandauResult, evaluateUpperCritical,
+  type UpperCriticalInputs, type UpperCriticalResult, evaluateAmbegaokarBaratoff,
+  type AmbegaokarBaratoffInputs, type AmbegaokarBaratoffResult, evaluateBcsJump, type BcsJumpInputs,
+  type BcsJumpResult, evaluateMassAction, type MassActionInputs, type MassActionResult,
+  evaluateLyddaneSachsTeller, type LyddaneSachsTellerInputs, type LyddaneSachsTellerResult,
+  evaluateBktJump, type BktJumpInputs, type BktJumpResult, evaluateLandauerConductance,
+  type LandauerConductanceInputs, type LandauerConductanceResult, BRIDGE_EVALUATORS, evaluateBridge,
+  EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole, BridgeEquations, christoffel,
+  CovariantDerivativeNode, ricci, RicciTensorNode, einstein, EinsteinTensorNode, bianchiResidual,
+  BianchiResidualNode, verifyKillingEquation, checkKillingEquation, evaluateConservedCharge,
+  KillingEquationOptions, KillingEquationCheck, ChristoffelAccess, integrateGeodesic,
+  type GeodesicIntegratorInputs, type GeodesicIntegratorResult, toGeometrized, fromGeometrized,
+  geometrizedFactor, NonGeometrizableDimensionError, TracableTensorNode, TensorTraceNode,
+  TensorTraceValidationResult, TensorTraceOptions, validateTensorTrace, FriedmannVariant,
+  FriedmannEquationNode, FriedmannEquationValidationResult, validateFriedmannEquation, RGCouplingNode,
+  BetaFunctionNode, BetaFunctionValidationResult, rgCoupling, validateRGCoupling,
+  validateBetaFunction, ArrowOfTime, GaugeFieldNode, TimeSymmetryPredicateNode,
+  TimeSymmetryPredicateValidationResult, validateGaugeField, validateTimeSymmetryPredicate,
+  ScalarFieldNode, KleinGordonEquationNode, KleinGordonEquationValidationResult,
+  validateKleinGordonEquation, Dimension, convertValue, parseUnit, UnitError, ParsedUnit,
+  TemperatureReading, DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION,
+  FORCE, ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, multiply, divide, power, add, subtract,
+  equals, format, DimensionMismatchError, ExprNode, TranscendentalFn, ValidationResult, Violation,
+  validate, validateEquation, validateInverseMetricPair, inferDimensionForBridge,
+  evaluateEinsteinEquationResidual, EinsteinEquationResidualInput, MetricClosure, Vec4,
+  validateEinsteinFieldEquation, EinsteinFieldEquationNode, EinsteinFieldEquationValidationResult,
+  KretschmannScalarNode, KretschmannScalarValidationResult, validateKretschmannScalar,
+  computeKretschmann, evaluateNumerical, evaluateNumericalRaw, evaluateMetricInverse, getActiveEngine,
+  setActiveEngine, NumericalBackendError, DuplicateCoordinateWarning, EngineCapabilityError,
+  hasAutogradSupport, evaluateBE37CovariantEikonalNumerical, integrateGeodesicGL4, findPerihelion,
+  NumericalResult, NumericalRawResult, EvaluateOptions, NumericalInputs, TensorEngine, EngineTensor,
+  EinsumSpec, NestedArray, GridField, ForwardGradResult, ReverseGradResult, GL4State, GL4Snapshot,
+  GL4Options, PerihelionResult, FindPerihelionOptions, composeEdges, consistencyRatio, evaluateEdge,
   minConfidence, regimesDiffer, QUANTITY_IDENTIFICATIONS, CompositionDimensionError,
   CompositionJunctionError, DomainViolationError, be11ZurekEdge, be12Edge, be16Edge, be37Edge,
   be42Edge, be42ViaRsEdge, be51Edge, be52Edge, lawSchwarzschildRadius, M_SUN_KG, be14Edge, be19Edge,
   be21Edge, be48Edge, be53Edge, be54Edge, be66Edge, be67Edge, be68Edge, be69Edge, be70Edge, be71Edge,
   be72Edge, be73Edge, be74Edge, be75Edge, be76Edge, be77Edge, be78Edge, be79Edge, be80Edge, be81Edge,
-  be82Edge, be83Edge, be84Edge, be85Edge, be86Edge, be87Edge, APPLIED_PHYSICIST_EDGES, BridgeEdge,
-  ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain,
+  be82Edge, be83Edge, be84Edge, be85Edge, be86Edge, be87Edge, APPLIED_PHYSICIST_EDGES, be88Edge,
+  be89Edge, be90Edge, be91Edge, be92Edge, be93Edge, be94Edge, be95Edge, be96Edge, be97Edge, be98Edge,
+  be99Edge, be100Edge, be101Edge, be102Edge, CONDENSED_R5_EDGES, BridgeEdge, ComposeOptions,
+  EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain,
   adjudicateBridgeEntry, adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS,
   BridgeVerdict, CatalogAdjudicationReport, RejectedBridgeAdjudication, confrontBE36, GW170817,
   BE36ConfrontationResult, GWSpeedObservation, confrontBE52, MERCURY, BE52ConfrontationResult,
@@ -8492,12 +8811,12 @@ graph TD
     end
 
     subgraph Bridges
-        N6[be11-decoherence-confrontation]
-        N7[be21-kss-confrontation]
-        N8[be23-planckian-confrontation]
-        N9[be35-bootstrap-confrontation]
-        N10[be36-gw170817-confrontation]
-        N11[...109 more]
+        N6[be100-lyddane-sachs-teller]
+        N7[be101-bkt-jump]
+        N8[be102-landauer-conductance]
+        N9[be11-decoherence-confrontation]
+        N10[be21-kss-confrontation]
+        N11[...124 more]
     end
 
     subgraph Canonical
@@ -8537,7 +8856,7 @@ graph TD
         N33[audit-coverage]
         N34[axes]
         N35[axis-audit]
-        N36[...84 more]
+        N36[...86 more]
     end
 
     subgraph Core
@@ -8589,7 +8908,8 @@ graph TD
     N0 --> N48
     N3 --> N48
     N4 --> N3
-    N10 --> N39
+    N7 --> N39
+    N8 --> N39
     N12 --> N50
     N13 --> N50
     N14 --> N12
@@ -8615,7 +8935,6 @@ graph TD
     N27 --> N28
     N28 --> N26
     N28 --> N30
-    N30 --> N62
 ```
 
 ---
@@ -8624,17 +8943,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 454 |
+| Total TypeScript Files | 471 |
 | Total Modules | 13 |
-| Total Lines of Code | 96650 |
-| Total Exports | 3351 |
-| Total Re-exports | 1611 |
+| Total Lines of Code | 99413 |
+| Total Exports | 3553 |
+| Total Re-exports | 1734 |
 | Total Classes | 61 |
-| Total Interfaces | 529 |
-| Total Functions | 834 |
+| Total Interfaces | 559 |
+| Total Functions | 849 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 580 |
+| Type-only Imports | 583 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

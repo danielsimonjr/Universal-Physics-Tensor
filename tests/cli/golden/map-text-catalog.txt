@@ -1,7 +1,7 @@
 
-Linkage map — how the equations connect via shared quantities  [source: catalog (77-bridge)]
-(43 components over 68 edges; 22 compose into chains)
-  anchored core: the clusters holding at least one of the 36 established-confidence edge(s) of the 68 in this graph
+Linkage map — how the equations connect via shared quantities  [source: catalog (92-bridge)]
+(58 components over 83 edges; 22 compose into chains)
+  anchored core: the clusters holding at least one of the 51 established-confidence edge(s) of the 83 in this graph
 
   ● cluster of 22  [ANCHORED to known physics]
      edges:  be-11-zurek, be-12, be-16, be-37, be-42, be-42-via-rs, be-51, be-52, law-schwarzschild-radius, be-48, be-11-master, be-23, be-27, be-33, be-34, be-38, be-63, be-67, be-69, be-74, be-75, be-76
@@ -23,7 +23,7 @@ Linkage map — how the equations connect via shared quantities  [source: catalo
      status: 2 established
      link hubs: hall-conductance
 
-  ○ isolated (39) — share no quantity with any other edge:
-     be-14, be-15, be-17, be-18, be-21, be-22, be-24, be-25, be-26, be-30, be-36, be-39, be-40, be-41, be-43, be-45, be-46, be-47, be-49, be-50, be-53, be-59, be-66, be-68, be-70, be-71, be-72, be-73, be-77, be-78, be-79, be-80, be-81, be-82, be-83, be-84, be-85, be-86, be-87
+  ○ isolated (54) — share no quantity with any other edge:
+     be-100, be-101, be-102, be-14, be-15, be-17, be-18, be-21, be-22, be-24, be-25, be-26, be-30, be-36, be-39, be-40, be-41, be-43, be-45, be-46, be-47, be-49, be-50, be-53, be-59, be-66, be-68, be-70, be-71, be-72, be-73, be-77, be-78, be-79, be-80, be-81, be-82, be-83, be-84, be-85, be-86, be-87, be-88, be-89, be-90, be-91, be-92, be-93, be-94, be-95, be-96, be-97, be-98, be-99
 
   (a structural map — shared-quantity connectivity, NOT a credibility signal)

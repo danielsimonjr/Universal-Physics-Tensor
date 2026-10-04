@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Vendor PhysJS `03e8bb77c952f720bdd2730af2afc6a7f2d36243`. Lean files stay `lean/<File>.lean`. Add BE-88 through BE-102 as formally proved. Landau diamagnetism and the BCS coherence length stay unproved and take no bridge id.
+  Done: the manifest commit is that sha. The fifteen theorems are kind `bridge`. BE-90 assumes `π⁴/15`. BE-95 is one trial wall. BE-97 is `T = 0`. BE-98 reads `ζ` as the quartic coefficient. BE-101 is the energy-entropy argument. The r5 dogfood Debye premise that equates the three-branch sum to `n` is recorded as `k_D³ = 2 π² n`.
+
 - [x] A synonym is one governing variable.
   `upt explain cyclotron-frequency` with `magnetic-field` also lists `magnetic-flux-density` and says the inputs do not fix a unique monomial. The derivation line is already `∝ charge·magnetic-field·mass^-1`.
   Done: that command exits 0, prints `Recovered value: -175882001077.216`, and says `{charge, magnetic-field, mass}` fix it up to a dimensionless constant: `cyclotron-frequency ∝ charge·magnetic-field·mass^-1`. It does not name `magnetic-flux-density`. Larmor radius at `speed=1e6` and positive `q` prints `0.00000568563010356572` and the same unique-monomial sentence. `magnetic-flux-density=1` still recovers the positive cyclotron frequency. Two different values of the pair stay two inputs.

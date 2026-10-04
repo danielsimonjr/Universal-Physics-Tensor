@@ -28,13 +28,22 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
     // identification: a minimal surface is not a pull-in electrode, and a
     // Josephson voltage is not a diode voltage. be-85 and be-86 stay in the
     // unconnected remainder.
+    // The lists without be-88..102, and without be-18, are the record from
+    // before those edges. be-18 shares the token "mass" with mass-action-gap.
+    // be-88, be-89, be-92, be-93, be-94, and be-99 share "density" with
+    // carrier-density. be-96 shares "length". be-101 shares "temperature".
+    // be-102 shares "conductance" with the Hall conductance. be-90, be-91,
+    // and be-97 share a token with another isolated edge. A shared token is
+    // not an identification. be-95, be-98, and be-100 stay unconnected.
     expect(report.connectedOrphans).toEqual([
-      'be-14', 'be-15', 'be-22', 'be-24', 'be-26', 'be-36', 'be-41', 'be-43', 'be-45', 'be-47', 'be-59',
-      'be-66', 'be-68', 'be-70', 'be-71', 'be-73', 'be-77', 'be-78', 'be-79', 'be-80', 'be-81', 'be-82',
-      'be-83', 'be-84', 'be-87',
+      'be-101', 'be-102', 'be-14', 'be-15', 'be-18', 'be-22', 'be-24', 'be-26', 'be-36', 'be-41', 'be-43',
+      'be-45', 'be-47', 'be-59', 'be-66', 'be-68', 'be-70', 'be-71', 'be-73', 'be-77', 'be-78', 'be-79',
+      'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-87', 'be-88', 'be-89', 'be-90', 'be-91', 'be-92',
+      'be-93', 'be-94', 'be-96', 'be-97', 'be-99',
     ]);
     expect(report.unconnectedOrphans).toEqual([
-      'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72', 'be-85', 'be-86',
+      'be-100', 'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
+      'be-85', 'be-86', 'be-95', 'be-98',
     ]);
     // every isolated bridge is accounted for (connected ∪ unconnected, no overlap)
     const both = new Set([...report.connectedOrphans, ...report.unconnectedOrphans]);
