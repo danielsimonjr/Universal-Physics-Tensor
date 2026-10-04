@@ -3,7 +3,7 @@ metadata:
   version: 3.1.0
   totalFiles: 453
   totalModules: 13
-  totalExports: 3342
+  totalExports: 3343
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8433,6 +8433,9 @@ modules:
         - file: ../statuses.js
           imports:
             - statusMeaning
+        - file: ../../composition/bridge-analysis.js
+          imports:
+            - vacuumConstantThroughAlpha
       exports:
         - command
       constants:
@@ -11091,6 +11094,7 @@ modules:
             - DATA_CONFRONTED_IDS
       exports:
         - dimensionalFreedom
+        - vacuumConstantThroughAlpha
         - attemptDerivation
         - anchoringDistance
         - bridgePriority
@@ -11101,6 +11105,7 @@ modules:
         - LinkCandidate
       functions:
         - dimensionalFreedom
+        - vacuumConstantThroughAlpha
         - attemptDerivation
         - anchoringDistance
         - bridgePriority
@@ -22338,11 +22343,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 453
   totalModules: 13
-  totalLinesOfCode: 96409
-  totalExports: 3342
+  totalLinesOfCode: 96436
+  totalExports: 3343
   totalClasses: 60
   totalInterfaces: 529
-  totalFunctions: 828
+  totalFunctions: 829
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 846

@@ -17,7 +17,7 @@ Deriving the bridge equations by dimensions
     be-70                  +[k_B]  ×1.000e+0
     be-71                  +[]  ×1.000e+0
     be-73                  +[]  ×1.000e+0
-    be-74                  +[ℏ,c,e]  ×5.452e+0  (empirical/tuned constant)
+    be-74                  +[ℏ,c,e]  ×5.452e+0  (vacuum constant; μ0 rewritten through α)
     be-80                  +[]  ×1.125e+0  (empirical/tuned constant)
     be-83                  +[]  ×1.000e+0
     be-84                  +[]  ×4.532e+0  (empirical/tuned constant)
