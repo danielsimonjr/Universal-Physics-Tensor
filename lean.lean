@@ -52,3 +52,6 @@ import lean.EinsteinRelation
 import lean.Clapeyron
 import lean.GravitationalRedshift
 import lean.KelvinRelation
+import lean.MagneticPressure
+import lean.LondonPenetration
+import lean.PlasmaBeta
