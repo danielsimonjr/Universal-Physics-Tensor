@@ -4,7 +4,7 @@
     "version": "3.1.0",
     "totalFiles": 442,
     "totalModules": 13,
-    "totalExports": 3192
+    "totalExports": 3193
   },
   "entryPoints": [
     {
@@ -17199,6 +17199,7 @@
           }
         ],
         "exports": [
+          "withBoundAliases",
           "evaluateEdge",
           "CompositionJunctionError",
           "CompositionDimensionError",
@@ -17218,6 +17219,7 @@
           "BridgeEdge"
         ],
         "functions": [
+          "withBoundAliases",
           "evaluateEdge"
         ]
       },
@@ -17359,9 +17361,9 @@
           {
             "file": "../edge.js",
             "imports": [
+              "withBoundAliases",
               "BridgeEdge"
-            ],
-            "typeOnly": true
+            ]
           },
           {
             "file": "../quantity.js",
@@ -31001,16 +31003,16 @@
   "statistics": {
     "totalTypeScriptFiles": 442,
     "totalModules": 13,
-    "totalLinesOfCode": 94179,
-    "totalExports": 3192,
+    "totalLinesOfCode": 94245,
+    "totalExports": 3193,
     "totalClasses": 60,
     "totalInterfaces": 507,
-    "totalFunctions": 816,
+    "totalFunctions": 817,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 796,
     "totalReExports": 1521,
-    "totalTypeOnlyImports": 581,
+    "totalTypeOnlyImports": 580,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 1,

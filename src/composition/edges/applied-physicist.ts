@@ -25,7 +25,7 @@ import { evaluatePlasmaBeta } from '../../bridges/be76-plasma-beta.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import { DIMENSIONLESS } from '../../dimensional/types.js';
 import { CONSTANTS } from '../../dimensional/symbolic-constants.js';
-import type { BridgeEdge } from '../edge.js';
+import { withBoundAliases, type BridgeEdge } from '../edge.js';
 import type { Quantity } from '../quantity.js';
 import {
   alfvenSpeedQ,
@@ -100,7 +100,7 @@ const BE68_SYMBOLIC: ExprNode = prod(
  *
  * @public
  */
-export const be66Edge: BridgeEdge = {
+export const be66Edge: BridgeEdge = withBoundAliases({
   id: 'be-66',
   beId: 66,
   kind: 'law',
@@ -132,7 +132,7 @@ export const be66Edge: BridgeEdge = {
   symbolic: BE66_SYMBOLIC,
   citation:
     'OpenStax University Physics Volume 2, https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog\'s assembly.',
-};
+});
 
 /**
  * BE-67 Alfvén speed: (magnetic-flux-density, plasma-mass-density) →
@@ -142,7 +142,7 @@ export const be66Edge: BridgeEdge = {
  *
  * @public
  */
-export const be67Edge: BridgeEdge = {
+export const be67Edge: BridgeEdge = withBoundAliases({
   id: 'be-67',
   beId: 67,
   kind: 'law',
@@ -169,7 +169,7 @@ export const be67Edge: BridgeEdge = {
     }).v_m_per_s,
   symbolic: BE67_SYMBOLIC,
   citation: 'Alfvén 1942 Nature 150:405. SI form B/√(μ0 ρ); ρ is the total mass density.',
-};
+});
 
 /**
  * BE-68 Tolman–Ehrenfest: (proper-temperature, metric-g00) →
@@ -179,7 +179,7 @@ export const be67Edge: BridgeEdge = {
  *
  * @public
  */
-export const be68Edge: BridgeEdge = {
+export const be68Edge: BridgeEdge = withBoundAliases({
   id: 'be-68',
   beId: 68,
   kind: 'law',
@@ -207,7 +207,7 @@ export const be68Edge: BridgeEdge = {
   symbolic: BE68_SYMBOLIC,
   citation:
     'Tolman & Ehrenfest 1930 Phys. Rev. 36:1791 (T0 √g_44). Catalog form T √(−g_00).',
-};
+});
 
 /** |ω/k| = √(c_s² + B²/(μ0 ρ)), with μ0 = 1/(ε0 c²). */
 const BE69_SYMBOLIC: ExprNode = pow(
@@ -247,7 +247,7 @@ const BE73_SYMBOLIC: ExprNode = prod(qsym(seebeckCoefficientQ), qsym(peltierTemp
  *
  * @public
  */
-export const be69Edge: BridgeEdge = {
+export const be69Edge: BridgeEdge = withBoundAliases({
   id: 'be-69',
   beId: 69,
   kind: 'law',
@@ -278,7 +278,7 @@ export const be69Edge: BridgeEdge = {
   symbolic: BE69_SYMBOLIC,
   citation:
     'PhysJS.FastMagnetosonic.speed_eq. Perpendicular compressional phase speed. c_s = 0 is the Alfvén number of a different polarization.',
-};
+});
 
 /**
  * BE-70 Einstein relation: (electrical-mobility, einstein-temperature,
@@ -286,7 +286,7 @@ export const be69Edge: BridgeEdge = {
  *
  * @public
  */
-export const be70Edge: BridgeEdge = {
+export const be70Edge: BridgeEdge = withBoundAliases({
   id: 'be-70',
   beId: 70,
   kind: 'law',
@@ -316,7 +316,7 @@ export const be70Edge: BridgeEdge = {
     }).D_m2_per_s,
   symbolic: BE70_SYMBOLIC,
   citation: 'PhysJS.EinsteinRelation.diffusion_eq. Drift cancels diffusion on a Boltzmann profile.',
-};
+});
 
 /**
  * BE-71 Clapeyron slope: (specific-latent-heat, clapeyron-temperature,
@@ -324,7 +324,7 @@ export const be70Edge: BridgeEdge = {
  *
  * @public
  */
-export const be71Edge: BridgeEdge = {
+export const be71Edge: BridgeEdge = withBoundAliases({
   id: 'be-71',
   beId: 71,
   kind: 'law',
@@ -354,7 +354,7 @@ export const be71Edge: BridgeEdge = {
     }).slope_Pa_per_K,
   symbolic: BE71_SYMBOLIC,
   citation: 'PhysJS.Clapeyron.slope_eq. L = T (s2−s1) is already substituted. The entropy slope is not a second edge.',
-};
+});
 
 /**
  * BE-72 gravitational redshift: (redshift-metric-g00-1,
@@ -364,7 +364,7 @@ export const be71Edge: BridgeEdge = {
  *
  * @public
  */
-export const be72Edge: BridgeEdge = {
+export const be72Edge: BridgeEdge = withBoundAliases({
   id: 'be-72',
   beId: 72,
   kind: 'law',
@@ -392,7 +392,7 @@ export const be72Edge: BridgeEdge = {
   symbolic: BE72_SYMBOLIC,
   citation:
     'PhysJS.GravitationalRedshift.frequency_ratio. Not PhysJS.TolmanEhrenfest.hydrostatic_constant. tolman_same_ratio is nested and is not this edge.',
-};
+});
 
 /**
  * BE-73 Kelvin relation: (seebeck-coefficient, peltier-temperature) →
@@ -401,7 +401,7 @@ export const be72Edge: BridgeEdge = {
  *
  * @public
  */
-export const be73Edge: BridgeEdge = {
+export const be73Edge: BridgeEdge = withBoundAliases({
   id: 'be-73',
   beId: 73,
   kind: 'law',
@@ -425,7 +425,7 @@ export const be73Edge: BridgeEdge = {
   symbolic: BE73_SYMBOLIC,
   citation:
     'PhysJS.KelvinRelation.peltier_eq. L12 = L21 is ThermoelectricOnsager.onsager, a structure field, not an axiom and not an input.',
-};
+});
 
 /** p_B = B² / (2 μ0). The 2 is the inductor integral, not a Buckingham constant. */
 const BE74_SYMBOLIC: ExprNode = ratio(pow(qsym(magneticFluxDensityQ), lit(2)), prod(lit(2), mu0));
@@ -449,7 +449,7 @@ const BE76_SYMBOLIC: ExprNode = ratio(
  *
  * @public
  */
-export const be74Edge: BridgeEdge = {
+export const be74Edge: BridgeEdge = withBoundAliases({
   id: 'be-74',
   beId: 74,
   kind: 'law',
@@ -468,7 +468,7 @@ export const be74Edge: BridgeEdge = {
   symbolic: BE74_SYMBOLIC,
   citation:
     'PhysJS.MagneticPressure.pressure_eq. U = (L/2) I². C = 1 is the battery work per volume, not this pressure.',
-};
+});
 
 /**
  * BE-75 London penetration depth: (effective-mass, carrier-density) →
@@ -477,7 +477,7 @@ export const be74Edge: BridgeEdge = {
  *
  * @public
  */
-export const be75Edge: BridgeEdge = {
+export const be75Edge: BridgeEdge = withBoundAliases({
   id: 'be-75',
   beId: 75,
   kind: 'law',
@@ -501,7 +501,7 @@ export const be75Edge: BridgeEdge = {
   symbolic: BE75_SYMBOLIC,
   citation:
     'PhysJS.LondonPenetration.depth_eq. Units also admit μ0 e²/m. Not the classical skin depth.',
-};
+});
 
 /**
  * BE-76 plasma beta: (carrier-density, temperature, magnetic-pressure) →
@@ -512,7 +512,7 @@ export const be75Edge: BridgeEdge = {
  *
  * @public
  */
-export const be76Edge: BridgeEdge = {
+export const be76Edge: BridgeEdge = withBoundAliases({
   id: 'be-76',
   beId: 76,
   kind: 'bridge',
@@ -542,7 +542,7 @@ export const be76Edge: BridgeEdge = {
   symbolic: BE76_SYMBOLIC,
   citation:
     'PhysJS.PlasmaBeta.beta_eq. p_B is PhysJS.MagneticPressure.pressure_eq. Using B²/μ0 is half of this beta. Not a plasma-β inequality.',
-};
+});
 
 /** The applied-physicist edges, in catalog-id order. @public */
 export const APPLIED_PHYSICIST_EDGES: readonly BridgeEdge[] = [
