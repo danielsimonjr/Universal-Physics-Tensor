@@ -3,7 +3,7 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
-import PhysJS.Dimensional
+import lean.Dimensional
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.FinCases

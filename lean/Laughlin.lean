@@ -3,7 +3,7 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
-import PhysJS.QuantumHall
+import lean.QuantumHall
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.NormNum
 

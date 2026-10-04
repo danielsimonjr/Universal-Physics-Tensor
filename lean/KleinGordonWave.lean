@@ -3,8 +3,8 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
-import PhysJS.Inequalities
-import PhysJS.PlaneWave
+import lean.Inequalities
+import lean.PlaneWave
 
 /-!
 `ab-klein-gordon-wave`. Covers `bound.delta` exactly, at the dispersion relation.

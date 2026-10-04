@@ -22,7 +22,14 @@ rev = "af484f78ee0701290595f8bf892b157b10d64940"
 
 [[lean_lib]]
 name = "PhysJS"
-# Module PhysJS.Clapeyron is lean/PhysJS/Clapeyron.lean. The library name
-# stays PhysJS, so theorem names do not change. `lake build` still runs
-# from the repository root, where this file lives.
-srcDir = "lean"
+# `lean/Clapeyron.lean` is the module `lean.Clapeyron`. The aggregator
+# `lean.lean` is the module `lean` and imports the others. `srcDir` stays
+# the package root: `srcDir = "lean"` would look for `lean/lean/Clapeyron.lean`.
+# `lean.*` builds `lean.lean` and every file in `lean/`. `PhysJS.+` would
+# build `lean/PhysJS/`, which this tree does not have. Declarations stay in
+# `namespace PhysJS...`, so theorem names do not change. The axiom audit
+# imports the module `lean` and checks declarations defined in `lean` and
+# `lean.*`.
+srcDir = "."
+roots = ["lean"]
+globs = ["lean.*"]

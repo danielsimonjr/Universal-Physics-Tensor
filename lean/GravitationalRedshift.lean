@@ -3,7 +3,7 @@ Copyright (c) 2026 Daniel Simon Jr.
 Released under MIT license as described in the file LICENSE.
 -/
 
-import PhysJS.TolmanEhrenfest
+import lean.TolmanEhrenfest
 import Mathlib.Analysis.Real.Sqrt
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
