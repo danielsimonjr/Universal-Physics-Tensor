@@ -170,6 +170,8 @@ Flags:
         (power/(area*temperature^4)); pressure, density, volume, viscosity,
         resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
         In --formula, a bare e is the elementary charge and E is energy.
+        A name from a dimension argument is one symbol, hyphens included.
+        A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
         recover the dimensionless prefactor. A target that is not a unique

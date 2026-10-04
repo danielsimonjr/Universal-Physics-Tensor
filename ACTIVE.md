@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A hyphenated name in `upt derive --formula` is the symbol the dimension argument accepted.
+  `upt derive fermi-energy:energy reduced-planck-constant:action mass:mass carrier-density:L^-3 --formula "(reduced-planck-constant^2/(2*mass))*(3*pi^2*carrier-density)^(2/3)"` exits 2 with `undeclared symbol 'reduced'`.
+  Done: that command exits 0 and the recovered prefactor is `4.7854e+0`. The same formula with `reduced-planck-constant` left undeclared still names `reduced`, and the line says a hyphen between names is subtraction.
+
 - [x] A synonym is one governing variable.
   `upt explain cyclotron-frequency` with `magnetic-field` also lists `magnetic-flux-density` and says the inputs do not fix a unique monomial. The derivation line is already `∝ charge·magnetic-field·mass^-1`.
   Done: that command exits 0, prints `Recovered value: -175882001077.216`, and says `{charge, magnetic-field, mass}` fix it up to a dimensionless constant: `cyclotron-frequency ∝ charge·magnetic-field·mass^-1`. It does not name `magnetic-flux-density`. Larmor radius at `speed=1e6` and positive `q` prints `0.00000568563010356572` and the same unique-monomial sentence. `magnetic-flux-density=1` still recovers the positive cyclotron frequency. Two different values of the pair stay two inputs.
