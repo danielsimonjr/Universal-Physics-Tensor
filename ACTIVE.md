@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A comparison residual is value/reference − 1. Its glossary says signed relative difference, including when the residual is negative.
+  Done: `signedRelativeDifference` is that glossary. The poor-conductor skin-depth line prints `maxwell_deviation = -0.0487572085250777` beside that phrase. The copper lumped-cooling line prints `parent_deviation = -0.000052203242016934936` beside it. Resistor-noise and Brownian residuals use the same phrase. Kepler's `(1 + q)^{2/3} − 1` still says excess.
+
 - [x] Record the engineering-physicist dogfood of published `universal-physics-tensor@3.1.0`. The report is `docs/dogfood/2026-10-04-engineering-physicist-bridges-r4.md`. The session does not change `src/`.
   Done: the report is that file. npm `3.1.0` gitHead is `d5db9af65c27c3796d9bde37b7f286923ef12c9d`. Annotated tag `v3.1.0` (object `8d110b6d26cbe3e40ef608446aa2bd0a17cb573c`) points at that commit. Publish run `37209533226` succeeded. New candidates stay unproven. The bugs are filed as issues 351–358 and are not fixed in this change.
 

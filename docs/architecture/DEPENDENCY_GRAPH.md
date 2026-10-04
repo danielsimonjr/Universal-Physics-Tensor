@@ -3318,7 +3318,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../core/constants.js` | `K_B_SI` | Import |
 | `./quadrature.js` | `adaptiveSimpson` | Import |
-| `./types.js` | `check, requirePositive, AppliedCase` | Import |
+| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
 
 **Exports:**
 - Functions: `ballisticDeficit`, `hydrodynamicMsdRatio`, `faxenParallel`, `brennerPerpendicular`
@@ -3387,7 +3387,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `C_SI, H_SI, K_B_SI` | Import |
-| `./types.js` | `check, requirePositive, AppliedCase` | Import |
+| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
 
 **Exports:**
 - Interfaces: `LumpedRadiating`
@@ -3411,7 +3411,7 @@ The codebase is organized into the following modules:
 | `../core/constants.js` | `H_SI, K_B_SI` | Import |
 | `../bridges/be58-johnson-nyquist.js` | `evaluateJohnsonNyquist` | Import |
 | `./quadrature.js` | `adaptiveSimpson` | Import |
-| `./types.js` | `check, requirePositive, AppliedCase` | Import |
+| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
 
 **Exports:**
 - Constants: `CLASSICAL_MAX_X`, `FLAT_BAND_MAX_WRC`, `AMPLIFIER_MAX_REL_SIGMA`, `RESISTOR_NOISE_CASE`
@@ -3424,7 +3424,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `C_SI` | Import |
-| `./types.js` | `check, requirePositive, AppliedCase` | Import |
+| `./types.js` | `check, requirePositive, signedRelativeDifference, AppliedCase` | Import |
 
 **Exports:**
 - Functions: `maxwellDepthFactor`
@@ -3441,7 +3441,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `CaseOutput`, `CaseCheck`, `CaseComparison`, `CaseExample`, `CaseResult`, `AppliedCase`
-- Functions: `requirePositive`
+- Functions: `signedRelativeDifference`, `requirePositive`
 - Constants: `check`
 
 ---
@@ -8420,12 +8420,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 442 |
 | Total Modules | 13 |
-| Total Lines of Code | 94176 |
-| Total Exports | 3192 |
+| Total Lines of Code | 94190 |
+| Total Exports | 3193 |
 | Total Re-exports | 1521 |
 | Total Classes | 60 |
 | Total Interfaces | 507 |
-| Total Functions | 816 |
+| Total Functions | 817 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 581 |
