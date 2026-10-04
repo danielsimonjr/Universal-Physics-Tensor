@@ -10,8 +10,10 @@
  * carries a constant of its own.
  *
  * Every quote is verbatim wikitext from the pinned Wikipedia revision in its
- * locator, fetched and matched on 2026-09-25 (the first nine) or 2026-09-27 (the
- * rest, and the group prefactor below).
+ * locator, fetched and matched on 2026-09-25 (the first nine), 2026-09-27 (the
+ * next rows, and the group prefactor below), or 2026-10-04 (dynamic pressure,
+ * Laplace pressure, inductor energy, equipartition, kinetic pressure, half-life,
+ * and the Thomson cross-section).
  *
  * A prefactor that depends on a dimensionless group the entry's dimensional
  * record does not carry (CE-sound-speed's √γ) is not a constant, so it is not in
@@ -163,6 +165,48 @@ export const CANONICAL_PREFACTORS: readonly CanonicalPrefactor[] = [
     prefactor: 1,
     quote: String.raw`\lambda\!\!\!\bar{} = \frac{\lambda}{2 \pi} = \frac{\hbar}{m c},`,
     locator: "Wikipedia, 'Compton wavelength', revision 1376812882, wikitext line 13",
+  },
+  {
+    id: 'CE-dynamic-pressure',
+    prefactor: 0.5,
+    quote: String.raw`q = \frac{1}{2}\rho\, u^2`,
+    locator: "Wikipedia, 'Dynamic pressure', revision 1323192083, wikitext line 6",
+  },
+  {
+    id: 'CE-laplace-pressure',
+    prefactor: 2,
+    quote: String.raw`\Delta p = \frac{2 \gamma}{R}.`,
+    locator: "Wikipedia, 'Young–Laplace equation', revision 1350190310, wikitext line 40",
+  },
+  {
+    id: 'CE-inductor-energy',
+    prefactor: 0.5,
+    quote: String.raw`\tfrac{1}{2} L\,I^2`,
+    locator: "Wikipedia, 'Inductance', revision 1372308482, wikitext line 109",
+  },
+  {
+    id: 'CE-equipartition',
+    prefactor: 1.5,
+    quote: String.raw`\langle H_{\mathrm{kin}} \rangle = \left\langle \frac{p^2}{2m} \right\rangle = \langle \tfrac{1}{2} m v^{2} \rangle = \tfrac{3}{2} k_\text{B} T.`,
+    locator: "Wikipedia, 'Equipartition theorem', revision 1373697867, wikitext line 304",
+  },
+  {
+    id: 'CE-kinetic-pressure',
+    prefactor: 1 / 3,
+    quote: String.raw`= \frac{1}{3} n mv_\text{rms}^2`,
+    locator: "Wikipedia, 'Kinetic theory of gases', revision 1371478093, wikitext line 173",
+  },
+  {
+    id: 'CE-half-life',
+    prefactor: Math.log(2),
+    quote: String.raw`t_{1/2} = \frac{\ln (2)}{\lambda} = \tau \ln(2)`,
+    locator: "Wikipedia, 'Half-life', revision 1373221894, wikitext line 64",
+  },
+  {
+    id: 'CE-thomson-cross-section',
+    prefactor: (8 * Math.PI) / 3,
+    quote: String.raw`\sigma_\text{t} = \frac{8\pi} 3 \left(\frac{q^2}{4\pi\varepsilon_0 mc^2}\right)^2 = \frac{8\pi} 3 {r}^2 = \frac{8 \pi}{3} \left(\alpha \lambda\!\!\!\bar{}_\text{c}\right)^2 ,`,
+    locator: "Wikipedia, 'Thomson scattering', revision 1348001870, wikitext line 31",
   },
 ];
 

@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] The canonical graph evaluator ignores sourced dimensionless prefactors.
+  Done: explain of Stokes drag recovers `1.88495559215388e-12`. Dynamic pressure recovers `2000`. Laplace pressure recovers `144`. Field energy stays a decoy. Stokes–Einstein stays derived at `1/(6π)`.
+
 - [x] Vendor PhysJS `92f87257a1e3086a48cdc19fe4361cc1c5909d49`. Lean files stay `lean/<File>.lean`. Add BE-77 through BE-87 as formally proved. BE-83 reads the Kelvin relation along temperature and does not compose with BE-73. A denial sentence is not a search hit.
   Done: the manifest commit is that sha. The eleven theorems are kind `bridge`. Explain recovers each catalog equation. `upt search "thomson coefficient"` names be-83. `upt search "skin depth"` names `case-skin-depth` and does not name be-75. `onsager` still names be-73.
 

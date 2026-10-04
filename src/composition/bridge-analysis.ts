@@ -132,7 +132,7 @@ const CLEAN_PREFACTORS: readonly number[] = [
   1, 2, 3, 4, 0.5, 0.25, Math.log(2),
   1 / (2 * Math.PI), 1 / (4 * Math.PI), 1 / (8 * Math.PI),
   Math.sqrt(2 * Math.PI), Math.sqrt(Math.PI),
-  Math.PI, 2 * Math.PI, 4 * Math.PI, 6 * Math.PI,
+  Math.PI, 2 * Math.PI, 4 * Math.PI, 6 * Math.PI, 1 / (6 * Math.PI),
 ];
 const isCleanPrefactor = (p: number): boolean =>
   CLEAN_PREFACTORS.some((c) => Math.abs(Math.abs(p) - c) < 1e-3 * c);
@@ -142,12 +142,30 @@ const isCleanPrefactor = (p: number): boolean =>
  * prefactor. Stefan–Boltzmann (≈0.1645) and Wien (≈1.265) stay inside that
  * window and keep the empirical/tuned mark. A G-closure of an atomic law
  * (10^21–10^25) and the ℏ, c, e stand-in for the field energy density
- * (≈10.9) do not. A recognized constant (2π, ln 2, 4π, …) stays even when
- * it sits outside the window. Catalog bridges are not canonical ids, so an
- * empirical scale such as be-48 stays where the catalog audit put it.
+ * (≈10.9) do not. After the sourced ½ is applied, the same stand-in sits
+ * near 5.45, inside the window, and times α is 1/(8π). That is μ0 rewritten
+ * through α. A larger subset that still contains {ℏ, c, e} is the same
+ * rewrite, so it is still not derived. A catalog id is not a canonical id,
+ * so be-74 stays where the catalog audit put it.
+ * A recognized constant (2π, ln 2, 4π, 1/(6π), …) stays even when it sits
+ * outside the window.
  */
-function recoveredCanonicalPrefactor(id: string, prefactor: number): boolean {
+const ALPHA = 7.2973525693e-3;
+
+function recoveredCanonicalPrefactor(
+  id: string,
+  prefactor: number,
+  subset: readonly string[],
+): boolean {
   if (!id.startsWith('CE-') || isCleanPrefactor(prefactor)) return true;
+  if (
+    subset.includes('ℏ') &&
+    subset.includes('c') &&
+    subset.includes('e') &&
+    isCleanPrefactor(Math.abs(prefactor) * ALPHA)
+  ) {
+    return false;
+  }
   const mag = Math.abs(prefactor);
   if (!(mag > 0) || !Number.isFinite(mag)) return false;
   return Math.abs(Math.log10(mag)) <= 1;
@@ -198,7 +216,7 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
     const cv =
       Math.sqrt(ratios.reduce((a, b) => a + (b - mean) ** 2, 0) / ratios.length) /
       Math.abs(mean);
-    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean)) {
+    if (cv < 1e-9 && recoveredCanonicalPrefactor(e.id, mean, S.map((x) => x.name))) {
       return {
         status: 'derived',
         subset: S.map((x) => x.name),
