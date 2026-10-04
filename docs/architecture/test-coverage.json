@@ -5283,6 +5283,7 @@
     "src/cli/commands/atlas.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5365,6 +5366,7 @@
     "src/cli/commands/audit.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5447,6 +5449,7 @@
     "src/cli/commands/axes.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5529,6 +5532,7 @@
     "src/cli/commands/candidates.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5611,6 +5615,7 @@
     "src/cli/commands/canonical.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5693,6 +5698,7 @@
     "src/cli/commands/chain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5775,6 +5781,7 @@
     "src/cli/commands/confront.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5857,6 +5864,7 @@
     "src/cli/commands/connectors.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -5939,6 +5947,7 @@
     "src/cli/commands/coverage.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6021,6 +6030,7 @@
     "src/cli/commands/derive.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6103,6 +6113,7 @@
     "src/cli/commands/discover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6185,6 +6196,7 @@
     "src/cli/commands/eval.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6267,6 +6279,7 @@
     "src/cli/commands/evaluate.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6350,6 +6363,7 @@
     "src/cli/commands/explain.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6432,6 +6446,7 @@
     "src/cli/commands/frontier.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6514,6 +6529,7 @@
     "src/cli/commands/ground.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6596,6 +6612,7 @@
     "src/cli/commands/index.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6678,6 +6695,7 @@
     "src/cli/commands/map.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6760,6 +6778,7 @@
     "src/cli/commands/metric.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6842,6 +6861,7 @@
     "src/cli/commands/path.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -6924,6 +6944,7 @@
     "src/cli/commands/predict.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7006,6 +7027,7 @@
     "src/cli/commands/priority.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7088,6 +7110,7 @@
     "src/cli/commands/probe.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7171,6 +7194,7 @@
     "src/cli/commands/recover.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7253,6 +7277,7 @@
     "src/cli/commands/regime.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7335,6 +7360,7 @@
     "src/cli/commands/retrieve.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7417,6 +7443,7 @@
     "src/cli/commands/search.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7499,6 +7526,7 @@
     "src/cli/commands/symbolic.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7581,6 +7609,7 @@
     "src/cli/commands/testplan.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -7683,6 +7712,7 @@
     "src/cli/main.ts": [
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/stokes-einstein-regime.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/cli/applied-cases.test.ts",
       "tests/cli/applied-physics-audit.test.ts",
       "tests/cli/atlas-command.test.ts",
@@ -8444,6 +8474,7 @@
       "tests/bridges/be-67-alfven-speed.test.ts",
       "tests/bridges/be-68-tolman-ehrenfest.test.ts",
       "tests/bridges/be-69-fast-magnetosonic.test.ts",
+      "tests/bridges/be-70-einstein-relation.test.ts",
       "tests/bridges/be-71-clapeyron.test.ts",
       "tests/bridges/be-72-gravitational-redshift.test.ts",
       "tests/bridges/be-74-76.test.ts",
@@ -14847,7 +14878,38 @@
       "src/bridges/be85-shot-noise.ts",
       "src/bridges/be86-reynolds-analogy.ts",
       "src/bridges/be87-capacitor-noise.ts",
-      "src/atlas/catalog-formal-ref.ts"
+      "src/atlas/catalog-formal-ref.ts",
+      "src/composition/edges/applied-physicist.ts",
+      "src/cli/main.ts",
+      "src/cli/commands/index.ts",
+      "src/cli/commands/priority.ts",
+      "src/cli/commands/audit.ts",
+      "src/cli/commands/coverage.ts",
+      "src/cli/commands/canonical.ts",
+      "src/cli/commands/recover.ts",
+      "src/cli/commands/connectors.ts",
+      "src/cli/commands/predict.ts",
+      "src/cli/commands/candidates.ts",
+      "src/cli/commands/frontier.ts",
+      "src/cli/commands/explain.ts",
+      "src/cli/commands/symbolic.ts",
+      "src/cli/commands/eval.ts",
+      "src/cli/commands/derive.ts",
+      "src/cli/commands/map.ts",
+      "src/cli/commands/discover.ts",
+      "src/cli/commands/confront.ts",
+      "src/cli/commands/axes.ts",
+      "src/cli/commands/evaluate.ts",
+      "src/cli/commands/ground.ts",
+      "src/cli/commands/probe.ts",
+      "src/cli/commands/regime.ts",
+      "src/cli/commands/path.ts",
+      "src/cli/commands/atlas.ts",
+      "src/cli/commands/chain.ts",
+      "src/cli/commands/search.ts",
+      "src/cli/commands/retrieve.ts",
+      "src/cli/commands/metric.ts",
+      "src/cli/commands/testplan.ts"
     ],
     "tests/bridges/be-71-clapeyron.test.ts": [
       "src/bridges/be71-clapeyron.ts",

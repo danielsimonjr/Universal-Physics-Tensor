@@ -353,13 +353,14 @@ export const be70Edge: BridgeEdge = withBoundAliases({
   target: diffusivityQ,
   confidence: 'established',
   domain: {
-    description: 'μ finite, T ≠ 0, q ≠ 0',
+    description: 'μ finite, T ≠ 0, q ≠ 0, and μ and q have the same sign',
     predicate: (i) =>
       finite(i['electrical-mobility']) &&
       finite(i['einstein-temperature']) &&
       i['einstein-temperature'] !== 0 &&
       finite(i['carrier-charge']) &&
-      i['carrier-charge'] !== 0,
+      i['carrier-charge'] !== 0 &&
+      i['electrical-mobility'] * i['carrier-charge'] >= 0,
   },
   evaluate: (i) =>
     evaluateEinsteinRelation({
