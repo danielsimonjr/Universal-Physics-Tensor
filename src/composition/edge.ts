@@ -68,8 +68,9 @@ export interface BridgeEdge {
   readonly sources: readonly Quantity[];
   /**
    * Evaluator keys and the symbols a reader copies, keyed by source name.
-   * `evaluate` stays keyed by the source name. Explain, search, map, and
-   * derive read this record instead of a private spelling list.
+   * `evaluate`, the domain predicate, and `evaluateEdge` copy an alias onto
+   * that source name before the formula. Explain, search, map, and derive
+   * read the same record.
    */
   readonly aliases?: Readonly<Record<string, readonly string[]>>;
   /** Output quantity. */
@@ -233,8 +234,72 @@ export class UndefinedCompositionError extends Error {
 }
 
 /**
+ * Two keys for one source disagree. The formula is not run.
+ * The message names the source and every key that was set.
+ * @internal
+ */
+class AliasConflictError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AliasConflictError';
+  }
+}
+
+/**
+ * Copy each present alias onto its source name. The caller's record is
+ * not mutated. A source that is already set to the same number stays.
+ * Two different numbers for one source throw {@link AliasConflictError}.
+ * @internal
+ */
+function bindAliasInputs(
+  edge: BridgeEdge,
+  inputs: Record<string, number>,
+): Record<string, number> {
+  if (edge.aliases === undefined) return inputs;
+  let out: Record<string, number> | undefined;
+  for (const [quantity, keys] of Object.entries(edge.aliases)) {
+    const named = Object.hasOwn(inputs, quantity);
+    const present = keys.filter((key) => Object.hasOwn(inputs, key));
+    if (!named && present.length === 0) continue;
+    const values = [
+      ...(named ? [{ key: quantity, value: inputs[quantity]! }] : []),
+      ...present.map((key) => ({ key, value: inputs[key]! })),
+    ];
+    const first = values[0]!.value;
+    if (values.some((row) => !Object.is(row.value, first))) {
+      throw new AliasConflictError(
+        `${edge.id}: ${values.map((row) => `${row.key}=${row.value}`).join(' and ')}; those keys name ${quantity}`,
+      );
+    }
+    if (!named) {
+      out ??= { ...inputs };
+      out[quantity] = first;
+    }
+  }
+  return out ?? inputs;
+}
+
+/**
+ * The domain predicate and `evaluate` read source names. This copy reads
+ * aliases first, so a CLI key reaches the same formula.
+ * @internal
+ */
+export function withBoundAliases<E extends BridgeEdge>(edge: E): E {
+  if (edge.aliases === undefined) return edge;
+  return {
+    ...edge,
+    domain: {
+      description: edge.domain.description,
+      predicate: (inputs) => edge.domain.predicate(bindAliasInputs(edge, inputs)),
+    },
+    evaluate: (inputs) => edge.evaluate(bindAliasInputs(edge, inputs)),
+  };
+}
+
+/**
  * Domain-checked evaluation: throws {@link DomainViolationError} when
  * `inputs` violate `edge.domain`, otherwise returns `edge.evaluate`.
+ * An alias is copied onto its source name first.
  *
  * @public
  */
@@ -242,10 +307,11 @@ export function evaluateEdge(
   edge: BridgeEdge,
   inputs: Record<string, number>,
 ): number {
-  if (!edge.domain.predicate(inputs)) {
+  const bound = bindAliasInputs(edge, inputs);
+  if (!edge.domain.predicate(bound)) {
     throw new DomainViolationError(
       `${edge.id}: inputs violate validity domain (${edge.domain.description})`,
     );
   }
-  return edge.evaluate(inputs);
+  return edge.evaluate(bound);
 }
