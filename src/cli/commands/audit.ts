@@ -20,8 +20,9 @@ const FLAGS: FlagSpec[] = [
 const HELP = `upt audit [--source=catalog|canonical|both]
         Try to derive every built-in bridge equation by dimensions: which
         re-derive as a recognized monomial (with the prefactor recovered),
-        which are decoys, which add dimensionful terms (not a monomial),
-        which are dimensionally open.
+        which are dimensional with no sourced prefactor (the evaluator's 1
+        is that absence), which are decoys, which add dimensionful terms
+        (not a monomial), which are dimensionally open.
         A DECOY is a failed dimensional RECONSTRUCTION: a set of constants
         closes the dimensions, but its monomial does not reproduce the
         bridge's evaluator. It is not a physical refutation of the formula.
@@ -32,12 +33,14 @@ const HELP = `upt audit [--source=catalog|canonical|both]
 
 const DECOY_DEFINITION = statusMeaning('decoy');
 const NOT_A_MONOMIAL_DEFINITION = statusMeaning('not-a-monomial');
+const COEFFICIENT_UNSET_DEFINITION = statusMeaning('coefficient-unset');
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const { graph, source } = resolveGraph(api, args.flags);
 
   const derived: Array<{ e: (typeof graph)[number]; d: ReturnType<typeof api.attemptDerivation>; c: number }> = [];
+  const coefficientUnset: Array<{ e: (typeof graph)[number]; c: number }> = [];
   const decoy: Array<{ e: (typeof graph)[number]; c: number }> = [];
   const notAMonomial: Array<{ e: (typeof graph)[number]; c: number }> = [];
   const open: Array<{ e: (typeof graph)[number]; c: number }> = [];
@@ -45,6 +48,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const d = api.attemptDerivation(e);
     const c = api.dimensionalFreedom(e);
     if (d.status === 'derived') derived.push({ e, d, c });
+    else if (d.status === 'coefficient-unset') coefficientUnset.push({ e, c });
     else if (d.status === 'decoy') decoy.push({ e, c });
     else if (d.status === 'not-a-monomial') notAMonomial.push({ e, c });
     else open.push({ e, c });
@@ -64,10 +68,15 @@ async function run(ctx: CommandCtx): Promise<number> {
             cleanPrefactor: d.cleanPrefactor,
             complexity: c,
           })),
+          coefficientUnset: coefficientUnset.map(({ e, c }) => ({ id: e.id, complexity: c })),
           decoy: decoy.map(({ e, c }) => ({ id: e.id, complexity: c })),
           notAMonomial: notAMonomial.map(({ e, c }) => ({ id: e.id, complexity: c })),
           open: openSorted.map(({ e, c }) => ({ id: e.id, complexity: c })),
-          definitions: { decoy: DECOY_DEFINITION, 'not-a-monomial': NOT_A_MONOMIAL_DEFINITION },
+          definitions: {
+            decoy: DECOY_DEFINITION,
+            'coefficient-unset': COEFFICIENT_UNSET_DEFINITION,
+            'not-a-monomial': NOT_A_MONOMIAL_DEFINITION,
+          },
         },
       },
       ctx.write
@@ -86,6 +95,12 @@ async function run(ctx: CommandCtx): Promise<number> {
         : '  (empirical/tuned constant)';
     out(`    ${e.id.padEnd(22)} +[${(d.subset || []).join(',')}]  ×${d.prefactor!.toExponential(3)}${tag}`);
   }
+  out(
+    `\n  COEFFICIENT UNSET (${coefficientUnset.length}) — dimensional, and no sourced prefactor multiplies the monomial. ` +
+      "The evaluator's 1 is that absence, not a recovered constant:",
+  );
+  out('    ' + coefficientUnset.map((x) => x.e.id).join(', '));
+  out('    (not a recovered prefactor, not a failed reconstruction, and not a free dimensionless group)');
   out(
     `\n  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, ${decoy.length}) — a set of constants closes the dimensions, ` +
       'but its monomial does not reproduce the evaluator:',
@@ -111,7 +126,8 @@ export const command: Command = {
   aliases: [],
   flags: FLAGS,
   help: commandHelp(HELP, FLAGS),
-  summary: 'Derive every bridge equation by dimensions and sort derived, decoy, not a monomial, and open.',
+  summary:
+    'Derive every bridge equation by dimensions and sort derived, coefficient unset, decoy, not a monomial, and open.',
   example: 'upt audit',
   group: 'evaluate',
   run,

@@ -15,7 +15,23 @@ import { classifyDetermination } from '../determination.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { canonicalCheckFailed, conventionLines } from '../conventions.js';
+import { rewriteCatalogHyphens } from '../../composition/user-equation.js';
 import type { Dimension } from '../../dimensional/types.js';
+
+/** The parser's symbol for a declared name. A hyphen is subtraction, so a
+ *  declared `reduced-planck-constant` is the symbol `reduced_planck_constant`. */
+const formulaSymbol = (name: string): string => name.replace(/-/g, '_');
+
+/**
+ * A hyphen that remains after declared names are rewritten is subtraction.
+ * The undeclared-symbol error otherwise names only the first piece.
+ */
+function hyphenSubtractionNote(error: string | undefined, formula: string): string {
+  if (error === undefined) return '';
+  if (!error.includes('undeclared symbol')) return error;
+  if (!/[A-Za-z0-9_]-[A-Za-z0-9_]/.test(formula)) return error;
+  return `${error} A hyphen between names is subtraction. A name from a dimension argument is one symbol.`;
+}
 
 const FLAGS: FlagSpec[] = [
   {
@@ -36,6 +52,8 @@ const HELP = `upt derive <target:dim> <var:dim> ... [--formula "<expr>"] [--debu
         (power/(area*temperature^4)); pressure, density, volume, viscosity,
         resistance, magnetic_field and permeability are names; mass/length^3 and M/L^3 work.
         In --formula, a bare e is the elementary charge and E is energy.
+        A name from a dimension argument is one symbol, hyphens included.
+        A hyphen between other names is subtraction.
         Euler's number is exp(x), for example exp(1). The name euler is refused.
         With --formula, also verify it and
         recover the dimensionless prefactor. A target that is not a unique
@@ -132,12 +150,14 @@ async function run(ctx: CommandCtx): Promise<number> {
     if (debug) err(`  [parser: ${formulaParserLabel(await api.getFormulaParserKind())}]`);
 
     const checker = await api.getFormulaDimensionChecker();
-    const dims = Object.fromEntries(governing.map((g) => [g.name, g.dim]));
-    const r = checker.check(formula, dims);
+    const declared = new Set(governing.map((g) => g.name));
+    const formulaSymbols = rewriteCatalogHyphens(formula, declared);
+    const dims = Object.fromEntries(governing.map((g) => [formulaSymbol(g.name), g.dim]));
+    const r = checker.check(formulaSymbols, dims);
     formulaCheck = r;
     if (!r.ok) {
       failed = true;
-      textOut(`  formula dimensional check: ✗ ${r.error}`);
+      textOut(`  formula dimensional check: ✗ ${hyphenSubtractionNote(r.error, formula)}`);
     } else {
       const matches = dimsEqualTol(r.dim!, target.dim);
       if (!matches) failed = true;
@@ -149,7 +169,7 @@ async function run(ctx: CommandCtx): Promise<number> {
 
     let cf;
     try {
-      cf = parser.parse(formula);
+      cf = parser.parse(formulaSymbols);
     } catch (e) {
       throw new UsageError(withParser('  formula parse error: ' + (e as Error).message, await api.getFormulaParserKind()));
     }
@@ -170,7 +190,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         compiled.evaluate(
           Object.fromEntries(
             governing.map((g) => [
-              g.name,
+              formulaSymbol(g.name),
               isConstant(g) ? api.CONSTANTS[g.name]!.value : values[g.name.replace(/_/g, '-')]!,
             ]),
           ),
@@ -203,10 +223,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     for (let j = 0; j < 3; j++) {
       const scope: Record<string, number> = {};
       governing.forEach((g, i) => {
-        scope[g.name] = Math.pow(1.7 + i, 1 + 0.3 * j);
+        scope[formulaSymbol(g.name)] = Math.pow(1.7 + i, 1 + 0.3 * j);
       });
       let cand = 1;
-      for (const g of governing) cand *= Math.pow(scope[g.name], det.monomial?.[g.name] || 0);
+      for (const g of governing) cand *= Math.pow(scope[formulaSymbol(g.name)]!, det.monomial?.[g.name] || 0);
       try {
         ratios.push(cf.evaluate(scope) / cand);
       } catch (e) {

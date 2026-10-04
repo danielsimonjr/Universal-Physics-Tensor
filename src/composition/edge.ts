@@ -90,6 +90,13 @@ export interface BridgeEdge {
   readonly symbolic?: ExprNode;
   readonly citation: string;
   /**
+   * The canonical entry is dimensional and no sourced prefactor multiplies
+   * the monomial. The evaluator's leading 1 is that absence. It is not a
+   * recovered constant. Absent on catalog edges and on a dimensional entry
+   * whose table already supplies the factor, including a sourced 1.
+   */
+  readonly coefficientUnset?: boolean;
+  /**
    * Provenance: the quantity identification the junction used, when a
    * composed edge was formed via `QUANTITY_IDENTIFICATIONS` rather than
    * a name match. Absent on primitive edges and name-matched
