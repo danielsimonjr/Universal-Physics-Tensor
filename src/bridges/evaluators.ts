@@ -373,7 +373,7 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
       'Thomson coefficient',
       [
         temperature('T_K', 'temperature', 'T', 'absolute temperature'),
-        P('dS_dT_V_per_K2', 'Seebeck slope', 'dS/dT', '', 'volts per kelvin squared; not a sampled difference'),
+        P('dS_dT_V_per_K2', 'Seebeck slope', 'dS/dT', 'V/K^2', 'volts per kelvin squared; not a sampled difference'),
       ],
       (i) => evaluateThomsonCoefficient({ T_K: i.T_K, dS_dT_V_per_K2: i.dS_dT_V_per_K2 }),
     ),
