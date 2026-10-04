@@ -92,6 +92,8 @@ Command text that named a file inside the repository now names the GitHub blob U
 
 ### Documented
 
+- **Condensed-matter dogfood of published 4.0.0.** `docs/dogfood/2026-10-04-condensed-matter-bridges-r5.md` records the condensed-matter session against the published tarball: how the Drude, Fermi, phonon, magnetic, superconducting, semiconductor, and quantum-Hall commands behave, and the candidates that units do not fix. Candidates stay unproven. The bugs it records are filed as issues 370–376 and are not fixed here. No `src/` change.
+
 - **Engineering-physicist dogfood of published 3.1.0.** `docs/dogfood/2026-10-04-engineering-physicist-bridges-r4.md` records the engineering-physicist session against the published tarball: the 3.0.0 repros that 3.1.0 closed, how BE-74 through BE-76 and the engineering cases behave, and the candidates that units do not fix. Candidates stay unproven. The bugs it records are filed as issues 351–358 and are not fixed here. No `src/` change.
 
 - **Applied-physicist dogfood of published 3.0.0.** `docs/dogfood/2026-10-04-applied-physicist-bridges-r3.md` re-runs the 2.0.0 and 2.0.1 repros against the published tarball and records how BE-66 through BE-73 behave, which migration notes the commands follow, and which new gaps the session found. Candidates stay unproven. The bugs it records are not fixed here. No `src/` change.
