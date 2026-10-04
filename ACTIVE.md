@@ -38,7 +38,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
   Done: the hand-written copy is gone. `upt --help` is each command's own help, in name order. `upt chain` stays off that list. The binding is `upt eval E E=1eV`. The evaluate sentence names the registered evaluators. `catalogEvidenceInput` passes a kind-bridge reference and does not pass a derivation-step, a property, or a cross-check.
 - [x] `upt connectors` reads the adjudication ledger. A recorded decoy is not headed as a motivated connector. The Förster/Schwarzschild rejection is a ledger row. Delete the prose that names a shared token as the motivated set.
   Done: a decoy or an entailed pair is printed under that verdict, with the grounds. A pair with no ledger row is unadjudicated. A shared token is a token. The Förster pair is a ledger decoy. The coarsening and tunneling pairs stay the decoys already on the ledger. The motivated heading is gone.
-- [ ] Explain text and the summary string format a recovered value through one function. Four-digit exponential formatting is not that function. JSON keeps the full number.
+- [x] Explain text and the summary string format a recovered value through one function. Four-digit exponential formatting is not that function. JSON keeps the full number.
+  Done: `formatQuantity` prints 15 significant digits. `printExplanation` and `buildSummary` call it. A restatement disagreement ratio uses that same function. JSON `recoveredValue` stays the number `explainQuantity` computed. Relative spread stays one-digit exponential. Derive and symbolic tables keep their own formatting.
 - [ ] `upt derive` and `upt map` share one known-relation report. A catalog edge whose target and sources are the formula is named even when no canonical equation has that target.
 
 - [x] A kind-`bridge` catalog formalRef is `formally-proved` on the catalog path and on the edge path. A derivation-step stays off that tag. A chain keeps its weaker grade.

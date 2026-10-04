@@ -3,7 +3,7 @@ metadata:
   version: 3.0.0
   totalFiles: 433
   totalModules: 13
-  totalExports: 3084
+  totalExports: 3085
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8265,6 +8265,9 @@ modules:
             - nearQuantityNames
             - rewriteInputKey
             - shareSynonyms
+        - file: ../../composition/explain.js
+          imports:
+            - formatQuantity
       exports:
         - command
       constants:
@@ -12140,12 +12143,14 @@ modules:
           imports:
             - dimensionallyDetermines
       exports:
+        - formatQuantity
         - explainQuantity
       interfaces:
         - DerivationExplanation
         - ExplainOptions
         - QuantityExplanation
       functions:
+        - formatQuantity
         - explainQuantity
     src/composition/expr-eval.ts:
       description: Scalar `ExprNode` value evaluator (v0.12 symbolic composition).
@@ -21093,11 +21098,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 433
   totalModules: 13
-  totalLinesOfCode: 92272
-  totalExports: 3084
+  totalLinesOfCode: 92283
+  totalExports: 3085
   totalClasses: 60
   totalInterfaces: 490
-  totalFunctions: 802
+  totalFunctions: 803
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 769

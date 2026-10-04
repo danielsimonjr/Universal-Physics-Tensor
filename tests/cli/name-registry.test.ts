@@ -8,6 +8,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { formatQuantity } from '../../src/composition/explain.js';
 import { analyzeUserEquation } from '../../src/composition/user-equation.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
 
@@ -40,11 +41,15 @@ describe('name registry — explain, search, derive', () => {
     const pressure = await run(['explain', 'radiation-pressure', 'I=1e6', 'R=0', 'theta=0']);
     expect(pressure.code).toBe(0);
     expect(pressure.text).not.toMatch(/cannot be determined/);
-    expect(pressure.text).toMatch(/3\.3356e-3/);
+    const pressureJson = await run(['explain', 'radiation-pressure', 'I=1e6', 'R=0', 'theta=0', '--json']);
+    const pressureValue = (JSON.parse(pressureJson.text) as { result: { recoveredValue: number } }).result.recoveredValue;
+    expect(Math.abs(pressureValue - 3.3356e-3) / 3.3356e-3).toBeLessThan(1e-4);
+    expect(pressure.text).toContain(`Recovered value: ${formatQuantity(pressureValue)}.`);
+    expect(pressure.text).not.toMatch(/3\.3356e-3/);
 
     const listed = await run(['explain', 'radiation-pressure', 'I_W_per_m2=1e6', 'R=0', 'theta_rad=0']);
     expect(listed.code).toBe(0);
-    expect(listed.text).toMatch(/3\.3356e-3/);
+    expect(listed.text).toContain(`Recovered value: ${formatQuantity(pressureValue)}.`);
 
     const alfven = await run(['explain', 'alfven-speed', 'B_T=12e-9', 'rho_kg_per_m3=2.34e-20']);
     expect(alfven.code).toBe(0);
@@ -54,7 +59,8 @@ describe('name registry — explain, search, derive', () => {
     const tolman = await run(['explain', 'tolman-invariant', 'T_K=5800', 'g_00=-1']);
     expect(tolman.code).toBe(0);
     expect(tolman.text).not.toMatch(/cannot be determined/);
-    expect(tolman.text).toMatch(/5\.8000e\+3/);
+    expect(tolman.text).toContain(`Recovered value: ${formatQuantity(5800)}.`);
+    expect(tolman.text).not.toMatch(/5\.8000e\+3/);
   });
 
   it('a name that does not resolve exits 1 and does not claim there is no derivation path', async () => {
