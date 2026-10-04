@@ -4,7 +4,7 @@
     "version": "3.0.0",
     "totalFiles": 438,
     "totalModules": 13,
-    "totalExports": 3156
+    "totalExports": 3158
   },
   "entryPoints": [
     {
@@ -3155,6 +3155,8 @@
         "exports": [
           "PHYSJS_COMMIT",
           "physjsTheorem",
+          "physjsLeanFile",
+          "physjsFileUrl",
           "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
@@ -3164,6 +3166,8 @@
         ],
         "functions": [
           "physjsTheorem",
+          "physjsLeanFile",
+          "physjsFileUrl",
           "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
@@ -30701,11 +30705,11 @@
   "statistics": {
     "totalTypeScriptFiles": 438,
     "totalModules": 13,
-    "totalLinesOfCode": 93412,
-    "totalExports": 3156,
+    "totalLinesOfCode": 93438,
+    "totalExports": 3158,
     "totalClasses": 60,
     "totalInterfaces": 501,
-    "totalFunctions": 810,
+    "totalFunctions": 812,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 790,
