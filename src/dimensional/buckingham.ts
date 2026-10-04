@@ -84,6 +84,13 @@ export interface DimensionalDeterminationResult {
   readonly monomial?: Readonly<Record<string, number>>;
   /** Always true when `monomial` is present — a standing reminder. */
   readonly upToDimensionlessConstant?: true;
+  /**
+   * True only when the target's dimension is not in the span of the governing
+   * variables, so a monomial needs dimensionful constants the inputs do not
+   * name. False when the governing variables are dimensionally dependent or
+   * leave more than one π-group: that failure is not a missing constant.
+   */
+  readonly outsideGoverningSpan: boolean;
   /** Plain-language reason for the verdict. */
   readonly reason: string;
 }
@@ -275,6 +282,7 @@ export function dimensionallyDetermines(
       target: target.name,
       governing: governingNames,
       determined: false,
+      outsideGoverningSpan: false,
       reason:
         'governing variables are dimensionally dependent ' +
         `(${governingPi.piGroupCount} dimensionless combination(s) among them); ` +
@@ -288,6 +296,7 @@ export function dimensionallyDetermines(
       target: target.name,
       governing: governingNames,
       determined: false,
+      outsideGoverningSpan: full.piGroupCount === 0,
       reason:
         full.piGroupCount === 0
           ? "the target's dimension is not in the span of the governing " +
@@ -305,6 +314,7 @@ export function dimensionallyDetermines(
       target: target.name,
       governing: governingNames,
       determined: false,
+      outsideGoverningSpan: false,
       reason:
         'the sole dimensionless group does not involve the target ' +
         '(the target is dimensionally redundant with the governing set)',
@@ -321,6 +331,7 @@ export function dimensionallyDetermines(
     determined: true,
     monomial,
     upToDimensionlessConstant: true,
+    outsideGoverningSpan: false,
     reason:
       'unique dimensionless group fixes the target up to a dimensionless constant',
   };
