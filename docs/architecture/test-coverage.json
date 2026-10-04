@@ -6403,6 +6403,7 @@
       "tests/cli/graphs.test.ts",
       "tests/cli/map-atlas-results.test.ts",
       "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/name-registry.test.ts",
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/unit-convention-binding.test.ts",
       "tests/composition/attribute-audit.test.ts",
@@ -14716,6 +14717,7 @@
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
       "src/cli/commands/testplan.ts",
+      "src/composition/explain.ts",
       "src/composition/user-equation.ts",
       "src/dimensional/types.ts"
     ],
