@@ -5,20 +5,16 @@
  * @module atlas/composition-table
  */
 
-import {
-  COMPOSITION_TABLE as compositionTableValue,
-  composeRelation as composeRelationValue,
-  NO_COMPOSITE_CLAIM as noCompositeClaimValue,
+/**
+ * The composition table, the silent-cell value, and the function that reads a cell.
+ *
+ * @public
+ */
+export {
+  COMPOSITION_TABLE,
+  composeRelation,
+  NO_COMPOSITE_CLAIM,
 } from '../relations/composition-table.js';
-
-/** The `'no-composite-claim'` value returned when a chain of two relations asserts nothing. @public */
-export const NO_COMPOSITE_CLAIM = noCompositeClaimValue;
-
-/** Every cell of the relation composition table, including the silent `'no-composite-claim'` cells. @public */
-export const COMPOSITION_TABLE = compositionTableValue;
-
-/** The relation a chain of two bridges asserts, read from the composition table. @public */
-export const composeRelation = composeRelationValue;
 
 /** What `composeRelation` returns when the chain asserts nothing. @public */
 export type NoCompositeClaim = import('../relations/composition-table.js').NoCompositeClaim;

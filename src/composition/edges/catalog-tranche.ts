@@ -33,7 +33,6 @@ import {
   FREQUENCY,
   MASS,
 } from '../../dimensional/types.js';
-import type { Dimension } from '../../dimensional/types.js';
 import { evaluateRyuTakayanagi } from '../../bridges/equations/be-14-ryu-takayanagi.js';
 import { evaluateQuantumBounce } from '../../bridges/equations/be-19-quantum-bounce.js';
 import {
@@ -61,18 +60,6 @@ import {
   viscosityEntropyRatioQ,
   yangMillsBetaQ,
 } from '../quantities.js';
-
-// --- Local dimension aliases ---
-
-/** Mass-density [M L⁻³] (kg/m³) — BE-19/BE-54 shared convention. */
-const MASS_DENSITY: Dimension = {
-  L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0,
-};
-
-/** [T⁻²] (s⁻²) — H² and the c²-rescaled cosmological constant. */
-const T_INV2: Dimension = {
-  L: 0, M: 0, T: -2, I: 0, Theta: 0, N: 0, J: 0,
-};
 
 // --- Quantity nodes ---
 

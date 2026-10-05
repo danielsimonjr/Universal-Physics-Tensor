@@ -30,6 +30,7 @@ import {
   FORCE,
   TEMPERATURE,
   VELOCITY,
+  MASS_DENSITY,
 } from './types.js';
 import { ExprNode, validate } from './validator.js';
 import { equals, multiply, power } from './algebra.js';
@@ -57,11 +58,6 @@ const INV_LENGTH_2: Dimension = power(LENGTH, -2);
 /** [T Θ] — bracketed-product literal for BE-21's KSS viscosity-to-entropy ratio. */
 const TIME_TIMES_TEMPERATURE: Dimension = {
   L: 0, M: 0, T: 1, I: 0, Theta: 1, N: 0, J: 0,
-};
-
-/** [L^-3 M] — bracketed-product literal for BE-20's cosmological-constant mass density. */
-const MASS_DENSITY: Dimension = {
-  L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0,
 };
 
 /**

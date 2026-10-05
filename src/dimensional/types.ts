@@ -49,6 +49,8 @@ export const AREA:          Dimension = { L: 2, M: 0, T: 0, I: 0, Theta: 0, N: 0
 export const TIME:          Dimension = { L: 0, M: 0, T: 1, I: 0, Theta: 0, N: 0, J: 0 };
 export const FREQUENCY:     Dimension = { L: 0, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
 export const MASS:          Dimension = { L: 0, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+/** Mass density, kilogram per cubic metre. */
+export const MASS_DENSITY:  Dimension = { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 export const VELOCITY:      Dimension = { L: 1, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
 export const ACCELERATION:  Dimension = { L: 1, M: 0, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 export const FORCE:         Dimension = { L: 1, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 }; // newton

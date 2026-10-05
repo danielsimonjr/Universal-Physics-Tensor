@@ -16,9 +16,10 @@ import { MU0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Proton mass in kilograms. The core CODATA value that BE-64 and `upt eval` `m_p` use.
+ *
  * @public
  */
-export { M_PROTON_SI };
+export { M_PROTON_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateAlfvenSpeed}.

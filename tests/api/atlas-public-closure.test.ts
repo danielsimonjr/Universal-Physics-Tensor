@@ -92,15 +92,22 @@ export function followedDeclaration(
   read: (spec: string) => string | undefined,
   depth = 0,
 ): string | undefined {
+  if (depth > 4) return undefined;
   const text = declarationText(source, name);
-  if (text === undefined || depth > 4) return text;
-  const alias = /export\s+type\s+[A-Za-z0-9_$]+\s*=\s*import\(\s*(['"])([^'"]+)\1\s*\)\.([A-Za-z0-9_$]+)/.exec(
-    stripComments(text),
-  );
-  if (alias === null) return text;
-  const next = read(alias[2]!);
-  if (next === undefined) return text;
-  return followedDeclaration(next, alias[3]!, read, depth + 1) ?? text;
+  if (text !== undefined) {
+    const alias = /export\s+type\s+[A-Za-z0-9_$]+\s*=\s*import\(\s*(['"])([^'"]+)\1\s*\)\.([A-Za-z0-9_$]+)/.exec(
+      stripComments(text),
+    );
+    if (alias === null) return text;
+    const next = read(alias[2]!);
+    if (next === undefined) return text;
+    return followedDeclaration(next, alias[3]!, read, depth + 1) ?? text;
+  }
+  const hop = namedReExports(source).find((item) => item.name === name);
+  if (hop === undefined) return undefined;
+  const next = read(hop.specifier);
+  if (next === undefined) return undefined;
+  return followedDeclaration(next, name, read, depth + 1);
 }
 
 /** Atlas type names referenced (as whole words) in `text`, other than `self`. */
@@ -149,6 +156,16 @@ describe('the scan — proven before it is trusted', () => {
       '}',
     ].join('\n');
     expect(atlasRefs(declarationText(src, 'Probe')!, 'Probe')).toEqual([]);
+  });
+
+  it('FOLLOWS export-from to the declaration the facade names', () => {
+    const origin = 'export function regimeHolds(regime: Regime): boolean { return true; }';
+    const shim = "export { regimeHolds } from './regime.js';";
+    const read = (spec: string): string | undefined => (spec === './regime.js' ? origin : undefined);
+    const text = followedDeclaration(shim, 'regimeHolds', read);
+    expect(text).toBeDefined();
+    expect(atlasRefs(text!, 'regimeHolds')).toContain('Regime');
+    expect(followedDeclaration("export { gone } from './nope.js';", 'gone', () => undefined)).toBeUndefined();
   });
 
   it('FOLLOWS a type alias into the module it names, so a leak behind the alias fails', () => {

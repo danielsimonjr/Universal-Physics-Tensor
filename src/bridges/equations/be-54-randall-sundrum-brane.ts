@@ -45,6 +45,7 @@ import type { ExprNode, DimensionValidationReport } from '../../dimensional/vali
 import {
   Dimension,
   DIMENSIONLESS,
+  MASS_DENSITY,
 } from '../../dimensional/types.js';
 import { G as DIM_G } from '../../dimensional/constants.js';
 import { PhysicalConstants } from '../../core/types.js';
@@ -53,11 +54,6 @@ import { sym, validateFiniteInputs, validateBEDimensions } from './_be-helpers.j
 // ---------------------------------------------------------------------------
 // Dimension primitives
 // ---------------------------------------------------------------------------
-
-/** Mass-density [M L⁻³] — shared with BE-19's convention. */
-const MASS_DENSITY: Dimension = {
-  L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0,
-};
 
 /** [T⁻²] — for H² and the c²-rescaled cosmological constant. */
 const T_INV2: Dimension = {
@@ -242,7 +238,7 @@ const BE54_DENSITY: ScalarFieldNode = {
   name: 'rho',
   // Mass-density per BE-19 convention (the BE-19 agent's FriedmannEquationNode
   // pins density to [M L⁻³] mass-density, not energy-density [M L⁻¹ T⁻²]).
-  dim: { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
+  dim: MASS_DENSITY,
   symmetry: 'scalar',
 };
 

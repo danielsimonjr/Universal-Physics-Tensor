@@ -31,9 +31,12 @@ const SRC = resolve(here, '../../src');
 const INDEX = readFileSync(join(SRC, 'index.ts'), 'utf-8');
 
 /** Resolve a `./x.js` specifier relative to a source file to its `.ts` text. */
-function readerFor(fromFile: string): (spec: string) => string | undefined {
-  return (spec) => {
-    const ts = resolve(dirname(fromFile), spec.replace(/\.js$/, '.ts'));
+function readerFor(fromFile: string): (spec: string, from?: string) => string | undefined {
+  return (spec, from) => {
+    const base = from === undefined
+      ? fromFile
+      : resolve(dirname(fromFile), from.replace(/\.js$/, '.ts'));
+    const ts = resolve(dirname(base), spec.replace(/\.js$/, '.ts'));
     return existsSync(ts) ? readFileSync(ts, 'utf-8') : undefined;
   };
 }
@@ -84,6 +87,30 @@ describe('checkFacade — the reverse check, proven to FAIL where it must', () =
 
   it('FAILS on a deliberately UNTAGGED symbol', () => {
     expect(checkFacade("export { good, bad } from './m.js';", read)).toEqual([
+      { name: 'bad', problem: 'not-tagged-public' },
+    ]);
+  });
+
+  it('follows export-from to the declaration, and a shim tag does not launder an internal name', () => {
+    const origin = [
+      '/** @public */',
+      'export const good = 1;',
+      '/** @public */',
+      'export const also = 3;',
+      '/** @internal */',
+      'export const bad = 2;',
+    ].join('\n');
+    const shim = [
+      '/** @public */',
+      "export { good, also, bad } from './origin.js';",
+    ].join('\n');
+    const read = (spec: string, from?: string): string | undefined => {
+      if (from === undefined && spec === './shim.js') return shim;
+      if (from === './shim.js' && spec === './origin.js') return origin;
+      return undefined;
+    };
+    expect(checkFacade("export { good, also } from './shim.js';", read)).toEqual([]);
+    expect(checkFacade("export { bad } from './shim.js';", read)).toEqual([
       { name: 'bad', problem: 'not-tagged-public' },
     ]);
   });

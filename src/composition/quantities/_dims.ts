@@ -14,8 +14,12 @@ import type { Dimension } from '../../dimensional/types.js';
 export const ENERGY_DIM: Dimension = { L: 2, M: 1, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 /** [T⁻¹] alias. */
 export const FREQUENCY_DIM = FREQUENCY;
-/** Mass-density [M L⁻³] (kg/m³) — BE-19/BE-54 shared convention. */
-export const MASS_DENSITY: Dimension = { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
+/**
+ * Mass-density [M L⁻³] (kg/m³). The dimensional export.
+ *
+ * @internal
+ */
+export { MASS_DENSITY } from '../../dimensional/types.js';
 /** [T⁻²] (s⁻²) — H² and the c²-rescaled cosmological constant. */
 export const T_INV2: Dimension = { L: 0, M: 0, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 

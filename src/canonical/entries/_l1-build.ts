@@ -10,11 +10,15 @@ import type { CanonicalEquation } from '../canonical-equation.js';
 import type { ExprNode } from '../../dimensional/validator.js';
 import type { DimensionalVariable } from '../../dimensional/buckingham.js';
 import { DIMENSIONLESS } from '../../dimensional/types.js';
-import { sym, dim } from '../../dimensional/ast-builders.js';
+import { sym } from '../../dimensional/ast-builders.js';
 import { dimensionalFields } from '../dimensional-fields.js';
 
-// Re-exported for the L1 entry files that import `dim` from `_l1-build`.
-export { dim };
+/**
+ * Re-exported for the L1 entry files that import `dim` from this module.
+ *
+ * @internal
+ */
+export { dim } from '../../dimensional/ast-builders.js';
 
 export const op = (
   o: '+' | '-' | '*' | '/' | '^',

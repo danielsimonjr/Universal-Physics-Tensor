@@ -23,3 +23,5 @@ The live list of a second owner for a concept the integration design assigned on
 `function canonicalJson` and `function captureEnvironment` are defined only in `src/composition/canonical-json.ts`.
 
 No classical RK4 weight `(h / 6) *` remains under `src/`.
+
+`const MASS_DENSITY` is defined only in `src/dimensional/types.ts`.

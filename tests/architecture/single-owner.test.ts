@@ -14,6 +14,8 @@ import {
   classicalRk4Literal,
   jsonDefinition,
   jsonOwnerHits,
+  massDensityAssignment,
+  massDensityHits,
   nameTableOwnerHits,
   prefactorOwnerHits,
   renderDuplicateOwners,
@@ -65,6 +67,17 @@ describe('single owner', () => {
 
   it('has no second classical RK4 step', () => {
     expect(classicalRk4Hits(root)).toEqual([]);
+  });
+
+  it('has one MASS_DENSITY assignment', () => {
+    expect(massDensityHits(root)).toEqual([]);
+  });
+
+  it('a const MASS_DENSITY assignment is a hit, and a re-export is not', () => {
+    // The marker matches `export const MASS_DENSITY` and `const MASS_DENSITY` on the parent tree.
+    expect(massDensityAssignment('export const MASS_DENSITY: Dimension = { L: -3, M: 1 };\n')).toBe(true);
+    expect(massDensityAssignment('const MASS_DENSITY: Dimension = { L: -3, M: 1 };\n')).toBe(true);
+    expect(massDensityAssignment("export { MASS_DENSITY } from '../../dimensional/types.js';\n")).toBe(false);
   });
 
   it('a classical RK4 weight is a hit', () => {

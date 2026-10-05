@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 479,
-    "totalTestFiles": 701,
+    "totalTestFiles": 703,
     "testedCount": 469,
     "untestedCount": 10,
     "coveragePercent": "97.9"
@@ -767,8 +767,10 @@
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
       "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/bound-machine-form.test.ts",
       "tests/atlas/error-algebra.test.ts",
       "tests/atlas/path-bound.test.ts",
+      "tests/atlas/transported-norm-demo.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -966,7 +968,20 @@
       "tests/cli/suggest-token-length.test.ts"
     ],
     "src/atlas/physjs-entries.generated.ts": [
-      "tests/atlas/physjs-generated-table.test.ts"
+      "tests/atlas/bridge-seed-keys.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
+      "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/formalref-kind.test.ts",
+      "tests/atlas/physjs-be66-68.test.ts",
+      "tests/atlas/physjs-be69-73.test.ts",
+      "tests/atlas/physjs-generated-table.test.ts",
+      "tests/atlas/physjs-lean-path.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
+      "tests/bridges/be-77-87.test.ts",
+      "tests/bridges/be-88-102.test.ts",
+      "tests/composition/seed-edges.test.ts"
     ],
     "src/atlas/physjs-ref.ts": [
       "tests/atlas/bridge-seed-keys.test.ts",
@@ -8020,11 +8035,13 @@
     "src/bridges/equations/be-19-quantum-bounce.ts": [
       "tests/bridges/be-19-encoding.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
-      "tests/dimensional/bridge-check.test.ts"
+      "tests/dimensional/bridge-check.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts"
     ],
     "src/bridges/equations/be-20-vacuum-energy.ts": [
       "tests/bridges/be-20-encoding.test.ts",
-      "tests/bridges/bucket-a-formal-sanity.test.ts"
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts"
     ],
     "src/bridges/equations/be-21-kss-bound.ts": [
       "tests/bridges/be-21-encoding.test.ts",
@@ -8176,7 +8193,8 @@
     ],
     "src/bridges/equations/be-54-randall-sundrum-brane.ts": [
       "tests/bridges/be-54-encoding.test.ts",
-      "tests/bridges/bucket-a-formal-sanity.test.ts"
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts"
     ],
     "src/bridges/evaluator-inputs.ts": [
       "tests/cases/applied-cases.test.ts",
@@ -13160,6 +13178,7 @@
       "tests/composition/stress-tests.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/dimensional/bridge-derivation-audit.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
@@ -14044,6 +14063,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/composition/probe/coverage-backfill.test.ts",
       "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/generator-budget.test.ts",
       "tests/composition/probe/modules.test.ts"
@@ -14061,6 +14081,7 @@
       "tests/composition/proposed-bridges.test.ts"
     ],
     "src/composition/quantities/_dims.ts": [
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/internal/helper-coverage.test.ts"
     ],
     "src/composition/quantities/applied-physicist.ts": [
@@ -14403,28 +14424,125 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/atlas/audited-catalog.test.ts",
+      "tests/atlas/catalog-formal-ref.test.ts",
+      "tests/atlas/catalog-proved-evidence.test.ts",
+      "tests/atlas/chain-pipeline-catalog.test.ts",
+      "tests/atlas/chain-pipeline.test.ts",
+      "tests/atlas/coverage.test.ts",
+      "tests/atlas/derive-evidence.test.ts",
+      "tests/atlas/formalref-kind.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/physjs-be69-73.test.ts",
+      "tests/atlas/physjs-generated-table.test.ts",
+      "tests/atlas/physjs-lean-path.test.ts",
+      "tests/atlas/physjs-manifest.test.ts",
+      "tests/atlas/proof-target.test.ts",
+      "tests/bridges/be-100-lyddane-sachs-teller.test.ts",
+      "tests/bridges/be-101-bkt-jump.test.ts",
+      "tests/bridges/be-102-landauer-conductance.test.ts",
+      "tests/bridges/be-103-bohm-sheath.test.ts",
+      "tests/bridges/be-104-ion-acoustic.test.ts",
+      "tests/bridges/be-105-upper-hybrid.test.ts",
+      "tests/bridges/be-106-cold-plasma-cutoff.test.ts",
+      "tests/bridges/be-107-lower-hybrid.test.ts",
+      "tests/bridges/be-108-oblique-magnetosonic.test.ts",
+      "tests/bridges/be-109-bennett-pinch.test.ts",
+      "tests/bridges/be-11-fix.test.ts",
+      "tests/bridges/be-110-loss-cone.test.ts",
+      "tests/bridges/be-111-grad-b-drift.test.ts",
+      "tests/bridges/be-112-exb-drift.test.ts",
+      "tests/bridges/be-113-landau-damping.test.ts",
+      "tests/bridges/be-114-debye-sphere.test.ts",
+      "tests/bridges/be-115-multi-debye.test.ts",
+      "tests/bridges/be-116-lorentz-resistivity.test.ts",
+      "tests/bridges/be-117-resistive-slab.test.ts",
+      "tests/bridges/be-118-parker-critical.test.ts",
+      "tests/bridges/be-119-parker-spiral.test.ts",
+      "tests/bridges/be-120-chapman-ferraro.test.ts",
+      "tests/bridges/be-121-lawson-breakeven.test.ts",
+      "tests/bridges/be-122-langmuir-probe.test.ts",
+      "tests/bridges/be-123-cross-field-diffusion.test.ts",
+      "tests/bridges/be-124-firehose.test.ts",
+      "tests/bridges/be-125-mirror-instability.test.ts",
+      "tests/bridges/be-14-ryu-takayanagi.test.ts",
+      "tests/bridges/be-18-fix.test.ts",
       "tests/bridges/be-26-encoding.test.ts",
+      "tests/bridges/be-29-fix.test.ts",
+      "tests/bridges/be-47-fix.test.ts",
+      "tests/bridges/be-48-fix.test.ts",
+      "tests/bridges/be-55-quantum-hall.test.ts",
       "tests/bridges/be-56-casimir.test.ts",
+      "tests/bridges/be-57-unruh.test.ts",
       "tests/bridges/be-58-johnson-nyquist.test.ts",
+      "tests/bridges/be-59-ac-josephson.test.ts",
+      "tests/bridges/be-60-fractional-qh.test.ts",
+      "tests/bridges/be-61-wiedemann-franz.test.ts",
       "tests/bridges/be-62-bcs-gap.test.ts",
+      "tests/bridges/be-63-chandrasekhar-mass.test.ts",
+      "tests/bridges/be-64-eddington-luminosity.test.ts",
+      "tests/bridges/be-65-jeans-mass.test.ts",
       "tests/bridges/be-66-radiation-pressure.test.ts",
+      "tests/bridges/be-67-alfven-speed.test.ts",
+      "tests/bridges/be-68-tolman-ehrenfest.test.ts",
+      "tests/bridges/be-69-fast-magnetosonic.test.ts",
       "tests/bridges/be-70-einstein-relation.test.ts",
+      "tests/bridges/be-71-clapeyron.test.ts",
+      "tests/bridges/be-72-gravitational-redshift.test.ts",
+      "tests/bridges/be-73-kelvin-peltier.test.ts",
       "tests/bridges/be-74-76.test.ts",
       "tests/bridges/be-75-london-penetration.test.ts",
       "tests/bridges/be-76-plasma-beta.test.ts",
       "tests/bridges/be-77-87.test.ts",
+      "tests/bridges/be-78-euler-buckling.test.ts",
+      "tests/bridges/be-79-pull-in.test.ts",
+      "tests/bridges/be-80-mott-gurney.test.ts",
+      "tests/bridges/be-81-child-langmuir.test.ts",
+      "tests/bridges/be-82-shockley-diode.test.ts",
+      "tests/bridges/be-83-thomson.test.ts",
+      "tests/bridges/be-84-four-point.test.ts",
+      "tests/bridges/be-85-shot-noise.test.ts",
+      "tests/bridges/be-86-reynolds-analogy.test.ts",
+      "tests/bridges/be-87-capacitor-noise.test.ts",
       "tests/bridges/be-88-102.test.ts",
+      "tests/bridges/be-88-fermi-sea.test.ts",
+      "tests/bridges/be-89-debye-cutoff.test.ts",
+      "tests/bridges/be-90-debye-heat.test.ts",
+      "tests/bridges/be-91-einstein-solid.test.ts",
+      "tests/bridges/be-92-sommerfeld-heat.test.ts",
+      "tests/bridges/be-93-curie-weiss.test.ts",
+      "tests/bridges/be-94-pauli-paramagnetism.test.ts",
+      "tests/bridges/be-95-ginzburg-landau.test.ts",
+      "tests/bridges/be-96-upper-critical.test.ts",
+      "tests/bridges/be-97-ambegaokar-baratoff.test.ts",
+      "tests/bridges/be-98-bcs-jump.test.ts",
+      "tests/bridges/be-99-mass-action.test.ts",
+      "tests/bridges/be53-yang-mills-confrontation.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/bucket-a-formal-sanity.test.ts",
+      "tests/bridges/catalog-adapter.test.ts",
       "tests/bridges/catalog-formal-sanity.test.ts",
+      "tests/bridges/catalog-integrity.test.ts",
+      "tests/bridges/catalog-json.test.ts",
+      "tests/bridges/confrontation-registry.test.ts",
+      "tests/bridges/descriptor-consistency.test.ts",
+      "tests/bridges/dimensional-signature-catalog.test.ts",
+      "tests/bridges/membership.test.ts",
+      "tests/bridges/orphan-dimensional-signature.test.ts",
+      "tests/bridges/overlay-registry-quote.test.ts",
       "tests/bridges/perihelion-precession.test.ts",
       "tests/bridges/plasma-formulas.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/bridges/solar-gm.test.ts",
+      "tests/bridges/spec-vs-index.test.ts",
+      "tests/bridges/tensor-index.test.ts",
+      "tests/bridges-index.test.ts",
+      "tests/canonical/invariants.test.ts",
       "tests/canonical/numeric-prefactor.test.ts",
+      "tests/canonical/structural-classifier.test.ts",
+      "tests/cases/applied-cases.test.ts",
       "tests/cases/kepler-rv.test.ts",
+      "tests/cli/atlas-command.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/binding-expressions.test.ts",
@@ -14452,9 +14570,12 @@
       "tests/cli/undeclared-e-charge.test.ts",
       "tests/composition/canonical-compare.test.ts",
       "tests/composition/canonical-graph.test.ts",
+      "tests/composition/catalog-full.test.ts",
+      "tests/composition/catalog-tranche.test.ts",
       "tests/composition/dogfood-compare.test.ts",
       "tests/composition/landauer-prefactor.test.ts",
       "tests/composition/namespacing.test.ts",
+      "tests/composition/proposed-bridges.test.ts",
       "tests/composition/symbolic-composition.test.ts",
       "tests/core/constants.test.ts",
       "tests/dimensional/units.test.ts",
@@ -14484,7 +14605,8 @@
       "tests/numerical/spacetime-metrics.test.ts",
       "tests/numerical/weyl-kerr-schild.test.ts",
       "tests/numerical/weyl-schwarzschild.test.ts",
-      "tests/tensor.test.ts"
+      "tests/tensor.test.ts",
+      "tests/tools/readme-status.test.ts"
     ],
     "src/core/flux-rules.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -14789,6 +14911,7 @@
       "tests/dimensional/dimensionful-power-ad.test.ts",
       "tests/dimensional/distributional-grammar.test.ts",
       "tests/dimensional/integral-bounds-validation.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/dimensional/tensor-partial-derivative.test.ts",
       "tests/dimensional/transcendental-validation.test.ts",
@@ -15011,6 +15134,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/dimensional/bridge-check.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -15173,8 +15297,40 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/atlas/diffusion.test.ts",
+      "tests/bridges/be-11-fix.test.ts",
+      "tests/bridges/be-12-encoding.test.ts",
+      "tests/bridges/be-13-encoding.test.ts",
+      "tests/bridges/be-14-ryu-takayanagi.test.ts",
+      "tests/bridges/be-15-encoding.test.ts",
+      "tests/bridges/be-16-landauer-encoding.test.ts",
+      "tests/bridges/be-17-encoding.test.ts",
+      "tests/bridges/be-19-encoding.test.ts",
+      "tests/bridges/be-22-encoding.test.ts",
+      "tests/bridges/be-23-encoding.test.ts",
+      "tests/bridges/be-25-encoding.test.ts",
+      "tests/bridges/be-26-encoding.test.ts",
+      "tests/bridges/be-34-encoding.test.ts",
+      "tests/bridges/be-37-shapiro-encoding.test.ts",
+      "tests/bridges/be-40-encoding.test.ts",
+      "tests/bridges/be-41-encoding.test.ts",
+      "tests/bridges/be-44-encoding.test.ts",
+      "tests/bridges/be-47-encoding.test.ts",
+      "tests/bridges/be-54-encoding.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/catalog-grammar-applicability.test.ts",
+      "tests/bridges/dimensional-signature-catalog.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/canonical/atomic.test.ts",
+      "tests/canonical/condensed-matter.test.ts",
+      "tests/canonical/electromagnetism.test.ts",
+      "tests/canonical/fluids-waves.test.ts",
+      "tests/canonical/invariants.test.ts",
+      "tests/canonical/mechanics.test.ts",
+      "tests/canonical/nonmonomial.test.ts",
+      "tests/canonical/quantity-names.test.ts",
+      "tests/canonical/statistical-mechanics.test.ts",
+      "tests/canonical/thermo-nuclear-cosmo.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/explain-temperature-binding.test.ts",
@@ -15184,13 +15340,29 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/cli/symbolic-latex.test.ts",
+      "tests/composition/calibration-targets.test.ts",
+      "tests/composition/discovery-canonical-kind.test.ts",
+      "tests/composition/persona-retest-compare.test.ts",
+      "tests/composition/proposed-bridges.test.ts",
+      "tests/composition/seed-edges.test.ts",
+      "tests/composition/symbolic-composition.test.ts",
+      "tests/composition/symbolic-simplification.test.ts",
+      "tests/dimensional/algebra-properties.test.ts",
+      "tests/dimensional/algebra.test.ts",
+      "tests/dimensional/bridge-check.test.ts",
       "tests/dimensional/connection-validators.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
+      "tests/dimensional/dimension-inference.test.ts",
+      "tests/dimensional/dimension-spec.test.ts",
+      "tests/dimensional/dimensionful-power-ad.test.ts",
       "tests/dimensional/distributional-grammar.test.ts",
       "tests/dimensional/duplicate-coord-warning.test.ts",
       "tests/dimensional/einstein.test.ts",
       "tests/dimensional/error-message-discoverability.test.ts",
+      "tests/dimensional/integral-bounds-validation.test.ts",
       "tests/dimensional/kronecker-delta.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/dimensional/metric-tensor.test.ts",
       "tests/dimensional/metric-validation-errors.test.ts",
       "tests/dimensional/minkowski-curvature.test.ts",
@@ -15201,6 +15373,7 @@
       "tests/dimensional/tensor-partial-derivative.test.ts",
       "tests/dimensional/tensor-product.test.ts",
       "tests/dimensional/tensor-symbol.test.ts",
+      "tests/dimensional/transcendental-validation.test.ts",
       "tests/dimensional/uptError.test.ts",
       "tests/dimensional/weyl-validators.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
@@ -15210,12 +15383,14 @@
       "tests/numerical/covariant-derivative-lowering.test.ts",
       "tests/numerical/engine-default.test.ts",
       "tests/numerical/errors.test.ts",
+      "tests/numerical/euler-rejected.test.ts",
       "tests/numerical/evaluate.test.ts",
       "tests/numerical/integral-quadrature.test.ts",
       "tests/numerical/lowering-covariant-dead-else.test.ts",
       "tests/numerical/lowering-strategy-cast.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
+      "tests/numerical/parse-physics.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -15258,6 +15433,7 @@
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
       "tests/dimensional/friedmann-equation.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
@@ -15457,6 +15633,7 @@
       "tests/bridges/be-16-landauer-encoding.test.ts",
       "tests/bridges/be-17-encoding.test.ts",
       "tests/bridges/be-18-encoding.test.ts",
+      "tests/bridges/be-20-encoding.test.ts",
       "tests/bridges/be-22-encoding.test.ts",
       "tests/bridges/be-23-encoding.test.ts",
       "tests/bridges/be-24-encoding.test.ts",
@@ -15482,6 +15659,7 @@
       "tests/bridges/be-49-encoding.test.ts",
       "tests/bridges/be-53-encoding.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/bucket-a-formal-sanity.test.ts",
       "tests/bridges/catalog-grammar-applicability.test.ts",
       "tests/bridges/equations/_be-helpers.test.ts",
       "tests/bridges/public-api-stability.test.ts",
@@ -15581,6 +15759,7 @@
       "tests/dimensional/integral-derivative-tensor.test.ts",
       "tests/dimensional/klein-gordon-equation.test.ts",
       "tests/dimensional/kronecker-delta.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/dimensional/metric-ast-serialization.test.ts",
       "tests/dimensional/metric-helpers.test.ts",
       "tests/dimensional/metric-tensor.test.ts",
@@ -15986,8 +16165,16 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/diff/be-26-ad.test.ts",
+      "tests/diff/bridge-ast-gradient-byid.test.ts",
+      "tests/diff/bridge-ast-gradient-transcendental.test.ts",
+      "tests/diff/bridge-ast-gradient.test.ts",
+      "tests/diff/bridge-ast-reencode-batch.test.ts",
+      "tests/diff/bridge-ast-reencode.test.ts",
       "tests/diff/bridge-gradient.test.ts",
+      "tests/diff/integral-ad.test.ts",
       "tests/dimensional/covariant-derivative-preview.test.ts",
+      "tests/dimensional/dimensionful-power-ad.test.ts",
       "tests/dimensional/duplicate-coord-warning.test.ts",
       "tests/dimensional/einstein.test.ts",
       "tests/dimensional/minkowski-curvature.test.ts",
@@ -15997,6 +16184,8 @@
       "tests/numerical/be37-shapiro-step-sweep.test.ts",
       "tests/numerical/correctness.test.ts",
       "tests/numerical/covariant-derivative-lowering.test.ts",
+      "tests/numerical/einsum-precompute.test.ts",
+      "tests/numerical/engine-capability.test.ts",
       "tests/numerical/engine-default.test.ts",
       "tests/numerical/errors.test.ts",
       "tests/numerical/evaluate.test.ts",
@@ -16004,9 +16193,12 @@
       "tests/numerical/lowering-covariant-dead-else.test.ts",
       "tests/numerical/lowering-covariant-guard.test.ts",
       "tests/numerical/lowering-strategy-cast.test.ts",
+      "tests/numerical/mathts-autograd.test.ts",
+      "tests/numerical/mathts-engine-typing.test.ts",
       "tests/numerical/metric-inverse-curvature-walk.test.ts",
       "tests/numerical/metric-inverse.test.ts",
       "tests/numerical/riemann-tensor-lowering.test.ts",
+      "tests/numerical/tensor-engine-types.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/numerical/formula-contract.ts": [
@@ -16340,7 +16532,40 @@
       "tests/numerical/weyl-schwarzschild.test.ts"
     ],
     "src/numerical/metric-inverse.ts": [
-      "tests/numerical/lowering-utils.test.ts"
+      "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/public-surface.test.ts",
+      "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/public-api-stability.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/explain-temperature-binding.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-search.test.ts",
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/dimensional/covariant-derivative-preview.test.ts",
+      "tests/dimensional/duplicate-coord-warning.test.ts",
+      "tests/dimensional/einstein.test.ts",
+      "tests/dimensional/minkowski-curvature.test.ts",
+      "tests/dimensional/ricci.test.ts",
+      "tests/fixtures/confrontation-golden.test.ts",
+      "tests/numerical/be37-covariant-eikonal-real.test.ts",
+      "tests/numerical/be37-shapiro-step-sweep.test.ts",
+      "tests/numerical/correctness.test.ts",
+      "tests/numerical/covariant-derivative-lowering.test.ts",
+      "tests/numerical/engine-default.test.ts",
+      "tests/numerical/evaluate.test.ts",
+      "tests/numerical/integral-quadrature.test.ts",
+      "tests/numerical/lowering-covariant-dead-else.test.ts",
+      "tests/numerical/lowering-strategy-cast.test.ts",
+      "tests/numerical/lowering-utils.test.ts",
+      "tests/numerical/metric-inverse-curvature-walk.test.ts",
+      "tests/numerical/metric-inverse.test.ts",
+      "tests/numerical/riemann-tensor-lowering.test.ts",
+      "tests/tensor.test.ts"
     ],
     "src/numerical/null-ic.ts": [
       "tests/numerical/null-ic.test.ts"
@@ -16413,6 +16638,7 @@
       "tests/cli/recover-conventions.test.ts",
       "tests/cli/regime-search.test.ts",
       "tests/cli/suggest-token-length.test.ts",
+      "tests/dimensional/mass-density-owner.test.ts",
       "tests/numerical/spacetime-metrics.test.ts"
     ],
     "src/numerical/strides.ts": [
@@ -16518,8 +16744,28 @@
       "tests/relations/category.test.ts"
     ],
     "src/relations/composition-table.ts": [
+      "tests/api/atlas-public-closure.test.ts",
+      "tests/api/gm-sun-units-public.test.ts",
+      "tests/api/public-surface.test.ts",
+      "tests/atlas/barrel-completeness.test.ts",
+      "tests/atlas/composition-table.test.ts",
+      "tests/atlas/path-bound.test.ts",
       "tests/atlas/relations-shim.test.ts",
-      "tests/relations/category.test.ts"
+      "tests/atlas/transported-norm-demo.test.ts",
+      "tests/bridges/bridge-equations-facade.test.ts",
+      "tests/bridges/public-api-stability.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/explain-temperature-binding.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-search.test.ts",
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/fixtures/confrontation-golden.test.ts",
+      "tests/relations/category.test.ts",
+      "tests/tensor.test.ts"
     ],
     "src/relations/conventions.ts": [
       "tests/atlas/conventions.test.ts",
@@ -16726,6 +16972,7 @@
       "src/atlas/composition-table.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
       "src/bridges/be55-quantum-hall.ts",
@@ -16779,12 +17026,13 @@
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -16907,6 +17155,7 @@
       "src/atlas/composition-table.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
       "src/bridges/be55-quantum-hall.ts",
@@ -16960,12 +17209,13 @@
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -17090,6 +17340,7 @@
       "src/atlas/composition-table.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
       "src/bridges/be55-quantum-hall.ts",
@@ -17143,12 +17394,13 @@
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -17184,6 +17436,7 @@
       "src/core/regimes-builtins.ts"
     ],
     "tests/api/public-tag-vs-index-invariant.test.ts": [],
+    "tests/architecture/reexport-locals.test.ts": [],
     "tests/architecture/scalar-builder-gate.test.ts": [
       "src/composition/expr-eval.ts",
       "src/dimensional/validator.ts",
@@ -17300,6 +17553,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/composition/catalog-graph.ts",
       "src/canonical/registry.ts",
       "src/atlas/coverage.ts",
@@ -17351,6 +17605,7 @@
       "src/atlas/statement.ts",
       "src/atlas/derivation.ts",
       "src/relations/types.ts",
+      "src/relations/composition-table.ts",
       "src/relations/regime.ts"
     ],
     "tests/atlas/benchmark-ablation.test.ts": [
@@ -17403,6 +17658,7 @@
       "src/relations/regime.ts",
       "src/atlas/families.ts",
       "src/atlas/path-bound.ts",
+      "src/atlas/error-algebra.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
     ],
@@ -17412,7 +17668,8 @@
     "tests/atlas/bridge-seed-keys.test.ts": [
       "src/atlas/families.ts",
       "src/atlas/derive-evidence.ts",
-      "src/atlas/physjs-ref.ts"
+      "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts"
     ],
     "tests/atlas/canonical-links.test.ts": [
       "src/atlas/families.ts",
@@ -17479,6 +17736,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts",
       "src/cli/map-evidence.ts"
@@ -17542,6 +17800,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/composition/compose.ts",
       "src/composition/edges/calibration.ts"
     ],
@@ -17599,14 +17858,17 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/enumerate.ts",
       "src/atlas/chain-pipeline.ts",
-      "src/atlas/physjs-ref.ts"
+      "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts"
     ],
     "tests/atlas/chain-pipeline.test.ts": [
       "src/atlas/chain-pipeline.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -17660,6 +17922,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/rhs-registry.ts",
       "src/composition/enumerate.ts",
       "src/composition/index.ts",
@@ -17712,6 +17975,7 @@
     ],
     "tests/atlas/composition-table.test.ts": [
       "src/atlas/composition-table.ts",
+      "src/relations/composition-table.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
     ],
@@ -17780,6 +18044,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts"
     ],
@@ -17842,6 +18107,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts"
     ],
@@ -17858,6 +18124,7 @@
       "src/relations/regime.ts",
       "src/canonical/registry.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
     ],
@@ -17890,6 +18157,7 @@
       "src/atlas/waves/bridges-closure.ts",
       "src/atlas/waves/numerics.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
     ],
@@ -17898,6 +18166,7 @@
       "src/atlas/derive-evidence.ts",
       "src/atlas/catalog-formal-ref.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -17950,7 +18219,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/atlas/gr-spine-regime.test.ts": [
       "src/cli/main.ts",
@@ -18036,12 +18306,12 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/composition/edges/calibration.ts",
       "src/atlas/regime.ts",
       "src/relations/regime.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts",
-      "src/core/constants.ts",
       "src/bridges/be52-mercury-confrontation.ts"
     ],
     "tests/atlas/hybrid-retrieval.test.ts": [
@@ -18133,9 +18403,10 @@
     ],
     "tests/atlas/path-bound.test.ts": [
       "src/atlas/path-bound.ts",
-      "src/atlas/families.ts",
       "src/atlas/error-algebra.ts",
+      "src/atlas/families.ts",
       "src/atlas/composition-table.ts",
+      "src/relations/composition-table.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts",
       "src/atlas/oscillators/bridges-limits.ts",
@@ -18167,6 +18438,7 @@
       "src/atlas/catalog-formal-ref.ts",
       "src/atlas/derive-evidence.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/cli/map-evidence.ts",
       "src/composition/edges/applied-physicist.ts"
     ],
@@ -18174,14 +18446,15 @@
       "src/atlas/catalog-formal-ref.ts",
       "src/atlas/derive-evidence.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/bridges/be67-alfven-speed.ts",
+      "src/core/constants.ts",
       "src/bridges/be69-fast-magnetosonic.ts",
       "src/bridges/be70-einstein-relation.ts",
       "src/bridges/be71-clapeyron.ts",
       "src/bridges/be72-gravitational-redshift.ts",
       "src/bridges/be73-kelvin-peltier.ts",
       "src/bridges/be68-tolman-ehrenfest.ts",
-      "src/core/constants.ts",
       "src/cli/map-evidence.ts",
       "src/composition/aliases.ts",
       "src/composition/canonical-compare.ts",
@@ -18246,6 +18519,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/physjs-ref.ts",
       "src/atlas/physjs-entries.generated.ts"
     ],
@@ -18253,6 +18527,7 @@
       "src/atlas/catalog-formal-ref.ts",
       "src/atlas/families.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -18305,7 +18580,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/atlas/physjs-manifest.test.ts": [
       "src/atlas/families.ts",
@@ -18365,7 +18641,9 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
-      "src/atlas/physjs-ref.ts"
+      "src/core/constants.ts",
+      "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts"
     ],
     "tests/atlas/poster.test.ts": [
       "src/atlas/statement.ts",
@@ -18380,6 +18658,7 @@
       "src/atlas/catalog-formal-ref.ts",
       "src/atlas/proof-target.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -18433,6 +18712,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/composition/chain-candidate.ts"
     ],
     "tests/atlas/quantum-support.test.ts": [
@@ -18461,9 +18741,9 @@
       "src/atlas/conventions.ts",
       "src/relations/conventions.ts",
       "src/atlas/composition-table.ts",
+      "src/relations/composition-table.ts",
       "src/atlas/regime.ts",
-      "src/relations/regime.ts",
-      "src/relations/composition-table.ts"
+      "src/relations/regime.ts"
     ],
     "tests/atlas/relative-norm-convention.test.ts": [
       "src/atlas/families.ts"
@@ -18534,10 +18814,12 @@
     ],
     "tests/atlas/transported-norm-demo.test.ts": [
       "src/atlas/composition-table.ts",
+      "src/relations/composition-table.ts",
       "src/atlas/families.ts",
       "src/atlas/oscillators/bridges-exact.ts",
       "src/atlas/oscillators/bridges-limits.ts",
       "src/atlas/path-bound.ts",
+      "src/atlas/error-algebra.ts",
       "src/atlas/types.ts",
       "src/relations/types.ts"
     ],
@@ -18635,6 +18917,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-101-bkt-jump.test.ts": [
@@ -18691,6 +18974,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-102-landauer-conductance.test.ts": [
@@ -18747,6 +19031,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-103-bohm-sheath.test.ts": [
@@ -18803,6 +19088,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-104-ion-acoustic.test.ts": [
@@ -18859,6 +19145,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-105-upper-hybrid.test.ts": [
@@ -18915,6 +19202,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-106-cold-plasma-cutoff.test.ts": [
@@ -18971,6 +19259,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-107-lower-hybrid.test.ts": [
@@ -19027,6 +19316,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-108-oblique-magnetosonic.test.ts": [
@@ -19083,6 +19373,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-109-bennett-pinch.test.ts": [
@@ -19139,6 +19430,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-11-fix.test.ts": [
@@ -19195,11 +19487,13 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/equations/be-11-decoherence-master.ts",
       "src/dimensional/types.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/bridges/be-110-loss-cone.test.ts": [
       "src/bridges/index.ts",
@@ -19255,6 +19549,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-111-grad-b-drift.test.ts": [
@@ -19311,6 +19606,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-112-exb-drift.test.ts": [
@@ -19367,6 +19663,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-113-landau-damping.test.ts": [
@@ -19423,6 +19720,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-114-debye-sphere.test.ts": [
@@ -19479,6 +19777,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-115-multi-debye.test.ts": [
@@ -19535,6 +19834,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-116-lorentz-resistivity.test.ts": [
@@ -19591,6 +19891,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-117-resistive-slab.test.ts": [
@@ -19647,6 +19948,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-118-parker-critical.test.ts": [
@@ -19703,6 +20005,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-119-parker-spiral.test.ts": [
@@ -19759,6 +20062,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-12-encoding.test.ts": [
@@ -19766,6 +20070,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts",
       "src/core/types.ts"
     ],
@@ -19824,6 +20129,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-121-lawson-breakeven.test.ts": [
@@ -19880,6 +20186,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-122-langmuir-probe.test.ts": [
@@ -19936,6 +20243,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-123-cross-field-diffusion.test.ts": [
@@ -19992,6 +20300,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-124-firehose.test.ts": [
@@ -20048,6 +20357,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-125-mirror-instability.test.ts": [
@@ -20104,6 +20414,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-13-encoding.test.ts": [
@@ -20111,6 +20422,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/core/types.ts",
       "src/dimensional/tensor-trace.ts"
     ],
@@ -20121,6 +20433,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -20174,6 +20487,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/core/types.ts"
     ],
     "tests/bridges/be-15-encoding.test.ts": [
@@ -20181,6 +20495,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/bridges/be-15-reformulation.test.ts": [],
@@ -20189,6 +20504,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/bridges/be-17-encoding.test.ts": [
@@ -20196,6 +20512,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/bridges/be-17-reformulation.test.ts": [],
@@ -20263,18 +20580,21 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-19-encoding.test.ts": [
       "src/bridges/equations/be-19-quantum-bounce.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/core/types.ts",
       "src/dimensional/friedmann-equation.ts"
     ],
     "tests/bridges/be-20-encoding.test.ts": [
       "src/bridges/equations/be-20-vacuum-energy.ts",
+      "src/dimensional/types.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/core/types.ts"
@@ -20290,6 +20610,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/bridges/be-23-encoding.test.ts": [
@@ -20297,7 +20618,8 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/bridges/be-23-reformulation.test.ts": [],
     "tests/bridges/be-24-encoding.test.ts": [
@@ -20312,6 +20634,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/core/types.ts"
     ],
     "tests/bridges/be-25-iit-encoding.test.ts": [
@@ -20326,7 +20649,8 @@
       "src/bridges/equations/be-26-dna-tunneling.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/bridges/be-27-encoding.test.ts": [
       "src/bridges/equations/be-27-effective-temperature.ts",
@@ -20400,7 +20724,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-30-encoding.test.ts": [
       "src/bridges/equations/be-30-flm-first-law.ts",
@@ -20434,6 +20759,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/core/types.ts"
     ],
     "tests/bridges/be-35-encoding.test.ts": [
@@ -20467,6 +20793,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/bridges/be-38-encoding.test.ts": [
@@ -20488,13 +20815,15 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/bridges/be-41-encoding.test.ts": [
       "src/bridges/equations/be-41-swampland.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/bridges/be-42-encoding.test.ts": [
       "src/bridges/equations/be-42-hawking-temperature.ts",
@@ -20515,7 +20844,8 @@
       "src/bridges/equations/be-44-soft-hair.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/bridges/be-45-encoding.test.ts": [
       "src/bridges/equations/be-45-tcc.ts",
@@ -20533,7 +20863,8 @@
       "src/bridges/equations/be-47-bbn-dark-sector.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/bridges/be-47-fix.test.ts": [
       "src/bridges/index.ts",
@@ -20588,7 +20919,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-48-encoding.test.ts": [
       "src/bridges/equations/be-48-grw-localization.ts",
@@ -20649,7 +20981,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-49-encoding.test.ts": [
       "src/bridges/equations/be-49-quantum-darwinism.ts",
@@ -20677,6 +21010,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/core/types.ts",
       "src/dimensional/friedmann-equation.ts"
     ],
@@ -20736,7 +21070,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-56-casimir.test.ts": [
       "src/bridges/be56-casimir.ts",
@@ -20852,7 +21187,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-58-johnson-nyquist.test.ts": [
       "src/bridges/be58-johnson-nyquist.ts",
@@ -20969,7 +21305,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-60-fractional-qh.test.ts": [
       "src/bridges/be60-fractional-qh.ts",
@@ -21027,7 +21364,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-61-wiedemann-franz.test.ts": [
       "src/bridges/be61-wiedemann-franz.ts",
@@ -21085,7 +21423,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-62-bcs-gap.test.ts": [
       "src/bridges/be62-bcs-gap.ts",
@@ -21201,7 +21540,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-64-eddington-luminosity.test.ts": [
       "src/bridges/be64-eddington-luminosity.ts",
@@ -21258,7 +21598,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-65-jeans-mass.test.ts": [
       "src/bridges/be65-jeans-mass.ts",
@@ -21316,7 +21657,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/be-66-radiation-pressure.test.ts": [
       "src/bridges/be66-radiation-pressure.ts",
@@ -21372,13 +21714,14 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
-      "src/atlas/catalog-formal-ref.ts",
       "src/core/constants.ts",
+      "src/atlas/catalog-formal-ref.ts",
       "src/composition/edges/applied-physicist.ts",
       "src/composition/quantity.ts"
     ],
     "tests/bridges/be-67-alfven-speed.test.ts": [
       "src/bridges/be67-alfven-speed.ts",
+      "src/core/constants.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -21490,6 +21833,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts",
       "src/composition/edges/applied-physicist.ts",
       "src/composition/quantity.ts",
@@ -21498,6 +21842,7 @@
     "tests/bridges/be-69-fast-magnetosonic.test.ts": [
       "src/bridges/be69-fast-magnetosonic.ts",
       "src/bridges/be67-alfven-speed.ts",
+      "src/core/constants.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
@@ -21694,6 +22039,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts",
       "src/composition/edges/applied-physicist.ts"
     ],
@@ -21751,6 +22097,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts",
       "src/composition/edges/applied-physicist.ts"
     ],
@@ -21808,6 +22155,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/evaluators.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
@@ -21858,6 +22206,7 @@
       "src/composition/catalog-graph.ts",
       "src/atlas/catalog-formal-ref.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/cli/map-evidence.ts"
     ],
     "tests/bridges/be-78-euler-buckling.test.ts": [
@@ -21914,6 +22263,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-79-pull-in.test.ts": [
@@ -21970,6 +22320,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-80-mott-gurney.test.ts": [
@@ -22026,6 +22377,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-81-child-langmuir.test.ts": [
@@ -22082,6 +22434,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-82-shockley-diode.test.ts": [
@@ -22138,6 +22491,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-83-thomson.test.ts": [
@@ -22194,6 +22548,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-84-four-point.test.ts": [
@@ -22250,6 +22605,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-85-shot-noise.test.ts": [
@@ -22306,6 +22662,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-86-reynolds-analogy.test.ts": [
@@ -22362,6 +22719,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-87-capacitor-noise.test.ts": [
@@ -22418,6 +22776,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-88-102.test.ts": [
@@ -22440,6 +22799,7 @@
       "src/dimensional/formula-names.ts",
       "src/atlas/catalog-formal-ref.ts",
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/cli/map-evidence.ts"
     ],
     "tests/bridges/be-88-fermi-sea.test.ts": [
@@ -22496,6 +22856,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-89-debye-cutoff.test.ts": [
@@ -22552,6 +22913,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-90-debye-heat.test.ts": [
@@ -22608,6 +22970,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-91-einstein-solid.test.ts": [
@@ -22664,6 +23027,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-92-sommerfeld-heat.test.ts": [
@@ -22720,6 +23084,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-93-curie-weiss.test.ts": [
@@ -22776,6 +23141,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-94-pauli-paramagnetism.test.ts": [
@@ -22832,6 +23198,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-95-ginzburg-landau.test.ts": [
@@ -22888,6 +23255,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-96-upper-critical.test.ts": [
@@ -22944,6 +23312,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-97-ambegaokar-baratoff.test.ts": [
@@ -23000,6 +23369,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-98-bcs-jump.test.ts": [
@@ -23056,6 +23426,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be-99-mass-action.test.ts": [
@@ -23112,6 +23483,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/catalog-formal-ref.ts"
     ],
     "tests/bridges/be11-decoherence-confrontation.test.ts": [
@@ -23210,6 +23582,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/confrontations.ts",
       "src/bridges/equations/be-53-yang-mills-beta.ts",
       "src/bridges/be53-yang-mills-confrontation.ts"
@@ -23302,6 +23675,7 @@
       "src/atlas/composition-table.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
       "src/bridges/be55-quantum-hall.ts",
@@ -23355,12 +23729,13 @@
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -23454,9 +23829,9 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts",
-      "src/core/constants.ts",
       "src/bridges/equations/be-12-coherence-length.ts",
       "src/bridges/equations/be-21-kss-bound.ts",
       "src/bridges/equations/be-14-ryu-takayanagi.ts",
@@ -23467,6 +23842,7 @@
       "src/bridges/equations/be-27-effective-temperature.ts",
       "src/bridges/equations/be-22-topological-entanglement.ts",
       "src/bridges/equations/be-20-vacuum-energy.ts",
+      "src/dimensional/types.ts",
       "src/bridges/equations/be-15-emergence.ts",
       "src/bridges/equations/be-33-hertz-millis.ts",
       "src/bridges/equations/be-50-wheeler-feynman.ts",
@@ -23532,6 +23908,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/catalog-adapter.ts",
       "src/core/tensor.ts",
       "src/core/types.ts"
@@ -23606,6 +23983,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts",
       "src/bridges/equations/be-15-emergence.ts",
       "src/bridges/equations/be-28-onsager-entropy-production.ts",
@@ -23664,7 +24042,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/catalog-json.test.ts": [
       "src/atlas/catalog-formal-ref.ts",
@@ -23721,6 +24100,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/confrontations.ts",
       "src/composition/adjudication.ts"
     ],
@@ -23799,6 +24179,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/observations/types.ts"
     ],
     "tests/bridges/confrontation-rigor.test.ts": [
@@ -23868,6 +24249,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/rhs-registry.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/descriptor.ts"
@@ -23926,9 +24308,11 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/bridges/rhs-registry.ts"
     ],
     "tests/bridges/equations/_be-helpers.test.ts": [
@@ -24003,6 +24387,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/membership.ts",
       "src/bridges/rejected.ts"
     ],
@@ -24062,7 +24447,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/overlay-registry-quote.test.ts": [
       "src/bridges/index.ts",
@@ -24118,6 +24504,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/rejected.ts"
     ],
     "tests/bridges/perihelion-precession-labeled.test.ts": [
@@ -24195,6 +24582,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/numerical/index.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
@@ -24202,13 +24590,13 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
       "src/index.ts",
       "src/atlas/public.ts",
       "src/core/tensor.ts",
-      "src/core/constants.ts",
       "src/core/types.ts",
       "src/core/cell.ts",
       "src/core/flux-rules.ts",
@@ -24290,6 +24678,7 @@
       "src/atlas/composition-table.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
       "src/composition/quantity.ts",
       "src/composition/edge.ts",
@@ -24388,7 +24777,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/bridges/tensor-index.test.ts": [
       "src/bridges/index.ts",
@@ -24444,6 +24834,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/tensor-index.ts"
     ],
     "tests/bridges-index.test.ts": [
@@ -24499,11 +24890,13 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/canonical/atomic.test.ts": [
       "src/canonical/entries/atomic.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24554,6 +24947,7 @@
     "tests/canonical/condensed-matter.test.ts": [
       "src/canonical/entries/condensed-matter.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24570,6 +24964,7 @@
     "tests/canonical/electromagnetism.test.ts": [
       "src/canonical/entries/electromagnetism.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24577,6 +24972,7 @@
     "tests/canonical/fluids-waves.test.ts": [
       "src/canonical/entries/fluids-waves.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24636,7 +25032,9 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24649,6 +25047,7 @@
     "tests/canonical/mechanics.test.ts": [
       "src/canonical/entries/mechanics.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/canonical/nonmonomial.test.ts": [
@@ -24656,7 +25055,8 @@
       "src/canonical/registry.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/canonical/normal-form.test.ts": [
       "src/canonical/normal-form.ts",
@@ -24673,6 +25073,7 @@
       "src/canonical/registry.ts",
       "src/dimensional/symbolic-constants.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24711,6 +25112,7 @@
     "tests/canonical/statistical-mechanics.test.ts": [
       "src/canonical/entries/statistical-mechanics.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24770,6 +25172,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/rhs-registry.ts",
       "src/canonical/linkage.ts",
       "src/canonical/normal-form.ts",
@@ -24784,6 +25187,7 @@
     "tests/canonical/thermo-nuclear-cosmo.test.ts": [
       "src/canonical/entries/thermo-nuclear-cosmo.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts"
@@ -24845,6 +25249,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/atlas/families.ts",
       "src/canonical/registry.ts",
       "src/dimensional/units.ts"
@@ -25061,7 +25466,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/cli/atlas-evidence.test.ts": [
       "src/cli/main.ts",
@@ -25298,13 +25704,15 @@
       "src/relations/conventions.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -25571,13 +25979,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -26808,13 +27218,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -27178,13 +27590,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -27713,13 +28127,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -27984,13 +28400,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -28885,13 +29303,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -29221,13 +29641,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -29791,13 +30213,15 @@
       "src/relations/types.ts",
       "src/relations/regime.ts",
       "src/atlas/error-algebra.ts",
+      "src/relations/composition-table.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -29866,6 +30290,7 @@
       "src/dimensional/symbolic-constants.ts",
       "src/dimensional/units.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/cli/main.ts",
@@ -30260,6 +30685,7 @@
       "src/composition/edges/catalog-fields.ts",
       "src/composition/edges/catalog-condensed-matter.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts",
       "src/core/types.ts"
     ],
@@ -30413,6 +30839,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/bridges/rejected.ts",
       "src/core/types.ts"
     ],
@@ -30498,6 +30925,7 @@
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
+      "src/core/constants.ts",
       "src/core/types.ts"
     ],
     "tests/composition/chain-candidate.test.ts": [
@@ -30742,6 +31170,7 @@
       "src/composition/discovery.ts",
       "src/composition/bridge-analysis.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/discovery-magnitude.test.ts": [
@@ -31125,6 +31554,7 @@
       "src/canonical/registry.ts",
       "src/dimensional/symbolic-constants.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/poster-source.test.ts": [
@@ -31151,6 +31581,7 @@
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/search-budget.ts",
+      "src/composition/probe/types.ts",
       "src/composition/probe/problem.ts",
       "src/composition/probe/frontier.ts",
       "src/composition/probe/pipeline.ts",
@@ -31224,15 +31655,16 @@
       "src/dimensional/types.ts",
       "src/composition/probe/generator.ts",
       "src/composition/probe/search-budget.ts",
+      "src/composition/probe/types.ts",
       "src/composition/probe/problem.ts",
-      "src/composition/probe/frontier.ts",
-      "src/composition/probe/types.ts"
+      "src/composition/probe/frontier.ts"
     ],
     "tests/composition/probe/import-graph.test.ts": [],
     "tests/composition/probe/modules.test.ts": [
       "src/dimensional/types.ts",
       "src/dimensional/ast-builders.ts",
       "src/composition/probe/search-budget.ts",
+      "src/composition/probe/types.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
       "src/composition/probe/candidate-store.ts",
@@ -31252,8 +31684,7 @@
       "src/composition/probe/metadata.ts",
       "src/composition/probe/problem.ts",
       "src/composition/probe/run-manifest.ts",
-      "src/composition/canonical-json.ts",
-      "src/composition/probe/types.ts"
+      "src/composition/canonical-json.ts"
     ],
     "tests/composition/probe/no-holdout-wording.test.ts": [
       "src/composition/probe/problem.ts",
@@ -31288,6 +31719,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/canonical/registry.ts",
       "src/bridges/index.ts",
       "src/bridges/gravitational-lensing.ts",
@@ -31341,7 +31773,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/composition/quantities.test.ts": [
       "src/composition/quantities.ts",
@@ -31426,6 +31859,7 @@
     ],
     "tests/composition/seed-edges.test.ts": [
       "src/atlas/physjs-ref.ts",
+      "src/atlas/physjs-entries.generated.ts",
       "src/composition/catalog-graph.ts",
       "src/composition/edges/proved-seeds.ts",
       "src/composition/not-composable-seeds.ts",
@@ -31442,6 +31876,7 @@
       "src/dimensional/symbolic-constants.ts",
       "src/dimensional/types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/composition/expr-eval.ts"
@@ -31549,6 +31984,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/symbolic-constants-extra.test.ts": [
@@ -31562,6 +31998,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/composition/user-equation.test.ts": [
@@ -31636,6 +32073,7 @@
       "src/diff/bridge-ast-gradient.ts",
       "src/bridges/equations/be-26-dna-tunneling.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/diff/bridge-ast-gradient-byid.test.ts": [
@@ -31643,6 +32081,7 @@
       "src/bridges/rhs-registry.ts",
       "src/bridges/equations/be-42-hawking-temperature.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/diff/bridge-ast-gradient-transcendental.test.ts": [
@@ -31650,6 +32089,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/diff/bridge-ast-gradient.test.ts": [
@@ -31658,6 +32098,7 @@
       "src/diff/bridge-gradient.ts",
       "src/diff/bridge-specs.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/diff/bridge-ast-reencode-batch.test.ts": [
@@ -31665,12 +32106,14 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/diff/bridge-ast-reencode.test.ts": [
       "src/diff/bridge-ast-gradient.ts",
       "src/core/types.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/diff/bridge-gradient.test.ts": [
@@ -31685,14 +32128,17 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/dimensional/algebra-properties.test.ts": [
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/dimensional/algebra.test.ts": [
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/dimensional/ast-builders.test.ts": [
@@ -31715,6 +32161,7 @@
       "src/dimensional/ast-types.ts",
       "src/dimensional/types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/constants.ts",
       "src/bridges/equations/be-17-einstein-cartan.ts",
       "src/bridges/equations/be-19-quantum-bounce.ts",
@@ -31803,6 +32250,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -31840,6 +32288,7 @@
       "src/numerical/formula-dimension.ts",
       "src/dimensional/types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
     ],
@@ -31849,15 +32298,18 @@
     "tests/dimensional/dimension-spec.test.ts": [
       "src/dimensional/dimension-spec.ts",
       "src/dimensional/types.ts",
-      "src/dimensional/algebra.ts"
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts"
     ],
     "tests/dimensional/dimensionful-power-ad.test.ts": [
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts",
       "src/diff/bridge-ast-gradient.ts",
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/dimensional/distributional-grammar.test.ts": [
@@ -31876,6 +32328,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -31907,6 +32360,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -31942,6 +32396,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/dimensional/integral-derivative-tensor.test.ts": [
@@ -31965,6 +32420,19 @@
       "src/dimensional/types.ts",
       "src/dimensional/errors.ts",
       "src/dimensional/metric-validators.ts"
+    ],
+    "tests/dimensional/mass-density-owner.test.ts": [
+      "src/bridges/equations/be-19-quantum-bounce.ts",
+      "src/bridges/equations/be-20-vacuum-energy.ts",
+      "src/dimensional/types.ts",
+      "src/bridges/equations/be-54-randall-sundrum-brane.ts",
+      "src/composition/edges/catalog-tranche.ts",
+      "src/composition/quantities/_dims.ts",
+      "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
+      "src/dimensional/bridge-check.ts",
+      "src/dimensional/friedmann-equation.ts",
+      "src/numerical/spacetime-metrics.ts"
     ],
     "tests/dimensional/metric-ast-serialization.test.ts": [
       "src/dimensional/metric.ts",
@@ -32000,6 +32468,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32053,6 +32522,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32126,8 +32596,8 @@
       "src/dimensional/ast-types.ts",
       "src/dimensional/tensor.ts",
       "src/dimensional/algebra.ts",
-      "src/dimensional/types.ts",
       "src/dimensional/errors.ts",
+      "src/dimensional/types.ts",
       "src/dimensional/metric-validators.ts"
     ],
     "tests/dimensional/tensor-product.test.ts": [
@@ -32158,6 +32628,7 @@
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/dimensional/types.ts"
     ],
     "tests/dimensional/units.test.ts": [
@@ -32292,6 +32763,7 @@
       "src/atlas/composition-table.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
       "src/bridges/be55-quantum-hall.ts",
@@ -32345,12 +32817,13 @@
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32415,6 +32888,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts"
@@ -32427,6 +32901,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32469,6 +32944,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32485,6 +32961,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts"
@@ -32503,14 +32980,16 @@
     ],
     "tests/numerical/einsum-precompute.test.ts": [
       "src/numerical/mathts-engine.ts",
-      "src/numerical/tensor-engine.ts"
+      "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts"
     ],
     "tests/numerical/einsum-properties.test.ts": [
       "src/numerical/mathts-engine.ts"
     ],
     "tests/numerical/engine-capability.test.ts": [
       "src/numerical/mathts-engine.ts",
-      "src/numerical/tensor-engine.ts"
+      "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts"
     ],
     "tests/numerical/engine-conformance.mathts.test.ts": [
       "src/numerical/mathts-engine.ts"
@@ -32527,6 +33006,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts"
@@ -32541,6 +33021,7 @@
       "src/numerical/formula-mathts.ts",
       "src/dimensional/types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/formula-registry.ts",
       "src/numerical/binding-value.ts"
     ],
@@ -32552,6 +33033,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32625,6 +33107,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32692,6 +33175,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts"
@@ -32719,6 +33203,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32742,11 +33227,13 @@
     ],
     "tests/numerical/mathts-autograd.test.ts": [
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/mathts-engine.ts"
     ],
     "tests/numerical/mathts-engine-typing.test.ts": [
       "src/numerical/mathts-engine.ts",
-      "src/numerical/tensor-engine.ts"
+      "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts"
     ],
     "tests/numerical/mathts-required.test.ts": [
       "src/numerical/formula-registry.ts"
@@ -32762,6 +33249,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32779,6 +33267,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32810,6 +33299,7 @@
       "src/numerical/formula-registry.ts",
       "src/dimensional/types.ts",
       "src/dimensional/algebra.ts",
+      "src/dimensional/errors.ts",
       "src/core/constants.ts",
       "src/numerical/formula-mathts.ts"
     ],
@@ -32842,6 +33332,7 @@
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
       "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -32864,6 +33355,7 @@
     ],
     "tests/numerical/tensor-engine-types.test.ts": [
       "src/numerical/tensor-engine.ts",
+      "src/numerical/errors.ts",
       "src/numerical/types.ts"
     ],
     "tests/numerical/tensor-partial-derivative-lowering.test.ts": [
@@ -32989,6 +33481,7 @@
       "src/atlas/composition-table.ts",
       "src/relations/types.ts",
       "src/relations/regime.ts",
+      "src/relations/composition-table.ts",
       "src/bridges/gravitational-lensing.ts",
       "src/bridges/perihelion-precession.ts",
       "src/bridges/be55-quantum-hall.ts",
@@ -33042,12 +33535,13 @@
       "src/bridges/be102-landauer-conductance.ts",
       "src/bridges/plasma-space.ts",
       "src/dimensional/ast-types.ts",
+      "src/dimensional/errors.ts",
       "src/numerical/tensor-engine.ts",
       "src/numerical/types.ts",
       "src/numerical/grid-field.ts",
       "src/numerical/engine-registry.ts",
       "src/numerical/errors.ts",
-      "src/dimensional/errors.ts",
+      "src/numerical/metric-inverse.ts",
       "src/numerical/be37-covariant-eikonal.ts",
       "src/numerical/gl4-integrator.ts",
       "src/numerical/perihelion-finder.ts",
@@ -33169,7 +33663,8 @@
       "src/bridges/be100-lyddane-sachs-teller.ts",
       "src/bridges/be101-bkt-jump.ts",
       "src/bridges/be102-landauer-conductance.ts",
-      "src/bridges/plasma-space.ts"
+      "src/bridges/plasma-space.ts",
+      "src/core/constants.ts"
     ],
     "tests/tools/untracked-gate-inputs.test.ts": [],
     "tests/tools/vitest-coverage-alignment.test.ts": []

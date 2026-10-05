@@ -2,13 +2,13 @@
 
 Names that more than one `src` file declares, after the dependency graph's `reExported` list is removed.
 
-> **Read from `docs/architecture/dependency-graph.json` on the 5.0.0 tree, then checked in source.** `repo_map.py` is not in this repository and was not re-run. The previous edition of this file said 383 TypeScript files under `src/` and cited `totalSourceFiles` 1025. The current graph's `metadata.totalFiles` is 471 and its `statistics.totalExports` is 3553. Those older fields are not in the JSON.
+> **Read from `docs/architecture/dependency-graph.json`, then checked in source.** `repo_map.py` is not in this repository and was not re-run. The previous edition of this file said 383 TypeScript files under `src/` and cited `totalSourceFiles` 1025. A later edition said 16 names after `reExported`. The current graph's `metadata.totalFiles` is 479 and its `statistics.totalExports` is 3889. Those older fields are not in the JSON.
 
 ## Read this first
 
-The graph's raw export lists collide on 1124 names, because barrels re-export the same binding. After names marked `reExported` are removed, **16 names are still declared in more than one file**. Most of those 16 are a shim that assigns or re-exports a binding the lexer did not mark `reExported`. Four groups are real second definitions or a lexer false positive. The tool groups by name only. A group means "more than one file declares this name", not "the bodies differ". The sentence that those four groups include `canonicalJson` and `captureEnvironment` is the record from before the JSON profiles. Those two names are now one module. A later walk also reports `getBridge` and `PHYSJS_COMMIT`, which this 16-name reading did not list.
+The graph's raw export lists collide because barrels re-export the same binding. After names marked `reExported` are removed, **3 names are still declared in more than one file**. The sentence that 16 names remain, and that most of those 16 are a shim the lexer did not mark `reExported`, is the record from before `export { … } from` replaced those assignments. The tool groups by name only. A group means "more than one file declares this name", not "the bodies differ". `canonicalJson` and `captureEnvironment` are one module. `getBridge` is two functions and was already a local pair.
 
-`src/` on this measurement is 471 TypeScript files (`docs:deps` and `git ls-files`).
+`src/` on this measurement is 479 TypeScript files (`docs:deps` and `git ls-files`).
 
 ## Real second definitions
 
@@ -16,40 +16,42 @@ The graph's raw export lists collide on 1124 names, because barrels re-export th
 
 Every module under `src/cli/commands/` that is a command exports `command`. Helpers (`index.ts`, `_atlas-route.ts`, `_atlas-map.ts`, `_discovery-opts.ts`) do not. `command.ts` defines the shape. The previous edition of this file said 23 files. The registry in `src/cli/commands/index.ts` now side-effect-imports 28 command modules.
 
-### `MASS_DENSITY` — 2 exported files, 5 more local copies. Same dimension.
+### `getBridge` — 2 files. Two functions.
 
-| File | Role |
-|---|---|
-| `src/bridges/equations/be-20-vacuum-energy.ts:66` | exported `Dimension` |
-| `src/composition/quantities/_dims.ts:18` | exported `Dimension` the quantity modules import |
+`src/atlas/bridge-record.ts` and `src/composition/descriptor.ts` each define `getBridge`. They are not one binding.
 
-Both are `{ L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }`. The same object literal is also a non-exported `const` in `src/composition/edges/catalog-tranche.ts:68`, `src/dimensional/bridge-check.ts:63`, `src/dimensional/friedmann-equation.ts:163`, `src/bridges/equations/be-19-quantum-bounce.ts:72`, and `src/bridges/equations/be-54-randall-sundrum-brane.ts:58`. The graph does not list those five, because they are not exported.
+### `MASS_DENSITY`
+
+`MASS_DENSITY` is `{ L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }` in `src/dimensional/types.ts`. be-20 and `src/composition/quantities/_dims.ts` re-export it, and the graph marks both `reExported`. The sentence that two files export it, and that five more files assign the same object, is the record from before this export. Those files were `be-20-vacuum-energy.ts`, `_dims.ts`, `catalog-tranche.ts`, `bridge-check.ts`, `friedmann-equation.ts`, `be-19-quantum-bounce.ts`, and `be-54-randall-sundrum-brane.ts`.
 
 ### `canonicalJson` and `captureEnvironment`
 
 Both names are defined in `src/composition/canonical-json.ts`. The probe files re-export them. The sentence that each name is a second definition, in `src/cli/record.ts` and under `src/composition/probe/`, is the record from before that module.
 
-## Same binding, lexer did not mark it a re-export
+## Same binding, now marked a re-export
 
-These are one value reached through a second `export`. They are shims, recorded so a later reader does not treat them as a second algorithm.
+These were one value reached through a second `export`. They are `export { … } from`, so the graph no longer lists them as two local declarations. The sentence that the lexer did not mark them `reExported` is the record from before that change.
 
-| Name | Declaring file | Second file |
+| Name | Declaring file | Re-export |
 |---|---|---|
-| `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM` | `src/relations/composition-table.ts` | `src/atlas/composition-table.ts` assigns the imports and exports the consts |
-| `regimeHolds` | `src/relations/regime.ts` | `src/atlas/regime.ts:28` assigns the import |
-| `DimensionMismatchError` | `src/dimensional/errors.ts:26` | `src/dimensional/algebra.ts:19` `export { DimensionMismatchError }` |
-| `EngineCapabilityError` | `src/numerical/errors.ts:28` | `src/numerical/tensor-engine.ts:15` `export { EngineCapabilityError }` |
-| `DEFAULT_SEARCH_BUDGET` | `src/composition/probe/types.ts:71` | `src/composition/probe/search-budget.ts:11` `export { DEFAULT_SEARCH_BUDGET }` |
-| `IDENTITY_BOUND` | `src/atlas/error-algebra.ts:28` | `src/atlas/path-bound.ts` `export { IDENTITY_BOUND }` |
-| `M_PROTON_SI` | `src/core/constants.ts:103` | `src/bridges/be67-alfven-speed.ts:21` `export { M_PROTON_SI }` |
-| `evaluateMetricInverse` | `src/numerical/metric-inverse.ts:23` | `src/numerical/index.ts:34` `export { evaluateMetricInverse }` |
-| `dim` | `src/dimensional/ast-builders.ts:29` | `src/canonical/entries/_l1-build.ts:17` `export { dim }` |
+| `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM` | `src/relations/composition-table.ts` | `src/atlas/composition-table.ts` |
+| `regimeHolds` | `src/relations/regime.ts` | `src/atlas/regime.ts` |
+| `DimensionMismatchError` | `src/dimensional/errors.ts` | `src/dimensional/algebra.ts` |
+| `EngineCapabilityError` | `src/numerical/errors.ts` | `src/numerical/tensor-engine.ts` |
+| `DEFAULT_SEARCH_BUDGET` | `src/composition/probe/types.ts` | `src/composition/probe/search-budget.ts` |
+| `IDENTITY_BOUND` | `src/atlas/error-algebra.ts` | `src/atlas/path-bound.ts` |
+| `M_PROTON_SI` | `src/core/constants.ts` | `src/bridges/be67-alfven-speed.ts` |
+| `evaluateMetricInverse` | `src/numerical/metric-inverse.ts` | `src/numerical/index.ts` |
+| `dim` | `src/dimensional/ast-builders.ts` | `src/canonical/entries/_l1-build.ts` |
+| `PHYSJS_COMMIT` | `src/atlas/physjs-entries.generated.ts` | `src/atlas/physjs-ref.ts` |
+
+`admitApproximation` stays `export function` in `src/atlas/regime.ts`.
 
 ## Lexer false positive
 
 ### `BCS_GAP_RATIO`
 
-`src/bridges/be62-bcs-gap.ts:23` exports the constant. `src/bridges/confrontations.ts:661` quotes that line inside a citation object. The dependency-graph lexer records the quote as an export, and `unused-analysis.md` then lists it as unused. There is one constant.
+`src/bridges/be62-bcs-gap.ts` exports the constant. `src/bridges/confrontations.ts` quotes that line inside a citation object. The dependency-graph lexer records the quote as an export, and `unused-analysis.md` then lists it as unused. There is one constant.
 
 ## Withdrawn from the previous edition
 
@@ -59,9 +61,10 @@ These are one value reached through a second `export`. They are shims, recorded 
 
 | Claim | Value | Source |
 |---|---|---|
-| `src` TypeScript files | 471 | `dependency-graph.json` `metadata.totalFiles`, and `git ls-files` |
-| total exports | 3553 | `dependency-graph.json` `statistics.totalExports` |
-| names declared in more than one file, after `reExported` | 16 | walk of `dependency-graph.json` described above |
-| of which the bodies differ or the lexer mis-read a quote | 4 (`command`, `MASS_DENSITY`, `canonicalJson`, `captureEnvironment`) plus `BCS_GAP_RATIO`. The sentence that includes `canonicalJson` and `captureEnvironment` is the record from before the JSON profiles | source read |
+| `src` TypeScript files | 479 | `dependency-graph.json` `metadata.totalFiles`, and `git ls-files` |
+| total exports | 3889 | `dependency-graph.json` `statistics.totalExports` |
+| total re-exports | 1939 | `dependency-graph.json` `statistics.totalReExports` |
+| names declared in more than one file, after `reExported` | 3 (`command`, `getBridge`, `BCS_GAP_RATIO`) | walk of `dependency-graph.json` described above |
+| of which the bodies differ or the lexer mis-read a quote | 3. The sentence that this cell is 4 (`command`, `MASS_DENSITY`, `canonicalJson`, `captureEnvironment`) plus `BCS_GAP_RATIO` is the record from before the JSON profiles and this export | source read |
 
 `repo_map.py` did not produce this edition. A later `repo_map.py check` against the old 1025/1982 claims would be checking a schema this tree no longer writes.

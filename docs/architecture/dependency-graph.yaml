@@ -3,7 +3,7 @@ metadata:
   version: 5.0.0
   totalFiles: 479
   totalModules: 13
-  totalExports: 3888
+  totalExports: 3889
 entryPoints:
   - file: src/index.ts
     type: main
@@ -472,14 +472,15 @@ modules:
             - COMPOSITION_TABLE
             - composeRelation
             - NO_COMPOSITE_CLAIM
+          reExport: true
       exports:
-        - NO_COMPOSITE_CLAIM
         - COMPOSITION_TABLE
         - composeRelation
-      constants:
         - NO_COMPOSITE_CLAIM
+      reExported:
         - COMPOSITION_TABLE
         - composeRelation
+        - NO_COMPOSITE_CLAIM
     src/atlas/conventions.ts:
       description: Re-export of the convention comparison. The implementation lives in
       externalDependencies: []
@@ -2249,6 +2250,10 @@ modules:
           imports:
             - AtlasFamily
           typeOnly: true
+        - file: ./error-algebra.js
+          imports:
+            - IDENTITY_BOUND
+          reExport: true
       exports:
         - IDENTITY_BOUND
         - findPath
@@ -2259,6 +2264,8 @@ modules:
         - routeEntryModels
         - familyChangeBlocksHorizon
         - horizonOnRoute
+      reExported:
+        - IDENTITY_BOUND
       interfaces:
         - RouteEnumeration
         - PathBoundClaim
@@ -2307,6 +2314,10 @@ modules:
             - PHYSJS_PHYS_LIB
             - PHYSJS_TOOLCHAIN
             - PHYSJS_ENTRIES
+        - file: ./physjs-entries.generated.js
+          imports:
+            - PHYSJS_COMMIT
+          reExport: true
       exports:
         - PHYSJS_COMMIT
         - physjsTheorem
@@ -2315,6 +2326,8 @@ modules:
         - bridgeSeedKeys
         - physjsFormalRef
         - physjsManifestProblems
+      reExported:
+        - PHYSJS_COMMIT
       interfaces:
         - PhysjsManifestFile
       functions:
@@ -2575,9 +2588,6 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
-        - file: ../relations/regime.js
-          imports:
-            - regimeHolds
         - file: ./types.js
           imports:
             - AtlasBridge
@@ -2600,6 +2610,10 @@ modules:
             - RegimeOverlap
             - RegionSample
           reExport: true
+        - file: ../relations/regime.js
+          imports:
+            - regimeHolds
+          reExport: true
       exports:
         - collidingRegimeGroups
         - deriveRegimeGroups
@@ -2620,10 +2634,9 @@ modules:
         - RegimeBearing
         - RegimeOverlap
         - RegionSample
+        - regimeHolds
       functions:
         - admitApproximation
-      constants:
-        - regimeHolds
     src/atlas/serialize.ts:
       description: JSON projection of an atlas family (Atlas Phase 0, S0.6).
       externalDependencies: []
@@ -3990,10 +4003,16 @@ modules:
         - file: ../dimensional/formula-names.js
           imports:
             - MU0_SI
+        - file: ../core/constants.js
+          imports:
+            - M_PROTON_SI
+          reExport: true
       exports:
         - M_PROTON_SI
         - alfvenProtonOnlyDensity
         - evaluateAlfvenSpeed
+      reExported:
+        - M_PROTON_SI
       interfaces:
         - AlfvenInputs
         - AlfvenResult
@@ -5265,6 +5284,7 @@ modules:
           imports:
             - Dimension
             - DIMENSIONLESS
+            - MASS_DENSITY
         - file: ../../dimensional/constants.js
           imports:
             - G
@@ -5313,6 +5333,7 @@ modules:
           imports:
             - Dimension
             - DIMENSIONLESS
+            - MASS_DENSITY
         - file: ../../dimensional/constants.js
           imports:
             - c
@@ -5331,17 +5352,22 @@ modules:
             - sym
             - validateFiniteInputs
             - validateBEDimensions
+        - file: ../../dimensional/types.js
+          imports:
+            - MASS_DENSITY
+          reExport: true
       exports:
         - MASS_DENSITY
         - BE20_VACUUM_ENERGY_RHS
         - BE20_VACUUM_ENERGY_LHS
         - evaluateCosmologicalConstantDensity
         - validateBE20Dimensions
+      reExported:
+        - MASS_DENSITY
       functions:
         - evaluateCosmologicalConstantDensity
         - validateBE20Dimensions
       constants:
-        - MASS_DENSITY
         - BE20_VACUUM_ENERGY_RHS
         - BE20_VACUUM_ENERGY_LHS
     src/bridges/equations/be-21-kss-bound.ts:
@@ -6561,6 +6587,7 @@ modules:
           imports:
             - Dimension
             - DIMENSIONLESS
+            - MASS_DENSITY
         - file: ../../dimensional/constants.js
           imports:
             - G
@@ -8228,15 +8255,20 @@ modules:
         - file: ../../dimensional/ast-builders.js
           imports:
             - sym
-            - dim
         - file: ../dimensional-fields.js
           imports:
             - dimensionalFields
+        - file: ../../dimensional/ast-builders.js
+          imports:
+            - dim
+          reExport: true
       exports:
         - dim
         - op
         - pow
         - l1
+      reExported:
+        - dim
       constants:
         - op
         - pow
@@ -13764,10 +13796,6 @@ modules:
             - ENTROPY
             - FREQUENCY
             - MASS
-        - file: ../../dimensional/types.js
-          imports:
-            - Dimension
-          typeOnly: true
         - file: ../../bridges/equations/be-14-ryu-takayanagi.js
           imports:
             - evaluateRyuTakayanagi
@@ -16538,11 +16566,17 @@ modules:
         - file: ./types.js
           imports:
             - DEFAULT_SEARCH_BUDGET
+        - file: ./types.js
+          imports:
+            - DEFAULT_SEARCH_BUDGET
+          reExport: true
       exports:
         - DEFAULT_SEARCH_BUDGET
         - openBudget
         - budgetStopReason
         - canEmitCandidate
+      reExported:
+        - DEFAULT_SEARCH_BUDGET
       interfaces:
         - BudgetState
       functions:
@@ -16852,10 +16886,14 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - MASS_DENSITY
+          reExport: true
       exports:
+        - MASS_DENSITY
         - ENERGY_DIM
         - FREQUENCY_DIM
-        - MASS_DENSITY
         - T_INV2
         - INV_AREA
         - INV_LENGTH
@@ -16872,10 +16910,11 @@ modules:
         - CONDUCTANCE
         - VOLTAGE
         - ENERGY4
+      reExported:
+        - MASS_DENSITY
       constants:
         - ENERGY_DIM
         - FREQUENCY_DIM
-        - MASS_DENSITY
         - T_INV2
         - INV_AREA
         - INV_LENGTH
@@ -18477,6 +18516,10 @@ modules:
         - file: ./errors.js
           imports:
             - DimensionMismatchError
+        - file: ./errors.js
+          imports:
+            - DimensionMismatchError
+          reExport: true
       exports:
         - DimensionMismatchError
         - EXPONENT_TOL
@@ -18487,6 +18530,8 @@ modules:
         - add
         - subtract
         - format
+      reExported:
+        - DimensionMismatchError
       functions:
         - multiply
         - divide
@@ -18565,6 +18610,7 @@ modules:
             - FORCE
             - TEMPERATURE
             - VELOCITY
+            - MASS_DENSITY
         - file: ./validator.js
           imports:
             - ExprNode
@@ -19043,6 +19089,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ./types.js
+          imports:
+            - MASS_DENSITY
         - file: ./klein-gordon-equation.js
           imports:
             - ScalarFieldNode
@@ -19475,6 +19524,7 @@ modules:
         - TIME
         - FREQUENCY
         - MASS
+        - MASS_DENSITY
         - VELOCITY
         - ACCELERATION
         - FORCE
@@ -19494,6 +19544,7 @@ modules:
         - TIME
         - FREQUENCY
         - MASS
+        - MASS_DENSITY
         - VELOCITY
         - ACCELERATION
         - FORCE
@@ -23412,6 +23463,10 @@ modules:
           imports:
             - DuplicateCoordinateWarning
           reExport: true
+        - file: ./metric-inverse.js
+          imports:
+            - evaluateMetricInverse
+          reExport: true
         - file: ./be37-covariant-eikonal.js
           imports:
             - evaluateBE37CovariantEikonalNumerical
@@ -23483,6 +23538,7 @@ modules:
         - setActiveEngine
         - NumericalBackendError
         - DuplicateCoordinateWarning
+        - evaluateMetricInverse
         - evaluateBE37CovariantEikonalNumerical
         - BE37CovariantEikonalInputs
         - BE37CovariantEikonalResult
@@ -23936,6 +23992,7 @@ modules:
             - DIMENSIONLESS
             - LENGTH
             - MASS
+            - MASS_DENSITY
             - TIME
             - VELOCITY
             - Dimension
@@ -24010,10 +24067,13 @@ modules:
         - file: ./errors.js
           imports:
             - EngineCapabilityError
+          reExport: true
       exports:
         - EngineCapabilityError
         - hasAutogradSupport
         - isEinsumSpec
+      reExported:
+        - EngineCapabilityError
       interfaces:
         - EngineTensor
         - EinsumContraction
@@ -24717,17 +24777,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 479
   totalModules: 13
-  totalLinesOfCode: 102971
-  totalExports: 3888
+  totalLinesOfCode: 102981
+  totalExports: 3889
   totalClasses: 61
   totalInterfaces: 612
   totalFunctions: 879
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 1027
-  totalReExports: 1925
-  totalTypeOnlyImports: 588
+  totalConstants: 1022
+  totalReExports: 1939
+  totalTypeOnlyImports: 587
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 75
+  unusedExportsCount: 74

@@ -282,10 +282,10 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../relations/composition-table.js` | `COMPOSITION_TABLE, composeRelation, NO_COMPOSITE_CLAIM` | Import |
+| `../relations/composition-table.js` | `COMPOSITION_TABLE, composeRelation, NO_COMPOSITE_CLAIM` | Re-export |
 
 **Exports:**
-- Constants: `NO_COMPOSITE_CLAIM`, `COMPOSITION_TABLE`, `composeRelation`
+- Re-exports: `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM`
 
 ---
 
@@ -895,10 +895,12 @@ The codebase is organized into the following modules:
 | `./types.js` | `AtlasBridge, NormTransport, RelationType` | Import (type-only) |
 | `./families.js` | `ATLAS_FAMILIES` | Import |
 | `./oscillators/index.js` | `AtlasFamily` | Import (type-only) |
+| `./error-algebra.js` | `IDENTITY_BOUND` | Re-export |
 
 **Exports:**
 - Interfaces: `RouteEnumeration`, `PathBoundClaim`, `AppliedTransport`, `PathNoClaim`
 - Functions: `findPath`, `findAtlasPath`, `enumerateAtlasRoutes`, `enumerateRoutes`, `boundPath`, `routeEntryModels`, `familyChangeBlocksHorizon`, `horizonOnRoute`
+- Re-exports: `IDENTITY_BOUND`
 
 ---
 
@@ -916,10 +918,12 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `FormalRef, FormalRefKind` | Import (type-only) |
 | `./physjs-entries.generated.js` | `PHYSJS_COMMIT, PHYSJS_MATHLIB, PHYSJS_PHYS_LIB, PHYSJS_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
+| `./physjs-entries.generated.js` | `PHYSJS_COMMIT` | Re-export |
 
 **Exports:**
 - Interfaces: `PhysjsManifestFile`
 - Functions: `physjsTheorem`, `physjsLeanFile`, `physjsFileUrl`, `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
+- Re-exports: `PHYSJS_COMMIT`
 
 ---
 
@@ -1024,16 +1028,21 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `../relations/regime.js` | `regimeHolds` | Import |
 | `./types.js` | `AtlasBridge` | Import (type-only) |
 | `./types.js` | `MissingDeltaAtError, MissingHorizonError` | Import |
 | `../relations/regime.js` | `collidingRegimeGroups, deriveRegimeGroups, intersectRegimes, regimeOverlap, uncoveredRegions` | Re-export |
 | `../relations/regime.js` | `RegimeBearing, RegimeOverlap, RegionSample` | Re-export |
+| `../relations/regime.js` | `regimeHolds` | Re-export |
 
 **Exports:**
 - Functions: `admitApproximation`
-- Constants: `regimeHolds`
-- Re-exports: `collidingRegimeGroups`, `deriveRegimeGroups`, `intersectRegimes`, `regimeOverlap`, `uncoveredRegions`, `RegimeBearing`, `RegimeOverlap`, `RegionSample`
+- Re-exports:
+
+  ```text
+  collidingRegimeGroups, deriveRegimeGroups, intersectRegimes, regimeOverlap, uncoveredRegions,
+  RegimeBearing, RegimeOverlap, RegionSample, regimeHolds
+  ```
+
 
 ---
 
@@ -1819,10 +1828,12 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../core/constants.js` | `M_PROTON_SI` | Import |
 | `../dimensional/formula-names.js` | `MU0_SI` | Import |
+| `../core/constants.js` | `M_PROTON_SI` | Re-export |
 
 **Exports:**
 - Interfaces: `AlfvenInputs`, `AlfvenResult`
 - Functions: `alfvenProtonOnlyDensity`, `evaluateAlfvenSpeed`
+- Re-exports: `M_PROTON_SI`
 
 ---
 
@@ -2511,7 +2522,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../../dimensional/validator.js` | `ExprNode, DimensionValidationReport` | Import (type-only) |
-| `../../dimensional/types.js` | `Dimension, DIMENSIONLESS` | Import |
+| `../../dimensional/types.js` | `Dimension, DIMENSIONLESS, MASS_DENSITY` | Import |
 | `../../dimensional/constants.js` | `G` | Import |
 | `../../core/types.js` | `PhysicalConstants` | Import |
 | `../../dimensional/friedmann-equation.js` | `FriedmannEquationNode` | Import (type-only) |
@@ -2531,16 +2542,18 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../dimensional/validator.js` | `ExprNode, DimensionValidationReport` | Import (type-only) |
 | `../../dimensional/stress-energy-validators.js` | `CosmologicalConstantNode` | Import (type-only) |
-| `../../dimensional/types.js` | `Dimension, DIMENSIONLESS` | Import |
+| `../../dimensional/types.js` | `Dimension, DIMENSIONLESS, MASS_DENSITY` | Import |
 | `../../dimensional/constants.js` | `c, G` | Import |
 | `../../dimensional/algebra.js` | `power` | Import |
 | `../../dimensional/types.js` | `LENGTH` | Import |
 | `../../core/types.js` | `PhysicalConstants` | Import |
 | `./_be-helpers.js` | `sym, validateFiniteInputs, validateBEDimensions` | Import |
+| `../../dimensional/types.js` | `MASS_DENSITY` | Re-export |
 
 **Exports:**
 - Functions: `evaluateCosmologicalConstantDensity`, `validateBE20Dimensions`
-- Constants: `MASS_DENSITY`, `BE20_VACUUM_ENERGY_RHS`, `BE20_VACUUM_ENERGY_LHS`
+- Constants: `BE20_VACUUM_ENERGY_RHS`, `BE20_VACUUM_ENERGY_LHS`
+- Re-exports: `MASS_DENSITY`
 
 ---
 
@@ -3075,7 +3088,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../../dimensional/validator.js` | `ExprNode, DimensionValidationReport` | Import (type-only) |
-| `../../dimensional/types.js` | `Dimension, DIMENSIONLESS` | Import |
+| `../../dimensional/types.js` | `Dimension, DIMENSIONLESS, MASS_DENSITY` | Import |
 | `../../dimensional/constants.js` | `G` | Import |
 | `../../core/types.js` | `PhysicalConstants` | Import |
 | `./_be-helpers.js` | `sym, validateFiniteInputs, validateBEDimensions` | Import |
@@ -3560,11 +3573,13 @@ The codebase is organized into the following modules:
 | `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../../dimensional/buckingham.js` | `DimensionalVariable` | Import (type-only) |
 | `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
-| `../../dimensional/ast-builders.js` | `sym, dim` | Import |
+| `../../dimensional/ast-builders.js` | `sym` | Import |
 | `../dimensional-fields.js` | `dimensionalFields` | Import |
+| `../../dimensional/ast-builders.js` | `dim` | Re-export |
 
 **Exports:**
 - Constants: `op`, `pow`, `l1`
+- Re-exports: `dim`
 
 ---
 
@@ -5769,7 +5784,6 @@ The codebase is organized into the following modules:
 | `../../dimensional/ast-builders.js` | `sym` | Import |
 | `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../dimensional/types.js` | `DIMENSIONLESS, AREA, ENTROPY, FREQUENCY, MASS` | Import |
-| `../../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../../bridges/equations/be-14-ryu-takayanagi.js` | `evaluateRyuTakayanagi` | Import |
 | `../../bridges/equations/be-19-quantum-bounce.js` | `evaluateQuantumBounce` | Import |
 | `../../bridges/equations/be-21-kss-bound.js` | `evaluateKSSBound, BE21_KSS_RHS, VISCOSITY_OVER_ENTROPY_DENSITY` | Import |
@@ -6580,10 +6594,12 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `SearchBudget, SearchStopReason` | Import (type-only) |
 | `./types.js` | `DEFAULT_SEARCH_BUDGET` | Import |
+| `./types.js` | `DEFAULT_SEARCH_BUDGET` | Re-export |
 
 **Exports:**
 - Interfaces: `BudgetState`
 - Functions: `openBudget`, `budgetStopReason`, `canEmitCandidate`
+- Re-exports: `DEFAULT_SEARCH_BUDGET`
 
 ---
 
@@ -6718,16 +6734,18 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../../dimensional/types.js` | `FREQUENCY` | Import |
 | `../../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../../dimensional/types.js` | `MASS_DENSITY` | Re-export |
 
 **Exports:**
 - Constants:
 
   ```text
-  ENERGY_DIM, FREQUENCY_DIM, MASS_DENSITY, T_INV2, INV_AREA, INV_LENGTH, ENERGY_DENSITY, MOBILITY,
-  RESISTIVITY, NUMBER_DENSITY, NUMBER_DENSITY_RATE, VECTOR_POTENTIAL, COUPLING_PREFACTOR_SQUARED,
+  ENERGY_DIM, FREQUENCY_DIM, T_INV2, INV_AREA, INV_LENGTH, ENERGY_DENSITY, MOBILITY, RESISTIVITY,
+  NUMBER_DENSITY, NUMBER_DENSITY_RATE, VECTOR_POTENTIAL, COUPLING_PREFACTOR_SQUARED,
   TORSION_CONTRACTION, SPIN_DENSITY_SQUARED, ENERGY_DIM2, CONDUCTANCE, VOLTAGE, ENERGY4
   ```
 
+- Re-exports: `MASS_DENSITY`
 
 ---
 
@@ -7284,10 +7302,12 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `Dimension, NAMED_DIMENSIONS` | Import |
 | `./errors.js` | `DimensionMismatchError` | Import |
+| `./errors.js` | `DimensionMismatchError` | Re-export |
 
 **Exports:**
 - Functions: `multiply`, `divide`, `power`, `equals`, `add`, `subtract`, `format`
 - Constants: `EXPONENT_TOL`
+- Re-exports: `DimensionMismatchError`
 
 ---
 
@@ -7319,7 +7339,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `Dimension, DIMENSIONLESS, ENERGY, ENTROPY, FREQUENCY, TIME, MASS, POWER, LENGTH, AREA, FORCE, TEMPERATURE, VELOCITY` | Import |
+| `./types.js` | `Dimension, DIMENSIONLESS, ENERGY, ENTROPY, FREQUENCY, TIME, MASS, POWER, LENGTH, AREA, FORCE, TEMPERATURE, VELOCITY, MASS_DENSITY` | Import |
 | `./validator.js` | `ExprNode, validate` | Import |
 | `./algebra.js` | `equals, multiply, power` | Import |
 
@@ -7560,6 +7580,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
+| `./types.js` | `MASS_DENSITY` | Import |
 | `./klein-gordon-equation.js` | `ScalarFieldNode` | Import (type-only) |
 | `./algebra.js` | `equals` | Import |
 | `./field-equation-helpers.js` | `validateFreeIndexLabelMatch, validateComponentDimension, validateTensorSymmetry` | Import |
@@ -7754,8 +7775,8 @@ The codebase is organized into the following modules:
 - Constants:
 
   ```text
-  DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, VELOCITY, ACCELERATION, FORCE, ENERGY, POWER,
-  ACTION, TEMPERATURE, ENTROPY, CHARGE, NAMED_DIMENSIONS
+  DIMENSIONLESS, LENGTH, AREA, TIME, FREQUENCY, MASS, MASS_DENSITY, VELOCITY, ACCELERATION, FORCE,
+  ENERGY, POWER, ACTION, TEMPERATURE, ENTROPY, CHARGE, NAMED_DIMENSIONS
   ```
 
 
@@ -8579,6 +8600,7 @@ The codebase is organized into the following modules:
 | `./engine-registry.js` | `getActiveEngine, setActiveEngine` | Re-export |
 | `./errors.js` | `NumericalBackendError` | Re-export |
 | `../dimensional/errors.js` | `DuplicateCoordinateWarning` | Re-export |
+| `./metric-inverse.js` | `evaluateMetricInverse` | Re-export |
 | `./be37-covariant-eikonal.js` | `evaluateBE37CovariantEikonalNumerical` | Re-export |
 | `./be37-covariant-eikonal.js` | `BE37CovariantEikonalInputs, BE37CovariantEikonalResult` | Re-export |
 | `./gl4-integrator.js` | `integrateGeodesicGL4` | Re-export |
@@ -8594,9 +8616,10 @@ The codebase is organized into the following modules:
   ```text
   TensorEngine, EngineTensor, EinsumSpec, ForwardGradResult, ReverseGradResult, hasAutogradSupport,
   EngineCapabilityError, NumericalInputs, NestedArray, GridField, getActiveEngine, setActiveEngine,
-  NumericalBackendError, DuplicateCoordinateWarning, evaluateBE37CovariantEikonalNumerical,
-  BE37CovariantEikonalInputs, BE37CovariantEikonalResult, integrateGeodesicGL4, GL4State, GL4Snapshot,
-  GL4Options, findPerihelion, PerihelionResult, FindPerihelionOptions
+  NumericalBackendError, DuplicateCoordinateWarning, evaluateMetricInverse,
+  evaluateBE37CovariantEikonalNumerical, BE37CovariantEikonalInputs, BE37CovariantEikonalResult,
+  integrateGeodesicGL4, GL4State, GL4Snapshot, GL4Options, findPerihelion, PerihelionResult,
+  FindPerihelionOptions
   ```
 
 
@@ -8852,7 +8875,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `C_SI, G_SI, M_SUN_SI` | Import |
-| `../dimensional/types.js` | `DIMENSIONLESS, LENGTH, MASS, TIME, VELOCITY, Dimension` | Import |
+| `../dimensional/types.js` | `DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, Dimension` | Import |
 | `./binding-value.js` | `readParameter` | Import |
 
 **Exports:**
@@ -8883,11 +8906,12 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `NestedArray` | Import (type-only) |
-| `./errors.js` | `EngineCapabilityError` | Import |
+| `./errors.js` | `EngineCapabilityError` | Re-export |
 
 **Exports:**
 - Interfaces: `EngineTensor`, `EinsumContraction`, `EinsumSpec`, `ForwardGradResult`, `ReverseGradResult`, `TensorEngine`
 - Functions: `hasAutogradSupport`, `isEinsumSpec`
+- Re-exports: `EngineCapabilityError`
 
 ---
 
@@ -9197,15 +9221,15 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 479 |
 | Total Modules | 13 |
-| Total Lines of Code | 102971 |
-| Total Exports | 3888 |
-| Total Re-exports | 1925 |
+| Total Lines of Code | 102981 |
+| Total Exports | 3889 |
+| Total Re-exports | 1939 |
 | Total Classes | 61 |
 | Total Interfaces | 612 |
 | Total Functions | 879 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 588 |
+| Type-only Imports | 587 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

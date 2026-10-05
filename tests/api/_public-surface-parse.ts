@@ -79,17 +79,51 @@ export interface FacadeProblem {
 }
 
 /**
+ * `@public` names visible from `specifier`. A local `export const` counts.
+ * `export { name } from` counts only when the name is `@public` where that
+ * hop declares it. A `@public` comment on the re-export itself does not.
+ *
+ * `readModule(specifier, from)` reads `specifier` relative to `from`. `from`
+ * is omitted for a specifier relative to the facade.
+ */
+function publicNamesFrom(
+  specifier: string,
+  readModule: (specifier: string, from?: string) => string | undefined,
+  from: string | undefined,
+  memo: Map<string, Set<string> | undefined>,
+): Set<string> | undefined {
+  const key = `${from ?? ''}>${specifier}`;
+  if (memo.has(key)) return memo.get(key);
+  // A cycle sees this empty set. The completed set replaces it before return.
+  memo.set(key, new Set());
+  const text = readModule(specifier, from);
+  if (text === undefined) {
+    memo.set(key, undefined);
+    return undefined;
+  }
+  const names = publicDeclNames(text);
+  memo.set(key, names);
+  for (const hop of namedReExports(text)) {
+    if (names.has(hop.name)) continue;
+    const deeper = publicNamesFrom(hop.specifier, readModule, specifier, memo);
+    if (deeper?.has(hop.name)) names.add(hop.name);
+  }
+  return names;
+}
+
+/**
  * Check a namespace FACADE: every symbol it re-exports must be declared
  * `@public` in the module it is re-exported from, and the facade may not use
  * `export *` (a wildcard's contents cannot be checked name by name).
  *
  * @param facade - the facade's source text.
  * @param readModule - source text of a specifier relative to the facade, or
- *   undefined when it cannot be resolved.
+ *   relative to `from` when that module re-exports further. Undefined when
+ *   it cannot be resolved.
  */
 export function checkFacade(
   facade: string,
-  readModule: (specifier: string) => string | undefined,
+  readModule: (specifier: string, from?: string) => string | undefined,
 ): FacadeProblem[] {
   const problems: FacadeProblem[] = [];
   for (const spec of wildcardReExports(facade)) {
@@ -98,8 +132,7 @@ export function checkFacade(
   const cache = new Map<string, Set<string> | undefined>();
   for (const { name, specifier } of namedReExports(facade)) {
     if (!cache.has(specifier)) {
-      const text = readModule(specifier);
-      cache.set(specifier, text === undefined ? undefined : publicDeclNames(text));
+      cache.set(specifier, publicNamesFrom(specifier, readModule, undefined, new Map()));
     }
     const tagged = cache.get(specifier);
     if (tagged === undefined) problems.push({ name, problem: 'unresolvable-module' });

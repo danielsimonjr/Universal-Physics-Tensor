@@ -765,5 +765,9 @@ export function horizonOnRoute(
   return { horizon: bound.horizon, restatedBy: later, holds };
 }
 
-/** Re-exported so a caller need not reach into the algebra module. @internal */
-export { IDENTITY_BOUND };
+/**
+ * Re-exported so a caller need not reach into the algebra module.
+ *
+ * @internal
+ */
+export { IDENTITY_BOUND } from './error-algebra.js';
