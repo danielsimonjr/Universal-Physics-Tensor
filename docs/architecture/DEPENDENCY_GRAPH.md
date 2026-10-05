@@ -8975,7 +8975,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 473 |
 | Total Modules | 13 |
-| Total Lines of Code | 100113 |
+| Total Lines of Code | 100119 |
 | Total Exports | 3560 |
 | Total Re-exports | 1735 |
 | Total Classes | 61 |

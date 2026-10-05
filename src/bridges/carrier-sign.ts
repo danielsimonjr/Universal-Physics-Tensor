@@ -39,12 +39,18 @@ function assertSameCarrierSign(a: number, b: number, left: string, right: string
 /** How many times the sign policy has run since the last reset. The once-check reads this. */
 let carrierSignPolicyCalls = 0;
 
-/** @internal */
+/**
+ * Reset the sign-policy call count. The once-check reads the count after this.
+ * @internal
+ */
 export function resetCarrierSignPolicyCalls(): void {
   carrierSignPolicyCalls = 0;
 }
 
-/** @internal */
+/**
+ * How many times the sign policy has run since the last reset.
+ * @internal
+ */
 export function readCarrierSignPolicyCalls(): number {
   return carrierSignPolicyCalls;
 }

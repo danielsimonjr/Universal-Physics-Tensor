@@ -184,13 +184,13 @@ Explain therefore consults edit distance and, on a miss, the search word index. 
 
 ### Sign rules
 
-The shared type is `CarrierSignError` (`src/bridges/carrier-sign.ts:18-22`). `applyCarrierSignPolicy` (`carrier-sign.ts:73`) is the only caller of `assertSameCarrierSign` (`carrier-sign.ts:34`).
+The shared type is `CarrierSignError` (`src/bridges/carrier-sign.ts:18-22`). `applyCarrierSignPolicy` (`carrier-sign.ts:79`) is the only caller of `assertSameCarrierSign` (`carrier-sign.ts:34`).
 
 | Check | Where | Behavior |
 |---|---|---|
 | `assertSameCarrierSign` | `carrier-sign.ts:34` | throws when the product is negative. Only `applyCarrierSignPolicy` calls it |
 | `sameCarrierSign` | `carrier-sign.ts:26-28` | boolean, product ≥ 0. `assertSameCarrierSign` uses it when both values are finite |
-| `applyCarrierSignPolicy` | `carrier-sign.ts:73` | one policy. A monomial odd in both `charge` and `carrier-mobility` rejects opposite signs. An explicit pair is that check for the Einstein relation. Inputs the scalar AST is even in become absolute values |
+| `applyCarrierSignPolicy` | `carrier-sign.ts:79` | one policy. A monomial odd in both `charge` and `carrier-mobility` rejects opposite signs. An explicit pair is that check for the Einstein relation. Inputs the scalar AST is even in become absolute values |
 
 A canonical edge calls the policy once, in `toEdge` (`canonical-graph.ts:479`), and then `makeEvaluate`. `evaluateEdge` calls that edge function, so explain and a direct `edge.evaluate` are the same call. BE-70 calls the policy once inside `evaluateEinsteinRelation` (`be70-einstein-relation.ts:62`). The edge domain (`applied-physicist.ts:355-363`) checks that μ and q are finite and that T and q are nonzero. It does not check the sign. Hall and cyclotron stay signed. Plasma frequency and Larmor radius stay positive magnitudes. Conductivity says `charge and carrier-mobility must have the same sign`. Einstein says `electrical-mobility (mu_m2_per_Vs) and carrier-charge (q_C) must have the same sign`. The sentence that BE-70 is checked twice, and that the Einstein message names `mu_m2_per_Vs` and `q_C` without the quantities, is the record from before this policy. Decision 8 puts that one call on the evaluator. The table in section 6 still names `evaluateEdge`, which is the recommendation that measurement made.
 
