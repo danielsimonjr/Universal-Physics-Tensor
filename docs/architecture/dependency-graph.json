@@ -21178,7 +21178,22 @@
       },
       "src/composition/expr-eval.ts": {
         "description": "Scalar `ExprNode` value evaluator (v0.12 symbolic composition).",
-        "externalDependencies": [],
+        "externalDependencies": [
+          {
+            "package": "@danielsimonjr/mathts-expression",
+            "imports": [
+              "createScalarBuilder",
+              "ScalarBuildError"
+            ]
+          },
+          {
+            "package": "@danielsimonjr/mathts-functions",
+            "imports": [
+              "evaluateScalar",
+              "ScalarEvalError"
+            ]
+          }
+        ],
         "nodeDependencies": [],
         "internalDependencies": [
           {
@@ -34813,7 +34828,7 @@
   "statistics": {
     "totalTypeScriptFiles": 479,
     "totalModules": 13,
-    "totalLinesOfCode": 103013,
+    "totalLinesOfCode": 102971,
     "totalExports": 3888,
     "totalClasses": 61,
     "totalInterfaces": 612,

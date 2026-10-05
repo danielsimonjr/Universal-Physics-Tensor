@@ -13378,6 +13378,7 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/association.test.ts",
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
@@ -14828,6 +14829,7 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/applicability.test.ts",
       "tests/atlas/benchmark-ablation.test.ts",
       "tests/atlas/benchmark-baselines.test.ts",
@@ -15438,6 +15440,7 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/canonical-links.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/models.test.ts",
@@ -15651,6 +15654,7 @@
       "tests/api/atlas-public-closure.test.ts",
       "tests/api/gm-sun-units-public.test.ts",
       "tests/api/public-surface.test.ts",
+      "tests/architecture/scalar-builder-gate.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/diffusion.test.ts",
       "tests/bridges/be-11-fix.test.ts",
@@ -17180,7 +17184,12 @@
       "src/core/regimes-builtins.ts"
     ],
     "tests/api/public-tag-vs-index-invariant.test.ts": [],
-    "tests/architecture/scalar-builder-gate.test.ts": [],
+    "tests/architecture/scalar-builder-gate.test.ts": [
+      "src/composition/expr-eval.ts",
+      "src/dimensional/validator.ts",
+      "src/dimensional/ast-types.ts",
+      "src/dimensional/types.ts"
+    ],
     "tests/architecture/single-owner.test.ts": [],
     "tests/atlas/applicability.test.ts": [
       "src/dimensional/ast-builders.ts",
