@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A multi-word search is a noun phrase, and a suggestion does not drop the kind of thing asked for.
+  `upt search "reynolds number"` exits 0 on be-86 only. `upt explain debye-length` exits 1 and lists be-89, CE-debye-frequency, and the phonon quantities.
+  Done: `upt search "reynolds number"` exits 1 and does not name be-86. `upt search "prandtl number"` names be-86. `upt explain debye-length` says NOT COVERED and lists no phonon row. `upt search debye` still names CE-debye-frequency. No Reynolds-number bridge is added.
+
 - [x] Explaining `sound-speed` uses the sound-speed equation, and a bound `gamma` multiplies.
   `upt explain sound-speed pressure=1e5 density=1.2 --source=canonical` says the graph has no derivation path. `upt explain speed` with those inputs recovers `288.675134594813` via CE-sound-speed. `gamma=1.4` on `sound-speed` exits 1.
   Done: that command names CE-sound-speed and prints `288.675134594813`, and says the constant was set to 1. With `gamma=1.4` it prints `341.565025531987` and does not say the constant was set to 1. `upt explain speed` with those inputs does not name CE-sound-speed. `compareWithCanonical('speed', …)` still names it. CE-schwarzschild-radius still targets `radius`.
