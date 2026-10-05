@@ -76,7 +76,8 @@ const HELP = `upt discover [--source=catalog|canonical|both]
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
-        --derive consumes.
+        --derive consumes. T, temperature, temp, and T_K on an anchor are
+        kelvin: an energy is k_B T, and any other dimension is an error.
         Candidates a physicist has already adjudicated
         (${ADJUDICATION_URLS})
         fold out of the PROMISING list by default (decoy/entailed verdicts only —

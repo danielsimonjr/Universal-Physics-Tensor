@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] An energy on a temperature binding is k_B T in explain, discovery anchors, and regime coordinates.
+  `upt explain most-probable-speed boltzmann-constant=1.380649e-23 temperature=10eV molecular-mass=1.67262192369e-27 --source=canonical` prints `1.15000027903998e-7`. `upt explain plasma-beta carrier-density=5e6 temperature=10eV magnetic-pressure=5.72957794818894e-11 --source=catalog` prints `1.93037217362116e-24`. `upt eval` already reads that energy as kelvin.
+  Done: the most-probable command prints `30949.6900726706` and says the energy is read as k_B T. The plasma-beta command prints `0.139816287385219`. `temperature=1m` exits 1. `upt evaluate be-76 T_K=10eV` still exits 1. A discovery anchor, `parseAt`, and a temperature sweep use the same reading. The scale is the bound `boltzmann-constant` when it is a bare number or J/K.
+
 - [x] Write an integration map of the 5.0.0 tree. Do not change `src/`.
   Done: `docs/architecture/INTEGRATION_MAP.md` is that map, measured on `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f`. It records module entries, the command call graph, the parallel implementations, the MathTS and PhysJS boundaries, and ten recommended unification targets. `duplicate-symbols.md` and the architecture verification blocks were corrected from the same measurement. No `src/` change.
 

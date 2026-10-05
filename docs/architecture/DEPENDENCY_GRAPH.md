@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 129 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 55 files
+- **cli**: 56 files
 - **root**: 1 file
 - **composition**: 91 files
 - **core**: 11 files
@@ -3951,9 +3951,11 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../args.js` | `ParsedArgs` | Import (type-only) |
-| `../errors.js` | `UsageError` | Import |
+| `../errors.js` | `CliError, UsageError` | Import |
 | `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
-| `../../numerical/binding-value.js` | `readNamedBinding` | Import |
+| `../../numerical/binding-value.js` | `alignTemperatureBinding, readNamedBinding, BindingValue` | Import |
+| `../../dimensional/units.js` | `UnitError` | Import |
+| `../temperature-bindings.js` | `kelvinScale` | Import |
 
 **Exports:**
 - Functions: `parseDiscoveryOpts`
@@ -4213,7 +4215,9 @@ The codebase is organized into the following modules:
 | `../../bridges/carrier-sign.js` | `CarrierSignError` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../search-index.js` | `searchNameWords` | Import |
-| `../../numerical/binding-value.js` | `readNamedBinding` | Import |
+| `../../numerical/binding-value.js` | `alignTemperatureBinding, readNamedBinding` | Import |
+| `../../dimensional/units.js` | `UnitError` | Import |
+| `../temperature-bindings.js` | `kelvinScale` | Import |
 | `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms` | Import |
 | `../../composition/explain.js` | `formatQuantity` | Import |
 
@@ -4437,6 +4441,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
+| `../temperature-bindings.js` | `kelvinScale` | Import |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
@@ -4783,6 +4788,20 @@ The codebase is organized into the following modules:
 - Interfaces: `StatusDefinition`
 - Functions: `definitionsFor`, `statusMeaning`, `glossaryText`
 - Constants: `STATUS_GLOSSARY`
+
+---
+
+### `src/cli/temperature-bindings.ts` - Joules per kelvin for a temperature binding.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../numerical/binding-value.js` | `boltzmannBindingScale, BindingValue` | Import |
+
+**Exports:**
+- Functions: `kelvinScale`
 
 ---
 
@@ -8844,7 +8863,7 @@ graph TD
         N26[command]
         N27[_atlas-map]
         N28[_atlas-route]
-        N29[...50 more]
+        N29[...51 more]
     end
 
     subgraph Root
@@ -8944,14 +8963,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 471 |
+| Total TypeScript Files | 472 |
 | Total Modules | 13 |
-| Total Lines of Code | 99578 |
-| Total Exports | 3553 |
+| Total Lines of Code | 99691 |
+| Total Exports | 3554 |
 | Total Re-exports | 1734 |
 | Total Classes | 61 |
 | Total Interfaces | 560 |
-| Total Functions | 849 |
+| Total Functions | 850 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 583 |

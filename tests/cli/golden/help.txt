@@ -203,7 +203,8 @@ Flags:
         keeps more candidates 'promising', tighter N falsifies more as clashes.
         --anchor=k=v[,k2=v2] overrides the numeric anchor (default mass=M_sun)
         for the consistency/closure check. Both reshape the candidate pool that
-        --derive consumes.
+        --derive consumes. T, temperature, temp, and T_K on an anchor are
+        kelvin: an energy is k_B T, and any other dimension is an error.
         Candidates a physicist has already adjudicated
         (https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/proposed-equations-adjudication.md
         https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/orphan-connector-adjudication.md
@@ -335,6 +336,9 @@ Flags:
         whether the two recovered values agree.
         A value is a number, a unit (mass=1Msun) or a constant expression
         (mass=1*M_sun). A bare number is already in the quantity's unit.
+        T, temperature, temp, and T_K are kelvin: an energy on that name is
+        k_B T, using boltzmann-constant, k_B, or kB when one of those is
+        bound, and any other dimension is an error.
         A tagged quantity converts into that unit (GeV, bit, nat, J/K).
         magnetic-field and magnetic-flux-density are one vacuum B: a value
         given under either name is available under the other.
@@ -565,6 +569,8 @@ Flags:
         circuit clock). Any other norm or direction is refused as
         'norm-not-stated', and the refusal names the missing declaration.
         --at values are numbers, units, or constant expressions (theta0=pi/2).
+        T, temperature, temp, and T_K are kelvin: an energy on that name is k_B T.
+        A sweep of one of those names reads its endpoints the same way.
         A regime or horizon that was checked and failed prints no bound
         number: the domain supremum is not a claim at that point.
         --sweep name=lo:hi:n[:log] evaluates the path at n samples (2 to 200,
@@ -834,6 +840,7 @@ Flags:
         no violated record exit 0.
         A value is a number, a unit, or a constant expression (theta0=pi/2,
         t=1s). A bare number is already in the coordinate's unit.
+        T, temperature, temp, and T_K are kelvin: an energy on that name is k_B T.
         e.g.  upt regime <name> --at theta0=0.2
               upt regime <name> --deny lossless
 Flags:
