@@ -2,9 +2,10 @@
  * One alias registry for evaluate, explain, search, and derive.
  *
  * `upt explain debye-length` used to suggest `planck-length` (a shared
- * token) and exit 1. `upt explain` of the keys `upt evaluate` prints used
- * to exit 0 and say there is no derivation path. `mu_0` as a dimension
- * term used to exit 2.
+ * token) and exit 1. It then named the phonon Debye frequency. A length
+ * query does not name that family. `upt explain` of the keys `upt evaluate`
+ * prints used to exit 0 and say there is no derivation path. `mu_0` as a
+ * dimension term used to exit 2.
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
@@ -20,11 +21,13 @@ async function run(args: string[]): Promise<{ code: number; text: string }> {
 }
 
 describe('name registry — explain, search, derive', () => {
-  it('explain debye-length names the Debye frequency and does not suggest planck-length', async () => {
+  it('explain debye-length does not name the phonon Debye family or planck-length', async () => {
     const r = await run(['explain', 'debye-length']);
     expect(r.code).toBe(1);
+    expect(r.text).toMatch(/NOT COVERED/);
     expect(r.text).not.toMatch(/planck-length/);
-    expect(r.text).toMatch(/CE-debye-frequency/);
+    expect(r.text).not.toMatch(/CE-debye-frequency/);
+    expect(r.text).not.toMatch(/be-89/);
     const search = await run(['search', 'debye']);
     expect(search.code).toBe(0);
     expect(search.text).toMatch(/CE-debye-frequency/);
