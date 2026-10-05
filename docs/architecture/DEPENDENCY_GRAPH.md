@@ -260,7 +260,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../composition/edge.js` | `BridgeEdge` | Import (type-only) |
-| `../composition/enumerate.js` | `enumerateCompositions` | Import |
+| `../composition/enumerate.js` | `enumerateCompositionsWithRefusals` | Import |
 | `../relations/composition-table.js` | `CompositionResult` | Import (type-only) |
 | `../composition/buckingham-filter.js` | `buckinghamFilter` | Import |
 | `../composition/chain-match.js` | `matchChain` | Import |
@@ -272,7 +272,7 @@ The codebase is organized into the following modules:
 | `../composition/mathts-scalar-symbols.js` | `scalarSymbolsFromMathTs` | Import |
 
 **Exports:**
-- Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`
+- Interfaces: `ChainConfirmationRecord`, `ChainRestatementRecord`, `ChainStubRecord`, `ChainCompositionRefusal`
 - Functions: `governingOf`, `categoryCompositionForChain`, `renderChainRecord`, `runChainPipeline`
 
 ---
@@ -9199,11 +9199,11 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 480 |
 | Total Modules | 13 |
-| Total Lines of Code | 102932 |
+| Total Lines of Code | 102957 |
 | Total Exports | 3744 |
 | Total Re-exports | 1792 |
 | Total Classes | 62 |
-| Total Interfaces | 612 |
+| Total Interfaces | 613 |
 | Total Functions | 880 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |

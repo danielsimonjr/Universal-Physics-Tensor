@@ -175,7 +175,10 @@ export type {
   KnownIssue,
 } from './bridges/index.js';
 
-// 6.0.0 — constants stay. Per-bridge evaluate functions are not on this root.
+/**
+ * Constants that stay on the package root, and `CarrierSignError`.
+ * Per-bridge evaluate functions are not on this root.
+ */
 export {
   VON_KLITZING_SI,
   JOSEPHSON_CONSTANT_SI,

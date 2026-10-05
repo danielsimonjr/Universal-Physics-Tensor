@@ -617,7 +617,7 @@
           {
             "file": "../composition/enumerate.js",
             "imports": [
-              "enumerateCompositions"
+              "enumerateCompositionsWithRefusals"
             ]
           },
           {
@@ -690,7 +690,8 @@
         "interfaces": [
           "ChainConfirmationRecord",
           "ChainRestatementRecord",
-          "ChainStubRecord"
+          "ChainStubRecord",
+          "ChainCompositionRefusal"
         ],
         "functions": [
           "governingOf",
@@ -34549,10 +34550,10 @@
   "statistics": {
     "totalTypeScriptFiles": 480,
     "totalModules": 13,
-    "totalLinesOfCode": 102932,
+    "totalLinesOfCode": 102957,
     "totalExports": 3744,
     "totalClasses": 62,
-    "totalInterfaces": 612,
+    "totalInterfaces": 613,
     "totalFunctions": 880,
     "totalTypeGuards": 5,
     "totalEnums": 0,

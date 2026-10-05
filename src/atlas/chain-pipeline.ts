@@ -20,7 +20,7 @@ import { DIMENSIONLESS } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import type { BridgeEdge } from '../composition/edge.js';
-import { enumerateCompositions } from '../composition/enumerate.js';
+import { enumerateCompositionsWithRefusals } from '../composition/enumerate.js';
 import type { CompositionResult } from '../relations/composition-table.js';
 import { buckinghamFilter } from '../composition/buckingham-filter.js';
 import { matchChain } from '../composition/chain-match.js';
@@ -58,12 +58,27 @@ export interface ChainStubRecord {
   readonly text: string;
 }
 
-/** One ordered survivor, or a recorded regime rejection. @internal */
+/**
+ * A pair the composition table refused.
+ *
+ * The message is `UndefinedCompositionError`. A dimension mismatch is not
+ * this record.
+ *
+ * @internal
+ */
+export interface ChainCompositionRefusal {
+  readonly kind: 'rejected: composition table';
+  readonly edgeIds: readonly [string, string];
+  readonly message: string;
+}
+
+/** One ordered survivor, a regime rejection, or a composition-table refusal. @internal */
 export type ChainPipelineResult =
   | ChainConfirmationRecord
   | ChainRestatementRecord
   | ChainStubRecord
-  | ChainRegimeMismatch;
+  | ChainRegimeMismatch
+  | ChainCompositionRefusal;
 
 function isNumericName(name: string): boolean {
   return /^\d+(\.\d+)?$/.test(name);
@@ -197,14 +212,16 @@ export function renderChainRecord(
  * A manifest key whose derived kind is not `bridge` is not a premise.
  * A chain the Buckingham filter drops is absent. A confirmation or a
  * restatement is not sent to the regime gate. Any other mismatch is
- * `rejected: regime mismatch` and is not a stub. The catalog array is
- * not modified.
+ * `rejected: regime mismatch` and is not a stub. A composition-table
+ * refusal is `rejected: composition table` and is not a dimension
+ * failure. The catalog array is not modified.
  *
  * @internal
  */
 export function runChainPipeline(edges: readonly BridgeEdge[]): readonly ChainPipelineResult[] {
   const seedIds = new Set(bridgeSeedKeys());
-  const report = enumerateCompositions(edges, { seedIds });
+  const found = enumerateCompositionsWithRefusals(edges, { seedIds });
+  const report = found.report;
   const records: ChainRecord[] = [];
   const rejections: ChainRecord[] = [];
   for (const target of report.proofTargets) {
@@ -236,10 +253,18 @@ export function runChainPipeline(edges: readonly BridgeEdge[]): readonly ChainPi
   const orderedRejections = [...rejections].sort((a, b) =>
     compareChainEdgeIds(a.edgeIds, b.edgeIds),
   );
+  const tableRefusals: ChainCompositionRefusal[] = found.relationRefusals
+    .map((row) => ({
+      kind: 'rejected: composition table' as const,
+      edgeIds: [row.first.id, row.second.id] as [string, string],
+      message: row.message,
+    }))
+    .sort((a, b) => compareChainEdgeIds(a.edgeIds, b.edgeIds));
   return [
     ...orderChainRecords(records).map((record) =>
       renderChainRecord(record, theoremsFor(record.edgeIds)),
     ),
     ...orderedRejections.map((record) => renderChainRecord(record)),
+    ...tableRefusals,
   ];
 }
