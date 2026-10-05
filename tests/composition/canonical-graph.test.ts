@@ -109,10 +109,12 @@ describe('canonicalToEdges — adapter contract', () => {
     expect(v).toBeGreaterThan(0);
   });
 
-  it('abstains numerically (NaN) where dimensions cannot pin a monomial', () => {
-    // Newton's gravitation: F = G m₁ m₂ / r² — two same-dim masses ⇒ monomial null.
+  it('evaluates a fully-quantitative AST when the monomial is null', () => {
+    // Two same-dim masses leave the Buckingham monomial null. The AST is still
+    // F = G m₁ m₂ / r², and that is what the edge returns.
     const e = byId('CE-newton-gravitation');
-    expect(Number.isFinite(e.evaluate({ mass: 1, 'secondary-mass': 1, r: 1 }))).toBe(false);
+    expect(e.evaluate({ mass: 1, 'secondary-mass': 1, r: 1 })).toBeCloseTo(G_SI, 8);
+    expect(CANONICAL_BY_ID['CE-newton-gravitation'].dimensional.monomial).toBeNull();
   });
 
   it('is callable on an explicit equation subset', () => {

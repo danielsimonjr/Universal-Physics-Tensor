@@ -36,11 +36,19 @@
  *     outside this tree. `scalar-up-to-constant` is not a license to drop ½,
  *     2π, or 6π. An entry with no table row and no recorded coefficient — no
  *     AST, no restatement, a sum, an unresolved stub — still takes the leading
- *     factor as 1. A G-closure is not given a second constant here. Where
+ *     factor as 1. A fully-quantitative dimensionless count (`N`,
+ *     `1-e²`) is a source in `formulaFactors`, not a stub that drops the
+ *     rest of the coefficient: the evaluator multiplies it, and a missing
+ *     count does not return the count-free value. A `scalar-up-to-constant`
+ *     stub (Jarzynski's log average) stays out of that list. A G-closure
+ *     is not given a second constant here. Where
  *     dimensions cannot pin a monomial
- *     (`monomial: null`, e.g. Newton's two same-dim masses), the edge carries a
- *     NaN evaluator; `retrodict` accepts only finite derivations, so it
- *     abstains cleanly rather than polluting the consistency check.
+ *     (`monomial: null`), a fully-quantitative product, quotient, or integer
+ *     power is evaluated from that AST, so a numeric leaf (4, 6π, 8π) is not
+ *     dropped and Newton's two same-dim masses still return G m₁ m₂ / r².
+ *     A sum, a transcendental, or a `scalar-up-to-constant` stub still carries
+ *     a NaN evaluator; `retrodict` accepts only finite derivations, so it
+ *     abstains on those rather than inventing a monomial.
  *
  * The public counterpart to `CATALOG_GRAPH` (the bridge-catalog graph): exported
  * from the package manifest and surfaced via the CLI's `--source=canonical`
@@ -214,16 +222,124 @@ function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undef
 }
 
 /**
+ * Exponents of every symbol in a product, quotient, or integer power.
+ * Undefined for a sum or any node that is not that monomial.
+ */
+function monomialExponents(node: ExprNode | undefined): Map<string, number> | undefined {
+  if (node === undefined) return undefined;
+  if (node.kind === 'symbol') return new Map([[node.name, 1]]);
+  if (node.kind !== 'op') return undefined;
+  if (node.op === '*') {
+    const acc = new Map<string, number>();
+    for (const arg of node.args) {
+      const part = monomialExponents(arg);
+      if (part === undefined) return undefined;
+      for (const [name, exp] of part) acc.set(name, (acc.get(name) ?? 0) + exp);
+    }
+    return acc;
+  }
+  if (node.op === '/') {
+    if (node.args.length !== 2) return undefined;
+    const numerator = monomialExponents(node.args[0]);
+    const denominator = monomialExponents(node.args[1]);
+    if (numerator === undefined || denominator === undefined) return undefined;
+    for (const [name, exp] of denominator) numerator.set(name, (numerator.get(name) ?? 0) - exp);
+    return numerator;
+  }
+  if (node.op === '^') {
+    const base = node.args[0];
+    const expNode = node.args[1];
+    if (base === undefined || expNode === undefined || expNode.kind !== 'symbol') return undefined;
+    const exp = Number(expNode.name);
+    if (!Number.isFinite(exp)) return undefined;
+    const inner = monomialExponents(base);
+    if (inner === undefined) return undefined;
+    for (const [name, innerExp] of inner) inner.set(name, innerExp * exp);
+    return inner;
+  }
+  return undefined;
+}
+
+/**
+ * Dimensionless counts a fully-quantitative AST multiplies in and Buckingham
+ * cannot see. `scalar-up-to-constant` stays excluded: that stub is the
+ * unfixed factor, not a required input.
+ */
+function formulaFactorExponents(eq: CanonicalEquation): Record<string, number> {
+  if (eq.epistemicStatus !== 'fully-quantitative' || eq.scalarAst === undefined) return {};
+  const powers = monomialExponents(eq.scalarAst);
+  if (powers === undefined) return {};
+  const governing = new Set(eq.dimensional.governing.map((g) => g.name));
+  const dims = new Map<string, Dimension>();
+  const collectDims = (node: ExprNode): void => {
+    if (node.kind === 'symbol') dims.set(node.name, node.dim);
+    else if (node.kind === 'op') for (const arg of node.args) collectDims(arg);
+  };
+  collectDims(eq.scalarAst);
+  const factors: Record<string, number> = {};
+  for (const [name, exp] of powers) {
+    if (exp === 0) continue;
+    const dim = dims.get(name);
+    if (dim === undefined || !equals(dim, DIMENSIONLESS)) continue;
+    if (dimensionlessLeaf(name) !== undefined) continue;
+    if (governing.has(name) || name in CONSTANTS) continue;
+    factors[name] = exp;
+  }
+  return factors;
+}
+
+/** Evaluate a fully-quantitative monomial AST, including its dimensionless counts. */
+function evaluateAstMonomial(
+  eq: CanonicalEquation,
+  powers: ReadonlyMap<string, number>,
+): (inputs: Record<string, number>) => number {
+  const dimByName = new Map(eq.dimensional.governing.map((g) => [g.name, g.dim]));
+  let constFactor = 1;
+  const varExps: Array<[string, number]> = [];
+  for (const [name, exp] of powers) {
+    if (exp === 0) continue;
+    const leaf = dimensionlessLeaf(name);
+    if (leaf !== undefined) {
+      constFactor *= Math.pow(leaf, exp);
+      continue;
+    }
+    const dim = dimByName.get(name) ?? CONSTANTS[name]?.dim;
+    const cv = dim !== undefined ? constantValue(name, dim) : null;
+    if (cv !== null) constFactor *= Math.pow(cv, exp);
+    else varExps.push([name, exp]);
+  }
+  const monomial = eq.dimensional.monomial;
+  return (inputs: Record<string, number>): number => {
+    if (monomial !== null) assertCarrierProductSign(monomial, inputs);
+    let v = constFactor;
+    for (const [name, exp] of varExps) {
+      const x = inputs[name];
+      if (x === undefined || !Number.isFinite(x)) return Number.NaN;
+      v *= Math.pow(x, exp);
+    }
+    return v;
+  };
+}
+
+/**
  * Build the evaluator for one canonical equation, keyed by its VARIABLE source
  * names. Variables carry the monomial exponent from `inputs`; constants
  * contribute a fixed baked factor. A fully-quantitative restatement multiplies
  * its recorded dimensionless coefficient and the sourced table prefactor.
- * Returns NaN when the monomial is null (dimensions underdetermine the form)
+ * A fully-quantitative AST that names a dimensionless count, or whose
+ * Buckingham monomial is null, is evaluated from that AST so the count and
+ * the numeric leaves (6π) are not dropped.
+ * Returns NaN when the monomial is null and the AST is not that monomial
  * — `retrodict` then abstains.
  */
 function makeEvaluate(
   eq: CanonicalEquation,
 ): (inputs: Record<string, number>) => number {
+  const powers = eq.epistemicStatus === 'fully-quantitative' ? monomialExponents(eq.scalarAst) : undefined;
+  const factors = formulaFactorExponents(eq);
+  if (powers !== undefined && (Object.keys(factors).length > 0 || eq.dimensional.monomial === null)) {
+    return evaluateAstMonomial(eq, powers);
+  }
   const monomial = eq.dimensional.monomial;
   if (monomial === null) return () => NaN;
   const dimByName = new Map(eq.dimensional.governing.map((g) => [g.name, g.dim]));
@@ -254,9 +370,13 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
     dim: eq.dimensional.target.dim,
     attributes,
   };
+  const factors = formulaFactorExponents(eq);
   const sources: Quantity[] = eq.dimensional.governing
     .filter((g) => constantValue(g.name, g.dim) === null)
     .map((g) => ({ name: g.name, symbol: g.name, dim: g.dim, attributes }));
+  for (const name of Object.keys(factors)) {
+    sources.push({ name, symbol: name, dim: DIMENSIONLESS, attributes });
+  }
   return {
     id: eq.id,
     beId: null,
@@ -271,6 +391,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
     ...(eq.epistemicStatus === 'dimensional' && canonicalPrefactor(eq.id) === undefined
       ? { coefficientUnset: true as const }
       : {}),
+    ...(Object.keys(factors).length > 0 ? { formulaFactors: factors } : {}),
   };
 }
 

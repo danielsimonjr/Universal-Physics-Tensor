@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A fully-quantitative count in the scalar AST is an input of the canonical evaluator.
+  `upt explain pressure boltzmann-constant=1.380649e-23 temperature=300 V=0.0224 --source=canonical` prints `1.84908348214286e-19`, which is `k_B T/V`. The law is `P = N k_B T/V`.
+  Done: that command exits 0 with no recovered value and names `N`. With `N=6.02214076e23` it prints `111354.410064552` and `pressure ∝ boltzmann-constant·temperature·V^-1·N`. Perihelion divides by `one_minus_e_sq` and keeps `6π`. A null monomial evaluates the fully-quantitative AST, so Hawking temperature keeps `8π` and Newton returns `G m₁ m₂ / r²`. The canonical audit is DECOY 11 and OPEN 19. Jarzynski stays DERIVED `×1`.
+
 - [x] An energy on a temperature binding is k_B T in explain, discovery anchors, and regime coordinates.
   `upt explain most-probable-speed boltzmann-constant=1.380649e-23 temperature=10eV molecular-mass=1.67262192369e-27 --source=canonical` prints `1.15000027903998e-7`. `upt explain plasma-beta carrier-density=5e6 temperature=10eV magnetic-pressure=5.72957794818894e-11 --source=catalog` prints `1.93037217362116e-24`. `upt eval` already reads that energy as kelvin.
   Done: the most-probable command prints `30949.6900726706` and says the energy is read as k_B T. The plasma-beta command prints `0.139816287385219`. `temperature=1m` exits 1. `upt evaluate be-76 T_K=10eV` still exits 1. A discovery anchor, `parseAt`, and a temperature sweep use the same reading. The scale is the bound `boltzmann-constant` when it is a bare number or J/K.

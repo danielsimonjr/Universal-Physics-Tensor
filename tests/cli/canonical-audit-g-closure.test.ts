@@ -50,8 +50,15 @@ describe('canonical audit G-closures', () => {
     expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
     expect(text.stdout).toMatch(/DERIVED \(73\)/);
     expect(text.stdout).toMatch(/COEFFICIENT UNSET \(6\)/);
-    expect(text.stdout).toMatch(/DECOY, 7\)/);
-    expect(text.stdout).toMatch(/OPEN \(23\)/);
+    // Hawking, light deflection, perihelion, and Bekenstein–Hawking were OPEN
+    // because a null monomial evaluated to NaN, so the audit had no samples.
+    // The evaluator is the AST. The only closure the search accepts does not
+    // reproduce it, so those four are DECOY and OPEN is 19.
+    expect(text.stdout).toMatch(/DECOY, 11\)/);
+    expect(text.stdout).toMatch(
+      /CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-bekenstein-hawking/,
+    );
+    expect(text.stdout).toMatch(/OPEN \(19\)/);
     const decoy = text.stdout.split('OPEN (')[0] ?? '';
     for (const id of SPURIOUS) expect(decoy, id).toContain(id);
   });
