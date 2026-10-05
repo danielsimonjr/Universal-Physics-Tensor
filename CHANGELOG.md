@@ -12,6 +12,18 @@ from v0.1.0 onward.
 
 - **Plasma and space dogfood of published 5.0.0.** `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md` records the plasma and space session against the published tarball: how the Debye, frequency, MHD, sheath, transport, and solar-wind commands behave, and the candidates that units do not fix. Candidates stay unproven. The bugs it records are filed as issues 386–392 and are not fixed here. No `src/` change.
 
+### Migration
+
+`upt explain most-probable-speed boltzmann-constant=1.380649e-23 temperature=10eV molecular-mass=1.67262192369e-27 --source=canonical` printed `Recovered value: 1.15000027903998e-7`. It now prints `30949.6900726706` and stderr says `temperature=10eV` is read as k_B T. `upt explain plasma-beta carrier-density=5e6 temperature=10eV magnetic-pressure=5.72957794818894e-11 --source=catalog` printed `1.93037217362116e-24`. It now prints `0.139816287385219`. `temperature=1m` on those names exits 1. `upt evaluate be-76 T_K=10eV` still exits 1: a declared kelvin slot does not accept an energy. A discovery `--anchor`, a regime or path `--at`, and a path `--sweep` of `T`, `temperature`, `temp`, or `T_K` use the same reading. The scale is `boltzmann-constant` when that binding is a bare number or already J/K; otherwise `k_B`, then `kB`, then the CODATA value. A bare number on those names stays kelvin.
+
+### Breaking
+
+- **An energy on a temperature binding outside `upt eval` is k_B T.** A caller that matched the joule magnitude in the kelvin slot of `upt explain`, a discovery anchor, a regime coordinate, or a path sweep now matches the kelvin temperature. `upt evaluate` still rejects that energy.
+
+### Fixed
+
+- **Explain, discovery anchors, and regime coordinates read an energy on a temperature name as k_B T.** The reading already lived in `upt eval`'s `parseScope` (`alignTemperatureBinding`). Explain stored `readNamedBinding`'s joules. Issue #386.
+
 ## [5.0.0] - 2026-10-04
 
 Major release. The breaks below landed after published `4.0.0` (`9e7dfa279be3c56d83c1f9436cd3034687f00e3f`). The package root adds the BE-88 through BE-102 evaluators, their input and result types, and `be88Edge` through `be102Edge`. npm `4.0.0` remains the published release until the tag workflow.

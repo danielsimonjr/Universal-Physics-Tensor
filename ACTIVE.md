@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] An energy on a temperature binding is k_B T in explain, discovery anchors, and regime coordinates.
+  `upt explain most-probable-speed boltzmann-constant=1.380649e-23 temperature=10eV molecular-mass=1.67262192369e-27 --source=canonical` prints `1.15000027903998e-7`. `upt explain plasma-beta carrier-density=5e6 temperature=10eV magnetic-pressure=5.72957794818894e-11 --source=catalog` prints `1.93037217362116e-24`. `upt eval` already reads that energy as kelvin.
+  Done: the most-probable command prints `30949.6900726706` and says the energy is read as k_B T. The plasma-beta command prints `0.139816287385219`. `temperature=1m` exits 1. `upt evaluate be-76 T_K=10eV` still exits 1. A discovery anchor, `parseAt`, and a temperature sweep use the same reading. The scale is the bound `boltzmann-constant` when it is a bare number or J/K.
+
 - [x] Record the plasma and space dogfood of published `universal-physics-tensor@5.0.0`. The report is `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md`. The session does not change `src/`.
   Done: the report is that file. npm `5.0.0` gitHead is `4420714b67f5728492ba90d9a983280227b36943`. Annotated tag `v5.0.0` (object `28ebfb885aab8b06499e90fcd208d4e688b0af69`) points at that commit. Publish run `37247750332` succeeded. New candidates stay unproven. The bugs are filed as issues 386–392 and are not fixed in this change.
 

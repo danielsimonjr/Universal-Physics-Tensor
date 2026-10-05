@@ -75,6 +75,8 @@ const HELP = `upt path <from> <to> [--at group=value ...] [--tolerance=[observab
         circuit clock). Any other norm or direction is refused as
         'norm-not-stated', and the refusal names the missing declaration.
         --at values are numbers, units, or constant expressions (theta0=pi/2).
+        T, temperature, temp, and T_K are kelvin: an energy on that name is k_B T.
+        A sweep of one of those names reads its endpoints the same way.
         A regime or horizon that was checked and failed prints no bound
         number: the domain supremum is not a claim at that point.
         --sweep name=lo:hi:n[:log] evaluates the path at n samples (2 to 200,
@@ -183,8 +185,13 @@ export function parseSweep(
   const [, name, loS, hiS, nS, sp] = m as unknown as [string, string, string, string, string, string | undefined];
   const endpoint = (raw: string): number => {
     try {
-      return api.readBinding(raw).value;
-    } catch {
+      const read = api.readBinding(raw);
+      const aligned = api.alignTemperatureBinding(name, raw, read);
+      return Number.isFinite(aligned.value) ? aligned.value : Number.NaN;
+    } catch (e) {
+      if (e instanceof api.UnitError) {
+        throw new CliError(`upt path: --sweep '${spec}' is not a temperature. ${e.message}`);
+      }
       return Number.NaN;
     }
   };

@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "5.0.0",
-    "totalFiles": 471,
+    "totalFiles": 472,
     "totalModules": 13,
-    "totalExports": 3553
+    "totalExports": 3554
   },
   "entryPoints": [
     {
@@ -13113,6 +13113,7 @@
           {
             "file": "../errors.js",
             "imports": [
+              "CliError",
               "UsageError"
             ]
           },
@@ -13126,7 +13127,21 @@
           {
             "file": "../../numerical/binding-value.js",
             "imports": [
-              "readNamedBinding"
+              "alignTemperatureBinding",
+              "readNamedBinding",
+              "BindingValue"
+            ]
+          },
+          {
+            "file": "../../dimensional/units.js",
+            "imports": [
+              "UnitError"
+            ]
+          },
+          {
+            "file": "../temperature-bindings.js",
+            "imports": [
+              "kelvinScale"
             ]
           }
         ],
@@ -14005,7 +14020,20 @@
           {
             "file": "../../numerical/binding-value.js",
             "imports": [
+              "alignTemperatureBinding",
               "readNamedBinding"
+            ]
+          },
+          {
+            "file": "../../dimensional/units.js",
+            "imports": [
+              "UnitError"
+            ]
+          },
+          {
+            "file": "../temperature-bindings.js",
+            "imports": [
+              "kelvinScale"
             ]
           },
           {
@@ -14809,6 +14837,12 @@
               "FlagSpec"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../temperature-bindings.js",
+            "imports": [
+              "kelvinScale"
+            ]
           },
           {
             "file": "../command.js",
@@ -15887,6 +15921,38 @@
         ],
         "constants": [
           "STATUS_GLOSSARY"
+        ]
+      },
+      "src/cli/temperature-bindings.ts": {
+        "description": "Joules per kelvin for a temperature binding.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [
+          {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
+            ]
+          },
+          {
+            "file": "../numerical/binding-value.js",
+            "imports": [
+              "boltzmannBindingScale",
+              "BindingValue"
+            ]
+          }
+        ],
+        "exports": [
+          "kelvinScale"
+        ],
+        "functions": [
+          "kelvinScale"
         ]
       },
       "src/cli/top-level-help.ts": {
@@ -33117,6 +33183,7 @@
           "src/cli/record.ts",
           "src/cli/search-index.ts",
           "src/cli/statuses.ts",
+          "src/cli/temperature-bindings.ts",
           "src/cli/top-level-help.ts",
           "src/cli/version.ts"
         ]
@@ -33353,13 +33420,13 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 471,
+    "totalTypeScriptFiles": 472,
     "totalModules": 13,
-    "totalLinesOfCode": 99578,
-    "totalExports": 3553,
+    "totalLinesOfCode": 99686,
+    "totalExports": 3554,
     "totalClasses": 61,
     "totalInterfaces": 560,
-    "totalFunctions": 849,
+    "totalFunctions": 850,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 911,

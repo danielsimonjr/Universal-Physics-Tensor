@@ -20,7 +20,9 @@ import { emitJson } from '../output.js';
 import { CarrierSignError } from '../../bridges/carrier-sign.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
-import { readNamedBinding } from '../../numerical/binding-value.js';
+import { alignTemperatureBinding, readNamedBinding } from '../../numerical/binding-value.js';
+import { UnitError } from '../../dimensional/units.js';
+import { kelvinScale } from '../temperature-bindings.js';
 import {
   aliasesForTarget,
   nearQuantityNames,
@@ -53,6 +55,9 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         whether the two recovered values agree.
         A value is a number, a unit (mass=1Msun) or a constant expression
         (mass=1*M_sun). A bare number is already in the quantity's unit.
+        T, temperature, temp, and T_K are kelvin: an energy on that name is
+        k_B T, using boltzmann-constant, k_B, or kB when one of those is
+        bound, and any other dimension is an error.
         A tagged quantity converts into that unit (GeV, bit, nat, J/K).
         magnetic-field and magnetic-flux-density are one vacuum B: a value
         given under either name is available under the other.
@@ -65,9 +70,9 @@ const HELP = `upt explain <quantity> [name=value | name] ...
  * `mass=1e500`→∞, and a bare name alongside a valued one were all silent
  * wrong-physics footguns.
  */
-function parseKnown(args: readonly string[]): string[] | Record<string, number> {
+function parseKnown(args: readonly string[]): { known: string[] | Record<string, number>; notes: string[] } {
   const valued = args.filter((a) => a.includes('='));
-  if (valued.length === 0) return [...args]; // names mode
+  if (valued.length === 0) return { known: [...args], notes: [] }; // names mode
 
   if (valued.length !== args.length) {
     const bare = args.filter((a) => !a.includes('=')).join(', ');
@@ -77,23 +82,47 @@ function parseKnown(args: readonly string[]): string[] | Record<string, number> 
     );
   }
 
-  const values: Record<string, number> = {};
+  const pending: { name: string; raw: string; assignment: string; read: ReturnType<typeof readNamedBinding> }[] = [];
   for (const a of args) {
     const eq = a.indexOf('=');
     const name = a.slice(0, eq);
     const raw = a.slice(eq + 1);
-    let num: number;
+    let read: ReturnType<typeof readNamedBinding>;
     try {
-      num = readNamedBinding(name, raw).value;
+      read = readNamedBinding(name, raw);
     } catch {
-      num = Number.NaN;
-    }
-    if (raw === '' || !Number.isFinite(num)) {
       throw new UsageError(`upt: '${a}' is not a finite number. Expected ${name}=<number>. See \`upt help\`.`);
     }
-    values[name] = num;
+    if (raw === '' || !Number.isFinite(read.value)) {
+      throw new UsageError(`upt: '${a}' is not a finite number. Expected ${name}=<number>. See \`upt help\`.`);
+    }
+    pending.push({ name, raw, assignment: a, read });
   }
-  return values;
+
+  // The same reading as `upt eval`: an energy on a temperature name is k_B T.
+  // Eval wired this in parseScope. Explain used to keep the joule magnitude.
+  const kB = kelvinScale(pending);
+  const values: Record<string, number> = {};
+  const notes: string[] = [];
+  for (const p of pending) {
+    try {
+      const aligned = alignTemperatureBinding(p.name, p.raw, p.read, kB);
+      if (!Number.isFinite(aligned.value)) {
+        throw new UsageError(
+          `upt: '${p.assignment}' is not a finite number. Expected ${p.name}=<number>. See \`upt help\`.`,
+        );
+      }
+      values[p.name] = aligned.value;
+      for (const note of aligned.notes) if (!notes.includes(note)) notes.push(note);
+    } catch (e) {
+      if (e instanceof UsageError) throw e;
+      if (e instanceof UnitError) {
+        throw new CliError(`upt explain: '${p.assignment}' is not a temperature. ${e.message}`);
+      }
+      throw e;
+    }
+  }
+  return { known: values, notes };
 }
 
 /**
@@ -267,7 +296,8 @@ async function run(ctx: CommandCtx): Promise<number> {
   }
   const aliases = aliasesForTarget(graph, resolvedTarget);
   const parsed = parseKnown(rest);
-  const rebound = rebind(parsed, aliases, names);
+  for (const note of parsed.notes) ctx.err(note);
+  const rebound = rebind(parsed.known, aliases, names);
   const known = shareSynonyms(rebound, names);
   let x;
   try {

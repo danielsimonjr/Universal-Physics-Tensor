@@ -11,9 +11,11 @@
  * green and untouched) — do not reword them.
  */
 import type { ParsedArgs } from '../args.js';
-import { UsageError } from '../errors.js';
+import { CliError, UsageError } from '../errors.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
-import { readNamedBinding } from '../../numerical/binding-value.js';
+import { alignTemperatureBinding, readNamedBinding, type BindingValue } from '../../numerical/binding-value.js';
+import { UnitError } from '../../dimensional/units.js';
+import { kelvinScale } from '../temperature-bindings.js';
 
 export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
@@ -32,23 +34,40 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
   }
 
   const gt: Record<string, number> = {};
+  const pending: { name: string; raw: string; pair: string; read: BindingValue }[] = [];
   for (const x of flags.get('anchor') ?? []) {
     for (const pair of x.split(',')) {
       const eq = pair.indexOf('=');
       const k = eq >= 0 ? pair.slice(0, eq) : pair;
       const v = eq >= 0 ? pair.slice(eq + 1) : '';
-      let val = Number.NaN;
+      let read: BindingValue | undefined;
       if (v !== '') {
         try {
-          val = readNamedBinding(k, v).value;
+          read = readNamedBinding(k, v);
         } catch {
-          val = Number.NaN;
+          read = undefined;
         }
       }
-      if (eq < 0 || !k || v === '' || !Number.isFinite(val)) {
+      if (eq < 0 || !k || v === '' || read === undefined || !Number.isFinite(read.value)) {
         throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${pair}".`);
       }
-      gt[k] = val;
+      pending.push({ name: k, raw: v, pair, read });
+    }
+  }
+  const kB = kelvinScale(pending);
+  for (const p of pending) {
+    try {
+      const aligned = alignTemperatureBinding(p.name, p.raw, p.read, kB);
+      if (!Number.isFinite(aligned.value)) {
+        throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
+      }
+      gt[p.name] = aligned.value;
+    } catch (e) {
+      if (e instanceof UsageError) throw e;
+      if (e instanceof UnitError) {
+        throw new CliError(`upt: --anchor '${p.pair}' is not a temperature. ${e.message}`);
+      }
+      throw e;
     }
   }
   if (Object.keys(gt).length) opts.groundTruth = gt;
