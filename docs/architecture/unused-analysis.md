@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 78
+- **Potentially unused exports**: 76
 
 ## Potentially Unused Files
 
@@ -131,9 +131,7 @@ These exports are not imported by any other file in the codebase:
 
 ### `src/cli/record.ts`
 
-- `canonicalJson` (function)
 - `entryFingerprint` (function)
-- `captureEnvironment` (function)
 - `RECORD_SCHEMA` (constant)
 - `sha256` (constant)
 - `argvFingerprint` (constant)

@@ -10,6 +10,8 @@ import { describe, expect, it } from 'vitest';
 import {
   bridgeEquationLiteral,
   bridgeRegistryHits,
+  jsonDefinition,
+  jsonOwnerHits,
   nameTableOwnerHits,
   prefactorOwnerHits,
   renderDuplicateOwners,
@@ -44,6 +46,19 @@ describe('single owner', () => {
 
   it('builds a catalog id only through registerBridge', () => {
     expect(bridgeRegistryHits(root)).toEqual([]);
+  });
+
+  it('defines canonicalJson and captureEnvironment in one module', () => {
+    expect(jsonOwnerHits(root)).toEqual([]);
+  });
+
+  it('a third canonicalJson definition is a hit, and a re-export is not', () => {
+    // The marker was chosen to match `export function canonicalJson` on the parent tree.
+    // This proves the matcher fires. The parent failure was the two live definitions.
+    expect(jsonDefinition('export function canonicalJson(value: unknown): string {\n', 'canonicalJson')).toBe(true);
+    expect(jsonDefinition("export { canonicalJson } from './serialize.js';\n", 'canonicalJson')).toBe(false);
+    expect(jsonDefinition('export async function captureEnvironment(api: Api) {\n', 'captureEnvironment')).toBe(true);
+    expect(jsonDefinition("export { captureEnvironment } from './run-manifest.js';\n", 'captureEnvironment')).toBe(false);
   });
 
   it('a second BRIDGE_EQUATIONS literal is a hit', () => {

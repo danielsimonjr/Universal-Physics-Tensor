@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "5.0.0",
-    "totalFiles": 478,
+    "totalFiles": 479,
     "totalModules": 13,
-    "totalExports": 3886
+    "totalExports": 3888
   },
   "entryPoints": [
     {
@@ -16313,6 +16313,13 @@
             ]
           },
           {
+            "file": "../composition/canonical-json.js",
+            "imports": [
+              "canonicalJson",
+              "captureEnvironment"
+            ]
+          },
+          {
             "file": "./version.js",
             "imports": [
               "packageVersion",
@@ -16324,9 +16331,7 @@
           "RECORD_SCHEMA",
           "sha256",
           "argvFingerprint",
-          "canonicalJson",
           "entryFingerprint",
-          "captureEnvironment",
           "recordInvocation",
           "replayRecord",
           "showRecord"
@@ -16341,9 +16346,7 @@
           "ReplayEntryReport"
         ],
         "functions": [
-          "canonicalJson",
           "entryFingerprint",
-          "captureEnvironment",
           "recordInvocation",
           "replayRecord",
           "showRecord"
@@ -18194,6 +18197,45 @@
         "constants": [
           "CANONICAL_CONSTANTS",
           "CANONICAL_GRAPH"
+        ]
+      },
+      "src/composition/canonical-json.ts": {
+        "description": "One canonical-JSON serializer with two named profiles.",
+        "externalDependencies": [],
+        "nodeDependencies": [
+          {
+            "module": "crypto",
+            "imports": [
+              "createHash"
+            ]
+          }
+        ],
+        "internalDependencies": [
+          {
+            "file": "./probe/types.js",
+            "imports": [
+              "EnvironmentFingerprint"
+            ],
+            "typeOnly": true
+          }
+        ],
+        "exports": [
+          "canonicalJson",
+          "sha256Hex",
+          "hashCanonical",
+          "captureEnvironment"
+        ],
+        "interfaces": [
+          "RecordEnvironmentSources",
+          "RecordEnvironmentSnapshot"
+        ],
+        "functions": [
+          "canonicalJson",
+          "sha256Hex",
+          "hashCanonical",
+          "captureEnvironment",
+          "captureEnvironment",
+          "captureEnvironment"
         ]
       },
       "src/composition/canonical-prefactors.ts": {
@@ -22977,11 +23019,12 @@
             "reExport": true
           },
           {
-            "file": "./serialize.js",
+            "file": "../canonical-json.js",
             "imports": [
               "canonicalJson",
               "sha256Hex",
-              "hashCanonical"
+              "hashCanonical",
+              "captureEnvironment"
             ],
             "reExport": true
           },
@@ -23026,8 +23069,7 @@
             "file": "./run-manifest.js",
             "imports": [
               "openManifest",
-              "closeManifest",
-              "captureEnvironment"
+              "closeManifest"
             ],
             "reExport": true
           },
@@ -23320,6 +23362,7 @@
           "canonicalJson",
           "sha256Hex",
           "hashCanonical",
+          "captureEnvironment",
           "openBudget",
           "budgetStopReason",
           "canEmitCandidate",
@@ -23334,7 +23377,6 @@
           "ResidualError",
           "openManifest",
           "closeManifest",
-          "captureEnvironment",
           "canTransition",
           "applyStatus",
           "statusRank",
@@ -23513,6 +23555,7 @@
           "canonicalJson",
           "sha256Hex",
           "hashCanonical",
+          "captureEnvironment",
           "openBudget",
           "budgetStopReason",
           "canEmitCandidate",
@@ -23528,7 +23571,6 @@
           "ResidualError",
           "openManifest",
           "closeManifest",
-          "captureEnvironment",
           "canTransition",
           "applyStatus",
           "statusRank",
@@ -23986,7 +24028,6 @@
             "imports": [
               "DiscoveryBackendDescriptor",
               "DiscoveryRunManifest",
-              "EnvironmentFingerprint",
               "SearchBudget",
               "SearchStopReason"
             ],
@@ -24000,10 +24041,18 @@
             ]
           },
           {
-            "file": "./serialize.js",
+            "file": "../canonical-json.js",
             "imports": [
+              "captureEnvironment",
               "hashCanonical"
             ]
+          },
+          {
+            "file": "../canonical-json.js",
+            "imports": [
+              "captureEnvironment"
+            ],
+            "reExport": true
           }
         ],
         "exports": [
@@ -24011,11 +24060,13 @@
           "openManifest",
           "closeManifest"
         ],
+        "reExported": [
+          "captureEnvironment"
+        ],
         "interfaces": [
           "ManifestDraft"
         ],
         "functions": [
-          "captureEnvironment",
           "openManifest",
           "closeManifest"
         ]
@@ -24082,23 +24133,26 @@
         ]
       },
       "src/composition/probe/serialize.ts": {
-        "description": "Canonical JSON serialization and hashing for Product B probe artifacts.",
+        "description": "Probe-profile re-exports of the one canonical-JSON module.",
         "externalDependencies": [],
-        "nodeDependencies": [
+        "nodeDependencies": [],
+        "internalDependencies": [
           {
-            "module": "crypto",
+            "file": "../canonical-json.js",
             "imports": [
-              "createHash"
-            ]
+              "canonicalJson",
+              "sha256Hex",
+              "hashCanonical"
+            ],
+            "reExport": true
           }
         ],
-        "internalDependencies": [],
         "exports": [
           "canonicalJson",
           "sha256Hex",
           "hashCanonical"
         ],
-        "functions": [
+        "reExported": [
           "canonicalJson",
           "sha256Hex",
           "hashCanonical"
@@ -34513,6 +34567,7 @@
           "src/composition/buckingham-filter.ts",
           "src/composition/canonical-compare.ts",
           "src/composition/canonical-graph.ts",
+          "src/composition/canonical-json.ts",
           "src/composition/canonical-prefactors.ts",
           "src/composition/catalog-graph.ts",
           "src/composition/chain-candidate.ts",
@@ -34728,21 +34783,21 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 478,
+    "totalTypeScriptFiles": 479,
     "totalModules": 13,
-    "totalLinesOfCode": 102949,
-    "totalExports": 3886,
+    "totalLinesOfCode": 103030,
+    "totalExports": 3888,
     "totalClasses": 61,
-    "totalInterfaces": 610,
+    "totalInterfaces": 612,
     "totalFunctions": 879,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 1027,
-    "totalReExports": 1921,
-    "totalTypeOnlyImports": 587,
+    "totalReExports": 1925,
+    "totalTypeOnlyImports": 588,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
     "unusedFilesCount": 0,
-    "unusedExportsCount": 78
+    "unusedExportsCount": 76
   }
 }

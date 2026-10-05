@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 478,
-    "totalTestFiles": 699,
-    "testedCount": 468,
+    "totalSourceFiles": 479,
+    "totalTestFiles": 700,
+    "testedCount": 469,
     "untestedCount": 10,
     "coveragePercent": "97.9"
   },
@@ -308,6 +308,7 @@
     "src/composition/buckingham-filter.ts",
     "src/composition/canonical-compare.ts",
     "src/composition/canonical-graph.ts",
+    "src/composition/canonical-json.ts",
     "src/composition/canonical-prefactors.ts",
     "src/composition/catalog-graph.ts",
     "src/composition/chain-candidate.ts",
@@ -12288,6 +12289,22 @@
       "tests/fixtures/confrontation-golden.test.ts",
       "tests/tensor.test.ts"
     ],
+    "src/composition/canonical-json.ts": [
+      "tests/atlas/benchmark-preregistration.test.ts",
+      "tests/cli/atlas-evidence.test.ts",
+      "tests/cli/audit-improvements.test.ts",
+      "tests/cli/explain-temperature-binding.test.ts",
+      "tests/cli/graphs.test.ts",
+      "tests/cli/map-atlas-results.test.ts",
+      "tests/cli/map-atlas-views.test.ts",
+      "tests/cli/recover-conventions.test.ts",
+      "tests/cli/regime-search.test.ts",
+      "tests/cli/suggest-token-length.test.ts",
+      "tests/composition/canonical-json.test.ts",
+      "tests/composition/probe/expression-gaps.test.ts",
+      "tests/composition/probe/modules.test.ts",
+      "tests/composition/probe/serialize.test.ts"
+    ],
     "src/composition/canonical-prefactors.ts": [
       "tests/atlas/canonical-links.test.ts",
       "tests/composition/canonical-prefactors.test.ts",
@@ -13981,16 +13998,6 @@
     ],
     "src/composition/probe/serialize.ts": [
       "tests/atlas/benchmark-preregistration.test.ts",
-      "tests/cli/atlas-evidence.test.ts",
-      "tests/cli/audit-improvements.test.ts",
-      "tests/cli/explain-temperature-binding.test.ts",
-      "tests/cli/graphs.test.ts",
-      "tests/cli/map-atlas-results.test.ts",
-      "tests/cli/map-atlas-views.test.ts",
-      "tests/cli/recover-conventions.test.ts",
-      "tests/cli/regime-search.test.ts",
-      "tests/cli/suggest-token-length.test.ts",
-      "tests/composition/probe/expression-gaps.test.ts",
       "tests/composition/probe/serialize.test.ts"
     ],
     "src/composition/probe/structure.ts": [
@@ -17354,7 +17361,8 @@
     "tests/atlas/benchmark-preregistration.test.ts": [
       "src/atlas/benchmark/loader.ts",
       "src/atlas/benchmark/types.ts",
-      "src/composition/probe/serialize.ts"
+      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts"
     ],
     "tests/atlas/benchmark-run-atlas.test.ts": [
       "src/atlas/benchmark/run-atlas.ts",
@@ -25247,7 +25255,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -25519,7 +25527,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -26756,7 +26764,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -27126,7 +27134,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -27661,7 +27669,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -27932,7 +27940,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -28833,7 +28841,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -29169,7 +29177,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -29739,7 +29747,7 @@
       "src/bridges/plasma-space.ts",
       "src/cases/types.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -30262,6 +30270,9 @@
       "src/dimensional/types.ts",
       "src/composition/graph-viz.ts",
       "src/composition/user-equation.ts"
+    ],
+    "tests/composition/canonical-json.test.ts": [
+      "src/composition/canonical-json.ts"
     ],
     "tests/composition/canonical-prefactor-eval.test.ts": [
       "src/composition/canonical-graph.ts",
@@ -31155,7 +31166,7 @@
       "src/cases/types.ts",
       "src/composition/probe/index.ts",
       "src/composition/probe/types.ts",
-      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/search-budget.ts",
       "src/composition/probe/fingerprint.ts",
       "src/composition/probe/residual.ts",
@@ -31224,6 +31235,7 @@
       "src/composition/probe/metadata.ts",
       "src/composition/probe/problem.ts",
       "src/composition/probe/run-manifest.ts",
+      "src/composition/canonical-json.ts",
       "src/composition/probe/types.ts"
     ],
     "tests/composition/probe/no-holdout-wording.test.ts": [
@@ -31236,7 +31248,8 @@
       "src/dimensional/types.ts"
     ],
     "tests/composition/probe/serialize.test.ts": [
-      "src/composition/probe/serialize.ts"
+      "src/composition/probe/serialize.ts",
+      "src/composition/canonical-json.ts"
     ],
     "tests/composition/probe/study-inputs.test.ts": [
       "src/composition/probe/study.ts"

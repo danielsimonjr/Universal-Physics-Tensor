@@ -56,7 +56,7 @@ export type {
   ScientificRelationRecord,
 } from './types.js';
 
-export { canonicalJson, sha256Hex, hashCanonical } from './serialize.js';
+export { canonicalJson, sha256Hex, hashCanonical, captureEnvironment } from '../canonical-json.js';
 export { openBudget, budgetStopReason, canEmitCandidate } from './search-budget.js';
 export type { BudgetState } from './search-budget.js';
 export {
@@ -68,7 +68,7 @@ export {
   fingerprintExpr,
 } from './fingerprint.js';
 export { scalarDiscrepancy, rmse, ResidualError } from './residual.js';
-export { openManifest, closeManifest, captureEnvironment } from './run-manifest.js';
+export { openManifest, closeManifest } from './run-manifest.js';
 export { canTransition, applyStatus, statusRank, ProbeCandidateStore } from './candidate-store.js';
 export { monomialToExpr, generateNative } from './generator.js';
 export type { RawCandidate } from './generator.js';

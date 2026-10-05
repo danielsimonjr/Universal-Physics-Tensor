@@ -25,6 +25,7 @@ import { CliError } from './errors.js';
 import { emitJson } from './output.js';
 import { moduleSources, staticReach, type Attribution } from './record-reach.js';
 import { constantTables, tableFingerprint, type ConstantTable } from './record-tables.js';
+import { canonicalJson, captureEnvironment } from '../composition/canonical-json.js';
 import { packageVersion, peerVersions } from './version.js';
 
 /** The output callbacks a recorded or replayed CLI invocation writes through. */
@@ -90,39 +91,24 @@ export interface RecordInput {
 
 export const sha256 = (s: string | Buffer): string => createHash('sha256').update(s).digest('hex');
 
-/** JSON with object keys sorted at every depth, so a hash does not depend on key order. */
-export function canonicalJson(v: unknown): string {
-  if (Array.isArray(v)) return `[${v.map(canonicalJson).join(',')}]`;
-  if (typeof v === 'object' && v !== null) {
-    const o = v as Record<string, unknown>;
-    return `{${Object.keys(o)
-      .filter((k) => o[k] !== undefined)
-      .sort()
-      .map((k) => `${JSON.stringify(k)}:${canonicalJson(o[k])}`)
-      .join(',')}}`;
-  }
-  return JSON.stringify(v);
-}
-
-export const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv));
+export const argvFingerprint = (argv: unknown): string => sha256(canonicalJson(argv, 'record'));
 
 /** Hash a record entry after excluding its stored fingerprint field. */
 export function entryFingerprint(entry: Partial<RecordEntry>): string {
   const { entrySha256: _, ...rest } = entry;
-  return sha256(canonicalJson(rest));
+  return sha256(canonicalJson(rest, 'record'));
 }
 
-
-/** Capture the live UPT runtime environment and constant table fingerprints for a record. */
-export async function captureEnvironment(api: typeof cliApi): Promise<RecordEnvironment> {
-  return {
+/** The record profile of {@link captureEnvironment}, fed from the CLI toolchain. */
+function recordEnvironment(api: typeof cliApi): Promise<RecordEnvironment> {
+  return captureEnvironment('record', {
     uptVersion: packageVersion(),
     node: process.version,
-    formulaParser: await api.getFormulaParserKind(),
-    simplifier: await api.isSimplifierAvailable(),
-    peers: peerVersions(),
-    constantTables: (await constantTables()).tables,
-  };
+    formulaParser: () => api.getFormulaParserKind(),
+    simplifier: () => api.isSimplifierAvailable(),
+    peers: () => peerVersions(),
+    constantTables: async () => (await constantTables()).tables,
+  });
 }
 
 async function attribute(argv: string[]): Promise<Attribution | null> {
@@ -290,7 +276,7 @@ export async function recordInvocation(
     argvSha256: argvFingerprint(argv),
     parsed,
     attribution: await attribute(argv),
-    environment: await captureEnvironment(api),
+    environment: await recordEnvironment(api),
     result: {
       exitCode: run.exitCode,
       threw: run.threw,
@@ -550,7 +536,7 @@ export async function replayRecord(
   api: typeof cliApi,
 ): Promise<number> {
   const lines = readRecord(file);
-  const live = await captureEnvironment(api);
+  const live = await recordEnvironment(api);
   const reports: ReplayEntryReport[] = [];
   for (const l of lines) {
     if ('error' in l) {
@@ -692,7 +678,12 @@ function describeEnvironment(env: Partial<RecordEnvironment>): string {
     .map(([k, v]) => `${k} ${v ?? 'absent'}`)
     .join(', ');
   const tables = (typeof env.constantTables === 'object' && env.constantTables) || {};
-  const combined = sha256(canonicalJson(Object.fromEntries(Object.entries(tables).map(([k, t]) => [k, t?.sha256]))));
+  const combined = sha256(
+    canonicalJson(
+      Object.fromEntries(Object.entries(tables).map(([k, t]) => [k, t?.sha256])),
+      'record',
+    ),
+  );
   return (
     `upt ${env.uptVersion}, node ${env.node}, formula parser ${env.formulaParser}, ` +
     `simplifier ${env.simplifier ? 'available' : 'unavailable'}, ` +

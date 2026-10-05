@@ -140,6 +140,37 @@ export function bridgeEquationLiteral(source: string): boolean {
   return BRIDGE_LITERAL.test(source);
 }
 
+/** A `function canonicalJson(` or `function captureEnvironment(` is a definition. A re-export is not. */
+export function jsonDefinition(source: string, name: 'canonicalJson' | 'captureEnvironment'): boolean {
+  return new RegExp(`function\\s+${name}\\s*\\(`).test(source);
+}
+
+/**
+ * `canonicalJson` and `captureEnvironment` are defined in one module.
+ * A second file, or a missing owner, is a hit.
+ */
+export function jsonOwnerHits(root: string): string[] {
+  const files: string[] = [];
+  walkTs(join(root, 'src'), files);
+  const owner = 'src/composition/canonical-json.ts';
+  const hits: string[] = [];
+  for (const name of ['canonicalJson', 'captureEnvironment'] as const) {
+    const definitions: string[] = [];
+    for (const file of files) {
+      const rel = relative(root, file).replaceAll('\\', '/');
+      if (jsonDefinition(readFileSync(file, 'utf8'), name)) definitions.push(rel);
+    }
+    if (definitions.length !== 1 || definitions[0] !== owner) {
+      hits.push(
+        definitions.length === 0
+          ? `no function ${name}`
+          : `function ${name} is defined in ${definitions.join(', ')}`,
+      );
+    }
+  }
+  return hits;
+}
+
 /** Files under `src/` that still assign `BRIDGE_EQUATIONS` from a literal. */
 export function bridgeRegistryHits(root: string): string[] {
   const files: string[] = [];
@@ -186,6 +217,7 @@ export function renderDuplicateOwners(root: string): string {
   const signs = signOwnerHits(root);
   const prefactors = prefactorOwnerHits(root);
   const bridges = bridgeRegistryHits(root);
+  const json = jsonOwnerHits(root);
   const temperatureBody =
     temperature.length === 0
       ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
@@ -206,6 +238,10 @@ export function renderDuplicateOwners(root: string): string {
     bridges.length === 0
       ? '`BRIDGE_EQUATIONS` is the projection of `registerBridge`. No hand-maintained catalog literal.\n'
       : bridges.map((hit) => `- ${hit}`).join('\n') + '\n';
+  const jsonBody =
+    json.length === 0
+      ? '`function canonicalJson` and `function captureEnvironment` are defined only in `src/composition/canonical-json.ts`.\n'
+      : json.map((hit) => `- ${hit}`).join('\n') + '\n';
   return (
     '<!-- repo-map:no-verification -->\n' +
     '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n' +
@@ -223,6 +259,8 @@ export function renderDuplicateOwners(root: string): string {
     '\n' +
     prefactorBody +
     '\n' +
-    bridgeBody
+    bridgeBody +
+    '\n' +
+    jsonBody
   );
 }
