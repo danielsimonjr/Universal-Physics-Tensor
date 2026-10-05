@@ -66,9 +66,12 @@ describe('a multi-word search is a noun phrase in one field', () => {
     expect(r.text).toMatch(/be-86/);
   });
 
-  it('does not answer a Debye length with the phonon Debye family', async () => {
+  it('answers a Debye length with the plasma Debye bridges, not the phonon family', async () => {
     const r = await search('debye length');
-    expect(r.code, r.text).toBe(1);
+    // Exit 1, and no plasma Debye row, is the record from before be-114 and be-115.
+    expect(r.code, r.text).toBe(0);
+    expect(r.text).toMatch(/be-114/);
+    expect(r.text).toMatch(/be-115/);
     expect(r.text).not.toMatch(/CE-debye-frequency/);
     expect(r.text).not.toMatch(/be-89/);
     expect(r.text).not.toMatch(/be-90/);
@@ -84,7 +87,7 @@ describe('a multi-word search is a noun phrase in one field', () => {
     expect(out).not.toMatch(/be-89/);
     expect(out).not.toMatch(/be-90/);
     expect(out).not.toMatch(/planck-length/);
-    expect(out).not.toMatch(/upt search debye/);
+    expect(out).toMatch(/be-115/);
   });
 
   it('a one-word Debye search still returns the phonon family', async () => {

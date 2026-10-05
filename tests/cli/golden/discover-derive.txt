@@ -49,4 +49,11 @@ Derived identity-consequence PROPOSALS — UNADJUDICATED, math-only  [source: ca
       meaning: temperature is the temperature of CE-wien (Wien's displacement law): the temperature for which peak-wavelength equals hubble-distance (CE-hubble-distance) — an equal-[length] scale; the hubble-distance side is not given a temperature
       assumptions carried: CE-hubble-distance: present-epoch Hubble parameter; CE-wien: blackbody, thermal equilibrium
       canonical match: none — 0 registry equation(s) target temperature, 0 with governing {hubble-rate}; scope: this registry only, not physics at large
+  IC-parker-radius--peak-wavelength--temperature
+      temperature = \frac{2 \cdot b \cdot parker-sound^{2}}{G \cdot parker-mass}      [temperature]  (no sourced sample value for parker-mass, 2, parker-sound; not evaluated)
+      from: parker-radius ≟ peak-wavelength  (BE-118 = CE-wien); solved for temperature
+      status: conditional identity — holds only if parker-radius ≡ peak-wavelength (unadjudicated); untested
+      meaning: temperature is the temperature of CE-wien (Wien's displacement law): the temperature for which peak-wavelength equals ? (undefined) — an equal-[length] scale; the ? side is not given a temperature
+      assumptions carried: CE-wien: blackbody, thermal equilibrium
+      canonical match: none — 0 registry equation(s) target temperature, 0 with governing {parker-mass, 2, parker-sound}; scope: this registry only, not physics at large
 
