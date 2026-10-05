@@ -51,10 +51,10 @@ const VALUE_NAMES: Record<string, readonly string[]> = {
     'kerrTurningPointOrbit',
     'schwarzschildCircularOrbit',
   ],
-  'src/cli/commands/eval.ts': ['builtinFormulaDimensionChecker', 'readBinding', 'UnitError'],
+  'src/cli/commands/eval.ts': ['builtinFormulaDimensionChecker', 'readNamedBinding', 'UnitError'],
   'src/cli/commands/evaluate.ts': ['bindingInUnit', 'C_SI', 'G_SI', 'missingEvaluatorMessage'],
-  'src/cli/commands/regime.ts': ['readBinding'],
-  'src/cli/commands/path.ts': ['readBinding'],
+  'src/cli/commands/regime.ts': ['readNamedBinding'],
+  'src/cli/commands/path.ts': ['readBinding', 'readNamedBinding'],
   'src/cli/commands/map.ts': [],
 };
 

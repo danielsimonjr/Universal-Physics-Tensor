@@ -55,7 +55,7 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
       gt[p.name] = read.value;
     } catch (e) {
       if (e instanceof UsageError) throw e;
-      if (e instanceof UnitError) {
+      if (e instanceof UnitError && /is a temperature/.test(e.message)) {
         throw new CliError(`upt: --anchor '${p.pair}' is not a temperature. ${e.message}`);
       }
       throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
