@@ -138,7 +138,8 @@ describe('scanCatalog', () => {
     // BE-74 (electromagnetic/continuum) and BE-76 (fluid/plasma) join that set: 29 → 31.
     // BE-75 is quantum → classical and is submitted.
     // Twelve of BE-88..102 have no PhysicalScale axis. 41 is the record from before those twelve.
-    expect(report.unsubmitted).toHaveLength(76);
+    // 76 is the record from before be-126..133. Those eight tuples are not PhysicalScale.
+    expect(report.unsubmitted).toHaveLength(84);
     // 53 is the record from before be-103..125. Those twenty-three tuples are fluid → plasma.
   });
 
