@@ -7,6 +7,9 @@
  * The Bose integral, the trial wall, T = 0, the quartic coefficient,
  * and the energy-entropy argument stay hypotheses.
  */
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { evaluateFermiSea } from '../../src/bridges/be88-fermi-sea.js';
 import { evaluateDebyeCutoff } from '../../src/bridges/be89-debye-cutoff.js';
@@ -29,7 +32,10 @@ import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
 import { PHYSJS_COMMIT } from '../../src/atlas/physjs-ref.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
-const SHA = '03e8bb77c952f720bdd2730af2afc6a7f2d36243';
+const manifest = JSON.parse(
+  readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../../formal/physjs/manifest.json'), 'utf8'),
+) as { commit: string };
+const SHA = manifest.commit;
 const N = 1e28;
 const M = 9.1093837015e-31;
 

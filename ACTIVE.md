@@ -40,8 +40,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
   A fixture module imported only that way is not reported unused, and the same fixture with the line removed is unused. `src/atlas/public.ts` leaves the unused-file list for that reason. `bun run docs:deps` is clean against the committed architecture docs.
   Done: `tests/tools/export-star-as-deps.test.ts`. Before the match, the fixture listed `src/only-via-star-as.ts` as unused and the committed report listed `src/atlas/public.ts`. Both assertions pass. The counts are the regeneration paragraph in `docs/architecture/INTEGRATION_MAP.md`. `docs/architecture/duplicate-owners.md` is generated and has no scan yet.
 
-- [ ] Implement phase 1 of the 6.0.0 integration: generate the PhysJS table from the vendored manifest.
+- [x] Implement phase 1 of the 6.0.0 integration: generate the PhysJS table from the vendored manifest.
   The generate step replaces the hand-copy in `WORKFLOWS.md`. Editing a theorem in the generated file without editing the manifest fails the formal gate. A manifest entry with no bridge still fails. Tests that hardcoded the commit string read the manifest.
+  Done: `scripts/generate-physjs-table.ts` writes `src/atlas/physjs-entries.generated.ts`. Before that file existed, `tests/atlas/physjs-generated-table.test.ts` failed to import it. A hand-edited theorem and a deleted key fail `physjsManifestProblems`. `bun scripts/generate-physjs-table.ts --check` is in the docs gate.
 
 - [ ] Implement phase 2 of the 6.0.0 integration: one temperature and unit reader.
   Explain, evaluate, eval, a discovery anchor, a regime coordinate, and a path sweep of an energy on a temperature name agree on the kelvin value. A metre on a temperature name throws. An energy on a non-temperature name stays joules. `upt evaluate` converts.
