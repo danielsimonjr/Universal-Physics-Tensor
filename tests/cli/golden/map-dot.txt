@@ -245,6 +245,8 @@ digraph PhysicsMap {
     q_mass -> j_CE_perihelion_precession;
     q_a [shape=ellipse,label="a"];
     q_a -> j_CE_perihelion_precession;
+    q_one_minus_e_sq [shape=ellipse,label="one_minus_e_sq"];
+    q_one_minus_e_sq -> j_CE_perihelion_precession;
     q_perihelion_precession [shape=ellipse,label="perihelion-precession"];
     j_CE_perihelion_precession -> q_perihelion_precession;
     j_CE_newton_gravitation [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Newton's law of gravitation"];
@@ -521,6 +523,8 @@ digraph PhysicsMap {
     q_temperature -> j_CE_ideal_gas;
     q_V [shape=ellipse,label="V"];
     q_V -> j_CE_ideal_gas;
+    q_N [shape=ellipse,label="N"];
+    q_N -> j_CE_ideal_gas;
     j_CE_ideal_gas -> q_pressure;
     j_CE_wien [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Wien's displacement law"];
     q_temperature -> j_CE_wien;

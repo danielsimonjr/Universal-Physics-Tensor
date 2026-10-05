@@ -86,10 +86,17 @@ function mapGetOrInsert<K, V>(m: Map<K, V>, k: K, make: () => V): V {
 }
 
 type DV = { name: string; dim: Dimension };
-const asVars = (e: BridgeEdge): { target: DV; sources: DV[] } => ({
-  target: { name: e.target.name, dim: e.target.dim },
-  sources: e.sources.map((s) => ({ name: s.name, dim: s.dim })),
-});
+const asVars = (e: BridgeEdge): { target: DV; sources: DV[] } => {
+  const factors = e.formulaFactors ?? {};
+  return {
+    target: { name: e.target.name, dim: e.target.dim },
+    // A dimensionless count is not a Buckingham governor. Folding it in
+    // makes the monomial non-unique and the audit leaves DERIVED.
+    sources: e.sources
+      .filter((s) => factors[s.name] === undefined)
+      .map((s) => ({ name: s.name, dim: s.dim })),
+  };
+};
 
 const rankOf = (vars: DV[]): number => (vars.length ? buckinghamPi(vars).rank : 0);
 const inSpan = (t: DV, gov: DV[]): boolean =>
@@ -237,8 +244,13 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
     if (inputs.length < need) continue;
     const ratios = inputs.map((i) => {
       let cand = 1;
-      for (const s of e.sources) cand *= Math.pow(i[s.name], r.monomial![s.name] ?? 0);
+      const factors = e.formulaFactors ?? {};
+      for (const s of e.sources) {
+        if (factors[s.name] !== undefined) continue;
+        cand *= Math.pow(i[s.name], r.monomial![s.name] ?? 0);
+      }
       for (const k of S) cand *= Math.pow(k.si, r.monomial![k.name] ?? 0);
+      for (const [name, exp] of Object.entries(factors)) cand *= Math.pow(i[name]!, exp);
       return e.evaluate(i) / cand;
     });
     const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;

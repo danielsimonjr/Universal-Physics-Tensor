@@ -40,7 +40,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
   Plasma frequency and Larmor radius are magnitudes. Hall and cyclotron stay signed. Einstein and conductivity reject opposite signs once. A policy that takes the absolute value of the cyclotron frequency fails the cyclotron test.
 
 - [ ] Implement phase 5 of the 6.0.0 integration: a sourced factor or unset, and the ideal-gas count.
-  An unset coefficient yields no recovered number. Ideal gas without `N` is a missing input. Ideal gas with `N` is `N k_B T / V`. Sound speed multiplies by the square root of gamma when gamma is bound, and is unset when it is not.
+  An unset coefficient yields no recovered number. Ideal gas without `N` is a missing input. Ideal gas with `N` is `N k_B T / V`. Sound speed multiplies by the square root of gamma when gamma is bound, and is unset when it is not. The ideal-gas count already evaluates from the scalar AST. This phase does not reimplement that path.
 
 - [ ] Implement phase 6 of the 6.0.0 integration: one evaluator, by cluster, lowering each tree through MathTS.
   If the installed MathTS packages have no public scalar-expression builder, that builder is added in MathTS first. Each cluster's lowered value matches the deleted function on that cluster's numeric fixture. A catalog id has one numeric body.
@@ -62,6 +62,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 - [ ] Implement phase 12 of the 6.0.0 integration: the 6.0.0 public surface, the migration guide, and package version 6.0.0.
   The removed per-bridge names are not exported. `evaluateRelation` and the unset-coefficient error are exported. `package.json` is 6.0.0. The changelog carries the migration. The tag and the publish are the release step after this phase merges, not this phase.
+
+- [x] A fully-quantitative count in the scalar AST is an input of the canonical evaluator.
+  `upt explain pressure boltzmann-constant=1.380649e-23 temperature=300 V=0.0224 --source=canonical` prints `1.84908348214286e-19`, which is `k_B T/V`. The law is `P = N k_B T/V`.
+  Done: that command exits 0 with no recovered value and names `N`. With `N=6.02214076e23` it prints `111354.410064552` and `pressure ∝ boltzmann-constant·temperature·V^-1·N`. Perihelion divides by `one_minus_e_sq` and keeps `6π`. A null monomial evaluates the fully-quantitative AST, so Hawking temperature keeps `8π` and Newton returns `G m₁ m₂ / r²`. The canonical audit is DECOY 11 and OPEN 19. Jarzynski stays DERIVED `×1`.
 
 - [x] An energy on a temperature binding is k_B T in explain, discovery anchors, and regime coordinates.
   `upt explain most-probable-speed boltzmann-constant=1.380649e-23 temperature=10eV molecular-mass=1.67262192369e-27 --source=canonical` prints `1.15000027903998e-7`. `upt explain plasma-beta carrier-density=5e6 temperature=10eV magnetic-pressure=5.72957794818894e-11 --source=catalog` prints `1.93037217362116e-24`. `upt eval` already reads that energy as kelvin.

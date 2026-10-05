@@ -97,6 +97,15 @@ export interface BridgeEdge {
    */
   readonly coefficientUnset?: boolean;
   /**
+   * Exponents of dimensionless counts the dimensional monomial cannot see.
+   * A fully-quantitative scalar AST records them (`N` in `P = N k_B T/V`,
+   * `one_minus_e_sq` in the Einstein perihelion formula). They are sources.
+   * Buckingham drops them, so the audit multiplies these exponents back in.
+   * Absent when the formula has no such count. A `scalar-up-to-constant`
+   * stub is not one of these.
+   */
+  readonly formulaFactors?: Readonly<Record<string, number>>;
+  /**
    * Provenance: the quantity identification the junction used, when a
    * composed edge was formed via `QUANTITY_IDENTIFICATIONS` rather than
    * a name match. Absent on primitive edges and name-matched
