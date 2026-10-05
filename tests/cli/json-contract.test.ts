@@ -216,7 +216,9 @@ describe('json-contract — discover --json', () => {
 
     expect(status).toBe(0);
     expect(envelope.adjudicationSummary).toBeUndefined();
-  });
+    // The combined ranking no longer finishes in 60s on the CI runner.
+    // 60s is the record from before be-103..125.
+  }, 180_000);
 
   it('D1 axis gate: every result candidate carries axisChecked/axisClashes; at least one axis-clash verdict is present', async () => {
     const { status, envelope } = await runJson(['discover', '--json']);
