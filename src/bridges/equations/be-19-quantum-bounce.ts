@@ -59,6 +59,7 @@ import type { ExprNode, DimensionValidationReport } from '../../dimensional/vali
 import {
   Dimension,
   DIMENSIONLESS,
+  MASS_DENSITY,
 } from '../../dimensional/types.js';
 import { G as DIM_G } from '../../dimensional/constants.js';
 import { PhysicalConstants } from '../../core/types.js';
@@ -67,11 +68,6 @@ import type { ScalarFieldNode } from '../../dimensional/klein-gordon-equation.js
 import { sym, validateFiniteInputs, validateBEDimensions } from './_be-helpers.js';
 
 // --- Symbolic AST ---
-
-/** Mass-density [M L^-3]. */
-const MASS_DENSITY: Dimension = {
-  L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0,
-};
 
 /** [T^-2] dimension for Λ in the c²-rescaled Friedmann form. */
 const T_INV2: Dimension = {

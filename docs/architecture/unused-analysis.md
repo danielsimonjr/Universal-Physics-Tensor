@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 75
+- **Potentially unused exports**: 74
 
 ## Potentially Unused Files
 
@@ -162,7 +162,6 @@ These exports are not imported by any other file in the codebase:
 
 ### `src/numerical/spacetime-metrics.ts`
 
-- `metricParams` (function)
 - `METRIC_SIGNATURE` (constant)
 - `METRIC_SIGNATURE_NOTE` (constant)
 

@@ -13,10 +13,13 @@
 import { Dimension, NAMED_DIMENSIONS } from './types.js';
 import { DimensionMismatchError } from './errors.js';
 
-/** Re-exported for backward compatibility with consumers that import
- *  `DimensionMismatchError` from `algebra.js`. The canonical definition
- *  now lives in `errors.ts` alongside the new `UPTError` base class. */
-export { DimensionMismatchError };
+/**
+ * Re-exported for callers that import the error from the algebra module.
+ * The definition lives in `errors.ts`.
+ *
+ * @public
+ */
+export { DimensionMismatchError } from './errors.js';
 
 const BASES = ['L', 'M', 'T', 'I', 'Theta', 'N', 'J'] as const;
 type Base = typeof BASES[number];

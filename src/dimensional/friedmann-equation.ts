@@ -59,6 +59,7 @@
  */
 
 import type { Dimension } from './types.js';
+import { MASS_DENSITY } from './types.js';
 import type { ScalarFieldNode } from './klein-gordon-equation.js';
 import { equals } from './algebra.js';
 import {
@@ -158,9 +159,6 @@ const T_INV2: Dimension = { L: 0, M: 0, T: -2, I: 0, Theta: 0, N: 0, J: 0 };
 
 /** `[T^-1]`: dim of the un-squared Hubble parameter H. */
 const T_INV1: Dimension = { L: 0, M: 0, T: -1, I: 0, Theta: 0, N: 0, J: 0 };
-
-/** `[M·L^-3]`: dim of mass-density ρ (canonical Friedmann convention). */
-const MASS_DENSITY: Dimension = { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 
 /** `[]`: dimensionless (the LQC `(1 − ρ/ρ_crit)` correction factor). */
 const DIMLESS: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };

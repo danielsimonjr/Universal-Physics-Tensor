@@ -11,8 +11,12 @@
  */
 
 import type { NestedArray } from './types.js';
-import { EngineCapabilityError } from './errors.js';
-export { EngineCapabilityError };
+/**
+ * Thrown when an engine does not implement a requested capability.
+ *
+ * @public
+ */
+export { EngineCapabilityError } from './errors.js';
 
 /** Opaque rank-N tensor handle. Each engine backs it with its own storage
  *  (Float64Array, a MathTS Tensor, a future WASM offset); consumers see

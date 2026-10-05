@@ -10,7 +10,7 @@ The name table below was re-read after the three lists and the two distances mov
 
 The sign section below was re-read after `applyCarrierSignPolicy` became the only caller of `assertSameCarrierSign`. The BE-70 domain does not call `sameCarrierSign`.
 
-A later regeneration, after `docs:deps` learned `export * as`, the PhysJS table became a generated source file, the sound-speed test landed, the noun-phrase search test landed, `src/cli/temperature-bindings.ts` was deleted, the name table became one module, and the sign policy became one function, re-counted the unused-file and no-test rows. The sentence that `dependency-graph.json` `statistics` is 472 source files, 3560 exports, 1734 re-exports, 0 unused files, and 78 unused exports, and that `TEST_COVERAGE.md` is 672 test files and 10 source files with no test import (462 of 472, 97.9 percent), is the record from before `registerBridge` and BE-103–125. The same statistics after that registration are 478 source files, 3886 exports, 1921 re-exports, 0 unused files, and 78 unused exports. `TEST_COVERAGE.md` is 699 test files and 10 source files with no test import (468 of 478, 97.9 percent). `git ls-files 'src/**/*.ts' 'src/*.ts'` is 478. The generator's module file counts are atlas 72, bridges 132, composition 93, and the other modules are unchanged from the line below. The sentence that those registration statistics are the live counts is the record from before the JSON profiles. After that module, the same statistics are 479 source files, 3888 exports, 1925 re-exports, 0 unused files, and 76 unused exports. `TEST_COVERAGE.md` is 700 test files and 10 source files with no test import (469 of 479, 97.9 percent). `git ls-files 'src/**/*.ts' 'src/*.ts'` is 479. Composition is 94 files. The other module file counts are unchanged. Total lines of code are 103030. The sentence that names 102949 lines is the record from before the JSON profiles. After the classical RK4 steps call `solveODESystem`, the same statistics are 479 source files, 3888 exports, 1925 re-exports, 0 unused files, and 75 unused exports. `TEST_COVERAGE.md` is 701 test files and 10 source files with no test import (469 of 479, 97.9 percent). Total lines of code are 103013. The sentence that names 103030 lines and 76 unused exports is the record from before this call. The counts atlas 70, bridges 129, and composition 91 are the record from before this registration. The five exports added with the generated table are `PHYSJS_COMMIT`, `PHYSJS_TOOLCHAIN`, `PHYSJS_MATHLIB`, `PHYSJS_PHYS_LIB`, and `PHYSJS_ENTRIES`. `sameCarrierSign`, `assertSameCarrierSign`, and `assertCarrierProductSign` are no longer exports, and `applyCarrierSignPolicy`, `resetCarrierSignPolicyCalls`, and `readCarrierSignPolicyCalls` are. The sentence that names 671 test files is the count from before the scalar-builder gate test. The sentence that names 670 test files is the count from before the name-table test. The sentence that names 669 test files is the count from before the temperature-owner test and the sign-policy test. The sentence that names 667 test files is the count from before the noun-phrase search test. The sentence that names 666 test files is the count from before the sound-speed test. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. The temperature scan, the name-table scan, and the sign scan are registered there. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
+A later regeneration, after `docs:deps` learned `export * as`, the PhysJS table became a generated source file, the sound-speed test landed, the noun-phrase search test landed, `src/cli/temperature-bindings.ts` was deleted, the name table became one module, and the sign policy became one function, re-counted the unused-file and no-test rows. The sentence that `dependency-graph.json` `statistics` is 472 source files, 3560 exports, 1734 re-exports, 0 unused files, and 78 unused exports, and that `TEST_COVERAGE.md` is 672 test files and 10 source files with no test import (462 of 472, 97.9 percent), is the record from before `registerBridge` and BE-103–125. The same statistics after that registration are 478 source files, 3886 exports, 1921 re-exports, 0 unused files, and 78 unused exports. `TEST_COVERAGE.md` is 699 test files and 10 source files with no test import (468 of 478, 97.9 percent). `git ls-files 'src/**/*.ts' 'src/*.ts'` is 478. The generator's module file counts are atlas 72, bridges 132, composition 93, and the other modules are unchanged from the line below. The sentence that those registration statistics are the live counts is the record from before the JSON profiles. After that module, the same statistics are 479 source files, 3888 exports, 1925 re-exports, 0 unused files, and 76 unused exports. `TEST_COVERAGE.md` is 700 test files and 10 source files with no test import (469 of 479, 97.9 percent). `git ls-files 'src/**/*.ts' 'src/*.ts'` is 479. Composition is 94 files. The other module file counts are unchanged. Total lines of code are 103030. The sentence that names 102949 lines is the record from before the JSON profiles. After the classical RK4 steps call `solveODESystem`, the same statistics are 479 source files, 3888 exports, 1925 re-exports, 0 unused files, and 75 unused exports. `TEST_COVERAGE.md` is 701 test files and 10 source files with no test import (469 of 479, 97.9 percent). Total lines of code are 103013. The sentence that names 103030 lines and 76 unused exports is the record from before this call. The sentence that names 103013 lines, 3888 exports, 1925 re-exports, 75 unused exports, and 701 test files is the record from before one `MASS_DENSITY`. After that export, the same statistics are 479 source files, 3889 exports, 1939 re-exports, 0 unused files, and 74 unused exports. `TEST_COVERAGE.md` is 703 test files and 10 source files with no test import (469 of 479, 97.9 percent). Total lines of code are 102981. `metricParams` left the unused-export list because a test imports it. The counts atlas 70, bridges 129, and composition 91 are the record from before this registration. The five exports added with the generated table are `PHYSJS_COMMIT`, `PHYSJS_TOOLCHAIN`, `PHYSJS_MATHLIB`, `PHYSJS_PHYS_LIB`, and `PHYSJS_ENTRIES`. `sameCarrierSign`, `assertSameCarrierSign`, and `assertCarrierProductSign` are no longer exports, and `applyCarrierSignPolicy`, `resetCarrierSignPolicyCalls`, and `readCarrierSignPolicyCalls` are. The sentence that names 671 test files is the count from before the scalar-builder gate test. The sentence that names 670 test files is the count from before the name-table test. The sentence that names 669 test files is the count from before the temperature-owner test and the sign-policy test. The sentence that names 667 test files is the count from before the noun-phrase search test. The sentence that names 666 test files is the count from before the sound-speed test. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. The temperature scan, the name-table scan, and the sign scan are registered there. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
 
 Anything below that was not opened in source, or that a second method did not confirm, is marked **INFERRED**.
 
@@ -248,19 +248,7 @@ The canonical target is `erasure-energy` (`src/canonical/entries/thermo-nuclear-
 
 ### `MASS_DENSITY`
 
-Seven local definitions, same seven exponents `{L:-3, M:1, T:0, I:0, Theta:0, N:0, J:0}`:
-
-| File | Export? |
-|---|---|
-| `src/bridges/equations/be-20-vacuum-energy.ts:66` | exported |
-| `src/composition/quantities/_dims.ts:18` | exported; quantities import this one |
-| `src/composition/edges/catalog-tranche.ts:68` | local |
-| `src/dimensional/bridge-check.ts:63` | local |
-| `src/dimensional/friedmann-equation.ts:163` | local |
-| `src/bridges/equations/be-19-quantum-bounce.ts:72` | local |
-| `src/bridges/equations/be-54-randall-sundrum-brane.ts:58` | local |
-
-The dependency graph reports the two exported names as a duplicate. The five `const` copies are the same shape and are invisible to that report.
+`MASS_DENSITY` is `{L:-3, M:1, T:0, I:0, Theta:0, N:0, J:0}` in `src/dimensional/types.ts`. It is not a row of `NAMED_DIMENSIONS`, so `format()` does not gain a name. be-20 and `src/composition/quantities/_dims.ts` re-export that binding. The Friedmann validator, bridge 20's expected dimension, the vacuum-energy left-hand side, the loop-quantum density, the brane density, and the FLRW `rho` parameter use it. The sentence that seven files assign the same object, and that the graph reports be-20 and `_dims.ts` as two exports, is the record from before this export. Those seven files were `be-20-vacuum-energy.ts`, `_dims.ts`, `catalog-tranche.ts`, `bridge-check.ts`, `friedmann-equation.ts`, `be-19-quantum-bounce.ts`, and `be-54-randall-sundrum-brane.ts`. `BE54_DENSITY.dim` and `PARAM_DIM.rho` were the same exponents without the name, and they now name this export. The live scan is `docs/architecture/duplicate-owners.md`.
 
 ### `canonicalJson` and `captureEnvironment`
 
@@ -352,40 +340,34 @@ The same generator lists `BCS_GAP_RATIO` as an export of `src/bridges/confrontat
 
 ### Re-export shims
 
-These files exist so atlas (and a few other barrels) can name a symbol whose body lives elsewhere:
+These files name a symbol whose body lives elsewhere. Each of the assign-and-reexport rows below is now `export { … } from`, which the graph marks `reExported`. The sentence that `composition-table.ts` assigns then re-exports, and that `regimeHolds`, `DimensionMismatchError`, `EngineCapabilityError`, `evaluateMetricInverse`, `DEFAULT_SEARCH_BUDGET`, `IDENTITY_BOUND`, `M_PROTON_SI`, `dim`, and `PHYSJS_COMMIT` are a second local declaration, is the record from before that change. `admitApproximation` stays `export function` in `src/atlas/regime.ts`. `getBridge` stays two functions.
 
 | Shim | Body lives in |
 |---|---|
-| `src/atlas/composition-table.ts` | `src/relations/composition-table.ts` (assigned, then re-exported, so the graph treats the names as local) |
-| `src/atlas/regime.ts` | `regimeHolds` assigned from `src/relations/regime.ts`; other names are `export { … } from` |
+| `src/atlas/composition-table.ts` | `src/relations/composition-table.ts` |
+| `src/atlas/regime.ts` | `regimeHolds` from `src/relations/regime.ts`; `admitApproximation` stays here |
 | `src/atlas/conventions.ts` | `src/relations/conventions.ts` |
-| `src/dimensional/algebra.ts:19` | `export { DimensionMismatchError }` from `errors.ts` |
-| `src/numerical/tensor-engine.ts:15` | `export { EngineCapabilityError }` from `errors.ts` |
-| `src/numerical/index.ts:34` | `export { evaluateMetricInverse }` |
-| `src/composition/probe/search-budget.ts:11` | `export { DEFAULT_SEARCH_BUDGET }` from `types.ts` |
-| `src/atlas/path-bound.ts` | `export { IDENTITY_BOUND }` from `error-algebra.ts` |
-| `src/bridges/be67-alfven-speed.ts:21` | `export { M_PROTON_SI }` from `core/constants.ts` |
-| `src/canonical/entries/_l1-build.ts:17` | `export { dim }` from `dimensional/ast-builders.ts` |
+| `src/dimensional/algebra.ts` | `DimensionMismatchError` from `errors.ts` |
+| `src/numerical/tensor-engine.ts` | `EngineCapabilityError` from `errors.ts` |
+| `src/numerical/index.ts` | `evaluateMetricInverse` from `metric-inverse.ts` |
+| `src/composition/probe/search-budget.ts` | `DEFAULT_SEARCH_BUDGET` from `types.ts` |
+| `src/atlas/path-bound.ts` | `IDENTITY_BOUND` from `error-algebra.ts` |
+| `src/bridges/be67-alfven-speed.ts` | `M_PROTON_SI` from `core/constants.ts` |
+| `src/canonical/entries/_l1-build.ts` | `dim` from `dimensional/ast-builders.ts` |
+| `src/atlas/physjs-ref.ts` | `PHYSJS_COMMIT` from `physjs-entries.generated.ts` |
+| `src/bridges/equations/be-20-vacuum-energy.ts` | `MASS_DENSITY` from `dimensional/types.ts` |
+| `src/composition/quantities/_dims.ts` | `MASS_DENSITY` from `dimensional/types.ts` |
 
-`tests/atlas/relations-shim.test.ts` checks the relations move. The shims are cycle breaks and public-surface stability, not a second physics implementation, except where the atlas file also contains local logic (`admitApproximation` stays in `src/atlas/regime.ts`).
+`tests/atlas/relations-shim.test.ts` checks the relations move. The shims are cycle breaks and public-surface stability, not a second physics implementation.
 
 ### Names the graph reports as locally declared in more than one file
 
-14 names in the rows below, after removing names that appear only because a barrel re-exports them (`reExported` in the JSON). `canonicalJson` and `captureEnvironment` left this list when both moved to `src/composition/canonical-json.ts`. The sentence that this list is 16 names and includes those two is the record from before that module. A walk of the same JSON also reports `getBridge` (`src/atlas/bridge-record.ts` and `src/composition/descriptor.ts`) and `PHYSJS_COMMIT` (`src/atlas/physjs-entries.generated.ts` and `export { PHYSJS_COMMIT }` in `src/atlas/physjs-ref.ts`). Those two were already local declarations and were not rows of the 16. Classification from reading the definitions:
+A walk of `dependency-graph.json` that skips each file's `reExported` list reports 3 names. `command` is 28 command modules. `getBridge` is `src/atlas/bridge-record.ts` and `src/composition/descriptor.ts`. `BCS_GAP_RATIO` is `src/bridges/be62-bcs-gap.ts` and a citation quote in `src/bridges/confrontations.ts`. The sentence that this list is 16 names, and the later walk that still listed `MASS_DENSITY`, `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM`, `regimeHolds`, `DimensionMismatchError`, `EngineCapabilityError`, `DEFAULT_SEARCH_BUDGET`, `IDENTITY_BOUND`, `M_PROTON_SI`, `evaluateMetricInverse`, `dim`, and `PHYSJS_COMMIT` as two files, is the record from before the re-exports. `canonicalJson` and `captureEnvironment` left an earlier list when both moved to `src/composition/canonical-json.ts`. Classification of the three that remain:
 
 | Name | Files | Reading |
 |---|---|---|
 | `command` | 28 command modules | registration convention |
-| `MASS_DENSITY` | be-20 and `_dims.ts` | same dimension, two exports; five more local copies above |
-| `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM` | atlas shim and `relations/` | same bindings |
-| `regimeHolds` | atlas shim and `relations/regime.ts` | same binding |
-| `DimensionMismatchError` | `algebra.ts` re-export and `errors.ts` | same class |
-| `EngineCapabilityError` | `tensor-engine.ts` re-export and `errors.ts` | same class |
-| `DEFAULT_SEARCH_BUDGET` | `search-budget.ts` re-export and `types.ts` | same value |
-| `IDENTITY_BOUND` | `path-bound.ts` re-export and `error-algebra.ts` | same value |
-| `M_PROTON_SI` | `be67-alfven-speed.ts` re-export and `core/constants.ts` | same value |
-| `evaluateMetricInverse` | `numerical/index.ts` re-export and `metric-inverse.ts` | same function |
-| `dim` | `_l1-build.ts` re-export and `ast-builders.ts` | same function |
+| `getBridge` | `bridge-record.ts` and `descriptor.ts` | two functions |
 | `BCS_GAP_RATIO` | confrontations quote and `be62-bcs-gap.ts` | parser false positive plus one real constant |
 
 `duplicate-symbols.md` previously said 5 names, 383 `src` files, and `totalSourceFiles` 1025. The 383/1025 figures are not in the current `dependency-graph.json` (`totalFiles` 471, `totalExports` 3553). `repo_map.py` is not in this repository; that file was corrected from this reading, not regenerated by `repo_map.py`.

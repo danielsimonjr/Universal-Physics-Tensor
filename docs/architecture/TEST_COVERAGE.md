@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 479 |
-| Total Test Files | 701 |
+| Total Test Files | 703 |
 | Source Files with Tests | 469 |
 | Source Files without Tests | 10 |
 | Coverage | 97.9% |
@@ -72,7 +72,7 @@ The following 10 source files are not directly imported by any test file:
 | `diffusion/index.ts` | `barrel-completeness.test.ts`, `diffusion.test.ts` |
 | `diffusion/models.ts` | `barrel-completeness.test.ts`, `diffusion.test.ts`, `negative-controls.test.ts` |
 | `diffusion/numerics.ts` | `closure.test.ts`, `diffusion.test.ts`, `formal-sanity.test.ts`, `linear-oscillator-step.test.ts`, `negative-controls.test.ts` |
-| `atlas/error-algebra.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `error-algebra.test.ts`, `path-bound.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
+| `atlas/error-algebra.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `bound-machine-form.test.ts`, `error-algebra.test.ts`, `path-bound.test.ts`, `transported-norm-demo.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `atlas/export.ts` | `barrel-completeness.test.ts`, `export.test.ts` |
 | `atlas/families.ts` | `atlas-json.test.ts`, `barrel-completeness.test.ts`, `benchmark.test.ts`, `bound-machine-form.test.ts`, `bridge-seed-keys.test.ts`, `canonical-links.test.ts`, `delta-at-proven.test.ts`, `evidence-rule.test.ts`, `export.test.ts`, `families.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `lc-analogy-text.test.ts`, `link-prediction.test.ts`, `oscillators-coarse.test.ts`, `path-bound.test.ts`, `pendulum-phase-translation.test.ts`, `physjs-generated-table.test.ts`, `physjs-lean-path.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `regime-admission.test.ts`, `relative-norm-convention.test.ts`, `spring-lc-phase-carriage.test.ts`, `transported-norm-demo.test.ts`, `witness-claims.test.ts`, `applied-cases.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `proved-counterexample.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `formalref-axiom-gate.test.ts` |
 | `atlas/index.ts` | `barrel-completeness.test.ts` |
@@ -94,7 +94,7 @@ The following 10 source files are not directly imported by any test file:
 | `oscillators/position-translation.ts` | `pendulum-position-translation.test.ts` |
 | `oscillators/rejections.ts` | `oscillators-coarse.test.ts` |
 | `atlas/path-bound.ts` | `barrel-completeness.test.ts`, `bound-machine-form.test.ts`, `path-bound.test.ts`, `transported-norm-demo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts` |
-| `atlas/physjs-entries.generated.ts` | `physjs-generated-table.test.ts` |
+| `atlas/physjs-entries.generated.ts` | `bridge-seed-keys.test.ts`, `chain-pipeline-catalog.test.ts`, `chain-pipeline.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `physjs-be66-68.test.ts`, `physjs-be69-73.test.ts`, `physjs-generated-table.test.ts`, `physjs-lean-path.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `be-77-87.test.ts`, `be-88-102.test.ts`, `seed-edges.test.ts` |
 | `atlas/physjs-ref.ts` | `bridge-seed-keys.test.ts`, `chain-pipeline-catalog.test.ts`, `chain-pipeline.test.ts`, `formal-sanity.test.ts`, `formalref-kind.test.ts`, `physjs-be66-68.test.ts`, `physjs-be69-73.test.ts`, `physjs-generated-table.test.ts`, `physjs-lean-path.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `be-77-87.test.ts`, `be-88-102.test.ts`, `seed-edges.test.ts` |
 | `poster/associations.ts` | `poster.test.ts` |
 | `poster/derivations.ts` | `poster.test.ts` |
@@ -201,8 +201,8 @@ The following 10 source files are not directly imported by any test file:
 | `equations/be-16-landauer.ts` | `be-16-landauer-encoding.test.ts`, `bridge-equations-facade.test.ts` |
 | `equations/be-17-einstein-cartan.ts` | `be-17-encoding.test.ts`, `be-17-structural.test.ts`, `bucket-a-formal-sanity.test.ts`, `bridge-check.test.ts` |
 | `equations/be-18-higgs-mass.ts` | `be-18-encoding.test.ts` |
-| `equations/be-19-quantum-bounce.ts` | `be-19-encoding.test.ts`, `catalog-formal-sanity.test.ts`, `bridge-check.test.ts` |
-| `equations/be-20-vacuum-energy.ts` | `be-20-encoding.test.ts`, `bucket-a-formal-sanity.test.ts` |
+| `equations/be-19-quantum-bounce.ts` | `be-19-encoding.test.ts`, `catalog-formal-sanity.test.ts`, `bridge-check.test.ts`, `mass-density-owner.test.ts` |
+| `equations/be-20-vacuum-energy.ts` | `be-20-encoding.test.ts`, `bucket-a-formal-sanity.test.ts`, `mass-density-owner.test.ts` |
 | `equations/be-21-kss-bound.ts` | `be-21-encoding.test.ts`, `bridge-equations-facade.test.ts`, `bucket-a-formal-sanity.test.ts` |
 | `equations/be-22-topological-entanglement.ts` | `be-22-encoding.test.ts`, `bucket-a-formal-sanity.test.ts`, `bridge-check.test.ts` |
 | `equations/be-23-syk-planckian.ts` | `be-23-encoding.test.ts`, `be23-planckian-confrontation.test.ts` |
@@ -235,7 +235,7 @@ The following 10 source files are not directly imported by any test file:
 | `equations/be-49-quantum-darwinism.ts` | `be-49-encoding.test.ts` |
 | `equations/be-50-wheeler-feynman.ts` | `be-50-encoding.test.ts`, `bucket-a-formal-sanity.test.ts` |
 | `equations/be-53-yang-mills-beta.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `be-53-encoding.test.ts`, `be53-yang-mills-confrontation.test.ts`, `bridge-equations-facade.test.ts`, `catalog-formal-sanity.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `equations/be-54-randall-sundrum-brane.ts` | `be-54-encoding.test.ts`, `bucket-a-formal-sanity.test.ts` |
+| `equations/be-54-randall-sundrum-brane.ts` | `be-54-encoding.test.ts`, `bucket-a-formal-sanity.test.ts`, `mass-density-owner.test.ts` |
 | `bridges/evaluator-inputs.ts` | `applied-cases.test.ts`, `brownian-sphere.test.ts`, `lumped-cooling.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `units.test.ts` |
 | `bridges/evaluators.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `be-73-kelvin-peltier.test.ts`, `bridge-equations-facade.test.ts`, `evaluators.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-bridge-16-hint.test.ts`, `evaluate-bridge-42-hint.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `units.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `bridges/gravitational-lensing.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `audited-catalog.test.ts`, `catalog-formal-ref.test.ts`, `catalog-proved-evidence.test.ts`, `chain-pipeline-catalog.test.ts`, `chain-pipeline.test.ts`, `coverage.test.ts`, `derive-evidence.test.ts`, `formalref-kind.test.ts`, `gr-spine-regime.test.ts`, `physjs-generated-table.test.ts`, `physjs-lean-path.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `be-100-lyddane-sachs-teller.test.ts`, `be-101-bkt-jump.test.ts`, `be-102-landauer-conductance.test.ts`, `be-103-bohm-sheath.test.ts`, `be-104-ion-acoustic.test.ts`, `be-105-upper-hybrid.test.ts`, `be-106-cold-plasma-cutoff.test.ts`, `be-107-lower-hybrid.test.ts`, `be-108-oblique-magnetosonic.test.ts`, `be-109-bennett-pinch.test.ts`, `be-11-fix.test.ts`, `be-110-loss-cone.test.ts`, `be-111-grad-b-drift.test.ts`, `be-112-exb-drift.test.ts`, `be-113-landau-damping.test.ts`, `be-114-debye-sphere.test.ts`, `be-115-multi-debye.test.ts`, `be-116-lorentz-resistivity.test.ts`, `be-117-resistive-slab.test.ts`, `be-118-parker-critical.test.ts`, `be-119-parker-spiral.test.ts`, `be-120-chapman-ferraro.test.ts`, `be-121-lawson-breakeven.test.ts`, `be-122-langmuir-probe.test.ts`, `be-123-cross-field-diffusion.test.ts`, `be-124-firehose.test.ts`, `be-125-mirror-instability.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-18-fix.test.ts`, `be-29-fix.test.ts`, `be-47-fix.test.ts`, `be-48-fix.test.ts`, `be-55-quantum-hall.test.ts`, `be-56-casimir.test.ts`, `be-57-unruh.test.ts`, `be-58-johnson-nyquist.test.ts`, `be-59-ac-josephson.test.ts`, `be-60-fractional-qh.test.ts`, `be-61-wiedemann-franz.test.ts`, `be-62-bcs-gap.test.ts`, `be-63-chandrasekhar-mass.test.ts`, `be-64-eddington-luminosity.test.ts`, `be-65-jeans-mass.test.ts`, `be-66-radiation-pressure.test.ts`, `be-67-alfven-speed.test.ts`, `be-68-tolman-ehrenfest.test.ts`, `be-69-fast-magnetosonic.test.ts`, `be-70-einstein-relation.test.ts`, `be-71-clapeyron.test.ts`, `be-72-gravitational-redshift.test.ts`, `be-73-kelvin-peltier.test.ts`, `be-78-euler-buckling.test.ts`, `be-79-pull-in.test.ts`, `be-80-mott-gurney.test.ts`, `be-81-child-langmuir.test.ts`, `be-82-shockley-diode.test.ts`, `be-83-thomson.test.ts`, `be-84-four-point.test.ts`, `be-85-shot-noise.test.ts`, `be-86-reynolds-analogy.test.ts`, `be-87-capacitor-noise.test.ts`, `be-88-fermi-sea.test.ts`, `be-89-debye-cutoff.test.ts`, `be-90-debye-heat.test.ts`, `be-91-einstein-solid.test.ts`, `be-92-sommerfeld-heat.test.ts`, `be-93-curie-weiss.test.ts`, `be-94-pauli-paramagnetism.test.ts`, `be-95-ginzburg-landau.test.ts`, `be-96-upper-critical.test.ts`, `be-97-ambegaokar-baratoff.test.ts`, `be-98-bcs-jump.test.ts`, `be-99-mass-action.test.ts`, `be53-yang-mills-confrontation.test.ts`, `bridge-equations-facade.test.ts`, `bucket-a-formal-sanity.test.ts`, `catalog-adapter.test.ts`, `catalog-formal-sanity.test.ts`, `catalog-integrity.test.ts`, `catalog-json.test.ts`, `confrontation-registry.test.ts`, `descriptor-consistency.test.ts`, `dimensional-signature-catalog.test.ts`, `gravitational-lensing.test.ts`, `membership.test.ts`, `orphan-dimensional-signature.test.ts`, `overlay-registry-quote.test.ts`, `public-api-stability.test.ts`, `spec-vs-index.test.ts`, `tensor-index.test.ts`, `bridges-index.test.ts`, `invariants.test.ts`, `structural-classifier.test.ts`, `applied-cases.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `proposed-bridges.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts`, `readme-status.test.ts` |
@@ -361,7 +361,7 @@ The following 10 source files are not directly imported by any test file:
 | `edges/catalog-full.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `edges/catalog-gravitation-cosmology.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `edges/catalog-quantum.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `edges/catalog-tranche.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
+| `edges/catalog-tranche.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `mass-density-owner.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `edges/condensed-r5.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `edges/plasma-space.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `symbolic-composition.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `edges/proved-seeds.ts` | `seed-edges.test.ts` |
@@ -403,10 +403,10 @@ The following 10 source files are not directly imported by any test file:
 | `probe/serialize.ts` | `benchmark-preregistration.test.ts`, `serialize.test.ts` |
 | `probe/structure.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `coverage-backfill.test.ts`, `expression-gaps.test.ts`, `modules.test.ts` |
 | `probe/study.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts`, `study-inputs.test.ts`, `study-refusals.test.ts`, `study-replication.test.ts`, `study.test.ts` |
-| `probe/types.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `expression-gaps.test.ts`, `generator-budget.test.ts`, `modules.test.ts` |
+| `probe/types.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `coverage-backfill.test.ts`, `expression-gaps.test.ts`, `generator-budget.test.ts`, `modules.test.ts` |
 | `composition/proposed-bridges.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `proposed-bridges.test.ts` |
 | `composition/quantities.ts` | `association.test.ts`, `attribute-audit.test.ts`, `composition-recovery.test.ts`, `quantities.test.ts`, `seed-edges.test.ts` |
-| `quantities/_dims.ts` | `helper-coverage.test.ts` |
+| `quantities/_dims.ts` | `mass-density-owner.test.ts`, `helper-coverage.test.ts` |
 | `quantities/applied-physicist.ts` | `association.test.ts`, `attribute-audit.test.ts`, `composition-recovery.test.ts`, `quantities.test.ts`, `seed-edges.test.ts` |
 | `quantities/common.ts` | `association.test.ts`, `attribute-audit.test.ts`, `composition-recovery.test.ts`, `quantities.test.ts`, `seed-edges.test.ts` |
 | `quantities/condensed-matter.ts` | `association.test.ts`, `attribute-audit.test.ts`, `composition-recovery.test.ts`, `quantities.test.ts`, `seed-edges.test.ts` |
@@ -422,7 +422,7 @@ The following 10 source files are not directly imported by any test file:
 | `composition/user-equation.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `chain-pipeline.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `evaluate-uncertainty-name.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `name-registry.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `attribute-audit.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `bridge-priority.test.ts`, `calibration-targets.test.ts`, `canonical-graph.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `dimensionful-constant.test.ts`, `discovery.test.ts`, `dogfood-compare.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `formula-shape.test.ts`, `identifiability.test.ts`, `link-candidates.test.ts`, `linkage-map.test.ts`, `name-table.test.ts`, `namespacing.test.ts`, `orphan-connectors.test.ts`, `persona-retest-compare.test.ts`, `quantities.test.ts`, `retrodiction.test.ts`, `seed-enumeration.test.ts`, `stress-tests.test.ts`, `suggest-ranking.test.ts`, `symbolic-composition.test.ts`, `user-equation.test.ts`, `bridge-derivation-audit.test.ts`, `symbolic-exponent.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `core/axes-registry.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `perihelion-precession-labeled.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `axes-registry.test.ts`, `labeled-tensor-axis-order.test.ts`, `labeled-tensor-merge-split.test.ts`, `labeled-tensor.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `core/cell.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `addCell.test.ts`, `cell.test.ts`, `flux-rules.test.ts`, `populated-cells.test.ts`, `regime-rule-install.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `core/constants.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `gr-spine-regime.test.ts`, `physjs-be69-73.test.ts`, `be-26-encoding.test.ts`, `be-56-casimir.test.ts`, `be-58-johnson-nyquist.test.ts`, `be-62-bcs-gap.test.ts`, `be-66-radiation-pressure.test.ts`, `be-70-einstein-relation.test.ts`, `be-74-76.test.ts`, `be-75-london-penetration.test.ts`, `be-76-plasma-beta.test.ts`, `be-77-87.test.ts`, `be-88-102.test.ts`, `bridge-equations-facade.test.ts`, `bucket-a-formal-sanity.test.ts`, `catalog-formal-sanity.test.ts`, `perihelion-precession.test.ts`, `plasma-formulas.test.ts`, `public-api-stability.test.ts`, `solar-gm.test.ts`, `numeric-prefactor.test.ts`, `kepler-rv.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `binding-expressions.test.ts`, `dogfood-2026-09-29.test.ts`, `dogfood-open-items.test.ts`, `eval-si-prefix-constants.test.ts`, `eval-temperature-binding.test.ts`, `evaluate-bridge-16-hint.test.ts`, `explain-both-landauer.test.ts`, `explain-flux-density-cyclotron.test.ts`, `explain-formula-factor.test.ts`, `explain-temperature-binding.test.ts`, `gauss-unit-name.test.ts`, `gr-dogfood-cli.test.ts`, `graphs.test.ts`, `magnitude-charge-sign.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `physjs-be74-76.test.ts`, `physjs-be77-87.test.ts`, `physjs-be88-102.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `undeclared-e-charge.test.ts`, `canonical-compare.test.ts`, `canonical-graph.test.ts`, `dogfood-compare.test.ts`, `landauer-prefactor.test.ts`, `namespacing.test.ts`, `symbolic-composition.test.ts`, `constants.test.ts`, `units.test.ts`, `confrontation-golden.test.ts`, `perfect-fluid.test.ts`, `schwarzschild-riemann.test.ts`, `schwarzschild.test.ts`, `binding-value.test.ts`, `conserved-charge-mercury.test.ts`, `einstein-desitter.test.ts`, `einstein-flrw.test.ts`, `einstein-vacuum-schwarzschild.test.ts`, `euler-rejected.test.ts`, `formula-mathts.test.ts`, `geometrized-schwarzschild-equivalence.test.ts`, `geometrized.test.ts`, `gl4-integrator.test.ts`, `killing-schwarzschild.test.ts`, `klein-gordon.test.ts`, `kretschmann-horizon.test.ts`, `kretschmann-lowering.test.ts`, `kretschmann-schwarzschild.test.ts`, `mathts-067-delegation.test.ts`, `painleve-gullstrand-curvature.test.ts`, `parse-physics.test.ts`, `schwarzschild-radial-geodesic.test.ts`, `spacetime-metrics.test.ts`, `weyl-kerr-schild.test.ts`, `weyl-schwarzschild.test.ts`, `tensor.test.ts` |
+| `core/constants.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `audited-catalog.test.ts`, `catalog-formal-ref.test.ts`, `catalog-proved-evidence.test.ts`, `chain-pipeline-catalog.test.ts`, `chain-pipeline.test.ts`, `coverage.test.ts`, `derive-evidence.test.ts`, `formalref-kind.test.ts`, `gr-spine-regime.test.ts`, `physjs-be69-73.test.ts`, `physjs-generated-table.test.ts`, `physjs-lean-path.test.ts`, `physjs-manifest.test.ts`, `proof-target.test.ts`, `be-100-lyddane-sachs-teller.test.ts`, `be-101-bkt-jump.test.ts`, `be-102-landauer-conductance.test.ts`, `be-103-bohm-sheath.test.ts`, `be-104-ion-acoustic.test.ts`, `be-105-upper-hybrid.test.ts`, `be-106-cold-plasma-cutoff.test.ts`, `be-107-lower-hybrid.test.ts`, `be-108-oblique-magnetosonic.test.ts`, `be-109-bennett-pinch.test.ts`, `be-11-fix.test.ts`, `be-110-loss-cone.test.ts`, `be-111-grad-b-drift.test.ts`, `be-112-exb-drift.test.ts`, `be-113-landau-damping.test.ts`, `be-114-debye-sphere.test.ts`, `be-115-multi-debye.test.ts`, `be-116-lorentz-resistivity.test.ts`, `be-117-resistive-slab.test.ts`, `be-118-parker-critical.test.ts`, `be-119-parker-spiral.test.ts`, `be-120-chapman-ferraro.test.ts`, `be-121-lawson-breakeven.test.ts`, `be-122-langmuir-probe.test.ts`, `be-123-cross-field-diffusion.test.ts`, `be-124-firehose.test.ts`, `be-125-mirror-instability.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-18-fix.test.ts`, `be-26-encoding.test.ts`, `be-29-fix.test.ts`, `be-47-fix.test.ts`, `be-48-fix.test.ts`, `be-55-quantum-hall.test.ts`, `be-56-casimir.test.ts`, `be-57-unruh.test.ts`, `be-58-johnson-nyquist.test.ts`, `be-59-ac-josephson.test.ts`, `be-60-fractional-qh.test.ts`, `be-61-wiedemann-franz.test.ts`, `be-62-bcs-gap.test.ts`, `be-63-chandrasekhar-mass.test.ts`, `be-64-eddington-luminosity.test.ts`, `be-65-jeans-mass.test.ts`, `be-66-radiation-pressure.test.ts`, `be-67-alfven-speed.test.ts`, `be-68-tolman-ehrenfest.test.ts`, `be-69-fast-magnetosonic.test.ts`, `be-70-einstein-relation.test.ts`, `be-71-clapeyron.test.ts`, `be-72-gravitational-redshift.test.ts`, `be-73-kelvin-peltier.test.ts`, `be-74-76.test.ts`, `be-75-london-penetration.test.ts`, `be-76-plasma-beta.test.ts`, `be-77-87.test.ts`, `be-78-euler-buckling.test.ts`, `be-79-pull-in.test.ts`, `be-80-mott-gurney.test.ts`, `be-81-child-langmuir.test.ts`, `be-82-shockley-diode.test.ts`, `be-83-thomson.test.ts`, `be-84-four-point.test.ts`, `be-85-shot-noise.test.ts`, `be-86-reynolds-analogy.test.ts`, `be-87-capacitor-noise.test.ts`, `be-88-102.test.ts`, `be-88-fermi-sea.test.ts`, `be-89-debye-cutoff.test.ts`, `be-90-debye-heat.test.ts`, `be-91-einstein-solid.test.ts`, `be-92-sommerfeld-heat.test.ts`, `be-93-curie-weiss.test.ts`, `be-94-pauli-paramagnetism.test.ts`, `be-95-ginzburg-landau.test.ts`, `be-96-upper-critical.test.ts`, `be-97-ambegaokar-baratoff.test.ts`, `be-98-bcs-jump.test.ts`, `be-99-mass-action.test.ts`, `be53-yang-mills-confrontation.test.ts`, `bridge-equations-facade.test.ts`, `bucket-a-formal-sanity.test.ts`, `catalog-adapter.test.ts`, `catalog-formal-sanity.test.ts`, `catalog-integrity.test.ts`, `catalog-json.test.ts`, `confrontation-registry.test.ts`, `descriptor-consistency.test.ts`, `dimensional-signature-catalog.test.ts`, `membership.test.ts`, `orphan-dimensional-signature.test.ts`, `overlay-registry-quote.test.ts`, `perihelion-precession.test.ts`, `plasma-formulas.test.ts`, `public-api-stability.test.ts`, `solar-gm.test.ts`, `spec-vs-index.test.ts`, `tensor-index.test.ts`, `bridges-index.test.ts`, `invariants.test.ts`, `numeric-prefactor.test.ts`, `structural-classifier.test.ts`, `applied-cases.test.ts`, `kepler-rv.test.ts`, `atlas-command.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `binding-expressions.test.ts`, `dogfood-2026-09-29.test.ts`, `dogfood-open-items.test.ts`, `eval-si-prefix-constants.test.ts`, `eval-temperature-binding.test.ts`, `evaluate-bridge-16-hint.test.ts`, `explain-both-landauer.test.ts`, `explain-flux-density-cyclotron.test.ts`, `explain-formula-factor.test.ts`, `explain-temperature-binding.test.ts`, `gauss-unit-name.test.ts`, `gr-dogfood-cli.test.ts`, `graphs.test.ts`, `magnitude-charge-sign.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `physjs-be74-76.test.ts`, `physjs-be77-87.test.ts`, `physjs-be88-102.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `undeclared-e-charge.test.ts`, `canonical-compare.test.ts`, `canonical-graph.test.ts`, `catalog-full.test.ts`, `catalog-tranche.test.ts`, `dogfood-compare.test.ts`, `landauer-prefactor.test.ts`, `namespacing.test.ts`, `proposed-bridges.test.ts`, `symbolic-composition.test.ts`, `constants.test.ts`, `units.test.ts`, `confrontation-golden.test.ts`, `perfect-fluid.test.ts`, `schwarzschild-riemann.test.ts`, `schwarzschild.test.ts`, `binding-value.test.ts`, `conserved-charge-mercury.test.ts`, `einstein-desitter.test.ts`, `einstein-flrw.test.ts`, `einstein-vacuum-schwarzschild.test.ts`, `euler-rejected.test.ts`, `formula-mathts.test.ts`, `geometrized-schwarzschild-equivalence.test.ts`, `geometrized.test.ts`, `gl4-integrator.test.ts`, `killing-schwarzschild.test.ts`, `klein-gordon.test.ts`, `kretschmann-horizon.test.ts`, `kretschmann-lowering.test.ts`, `kretschmann-schwarzschild.test.ts`, `mathts-067-delegation.test.ts`, `painleve-gullstrand-curvature.test.ts`, `parse-physics.test.ts`, `schwarzschild-radial-geodesic.test.ts`, `spacetime-metrics.test.ts`, `weyl-kerr-schild.test.ts`, `weyl-schwarzschild.test.ts`, `tensor.test.ts`, `readme-status.test.ts` |
 | `core/flux-rules.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `flux-rules.test.ts`, `populated-cells.test.ts`, `regime-rule-install.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `core/labeled-tensor.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `perihelion-precession-labeled.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `labeled-tensor-axis-order.test.ts`, `labeled-tensor-merge-split.test.ts`, `labeled-tensor.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `core/regime-registry.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `regime-registry.test.ts`, `regime-rule-install.test.ts`, `regimes-builtins.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
@@ -434,10 +434,10 @@ The following 10 source files are not directly imported by any test file:
 | `diff/bridge-ast-gradient.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `be-26-ad.test.ts`, `bridge-ast-gradient-byid.test.ts`, `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-gradient.test.ts`, `bridge-ast-reencode-batch.test.ts`, `bridge-ast-reencode.test.ts`, `integral-ad.test.ts`, `dimensionful-power-ad.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `diff/bridge-gradient.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `bridge-ast-gradient.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `diff/bridge-specs.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `bridge-ast-gradient.test.ts`, `bridge-gradient.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `dimensional/algebra.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `diffusion.test.ts`, `be-11-fix.test.ts`, `be-12-encoding.test.ts`, `be-13-encoding.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-15-encoding.test.ts`, `be-16-landauer-encoding.test.ts`, `be-17-encoding.test.ts`, `be-19-encoding.test.ts`, `be-22-encoding.test.ts`, `be-23-encoding.test.ts`, `be-25-encoding.test.ts`, `be-26-encoding.test.ts`, `be-34-encoding.test.ts`, `be-37-shapiro-encoding.test.ts`, `be-40-encoding.test.ts`, `be-41-encoding.test.ts`, `be-44-encoding.test.ts`, `be-47-encoding.test.ts`, `be-54-encoding.test.ts`, `bridge-equations-facade.test.ts`, `catalog-grammar-applicability.test.ts`, `dimensional-signature-catalog.test.ts`, `public-api-stability.test.ts`, `atomic.test.ts`, `condensed-matter.test.ts`, `electromagnetism.test.ts`, `fluids-waves.test.ts`, `invariants.test.ts`, `mechanics.test.ts`, `nonmonomial.test.ts`, `quantity-names.test.ts`, `statistical-mechanics.test.ts`, `thermo-nuclear-cosmo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `symbolic-latex.test.ts`, `calibration-targets.test.ts`, `discovery-canonical-kind.test.ts`, `persona-retest-compare.test.ts`, `proposed-bridges.test.ts`, `seed-edges.test.ts`, `symbolic-composition.test.ts`, `symbolic-simplification.test.ts`, `algebra-properties.test.ts`, `algebra.test.ts`, `bridge-check.test.ts`, `dimension-inference.test.ts`, `dimension-spec.test.ts`, `dimensionful-power-ad.test.ts`, `distributional-grammar.test.ts`, `integral-bounds-validation.test.ts`, `symbolic-exponent.test.ts`, `tensor-partial-derivative.test.ts`, `transcendental-validation.test.ts`, `confrontation-golden.test.ts`, `euler-rejected.test.ts`, `parse-physics.test.ts`, `tensor.test.ts` |
+| `dimensional/algebra.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `diffusion.test.ts`, `be-11-fix.test.ts`, `be-12-encoding.test.ts`, `be-13-encoding.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-15-encoding.test.ts`, `be-16-landauer-encoding.test.ts`, `be-17-encoding.test.ts`, `be-19-encoding.test.ts`, `be-22-encoding.test.ts`, `be-23-encoding.test.ts`, `be-25-encoding.test.ts`, `be-26-encoding.test.ts`, `be-34-encoding.test.ts`, `be-37-shapiro-encoding.test.ts`, `be-40-encoding.test.ts`, `be-41-encoding.test.ts`, `be-44-encoding.test.ts`, `be-47-encoding.test.ts`, `be-54-encoding.test.ts`, `bridge-equations-facade.test.ts`, `catalog-grammar-applicability.test.ts`, `dimensional-signature-catalog.test.ts`, `public-api-stability.test.ts`, `atomic.test.ts`, `condensed-matter.test.ts`, `electromagnetism.test.ts`, `fluids-waves.test.ts`, `invariants.test.ts`, `mechanics.test.ts`, `nonmonomial.test.ts`, `quantity-names.test.ts`, `statistical-mechanics.test.ts`, `thermo-nuclear-cosmo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `symbolic-latex.test.ts`, `calibration-targets.test.ts`, `discovery-canonical-kind.test.ts`, `persona-retest-compare.test.ts`, `proposed-bridges.test.ts`, `seed-edges.test.ts`, `symbolic-composition.test.ts`, `symbolic-simplification.test.ts`, `algebra-properties.test.ts`, `algebra.test.ts`, `bridge-check.test.ts`, `dimension-inference.test.ts`, `dimension-spec.test.ts`, `dimensionful-power-ad.test.ts`, `distributional-grammar.test.ts`, `integral-bounds-validation.test.ts`, `mass-density-owner.test.ts`, `symbolic-exponent.test.ts`, `tensor-partial-derivative.test.ts`, `transcendental-validation.test.ts`, `confrontation-golden.test.ts`, `euler-rejected.test.ts`, `parse-physics.test.ts`, `tensor.test.ts` |
 | `dimensional/ast-builders.ts` | `applicability.test.ts`, `benchmark-ablation.test.ts`, `benchmark-baselines.test.ts`, `benchmark-run-atlas.test.ts`, `benchmark.test.ts`, `chain-pipeline.test.ts`, `hybrid-retrieval.test.ts`, `models.test.ts`, `negative-controls.test.ts`, `oscillators-coarse.test.ts`, `witness-results.test.ts`, `witness-runners.test.ts`, `_be-helpers.test.ts`, `dimensional-fields.test.ts`, `structural-classifier.test.ts`, `chain-regime.test.ts`, `gr-formula-compare.test.ts`, `corpus-prefactor.test.ts`, `coverage-backfill.test.ts`, `experiment-design.test.ts`, `modules.test.ts`, `parse-expr-json.test.ts`, `relation-refusal.test.ts`, `seed-enumeration.test.ts`, `ast-builders.test.ts`, `helper-coverage.test.ts` |
 | `dimensional/ast-types.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `scalar-builder-gate.test.ts`, `applicability.test.ts`, `benchmark-ablation.test.ts`, `benchmark-baselines.test.ts`, `benchmark-run-atlas.test.ts`, `benchmark.test.ts`, `chain-pipeline.test.ts`, `diffusion.test.ts`, `hybrid-retrieval.test.ts`, `negative-controls.test.ts`, `witness-runners.test.ts`, `be-11-fix.test.ts`, `be-12-encoding.test.ts`, `be-13-encoding.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-15-encoding.test.ts`, `be-16-landauer-encoding.test.ts`, `be-17-encoding.test.ts`, `be-17-structural.test.ts`, `be-18-encoding.test.ts`, `be-19-encoding.test.ts`, `be-20-encoding.test.ts`, `be-21-encoding.test.ts`, `be-22-encoding.test.ts`, `be-23-encoding.test.ts`, `be-24-encoding.test.ts`, `be-25-encoding.test.ts`, `be-25-iit-encoding.test.ts`, `be-26-encoding.test.ts`, `be-27-encoding.test.ts`, `be-28-onsager-encoding.test.ts`, `be-29-encoding.test.ts`, `be-30-encoding.test.ts`, `be-31-encoding.test.ts`, `be-32-encoding.test.ts`, `be-33-encoding.test.ts`, `be-34-encoding.test.ts`, `be-35-encoding.test.ts`, `be-36-encoding.test.ts`, `be-37-shapiro-eikonal-structural.test.ts`, `be-37-shapiro-encoding.test.ts`, `be-38-encoding.test.ts`, `be-39-encoding.test.ts`, `be-40-encoding.test.ts`, `be-41-encoding.test.ts`, `be-42-encoding.test.ts`, `be-43-encoding.test.ts`, `be-44-encoding.test.ts`, `be-45-encoding.test.ts`, `be-46-encoding.test.ts`, `be-47-encoding.test.ts`, `be-48-encoding.test.ts`, `be-49-encoding.test.ts`, `be-50-encoding.test.ts`, `be-53-encoding.test.ts`, `be-54-encoding.test.ts`, `bridge-equations-facade.test.ts`, `catalog-grammar-applicability.test.ts`, `dimensional-signature-catalog.test.ts`, `_be-helpers.test.ts`, `public-api-stability.test.ts`, `atomic.test.ts`, `condensed-matter.test.ts`, `electromagnetism.test.ts`, `fluids-waves.test.ts`, `invariants.test.ts`, `nonmonomial.test.ts`, `normal-form.test.ts`, `quantity-names.test.ts`, `relativity.test.ts`, `residual.test.ts`, `restates-bridge.test.ts`, `statistical-mechanics.test.ts`, `structural-classifier.test.ts`, `thermo-nuclear-cosmo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `symbolic-latex.test.ts`, `canonical-prefactors.test.ts`, `chain-regime.test.ts`, `collect-symbols-transcendental.test.ts`, `composition-recovery.test.ts`, `mathts-scalar-symbols.test.ts`, `corpus-prefactor.test.ts`, `coverage-backfill.test.ts`, `family-b.test.ts`, `proposed-bridges.test.ts`, `relation-refusal.test.ts`, `seed-edges.test.ts`, `seed-enumeration.test.ts`, `symbolic-composition.test.ts`, `symbolic-simplification.test.ts`, `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-reencode-batch.test.ts`, `integral-ad.test.ts`, `bianchi-residual.test.ts`, `bridge-check.test.ts`, `christoffel-helper.test.ts`, `connection-validators.test.ts`, `cosmological-constant.test.ts`, `covariant-derivative-node.test.ts`, `covariant-derivative-preview.test.ts`, `curvature-invariants.test.ts`, `derivative-strategy-field.test.ts`, `derivative-strategy-propagation.test.ts`, `dimension-inference.test.ts`, `dimensionful-power-ad.test.ts`, `distributional-grammar.test.ts`, `duplicate-coord-warning.test.ts`, `einstein-equation.test.ts`, `einstein.test.ts`, `equation-valence.test.ts`, `integral-bounds-validation.test.ts`, `integral-derivative-tensor.test.ts`, `killing-validators.test.ts`, `kronecker-delta.test.ts`, `metric-ast-serialization.test.ts`, `metric-helpers.test.ts`, `metric-tensor.test.ts`, `minkowski-curvature.test.ts`, `numerical-form-field.test.ts`, `numerical-form-preservation.test.ts`, `op-tensor-interactions.test.ts`, `raise-lower.test.ts`, `rg-flow.test.ts`, `ricci.test.ts`, `riemann-tensor.test.ts`, `stress-energy-validators.test.ts`, `symbolic-exponent.test.ts`, `tensor-ast-serialization.test.ts`, `tensor-helpers.test.ts`, `tensor-node-types.test.ts`, `tensor-partial-derivative.test.ts`, `tensor-product.test.ts`, `tensor-step-c.test.ts`, `tensor-symbol.test.ts`, `tensor-trace.test.ts`, `transcendental-validation.test.ts`, `validation-result-shape.test.ts`, `validator-probe-ctx.test.ts`, `validator-registry.test.ts`, `validator.test.ts`, `violation-severity.test.ts`, `weyl-validators.test.ts`, `confrontation-golden.test.ts`, `correctness.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `kretschmann-lowering.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-deferred-arms.test.ts`, `lowering-utils.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-partial-derivative-lowering.test.ts`, `tensor.test.ts` |
-| `dimensional/bridge-check.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `bridge-check.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
+| `dimensional/bridge-check.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `bridge-check.test.ts`, `mass-density-owner.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `dimensional/buckingham.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `oscillators-coarse.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `dimensional-classics.test.ts`, `dimensional-fields.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `buckingham-filter.test.ts`, `dimensionful-constant.test.ts`, `buckingham.test.ts`, `derivation-benchmark.test.ts`, `confrontation-golden.test.ts`, `mathts-067-delegation.test.ts`, `tensor.test.ts` |
 | `dimensional/connection-validators.ts` | `curvature-invariants.test.ts`, `einstein-equation.test.ts`, `validator-registry.test.ts`, `kretschmann-lowering.test.ts` |
 | `dimensional/connection.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `christoffel-helper.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
@@ -448,11 +448,11 @@ The following 10 source files are not directly imported by any test file:
 | `dimensional/dimension-inference.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `dimension-inference.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `dimensional/dimension-spec.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `dimension-spec-grouping.test.ts`, `dimension-spec.test.ts` |
 | `dimensional/einstein-equation.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `relativity.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `einstein-equation.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
-| `dimensional/errors.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `connection-validators.test.ts`, `covariant-derivative-preview.test.ts`, `distributional-grammar.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `error-message-discoverability.test.ts`, `kronecker-delta.test.ts`, `metric-tensor.test.ts`, `metric-validation-errors.test.ts`, `minkowski-curvature.test.ts`, `op-tensor-interactions.test.ts`, `raise-lower.test.ts`, `ricci.test.ts`, `symbolic-exponent.test.ts`, `tensor-partial-derivative.test.ts`, `tensor-product.test.ts`, `tensor-symbol.test.ts`, `uptError.test.ts`, `weyl-validators.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `errors.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
+| `dimensional/errors.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `diffusion.test.ts`, `be-11-fix.test.ts`, `be-12-encoding.test.ts`, `be-13-encoding.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-15-encoding.test.ts`, `be-16-landauer-encoding.test.ts`, `be-17-encoding.test.ts`, `be-19-encoding.test.ts`, `be-22-encoding.test.ts`, `be-23-encoding.test.ts`, `be-25-encoding.test.ts`, `be-26-encoding.test.ts`, `be-34-encoding.test.ts`, `be-37-shapiro-encoding.test.ts`, `be-40-encoding.test.ts`, `be-41-encoding.test.ts`, `be-44-encoding.test.ts`, `be-47-encoding.test.ts`, `be-54-encoding.test.ts`, `bridge-equations-facade.test.ts`, `catalog-grammar-applicability.test.ts`, `dimensional-signature-catalog.test.ts`, `public-api-stability.test.ts`, `atomic.test.ts`, `condensed-matter.test.ts`, `electromagnetism.test.ts`, `fluids-waves.test.ts`, `invariants.test.ts`, `mechanics.test.ts`, `nonmonomial.test.ts`, `quantity-names.test.ts`, `statistical-mechanics.test.ts`, `thermo-nuclear-cosmo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `symbolic-latex.test.ts`, `calibration-targets.test.ts`, `discovery-canonical-kind.test.ts`, `persona-retest-compare.test.ts`, `proposed-bridges.test.ts`, `seed-edges.test.ts`, `symbolic-composition.test.ts`, `symbolic-simplification.test.ts`, `algebra-properties.test.ts`, `algebra.test.ts`, `bridge-check.test.ts`, `connection-validators.test.ts`, `covariant-derivative-preview.test.ts`, `dimension-inference.test.ts`, `dimension-spec.test.ts`, `dimensionful-power-ad.test.ts`, `distributional-grammar.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `error-message-discoverability.test.ts`, `integral-bounds-validation.test.ts`, `kronecker-delta.test.ts`, `mass-density-owner.test.ts`, `metric-tensor.test.ts`, `metric-validation-errors.test.ts`, `minkowski-curvature.test.ts`, `op-tensor-interactions.test.ts`, `raise-lower.test.ts`, `ricci.test.ts`, `symbolic-exponent.test.ts`, `tensor-partial-derivative.test.ts`, `tensor-product.test.ts`, `tensor-symbol.test.ts`, `transcendental-validation.test.ts`, `uptError.test.ts`, `weyl-validators.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `errors.test.ts`, `euler-rejected.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `parse-physics.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `dimensional/field-equation-helpers.ts` | `field-equation-helpers.test.ts` |
 | `dimensional/formula-names.ts` | `be-67-alfven-speed.test.ts`, `be-74-76.test.ts`, `be-75-london-penetration.test.ts`, `be-76-plasma-beta.test.ts`, `be-77-87.test.ts`, `be-88-102.test.ts`, `plasma-formulas.test.ts`, `dogfood-2026-09-29.test.ts`, `eval-si-prefix-constants.test.ts`, `magnitude-charge-sign.test.ts`, `physjs-be74-76.test.ts`, `physjs-be77-87.test.ts`, `physjs-be88-102.test.ts` |
 | `dimensional/fresh-label.ts` | `fresh-label.test.ts` |
-| `dimensional/friedmann-equation.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `be-19-encoding.test.ts`, `be-54-encoding.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `friedmann-equation.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
+| `dimensional/friedmann-equation.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `be-19-encoding.test.ts`, `be-54-encoding.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `friedmann-equation.test.ts`, `mass-density-owner.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `dimensional/gauge-field.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `gauge-field.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `dimensional/killing-validators.ts` | `killing-validators.test.ts` |
 | `dimensional/klein-gordon-equation.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `friedmann-equation.test.ts`, `klein-gordon-equation.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
@@ -463,7 +463,7 @@ The following 10 source files are not directly imported by any test file:
 | `dimensional/symbolic-constants.ts` | `quantity-names.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `eval-registered-constants.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `symbolic-latex.test.ts`, `persona-retest-compare.test.ts`, `seed-edges.test.ts`, `symbolic-composition.test.ts`, `symbolic-constants-extra.test.ts` |
 | `dimensional/tensor-trace.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `be-13-encoding.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `tensor-trace.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `dimensional/tensor.ts` | `bianchi-residual.test.ts`, `christoffel-helper.test.ts`, `connection-validators.test.ts`, `covariant-derivative-node.test.ts`, `covariant-derivative-preview.test.ts`, `derivative-strategy-propagation.test.ts`, `distributional-grammar.test.ts`, `duplicate-coord-warning.test.ts`, `einstein-equation.test.ts`, `einstein.test.ts`, `integral-derivative-tensor.test.ts`, `metric-ast-serialization.test.ts`, `metric-helpers.test.ts`, `minkowski-curvature.test.ts`, `numerical-form-field.test.ts`, `numerical-form-preservation.test.ts`, `raise-lower.test.ts`, `ricci.test.ts`, `riemann-tensor.test.ts`, `tensor-helpers.test.ts`, `tensor-partial-derivative.test.ts`, `tensor-product.test.ts`, `tensor-step-c.test.ts`, `correctness.test.ts`, `evaluate.test.ts`, `lowering-contract.test.ts`, `lowering-utils.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-partial-derivative-lowering.test.ts` |
-| `dimensional/types.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `scalar-builder-gate.test.ts`, `canonical-links.test.ts`, `chain-pipeline.test.ts`, `models.test.ts`, `negative-controls.test.ts`, `oscillators-coarse.test.ts`, `overlay-types.test.ts`, `path-bound.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `be-11-fix.test.ts`, `be-12-encoding.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-15-encoding.test.ts`, `be-16-landauer-encoding.test.ts`, `be-17-encoding.test.ts`, `be-18-encoding.test.ts`, `be-22-encoding.test.ts`, `be-23-encoding.test.ts`, `be-24-encoding.test.ts`, `be-25-iit-encoding.test.ts`, `be-27-encoding.test.ts`, `be-29-encoding.test.ts`, `be-30-encoding.test.ts`, `be-31-encoding.test.ts`, `be-32-encoding.test.ts`, `be-33-encoding.test.ts`, `be-35-encoding.test.ts`, `be-36-encoding.test.ts`, `be-37-shapiro-eikonal-structural.test.ts`, `be-37-shapiro-encoding.test.ts`, `be-38-encoding.test.ts`, `be-39-encoding.test.ts`, `be-40-encoding.test.ts`, `be-42-encoding.test.ts`, `be-43-encoding.test.ts`, `be-45-encoding.test.ts`, `be-46-encoding.test.ts`, `be-48-encoding.test.ts`, `be-49-encoding.test.ts`, `be-53-encoding.test.ts`, `bridge-equations-facade.test.ts`, `catalog-grammar-applicability.test.ts`, `_be-helpers.test.ts`, `public-api-stability.test.ts`, `atomic.test.ts`, `carrier-sign.test.ts`, `condensed-matter.test.ts`, `electromagnetism.test.ts`, `fluids-waves.test.ts`, `invariants.test.ts`, `mechanics.test.ts`, `normal-form.test.ts`, `quantity-names.test.ts`, `residual.test.ts`, `restates-bridge.test.ts`, `statistical-mechanics.test.ts`, `structural-classifier.test.ts`, `thermo-nuclear-cosmo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `name-registry.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `undeclared-e-charge.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `buckingham-filter.test.ts`, `calibration-targets.test.ts`, `canonical-compare-pairing.test.ts`, `canonical-graph-information-axis.test.ts`, `canonical-graph.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `composition-recovery.test.ts`, `dimension-adjacency.test.ts`, `dimensionful-constant.test.ts`, `discovery-canonical-kind.test.ts`, `discovery-magnitude.test.ts`, `discovery.test.ts`, `dogfood-compare.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `frontier-account.test.ts`, `gr-formula-compare.test.ts`, `graph-viz.test.ts`, `identifiability.test.ts`, `junction-dimension.test.ts`, `known-relation.test.ts`, `mathts-scalar-symbols.test.ts`, `namespacing.test.ts`, `persona-retest-compare.test.ts`, `coverage-backfill.test.ts`, `experiment-design.test.ts`, `family-b.test.ts`, `generator-budget.test.ts`, `modules.test.ts`, `parse-expr-json.test.ts`, `relation-refusal.test.ts`, `retrodiction.test.ts`, `seed-edges.test.ts`, `seed-enumeration.test.ts`, `suggest-ranking.test.ts`, `symbolic-composition.test.ts`, `symbolic-simplification.test.ts`, `user-equation.test.ts`, `algebra-properties.test.ts`, `algebra.test.ts`, `ast-builders.test.ts`, `bianchi-residual.test.ts`, `bridge-check.test.ts`, `buckingham.test.ts`, `christoffel-helper.test.ts`, `connection-validators.test.ts`, `covariant-derivative-node.test.ts`, `covariant-derivative-preview.test.ts`, `derivation-benchmark.test.ts`, `derivative-strategy-field.test.ts`, `derivative-strategy-propagation.test.ts`, `dimension-inference.test.ts`, `dimension-spec.test.ts`, `dimensionful-power-ad.test.ts`, `distributional-grammar.test.ts`, `duplicate-coord-warning.test.ts`, `einstein-equation.test.ts`, `einstein.test.ts`, `equation-valence.test.ts`, `field-equation-helpers.test.ts`, `friedmann-equation.test.ts`, `gauge-field.test.ts`, `integral-bounds-validation.test.ts`, `integral-derivative-tensor.test.ts`, `klein-gordon-equation.test.ts`, `kronecker-delta.test.ts`, `metric-ast-serialization.test.ts`, `metric-helpers.test.ts`, `metric-tensor.test.ts`, `minkowski-curvature.test.ts`, `numerical-form-field.test.ts`, `numerical-form-preservation.test.ts`, `raise-lower.test.ts`, `rg-flow.test.ts`, `ricci.test.ts`, `riemann-tensor.test.ts`, `symbolic-exponent.test.ts`, `tensor-node-types.test.ts`, `tensor-partial-derivative.test.ts`, `tensor-step-c.test.ts`, `tensor-trace.test.ts`, `transcendental-validation.test.ts`, `validator-probe-ctx.test.ts`, `validator.test.ts`, `violation-severity.test.ts`, `confrontation-golden.test.ts`, `helper-coverage.test.ts`, `binding-value.test.ts`, `correctness.test.ts`, `euler-rejected.test.ts`, `evaluate.test.ts`, `formula-dimension.test.ts`, `geometrized-schwarzschild-equivalence.test.ts`, `geometrized.test.ts`, `integral-quadrature.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-utils.test.ts`, `mathts-067-delegation.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `parse-physics.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-partial-derivative-lowering.test.ts`, `tensor.test.ts` |
+| `dimensional/types.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `scalar-builder-gate.test.ts`, `canonical-links.test.ts`, `chain-pipeline.test.ts`, `models.test.ts`, `negative-controls.test.ts`, `oscillators-coarse.test.ts`, `overlay-types.test.ts`, `path-bound.test.ts`, `regime-admission.test.ts`, `regime.test.ts`, `be-11-fix.test.ts`, `be-12-encoding.test.ts`, `be-14-ryu-takayanagi.test.ts`, `be-15-encoding.test.ts`, `be-16-landauer-encoding.test.ts`, `be-17-encoding.test.ts`, `be-18-encoding.test.ts`, `be-20-encoding.test.ts`, `be-22-encoding.test.ts`, `be-23-encoding.test.ts`, `be-24-encoding.test.ts`, `be-25-iit-encoding.test.ts`, `be-27-encoding.test.ts`, `be-29-encoding.test.ts`, `be-30-encoding.test.ts`, `be-31-encoding.test.ts`, `be-32-encoding.test.ts`, `be-33-encoding.test.ts`, `be-35-encoding.test.ts`, `be-36-encoding.test.ts`, `be-37-shapiro-eikonal-structural.test.ts`, `be-37-shapiro-encoding.test.ts`, `be-38-encoding.test.ts`, `be-39-encoding.test.ts`, `be-40-encoding.test.ts`, `be-42-encoding.test.ts`, `be-43-encoding.test.ts`, `be-45-encoding.test.ts`, `be-46-encoding.test.ts`, `be-48-encoding.test.ts`, `be-49-encoding.test.ts`, `be-53-encoding.test.ts`, `bridge-equations-facade.test.ts`, `bucket-a-formal-sanity.test.ts`, `catalog-grammar-applicability.test.ts`, `_be-helpers.test.ts`, `public-api-stability.test.ts`, `atomic.test.ts`, `carrier-sign.test.ts`, `condensed-matter.test.ts`, `electromagnetism.test.ts`, `fluids-waves.test.ts`, `invariants.test.ts`, `mechanics.test.ts`, `normal-form.test.ts`, `quantity-names.test.ts`, `residual.test.ts`, `restates-bridge.test.ts`, `statistical-mechanics.test.ts`, `structural-classifier.test.ts`, `thermo-nuclear-cosmo.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `name-registry.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `undeclared-e-charge.test.ts`, `axis-gate.test.ts`, `bridge-prediction.test.ts`, `buckingham-filter.test.ts`, `calibration-targets.test.ts`, `canonical-compare-pairing.test.ts`, `canonical-graph-information-axis.test.ts`, `canonical-graph.test.ts`, `chain-regime.test.ts`, `compose-properties.test.ts`, `compose-relation.test.ts`, `compose.test.ts`, `composition-recovery.test.ts`, `dimension-adjacency.test.ts`, `dimensionful-constant.test.ts`, `discovery-canonical-kind.test.ts`, `discovery-magnitude.test.ts`, `discovery.test.ts`, `dogfood-compare.test.ts`, `enumerate-uncertainty.test.ts`, `explain.test.ts`, `frontier-account.test.ts`, `gr-formula-compare.test.ts`, `graph-viz.test.ts`, `identifiability.test.ts`, `junction-dimension.test.ts`, `known-relation.test.ts`, `mathts-scalar-symbols.test.ts`, `namespacing.test.ts`, `persona-retest-compare.test.ts`, `coverage-backfill.test.ts`, `experiment-design.test.ts`, `family-b.test.ts`, `generator-budget.test.ts`, `modules.test.ts`, `parse-expr-json.test.ts`, `relation-refusal.test.ts`, `retrodiction.test.ts`, `seed-edges.test.ts`, `seed-enumeration.test.ts`, `suggest-ranking.test.ts`, `symbolic-composition.test.ts`, `symbolic-simplification.test.ts`, `user-equation.test.ts`, `algebra-properties.test.ts`, `algebra.test.ts`, `ast-builders.test.ts`, `bianchi-residual.test.ts`, `bridge-check.test.ts`, `buckingham.test.ts`, `christoffel-helper.test.ts`, `connection-validators.test.ts`, `covariant-derivative-node.test.ts`, `covariant-derivative-preview.test.ts`, `derivation-benchmark.test.ts`, `derivative-strategy-field.test.ts`, `derivative-strategy-propagation.test.ts`, `dimension-inference.test.ts`, `dimension-spec.test.ts`, `dimensionful-power-ad.test.ts`, `distributional-grammar.test.ts`, `duplicate-coord-warning.test.ts`, `einstein-equation.test.ts`, `einstein.test.ts`, `equation-valence.test.ts`, `field-equation-helpers.test.ts`, `friedmann-equation.test.ts`, `gauge-field.test.ts`, `integral-bounds-validation.test.ts`, `integral-derivative-tensor.test.ts`, `klein-gordon-equation.test.ts`, `kronecker-delta.test.ts`, `mass-density-owner.test.ts`, `metric-ast-serialization.test.ts`, `metric-helpers.test.ts`, `metric-tensor.test.ts`, `minkowski-curvature.test.ts`, `numerical-form-field.test.ts`, `numerical-form-preservation.test.ts`, `raise-lower.test.ts`, `rg-flow.test.ts`, `ricci.test.ts`, `riemann-tensor.test.ts`, `symbolic-exponent.test.ts`, `tensor-node-types.test.ts`, `tensor-partial-derivative.test.ts`, `tensor-step-c.test.ts`, `tensor-trace.test.ts`, `transcendental-validation.test.ts`, `validator-probe-ctx.test.ts`, `validator.test.ts`, `violation-severity.test.ts`, `confrontation-golden.test.ts`, `helper-coverage.test.ts`, `binding-value.test.ts`, `correctness.test.ts`, `euler-rejected.test.ts`, `evaluate.test.ts`, `formula-dimension.test.ts`, `geometrized-schwarzschild-equivalence.test.ts`, `geometrized.test.ts`, `integral-quadrature.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-utils.test.ts`, `mathts-067-delegation.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `parse-physics.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-partial-derivative-lowering.test.ts`, `tensor.test.ts` |
 | `dimensional/unit-convention.ts` | `retrodiction.test.ts` |
 | `dimensional/units.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `evaluators.test.ts`, `public-api-stability.test.ts`, `applied-cases.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `symbolic-latex.test.ts`, `units.test.ts`, `confrontation-golden.test.ts`, `binding-value.test.ts`, `tensor.test.ts` |
 | `dimensional/validator-registry.ts` | `validator-registry.test.ts` |
@@ -479,7 +479,7 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/derivative-lowering.ts` | `tensor-partial-derivative-lowering.test.ts` |
 | `numerical/einstein-equation.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `confrontation-golden.test.ts`, `einstein-desitter.test.ts`, `einstein-flrw.test.ts`, `einstein-vacuum-schwarzschild.test.ts`, `tensor.test.ts` |
 | `numerical/engine-registry.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
-| `numerical/errors.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `bridge-gradient.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `errors.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
+| `numerical/errors.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `be-26-ad.test.ts`, `bridge-ast-gradient-byid.test.ts`, `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-gradient.test.ts`, `bridge-ast-reencode-batch.test.ts`, `bridge-ast-reencode.test.ts`, `bridge-gradient.test.ts`, `integral-ad.test.ts`, `covariant-derivative-preview.test.ts`, `dimensionful-power-ad.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `einsum-precompute.test.ts`, `engine-capability.test.ts`, `engine-default.test.ts`, `errors.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-strategy-cast.test.ts`, `mathts-autograd.test.ts`, `mathts-engine-typing.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-engine-types.test.ts`, `tensor.test.ts` |
 | `numerical/formula-contract.ts` | `eval-functions.test.ts`, `euler-rejected.test.ts`, `formula-mathts.test.ts`, `formula.test.ts` |
 | `numerical/formula-dimension.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `undeclared-e-charge.test.ts`, `dimension-inference.test.ts`, `confrontation-golden.test.ts`, `formula-dimension.test.ts`, `parse-physics.test.ts`, `tensor.test.ts` |
 | `numerical/formula-mathts.ts` | `symbolic-latex.test.ts`, `euler-rejected.test.ts`, `finiteness-guards.test.ts`, `formula-conformance.mathts.test.ts`, `formula-mathts.test.ts`, `formula.test.ts`, `mathts-067-delegation.test.ts`, `parse-physics.test.ts` |
@@ -496,20 +496,20 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/lowering-utils.ts` | `lowering-utils.test.ts` |
 | `numerical/lowering.ts` | `kretschmann-lowering.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-deferred-arms.test.ts` |
 | `numerical/mathts-engine.ts` | `perihelion-precession-labeled.test.ts`, `labeled-tensor-axis-order.test.ts`, `labeled-tensor-merge-split.test.ts`, `labeled-tensor.test.ts`, `be-26-ad.test.ts`, `bridge-ast-gradient-byid.test.ts`, `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-gradient.test.ts`, `bridge-ast-reencode-batch.test.ts`, `bridge-ast-reencode.test.ts`, `bridge-gradient.test.ts`, `integral-ad.test.ts`, `bianchi-residual.test.ts`, `dimensionful-power-ad.test.ts`, `minkowski-curvature.test.ts`, `schwarzschild-riemann.test.ts`, `christoffel-precompute.test.ts`, `connection-lowering-nonfinite.test.ts`, `einsum-precompute.test.ts`, `einsum-properties.test.ts`, `engine-capability.test.ts`, `engine-conformance.mathts.test.ts`, `engine-conformance.test.ts`, `engine-default.test.ts`, `foreach-multi-index.test.ts`, `geometrized-schwarzschild-equivalence.test.ts`, `kretschmann-factored-raising.test.ts`, `kretschmann-horizon.test.ts`, `kretschmann-lowering.test.ts`, `kretschmann-schwarzschild.test.ts`, `lower-first-index-n4-unroll.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-deferred-arms.test.ts`, `mathts-autograd.test.ts`, `mathts-engine-typing.test.ts`, `painleve-gullstrand-curvature.test.ts`, `tensor-partial-derivative-lowering.test.ts`, `weyl-schwarzschild.test.ts` |
-| `numerical/metric-inverse.ts` | `lowering-utils.test.ts` |
+| `numerical/metric-inverse.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `lowering-utils.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/null-ic.ts` | `null-ic.test.ts` |
 | `numerical/null-ray-integrator.ts` | `ode-helper.test.ts`, `null-ray-integrator.test.ts` |
 | `numerical/painleve-gullstrand-metric.ts` | `kretschmann-factored-raising.test.ts`, `lower-first-index-n4-unroll.test.ts`, `painleve-gullstrand-curvature.test.ts` |
 | `numerical/pderiv.ts` | `metric-deriv-supplied.test.ts`, `pderiv-flatten-consolidation.test.ts`, `pderiv-order-default.test.ts`, `pderiv-order.test.ts`, `pderiv.test.ts` |
 | `numerical/perihelion-finder.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `perihelion-precession.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `perihelion-finder-roundtrip.test.ts`, `perihelion-finder.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/quadrature.ts` | `finiteness-guards.test.ts`, `integral-quadrature.test.ts` |
-| `numerical/spacetime-metrics.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `spacetime-metrics.test.ts` |
+| `numerical/spacetime-metrics.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `mass-density-owner.test.ts`, `spacetime-metrics.test.ts` |
 | `numerical/strides.ts` | `strides.test.ts` |
 | `numerical/tensor-engine.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `be-26-ad.test.ts`, `bridge-ast-gradient-byid.test.ts`, `bridge-ast-gradient-transcendental.test.ts`, `bridge-ast-gradient.test.ts`, `bridge-ast-reencode-batch.test.ts`, `bridge-ast-reencode.test.ts`, `bridge-gradient.test.ts`, `integral-ad.test.ts`, `covariant-derivative-preview.test.ts`, `dimensionful-power-ad.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `einsum-precompute.test.ts`, `engine-capability.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-strategy-cast.test.ts`, `mathts-autograd.test.ts`, `mathts-engine-typing.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-engine-types.test.ts`, `tensor.test.ts` |
 | `numerical/types.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `covariant-derivative-preview.test.ts`, `duplicate-coord-warning.test.ts`, `einstein.test.ts`, `minkowski-curvature.test.ts`, `ricci.test.ts`, `confrontation-golden.test.ts`, `be37-covariant-eikonal-real.test.ts`, `be37-shapiro-step-sweep.test.ts`, `connection-lowering-helpers.test.ts`, `correctness.test.ts`, `covariant-derivative-lowering.test.ts`, `engine-default.test.ts`, `evaluate.test.ts`, `integral-quadrature.test.ts`, `lowering-contract.test.ts`, `lowering-covariant-dead-else.test.ts`, `lowering-covariant-guard.test.ts`, `lowering-strategy-cast.test.ts`, `lowering-utils.test.ts`, `metric-inverse-curvature-walk.test.ts`, `metric-inverse.test.ts`, `pderiv.test.ts`, `riemann-tensor-lowering.test.ts`, `tensor-engine-types.test.ts`, `tensor-partial-derivative-lowering.test.ts`, `tensor.test.ts` |
 | `numerical/weyl-lowering.ts` | `weyl-kerr-schild.test.ts`, `weyl-reference.test.ts`, `weyl-schwarzschild.test.ts` |
 | `relations/category.ts` | `category.test.ts` |
-| `relations/composition-table.ts` | `relations-shim.test.ts`, `category.test.ts` |
+| `relations/composition-table.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `barrel-completeness.test.ts`, `composition-table.test.ts`, `path-bound.test.ts`, `relations-shim.test.ts`, `transported-norm-demo.test.ts`, `bridge-equations-facade.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `confrontation-golden.test.ts`, `category.test.ts`, `tensor.test.ts` |
 | `relations/conventions.ts` | `conventions.test.ts`, `relations-shim.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts` |
 | `relations/domain-regimes.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `domain-regimes.test.ts` |
 | `relations/regime-registration.ts` | `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `domain-regimes.test.ts` |
@@ -523,19 +523,20 @@ The following 10 source files are not directly imported by any test file:
 
 | Test File | Imports from Source |
 |-----------|---------------------|
-| `api/atlas-public-closure.test.ts` | 179 files |
-| `api/gm-sun-units-public.test.ts` | 179 files |
+| `api/atlas-public-closure.test.ts` | 181 files |
+| `api/gm-sun-units-public.test.ts` | 181 files |
 | `api/namespace-facade-invariant.test.ts` | 0 files |
 | `api/optional-peer-absence.test.ts` | 0 files |
-| `api/public-surface.test.ts` | 179 files |
+| `api/public-surface.test.ts` | 181 files |
 | `api/public-tag-vs-index-invariant.test.ts` | 0 files |
+| `architecture/reexport-locals.test.ts` | 0 files |
 | `architecture/scalar-builder-gate.test.ts` | 4 files |
 | `architecture/single-owner.test.ts` | 0 files |
 | `atlas/applicability.test.ts` | 6 files |
 | `atlas/association.test.ts` | 40 files |
 | `atlas/atlas-json.test.ts` | 3 files |
-| `atlas/audited-catalog.test.ts` | 62 files |
-| `atlas/barrel-completeness.test.ts` | 41 files |
+| `atlas/audited-catalog.test.ts` | 63 files |
+| `atlas/barrel-completeness.test.ts` | 42 files |
 | `atlas/benchmark-ablation.test.ts` | 5 files |
 | `atlas/benchmark-baselines.test.ts` | 4 files |
 | `atlas/benchmark-model-set.test.ts` | 2 files |
@@ -544,30 +545,30 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/benchmark-stats.test.ts` | 1 files |
 | `atlas/benchmark-study.test.ts` | 1 files |
 | `atlas/benchmark.test.ts` | 6 files |
-| `atlas/bound-machine-form.test.ts` | 8 files |
+| `atlas/bound-machine-form.test.ts` | 9 files |
 | `atlas/bridge-record.test.ts` | 1 files |
-| `atlas/bridge-seed-keys.test.ts` | 3 files |
+| `atlas/bridge-seed-keys.test.ts` | 4 files |
 | `atlas/canonical-links.test.ts` | 6 files |
-| `atlas/catalog-formal-ref.test.ts` | 59 files |
-| `atlas/catalog-proved-evidence.test.ts` | 60 files |
-| `atlas/chain-pipeline-catalog.test.ts` | 57 files |
-| `atlas/chain-pipeline.test.ts` | 88 files |
+| `atlas/catalog-formal-ref.test.ts` | 60 files |
+| `atlas/catalog-proved-evidence.test.ts` | 61 files |
+| `atlas/chain-pipeline-catalog.test.ts` | 59 files |
+| `atlas/chain-pipeline.test.ts` | 90 files |
 | `atlas/chain-result.test.ts` | 3 files |
 | `atlas/closure.test.ts` | 9 files |
-| `atlas/composition-table.test.ts` | 3 files |
+| `atlas/composition-table.test.ts` | 4 files |
 | `atlas/conventions.test.ts` | 4 files |
-| `atlas/coverage.test.ts` | 60 files |
+| `atlas/coverage.test.ts` | 61 files |
 | `atlas/delta-at-proven.test.ts` | 1 files |
-| `atlas/derive-evidence.test.ts` | 57 files |
+| `atlas/derive-evidence.test.ts` | 58 files |
 | `atlas/derived-tag-literals.test.ts` | 0 files |
-| `atlas/diffusion.test.ts` | 13 files |
+| `atlas/diffusion.test.ts` | 14 files |
 | `atlas/error-algebra.test.ts` | 3 files |
 | `atlas/evidence-rule.test.ts` | 3 files |
 | `atlas/export.test.ts` | 2 files |
 | `atlas/exports-subpath.test.ts` | 0 files |
 | `atlas/families.test.ts` | 1 files |
-| `atlas/formal-sanity.test.ts` | 12 files |
-| `atlas/formalref-kind.test.ts` | 57 files |
+| `atlas/formal-sanity.test.ts` | 13 files |
+| `atlas/formalref-kind.test.ts` | 59 files |
 | `atlas/gr-spine-regime.test.ts` | 90 files |
 | `atlas/hybrid-retrieval.test.ts` | 4 files |
 | `atlas/import-graph.test.ts` | 0 files |
@@ -582,16 +583,16 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/oscillators-exact.test.ts` | 1 files |
 | `atlas/oscillators-limits.test.ts` | 6 files |
 | `atlas/overlay-types.test.ts` | 5 files |
-| `atlas/path-bound.test.ts` | 14 files |
+| `atlas/path-bound.test.ts` | 15 files |
 | `atlas/pendulum-phase-translation.test.ts` | 6 files |
 | `atlas/pendulum-position-translation.test.ts` | 6 files |
-| `atlas/physjs-be66-68.test.ts` | 5 files |
-| `atlas/physjs-be69-73.test.ts` | 18 files |
-| `atlas/physjs-generated-table.test.ts` | 57 files |
-| `atlas/physjs-lean-path.test.ts` | 56 files |
-| `atlas/physjs-manifest.test.ts` | 58 files |
+| `atlas/physjs-be66-68.test.ts` | 6 files |
+| `atlas/physjs-be69-73.test.ts` | 19 files |
+| `atlas/physjs-generated-table.test.ts` | 58 files |
+| `atlas/physjs-lean-path.test.ts` | 58 files |
+| `atlas/physjs-manifest.test.ts` | 60 files |
 | `atlas/poster.test.ts` | 6 files |
-| `atlas/proof-target.test.ts` | 58 files |
+| `atlas/proof-target.test.ts` | 60 files |
 | `atlas/quantum-support.test.ts` | 1 files |
 | `atlas/regime-admission.test.ts` | 9 files |
 | `atlas/regime.test.ts` | 6 files |
@@ -603,68 +604,68 @@ The following 10 source files are not directly imported by any test file:
 | `atlas/spring-lc-phase-carriage.test.ts` | 6 files |
 | `atlas/statement-derivation.test.ts` | 4 files |
 | `atlas/stokes-einstein-regime.test.ts` | 33 files |
-| `atlas/transported-norm-demo.test.ts` | 7 files |
+| `atlas/transported-norm-demo.test.ts` | 9 files |
 | `atlas/waves.test.ts` | 6 files |
 | `atlas/witness-claims.test.ts` | 6 files |
 | `atlas/witness-dominance.test.ts` | 1 files |
 | `atlas/witness-results.test.ts` | 11 files |
 | `atlas/witness-runners.test.ts` | 6 files |
-| `bridges/be-100-lyddane-sachs-teller.test.ts` | 54 files |
-| `bridges/be-101-bkt-jump.test.ts` | 54 files |
-| `bridges/be-102-landauer-conductance.test.ts` | 54 files |
-| `bridges/be-103-bohm-sheath.test.ts` | 54 files |
-| `bridges/be-104-ion-acoustic.test.ts` | 54 files |
-| `bridges/be-105-upper-hybrid.test.ts` | 54 files |
-| `bridges/be-106-cold-plasma-cutoff.test.ts` | 54 files |
-| `bridges/be-107-lower-hybrid.test.ts` | 54 files |
-| `bridges/be-108-oblique-magnetosonic.test.ts` | 54 files |
-| `bridges/be-109-bennett-pinch.test.ts` | 54 files |
-| `bridges/be-11-fix.test.ts` | 58 files |
-| `bridges/be-110-loss-cone.test.ts` | 54 files |
-| `bridges/be-111-grad-b-drift.test.ts` | 54 files |
-| `bridges/be-112-exb-drift.test.ts` | 54 files |
-| `bridges/be-113-landau-damping.test.ts` | 54 files |
-| `bridges/be-114-debye-sphere.test.ts` | 54 files |
-| `bridges/be-115-multi-debye.test.ts` | 54 files |
-| `bridges/be-116-lorentz-resistivity.test.ts` | 54 files |
-| `bridges/be-117-resistive-slab.test.ts` | 54 files |
-| `bridges/be-118-parker-critical.test.ts` | 54 files |
-| `bridges/be-119-parker-spiral.test.ts` | 54 files |
-| `bridges/be-12-encoding.test.ts` | 6 files |
+| `bridges/be-100-lyddane-sachs-teller.test.ts` | 55 files |
+| `bridges/be-101-bkt-jump.test.ts` | 55 files |
+| `bridges/be-102-landauer-conductance.test.ts` | 55 files |
+| `bridges/be-103-bohm-sheath.test.ts` | 55 files |
+| `bridges/be-104-ion-acoustic.test.ts` | 55 files |
+| `bridges/be-105-upper-hybrid.test.ts` | 55 files |
+| `bridges/be-106-cold-plasma-cutoff.test.ts` | 55 files |
+| `bridges/be-107-lower-hybrid.test.ts` | 55 files |
+| `bridges/be-108-oblique-magnetosonic.test.ts` | 55 files |
+| `bridges/be-109-bennett-pinch.test.ts` | 55 files |
+| `bridges/be-11-fix.test.ts` | 60 files |
+| `bridges/be-110-loss-cone.test.ts` | 55 files |
+| `bridges/be-111-grad-b-drift.test.ts` | 55 files |
+| `bridges/be-112-exb-drift.test.ts` | 55 files |
+| `bridges/be-113-landau-damping.test.ts` | 55 files |
+| `bridges/be-114-debye-sphere.test.ts` | 55 files |
+| `bridges/be-115-multi-debye.test.ts` | 55 files |
+| `bridges/be-116-lorentz-resistivity.test.ts` | 55 files |
+| `bridges/be-117-resistive-slab.test.ts` | 55 files |
+| `bridges/be-118-parker-critical.test.ts` | 55 files |
+| `bridges/be-119-parker-spiral.test.ts` | 55 files |
+| `bridges/be-12-encoding.test.ts` | 7 files |
 | `bridges/be-12-reformulation.test.ts` | 0 files |
-| `bridges/be-120-chapman-ferraro.test.ts` | 54 files |
-| `bridges/be-121-lawson-breakeven.test.ts` | 54 files |
-| `bridges/be-122-langmuir-probe.test.ts` | 54 files |
-| `bridges/be-123-cross-field-diffusion.test.ts` | 54 files |
-| `bridges/be-124-firehose.test.ts` | 54 files |
-| `bridges/be-125-mirror-instability.test.ts` | 54 files |
-| `bridges/be-13-encoding.test.ts` | 6 files |
+| `bridges/be-120-chapman-ferraro.test.ts` | 55 files |
+| `bridges/be-121-lawson-breakeven.test.ts` | 55 files |
+| `bridges/be-122-langmuir-probe.test.ts` | 55 files |
+| `bridges/be-123-cross-field-diffusion.test.ts` | 55 files |
+| `bridges/be-124-firehose.test.ts` | 55 files |
+| `bridges/be-125-mirror-instability.test.ts` | 55 files |
+| `bridges/be-13-encoding.test.ts` | 7 files |
 | `bridges/be-13-reformulation.test.ts` | 0 files |
-| `bridges/be-14-ryu-takayanagi.test.ts` | 59 files |
-| `bridges/be-15-encoding.test.ts` | 5 files |
+| `bridges/be-14-ryu-takayanagi.test.ts` | 61 files |
+| `bridges/be-15-encoding.test.ts` | 6 files |
 | `bridges/be-15-reformulation.test.ts` | 0 files |
-| `bridges/be-16-landauer-encoding.test.ts` | 5 files |
-| `bridges/be-17-encoding.test.ts` | 5 files |
+| `bridges/be-16-landauer-encoding.test.ts` | 6 files |
+| `bridges/be-17-encoding.test.ts` | 6 files |
 | `bridges/be-17-reformulation.test.ts` | 0 files |
 | `bridges/be-17-structural.test.ts` | 3 files |
 | `bridges/be-18-encoding.test.ts` | 4 files |
-| `bridges/be-18-fix.test.ts` | 53 files |
-| `bridges/be-19-encoding.test.ts` | 6 files |
-| `bridges/be-20-encoding.test.ts` | 4 files |
+| `bridges/be-18-fix.test.ts` | 54 files |
+| `bridges/be-19-encoding.test.ts` | 7 files |
+| `bridges/be-20-encoding.test.ts` | 5 files |
 | `bridges/be-21-encoding.test.ts` | 4 files |
-| `bridges/be-22-encoding.test.ts` | 5 files |
-| `bridges/be-23-encoding.test.ts` | 5 files |
+| `bridges/be-22-encoding.test.ts` | 6 files |
+| `bridges/be-23-encoding.test.ts` | 6 files |
 | `bridges/be-23-reformulation.test.ts` | 0 files |
 | `bridges/be-24-encoding.test.ts` | 4 files |
 | `bridges/be-24-reformulation.test.ts` | 0 files |
-| `bridges/be-25-encoding.test.ts` | 5 files |
+| `bridges/be-25-encoding.test.ts` | 6 files |
 | `bridges/be-25-iit-encoding.test.ts` | 4 files |
 | `bridges/be-25-reformulation.test.ts` | 0 files |
-| `bridges/be-26-encoding.test.ts` | 5 files |
+| `bridges/be-26-encoding.test.ts` | 6 files |
 | `bridges/be-27-encoding.test.ts` | 5 files |
 | `bridges/be-28-onsager-encoding.test.ts` | 3 files |
 | `bridges/be-29-encoding.test.ts` | 5 files |
-| `bridges/be-29-fix.test.ts` | 53 files |
+| `bridges/be-29-fix.test.ts` | 54 files |
 | `bridges/be-30-encoding.test.ts` | 4 files |
 | `bridges/be-30-reformulation.test.ts` | 0 files |
 | `bridges/be-31-encoding.test.ts` | 4 files |
@@ -672,82 +673,82 @@ The following 10 source files are not directly imported by any test file:
 | `bridges/be-32-encoding.test.ts` | 4 files |
 | `bridges/be-33-encoding.test.ts` | 4 files |
 | `bridges/be-33-reformulation.test.ts` | 0 files |
-| `bridges/be-34-encoding.test.ts` | 5 files |
+| `bridges/be-34-encoding.test.ts` | 6 files |
 | `bridges/be-35-encoding.test.ts` | 6 files |
 | `bridges/be-36-encoding.test.ts` | 5 files |
 | `bridges/be-36-reformulation.test.ts` | 0 files |
 | `bridges/be-37-numerical-eikonal.test.ts` | 1 files |
 | `bridges/be-37-r3-disposition.test.ts` | 0 files |
 | `bridges/be-37-shapiro-eikonal-structural.test.ts` | 4 files |
-| `bridges/be-37-shapiro-encoding.test.ts` | 5 files |
+| `bridges/be-37-shapiro-encoding.test.ts` | 6 files |
 | `bridges/be-38-encoding.test.ts` | 4 files |
 | `bridges/be-38-reformulation.test.ts` | 0 files |
 | `bridges/be-39-encoding.test.ts` | 5 files |
-| `bridges/be-40-encoding.test.ts` | 5 files |
-| `bridges/be-41-encoding.test.ts` | 4 files |
+| `bridges/be-40-encoding.test.ts` | 6 files |
+| `bridges/be-41-encoding.test.ts` | 5 files |
 | `bridges/be-42-encoding.test.ts` | 5 files |
 | `bridges/be-43-encoding.test.ts` | 5 files |
 | `bridges/be-43-reformulation.test.ts` | 0 files |
-| `bridges/be-44-encoding.test.ts` | 4 files |
+| `bridges/be-44-encoding.test.ts` | 5 files |
 | `bridges/be-45-encoding.test.ts` | 4 files |
 | `bridges/be-46-encoding.test.ts` | 4 files |
-| `bridges/be-47-encoding.test.ts` | 4 files |
-| `bridges/be-47-fix.test.ts` | 53 files |
+| `bridges/be-47-encoding.test.ts` | 5 files |
+| `bridges/be-47-fix.test.ts` | 54 files |
 | `bridges/be-48-encoding.test.ts` | 4 files |
-| `bridges/be-48-fix.test.ts` | 53 files |
+| `bridges/be-48-fix.test.ts` | 54 files |
 | `bridges/be-49-encoding.test.ts` | 4 files |
 | `bridges/be-50-encoding.test.ts` | 3 files |
 | `bridges/be-50-reformulation.test.ts` | 0 files |
 | `bridges/be-51-gravitational-lensing-structural.test.ts` | 0 files |
 | `bridges/be-52-perihelion-precession-structural.test.ts` | 0 files |
 | `bridges/be-53-encoding.test.ts` | 5 files |
-| `bridges/be-54-encoding.test.ts` | 6 files |
-| `bridges/be-55-quantum-hall.test.ts` | 56 files |
+| `bridges/be-54-encoding.test.ts` | 7 files |
+| `bridges/be-55-quantum-hall.test.ts` | 57 files |
 | `bridges/be-56-casimir.test.ts` | 57 files |
-| `bridges/be-57-unruh.test.ts` | 55 files |
+| `bridges/be-57-unruh.test.ts` | 56 files |
 | `bridges/be-58-johnson-nyquist.test.ts` | 57 files |
-| `bridges/be-59-ac-josephson.test.ts` | 56 files |
-| `bridges/be-60-fractional-qh.test.ts` | 56 files |
-| `bridges/be-61-wiedemann-franz.test.ts` | 56 files |
+| `bridges/be-59-ac-josephson.test.ts` | 57 files |
+| `bridges/be-60-fractional-qh.test.ts` | 57 files |
+| `bridges/be-61-wiedemann-franz.test.ts` | 57 files |
 | `bridges/be-62-bcs-gap.test.ts` | 57 files |
-| `bridges/be-63-chandrasekhar-mass.test.ts` | 55 files |
-| `bridges/be-64-eddington-luminosity.test.ts` | 55 files |
-| `bridges/be-65-jeans-mass.test.ts` | 56 files |
+| `bridges/be-63-chandrasekhar-mass.test.ts` | 56 files |
+| `bridges/be-64-eddington-luminosity.test.ts` | 56 files |
+| `bridges/be-65-jeans-mass.test.ts` | 57 files |
 | `bridges/be-66-radiation-pressure.test.ts` | 57 files |
-| `bridges/be-67-alfven-speed.test.ts` | 57 files |
-| `bridges/be-68-tolman-ehrenfest.test.ts` | 57 files |
-| `bridges/be-69-fast-magnetosonic.test.ts` | 55 files |
+| `bridges/be-67-alfven-speed.test.ts` | 58 files |
+| `bridges/be-68-tolman-ehrenfest.test.ts` | 58 files |
+| `bridges/be-69-fast-magnetosonic.test.ts` | 56 files |
 | `bridges/be-70-einstein-relation.test.ts` | 86 files |
-| `bridges/be-71-clapeyron.test.ts` | 55 files |
-| `bridges/be-72-gravitational-redshift.test.ts` | 55 files |
-| `bridges/be-73-kelvin-peltier.test.ts` | 55 files |
+| `bridges/be-71-clapeyron.test.ts` | 56 files |
+| `bridges/be-72-gravitational-redshift.test.ts` | 56 files |
+| `bridges/be-73-kelvin-peltier.test.ts` | 56 files |
 | `bridges/be-74-76.test.ts` | 14 files |
 | `bridges/be-75-london-penetration.test.ts` | 3 files |
 | `bridges/be-76-plasma-beta.test.ts` | 3 files |
-| `bridges/be-77-87.test.ts` | 21 files |
-| `bridges/be-78-euler-buckling.test.ts` | 54 files |
-| `bridges/be-79-pull-in.test.ts` | 54 files |
-| `bridges/be-80-mott-gurney.test.ts` | 54 files |
-| `bridges/be-81-child-langmuir.test.ts` | 54 files |
-| `bridges/be-82-shockley-diode.test.ts` | 54 files |
-| `bridges/be-83-thomson.test.ts` | 54 files |
-| `bridges/be-84-four-point.test.ts` | 54 files |
-| `bridges/be-85-shot-noise.test.ts` | 54 files |
-| `bridges/be-86-reynolds-analogy.test.ts` | 54 files |
-| `bridges/be-87-capacitor-noise.test.ts` | 54 files |
-| `bridges/be-88-102.test.ts` | 20 files |
-| `bridges/be-88-fermi-sea.test.ts` | 54 files |
-| `bridges/be-89-debye-cutoff.test.ts` | 54 files |
-| `bridges/be-90-debye-heat.test.ts` | 54 files |
-| `bridges/be-91-einstein-solid.test.ts` | 54 files |
-| `bridges/be-92-sommerfeld-heat.test.ts` | 54 files |
-| `bridges/be-93-curie-weiss.test.ts` | 54 files |
-| `bridges/be-94-pauli-paramagnetism.test.ts` | 54 files |
-| `bridges/be-95-ginzburg-landau.test.ts` | 54 files |
-| `bridges/be-96-upper-critical.test.ts` | 54 files |
-| `bridges/be-97-ambegaokar-baratoff.test.ts` | 54 files |
-| `bridges/be-98-bcs-jump.test.ts` | 54 files |
-| `bridges/be-99-mass-action.test.ts` | 54 files |
+| `bridges/be-77-87.test.ts` | 22 files |
+| `bridges/be-78-euler-buckling.test.ts` | 55 files |
+| `bridges/be-79-pull-in.test.ts` | 55 files |
+| `bridges/be-80-mott-gurney.test.ts` | 55 files |
+| `bridges/be-81-child-langmuir.test.ts` | 55 files |
+| `bridges/be-82-shockley-diode.test.ts` | 55 files |
+| `bridges/be-83-thomson.test.ts` | 55 files |
+| `bridges/be-84-four-point.test.ts` | 55 files |
+| `bridges/be-85-shot-noise.test.ts` | 55 files |
+| `bridges/be-86-reynolds-analogy.test.ts` | 55 files |
+| `bridges/be-87-capacitor-noise.test.ts` | 55 files |
+| `bridges/be-88-102.test.ts` | 21 files |
+| `bridges/be-88-fermi-sea.test.ts` | 55 files |
+| `bridges/be-89-debye-cutoff.test.ts` | 55 files |
+| `bridges/be-90-debye-heat.test.ts` | 55 files |
+| `bridges/be-91-einstein-solid.test.ts` | 55 files |
+| `bridges/be-92-sommerfeld-heat.test.ts` | 55 files |
+| `bridges/be-93-curie-weiss.test.ts` | 55 files |
+| `bridges/be-94-pauli-paramagnetism.test.ts` | 55 files |
+| `bridges/be-95-ginzburg-landau.test.ts` | 55 files |
+| `bridges/be-96-upper-critical.test.ts` | 55 files |
+| `bridges/be-97-ambegaokar-baratoff.test.ts` | 55 files |
+| `bridges/be-98-bcs-jump.test.ts` | 55 files |
+| `bridges/be-99-mass-action.test.ts` | 55 files |
 | `bridges/be11-decoherence-confrontation.test.ts` | 3 files |
 | `bridges/be21-kss-confrontation.test.ts` | 3 files |
 | `bridges/be23-planckian-confrontation.test.ts` | 3 files |
@@ -757,65 +758,65 @@ The following 10 source files are not directly imported by any test file:
 | `bridges/be48-collapse.test.ts` | 3 files |
 | `bridges/be51-lensing-confrontation.test.ts` | 3 files |
 | `bridges/be52-mercury-confrontation.test.ts` | 1 files |
-| `bridges/be53-yang-mills-confrontation.test.ts` | 56 files |
-| `bridges/bridge-equations-facade.test.ts` | 183 files |
+| `bridges/be53-yang-mills-confrontation.test.ts` | 57 files |
+| `bridges/bridge-equations-facade.test.ts` | 185 files |
 | `bridges/bridges-composition-imports.test.ts` | 0 files |
-| `bridges/bucket-a-formal-sanity.test.ts` | 76 files |
-| `bridges/catalog-adapter.test.ts` | 56 files |
+| `bridges/bucket-a-formal-sanity.test.ts` | 77 files |
+| `bridges/catalog-adapter.test.ts` | 57 files |
 | `bridges/catalog-formal-sanity.test.ts` | 64 files |
-| `bridges/catalog-grammar-applicability.test.ts` | 7 files |
-| `bridges/catalog-integrity.test.ts` | 53 files |
-| `bridges/catalog-json.test.ts` | 56 files |
+| `bridges/catalog-grammar-applicability.test.ts` | 8 files |
+| `bridges/catalog-integrity.test.ts` | 54 files |
+| `bridges/catalog-json.test.ts` | 57 files |
 | `bridges/catalog-physjs-import.test.ts` | 0 files |
 | `bridges/confrontation-consistency-gap.test.ts` | 13 files |
 | `bridges/confrontation-coverage.test.ts` | 1 files |
-| `bridges/confrontation-registry.test.ts` | 56 files |
+| `bridges/confrontation-registry.test.ts` | 57 files |
 | `bridges/confrontation-rigor.test.ts` | 2 files |
 | `bridges/confrontation-source-refs.test.ts` | 2 files |
 | `bridges/crossing-residual-removed.test.ts` | 3 files |
-| `bridges/descriptor-consistency.test.ts` | 56 files |
-| `bridges/dimensional-signature-catalog.test.ts` | 57 files |
+| `bridges/descriptor-consistency.test.ts` | 57 files |
+| `bridges/dimensional-signature-catalog.test.ts` | 59 files |
 | `equations/_be-helpers.test.ts` | 6 files |
 | `bridges/evaluators.test.ts` | 4 files |
 | `bridges/gravitational-lensing.test.ts` | 2 files |
-| `bridges/membership.test.ts` | 55 files |
+| `bridges/membership.test.ts` | 56 files |
 | `bridges/observation-types.test.ts` | 1 files |
-| `bridges/orphan-dimensional-signature.test.ts` | 53 files |
-| `bridges/overlay-registry-quote.test.ts` | 54 files |
+| `bridges/orphan-dimensional-signature.test.ts` | 54 files |
+| `bridges/overlay-registry-quote.test.ts` | 55 files |
 | `bridges/perihelion-precession-labeled.test.ts` | 6 files |
 | `bridges/perihelion-precession.test.ts` | 4 files |
 | `bridges/plasma-formulas.test.ts` | 5 files |
-| `bridges/public-api-stability.test.ts` | 180 files |
+| `bridges/public-api-stability.test.ts` | 182 files |
 | `bridges/register-bridge.test.ts` | 1 files |
 | `bridges/sensitivity.test.ts` | 1 files |
 | `bridges/solar-gm.test.ts` | 4 files |
-| `bridges/spec-vs-index.test.ts` | 53 files |
-| `bridges/tensor-index.test.ts` | 54 files |
-| `tests/bridges-index.test.ts` | 53 files |
-| `canonical/atomic.test.ts` | 5 files |
+| `bridges/spec-vs-index.test.ts` | 54 files |
+| `bridges/tensor-index.test.ts` | 55 files |
+| `tests/bridges-index.test.ts` | 54 files |
+| `canonical/atomic.test.ts` | 6 files |
 | `canonical/canonical-count-prose.test.ts` | 1 files |
 | `canonical/carrier-sign.test.ts` | 38 files |
-| `canonical/condensed-matter.test.ts` | 5 files |
+| `canonical/condensed-matter.test.ts` | 6 files |
 | `canonical/dimensional-classics.test.ts` | 2 files |
 | `canonical/dimensional-fields.test.ts` | 3 files |
-| `canonical/electromagnetism.test.ts` | 5 files |
-| `canonical/fluids-waves.test.ts` | 5 files |
-| `canonical/invariants.test.ts` | 58 files |
+| `canonical/electromagnetism.test.ts` | 6 files |
+| `canonical/fluids-waves.test.ts` | 6 files |
+| `canonical/invariants.test.ts` | 60 files |
 | `canonical/linkage.test.ts` | 3 files |
-| `canonical/mechanics.test.ts` | 3 files |
-| `canonical/nonmonomial.test.ts` | 5 files |
+| `canonical/mechanics.test.ts` | 4 files |
+| `canonical/nonmonomial.test.ts` | 6 files |
 | `canonical/normal-form.test.ts` | 4 files |
 | `canonical/numeric-prefactor.test.ts` | 3 files |
-| `canonical/quantity-names.test.ts` | 6 files |
+| `canonical/quantity-names.test.ts` | 7 files |
 | `canonical/registry.test.ts` | 1 files |
 | `canonical/relativity.test.ts` | 5 files |
 | `canonical/residual.test.ts` | 6 files |
 | `canonical/restates-bridge.test.ts` | 6 files |
 | `canonical/seed-l-layer.test.ts` | 3 files |
-| `canonical/statistical-mechanics.test.ts` | 5 files |
-| `canonical/structural-classifier.test.ts` | 64 files |
-| `canonical/thermo-nuclear-cosmo.test.ts` | 5 files |
-| `cases/applied-cases.test.ts` | 59 files |
+| `canonical/statistical-mechanics.test.ts` | 6 files |
+| `canonical/structural-classifier.test.ts` | 65 files |
+| `canonical/thermo-nuclear-cosmo.test.ts` | 6 files |
+| `cases/applied-cases.test.ts` | 60 files |
 | `cases/brownian-sphere.test.ts` | 4 files |
 | `cases/damped-resonator.test.ts` | 1 files |
 | `cases/kepler-rv.test.ts` | 2 files |
@@ -826,9 +827,9 @@ The following 10 source files are not directly imported by any test file:
 | `cli/applied-cases.test.ts` | 32 files |
 | `cli/applied-physics-audit.test.ts` | 30 files |
 | `cli/args.test.ts` | 2 files |
-| `cli/atlas-command.test.ts` | 87 files |
-| `cli/atlas-evidence.test.ts` | 270 files |
-| `cli/audit-improvements.test.ts` | 271 files |
+| `cli/atlas-command.test.ts` | 88 files |
+| `cli/atlas-evidence.test.ts` | 272 files |
+| `cli/audit-improvements.test.ts` | 273 files |
 | `cli/binding-expressions.test.ts` | 31 files |
 | `cli/canonical-audit-g-closure.test.ts` | 30 files |
 | `cli/canonical-compare-cli.test.ts` | 30 files |
@@ -863,11 +864,11 @@ The following 10 source files are not directly imported by any test file:
 | `cli/explain-quantity-format.test.ts` | 31 files |
 | `cli/explain-sound-speed.test.ts` | 32 files |
 | `cli/explain-synonym-monomial.test.ts` | 33 files |
-| `cli/explain-temperature-binding.test.ts` | 268 files |
+| `cli/explain-temperature-binding.test.ts` | 270 files |
 | `cli/frontier.test.ts` | 30 files |
 | `cli/gauss-unit-name.test.ts` | 31 files |
 | `cli/gr-dogfood-cli.test.ts` | 31 files |
-| `cli/graphs.test.ts` | 240 files |
+| `cli/graphs.test.ts` | 242 files |
 | `cli/hardening.test.ts` | 0 files |
 | `cli/help-covers-registry.test.ts` | 31 files |
 | `cli/help-flags.test.ts` | 31 files |
@@ -877,8 +878,8 @@ The following 10 source files are not directly imported by any test file:
 | `cli/known-relation.test.ts` | 30 files |
 | `cli/magnitude-charge-sign.test.ts` | 33 files |
 | `cli/main-dispatch.test.ts` | 33 files |
-| `cli/map-atlas-results.test.ts` | 269 files |
-| `cli/map-atlas-views.test.ts` | 268 files |
+| `cli/map-atlas-results.test.ts` | 271 files |
+| `cli/map-atlas-views.test.ts` | 270 files |
 | `cli/map-filters.test.ts` | 30 files |
 | `cli/name-registry.test.ts` | 33 files |
 | `cli/new-commands.test.ts` | 30 files |
@@ -900,10 +901,10 @@ The following 10 source files are not directly imported by any test file:
 | `cli/record-hardening.test.ts` | 31 files |
 | `cli/record-inputs.test.ts` | 30 files |
 | `cli/record-replay.test.ts` | 30 files |
-| `cli/recover-conventions.test.ts` | 269 files |
+| `cli/recover-conventions.test.ts` | 271 files |
 | `cli/regime-at-resolution.test.ts` | 30 files |
 | `cli/regime-domain.test.ts` | 30 files |
-| `cli/regime-search.test.ts` | 269 files |
+| `cli/regime-search.test.ts` | 271 files |
 | `cli/regime.test.ts` | 30 files |
 | `cli/retrieve.test.ts` | 32 files |
 | `cli/search-formula-route.test.ts` | 30 files |
@@ -914,8 +915,8 @@ The following 10 source files are not directly imported by any test file:
 | `cli/source-extension.test.ts` | 30 files |
 | `cli/statuses.test.ts` | 31 files |
 | `cli/suggest-ranking-cli.test.ts` | 30 files |
-| `cli/suggest-token-length.test.ts` | 269 files |
-| `cli/symbolic-latex.test.ts` | 38 files |
+| `cli/suggest-token-length.test.ts` | 271 files |
+| `cli/symbolic-latex.test.ts` | 39 files |
 | `cli/thomson-unit.test.ts` | 30 files |
 | `cli/undeclared-e-charge.test.ts` | 33 files |
 | `cli/unit-convention-binding.test.ts` | 31 files |
@@ -938,7 +939,7 @@ The following 10 source files are not directly imported by any test file:
 | `composition/bridge-prediction.test.ts` | 31 files |
 | `composition/bridge-priority.test.ts` | 29 files |
 | `composition/buckingham-filter.test.ts` | 4 files |
-| `composition/calibration-targets.test.ts` | 31 files |
+| `composition/calibration-targets.test.ts` | 32 files |
 | `composition/canonical-compare-pairing.test.ts` | 2 files |
 | `composition/canonical-compare.test.ts` | 2 files |
 | `composition/canonical-graph-information-axis.test.ts` | 4 files |
@@ -946,8 +947,8 @@ The following 10 source files are not directly imported by any test file:
 | `composition/canonical-json.test.ts` | 1 files |
 | `composition/canonical-prefactor-eval.test.ts` | 32 files |
 | `composition/canonical-prefactors.test.ts` | 4 files |
-| `composition/catalog-full.test.ts` | 83 files |
-| `composition/catalog-tranche.test.ts` | 82 files |
+| `composition/catalog-full.test.ts` | 84 files |
+| `composition/catalog-tranche.test.ts` | 83 files |
 | `composition/chain-candidate.test.ts` | 1 files |
 | `composition/chain-regime.test.ts` | 36 files |
 | `composition/collect-symbols-transcendental.test.ts` | 3 files |
@@ -960,7 +961,7 @@ The following 10 source files are not directly imported by any test file:
 | `composition/dimension-adjacency.test.ts` | 2 files |
 | `composition/dimensionful-constant.test.ts` | 30 files |
 | `composition/discovery-calibration.test.ts` | 4 files |
-| `composition/discovery-canonical-kind.test.ts` | 4 files |
+| `composition/discovery-canonical-kind.test.ts` | 5 files |
 | `composition/discovery-magnitude.test.ts` | 6 files |
 | `composition/discovery.test.ts` | 31 files |
 | `composition/dogfood-compare.test.ts` | 4 files |
@@ -984,11 +985,11 @@ The following 10 source files are not directly imported by any test file:
 | `composition/name-table.test.ts` | 2 files |
 | `composition/namespacing.test.ts` | 30 files |
 | `composition/orphan-connectors.test.ts` | 30 files |
-| `composition/persona-retest-compare.test.ts` | 7 files |
+| `composition/persona-retest-compare.test.ts` | 8 files |
 | `composition/poster-source.test.ts` | 5 files |
 | `probe/backend.test.ts` | 1 files |
 | `probe/corpus-prefactor.test.ts` | 5 files |
-| `probe/coverage-backfill.test.ts` | 21 files |
+| `probe/coverage-backfill.test.ts` | 22 files |
 | `probe/dimensionless-input.test.ts` | 2 files |
 | `probe/discovery-run-schema.test.ts` | 0 files |
 | `probe/experiment-design.test.ts` | 3 files |
@@ -1004,17 +1005,17 @@ The following 10 source files are not directly imported by any test file:
 | `probe/study-refusals.test.ts` | 1 files |
 | `probe/study-replication.test.ts` | 1 files |
 | `probe/study.test.ts` | 1 files |
-| `composition/proposed-bridges.test.ts` | 61 files |
+| `composition/proposed-bridges.test.ts` | 63 files |
 | `composition/quantities.test.ts` | 37 files |
 | `composition/relation-refusal.test.ts` | 8 files |
 | `composition/retrodiction.test.ts` | 30 files |
-| `composition/seed-edges.test.ts` | 20 files |
+| `composition/seed-edges.test.ts` | 22 files |
 | `composition/seed-enumeration.test.ts` | 32 files |
 | `composition/stress-tests.test.ts` | 28 files |
 | `composition/suggest-ranking.test.ts` | 2 files |
-| `composition/symbolic-composition.test.ts` | 35 files |
+| `composition/symbolic-composition.test.ts` | 36 files |
 | `composition/symbolic-constants-extra.test.ts` | 1 files |
-| `composition/symbolic-simplification.test.ts` | 8 files |
+| `composition/symbolic-simplification.test.ts` | 9 files |
 | `composition/user-equation.test.ts` | 5 files |
 | `core/addCell.test.ts` | 3 files |
 | `core/axes-registry.test.ts` | 1 files |
@@ -1029,19 +1030,19 @@ The following 10 source files are not directly imported by any test file:
 | `core/regime-rule-install.test.ts` | 5 files |
 | `core/regimes-builtins.test.ts` | 2 files |
 | `core/universal-index.test.ts` | 1 files |
-| `diff/be-26-ad.test.ts` | 4 files |
-| `diff/bridge-ast-gradient-byid.test.ts` | 5 files |
-| `diff/bridge-ast-gradient-transcendental.test.ts` | 5 files |
-| `diff/bridge-ast-gradient.test.ts` | 6 files |
-| `diff/bridge-ast-reencode-batch.test.ts` | 5 files |
-| `diff/bridge-ast-reencode.test.ts` | 4 files |
+| `diff/be-26-ad.test.ts` | 5 files |
+| `diff/bridge-ast-gradient-byid.test.ts` | 6 files |
+| `diff/bridge-ast-gradient-transcendental.test.ts` | 6 files |
+| `diff/bridge-ast-gradient.test.ts` | 7 files |
+| `diff/bridge-ast-reencode-batch.test.ts` | 6 files |
+| `diff/bridge-ast-reencode.test.ts` | 5 files |
 | `diff/bridge-gradient.test.ts` | 5 files |
-| `diff/integral-ad.test.ts` | 5 files |
-| `dimensional/algebra-properties.test.ts` | 2 files |
-| `dimensional/algebra.test.ts` | 2 files |
+| `diff/integral-ad.test.ts` | 6 files |
+| `dimensional/algebra-properties.test.ts` | 3 files |
+| `dimensional/algebra.test.ts` | 3 files |
 | `dimensional/ast-builders.test.ts` | 2 files |
 | `dimensional/bianchi-residual.test.ts` | 8 files |
-| `dimensional/bridge-check.test.ts` | 13 files |
+| `dimensional/bridge-check.test.ts` | 14 files |
 | `dimensional/bridge-derivation-audit.test.ts` | 29 files |
 | `dimensional/buckingham.test.ts` | 2 files |
 | `dimensional/christoffel-helper.test.ts` | 6 files |
@@ -1049,37 +1050,38 @@ The following 10 source files are not directly imported by any test file:
 | `dimensional/constants-surface.test.ts` | 1 files |
 | `dimensional/cosmological-constant.test.ts` | 3 files |
 | `dimensional/covariant-derivative-node.test.ts` | 5 files |
-| `dimensional/covariant-derivative-preview.test.ts` | 16 files |
+| `dimensional/covariant-derivative-preview.test.ts` | 17 files |
 | `dimensional/curvature-composite-factory.test.ts` | 1 files |
 | `dimensional/curvature-invariants.test.ts` | 5 files |
 | `dimensional/curvature-numerical-imports.test.ts` | 0 files |
 | `dimensional/derivation-benchmark.test.ts` | 2 files |
 | `dimensional/derivative-strategy-field.test.ts` | 4 files |
 | `dimensional/derivative-strategy-propagation.test.ts` | 4 files |
-| `dimensional/dimension-inference.test.ts` | 6 files |
+| `dimensional/dimension-inference.test.ts` | 7 files |
 | `dimensional/dimension-spec-grouping.test.ts` | 1 files |
-| `dimensional/dimension-spec.test.ts` | 3 files |
-| `dimensional/dimensionful-power-ad.test.ts` | 7 files |
+| `dimensional/dimension-spec.test.ts` | 4 files |
+| `dimensional/dimensionful-power-ad.test.ts` | 9 files |
 | `dimensional/distributional-grammar.test.ts` | 6 files |
-| `dimensional/duplicate-coord-warning.test.ts` | 15 files |
+| `dimensional/duplicate-coord-warning.test.ts` | 16 files |
 | `dimensional/einstein-equation.test.ts` | 9 files |
-| `dimensional/einstein.test.ts` | 16 files |
+| `dimensional/einstein.test.ts` | 17 files |
 | `dimensional/equation-valence.test.ts` | 3 files |
 | `dimensional/error-message-discoverability.test.ts` | 1 files |
 | `dimensional/field-equation-helpers.test.ts` | 2 files |
 | `dimensional/fresh-label.test.ts` | 1 files |
 | `dimensional/friedmann-equation.test.ts` | 3 files |
 | `dimensional/gauge-field.test.ts` | 2 files |
-| `dimensional/integral-bounds-validation.test.ts` | 4 files |
+| `dimensional/integral-bounds-validation.test.ts` | 5 files |
 | `dimensional/integral-derivative-tensor.test.ts` | 4 files |
 | `dimensional/killing-validators.test.ts` | 3 files |
 | `dimensional/klein-gordon-equation.test.ts` | 2 files |
 | `dimensional/kronecker-delta.test.ts` | 5 files |
+| `dimensional/mass-density-owner.test.ts` | 11 files |
 | `dimensional/metric-ast-serialization.test.ts` | 5 files |
 | `dimensional/metric-helpers.test.ts` | 4 files |
 | `dimensional/metric-tensor.test.ts` | 5 files |
 | `dimensional/metric-validation-errors.test.ts` | 1 files |
-| `dimensional/minkowski-curvature.test.ts` | 18 files |
+| `dimensional/minkowski-curvature.test.ts` | 19 files |
 | `dimensional/numerical-form-field.test.ts` | 3 files |
 | `dimensional/numerical-form-preservation.test.ts` | 5 files |
 | `dimensional/op-tensor-interactions.test.ts` | 3 files |
@@ -1087,7 +1089,7 @@ The following 10 source files are not directly imported by any test file:
 | `dimensional/raise-lower.test.ts` | 6 files |
 | `dimensional/readme-snippets.test.ts` | 0 files |
 | `dimensional/rg-flow.test.ts` | 4 files |
-| `dimensional/ricci.test.ts` | 16 files |
+| `dimensional/ricci.test.ts` | 17 files |
 | `dimensional/riemann-tensor.test.ts` | 5 files |
 | `dimensional/stress-energy-validators.test.ts` | 3 files |
 | `dimensional/symbolic-exponent.test.ts` | 33 files |
@@ -1100,7 +1102,7 @@ The following 10 source files are not directly imported by any test file:
 | `dimensional/tensor-step-c.test.ts` | 4 files |
 | `dimensional/tensor-symbol.test.ts` | 3 files |
 | `dimensional/tensor-trace.test.ts` | 4 files |
-| `dimensional/transcendental-validation.test.ts` | 4 files |
+| `dimensional/transcendental-validation.test.ts` | 5 files |
 | `dimensional/units.test.ts` | 4 files |
 | `dimensional/uptError.test.ts` | 1 files |
 | `dimensional/validation-result-shape.test.ts` | 2 files |
@@ -1110,15 +1112,15 @@ The following 10 source files are not directly imported by any test file:
 | `dimensional/violation-severity.test.ts` | 3 files |
 | `dimensional/weyl-validators.test.ts` | 4 files |
 | `examples/basic-usage.test.ts` | 0 files |
-| `fixtures/confrontation-golden.test.ts` | 179 files |
+| `fixtures/confrontation-golden.test.ts` | 181 files |
 | `fixtures/perfect-fluid.test.ts` | 1 files |
 | `fixtures/schwarzschild-riemann.test.ts` | 3 files |
 | `fixtures/schwarzschild.test.ts` | 1 files |
 | `internal/helper-coverage.test.ts` | 7 files |
 | `internal/no-raw-nul.test.ts` | 0 files |
 | `internal/src-parses.test.ts` | 0 files |
-| `numerical/be37-covariant-eikonal-real.test.ts` | 10 files |
-| `numerical/be37-shapiro-step-sweep.test.ts` | 11 files |
+| `numerical/be37-covariant-eikonal-real.test.ts` | 11 files |
+| `numerical/be37-shapiro-step-sweep.test.ts` | 12 files |
 | `numerical/binding-value.test.ts` | 4 files |
 | `numerical/christoffel-flat-indexing.test.ts` | 1 files |
 | `numerical/christoffel-flat.test.ts` | 1 files |
@@ -1126,20 +1128,20 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/connection-lowering-helpers.test.ts` | 2 files |
 | `numerical/connection-lowering-nonfinite.test.ts` | 2 files |
 | `numerical/conserved-charge-mercury.test.ts` | 3 files |
-| `numerical/correctness.test.ts` | 14 files |
-| `numerical/covariant-derivative-lowering.test.ts` | 10 files |
+| `numerical/correctness.test.ts` | 15 files |
+| `numerical/covariant-derivative-lowering.test.ts` | 11 files |
 | `numerical/einstein-desitter.test.ts` | 2 files |
 | `numerical/einstein-flrw.test.ts` | 2 files |
 | `numerical/einstein-vacuum-schwarzschild.test.ts` | 2 files |
-| `numerical/einsum-precompute.test.ts` | 2 files |
+| `numerical/einsum-precompute.test.ts` | 3 files |
 | `numerical/einsum-properties.test.ts` | 1 files |
-| `numerical/engine-capability.test.ts` | 2 files |
+| `numerical/engine-capability.test.ts` | 3 files |
 | `numerical/engine-conformance.mathts.test.ts` | 1 files |
 | `numerical/engine-conformance.test.ts` | 1 files |
-| `numerical/engine-default.test.ts` | 11 files |
+| `numerical/engine-default.test.ts` | 12 files |
 | `numerical/errors.test.ts` | 2 files |
-| `numerical/euler-rejected.test.ts` | 7 files |
-| `numerical/evaluate.test.ts` | 14 files |
+| `numerical/euler-rejected.test.ts` | 8 files |
+| `numerical/evaluate.test.ts` | 15 files |
 | `numerical/finiteness-guards.test.ts` | 2 files |
 | `numerical/flatten-na-accuracy.test.ts` | 1 files |
 | `numerical/foreach-multi-index.test.ts` | 2 files |
@@ -1154,7 +1156,7 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/gl4-integrator.test.ts` | 2 files |
 | `numerical/gl4-stage-solver.test.ts` | 1 files |
 | `numerical/gl4-step-halving.test.ts` | 1 files |
-| `numerical/integral-quadrature.test.ts` | 14 files |
+| `numerical/integral-quadrature.test.ts` | 15 files |
 | `numerical/killing-check.test.ts` | 1 files |
 | `numerical/killing-schwarzschild.test.ts` | 2 files |
 | `numerical/klein-gordon.test.ts` | 2 files |
@@ -1164,36 +1166,36 @@ The following 10 source files are not directly imported by any test file:
 | `numerical/kretschmann-schwarzschild.test.ts` | 4 files |
 | `numerical/lower-first-index-n4-unroll.test.ts` | 3 files |
 | `numerical/lowering-contract.test.ts` | 7 files |
-| `numerical/lowering-covariant-dead-else.test.ts` | 10 files |
+| `numerical/lowering-covariant-dead-else.test.ts` | 11 files |
 | `numerical/lowering-covariant-guard.test.ts` | 7 files |
 | `numerical/lowering-deferred-arms.test.ts` | 4 files |
-| `numerical/lowering-strategy-cast.test.ts` | 11 files |
+| `numerical/lowering-strategy-cast.test.ts` | 12 files |
 | `numerical/lowering-utils.test.ts` | 8 files |
 | `numerical/mathts-067-delegation.test.ts` | 4 files |
-| `numerical/mathts-autograd.test.ts` | 2 files |
-| `numerical/mathts-engine-typing.test.ts` | 2 files |
+| `numerical/mathts-autograd.test.ts` | 3 files |
+| `numerical/mathts-engine-typing.test.ts` | 3 files |
 | `numerical/mathts-required.test.ts` | 1 files |
 | `numerical/metric-deriv-supplied.test.ts` | 1 files |
-| `numerical/metric-inverse-curvature-walk.test.ts` | 15 files |
-| `numerical/metric-inverse.test.ts` | 14 files |
+| `numerical/metric-inverse-curvature-walk.test.ts` | 16 files |
+| `numerical/metric-inverse.test.ts` | 15 files |
 | `numerical/non-finite-propagation.test.ts` | 1 files |
 | `numerical/null-ic.test.ts` | 1 files |
 | `numerical/null-ray-integrator.test.ts` | 1 files |
 | `numerical/numerical-composition-imports.test.ts` | 0 files |
 | `numerical/ode-delegation.test.ts` | 0 files |
 | `numerical/painleve-gullstrand-curvature.test.ts` | 5 files |
-| `numerical/parse-physics.test.ts` | 6 files |
+| `numerical/parse-physics.test.ts` | 7 files |
 | `numerical/pderiv-flatten-consolidation.test.ts` | 1 files |
 | `numerical/pderiv-order-default.test.ts` | 1 files |
 | `numerical/pderiv-order.test.ts` | 1 files |
 | `numerical/pderiv.test.ts` | 3 files |
 | `numerical/perihelion-finder-roundtrip.test.ts` | 2 files |
 | `numerical/perihelion-finder.test.ts` | 1 files |
-| `numerical/riemann-tensor-lowering.test.ts` | 15 files |
+| `numerical/riemann-tensor-lowering.test.ts` | 16 files |
 | `numerical/schwarzschild-radial-geodesic.test.ts` | 2 files |
 | `numerical/spacetime-metrics.test.ts` | 2 files |
 | `numerical/strides.test.ts` | 1 files |
-| `numerical/tensor-engine-types.test.ts` | 2 files |
+| `numerical/tensor-engine-types.test.ts` | 3 files |
 | `numerical/tensor-partial-derivative-lowering.test.ts` | 7 files |
 | `numerical/weyl-kerr-schild.test.ts` | 2 files |
 | `numerical/weyl-reference.test.ts` | 1 files |
@@ -1202,7 +1204,7 @@ The following 10 source files are not directly imported by any test file:
 | `relations/category.test.ts` | 3 files |
 | `relations/domain-regimes.test.ts` | 2 files |
 | `relations/regime-vocabularies.test.ts` | 1 files |
-| `tests/tensor.test.ts` | 179 files |
+| `tests/tensor.test.ts` | 181 files |
 | `tools/api-surface.test.ts` | 0 files |
 | `tools/citation-quote-check.test.ts` | 0 files |
 | `tools/code-docs-ratchet.test.ts` | 0 files |
@@ -1221,6 +1223,6 @@ The following 10 source files are not directly imported by any test file:
 | `tools/publish-version-guard.test.ts` | 0 files |
 | `tools/pushed-head.test.ts` | 0 files |
 | `tools/readme-links.test.ts` | 0 files |
-| `tools/readme-status.test.ts` | 56 files |
+| `tools/readme-status.test.ts` | 57 files |
 | `tools/untracked-gate-inputs.test.ts` | 0 files |
 | `tools/vitest-coverage-alignment.test.ts` | 0 files |

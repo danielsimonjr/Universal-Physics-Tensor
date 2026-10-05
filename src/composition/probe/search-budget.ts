@@ -8,7 +8,12 @@
 import type { SearchBudget, SearchStopReason } from './types.js';
 import { DEFAULT_SEARCH_BUDGET } from './types.js';
 
-export { DEFAULT_SEARCH_BUDGET };
+/**
+ * The default search budget.
+ *
+ * @internal
+ */
+export { DEFAULT_SEARCH_BUDGET } from './types.js';
 
 /** Mutable counters for one run. @internal */
 export interface BudgetState {

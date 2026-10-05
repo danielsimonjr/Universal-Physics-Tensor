@@ -52,6 +52,7 @@ import type { CosmologicalConstantNode } from '../../dimensional/stress-energy-v
 import {
   Dimension,
   DIMENSIONLESS,
+  MASS_DENSITY,
 } from '../../dimensional/types.js';
 import { c as DIM_c, G as DIM_G } from '../../dimensional/constants.js';
 import { power } from '../../dimensional/algebra.js';
@@ -62,10 +63,12 @@ import { sym, validateFiniteInputs, validateBEDimensions } from './_be-helpers.j
 /** [L⁻²] — cosmological-constant Λ has dimension of inverse area. */
 const INV_LENGTH_2: Dimension = power(LENGTH, -2);
 
-/** [M L⁻³] — mass density (kg/m³). */
-export const MASS_DENSITY: Dimension = {
-  L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0,
-};
+/**
+ * Mass density [M L⁻³] (kg/m³). The dimensional export.
+ *
+ * @public
+ */
+export { MASS_DENSITY } from '../../dimensional/types.js';
 
 /**
  * v0.6.0 re-encoding: `CosmologicalConstantNode` for Λ.

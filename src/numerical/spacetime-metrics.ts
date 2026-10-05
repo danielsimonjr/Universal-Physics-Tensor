@@ -19,7 +19,7 @@
 
 import { solveODESystem } from '@danielsimonjr/mathts-functions';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
-import { DIMENSIONLESS, LENGTH, MASS, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
+import { DIMENSIONLESS, LENGTH, MASS, MASS_DENSITY, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
 import { readParameter } from './binding-value.js';
 
 /** Coordinate order (t, r, θ, φ). */
@@ -418,7 +418,7 @@ const PARAM_DIM: Readonly<Record<string, Dimension>> = {
   n: DIMENSIONLESS,
   k: { L: -2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
   Lambda: { L: -2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
-  rho: { L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 },
+  rho: MASS_DENSITY,
 };
 
 /** Parse `key=value` pairs. A value is a number, a unit, or a constant expression. @internal */

@@ -190,6 +190,31 @@ export function classicalRk4Literal(source: string): boolean {
   return /\(h \/ 6\) \*/.test(source);
 }
 
+const MASS_DENSITY_OWNER = 'src/dimensional/types.ts';
+
+/** A `const MASS_DENSITY` assignment. `export { MASS_DENSITY } from` is not one. */
+export function massDensityAssignment(source: string): boolean {
+  return /(?:export\s+)?const\s+MASS_DENSITY\b/.test(source);
+}
+
+/**
+ * One `const MASS_DENSITY`, and it is the dimensional export.
+ * A second assignment, or a missing owner, is a hit.
+ */
+export function massDensityHits(root: string): string[] {
+  const files: string[] = [];
+  walkTs(join(root, 'src'), files);
+  const assignments: string[] = [];
+  for (const file of files) {
+    if (massDensityAssignment(readFileSync(file, 'utf8'))) {
+      assignments.push(relative(root, file).replaceAll('\\', '/'));
+    }
+  }
+  if (assignments.length === 1 && assignments[0] === MASS_DENSITY_OWNER) return [];
+  if (assignments.length === 0) return ['no const MASS_DENSITY'];
+  return assignments.map((file) => `${file} assigns MASS_DENSITY`);
+}
+
 /** Files under `src/` that still update a state with the classical RK4 weights. */
 export function classicalRk4Hits(root: string): string[] {
   const files: string[] = [];
@@ -238,6 +263,7 @@ export function renderDuplicateOwners(root: string): string {
   const bridges = bridgeRegistryHits(root);
   const json = jsonOwnerHits(root);
   const rk4 = classicalRk4Hits(root);
+  const density = massDensityHits(root);
   const temperatureBody =
     temperature.length === 0
       ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
@@ -266,6 +292,10 @@ export function renderDuplicateOwners(root: string): string {
     rk4.length === 0
       ? 'No classical RK4 weight `(h / 6) *` remains under `src/`.\n'
       : rk4.map((hit) => `- ${hit}`).join('\n') + '\n';
+  const densityBody =
+    density.length === 0
+      ? '`const MASS_DENSITY` is defined only in `src/dimensional/types.ts`.\n'
+      : density.map((hit) => `- ${hit}`).join('\n') + '\n';
   return (
     '<!-- repo-map:no-verification -->\n' +
     '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n' +
@@ -287,6 +317,8 @@ export function renderDuplicateOwners(root: string): string {
     '\n' +
     jsonBody +
     '\n' +
-    rk4Body
+    rk4Body +
+    '\n' +
+    densityBody
   );
 }

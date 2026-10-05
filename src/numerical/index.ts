@@ -30,8 +30,12 @@ export { NumericalBackendError } from './errors.js';
  *  as the single public API surface, without creating a dimensional→numerical
  *  import cycle. See v0.4.0-Implementation-Plan Task 13 for rationale. */
 export { DuplicateCoordinateWarning } from '../dimensional/errors.js';
-/** @public */
-export { evaluateMetricInverse };
+/**
+ * Evaluate a metric inverse from a detected pair.
+ *
+ * @public
+ */
+export { evaluateMetricInverse } from './metric-inverse.js';
 /** @public */
 export {
   evaluateBE37CovariantEikonalNumerical,

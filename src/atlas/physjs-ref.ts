@@ -52,8 +52,12 @@ import {
   PHYSJS_ENTRIES as GENERATED_PHYSJS_ENTRIES,
 } from './physjs-entries.generated.js';
 
-/** PhysJS commit the vendored manifest records. @internal */
-export { PHYSJS_COMMIT };
+/**
+ * PhysJS commit the vendored manifest records.
+ *
+ * @internal
+ */
+export { PHYSJS_COMMIT } from './physjs-entries.generated.js';
 
 /**
  * Every reviewed PhysJS reference covers its statement only. A lemma about
