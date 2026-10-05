@@ -320,7 +320,7 @@ function inputParity(node: ExprNode, name: string): InputParity {
     let acc: InputParity = 'absent';
     for (const arg of node.args) {
       const part = inputParity(arg, name);
-      if (part === 'neither' || acc === 'neither') return 'neither';
+      if (part === 'neither') return 'neither';
       if (part === 'absent') continue;
       if (acc === 'absent') acc = part;
       else if (acc === 'odd' && part === 'odd') acc = 'even';
