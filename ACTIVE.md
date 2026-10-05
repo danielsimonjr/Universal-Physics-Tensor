@@ -44,8 +44,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
   The generate step replaces the hand-copy in `WORKFLOWS.md`. Editing a theorem in the generated file without editing the manifest fails the formal gate. A manifest entry with no bridge still fails. Tests that hardcoded the commit string read the manifest.
   Done: `scripts/generate-physjs-table.ts` writes `src/atlas/physjs-entries.generated.ts`. Before that file existed, `tests/atlas/physjs-generated-table.test.ts` failed to import it. A hand-edited theorem and a deleted key fail `physjsManifestProblems`. `bun scripts/generate-physjs-table.ts --check` is in the docs gate.
 
-- [ ] Implement phase 2 of the 6.0.0 integration: one temperature and unit reader.
+- [x] Implement phase 2 of the 6.0.0 integration: one temperature and unit reader.
   Explain, evaluate, eval, a discovery anchor, a regime coordinate, and a path sweep of an energy on a temperature name agree on the kelvin value. A metre on a temperature name throws. An energy on a non-temperature name stays joules. `upt evaluate` converts.
+  Done: `readNamedBinding` applies `alignTemperatureBinding`. Before that call, the scan named `_discovery-opts.ts`, `eval.ts`, `explain.ts`, `path.ts`, `regime.ts`, and `cli-api.ts`, and `upt evaluate be-76 T_K=10eV` exited 1. Those six readings of `temperature=10eV` now agree. `temperature=1m` throws. `energy=10eV` stays joules. `src/cli/temperature-bindings.ts` is deleted. The live list is `docs/architecture/duplicate-owners.md`.
 
 - [ ] Implement phase 3 of the 6.0.0 integration: one name table and one edit distance.
   Resolution uses optimal string alignment at distance at most 1. `erasure-energy` and the Landauer quantity are one quantity. A Debye-length miss does not suggest the phonon family. A Reynolds-number search does not hit the analogy. A Prandtl-number search names that bridge and says the match is the gloss.

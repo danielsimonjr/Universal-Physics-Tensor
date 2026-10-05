@@ -185,9 +185,8 @@ export function parseSweep(
   const [, name, loS, hiS, nS, sp] = m as unknown as [string, string, string, string, string, string | undefined];
   const endpoint = (raw: string): number => {
     try {
-      const read = api.readBinding(raw);
-      const aligned = api.alignTemperatureBinding(name, raw, read);
-      return Number.isFinite(aligned.value) ? aligned.value : Number.NaN;
+      const read = api.readNamedBinding(name, raw);
+      return Number.isFinite(read.value) ? read.value : Number.NaN;
     } catch (e) {
       if (e instanceof api.UnitError) {
         throw new CliError(`upt path: --sweep '${spec}' is not a temperature. ${e.message}`);
