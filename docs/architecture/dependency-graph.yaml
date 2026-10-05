@@ -4006,7 +4006,7 @@ modules:
             - K_B_SI
         - file: ./carrier-sign.js
           imports:
-            - assertSameCarrierSign
+            - applyCarrierSignPolicy
       exports:
         - evaluateEinsteinRelation
       interfaces:
@@ -4719,16 +4719,16 @@ modules:
       nodeDependencies: []
       internalDependencies: []
       exports:
-        - sameCarrierSign
-        - assertSameCarrierSign
-        - assertCarrierProductSign
+        - resetCarrierSignPolicyCalls
+        - readCarrierSignPolicyCalls
+        - applyCarrierSignPolicy
         - CarrierSignError
       classes:
         - CarrierSignError
       functions:
-        - sameCarrierSign
-        - assertSameCarrierSign
-        - assertCarrierProductSign
+        - resetCarrierSignPolicyCalls
+        - readCarrierSignPolicyCalls
+        - applyCarrierSignPolicy
     src/bridges/catalog-adapter.ts:
       description: "Catalog adapter: ingests the 44-entry `BRIDGE_EQUATIONS` array into"
       externalDependencies: []
@@ -11840,7 +11840,7 @@ modules:
             - CANONICAL_EQUATIONS
         - file: ../bridges/carrier-sign.js
           imports:
-            - assertCarrierProductSign
+            - applyCarrierSignPolicy
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
@@ -12537,9 +12537,6 @@ modules:
         - file: ../../bridges/be82-shockley-diode.js
           imports:
             - evaluateShockleyDiode
-        - file: ../../bridges/carrier-sign.js
-          imports:
-            - sameCarrierSign
         - file: ../../bridges/be83-thomson.js
           imports:
             - evaluateThomsonCoefficient
@@ -23488,7 +23485,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 472
   totalModules: 13
-  totalLinesOfCode: 100105
+  totalLinesOfCode: 100164
   totalExports: 3560
   totalClasses: 61
   totalInterfaces: 562

@@ -4,7 +4,7 @@
  * A hit is a second owner. The generated file `docs/architecture/duplicate-owners.md`
  * is this scan's output. The architecture test fails when the list is not empty.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 function walkTs(dir: string, out: string[]): void {
@@ -105,10 +105,36 @@ export function nameTableOwnerHits(root: string): string[] {
   return hits;
 }
 
+/** `assertSameCarrierSign` has no caller except `applyCarrierSignPolicy`. */
+export function signOwnerHits(root: string): string[] {
+  const policyPath = join(root, 'src/bridges/carrier-sign.ts');
+  if (!existsSync(policyPath)) return [];
+  const hits: string[] = [];
+  const policy = readFileSync(policyPath, 'utf8');
+  const body = braceBody(policy, 'applyCarrierSignPolicy');
+  if (body === null || !body.includes('assertSameCarrierSign(')) {
+    hits.push('applyCarrierSignPolicy does not call assertSameCarrierSign');
+  }
+  const outside = body === null ? policy : policy.replace(body, '');
+  const withoutDef = outside.replace(/function\s+assertSameCarrierSign\s*\(/, 'function assertSameCarrierSign ');
+  if (/assertSameCarrierSign\s*\(/.test(withoutDef)) {
+    hits.push('assertSameCarrierSign is called outside applyCarrierSignPolicy');
+  }
+  const domain = readFileSync(join(root, 'src/composition/edges/applied-physicist.ts'), 'utf8');
+  if (/sameCarrierSign\s*\(/.test(domain)) hits.push('the BE-70 domain calls sameCarrierSign');
+  const einstein = readFileSync(join(root, 'src/bridges/be70-einstein-relation.ts'), 'utf8');
+  if (/assertSameCarrierSign\s*\(/.test(einstein)) hits.push('evaluateEinsteinRelation calls assertSameCarrierSign');
+  const graph = readFileSync(join(root, 'src/composition/canonical-graph.ts'), 'utf8');
+  if (/assertCarrierProductSign\s*\(/.test(graph)) hits.push('canonical-graph calls assertCarrierProductSign');
+  if (/magnitudeBase\s*\(/.test(graph)) hits.push('canonical-graph calls magnitudeBase');
+  return hits;
+}
+
 /** The committed duplicate-owner report. */
 export function renderDuplicateOwners(root: string): string {
   const temperature = temperatureOwnerHits(root);
   const names = nameTableOwnerHits(root);
+  const signs = signOwnerHits(root);
   const temperatureBody =
     temperature.length === 0
       ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
@@ -117,6 +143,10 @@ export function renderDuplicateOwners(root: string): string {
     names.length === 0
       ? '`function editDistance` is defined only in `src/composition/aliases.ts`. `FORMULA_ALIASES`, `ENTRY_TARGET_ALIASES`, and `QUANTITY_SYNONYMS` are not separate tables.\n'
       : names.map((hit) => `- ${hit}`).join('\n') + '\n';
+  const signBody =
+    signs.length === 0
+      ? '`assertSameCarrierSign` is called only from `applyCarrierSignPolicy`. The BE-70 domain does not call `sameCarrierSign`. No second owner.\n'
+      : signs.map((hit) => `- ${hit}`).join('\n') + '\n';
   return (
     '<!-- repo-map:no-verification -->\n' +
     '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n' +
@@ -128,6 +158,8 @@ export function renderDuplicateOwners(root: string): string {
     '## Hits\n\n' +
     temperatureBody +
     '\n' +
-    nameBody
+    nameBody +
+    '\n' +
+    signBody
   );
 }

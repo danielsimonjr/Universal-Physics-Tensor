@@ -5734,7 +5734,7 @@
           {
             "file": "./carrier-sign.js",
             "imports": [
-              "assertSameCarrierSign"
+              "applyCarrierSignPolicy"
             ]
           }
         ],
@@ -6927,18 +6927,18 @@
         "nodeDependencies": [],
         "internalDependencies": [],
         "exports": [
-          "sameCarrierSign",
-          "assertSameCarrierSign",
-          "assertCarrierProductSign",
+          "resetCarrierSignPolicyCalls",
+          "readCarrierSignPolicyCalls",
+          "applyCarrierSignPolicy",
           "CarrierSignError"
         ],
         "classes": [
           "CarrierSignError"
         ],
         "functions": [
-          "sameCarrierSign",
-          "assertSameCarrierSign",
-          "assertCarrierProductSign"
+          "resetCarrierSignPolicyCalls",
+          "readCarrierSignPolicyCalls",
+          "applyCarrierSignPolicy"
         ]
       },
       "src/bridges/catalog-adapter.ts": {
@@ -17641,7 +17641,7 @@
           {
             "file": "../bridges/carrier-sign.js",
             "imports": [
-              "assertCarrierProductSign"
+              "applyCarrierSignPolicy"
             ]
           },
           {
@@ -18766,12 +18766,6 @@
             "file": "../../bridges/be82-shockley-diode.js",
             "imports": [
               "evaluateShockleyDiode"
-            ]
-          },
-          {
-            "file": "../../bridges/carrier-sign.js",
-            "imports": [
-              "sameCarrierSign"
             ]
           },
           {
@@ -33447,7 +33441,7 @@
   "statistics": {
     "totalTypeScriptFiles": 472,
     "totalModules": 13,
-    "totalLinesOfCode": 100105,
+    "totalLinesOfCode": 100164,
     "totalExports": 3560,
     "totalClasses": 61,
     "totalInterfaces": 562,
