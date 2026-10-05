@@ -6,6 +6,8 @@
 > The drift gate treats a missing Verification section as a failure, so the opt-out is
 > stated here explicitly rather than left to be inferred from its absence.
 
+Current catalog and edge counts, and the places the same concept is implemented twice, are `INTEGRATION_MAP.md`. A count in this essay that still says 46 edges or 58 bridges is older than the 92-row, 83-edge tree.
+
 UPT's bridge/law catalog is a **graph**. Round nodes are *quantities*
 (`mass`, `temperature`, `photon-energy`, …). Box nodes are *equations* —
 laws, bridges, or machine-derived proposals. Each one is an n-ary

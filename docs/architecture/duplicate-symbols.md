@@ -1,83 +1,77 @@
 # Universal Physics Tensor — Duplicate Symbols
 
-Names that more than one `src` file exports.
+Names that more than one `src` file declares, after the dependency graph's `reExported` list is removed.
 
-> **Derived from `duplicate-symbols.json`.** A person writes this file from that artifact.
+> **Read from `docs/architecture/dependency-graph.json` on the 5.0.0 tree, then checked in source.** `repo_map.py` is not in this repository and was not re-run. The previous edition of this file said 383 TypeScript files under `src/` and cited `totalSourceFiles` 1025. The current graph's `metadata.totalFiles` is 471 and its `statistics.totalExports` is 3553. Those older fields are not in the JSON.
 
 ## Read this first
 
-**5 names out of 1,982 are exported by more than one file.** For 383 TypeScript files under
-`src/`, that count is low. The names split into one registration convention, one shared
-dimension constant, two artifact helpers with different scopes, and one uncertainty name used at
-two layers.
+The graph's raw export lists collide on 1124 names, because barrels re-export the same binding. After names marked `reExported` are removed, **16 names are still declared in more than one file**. Most of those 16 are a shim that assigns or re-exports a binding the lexer did not mark `reExported`. Four groups are real second definitions or a lexer false positive. The tool groups by name only. A group means "more than one file declares this name", not "the bodies differ".
 
-The tool groups **by name only**. The tool does not compare bodies, so a group means "more than
-one place uses this name", never "these definitions conflict". All five groups below were read.
+`src/` on this measurement is 471 TypeScript files (`docs:deps` and `git ls-files`).
 
-## The five groups
+## Real second definitions
 
-### `command` — 23 files. Benign.
+### `command` — 28 files. Registration convention.
 
-Every module under `src/cli/commands/` exports a `command`. This export is the CLI's registration
-convention: `command.ts` defines the shape, the registry collects one per module, and each is
-reached through `CommandCtx`. Renaming them would break the pattern that makes the command tree
-uniform. **No action.**
+Every module under `src/cli/commands/` that is a command exports `command`. Helpers (`index.ts`, `_atlas-route.ts`, `_atlas-map.ts`, `_discovery-opts.ts`) do not. `command.ts` defines the shape. The previous edition of this file said 23 files. The registry in `src/cli/commands/index.ts` now side-effect-imports 28 command modules.
 
-### `MASS_DENSITY` — 2 files. Drift risk.
+### `MASS_DENSITY` — 2 exported files, 5 more local copies. Same dimension.
 
 | File | Role |
 |---|---|
-| `src/bridges/equations/be-20-vacuum-energy.ts` | A bridge's own dimensional symbol |
-| `src/composition/quantities/_dims.ts` | The shared dimension table for composition quantities |
+| `src/bridges/equations/be-20-vacuum-energy.ts:66` | exported `Dimension` |
+| `src/composition/quantities/_dims.ts:18` | exported `Dimension` the quantity modules import |
 
-Both definitions encode `M·L⁻³`. The files sit on either side of the boundary between the bridge
-catalog and the composition graph. That boundary is a seam where two definitions of the same
-physical quantity must agree. A change to one definition must check the other definition.
+Both are `{ L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }`. The same object literal is also a non-exported `const` in `src/composition/edges/catalog-tranche.ts:68`, `src/dimensional/bridge-check.ts:63`, `src/dimensional/friedmann-equation.ts:163`, `src/bridges/equations/be-19-quantum-bounce.ts:72`, and `src/bridges/equations/be-54-randall-sundrum-brane.ts:58`. The graph does not list those five, because they are not exported.
 
-### `canonicalJson` — 2 files. Drift risk.
+### `canonicalJson` — 2 files. Different edge cases.
 
 | File | Role |
 |---|---|
-| `src/cli/record.ts` | Record/replay entry hashing |
-| `src/composition/probe/serialize.ts` | Product B probe artifact hashing |
+| `src/cli/record.ts:94` | record/replay hashing. Hand-joined arrays. No `Date` case |
+| `src/composition/probe/serialize.ts` | probe artifact hashing. `Date` becomes an ISO string. An `undefined` array hole becomes `null` |
 
-Both functions write sorted-key JSON for hashes, but their edge behavior is not identical. The
-probe serializer gives `Date` values an ISO string and turns `undefined` array entries into `null`.
-The record serializer has no `Date` case and uses a hand-written array join. A shared helper would
-change at least one hash format unless tests pinned the edge cases first.
-
-### `captureEnvironment` — 2 files. Benign.
+### `captureEnvironment` — 2 files. Different schemas.
 
 | File | Role |
 |---|---|
-| `src/cli/record.ts` | Captures the UPT version, Node version, parser, simplifier, peers, and constant table hashes for replay |
-| `src/composition/probe/run-manifest.ts` | Captures the host Node version, platform, and architecture for a probe run manifest |
+| `src/cli/record.ts:117` | UPT version, Node, parser, simplifier, peers, constant-table hashes |
+| `src/composition/probe/run-manifest.ts:18` | Node version, platform, architecture |
 
-The name is the same because both artifacts carry an environment block. The schemas are different
-by design, and neither function is a copy of the other.
+## Same binding, lexer did not mark it a re-export
 
-### `propagateUncertainty` — 2 files. Drift risk.
+These are one value reached through a second `export`. They are shims, recorded so a later reader does not treat them as a second algorithm.
 
-| File | Role |
-|---|---|
-| `src/cli/commands/evaluate.ts` | Propagates case-input uncertainty through an arbitrary evaluator output map, with correlations and curvature warnings |
-| `src/composition/uncertainty.ts` | Propagates uncertainty through a `BridgeEdge`, with an optional deterministic approximation bound reported separately |
+| Name | Declaring file | Second file |
+|---|---|---|
+| `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM` | `src/relations/composition-table.ts` | `src/atlas/composition-table.ts` assigns the imports and exports the consts |
+| `regimeHolds` | `src/relations/regime.ts` | `src/atlas/regime.ts:28` assigns the import |
+| `DimensionMismatchError` | `src/dimensional/errors.ts:26` | `src/dimensional/algebra.ts:19` `export { DimensionMismatchError }` |
+| `EngineCapabilityError` | `src/numerical/errors.ts:28` | `src/numerical/tensor-engine.ts:15` `export { EngineCapabilityError }` |
+| `DEFAULT_SEARCH_BUDGET` | `src/composition/probe/types.ts:71` | `src/composition/probe/search-budget.ts:11` `export { DEFAULT_SEARCH_BUDGET }` |
+| `IDENTITY_BOUND` | `src/atlas/error-algebra.ts:28` | `src/atlas/path-bound.ts` `export { IDENTITY_BOUND }` |
+| `M_PROTON_SI` | `src/core/constants.ts:103` | `src/bridges/be67-alfven-speed.ts:21` `export { M_PROTON_SI }` |
+| `evaluateMetricInverse` | `src/numerical/metric-inverse.ts:23` | `src/numerical/index.ts:34` `export { evaluateMetricInverse }` |
+| `dim` | `src/dimensional/ast-builders.ts:29` | `src/canonical/entries/_l1-build.ts:17` `export { dim }` |
 
-Both functions are uncertainty propagators, but their contracts differ. The CLI helper is case-local
-and reports per-output reliability detail. The composition helper is a graph-layer API over bridge
-sources. A fix in one layer does not prove the other layer correct.
+## Lexer false positive
+
+### `BCS_GAP_RATIO`
+
+`src/bridges/be62-bcs-gap.ts:23` exports the constant. `src/bridges/confrontations.ts:661` quotes that line inside a citation object. The dependency-graph lexer records the quote as an export, and `unused-analysis.md` then lists it as unused. There is one constant.
+
+## Withdrawn from the previous edition
+
+`propagateUncertainty` was listed as a duplicate export of `src/cli/commands/evaluate.ts` and `src/composition/uncertainty.ts`. The CLI function is now `propagateEvaluatorUncertainty` (`evaluate.ts:161`). The graph-layer export remains `src/composition/uncertainty.ts:100`. Both still call MathTS `propagateUncertainty`. They are two wrappers, and they are no longer the same exported name.
 
 ## Verification
 
-Generated by `repo_map.py map`.
-Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_map.py check <repo> --docs docs/architecture`
-
 | Claim | Value | Source |
 |---|---|---|
-| duplicateCount | 5 | duplicate-symbols.json |
-| totalSourceFiles | 1025 | dependency-graph.json |
+| `src` TypeScript files | 471 | `dependency-graph.json` `metadata.totalFiles`, and `git ls-files` |
+| total exports | 3553 | `dependency-graph.json` `statistics.totalExports` |
+| names declared in more than one file, after `reExported` | 16 | walk of `dependency-graph.json` described above |
+| of which the bodies differ or the lexer mis-read a quote | 4 (`command`, `MASS_DENSITY`, `canonicalJson`, `captureEnvironment`) plus `BCS_GAP_RATIO` | source read |
 
-**Claims the gate cannot hold.** The `totalSymbols` figure of 1,982 and the per-group file lists
-come from `duplicate-symbols.json`. The judgement about each group comes from reading the source.
-The artifact states in its own note that it does **not** classify a group as a true duplicate or
-a legitimate one. This document makes no stronger claim than the reading behind it.
+`repo_map.py` did not produce this edition. A later `repo_map.py check` against the old 1025/1982 claims would be checking a schema this tree no longer writes.
