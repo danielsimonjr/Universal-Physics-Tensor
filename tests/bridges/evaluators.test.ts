@@ -128,7 +128,7 @@ describe('BRIDGE_EVALUATORS', () => {
       omega_rad_s: 1e6, v_t_m_per_s: 1e5, lambda_D_m: 1e-4,
       lambda_1_m: 1e-4, lambda_2_m: 2e-4, Z: 1, ln_Lambda: 10,
       Omega_rad_s: 2.9e-6, r_m: 1.5e11, v_r_m_per_s: 4e5, B_E_T: 3.12e-5,
-      v_m_per_s: 4e5, sigma_v_m3_per_s: 1e-22, E_J: 2.8e-12,
+      sigma_v_m3_per_s: 1e-22, E_J: 2.8e-12,
       m_e_kg: 9.1093837015e-31, alpha: 1, beta_parallel: 1, beta_perp: 1,
       T_perp_K: 300, T_parallel_K: 200,
     };
