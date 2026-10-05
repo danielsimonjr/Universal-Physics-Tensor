@@ -67,6 +67,23 @@ export interface SearchMatch {
 export const STOP_WORDS: ReadonlySet<string> = new Set(['of', 'the', 'and', 'for', 'in', 'an']);
 
 /**
+ * The kind of thing a name asks for. A suggestion may not drop one of these,
+ * and it may not keep only these when the name also named a subject
+ * (`debye-length` is not the word `length`, and it is not the word `debye`).
+ * `equation` is not one of these: `schrodinger-equation` still searches `schrodinger`.
+ */
+const KIND_WORDS: ReadonlySet<string> = new Set([
+  'length',
+  'radius',
+  'frequency',
+  'speed',
+  'energy',
+  'number',
+  'heat',
+  'capacity',
+]);
+
+/**
  * A suggestion query is not an explicit search. One- and two-letter hyphen
  * fragments are symbols (`a`, `T`), and the fewest-match rule would pick
  * them over the real word. Explicit `queryWords` still accepts them.
@@ -276,7 +293,34 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
   return entries;
 }
 
-/** Every entry of `index` that EVERY word of `significant` matches, name and id matches first. */
+/** True when `window` and `query` are the same words, order aside. */
+function sameWords(window: readonly string[], query: readonly string[]): boolean {
+  if (window.length !== query.length) return false;
+  const a = [...window].sort();
+  const b = [...query].sort();
+  return a.every((w, i) => w === b[i]);
+}
+
+/**
+ * A phrase is a contiguous run of a field's content words. Stop words in the
+ * field are not part of the run, so "speed of sound" is the words speed, sound.
+ * The query's order does not have to be the field's order.
+ */
+function phraseInField(text: string, query: readonly string[]): boolean {
+  const field = words(text).filter((w) => !STOP_WORDS.has(w));
+  const q = query.map(fold).filter((w) => !STOP_WORDS.has(w));
+  if (q.length === 0 || field.length < q.length) return false;
+  for (let i = 0; i + q.length <= field.length; i++) {
+    if (sameWords(field.slice(i, i + q.length), q)) return true;
+  }
+  return false;
+}
+
+/** Every entry of `index` that EVERY word of `significant` matches, name and id matches first.
+ *  One word matches as before, including a proper prefix. Two or more words match only as whole
+ *  words. When one field contains two or more of them, those words have to sit together in that
+ *  field; a field that scatters them does not count. Words that never share a field still match,
+ *  so "thermal" in a description and "noise" in a name still find Johnson–Nyquist. */
 export function matchEveryWord(
   api: CommandCtx['api'],
   index: readonly SearchEntry[],
@@ -294,6 +338,24 @@ export function matchEveryWord(
   for (const e of index) {
     if (glued.includes('_') && e.fields.some((f) => (f.exact ?? []).includes(glued))) {
       matches.push({ entry: e, matchedIn: ['alias'], alias: glued });
+      continue;
+    }
+    if (significant.length > 1) {
+      const folded = significant.map(fold).filter((w) => !STOP_WORDS.has(w));
+      const labels: string[] = [];
+      const covered = new Set<string>();
+      for (const f of e.fields) {
+        const fieldWords = words(f.text).filter((w) => !STOP_WORDS.has(w));
+        const present = folded.filter((q) => fieldWords.includes(q));
+        if (present.length === 0) continue;
+        // Scattered co-occurrence is not the phrase. "Reynolds" and "number"
+        // both sit in "Reynolds analogy (Prandtl number 1)" and are not it.
+        if (present.length >= 2 && !phraseInField(f.text, present)) continue;
+        labels.push(f.label);
+        for (const q of present) covered.add(q);
+      }
+      if (folded.some((q) => !covered.has(q))) continue;
+      matches.push({ entry: e, matchedIn: labels });
       continue;
     }
     const alias = e.kind === 'quantity' ? aliasTargets.get(e.id) : undefined;
@@ -329,7 +391,9 @@ export function matchEveryWord(
  * the name splits on `-`, `_` and spaces, stop words drop, and the words are searched together. When
  * no entry matches every word, the largest set of the words that some entry does match is used
  * instead, the one with the fewest matches when sets tie (so the rarer word `schrodinger` beats the
- * common word `equation`). A token shorter than three letters is dropped: it is a symbol, and
+ * common word `equation`). A set that drops a kind word (`length`, `number`, and the others in
+ * `KIND_WORDS`) is not used, and neither is a set of only those words when the name also named a
+ * subject. A token shorter than three letters is dropped: it is a symbol, and
  * `not-a-quantity-xyz` must not search `a`. Returns `null` when no word matches anything. At most
  * six words are tried.
  */
@@ -347,6 +411,10 @@ export function searchNameWords(
   for (let mask = (1 << all.length) - 1; mask > 0; mask--) {
     const subset = all.filter((_, i) => (mask & (1 << i)) !== 0);
     if (best !== null && subset.length < best.words.length) continue;
+    const dropped = all.filter((w) => !subset.includes(w));
+    if (dropped.some((w) => KIND_WORDS.has(fold(w)))) continue;
+    const askedForASubject = all.some((w) => !KIND_WORDS.has(fold(w)));
+    if (askedForASubject && subset.every((w) => KIND_WORDS.has(fold(w)))) continue;
     const matches = matchEveryWord(api, index, subset);
     if (matches.length === 0) continue;
     if (
