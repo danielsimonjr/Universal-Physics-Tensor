@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A magnitude that is even in a signed input stays positive.
+  `upt explain plasma-frequency` with `charge=-e` prints a negative frequency. `upt explain larmor-radius` with `charge=-e` prints a negative length. Cyclotron frequency and the Hall coefficient stay signed.
+  Done: plasma frequency at `carrier-density=1e6`, `charge=-1.602176634e-19`, `vacuum-permittivity=8.8541878128e-12`, `mass=9.1093837015e-31` prints `56414.6023118063`. Larmor radius at electron mass, `speed=1e6`, that charge, and `magnetic-field=1` prints `0.00000568563010356572`. The formula is `r_L = m v_⊥ / (|q| B)`. Cyclotron frequency stays `-175882001077.216`. The Hall coefficient stays negative.
+
 - [x] Write the integration design for 6.0.0. Do not change `src/`.
   The map's ten targets become decisions in `docs/planning/v6.0.0-Design.md`, checked against the source. The owner has not approved an implementation phase.
   Done: that file. The map's edit-distance, prefactor, ideal-gas, and private-RK4 rows were corrected from the same reading. No `src/` change. The owner accepted the five resolutions on 2026-10-04. `upt evaluate` converts an energy in a kelvin slot through `readNamedBinding`. The Larmor radius is a magnitude and cyclotron frequency stays signed. `BridgeEquations`, `evaluateEinsteinRelation`, and the other per-bridge APIs are removed with no compatibility shims. Ideal-gas `N` stays a dimensionless input. A missing MathTS scalar-expression builder is added in MathTS before phase 6 lowers, and publishing MathTS stays the owner's job. The phases below are the authorized work.
