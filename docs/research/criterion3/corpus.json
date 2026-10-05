@@ -2090,16 +2090,19 @@
           "op": "*",
           "args": [
             {
-              "kind": "symbol",
-              "name": "charge",
-              "dim": {
-                "L": 0,
-                "M": 0,
-                "T": 1,
-                "I": 1,
-                "Theta": 0,
-                "N": 0,
-                "J": 0
+              "kind": "abs",
+              "arg": {
+                "kind": "symbol",
+                "name": "charge",
+                "dim": {
+                  "L": 0,
+                  "M": 0,
+                  "T": 1,
+                  "I": 1,
+                  "Theta": 0,
+                  "N": 0,
+                  "J": 0
+                }
               }
             },
             {

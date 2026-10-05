@@ -201,11 +201,11 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     id: 'CE-larmor-radius',
     name: 'Larmor (gyro) radius',
     domain: 'electromagnetism',
-    formula_latex: 'r_L = m v_\\perp / (q B)',
+    formula_latex: 'r_L = m v_\\perp / (|q| B)',
     epistemicStatus: 'fully-quantitative',
     scalarAst: op('/', [
       op('*', [sym('mass', MASS), sym('speed', VELOCITY)]),
-      op('*', [sym('charge', CHARGE), sym('magnetic-field', MAGNETIC_FIELD)]),
+      op('*', [{ kind: 'abs', arg: sym('charge', CHARGE) }, sym('magnetic-field', MAGNETIC_FIELD)]),
     ]),
     regime: { scale: 'classical', force: 'electromagnetic' },
     assumptions: ['velocity perpendicular to B', 'non-relativistic'],
