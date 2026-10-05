@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 from v0.1.0 onward.
 
+## [Unreleased]
+
+### Documented
+
+- **Plasma and space dogfood of published 5.0.0.** `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md` records the plasma and space session against the published tarball: how the Debye, frequency, MHD, sheath, transport, and solar-wind commands behave, and the candidates that units do not fix. Candidates stay unproven. The bugs it records are filed as issues 386–392 and are not fixed here. No `src/` change.
+
 ## [5.0.0] - 2026-10-04
 
 Major release. The breaks below landed after published `4.0.0` (`9e7dfa279be3c56d83c1f9436cd3034687f00e3f`). The package root adds the BE-88 through BE-102 evaluators, their input and result types, and `be88Edge` through `be102Edge`. npm `4.0.0` remains the published release until the tag workflow.
