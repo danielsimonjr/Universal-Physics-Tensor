@@ -11,7 +11,7 @@
 | Metric | Count |
 |--------|-------|
 | Total Source Files | 472 |
-| Total Test Files | 671 |
+| Total Test Files | 672 |
 | Source Files with Tests | 462 |
 | Source Files without Tests | 10 |
 | Coverage | 97.9% |
@@ -522,6 +522,7 @@ The following 10 source files are not directly imported by any test file:
 | `api/optional-peer-absence.test.ts` | 0 files |
 | `api/public-surface.test.ts` | 177 files |
 | `api/public-tag-vs-index-invariant.test.ts` | 0 files |
+| `architecture/scalar-builder-gate.test.ts` | 0 files |
 | `architecture/single-owner.test.ts` | 0 files |
 | `atlas/applicability.test.ts` | 6 files |
 | `atlas/association.test.ts` | 38 files |

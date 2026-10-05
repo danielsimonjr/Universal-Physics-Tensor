@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 472,
-    "totalTestFiles": 671,
+    "totalTestFiles": 672,
     "testedCount": 462,
     "untestedCount": 10,
     "coveragePercent": "97.9"
@@ -15737,6 +15737,7 @@
       "src/core/regimes-builtins.ts"
     ],
     "tests/api/public-tag-vs-index-invariant.test.ts": [],
+    "tests/architecture/scalar-builder-gate.test.ts": [],
     "tests/architecture/single-owner.test.ts": [],
     "tests/atlas/applicability.test.ts": [
       "src/dimensional/ast-builders.ts",
