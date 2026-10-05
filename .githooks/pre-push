@@ -101,6 +101,14 @@ if ! git diff --quiet -- docs/architecture/; then
   exit 1
 fi
 
+echo "pre-push gate: PhysJS table freshness"
+if ! bun scripts/generate-physjs-table.ts --check; then
+  echo ""
+  echo "PRE-PUSH GATE FAILED: src/atlas/physjs-entries.generated.ts is stale."
+  echo "Run bun run physjs:table and commit the file."
+  exit 1
+fi
+
 # ---------------------------------------------------------------------------
 # code-docs, as a RATCHET rather than a wall.
 #

@@ -92,6 +92,8 @@ jobs:
         run: bun scripts/readme-status.ts --check
       - name: Fail when the CLI reference is stale
         run: bun scripts/cli-reference.ts --check
+      - name: Fail when the PhysJS table is stale
+        run: bun scripts/generate-physjs-table.ts --check
 
   # Non-required on purpose. The local pre-push hook still runs the private
   # code_docs.py against .githooks/code-docs-baseline.txt. A GitHub-UI merge

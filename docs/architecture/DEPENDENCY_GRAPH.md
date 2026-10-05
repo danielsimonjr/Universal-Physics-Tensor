@@ -38,7 +38,7 @@ This document provides a comprehensive dependency graph of all files, components
 
 The codebase is organized into the following modules:
 
-- **atlas**: 70 files
+- **atlas**: 71 files
 - **bridges**: 129 files
 - **canonical**: 19 files
 - **cases**: 9 files
@@ -871,17 +871,24 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/atlas/physjs-entries.generated.ts` - Generated from `formal/physjs/manifest.json`. Do not edit by hand.
+
+**Exports:**
+- Constants: `PHYSJS_COMMIT`, `PHYSJS_TOOLCHAIN`, `PHYSJS_MATHLIB`, `PHYSJS_PHYS_LIB`, `PHYSJS_ENTRIES`
+
+---
+
 ### `src/atlas/physjs-ref.ts` - Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `FormalRef, FormalRefKind` | Import (type-only) |
+| `./physjs-entries.generated.js` | `PHYSJS_COMMIT, PHYSJS_MATHLIB, PHYSJS_PHYS_LIB, PHYSJS_TOOLCHAIN, PHYSJS_ENTRIES` | Import |
 
 **Exports:**
 - Interfaces: `PhysjsManifestFile`
 - Functions: `physjsTheorem`, `physjsLeanFile`, `physjsFileUrl`, `bridgeSeedKeys`, `physjsFormalRef`, `physjsManifestProblems`
-- Constants: `PHYSJS_COMMIT`
 
 ---
 
@@ -8814,7 +8821,7 @@ graph TD
         N2[backend-shapes]
         N3[baselines]
         N4[hybrid-retrieval]
-        N5[...65 more]
+        N5[...66 more]
     end
 
     subgraph Bridges
@@ -8950,10 +8957,10 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 471 |
+| Total TypeScript Files | 472 |
 | Total Modules | 13 |
-| Total Lines of Code | 100124 |
-| Total Exports | 3555 |
+| Total Lines of Code | 100067 |
+| Total Exports | 3560 |
 | Total Re-exports | 1736 |
 | Total Classes | 61 |
 | Total Interfaces | 561 |

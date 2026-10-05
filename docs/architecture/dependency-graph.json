@@ -2,9 +2,9 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "5.0.0",
-    "totalFiles": 471,
+    "totalFiles": 472,
     "totalModules": 13,
-    "totalExports": 3555
+    "totalExports": 3560
   },
   "entryPoints": [
     {
@@ -3138,6 +3138,26 @@
           "horizonOnRoute"
         ]
       },
+      "src/atlas/physjs-entries.generated.ts": {
+        "description": "Generated from `formal/physjs/manifest.json`. Do not edit by hand.",
+        "externalDependencies": [],
+        "nodeDependencies": [],
+        "internalDependencies": [],
+        "exports": [
+          "PHYSJS_COMMIT",
+          "PHYSJS_TOOLCHAIN",
+          "PHYSJS_MATHLIB",
+          "PHYSJS_PHYS_LIB",
+          "PHYSJS_ENTRIES"
+        ],
+        "constants": [
+          "PHYSJS_COMMIT",
+          "PHYSJS_TOOLCHAIN",
+          "PHYSJS_MATHLIB",
+          "PHYSJS_PHYS_LIB",
+          "PHYSJS_ENTRIES"
+        ]
+      },
       "src/atlas/physjs-ref.ts": {
         "description": "Reviewed `formalRef`s keyed by the vendored PhysJS bridge manifest.",
         "externalDependencies": [],
@@ -3150,6 +3170,16 @@
               "FormalRefKind"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./physjs-entries.generated.js",
+            "imports": [
+              "PHYSJS_COMMIT",
+              "PHYSJS_MATHLIB",
+              "PHYSJS_PHYS_LIB",
+              "PHYSJS_TOOLCHAIN",
+              "PHYSJS_ENTRIES"
+            ]
           }
         ],
         "exports": [
@@ -3171,9 +3201,6 @@
           "bridgeSeedKeys",
           "physjsFormalRef",
           "physjsManifestProblems"
-        ],
-        "constants": [
-          "PHYSJS_COMMIT"
         ]
       },
       "src/atlas/poster/associations.ts": {
@@ -32911,6 +32938,7 @@
           "src/atlas/oscillators/position-translation.ts",
           "src/atlas/oscillators/rejections.ts",
           "src/atlas/path-bound.ts",
+          "src/atlas/physjs-entries.generated.ts",
           "src/atlas/physjs-ref.ts",
           "src/atlas/poster/associations.ts",
           "src/atlas/poster/derivations.ts",
@@ -33401,16 +33429,16 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 471,
+    "totalTypeScriptFiles": 472,
     "totalModules": 13,
-    "totalLinesOfCode": 100124,
-    "totalExports": 3555,
+    "totalLinesOfCode": 100067,
+    "totalExports": 3560,
     "totalClasses": 61,
     "totalInterfaces": 561,
     "totalFunctions": 849,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 911,
+    "totalConstants": 915,
     "totalReExports": 1736,
     "totalTypeOnlyImports": 583,
     "runtimeCircularDeps": 0,
