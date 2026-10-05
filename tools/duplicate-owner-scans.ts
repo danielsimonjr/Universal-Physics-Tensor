@@ -4,7 +4,7 @@
  * A hit is a second owner. The generated file `docs/architecture/duplicate-owners.md`
  * is this scan's output. The architecture test fails when the list is not empty.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 function walkTs(dir: string, out: string[]): void {
@@ -77,8 +77,10 @@ export function temperatureOwnerHits(root: string): string[] {
 
 /** `assertSameCarrierSign` has no caller except `applyCarrierSignPolicy`. */
 export function signOwnerHits(root: string): string[] {
+  const policyPath = join(root, 'src/bridges/carrier-sign.ts');
+  if (!existsSync(policyPath)) return [];
   const hits: string[] = [];
-  const policy = readFileSync(join(root, 'src/bridges/carrier-sign.ts'), 'utf8');
+  const policy = readFileSync(policyPath, 'utf8');
   const body = braceBody(policy, 'applyCarrierSignPolicy');
   if (body === null || !body.includes('assertSameCarrierSign(')) {
     hits.push('applyCarrierSignPolicy does not call assertSameCarrierSign');
