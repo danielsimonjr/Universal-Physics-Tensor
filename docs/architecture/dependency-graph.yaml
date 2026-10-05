@@ -3,7 +3,7 @@ metadata:
   version: 5.0.0
   totalFiles: 472
   totalModules: 13
-  totalExports: 3554
+  totalExports: 3555
 entryPoints:
   - file: src/index.ts
     type: main
@@ -18866,6 +18866,10 @@ modules:
         - file: ./core/regimes-builtins.js
           imports:
             - "*"
+        - file: ./atlas/public.js
+          imports:
+            - "*"
+          reExport: true
         - file: ./core/tensor.js
           imports:
             - UniversalTensor
@@ -20549,6 +20553,7 @@ modules:
         - confrontationRigor
         - rigorDistribution
         - decidingMeasurement
+        - atlas
         - TensorConfig
         - TensorIndices
         - PhysicalLaw
@@ -20769,6 +20774,7 @@ modules:
         - RigorTier
         - Elasticity
       reExported:
+        - "* as atlas from ./atlas/public.js"
         - UniversalTensor
         - C_SI
         - G_SI
@@ -23466,16 +23472,16 @@ statistics:
   totalTypeScriptFiles: 472
   totalModules: 13
   totalLinesOfCode: 99989
-  totalExports: 3554
+  totalExports: 3555
   totalClasses: 61
   totalInterfaces: 560
   totalFunctions: 850
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 911
-  totalReExports: 1734
+  totalReExports: 1735
   totalTypeOnlyImports: 583
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
-  unusedFilesCount: 1
+  unusedFilesCount: 0
   unusedExportsCount: 78

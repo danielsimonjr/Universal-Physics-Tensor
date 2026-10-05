@@ -6,6 +6,8 @@ A reading of how the library actually runs, and where the same concept is implem
 
 The temperature call graph below was re-read after `b193d5e0` (#395). That patch calls `alignTemperatureBinding` from explain, discovery anchors, regime coordinates, and path sweeps. The headline counts in the table were not re-derived on that commit. `upt evaluate` still does not call `alignTemperatureBinding`.
 
+A later regeneration, after `docs:deps` learned `export * as`, re-counted the unused-file and no-test rows. `dependency-graph.json` `statistics` is 472 source files, 3555 exports, 1735 re-exports, 0 unused files, and 78 unused exports. `git ls-files 'src/**/*.ts' 'src/*.ts'` is 472. `TEST_COVERAGE.md` is 666 test files and 10 source files with no test import (462 of 472, 97.9 percent). The extra export and re-export are `export * as atlas`. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
+
 Anything below that was not opened in source, or that a second method did not confirm, is marked **INFERRED**.
 
 ---
@@ -20,9 +22,9 @@ Anything below that was not opened in source, or that a second method did not co
 | Modules | 13 | 12 directories plus the two root files `src/index.ts` (`entry`) and `src/cli-api.ts` (`root`) | yes |
 | Lines | 99578 | 99111 physical lines. 467 files end in a newline. `split('\n').length` adds one segment per such file: 99111 + 467 = 99578 | yes, different definition |
 | Circular dependencies | 0 runtime, 0 type-only | 2453 relative import edges, 0 unresolved, 0 cycles, 469 files appear in the walk | yes |
-| Unused file | `src/atlas/public.ts` | `src/index.ts` does not list that file in the JSON internal-dependency array. The source does `export * as atlas from './atlas/public.js'` at `src/index.ts:1144` | the file is reached; the generator misses `export * as` |
+| Unused file | none. The first measurement listed `src/atlas/public.ts` | `dependency-graph.json` records `src/index.ts` depending on `./atlas/public.js`. The source is `export * as atlas from './atlas/public.js'` at `src/index.ts:1144` | yes |
 | Unused exports | 78 | not re-derived name by name. One listed name is a parser false positive (below) | count matches the committed `unused-analysis.md`; the list is not a deletion list |
-| Source files with no test import | 11 of 471 (97.7%), 662 test files | the 11 paths are the generator's "no test file imports this module" list, not statement coverage | definition recorded, not re-derived |
+| Source files with no test import | 10 of 472 (97.9%), 666 test files. The first measurement was 11 of 471 (97.7%), 662 test files | the 10 paths are the generator's "no test file imports this module" list, not statement coverage. `src/atlas/public.ts` left the list because the namespace re-export is now an import edge | definition recorded, not re-derived |
 | Public surface | 698 symbols, 611 `@public`, 3 `@internal`, 84 untagged, `undocumented: 20` | 698 symbols in the report; 21 have `documented: false`. The summary excludes `kind: 'namespace'` (`tools/create-dependency-graph/api-surface.ts:627`). The extra one is the `atlas` namespace | yes |
 | API-walk external MathTS import | one: `src/numerical/gl4-integrator.ts` → `@danielsimonjr/mathts-functions` | the report's `external` array has that single object. Unresolved specifiers: 0 | yes |
 | Files that load MathTS | — | 14 files contain `from`, `import()`, or `import.meta.resolve` of `@danielsimonjr/mathts-*` | the "about 16" figure matches mention sites if `src/cli/version.ts:52` (a string) and a comment in `src/atlas/witness-symbolic.ts` are counted with the 14 |
@@ -340,7 +342,7 @@ The commit string is also hardcoded in `tests/atlas/physjs-manifest.test.ts`, `t
 
 ### `src/atlas/public.ts` is reached
 
-`unused-analysis.md` lists it because the generator does not record `export * as` as an internal dependency. `src/index.ts:1142-1144` is the namespace facade `MEMORY.md` describes. The `./atlas` package subpath points at `src/atlas/index.ts`, which is the larger internal barrel. Two entry shapes, one implementation.
+`docs:deps` records `export * as <name> from` as an internal dependency, the same way it records `export * from`. `unused-analysis.md` lists 0 unused files. `src/index.ts:1144` is the namespace facade `MEMORY.md` describes, and the dependency graph records that edge. The `./atlas` package subpath points at `src/atlas/index.ts`, which is the larger internal barrel. Two entry shapes, one implementation. The live duplicate-owner list, which does not yet register a scan, is `docs/architecture/duplicate-owners.md`.
 
 The same generator lists `BCS_GAP_RATIO` as an export of `src/bridges/confrontations.ts`. The only occurrence there is a quote string at `confrontations.ts:661`. The real export is `src/bridges/be62-bcs-gap.ts:23`. That unused-export row is a lexer false positive.
 
@@ -386,13 +388,13 @@ These files exist so atlas (and a few other barrels) can name a symbol whose bod
 
 `duplicate-symbols.md` previously said 5 names, 383 `src` files, and `totalSourceFiles` 1025. The 383/1025 figures are not in the current `dependency-graph.json` (`totalFiles` 471, `totalExports` 3553). `repo_map.py` is not in this repository; that file was corrected from this reading, not regenerated by `repo_map.py`.
 
-### Eleven files no test imports directly
+### Ten files no test imports directly
 
 From `TEST_COVERAGE.md`, which measures import edges from tests, not line coverage:
 
-`src/atlas/public.ts`, `src/cases/quadrature.ts`, `src/cli/commands/_atlas-route.ts`, `src/cli/conventions.ts`, `src/cli/determination.ts`, `src/cli/euler-guard.ts`, `src/cli/record-reach.ts`, `src/cli/record-tables.ts`, `src/cli/record.ts`, `src/cli/top-level-help.ts`, `src/dimensional/natural-units.ts`.
+`src/cases/quadrature.ts`, `src/cli/commands/_atlas-route.ts`, `src/cli/conventions.ts`, `src/cli/determination.ts`, `src/cli/euler-guard.ts`, `src/cli/record-reach.ts`, `src/cli/record-tables.ts`, `src/cli/record.ts`, `src/cli/top-level-help.ts`, `src/dimensional/natural-units.ts`.
 
-`public.ts` is on this list for the same `export * as` blind spot. The CLI modules are reached through `main.ts` and `cli-api.ts`, so a test of a command can exercise them without importing the file. That is a coverage-tool limit, not a proof the file is untested.
+`src/atlas/public.ts` left this list when the generator began following `export * as`: tests that import the package root now reach the namespace and the modules it re-exports. The CLI modules are reached through `main.ts` and `cli-api.ts`, so a test of a command can exercise them without importing the file. That is a coverage-tool limit, not a proof the file is untested.
 
 ### Architecture docs that had drifted
 
@@ -400,7 +402,7 @@ Corrected in this change: the verification blocks and the current-count sentence
 
 Still narrative, and not rewritten sentence by sentence: per-file component essays, historical audit reports under `docs/architecture/archive/`, and `PHYSICS_MAP.md`. Where those essays still say the catalog has 58 rows or that `Float64ReferenceEngine` exists, the essay is older than the tree. `class Float64ReferenceEngine` is absent under `src/`; `MathTSEngine` is the engine class (`src/numerical/mathts-engine.ts:57`). `ARCHITECTURE.md`'s statistics table was updated; a later paragraph that still names two engines should be read against that table.
 
-`git ls-files '*.ts' '*.tsx'` on this checkout is 1193 files (471 under `src/`, 688 under `tests/`). That is not the old repo_map total of 1025, and it is not the generator's 662 test files (the generator's test count is the files it classified as tests). Both numbers are in this map so they are not collapsed into one.
+`git ls-files '*.ts' '*.tsx'` on this checkout is 1198 files (472 under `src/`). That is not the old repo_map total of 1025, and it is not the generator's 666 test files (the generator's test count is the files it classified as tests). Both numbers are in this map so they are not collapsed into one.
 
 ---
 
@@ -419,7 +421,7 @@ Each row names a single owner that could hold the concept, and the break a unifi
 | 7 | The two `canonicalJson` implementations and the two `captureEnvironment` implementations | one serializer module with two named profiles (`record`, `probe`) | merging the profiles without naming them changes record fingerprints or probe hashes. Keeping two profiles avoids that break and removes the second algorithm |
 | 8 | BE-70's domain predicate and `assertSameCarrierSign`, beside the canonical monomial check | `assertCarrierProductSign` invoked once from `evaluateEdge` | error text may name one pair of variables. Hall and cyclotron stay signed. The public `CarrierSignError` class stays |
 | 9 | Hand-copied PhysJS entries (`PHYSJS_ENTRIES`, test SHA constants, golden URLs) | `formal/physjs/manifest.json` as the only pin; generate the TypeScript table | `physjsFormalRef` stays. The ritual in `WORKFLOWS.md` gains a generate step and loses the hand-copied table. A wrong generate would fail `atlas:formal-gate` |
-| 10 | Atlas re-export shims and the generator's blindness to `export * as` | keep `src/relations/` as the vocabulary owner; teach `docs:deps` to follow `export * as`, or stop listing `public.ts` as unused | no physics API break. `export * as atlas` stays the package namespace. A generator change moves `public.ts` out of `unused-analysis.md` and out of the "no test import" list |
+| 10 | Atlas re-export shims and the generator's blindness to `export * as` | keep `src/relations/` as the vocabulary owner; teach `docs:deps` to follow `export * as`, or stop listing `public.ts` as unused | no physics API break. `export * as atlas` stays the package namespace. The generator now records that form: `public.ts` is out of `unused-analysis.md` and out of the "no test import" list. The assign-and-reexport shims are still two local definitions |
 
 Targets 1 and 5 are the ones a user can hit today with one command that disagrees with another command about the same quantity. Targets 2 and 3 are why a fix in one registry does not land in the others. Target 6 is the owner's "delegate math to MathTS" boundary that is still open. Targets 7–10 are real duplicates with a smaller user-visible surface.
 
