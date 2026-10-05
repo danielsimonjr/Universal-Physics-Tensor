@@ -2,7 +2,7 @@
 
 > **Status note:** This document catalogs Bridge Equations 21-76 (BE-21–50 from the original spec catalog; BE-51–54 in §V-B; BE-55–76 in §V-C). Equations span a wide range of physical credibility: some (e.g., Eq 21 AdS/CMT; Eq 26 WKB tunneling; Eq 35 conformal bootstrap; Eqs 55–76) are established results from mainstream physics; others (e.g., Eq 25 consciousness, Eq 42 firewall, Eq 46 multiverse, Eq 50 retrocausal QFT) are highly speculative. Each equation should carry a **Status** line indicating this; where one is missing, treat the equation as unvalidated. Several equations have known issues flagged in their Status notes (Eqs 22, 23, 24, 25, 31, 37, 38, 50). The mathematical formulations reproduced here are drawn from the literature (where cited) or are original proposals; formal citations are being retroactively added — see the Part-VI conclusion for the current citation-completeness status.
 
-> **Spec-scope note (catalog count):** The specification catalogs **77 bridge equations, IDs 11–87** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-87: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–87). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05, BE-66–68 are written up in §V-C, BE-69–73 are the PhysJS #57 rows in that same section, and BE-74–76 are the PhysJS #62 rows, and BE-77–87 are the PhysJS #64 rows. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **77 entries, IDs 11–87**. Entries 51 and 53–87 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C, prose that says "58 equations" / "IDs 11–68" is the record from before BE-69–73, and prose that says "63 equations" / "IDs 11–73" is the record from before BE-74–76. Status distribution across the 66-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 30 established · 33 speculative · 3 highly-speculative · 0 invalid.
+> **Spec-scope note (catalog count):** The specification catalogs **77 bridge equations, IDs 11–87** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-87: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–87). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05, BE-66–68 are written up in §V-C, BE-69–73 are the PhysJS #57 rows in that same section, and BE-74–76 are the PhysJS #62 rows, and BE-77–87 are the PhysJS #64 rows. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **115 entries, IDs 11–125**. The sentence that names 77 entries, IDs 11–87, is the record from before BE-88–102. The sentence that names 92 entries, IDs 11–102, is the record from before BE-103–125. BE-88–102 are the PhysJS #65 rows. BE-103–125 are the PhysJS #66 rows in §V-C. Entries 51 and 53–87 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C, prose that says "58 equations" / "IDs 11–68" is the record from before BE-69–73, and prose that says "63 equations" / "IDs 11–73" is the record from before BE-74–76. Status distribution across the 66-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 30 established · 33 speculative · 3 highly-speculative · 0 invalid.
 
 ## V. Extended Catalog of Bridging Equations (21-50)
 
@@ -1746,6 +1746,328 @@ where:
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.LandauerConductance.conductance_eq`.
 - **Rationale**: One spin is e²/h. This is not the Hall conductance and not Landauer erasure.
 
+**Bridge Equation 103: Bohm sheath threshold** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.BohmSheath.cold_bohm_threshold`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/BohmSheath.lean) states that cold ions, with n_i(φ) = n0 / sqrt(1 − 2 e φ/(m u0²)) and Boltzmann electrons, have edge slopes whose ratio is at least 1 only when u0² ≥ k_B T_e / m_i. The sound-speed root is the non-negative one. γ_i = 3, from p ∝ n³, is the nested warmSound object and is not γ_i = 5/3. Not a kinetic sheath. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateBohmSheath`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: cold ions, with n_i(φ) = n0 / sqrt(1 − 2 e φ/(m u0²)) and Boltzmann electrons, have edge slopes whose ratio is at least 1 only when u0² ≥ k_B T_e / m_i. The sound-speed root is the non-negative one. γ_i = 3, from p ∝ n³, is the nested warmSound object and is not γ_i = 5/3. Not a kinetic sheath
+- **Mathematical Formulation**: `u_0 = \sqrt{k_B T_e / m_i}`.
+- **Dimensions**: The catalog signature is `[velocity]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.BohmSheath.cold_bohm_threshold`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 104: Ion-acoustic dispersion** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.IonAcoustic.dispersion_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/IonAcoustic.lean) states that cold ions, continuity, ion momentum, and Poisson with Boltzmann electrons inside Poisson give ω² = k² c_s² / (1 + k² λ_De²), with c_s² = k_B T_e / m_i and λ_De² = ε0 k_B T_e / (n0 e²), for k ≠ 0. Warm ions and a kinetic dispersion are not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateIonAcoustic`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: cold ions, continuity, ion momentum, and Poisson with Boltzmann electrons inside Poisson give ω² = k² c_s² / (1 + k² λ_De²), with c_s² = k_B T_e / m_i and λ_De² = ε0 k_B T_e / (n0 e²), for k ≠ 0. Warm ions and a kinetic dispersion are not this row
+- **Mathematical Formulation**: `\omega^2 = k^2 c_s^2 / (1 + k^2 \lambda_{De}^2)`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.IonAcoustic.dispersion_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 105: Upper-hybrid frequency** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.UpperHybrid.upper_hybrid_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/UpperHybrid.lean) states that cold electrons, B along z, and the ansatz Ex = E0 cos(ω t), vx = vx0 sin(ω t), vy = vy0 cos(ω t), with charge −e and ∂Ex/∂t = n e vx / ε0, give ω² = n e²/(ε0 m) + (e B/m)². Not a cyclotron monomial and not ω_pe alone. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateUpperHybrid`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: cold electrons, B along z, and the ansatz Ex = E0 cos(ω t), vx = vx0 sin(ω t), vy = vy0 cos(ω t), with charge −e and ∂Ex/∂t = n e vx / ε0, give ω² = n e²/(ε0 m) + (e B/m)². Not a cyclotron monomial and not ω_pe alone
+- **Mathematical Formulation**: `\omega^2 = n e^2/(\varepsilon_0 m) + (e B/m)^2`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.UpperHybrid.upper_hybrid_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 106: R-wave cutoff** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ColdPlasmaCutoff.cutoff_R`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ColdPlasmaCutoff.lean) states that the cold Stix index n_R² = 1 − ω_p²/(ω(ω − ω_c)) is a hypothesis. Vanishing n is ω(ω − ω_c) = ω_p². For ω_c ≥ 0 the nonnegative root is ω_R = (ω_c + sqrt(ω_c² + 4 ω_p²))/2. The L root and the whistler limit are nested. The Stix dielectric is not re-derived. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateColdPlasmaCutoff`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the cold Stix index n_R² = 1 − ω_p²/(ω(ω − ω_c)) is a hypothesis. Vanishing n is ω(ω − ω_c) = ω_p². For ω_c ≥ 0 the nonnegative root is ω_R = (ω_c + sqrt(ω_c² + 4 ω_p²))/2. The L root and the whistler limit are nested. The Stix dielectric is not re-derived
+- **Mathematical Formulation**: `\omega_R = (\omega_c + \sqrt{\omega_c^2 + 4 \omega_p^2})/2`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ColdPlasmaCutoff.cutoff_R`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 107: Lower-hybrid frequency** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LowerHybrid.lower_hybrid_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LowerHybrid.lean) states that cold singly charged fluids satisfy ω_pe²/ω_ce² = ω_pi²/(ω_ci ω_ce). The ordered balance 1 + ω_pi²/(ω_ci ω_ce) = ω_pi²/ω² is a hypothesis and gives ω² = 1/(1/ω_pi² + 1/(ω_ci ω_ce)). Dropping the leading 1 is a separate hypothesis and leaves ω² = ω_ci ω_ce. Not a cyclotron monomial. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLowerHybrid`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: cold singly charged fluids satisfy ω_pe²/ω_ce² = ω_pi²/(ω_ci ω_ce). The ordered balance 1 + ω_pi²/(ω_ci ω_ce) = ω_pi²/ω² is a hypothesis and gives ω² = 1/(1/ω_pi² + 1/(ω_ci ω_ce)). Dropping the leading 1 is a separate hypothesis and leaves ω² = ω_ci ω_ce. Not a cyclotron monomial
+- **Mathematical Formulation**: `\omega^2 = 1/(1/\omega_{pi}^2 + 1/(\omega_{ci} \omega_{ce}))`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LowerHybrid.lower_hybrid_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 108: Oblique fast magnetosonic speed** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ObliqueMagnetosonic.phase_speed_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ObliqueMagnetosonic.lean) states that the be-69 quartic with k_∥ = k cos θ is a hypothesis. The phase-speed squares are ½[c_s² + v_A² ± sqrt((c_s² + v_A²)² − 4 c_s² v_A² cos²θ)] for c_s², v_A² ≥ 0. At θ = π/2 the fast root is c_s² + v_A² and the slow root is 0, the perpendicular values and not a second proof of that polarization. At θ = 0 the roots are the larger and smaller of c_s² and v_A². The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateObliqueMagnetosonic`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the be-69 quartic with k_∥ = k cos θ is a hypothesis. The phase-speed squares are ½[c_s² + v_A² ± sqrt((c_s² + v_A²)² − 4 c_s² v_A² cos²θ)] for c_s², v_A² ≥ 0. At θ = π/2 the fast root is c_s² + v_A² and the slow root is 0, the perpendicular values and not a second proof of that polarization. At θ = 0 the roots are the larger and smaller of c_s² and v_A²
+- **Mathematical Formulation**: `v_+^2 = \tfrac{1}{2}\left[c_s^2 + v_A^2 + \sqrt{(c_s^2 + v_A^2)^2 - 4 c_s^2 v_A^2 \cos^2\theta}\right]`.
+- **Dimensions**: The catalog signature is `[velocity]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ObliqueMagnetosonic.phase_speed_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 109: Bennett pinch (equal temperature)** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.BennettPinch.bennett_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/BennettPinch.lean) states that a steady z-pinch with B = μ0 I/(2 π r), dI/dr = 2 π r j, and dp/dr = −j B cancels off the axis in d/dr[π r² p + μ0 I²/(8 π)]. Differentiability through the axis is a hypothesis. With I(0) = 0 and p(R) = 0 the fundamental theorem gives μ0 I(R)²/(8 π) = ∫₀^R 2 π r p dr. Equal temperatures are the nested equalTemperature object. The single-population current uses ∫ p dA = N k_B T and is not that hydrogenic current. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateBennettPinch`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: a steady z-pinch with B = μ0 I/(2 π r), dI/dr = 2 π r j, and dp/dr = −j B cancels off the axis in d/dr[π r² p + μ0 I²/(8 π)]. Differentiability through the axis is a hypothesis. With I(0) = 0 and p(R) = 0 the fundamental theorem gives μ0 I(R)²/(8 π) = ∫₀^R 2 π r p dr. Equal temperatures are the nested equalTemperature object. The single-population current uses ∫ p dA = N k_B T and is not that hydrogenic current
+- **Mathematical Formulation**: `I = \sqrt{16 \pi N k_B T / \mu_0}`.
+- **Dimensions**: The catalog signature is `[I]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.BennettPinch.bennett_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 110: Loss-cone pitch** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LossCone.loss_cone_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LossCone.lean) states that μ = m v_⊥²/(2 B) and the kinetic energy are constant along a field line. Parallel speed vanishes at the mirror, so sin² θ_lc = B0/Bm = 1/R_m with R_m = Bm/B0. Pitch-angle scattering is not this statement. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLossCone`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: μ = m v_⊥²/(2 B) and the kinetic energy are constant along a field line. Parallel speed vanishes at the mirror, so sin² θ_lc = B0/Bm = 1/R_m with R_m = Bm/B0. Pitch-angle scattering is not this statement
+- **Mathematical Formulation**: `\sin^2\theta_{lc} = B_0/B_m`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LossCone.loss_cone_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 111: Grad-B drift magnitude** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.GradBDrift.drift_magnitude`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/GradBDrift.lean) states that μ = m v_⊥²/(2 B) and the grad-B speed μ |∇B|/(q B) give m v_⊥² |∇B|/(2 q B²). Vacuum low-β curvature uses κ = |∇B|/B, so the curvature speed is m v_∥² |∇B|/(q B²) and the sum is m (v_∥² + v_⊥²/2) |∇B|/(q B²). High-β curvature, where κ ≠ |∇B|/B, is a different vector for m ≠ 0. q is the signed charge. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateGradBDrift`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: μ = m v_⊥²/(2 B) and the grad-B speed μ |∇B|/(q B) give m v_⊥² |∇B|/(2 q B²). Vacuum low-β curvature uses κ = |∇B|/B, so the curvature speed is m v_∥² |∇B|/(q B²) and the sum is m (v_∥² + v_⊥²/2) |∇B|/(q B²). High-β curvature, where κ ≠ |∇B|/B, is a different vector for m ≠ 0. q is the signed charge
+- **Mathematical Formulation**: `v = m v_\perp^2 |\nabla B| / (2 q B^2)`.
+- **Dimensions**: The catalog signature is `[velocity]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.GradBDrift.drift_magnitude`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 112: E×B drift speed** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ExBDrift.drift_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ExBDrift.lean) states that steady q E + q v × B = 0 with B along z gives v_x = E_y/B and v_y = −E_x/B for q ≠ 0 and B ≠ 0. The opposite charge has the same solution. Not a finite-Larmor-radius drift. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateExBDrift`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: steady q E + q v × B = 0 with B along z gives v_x = E_y/B and v_y = −E_x/B for q ≠ 0 and B ≠ 0. The opposite charge has the same solution. Not a finite-Larmor-radius drift
+- **Mathematical Formulation**: `v = |E_\perp| / |B|`.
+- **Dimensions**: The catalog signature is `[velocity]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ExBDrift.drift_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 113: Landau damping rate** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LandauDamping.damping_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LandauDamping.lean) states that the Maxwellian f = n/(v_t sqrt(2π)) exp(−v²/(2 v_t²)) has slope −(v/v_t²) f. The residue formula γ = (π ω³/(2 n k²)) (∂f/∂v)|_{ω/k} is a hypothesis, not a contour integral, and gives γ = −sqrt(π/8) ω (ω/(k v_t))³ exp(−ω²/(2 k² v_t²)). Bohm–Gross is the nested bohmGross object and does not replace ω by ω_p in this prefactor. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLandauDamping`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the Maxwellian f = n/(v_t sqrt(2π)) exp(−v²/(2 v_t²)) has slope −(v/v_t²) f. The residue formula γ = (π ω³/(2 n k²)) (∂f/∂v)|_{ω/k} is a hypothesis, not a contour integral, and gives γ = −sqrt(π/8) ω (ω/(k v_t))³ exp(−ω²/(2 k² v_t²)). Bohm–Gross is the nested bohmGross object and does not replace ω by ω_p in this prefactor
+- **Mathematical Formulation**: `\gamma = -\sqrt{\pi/8}\,\omega\,(\omega/(k v_t))^3 \exp(-\omega^2/(2 k^2 v_t^2))`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LandauDamping.damping_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 114: Debye-sphere Coulomb argument** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.DebyeSphere.coulomb_argument`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/DebyeSphere.lean) states that N_D = (4π/3) n λ_D³. The Rutherford b_90 = e²/(4π ε0 μ v_rel²), at (1/2) μ v_rel² = (3/2) k_B T, is e²/(12 π ε0 k_B T). Then Λ = λ_D/b_90 = 12 π n λ_D³ = 9 N_D. The one-species Debye length is an input. The angular integral and ln Λ are not evaluated. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateDebyeSphere`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: N_D = (4π/3) n λ_D³. The Rutherford b_90 = e²/(4π ε0 μ v_rel²), at (1/2) μ v_rel² = (3/2) k_B T, is e²/(12 π ε0 k_B T). Then Λ = λ_D/b_90 = 12 π n λ_D³ = 9 N_D. The one-species Debye length is an input. The angular integral and ln Λ are not evaluated
+- **Mathematical Formulation**: `\Lambda = 9 N_D`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.DebyeSphere.coulomb_argument`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 115: Two-species Debye length** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.MultiDebye.debye_two`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/MultiDebye.lean) states that two linearized Boltzmann responses and Poisson give 1/λ_D² = 1/λ₁² + 1/λ₂², with λ_s² = ε0 k_B T_s/(n_s q_s²). Dropping a responding species leaves a different length. The one-species length is not restated. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateMultiDebye`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: two linearized Boltzmann responses and Poisson give 1/λ_D² = 1/λ₁² + 1/λ₂², with λ_s² = ε0 k_B T_s/(n_s q_s²). Dropping a responding species leaves a different length. The one-species length is not restated
+- **Mathematical Formulation**: `1/\lambda_D^2 = 1/\lambda_1^2 + 1/\lambda_2^2`.
+- **Dimensions**: The catalog signature is `[length]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.MultiDebye.debye_two`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 116: Lorentz resistivity (kinetic)** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LorentzResistivity.resistivity_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LorentzResistivity.lean) states that σ_tr = 4π b0² ln Λ is a hypothesis, with b0 = Z e²/(4π ε0 m v²). At v_T² = 2 k_B T/m, ν(v_T) = n_i Z² e⁴ ln Λ √2 / (16 π ε0² √m (k_B T √(k_B T))). The conductivity moment σ = (8/√π) n_e e²/(m ν(v_T)) is a hypothesis, not the Gaussian integral. With n_e = Z n_i it gives η = (π √(2π)/8) Z e² √m ln Λ / ((4π ε0)² (k_B T √(k_B T))). The typed reference closure is nested. The Spitzer–Härm factor 0.51 is not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLorentzResistivity`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: σ_tr = 4π b0² ln Λ is a hypothesis, with b0 = Z e²/(4π ε0 m v²). At v_T² = 2 k_B T/m, ν(v_T) = n_i Z² e⁴ ln Λ √2 / (16 π ε0² √m (k_B T √(k_B T))). The conductivity moment σ = (8/√π) n_e e²/(m ν(v_T)) is a hypothesis, not the Gaussian integral. With n_e = Z n_i it gives η = (π √(2π)/8) Z e² √m ln Λ / ((4π ε0)² (k_B T √(k_B T))). The typed reference closure is nested. The Spitzer–Härm factor 0.51 is not this row
+- **Mathematical Formulation**: `\eta = (\pi \sqrt{2\pi}/8)\, Z e^2 \sqrt{m} \ln\Lambda / ((4\pi\varepsilon_0)^2 (k_B T)^{3/2})`.
+- **Dimensions**: The catalog signature is `[L^3 M T^-3 I^-2]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LorentzResistivity.resistivity_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 117: Resistive-slab decay time** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ResistiveSlab.decay_time`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ResistiveSlab.lean) states that η_m = 1/(μ0 σ) and ∂B/∂t = η_m ∂²B/∂x² are hypotheses. The slab mode B0 sin(π x/L) exp(−t/τ) decays at τ = μ0 σ L²/π². A denominator 4π is not π². Rm and the Lundquist number are the nested lundquist object. Not the Reynolds analogy. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateResistiveSlab`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: η_m = 1/(μ0 σ) and ∂B/∂t = η_m ∂²B/∂x² are hypotheses. The slab mode B0 sin(π x/L) exp(−t/τ) decays at τ = μ0 σ L²/π². A denominator 4π is not π². Rm and the Lundquist number are the nested lundquist object. Not the Reynolds analogy
+- **Mathematical Formulation**: `\tau = \mu_0 \sigma L^2 / \pi^2`.
+- **Dimensions**: The catalog signature is `[time]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ResistiveSlab.decay_time`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 118: Parker critical radius** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ParkerCritical.critical_radius`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ParkerCritical.lean) states that an isothermal spherical wind factors as (v − c_s²/v) dv = (2 c_s²/r − G M/r²) dr. The critical point is both factors vanishing: v² = c_s² and r_c = G M/(2 c_s²). The 2 is spherical divergence. A vanishing coefficient alone does not force the geometric side to vanish. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateParkerCritical`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: an isothermal spherical wind factors as (v − c_s²/v) dv = (2 c_s²/r − G M/r²) dr. The critical point is both factors vanishing: v² = c_s² and r_c = G M/(2 c_s²). The 2 is spherical divergence. A vanishing coefficient alone does not force the geometric side to vanish
+- **Mathematical Formulation**: `r_c = G M / (2 c_s^2)`.
+- **Dimensions**: The catalog signature is `[length]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ParkerCritical.critical_radius`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 119: Parker spiral ratio** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ParkerSpiral.spiral_ratio`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ParkerSpiral.lean) states that B_φ/B_r = r sinθ dφ/dr and the frozen-in angle dφ/dr = −Ω/v_r give B_φ/B_r = −Ω r sinθ/v_r. sinθ is a real parameter. Dropping the sign is a different spiral. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateParkerSpiral`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: B_φ/B_r = r sinθ dφ/dr and the frozen-in angle dφ/dr = −Ω/v_r give B_φ/B_r = −Ω r sinθ/v_r. sinθ is a real parameter. Dropping the sign is a different spiral
+- **Mathematical Formulation**: `B_\phi/B_r = -\Omega r \sin\theta / v_r`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ParkerSpiral.spiral_ratio`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 120: Chapman–Ferraro standoff** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ChapmanFerraro.standoff_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ChapmanFerraro.lean) states that a doubled dipole B_mp = 2 B_E (R_E/r)³ is a hypothesis. Ram balance ρ v² = B_mp²/(2 μ0) at K = 1 gives (R/R_E)⁶ = 2 B_E²/(μ0 ρ v²). Specular 2 ρ v² replaces the numerator 2 by 1. Magnetic pressure is an input, not a proof of be-74. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateChapmanFerraro`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: a doubled dipole B_mp = 2 B_E (R_E/r)³ is a hypothesis. Ram balance ρ v² = B_mp²/(2 μ0) at K = 1 gives (R/R_E)⁶ = 2 B_E²/(μ0 ρ v²). Specular 2 ρ v² replaces the numerator 2 by 1. Magnetic pressure is an input, not a proof of be-74
+- **Mathematical Formulation**: `(R/R_E)^6 = 2 B_E^2 / (\mu_0 \rho v^2)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ChapmanFerraro.standoff_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 121: Lawson breakeven product** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LawsonBreakeven.breakeven_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LawsonBreakeven.lean) states that a 50–50 Maxwellian DT mix, with bremsstrahlung neglected, has fusion power (n² ⟨σv⟩/4) E and thermal power 3 n k_B T/τ. Breakeven gives n τ = 12 k_B T/(⟨σv⟩ E). The 12 is 4 × 3, not either factor alone. The Maxwellian average is not computed, and this is not an evaluated triple product. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLawsonBreakeven`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: a 50–50 Maxwellian DT mix, with bremsstrahlung neglected, has fusion power (n² ⟨σv⟩/4) E and thermal power 3 n k_B T/τ. Breakeven gives n τ = 12 k_B T/(⟨σv⟩ E). The 12 is 4 × 3, not either factor alone. The Maxwellian average is not computed, and this is not an evaluated triple product
+- **Mathematical Formulation**: `n \tau = 12 k_B T / (\langle\sigma v\rangle E)`.
+- **Dimensions**: The catalog signature is `[L^-3 T]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LawsonBreakeven.breakeven_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 122: Langmuir floating potential** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LangmuirProbe.floating_potential`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LangmuirProbe.lean) states that Γ_e = n0 exp(e Φ/(k_B T)) sqrt(k_B T/(2 π m_e)). Equating it to the Bohm ion flux gives e Φ/(k_B T) = (1/2) ln(2 π m_e/m_i) − 1/2. The ion flux is the nested bohmFlux object. Not Child–Langmuir. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLangmuirProbe`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Γ_e = n0 exp(e Φ/(k_B T)) sqrt(k_B T/(2 π m_e)). Equating it to the Bohm ion flux gives e Φ/(k_B T) = (1/2) ln(2 π m_e/m_i) − 1/2. The ion flux is the nested bohmFlux object. Not Child–Langmuir
+- **Mathematical Formulation**: `e\Phi/(k_B T) = \tfrac{1}{2}\ln(2\pi m_e/m_i) - \tfrac{1}{2}`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LangmuirProbe.floating_potential`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 123: Cross-field diffusion ratio** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.CrossFieldDiffusion.diffusion_ratio`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/CrossFieldDiffusion.lean) states that q E + q v × B − m v/τ = 0, with μ = q τ/m and α = μ B, solves to v_x = μ (E_x + α E_y)/(1+α²) and v_y = μ (E_y − α E_x)/(1+α²). Einstein's relation D = μ k_B T/q on μ and on μ/(1+α²), the same relation as be-70 and not re-proved here, gives D_⊥/D_∥ = 1/(1+ω_c² τ²) for E along x. The ratio is even in the sign of ω_c. Bohm's 1/16 equals this ratio only when α² = 15. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateCrossFieldDiffusion`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: q E + q v × B − m v/τ = 0, with μ = q τ/m and α = μ B, solves to v_x = μ (E_x + α E_y)/(1+α²) and v_y = μ (E_y − α E_x)/(1+α²). Einstein's relation D = μ k_B T/q on μ and on μ/(1+α²), the same relation as be-70 and not re-proved here, gives D_⊥/D_∥ = 1/(1+ω_c² τ²) for E along x. The ratio is even in the sign of ω_c. Bohm's 1/16 equals this ratio only when α² = 15
+- **Mathematical Formulation**: `D_\perp/D_\parallel = 1/(1+\alpha^2)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.CrossFieldDiffusion.diffusion_ratio`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 124: Firehose margin** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.Firehose.firehose_threshold`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/Firehose.lean) states that the CGL root ω² = (k_∥²/ρ) (B²/μ0 + p_⊥ − p_∥) is a hypothesis. It is negative iff p_∥ − p_⊥ > B²/μ0. With β = 2 μ0 p/B², the be-76 definition and not the solenoid hypotheses of beta_eq, the threshold is β_∥ − β_⊥ > 2. The CGL closure is not derived. be-76 does not prove this inequality. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateFirehose`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the CGL root ω² = (k_∥²/ρ) (B²/μ0 + p_⊥ − p_∥) is a hypothesis. It is negative iff p_∥ − p_⊥ > B²/μ0. With β = 2 μ0 p/B², the be-76 definition and not the solenoid hypotheses of beta_eq, the threshold is β_∥ − β_⊥ > 2. The CGL closure is not derived. be-76 does not prove this inequality
+- **Mathematical Formulation**: `\beta_\parallel - \beta_\perp`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Firehose.firehose_threshold`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 125: Mirror margin** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.MirrorInstability.mirror_threshold`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/MirrorInstability.lean) states that the mirror threshold β_⊥ (T_⊥/T_∥ − 1) > 1 is a hypothesis, equivalent to T_⊥/T_∥ − 1 > 1/β_⊥, with β = 2 μ0 p/B². A beta that omits the 2 replaces 1/β by 2/β. The temperature ratio is not the temperature difference. The kinetic integral is not evaluated. Not the loss cone and not a proof of be-76. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateMirrorInstability`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the mirror threshold β_⊥ (T_⊥/T_∥ − 1) > 1 is a hypothesis, equivalent to T_⊥/T_∥ − 1 > 1/β_⊥, with β = 2 μ0 p/B². A beta that omits the 2 replaces 1/β by 2/β. The temperature ratio is not the temperature difference. The kinetic integral is not evaluated. Not the loss cone and not a proof of be-76
+- **Mathematical Formulation**: `\beta_\perp (T_\perp/T_\parallel - 1)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: finite inputs named by the evaluator. Hypotheses stay in the proof-status paragraph.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.MirrorInstability.mirror_threshold`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
 **Open candidates, unproved.** These two statements have no bridge id and no `formalRef`.
 
 - **Landau diamagnetism.** `χ_L = −χ_P / 3` for free electrons in three dimensions. No Lean theorem in the pinned PhysJS manifest states it. It is not BE-94. BE-94 is the Pauli spin susceptibility.
@@ -1758,7 +2080,7 @@ These additional equations fill crucial gaps in the tensor structure according t
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. No new pattern is introduced.
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. The sentence that ids 51–102 take the pattern of their category is the record from before BE-103 through BE-125. Ids 103–125 take the pattern of category D. No new pattern is introduced.
 
 1. **Quantum-Classical Bridges (11-12, 33-35, 56, 71)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
@@ -1769,7 +2091,7 @@ Each bridge equation type maps to specific tensor components. The component is t
 3. **Emergence Patterns (15-16, 27-29, 48-50, 58, 70, 85, 87)**:
    Higher-rank correlations <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%5Cbeta%5Cgamma%5Cdelta%5Cepsilon%5Czeta%E2%80%A6%7D" alt="\boldsymbol{\Pi}^{\alpha\beta\gamma\delta\epsilon\zeta…}" />
    Categories C, H, and O. The ellipsis is the mark of this cluster (Part I §1.2, the emergent component). A scalar formula in the cluster keeps the ellipsis: BE-27's encoded form is a scalar and is already in this list.
-4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86)**:
+4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86, 103-125)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
    Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
 5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84, 88-102)**:

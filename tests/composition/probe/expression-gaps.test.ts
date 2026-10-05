@@ -73,11 +73,12 @@ describe('expression search gaps', () => {
     // 358 wrappers and 343 relation-links are the record from before be-77..87.
     // 724 wrappers and 709 relation-links are the record from before be-88..102.
     // The fifteen new edges are isolated, so each new quantity opens relation-links.
-    expect(wrappers).toHaveLength(1364);
-    expect(byKind(wrappers)).toEqual({ 'relation-link': 1349, 'regime-transition': 15 });
+    // 1364 wrappers and 1349 relation-links are the record from before be-103..125.
+    expect(wrappers).toHaveLength(2974);
+    expect(byKind(wrappers)).toEqual({ 'relation-link': 2959, 'regime-transition': 15 });
     expect(wrappers.every((g) => g.searchability.searchable === false)).toBe(true);
     expect(byKind(scanWithExpressionGaps(CATALOG_GRAPH))).toEqual({
-      'relation-link': 1349,
+      'relation-link': 2959,
       'regime-transition': 15,
       'prediction-residual': 6,
     });

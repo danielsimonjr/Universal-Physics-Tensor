@@ -15,19 +15,19 @@
  */
 
 import type { FormalRef } from '../relations/types.js';
+import { PHYSJS_ENTRIES } from './physjs-entries.generated.js';
 import { physjsFormalRef } from './physjs-ref.js';
 
 /**
- * Catalog ids that had a `physjsFormalRef` call on the bridge row.
- * File order of those calls. `be-20` is absent: its Friedmann corollary
- * stays nested on `be-13`.
+ * Catalog ids whose generated manifest key is `be-<id>`.
+ * Derived from that table, so a new `be-*` key is not a second hand list.
+ * `be-20` is absent: its Friedmann corollary stays nested on `be-13`.
+ * The hand list that stopped at 102 is the record from before BE-103–125.
  */
-const CATALOG_FORMAL_REF_IDS = [
-  11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 24, 27, 28, 29, 30, 32, 33, 34, 35, 37, 38, 40, 42, 43,
-  50, 51, 54, 53, 55, 58, 59, 60, 61, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
-  77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
-  98, 99, 100, 101, 102,
-] as const;
+const CATALOG_FORMAL_REF_IDS: readonly number[] = PHYSJS_ENTRIES.flatMap((entry) => {
+  const match = /^be-(\d+)$/.exec(entry.key);
+  return match === null ? [] : [Number(match[1])];
+});
 
 const BY_ID: ReadonlyMap<number, FormalRef> = new Map(
   CATALOG_FORMAL_REF_IDS.map((id) => [id, physjsFormalRef(`be-${id}`)]),

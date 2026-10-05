@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 5.0.0
-  totalFiles: 472
+  totalFiles: 478
   totalModules: 13
-  totalExports: 3560
+  totalExports: 3886
 entryPoints:
   - file: src/index.ts
     type: main
@@ -346,6 +346,27 @@ modules:
         - FAILURE_KINDS
         - HELD_OUT_FAMILY
         - HELD_OUT_MARKERS
+    src/atlas/bridge-record.ts:
+      description: One catalog bridge, joined to the canonical foreign key and the generated
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../bridges/evaluators.js
+          imports:
+            - BRIDGE_EVALUATORS
+        - file: ../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
+        - file: ../composition/descriptor.js
+          imports:
+            - getBridge
+        - file: ./catalog-formal-ref.js
+          imports:
+            - catalogFormalRef
+      exports:
+        - getBridge
+      functions:
+        - getBridge
     src/atlas/catalog-formal-ref.ts:
       description: Catalog formal references, keyed by bridge id.
       externalDependencies: []
@@ -355,6 +376,9 @@ modules:
           imports:
             - FormalRef
           typeOnly: true
+        - file: ./physjs-entries.generated.js
+          imports:
+            - PHYSJS_ENTRIES
         - file: ./physjs-ref.js
           imports:
             - physjsFormalRef
@@ -6737,6 +6761,35 @@ modules:
         - file: ./be102-landauer-conductance.js
           imports:
             - evaluateLandauerConductance
+        - file: ./plasma-space.js
+          imports:
+            - evaluateBennettPinch
+            - evaluateBohmSheath
+            - evaluateChapmanFerraro
+            - evaluateColdPlasmaCutoff
+            - evaluateCrossFieldDiffusion
+            - evaluateDebyeSphere
+            - evaluateExBDrift
+            - evaluateFirehose
+            - evaluateGradBDrift
+            - evaluateIonAcoustic
+            - evaluateLandauDamping
+            - evaluateLangmuirProbe
+            - evaluateLawsonBreakeven
+            - evaluateLorentzResistivity
+            - evaluateLossCone
+            - evaluateLowerHybrid
+            - evaluateMirrorInstability
+            - evaluateMultiDebye
+            - evaluateObliqueMagnetosonic
+            - evaluateParkerCritical
+            - evaluateParkerSpiral
+            - evaluateResistiveSlab
+            - evaluateUpperHybrid
+        - file: ./registry.js
+          imports:
+            - bridgeRegistry
+            - registerBridge
       exports:
         - BRIDGE_EVALUATORS
         - missingEvaluatorMessage
@@ -6793,6 +6846,13 @@ modules:
             - C_SI
             - G_SI
             - M_SUN_SI
+        - file: ./registry.js
+          imports:
+            - bridgeRegistry
+            - registerBridge
+        - file: ./plasma-catalog.js
+          imports:
+            - PLASMA_CATALOG_ROWS
         - file: ./gravitational-lensing.js
           imports:
             - evaluateGravitationalLensing
@@ -7106,6 +7166,78 @@ modules:
             - type LandauerConductanceInputs
             - type LandauerConductanceResult
           reExport: true
+        - file: ./plasma-space.js
+          imports:
+            - evaluateBohmSheath
+            - type BohmSheathInputs
+            - type BohmSheathResult
+            - evaluateIonAcoustic
+            - type IonAcousticInputs
+            - type IonAcousticResult
+            - evaluateUpperHybrid
+            - type UpperHybridInputs
+            - type UpperHybridResult
+            - evaluateColdPlasmaCutoff
+            - type ColdPlasmaCutoffInputs
+            - type ColdPlasmaCutoffResult
+            - evaluateLowerHybrid
+            - type LowerHybridInputs
+            - type LowerHybridResult
+            - evaluateObliqueMagnetosonic
+            - type ObliqueMagnetosonicInputs
+            - type ObliqueMagnetosonicResult
+            - evaluateBennettPinch
+            - type BennettPinchInputs
+            - type BennettPinchResult
+            - evaluateLossCone
+            - type LossConeInputs
+            - type LossConeResult
+            - evaluateGradBDrift
+            - type GradBDriftInputs
+            - type GradBDriftResult
+            - evaluateExBDrift
+            - type ExBDriftInputs
+            - type ExBDriftResult
+            - evaluateLandauDamping
+            - type LandauDampingInputs
+            - type LandauDampingResult
+            - evaluateDebyeSphere
+            - type DebyeSphereInputs
+            - type DebyeSphereResult
+            - evaluateMultiDebye
+            - type MultiDebyeInputs
+            - type MultiDebyeResult
+            - evaluateLorentzResistivity
+            - type LorentzResistivityInputs
+            - type LorentzResistivityResult
+            - evaluateResistiveSlab
+            - type ResistiveSlabInputs
+            - type ResistiveSlabResult
+            - evaluateParkerCritical
+            - type ParkerCriticalInputs
+            - type ParkerCriticalResult
+            - evaluateParkerSpiral
+            - type ParkerSpiralInputs
+            - type ParkerSpiralResult
+            - evaluateChapmanFerraro
+            - type ChapmanFerraroInputs
+            - type ChapmanFerraroResult
+            - evaluateLawsonBreakeven
+            - type LawsonBreakevenInputs
+            - type LawsonBreakevenResult
+            - evaluateLangmuirProbe
+            - type LangmuirProbeInputs
+            - type LangmuirProbeResult
+            - evaluateCrossFieldDiffusion
+            - type CrossFieldDiffusionInputs
+            - type CrossFieldDiffusionResult
+            - evaluateFirehose
+            - type FirehoseInputs
+            - type FirehoseResult
+            - evaluateMirrorInstability
+            - type MirrorInstabilityInputs
+            - type MirrorInstabilityResult
+          reExport: true
       exports:
         - evaluateGravitationalLensing
         - type GravitationalLensingInputs
@@ -7267,6 +7399,75 @@ modules:
         - evaluateLandauerConductance
         - type LandauerConductanceInputs
         - type LandauerConductanceResult
+        - evaluateBohmSheath
+        - type BohmSheathInputs
+        - type BohmSheathResult
+        - evaluateIonAcoustic
+        - type IonAcousticInputs
+        - type IonAcousticResult
+        - evaluateUpperHybrid
+        - type UpperHybridInputs
+        - type UpperHybridResult
+        - evaluateColdPlasmaCutoff
+        - type ColdPlasmaCutoffInputs
+        - type ColdPlasmaCutoffResult
+        - evaluateLowerHybrid
+        - type LowerHybridInputs
+        - type LowerHybridResult
+        - evaluateObliqueMagnetosonic
+        - type ObliqueMagnetosonicInputs
+        - type ObliqueMagnetosonicResult
+        - evaluateBennettPinch
+        - type BennettPinchInputs
+        - type BennettPinchResult
+        - evaluateLossCone
+        - type LossConeInputs
+        - type LossConeResult
+        - evaluateGradBDrift
+        - type GradBDriftInputs
+        - type GradBDriftResult
+        - evaluateExBDrift
+        - type ExBDriftInputs
+        - type ExBDriftResult
+        - evaluateLandauDamping
+        - type LandauDampingInputs
+        - type LandauDampingResult
+        - evaluateDebyeSphere
+        - type DebyeSphereInputs
+        - type DebyeSphereResult
+        - evaluateMultiDebye
+        - type MultiDebyeInputs
+        - type MultiDebyeResult
+        - evaluateLorentzResistivity
+        - type LorentzResistivityInputs
+        - type LorentzResistivityResult
+        - evaluateResistiveSlab
+        - type ResistiveSlabInputs
+        - type ResistiveSlabResult
+        - evaluateParkerCritical
+        - type ParkerCriticalInputs
+        - type ParkerCriticalResult
+        - evaluateParkerSpiral
+        - type ParkerSpiralInputs
+        - type ParkerSpiralResult
+        - evaluateChapmanFerraro
+        - type ChapmanFerraroInputs
+        - type ChapmanFerraroResult
+        - evaluateLawsonBreakeven
+        - type LawsonBreakevenInputs
+        - type LawsonBreakevenResult
+        - evaluateLangmuirProbe
+        - type LangmuirProbeInputs
+        - type LangmuirProbeResult
+        - evaluateCrossFieldDiffusion
+        - type CrossFieldDiffusionInputs
+        - type CrossFieldDiffusionResult
+        - evaluateFirehose
+        - type FirehoseInputs
+        - type FirehoseResult
+        - evaluateMirrorInstability
+        - type MirrorInstabilityInputs
+        - type MirrorInstabilityResult
         - BE37_REGIME
         - BE51_REGIME
         - BE52_REGIME
@@ -7434,6 +7635,75 @@ modules:
         - evaluateLandauerConductance
         - type LandauerConductanceInputs
         - type LandauerConductanceResult
+        - evaluateBohmSheath
+        - type BohmSheathInputs
+        - type BohmSheathResult
+        - evaluateIonAcoustic
+        - type IonAcousticInputs
+        - type IonAcousticResult
+        - evaluateUpperHybrid
+        - type UpperHybridInputs
+        - type UpperHybridResult
+        - evaluateColdPlasmaCutoff
+        - type ColdPlasmaCutoffInputs
+        - type ColdPlasmaCutoffResult
+        - evaluateLowerHybrid
+        - type LowerHybridInputs
+        - type LowerHybridResult
+        - evaluateObliqueMagnetosonic
+        - type ObliqueMagnetosonicInputs
+        - type ObliqueMagnetosonicResult
+        - evaluateBennettPinch
+        - type BennettPinchInputs
+        - type BennettPinchResult
+        - evaluateLossCone
+        - type LossConeInputs
+        - type LossConeResult
+        - evaluateGradBDrift
+        - type GradBDriftInputs
+        - type GradBDriftResult
+        - evaluateExBDrift
+        - type ExBDriftInputs
+        - type ExBDriftResult
+        - evaluateLandauDamping
+        - type LandauDampingInputs
+        - type LandauDampingResult
+        - evaluateDebyeSphere
+        - type DebyeSphereInputs
+        - type DebyeSphereResult
+        - evaluateMultiDebye
+        - type MultiDebyeInputs
+        - type MultiDebyeResult
+        - evaluateLorentzResistivity
+        - type LorentzResistivityInputs
+        - type LorentzResistivityResult
+        - evaluateResistiveSlab
+        - type ResistiveSlabInputs
+        - type ResistiveSlabResult
+        - evaluateParkerCritical
+        - type ParkerCriticalInputs
+        - type ParkerCriticalResult
+        - evaluateParkerSpiral
+        - type ParkerSpiralInputs
+        - type ParkerSpiralResult
+        - evaluateChapmanFerraro
+        - type ChapmanFerraroInputs
+        - type ChapmanFerraroResult
+        - evaluateLawsonBreakeven
+        - type LawsonBreakevenInputs
+        - type LawsonBreakevenResult
+        - evaluateLangmuirProbe
+        - type LangmuirProbeInputs
+        - type LangmuirProbeResult
+        - evaluateCrossFieldDiffusion
+        - type CrossFieldDiffusionInputs
+        - type CrossFieldDiffusionResult
+        - evaluateFirehose
+        - type FirehoseInputs
+        - type FirehoseResult
+        - evaluateMirrorInstability
+        - type MirrorInstabilityInputs
+        - type MirrorInstabilityResult
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
@@ -7539,6 +7809,153 @@ modules:
         - PerihelionPrecessionResult
       functions:
         - evaluatePerihelionPrecession
+    src/bridges/plasma-catalog.ts:
+      description: Catalog rows for BE-103 through BE-125.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - PLASMA_CATALOG_ROWS
+      constants:
+        - PLASMA_CATALOG_ROWS
+    src/bridges/plasma-space.ts:
+      description: BE-103 through BE-125 — plasma and space evaluators.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - E_SI
+            - G_SI
+            - K_B_SI
+        - file: ../dimensional/formula-names.js
+          imports:
+            - EPS0_SI
+            - MU0_SI
+      exports:
+        - evaluateBohmSheath
+        - evaluateBohmWarmSound
+        - evaluateIonAcoustic
+        - evaluateUpperHybrid
+        - evaluateColdPlasmaCutoff
+        - evaluateLowerHybrid
+        - evaluateObliqueMagnetosonic
+        - evaluateBennettPinch
+        - bennettSinglePopulationCurrent
+        - evaluateLossCone
+        - evaluateGradBDrift
+        - evaluateExBDrift
+        - evaluateLandauDamping
+        - evaluateDebyeSphere
+        - evaluateMultiDebye
+        - evaluateLorentzResistivity
+        - lorentzReferenceOverKinetic
+        - evaluateResistiveSlab
+        - evaluateParkerCritical
+        - evaluateParkerSpiral
+        - evaluateChapmanFerraro
+        - evaluateLawsonBreakeven
+        - evaluateLangmuirProbe
+        - evaluateCrossFieldDiffusion
+        - evaluateCrossFieldVelocity
+        - evaluateFirehose
+        - evaluateMirrorInstability
+      interfaces:
+        - BohmSheathInputs
+        - BohmSheathResult
+        - IonAcousticInputs
+        - IonAcousticResult
+        - UpperHybridInputs
+        - UpperHybridResult
+        - ColdPlasmaCutoffInputs
+        - ColdPlasmaCutoffResult
+        - LowerHybridInputs
+        - LowerHybridResult
+        - ObliqueMagnetosonicInputs
+        - ObliqueMagnetosonicResult
+        - BennettPinchInputs
+        - BennettPinchResult
+        - LossConeInputs
+        - LossConeResult
+        - GradBDriftInputs
+        - GradBDriftResult
+        - ExBDriftInputs
+        - ExBDriftResult
+        - LandauDampingInputs
+        - LandauDampingResult
+        - DebyeSphereInputs
+        - DebyeSphereResult
+        - MultiDebyeInputs
+        - MultiDebyeResult
+        - LorentzResistivityInputs
+        - LorentzResistivityResult
+        - ResistiveSlabInputs
+        - ResistiveSlabResult
+        - ParkerCriticalInputs
+        - ParkerCriticalResult
+        - ParkerSpiralInputs
+        - ParkerSpiralResult
+        - ChapmanFerraroInputs
+        - ChapmanFerraroResult
+        - LawsonBreakevenInputs
+        - LawsonBreakevenResult
+        - LangmuirProbeInputs
+        - LangmuirProbeResult
+        - CrossFieldDiffusionInputs
+        - CrossFieldDiffusionResult
+        - FirehoseInputs
+        - FirehoseResult
+        - MirrorInstabilityInputs
+        - MirrorInstabilityResult
+      functions:
+        - evaluateBohmSheath
+        - evaluateBohmWarmSound
+        - evaluateIonAcoustic
+        - evaluateUpperHybrid
+        - evaluateColdPlasmaCutoff
+        - evaluateLowerHybrid
+        - evaluateObliqueMagnetosonic
+        - evaluateBennettPinch
+        - bennettSinglePopulationCurrent
+        - evaluateLossCone
+        - evaluateGradBDrift
+        - evaluateExBDrift
+        - evaluateLandauDamping
+        - evaluateDebyeSphere
+        - evaluateMultiDebye
+        - evaluateLorentzResistivity
+        - lorentzReferenceOverKinetic
+        - evaluateResistiveSlab
+        - evaluateParkerCritical
+        - evaluateParkerSpiral
+        - evaluateChapmanFerraro
+        - evaluateLawsonBreakeven
+        - evaluateLangmuirProbe
+        - evaluateCrossFieldDiffusion
+        - evaluateCrossFieldVelocity
+        - evaluateFirehose
+        - evaluateMirrorInstability
+    src/bridges/registry.ts:
+      description: One registration for a catalog bridge.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+      exports:
+        - bridgeRegistry
+        - createBridgeRegistry
+        - registerBridge
+      interfaces:
+        - BridgeRegistration
+        - BridgeRegistry
+      functions:
+        - createBridgeRegistry
+        - registerBridge
+      constants:
+        - bridgeRegistry
     src/bridges/rejected.ts:
       description: Negative catalog (v0.8.0 P-4) — NOT-A-BRIDGE adjudications as
       externalDependencies: []
@@ -7561,6 +7978,10 @@ modules:
           imports:
             - ExprNode
           typeOnly: true
+        - file: ./registry.js
+          imports:
+            - bridgeRegistry
+            - registerBridge
         - file: ./equations/be-11-decoherence-master.js
           imports:
             - DECOHERENCE_RATE_RHS
@@ -11903,7 +12324,7 @@ modules:
         - CANONICAL_PREFACTORS
         - CANONICAL_GROUP_PREFACTORS
     src/composition/catalog-graph.ts:
-      description: The full composition graph as a single constant — the 83 `BridgeEdge`s
+      description: The composition graph is the edge projection of `registerBridge`.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -11911,6 +12332,10 @@ modules:
           imports:
             - BridgeEdge
           typeOnly: true
+        - file: ../bridges/registry.js
+          imports:
+            - bridgeRegistry
+            - registerBridge
         - file: ./edges/calibration.js
           imports:
             - be11ZurekEdge
@@ -11942,6 +12367,9 @@ modules:
         - file: ./edges/condensed-r5.js
           imports:
             - CONDENSED_R5_EDGES
+        - file: ./edges/plasma-space.js
+          imports:
+            - PLASMA_SPACE_EDGES
       exports:
         - CATALOG_GRAPH
       constants:
@@ -13511,6 +13939,190 @@ modules:
         - be101Edge
         - be102Edge
         - CONDENSED_R5_EDGES
+    src/composition/edges/plasma-space.ts:
+      description: Composition edges for BE-103 through BE-125.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+        - file: ../../dimensional/symbolic-constants.js
+          imports:
+            - CONSTANTS
+        - file: ../../bridges/plasma-space.js
+          imports:
+            - evaluateBennettPinch
+            - evaluateBohmSheath
+            - evaluateChapmanFerraro
+            - evaluateColdPlasmaCutoff
+            - evaluateCrossFieldDiffusion
+            - evaluateDebyeSphere
+            - evaluateExBDrift
+            - evaluateFirehose
+            - evaluateGradBDrift
+            - evaluateIonAcoustic
+            - evaluateLandauDamping
+            - evaluateLangmuirProbe
+            - evaluateLawsonBreakeven
+            - evaluateLorentzResistivity
+            - evaluateLossCone
+            - evaluateLowerHybrid
+            - evaluateMirrorInstability
+            - evaluateMultiDebye
+            - evaluateObliqueMagnetosonic
+            - evaluateParkerCritical
+            - evaluateParkerSpiral
+            - evaluateResistiveSlab
+            - evaluateUpperHybrid
+        - file: ../edge.js
+          imports:
+            - withBoundAliases
+            - BridgeEdge
+        - file: ../quantity.js
+          imports:
+            - Quantity
+          typeOnly: true
+        - file: ../quantities.js
+          imports:
+            - bennettCurrentQ
+            - bennettLineDensityQ
+            - bennettTemperatureQ
+            - bohmElectronTemperatureQ
+            - bohmIonMassQ
+            - bohmIonSpeedQ
+            - crossFieldAlphaQ
+            - crossFieldRatioQ
+            - cutoffCyclotronQ
+            - cutoffPlasmaQ
+            - cutoffRFrequencyQ
+            - debyeSphereArgumentQ
+            - debyeSphereDensityQ
+            - debyeSphereLengthQ
+            - exbFieldQ
+            - exbFieldXQ
+            - exbFieldYQ
+            - exbSpeedQ
+            - firehoseBetaParallelQ
+            - firehoseBetaPerpQ
+            - firehoseMarginQ
+            - gradbChargeQ
+            - gradbDriftQ
+            - gradbFieldQ
+            - gradbGradientQ
+            - gradbMassQ
+            - gradbPerpSpeedQ
+            - ionAcousticDebyeQ
+            - ionAcousticFrequencyQ
+            - ionAcousticSoundQ
+            - ionAcousticWavenumberQ
+            - landauGammaQ
+            - landauOmegaQ
+            - landauThermalQ
+            - landauWavenumberQ
+            - lawsonEnergyQ
+            - lawsonProductQ
+            - lawsonReactivityQ
+            - lawsonTemperatureQ
+            - lorentzChargeStateQ
+            - lorentzCoulombLogQ
+            - lorentzMassQ
+            - lorentzResistivityQ
+            - lorentzTemperatureQ
+            - lossConeMirrorQ
+            - lossConePitchQ
+            - lossConeThroatQ
+            - lowerHybridElectronCyclotronQ
+            - lowerHybridFrequencyQ
+            - lowerHybridIonCyclotronQ
+            - lowerHybridIonPlasmaQ
+            - mirrorBetaPerpQ
+            - mirrorMarginQ
+            - mirrorTParallelQ
+            - mirrorTPerpQ
+            - multiDebye1Q
+            - multiDebye2Q
+            - multiDebyeLengthQ
+            - obliqueAlfvenQ
+            - obliqueAngleQ
+            - obliqueFastSpeedQ
+            - obliqueSoundQ
+            - parkerMassQ
+            - parkerRadiusQ
+            - parkerSoundQ
+            - probeElectronMassQ
+            - probeIonMassQ
+            - probePotentialRatioQ
+            - slabConductivityQ
+            - slabTimeQ
+            - slabWidthQ
+            - spiralColatitudeQ
+            - spiralOmegaQ
+            - spiralRadialSpeedQ
+            - spiralRadiusQ
+            - spiralRatioQ
+            - standoffDensityQ
+            - standoffFieldQ
+            - standoffSixthQ
+            - standoffSpeedQ
+            - upperHybridDensityQ
+            - upperHybridFieldQ
+            - upperHybridFrequencyQ
+            - upperHybridMassQ
+      exports:
+        - be103Edge
+        - be104Edge
+        - be105Edge
+        - be106Edge
+        - be107Edge
+        - be108Edge
+        - be109Edge
+        - be110Edge
+        - be111Edge
+        - be112Edge
+        - be113Edge
+        - be114Edge
+        - be115Edge
+        - be116Edge
+        - be117Edge
+        - be118Edge
+        - be119Edge
+        - be120Edge
+        - be121Edge
+        - be122Edge
+        - be123Edge
+        - be124Edge
+        - be125Edge
+        - PLASMA_SPACE_EDGES
+      constants:
+        - be103Edge
+        - be104Edge
+        - be105Edge
+        - be106Edge
+        - be107Edge
+        - be108Edge
+        - be109Edge
+        - be110Edge
+        - be111Edge
+        - be112Edge
+        - be113Edge
+        - be114Edge
+        - be115Edge
+        - be116Edge
+        - be117Edge
+        - be118Edge
+        - be119Edge
+        - be120Edge
+        - be121Edge
+        - be122Edge
+        - be123Edge
+        - be124Edge
+        - be125Edge
+        - PLASMA_SPACE_EDGES
     src/composition/edges/proved-seeds.ts:
       description: Composition edges for proved catalog seeds that had no graph edge.
       externalDependencies: []
@@ -14060,6 +14672,33 @@ modules:
             - be102Edge
             - CONDENSED_R5_EDGES
           reExport: true
+        - file: ./edges/plasma-space.js
+          imports:
+            - be103Edge
+            - be104Edge
+            - be105Edge
+            - be106Edge
+            - be107Edge
+            - be108Edge
+            - be109Edge
+            - be110Edge
+            - be111Edge
+            - be112Edge
+            - be113Edge
+            - be114Edge
+            - be115Edge
+            - be116Edge
+            - be117Edge
+            - be118Edge
+            - be119Edge
+            - be120Edge
+            - be121Edge
+            - be122Edge
+            - be123Edge
+            - be124Edge
+            - be125Edge
+            - PLASMA_SPACE_EDGES
+          reExport: true
         - file: ./edges/catalog-full.js
           imports:
             - be11Edge
@@ -14282,6 +14921,30 @@ modules:
         - be101Edge
         - be102Edge
         - CONDENSED_R5_EDGES
+        - be103Edge
+        - be104Edge
+        - be105Edge
+        - be106Edge
+        - be107Edge
+        - be108Edge
+        - be109Edge
+        - be110Edge
+        - be111Edge
+        - be112Edge
+        - be113Edge
+        - be114Edge
+        - be115Edge
+        - be116Edge
+        - be117Edge
+        - be118Edge
+        - be119Edge
+        - be120Edge
+        - be121Edge
+        - be122Edge
+        - be123Edge
+        - be124Edge
+        - be125Edge
+        - PLASMA_SPACE_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -14448,6 +15111,30 @@ modules:
         - be101Edge
         - be102Edge
         - CONDENSED_R5_EDGES
+        - be103Edge
+        - be104Edge
+        - be105Edge
+        - be106Edge
+        - be107Edge
+        - be108Edge
+        - be109Edge
+        - be110Edge
+        - be111Edge
+        - be112Edge
+        - be113Edge
+        - be114Edge
+        - be115Edge
+        - be116Edge
+        - be117Edge
+        - be118Edge
+        - be119Edge
+        - be120Edge
+        - be121Edge
+        - be122Edge
+        - be123Edge
+        - be124Edge
+        - be125Edge
+        - PLASMA_SPACE_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -16772,6 +17459,202 @@ modules:
         - nucleonYieldRateQ
         - laneEmdenOmega3Q
         - meanMolecularWeightPerElectronQ
+    src/composition/quantities/plasma-space.ts:
+      description: Quantity nodes for BE-103 through BE-125.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../quantity.js
+          imports:
+            - Quantity
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - CHARGE
+            - DIMENSIONLESS
+            - FREQUENCY
+            - LENGTH
+            - MASS
+            - TEMPERATURE
+            - TIME
+            - VELOCITY
+        - file: ./_dims.js
+          imports:
+            - ENERGY_DIM
+            - INV_LENGTH
+            - MASS_DENSITY
+            - NUMBER_DENSITY
+            - RESISTIVITY
+      exports:
+        - bohmElectronTemperatureQ
+        - bohmIonMassQ
+        - bohmIonSpeedQ
+        - ionAcousticWavenumberQ
+        - ionAcousticSoundQ
+        - ionAcousticDebyeQ
+        - ionAcousticFrequencyQ
+        - upperHybridDensityQ
+        - upperHybridFieldQ
+        - upperHybridMassQ
+        - upperHybridFrequencyQ
+        - cutoffCyclotronQ
+        - cutoffPlasmaQ
+        - cutoffRFrequencyQ
+        - lowerHybridIonPlasmaQ
+        - lowerHybridIonCyclotronQ
+        - lowerHybridElectronCyclotronQ
+        - lowerHybridFrequencyQ
+        - obliqueSoundQ
+        - obliqueAlfvenQ
+        - obliqueAngleQ
+        - obliqueFastSpeedQ
+        - bennettLineDensityQ
+        - bennettTemperatureQ
+        - bennettCurrentQ
+        - lossConeThroatQ
+        - lossConeMirrorQ
+        - lossConePitchQ
+        - gradbMassQ
+        - gradbPerpSpeedQ
+        - gradbGradientQ
+        - gradbChargeQ
+        - gradbFieldQ
+        - gradbDriftQ
+        - exbFieldXQ
+        - exbFieldYQ
+        - exbFieldQ
+        - exbSpeedQ
+        - landauOmegaQ
+        - landauWavenumberQ
+        - landauThermalQ
+        - landauGammaQ
+        - debyeSphereDensityQ
+        - debyeSphereLengthQ
+        - debyeSphereArgumentQ
+        - multiDebye1Q
+        - multiDebye2Q
+        - multiDebyeLengthQ
+        - lorentzChargeStateQ
+        - lorentzCoulombLogQ
+        - lorentzTemperatureQ
+        - lorentzMassQ
+        - lorentzResistivityQ
+        - slabConductivityQ
+        - slabWidthQ
+        - slabTimeQ
+        - parkerSoundQ
+        - parkerMassQ
+        - parkerRadiusQ
+        - spiralOmegaQ
+        - spiralRadiusQ
+        - spiralColatitudeQ
+        - spiralRadialSpeedQ
+        - spiralRatioQ
+        - standoffFieldQ
+        - standoffDensityQ
+        - standoffSpeedQ
+        - standoffSixthQ
+        - lawsonTemperatureQ
+        - lawsonReactivityQ
+        - lawsonEnergyQ
+        - lawsonProductQ
+        - probeElectronMassQ
+        - probeIonMassQ
+        - probePotentialRatioQ
+        - crossFieldAlphaQ
+        - crossFieldRatioQ
+        - firehoseBetaParallelQ
+        - firehoseBetaPerpQ
+        - firehoseMarginQ
+        - mirrorBetaPerpQ
+        - mirrorTPerpQ
+        - mirrorTParallelQ
+        - mirrorMarginQ
+      constants:
+        - bohmElectronTemperatureQ
+        - bohmIonMassQ
+        - bohmIonSpeedQ
+        - ionAcousticWavenumberQ
+        - ionAcousticSoundQ
+        - ionAcousticDebyeQ
+        - ionAcousticFrequencyQ
+        - upperHybridDensityQ
+        - upperHybridFieldQ
+        - upperHybridMassQ
+        - upperHybridFrequencyQ
+        - cutoffCyclotronQ
+        - cutoffPlasmaQ
+        - cutoffRFrequencyQ
+        - lowerHybridIonPlasmaQ
+        - lowerHybridIonCyclotronQ
+        - lowerHybridElectronCyclotronQ
+        - lowerHybridFrequencyQ
+        - obliqueSoundQ
+        - obliqueAlfvenQ
+        - obliqueAngleQ
+        - obliqueFastSpeedQ
+        - bennettLineDensityQ
+        - bennettTemperatureQ
+        - bennettCurrentQ
+        - lossConeThroatQ
+        - lossConeMirrorQ
+        - lossConePitchQ
+        - gradbMassQ
+        - gradbPerpSpeedQ
+        - gradbGradientQ
+        - gradbChargeQ
+        - gradbFieldQ
+        - gradbDriftQ
+        - exbFieldXQ
+        - exbFieldYQ
+        - exbFieldQ
+        - exbSpeedQ
+        - landauOmegaQ
+        - landauWavenumberQ
+        - landauThermalQ
+        - landauGammaQ
+        - debyeSphereDensityQ
+        - debyeSphereLengthQ
+        - debyeSphereArgumentQ
+        - multiDebye1Q
+        - multiDebye2Q
+        - multiDebyeLengthQ
+        - lorentzChargeStateQ
+        - lorentzCoulombLogQ
+        - lorentzTemperatureQ
+        - lorentzMassQ
+        - lorentzResistivityQ
+        - slabConductivityQ
+        - slabWidthQ
+        - slabTimeQ
+        - parkerSoundQ
+        - parkerMassQ
+        - parkerRadiusQ
+        - spiralOmegaQ
+        - spiralRadiusQ
+        - spiralColatitudeQ
+        - spiralRadialSpeedQ
+        - spiralRatioQ
+        - standoffFieldQ
+        - standoffDensityQ
+        - standoffSpeedQ
+        - standoffSixthQ
+        - lawsonTemperatureQ
+        - lawsonReactivityQ
+        - lawsonEnergyQ
+        - lawsonProductQ
+        - probeElectronMassQ
+        - probeIonMassQ
+        - probePotentialRatioQ
+        - crossFieldAlphaQ
+        - crossFieldRatioQ
+        - firehoseBetaParallelQ
+        - firehoseBetaPerpQ
+        - firehoseMarginQ
+        - mirrorBetaPerpQ
+        - mirrorTPerpQ
+        - mirrorTParallelQ
+        - mirrorMarginQ
     src/composition/quantities/quantum.ts:
       description: Centralized Quantity nodes — quantum / information / open-system / biological-quantum domain.
       externalDependencies: []
@@ -16880,6 +17763,10 @@ modules:
           imports:
             - "*"
           reExport: true
+        - file: ./quantities/plasma-space.js
+          imports:
+            - "*"
+          reExport: true
       exports: []
       reExported:
         - "* from ./quantities/quantum.js"
@@ -16889,6 +17776,7 @@ modules:
         - "* from ./quantities/common.js"
         - "* from ./quantities/applied-physicist.js"
         - "* from ./quantities/condensed-r5.js"
+        - "* from ./quantities/plasma-space.js"
     src/composition/quantity.ts:
       description: Composition graph — quantity nodes (v0.8.0 T2, per
       externalDependencies: []
@@ -19223,6 +20111,75 @@ modules:
             - evaluateLandauerConductance
             - type LandauerConductanceInputs
             - type LandauerConductanceResult
+            - evaluateBohmSheath
+            - type BohmSheathInputs
+            - type BohmSheathResult
+            - evaluateIonAcoustic
+            - type IonAcousticInputs
+            - type IonAcousticResult
+            - evaluateUpperHybrid
+            - type UpperHybridInputs
+            - type UpperHybridResult
+            - evaluateColdPlasmaCutoff
+            - type ColdPlasmaCutoffInputs
+            - type ColdPlasmaCutoffResult
+            - evaluateLowerHybrid
+            - type LowerHybridInputs
+            - type LowerHybridResult
+            - evaluateObliqueMagnetosonic
+            - type ObliqueMagnetosonicInputs
+            - type ObliqueMagnetosonicResult
+            - evaluateBennettPinch
+            - type BennettPinchInputs
+            - type BennettPinchResult
+            - evaluateLossCone
+            - type LossConeInputs
+            - type LossConeResult
+            - evaluateGradBDrift
+            - type GradBDriftInputs
+            - type GradBDriftResult
+            - evaluateExBDrift
+            - type ExBDriftInputs
+            - type ExBDriftResult
+            - evaluateLandauDamping
+            - type LandauDampingInputs
+            - type LandauDampingResult
+            - evaluateDebyeSphere
+            - type DebyeSphereInputs
+            - type DebyeSphereResult
+            - evaluateMultiDebye
+            - type MultiDebyeInputs
+            - type MultiDebyeResult
+            - evaluateLorentzResistivity
+            - type LorentzResistivityInputs
+            - type LorentzResistivityResult
+            - evaluateResistiveSlab
+            - type ResistiveSlabInputs
+            - type ResistiveSlabResult
+            - evaluateParkerCritical
+            - type ParkerCriticalInputs
+            - type ParkerCriticalResult
+            - evaluateParkerSpiral
+            - type ParkerSpiralInputs
+            - type ParkerSpiralResult
+            - evaluateChapmanFerraro
+            - type ChapmanFerraroInputs
+            - type ChapmanFerraroResult
+            - evaluateLawsonBreakeven
+            - type LawsonBreakevenInputs
+            - type LawsonBreakevenResult
+            - evaluateLangmuirProbe
+            - type LangmuirProbeInputs
+            - type LangmuirProbeResult
+            - evaluateCrossFieldDiffusion
+            - type CrossFieldDiffusionInputs
+            - type CrossFieldDiffusionResult
+            - evaluateFirehose
+            - type FirehoseInputs
+            - type FirehoseResult
+            - evaluateMirrorInstability
+            - type MirrorInstabilityInputs
+            - type MirrorInstabilityResult
           reExport: true
         - file: ./bridges/evaluators.js
           imports:
@@ -19551,6 +20508,33 @@ modules:
             - be101Edge
             - be102Edge
             - CONDENSED_R5_EDGES
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - be103Edge
+            - be104Edge
+            - be105Edge
+            - be106Edge
+            - be107Edge
+            - be108Edge
+            - be109Edge
+            - be110Edge
+            - be111Edge
+            - be112Edge
+            - be113Edge
+            - be114Edge
+            - be115Edge
+            - be116Edge
+            - be117Edge
+            - be118Edge
+            - be119Edge
+            - be120Edge
+            - be121Edge
+            - be122Edge
+            - be123Edge
+            - be124Edge
+            - be125Edge
+            - PLASMA_SPACE_EDGES
           reExport: true
         - file: ./composition/index.js
           imports:
@@ -20312,6 +21296,75 @@ modules:
         - evaluateLandauerConductance
         - type LandauerConductanceInputs
         - type LandauerConductanceResult
+        - evaluateBohmSheath
+        - type BohmSheathInputs
+        - type BohmSheathResult
+        - evaluateIonAcoustic
+        - type IonAcousticInputs
+        - type IonAcousticResult
+        - evaluateUpperHybrid
+        - type UpperHybridInputs
+        - type UpperHybridResult
+        - evaluateColdPlasmaCutoff
+        - type ColdPlasmaCutoffInputs
+        - type ColdPlasmaCutoffResult
+        - evaluateLowerHybrid
+        - type LowerHybridInputs
+        - type LowerHybridResult
+        - evaluateObliqueMagnetosonic
+        - type ObliqueMagnetosonicInputs
+        - type ObliqueMagnetosonicResult
+        - evaluateBennettPinch
+        - type BennettPinchInputs
+        - type BennettPinchResult
+        - evaluateLossCone
+        - type LossConeInputs
+        - type LossConeResult
+        - evaluateGradBDrift
+        - type GradBDriftInputs
+        - type GradBDriftResult
+        - evaluateExBDrift
+        - type ExBDriftInputs
+        - type ExBDriftResult
+        - evaluateLandauDamping
+        - type LandauDampingInputs
+        - type LandauDampingResult
+        - evaluateDebyeSphere
+        - type DebyeSphereInputs
+        - type DebyeSphereResult
+        - evaluateMultiDebye
+        - type MultiDebyeInputs
+        - type MultiDebyeResult
+        - evaluateLorentzResistivity
+        - type LorentzResistivityInputs
+        - type LorentzResistivityResult
+        - evaluateResistiveSlab
+        - type ResistiveSlabInputs
+        - type ResistiveSlabResult
+        - evaluateParkerCritical
+        - type ParkerCriticalInputs
+        - type ParkerCriticalResult
+        - evaluateParkerSpiral
+        - type ParkerSpiralInputs
+        - type ParkerSpiralResult
+        - evaluateChapmanFerraro
+        - type ChapmanFerraroInputs
+        - type ChapmanFerraroResult
+        - evaluateLawsonBreakeven
+        - type LawsonBreakevenInputs
+        - type LawsonBreakevenResult
+        - evaluateLangmuirProbe
+        - type LangmuirProbeInputs
+        - type LangmuirProbeResult
+        - evaluateCrossFieldDiffusion
+        - type CrossFieldDiffusionInputs
+        - type CrossFieldDiffusionResult
+        - evaluateFirehose
+        - type FirehoseInputs
+        - type FirehoseResult
+        - evaluateMirrorInstability
+        - type MirrorInstabilityInputs
+        - type MirrorInstabilityResult
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - BridgeEquations
@@ -20447,6 +21500,30 @@ modules:
         - be101Edge
         - be102Edge
         - CONDENSED_R5_EDGES
+        - be103Edge
+        - be104Edge
+        - be105Edge
+        - be106Edge
+        - be107Edge
+        - be108Edge
+        - be109Edge
+        - be110Edge
+        - be111Edge
+        - be112Edge
+        - be113Edge
+        - be114Edge
+        - be115Edge
+        - be116Edge
+        - be117Edge
+        - be118Edge
+        - be119Edge
+        - be120Edge
+        - be121Edge
+        - be122Edge
+        - be123Edge
+        - be124Edge
+        - be125Edge
+        - PLASMA_SPACE_EDGES
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -21048,6 +22125,75 @@ modules:
         - evaluateLandauerConductance
         - type LandauerConductanceInputs
         - type LandauerConductanceResult
+        - evaluateBohmSheath
+        - type BohmSheathInputs
+        - type BohmSheathResult
+        - evaluateIonAcoustic
+        - type IonAcousticInputs
+        - type IonAcousticResult
+        - evaluateUpperHybrid
+        - type UpperHybridInputs
+        - type UpperHybridResult
+        - evaluateColdPlasmaCutoff
+        - type ColdPlasmaCutoffInputs
+        - type ColdPlasmaCutoffResult
+        - evaluateLowerHybrid
+        - type LowerHybridInputs
+        - type LowerHybridResult
+        - evaluateObliqueMagnetosonic
+        - type ObliqueMagnetosonicInputs
+        - type ObliqueMagnetosonicResult
+        - evaluateBennettPinch
+        - type BennettPinchInputs
+        - type BennettPinchResult
+        - evaluateLossCone
+        - type LossConeInputs
+        - type LossConeResult
+        - evaluateGradBDrift
+        - type GradBDriftInputs
+        - type GradBDriftResult
+        - evaluateExBDrift
+        - type ExBDriftInputs
+        - type ExBDriftResult
+        - evaluateLandauDamping
+        - type LandauDampingInputs
+        - type LandauDampingResult
+        - evaluateDebyeSphere
+        - type DebyeSphereInputs
+        - type DebyeSphereResult
+        - evaluateMultiDebye
+        - type MultiDebyeInputs
+        - type MultiDebyeResult
+        - evaluateLorentzResistivity
+        - type LorentzResistivityInputs
+        - type LorentzResistivityResult
+        - evaluateResistiveSlab
+        - type ResistiveSlabInputs
+        - type ResistiveSlabResult
+        - evaluateParkerCritical
+        - type ParkerCriticalInputs
+        - type ParkerCriticalResult
+        - evaluateParkerSpiral
+        - type ParkerSpiralInputs
+        - type ParkerSpiralResult
+        - evaluateChapmanFerraro
+        - type ChapmanFerraroInputs
+        - type ChapmanFerraroResult
+        - evaluateLawsonBreakeven
+        - type LawsonBreakevenInputs
+        - type LawsonBreakevenResult
+        - evaluateLangmuirProbe
+        - type LangmuirProbeInputs
+        - type LangmuirProbeResult
+        - evaluateCrossFieldDiffusion
+        - type CrossFieldDiffusionInputs
+        - type CrossFieldDiffusionResult
+        - evaluateFirehose
+        - type FirehoseInputs
+        - type FirehoseResult
+        - evaluateMirrorInstability
+        - type MirrorInstabilityInputs
+        - type MirrorInstabilityResult
         - BRIDGE_EVALUATORS
         - evaluateBridge
         - EvaluatorSpec
@@ -21241,6 +22387,30 @@ modules:
         - be101Edge
         - be102Edge
         - CONDENSED_R5_EDGES
+        - be103Edge
+        - be104Edge
+        - be105Edge
+        - be106Edge
+        - be107Edge
+        - be108Edge
+        - be109Edge
+        - be110Edge
+        - be111Edge
+        - be112Edge
+        - be113Edge
+        - be114Edge
+        - be115Edge
+        - be116Edge
+        - be117Edge
+        - be118Edge
+        - be119Edge
+        - be120Edge
+        - be121Edge
+        - be122Edge
+        - be123Edge
+        - be124Edge
+        - be125Edge
+        - PLASMA_SPACE_EDGES
         - BridgeEdge
         - ComposeOptions
         - EdgeConfidence
@@ -22997,6 +24167,7 @@ dependencyGraph:
         - src/atlas/benchmark/stats.ts
         - src/atlas/benchmark/study.ts
         - src/atlas/benchmark/types.ts
+        - src/atlas/bridge-record.ts
         - src/atlas/catalog-formal-ref.ts
         - src/atlas/chain-pipeline.ts
         - src/atlas/composition-table.ts
@@ -23184,6 +24355,9 @@ dependencyGraph:
         - src/bridges/observations/types.ts
         - src/bridges/perihelion-precession-labeled.ts
         - src/bridges/perihelion-precession.ts
+        - src/bridges/plasma-catalog.ts
+        - src/bridges/plasma-space.ts
+        - src/bridges/registry.ts
         - src/bridges/rejected.ts
         - src/bridges/rhs-registry.ts
         - src/bridges/sensitivity.ts
@@ -23318,6 +24492,7 @@ dependencyGraph:
         - src/composition/edges/catalog-quantum.ts
         - src/composition/edges/catalog-tranche.ts
         - src/composition/edges/condensed-r5.ts
+        - src/composition/edges/plasma-space.ts
         - src/composition/edges/proved-seeds.ts
         - src/composition/enumerate.ts
         - src/composition/explain.ts
@@ -23366,6 +24541,7 @@ dependencyGraph:
         - src/composition/quantities/condensed-r5.ts
         - src/composition/quantities/fields.ts
         - src/composition/quantities/gravitation-cosmology.ts
+        - src/composition/quantities/plasma-space.ts
         - src/composition/quantities/quantum.ts
         - src/composition/quantities.ts
         - src/composition/quantity.ts
@@ -23483,18 +24659,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 472
+  totalTypeScriptFiles: 478
   totalModules: 13
-  totalLinesOfCode: 100171
-  totalExports: 3560
+  totalLinesOfCode: 102865
+  totalExports: 3886
   totalClasses: 61
-  totalInterfaces: 562
-  totalFunctions: 849
+  totalInterfaces: 610
+  totalFunctions: 879
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 917
-  totalReExports: 1734
-  totalTypeOnlyImports: 583
+  totalConstants: 1027
+  totalReExports: 1921
+  totalTypeOnlyImports: 587
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

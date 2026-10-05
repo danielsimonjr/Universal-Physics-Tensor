@@ -121,8 +121,8 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
       }),
     ];
     // 57 is the record from before be-77..87 each added a catalog formalRef.
-    expect(refs.length).toBe(83);
-    // 68 is the record from before be-88..102.
+    expect(refs.length).toBe(106);
+    // 83 is the record from before be-103..125. 68 is the record from before be-88..102.
     for (const ref of refs) {
       expect(ref.url).toBe(physjsFileUrl(physjsLeanFile(ref.statement)));
       expect(ref.url).toContain(`/blob/${PHYSJS_COMMIT}/lean/`);

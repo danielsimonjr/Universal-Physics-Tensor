@@ -32,7 +32,13 @@
  * `inversion`, `vacuum`, `corollary`, `friedmann`, `lengthMonomial`,
  * `torsionMonomial`, `coefficientNotFixed`, `unitCoefficient`, `scalingShape`,
  * `everyPower`, `perpendicularQuartic`, `tolmanRatio`) is recorded and is not
- * a `formalRef`.
+ * a `formalRef`. The sentence that those fourteen names are the whole nested
+ * set is the record from before BE-103 through BE-125. That ingestion adds
+ * `warmSound`, `cutoffL`, `whistlerLimit`, `equalTemperature`, `bohmGross`,
+ * `referenceResistivity`, `lundquist`, and `bohmFlux`. PhysJS #66 adds
+ * be-103 through be-125. The sentence that the pin is
+ * `03e8bb77c952f720bdd2730af2afc6a7f2d36243` and that the table stops at
+ * be-102 is the record from before that pin.
  *
  * @module atlas/physjs-ref
  */
@@ -80,6 +86,14 @@ const NESTED_FIELDS = [
   'everyPower',
   'perpendicularQuartic',
   'tolmanRatio',
+  'warmSound',
+  'cutoffL',
+  'whistlerLimit',
+  'equalTemperature',
+  'bohmGross',
+  'referenceResistivity',
+  'lundquist',
+  'bohmFlux',
 ] as const;
 
 type NestedField = (typeof NESTED_FIELDS)[number];
@@ -147,6 +161,22 @@ interface PhysjsEntry {
   readonly perpendicularQuartic?: PhysjsNestedStatement;
   /** BE-72. Equal Tolman products imply equal ratios. Not the reference, and not BE-68. */
   readonly tolmanRatio?: PhysjsNestedStatement;
+  /** BE-103. Warm sound with γ_i = 3. Not the cold threshold. */
+  readonly warmSound?: PhysjsNestedStatement;
+  /** BE-106. The L cutoff. The Stix index is a hypothesis. Not the reference. */
+  readonly cutoffL?: PhysjsNestedStatement;
+  /** BE-106. The whistler limit. A hypothesis. Not the reference. */
+  readonly whistlerLimit?: PhysjsNestedStatement;
+  /** BE-109. Equal-temperature current. The factor 8 is not this value. */
+  readonly equalTemperature?: PhysjsNestedStatement;
+  /** BE-113. Bohm–Gross. It does not replace ω by ω_p in the damping prefactor. */
+  readonly bohmGross?: PhysjsNestedStatement;
+  /** BE-116. The reference resistivity. Not the kinetic catalog value. */
+  readonly referenceResistivity?: PhysjsNestedStatement;
+  /** BE-117. Lundquist over magnetic Reynolds. Not the slab time. */
+  readonly lundquist?: PhysjsNestedStatement;
+  /** BE-122. Bohm ion flux. Not the floating potential. */
+  readonly bohmFlux?: PhysjsNestedStatement;
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -279,6 +309,29 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-100',
   'be-101',
   'be-102',
+  'be-103',
+  'be-104',
+  'be-105',
+  'be-106',
+  'be-107',
+  'be-108',
+  'be-109',
+  'be-110',
+  'be-111',
+  'be-112',
+  'be-113',
+  'be-114',
+  'be-115',
+  'be-116',
+  'be-117',
+  'be-118',
+  'be-119',
+  'be-120',
+  'be-121',
+  'be-122',
+  'be-123',
+  'be-124',
+  'be-125',
 ]);
 
 /**

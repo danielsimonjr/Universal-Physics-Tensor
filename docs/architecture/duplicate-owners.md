@@ -17,3 +17,5 @@ The live list of a second owner for a concept the integration design assigned on
 `assertSameCarrierSign` is called only from `applyCarrierSignPolicy`. The BE-70 domain does not call `sameCarrierSign`. No second owner.
 
 `canonicalPrefactor(…) ?? 1` does not occur. `makeEvaluate` calls `canonicalGroupPrefactor`.
+
+`BRIDGE_EQUATIONS` is the projection of `registerBridge`. No hand-maintained catalog literal.

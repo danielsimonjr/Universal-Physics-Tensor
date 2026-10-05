@@ -35,15 +35,30 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
     // be-102 shares "conductance" with the Hall conductance. be-90, be-91,
     // and be-97 share a token with another isolated edge. A shared token is
     // not an identification. be-95, be-98, and be-100 stay unconnected.
+    // The lists with be-85 unconnected, and without be-103..125, are the
+    // record from before those edges. be-85 shares "current" with
+    // bennett-current. A shot current is not a Bennett current.
+    // be-103 shares "temperature". be-104 and be-114 share "debye".
+    // be-105 and be-114 share "density". be-106 shares "cyclotron" with
+    // another isolated edge. be-108 shares "alfven" and "speed".
+    // be-109 shares "temperature". be-111 and be-112 share "field".
+    // be-113 shares "omega". be-115 shares "length". be-116, be-118, and
+    // be-122 share "mass". be-117 shares "time". be-119 shares "speed".
+    // be-120 shares "density" and "speed". be-121 shares "energy".
+    // A shared token is not an identification.
+    // be-123 and be-124 have no connector. be-107, be-110, and be-125 have
+    // connectors that are not same-kind, so they are in neither list.
     expect(report.connectedOrphans).toEqual([
-      'be-101', 'be-102', 'be-14', 'be-15', 'be-18', 'be-22', 'be-24', 'be-26', 'be-36', 'be-41', 'be-43',
+      'be-101', 'be-102', 'be-103', 'be-104', 'be-105', 'be-106', 'be-108', 'be-109', 'be-111', 'be-112',
+      'be-113', 'be-114', 'be-115', 'be-116', 'be-117', 'be-118', 'be-119', 'be-120', 'be-121', 'be-122',
+      'be-14', 'be-15', 'be-18', 'be-22', 'be-24', 'be-26', 'be-36', 'be-41', 'be-43',
       'be-45', 'be-47', 'be-59', 'be-66', 'be-68', 'be-70', 'be-71', 'be-73', 'be-77', 'be-78', 'be-79',
-      'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-87', 'be-88', 'be-89', 'be-90', 'be-91', 'be-92',
+      'be-80', 'be-81', 'be-82', 'be-83', 'be-84', 'be-85', 'be-87', 'be-88', 'be-89', 'be-90', 'be-91', 'be-92',
       'be-93', 'be-94', 'be-96', 'be-97', 'be-99',
     ]);
     expect(report.unconnectedOrphans).toEqual([
-      'be-100', 'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
-      'be-85', 'be-86', 'be-95', 'be-98',
+      'be-100', 'be-123', 'be-124', 'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
+      'be-86', 'be-95', 'be-98',
     ]);
     // every isolated bridge is accounted for (connected ∪ unconnected, no overlap)
     const both = new Set([...report.connectedOrphans, ...report.unconnectedOrphans]);

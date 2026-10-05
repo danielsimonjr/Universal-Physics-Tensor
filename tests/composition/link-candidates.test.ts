@@ -20,8 +20,9 @@ describe('proposeLinkCandidates — generator', () => {
     // 191 is the record from before be-74..76 joined the anchored cluster.
     // 199 is the record from before be-77..87. 389 is the record from before
     // be-88..102. Those fifteen edges are isolated, so each same-dimension
-    // pair with another component is a candidate.
-    expect(cands.length).toBe(710);
+    // pair with another component is a candidate. 710 is the record from
+    // before be-103..125. Those twenty-three edges are isolated too.
+    expect(cands.length).toBe(1525);
   });
 
   it('the funnel narrows: most touch the core, fewer are same-kind', () => {
@@ -30,8 +31,9 @@ describe('proposeLinkCandidates — generator', () => {
     // 157 and 65 are the record from before be-74..76.
     // 165 and 66 are the record from before be-77..87.
     // 355 and 141 are the record from before be-88..102.
-    expect(core).toBe(676);
-    expect(ck).toBe(321);
+    // 676 and 321 are the record from before be-103..125.
+    expect(core).toBe(1491);
+    expect(ck).toBe(654);
     expect(ck).toBeLessThan(core); // the filters genuinely narrow
   });
 
