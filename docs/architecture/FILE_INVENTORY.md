@@ -13,10 +13,7 @@ them, not because a directory name was guessed. This matters: an earlier version
 filesystem and counted a gitignored scratch file under `.remember/tmp/` as source, and reported
 it as dead code.
 
-The scope of this document is the **whole repository**. The `src`-only figures in the other
-documents come from this repository's own generator (`bun run docs:deps`: 422 files) and are
-smaller by construction. The zone and disposition tables below are the last `repo_map.py`
-census. They were not re-measured in this change, because that tool is not in this environment.
+The scope of this document is the **whole repository**. The `src`-only figure from this repository's own generator is 471 files (`bun run docs:deps` on `b1db6b66`). The zone and disposition tables below are the last `repo_map.py` census. That tool is not in this repository and was not re-run, so those tables still say `src` 403 and a whole-repo total of 1025. A `git ls-files '*.ts' '*.tsx'` of this checkout is 1193 files (471 under `src/`, 688 under `tests/`). That is a different census from both the old table and the generator's 662 test files. Do not treat the zone table as current. The corrected `src/` census and the parallel-implementation reading are `INTEGRATION_MAP.md`.
 
 ## By zone
 
@@ -76,11 +73,9 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| totalSourceFiles | 1025 | dependency-graph.json |
-| orphanedFiles | 5 | dependency-graph.json |
-| reachableFiles | 388 | dependency-graph.json |
-| testOnlyFiles | 10 | dependency-graph.json |
-| entryRoots | 5 | dependency-graph.json |
+| `src` TypeScript files | 471 | `dependency-graph.json` `statistics.totalTypeScriptFiles` |
+
+`totalSourceFiles`, `orphanedFiles`, `reachableFiles`, `testOnlyFiles`, and `entryRoots` are not fields of the current `dependency-graph.json`. The previous table cited 1025, 5, 388, 10, and 5 from `repo_map.py`. That tool was not re-run. The zone table above is that old census.
 
 **Claims the gate cannot hold.** The per-zone and per-disposition tables come from
 `file-inventory.json`'s `byArea` and `byDisposition` blocks, which the gate does not read. The

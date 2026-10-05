@@ -4,7 +4,7 @@
 
 ## What Is This?
 
-Universal Physics Tensor (UPT) is a **TypeScript dimensional-analyzer and bridge-equation library** for exploring unified physics through tensor formalism. The library provides machine-readable encoding of 58 bridge equations that connect distinct physics regimes (quantum to classical, gravity to gauge, thermodynamics to information theory). A layered computational backend can validate, symbolically analyze, and numerically evaluate those equations.
+Universal Physics Tensor (UPT) is a **TypeScript dimensional-analyzer and bridge-equation library** for exploring unified physics through tensor formalism. The library provides machine-readable encoding of 92 bridge equations (ids 11–102) that connect distinct physics regimes (quantum to classical, gravity to gauge, thermodynamics to information theory). A layered computational backend can validate, symbolically analyze, and numerically evaluate those equations. Where the same concept is implemented more than once, the reading is `INTEGRATION_MAP.md`.
 
 The library serves two audiences. Researchers want to query the bridge-equation catalog and catch dimensional errors in novel formulations. Implementors want to evaluate tensor contractions numerically, compute Christoffel symbols, or integrate geodesics in an arbitrary Lorentzian manifold.
 
@@ -14,9 +14,9 @@ The library serves two audiences. Researchers want to query the bridge-equation 
 
 Four goals govern every design choice in UPT:
 
-1. **Bridges drive the work.** The 58 bridge equations in `src/bridges/` are the scientific core. Tooling, tests, and new capabilities exist to serve the catalog, not the other way around. A new feature earns its place by enabling or improving a bridge encoding.
+1. **Bridges drive the work.** The 92 bridge equations in `src/bridges/` are the scientific core. Tooling, tests, and new capabilities exist to serve the catalog, not the other way around. A new feature earns its place by enabling or improving a bridge encoding.
 
-2. **MathTS first-class.** `@danielsimonjr/mathts-tensor` is the preferred numerical backend. The `TensorEngine` interface keeps UPT backend-agnostic. Even so, MathTSEngine is the intended default when the optional dep is present. The selection is a deliberate signal about the dependency shape of the ecosystem, not a performance claim.
+2. **MathTS first-class.** `@danielsimonjr/mathts-tensor` is the numerical backend. The `TensorEngine` interface is the seam. `MathTSEngine` is the engine class, and the MathTS packages are required dependencies. The selection is a deliberate signal about the dependency shape of the ecosystem, not a performance claim.
 
 3. **Integrated scientific environment.** UPT aims to be a self-contained environment for computational physics. The environment covers Christoffel symbols, geodesic integration, curvature (Riemann/Ricci/Einstein/Weyl/Kretschmann), and Killing-vector and Einstein-field-equation machinery. The environment also covers symbolic composition and simplification (`src/composition/compose-symbolic.ts`, `src/composition/expr-simplify.ts`). All of these share a common AST and type system.
 
@@ -50,7 +50,7 @@ UPT is organized into five conceptual layers that build on each other:
 │  SI Dimension algebra (multiply / divide / power / format)   │
 ├──────────────────────────────────────────────────────────────┤
 │  Layer 1: Bridge Catalog                                     │
-│  BRIDGE_EQUATIONS (58 entries) + per-bridge evaluator        │
+│  BRIDGE_EQUATIONS (92 entries, ids 11–102) + evaluators      │
 │  modules (be-*.ts) + BridgeEquationEntry metadata type +     │
 │  membership criterion / negative catalog                     │
 └──────────────────────────────────────────────────────────────┘
@@ -58,13 +58,13 @@ UPT is organized into five conceptual layers that build on each other:
 
 A bridge equation module at Layer 1 builds AST nodes at Layer 2 and validates them with the dimensional algebra. The module optionally raises/lowers indices using Layer 3 metric primitives, and Layer 4 can evaluate the module numerically. Layer 5 (the curvature / general-relativity layer) is built on top of Layers 2–4. Its curvature node kinds are `ExprNode` members with their own validators and lowering arms. Its integrators reuse the same Christoffel-closure convention as the Layer-4 RK4 solver. Callers who only want catalog metadata (status, known issues, references) never touch layers 2–5.
 
-Beside the layers sits a **composition graph** (`src/composition/`). The graph holds bridges as `BridgeEdge` objects over `Quantity` endpoints, composable via `composeEdges`. The pre-registered calibration edges include the first diagonal-law edge, `lawSchwarzschildRadius`. Its first derived result (CT-1) chains BE-42∘BE-16 to E_min(M) = ℏc³ln2/(8πGM). Catalog membership is computable (`src/bridges/membership.ts` + the `src/bridges/rejected.ts` negative catalog — see `v0.8.0-catalog-adjudication.md`), and GW170817 vs. BE-36 is a real-data confrontation. The graph has **46 edges**. The graph also has:
+Beside the layers sits a **composition graph** (`src/composition/`). The graph holds bridges as `BridgeEdge` objects over `Quantity` endpoints, composable via `composeEdges`. The pre-registered calibration edges include the first diagonal-law edge, `lawSchwarzschildRadius`. Its first derived result (CT-1) chains BE-42∘BE-16 to E_min(M) = ℏc³ln2/(8πGM). Catalog membership is computable (`src/bridges/membership.ts` + the `src/bridges/rejected.ts` negative catalog — see `v0.8.0-catalog-adjudication.md`), and GW170817 vs. BE-36 is a real-data confrontation. The graph has **83 edges** (`CATALOG_GRAPH`). The graph also has:
 
 - a Phase-D candidate enumerator (`enumerateCompositions`);
 - first-order uncertainty propagation (`propagateUncertainty`);
 - a name-collision namespacing gate (`CompositionAliasError` + `SOURCE_ALIAS_DISPOSITIONS` over 131 centralized `Quantity` nodes in `quantities.ts`).
 
-BE-23 vs. cuprate Planckian dissipation is another data confrontation. The 55-bridge catalog (46 graph edges) is validated against the **canonical L-layer** (`src/canonical/`, 109 equations). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** of 19 (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` + the per-bridge `be*-confrontation.ts` evaluators carry the spine.
+BE-23 vs. cuprate Planckian dissipation is another data confrontation. The 92-bridge catalog (83 graph edges) is validated against the **canonical L-layer** (`src/canonical/`, 109 equations). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** of 19 (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` + the per-bridge `be*-confrontation.ts` evaluators carry the spine.
 
 ---
 
@@ -85,44 +85,14 @@ See `ARCHITECTURE.md` for detailed module design. See `COMPONENTS.md` for per-fi
 
 ## Verification
 
-Generated by `repo_map.py map`.
-Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_map.py check <repo> --docs docs/architecture`
+`repo_map.py` is not in this repository and was not re-run. The previous table cited `totalSourceFiles` 1025 and `totalExports` 3697 as fields of `dependency-graph.json`. The current schema's `statistics` object, re-read after `bun run docs:deps` on `b1db6b66`, is the `src/` record: 471 files, 3553 exports, 1734 re-exports, 0 runtime cycles, 0 type-only cycles, 1 unused file, 78 unused exports. `git ls-files '*.ts' '*.tsx'` of this checkout is 1193 files. That census includes tests and tools. It is not the generator's `src/` count, and it is not the old 1025.
 
-| Claim | Value | Source |
-|---|---|---|
-| totalSourceFiles | 1025 | dependency-graph.json |
-| totalExports | 3697 | dependency-graph.json |
-| entryRoots | 5 | dependency-graph.json |
+**Claims the gate cannot hold.** These catalog figures are properties of the physics catalog, not of the dependency graph. They were re-counted from source on the same commit (`INTEGRATION_MAP.md` records the method):
 
-**Lines of code are not a gated claim.** They change on almost every edit, so a gated figure
-would fail on every push and teach readers to update it without reading it. The current figure,
-with its source and the date it was measured, is in `NOTES.md`. The gate holds only claims that
-change when the STRUCTURE changes.
-
-**Two scopes, both correct.** The table above is **whole-repository** — `repo_map` counts
-every TypeScript file git tracks, including `tests/`, `bench/`, `examples/` and `tools/`. The prose in this
-document uses the **`src/` scope** produced by this repository's own generator
-(`bun run docs:deps`): 426 files, 3069 exports, 1452 of them re-exports. The whole-repository
-table above was last filled by `repo_map.py` and was not re-measured in this change: that tool
-is not in this environment. The two scopes answer different questions. Every figure states its scope.
-
-> The `src/`-scope figures above are read from `statistics` in the generated
-> `dependency-graph.json`, and **must be re-read from it after any regeneration** — they are the
-> one place in this document where a generated number is restated in prose, so they go stale
-> silently. The whole-repository figures in the table belong to `repo_map.py` and its own check
-> gate; do not hand-edit them here.
-
-**Claims the gate cannot hold.** These catalog figures are properties of the physics catalog,
-not of the dependency graph:
-
-- 58 bridge entries (IDs 11–68; 22 established, 33 speculative, 3 highly-speculative);
+- 92 bridge entries (ids 11–102; 56 established, 33 speculative, 3 highly-speculative);
 - 109 canonical equations;
-- 49 composition-graph edges;
+- 83 composition-graph edges;
 - 19 real-data confrontations.
-
-They were measured by importing the built package and reading
-`BRIDGE_EQUATIONS`, `CANONICAL_EQUATIONS`, `CATALOG_GRAPH` and `listConfrontations()` directly,
-not taken from any metric. Re-measure the same way; `repo_map` cannot check them.
 
 ---
 
