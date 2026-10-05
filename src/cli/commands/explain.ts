@@ -113,7 +113,12 @@ function parseKnown(args: readonly string[]): { known: string[] | Record<string,
         );
       }
       values[p.name] = aligned.value;
-      for (const note of aligned.notes) if (!notes.includes(note)) notes.push(note);
+      // Unit-convention notes were already on the binding and explain did not
+      // print them. The temperature reading adds a note; that one is new.
+      for (const note of aligned.notes) {
+        if (p.read.notes.includes(note) || notes.includes(note)) continue;
+        notes.push(note);
+      }
     } catch (e) {
       if (e instanceof UsageError) throw e;
       if (e instanceof UnitError) {
