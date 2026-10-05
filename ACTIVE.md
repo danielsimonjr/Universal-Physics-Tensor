@@ -72,8 +72,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
   A record fixture and a probe fixture hash to the same digests as the old functions. The probe export names stay.
   Done: `canonicalJson` and `captureEnvironment` are defined in `src/composition/canonical-json.ts`. The parent scan failed because each name was defined in `src/cli/record.ts` and again under `src/composition/probe/`. The probe subpath re-exports both names. The record profile keeps today's hash bytes. The probe profile keeps Date-to-ISO and undefined-hole-to-null.
 
-- [ ] Implement phase 9 of the 6.0.0 integration: classical Runge-Kutta steps call the MathTS ODE solver.
+- [x] Implement phase 9 of the 6.0.0 integration: classical Runge-Kutta steps call the MathTS ODE solver.
   A linear oscillator matches the exact solution at the witness step size. The Schwarzschild and Kerr samples stay inside their existing tolerances. The finite-difference wave and heat functions stay.
+  Done: the parent scan failed on `src/atlas/diffusion/numerics.ts`, `src/atlas/oscillators/limit-witnesses.ts`, `src/atlas/oscillators/pendulum-motion.ts`, and `src/numerical/spacetime-metrics.ts`. Each of those steps now calls `solveODESystem` with `dt`. The crossing refinement stays. The finite-difference wave and heat functions stay. Witness goldens did not move.
 
 - [ ] Implement phase 10 of the 6.0.0 integration: one mass-density dimension, and re-exports instead of assign-and-reexport.
   The dimension object matches at each former copy. The dependency graph does not list a pure re-export as two local definitions. The approximation admission stays defined in the atlas regime module.

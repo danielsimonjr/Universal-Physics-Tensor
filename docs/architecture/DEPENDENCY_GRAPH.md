@@ -445,6 +445,11 @@ The codebase is organized into the following modules:
 
 ### `src/atlas/diffusion/numerics.ts` - Atlas Phase 4, S4.4 — the numerics behind the diffusion family's witnesses.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `solveODESystem` |
+
 **Exports:**
 - Interfaces: `HeatFixture`, `WickFixture`, `LangevinFixture`, `SteadyStateFixture`
 - Functions:
@@ -733,6 +738,11 @@ The codebase is organized into the following modules:
 
 ### `src/atlas/oscillators/limit-witnesses.ts` - The measurements behind the in-process witnesses of the three oscillator
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `solveODESystem` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -796,6 +806,11 @@ The codebase is organized into the following modules:
 ---
 
 ### `src/atlas/oscillators/pendulum-motion.ts` - The pendulum and its linear oscillator, integrated and read off, for the
+
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `solveODESystem` |
 
 **Internal Dependencies:**
 | File | Imports | Type |
@@ -8822,6 +8837,11 @@ The codebase is organized into the following modules:
 
 ### `src/numerical/spacetime-metrics.ts` - Curvature of a few exact metrics for `upt metric`.
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-functions` | `solveODESystem` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -9171,7 +9191,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 479 |
 | Total Modules | 13 |
-| Total Lines of Code | 103030 |
+| Total Lines of Code | 103013 |
 | Total Exports | 3888 |
 | Total Re-exports | 1925 |
 | Total Classes | 61 |

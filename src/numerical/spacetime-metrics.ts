@@ -17,6 +17,7 @@
  * @internal
  */
 
+import { solveODESystem } from '@danielsimonjr/mathts-functions';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
 import { DIMENSIONLESS, LENGTH, MASS, TIME, VELOCITY, type Dimension } from '../dimensional/types.js';
 import { readParameter } from './binding-value.js';
@@ -686,17 +687,13 @@ export function schwarzschildCircularOrbit(opts?: {
     }
     return [u[0]!, u[1]!, u[2]!, u[3]!, du[0]!, du[1]!, du[2]!, du[3]!];
   };
-  const add = (a: number[], b: number[], scale: number) => a.map((v, i) => v + scale * b[i]!);
   const period = (2 * Math.PI) / uphi;
   const fraction = opts?.fraction ?? 0.02;
   const steps = 400;
   const h = (period * fraction) / steps;
   for (let n = 0; n < steps; n++) {
-    const k1 = accel(y);
-    const k2 = accel(add(y, k1, h / 2));
-    const k3 = accel(add(y, k2, h / 2));
-    const k4 = accel(add(y, k3, h));
-    y = y.map((v, i) => v + (h / 6) * (k1[i]! + 2 * k2[i]! + 2 * k3[i]! + k4[i]!));
+    const sol = solveODESystem((_t, s) => accel(s), y, [0, h], { dt: h });
+    y = (sol.y[sol.y.length - 1] ?? y).slice();
     y[2] = Math.PI / 2;
     y[6] = 0;
   }
@@ -1096,18 +1093,10 @@ function integrateGeodesic(gammaAt: (r: number, theta: number) => Gamma, y0: rea
     }
     return [u[0]!, u[1]!, u[2]!, u[3]!, du[0]!, du[1]!, du[2]!, du[3]!];
   };
-  const add = (left: number[], right: number[], scale: number) => left.map((v, i) => v + scale * right[i]!);
   const angular = Math.max(Math.abs(y0[7]!), Math.abs(y0[6]!), 1e-12);
   const h = ((2 * Math.PI) / angular) * fraction / steps;
-  let y = y0.slice();
-  for (let n = 0; n < steps; n++) {
-    const k1 = accel(y);
-    const k2 = accel(add(y, k1, h / 2));
-    const k3 = accel(add(y, k2, h / 2));
-    const k4 = accel(add(y, k3, h));
-    y = y.map((v, i) => v + (h / 6) * (k1[i]! + 2 * k2[i]! + 2 * k3[i]! + k4[i]!));
-  }
-  return y;
+  const sol = solveODESystem((_t, s) => accel(s), y0.slice(), [0, steps * h], { dt: h });
+  return sol.y[sol.y.length - 1] ?? y0.slice();
 }
 
 function sampleOf(metric: MetricFn, a: number, y0: readonly number[], y1: readonly number[], steps: number, mu2: number): KerrGeodesicSample {

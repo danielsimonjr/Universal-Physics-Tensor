@@ -10,6 +10,7 @@
  * @internal
  */
 
+import { solveODESystem } from '@danielsimonjr/mathts-functions';
 import { agm, pendulumPeriodErrorAt } from './bridges-limits.js';
 
 /** ω0² at T0 = 1. @internal */
@@ -19,17 +20,16 @@ export const pendulumAccel = (x: number): number => -W2 * Math.sin(x);
 /** @internal */
 export const linearAccel = (x: number): number => -W2 * x;
 
-/** One classical RK4 step of x″ = accel(x). @internal */
+/**
+ * One fixed step of x″ = accel(x). MathTS `solveODESystem` with `dt` is the
+ * classical RK4 step.
+ *
+ * @internal
+ */
 export function rk4Step(x: number, v: number, h: number, accel: (x: number) => number): [number, number] {
-  const k1x = v;
-  const k1v = accel(x);
-  const k2x = v + 0.5 * h * k1v;
-  const k2v = accel(x + 0.5 * h * k1x);
-  const k3x = v + 0.5 * h * k2v;
-  const k3v = accel(x + 0.5 * h * k2x);
-  const k4x = v + h * k3v;
-  const k4v = accel(x + h * k3x);
-  return [x + (h / 6) * (k1x + 2 * k2x + 2 * k3x + k4x), v + (h / 6) * (k1v + 2 * k2v + 2 * k3v + k4v)];
+  const sol = solveODESystem((_t, y) => [y[1]!, accel(y[0]!)], [x, v], [0, h], { dt: h });
+  const end = sol.y[sol.y.length - 1] ?? [x, v];
+  return [end[0]!, end[1]!];
 }
 
 /**

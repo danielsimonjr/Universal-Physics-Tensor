@@ -3,7 +3,8 @@
  * bridges that had none: W7 (`ab-pendulum-linear`), W8b (`ab-damped-massless`)
  * and W9 (`ab-chain-wave`).
  *
- * Each one INTEGRATES the premise model's own equation by RK4 and reads the
+ * Each one INTEGRATES the premise model's own equation with MathTS
+ * `solveODESystem` and `dt`, and reads the
  * claimed quantity off the motion. None evaluates the closed form its record
  * states, so a test comparing the measurement with that closed form compares
  * two methods, not one method with itself.
@@ -12,6 +13,7 @@
  * @internal
  */
 
+import { solveODESystem } from '@danielsimonjr/mathts-functions';
 import { quarterPeriod } from './norm-transport-witness.js';
 
 /**
@@ -63,23 +65,17 @@ export function measureMasslessOffset(
   const h = m / stepsPerMass;
   const layerSteps = Math.ceil((5 * stepsPerMass) / b);
   const steps = Math.ceil(tEnd / h);
-  let x = x0;
-  let v = v0;
+  const sol = solveODESystem(
+    (_t, y) => [y[1]!, -(b * y[1]! + k * y[0]!) / m],
+    [x0, v0],
+    [0, steps * h],
+    { dt: h },
+  );
   let sup = 0;
-  for (let i = 1; i <= steps; i++) {
-    // The damped force reads v as well as x, so the first-order system is stepped here.
-    const f = (xx: number, vv: number): number => -(b * vv + k * xx) / m;
-    const k1x = v;
-    const k1v = f(x, v);
-    const k2x = v + 0.5 * h * k1v;
-    const k2v = f(x + 0.5 * h * k1x, v + 0.5 * h * k1v);
-    const k3x = v + 0.5 * h * k2v;
-    const k3v = f(x + 0.5 * h * k2x, v + 0.5 * h * k2v);
-    const k4x = v + h * k3v;
-    const k4v = f(x + h * k3x, v + h * k3v);
-    x += (h / 6) * (k1x + 2 * k2x + 2 * k3x + k4x);
-    v += (h / 6) * (k1v + 2 * k2v + 2 * k3v + k4v);
-    if (i >= layerSteps) sup = Math.max(sup, Math.abs(x - x0 * Math.exp((-k / b) * i * h)));
+  for (let i = layerSteps; i <= steps; i++) {
+    const x = sol.y[i]?.[0];
+    if (x === undefined) return Number.NaN;
+    sup = Math.max(sup, Math.abs(x - x0 * Math.exp((-k / b) * i * h)));
   }
   return sup;
 }
@@ -114,33 +110,33 @@ export function measureChainDispersionError(
     for (let n = 0; n < N; n++) out[n] = w * (u[(n + 1) % N]! - 2 * u[n]! + u[(n - 1 + N) % N]!);
     return out;
   };
-  const axpy = (y: Float64Array, s: number, x: Float64Array): Float64Array => {
-    const out = new Float64Array(N);
-    for (let n = 0; n < N; n++) out[n] = y[n]! + s * x[n]!;
-    return out;
-  };
   const h = 1 / stepsPerUnitTime;
-  let u = Float64Array.from({ length: N }, (_, n) => Math.cos((2 * Math.PI * n) / N));
-  let v = new Float64Array(N);
+  let state = [
+    ...Float64Array.from({ length: N }, (_, n) => Math.cos((2 * Math.PI * n) / N)),
+    ...new Array<number>(N).fill(0),
+  ];
   // Twice the lattice quarter period π/(4√(κ/m) sin(π/N)): the crossing is inside.
   const maxSteps = Math.ceil(((2 * Math.PI) / (4 * Math.sqrt(w) * Math.sin(Math.PI / N))) * stepsPerUnitTime);
   for (let i = 0; i < maxSteps; i++) {
-    const k1u = v;
-    const k1v = accel(u);
-    const k2u = axpy(v, 0.5 * h, k1v);
-    const k2v = accel(axpy(u, 0.5 * h, k1u));
-    const k3u = axpy(v, 0.5 * h, k2v);
-    const k3v = accel(axpy(u, 0.5 * h, k2u));
-    const k4u = axpy(v, h, k3v);
-    const k4v = accel(axpy(u, h, k3u));
-    const nu = new Float64Array(N);
-    const nv = new Float64Array(N);
-    for (let n = 0; n < N; n++) {
-      nu[n] = u[n]! + (h / 6) * (k1u[n]! + 2 * k2u[n]! + 2 * k3u[n]! + k4u[n]!);
-      nv[n] = v[n]! + (h / 6) * (k1v[n]! + 2 * k2v[n]! + 2 * k3v[n]! + k4v[n]!);
-    }
-    if (u[0]! > 0 && nu[0]! <= 0) {
-      const [p0, m0, p1, m1] = [u[0]!, v[0]! * h, nu[0]!, nv[0]! * h];
+    const sol = solveODESystem(
+      (_t, y) => {
+        const pos = Float64Array.from(y.slice(0, N));
+        const vel = y.slice(N);
+        const a = accel(pos);
+        return [...vel, ...a];
+      },
+      state,
+      [0, h],
+      { dt: h },
+    );
+    const next = sol.y[sol.y.length - 1];
+    if (next === undefined) return Number.NaN;
+    const u0 = state[0]!;
+    const nu0 = next[0]!;
+    const v0 = state[N]!;
+    const nv0 = next[N]!;
+    if (u0 > 0 && nu0 <= 0) {
+      const [p0, m0, p1, m1] = [u0, v0 * h, nu0, nv0 * h];
       const p = (s: number): number =>
         (2 * s ** 3 - 3 * s ** 2 + 1) * p0 + (s ** 3 - 2 * s ** 2 + s) * m0 + (-2 * s ** 3 + 3 * s ** 2) * p1 + (s ** 3 - s ** 2) * m1;
       const dp = (s: number): number =>
@@ -152,8 +148,7 @@ export function measureChainDispersionError(
       const q = (2 * Math.PI) / (N * a);
       return 1 - omega / (c * q);
     }
-    u = nu;
-    v = nv;
+    state = next.slice();
   }
   return Number.NaN;
 }

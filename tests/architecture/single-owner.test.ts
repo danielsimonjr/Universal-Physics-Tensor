@@ -10,6 +10,8 @@ import { describe, expect, it } from 'vitest';
 import {
   bridgeEquationLiteral,
   bridgeRegistryHits,
+  classicalRk4Hits,
+  classicalRk4Literal,
   jsonDefinition,
   jsonOwnerHits,
   nameTableOwnerHits,
@@ -59,6 +61,16 @@ describe('single owner', () => {
     expect(jsonDefinition("export { canonicalJson } from './serialize.js';\n", 'canonicalJson')).toBe(false);
     expect(jsonDefinition('export async function captureEnvironment(api: Api) {\n', 'captureEnvironment')).toBe(true);
     expect(jsonDefinition("export { captureEnvironment } from './run-manifest.js';\n", 'captureEnvironment')).toBe(false);
+  });
+
+  it('has no second classical RK4 step', () => {
+    expect(classicalRk4Hits(root)).toEqual([]);
+  });
+
+  it('a classical RK4 weight is a hit', () => {
+    // The marker matches the update the parent tree had. This proves the matcher fires.
+    expect(classicalRk4Literal('y += (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4);')).toBe(true);
+    expect(classicalRk4Literal('solveODESystem(f, y0, [0, h], { dt: h });')).toBe(false);
   });
 
   it('a second BRIDGE_EQUATIONS literal is a hit', () => {

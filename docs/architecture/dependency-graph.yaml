@@ -813,7 +813,10 @@ modules:
         - DIFFUSION_MODELS
     src/atlas/diffusion/numerics.ts:
       description: Atlas Phase 4, S4.4 — the numerics behind the diffusion family's witnesses.
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - solveODESystem
       nodeDependencies: []
       internalDependencies: []
       exports:
@@ -1958,7 +1961,10 @@ modules:
         - OSCILLATOR_FAMILY
     src/atlas/oscillators/limit-witnesses.ts:
       description: The measurements behind the in-process witnesses of the three oscillator
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - solveODESystem
       nodeDependencies: []
       internalDependencies:
         - file: ./norm-transport-witness.js
@@ -2066,7 +2072,10 @@ modules:
         - RELATIVE_PERIOD_NORM
     src/atlas/oscillators/pendulum-motion.ts:
       description: The pendulum and its linear oscillator, integrated and read off, for the
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - solveODESystem
       nodeDependencies: []
       internalDependencies:
         - file: ./bridges-limits.js
@@ -23903,7 +23912,10 @@ modules:
         - GAUSS_LEGENDRE_16
     src/numerical/spacetime-metrics.ts:
       description: Curvature of a few exact metrics for `upt metric`.
-      externalDependencies: []
+      externalDependencies:
+        - package: "@danielsimonjr/mathts-functions"
+          imports:
+            - solveODESystem
       nodeDependencies: []
       internalDependencies:
         - file: ../core/constants.js
@@ -24697,7 +24709,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 479
   totalModules: 13
-  totalLinesOfCode: 103030
+  totalLinesOfCode: 103013
   totalExports: 3888
   totalClasses: 61
   totalInterfaces: 612
@@ -24710,4 +24722,4 @@ statistics:
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 76
+  unusedExportsCount: 75
