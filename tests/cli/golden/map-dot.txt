@@ -474,7 +474,7 @@ digraph PhysicsMap {
     j_CE_sound_speed [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Speed of sound in a fluid"];
     q_pressure -> j_CE_sound_speed;
     q_density -> j_CE_sound_speed;
-    j_CE_sound_speed -> q_speed;
+    j_CE_sound_speed -> q_sound_speed;
     j_CE_volume_flow_rate [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Volume flow rate (continuity)"];
     q_cross_sectional_area [shape=ellipse,label="cross-sectional-area"];
     q_cross_sectional_area -> j_CE_volume_flow_rate;

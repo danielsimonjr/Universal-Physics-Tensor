@@ -14046,6 +14046,12 @@
             ]
           },
           {
+            "file": "../../composition/canonical-prefactors.js",
+            "imports": [
+              "CANONICAL_GROUP_PREFACTORS"
+            ]
+          },
+          {
             "file": "../../composition/explain.js",
             "imports": [
               "formatQuantity"
@@ -17698,6 +17704,8 @@
           {
             "file": "./canonical-prefactors.js",
             "imports": [
+              "CANONICAL_GROUP_PREFACTORS",
+              "canonicalGroupPrefactor",
               "canonicalPrefactor"
             ]
           }
@@ -20369,6 +20377,12 @@
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./canonical-prefactors.js",
+            "imports": [
+              "CANONICAL_GROUP_PREFACTORS"
+            ]
           },
           {
             "file": "../dimensional/buckingham.js",
@@ -24717,6 +24731,12 @@
               "BridgeEdge"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./canonical-prefactors.js",
+            "imports": [
+              "CANONICAL_GROUP_PREFACTORS"
+            ]
           },
           {
             "file": "./edge.js",
@@ -33431,7 +33451,7 @@
   "statistics": {
     "totalTypeScriptFiles": 472,
     "totalModules": 13,
-    "totalLinesOfCode": 99989,
+    "totalLinesOfCode": 100047,
     "totalExports": 3555,
     "totalClasses": 61,
     "totalInterfaces": 560,

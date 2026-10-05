@@ -503,7 +503,8 @@ const LINK_CHECKS: readonly LinkCheck[] = [
     model: 'model-sound',
     canonical: 'CE-sound-speed',
     bindings: {
-      speed: {
+      // The measured mode speed is the quantity sound-speed. A string wave still binds speed.
+      'sound-speed': {
         observable: 'p′',
         quantity: 'f·λ of the mode a(t) sin(κx) of p′_tt = (γ p₀/ρ₀) p′_xx',
         measure: (p) => modeSpeed((p['gamma']! * p['p0']!) / p['rho0']!, p['kappa']!),
