@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Write an integration map of the 5.0.0 tree. Do not change `src/`.
+  Done: `docs/architecture/INTEGRATION_MAP.md` is that map, measured on `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f`. It records module entries, the command call graph, the parallel implementations, the MathTS and PhysJS boundaries, and ten recommended unification targets. `duplicate-symbols.md` and the architecture verification blocks were corrected from the same measurement. No `src/` change.
+
 - [x] Record the plasma and space dogfood of published `universal-physics-tensor@5.0.0`. The report is `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md`. The session does not change `src/`.
   Done: the report is that file. npm `5.0.0` gitHead is `4420714b67f5728492ba90d9a983280227b36943`. Annotated tag `v5.0.0` (object `28ebfb885aab8b06499e90fcd208d4e688b0af69`) points at that commit. Publish run `37247750332` succeeded. New candidates stay unproven. The bugs are filed as issues 386–392 and are not fixed in this change.
 

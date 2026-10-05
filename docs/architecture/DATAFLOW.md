@@ -896,9 +896,10 @@ Regenerate: `python repo_map.py map <repo> --out <dir>` · Check: `python repo_m
 
 | Claim | Value | Source |
 |---|---|---|
-| entryRoots | 5 | dependency-graph.json |
-| reachableFiles | 388 | dependency-graph.json |
-| runtimeCircularDeps | 0 | dependency-graph.json |
+| runtimeCircularDeps | 0 | `dependency-graph.json` `statistics` |
+| package export files the generator marks reachable | 4 | `docs:deps` log on `b1db6b66` (`package.json` `exports`: `.`, `numerical/mathts-engine`, `probe`, `atlas`) |
+
+`entryRoots` and `reachableFiles` are not fields of the current `dependency-graph.json`. The previous table said 5 and 388. `repo_map.py` was not re-run. `src/cli/main.ts` is still reached from `bin/upt.mjs` by a runtime path, which a static import walk does not follow. The runtime call graph is `INTEGRATION_MAP.md`.
 
 **`entryRoots` is 5.** The roots are `src/index.ts`, the subpath entries
 `src/numerical/mathts-engine.ts`, `src/atlas/index.ts` and `src/composition/probe/index.ts`, and

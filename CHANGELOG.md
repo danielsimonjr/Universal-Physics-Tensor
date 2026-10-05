@@ -10,6 +10,8 @@ from v0.1.0 onward.
 
 ### Documented
 
+- **Integration map of the 5.0.0 tree.** `docs/architecture/INTEGRATION_MAP.md` records how the modules connect at runtime and where the same concept is implemented more than once (unit reading, evaluators, bridge registries, aliases, prefactors, local math beside MathTS, the two JSON canonicalizers, the PhysJS pin). The map is a measurement for a later design. It does not change `src/`. `duplicate-symbols.md` and the architecture verification blocks were corrected from that measurement because they still quoted an older file count.
+
 - **Plasma and space dogfood of published 5.0.0.** `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md` records the plasma and space session against the published tarball: how the Debye, frequency, MHD, sheath, transport, and solar-wind commands behave, and the candidates that units do not fix. Candidates stay unproven. The bugs it records are filed as issues 386–392 and are not fixed here. No `src/` change.
 
 ## [5.0.0] - 2026-10-04

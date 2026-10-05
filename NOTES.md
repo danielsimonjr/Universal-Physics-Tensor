@@ -11,6 +11,8 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-10-05
 
+- **Integration map.** `docs/architecture/INTEGRATION_MAP.md` is the measurement of parallel implementations on `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f`. The counts live in that file. No `src/` change.
+
 - **Package version 5.0.0 is on npm.** `npm view universal-physics-tensor@5.0.0 version gitHead --prefer-online` printed `5.0.0` and `4420714b67f5728492ba90d9a983280227b36943`. Annotated tag `v5.0.0` is object `28ebfb885aab8b06499e90fcd208d4e688b0af69` and its target is that commit. Publish run `37247750332` succeeded. The GitHub release is `https://github.com/danielsimonjr/Universal-Physics-Tensor/releases/tag/v5.0.0`. The sentence that npm `latest` is still `4.0.0` is the record from before this measurement.
 - **Plasma and space dogfood, round 6, 2026-10-04.** The session, the new candidates, and the filed bugs are `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md`. Model persona on the published package `universal-physics-tensor@5.0.0`, not a human reviewer. The new candidates are unproven. The bugs are issues 386–392 and are not fixed in this change. The session does not change `src/`.
 
