@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Write the integration design for 6.0.0. Do not change `src/`.
+  The map's ten targets become decisions in `docs/planning/v6.0.0-Design.md`, checked against the source. The owner has not approved an implementation phase.
+  Done: that file. The map's edit-distance, prefactor, ideal-gas, and private-RK4 rows were corrected from the same reading. No `src/` change. Implementation stays unauthorized until the owner accepts the note and an open task names a phase.
+
 - [x] Write an integration map of the 5.0.0 tree. Do not change `src/`.
   Done: `docs/architecture/INTEGRATION_MAP.md` is that map, measured on `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f`. It records module entries, the command call graph, the parallel implementations, the MathTS and PhysJS boundaries, and ten recommended unification targets. `duplicate-symbols.md` and the architecture verification blocks were corrected from the same measurement. No `src/` change.
 

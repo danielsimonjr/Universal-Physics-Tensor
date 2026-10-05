@@ -2,7 +2,7 @@
 
 A reading of how the library actually runs, and where the same concept is implemented more than once. This is a measurement of the tree, for a later integration design. It does not choose that design.
 
-**Measured on** `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f` (`master` at measurement; package `5.0.0`). `src/` was not edited. `bun run docs:deps` (`--include-tests`) was run again on that tree; `git diff -- docs/architecture/` of the generator outputs was empty, so the committed graph, unused analysis, and test-coverage report match that run. The API-surface report is opt-in and is not a committed generator output; it was written to a temporary file with `--api-surface` and `--api-entry=src/index.ts`.
+**Measured on** `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f` (`master` at measurement; package `5.0.0`). `src/` was not edited. A second reading of that same `src/` tree, for the integration design, corrected the edit-distance row, the prefactor section (group table and the ideal-gas count), and the private RK4 list. The recommendations in section 6 were updated to match those corrections. They are still recommendations. `bun run docs:deps` (`--include-tests`) was run again on that tree; `git diff -- docs/architecture/` of the generator outputs was empty, so the committed graph, unused analysis, and test-coverage report match that run. The API-surface report is opt-in and is not a committed generator output; it was written to a temporary file with `--api-surface` and `--api-entry=src/index.ts`.
 
 Anything below that was not opened in source, or that a second method did not confirm, is marked **INFERRED**.
 
@@ -157,7 +157,7 @@ One unit table lives in `src/dimensional/units.ts`: `parseUnit`, `convertValue`,
 
 `readBinding` (`binding-value.ts:359`) accepts a bare number, a number plus a unit, or an expression whose unit literals were spliced out and parsed by the MathTS formula parser. `bindingInUnit` (`binding-value.ts:414`) uses `convertValue` for a plain number-plus-unit and `readBinding` for an expression. `readNamedBinding` (`binding-value.ts:337`) applies `QUANTITY_CONVENTION_UNIT` (`src/dimensional/unit-convention.ts:21-31`: GeV energies, bit, nat, one entropy in J/K) and otherwise returns `readBinding`.
 
-`alignTemperatureBinding` (`binding-value.ts:48-75`) divides an energy by `k_B` when the binding name is `T`, `temperature`, `temp`, or `T_K`. The module comment at `binding-value.ts:13-15` states that rule for a temperature name. The only caller is `upt eval` (`eval.ts:66-69`). Callers of `readNamedBinding` are `upt explain` (`explain.ts:87`) and discover/map anchors (`_discovery-opts.ts:43`). `upt evaluate` uses `bindingInUnit` with the evaluator's declared unit (`evaluator-inputs.ts`). `upt path` and `upt regime` also read bindings without `alignTemperatureBinding` (**INFERRED** for the exact call lines inside those two commands; the import search shows they do not reference `alignTemperatureBinding`).
+`alignTemperatureBinding` (`binding-value.ts:48-75`) divides an energy by `k_B` when the binding name is `T`, `temperature`, `temp`, or `T_K`. The module comment at `binding-value.ts:13-15` states that rule for a temperature name. The only caller is `upt eval` (`eval.ts:66-69`). Callers of `readNamedBinding` are `upt explain` (`explain.ts:87`) and discover/map anchors (`_discovery-opts.ts:43`). `upt evaluate` uses `bindingInUnit` with the evaluator's declared unit (`evaluator-inputs.ts:44`). `upt regime` reads bindings with `readBinding` (`regime.ts:101`). `upt path` does too (`path.ts:186` and `path.ts:370`). Neither calls `alignTemperatureBinding`.
 
 So `temperature=10eV` is joules on explain and a dimension error on evaluate, and kelvin on eval when the left-hand name is one of the four temperature names. That is the split behind issue 386. The earlier eV-as-kelvin fix is the `alignTemperatureBinding` path; it was wired to one command.
 
@@ -171,8 +171,8 @@ So `temperature=10eV` is joules on explain and a dimension error on evaluate, an
 | `canonicalQuantityName` | `src/canonical/normal-form.ts` | structural-hash renaming (`T` plus a temperature dimension → `temperature`) |
 | `ENTRY_TARGET_ALIASES` | `src/composition/canonical-compare.ts` | compare-target names |
 | `SOURCE_ALIAS_DISPOSITIONS` | `src/composition/compose.ts` | composition name collisions |
-| `nearQuantityNames` | `aliases.ts:53-83` | Levenshtein distance ≤ 1. Explain uses it (`explain.ts`) |
-| `suggestQuantities` | `user-equation.ts` | a second edit distance, with transpositions (**INFERRED** that the second algorithm counts transpositions; the function is a different implementation from `nearQuantityNames`) |
+| `nearQuantityNames` | `aliases.ts:53-83` | plain Levenshtein. Returns only when the distance is ≤ 1, and returns 2 immediately when the lengths differ by more than 1. Explain uses it (`explain.ts`) |
+| `suggestQuantities` | `user-equation.ts:262-335` | a second edit distance: optimal string alignment (an adjacent transposition is one edit, so `lenght` → `length` is distance 1). The rank also allows distance up to `max(1, ceil(length/2))` and then containment. Confirmed in `rankByName`; the earlier INFERRED mark was this algorithm |
 | `FORMULA_NAMED` | `src/dimensional/formula-names.ts` | constant names for the formula parser (`m_p`, `e`), not graph quantities |
 | Search words | `src/cli/search-index.ts` | word index over the registries above |
 
@@ -192,7 +192,11 @@ Hall and cyclotron monomials are not odd in both names, so the canonical check r
 
 ### Coefficients and prefactors
 
-`CANONICAL_PREFACTORS` (`src/composition/canonical-prefactors.ts`) is the sourced table. Canonical `makeEvaluate` (`canonical-graph.ts:224-245`) always multiplies `constFactor * recorded * (canonicalPrefactor(eq.id) ?? 1)`. `recordedDimensionlessCoefficient` (`canonical-graph.ts:201-214`) applies only when `restatesBridge` is set. `toEdge` sets `coefficientUnset` when the entry is dimensional and the table has no prefactor (`canonical-graph.ts:271-273`).
+`CANONICAL_PREFACTORS` (`src/composition/canonical-prefactors.ts`) is the sourced numeric table. Canonical `makeEvaluate` (`canonical-graph.ts:224-245`) always multiplies `constFactor * recorded * (canonicalPrefactor(eq.id) ?? 1)`. `recordedDimensionlessCoefficient` (`canonical-graph.ts:201-214`) applies only when `restatesBridge` is set. `toEdge` sets `coefficientUnset` when the entry is dimensional and the numeric table has no prefactor (`canonical-graph.ts:271-273`).
+
+A second table, `CANONICAL_GROUP_PREFACTORS`, holds a dimensionless group the numeric table does not (`CE-sound-speed`, group `gamma`, exponent `1/2`). `canonicalGroupPrefactor` is called from `canonical-compare.ts` and from tests. `makeEvaluate` does not call it. The sound-speed evaluator therefore never multiplies by √γ.
+
+`makeEvaluate` evaluates `eq.dimensional.monomial`, not `eq.scalarAst`. `CE-ideal-gas` encodes `P = N k_B T / V` with `N` a dimensionless symbol on the AST (`thermo-nuclear-cosmo.ts`) and omits `N` from the governing monomial. The numeric value is `k_B T / V`. `canonical-compare.ts` has a separate widening (`astOnlyCounts`) for that count. Explain does not use it.
 
 `attemptDerivation` returns `coefficient-unset` without comparing values when that flag is set (`bridge-analysis.ts:226-228`). The recovered explain value can still be the monomial times 1. That is the fermi-energy behavior recorded in `NOTES.md`: the audit says COEFFICIENT UNSET and explain still prints a number.
 
@@ -215,7 +219,7 @@ A catalog id is a number on `BridgeEquationEntry`. The string form `be-<n>` is t
 | Formal reference | `catalogFormalRef(n)` | `src/atlas/catalog-formal-ref.ts` | no. The catalog row type has no `formalRef` field |
 | Atlas bridge | `AtlasBridge` | `src/atlas/families.ts` and the three families | no. `getBridge` takes a numeric catalog id |
 
-`restatesBridge` on canonical entries uses the numeric string (`'16'`, not `'be-16'`). A full read of every entry file was not repeated here. The exploration pass found five entries with `restatesBridge` set (16, 29, 42, 51, 52) and none for be-83. **INFERRED** only in the sense that this pass confirmed the field's existence and the Landauer example below, and did not re-open all 109 entries.
+`restatesBridge` on canonical entries uses the numeric string (`'16'`, not `'be-16'`). Assignments of that field are five: `'16'` and `'29'` in `src/canonical/entries/thermo-nuclear-cosmo.ts`, and `'42'`, `'51'`, and `'52'` in `src/canonical/entries/relativity.ts`. be-83 has none. The earlier INFERRED mark was this list; a search for `restatesBridge:` assignments under `src/canonical/entries/` returns those five.
 
 `be-16` (Landauer), checked in source:
 
@@ -297,8 +301,8 @@ No `src/` file imports `mathts-expression`, `mathts-matrix`, `mathts-wasm`, `mat
 | Simplify fallback | `src/composition/expr-simplify.ts` | returns the original AST when the dynamic import fails. MathTS is required, so that branch is a second implementation of "do nothing" |
 | Unit table | `src/dimensional/units.ts` | parse, affine °C, gauss, bit-as-ln-2. MathTS confirms a ratio when dimensions agree |
 | Buckingham setup | `src/dimensional/buckingham.ts` | rational exponent search and the matrix. The nullspace call is MathTS |
-| Geodesic RHS and a private stepper | `src/numerical/spacetime-metrics.ts:1087` | classical RK4 loop, separate from `geodesic-integrator.ts:191` which calls `solveODESystem` |
-| Witness steppers | `src/atlas/oscillators/pendulum-motion.ts:23` (`rk4Step`); `src/atlas/diffusion/numerics.ts:237-243` (Langevin moment RK4) | fixed-step RK4 on the witness's own equations |
+| Geodesic RHS and two private steppers | `schwarzschildCircularOrbit` (`src/numerical/spacetime-metrics.ts:633`, loop at 694) and Kerr `integrateGeodesic` (same file, 1087) | both are classical RK4. `src/numerical/geodesic-integrator.ts:191` is a third geodesic stepper and calls `solveODESystem`. The loop at `geodesic-integrator.ts:235` samples that solution; it is not a fourth stepper |
+| Witness steppers | `rk4Step` in `src/atlas/oscillators/pendulum-motion.ts:23`, also called from `position-translation.ts`, `phase-carriage.ts`, and `norm-transport-witness.ts`. `limit-witnesses.ts:80` and `:139` inline their own RK4 and do not call `rk4Step`. Langevin moments in `src/atlas/diffusion/numerics.ts:237-243` | fixed-step RK4. The wave and heat loops in `waves/numerics.ts` and the diffusion heat step are finite differences, not this stepper |
 | GL4 driver | `src/numerical/gl4-integrator.ts` | `geodesicDeriv` and step halving around `gaussLegendre4` |
 | Quadrature sum | `src/numerical/quadrature.ts` | affine map and the weighted sum; nodes come from MathTS |
 | Christoffel / curvature lowering | `src/numerical/pderiv.ts`, `connection-lowering-helpers.ts`, `curvature-lowering-helpers.ts`, `lowering.ts` | pointwise numeric tensor algebra on the `TensorEngine` |
@@ -400,15 +404,15 @@ Still narrative, and not rewritten sentence by sentence: per-file component essa
 
 ## 6. Integration targets
 
-Recommendations for a design the owner has not approved. Each row names a single owner that could hold the concept, and the break a unification would cause. None of these is a decision to implement.
+Recommendations for a design the owner has not approved. Each row names a single owner that could hold the concept, and the break a unification would cause. None of these is a decision to implement. The decisions are `docs/planning/v6.0.0-Design.md`. Where that note chooses a different owner than the row below, the note is the decision and this table stays the recommendation it was measured as.
 
 | # | Unify | Proposed owner | Expected break |
 |---|---|---|---|
 | 1 | Temperature and unit reading (`alignTemperatureBinding`, `readNamedBinding`, `bindingInUnit`, `convertValue`) | `readNamedBinding` in `src/numerical/binding-value.ts`, called by eval, explain, evaluate, and anchors | `upt explain temperature=10eV` and `upt evaluate` of a kelvin parameter written as `10eV` would follow the eval rule (divide by `k_B`) or reject. A joule binding on a non-temperature name stays joules |
 | 2 | The three ways a bridge is evaluated: `BRIDGE_EVALUATORS` / `BridgeEquations`, `BridgeEdge.evaluate`, canonical `makeEvaluate` | one evaluate function keyed by catalog id or canonical id, with edges and the CLI map as projections that copy alias keys | input names change for callers that pass `T_K` or `q_C` without going through the alias projection. `upt eval` stays a user-formula command and is not this function |
 | 3 | Catalog row, RHS, graph edge, canonical `restatesBridge`, formalRef overlay | extend `getBridge` / `BRIDGE_DESCRIPTORS` so a missing edge, a missing canonical partner, and the formalRef are fields of one record | `getBridge` grows fields. Catalog `status`, edge `confidence`, and derived evidence stay different facts on that record. Adding a bridge becomes one registration instead of four edits. Atlas `ab-*` stays a separate registry: those bridges relate models, and `not-composable-seeds.ts` says they are not quantity edges |
-| 4 | Alias tables and the two edit distances | `src/composition/aliases.ts` as the only name table. Search and explain both read it | a typo one distance accepts today may resolve differently. Formula `T` and canonical-hash renaming move to that table |
-| 5 | Sourced prefactor versus the unset-1 the canonical evaluator multiplies | `canonicalPrefactor` decides the factor; `makeEvaluate` and `attemptDerivation` both honor an unset result | explain of an unset row (fermi energy and the other five COEFFICIENT UNSET ids) stops printing a value computed with 1, or prints the unset state as the result. Audit labels can stay |
+| 4 | Alias tables and the two edit distances. `suggestQuantities` is optimal string alignment plus containment; `nearQuantityNames` is Levenshtein ≤ 1 | `src/composition/aliases.ts` as the only name table, and one distance (the transposition-aware one, so `lenght` still resolves). Search and explain both read it | a typo only the longer rank accepts today may resolve differently. Containment stays a suggestion rank and does not become identity. Formula `T` and canonical-hash renaming move to that table |
+| 5 | Sourced prefactor versus the unset-1 the canonical evaluator multiplies. Includes `CANONICAL_GROUP_PREFACTORS`, which `makeEvaluate` never reads, and a dimensionless AST symbol the monomial drops (`CE-ideal-gas`'s `N`) | one prefactor result (sourced number, sourced group, or unset). `makeEvaluate` and `attemptDerivation` both honor unset, and the numeric value is the AST | explain of an unset row stops printing a value computed with 1. A group with no bound value is unset. `N` is an input of the ideal-gas AST. Audit labels can stay |
 | 6 | Local `ExprNode` eval, substitution, and the simplify no-op, plus the private RK4 loops | MathTS for numeric value and ODE steps; the UPT AST remains the dimension-carrying tree. Geodesic stepping lives in `geodesic-integrator.ts` | golden numbers in witness results, Kerr geodesics inside `spacetime-metrics.ts`, and any guard that depends on JavaScript `Math.pow` move. The simplify fallback that returns the input AST goes away if MathTS is required |
 | 7 | The two `canonicalJson` implementations and the two `captureEnvironment` implementations | one serializer module with two named profiles (`record`, `probe`) | merging the profiles without naming them changes record fingerprints or probe hashes. Keeping two profiles avoids that break and removes the second algorithm |
 | 8 | BE-70's domain predicate and `assertSameCarrierSign`, beside the canonical monomial check | `assertCarrierProductSign` invoked once from `evaluateEdge` | error text may name one pair of variables. Hall and cyclotron stay signed. The public `CarrierSignError` class stays |

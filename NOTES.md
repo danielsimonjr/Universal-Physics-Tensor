@@ -11,6 +11,7 @@ nothing validates prose and the next reader cannot tell.
 
 ## As of 2026-10-05
 
+- **Integration design.** `docs/planning/v6.0.0-Design.md` is the target for a 6.0.0 break: one owner for each concept the integration map measured, the public breaks, and the phases. The owner has not accepted it. No phase is authorized. No `src/` change. The map's edit-distance, group-prefactor, ideal-gas, and private-RK4 rows were corrected in that same change. The only open round-6 fix at this writing is PR #395 (issue 386). Issues 387–392 have no fix PR.
 - **Integration map.** `docs/architecture/INTEGRATION_MAP.md` is the measurement of parallel implementations on `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f`. The counts live in that file. No `src/` change.
 
 - **Package version 5.0.0 is on npm.** `npm view universal-physics-tensor@5.0.0 version gitHead --prefer-online` printed `5.0.0` and `4420714b67f5728492ba90d9a983280227b36943`. Annotated tag `v5.0.0` is object `28ebfb885aab8b06499e90fcd208d4e688b0af69` and its target is that commit. Publish run `37247750332` succeeded. The GitHub release is `https://github.com/danielsimonjr/Universal-Physics-Tensor/releases/tag/v5.0.0`. The sentence that npm `latest` is still `4.0.0` is the record from before this measurement.
