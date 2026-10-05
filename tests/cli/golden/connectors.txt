@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 183 established-confidence edge(s) of the 215 in this graph
+  anchored core: the clusters holding at least one of the 191 established-confidence edge(s) of the 223 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  62 of the isolated bridges share a name token with the core; 18 are truly unconnected.
+  65 of the isolated bridges share a name token with the core; 19 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -403,6 +403,12 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         probe-ion-mass ≟ reference-mass                        [[mass]]  → be-41
         probe-ion-mass ≟ secondary-mass                        [[mass]]  → CE-newton-gravitation
         probe-ion-mass ≟ swampland-tower-mass                  [[mass]]  → be-41
+    ── be-129 (isolated):
+        fin-conductivity ≟ thermal-conductivity                [[L M T^-3 Theta^-1]]  → CE-thermal-diffusivity
+    ── be-131 (isolated):
+        joukowsky-rho ≟ rho                                    [[L^-3 M]]  → CE-friedmann-curvature
+    ── be-133 (isolated):
+        damping-spring ≟ spring-constant                       [[M T^-2]]  → CE-spring-potential-energy
     ── be-14 (isolated):
         boundary-entanglement-entropy ≟ bh-entropy             [[entropy]]  → CE-bekenstein-hawking
         boundary-entanglement-entropy ≟ boltzmann-entropy      [[entropy]]  → CE-boltzmann-entropy
@@ -1123,6 +1129,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         position-momentum-uncertainty-product ≟ angular-momentum [[action]]  → CE-angular-momentum
 
 
-  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-100, be-123, be-124, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86, be-95, be-98
+  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-100, be-123, be-124, be-128, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86, be-95, be-98
 
   The isolated-bridge review is written up in https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md.

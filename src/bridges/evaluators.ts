@@ -86,6 +86,16 @@ import {
   evaluateResistiveSlab,
   evaluateUpperHybrid,
 } from './plasma-space.js';
+import {
+  evaluateBoostConverter,
+  evaluateCoaxialCapacitance,
+  evaluateCombDrive,
+  evaluateDampingRatio,
+  evaluateFinEfficiency,
+  evaluateJoukowsky,
+  evaluateSubthresholdSwing,
+  evaluateThermoelectricGenerator,
+} from './engineering-r7.js';
 import { bridgeRegistry, registerBridge } from './registry.js';
 
 /**
@@ -666,6 +676,50 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
     spec(125, 'Mirror margin', [P('beta_perp', 'perpendicular beta', 'β_⊥', '', 'β = 2 μ0 p / B²; the kinetic integral is a hypothesis'), temperature('T_perp_K', 'perpendicular temperature', 'T_⊥', 'perpendicular temperature'), temperature('T_parallel_K', 'parallel temperature', 'T_∥', 'parallel temperature')], (i) =>
       evaluateMirrorInstability({ beta_perp: i.beta_perp, T_perp_K: i.T_perp_K, T_parallel_K: i.T_parallel_K }),
     ),
+    spec(126, 'Comb-drive lateral force', [
+      P('n', 'finger count', 'n', '', 'number of fingers, both sidewalls'),
+      P('eps_F_per_m', 'permittivity', 'ε', 'F/m', 'permittivity of the gap'),
+      P('h_m', 'thickness', 'h', 'm', 'finger thickness'),
+      P('V_volts', 'voltage', 'V', 'V', 'voltage across the gap'),
+      P('g_m', 'gap', 'g', 'm', 'gap, ≠ 0', { geometry: 'separation' }),
+    ], (i) => evaluateCombDrive({ n: i.n, eps_F_per_m: i.eps_F_per_m, h_m: i.h_m, V_volts: i.V_volts, g_m: i.g_m })),
+    spec(127, 'Subthreshold swing', [
+      temperature('T_K', 'temperature', 'T', 'lattice temperature, ≠ 0'),
+      P('Cd_F', 'depletion capacitance', 'C_d', 'F', 'depletion capacitance'),
+      P('Cox_F', 'oxide capacitance', 'C_ox', 'F', 'oxide capacitance, ≠ 0'),
+    ], (i) => evaluateSubthresholdSwing({ T_K: i.T_K, Cd_F: i.Cd_F, Cox_F: i.Cox_F })),
+    spec(128, 'Ideal boost ratio', [
+      P('D', 'duty', 'D', '', 'switch duty, ≠ 1'),
+    ], (i) => evaluateBoostConverter({ D: i.D })),
+    spec(129, 'Straight-fin efficiency', [
+      P('h_W_per_m2_K', 'convection', 'h', 'W/(m^2*K)', 'surface convection, > 0'),
+      P('k_W_per_m_K', 'conductivity', 'k', 'W/(m*K)', 'fin conductivity, > 0'),
+      P('t_m', 'thickness', 't', 'm', 'fin thickness, > 0'),
+      P('L_fin_m', 'length', 'L', 'm', 'fin length, ≠ 0'),
+    ], (i) => evaluateFinEfficiency({ h_W_per_m2_K: i.h_W_per_m2_K, k_W_per_m_K: i.k_W_per_m_K, t_m: i.t_m, L_fin_m: i.L_fin_m })),
+    spec(130, 'Thermoelectric generator efficiency', [
+      temperature('Th_K', 'hot temperature', 'T_h', 'hot junction, ≠ 0'),
+      temperature('Tc_K', 'cold temperature', 'T_c', 'cold junction'),
+      P('Z_per_K', 'figure of merit', 'Z', 'K^-1', 'Z = S²/(R K)'),
+    ], (i) => evaluateThermoelectricGenerator({ Th_K: i.Th_K, Tc_K: i.Tc_K, Z_per_K: i.Z_per_K })),
+    spec(131, 'Joukowsky pressure', [
+      P('rho_kg_per_m3', 'density', 'ρ', 'kg/m^3', 'fluid density, > 0'),
+      P('dv_m_per_s', 'velocity change', 'Δv', 'm/s', 'change in velocity'),
+      P('K_Pa', 'bulk modulus', 'K', 'Pa', 'fluid bulk modulus, > 0'),
+      P('E_Pa', 'wall modulus', 'E', 'Pa', 'pipe wall modulus, > 0'),
+      P('pipe_D_m', 'diameter', 'D', 'm', 'internal diameter', { geometry: 'diameter' }),
+      P('wall_m', 'wall thickness', 'e_wall', 'm', 'wall thickness, > 0'),
+    ], (i) => evaluateJoukowsky({ rho_kg_per_m3: i.rho_kg_per_m3, dv_m_per_s: i.dv_m_per_s, K_Pa: i.K_Pa, E_Pa: i.E_Pa, pipe_D_m: i.pipe_D_m, wall_m: i.wall_m })),
+    spec(132, 'Coaxial capacitance per length', [
+      P('eps_F_per_m', 'permittivity', 'ε', 'F/m', 'insulator permittivity, ≠ 0'),
+      P('a_m', 'inner radius', 'a', 'm', 'inner radius, > 0', { geometry: 'radius' }),
+      P('b_m', 'outer radius', 'b', 'm', 'outer radius, > 0 and ≠ a', { geometry: 'radius' }),
+    ], (i) => evaluateCoaxialCapacitance({ eps_F_per_m: i.eps_F_per_m, a_m: i.a_m, b_m: i.b_m })),
+    spec(133, 'Damping ratio', [
+      P('c_kg_per_s', 'damping coefficient', 'c', 'kg/s', 'viscous coefficient'),
+      P('k_N_per_m', 'stiffness', 'k', 'N/m', 'stiffness, > 0'),
+      P('m_kg', 'mass', 'm', 'kg', 'mass, > 0'),
+    ], (i) => evaluateDampingRatio({ c_kg_per_s: i.c_kg_per_s, k_N_per_m: i.k_N_per_m, m_kg: i.m_kg })),
 ];
 
 for (const evaluator of EVALUATOR_SPECS) registerBridge({ evaluator });

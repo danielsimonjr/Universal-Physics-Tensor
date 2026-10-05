@@ -99,12 +99,13 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
       ['be-11-zurek', 'be-11-master', 'be-21', 'be-37', 'be-48', 'be-51', 'be-52', 'be-55', 'be-59'].sort(),
     );
     // 57 is the record from before be-77..87.
-    expect(CATALOG_GRAPH.length).toBe(106);
+    expect(CATALOG_GRAPH.length).toBe(114);
+    // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125.
     // 68 is the record from before be-88..102.
   });
 
-  it('reproduces the golden snapshot of all 11236 ordered pairs', () => {
+  it('reproduces the golden snapshot of all 12996 ordered pairs', () => {
     // evaluateAtOnes was refreshed when HBAR_SI became H_SI/(2π). Pair structure was not.
     const live = snapshotAllPairs(CATALOG_GRAPH, composeEdges);
     expect(live.length).toBe(GOLDEN.length);
@@ -115,7 +116,8 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
 
   it('the golden is a real proof, not a vacuous one (it has composable pairs)', () => {
     // 3249 = 57² is the record from before be-77..87. 68² = 4624.
-    expect(GOLDEN.length).toBe(11236);
+    expect(GOLDEN.length).toBe(12996);
+    // 11236 is the record from before be-126..133. Composed pairs stay 22.
     // 6889 = 83² is the record from before be-103..125. 4624 = 68² is the record from before be-88..102.
     // 19 composed pairs is the record from before be-74..76. The three new
     // pairs are be-74>>be-76, be-42>>be-76, and be-42-via-rs>>be-76.

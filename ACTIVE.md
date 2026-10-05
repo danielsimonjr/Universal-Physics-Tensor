@@ -20,6 +20,11 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Pin PhysJS `8515c621d1c6e6d31c2eea4467181eb85d58234b` and register BE-126 through BE-133.
+  The catalog stops at BE-125. `upt evaluate` has no comb-drive, subthreshold, boost, fin, thermoelectric-generator, Joukowsky, coaxial, or damping-ratio row. PhysJS #67 proves those eight equations.
+  The pin, the eight catalog rows, their evaluators, and their edges are not in this tree.
+  Done: the manifest commit is that sha. The catalog is 123 rows, ids 11–133, 87 established. The graph has 114 edges. Eighty-one rows derive `formally-proved`. `evaluateRelation('be-126')` returns the comb-drive force. The fin edge returns η. The Joukowsky edge returns Δp. A dropped 2, a dropped 2π, the Carnot factor, and ρ (Δv)² are different numbers. The composed-pair golden is 12996 ordered pairs and 22 composed pairs. `package.json` stays 6.0.0. The tag is not this task.
+
 - [x] Dimensionful inputs on be-78, be-79, be-80, be-82, be-84, and be-85 are labeled dimensionless and reject their units.
   `upt evaluate be-78 E_Pa=2e11 I_m4=1e-8 L_m=2` labels `I_m4 [dimensionless]`. `I_m4=1e-8m^4` exits 1. `A_m2=1cm^2`, `eps` in F/m, and `1pA`, `1mA`, and `1uA` on the ampere keys do the same. be-86 `C_f` is dimensionless.
   Done: those keys are `m^4`, `m^2`, `F/m`, and `A`. The bare be-78 command prints `P_N = 4934.802200544679`. `I_m4=1e-8m^4` converts to the same load. `A_m2=1cm^2`, `eps` in F/m, `I_s_A=1pA`, `I_A=1mA`, and `I_A=1uA` match the bare SI commands. `I_A=1m` on be-85 still exits 1. be-86 `C_f` stays dimensionless.

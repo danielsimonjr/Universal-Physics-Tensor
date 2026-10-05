@@ -57,7 +57,7 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
       'be-93', 'be-94', 'be-96', 'be-97', 'be-99',
     ]);
     expect(report.unconnectedOrphans).toEqual([
-      'be-100', 'be-123', 'be-124', 'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
+      'be-100', 'be-123', 'be-124', 'be-128', 'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
       'be-86', 'be-95', 'be-98',
     ]);
     // every isolated bridge is accounted for (connected ∪ unconnected, no overlap)

@@ -74,7 +74,8 @@ describe('upt --help covers the command registry', () => {
     expect(help).toContain('upt eval E E=1eV');
     expect(help).not.toMatch(/E=<number>/);
     // BE-51/52/55..125 is the record from before be-16 and be-42 joined the registry.
-    expect(help).toMatch(/BE-16\/42\/51\/52\/55\.\.125/);
+    expect(help).toMatch(/BE-16\/42\/51\/52\/55\.\.133/);
+    // BE-16/42/51/52/55..125 is the record from before be-126..133.
     expect(help).not.toMatch(/BE-51\/52\/55\.\.125/);
     expect(help).not.toMatch(/55\.\.65/);
   });

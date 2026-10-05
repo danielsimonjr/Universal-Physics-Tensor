@@ -118,6 +118,14 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   123, // BE-123 cross-field ratio: closed-form evaluator, no AST.
   124, // BE-124 firehose margin: closed-form evaluator, no AST.
   125, // BE-125 mirror margin: closed-form evaluator, no AST.
+  126, // BE-126 comb drive: closed-form evaluator, no AST.
+  127, // BE-127 subthreshold swing: closed-form evaluator, no AST.
+  128, // BE-128 boost ratio: closed-form evaluator, no AST.
+  129, // BE-129 fin efficiency: closed-form evaluator, no AST.
+  130, // BE-130 thermoelectric generator: closed-form evaluator, no AST.
+  131, // BE-131 Joukowsky pressure: closed-form evaluator, no AST.
+  132, // BE-132 coaxial capacitance: closed-form evaluator, no AST.
+  133, // BE-133 damping ratio: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -133,11 +141,12 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has seventy-three entries (BE-51/52 + BE-55..125 closed-form)', () => {
+    it('orphan allowlist has eighty-one entries (BE-51/52 + BE-55..133 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(73);
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(81);
+      // 73 is the record from before be-126..133.
       // 50 is the record from before be-103..125. 35 is the record from before be-88..102.
     });
 
@@ -208,7 +217,7 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
         51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
         77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
         101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
-        120, 121, 122, 123, 124, 125,
+        120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
       ]);
       // 50 ids ending at 102 is the record from before be-103..125.
     });

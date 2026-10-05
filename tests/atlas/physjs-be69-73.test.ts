@@ -64,7 +64,8 @@ const VERSION = `physjs@${SHA} leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@
 describe('PhysJS proofs for be-69 through be-73', () => {
   it('the vendored manifest is PhysJS #57 and names the five theorems', () => {
     expect(PHYSJS_COMMIT).toBe(manifest.commit);
-    expect(manifest.entries).toHaveLength(106);
+    expect(manifest.entries).toHaveLength(114);
+    // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.
     for (const row of ROWS) {
       const entry = manifest.entries.find((candidate) => candidate.key === `be-${row.id}`);

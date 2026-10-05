@@ -21,8 +21,9 @@ describe('auditCoverage — catalog grounding profile', () => {
 
   it('audits all 58 catalogued bridges, sorted by id', () => {
     // 66 is the record from before be-77..87.
-    expect(report.total).toBe(115);
-    expect(report.bridges).toHaveLength(115);
+    expect(report.total).toBe(123);
+    // 115 is the record from before be-126..133.
+    expect(report.bridges).toHaveLength(123);
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
     const ids = report.bridges.map((b) => b.id);
     expect(ids).toEqual([...ids].sort((a, b) => a - b));
@@ -35,7 +36,8 @@ describe('auditCoverage — catalog grounding profile', () => {
     expect(confronted).toEqual([11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65]);
     // 44 is the record from before be-74..76. None of those three is data-confronted.
     // 47 is the record from before be-77..87. None of those eleven is data-confronted.
-    expect(report.withoutDataConfrontation).toBe(96);
+    expect(report.withoutDataConfrontation).toBe(104);
+    // 96 is the record from before be-126..133.
     // 73 is the record from before be-103..125. None of those twenty-three is data-confronted.
     // 58 is the record from before be-88..102. None of those fifteen is data-confronted.
     for (const id of [11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65]) {
@@ -47,7 +49,7 @@ describe('auditCoverage — catalog grounding profile', () => {
     for (const b of report.bridges) expect(TIERS).toContain(b.tier);
     const sum = TIERS.reduce((n, t) => n + report.byTier[t], 0);
     // 66 is the record from before be-77..87.
-    expect(sum).toBe(115);
+    expect(sum).toBe(123);
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
     expect(report.byTier['data-confronted']).toBe(19);
   });

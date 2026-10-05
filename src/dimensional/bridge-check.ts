@@ -225,6 +225,14 @@ export const EXPECTED_DIMENSION_BY_BRIDGE: ReadonlyMap<number, Dimension> = new 
   [123, DIMENSIONLESS],
   [124, DIMENSIONLESS],
   [125, DIMENSIONLESS],
+  [126, FORCE],
+  [127, { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 }], // BE-127 subthreshold swing, volts per decade.
+  [128, DIMENSIONLESS],
+  [129, DIMENSIONLESS],
+  [130, DIMENSIONLESS],
+  [131, PRESSURE],
+  [132, { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 }], // BE-132 capacitance per length.
+  [133, DIMENSIONLESS],
 ]);
 
 /**

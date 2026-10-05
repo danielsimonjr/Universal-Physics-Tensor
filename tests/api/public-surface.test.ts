@@ -125,6 +125,8 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'evaluateMultiDebye', 'evaluateLorentzResistivity', 'evaluateResistiveSlab', 'evaluateParkerCritical',
   'evaluateParkerSpiral', 'evaluateChapmanFerraro', 'evaluateLawsonBreakeven', 'evaluateLangmuirProbe',
   'evaluateCrossFieldDiffusion', 'evaluateFirehose', 'evaluateMirrorInstability',
+  'evaluateCombDrive', 'evaluateSubthresholdSwing', 'evaluateBoostConverter', 'evaluateFinEfficiency',
+  'evaluateThermoelectricGenerator', 'evaluateJoukowsky', 'evaluateCoaxialCapacitance', 'evaluateDampingRatio',
   'be88Edge', 'be89Edge', 'be90Edge', 'be91Edge', 'be92Edge', 'be93Edge', 'be94Edge',
   'be95Edge', 'be96Edge', 'be97Edge', 'be98Edge', 'be99Edge', 'be100Edge', 'be101Edge',
   'be102Edge', 'CONDENSED_R5_EDGES',
@@ -132,6 +134,8 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'be110Edge', 'be111Edge', 'be112Edge', 'be113Edge', 'be114Edge', 'be115Edge', 'be116Edge',
   'be117Edge', 'be118Edge', 'be119Edge', 'be120Edge', 'be121Edge', 'be122Edge', 'be123Edge',
   'be124Edge', 'be125Edge', 'PLASMA_SPACE_EDGES',
+  'be126Edge', 'be127Edge', 'be128Edge', 'be129Edge', 'be130Edge', 'be131Edge', 'be132Edge', 'be133Edge',
+  'ENGINEERING_R7_EDGES',
   'APPLIED_PHYSICIST_EDGES',
   // v0.8.0 — membership criterion + negative catalog (G-2 / P-4)
   'adjudicateBridgeEntry', 'adjudicateCatalog',

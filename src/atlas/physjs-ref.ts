@@ -38,7 +38,10 @@
  * `referenceResistivity`, `lundquist`, and `bohmFlux`. PhysJS #66 adds
  * be-103 through be-125. The sentence that the pin is
  * `03e8bb77c952f720bdd2730af2afc6a7f2d36243` and that the table stops at
- * be-102 is the record from before that pin.
+ * be-102 is the record from before that pin. PhysJS #67 adds be-126 through
+ * be-133. The sentence that the pin is
+ * `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f` and that the table stops at
+ * be-125 is the record from before that pin.
  *
  * @module atlas/physjs-ref
  */
@@ -336,6 +339,14 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-123',
   'be-124',
   'be-125',
+  'be-126',
+  'be-127',
+  'be-128',
+  'be-129',
+  'be-130',
+  'be-131',
+  'be-132',
+  'be-133',
 ]);
 
 /**
