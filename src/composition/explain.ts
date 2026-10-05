@@ -32,6 +32,7 @@ import { classifyIdentifiability, forwardClosure } from './identifiability.js';
 import type { RetrodictionResult } from './retrodiction.js';
 import { retrodictNode } from './retrodiction.js';
 import type { Dimension } from '../dimensional/types.js';
+import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 
 /**
  * Text form of a recovered quantity: 15 significant digits, the precision an
@@ -485,6 +486,15 @@ export function explainQuantity(
     .map((id) => byId.get(id))
     .filter((edge): edge is BridgeEdge => edge !== undefined);
   const firedFactors = collectFactors(firedEdges);
+  const boundGroupExponents: Record<string, number> = {};
+  if (values) {
+    for (const edge of firedEdges) {
+      const group = CANONICAL_GROUP_PREFACTORS.find((p) => p.id === edge.id);
+      if (group !== undefined && Number.isFinite(values[group.group])) {
+        boundGroupExponents[group.group] = group.exponent;
+      }
+    }
+  }
   const blockedByCount = edges.filter((edge) => {
     if (edge.target.name !== target) return false;
     const factors = factorsOn(edge);
@@ -516,7 +526,11 @@ export function explainQuantity(
     } else if (det.determined && det.monomial !== undefined) {
       dimensional = {
         ...det,
-        monomial: monomialWithFactors(det.monomial, firedFactors, knownSet),
+        monomial: monomialWithFactors(
+          det.monomial,
+          { ...firedFactors, ...boundGroupExponents },
+          knownSet,
+        ),
       };
     } else {
       dimensional = det;
@@ -535,8 +549,13 @@ export function explainQuantity(
   const unsetEdge = derivations
     .map((d) => byId.get(d.edge))
     .find((e) => e?.coefficientUnset === true);
+  const groupBound =
+    unsetEdge !== undefined &&
+    CANONICAL_GROUP_PREFACTORS.some(
+      (p) => p.id === unsetEdge.id && values !== null && Number.isFinite(values[p.group]),
+    );
   const unsetSentence =
-    unsetEdge === undefined
+    unsetEdge === undefined || groupBound
       ? undefined
       : 'The printed value sets the dimensionless constant to 1. That 1 was not recovered.' +
         (UNSET_FACTOR[unsetEdge.id] !== undefined ? ` ${UNSET_FACTOR[unsetEdge.id]}` : '');

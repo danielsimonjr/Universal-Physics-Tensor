@@ -32,7 +32,10 @@
  *     AST that restates a catalog bridge, and whose extra factors are a closed
  *     dimensionless coefficient (ln 2, …), multiplies that coefficient in, so
  *     the number matches the catalog evaluator of the same law. A sourced
- *     prefactor from `canonicalPrefactor` multiplies as well. That table is
+ *     prefactor from `canonicalPrefactor` multiplies as well. A dimensionless
+ *     group in `CANONICAL_GROUP_PREFACTORS` multiplies only when that input is
+ *     present (`√γ` for sound speed); absent, the leading factor stays 1 and
+ *     the coefficient stays unset. That table is
  *     outside this tree. `scalar-up-to-constant` is not a license to drop ½,
  *     2π, or 6π. An entry with no table row and no recorded coefficient — no
  *     AST, no restatement, a sum, an unresolved stub — still takes the leading
@@ -69,7 +72,7 @@ import type { InformationMeasure } from '../core/types.js';
 import { CHARGE, DIMENSIONLESS, MASS } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
-import { canonicalPrefactor } from './canonical-prefactors.js';
+import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
 
 /** A universal constant a canonical `governing` list may name: SI value + dim. */
 interface ConstantDef {
@@ -434,10 +437,18 @@ function makeEvaluate(
   }
   const recorded = recordedDimensionlessCoefficient(eq) ?? 1;
   const tabled = canonicalPrefactor(eq.id) ?? 1;
+  const group = CANONICAL_GROUP_PREFACTORS.find((p) => p.id === eq.id);
   const even = evenInputNames(eq.scalarAst);
   return (inputs: Record<string, number>): number => {
     assertCarrierProductSign(monomial, inputs);
     let v = constFactor * recorded * tabled;
+    if (group !== undefined) {
+      const g = inputs[group.group];
+      if (g !== undefined && Number.isFinite(g)) {
+        const factor = canonicalGroupPrefactor(eq.id, g);
+        if (factor !== undefined) v *= factor;
+      }
+    }
     for (const [name, exp] of varExps) {
       const x = inputs[name];
       v *= Math.pow(x === undefined ? Number.NaN : magnitudeBase(name, x, even), exp);

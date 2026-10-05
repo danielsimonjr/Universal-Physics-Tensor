@@ -285,7 +285,8 @@ flowchart LR
     j_CE_sound_speed["Speed of sound in a fluid"]:::law
     q_pressure --> j_CE_sound_speed
     q_density --> j_CE_sound_speed
-    j_CE_sound_speed --> q_speed
+    q_sound_speed(["sound-speed"]):::qty
+    j_CE_sound_speed --> q_sound_speed
     j_CE_volume_flow_rate["Volume flow rate (continuity)"]:::law
     q_cross_sectional_area(["cross-sectional-area"]):::qty
     q_cross_sectional_area --> j_CE_volume_flow_rate
@@ -422,7 +423,6 @@ flowchart LR
     q_plasma_frequency(["plasma-frequency"]):::qty
     j_CE_plasma_frequency --> q_plasma_frequency
     j_CE_debye_frequency["Debye frequency"]:::law
-    q_sound_speed(["sound-speed"]):::qty
     q_sound_speed --> j_CE_debye_frequency
     q_number_density(["number-density"]):::qty
     q_number_density --> j_CE_debye_frequency

@@ -9442,6 +9442,9 @@ modules:
             - nearQuantityNames
             - rewriteInputKey
             - shareSynonyms
+        - file: ../../composition/canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
         - file: ../../composition/explain.js
           imports:
             - formatQuantity
@@ -11888,6 +11891,8 @@ modules:
           typeOnly: true
         - file: ./canonical-prefactors.js
           imports:
+            - CANONICAL_GROUP_PREFACTORS
+            - canonicalGroupPrefactor
             - canonicalPrefactor
       exports:
         - CANONICAL_CONSTANTS
@@ -13679,6 +13684,9 @@ modules:
           imports:
             - Dimension
           typeOnly: true
+        - file: ./canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
         - file: ../dimensional/buckingham.js
           imports:
             - DimensionalDeterminationResult
@@ -16955,6 +16963,9 @@ modules:
           imports:
             - BridgeEdge
           typeOnly: true
+        - file: ./canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
         - file: ./edge.js
           imports:
             - evaluateEdge
@@ -23494,7 +23505,7 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 473
   totalModules: 13
-  totalLinesOfCode: 99932
+  totalLinesOfCode: 99990
   totalExports: 3560
   totalClasses: 61
   totalInterfaces: 560

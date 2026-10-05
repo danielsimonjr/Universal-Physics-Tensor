@@ -4226,6 +4226,7 @@ The codebase is organized into the following modules:
 | `../../dimensional/units.js` | `UnitError` | Import |
 | `../temperature-bindings.js` | `kelvinScale` | Import |
 | `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms` | Import |
+| `../../composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `../../composition/explain.js` | `formatQuantity` | Import |
 
 **Exports:**
@@ -5145,7 +5146,7 @@ The codebase is organized into the following modules:
 | `../dimensional/types.js` | `CHARGE, DIMENSIONLESS, MASS` | Import |
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
-| `./canonical-prefactors.js` | `canonicalPrefactor` | Import |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor` | Import |
 
 **Exports:**
 - Functions: `canonicalToEdges`
@@ -5754,6 +5755,7 @@ The codebase is organized into the following modules:
 | `./retrodiction.js` | `RetrodictionResult` | Import (type-only) |
 | `./retrodiction.js` | `retrodictNode` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `../dimensional/buckingham.js` | `DimensionalDeterminationResult` | Import (type-only) |
 | `../dimensional/buckingham.js` | `dimensionallyDetermines` | Import |
 | `./aliases.js` | `collapseSynonymGovernors` | Import |
@@ -6805,6 +6807,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../bridges/carrier-sign.js` | `CarrierSignError` | Import |
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `./edge.js` | `evaluateEdge` | Import |
 | `./compose.js` | `QuantityIdentification` | Import (type-only) |
 | `./compose.js` | `QUANTITY_IDENTIFICATIONS` | Import |
@@ -8973,7 +8976,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 473 |
 | Total Modules | 13 |
-| Total Lines of Code | 99932 |
+| Total Lines of Code | 99990 |
 | Total Exports | 3560 |
 | Total Re-exports | 1735 |
 | Total Classes | 61 |

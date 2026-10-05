@@ -31,11 +31,28 @@
 
 import { CarrierSignError } from '../bridges/carrier-sign.js';
 import type { BridgeEdge } from './edge.js';
+import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { evaluateEdge } from './edge.js';
 import type { QuantityIdentification } from './compose.js';
 import { QUANTITY_IDENTIFICATIONS } from './compose.js';
 import { conventionFactor } from '../dimensional/unit-convention.js';
 import { classifyAll } from './identifiability.js';
+
+/**
+ * Source values, plus a dimensionless group the edge multiplies when the
+ * ground truth names it. The group is not a source: Buckingham cannot see
+ * it, and a missing group is the unset coefficient, not a missing input.
+ */
+function evaluationInputs(edge: BridgeEdge, values: ReadonlyMap<string, number>): Record<string, number> {
+  const inputs: Record<string, number> = {};
+  for (const s of edge.sources) inputs[s.name] = values.get(s.name)!;
+  const group = CANONICAL_GROUP_PREFACTORS.find((g) => g.id === edge.id);
+  if (group !== undefined) {
+    const g = values.get(group.group);
+    if (g !== undefined) inputs[group.group] = g;
+  }
+  return inputs;
+}
 
 /** Outcome of retrodicting one node. @public */
 export type RetrodictionOutcome =
@@ -136,8 +153,7 @@ export function forwardEvaluate(
     for (const e of edges) {
       if (values.has(e.target.name)) continue;
       if (!e.sources.every((s) => values.has(s.name))) continue;
-      const inputs: Record<string, number> = {};
-      for (const s of e.sources) inputs[s.name] = values.get(s.name)!;
+      const inputs = evaluationInputs(e, values);
       let v: number;
       try {
         v = evaluateEdge(e, inputs);
@@ -177,8 +193,7 @@ export function retrodictNode(
   for (const e of edges) {
     if (e.target.name !== target) continue;
     if (!e.sources.every((s) => values.has(s.name))) continue;
-    const inputs: Record<string, number> = {};
-    for (const s of e.sources) inputs[s.name] = values.get(s.name)!;
+    const inputs = evaluationInputs(e, values);
     let v: number;
     try {
       v = evaluateEdge(e, inputs);

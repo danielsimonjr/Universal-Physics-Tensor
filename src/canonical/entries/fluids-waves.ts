@@ -153,8 +153,10 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     references: ['Standard wave mechanics'],
     partnerBridges: [],
   }),
-  // ── sound speed (√-law: dimensional-only; γ is a dimensionless leading const)
-  l1({ name: 'speed', dim: VELOCITY }, [
+  // ── sound speed (√-law: dimensional-only; γ is a dimensionless leading const).
+  // The quantity is sound-speed. The generic quantity speed is a flow velocity
+  // and a wave speed, and this law does not target it.
+  l1({ name: 'sound-speed', dim: VELOCITY }, [
     { name: 'pressure', dim: PRESSURE },
     { name: 'density', dim: DENSITY },
   ], {
