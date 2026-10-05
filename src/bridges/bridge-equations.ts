@@ -124,7 +124,7 @@ import { evaluateLandauerConductance } from './be102-landauer-conductance.js';
  * Root-level facade keyed by readable method names. Each value is a re-export of
  * the bridge's existing `evaluate*()` function; the bridge ID is in the comment.
  *
- * @public
+ * @internal
  */
 export const BridgeEquations = {
   decoherenceRate: evaluateDecoherenceRate,                 // BE-11

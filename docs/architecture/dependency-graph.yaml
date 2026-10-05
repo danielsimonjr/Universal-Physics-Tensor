@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
-  version: 5.0.0
-  totalFiles: 479
+  version: 6.0.0
+  totalFiles: 480
   totalModules: 13
-  totalExports: 3889
+  totalExports: 3744
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6647,6 +6647,12 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ./equations/be-16-landauer.js
+          imports:
+            - evaluateLandauerEnergy
+        - file: ./equations/be-42-hawking-temperature.js
+          imports:
+            - evaluateHawkingTemperature
         - file: ./gravitational-lensing.js
           imports:
             - evaluateGravitationalLensing
@@ -12918,6 +12924,9 @@ modules:
           imports:
             - ExprNode
           typeOnly: true
+        - file: ./canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
         - file: ../relations/types.js
           imports:
             - Conventions
@@ -12931,12 +12940,14 @@ modules:
         - CompositionJunctionError
         - CompositionDimensionError
         - DomainViolationError
+        - CoefficientUnsetError
         - CompositionAliasError
         - UndefinedCompositionError
       classes:
         - CompositionJunctionError
         - CompositionDimensionError
         - DomainViolationError
+        - CoefficientUnsetError
         - CompositionAliasError
         - UndefinedCompositionError
       interfaces:
@@ -14302,6 +14313,30 @@ modules:
         - enumerateCompositionsWithRefusals
       constants:
         - REGISTERED_COMPOSITION_IDS
+    src/composition/evaluate-relation.ts:
+      description: One public evaluation of a catalog id or a canonical id.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../dimensional/types.js
+          imports:
+            - Dimension
+          typeOnly: true
+        - file: ./canonical-graph.js
+          imports:
+            - CANONICAL_GRAPH
+        - file: ./catalog-graph.js
+          imports:
+            - CATALOG_GRAPH
+        - file: ./edge.js
+          imports:
+            - CoefficientUnsetError
+            - evaluateEdge
+            - BridgeEdge
+      exports:
+        - evaluateRelation
+      functions:
+        - evaluateRelation
     src/composition/explain.ts:
       description: "\"Explain this quantity\" — the unified entry point over the three"
       externalDependencies: []
@@ -14650,6 +14685,7 @@ modules:
           reExport: true
         - file: ./edge.js
           imports:
+            - CoefficientUnsetError
             - CompositionAliasError
             - CompositionDimensionError
             - CompositionJunctionError
@@ -14864,6 +14900,14 @@ modules:
           imports:
             - explainQuantity
           reExport: true
+        - file: ./evaluate-relation.js
+          imports:
+            - Evaluation
+          reExport: true
+        - file: ./evaluate-relation.js
+          imports:
+            - evaluateRelation
+          reExport: true
         - file: ./compose-symbolic.js
           imports:
             - Observable
@@ -14927,6 +14971,7 @@ modules:
           reExport: true
       exports:
         - regimesDiffer
+        - CoefficientUnsetError
         - CompositionAliasError
         - CompositionDimensionError
         - CompositionJunctionError
@@ -15057,6 +15102,7 @@ modules:
         - retrodict
         - retrodictNode
         - explainQuantity
+        - evaluateRelation
         - composeSymbolic
         - SymbolicCompositionError
         - SymbolicEvalError
@@ -15094,6 +15140,7 @@ modules:
         - DerivationExplanation
         - ExplainOptions
         - QuantityExplanation
+        - Evaluation
         - Observable
         - ComposeSymbolicOptions
         - VizStatus
@@ -15114,6 +15161,7 @@ modules:
         - BridgeEdge
         - EdgeConfidence
         - ValidityDomain
+        - CoefficientUnsetError
         - CompositionAliasError
         - CompositionDimensionError
         - CompositionJunctionError
@@ -15261,6 +15309,8 @@ modules:
         - ExplainOptions
         - QuantityExplanation
         - explainQuantity
+        - Evaluation
+        - evaluateRelation
         - Observable
         - ComposeSymbolicOptions
         - composeSymbolic
@@ -20048,172 +20098,28 @@ modules:
           reExport: true
         - file: ./bridges/index.js
           imports:
-            - evaluateGravitationalLensing
-            - type GravitationalLensingInputs
-            - type GravitationalLensingResult
-            - evaluatePerihelionPrecession
-            - type PerihelionPrecessionInputs
-            - type PerihelionPrecessionResult
-            - evaluateQuantumHall
             - VON_KLITZING_SI
-            - type QuantumHallInputs
-            - type QuantumHallResult
-            - evaluateCasimir
-            - type CasimirInputs
-            - type CasimirResult
-            - evaluateUnruh
-            - type UnruhInputs
-            - type UnruhResult
-            - evaluateJohnsonNyquist
-            - type JohnsonNyquistInputs
-            - type JohnsonNyquistResult
-            - evaluateACJosephson
             - JOSEPHSON_CONSTANT_SI
-            - type ACJosephsonInputs
-            - type ACJosephsonResult
-            - evaluateFractionalQH
-            - type FractionalQHInputs
-            - type FractionalQHResult
-            - evaluateWiedemannFranz
             - LORENZ_NUMBER_SI
-            - type WiedemannFranzInputs
-            - type WiedemannFranzResult
-            - evaluateBCSGap
             - BCS_GAP_RATIO
-            - type BCSGapInputs
-            - type BCSGapResult
-            - evaluateChandrasekharMass
             - LANE_EMDEN_OMEGA3
-            - type ChandrasekharInputs
-            - type ChandrasekharResult
-            - evaluateEddingtonLuminosity
             - THOMSON_CROSS_SECTION_SI
-            - type EddingtonInputs
-            - type EddingtonResult
-            - evaluateJeansMass
-            - type JeansInputs
-            - type JeansResult
-          reExport: true
-        - file: ./bridges/index.js
-          imports:
-            - evaluateRadiationPressure
-            - type RadiationPressureInputs
-            - type RadiationPressureResult
-            - evaluateAlfvenSpeed
             - alfvenProtonOnlyDensity
             - M_PROTON_SI
-            - type AlfvenInputs
-            - type AlfvenResult
-            - evaluateTolmanEhrenfest
             - tolmanTemperatureAt
-            - type TolmanInputs
-            - type TolmanResult
+            - CarrierSignError
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - evaluateRelation
+            - CoefficientUnsetError
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - Evaluation
           reExport: true
         - file: ./bridges/index.js
           imports:
-            - evaluateFastMagnetosonic
-            - type FastMagnetosonicInputs
-            - type FastMagnetosonicResult
-            - evaluateEinsteinRelation
-            - type EinsteinRelationInputs
-            - type EinsteinRelationResult
-            - CarrierSignError
-            - evaluateClapeyron
-            - type ClapeyronInputs
-            - type ClapeyronResult
-            - evaluateGravitationalRedshift
-            - type GravitationalRedshiftInputs
-            - type GravitationalRedshiftResult
-            - evaluateKelvinPeltier
-            - type KelvinPeltierInputs
-            - type KelvinPeltierResult
-            - evaluateMagneticPressure
-            - type MagneticPressureInputs
-            - type MagneticPressureResult
-            - evaluateLondonPenetration
-            - type LondonPenetrationInputs
-            - type LondonPenetrationResult
-            - evaluatePlasmaBeta
-            - type PlasmaBetaInputs
-            - type PlasmaBetaResult
-            - evaluateHagenPoiseuille
-            - type HagenPoiseuilleInputs
-            - type HagenPoiseuilleResult
-            - evaluateEulerBuckling
-            - type EulerBucklingInputs
-            - type EulerBucklingResult
-            - evaluatePullIn
-            - type PullInInputs
-            - type PullInResult
-            - evaluateMottGurney
-            - type MottGurneyInputs
-            - type MottGurneyResult
-            - evaluateChildLangmuir
-            - type ChildLangmuirInputs
-            - type ChildLangmuirResult
-            - evaluateShockleyDiode
-            - type ShockleyDiodeInputs
-            - type ShockleyDiodeResult
-            - evaluateThomsonCoefficient
-            - type ThomsonCoefficientInputs
-            - type ThomsonCoefficientResult
-            - evaluateFourPointSheet
-            - type FourPointSheetInputs
-            - type FourPointSheetResult
-            - evaluateShotNoise
-            - type ShotNoiseInputs
-            - type ShotNoiseResult
-            - evaluateReynoldsAnalogy
-            - type ReynoldsAnalogyInputs
-            - type ReynoldsAnalogyResult
-            - evaluateCapacitorNoise
-            - type CapacitorNoiseInputs
-            - type CapacitorNoiseResult
-            - evaluateFermiSea
-            - type FermiSeaInputs
-            - type FermiSeaResult
-            - evaluateDebyeCutoff
-            - type DebyeCutoffInputs
-            - type DebyeCutoffResult
-            - evaluateDebyeHeat
-            - type DebyeHeatInputs
-            - type DebyeHeatResult
-            - evaluateEinsteinSolid
-            - type EinsteinSolidInputs
-            - type EinsteinSolidResult
-            - evaluateSommerfeldHeat
-            - type SommerfeldHeatInputs
-            - type SommerfeldHeatResult
-            - evaluateCurieWeiss
-            - type CurieWeissInputs
-            - type CurieWeissResult
-            - evaluatePauliParamagnetism
-            - type PauliParamagnetismInputs
-            - type PauliParamagnetismResult
-            - evaluateGinzburgLandau
-            - type GinzburgLandauInputs
-            - type GinzburgLandauResult
-            - evaluateUpperCritical
-            - type UpperCriticalInputs
-            - type UpperCriticalResult
-            - evaluateAmbegaokarBaratoff
-            - type AmbegaokarBaratoffInputs
-            - type AmbegaokarBaratoffResult
-            - evaluateBcsJump
-            - type BcsJumpInputs
-            - type BcsJumpResult
-            - evaluateMassAction
-            - type MassActionInputs
-            - type MassActionResult
-            - evaluateLyddaneSachsTeller
-            - type LyddaneSachsTellerInputs
-            - type LyddaneSachsTellerResult
-            - evaluateBktJump
-            - type BktJumpInputs
-            - type BktJumpResult
-            - evaluateLandauerConductance
-            - type LandauerConductanceInputs
-            - type LandauerConductanceResult
             - evaluateBohmSheath
             - type BohmSheathInputs
             - type BohmSheathResult
@@ -20286,19 +20192,10 @@ modules:
           reExport: true
         - file: ./bridges/evaluators.js
           imports:
-            - BRIDGE_EVALUATORS
-            - evaluateBridge
-          reExport: true
-        - file: ./bridges/evaluators.js
-          imports:
             - EvaluatorSpec
             - EvaluatorParameter
             - ParameterAlternate
             - GeometryRole
-          reExport: true
-        - file: ./bridges/bridge-equations.js
-          imports:
-            - BridgeEquations
           reExport: true
         - file: ./dimensional/connection.js
           imports:
@@ -21239,166 +21136,18 @@ modules:
         - BE11_DECOHERENCE_DIFF
         - DIFFERENTIABLE_BRIDGE_SPECS
         - BRIDGE_EQUATIONS
-        - evaluateGravitationalLensing
-        - type GravitationalLensingInputs
-        - type GravitationalLensingResult
-        - evaluatePerihelionPrecession
-        - type PerihelionPrecessionInputs
-        - type PerihelionPrecessionResult
-        - evaluateQuantumHall
         - VON_KLITZING_SI
-        - type QuantumHallInputs
-        - type QuantumHallResult
-        - evaluateCasimir
-        - type CasimirInputs
-        - type CasimirResult
-        - evaluateUnruh
-        - type UnruhInputs
-        - type UnruhResult
-        - evaluateJohnsonNyquist
-        - type JohnsonNyquistInputs
-        - type JohnsonNyquistResult
-        - evaluateACJosephson
         - JOSEPHSON_CONSTANT_SI
-        - type ACJosephsonInputs
-        - type ACJosephsonResult
-        - evaluateFractionalQH
-        - type FractionalQHInputs
-        - type FractionalQHResult
-        - evaluateWiedemannFranz
         - LORENZ_NUMBER_SI
-        - type WiedemannFranzInputs
-        - type WiedemannFranzResult
-        - evaluateBCSGap
         - BCS_GAP_RATIO
-        - type BCSGapInputs
-        - type BCSGapResult
-        - evaluateChandrasekharMass
         - LANE_EMDEN_OMEGA3
-        - type ChandrasekharInputs
-        - type ChandrasekharResult
-        - evaluateEddingtonLuminosity
         - THOMSON_CROSS_SECTION_SI
-        - type EddingtonInputs
-        - type EddingtonResult
-        - evaluateJeansMass
-        - type JeansInputs
-        - type JeansResult
-        - evaluateRadiationPressure
-        - type RadiationPressureInputs
-        - type RadiationPressureResult
-        - evaluateAlfvenSpeed
         - alfvenProtonOnlyDensity
         - M_PROTON_SI
-        - type AlfvenInputs
-        - type AlfvenResult
-        - evaluateTolmanEhrenfest
         - tolmanTemperatureAt
-        - type TolmanInputs
-        - type TolmanResult
-        - evaluateFastMagnetosonic
-        - type FastMagnetosonicInputs
-        - type FastMagnetosonicResult
-        - evaluateEinsteinRelation
-        - type EinsteinRelationInputs
-        - type EinsteinRelationResult
         - CarrierSignError
-        - evaluateClapeyron
-        - type ClapeyronInputs
-        - type ClapeyronResult
-        - evaluateGravitationalRedshift
-        - type GravitationalRedshiftInputs
-        - type GravitationalRedshiftResult
-        - evaluateKelvinPeltier
-        - type KelvinPeltierInputs
-        - type KelvinPeltierResult
-        - evaluateMagneticPressure
-        - type MagneticPressureInputs
-        - type MagneticPressureResult
-        - evaluateLondonPenetration
-        - type LondonPenetrationInputs
-        - type LondonPenetrationResult
-        - evaluatePlasmaBeta
-        - type PlasmaBetaInputs
-        - type PlasmaBetaResult
-        - evaluateHagenPoiseuille
-        - type HagenPoiseuilleInputs
-        - type HagenPoiseuilleResult
-        - evaluateEulerBuckling
-        - type EulerBucklingInputs
-        - type EulerBucklingResult
-        - evaluatePullIn
-        - type PullInInputs
-        - type PullInResult
-        - evaluateMottGurney
-        - type MottGurneyInputs
-        - type MottGurneyResult
-        - evaluateChildLangmuir
-        - type ChildLangmuirInputs
-        - type ChildLangmuirResult
-        - evaluateShockleyDiode
-        - type ShockleyDiodeInputs
-        - type ShockleyDiodeResult
-        - evaluateThomsonCoefficient
-        - type ThomsonCoefficientInputs
-        - type ThomsonCoefficientResult
-        - evaluateFourPointSheet
-        - type FourPointSheetInputs
-        - type FourPointSheetResult
-        - evaluateShotNoise
-        - type ShotNoiseInputs
-        - type ShotNoiseResult
-        - evaluateReynoldsAnalogy
-        - type ReynoldsAnalogyInputs
-        - type ReynoldsAnalogyResult
-        - evaluateCapacitorNoise
-        - type CapacitorNoiseInputs
-        - type CapacitorNoiseResult
-        - evaluateFermiSea
-        - type FermiSeaInputs
-        - type FermiSeaResult
-        - evaluateDebyeCutoff
-        - type DebyeCutoffInputs
-        - type DebyeCutoffResult
-        - evaluateDebyeHeat
-        - type DebyeHeatInputs
-        - type DebyeHeatResult
-        - evaluateEinsteinSolid
-        - type EinsteinSolidInputs
-        - type EinsteinSolidResult
-        - evaluateSommerfeldHeat
-        - type SommerfeldHeatInputs
-        - type SommerfeldHeatResult
-        - evaluateCurieWeiss
-        - type CurieWeissInputs
-        - type CurieWeissResult
-        - evaluatePauliParamagnetism
-        - type PauliParamagnetismInputs
-        - type PauliParamagnetismResult
-        - evaluateGinzburgLandau
-        - type GinzburgLandauInputs
-        - type GinzburgLandauResult
-        - evaluateUpperCritical
-        - type UpperCriticalInputs
-        - type UpperCriticalResult
-        - evaluateAmbegaokarBaratoff
-        - type AmbegaokarBaratoffInputs
-        - type AmbegaokarBaratoffResult
-        - evaluateBcsJump
-        - type BcsJumpInputs
-        - type BcsJumpResult
-        - evaluateMassAction
-        - type MassActionInputs
-        - type MassActionResult
-        - evaluateLyddaneSachsTeller
-        - type LyddaneSachsTellerInputs
-        - type LyddaneSachsTellerResult
-        - evaluateBktJump
-        - type BktJumpInputs
-        - type BktJumpResult
-        - evaluateLandauerConductance
-        - type LandauerConductanceInputs
-        - type LandauerConductanceResult
+        - evaluateRelation
+        - CoefficientUnsetError
         - evaluateBohmSheath
         - type BohmSheathInputs
         - type BohmSheathResult
@@ -21468,9 +21217,6 @@ modules:
         - evaluateMirrorInstability
         - type MirrorInstabilityInputs
         - type MirrorInstabilityResult
-        - BRIDGE_EVALUATORS
-        - evaluateBridge
-        - BridgeEquations
         - christoffel
         - ricci
         - einstein
@@ -21787,6 +21533,7 @@ modules:
         - BridgeIssueSeverity
         - BridgeIssueFixable
         - KnownIssue
+        - Evaluation
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
@@ -22068,166 +21815,19 @@ modules:
         - BridgeIssueSeverity
         - BridgeIssueFixable
         - KnownIssue
-        - evaluateGravitationalLensing
-        - type GravitationalLensingInputs
-        - type GravitationalLensingResult
-        - evaluatePerihelionPrecession
-        - type PerihelionPrecessionInputs
-        - type PerihelionPrecessionResult
-        - evaluateQuantumHall
         - VON_KLITZING_SI
-        - type QuantumHallInputs
-        - type QuantumHallResult
-        - evaluateCasimir
-        - type CasimirInputs
-        - type CasimirResult
-        - evaluateUnruh
-        - type UnruhInputs
-        - type UnruhResult
-        - evaluateJohnsonNyquist
-        - type JohnsonNyquistInputs
-        - type JohnsonNyquistResult
-        - evaluateACJosephson
         - JOSEPHSON_CONSTANT_SI
-        - type ACJosephsonInputs
-        - type ACJosephsonResult
-        - evaluateFractionalQH
-        - type FractionalQHInputs
-        - type FractionalQHResult
-        - evaluateWiedemannFranz
         - LORENZ_NUMBER_SI
-        - type WiedemannFranzInputs
-        - type WiedemannFranzResult
-        - evaluateBCSGap
         - BCS_GAP_RATIO
-        - type BCSGapInputs
-        - type BCSGapResult
-        - evaluateChandrasekharMass
         - LANE_EMDEN_OMEGA3
-        - type ChandrasekharInputs
-        - type ChandrasekharResult
-        - evaluateEddingtonLuminosity
         - THOMSON_CROSS_SECTION_SI
-        - type EddingtonInputs
-        - type EddingtonResult
-        - evaluateJeansMass
-        - type JeansInputs
-        - type JeansResult
-        - evaluateRadiationPressure
-        - type RadiationPressureInputs
-        - type RadiationPressureResult
-        - evaluateAlfvenSpeed
         - alfvenProtonOnlyDensity
         - M_PROTON_SI
-        - type AlfvenInputs
-        - type AlfvenResult
-        - evaluateTolmanEhrenfest
         - tolmanTemperatureAt
-        - type TolmanInputs
-        - type TolmanResult
-        - evaluateFastMagnetosonic
-        - type FastMagnetosonicInputs
-        - type FastMagnetosonicResult
-        - evaluateEinsteinRelation
-        - type EinsteinRelationInputs
-        - type EinsteinRelationResult
         - CarrierSignError
-        - evaluateClapeyron
-        - type ClapeyronInputs
-        - type ClapeyronResult
-        - evaluateGravitationalRedshift
-        - type GravitationalRedshiftInputs
-        - type GravitationalRedshiftResult
-        - evaluateKelvinPeltier
-        - type KelvinPeltierInputs
-        - type KelvinPeltierResult
-        - evaluateMagneticPressure
-        - type MagneticPressureInputs
-        - type MagneticPressureResult
-        - evaluateLondonPenetration
-        - type LondonPenetrationInputs
-        - type LondonPenetrationResult
-        - evaluatePlasmaBeta
-        - type PlasmaBetaInputs
-        - type PlasmaBetaResult
-        - evaluateHagenPoiseuille
-        - type HagenPoiseuilleInputs
-        - type HagenPoiseuilleResult
-        - evaluateEulerBuckling
-        - type EulerBucklingInputs
-        - type EulerBucklingResult
-        - evaluatePullIn
-        - type PullInInputs
-        - type PullInResult
-        - evaluateMottGurney
-        - type MottGurneyInputs
-        - type MottGurneyResult
-        - evaluateChildLangmuir
-        - type ChildLangmuirInputs
-        - type ChildLangmuirResult
-        - evaluateShockleyDiode
-        - type ShockleyDiodeInputs
-        - type ShockleyDiodeResult
-        - evaluateThomsonCoefficient
-        - type ThomsonCoefficientInputs
-        - type ThomsonCoefficientResult
-        - evaluateFourPointSheet
-        - type FourPointSheetInputs
-        - type FourPointSheetResult
-        - evaluateShotNoise
-        - type ShotNoiseInputs
-        - type ShotNoiseResult
-        - evaluateReynoldsAnalogy
-        - type ReynoldsAnalogyInputs
-        - type ReynoldsAnalogyResult
-        - evaluateCapacitorNoise
-        - type CapacitorNoiseInputs
-        - type CapacitorNoiseResult
-        - evaluateFermiSea
-        - type FermiSeaInputs
-        - type FermiSeaResult
-        - evaluateDebyeCutoff
-        - type DebyeCutoffInputs
-        - type DebyeCutoffResult
-        - evaluateDebyeHeat
-        - type DebyeHeatInputs
-        - type DebyeHeatResult
-        - evaluateEinsteinSolid
-        - type EinsteinSolidInputs
-        - type EinsteinSolidResult
-        - evaluateSommerfeldHeat
-        - type SommerfeldHeatInputs
-        - type SommerfeldHeatResult
-        - evaluateCurieWeiss
-        - type CurieWeissInputs
-        - type CurieWeissResult
-        - evaluatePauliParamagnetism
-        - type PauliParamagnetismInputs
-        - type PauliParamagnetismResult
-        - evaluateGinzburgLandau
-        - type GinzburgLandauInputs
-        - type GinzburgLandauResult
-        - evaluateUpperCritical
-        - type UpperCriticalInputs
-        - type UpperCriticalResult
-        - evaluateAmbegaokarBaratoff
-        - type AmbegaokarBaratoffInputs
-        - type AmbegaokarBaratoffResult
-        - evaluateBcsJump
-        - type BcsJumpInputs
-        - type BcsJumpResult
-        - evaluateMassAction
-        - type MassActionInputs
-        - type MassActionResult
-        - evaluateLyddaneSachsTeller
-        - type LyddaneSachsTellerInputs
-        - type LyddaneSachsTellerResult
-        - evaluateBktJump
-        - type BktJumpInputs
-        - type BktJumpResult
-        - evaluateLandauerConductance
-        - type LandauerConductanceInputs
-        - type LandauerConductanceResult
+        - evaluateRelation
+        - CoefficientUnsetError
+        - Evaluation
         - evaluateBohmSheath
         - type BohmSheathInputs
         - type BohmSheathResult
@@ -22297,13 +21897,10 @@ modules:
         - evaluateMirrorInstability
         - type MirrorInstabilityInputs
         - type MirrorInstabilityResult
-        - BRIDGE_EVALUATORS
-        - evaluateBridge
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
         - GeometryRole
-        - BridgeEquations
         - christoffel
         - CovariantDerivativeNode
         - ricci
@@ -24611,6 +24208,7 @@ dependencyGraph:
         - src/composition/edges/plasma-space.ts
         - src/composition/edges/proved-seeds.ts
         - src/composition/enumerate.ts
+        - src/composition/evaluate-relation.ts
         - src/composition/explain.ts
         - src/composition/expr-eval.ts
         - src/composition/expr-simplify.ts
@@ -24775,18 +24373,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 479
+  totalTypeScriptFiles: 480
   totalModules: 13
-  totalLinesOfCode: 102981
-  totalExports: 3889
-  totalClasses: 61
+  totalLinesOfCode: 102932
+  totalExports: 3744
+  totalClasses: 62
   totalInterfaces: 612
-  totalFunctions: 879
+  totalFunctions: 880
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 1022
-  totalReExports: 1939
-  totalTypeOnlyImports: 587
+  totalReExports: 1792
+  totalTypeOnlyImports: 588
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0

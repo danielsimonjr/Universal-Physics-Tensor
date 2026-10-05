@@ -17,7 +17,7 @@ import { E_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateShotNoise}.
- * @public
+ * @internal
  */
 export interface ShotNoiseInputs {
   /**
@@ -29,7 +29,7 @@ export interface ShotNoiseInputs {
 
 /**
  * Result of {@link evaluateShotNoise}.
- * @public
+ * @internal
  */
 export interface ShotNoiseResult {
   readonly I_A: number;
@@ -43,7 +43,7 @@ export interface ShotNoiseResult {
  * `e` is the elementary charge. The two-sided convention e I is not
  * this result.
  *
- * @public
+ * @internal
  */
 export function evaluateShotNoise({ I_A }: ShotNoiseInputs): ShotNoiseResult {
   if (!Number.isFinite(I_A)) {

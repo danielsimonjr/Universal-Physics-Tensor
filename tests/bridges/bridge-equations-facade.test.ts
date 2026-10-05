@@ -2,10 +2,11 @@
  * `BridgeEquations` facade (v0.14) — the root-level convenience layer over the
  * per-bridge evaluators. Each method must be a 1:1 pass-through to the existing
  * evaluator (identical results), the archived BE-25 OrchOR must NOT be exposed,
- * and the object must be reachable from the package root.
+ * The object stays a module. It is not a package-root export.
  */
 import { describe, it, expect } from 'vitest';
-import { BridgeEquations } from '../../src/index.js';
+import * as root from '../../src/index.js';
+import { BridgeEquations } from '../../src/bridges/bridge-equations.js';
 import { evaluateDecoherenceRate } from '../../src/bridges/equations/be-11-decoherence-master.js';
 import { evaluateHawkingTemperature } from '../../src/bridges/equations/be-42-hawking-temperature.js';
 import { evaluateKSSBound } from '../../src/bridges/equations/be-21-kss-bound.js';
@@ -17,6 +18,10 @@ import { evaluateAlfvenSpeed } from '../../src/bridges/be67-alfven-speed.js';
 import { evaluateTolmanEhrenfest } from '../../src/bridges/be68-tolman-ehrenfest.js';
 
 describe('BridgeEquations facade — pass-through dispatch', () => {
+  it('is not a package-root export', () => {
+    expect('BridgeEquations' in root).toBe(false);
+  });
+
   it('decoherenceRate matches the underlying evaluator', () => {
     const input = { gamma0_per_s: 1e9, lambda: 2, lambda0: 1 };
     expect(BridgeEquations.decoherenceRate(input)).toBe(evaluateDecoherenceRate(input));

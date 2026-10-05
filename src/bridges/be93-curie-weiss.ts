@@ -19,7 +19,7 @@ import { MU0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Inputs for {@link evaluateCurieWeiss}.
- * @public
+ * @internal
  */
 export interface CurieWeissInputs {
   /** Moment density, per cubic metre. */
@@ -38,7 +38,7 @@ export interface CurieWeissInputs {
 
 /**
  * Result of {@link evaluateCurieWeiss}.
- * @public
+ * @internal
  */
 export interface CurieWeissResult {
   readonly n_per_m3: number;
@@ -56,7 +56,7 @@ export interface CurieWeissResult {
 /**
  * Evaluate the Curie–Weiss susceptibility. θ is the mean-field hypothesis.
  *
- * @public
+ * @internal
  */
 export function evaluateCurieWeiss(inputs: CurieWeissInputs): CurieWeissResult {
   const { n_per_m3, g, spin, muB_J_per_T, T_K, theta_K } = inputs;

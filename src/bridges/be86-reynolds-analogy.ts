@@ -16,7 +16,7 @@
 
 /**
  * Inputs for {@link evaluateReynoldsAnalogy}.
- * @public
+ * @internal
  */
 export interface ReynoldsAnalogyInputs {
   /**
@@ -28,7 +28,7 @@ export interface ReynoldsAnalogyInputs {
 
 /**
  * Result of {@link evaluateReynoldsAnalogy}.
- * @public
+ * @internal
  */
 export interface ReynoldsAnalogyResult {
   readonly C_f: number;
@@ -42,7 +42,7 @@ export interface ReynoldsAnalogyResult {
  * Prandtl number and the wall slopes are hypotheses, not inputs. The
  * function does not accept Pr ≠ 1 and still return this equality.
  *
- * @public
+ * @internal
  */
 export function evaluateReynoldsAnalogy({ C_f }: ReynoldsAnalogyInputs): ReynoldsAnalogyResult {
   if (!Number.isFinite(C_f)) {

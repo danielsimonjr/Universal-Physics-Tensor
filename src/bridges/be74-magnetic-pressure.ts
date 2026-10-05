@@ -14,7 +14,7 @@ import { MU0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Inputs for {@link evaluateMagneticPressure}.
- * @public
+ * @internal
  */
 export interface MagneticPressureInputs {
   /** Magnetic flux density, tesla. The formula uses `B²`. */
@@ -23,7 +23,7 @@ export interface MagneticPressureInputs {
 
 /**
  * Result of {@link evaluateMagneticPressure}.
- * @public
+ * @internal
  */
 export interface MagneticPressureResult {
   readonly B_T: number;
@@ -37,7 +37,7 @@ export interface MagneticPressureResult {
  * The factor 2 is the stored-energy half of the battery work. It is not
  * recovered from the dimensions of B and μ0.
  *
- * @public
+ * @internal
  */
 export function evaluateMagneticPressure({ B_T }: MagneticPressureInputs): MagneticPressureResult {
   if (!Number.isFinite(B_T)) {

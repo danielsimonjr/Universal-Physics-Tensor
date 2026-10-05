@@ -83,8 +83,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [ ] Implement phase 11 of the 6.0.0 integration: a composition-table refusal is its own result.
   A silent cell produces the table's error and does not look like a dimension failure. A derivation followed by a derivation that meets on a quantity still composes.
 
-- [ ] Implement phase 12 of the 6.0.0 integration: the 6.0.0 public surface, the migration guide, and package version 6.0.0.
+- [x] Implement phase 12 of the 6.0.0 integration: the 6.0.0 public surface, the migration guide, and package version 6.0.0.
   The removed per-bridge names are not exported. `evaluateRelation` and the unset-coefficient error are exported. `package.json` is 6.0.0. The changelog carries the migration. The tag and the publish are the release step after this phase merges, not this phase.
+  Done: the parent root still exported `BRIDGE_EVALUATORS`, and `Evaluation` had no declaration. Those per-bridge names are gone. `evaluateRelation('be-70', { mu_m2_per_Vs: 0.14, T_K: 300, q_C: 1.602176634e-19 })` is `{ kind: 'value' }`. The same call with a negative charge throws `CarrierSignError`. `evaluateRelation('be-16')` and `evaluateRelation('be-42')` return a number. `evaluateEdge` on `CE-sound-speed` without `gamma` throws `CoefficientUnsetError`. `evaluateRelation` records that as `kind: 'unset'`. `gamma: 1.4` is a value. Closed forms stay that id's single numeric body. Plasma evaluators BE-103 through BE-125 stay on the root. The constants named in the design stay. `package.json` is 6.0.0. The tag is not this phase.
 
 - [x] A fully-quantitative count in the scalar AST is an input of the canonical evaluator.
   `upt explain pressure boltzmann-constant=1.380649e-23 temperature=300 V=0.0224 --source=canonical` prints `1.84908348214286e-19`, which is `k_B T/V`. The law is `P = N k_B T/V`.

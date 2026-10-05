@@ -17,7 +17,7 @@
 
 /**
  * Inputs for {@link evaluateGravitationalRedshift}.
- * @public
+ * @internal
  */
 export interface GravitationalRedshiftInputs {
   /** Static `g_00` at observer 1. Must be negative. */
@@ -28,7 +28,7 @@ export interface GravitationalRedshiftInputs {
 
 /**
  * Result of {@link evaluateGravitationalRedshift}.
- * @public
+ * @internal
  */
 export interface GravitationalRedshiftResult {
   readonly g1: number;
@@ -40,7 +40,7 @@ export interface GravitationalRedshiftResult {
 /**
  * Evaluate `ν1/ν2 = √(g2/g1)` for two negative metric components.
  *
- * @public
+ * @internal
  */
 export function evaluateGravitationalRedshift({
   g1,

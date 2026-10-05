@@ -31,7 +31,7 @@ import { C_SI as c_SI, G_SI } from '../core/constants.js';
 /**
  * Inputs to `evaluateGravitationalLensing` (BE-51).
  *
- * @public
+ * @internal
  */
 export interface GravitationalLensingInputs {
   /** Lensing mass in kilograms. */
@@ -43,7 +43,7 @@ export interface GravitationalLensingInputs {
 /**
  * Result of `evaluateGravitationalLensing` (BE-51).
  *
- * @public
+ * @internal
  */
 export interface GravitationalLensingResult {
   /** Deflection angle in radians: α = 4GM/(bc²). */
@@ -75,7 +75,7 @@ export interface GravitationalLensingResult {
  *   - `M_kg`, `b_m` — input echoes (same units as above).
  * @throws {RangeError} if `b_m ≤ 0`.
  *
- * @public
+ * @internal
  */
 export function evaluateGravitationalLensing(
   inputs: GravitationalLensingInputs,

@@ -16,7 +16,7 @@
 
 /**
  * Inputs for {@link evaluateKelvinPeltier}.
- * @public
+ * @internal
  */
 export interface KelvinPeltierInputs {
   /** Seebeck coefficient, V/K. */
@@ -27,7 +27,7 @@ export interface KelvinPeltierInputs {
 
 /**
  * Result of {@link evaluateKelvinPeltier}.
- * @public
+ * @internal
  */
 export interface KelvinPeltierResult {
   readonly S_V_per_K: number;
@@ -39,7 +39,7 @@ export interface KelvinPeltierResult {
 /**
  * Evaluate `Π = S T`.
  *
- * @public
+ * @internal
  */
 export function evaluateKelvinPeltier({ S_V_per_K, T_K }: KelvinPeltierInputs): KelvinPeltierResult {
   if (!Number.isFinite(S_V_per_K)) {

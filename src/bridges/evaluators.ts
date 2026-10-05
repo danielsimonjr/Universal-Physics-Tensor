@@ -9,6 +9,8 @@
  *
  * @module bridges/evaluators
  */
+import { evaluateLandauerEnergy } from './equations/be-16-landauer.js';
+import { evaluateHawkingTemperature } from './equations/be-42-hawking-temperature.js';
 import { evaluateGravitationalLensing } from './gravitational-lensing.js';
 import { evaluatePerihelionPrecession } from './perihelion-precession.js';
 import { evaluateQuantumHall } from './be55-quantum-hall.js';
@@ -162,6 +164,12 @@ const temperature = (key: string, quantity: string, symbol: string, meaning: str
 
 /** Bridge id → evaluator. Registered, then snapshotted. */
 const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
+    spec(16, 'Landauer energy', [temperature('temperature_K', 'temperature', 'T', 'thermodynamic temperature, ≥ 0')], (i) => ({
+      value: evaluateLandauerEnergy({ temperature_K: i.temperature_K }),
+    })),
+    spec(42, 'Hawking temperature', [P('M_kg', 'mass', 'M', 'kg', 'black-hole mass, > 0')], (i) => ({
+      value: evaluateHawkingTemperature({ M_kg: i.M_kg }),
+    })),
     spec(
       51,
       'Gravitational lensing (Eddington)',
@@ -662,32 +670,15 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
 
 for (const evaluator of EVALUATOR_SPECS) registerBridge({ evaluator });
 
-/** Bridge id → evaluator. The projection of `registerBridge`. @public */
+/** Bridge id → evaluator. The projection of `registerBridge`. @internal */
 export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> =
   bridgeRegistry.evaluators() as ReadonlyMap<number, EvaluatorSpec>;
 
 /**
  * What to say when an id is not in {@link BRIDGE_EVALUATORS}.
- * be-42 is the Hawking temperature and be-16 is the Landauer energy.
- * `upt evaluate` does not run either. The named `BridgeEquations` function
- * and the named `upt explain` command do.
  * @internal
  */
 export function missingEvaluatorMessage(bridgeId: number): string {
-  if (bridgeId === 42) {
-    return (
-      'evaluateBridge: be-42 has no id-keyed evaluator. ' +
-      'Hawking temperature is BridgeEquations.hawkingTemperature({ M_kg }). ' +
-      'From the CLI: upt explain hawking-temperature mass=1.989e30'
-    );
-  }
-  if (bridgeId === 16) {
-    return (
-      'evaluateBridge: be-16 has no id-keyed evaluator. ' +
-      'Landauer energy is BridgeEquations.landauerEnergy({ temperature_K }). ' +
-      'From the CLI: upt explain landauer-erasure-energy temperature=300'
-    );
-  }
   return `evaluateBridge: be-${bridgeId} has no evaluator (only closed-form + spacetime bridges do — see \`upt evaluate\` with no args)`;
 }
 
@@ -695,7 +686,7 @@ export function missingEvaluatorMessage(bridgeId: number): string {
  * Evaluate a bridge by id with a numeric input record. Throws on an unknown id
  * or a missing required input (the evaluator itself validates ranges).
  *
- * @public
+ * @internal
  */
 export function evaluateBridge(
   bridgeId: number,

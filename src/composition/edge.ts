@@ -14,6 +14,7 @@
 
 import type { Quantity } from './quantity.js';
 import type { ExprNode } from '../dimensional/validator.js';
+import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import type {
   Conventions,
   Counterexample,
@@ -204,6 +205,33 @@ export class DomainViolationError extends Error {
 }
 
 /**
+ * The edge's coefficient has no sourced number and its group is unbound.
+ *
+ * `evaluateEdge` throws this. `evaluateRelation` records it as
+ * `kind: 'unset'` and does not return a number.
+ *
+ * @public
+ */
+export class CoefficientUnsetError extends Error {
+  readonly id: string;
+  readonly formula: string;
+  constructor(id: string, formula: string) {
+    super(`evaluateEdge: ${id} coefficient is unset (${formula})`);
+    this.name = 'CoefficientUnsetError';
+    this.id = id;
+    this.formula = formula;
+  }
+}
+
+/** A group prefactor is sourced only when that group is a finite input. */
+function groupBound(edge: BridgeEdge, inputs: Record<string, number>): boolean {
+  const group = CANONICAL_GROUP_PREFACTORS.find((row) => row.id === edge.id);
+  if (group === undefined) return false;
+  const value = inputs[group.group];
+  return value !== undefined && Number.isFinite(value);
+}
+
+/**
  * Composition refused: the composed sources would contain a duplicate
  * quantity NAME across operands without a recorded disposition (v0.11
  * namespacing gate, Option D — pure name-collision rule per the Adam
@@ -315,7 +343,8 @@ export function withBoundAliases<E extends BridgeEdge>(edge: E): E {
 /**
  * Domain-checked evaluation: throws {@link DomainViolationError} when
  * `inputs` violate `edge.domain`, otherwise returns `edge.evaluate`.
- * An alias is copied onto its source name first.
+ * An alias is copied onto its source name first. An unset coefficient
+ * throws {@link CoefficientUnsetError} instead of a monomial times 1.
  *
  * @public
  */
@@ -328,6 +357,9 @@ export function evaluateEdge(
     throw new DomainViolationError(
       `${edge.id}: inputs violate validity domain (${edge.domain.description})`,
     );
+  }
+  if (edge.coefficientUnset === true && !groupBound(edge, bound)) {
+    throw new CoefficientUnsetError(edge.id, edge.label);
   }
   return edge.evaluate(bound);
 }

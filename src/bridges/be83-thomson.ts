@@ -14,7 +14,7 @@
 
 /**
  * Inputs for {@link evaluateThomsonCoefficient}.
- * @public
+ * @internal
  */
 export interface ThomsonCoefficientInputs {
   /** Absolute temperature, kelvin. */
@@ -28,7 +28,7 @@ export interface ThomsonCoefficientInputs {
 
 /**
  * Result of {@link evaluateThomsonCoefficient}.
- * @public
+ * @internal
  */
 export interface ThomsonCoefficientResult {
   readonly T_K: number;
@@ -43,7 +43,7 @@ export interface ThomsonCoefficientResult {
  * The functional Kelvin relation and the Thomson split are hypotheses.
  * This is not Π = S T.
  *
- * @public
+ * @internal
  */
 export function evaluateThomsonCoefficient({
   T_K,

@@ -214,12 +214,12 @@ const quantumLaws = tensor.queryLaws({ scale: 'quantum' });
 console.log(quantumLaws.map(l => l.name));
 ```
 
-> **Note:** Each catalogued bridge ships a computable `evaluate*()` function, and
-> the `BridgeEquations` facade (v0.14) gathers them under readable method names —
-> e.g. `BridgeEquations.decoherenceRate({ gamma0_per_s, lambda, lambda0 })` (BE-11)
-> or `BridgeEquations.hawkingTemperature({ M_kg })` (BE-42). The formal spec
-> (Parts I–III) defines the underlying physics and AST encodings; the facade is
-> the convenience layer over those evaluators.
+> **Note:** `evaluateRelation(id, bindings)` is the public evaluation.
+> A sourced number is `{ kind: 'value', value, dimension }`. An unset
+> coefficient is `{ kind: 'unset', formula }` and is not a number.
+> `evaluateRelation('be-42', { mass: 1.989e30 })` is the Hawking temperature.
+> `evaluateRelation('be-16', { temperature: 300 })` is `k_B T ln 2`.
+> The formal spec (Parts I–III) defines the underlying physics and AST encodings.
 
 ## Core Concepts
 

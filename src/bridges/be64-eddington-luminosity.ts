@@ -19,12 +19,12 @@ import { G_SI, C_SI, M_PROTON_SI } from '../core/constants.js';
 /** Thomson cross-section σ_T, m². @public */
 export const THOMSON_CROSS_SECTION_SI = 6.6524587321e-29;
 
-/** @public */
+/** @internal */
 export interface EddingtonInputs {
   /** Accretor / stellar mass (kg). */
   readonly M_kg: number;
 }
-/** @public */
+/** @internal */
 export interface EddingtonResult {
   readonly M_kg: number;
   /** Eddington luminosity (W). */
@@ -39,7 +39,7 @@ const L_SUN_SI = 3.828e26;
 /**
  * Evaluate the Eddington luminosity for an accretor mass.
  *
- * @public
+ * @internal
  */
 export function evaluateEddingtonLuminosity({ M_kg }: EddingtonInputs): EddingtonResult {
   if (!Number.isFinite(M_kg) || M_kg <= 0) {

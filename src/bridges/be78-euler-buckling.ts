@@ -15,7 +15,7 @@
 
 /**
  * Inputs for {@link evaluateEulerBuckling}.
- * @public
+ * @internal
  */
 export interface EulerBucklingInputs {
   /** Young's modulus, pascal. */
@@ -28,7 +28,7 @@ export interface EulerBucklingInputs {
 
 /**
  * Result of {@link evaluateEulerBuckling}.
- * @public
+ * @internal
  */
 export interface EulerBucklingResult {
   readonly E_Pa: number;
@@ -41,7 +41,7 @@ export interface EulerBucklingResult {
 /**
  * Evaluate `P_cr = π² E I / L²` for pinned ends.
  *
- * @public
+ * @internal
  */
 export function evaluateEulerBuckling({ E_Pa, I_m4, L_m }: EulerBucklingInputs): EulerBucklingResult {
   if (!Number.isFinite(E_Pa) || E_Pa <= 0) {

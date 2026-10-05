@@ -15,7 +15,7 @@
 
 /**
  * Inputs for {@link evaluateHagenPoiseuille}.
- * @public
+ * @internal
  */
 export interface HagenPoiseuilleInputs {
   /** Pipe radius, metres. */
@@ -30,7 +30,7 @@ export interface HagenPoiseuilleInputs {
 
 /**
  * Result of {@link evaluateHagenPoiseuille}.
- * @public
+ * @internal
  */
 export interface HagenPoiseuilleResult {
   readonly R_m: number;
@@ -47,7 +47,7 @@ export interface HagenPoiseuilleResult {
  * The 8 is the integral of the no-slip parabola. It is not the Fanning
  * factor 16, and it is not a square-duct eigenvalue.
  *
- * @public
+ * @internal
  */
 export function evaluateHagenPoiseuille({
   R_m,

@@ -16,7 +16,7 @@ import { K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateSommerfeldHeat}.
- * @public
+ * @internal
  */
 export interface SommerfeldHeatInputs {
   /** Electron number density, per cubic metre. */
@@ -29,7 +29,7 @@ export interface SommerfeldHeatInputs {
 
 /**
  * Result of {@link evaluateSommerfeldHeat}.
- * @public
+ * @internal
  */
 export interface SommerfeldHeatResult {
   readonly n_per_m3: number;
@@ -42,7 +42,7 @@ export interface SommerfeldHeatResult {
 /**
  * Evaluate the √E Sommerfeld heat capacity. The flat-density factor is not used.
  *
- * @public
+ * @internal
  */
 export function evaluateSommerfeldHeat({ n_per_m3, T_K, E_F_J }: SommerfeldHeatInputs): SommerfeldHeatResult {
   if (!Number.isFinite(n_per_m3) || n_per_m3 <= 0) {

@@ -16,7 +16,7 @@ import { MU0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Inputs for {@link evaluateLondonPenetration}.
- * @public
+ * @internal
  */
 export interface LondonPenetrationInputs {
   /** Carrier mass, kg. */
@@ -27,7 +27,7 @@ export interface LondonPenetrationInputs {
 
 /**
  * Result of {@link evaluateLondonPenetration}.
- * @public
+ * @internal
  */
 export interface LondonPenetrationResult {
   readonly m_kg: number;
@@ -39,7 +39,7 @@ export interface LondonPenetrationResult {
 /**
  * Evaluate `λ_L = √(m / (μ0 n e²))` with `e` the elementary charge.
  *
- * @public
+ * @internal
  */
 export function evaluateLondonPenetration({
   m_kg,

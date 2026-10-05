@@ -18,7 +18,7 @@ import { E_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateAmbegaokarBaratoff}.
- * @public
+ * @internal
  */
 export interface AmbegaokarBaratoffInputs {
   /** Gap, joules. Identical on the two sides, at T = 0. */
@@ -27,7 +27,7 @@ export interface AmbegaokarBaratoffInputs {
 
 /**
  * Result of {@link evaluateAmbegaokarBaratoff}.
- * @public
+ * @internal
  */
 export interface AmbegaokarBaratoffResult {
   readonly Delta_J: number;
@@ -38,7 +38,7 @@ export interface AmbegaokarBaratoffResult {
 /**
  * Evaluate the T = 0 Ambegaokar–Baratoff product. Not the tanh factor.
  *
- * @public
+ * @internal
  */
 export function evaluateAmbegaokarBaratoff({ Delta_J }: AmbegaokarBaratoffInputs): AmbegaokarBaratoffResult {
   if (!Number.isFinite(Delta_J) || Delta_J <= 0) {

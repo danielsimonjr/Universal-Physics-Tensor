@@ -15,6 +15,7 @@ export { regimesDiffer } from './quantity.js';
 
 export type { BridgeEdge, EdgeConfidence, ValidityDomain } from './edge.js';
 export {
+  CoefficientUnsetError,
   CompositionAliasError,
   CompositionDimensionError,
   CompositionJunctionError,
@@ -206,6 +207,8 @@ export type {
   QuantityExplanation,
 } from './explain.js';
 export { explainQuantity } from './explain.js';
+export type { Evaluation } from './evaluate-relation.js';
+export { evaluateRelation } from './evaluate-relation.js';
 
 export type { Observable, ComposeSymbolicOptions } from './compose-symbolic.js';
 export { composeSymbolic, SymbolicCompositionError } from './compose-symbolic.js';

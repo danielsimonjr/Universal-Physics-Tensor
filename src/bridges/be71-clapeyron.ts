@@ -14,7 +14,7 @@
 
 /**
  * Inputs for {@link evaluateClapeyron}.
- * @public
+ * @internal
  */
 export interface ClapeyronInputs {
   /** Specific latent heat, J/kg. `L = T (s2 − s1)`. */
@@ -27,7 +27,7 @@ export interface ClapeyronInputs {
 
 /**
  * Result of {@link evaluateClapeyron}.
- * @public
+ * @internal
  */
 export interface ClapeyronResult {
   readonly L_J_per_kg: number;
@@ -40,7 +40,7 @@ export interface ClapeyronResult {
 /**
  * Evaluate `dP/dT = L / (T Δv)`.
  *
- * @public
+ * @internal
  */
 export function evaluateClapeyron({
   L_J_per_kg,

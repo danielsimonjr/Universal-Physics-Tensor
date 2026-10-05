@@ -8,10 +8,11 @@ import { parseUnit } from '../../src/dimensional/units.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
 
 describe('BRIDGE_EVALUATORS', () => {
-  it('covers the closed-form / spacetime bridges (51/52/55..125)', () => {
+  it('covers the closed-form / spacetime bridges (16/42/51/52/55..125)', () => {
+    // The list that started at 51 is the record from before be-16 and be-42 evaluated by id.
     // The list that stopped at 102 is the record from before BE-103..125.
     expect([...BRIDGE_EVALUATORS.keys()].sort((a, b) => a - b)).toEqual([
-      51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
+      16, 42, 51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
       77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
       101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
       120, 121, 122, 123, 124, 125,
@@ -104,7 +105,7 @@ describe('BRIDGE_EVALUATORS', () => {
 
   it('every spec run is callable with its declared inputs', () => {
     const sample: Record<string, number> = {
-      M_kg: 1.989e30, b_m: 7e8, a_m: 5.79e10, e: 0.2056, T_yr: 0.24,
+      M_kg: 1.989e30, b_m: 7e8, a_m: 5.79e10, e: 0.2056, T_yr: 0.24, temperature_K: 300,
       C: 1, d_m: 1e-6, a_m_s2: 9.8, T_K: 300, R_ohm: 1000, V_volts: 1e-3,
       nu: 1 / 3, sigma_S_per_m: 6e7, T_c_K: 1.2, mu_e: 2, rho_kg_per_m3: 3.8e-16, mu: 2.3,
       I_W_per_m2: 1e6, R: 0, theta_rad: 0, B_T: 12e-9, g_00: -0.81,

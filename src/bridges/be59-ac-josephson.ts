@@ -19,12 +19,12 @@ import { H_SI, E_SI } from '../core/constants.js';
 /** Josephson constant K_J = 2e/h (Hz/V) — exact in the post-2019 SI. @public */
 export const JOSEPHSON_CONSTANT_SI = (2 * E_SI) / H_SI;
 
-/** @public */
+/** @internal */
 export interface ACJosephsonInputs {
   /** DC bias voltage across the junction (volts). */
   readonly V_volts: number;
 }
-/** @public */
+/** @internal */
 export interface ACJosephsonResult {
   readonly V_volts: number;
   /** Emitted (Shapiro-step) frequency f = K_J·V (Hz). */
@@ -36,7 +36,7 @@ export interface ACJosephsonResult {
 /**
  * Evaluate the AC Josephson frequency f = 2eV/h for a bias voltage.
  *
- * @public
+ * @internal
  */
 export function evaluateACJosephson({ V_volts }: ACJosephsonInputs): ACJosephsonResult {
   if (!Number.isFinite(V_volts)) {

@@ -22,12 +22,12 @@ const EULER_GAMMA = 0.5772156649015329;
 /** Weak-coupling BCS gap ratio 2Δ(0)/(k_B T_c) = 2π/e^γ ≈ 3.528. @public */
 export const BCS_GAP_RATIO = (2 * Math.PI) / Math.exp(EULER_GAMMA);
 
-/** @public */
+/** @internal */
 export interface BCSGapInputs {
   /** Superconducting critical temperature T_c (K). */
   readonly T_c_K: number;
 }
-/** @public */
+/** @internal */
 export interface BCSGapResult {
   readonly T_c_K: number;
   /** T=0 gap Δ(0) = (BCS_GAP_RATIO/2)·k_B·T_c (joules). */
@@ -39,7 +39,7 @@ export interface BCSGapResult {
 /**
  * Evaluate the weak-coupling BCS gap Δ(0) for a critical temperature.
  *
- * @public
+ * @internal
  */
 export function evaluateBCSGap({ T_c_K }: BCSGapInputs): BCSGapResult {
   if (!Number.isFinite(T_c_K) || T_c_K < 0) {

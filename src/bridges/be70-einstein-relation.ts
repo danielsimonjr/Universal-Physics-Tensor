@@ -17,7 +17,7 @@ import { applyCarrierSignPolicy } from './carrier-sign.js';
 
 /**
  * Inputs for {@link evaluateEinsteinRelation}.
- * @public
+ * @internal
  */
 export interface EinsteinRelationInputs {
   /** Electrical mobility, m²/(V·s). */
@@ -30,7 +30,7 @@ export interface EinsteinRelationInputs {
 
 /**
  * Result of {@link evaluateEinsteinRelation}.
- * @public
+ * @internal
  */
 export interface EinsteinRelationResult {
   readonly mu_m2_per_Vs: number;
@@ -43,7 +43,7 @@ export interface EinsteinRelationResult {
 /**
  * Evaluate `D = μ k_B T / q`.
  *
- * @public
+ * @internal
  */
 export function evaluateEinsteinRelation({
   mu_m2_per_Vs,

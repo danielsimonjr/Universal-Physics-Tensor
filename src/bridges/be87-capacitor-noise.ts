@@ -17,7 +17,7 @@ import { K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateCapacitorNoise}.
- * @public
+ * @internal
  */
 export interface CapacitorNoiseInputs {
   /** Absolute temperature, kelvin. */
@@ -28,7 +28,7 @@ export interface CapacitorNoiseInputs {
 
 /**
  * Result of {@link evaluateCapacitorNoise}.
- * @public
+ * @internal
  */
 export interface CapacitorNoiseResult {
   readonly T_K: number;
@@ -40,7 +40,7 @@ export interface CapacitorNoiseResult {
 /**
  * Evaluate `⟨v²⟩ = k_B T / C` for one quadratic capacitor term.
  *
- * @public
+ * @internal
  */
 export function evaluateCapacitorNoise({ T_K, C_F }: CapacitorNoiseInputs): CapacitorNoiseResult {
   if (!Number.isFinite(T_K)) {

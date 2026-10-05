@@ -28,13 +28,13 @@ import { H_SI, E_SI } from '../core/constants.js';
 /** The von Klitzing constant R_K = h/e² (Ω). Post-2019 SI: exact. @public */
 export const VON_KLITZING_SI = H_SI / (E_SI * E_SI);
 
-/** Inputs for the quantized Hall conductance/resistance. @public */
+/** Inputs for the quantized Hall conductance/resistance. @internal */
 export interface QuantumHallInputs {
   /** The integer TKNN/Chern number C (Hall plateau index / filling factor). */
   readonly C: number;
 }
 
-/** Result of evaluating the integer quantum Hall relation. @public */
+/** Result of evaluating the integer quantum Hall relation. @internal */
 export interface QuantumHallResult {
   readonly C: number;
   /** Hall conductance σ_xy = C·e²/h (siemens, S). */
@@ -48,7 +48,7 @@ export interface QuantumHallResult {
 /**
  * Evaluate the integer quantum Hall relation for plateau index (Chern number) C.
  *
- * @public
+ * @internal
  */
 export function evaluateQuantumHall({ C }: QuantumHallInputs): QuantumHallResult {
   if (!Number.isInteger(C) || C === 0) {

@@ -15,7 +15,7 @@ import { E_SI, HBAR_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateUpperCritical}.
- * @public
+ * @internal
  */
 export interface UpperCriticalInputs {
   /** Coherence length, metres. */
@@ -24,7 +24,7 @@ export interface UpperCriticalInputs {
 
 /**
  * Result of {@link evaluateUpperCritical}.
- * @public
+ * @internal
  */
 export interface UpperCriticalResult {
   readonly xi_m: number;
@@ -35,7 +35,7 @@ export interface UpperCriticalResult {
 /**
  * Evaluate B_c2 = ℏ / (2 e ξ²). e is the elementary charge.
  *
- * @public
+ * @internal
  */
 export function evaluateUpperCritical({ xi_m }: UpperCriticalInputs): UpperCriticalResult {
   if (!Number.isFinite(xi_m) || xi_m <= 0) {

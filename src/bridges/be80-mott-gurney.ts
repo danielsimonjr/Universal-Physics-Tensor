@@ -14,7 +14,7 @@
 
 /**
  * Inputs for {@link evaluateMottGurney}.
- * @public
+ * @internal
  */
 export interface MottGurneyInputs {
   /**
@@ -32,7 +32,7 @@ export interface MottGurneyInputs {
 
 /**
  * Result of {@link evaluateMottGurney}.
- * @public
+ * @internal
  */
 export interface MottGurneyResult {
   readonly eps: number;
@@ -49,7 +49,7 @@ export interface MottGurneyResult {
  * Drift, Poisson, and the injecting contact E(0) = 0 are hypotheses.
  * This is not the Child–Langmuir current.
  *
- * @public
+ * @internal
  */
 export function evaluateMottGurney({
   eps,

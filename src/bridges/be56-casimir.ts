@@ -22,13 +22,13 @@
  */
 import { HBAR_SI, C_SI } from '../core/constants.js';
 
-/** Inputs for the ideal Casimir pressure. @public */
+/** Inputs for the ideal Casimir pressure. @internal */
 export interface CasimirInputs {
   /** Plate separation d (m), > 0. */
   readonly d_m: number;
 }
 
-/** Result of evaluating the ideal Casimir pressure. @public */
+/** Result of evaluating the ideal Casimir pressure. @internal */
 export interface CasimirResult {
   readonly d_m: number;
   /** Force per unit area F/A = −π²ℏc/(240 d⁴) (Pa; negative = attractive). */
@@ -38,7 +38,7 @@ export interface CasimirResult {
 /**
  * Evaluate the ideal (perfect-conductor, T=0) Casimir pressure at separation d.
  *
- * @public
+ * @internal
  */
 export function evaluateCasimir({ d_m }: CasimirInputs): CasimirResult {
   if (!(d_m > 0)) {

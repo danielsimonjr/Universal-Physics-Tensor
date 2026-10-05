@@ -175,177 +175,29 @@ export type {
   KnownIssue,
 } from './bridges/index.js';
 
-// v0.4.0 bridge implementations (evaluator functions beyond the spec catalog)
+// 6.0.0 — constants stay. Per-bridge evaluate functions are not on this root.
 export {
-  evaluateGravitationalLensing,
-  type GravitationalLensingInputs,
-  type GravitationalLensingResult,
-  evaluatePerihelionPrecession,
-  type PerihelionPrecessionInputs,
-  type PerihelionPrecessionResult,
-  // PI-instrument bridge expansion (2026-07-05) — four established closed-form bridges.
-  evaluateQuantumHall,
   VON_KLITZING_SI,
-  type QuantumHallInputs,
-  type QuantumHallResult,
-  evaluateCasimir,
-  type CasimirInputs,
-  type CasimirResult,
-  evaluateUnruh,
-  type UnruhInputs,
-  type UnruhResult,
-  evaluateJohnsonNyquist,
-  type JohnsonNyquistInputs,
-  type JohnsonNyquistResult,
-  // Condensed-matter cluster (2026-07-05) — four established closed-form bridges.
-  evaluateACJosephson,
   JOSEPHSON_CONSTANT_SI,
-  type ACJosephsonInputs,
-  type ACJosephsonResult,
-  evaluateFractionalQH,
-  type FractionalQHInputs,
-  type FractionalQHResult,
-  evaluateWiedemannFranz,
   LORENZ_NUMBER_SI,
-  type WiedemannFranzInputs,
-  type WiedemannFranzResult,
-  evaluateBCSGap,
   BCS_GAP_RATIO,
-  type BCSGapInputs,
-  type BCSGapResult,
-  // Astrophysics cluster (2026-07-05) — three established closed-form bridges.
-  evaluateChandrasekharMass,
   LANE_EMDEN_OMEGA3,
-  type ChandrasekharInputs,
-  type ChandrasekharResult,
-  evaluateEddingtonLuminosity,
   THOMSON_CROSS_SECTION_SI,
-  type EddingtonInputs,
-  type EddingtonResult,
-  evaluateJeansMass,
-  type JeansInputs,
-  type JeansResult,
-} from './bridges/index.js';
-/** Radiation pressure, the Alfvén speed, and the Tolman–Ehrenfest invariant. */
-export {
-  evaluateRadiationPressure,
-  type RadiationPressureInputs,
-  type RadiationPressureResult,
-  evaluateAlfvenSpeed,
   alfvenProtonOnlyDensity,
   M_PROTON_SI,
-  type AlfvenInputs,
-  type AlfvenResult,
-  evaluateTolmanEhrenfest,
   tolmanTemperatureAt,
-  type TolmanInputs,
-  type TolmanResult,
-} from './bridges/index.js';
-/** Fast magnetosonic speed, Einstein relation, Clapeyron slope, gravitational frequency ratio, Kelvin–Peltier. */
-export {
-  evaluateFastMagnetosonic,
-  type FastMagnetosonicInputs,
-  type FastMagnetosonicResult,
-  evaluateEinsteinRelation,
-  type EinsteinRelationInputs,
-  type EinsteinRelationResult,
   CarrierSignError,
-  evaluateClapeyron,
-  type ClapeyronInputs,
-  type ClapeyronResult,
-  evaluateGravitationalRedshift,
-  type GravitationalRedshiftInputs,
-  type GravitationalRedshiftResult,
-  evaluateKelvinPeltier,
-  type KelvinPeltierInputs,
-  type KelvinPeltierResult,
-  evaluateMagneticPressure,
-  type MagneticPressureInputs,
-  type MagneticPressureResult,
-  evaluateLondonPenetration,
-  type LondonPenetrationInputs,
-  type LondonPenetrationResult,
-  evaluatePlasmaBeta,
-  type PlasmaBetaInputs,
-  type PlasmaBetaResult,
-  evaluateHagenPoiseuille,
-  type HagenPoiseuilleInputs,
-  type HagenPoiseuilleResult,
-  evaluateEulerBuckling,
-  type EulerBucklingInputs,
-  type EulerBucklingResult,
-  evaluatePullIn,
-  type PullInInputs,
-  type PullInResult,
-  evaluateMottGurney,
-  type MottGurneyInputs,
-  type MottGurneyResult,
-  evaluateChildLangmuir,
-  type ChildLangmuirInputs,
-  type ChildLangmuirResult,
-  evaluateShockleyDiode,
-  type ShockleyDiodeInputs,
-  type ShockleyDiodeResult,
-  evaluateThomsonCoefficient,
-  type ThomsonCoefficientInputs,
-  type ThomsonCoefficientResult,
-  evaluateFourPointSheet,
-  type FourPointSheetInputs,
-  type FourPointSheetResult,
-  evaluateShotNoise,
-  type ShotNoiseInputs,
-  type ShotNoiseResult,
-  evaluateReynoldsAnalogy,
-  type ReynoldsAnalogyInputs,
-  type ReynoldsAnalogyResult,
-  evaluateCapacitorNoise,
-  type CapacitorNoiseInputs,
-  type CapacitorNoiseResult,
-  evaluateFermiSea,
-  type FermiSeaInputs,
-  type FermiSeaResult,
-  evaluateDebyeCutoff,
-  type DebyeCutoffInputs,
-  type DebyeCutoffResult,
-  evaluateDebyeHeat,
-  type DebyeHeatInputs,
-  type DebyeHeatResult,
-  evaluateEinsteinSolid,
-  type EinsteinSolidInputs,
-  type EinsteinSolidResult,
-  evaluateSommerfeldHeat,
-  type SommerfeldHeatInputs,
-  type SommerfeldHeatResult,
-  evaluateCurieWeiss,
-  type CurieWeissInputs,
-  type CurieWeissResult,
-  evaluatePauliParamagnetism,
-  type PauliParamagnetismInputs,
-  type PauliParamagnetismResult,
-  evaluateGinzburgLandau,
-  type GinzburgLandauInputs,
-  type GinzburgLandauResult,
-  evaluateUpperCritical,
-  type UpperCriticalInputs,
-  type UpperCriticalResult,
-  evaluateAmbegaokarBaratoff,
-  type AmbegaokarBaratoffInputs,
-  type AmbegaokarBaratoffResult,
-  evaluateBcsJump,
-  type BcsJumpInputs,
-  type BcsJumpResult,
-  evaluateMassAction,
-  type MassActionInputs,
-  type MassActionResult,
-  evaluateLyddaneSachsTeller,
-  type LyddaneSachsTellerInputs,
-  type LyddaneSachsTellerResult,
-  evaluateBktJump,
-  type BktJumpInputs,
-  type BktJumpResult,
-  evaluateLandauerConductance,
-  type LandauerConductanceInputs,
-  type LandauerConductanceResult,
+} from './bridges/index.js';
+/**
+ * One evaluation of a catalog id or a canonical id.
+ * A sourced number is `kind: 'value'`. An unset coefficient is `kind: 'unset'`.
+ * @public
+ */
+export { evaluateRelation, CoefficientUnsetError } from './composition/index.js';
+/** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
+export type { Evaluation } from './composition/index.js';
+/** Plasma and space closed forms, BE-103 through BE-125. Each stays that id's single numeric body. */
+export {
   evaluateBohmSheath,
   type BohmSheathInputs,
   type BohmSheathResult,
@@ -417,15 +269,7 @@ export {
   type MirrorInstabilityResult,
 } from './bridges/index.js';
 
-// Bridge-evaluator dispatch registry (`upt evaluate`) — id → evaluator.
-export { BRIDGE_EVALUATORS, evaluateBridge } from './bridges/evaluators.js';
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
-
-// v0.14 — `BridgeEquations` convenience facade. A root-level object that gathers
-// every per-bridge `evaluate*()` function under readable method names (1:1
-// pass-through, no new physics). Lets consumers call e.g.
-// `BridgeEquations.decoherenceRate({...})` without reaching into subpath modules.
-export { BridgeEquations } from './bridges/bridge-equations.js';
 
 // v0.4.0 connection layer — Christoffel formula builder and covariant derivative
 // AST node type. `christoffel` is public because bridge modules and downstream

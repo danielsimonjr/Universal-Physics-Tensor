@@ -13,7 +13,7 @@
 
 /**
  * Inputs for {@link evaluateDebyeCutoff}.
- * @public
+ * @internal
  */
 export interface DebyeCutoffInputs {
   /** Common acoustic speed, metres per second. */
@@ -24,7 +24,7 @@ export interface DebyeCutoffInputs {
 
 /**
  * Result of {@link evaluateDebyeCutoff}.
- * @public
+ * @internal
  */
 export interface DebyeCutoffResult {
   readonly v_m_per_s: number;
@@ -36,7 +36,7 @@ export interface DebyeCutoffResult {
 /**
  * Evaluate ω_D = v_s (6 π² n)^{1/3}.
  *
- * @public
+ * @internal
  */
 export function evaluateDebyeCutoff({ v_m_per_s, n_per_m3 }: DebyeCutoffInputs): DebyeCutoffResult {
   if (!Number.isFinite(v_m_per_s) || v_m_per_s <= 0) {
