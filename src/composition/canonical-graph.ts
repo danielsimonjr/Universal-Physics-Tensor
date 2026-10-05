@@ -288,6 +288,83 @@ function formulaFactorExponents(eq: CanonicalEquation): Record<string, number> {
   return factors;
 }
 
+type InputParity = 'even' | 'odd' | 'neither' | 'absent';
+
+/**
+ * Sign parity of `node` as a function of `name`. A product of two odd
+ * factors is even. An absolute value is even. An even integer power is
+ * even. A fractional power of an even subexpression stays even
+ * (`√(q²)`), and a fractional power of an odd one is not a magnitude.
+ */
+function inputParity(node: ExprNode, name: string): InputParity {
+  if (node.kind === 'symbol') return node.name === name ? 'odd' : 'absent';
+  if (node.kind === 'abs') {
+    const inner = inputParity(node.arg, name);
+    if (inner === 'absent' || inner === 'neither') return inner;
+    return 'even';
+  }
+  if (node.kind === 'transcendental' || node.kind === 'dirac-delta') {
+    const inner = inputParity(node.arg, name);
+    return inner === 'absent' ? 'absent' : 'neither';
+  }
+  if (node.kind !== 'op') return 'neither';
+  if (node.op === '+' || node.op === '-') {
+    const parts = node.args.map((arg) => inputParity(arg, name)).filter((p) => p !== 'absent');
+    if (parts.length === 0) return 'absent';
+    if (parts.some((p) => p === 'neither')) return 'neither';
+    if (parts.every((p) => p === 'even')) return 'even';
+    if (parts.every((p) => p === 'odd')) return 'odd';
+    return 'neither';
+  }
+  if (node.op === '*' || node.op === '/') {
+    let acc: InputParity = 'absent';
+    for (const arg of node.args) {
+      const part = inputParity(arg, name);
+      if (part === 'neither') return 'neither';
+      if (part === 'absent') continue;
+      if (acc === 'absent') acc = part;
+      else if (acc === 'odd' && part === 'odd') acc = 'even';
+      else if (acc === 'odd' || part === 'odd') acc = 'odd';
+      else acc = 'even';
+    }
+    return acc;
+  }
+  if (node.op === '^') {
+    const base = node.args[0];
+    const expNode = node.args[1];
+    if (base === undefined || expNode === undefined || expNode.kind !== 'symbol') return 'neither';
+    const exp = Number(expNode.name);
+    const inner = inputParity(base, name);
+    if (!Number.isFinite(exp) || inner === 'neither') return inner === 'absent' ? 'absent' : 'neither';
+    if (inner === 'absent' || exp === 0) return 'absent';
+    if (Number.isInteger(exp) && Math.abs(exp) % 2 === 0) return 'even';
+    if (Number.isInteger(exp)) return inner;
+    return inner === 'even' ? 'even' : 'neither';
+  }
+  return 'neither';
+}
+
+/** Names whose scalar AST is an even function. A magnitude uses these absolutely. */
+function evenInputNames(node: ExprNode | undefined): ReadonlySet<string> {
+  if (node === undefined) return new Set();
+  const names = new Set<string>();
+  const walk = (n: ExprNode): void => {
+    if (n.kind === 'symbol') names.add(n.name);
+    else if (n.kind === 'op') for (const arg of n.args) walk(arg);
+    else if (n.kind === 'abs' || n.kind === 'transcendental' || n.kind === 'dirac-delta') walk(n.arg);
+  };
+  walk(node);
+  const even = new Set<string>();
+  for (const name of names) {
+    if (inputParity(node, name) === 'even') even.add(name);
+  }
+  return even;
+}
+
+function magnitudeBase(name: string, value: number, even: ReadonlySet<string>): number {
+  return even.has(name) ? Math.abs(value) : value;
+}
+
 /** Evaluate a fully-quantitative monomial AST, including its dimensionless counts. */
 function evaluateAstMonomial(
   eq: CanonicalEquation,
@@ -309,13 +386,14 @@ function evaluateAstMonomial(
     else varExps.push([name, exp]);
   }
   const monomial = eq.dimensional.monomial;
+  const even = evenInputNames(eq.scalarAst);
   return (inputs: Record<string, number>): number => {
     if (monomial !== null) assertCarrierProductSign(monomial, inputs);
     let v = constFactor;
     for (const [name, exp] of varExps) {
       const x = inputs[name];
       if (x === undefined || !Number.isFinite(x)) return Number.NaN;
-      v *= Math.pow(x, exp);
+      v *= Math.pow(magnitudeBase(name, x, even), exp);
     }
     return v;
   };
@@ -328,7 +406,10 @@ function evaluateAstMonomial(
  * its recorded dimensionless coefficient and the sourced table prefactor.
  * A fully-quantitative AST that names a dimensionless count, or whose
  * Buckingham monomial is null, is evaluated from that AST so the count and
- * the numeric leaves (6π) are not dropped.
+ * the numeric leaves (6π) are not dropped. A variable the AST is even in
+ * (q² under a square root, or |q|) is taken as an absolute value, so a
+ * magnitude stays positive. An odd formula, including a cyclotron frequency
+ * and a Hall coefficient, stays signed.
  * Returns NaN when the monomial is null and the AST is not that monomial
  * — `retrodict` then abstains.
  */
@@ -353,10 +434,14 @@ function makeEvaluate(
   }
   const recorded = recordedDimensionlessCoefficient(eq) ?? 1;
   const tabled = canonicalPrefactor(eq.id) ?? 1;
+  const even = evenInputNames(eq.scalarAst);
   return (inputs: Record<string, number>): number => {
     assertCarrierProductSign(monomial, inputs);
     let v = constFactor * recorded * tabled;
-    for (const [name, exp] of varExps) v *= Math.pow(inputs[name], exp);
+    for (const [name, exp] of varExps) {
+      const x = inputs[name];
+      v *= Math.pow(x === undefined ? Number.NaN : magnitudeBase(name, x, even), exp);
+    }
     return v;
   };
 }

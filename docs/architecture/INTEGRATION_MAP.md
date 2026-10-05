@@ -6,7 +6,7 @@ A reading of how the library actually runs, and where the same concept is implem
 
 The temperature call graph below was re-read after `b193d5e0` (#395). That patch calls `alignTemperatureBinding` from explain, discovery anchors, regime coordinates, and path sweeps. The headline counts in the table were not re-derived on that commit. `upt evaluate` still does not call `alignTemperatureBinding`.
 
-A later regeneration, after `docs:deps` learned `export * as`, re-counted the unused-file and no-test rows. `dependency-graph.json` `statistics` is 472 source files, 3555 exports, 1735 re-exports, 0 unused files, and 78 unused exports. `git ls-files 'src/**/*.ts' 'src/*.ts'` is 472. `TEST_COVERAGE.md` is 665 test files and 10 source files with no test import (462 of 472, 97.9 percent). The extra export and re-export are `export * as atlas`. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
+A later regeneration, after `docs:deps` learned `export * as`, re-counted the unused-file and no-test rows. `dependency-graph.json` `statistics` is 472 source files, 3555 exports, 1735 re-exports, 0 unused files, and 78 unused exports. `git ls-files 'src/**/*.ts' 'src/*.ts'` is 472. `TEST_COVERAGE.md` is 666 test files and 10 source files with no test import (462 of 472, 97.9 percent). The extra export and re-export are `export * as atlas`. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
 
 Anything below that was not opened in source, or that a second method did not confirm, is marked **INFERRED**.
 
@@ -24,7 +24,7 @@ Anything below that was not opened in source, or that a second method did not co
 | Circular dependencies | 0 runtime, 0 type-only | 2453 relative import edges, 0 unresolved, 0 cycles, 469 files appear in the walk | yes |
 | Unused file | none. The first measurement listed `src/atlas/public.ts` | `dependency-graph.json` records `src/index.ts` depending on `./atlas/public.js`. The source is `export * as atlas from './atlas/public.js'` at `src/index.ts:1144` | yes |
 | Unused exports | 78 | not re-derived name by name. One listed name is a parser false positive (below) | count matches the committed `unused-analysis.md`; the list is not a deletion list |
-| Source files with no test import | 10 of 472 (97.9%), 665 test files. The first measurement was 11 of 471 (97.7%), 662 test files | the 10 paths are the generator's "no test file imports this module" list, not statement coverage. `src/atlas/public.ts` left the list because the namespace re-export is now an import edge | definition recorded, not re-derived |
+| Source files with no test import | 10 of 472 (97.9%), 666 test files. The first measurement was 11 of 471 (97.7%), 662 test files | the 10 paths are the generator's "no test file imports this module" list, not statement coverage. `src/atlas/public.ts` left the list because the namespace re-export is now an import edge | definition recorded, not re-derived |
 | Public surface | 698 symbols, 611 `@public`, 3 `@internal`, 84 untagged, `undocumented: 20` | 698 symbols in the report; 21 have `documented: false`. The summary excludes `kind: 'namespace'` (`tools/create-dependency-graph/api-surface.ts:627`). The extra one is the `atlas` namespace | yes |
 | API-walk external MathTS import | one: `src/numerical/gl4-integrator.ts` → `@danielsimonjr/mathts-functions` | the report's `external` array has that single object. Unresolved specifiers: 0 | yes |
 | Files that load MathTS | — | 14 files contain `from`, `import()`, or `import.meta.resolve` of `@danielsimonjr/mathts-*` | the "about 16" figure matches mention sites if `src/cli/version.ts:52` (a string) and a comment in `src/atlas/witness-symbolic.ts` are counted with the 14 |
@@ -402,7 +402,7 @@ Corrected in this change: the verification blocks and the current-count sentence
 
 Still narrative, and not rewritten sentence by sentence: per-file component essays, historical audit reports under `docs/architecture/archive/`, and `PHYSICS_MAP.md`. Where those essays still say the catalog has 58 rows or that `Float64ReferenceEngine` exists, the essay is older than the tree. `class Float64ReferenceEngine` is absent under `src/`; `MathTSEngine` is the engine class (`src/numerical/mathts-engine.ts:57`). `ARCHITECTURE.md`'s statistics table was updated; a later paragraph that still names two engines should be read against that table.
 
-`git ls-files '*.ts' '*.tsx'` on this checkout is 1197 files (472 under `src/`). That is not the old repo_map total of 1025, and it is not the generator's 665 test files (the generator's test count is the files it classified as tests). Both numbers are in this map so they are not collapsed into one.
+`git ls-files '*.ts' '*.tsx'` on this checkout is 1198 files (472 under `src/`). That is not the old repo_map total of 1025, and it is not the generator's 666 test files (the generator's test count is the files it classified as tests). Both numbers are in this map so they are not collapsed into one.
 
 ---
 
