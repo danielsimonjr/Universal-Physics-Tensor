@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   nameTableOwnerHits,
+  prefactorOwnerHits,
   renderDuplicateOwners,
   signOwnerHits,
   temperatureOwnerHits,
@@ -33,5 +34,9 @@ describe('single owner', () => {
 
   it('keeps one edit distance and one name table', () => {
     expect(nameTableOwnerHits(root)).toEqual([]);
+  });
+
+  it('does not invent a sourced 1 for a missing prefactor', () => {
+    expect(prefactorOwnerHits(root)).toEqual([]);
   });
 });

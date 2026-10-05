@@ -105,6 +105,30 @@ export function nameTableOwnerHits(root: string): string[] {
   return hits;
 }
 
+/**
+ * `canonicalPrefactor(…) ?? 1` and `recordedDimensionlessCoefficient(…) ?? 1`
+ * invent a sourced 1. `makeEvaluate` calls `canonicalGroupPrefactor`.
+ */
+export function prefactorOwnerHits(root: string): string[] {
+  const files: string[] = [];
+  walkTs(join(root, 'src'), files);
+  const hits: string[] = [];
+  const invented =
+    /canonicalPrefactor\s*\([^)]*\)\s*\?\?\s*1|recordedDimensionlessCoefficient\s*\([^)]*\)\s*\?\?\s*1/;
+  for (const file of files) {
+    const rel = relative(root, file).replaceAll('\\', '/');
+    const text = readFileSync(file, 'utf8');
+    if (invented.test(text)) hits.push(`${rel} combines a missing prefactor with ?? 1`);
+  }
+  const graphPath = join(root, 'src/composition/canonical-graph.ts');
+  if (!existsSync(graphPath)) return hits;
+  const body = braceBody(readFileSync(graphPath, 'utf8'), 'makeEvaluate');
+  if (body === null || !body.includes('canonicalGroupPrefactor(')) {
+    hits.push('makeEvaluate does not call canonicalGroupPrefactor');
+  }
+  return hits;
+}
+
 /** `assertSameCarrierSign` has no caller except `applyCarrierSignPolicy`. */
 export function signOwnerHits(root: string): string[] {
   const policyPath = join(root, 'src/bridges/carrier-sign.ts');
@@ -135,6 +159,7 @@ export function renderDuplicateOwners(root: string): string {
   const temperature = temperatureOwnerHits(root);
   const names = nameTableOwnerHits(root);
   const signs = signOwnerHits(root);
+  const prefactors = prefactorOwnerHits(root);
   const temperatureBody =
     temperature.length === 0
       ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
@@ -147,6 +172,10 @@ export function renderDuplicateOwners(root: string): string {
     signs.length === 0
       ? '`assertSameCarrierSign` is called only from `applyCarrierSignPolicy`. The BE-70 domain does not call `sameCarrierSign`. No second owner.\n'
       : signs.map((hit) => `- ${hit}`).join('\n') + '\n';
+  const prefactorBody =
+    prefactors.length === 0
+      ? '`canonicalPrefactor(…) ?? 1` does not occur. `makeEvaluate` calls `canonicalGroupPrefactor`.\n'
+      : prefactors.map((hit) => `- ${hit}`).join('\n') + '\n';
   return (
     '<!-- repo-map:no-verification -->\n' +
     '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n' +
@@ -160,6 +189,8 @@ export function renderDuplicateOwners(root: string): string {
     '\n' +
     nameBody +
     '\n' +
-    signBody
+    signBody +
+    '\n' +
+    prefactorBody
   );
 }

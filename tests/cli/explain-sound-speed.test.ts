@@ -1,8 +1,8 @@
 /**
  * CE-sound-speed is filed under the quantity `speed`, so explaining
  * `sound-speed` has no derivation, and `gamma` is not a graph name.
- * A bound adiabatic index is √γ in front of √(P/ρ). Unbound, the printed
- * 1 is still the unset coefficient. Issue #390.
+ * A bound adiabatic index is √γ in front of √(P/ρ). Unbound, the factor
+ * is unset and no number is recovered. Issue #390.
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
@@ -33,15 +33,16 @@ const BARE = Math.sqrt(1e5 / 1.2);
 const WITH_GAMMA = Math.sqrt((1.4 * 1e5) / 1.2);
 
 describe('sound-speed explain uses CE-sound-speed', () => {
-  it('recovers √(P/ρ) and says the constant was set to 1', async () => {
+  it('leaves unbound gamma unset and prints no recovered number', async () => {
     const cap = capture();
     expect(
       await runCli(['explain', 'sound-speed', 'pressure=1e5', 'density=1.2', '--source=canonical'], cap.io),
     ).toBe(0);
     const body = text(cap);
     expect(body).toMatch(/CE-sound-speed/);
-    expect(recovered(body)).toBeCloseTo(BARE, 6);
-    expect(body).toContain('The printed value sets the dimensionless constant to 1. That 1 was not recovered.');
+    expect(body).not.toMatch(/Recovered value:/);
+    expect(body).toMatch(/factor is unset/);
+    expect(recovered(body)).toBeUndefined();
   });
 
   it('multiplies by √γ when gamma is bound and does not claim the constant was set to 1', async () => {

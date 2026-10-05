@@ -1,11 +1,11 @@
 /**
  * A dimensional entry with no sourced prefactor is not a recovered factor of 1.
  *
- * The canonical evaluator treats a missing coefficient as 1. The audit then
- * listed that 1 as DERIVED. Fermi energy, Fermi velocity, and the Debye
- * frequency are proportionalities. The plasma frequency's unit monomial is
- * the angular formula, so that row stays derived. A sourced factor of 1,
- * such as the simple-harmonic frequency, stays derived too.
+ * A missing coefficient is unset. Explain prints no recovered number.
+ * Fermi energy, Fermi velocity, and the Debye frequency are proportionalities.
+ * The plasma frequency's unit monomial is the angular formula, so that row
+ * stays derived. A sourced factor of 1, such as the simple-harmonic frequency,
+ * stays derived too.
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
@@ -55,22 +55,21 @@ describe('an unset dimensional coefficient is not a recovered prefactor', () => 
     expect(unset).not.toContain('CE-simple-harmonic-frequency');
   });
 
-  it('says the Fermi, velocity, and Debye prints set the constant to 1', async () => {
+  it('prints no recovered number for Fermi, velocity, and Debye, and names the unset factor', async () => {
     const hbar = 'reduced-planck-constant=1.054571817e-34';
     const m = 'mass=9.1093837015e-31';
     const n = 'carrier-density=8.47e28';
     const fermi = await run(['explain', 'fermi-energy', hbar, m, n, '--source=canonical']);
     expect(fermi.code).toBe(0);
-    expect(fermi.text).toMatch(/Recovered value: 2\.35460972213968e-19/);
-    expect(fermi.text).toMatch(/sets the dimensionless constant to 1/);
+    expect(fermi.text).not.toMatch(/Recovered value:/);
+    expect(fermi.text).toMatch(/factor is unset/);
     expect(fermi.text).toMatch(/\(1\/2\)\(3π²\)\^\{2\/3\}/);
-    expect(fermi.text).toMatch(/was not recovered/);
 
     const velocity = await run(['explain', 'fermi-velocity', hbar, m, n, '--source=canonical']);
     expect(velocity.code).toBe(0);
-    expect(velocity.text).toMatch(/Recovered value: 508411\.035391819/);
+    expect(velocity.text).not.toMatch(/Recovered value:/);
     expect(velocity.text).toMatch(/\(3π²\)\^\{1\/3\}/);
-    expect(velocity.text).toMatch(/sets the dimensionless constant to 1/);
+    expect(velocity.text).toMatch(/factor is unset/);
 
     const debye = await run([
       'explain',
@@ -80,8 +79,8 @@ describe('an unset dimensional coefficient is not a recovered prefactor', () => 
       '--source=canonical',
     ]);
     expect(debye.code).toBe(0);
-    expect(debye.text).toMatch(/Recovered value: 13190489016474\.5/);
+    expect(debye.text).not.toMatch(/Recovered value:/);
     expect(debye.text).toMatch(/\(6π²\)\^\{1\/3\}/);
-    expect(debye.text).toMatch(/sets the dimensionless constant to 1/);
+    expect(debye.text).toMatch(/factor is unset/);
   });
 });

@@ -34,11 +34,25 @@ const errText = (c: ReturnType<typeof capture>) => c.err.join('');
 const KELVIN_10EV = (10 * E_SI) / K_B_SI;
 const PROTON = '1.67262192369e-27';
 const KB = String(K_B_SI);
+const N_A = 6.02214076e23;
+const V_M3 = 0.0224;
 
 function recovered(body: string): number {
   const m = /Recovered value: ([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/.exec(body);
   if (m === null) throw new Error(`no recovered value in:\n${body}`);
   return Number(m[1]);
+}
+
+function idealGas(k: number, temperature: string) {
+  return [
+    'explain',
+    'pressure',
+    `boltzmann-constant=${k}`,
+    `temperature=${temperature}`,
+    `V=${V_M3}`,
+    `N=${N_A}`,
+    '--source=canonical',
+  ];
 }
 
 describe('explain temperature bindings', () => {
@@ -57,11 +71,22 @@ describe('explain temperature bindings', () => {
         kelvin.io,
       ),
     ).toBe(0);
-    expect(recovered(text(energy))).toBeCloseTo(recovered(text(kelvin)), 8);
-    expect(recovered(text(energy))).toBeCloseTo(30949.6900706035, 4);
-    expect(recovered(text(energy))).not.toBeCloseTo(1.15000027903998e-7, 6);
+    expect(text(energy)).not.toMatch(/Recovered value:/);
+    expect(text(kelvin)).not.toMatch(/Recovered value:/);
+    expect(text(energy)).toMatch(/factor is unset/);
     expect(errText(energy)).toMatch(/k_B T/);
-    expect(text(energy)).toMatch(/That 1 was not recovered/);
+    const explained = /is ([0-9.]+e[+-]\d+) K/.exec(errText(energy));
+    expect(explained).not.toBeNull();
+    expect(Number(explained![1])).toBeCloseTo(KELVIN_10EV, 0);
+
+    const gasEnergy = capture();
+    expect(await runCli(idealGas(K_B_SI, '10eV'), gasEnergy.io)).toBe(0);
+    const gasKelvin = capture();
+    expect(await runCli(idealGas(K_B_SI, String(KELVIN_10EV)), gasKelvin.io)).toBe(0);
+    const expected = (N_A * K_B_SI * KELVIN_10EV) / V_M3;
+    expect(recovered(text(gasEnergy))).toBeCloseTo(expected, 4);
+    expect(recovered(text(gasEnergy))).toBeCloseTo(recovered(text(gasKelvin)), 6);
+    expect(recovered(text(gasEnergy))).not.toBeCloseTo((N_A * K_B_SI * (10 * E_SI)) / V_M3, 0);
   });
 
   it('uses the bound boltzmann-constant so kT stays 10 eV', async () => {
@@ -73,22 +98,25 @@ describe('explain temperature bindings', () => {
         energy.io,
       ),
     ).toBe(0);
-    const kelvin = capture();
-    expect(
-      await runCli(
-        ['explain', 'most-probable-speed', `boltzmann-constant=${doubled}`, `temperature=${(10 * E_SI) / doubled}`, `molecular-mass=${PROTON}`, '--source=canonical'],
-        kelvin.io,
-      ),
-    ).toBe(0);
-    expect(recovered(text(energy))).toBeCloseTo(recovered(text(kelvin)), 8);
+    expect(text(energy)).not.toMatch(/Recovered value:/);
+    expect(text(energy)).toMatch(/factor is unset/);
+    const thermal = (k: number, temperature: string) => [
+      'explain',
+      'thermal-energy',
+      `boltzmann-constant=${k}`,
+      `temperature=${temperature}`,
+      '--source=canonical',
+    ];
+    const gasEnergy = capture();
+    expect(await runCli(thermal(doubled, '10eV'), gasEnergy.io)).toBe(0);
+    const gasKelvin = capture();
+    expect(await runCli(thermal(doubled, String((10 * E_SI) / doubled)), gasKelvin.io)).toBe(0);
+    const expected = 1.5 * 10 * E_SI;
+    expect(recovered(text(gasEnergy))).toBeCloseTo(expected, 4);
+    expect(recovered(text(gasEnergy))).toBeCloseTo(recovered(text(gasKelvin)), 6);
     const codata = capture();
-    expect(
-      await runCli(
-        ['explain', 'most-probable-speed', `boltzmann-constant=${KB}`, 'temperature=10eV', `molecular-mass=${PROTON}`, '--source=canonical'],
-        codata.io,
-      ),
-    ).toBe(0);
-    expect(recovered(text(energy)) / recovered(text(codata))).toBeCloseTo(1, 8);
+    expect(await runCli(thermal(K_B_SI, '10eV'), codata.io)).toBe(0);
+    expect(recovered(text(gasEnergy)) / recovered(text(codata))).toBeCloseTo(1, 6);
   });
 
   it('reads plasma-beta temperature=10eV as the same beta as that kelvin', async () => {
@@ -120,8 +148,13 @@ describe('explain temperature bindings', () => {
         cap.io,
       ),
     ).toBe(0);
-    expect(recovered(text(cap))).toBeCloseTo(1573.63271668378, 6);
+    expect(text(cap)).not.toMatch(/Recovered value:/);
+    expect(text(cap)).toMatch(/factor is unset/);
     expect(errText(cap)).not.toMatch(/k_B T/);
+    const gas = capture();
+    expect(await runCli(idealGas(K_B_SI, '300'), gas.io)).toBe(0);
+    expect(recovered(text(gas))).toBeCloseTo((N_A * K_B_SI * 300) / V_M3, 4);
+    expect(recovered(text(gas))).not.toBeCloseTo((N_A * 300 * E_SI) / V_M3, 0);
   });
 
   it('rejects a length bound to temperature and does not recover a value', async () => {
