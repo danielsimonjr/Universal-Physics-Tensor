@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 0
-- **Potentially unused exports**: 76
+- **Potentially unused exports**: 75
 
 ## Potentially Unused Files
 
@@ -28,10 +28,6 @@ These exports are not imported by any other file in the codebase:
 
 - `CONTRACT_PENDULUM_LINEAR` (constant)
 - `CONTRACT_DAMPED_MASSLESS` (constant)
-
-### `src/atlas/oscillators/pendulum-motion.ts`
-
-- `W2` (constant)
 
 ### `src/atlas/oscillators/phase-translation.ts`
 

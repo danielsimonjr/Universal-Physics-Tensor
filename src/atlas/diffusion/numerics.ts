@@ -9,6 +9,8 @@
  * @module atlas/diffusion/numerics
  */
 
+import { solveODESystem } from '@danielsimonjr/mathts-functions';
+
 /**
  * The Gaussian solution of `∂c/∂t = D ∂²c/∂x²` from a point source of unit
  * mass, evaluated at `x`: `(4πDt)^{-1/2} exp(−x²/(4Dt))`.
@@ -219,7 +221,7 @@ export interface LangevinFixture {
  *
  * The second moments are integrated from the LANGEVIN model's own moment
  * equations, `d⟨x²⟩/dt = 2⟨xv⟩`, `d⟨xv⟩/dt = ⟨v²⟩ − (γ/m)⟨xv⟩`, with
- * `⟨v²⟩ = k_B T/m` held at equipartition, by RK4 on a fine fixed grid. The
+ * `⟨v²⟩ = k_B T/m` held at equipartition, by `solveODESystem` with `dt` on a fine fixed grid. The
  * diffusion coefficient `D = k_B T/γ` (Einstein) enters only the DENOMINATOR:
  * the ratio tends to 1 in the diffusive regime `t ≫ τ_p`.
  *
@@ -231,17 +233,14 @@ export function langevinMsdRatio(resolution: number, f: LangevinFixture): number
   const v2 = f.kT / f.m;
   const steps = Math.max(2000, Math.ceil(200 * resolution));
   const h = tEnd / steps;
-  let x2 = 0;
-  let xv = 0;
-  const rhs = (xvNow: number): [number, number] => [2 * xvNow, v2 - xvNow / tauP];
-  for (let n = 0; n < steps; n++) {
-    const [a1, b1] = rhs(xv);
-    const [a2, b2] = rhs(xv + 0.5 * h * b1);
-    const [a3, b3] = rhs(xv + 0.5 * h * b2);
-    const [a4, b4] = rhs(xv + h * b3);
-    x2 += (h / 6) * (a1 + 2 * a2 + 2 * a3 + a4);
-    xv += (h / 6) * (b1 + 2 * b2 + 2 * b3 + b4);
-  }
+  const sol = solveODESystem(
+    (_t, y) => [2 * y[1]!, v2 - y[1]! / tauP],
+    [0, 0],
+    [0, steps * h],
+    { dt: h },
+  );
+  const end = sol.y[sol.y.length - 1];
+  const x2 = end?.[0] ?? Number.NaN;
   const D = f.kT / f.gamma;
   return x2 / (2 * D * tEnd);
 }

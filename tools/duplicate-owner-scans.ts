@@ -185,6 +185,25 @@ export function bridgeRegistryHits(root: string): string[] {
   return hits;
 }
 
+/** The classical RK4 update `(h / 6) *`. A comment that names the weights is a hit too. */
+export function classicalRk4Literal(source: string): boolean {
+  return /\(h \/ 6\) \*/.test(source);
+}
+
+/** Files under `src/` that still update a state with the classical RK4 weights. */
+export function classicalRk4Hits(root: string): string[] {
+  const files: string[] = [];
+  walkTs(join(root, 'src'), files);
+  const hits: string[] = [];
+  for (const file of files) {
+    if (classicalRk4Literal(readFileSync(file, 'utf8'))) {
+      const rel = relative(root, file).replaceAll('\\', '/');
+      hits.push(`${rel} still steps with (h / 6) *`);
+    }
+  }
+  return hits;
+}
+
 /** `assertSameCarrierSign` has no caller except `applyCarrierSignPolicy`. */
 export function signOwnerHits(root: string): string[] {
   const policyPath = join(root, 'src/bridges/carrier-sign.ts');
@@ -218,6 +237,7 @@ export function renderDuplicateOwners(root: string): string {
   const prefactors = prefactorOwnerHits(root);
   const bridges = bridgeRegistryHits(root);
   const json = jsonOwnerHits(root);
+  const rk4 = classicalRk4Hits(root);
   const temperatureBody =
     temperature.length === 0
       ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
@@ -242,6 +262,10 @@ export function renderDuplicateOwners(root: string): string {
     json.length === 0
       ? '`function canonicalJson` and `function captureEnvironment` are defined only in `src/composition/canonical-json.ts`.\n'
       : json.map((hit) => `- ${hit}`).join('\n') + '\n';
+  const rk4Body =
+    rk4.length === 0
+      ? 'No classical RK4 weight `(h / 6) *` remains under `src/`.\n'
+      : rk4.map((hit) => `- ${hit}`).join('\n') + '\n';
   return (
     '<!-- repo-map:no-verification -->\n' +
     '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n' +
@@ -261,6 +285,8 @@ export function renderDuplicateOwners(root: string): string {
     '\n' +
     bridgeBody +
     '\n' +
-    jsonBody
+    jsonBody +
+    '\n' +
+    rk4Body
   );
 }

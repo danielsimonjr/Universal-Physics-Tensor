@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 479,
-    "totalTestFiles": 700,
+    "totalTestFiles": 701,
     "testedCount": 469,
     "untestedCount": 10,
     "coveragePercent": "97.9"
@@ -759,6 +759,7 @@
       "tests/atlas/closure.test.ts",
       "tests/atlas/diffusion.test.ts",
       "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/linear-oscillator-step.test.ts",
       "tests/atlas/negative-controls.test.ts"
     ],
     "src/atlas/error-algebra.ts": [
@@ -934,6 +935,7 @@
       "tests/atlas/path-bound.test.ts"
     ],
     "src/atlas/oscillators/pendulum-motion.ts": [
+      "tests/atlas/linear-oscillator-step.test.ts",
       "tests/atlas/pendulum-position-translation.test.ts"
     ],
     "src/atlas/oscillators/phase-carriage.ts": [
@@ -1142,6 +1144,7 @@
     "src/atlas/waves/numerics.ts": [
       "tests/atlas/closure.test.ts",
       "tests/atlas/formal-sanity.test.ts",
+      "tests/atlas/linear-oscillator-step.test.ts",
       "tests/atlas/negative-controls.test.ts",
       "tests/atlas/waves.test.ts"
     ],
@@ -18041,6 +18044,11 @@
     "tests/atlas/import-graph.test.ts": [],
     "tests/atlas/lc-analogy-text.test.ts": [
       "src/atlas/families.ts"
+    ],
+    "tests/atlas/linear-oscillator-step.test.ts": [
+      "src/atlas/diffusion/numerics.ts",
+      "src/atlas/oscillators/pendulum-motion.ts",
+      "src/atlas/waves/numerics.ts"
     ],
     "tests/atlas/link-prediction.test.ts": [
       "src/atlas/link-prediction.ts",

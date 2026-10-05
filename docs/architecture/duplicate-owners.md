@@ -21,3 +21,5 @@ The live list of a second owner for a concept the integration design assigned on
 `BRIDGE_EQUATIONS` is the projection of `registerBridge`. No hand-maintained catalog literal.
 
 `function canonicalJson` and `function captureEnvironment` are defined only in `src/composition/canonical-json.ts`.
+
+No classical RK4 weight `(h / 6) *` remains under `src/`.
