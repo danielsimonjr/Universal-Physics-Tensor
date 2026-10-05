@@ -66,6 +66,14 @@ import lean.FourPoint
 import lean.ShotNoise
 import lean.ReynoldsAnalogy
 import lean.CapacitorNoise
+import lean.CombDrive
+import lean.SubthresholdSwing
+import lean.BoostConverter
+import lean.FinEfficiency
+import lean.ThermoelectricGenerator
+import lean.Joukowsky
+import lean.CoaxialCapacitance
+import lean.DampingRatio
 import lean.FermiSea
 import lean.DebyeCutoff
 import lean.DebyeHeat
