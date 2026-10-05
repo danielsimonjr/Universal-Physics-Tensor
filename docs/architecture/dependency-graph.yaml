@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 5.0.0
-  totalFiles: 478
+  totalFiles: 479
   totalModules: 13
-  totalExports: 3886
+  totalExports: 3888
 entryPoints:
   - file: src/index.ts
     type: main
@@ -10949,6 +10949,10 @@ modules:
             - constantTables
             - tableFingerprint
             - ConstantTable
+        - file: ../composition/canonical-json.js
+          imports:
+            - canonicalJson
+            - captureEnvironment
         - file: ./version.js
           imports:
             - packageVersion
@@ -10957,9 +10961,7 @@ modules:
         - RECORD_SCHEMA
         - sha256
         - argvFingerprint
-        - canonicalJson
         - entryFingerprint
-        - captureEnvironment
         - recordInvocation
         - replayRecord
         - showRecord
@@ -10972,9 +10974,7 @@ modules:
         - StreamDifference
         - ReplayEntryReport
       functions:
-        - canonicalJson
         - entryFingerprint
-        - captureEnvironment
         - recordInvocation
         - replayRecord
         - showRecord
@@ -12304,6 +12304,33 @@ modules:
       constants:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
+    src/composition/canonical-json.ts:
+      description: One canonical-JSON serializer with two named profiles.
+      externalDependencies: []
+      nodeDependencies:
+        - module: crypto
+          imports:
+            - createHash
+      internalDependencies:
+        - file: ./probe/types.js
+          imports:
+            - EnvironmentFingerprint
+          typeOnly: true
+      exports:
+        - canonicalJson
+        - sha256Hex
+        - hashCanonical
+        - captureEnvironment
+      interfaces:
+        - RecordEnvironmentSources
+        - RecordEnvironmentSnapshot
+      functions:
+        - canonicalJson
+        - sha256Hex
+        - hashCanonical
+        - captureEnvironment
+        - captureEnvironment
+        - captureEnvironment
     src/composition/canonical-prefactors.ts:
       description: Exact prefactors for canonical equations that `src/canonical` records only
       externalDependencies: []
@@ -15666,11 +15693,12 @@ modules:
             - FalsificationRecord
             - ScientificRelationRecord
           reExport: true
-        - file: ./serialize.js
+        - file: ../canonical-json.js
           imports:
             - canonicalJson
             - sha256Hex
             - hashCanonical
+            - captureEnvironment
           reExport: true
         - file: ./search-budget.js
           imports:
@@ -15701,7 +15729,6 @@ modules:
           imports:
             - openManifest
             - closeManifest
-            - captureEnvironment
           reExport: true
         - file: ./candidate-store.js
           imports:
@@ -15898,6 +15925,7 @@ modules:
         - canonicalJson
         - sha256Hex
         - hashCanonical
+        - captureEnvironment
         - openBudget
         - budgetStopReason
         - canEmitCandidate
@@ -15912,7 +15940,6 @@ modules:
         - ResidualError
         - openManifest
         - closeManifest
-        - captureEnvironment
         - canTransition
         - applyStatus
         - statusRank
@@ -16090,6 +16117,7 @@ modules:
         - canonicalJson
         - sha256Hex
         - hashCanonical
+        - captureEnvironment
         - openBudget
         - budgetStopReason
         - canEmitCandidate
@@ -16105,7 +16133,6 @@ modules:
         - ResidualError
         - openManifest
         - closeManifest
-        - captureEnvironment
         - canTransition
         - applyStatus
         - statusRank
@@ -16437,7 +16464,6 @@ modules:
           imports:
             - DiscoveryBackendDescriptor
             - DiscoveryRunManifest
-            - EnvironmentFingerprint
             - SearchBudget
             - SearchStopReason
           typeOnly: true
@@ -16445,17 +16471,23 @@ modules:
           imports:
             - DEFAULT_SEARCH_BUDGET
             - SCHEMA_VERSION
-        - file: ./serialize.js
+        - file: ../canonical-json.js
           imports:
+            - captureEnvironment
             - hashCanonical
+        - file: ../canonical-json.js
+          imports:
+            - captureEnvironment
+          reExport: true
       exports:
         - captureEnvironment
         - openManifest
         - closeManifest
+      reExported:
+        - captureEnvironment
       interfaces:
         - ManifestDraft
       functions:
-        - captureEnvironment
         - openManifest
         - closeManifest
     src/composition/probe/scoring.ts:
@@ -16501,18 +16533,21 @@ modules:
         - budgetStopReason
         - canEmitCandidate
     src/composition/probe/serialize.ts:
-      description: Canonical JSON serialization and hashing for Product B probe artifacts.
+      description: Probe-profile re-exports of the one canonical-JSON module.
       externalDependencies: []
-      nodeDependencies:
-        - module: crypto
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../canonical-json.js
           imports:
-            - createHash
-      internalDependencies: []
+            - canonicalJson
+            - sha256Hex
+            - hashCanonical
+          reExport: true
       exports:
         - canonicalJson
         - sha256Hex
         - hashCanonical
-      functions:
+      reExported:
         - canonicalJson
         - sha256Hex
         - hashCanonical
@@ -24466,6 +24501,7 @@ dependencyGraph:
         - src/composition/buckingham-filter.ts
         - src/composition/canonical-compare.ts
         - src/composition/canonical-graph.ts
+        - src/composition/canonical-json.ts
         - src/composition/canonical-prefactors.ts
         - src/composition/catalog-graph.ts
         - src/composition/chain-candidate.ts
@@ -24659,19 +24695,19 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 478
+  totalTypeScriptFiles: 479
   totalModules: 13
-  totalLinesOfCode: 102949
-  totalExports: 3886
+  totalLinesOfCode: 103025
+  totalExports: 3888
   totalClasses: 61
-  totalInterfaces: 610
+  totalInterfaces: 612
   totalFunctions: 879
   totalTypeGuards: 5
   totalEnums: 0
   totalConstants: 1027
-  totalReExports: 1921
-  totalTypeOnlyImports: 587
+  totalReExports: 1925
+  totalTypeOnlyImports: 588
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
-  unusedExportsCount: 78
+  unusedExportsCount: 76

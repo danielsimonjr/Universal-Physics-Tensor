@@ -44,7 +44,7 @@ The codebase is organized into the following modules:
 - **cases**: 9 files
 - **cli**: 55 files
 - **root**: 1 file
-- **composition**: 93 files
+- **composition**: 94 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -4866,11 +4866,12 @@ The codebase is organized into the following modules:
 | `./output.js` | `emitJson` | Import |
 | `./record-reach.js` | `moduleSources, staticReach, Attribution` | Import |
 | `./record-tables.js` | `constantTables, tableFingerprint, ConstantTable` | Import |
+| `../composition/canonical-json.js` | `canonicalJson, captureEnvironment` | Import |
 | `./version.js` | `packageVersion, peerVersions` | Import |
 
 **Exports:**
 - Interfaces: `RecordEnvironment`, `RecordResult`, `RecordEntry`, `RecordInput`, `EnvironmentChange`, `StreamDifference`, `ReplayEntryReport`
-- Functions: `canonicalJson`, `entryFingerprint`, `captureEnvironment`, `recordInvocation`, `replayRecord`, `showRecord`
+- Functions: `entryFingerprint`, `recordInvocation`, `replayRecord`, `showRecord`
 - Constants: `RECORD_SCHEMA`, `sha256`, `argvFingerprint`
 
 ---
@@ -5238,6 +5239,24 @@ The codebase is organized into the following modules:
 **Exports:**
 - Functions: `canonicalToEdges`
 - Constants: `CANONICAL_CONSTANTS`, `CANONICAL_GRAPH`
+
+---
+
+### `src/composition/canonical-json.ts` - One canonical-JSON serializer with two named profiles.
+
+**Node.js Built-in Dependencies:**
+| Module | Import |
+|--------|--------|
+| `crypto` | `createHash` |
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `./probe/types.js` | `EnvironmentFingerprint` | Import (type-only) |
+
+**Exports:**
+- Interfaces: `RecordEnvironmentSources`, `RecordEnvironmentSnapshot`
+- Functions: `canonicalJson`, `sha256Hex`, `hashCanonical`, `captureEnvironment`, `captureEnvironment`, `captureEnvironment`
 
 ---
 
@@ -6320,12 +6339,12 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./types.js` | `SCHEMA_VERSION, PROBE_SCHEMA_VERSION, DEFAULT_SEARCH_BUDGET` | Re-export |
 | `./types.js` | `ProbeCandidateStatus, RelationKind, AuditState, DiscrepancyKind, DatasetRole, SearchStopReason, FrontierGapKind, IdentifiabilityKind, SearchBudget, DiscrepancyDefinition, ScientificRelationRef, IdentifiabilityAssessment, SearchabilityAssessment, GapEvidence, FrontierGap, ProbeCandidateOrigin, ProbeCandidateBody, StatusEvent, CandidateFingerprint, ComplexityMetrics, ProbeCandidateRecord, ProbeRejectionRecord, DiscoveryBackendDescriptor, EnvironmentFingerprint, NondeterminismSource, DiscoveryRunManifest, DimensionalVariableRef, ObservationRow, ProbeDataset, SearchProblem, ScoreVector, EvidenceAssessment, EvidenceProfile, DeclaredLimit, FalsificationBattery, FalsificationRecord, ScientificRelationRecord` | Re-export |
-| `./serialize.js` | `canonicalJson, sha256Hex, hashCanonical` | Re-export |
+| `../canonical-json.js` | `canonicalJson, sha256Hex, hashCanonical, captureEnvironment` | Re-export |
 | `./search-budget.js` | `openBudget, budgetStopReason, canEmitCandidate` | Re-export |
 | `./search-budget.js` | `BudgetState` | Re-export |
 | `./fingerprint.js` | `bodyExpression, countAstNodes, countOperators, maxPowerOrder, complexityOf, fingerprintExpr` | Re-export |
 | `./residual.js` | `scalarDiscrepancy, rmse, ResidualError` | Re-export |
-| `./run-manifest.js` | `openManifest, closeManifest, captureEnvironment` | Re-export |
+| `./run-manifest.js` | `openManifest, closeManifest` | Re-export |
 | `./candidate-store.js` | `canTransition, applyStatus, statusRank, ProbeCandidateStore` | Re-export |
 | `./generator.js` | `monomialToExpr, generateNative` | Re-export |
 | `./generator.js` | `RawCandidate` | Re-export |
@@ -6370,10 +6389,10 @@ The codebase is organized into the following modules:
   DiscoveryBackendDescriptor, EnvironmentFingerprint, NondeterminismSource, DiscoveryRunManifest,
   DimensionalVariableRef, ObservationRow, ProbeDataset, SearchProblem, ScoreVector,
   EvidenceAssessment, EvidenceProfile, DeclaredLimit, FalsificationBattery, FalsificationRecord,
-  ScientificRelationRecord, canonicalJson, sha256Hex, hashCanonical, openBudget, budgetStopReason,
-  canEmitCandidate, BudgetState, bodyExpression, countAstNodes, countOperators, maxPowerOrder,
-  complexityOf, fingerprintExpr, scalarDiscrepancy, rmse, ResidualError, openManifest, closeManifest,
-  captureEnvironment, canTransition, applyStatus, statusRank, ProbeCandidateStore, monomialToExpr,
+  ScientificRelationRecord, canonicalJson, sha256Hex, hashCanonical, captureEnvironment, openBudget,
+  budgetStopReason, canEmitCandidate, BudgetState, bodyExpression, countAstNodes, countOperators,
+  maxPowerOrder, complexityOf, fingerprintExpr, scalarDiscrepancy, rmse, ResidualError, openManifest,
+  closeManifest, canTransition, applyStatus, statusRank, ProbeCandidateStore, monomialToExpr,
   generateNative, RawCandidate, wrapRelationLinkGaps, wrapConnectorGaps, wrapRegimeGaps, scanFrontier,
   findFrontierGap, problemFromResidualGap, expressionSearchGaps, scanWithExpressionGaps, fitPrefactor,
   FitResult, scoreCandidate, rankPareto, RankedCandidate, compareToCorpus, corpusRelativeWording,
@@ -6508,13 +6527,15 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./types.js` | `DiscoveryBackendDescriptor, DiscoveryRunManifest, EnvironmentFingerprint, SearchBudget, SearchStopReason` | Import (type-only) |
+| `./types.js` | `DiscoveryBackendDescriptor, DiscoveryRunManifest, SearchBudget, SearchStopReason` | Import (type-only) |
 | `./types.js` | `DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION` | Import |
-| `./serialize.js` | `hashCanonical` | Import |
+| `../canonical-json.js` | `captureEnvironment, hashCanonical` | Import |
+| `../canonical-json.js` | `captureEnvironment` | Re-export |
 
 **Exports:**
 - Interfaces: `ManifestDraft`
-- Functions: `captureEnvironment`, `openManifest`, `closeManifest`
+- Functions: `openManifest`, `closeManifest`
+- Re-exports: `captureEnvironment`
 
 ---
 
@@ -6545,15 +6566,15 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/probe/serialize.ts` - Canonical JSON serialization and hashing for Product B probe artifacts.
+### `src/composition/probe/serialize.ts` - Probe-profile re-exports of the one canonical-JSON module.
 
-**Node.js Built-in Dependencies:**
-| Module | Import |
-|--------|--------|
-| `crypto` | `createHash` |
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../canonical-json.js` | `canonicalJson, sha256Hex, hashCanonical` | Re-export |
 
 **Exports:**
-- Functions: `canonicalJson`, `sha256Hex`, `hashCanonical`
+- Re-exports: `canonicalJson`, `sha256Hex`, `hashCanonical`
 
 ---
 
@@ -9061,7 +9082,7 @@ graph TD
         N33[audit-coverage]
         N34[axes]
         N35[axis-audit]
-        N36[...88 more]
+        N36[...89 more]
     end
 
     subgraph Core
@@ -9148,17 +9169,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 478 |
+| Total TypeScript Files | 479 |
 | Total Modules | 13 |
-| Total Lines of Code | 102949 |
-| Total Exports | 3886 |
-| Total Re-exports | 1921 |
+| Total Lines of Code | 103025 |
+| Total Exports | 3888 |
+| Total Re-exports | 1925 |
 | Total Classes | 61 |
-| Total Interfaces | 610 |
+| Total Interfaces | 612 |
 | Total Functions | 879 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
-| Type-only Imports | 587 |
+| Type-only Imports | 588 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

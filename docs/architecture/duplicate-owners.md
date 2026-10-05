@@ -19,3 +19,5 @@ The live list of a second owner for a concept the integration design assigned on
 `canonicalPrefactor(…) ?? 1` does not occur. `makeEvaluate` calls `canonicalGroupPrefactor`.
 
 `BRIDGE_EQUATIONS` is the projection of `registerBridge`. No hand-maintained catalog literal.
+
+`function canonicalJson` and `function captureEnvironment` are defined only in `src/composition/canonical-json.ts`.

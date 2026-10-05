@@ -7,21 +7,13 @@
 import type {
   DiscoveryBackendDescriptor,
   DiscoveryRunManifest,
-  EnvironmentFingerprint,
   SearchBudget,
   SearchStopReason,
 } from './types.js';
 import { DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
-import { hashCanonical } from './serialize.js';
+import { captureEnvironment, hashCanonical } from '../canonical-json.js';
 
-/** Capture host environment. @internal */
-export function captureEnvironment(): EnvironmentFingerprint {
-  return {
-    node: process.versions.node,
-    platform: process.platform,
-    arch: process.arch,
-  };
-}
+export { captureEnvironment } from '../canonical-json.js';
 
 export interface ManifestDraft {
   readonly runId: string;

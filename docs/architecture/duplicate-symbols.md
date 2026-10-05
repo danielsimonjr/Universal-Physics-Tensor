@@ -6,7 +6,7 @@ Names that more than one `src` file declares, after the dependency graph's `reEx
 
 ## Read this first
 
-The graph's raw export lists collide on 1124 names, because barrels re-export the same binding. After names marked `reExported` are removed, **16 names are still declared in more than one file**. Most of those 16 are a shim that assigns or re-exports a binding the lexer did not mark `reExported`. Four groups are real second definitions or a lexer false positive. The tool groups by name only. A group means "more than one file declares this name", not "the bodies differ".
+The graph's raw export lists collide on 1124 names, because barrels re-export the same binding. After names marked `reExported` are removed, **16 names are still declared in more than one file**. Most of those 16 are a shim that assigns or re-exports a binding the lexer did not mark `reExported`. Four groups are real second definitions or a lexer false positive. The tool groups by name only. A group means "more than one file declares this name", not "the bodies differ". The sentence that those four groups include `canonicalJson` and `captureEnvironment` is the record from before the JSON profiles. Those two names are now one module. A later walk also reports `getBridge` and `PHYSJS_COMMIT`, which this 16-name reading did not list.
 
 `src/` on this measurement is 471 TypeScript files (`docs:deps` and `git ls-files`).
 
@@ -25,19 +25,9 @@ Every module under `src/cli/commands/` that is a command exports `command`. Help
 
 Both are `{ L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }`. The same object literal is also a non-exported `const` in `src/composition/edges/catalog-tranche.ts:68`, `src/dimensional/bridge-check.ts:63`, `src/dimensional/friedmann-equation.ts:163`, `src/bridges/equations/be-19-quantum-bounce.ts:72`, and `src/bridges/equations/be-54-randall-sundrum-brane.ts:58`. The graph does not list those five, because they are not exported.
 
-### `canonicalJson` — 2 files. Different edge cases.
+### `canonicalJson` and `captureEnvironment`
 
-| File | Role |
-|---|---|
-| `src/cli/record.ts:94` | record/replay hashing. Hand-joined arrays. No `Date` case |
-| `src/composition/probe/serialize.ts` | probe artifact hashing. `Date` becomes an ISO string. An `undefined` array hole becomes `null` |
-
-### `captureEnvironment` — 2 files. Different schemas.
-
-| File | Role |
-|---|---|
-| `src/cli/record.ts:117` | UPT version, Node, parser, simplifier, peers, constant-table hashes |
-| `src/composition/probe/run-manifest.ts:18` | Node version, platform, architecture |
+Both names are defined in `src/composition/canonical-json.ts`. The probe files re-export them. The sentence that each name is a second definition, in `src/cli/record.ts` and under `src/composition/probe/`, is the record from before that module.
 
 ## Same binding, lexer did not mark it a re-export
 
@@ -72,6 +62,6 @@ These are one value reached through a second `export`. They are shims, recorded 
 | `src` TypeScript files | 471 | `dependency-graph.json` `metadata.totalFiles`, and `git ls-files` |
 | total exports | 3553 | `dependency-graph.json` `statistics.totalExports` |
 | names declared in more than one file, after `reExported` | 16 | walk of `dependency-graph.json` described above |
-| of which the bodies differ or the lexer mis-read a quote | 4 (`command`, `MASS_DENSITY`, `canonicalJson`, `captureEnvironment`) plus `BCS_GAP_RATIO` | source read |
+| of which the bodies differ or the lexer mis-read a quote | 4 (`command`, `MASS_DENSITY`, `canonicalJson`, `captureEnvironment`) plus `BCS_GAP_RATIO`. The sentence that includes `canonicalJson` and `captureEnvironment` is the record from before the JSON profiles | source read |
 
 `repo_map.py` did not produce this edition. A later `repo_map.py check` against the old 1025/1982 claims would be checking a schema this tree no longer writes.
