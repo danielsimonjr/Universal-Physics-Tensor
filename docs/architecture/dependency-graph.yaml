@@ -3,7 +3,7 @@ metadata:
   version: 6.0.0
   totalFiles: 480
   totalModules: 13
-  totalExports: 3744
+  totalExports: 3745
 entryPoints:
   - file: src/index.ts
     type: main
@@ -9902,6 +9902,7 @@ modules:
             - nearQuantityNames
             - rewriteInputKey
             - shareSynonyms
+            - SynonymDisagreementError
         - file: ../../composition/canonical-prefactors.js
           imports:
             - CANONICAL_GROUP_PREFACTORS
@@ -12007,6 +12008,9 @@ modules:
         - nearQuantityNames
         - shareSynonyms
         - collapseSynonymGovernors
+        - SynonymDisagreementError
+      classes:
+        - SynonymDisagreementError
       functions:
         - aliasesForTarget
         - rewriteInputKey
@@ -24376,9 +24380,9 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 480
   totalModules: 13
-  totalLinesOfCode: 102963
-  totalExports: 3744
-  totalClasses: 62
+  totalLinesOfCode: 103030
+  totalExports: 3745
+  totalClasses: 63
   totalInterfaces: 613
   totalFunctions: 880
   totalTypeGuards: 5

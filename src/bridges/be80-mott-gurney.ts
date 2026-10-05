@@ -18,8 +18,8 @@
  */
 export interface MottGurneyInputs {
   /**
-   * Permittivity of the solid, farads per metre. The key has no unit
-   * suffix: the evaluator takes the number in F/m.
+   * Permittivity of the solid, farads per metre. The evaluate key is `eps`.
+   * The declared unit is F/m.
    */
   readonly eps: number;
   /** Drift mobility, square metres per volt-second. */

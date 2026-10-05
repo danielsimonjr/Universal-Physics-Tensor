@@ -341,7 +341,9 @@ Flags:
         bound, and any other dimension is an error.
         A tagged quantity converts into that unit (GeV, bit, nat, J/K).
         magnetic-field and magnetic-flux-density are one vacuum B: a value
-        given under either name is available under the other.
+        given under either name is available under the other. The same
+        number under both spellings is one input. Two different numbers
+        are an error, and no frequency is recovered.
         e.g.  upt explain hawking-temperature mass=1.989e30
 Flags:
   --source=VALUE

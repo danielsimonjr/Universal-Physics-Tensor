@@ -176,12 +176,25 @@ export function shareSynonyms(
 }
 
 /**
+ * Thrown when one quantity is bound under two synonym spellings and the
+ * numbers differ. The formula is not run. The message names both spellings.
+ * @internal
+ */
+export class SynonymDisagreementError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SynonymDisagreementError';
+  }
+}
+
+/**
  * One name per synonym pair in a governing set.
  *
  * Copying the value onto the other name lets either spelling evaluate.
  * Both names are the same quantity, so Buckingham must see one of them.
- * The name that is a source of the target stays. Two different values
- * stay two inputs.
+ * The name that is a source of the target stays. The same number under
+ * both spellings is that one input. Two different numbers are
+ * {@link SynonymDisagreementError}: the report does not pick one.
  */
 export function collapseSynonymGovernors(
   names: readonly string[],
@@ -196,7 +209,12 @@ export function collapseSynonymGovernors(
       const nums = present.map((n) => values[n]);
       if (nums.some((n) => n === undefined)) continue;
       const first = nums[0]!;
-      if (nums.some((n) => n !== first)) continue;
+      if (nums.some((n) => n !== first)) {
+        const shown = present.map((n) => `${n}=${values[n]}`).join(', ');
+        throw new SynonymDisagreementError(
+          `${present.join(' and ')} are one quantity and disagree (${shown})`,
+        );
+      }
     }
     const sources = present.filter((n) => sourceNames.has(n));
     const keep = sources[0] ?? present[0]!;

@@ -27,6 +27,7 @@ import {
   nearQuantityNames,
   rewriteInputKey,
   shareSynonyms,
+  SynonymDisagreementError,
 } from '../../composition/aliases.js';
 import { CANONICAL_GROUP_PREFACTORS } from '../../composition/canonical-prefactors.js';
 import { formatQuantity } from '../../composition/explain.js';
@@ -60,7 +61,9 @@ const HELP = `upt explain <quantity> [name=value | name] ...
         bound, and any other dimension is an error.
         A tagged quantity converts into that unit (GeV, bit, nat, J/K).
         magnetic-field and magnetic-flux-density are one vacuum B: a value
-        given under either name is available under the other.
+        given under either name is available under the other. The same
+        number under both spellings is one input. Two different numbers
+        are an error, and no frequency is recovered.
         e.g.  upt explain hawking-temperature mass=1.989e30`;
 
 /**
@@ -299,7 +302,9 @@ async function run(ctx: CommandCtx): Promise<number> {
   try {
     x = api.explainQuantity(graph, resolvedTarget, known);
   } catch (e) {
-    if (e instanceof CarrierSignError) throw new CliError(`upt explain: ${e.message}`);
+    if (e instanceof CarrierSignError || e instanceof SynonymDisagreementError) {
+      throw new CliError(`upt explain: ${e.message}`);
+    }
     throw e;
   }
   const partner = source === 'both' ? restatementPartner(api, resolvedTarget) : null;

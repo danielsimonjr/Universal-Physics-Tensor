@@ -225,11 +225,44 @@ function traceLeaves(
   return [...leaves].sort();
 }
 
-function formatMonomial(m: Readonly<Record<string, number>>): string {
+/** An even integer power is already an even function of a signed input. */
+function evenIntegerPower(exp: number): boolean {
+  return Number.isInteger(exp) && Math.abs(exp) % 2 === 0;
+}
+
+/**
+ * Buckingham's exponent of an even input is the exponent of its magnitude.
+ * `√(q²)` and `|q|` come out as `q^1` and `q^-1`. Those odd powers are
+ * printed as `|q|`, so a dimensionless constant can produce the positive
+ * value. An even integer power (`q^2`, `q^-2`) is already even.
+ */
+function formatMonomial(m: Readonly<Record<string, number>>, even?: ReadonlySet<string>): string {
   const parts = Object.entries(m)
     .filter(([, e]) => e !== 0)
-    .map(([n, e]) => (e === 1 ? n : `${n}^${e}`));
+    .map(([n, e]) => {
+      const token = even?.has(n) === true && !evenIntegerPower(e) ? `|${n}|` : n;
+      return e === 1 ? token : `${token}^${e}`;
+    });
   return parts.join('·') || '1';
+}
+
+/**
+ * Names every fired edge treats as a magnitude. A name that is signed on
+ * any fired edge stays signed: one odd formula does not borrow another's
+ * absolute value.
+ */
+function magnitudeNames(edges: readonly BridgeEdge[]): ReadonlySet<string> {
+  const even = new Set<string>();
+  const signed = new Set<string>();
+  for (const edge of edges) {
+    const marked = new Set(edge.evenInputs ?? []);
+    for (const source of edge.sources) {
+      if (marked.has(source.name)) even.add(source.name);
+      else signed.add(source.name);
+    }
+  }
+  for (const name of signed) even.delete(name);
+  return even;
 }
 
 function factorsOn(edge: BridgeEdge | undefined): Readonly<Record<string, number>> {
@@ -278,6 +311,7 @@ function buildSummary(
   formulaIsSum: boolean,
   encodedMatchesMonomial: boolean,
   unsetSentence: string | undefined,
+  even: ReadonlySet<string>,
 ): string {
   const known = knownNames.length
     ? `{${knownNames.join(', ')}}`
@@ -350,7 +384,7 @@ function buildSummary(
   } else if (dimensional?.determined && dimensional.monomial && !encodedMatchesMonomial) {
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
   } else if (dimensional?.determined && dimensional.monomial) {
-    s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial)}.`;
+    s += ` Dimensionally, ${known} fix it up to a dimensionless constant: ${target} ∝ ${formatMonomial(dimensional.monomial, even)}.`;
     if (unsetSentence !== undefined) s += ` ${unsetSentence}`;
   } else if (dimensional?.outsideGoverningSpan && knownNames.length) {
     s += ` Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.`;
@@ -467,7 +501,7 @@ export function explainQuantity(
         if (!sum && !missingCount && merged !== undefined && agrees) {
           dimensionalForm = {
             monomial: merged,
-            formula: `${target} ∝ ${formatMonomial(merged)}`,
+            formula: `${target} ∝ ${formatMonomial(merged, new Set(e?.evenInputs ?? []))}`,
           };
         }
       }
@@ -586,6 +620,7 @@ export function explainQuantity(
     formulaIsSum,
     encodedAgrees,
     unsetSentence,
+    magnitudeNames(firedEdges),
   );
 
   return {

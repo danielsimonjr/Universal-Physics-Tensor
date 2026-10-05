@@ -473,6 +473,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
   }
   const evaluateRaw = makeEvaluate(eq);
   const even = evenInputNames(eq.scalarAst);
+  const evenInputs = sources.filter((source) => even.has(source.name)).map((source) => source.name);
   const monomial = eq.dimensional.monomial;
   return {
     id: eq.id,
@@ -489,6 +490,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
       ? { coefficientUnset: true as const }
       : {}),
     ...(Object.keys(factors).length > 0 ? { formulaFactors: factors } : {}),
+    ...(evenInputs.length > 0 ? { evenInputs } : {}),
   };
 }
 

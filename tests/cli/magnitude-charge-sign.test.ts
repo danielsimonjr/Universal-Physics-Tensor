@@ -1,9 +1,10 @@
 /**
  * A frequency or a radius is a magnitude. The plasma frequency is even in
- * the carrier charge, and a gyroradius is a length. The reduced monomial
- * still carries charge to the first power, so a negative charge comes out
- * negative. A signed cyclotron frequency and a Hall coefficient stay signed.
- * Issues #388 and #389.
+ * the carrier charge, and a gyroradius is a length. Buckingham still writes
+ * the odd dimensional exponent. Explain prints that exponent as a magnitude,
+ * so the positive number sits beside `|charge|`. An even integer power stays
+ * bare. A signed cyclotron frequency and a Hall coefficient stay signed.
+ * Issues #388, #389, and #419.
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
@@ -75,6 +76,11 @@ describe('magnitudes stay positive when the carrier charge is negative', () => {
     const body = cap.lines.join('');
     expect(body).not.toMatch(/Recovered value: -/);
     expect(body).toMatch(/Recovered value: 56414\.6023118063/);
+    for (const line of body.match(/plasma-frequency ∝ [^\n]+/g) ?? []) {
+      expect(line, line).toContain('|charge|');
+      expect(line.replaceAll('|charge|', ''), line).not.toMatch(/charge/);
+    }
+    expect(body.match(/plasma-frequency ∝ /g)?.length).toBeGreaterThan(0);
 
     const larmor = { lines: [] as string[] };
     expect(
@@ -95,7 +101,42 @@ describe('magnitudes stay positive when the carrier charge is negative', () => {
         },
       ),
     ).toBe(0);
-    expect(larmor.lines.join('')).toMatch(/Recovered value: 0\.00000568563010356572/);
+    const larmorText = larmor.lines.join('');
+    expect(larmorText).toMatch(/Recovered value: 0\.00000568563010356572/);
+    for (const line of larmorText.match(/larmor-radius ∝ [^\n]+/g) ?? []) {
+      expect(line, line).toContain('|charge|^-1');
+      expect(line.replaceAll('|charge|', ''), line).not.toMatch(/charge/);
+    }
+    expect(larmorText.match(/larmor-radius ∝ /g)?.length).toBeGreaterThan(0);
+  });
+
+  it('prints an even integer power of charge bare', async () => {
+    const cap = { lines: [] as string[] };
+    expect(
+      await runCli(
+        [
+          'explain',
+          'electrical-resistivity',
+          `mass=${M_E_SI}`,
+          'carrier-density=1e28',
+          `charge=${-E_SI}`,
+          'relaxation-time=1e-14',
+          '--source=canonical',
+        ],
+        {
+          out: (s?: string) => cap.lines.push((s ?? '') + '\n'),
+          err: () => undefined,
+          write: (s: string) => cap.lines.push(s),
+        },
+      ),
+    ).toBe(0);
+    const text = cap.lines.join('');
+    expect(text).toMatch(/Recovered value: 3\.54869118854327e-7/);
+    for (const line of text.match(/electrical-resistivity ∝ [^\n]+/g) ?? []) {
+      expect(line, line).toContain('charge^-2');
+      expect(line, line).not.toContain('|charge|');
+    }
+    expect(text.match(/electrical-resistivity ∝ /g)?.length).toBeGreaterThan(0);
   });
 
   it('mobility and the Hall coefficient stay signed', () => {

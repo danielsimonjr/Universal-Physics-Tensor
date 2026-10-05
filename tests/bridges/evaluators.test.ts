@@ -65,6 +65,9 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_W_per_m_K$/, 'W/(m*K)'],
       [/_W_per_m2_K$/, 'W/(m^2*K)'],
       [/_W_per_m2$/, 'W/m^2'],
+      // Longer than `_m2`. A second moment is m^4; a bare area suffix is m^2.
+      [/_m4$/, 'm^4'],
+      [/_m2$/, 'm^2'],
       [/_m_s2$/, 'm/s^2'],
       [/_Pa_s$/, 'Pa*s'],
       [/_N_per_m$/, 'N/m'],
@@ -87,7 +90,10 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_yr$/, 'yr'],
       [/_Hz$/, 'Hz'],
       [/_C$/, 'C'],
+      [/_A$/, 'A'],
       [/_F$/, 'F'],
+      // The Mott–Gurney permittivity key does not carry a unit suffix. It is F/m.
+      [/^eps$/, 'F/m'],
       [/_s$/, 's'],
     ];
     const declared = [
