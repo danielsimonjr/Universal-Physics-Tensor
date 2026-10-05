@@ -651,8 +651,10 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
     const { text } = await run(['discover', '--source=canonical']);
     const row = text.slice(text.indexOf('    a ≟ classical-electron-radius'));
     const r = row.slice(0, row.slice(1).search(/\n {4}\S/) + 1);
-    expect(r).toMatch(/^ {4}a ≟ classical-electron-radius .*\n {8}unlocks: a, perihelion-precession\n/);
-    expect(r).toMatch(/\[readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none \(abstained: magnitude, axis, consequence\) · mechanism: none · data: none\]/);
+    // Perihelion also needs one_minus_e_sq, so identifying the semi-major axis
+    // with a length does not unlock the precession.
+    expect(r).toMatch(/^ {4}a ≟ classical-electron-radius .*\n {8}unlocks: a\n/);
+    expect(r).toMatch(/\[readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none \(abstained: magnitude, axis, consequence\) · mechanism: none · data: none\]/);
     expect(r).toMatch(/\[to make it testable — premise: a and classical-electron-radius are the same physical quantity, not only both \[length\]/);
     expect(r).toMatch(/needs a representative magnitude for: a\b/);
     expect(r).toMatch(/observation: measure a and classical-electron-radius in one system that defines both/);

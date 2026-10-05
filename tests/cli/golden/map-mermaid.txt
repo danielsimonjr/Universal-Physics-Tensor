@@ -243,6 +243,8 @@ flowchart LR
     q_mass --> j_CE_perihelion_precession
     q_a(["a"]):::qty
     q_a --> j_CE_perihelion_precession
+    q_one_minus_e_sq(["one_minus_e_sq"]):::qty
+    q_one_minus_e_sq --> j_CE_perihelion_precession
     q_perihelion_precession(["perihelion-precession"]):::qty
     j_CE_perihelion_precession --> q_perihelion_precession
     j_CE_newton_gravitation["Newton's law of gravitation"]:::law
@@ -519,6 +521,8 @@ flowchart LR
     q_temperature --> j_CE_ideal_gas
     q_V(["V"]):::qty
     q_V --> j_CE_ideal_gas
+    q_N(["N"]):::qty
+    q_N --> j_CE_ideal_gas
     j_CE_ideal_gas --> q_pressure
     j_CE_wien["Wien's displacement law"]:::law
     q_temperature --> j_CE_wien
