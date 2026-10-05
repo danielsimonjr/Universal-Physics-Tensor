@@ -19,6 +19,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
 import { dump as dumpYaml } from 'js-yaml';
 import { basename, dirname, join, relative, resolve as resolvePathAbs } from 'path';
+import { renderDuplicateOwners } from '../duplicate-owner-scans.js';
 import { isTracked, trackedFiles } from './tracked-files.js';
 import {
   buildApiSurfaceReport,
@@ -2076,16 +2077,7 @@ async function main(): Promise<void> {
   // is registered, the committed file has an empty hit list, and docs-fresh
   // fails if a later scan is not regenerated into this file.
   const duplicateOwnerPath = join(OUTPUT_DIR, 'duplicate-owners.md');
-  const duplicateOwnerReport = '<!-- repo-map:no-verification -->\n'
-    + '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n'
-    + '     tools/create-dependency-graph/create-dependency-graph.ts, then run\n'
-    + '     `npm run docs:deps`. Hand edits are caught by the docs-fresh job. -->\n\n'
-    + '# Duplicate owners\n\n'
-    + 'The live list of a second owner for a concept the integration design assigned once.\n'
-    + '`docs/architecture/INTEGRATION_MAP.md` points here and does not copy these rows.\n\n'
-    + '## Hits\n\n'
-    + 'No scan is registered yet. Each phase that creates a single owner adds its scan here.\n';
-  writeFileSync(duplicateOwnerPath, duplicateOwnerReport);
+  writeFileSync(duplicateOwnerPath, renderDuplicateOwners(ROOT_DIR));
   console.log('Written: docs/architecture/duplicate-owners.md');
 
   // Write full unused analysis to a separate file

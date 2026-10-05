@@ -11,7 +11,7 @@
  * @module bridges/evaluator-inputs
  */
 import { unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
-import { bindingInUnit } from '../numerical/binding-value.js';
+import { readNamedBinding, type NamedBindingSibling } from '../numerical/binding-value.js';
 import type { EvaluatorParameter } from './evaluators.js';
 
 /** One input as it was given and as the evaluator receives it. @internal */
@@ -40,11 +40,18 @@ const splitArg = (a: string): [string, string] => {
   return [a.slice(0, eq), a.slice(eq + 1)];
 };
 
-function convert(p: EvaluatorParameter, raw: string, reading: TemperatureReading): { value: number; note?: string } {
-  const { value, given } = bindingInUnit(raw, p.unit, reading);
-  if (given === '') return { value };
-  const offset = /degC|°C/.test(given) && reading === 'absolute' ? ' (absolute: + 273.15)' : /degC|°C/.test(given) ? ' (a difference: no offset)' : '';
-  return { value, note: `${raw.trim()} → ${show(value)} ${p.unit || '(dimensionless)'}${offset}${unitAside(given)}` };
+function convert(
+  p: EvaluatorParameter,
+  raw: string,
+  reading: TemperatureReading,
+  siblings: readonly NamedBindingSibling[],
+): { value: number; note?: string } {
+  const read = readNamedBinding(p.key, raw, { reading, siblings, declaredUnit: p.unit });
+  if (!read.dimensioned) return { value: read.value };
+  const offset = /degC|°C/.test(raw) && reading === 'absolute' ? ' (absolute: + 273.15)' : /degC|°C/.test(raw) ? ' (a difference: no offset)' : '';
+  const base = `${raw.trim()} → ${show(read.value)} ${p.unit || '(dimensionless)'}${offset}${unitAside(raw)}`;
+  const temperature = read.notes.find((note) => note.includes('k_B T'));
+  return { value: read.value, note: temperature === undefined ? base : `${base}. ${temperature}` };
 }
 
 /**
@@ -59,6 +66,10 @@ export function resolveEvaluatorInputs(
   const inputs: Record<string, number> = {};
   const resolved: ResolvedInput[] = [];
   const known = parameters.flatMap((p) => [p.key, ...(p.alternates ?? []).map((a) => a.key)]);
+  const siblings: NamedBindingSibling[] = args.map((arg) => {
+    const [key, raw] = splitArg(arg);
+    return { name: key, raw };
+  });
   for (const arg of args) {
     const [key, raw] = splitArg(arg);
     const direct = parameters.find((p) => p.key === key);
@@ -70,7 +81,7 @@ export function resolveEvaluatorInputs(
       const throughAlternate = direct === undefined || earlier.via !== undefined;
       throw new UnitError(`'${p.key}' is given twice${throughAlternate ? ' (once through an alternate)' : ''}`);
     }
-    const c = convert(p, raw, 'absolute');
+    const c = convert(p, raw, 'absolute', siblings);
     const alt = direct === undefined ? p.alternates!.find((a) => a.key === key)! : undefined;
     const value = alt === undefined ? c.value : c.value * alt.toKey;
     inputs[p.key] = value;
