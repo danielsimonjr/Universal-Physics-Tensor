@@ -19,7 +19,7 @@ import { C_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateRadiationPressure}.
- * @public
+ * @internal
  */
 export interface RadiationPressureInputs {
   /** Beam intensity, W/m². The magnitude of the time-averaged Poynting flux. */
@@ -32,7 +32,7 @@ export interface RadiationPressureInputs {
 
 /**
  * Result of {@link evaluateRadiationPressure}.
- * @public
+ * @internal
  */
 export interface RadiationPressureResult {
   readonly I_W_per_m2: number;
@@ -45,7 +45,7 @@ export interface RadiationPressureResult {
 /**
  * Evaluate `P_n = (I/c) (1+R) cos²θ`.
  *
- * @public
+ * @internal
  */
 export function evaluateRadiationPressure({
   I_W_per_m2,

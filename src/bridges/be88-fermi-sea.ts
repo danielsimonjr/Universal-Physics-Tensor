@@ -18,7 +18,7 @@ import { HBAR_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateFermiSea}.
- * @public
+ * @internal
  */
 export interface FermiSeaInputs {
   /** Number density of electrons, per cubic metre. */
@@ -29,7 +29,7 @@ export interface FermiSeaInputs {
 
 /**
  * Result of {@link evaluateFermiSea}.
- * @public
+ * @internal
  */
 export interface FermiSeaResult {
   readonly n_per_m3: number;
@@ -45,7 +45,7 @@ export interface FermiSeaResult {
 /**
  * Evaluate the two-spin Fermi sphere and the isotropic parabola at k_F.
  *
- * @public
+ * @internal
  */
 export function evaluateFermiSea({ n_per_m3, m_kg }: FermiSeaInputs): FermiSeaResult {
   if (!Number.isFinite(n_per_m3) || n_per_m3 <= 0) {

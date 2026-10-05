@@ -17,7 +17,7 @@ import { E_SI, K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateShockleyDiode}.
- * @public
+ * @internal
  */
 export interface ShockleyDiodeInputs {
   /** Saturation current, amperes. */
@@ -30,7 +30,7 @@ export interface ShockleyDiodeInputs {
 
 /**
  * Result of {@link evaluateShockleyDiode}.
- * @public
+ * @internal
  */
 export interface ShockleyDiodeResult {
   readonly I_s_A: number;
@@ -45,7 +45,7 @@ export interface ShockleyDiodeResult {
  *
  * `e` is the elementary charge. Euler's number is `exp`, not a bare `e`.
  *
- * @public
+ * @internal
  */
 export function evaluateShockleyDiode({ I_s_A, V_volts, T_K }: ShockleyDiodeInputs): ShockleyDiodeResult {
   if (!Number.isFinite(I_s_A)) {

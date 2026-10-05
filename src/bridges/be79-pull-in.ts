@@ -14,7 +14,7 @@ import { EPS0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Inputs for {@link evaluatePullIn}.
- * @public
+ * @internal
  */
 export interface PullInInputs {
   /** Linear spring stiffness, newtons per metre. */
@@ -27,7 +27,7 @@ export interface PullInInputs {
 
 /**
  * Result of {@link evaluatePullIn}.
- * @public
+ * @internal
  */
 export interface PullInResult {
   readonly k_N_per_m: number;
@@ -43,7 +43,7 @@ export interface PullInResult {
  * `ε0` is the vacuum permittivity. The gap at the fold is `2 g0/3`,
  * not `g0/2`. Fringing is not in the theorem.
  *
- * @public
+ * @internal
  */
 export function evaluatePullIn({ k_N_per_m, g0_m, A_m2 }: PullInInputs): PullInResult {
   if (!Number.isFinite(k_N_per_m) || k_N_per_m <= 0) {

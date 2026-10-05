@@ -40,11 +40,9 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'evaluateNumerical', 'evaluateNumericalRaw', 'evaluateMetricInverse',
   'getActiveEngine', 'setActiveEngine',
   'NumericalBackendError',
-  // v0.4.0 bridge implementations
-  'evaluateGravitationalLensing',
-  'evaluatePerihelionPrecession',
-  // v0.14 bridge-equations facade
-  'BridgeEquations',
+  // 6.0.0 — one evaluator
+  'evaluateRelation',
+  'CoefficientUnsetError',
   // v0.14 G-9 increment 2 — geometrized boundary adapters
   'toGeometrized',
   'fromGeometrized',
@@ -121,18 +119,6 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'be74Edge', 'be75Edge', 'be76Edge',
   'be77Edge', 'be78Edge', 'be79Edge', 'be80Edge', 'be81Edge', 'be82Edge',
   'be83Edge', 'be84Edge', 'be85Edge', 'be86Edge', 'be87Edge',
-  'evaluateFastMagnetosonic', 'evaluateEinsteinRelation', 'evaluateClapeyron',
-  'evaluateGravitationalRedshift', 'evaluateKelvinPeltier',
-  'evaluateMagneticPressure', 'evaluateLondonPenetration', 'evaluatePlasmaBeta',
-  'evaluateHagenPoiseuille', 'evaluateEulerBuckling', 'evaluatePullIn',
-  'evaluateMottGurney', 'evaluateChildLangmuir', 'evaluateShockleyDiode',
-  'evaluateThomsonCoefficient', 'evaluateFourPointSheet', 'evaluateShotNoise',
-  'evaluateReynoldsAnalogy', 'evaluateCapacitorNoise',
-  'evaluateFermiSea', 'evaluateDebyeCutoff', 'evaluateDebyeHeat', 'evaluateEinsteinSolid',
-  'evaluateSommerfeldHeat', 'evaluateCurieWeiss', 'evaluatePauliParamagnetism',
-  'evaluateGinzburgLandau', 'evaluateUpperCritical', 'evaluateAmbegaokarBaratoff',
-  'evaluateBcsJump', 'evaluateMassAction', 'evaluateLyddaneSachsTeller',
-  'evaluateBktJump', 'evaluateLandauerConductance',
   'evaluateBohmSheath', 'evaluateIonAcoustic', 'evaluateUpperHybrid', 'evaluateColdPlasmaCutoff',
   'evaluateLowerHybrid', 'evaluateObliqueMagnetosonic', 'evaluateBennettPinch', 'evaluateLossCone',
   'evaluateGradBDrift', 'evaluateExBDrift', 'evaluateLandauDamping', 'evaluateDebyeSphere',
@@ -214,6 +200,83 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'atlas',
 ].sort();
 
+const REMOVED_IN_6 = [
+  'BRIDGE_EVALUATORS',
+  'evaluateBridge',
+  'BridgeEquations',
+  'evaluateGravitationalLensing',
+  'evaluatePerihelionPrecession',
+  'evaluateQuantumHall',
+  'evaluateCasimir',
+  'evaluateUnruh',
+  'evaluateJohnsonNyquist',
+  'evaluateACJosephson',
+  'evaluateFractionalQH',
+  'evaluateWiedemannFranz',
+  'evaluateBCSGap',
+  'evaluateChandrasekharMass',
+  'evaluateEddingtonLuminosity',
+  'evaluateJeansMass',
+  'evaluateRadiationPressure',
+  'evaluateAlfvenSpeed',
+  'evaluateTolmanEhrenfest',
+  'evaluateFastMagnetosonic',
+  'evaluateEinsteinRelation',
+  'evaluateClapeyron',
+  'evaluateGravitationalRedshift',
+  'evaluateKelvinPeltier',
+  'evaluateMagneticPressure',
+  'evaluateLondonPenetration',
+  'evaluatePlasmaBeta',
+  'evaluateHagenPoiseuille',
+  'evaluateEulerBuckling',
+  'evaluatePullIn',
+  'evaluateMottGurney',
+  'evaluateChildLangmuir',
+  'evaluateShockleyDiode',
+  'evaluateThomsonCoefficient',
+  'evaluateFourPointSheet',
+  'evaluateShotNoise',
+  'evaluateReynoldsAnalogy',
+  'evaluateCapacitorNoise',
+  'evaluateFermiSea',
+  'evaluateDebyeCutoff',
+  'evaluateDebyeHeat',
+  'evaluateEinsteinSolid',
+  'evaluateSommerfeldHeat',
+  'evaluateCurieWeiss',
+  'evaluatePauliParamagnetism',
+  'evaluateGinzburgLandau',
+  'evaluateUpperCritical',
+  'evaluateAmbegaokarBaratoff',
+  'evaluateBcsJump',
+  'evaluateMassAction',
+  'evaluateLyddaneSachsTeller',
+  'evaluateBktJump',
+  'evaluateLandauerConductance',
+];
+
+describe('Public API stability — 6.0.0 surface', () => {
+  it('removes the per-bridge evaluators and exports evaluateRelation', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { fileURLToPath } = await import('node:url');
+    const indexSrc = readFileSync(fileURLToPath(new URL('../../src/index.ts', import.meta.url)), 'utf8');
+    for (const name of REMOVED_IN_6) {
+      expect(name in root, name).toBe(false);
+      expect(indexSrc, name).not.toContain(name);
+    }
+    expect('evaluateRelation' in root).toBe(true);
+    expect('CoefficientUnsetError' in root).toBe(true);
+    expect(indexSrc).toContain('export type { Evaluation }');
+    expect('VON_KLITZING_SI' in root).toBe(true);
+    expect('CarrierSignError' in root).toBe(true);
+    expect('evaluateBohmSheath' in root).toBe(true);
+    for (const name of REMOVED_IN_6.filter((n) => n.startsWith('evaluate') && n !== 'evaluateBridge')) {
+      expect(indexSrc, `${name}Inputs`).not.toContain(`${name.replace(/^evaluate/, '')}Inputs`);
+    }
+  });
+});
+
 describe('Public API stability — v0.4.0 surface', () => {
   it('runtime exports match the v0.4.0 snapshot', () => {
     const actual = Object.keys(root).sort();
@@ -278,9 +341,8 @@ const ALL_TYPE_EXPORTS = [
   // Bridge catalog types
   'BridgeEquationEntry', 'BridgeEquationStatus', 'BridgeIssueSeverity',
   'BridgeIssueFixable', 'KnownIssue',
-  // Bridge input/result types
-  'GravitationalLensingInputs', 'GravitationalLensingResult',
-  'PerihelionPrecessionInputs', 'PerihelionPrecessionResult',
+  // 6.0.0 evaluation
+  'Evaluation',
   // Geodesic types
   'GeodesicIntegratorInputs', 'GeodesicIntegratorResult',
   // Dimensional types

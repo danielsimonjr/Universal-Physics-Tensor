@@ -17,7 +17,7 @@
 
 /**
  * Inputs for {@link evaluateBcsJump}.
- * @public
+ * @internal
  */
 export interface BcsJumpInputs {
   /** GL quartic coefficient ζ. Not a zeta-function value. */
@@ -26,7 +26,7 @@ export interface BcsJumpInputs {
 
 /**
  * Result of {@link evaluateBcsJump}.
- * @public
+ * @internal
  */
 export interface BcsJumpResult {
   readonly zeta: number;
@@ -37,7 +37,7 @@ export interface BcsJumpResult {
 /**
  * Evaluate ΔC/C_n = 12/(7 ζ). ζ is supplied, not summed.
  *
- * @public
+ * @internal
  */
 export function evaluateBcsJump({ zeta }: BcsJumpInputs): BcsJumpResult {
   if (!Number.isFinite(zeta) || zeta === 0) {

@@ -32,7 +32,7 @@ import { C_SI as c_SI, G_SI } from '../core/constants.js';
 /**
  * Inputs to `evaluatePerihelionPrecession` (BE-52).
  *
- * @public
+ * @internal
  */
 export interface PerihelionPrecessionInputs {
   /** Central mass in kilograms (e.g. solar mass 1.989e30 kg). */
@@ -48,7 +48,7 @@ export interface PerihelionPrecessionInputs {
 /**
  * Result of `evaluatePerihelionPrecession` (BE-52).
  *
- * @public
+ * @internal
  */
 export interface PerihelionPrecessionResult {
   /** GR perihelion advance per orbit in radians: Δφ = 6πGM/(a(1−e²)c²). */
@@ -89,7 +89,7 @@ export interface PerihelionPrecessionResult {
  *   - `M_kg`, `a_m`, `e` — input echoes (same units as above).
  * @throws {RangeError} if `a_m ≤ 0`, `T_yr ≤ 0`, or `e` is outside [0, 1).
  *
- * @public
+ * @internal
  */
 export function evaluatePerihelionPrecession(
   inputs: PerihelionPrecessionInputs,

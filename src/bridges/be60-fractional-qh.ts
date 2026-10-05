@@ -16,12 +16,12 @@
 import { H_SI, E_SI } from '../core/constants.js';
 import { VON_KLITZING_SI } from './be55-quantum-hall.js';
 
-/** @public */
+/** @internal */
 export interface FractionalQHInputs {
   /** Filling fraction ν = p/q (e.g. 1/3). */
   readonly nu: number;
 }
-/** @public */
+/** @internal */
 export interface FractionalQHResult {
   readonly nu: number;
   /** Fractional Hall conductance σ_xy = ν·e²/h (siemens). */
@@ -33,7 +33,7 @@ export interface FractionalQHResult {
 /**
  * Evaluate the fractional-QH Hall conductance/resistance at filling ν.
  *
- * @public
+ * @internal
  */
 export function evaluateFractionalQH({ nu }: FractionalQHInputs): FractionalQHResult {
   if (!Number.isFinite(nu) || nu <= 0) {

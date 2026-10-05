@@ -17,7 +17,7 @@ import { K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateBktJump}.
- * @public
+ * @internal
  */
 export interface BktJumpInputs {
   /** Vortex stiffness, joules. */
@@ -26,7 +26,7 @@ export interface BktJumpInputs {
 
 /**
  * Result of {@link evaluateBktJump}.
- * @public
+ * @internal
  */
 export interface BktJumpResult {
   readonly J_J: number;
@@ -37,7 +37,7 @@ export interface BktJumpResult {
 /**
  * Evaluate T = π J / (2 k_B). Not the RG flow and not π J / k_B.
  *
- * @public
+ * @internal
  */
 export function evaluateBktJump({ J_J }: BktJumpInputs): BktJumpResult {
   if (!Number.isFinite(J_J) || J_J <= 0) {

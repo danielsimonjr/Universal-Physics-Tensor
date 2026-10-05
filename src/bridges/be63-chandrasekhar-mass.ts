@@ -19,12 +19,12 @@ import { HBAR_SI, C_SI, G_SI, M_SUN_SI, M_U_SI } from '../core/constants.js';
 /** Lane-Emden n=3 surface constant ω₃⁰ = −ξ²θ'(ξ)|_surface. @public */
 export const LANE_EMDEN_OMEGA3 = 2.01824;
 
-/** @public */
+/** @internal */
 export interface ChandrasekharInputs {
   /** Mean molecular weight per electron μ_e (2 for carbon/oxygen white dwarfs). */
   readonly mu_e: number;
 }
-/** @public */
+/** @internal */
 export interface ChandrasekharResult {
   readonly mu_e: number;
   /** Chandrasekhar mass (kg). */
@@ -36,7 +36,7 @@ export interface ChandrasekharResult {
 /**
  * Evaluate the Chandrasekhar mass for a mean molecular weight per electron.
  *
- * @public
+ * @internal
  */
 export function evaluateChandrasekharMass({ mu_e }: ChandrasekharInputs): ChandrasekharResult {
   if (!Number.isFinite(mu_e) || mu_e <= 0) {

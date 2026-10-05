@@ -23,7 +23,7 @@ export { M_PROTON_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateAlfvenSpeed}.
- * @public
+ * @internal
  */
 export interface AlfvenInputs {
   /** Magnetic flux density, tesla. */
@@ -34,7 +34,7 @@ export interface AlfvenInputs {
 
 /**
  * Result of {@link evaluateAlfvenSpeed}.
- * @public
+ * @internal
  */
 export interface AlfvenResult {
   readonly B_T: number;
@@ -60,7 +60,7 @@ export function alfvenProtonOnlyDensity(n_per_m3: number): number {
 /**
  * Evaluate `v_A = B / √(μ0 ρ)` with `ρ` the supplied total mass density.
  *
- * @public
+ * @internal
  */
 export function evaluateAlfvenSpeed({ B_T, rho_kg_per_m3 }: AlfvenInputs): AlfvenResult {
   if (!Number.isFinite(B_T) || B_T < 0) {

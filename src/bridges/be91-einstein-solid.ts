@@ -17,7 +17,7 @@ import { K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateEinsteinSolid}.
- * @public
+ * @internal
  */
 export interface EinsteinSolidInputs {
   /** Number of atoms. */
@@ -30,7 +30,7 @@ export interface EinsteinSolidInputs {
 
 /**
  * Result of {@link evaluateEinsteinSolid}.
- * @public
+ * @internal
  */
 export interface EinsteinSolidResult {
   readonly N: number;
@@ -43,7 +43,7 @@ export interface EinsteinSolidResult {
 /**
  * Evaluate the three-oscillator Einstein heat capacity.
  *
- * @public
+ * @internal
  */
 export function evaluateEinsteinSolid({ N, T_K, thetaE_K }: EinsteinSolidInputs): EinsteinSolidResult {
   if (!Number.isFinite(N) || N <= 0) {

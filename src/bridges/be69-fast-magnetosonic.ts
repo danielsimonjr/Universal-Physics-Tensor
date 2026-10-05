@@ -15,7 +15,7 @@ import { MU0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Inputs for {@link evaluateFastMagnetosonic}.
- * @public
+ * @internal
  */
 export interface FastMagnetosonicInputs {
   /** Sound speed, m/s. Zero is the Alfvén number of this polarization. */
@@ -28,7 +28,7 @@ export interface FastMagnetosonicInputs {
 
 /**
  * Result of {@link evaluateFastMagnetosonic}.
- * @public
+ * @internal
  */
 export interface FastMagnetosonicResult {
   readonly cs_m_per_s: number;
@@ -41,7 +41,7 @@ export interface FastMagnetosonicResult {
 /**
  * Evaluate `√(c_s² + B²/(μ0 ρ))`.
  *
- * @public
+ * @internal
  */
 export function evaluateFastMagnetosonic({
   cs_m_per_s,

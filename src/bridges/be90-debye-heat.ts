@@ -17,7 +17,7 @@ import { K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateDebyeHeat}.
- * @public
+ * @internal
  */
 export interface DebyeHeatInputs {
   /** Number of atoms. */
@@ -30,7 +30,7 @@ export interface DebyeHeatInputs {
 
 /**
  * Result of {@link evaluateDebyeHeat}.
- * @public
+ * @internal
  */
 export interface DebyeHeatResult {
   readonly N: number;
@@ -43,7 +43,7 @@ export interface DebyeHeatResult {
 /**
  * Evaluate the low-temperature Debye heat capacity. π⁴/15 is assumed.
  *
- * @public
+ * @internal
  */
 export function evaluateDebyeHeat({ N, T_K, thetaD_K }: DebyeHeatInputs): DebyeHeatResult {
   if (!Number.isFinite(N) || N <= 0) {

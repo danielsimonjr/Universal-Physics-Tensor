@@ -15,7 +15,7 @@ import { MU0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Inputs for {@link evaluatePauliParamagnetism}.
- * @public
+ * @internal
  */
 export interface PauliParamagnetismInputs {
   /** Electron number density, per cubic metre. */
@@ -28,7 +28,7 @@ export interface PauliParamagnetismInputs {
 
 /**
  * Result of {@link evaluatePauliParamagnetism}.
- * @public
+ * @internal
  */
 export interface PauliParamagnetismResult {
   readonly n_per_m3: number;
@@ -41,7 +41,7 @@ export interface PauliParamagnetismResult {
 /**
  * Evaluate the √E Pauli susceptibility. Not χ_L = −χ_P/3.
  *
- * @public
+ * @internal
  */
 export function evaluatePauliParamagnetism({
   n_per_m3,

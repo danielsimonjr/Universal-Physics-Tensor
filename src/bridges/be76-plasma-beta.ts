@@ -16,7 +16,7 @@ import { K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluatePlasmaBeta}.
- * @public
+ * @internal
  */
 export interface PlasmaBetaInputs {
   /** Number density, m⁻³. */
@@ -31,7 +31,7 @@ export interface PlasmaBetaInputs {
 
 /**
  * Result of {@link evaluatePlasmaBeta}.
- * @public
+ * @internal
  */
 export interface PlasmaBetaResult {
   readonly n_per_m3: number;
@@ -44,7 +44,7 @@ export interface PlasmaBetaResult {
 /**
  * Evaluate `β = n k_B T / p_B`.
  *
- * @public
+ * @internal
  */
 export function evaluatePlasmaBeta({ n_per_m3, T_K, p_B_Pa }: PlasmaBetaInputs): PlasmaBetaResult {
   if (!Number.isFinite(n_per_m3)) {

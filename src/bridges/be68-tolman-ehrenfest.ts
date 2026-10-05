@@ -16,7 +16,7 @@
 
 /**
  * Inputs for {@link evaluateTolmanEhrenfest}.
- * @public
+ * @internal
  */
 export interface TolmanInputs {
   /** Proper temperature, kelvin. */
@@ -27,7 +27,7 @@ export interface TolmanInputs {
 
 /**
  * Result of {@link evaluateTolmanEhrenfest}.
- * @public
+ * @internal
  */
 export interface TolmanResult {
   readonly T_K: number;
@@ -39,7 +39,7 @@ export interface TolmanResult {
 /**
  * Evaluate `T √(−g_00)`.
  *
- * @public
+ * @internal
  */
 export function evaluateTolmanEhrenfest({ T_K, g_00 }: TolmanInputs): TolmanResult {
   if (!Number.isFinite(T_K) || T_K <= 0) {

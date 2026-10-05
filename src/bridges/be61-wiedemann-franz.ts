@@ -21,14 +21,14 @@ import { K_B_SI, E_SI } from '../core/constants.js';
 /** Sommerfeld Lorenz number L₀ = (π²/3)(k_B/e)² (W·Ω·K⁻²). @public */
 export const LORENZ_NUMBER_SI = (Math.PI ** 2 / 3) * (K_B_SI / E_SI) ** 2;
 
-/** @public */
+/** @internal */
 export interface WiedemannFranzInputs {
   /** Electrical conductivity σ (S/m). */
   readonly sigma_S_per_m: number;
   /** Temperature T (K). */
   readonly T_K: number;
 }
-/** @public */
+/** @internal */
 export interface WiedemannFranzResult {
   readonly sigma_S_per_m: number;
   readonly T_K: number;
@@ -41,7 +41,7 @@ export interface WiedemannFranzResult {
 /**
  * Evaluate the Wiedemann-Franz thermal conductivity κ = L₀·σ·T.
  *
- * @public
+ * @internal
  */
 export function evaluateWiedemannFranz({
   sigma_S_per_m,

@@ -22,7 +22,7 @@
  */
 import { K_B_SI } from '../core/constants.js';
 
-/** Inputs for the Johnson-Nyquist voltage-noise PSD. @public */
+/** Inputs for the Johnson-Nyquist voltage-noise PSD. @internal */
 export interface JohnsonNyquistInputs {
   /** Temperature T (K), ≥ 0. */
   readonly T_K: number;
@@ -30,7 +30,7 @@ export interface JohnsonNyquistInputs {
   readonly R_ohm: number;
 }
 
-/** Result of evaluating the Johnson-Nyquist noise. @public */
+/** Result of evaluating the Johnson-Nyquist noise. @internal */
 export interface JohnsonNyquistResult {
   readonly T_K: number;
   readonly R_ohm: number;
@@ -42,7 +42,7 @@ export interface JohnsonNyquistResult {
  * Evaluate the one-sided Johnson-Nyquist voltage-noise PSD for a resistor R at
  * temperature T.
  *
- * @public
+ * @internal
  */
 export function evaluateJohnsonNyquist({
   T_K,

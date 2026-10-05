@@ -281,7 +281,7 @@ Flags:
         Set ħ = c = G = 1 when reading values.
 
   upt evaluate <be-NN | case-id> key=value[unit] ...
-        Numerically evaluate a closed-form / spacetime bridge (BE-51/52/55..125),
+        Numerically evaluate a closed-form / spacetime bridge (BE-16/42/51/52/55..125),
         or an applied case: a whole measurement problem with its parent and
         scalar equations, observable, conditions, regime checks and a route
         to a measurement comparison. A case whose regime check fails prints

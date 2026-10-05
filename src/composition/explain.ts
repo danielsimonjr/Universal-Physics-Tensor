@@ -108,6 +108,12 @@ export interface QuantityExplanation {
   readonly consistency?: RetrodictionResult;
   /** Agreed recovered value (consistent or single), when values supplied. */
   readonly recoveredValue?: number;
+  /**
+   * Where the numeric factor came from. `unset` is not the same as a
+   * missing `recoveredValue`: the inputs were read and the factor has
+   * no source. `group` means a bound dimensionless group supplied it.
+   */
+  readonly coefficient?: 'sourced' | 'group' | 'unset';
   /** Whether the KNOWN set dimensionally fixes the target (Buckingham-π);
    *  absent when the target has no resolvable dimension. */
   readonly dimensional?: DimensionalDeterminationResult;
@@ -560,6 +566,15 @@ export function explainQuantity(
       : 'The factor is unset.' +
         (UNSET_FACTOR[unsetEdge.id] !== undefined ? ` ${UNSET_FACTOR[unsetEdge.id]}` : '');
 
+  const coefficient: QuantityExplanation['coefficient'] =
+    unsetEdge !== undefined && !groupBound
+      ? 'unset'
+      : groupBound
+        ? 'group'
+        : recoveredValue !== undefined
+          ? 'sourced'
+          : undefined;
+
   const summary = buildSummary(
     target,
     identifiability,
@@ -580,6 +595,7 @@ export function explainQuantity(
     derivations,
     ...(consistency ? { consistency } : {}),
     ...(recoveredValue !== undefined ? { recoveredValue } : {}),
+    ...(coefficient !== undefined ? { coefficient } : {}),
     ...(dimensional ? { dimensional } : {}),
     blockingFrontier: identifiability.blockingFrontier,
     summary,

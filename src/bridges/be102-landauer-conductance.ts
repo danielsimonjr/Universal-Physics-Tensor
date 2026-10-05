@@ -16,7 +16,7 @@ import { E_SI, H_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateLandauerConductance}.
- * @public
+ * @internal
  */
 export interface LandauerConductanceInputs {
   /** Sum of transmission eigenvalues. */
@@ -25,7 +25,7 @@ export interface LandauerConductanceInputs {
 
 /**
  * Result of {@link evaluateLandauerConductance}.
- * @public
+ * @internal
  */
 export interface LandauerConductanceResult {
   readonly sum_Tn: number;
@@ -36,7 +36,7 @@ export interface LandauerConductanceResult {
 /**
  * Evaluate the two-spin Landauer conductance. Not h/(e²) and not erasure.
  *
- * @public
+ * @internal
  */
 export function evaluateLandauerConductance({ sum_Tn }: LandauerConductanceInputs): LandauerConductanceResult {
   if (!Number.isFinite(sum_Tn)) {

@@ -17,7 +17,7 @@ import { EPS0_SI } from '../dimensional/formula-names.js';
 
 /**
  * Inputs for {@link evaluateChildLangmuir}.
- * @public
+ * @internal
  */
 export interface ChildLangmuirInputs {
   /** Particle mass, kilograms. */
@@ -30,7 +30,7 @@ export interface ChildLangmuirInputs {
 
 /**
  * Result of {@link evaluateChildLangmuir}.
- * @public
+ * @internal
  */
 export interface ChildLangmuirResult {
   readonly m_kg: number;
@@ -46,7 +46,7 @@ export interface ChildLangmuirResult {
  * `e` is `E_SI`, the elementary charge, not an input and not Euler's
  * number. `ε0` is the vacuum permittivity.
  *
- * @public
+ * @internal
  */
 export function evaluateChildLangmuir({ m_kg, V_volts, d_m }: ChildLangmuirInputs): ChildLangmuirResult {
   if (!Number.isFinite(m_kg) || m_kg <= 0) {

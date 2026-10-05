@@ -18,7 +18,7 @@ import { K_B_SI, G_SI } from '../core/constants.js';
 /** Unified atomic mass unit, kg. */
 const M_U_SI = 1.66053906660e-27;
 
-/** @public */
+/** @internal */
 export interface JeansInputs {
   /** Cloud temperature T (K). */
   readonly T_K: number;
@@ -27,7 +27,7 @@ export interface JeansInputs {
   /** Mean molecular weight μ (≈ 2.3 for molecular H₂/He clouds). */
   readonly mu: number;
 }
-/** @public */
+/** @internal */
 export interface JeansResult {
   readonly T_K: number;
   readonly rho_kg_per_m3: number;
@@ -39,7 +39,7 @@ export interface JeansResult {
 /**
  * Evaluate the Jeans mass for a cloud's temperature, density, and composition.
  *
- * @public
+ * @internal
  */
 export function evaluateJeansMass({ T_K, rho_kg_per_m3, mu }: JeansInputs): JeansResult {
   if (!Number.isFinite(T_K) || T_K <= 0) {

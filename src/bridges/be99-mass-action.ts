@@ -16,7 +16,7 @@ import { K_B_SI } from '../core/constants.js';
 
 /**
  * Inputs for {@link evaluateMassAction}.
- * @public
+ * @internal
  */
 export interface MassActionInputs {
   /** Conduction-band effective density of states, per cubic metre. */
@@ -31,7 +31,7 @@ export interface MassActionInputs {
 
 /**
  * Result of {@link evaluateMassAction}.
- * @public
+ * @internal
  */
 export interface MassActionResult {
   readonly N_c_per_m3: number;
@@ -45,7 +45,7 @@ export interface MassActionResult {
 /**
  * Evaluate the mass-action intrinsic density. The 2 in the exponent stays.
  *
- * @public
+ * @internal
  */
 export function evaluateMassAction({
   N_c_per_m3,

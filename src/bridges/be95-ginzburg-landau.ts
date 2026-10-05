@@ -20,7 +20,7 @@
 
 /**
  * Inputs for {@link evaluateGinzburgLandau}.
- * @public
+ * @internal
  */
 export interface GinzburgLandauInputs {
   /** Ginzburg–Landau parameter κ. */
@@ -29,7 +29,7 @@ export interface GinzburgLandauInputs {
 
 /**
  * Result of {@link evaluateGinzburgLandau}.
- * @public
+ * @internal
  */
 export interface GinzburgLandauResult {
   readonly kappa: number;
@@ -43,7 +43,7 @@ export interface GinzburgLandauResult {
 /**
  * Evaluate the trial-wall factor (1/κ² − 2). Not the energy of every minimizer.
  *
- * @public
+ * @internal
  */
 export function evaluateGinzburgLandau({ kappa }: GinzburgLandauInputs): GinzburgLandauResult {
   if (!Number.isFinite(kappa) || kappa <= 0) {

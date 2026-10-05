@@ -15,7 +15,7 @@
 
 /**
  * Inputs for {@link evaluateLyddaneSachsTeller}.
- * @public
+ * @internal
  */
 export interface LyddaneSachsTellerInputs {
   /** Static dielectric constant ε(0). */
@@ -26,7 +26,7 @@ export interface LyddaneSachsTellerInputs {
 
 /**
  * Result of {@link evaluateLyddaneSachsTeller}.
- * @public
+ * @internal
  */
 export interface LyddaneSachsTellerResult {
   readonly eps_static: number;
@@ -38,7 +38,7 @@ export interface LyddaneSachsTellerResult {
 /**
  * Evaluate ε(0)/ε(∞). That is the squared frequency ratio.
  *
- * @public
+ * @internal
  */
 export function evaluateLyddaneSachsTeller({
   eps_static,

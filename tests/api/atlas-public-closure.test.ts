@@ -205,3 +205,50 @@ describe('closure under type references', () => {
     expect(leaks).toEqual([]);
   });
 });
+
+/**
+ * Names a declaration introduces as types. `Dimension` in
+ * `{ dimension: Dimension }` counts. A word in a string literal does not.
+ */
+function typeNamesIn(declaration: string, self: string): string[] {
+  const code = declaration.replace(/'[^']*'|"[^"]*"/g, '');
+  const found = code.match(/\b[A-Z][A-Za-z0-9_]*\b/g) ?? [];
+  return [...new Set(found.filter((name) => name !== self))];
+}
+
+/** Type names exported from the package root. */
+function rootTypeNames(indexSrc: string): Set<string> {
+  const names = new Set<string>();
+  const code = stripComments(indexSrc);
+  for (const block of code.matchAll(/export\s+(?:type\s+)?\{([^}]+)\}/g)) {
+    for (const part of block[1]!.split(',')) {
+      const trimmed = part.trim();
+      if (trimmed === '') continue;
+      const name = trimmed.replace(/^type\s+/, '').split(/\s+as\s+/).pop()!.trim();
+      if (/^[A-Z]/.test(name)) names.add(name);
+    }
+  }
+  for (const match of code.matchAll(/export\s+(?:interface|type|class|enum)\s+([A-Z][A-Za-z0-9_]*)/g)) {
+    names.add(match[1]!);
+  }
+  return names;
+}
+
+describe('Evaluation is closed under type references', () => {
+  it('an untagged fixture is a leak', () => {
+    const fixture = 'export type Evaluation = { readonly dimension: SecretDim };';
+    const decl = declarationText(fixture, 'Evaluation');
+    const leaks = typeNamesIn(decl!, 'Evaluation').filter((name) => !new Set(['Dimension']).has(name));
+    expect(leaks).toContain('SecretDim');
+  });
+
+  it('Evaluation names only types the package root exports', () => {
+    const file = resolve(SRC, 'composition/evaluate-relation.ts');
+    const indexSrc = readFileSync(resolve(SRC, 'index.ts'), 'utf-8');
+    const decl = declarationText(readFileSync(file, 'utf-8'), 'Evaluation');
+    expect(decl, 'Evaluation declaration').toBeDefined();
+    const publicTypes = rootTypeNames(indexSrc);
+    const leaks = typeNamesIn(decl!, 'Evaluation').filter((name) => !publicTypes.has(name));
+    expect(leaks).toEqual([]);
+  });
+});

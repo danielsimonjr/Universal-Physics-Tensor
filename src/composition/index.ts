@@ -14,7 +14,9 @@ export type { Quantity, RegimeAttributes } from './quantity.js';
 export { regimesDiffer } from './quantity.js';
 
 export type { BridgeEdge, EdgeConfidence, ValidityDomain } from './edge.js';
+/** Edge evaluation and the errors it throws. An unset coefficient is `CoefficientUnsetError`. */
 export {
+  CoefficientUnsetError,
   CompositionAliasError,
   CompositionDimensionError,
   CompositionJunctionError,
@@ -206,6 +208,10 @@ export type {
   QuantityExplanation,
 } from './explain.js';
 export { explainQuantity } from './explain.js';
+/** The result of {@link evaluateRelation}. A value carries a dimension. An unset coefficient carries the formula. */
+export type { Evaluation } from './evaluate-relation.js';
+/** Evaluate a catalog id or a canonical id. A sourced number is `kind: 'value'`. An unset coefficient is `kind: 'unset'`. */
+export { evaluateRelation } from './evaluate-relation.js';
 
 export type { Observable, ComposeSymbolicOptions } from './compose-symbolic.js';
 export { composeSymbolic, SymbolicCompositionError } from './compose-symbolic.js';

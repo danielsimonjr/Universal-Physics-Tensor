@@ -22,13 +22,13 @@
  */
 import { HBAR_SI, C_SI, K_B_SI } from '../core/constants.js';
 
-/** Inputs for the Unruh temperature. @public */
+/** Inputs for the Unruh temperature. @internal */
 export interface UnruhInputs {
   /** Proper acceleration a (m/s²), ≥ 0. */
   readonly a_m_s2: number;
 }
 
-/** Result of evaluating the Unruh temperature. @public */
+/** Result of evaluating the Unruh temperature. @internal */
 export interface UnruhResult {
   readonly a_m_s2: number;
   /** Unruh temperature T = ℏa/(2π c k_B) (K). */
@@ -38,7 +38,7 @@ export interface UnruhResult {
 /**
  * Evaluate the Unruh temperature for proper acceleration a.
  *
- * @public
+ * @internal
  */
 export function evaluateUnruh({ a_m_s2 }: UnruhInputs): UnruhResult {
   if (!(a_m_s2 >= 0)) {

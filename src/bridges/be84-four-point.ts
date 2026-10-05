@@ -16,7 +16,7 @@
 
 /**
  * Inputs for {@link evaluateFourPointSheet}.
- * @public
+ * @internal
  */
 export interface FourPointSheetInputs {
   /** Inner-pair voltage, volts. */
@@ -27,7 +27,7 @@ export interface FourPointSheetInputs {
 
 /**
  * Result of {@link evaluateFourPointSheet}.
- * @public
+ * @internal
  */
 export interface FourPointSheetResult {
   readonly V_volts: number;
@@ -42,7 +42,7 @@ export interface FourPointSheetResult {
  * The radial 1/r field and linear superposition are hypotheses. The
  * spacing s cancels and is not an input. A sink at 4s is not this factor.
  *
- * @public
+ * @internal
  */
 export function evaluateFourPointSheet({ V_volts, I_A }: FourPointSheetInputs): FourPointSheetResult {
   if (!Number.isFinite(V_volts)) {
