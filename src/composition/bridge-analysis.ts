@@ -230,8 +230,8 @@ export function attemptDerivation(e: BridgeEdge): DerivationResult {
   if (e.symbolic !== undefined && formulaShape(e.symbolic) === 'dimensional-sum') {
     return { status: 'not-a-monomial' };
   }
-  // A missing coefficient is not the constant 1. The evaluator still
-  // multiplies by 1, and matching that 1 does not recover a prefactor.
+  // A missing coefficient is not the constant 1. The evaluator returns
+  // no number, so a ratio against that number is not a recovered prefactor.
   if (e.coefficientUnset === true) return { status: 'coefficient-unset' };
   const { target, sources } = asVars(e);
   const inputs = makeInputs(e);

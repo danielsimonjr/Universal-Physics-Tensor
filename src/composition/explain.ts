@@ -256,9 +256,9 @@ function monomialWithFactors(
 
 /** Textbook factors the unit monomial is not. Disclosure, not a formalRef. */
 const UNSET_FACTOR: Readonly<Record<string, string>> = {
-  'CE-fermi-energy': 'The standard factor (1/2)(3π²)^{2/3} is not this 1.',
-  'CE-fermi-velocity': 'The standard factor (3π²)^{1/3} is not this 1.',
-  'CE-debye-frequency': 'The standard factor (6π²)^{1/3} is not this 1.',
+  'CE-fermi-energy': 'The standard factor (1/2)(3π²)^{2/3} is unset.',
+  'CE-fermi-velocity': 'The standard factor (3π²)^{1/3} is unset.',
+  'CE-debye-frequency': 'The standard factor (6π²)^{1/3} is unset.',
 };
 
 function buildSummary(
@@ -557,7 +557,7 @@ export function explainQuantity(
   const unsetSentence =
     unsetEdge === undefined || groupBound
       ? undefined
-      : 'The printed value sets the dimensionless constant to 1. That 1 was not recovered.' +
+      : 'The factor is unset.' +
         (UNSET_FACTOR[unsetEdge.id] !== undefined ? ` ${UNSET_FACTOR[unsetEdge.id]}` : '');
 
   const summary = buildSummary(

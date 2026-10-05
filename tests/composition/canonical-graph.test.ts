@@ -88,8 +88,12 @@ describe('canonicalToEdges — adapter contract', () => {
     };
     const [edge] = canonicalToEdges([fake]);
     expect(edge.sources.map((s) => s.name).sort()).toEqual(['L', 'e']);
-    // e=0.5 (eccentricity) must flow through, not 1.602e-19 (charge).
-    expect(edge.evaluate({ e: 0.5, L: 2 })).toBeCloseTo(1, 9);
+    expect(edge.coefficientUnset).toBe(true);
+    expect(edge.evaluate({ e: 0.5, L: 2 })).toBeNaN();
+    // The same monomial, once the product is the recorded formula, uses 0.5 and not the elementary charge.
+    const [flow] = canonicalToEdges([{ ...fake, epistemicStatus: 'scalar-up-to-constant' }]);
+    expect(flow.evaluate({ e: 0.5, L: 2 })).toBeCloseTo(1, 9);
+    expect(flow.evaluate({ e: 0.5, L: 2 })).not.toBeCloseTo(1.602176634e-19 * 2, 6);
   });
 
   it('reduces Schwarzschild radius to a single physical source (mass)', () => {

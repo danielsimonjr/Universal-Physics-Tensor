@@ -15,3 +15,5 @@ The live list of a second owner for a concept the integration design assigned on
 `function editDistance` is defined only in `src/composition/aliases.ts`. `FORMULA_ALIASES`, `ENTRY_TARGET_ALIASES`, and `QUANTITY_SYNONYMS` are not separate tables.
 
 `assertSameCarrierSign` is called only from `applyCarrierSignPolicy`. The BE-70 domain does not call `sameCarrierSign`. No second owner.
+
+`canonicalPrefactor(…) ?? 1` does not occur. `makeEvaluate` calls `canonicalGroupPrefactor`.

@@ -34,12 +34,10 @@
  *     the number matches the catalog evaluator of the same law. A sourced
  *     prefactor from `canonicalPrefactor` multiplies as well. A dimensionless
  *     group in `CANONICAL_GROUP_PREFACTORS` multiplies only when that input is
- *     present (`√γ` for sound speed); absent, the leading factor stays 1 and
- *     the coefficient stays unset. That table is
+ *     present (`√γ` for sound speed). Absent, a dimensional entry with no
+ *     sourced prefactor returns no number. That table is
  *     outside this tree. `scalar-up-to-constant` is not a license to drop ½,
- *     2π, or 6π. An entry with no table row and no recorded coefficient — no
- *     AST, no restatement, a sum, an unresolved stub — still takes the leading
- *     factor as 1. A fully-quantitative dimensionless count (`N`,
+ *     2π, or 6π. A sourced 1 stays a value. A fully-quantitative dimensionless count (`N`,
  *     `1-e²`) is a source in `formulaFactors`, not a stub that drops the
  *     rest of the coefficient: the evaluator multiplies it, and a missing
  *     count does not return the count-free value. A `scalar-up-to-constant`
@@ -406,8 +404,9 @@ function evaluateAstMonomial(
  * once before this function: an input the AST is even in is an absolute
  * value, and a product odd in both charge and mobility rejects opposite
  * signs. This function does not do that again.
- * Returns NaN when the monomial is null and the AST is not that monomial
- * — `retrodict` then abstains.
+ * Returns NaN when the monomial is null and the AST is not that monomial,
+ * and when a dimensional coefficient is unset and its group is unbound.
+ * `retrodict` then abstains.
  */
 function makeEvaluate(
   eq: CanonicalEquation,
@@ -428,11 +427,19 @@ function makeEvaluate(
     if (cv !== null) constFactor *= Math.pow(cv, exp);
     else varExps.push([name, exp]);
   }
-  const recorded = recordedDimensionlessCoefficient(eq) ?? 1;
-  const tabled = canonicalPrefactor(eq.id) ?? 1;
+  const recorded = recordedDimensionlessCoefficient(eq);
+  const tabled = canonicalPrefactor(eq.id);
   const group = CANONICAL_GROUP_PREFACTORS.find((p) => p.id === eq.id);
+  const unset = eq.epistemicStatus === 'dimensional' && tabled === undefined;
   return (inputs: Record<string, number>): number => {
-    let v = constFactor * recorded * tabled;
+    if (unset) {
+      if (group === undefined) return Number.NaN;
+      const bound = inputs[group.group];
+      if (bound === undefined || !Number.isFinite(bound)) return Number.NaN;
+    }
+    let v = constFactor;
+    if (recorded !== undefined) v *= recorded;
+    if (tabled !== undefined) v *= tabled;
     if (group !== undefined) {
       const g = inputs[group.group];
       if (g !== undefined && Number.isFinite(g)) {
