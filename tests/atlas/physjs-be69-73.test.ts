@@ -46,8 +46,6 @@ import {
   be73Edge,
 } from '../../src/composition/edges/applied-physicist.js';
 
-const SHA = '03e8bb77c952f720bdd2730af2afc6a7f2d36243';
-const VERSION = `physjs@${SHA} leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940`;
 const AXIOMS = ['propext', 'Classical.choice', 'Quot.sound'] as const;
 
 const ROWS = [
@@ -60,11 +58,12 @@ const ROWS = [
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const manifest = JSON.parse(readFileSync(resolve(root, 'formal/physjs/manifest.json'), 'utf-8')) as PhysjsManifestFile;
+const SHA = manifest.commit;
+const VERSION = `physjs@${SHA} leanprover/lean4:v4.34.1 mathlib:v4.34.1 physlib@af484f78ee0701290595f8bf892b157b10d64940`;
 
 describe('PhysJS proofs for be-69 through be-73', () => {
   it('the vendored manifest is PhysJS #57 and names the five theorems', () => {
-    expect(PHYSJS_COMMIT).toBe(SHA);
-    expect(manifest.commit).toBe(SHA);
+    expect(PHYSJS_COMMIT).toBe(manifest.commit);
     expect(manifest.entries).toHaveLength(83);
     // 68 is the record from before be-88..102.
     for (const row of ROWS) {

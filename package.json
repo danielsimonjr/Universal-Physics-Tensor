@@ -52,6 +52,7 @@
     "bench": "vitest bench",
     "bench:ci": "vitest bench --reporter=verbose",
     "docs:deps": "bun tools/create-dependency-graph/create-dependency-graph.ts --root=. --include-tests",
+    "physjs:table": "bun scripts/generate-physjs-table.ts",
     "docs:cli": "bun scripts/cli-reference.ts",
     "audit:plans": "bun tools/plan-doc-audit/audit.ts",
     "layer:check": "bun tools/layer-order/check.ts",

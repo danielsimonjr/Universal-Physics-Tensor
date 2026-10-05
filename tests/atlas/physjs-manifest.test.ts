@@ -31,7 +31,7 @@ const carriers = [
   ...BRIDGE_EQUATIONS.map((entry) => ({ id: `be-${entry.id}`, formalRef: catalogFormalRef(entry.id) })),
 ];
 
-/** The manifest at PhysJS `main` `03e8bb77c952f720bdd2730af2afc6a7f2d36243`, in file order. A swapped theorem or key fails this list. The sentence that names `92f87257a1e3086a48cdc19fe4361cc1c5909d49` is the record from before PhysJS #65. */
+/** The manifest, in file order. A swapped theorem or key fails this list. The commit is `manifest.commit`. The sentence that names `03e8bb77c952f720bdd2730af2afc6a7f2d36243` in this file is the record from before the tests read the manifest. The sentence that names `92f87257a1e3086a48cdc19fe4361cc1c5909d49` is the record from before PhysJS #65. */
 const EXPECTED: readonly (readonly [string, string, string])[] = [
   ['ab-kg-schrodinger', 'PhysJS.KgSchrodinger.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
   ['ab-klein-gordon-wave', 'PhysJS.KleinGordonWave.covers_bound_delta', 'bound.delta exactly, at the dispersion relation'],
@@ -185,10 +185,9 @@ const PLANE_WAVE_COVERS = 'a plane wave solves the PDE iff ω(k) obeys the dispe
 const COVERAGE = 'covers its statement only';
 
 describe('vendored PhysJS manifest', () => {
-  it('records commit 03e8bb77c952f720bdd2730af2afc6a7f2d36243, and every coverage phrase says the reference covers its statement only', () => {
-    expect(manifest.commit).toBe('03e8bb77c952f720bdd2730af2afc6a7f2d36243');
+  it('records the manifest commit, and every coverage phrase says the reference covers its statement only', () => {
     expect(manifest.commit).toMatch(/^[0-9a-f]{40}$/);
-    expect(manifest.commit).toBe(PHYSJS_COMMIT);
+    expect(PHYSJS_COMMIT).toBe(manifest.commit);
     expect(manifest.toolchain).toBe('leanprover/lean4:v4.34.1');
     expect(manifest.entries).toHaveLength(EXPECTED.length);
     expect(manifest.entries.every((entry) => entry.coverage === COVERAGE)).toBe(true);
