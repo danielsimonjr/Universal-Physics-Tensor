@@ -107,6 +107,13 @@ export interface BridgeEdge {
    */
   readonly formulaFactors?: Readonly<Record<string, number>>;
   /**
+   * Source names the scalar formula is an even function of. The evaluator
+   * takes the absolute value of each one. Buckingham still writes the
+   * dimensional exponent, which is odd for `√(q²)` and for `|q|`. Explain
+   * prints those names as magnitudes. Absent when no source is even.
+   */
+  readonly evenInputs?: readonly string[];
+  /**
    * Provenance: the quantity identification the junction used, when a
    * composed edge was formed via `QUANTITY_IDENTIFICATIONS` rather than
    * a name match. Absent on primitive edges and name-matched

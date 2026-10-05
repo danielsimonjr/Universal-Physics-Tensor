@@ -20,6 +20,18 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Dimensionful inputs on be-78, be-79, be-80, be-82, be-84, and be-85 are labeled dimensionless and reject their units.
+  `upt evaluate be-78 E_Pa=2e11 I_m4=1e-8 L_m=2` labels `I_m4 [dimensionless]`. `I_m4=1e-8m^4` exits 1. `A_m2=1cm^2`, `eps` in F/m, and `1pA`, `1mA`, and `1uA` on the ampere keys do the same. be-86 `C_f` is dimensionless.
+  Done: those keys are `m^4`, `m^2`, `F/m`, and `A`. The bare be-78 command prints `P_N = 4934.802200544679`. `I_m4=1e-8m^4` converts to the same load. `A_m2=1cm^2`, `eps` in F/m, `I_s_A=1pA`, `I_A=1mA`, and `I_A=1uA` match the bare SI commands. `I_A=1m` on be-85 still exits 1. be-86 `C_f` stays dimensionless.
+
+- [x] Cyclotron explain recovers `magnetic-field=1` when `magnetic-flux-density=2` is also set.
+  `upt explain cyclotron-frequency charge=-1.602176634e-19 magnetic-field=1 magnetic-flux-density=2 mass=9.1093837015e-31 --source=canonical` exits 0, prints `Recovered value: -175882001077.216`, and says the monomial is not unique.
+  Done: that command exits 1 and says `magnetic-field and magnetic-flux-density are one quantity and disagree (magnetic-field=1, magnetic-flux-density=2)`. It prints no recovered value. The same number under both spellings still prints `-175882001077.216` and the known set `{charge, magnetic-field, mass}`. One spelling still recovers that frequency, and `magnetic-flux-density=1` with a positive charge still recovers `175882001077.216`.
+
+- [x] Plasma frequency and Larmor radius print a positive magnitude beside an odd power of charge.
+  The recovered numbers are `56414.6023118063` and `0.00000568563010356572`. The proportionality is `charge` and `charge^-1`.
+  Done: those numbers stay. The proportionality lines are `|charge|` and `|charge|^-1`. Drude resistivity stays `charge^-2` and prints `3.54869118854327e-7`. Cyclotron frequency stays `charge·magnetic-field·mass^-1` and `-175882001077.216`. The Hall coefficient stays negative.
+
 - [x] A multi-word search is a noun phrase, and a suggestion does not drop the kind of thing asked for.
   `upt search "reynolds number"` exits 0 on be-86 only. `upt explain debye-length` exits 1 and lists be-89, CE-debye-frequency, and the phonon quantities.
   Done: `upt search "reynolds number"` exits 1 and does not name be-86. `upt search "prandtl number"` names be-86. `upt explain debye-length` says NOT COVERED and lists no phonon row. `upt search debye` still names CE-debye-frequency. No Reynolds-number bridge is added.

@@ -4357,7 +4357,7 @@ The codebase is organized into the following modules:
 | `../search-index.js` | `searchNameWords` | Import |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 | `../../dimensional/units.js` | `UnitError` | Import |
-| `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms` | Import |
+| `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms, SynonymDisagreementError` | Import |
 | `../../composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `../../composition/explain.js` | `formatQuantity` | Import |
 
@@ -5120,6 +5120,7 @@ The codebase is organized into the following modules:
 | `../dimensional/formula-names.js` | `DIMENSION_RENAMES, DimensionRename` | Import |
 
 **Exports:**
+- Classes: `SynonymDisagreementError`
 - Functions: `aliasesForTarget`, `rewriteInputKey`, `editDistance`, `synonymInCatalog`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
 - Constants: `NAME_TABLE`
 
@@ -9199,10 +9200,10 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 480 |
 | Total Modules | 13 |
-| Total Lines of Code | 102963 |
-| Total Exports | 3744 |
+| Total Lines of Code | 103030 |
+| Total Exports | 3745 |
 | Total Re-exports | 1792 |
-| Total Classes | 62 |
+| Total Classes | 63 |
 | Total Interfaces | 613 |
 | Total Functions | 880 |
 | Total Type Guards | 5 |

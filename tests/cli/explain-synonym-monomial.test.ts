@@ -87,17 +87,75 @@ describe('a magnetic synonym is one Buckingham variable', () => {
     expect(fluxText).toMatch(/Recovered value: 175882001077\.216/);
     expect(fluxText).toMatch(/charge·magnetic-field·mass\^-1/);
     expect(fluxText).not.toMatch(/do not fix a unique monomial/);
+
+    const doubled = capture();
+    const doubledCode = await runCli(
+      [
+        'explain',
+        'cyclotron-frequency',
+        `charge=${Q}`,
+        'magnetic-flux-density=2',
+        `mass=${M}`,
+        '--source=canonical',
+      ],
+      doubled.io,
+    );
+    const doubledText = doubled.lines.join('');
+    expect(doubledCode, doubledText).toBe(0);
+    expect(doubledText).toMatch(/Recovered value: -351764002154\.433/);
+    expect(doubledText).not.toMatch(/do not fix a unique monomial/);
   });
 
-  it('keeps two different values of the synonym pair as two inputs', () => {
+  it('recovers one frequency when both spellings carry the same number', async () => {
+    const cap = capture();
+    const code = await runCli(
+      [
+        'explain',
+        'cyclotron-frequency',
+        `charge=${Q}`,
+        'magnetic-field=1',
+        'magnetic-flux-density=1',
+        `mass=${M}`,
+        '--source=canonical',
+      ],
+      cap.io,
+    );
+    const text = cap.lines.join('');
+    expect(code, text).toBe(0);
+    expect(text).toMatch(/Recovered value: -175882001077\.216/);
+    expect(text).toMatch(/\{charge, magnetic-field, mass\}/);
+    expect(text).not.toMatch(/do not fix a unique monomial/);
+    expect(text).not.toMatch(/magnetic-flux-density/);
+  });
+
+  it('fails when the two spellings disagree, and does not recover a frequency', async () => {
     const names = new Set(CANONICAL_GRAPH.flatMap((e) => [e.target.name, ...e.sources.map((s) => s.name)]));
     const known = shareSynonyms(
       { charge: -Q, 'magnetic-field': 1, 'magnetic-flux-density': 2, mass: M },
       names,
     );
-    const x = explainQuantity(CANONICAL_GRAPH, 'cyclotron-frequency', known as Record<string, number>);
-    expect(x.summary).toMatch(/do not fix a unique monomial/);
-    expect(x.known).toContain('magnetic-field');
-    expect(x.known).toContain('magnetic-flux-density');
+    expect(() => explainQuantity(CANONICAL_GRAPH, 'cyclotron-frequency', known as Record<string, number>)).toThrow(
+      /magnetic-field and magnetic-flux-density are one quantity and disagree/,
+    );
+
+    const cap = capture();
+    const code = await runCli(
+      [
+        'explain',
+        'cyclotron-frequency',
+        `charge=${Q}`,
+        'magnetic-field=1',
+        'magnetic-flux-density=2',
+        `mass=${M}`,
+        '--source=canonical',
+      ],
+      cap.io,
+    );
+    const text = cap.lines.join('');
+    expect(code, text).toBe(1);
+    expect(text).toMatch(/magnetic-field and magnetic-flux-density are one quantity and disagree/);
+    expect(text).toMatch(/magnetic-field=1/);
+    expect(text).toMatch(/magnetic-flux-density=2/);
+    expect(text).not.toMatch(/Recovered value/);
   });
 });

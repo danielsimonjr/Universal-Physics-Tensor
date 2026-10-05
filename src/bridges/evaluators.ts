@@ -370,7 +370,7 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
       'Euler buckling',
       [
         P('E_Pa', "Young's modulus", 'E', 'Pa', 'modulus, > 0'),
-        P('I_m4', 'second moment of area', 'I', '', 'metres to the fourth, > 0'),
+        P('I_m4', 'second moment of area', 'I', 'm^4', 'metres to the fourth, > 0'),
         P('L_m', 'column length', 'L', 'm', 'length between pinned ends, > 0'),
       ],
       (i) => evaluateEulerBuckling({ E_Pa: i.E_Pa, I_m4: i.I_m4, L_m: i.L_m }),
@@ -381,7 +381,7 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
       [
         P('k_N_per_m', 'spring stiffness', 'k', 'N/m', 'linear spring, > 0'),
         P('g0_m', 'rest gap', 'g0', 'm', 'rest gap, > 0; the fold is 2 g0/3'),
-        P('A_m2', 'plate area', 'A', '', 'parallel-plate area in m², > 0'),
+        P('A_m2', 'plate area', 'A', 'm^2', 'parallel-plate area in m², > 0'),
       ],
       (i) => evaluatePullIn({ k_N_per_m: i.k_N_per_m, g0_m: i.g0_m, A_m2: i.A_m2 }),
     ),
@@ -389,7 +389,7 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
       80,
       'Mott–Gurney',
       [
-        P('eps', 'permittivity', 'ε', '', 'solid permittivity in F/m, > 0'),
+        P('eps', 'permittivity', 'ε', 'F/m', 'solid permittivity in F/m, > 0'),
         P('mu_m2_per_Vs', 'drift mobility', 'μ', 'm^2/(V·s)', 'drift mobility, > 0'),
         P('V_volts', 'voltage', 'V', 'V', 'the formula uses V²'),
         P('d_m', 'thickness', 'd', 'm', 'film thickness, > 0', { geometry: 'separation' }),
@@ -410,7 +410,7 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
       82,
       'Shockley diode',
       [
-        P('I_s_A', 'saturation current', 'I_s', '', 'saturation current in amperes'),
+        P('I_s_A', 'saturation current', 'I_s', 'A', 'saturation current in amperes'),
         P('V_volts', 'bias', 'V', 'V', 'bias voltage; ideality is 1'),
         temperature('T_K', 'temperature', 'T', 'absolute temperature, nonzero'),
       ],
@@ -430,14 +430,14 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
       'Four-point sheet',
       [
         P('V_volts', 'inner-pair voltage', 'V', 'V', 'voltage on the inner pair'),
-        P('I_A', 'probe current', 'I', '', 'current in amperes, nonzero'),
+        P('I_A', 'probe current', 'I', 'A', 'current in amperes, nonzero'),
       ],
       (i) => evaluateFourPointSheet({ V_volts: i.V_volts, I_A: i.I_A }),
     ),
     spec(
       85,
       'Shot noise',
-      [P('I_A', 'current', 'I', '', 'current in the Poisson mean, amperes; one-sided 2 e I')],
+      [P('I_A', 'current', 'I', 'A', 'current in the Poisson mean, amperes; one-sided 2 e I')],
       (i) => evaluateShotNoise({ I_A: i.I_A }),
     ),
     spec(
