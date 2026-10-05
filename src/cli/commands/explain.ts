@@ -29,6 +29,7 @@ import {
   rewriteInputKey,
   shareSynonyms,
 } from '../../composition/aliases.js';
+import { CANONICAL_GROUP_PREFACTORS } from '../../composition/canonical-prefactors.js';
 import { formatQuantity } from '../../composition/explain.js';
 
 /** How many `upt search` hits a NOT COVERED answer lists before "… and N more". */
@@ -270,6 +271,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   // C4). It used to get the same "no derivation path" answer as a real quantity
   // the inputs cannot reach, and exit 0. Underscores resolve like hyphens.
   const names = new Set(graph.flatMap((e) => [e.target.name, ...e.sources.map((s) => s.name)]));
+  // A dimensionless group the equation multiplies (sound-speed's gamma) is an
+  // optional input, not a graph node. It resolves as a binding and not as a target.
+  const inputNames = new Set(names);
+  const edgeIds = new Set(graph.map((e) => e.id));
+  for (const group of CANONICAL_GROUP_PREFACTORS) {
+    if (edgeIds.has(group.id)) inputNames.add(group.group);
+  }
   let resolvedTarget = api.resolveToCatalogName(target, names);
   if (resolvedTarget === null) {
     const near = nearQuantityNames(target, names);
@@ -302,7 +310,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   const aliases = aliasesForTarget(graph, resolvedTarget);
   const parsed = parseKnown(rest);
   for (const note of parsed.notes) ctx.err(note);
-  const rebound = rebind(parsed.known, aliases, names);
+  const rebound = rebind(parsed.known, aliases, inputNames);
   const known = shareSynonyms(rebound, names);
   let x;
   try {

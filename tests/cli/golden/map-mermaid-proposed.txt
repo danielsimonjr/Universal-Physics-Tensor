@@ -498,7 +498,7 @@ flowchart LR
     j_CE_sound_speed["Speed of sound in a fluid"]:::law
     q_pressure --> j_CE_sound_speed
     q_density --> j_CE_sound_speed
-    j_CE_sound_speed --> q_speed
+    j_CE_sound_speed --> q_sound_speed
     j_CE_volume_flow_rate["Volume flow rate (continuity)"]:::law
     q_cross_sectional_area(["cross-sectional-area"]):::qty
     q_cross_sectional_area --> j_CE_volume_flow_rate

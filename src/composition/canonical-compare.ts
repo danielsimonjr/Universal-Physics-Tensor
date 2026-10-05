@@ -60,6 +60,9 @@ const RATIO_TOLERANCE = 1e-9;
  */
 const ENTRY_TARGET_ALIASES: Readonly<Record<string, readonly string[]>> = {
   'CE-schwarzschild-radius': ['schwarzschild-radius'],
+  // The equation's quantity is sound-speed. A formula written for speed, with
+  // pressure and density, is still this law. speed is not a synonym of sound-speed.
+  'CE-sound-speed': ['speed'],
   // The L0 id keeps the catalog name. The reduced name is the same entry.
   // The non-reduced entry also answers to that catalog name when the formula uses h.
   'CE-compton-wavelength': ['reduced-compton-wavelength'],

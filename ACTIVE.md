@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Explaining `sound-speed` uses the sound-speed equation, and a bound `gamma` multiplies.
+  `upt explain sound-speed pressure=1e5 density=1.2 --source=canonical` says the graph has no derivation path. `upt explain speed` with those inputs recovers `288.675134594813` via CE-sound-speed. `gamma=1.4` on `sound-speed` exits 1.
+  Done: that command names CE-sound-speed and prints `288.675134594813`, and says the constant was set to 1. With `gamma=1.4` it prints `341.565025531987` and does not say the constant was set to 1. `upt explain speed` with those inputs does not name CE-sound-speed. `compareWithCanonical('speed', …)` still names it. CE-schwarzschild-radius still targets `radius`.
+
 - [x] Write the integration design for 6.0.0. Do not change `src/`.
   The map's ten targets become decisions in `docs/planning/v6.0.0-Design.md`, checked against the source. The owner has not approved an implementation phase.
   Done: that file. The map's edit-distance, prefactor, ideal-gas, and private-RK4 rows were corrected from the same reading. No `src/` change. The owner accepted the five resolutions on 2026-10-04. `upt evaluate` converts an energy in a kelvin slot through `readNamedBinding`. The Larmor radius is a magnitude and cyclotron frequency stays signed. `BridgeEquations`, `evaluateEinsteinRelation`, and the other per-bridge APIs are removed with no compatibility shims. Ideal-gas `N` stays a dimensionless input. A missing MathTS scalar-expression builder is added in MathTS before phase 6 lowers, and publishing MathTS stays the owner's job. The phases below are the authorized work.
