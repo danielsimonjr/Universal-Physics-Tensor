@@ -710,6 +710,20 @@ function parseFile(filePath: string, isTestFile: boolean = false): ParsedFile {
     result.exports.reExported.push(`* from ${match[1]}`);
   }
 
+  // Re-exports: export * as <name> from. The same dependency as `export * from`.
+  // Without this, `src/index.ts`'s `export * as atlas from './atlas/public.js'`
+  // does not count as an import, and unused-analysis.md lists `public.ts`.
+  const reExportNamespaceRegex = /export\s+\*\s+as\s+([A-Za-z_$][A-Za-z0-9_$]*)\s+from\s+['"]([^'"]+)['"]/g;
+  while ((match = reExportNamespaceRegex.exec(content)) !== null) {
+    result.internalDependencies.push({
+      file: match[2],
+      imports: ['*'],
+      reExport: true
+    });
+    result.exports.named.push(match[1]);
+    result.exports.reExported.push(`* as ${match[1]} from ${match[2]}`);
+  }
+
   // Re-exports: export { foo } from
   // v0.7.1 M-13 fix: also match `export type { ... } from` (type-only named re-exports).
   // Without this, type-only re-exports from src/index.ts are not tracked as "imported"
@@ -2056,6 +2070,23 @@ async function main(): Promise<void> {
       shown++;
     }
   }
+
+  // Live duplicate-owner list. Narrative docs point here and do not restate the rows.
+  // Scans are registered by the phase that makes a single owner true. Until one
+  // is registered, the committed file has an empty hit list, and docs-fresh
+  // fails if a later scan is not regenerated into this file.
+  const duplicateOwnerPath = join(OUTPUT_DIR, 'duplicate-owners.md');
+  const duplicateOwnerReport = '<!-- repo-map:no-verification -->\n'
+    + '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n'
+    + '     tools/create-dependency-graph/create-dependency-graph.ts, then run\n'
+    + '     `npm run docs:deps`. Hand edits are caught by the docs-fresh job. -->\n\n'
+    + '# Duplicate owners\n\n'
+    + 'The live list of a second owner for a concept the integration design assigned once.\n'
+    + '`docs/architecture/INTEGRATION_MAP.md` points here and does not copy these rows.\n\n'
+    + '## Hits\n\n'
+    + 'No scan is registered yet. Each phase that creates a single owner adds its scan here.\n';
+  writeFileSync(duplicateOwnerPath, duplicateOwnerReport);
+  console.log('Written: docs/architecture/duplicate-owners.md');
 
   // Write full unused analysis to a separate file
   const unusedReportPath = join(OUTPUT_DIR, 'unused-analysis.md');

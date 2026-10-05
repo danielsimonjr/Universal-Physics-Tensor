@@ -7672,6 +7672,7 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `./core/regime-rule-install.js` | `*` | Import |
 | `./core/regimes-builtins.js` | `*` | Import |
+| `./atlas/public.js` | `*` | Re-export |
 | `./core/tensor.js` | `UniversalTensor` | Re-export |
 | `./core/constants.js` | `C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, GM_SUN_SI, M_E_SI, B_WIEN_SI` | Re-export |
 | `./core/types.js` | `TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation, EmergentPhenomenon, PhysicalScale, Force, Symmetry, InformationMeasure` | Re-export |
@@ -7846,32 +7847,32 @@ The codebase is organized into the following modules:
 - Re-exports:
 
   ```text
-  UniversalTensor, C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA, M_P_SI, L_P_SI, T_P_SI, H0_SI,
-  M_SUN_SI, GM_SUN_SI, M_E_SI, B_WIEN_SI, TensorConfig, TensorIndices, PhysicalLaw, BridgeEquation,
-  EmergentPhenomenon, PhysicalScale, Force, Symmetry, InformationMeasure, PhysicalConstants, Cell,
-  CellBase, CellConfidence, LawCell, BridgeCell, EmergenceCell, compose, FluxDiagnostic, FluxReport,
-  FluxViolationError, CatalogEntryStatus, CatalogIngestionReport, catalogToCells, scanCatalog,
-  ingestCatalog, ingestionReportToFluxReport, CatalogIngestionError, AxisName, UniversalIndex,
-  UniversalIndexId, MakeIndexOptions, makeIndex, AxesRegistry, Axes, LabeledTensor,
-  LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError, IndexNameMismatchError,
-  RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError, RegimeProvenance,
-  RegimeValueBase, RegimeSpec, defineRegime, defineScale, defineForce, defineSymmetry,
-  defineInformation, defineDimension, defineTopology, lookupRegime, listRegimesByAxis, provenanceFor,
-  attachRegimesToCell, getCellRegimes, RegimeCollisionError, BridgeDiffSpec, BridgeGradientResult,
-  BridgeNumericalGradientResult, bridgeGradient, bridgeGradientNumerical, gradientToNamed,
-  ASTGradientResult, bridgeGradientAST, bridgeGradientASTById, astDifferentiableBridgeIds,
-  BE37_SHAPIRO_DIFF, BE52_PERIHELION_DIFF, BE42_HAWKING_DIFF, BE11_DECOHERENCE_DIFF,
-  DIFFERENTIABLE_BRIDGE_SPECS, BRIDGE_EQUATIONS, BridgeEquationEntry, BridgeEquationStatus,
-  BridgeIssueSeverity, BridgeIssueFixable, KnownIssue, evaluateGravitationalLensing,
-  type GravitationalLensingInputs, type GravitationalLensingResult, evaluatePerihelionPrecession,
-  type PerihelionPrecessionInputs, type PerihelionPrecessionResult, evaluateQuantumHall,
-  VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult, evaluateCasimir,
-  type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs, type UnruhResult,
-  evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult, evaluateACJosephson,
-  JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult, evaluateFractionalQH,
-  type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz, LORENZ_NUMBER_SI,
-  type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap, BCS_GAP_RATIO,
-  type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3,
+  * as atlas from ./atlas/public.js, UniversalTensor, C_SI, G_SI, H_SI, HBAR_SI, K_B_SI, E_SI, ALPHA,
+  M_P_SI, L_P_SI, T_P_SI, H0_SI, M_SUN_SI, GM_SUN_SI, M_E_SI, B_WIEN_SI, TensorConfig, TensorIndices,
+  PhysicalLaw, BridgeEquation, EmergentPhenomenon, PhysicalScale, Force, Symmetry, InformationMeasure,
+  PhysicalConstants, Cell, CellBase, CellConfidence, LawCell, BridgeCell, EmergenceCell, compose,
+  FluxDiagnostic, FluxReport, FluxViolationError, CatalogEntryStatus, CatalogIngestionReport,
+  catalogToCells, scanCatalog, ingestCatalog, ingestionReportToFluxReport, CatalogIngestionError,
+  AxisName, UniversalIndex, UniversalIndexId, MakeIndexOptions, makeIndex, AxesRegistry, Axes,
+  LabeledTensor, LabeledTensorConstructionError, AxisMismatchError, IdentityConflictError,
+  IndexNameMismatchError, RankPreservationError, AxisOrderError, AxisMergeError, AxisSplitError,
+  RegimeProvenance, RegimeValueBase, RegimeSpec, defineRegime, defineScale, defineForce,
+  defineSymmetry, defineInformation, defineDimension, defineTopology, lookupRegime, listRegimesByAxis,
+  provenanceFor, attachRegimesToCell, getCellRegimes, RegimeCollisionError, BridgeDiffSpec,
+  BridgeGradientResult, BridgeNumericalGradientResult, bridgeGradient, bridgeGradientNumerical,
+  gradientToNamed, ASTGradientResult, bridgeGradientAST, bridgeGradientASTById,
+  astDifferentiableBridgeIds, BE37_SHAPIRO_DIFF, BE52_PERIHELION_DIFF, BE42_HAWKING_DIFF,
+  BE11_DECOHERENCE_DIFF, DIFFERENTIABLE_BRIDGE_SPECS, BRIDGE_EQUATIONS, BridgeEquationEntry,
+  BridgeEquationStatus, BridgeIssueSeverity, BridgeIssueFixable, KnownIssue,
+  evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult,
+  evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult,
+  evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult,
+  evaluateCasimir, type CasimirInputs, type CasimirResult, evaluateUnruh, type UnruhInputs,
+  type UnruhResult, evaluateJohnsonNyquist, type JohnsonNyquistInputs, type JohnsonNyquistResult,
+  evaluateACJosephson, JOSEPHSON_CONSTANT_SI, type ACJosephsonInputs, type ACJosephsonResult,
+  evaluateFractionalQH, type FractionalQHInputs, type FractionalQHResult, evaluateWiedemannFranz,
+  LORENZ_NUMBER_SI, type WiedemannFranzInputs, type WiedemannFranzResult, evaluateBCSGap,
+  BCS_GAP_RATIO, type BCSGapInputs, type BCSGapResult, evaluateChandrasekharMass, LANE_EMDEN_OMEGA3,
   type ChandrasekharInputs, type ChandrasekharResult, evaluateEddingtonLuminosity,
   THOMSON_CROSS_SECTION_SI, type EddingtonInputs, type EddingtonResult, evaluateJeansMass,
   type JeansInputs, type JeansResult, evaluateRadiationPressure, type RadiationPressureInputs,
@@ -8966,8 +8967,8 @@ graph TD
 | Total TypeScript Files | 472 |
 | Total Modules | 13 |
 | Total Lines of Code | 99904 |
-| Total Exports | 3554 |
-| Total Re-exports | 1734 |
+| Total Exports | 3555 |
+| Total Re-exports | 1735 |
 | Total Classes | 61 |
 | Total Interfaces | 560 |
 | Total Functions | 850 |

@@ -4,7 +4,7 @@
     "version": "5.0.0",
     "totalFiles": 472,
     "totalModules": 13,
-    "totalExports": 3554
+    "totalExports": 3555
   },
   "entryPoints": [
     {
@@ -27495,6 +27495,13 @@
             ]
           },
           {
+            "file": "./atlas/public.js",
+            "imports": [
+              "*"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./core/tensor.js",
             "imports": [
               "UniversalTensor"
@@ -29685,6 +29692,7 @@
           "confrontationRigor",
           "rigorDistribution",
           "decidingMeasurement",
+          "atlas",
           "TensorConfig",
           "TensorIndices",
           "PhysicalLaw",
@@ -29906,6 +29914,7 @@
           "Elasticity"
         ],
         "reExported": [
+          "* as atlas from ./atlas/public.js",
           "UniversalTensor",
           "C_SI",
           "G_SI",
@@ -33423,18 +33432,18 @@
     "totalTypeScriptFiles": 472,
     "totalModules": 13,
     "totalLinesOfCode": 99904,
-    "totalExports": 3554,
+    "totalExports": 3555,
     "totalClasses": 61,
     "totalInterfaces": 560,
     "totalFunctions": 850,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 911,
-    "totalReExports": 1734,
+    "totalReExports": 1735,
     "totalTypeOnlyImports": 583,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,
-    "unusedFilesCount": 1,
+    "unusedFilesCount": 0,
     "unusedExportsCount": 78
   }
 }

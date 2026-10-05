@@ -1,0 +1,13 @@
+<!-- repo-map:no-verification -->
+<!-- GENERATED FILE -- do not edit by hand. Edit the generator at
+     tools/create-dependency-graph/create-dependency-graph.ts, then run
+     `npm run docs:deps`. Hand edits are caught by the docs-fresh job. -->
+
+# Duplicate owners
+
+The live list of a second owner for a concept the integration design assigned once.
+`docs/architecture/INTEGRATION_MAP.md` points here and does not copy these rows.
+
+## Hits
+
+No scan is registered yet. Each phase that creates a single owner adds its scan here.
