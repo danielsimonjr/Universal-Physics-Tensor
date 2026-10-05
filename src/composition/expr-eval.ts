@@ -7,18 +7,21 @@
  * DIFFERENT AST — so this is the missing primitive that makes a bridge's
  * `symbolic` form executable.
  *
- * Leaf resolution order (Adam A-1, A-5): caller `values` win, then the
- * `CONSTANTS` registry, then a base-10 numeric-literal symbol (`'2'`, `'3'`);
- * an unresolved or non-finite leaf throws. `^` reads its exponent from the
- * second arg's value and uses `Math.pow`. `transcendental` and `abs` evaluate
- * their scalar argument. Tensor / integral / derivative arms are out of scope
- * and throw.
+ * The tree is lowered with `createScalarBuilder` and evaluated with
+ * `evaluateScalar`. This module does not print a formula and does not parse
+ * one. Leaf resolution order (Adam A-1, A-5): caller `values` win, then the
+ * `CONSTANTS` registry, then a spelled-out multiple of π, then a base-10
+ * numeric-literal symbol (`'2'`, `'3'`), which MathTS resolves. An unresolved
+ * or non-finite operator result throws. Tensor / integral / derivative arms
+ * are out of scope and throw.
  *
  * INTERNAL — not on the public surface.
  *
  * @module composition/expr-eval
  */
 
+import { createScalarBuilder, ScalarBuildError } from '@danielsimonjr/mathts-expression';
+import { evaluateScalar, ScalarEvalError } from '@danielsimonjr/mathts-functions';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 
@@ -31,19 +34,51 @@ export class SymbolicEvalError extends Error {
   }
 }
 
-/** Resolve a leaf symbol's numeric value: values → CONSTANTS → literal. */
-function resolveLeaf(name: string, values: Readonly<Record<string, number>>): number {
-  if (Object.prototype.hasOwnProperty.call(values, name)) return values[name];
-  const constant = CONSTANTS[name];
-  if (constant !== undefined) return constant.value;
-  const pi = piMultipleValue(name);
-  if (pi !== undefined) return pi;
-  const literal = Number(name);
-  if (Number.isFinite(literal)) return literal;
-  throw new SymbolicEvalError(
-    `evalExpr: leaf symbol '${name}' has no value (not in inputs, not a ` +
-      `registered constant, not a numeric literal).`,
-  );
+const builder = createScalarBuilder();
+
+/** Symbol names on the scalar arms. Other kinds are left for the builder to reject. */
+function symbolNames(node: ExprNode, out: Set<string>): void {
+  if (node.kind === 'symbol') {
+    out.add(node.name);
+    return;
+  }
+  if (node.kind === 'op') {
+    for (const arg of node.args) symbolNames(arg, out);
+    return;
+  }
+  if (node.kind === 'transcendental' || node.kind === 'abs') symbolNames(node.arg, out);
+}
+
+/**
+ * Caller bindings, then registered constants and spelled-out π multiples
+ * that the caller did not set. Numeric-literal names stay unset so MathTS
+ * reads them.
+ */
+function scopeFor(
+  node: ExprNode,
+  values: Readonly<Record<string, number>>,
+): Record<string, number> {
+  const scope: Record<string, number> = { ...values };
+  const names = new Set<string>();
+  symbolNames(node, names);
+  for (const name of names) {
+    if (Object.prototype.hasOwnProperty.call(scope, name)) continue;
+    const constant = CONSTANTS[name];
+    if (constant !== undefined) {
+      scope[name] = constant.value;
+      continue;
+    }
+    const pi = piMultipleValue(name);
+    if (pi !== undefined) scope[name] = pi;
+  }
+  return scope;
+}
+
+function asSymbolic(err: unknown): Error {
+  if (err instanceof ScalarEvalError || err instanceof ScalarBuildError) {
+    return new SymbolicEvalError(err.message.replace(/^(?:evaluateScalar|scalar builder):/, 'evalExpr:'));
+  }
+  return err instanceof Error ? err : new SymbolicEvalError(String(err));
 }
 
 /**
@@ -56,87 +91,10 @@ export function evalExpr(
   node: ExprNode,
   values: Readonly<Record<string, number>> = {},
 ): number {
-  switch (node.kind) {
-    case 'symbol':
-      return resolveLeaf(node.name, values);
-
-    case 'op': {
-      if (node.op === '^') {
-        if (node.args.length !== 2) {
-          throw new SymbolicEvalError(
-            `evalExpr: '^' needs exactly 2 args, got ${node.args.length}.`,
-          );
-        }
-        // The exponent may be a numeric-literal symbol (resolveLeaf returns its
-        // value) OR a general input-dependent expression (v0.13 — e.g. −1/z).
-        // `finite()` still catches a non-finite result (NaN/Inf).
-        const base = evalExpr(node.args[0], values);
-        const exp = evalExpr(node.args[1], values);
-        return finite(Math.pow(base, exp), node);
-      }
-      if (node.args.length === 0) {
-        // Mirrors the validator's empty-op convention: * / → 1, + - → 0.
-        return node.op === '*' || node.op === '/' ? 1 : 0;
-      }
-      let acc = evalExpr(node.args[0], values);
-      for (let i = 1; i < node.args.length; i++) {
-        const v = evalExpr(node.args[i], values);
-        if (node.op === '+') acc += v;
-        else if (node.op === '-') acc -= v;
-        else if (node.op === '*') acc *= v;
-        else acc /= v;
-      }
-      return finite(acc, node);
-    }
-
-    case 'transcendental':
-      return finite(applyTranscendental(node.fn, evalExpr(node.arg, values)), node);
-
-    case 'abs':
-      return finite(Math.abs(evalExpr(node.arg, values)), node);
-
-    default:
-      throw new SymbolicEvalError(
-        `evalExpr: node kind '${node.kind}' is out of scope (scalar ` +
-          `symbol/op/transcendental/abs only; integral/derivative/tensor nodes are not ` +
-          `numerically evaluable here).`,
-      );
+  try {
+    const lowered = builder.from(node);
+    return evaluateScalar(lowered, scopeFor(node, values));
+  } catch (err) {
+    throw asSymbolic(err);
   }
-}
-
-function applyTranscendental(fn: string, arg: number): number {
-  switch (fn) {
-    case 'exp':
-      return Math.exp(arg);
-    case 'ln':
-      return Math.log(arg);
-    case 'log2':
-      return Math.log2(arg);
-    case 'log10':
-      return Math.log10(arg);
-    case 'sin':
-      return Math.sin(arg);
-    case 'cos':
-      return Math.cos(arg);
-    case 'tan':
-      return Math.tan(arg);
-    case 'sinh':
-      return Math.sinh(arg);
-    case 'cosh':
-      return Math.cosh(arg);
-    case 'tanh':
-      return Math.tanh(arg);
-    default:
-      throw new SymbolicEvalError(`evalExpr: unknown transcendental '${fn}'.`);
-  }
-}
-
-function finite(value: number, node: ExprNode): number {
-  if (!Number.isFinite(value)) {
-    throw new SymbolicEvalError(
-      `evalExpr: '${(node as { op?: string }).op ?? node.kind}' produced a ` +
-        `non-finite value (${value}).`,
-    );
-  }
-  return value;
 }

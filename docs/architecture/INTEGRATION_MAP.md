@@ -296,14 +296,15 @@ MathTS packages are required dependencies (`package.json`, `MEMORY.md`). `getFor
 | `bridgeGradientAST` | dynamic autograd + tensor | `src/diff/bridge-ast-gradient.ts:214-216` |
 | `simplifyExpr` | dynamic `parse` + `simplify` | `src/composition/expr-simplify.ts` |
 | scalar-symbol filter | `parse` via `import.meta.resolve` | `src/composition/mathts-scalar-symbols.ts` |
+| `evalExpr` | `createScalarBuilder`, `evaluateScalar` | `src/composition/expr-eval.ts` |
 
-No `src/` file imports `mathts-expression`, `mathts-matrix`, `mathts-wasm`, `mathts-parallel`, or `mathts-workerpool`. Those packages are dependencies of the MathTS packages the library does import. The API walk from `src/index.ts` follows static re-exports and reports only the `gl4-integrator.ts` import, because the other MathTS imports sit behind dynamic `import()`, behind the CLI (not the package root), or behind modules the walk did not follow as external edges. **INFERRED** on the exact reason each of the other 13 files is absent from `external`; the report itself lists one specifier.
+`src/composition/expr-eval.ts` imports `@danielsimonjr/mathts-expression`. No `src/` file imports `mathts-matrix`, `mathts-wasm`, `mathts-parallel`, or `mathts-workerpool`. Those packages are dependencies of the MathTS packages the library does import. The sentence that no `src/` file imports `mathts-expression` is the record from before this lowering. The API walk from `src/index.ts` follows static re-exports and reports only the `gl4-integrator.ts` import, because the other MathTS imports sit behind dynamic `import()`, behind the CLI (not the package root), or behind modules the walk did not follow as external edges. **INFERRED** on the exact reason each of the other files is absent from `external`; the report itself lists one specifier.
 
 ### Still local
 
 | Algorithm | File | What remains local |
 |---|---|---|
-| `ExprNode` numeric interpreter | `src/composition/expr-eval.ts` | `+ - * / ^`, transcendentals, `Math.abs`, `Math.pow`. No MathTS call. The installed `@danielsimonjr/mathts-expression@0.9.0` does not export `createScalarBuilder`, and `@danielsimonjr/mathts-functions@0.67.0` does not export `scalar` or `evaluateScalar`, so this interpreter is still the numeric body. `expr-simplify.ts` uses it as a numeric guard |
+| `ExprNode` numeric interpreter | `src/composition/expr-eval.ts` | Leaf binding stays here: caller values, then `CONSTANTS`, then a spelled-out multiple of π. The arithmetic is `evaluateScalar`. The sentence that this file calls `Math.pow` and that `@danielsimonjr/mathts-expression@0.9.0` does not export `createScalarBuilder` is the record from before this lowering. `expr-simplify.ts` uses `evalExpr` as a numeric guard |
 | Substitution | `src/composition/expr-subst.ts` | tree walk. No MathTS call |
 | Simplify fallback | `src/composition/expr-simplify.ts` | returns the original AST when the dynamic import fails. MathTS is required, so that branch is a second implementation of "do nothing" |
 | Unit table | `src/dimensional/units.ts` | parse, affine °C, gauss, bit-as-ln-2. MathTS confirms a ratio when dimensions agree |

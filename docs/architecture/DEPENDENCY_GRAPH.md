@@ -5916,6 +5916,12 @@ The codebase is organized into the following modules:
 
 ### `src/composition/expr-eval.ts` - Scalar `ExprNode` value evaluator (v0.12 symbolic composition).
 
+**External Dependencies:**
+| Package | Import |
+|---------|--------|
+| `@danielsimonjr/mathts-expression` | `createScalarBuilder, ScalarBuildError` |
+| `@danielsimonjr/mathts-functions` | `evaluateScalar, ScalarEvalError` |
+
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
@@ -9191,7 +9197,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 479 |
 | Total Modules | 13 |
-| Total Lines of Code | 103013 |
+| Total Lines of Code | 102971 |
 | Total Exports | 3888 |
 | Total Re-exports | 1925 |
 | Total Classes | 61 |
