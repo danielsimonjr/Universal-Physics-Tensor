@@ -32,8 +32,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
   The map's ten targets become decisions in `docs/planning/v6.0.0-Design.md`, checked against the source. The owner has not approved an implementation phase.
   Done: that file. The map's edit-distance, prefactor, ideal-gas, and private-RK4 rows were corrected from the same reading. No `src/` change. The owner accepted the five resolutions on 2026-10-04. `upt evaluate` converts an energy in a kelvin slot through `readNamedBinding`. The Larmor radius is a magnitude and cyclotron frequency stays signed. `BridgeEquations`, `evaluateEinsteinRelation`, and the other per-bridge APIs are removed with no compatibility shims. Ideal-gas `N` stays a dimensionless input. A missing MathTS scalar-expression builder is added in MathTS before phase 6 lowers, and publishing MathTS stays the owner's job. The phases below are the authorized work.
 
-- [ ] Implement phase 0 of the 6.0.0 integration: the dependency generator records an export-star-as as an internal dependency.
+- [x] Implement phase 0 of the 6.0.0 integration: the dependency generator records an export-star-as as an internal dependency.
   A fixture module imported only that way is not reported unused, and the same fixture with the line removed is unused. `src/atlas/public.ts` leaves the unused-file list for that reason. `bun run docs:deps` is clean against the committed architecture docs.
+  Done: `tests/tools/export-star-as-deps.test.ts`. Before the match, the fixture listed `src/only-via-star-as.ts` as unused and the committed report listed `src/atlas/public.ts`. Both assertions pass. The counts are the regeneration paragraph in `docs/architecture/INTEGRATION_MAP.md`. `docs/architecture/duplicate-owners.md` is generated and has no scan yet.
 
 - [ ] Implement phase 1 of the 6.0.0 integration: generate the PhysJS table from the vendored manifest.
   The generate step replaces the hand-copy in `WORKFLOWS.md`. Editing a theorem in the generated file without editing the manifest fails the formal gate. A manifest entry with no bridge still fails. Tests that hardcoded the commit string read the manifest.
