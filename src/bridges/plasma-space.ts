@@ -23,11 +23,11 @@ export interface BohmSheathInputs {
   readonly T_e_K: number;
   readonly m_i_kg: number;
 }
-/** @public */
+/** Bohm Sheath Result. @public */
 export interface BohmSheathResult {
   readonly u0_m_s: number;
 }
-/** @public */
+/** evaluate Bohm Sheath. @public */
 export function evaluateBohmSheath({ T_e_K, m_i_kg }: BohmSheathInputs): BohmSheathResult {
   finite('T_e_K', T_e_K);
   finite('m_i_kg', m_i_kg);
@@ -53,11 +53,11 @@ export interface IonAcousticInputs {
   readonly c_s_m_s: number;
   readonly lambda_De_m: number;
 }
-/** @public */
+/** Ion Acoustic Result. @public */
 export interface IonAcousticResult {
   readonly omega_rad_s: number;
 }
-/** @public */
+/** evaluate Ion Acoustic. @public */
 export function evaluateIonAcoustic({ k_per_m, c_s_m_s, lambda_De_m }: IonAcousticInputs): IonAcousticResult {
   finite('k_per_m', k_per_m);
   finite('c_s_m_s', c_s_m_s);
@@ -74,11 +74,11 @@ export interface UpperHybridInputs {
   readonly B_T: number;
   readonly m_kg: number;
 }
-/** @public */
+/** Upper Hybrid Result. @public */
 export interface UpperHybridResult {
   readonly omega_rad_s: number;
 }
-/** @public */
+/** evaluate Upper Hybrid. @public */
 export function evaluateUpperHybrid({ n_per_m3, B_T, m_kg }: UpperHybridInputs): UpperHybridResult {
   finite('n_per_m3', n_per_m3);
   finite('B_T', B_T);
@@ -98,11 +98,11 @@ export interface ColdPlasmaCutoffInputs {
   readonly omega_c_rad_s: number;
   readonly omega_p_rad_s: number;
 }
-/** @public */
+/** Cold Plasma Cutoff Result. @public */
 export interface ColdPlasmaCutoffResult {
   readonly omega_R_rad_s: number;
 }
-/** @public */
+/** evaluate Cold Plasma Cutoff. @public */
 export function evaluateColdPlasmaCutoff({
   omega_c_rad_s,
   omega_p_rad_s,
@@ -120,11 +120,11 @@ export interface LowerHybridInputs {
   readonly omega_ci_rad_s: number;
   readonly omega_ce_rad_s: number;
 }
-/** @public */
+/** Lower Hybrid Result. @public */
 export interface LowerHybridResult {
   readonly omega_rad_s: number;
 }
-/** @public */
+/** evaluate Lower Hybrid. @public */
 export function evaluateLowerHybrid({
   omega_pi_rad_s,
   omega_ci_rad_s,
@@ -143,11 +143,11 @@ export interface ObliqueMagnetosonicInputs {
   readonly v_A_m_s: number;
   readonly theta_rad: number;
 }
-/** @public */
+/** Oblique Magnetosonic Result. @public */
 export interface ObliqueMagnetosonicResult {
   readonly v_fast_m_s: number;
 }
-/** @public */
+/** evaluate Oblique Magnetosonic. @public */
 export function evaluateObliqueMagnetosonic({
   c_s_m_s,
   v_A_m_s,
@@ -173,11 +173,11 @@ export interface BennettPinchInputs {
   readonly N_per_m: number;
   readonly T_K: number;
 }
-/** @public */
+/** Bennett Pinch Result. @public */
 export interface BennettPinchResult {
   readonly I_A: number;
 }
-/** @public */
+/** evaluate Bennett Pinch. @public */
 export function evaluateBennettPinch({ N_per_m, T_K }: BennettPinchInputs): BennettPinchResult {
   finite('N_per_m', N_per_m);
   finite('T_K', T_K);
@@ -195,11 +195,11 @@ export interface LossConeInputs {
   readonly B0_T: number;
   readonly Bm_T: number;
 }
-/** @public */
+/** Loss Cone Result. @public */
 export interface LossConeResult {
   readonly sin2_theta: number;
 }
-/** @public */
+/** evaluate Loss Cone. @public */
 export function evaluateLossCone({ B0_T, Bm_T }: LossConeInputs): LossConeResult {
   finite('B0_T', B0_T);
   finite('Bm_T', Bm_T);
@@ -215,11 +215,11 @@ export interface GradBDriftInputs {
   readonly q_C: number;
   readonly B_T: number;
 }
-/** @public */
+/** Grad BDrift Result. @public */
 export interface GradBDriftResult {
   readonly v_m_s: number;
 }
-/** @public */
+/** evaluate Grad BDrift. @public */
 export function evaluateGradBDrift({
   m_kg,
   v_perp_m_s,
@@ -244,13 +244,13 @@ export interface ExBDriftInputs {
   readonly E_y_V_per_m: number;
   readonly B_T: number;
 }
-/** @public */
+/** Ex BDrift Result. @public */
 export interface ExBDriftResult {
   readonly v_x_m_s: number;
   readonly v_y_m_s: number;
   readonly speed_m_s: number;
 }
-/** @public */
+/** evaluate Ex BDrift. @public */
 export function evaluateExBDrift({ E_x_V_per_m, E_y_V_per_m, B_T }: ExBDriftInputs): ExBDriftResult {
   finite('E_x_V_per_m', E_x_V_per_m);
   finite('E_y_V_per_m', E_y_V_per_m);
@@ -271,11 +271,11 @@ export interface LandauDampingInputs {
   readonly k_per_m: number;
   readonly v_t_m_s: number;
 }
-/** @public */
+/** Landau Damping Result. @public */
 export interface LandauDampingResult {
   readonly gamma_rad_s: number;
 }
-/** @public */
+/** evaluate Landau Damping. @public */
 export function evaluateLandauDamping({
   omega_rad_s,
   k_per_m,
@@ -299,12 +299,12 @@ export interface DebyeSphereInputs {
   readonly n_per_m3: number;
   readonly lambda_D_m: number;
 }
-/** @public */
+/** Debye Sphere Result. @public */
 export interface DebyeSphereResult {
   readonly N_D: number;
   readonly Lambda: number;
 }
-/** @public */
+/** evaluate Debye Sphere. @public */
 export function evaluateDebyeSphere({ n_per_m3, lambda_D_m }: DebyeSphereInputs): DebyeSphereResult {
   finite('n_per_m3', n_per_m3);
   finite('lambda_D_m', lambda_D_m);
@@ -317,11 +317,11 @@ export interface MultiDebyeInputs {
   readonly lambda_1_m: number;
   readonly lambda_2_m: number;
 }
-/** @public */
+/** Multi Debye Result. @public */
 export interface MultiDebyeResult {
   readonly lambda_D_m: number;
 }
-/** @public */
+/** evaluate Multi Debye. @public */
 export function evaluateMultiDebye({ lambda_1_m, lambda_2_m }: MultiDebyeInputs): MultiDebyeResult {
   finite('lambda_1_m', lambda_1_m);
   finite('lambda_2_m', lambda_2_m);
@@ -341,11 +341,11 @@ export interface LorentzResistivityInputs {
   readonly T_K: number;
   readonly m_kg: number;
 }
-/** @public */
+/** Lorentz Resistivity Result. @public */
 export interface LorentzResistivityResult {
   readonly eta_ohm_m: number;
 }
-/** @public */
+/** evaluate Lorentz Resistivity. @public */
 export function evaluateLorentzResistivity({
   Z,
   ln_Lambda,
@@ -374,11 +374,11 @@ export interface ResistiveSlabInputs {
   readonly sigma_S_per_m: number;
   readonly L_m: number;
 }
-/** @public */
+/** Resistive Slab Result. @public */
 export interface ResistiveSlabResult {
   readonly tau_s: number;
 }
-/** @public */
+/** evaluate Resistive Slab. @public */
 export function evaluateResistiveSlab({ sigma_S_per_m, L_m }: ResistiveSlabInputs): ResistiveSlabResult {
   finite('sigma_S_per_m', sigma_S_per_m);
   finite('L_m', L_m);
@@ -390,11 +390,11 @@ export interface ParkerCriticalInputs {
   readonly c_s_m_s: number;
   readonly M_kg: number;
 }
-/** @public */
+/** Parker Critical Result. @public */
 export interface ParkerCriticalResult {
   readonly r_c_m: number;
 }
-/** @public */
+/** evaluate Parker Critical. @public */
 export function evaluateParkerCritical({ c_s_m_s, M_kg }: ParkerCriticalInputs): ParkerCriticalResult {
   finite('c_s_m_s', c_s_m_s);
   finite('M_kg', M_kg);
@@ -409,11 +409,11 @@ export interface ParkerSpiralInputs {
   readonly theta_rad: number;
   readonly v_r_m_s: number;
 }
-/** @public */
+/** Parker Spiral Result. @public */
 export interface ParkerSpiralResult {
   readonly ratio: number;
 }
-/** @public */
+/** evaluate Parker Spiral. @public */
 export function evaluateParkerSpiral({
   Omega_rad_s,
   r_m,
@@ -434,11 +434,11 @@ export interface ChapmanFerraroInputs {
   readonly rho_kg_per_m3: number;
   readonly v_m_s: number;
 }
-/** @public */
+/** Chapman Ferraro Result. @public */
 export interface ChapmanFerraroResult {
   readonly standoff_sixth: number;
 }
-/** @public */
+/** evaluate Chapman Ferraro. @public */
 export function evaluateChapmanFerraro({
   B_E_T,
   rho_kg_per_m3,
@@ -457,11 +457,11 @@ export interface LawsonBreakevenInputs {
   readonly sigma_v_m3_s: number;
   readonly E_J: number;
 }
-/** @public */
+/** Lawson Breakeven Result. @public */
 export interface LawsonBreakevenResult {
   readonly n_tau_s_per_m3: number;
 }
-/** @public */
+/** evaluate Lawson Breakeven. @public */
 export function evaluateLawsonBreakeven({
   T_K,
   sigma_v_m3_s,
@@ -479,11 +479,11 @@ export interface LangmuirProbeInputs {
   readonly m_e_kg: number;
   readonly m_i_kg: number;
 }
-/** @public */
+/** Langmuir Probe Result. @public */
 export interface LangmuirProbeResult {
   readonly ePhi_over_kT: number;
 }
-/** @public */
+/** evaluate Langmuir Probe. @public */
 export function evaluateLangmuirProbe({ m_e_kg, m_i_kg }: LangmuirProbeInputs): LangmuirProbeResult {
   finite('m_e_kg', m_e_kg);
   finite('m_i_kg', m_i_kg);
@@ -495,11 +495,11 @@ export function evaluateLangmuirProbe({ m_e_kg, m_i_kg }: LangmuirProbeInputs): 
 export interface CrossFieldDiffusionInputs {
   readonly alpha: number;
 }
-/** @public */
+/** Cross Field Diffusion Result. @public */
 export interface CrossFieldDiffusionResult {
   readonly ratio: number;
 }
-/** @public */
+/** evaluate Cross Field Diffusion. @public */
 export function evaluateCrossFieldDiffusion({ alpha }: CrossFieldDiffusionInputs): CrossFieldDiffusionResult {
   finite('alpha', alpha);
   return { ratio: 1 / (1 + alpha * alpha) };
@@ -527,11 +527,11 @@ export interface FirehoseInputs {
   readonly beta_parallel: number;
   readonly beta_perp: number;
 }
-/** @public */
+/** Firehose Result. @public */
 export interface FirehoseResult {
   readonly margin: number;
 }
-/** @public */
+/** evaluate Firehose. @public */
 export function evaluateFirehose({ beta_parallel, beta_perp }: FirehoseInputs): FirehoseResult {
   finite('beta_parallel', beta_parallel);
   finite('beta_perp', beta_perp);
@@ -548,11 +548,11 @@ export interface MirrorInstabilityInputs {
   readonly T_perp_K: number;
   readonly T_parallel_K: number;
 }
-/** @public */
+/** Mirror Instability Result. @public */
 export interface MirrorInstabilityResult {
   readonly margin: number;
 }
-/** @public */
+/** evaluate Mirror Instability. @public */
 export function evaluateMirrorInstability({
   beta_perp,
   T_perp_K,
