@@ -4,7 +4,7 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  377 candidates  →  59 promising  ·  298 inert  ·  19 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  funnel:  377 candidates  →  59 promising  ·  300 inert  ·  17 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
   readiness of the 59 promising: 0 mechanism-tested · 0 data-tested · 59 without magnitude evidence · 59 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
@@ -364,35 +364,35 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: deviation-from-mean · needs a stated force regime for: thermal-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, deviation-from-mean · needs a stated scale regime for: deviation-from-mean · needs a stated force regime for: thermal-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ droplet-radius                  [[length]]  score 6
         unlocks: droplet-radius
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: droplet-radius · needs a stated force regime for: thermal-wavelength, droplet-radius · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, droplet-radius · needs a stated scale regime for: droplet-radius · needs a stated force regime for: thermal-wavelength, droplet-radius · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and droplet-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ hubble-distance                 [[length]]  score 6
         unlocks: hubble-distance
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ scale-factor                    [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: thermal-wavelength, scale-factor · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: thermal-wavelength, scale-factor · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ standard-deviation              [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: standard-deviation · needs a stated force regime for: thermal-wavelength, standard-deviation · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, standard-deviation · needs a stated scale regime for: standard-deviation · needs a stated force regime for: thermal-wavelength, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     wavelength ≟ classical-electron-radius               [[length]]  score 6
         unlocks: wavelength
@@ -421,8 +421,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
     radius ≟ classical-electron-radius                   ~16.9 orders apart  (anchor-derived)
     radius ≟ planck-length                               ~38.3 orders apart  (anchor-derived)
     rest-energy ≟ rydberg-energy                         ~62.4 orders apart  (anchor-derived)
-    thermal-wavelength ≟ bohr-radius                     ~23.8 orders apart  (anchor-derived)
-    thermal-wavelength ≟ classical-electron-radius       ~20.6 orders apart  (anchor-derived)
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     distance ≟ hubble-distance                           [[length]]
