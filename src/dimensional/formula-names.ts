@@ -9,7 +9,7 @@
  */
 
 import type { Dimension } from './types.js';
-import { CHARGE, DIMENSIONLESS, LENGTH, MASS } from './types.js';
+import { CHARGE, DIMENSIONLESS, LENGTH, MASS, TEMPERATURE } from './types.js';
 import { C_SI, E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, N_A_SI } from '../core/constants.js';
 
 const PERMITTIVITY: Dimension = { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };
@@ -55,3 +55,22 @@ export const FORMULA_NAMED: readonly FormulaName[] = [
 export function formulaNameDimensions(): ReadonlyMap<string, Dimension> {
   return new Map(FORMULA_NAMED.map((n) => [n.name, n.dim]));
 }
+
+/** A short symbol is this quantity only when it carries this dimension. */
+export interface DimensionRename {
+  readonly symbol: string;
+  readonly dimension: Dimension;
+  readonly name: string;
+}
+
+/**
+ * Structural-hash spellings. A time coordinate named `T` is not temperature.
+ * The name table includes this array. It is defined here so the canonical
+ * normal form can read it without importing composition.
+ */
+export const DIMENSION_RENAMES: readonly DimensionRename[] = [
+  { symbol: 'T', dimension: TEMPERATURE, name: 'temperature' },
+  { symbol: 'M', dimension: MASS, name: 'mass' },
+  { symbol: 'm_1', dimension: MASS, name: 'mass' },
+  { symbol: 'm_2', dimension: MASS, name: 'secondary-mass' },
+];

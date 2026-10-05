@@ -9,14 +9,7 @@
  * @module composition/aliases
  */
 import type { BridgeEdge } from './edge.js';
-import { MASS, TEMPERATURE, type Dimension } from '../dimensional/types.js';
-
-/** A short symbol is this quantity only when it carries this dimension. */
-export interface DimensionRename {
-  readonly symbol: string;
-  readonly dimension: Dimension;
-  readonly name: string;
-}
+import { DIMENSION_RENAMES, type DimensionRename } from '../dimensional/formula-names.js';
 
 /**
  * The one name table.
@@ -51,12 +44,7 @@ export const NAME_TABLE: {
     'CE-compton-wavelength': ['reduced-compton-wavelength'],
     'CE-compton-wavelength-full': ['compton-wavelength'],
   },
-  dimensionRenames: [
-    { symbol: 'T', dimension: TEMPERATURE, name: 'temperature' },
-    { symbol: 'M', dimension: MASS, name: 'mass' },
-    { symbol: 'm_1', dimension: MASS, name: 'mass' },
-    { symbol: 'm_2', dimension: MASS, name: 'secondary-mass' },
-  ],
+  dimensionRenames: DIMENSION_RENAMES,
 };
 
 /** Alias key → source name, for edges whose target is `target`. Ambiguous keys are omitted. */

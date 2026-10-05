@@ -3637,7 +3637,7 @@ The codebase is organized into the following modules:
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/algebra.js` | `equals` | Import |
-| `../composition/aliases.js` | `NAME_TABLE` | Import |
+| `../dimensional/formula-names.js` | `DIMENSION_RENAMES` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
@@ -4982,10 +4982,9 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
-| `../dimensional/types.js` | `MASS, TEMPERATURE, Dimension` | Import |
+| `../dimensional/formula-names.js` | `DIMENSION_RENAMES, DimensionRename` | Import |
 
 **Exports:**
-- Interfaces: `DimensionRename`
 - Functions: `aliasesForTarget`, `rewriteInputKey`, `editDistance`, `synonymInCatalog`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
 - Constants: `NAME_TABLE`
 
@@ -7330,13 +7329,13 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
+| `./types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS, TEMPERATURE` | Import |
 | `../core/constants.js` | `C_SI, E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, N_A_SI` | Import |
 
 **Exports:**
-- Interfaces: `FormulaName`
+- Interfaces: `FormulaName`, `DimensionRename`
 - Functions: `formulaNameDimensions`
-- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
+- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`, `DIMENSION_RENAMES`
 
 ---
 
@@ -8962,8 +8961,8 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 472 |
 | Total Modules | 13 |
-| Total Lines of Code | 100098 |
-| Total Exports | 3559 |
+| Total Lines of Code | 100105 |
+| Total Exports | 3560 |
 | Total Re-exports | 1734 |
 | Total Classes | 61 |
 | Total Interfaces | 562 |

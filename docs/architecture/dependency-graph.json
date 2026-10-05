@@ -4,7 +4,7 @@
     "version": "5.0.0",
     "totalFiles": 472,
     "totalModules": 13,
-    "totalExports": 3559
+    "totalExports": 3560
   },
   "entryPoints": [
     {
@@ -12155,9 +12155,9 @@
             ]
           },
           {
-            "file": "../composition/aliases.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
-              "NAME_TABLE"
+              "DIMENSION_RENAMES"
             ]
           },
           {
@@ -17136,11 +17136,10 @@
             "typeOnly": true
           },
           {
-            "file": "../dimensional/types.js",
+            "file": "../dimensional/formula-names.js",
             "imports": [
-              "MASS",
-              "TEMPERATURE",
-              "Dimension"
+              "DIMENSION_RENAMES",
+              "DimensionRename"
             ]
           }
         ],
@@ -17153,9 +17152,6 @@
           "nearQuantityNames",
           "shareSynonyms",
           "collapseSynonymGovernors"
-        ],
-        "interfaces": [
-          "DimensionRename"
         ],
         "functions": [
           "aliasesForTarget",
@@ -26345,7 +26341,8 @@
               "CHARGE",
               "DIMENSIONLESS",
               "LENGTH",
-              "MASS"
+              "MASS",
+              "TEMPERATURE"
             ]
           },
           {
@@ -26364,10 +26361,12 @@
           "EPS0_SI",
           "MU0_SI",
           "FORMULA_NAMED",
+          "DIMENSION_RENAMES",
           "formulaNameDimensions"
         ],
         "interfaces": [
-          "FormulaName"
+          "FormulaName",
+          "DimensionRename"
         ],
         "functions": [
           "formulaNameDimensions"
@@ -26375,7 +26374,8 @@
         "constants": [
           "EPS0_SI",
           "MU0_SI",
-          "FORMULA_NAMED"
+          "FORMULA_NAMED",
+          "DIMENSION_RENAMES"
         ]
       },
       "src/dimensional/fresh-label.ts": {
@@ -33447,14 +33447,14 @@
   "statistics": {
     "totalTypeScriptFiles": 472,
     "totalModules": 13,
-    "totalLinesOfCode": 100098,
-    "totalExports": 3559,
+    "totalLinesOfCode": 100105,
+    "totalExports": 3560,
     "totalClasses": 61,
     "totalInterfaces": 562,
     "totalFunctions": 849,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 916,
+    "totalConstants": 917,
     "totalReExports": 1734,
     "totalTypeOnlyImports": 583,
     "runtimeCircularDeps": 0,
