@@ -9,6 +9,11 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-10-05
+
+- **Package version 5.0.0 is on npm.** `npm view universal-physics-tensor@5.0.0 version gitHead --prefer-online` printed `5.0.0` and `4420714b67f5728492ba90d9a983280227b36943`. Annotated tag `v5.0.0` is object `28ebfb885aab8b06499e90fcd208d4e688b0af69` and its target is that commit. Publish run `37247750332` succeeded. The GitHub release is `https://github.com/danielsimonjr/Universal-Physics-Tensor/releases/tag/v5.0.0`. The sentence that npm `latest` is still `4.0.0` is the record from before this measurement.
+- **Plasma and space dogfood, round 6, 2026-10-04.** The session, the new candidates, and the filed bugs are `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md`. Model persona on the published package `universal-physics-tensor@5.0.0`, not a human reviewer. The new candidates are unproven. The bugs are issues 386–392 and are not fixed in this change. The session does not change `src/`.
+
 ## As of 2026-10-04
 
 - **Package version in this tree is 5.0.0.** npm `latest` is still `4.0.0` until the tag workflow publishes this version. The major note is the [5.0.0] section. Since published `4.0.0` (`9e7dfa27`), a monomial odd in both carrier charge and mobility throws `CarrierSignError`, the canonical audit splits an unsourced 1 into COEFFICIENT UNSET, a catalog bridge with no evaluator routes to `upt atlas`, and be-83's slope is `V/K^2`. The public exports added since `4.0.0` are the BE-88 through BE-102 evaluators, their input and result types, and `be88Edge` through `be102Edge`. No export was removed. The sentence that the package version stays 4.0.0 is the record from before this bump.

@@ -20,6 +20,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Record the plasma and space dogfood of published `universal-physics-tensor@5.0.0`. The report is `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md`. The session does not change `src/`.
+  Done: the report is that file. npm `5.0.0` gitHead is `4420714b67f5728492ba90d9a983280227b36943`. Annotated tag `v5.0.0` (object `28ebfb885aab8b06499e90fcd208d4e688b0af69`) points at that commit. Publish run `37247750332` succeeded. New candidates stay unproven. The bugs are filed as issues 386–392 and are not fixed in this change.
+
 - [x] Set the package version to 5.0.0. Published `4.0.0` is `9e7dfa27`. Since that tag, opposite carrier signs throw, an unsourced dimensional 1 is COEFFICIENT UNSET, search of a catalog bridge with no evaluator names the formula, and be-83 is `V/K^2`. PhysJS `03e8bb77` adds BE-88 through BE-102.
   Done: `package.json` is 5.0.0. The major note is the [5.0.0] section. Version-stamped artifacts carry 5.0.0. The Part VIII check requires 5.0.0. Before the bump it required 4.0.0. npm `4.0.0` remains the published release until the tag workflow.
 - [x] A dimensional entry with no sourced prefactor is not a recovered factor of 1.
