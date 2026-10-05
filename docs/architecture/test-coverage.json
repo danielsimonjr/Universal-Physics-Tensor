@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 473,
-    "totalTestFiles": 669,
+    "totalTestFiles": 670,
     "testedCount": 463,
     "untestedCount": 10,
     "coveragePercent": "97.9"
@@ -3542,6 +3542,7 @@
       "tests/bridges/spec-vs-index.test.ts",
       "tests/bridges/tensor-index.test.ts",
       "tests/bridges-index.test.ts",
+      "tests/canonical/carrier-sign.test.ts",
       "tests/canonical/invariants.test.ts",
       "tests/canonical/structural-classifier.test.ts",
       "tests/cases/applied-cases.test.ts",
@@ -6715,6 +6716,7 @@
       "tests/bridges/spec-vs-index.test.ts",
       "tests/bridges/tensor-index.test.ts",
       "tests/bridges-index.test.ts",
+      "tests/canonical/carrier-sign.test.ts",
       "tests/canonical/invariants.test.ts",
       "tests/canonical/structural-classifier.test.ts",
       "tests/cases/applied-cases.test.ts",
@@ -11313,6 +11315,7 @@
       "tests/bridges/be-77-87.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/evaluate-uncertainty-name.test.ts",
@@ -11384,6 +11387,7 @@
       "tests/bridges/be-77-87.test.ts",
       "tests/bridges/bridge-equations-facade.test.ts",
       "tests/bridges/public-api-stability.test.ts",
+      "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
       "tests/cli/audit-improvements.test.ts",
       "tests/cli/evaluate-uncertainty-name.test.ts",
@@ -15735,6 +15739,7 @@
       "src/core/regimes-builtins.ts"
     ],
     "tests/api/public-tag-vs-index-invariant.test.ts": [],
+    "tests/architecture/single-owner.test.ts": [],
     "tests/atlas/applicability.test.ts": [
       "src/dimensional/ast-builders.ts",
       "src/dimensional/ast-types.ts",
@@ -21666,6 +21671,10 @@
     "tests/canonical/carrier-sign.test.ts": [
       "src/composition/canonical-graph.ts",
       "src/composition/explain.ts",
+      "src/composition/edge.ts",
+      "src/composition/edges/applied-physicist.ts",
+      "src/bridges/be70-einstein-relation.ts",
+      "src/bridges/carrier-sign.ts",
       "src/canonical/canonical-equation.ts",
       "src/dimensional/types.ts",
       "src/cli/main.ts",

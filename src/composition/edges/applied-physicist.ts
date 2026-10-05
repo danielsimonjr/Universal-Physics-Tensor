@@ -28,7 +28,6 @@ import { evaluatePullIn } from '../../bridges/be79-pull-in.js';
 import { evaluateMottGurney } from '../../bridges/be80-mott-gurney.js';
 import { evaluateChildLangmuir } from '../../bridges/be81-child-langmuir.js';
 import { evaluateShockleyDiode } from '../../bridges/be82-shockley-diode.js';
-import { sameCarrierSign } from '../../bridges/carrier-sign.js';
 import { evaluateThomsonCoefficient } from '../../bridges/be83-thomson.js';
 import { evaluateFourPointSheet } from '../../bridges/be84-four-point.js';
 import { evaluateShotNoise } from '../../bridges/be85-shot-noise.js';
@@ -354,14 +353,13 @@ export const be70Edge: BridgeEdge = withBoundAliases({
   target: diffusivityQ,
   confidence: 'established',
   domain: {
-    description: 'μ finite, T ≠ 0, q ≠ 0, and μ and q have the same sign',
+    description: 'μ finite, T ≠ 0, and q ≠ 0',
     predicate: (i) =>
       finite(i['electrical-mobility']) &&
       finite(i['einstein-temperature']) &&
       i['einstein-temperature'] !== 0 &&
       finite(i['carrier-charge']) &&
-      i['carrier-charge'] !== 0 &&
-      sameCarrierSign(i['electrical-mobility'], i['carrier-charge']),
+      i['carrier-charge'] !== 0,
   },
   evaluate: (i) =>
     evaluateEinsteinRelation({

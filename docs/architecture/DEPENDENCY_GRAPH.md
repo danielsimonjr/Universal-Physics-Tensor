@@ -1822,7 +1822,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `K_B_SI` | Import |
-| `./carrier-sign.js` | `assertSameCarrierSign` | Import |
+| `./carrier-sign.js` | `applyCarrierSignPolicy` | Import |
 
 **Exports:**
 - Interfaces: `EinsteinRelationInputs`, `EinsteinRelationResult`
@@ -2257,7 +2257,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Classes: `CarrierSignError`
-- Functions: `sameCarrierSign`, `assertSameCarrierSign`, `assertCarrierProductSign`
+- Functions: `resetCarrierSignPolicyCalls`, `readCarrierSignPolicyCalls`, `applyCarrierSignPolicy`
 
 ---
 
@@ -5138,7 +5138,7 @@ The codebase is organized into the following modules:
 | `./quantity.js` | `Quantity, RegimeAttributes` | Import (type-only) |
 | `../canonical/canonical-equation.js` | `CanonicalEquation` | Import (type-only) |
 | `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
-| `../bridges/carrier-sign.js` | `assertCarrierProductSign` | Import |
+| `../bridges/carrier-sign.js` | `applyCarrierSignPolicy` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 | `../core/constants.js` | `E_SI, M_E_SI` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
@@ -5461,7 +5461,6 @@ The codebase is organized into the following modules:
 | `../../bridges/be80-mott-gurney.js` | `evaluateMottGurney` | Import |
 | `../../bridges/be81-child-langmuir.js` | `evaluateChildLangmuir` | Import |
 | `../../bridges/be82-shockley-diode.js` | `evaluateShockleyDiode` | Import |
-| `../../bridges/carrier-sign.js` | `sameCarrierSign` | Import |
 | `../../bridges/be83-thomson.js` | `evaluateThomsonCoefficient` | Import |
 | `../../bridges/be84-four-point.js` | `evaluateFourPointSheet` | Import |
 | `../../bridges/be85-shot-noise.js` | `evaluateShotNoise` | Import |
@@ -8976,7 +8975,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 473 |
 | Total Modules | 13 |
-| Total Lines of Code | 100060 |
+| Total Lines of Code | 100113 |
 | Total Exports | 3560 |
 | Total Re-exports | 1735 |
 | Total Classes | 61 |

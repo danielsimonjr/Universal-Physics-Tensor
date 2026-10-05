@@ -64,7 +64,7 @@ import type { BridgeEdge, ValidityDomain } from './edge.js';
 import type { Quantity, RegimeAttributes } from './quantity.js';
 import type { CanonicalEquation } from '../canonical/canonical-equation.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
-import { assertCarrierProductSign } from '../bridges/carrier-sign.js';
+import { applyCarrierSignPolicy } from '../bridges/carrier-sign.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 import { E_SI, M_E_SI } from '../core/constants.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -364,10 +364,6 @@ function evenInputNames(node: ExprNode | undefined): ReadonlySet<string> {
   return even;
 }
 
-function magnitudeBase(name: string, value: number, even: ReadonlySet<string>): number {
-  return even.has(name) ? Math.abs(value) : value;
-}
-
 /** Evaluate a fully-quantitative monomial AST, including its dimensionless counts. */
 function evaluateAstMonomial(
   eq: CanonicalEquation,
@@ -388,15 +384,12 @@ function evaluateAstMonomial(
     if (cv !== null) constFactor *= Math.pow(cv, exp);
     else varExps.push([name, exp]);
   }
-  const monomial = eq.dimensional.monomial;
-  const even = evenInputNames(eq.scalarAst);
   return (inputs: Record<string, number>): number => {
-    if (monomial !== null) assertCarrierProductSign(monomial, inputs);
     let v = constFactor;
     for (const [name, exp] of varExps) {
       const x = inputs[name];
       if (x === undefined || !Number.isFinite(x)) return Number.NaN;
-      v *= Math.pow(magnitudeBase(name, x, even), exp);
+      v *= Math.pow(x, exp);
     }
     return v;
   };
@@ -409,10 +402,10 @@ function evaluateAstMonomial(
  * its recorded dimensionless coefficient and the sourced table prefactor.
  * A fully-quantitative AST that names a dimensionless count, or whose
  * Buckingham monomial is null, is evaluated from that AST so the count and
- * the numeric leaves (6π) are not dropped. A variable the AST is even in
- * (q² under a square root, or |q|) is taken as an absolute value, so a
- * magnitude stays positive. An odd formula, including a cyclotron frequency
- * and a Hall coefficient, stays signed.
+ * the numeric leaves (6π) are not dropped. The edge applies the sign policy
+ * once before this function: an input the AST is even in is an absolute
+ * value, and a product odd in both charge and mobility rejects opposite
+ * signs. This function does not do that again.
  * Returns NaN when the monomial is null and the AST is not that monomial
  * — `retrodict` then abstains.
  */
@@ -438,9 +431,7 @@ function makeEvaluate(
   const recorded = recordedDimensionlessCoefficient(eq) ?? 1;
   const tabled = canonicalPrefactor(eq.id) ?? 1;
   const group = CANONICAL_GROUP_PREFACTORS.find((p) => p.id === eq.id);
-  const even = evenInputNames(eq.scalarAst);
   return (inputs: Record<string, number>): number => {
-    assertCarrierProductSign(monomial, inputs);
     let v = constFactor * recorded * tabled;
     if (group !== undefined) {
       const g = inputs[group.group];
@@ -451,7 +442,7 @@ function makeEvaluate(
     }
     for (const [name, exp] of varExps) {
       const x = inputs[name];
-      v *= Math.pow(x === undefined ? Number.NaN : magnitudeBase(name, x, even), exp);
+      v *= Math.pow(x === undefined ? Number.NaN : x, exp);
     }
     return v;
   };
@@ -473,6 +464,9 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
   for (const name of Object.keys(factors)) {
     sources.push({ name, symbol: name, dim: DIMENSIONLESS, attributes });
   }
+  const evaluateRaw = makeEvaluate(eq);
+  const even = evenInputNames(eq.scalarAst);
+  const monomial = eq.dimensional.monomial;
   return {
     id: eq.id,
     beId: null,
@@ -482,7 +476,7 @@ function toEdge(eq: CanonicalEquation): BridgeEdge {
     target,
     confidence: 'established',
     domain: PERMISSIVE_DOMAIN,
-    evaluate: makeEvaluate(eq),
+    evaluate: (inputs) => evaluateRaw(applyCarrierSignPolicy(monomial, inputs, even)),
     citation: eq.references[0] ?? eq.id,
     ...(eq.epistemicStatus === 'dimensional' && canonicalPrefactor(eq.id) === undefined
       ? { coefficientUnset: true as const }

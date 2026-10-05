@@ -34,7 +34,8 @@ describe('BE-70 Einstein relation', () => {
       'einstein-temperature': 300,
       'carrier-charge': -Q,
     };
-    expect(be70Edge.domain.predicate(point)).toBe(false);
+    expect(be70Edge.domain.predicate(point)).toBe(true);
+    expect(() => be70Edge.evaluate(point)).toThrow(/same sign/);
     expect(
       be70Edge.domain.predicate({
         'electrical-mobility': -0.14,
