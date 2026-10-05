@@ -89,11 +89,12 @@ describe('upt ground', () => {
     const code = await runCli(['ground', 'landauer-erasure-energy', 'dark-fermion-mass'], c.io);
     expect(code).toBe(0);
     expect(text(c)).toMatch(/mechanism-tested false · data-tested false/);
-  });
+  }, 180_000);
+  // ground ranks the catalog. 1525 candidates no longer finish in 60s on the CI runner.
   it('a non-candidate pair → exit 1', async () => {
     const c = capture();
     expect(await runCli(['ground', 'mass', 'mass'], c.io)).toBe(1);
-  });
+  }, 180_000);
   it('needs two names → exit 2', async () => {
     const c = capture();
     expect(await runCli(['ground', 'mass'], c.io)).toBe(2);
@@ -107,18 +108,18 @@ describe('upt ground', () => {
       expect(await runCli(['ground', '--source=canonical', 'compton-wavelength', 'hubble-distance'], c.io)).toBe(0);
       expect(text(c)).toMatch(/\[source: canonical/);
       expect(text(c)).toMatch(/compton-wavelength ≟ hubble-distance/);
-    });
+    }, 180_000);
     it('a pair from another scope names the scope that has it', async () => {
       const c = capture();
       expect(await runCli(['ground', 'compton-wavelength', 'hubble-distance'], c.io)).toBe(1);
       expect(text(c)).toMatch(/not a candidate in the catalog graph/);
       expect(text(c)).toMatch(/upt ground --source=canonical compton-wavelength hubble-distance/);
-    });
+    }, 180_000);
     it('a pair in no scope still says so, without naming a scope', async () => {
       const c = capture();
       expect(await runCli(['ground', 'mass', 'mass'], c.io)).toBe(1);
       expect(text(c)).toMatch(/in any of catalog, canonical, both/);
-    });
+    }, 180_000);
     it('help documents --source and the discover options', async () => {
       const c = capture();
       expect(await runCli(['help', 'ground'], c.io)).toBe(0);

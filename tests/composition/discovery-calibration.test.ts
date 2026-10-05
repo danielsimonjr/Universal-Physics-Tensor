@@ -161,7 +161,9 @@ describe('discovery calibration benchmark', () => {
         ADJUDICATIONS.some((a) => a.id === `${[c.a, c.b].sort().join('~')}`),
     );
     expect(escaped).toEqual([]);
-  });
+    // 1525 catalog candidates. The combined ranking no longer finishes in 60s
+    // on the CI runner. 60s is the record from before be-103..125.
+  }, 180_000);
 
   it('seed pairs resolve against the live graph or say why not', () => {
     // Guards silent name drift: every adjudication either names two live

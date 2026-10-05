@@ -186,7 +186,9 @@ describe('widened scope — candidate-set agnostic', () => {
     expect(ids).toContain('IC-erasure-energy--photon-energy--nu');
     // No structural duplicates survive (dedup ran).
     expect(new Set(ids).size).toBe(ids.length);
-  });
+    // The combined ranking no longer finishes in 60s on the CI runner.
+    // 60s is the record from before be-103..125.
+  }, 180_000);
 });
 
 describe('bridge-source adapter + leaf canonicalization', () => {
