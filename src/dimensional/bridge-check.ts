@@ -205,12 +205,37 @@ export const EXPECTED_DIMENSION_BY_BRIDGE: ReadonlyMap<number, Dimension> = new 
   [100, DIMENSIONLESS], // BE-100 Lyddane–Sachs–Teller ratio.
   [101, TEMPERATURE], // BE-101 BKT temperature.
   [102, HALL_CONDUCTANCE], // BE-102 Landauer conductance.
+  // 90 is the record from before be-103..125. Those rows have no AST.
+  [103, VELOCITY],
+  [104, FREQUENCY],
+  [105, FREQUENCY],
+  [106, FREQUENCY],
+  [107, FREQUENCY],
+  [108, VELOCITY],
+  [109, { L: 0, M: 0, T: 0, I: 1, Theta: 0, N: 0, J: 0 }], // BE-109 equal-temperature Bennett current.
+  [110, DIMENSIONLESS],
+  [111, VELOCITY],
+  [112, VELOCITY],
+  [113, FREQUENCY],
+  [114, DIMENSIONLESS],
+  [115, LENGTH],
+  [116, RESISTIVITY],
+  [117, TIME],
+  [118, LENGTH],
+  [119, DIMENSIONLESS],
+  [120, DIMENSIONLESS],
+  [121, { L: -3, M: 0, T: 1, I: 0, Theta: 0, N: 0, J: 0 }], // BE-121 Lawson n τ.
+  [122, DIMENSIONLESS],
+  [123, DIMENSIONLESS],
+  [124, DIMENSIONLESS],
+  [125, DIMENSIONLESS],
 ]);
 
 /**
  * Infer the SI dimensional signature of a bridge equation expression.
  *
- * @param bridgeId  The id from `BRIDGE_EQUATIONS` (11..102). If present
+ * @param bridgeId  The id from `BRIDGE_EQUATIONS`. The sentence that the
+ *                  range is 11..102 is the record from before BE-103–125. If present
  *                  in `EXPECTED_DIMENSION_BY_BRIDGE` the inferred dim
  *                  is cross-checked against the expected; mismatch =>
  *                  null. If absent, the inferred dim is returned as-is.

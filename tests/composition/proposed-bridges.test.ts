@@ -121,7 +121,8 @@ describe('epistemic firewall', () => {
     deriveProposedBridges();
     expect(BRIDGE_EQUATIONS).toBe(ref); // same array reference
     expect(JSON.stringify(BRIDGE_EQUATIONS)).toBe(before); // unchanged content
-    expect(BRIDGE_EQUATIONS).toHaveLength(92);
+    expect(BRIDGE_EQUATIONS).toHaveLength(115);
+    // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
   });
 });
@@ -185,7 +186,9 @@ describe('widened scope — candidate-set agnostic', () => {
     expect(ids).toContain('IC-erasure-energy--photon-energy--nu');
     // No structural duplicates survive (dedup ran).
     expect(new Set(ids).size).toBe(ids.length);
-  });
+    // The combined ranking no longer finishes in 60s on the CI runner.
+    // 60s is the record from before be-103..125.
+  }, 180_000);
 });
 
 describe('bridge-source adapter + leaf canonicalization', () => {
@@ -271,7 +274,8 @@ describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', ()
   });
 
   it('is NOT the catalog — BRIDGE_EQUATIONS stays the faithful 44', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(92);
+    expect(BRIDGE_EQUATIONS).toHaveLength(115);
+    // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
     // PROPOSED_BRIDGES ids are string IC-*, never numeric catalog ids.
     for (const e of PROPOSED_BRIDGES) expect(e.id).toMatch(/^IC-/);

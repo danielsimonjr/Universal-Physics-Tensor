@@ -73,9 +73,9 @@ describe('§VI.6.1 tensor index', () => {
   const listed = specTensorIndex(readFileSync(SPEC, 'utf8'));
 
   it('places every catalog id in exactly one component, matching its category', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(92);
-    expect(listed.size).toBe(92);
-    // 77 is the record from before be-88..102.
+    expect(BRIDGE_EQUATIONS).toHaveLength(115);
+    expect(listed.size).toBe(115);
+    // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
     for (const entry of BRIDGE_EQUATIONS) {
       expect(
         listed.get(entry.id),

@@ -64,8 +64,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
   If the installed MathTS packages have no public scalar-expression builder, that builder is added in MathTS first. Each cluster's lowered value matches the deleted function on that cluster's numeric fixture. A catalog id has one numeric body.
   Blocked on a MathTS release. Installed `@danielsimonjr/mathts-expression` 0.9.0 and `@danielsimonjr/mathts-functions` 0.67.0 do not export the builder. Local MathTS commit `fda3d888f99516d3862bd0e1aa170d12543488ec` adds it. Push to that repository returned 403. Closed forms stay until the owner publishes and this tree installs the export.
 
-- [ ] Implement phase 7 of the 6.0.0 integration: one bridge registration, including the PhysJS bridges BE-103 through BE-125.
+- [x] Implement phase 7 of the 6.0.0 integration: one bridge registration, including the PhysJS bridges BE-103 through BE-125.
   A fixture record appears in the catalog, the right-hand side, the edge list, and the evaluator map. An atlas model id is rejected. The manifest pin is PhysJS `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f`. Proofs that assume their key step as a hypothesis say so. The equal-temperature Bennett current and the kinetic closure are the corrected formulas.
+  Done: `registerBridge` is the only builder of a catalog id. The parent scan failed on `export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [`. BE-103 through BE-125 are registered. BE-106, BE-113, BE-116, and BE-125 name their hypotheses. The Bennett equal-temperature current uses 16π. BE-116 returns the kinetic closure. Closed forms stay because the MathTS builder is not installed, so these rows have no new right-hand-side AST.
 
 - [ ] Implement phase 8 of the 6.0.0 integration: one JSON canonicalizer with a record profile and a probe profile.
   A record fixture and a probe fixture hash to the same digests as the old functions. The probe export names stay.

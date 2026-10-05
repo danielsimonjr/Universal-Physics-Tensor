@@ -63,8 +63,13 @@ describe('discovery calibration benchmark', () => {
   // pauli-fermi-energy, sommerfeld-fermi-energy, and mass-action-gap. A
   // shared energy token is not an identification. Entailed stays 0 and
   // novel-consequence stays 1.
+  // BE-103 through BE-125 are isolated. total 710 → 1525, promising 15 → 16,
+  // inert 230 → 703, axis-clash 445 → 786. magnitude-clash stays 20.
+  // The would-clash sum is 796 = 786 axis-clash + 10 still shadowed.
+  // The new promising pair is landauer-erasure-energy with lawson-energy.
+  // A shared energy token is not an identification.
   const EXPECTED = {
-    catalog: { total: 710, promising: 15, inert: 230, clash: 20, contradictory: 0, axisClash: 445 },
+    catalog: { total: 1525, promising: 16, inert: 703, clash: 20, contradictory: 0, axisClash: 786 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -77,7 +82,7 @@ describe('discovery calibration benchmark', () => {
     expect(count(cands, 'axis-clash')).toBe(EXPECTED.catalog.axisClash);
   });
 
-  it('the 455 would-clash pairs decompose as 445 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
+  it('the 796 would-clash pairs decompose as 786 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
     const cands = rankDiscoveries(CATALOG_GRAPH);
     // `axisClashes` stays populated regardless of which falsifier wins, so
     // the shadowed pairs are exactly the magnitude-clash candidates whose
@@ -86,7 +91,8 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(455);
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(796);
+    // 455 is the record from before be-103..125.
     expect(shadowed.length).toBe(10);
   });
 
@@ -155,7 +161,9 @@ describe('discovery calibration benchmark', () => {
         ADJUDICATIONS.some((a) => a.id === `${[c.a, c.b].sort().join('~')}`),
     );
     expect(escaped).toEqual([]);
-  });
+    // 1525 catalog candidates. The combined ranking no longer finishes in 60s
+    // on the CI runner. 60s is the record from before be-103..125.
+  }, 180_000);
 
   it('seed pairs resolve against the live graph or say why not', () => {
     // Guards silent name drift: every adjudication either names two live

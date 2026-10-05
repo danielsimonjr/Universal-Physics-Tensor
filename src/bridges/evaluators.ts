@@ -59,6 +59,32 @@ import { evaluateMassAction } from './be99-mass-action.js';
 import { evaluateLyddaneSachsTeller } from './be100-lyddane-sachs-teller.js';
 import { evaluateBktJump } from './be101-bkt-jump.js';
 import { evaluateLandauerConductance } from './be102-landauer-conductance.js';
+import {
+  evaluateBennettPinch,
+  evaluateBohmSheath,
+  evaluateChapmanFerraro,
+  evaluateColdPlasmaCutoff,
+  evaluateCrossFieldDiffusion,
+  evaluateDebyeSphere,
+  evaluateExBDrift,
+  evaluateFirehose,
+  evaluateGradBDrift,
+  evaluateIonAcoustic,
+  evaluateLandauDamping,
+  evaluateLangmuirProbe,
+  evaluateLawsonBreakeven,
+  evaluateLorentzResistivity,
+  evaluateLossCone,
+  evaluateLowerHybrid,
+  evaluateMirrorInstability,
+  evaluateMultiDebye,
+  evaluateObliqueMagnetosonic,
+  evaluateParkerCritical,
+  evaluateParkerSpiral,
+  evaluateResistiveSlab,
+  evaluateUpperHybrid,
+} from './plasma-space.js';
+import { bridgeRegistry, registerBridge } from './registry.js';
 
 /**
  * What a length input measures. Two lengths of one dimension are not
@@ -134,9 +160,8 @@ const P = (
 const temperature = (key: string, quantity: string, symbol: string, meaning: string): EvaluatorParameter =>
   P(key, quantity, symbol, 'K', meaning, { temperature: 'absolute' });
 
-/** Bridge id → evaluator. @public */
-export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
-  [
+/** Bridge id → evaluator. Registered, then snapshotted. */
+const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
     spec(
       51,
       'Gravitational lensing (Eddington)',
@@ -564,8 +589,82 @@ export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> = new Map(
       [P('sum_Tn', 'transmission sum', 'Σ T_n', '', 'two spins; not the Hall conductance')],
       (i) => evaluateLandauerConductance({ sum_Tn: i.sum_Tn }),
     ),
-  ].map((s) => [s.bridgeId, s]),
-);
+    spec(103, 'Bohm sheath (cold)', [temperature('T_e_K', 'electron temperature', 'T_e', 'cold-ion threshold uses T_e'), P('m_i_kg', 'ion mass', 'm_i', 'kg', 'ion mass')], (i) =>
+      evaluateBohmSheath({ T_e_K: i.T_e_K, m_i_kg: i.m_i_kg }),
+    ),
+    spec(104, 'Ion acoustic dispersion', [P('k_per_m', 'wavenumber', 'k', 'm^-1', 'k ≠ 0'), P('c_s_m_per_s', 'sound speed', 'c_s', 'm/s', 'c_s² = k_B T_e / m_i'), P('lambda_De_m', 'Debye length', 'λ_De', 'm', 'one-species electron Debye length')], (i) =>
+      evaluateIonAcoustic({ k_per_m: i.k_per_m, c_s_m_s: i.c_s_m_per_s, lambda_De_m: i.lambda_De_m }),
+    ),
+    spec(105, 'Upper hybrid', [P('n_per_m3', 'density', 'n', 'm^-3', 'electron density'), P('B_T', 'magnetic field', 'B', 'T', 'field along z'), P('m_kg', 'mass', 'm', 'kg', 'electron mass')], (i) =>
+      evaluateUpperHybrid({ n_per_m3: i.n_per_m3, B_T: i.B_T, m_kg: i.m_kg }),
+    ),
+    spec(106, 'Cold-plasma R cutoff', [P('omega_c_rad_s', 'cyclotron frequency', 'ω_c', 'rad/s', 'ω_c ≥ 0; the Stix index is a hypothesis'), P('omega_p_rad_s', 'plasma frequency', 'ω_p', 'rad/s', 'plasma frequency')], (i) =>
+      evaluateColdPlasmaCutoff({ omega_c_rad_s: i.omega_c_rad_s, omega_p_rad_s: i.omega_p_rad_s }),
+    ),
+    spec(107, 'Lower hybrid', [P('omega_pi_rad_s', 'ion plasma frequency', 'ω_pi', 'rad/s', 'ion plasma frequency'), P('omega_ci_rad_s', 'ion cyclotron frequency', 'ω_ci', 'rad/s', 'ion cyclotron frequency'), P('omega_ce_rad_s', 'electron cyclotron frequency', 'ω_ce', 'rad/s', 'electron cyclotron frequency')], (i) =>
+      evaluateLowerHybrid({ omega_pi_rad_s: i.omega_pi_rad_s, omega_ci_rad_s: i.omega_ci_rad_s, omega_ce_rad_s: i.omega_ce_rad_s }),
+    ),
+    spec(108, 'Oblique magnetosonic', [P('c_s_m_per_s', 'sound speed', 'c_s', 'm/s', 'sound speed'), P('v_A_m_per_s', 'Alfvén speed', 'v_A', 'm/s', 'Alfvén speed'), P('theta_rad', 'propagation angle', 'θ', '', 'angle from the field, radians')], (i) =>
+      evaluateObliqueMagnetosonic({ c_s_m_s: i.c_s_m_per_s, v_A_m_s: i.v_A_m_per_s, theta_rad: i.theta_rad }),
+    ),
+    spec(109, 'Bennett pinch (equal temperature)', [P('N_per_m', 'line density', 'N', 'm^-1', 'N_e = N_i = N'), temperature('T_K', 'temperature', 'T', 'T_e = T_i = T')], (i) =>
+      evaluateBennettPinch({ N_per_m: i.N_per_m, T_K: i.T_K }),
+    ),
+    spec(110, 'Loss cone', [P('B0_T', 'throat field', 'B0', 'T', 'field at the throat'), P('Bm_T', 'mirror field', 'Bm', 'T', 'field at the mirror')], (i) =>
+      evaluateLossCone({ B0_T: i.B0_T, Bm_T: i.Bm_T }),
+    ),
+    spec(111, 'Grad-B drift', [P('m_kg', 'mass', 'm', 'kg', 'particle mass'), P('v_perp_m_per_s', 'perpendicular speed', 'v_⊥', 'm/s', 'speed perpendicular to B'), P('gradB_T_per_m', 'field gradient', '|∇B|', 'T/m', 'magnitude of the gradient'), P('q_C', 'charge', 'q', 'C', 'signed charge'), P('B_T', 'magnetic field', 'B', 'T', 'field strength, ≠ 0')], (i) =>
+      evaluateGradBDrift({ m_kg: i.m_kg, v_perp_m_s: i.v_perp_m_per_s, gradB_T_per_m: i.gradB_T_per_m, q_C: i.q_C, B_T: i.B_T }),
+    ),
+    spec(112, 'E×B drift', [P('E_x_V_per_m', 'electric field x', 'E_x', 'V/m', 'electric field along x'), P('E_y_V_per_m', 'electric field y', 'E_y', 'V/m', 'electric field along y'), P('B_T', 'magnetic field', 'B', 'T', 'field along z, ≠ 0')], (i) =>
+      evaluateExBDrift({ E_x_V_per_m: i.E_x_V_per_m, E_y_V_per_m: i.E_y_V_per_m, B_T: i.B_T }),
+    ),
+    spec(113, 'Landau damping', [P('omega_rad_s', 'wave frequency', 'ω', 'rad/s', 'real frequency; the residue formula is a hypothesis'), P('k_per_m', 'wavenumber', 'k', 'm^-1', 'wavenumber'), P('v_t_m_per_s', 'thermal speed', 'v_t', 'm/s', 'thermal speed in the Maxwellian')], (i) =>
+      evaluateLandauDamping({ omega_rad_s: i.omega_rad_s, k_per_m: i.k_per_m, v_t_m_s: i.v_t_m_per_s }),
+    ),
+    spec(114, 'Debye sphere', [P('n_per_m3', 'density', 'n', 'm^-3', 'number density'), P('lambda_D_m', 'Debye length', 'λ_D', 'm', 'one-species Debye length, an input')], (i) =>
+      evaluateDebyeSphere({ n_per_m3: i.n_per_m3, lambda_D_m: i.lambda_D_m }),
+    ),
+    spec(115, 'Two-species Debye length', [P('lambda_1_m', 'first Debye length', 'λ_1', 'm', 'species 1'), P('lambda_2_m', 'second Debye length', 'λ_2', 'm', 'species 2')], (i) =>
+      evaluateMultiDebye({ lambda_1_m: i.lambda_1_m, lambda_2_m: i.lambda_2_m }),
+    ),
+    spec(116, 'Lorentz resistivity (kinetic)', [P('Z', 'ion charge state', 'Z', '', 'ion charge state'), P('ln_Lambda', 'Coulomb logarithm', 'ln Λ', '', 'Coulomb logarithm, a hypothesis inside the transport cross section'), temperature('T_K', 'temperature', 'T', 'temperature in the thermal speed'), P('m_kg', 'mass', 'm', 'kg', 'mass in ν(v_T); the electron mass in the Lorentz collision')], (i) =>
+      evaluateLorentzResistivity({ Z: i.Z, ln_Lambda: i.ln_Lambda, T_K: i.T_K, m_kg: i.m_kg }),
+    ),
+    spec(117, 'Resistive slab', [P('sigma_S_per_m', 'conductivity', 'σ', 'S/m', 'conductivity'), P('L_m', 'slab width', 'L', 'm', 'slab width')], (i) =>
+      evaluateResistiveSlab({ sigma_S_per_m: i.sigma_S_per_m, L_m: i.L_m }),
+    ),
+    spec(118, 'Parker critical radius', [P('c_s_m_per_s', 'sound speed', 'c_s', 'm/s', 'isothermal sound speed'), P('M_kg', 'stellar mass', 'M', 'kg', 'central mass')], (i) =>
+      evaluateParkerCritical({ c_s_m_s: i.c_s_m_per_s, M_kg: i.M_kg }),
+    ),
+    spec(119, 'Parker spiral', [P('Omega_rad_s', 'rotation rate', 'Ω', 'rad/s', 'stellar rotation'), P('r_m', 'radius', 'r', 'm', 'heliocentric radius'), P('theta_rad', 'colatitude', 'θ', '', 'colatitude, radians'), P('v_r_m_per_s', 'radial speed', 'v_r', 'm/s', 'radial wind speed, ≠ 0')], (i) =>
+      evaluateParkerSpiral({ Omega_rad_s: i.Omega_rad_s, r_m: i.r_m, theta_rad: i.theta_rad, v_r_m_s: i.v_r_m_per_s }),
+    ),
+    spec(120, 'Chapman–Ferraro standoff', [P('B_E_T', 'surface field', 'B_E', 'T', 'equatorial surface field'), P('rho_kg_per_m3', 'mass density', 'ρ', 'kg/m^3', 'wind mass density'), P('v_m_per_s', 'wind speed', 'v', 'm/s', 'wind speed')], (i) =>
+      evaluateChapmanFerraro({ B_E_T: i.B_E_T, rho_kg_per_m3: i.rho_kg_per_m3, v_m_s: i.v_m_per_s }),
+    ),
+    spec(121, 'Lawson breakeven', [temperature('T_K', 'temperature', 'T', 'ion temperature'), P('sigma_v_m3_per_s', 'reactivity', '⟨σv⟩', 'm^3/s', 'Maxwellian average, not computed here'), P('E_J', 'fusion energy', 'E', 'J', 'energy released per reaction')], (i) =>
+      evaluateLawsonBreakeven({ T_K: i.T_K, sigma_v_m3_s: i.sigma_v_m3_per_s, E_J: i.E_J }),
+    ),
+    spec(122, 'Floating potential', [P('m_e_kg', 'electron mass', 'm_e', 'kg', 'electron mass'), P('m_i_kg', 'ion mass', 'm_i', 'kg', 'ion mass')], (i) =>
+      evaluateLangmuirProbe({ m_e_kg: i.m_e_kg, m_i_kg: i.m_i_kg }),
+    ),
+    spec(123, 'Cross-field diffusion ratio', [P('alpha', 'Hall parameter', 'α', '', 'α = μ B')], (i) =>
+      evaluateCrossFieldDiffusion({ alpha: i.alpha }),
+    ),
+    spec(124, 'Firehose margin', [P('beta_parallel', 'parallel beta', 'β_∥', '', 'β = 2 μ0 p / B²'), P('beta_perp', 'perpendicular beta', 'β_⊥', '', 'the be-76 definition')], (i) =>
+      evaluateFirehose({ beta_parallel: i.beta_parallel, beta_perp: i.beta_perp }),
+    ),
+    spec(125, 'Mirror margin', [P('beta_perp', 'perpendicular beta', 'β_⊥', '', 'β = 2 μ0 p / B²; the kinetic integral is a hypothesis'), temperature('T_perp_K', 'perpendicular temperature', 'T_⊥', 'perpendicular temperature'), temperature('T_parallel_K', 'parallel temperature', 'T_∥', 'parallel temperature')], (i) =>
+      evaluateMirrorInstability({ beta_perp: i.beta_perp, T_perp_K: i.T_perp_K, T_parallel_K: i.T_parallel_K }),
+    ),
+];
+
+for (const evaluator of EVALUATOR_SPECS) registerBridge({ evaluator });
+
+/** Bridge id → evaluator. The projection of `registerBridge`. @public */
+export const BRIDGE_EVALUATORS: ReadonlyMap<number, EvaluatorSpec> =
+  bridgeRegistry.evaluators() as ReadonlyMap<number, EvaluatorSpec>;
 
 /**
  * What to say when an id is not in {@link BRIDGE_EVALUATORS}.

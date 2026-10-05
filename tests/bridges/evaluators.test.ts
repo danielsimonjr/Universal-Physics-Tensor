@@ -8,11 +8,13 @@ import { parseUnit } from '../../src/dimensional/units.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
 
 describe('BRIDGE_EVALUATORS', () => {
-  it('covers the closed-form / spacetime bridges (51/52/55..102)', () => {
+  it('covers the closed-form / spacetime bridges (51/52/55..125)', () => {
+    // The list that stopped at 102 is the record from before BE-103..125.
     expect([...BRIDGE_EVALUATORS.keys()].sort((a, b) => a - b)).toEqual([
       51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
       77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
-      101, 102,
+      101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
+      120, 121, 122, 123, 124, 125,
     ]);
   });
 
@@ -67,7 +69,13 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_N_per_m$/, 'N/m'],
       [/_V2_per_Hz$/, 'V^2/Hz'],
       [/_A2_per_Hz$/, 'A^2/Hz'],
+      // Longer than `_per_m` and `_m`. A wavenumber is `m^-1`; a gradient is `T/m`.
+      [/_T_per_m$/, 'T/m'],
+      [/_V_per_m$/, 'V/m'],
       [/_per_m3$/, 'm^-3'],
+      [/_m3_per_s$/, 'm^3/s'],
+      [/_per_m$/, 'm^-1'],
+      [/_rad_s$/, 'rad/s'],
       [/_Pa$/, 'Pa'],
       [/_kg$/, 'kg'],
       [/_m$/, 'm'],
@@ -112,6 +120,17 @@ describe('BRIDGE_EVALUATORS', () => {
       xi_m: 1e-7, Delta_J: 1e-22, zeta: 1, N_c_per_m3: 1e25, N_v_per_m3: 1e25,
       E_g_J: 1e-19, eps_static: 10, eps_inf: 2, J_J: 1e-21, sum_Tn: 1,
       I_A: 1e-3, C_f: 0.004, C_F: 1e-12,
+      T_e_K: 300, m_i_kg: 1.67262192369e-27, k_per_m: 1e4, c_s_m_per_s: 1e4,
+      lambda_De_m: 1e-4, omega_c_rad_s: 1e6, omega_p_rad_s: 1e7,
+      omega_pi_rad_s: 1e6, omega_ci_rad_s: 1e5, omega_ce_rad_s: 1e8,
+      v_A_m_per_s: 1e5, N_per_m: 1e18, B0_T: 0.1, Bm_T: 1,
+      v_perp_m_per_s: 1e5, gradB_T_per_m: 0.01, E_x_V_per_m: 1, E_y_V_per_m: 1,
+      omega_rad_s: 1e6, v_t_m_per_s: 1e5, lambda_D_m: 1e-4,
+      lambda_1_m: 1e-4, lambda_2_m: 2e-4, Z: 1, ln_Lambda: 10,
+      Omega_rad_s: 2.9e-6, r_m: 1.5e11, v_r_m_per_s: 4e5, B_E_T: 3.12e-5,
+      sigma_v_m3_per_s: 1e-22, E_J: 2.8e-12,
+      m_e_kg: 9.1093837015e-31, alpha: 1, beta_parallel: 1, beta_perp: 1,
+      T_perp_K: 300, T_parallel_K: 200,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

@@ -80,12 +80,12 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
     const refuted = BRIDGE_EQUATIONS.filter(
       (e) => (e.counterexamples ?? []).length > 0,
     ).length;
-    expect(report.records).toBe(92);
-    // 77 is the record from before be-88..102.
+    expect(report.records).toBe(115);
+    // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
     expect(report.byTag.contradicted).toBe(refuted);
-    expect(report.byTag['formally-proved']).toBe(50);
-    // 35 is the record from before be-88..102.
-    expect(report.byTag.proposed).toBe(92 - refuted - 50);
+    expect(report.byTag['formally-proved']).toBe(73);
+    // 50 is the record from before be-103..125. 35 is the record from before be-88..102.
+    expect(report.byTag.proposed).toBe(115 - refuted - 73);
     for (const tag of ALL_EVIDENCE_TAGS) {
       if (tag === 'proposed' || tag === 'contradicted' || tag === 'formally-proved') continue;
       expect(report.byTag[tag]).toBe(0);
@@ -148,7 +148,7 @@ describe('coverage of the live catalog — the Sprint 1 baseline', () => {
         deriveEvidenceForVerdict(adjudicateBridgeEntry(entry), catalogEvidenceInput(entry), NO_PASSING_WITNESSES),
       ),
     );
-    expect(report.byTag['formally-proved']).toBe(50);
-    // 35 is the record from before be-88..102.
+    expect(report.byTag['formally-proved']).toBe(73);
+    // 50 is the record from before be-103..125. 35 is the record from before be-88..102.
   });
 });

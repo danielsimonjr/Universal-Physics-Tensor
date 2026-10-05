@@ -121,8 +121,11 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // the ratio is not the evaluator. be-90, be-91, and be-100 sit at
     // freedom 2. be-93 sits at 3 and is not a monomial. be-95, be-98, be-99,
     // and be-102 each leave one free ratio.
-    expect(closable.length).toBe(39);
-    expect(ALL_EDGES.length - closable.length).toBe(44);
+    // 39 of 83 is the record from before be-103..125. 46 of 106 admit a
+    // closure. be-103 and be-118 are derived. be-105 is freedom 0 and not a
+    // monomial. be-109, be-117, be-120, and be-121 are freedom 0 and decoys.
+    expect(closable.length).toBe(46);
+    expect(ALL_EDGES.length - closable.length).toBe(60);
   });
 
   it('dimensional analysis is a weak filter: a small minority are genuine monomial derivations', () => {
@@ -140,7 +143,9 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // be-84, be-85, and be-87 match their evaluators. be-81 does not.
     // The count of 20 is the record from before be-88..102. be-88, be-89,
     // be-96, be-97, and be-101 match their evaluators. be-92 and be-94 do not.
-    expect(derived.length).toBe(25);
+    // 25 is the record from before be-103..125. be-103 and be-118 match
+    // their evaluators. be-109, be-117, be-120, and be-121 do not.
+    expect(derived.length).toBe(27);
   });
 });
 
@@ -173,10 +178,11 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     expect(free('be-39')).toBe(5); // asymptotic safety
   });
 
-  it('the spectrum histogram is pinned (39 at 0; max 6)', () => {
+  it('the spectrum histogram is pinned (46 at 0; max 6)', () => {
     const hist: Record<number, number> = {};
     for (const e of ALL_EDGES) hist[dimensionalFreedom(e)] = (hist[dimensionalFreedom(e)] ?? 0) + 1;
-    expect(hist[0]).toBe(39); // the dimensionally-pinned set (derived + decoy + no-samples)
+    expect(hist[0]).toBe(46); // the dimensionally-pinned set (derived + decoy + no-samples)
+    // 39 at complexity 0 is the record from before be-103..125.
     expect(Math.max(...Object.keys(hist).map(Number))).toBe(6);
     // 18 bridges are exactly one dimensionless ratio away from a monomial.
     // 14 is the record from before be-77..87. be-77, be-78, be-79, and be-86
@@ -187,7 +193,10 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     // The count of 32 at complexity 0, and 18 at complexity 1, is the record
     // from before be-88..102. be-95, be-98, be-99, and be-102 each add one
     // at complexity 1.
-    expect(hist[1]).toBe(22);
+    // 22 at complexity 1 is the record from before be-103..125. be-104,
+    // be-106, be-110, be-111, be-112, be-113, be-114, be-115, be-122, and
+    // be-123 each add one.
+    expect(hist[1]).toBe(32);
   });
 
   it('complexity is ORTHOGONAL to status: an established bridge sits at complexity 1', () => {

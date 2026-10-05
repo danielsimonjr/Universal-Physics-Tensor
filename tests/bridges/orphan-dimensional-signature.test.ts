@@ -95,6 +95,29 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   100, // BE-100 Lyddane–Sachs–Teller: closed-form evaluator, no AST.
   101, // BE-101 BKT jump: closed-form evaluator, no AST.
   102, // BE-102 Landauer conductance: closed-form evaluator, no AST.
+  103, // BE-103 Bohm sheath: closed-form evaluator, no AST.
+  104, // BE-104 ion acoustic: closed-form evaluator, no AST.
+  105, // BE-105 upper hybrid: closed-form evaluator, no AST.
+  106, // BE-106 R cutoff: closed-form evaluator, no AST.
+  107, // BE-107 lower hybrid: closed-form evaluator, no AST.
+  108, // BE-108 oblique fast mode: closed-form evaluator, no AST.
+  109, // BE-109 Bennett current: closed-form evaluator, no AST.
+  110, // BE-110 loss cone: closed-form evaluator, no AST.
+  111, // BE-111 grad-B drift: closed-form evaluator, no AST.
+  112, // BE-112 E×B drift: closed-form evaluator, no AST.
+  113, // BE-113 Landau damping: closed-form evaluator, no AST.
+  114, // BE-114 Debye sphere: closed-form evaluator, no AST.
+  115, // BE-115 two-species Debye: closed-form evaluator, no AST.
+  116, // BE-116 kinetic resistivity: closed-form evaluator, no AST.
+  117, // BE-117 resistive slab: closed-form evaluator, no AST.
+  118, // BE-118 Parker radius: closed-form evaluator, no AST.
+  119, // BE-119 Parker spiral: closed-form evaluator, no AST.
+  120, // BE-120 Chapman–Ferraro: closed-form evaluator, no AST.
+  121, // BE-121 Lawson product: closed-form evaluator, no AST.
+  122, // BE-122 floating potential: closed-form evaluator, no AST.
+  123, // BE-123 cross-field ratio: closed-form evaluator, no AST.
+  124, // BE-124 firehose margin: closed-form evaluator, no AST.
+  125, // BE-125 mirror margin: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -110,12 +133,12 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has fifty entries (BE-51/52 + BE-55..102 closed-form)', () => {
+    it('orphan allowlist has seventy-three entries (BE-51/52 + BE-55..125 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(50);
-      // 35 is the record from before be-88..102.
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(73);
+      // 50 is the record from before be-103..125. 35 is the record from before be-88..102.
     });
 
     for (const id of ORPHAN_DIMENSIONAL_SIGNATURES) {
@@ -180,12 +203,14 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
       ).toEqual([]);
     });
 
-    it('orphan allowlist is BE-51/52 + BE-55..102 (closed-form evaluators)', () => {
+    it('orphan allowlist is BE-51/52 + BE-55..125 (closed-form evaluators)', () => {
       expect([...ORPHAN_DIMENSIONAL_SIGNATURES].sort((a, b) => a - b)).toEqual([
         51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
         77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
-        101, 102,
+        101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
+        120, 121, 122, 123, 124, 125,
       ]);
+      // 50 ids ending at 102 is the record from before be-103..125.
     });
   });
 });

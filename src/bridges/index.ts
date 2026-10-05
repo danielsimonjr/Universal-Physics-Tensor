@@ -13,13 +13,13 @@
  * Source-of-truth files: docs/specification/Part-{I-VI}.md
  *
  * Honest-claude: fields not explicitly stated in the spec are null (not guessed).
- * - dimensional_signature is populated for all 77 entries. 75 of them (all
- *   except BE-51 and BE-52) are registered in `EXPECTED_DIMENSION_BY_BRIDGE`
- *   (`src/dimensional/bridge-check.ts`); 42 (IDs 11-50, 53, 54) also have AST
- *   encodings under `src/bridges/equations/`. BE-51/52 are closed-form evaluator
- *   bridges, and BE-55-87 have evaluator modules in `src/bridges/`; none of
- *   them has an AST encoding. Populated values are exactly what
- *   `format()` produces for the inferred Dimension shape; never free-form prose.
+ * - `BRIDGE_EQUATIONS` is the projection of `registerBridge`. The rows below
+ *   are the input to that registration. The sentence that dimensional_signature
+ *   is populated for all 77 entries, and that BE-55-87 have no AST, is the
+ *   record from before later closed forms. 42 ids (11-50, 53, 54) have AST
+ *   encodings under `src/bridges/equations/`. Closed forms have evaluator
+ *   modules and no AST. Populated values are exactly what `format()` produces
+ *   for the inferred Dimension shape; never free-form prose.
  * - known_issues are extracted ONLY from explicit issue-markers in the spec
  *   ("**Known issue:**", "**Additional known issue:**", "**Bound violation:**",
  *   etc.). Equations whose Status text discusses problems narratively without
@@ -49,6 +49,8 @@ import { LENGTH, VELOCITY } from '../dimensional/types.js';
 // block below).
 import { MERCURY } from './be52-mercury-confrontation.js';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
+import { bridgeRegistry, registerBridge } from './registry.js';
+import { PLASMA_CATALOG_ROWS } from './plasma-catalog.js';
 
 /**
  * Lifecycle status of a bridge equation in the catalog.
@@ -237,16 +239,18 @@ export interface BridgeEquationEntry {
   // ── Atlas Phase 1 overlay (all OPTIONAL; a row without them is unchanged) ──
   /**
    * The typed relation this bridge asserts. Lives on the ROW, not only on the
-   * graph edge: 17 catalog bridges carry no `BridgeEdge` at all, and the row
-   * is the per-bridge record regardless.
+   * graph edge. The row is the per-bridge record whether or not an edge is
+   * registered. The sentence that 17 catalog bridges carry no `BridgeEdge` is
+   * the record from before later edges.
    */
   relation?: RelationContract;
   /**
    * Where in π-group space this bridge is claimed to apply (Atlas Phase 2).
    *
    * ADDITIVE. A row without it is byte-identical in behaviour to today. Like
-   * `relation`, it lives on the ROW rather than only on a graph edge, because
-   * 17 catalog bridges carry no `BridgeEdge` at all.
+   * `relation`, it lives on the ROW rather than only on a graph edge. The
+   * sentence that 17 catalog bridges carry no `BridgeEdge` is the record from
+   * before later edges.
    *
    * Declarative inequalities over dimensionless groups, traceable to the
    * dimension matrix. It never stands in for a `ValidityDomain.predicate` on
@@ -512,7 +516,7 @@ export const GR_SPINE_CONFRONTATION_POINTS: Readonly<
   52: { [WEAK_FIELD_GROUP]: MERCURY_RS_OVER_R, [SLOW_MOTION_GROUP]: MERCURY_V_OVER_C },
 };
 
-export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
+const CATALOG_ROWS: BridgeEquationEntry[] = [
 {
   id: 11,
   name: `Decoherence Master Equation`,
@@ -3443,6 +3447,13 @@ export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [
 
 ];
 
+for (const entry of CATALOG_ROWS) registerBridge({ entry });
+const plasmaRows: readonly BridgeEquationEntry[] = PLASMA_CATALOG_ROWS;
+for (const entry of plasmaRows) registerBridge({ entry });
+
+/** Catalog rows, in registration order. The projection of `registerBridge`. @public */
+export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = bridgeRegistry.equations() as BridgeEquationEntry[];
+
 // ---------------------------------------------------------------------------
 // v0.4.0 bridge implementations — exported alongside the catalog array
 // ---------------------------------------------------------------------------
@@ -3709,5 +3720,78 @@ export {
   type LandauerConductanceInputs,
   type LandauerConductanceResult,
 } from './be102-landauer-conductance.js';
+
+/** Plasma and space evaluators, BE-103 through BE-125. `e` is the elementary charge. */
+export {
+  evaluateBohmSheath,
+  type BohmSheathInputs,
+  type BohmSheathResult,
+  evaluateIonAcoustic,
+  type IonAcousticInputs,
+  type IonAcousticResult,
+  evaluateUpperHybrid,
+  type UpperHybridInputs,
+  type UpperHybridResult,
+  evaluateColdPlasmaCutoff,
+  type ColdPlasmaCutoffInputs,
+  type ColdPlasmaCutoffResult,
+  evaluateLowerHybrid,
+  type LowerHybridInputs,
+  type LowerHybridResult,
+  evaluateObliqueMagnetosonic,
+  type ObliqueMagnetosonicInputs,
+  type ObliqueMagnetosonicResult,
+  evaluateBennettPinch,
+  type BennettPinchInputs,
+  type BennettPinchResult,
+  evaluateLossCone,
+  type LossConeInputs,
+  type LossConeResult,
+  evaluateGradBDrift,
+  type GradBDriftInputs,
+  type GradBDriftResult,
+  evaluateExBDrift,
+  type ExBDriftInputs,
+  type ExBDriftResult,
+  evaluateLandauDamping,
+  type LandauDampingInputs,
+  type LandauDampingResult,
+  evaluateDebyeSphere,
+  type DebyeSphereInputs,
+  type DebyeSphereResult,
+  evaluateMultiDebye,
+  type MultiDebyeInputs,
+  type MultiDebyeResult,
+  evaluateLorentzResistivity,
+  type LorentzResistivityInputs,
+  type LorentzResistivityResult,
+  evaluateResistiveSlab,
+  type ResistiveSlabInputs,
+  type ResistiveSlabResult,
+  evaluateParkerCritical,
+  type ParkerCriticalInputs,
+  type ParkerCriticalResult,
+  evaluateParkerSpiral,
+  type ParkerSpiralInputs,
+  type ParkerSpiralResult,
+  evaluateChapmanFerraro,
+  type ChapmanFerraroInputs,
+  type ChapmanFerraroResult,
+  evaluateLawsonBreakeven,
+  type LawsonBreakevenInputs,
+  type LawsonBreakevenResult,
+  evaluateLangmuirProbe,
+  type LangmuirProbeInputs,
+  type LangmuirProbeResult,
+  evaluateCrossFieldDiffusion,
+  type CrossFieldDiffusionInputs,
+  type CrossFieldDiffusionResult,
+  evaluateFirehose,
+  type FirehoseInputs,
+  type FirehoseResult,
+  evaluateMirrorInstability,
+  type MirrorInstabilityInputs,
+  type MirrorInstabilityResult,
+} from './plasma-space.js';
 
 export default BRIDGE_EQUATIONS;

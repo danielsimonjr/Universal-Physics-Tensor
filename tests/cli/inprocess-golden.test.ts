@@ -117,9 +117,12 @@ describe('src/cli port — in-process golden corpus', () => {
     expect(cases.length).toBe(INPROCESS_READY.length);
   });
 
+  // 180s per case: the spawned corpus already uses 180s. discover-derive ranks
+  // the catalog. 1525 candidates no longer finish in 60s on the CI runner.
+  // 60s is the record from before be-103..125.
   it.each(ungated)('$name', async ({ name, args, pinStderr, exitCode }) => {
     await runCase(name, args, pinStderr, exitCode);
-  });
+  }, 180_000);
 });
 
 describe.skipIf(!peerPresent)('src/cli port — in-process golden corpus (peer-gated)', () => {

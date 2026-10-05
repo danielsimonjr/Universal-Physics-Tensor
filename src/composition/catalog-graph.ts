@@ -1,18 +1,13 @@
 /**
- * The full composition graph as a single constant — the 83 `BridgeEdge`s
- * (9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved seeds
- * + 22 applied-physicist + 15 condensed-matter).
- * 68 is the record from before be-88..102.
- *
- * Single source of truth for "the catalog as a graph": the CLI, the
- * analysis functions, and the test suites consume this rather than each
- * hand-rebuilding the edge list (which silently drifts when an edge is
- * added). When the graph grows, this is the one place to update.
+ * The composition graph is the edge projection of `registerBridge`.
+ * 83 is the record from before be-103..125. 68 is the record from before
+ * be-88..102.
  *
  * @module composition/catalog-graph
  */
 
 import type { BridgeEdge } from './edge.js';
+import { bridgeRegistry, registerBridge } from '../bridges/registry.js';
 import {
   be11ZurekEdge,
   be12Edge,
@@ -36,15 +31,15 @@ import { CATALOG_FULL_EDGES } from './edges/catalog-full.js';
 import { PROVED_SEED_EDGES } from './edges/proved-seeds.js';
 import { APPLIED_PHYSICIST_EDGES } from './edges/applied-physicist.js';
 import { CONDENSED_R5_EDGES } from './edges/condensed-r5.js';
+import { PLASMA_SPACE_EDGES } from './edges/plasma-space.js';
 
 /**
- * Every `BridgeEdge` in the composition graph (83 edges). The order is
- * calibration → tranche → catalog-full → proved seeds → applied-physicist
- * → condensed-matter. 68 is the record from before be-88..102.
+ * Every registered `BridgeEdge`, in registration order. 83 is the record
+ * from before be-103..125. 68 is the record from before be-88..102.
  *
  * @public
  */
-export const CATALOG_GRAPH: readonly BridgeEdge[] = [
+const EDGE_ROWS: readonly BridgeEdge[] = [
   be11ZurekEdge,
   be12Edge,
   be16Edge,
@@ -64,4 +59,10 @@ export const CATALOG_GRAPH: readonly BridgeEdge[] = [
   ...PROVED_SEED_EDGES,
   ...APPLIED_PHYSICIST_EDGES,
   ...CONDENSED_R5_EDGES,
+  ...PLASMA_SPACE_EDGES,
 ];
+
+for (const edge of EDGE_ROWS) registerBridge({ edge });
+
+/** The edge projection of `registerBridge`. @public */
+export const CATALOG_GRAPH: readonly BridgeEdge[] = bridgeRegistry.edges() as unknown as readonly BridgeEdge[];

@@ -18,6 +18,7 @@
  */
 
 import type { ExprNode } from '../dimensional/validator.js';
+import { bridgeRegistry, registerBridge } from './registry.js';
 
 import { DECOHERENCE_RATE_RHS } from './equations/be-11-decoherence-master.js';
 import { BE12_COHERENCE_LENGTH_RHS } from './equations/be-12-coherence-length.js';
@@ -67,7 +68,7 @@ import { BRANE_FRIEDMANN_RHS } from './equations/be-54-randall-sundrum-brane.js'
  * land. Ids 11–50, 53, 54 (42 bridges); BE-51/52 are closed-form evaluators
  * without an AST encoding and are intentionally absent.
  */
-export const BRIDGE_RHS_BY_ID: ReadonlyMap<number, ExprNode> = new Map<number, ExprNode>([
+const RHS_PAIRS: readonly (readonly [number, ExprNode])[] = [
   [11, DECOHERENCE_RATE_RHS],
   [12, BE12_COHERENCE_LENGTH_RHS],
   [13, BE13_EINSTEIN_TRACE_RHS],
@@ -110,7 +111,12 @@ export const BRIDGE_RHS_BY_ID: ReadonlyMap<number, ExprNode> = new Map<number, E
   [50, BE50_TIME_SYMMETRY_RESIDUAL_RHS],
   [53, BE53_BETA_G_RHS],
   [54, BRANE_FRIEDMANN_RHS],
-]);
+];
+
+for (const [id, rhs] of RHS_PAIRS) registerBridge({ id, rhs });
+
+/** Numeric bridge id → encoded RHS. The projection of `registerBridge`. @internal */
+export const BRIDGE_RHS_BY_ID: ReadonlyMap<number, ExprNode> = bridgeRegistry.rhs();
 
 /**
  * Parse a bridge id given as a number, `'42'`, or `'BE-42'` (case-insensitive,

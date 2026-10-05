@@ -103,6 +103,34 @@ export {
   CONDENSED_R5_EDGES,
 } from './edges/condensed-r5.js';
 
+/** Composition edges for the Bohm sheath through the mirror threshold, BE-103 through BE-125. */
+export {
+  be103Edge,
+  be104Edge,
+  be105Edge,
+  be106Edge,
+  be107Edge,
+  be108Edge,
+  be109Edge,
+  be110Edge,
+  be111Edge,
+  be112Edge,
+  be113Edge,
+  be114Edge,
+  be115Edge,
+  be116Edge,
+  be117Edge,
+  be118Edge,
+  be119Edge,
+  be120Edge,
+  be121Edge,
+  be122Edge,
+  be123Edge,
+  be124Edge,
+  be125Edge,
+  PLASMA_SPACE_EDGES,
+} from './edges/plasma-space.js';
+
 export {
   be11Edge,
   be13Edge,

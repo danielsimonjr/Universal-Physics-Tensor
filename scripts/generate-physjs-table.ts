@@ -30,6 +30,14 @@ const NESTED_FIELDS = [
   'everyPower',
   'perpendicularQuartic',
   'tolmanRatio',
+  'warmSound',
+  'cutoffL',
+  'whistlerLimit',
+  'equalTemperature',
+  'bohmGross',
+  'referenceResistivity',
+  'lundquist',
+  'bohmFlux',
 ] as const;
 
 const ENTRY_FIELDS = new Set<string>([

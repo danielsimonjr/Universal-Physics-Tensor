@@ -1,6 +1,6 @@
 flowchart LR
 %% UPT physics map — catalog + canonical
-  subgraph cl_0["anchored cluster (122)"]
+  subgraph cl_0["anchored cluster (124)"]
     direction LR
     j_be_11_zurek["BE-11"]:::established
     q_relaxation_rate(["relaxation-rate"]):::qty
@@ -226,6 +226,13 @@ flowchart LR
     q_capacitance --> j_be_87
     q_capacitor_voltage_variance(["capacitor-voltage-variance"]):::qty
     j_be_87 --> q_capacitor_voltage_variance
+    j_be_118["BE-118"]:::law
+    q_parker_sound(["parker-sound"]):::qty
+    q_parker_sound --> j_be_118
+    q_parker_mass(["parker-mass"]):::qty
+    q_parker_mass --> j_be_118
+    q_parker_radius(["parker-radius"]):::qty
+    j_be_118 --> q_parker_radius
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
     q_length --> j_CE_pendulum_period
@@ -740,6 +747,12 @@ flowchart LR
     j_IC_hubble_distance__peak_wavelength__temperature["IC-hubble-distance--peak-wavelength--temperature"]:::proposed
     q_hubble_rate --> j_IC_hubble_distance__peak_wavelength__temperature
     j_IC_hubble_distance__peak_wavelength__temperature --> q_temperature
+    j_IC_parker_radius__peak_wavelength__temperature["IC-parker-radius--peak-wavelength--temperature"]:::proposed
+    q_parker_mass --> j_IC_parker_radius__peak_wavelength__temperature
+    q_2(["2"]):::qty
+    q_2 --> j_IC_parker_radius__peak_wavelength__temperature
+    q_parker_sound --> j_IC_parker_radius__peak_wavelength__temperature
+    j_IC_parker_radius__peak_wavelength__temperature --> q_temperature
   end
   subgraph cl_1["anchored cluster (4)"]
     direction LR
@@ -854,7 +867,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (60)"]
+  subgraph cl_iso["isolated (82)"]
     direction LR
     j_be_100["BE-100"]:::law
     q_lst_static(["lst-static"]):::qty
@@ -873,6 +886,190 @@ flowchart LR
     q_landauer_transmission --> j_be_102
     q_landauer_channel_conductance(["landauer-channel-conductance"]):::qty
     j_be_102 --> q_landauer_channel_conductance
+    j_be_103["BE-103"]:::law
+    q_bohm_electron_temperature(["bohm-electron-temperature"]):::qty
+    q_bohm_electron_temperature --> j_be_103
+    q_bohm_ion_mass(["bohm-ion-mass"]):::qty
+    q_bohm_ion_mass --> j_be_103
+    q_bohm_ion_speed(["bohm-ion-speed"]):::qty
+    j_be_103 --> q_bohm_ion_speed
+    j_be_104["BE-104"]:::law
+    q_ion_acoustic_wavenumber(["ion-acoustic-wavenumber"]):::qty
+    q_ion_acoustic_wavenumber --> j_be_104
+    q_ion_acoustic_sound(["ion-acoustic-sound"]):::qty
+    q_ion_acoustic_sound --> j_be_104
+    q_ion_acoustic_debye(["ion-acoustic-debye"]):::qty
+    q_ion_acoustic_debye --> j_be_104
+    q_ion_acoustic_frequency(["ion-acoustic-frequency"]):::qty
+    j_be_104 --> q_ion_acoustic_frequency
+    j_be_105["BE-105"]:::law
+    q_upper_hybrid_density(["upper-hybrid-density"]):::qty
+    q_upper_hybrid_density --> j_be_105
+    q_upper_hybrid_field(["upper-hybrid-field"]):::qty
+    q_upper_hybrid_field --> j_be_105
+    q_upper_hybrid_mass(["upper-hybrid-mass"]):::qty
+    q_upper_hybrid_mass --> j_be_105
+    q_upper_hybrid_frequency(["upper-hybrid-frequency"]):::qty
+    j_be_105 --> q_upper_hybrid_frequency
+    j_be_106["BE-106"]:::law
+    q_cutoff_cyclotron(["cutoff-cyclotron"]):::qty
+    q_cutoff_cyclotron --> j_be_106
+    q_cutoff_plasma(["cutoff-plasma"]):::qty
+    q_cutoff_plasma --> j_be_106
+    q_cutoff_r_frequency(["cutoff-r-frequency"]):::qty
+    j_be_106 --> q_cutoff_r_frequency
+    j_be_107["BE-107"]:::law
+    q_lower_hybrid_ion_plasma(["lower-hybrid-ion-plasma"]):::qty
+    q_lower_hybrid_ion_plasma --> j_be_107
+    q_lower_hybrid_ion_cyclotron(["lower-hybrid-ion-cyclotron"]):::qty
+    q_lower_hybrid_ion_cyclotron --> j_be_107
+    q_lower_hybrid_electron_cyclotron(["lower-hybrid-electron-cyclotron"]):::qty
+    q_lower_hybrid_electron_cyclotron --> j_be_107
+    q_lower_hybrid_frequency(["lower-hybrid-frequency"]):::qty
+    j_be_107 --> q_lower_hybrid_frequency
+    j_be_108["BE-108"]:::law
+    q_oblique_sound(["oblique-sound"]):::qty
+    q_oblique_sound --> j_be_108
+    q_oblique_alfven(["oblique-alfven"]):::qty
+    q_oblique_alfven --> j_be_108
+    q_oblique_angle(["oblique-angle"]):::qty
+    q_oblique_angle --> j_be_108
+    q_oblique_fast_speed(["oblique-fast-speed"]):::qty
+    j_be_108 --> q_oblique_fast_speed
+    j_be_109["BE-109"]:::law
+    q_bennett_line_density(["bennett-line-density"]):::qty
+    q_bennett_line_density --> j_be_109
+    q_bennett_temperature(["bennett-temperature"]):::qty
+    q_bennett_temperature --> j_be_109
+    q_bennett_current(["bennett-current"]):::qty
+    j_be_109 --> q_bennett_current
+    j_be_110["BE-110"]:::law
+    q_loss_cone_throat(["loss-cone-throat"]):::qty
+    q_loss_cone_throat --> j_be_110
+    q_loss_cone_mirror(["loss-cone-mirror"]):::qty
+    q_loss_cone_mirror --> j_be_110
+    q_loss_cone_pitch(["loss-cone-pitch"]):::qty
+    j_be_110 --> q_loss_cone_pitch
+    j_be_111["BE-111"]:::law
+    q_gradb_mass(["gradb-mass"]):::qty
+    q_gradb_mass --> j_be_111
+    q_gradb_perp_speed(["gradb-perp-speed"]):::qty
+    q_gradb_perp_speed --> j_be_111
+    q_gradb_gradient(["gradb-gradient"]):::qty
+    q_gradb_gradient --> j_be_111
+    q_gradb_charge(["gradb-charge"]):::qty
+    q_gradb_charge --> j_be_111
+    q_gradb_field(["gradb-field"]):::qty
+    q_gradb_field --> j_be_111
+    q_gradb_drift(["gradb-drift"]):::qty
+    j_be_111 --> q_gradb_drift
+    j_be_112["BE-112"]:::law
+    q_exb_field_x(["exb-field-x"]):::qty
+    q_exb_field_x --> j_be_112
+    q_exb_field_y(["exb-field-y"]):::qty
+    q_exb_field_y --> j_be_112
+    q_exb_field(["exb-field"]):::qty
+    q_exb_field --> j_be_112
+    q_exb_speed(["exb-speed"]):::qty
+    j_be_112 --> q_exb_speed
+    j_be_113["BE-113"]:::law
+    q_landau_omega(["landau-omega"]):::qty
+    q_landau_omega --> j_be_113
+    q_landau_wavenumber(["landau-wavenumber"]):::qty
+    q_landau_wavenumber --> j_be_113
+    q_landau_thermal(["landau-thermal"]):::qty
+    q_landau_thermal --> j_be_113
+    q_landau_gamma(["landau-gamma"]):::qty
+    j_be_113 --> q_landau_gamma
+    j_be_114["BE-114"]:::law
+    q_debye_sphere_density(["debye-sphere-density"]):::qty
+    q_debye_sphere_density --> j_be_114
+    q_debye_sphere_length(["debye-sphere-length"]):::qty
+    q_debye_sphere_length --> j_be_114
+    q_debye_sphere_argument(["debye-sphere-argument"]):::qty
+    j_be_114 --> q_debye_sphere_argument
+    j_be_115["BE-115"]:::law
+    q_multi_debye_1(["multi-debye-1"]):::qty
+    q_multi_debye_1 --> j_be_115
+    q_multi_debye_2(["multi-debye-2"]):::qty
+    q_multi_debye_2 --> j_be_115
+    q_multi_debye_length(["multi-debye-length"]):::qty
+    j_be_115 --> q_multi_debye_length
+    j_be_116["BE-116"]:::law
+    q_lorentz_charge_state(["lorentz-charge-state"]):::qty
+    q_lorentz_charge_state --> j_be_116
+    q_lorentz_coulomb_log(["lorentz-coulomb-log"]):::qty
+    q_lorentz_coulomb_log --> j_be_116
+    q_lorentz_temperature(["lorentz-temperature"]):::qty
+    q_lorentz_temperature --> j_be_116
+    q_lorentz_mass(["lorentz-mass"]):::qty
+    q_lorentz_mass --> j_be_116
+    q_lorentz_resistivity(["lorentz-resistivity"]):::qty
+    j_be_116 --> q_lorentz_resistivity
+    j_be_117["BE-117"]:::law
+    q_slab_conductivity(["slab-conductivity"]):::qty
+    q_slab_conductivity --> j_be_117
+    q_slab_width(["slab-width"]):::qty
+    q_slab_width --> j_be_117
+    q_slab_time(["slab-time"]):::qty
+    j_be_117 --> q_slab_time
+    j_be_119["BE-119"]:::law
+    q_spiral_omega(["spiral-omega"]):::qty
+    q_spiral_omega --> j_be_119
+    q_spiral_radius(["spiral-radius"]):::qty
+    q_spiral_radius --> j_be_119
+    q_spiral_colatitude(["spiral-colatitude"]):::qty
+    q_spiral_colatitude --> j_be_119
+    q_spiral_radial_speed(["spiral-radial-speed"]):::qty
+    q_spiral_radial_speed --> j_be_119
+    q_spiral_ratio(["spiral-ratio"]):::qty
+    j_be_119 --> q_spiral_ratio
+    j_be_120["BE-120"]:::law
+    q_standoff_field(["standoff-field"]):::qty
+    q_standoff_field --> j_be_120
+    q_standoff_density(["standoff-density"]):::qty
+    q_standoff_density --> j_be_120
+    q_standoff_speed(["standoff-speed"]):::qty
+    q_standoff_speed --> j_be_120
+    q_standoff_sixth(["standoff-sixth"]):::qty
+    j_be_120 --> q_standoff_sixth
+    j_be_121["BE-121"]:::law
+    q_lawson_temperature(["lawson-temperature"]):::qty
+    q_lawson_temperature --> j_be_121
+    q_lawson_reactivity(["lawson-reactivity"]):::qty
+    q_lawson_reactivity --> j_be_121
+    q_lawson_energy(["lawson-energy"]):::qty
+    q_lawson_energy --> j_be_121
+    q_lawson_product(["lawson-product"]):::qty
+    j_be_121 --> q_lawson_product
+    j_be_122["BE-122"]:::law
+    q_probe_electron_mass(["probe-electron-mass"]):::qty
+    q_probe_electron_mass --> j_be_122
+    q_probe_ion_mass(["probe-ion-mass"]):::qty
+    q_probe_ion_mass --> j_be_122
+    q_probe_potential_ratio(["probe-potential-ratio"]):::qty
+    j_be_122 --> q_probe_potential_ratio
+    j_be_123["BE-123"]:::law
+    q_cross_field_alpha(["cross-field-alpha"]):::qty
+    q_cross_field_alpha --> j_be_123
+    q_cross_field_ratio(["cross-field-ratio"]):::qty
+    j_be_123 --> q_cross_field_ratio
+    j_be_124["BE-124"]:::law
+    q_firehose_beta_parallel(["firehose-beta-parallel"]):::qty
+    q_firehose_beta_parallel --> j_be_124
+    q_firehose_beta_perp(["firehose-beta-perp"]):::qty
+    q_firehose_beta_perp --> j_be_124
+    q_firehose_margin(["firehose-margin"]):::qty
+    j_be_124 --> q_firehose_margin
+    j_be_125["BE-125"]:::law
+    q_mirror_beta_perp(["mirror-beta-perp"]):::qty
+    q_mirror_beta_perp --> j_be_125
+    q_mirror_t_perp(["mirror-t-perp"]):::qty
+    q_mirror_t_perp --> j_be_125
+    q_mirror_t_parallel(["mirror-t-parallel"]):::qty
+    q_mirror_t_parallel --> j_be_125
+    q_mirror_margin(["mirror-margin"]):::qty
+    j_be_125 --> q_mirror_margin
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
     q_minimal_surface_area --> j_be_14

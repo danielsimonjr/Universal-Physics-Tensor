@@ -8,6 +8,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
+  bridgeEquationLiteral,
+  bridgeRegistryHits,
   nameTableOwnerHits,
   prefactorOwnerHits,
   renderDuplicateOwners,
@@ -38,5 +40,17 @@ describe('single owner', () => {
 
   it('does not invent a sourced 1 for a missing prefactor', () => {
     expect(prefactorOwnerHits(root)).toEqual([]);
+  });
+
+  it('builds a catalog id only through registerBridge', () => {
+    expect(bridgeRegistryHits(root)).toEqual([]);
+  });
+
+  it('a second BRIDGE_EQUATIONS literal is a hit', () => {
+    // The marker was chosen to match the assignment the parent tree had.
+    // This proves the matcher fires. The parent failure was the real literal.
+    const fixture = 'export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = [\n';
+    expect(bridgeEquationLiteral(fixture)).toBe(true);
+    expect(bridgeEquationLiteral('export const BRIDGE_EQUATIONS = production.equations();\n')).toBe(false);
   });
 });

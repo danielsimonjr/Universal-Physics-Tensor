@@ -129,6 +129,31 @@ export function prefactorOwnerHits(root: string): string[] {
   return hits;
 }
 
+/**
+ * A hand-maintained `BRIDGE_EQUATIONS = [` is a second catalog. The projection
+ * is `registerBridge` then `equations()`.
+ */
+const BRIDGE_LITERAL = /BRIDGE_EQUATIONS\s*(?::[^=]+)?=\s*\[/;
+
+/** True when `source` assigns `BRIDGE_EQUATIONS` from an array literal. */
+export function bridgeEquationLiteral(source: string): boolean {
+  return BRIDGE_LITERAL.test(source);
+}
+
+/** Files under `src/` that still assign `BRIDGE_EQUATIONS` from a literal. */
+export function bridgeRegistryHits(root: string): string[] {
+  const files: string[] = [];
+  walkTs(join(root, 'src'), files);
+  const hits: string[] = [];
+  for (const file of files) {
+    if (bridgeEquationLiteral(readFileSync(file, 'utf8'))) {
+      const rel = relative(root, file).replaceAll('\\', '/');
+      hits.push(`${rel} assigns BRIDGE_EQUATIONS from a literal`);
+    }
+  }
+  return hits;
+}
+
 /** `assertSameCarrierSign` has no caller except `applyCarrierSignPolicy`. */
 export function signOwnerHits(root: string): string[] {
   const policyPath = join(root, 'src/bridges/carrier-sign.ts');
@@ -160,6 +185,7 @@ export function renderDuplicateOwners(root: string): string {
   const names = nameTableOwnerHits(root);
   const signs = signOwnerHits(root);
   const prefactors = prefactorOwnerHits(root);
+  const bridges = bridgeRegistryHits(root);
   const temperatureBody =
     temperature.length === 0
       ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
@@ -176,6 +202,10 @@ export function renderDuplicateOwners(root: string): string {
     prefactors.length === 0
       ? '`canonicalPrefactor(…) ?? 1` does not occur. `makeEvaluate` calls `canonicalGroupPrefactor`.\n'
       : prefactors.map((hit) => `- ${hit}`).join('\n') + '\n';
+  const bridgeBody =
+    bridges.length === 0
+      ? '`BRIDGE_EQUATIONS` is the projection of `registerBridge`. No hand-maintained catalog literal.\n'
+      : bridges.map((hit) => `- ${hit}`).join('\n') + '\n';
   return (
     '<!-- repo-map:no-verification -->\n' +
     '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n' +
@@ -191,6 +221,8 @@ export function renderDuplicateOwners(root: string): string {
     '\n' +
     signBody +
     '\n' +
-    prefactorBody
+    prefactorBody +
+    '\n' +
+    bridgeBody
   );
 }
