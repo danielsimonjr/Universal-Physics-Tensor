@@ -28,18 +28,18 @@ or Graphviz-DOT **source text**, or as rendered SVG.
 ## The standard-physics (canonical) layer
 
 The textbook L-layer alone — every node a `law` (blue). Even established
-physics is only loosely connected. The layer has an 83-law core hubbed on
+physics is only loosely connected. The layer has an 84-law core hubbed on
 `mass`, `temperature`, `length`, `force`, and other widely-shared quantities.
-The layer also has two small two-law clusters (`radioactive-decay ↔ half-life`
-on the decay constant, and `thomson-cross-section
-↔ classical-electron-radius`). It also has 20 isolated laws, listed in the
+The layer also has three small two-law clusters (`radioactive-decay ↔ half-life`
+on the decay constant, `thomson-cross-section ↔ classical-electron-radius`,
+and the flat Friedmann equation with its curvature form). It also has 19 isolated laws, listed in the
 map's `isolated` group below, that share no quantity with any other law in
 this layer.
 
 ```mermaid
 flowchart LR
 %% UPT physics map — canonical (standard-physics L-layer, bridges excluded)
-  subgraph cl_0["anchored cluster (83)"]
+  subgraph cl_0["anchored cluster (84)"]
     direction LR
     j_CE_pendulum_period["Pendulum period"]:::law
     q_length(["length"]):::qty
@@ -65,7 +65,7 @@ flowchart LR
     q_linear_density --> j_CE_string_wave_speed
     q_speed(["speed"]):::qty
     j_CE_string_wave_speed --> q_speed
-    j_CE_compton_wavelength["Compton wavelength"]:::law
+    j_CE_compton_wavelength["Reduced Compton wavelength"]:::law
     q_mass --> j_CE_compton_wavelength
     q_compton_wavelength(["compton-wavelength"]):::qty
     j_CE_compton_wavelength --> q_compton_wavelength
@@ -88,6 +88,8 @@ flowchart LR
     q_mass --> j_CE_perihelion_precession
     q_a(["a"]):::qty
     q_a --> j_CE_perihelion_precession
+    q_one_minus_e_sq(["one_minus_e_sq"]):::qty
+    q_one_minus_e_sq --> j_CE_perihelion_precession
     q_perihelion_precession(["perihelion-precession"]):::qty
     j_CE_perihelion_precession --> q_perihelion_precession
     j_CE_newton_gravitation["Newton's law of gravitation"]:::law
@@ -322,7 +324,8 @@ flowchart LR
     j_CE_sound_speed["Speed of sound in a fluid"]:::law
     q_pressure --> j_CE_sound_speed
     q_density --> j_CE_sound_speed
-    j_CE_sound_speed --> q_speed
+    q_sound_speed(["sound-speed"]):::qty
+    j_CE_sound_speed --> q_sound_speed
     j_CE_volume_flow_rate["Volume flow rate (continuity)"]:::law
     q_cross_sectional_area(["cross-sectional-area"]):::qty
     q_cross_sectional_area --> j_CE_volume_flow_rate
@@ -372,6 +375,8 @@ flowchart LR
     q_temperature --> j_CE_ideal_gas
     q_V(["V"]):::qty
     q_V --> j_CE_ideal_gas
+    q_N(["N"]):::qty
+    q_N --> j_CE_ideal_gas
     j_CE_ideal_gas --> q_pressure
     j_CE_wien["Wien's displacement law"]:::law
     q_temperature --> j_CE_wien
@@ -400,6 +405,10 @@ flowchart LR
     j_CE_de_broglie["de Broglie wavelength"]:::law
     q_p --> j_CE_de_broglie
     j_CE_de_broglie --> q_compton_wavelength
+    j_CE_compton_wavelength_full["Compton wavelength"]:::law
+    q_mass --> j_CE_compton_wavelength_full
+    q_compton_wavelength_full(["compton-wavelength-full"]):::qty
+    j_CE_compton_wavelength_full --> q_compton_wavelength_full
     j_CE_carrier_mobility["Carrier mobility"]:::law
     q_charge --> j_CE_carrier_mobility
     q_relaxation_time(["relaxation-time"]):::qty
@@ -453,7 +462,6 @@ flowchart LR
     q_plasma_frequency(["plasma-frequency"]):::qty
     j_CE_plasma_frequency --> q_plasma_frequency
     j_CE_debye_frequency["Debye frequency"]:::law
-    q_sound_speed(["sound-speed"]):::qty
     q_sound_speed --> j_CE_debye_frequency
     q_number_density(["number-density"]):::qty
     q_number_density --> j_CE_debye_frequency
@@ -546,6 +554,21 @@ flowchart LR
   end
   subgraph cl_2["anchored cluster (2)"]
     direction LR
+    j_CE_friedmann_curvature["Friedmann equation (with curvature)"]:::law
+    q_rho(["rho"]):::qty
+    q_rho --> j_CE_friedmann_curvature
+    q_curvature_k(["curvature-k"]):::qty
+    q_curvature_k --> j_CE_friedmann_curvature
+    q_scale_factor(["scale-factor"]):::qty
+    q_scale_factor --> j_CE_friedmann_curvature
+    q_hubble_rate_squared(["hubble-rate-squared"]):::qty
+    j_CE_friedmann_curvature --> q_hubble_rate_squared
+    j_CE_friedmann["Friedmann equation (flat, matter-dominated)"]:::law
+    q_rho --> j_CE_friedmann
+    j_CE_friedmann --> q_hubble_rate_squared
+  end
+  subgraph cl_3["anchored cluster (2)"]
+    direction LR
     j_CE_half_life["Radioactive half-life"]:::law
     q_decay_constant(["decay-constant"]):::qty
     q_decay_constant --> j_CE_half_life
@@ -560,7 +583,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (20)"]
+  subgraph cl_iso["isolated (19)"]
     direction LR
     j_CE_bekenstein_hawking["Bekenstein–Hawking entropy"]:::law
     q_A(["A"]):::qty
@@ -592,11 +615,6 @@ flowchart LR
     q_work_done_by_system --> j_CE_first_law_thermodynamics
     q_internal_energy_change(["internal-energy-change"]):::qty
     j_CE_first_law_thermodynamics --> q_internal_energy_change
-    j_CE_friedmann["Friedmann equation (flat, matter-dominated)"]:::law
-    q_rho(["rho"]):::qty
-    q_rho --> j_CE_friedmann
-    q_hubble_rate_squared(["hubble-rate-squared"]):::qty
-    j_CE_friedmann --> q_hubble_rate_squared
     j_CE_hubble_distance["Hubble distance"]:::law
     q_hubble_rate(["hubble-rate"]):::qty
     q_hubble_rate --> j_CE_hubble_distance

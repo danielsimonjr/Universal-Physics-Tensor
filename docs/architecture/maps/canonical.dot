@@ -3,7 +3,7 @@ digraph PhysicsMap {
   rankdir=LR;
   node [fontname="Helvetica"];
   subgraph cluster_0 {
-    label="anchored cluster (83)";
+    label="anchored cluster (84)";
     j_CE_pendulum_period [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Pendulum period"];
     q_length [shape=ellipse,label="length"];
     q_length -> j_CE_pendulum_period;
@@ -28,7 +28,7 @@ digraph PhysicsMap {
     q_linear_density -> j_CE_string_wave_speed;
     q_speed [shape=ellipse,label="speed"];
     j_CE_string_wave_speed -> q_speed;
-    j_CE_compton_wavelength [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Compton wavelength"];
+    j_CE_compton_wavelength [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Reduced Compton wavelength"];
     q_mass -> j_CE_compton_wavelength;
     q_compton_wavelength [shape=ellipse,label="compton-wavelength"];
     j_CE_compton_wavelength -> q_compton_wavelength;
@@ -51,6 +51,8 @@ digraph PhysicsMap {
     q_mass -> j_CE_perihelion_precession;
     q_a [shape=ellipse,label="a"];
     q_a -> j_CE_perihelion_precession;
+    q_one_minus_e_sq [shape=ellipse,label="one_minus_e_sq"];
+    q_one_minus_e_sq -> j_CE_perihelion_precession;
     q_perihelion_precession [shape=ellipse,label="perihelion-precession"];
     j_CE_perihelion_precession -> q_perihelion_precession;
     j_CE_newton_gravitation [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Newton's law of gravitation"];
@@ -285,7 +287,8 @@ digraph PhysicsMap {
     j_CE_sound_speed [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Speed of sound in a fluid"];
     q_pressure -> j_CE_sound_speed;
     q_density -> j_CE_sound_speed;
-    j_CE_sound_speed -> q_speed;
+    q_sound_speed [shape=ellipse,label="sound-speed"];
+    j_CE_sound_speed -> q_sound_speed;
     j_CE_volume_flow_rate [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Volume flow rate (continuity)"];
     q_cross_sectional_area [shape=ellipse,label="cross-sectional-area"];
     q_cross_sectional_area -> j_CE_volume_flow_rate;
@@ -335,6 +338,8 @@ digraph PhysicsMap {
     q_temperature -> j_CE_ideal_gas;
     q_V [shape=ellipse,label="V"];
     q_V -> j_CE_ideal_gas;
+    q_N [shape=ellipse,label="N"];
+    q_N -> j_CE_ideal_gas;
     j_CE_ideal_gas -> q_pressure;
     j_CE_wien [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Wien's displacement law"];
     q_temperature -> j_CE_wien;
@@ -363,6 +368,10 @@ digraph PhysicsMap {
     j_CE_de_broglie [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="de Broglie wavelength"];
     q_p -> j_CE_de_broglie;
     j_CE_de_broglie -> q_compton_wavelength;
+    j_CE_compton_wavelength_full [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Compton wavelength"];
+    q_mass -> j_CE_compton_wavelength_full;
+    q_compton_wavelength_full [shape=ellipse,label="compton-wavelength-full"];
+    j_CE_compton_wavelength_full -> q_compton_wavelength_full;
     j_CE_carrier_mobility [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Carrier mobility"];
     q_charge -> j_CE_carrier_mobility;
     q_relaxation_time [shape=ellipse,label="relaxation-time"];
@@ -416,7 +425,6 @@ digraph PhysicsMap {
     q_plasma_frequency [shape=ellipse,label="plasma-frequency"];
     j_CE_plasma_frequency -> q_plasma_frequency;
     j_CE_debye_frequency [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Debye frequency"];
-    q_sound_speed [shape=ellipse,label="sound-speed"];
     q_sound_speed -> j_CE_debye_frequency;
     q_number_density [shape=ellipse,label="number-density"];
     q_number_density -> j_CE_debye_frequency;
@@ -509,6 +517,21 @@ digraph PhysicsMap {
   }
   subgraph cluster_2 {
     label="anchored cluster (2)";
+    j_CE_friedmann_curvature [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Friedmann equation (with curvature)"];
+    q_rho [shape=ellipse,label="rho"];
+    q_rho -> j_CE_friedmann_curvature;
+    q_curvature_k [shape=ellipse,label="curvature-k"];
+    q_curvature_k -> j_CE_friedmann_curvature;
+    q_scale_factor [shape=ellipse,label="scale-factor"];
+    q_scale_factor -> j_CE_friedmann_curvature;
+    q_hubble_rate_squared [shape=ellipse,label="hubble-rate-squared"];
+    j_CE_friedmann_curvature -> q_hubble_rate_squared;
+    j_CE_friedmann [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Friedmann equation (flat, matter-dominated)"];
+    q_rho -> j_CE_friedmann;
+    j_CE_friedmann -> q_hubble_rate_squared;
+  }
+  subgraph cluster_3 {
+    label="anchored cluster (2)";
     j_CE_half_life [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Radioactive half-life"];
     q_decay_constant [shape=ellipse,label="decay-constant"];
     q_decay_constant -> j_CE_half_life;
@@ -524,7 +547,7 @@ digraph PhysicsMap {
     j_CE_radioactive_decay -> q_remaining_nuclei;
   }
   subgraph cluster_iso {
-    label="isolated (20)";
+    label="isolated (19)";
     j_CE_bekenstein_hawking [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Bekenstein–Hawking entropy"];
     q_A [shape=ellipse,label="A"];
     q_A -> j_CE_bekenstein_hawking;
@@ -555,11 +578,6 @@ digraph PhysicsMap {
     q_work_done_by_system -> j_CE_first_law_thermodynamics;
     q_internal_energy_change [shape=ellipse,label="internal-energy-change"];
     j_CE_first_law_thermodynamics -> q_internal_energy_change;
-    j_CE_friedmann [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Friedmann equation (flat, matter-dominated)"];
-    q_rho [shape=ellipse,label="rho"];
-    q_rho -> j_CE_friedmann;
-    q_hubble_rate_squared [shape=ellipse,label="hubble-rate-squared"];
-    j_CE_friedmann -> q_hubble_rate_squared;
     j_CE_hubble_distance [shape=box,style="filled",fillcolor="#cfe3f7",color="#3a6ea5",label="Hubble distance"];
     q_hubble_rate [shape=ellipse,label="hubble-rate"];
     q_hubble_rate -> j_CE_hubble_distance;
