@@ -4,14 +4,19 @@
  * and a hand-edited theorem fails `atlas:formal-gate`.
  */
 
+/** PhysJS commit recorded by the vendored manifest. */
 export const PHYSJS_COMMIT = "03e8bb77c952f720bdd2730af2afc6a7f2d36243";
 
+/** Lean toolchain recorded by the vendored manifest. */
 export const PHYSJS_TOOLCHAIN = "leanprover/lean4:v4.34.1";
 
+/** Mathlib version recorded by the vendored manifest. */
 export const PHYSJS_MATHLIB = "v4.34.1";
 
+/** PhysLib commit recorded by the vendored manifest. */
 export const PHYSJS_PHYS_LIB = "af484f78ee0701290595f8bf892b157b10d64940";
 
+/** Compiled entry table copied from the vendored manifest entries. */
 export const PHYSJS_ENTRIES = [
   {
     key: "ab-kg-schrodinger",

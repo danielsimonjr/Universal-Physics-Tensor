@@ -142,14 +142,19 @@ export function renderPhysjsTable(manifest: Manifest): string {
  * and a hand-edited theorem fails \`atlas:formal-gate\`.
  */
 
+/** PhysJS commit recorded by the vendored manifest. */
 export const PHYSJS_COMMIT = ${quote(manifest.commit)};
 
+/** Lean toolchain recorded by the vendored manifest. */
 export const PHYSJS_TOOLCHAIN = ${quote(manifest.toolchain)};
 
+/** Mathlib version recorded by the vendored manifest. */
 export const PHYSJS_MATHLIB = ${quote(manifest.mathlib)};
 
+/** PhysLib commit recorded by the vendored manifest. */
 export const PHYSJS_PHYS_LIB = ${quote(manifest.physlib)};
 
+/** Compiled entry table copied from the vendored manifest entries. */
 export const PHYSJS_ENTRIES = [
 ${body}
 ] as const;
