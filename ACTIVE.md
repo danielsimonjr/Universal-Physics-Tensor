@@ -51,8 +51,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [ ] Implement phase 3 of the 6.0.0 integration: one name table and one edit distance.
   Resolution uses optimal string alignment at distance at most 1. `erasure-energy` and the Landauer quantity are one quantity. A Debye-length miss does not suggest the phonon family. A Reynolds-number search does not hit the analogy. A Prandtl-number search names that bridge and says the match is the gloss.
 
-- [ ] Implement phase 4 of the 6.0.0 integration: one sign policy.
+- [x] Implement phase 4 of the 6.0.0 integration: one sign policy.
   Plasma frequency and Larmor radius are magnitudes. Hall and cyclotron stay signed. Einstein and conductivity reject opposite signs once. A policy that takes the absolute value of the cyclotron frequency fails the cyclotron test.
+  Done: `applyCarrierSignPolicy` is the only caller of `assertSameCarrierSign`. A canonical edge and `evaluateEinsteinRelation` each call it once. The BE-70 domain does not call `sameCarrierSign`. The cyclotron mutation received `175882001077.2163` where the test expects the negative frequency.
 
 - [ ] Implement phase 5 of the 6.0.0 integration: a sourced factor or unset, and the ideal-gas count.
   An unset coefficient yields no recovered number. Ideal gas without `N` is a missing input. Ideal gas with `N` is `N k_B T / V`. Sound speed multiplies by the square root of gamma when gamma is bound, and is unset when it is not. The ideal-gas count already evaluates from the scalar AST. This phase does not reimplement that path.

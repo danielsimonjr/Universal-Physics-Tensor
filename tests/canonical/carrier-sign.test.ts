@@ -8,6 +8,10 @@ import { describe, expect, it } from 'vitest';
 import { canonicalToEdges } from '../../src/composition/canonical-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { explainQuantity } from '../../src/composition/explain.js';
+import { evaluateEdge } from '../../src/composition/edge.js';
+import { be70Edge } from '../../src/composition/edges/applied-physicist.js';
+import { evaluateEinsteinRelation } from '../../src/bridges/be70-einstein-relation.js';
+import { CarrierSignError, readCarrierSignPolicyCalls, resetCarrierSignPolicyCalls } from '../../src/bridges/carrier-sign.js';
 import type { CanonicalEquation } from '../../src/canonical/canonical-equation.js';
 import { CHARGE } from '../../src/dimensional/types.js';
 import { runCli } from '../../src/cli/main.js';
@@ -80,6 +84,36 @@ describe('carrier charge and mobility share a sign on a positive product', () =>
       'carrier-mobility': 0,
     });
     expect(zero === 0).toBe(true);
+  });
+
+  it('throws CarrierSignError once from the edge evaluate, including BE-70', () => {
+    resetCarrierSignPolicyCalls();
+    expect(() => conductivityEdge().evaluate({ 'carrier-density': N, charge: -Q, 'carrier-mobility': MU })).toThrow(CarrierSignError);
+    expect(readCarrierSignPolicyCalls()).toBe(1);
+
+    resetCarrierSignPolicyCalls();
+    const both = conductivityEdge().evaluate({
+      'carrier-density': N,
+      charge: -Q,
+      'carrier-mobility': -0.00439705002693041,
+    });
+    expect(both).toBeGreaterThan(0);
+    expect(readCarrierSignPolicyCalls()).toBe(1);
+
+    resetCarrierSignPolicyCalls();
+    expect(() =>
+      evaluateEdge(be70Edge, {
+        'electrical-mobility': 0.14,
+        'einstein-temperature': 300,
+        'carrier-charge': -Q,
+      }),
+    ).toThrow(CarrierSignError);
+    expect(readCarrierSignPolicyCalls()).toBe(1);
+
+    resetCarrierSignPolicyCalls();
+    const diffusivity = evaluateEinsteinRelation({ mu_m2_per_Vs: -0.14, T_K: 300, q_C: -Q }).D_m2_per_s;
+    expect(diffusivity).toBeGreaterThan(0);
+    expect(readCarrierSignPolicyCalls()).toBe(1);
   });
 
   it('does not take the sign off a Hall coefficient or a cyclotron frequency', () => {
