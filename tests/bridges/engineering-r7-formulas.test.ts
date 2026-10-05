@@ -6,6 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
+import { ENGINEERING_R7_CATALOG_ROWS } from '../../src/bridges/engineering-r7-catalog.js';
 import {
   carnotFactor,
   coaxialWithoutTwoPi,
@@ -40,6 +41,11 @@ const THEOREMS: Readonly<Record<number, string>> = {
 };
 
 describe('engineering formulas BE-126 through BE-133', () => {
+  it('the catalog rows are the eight established ids', () => {
+    expect(ENGINEERING_R7_CATALOG_ROWS.map((entry) => entry.id)).toEqual([126, 127, 128, 129, 130, 131, 132, 133]);
+    expect(ENGINEERING_R7_CATALOG_ROWS.every((entry) => entry.status === 'established')).toBe(true);
+  });
+
   it('each formalRef is kind bridge and names its theorem', () => {
     for (const [id, theorem] of Object.entries(THEOREMS)) {
       const ref = catalogFormalRef(Number(id));

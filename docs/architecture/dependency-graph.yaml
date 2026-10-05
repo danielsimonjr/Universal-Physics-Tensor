@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 6.0.0
-  totalFiles: 480
+  totalFiles: 484
   totalModules: 13
-  totalExports: 3745
+  totalExports: 3874
 entryPoints:
   - file: src/index.ts
     type: main
@@ -4933,6 +4933,77 @@ modules:
         - CONFRONTATION_RIGOR
         - BCS_GAP_RATIO
         - CONFRONTATIONS
+    src/bridges/engineering-r7-catalog.ts:
+      description: Catalog rows for BE-126 through BE-133.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - ENGINEERING_R7_CATALOG_ROWS
+      constants:
+        - ENGINEERING_R7_CATALOG_ROWS
+    src/bridges/engineering-r7.ts:
+      description: BE-126 through BE-133 — engineering closed forms.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - E_SI
+            - K_B_SI
+      exports:
+        - evaluateCombDrive
+        - combDriveOneSidewall
+        - evaluateSubthresholdSwing
+        - subthresholdIdealSwing
+        - evaluateBoostConverter
+        - evaluateFinEfficiency
+        - finOneFaceParameter
+        - finInfiniteEfficiency
+        - evaluateThermoelectricGenerator
+        - carnotFactor
+        - evaluateJoukowsky
+        - joukowskyDynamicPressure
+        - joukowskyRigidSpeed
+        - evaluateCoaxialCapacitance
+        - coaxialWithoutTwoPi
+        - evaluateDampingRatio
+        - dampingWithoutTwo
+      interfaces:
+        - CombDriveInputs
+        - CombDriveResult
+        - SubthresholdSwingInputs
+        - SubthresholdSwingResult
+        - BoostConverterInputs
+        - BoostConverterResult
+        - FinEfficiencyInputs
+        - FinEfficiencyResult
+        - ThermoelectricGeneratorInputs
+        - ThermoelectricGeneratorResult
+        - JoukowskyInputs
+        - JoukowskyResult
+        - CoaxialCapacitanceInputs
+        - CoaxialCapacitanceResult
+        - DampingRatioInputs
+        - DampingRatioResult
+      functions:
+        - evaluateCombDrive
+        - combDriveOneSidewall
+        - evaluateSubthresholdSwing
+        - subthresholdIdealSwing
+        - evaluateBoostConverter
+        - evaluateFinEfficiency
+        - finOneFaceParameter
+        - finInfiniteEfficiency
+        - evaluateThermoelectricGenerator
+        - carnotFactor
+        - evaluateJoukowsky
+        - joukowskyDynamicPressure
+        - joukowskyRigidSpeed
+        - evaluateCoaxialCapacitance
+        - coaxialWithoutTwoPi
+        - evaluateDampingRatio
+        - dampingWithoutTwo
     src/bridges/equations/_be-helpers.ts:
       description: Shared helpers for the 43 BE-NN bridge-equation modules in
       externalDependencies: []
@@ -6829,6 +6900,16 @@ modules:
             - evaluateParkerSpiral
             - evaluateResistiveSlab
             - evaluateUpperHybrid
+        - file: ./engineering-r7.js
+          imports:
+            - evaluateBoostConverter
+            - evaluateCoaxialCapacitance
+            - evaluateCombDrive
+            - evaluateDampingRatio
+            - evaluateFinEfficiency
+            - evaluateJoukowsky
+            - evaluateSubthresholdSwing
+            - evaluateThermoelectricGenerator
         - file: ./registry.js
           imports:
             - bridgeRegistry
@@ -6896,6 +6977,9 @@ modules:
         - file: ./plasma-catalog.js
           imports:
             - PLASMA_CATALOG_ROWS
+        - file: ./engineering-r7-catalog.js
+          imports:
+            - ENGINEERING_R7_CATALOG_ROWS
         - file: ./gravitational-lensing.js
           imports:
             - evaluateGravitationalLensing
@@ -7281,6 +7365,33 @@ modules:
             - type MirrorInstabilityInputs
             - type MirrorInstabilityResult
           reExport: true
+        - file: ./engineering-r7.js
+          imports:
+            - evaluateCombDrive
+            - type CombDriveInputs
+            - type CombDriveResult
+            - evaluateSubthresholdSwing
+            - type SubthresholdSwingInputs
+            - type SubthresholdSwingResult
+            - evaluateBoostConverter
+            - type BoostConverterInputs
+            - type BoostConverterResult
+            - evaluateFinEfficiency
+            - type FinEfficiencyInputs
+            - type FinEfficiencyResult
+            - evaluateThermoelectricGenerator
+            - type ThermoelectricGeneratorInputs
+            - type ThermoelectricGeneratorResult
+            - evaluateJoukowsky
+            - type JoukowskyInputs
+            - type JoukowskyResult
+            - evaluateCoaxialCapacitance
+            - type CoaxialCapacitanceInputs
+            - type CoaxialCapacitanceResult
+            - evaluateDampingRatio
+            - type DampingRatioInputs
+            - type DampingRatioResult
+          reExport: true
       exports:
         - evaluateGravitationalLensing
         - type GravitationalLensingInputs
@@ -7511,6 +7622,30 @@ modules:
         - evaluateMirrorInstability
         - type MirrorInstabilityInputs
         - type MirrorInstabilityResult
+        - evaluateCombDrive
+        - type CombDriveInputs
+        - type CombDriveResult
+        - evaluateSubthresholdSwing
+        - type SubthresholdSwingInputs
+        - type SubthresholdSwingResult
+        - evaluateBoostConverter
+        - type BoostConverterInputs
+        - type BoostConverterResult
+        - evaluateFinEfficiency
+        - type FinEfficiencyInputs
+        - type FinEfficiencyResult
+        - evaluateThermoelectricGenerator
+        - type ThermoelectricGeneratorInputs
+        - type ThermoelectricGeneratorResult
+        - evaluateJoukowsky
+        - type JoukowskyInputs
+        - type JoukowskyResult
+        - evaluateCoaxialCapacitance
+        - type CoaxialCapacitanceInputs
+        - type CoaxialCapacitanceResult
+        - evaluateDampingRatio
+        - type DampingRatioInputs
+        - type DampingRatioResult
         - BE37_REGIME
         - BE51_REGIME
         - BE52_REGIME
@@ -7747,6 +7882,30 @@ modules:
         - evaluateMirrorInstability
         - type MirrorInstabilityInputs
         - type MirrorInstabilityResult
+        - evaluateCombDrive
+        - type CombDriveInputs
+        - type CombDriveResult
+        - evaluateSubthresholdSwing
+        - type SubthresholdSwingInputs
+        - type SubthresholdSwingResult
+        - evaluateBoostConverter
+        - type BoostConverterInputs
+        - type BoostConverterResult
+        - evaluateFinEfficiency
+        - type FinEfficiencyInputs
+        - type FinEfficiencyResult
+        - evaluateThermoelectricGenerator
+        - type ThermoelectricGeneratorInputs
+        - type ThermoelectricGeneratorResult
+        - evaluateJoukowsky
+        - type JoukowskyInputs
+        - type JoukowskyResult
+        - evaluateCoaxialCapacitance
+        - type CoaxialCapacitanceInputs
+        - type CoaxialCapacitanceResult
+        - evaluateDampingRatio
+        - type DampingRatioInputs
+        - type DampingRatioResult
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
@@ -12449,6 +12608,9 @@ modules:
         - file: ./edges/plasma-space.js
           imports:
             - PLASMA_SPACE_EDGES
+        - file: ./edges/engineering-r7.js
+          imports:
+            - ENGINEERING_R7_EDGES
       exports:
         - CATALOG_GRAPH
       constants:
@@ -14019,6 +14181,97 @@ modules:
         - be101Edge
         - be102Edge
         - CONDENSED_R5_EDGES
+    src/composition/edges/engineering-r7.ts:
+      description: Composition edges for BE-126 through BE-133.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+        - file: ../../dimensional/symbolic-constants.js
+          imports:
+            - CONSTANTS
+        - file: ../../bridges/engineering-r7.js
+          imports:
+            - evaluateBoostConverter
+            - evaluateCoaxialCapacitance
+            - evaluateCombDrive
+            - evaluateDampingRatio
+            - evaluateFinEfficiency
+            - evaluateJoukowsky
+            - evaluateSubthresholdSwing
+            - evaluateThermoelectricGenerator
+        - file: ../edge.js
+          imports:
+            - withBoundAliases
+            - BridgeEdge
+        - file: ../quantity.js
+          imports:
+            - Quantity
+          typeOnly: true
+        - file: ../quantities.js
+          imports:
+            - boostDutyQ
+            - boostGainQ
+            - coaxInnerQ
+            - coaxLinerQ
+            - coaxOuterQ
+            - coaxSpecificQ
+            - combAirgapQ
+            - combBiasQ
+            - combDielectricQ
+            - combFingerCountQ
+            - combLateralQ
+            - combOverlapQ
+            - dampingDashpotQ
+            - dampingInertiaQ
+            - dampingSpringQ
+            - dampingZetaQ
+            - finAdiabaticQ
+            - finConductivityQ
+            - finConvectionQ
+            - finSpanQ
+            - finWebQ
+            - joukowskyBoreQ
+            - joukowskyBulkQ
+            - joukowskyClosureQ
+            - joukowskyJumpQ
+            - joukowskyRhoQ
+            - joukowskyThkQ
+            - joukowskyWallmodQ
+            - swingDecadeQ
+            - swingDepletionQ
+            - swingKelvinQ
+            - swingOxideQ
+            - tegFigureQ
+            - tegOptimumQ
+            - tegSinkQ
+            - tegSourceQ
+      exports:
+        - be126Edge
+        - be127Edge
+        - be128Edge
+        - be129Edge
+        - be130Edge
+        - be131Edge
+        - be132Edge
+        - be133Edge
+        - ENGINEERING_R7_EDGES
+      constants:
+        - be126Edge
+        - be127Edge
+        - be128Edge
+        - be129Edge
+        - be130Edge
+        - be131Edge
+        - be132Edge
+        - be133Edge
+        - ENGINEERING_R7_EDGES
     src/composition/edges/plasma-space.ts:
       description: Composition edges for BE-103 through BE-125.
       externalDependencies: []
@@ -14812,6 +15065,18 @@ modules:
             - be125Edge
             - PLASMA_SPACE_EDGES
           reExport: true
+        - file: ./edges/engineering-r7.js
+          imports:
+            - be126Edge
+            - be127Edge
+            - be128Edge
+            - be129Edge
+            - be130Edge
+            - be131Edge
+            - be132Edge
+            - be133Edge
+            - ENGINEERING_R7_EDGES
+          reExport: true
         - file: ./edges/catalog-full.js
           imports:
             - be11Edge
@@ -15067,6 +15332,15 @@ modules:
         - be124Edge
         - be125Edge
         - PLASMA_SPACE_EDGES
+        - be126Edge
+        - be127Edge
+        - be128Edge
+        - be129Edge
+        - be130Edge
+        - be131Edge
+        - be132Edge
+        - be133Edge
+        - ENGINEERING_R7_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -15260,6 +15534,15 @@ modules:
         - be124Edge
         - be125Edge
         - PLASMA_SPACE_EDGES
+        - be126Edge
+        - be127Edge
+        - be128Edge
+        - be129Edge
+        - be130Edge
+        - be131Edge
+        - be132Edge
+        - be133Edge
+        - ENGINEERING_R7_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -17439,6 +17722,96 @@ modules:
         - bktTemperatureQ
         - landauerTransmissionQ
         - landauerChannelConductanceQ
+    src/composition/quantities/engineering-r7.ts:
+      description: Quantity nodes for BE-126 through BE-133.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../quantity.js
+          imports:
+            - Quantity
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+            - FORCE
+            - LENGTH
+            - MASS
+            - TEMPERATURE
+      exports:
+        - combFingerCountQ
+        - combDielectricQ
+        - combOverlapQ
+        - combBiasQ
+        - combAirgapQ
+        - combLateralQ
+        - swingKelvinQ
+        - swingDepletionQ
+        - swingOxideQ
+        - swingDecadeQ
+        - boostDutyQ
+        - boostGainQ
+        - finConvectionQ
+        - finConductivityQ
+        - finWebQ
+        - finSpanQ
+        - finAdiabaticQ
+        - tegSourceQ
+        - tegSinkQ
+        - tegFigureQ
+        - tegOptimumQ
+        - joukowskyRhoQ
+        - joukowskyClosureQ
+        - joukowskyBulkQ
+        - joukowskyWallmodQ
+        - joukowskyBoreQ
+        - joukowskyThkQ
+        - joukowskyJumpQ
+        - coaxLinerQ
+        - coaxInnerQ
+        - coaxOuterQ
+        - coaxSpecificQ
+        - dampingDashpotQ
+        - dampingSpringQ
+        - dampingInertiaQ
+        - dampingZetaQ
+      constants:
+        - combFingerCountQ
+        - combDielectricQ
+        - combOverlapQ
+        - combBiasQ
+        - combAirgapQ
+        - combLateralQ
+        - swingKelvinQ
+        - swingDepletionQ
+        - swingOxideQ
+        - swingDecadeQ
+        - boostDutyQ
+        - boostGainQ
+        - finConvectionQ
+        - finConductivityQ
+        - finWebQ
+        - finSpanQ
+        - finAdiabaticQ
+        - tegSourceQ
+        - tegSinkQ
+        - tegFigureQ
+        - tegOptimumQ
+        - joukowskyRhoQ
+        - joukowskyClosureQ
+        - joukowskyBulkQ
+        - joukowskyWallmodQ
+        - joukowskyBoreQ
+        - joukowskyThkQ
+        - joukowskyJumpQ
+        - coaxLinerQ
+        - coaxInnerQ
+        - coaxOuterQ
+        - coaxSpecificQ
+        - dampingDashpotQ
+        - dampingSpringQ
+        - dampingInertiaQ
+        - dampingZetaQ
     src/composition/quantities/fields.ts:
       description: Centralized Quantity nodes — field-theory / gravity-modification / swampland domain.
       externalDependencies: []
@@ -17913,6 +18286,10 @@ modules:
           imports:
             - "*"
           reExport: true
+        - file: ./quantities/engineering-r7.js
+          imports:
+            - "*"
+          reExport: true
       exports: []
       reExported:
         - "* from ./quantities/quantum.js"
@@ -17923,6 +18300,7 @@ modules:
         - "* from ./quantities/applied-physicist.js"
         - "* from ./quantities/condensed-r5.js"
         - "* from ./quantities/plasma-space.js"
+        - "* from ./quantities/engineering-r7.js"
     src/composition/quantity.ts:
       description: Composition graph — quantity nodes (v0.8.0 T2, per
       externalDependencies: []
@@ -20195,6 +20573,33 @@ modules:
             - type MirrorInstabilityInputs
             - type MirrorInstabilityResult
           reExport: true
+        - file: ./bridges/index.js
+          imports:
+            - evaluateCombDrive
+            - type CombDriveInputs
+            - type CombDriveResult
+            - evaluateSubthresholdSwing
+            - type SubthresholdSwingInputs
+            - type SubthresholdSwingResult
+            - evaluateBoostConverter
+            - type BoostConverterInputs
+            - type BoostConverterResult
+            - evaluateFinEfficiency
+            - type FinEfficiencyInputs
+            - type FinEfficiencyResult
+            - evaluateThermoelectricGenerator
+            - type ThermoelectricGeneratorInputs
+            - type ThermoelectricGeneratorResult
+            - evaluateJoukowsky
+            - type JoukowskyInputs
+            - type JoukowskyResult
+            - evaluateCoaxialCapacitance
+            - type CoaxialCapacitanceInputs
+            - type CoaxialCapacitanceResult
+            - evaluateDampingRatio
+            - type DampingRatioInputs
+            - type DampingRatioResult
+          reExport: true
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
@@ -20540,6 +20945,18 @@ modules:
             - be124Edge
             - be125Edge
             - PLASMA_SPACE_EDGES
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - be126Edge
+            - be127Edge
+            - be128Edge
+            - be129Edge
+            - be130Edge
+            - be131Edge
+            - be132Edge
+            - be133Edge
+            - ENGINEERING_R7_EDGES
           reExport: true
         - file: ./composition/index.js
           imports:
@@ -21222,6 +21639,30 @@ modules:
         - evaluateMirrorInstability
         - type MirrorInstabilityInputs
         - type MirrorInstabilityResult
+        - evaluateCombDrive
+        - type CombDriveInputs
+        - type CombDriveResult
+        - evaluateSubthresholdSwing
+        - type SubthresholdSwingInputs
+        - type SubthresholdSwingResult
+        - evaluateBoostConverter
+        - type BoostConverterInputs
+        - type BoostConverterResult
+        - evaluateFinEfficiency
+        - type FinEfficiencyInputs
+        - type FinEfficiencyResult
+        - evaluateThermoelectricGenerator
+        - type ThermoelectricGeneratorInputs
+        - type ThermoelectricGeneratorResult
+        - evaluateJoukowsky
+        - type JoukowskyInputs
+        - type JoukowskyResult
+        - evaluateCoaxialCapacitance
+        - type CoaxialCapacitanceInputs
+        - type CoaxialCapacitanceResult
+        - evaluateDampingRatio
+        - type DampingRatioInputs
+        - type DampingRatioResult
         - christoffel
         - ricci
         - einstein
@@ -21378,6 +21819,15 @@ modules:
         - be124Edge
         - be125Edge
         - PLASMA_SPACE_EDGES
+        - be126Edge
+        - be127Edge
+        - be128Edge
+        - be129Edge
+        - be130Edge
+        - be131Edge
+        - be132Edge
+        - be133Edge
+        - ENGINEERING_R7_EDGES
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -21902,6 +22352,30 @@ modules:
         - evaluateMirrorInstability
         - type MirrorInstabilityInputs
         - type MirrorInstabilityResult
+        - evaluateCombDrive
+        - type CombDriveInputs
+        - type CombDriveResult
+        - evaluateSubthresholdSwing
+        - type SubthresholdSwingInputs
+        - type SubthresholdSwingResult
+        - evaluateBoostConverter
+        - type BoostConverterInputs
+        - type BoostConverterResult
+        - evaluateFinEfficiency
+        - type FinEfficiencyInputs
+        - type FinEfficiencyResult
+        - evaluateThermoelectricGenerator
+        - type ThermoelectricGeneratorInputs
+        - type ThermoelectricGeneratorResult
+        - evaluateJoukowsky
+        - type JoukowskyInputs
+        - type JoukowskyResult
+        - evaluateCoaxialCapacitance
+        - type CoaxialCapacitanceInputs
+        - type CoaxialCapacitanceResult
+        - evaluateDampingRatio
+        - type DampingRatioInputs
+        - type DampingRatioResult
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
@@ -22116,6 +22590,15 @@ modules:
         - be124Edge
         - be125Edge
         - PLASMA_SPACE_EDGES
+        - be126Edge
+        - be127Edge
+        - be128Edge
+        - be129Edge
+        - be130Edge
+        - be131Edge
+        - be132Edge
+        - be133Edge
+        - ENGINEERING_R7_EDGES
         - BridgeEdge
         - ComposeOptions
         - EdgeConfidence
@@ -24020,6 +24503,8 @@ dependencyGraph:
         - src/bridges/catalog-adapter.ts
         - src/bridges/confrontation-coverage.ts
         - src/bridges/confrontations.ts
+        - src/bridges/engineering-r7-catalog.ts
+        - src/bridges/engineering-r7.ts
         - src/bridges/equations/_be-helpers.ts
         - src/bridges/equations/be-11-decoherence-master.ts
         - src/bridges/equations/be-12-coherence-length.ts
@@ -24210,6 +24695,7 @@ dependencyGraph:
         - src/composition/edges/catalog-quantum.ts
         - src/composition/edges/catalog-tranche.ts
         - src/composition/edges/condensed-r5.ts
+        - src/composition/edges/engineering-r7.ts
         - src/composition/edges/plasma-space.ts
         - src/composition/edges/proved-seeds.ts
         - src/composition/enumerate.ts
@@ -24258,6 +24744,7 @@ dependencyGraph:
         - src/composition/quantities/common.ts
         - src/composition/quantities/condensed-matter.ts
         - src/composition/quantities/condensed-r5.ts
+        - src/composition/quantities/engineering-r7.ts
         - src/composition/quantities/fields.ts
         - src/composition/quantities/gravitation-cosmology.ts
         - src/composition/quantities/plasma-space.ts
@@ -24378,18 +24865,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 480
+  totalTypeScriptFiles: 484
   totalModules: 13
-  totalLinesOfCode: 103030
-  totalExports: 3745
+  totalLinesOfCode: 104242
+  totalExports: 3874
   totalClasses: 63
-  totalInterfaces: 613
-  totalFunctions: 880
+  totalInterfaces: 629
+  totalFunctions: 897
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 1022
-  totalReExports: 1792
-  totalTypeOnlyImports: 588
+  totalConstants: 1068
+  totalReExports: 1859
+  totalTypeOnlyImports: 591
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
