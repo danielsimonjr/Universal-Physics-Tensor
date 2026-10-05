@@ -3636,8 +3636,8 @@ The codebase is organized into the following modules:
 |------|---------|------|
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
-| `../dimensional/types.js` | `MASS, TEMPERATURE` | Import |
 | `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/formula-names.js` | `DIMENSION_RENAMES` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS, piMultipleValue` | Import |
 
 **Exports:**
@@ -4976,15 +4976,17 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/aliases.ts` - One record of what a typed name means on a graph edge.
+### `src/composition/aliases.ts` - One record of what a typed name means.
 
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
+| `../dimensional/formula-names.js` | `DIMENSION_RENAMES, DimensionRename` | Import |
 
 **Exports:**
-- Functions: `aliasesForTarget`, `rewriteInputKey`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
+- Functions: `aliasesForTarget`, `rewriteInputKey`, `editDistance`, `synonymInCatalog`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
+- Constants: `NAME_TABLE`
 
 ---
 
@@ -5098,6 +5100,7 @@ The codebase is organized into the following modules:
 | `./expr-eval.js` | `evalExpr` | Import |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
 | `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
+| `./aliases.js` | `NAME_TABLE` | Import |
 | `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
@@ -6832,7 +6835,7 @@ The codebase is organized into the following modules:
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `../dimensional/natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
-| `./aliases.js` | `aliasesForTarget, rewriteInputKey` | Import |
+| `./aliases.js` | `aliasesForTarget, editDistance, NAME_TABLE, rewriteInputKey, synonymInCatalog` | Import |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./graph-viz.js` | `VizModel, VizJunction` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
@@ -7325,13 +7328,13 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./types.js` | `Dimension` | Import (type-only) |
-| `./types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS` | Import |
+| `./types.js` | `CHARGE, DIMENSIONLESS, LENGTH, MASS, TEMPERATURE` | Import |
 | `../core/constants.js` | `C_SI, E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, N_A_SI` | Import |
 
 **Exports:**
-- Interfaces: `FormulaName`
+- Interfaces: `FormulaName`, `DimensionRename`
 - Functions: `formulaNameDimensions`
-- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`
+- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`, `DIMENSION_RENAMES`
 
 ---
 
@@ -8957,12 +8960,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 472 |
 | Total Modules | 13 |
-| Total Lines of Code | 100107 |
-| Total Exports | 3556 |
+| Total Lines of Code | 100164 |
+| Total Exports | 3560 |
 | Total Re-exports | 1734 |
 | Total Classes | 61 |
-| Total Interfaces | 561 |
-| Total Functions | 847 |
+| Total Interfaces | 562 |
+| Total Functions | 849 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 583 |

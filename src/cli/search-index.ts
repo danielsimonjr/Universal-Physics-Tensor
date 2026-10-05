@@ -38,6 +38,24 @@ interface Field {
   readonly exact?: readonly string[];
 }
 
+/**
+ * A trailing parenthetical is a gloss, not part of the title.
+ * `Reynolds analogy (Prandtl number 1)` is the title plus the gloss
+ * `Prandtl number 1`. A parenthesis with no preceding space, such as `ν(z)`,
+ * stays in the title.
+ */
+function titleAndGloss(label: string, text: string, exact?: readonly string[]): Field[] {
+  const match = /^(.*?)\s+\(([^()]*)\)\s*$/.exec(text);
+  const gloss = match?.[2]?.trim() ?? '';
+  if (match === null || gloss.length === 0) {
+    return [{ label, text, ...(exact === undefined ? {} : { exact }) }];
+  }
+  return [
+    { label, text: match[1]!.trim(), ...(exact === undefined ? {} : { exact }) },
+    { label: 'gloss', text: gloss },
+  ];
+}
+
 /** One indexed record: its registry, its id, the line `upt search` prints, the command that shows it, and its searchable fields. */
 export interface SearchEntry {
   readonly kind: SearchKind;
@@ -180,7 +198,7 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
           : {}),
       fields: [
         { label: 'id', text: `be ${b.id}`, exact: [`be-${b.id}`] },
-        { label: 'name', text: b.name },
+        ...titleAndGloss('name', b.name),
         { label: 'description', text: affirmativeSentences(b.context ?? '') },
       ],
     });
@@ -197,7 +215,7 @@ export function buildSearchIndex(api: CommandCtx['api']): SearchEntry[] {
       commandLabel: 'inspect',
       fields: [
         { label: 'id', text: c.id, exact: [c.id] },
-        { label: 'name', text: c.name },
+        ...titleAndGloss('name', c.name),
         { label: 'variables', text: [t.name, ...c.dimensional.governing.map((g) => g.name)].join(' ') },
       ],
     });
@@ -319,8 +337,10 @@ function phraseInField(text: string, query: readonly string[]): boolean {
 /** Every entry of `index` that EVERY word of `significant` matches, name and id matches first.
  *  One word matches as before, including a proper prefix. Two or more words match only as whole
  *  words. When one field contains two or more of them, those words have to sit together in that
- *  field; a field that scatters them does not count. Words that never share a field still match,
- *  so "thermal" in a description and "noise" in a name still find Johnson–Nyquist. */
+ *  field; a field that scatters them does not count. Words that never share a non-gloss field
+ *  still match, so "thermal" in a description and "noise" in a name still find Johnson–Nyquist.
+ *  A gloss does not combine with another field. A query whose words are the gloss is labeled
+ *  gloss. A query split across the title and the gloss matches nothing. */
 export function matchEveryWord(
   api: CommandCtx['api'],
   index: readonly SearchEntry[],
@@ -342,9 +362,15 @@ export function matchEveryWord(
     }
     if (significant.length > 1) {
       const folded = significant.map(fold).filter((w) => !STOP_WORDS.has(w));
+      const gloss = e.fields.find((f) => f.label === 'gloss' && phraseInField(f.text, folded));
+      if (gloss !== undefined) {
+        matches.push({ entry: e, matchedIn: ['gloss'] });
+        continue;
+      }
       const labels: string[] = [];
       const covered = new Set<string>();
       for (const f of e.fields) {
+        if (f.label === 'gloss') continue;
         const fieldWords = words(f.text).filter((w) => !STOP_WORDS.has(w));
         const present = folded.filter((q) => fieldWords.includes(q));
         if (present.length === 0) continue;

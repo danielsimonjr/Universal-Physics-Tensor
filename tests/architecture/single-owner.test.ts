@@ -8,6 +8,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
+  nameTableOwnerHits,
   renderDuplicateOwners,
   signOwnerHits,
   temperatureOwnerHits,
@@ -28,5 +29,9 @@ describe('single owner', () => {
     expect(readFileSync(resolve(root, 'docs/architecture/duplicate-owners.md'), 'utf8')).toBe(
       renderDuplicateOwners(root),
     );
+  });
+
+  it('keeps one edit distance and one name table', () => {
+    expect(nameTableOwnerHits(root)).toEqual([]);
   });
 });

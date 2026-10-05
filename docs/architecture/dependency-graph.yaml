@@ -3,7 +3,7 @@ metadata:
   version: 5.0.0
   totalFiles: 472
   totalModules: 13
-  totalExports: 3556
+  totalExports: 3560
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8211,13 +8211,12 @@ modules:
           imports:
             - Dimension
           typeOnly: true
-        - file: ../dimensional/types.js
-          imports:
-            - MASS
-            - TEMPERATURE
         - file: ../dimensional/algebra.js
           imports:
             - equals
+        - file: ../dimensional/formula-names.js
+          imports:
+            - DIMENSION_RENAMES
         - file: ../dimensional/symbolic-constants.js
           imports:
             - CONSTANTS
@@ -11518,7 +11517,7 @@ modules:
       constants:
         - ADJUDICATIONS
     src/composition/aliases.ts:
-      description: One record of what a typed name means on a graph edge.
+      description: One record of what a typed name means.
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
@@ -11526,18 +11525,29 @@ modules:
           imports:
             - BridgeEdge
           typeOnly: true
+        - file: ../dimensional/formula-names.js
+          imports:
+            - DIMENSION_RENAMES
+            - DimensionRename
       exports:
+        - NAME_TABLE
         - aliasesForTarget
         - rewriteInputKey
+        - editDistance
+        - synonymInCatalog
         - nearQuantityNames
         - shareSynonyms
         - collapseSynonymGovernors
       functions:
         - aliasesForTarget
         - rewriteInputKey
+        - editDistance
+        - synonymInCatalog
         - nearQuantityNames
         - shareSynonyms
         - collapseSynonymGovernors
+      constants:
+        - NAME_TABLE
     src/composition/audit-coverage.ts:
       description: Empirical-spine coverage audit (Direction 4).
       externalDependencies: []
@@ -11765,6 +11775,9 @@ modules:
         - file: ../dimensional/formula-names.js
           imports:
             - formulaNameDimensions
+        - file: ./aliases.js
+          imports:
+            - NAME_TABLE
         - file: ./user-equation.js
           imports:
             - parseUserEquation
@@ -17014,7 +17027,10 @@ modules:
         - file: ./aliases.js
           imports:
             - aliasesForTarget
+            - editDistance
+            - NAME_TABLE
             - rewriteInputKey
+            - synonymInCatalog
         - file: ./catalog-graph.js
           imports:
             - CATALOG_GRAPH
@@ -18044,6 +18060,7 @@ modules:
             - DIMENSIONLESS
             - LENGTH
             - MASS
+            - TEMPERATURE
         - file: ../core/constants.js
           imports:
             - C_SI
@@ -18056,15 +18073,18 @@ modules:
         - EPS0_SI
         - MU0_SI
         - FORMULA_NAMED
+        - DIMENSION_RENAMES
         - formulaNameDimensions
       interfaces:
         - FormulaName
+        - DimensionRename
       functions:
         - formulaNameDimensions
       constants:
         - EPS0_SI
         - MU0_SI
         - FORMULA_NAMED
+        - DIMENSION_RENAMES
     src/dimensional/fresh-label.ts:
       description: Shared deterministic fresh-label utility used by both metric.ts (raise/lower)
       externalDependencies: []
@@ -23465,14 +23485,14 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 472
   totalModules: 13
-  totalLinesOfCode: 100107
-  totalExports: 3556
+  totalLinesOfCode: 100164
+  totalExports: 3560
   totalClasses: 61
-  totalInterfaces: 561
-  totalFunctions: 847
+  totalInterfaces: 562
+  totalFunctions: 849
   totalTypeGuards: 5
   totalEnums: 0
-  totalConstants: 915
+  totalConstants: 917
   totalReExports: 1734
   totalTypeOnlyImports: 583
   runtimeCircularDeps: 0

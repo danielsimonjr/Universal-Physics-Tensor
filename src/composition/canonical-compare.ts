@@ -32,6 +32,7 @@ import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js
 import { evalExpr } from './expr-eval.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
+import { NAME_TABLE } from './aliases.js';
 import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
@@ -52,22 +53,6 @@ const FIXED_POINT_EXPONENTS: readonly number[] = [1, 1.3, 1.6];
 
 /** Relative tolerance for "the ratio is constant" and "the ratio is 1". @internal */
 const RATIO_TOLERANCE = 1e-9;
-
-/**
- * Catalog names for an entry whose frozen target name is a different word.
- * CE-schwarzschild-radius's L0 record calls the target `radius`; the catalog
- * quantity, and the name a student writes, is `schwarzschild-radius`.
- */
-const ENTRY_TARGET_ALIASES: Readonly<Record<string, readonly string[]>> = {
-  'CE-schwarzschild-radius': ['schwarzschild-radius'],
-  // The equation's quantity is sound-speed. A formula written for speed, with
-  // pressure and density, is still this law. speed is not a synonym of sound-speed.
-  'CE-sound-speed': ['speed'],
-  // The L0 id keeps the catalog name. The reduced name is the same entry.
-  // The non-reduced entry also answers to that catalog name when the formula uses h.
-  'CE-compton-wavelength': ['reduced-compton-wavelength'],
-  'CE-compton-wavelength-full': ['compton-wavelength'],
-};
 
 /** What a dimensionless registry stub stands for, when the symbol is not the latex. */
 const STUB_GLOSS: Readonly<Record<string, string>> = {
@@ -409,7 +394,7 @@ export function compareWithCanonical(
   for (const entry of entries) {
     const d = entry.dimensional;
     const via = normalize(d.target.name) === wantTarget ? undefined : targetThroughRestatedBridge(entry, wantTarget);
-    const alias = (ENTRY_TARGET_ALIASES[entry.id] ?? []).includes(wantTarget);
+    const alias = (NAME_TABLE.canonicalTargets[entry.id] ?? []).includes(wantTarget);
     if (normalize(d.target.name) !== wantTarget && via === undefined && !alias) continue;
     const targetVia = via === undefined ? {} : { targetVia: { bridge: via, its: d.target.name } };
     let variables = d.governing.filter((g) => !isConstant(g));

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 472,
-    "totalTestFiles": 670,
+    "totalTestFiles": 671,
     "testedCount": 462,
     "untestedCount": 10,
     "coveragePercent": "97.9"
@@ -10759,7 +10759,8 @@
     ],
     "src/composition/aliases.ts": [
       "tests/atlas/physjs-be69-73.test.ts",
-      "tests/cli/explain-synonym-monomial.test.ts"
+      "tests/cli/explain-synonym-monomial.test.ts",
+      "tests/composition/name-table.test.ts"
     ],
     "src/composition/audit-coverage.ts": [
       "tests/bridges/confrontation-coverage.test.ts",
@@ -12903,6 +12904,7 @@
       "tests/composition/identifiability.test.ts",
       "tests/composition/link-candidates.test.ts",
       "tests/composition/linkage-map.test.ts",
+      "tests/composition/name-table.test.ts",
       "tests/composition/namespacing.test.ts",
       "tests/composition/orphan-connectors.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
@@ -28145,6 +28147,10 @@
       "src/dimensional/types.ts",
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts"
+    ],
+    "tests/composition/name-table.test.ts": [
+      "src/composition/aliases.ts",
+      "src/composition/user-equation.ts"
     ],
     "tests/composition/namespacing.test.ts": [
       "src/composition/index.ts",

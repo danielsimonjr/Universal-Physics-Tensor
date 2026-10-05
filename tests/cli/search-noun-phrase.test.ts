@@ -40,10 +40,24 @@ describe('a multi-word search is a noun phrase in one field', () => {
     expect(r.text).toMatch(/no entry matches/);
   });
 
-  it('still finds the Reynolds analogy by the Prandtl number it states', async () => {
+  it('still finds the Reynolds analogy by the Prandtl number it states, and says the match is the gloss', async () => {
     const r = await search('prandtl number');
     expect(r.code, r.text).toBe(0);
     expect(r.text).toMatch(/be-86/);
+    expect(r.text).toMatch(/words in: gloss/);
+  });
+
+  it('still finds thermal noise across a name and a description', async () => {
+    const r = await search('thermal noise');
+    expect(r.code, r.text).toBe(0);
+    expect(r.text).toMatch(/be-58/);
+    expect(r.text).toMatch(/words in: name, description/);
+  });
+
+  it('still says landau is a prefix of landauer', async () => {
+    const r = await search('landau');
+    expect(r.code, r.text).toBe(0);
+    expect(r.text).toMatch(/landau is a prefix of landauer/);
   });
 
   it('still finds the Reynolds analogy by its own name', async () => {

@@ -4,7 +4,7 @@
     "version": "5.0.0",
     "totalFiles": 472,
     "totalModules": 13,
-    "totalExports": 3556
+    "totalExports": 3560
   },
   "entryPoints": [
     {
@@ -12149,16 +12149,15 @@
             "typeOnly": true
           },
           {
-            "file": "../dimensional/types.js",
-            "imports": [
-              "MASS",
-              "TEMPERATURE"
-            ]
-          },
-          {
             "file": "../dimensional/algebra.js",
             "imports": [
               "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "DIMENSION_RENAMES"
             ]
           },
           {
@@ -17125,7 +17124,7 @@
         ]
       },
       "src/composition/aliases.ts": {
-        "description": "One record of what a typed name means on a graph edge.",
+        "description": "One record of what a typed name means.",
         "externalDependencies": [],
         "nodeDependencies": [],
         "internalDependencies": [
@@ -17135,11 +17134,21 @@
               "BridgeEdge"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "DIMENSION_RENAMES",
+              "DimensionRename"
+            ]
           }
         ],
         "exports": [
+          "NAME_TABLE",
           "aliasesForTarget",
           "rewriteInputKey",
+          "editDistance",
+          "synonymInCatalog",
           "nearQuantityNames",
           "shareSynonyms",
           "collapseSynonymGovernors"
@@ -17147,9 +17156,14 @@
         "functions": [
           "aliasesForTarget",
           "rewriteInputKey",
+          "editDistance",
+          "synonymInCatalog",
           "nearQuantityNames",
           "shareSynonyms",
           "collapseSynonymGovernors"
+        ],
+        "constants": [
+          "NAME_TABLE"
         ]
       },
       "src/composition/audit-coverage.ts": {
@@ -17521,6 +17535,12 @@
             "file": "../dimensional/formula-names.js",
             "imports": [
               "formulaNameDimensions"
+            ]
+          },
+          {
+            "file": "./aliases.js",
+            "imports": [
+              "NAME_TABLE"
             ]
           },
           {
@@ -24845,7 +24865,10 @@
             "file": "./aliases.js",
             "imports": [
               "aliasesForTarget",
-              "rewriteInputKey"
+              "editDistance",
+              "NAME_TABLE",
+              "rewriteInputKey",
+              "synonymInCatalog"
             ]
           },
           {
@@ -26312,7 +26335,8 @@
               "CHARGE",
               "DIMENSIONLESS",
               "LENGTH",
-              "MASS"
+              "MASS",
+              "TEMPERATURE"
             ]
           },
           {
@@ -26331,10 +26355,12 @@
           "EPS0_SI",
           "MU0_SI",
           "FORMULA_NAMED",
+          "DIMENSION_RENAMES",
           "formulaNameDimensions"
         ],
         "interfaces": [
-          "FormulaName"
+          "FormulaName",
+          "DimensionRename"
         ],
         "functions": [
           "formulaNameDimensions"
@@ -26342,7 +26368,8 @@
         "constants": [
           "EPS0_SI",
           "MU0_SI",
-          "FORMULA_NAMED"
+          "FORMULA_NAMED",
+          "DIMENSION_RENAMES"
         ]
       },
       "src/dimensional/fresh-label.ts": {
@@ -33414,14 +33441,14 @@
   "statistics": {
     "totalTypeScriptFiles": 472,
     "totalModules": 13,
-    "totalLinesOfCode": 100107,
-    "totalExports": 3556,
+    "totalLinesOfCode": 100164,
+    "totalExports": 3560,
     "totalClasses": 61,
-    "totalInterfaces": 561,
-    "totalFunctions": 847,
+    "totalInterfaces": 562,
+    "totalFunctions": 849,
     "totalTypeGuards": 5,
     "totalEnums": 0,
-    "totalConstants": 915,
+    "totalConstants": 917,
     "totalReExports": 1734,
     "totalTypeOnlyImports": 583,
     "runtimeCircularDeps": 0,

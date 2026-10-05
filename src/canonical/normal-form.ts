@@ -22,8 +22,8 @@
  */
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
-import { MASS, TEMPERATURE } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
+import { DIMENSION_RENAMES } from '../dimensional/formula-names.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 
 const isDimensionless = (d: Dimension): boolean =>
@@ -65,9 +65,9 @@ const NAMED_DIMENSIONLESS_CONSTANTS = new Set(['ln_2_constant']);
  * @internal
  */
 export function canonicalQuantityName(name: string, dim: Dimension): string {
-  if (name === 'T' && equals(dim, TEMPERATURE)) return 'temperature';
-  if ((name === 'M' || name === 'm_1') && equals(dim, MASS)) return 'mass';
-  if (name === 'm_2' && equals(dim, MASS)) return 'secondary-mass';
+  for (const row of DIMENSION_RENAMES) {
+    if (row.symbol === name && equals(dim, row.dimension)) return row.name;
+  }
   return name;
 }
 
