@@ -29,7 +29,10 @@ const HELP = `upt search <word> ...
         or bridge description, and print the command that inspects each match. Every
         word must match. Two or more words that share a field must sit together
         there, in either order, and a word in that phrase is not a prefix of a
-        longer word. A space inside one argument, and a hyphen, are word
+        longer word. A trailing parenthetical is a gloss. A gloss does not
+        combine with the title, so a query split across them matches nothing,
+        and a query that is the gloss says so. Words that never share a
+        non-gloss field still match. A space inside one argument, and a hyphen, are word
         breaks, so a quoted phrase and a hyphenated name are several words.
         An equal dimension is never a match (a radius is not
         a wavelength). A word of one or two letters matches a symbol or alias

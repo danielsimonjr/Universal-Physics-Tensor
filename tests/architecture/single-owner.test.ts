@@ -7,7 +7,11 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { renderDuplicateOwners, temperatureOwnerHits } from '../../tools/duplicate-owner-scans.js';
+import {
+  nameTableOwnerHits,
+  renderDuplicateOwners,
+  temperatureOwnerHits,
+} from '../../tools/duplicate-owner-scans.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -17,5 +21,9 @@ describe('single owner', () => {
     expect(readFileSync(resolve(root, 'docs/architecture/duplicate-owners.md'), 'utf8')).toBe(
       renderDuplicateOwners(root),
     );
+  });
+
+  it('keeps one edit distance and one name table', () => {
+    expect(nameTableOwnerHits(root)).toEqual([]);
   });
 });

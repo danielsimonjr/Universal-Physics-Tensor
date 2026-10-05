@@ -26,7 +26,7 @@ import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
-import { aliasesForTarget, rewriteInputKey } from './aliases.js';
+import { aliasesForTarget, editDistance, NAME_TABLE, rewriteInputKey, synonymInCatalog } from './aliases.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import type { VizModel, VizJunction } from './graph-viz.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -223,19 +223,11 @@ export async function parseUserEquation(
 }
 
 /**
- * Single-letter / latex-style aliases that map onto a catalog quantity when the
- * long name is present and the short token is not (persona finding L4). `T` is
- * temperature in every CE formula_latex that uses it; the pendulum period is
- * named `period`, not `T`, in this catalog.
- */
-const FORMULA_ALIASES: Readonly<Record<string, string>> = {
-  T: 'temperature',
-};
-
-/**
  * Resolve a user symbol to a catalog quantity name: the literal name first, then
- * the `_`→`-` and `-`→`_` swaps, then {@link FORMULA_ALIASES}, against
- * `catalogNames`. Returns `null` if none match.
+ * the `_`→`-` and `-`→`_` swaps, then a formula spelling or a synonym pair in
+ * {@link NAME_TABLE}, against `catalogNames`. Returns `null` if none match.
+ * `T` is temperature in every CE formula that uses it; the pendulum period is
+ * named `period`, not `T`, in this catalog.
  *
  * @public
  */
@@ -248,35 +240,9 @@ export function resolveToCatalogName(
   if (underToHyphen !== name && catalogNames.has(underToHyphen)) return underToHyphen;
   const hyphenToUnder = name.replace(/-/g, '_');
   if (hyphenToUnder !== name && catalogNames.has(hyphenToUnder)) return hyphenToUnder;
-  const alias = FORMULA_ALIASES[name];
+  const alias = NAME_TABLE.formulaSpellings[name];
   if (alias !== undefined && catalogNames.has(alias)) return alias;
-  return null;
-}
-
-/**
- * Optimal-string-alignment edit distance: Levenshtein plus a swap of two adjacent
- * letters as ONE edit. Plain Levenshtein counts `lenght` → `length` as 2, the same
- * as `lenght` → `height`, and the typo's intended name then lost the tie
- * (persona finding N2).
- */
-function editDistance(a: string, b: string): number {
-  const m = a.length;
-  const n = b.length;
-  let prev2 = new Array<number>(n + 1).fill(0);
-  let prev = Array.from({ length: n + 1 }, (_, j) => j);
-  let curr = new Array<number>(n + 1);
-  for (let i = 1; i <= m; i++) {
-    curr[0] = i;
-    for (let j = 1; j <= n; j++) {
-      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-      curr[j] = Math.min(prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost);
-      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
-        curr[j] = Math.min(curr[j], prev2[j - 2] + 1);
-      }
-    }
-    [prev2, prev, curr] = [prev, curr, prev2];
-  }
-  return prev[n];
+  return synonymInCatalog(name, catalogNames);
 }
 
 /** Normalize for comparison: lowercase, `_`/`-` unified. */

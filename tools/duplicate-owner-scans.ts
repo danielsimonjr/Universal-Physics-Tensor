@@ -75,13 +75,48 @@ export function temperatureOwnerHits(root: string): string[] {
   return hits;
 }
 
+const SEPARATE_NAME_TABLES = ['FORMULA_ALIASES', 'ENTRY_TARGET_ALIASES', 'QUANTITY_SYNONYMS'] as const;
+
+/**
+ * A second `function editDistance`, or one of the name tables that aliases.ts
+ * replaced. The owner is `src/composition/aliases.ts`.
+ */
+export function nameTableOwnerHits(root: string): string[] {
+  const files: string[] = [];
+  walkTs(join(root, 'src'), files);
+  const hits: string[] = [];
+  const definitions: string[] = [];
+  for (const file of files) {
+    const rel = relative(root, file).replaceAll('\\', '/');
+    const text = readFileSync(file, 'utf8');
+    for (const name of SEPARATE_NAME_TABLES) {
+      if (new RegExp(`\\b${name}\\b`).test(text)) hits.push(`${rel} still names ${name}`);
+    }
+    if (/function\s+editDistance\s*\(/.test(text)) definitions.push(rel);
+  }
+  const owner = 'src/composition/aliases.ts';
+  if (definitions.length !== 1 || definitions[0] !== owner) {
+    hits.push(
+      definitions.length === 0
+        ? 'no function editDistance'
+        : `function editDistance is defined in ${definitions.join(', ')}`,
+    );
+  }
+  return hits;
+}
+
 /** The committed duplicate-owner report. */
 export function renderDuplicateOwners(root: string): string {
-  const hits = temperatureOwnerHits(root);
-  const body =
-    hits.length === 0
+  const temperature = temperatureOwnerHits(root);
+  const names = nameTableOwnerHits(root);
+  const temperatureBody =
+    temperature.length === 0
       ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
-      : hits.map((hit) => `- ${hit}`).join('\n') + '\n';
+      : temperature.map((hit) => `- ${hit}`).join('\n') + '\n';
+  const nameBody =
+    names.length === 0
+      ? '`function editDistance` is defined only in `src/composition/aliases.ts`. `FORMULA_ALIASES`, `ENTRY_TARGET_ALIASES`, and `QUANTITY_SYNONYMS` are not separate tables.\n'
+      : names.map((hit) => `- ${hit}`).join('\n') + '\n';
   return (
     '<!-- repo-map:no-verification -->\n' +
     '<!-- GENERATED FILE -- do not edit by hand. Edit the generator at\n' +
@@ -91,6 +126,8 @@ export function renderDuplicateOwners(root: string): string {
     'The live list of a second owner for a concept the integration design assigned once.\n' +
     '`docs/architecture/INTEGRATION_MAP.md` points here and does not copy these rows.\n\n' +
     '## Hits\n\n' +
-    body
+    temperatureBody +
+    '\n' +
+    nameBody
   );
 }

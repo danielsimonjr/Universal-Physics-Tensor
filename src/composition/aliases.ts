@@ -1,17 +1,63 @@
 /**
- * One record of what a typed name means on a graph edge.
+ * One record of what a typed name means.
  *
  * An evaluator key (`I_W_per_m2`) and the graph source (`poynting-flux`)
  * are the edge's `aliases`. A shared hyphen token is not nearness.
+ * Quantity synonyms, formula spellings, comparison targets, and
+ * structural-hash renames live in {@link NAME_TABLE}.
  *
  * @module composition/aliases
  */
 import type { BridgeEdge } from './edge.js';
+import { MASS, TEMPERATURE, type Dimension } from '../dimensional/types.js';
 
-/** Names that are one quantity. A value under either is available under the other. */
-const QUANTITY_SYNONYMS: readonly (readonly [string, string])[] = [
-  ['magnetic-field', 'magnetic-flux-density'],
-];
+/** A short symbol is this quantity only when it carries this dimension. */
+export interface DimensionRename {
+  readonly symbol: string;
+  readonly dimension: Dimension;
+  readonly name: string;
+}
+
+/**
+ * The one name table.
+ *
+ * A synonym pair is one quantity. A formula spelling resolves when the long
+ * name is in the catalog. A comparison target is a name an entry answers to
+ * besides its frozen target word. `speed` answers for the sound-speed
+ * equation in a comparison and is not a synonym of `sound-speed`. A dimension
+ * rename applies only for that dimension, so a time coordinate named `T`
+ * stays `T`.
+ */
+export const NAME_TABLE: {
+  readonly synonyms: readonly (readonly [string, string])[];
+  readonly formulaSpellings: Readonly<Record<string, string>>;
+  readonly canonicalTargets: Readonly<Record<string, readonly string[]>>;
+  readonly dimensionRenames: readonly DimensionRename[];
+} = {
+  synonyms: [
+    ['magnetic-field', 'magnetic-flux-density'],
+    ['landauer-erasure-energy', 'erasure-energy'],
+  ],
+  formulaSpellings: {
+    T: 'temperature',
+  },
+  canonicalTargets: {
+    'CE-schwarzschild-radius': ['schwarzschild-radius'],
+    // The equation's quantity is sound-speed. A formula written for speed, with
+    // pressure and density, is still this law. speed is not a synonym of sound-speed.
+    'CE-sound-speed': ['speed'],
+    // The L0 id keeps the catalog name. The reduced name is the same entry.
+    // The non-reduced entry also answers to that catalog name when the formula uses h.
+    'CE-compton-wavelength': ['reduced-compton-wavelength'],
+    'CE-compton-wavelength-full': ['compton-wavelength'],
+  },
+  dimensionRenames: [
+    { symbol: 'T', dimension: TEMPERATURE, name: 'temperature' },
+    { symbol: 'M', dimension: MASS, name: 'mass' },
+    { symbol: 'm_1', dimension: MASS, name: 'mass' },
+    { symbol: 'm_2', dimension: MASS, name: 'secondary-mass' },
+  ],
+};
 
 /** Alias key → source name, for edges whose target is `target`. Ambiguous keys are omitted. */
 export function aliasesForTarget(
@@ -50,21 +96,45 @@ export function rewriteInputKey(
   return hit !== undefined && graphNames.has(hit) ? hit : null;
 }
 
-function editDistance(a: string, b: string): number {
-  if (Math.abs(a.length - b.length) > 1) return 2;
-  const row = new Array<number>(b.length + 1);
-  for (let j = 0; j <= b.length; j++) row[j] = j;
-  for (let i = 1; i <= a.length; i++) {
-    let prev = row[0]!;
-    row[0] = i;
-    for (let j = 1; j <= b.length; j++) {
-      const cur = row[j]!;
+/**
+ * Optimal string alignment distance. An adjacent transposition is one edit,
+ * so `lenght` and `length` are distance 1. Resolution accepts distance ≤ 1.
+ * A longer cutoff, and containment, stay a suggestion rank.
+ */
+export function editDistance(a: string, b: string): number {
+  const m = a.length;
+  const n = b.length;
+  let prev2 = new Array<number>(n + 1).fill(0);
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  let curr = new Array<number>(n + 1);
+  for (let i = 1; i <= m; i++) {
+    curr[0] = i;
+    for (let j = 1; j <= n; j++) {
       const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-      row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, prev + cost);
-      prev = cur;
+      curr[j] = Math.min(prev[j]! + 1, curr[j - 1]! + 1, prev[j - 1]! + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        curr[j] = Math.min(curr[j]!, prev2[j - 2]! + 1);
+      }
     }
+    [prev2, prev, curr] = [prev, curr, prev2];
   }
-  return row[b.length]!;
+  return prev[n]!;
+}
+
+/**
+ * The catalog member of a synonym pair `name` belongs to, or null when
+ * `name` is not one of a pair the catalog holds.
+ */
+export function synonymInCatalog(name: string, catalogNames: ReadonlySet<string>): string | null {
+  const folded = name.replace(/_/g, '-');
+  for (const pair of NAME_TABLE.synonyms) {
+    if (!pair.includes(name) && !pair.includes(folded)) continue;
+    if (catalogNames.has(name)) return name;
+    if (catalogNames.has(folded)) return folded;
+    const other = pair.find((n) => catalogNames.has(n));
+    if (other !== undefined) return other;
+  }
+  return null;
 }
 
 const fold = (s: string): string => s.toLowerCase().replace(/_/g, '-');
@@ -93,7 +163,7 @@ export function shareSynonyms(
 ): string[] | Record<string, number> {
   if (Array.isArray(known)) {
     let out = known;
-    for (const pair of QUANTITY_SYNONYMS) {
+    for (const pair of NAME_TABLE.synonyms) {
       const hit = pair.filter((n) => out.includes(n));
       if (hit.length === 0) continue;
       const extra = pair.filter((n) => graphNames.has(n) && !out.includes(n));
@@ -103,7 +173,7 @@ export function shareSynonyms(
   }
   const out: Record<string, number> = { ...known };
   let added = false;
-  for (const pair of QUANTITY_SYNONYMS) {
+  for (const pair of NAME_TABLE.synonyms) {
     const hit = pair.filter((n) => Object.hasOwn(known, n));
     if (hit.length !== 1) continue;
     const source = hit[0]!;
@@ -131,7 +201,7 @@ export function collapseSynonymGovernors(
   values: Readonly<Record<string, number>> | null,
 ): string[] {
   const drop = new Set<string>();
-  for (const pair of QUANTITY_SYNONYMS) {
+  for (const pair of NAME_TABLE.synonyms) {
     const present = pair.filter((n) => names.includes(n));
     if (present.length < 2) continue;
     if (values !== null) {

@@ -6,7 +6,9 @@ A reading of how the library actually runs, and where the same concept is implem
 
 The temperature call graph below was re-read after the reading moved into `readNamedBinding`. Explain, eval, evaluate, discovery anchors, regime coordinates, and a path sweep call that function. It is the only caller of `alignTemperatureBinding`. `bindingInUnit` still rejects an energy whose dimension is not the declared unit. A path tolerance still uses `readBinding` (`path.ts:376`) and is not a temperature slot. `--sigma` still uses `bindingInUnit` with the difference reading.
 
-A later regeneration, after `docs:deps` learned `export * as`, the PhysJS table became a generated source file, the sound-speed test landed, the noun-phrase search test landed, and `src/cli/temperature-bindings.ts` was deleted, re-counted the unused-file and no-test rows. `dependency-graph.json` `statistics` is 472 source files, 3556 exports, 1734 re-exports, 0 unused files, and 78 unused exports. `git ls-files 'src/**/*.ts' 'src/*.ts'` is 472. `TEST_COVERAGE.md` is 670 test files and 10 source files with no test import (462 of 472, 97.9 percent). The five exports added with the generated table are `PHYSJS_COMMIT`, `PHYSJS_TOOLCHAIN`, `PHYSJS_MATHLIB`, `PHYSJS_PHYS_LIB`, and `PHYSJS_ENTRIES`. The sentence that names 669 test files is the count from before the temperature-owner test. The sentence that names 667 test files is the count from before the noun-phrase search test. The sentence that names 666 test files is the count from before the sound-speed test. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. The temperature scan is registered there. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
+The name table below was re-read after the three lists and the two distances moved into `src/composition/aliases.ts`. `NAME_TABLE` holds the synonym pairs, the formula spellings, the comparison targets, and the dimension renames. `editDistance` is optimal string alignment, and it is the only such function. Search indexes a trailing parenthetical as a gloss and does not combine that gloss with another field. Section 6 row 4 stays the recommendation it was measured as.
+
+A later regeneration, after `docs:deps` learned `export * as`, the PhysJS table became a generated source file, the sound-speed test landed, the noun-phrase search test landed, `src/cli/temperature-bindings.ts` was deleted, and the name table became one module, re-counted the unused-file and no-test rows. `dependency-graph.json` `statistics` is 472 source files, 3559 exports, 1734 re-exports, 0 unused files, and 78 unused exports. `git ls-files 'src/**/*.ts' 'src/*.ts'` is 472. `TEST_COVERAGE.md` is 671 test files and 10 source files with no test import (462 of 472, 97.9 percent). The five exports added with the generated table are `PHYSJS_COMMIT`, `PHYSJS_TOOLCHAIN`, `PHYSJS_MATHLIB`, `PHYSJS_PHYS_LIB`, and `PHYSJS_ENTRIES`. The sentence that names 670 test files is the count from before the name-table test. The sentence that names 669 test files is the count from before the temperature-owner test. The sentence that names 667 test files is the count from before the noun-phrase search test. The sentence that names 666 test files is the count from before the sound-speed test. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. The temperature scan and the name-table scan are registered there. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
 
 Anything below that was not opened in source, or that a second method did not confirm, is marked **INFERRED**.
 
@@ -109,7 +111,7 @@ flowchart TD
 
 1. A `be-<n>` target is redirected through `auditCoverage` and the catalog before `explainQuantity` (`explain.ts` `bridgeRedirect`, around the start of `run`). **INFERRED** on the interior of `bridgeRedirect` beyond the call to `auditCoverage`; the function starts at `explain.ts:141` per a read of that region.
 2. `resolveGraph` (`src/cli/graphs.ts:15`) reads `--source`. Default is `catalog` (`graphs.ts:20`). `canonical` uses `CANONICAL_GRAPH`. `both` concatenates the two graphs.
-3. The target name goes through `resolveToCatalogName` (`src/composition/user-equation.ts`) and then `nearQuantityNames` (`src/composition/aliases.ts:76`, edit distance). A miss asks `searchNameWords` (`src/cli/search-index.ts`).
+3. The target name goes through `resolveToCatalogName` (`src/composition/user-equation.ts:234`) and then `nearQuantityNames` (`src/composition/aliases.ts:146`, optimal string alignment at distance ≤ 1). A miss asks `searchNameWords` (`src/cli/search-index.ts`).
 4. Inputs are `readNamedBinding` (`explain.ts:96`), which applies the temperature reading.
 5. `explainQuantity` (`src/composition/explain.ts:339`) classifies identifiability, retrodicts, and calls `evaluateEdge` (`src/composition/edge.ts:313`).
 
@@ -125,13 +127,13 @@ These are different commands.
 
 ### `upt search`
 
-`run` is `src/cli/commands/search.ts:44`. `buildSearchIndex` (`src/cli/search-index.ts:141`) indexes catalog rows, canonical equations, atlas families, both graphs' quantities, regime registrations, and applied cases. For a catalog row the suggested command is chosen at `search-index.ts:153-157`:
+`run` is `src/cli/commands/search.ts:49`. `buildSearchIndex` (`src/cli/search-index.ts:176`) indexes catalog rows, canonical equations, atlas families, both graphs' quantities, regime registrations, and applied cases. A trailing parenthetical on a catalog or canonical name is a gloss field (`titleAndGloss`, `search-index.ts:47`). For a catalog row the suggested command is chosen at `search-index.ts:188-192`:
 
 - an id in `BRIDGE_EVALUATORS` → `upt evaluate be-<n>`
 - otherwise a `catalogFormalRef` → `upt atlas be-<n>`
 - otherwise → `upt explain be-<n>`
 
-Matching is `matchEveryWord` (word index). Explain's edit-distance helper is a second nearness path and is not what search ranks with.
+Matching is `matchEveryWord` (`search-index.ts:344`). Two or more words that share a field have to sit together there. A gloss does not combine with a non-gloss field, so `upt search "reynolds number"` matches nothing and `upt search "prandtl number"` names be-86 with the match labeled gloss. Words that never share a non-gloss field still match, so thermal noise still names be-58. Search does not rank by edit distance. Explain does, through the one `editDistance`.
 
 ### `upt derive`
 
@@ -163,24 +165,26 @@ One unit table lives in `src/dimensional/units.ts`: `parseUnit`, `convertValue`,
 
 `alignTemperatureBinding` in `binding-value.ts` divides an energy by `k_B` when the binding name is `T`, `temperature`, `temp`, or `T_K`, and when `readNamedBinding` is given a declared unit whose dimension is temperature. The module comment at `binding-value.ts:13-15` states that rule. The only call is inside `readNamedBinding`. Callers: `upt eval` (`eval.ts:57`), `upt explain` (`explain.ts:96`), discovery and map anchors (`_discovery-opts.ts:51`), regime coordinates (`regime.ts` `parseAt`, `readNamedBinding` at `regime.ts:105`), a path sweep (`path.ts:188`), and `upt evaluate` (`evaluator-inputs.ts:49`, with the parameter's declared unit). A path `--at` uses that same `parseAt`. The scale prefers a bare or J/K `boltzmann-constant`, then `k_B`, then `kB`, then the CODATA value. `src/cli/temperature-bindings.ts` is gone. A path tolerance still uses `readBinding` (`path.ts:376`) and is not a temperature slot. `--sigma` still uses `bindingInUnit` because a sigma is a difference.
 
-So `temperature=10eV` is kelvin on explain, eval, a discovery anchor, a regime coordinate, and a path sweep, and a dimension error on evaluate. That remaining evaluate rejection is the split issue 386 still has on `upt evaluate`.
+So `temperature=10eV` is kelvin on explain, eval, evaluate, a discovery anchor, a regime coordinate, and a path sweep. `bindingInUnit('10eV', 'K')` still throws.
 
 ### Quantity names and aliases
 
-| Table | File | What it maps |
-|---|---|---|
-| `QUANTITY_SYNONYMS` | `src/composition/aliases.ts:12-14` | one pair today: `magnetic-field` / `magnetic-flux-density`. `shareSynonyms`, `collapseSynonymGovernors` |
-| `edge.aliases` | on each `BridgeEdge`; read by `aliasesForTarget` (`aliases.ts:17`) and `rewriteInputKey` | evaluator key → quantity name (`T_K` → `temperature`, and the be-83 keys) |
-| `FORMULA_ALIASES` / `resolveToCatalogName` | `src/composition/user-equation.ts` | formula spellings, including underscore and hyphen folding |
-| `canonicalQuantityName` | `src/canonical/normal-form.ts` | structural-hash renaming (`T` plus a temperature dimension → `temperature`) |
-| `ENTRY_TARGET_ALIASES` | `src/composition/canonical-compare.ts` | compare-target names |
-| `SOURCE_ALIAS_DISPOSITIONS` | `src/composition/compose.ts` | composition name collisions |
-| `nearQuantityNames` | `aliases.ts:53-83` | plain Levenshtein. Returns only when the distance is ≤ 1, and returns 2 immediately when the lengths differ by more than 1. Explain uses it (`explain.ts`) |
-| `suggestQuantities` | `user-equation.ts:262-335` | a second edit distance: optimal string alignment (an adjacent transposition is one edit, so `lenght` → `length` is distance 1). The rank also allows distance up to `max(1, ceil(length/2))` and then containment. Confirmed in `rankByName`; the earlier INFERRED mark was this algorithm |
-| `FORMULA_NAMED` | `src/dimensional/formula-names.ts` | constant names for the formula parser (`m_p`, `e`), not graph quantities |
-| Search words | `src/cli/search-index.ts` | word index over the registries above |
+`NAME_TABLE` (`src/composition/aliases.ts:31`) is the name table.
 
-Explain therefore consults edit distance and, on a miss, the search word index. Search does not consult edit distance.
+| Record | What it maps |
+|---|---|
+| synonym pairs | `magnetic-field` / `magnetic-flux-density`, and `landauer-erasure-energy` / `erasure-energy`. `shareSynonyms` and `collapseSynonymGovernors` copy one spelling onto the other. `resolveToCatalogName` resolves either spelling to the one the catalog holds |
+| formula spellings | `T` → `temperature`, read by `resolveToCatalogName` (`user-equation.ts:234`) |
+| comparison targets | `CE-sound-speed` answers to `speed`. `speed` is not a synonym of `sound-speed`. `CE-schwarzschild-radius` answers to `schwarzschild-radius`. The Compton entries answer to the other Compton name. `compareWithCanonical` reads this list |
+| dimension renames | `T` with a temperature dimension is `temperature`. `M` and `m_1` with a mass dimension are `mass`. `m_2` is `secondary-mass`. `canonicalQuantityName` (`src/canonical/normal-form.ts:67`) reads this list. A time coordinate named `T` stays `T` |
+
+`edge.aliases` stays on each `BridgeEdge`. `aliasesForTarget` (`aliases.ts:63`) and `rewriteInputKey` read them. An evaluator key such as `T_K` → `temperature` is that edge record, not a second table.
+
+`editDistance` (`aliases.ts:104`) is optimal string alignment. An adjacent transposition is one edit, so `lenght` → `length` is distance 1 and `lxxgth` → `length` is distance 2. `nearQuantityNames` (`aliases.ts:146`) resolves at distance ≤ 1. `suggestQuantities` (`user-equation.ts:295`) calls that same function. Its longer cutoff, `max(1, ceil(length/2))`, and its containment rank stay suggestion-only (`rankByName`, `user-equation.ts:264`). Explain uses `nearQuantityNames` and, on a miss, the search word index.
+
+`SOURCE_ALIAS_DISPOSITIONS` (`src/composition/compose.ts`) is composition name collisions. `FORMULA_NAMED` (`src/dimensional/formula-names.ts`) names constants for the formula parser (`m_p`, `e`), not graph quantities. Search words are `src/cli/search-index.ts`. A trailing parenthetical is a gloss. The printed line stays the full name.
+
+The sentence that `QUANTITY_SYNONYMS`, `FORMULA_ALIASES`, and `ENTRY_TARGET_ALIASES` are three tables, and that `nearQuantityNames` is plain Levenshtein, is the first measurement.
 
 ### Sign rules
 
@@ -402,7 +406,7 @@ Corrected in this change: the verification blocks and the current-count sentence
 
 Still narrative, and not rewritten sentence by sentence: per-file component essays, historical audit reports under `docs/architecture/archive/`, and `PHYSICS_MAP.md`. Where those essays still say the catalog has 58 rows or that `Float64ReferenceEngine` exists, the essay is older than the tree. `class Float64ReferenceEngine` is absent under `src/`; `MathTSEngine` is the engine class (`src/numerical/mathts-engine.ts:57`). `ARCHITECTURE.md`'s statistics table was updated; a later paragraph that still names two engines should be read against that table.
 
-`git ls-files '*.ts' '*.tsx'` on this checkout is 1201 files (473 under `src/`). That is not the old repo_map total of 1025, and it is not the generator's 667 test files (the generator's test count is the files it classified as tests). Both numbers are in this map so they are not collapsed into one.
+`git ls-files '*.ts' '*.tsx'` on this checkout is 1205 files (472 under `src/`). That is not the old repo_map total of 1025, and it is not the generator's 671 test files (the generator's test count is the files it classified as tests). The sentence that names 1201 files and 473 under `src/` is the count from before the name-table test. Both numbers are in this map so they are not collapsed into one.
 
 ---
 
