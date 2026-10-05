@@ -13,9 +13,8 @@
 import type { ParsedArgs } from '../args.js';
 import { CliError, UsageError } from '../errors.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
-import { alignTemperatureBinding, readNamedBinding, type BindingValue } from '../../numerical/binding-value.js';
+import { readNamedBinding } from '../../numerical/binding-value.js';
 import { UnitError } from '../../dimensional/units.js';
-import { kelvinScale } from '../temperature-bindings.js';
 
 export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
@@ -34,40 +33,32 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
   }
 
   const gt: Record<string, number> = {};
-  const pending: { name: string; raw: string; pair: string; read: BindingValue }[] = [];
+  const pairs: { name: string; raw: string; pair: string }[] = [];
   for (const x of flags.get('anchor') ?? []) {
     for (const pair of x.split(',')) {
       const eq = pair.indexOf('=');
       const k = eq >= 0 ? pair.slice(0, eq) : pair;
       const v = eq >= 0 ? pair.slice(eq + 1) : '';
-      let read: BindingValue | undefined;
-      if (v !== '') {
-        try {
-          read = readNamedBinding(k, v);
-        } catch {
-          read = undefined;
-        }
-      }
-      if (eq < 0 || !k || v === '' || read === undefined || !Number.isFinite(read.value)) {
+      if (eq < 0 || !k || v === '') {
         throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${pair}".`);
       }
-      pending.push({ name: k, raw: v, pair, read });
+      pairs.push({ name: k, raw: v, pair });
     }
   }
-  const kB = kelvinScale(pending);
-  for (const p of pending) {
+  const siblings = pairs.map((p) => ({ name: p.name, raw: p.raw }));
+  for (const p of pairs) {
     try {
-      const aligned = alignTemperatureBinding(p.name, p.raw, p.read, kB);
-      if (!Number.isFinite(aligned.value)) {
+      const read = readNamedBinding(p.name, p.raw, { siblings });
+      if (!Number.isFinite(read.value)) {
         throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
       }
-      gt[p.name] = aligned.value;
+      gt[p.name] = read.value;
     } catch (e) {
       if (e instanceof UsageError) throw e;
       if (e instanceof UnitError) {
         throw new CliError(`upt: --anchor '${p.pair}' is not a temperature. ${e.message}`);
       }
-      throw e;
+      throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
     }
   }
   if (Object.keys(gt).length) opts.groundTruth = gt;

@@ -43,35 +43,23 @@ function parseScope(
 ): { scope: Record<string, number>; notes: string[] } {
   const scope: Record<string, number> = {};
   const notes: string[] = [];
-  const pending: {
-    name: string;
-    raw: string;
-    assignment: string;
-    read: ReturnType<CommandCtx['api']['readBinding']>;
-  }[] = [];
+  const assignments: { name: string; raw: string; assignment: string }[] = [];
   for (const a of args) {
     const eq = a.indexOf('=');
     if (eq < 0) {
       throw new UsageError(`upt eval: '${a}' must be name=value. See \`upt help\`.`);
     }
-    const name = a.slice(0, eq);
-    const raw = a.slice(eq + 1);
-    try {
-      pending.push({ name, raw, assignment: a, read: api.readBinding(raw, { mode }) });
-    } catch (e) {
-      const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
-      throw new CliError(`upt eval: '${a}' is not a finite number or a known unit. ${msg}`);
-    }
+    assignments.push({ name: a.slice(0, eq), raw: a.slice(eq + 1), assignment: a });
   }
-  const kB = api.boltzmannBindingScale(pending);
-  for (const p of pending) {
+  const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
+  for (const a of assignments) {
     try {
-      const read = api.alignTemperatureBinding(p.name, p.raw, p.read, kB);
-      scope[p.name] = read.value;
+      const read = api.readNamedBinding(a.name, a.raw, { mode, siblings });
+      scope[a.name] = read.value;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
       const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
-      throw new CliError(`upt eval: '${p.assignment}' is not a finite number or a known unit. ${msg}`);
+      throw new CliError(`upt eval: '${a.assignment}' is not a finite number or a known unit. ${msg}`);
     }
   }
   return { scope, notes };

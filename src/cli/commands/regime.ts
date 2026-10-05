@@ -18,7 +18,6 @@
  * there is no box and the command says so rather than inventing one.
  */
 import type { FlagSpec } from '../args.js';
-import { kelvinScale } from '../temperature-bindings.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
@@ -91,48 +90,32 @@ export function parseAt(
   command: string,
   notes?: string[],
 ): Record<string, number> {
-  const pending: {
-    name: string;
-    raw: string;
-    token: string;
-    read: ReturnType<CommandCtx['api']['readBinding']>;
-  }[] = [];
+  const assignments: { name: string; raw: string; token: string }[] = [];
   for (const token of raw) {
     const eq = token.indexOf('=');
     if (eq <= 0) {
       throw new CliError(`upt ${command}: '${token}' is not a group=value assignment`);
     }
-    const name = token.slice(0, eq);
-    const rawValue = token.slice(eq + 1);
-    try {
-      const read = api.readBinding(rawValue);
-      if (rawValue === '' || !Number.isFinite(read.value)) {
-        throw new CliError(`upt ${command}: '${token}' is not a finite number`);
-      }
-      pending.push({ name, raw: rawValue, token, read });
-    } catch (e) {
-      if (e instanceof CliError) throw e;
-      throw new CliError(`upt ${command}: '${token}' is not a finite number. ${(e as Error).message}`);
-    }
+    assignments.push({ name: token.slice(0, eq), raw: token.slice(eq + 1), token });
   }
-  const kB = kelvinScale(pending);
+  const siblings = assignments.map((a) => ({ name: a.name, raw: a.raw }));
   const point: Record<string, number> = {};
-  for (const p of pending) {
+  for (const a of assignments) {
     try {
-      const aligned = api.alignTemperatureBinding(p.name, p.raw, p.read, kB);
-      if (!Number.isFinite(aligned.value)) {
-        throw new CliError(`upt ${command}: '${p.token}' is not a finite number`);
+      const read = api.readNamedBinding(a.name, a.raw, { siblings });
+      if (a.raw === '' || !Number.isFinite(read.value)) {
+        throw new CliError(`upt ${command}: '${a.token}' is not a finite number`);
       }
-      point[p.name] = aligned.value;
+      point[a.name] = read.value;
       if (notes !== undefined) {
-        for (const note of aligned.notes) if (!notes.includes(note)) notes.push(note);
+        for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
       }
     } catch (e) {
       if (e instanceof CliError) throw e;
       if (e instanceof api.UnitError) {
-        throw new CliError(`upt ${command}: '${p.token}' is not a temperature. ${e.message}`);
+        throw new CliError(`upt ${command}: '${a.token}' is not a temperature. ${e.message}`);
       }
-      throw new CliError(`upt ${command}: '${p.token}' is not a finite number. ${(e as Error).message}`);
+      throw new CliError(`upt ${command}: '${a.token}' is not a finite number. ${(e as Error).message}`);
     }
   }
   return point;

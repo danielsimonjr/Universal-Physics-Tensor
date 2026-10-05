@@ -45,13 +45,15 @@ const TEMPERATURE_BINDING_NAMES = new Set(['T', 'temperature', 'temp', 'T_K']);
  * temperature, and a name that is not a temperature are unchanged.
  * @internal
  */
-export function alignTemperatureBinding(
+function alignTemperatureBinding(
   name: string,
   raw: string,
   read: BindingValue,
   kB: number = K_B_SI,
+  declaredTemperature = false,
 ): BindingValue {
-  if (!TEMPERATURE_BINDING_NAMES.has(name) || !read.dimensioned || equals(read.dimension, TEMPERATURE)) {
+  const slot = TEMPERATURE_BINDING_NAMES.has(name) || declaredTemperature;
+  if (!slot || !read.dimensioned || equals(read.dimension, TEMPERATURE)) {
     return read;
   }
   if (equals(read.dimension, ENERGY)) {
@@ -75,13 +77,17 @@ export function alignTemperatureBinding(
 }
 
 /**
- * Joules per kelvin for {@link alignTemperatureBinding}. An explicit `k_B`
- * or `kB` binding wins when it is a bare number or already in J/K.
- * @internal
+ * Joules per kelvin for a temperature binding. A bare number or a J/K value
+ * on `boltzmann-constant` wins, then `k_B`, then `kB`. Any other dimension
+ * falls through. With none of those, the scale is the CODATA value.
  */
-export function boltzmannBindingScale(
+function boltzmannBindingScale(
   pending: readonly { name: string; read: BindingValue }[],
 ): number {
+  const named = pending.find((p) => p.name === 'boltzmann-constant');
+  if (named !== undefined && (!named.read.dimensioned || equals(named.read.dimension, SYMBOLIC.k_B.dim))) {
+    return named.read.value;
+  }
   const hit = pending.find((p) => p.name === 'k_B') ?? pending.find((p) => p.name === 'kB');
   if (hit === undefined) return K_B_SI;
   if (!hit.read.dimensioned || equals(hit.read.dimension, SYMBOLIC.k_B.dim)) return hit.read.value;
@@ -327,26 +333,80 @@ function plainUnit(raw: string, reading: TemperatureReading): BindingValue | nul
   };
 }
 
+/** One other assignment in the same list, used to choose the Boltzmann scale. */
+export interface NamedBindingSibling {
+  readonly name: string;
+  readonly raw: string;
+}
+
 /**
- * Read a binding for a named quantity. A name in the convention table is
- * returned in that unit: a bare number is already in it, and a unit
- * converts into it. Any other name is {@link readBinding} (SI when the
- * value carries a unit).
+ * Read a binding for a named quantity. A temperature name (`T`,
+ * `temperature`, `temp`, `T_K`), or a slot whose declared unit is a
+ * temperature, reads an energy as `k_B T`. Any other dimension on that
+ * slot is an error. A name in the convention table, or a declared unit,
+ * is returned in that unit: a bare number is already in it. Any other
+ * name is {@link readBinding} (SI when the value carries a unit).
  * @internal
  */
 export function readNamedBinding(
   name: string,
   raw: string,
-  opts?: { readonly mode?: UnitMode; readonly reading?: TemperatureReading },
+  opts?: {
+    readonly mode?: UnitMode;
+    readonly reading?: TemperatureReading;
+    readonly siblings?: readonly NamedBindingSibling[];
+    /** The slot's unit. An empty string is dimensionless. Omitted means the convention table, or SI. */
+    readonly declaredUnit?: string;
+  },
 ): BindingValue {
-  const unit = quantityConventionUnit(name);
-  if (unit === undefined) return readBinding(raw, opts);
+  const mode = opts?.mode ?? 'si';
   const reading = opts?.reading ?? 'absolute';
-  const converted = bindingInUnit(raw, unit, reading, opts?.mode);
+  const read = readBinding(raw, { mode, reading });
+  const pending: { name: string; read: BindingValue }[] = [{ name, read }];
+  for (const sibling of opts?.siblings ?? []) {
+    if (sibling.name === name) continue;
+    try {
+      pending.push({ name: sibling.name, read: readBinding(sibling.raw, { mode, reading }) });
+    } catch {
+      // A sibling that does not parse is that sibling's own error.
+    }
+  }
+  const declared = opts?.declaredUnit;
+  const declaredDim = declared !== undefined && declared !== '' ? parseUnit(declared).dim : undefined;
+  const aligned = alignTemperatureBinding(
+    name,
+    raw,
+    read,
+    boltzmannBindingScale(pending),
+    declaredDim !== undefined && equals(declaredDim, TEMPERATURE),
+  );
+  const target = declared !== undefined ? declared : quantityConventionUnit(name);
+  if (target === undefined) return aligned;
+  const energyBecameTemperature =
+    aligned.dimensioned && equals(aligned.dimension, TEMPERATURE) && !equals(read.dimension, TEMPERATURE);
+  if (energyBecameTemperature) {
+    if (target === '') {
+      throw new UnitError(`'${raw.trim()}' is a temperature, but this input is dimensionless`);
+    }
+    const to = parseUnit(target);
+    if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
+    if (!equals(aligned.dimension, to.dim)) {
+      throw new UnitError(
+        `'${raw.trim()}' is ${format(aligned.dimension)}, but this input is ${format(to.dim)} (${target})`,
+      );
+    }
+    return {
+      value: aligned.value / to.scale,
+      dimensioned: true,
+      dimension: to.dim,
+      notes: aligned.notes,
+    };
+  }
+  const converted = bindingInUnit(raw, target, reading, mode);
   return {
     value: converted.value,
     dimensioned: converted.given !== '',
-    dimension: parseUnit(unit).dim,
+    dimension: target === '' ? DIMENSIONLESS : parseUnit(target).dim,
     notes: unitConventionNotes(converted.given),
   };
 }
