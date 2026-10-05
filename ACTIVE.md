@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Release 6.1.0.
+  Published npm is 6.0.0. The pin and the #421 fixes are on this tree. `package.json` is 6.0.0.
+  Done: `package.json` is 6.1.0. The catalog JSON, the atlas JSON, and the architecture dependency graph carry 6.1.0. The Part VIII check requires 6.1.0. The annotated tag is the publish step after this commit is on master.
+
 - [x] Pin PhysJS `8515c621d1c6e6d31c2eea4467181eb85d58234b` and register BE-126 through BE-133.
   The catalog stops at BE-125. `upt evaluate` has no comb-drive, subthreshold, boost, fin, thermoelectric-generator, Joukowsky, coaxial, or damping-ratio row. PhysJS #67 proves those eight equations.
   The pin, the eight catalog rows, their evaluators, and their edges are not in this tree.
