@@ -13,6 +13,11 @@ import type {
 import { DEFAULT_SEARCH_BUDGET, SCHEMA_VERSION } from './types.js';
 import { captureEnvironment, hashCanonical } from '../canonical-json.js';
 
+/**
+ * Capture host environment.
+ *
+ * @internal
+ */
 export { captureEnvironment } from '../canonical-json.js';
 
 export interface ManifestDraft {
