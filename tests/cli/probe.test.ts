@@ -97,8 +97,9 @@ describe('upt probe', () => {
     const env = JSON.parse(text(c));
     // 364 is the record from before be-77..87 (358 wrappers + 6 expression gaps).
     // 730 is the record from before be-88..102.
-    expect(env.options.scan).toEqual({ total: 2980, searchable: 6, showing: 'searchable-only' });
+    expect(env.options.scan).toEqual({ total: 3835, searchable: 6, showing: 'searchable-only' });
     // 1370 is the record from before be-103..125. 2980 is 2974 wrappers plus 6 expression gaps.
+    // 3835 is 3829 wrappers plus 6 expression gaps. 2980 is the record from before be-126..133.
     expect(env.result).toHaveLength(6);
     expect(env.result.every((g: { kind: string; observations: unknown[]; searchability: { searchable: boolean; reasons: string[] } }) =>
       g.kind === 'prediction-residual' &&
@@ -111,7 +112,7 @@ describe('upt probe', () => {
     const all = capture();
     expect(await runCli(['probe', 'scan', '--all', '--json'], all.io)).toBe(0);
     const envAll = JSON.parse(text(all));
-    expect(envAll.options.scan).toEqual({ total: 2980, searchable: 6, showing: 'all' });
+    expect(envAll.options.scan).toEqual({ total: 3835, searchable: 6, showing: 'all' });
     // 1370 is the record from before be-103..125.
     const kinds: Record<string, number> = {};
     for (const g of envAll.result as { kind: string; searchability: { searchable: boolean } }[]) {
@@ -120,7 +121,8 @@ describe('upt probe', () => {
     }
     // 343 relation-links is the record from before be-77..87.
     // 1349 relation-links is the record from before be-103..125.
-    expect(kinds).toEqual({ 'relation-link': 2959, 'regime-transition': 15, 'prediction-residual': 6 });
+    expect(kinds).toEqual({ 'relation-link': 3814, 'regime-transition': 15, 'prediction-residual': 6 });
+    // 2959 relation-links is the record from before be-126..133.
   });
 
   it('show a missing gap → exit 1', async () => {

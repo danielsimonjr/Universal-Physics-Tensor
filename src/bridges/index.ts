@@ -51,6 +51,7 @@ import { MERCURY } from './be52-mercury-confrontation.js';
 import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
 import { bridgeRegistry, registerBridge } from './registry.js';
 import { PLASMA_CATALOG_ROWS } from './plasma-catalog.js';
+import { ENGINEERING_R7_CATALOG_ROWS } from './engineering-r7-catalog.js';
 
 /**
  * Lifecycle status of a bridge equation in the catalog.
@@ -3450,6 +3451,8 @@ const CATALOG_ROWS: BridgeEquationEntry[] = [
 for (const entry of CATALOG_ROWS) registerBridge({ entry });
 const plasmaRows: readonly BridgeEquationEntry[] = PLASMA_CATALOG_ROWS;
 for (const entry of plasmaRows) registerBridge({ entry });
+const engineeringRows: readonly BridgeEquationEntry[] = ENGINEERING_R7_CATALOG_ROWS;
+for (const entry of engineeringRows) registerBridge({ entry });
 
 /** Catalog rows, in registration order. The projection of `registerBridge`. @public */
 export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = bridgeRegistry.equations() as BridgeEquationEntry[];
@@ -3793,5 +3796,33 @@ export {
   type MirrorInstabilityInputs,
   type MirrorInstabilityResult,
 } from './plasma-space.js';
+
+/** Engineering evaluators, BE-126 through BE-133. `e` is the elementary charge. */
+export {
+  evaluateCombDrive,
+  type CombDriveInputs,
+  type CombDriveResult,
+  evaluateSubthresholdSwing,
+  type SubthresholdSwingInputs,
+  type SubthresholdSwingResult,
+  evaluateBoostConverter,
+  type BoostConverterInputs,
+  type BoostConverterResult,
+  evaluateFinEfficiency,
+  type FinEfficiencyInputs,
+  type FinEfficiencyResult,
+  evaluateThermoelectricGenerator,
+  type ThermoelectricGeneratorInputs,
+  type ThermoelectricGeneratorResult,
+  evaluateJoukowsky,
+  type JoukowskyInputs,
+  type JoukowskyResult,
+  evaluateCoaxialCapacitance,
+  type CoaxialCapacitanceInputs,
+  type CoaxialCapacitanceResult,
+  evaluateDampingRatio,
+  type DampingRatioInputs,
+  type DampingRatioResult,
+} from './engineering-r7.js';
 
 export default BRIDGE_EQUATIONS;

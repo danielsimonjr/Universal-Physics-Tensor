@@ -271,6 +271,33 @@ export {
   type MirrorInstabilityInputs,
   type MirrorInstabilityResult,
 } from './bridges/index.js';
+/** Engineering closed forms, BE-126 through BE-133. Each stays that id's single numeric body. */
+export {
+  evaluateCombDrive,
+  type CombDriveInputs,
+  type CombDriveResult,
+  evaluateSubthresholdSwing,
+  type SubthresholdSwingInputs,
+  type SubthresholdSwingResult,
+  evaluateBoostConverter,
+  type BoostConverterInputs,
+  type BoostConverterResult,
+  evaluateFinEfficiency,
+  type FinEfficiencyInputs,
+  type FinEfficiencyResult,
+  evaluateThermoelectricGenerator,
+  type ThermoelectricGeneratorInputs,
+  type ThermoelectricGeneratorResult,
+  evaluateJoukowsky,
+  type JoukowskyInputs,
+  type JoukowskyResult,
+  evaluateCoaxialCapacitance,
+  type CoaxialCapacitanceInputs,
+  type CoaxialCapacitanceResult,
+  evaluateDampingRatio,
+  type DampingRatioInputs,
+  type DampingRatioResult,
+} from './bridges/index.js';
 
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
 
@@ -611,6 +638,18 @@ export {
   be124Edge,
   be125Edge,
   PLASMA_SPACE_EDGES,
+} from './composition/index.js';
+/** Composition edges for the comb drive through the damping ratio, BE-126 through BE-133. */
+export {
+  be126Edge,
+  be127Edge,
+  be128Edge,
+  be129Edge,
+  be130Edge,
+  be131Edge,
+  be132Edge,
+  be133Edge,
+  ENGINEERING_R7_EDGES,
 } from './composition/index.js';
 export type {
   BridgeEdge,

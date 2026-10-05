@@ -1668,7 +1668,111 @@
         "Classical.choice",
         "Quot.sound"
       ]
+    },
+    {
+      "key": "be-126",
+      "bridgeId": "be-126",
+      "theorem": "PhysJS.CombDrive.force_eq",
+      "covers": "derivation-step: both sidewalls give C = 2 n ε h x / g. Voltage-controlled coenergy (1/2) C V² has lateral force (1/2) V² dC/dx, so the sidewall 2 and the coenergy 1/2 cancel and F = n ε h V² / g. One sidewall leaves the 1/2. Not the normal pull-in of be-79",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-127",
+      "bridgeId": "be-127",
+      "theorem": "PhysJS.SubthresholdSwing.swing_eq",
+      "covers": "derivation-step: ln(I2/I1) = e (ψ2 − ψ1)/(k_B T) and the capacitive divider ψ2 − ψ1 = C_ox/(C_ox + C_d) (Vg2 − Vg1). One decade, I2/I1 = 10, gives S = ln(10) (k_B T/e) (1 + C_d/C_ox). Dropping C_d is not the swing when C_d ≠ 0. Not the ideal diode of be-82",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-128",
+      "bridgeId": "be-128",
+      "theorem": "PhysJS.BoostConverter.boost_ratio",
+      "covers": "derivation-step: ideal continuous-conduction volt-second balance Vin D + (Vin − Vout)(1 − D) = 0 gives Vout/Vin = 1/(1 − D) for D ≠ 1. No real duty equals both this ratio and the buck ratio D",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-129",
+      "bridgeId": "be-129",
+      "theorem": "PhysJS.FinEfficiency.efficiency_eq",
+      "covers": "derivation-step: θ'' = m² θ, an adiabatic tip θ'(L) = 0, and θ(0) = θ_b give θ(x) = θ_b cosh(m(L − x))/cosh(m L). Base Fourier heat over h P L θ_b is η = tanh(m L)/(m L) when m² = h P/(k A). A rectangle with P/A = 2/t gives m = √(2 h/(k t)). One face is not that m. tanh is not 1, so this is not an infinite fin",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-130",
+      "bridgeId": "be-130",
+      "theorem": "PhysJS.ThermoelectricGenerator.efficiency_eq",
+      "covers": "derivation-step: hot-junction heat is Q = S Th I − I² R/2 − K ΔT with ΔT = Tc − Th, and load power is P = I (S (Th − Tc) − I R). The Joule 1/2 and the 2 in P' are derivatives. Stationarity P' Q = P Q' at I = S Δ/(R (1 + m)), with m = √(1 + Z Tm), Z = S²/(R K), Δ = Th − Tc, and Tm = (Th + Tc)/2, gives η = (1 − Tc/Th) (m − 1)/(m + Tc/Th). Matched load m = 1 is not stationary when Z Tm ≠ 0. The Carnot factor alone is not this efficiency",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-131",
+      "bridgeId": "be-131",
+      "theorem": "PhysJS.Joukowsky.joukowsky_eq",
+      "covers": "derivation-step: the momentum jump −c Δv + Δp/ρ = 0 is Δp = ρ c Δv. Fluid compressibility dρ/ρ = dp/K and thin-wall hoop strain dA/A = dp D/(E e_wall) give c = √(K/ρ) / √(1 + (K/E)(D/e_wall)). Mass on the same front is the separate statement c² = Δp/Δρ and is not required for the pressure jump. ρ (Δv)² is not ρ c Δv when c ≠ Δv. Dropping the wall term is the rigid-pipe speed",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-132",
+      "bridgeId": "be-132",
+      "theorem": "PhysJS.CoaxialCapacitance.capacitance_per_length",
+      "covers": "derivation-step: the coaxial field λ/(2 π ε r) integrates to ΔV = (λ/(2 π ε)) ln(b/a), so C' = λ/ΔV = 2 π ε / ln(b/a). Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "key": "be-133",
+      "bridgeId": "be-133",
+      "theorem": "PhysJS.DampingRatio.damping_ratio",
+      "covers": "derivation-step: m ẍ + c ẋ + k x = 0 has ω = √(k/m) and linear coefficient c/m = 2 ζ ω, so ζ = c / (2 √(k m)). For c ≥ 0 the discriminant (c/m)² − 4 (k/m) vanishes iff ζ = 1. Dropping the 2 is not this ratio. √(k/m) is not ζ",
+      "coverage": "covers its statement only",
+      "leanProof": "complete",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
     }
   ],
-  "commit": "d519c2c6504e7fbbd2cf6932f9e52981ce595a0f"
+  "commit": "8515c621d1c6e6d31c2eea4467181eb85d58234b"
 }

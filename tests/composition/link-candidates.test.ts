@@ -22,7 +22,8 @@ describe('proposeLinkCandidates — generator', () => {
     // be-88..102. Those fifteen edges are isolated, so each same-dimension
     // pair with another component is a candidate. 710 is the record from
     // before be-103..125. Those twenty-three edges are isolated too.
-    expect(cands.length).toBe(1525);
+    // 1525 is the record from before be-126..133. Those eight edges are isolated too.
+    expect(cands.length).toBe(1964);
   });
 
   it('the funnel narrows: most touch the core, fewer are same-kind', () => {
@@ -32,7 +33,8 @@ describe('proposeLinkCandidates — generator', () => {
     // 165 and 66 are the record from before be-77..87.
     // 355 and 141 are the record from before be-88..102.
     // 676 and 321 are the record from before be-103..125.
-    expect(core).toBe(1491);
+    // 1491 is the record from before be-126..133. Same-kind stays 654.
+    expect(core).toBe(1930);
     expect(ck).toBe(654);
     expect(ck).toBeLessThan(core); // the filters genuinely narrow
   });

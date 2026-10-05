@@ -30,3 +30,4 @@ export * from './quantities/common.js';
 export * from './quantities/applied-physicist.js';
 export * from './quantities/condensed-r5.js';
 export * from './quantities/plasma-space.js';
+export * from './quantities/engineering-r7.js';

@@ -1,10 +1,10 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 183 established-confidence edge(s) of the 215 in this graph
+  anchored core: the clusters holding at least one of the 191 established-confidence edge(s) of the 223 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  3177 total  →  3162 touch the anchored core  →  1092 also same-kind
+  funnel:  3860 total  →  3845 touch the anchored core  →  1095 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     active-noise-energy ≟ inflation-hubble-energy            [energy]
@@ -193,6 +193,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     cutoff-r-frequency ≟ lower-hybrid-frequency              [frequency]
     cutoff-r-frequency ≟ photon-frequency                    [frequency]
     cutoff-r-frequency ≟ plasma-frequency                    [frequency]
+    damping-spring ≟ spring-constant                         [spring]
     dark-fermion-mass ≟ mass-action-gap                      [mass]
     dark-reaction-rate-coefficient ≟ volume-flow-rate        [rate]
     dark-species-density ≟ curie-density                     [density]
@@ -388,6 +389,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     fermi-sea-mass ≟ probe-ion-mass                          [mass]
     fermi-sea-mass ≟ secondary-mass                          [mass]
     fermi-sea-mass ≟ upper-hybrid-mass                       [mass]
+    fin-conductivity ≟ thermal-conductivity                  [conductivity]
     foerster-radius ≟ bohr-radius                            [radius]
     foerster-radius ≟ classical-electron-radius              [radius]
     foerster-radius ≟ droplet-radius                         [radius]
@@ -490,6 +492,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     ion-acoustic-sound ≟ oblique-sound                       [sound]
     ion-acoustic-sound ≟ parker-sound                        [sound]
     ion-acoustic-wavenumber ≟ landau-wavenumber              [wavenumber]
+    joukowsky-rho ≟ rho                                      [rho]
     kinetic-energy ≟ internal-energy-change                  [energy]
     kinetic-energy ≟ photon-energy                           [energy]
     kinetic-energy ≟ rydberg-energy                          [energy]

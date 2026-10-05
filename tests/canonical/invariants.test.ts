@@ -130,7 +130,9 @@ describe('OPEN-bridge coverage (F2 — gaps are logged, not silent)', () => {
     // None of those fifteen has a canonical partner.
     // The sentence that the gap is 84 is the record from before be-103..125.
     // 115 catalog ids − 8 partnered. None of those twenty-three has a canonical partner.
-    expect(gap.length).toBe(107);
+    // 123 catalog ids − 8 partnered. None of BE-126..133 has a canonical partner.
+    // 107 is the record from before those eight rows.
+    expect(gap.length).toBe(115);
     // every gap id is a real catalog id (and none is partnered)
     const partnered = partneredBridgeIds();
     for (const id of gap) {

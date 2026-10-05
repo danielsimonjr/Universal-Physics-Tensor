@@ -15,7 +15,7 @@ describe('BRIDGE_EVALUATORS', () => {
       16, 42, 51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
       77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
       101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
-      120, 121, 122, 123, 124, 125,
+      120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
     ]);
   });
 
@@ -50,6 +50,8 @@ describe('BRIDGE_EVALUATORS', () => {
   // declaration that disagrees with its key would convert `d_m=1um` wrongly.
   it("each declared unit agrees with the unit its key's suffix names (bridges and applied cases)", () => {
     const SUFFIX: readonly (readonly [RegExp, string])[] = [
+      [/_F_per_m$/, 'F/m'],
+      [/_kg_per_s$/, 'kg/s'],
       [/_kg_per_m3$/, 'kg/m^3'],
       [/_S_per_m$/, 'S/m'],
       [/_ohm_m$/, 'ohm*m'],
@@ -59,6 +61,7 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_J_per_T$/, 'J/T'],
       [/_V_per_K2$/, 'V/K^2'],
       [/_V_per_K$/, 'V/K'],
+      [/_per_K$/, 'K^-1'],
       [/_J$/, 'J'],
       [/_m_per_s$/, 'm/s'],
       [/_J_per_kg_K$/, 'J/(kg*K)'],
@@ -138,6 +141,12 @@ describe('BRIDGE_EVALUATORS', () => {
       sigma_v_m3_per_s: 1e-22, E_J: 2.8e-12,
       m_e_kg: 9.1093837015e-31, alpha: 1, beta_parallel: 1, beta_perp: 1,
       T_perp_K: 300, T_parallel_K: 200,
+      n: 10, eps_F_per_m: 8.854e-12, h_m: 2e-4, g_m: 2e-6,
+      Cd_F: 1e-15, Cox_F: 2e-15, D: 0.4,
+      h_W_per_m2_K: 100, k_W_per_m_K: 200, t_m: 0.002, L_fin_m: 0.05,
+      Th_K: 600, Tc_K: 300, Z_per_K: 0.001,
+      dv_m_per_s: 1, K_Pa: 2.2e9, pipe_D_m: 0.1, wall_m: 0.005,
+      c_kg_per_s: 2,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

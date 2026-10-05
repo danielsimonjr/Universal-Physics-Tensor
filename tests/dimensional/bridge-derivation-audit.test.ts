@@ -125,7 +125,10 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // closure. be-103 and be-118 are derived. be-105 is freedom 0 and not a
     // monomial. be-109, be-117, be-120, and be-121 are freedom 0 and decoys.
     expect(closable.length).toBe(46);
-    expect(ALL_EDGES.length - closable.length).toBe(60);
+    // 46 of 106 is the record from before be-126..133. 46 of 114 admit a
+    // closure. be-126, be-127, be-128, be-129, be-131, be-132, and be-133
+    // are open. be-130 is not a monomial.
+    expect(ALL_EDGES.length - closable.length).toBe(68);
   });
 
   it('dimensional analysis is a weak filter: a small minority are genuine monomial derivations', () => {
@@ -196,7 +199,10 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     // 22 at complexity 1 is the record from before be-103..125. be-104,
     // be-106, be-110, be-111, be-112, be-113, be-114, be-115, be-122, and
     // be-123 each add one.
-    expect(hist[1]).toBe(32);
+    expect(hist[1]).toBe(36);
+    // 32 at complexity 1 is the record from before be-126..133. be-127,
+    // be-128, be-132, and be-133 each add one. be-126 and be-129 sit at 2.
+    // be-130 is not a monomial. be-131 sits at 3.
   });
 
   it('complexity is ORTHOGONAL to status: an established bridge sits at complexity 1', () => {

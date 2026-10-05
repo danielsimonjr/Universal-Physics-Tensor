@@ -111,7 +111,8 @@ describe('scanCatalog', () => {
     expect(report.entries).toHaveLength(BRIDGE_EQUATIONS.length);
     // Updated 2026-05-24 (parallel-agent dispatch): 42 → 44 after adding
     // BE-53 (Yang-Mills β) AND BE-54 (Randall-Sundrum).
-    expect(report.entries).toHaveLength(115);
+    expect(report.entries).toHaveLength(123);
+    // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
   });
@@ -137,7 +138,8 @@ describe('scanCatalog', () => {
     // BE-74 (electromagnetic/continuum) and BE-76 (fluid/plasma) join that set: 29 → 31.
     // BE-75 is quantum → classical and is submitted.
     // Twelve of BE-88..102 have no PhysicalScale axis. 41 is the record from before those twelve.
-    expect(report.unsubmitted).toHaveLength(76);
+    // 76 is the record from before be-126..133. Those eight tuples are not PhysicalScale.
+    expect(report.unsubmitted).toHaveLength(84);
     // 53 is the record from before be-103..125. Those twenty-three tuples are fluid → plasma.
   });
 

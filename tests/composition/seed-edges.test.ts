@@ -283,6 +283,14 @@ describe('symbolic forms agree with the edge evaluator', () => {
     'be-123': { 'cross-field-alpha': 2 },
     'be-124': { 'firehose-beta-parallel': 3, 'firehose-beta-perp': 1 },
     'be-125': { 'mirror-beta-perp': 2, 'mirror-t-perp': 200, 'mirror-t-parallel': 100 },
+    'be-126': { 'comb-finger-count': 10, 'comb-dielectric': 1e-11, 'comb-overlap': 2e-4, 'comb-bias': 20, 'comb-airgap': 2e-6 },
+    'be-127': { 'swing-kelvin': 300, 'swing-depletion': 2e-15, 'swing-oxide': 1e-15 },
+    'be-128': { 'boost-duty': 0.6 },
+    'be-129': { 'fin-convection': 100, 'fin-conductivity': 200, 'fin-web': 0.002, 'fin-span': 0.05 },
+    'be-130': { 'teg-source': 600, 'teg-sink': 300, 'teg-figure': 0.001 },
+    'be-131': { 'joukowsky-rho': 1000, 'joukowsky-closure': 1, 'joukowsky-bulk': 2.2e9, 'joukowsky-wallmod': 2e11, 'joukowsky-bore': 0.1, 'joukowsky-thk': 0.005 },
+    'be-132': { 'coax-liner': 1e-11, 'coax-inner': 1, 'coax-outer': Math.E },
+    'be-133': { 'damping-dashpot': 2, 'damping-spring': 4, 'damping-inertia': 1 },
   };
 
   for (const [id, probe] of Object.entries(probes)) {

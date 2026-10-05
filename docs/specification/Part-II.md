@@ -2068,6 +2068,118 @@ where:
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.MirrorInstability.mirror_threshold`.
 - **Rationale**: The catalog value is the statement in the proof-status paragraph.
 
+**Bridge Equation 126: Comb-drive lateral force** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.CombDrive.force_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/CombDrive.lean) states that both sidewalls give C = 2 n ε h x / g. Voltage-controlled coenergy (1/2) C V² has lateral force (1/2) V² dC/dx, so the sidewall 2 and the coenergy 1/2 cancel and F = n ε h V² / g. One sidewall leaves the 1/2. Not the normal pull-in of be-79. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateCombDrive`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: both sidewalls give C = 2 n ε h x / g. Voltage-controlled coenergy (1/2) C V² has lateral force (1/2) V² dC/dx, so the sidewall 2 and the coenergy 1/2 cancel and F = n ε h V² / g. One sidewall leaves the 1/2. Not the normal pull-in of be-79
+- **Mathematical Formulation**: `F = n \varepsilon h V^2 / g`.
+- **Dimensions**: The catalog signature is `[force]`.
+- **Domain**: g ≠ 0. Both sidewalls and a fixed gap are the hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.CombDrive.force_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 127: Subthreshold swing** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.SubthresholdSwing.swing_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/SubthresholdSwing.lean) states that ln(I2/I1) = e (ψ2 − ψ1)/(k_B T) and the capacitive divider ψ2 − ψ1 = C_ox/(C_ox + C_d) (Vg2 − Vg1). One decade, I2/I1 = 10, gives S = ln(10) (k_B T/e) (1 + C_d/C_ox). Dropping C_d is not the swing when C_d ≠ 0. Not the ideal diode of be-82. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateSubthresholdSwing`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: ln(I2/I1) = e (ψ2 − ψ1)/(k_B T) and the capacitive divider ψ2 − ψ1 = C_ox/(C_ox + C_d) (Vg2 − Vg1). One decade, I2/I1 = 10, gives S = ln(10) (k_B T/e) (1 + C_d/C_ox). Dropping C_d is not the swing when C_d ≠ 0. Not the ideal diode of be-82
+- **Mathematical Formulation**: `S = \ln(10)\,(k_B T / e)\,(1 + C_d / C_{ox})`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1]`.
+- **Domain**: T ≠ 0, C_ox ≠ 0, and C_ox + C_d ≠ 0. e is the elementary charge.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.SubthresholdSwing.swing_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 128: Ideal boost ratio** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.BoostConverter.boost_ratio`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/BoostConverter.lean) states that ideal continuous-conduction volt-second balance Vin D + (Vin − Vout)(1 − D) = 0 gives Vout/Vin = 1/(1 − D) for D ≠ 1. No real duty equals both this ratio and the buck ratio D. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateBoostConverter`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: ideal continuous-conduction volt-second balance Vin D + (Vin − Vout)(1 − D) = 0 gives Vout/Vin = 1/(1 − D) for D ≠ 1. No real duty equals both this ratio and the buck ratio D
+- **Mathematical Formulation**: `V_{out} / V_{in} = 1 / (1 - D)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: D ≠ 1. Continuous conduction and ideal switches are the hypotheses.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.BoostConverter.boost_ratio`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 129: Straight-fin efficiency** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.FinEfficiency.efficiency_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/FinEfficiency.lean) states that θ'' = m² θ, an adiabatic tip θ'(L) = 0, and θ(0) = θ_b give θ(x) = θ_b cosh(m(L − x))/cosh(m L). Base Fourier heat over h P L θ_b is η = tanh(m L)/(m L) when m² = h P/(k A). A rectangle with P/A = 2/t gives m = √(2 h/(k t)). One face is not that m. tanh is not 1, so this is not an infinite fin. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateFinEfficiency`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: θ'' = m² θ, an adiabatic tip θ'(L) = 0, and θ(0) = θ_b give θ(x) = θ_b cosh(m(L − x))/cosh(m L). Base Fourier heat over h P L θ_b is η = tanh(m L)/(m L) when m² = h P/(k A). A rectangle with P/A = 2/t gives m = √(2 h/(k t)). One face is not that m. tanh is not 1, so this is not an infinite fin
+- **Mathematical Formulation**: `m = \sqrt{2 h / (k t)},\quad \eta = \tanh(m L) / (m L)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: k > 0, t > 0, h > 0, and L ≠ 0. The edge value is η.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.FinEfficiency.efficiency_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 130: Thermoelectric generator efficiency** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ThermoelectricGenerator.efficiency_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/ThermoelectricGenerator.lean) states that hot-junction heat is Q = S Th I − I² R/2 − K ΔT with ΔT = Tc − Th, and load power is P = I (S (Th − Tc) − I R). The Joule 1/2 and the 2 in P' are derivatives. Stationarity P' Q = P Q' at I = S Δ/(R (1 + m)), with m = √(1 + Z Tm), Z = S²/(R K), Δ = Th − Tc, and Tm = (Th + Tc)/2, gives η = (1 − Tc/Th) (m − 1)/(m + Tc/Th). Matched load m = 1 is not stationary when Z Tm ≠ 0. The Carnot factor alone is not this efficiency. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateThermoelectricGenerator`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: hot-junction heat is Q = S Th I − I² R/2 − K ΔT with ΔT = Tc − Th, and load power is P = I (S (Th − Tc) − I R). The Joule 1/2 and the 2 in P' are derivatives. Stationarity P' Q = P Q' at I = S Δ/(R (1 + m)), with m = √(1 + Z Tm), Z = S²/(R K), Δ = Th − Tc, and Tm = (Th + Tc)/2, gives η = (1 − Tc/Th) (m − 1)/(m + Tc/Th). Matched load m = 1 is not stationary when Z Tm ≠ 0. The Carnot factor alone is not this efficiency
+- **Mathematical Formulation**: `\eta = (1 - T_c/T_h) (\sqrt{1 + Z T_m} - 1) / (\sqrt{1 + Z T_m} + T_c/T_h)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: T_h ≠ 0, 1 + Z T_m ≥ 0, and the denominator ≠ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ThermoelectricGenerator.efficiency_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 131: Joukowsky pressure** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.Joukowsky.joukowsky_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/Joukowsky.lean) states that the momentum jump −c Δv + Δp/ρ = 0 is Δp = ρ c Δv. Fluid compressibility dρ/ρ = dp/K and thin-wall hoop strain dA/A = dp D/(E e_wall) give c = √(K/ρ) / √(1 + (K/E)(D/e_wall)). Mass on the same front is the separate statement c² = Δp/Δρ and is not required for the pressure jump. ρ (Δv)² is not ρ c Δv when c ≠ Δv. Dropping the wall term is the rigid-pipe speed. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateJoukowsky`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the momentum jump −c Δv + Δp/ρ = 0 is Δp = ρ c Δv. Fluid compressibility dρ/ρ = dp/K and thin-wall hoop strain dA/A = dp D/(E e_wall) give c = √(K/ρ) / √(1 + (K/E)(D/e_wall)). Mass on the same front is the separate statement c² = Δp/Δρ and is not required for the pressure jump. ρ (Δv)² is not ρ c Δv when c ≠ Δv. Dropping the wall term is the rigid-pipe speed
+- **Mathematical Formulation**: `\Delta p = \rho c \Delta v,\quad c = \sqrt{K/\rho} / \sqrt{1 + (K/E)(D/e_{wall})}`.
+- **Dimensions**: The catalog signature is `[L^-1 M T^-2]`.
+- **Domain**: ρ > 0, K > 0, E > 0, e_wall > 0, and 1 + (K/E)(D/e_wall) > 0. The edge value is Δp.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Joukowsky.joukowsky_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 132: Coaxial capacitance per length** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.CoaxialCapacitance.capacitance_per_length`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/CoaxialCapacitance.lean) states that the coaxial field λ/(2 π ε r) integrates to ΔV = (λ/(2 π ε)) ln(b/a), so C' = λ/ΔV = 2 π ε / ln(b/a). Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateCoaxialCapacitance`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: the coaxial field λ/(2 π ε r) integrates to ΔV = (λ/(2 π ε)) ln(b/a), so C' = λ/ΔV = 2 π ε / ln(b/a). Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d
+- **Mathematical Formulation**: `C' = 2 \pi \varepsilon / \ln(b/a)`.
+- **Dimensions**: The catalog signature is `[L^-3 M^-1 T^4 I^2]`.
+- **Domain**: a > 0, b > 0, a ≠ b, and ε ≠ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.CoaxialCapacitance.capacitance_per_length`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 133: Damping ratio** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.DampingRatio.damping_ratio`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/DampingRatio.lean) states that m ẍ + c ẋ + k x = 0 has ω = √(k/m) and linear coefficient c/m = 2 ζ ω, so ζ = c / (2 √(k m)). For c ≥ 0 the discriminant (c/m)² − 4 (k/m) vanishes iff ζ = 1. Dropping the 2 is not this ratio. √(k/m) is not ζ. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateDampingRatio`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: m ẍ + c ẋ + k x = 0 has ω = √(k/m) and linear coefficient c/m = 2 ζ ω, so ζ = c / (2 √(k m)). For c ≥ 0 the discriminant (c/m)² − 4 (k/m) vanishes iff ζ = 1. Dropping the 2 is not this ratio. √(k/m) is not ζ
+- **Mathematical Formulation**: `\zeta = c / (2 \sqrt{k m})`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: m > 0 and k > 0. Negative c is allowed.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.DampingRatio.damping_ratio`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
 **Open candidates, unproved.** These two statements have no bridge id and no `formalRef`.
 
 - **Landau diamagnetism.** `χ_L = −χ_P / 3` for free electrons in three dimensions. No Lean theorem in the pinned PhysJS manifest states it. It is not BE-94. BE-94 is the Pauli spin susceptibility.
@@ -2080,7 +2192,7 @@ These additional equations fill crucial gaps in the tensor structure according t
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. The sentence that ids 51–102 take the pattern of their category is the record from before BE-103 through BE-125. Ids 103–125 take the pattern of category D. No new pattern is introduced.
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. The sentence that ids 51–102 take the pattern of their category is the record from before BE-103 through BE-125. Ids 103–125 take the pattern of category D. The sentence that the field-unification list stops at 125 is the record from before BE-126 through BE-133. Ids 126–133 take the pattern of category D. No new pattern is introduced.
 
 1. **Quantum-Classical Bridges (11-12, 33-35, 56, 71)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
@@ -2091,7 +2203,7 @@ Each bridge equation type maps to specific tensor components. The component is t
 3. **Emergence Patterns (15-16, 27-29, 48-50, 58, 70, 85, 87)**:
    Higher-rank correlations <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%5Cbeta%5Cgamma%5Cdelta%5Cepsilon%5Czeta%E2%80%A6%7D" alt="\boldsymbol{\Pi}^{\alpha\beta\gamma\delta\epsilon\zeta…}" />
    Categories C, H, and O. The ellipsis is the mark of this cluster (Part I §1.2, the emergent component). A scalar formula in the cluster keeps the ellipsis: BE-27's encoded form is a scalar and is already in this list.
-4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86, 103-125)**:
+4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86, 103-133)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
    Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
 5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84, 88-102)**:

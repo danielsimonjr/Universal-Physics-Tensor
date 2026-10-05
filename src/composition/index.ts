@@ -133,6 +133,19 @@ export {
   PLASMA_SPACE_EDGES,
 } from './edges/plasma-space.js';
 
+/** Composition edges for the comb drive through the damping ratio, BE-126 through BE-133. */
+export {
+  be126Edge,
+  be127Edge,
+  be128Edge,
+  be129Edge,
+  be130Edge,
+  be131Edge,
+  be132Edge,
+  be133Edge,
+  ENGINEERING_R7_EDGES,
+} from './edges/engineering-r7.js';
+
 export {
   be11Edge,
   be13Edge,

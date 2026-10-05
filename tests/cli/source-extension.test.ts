@@ -82,7 +82,8 @@ describe('source-extension — --json envelopes', () => {
 
     expect(status).toBe(0);
     expect(envelope.command).toBe('coverage');
-    expect(envelope.result.total).toBe(115);
+    expect(envelope.result.total).toBe(123);
+    // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
   });
 

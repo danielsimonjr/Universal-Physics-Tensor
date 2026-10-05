@@ -39,11 +39,11 @@ Deriving the bridge equations by dimensions
     be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-109, be-117, be-120, be-121
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
-  NOT A MONOMIAL (12) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
-    be-54, be-36, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115
+  NOT A MONOMIAL (13) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
+    be-54, be-36, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115, be-130
     (not a failed reconstruction of a monomial, and not a physical refutation)
 
-  OPEN (52) — irreducible free dimensionless group(s); by complexity:
+  OPEN (59) — irreducible free dimensionless group(s); by complexity:
     cplx=0  be-82
     cplx=1  be-11-zurek
     cplx=1  be-37
@@ -72,6 +72,10 @@ Deriving the bridge equations by dimensions
     cplx=1  be-114
     cplx=1  be-122
     cplx=1  be-123
+    cplx=1  be-127
+    cplx=1  be-128
+    cplx=1  be-132
+    cplx=1  be-133
     cplx=2  be-11-master
     cplx=2  be-22
     cplx=2  be-25
@@ -86,10 +90,13 @@ Deriving the bridge equations by dimensions
     cplx=2  be-119
     cplx=2  be-124
     cplx=2  be-125
+    cplx=2  be-126
+    cplx=2  be-129
     cplx=3  be-53
     cplx=3  be-33
     cplx=3  be-45
     cplx=3  be-46
+    cplx=3  be-131
     cplx=4  be-31
     cplx=4  be-34
     cplx=4  be-41

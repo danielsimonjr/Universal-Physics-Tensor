@@ -42,16 +42,16 @@ Catalog sizes, counted from source text and from tests that pin `.length`:
 
 | Registry | Count | Where |
 |---|---|---|
-| `BRIDGE_EQUATIONS` | 115, ids 11–125 with no gaps | The projection of `registerBridge`. `tests/bridges/catalog-integrity.test.ts` and `tests/bridges-index.test.ts` expect 115. Status fields: 79 `established`, 33 `speculative`, 3 `highly-speculative`. 92 ids 11–102, with 56 established, is the record from before BE-103–125 |
+| `BRIDGE_EQUATIONS` | 123, ids 11–133 with no gaps | The projection of `registerBridge`. `tests/bridges/catalog-integrity.test.ts` and `tests/bridges-index.test.ts` expect 123. Status fields: 87 `established`, 33 `speculative`, 3 `highly-speculative`. 115 ids 11–125, with 79 established, is the record from before BE-126–133 |
 | `CANONICAL_EQUATIONS` | 109 | `id: 'CE-…'` in `src/canonical/entries/` (109 unique). The registry assembles them in `src/canonical/registry.ts`. The prose test compares product docs to `CANONICAL_EQUATIONS.length` and does not hardcode 109 |
-| `CATALOG_GRAPH` | 106 | The edge projection of `registerBridge`. `tests/composition/compose-relation.test.ts` expects 106. 83 is the record from before BE-103–125 |
+| `CATALOG_GRAPH` | 114 | The edge projection of `registerBridge`. `tests/composition/compose-relation.test.ts` expects 114. 106 is the record from before BE-126–133 |
 | Confrontations | 19 | `bridgeId` fields in `src/bridges/confrontations.ts`: 52, 23, 36, 37, 48, 51, 21, 35, 11, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65. None of BE-103–125 is data-confronted |
-| `BRIDGE_EVALUATORS` | 73 ids | `spec(n)` in `src/bridges/evaluators.ts`: 51, 52, and 55–125. 53 and 54 are absent. 50 ids, through 102, is the record from before BE-103–125 |
-| `catalogFormalRef` ids | 96 | `CATALOG_FORMAL_REF_IDS` is derived from generated `be-*` keys. 73 is the record from before BE-103–125. `be-20` stays absent |
-| PhysJS manifest entries | 106 | `formal/physjs/manifest.json` (`schema` `physjs-bridge-manifest/v1`, `commit` `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f`). 10 `ab-*` plus 96 `be-*`. 83 entries at `03e8bb77c952f720bdd2730af2afc6a7f2d36243` is the record from before PhysJS #66 |
+| `BRIDGE_EVALUATORS` | 83 ids | `spec(n)` in `src/bridges/evaluators.ts`: 16, 42, 51, 52, and 55–133. 53 and 54 are absent. The sentence that said 73 ids (51, 52, and 55–125) is the record from before BE-126–133 |
+| `catalogFormalRef` ids | 104 | `CATALOG_FORMAL_REF_IDS` is derived from generated `be-*` keys. 96 is the record from before BE-126–133. `be-20` stays absent |
+| PhysJS manifest entries | 114 | `formal/physjs/manifest.json` (`schema` `physjs-bridge-manifest/v1`, `commit` `8515c621d1c6e6d31c2eea4467181eb85d58234b`). 10 `ab-*` plus 104 `be-*`. 106 entries at `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f` is the record from before PhysJS #67 |
 | Atlas `id: 'ab-…'` | 20 | seven family bridge files under `src/atlas/{oscillators,diffusion,waves}/` |
 
-`src/bridges/index.ts` says `BRIDGE_EQUATIONS` is the projection of `registerBridge`. The sentences that the catalog has 77 entries, that BE-55–87 have no AST, and that 17 catalog bridges carry no `BridgeEdge`, are restated there as records from before later rows. The integrity test expects 115. The title that said "exactly 58" is the record from before BE-59 and the later rows.
+`src/bridges/index.ts` says `BRIDGE_EQUATIONS` is the projection of `registerBridge`. The sentences that the catalog has 77 entries, that BE-55–87 have no AST, and that 17 catalog bridges carry no `BridgeEdge`, are restated there as records from before later rows. The integrity test expects 123. The sentence that it expects 115 is the record from before BE-126–133. The title that said "exactly 58" is the record from before BE-59 and the later rows.
 
 ---
 
@@ -314,7 +314,7 @@ UPT does not run Lean for this system. The pin is the vendored manifest.
 
 | Piece | Location |
 |---|---|
-| Vendored manifest | `formal/physjs/manifest.json`. `toolchain` `leanprover/lean4:v4.34.1`, `mathlib` `v4.34.1`, `physlib` `af484f78ee0701290595f8bf892b157b10d64940`, `commit` `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f`, 106 entries. 83 entries at `03e8bb77c952f720bdd2730af2afc6a7f2d36243` is the record from before PhysJS #66 |
+| Vendored manifest | `formal/physjs/manifest.json`. `toolchain` `leanprover/lean4:v4.34.1`, `mathlib` `v4.34.1`, `physlib` `af484f78ee0701290595f8bf892b157b10d64940`, `commit` `8515c621d1c6e6d31c2eea4467181eb85d58234b`, 114 entries. 106 entries at `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f` is the record from before PhysJS #67 |
 | Compiled copy | `src/atlas/physjs-entries.generated.ts`, written by `bun run physjs:table` from the vendored manifest. `physjsFormalRef` reads that table. `PHYSJS_COMMIT` is the manifest `commit` |
 | Builder | `physjsFormalRef(key)` in `src/atlas/physjs-ref.ts`. Sets `system: 'lean4-physjs'` and `fidelity: 'sanity-lemmas'` |
 | Catalog overlay | `catalogFormalRef` in `src/atlas/catalog-formal-ref.ts`. Ids are the generated `be-*` keys, 96 of them. The hand list of 73 is the record from before BE-103–125. The catalog row does not store the reference |

@@ -68,8 +68,13 @@ describe('discovery calibration benchmark', () => {
   // The would-clash sum is 796 = 786 axis-clash + 10 still shadowed.
   // The new promising pair is landauer-erasure-energy with lawson-energy.
   // A shared energy token is not an identification.
+  // BE-126 through BE-133 are on the graph. total 1525 → 1964, promising 16 → 17,
+  // inert 703 → 943, axis-clash 786 → 984. magnitude-clash stays 20.
+  // The would-clash sum is 994 = 984 axis-clash + 10 still shadowed.
+  // The new promising pair is damping-inertia with mass. A shared mass
+  // dimension is not an identification.
   const EXPECTED = {
-    catalog: { total: 1525, promising: 16, inert: 703, clash: 20, contradictory: 0, axisClash: 786 },
+    catalog: { total: 1964, promising: 17, inert: 943, clash: 20, contradictory: 0, axisClash: 984 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -91,7 +96,8 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(796);
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(994);
+    // 796 is the record from before be-126..133.
     // 455 is the record from before be-103..125.
     expect(shadowed.length).toBe(10);
   });

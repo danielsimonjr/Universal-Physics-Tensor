@@ -825,7 +825,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (85)"]
+  subgraph cl_iso["isolated (93)"]
     direction LR
     j_be_100["BE-100"]:::law
     q_lst_static(["lst-static"]):::qty
@@ -1035,6 +1035,86 @@ flowchart LR
     q_mirror_t_parallel --> j_be_125
     q_mirror_margin(["mirror-margin"]):::qty
     j_be_125 --> q_mirror_margin
+    j_be_126["BE-126"]:::law
+    q_comb_finger_count(["comb-finger-count"]):::qty
+    q_comb_finger_count --> j_be_126
+    q_comb_dielectric(["comb-dielectric"]):::qty
+    q_comb_dielectric --> j_be_126
+    q_comb_overlap(["comb-overlap"]):::qty
+    q_comb_overlap --> j_be_126
+    q_comb_bias(["comb-bias"]):::qty
+    q_comb_bias --> j_be_126
+    q_comb_airgap(["comb-airgap"]):::qty
+    q_comb_airgap --> j_be_126
+    q_comb_lateral(["comb-lateral"]):::qty
+    j_be_126 --> q_comb_lateral
+    j_be_127["BE-127"]:::law
+    q_swing_kelvin(["swing-kelvin"]):::qty
+    q_swing_kelvin --> j_be_127
+    q_swing_depletion(["swing-depletion"]):::qty
+    q_swing_depletion --> j_be_127
+    q_swing_oxide(["swing-oxide"]):::qty
+    q_swing_oxide --> j_be_127
+    q_swing_decade(["swing-decade"]):::qty
+    j_be_127 --> q_swing_decade
+    j_be_128["BE-128"]:::law
+    q_boost_duty(["boost-duty"]):::qty
+    q_boost_duty --> j_be_128
+    q_boost_gain(["boost-gain"]):::qty
+    j_be_128 --> q_boost_gain
+    j_be_129["BE-129"]:::law
+    q_fin_convection(["fin-convection"]):::qty
+    q_fin_convection --> j_be_129
+    q_fin_conductivity(["fin-conductivity"]):::qty
+    q_fin_conductivity --> j_be_129
+    q_fin_web(["fin-web"]):::qty
+    q_fin_web --> j_be_129
+    q_fin_span(["fin-span"]):::qty
+    q_fin_span --> j_be_129
+    q_fin_adiabatic(["fin-adiabatic"]):::qty
+    j_be_129 --> q_fin_adiabatic
+    j_be_130["BE-130"]:::law
+    q_teg_source(["teg-source"]):::qty
+    q_teg_source --> j_be_130
+    q_teg_sink(["teg-sink"]):::qty
+    q_teg_sink --> j_be_130
+    q_teg_figure(["teg-figure"]):::qty
+    q_teg_figure --> j_be_130
+    q_teg_optimum(["teg-optimum"]):::qty
+    j_be_130 --> q_teg_optimum
+    j_be_131["BE-131"]:::law
+    q_joukowsky_rho(["joukowsky-rho"]):::qty
+    q_joukowsky_rho --> j_be_131
+    q_joukowsky_closure(["joukowsky-closure"]):::qty
+    q_joukowsky_closure --> j_be_131
+    q_joukowsky_bulk(["joukowsky-bulk"]):::qty
+    q_joukowsky_bulk --> j_be_131
+    q_joukowsky_wallmod(["joukowsky-wallmod"]):::qty
+    q_joukowsky_wallmod --> j_be_131
+    q_joukowsky_bore(["joukowsky-bore"]):::qty
+    q_joukowsky_bore --> j_be_131
+    q_joukowsky_thk(["joukowsky-thk"]):::qty
+    q_joukowsky_thk --> j_be_131
+    q_joukowsky_jump(["joukowsky-jump"]):::qty
+    j_be_131 --> q_joukowsky_jump
+    j_be_132["BE-132"]:::law
+    q_coax_liner(["coax-liner"]):::qty
+    q_coax_liner --> j_be_132
+    q_coax_inner(["coax-inner"]):::qty
+    q_coax_inner --> j_be_132
+    q_coax_outer(["coax-outer"]):::qty
+    q_coax_outer --> j_be_132
+    q_coax_specific(["coax-specific"]):::qty
+    j_be_132 --> q_coax_specific
+    j_be_133["BE-133"]:::law
+    q_damping_dashpot(["damping-dashpot"]):::qty
+    q_damping_dashpot --> j_be_133
+    q_damping_spring(["damping-spring"]):::qty
+    q_damping_spring --> j_be_133
+    q_damping_inertia(["damping-inertia"]):::qty
+    q_damping_inertia --> j_be_133
+    q_damping_zeta(["damping-zeta"]):::qty
+    j_be_133 --> q_damping_zeta
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
     q_minimal_surface_area --> j_be_14
