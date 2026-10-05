@@ -20,6 +20,49 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Write the integration design for 6.0.0. Do not change `src/`.
+  The map's ten targets become decisions in `docs/planning/v6.0.0-Design.md`, checked against the source. The owner has not approved an implementation phase.
+  Done: that file. The map's edit-distance, prefactor, ideal-gas, and private-RK4 rows were corrected from the same reading. No `src/` change. The owner accepted the five resolutions on 2026-10-04. `upt evaluate` converts an energy in a kelvin slot through `readNamedBinding`. The Larmor radius is a magnitude and cyclotron frequency stays signed. `BridgeEquations`, `evaluateEinsteinRelation`, and the other per-bridge APIs are removed with no compatibility shims. Ideal-gas `N` stays a dimensionless input. A missing MathTS scalar-expression builder is added in MathTS before phase 6 lowers, and publishing MathTS stays the owner's job. The phases below are the authorized work.
+
+- [ ] Implement phase 0 of the 6.0.0 integration: the dependency generator records an export-star-as as an internal dependency.
+  A fixture module imported only that way is not reported unused, and the same fixture with the line removed is unused. `src/atlas/public.ts` leaves the unused-file list for that reason. `bun run docs:deps` is clean against the committed architecture docs.
+
+- [ ] Implement phase 1 of the 6.0.0 integration: generate the PhysJS table from the vendored manifest.
+  The generate step replaces the hand-copy in `WORKFLOWS.md`. Editing a theorem in the generated file without editing the manifest fails the formal gate. A manifest entry with no bridge still fails. Tests that hardcoded the commit string read the manifest.
+
+- [ ] Implement phase 2 of the 6.0.0 integration: one temperature and unit reader.
+  Explain, evaluate, eval, a discovery anchor, a regime coordinate, and a path sweep of an energy on a temperature name agree on the kelvin value. A metre on a temperature name throws. An energy on a non-temperature name stays joules. `upt evaluate` converts.
+
+- [ ] Implement phase 3 of the 6.0.0 integration: one name table and one edit distance.
+  Resolution uses optimal string alignment at distance at most 1. `erasure-energy` and the Landauer quantity are one quantity. A Debye-length miss does not suggest the phonon family. A Reynolds-number search does not hit the analogy. A Prandtl-number search names that bridge and says the match is the gloss.
+
+- [ ] Implement phase 4 of the 6.0.0 integration: one sign policy.
+  Plasma frequency and Larmor radius are magnitudes. Hall and cyclotron stay signed. Einstein and conductivity reject opposite signs once. A policy that takes the absolute value of the cyclotron frequency fails the cyclotron test.
+
+- [ ] Implement phase 5 of the 6.0.0 integration: a sourced factor or unset, and the ideal-gas count.
+  An unset coefficient yields no recovered number. Ideal gas without `N` is a missing input. Ideal gas with `N` is `N k_B T / V`. Sound speed multiplies by the square root of gamma when gamma is bound, and is unset when it is not. The ideal-gas count already evaluates from the scalar AST. This phase does not reimplement that path.
+
+- [ ] Implement phase 6 of the 6.0.0 integration: one evaluator, by cluster, lowering each tree through MathTS.
+  If the installed MathTS packages have no public scalar-expression builder, that builder is added in MathTS first. Each cluster's lowered value matches the deleted function on that cluster's numeric fixture. A catalog id has one numeric body.
+
+- [ ] Implement phase 7 of the 6.0.0 integration: one bridge registration, including the PhysJS bridges BE-103 through BE-125.
+  A fixture record appears in the catalog, the right-hand side, the edge list, and the evaluator map. An atlas model id is rejected. The manifest pin is PhysJS `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f`. Proofs that assume their key step as a hypothesis say so. The equal-temperature Bennett current and the kinetic closure are the corrected formulas.
+
+- [ ] Implement phase 8 of the 6.0.0 integration: one JSON canonicalizer with a record profile and a probe profile.
+  A record fixture and a probe fixture hash to the same digests as the old functions. The probe export names stay.
+
+- [ ] Implement phase 9 of the 6.0.0 integration: classical Runge-Kutta steps call the MathTS ODE solver.
+  A linear oscillator matches the exact solution at the witness step size. The Schwarzschild and Kerr samples stay inside their existing tolerances. The finite-difference wave and heat functions stay.
+
+- [ ] Implement phase 10 of the 6.0.0 integration: one mass-density dimension, and re-exports instead of assign-and-reexport.
+  The dimension object matches at each former copy. The dependency graph does not list a pure re-export as two local definitions. The approximation admission stays defined in the atlas regime module.
+
+- [ ] Implement phase 11 of the 6.0.0 integration: a composition-table refusal is its own result.
+  A silent cell produces the table's error and does not look like a dimension failure. A derivation followed by a derivation that meets on a quantity still composes.
+
+- [ ] Implement phase 12 of the 6.0.0 integration: the 6.0.0 public surface, the migration guide, and package version 6.0.0.
+  The removed per-bridge names are not exported. `evaluateRelation` and the unset-coefficient error are exported. `package.json` is 6.0.0. The changelog carries the migration. The tag and the publish are the release step after this phase merges, not this phase.
+
 - [x] A fully-quantitative count in the scalar AST is an input of the canonical evaluator.
   `upt explain pressure boltzmann-constant=1.380649e-23 temperature=300 V=0.0224 --source=canonical` prints `1.84908348214286e-19`, which is `k_B T/V`. The law is `P = N k_B T/V`.
   Done: that command exits 0 with no recovered value and names `N`. With `N=6.02214076e23` it prints `111354.410064552` and `pressure ∝ boltzmann-constant·temperature·V^-1·N`. Perihelion divides by `one_minus_e_sq` and keeps `6π`. A null monomial evaluates the fully-quantitative AST, so Hawking temperature keeps `8π` and Newton returns `G m₁ m₂ / r²`. The canonical audit is DECOY 11 and OPEN 19. Jarzynski stays DERIVED `×1`.
