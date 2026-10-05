@@ -4,7 +4,7 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  377 candidates  →  59 promising  ·  305 inert  ·  12 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
+  funnel:  377 candidates  →  59 promising  ·  298 inert  ·  19 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1 axis-clash
   readiness of the 59 promising: 0 mechanism-tested · 0 data-tested · 59 without magnitude evidence · 59 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
@@ -16,13 +16,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: hubble-distance and compton-wavelength-full are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, compton-wavelength-full · needs a stated force regime for: hubble-distance, compton-wavelength-full · needs a consequence that re-derives a known law]
         [observation: measure hubble-distance and compton-wavelength-full in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    a ≟ classical-electron-radius                        [[length]]  score 7
-        unlocks: a, perihelion-precession
-        [consequence: inconclusive]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: a and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: a · needs a stated scale regime for: a, classical-electron-radius · needs a stated force regime for: a, classical-electron-radius · needs a consequence that re-derives a known law]
-        [observation: measure a and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     A ≟ thomson-cross-section                            [[area]]  score 7
         unlocks: A, bh-entropy
         [consequence: inconclusive]
@@ -56,21 +49,21 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: erasure-energy and internal-energy-change are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: erasure-energy, internal-energy-change · needs a stated scale regime for: erasure-energy, internal-energy-change · needs a stated force regime for: erasure-energy, internal-energy-change · needs a consequence that re-derives a known law]
+        [to make it testable — premise: erasure-energy and internal-energy-change are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: internal-energy-change · needs a stated scale regime for: erasure-energy, internal-energy-change · needs a stated force regime for: erasure-energy, internal-energy-change · needs a consequence that re-derives a known law]
         [observation: measure erasure-energy and internal-energy-change in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     free-energy-difference ≟ internal-energy-change      [[energy]]  score 7
         unlocks: internal-energy-change
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: free-energy-difference and internal-energy-change are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: free-energy-difference, internal-energy-change · needs a stated scale regime for: free-energy-difference, internal-energy-change · needs a stated force regime for: free-energy-difference, internal-energy-change · needs a consequence that re-derives a known law]
+        [to make it testable — premise: free-energy-difference and internal-energy-change are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: internal-energy-change · needs a stated scale regime for: free-energy-difference, internal-energy-change · needs a stated force regime for: free-energy-difference, internal-energy-change · needs a consequence that re-derives a known law]
         [observation: measure free-energy-difference and internal-energy-change in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     free-energy-difference ≟ photon-energy               [[energy]]  score 7
         unlocks: photon-energy
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: free-energy-difference and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: free-energy-difference, photon-energy · needs a stated scale regime for: free-energy-difference, photon-energy · needs a stated force regime for: free-energy-difference, photon-energy · needs a consequence that re-derives a known law]
+        [to make it testable — premise: free-energy-difference and photon-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: photon-energy · needs a stated scale regime for: free-energy-difference, photon-energy · needs a stated force regime for: free-energy-difference, photon-energy · needs a consequence that re-derives a known law]
         [observation: measure free-energy-difference and photon-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     impact_parameter ≟ classical-electron-radius         [[length]]  score 7
         unlocks: impact_parameter, light-deflection
@@ -100,6 +93,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: semi-major-axis and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: semi-major-axis · needs a stated scale regime for: classical-electron-radius · needs a stated force regime for: classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure semi-major-axis and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    a ≟ classical-electron-radius                        [[length]]  score 6
+        unlocks: a
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: a and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: a · needs a stated scale regime for: a, classical-electron-radius · needs a stated force regime for: a, classical-electron-radius · needs a consequence that re-derives a known law]
+        [observation: measure a and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     amplitude ≟ classical-electron-radius                [[length]]  score 6
         unlocks: amplitude
         [consequence: inconclusive]
@@ -210,35 +210,35 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: droplet-radius and peak-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius, peak-wavelength · needs a stated scale regime for: droplet-radius, peak-wavelength · needs a stated force regime for: droplet-radius, peak-wavelength · needs a consequence that re-derives a known law]
+        [to make it testable — premise: droplet-radius and peak-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: droplet-radius, peak-wavelength · needs a stated force regime for: droplet-radius, peak-wavelength · needs a consequence that re-derives a known law]
         [observation: measure droplet-radius and peak-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     erasure-energy ≟ heat-added                          [[energy]]  score 6
         unlocks: heat-added
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: erasure-energy and heat-added are the same physical quantity, not only both [energy] · needs a representative magnitude for: erasure-energy, heat-added · needs a stated scale regime for: erasure-energy, heat-added · needs a stated force regime for: erasure-energy, heat-added · needs a consequence that re-derives a known law]
+        [to make it testable — premise: erasure-energy and heat-added are the same physical quantity, not only both [energy] · needs a representative magnitude for: heat-added · needs a stated scale regime for: erasure-energy, heat-added · needs a stated force regime for: erasure-energy, heat-added · needs a consequence that re-derives a known law]
         [observation: measure erasure-energy and heat-added in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     erasure-energy ≟ work-done-by-system                 [[energy]]  score 6
         unlocks: work-done-by-system
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: erasure-energy and work-done-by-system are the same physical quantity, not only both [energy] · needs a representative magnitude for: erasure-energy, work-done-by-system · needs a stated scale regime for: erasure-energy, work-done-by-system · needs a stated force regime for: erasure-energy, work-done-by-system · needs a consequence that re-derives a known law]
+        [to make it testable — premise: erasure-energy and work-done-by-system are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-done-by-system · needs a stated scale regime for: erasure-energy, work-done-by-system · needs a stated force regime for: erasure-energy, work-done-by-system · needs a consequence that re-derives a known law]
         [observation: measure erasure-energy and work-done-by-system in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     free-energy-difference ≟ heat-added                  [[energy]]  score 6
         unlocks: heat-added
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: free-energy-difference and heat-added are the same physical quantity, not only both [energy] · needs a representative magnitude for: free-energy-difference, heat-added · needs a stated scale regime for: free-energy-difference, heat-added · needs a stated force regime for: free-energy-difference, heat-added · needs a consequence that re-derives a known law]
+        [to make it testable — premise: free-energy-difference and heat-added are the same physical quantity, not only both [energy] · needs a representative magnitude for: heat-added · needs a stated scale regime for: free-energy-difference, heat-added · needs a stated force regime for: free-energy-difference, heat-added · needs a consequence that re-derives a known law]
         [observation: measure free-energy-difference and heat-added in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     free-energy-difference ≟ work-done-by-system         [[energy]]  score 6
         unlocks: work-done-by-system
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: free-energy-difference and work-done-by-system are the same physical quantity, not only both [energy] · needs a representative magnitude for: free-energy-difference, work-done-by-system · needs a stated scale regime for: free-energy-difference, work-done-by-system · needs a stated force regime for: free-energy-difference, work-done-by-system · needs a consequence that re-derives a known law]
+        [to make it testable — premise: free-energy-difference and work-done-by-system are the same physical quantity, not only both [energy] · needs a representative magnitude for: work-done-by-system · needs a stated scale regime for: free-energy-difference, work-done-by-system · needs a stated force regime for: free-energy-difference, work-done-by-system · needs a consequence that re-derives a known law]
         [observation: measure free-energy-difference and work-done-by-system in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     height ≟ classical-electron-radius                   [[length]]  score 6
         unlocks: height
@@ -266,14 +266,14 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: peak-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: peak-wavelength, deviation-from-mean · needs a stated scale regime for: peak-wavelength, deviation-from-mean · needs a stated force regime for: peak-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
+        [to make it testable — premise: peak-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: peak-wavelength, deviation-from-mean · needs a stated force regime for: peak-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure peak-wavelength and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     peak-wavelength ≟ standard-deviation                 [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: peak-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: peak-wavelength, standard-deviation · needs a stated scale regime for: peak-wavelength, standard-deviation · needs a stated force regime for: peak-wavelength, standard-deviation · needs a consequence that re-derives a known law]
+        [to make it testable — premise: peak-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: peak-wavelength, standard-deviation · needs a stated force regime for: peak-wavelength, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure peak-wavelength and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     r ≟ classical-electron-radius                        [[length]]  score 6
         unlocks: r
@@ -287,14 +287,14 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: radiative-flux and incident-intensity are the same physical quantity, not only both [M T^-3] · needs a representative magnitude for: radiative-flux, incident-intensity · needs a stated scale regime for: radiative-flux, incident-intensity · needs a stated force regime for: radiative-flux, incident-intensity · needs a consequence that re-derives a known law]
+        [to make it testable — premise: radiative-flux and incident-intensity are the same physical quantity, not only both [M T^-3] · needs a representative magnitude for: incident-intensity · needs a stated scale regime for: radiative-flux, incident-intensity · needs a stated force regime for: radiative-flux, incident-intensity · needs a consequence that re-derives a known law]
         [observation: measure radiative-flux and incident-intensity in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     radiative-flux ≟ transmitted-intensity               [[M T^-3]]  score 6
         unlocks: transmitted-intensity
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: radiative-flux and transmitted-intensity are the same physical quantity, not only both [M T^-3] · needs a representative magnitude for: radiative-flux, transmitted-intensity · needs a stated scale regime for: radiative-flux, transmitted-intensity · needs a stated force regime for: radiative-flux, transmitted-intensity · needs a consequence that re-derives a known law]
+        [to make it testable — premise: radiative-flux and transmitted-intensity are the same physical quantity, not only both [M T^-3] · needs a representative magnitude for: transmitted-intensity · needs a stated scale regime for: radiative-flux, transmitted-intensity · needs a stated force regime for: radiative-flux, transmitted-intensity · needs a consequence that re-derives a known law]
         [observation: measure radiative-flux and transmitted-intensity in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     radius ≟ deviation-from-mean                         [[length]]  score 6
         unlocks: deviation-from-mean
@@ -357,42 +357,42 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: scale-factor and peak-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor, peak-wavelength · needs a stated scale regime for: scale-factor, peak-wavelength · needs a stated force regime for: scale-factor, peak-wavelength · needs a consequence that re-derives a known law]
+        [to make it testable — premise: scale-factor and peak-wavelength are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor, peak-wavelength · needs a stated force regime for: scale-factor, peak-wavelength · needs a consequence that re-derives a known law]
         [observation: measure scale-factor and peak-wavelength in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ deviation-from-mean             [[length]]  score 6
         unlocks: deviation-from-mean
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, deviation-from-mean · needs a stated scale regime for: deviation-from-mean · needs a stated force regime for: thermal-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and deviation-from-mean are the same physical quantity, not only both [length] · needs a representative magnitude for: deviation-from-mean · needs a stated scale regime for: deviation-from-mean · needs a stated force regime for: thermal-wavelength, deviation-from-mean · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and deviation-from-mean in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ droplet-radius                  [[length]]  score 6
         unlocks: droplet-radius
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, droplet-radius · needs a stated scale regime for: droplet-radius · needs a stated force regime for: thermal-wavelength, droplet-radius · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and droplet-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: droplet-radius · needs a stated scale regime for: droplet-radius · needs a stated force regime for: thermal-wavelength, droplet-radius · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and droplet-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ hubble-distance                 [[length]]  score 6
         unlocks: hubble-distance
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and hubble-distance are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance · needs a stated force regime for: thermal-wavelength, hubble-distance · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and hubble-distance in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ scale-factor                    [[length]]  score 6
         unlocks: scale-factor
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: thermal-wavelength, scale-factor · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and scale-factor are the same physical quantity, not only both [length] · needs a representative magnitude for: scale-factor · needs a stated scale regime for: scale-factor · needs a stated force regime for: thermal-wavelength, scale-factor · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and scale-factor in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     thermal-wavelength ≟ standard-deviation              [[length]]  score 6
         unlocks: standard-deviation
         [consequence: inconclusive]
         [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: thermal-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: thermal-wavelength, standard-deviation · needs a stated scale regime for: standard-deviation · needs a stated force regime for: thermal-wavelength, standard-deviation · needs a consequence that re-derives a known law]
+        [to make it testable — premise: thermal-wavelength and standard-deviation are the same physical quantity, not only both [length] · needs a representative magnitude for: standard-deviation · needs a stated scale regime for: standard-deviation · needs a stated force regime for: thermal-wavelength, standard-deviation · needs a consequence that re-derives a known law]
         [observation: measure thermal-wavelength and standard-deviation in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     wavelength ≟ classical-electron-radius               [[length]]  score 6
         unlocks: wavelength
@@ -407,15 +407,22 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
     bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart  (anchor-derived)
     classical-electron-radius ≟ bohr-radius              ~3.2 orders apart  (anchor-derived)
     classical-electron-radius ≟ compton-wavelength-full  ~58.5 orders apart  (anchor-derived)
+    erasure-energy ≟ rydberg-energy                      ~15.1 orders apart  (anchor-derived)
+    free-energy-difference ≟ rydberg-energy              ~14.9 orders apart  (anchor-derived)
     mass ≟ planck-mass                                   ~38.0 orders apart  (anchor-derived)
+    peak-wavelength ≟ bohr-radius                        ~14.9 orders apart  (anchor-derived)
+    peak-wavelength ≟ classical-electron-radius          ~18.1 orders apart  (anchor-derived)
     planck-length ≟ bohr-radius                          ~24.5 orders apart
     planck-length ≟ classical-electron-radius            ~21.3 orders apart  (anchor-derived)
     planck-length ≟ compton-wavelength                   ~23.2 orders apart
     planck-length ≟ compton-wavelength-full              ~37.2 orders apart  (anchor-derived)
+    planck-length ≟ peak-wavelength                      ~39.5 orders apart  (anchor-derived)
     radius ≟ bohr-radius                                 ~13.7 orders apart  (anchor-derived)
     radius ≟ classical-electron-radius                   ~16.9 orders apart  (anchor-derived)
     radius ≟ planck-length                               ~38.3 orders apart  (anchor-derived)
     rest-energy ≟ rydberg-energy                         ~62.4 orders apart  (anchor-derived)
+    thermal-wavelength ≟ bohr-radius                     ~23.8 orders apart  (anchor-derived)
+    thermal-wavelength ≟ classical-electron-radius       ~20.6 orders apart  (anchor-derived)
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     distance ≟ hubble-distance                           [[length]]

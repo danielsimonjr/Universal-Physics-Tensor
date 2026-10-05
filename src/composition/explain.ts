@@ -225,6 +225,34 @@ function formatMonomial(m: Readonly<Record<string, number>>): string {
   return parts.join('·') || '1';
 }
 
+function factorsOn(edge: BridgeEdge | undefined): Readonly<Record<string, number>> {
+  return edge?.formulaFactors ?? {};
+}
+
+function collectFactors(edges: readonly BridgeEdge[]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const edge of edges) {
+    for (const [name, exp] of Object.entries(factorsOn(edge))) out[name] = exp;
+  }
+  return out;
+}
+
+/**
+ * Buckingham cannot see a dimensionless count, so the printed monomial
+ * omits it. Put the recorded exponent back for each count the inputs name.
+ */
+function monomialWithFactors(
+  monomial: Readonly<Record<string, number>>,
+  factors: Readonly<Record<string, number>>,
+  present: ReadonlySet<string>,
+): Record<string, number> {
+  const merged: Record<string, number> = { ...monomial };
+  for (const [name, exp] of Object.entries(factors)) {
+    if (present.has(name) && exp !== 0) merged[name] = exp;
+  }
+  return merged;
+}
+
 /** Textbook factors the unit monomial is not. Disclosure, not a formalRef. */
 const UNSET_FACTOR: Readonly<Record<string, string>> = {
   'CE-fermi-energy': 'The standard factor (1/2)(3π²)^{2/3} is not this 1.',
@@ -410,8 +438,9 @@ export function explainQuantity(
       let dimensionalForm: DerivationExplanation['dimensionalForm'];
       const targetDimForChain = dimMap.get(target);
       if (targetDimForChain && leafInputs.length) {
+        const factors = factorsOn(e);
         const governing = leafInputs
-          .filter((n) => n !== target && dimMap.has(n))
+          .filter((n) => n !== target && dimMap.has(n) && factors[n] === undefined)
           .map((n) => ({ name: n, dim: dimMap.get(n)! }));
         const det = dimensionallyDetermines(
           { name: target, dim: targetDimForChain },
@@ -420,13 +449,18 @@ export function explainQuantity(
         const symbolic = e?.symbolic;
         const sum = symbolic !== undefined && formulaShape(symbolic) === 'dimensional-sum';
         const leaves = leafInputs.filter((name) => name !== target);
+        const missingCount = Object.keys(factors).some((name) => !leaves.includes(name));
+        const merged =
+          det.determined && det.monomial !== undefined
+            ? monomialWithFactors(det.monomial, factors, new Set(leaves))
+            : undefined;
         const agrees =
-          det.monomial !== undefined &&
-          encodedMatchesMonomial(edges, target, leaves, det.monomial, identifications);
-        if (!sum && det.determined && det.monomial && agrees) {
+          merged !== undefined &&
+          encodedMatchesMonomial(edges, target, leaves, merged, identifications);
+        if (!sum && !missingCount && merged !== undefined && agrees) {
           dimensionalForm = {
-            monomial: det.monomial,
-            formula: `${target} ∝ ${formatMonomial(det.monomial)}`,
+            monomial: merged,
+            formula: `${target} ∝ ${formatMonomial(merged)}`,
           };
         }
       }
@@ -443,13 +477,50 @@ export function explainQuantity(
   );
 
   // Dimensional sufficiency of the KNOWN set, independent of the graph.
+  // A dimensionless count is stripped before Buckingham (it is a π-group and
+  // would make the monomial non-unique) and written back into the monomial
+  // the summary prints. An edge whose other sources are known, but whose
+  // count is not, does not get to claim the count-free monomial.
+  const firedEdges = identifiability.derivations
+    .map((id) => byId.get(id))
+    .filter((edge): edge is BridgeEdge => edge !== undefined);
+  const firedFactors = collectFactors(firedEdges);
+  const blockedByCount = edges.filter((edge) => {
+    if (edge.target.name !== target) return false;
+    const factors = factorsOn(edge);
+    const names = Object.keys(factors);
+    if (names.length === 0 || names.every((name) => knownSet.has(name))) return false;
+    return edge.sources
+      .filter((source) => factors[source.name] === undefined)
+      .every((source) => knownSet.has(source.name) || determinable.has(source.name));
+  });
   let dimensional: DimensionalDeterminationResult | undefined;
   const targetDim = dimMap.get(target);
   if (targetDim) {
+    const strip = new Set<string>([
+      ...Object.keys(firedFactors),
+      ...blockedByCount.flatMap((edge) => Object.keys(factorsOn(edge))),
+    ]);
     const governing = knownNames
-      .filter((n) => n !== target && dimMap.has(n))
+      .filter((n) => n !== target && dimMap.has(n) && !strip.has(n))
       .map((n) => ({ name: n, dim: dimMap.get(n)! }));
-    dimensional = dimensionallyDetermines({ name: target, dim: targetDim }, governing);
+    const det = dimensionallyDetermines({ name: target, dim: targetDim }, governing);
+    const hideCountFree = blockedByCount.length > 0 && firedEdges.length === 0;
+    if (hideCountFree) {
+      dimensional = {
+        ...det,
+        determined: false,
+        monomial: undefined,
+        reason: 'a dimensionless count in the formula is not among the inputs',
+      };
+    } else if (det.determined && det.monomial !== undefined) {
+      dimensional = {
+        ...det,
+        monomial: monomialWithFactors(det.monomial, firedFactors, knownSet),
+      };
+    } else {
+      dimensional = det;
+    }
   }
 
   const formulaIsSum = identifiability.derivations.some((eid) => {
