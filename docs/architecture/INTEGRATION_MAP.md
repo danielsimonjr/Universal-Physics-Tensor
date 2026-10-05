@@ -4,9 +4,9 @@ A reading of how the library actually runs, and where the same concept is implem
 
 **Measured on** `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f` (`master` at the first measurement; package `5.0.0`). `src/` was not edited for that measurement. A second reading of that same `src/` tree, for the integration design, corrected the edit-distance row, the prefactor section (group table and the ideal-gas count), and the private RK4 list. The recommendations in section 6 were updated to match those corrections. They are still the recommendations that measurement made. The decisions are `docs/planning/v6.0.0-Design.md`. `bun run docs:deps` (`--include-tests`) was run again on that tree; `git diff -- docs/architecture/` of the generator outputs was empty, so the committed graph, unused analysis, and test-coverage report matched that run. The API-surface report is opt-in and is not a committed generator output; it was written to a temporary file with `--api-surface` and `--api-entry=src/index.ts`.
 
-The temperature call graph below was re-read after `b193d5e0` (#395). That patch calls `alignTemperatureBinding` from explain, discovery anchors, regime coordinates, and path sweeps. The headline counts in the table were not re-derived on that commit. `upt evaluate` still does not call `alignTemperatureBinding`.
+The temperature call graph below was re-read after `readNamedBinding` became the only caller of `alignTemperatureBinding`. `upt eval`, `upt explain`, `upt evaluate`, discovery anchors, regime coordinates, and path sweeps call that reader. The sentence that #395 calls `alignTemperatureBinding` from those commands, and that `upt evaluate` does not, is the record from before that owner. The headline counts in the table were not re-derived on `b193d5e0`.
 
-A later regeneration, after `docs:deps` learned `export * as`, re-counted the unused-file and no-test rows. `dependency-graph.json` `statistics` is 472 source files, 3555 exports, 1735 re-exports, 0 unused files, and 78 unused exports. `git ls-files 'src/**/*.ts' 'src/*.ts'` is 472. `TEST_COVERAGE.md` is 668 test files and 10 source files with no test import (462 of 472, 97.9 percent). The sentence that names 667 test files is the count from before the noun-phrase search test. The sentence that names 666 test files is the count from before the sound-speed test. The extra export and re-export are `export * as atlas`. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
+A later regeneration, after `docs:deps` learned `export * as`, re-counted the unused-file and no-test rows. `dependency-graph.json` `statistics` is 471 source files, 3555 exports, 1736 re-exports, 0 unused files, and 78 unused exports. `git ls-files 'src/**/*.ts' 'src/*.ts'` is 471. `TEST_COVERAGE.md` is 669 test files and 10 source files with no test import (461 of 471, 97.9 percent). The sentence that names 668 test files and 472 source files is the count from before `src/cli/temperature-bindings.ts` was deleted and the owner scan was added. The sentence that names 667 test files is the count from before the noun-phrase search test. The sentence that names 666 test files is the count from before the sound-speed test. The extra re-export is `readNamedAssignments`. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. This map points there and does not copy its rows. The table below stays the first measurement. The two rows that measurement no longer describes are marked in the cells.
 
 Anything below that was not opened in source, or that a second method did not confirm, is marked **INFERRED**.
 
@@ -110,7 +110,7 @@ flowchart TD
 1. A `be-<n>` target is redirected through `auditCoverage` and the catalog before `explainQuantity` (`explain.ts` `bridgeRedirect`, around the start of `run`). **INFERRED** on the interior of `bridgeRedirect` beyond the call to `auditCoverage`; the function starts at `explain.ts:141` per a read of that region.
 2. `resolveGraph` (`src/cli/graphs.ts:15`) reads `--source`. Default is `catalog` (`graphs.ts:20`). `canonical` uses `CANONICAL_GRAPH`. `both` concatenates the two graphs.
 3. The target name goes through `resolveToCatalogName` (`src/composition/user-equation.ts`) and then `nearQuantityNames` (`src/composition/aliases.ts:76`, edit distance). A miss asks `searchNameWords` (`src/cli/search-index.ts`).
-4. Inputs are `readNamedBinding` (`explain.ts:92`), then `alignTemperatureBinding` (`explain.ts:109`) with `kelvinScale` from `src/cli/temperature-bindings.ts`.
+4. Inputs are `readNamedAssignments` (`explain.ts:93`), which calls `readNamedBinding`. That function is the only caller of the energy-to-kelvin rule.
 5. `explainQuantity` (`src/composition/explain.ts:339`) classifies identifiability, retrodicts, and calls `evaluateEdge` (`src/composition/edge.ts:313`).
 
 Catalog edges and canonical edges share that function. The graph argument is what changes. Closed-form `BRIDGE_EVALUATORS` are not this path.
@@ -119,9 +119,9 @@ Catalog edges and canonical edges share that function. The graph argument is wha
 
 These are different commands.
 
-`upt evaluate` (`src/cli/commands/evaluate.ts:476`, name at 573) looks up `BRIDGE_EVALUATORS` and calls `evaluateBridge`. Inputs go through `resolveEvaluatorInputs` (`src/bridges/evaluator-inputs.ts`), which calls `bindingInUnit`. A missing id uses `missingEvaluatorMessage` (`src/bridges/evaluators.ts:577`): be-42 and be-16 have no id-keyed evaluator. Uncertainty for `--sigma` is `propagateEvaluatorUncertainty` (`evaluate.ts:161`), which calls MathTS `propagateUncertainty` and is a different function from `composition/uncertainty.ts`.
+`upt evaluate` (`src/cli/commands/evaluate.ts:478`, name at 575) looks up `BRIDGE_EVALUATORS` and calls `evaluateBridge`. Inputs go through `resolveEvaluatorInputs` (`src/bridges/evaluator-inputs.ts`). An absolute-temperature parameter calls `readNamedBinding` (`evaluator-inputs.ts:51`). Any other parameter calls `bindingInUnit` (`evaluator-inputs.ts:58`). `--sigma` still calls `bindingInUnit`. A missing id uses `missingEvaluatorMessage` (`src/bridges/evaluators.ts:577`): be-42 and be-16 have no id-keyed evaluator. Uncertainty for `--sigma` is `propagateEvaluatorUncertainty` (`evaluate.ts:163`), which calls MathTS `propagateUncertainty` and is a different function from `composition/uncertainty.ts`.
 
-`upt eval` (`src/cli/commands/eval.ts:112`, name at 196) parses a user formula. `getFormulaParser` (`src/numerical/formula-registry.ts:20`) always returns the MathTS parser (`formula-registry.ts:25-26`). Bindings are `readBinding` then `alignTemperatureBinding` (`eval.ts:60-69`).
+`upt eval` (`src/cli/commands/eval.ts:103`, name at 187) parses a user formula. `getFormulaParser` (`src/numerical/formula-registry.ts:20`) always returns the MathTS parser (`formula-registry.ts:25-26`). Bindings are `readNamedAssignments` (`eval.ts:56`).
 
 ### `upt search`
 
@@ -139,7 +139,7 @@ Matching is `matchEveryWord` (word index). Explain's edit-distance helper is a s
 
 ### `upt discover`
 
-`run` is `src/cli/commands/discover.ts:265`. `resolveGraph` selects the edge list. `rankDiscoveries` (`src/composition/discovery.ts:610`) builds a context and ranks link candidates from `proposeLinkCandidates` (`src/composition/bridge-analysis.ts`). `--derive` calls `deriveProposedBridges`. Anchor values use `readNamedBinding` (`src/cli/commands/_discovery-opts.ts:46`) and then `alignTemperatureBinding` (`_discovery-opts.ts:60`).
+`run` is `src/cli/commands/discover.ts:265`. `resolveGraph` selects the edge list. `rankDiscoveries` (`src/composition/discovery.ts:610`) builds a context and ranks link candidates from `proposeLinkCandidates` (`src/composition/bridge-analysis.ts`). `--derive` calls `deriveProposedBridges`. Anchor values use `readNamedAssignments` (`src/cli/commands/_discovery-opts.ts:50`).
 
 ### `upt audit`
 
@@ -147,7 +147,7 @@ Matching is `matchEveryWord` (word index). Explain's edit-distance helper is a s
 
 ### Library API versus the CLI barrel
 
-`src/index.ts` exports the catalog, both graphs, `explainQuantity`, `evaluateBridge`, `rankDiscoveries`, dimensional validation, and the `atlas` namespace. `src/cli-api.ts` re-exports much of that and also the CLI-only helpers: `attemptDerivation`, `getFormulaParser`, `compareWithCanonical`, `readBinding`, `alignTemperatureBinding`, the probe stack, and the atlas path/regime surface. Commands receive that object as `ctx.api`. They do not import `src/atlas/index.ts`.
+`src/index.ts` exports the catalog, both graphs, `explainQuantity`, `evaluateBridge`, `rankDiscoveries`, dimensional validation, and the `atlas` namespace. `src/cli-api.ts` re-exports much of that and also the CLI-only helpers: `attemptDerivation`, `getFormulaParser`, `compareWithCanonical`, `readBinding`, `readNamedBinding`, the probe stack, and the atlas path/regime surface. Commands receive that object as `ctx.api`. They do not import `src/atlas/index.ts`.
 
 ---
 
@@ -161,9 +161,9 @@ One unit table lives in `src/dimensional/units.ts`: `parseUnit`, `convertValue`,
 
 `readBinding` (`binding-value.ts:359`) accepts a bare number, a number plus a unit, or an expression whose unit literals were spliced out and parsed by the MathTS formula parser. `bindingInUnit` (`binding-value.ts:414`) uses `convertValue` for a plain number-plus-unit and `readBinding` for an expression. `readNamedBinding` (`binding-value.ts:337`) applies `QUANTITY_CONVENTION_UNIT` (`src/dimensional/unit-convention.ts:21-31`: GeV energies, bit, nat, one entropy in J/K) and otherwise returns `readBinding`.
 
-`alignTemperatureBinding` (`binding-value.ts:48-75`) divides an energy by `k_B` when the binding name is `T`, `temperature`, `temp`, or `T_K`. The module comment at `binding-value.ts:13-15` states that rule for a temperature name. Callers after `b193d5e0`: `upt eval` (`eval.ts:66-69`), `upt explain` (`explain.ts:109`, after `readNamedBinding` at `explain.ts:92`), discovery and map anchors (`_discovery-opts.ts:60`), regime coordinates (`regime.ts` `parseAt`, `alignTemperatureBinding` at `regime.ts:122` after `readBinding` at `regime.ts:108`), and a path sweep (`path.ts:189`). A path `--at` uses that same `parseAt` (`path.ts:1121`). The scale is `kelvinScale` in `src/cli/temperature-bindings.ts`, which reads `boltzmannBindingScale`. `upt evaluate` uses `bindingInUnit` with the evaluator's declared unit (`evaluator-inputs.ts:44`) and does not call `alignTemperatureBinding`. A path tolerance still uses `readBinding` (`path.ts:377`) and is not a temperature slot.
+`alignTemperatureBinding` (`binding-value.ts:50`) divides an energy by `k_B` when the binding name is `T`, `temperature`, `temp`, or `T_K`, or when the caller sets `asTemperature` for a declared kelvin parameter. The module comment at `binding-value.ts:13-15` states that rule for a temperature name. The only call is `readNamedBinding` (`binding-value.ts:380`). `readNamedAssignments` raw-reads the list, takes the Boltzmann scale (`boltzmann-constant`, then `k_B`, then `kB`, else CODATA), and calls `readNamedBinding` with that scale. Callers: `upt eval` (`eval.ts:56`), `upt explain` (`explain.ts:93`), discovery and map anchors (`_discovery-opts.ts:50`), regime coordinates (`regime.ts` `parseAt`), and a path sweep (`path.ts`, `readNamedBinding`). A path `--at` uses that same `parseAt`. `upt evaluate` sends an absolute-temperature parameter through `readNamedBinding` and every other parameter through `bindingInUnit`. A path tolerance still uses `readBinding` and is not a temperature slot. `bindingInUnit('10eV', 'K')` still throws.
 
-So `temperature=10eV` is kelvin on explain, eval, a discovery anchor, a regime coordinate, and a path sweep, and a dimension error on evaluate. That remaining evaluate rejection is the split issue 386 still has on `upt evaluate`.
+So `temperature=10eV` is kelvin on explain, eval, evaluate, a discovery anchor, a regime coordinate, and a path sweep. A joule binding on a non-temperature name stays joules. The sentence that evaluate rejects that energy is the record from before this owner.
 
 ### Quantity names and aliases
 

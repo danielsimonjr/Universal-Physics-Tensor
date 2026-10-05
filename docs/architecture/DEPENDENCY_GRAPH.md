@@ -42,7 +42,7 @@ The codebase is organized into the following modules:
 - **bridges**: 129 files
 - **canonical**: 19 files
 - **cases**: 9 files
-- **cli**: 56 files
+- **cli**: 55 files
 - **root**: 1 file
 - **composition**: 91 files
 - **core**: 11 files
@@ -3056,7 +3056,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/units.js` | `unitConventionNotes, UnitError, TemperatureReading` | Import |
-| `../numerical/binding-value.js` | `bindingInUnit` | Import |
+| `../numerical/binding-value.js` | `bindingInUnit, boltzmannBindingScale, readNamedBinding` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
 **Exports:**
@@ -3953,9 +3953,8 @@ The codebase is organized into the following modules:
 | `../args.js` | `ParsedArgs` | Import (type-only) |
 | `../errors.js` | `CliError, UsageError` | Import |
 | `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
-| `../../numerical/binding-value.js` | `alignTemperatureBinding, readNamedBinding, BindingValue` | Import |
+| `../../numerical/binding-value.js` | `readNamedAssignments` | Import |
 | `../../dimensional/units.js` | `UnitError` | Import |
-| `../temperature-bindings.js` | `kelvinScale` | Import |
 
 **Exports:**
 - Functions: `parseDiscoveryOpts`
@@ -4215,9 +4214,8 @@ The codebase is organized into the following modules:
 | `../../bridges/carrier-sign.js` | `CarrierSignError` | Import |
 | `../errors.js` | `UsageError, CliError` | Import |
 | `../search-index.js` | `searchNameWords` | Import |
-| `../../numerical/binding-value.js` | `alignTemperatureBinding, readNamedBinding` | Import |
+| `../../numerical/binding-value.js` | `readNamedAssignments` | Import |
 | `../../dimensional/units.js` | `UnitError` | Import |
-| `../temperature-bindings.js` | `kelvinScale` | Import |
 | `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms` | Import |
 | `../../composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `../../composition/explain.js` | `formatQuantity` | Import |
@@ -4442,7 +4440,6 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../args.js` | `FlagSpec` | Import (type-only) |
-| `../temperature-bindings.js` | `kelvinScale` | Import |
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
@@ -4792,20 +4789,6 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/cli/temperature-bindings.ts` - Joules per kelvin for a temperature binding.
-
-**Internal Dependencies:**
-| File | Imports | Type |
-|------|---------|------|
-| `../dimensional/algebra.js` | `equals` | Import |
-| `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
-| `../numerical/binding-value.js` | `boltzmannBindingScale, BindingValue` | Import |
-
-**Exports:**
-- Functions: `kelvinScale`
-
----
-
 ### `src/cli/top-level-help.ts` - `upt --help` is the registered commands' own help, not a second copy.
 
 **Internal Dependencies:**
@@ -4913,7 +4896,7 @@ The codebase is organized into the following modules:
 | `./atlas/catalog-formal-ref.js` | `catalogFormalRef` | Re-export |
 | `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
 | `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
-| `./numerical/binding-value.js` | `readBinding, bindingInUnit, alignTemperatureBinding, boltzmannBindingScale` | Re-export |
+| `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding, readNamedAssignments, boltzmannBindingScale` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./core/constants.js` | `C_SI, G_SI` | Re-export |
@@ -4963,9 +4946,9 @@ The codebase is organized into the following modules:
   AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
   ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
   kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding,
-  bindingInUnit, alignTemperatureBinding, boltzmannBindingScale, builtinFormulaDimensionChecker,
-  missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType,
-  EquationAnalysis
+  bindingInUnit, readNamedBinding, readNamedAssignments, boltzmannBindingScale,
+  builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -8060,8 +8043,8 @@ The codebase is organized into the following modules:
 | `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
 **Exports:**
-- Interfaces: `BindingValue`
-- Functions: `alignTemperatureBinding`, `boltzmannBindingScale`, `readNamedBinding`, `readBinding`, `bindingInUnit`, `readParameter`
+- Interfaces: `BindingValue`, `NamedBindingOptions`
+- Functions: `boltzmannBindingScale`, `readNamedBinding`, `readNamedAssignments`, `readBinding`, `bindingInUnit`, `readParameter`
 
 ---
 
@@ -8867,7 +8850,7 @@ graph TD
         N26[command]
         N27[_atlas-map]
         N28[_atlas-route]
-        N29[...51 more]
+        N29[...50 more]
     end
 
     subgraph Root
@@ -8967,14 +8950,14 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 472 |
+| Total TypeScript Files | 471 |
 | Total Modules | 13 |
-| Total Lines of Code | 100117 |
+| Total Lines of Code | 100124 |
 | Total Exports | 3555 |
-| Total Re-exports | 1735 |
+| Total Re-exports | 1736 |
 | Total Classes | 61 |
-| Total Interfaces | 560 |
-| Total Functions | 850 |
+| Total Interfaces | 561 |
+| Total Functions | 849 |
 | Total Type Guards | 5 |
 | Total Enums | 0 |
 | Type-only Imports | 583 |

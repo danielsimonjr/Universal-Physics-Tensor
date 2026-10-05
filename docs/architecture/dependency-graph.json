@@ -2,7 +2,7 @@
   "metadata": {
     "name": "universal-physics-tensor",
     "version": "5.0.0",
-    "totalFiles": 472,
+    "totalFiles": 471,
     "totalModules": 13,
     "totalExports": 3555
   },
@@ -9659,7 +9659,9 @@
           {
             "file": "../numerical/binding-value.js",
             "imports": [
-              "bindingInUnit"
+              "bindingInUnit",
+              "boltzmannBindingScale",
+              "readNamedBinding"
             ]
           },
           {
@@ -13127,21 +13129,13 @@
           {
             "file": "../../numerical/binding-value.js",
             "imports": [
-              "alignTemperatureBinding",
-              "readNamedBinding",
-              "BindingValue"
+              "readNamedAssignments"
             ]
           },
           {
             "file": "../../dimensional/units.js",
             "imports": [
               "UnitError"
-            ]
-          },
-          {
-            "file": "../temperature-bindings.js",
-            "imports": [
-              "kelvinScale"
             ]
           }
         ],
@@ -14020,20 +14014,13 @@
           {
             "file": "../../numerical/binding-value.js",
             "imports": [
-              "alignTemperatureBinding",
-              "readNamedBinding"
+              "readNamedAssignments"
             ]
           },
           {
             "file": "../../dimensional/units.js",
             "imports": [
               "UnitError"
-            ]
-          },
-          {
-            "file": "../temperature-bindings.js",
-            "imports": [
-              "kelvinScale"
             ]
           },
           {
@@ -14843,12 +14830,6 @@
               "FlagSpec"
             ],
             "typeOnly": true
-          },
-          {
-            "file": "../temperature-bindings.js",
-            "imports": [
-              "kelvinScale"
-            ]
           },
           {
             "file": "../command.js",
@@ -15929,38 +15910,6 @@
           "STATUS_GLOSSARY"
         ]
       },
-      "src/cli/temperature-bindings.ts": {
-        "description": "Joules per kelvin for a temperature binding.",
-        "externalDependencies": [],
-        "nodeDependencies": [],
-        "internalDependencies": [
-          {
-            "file": "../dimensional/algebra.js",
-            "imports": [
-              "equals"
-            ]
-          },
-          {
-            "file": "../dimensional/symbolic-constants.js",
-            "imports": [
-              "CONSTANTS"
-            ]
-          },
-          {
-            "file": "../numerical/binding-value.js",
-            "imports": [
-              "boltzmannBindingScale",
-              "BindingValue"
-            ]
-          }
-        ],
-        "exports": [
-          "kelvinScale"
-        ],
-        "functions": [
-          "kelvinScale"
-        ]
-      },
       "src/cli/top-level-help.ts": {
         "description": "`upt --help` is the registered commands' own help, not a second copy.",
         "externalDependencies": [],
@@ -16658,7 +16607,8 @@
             "imports": [
               "readBinding",
               "bindingInUnit",
-              "alignTemperatureBinding",
+              "readNamedBinding",
+              "readNamedAssignments",
               "boltzmannBindingScale"
             ],
             "reExport": true
@@ -16865,7 +16815,8 @@
           "type MetricId",
           "readBinding",
           "bindingInUnit",
-          "alignTemperatureBinding",
+          "readNamedBinding",
+          "readNamedAssignments",
           "boltzmannBindingScale",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
@@ -17103,7 +17054,8 @@
           "type MetricId",
           "readBinding",
           "bindingInUnit",
-          "alignTemperatureBinding",
+          "readNamedBinding",
+          "readNamedAssignments",
           "boltzmannBindingScale",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
@@ -30809,20 +30761,21 @@
           }
         ],
         "exports": [
-          "alignTemperatureBinding",
           "boltzmannBindingScale",
           "readNamedBinding",
+          "readNamedAssignments",
           "readBinding",
           "bindingInUnit",
           "readParameter"
         ],
         "interfaces": [
-          "BindingValue"
+          "BindingValue",
+          "NamedBindingOptions"
         ],
         "functions": [
-          "alignTemperatureBinding",
           "boltzmannBindingScale",
           "readNamedBinding",
+          "readNamedAssignments",
           "readBinding",
           "bindingInUnit",
           "readParameter"
@@ -33212,7 +33165,6 @@
           "src/cli/record.ts",
           "src/cli/search-index.ts",
           "src/cli/statuses.ts",
-          "src/cli/temperature-bindings.ts",
           "src/cli/top-level-help.ts",
           "src/cli/version.ts"
         ]
@@ -33449,17 +33401,17 @@
     ]
   },
   "statistics": {
-    "totalTypeScriptFiles": 472,
+    "totalTypeScriptFiles": 471,
     "totalModules": 13,
-    "totalLinesOfCode": 100117,
+    "totalLinesOfCode": 100124,
     "totalExports": 3555,
     "totalClasses": 61,
-    "totalInterfaces": 560,
-    "totalFunctions": 850,
+    "totalInterfaces": 561,
+    "totalFunctions": 849,
     "totalTypeGuards": 5,
     "totalEnums": 0,
     "totalConstants": 911,
-    "totalReExports": 1735,
+    "totalReExports": 1736,
     "totalTypeOnlyImports": 583,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

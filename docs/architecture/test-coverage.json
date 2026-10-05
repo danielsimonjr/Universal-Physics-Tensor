@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "totalSourceFiles": 472,
-    "totalTestFiles": 668,
-    "testedCount": 462,
+    "totalSourceFiles": 471,
+    "totalTestFiles": 669,
+    "testedCount": 461,
     "untestedCount": 10,
     "coveragePercent": "97.9"
   },
@@ -292,7 +292,6 @@
     "src/cli/published-url.ts",
     "src/cli/search-index.ts",
     "src/cli/statuses.ts",
-    "src/cli/temperature-bindings.ts",
     "src/cli/version.ts",
     "src/composition/adjudication.ts",
     "src/composition/aliases.ts",
@@ -10656,9 +10655,6 @@
       "tests/cli/output.test.ts",
       "tests/cli/statuses.test.ts"
     ],
-    "src/cli/temperature-bindings.ts": [
-      "tests/cli/explain-temperature-binding.test.ts"
-    ],
     "src/cli/top-level-help.ts": [],
     "src/cli/version.ts": [
       "tests/cli/output.test.ts"
@@ -15676,6 +15672,7 @@
       "src/core/regimes-builtins.ts"
     ],
     "tests/api/public-tag-vs-index-invariant.test.ts": [],
+    "tests/architecture/single-owner.test.ts": [],
     "tests/atlas/applicability.test.ts": [
       "src/dimensional/ast-builders.ts",
       "src/dimensional/ast-types.ts",
@@ -23885,8 +23882,7 @@
       "src/cli/commands/search.ts",
       "src/cli/commands/retrieve.ts",
       "src/cli/commands/metric.ts",
-      "src/cli/commands/testplan.ts",
-      "src/cli/temperature-bindings.ts"
+      "src/cli/commands/testplan.ts"
     ],
     "tests/cli/frontier.test.ts": [
       "src/cli/main.ts",

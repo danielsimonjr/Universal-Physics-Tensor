@@ -18,7 +18,6 @@
  * there is no box and the command says so rather than inventing one.
  */
 import type { FlagSpec } from '../args.js';
-import { kelvinScale } from '../temperature-bindings.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
@@ -91,12 +90,7 @@ export function parseAt(
   command: string,
   notes?: string[],
 ): Record<string, number> {
-  const pending: {
-    name: string;
-    raw: string;
-    token: string;
-    read: ReturnType<CommandCtx['api']['readBinding']>;
-  }[] = [];
+  const pending: { name: string; raw: string; token: string }[] = [];
   for (const token of raw) {
     const eq = token.indexOf('=');
     if (eq <= 0) {
@@ -104,35 +98,28 @@ export function parseAt(
     }
     const name = token.slice(0, eq);
     const rawValue = token.slice(eq + 1);
-    try {
-      const read = api.readBinding(rawValue);
-      if (rawValue === '' || !Number.isFinite(read.value)) {
-        throw new CliError(`upt ${command}: '${token}' is not a finite number`);
-      }
-      pending.push({ name, raw: rawValue, token, read });
-    } catch (e) {
-      if (e instanceof CliError) throw e;
-      throw new CliError(`upt ${command}: '${token}' is not a finite number. ${(e as Error).message}`);
-    }
+    if (rawValue === '') throw new CliError(`upt ${command}: '${token}' is not a finite number`);
+    pending.push({ name, raw: rawValue, token });
   }
-  const kB = kelvinScale(pending);
+  let rows: ReturnType<CommandCtx['api']['readNamedAssignments']>;
+  try {
+    rows = api.readNamedAssignments(pending);
+  } catch (e) {
+    const token = pending.find((p) => (e as Error).message.includes(p.name))?.token ?? pending[0]?.token ?? '';
+    if (e instanceof api.UnitError && /is a temperature/.test(e.message)) {
+      throw new CliError(`upt ${command}: '${token}' is not a temperature. ${e.message}`);
+    }
+    throw new CliError(`upt ${command}: '${token}' is not a finite number. ${(e as Error).message}`);
+  }
   const point: Record<string, number> = {};
-  for (const p of pending) {
-    try {
-      const aligned = api.alignTemperatureBinding(p.name, p.raw, p.read, kB);
-      if (!Number.isFinite(aligned.value)) {
-        throw new CliError(`upt ${command}: '${p.token}' is not a finite number`);
-      }
-      point[p.name] = aligned.value;
-      if (notes !== undefined) {
-        for (const note of aligned.notes) if (!notes.includes(note)) notes.push(note);
-      }
-    } catch (e) {
-      if (e instanceof CliError) throw e;
-      if (e instanceof api.UnitError) {
-        throw new CliError(`upt ${command}: '${p.token}' is not a temperature. ${e.message}`);
-      }
-      throw new CliError(`upt ${command}: '${p.token}' is not a finite number. ${(e as Error).message}`);
+  for (const row of rows) {
+    const token = pending.find((p) => p.name === row.name)?.token ?? `${row.name}=${row.raw}`;
+    if (!Number.isFinite(row.read.value)) {
+      throw new CliError(`upt ${command}: '${token}' is not a finite number`);
+    }
+    point[row.name] = row.read.value;
+    if (notes !== undefined) {
+      for (const note of row.read.notes) if (!notes.includes(note)) notes.push(note);
     }
   }
   return point;

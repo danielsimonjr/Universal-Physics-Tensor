@@ -10,9 +10,9 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Source Files | 472 |
-| Total Test Files | 668 |
-| Source Files with Tests | 462 |
+| Total Source Files | 471 |
+| Total Test Files | 669 |
+| Source Files with Tests | 461 |
 | Source Files without Tests | 10 |
 | Coverage | 97.9% |
 
@@ -320,7 +320,6 @@ The following 10 source files are not directly imported by any test file:
 | `cli/published-url.ts` | `audit-improvements.test.ts`, `published-citation.test.ts` |
 | `cli/search-index.ts` | `regime-search.test.ts`, `suggest-token-length.test.ts` |
 | `cli/statuses.ts` | `output.test.ts`, `statuses.test.ts` |
-| `cli/temperature-bindings.ts` | `explain-temperature-binding.test.ts` |
 | `cli/version.ts` | `output.test.ts` |
 | `composition/adjudication.ts` | `atlas-public-closure.test.ts`, `gm-sun-units-public.test.ts`, `public-surface.test.ts`, `association.test.ts`, `bridge-equations-facade.test.ts`, `catalog-json.test.ts`, `public-api-stability.test.ts`, `atlas-evidence.test.ts`, `audit-improvements.test.ts`, `explain-temperature-binding.test.ts`, `graphs.test.ts`, `map-atlas-results.test.ts`, `map-atlas-views.test.ts`, `recover-conventions.test.ts`, `regime-search.test.ts`, `suggest-token-length.test.ts`, `adjudication-annotate.test.ts`, `adjudication-id.test.ts`, `adjudication-registry.test.ts`, `discovery-calibration.test.ts`, `orphan-connectors.test.ts`, `modules.test.ts`, `confrontation-golden.test.ts`, `tensor.test.ts` |
 | `composition/aliases.ts` | `physjs-be69-73.test.ts`, `explain-synonym-monomial.test.ts` |
@@ -522,6 +521,7 @@ The following 10 source files are not directly imported by any test file:
 | `api/optional-peer-absence.test.ts` | 0 files |
 | `api/public-surface.test.ts` | 177 files |
 | `api/public-tag-vs-index-invariant.test.ts` | 0 files |
+| `architecture/single-owner.test.ts` | 0 files |
 | `atlas/applicability.test.ts` | 6 files |
 | `atlas/association.test.ts` | 38 files |
 | `atlas/atlas-json.test.ts` | 3 files |
@@ -825,7 +825,7 @@ The following 10 source files are not directly imported by any test file:
 | `cli/explain-quantity-format.test.ts` | 31 files |
 | `cli/explain-sound-speed.test.ts` | 32 files |
 | `cli/explain-synonym-monomial.test.ts` | 33 files |
-| `cli/explain-temperature-binding.test.ts` | 267 files |
+| `cli/explain-temperature-binding.test.ts` | 266 files |
 | `cli/frontier.test.ts` | 30 files |
 | `cli/gauss-unit-name.test.ts` | 31 files |
 | `cli/gr-dogfood-cli.test.ts` | 31 files |

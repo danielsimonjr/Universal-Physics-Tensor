@@ -43,15 +43,18 @@ const TEMPERATURE_BINDING_NAMES = new Set(['T', 'temperature', 'temp', 'T_K']);
  * A temperature binding speaks kelvin. An energy is `k_B T` (the joules
  * divided by `kB`). Any other dimension is refused. A bare number, a
  * temperature, and a name that is not a temperature are unchanged.
- * @internal
+ *
+ * Only {@link readNamedBinding} calls this. `asTemperature` is a declared
+ * kelvin parameter whose key is not one of the four names (`T_c_K`).
  */
-export function alignTemperatureBinding(
+function alignTemperatureBinding(
   name: string,
   raw: string,
   read: BindingValue,
   kB: number = K_B_SI,
+  asTemperature = false,
 ): BindingValue {
-  if (!TEMPERATURE_BINDING_NAMES.has(name) || !read.dimensioned || equals(read.dimension, TEMPERATURE)) {
+  if ((!asTemperature && !TEMPERATURE_BINDING_NAMES.has(name)) || !read.dimensioned || equals(read.dimension, TEMPERATURE)) {
     return read;
   }
   if (equals(read.dimension, ENERGY)) {
@@ -75,13 +78,19 @@ export function alignTemperatureBinding(
 }
 
 /**
- * Joules per kelvin for {@link alignTemperatureBinding}. An explicit `k_B`
- * or `kB` binding wins when it is a bare number or already in J/K.
+ * Joules per kelvin for a temperature binding in this assignment list.
+ * `boltzmann-constant` wins when it is a bare number or already in J/K;
+ * otherwise `k_B`, then `kB`, then the CODATA value. Any other dimension
+ * on those names falls through.
  * @internal
  */
 export function boltzmannBindingScale(
   pending: readonly { name: string; read: BindingValue }[],
 ): number {
+  const named = pending.find((p) => p.name === 'boltzmann-constant');
+  if (named !== undefined && (!named.read.dimensioned || equals(named.read.dimension, SYMBOLIC.k_B.dim))) {
+    return named.read.value;
+  }
   const hit = pending.find((p) => p.name === 'k_B') ?? pending.find((p) => p.name === 'kB');
   if (hit === undefined) return K_B_SI;
   if (!hit.read.dimensioned || equals(hit.read.dimension, SYMBOLIC.k_B.dim)) return hit.read.value;
@@ -327,21 +336,28 @@ function plainUnit(raw: string, reading: TemperatureReading): BindingValue | nul
   };
 }
 
+/** Options for {@link readNamedBinding}. `kB` is joules per kelvin. */
+export interface NamedBindingOptions {
+  readonly mode?: UnitMode;
+  readonly reading?: TemperatureReading;
+  /** Joules per kelvin. Omitted, the CODATA value. */
+  readonly kB?: number;
+  /**
+   * The caller declared this parameter's dimension as temperature
+   * (`T_c_K`). The four names `T`, `temperature`, `temp`, and `T_K`
+   * are temperatures without this flag.
+   */
+  readonly asTemperature?: boolean;
+}
+
 /**
- * Read a binding for a named quantity. A name in the convention table is
- * returned in that unit: a bare number is already in it, and a unit
- * converts into it. Any other name is {@link readBinding} (SI when the
- * value carries a unit).
- * @internal
+ * The named reading before the temperature rule. A convention-unit name
+ * is returned in that unit. Any other name is {@link readBinding}.
  */
-export function readNamedBinding(
-  name: string,
-  raw: string,
-  opts?: { readonly mode?: UnitMode; readonly reading?: TemperatureReading },
-): BindingValue {
+function readNamedQuantity(name: string, raw: string, opts?: NamedBindingOptions): BindingValue {
   const unit = quantityConventionUnit(name);
-  if (unit === undefined) return readBinding(raw, opts);
   const reading = opts?.reading ?? 'absolute';
+  if (unit === undefined) return readBinding(raw, { mode: opts?.mode, reading });
   const converted = bindingInUnit(raw, unit, reading, opts?.mode);
   return {
     value: converted.value,
@@ -349,6 +365,38 @@ export function readNamedBinding(
     dimension: parseUnit(unit).dim,
     notes: unitConventionNotes(converted.given),
   };
+}
+
+/**
+ * Read a binding for a named quantity. A temperature name, or
+ * `asTemperature`, speaks kelvin: an energy is `k_B T` and any other
+ * dimension is an error. A name in the convention table is returned in
+ * that unit. Any other name is {@link readBinding} (SI when the value
+ * carries a unit). This is the only caller of the temperature rule.
+ * @internal
+ */
+export function readNamedBinding(name: string, raw: string, opts?: NamedBindingOptions): BindingValue {
+  const read = readNamedQuantity(name, raw, opts);
+  return alignTemperatureBinding(name, raw, read, opts?.kB ?? K_B_SI, opts?.asTemperature === true);
+}
+
+/**
+ * Read every assignment, then apply the temperature rule once with the
+ * Boltzmann scale of the unaligned list. A temperature binding is not
+ * scaled before that scale is known.
+ * @internal
+ */
+export function readNamedAssignments(
+  items: readonly { name: string; raw: string }[],
+  opts?: NamedBindingOptions,
+): { name: string; raw: string; read: BindingValue }[] {
+  const raw = items.map((item) => ({ name: item.name, raw: item.raw, read: readNamedQuantity(item.name, item.raw, opts) }));
+  const kB = boltzmannBindingScale(raw);
+  return raw.map((item) => ({
+    name: item.name,
+    raw: item.raw,
+    read: readNamedBinding(item.name, item.raw, { ...opts, kB }),
+  }));
 }
 
 /**

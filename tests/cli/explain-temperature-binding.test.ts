@@ -1,17 +1,15 @@
 /**
- * `upt eval` reads an energy on `T`, `temperature`, `temp`, or `T_K` as
- * `k_B T`. `upt explain` stored the joule magnitude in the kelvin slot, so
- * `temperature=10eV` was about `1.6e-19` K. Issue #386.
- *
- * `upt evaluate` keeps the declared-unit rejection: eV is not kelvin.
+ * An energy on a temperature name is `k_B T`. `readNamedBinding` is the only
+ * reader that applies that rule. `upt eval`, `upt explain`, `upt evaluate`,
+ * a discovery anchor, a regime coordinate, and a path sweep all call it.
+ * `bindingInUnit` still refuses an energy in a declared kelvin unit.
  */
 import { describe, expect, it } from 'vitest';
 import * as api from '../../src/cli-api.js';
 import { runCli } from '../../src/cli/main.js';
 import { parseAt } from '../../src/cli/commands/regime.js';
 import { parseSweep } from '../../src/cli/commands/path.js';
-import { kelvinScale } from '../../src/cli/temperature-bindings.js';
-import { readNamedBinding } from '../../src/numerical/binding-value.js';
+import { bindingInUnit, boltzmannBindingScale, readNamedBinding } from '../../src/numerical/binding-value.js';
 import { E_SI, K_B_SI } from '../../src/core/constants.js';
 
 function capture() {
@@ -135,15 +133,55 @@ describe('explain temperature bindings', () => {
     expect(text(cap)).not.toMatch(/Recovered value/);
   });
 
-  it('upt evaluate be-76 still rejects T_K=10eV', async () => {
-    const cap = capture();
+  it('upt evaluate be-76 reads T_K=10eV as the kelvin whose kT is 10 eV', async () => {
+    const pressure = '5.72957794818894e-11';
+    const energy = capture();
+    expect(await runCli(['evaluate', 'be-76', 'n_per_m3=5e6', 'T_K=10eV', `p_B_Pa=${pressure}`], energy.io)).toBe(0);
+    const kelvin = capture();
     expect(
-      await runCli(
-        ['evaluate', 'be-76', 'n_per_m3=5e6', 'T_K=10eV', 'p_B_Pa=5.72957794818894e-11'],
-        cap.io,
-      ),
-    ).toBe(1);
-    expect(text(cap)).not.toMatch(/beta/);
+      await runCli(['evaluate', 'be-76', 'n_per_m3=5e6', `T_K=${KELVIN_10EV}`, `p_B_Pa=${pressure}`], kelvin.io),
+    ).toBe(0);
+    const beta = (body: string): number => {
+      const m = /beta = ([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/.exec(body);
+      if (m === null) throw new Error(`no beta in:\n${body}`);
+      return Number(m[1]);
+    };
+    expect(beta(text(energy))).toBeCloseTo(beta(text(kelvin)), 8);
+    expect(beta(text(energy))).toBeCloseTo(0.139816287385219, 5);
+    expect(text(energy)).toMatch(/k_B T/);
+    expect(text(energy)).not.toMatch(/1\.602176634e-18/);
+  });
+
+  it('upt evaluate reads an energy on a declared kelvin parameter that is not named T_K', async () => {
+    const energy = capture();
+    expect(await runCli(['evaluate', 'be-62', 'T_c_K=10eV'], energy.io)).toBe(0);
+    const kelvin = capture();
+    expect(await runCli(['evaluate', 'be-62', `T_c_K=${KELVIN_10EV}`], kelvin.io)).toBe(0);
+    const gap = (body: string): number => {
+      const m = /gap_0_J = ([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/.exec(body);
+      if (m === null) throw new Error(`no gap in:\n${body}`);
+      return Number(m[1]);
+    };
+    expect(gap(text(energy))).toBeCloseTo(gap(text(kelvin)), 6);
+    expect(gap(text(energy))).toBeGreaterThan(1e-18);
+  });
+
+  it('bindingInUnit alone rejects an energy in kelvin, and a non-temperature name stays joules', () => {
+    expect(() => bindingInUnit('10eV', 'K')).toThrow(/\[energy\]/);
+    const temperature = readNamedBinding('T_K', '10eV');
+    expect(temperature.value).toBeCloseTo(KELVIN_10EV, 8);
+    expect(temperature.value).not.toBeCloseTo(10 * E_SI, 6);
+    expect(temperature.notes.join('\n')).toMatch(/k_B T/);
+    const energy = readNamedBinding('energy', '10eV');
+    expect(energy.value).toBeCloseTo(10 * E_SI, 8);
+    expect(energy.notes.join('\n')).not.toMatch(/k_B T/);
+  });
+
+  it('upt eval leaves energy=10eV in joules', async () => {
+    const cap = capture();
+    expect(await runCli(['eval', 'energy', 'energy=10eV'], cap.io)).toBe(0);
+    expect(Number(text(cap).trim())).toBeCloseTo(10 * E_SI, 8);
+    expect(errText(cap)).not.toMatch(/k_B T/);
   });
 
   it('reads a discovery anchor temperature=10eV as kelvin', async () => {
@@ -176,9 +214,12 @@ describe('explain temperature bindings', () => {
   it('prefers a bare boltzmann-constant, and ignores one that is not J/K', () => {
     const doubled = readNamedBinding('boltzmann-constant', String(2 * K_B_SI));
     const explicit = readNamedBinding('k_B', '2');
-    expect(kelvinScale([{ name: 'boltzmann-constant', read: doubled }, { name: 'k_B', read: explicit }])).toBeCloseTo(2 * K_B_SI, 12);
+    expect(boltzmannBindingScale([{ name: 'boltzmann-constant', read: doubled }, { name: 'k_B', read: explicit }])).toBeCloseTo(
+      2 * K_B_SI,
+      12,
+    );
     const energy = readNamedBinding('boltzmann-constant', '10eV');
-    expect(kelvinScale([{ name: 'boltzmann-constant', read: energy }, { name: 'k_B', read: explicit }])).toBe(2);
-    expect(kelvinScale([{ name: 'temperature', read: readNamedBinding('temperature', '300') }])).toBeCloseTo(K_B_SI, 12);
+    expect(boltzmannBindingScale([{ name: 'boltzmann-constant', read: energy }, { name: 'k_B', read: explicit }])).toBe(2);
+    expect(boltzmannBindingScale([{ name: 'temperature', read: readNamedBinding('temperature', '300') }])).toBeCloseTo(K_B_SI, 12);
   });
 });

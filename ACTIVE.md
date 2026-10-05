@@ -43,8 +43,9 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 - [ ] Implement phase 1 of the 6.0.0 integration: generate the PhysJS table from the vendored manifest.
   The generate step replaces the hand-copy in `WORKFLOWS.md`. Editing a theorem in the generated file without editing the manifest fails the formal gate. A manifest entry with no bridge still fails. Tests that hardcoded the commit string read the manifest.
 
-- [ ] Implement phase 2 of the 6.0.0 integration: one temperature and unit reader.
+- [x] Implement phase 2 of the 6.0.0 integration: one temperature and unit reader.
   Explain, evaluate, eval, a discovery anchor, a regime coordinate, and a path sweep of an energy on a temperature name agree on the kelvin value. A metre on a temperature name throws. An energy on a non-temperature name stays joules. `upt evaluate` converts.
+  Done: `readNamedBinding` is the only caller of `alignTemperatureBinding`. `upt evaluate be-76 T_K=10eV` prints `beta = 0.13981628738521928`. `bindingInUnit('10eV', 'K')` throws. `energy=10eV` stays joules. `temperature=1m` exits 1. `src/cli/temperature-bindings.ts` is deleted.
 
 - [ ] Implement phase 3 of the 6.0.0 integration: one name table and one edit distance.
   Resolution uses optimal string alignment at distance at most 1. `erasure-energy` and the Landauer quantity are one quantity. A Debye-length miss does not suggest the phonon family. A Reynolds-number search does not hit the analogy. A Prandtl-number search names that bridge and says the match is the gloss.

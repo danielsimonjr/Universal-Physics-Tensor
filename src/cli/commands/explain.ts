@@ -20,9 +20,8 @@ import { emitJson } from '../output.js';
 import { CarrierSignError } from '../../bridges/carrier-sign.js';
 import { UsageError, CliError } from '../errors.js';
 import { searchNameWords } from '../search-index.js';
-import { alignTemperatureBinding, readNamedBinding } from '../../numerical/binding-value.js';
+import { readNamedAssignments } from '../../numerical/binding-value.js';
 import { UnitError } from '../../dimensional/units.js';
-import { kelvinScale } from '../temperature-bindings.js';
 import {
   aliasesForTarget,
   nearQuantityNames,
@@ -83,49 +82,41 @@ function parseKnown(args: readonly string[]): { known: string[] | Record<string,
     );
   }
 
-  const pending: { name: string; raw: string; assignment: string; read: ReturnType<typeof readNamedBinding> }[] = [];
+  const pending: { name: string; raw: string; assignment: string }[] = [];
   for (const a of args) {
     const eq = a.indexOf('=');
-    const name = a.slice(0, eq);
-    const raw = a.slice(eq + 1);
-    let read: ReturnType<typeof readNamedBinding>;
-    try {
-      read = readNamedBinding(name, raw);
-    } catch {
-      throw new UsageError(`upt: '${a}' is not a finite number. Expected ${name}=<number>. See \`upt help\`.`);
-    }
-    if (raw === '' || !Number.isFinite(read.value)) {
-      throw new UsageError(`upt: '${a}' is not a finite number. Expected ${name}=<number>. See \`upt help\`.`);
-    }
-    pending.push({ name, raw, assignment: a, read });
+    pending.push({ name: a.slice(0, eq), raw: a.slice(eq + 1), assignment: a });
   }
 
-  // The same reading as `upt eval`: an energy on a temperature name is k_B T.
-  // Eval wired this in parseScope. Explain used to keep the joule magnitude.
-  const kB = kelvinScale(pending);
+  let rows: ReturnType<typeof readNamedAssignments>;
+  try {
+    rows = readNamedAssignments(pending);
+  } catch (e) {
+    if (e instanceof UnitError && /is a temperature/.test(e.message)) {
+      const hit = pending.find((p) => e.message.includes(p.name));
+      throw new CliError(`upt explain: '${hit?.assignment ?? ''}' is not a temperature. ${e.message}`);
+    }
+    const msg = e instanceof Error ? e.message : String(e);
+    const hit = pending.find((p) => msg.includes(`'${p.raw.trim()}'`) || msg.includes(`${p.name}=`));
+    const name = hit?.name ?? pending[0]?.name ?? '';
+    throw new UsageError(
+      `upt: '${hit?.assignment ?? ''}' is not a finite number. Expected ${name}=<number>. See \`upt help\`.`,
+    );
+  }
   const values: Record<string, number> = {};
   const notes: string[] = [];
-  for (const p of pending) {
-    try {
-      const aligned = alignTemperatureBinding(p.name, p.raw, p.read, kB);
-      if (!Number.isFinite(aligned.value)) {
-        throw new UsageError(
-          `upt: '${p.assignment}' is not a finite number. Expected ${p.name}=<number>. See \`upt help\`.`,
-        );
-      }
-      values[p.name] = aligned.value;
-      // Unit-convention notes were already on the binding and explain did not
-      // print them. The temperature reading adds a note; that one is new.
-      for (const note of aligned.notes) {
-        if (p.read.notes.includes(note) || notes.includes(note)) continue;
-        notes.push(note);
-      }
-    } catch (e) {
-      if (e instanceof UsageError) throw e;
-      if (e instanceof UnitError) {
-        throw new CliError(`upt explain: '${p.assignment}' is not a temperature. ${e.message}`);
-      }
-      throw e;
+  for (const row of rows) {
+    if (row.raw === '' || !Number.isFinite(row.read.value)) {
+      throw new UsageError(
+        `upt: '${row.name}=${row.raw}' is not a finite number. Expected ${row.name}=<number>. See \`upt help\`.`,
+      );
+    }
+    values[row.name] = row.read.value;
+    // Unit-convention notes were already on the binding and explain did not
+    // print them. The temperature reading adds a k_B T note; that one is new.
+    for (const note of row.read.notes) {
+      if (!note.includes('k_B T') || notes.includes(note)) continue;
+      notes.push(note);
     }
   }
   return { known: values, notes };

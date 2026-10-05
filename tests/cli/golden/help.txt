@@ -293,7 +293,9 @@ Flags:
         carry a unit (d_m=1um, R_ohm=1kohm, T_yr=88d, M_kg=1Msun) or an
         expression of constants and units (M_kg=1*M_sun, v=0.6*c); it is
         converted into the declared unit only when the dimensions agree, and a
-        bare number is in the declared unit. The same reader accepts --sigma. An absolute temperature in degC
+        bare number is in the declared unit. An absolute temperature reads an
+        energy as k_B T; any other dimension on that input is an error. --sigma
+        stays in the declared unit. An absolute temperature in degC
         adds 273.15 K; a --sigma in degC is a difference and does not. degF is
         refused. An undeclared key exits 1 instead of being ignored. A declared
         alternate (major_axis_m for a_m) is converted exactly and said so.
