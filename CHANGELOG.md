@@ -10,11 +10,23 @@ from v0.1.0 onward.
 
 ### Documented
 
-- **Integration design for 6.0.0.** `docs/planning/v6.0.0-Design.md` decides the target architecture for the ten duplicated concepts in the integration map: which module owns each one, how explain, evaluate, search, derive, discover, and audit flow afterward, the public breaks, the MathTS prerequisite, and the phases. It does not change `src/` and it does not authorize a phase. The map's edit-distance row, the unread sound-speed group factor, the ideal-gas count dropped by the monomial, and the private RK4 list were incomplete and are corrected in the map.
+- **Integration design for 6.0.0.** `docs/planning/v6.0.0-Design.md` decides the target architecture for the ten duplicated concepts in the integration map: which module owns each one, how explain, evaluate, search, derive, discover, and audit flow afterward, the public breaks, the MathTS prerequisite, and the phases. It does not change `src/`. The owner accepted it on 2026-10-04. `upt evaluate` converts an energy in a kelvin slot through `readNamedBinding`. The Larmor radius is a magnitude and cyclotron frequency stays signed. `BridgeEquations`, `evaluateEinsteinRelation`, and the other per-bridge APIs are removed with no compatibility shims. Ideal-gas `N` stays a dimensionless input. A missing MathTS scalar-expression builder is added in MathTS before phase 6 lowers, and publishing MathTS stays the owner's job. The map's edit-distance row, the unread sound-speed group factor, the ideal-gas count dropped by the monomial, and the private RK4 list were incomplete and are corrected in the map. After the temperature reading outside `upt eval` landed, the map's temperature paragraph names those callers. `upt evaluate` still rejects that energy.
 
 - **Integration map of the 5.0.0 tree.** `docs/architecture/INTEGRATION_MAP.md` records how the modules connect at runtime and where the same concept is implemented more than once (unit reading, evaluators, bridge registries, aliases, prefactors, local math beside MathTS, the two JSON canonicalizers, the PhysJS pin). The map is a measurement for a later design. It does not change `src/`. `duplicate-symbols.md` and the architecture verification blocks were corrected from that measurement because they still quoted an older file count.
 
 - **Plasma and space dogfood of published 5.0.0.** `docs/dogfood/2026-10-04-plasma-space-bridges-r6.md` records the plasma and space session against the published tarball: how the Debye, frequency, MHD, sheath, transport, and solar-wind commands behave, and the candidates that units do not fix. Candidates stay unproven. The bugs it records are filed as issues 386–392 and are not fixed here. No `src/` change.
+
+### Migration
+
+`upt explain most-probable-speed boltzmann-constant=1.380649e-23 temperature=10eV molecular-mass=1.67262192369e-27 --source=canonical` printed `Recovered value: 1.15000027903998e-7`. It now prints `30949.6900726706` and stderr says `temperature=10eV` is read as k_B T. `upt explain plasma-beta carrier-density=5e6 temperature=10eV magnetic-pressure=5.72957794818894e-11 --source=catalog` printed `1.93037217362116e-24`. It now prints `0.139816287385219`. `temperature=1m` on those names exits 1. `upt evaluate be-76 T_K=10eV` still exits 1: a declared kelvin slot does not accept an energy. A discovery `--anchor`, a regime or path `--at`, and a path `--sweep` of `T`, `temperature`, `temp`, or `T_K` use the same reading. The scale is `boltzmann-constant` when that binding is a bare number or already J/K; otherwise `k_B`, then `kB`, then the CODATA value. A bare number on those names stays kelvin.
+
+### Breaking
+
+- **An energy on a temperature binding outside `upt eval` is k_B T.** A caller that matched the joule magnitude in the kelvin slot of `upt explain`, a discovery anchor, a regime coordinate, or a path sweep now matches the kelvin temperature. `upt evaluate` still rejects that energy.
+
+### Fixed
+
+- **Explain, discovery anchors, and regime coordinates read an energy on a temperature name as k_B T.** The reading already lived in `upt eval`'s `parseScope` (`alignTemperatureBinding`). Explain stored `readNamedBinding`'s joules. Issue #386.
 
 ## [5.0.0] - 2026-10-04
 

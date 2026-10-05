@@ -18,6 +18,7 @@
  * there is no box and the command says so rather than inventing one.
  */
 import type { FlagSpec } from '../args.js';
+import { kelvinScale } from '../temperature-bindings.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
@@ -70,6 +71,7 @@ const HELP = `upt regime <family> [--at group=value ...] [--json]
         no violated record exit 0.
         A value is a number, a unit, or a constant expression (theta0=pi/2,
         t=1s). A bare number is already in the coordinate's unit.
+        T, temperature, temp, and T_K are kelvin: an energy on that name is k_B T.
         e.g.  upt regime <name> --at theta0=0.2
               upt regime <name> --deny lossless`;
 
@@ -89,7 +91,12 @@ export function parseAt(
   command: string,
   notes?: string[],
 ): Record<string, number> {
-  const point: Record<string, number> = {};
+  const pending: {
+    name: string;
+    raw: string;
+    token: string;
+    read: ReturnType<CommandCtx['api']['readBinding']>;
+  }[] = [];
   for (const token of raw) {
     const eq = token.indexOf('=');
     if (eq <= 0) {
@@ -102,13 +109,30 @@ export function parseAt(
       if (rawValue === '' || !Number.isFinite(read.value)) {
         throw new CliError(`upt ${command}: '${token}' is not a finite number`);
       }
-      point[name] = read.value;
-      if (notes !== undefined) {
-        for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
-      }
+      pending.push({ name, raw: rawValue, token, read });
     } catch (e) {
       if (e instanceof CliError) throw e;
       throw new CliError(`upt ${command}: '${token}' is not a finite number. ${(e as Error).message}`);
+    }
+  }
+  const kB = kelvinScale(pending);
+  const point: Record<string, number> = {};
+  for (const p of pending) {
+    try {
+      const aligned = api.alignTemperatureBinding(p.name, p.raw, p.read, kB);
+      if (!Number.isFinite(aligned.value)) {
+        throw new CliError(`upt ${command}: '${p.token}' is not a finite number`);
+      }
+      point[p.name] = aligned.value;
+      if (notes !== undefined) {
+        for (const note of aligned.notes) if (!notes.includes(note)) notes.push(note);
+      }
+    } catch (e) {
+      if (e instanceof CliError) throw e;
+      if (e instanceof api.UnitError) {
+        throw new CliError(`upt ${command}: '${p.token}' is not a temperature. ${e.message}`);
+      }
+      throw new CliError(`upt ${command}: '${p.token}' is not a finite number. ${(e as Error).message}`);
     }
   }
   return point;

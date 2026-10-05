@@ -2,7 +2,9 @@
 
 A reading of how the library actually runs, and where the same concept is implemented more than once. This is a measurement of the tree, for a later integration design. It does not choose that design.
 
-**Measured on** `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f` (`master` at measurement; package `5.0.0`). `src/` was not edited. A second reading of that same `src/` tree, for the integration design, corrected the edit-distance row, the prefactor section (group table and the ideal-gas count), and the private RK4 list. The recommendations in section 6 were updated to match those corrections. They are still recommendations. `bun run docs:deps` (`--include-tests`) was run again on that tree; `git diff -- docs/architecture/` of the generator outputs was empty, so the committed graph, unused analysis, and test-coverage report match that run. The API-surface report is opt-in and is not a committed generator output; it was written to a temporary file with `--api-surface` and `--api-entry=src/index.ts`.
+**Measured on** `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f` (`master` at the first measurement; package `5.0.0`). `src/` was not edited for that measurement. A second reading of that same `src/` tree, for the integration design, corrected the edit-distance row, the prefactor section (group table and the ideal-gas count), and the private RK4 list. The recommendations in section 6 were updated to match those corrections. They are still the recommendations that measurement made. The decisions are `docs/planning/v6.0.0-Design.md`. `bun run docs:deps` (`--include-tests`) was run again on that tree; `git diff -- docs/architecture/` of the generator outputs was empty, so the committed graph, unused analysis, and test-coverage report matched that run. The API-surface report is opt-in and is not a committed generator output; it was written to a temporary file with `--api-surface` and `--api-entry=src/index.ts`.
+
+The temperature call graph below was re-read after `b193d5e0` (#395). That patch calls `alignTemperatureBinding` from explain, discovery anchors, regime coordinates, and path sweeps. The headline counts in the table were not re-derived on that commit. `upt evaluate` still does not call `alignTemperatureBinding`.
 
 Anything below that was not opened in source, or that a second method did not confirm, is marked **INFERRED**.
 
@@ -101,12 +103,12 @@ flowchart TD
 
 ### `upt explain`
 
-`run` is `src/cli/commands/explain.ts:213`. The command name is declared at line 328.
+`run` is `src/cli/commands/explain.ts:247`. The command name is declared at line 363.
 
-1. A `be-<n>` target is redirected through `auditCoverage` and the catalog before `explainQuantity` (`explain.ts` `bridgeRedirect`, around the start of `run`). **INFERRED** on the interior of `bridgeRedirect` beyond the call to `auditCoverage`; the function starts at `explain.ts:107` per a read of that region in the exploration pass.
+1. A `be-<n>` target is redirected through `auditCoverage` and the catalog before `explainQuantity` (`explain.ts` `bridgeRedirect`, around the start of `run`). **INFERRED** on the interior of `bridgeRedirect` beyond the call to `auditCoverage`; the function starts at `explain.ts:141` per a read of that region.
 2. `resolveGraph` (`src/cli/graphs.ts:15`) reads `--source`. Default is `catalog` (`graphs.ts:20`). `canonical` uses `CANONICAL_GRAPH`. `both` concatenates the two graphs.
 3. The target name goes through `resolveToCatalogName` (`src/composition/user-equation.ts`) and then `nearQuantityNames` (`src/composition/aliases.ts:76`, edit distance). A miss asks `searchNameWords` (`src/cli/search-index.ts`).
-4. Inputs are `readNamedBinding` (`explain.ts:87`), which does not call `alignTemperatureBinding`.
+4. Inputs are `readNamedBinding` (`explain.ts:92`), then `alignTemperatureBinding` (`explain.ts:109`) with `kelvinScale` from `src/cli/temperature-bindings.ts`.
 5. `explainQuantity` (`src/composition/explain.ts:339`) classifies identifiability, retrodicts, and calls `evaluateEdge` (`src/composition/edge.ts:313`).
 
 Catalog edges and canonical edges share that function. The graph argument is what changes. Closed-form `BRIDGE_EVALUATORS` are not this path.
@@ -135,7 +137,7 @@ Matching is `matchEveryWord` (word index). Explain's edit-distance helper is a s
 
 ### `upt discover`
 
-`run` is `src/cli/commands/discover.ts:264`. `resolveGraph` selects the edge list. `rankDiscoveries` (`src/composition/discovery.ts:610`) builds a context and ranks link candidates from `proposeLinkCandidates` (`src/composition/bridge-analysis.ts`). `--derive` calls `deriveProposedBridges`. Anchor values use `readNamedBinding` (`src/cli/commands/_discovery-opts.ts:43`).
+`run` is `src/cli/commands/discover.ts:265`. `resolveGraph` selects the edge list. `rankDiscoveries` (`src/composition/discovery.ts:610`) builds a context and ranks link candidates from `proposeLinkCandidates` (`src/composition/bridge-analysis.ts`). `--derive` calls `deriveProposedBridges`. Anchor values use `readNamedBinding` (`src/cli/commands/_discovery-opts.ts:46`) and then `alignTemperatureBinding` (`_discovery-opts.ts:60`).
 
 ### `upt audit`
 
@@ -157,9 +159,9 @@ One unit table lives in `src/dimensional/units.ts`: `parseUnit`, `convertValue`,
 
 `readBinding` (`binding-value.ts:359`) accepts a bare number, a number plus a unit, or an expression whose unit literals were spliced out and parsed by the MathTS formula parser. `bindingInUnit` (`binding-value.ts:414`) uses `convertValue` for a plain number-plus-unit and `readBinding` for an expression. `readNamedBinding` (`binding-value.ts:337`) applies `QUANTITY_CONVENTION_UNIT` (`src/dimensional/unit-convention.ts:21-31`: GeV energies, bit, nat, one entropy in J/K) and otherwise returns `readBinding`.
 
-`alignTemperatureBinding` (`binding-value.ts:48-75`) divides an energy by `k_B` when the binding name is `T`, `temperature`, `temp`, or `T_K`. The module comment at `binding-value.ts:13-15` states that rule for a temperature name. The only caller is `upt eval` (`eval.ts:66-69`). Callers of `readNamedBinding` are `upt explain` (`explain.ts:87`) and discover/map anchors (`_discovery-opts.ts:43`). `upt evaluate` uses `bindingInUnit` with the evaluator's declared unit (`evaluator-inputs.ts:44`). `upt regime` reads bindings with `readBinding` (`regime.ts:101`). `upt path` does too (`path.ts:186` and `path.ts:370`). Neither calls `alignTemperatureBinding`.
+`alignTemperatureBinding` (`binding-value.ts:48-75`) divides an energy by `k_B` when the binding name is `T`, `temperature`, `temp`, or `T_K`. The module comment at `binding-value.ts:13-15` states that rule for a temperature name. Callers after `b193d5e0`: `upt eval` (`eval.ts:66-69`), `upt explain` (`explain.ts:109`, after `readNamedBinding` at `explain.ts:92`), discovery and map anchors (`_discovery-opts.ts:60`), regime coordinates (`regime.ts` `parseAt`, `alignTemperatureBinding` at `regime.ts:122` after `readBinding` at `regime.ts:108`), and a path sweep (`path.ts:189`). A path `--at` uses that same `parseAt` (`path.ts:1121`). The scale is `kelvinScale` in `src/cli/temperature-bindings.ts`, which reads `boltzmannBindingScale`. `upt evaluate` uses `bindingInUnit` with the evaluator's declared unit (`evaluator-inputs.ts:44`) and does not call `alignTemperatureBinding`. A path tolerance still uses `readBinding` (`path.ts:377`) and is not a temperature slot.
 
-So `temperature=10eV` is joules on explain and a dimension error on evaluate, and kelvin on eval when the left-hand name is one of the four temperature names. That is the split behind issue 386. The earlier eV-as-kelvin fix is the `alignTemperatureBinding` path; it was wired to one command.
+So `temperature=10eV` is kelvin on explain, eval, a discovery anchor, a regime coordinate, and a path sweep, and a dimension error on evaluate. That remaining evaluate rejection is the split issue 386 still has on `upt evaluate`.
 
 ### Quantity names and aliases
 
@@ -404,11 +406,11 @@ Still narrative, and not rewritten sentence by sentence: per-file component essa
 
 ## 6. Integration targets
 
-Recommendations for a design the owner has not approved. Each row names a single owner that could hold the concept, and the break a unification would cause. None of these is a decision to implement. The decisions are `docs/planning/v6.0.0-Design.md`. Where that note chooses a different owner than the row below, the note is the decision and this table stays the recommendation it was measured as.
+Each row names a single owner that could hold the concept, and the break a unification would cause. The decisions are `docs/planning/v6.0.0-Design.md`. Where that note chooses a different owner than the row below, the note is the decision and this table stays the recommendation it was measured as.
 
 | # | Unify | Proposed owner | Expected break |
 |---|---|---|---|
-| 1 | Temperature and unit reading (`alignTemperatureBinding`, `readNamedBinding`, `bindingInUnit`, `convertValue`) | `readNamedBinding` in `src/numerical/binding-value.ts`, called by eval, explain, evaluate, and anchors | `upt explain temperature=10eV` and `upt evaluate` of a kelvin parameter written as `10eV` would follow the eval rule (divide by `k_B`) or reject. A joule binding on a non-temperature name stays joules |
+| 1 | Temperature and unit reading (`alignTemperatureBinding`, `readNamedBinding`, `bindingInUnit`, `convertValue`) | `readNamedBinding` in `src/numerical/binding-value.ts`, called by eval, explain, evaluate, and anchors | Explain, a discovery anchor, a regime coordinate, and a path sweep already divide an energy on a temperature name by `k_B`. `upt evaluate` of a kelvin parameter written as `10eV` still rejects that energy. A joule binding on a non-temperature name stays joules |
 | 2 | The three ways a bridge is evaluated: `BRIDGE_EVALUATORS` / `BridgeEquations`, `BridgeEdge.evaluate`, canonical `makeEvaluate` | one evaluate function keyed by catalog id or canonical id, with edges and the CLI map as projections that copy alias keys | input names change for callers that pass `T_K` or `q_C` without going through the alias projection. `upt eval` stays a user-formula command and is not this function |
 | 3 | Catalog row, RHS, graph edge, canonical `restatesBridge`, formalRef overlay | extend `getBridge` / `BRIDGE_DESCRIPTORS` so a missing edge, a missing canonical partner, and the formalRef are fields of one record | `getBridge` grows fields. Catalog `status`, edge `confidence`, and derived evidence stay different facts on that record. Adding a bridge becomes one registration instead of four edits. Atlas `ab-*` stays a separate registry: those bridges relate models, and `not-composable-seeds.ts` says they are not quantity edges |
 | 4 | Alias tables and the two edit distances. `suggestQuantities` is optimal string alignment plus containment; `nearQuantityNames` is Levenshtein ≤ 1 | `src/composition/aliases.ts` as the only name table, and one distance (the transposition-aware one, so `lenght` still resolves). Search and explain both read it | a typo only the longer rank accepts today may resolve differently. Containment stays a suggestion rank and does not become identity. Formula `T` and canonical-hash renaming move to that table |

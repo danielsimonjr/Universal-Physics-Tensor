@@ -22,7 +22,50 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 - [x] Write the integration design for 6.0.0. Do not change `src/`.
   The map's ten targets become decisions in `docs/planning/v6.0.0-Design.md`, checked against the source. The owner has not approved an implementation phase.
-  Done: that file. The map's edit-distance, prefactor, ideal-gas, and private-RK4 rows were corrected from the same reading. No `src/` change. Implementation stays unauthorized until the owner accepts the note and an open task names a phase.
+  Done: that file. The map's edit-distance, prefactor, ideal-gas, and private-RK4 rows were corrected from the same reading. No `src/` change. The owner accepted the five resolutions on 2026-10-04. `upt evaluate` converts an energy in a kelvin slot through `readNamedBinding`. The Larmor radius is a magnitude and cyclotron frequency stays signed. `BridgeEquations`, `evaluateEinsteinRelation`, and the other per-bridge APIs are removed with no compatibility shims. Ideal-gas `N` stays a dimensionless input. A missing MathTS scalar-expression builder is added in MathTS before phase 6 lowers, and publishing MathTS stays the owner's job. The phases below are the authorized work.
+
+- [ ] Implement phase 0 of the 6.0.0 integration: the dependency generator records an export-star-as as an internal dependency.
+  A fixture module imported only that way is not reported unused, and the same fixture with the line removed is unused. `src/atlas/public.ts` leaves the unused-file list for that reason. `bun run docs:deps` is clean against the committed architecture docs.
+
+- [ ] Implement phase 1 of the 6.0.0 integration: generate the PhysJS table from the vendored manifest.
+  The generate step replaces the hand-copy in `WORKFLOWS.md`. Editing a theorem in the generated file without editing the manifest fails the formal gate. A manifest entry with no bridge still fails. Tests that hardcoded the commit string read the manifest.
+
+- [ ] Implement phase 2 of the 6.0.0 integration: one temperature and unit reader.
+  Explain, evaluate, eval, a discovery anchor, a regime coordinate, and a path sweep of an energy on a temperature name agree on the kelvin value. A metre on a temperature name throws. An energy on a non-temperature name stays joules. `upt evaluate` converts.
+
+- [ ] Implement phase 3 of the 6.0.0 integration: one name table and one edit distance.
+  Resolution uses optimal string alignment at distance at most 1. `erasure-energy` and the Landauer quantity are one quantity. A Debye-length miss does not suggest the phonon family. A Reynolds-number search does not hit the analogy. A Prandtl-number search names that bridge and says the match is the gloss.
+
+- [ ] Implement phase 4 of the 6.0.0 integration: one sign policy.
+  Plasma frequency and Larmor radius are magnitudes. Hall and cyclotron stay signed. Einstein and conductivity reject opposite signs once. A policy that takes the absolute value of the cyclotron frequency fails the cyclotron test.
+
+- [ ] Implement phase 5 of the 6.0.0 integration: a sourced factor or unset, and the ideal-gas count.
+  An unset coefficient yields no recovered number. Ideal gas without `N` is a missing input. Ideal gas with `N` is `N k_B T / V`. Sound speed multiplies by the square root of gamma when gamma is bound, and is unset when it is not.
+
+- [ ] Implement phase 6 of the 6.0.0 integration: one evaluator, by cluster, lowering each tree through MathTS.
+  If the installed MathTS packages have no public scalar-expression builder, that builder is added in MathTS first. Each cluster's lowered value matches the deleted function on that cluster's numeric fixture. A catalog id has one numeric body.
+
+- [ ] Implement phase 7 of the 6.0.0 integration: one bridge registration, including the PhysJS bridges BE-103 through BE-125.
+  A fixture record appears in the catalog, the right-hand side, the edge list, and the evaluator map. An atlas model id is rejected. The manifest pin is PhysJS `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f`. Proofs that assume their key step as a hypothesis say so. The equal-temperature Bennett current and the kinetic closure are the corrected formulas.
+
+- [ ] Implement phase 8 of the 6.0.0 integration: one JSON canonicalizer with a record profile and a probe profile.
+  A record fixture and a probe fixture hash to the same digests as the old functions. The probe export names stay.
+
+- [ ] Implement phase 9 of the 6.0.0 integration: classical Runge-Kutta steps call the MathTS ODE solver.
+  A linear oscillator matches the exact solution at the witness step size. The Schwarzschild and Kerr samples stay inside their existing tolerances. The finite-difference wave and heat functions stay.
+
+- [ ] Implement phase 10 of the 6.0.0 integration: one mass-density dimension, and re-exports instead of assign-and-reexport.
+  The dimension object matches at each former copy. The dependency graph does not list a pure re-export as two local definitions. The approximation admission stays defined in the atlas regime module.
+
+- [ ] Implement phase 11 of the 6.0.0 integration: a composition-table refusal is its own result.
+  A silent cell produces the table's error and does not look like a dimension failure. A derivation followed by a derivation that meets on a quantity still composes.
+
+- [ ] Implement phase 12 of the 6.0.0 integration: the 6.0.0 public surface, the migration guide, and package version 6.0.0.
+  The removed per-bridge names are not exported. `evaluateRelation` and the unset-coefficient error are exported. `package.json` is 6.0.0. The changelog carries the migration. The tag and the publish are the release step after this phase merges, not this phase.
+
+- [x] An energy on a temperature binding is k_B T in explain, discovery anchors, and regime coordinates.
+  `upt explain most-probable-speed boltzmann-constant=1.380649e-23 temperature=10eV molecular-mass=1.67262192369e-27 --source=canonical` prints `1.15000027903998e-7`. `upt explain plasma-beta carrier-density=5e6 temperature=10eV magnetic-pressure=5.72957794818894e-11 --source=catalog` prints `1.93037217362116e-24`. `upt eval` already reads that energy as kelvin.
+  Done: the most-probable command prints `30949.6900726706` and says the energy is read as k_B T. The plasma-beta command prints `0.139816287385219`. `temperature=1m` exits 1. `upt evaluate be-76 T_K=10eV` still exits 1. A discovery anchor, `parseAt`, and a temperature sweep use the same reading. The scale is the bound `boltzmann-constant` when it is a bare number or J/K.
 
 - [x] Write an integration map of the 5.0.0 tree. Do not change `src/`.
   Done: `docs/architecture/INTEGRATION_MAP.md` is that map, measured on `b1db6b66f101448b1e3a9c2f11c4b4e08f71260f`. It records module entries, the command call graph, the parallel implementations, the MathTS and PhysJS boundaries, and ten recommended unification targets. `duplicate-symbols.md` and the architecture verification blocks were corrected from the same measurement. No `src/` change.
