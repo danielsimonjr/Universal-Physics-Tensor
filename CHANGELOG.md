@@ -28,6 +28,8 @@ The Documented, Migration, Breaking, and Fixed notes that were already under thi
 
 ### Documented
 
+- **Design for a bridge reduction pass.** `docs/design/bridge-reduction-pass.md` specifies a recurring pass that proposes a generating set of catalog bridges by algebraic composition through MathTS, and marks a bridge derived only when a pinned PhysJS derivation theorem imports the basis theorems. The note changes no code, no catalog row, no canonical entry, and no public type. Implementation waits on approval. The open questions are that note's last section.
+
 - **`source-map-js` is 1.2.2.** `bun audit --audit-level=high` failed on 1.2.1 (`GHSA-68fv-2mgg-jv7q`). The lockfile now resolves 1.2.2. It is a transitive dependency of vitest. This line moved out of `### Changed` when 7.0.0 took the resolver bullets.
 
 ### Changed
