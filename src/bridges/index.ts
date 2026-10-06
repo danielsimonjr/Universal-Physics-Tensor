@@ -53,6 +53,7 @@ import { bridgeRegistry, registerBridge } from './registry.js';
 import { PLASMA_CATALOG_ROWS } from './plasma-catalog.js';
 import { ENGINEERING_R7_CATALOG_ROWS } from './engineering-r7-catalog.js';
 import { CONDENSED_R8_CATALOG_ROWS } from './condensed-r8-catalog.js';
+import { THERMAL_R9_CATALOG_ROWS } from './thermal-r9-catalog.js';
 
 /**
  * Lifecycle status of a bridge equation in the catalog.
@@ -3456,6 +3457,8 @@ const engineeringRows: readonly BridgeEquationEntry[] = ENGINEERING_R7_CATALOG_R
 for (const entry of engineeringRows) registerBridge({ entry });
 const condensedRows: readonly BridgeEquationEntry[] = CONDENSED_R8_CATALOG_ROWS;
 for (const entry of condensedRows) registerBridge({ entry });
+const thermalRows: readonly BridgeEquationEntry[] = THERMAL_R9_CATALOG_ROWS;
+for (const entry of thermalRows) registerBridge({ entry });
 
 /** Catalog rows, in registration order. The projection of `registerBridge`. @public */
 export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = bridgeRegistry.equations() as BridgeEquationEntry[];
@@ -3870,5 +3873,80 @@ export {
   type GorterCasimirInputs,
   type GorterCasimirResult,
 } from './condensed-r8.js';
+
+/** Thermal and chemical evaluators, BE-147 through BE-170. `e` is the elementary charge. */
+export {
+  evaluateArrhenius,
+  type ArrheniusInputs,
+  type ArrheniusResult,
+  evaluateEyring,
+  type EyringInputs,
+  type EyringResult,
+  evaluateVanTHoff,
+  type VanTHoffInputs,
+  type VanTHoffResult,
+  evaluateGibbsIsotherm,
+  type GibbsIsothermInputs,
+  type GibbsIsothermResult,
+  evaluateNernstGibbs,
+  type NernstGibbsInputs,
+  type NernstGibbsResult,
+  evaluateClausiusClapeyron,
+  type ClausiusClapeyronInputs,
+  type ClausiusClapeyronResult,
+  evaluateRaoult,
+  type RaoultInputs,
+  type RaoultResult,
+  evaluatePrandtl,
+  type PrandtlInputs,
+  type PrandtlResult,
+  evaluateReynoldsNumber,
+  type ReynoldsNumberInputs,
+  type ReynoldsNumberResult,
+  evaluateBiot,
+  type BiotInputs,
+  type BiotResult,
+  evaluateNusselt,
+  type NusseltInputs,
+  type NusseltResult,
+  evaluateSchmidt,
+  type SchmidtInputs,
+  type SchmidtResult,
+  evaluateSherwood,
+  type SherwoodInputs,
+  type SherwoodResult,
+  evaluateFourierConduction,
+  type FourierConductionInputs,
+  type FourierConductionResult,
+  evaluateNewtonCooling,
+  type NewtonCoolingInputs,
+  type NewtonCoolingResult,
+  evaluateOtto,
+  type OttoInputs,
+  type OttoResult,
+  evaluateJouleThomson,
+  type JouleThomsonInputs,
+  type JouleThomsonResult,
+  evaluatePlanckSpectrum,
+  type PlanckSpectrumInputs,
+  type PlanckSpectrumResult,
+  evaluateStefanBoltzmann,
+  type StefanBoltzmannResult,
+  evaluateWienDisplacement,
+  type WienDisplacementInputs,
+  type WienDisplacementResult,
+  evaluateSackurTetrode,
+  type SackurTetrodeInputs,
+  type SackurTetrodeResult,
+  evaluateSaha,
+  type SahaInputs,
+  type SahaResult,
+  evaluateRichardsonDushman,
+  type RichardsonDushmanInputs,
+  type RichardsonDushmanResult,
+  evaluateOnsagerReciprocity,
+  type OnsagerReciprocityInputs,
+  type OnsagerReciprocityResult,
+} from './thermal-r9.js';
 
 export default BRIDGE_EQUATIONS;

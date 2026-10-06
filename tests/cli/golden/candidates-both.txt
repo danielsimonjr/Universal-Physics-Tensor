@@ -1,10 +1,10 @@
 
 Link candidates — cross-cluster quantities sharing a dimension  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 204 established-confidence edge(s) of the 236 in this graph
+  anchored core: the clusters holding at least one of the 228 established-confidence edge(s) of the 260 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  4612 total  →  4597 touch the anchored core  →  1106 also same-kind
+  funnel:  6238 total  →  6223 touch the anchored core  →  1106 also same-kind
 
   same-kind + core-touching (the least-implausible set):
     acdrude-scatter ≟ matthsum-scatter                       [scatter]

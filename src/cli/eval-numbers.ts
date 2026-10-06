@@ -24,8 +24,9 @@ export const HBAR_TRUNCATION_NOTE =
  * Registered constants an eval may omit, taken from {@link CONSTANTS} so a
  * new registry leaf is a formula name without a second list. Aliases below
  * are spellings that are not registry keys. `m_p` and `m_proton` are the
- * proton mass, `N_A` is the Avogadro constant, and `F` is the Faraday
- * constant `N_A * e`. Bare `sigma` is not an alias of `sigma_sb`. Explicit
+ * proton mass. `N_A` is a registry key, the Avogadro constant, and the
+ * assignment below restates that value. `F` is the Faraday constant
+ * `N_A * e`. Bare `sigma` is not an alias of `sigma_sb`. Explicit
  * `name=` wins over these.
  *
  * `2pi`, `4pi` and `8pi` are in the scope. The MathTS parser reads those

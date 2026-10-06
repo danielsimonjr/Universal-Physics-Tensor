@@ -164,6 +164,35 @@ export {
   CONDENSED_R8_EDGES,
 } from './edges/condensed-r8.js';
 
+/** Composition edges for the Arrhenius rate through Onsager reciprocity, BE-147 through BE-170. */
+export {
+  be147Edge,
+  be148Edge,
+  be149Edge,
+  be150Edge,
+  be151Edge,
+  be152Edge,
+  be153Edge,
+  be154Edge,
+  be155Edge,
+  be156Edge,
+  be157Edge,
+  be158Edge,
+  be159Edge,
+  be160Edge,
+  be161Edge,
+  be162Edge,
+  be163Edge,
+  be164Edge,
+  be165Edge,
+  be166Edge,
+  be167Edge,
+  be168Edge,
+  be169Edge,
+  be170Edge,
+  THERMAL_R9_EDGES,
+} from './edges/thermal-r9.js';
+
 export {
   be11Edge,
   be13Edge,

@@ -29,7 +29,8 @@ describe('runChainPipeline(CATALOG_GRAPH)', () => {
 
   it('leaves the catalog array unchanged', () => {
     expect(BRIDGE_EQUATIONS.map((row) => row.id)).toEqual(before);
-    expect(BRIDGE_EQUATIONS).toHaveLength(136);
+    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+    // 136 is the record from before be-147..170.
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.

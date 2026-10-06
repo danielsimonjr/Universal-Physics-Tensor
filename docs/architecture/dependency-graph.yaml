@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
-  version: 7.0.0
+  version: 8.0.0
   totalFiles: 488
   totalModules: 13
-  totalExports: 4073
+  totalExports: 4265
 entryPoints:
   - file: src/index.ts
     type: main
@@ -7035,6 +7035,32 @@ modules:
             - evaluateSemiconductorFermi
             - evaluateStoner
             - evaluateThomasFermi
+        - file: ./thermal-r9.js
+          imports:
+            - evaluateArrhenius
+            - evaluateBiot
+            - evaluateClausiusClapeyron
+            - evaluateEyring
+            - evaluateFourierConduction
+            - evaluateGibbsIsotherm
+            - evaluateJouleThomson
+            - evaluateNernstGibbs
+            - evaluateNewtonCooling
+            - evaluateNusselt
+            - evaluateOnsagerReciprocity
+            - evaluateOtto
+            - evaluatePlanckSpectrum
+            - evaluatePrandtl
+            - evaluateRaoult
+            - evaluateReynoldsNumber
+            - evaluateRichardsonDushman
+            - evaluateSackurTetrode
+            - evaluateSaha
+            - evaluateSchmidt
+            - evaluateSherwood
+            - evaluateStefanBoltzmann
+            - evaluateVanTHoff
+            - evaluateWienDisplacement
         - file: ./registry.js
           imports:
             - bridgeRegistry
@@ -7108,6 +7134,9 @@ modules:
         - file: ./condensed-r8-catalog.js
           imports:
             - CONDENSED_R8_CATALOG_ROWS
+        - file: ./thermal-r9-catalog.js
+          imports:
+            - THERMAL_R9_CATALOG_ROWS
         - file: ./gravitational-lensing.js
           imports:
             - evaluateGravitationalLensing
@@ -7562,6 +7591,80 @@ modules:
             - type GorterCasimirInputs
             - type GorterCasimirResult
           reExport: true
+        - file: ./thermal-r9.js
+          imports:
+            - evaluateArrhenius
+            - type ArrheniusInputs
+            - type ArrheniusResult
+            - evaluateEyring
+            - type EyringInputs
+            - type EyringResult
+            - evaluateVanTHoff
+            - type VanTHoffInputs
+            - type VanTHoffResult
+            - evaluateGibbsIsotherm
+            - type GibbsIsothermInputs
+            - type GibbsIsothermResult
+            - evaluateNernstGibbs
+            - type NernstGibbsInputs
+            - type NernstGibbsResult
+            - evaluateClausiusClapeyron
+            - type ClausiusClapeyronInputs
+            - type ClausiusClapeyronResult
+            - evaluateRaoult
+            - type RaoultInputs
+            - type RaoultResult
+            - evaluatePrandtl
+            - type PrandtlInputs
+            - type PrandtlResult
+            - evaluateReynoldsNumber
+            - type ReynoldsNumberInputs
+            - type ReynoldsNumberResult
+            - evaluateBiot
+            - type BiotInputs
+            - type BiotResult
+            - evaluateNusselt
+            - type NusseltInputs
+            - type NusseltResult
+            - evaluateSchmidt
+            - type SchmidtInputs
+            - type SchmidtResult
+            - evaluateSherwood
+            - type SherwoodInputs
+            - type SherwoodResult
+            - evaluateFourierConduction
+            - type FourierConductionInputs
+            - type FourierConductionResult
+            - evaluateNewtonCooling
+            - type NewtonCoolingInputs
+            - type NewtonCoolingResult
+            - evaluateOtto
+            - type OttoInputs
+            - type OttoResult
+            - evaluateJouleThomson
+            - type JouleThomsonInputs
+            - type JouleThomsonResult
+            - evaluatePlanckSpectrum
+            - type PlanckSpectrumInputs
+            - type PlanckSpectrumResult
+            - evaluateStefanBoltzmann
+            - type StefanBoltzmannResult
+            - evaluateWienDisplacement
+            - type WienDisplacementInputs
+            - type WienDisplacementResult
+            - evaluateSackurTetrode
+            - type SackurTetrodeInputs
+            - type SackurTetrodeResult
+            - evaluateSaha
+            - type SahaInputs
+            - type SahaResult
+            - evaluateRichardsonDushman
+            - type RichardsonDushmanInputs
+            - type RichardsonDushmanResult
+            - evaluateOnsagerReciprocity
+            - type OnsagerReciprocityInputs
+            - type OnsagerReciprocityResult
+          reExport: true
       exports:
         - evaluateGravitationalLensing
         - type GravitationalLensingInputs
@@ -7855,6 +7958,77 @@ modules:
         - evaluateGorterCasimir
         - type GorterCasimirInputs
         - type GorterCasimirResult
+        - evaluateArrhenius
+        - type ArrheniusInputs
+        - type ArrheniusResult
+        - evaluateEyring
+        - type EyringInputs
+        - type EyringResult
+        - evaluateVanTHoff
+        - type VanTHoffInputs
+        - type VanTHoffResult
+        - evaluateGibbsIsotherm
+        - type GibbsIsothermInputs
+        - type GibbsIsothermResult
+        - evaluateNernstGibbs
+        - type NernstGibbsInputs
+        - type NernstGibbsResult
+        - evaluateClausiusClapeyron
+        - type ClausiusClapeyronInputs
+        - type ClausiusClapeyronResult
+        - evaluateRaoult
+        - type RaoultInputs
+        - type RaoultResult
+        - evaluatePrandtl
+        - type PrandtlInputs
+        - type PrandtlResult
+        - evaluateReynoldsNumber
+        - type ReynoldsNumberInputs
+        - type ReynoldsNumberResult
+        - evaluateBiot
+        - type BiotInputs
+        - type BiotResult
+        - evaluateNusselt
+        - type NusseltInputs
+        - type NusseltResult
+        - evaluateSchmidt
+        - type SchmidtInputs
+        - type SchmidtResult
+        - evaluateSherwood
+        - type SherwoodInputs
+        - type SherwoodResult
+        - evaluateFourierConduction
+        - type FourierConductionInputs
+        - type FourierConductionResult
+        - evaluateNewtonCooling
+        - type NewtonCoolingInputs
+        - type NewtonCoolingResult
+        - evaluateOtto
+        - type OttoInputs
+        - type OttoResult
+        - evaluateJouleThomson
+        - type JouleThomsonInputs
+        - type JouleThomsonResult
+        - evaluatePlanckSpectrum
+        - type PlanckSpectrumInputs
+        - type PlanckSpectrumResult
+        - evaluateStefanBoltzmann
+        - type StefanBoltzmannResult
+        - evaluateWienDisplacement
+        - type WienDisplacementInputs
+        - type WienDisplacementResult
+        - evaluateSackurTetrode
+        - type SackurTetrodeInputs
+        - type SackurTetrodeResult
+        - evaluateSaha
+        - type SahaInputs
+        - type SahaResult
+        - evaluateRichardsonDushman
+        - type RichardsonDushmanInputs
+        - type RichardsonDushmanResult
+        - evaluateOnsagerReciprocity
+        - type OnsagerReciprocityInputs
+        - type OnsagerReciprocityResult
         - BE37_REGIME
         - BE51_REGIME
         - BE52_REGIME
@@ -8154,6 +8328,77 @@ modules:
         - evaluateGorterCasimir
         - type GorterCasimirInputs
         - type GorterCasimirResult
+        - evaluateArrhenius
+        - type ArrheniusInputs
+        - type ArrheniusResult
+        - evaluateEyring
+        - type EyringInputs
+        - type EyringResult
+        - evaluateVanTHoff
+        - type VanTHoffInputs
+        - type VanTHoffResult
+        - evaluateGibbsIsotherm
+        - type GibbsIsothermInputs
+        - type GibbsIsothermResult
+        - evaluateNernstGibbs
+        - type NernstGibbsInputs
+        - type NernstGibbsResult
+        - evaluateClausiusClapeyron
+        - type ClausiusClapeyronInputs
+        - type ClausiusClapeyronResult
+        - evaluateRaoult
+        - type RaoultInputs
+        - type RaoultResult
+        - evaluatePrandtl
+        - type PrandtlInputs
+        - type PrandtlResult
+        - evaluateReynoldsNumber
+        - type ReynoldsNumberInputs
+        - type ReynoldsNumberResult
+        - evaluateBiot
+        - type BiotInputs
+        - type BiotResult
+        - evaluateNusselt
+        - type NusseltInputs
+        - type NusseltResult
+        - evaluateSchmidt
+        - type SchmidtInputs
+        - type SchmidtResult
+        - evaluateSherwood
+        - type SherwoodInputs
+        - type SherwoodResult
+        - evaluateFourierConduction
+        - type FourierConductionInputs
+        - type FourierConductionResult
+        - evaluateNewtonCooling
+        - type NewtonCoolingInputs
+        - type NewtonCoolingResult
+        - evaluateOtto
+        - type OttoInputs
+        - type OttoResult
+        - evaluateJouleThomson
+        - type JouleThomsonInputs
+        - type JouleThomsonResult
+        - evaluatePlanckSpectrum
+        - type PlanckSpectrumInputs
+        - type PlanckSpectrumResult
+        - evaluateStefanBoltzmann
+        - type StefanBoltzmannResult
+        - evaluateWienDisplacement
+        - type WienDisplacementInputs
+        - type WienDisplacementResult
+        - evaluateSackurTetrode
+        - type SackurTetrodeInputs
+        - type SackurTetrodeResult
+        - evaluateSaha
+        - type SahaInputs
+        - type SahaResult
+        - evaluateRichardsonDushman
+        - type RichardsonDushmanInputs
+        - type RichardsonDushmanResult
+        - evaluateOnsagerReciprocity
+        - type OnsagerReciprocityInputs
+        - type OnsagerReciprocityResult
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
@@ -12900,6 +13145,9 @@ modules:
         - file: ./edges/condensed-r8.js
           imports:
             - CONDENSED_R8_EDGES
+        - file: ./edges/thermal-r9.js
+          imports:
+            - THERMAL_R9_EDGES
       exports:
         - CATALOG_GRAPH
       constants:
@@ -15513,6 +15761,34 @@ modules:
             - be146Edge
             - CONDENSED_R8_EDGES
           reExport: true
+        - file: ./edges/thermal-r9.js
+          imports:
+            - be147Edge
+            - be148Edge
+            - be149Edge
+            - be150Edge
+            - be151Edge
+            - be152Edge
+            - be153Edge
+            - be154Edge
+            - be155Edge
+            - be156Edge
+            - be157Edge
+            - be158Edge
+            - be159Edge
+            - be160Edge
+            - be161Edge
+            - be162Edge
+            - be163Edge
+            - be164Edge
+            - be165Edge
+            - be166Edge
+            - be167Edge
+            - be168Edge
+            - be169Edge
+            - be170Edge
+            - THERMAL_R9_EDGES
+          reExport: true
         - file: ./edges/catalog-full.js
           imports:
             - be11Edge
@@ -15795,6 +16071,31 @@ modules:
         - be145Edge
         - be146Edge
         - CONDENSED_R8_EDGES
+        - be147Edge
+        - be148Edge
+        - be149Edge
+        - be150Edge
+        - be151Edge
+        - be152Edge
+        - be153Edge
+        - be154Edge
+        - be155Edge
+        - be156Edge
+        - be157Edge
+        - be158Edge
+        - be159Edge
+        - be160Edge
+        - be161Edge
+        - be162Edge
+        - be163Edge
+        - be164Edge
+        - be165Edge
+        - be166Edge
+        - be167Edge
+        - be168Edge
+        - be169Edge
+        - be170Edge
+        - THERMAL_R9_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -16012,6 +16313,31 @@ modules:
         - be145Edge
         - be146Edge
         - CONDENSED_R8_EDGES
+        - be147Edge
+        - be148Edge
+        - be149Edge
+        - be150Edge
+        - be151Edge
+        - be152Edge
+        - be153Edge
+        - be154Edge
+        - be155Edge
+        - be156Edge
+        - be157Edge
+        - be158Edge
+        - be159Edge
+        - be160Edge
+        - be161Edge
+        - be162Edge
+        - be163Edge
+        - be164Edge
+        - be165Edge
+        - be166Edge
+        - be167Edge
+        - be168Edge
+        - be169Edge
+        - be170Edge
+        - THERMAL_R9_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -18869,6 +19195,10 @@ modules:
           imports:
             - "*"
           reExport: true
+        - file: ./quantities/thermal-r9.js
+          imports:
+            - "*"
+          reExport: true
       exports: []
       reExported:
         - "* from ./quantities/quantum.js"
@@ -18881,6 +19211,7 @@ modules:
         - "* from ./quantities/plasma-space.js"
         - "* from ./quantities/engineering-r7.js"
         - "* from ./quantities/condensed-r8.js"
+        - "* from ./quantities/thermal-r9.js"
     src/composition/quantity.ts:
       description: Composition graph — quantity nodes (v0.8.0 T2, per
       externalDependencies: []
@@ -20440,6 +20771,7 @@ modules:
             - K_B_SI
             - B_WIEN_SI
             - M_U_SI
+            - N_A_SI
       exports:
         - CONSTANTS
         - CONSTANT_PROVENANCE
@@ -21239,6 +21571,80 @@ modules:
             - type GorterCasimirInputs
             - type GorterCasimirResult
           reExport: true
+        - file: ./bridges/index.js
+          imports:
+            - evaluateArrhenius
+            - type ArrheniusInputs
+            - type ArrheniusResult
+            - evaluateEyring
+            - type EyringInputs
+            - type EyringResult
+            - evaluateVanTHoff
+            - type VanTHoffInputs
+            - type VanTHoffResult
+            - evaluateGibbsIsotherm
+            - type GibbsIsothermInputs
+            - type GibbsIsothermResult
+            - evaluateNernstGibbs
+            - type NernstGibbsInputs
+            - type NernstGibbsResult
+            - evaluateClausiusClapeyron
+            - type ClausiusClapeyronInputs
+            - type ClausiusClapeyronResult
+            - evaluateRaoult
+            - type RaoultInputs
+            - type RaoultResult
+            - evaluatePrandtl
+            - type PrandtlInputs
+            - type PrandtlResult
+            - evaluateReynoldsNumber
+            - type ReynoldsNumberInputs
+            - type ReynoldsNumberResult
+            - evaluateBiot
+            - type BiotInputs
+            - type BiotResult
+            - evaluateNusselt
+            - type NusseltInputs
+            - type NusseltResult
+            - evaluateSchmidt
+            - type SchmidtInputs
+            - type SchmidtResult
+            - evaluateSherwood
+            - type SherwoodInputs
+            - type SherwoodResult
+            - evaluateFourierConduction
+            - type FourierConductionInputs
+            - type FourierConductionResult
+            - evaluateNewtonCooling
+            - type NewtonCoolingInputs
+            - type NewtonCoolingResult
+            - evaluateOtto
+            - type OttoInputs
+            - type OttoResult
+            - evaluateJouleThomson
+            - type JouleThomsonInputs
+            - type JouleThomsonResult
+            - evaluatePlanckSpectrum
+            - type PlanckSpectrumInputs
+            - type PlanckSpectrumResult
+            - evaluateStefanBoltzmann
+            - type StefanBoltzmannResult
+            - evaluateWienDisplacement
+            - type WienDisplacementInputs
+            - type WienDisplacementResult
+            - evaluateSackurTetrode
+            - type SackurTetrodeInputs
+            - type SackurTetrodeResult
+            - evaluateSaha
+            - type SahaInputs
+            - type SahaResult
+            - evaluateRichardsonDushman
+            - type RichardsonDushmanInputs
+            - type RichardsonDushmanResult
+            - evaluateOnsagerReciprocity
+            - type OnsagerReciprocityInputs
+            - type OnsagerReciprocityResult
+          reExport: true
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
@@ -21613,6 +22019,34 @@ modules:
             - be145Edge
             - be146Edge
             - CONDENSED_R8_EDGES
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - be147Edge
+            - be148Edge
+            - be149Edge
+            - be150Edge
+            - be151Edge
+            - be152Edge
+            - be153Edge
+            - be154Edge
+            - be155Edge
+            - be156Edge
+            - be157Edge
+            - be158Edge
+            - be159Edge
+            - be160Edge
+            - be161Edge
+            - be162Edge
+            - be163Edge
+            - be164Edge
+            - be165Edge
+            - be166Edge
+            - be167Edge
+            - be168Edge
+            - be169Edge
+            - be170Edge
+            - THERMAL_R9_EDGES
           reExport: true
         - file: ./composition/index.js
           imports:
@@ -22361,6 +22795,77 @@ modules:
         - evaluateGorterCasimir
         - type GorterCasimirInputs
         - type GorterCasimirResult
+        - evaluateArrhenius
+        - type ArrheniusInputs
+        - type ArrheniusResult
+        - evaluateEyring
+        - type EyringInputs
+        - type EyringResult
+        - evaluateVanTHoff
+        - type VanTHoffInputs
+        - type VanTHoffResult
+        - evaluateGibbsIsotherm
+        - type GibbsIsothermInputs
+        - type GibbsIsothermResult
+        - evaluateNernstGibbs
+        - type NernstGibbsInputs
+        - type NernstGibbsResult
+        - evaluateClausiusClapeyron
+        - type ClausiusClapeyronInputs
+        - type ClausiusClapeyronResult
+        - evaluateRaoult
+        - type RaoultInputs
+        - type RaoultResult
+        - evaluatePrandtl
+        - type PrandtlInputs
+        - type PrandtlResult
+        - evaluateReynoldsNumber
+        - type ReynoldsNumberInputs
+        - type ReynoldsNumberResult
+        - evaluateBiot
+        - type BiotInputs
+        - type BiotResult
+        - evaluateNusselt
+        - type NusseltInputs
+        - type NusseltResult
+        - evaluateSchmidt
+        - type SchmidtInputs
+        - type SchmidtResult
+        - evaluateSherwood
+        - type SherwoodInputs
+        - type SherwoodResult
+        - evaluateFourierConduction
+        - type FourierConductionInputs
+        - type FourierConductionResult
+        - evaluateNewtonCooling
+        - type NewtonCoolingInputs
+        - type NewtonCoolingResult
+        - evaluateOtto
+        - type OttoInputs
+        - type OttoResult
+        - evaluateJouleThomson
+        - type JouleThomsonInputs
+        - type JouleThomsonResult
+        - evaluatePlanckSpectrum
+        - type PlanckSpectrumInputs
+        - type PlanckSpectrumResult
+        - evaluateStefanBoltzmann
+        - type StefanBoltzmannResult
+        - evaluateWienDisplacement
+        - type WienDisplacementInputs
+        - type WienDisplacementResult
+        - evaluateSackurTetrode
+        - type SackurTetrodeInputs
+        - type SackurTetrodeResult
+        - evaluateSaha
+        - type SahaInputs
+        - type SahaResult
+        - evaluateRichardsonDushman
+        - type RichardsonDushmanInputs
+        - type RichardsonDushmanResult
+        - evaluateOnsagerReciprocity
+        - type OnsagerReciprocityInputs
+        - type OnsagerReciprocityResult
         - christoffel
         - ricci
         - einstein
@@ -22540,6 +23045,31 @@ modules:
         - be145Edge
         - be146Edge
         - CONDENSED_R8_EDGES
+        - be147Edge
+        - be148Edge
+        - be149Edge
+        - be150Edge
+        - be151Edge
+        - be152Edge
+        - be153Edge
+        - be154Edge
+        - be155Edge
+        - be156Edge
+        - be157Edge
+        - be158Edge
+        - be159Edge
+        - be160Edge
+        - be161Edge
+        - be162Edge
+        - be163Edge
+        - be164Edge
+        - be165Edge
+        - be166Edge
+        - be167Edge
+        - be168Edge
+        - be169Edge
+        - be170Edge
+        - THERMAL_R9_EDGES
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -23127,6 +23657,77 @@ modules:
         - evaluateGorterCasimir
         - type GorterCasimirInputs
         - type GorterCasimirResult
+        - evaluateArrhenius
+        - type ArrheniusInputs
+        - type ArrheniusResult
+        - evaluateEyring
+        - type EyringInputs
+        - type EyringResult
+        - evaluateVanTHoff
+        - type VanTHoffInputs
+        - type VanTHoffResult
+        - evaluateGibbsIsotherm
+        - type GibbsIsothermInputs
+        - type GibbsIsothermResult
+        - evaluateNernstGibbs
+        - type NernstGibbsInputs
+        - type NernstGibbsResult
+        - evaluateClausiusClapeyron
+        - type ClausiusClapeyronInputs
+        - type ClausiusClapeyronResult
+        - evaluateRaoult
+        - type RaoultInputs
+        - type RaoultResult
+        - evaluatePrandtl
+        - type PrandtlInputs
+        - type PrandtlResult
+        - evaluateReynoldsNumber
+        - type ReynoldsNumberInputs
+        - type ReynoldsNumberResult
+        - evaluateBiot
+        - type BiotInputs
+        - type BiotResult
+        - evaluateNusselt
+        - type NusseltInputs
+        - type NusseltResult
+        - evaluateSchmidt
+        - type SchmidtInputs
+        - type SchmidtResult
+        - evaluateSherwood
+        - type SherwoodInputs
+        - type SherwoodResult
+        - evaluateFourierConduction
+        - type FourierConductionInputs
+        - type FourierConductionResult
+        - evaluateNewtonCooling
+        - type NewtonCoolingInputs
+        - type NewtonCoolingResult
+        - evaluateOtto
+        - type OttoInputs
+        - type OttoResult
+        - evaluateJouleThomson
+        - type JouleThomsonInputs
+        - type JouleThomsonResult
+        - evaluatePlanckSpectrum
+        - type PlanckSpectrumInputs
+        - type PlanckSpectrumResult
+        - evaluateStefanBoltzmann
+        - type StefanBoltzmannResult
+        - evaluateWienDisplacement
+        - type WienDisplacementInputs
+        - type WienDisplacementResult
+        - evaluateSackurTetrode
+        - type SackurTetrodeInputs
+        - type SackurTetrodeResult
+        - evaluateSaha
+        - type SahaInputs
+        - type SahaResult
+        - evaluateRichardsonDushman
+        - type RichardsonDushmanInputs
+        - type RichardsonDushmanResult
+        - evaluateOnsagerReciprocity
+        - type OnsagerReciprocityInputs
+        - type OnsagerReciprocityResult
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
@@ -23364,6 +23965,31 @@ modules:
         - be145Edge
         - be146Edge
         - CONDENSED_R8_EDGES
+        - be147Edge
+        - be148Edge
+        - be149Edge
+        - be150Edge
+        - be151Edge
+        - be152Edge
+        - be153Edge
+        - be154Edge
+        - be155Edge
+        - be156Edge
+        - be157Edge
+        - be158Edge
+        - be159Edge
+        - be160Edge
+        - be161Edge
+        - be162Edge
+        - be163Edge
+        - be164Edge
+        - be165Edge
+        - be166Edge
+        - be167Edge
+        - be168Edge
+        - be169Edge
+        - be170Edge
+        - THERMAL_R9_EDGES
         - BridgeEdge
         - ComposeOptions
         - EdgeConfidence
@@ -25641,15 +26267,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 488
   totalModules: 13
-  totalLinesOfCode: 106610
-  totalExports: 4073
+  totalLinesOfCode: 107236
+  totalExports: 4265
   totalClasses: 63
   totalInterfaces: 656
   totalFunctions: 928
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 1127
-  totalReExports: 1969
+  totalReExports: 2162
   totalTypeOnlyImports: 594
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0

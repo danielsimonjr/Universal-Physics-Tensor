@@ -45,7 +45,9 @@
  * be-146. The sentence that the pin is
  * `8515c621d1c6e6d31c2eea4467181eb85d58234b` and that the table stops at
  * be-133 is the record from before that pin. That ingestion adds
- * `heisenberg_fraction`.
+ * `heisenberg_fraction`. PhysJS #69 adds be-147 through be-170. The
+ * sentence that the pin is `10cf71e9f1f460780f8620de7ba422df61e0949b` and
+ * that the table stops at be-146 is the record from before that pin.
  *
  * @module atlas/physjs-ref
  */
@@ -367,6 +369,30 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-144',
   'be-145',
   'be-146',
+  'be-147',
+  'be-148',
+  'be-149',
+  'be-150',
+  'be-151',
+  'be-152',
+  'be-153',
+  'be-154',
+  'be-155',
+  'be-156',
+  'be-157',
+  'be-158',
+  'be-159',
+  'be-160',
+  'be-161',
+  'be-162',
+  'be-163',
+  'be-164',
+  'be-165',
+  'be-166',
+  'be-167',
+  'be-168',
+  'be-169',
+  'be-170',
 ]);
 
 /**

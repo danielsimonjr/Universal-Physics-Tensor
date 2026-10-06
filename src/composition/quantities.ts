@@ -32,3 +32,4 @@ export * from './quantities/condensed-r5.js';
 export * from './quantities/plasma-space.js';
 export * from './quantities/engineering-r7.js';
 export * from './quantities/condensed-r8.js';
+export * from './quantities/thermal-r9.js';

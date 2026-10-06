@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { BRIDGE_EVALUATORS, evaluateBridge } from '../../src/bridges/evaluators.js';
+import { temperatureQuantityRole } from '../../src/dimensional/formula-names.js';
 import { parseUnit } from '../../src/dimensional/units.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
 
@@ -17,6 +18,8 @@ describe('BRIDGE_EVALUATORS', () => {
       101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
       120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
       134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+      147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160,
+      161, 162, 163, 164, 165, 166, 167, 168, 169, 170,
     ]);
   });
 
@@ -57,7 +60,9 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_S_per_m$/, 'S/m'],
       [/_ohm_m$/, 'ohm*m'],
       [/_m2_per_Vs$/, 'm^2/(V·s)'],
+      [/_m3_per_kg_K$/, 'm^3/(kg*K)'],
       [/_m3_per_kg$/, 'm^3/kg'],
+      [/_J_per_mol$/, 'J/mol'],
       [/_J_per_kg$/, 'J/kg'],
       [/_J_per_T$/, 'J/T'],
       [/_J_m2$/, 'J*m^2'],
@@ -71,7 +76,8 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_W_per_m_K$/, 'W/(m*K)'],
       [/_W_per_m2_K$/, 'W/(m^2*K)'],
       [/_W_per_m2$/, 'W/m^2'],
-      // Longer than `_m2`. A second moment is m^4; a bare area suffix is m^2.
+      // Longer than `_m2` and `_s`. A diffusivity is m^2/s; a second moment is m^4.
+      [/_m2_per_s$/, 'm^2/s'],
       [/_m4$/, 'm^4'],
       [/_per_m2$/, 'm^-2'],
       [/_m2$/, 'm^2'],
@@ -84,6 +90,8 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_T_per_m$/, 'T/m'],
       [/_V_per_m$/, 'V/m'],
       [/_per_m3$/, 'm^-3'],
+      // Longer than `_m`. A volume is m^3; a density already matched `_per_m3`.
+      [/_m3$/, 'm^3'],
       [/_m3_per_s$/, 'm^3/s'],
       [/_per_m$/, 'm^-1'],
       [/_rad_s$/, 'rad/s'],
@@ -111,7 +119,10 @@ describe('BRIDGE_EVALUATORS', () => {
       for (const p of parameters) {
         const expected = SUFFIX.find(([re]) => re.test(p.key))?.[1] ?? '';
         expect(p.unit, `${label} ${p.key}`).toBe(expected);
-        expect(p.temperature === 'absolute', `${label} ${p.key}`).toBe(expected === 'K');
+        // A kelvin suffix is a point unless the name is an interval. `theta_difference_K`
+        // is an excess: the reader drops the affine offset, and the flag stays unset.
+        const point = temperatureQuantityRole(p.key) === 'absolute';
+        expect(p.temperature === 'absolute', `${label} ${p.key}`).toBe(expected === 'K' && point);
       }
     }
   });
@@ -157,6 +168,13 @@ describe('BRIDGE_EVALUATORS', () => {
       A_per_m2: 1e18, Ic_A: 1e-3, lambda_m: 1e-6, lambda0_m: 1e-7,
       tau_s: 1e-14, tau1_s: 1e-14, tau2_s: 2e-14, C_ohm_m_s: 1e-15,
       chi_P: 1, x: 0.2,
+      A_Hz: 1e6, Ea_J_per_mol: 8e4, dG_J: 1e-19, dH_J_per_mol: 4e4,
+      K: 10, E0_volts: 1.1, Q: 10, T1_K: 300, T2_K: 373.15, Psat_Pa: 101325,
+      cp_J_per_kg_K: 4180, Lc_m: 0.01, D_m2_per_s: 1e-9,
+      km_m_per_s: 1e-4, T_L_K: 400, T_0_K: 300, c_J_per_kg_K: 4180, V_m3: 0.001,
+      t_s: 10, theta_difference_K: 18, r: 8, gamma: 1.4,
+      dv_dT_m3_per_kg_K: 0.001, v_m3_per_kg: 0.001, nu_Hz: 1e14, wien_x: 4.5,
+      nQ_per_m3: 1e30, I_J: 2e-18, phi_J: 4e-19, L12: 3, onsager_B_T: 0,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

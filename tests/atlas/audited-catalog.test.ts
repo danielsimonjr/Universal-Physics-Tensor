@@ -61,11 +61,13 @@ const rowOf = (id: number) => {
 
 describe('S1.5 — the ten audited catalog rows', () => {
   it('registers 63 catalog rows and 54 graph edges', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(136);
+    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+    // 136 is the record from before be-147..170.
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
-    expect(CATALOG_GRAPH).toHaveLength(127);
+    expect(CATALOG_GRAPH).toHaveLength(151);
+    // 127 is the record from before be-147..170.
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 77 and 68 are the record from before be-88..102.

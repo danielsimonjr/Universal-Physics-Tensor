@@ -111,7 +111,8 @@ describe('buildVizModel — evidence filter', () => {
     const proved = withBeId.filter((e) => deriveEdgeEvidence(e.beId!).has('formally-proved'));
     expect(proposed.length).toBeGreaterThan(0);
     // 24 is the record from before be-77..87. Each new edge derives formally-proved.
-    expect(proved.length).toBe(94);
+    expect(proved.length).toBe(118);
+    // 94 is the record from before be-147..170.
     // 81 is the record from before be-134..146.
     // 73 is the record from before be-126..133.
     // 50 is the record from before be-103..125. 35 is the record from before be-88..102.

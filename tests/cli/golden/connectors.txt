@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 204 established-confidence edge(s) of the 236 in this graph
+  anchored core: the clusters holding at least one of the 228 established-confidence edge(s) of the 260 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  72 of the isolated bridges share a name token with the core; 20 are truly unconnected.
+  72 of the isolated bridges share a name token with the core; 23 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -1147,6 +1147,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         position-momentum-uncertainty-product ≟ angular-momentum [[action]]  → CE-angular-momentum
 
 
-  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-100, be-123, be-124, be-128, be-145, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86, be-95, be-98
+  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-100, be-123, be-124, be-128, be-145, be-162, be-165, be-166, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86, be-95, be-98
 
   The isolated-bridge review is written up in https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md.

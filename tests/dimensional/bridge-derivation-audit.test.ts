@@ -124,7 +124,10 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // 39 of 83 is the record from before be-103..125. 46 of 106 admit a
     // closure. be-103 and be-118 are derived. be-105 is freedom 0 and not a
     // monomial. be-109, be-117, be-120, and be-121 are freedom 0 and decoys.
-    expect(closable.length).toBe(51);
+    expect(closable.length).toBe(58);
+    // 51 of 127 is the record from before be-147..170. 58 of 151 admit a
+    // closure. be-147, be-148, be-149, be-164, be-165, be-168, and be-169
+    // sit at freedom 0. be-165 is derived. The other six of those are decoys.
     // 46 of 106 is the record from before be-126..133. 46 of 114 admit a
     // closure. be-126, be-127, be-128, be-129, be-131, be-132, and be-133
     // are open. be-130 is not a monomial.
@@ -132,7 +135,8 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // closure. be-135, be-136, be-140, and be-141 are derived. be-137 is a
     // decoy. be-134, be-138, be-139, be-142, be-143, be-144, be-145, and
     // be-146 are open.
-    expect(ALL_EDGES.length - closable.length).toBe(76);
+    expect(ALL_EDGES.length - closable.length).toBe(93);
+    // 76 is the record from before be-147..170.
   });
 
   it('dimensional analysis is a weak filter: a small minority are genuine monomial derivations', () => {
@@ -152,7 +156,8 @@ describe('bridge dimensional audit — decoys and the irreducible majority', () 
     // be-96, be-97, and be-101 match their evaluators. be-92 and be-94 do not.
     // 25 is the record from before be-103..125. be-103 and be-118 match
     // their evaluators. be-109, be-117, be-120, and be-121 do not.
-    expect(derived.length).toBe(31);
+    expect(derived.length).toBe(32);
+    // 31 is the record from before be-147..170. be-165 matches its evaluator.
     // 27 is the record from before be-134..146. be-135, be-136, be-140, and
     // be-141 match their evaluators. be-137 does not.
   });
@@ -187,14 +192,20 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     expect(free('be-39')).toBe(5); // asymptotic safety
   });
 
-  it('the spectrum histogram is pinned (51 at 0; max 6)', () => {
+  it('the spectrum histogram is pinned (58 at 0; max 6, and be-150 is unclosable)', () => {
     const hist: Record<number, number> = {};
     for (const e of ALL_EDGES) hist[dimensionalFreedom(e)] = (hist[dimensionalFreedom(e)] ?? 0) + 1;
-    expect(hist[0]).toBe(51); // the dimensionally-pinned set (derived + decoy + no-samples)
+    expect(hist[0]).toBe(58); // the dimensionally-pinned set (derived + decoy + no-samples)
+    // 51 is the record from before be-147..170. The seven new zeros are
+    // be-147, be-148, be-149, be-164, be-165, be-168, and be-169.
     // 46 is the record from before be-134..146. be-135, be-136, be-137,
     // be-140, and be-141 sit at 0.
     // 39 at complexity 0 is the record from before be-103..125.
-    expect(Math.max(...Object.keys(hist).map(Number))).toBe(6);
+    const finite = Object.keys(hist).map(Number).filter((n) => Number.isFinite(n));
+    expect(Math.max(...finite)).toBe(6);
+    // be-150 targets energy per amount. The audit constants are ℏ, c, G, k_B, and e,
+    // so no subset spans N and the freedom is Infinity. 6 is still the finite maximum.
+    expect(hist[Infinity]).toBe(1);
     // 18 bridges are exactly one dimensionless ratio away from a monomial.
     // 14 is the record from before be-77..87. be-77, be-78, be-79, and be-86
     // each add one. be-68 is one: g_00 is dimensionless, so T √(−g_00) is
@@ -207,7 +218,10 @@ describe('bridge dimensional complexity — the spectrum behind "unclosable"', (
     // 22 at complexity 1 is the record from before be-103..125. be-104,
     // be-106, be-110, be-111, be-112, be-113, be-114, be-115, be-122, and
     // be-123 each add one.
-    expect(hist[1]).toBe(42);
+    expect(hist[1]).toBe(54);
+    // 42 is the record from before be-147..170. be-152 through be-160 except
+    // be-151, plus be-163, be-166, and be-170, each add one. be-151 and be-162
+    // sit at 2. be-161 sits at 3.
     // 36 is the record from before be-134..146. be-134, be-139, be-142,
     // be-143, be-144, and be-146 each add one. be-138 sits at 2. be-145
     // sits at 2.

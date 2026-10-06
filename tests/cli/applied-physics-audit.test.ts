@@ -138,7 +138,8 @@ describe('F09 — a proof badge carries its theorem scope', () => {
 // Already true when the audit ran (it read the text view only); pinned across every export so a
 // later change cannot merge "no overlay metadata" into "did not match".
 describe('F10 — an evidence-filtered export keeps absent evidence apart from non-matching evidence', () => {
-  const split = /94 of 236 kept; 32 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
+  const split = /118 of 260 kept; 32 dropped \(did not match\); 110 dropped \(no overlay metadata\)/;
+  // 94 of 236 is the record from before be-147..170. Those twenty-four are formally-proved, so they are kept.
   // 81 of 223 is the record from before be-134..146. Those thirteen are formally-proved, so they are kept.
   // 73 of 215 is the record from before be-126..133. Those eight are formally-proved, so they are kept.
   // 50 of 192 is the record from before be-103..125. Those twenty-three are formally-proved, so they are kept.
@@ -152,8 +153,8 @@ describe('F10 — an evidence-filtered export keeps absent evidence apart from n
     const c = capture();
     await runCli(['map', '--source=both', '--evidence=formally-proved', '--json'], c.io);
     expect(JSON.parse(c.lines.join('')).result.filter).toEqual({
-      total: 236,
-      kept: 94,
+      total: 260,
+      kept: 118,
       droppedNotMatching: 32,
       droppedMissingMetadata: 110,
       evidence: 'formally-proved',
@@ -165,7 +166,8 @@ describe('F11 — DECOY is a failed dimensional reconstruction, not a physical r
   it('the heading names the reconstruction that failed and disclaims refutation', async () => {
     const { text } = await run(['audit']);
     expect(text).toMatch(
-      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 16\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
+      /DIMENSIONAL-RECONSTRUCTION MISMATCH \(DECOY, 22\) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator/,
+      // 16 is the record from before be-147..170. be-147, be-148, be-149, be-164, be-168, and be-169 are the six new decoys.
       // 15 is the record from before be-134..146. be-137 is the new decoy.
       // 11 is the record from before be-103..125. be-109, be-117, be-120, and be-121 are the four new decoys.
     );

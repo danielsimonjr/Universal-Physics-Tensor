@@ -54,6 +54,10 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
     // be-144 share "scatter". A shared token is not an identification.
     // be-141 and be-145 have no connector. be-140, be-142, be-144, and be-146
     // have connectors that are not same-kind, so they are in neither list.
+    // The lists without be-147..170 are the record from before those edges.
+    // be-162, be-165, and be-166 have no connector. The other twenty-one new
+    // edges have connectors that are not same-kind, so they are in neither list.
+    // A shared token is not an identification.
     expect(report.connectedOrphans).toEqual([
       'be-101', 'be-102', 'be-103', 'be-104', 'be-105', 'be-106', 'be-108', 'be-109', 'be-111', 'be-112',
       'be-113', 'be-114', 'be-115', 'be-116', 'be-117', 'be-118', 'be-119', 'be-120', 'be-121', 'be-122',
@@ -63,7 +67,7 @@ describe('proposeOrphanConnectors — the isolated-bridge frontier', () => {
       'be-93', 'be-94', 'be-96', 'be-97', 'be-99',
     ]);
     expect(report.unconnectedOrphans).toEqual([
-      'be-100', 'be-123', 'be-124', 'be-128', 'be-141', 'be-145', 'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
+      'be-100', 'be-123', 'be-124', 'be-128', 'be-141', 'be-145', 'be-162', 'be-165', 'be-166', 'be-17', 'be-21', 'be-25', 'be-30', 'be-39', 'be-46', 'be-49', 'be-50', 'be-53', 'be-72',
       'be-86', 'be-95', 'be-98',
     ]);
     // every isolated bridge is accounted for (connected ∪ unconnected, no overlap)

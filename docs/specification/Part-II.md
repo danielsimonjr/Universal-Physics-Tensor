@@ -2362,6 +2362,342 @@ where:
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.GorterCasimir.gorter_casimir`.
 - **Rationale**: The catalog value is the statement in the proof-status paragraph.
 
+**Bridge Equation 147: Arrhenius rate** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Arrhenius.arrhenius_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Arrhenius.lean) states the catalog formula. Type standard. T ≠ 0. The prefactor A is temperature-independent. The Eyring identification of A is not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateArrhenius`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: k = A exp(−Ea/(R T)) with R = N_A k_B is the molecular factor exp(−ε/(k_B T)) at ε = Ea/N_A. The prefactor A is temperature-independent.
+- **Mathematical Formulation**: `k = A \exp(-E_a/(R T)),\quad R = N_A k_B`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: T ≠ 0. The prefactor A is temperature-independent. The Eyring identification of A is not this row.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Arrhenius.arrhenius_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 148: Eyring rate** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Eyring.eyring_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Eyring.lean) states the catalog formula. Type standard. T ≠ 0. The transmission coefficient is 1. The molar form calls be-147. Ea = ΔH‡ + R T and A = (k_B T/h) exp(ΔS‡/R) differ from this rate by exp(−1). The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateEyring`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: k = (k_B T/h) exp(−ΔG‡/(k_B T)). The molar form calls Arrhenius at R = N_A k_B.
+- **Mathematical Formulation**: `k = (k_B T/h) \exp(-\Delta G^\ddagger/(k_B T))`.
+- **Dimensions**: The catalog signature is `[frequency]`.
+- **Domain**: T ≠ 0. The transmission coefficient is 1. The molar form calls be-147. Ea = ΔH‡ + R T and A = (k_B T/h) exp(ΔS‡/R) differ from this rate by exp(−1).
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Eyring.eyring_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 149: van 't Hoff slope** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.VanTHoff.vant_hoff`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/VanTHoff.lean) states the catalog formula. Type standard. T ≠ 0. ΔH° and ΔS° are constant. Derived from be-150. Not a plot and not a second proof of be-150. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateVanTHoff`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: equilibrium_log is the Gibbs isotherm, so ln K = −ΔG°/(R T). At ΔG° = ΔH° − T ΔS° with both constant, d ln K/dT = ΔH°/(R T²).
+- **Mathematical Formulation**: `\frac{d \ln K}{dT} = \frac{\Delta H^\circ}{R T^2}`.
+- **Dimensions**: The catalog signature is `[Theta^-1]`.
+- **Domain**: T ≠ 0. ΔH° and ΔS° are constant. Derived from be-150. Not a plot and not a second proof of be-150.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.VanTHoff.vant_hoff`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 150: Gibbs isotherm** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.GibbsIsotherm.gibbs_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/GibbsIsotherm.lean) states the catalog formula. Type standard. K > 0 and T ≠ 0. Not an activity model. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateGibbsIsotherm`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Σ ν_i μ_i = 0 with μ_i = μ_i° + R T ln a_i gives ΔG° = −R T ln K for K > 0 and T ≠ 0. Not an activity model.
+- **Mathematical Formulation**: `\Delta G^\circ = -R T \ln K`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-2 N^-1]`.
+- **Domain**: K > 0 and T ≠ 0. Not an activity model.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.GibbsIsotherm.gibbs_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 151: Nernst voltage** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.NernstGibbs.nernst_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/NernstGibbs.lean) states the catalog formula. Type standard. n ≠ 0 and Q > 0. The edge value is E. Derived from be-150. e is the elementary charge. Not a second proof of be-150. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateNernstGibbs`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The cell standard state is the Gibbs isotherm, and ΔG = −n F E with F = N_A e gives E = E° − (R T/(n F)) ln Q. e is the elementary charge.
+- **Mathematical Formulation**: `E = E^\circ - (R T/(n F)) \ln Q,\quad F = N_A e`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1]`.
+- **Domain**: n ≠ 0 and Q > 0. The edge value is E. Derived from be-150. e is the elementary charge. Not a second proof of be-150.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.NernstGibbs.nernst_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 152: Integrated Clausius–Clapeyron** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.ClausiusClapeyron.integrated_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/ClausiusClapeyron.lean) states the catalog formula. Type standard. Both temperatures are positive. Derived from be-71. A separate liquid volume is not this row. Not a second proof of be-71. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateClausiusClapeyron`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: ideal_vapor_slope calls the Clapeyron slope, be-71, and substitutes Δv = R T/P. Constant latent heat integrates to ln(P2/P1) = −(ΔH/R)(1/T2 − 1/T1).
+- **Mathematical Formulation**: `\ln(P_2/P_1) = -(\Delta H/R)(1/T_2 - 1/T_1)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: Both temperatures are positive. Derived from be-71. A separate liquid volume is not this row. Not a second proof of be-71.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ClausiusClapeyron.integrated_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 153: Raoult partial pressure** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Raoult.raoult_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Raoult.lean) states the catalog formula. Type standard. P* > 0. Derived from be-150 twice, once for the mixture and once for the pure liquid. A nonideal activity is not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateRaoult`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The Gibbs isotherm on the ideal mixture and on the pure liquid gives P = x P*. The liquid activity is the mole fraction and the vapor activity is P/P°.
+- **Mathematical Formulation**: `P = x P^*`.
+- **Dimensions**: The catalog signature is `[L^-1 M T^-2]`.
+- **Domain**: P* > 0. Derived from be-150 twice, once for the mixture and once for the pure liquid. A nonideal activity is not this row.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Raoult.raoult_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 154: Prandtl number** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Prandtl.prandtl_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Prandtl.lean) states the catalog formula. Type standard. k ≠ 0. Not a heat-transfer correlation and not the Reynolds analogy of be-86. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluatePrandtl`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The ratio identity Pr = ν/α with ν = μ/ρ and α = k/(ρ c_p) is the product Pr k = μ c_p. Not a heat-transfer correlation and not the Reynolds analogy of be-86.
+- **Mathematical Formulation**: `\mathrm{Pr} = \mu c_p / k`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: k ≠ 0. Not a heat-transfer correlation and not the Reynolds analogy of be-86.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Prandtl.prandtl_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 155: Reynolds number** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.ReynoldsNumber.reynolds_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/ReynoldsNumber.lean) states the catalog formula. Type standard. μ ≠ 0. Not a friction correlation and not the pipe factor of be-77. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateReynoldsNumber`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Inertial flux over viscous flux is Re = (ρ v²)/(μ v/L) = v L/ν with ν = μ/ρ, so Re μ = ρ v L. Not a friction correlation and not the pipe factor of be-77.
+- **Mathematical Formulation**: `\mathrm{Re} = \rho v L / \mu`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: μ ≠ 0. Not a friction correlation and not the pipe factor of be-77.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ReynoldsNumber.reynolds_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 156: Biot number** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Biot.biot_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Biot.lean) states the catalog formula. Type standard. k ≠ 0. The edge value is Bi = h L_c/k. Bi = h V/(k A) when L_c = V/A is the same statement. Not a lumped-capacitance criterion. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateBiot`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: With L_c = V/A, Bi = (L_c/k)/(1/h) = h V/(k A), so Bi k = h L_c. Not a lumped-capacitance criterion.
+- **Mathematical Formulation**: `\mathrm{Bi} = h L_c / k`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: k ≠ 0. The edge value is Bi = h L_c/k. Bi = h V/(k A) when L_c = V/A is the same statement. Not a lumped-capacitance criterion.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Biot.biot_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 157: Nusselt number** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Nusselt.nusselt_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Nusselt.lean) states the catalog formula. Type standard. k ≠ 0. Not a correlation for Nu. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateNusselt`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: h = k (∂T/∂n)/ΔT makes Nu = h L/k equal to L (∂T/∂n)/ΔT, so Nu k = h L. Not a correlation for Nu.
+- **Mathematical Formulation**: `\mathrm{Nu} = h L / k`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: k ≠ 0. Not a correlation for Nu.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Nusselt.nusselt_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 158: Schmidt number** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Schmidt.schmidt_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Schmidt.lean) states the catalog formula. Type standard. ρ ≠ 0 and D ≠ 0. The edge value is Sc. Le = Sc/Pr is the second conjunct and is not a second edge. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateSchmidt`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Sc = ν/D with ν = μ/ρ is Sc ρ D = μ, and Le = α/D = Sc/Pr once Pr = ν/α. Not a mass-transfer correlation.
+- **Mathematical Formulation**: `\mathrm{Sc} = \mu/(\rho D)`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: ρ ≠ 0 and D ≠ 0. The edge value is Sc. Le = Sc/Pr is the second conjunct and is not a second edge.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Schmidt.schmidt_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 159: Sherwood number** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Sherwood.sherwood_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Sherwood.lean) states the catalog formula. Type standard. D ≠ 0. Not a correlation for Sh. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateSherwood`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: k_m = D (∂c/∂n)/Δc makes Sh = k_m L/D equal to L (∂c/∂n)/Δc, so Sh D = k_m L. Not a correlation for Sh.
+- **Mathematical Formulation**: `\mathrm{Sh} = k_m L / D`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: D ≠ 0. Not a correlation for Sh.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Sherwood.sherwood_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 160: Fourier slab flux** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.FourierConduction.fourier_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/FourierConduction.lean) states the catalog formula. Type standard. k ≠ 0 and L ≠ 0. The proved statement is the integrated slab, sign included. The differential is the hypothesis. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateFourierConduction`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: A constant flux q = −k dT/dx integrates to q L = −k (T(L) − T(0)). A temperature-dependent conductivity is not this row.
+- **Mathematical Formulation**: `q L = -k (T(L) - T(0))`.
+- **Dimensions**: The catalog signature is `[M T^-3]`.
+- **Domain**: k ≠ 0 and L ≠ 0. The proved statement is the integrated slab, sign included. The differential is the hypothesis.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.FourierConduction.fourier_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 161: Newton cooling** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.NewtonCooling.newton_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/NewtonCooling.lean) states the catalog formula. Type standard. ρ c V ≠ 0 and h A ≠ 0. The edge value is θ(t). θ(0) is an interval: the evaluator key theta_difference_K. The bare flux q = h A θ is not this temperature. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateNewtonCooling`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: ρ c V dθ/dt = −h A θ integrates to θ(t) = θ(0) exp(−t/τ) with τ = ρ c V/(h A). Radiation in T^4 is not this row.
+- **Mathematical Formulation**: `\theta(t) = \theta(0) \exp(-t/\tau),\quad \tau = \rho c V/(h A)`.
+- **Dimensions**: The catalog signature is `[temperature]`.
+- **Domain**: ρ c V ≠ 0 and h A ≠ 0. The edge value is θ(t). θ(0) is an interval: the evaluator key theta_difference_K. The bare flux q = h A θ is not this temperature.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.NewtonCooling.newton_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 162: Otto efficiency** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Otto.otto_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Otto.lean) states the catalog formula. Type standard. r > 0 and γ > 1. Cold-air standard. A temperature-dependent heat capacity is not this row. r^(γ−1) is not r^(1−γ). The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateOtto`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The cold-air isentropic cycle at constant γ > 1 gives η = 1 − r^(1−γ). A temperature-dependent heat capacity is not this row.
+- **Mathematical Formulation**: `\eta = 1 - r^{1-\gamma}`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: r > 0 and γ > 1. Cold-air standard. A temperature-dependent heat capacity is not this row. r^(γ−1) is not r^(1−γ).
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Otto.otto_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 163: Joule–Thomson coefficient** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.JouleThomson.joule_thomson_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/JouleThomson.lean) states the catalog formula. Type standard. c_p ≠ 0. The edge value is the general coefficient. The ideal-gas bracket v = R T/P vanishes. Not a measured inversion curve. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateJouleThomson`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The enthalpy differential dh = c_p dT + (v − T (∂v/∂T)_p) dP is a hypothesis. It gives μ_JT c_p = T (∂v/∂T)_p − v, and the ideal-gas bracket v = R T/P vanishes.
+- **Mathematical Formulation**: `\mu_{JT} c_p = T (\partial v/\partial T)_p - v`.
+- **Dimensions**: The catalog signature is `[L M^-1 T^2 Theta]`.
+- **Domain**: c_p ≠ 0. The edge value is the general coefficient. The ideal-gas bracket v = R T/P vanishes. Not a measured inversion curve.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.JouleThomson.joule_thomson_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 164: Planck spectrum** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.PlanckSpectrum.planck_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/PlanckSpectrum.lean) states the catalog formula. Type cross-domain. ν > 0 and T > 0. The 8π mode density, two polarizations, is a hypothesis. One polarization is not this density. The frequency integral is be-165. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluatePlanckSpectrum`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The Bose factor 1/(exp(x) − 1) = Σ_{n≥1} exp(−n x) is proved. The mode density 8 π ν²/c³, two polarizations, is a hypothesis.
+- **Mathematical Formulation**: `u (\exp(h\nu/k_B T) - 1) c^3 = 8 \pi h \nu^3`.
+- **Dimensions**: The catalog signature is `[L^-1 M T^-1]`.
+- **Domain**: ν > 0 and T > 0. The 8π mode density, two polarizations, is a hypothesis. One polarization is not this density. The frequency integral is be-165.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.PlanckSpectrum.planck_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 165: Stefan–Boltzmann constant** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.StefanBoltzmann.stefan_boltzmann_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/StefanBoltzmann.lean) states the catalog formula. Type cross-domain. No inputs. The value is π² k_B⁴/(60 ℏ³ c²), the exact quotient, not a rounded display. The mode density 8π is the hypothesis of be-164. Not a radiometer measurement. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateStefanBoltzmann`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: ∫_0^∞ x³/(exp(x) − 1) dx = π⁴/15 from Σ n^{−4} = π⁴/90 and Γ(4) = 6. The hemisphere integrals give the factor c/4.
+- **Mathematical Formulation**: `\sigma = \pi^2 k_B^4 / (60 \hbar^3 c^2)`.
+- **Dimensions**: The catalog signature is `[M T^-3 Theta^-4]`.
+- **Domain**: No inputs. The value is π² k_B⁴/(60 ℏ³ c²), the exact quotient, not a rounded display. The mode density 8π is the hypothesis of be-164. Not a radiometer measurement.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.StefanBoltzmann.stefan_boltzmann_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 166: Wien displacement** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.WienDisplacement.wien_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/WienDisplacement.lean) states the catalog formula. Type cross-domain. x is an input in (4, 5). The unique positive root of 5 − x = 5 exp(−x) lies in that interval. The decimal is not evaluated. x = 0 is an extraneous root. Supplying an x states the algebra and does not certify that the supplied x is the root. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateWienDisplacement`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: spectral(x) = x⁵/(exp(x) − 1) has derivative zero for x > 0 exactly when 5 − x = 5 exp(−x). That equation has a unique positive root and the root lies in (4, 5).
+- **Mathematical Formulation**: `b k_B x = h c`.
+- **Dimensions**: The catalog signature is `[L Theta]`.
+- **Domain**: x is an input in (4, 5). The unique positive root of 5 − x = 5 exp(−x) lies in that interval. The decimal is not evaluated. x = 0 is an extraneous root. Supplying an x states the algebra and does not certify that the supplied x is the root.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.WienDisplacement.wien_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 167: Sackur–Tetrode entropy** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.SackurTetrode.sackur_tetrode`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/SackurTetrode.lean) states the catalog formula. Type cross-domain. n_Q > 0 and n > 0. n_Q is the thermal de Broglie factor of be-12 and is an input, not re-derived. Stirling is ln N! = N ln N − N, not the series. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateSackurTetrode`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: n_Q = λ_T^{−3} uses the thermal de Broglie wavelength, be-12. Stirling ln N! = N ln N − N is a hypothesis, and U = (3/2) N k_B T is equipartition.
+- **Mathematical Formulation**: `S = N k_B (\ln(n_Q/n) + 5/2)`.
+- **Dimensions**: The catalog signature is `[entropy]`.
+- **Domain**: n_Q > 0 and n > 0. n_Q is the thermal de Broglie factor of be-12 and is an input, not re-derived. Stirling is ln N! = N ln N − N, not the series.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.SackurTetrode.sackur_tetrode`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 168: Saha ionization constant** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Saha.saha_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Saha.lean) states the catalog formula. Type cross-domain. m > 0 and T > 0. Derived from be-12. The electron spin weight 2 and the internal partition functions are not in this statement. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateSaha`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The thermal factor is the thermal de Broglie wavelength, so K = (2 π m k_B T/h²)^{3/2} exp(−I/(k_B T)). The electron weight 2 and the internal partition functions are not in this statement.
+- **Mathematical Formulation**: `K = (2\pi m k_B T/h^2)^{3/2} \exp(-I/(k_B T))`.
+- **Dimensions**: The catalog signature is `[L^-3]`.
+- **Domain**: m > 0 and T > 0. Derived from be-12. The electron spin weight 2 and the internal partition functions are not in this statement.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Saha.saha_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 169: Richardson–Dushman current** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.RichardsonDushman.richardson_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/RichardsonDushman.lean) states the catalog formula. Type cross-domain. T > 0. The Boltzmann tail replaces Fermi–Dirac. The reflection coefficient is 1. The prefactor 4 π m e/h³ is a hypothesis. e is the elementary charge. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateRichardsonDushman`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: ∫_a^∞ exp(−c x) dx = exp(−c a)/c is proved. The current is the hypothesis 4 π m e/h³ times one factor k_B T from each tail, so J h³ exp(φ/(k_B T)) = 4 π m e k_B² T².
+- **Mathematical Formulation**: `J h^3 \exp(\varphi/(k_B T)) = 4 \pi m e k_B^2 T^2`.
+- **Dimensions**: The catalog signature is `[L^-2 I]`.
+- **Domain**: T > 0. The Boltzmann tail replaces Fermi–Dirac. The reflection coefficient is 1. The prefactor 4 π m e/h³ is a hypothesis. e is the elementary charge.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.RichardsonDushman.richardson_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 170: Onsager reciprocity** *(Category D: Field Unification Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.OnsagerReciprocity.onsager_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/OnsagerReciprocity.lean) states the catalog formula. Type cross-domain. B = 0. The magnetic case L12(B) = L21(−B) is not this row. The thermoelectric instance applies be-73 and does not re-prove Π = S T. An antisymmetric cross term is not this equality. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/thermal-r9.ts`](../../src/bridges/thermal-r9.ts) (`evaluateOnsagerReciprocity`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The mixed partials of Φ = ½ L11 X1² + L12 X1 X2 + ½ L22 X2² are both L12, so L12 = L21. thermoelectric_instance applies the Kelvin–Peltier relation, be-73, and does not re-prove Π = S T.
+- **Mathematical Formulation**: `L_{12} = L_{21}`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: B = 0. The magnetic case L12(B) = L21(−B) is not this row. The thermoelectric instance applies be-73 and does not re-prove Π = S T. An antisymmetric cross term is not this equality.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.OnsagerReciprocity.onsager_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
 **Open candidates, unproved.** These two statements have no bridge id and no `formalRef`.
 
 - **Landau diamagnetism.** `χ_L = −χ_P / 3` for free electrons in three dimensions. No Lean theorem in the pinned PhysJS manifest states it. It is not BE-94. BE-94 is the Pauli spin susceptibility.
@@ -2374,7 +2710,7 @@ These additional equations fill crucial gaps in the tensor structure according t
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. The sentence that ids 51–102 take the pattern of their category is the record from before BE-103 through BE-125. Ids 103–125 take the pattern of category D. The sentence that the field-unification list stops at 125 is the record from before BE-126 through BE-133. Ids 126–133 take the pattern of category D. The sentence that the scale-transition list stops at 102 is the record from before BE-134 through BE-146. Ids 134–146 take the pattern of category F. No new pattern is introduced.
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. The sentence that ids 51–102 take the pattern of their category is the record from before BE-103 through BE-125. Ids 103–125 take the pattern of category D. The sentence that the field-unification list stops at 125 is the record from before BE-126 through BE-133. Ids 126–133 take the pattern of category D. The sentence that the scale-transition list stops at 102 is the record from before BE-134 through BE-146. Ids 134–146 take the pattern of category F. The sentence that the field-unification list stops at 133 is the record from before BE-147 through BE-170. Ids 147–170 take the pattern of category D. No new pattern is introduced.
 
 1. **Quantum-Classical Bridges (11-12, 33-35, 56, 71)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
@@ -2385,7 +2721,7 @@ Each bridge equation type maps to specific tensor components. The component is t
 3. **Emergence Patterns (15-16, 27-29, 48-50, 58, 70, 85, 87)**:
    Higher-rank correlations <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%5Cbeta%5Cgamma%5Cdelta%5Cepsilon%5Czeta%E2%80%A6%7D" alt="\boldsymbol{\Pi}^{\alpha\beta\gamma\delta\epsilon\zeta…}" />
    Categories C, H, and O. The ellipsis is the mark of this cluster (Part I §1.2, the emergent component). A scalar formula in the cluster keeps the ellipsis: BE-27's encoded form is a scalar and is already in this list.
-4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86, 103-133)**:
+4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86, 103-133, 147-170)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
    Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
 5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84, 88-102, 134-146)**:

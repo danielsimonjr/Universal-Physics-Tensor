@@ -825,7 +825,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (106)"]
+  subgraph cl_iso["isolated (130)"]
     direction LR
     j_be_100["BE-100"]:::law
     q_lst_static(["lst-static"]):::qty
@@ -1219,6 +1219,207 @@ flowchart LR
     q_gortercas_tc --> j_be_146
     q_gortercas_ns(["gortercas-ns"]):::qty
     j_be_146 --> q_gortercas_ns
+    j_be_147["BE-147"]:::law
+    q_arrhprefac(["arrhprefac"]):::qty
+    q_arrhprefac --> j_be_147
+    q_arrhbarrier(["arrhbarrier"]):::qty
+    q_arrhbarrier --> j_be_147
+    q_arrhwarmth(["arrhwarmth"]):::qty
+    q_arrhwarmth --> j_be_147
+    q_arrhrate(["arrhrate"]):::qty
+    j_be_147 --> q_arrhrate
+    j_be_148["BE-148"]:::law
+    q_eyringbarrier(["eyringbarrier"]):::qty
+    q_eyringbarrier --> j_be_148
+    q_eyringwarmth(["eyringwarmth"]):::qty
+    q_eyringwarmth --> j_be_148
+    q_eyringrate(["eyringrate"]):::qty
+    j_be_148 --> q_eyringrate
+    j_be_149["BE-149"]:::law
+    q_vanthoffenthalpy(["vanthoffenthalpy"]):::qty
+    q_vanthoffenthalpy --> j_be_149
+    q_vanthoffwarmth(["vanthoffwarmth"]):::qty
+    q_vanthoffwarmth --> j_be_149
+    q_vanthoffslope(["vanthoffslope"]):::qty
+    j_be_149 --> q_vanthoffslope
+    j_be_150["BE-150"]:::law
+    q_gibbsisok(["gibbsisok"]):::qty
+    q_gibbsisok --> j_be_150
+    q_gibbsisowarmth(["gibbsisowarmth"]):::qty
+    q_gibbsisowarmth --> j_be_150
+    q_gibbsisodg(["gibbsisodg"]):::qty
+    j_be_150 --> q_gibbsisodg
+    j_be_151["BE-151"]:::law
+    q_nernstge0(["nernstge0"]):::qty
+    q_nernstge0 --> j_be_151
+    q_nernstgn(["nernstgn"]):::qty
+    q_nernstgn --> j_be_151
+    q_nernstgq(["nernstgq"]):::qty
+    q_nernstgq --> j_be_151
+    q_nernstgwarmth(["nernstgwarmth"]):::qty
+    q_nernstgwarmth --> j_be_151
+    q_nernstge(["nernstge"]):::qty
+    j_be_151 --> q_nernstge
+    j_be_152["BE-152"]:::law
+    q_clapintlatent(["clapintlatent"]):::qty
+    q_clapintlatent --> j_be_152
+    q_clapintwarm1(["clapintwarm1"]):::qty
+    q_clapintwarm1 --> j_be_152
+    q_clapintwarm2(["clapintwarm2"]):::qty
+    q_clapintwarm2 --> j_be_152
+    q_clapintln(["clapintln"]):::qty
+    j_be_152 --> q_clapintln
+    j_be_153["BE-153"]:::law
+    q_raoultmole(["raoultmole"]):::qty
+    q_raoultmole --> j_be_153
+    q_raoultsat(["raoultsat"]):::qty
+    q_raoultsat --> j_be_153
+    q_raoultvapor(["raoultvapor"]):::qty
+    j_be_153 --> q_raoultvapor
+    j_be_154["BE-154"]:::law
+    q_prandtlmu(["prandtlmu"]):::qty
+    q_prandtlmu --> j_be_154
+    q_prandtlcp(["prandtlcp"]):::qty
+    q_prandtlcp --> j_be_154
+    q_prandtlk(["prandtlk"]):::qty
+    q_prandtlk --> j_be_154
+    q_prandtlratio(["prandtlratio"]):::qty
+    j_be_154 --> q_prandtlratio
+    j_be_155["BE-155"]:::law
+    q_reynumrho(["reynumrho"]):::qty
+    q_reynumrho --> j_be_155
+    q_reynumvel(["reynumvel"]):::qty
+    q_reynumvel --> j_be_155
+    q_reynumlen(["reynumlen"]):::qty
+    q_reynumlen --> j_be_155
+    q_reynummu(["reynummu"]):::qty
+    q_reynummu --> j_be_155
+    q_reynumratio(["reynumratio"]):::qty
+    j_be_155 --> q_reynumratio
+    j_be_156["BE-156"]:::law
+    q_biotfilm(["biotfilm"]):::qty
+    q_biotfilm --> j_be_156
+    q_biotlength(["biotlength"]):::qty
+    q_biotlength --> j_be_156
+    q_biotk(["biotk"]):::qty
+    q_biotk --> j_be_156
+    q_biotratio(["biotratio"]):::qty
+    j_be_156 --> q_biotratio
+    j_be_157["BE-157"]:::law
+    q_nusseltfilm(["nusseltfilm"]):::qty
+    q_nusseltfilm --> j_be_157
+    q_nusseltlen(["nusseltlen"]):::qty
+    q_nusseltlen --> j_be_157
+    q_nusseltk(["nusseltk"]):::qty
+    q_nusseltk --> j_be_157
+    q_nusseltratio(["nusseltratio"]):::qty
+    j_be_157 --> q_nusseltratio
+    j_be_158["BE-158"]:::law
+    q_schmidtmu(["schmidtmu"]):::qty
+    q_schmidtmu --> j_be_158
+    q_schmidtrho(["schmidtrho"]):::qty
+    q_schmidtrho --> j_be_158
+    q_schmidtdiff(["schmidtdiff"]):::qty
+    q_schmidtdiff --> j_be_158
+    q_schmidtratio(["schmidtratio"]):::qty
+    j_be_158 --> q_schmidtratio
+    j_be_159["BE-159"]:::law
+    q_sherwoodkm(["sherwoodkm"]):::qty
+    q_sherwoodkm --> j_be_159
+    q_sherwoodlen(["sherwoodlen"]):::qty
+    q_sherwoodlen --> j_be_159
+    q_sherwooddiff(["sherwooddiff"]):::qty
+    q_sherwooddiff --> j_be_159
+    q_sherwoodratio(["sherwoodratio"]):::qty
+    j_be_159 --> q_sherwoodratio
+    j_be_160["BE-160"]:::law
+    q_fourierslabk(["fourierslabk"]):::qty
+    q_fourierslabk --> j_be_160
+    q_fourierslabend(["fourierslabend"]):::qty
+    q_fourierslabend --> j_be_160
+    q_fourierslabstart(["fourierslabstart"]):::qty
+    q_fourierslabstart --> j_be_160
+    q_fourierslablen(["fourierslablen"]):::qty
+    q_fourierslablen --> j_be_160
+    q_fourierslabflux(["fourierslabflux"]):::qty
+    j_be_160 --> q_fourierslabflux
+    j_be_161["BE-161"]:::law
+    q_newtonrho(["newtonrho"]):::qty
+    q_newtonrho --> j_be_161
+    q_newtoncp(["newtoncp"]):::qty
+    q_newtoncp --> j_be_161
+    q_newtonvol(["newtonvol"]):::qty
+    q_newtonvol --> j_be_161
+    q_newtonfilm(["newtonfilm"]):::qty
+    q_newtonfilm --> j_be_161
+    q_newtonarea(["newtonarea"]):::qty
+    q_newtonarea --> j_be_161
+    q_newtontime(["newtontime"]):::qty
+    q_newtontime --> j_be_161
+    q_newtontheta0(["newtontheta0"]):::qty
+    q_newtontheta0 --> j_be_161
+    q_newtontheta(["newtontheta"]):::qty
+    j_be_161 --> q_newtontheta
+    j_be_162["BE-162"]:::law
+    q_ottoratio(["ottoratio"]):::qty
+    q_ottoratio --> j_be_162
+    q_ottogamma(["ottogamma"]):::qty
+    q_ottogamma --> j_be_162
+    q_ottoeta(["ottoeta"]):::qty
+    j_be_162 --> q_ottoeta
+    j_be_163["BE-163"]:::law
+    q_jtcwarmth(["jtcwarmth"]):::qty
+    q_jtcwarmth --> j_be_163
+    q_jtcdvdt(["jtcdvdt"]):::qty
+    q_jtcdvdt --> j_be_163
+    q_jtcvolume(["jtcvolume"]):::qty
+    q_jtcvolume --> j_be_163
+    q_jtcp(["jtcp"]):::qty
+    q_jtcp --> j_be_163
+    q_jtcmu(["jtcmu"]):::qty
+    j_be_163 --> q_jtcmu
+    j_be_164["BE-164"]:::law
+    q_planckfreq(["planckfreq"]):::qty
+    q_planckfreq --> j_be_164
+    q_planckwarmth(["planckwarmth"]):::qty
+    q_planckwarmth --> j_be_164
+    q_plancku(["plancku"]):::qty
+    j_be_164 --> q_plancku
+    j_be_165["BE-165"]:::law
+    q_stefansigma(["stefansigma"]):::qty
+    j_be_165 --> q_stefansigma
+    j_be_166["BE-166"]:::law
+    q_wienroot(["wienroot"]):::qty
+    q_wienroot --> j_be_166
+    q_wienb(["wienb"]):::qty
+    j_be_166 --> q_wienb
+    j_be_167["BE-167"]:::law
+    q_sackurcount(["sackurcount"]):::qty
+    q_sackurcount --> j_be_167
+    q_sackurquantum(["sackurquantum"]):::qty
+    q_sackurquantum --> j_be_167
+    q_sackurdensity(["sackurdensity"]):::qty
+    q_sackurdensity --> j_be_167
+    q_sackurentropy(["sackurentropy"]):::qty
+    j_be_167 --> q_sackurentropy
+    j_be_168["BE-168"]:::law
+    q_sahamass(["sahamass"]):::qty
+    q_sahamass --> j_be_168
+    q_sahawarmth(["sahawarmth"]):::qty
+    q_sahawarmth --> j_be_168
+    q_sahaion(["sahaion"]):::qty
+    q_sahaion --> j_be_168
+    q_sahaconst(["sahaconst"]):::qty
+    j_be_168 --> q_sahaconst
+    j_be_169["BE-169"]:::law
+    q_richardsmass(["richardsmass"]):::qty
+    q_richardsmass --> j_be_169
+    q_richardswarmth(["richardswarmth"]):::qty
+    q_richardswarmth --> j_be_169
+    q_richardsphi(["richardsphi"]):::qty
+    q_richardsphi --> j_be_169
+    q_richardsj(["richardsj"]):::qty
+    j_be_169 --> q_richardsj
     j_be_17["BE-17"]:::speculative
     q_einstein_coupling_prefactor_squared(["einstein-coupling-prefactor-squared"]):::qty
     q_einstein_coupling_prefactor_squared --> j_be_17
@@ -1226,6 +1427,13 @@ flowchart LR
     q_torsion_contraction_scalar --> j_be_17
     q_spin_density_squared(["spin-density-squared"]):::qty
     j_be_17 --> q_spin_density_squared
+    j_be_170["BE-170"]:::law
+    q_onsagerl12(["onsagerl12"]):::qty
+    q_onsagerl12 --> j_be_170
+    q_onsagerb0(["onsagerb0"]):::qty
+    q_onsagerb0 --> j_be_170
+    q_onsagerl21(["onsagerl21"]):::qty
+    j_be_170 --> q_onsagerl21
     j_be_18["BE-18"]:::speculative
     q_yukawa_coupling(["yukawa-coupling"]):::qty
     q_yukawa_coupling --> j_be_18

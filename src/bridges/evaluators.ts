@@ -111,6 +111,32 @@ import {
   evaluateStoner,
   evaluateThomasFermi,
 } from './condensed-r8.js';
+import {
+  evaluateArrhenius,
+  evaluateBiot,
+  evaluateClausiusClapeyron,
+  evaluateEyring,
+  evaluateFourierConduction,
+  evaluateGibbsIsotherm,
+  evaluateJouleThomson,
+  evaluateNernstGibbs,
+  evaluateNewtonCooling,
+  evaluateNusselt,
+  evaluateOnsagerReciprocity,
+  evaluateOtto,
+  evaluatePlanckSpectrum,
+  evaluatePrandtl,
+  evaluateRaoult,
+  evaluateReynoldsNumber,
+  evaluateRichardsonDushman,
+  evaluateSackurTetrode,
+  evaluateSaha,
+  evaluateSchmidt,
+  evaluateSherwood,
+  evaluateStefanBoltzmann,
+  evaluateVanTHoff,
+  evaluateWienDisplacement,
+} from './thermal-r9.js';
 import { bridgeRegistry, registerBridge } from './registry.js';
 
 /**
@@ -795,6 +821,121 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
       temperature('Tc_K', 'critical temperature', 'T_c', 'critical temperature, > T'),
       P('lambda0_m', 'zero-temperature depth', 'λ(0)', 'm', 'London depth at T = 0, > 0'),
     ], (i) => evaluateGorterCasimir({ T_K: i.T_K, Tc_K: i.Tc_K, lambda0_m: i.lambda0_m })),
+    spec(147, 'Arrhenius rate', [
+      P('A_Hz', 'prefactor', 'A', 'Hz', 'temperature-independent prefactor'),
+      P('Ea_J_per_mol', 'activation energy', 'E_a', 'J/mol', 'per mole'),
+      temperature('T_K', 'temperature', 'T', 'temperature, ≠ 0'),
+    ], (i) => evaluateArrhenius({ A_per_s: i.A_Hz, Ea_J_per_mol: i.Ea_J_per_mol, T_K: i.T_K })),
+    spec(148, 'Eyring rate', [
+      P('dG_J', 'activation barrier', 'ΔG‡', 'J', 'per molecule'),
+      temperature('T_K', 'temperature', 'T', 'temperature, ≠ 0'),
+    ], (i) => evaluateEyring({ dG_J: i.dG_J, T_K: i.T_K })),
+    spec(149, "van 't Hoff slope", [
+      P('dH_J_per_mol', 'enthalpy', 'ΔH°', 'J/mol', 'constant'),
+      temperature('T_K', 'temperature', 'T', 'temperature, ≠ 0'),
+    ], (i) => evaluateVanTHoff({ dH_J_per_mol: i.dH_J_per_mol, T_K: i.T_K })),
+    spec(150, 'Gibbs isotherm', [
+      P('K', 'equilibrium constant', 'K', '', 'K > 0'),
+      temperature('T_K', 'temperature', 'T', 'temperature, ≠ 0'),
+    ], (i) => evaluateGibbsIsotherm({ K: i.K, T_K: i.T_K })),
+    spec(151, 'Nernst voltage', [
+      P('E0_volts', 'standard potential', 'E°', 'V', 'standard potential'),
+      P('n', 'electron count', 'n', '', 'n ≠ 0'),
+      P('Q', 'reaction quotient', 'Q', '', 'Q > 0'),
+      temperature('T_K', 'temperature', 'T', 'temperature'),
+    ], (i) => evaluateNernstGibbs({ E0_V: i.E0_volts, n: i.n, Q: i.Q, T_K: i.T_K })),
+    spec(152, 'Integrated Clausius–Clapeyron', [
+      P('dH_J_per_mol', 'latent heat', 'ΔH', 'J/mol', 'constant'),
+      temperature('T1_K', 'first temperature', 'T_1', 'positive'),
+      temperature('T2_K', 'second temperature', 'T_2', 'positive'),
+    ], (i) => evaluateClausiusClapeyron({ dH_J_per_mol: i.dH_J_per_mol, T1_K: i.T1_K, T2_K: i.T2_K })),
+    spec(153, 'Raoult partial pressure', [
+      P('x', 'mole fraction', 'x', '', 'ideal-mixture activity'),
+      P('Psat_Pa', 'saturation pressure', 'P*', 'Pa', 'P* > 0'),
+    ], (i) => evaluateRaoult({ x: i.x, Psat_Pa: i.Psat_Pa })),
+    spec(154, 'Prandtl number', [
+      P('mu_Pa_s', 'dynamic viscosity', 'μ', 'Pa*s', 'dynamic viscosity'),
+      P('cp_J_per_kg_K', 'specific heat', 'c_p', 'J/(kg*K)', 'specific heat'),
+      P('k_W_per_m_K', 'conductivity', 'k', 'W/(m*K)', 'thermal conductivity, ≠ 0'),
+    ], (i) => evaluatePrandtl({ mu_Pa_s: i.mu_Pa_s, cp_J_per_kg_K: i.cp_J_per_kg_K, k_W_per_m_K: i.k_W_per_m_K })),
+    spec(155, 'Reynolds number', [
+      P('rho_kg_per_m3', 'density', 'ρ', 'kg/m^3', 'mass density'),
+      P('v_m_per_s', 'speed', 'v', 'm/s', 'speed'),
+      P('L_m', 'length', 'L', 'm', 'length'),
+      P('mu_Pa_s', 'dynamic viscosity', 'μ', 'Pa*s', 'dynamic viscosity, ≠ 0'),
+    ], (i) => evaluateReynoldsNumber({ rho_kg_per_m3: i.rho_kg_per_m3, v_m_per_s: i.v_m_per_s, L_m: i.L_m, mu_Pa_s: i.mu_Pa_s })),
+    spec(156, 'Biot number', [
+      P('h_W_per_m2_K', 'film coefficient', 'h', 'W/(m^2*K)', 'convection coefficient'),
+      P('Lc_m', 'characteristic length', 'L_c', 'm', 'V/A'),
+      P('k_W_per_m_K', 'conductivity', 'k', 'W/(m*K)', 'conductivity, ≠ 0'),
+    ], (i) => evaluateBiot({ h_W_per_m2_K: i.h_W_per_m2_K, Lc_m: i.Lc_m, k_W_per_m_K: i.k_W_per_m_K })),
+    spec(157, 'Nusselt number', [
+      P('h_W_per_m2_K', 'film coefficient', 'h', 'W/(m^2*K)', 'convection coefficient'),
+      P('L_m', 'length', 'L', 'm', 'length'),
+      P('k_W_per_m_K', 'conductivity', 'k', 'W/(m*K)', 'fluid conductivity, ≠ 0'),
+    ], (i) => evaluateNusselt({ h_W_per_m2_K: i.h_W_per_m2_K, L_m: i.L_m, k_W_per_m_K: i.k_W_per_m_K })),
+    spec(158, 'Schmidt number', [
+      P('mu_Pa_s', 'dynamic viscosity', 'μ', 'Pa*s', 'dynamic viscosity'),
+      P('rho_kg_per_m3', 'density', 'ρ', 'kg/m^3', 'density, ≠ 0'),
+      P('D_m2_per_s', 'diffusivity', 'D', 'm^2/s', 'mass diffusivity, ≠ 0'),
+    ], (i) => evaluateSchmidt({ mu_Pa_s: i.mu_Pa_s, rho_kg_per_m3: i.rho_kg_per_m3, D_m2_per_s: i.D_m2_per_s })),
+    spec(159, 'Sherwood number', [
+      P('km_m_per_s', 'mass-transfer coefficient', 'k_m', 'm/s', 'mass-transfer coefficient'),
+      P('L_m', 'length', 'L', 'm', 'length'),
+      P('D_m2_per_s', 'diffusivity', 'D', 'm^2/s', 'diffusivity, ≠ 0'),
+    ], (i) => evaluateSherwood({ km_m_per_s: i.km_m_per_s, L_m: i.L_m, D_m2_per_s: i.D_m2_per_s })),
+    spec(160, 'Fourier slab flux', [
+      P('k_W_per_m_K', 'conductivity', 'k', 'W/(m*K)', 'constant conductivity, ≠ 0'),
+      temperature('T_L_K', 'temperature at L', 'T(L)', 'absolute endpoint'),
+      temperature('T_0_K', 'temperature at 0', 'T(0)', 'absolute endpoint'),
+      P('L_m', 'thickness', 'L', 'm', 'thickness, ≠ 0'),
+    ], (i) => evaluateFourierConduction({ k_W_per_m_K: i.k_W_per_m_K, T_L_K: i.T_L_K, T_0_K: i.T_0_K, L_m: i.L_m })),
+    spec(161, 'Newton cooling', [
+      P('rho_kg_per_m3', 'density', 'ρ', 'kg/m^3', 'density'),
+      P('c_J_per_kg_K', 'specific heat', 'c', 'J/(kg*K)', 'specific heat'),
+      P('V_m3', 'volume', 'V', 'm^3', 'volume'),
+      P('h_W_per_m2_K', 'film coefficient', 'h', 'W/(m^2*K)', 'film coefficient'),
+      P('A_m2', 'area', 'A', 'm^2', 'surface area'),
+      P('t_s', 'time', 't', 's', 'time'),
+      P('theta_difference_K', 'excess temperature', 'θ(0)', 'K', 'interval; degC and degF have no offset'),
+    ], (i) => evaluateNewtonCooling({ rho_kg_per_m3: i.rho_kg_per_m3, c_J_per_kg_K: i.c_J_per_kg_K, V_m3: i.V_m3, h_W_per_m2_K: i.h_W_per_m2_K, A_m2: i.A_m2, t_s: i.t_s, theta_difference_K: i.theta_difference_K })),
+    spec(162, 'Otto efficiency', [
+      P('r', 'compression ratio', 'r', '', 'r > 0'),
+      P('gamma', 'heat-capacity ratio', 'γ', '', 'γ > 1, constant'),
+    ], (i) => evaluateOtto({ r: i.r, gamma: i.gamma })),
+    spec(163, 'Joule–Thomson coefficient', [
+      temperature('T_K', 'temperature', 'T', 'temperature'),
+      P('dv_dT_m3_per_kg_K', 'specific-volume slope', '(∂v/∂T)_p', 'm^3/(kg*K)', 'isobaric'),
+      P('v_m3_per_kg', 'specific volume', 'v', 'm^3/kg', 'specific volume'),
+      P('cp_J_per_kg_K', 'specific heat', 'c_p', 'J/(kg*K)', 'specific heat, ≠ 0'),
+    ], (i) => evaluateJouleThomson({ T_K: i.T_K, dv_dT_m3_per_kg_K: i.dv_dT_m3_per_kg_K, v_m3_per_kg: i.v_m3_per_kg, cp_J_per_kg_K: i.cp_J_per_kg_K })),
+    spec(164, 'Planck spectrum', [
+      P('nu_Hz', 'frequency', 'ν', 'Hz', 'frequency, > 0'),
+      temperature('T_K', 'temperature', 'T', 'temperature, > 0'),
+    ], (i) => evaluatePlanckSpectrum({ nu_Hz: i.nu_Hz, T_K: i.T_K })),
+    spec(165, 'Stefan–Boltzmann constant', [], () => evaluateStefanBoltzmann()),
+    spec(166, 'Wien displacement', [
+      P('wien_x', 'spectral root', 'x', '', 'input in (4, 5); the decimal is not evaluated'),
+    ], (i) => evaluateWienDisplacement({ x: i.wien_x })),
+    spec(167, 'Sackur–Tetrode entropy', [
+      P('N', 'particle count', 'N', '', 'dimensionless count'),
+      P('nQ_per_m3', 'quantum concentration', 'n_Q', 'm^-3', 'from be-12, an input, > 0'),
+      P('n_per_m3', 'number density', 'n', 'm^-3', 'number density, > 0'),
+    ], (i) => evaluateSackurTetrode({ N: i.N, nQ_per_m3: i.nQ_per_m3, n_per_m3: i.n_per_m3 })),
+    spec(168, 'Saha ionization constant', [
+      P('m_kg', 'mass', 'm', 'kg', 'mass, > 0'),
+      temperature('T_K', 'temperature', 'T', 'temperature, > 0'),
+      P('I_J', 'ionization energy', 'I', 'J', 'ionization energy'),
+    ], (i) => evaluateSaha({ m_kg: i.m_kg, T_K: i.T_K, I_J: i.I_J })),
+    spec(169, 'Richardson–Dushman current', [
+      P('m_kg', 'mass', 'm', 'kg', 'carrier mass'),
+      temperature('T_K', 'temperature', 'T', 'temperature, > 0'),
+      P('phi_J', 'work function', 'φ', 'J', 'work function'),
+    ], (i) => evaluateRichardsonDushman({ m_kg: i.m_kg, T_K: i.T_K, phi_J: i.phi_J })),
+    spec(170, 'Onsager reciprocity', [
+      P('L12', 'cross coefficient', 'L_12', '', 'dissipation-potential cross term'),
+      P('onsager_B_T', 'magnetic field', 'B', 'T', 'must be 0; the magnetic case is not this row'),
+    ], (i) => evaluateOnsagerReciprocity({ L12: i.L12, B_T: i.onsager_B_T })),
 ];
 
 for (const evaluator of EVALUATOR_SPECS) registerBridge({ evaluator });

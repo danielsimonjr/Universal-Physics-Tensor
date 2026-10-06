@@ -26,7 +26,7 @@ import {
   MASS,
   VELOCITY,
 } from './types.js';
-import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI, M_U_SI } from '../core/constants.js';
+import { C_SI, E_SI, G_SI, GM_SUN_SI, HBAR_SI, H_SI, K_B_SI, B_WIEN_SI, M_U_SI, N_A_SI } from '../core/constants.js';
 
 const dim = (L = 0, M = 0, T = 0, Theta = 0): Dimension => ({
   L,
@@ -86,6 +86,7 @@ export const CONSTANTS: Readonly<Record<string, NamedConstantValue>> = {
   GM_sun: { value: GM_SUN_SI, dim: dim(3, 0, -2) },
   Msun_iau: { value: GM_SUN_SI / G_SI, dim: dim(0, 1, 0) },
   m_u: { value: M_U_SI, dim: MASS },
+  N_A: { value: N_A_SI, dim: { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: -1, J: 0 } },
 };
 
 /** What a registered constant is, its SI unit, and where its value comes from (audit I10). @internal */
@@ -142,5 +143,10 @@ export const CONSTANT_PROVENANCE: Readonly<Record<string, ConstantProvenance>> =
     meaning: 'unified atomic mass unit (atomic mass constant)',
     unit: 'kg',
     source: 'CODATA 2018 (core/constants.ts M_U_SI)',
+  },
+  N_A: {
+    meaning: 'Avogadro constant',
+    unit: 'mol^-1',
+    source: 'exact SI, 2019 redefinition (core/constants.ts N_A_SI)',
   },
 };

@@ -139,6 +139,30 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   144, // BE-144 Matthiessen lifetime: closed-form evaluator, no AST.
   145, // BE-145 Stoner susceptibility: closed-form evaluator, no AST.
   146, // BE-146 Gorter–Casimir fraction: closed-form evaluator, no AST.
+  147, // BE-147 Arrhenius rate: closed-form evaluator, no AST.
+  148, // BE-148 Eyring rate: closed-form evaluator, no AST.
+  149, // BE-149 van 't Hoff slope: closed-form evaluator, no AST.
+  150, // BE-150 Gibbs isotherm: closed-form evaluator, no AST.
+  151, // BE-151 Nernst voltage: closed-form evaluator, no AST.
+  152, // BE-152 Integrated Clausius–Clapeyron: closed-form evaluator, no AST.
+  153, // BE-153 Raoult partial pressure: closed-form evaluator, no AST.
+  154, // BE-154 Prandtl number: closed-form evaluator, no AST.
+  155, // BE-155 Reynolds number: closed-form evaluator, no AST.
+  156, // BE-156 Biot number: closed-form evaluator, no AST.
+  157, // BE-157 Nusselt number: closed-form evaluator, no AST.
+  158, // BE-158 Schmidt number: closed-form evaluator, no AST.
+  159, // BE-159 Sherwood number: closed-form evaluator, no AST.
+  160, // BE-160 Fourier slab flux: closed-form evaluator, no AST.
+  161, // BE-161 Newton cooling: closed-form evaluator, no AST.
+  162, // BE-162 Otto efficiency: closed-form evaluator, no AST.
+  163, // BE-163 Joule–Thomson coefficient: closed-form evaluator, no AST.
+  164, // BE-164 Planck spectrum: closed-form evaluator, no AST.
+  165, // BE-165 Stefan–Boltzmann constant: closed-form evaluator, no AST.
+  166, // BE-166 Wien displacement: closed-form evaluator, no AST.
+  167, // BE-167 Sackur–Tetrode entropy: closed-form evaluator, no AST.
+  168, // BE-168 Saha ionization constant: closed-form evaluator, no AST.
+  169, // BE-169 Richardson–Dushman current: closed-form evaluator, no AST.
+  170, // BE-170 Onsager reciprocity: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -154,11 +178,12 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has ninety-four entries (BE-51/52 + BE-55..146 closed-form)', () => {
+    it('orphan allowlist has one hundred eighteen entries (BE-51/52 + BE-55..170 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(94);
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(118);
+      // 94 is the record from before be-147..170.
       // 81 is the record from before be-134..146.
       // 73 is the record from before be-126..133.
       // 50 is the record from before be-103..125. 35 is the record from before be-88..102.
@@ -233,6 +258,8 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
         101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
         120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
         134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+        147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160,
+        161, 162, 163, 164, 165, 166, 167, 168, 169, 170,
       ]);
       // 50 ids ending at 102 is the record from before be-103..125.
     });

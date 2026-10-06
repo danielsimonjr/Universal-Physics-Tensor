@@ -1,5 +1,5 @@
 
-● hawking-temperature  [source: catalog (136-bridge)]
+● hawking-temperature  [source: catalog (160-bridge)]
   'hawking-temperature' is over-determined from {mass}: 2 derivation routes (be-42, be-42-via-rs) restate ONE bridge (BE-42). They agree (relative spread 0.0e+0) — agreement by construction, not an independent check. Recovered value: 6.16842971641034e-8. Dimensionally, those inputs alone do not fix it — the encoded formula carries dimensionful constants.
   derivations:
     - be-42 (Hawking temperature T_H = ℏc³/(8πGMk_B)) = 6.16842971641034e-8

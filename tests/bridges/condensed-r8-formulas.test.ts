@@ -112,7 +112,8 @@ describe('condensed-matter formulas BE-134 through BE-146', () => {
       expect(ref?.kind, `be-${id}`).toBe('bridge');
       expect(ref?.statement, `be-${id}`).toBe(theorem);
       expect(ref?.covers.startsWith('derivation-step:'), `be-${id}`).toBe(true);
-      expect(ref?.url, `be-${id}`).toContain('10cf71e9f1f460780f8620de7ba422df61e0949b');
+      expect(ref?.url, `be-${id}`).toContain('10e48f140c0e9fad3c50e5e5538124c52b3e732c');
+      // 10cf71e9f1f460780f8620de7ba422df61e0949b is the record from before be-147..170.
     }
     expect(catalogFormalRef(134)?.statement).not.toBe('PhysJS.BlochLaw.heisenberg_fraction');
   });

@@ -81,8 +81,14 @@ describe('discovery calibration benchmark', () => {
   // and dos3d-abscissa, fermioffset-muoff, and tfscreen-chemical with
   // landauer-erasure-energy. A shared mass or energy dimension is not an
   // identification.
+  // BE-147 through BE-170 are on the graph. total 2518 → 3787, promising 25 → 30,
+  // inert 1307 → 2266, axis-clash 1166 → 1471. magnitude-clash stays 20.
+  // The would-clash sum is 1481 = 1471 axis-clash + 10 still shadowed.
+  // The five new promising pairs are eyringbarrier, richardsphi, and sahaion
+  // with landauer-erasure-energy, and richardsmass and sahamass with mass.
+  // A shared mass or energy dimension is not an identification.
   const EXPECTED = {
-    catalog: { total: 2518, promising: 25, inert: 1307, clash: 20, contradictory: 0, axisClash: 1166 },
+    catalog: { total: 3787, promising: 30, inert: 2266, clash: 20, contradictory: 0, axisClash: 1471 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -95,7 +101,7 @@ describe('discovery calibration benchmark', () => {
     expect(count(cands, 'axis-clash')).toBe(EXPECTED.catalog.axisClash);
   });
 
-  it('the 1176 would-clash pairs decompose as 1166 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
+  it('the 1481 would-clash pairs decompose as 1471 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
     const cands = rankDiscoveries(CATALOG_GRAPH);
     // `axisClashes` stays populated regardless of which falsifier wins, so
     // the shadowed pairs are exactly the magnitude-clash candidates whose
@@ -104,7 +110,8 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1176);
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1481);
+    // 1176 is the record from before be-147..170.
     // 994 is the record from before be-134..146.
     // 796 is the record from before be-126..133.
     // 455 is the record from before be-103..125.
