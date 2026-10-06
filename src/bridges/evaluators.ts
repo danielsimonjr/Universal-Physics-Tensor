@@ -96,6 +96,21 @@ import {
   evaluateSubthresholdSwing,
   evaluateThermoelectricGenerator,
 } from './engineering-r7.js';
+import {
+  evaluateAcDrude,
+  evaluateBlochLaw,
+  evaluateBuiltinVoltage,
+  evaluateDensityOfStates2D,
+  evaluateDensityOfStates3D,
+  evaluateGorterCasimir,
+  evaluateJosephsonInductance,
+  evaluateLowerCritical,
+  evaluateMatthiessen,
+  evaluateOnsagerFrequency,
+  evaluateSemiconductorFermi,
+  evaluateStoner,
+  evaluateThomasFermi,
+} from './condensed-r8.js';
 import { bridgeRegistry, registerBridge } from './registry.js';
 
 /**
@@ -720,6 +735,66 @@ const EVALUATOR_SPECS: readonly EvaluatorSpec[] = [
       P('k_N_per_m', 'stiffness', 'k', 'N/m', 'stiffness, > 0'),
       P('m_kg', 'mass', 'm', 'kg', 'mass, > 0'),
     ], (i) => evaluateDampingRatio({ c_kg_per_s: i.c_kg_per_s, k_N_per_m: i.k_N_per_m, m_kg: i.m_kg })),
+    spec(134, 'Bloch magnon deficit', [
+      P('muB_J_per_T', 'Bohr magneton', 'μ_B', 'J/T', 'one Bohr magneton, not g μ_B'),
+      P('zeta_3_2', 'Bose value', 'ζ(3/2)', '', 'ζ(3/2), not evaluated'),
+      temperature('T_K', 'temperature', 'T', 'temperature, ≥ 0'),
+      P('D_J_m2', 'magnon stiffness', 'D', 'J*m^2', 'quadratic stiffness, > 0'),
+    ], (i) => evaluateBlochLaw({ muB_J_per_T: i.muB_J_per_T, zeta_3_2: i.zeta_3_2, T_K: i.T_K, D_J_m2: i.D_J_m2 })),
+    spec(135, 'Three-dimensional density of states', [
+      P('m_kg', 'band mass', 'm', 'kg', 'band mass, > 0'),
+      P('E_J', 'energy', 'E', 'J', 'energy, ≥ 0'),
+    ], (i) => evaluateDensityOfStates3D({ m_kg: i.m_kg, E_J: i.E_J })),
+    spec(136, 'Two-dimensional density of states', [
+      P('m_kg', 'band mass', 'm', 'kg', 'band mass, ≠ 0'),
+    ], (i) => evaluateDensityOfStates2D({ m_kg: i.m_kg })),
+    spec(137, 'Thomas–Fermi wavevector squared', [
+      P('n_per_m3', 'carrier density', 'n', 'm^-3', 'carrier density'),
+      P('EF_J', 'Fermi energy', 'E_F', 'J', 'Fermi energy, > 0'),
+    ], (i) => evaluateThomasFermi({ n_per_m3: i.n_per_m3, EF_J: i.EF_J })),
+    spec(138, 'Built-in voltage', [
+      temperature('T_K', 'temperature', 'T', 'temperature'),
+      P('NA_per_m3', 'acceptor density', 'N_A', 'm^-3', 'acceptor density, > 0'),
+      P('ND_per_m3', 'donor density', 'N_D', 'm^-3', 'donor density, > 0'),
+      P('ni_per_m3', 'intrinsic density', 'n_i', 'm^-3', 'intrinsic density, > 0'),
+    ], (i) => evaluateBuiltinVoltage({ T_K: i.T_K, NA_per_m3: i.NA_per_m3, ND_per_m3: i.ND_per_m3, ni_per_m3: i.ni_per_m3 })),
+    spec(139, 'Semiconductor Fermi offset', [
+      temperature('T_K', 'temperature', 'T', 'temperature, ≠ 0'),
+      P('mh_kg', 'hole mass', 'm_h*', 'kg', 'hole mass, > 0'),
+      P('me_kg', 'electron mass', 'm_e*', 'kg', 'electron mass, > 0'),
+      P('Nc_per_m3', 'conduction density', 'N_c', 'm^-3', 'effective conduction density, > 0'),
+      P('ND_per_m3', 'donor density', 'N_D', 'm^-3', 'donor density, > 0'),
+    ], (i) => evaluateSemiconductorFermi({ T_K: i.T_K, mh_kg: i.mh_kg, me_kg: i.me_kg, Nc_per_m3: i.Nc_per_m3, ND_per_m3: i.ND_per_m3 })),
+    spec(140, 'Onsager frequency', [
+      P('A_per_m2', 'orbit area', 'A', 'm^-2', 'extremal Fermi-surface area'),
+    ], (i) => evaluateOnsagerFrequency({ A_per_m2: i.A_per_m2 })),
+    spec(141, 'Josephson inductance', [
+      P('Ic_A', 'critical current', 'I_c', 'A', 'critical current, ≠ 0'),
+    ], (i) => evaluateJosephsonInductance({ Ic_A: i.Ic_A })),
+    spec(142, 'Lower critical field', [
+      P('lambda_m', 'London depth', 'λ', 'm', 'London depth, > ξ'),
+      P('xi_m', 'core cutoff', 'ξ', 'm', 'core cutoff, > 0'),
+    ], (i) => evaluateLowerCritical({ lambda_m: i.lambda_m, xi_m: i.xi_m })),
+    spec(143, 'AC Drude conductivity', [
+      P('n_per_m3', 'carrier density', 'n', 'm^-3', 'carrier density'),
+      P('m_kg', 'band mass', 'm', 'kg', 'band mass, ≠ 0'),
+      P('tau_s', 'scattering time', 'τ', 's', 'scattering time, > 0'),
+      P('omega_rad_s', 'angular drive', 'ω', 'rad/s', 'angular frequency'),
+    ], (i) => evaluateAcDrude({ n_per_m3: i.n_per_m3, m_kg: i.m_kg, tau_s: i.tau_s, omega_rad_s: i.omega_rad_s })),
+    spec(144, 'Matthiessen lifetime', [
+      P('tau1_s', 'first lifetime', 'τ₁', 's', 'first lifetime, ≠ 0'),
+      P('tau2_s', 'second lifetime', 'τ₂', 's', 'second lifetime, ≠ 0'),
+      P('C_ohm_m_s', 'Drude factor', 'C', 'ohm*m*s', 'ρ_i = C/τ_i'),
+    ], (i) => evaluateMatthiessen({ tau1_s: i.tau1_s, tau2_s: i.tau2_s, C_ohm_m_s: i.C_ohm_m_s })),
+    spec(145, 'Stoner susceptibility', [
+      P('chi_P', 'Pauli susceptibility', 'χ_P', '', 'be-94 value, not re-proved'),
+      P('x', 'Stoner product', 'I g(E_F)', '', '|x| < 1'),
+    ], (i) => evaluateStoner({ chi_P: i.chi_P, x: i.x })),
+    spec(146, 'Gorter–Casimir fraction', [
+      temperature('T_K', 'temperature', 'T', 'temperature, 0 ≤ T < T_c'),
+      temperature('Tc_K', 'critical temperature', 'T_c', 'critical temperature, > T'),
+      P('lambda0_m', 'zero-temperature depth', 'λ(0)', 'm', 'London depth at T = 0, > 0'),
+    ], (i) => evaluateGorterCasimir({ T_K: i.T_K, Tc_K: i.Tc_K, lambda0_m: i.lambda0_m })),
 ];
 
 for (const evaluator of EVALUATOR_SPECS) registerBridge({ evaluator });

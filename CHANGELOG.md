@@ -8,9 +8,13 @@ from v0.1.0 onward.
 
 ## [Unreleased]
 
-### Changed
+The Documented, Migration, Breaking, and Fixed notes under this heading are the working record already summarized in [6.1.0] and [6.0.0]. The Changed notes are the same resolver change [7.0.0] releases. Nothing under this heading is waiting on a version.
 
-- **`source-map-js` is 1.2.2.** `bun audit --audit-level=high` failed on 1.2.1 (`GHSA-68fv-2mgg-jv7q`). The lockfile now resolves 1.2.2. It is a transitive dependency of vitest.
+### Documented
+
+- **`source-map-js` is 1.2.2.** `bun audit --audit-level=high` failed on 1.2.1 (`GHSA-68fv-2mgg-jv7q`). The lockfile now resolves 1.2.2. It is a transitive dependency of vitest. This line moved out of `### Changed` when 7.0.0 took the resolver bullets.
+
+### Changed
 
 - **One name resolver, one unit grammar, one evaluable id, and the scalar factor the formula states.** `resolveQuantityName` in `src/dimensional/formula-names.ts` is the spelling resolver for a target, an input, `upt eval`, `upt explain`, `upt evaluate`, `--sigma`, `upt discover`, `upt regime`, and `upt search`. `SYNONYM_GROUPS` is the list: the magnetic pair, the Landauer pair, and `temperature` / `T` / `temp` / `T_K`. `NAME_TABLE.synonyms` is that array. `isTemperatureName` is the group that contains `temperature`. Two spellings with different numbers throw `SynonymDisagreementError` and do not print a value. The same number is one binding, so `k_B*T/e` and `k_B*temperature/e` read it. An energy on any of those spellings is `k_B T`, including `--sigma` read as a difference. `erasure-energy` resolves as an explain target and as an explain input. `resolveToCatalogName`, `rewriteInputKey`, `formulaSpellings`, `synonymInCatalog`, and `TEMPERATURE_BINDING_NAMES` are deleted. `bindingInUnit` stays the unit conversion inside `readNamedBinding` and still rejects `10eV` in `K` by itself. `DIMENSION_RENAMES` stays the dimension-conditional structural hash. `edge.aliases` stays per-edge data that the resolver reads. There is no `upt solve` command. The help listing of `BRIDGE_EVALUATORS` is the registry enumeration, not a second per-id lookup.
 
@@ -106,6 +110,30 @@ from v0.1.0 onward.
 - **A magnitude that is even in a signed input stays positive.** Buckingham reduces `√(q²)` to `q^1`, so a negative carrier charge made the plasma frequency negative. The gyroradius was encoded as `m v / (q B)`, which is odd in `q`, and a length came out negative. The evaluator now takes the absolute value of an input the scalar AST is even in. The Larmor formula uses `|q|`. An odd formula stays signed. Issues #388 and #389.
 - **A fully-quantitative count is an input of the canonical evaluator.** The evaluator was the Buckingham monomial. That monomial cannot see `N` in `P = N k_B T/V`, and it is null for perihelion, so `1-e²` and `6π` were dropped and the edge returned NaN. The same null monomial dropped `8π` from Hawking temperature and returned NaN for every other fully-quantitative product, quotient, or integer power, including Newton's gravitation. A `scalar-up-to-constant` stub, including Jarzynski, stays on the monomial. Issue #387.
 - **Explain, discovery anchors, and regime coordinates read an energy on a temperature name as k_B T.** The reading already lived in `upt eval`'s `parseScope` (`alignTemperatureBinding`). Explain stored `readNamedBinding`'s joules. Issue #386.
+
+## [7.0.0] - 2026-10-06
+
+Major release. `resolveToCatalogName` is removed from the public surface. Call `resolveQuantityName`. PhysJS pin `10cf71e9f1f460780f8620de7ba422df61e0949b` (PhysJS #68). The catalog adds BE-134 through BE-146. npm `6.0.0` remains the published release until the tag workflow. This change does not tag and does not publish.
+
+### Migration
+
+`resolveToCatalogName` is gone. A caller that imported it now imports `resolveQuantityName` from `src/dimensional/formula-names.ts`. The spelling list is `SYNONYM_GROUPS`. Two spellings of one quantity with different numbers throw `SynonymDisagreementError`. The same number is one binding.
+
+### Added
+
+- **PhysJS #68 proves BE-134 through BE-146.** The theorems are `PhysJS.BlochLaw.bloch_law`, `PhysJS.DensityOfStates3D.dos_3d`, `PhysJS.DensityOfStates2D.dos_2d`, `PhysJS.ThomasFermi.thomas_fermi`, `PhysJS.BuiltinVoltage.builtin_voltage`, `PhysJS.SemiconductorFermi.fermi_level`, `PhysJS.OnsagerFrequency.onsager_frequency`, `PhysJS.JosephsonInductance.inductance_eq`, `PhysJS.LowerCritical.lower_critical`, `PhysJS.AcDrude.ac_drude`, `PhysJS.Matthiessen.matthiessen`, `PhysJS.Stoner.stoner`, and `PhysJS.GorterCasimir.gorter_casimir`. Each row is category F and established. Kind is `bridge`. `heisenberg_fraction` on BE-134 is a nested object and is not the formalRef. `evaluateBlochLaw`, `evaluateDensityOfStates3D`, `evaluateDensityOfStates2D`, `evaluateThomasFermi`, `evaluateBuiltinVoltage`, `evaluateSemiconductorFermi`, `evaluateOnsagerFrequency`, `evaluateJosephsonInductance`, `evaluateLowerCritical`, `evaluateAcDrude`, `evaluateMatthiessen`, `evaluateStoner`, and `evaluateGorterCasimir` are on the root, and so are `be134Edge` through `be146Edge`. `evaluateRelation('be-134')` returns the magnetization deficit. The Fermi edge returns the intrinsic offset. The Matthiessen edge returns the parallel lifetime. The Gorter–Casimir edge returns `n_s/n`. A Landé factor of 2, one spin, a valley factor other than 1, a dropped 3/2, `k_B T/e` without the logarithm, half the mass logarithm, a dropped 2π, `ℏ/(e I_c)` without the 2, a dropped 4π, `σ_0/(ω² τ²)`, one lifetime, `χ_P (1+x)`, and exponent 2 are different numbers. `e` is the elementary charge. The catalog is 136 rows, ids 11–146: 100 established, 33 speculative, 3 highly-speculative. The graph has 127 edges. Ninety-four catalog rows derive `formally-proved`. The evaluate range is `BE-16/42/51/52/55..146`. The composed-pair golden is 16129 ordered pairs and 22 composed pairs. The discovery funnel is 2518 total, 25 promising, 1307 inert, 20 magnitude-clash, 0 contradictory, and 1166 axis-clash. Same-kind link candidates are 665. The eleven new same-kind pairs share `warmth`, `bandmass`, `n3`, or `scatter` among the new edges. A shared token is not an identification. The eight new promising pairs share a mass or an energy dimension with `mass` or `landauer-erasure-energy`. A shared dimension is not an identification.
+
+### Changed
+
+- **One name resolver, one unit grammar, one evaluable id, and the scalar factor the formula states.** `resolveQuantityName` is the spelling resolver for a target, an input, `upt eval`, `upt explain`, `upt evaluate`, `--sigma`, `upt discover`, `upt regime`, and `upt search`. `resolveEvaluable` is the id `evaluateRelation` and `upt evaluate` share. A unit token is one factor or one product: `m2K` is `m^2·K`, `cm^2/Vs` is `cm^2/(V·s)`, and an ambiguous split is refused. A fully-quantitative scalar AST multiplies its dimensionless coefficient. `CE-point-charge-field` at `charge = -e`, `r = 1` is `-e/(4π ε₀)`. The canonical audit stays DERIVED (72), COEFFICIENT UNSET (6), DECOY (12), OPEN (19). The Changed notes above this version heading are the same change, in the words written before the version heading existed.
+
+### Breaking
+
+- **`resolveToCatalogName` is removed.** A caller that imported `resolveToCatalogName`, `rewriteInputKey`, `formulaSpellings`, `synonymInCatalog`, or `TEMPERATURE_BINDING_NAMES` now uses `resolveQuantityName`. `bindingInUnit` stays the unit conversion inside `readNamedBinding`.
+
+The Part VIII check requires `7.0.0`. Before the bump it required `6.1.0` and failed on this package version. Version-stamped artifacts carry `7.0.0`. Architecture docs were regenerated: 484 files, 3987 exports, 1969 re-exports, 0 circular dependencies. Architecture test-coverage docs count 718 test files. The unused-analysis report lists 0 files and 74 exports. The catalog dimensional audit is DERIVED 31 and DECOY 16. be-137 is the new decoy. 27 derived and 15 decoys are the record from before BE-134 through BE-146.
+
+**Dependency health, measured for this release:** `bun audit` finds 0 vulnerabilities in 142 packages. `bun outdated` lists `@types/node` 26.5.1 → 26.6.4, `fast-check` 4.10.0 → 4.10.2, `js-yaml` 5.4.2 → 5.4.3, and `@viz-js/viz` 3.30.0 → 3.31.0. `vitest` and `@vitest/coverage-v8` stay 4.1.11 inside the current range; latest is 5.0.3. `tree-sitter` stays 0.22.4 inside the current range; latest is 0.25.1. None of these is a HIGH or CRITICAL advisory.
 
 ## [6.1.0] - 2026-10-05
 

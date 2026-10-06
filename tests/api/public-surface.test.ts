@@ -127,6 +127,9 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'evaluateCrossFieldDiffusion', 'evaluateFirehose', 'evaluateMirrorInstability',
   'evaluateCombDrive', 'evaluateSubthresholdSwing', 'evaluateBoostConverter', 'evaluateFinEfficiency',
   'evaluateThermoelectricGenerator', 'evaluateJoukowsky', 'evaluateCoaxialCapacitance', 'evaluateDampingRatio',
+  'evaluateBlochLaw', 'evaluateDensityOfStates3D', 'evaluateDensityOfStates2D', 'evaluateThomasFermi',
+  'evaluateBuiltinVoltage', 'evaluateSemiconductorFermi', 'evaluateOnsagerFrequency', 'evaluateJosephsonInductance',
+  'evaluateLowerCritical', 'evaluateAcDrude', 'evaluateMatthiessen', 'evaluateStoner', 'evaluateGorterCasimir',
   'be88Edge', 'be89Edge', 'be90Edge', 'be91Edge', 'be92Edge', 'be93Edge', 'be94Edge',
   'be95Edge', 'be96Edge', 'be97Edge', 'be98Edge', 'be99Edge', 'be100Edge', 'be101Edge',
   'be102Edge', 'CONDENSED_R5_EDGES',
@@ -136,6 +139,9 @@ const EXPECTED_RUNTIME_EXPORTS = [
   'be124Edge', 'be125Edge', 'PLASMA_SPACE_EDGES',
   'be126Edge', 'be127Edge', 'be128Edge', 'be129Edge', 'be130Edge', 'be131Edge', 'be132Edge', 'be133Edge',
   'ENGINEERING_R7_EDGES',
+  'be134Edge', 'be135Edge', 'be136Edge', 'be137Edge', 'be138Edge', 'be139Edge', 'be140Edge',
+  'be141Edge', 'be142Edge', 'be143Edge', 'be144Edge', 'be145Edge', 'be146Edge',
+  'CONDENSED_R8_EDGES',
   'APPLIED_PHYSICIST_EDGES',
   // v0.8.0 — membership criterion + negative catalog (G-2 / P-4)
   'adjudicateBridgeEntry', 'adjudicateCatalog',
@@ -267,7 +273,7 @@ describe('Public API stability — 6.0.0 surface', () => {
     const indexSrc = readFileSync(fileURLToPath(new URL('../../src/index.ts', import.meta.url)), 'utf8');
     for (const name of REMOVED_IN_6) {
       expect(name in root, name).toBe(false);
-      expect(indexSrc, name).not.toContain(name);
+      expect(indexSrc, name).not.toMatch(new RegExp(`\\b${name}\\b`));
     }
     expect('evaluateRelation' in root).toBe(true);
     expect('CoefficientUnsetError' in root).toBe(true);
@@ -276,7 +282,10 @@ describe('Public API stability — 6.0.0 surface', () => {
     expect('CarrierSignError' in root).toBe(true);
     expect('evaluateBohmSheath' in root).toBe(true);
     for (const name of REMOVED_IN_6.filter((n) => n.startsWith('evaluate') && n !== 'evaluateBridge')) {
-      expect(indexSrc, `${name}Inputs`).not.toContain(`${name.replace(/^evaluate/, '')}Inputs`);
+      const inputs = `${name.replace(/^evaluate/, '')}Inputs`;
+      // A later name can contain these letters. GorterCasimirInputs contains
+      // CasimirInputs. The removed identifier is a whole word.
+      expect(indexSrc, `${name}Inputs`).not.toMatch(new RegExp(`\\b${inputs}\\b`));
     }
   });
 });

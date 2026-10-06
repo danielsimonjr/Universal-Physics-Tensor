@@ -1,11 +1,11 @@
 
 Orphan connectors — same-dimension identifications that would pull an ISOLATED
 bridge into the anchored core (the graph's structural frontier).  [source: catalog + canonical]
-  anchored core: the clusters holding at least one of the 191 established-confidence edge(s) of the 223 in this graph
+  anchored core: the clusters holding at least one of the 204 established-confidence edge(s) of the 236 in this graph
 ⚠ A REVIEW SURFACE: same dimension is a WEAK prior. A shared name token is a token.
   A recorded verdict is the ledger.
 
-  65 of the isolated bridges share a name token with the core; 19 are truly unconnected.
+  72 of the isolated bridges share a name token with the core; 20 are truly unconnected.
 
   DECOY (recorded verdict):
     ── be-24 (isolated):
@@ -409,6 +409,22 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         joukowsky-rho ≟ rho                                    [[L^-3 M]]  → CE-friedmann-curvature
     ── be-133 (isolated):
         damping-spring ≟ spring-constant                       [[M T^-2]]  → CE-spring-potential-energy
+    ── be-134 (isolated):
+        blochlaw-warmth ≟ builtin-warmth                       [[temperature]]  → be-138
+        blochlaw-warmth ≟ fermioffset-warmth                   [[temperature]]  → be-139
+        blochlaw-warmth ≟ gortercas-warmth                     [[temperature]]  → be-146
+    ── be-135 (isolated):
+        dos3d-bandmass ≟ acdrude-bandmass                      [[mass]]  → be-143
+        dos3d-bandmass ≟ dos2d-bandmass                        [[mass]]  → be-136
+    ── be-136 (isolated):
+        dos2d-bandmass ≟ acdrude-bandmass                      [[mass]]  → be-143
+    ── be-137 (isolated):
+        tfscreen-n3 ≟ acdrude-n3                               [[L^-3]]  → be-143
+    ── be-138 (isolated):
+        builtin-warmth ≟ fermioffset-warmth                    [[temperature]]  → be-139
+        builtin-warmth ≟ gortercas-warmth                      [[temperature]]  → be-146
+    ── be-139 (isolated):
+        fermioffset-warmth ≟ gortercas-warmth                  [[temperature]]  → be-146
     ── be-14 (isolated):
         boundary-entanglement-entropy ≟ bh-entropy             [[entropy]]  → CE-bekenstein-hawking
         boundary-entanglement-entropy ≟ boltzmann-entropy      [[entropy]]  → CE-boltzmann-entropy
@@ -416,6 +432,8 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         minimal-surface-area ≟ area                            [[area]]  → CE-resistance-material
         minimal-surface-area ≟ cross-sectional-area            [[area]]  → CE-volume-flow-rate
         minimal-surface-area ≟ pull-in-area                    [[area]]  → be-79
+    ── be-143 (isolated):
+        acdrude-scatter ≟ matthsum-scatter                     [[time]]  → be-144
     ── be-18 (isolated):
         dark-fermion-mass ≟ mass-action-gap                    [[energy]]  → be-99
     ── be-22 (isolated):
@@ -1129,6 +1147,6 @@ bridge into the anchored core (the graph's structural frontier).  [source: catal
         position-momentum-uncertainty-product ≟ angular-momentum [[action]]  → CE-angular-momentum
 
 
-  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-100, be-123, be-124, be-128, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86, be-95, be-98
+  truly unconnected (no same-dimension bridge into them): CE-bohr-magneton, CE-snell-law, be-100, be-123, be-124, be-128, be-145, be-17, be-21, be-25, be-30, be-39, be-46, be-49, be-50, be-53, be-72, be-86, be-95, be-98
 
   The isolated-bridge review is written up in https://github.com/danielsimonjr/Universal-Physics-Tensor/blob/master/docs/research/Orphan-Connector-Analysis.md.

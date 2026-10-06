@@ -5,7 +5,7 @@
 
 # universal-physics-tensor - Dependency Graph
 
-**Version**: 6.1.0
+**Version**: 7.0.0
 
 This document provides a comprehensive dependency graph of all files, components, imports, functions, and variables in the codebase.
 
@@ -3213,6 +3213,7 @@ The codebase is organized into the following modules:
 | `./be102-landauer-conductance.js` | `evaluateLandauerConductance` | Import |
 | `./plasma-space.js` | `evaluateBennettPinch, evaluateBohmSheath, evaluateChapmanFerraro, evaluateColdPlasmaCutoff, evaluateCrossFieldDiffusion, evaluateDebyeSphere, evaluateExBDrift, evaluateFirehose, evaluateGradBDrift, evaluateIonAcoustic, evaluateLandauDamping, evaluateLangmuirProbe, evaluateLawsonBreakeven, evaluateLorentzResistivity, evaluateLossCone, evaluateLowerHybrid, evaluateMirrorInstability, evaluateMultiDebye, evaluateObliqueMagnetosonic, evaluateParkerCritical, evaluateParkerSpiral, evaluateResistiveSlab, evaluateUpperHybrid` | Import |
 | `./engineering-r7.js` | `evaluateBoostConverter, evaluateCoaxialCapacitance, evaluateCombDrive, evaluateDampingRatio, evaluateFinEfficiency, evaluateJoukowsky, evaluateSubthresholdSwing, evaluateThermoelectricGenerator` | Import |
+| `./condensed-r8.js` | `evaluateAcDrude, evaluateBlochLaw, evaluateBuiltinVoltage, evaluateDensityOfStates2D, evaluateDensityOfStates3D, evaluateGorterCasimir, evaluateJosephsonInductance, evaluateLowerCritical, evaluateMatthiessen, evaluateOnsagerFrequency, evaluateSemiconductorFermi, evaluateStoner, evaluateThomasFermi` | Import |
 | `./registry.js` | `bridgeRegistry, registerBridge` | Import |
 
 **Exports:**
@@ -3248,6 +3249,7 @@ The codebase is organized into the following modules:
 | `./registry.js` | `bridgeRegistry, registerBridge` | Import |
 | `./plasma-catalog.js` | `PLASMA_CATALOG_ROWS` | Import |
 | `./engineering-r7-catalog.js` | `ENGINEERING_R7_CATALOG_ROWS` | Import |
+| `./condensed-r8-catalog.js` | `CONDENSED_R8_CATALOG_ROWS` | Import |
 | `./gravitational-lensing.js` | `evaluateGravitationalLensing, type GravitationalLensingInputs, type GravitationalLensingResult` | Re-export |
 | `./perihelion-precession.js` | `evaluatePerihelionPrecession, type PerihelionPrecessionInputs, type PerihelionPrecessionResult` | Re-export |
 | `./be55-quantum-hall.js` | `evaluateQuantumHall, VON_KLITZING_SI, type QuantumHallInputs, type QuantumHallResult` | Re-export |
@@ -3301,6 +3303,7 @@ The codebase is organized into the following modules:
 | `./be102-landauer-conductance.js` | `evaluateLandauerConductance, type LandauerConductanceInputs, type LandauerConductanceResult` | Re-export |
 | `./plasma-space.js` | `evaluateBohmSheath, type BohmSheathInputs, type BohmSheathResult, evaluateIonAcoustic, type IonAcousticInputs, type IonAcousticResult, evaluateUpperHybrid, type UpperHybridInputs, type UpperHybridResult, evaluateColdPlasmaCutoff, type ColdPlasmaCutoffInputs, type ColdPlasmaCutoffResult, evaluateLowerHybrid, type LowerHybridInputs, type LowerHybridResult, evaluateObliqueMagnetosonic, type ObliqueMagnetosonicInputs, type ObliqueMagnetosonicResult, evaluateBennettPinch, type BennettPinchInputs, type BennettPinchResult, evaluateLossCone, type LossConeInputs, type LossConeResult, evaluateGradBDrift, type GradBDriftInputs, type GradBDriftResult, evaluateExBDrift, type ExBDriftInputs, type ExBDriftResult, evaluateLandauDamping, type LandauDampingInputs, type LandauDampingResult, evaluateDebyeSphere, type DebyeSphereInputs, type DebyeSphereResult, evaluateMultiDebye, type MultiDebyeInputs, type MultiDebyeResult, evaluateLorentzResistivity, type LorentzResistivityInputs, type LorentzResistivityResult, evaluateResistiveSlab, type ResistiveSlabInputs, type ResistiveSlabResult, evaluateParkerCritical, type ParkerCriticalInputs, type ParkerCriticalResult, evaluateParkerSpiral, type ParkerSpiralInputs, type ParkerSpiralResult, evaluateChapmanFerraro, type ChapmanFerraroInputs, type ChapmanFerraroResult, evaluateLawsonBreakeven, type LawsonBreakevenInputs, type LawsonBreakevenResult, evaluateLangmuirProbe, type LangmuirProbeInputs, type LangmuirProbeResult, evaluateCrossFieldDiffusion, type CrossFieldDiffusionInputs, type CrossFieldDiffusionResult, evaluateFirehose, type FirehoseInputs, type FirehoseResult, evaluateMirrorInstability, type MirrorInstabilityInputs, type MirrorInstabilityResult` | Re-export |
 | `./engineering-r7.js` | `evaluateCombDrive, type CombDriveInputs, type CombDriveResult, evaluateSubthresholdSwing, type SubthresholdSwingInputs, type SubthresholdSwingResult, evaluateBoostConverter, type BoostConverterInputs, type BoostConverterResult, evaluateFinEfficiency, type FinEfficiencyInputs, type FinEfficiencyResult, evaluateThermoelectricGenerator, type ThermoelectricGeneratorInputs, type ThermoelectricGeneratorResult, evaluateJoukowsky, type JoukowskyInputs, type JoukowskyResult, evaluateCoaxialCapacitance, type CoaxialCapacitanceInputs, type CoaxialCapacitanceResult, evaluateDampingRatio, type DampingRatioInputs, type DampingRatioResult` | Re-export |
+| `./condensed-r8.js` | `evaluateBlochLaw, type BlochLawInputs, type BlochLawResult, evaluateDensityOfStates3D, type DensityOfStates3DInputs, type DensityOfStates3DResult, evaluateDensityOfStates2D, type DensityOfStates2DInputs, type DensityOfStates2DResult, evaluateThomasFermi, type ThomasFermiInputs, type ThomasFermiResult, evaluateBuiltinVoltage, type BuiltinVoltageInputs, type BuiltinVoltageResult, evaluateSemiconductorFermi, type SemiconductorFermiInputs, type SemiconductorFermiResult, evaluateOnsagerFrequency, type OnsagerFrequencyInputs, type OnsagerFrequencyResult, evaluateJosephsonInductance, type JosephsonInductanceInputs, type JosephsonInductanceResult, evaluateLowerCritical, type LowerCriticalInputs, type LowerCriticalResult, evaluateAcDrude, type AcDrudeInputs, type AcDrudeResult, evaluateMatthiessen, type MatthiessenInputs, type MatthiessenResult, evaluateStoner, type StonerInputs, type StonerResult, evaluateGorterCasimir, type GorterCasimirInputs, type GorterCasimirResult` | Re-export |
 
 **Exports:**
 - Interfaces: `KnownIssue`, `BridgeEquationEntry`
@@ -3379,7 +3382,18 @@ The codebase is organized into the following modules:
   type ThermoelectricGeneratorInputs, type ThermoelectricGeneratorResult, evaluateJoukowsky,
   type JoukowskyInputs, type JoukowskyResult, evaluateCoaxialCapacitance,
   type CoaxialCapacitanceInputs, type CoaxialCapacitanceResult, evaluateDampingRatio,
-  type DampingRatioInputs, type DampingRatioResult
+  type DampingRatioInputs, type DampingRatioResult, evaluateBlochLaw, type BlochLawInputs,
+  type BlochLawResult, evaluateDensityOfStates3D, type DensityOfStates3DInputs,
+  type DensityOfStates3DResult, evaluateDensityOfStates2D, type DensityOfStates2DInputs,
+  type DensityOfStates2DResult, evaluateThomasFermi, type ThomasFermiInputs, type ThomasFermiResult,
+  evaluateBuiltinVoltage, type BuiltinVoltageInputs, type BuiltinVoltageResult,
+  evaluateSemiconductorFermi, type SemiconductorFermiInputs, type SemiconductorFermiResult,
+  evaluateOnsagerFrequency, type OnsagerFrequencyInputs, type OnsagerFrequencyResult,
+  evaluateJosephsonInductance, type JosephsonInductanceInputs, type JosephsonInductanceResult,
+  evaluateLowerCritical, type LowerCriticalInputs, type LowerCriticalResult, evaluateAcDrude,
+  type AcDrudeInputs, type AcDrudeResult, evaluateMatthiessen, type MatthiessenInputs,
+  type MatthiessenResult, evaluateStoner, type StonerInputs, type StonerResult, evaluateGorterCasimir,
+  type GorterCasimirInputs, type GorterCasimirResult
   ```
 
 - Default: `BRIDGE_EQUATIONS`
@@ -5376,6 +5390,7 @@ The codebase is organized into the following modules:
 | `./edges/condensed-r5.js` | `CONDENSED_R5_EDGES` | Import |
 | `./edges/plasma-space.js` | `PLASMA_SPACE_EDGES` | Import |
 | `./edges/engineering-r7.js` | `ENGINEERING_R7_EDGES` | Import |
+| `./edges/condensed-r8.js` | `CONDENSED_R8_EDGES` | Import |
 
 **Exports:**
 - Constants: `CATALOG_GRAPH`
@@ -6198,6 +6213,7 @@ The codebase is organized into the following modules:
 | `./edges/condensed-r5.js` | `be88Edge, be89Edge, be90Edge, be91Edge, be92Edge, be93Edge, be94Edge, be95Edge, be96Edge, be97Edge, be98Edge, be99Edge, be100Edge, be101Edge, be102Edge, CONDENSED_R5_EDGES` | Re-export |
 | `./edges/plasma-space.js` | `be103Edge, be104Edge, be105Edge, be106Edge, be107Edge, be108Edge, be109Edge, be110Edge, be111Edge, be112Edge, be113Edge, be114Edge, be115Edge, be116Edge, be117Edge, be118Edge, be119Edge, be120Edge, be121Edge, be122Edge, be123Edge, be124Edge, be125Edge, PLASMA_SPACE_EDGES` | Re-export |
 | `./edges/engineering-r7.js` | `be126Edge, be127Edge, be128Edge, be129Edge, be130Edge, be131Edge, be132Edge, be133Edge, ENGINEERING_R7_EDGES` | Re-export |
+| `./edges/condensed-r8.js` | `be134Edge, be135Edge, be136Edge, be137Edge, be138Edge, be139Edge, be140Edge, be141Edge, be142Edge, be143Edge, be144Edge, be145Edge, be146Edge, CONDENSED_R8_EDGES` | Re-export |
 | `./edges/catalog-full.js` | `be11Edge, be13Edge, be15Edge, be17Edge, be18Edge, be20Edge, be22Edge, be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge, be31Edge, be33Edge, be34Edge, be36Edge, be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge, be47Edge, be49Edge, be50Edge, CATALOG_FULL_EDGES` | Re-export |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Re-export |
 | `./canonical-graph.js` | `CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS` | Re-export |
@@ -6244,21 +6260,23 @@ The codebase is organized into the following modules:
   be105Edge, be106Edge, be107Edge, be108Edge, be109Edge, be110Edge, be111Edge, be112Edge, be113Edge,
   be114Edge, be115Edge, be116Edge, be117Edge, be118Edge, be119Edge, be120Edge, be121Edge, be122Edge,
   be123Edge, be124Edge, be125Edge, PLASMA_SPACE_EDGES, be126Edge, be127Edge, be128Edge, be129Edge,
-  be130Edge, be131Edge, be132Edge, be133Edge, ENGINEERING_R7_EDGES, be11Edge, be13Edge, be15Edge,
-  be17Edge, be18Edge, be20Edge, be22Edge, be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge,
-  be31Edge, be33Edge, be34Edge, be36Edge, be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge,
-  be47Edge, be49Edge, be50Edge, CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges,
-  CANONICAL_CONSTANTS, CompositionCandidate, EnumerationReport, enumerateCompositions,
-  REGISTERED_COMPOSITION_IDS, UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict,
-  IdentifiabilityResult, IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure,
-  RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionReport,
-  RetrodictionOptions, retrodict, retrodictNode, DerivationExplanation, ExplainOptions,
-  QuantityExplanation, explainQuantity, Evaluation, evaluateRelation, Observable,
-  ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, VizStatus,
-  VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel, edgeToJunction,
-  renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation,
-  EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, suggestQuantities,
-  suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
+  be130Edge, be131Edge, be132Edge, be133Edge, ENGINEERING_R7_EDGES, be134Edge, be135Edge, be136Edge,
+  be137Edge, be138Edge, be139Edge, be140Edge, be141Edge, be142Edge, be143Edge, be144Edge, be145Edge,
+  be146Edge, CONDENSED_R8_EDGES, be11Edge, be13Edge, be15Edge, be17Edge, be18Edge, be20Edge, be22Edge,
+  be23Edge, be24Edge, be25Edge, be26Edge, be27Edge, be30Edge, be31Edge, be33Edge, be34Edge, be36Edge,
+  be38Edge, be39Edge, be41Edge, be43Edge, be45Edge, be46Edge, be47Edge, be49Edge, be50Edge,
+  CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS,
+  CompositionCandidate, EnumerationReport, enumerateCompositions, REGISTERED_COMPOSITION_IDS,
+  UncertaintyResult, propagateUncertainty, IdentifiabilityVerdict, IdentifiabilityResult,
+  IdentifiabilityOptions, classifyIdentifiability, classifyAll, forwardClosure, RetrodictionOutcome,
+  RetrodictionPrediction, RetrodictionResult, RetrodictionReport, RetrodictionOptions, retrodict,
+  retrodictNode, DerivationExplanation, ExplainOptions, QuantityExplanation, explainQuantity,
+  Evaluation, evaluateRelation, Observable, ComposeSymbolicOptions, composeSymbolic,
+  SymbolicCompositionError, SymbolicEvalError, VizStatus, VizJunction, VizCluster, VizOptions,
+  VizModel, VizFilterStats, buildVizModel, edgeToJunction, renderDotToSvg,
+  SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation, EquationLanding,
+  EquationAnalysis, EquationHint, parseUserEquation, suggestQuantities, suggestByDimension,
+  equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
   SynonymDisagreementError
   ```
 
@@ -7121,6 +7139,7 @@ The codebase is organized into the following modules:
 | `./quantities/condensed-r5.js` | `*` | Re-export |
 | `./quantities/plasma-space.js` | `*` | Re-export |
 | `./quantities/engineering-r7.js` | `*` | Re-export |
+| `./quantities/condensed-r8.js` | `*` | Re-export |
 
 **Exports:**
 - Re-exports:
@@ -7130,7 +7149,7 @@ The codebase is organized into the following modules:
   * from ./quantities/fields.js, * from ./quantities/condensed-matter.js,
   * from ./quantities/common.js, * from ./quantities/applied-physicist.js,
   * from ./quantities/condensed-r5.js, * from ./quantities/plasma-space.js,
-  * from ./quantities/engineering-r7.js
+  * from ./quantities/engineering-r7.js, * from ./quantities/condensed-r8.js
   ```
 
 
@@ -8070,6 +8089,7 @@ The codebase is organized into the following modules:
 | `./composition/index.js` | `Evaluation` | Re-export |
 | `./bridges/index.js` | `evaluateBohmSheath, type BohmSheathInputs, type BohmSheathResult, evaluateIonAcoustic, type IonAcousticInputs, type IonAcousticResult, evaluateUpperHybrid, type UpperHybridInputs, type UpperHybridResult, evaluateColdPlasmaCutoff, type ColdPlasmaCutoffInputs, type ColdPlasmaCutoffResult, evaluateLowerHybrid, type LowerHybridInputs, type LowerHybridResult, evaluateObliqueMagnetosonic, type ObliqueMagnetosonicInputs, type ObliqueMagnetosonicResult, evaluateBennettPinch, type BennettPinchInputs, type BennettPinchResult, evaluateLossCone, type LossConeInputs, type LossConeResult, evaluateGradBDrift, type GradBDriftInputs, type GradBDriftResult, evaluateExBDrift, type ExBDriftInputs, type ExBDriftResult, evaluateLandauDamping, type LandauDampingInputs, type LandauDampingResult, evaluateDebyeSphere, type DebyeSphereInputs, type DebyeSphereResult, evaluateMultiDebye, type MultiDebyeInputs, type MultiDebyeResult, evaluateLorentzResistivity, type LorentzResistivityInputs, type LorentzResistivityResult, evaluateResistiveSlab, type ResistiveSlabInputs, type ResistiveSlabResult, evaluateParkerCritical, type ParkerCriticalInputs, type ParkerCriticalResult, evaluateParkerSpiral, type ParkerSpiralInputs, type ParkerSpiralResult, evaluateChapmanFerraro, type ChapmanFerraroInputs, type ChapmanFerraroResult, evaluateLawsonBreakeven, type LawsonBreakevenInputs, type LawsonBreakevenResult, evaluateLangmuirProbe, type LangmuirProbeInputs, type LangmuirProbeResult, evaluateCrossFieldDiffusion, type CrossFieldDiffusionInputs, type CrossFieldDiffusionResult, evaluateFirehose, type FirehoseInputs, type FirehoseResult, evaluateMirrorInstability, type MirrorInstabilityInputs, type MirrorInstabilityResult` | Re-export |
 | `./bridges/index.js` | `evaluateCombDrive, type CombDriveInputs, type CombDriveResult, evaluateSubthresholdSwing, type SubthresholdSwingInputs, type SubthresholdSwingResult, evaluateBoostConverter, type BoostConverterInputs, type BoostConverterResult, evaluateFinEfficiency, type FinEfficiencyInputs, type FinEfficiencyResult, evaluateThermoelectricGenerator, type ThermoelectricGeneratorInputs, type ThermoelectricGeneratorResult, evaluateJoukowsky, type JoukowskyInputs, type JoukowskyResult, evaluateCoaxialCapacitance, type CoaxialCapacitanceInputs, type CoaxialCapacitanceResult, evaluateDampingRatio, type DampingRatioInputs, type DampingRatioResult` | Re-export |
+| `./bridges/index.js` | `evaluateBlochLaw, type BlochLawInputs, type BlochLawResult, evaluateDensityOfStates3D, type DensityOfStates3DInputs, type DensityOfStates3DResult, evaluateDensityOfStates2D, type DensityOfStates2DInputs, type DensityOfStates2DResult, evaluateThomasFermi, type ThomasFermiInputs, type ThomasFermiResult, evaluateBuiltinVoltage, type BuiltinVoltageInputs, type BuiltinVoltageResult, evaluateSemiconductorFermi, type SemiconductorFermiInputs, type SemiconductorFermiResult, evaluateOnsagerFrequency, type OnsagerFrequencyInputs, type OnsagerFrequencyResult, evaluateJosephsonInductance, type JosephsonInductanceInputs, type JosephsonInductanceResult, evaluateLowerCritical, type LowerCriticalInputs, type LowerCriticalResult, evaluateAcDrude, type AcDrudeInputs, type AcDrudeResult, evaluateMatthiessen, type MatthiessenInputs, type MatthiessenResult, evaluateStoner, type StonerInputs, type StonerResult, evaluateGorterCasimir, type GorterCasimirInputs, type GorterCasimirResult` | Re-export |
 | `./bridges/evaluators.js` | `EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole` | Re-export |
 | `./dimensional/connection.js` | `christoffel` | Re-export |
 | `./dimensional/validator.js` | `CovariantDerivativeNode` | Re-export |
@@ -8115,6 +8135,7 @@ The codebase is organized into the following modules:
 | `./composition/index.js` | `be88Edge, be89Edge, be90Edge, be91Edge, be92Edge, be93Edge, be94Edge, be95Edge, be96Edge, be97Edge, be98Edge, be99Edge, be100Edge, be101Edge, be102Edge, CONDENSED_R5_EDGES` | Re-export |
 | `./composition/index.js` | `be103Edge, be104Edge, be105Edge, be106Edge, be107Edge, be108Edge, be109Edge, be110Edge, be111Edge, be112Edge, be113Edge, be114Edge, be115Edge, be116Edge, be117Edge, be118Edge, be119Edge, be120Edge, be121Edge, be122Edge, be123Edge, be124Edge, be125Edge, PLASMA_SPACE_EDGES` | Re-export |
 | `./composition/index.js` | `be126Edge, be127Edge, be128Edge, be129Edge, be130Edge, be131Edge, be132Edge, be133Edge, ENGINEERING_R7_EDGES` | Re-export |
+| `./composition/index.js` | `be134Edge, be135Edge, be136Edge, be137Edge, be138Edge, be139Edge, be140Edge, be141Edge, be142Edge, be143Edge, be144Edge, be145Edge, be146Edge, CONDENSED_R8_EDGES` | Re-export |
 | `./composition/index.js` | `BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain` | Re-export |
 | `./bridges/membership.js` | `adjudicateBridgeEntry, adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS` | Re-export |
 | `./bridges/membership.js` | `BridgeVerdict, CatalogAdjudicationReport, RejectedBridgeAdjudication` | Re-export |
@@ -8264,7 +8285,18 @@ The codebase is organized into the following modules:
   type ThermoelectricGeneratorInputs, type ThermoelectricGeneratorResult, evaluateJoukowsky,
   type JoukowskyInputs, type JoukowskyResult, evaluateCoaxialCapacitance,
   type CoaxialCapacitanceInputs, type CoaxialCapacitanceResult, evaluateDampingRatio,
-  type DampingRatioInputs, type DampingRatioResult, EvaluatorSpec, EvaluatorParameter,
+  type DampingRatioInputs, type DampingRatioResult, evaluateBlochLaw, type BlochLawInputs,
+  type BlochLawResult, evaluateDensityOfStates3D, type DensityOfStates3DInputs,
+  type DensityOfStates3DResult, evaluateDensityOfStates2D, type DensityOfStates2DInputs,
+  type DensityOfStates2DResult, evaluateThomasFermi, type ThomasFermiInputs, type ThomasFermiResult,
+  evaluateBuiltinVoltage, type BuiltinVoltageInputs, type BuiltinVoltageResult,
+  evaluateSemiconductorFermi, type SemiconductorFermiInputs, type SemiconductorFermiResult,
+  evaluateOnsagerFrequency, type OnsagerFrequencyInputs, type OnsagerFrequencyResult,
+  evaluateJosephsonInductance, type JosephsonInductanceInputs, type JosephsonInductanceResult,
+  evaluateLowerCritical, type LowerCriticalInputs, type LowerCriticalResult, evaluateAcDrude,
+  type AcDrudeInputs, type AcDrudeResult, evaluateMatthiessen, type MatthiessenInputs,
+  type MatthiessenResult, evaluateStoner, type StonerInputs, type StonerResult, evaluateGorterCasimir,
+  type GorterCasimirInputs, type GorterCasimirResult, EvaluatorSpec, EvaluatorParameter,
   ParameterAlternate, GeometryRole, christoffel, CovariantDerivativeNode, ricci, RicciTensorNode,
   einstein, EinsteinTensorNode, bianchiResidual, BianchiResidualNode, verifyKillingEquation,
   checkKillingEquation, evaluateConservedCharge, KillingEquationOptions, KillingEquationCheck,
@@ -8302,19 +8334,21 @@ The codebase is organized into the following modules:
   be106Edge, be107Edge, be108Edge, be109Edge, be110Edge, be111Edge, be112Edge, be113Edge, be114Edge,
   be115Edge, be116Edge, be117Edge, be118Edge, be119Edge, be120Edge, be121Edge, be122Edge, be123Edge,
   be124Edge, be125Edge, PLASMA_SPACE_EDGES, be126Edge, be127Edge, be128Edge, be129Edge, be130Edge,
-  be131Edge, be132Edge, be133Edge, ENGINEERING_R7_EDGES, BridgeEdge, ComposeOptions, EdgeConfidence,
-  Quantity, QuantityIdentification, RegimeAttributes, ValidityDomain, adjudicateBridgeEntry,
-  adjudicateCatalog, REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, BridgeVerdict,
-  CatalogAdjudicationReport, RejectedBridgeAdjudication, confrontBE36, GW170817,
-  BE36ConfrontationResult, GWSpeedObservation, confrontBE52, MERCURY, BE52ConfrontationResult,
-  PerihelionObservation, enumerateCompositions, REGISTERED_COMPOSITION_IDS, propagateUncertainty,
-  CompositionCandidate, EnumerationReport, UncertaintyResult, classifyIdentifiability, classifyAll,
-  forwardClosure, IdentifiabilityVerdict, IdentifiabilityResult, IdentifiabilityOptions, retrodict,
-  retrodictNode, RetrodictionOutcome, RetrodictionPrediction, RetrodictionResult, RetrodictionReport,
-  RetrodictionOptions, explainQuantity, DerivationExplanation, ExplainOptions, QuantityExplanation,
-  composeSymbolic, SymbolicCompositionError, SymbolicEvalError, Observable, ComposeSymbolicOptions,
-  buildVizModel, edgeToJunction, VizStatus, VizJunction, VizCluster, VizOptions, VizModel,
-  VizFilterStats, renderDotToSvg, SvgRendererUnavailableError, parseUserEquation, suggestQuantities,
+  be131Edge, be132Edge, be133Edge, ENGINEERING_R7_EDGES, be134Edge, be135Edge, be136Edge, be137Edge,
+  be138Edge, be139Edge, be140Edge, be141Edge, be142Edge, be143Edge, be144Edge, be145Edge, be146Edge,
+  CONDENSED_R8_EDGES, BridgeEdge, ComposeOptions, EdgeConfidence, Quantity, QuantityIdentification,
+  RegimeAttributes, ValidityDomain, adjudicateBridgeEntry, adjudicateCatalog,
+  REJECTED_BRIDGE_ADJUDICATIONS, REJECTED_BRIDGE_IDS, BridgeVerdict, CatalogAdjudicationReport,
+  RejectedBridgeAdjudication, confrontBE36, GW170817, BE36ConfrontationResult, GWSpeedObservation,
+  confrontBE52, MERCURY, BE52ConfrontationResult, PerihelionObservation, enumerateCompositions,
+  REGISTERED_COMPOSITION_IDS, propagateUncertainty, CompositionCandidate, EnumerationReport,
+  UncertaintyResult, classifyIdentifiability, classifyAll, forwardClosure, IdentifiabilityVerdict,
+  IdentifiabilityResult, IdentifiabilityOptions, retrodict, retrodictNode, RetrodictionOutcome,
+  RetrodictionPrediction, RetrodictionResult, RetrodictionReport, RetrodictionOptions,
+  explainQuantity, DerivationExplanation, ExplainOptions, QuantityExplanation, composeSymbolic,
+  SymbolicCompositionError, SymbolicEvalError, Observable, ComposeSymbolicOptions, buildVizModel,
+  edgeToJunction, VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats,
+  renderDotToSvg, SvgRendererUnavailableError, parseUserEquation, suggestQuantities,
   suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
   UserEquation, EquationLanding, EquationAnalysis, EquationHint, parsePhysics, FormulaDimensionError,
   ParsedPhysics, inferUnknownDimension, substituteSymbolDim, dimensionAdjacency, DimensionAdjacency,
@@ -9334,9 +9368,9 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 484 |
 | Total Modules | 13 |
-| Total Lines of Code | 104538 |
-| Total Exports | 3881 |
-| Total Re-exports | 1862 |
+| Total Lines of Code | 104896 |
+| Total Exports | 3987 |
+| Total Re-exports | 1969 |
 | Total Classes | 63 |
 | Total Interfaces | 630 |
 | Total Functions | 900 |
@@ -9348,4 +9382,4 @@ graph TD
 
 ---
 
-*Version*: 6.1.0
+*Version*: 7.0.0

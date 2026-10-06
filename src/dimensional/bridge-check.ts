@@ -233,6 +233,19 @@ export const EXPECTED_DIMENSION_BY_BRIDGE: ReadonlyMap<number, Dimension> = new 
   [131, PRESSURE],
   [132, { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 }], // BE-132 capacitance per length.
   [133, DIMENSIONLESS],
+  [134, { L: -1, M: 0, T: 0, I: 1, Theta: 0, N: 0, J: 0 }], // BE-134 Bloch magnetization deficit.
+  [135, { L: -5, M: -1, T: 2, I: 0, Theta: 0, N: 0, J: 0 }], // BE-135 states per volume per energy.
+  [136, { L: -4, M: -1, T: 2, I: 0, Theta: 0, N: 0, J: 0 }], // BE-136 states per area per energy.
+  [137, { L: -2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 }], // BE-137 Thomas–Fermi k².
+  [138, { L: 2, M: 1, T: -3, I: -1, Theta: 0, N: 0, J: 0 }], // BE-138 built-in voltage.
+  [139, ENERGY],
+  [140, { L: 0, M: 1, T: -2, I: -1, Theta: 0, N: 0, J: 0 }], // BE-140 Onsager F, tesla.
+  [141, { L: 2, M: 1, T: -2, I: -2, Theta: 0, N: 0, J: 0 }], // BE-141 Josephson inductance.
+  [142, { L: 0, M: 1, T: -2, I: -1, Theta: 0, N: 0, J: 0 }], // BE-142 lower critical field.
+  [143, { L: -3, M: -1, T: 3, I: 2, Theta: 0, N: 0, J: 0 }], // BE-143 AC conductivity.
+  [144, TIME],
+  [145, DIMENSIONLESS],
+  [146, DIMENSIONLESS],
 ]);
 
 /**

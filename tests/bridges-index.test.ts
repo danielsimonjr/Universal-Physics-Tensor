@@ -34,21 +34,23 @@ const VALID_FIXABLE = new Set([
 const VALID_PARTS = new Set(['I', 'II', 'III', 'IV', 'V', 'VI']);
 
 describe('Bridge Equation Index', () => {
-  it('contains 123 entries, ids 11 through 133', () => {
+  it('contains 136 entries, ids 11 through 146', () => {
     // The title that said exactly 92 is the record from before BE-103..125.
     // Updated 2026-05-24: 42 → 44 (BE-53 Yang-Mills β, BE-54 Randall-Sundrum).
     // Updated 2026-07-05: 44 → 48 (PI-instrument expansion: BE-55 quantum Hall,
     // BE-56 Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist).
-    expect(BRIDGE_EQUATIONS.length).toBe(123);
+    expect(BRIDGE_EQUATIONS.length).toBe(136);
+    // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
   });
 
-  it('has no duplicate IDs; IDs 11 through 133 with no gaps', () => {
+  it('has no duplicate IDs; IDs 11 through 146 with no gaps', () => {
     // The title that said 11 through 76 is the record from before the later rows.
     const ids = BRIDGE_EQUATIONS.map((e) => e.id).sort((a, b) => a - b);
-    expect(ids).toEqual(Array.from({ length: 123 }, (_, i) => i + 11));
-    expect(new Set(ids).size).toBe(123);
+    expect(ids).toEqual(Array.from({ length: 136 }, (_, i) => i + 11));
+    expect(new Set(ids).size).toBe(136);
+    // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
   });
 

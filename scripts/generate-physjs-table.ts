@@ -38,6 +38,7 @@ const NESTED_FIELDS = [
   'referenceResistivity',
   'lundquist',
   'bohmFlux',
+  'heisenberg_fraction',
 ] as const;
 
 const ENTRY_FIELDS = new Set<string>([

@@ -73,8 +73,16 @@ describe('discovery calibration benchmark', () => {
   // The would-clash sum is 994 = 984 axis-clash + 10 still shadowed.
   // The new promising pair is damping-inertia with mass. A shared mass
   // dimension is not an identification.
+  // BE-134 through BE-146 are on the graph. total 1964 → 2518, promising 17 → 25,
+  // inert 943 → 1307, axis-clash 984 → 1166. magnitude-clash stays 20.
+  // The would-clash sum is 1176 = 1166 axis-clash + 10 still shadowed.
+  // The eight new promising pairs are acdrude-bandmass, dos2d-bandmass,
+  // dos3d-bandmass, fermioffset-elecmass, and fermioffset-holemass with mass,
+  // and dos3d-abscissa, fermioffset-muoff, and tfscreen-chemical with
+  // landauer-erasure-energy. A shared mass or energy dimension is not an
+  // identification.
   const EXPECTED = {
-    catalog: { total: 1964, promising: 17, inert: 943, clash: 20, contradictory: 0, axisClash: 984 },
+    catalog: { total: 2518, promising: 25, inert: 1307, clash: 20, contradictory: 0, axisClash: 1166 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -87,7 +95,7 @@ describe('discovery calibration benchmark', () => {
     expect(count(cands, 'axis-clash')).toBe(EXPECTED.catalog.axisClash);
   });
 
-  it('the 796 would-clash pairs decompose as 786 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
+  it('the 1176 would-clash pairs decompose as 1166 axis-clash verdicts + 10 shadowed by magnitude-clash', () => {
     const cands = rankDiscoveries(CATALOG_GRAPH);
     // `axisClashes` stays populated regardless of which falsifier wins, so
     // the shadowed pairs are exactly the magnitude-clash candidates whose
@@ -96,7 +104,8 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(994);
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1176);
+    // 994 is the record from before be-134..146.
     // 796 is the record from before be-126..133.
     // 455 is the record from before be-103..125.
     expect(shadowed.length).toBe(10);

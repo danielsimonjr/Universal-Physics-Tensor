@@ -52,6 +52,7 @@ import { C_SI, G_SI, M_SUN_SI } from '../core/constants.js';
 import { bridgeRegistry, registerBridge } from './registry.js';
 import { PLASMA_CATALOG_ROWS } from './plasma-catalog.js';
 import { ENGINEERING_R7_CATALOG_ROWS } from './engineering-r7-catalog.js';
+import { CONDENSED_R8_CATALOG_ROWS } from './condensed-r8-catalog.js';
 
 /**
  * Lifecycle status of a bridge equation in the catalog.
@@ -3453,6 +3454,8 @@ const plasmaRows: readonly BridgeEquationEntry[] = PLASMA_CATALOG_ROWS;
 for (const entry of plasmaRows) registerBridge({ entry });
 const engineeringRows: readonly BridgeEquationEntry[] = ENGINEERING_R7_CATALOG_ROWS;
 for (const entry of engineeringRows) registerBridge({ entry });
+const condensedRows: readonly BridgeEquationEntry[] = CONDENSED_R8_CATALOG_ROWS;
+for (const entry of condensedRows) registerBridge({ entry });
 
 /** Catalog rows, in registration order. The projection of `registerBridge`. @public */
 export const BRIDGE_EQUATIONS: BridgeEquationEntry[] = bridgeRegistry.equations() as BridgeEquationEntry[];
@@ -3824,5 +3827,48 @@ export {
   type DampingRatioInputs,
   type DampingRatioResult,
 } from './engineering-r7.js';
+
+/** Condensed-matter evaluators, BE-134 through BE-146. `e` is the elementary charge. */
+export {
+  evaluateBlochLaw,
+  type BlochLawInputs,
+  type BlochLawResult,
+  evaluateDensityOfStates3D,
+  type DensityOfStates3DInputs,
+  type DensityOfStates3DResult,
+  evaluateDensityOfStates2D,
+  type DensityOfStates2DInputs,
+  type DensityOfStates2DResult,
+  evaluateThomasFermi,
+  type ThomasFermiInputs,
+  type ThomasFermiResult,
+  evaluateBuiltinVoltage,
+  type BuiltinVoltageInputs,
+  type BuiltinVoltageResult,
+  evaluateSemiconductorFermi,
+  type SemiconductorFermiInputs,
+  type SemiconductorFermiResult,
+  evaluateOnsagerFrequency,
+  type OnsagerFrequencyInputs,
+  type OnsagerFrequencyResult,
+  evaluateJosephsonInductance,
+  type JosephsonInductanceInputs,
+  type JosephsonInductanceResult,
+  evaluateLowerCritical,
+  type LowerCriticalInputs,
+  type LowerCriticalResult,
+  evaluateAcDrude,
+  type AcDrudeInputs,
+  type AcDrudeResult,
+  evaluateMatthiessen,
+  type MatthiessenInputs,
+  type MatthiessenResult,
+  evaluateStoner,
+  type StonerInputs,
+  type StonerResult,
+  evaluateGorterCasimir,
+  type GorterCasimirInputs,
+  type GorterCasimirResult,
+} from './condensed-r8.js';
 
 export default BRIDGE_EQUATIONS;

@@ -82,7 +82,8 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
     expect(leanFiles.has('lean/PlasmaBeta.lean')).toBe(true);
     expect([...leanFiles].every((path) => /^lean\/[^/]+\.lean$/.test(path))).toBe(true);
     // 60 is the record from before PhysJS #64 added the eleven Lean files.
-    expect(leanFiles.size).toBe(117);
+    expect(leanFiles.size).toBe(130);
+    // 117 is the record from before PhysJS #68 added the thirteen Lean files.
     // 109 is the record from before be-126..133.
     // 86 is the record from before be-103..125. 71 is the record from before PhysJS #65.
   });
@@ -90,7 +91,8 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
   it('every formalRef URL is a file in that tree', () => {
     const urls = emittedUrls();
     // 57 is the record from before be-77..87 each added a catalog formalRef.
-    expect(urls.length).toBe(114);
+    expect(urls.length).toBe(127);
+    // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.
     for (const url of urls) expectLeanFile(url);

@@ -16,6 +16,7 @@ describe('BRIDGE_EVALUATORS', () => {
       77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
       101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
       120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
+      134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
     ]);
   });
 
@@ -59,6 +60,8 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_m3_per_kg$/, 'm^3/kg'],
       [/_J_per_kg$/, 'J/kg'],
       [/_J_per_T$/, 'J/T'],
+      [/_J_m2$/, 'J*m^2'],
+      [/_ohm_m_s$/, 'ohm*m*s'],
       [/_V_per_K2$/, 'V/K^2'],
       [/_V_per_K$/, 'V/K'],
       [/_per_K$/, 'K^-1'],
@@ -70,6 +73,7 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_W_per_m2$/, 'W/m^2'],
       // Longer than `_m2`. A second moment is m^4; a bare area suffix is m^2.
       [/_m4$/, 'm^4'],
+      [/_per_m2$/, 'm^-2'],
       [/_m2$/, 'm^2'],
       [/_m_s2$/, 'm/s^2'],
       [/_Pa_s$/, 'Pa*s'],
@@ -144,9 +148,15 @@ describe('BRIDGE_EVALUATORS', () => {
       n: 10, eps_F_per_m: 8.854e-12, h_m: 2e-4, g_m: 2e-6,
       Cd_F: 1e-15, Cox_F: 2e-15, D: 0.4,
       h_W_per_m2_K: 100, k_W_per_m_K: 200, t_m: 0.002, L_fin_m: 0.05,
-      Th_K: 600, Tc_K: 300, Z_per_K: 0.001,
+      Th_K: 600, Tc_K: 400, Z_per_K: 0.001,
       dv_m_per_s: 1, K_Pa: 2.2e9, pipe_D_m: 0.1, wall_m: 0.005,
       c_kg_per_s: 2,
+      zeta_3_2: 2.612375348685488, D_J_m2: 1e-40,
+      NA_per_m3: 1e22, ND_per_m3: 1e21, ni_per_m3: 1e16,
+      mh_kg: 4e-31, me_kg: 1e-31, Nc_per_m3: 1e25, EF_J: 1e-18,
+      A_per_m2: 1e18, Ic_A: 1e-3, lambda_m: 1e-6, lambda0_m: 1e-7,
+      tau_s: 1e-14, tau1_s: 1e-14, tau2_s: 2e-14, C_ohm_m_s: 1e-15,
+      chi_P: 1, x: 0.2,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

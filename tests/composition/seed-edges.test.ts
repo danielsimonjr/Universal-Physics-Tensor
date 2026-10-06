@@ -291,6 +291,19 @@ describe('symbolic forms agree with the edge evaluator', () => {
     'be-131': { 'joukowsky-rho': 1000, 'joukowsky-closure': 1, 'joukowsky-bulk': 2.2e9, 'joukowsky-wallmod': 2e11, 'joukowsky-bore': 0.1, 'joukowsky-thk': 0.005 },
     'be-132': { 'coax-liner': 1e-11, 'coax-inner': 1, 'coax-outer': Math.E },
     'be-133': { 'damping-dashpot': 2, 'damping-spring': 4, 'damping-inertia': 1 },
+    'be-134': { 'blochlaw-mub': 9.274e-24, 'blochlaw-zeta': 2.612375348685488, 'blochlaw-warmth': 10, 'blochlaw-dstiff': 1e-40 },
+    'be-135': { 'dos3d-bandmass': 9.1e-31, 'dos3d-abscissa': 1e-19 },
+    'be-136': { 'dos2d-bandmass': 9.1e-31 },
+    'be-137': { 'tfscreen-n3': 1e28, 'tfscreen-chemical': 1e-18 },
+    'be-138': { 'builtin-warmth': 300, 'builtin-acceptor': 1e22, 'builtin-donor': 1e21, 'builtin-ni': 1e16 },
+    'be-139': { 'fermioffset-warmth': 300, 'fermioffset-holemass': 4e-31, 'fermioffset-elecmass': 1e-31 },
+    'be-140': { 'onsagerk-karea': 1e18 },
+    'be-141': { 'josephsonl-ic': 1e-3 },
+    'be-142': { 'lowercrit-pen': 1e-7, 'lowercrit-xi': 1e-8 },
+    'be-143': { 'acdrude-n3': 1e28, 'acdrude-bandmass': 9.1e-31, 'acdrude-scatter': 1e-14, 'acdrude-radian': 1e14 },
+    'be-144': { 'matthsum-scatter1': 1e-14, 'matthsum-scatter2': 2e-14 },
+    'be-145': { 'stonerchi-pauli': 2, 'stonerchi-ig': 0.25 },
+    'be-146': { 'gortercas-warmth': 2, 'gortercas-tc': 4 },
   };
 
   for (const [id, probe] of Object.entries(probes)) {

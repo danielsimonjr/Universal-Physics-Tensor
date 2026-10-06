@@ -126,6 +126,19 @@ const ORPHAN_DIMENSIONAL_SIGNATURES: ReadonlySet<number> = new Set([
   131, // BE-131 Joukowsky pressure: closed-form evaluator, no AST.
   132, // BE-132 coaxial capacitance: closed-form evaluator, no AST.
   133, // BE-133 damping ratio: closed-form evaluator, no AST.
+  134, // BE-134 Bloch deficit: closed-form evaluator, no AST.
+  135, // BE-135 three-dimensional density of states: closed-form evaluator, no AST.
+  136, // BE-136 two-dimensional density of states: closed-form evaluator, no AST.
+  137, // BE-137 Thomas–Fermi wavevector squared: closed-form evaluator, no AST.
+  138, // BE-138 built-in voltage: closed-form evaluator, no AST.
+  139, // BE-139 semiconductor Fermi offset: closed-form evaluator, no AST.
+  140, // BE-140 Onsager frequency: closed-form evaluator, no AST.
+  141, // BE-141 Josephson inductance: closed-form evaluator, no AST.
+  142, // BE-142 lower critical field: closed-form evaluator, no AST.
+  143, // BE-143 AC Drude conductivity: closed-form evaluator, no AST.
+  144, // BE-144 Matthiessen lifetime: closed-form evaluator, no AST.
+  145, // BE-145 Stoner susceptibility: closed-form evaluator, no AST.
+  146, // BE-146 Gorter–Casimir fraction: closed-form evaluator, no AST.
 ]);
 
 /**
@@ -141,11 +154,12 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
     // dimensional_signatures are now AST-backed. This sentinel
     // assertion ensures the suite has at least one assertion when
     // ORPHAN_DIMENSIONAL_SIGNATURES is empty.
-    it('orphan allowlist has eighty-one entries (BE-51/52 + BE-55..133 closed-form)', () => {
+    it('orphan allowlist has ninety-four entries (BE-51/52 + BE-55..146 closed-form)', () => {
       // BE-51/52 and the four PI-instrument bridges (BE-55 quantum Hall, BE-56
       // Casimir, BE-57 Unruh, BE-58 Johnson-Nyquist) have dimensional_signatures
       // but closed-form evaluators, not AST modules.
-      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(81);
+      expect(ORPHAN_DIMENSIONAL_SIGNATURES.size).toBe(94);
+      // 81 is the record from before be-134..146.
       // 73 is the record from before be-126..133.
       // 50 is the record from before be-103..125. 35 is the record from before be-88..102.
     });
@@ -218,6 +232,7 @@ describe('Bridge index: orphan dimensional_signature invariants', () => {
         77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
         101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
         120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
+        134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
       ]);
       // 50 ids ending at 102 is the record from before be-103..125.
     });

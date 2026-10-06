@@ -298,6 +298,48 @@ export {
   type DampingRatioInputs,
   type DampingRatioResult,
 } from './bridges/index.js';
+/** Condensed-matter closed forms, BE-134 through BE-146. Each stays that id's single numeric body. */
+export {
+  evaluateBlochLaw,
+  type BlochLawInputs,
+  type BlochLawResult,
+  evaluateDensityOfStates3D,
+  type DensityOfStates3DInputs,
+  type DensityOfStates3DResult,
+  evaluateDensityOfStates2D,
+  type DensityOfStates2DInputs,
+  type DensityOfStates2DResult,
+  evaluateThomasFermi,
+  type ThomasFermiInputs,
+  type ThomasFermiResult,
+  evaluateBuiltinVoltage,
+  type BuiltinVoltageInputs,
+  type BuiltinVoltageResult,
+  evaluateSemiconductorFermi,
+  type SemiconductorFermiInputs,
+  type SemiconductorFermiResult,
+  evaluateOnsagerFrequency,
+  type OnsagerFrequencyInputs,
+  type OnsagerFrequencyResult,
+  evaluateJosephsonInductance,
+  type JosephsonInductanceInputs,
+  type JosephsonInductanceResult,
+  evaluateLowerCritical,
+  type LowerCriticalInputs,
+  type LowerCriticalResult,
+  evaluateAcDrude,
+  type AcDrudeInputs,
+  type AcDrudeResult,
+  evaluateMatthiessen,
+  type MatthiessenInputs,
+  type MatthiessenResult,
+  evaluateStoner,
+  type StonerInputs,
+  type StonerResult,
+  evaluateGorterCasimir,
+  type GorterCasimirInputs,
+  type GorterCasimirResult,
+} from './bridges/index.js';
 
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
 
@@ -650,6 +692,23 @@ export {
   be132Edge,
   be133Edge,
   ENGINEERING_R7_EDGES,
+} from './composition/index.js';
+/** Composition edges for the Bloch deficit through the Gorter–Casimir fraction, BE-134 through BE-146. */
+export {
+  be134Edge,
+  be135Edge,
+  be136Edge,
+  be137Edge,
+  be138Edge,
+  be139Edge,
+  be140Edge,
+  be141Edge,
+  be142Edge,
+  be143Edge,
+  be144Edge,
+  be145Edge,
+  be146Edge,
+  CONDENSED_R8_EDGES,
 } from './composition/index.js';
 export type {
   BridgeEdge,

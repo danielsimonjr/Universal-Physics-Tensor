@@ -33,6 +33,7 @@ import { APPLIED_PHYSICIST_EDGES } from './edges/applied-physicist.js';
 import { CONDENSED_R5_EDGES } from './edges/condensed-r5.js';
 import { PLASMA_SPACE_EDGES } from './edges/plasma-space.js';
 import { ENGINEERING_R7_EDGES } from './edges/engineering-r7.js';
+import { CONDENSED_R8_EDGES } from './edges/condensed-r8.js';
 
 /**
  * Every registered `BridgeEdge`, in registration order. 83 is the record
@@ -62,6 +63,7 @@ const EDGE_ROWS: readonly BridgeEdge[] = [
   ...CONDENSED_R5_EDGES,
   ...PLASMA_SPACE_EDGES,
   ...ENGINEERING_R7_EDGES,
+  ...CONDENSED_R8_EDGES,
 ];
 
 for (const edge of EDGE_ROWS) registerBridge({ edge });

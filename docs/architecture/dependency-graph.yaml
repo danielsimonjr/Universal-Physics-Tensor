@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
-  version: 6.1.0
+  version: 7.0.0
   totalFiles: 484
   totalModules: 13
-  totalExports: 3881
+  totalExports: 3987
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6915,6 +6915,21 @@ modules:
             - evaluateJoukowsky
             - evaluateSubthresholdSwing
             - evaluateThermoelectricGenerator
+        - file: ./condensed-r8.js
+          imports:
+            - evaluateAcDrude
+            - evaluateBlochLaw
+            - evaluateBuiltinVoltage
+            - evaluateDensityOfStates2D
+            - evaluateDensityOfStates3D
+            - evaluateGorterCasimir
+            - evaluateJosephsonInductance
+            - evaluateLowerCritical
+            - evaluateMatthiessen
+            - evaluateOnsagerFrequency
+            - evaluateSemiconductorFermi
+            - evaluateStoner
+            - evaluateThomasFermi
         - file: ./registry.js
           imports:
             - bridgeRegistry
@@ -6985,6 +7000,9 @@ modules:
         - file: ./engineering-r7-catalog.js
           imports:
             - ENGINEERING_R7_CATALOG_ROWS
+        - file: ./condensed-r8-catalog.js
+          imports:
+            - CONDENSED_R8_CATALOG_ROWS
         - file: ./gravitational-lensing.js
           imports:
             - evaluateGravitationalLensing
@@ -7397,6 +7415,48 @@ modules:
             - type DampingRatioInputs
             - type DampingRatioResult
           reExport: true
+        - file: ./condensed-r8.js
+          imports:
+            - evaluateBlochLaw
+            - type BlochLawInputs
+            - type BlochLawResult
+            - evaluateDensityOfStates3D
+            - type DensityOfStates3DInputs
+            - type DensityOfStates3DResult
+            - evaluateDensityOfStates2D
+            - type DensityOfStates2DInputs
+            - type DensityOfStates2DResult
+            - evaluateThomasFermi
+            - type ThomasFermiInputs
+            - type ThomasFermiResult
+            - evaluateBuiltinVoltage
+            - type BuiltinVoltageInputs
+            - type BuiltinVoltageResult
+            - evaluateSemiconductorFermi
+            - type SemiconductorFermiInputs
+            - type SemiconductorFermiResult
+            - evaluateOnsagerFrequency
+            - type OnsagerFrequencyInputs
+            - type OnsagerFrequencyResult
+            - evaluateJosephsonInductance
+            - type JosephsonInductanceInputs
+            - type JosephsonInductanceResult
+            - evaluateLowerCritical
+            - type LowerCriticalInputs
+            - type LowerCriticalResult
+            - evaluateAcDrude
+            - type AcDrudeInputs
+            - type AcDrudeResult
+            - evaluateMatthiessen
+            - type MatthiessenInputs
+            - type MatthiessenResult
+            - evaluateStoner
+            - type StonerInputs
+            - type StonerResult
+            - evaluateGorterCasimir
+            - type GorterCasimirInputs
+            - type GorterCasimirResult
+          reExport: true
       exports:
         - evaluateGravitationalLensing
         - type GravitationalLensingInputs
@@ -7651,6 +7711,45 @@ modules:
         - evaluateDampingRatio
         - type DampingRatioInputs
         - type DampingRatioResult
+        - evaluateBlochLaw
+        - type BlochLawInputs
+        - type BlochLawResult
+        - evaluateDensityOfStates3D
+        - type DensityOfStates3DInputs
+        - type DensityOfStates3DResult
+        - evaluateDensityOfStates2D
+        - type DensityOfStates2DInputs
+        - type DensityOfStates2DResult
+        - evaluateThomasFermi
+        - type ThomasFermiInputs
+        - type ThomasFermiResult
+        - evaluateBuiltinVoltage
+        - type BuiltinVoltageInputs
+        - type BuiltinVoltageResult
+        - evaluateSemiconductorFermi
+        - type SemiconductorFermiInputs
+        - type SemiconductorFermiResult
+        - evaluateOnsagerFrequency
+        - type OnsagerFrequencyInputs
+        - type OnsagerFrequencyResult
+        - evaluateJosephsonInductance
+        - type JosephsonInductanceInputs
+        - type JosephsonInductanceResult
+        - evaluateLowerCritical
+        - type LowerCriticalInputs
+        - type LowerCriticalResult
+        - evaluateAcDrude
+        - type AcDrudeInputs
+        - type AcDrudeResult
+        - evaluateMatthiessen
+        - type MatthiessenInputs
+        - type MatthiessenResult
+        - evaluateStoner
+        - type StonerInputs
+        - type StonerResult
+        - evaluateGorterCasimir
+        - type GorterCasimirInputs
+        - type GorterCasimirResult
         - BE37_REGIME
         - BE51_REGIME
         - BE52_REGIME
@@ -7911,6 +8010,45 @@ modules:
         - evaluateDampingRatio
         - type DampingRatioInputs
         - type DampingRatioResult
+        - evaluateBlochLaw
+        - type BlochLawInputs
+        - type BlochLawResult
+        - evaluateDensityOfStates3D
+        - type DensityOfStates3DInputs
+        - type DensityOfStates3DResult
+        - evaluateDensityOfStates2D
+        - type DensityOfStates2DInputs
+        - type DensityOfStates2DResult
+        - evaluateThomasFermi
+        - type ThomasFermiInputs
+        - type ThomasFermiResult
+        - evaluateBuiltinVoltage
+        - type BuiltinVoltageInputs
+        - type BuiltinVoltageResult
+        - evaluateSemiconductorFermi
+        - type SemiconductorFermiInputs
+        - type SemiconductorFermiResult
+        - evaluateOnsagerFrequency
+        - type OnsagerFrequencyInputs
+        - type OnsagerFrequencyResult
+        - evaluateJosephsonInductance
+        - type JosephsonInductanceInputs
+        - type JosephsonInductanceResult
+        - evaluateLowerCritical
+        - type LowerCriticalInputs
+        - type LowerCriticalResult
+        - evaluateAcDrude
+        - type AcDrudeInputs
+        - type AcDrudeResult
+        - evaluateMatthiessen
+        - type MatthiessenInputs
+        - type MatthiessenResult
+        - evaluateStoner
+        - type StonerInputs
+        - type StonerResult
+        - evaluateGorterCasimir
+        - type GorterCasimirInputs
+        - type GorterCasimirResult
       interfaces:
         - KnownIssue
         - BridgeEquationEntry
@@ -12651,6 +12789,9 @@ modules:
         - file: ./edges/engineering-r7.js
           imports:
             - ENGINEERING_R7_EDGES
+        - file: ./edges/condensed-r8.js
+          imports:
+            - CONDENSED_R8_EDGES
       exports:
         - CATALOG_GRAPH
       constants:
@@ -15134,6 +15275,23 @@ modules:
             - be133Edge
             - ENGINEERING_R7_EDGES
           reExport: true
+        - file: ./edges/condensed-r8.js
+          imports:
+            - be134Edge
+            - be135Edge
+            - be136Edge
+            - be137Edge
+            - be138Edge
+            - be139Edge
+            - be140Edge
+            - be141Edge
+            - be142Edge
+            - be143Edge
+            - be144Edge
+            - be145Edge
+            - be146Edge
+            - CONDENSED_R8_EDGES
+          reExport: true
         - file: ./edges/catalog-full.js
           imports:
             - be11Edge
@@ -15402,6 +15560,20 @@ modules:
         - be132Edge
         - be133Edge
         - ENGINEERING_R7_EDGES
+        - be134Edge
+        - be135Edge
+        - be136Edge
+        - be137Edge
+        - be138Edge
+        - be139Edge
+        - be140Edge
+        - be141Edge
+        - be142Edge
+        - be143Edge
+        - be144Edge
+        - be145Edge
+        - be146Edge
+        - CONDENSED_R8_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -15605,6 +15777,20 @@ modules:
         - be132Edge
         - be133Edge
         - ENGINEERING_R7_EDGES
+        - be134Edge
+        - be135Edge
+        - be136Edge
+        - be137Edge
+        - be138Edge
+        - be139Edge
+        - be140Edge
+        - be141Edge
+        - be142Edge
+        - be143Edge
+        - be144Edge
+        - be145Edge
+        - be146Edge
+        - CONDENSED_R8_EDGES
         - be11Edge
         - be13Edge
         - be15Edge
@@ -18353,6 +18539,10 @@ modules:
           imports:
             - "*"
           reExport: true
+        - file: ./quantities/condensed-r8.js
+          imports:
+            - "*"
+          reExport: true
       exports: []
       reExported:
         - "* from ./quantities/quantum.js"
@@ -18364,6 +18554,7 @@ modules:
         - "* from ./quantities/condensed-r5.js"
         - "* from ./quantities/plasma-space.js"
         - "* from ./quantities/engineering-r7.js"
+        - "* from ./quantities/condensed-r8.js"
     src/composition/quantity.ts:
       description: Composition graph — quantity nodes (v0.8.0 T2, per
       externalDependencies: []
@@ -20676,6 +20867,48 @@ modules:
             - type DampingRatioInputs
             - type DampingRatioResult
           reExport: true
+        - file: ./bridges/index.js
+          imports:
+            - evaluateBlochLaw
+            - type BlochLawInputs
+            - type BlochLawResult
+            - evaluateDensityOfStates3D
+            - type DensityOfStates3DInputs
+            - type DensityOfStates3DResult
+            - evaluateDensityOfStates2D
+            - type DensityOfStates2DInputs
+            - type DensityOfStates2DResult
+            - evaluateThomasFermi
+            - type ThomasFermiInputs
+            - type ThomasFermiResult
+            - evaluateBuiltinVoltage
+            - type BuiltinVoltageInputs
+            - type BuiltinVoltageResult
+            - evaluateSemiconductorFermi
+            - type SemiconductorFermiInputs
+            - type SemiconductorFermiResult
+            - evaluateOnsagerFrequency
+            - type OnsagerFrequencyInputs
+            - type OnsagerFrequencyResult
+            - evaluateJosephsonInductance
+            - type JosephsonInductanceInputs
+            - type JosephsonInductanceResult
+            - evaluateLowerCritical
+            - type LowerCriticalInputs
+            - type LowerCriticalResult
+            - evaluateAcDrude
+            - type AcDrudeInputs
+            - type AcDrudeResult
+            - evaluateMatthiessen
+            - type MatthiessenInputs
+            - type MatthiessenResult
+            - evaluateStoner
+            - type StonerInputs
+            - type StonerResult
+            - evaluateGorterCasimir
+            - type GorterCasimirInputs
+            - type GorterCasimirResult
+          reExport: true
         - file: ./bridges/evaluators.js
           imports:
             - EvaluatorSpec
@@ -21033,6 +21266,23 @@ modules:
             - be132Edge
             - be133Edge
             - ENGINEERING_R7_EDGES
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - be134Edge
+            - be135Edge
+            - be136Edge
+            - be137Edge
+            - be138Edge
+            - be139Edge
+            - be140Edge
+            - be141Edge
+            - be142Edge
+            - be143Edge
+            - be144Edge
+            - be145Edge
+            - be146Edge
+            - CONDENSED_R8_EDGES
           reExport: true
         - file: ./composition/index.js
           imports:
@@ -21742,6 +21992,45 @@ modules:
         - evaluateDampingRatio
         - type DampingRatioInputs
         - type DampingRatioResult
+        - evaluateBlochLaw
+        - type BlochLawInputs
+        - type BlochLawResult
+        - evaluateDensityOfStates3D
+        - type DensityOfStates3DInputs
+        - type DensityOfStates3DResult
+        - evaluateDensityOfStates2D
+        - type DensityOfStates2DInputs
+        - type DensityOfStates2DResult
+        - evaluateThomasFermi
+        - type ThomasFermiInputs
+        - type ThomasFermiResult
+        - evaluateBuiltinVoltage
+        - type BuiltinVoltageInputs
+        - type BuiltinVoltageResult
+        - evaluateSemiconductorFermi
+        - type SemiconductorFermiInputs
+        - type SemiconductorFermiResult
+        - evaluateOnsagerFrequency
+        - type OnsagerFrequencyInputs
+        - type OnsagerFrequencyResult
+        - evaluateJosephsonInductance
+        - type JosephsonInductanceInputs
+        - type JosephsonInductanceResult
+        - evaluateLowerCritical
+        - type LowerCriticalInputs
+        - type LowerCriticalResult
+        - evaluateAcDrude
+        - type AcDrudeInputs
+        - type AcDrudeResult
+        - evaluateMatthiessen
+        - type MatthiessenInputs
+        - type MatthiessenResult
+        - evaluateStoner
+        - type StonerInputs
+        - type StonerResult
+        - evaluateGorterCasimir
+        - type GorterCasimirInputs
+        - type GorterCasimirResult
         - christoffel
         - ricci
         - einstein
@@ -21907,6 +22196,20 @@ modules:
         - be132Edge
         - be133Edge
         - ENGINEERING_R7_EDGES
+        - be134Edge
+        - be135Edge
+        - be136Edge
+        - be137Edge
+        - be138Edge
+        - be139Edge
+        - be140Edge
+        - be141Edge
+        - be142Edge
+        - be143Edge
+        - be144Edge
+        - be145Edge
+        - be146Edge
+        - CONDENSED_R8_EDGES
         - adjudicateBridgeEntry
         - adjudicateCatalog
         - REJECTED_BRIDGE_ADJUDICATIONS
@@ -22455,6 +22758,45 @@ modules:
         - evaluateDampingRatio
         - type DampingRatioInputs
         - type DampingRatioResult
+        - evaluateBlochLaw
+        - type BlochLawInputs
+        - type BlochLawResult
+        - evaluateDensityOfStates3D
+        - type DensityOfStates3DInputs
+        - type DensityOfStates3DResult
+        - evaluateDensityOfStates2D
+        - type DensityOfStates2DInputs
+        - type DensityOfStates2DResult
+        - evaluateThomasFermi
+        - type ThomasFermiInputs
+        - type ThomasFermiResult
+        - evaluateBuiltinVoltage
+        - type BuiltinVoltageInputs
+        - type BuiltinVoltageResult
+        - evaluateSemiconductorFermi
+        - type SemiconductorFermiInputs
+        - type SemiconductorFermiResult
+        - evaluateOnsagerFrequency
+        - type OnsagerFrequencyInputs
+        - type OnsagerFrequencyResult
+        - evaluateJosephsonInductance
+        - type JosephsonInductanceInputs
+        - type JosephsonInductanceResult
+        - evaluateLowerCritical
+        - type LowerCriticalInputs
+        - type LowerCriticalResult
+        - evaluateAcDrude
+        - type AcDrudeInputs
+        - type AcDrudeResult
+        - evaluateMatthiessen
+        - type MatthiessenInputs
+        - type MatthiessenResult
+        - evaluateStoner
+        - type StonerInputs
+        - type StonerResult
+        - evaluateGorterCasimir
+        - type GorterCasimirInputs
+        - type GorterCasimirResult
         - EvaluatorSpec
         - EvaluatorParameter
         - ParameterAlternate
@@ -22678,6 +23020,20 @@ modules:
         - be132Edge
         - be133Edge
         - ENGINEERING_R7_EDGES
+        - be134Edge
+        - be135Edge
+        - be136Edge
+        - be137Edge
+        - be138Edge
+        - be139Edge
+        - be140Edge
+        - be141Edge
+        - be142Edge
+        - be143Edge
+        - be144Edge
+        - be145Edge
+        - be146Edge
+        - CONDENSED_R8_EDGES
         - BridgeEdge
         - ComposeOptions
         - EdgeConfidence
@@ -24948,15 +25304,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 484
   totalModules: 13
-  totalLinesOfCode: 104538
-  totalExports: 3881
+  totalLinesOfCode: 104896
+  totalExports: 3987
   totalClasses: 63
   totalInterfaces: 630
   totalFunctions: 900
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 1069
-  totalReExports: 1862
+  totalReExports: 1969
   totalTypeOnlyImports: 591
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
