@@ -77,6 +77,7 @@ const INVOCATIONS: string[][] = [
 const reached = new Set<string>();
 
 describe('audit I13: every status a command emits is defined in its envelope', () => {
+  // 60s is the record from before be-147..170. `discover` walks 3787 candidates twice.
   it.each(INVOCATIONS.map((a) => [a.join(' '), a] as const))('%s', async (_label, argv) => {
     const text = await run(argv);
     const json = await run([...argv, '--json']);
@@ -86,7 +87,7 @@ describe('audit I13: every status a command emits is defined in its envelope', (
     for (const [k, meaning] of Object.entries(envelope.definitions ?? {})) {
       expect(meaning).toBe(STATUS_GLOSSARY.find((s) => s.key === k)!.meaning);
     }
-  });
+  }, 180_000);
 
   it('--replay: reproduced, differs and not replayable are defined', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'upt-statuses-'));

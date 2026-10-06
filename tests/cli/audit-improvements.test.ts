@@ -682,6 +682,7 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
     expect(survivedAny).toBeGreaterThan(0);
   });
 
+  // 60s is the record from before be-147..170. Catalog discover now walks 3787 candidates.
   it('--require-falsifier hides a row that only connectivity supports, and says how many', async () => {
     const all = await json(['discover', '--source=catalog']);
     const p = all.result.filter((c: any) => c.verdict === 'promising');
@@ -695,7 +696,7 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
     const canonical = await run(['discover', '--source=canonical', '--require-falsifier']);
     const n = /→ {2}(\d+) promising/.exec(canonical.text)![1];
     expect(canonical.text).toContain(`--require-falsifier: ${n} of the ${n} promising hidden`);
-  });
+  }, 180_000);
 });
 
 describe('I12 — a derived relation carries its premise, meaning and status wherever it goes', () => {

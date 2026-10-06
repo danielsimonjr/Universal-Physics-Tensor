@@ -326,6 +326,7 @@ describe('rankDiscoveries — hoisted-context equivalence guard', () => {
   // builds a fresh context per call. The two paths MUST agree byte-for-byte —
   // any divergence means the shared context leaked mutable state between
   // candidates (the one real failure mode of the loop-invariant hoist).
+  // 60s is the record from before be-147..170. The funnel is 3787 candidates, vetted twice.
   it('produces results identical to vetting each candidate independently', () => {
     const candidates = proposeLinkCandidates(CATALOG_GRAPH);
     const independent = candidates
@@ -343,5 +344,5 @@ describe('rankDiscoveries — hoisted-context equivalence guard', () => {
         x.dim.localeCompare(y.dim),
     );
     expect(shared).toEqual(independent);
-  });
+  }, 180_000);
 });

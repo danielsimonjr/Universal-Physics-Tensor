@@ -38,7 +38,8 @@ describe('auditCoverage — catalog grounding profile', () => {
     expect(confronted).toEqual([11, 21, 23, 35, 36, 37, 48, 51, 52, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65]);
     // 44 is the record from before be-74..76. None of those three is data-confronted.
     // 47 is the record from before be-77..87. None of those eleven is data-confronted.
-    expect(report.withoutDataConfrontation).toBe(117);
+    expect(report.withoutDataConfrontation).toBe(141);
+    // 117 is the record from before be-147..170. None of those twenty-four is data-confronted.
     // 104 is the record from before be-134..146.
     // 96 is the record from before be-126..133.
     // 73 is the record from before be-103..125. None of those twenty-three is data-confronted.

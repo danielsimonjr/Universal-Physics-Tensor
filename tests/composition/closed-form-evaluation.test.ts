@@ -33,6 +33,14 @@ function samples(names: readonly string[]): Record<string, number>[] {
     });
     out.push(equal, varied, reversed, negative, alternating);
   }
+  // 4.5 sits in Wien's open interval (4, 5). Zero is Onsager's magnetic field.
+  // The scales above are the record from before BE-166 and BE-170.
+  if (names.length > 0) {
+    out.push(
+      Object.fromEntries(names.map((name) => [name, 4.5])),
+      Object.fromEntries(names.map((name) => [name, 0])),
+    );
+  }
   return out;
 }
 

@@ -4,8 +4,8 @@
  * A suggestion does not drop the kind of thing the name asked for, so
  * `debye-length` does not fall back to the phonon Debye family.
  *
- * `upt search debye` is one word and still returns that family. A Reynolds
- * number bridge is not added.
+ * `upt search debye` is one word and still returns that family. The sentence
+ * that a Reynolds number bridge is not added is the record from before BE-155.
  */
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
@@ -33,11 +33,12 @@ async function search(query: string): Promise<{ code: number; text: string }> {
 }
 
 describe('a multi-word search is a noun phrase in one field', () => {
-  it('does not answer Reynolds number with the Reynolds analogy', async () => {
+  it('answers Reynolds number with BE-155 and not the Reynolds analogy', async () => {
     const r = await search('reynolds number');
-    expect(r.code, r.text).toBe(1);
+    // Exit 1 and "no entry matches" is the record from before BE-155.
+    expect(r.code, r.text).toBe(0);
+    expect(r.text).toMatch(/be-155/);
     expect(r.text).not.toMatch(/be-86/);
-    expect(r.text).toMatch(/no entry matches/);
   });
 
   it('still finds the Reynolds analogy by the Prandtl number it states, and says the match is the gloss', async () => {
