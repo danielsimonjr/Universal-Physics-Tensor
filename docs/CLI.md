@@ -87,7 +87,7 @@ upt evaluate <be-NN | case-id> key=value[unit] ...
 
 | Flag | Value | Default | Description |
 |---|---|---|---|
-| `--sigma=VALUE (repeatable) (or --sigma VALUE)` | `=` or next token, repeatable |  | One input uncertainty as key=u, in the input's unit. A temperature uncertainty in degC is a difference. |
+| `--sigma=VALUE (repeatable) (or --sigma VALUE)` | `=` or next token, repeatable |  | One input uncertainty as key=u, in the input's unit. A temperature uncertainty in degC or degF is a difference. |
 | `--corr=VALUE (repeatable) (or --corr VALUE)` | `=` or next token, repeatable |  | A pairwise correlation as a,b=rho, used with --sigma. |
 | `--json` | no |  | Write a JSON envelope to stdout instead of the text report. |
 

@@ -80,7 +80,9 @@ export const DIMENSION_RENAMES: readonly DimensionRename[] = [
  *
  * A group is not a pair of hubs. `T` and `temp` are the same temperature
  * whether or not the word `temperature` is also present. `Th_K` and `Tc_K`
- * are two temperatures and are not in the temperature group. This array is
+ * are two temperatures and are not in the temperature group. `k_B` and
+ * `boltzmann-constant` are one scale. `specific-heat` and
+ * `specific-heat-capacity` are one quantity. This array is
  * the only spelling list: the name table holds it by reference, and a
  * temperature binding asks {@link isTemperatureName}.
  *
@@ -91,6 +93,9 @@ export const SYNONYM_GROUPS: readonly (readonly string[])[] = [
   ['magnetic-field', 'magnetic-flux-density'],
   ['landauer-erasure-energy', 'erasure-energy'],
   ['temperature', 'T', 'temp', 'T_K'],
+  // One Boltzmann scale. `k_B` does not fold onto `kB` (`_` becomes `-`), so both are members.
+  ['boltzmann-constant', 'k_B', 'kB', 'boltzmann'],
+  ['specific-heat', 'specific-heat-capacity'],
 ];
 
 const foldName = (s: string): string => s.replace(/_/g, '-');
@@ -108,6 +113,26 @@ export function synonymGroup(name: string): readonly string[] | undefined {
 export function isTemperatureName(name: string): boolean {
   const group = synonymGroup(name);
   return group !== undefined && group.includes('temperature');
+}
+
+const INTERVAL_WORD = /(?:^|[-_])(?:change|difference|delta|interval|increment|drop|rise)(?:$|[-_])/i;
+const DIFFERENTIAL = /^(?:d|Δ)T(?:$|[-_\d])|^delta[-_]?T(?:$|[-_\d])/i;
+
+/**
+ * Whether an affine temperature on this quantity is an interval or a point.
+ *
+ * A difference slot is a hyphen or underscore token
+ * `change`, `difference`, `delta`, `interval`, `increment`, `drop`, or `rise`,
+ * or a differential `dT`, `ΔT`, `deltaT`, or `delta-T`. `temperature-change`
+ * and `dT` are intervals. `T`, `T1`, `T2`, and `hot-reservoir-temperature`
+ * are points. The offset is the only thing this changes.
+ */
+export function temperatureQuantityRole(name: string): 'absolute' | 'difference' {
+  const folded = name.trim();
+  const hyphen = folded.replace(/_/g, '-');
+  if (DIFFERENTIAL.test(folded) || DIFFERENTIAL.test(hyphen)) return 'difference';
+  if (INTERVAL_WORD.test(folded) || INTERVAL_WORD.test(hyphen)) return 'difference';
+  return 'absolute';
 }
 
 /**
