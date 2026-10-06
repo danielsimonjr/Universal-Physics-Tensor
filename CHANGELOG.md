@@ -127,6 +127,10 @@ Major release. `resolveToCatalogName` is removed from the public surface. Call `
 
 - **One name resolver, one unit grammar, one evaluable id, and the scalar factor the formula states.** `resolveQuantityName` is the spelling resolver for a target, an input, `upt eval`, `upt explain`, `upt evaluate`, `--sigma`, `upt discover`, `upt regime`, and `upt search`. `resolveEvaluable` is the id `evaluateRelation` and `upt evaluate` share. A unit token is one factor or one product: `m2K` is `m^2·K`, `cm^2/Vs` is `cm^2/(V·s)`, and an ambiguous split is refused. A fully-quantitative scalar AST multiplies its dimensionless coefficient. `CE-point-charge-field` at `charge = -e`, `r = 1` is `-e/(4π ε₀)`. The canonical audit stays DERIVED (72), COEFFICIENT UNSET (6), DECOY (12), OPEN (19). The Changed notes above this version heading are the same change, in the words written before the version heading existed.
 
+### Fixed
+
+- **Four catalog discovers do not fit in 60s on the CI runner.** `tests/cli/source-anchor.test.ts` runs `discover` twice as text and twice as JSON, and the ground check re-runs that funnel. The funnel is 2518 candidates, and one discover there is about 20s. Those two tests allow 180s. 60s is the record from before BE-134 through BE-146.
+
 ### Breaking
 
 - **`resolveToCatalogName` is removed.** A caller that imported `resolveToCatalogName`, `rewriteInputKey`, `formulaSpellings`, `synonymInCatalog`, or `TEMPERATURE_BINDING_NAMES` now uses `resolveQuantityName`. `bindingInUnit` stays the unit conversion inside `readNamedBinding`.
