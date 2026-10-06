@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Write the design for a recurring bridge reduction pass. Do not change code.
+  The catalog has no generating-set pass. What counts as derivable, and a Lean-only derived mark, are unspecified. Dogfood proposals carry a standard or cross-domain label. Daniel has not approved an implementation.
+  Done: `docs/design/bridge-reduction-pass.md`. No `src/` change. The pass is not an open task.
+
 - [x] Pin PhysJS `10cf71e9f1f460780f8620de7ba422df61e0949b` and register BE-134 through BE-146.
   The catalog stops at BE-133. PhysJS #68 proves the thirteen condensed-matter equations from the round-8 dogfood. `package.json` is 6.1.0. `resolveToCatalogName` is already gone from the public surface.
   The pin, the thirteen catalog rows, their evaluators, and their edges are not in this tree. The version is not 7.0.0.
