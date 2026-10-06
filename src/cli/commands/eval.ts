@@ -59,6 +59,7 @@ function parseScope(
       scope[a.name] = read.value;
       for (const note of read.notes) if (!notes.includes(note)) notes.push(note);
     } catch (e) {
+      if (e instanceof SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
       const msg = e instanceof api.UnitError ? e.message : (e as Error).message;
       throw new CliError(`upt eval: '${a.assignment}' is not a finite number or a known unit. ${msg}`);
     }

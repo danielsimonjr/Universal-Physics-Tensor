@@ -50,9 +50,11 @@
  *     (`monomial: null`), a fully-quantitative product, quotient, or integer
  *     power is evaluated from that AST, so a numeric leaf (4, 6π, 8π) is not
  *     dropped and Newton's two same-dim masses still return G m₁ m₂ / r².
- *     A sum, a transcendental, or a `scalar-up-to-constant` stub still carries
- *     a NaN evaluator; `retrodict` accepts only finite derivations, so it
- *     abstains on those rather than inventing a monomial.
+ *     A fully-quantitative sum or transcendental (Carnot, the first law, the
+ *     Boltzmann factor) is evaluated from that same AST. A
+ *     `scalar-up-to-constant` stub still carries a NaN evaluator;
+ *     `retrodict` accepts only finite derivations, so it abstains on those
+ *     rather than inventing a monomial or presenting the dropped ½ as the law.
  *
  * The public counterpart to `CATALOG_GRAPH` (the bridge-catalog graph): exported
  * from the package manifest and surfaced via the CLI's `--source=canonical`
@@ -74,6 +76,7 @@ import { CHARGE, DIMENSIONLESS, MASS } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
+import { evalExpr } from './expr-eval.js';
 
 /** A universal constant a canonical `governing` list may name: SI value + dim. */
 interface ConstantDef {
@@ -395,6 +398,49 @@ function evaluateAstMonomial(
   };
 }
 
+/** Numeric literal symbols (`1`, `-1`) the monomial path already folded. */
+function literalInputs(node: ExprNode, inputs: Record<string, number>): Record<string, number> {
+  const scope: Record<string, number> = { ...inputs };
+  const walk = (current: ExprNode): void => {
+    if (current.kind === 'symbol') {
+      if (Object.hasOwn(scope, current.name)) return;
+      const numeric = Number(current.name);
+      if (current.name.trim() !== '' && Number.isFinite(numeric)) scope[current.name] = numeric;
+      return;
+    }
+    if (current.kind === 'op') for (const arg of current.args) walk(arg);
+    else if (current.kind === 'abs' || current.kind === 'transcendental' || current.kind === 'dirac-delta') walk(current.arg);
+  };
+  walk(node);
+  return scope;
+}
+
+/**
+ * A fully-quantitative sum or transcendental. The monomial exponent walk
+ * cannot see it. `scalar-up-to-constant` stays out: that status dropped a
+ * factor, and the AST is not the law.
+ */
+function evaluateClosedScalar(
+  eq: CanonicalEquation,
+): ((inputs: Record<string, number>) => number) | undefined {
+  if (eq.epistemicStatus !== 'fully-quantitative' || eq.scalarAst === undefined) return undefined;
+  if (monomialExponents(eq.scalarAst) !== undefined) return undefined;
+  const ast = eq.scalarAst;
+  const required = eq.dimensional.governing.filter((governing) => constantValue(governing.name, governing.dim) === null);
+  return (inputs) => {
+    for (const governing of required) {
+      const value = inputs[governing.name];
+      if (value === undefined || !Number.isFinite(value)) return Number.NaN;
+    }
+    try {
+      const value = evalExpr(ast, literalInputs(ast, inputs));
+      return Number.isFinite(value) ? value : Number.NaN;
+    } catch {
+      return Number.NaN;
+    }
+  };
+}
+
 /**
  * Build the evaluator for one canonical equation, keyed by its VARIABLE source
  * names. Variables carry the monomial exponent from `inputs`; constants
@@ -403,12 +449,13 @@ function evaluateAstMonomial(
  * already own that factor, and multiplies the sourced table prefactor.
  * A fully-quantitative AST that names a dimensionless count, or whose
  * Buckingham monomial is null, is evaluated from that AST so the count and
- * the numeric leaves (6π) are not dropped. The edge applies the sign policy
+ * the numeric leaves (6π) are not dropped. A fully-quantitative sum or
+ * transcendental is evaluated from that AST too. The edge applies the sign policy
  * once before this function: an input the AST is even in is an absolute
  * value, and a product odd in both charge and mobility rejects opposite
  * signs. This function does not do that again.
- * Returns NaN when the monomial is null and the AST is not that monomial,
- * and when a dimensional coefficient is unset and its group is unbound.
+ * Returns NaN when the monomial is null and the AST is not a fully-quantitative
+ * closed form, and when a dimensional coefficient is unset and its group is unbound.
  * `retrodict` then abstains.
  */
 function makeEvaluate(
@@ -419,6 +466,8 @@ function makeEvaluate(
   if (powers !== undefined && (Object.keys(factors).length > 0 || eq.dimensional.monomial === null)) {
     return evaluateAstMonomial(eq, powers);
   }
+  const closed = evaluateClosedScalar(eq);
+  if (closed !== undefined) return closed;
   const monomial = eq.dimensional.monomial;
   if (monomial === null) return () => NaN;
   const dimByName = new Map(eq.dimensional.governing.map((g) => [g.name, g.dim]));

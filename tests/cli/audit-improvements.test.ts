@@ -268,12 +268,15 @@ describe('I6 — every evaluator declares its inputs; units convert only when th
     await bad(['be-63', 'mu_e=2m'], /'m' is \[length\], but this input is \[1\] \(dimensionless\)/);
     await bad(['be-56', 'radius_m=1um'], /'radius_m' is not an input here; the inputs are: d_m/);
     await bad(['be-52', 'M_kg=1Msun', 'a_m=5.79e10', 'major_axis_m=1.158e11', 'e=0.2', 'T_yr=0.24'], /'a_m' is given twice \(once through an alternate\)/);
-    await bad(['be-58', 'T_K=80degF', 'R_ohm=1'], /Fahrenheit is not accepted/);
+    const fahrenheit = (80 - 32) * (5 / 9) + 273.15;
+    const viaF = await out(['evaluate', 'be-58', 'T_K=80degF', 'R_ohm=1']);
+    const viaK = await out(['evaluate', 'be-58', `T_K=${fahrenheit}`, 'R_ohm=1']);
+    expect(viaF.S_V_V2_per_Hz).toBeCloseTo(viaK.S_V_V2_per_Hz, 8);
   });
 
   it('the listing declares every input with its unit and meaning', async () => {
     const r = await run(['evaluate']);
-    expect(r.text).toMatch(/\n {2}be-58 {2}Johnson-Nyquist noise\n {6}T_K \[K\] temperature T \(an absolute temperature; degC adds 273\.15\) — /);
+    expect(r.text).toMatch(/\n {2}be-58 {2}Johnson-Nyquist noise\n {6}T_K \[K\] temperature T \(an absolute temperature; degC adds 273\.15; degF is \(degF − 32\)×5\/9 \+ 273\.15\) — /);
     const env = await json(['evaluate']);
     expect(env.result.find((s: any) => s.bridgeId === 51).parameters[1]).toMatchObject({ key: 'b_m', unit: 'm', geometry: 'impact-parameter' });
   });

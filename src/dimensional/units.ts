@@ -6,22 +6,27 @@
  * `W/m*K` both mean W·m⁻¹·K⁻¹). An exact symbol is matched before a prefixed
  * one, so `min` is a minute, `Pa` a pascal and `mm` a millimetre.
  *
- * Temperature in °C is affine, so it is accepted only alone and only with an
- * explicit reading: an ABSOLUTE temperature adds 273.15 K; a temperature
- * DIFFERENCE (an uncertainty, an interval) does not. °F is refused rather than
- * converted.
+ * An affine temperature (`degC`, `°C`, `degF`, `°F`) is accepted only alone.
+ * The kelvin value is `value × scale + offset` for an absolute reading and
+ * `value × scale` for a difference. Rankine is proportional (`°R × 5/9`), not
+ * affine. The caller decides which reading, from the quantity's role.
  *
  * An exact symbol wins over a prefix: `T` is the tesla and `Ts` is a
- * terasecond; `G` is the gauss and `GPa` is a gigapascal. A glued positive
- * exponent is that power when the letters are already a unit, so `K2` and
- * `K²` are `K^2`.
+ * terasecond; `G` is the gauss and `GPa` is a gigapascal; `P` is the poise
+ * and `PV` is still a petavolt. A glued positive exponent is that power when
+ * the letters are already a unit, so `K2` and `K²` are `K^2`.
  *
  * A token with no separator is one factor when the whole token is an exact
  * unit or a prefix plus a unit, with an optional exponent. That reading
- * wins, so `ms` stays a millisecond, `mm` a millimetre, `mK` a millikelvin,
- * and `Ts` a terasecond. Otherwise the token is a product of such factors
- * when exactly one split exists: `m2K` is `m^2·K`, `Vs` is `V·s`, and
- * `cm^2/Vs` is `cm^2/(V·s)`. Zero splits are an unknown unit. Two or more
+ * wins on a bare token, so `ms` stays a millisecond, `mm` a millimetre,
+ * `mK` a millikelvin, and `Ts` a terasecond. Inside a larger expression the
+ * prefixed reading competes with a heterogeneous product (`mK` is millikelvin
+ * or metre·kelvin; `ms` is millisecond or metre·second). A homogeneous power
+ * does not compete (`mm` is a millimetre, not metre·metre). `parseUnit` names
+ * every remaining reading and refuses. `convertValue` keeps the one reading
+ * whose dimension is the declared unit. A token that is not one factor is a
+ * product when exactly one split exists: `m2K` is `m^2·K`, `Vs` is `V·s`,
+ * and `cm^2/Vs` is `cm^2/(V·s)`. Zero splits are an unknown unit. Two or more
  * splits name each reading and are refused (`mAs` is milliampere·second or
  * metre·ampere·second). An unknown token that ends in a digit stays unknown
  * when it is not that product.
@@ -39,12 +44,14 @@ import { equals, format, multiply, power } from './algebra.js';
 import type { Dimension } from './types.js';
 import { C_SI, E_SI, G_SI, GM_SUN_SI, M_SUN_SI } from '../core/constants.js';
 
+type AffineTemperature = 'celsius' | 'fahrenheit';
+
 /** A unit, as a scale to SI base units and a dimension. @public */
 export interface ParsedUnit {
   readonly scale: number;
   readonly dim: Dimension;
-  /** `'celsius'` only for a lone `degC`, which is affine and needs a reading. */
-  readonly affine?: 'celsius';
+  /** Set only for a lone affine temperature, which needs a reading. */
+  readonly affine?: 'celsius' | 'fahrenheit';
 }
 
 /** Thrown for any input that does not parse as a value with a known unit. @public */
@@ -112,9 +119,59 @@ const UNITS: ReadonlyMap<string, readonly [number, Dimension, boolean]> = new Ma
   // IAU-style parsec; the prefix applies, so `Mpc` is a megaparsec.
   ['pc', [3.0856775814913673e16, D({ L: 1 }), true]],
   ['ly', [C_SI * 365.25 * 86400, D({ L: 1 }), false]],
+  // CGPM 1964: 1 L = 1 dm³ = 10⁻³ m³ exactly. Prefixable, so mL is a millilitre.
+  // `l` is the same litre. Bare `mL` stays the prefix; `mol/mL` competes with metre·litre.
+  ['L', [1e-3, D({ L: 3 }), true]],
+  ['l', [1e-3, D({ L: 3 }), true]],
+  // Thermochemical calorie: 1 cal_th = 4.184 J exactly (NIST). Not cal_IT = 4.1868 J.
+  // Prefixable, so kcal is 4184 J.
+  ['cal', [4.184, JOULE, true]],
+  // International Steam Table BTU: cal_IT × (lb/g) / (°F per 1.8 °C).
+  // 4.1868 × 453.59237 / 1.8 J exactly. Not the thermochemical calorie.
+  ['BTU', [(4.1868 * 453.59237) / 1.8, JOULE, false]],
+  // psi = lbf/in². lbf = 0.45359237 kg × 9.80665 m/s² (1959 pound × standard gravity).
+  // inch = 0.0254 m exactly.
+  ['psi', [(0.45359237 * 9.80665) / (0.0254 * 0.0254), D({ L: -1, M: 1, T: -2 }), false]],
+  // torr = 1/760 of a standard atmosphere = 101325/760 Pa exactly. Prefixable (mtorr).
+  ['torr', [101325 / 760, D({ L: -1, M: 1, T: -2 }), true]],
+  // Conventional millimetre of mercury, 133.322387415 Pa exactly (NIST SP 811).
+  // Not the torr, and not `mm` × `Hg`.
+  ['mmHg', [133.322387415, D({ L: -1, M: 1, T: -2 }), false]],
+  // Poise = 0.1 Pa·s exactly. Prefixable, so cP = 10⁻³ Pa·s. Exact `P` wins over peta.
+  ['P', [0.1, D({ L: -1, M: 1, T: -1 }), true]],
+  // Rankine is proportional: K = °R × 5/9. Not affine.
+  ['degR', [5 / 9, D({ Theta: 1 }), false]],
+  ['°R', [5 / 9, D({ Theta: 1 }), false]],
+  // Revolutions per minute = 1/60 Hz. Prefixable, so krpm is a kilorevolution per minute.
+  ['rpm', [1 / 60, D({ T: -1 }), true]],
+  // Mechanical horsepower = 550 ft·lbf/s. ft = 0.3048 m.
+  ['hp', [550 * 0.3048 * 0.45359237 * 9.80665, D({ L: 2, M: 1, T: -3 }), false]],
 ]);
 
 const CELSIUS_OFFSET_K = 273.15;
+const FAHRENHEIT_SCALE = 5 / 9;
+
+interface AffineRow {
+  readonly id: AffineTemperature;
+  readonly scale: number;
+  readonly offset: number;
+  readonly symbols: readonly string[];
+}
+
+/** Lone spellings. A compound that contains one is refused. */
+const AFFINE: readonly AffineRow[] = [
+  { id: 'celsius', scale: 1, offset: CELSIUS_OFFSET_K, symbols: ['degC', '°C'] },
+  {
+    id: 'fahrenheit',
+    scale: FAHRENHEIT_SCALE,
+    offset: CELSIUS_OFFSET_K - 32 * FAHRENHEIT_SCALE,
+    symbols: ['degF', '°F'],
+  },
+];
+
+function affineRow(text: string): AffineRow | undefined {
+  return AFFINE.find((row) => row.symbols.includes(text));
+}
 
 const PREFIXES: ReadonlyMap<string, number> = new Map([
   ['Y', 1e24], ['Z', 1e21], ['E', 1e18], ['P', 1e15], ['T', 1e12], ['G', 1e9], ['M', 1e6], ['k', 1e3],
@@ -177,6 +234,29 @@ function formatReading(factors: readonly FactorReading[]): string {
   return factors.map((factor) => (factor.exp === 1 ? factor.base : `${factor.base}^${factor.exp}`)).join('·');
 }
 
+/** The unprefixed unit a prefix spelling attaches to, or null when `symbol` is exact. */
+function attachedUnit(symbol: string): string | null {
+  if (UNITS.has(symbol)) return null;
+  for (const [prefix] of PREFIXES) {
+    if (!symbol.startsWith(prefix) || symbol.length === prefix.length) continue;
+    const base = symbol.slice(prefix.length);
+    const row = UNITS.get(base);
+    if (row !== undefined && row[2]) return base;
+  }
+  return null;
+}
+
+/**
+ * A product of the same unprefixed unit the prefix attaches to (`mm` = m·m,
+ * `mm2` = m·m²). Powers are written `m2` / `m^2`, so this reading does not
+ * compete with the prefix.
+ */
+function homogeneousPower(single: FactorReading, product: readonly FactorReading[]): boolean {
+  const unit = attachedUnit(single.base);
+  if (unit === null) return false;
+  return product.every((factor) => factor.base === unit && attachedUnit(factor.base) === null);
+}
+
 /** Every way to split `token` into one or more factors. A one-factor token is included. */
 function segmentations(token: string): FactorReading[][] {
   const ways: FactorReading[][][] = Array.from({ length: token.length + 1 }, () => []);
@@ -195,27 +275,62 @@ function segmentations(token: string): FactorReading[][] {
 }
 
 /**
- * Factors of one token. A token that is exactly one factor is that factor
- * and is not also split. Any other token must have exactly one segmentation.
+ * Ways to read one token. A bare expression keeps a one-factor reading and
+ * does not also split it. Inside a compound, a prefixed factor also competes
+ * with each heterogeneous product. A homogeneous power does not.
  */
-function readFactorToken(token: string): readonly FactorReading[] {
+function tokenWays(token: string, compete: boolean): FactorReading[][] {
   const single = tryOneFactor(token);
-  if (single !== null) return [single];
-  const ways = segmentations(token).filter((way) => way.length > 1);
-  if (ways.length === 0) throw new UnitError(`unknown unit '${token}'`);
-  if (ways.length > 1) {
-    throw new UnitError(`'${token}' is ambiguous: ${ways.map(formatReading).join(' or ')}`);
-  }
-  return ways[0]!;
+  if (single !== null && !compete) return [[single]];
+  const products = segmentations(token).filter((way) => way.length > 1);
+  const extra = single === null ? products : products.filter((way) => !homogeneousPower(single, way));
+  const ways: FactorReading[][] = [];
+  if (single !== null) ways.push([single]);
+  for (const way of extra) ways.push(way);
+  const unique = new Map<string, FactorReading[]>();
+  for (const way of ways) unique.set(formatReading(way), way);
+  const list = [...unique.values()];
+  if (list.length === 0) throw new UnitError(`unknown unit '${token}'`);
+  return list;
 }
 
-const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3 };
+function cartesian<T>(lists: readonly (readonly T[])[]): T[][] {
+  let acc: T[][] = [[]];
+  for (const list of lists) {
+    const next: T[][] = [];
+    for (const prev of acc) for (const item of list) next.push([...prev, item]);
+    acc = next;
+  }
+  return acc;
+}
 
-function parseFactors(text: string, sign: 1 | -1): { scale: number; dim: Dimension } {
+interface UnitReading extends ParsedUnit {
+  readonly label: string;
+}
+
+function sideTokens(text: string): string[] {
+  return text.split(/[*·\s]+/).filter((part) => part.length > 0);
+}
+
+function formatSide(tokens: readonly (readonly FactorReading[])[]): string {
+  return tokens.map((factors) => formatReading(factors)).join('·');
+}
+
+function formatExpression(
+  num: readonly (readonly FactorReading[])[],
+  den: readonly (readonly FactorReading[])[],
+): string {
+  const numerator = formatSide(num);
+  if (den.length === 0) return numerator;
+  const denominator = formatSide(den);
+  return denominator.includes('·') ? `${numerator}/(${denominator})` : `${numerator}/${denominator}`;
+}
+
+function accumulate(tokens: readonly (readonly FactorReading[])[], sign: 1 | -1): { scale: number; dim: Dimension } {
   let scale = 1;
   let dim = DIMENSIONLESS;
-  for (const token of text.split(/[*·\s]+/).filter((part) => part.length > 0)) {
-    for (const factor of readFactorToken(token)) {
+  for (const factors of tokens) {
+    for (const factor of factors) {
       const n = sign * factor.exp;
       scale *= factor.scale ** n;
       dim = multiply(dim, power(factor.dim, n));
@@ -223,6 +338,50 @@ function parseFactors(text: string, sign: 1 | -1): { scale: number; dim: Dimensi
   }
   return { scale, dim };
 }
+
+/** Every dimensionally distinct spelling of one unit expression. */
+function unitReadings(text: string): UnitReading[] {
+  const t = text.trim();
+  if (t === '' || t === '1') return [{ scale: 1, dim: DIMENSIONLESS, label: '1' }];
+  const affine = affineRow(t);
+  if (affine !== undefined) {
+    return [{ scale: affine.scale, dim: D({ Theta: 1 }), affine: affine.id, label: t }];
+  }
+  if (
+    AFFINE.some((row) => row.symbols.some((symbol) => t.includes(symbol))) ||
+    /deg\s+[CFcf]|°\s*[CFcf]/.test(t)
+  ) {
+    throw new UnitError('an affine temperature cannot be part of a compound unit; give K');
+  }
+  const parts = t.split('/');
+  if (parts.length > 2) throw new UnitError(`'${t}' has more than one '/'; put the whole denominator after one '/'`);
+  const compete = /[*·/\s]/.test(t);
+  const numerator = sideTokens(parts[0]!);
+  const denominatorText = parts.length === 1 ? '' : parts[1]!.replace(/^\((.*)\)$/, '$1');
+  const denominator = denominatorText === '' ? [] : sideTokens(denominatorText);
+  // `/s` is a dimensionless numerator over seconds. A bare `/` is not a unit.
+  if (numerator.length === 0 && denominator.length === 0) throw new UnitError(`unknown unit '${t}'`);
+  const numWays = numerator.map((token) => tokenWays(token, compete));
+  const denWays = denominator.map((token) => tokenWays(token, compete));
+  const numCombos = numerator.length === 0 ? [[]] : cartesian(numWays);
+  const denCombos = denominator.length === 0 ? [[]] : cartesian(denWays);
+  const unique = new Map<string, UnitReading>();
+  for (const num of numCombos) {
+    for (const den of denCombos) {
+      const n = accumulate(num, 1);
+      const d = accumulate(den, -1);
+      const label = formatExpression(num, den);
+      unique.set(label, { scale: n.scale * d.scale, dim: multiply(n.dim, d.dim), label });
+    }
+  }
+  return [...unique.values()];
+}
+
+function ambiguousMessage(text: string, readings: readonly UnitReading[]): string {
+  return `'${text}' is ambiguous: ${readings.map((reading) => reading.label).join(' or ')}`;
+}
+
+const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3 };
 
 /**
  * Spellings that convert correctly and still mean something else to a reader.
@@ -244,26 +403,39 @@ export function unitConventionNotes(given: string): string[] {
   if (symbols.includes('G')) notes.push('bare G is the gauss (1e-4 T); GPa is still a gigapascal');
   if (symbols.includes('T')) notes.push('bare T is the tesla; Ts is a terasecond');
   if (symbols.includes('A')) notes.push('bare A is the ampere, not the angstrom; write angstrom or Å for 10^-10 m');
+  if (symbols.includes('P')) notes.push('bare P is the poise (0.1 Pa·s); PV is still a petavolt');
   return notes;
 }
 
 /** Parse a unit expression; the empty string is dimensionless. @public */
 export function parseUnit(text: string): ParsedUnit {
   const t = text.trim();
-  if (t === '' || t === '1') return { scale: 1, dim: DIMENSIONLESS };
-  if (t === 'degC' || t === '°C') return { scale: 1, dim: D({ Theta: 1 }), affine: 'celsius' };
-  if (/deg ?F|°F/.test(t)) throw new UnitError('Fahrenheit is not accepted; give K or degC');
-  if (/degC|°C/.test(t)) throw new UnitError('degC is affine and cannot be part of a compound unit; give K');
-  const parts = t.split('/');
-  if (parts.length > 2) throw new UnitError(`'${t}' has more than one '/'; put the whole denominator after one '/'`);
-  const num = parseFactors(parts[0]!, 1);
-  if (parts.length === 1) return num;
-  const den = parseFactors(parts[1]!.replace(/^\((.*)\)$/, '$1'), -1);
-  return { scale: num.scale * den.scale, dim: multiply(num.dim, den.dim) };
+  const readings = unitReadings(t);
+  if (readings.length !== 1) throw new UnitError(ambiguousMessage(t, readings));
+  const reading = readings[0]!;
+  return {
+    scale: reading.scale,
+    dim: reading.dim,
+    ...(reading.affine !== undefined ? { affine: reading.affine } : {}),
+  };
 }
 
 /** How a temperature value is read: as a point on the scale, or as a difference. @public */
 export type TemperatureReading = 'absolute' | 'difference';
+
+/** Kelvin added when this affine unit is an absolute point. @internal */
+export function affineAbsoluteOffsetK(id: 'celsius' | 'fahrenheit'): number {
+  const row = AFFINE.find((candidate) => candidate.id === id);
+  if (row === undefined) throw new UnitError(`unknown affine temperature '${id}'`);
+  return row.offset;
+}
+
+/** Kelvin from an affine or proportional reading. A difference drops the offset. */
+function kelvinFrom(value: number, unit: ParsedUnit, reading: TemperatureReading): number {
+  const row = unit.affine === undefined ? undefined : AFFINE.find((candidate) => candidate.id === unit.affine);
+  const offset = row !== undefined && reading === 'absolute' ? row.offset : 0;
+  return value * unit.scale + offset;
+}
 
 /**
  * Convert `raw` (`<number>[unit]`) into `target` (a unit expression). A bare
@@ -283,14 +455,18 @@ export function convertValue(
   const given = m[2]!;
   if (!Number.isFinite(v)) throw new UnitError(`'${raw}' is not a finite number`);
   if (given === '') return { value: v, given };
-  const from = parseUnit(given);
+  const readings = unitReadings(given);
   const to = parseUnit(target);
   if (to.affine !== undefined) throw new UnitError(`a declared unit cannot be affine ('${target}')`);
-  if (!equals(from.dim, to.dim)) {
+  const matched = readings.filter((candidate) => equals(candidate.dim, to.dim));
+  if (matched.length !== 1) {
+    if (readings.length > 1) throw new UnitError(ambiguousMessage(given, readings));
+    const from = readings[0];
+    if (from === undefined) throw new UnitError(`unknown unit '${given}'`);
     throw new UnitError(`'${given}' is ${format(from.dim)}, but this input is ${format(to.dim)} (${target || 'dimensionless'})`);
   }
-  const offset = from.affine === 'celsius' && reading === 'absolute' ? CELSIUS_OFFSET_K : 0;
-  const local = (v * from.scale + offset) / to.scale;
+  const from = matched[0]!;
+  const local = kelvinFrom(v, from, reading) / to.scale;
   // MathTS `unit` + `toSI` is the conversion when it reads the same quantity.
   // A temperature difference must not take the absolute offset `toSI` adds.
   // `bit` is ln 2 nat here; MathTS reads `bit` as 1. Symbols MathTS does not

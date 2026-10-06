@@ -19,18 +19,24 @@
  */
 
 import { K_B_SI, M_SUN_SI } from '../core/constants.js';
-import { FORMULA_NAMED, isTemperatureName } from '../dimensional/formula-names.js';
+import {
+  FORMULA_NAMED,
+  assertSynonymAgreement,
+  isTemperatureName,
+  synonymGroup,
+  temperatureQuantityRole,
+} from '../dimensional/formula-names.js';
 import { quantityConventionUnit } from '../dimensional/unit-convention.js';
 import { naturalConstantOverrides, type UnitMode } from '../dimensional/natural-units.js';
 import { CONSTANTS as SYMBOLIC } from '../dimensional/symbolic-constants.js';
 import { divide, equals, format, multiply, power } from '../dimensional/algebra.js';
 import { DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, type Dimension } from '../dimensional/types.js';
 import {
+  affineAbsoluteOffsetK,
   convertValue,
   mathTsAgreedQuantity,
   parseUnit,
   unitConventionNotes,
-  unitTables,
   UnitError,
   type TemperatureReading,
 } from '../dimensional/units.js';
@@ -76,21 +82,34 @@ function alignTemperatureBinding(
   );
 }
 
+function sameSpelling(a: string, b: string): boolean {
+  return a === b || a.replace(/_/g, '-') === b.replace(/_/g, '-');
+}
+
 /**
- * Joules per kelvin for a temperature binding. A bare number or a J/K value
- * on `boltzmann-constant` wins, then `k_B`, then `kB`. Any other dimension
- * falls through. With none of those, the scale is the CODATA value.
+ * Joules per kelvin for a temperature binding. Spellings are the Boltzmann
+ * group of {@link SYNONYM_GROUPS}, in that order. Two J/K or bare values that
+ * disagree throw. A wrong dimension is ignored. With none of those, the scale
+ * is the CODATA value.
  */
 function boltzmannBindingScale(
   pending: readonly { name: string; read: BindingValue }[],
 ): number {
-  const named = pending.find((p) => p.name === 'boltzmann-constant');
-  if (named !== undefined && (!named.read.dimensioned || equals(named.read.dimension, SYMBOLIC.k_B.dim))) {
-    return named.read.value;
+  const group = synonymGroup('boltzmann-constant') ?? [];
+  const dim = SYMBOLIC.k_B.dim;
+  const hits = pending.filter((entry) => {
+    if (!group.some((member) => sameSpelling(member, entry.name))) return false;
+    return !entry.read.dimensioned || equals(entry.read.dimension, dim);
+  });
+  if (hits.length >= 2) {
+    const values: Record<string, number> = {};
+    for (const hit of hits) values[hit.name] = hit.read.value;
+    assertSynonymAgreement(values);
   }
-  const hit = pending.find((p) => p.name === 'k_B') ?? pending.find((p) => p.name === 'kB');
-  if (hit === undefined) return K_B_SI;
-  if (!hit.read.dimensioned || equals(hit.read.dimension, SYMBOLIC.k_B.dim)) return hit.read.value;
+  for (const member of group) {
+    const hit = hits.find((entry) => sameSpelling(entry.name, member));
+    if (hit !== undefined) return hit.read.value;
+  }
   return K_B_SI;
 }
 
@@ -111,8 +130,6 @@ interface Qty {
 const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
 const NUMBER_UNIT = /^([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)$/;
 const GLUED_NUMBER = /(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/g;
-const CELSIUS_OFFSET_K = unitTables().celsiusOffsetK;
-
 function finite(raw: string, value: number): number {
   if (!Number.isFinite(value)) throw new UnitError(`'${raw}' is not a finite number`);
   return value;
@@ -143,7 +160,7 @@ function scopeFor(mode: UnitMode): Map<string, Qty> {
 /** A unit the parser recognized and refused, rather than a prefix that is not a unit. */
 function unitRefusal(e: unknown): UnitError | null {
   if (!(e instanceof UnitError)) return null;
-  return /Fahrenheit|affine|more than one/.test(e.message) ? e : null;
+  return /affine|more than one|ambiguous/.test(e.message) ? e : null;
 }
 
 /** The longest unit expression at the start of `rest`, or null. */
@@ -196,7 +213,7 @@ function spliceUnits(src: string): Splice {
     }
     const parsed = parseUnit(unit);
     if (parsed.affine !== undefined) {
-      throw new UnitError('degC is affine and cannot be part of an expression; give the temperature alone, or use K');
+      throw new UnitError('an affine temperature cannot be part of an expression; give it alone, or use K');
     }
     const agreed = mathTsAgreedQuantity(1, unit, parsed);
     const name = `__u${slots.size}`;
@@ -323,7 +340,7 @@ function plainUnit(raw: string, reading: TemperatureReading): BindingValue | nul
     return null;
   }
   const v = finite(raw, Number(m[1]));
-  const offset = unit.affine === 'celsius' && reading === 'absolute' ? CELSIUS_OFFSET_K : 0;
+  const offset = unit.affine !== undefined && reading === 'absolute' ? affineAbsoluteOffsetK(unit.affine) : 0;
   const agreed = offset === 0 ? mathTsAgreedQuantity(v, m[2], unit) : undefined;
   return {
     value: agreed?.value ?? v * unit.scale + offset,
@@ -331,6 +348,40 @@ function plainUnit(raw: string, reading: TemperatureReading): BindingValue | nul
     dimension: agreed?.dim ?? unit.dim,
     notes: unitConventionNotes(m[2]),
   };
+}
+
+function looksLikeNumberUnit(raw: string): boolean {
+  const matched = NUMBER_UNIT.exec(raw.trim());
+  if (matched === null || matched[2] === undefined || matched[2] === '') return false;
+  return !matched[2].startsWith('*') && !matched[2].startsWith('·');
+}
+
+/**
+ * A number-plus-unit whose dimension matches `target`, including an ambiguous
+ * token that has one reading of that dimension. A unique dimension mismatch
+ * returns undefined so an energy on a temperature can still become `k_B T`.
+ * An ambiguous expression that matches nothing throws.
+ */
+function declaredUnitReading(
+  raw: string,
+  target: string,
+  reading: TemperatureReading,
+): BindingValue | undefined {
+  if (!looksLikeNumberUnit(raw)) return undefined;
+  try {
+    const converted = convertValue(raw, target, reading);
+    if (converted.given === '') return undefined;
+    const to = parseUnit(target);
+    return {
+      value: converted.value,
+      dimensioned: true,
+      dimension: to.dim,
+      notes: unitConventionNotes(converted.given),
+    };
+  } catch (error) {
+    if (error instanceof UnitError && /ambiguous/.test(error.message)) throw error;
+    return undefined;
+  }
 }
 
 /** One other assignment in the same list, used to choose the Boltzmann scale. */
@@ -360,7 +411,13 @@ export function readNamedBinding(
   },
 ): BindingValue {
   const mode = opts?.mode ?? 'si';
-  const reading = opts?.reading ?? 'absolute';
+  const reading = opts?.reading ?? temperatureQuantityRole(name);
+  const declared = opts?.declaredUnit;
+  const targetPreview = declared !== undefined ? declared : quantityConventionUnit(name);
+  if (targetPreview !== undefined && targetPreview !== '') {
+    const resolved = declaredUnitReading(raw, targetPreview, reading);
+    if (resolved !== undefined) return resolved;
+  }
   const read = readBinding(raw, { mode, reading });
   const pending: { name: string; read: BindingValue }[] = [{ name, read }];
   for (const sibling of opts?.siblings ?? []) {
@@ -371,7 +428,6 @@ export function readNamedBinding(
       // A sibling that does not parse is that sibling's own error.
     }
   }
-  const declared = opts?.declaredUnit;
   const declaredDim = declared !== undefined && declared !== '' ? parseUnit(declared).dim : undefined;
   const aligned = alignTemperatureBinding(
     name,
@@ -477,7 +533,7 @@ export function bindingInUnit(
   reading: TemperatureReading = 'absolute',
   mode: UnitMode = 'si',
 ): { value: number; given: string } {
-  if (NUMBER.test(raw.trim()) || plainUnit(raw.trim(), reading) !== null) {
+  if (NUMBER.test(raw.trim()) || looksLikeNumberUnit(raw)) {
     return convertValue(raw, target, reading);
   }
   const b = readBinding(raw, { reading, mode });

@@ -22,7 +22,7 @@ const FLAGS: FlagSpec[] = [
     name: '--sigma',
     valueStyle: 'either',
     repeatable: true,
-    description: 'One input uncertainty as key=u, in the input\'s unit. A temperature uncertainty in degC is a difference.',
+    description: 'One input uncertainty as key=u, in the input\'s unit. A temperature uncertainty in degC or degF is a difference.',
   },
   {
     name: '--corr',
@@ -47,8 +47,9 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         expression of constants and units (M_kg=1*M_sun, v=0.6*c); it is
         converted into the declared unit only when the dimensions agree, and a
         bare number is in the declared unit. The same reader accepts --sigma. An absolute temperature in degC
-        adds 273.15 K; a --sigma in degC is a difference and does not. degF is
-        refused. An undeclared key exits 1 instead of being ignored. A declared
+        adds 273.15 K, and one in degF is (degF − 32) × 5/9 + 273.15. A difference slot
+        (temperature-change, dT) and a --sigma take the interval, with no offset.
+        An undeclared key exits 1 instead of being ignored. A declared
         alternate (major_axis_m for a_m) is converted exactly and said so.
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_⊙
               (ideal degenerate gas, with m_u and M_⊙ = 1.989e30 kg)
@@ -85,7 +86,7 @@ function resolveInputs(api: CommandCtx['api'], label: string, parameters: readon
 function describeParameter(p: EvaluatorParameter): string {
   const extras = [
     ...(p.geometry === undefined ? [] : [`geometry: ${p.geometry}`]),
-    ...(p.temperature === undefined ? [] : ['an absolute temperature; degC adds 273.15']),
+    ...(p.temperature === undefined ? [] : ['an absolute temperature; degC adds 273.15; degF is (degF − 32)×5/9 + 273.15']),
     ...(p.optional === true ? ['optional'] : []),
   ];
   const alts = (p.alternates ?? []).map((a) => `or give ${a.key}, ${a.meaning}`);

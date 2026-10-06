@@ -14,6 +14,7 @@ import {
   readNamedBinding,
   readParameter,
 } from '../../src/numerical/binding-value.js';
+import { temperatureQuantityRole } from '../../src/dimensional/formula-names.js';
 import { MASS, TIME } from '../../src/dimensional/types.js';
 
 describe('readBinding', () => {
@@ -76,7 +77,7 @@ describe('readBinding', () => {
   it('refuses a non-finite literal and a dimension that does not match the parameter', () => {
     expect(() => readBinding('1e500')).toThrow(/not a finite number/);
     expect(() => readBinding('abc')).toThrow(/is not a number with an optional unit/);
-    expect(() => readBinding('80degF')).toThrow(/Fahrenheit is not accepted/);
+    expect(readBinding('80degF').value).toBeCloseTo((80 - 32) * (5 / 9) + 273.15, 9);
     expect(() => readParameter('1s', MASS)).toThrow(/time/);
     expect(readParameter('1s', TIME).value).toBe(1);
     expect(readParameter('pi/2', TIME).value).toBeCloseTo(Math.PI / 2, 12);
@@ -89,5 +90,35 @@ describe('readBinding', () => {
     expect(bindingInUnit('1', 'kg').value).toBe(1);
     expect(bindingInUnit('1Msun', 'kg').value).toBe(convertValue('1Msun', 'kg').value);
     expect(() => bindingInUnit('1Msun', 'm')).toThrow(/mass/);
+  });
+});
+
+describe('affine temperature role', () => {
+  const point = (unit: string, value: number): number => {
+    if (unit === 'degC' || unit === '°C') return value + 273.15;
+    return (value - 32) * (5 / 9) + 273.15;
+  };
+  const interval = (unit: string, value: number): number => {
+    if (unit === 'degC' || unit === '°C') return value;
+    return value * (5 / 9);
+  };
+
+  it('an interval name drops the offset and a point name keeps it, for every affine unit', () => {
+    for (const unit of ['degC', '°C', 'degF', '°F']) {
+      expect(readNamedBinding('temperature', `10${unit}`).value).toBeCloseTo(point(unit, 10), 8);
+      expect(readNamedBinding('T', `10${unit}`).value).toBeCloseTo(point(unit, 10), 8);
+      expect(readNamedBinding('temperature-change', `10${unit}`).value).toBeCloseTo(interval(unit, 10), 8);
+      expect(readNamedBinding('dT', `10${unit}`).value).toBeCloseTo(interval(unit, 10), 8);
+      expect(readNamedBinding('delta-T', `10${unit}`).value).toBeCloseTo(interval(unit, 10), 8);
+    }
+    expect(temperatureQuantityRole('hot-reservoir-temperature')).toBe('absolute');
+    expect(temperatureQuantityRole('T2')).toBe('absolute');
+    expect(temperatureQuantityRole('temperature_change')).toBe('difference');
+    const hot = readNamedBinding('T2', '100degC').value;
+    const cold = readNamedBinding('T1', '20degC').value;
+    expect(hot - cold).toBeCloseTo(80, 8);
+    expect(readNamedBinding('T_K', '10degC', { reading: 'difference' }).value).toBe(10);
+    expect(readNamedBinding('temperature-change', '10degC', { declaredUnit: 'K' }).value).toBe(10);
+    expect(readNamedBinding('T', '25degC', { declaredUnit: 'K' }).value).toBeCloseTo(298.15, 8);
   });
 });

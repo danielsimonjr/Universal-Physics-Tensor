@@ -79,7 +79,8 @@ describe('parseUnit', () => {
     expect(() => parseUnit('cd')).toThrow(UnitError);
     expect(() => parseUnit('furlong')).toThrow(/unknown unit 'furlong'/);
     expect(() => parseUnit('m/s/s')).toThrow(/more than one '\/'/);
-    expect(() => parseUnit('degF')).toThrow(/Fahrenheit is not accepted/);
+    expect(parseUnit('degF').affine).toBe('fahrenheit');
+    expect(parseUnit('degF').scale).toBeCloseTo(5 / 9, 12);
     expect(() => parseUnit('degC/s')).toThrow(/affine/);
   });
 });
@@ -101,6 +102,37 @@ describe('convertValue', () => {
     expect(convertValue('1 kohm', 'ohm').value).toBe(1000);
     expect(convertValue('25degC', 'K', 'difference').value).toBe(25);
     expect(convertValue('25 K', 'K', 'difference').value).toBe(25);
+    expect(convertValue('32degF', 'K').value).toBeCloseTo(273.15, 9);
+    expect(convertValue('212degF', 'K').value).toBeCloseTo(373.15, 9);
+    expect(convertValue('18degF', 'K', 'difference').value).toBeCloseTo(10, 9);
+    expect(convertValue('9degR', 'K').value).toBeCloseTo(5, 9);
+    expect(convertValue('0degR', 'K').value).toBeCloseTo(0, 12);
+  });
+
+  it('reads the defined engineering units, including a prefix', () => {
+    const pound = 0.45359237;
+    const gravity = 9.80665;
+    const inch = 0.0254;
+    expect(parseUnit('L').scale).toBeCloseTo(1e-3, 12);
+    expect(parseUnit('l').scale).toBe(parseUnit('L').scale);
+    expect(parseUnit('mL').scale).toBeCloseTo(1e-6, 12);
+    expect(parseUnit('ml').scale).toBeCloseTo(1e-6, 12);
+    expect(parseUnit('cal').scale).toBeCloseTo(4.184, 12);
+    expect(parseUnit('kcal').scale).toBeCloseTo(4184, 9);
+    expect(parseUnit('BTU').scale).toBeCloseTo((4.1868 * 453.59237) / 1.8, 9);
+    expect(parseUnit('psi').scale).toBeCloseTo((pound * gravity) / inch ** 2, 6);
+    expect(parseUnit('torr').scale).toBeCloseTo(101325 / 760, 9);
+    expect(parseUnit('mmHg').scale).toBeCloseTo(133.322387415, 9);
+    expect(parseUnit('mmHg').scale).not.toBeCloseTo(101325 / 760, 6);
+    expect(parseUnit('P').scale).toBeCloseTo(0.1, 12);
+    expect(parseUnit('cP').scale).toBeCloseTo(0.001, 12);
+    expect(convertValue('1cP', 'Pa*s').value).toBeCloseTo(0.001, 12);
+    expect(convertValue('1mol/mL', 'mol/m^3').value).toBeCloseTo(1e6, 6);
+    expect(() => parseUnit('mol/mL')).toThrow(/ambiguous/);
+    expect(parseUnit('rpm').scale).toBeCloseTo(1 / 60, 12);
+    expect(convertValue('60rpm', 'Hz').value).toBeCloseTo(1, 12);
+    expect(parseUnit('hp').scale).toBeCloseTo(550 * 0.3048 * pound * gravity, 6);
+    expect(parseUnit('PV').scale).toBe(1e15);
   });
 
   it('conversion calls MathTS unit and toSI', () => {
