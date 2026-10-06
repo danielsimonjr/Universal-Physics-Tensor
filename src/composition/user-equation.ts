@@ -72,6 +72,7 @@ export interface UserEquation {
 const MAX_USER_EQUATION_LEN = 8192;
 
 import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
+/** Rewrite a catalog hyphenated name to underscores before the expression parse. */
 export { rewriteCatalogHyphens };
 
 /**

@@ -153,6 +153,7 @@ export {
   bridgeGradientASTById,
   astDifferentiableBridgeIds,
 } from './diff/bridge-ast-gradient.js';
+/** Differentiable relations: Shapiro delay, perihelion advance, Hawking temperature, and the decoherence rate. */
 export {
   SHAPIRO_DELAY_DIFF,
   PERIHELION_ADVANCE_DIFF,
@@ -167,9 +168,11 @@ export {
 // (status, known issues, references, dependencies), while `BridgeEquation`
 // describes a runtime bridge between two tensor regimes.
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
+/** Request a caller-table confrontation. The catalog status does not change. */
 export {
   requestCallerTableConfrontation,
 } from './bridges/caller-table.js';
+/** Types of a caller-table request and of its refusal or hit. */
 export type {
   MeasuredCouplingRow,
   RunningProcedureRecord,
@@ -405,6 +408,7 @@ export { computeKretschmann } from './numerical/kretschmann.js';
 // `MathTSEngine` is intentionally NOT re-exported here. It is reachable only
 // via the `universal-physics-tensor/numerical/mathts-engine` subpath. The
 // MathTS packages are required dependencies.
+/** Numerical evaluation, the covariant eikonal integrator, the GL4 geodesic integrator, and the perihelion finder. */
 export {
   evaluateNumerical,
   evaluateNumericalRaw,
@@ -422,6 +426,7 @@ export {
   // v0.5.0 perihelion finder (Task 4)
   findPerihelion,
 } from './numerical/index.js';
+/** Types for numerical evaluation, gradients, the GL4 integrator, the perihelion finder, and the covariant eikonal. */
 export type {
   NumericalResult,
   NumericalRawResult,

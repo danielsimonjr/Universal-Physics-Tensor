@@ -12,14 +12,15 @@ import type { FormalRef } from '../relations/types.js';
 import { catalogEntry } from '../bridges/catalog-load.js';
 import { physjsFormalRef } from './physjs-ref.js';
 
+/** Memo of the PhysJS reference already built for a catalog id. */
+const byId = new Map<number, FormalRef | undefined>();
+
 /**
  * The reviewed PhysJS reference for a catalog id, or `undefined` when the
  * row records no manifest key.
  *
  * @internal
  */
-const byId = new Map<number, FormalRef | undefined>();
-
 export function catalogFormalRef(id: number): FormalRef | undefined {
   if (byId.has(id)) return byId.get(id);
   const key = catalogEntry(id)?.formalKey;

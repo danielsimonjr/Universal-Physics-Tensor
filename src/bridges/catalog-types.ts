@@ -42,6 +42,7 @@ export interface CatalogEntry extends BridgeEquationEntry {
   readonly scalarExpression?: string;
 }
 
+/** Inputs and the number the engine returns at those inputs. */
 export interface CatalogReference {
   readonly inputs: Readonly<Record<string, number>>;
   readonly value: number;
@@ -74,6 +75,7 @@ export interface CatalogRelation {
   readonly method?: string;
 }
 
+/** One named input of a catalog evaluator. */
 export interface CatalogEvaluatorParameter {
   readonly key: string;
   readonly quantity: string;
@@ -86,12 +88,14 @@ export interface CatalogEvaluatorParameter {
   readonly optional?: true;
 }
 
+/** The input contract of one catalog evaluator. */
 export interface CatalogEvaluator {
   readonly catalogId: number;
   readonly name: string;
   readonly parameters: readonly CatalogEvaluatorParameter[];
 }
 
+/** One committed data confrontation of a catalog record. */
 export interface CatalogConfrontation {
   readonly catalogId: number;
   readonly title: string;
@@ -102,6 +106,7 @@ export interface CatalogConfrontation {
   readonly prediction?: { readonly inputs: Readonly<Record<string, number>> };
 }
 
+/** The on-disk catalog: schema 3, entries, relations, evaluators, and confrontations. */
 export interface CatalogFile {
   readonly schemaVersion: 3;
   readonly packageVersion: string;
@@ -113,4 +118,5 @@ export interface CatalogFile {
   readonly spine: Readonly<Record<string, Readonly<Record<string, number>>>>;
 }
 
+/** Lifecycle status of a catalog row. */
 export type { BridgeEquationStatus };

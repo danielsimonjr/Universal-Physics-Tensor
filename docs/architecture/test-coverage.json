@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 351,
-    "totalTestFiles": 518,
+    "totalTestFiles": 519,
     "testedCount": 333,
     "untestedCount": 18,
     "coveragePercent": "94.9"
@@ -1117,6 +1117,7 @@
     "src/bridges/catalog-load.ts": [
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/tensor-index.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -4670,6 +4671,7 @@
       "tests/atlas/chain-pipeline-refusal.test.ts",
       "tests/atlas/chain-pipeline.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/descriptor-consistency.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/carrier-sign.test.ts",
@@ -5001,6 +5003,7 @@
       "tests/atlas/gr-spine-regime.test.ts",
       "tests/atlas/overlay-types.test.ts",
       "tests/atlas/path-bound.test.ts",
+      "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/public-api-stability.test.ts",
       "tests/canonical/carrier-sign.test.ts",
       "tests/cli/atlas-evidence.test.ts",
@@ -9383,6 +9386,11 @@
     ],
     "tests/bridges/catalog-json.test.ts": [],
     "tests/bridges/catalog-physjs-import.test.ts": [],
+    "tests/bridges/catalog-reference-golden.test.ts": [
+      "src/bridges/catalog-load.ts",
+      "src/composition/catalog-graph.ts",
+      "src/composition/edge.ts"
+    ],
     "tests/bridges/confrontation-coverage.test.ts": [
       "src/composition/audit-coverage.ts"
     ],

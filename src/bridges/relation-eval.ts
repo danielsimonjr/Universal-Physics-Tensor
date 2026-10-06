@@ -11,6 +11,7 @@ import type { CatalogRelation } from './catalog-types.js';
 import { evaluateFormula, formulaNames, formulaScope } from './expr-parse.js';
 import { holds, HoldsError } from './holds.js';
 
+/** Thrown when two carrier roles have opposite signs. */
 export { CarrierSignError };
 
 const parityCache = new Map<string, { readonly even: readonly string[]; readonly pair?: { readonly charge: string; readonly mobility: string } }>();

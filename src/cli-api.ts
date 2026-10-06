@@ -68,8 +68,11 @@ export {
   confrontationRigor,
   rigorDistribution,
 } from './bridges/confrontations.js';
+/** Ask for a caller-table confrontation. The catalog status does not change. */
 export { requestCallerTableConfrontation } from './bridges/caller-table.js';
+/** The catalog row, the id parser, and the relation a numeric id evaluates. */
 export { catalogEntry, parseBridgeId, primaryRelation } from './bridges/catalog-load.js';
+/** The two composition demonstrations the CLI prints. */
 export { demonstrationEdges } from './composition/catalog-graph.js';
 export type { ConfrontationEntry, RigorTier } from './bridges/confrontations.js';
 export { consistencyComparison } from './bridges/observations/types.js';

@@ -11,17 +11,17 @@ import { catalogEvaluators } from './catalog-load.js';
 import type { CatalogEvaluatorParameter, CatalogRelation } from './catalog-types.js';
 import { evaluateCatalogRelation, relationHolds } from './relation-eval.js';
 
-/** @public */
+/** How a length input is read: radius, diameter, separation, impact parameter, or semi-major axis. @public */
 export type GeometryRole = 'radius' | 'diameter' | 'separation' | 'impact-parameter' | 'semi-major-axis';
 
-/** @public */
+/** A second key that converts into the parameter's key. @public */
 export interface ParameterAlternate {
   readonly key: string;
   readonly meaning: string;
   readonly toKey: number;
 }
 
-/** @public */
+/** One named input of an evaluator. @public */
 export interface EvaluatorParameter {
   readonly key: string;
   readonly quantity: string;

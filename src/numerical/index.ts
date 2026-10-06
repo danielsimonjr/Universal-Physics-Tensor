@@ -36,10 +36,11 @@ export { DuplicateCoordinateWarning } from '../dimensional/errors.js';
  * @public
  */
 export { evaluateMetricInverse } from './metric-inverse.js';
-/** @public */
+/** Integrate the covariant eikonal on a numerical grid. @public */
 export {
   evaluateCovariantEikonalNumerical,
 } from './covariant-eikonal.js';
+/** Inputs and the result of the covariant eikonal integrator. */
 export type {
   CovariantEikonalInputs,
   CovariantEikonalResult,

@@ -12,8 +12,10 @@ export type {
   BridgeIssueSeverity,
   KnownIssue,
 } from './types.js';
+/** An active status is every status except `invalid`. */
 export { isActiveStatus } from './types.js';
 
+/** Physical constants the catalog expressions name. */
 export {
   BCS_GAP_RATIO,
   JOSEPHSON_CONSTANT_SI,
@@ -23,6 +25,7 @@ export {
   THOMSON_CROSS_SECTION_SI,
   VON_KLITZING_SI,
 } from '../core/constants.js';
+/** Thrown when two carrier roles have opposite signs. */
 export { CarrierSignError } from './carrier-sign.js';
 
 import type { BridgeEquationEntry } from './types.js';

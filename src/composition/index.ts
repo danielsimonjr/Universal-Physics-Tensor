@@ -37,6 +37,7 @@ export type { AliasDisposition } from './compose.js';
 export { consistencyRatio } from './consistency.js';
 
 export { M_SUN_KG } from '../core/constants.js';
+/** The catalog graph and the edge for one graph id. */
 export { catalogEdge, CATALOG_GRAPH } from './catalog-graph.js';
 
 export {
