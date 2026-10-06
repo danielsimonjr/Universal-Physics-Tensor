@@ -16832,7 +16832,6 @@
               "renderDotToSvg",
               "equationLanding",
               "analyzeUserEquation",
-              "resolveQuantityName",
               "suggestQuantities",
               "buckinghamPi",
               "dimensionallyDetermines"
@@ -17435,6 +17434,13 @@
             "reExport": true
           },
           {
+            "file": "./index.js",
+            "imports": [
+              "resolveQuantityName"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./composition/evaluate-relation.js",
             "imports": [
               "resolveEvaluable"
@@ -17516,7 +17522,6 @@
           "renderDotToSvg",
           "equationLanding",
           "analyzeUserEquation",
-          "resolveQuantityName",
           "suggestQuantities",
           "buckinghamPi",
           "dimensionallyDetermines",
@@ -17651,6 +17656,7 @@
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
+          "resolveQuantityName",
           "resolveEvaluable",
           "SynonymDisagreementError",
           "builtinFormulaDimensionChecker",
@@ -17717,7 +17723,6 @@
           "renderDotToSvg",
           "equationLanding",
           "analyzeUserEquation",
-          "resolveQuantityName",
           "suggestQuantities",
           "buckinghamPi",
           "dimensionallyDetermines",
@@ -17890,6 +17895,7 @@
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
+          "resolveQuantityName",
           "resolveEvaluable",
           "SynonymDisagreementError",
           "builtinFormulaDimensionChecker",
@@ -30388,12 +30394,18 @@
             "file": "./composition/index.js",
             "imports": [
               "parseUserEquation",
-              "resolveQuantityName",
               "suggestQuantities",
               "suggestByDimension",
               "equationLanding",
               "analyzeUserEquation",
               "UserEquationError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./composition/index.js",
+            "imports": [
+              "resolveQuantityName"
             ],
             "reExport": true
           },
@@ -31391,12 +31403,12 @@
           "renderDotToSvg",
           "SvgRendererUnavailableError",
           "parseUserEquation",
-          "resolveQuantityName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
           "analyzeUserEquation",
           "UserEquationError",
+          "resolveQuantityName",
           "parsePhysics",
           "FormulaDimensionError",
           "inferUnknownDimension",
@@ -32199,12 +32211,12 @@
           "renderDotToSvg",
           "SvgRendererUnavailableError",
           "parseUserEquation",
-          "resolveQuantityName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
           "analyzeUserEquation",
           "UserEquationError",
+          "resolveQuantityName",
           "UserEquation",
           "EquationLanding",
           "EquationAnalysis",
@@ -35236,7 +35248,7 @@
   "statistics": {
     "totalTypeScriptFiles": 484,
     "totalModules": 13,
-    "totalLinesOfCode": 104533,
+    "totalLinesOfCode": 104538,
     "totalExports": 3881,
     "totalClasses": 63,
     "totalInterfaces": 630,

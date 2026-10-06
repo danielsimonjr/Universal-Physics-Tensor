@@ -252,5 +252,6 @@ export {
   analyzeUserEquation,
   UserEquationError,
 } from './user-equation.js';
+/** The catalog or parameter name a spelling means. Two spellings of one quantity that disagree throw {@link SynonymDisagreementError}. */
 export { resolveQuantityName, SynonymDisagreementError } from '../dimensional/formula-names.js';
 // formatConnectedSummary stays internal — CLI reaches it via cli-api.

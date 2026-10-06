@@ -765,13 +765,14 @@ export { renderDotToSvg, SvgRendererUnavailableError } from './composition/index
 // the map as a connected 'user' junction (with a "did you mean?" hint).
 export {
   parseUserEquation,
-  resolveQuantityName,
   suggestQuantities,
   suggestByDimension,
   equationLanding,
   analyzeUserEquation,
   UserEquationError,
 } from './composition/index.js';
+/** The catalog or parameter name a spelling means. One owner for a target and an input. */
+export { resolveQuantityName } from './composition/index.js';
 export type { UserEquation, EquationLanding, EquationAnalysis, EquationHint } from './composition/index.js';
 
 // Phase 1 — string → dimensional ExprNode parser + single-unknown dimensional

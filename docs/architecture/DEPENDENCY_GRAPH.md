@@ -5022,7 +5022,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./relations/domain-regimes.js` | `*` | Import |
-| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, resolveQuantityName, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
+| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
 | `./index.js` | `composeEdges` | Re-export |
 | `./composition/user-equation.js` | `formatConnectedSummary` | Re-export |
 | `./composition/bridge-analysis.js` | `bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors` | Re-export |
@@ -5094,6 +5094,7 @@ The codebase is organized into the following modules:
 | `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
 | `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
 | `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding` | Re-export |
+| `./index.js` | `resolveQuantityName` | Re-export |
 | `./composition/evaluate-relation.js` | `resolveEvaluable` | Re-export |
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
@@ -5110,9 +5111,9 @@ The codebase is organized into the following modules:
   ```text
   explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge,
   lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding,
-  analyzeUserEquation, resolveQuantityName, suggestQuantities, buckinghamPi, dimensionallyDetermines,
-  composeEdges, formatConnectedSummary, bridgePriority, attemptDerivation, dimensionalFreedom,
-  linkageMap, proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser, getFormulaParserKind,
+  analyzeUserEquation, suggestQuantities, buckinghamPi, dimensionallyDetermines, composeEdges,
+  formatConnectedSummary, bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap,
+  proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser, getFormulaParserKind,
   getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, catalogFrontierAccount,
   formatFrontierAccount, rankDiscoveries, ANCHOR_DEFAULT, BRIDGE_EQUATIONS, auditCoverage,
   CONFRONTATIONS, listConfrontations, runConfrontation, confrontationRigor, rigorDistribution,
@@ -5145,7 +5146,7 @@ The codebase is organized into the following modules:
   AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
   ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
   kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding,
-  bindingInUnit, readNamedBinding, resolveEvaluable, SynonymDisagreementError,
+  bindingInUnit, readNamedBinding, resolveQuantityName, resolveEvaluable, SynonymDisagreementError,
   builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction,
   VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
@@ -8134,7 +8135,8 @@ The codebase is organized into the following modules:
 | `./composition/index.js` | `buildVizModel, edgeToJunction` | Re-export |
 | `./composition/index.js` | `VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats` | Re-export |
 | `./composition/index.js` | `renderDotToSvg, SvgRendererUnavailableError` | Re-export |
-| `./composition/index.js` | `parseUserEquation, resolveQuantityName, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError` | Re-export |
+| `./composition/index.js` | `parseUserEquation, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError` | Re-export |
+| `./composition/index.js` | `resolveQuantityName` | Re-export |
 | `./composition/index.js` | `UserEquation, EquationLanding, EquationAnalysis, EquationHint` | Re-export |
 | `./numerical/formula-registry.js` | `parsePhysics` | Re-export |
 | `./numerical/formula-dimension.js` | `FormulaDimensionError` | Re-export |
@@ -8312,8 +8314,8 @@ The codebase is organized into the following modules:
   RetrodictionOptions, explainQuantity, DerivationExplanation, ExplainOptions, QuantityExplanation,
   composeSymbolic, SymbolicCompositionError, SymbolicEvalError, Observable, ComposeSymbolicOptions,
   buildVizModel, edgeToJunction, VizStatus, VizJunction, VizCluster, VizOptions, VizModel,
-  VizFilterStats, renderDotToSvg, SvgRendererUnavailableError, parseUserEquation, resolveQuantityName,
-  suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError,
+  VizFilterStats, renderDotToSvg, SvgRendererUnavailableError, parseUserEquation, suggestQuantities,
+  suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
   UserEquation, EquationLanding, EquationAnalysis, EquationHint, parsePhysics, FormulaDimensionError,
   ParsedPhysics, inferUnknownDimension, substituteSymbolDim, dimensionAdjacency, DimensionAdjacency,
   confrontBE36WithUncertainty, BE36ConfrontationWithUncertainty, buckinghamPi,
@@ -9332,7 +9334,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 484 |
 | Total Modules | 13 |
-| Total Lines of Code | 104533 |
+| Total Lines of Code | 104538 |
 | Total Exports | 3881 |
 | Total Re-exports | 1862 |
 | Total Classes | 63 |
