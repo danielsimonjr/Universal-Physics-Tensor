@@ -200,12 +200,12 @@ describe('explain temperature bindings', () => {
         evaluatedKelvin.io,
       ),
     ).toBe(0);
-    const beta = (body: string): string => {
-      const line = body.split('\n').find((row) => /beta/i.test(row) && /=/.test(row));
-      if (line === undefined) throw new Error(`no beta line in:\n${body}`);
+    const valueLine = (body: string): string => {
+      const line = body.split('\n').find((row) => /^\s*value = /.test(row));
+      if (line === undefined) throw new Error(`no value line in:\n${body}`);
       return line;
     };
-    expect(beta(text(evaluated))).toBe(beta(text(evaluatedKelvin)));
+    expect(valueLine(text(evaluated))).toBe(valueLine(text(evaluatedKelvin)));
 
     const ev = capture();
     expect(await runCli(['eval', 'T', 'T=10eV'], ev.io)).toBe(0);

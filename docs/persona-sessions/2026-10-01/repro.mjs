@@ -1,7 +1,7 @@
 /**
- * Repro for docs/dogfood/2026-10-01-library-api.md.
+ * Repro for docs/persona-sessions/2026-10-01-library-api.md.
  *
- * From a built clone:  node docs/dogfood/2026-10-01/repro.mjs
+ * From a built clone:  node docs/persona-sessions/2026-10-01/repro.mjs
  * Imports the package entry points package.json exports (dist/), not src/.
  */
 import { pathToFileURL } from 'node:url';

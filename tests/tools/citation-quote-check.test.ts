@@ -1,6 +1,6 @@
 /**
  * The citation quote check (`tools/citation-quote-check/`). It matches every quoted span and
- * locator of the `// source:` comments in `src/bridges/index.ts` against downloaded source texts.
+ * locator of the `// source:` comments in `docs/research/phase-1-source-comments.txt` against downloaded source texts.
  * The sources are not in the repository, so CI checks three things without them:
  *
  * - the matcher: exact after whitespace, hyphenation and encoding normalisation, and nothing looser;
@@ -40,7 +40,7 @@ const read = (p: string) => readFileSync(resolve(root, p), 'utf-8');
 
 const manifestText = read('docs/research/phase-1-citation-claims.json');
 const manifest = JSON.parse(manifestText) as Manifest;
-const tokens = extractCommentTokens(read('src/bridges/index.ts'));
+const tokens = extractCommentTokens(read('docs/research/phase-1-source-comments.txt'));
 
 describe('citation quote check — the matcher', () => {
   it('ignores whitespace, including line breaks', () => {

@@ -22,6 +22,6 @@ describe('getBridge', () => {
     expect(record.formalRef?.statement).toBe('PhysJS.BohmSheath.cold_bohm_threshold');
     expect(record.evaluator?.bridgeId).toBe(103);
     expect(record.edges.map((edge) => edge.id)).toEqual(['be-103']);
-    expect(record.rhs).toBeUndefined();
+    expect(record.rhs).toBeDefined();
   });
 });

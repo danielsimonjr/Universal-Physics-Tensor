@@ -120,6 +120,7 @@ interface TensorModuleLike {
  * via the `bindings` argument.
  */
 const NAMED_CONSTANTS: Readonly<Record<string, number>> = {
+  h: PhysicalConstants.h,
   hbar: PhysicalConstants.hbar,
   c: PhysicalConstants.c,
   G: PhysicalConstants.G,

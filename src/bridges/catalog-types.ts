@@ -35,6 +35,11 @@ export interface CatalogEntry extends BridgeEquationEntry {
   readonly callerTable?: true;
   /** A named statement this row's expression supports. */
   readonly statement?: string;
+  /**
+   * Scalar expression for a row that has no relation. The structural
+   * registry parses it. It is not a graph edge and it is not evaluated.
+   */
+  readonly scalarExpression?: string;
 }
 
 export interface CatalogReference {

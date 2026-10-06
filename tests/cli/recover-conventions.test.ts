@@ -22,12 +22,12 @@ function capture() {
 }
 const text = (c: ReturnType<typeof capture>) => c.lines.join('');
 
-describe('upt recover — unchanged while no row declares conventions', () => {
-  it('the precondition holds: nothing in either registry declares conventions', () => {
-    // If this ever fails, the byte-identity claim below stops being about an
-    // inert advisory and the expectation must be re-derived, not relaxed.
+describe('upt recover — silent while declared conventions do not disagree', () => {
+  it('the precondition holds: canonical rows declare none; a catalog edge may', () => {
+    // A one-sided declaration is unknown, not a mismatch, so the advisory stays
+    // silent. A disagreement on a key both sides declare is the control below.
     expect(cliApi.CANONICAL_EQUATIONS.some((e) => e.conventions !== undefined)).toBe(false);
-    expect(cliApi.CATALOG_GRAPH.some((e) => e.conventions !== undefined)).toBe(false);
+    expect(cliApi.CATALOG_GRAPH.some((e) => e.conventions !== undefined)).toBe(true);
   });
 
   it('EVERY linkage row — not just the printed ones — yields an empty mismatch set', async () => {

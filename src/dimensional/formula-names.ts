@@ -9,7 +9,7 @@
  */
 
 import type { Dimension } from './types.js';
-import { CHARGE, DIMENSIONLESS, LENGTH, MASS, TEMPERATURE } from './types.js';
+import { CHARGE, DIMENSIONLESS, FREQUENCY, LENGTH, MASS, TEMPERATURE } from './types.js';
 import {
   C_SI,
   E_SI,
@@ -20,7 +20,7 @@ import {
   N_A_SI,
   THOMSON_CROSS_SECTION_SI,
 } from '../core/constants.js';
-import { quantityRecord, synonymGroupsFromRegistry } from './quantity-registry.js';
+import { allQuantityRecords, quantityRecord, synonymGroupsFromRegistry } from './quantity-registry.js';
 
 const PERMITTIVITY: Dimension = { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };
 /** μ₀ = 1/(ε₀ c²), [M L T⁻² I⁻²]. */
@@ -63,6 +63,10 @@ export const FORMULA_NAMED: readonly FormulaName[] = [
   { name: 'scale_factor', dim: LENGTH, value: 1 },
   { name: 'sigma_T', dim: AREA, value: THOMSON_CROSS_SECTION_SI },
   { name: 'lane_emden_omega_3', dim: DIMENSIONLESS, value: LANE_EMDEN_OMEGA3 },
+  // GRW mass amplification: λ = λ₀ · (m / m₀), with λ₀ a rate and m₀ a mass.
+  // The two numbers are the catalog expression's, so the rate is unchanged.
+  { name: 'grw_lambda0', dim: FREQUENCY, value: 1e-16 },
+  { name: 'grw_m0', dim: MASS, value: 1.67e-27 },
 ];
 
 /** Name → dimension for the formula overlay. Does not override a catalog entry. @internal */
@@ -107,6 +111,19 @@ export const DIMENSION_RENAMES: readonly DimensionRename[] = [
 export const SYNONYM_GROUPS: readonly (readonly string[])[] = synonymGroupsFromRegistry();
 
 const foldName = (s: string): string => s.replace(/_/g, '-');
+
+const QUANTITY_IDS = new Set(allQuantityRecords().map((row) => row.id));
+
+/**
+ * The registry id for `name`, or for the same spelling with `_` written as `-`.
+ * A short symbol that is not an id stays unresolved. Dimension is not consulted.
+ */
+export function quantityIdForSpelling(name: string): string | undefined {
+  if (QUANTITY_IDS.has(name)) return name;
+  const hyphen = foldName(name);
+  if (hyphen !== name && QUANTITY_IDS.has(hyphen)) return hyphen;
+  return undefined;
+}
 
 /** The group `name` belongs to, comparing `_` and `-` as the same character. */
 export function synonymGroup(name: string): readonly string[] | undefined {

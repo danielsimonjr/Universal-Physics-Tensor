@@ -255,7 +255,8 @@ describe('--stored hashes the witness-results artifact it reads', () => {
 });
 
 describe('module sources', () => {
-  const BE64 = 'bridges/be64-eddington-luminosity';
+  // evaluate loads this command module; eval does not. NONLINEAR_FRACTION is private to it.
+  const evaluateModule = 'cli/commands/evaluate';
   let session: string;
   beforeAll(async () => {
     session = join(dir, 'modules.jsonl');
@@ -266,9 +267,9 @@ describe('module sources', () => {
   it('each entry hashes the source of every module its command loads (checked independently)', () => {
     const [thermal, formula] = readEntries(session);
     expect(thermal.attribution.modules['cli/commands/evaluate']).toBe(sha(readFileSync(join(repo, 'dist', 'cli', 'commands', 'evaluate.js'))));
-    expect(thermal.attribution.modules[BE64]).toBe(sha(readFileSync(join(repo, 'dist', `${BE64}.js`))));
+    expect(thermal.attribution.modules[evaluateModule]).toBe(sha(readFileSync(join(repo, 'dist', `${evaluateModule}.js`))));
     expect(formula.attribution.modules['cli/commands/eval']).toBe(sha(readFileSync(join(repo, 'dist', 'cli', 'commands', 'eval.js'))));
-    expect(formula.attribution.modules[BE64]).toBeUndefined();
+    expect(formula.attribution.modules[evaluateModule]).toBeUndefined();
   });
 
   it('an untouched record compares every module and finds no change', async () => {
@@ -282,17 +283,17 @@ describe('module sources', () => {
 
   it('PAIRED CONTROL — an edited module hash is named, reachable, beside a reproduced output', async () => {
     const file = edited(session, join(dir, 'modules-edited.jsonl'), (e) => {
-      e[0].attribution.modules[BE64] = '0'.repeat(64);
+      e[0].attribution.modules[evaluateModule] = '0'.repeat(64);
     });
     const { code, entries, text } = await replay(file);
     expect(entries[0].integrity).toEqual([]);
     expect(entries[0].outcome).toBe('reproduced');
     expect(entries[0].environmentChanges).toEqual([
-      { fact: `module ${BE64}`, recorded: '0'.repeat(64), current: sha(readFileSync(join(repo, 'dist', `${BE64}.js`))), reach: 'reachable' },
+      { fact: `module ${evaluateModule}`, recorded: '0'.repeat(64), current: sha(readFileSync(join(repo, 'dist', `${evaluateModule}.js`))), reach: 'reachable' },
     ]);
     expect(entries[1].environmentChanges).toEqual([]);
     expect(code).toBe(1);
-    expect(text).toContain(`      module ${BE64}: "${'0'.repeat(64)}" -> `);
+    expect(text).toContain(`      module ${evaluateModule}: "${'0'.repeat(64)}" -> `);
   });
 
   it('an entry recorded without module hashes says a private literal would go unseen', async () => {
@@ -312,18 +313,20 @@ describe('module sources', () => {
     cpSync(join(repo, 'bin', 'upt.mjs'), join(copy, 'bin', 'upt.mjs'));
     cpSync(join(repo, 'package.json'), join(copy, 'package.json'));
     symlinkSync(join(repo, 'node_modules'), join(copy, 'node_modules'), 'junction');
-    const be64 = join(copy, 'dist', `${BE64}.js`);
-    const before = readFileSync(be64, 'utf8');
-    const after = before.replace('const L_SUN_SI = 3.828e26;', 'const L_SUN_SI = 3.9e26;');
+    // The catalog and the quantity registry are read from data/ beside dist.
+    symlinkSync(join(repo, 'data'), join(copy, 'data'), 'junction');
+    const evaluateSource = join(copy, 'dist', `${evaluateModule}.js`);
+    const before = readFileSync(evaluateSource, 'utf8');
+    const after = before.replace('const NONLINEAR_FRACTION = 0.1;', 'const NONLINEAR_FRACTION = 0.2;');
     expect(after).not.toBe(before);
-    expect(before).not.toMatch(/export const L_SUN_SI/);
-    writeFileSync(be64, after);
+    expect(before).not.toMatch(/export const NONLINEAR_FRACTION/);
+    writeFileSync(evaluateSource, after);
 
     const r = spawnSync(process.execPath, [join(copy, 'bin', 'upt.mjs'), `--replay=${session}`, '--json'], { encoding: 'utf8' });
     const [thermal, formula] = JSON.parse(r.stdout).result.entries;
     expect(thermal.outcome).toBe('reproduced');
     expect(thermal.environmentChanges).toEqual([
-      { fact: `module ${BE64}`, recorded: sha(before), current: sha(after), reach: 'reachable' },
+      { fact: `module ${evaluateModule}`, recorded: sha(before), current: sha(after), reach: 'reachable' },
     ]);
     expect(formula.outcome).toBe('reproduced');
     expect(formula.environmentChanges).toEqual([]);

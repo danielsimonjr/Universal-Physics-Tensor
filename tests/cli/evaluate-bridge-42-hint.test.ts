@@ -42,9 +42,9 @@ describe('upt evaluate be-42 returns a Hawking temperature', () => {
     expect(cli.err.join('')).not.toContain('BridgeEquations');
   });
 
-  it('an id that truly has no evaluator still points at upt evaluate with no args', () => {
+  it('an id that truly has no evaluator names the catalog id', () => {
     const message = messageOf(() => evaluateBridge(11, { x: 1 }));
-    expect(message).toMatch(/upt evaluate` with no args/);
+    expect(message).toBe('evaluateBridge: catalog id 11 has no evaluator');
     expect(message).not.toMatch(/BridgeEquations/);
   });
 });

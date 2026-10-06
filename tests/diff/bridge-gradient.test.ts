@@ -38,7 +38,7 @@ import { EngineCapabilityError } from '../../src/numerical/errors.js';
 describe('BridgeDiffSpec — shape', () => {
   it('every shipped spec has bridgeId, name, paramNames, defaults, evaluate', () => {
     for (const spec of DIFFERENTIABLE_RELATIONS) {
-      expect(spec.bridgeId).toMatch(/^BE-\d+$/);
+      expect(spec.bridgeId).toMatch(/^be-\d+$/);
       expect(typeof spec.name).toBe('string');
       expect(spec.paramNames.length).toBeGreaterThan(0);
       expect(typeof spec.evaluate).toBe('function');

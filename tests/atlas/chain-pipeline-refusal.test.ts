@@ -87,8 +87,8 @@ describe('a composition refusal is a pipeline result', () => {
 
   it('derivation then derivation that meets on a quantity still composes', () => {
     expect(bridgeSeedKeys()).toEqual(expect.arrayContaining(['be-55', 'be-12']));
-    const first = edge('be-55', 'particle-mass', MASS, 'm', MASS, derivation, sym('m', MASS));
-    const second = edge('be-12', 'm', MASS, 'wavelength', LENGTH, derivation, rhs12);
+    const first = edge('be-55', 'particle-mass', MASS, 'mass', MASS, derivation, sym('mass', MASS));
+    const second = edge('be-12', 'mass', MASS, 'wavelength', LENGTH, derivation, rhs12);
     const results = runChainPipeline([first, second]);
     expect(results).toContainEqual({
       kind: 'confirmation',

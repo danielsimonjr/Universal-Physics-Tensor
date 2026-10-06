@@ -18,8 +18,12 @@ import { physjsFormalRef } from './physjs-ref.js';
  *
  * @internal
  */
+const byId = new Map<number, FormalRef | undefined>();
+
 export function catalogFormalRef(id: number): FormalRef | undefined {
+  if (byId.has(id)) return byId.get(id);
   const key = catalogEntry(id)?.formalKey;
-  if (key === undefined) return undefined;
-  return physjsFormalRef(key);
+  const ref = key === undefined ? undefined : physjsFormalRef(key);
+  byId.set(id, ref);
+  return ref;
 }

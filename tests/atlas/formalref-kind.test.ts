@@ -120,8 +120,9 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
         return formalRef === undefined ? [] : [formalRef];
       }),
     ];
+    // 127 is the record from before be-147..170 each added a catalog formalRef.
     // 57 is the record from before be-77..87 each added a catalog formalRef.
-    expect(refs.length).toBe(127);
+    expect(refs.length).toBe(151);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.

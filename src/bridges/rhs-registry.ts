@@ -14,8 +14,8 @@ export { parseBridgeId };
 /** Catalog id → expression tree of its primary relation. */
 export const BRIDGE_RHS_BY_ID: ReadonlyMap<number, ExprNode> = new Map(
   catalogEntries().flatMap((entry) => {
-    const relation = primaryRelation(entry.id);
-    if (relation === undefined) return [];
-    return [[entry.id, parseCatalogExpression(relation.expression)] as const];
+    const expression = primaryRelation(entry.id)?.expression ?? entry.scalarExpression;
+    if (expression === undefined) return [];
+    return [[entry.id, parseCatalogExpression(expression)] as const];
   }),
 );

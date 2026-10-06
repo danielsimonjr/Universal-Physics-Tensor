@@ -67,7 +67,9 @@ describe('every recorded confrontation statement cites text that exists', () => 
     });
 
     it('a file that does not exist', () => {
-      expect(refProblem({ ...real, file: real.file.replace(/\.ts$/, '-missing.ts') })).toMatch(/no such file/);
+      const missing = real.file.replace(/(\.[^.]+)$/, '-missing$1');
+      expect(missing).not.toBe(real.file);
+      expect(refProblem({ ...real, file: missing })).toMatch(/no such file/);
     });
 
     it('a quote altered by one character', () => {
@@ -80,10 +82,10 @@ describe('every recorded confrontation statement cites text that exists', () => 
     });
 
     it('a symbol the file only imports and uses, but does not declare', () => {
-      expect(refProblem({ file: 'src/bridges/be61-wiedemann-franz-confrontation.ts', symbol: 'LORENZ_NUMBER_SI' })).toMatch(
+      expect(refProblem({ file: 'src/bridges/index.ts', symbol: 'LORENZ_NUMBER_SI' })).toMatch(
         /does not declare LORENZ_NUMBER_SI/,
       );
-      expect(refProblem({ file: 'src/bridges/be61-wiedemann-franz.ts', symbol: 'LORENZ_NUMBER_SI' })).toBeNull();
+      expect(refProblem({ file: 'src/core/constants.ts', symbol: 'LORENZ_NUMBER_SI' })).toBeNull();
     });
 
     it('a path outside the repository, and a quote too short to identify a place', () => {

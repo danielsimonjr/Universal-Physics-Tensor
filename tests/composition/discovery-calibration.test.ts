@@ -82,7 +82,8 @@ describe('discovery calibration benchmark', () => {
   // landauer-erasure-energy. A shared mass or energy dimension is not an
   // identification.
   const EXPECTED = {
-    catalog: { total: 2518, promising: 25, inert: 1307, clash: 20, contradictory: 0, axisClash: 1166 },
+    // 2518 / 25 / 1307 / 1166 is the record from before be-147..170.
+    catalog: { total: 4196, promising: 32, inert: 2377, clash: 20, contradictory: 0, axisClash: 1767 },
   };
 
   it('catalog funnel counts are pinned at HEAD', () => {
@@ -104,7 +105,8 @@ describe('discovery calibration benchmark', () => {
     const shadowed = cands.filter(
       (c) => c.verdict === 'magnitude-clash' && c.axisClashes.length > 0,
     );
-    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1176);
+    // 1176 is the record from before be-147..170.
+    expect(count(cands, 'axis-clash') + shadowed.length).toBe(1777);
     // 994 is the record from before be-134..146.
     // 796 is the record from before be-126..133.
     // 455 is the record from before be-103..125.

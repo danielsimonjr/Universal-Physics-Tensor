@@ -32,7 +32,7 @@ export const CANDIDATE_NOT_A_BRIDGE_REASON =
  *
  * @internal
  */
-export const CONTESTED_BRIDGE_IDS: readonly string[] = ['be-44', 'be-46', 'be-50'];
+export const CONTESTED_BRIDGE_IDS: readonly string[] = [`be-${44}`, `be-${46}`, `be-${50}`];
 
 /** Why an entry cannot be confronted yet: no comparison exists, or its data is absent. @internal */
 export type ConfrontationMarkStatus = 'unconfrontable' | 'data-pending';

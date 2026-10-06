@@ -9,6 +9,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { catalogEntries } from '../../src/bridges/catalog-load.js';
 import {
   TENSOR_INDEX_BY_CATEGORY,
   TENSOR_INDEX_PATTERN,
@@ -19,12 +20,12 @@ import {
 const SPEC = 'docs/specification/Part-II.md';
 
 const HEADING_COMPONENT: Readonly<Record<string, TensorIndexComponent>> = {
-  'Quantum-Classical Bridges': 'quantum-classical',
-  'Information-Geometry Bridges': 'information-geometry',
-  'Emergence Patterns': 'emergence',
-  'Field Unification': 'field-unification',
-  'Scale Transitions': 'scale-transition',
-  'Cosmological Puzzles': 'unassigned',
+  'Quantum-classical bridges': 'quantum-classical',
+  'Information-geometry bridges': 'information-geometry',
+  'Emergence patterns': 'emergence',
+  'Field unification': 'field-unification',
+  'Scale transitions': 'scale-transition',
+  'Cosmological puzzles': 'unassigned',
 };
 
 /** Expand `11-12, 33-35, 56` into sorted ids. An en dash is a hyphen. */
@@ -72,18 +73,20 @@ export function specTensorIndex(markdown: string): Map<number, TensorIndexCompon
 describe('§VI.6.1 tensor index', () => {
   const listed = specTensorIndex(readFileSync(SPEC, 'utf8'));
 
-  it('places every catalog id in exactly one component, matching its category', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(136);
-    // 123 is the record from before be-134..146.
-    // 115 is the record from before be-126..133.
-    expect(listed.size).toBe(136);
-    // 123 is the record from before be-134..146.
-    // 92 is the record from before be-103..125. 77 is the record from before be-88..102.
-    for (const entry of BRIDGE_EQUATIONS) {
+  it('places every cross-domain id in exactly one component, matching its category', () => {
+    const crossDomain = catalogEntries().filter((entry) => entry.type === 'cross-domain');
+    // 136 is the record from before the specification dropped standard write-ups.
+    expect(BRIDGE_EQUATIONS).toHaveLength(160);
+    expect(crossDomain).toHaveLength(40);
+    expect(listed.size).toBe(40);
+    for (const entry of crossDomain) {
       expect(
         listed.get(entry.id),
         `BE-${entry.id} category ${entry.category}`,
       ).toBe(tensorIndexComponent(entry.category));
+    }
+    for (const entry of catalogEntries()) {
+      if (entry.type === 'standard') expect(listed.has(entry.id), `BE-${entry.id}`).toBe(false);
     }
   });
 
@@ -136,7 +139,8 @@ describe('§VI.6.1 tensor index', () => {
       const entry = BRIDGE_EQUATIONS.find((e) => e.id === Number(id));
       expect(entry).toBeDefined();
       expect(tensorIndexComponent(entry!.category)).toBe(component);
-      expect(listed.get(Number(id))).toBe(component);
+      const inSpec = new Set([56, 57, 58, 61, 63, 64, 65, 68]);
+      expect(listed.get(Number(id))).toBe(inSpec.has(Number(id)) ? component : undefined);
     }
   });
 

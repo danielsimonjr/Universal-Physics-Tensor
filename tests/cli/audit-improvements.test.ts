@@ -191,7 +191,7 @@ describe('I9 — uncertainty propagation, kept apart from sensitivity', () => {
   // rT² + rR² + 2ρ rT rR; each input here carries 1%.
   it('Johnson noise, independent inputs: relative σ is √2 % (analytic, S ∝ T·R)', async () => {
     const env = await json(JOHNSON);
-    const s = env.result.uncertainty.outputs.S_V_V2_per_Hz;
+    const s = env.result.uncertainty.outputs.value;
     expect(s.relative).toBeCloseTo(Math.SQRT2 / 100, 8);
     expect(s.contributions.T_K.sensitivity).toBeCloseTo(s.value / 300, 25);
     expect(s.unreliable).toEqual([]);
@@ -199,8 +199,8 @@ describe('I9 — uncertainty propagation, kept apart from sensitivity', () => {
   });
 
   it('a correlated-input result differs from the independent one, by the analytic amount', async () => {
-    const pos = (await json([...JOHNSON, '--corr', 'T_K,R_ohm=0.5'])).result.uncertainty.outputs.S_V_V2_per_Hz;
-    const neg = (await json([...JOHNSON, '--corr', 'T_K,R_ohm=-1'])).result.uncertainty.outputs.S_V_V2_per_Hz;
+    const pos = (await json([...JOHNSON, '--corr', 'T_K,R_ohm=0.5'])).result.uncertainty.outputs.value;
+    const neg = (await json([...JOHNSON, '--corr', 'T_K,R_ohm=-1'])).result.uncertainty.outputs.value;
     expect(pos.relative).toBeCloseTo(Math.sqrt(3) / 100, 8);
     expect(neg.relative).toBeCloseTo(0, 10);
   });
@@ -244,17 +244,17 @@ describe('I6 — every evaluator declares its inputs; units convert only when th
   it('an absolute temperature in degC adds 273.15 K; its σ in degC does not', async () => {
     const c = await out(['evaluate', 'be-58', 'T_K=26.85degC', 'R_ohm=1kohm']);
     const k = await out(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000']);
-    expect(c.S_V_V2_per_Hz).toBeCloseTo(k.S_V_V2_per_Hz, 28);
+    expect(c.value).toBeCloseTo(k.value, 28);
     const env = await json(['evaluate', 'be-58', 'T_K=300', 'R_ohm=1000', '--sigma', 'T_K=3degC']);
     expect(env.result.uncertainty.sigma.T_K).toBe(3);
-    expect(env.result.uncertainty.outputs.S_V_V2_per_Hz.relative).toBeCloseTo(0.01, 10);
+    expect(env.result.uncertainty.outputs.value.relative).toBeCloseTo(0.01, 10);
   });
 
   it('the full major axis is a declared alternate of the semi-major axis, halved and said so', async () => {
     const viaMajor = await json(['evaluate', 'be-52', 'M_kg=1Msun', 'major_axis_m=1.158e11', 'e=0.2056', 'T_yr=88d']);
     const direct = await json(['evaluate', 'be-52', 'M_kg=1.989e30', 'a_m=5.79e10', 'e=0.2056', `T_yr=${88 / 365.25}`]);
     expect(viaMajor.result.inputs.a_m).toBeCloseTo(5.79e10, 0);
-    expect(viaMajor.result.output.dphi_rad_per_orbit).toBeCloseTo(direct.result.output.dphi_rad_per_orbit, 18);
+    expect(viaMajor.result.output.value).toBeCloseTo(direct.result.output.value, 18);
     expect(viaMajor.result.conversions.find((c: any) => c.key === 'a_m').via).toBe('major_axis_m');
   });
 
@@ -271,7 +271,7 @@ describe('I6 — every evaluator declares its inputs; units convert only when th
     const fahrenheit = (80 - 32) * (5 / 9) + 273.15;
     const viaF = await out(['evaluate', 'be-58', 'T_K=80degF', 'R_ohm=1']);
     const viaK = await out(['evaluate', 'be-58', `T_K=${fahrenheit}`, 'R_ohm=1']);
-    expect(viaF.S_V_V2_per_Hz).toBeCloseTo(viaK.S_V_V2_per_Hz, 8);
+    expect(viaF.value).toBeCloseTo(viaK.value, 8);
   });
 
   it('the listing declares every input with its unit and meaning', async () => {
@@ -682,6 +682,7 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
     expect(survivedAny).toBeGreaterThan(0);
   });
 
+  // Two catalog discovers plus one canonical. 60s is the record from before the graph held every relation.
   it('--require-falsifier hides a row that only connectivity supports, and says how many', async () => {
     const all = await json(['discover', '--source=catalog']);
     const p = all.result.filter((c: any) => c.verdict === 'promising');
@@ -695,7 +696,7 @@ describe('I11 — discovery readiness by dimension; connectivity alone is not ev
     const canonical = await run(['discover', '--source=canonical', '--require-falsifier']);
     const n = /→ {2}(\d+) promising/.exec(canonical.text)![1];
     expect(canonical.text).toContain(`--require-falsifier: ${n} of the ${n} promising hidden`);
-  });
+  }, 300_000);
 });
 
 describe('I12 — a derived relation carries its premise, meaning and status wherever it goes', () => {

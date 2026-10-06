@@ -5,16 +5,10 @@
  * distinct-object pairs).
  */
 import { describe, it, expect } from 'vitest';
-import * as quantities from '../../src/composition/quantities.js';
+import { allQuantities } from '../../src/composition/quantities.js';
 import type { Quantity } from '../../src/composition/index.js';
 
-const nodes = Object.entries(quantities).filter(
-  (e): e is [string, Quantity] =>
-    typeof e[1] === 'object' &&
-    e[1] !== null &&
-    'name' in (e[1] as object) &&
-    'dim' in (e[1] as object),
-);
+const nodes: [string, Quantity][] = allQuantities().map((q) => [q.name, q]);
 
 describe('centralized Quantity registry (v0.11 criterion 6)', () => {
   it('exports at least the 30 unique nodes from the centralization', () => {

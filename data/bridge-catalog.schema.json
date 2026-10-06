@@ -84,6 +84,10 @@
           "formula_latex": { "type": ["string", "null"] },
           "dimensional_signature": { "type": ["string", "null"] },
           "encoded_form": { "type": "string" },
+          "scalarExpression": {
+            "type": "string",
+            "description": "Scalar expression for a row that has no relation. Parsed into the structural registry. Not a graph edge."
+          },
           "references": { "type": "array", "items": { "type": "string" } },
           "dependencies": { "type": "array", "items": { "type": "integer" } },
           "known_issues": { "type": "array" },

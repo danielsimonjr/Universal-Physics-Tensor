@@ -23,7 +23,7 @@
 import type { ExprNode } from '../dimensional/validator.js';
 import type { Dimension } from '../dimensional/types.js';
 import { equals } from '../dimensional/algebra.js';
-import { DIMENSION_RENAMES } from '../dimensional/formula-names.js';
+import { DIMENSION_RENAMES, quantityIdForSpelling } from '../dimensional/formula-names.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
 
 const isDimensionless = (d: Dimension): boolean =>
@@ -68,7 +68,7 @@ export function canonicalQuantityName(name: string, dim: Dimension): string {
   for (const row of DIMENSION_RENAMES) {
     if (row.symbol === name && equals(dim, row.dimension)) return row.name;
   }
-  return name;
+  return quantityIdForSpelling(name) ?? name;
 }
 
 function isDroppableConstant(name: string): boolean {
@@ -165,8 +165,12 @@ export function normalForm(node: ExprNode): string {
       }
     }
 
-    case 'transcendental':
-      return `${node.fn}(${normalForm(node.arg)})`;
+    case 'transcendental': {
+      // ln(2) is the same dimensionless constant as the symbol `ln2`.
+      const arg = normalForm(node.arg);
+      if (arg === UNIT) return UNIT;
+      return `${node.fn}(${arg})`;
+    }
 
     case 'abs':
       return `abs(${normalForm(node.arg)})`;

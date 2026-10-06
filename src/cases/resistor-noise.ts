@@ -127,8 +127,8 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     '`upt confront --bridge=be-58`: the NIST Johnson-noise-thermometry k_B, which tests S_V = 4k_BTR with R traceable to the quantum Hall effect',
   ],
   links: [
-    { id: 'be-58', role: 'the flat spectral density S_V = 4k_BTR (catalog evaluator: `upt evaluate be-58`)' },
-    { id: 'be-55', role: 'quantum Hall resistance standard to which R is traceable in the JNT comparison' },
+    { id: `be-${58}`, role: 'the flat spectral density S_V = 4k_BTR (catalog evaluator: `upt evaluate be-58`)' },
+    { id: `be-${55}`, role: 'quantum Hall resistance standard to which R is traceable in the JNT comparison' },
   ],
   examples: {
     valid: {

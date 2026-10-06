@@ -153,6 +153,13 @@ export {
   bridgeGradientASTById,
   astDifferentiableBridgeIds,
 } from './diff/bridge-ast-gradient.js';
+export {
+  SHAPIRO_DELAY_DIFF,
+  PERIHELION_ADVANCE_DIFF,
+  HAWKING_TEMPERATURE_DIFF,
+  DECOHERENCE_RATE_DIFF,
+  DIFFERENTIABLE_RELATIONS,
+} from './diff/bridge-specs.js';
 
 // Machine-readable bridge equation index — the 40+ catalogued equations.
 // `BridgeEquationEntry` is intentionally a different shape from the runtime
@@ -160,6 +167,18 @@ export {
 // (status, known issues, references, dependencies), while `BridgeEquation`
 // describes a runtime bridge between two tensor regimes.
 export { BRIDGE_EQUATIONS } from './bridges/index.js';
+export {
+  requestCallerTableConfrontation,
+} from './bridges/caller-table.js';
+export type {
+  MeasuredCouplingRow,
+  RunningProcedureRecord,
+  RunningProcedure,
+  CallerTableRequest,
+  CallerTableRefusal,
+  CallerTableHit,
+  CallerTableResult,
+} from './bridges/caller-table.js';
 export type {
   BridgeEquationEntry,
   BridgeEquationStatus,
@@ -423,6 +442,8 @@ export type {
   // v0.5.0 perihelion-finder type additions (Task 4)
   PerihelionResult,
   FindPerihelionOptions,
+  CovariantEikonalInputs,
+  CovariantEikonalResult,
 } from './numerical/index.js';
 
 // ---------------------------------------------------------------------------

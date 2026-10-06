@@ -19,8 +19,24 @@ function regimeFor(relation: ReturnType<typeof catalogRelations>[number]) {
   return fromEntry ?? relation.regime;
 }
 
+function inherited<T>(
+  relation: ReturnType<typeof catalogRelations>[number],
+  field: 'relation' | 'conventions' | 'counterexamples',
+): T | undefined {
+  const fromRelation = relation[field] as T | undefined;
+  const entry = relation.catalogId === null ? undefined : catalogEntry(relation.catalogId);
+  const fromEntry = entry?.[field] as T | undefined;
+  if (fromRelation !== undefined && fromEntry !== undefined && JSON.stringify(fromRelation) !== JSON.stringify(fromEntry)) {
+    throw new Error(`catalog ${relation.catalogId} ${field} disagrees with relation ${relation.id}`);
+  }
+  return fromRelation ?? fromEntry;
+}
+
 function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): BridgeEdge {
   const regime = regimeFor(relation);
+  const contract = inherited<NonNullable<BridgeEdge['relation']>>(relation, 'relation');
+  const conventions = inherited<NonNullable<BridgeEdge['conventions']>>(relation, 'conventions');
+  const counterexamples = inherited<NonNullable<BridgeEdge['counterexamples']>>(relation, 'counterexamples');
   const edge: BridgeEdge = {
     id: relation.id,
     beId: relation.catalogId,
@@ -39,10 +55,10 @@ function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): Bridg
     citation: relation.citation,
     ...(relation.coefficientUnset === true ? { coefficientUnset: true } : {}),
     ...(relation.formulaFactors !== undefined ? { formulaFactors: relation.formulaFactors } : {}),
-    ...(relation.relation !== undefined ? { relation: relation.relation } : {}),
+    ...(contract !== undefined ? { relation: contract } : {}),
     ...(regime !== undefined ? { regime } : {}),
-    ...(relation.conventions !== undefined ? { conventions: relation.conventions } : {}),
-    ...(relation.counterexamples !== undefined ? { counterexamples: relation.counterexamples } : {}),
+    ...(conventions !== undefined ? { conventions } : {}),
+    ...(counterexamples !== undefined ? { counterexamples } : {}),
   };
   return withBoundAliases(edge);
 }

@@ -58,7 +58,10 @@ describe('dimensionful fractional powers — reverse-mode AD', () => {
   it.runIf(peerPresent)('BE-12 thermal de Broglie λ_T ∝ T^(−1/2): ∂λ/∂T = −0.5·λ/T (exact)', async () => {
     const m = 1e-26;
     const T = 300;
-    const { value, gradient } = await bridgeGradientASTById('BE-12', 'T', { m, T });
+    const { value, gradient } = await bridgeGradientASTById('BE-12', 'temperature', {
+      mass: m,
+      temperature: T,
+    });
     expect(relErr(gradient, (-0.5 * value) / T)).toBeLessThan(1e-9);
   });
 });

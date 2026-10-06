@@ -268,9 +268,11 @@ describe('persona retest: what map --equation prints', () => {
   });
 
   it('W6: the one-letter a is disclosed as the catalog a, with its dimension and who uses it', async () => {
-    const t = await text(['map', '--equation', 'unruh_temperature = hbar*a/(2*pi*k_B*c)']);
+    // Unbound, the letter has no catalog dimension, so the check is not established and exits 3
+    // (the same contract as an unresolved name). Binding it to catalog a [length] mismatches temperature.
+    const t = await text(['map', '--equation', 'unruh_temperature = hbar*a/(2*pi*k_B*c)'], 3);
     expect(t).toMatch(/· 'a' matches the catalog quantity a \[length\] \(used by CE-perihelion-precession[^)]*\), a one-letter name, and is not bound\. Pass --bind-short to bind it/);
-    const bound = await text(['map', '--equation', 'unruh_temperature = hbar*a/(2*pi*k_B*c)', '--bind-short']);
+    const bound = await text(['map', '--equation', 'unruh_temperature = hbar*a/(2*pi*k_B*c)', '--bind-short'], 3);
     expect(bound).toMatch(/· 'a' is bound to the catalog quantity a \[length\], a one-letter name \(used by CE-perihelion-precession[^)]*\); if you meant another quantity, write its full name/);
   });
 

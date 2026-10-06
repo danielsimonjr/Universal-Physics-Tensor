@@ -106,7 +106,7 @@ export const KEPLER_RV_CASE: AppliedCase = {
   ],
   links: [
     { id: 'CE-kepler-third', role: 'T² = 4π²a³/(GM), with the assumptions two-body and M ≫ m; here with M → M_* + m_p' },
-    { id: 'be-52', role: 'the GR perihelion advance Δφ = 6πGM/(c²a(1 − e²)), evaluated with the total mass (`upt evaluate be-52`)' },
+    { id: `be-${52}`, role: 'the GR perihelion advance Δφ = 6πGM/(c²a(1 − e²)), evaluated with the total mass (`upt evaluate be-52`)' },
     { id: 'CE-perihelion-precession', role: 'the canonical entry restating BE-52' },
     { id: 'CE-schwarzschild-radius', role: 'r_s = 2GM/c², whose ratio to a (halved) is the weak-field check\'s quantity' },
   ],

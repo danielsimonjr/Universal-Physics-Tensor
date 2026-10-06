@@ -226,7 +226,8 @@ describe('rankDiscoveries — real CATALOG_GRAPH funnel', () => {
     // 710 is the record from before be-103..125.
     // 1525 is the record from before be-126..133.
     // 1964 is the record from before be-134..146.
-    expect(ranked.length).toBe(2518);
+    // 2518 is the record from before be-147..170.
+    expect(ranked.length).toBe(4196);
     const verdicts = new Set(ranked.map((r) => r.verdict));
     for (const v of verdicts) {
       expect(['promising', 'inert', 'contradictory', 'magnitude-clash', 'axis-clash']).toContain(v);
@@ -325,6 +326,7 @@ describe('rankDiscoveries — hoisted-context equivalence guard', () => {
   // builds a fresh context per call. The two paths MUST agree byte-for-byte —
   // any divergence means the shared context leaked mutable state between
   // candidates (the one real failure mode of the loop-invariant hoist).
+  // 60s is the record from before the candidate pool grew past 2518.
   it('produces results identical to vetting each candidate independently', () => {
     const candidates = proposeLinkCandidates(CATALOG_GRAPH);
     const independent = candidates
@@ -342,5 +344,5 @@ describe('rankDiscoveries — hoisted-context equivalence guard', () => {
         x.dim.localeCompare(y.dim),
     );
     expect(shared).toEqual(independent);
-  });
+  }, 300_000);
 });

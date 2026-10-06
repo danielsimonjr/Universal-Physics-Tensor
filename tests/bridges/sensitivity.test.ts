@@ -10,7 +10,7 @@ describe('decidingMeasurement (elasticity)', () => {
       expect(ranked[i - 1].elasticity).toBeGreaterThanOrEqual(ranked[i].elasticity);
     }
     // perihelion advance ∝ M / (a (1-e²)): elasticity wrt M is ~1
-    const m = ranked.find((r) => r.input === 'central_mass_kg');
+    const m = ranked.find((r) => r.input === 'mass');
     expect(m?.elasticity).toBeCloseTo(1, 1);
   });
 

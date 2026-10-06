@@ -21,8 +21,9 @@ describe('linkageMap — component structure', () => {
     // Each of those eight edges uses quantities that meet no other edge.
     // 89 components and 85 isolated edges are the record from before be-134..146.
     // Each of those thirteen edges uses quantities that meet no other edge.
-    expect(m.componentCount).toBe(102);
-    expect(m.isolated.length).toBe(98);
+    // 102 components and 98 isolated edges are the record from before be-147..170.
+    expect(m.componentCount).toBe(133);
+    expect(m.isolated.length).toBe(129);
     expect(m.clusters.reduce((n, c) => n + c.size, 0)).toBe(GRAPH.length);
   });
 

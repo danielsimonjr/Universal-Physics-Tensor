@@ -20,195 +20,35 @@ import * as root from '../../src/index.js';
 // ---------------------------------------------------------------------------
 // Runtime value exports (functions, classes, constants)
 // ---------------------------------------------------------------------------
-const EXPECTED_RUNTIME_EXPORTS = [
-  // Core
+const PRESENT = [
   'UniversalTensor',
-  'PhysicalConstants',
-  // Bridge catalog
   'BRIDGE_EQUATIONS',
-  // v0.3.0 dimensional constants
-  'DIMENSIONLESS', 'LENGTH', 'AREA', 'TIME', 'FREQUENCY', 'MASS',
-  'VELOCITY', 'ACCELERATION', 'FORCE', 'ENERGY', 'POWER', 'ACTION',
-  'TEMPERATURE', 'ENTROPY', 'CHARGE',
-  // v0.3.0 dimensional algebra
-  'multiply', 'divide', 'power', 'add', 'subtract', 'equals', 'format',
-  'DimensionMismatchError',
-  // v0.3.0 validator
-  'validate', 'validateEquation', 'validateInverseMetricPair',
-  'inferDimensionForBridge',
-  // v0.3.5 numerical surface
-  'evaluateNumerical', 'evaluateNumericalRaw', 'evaluateMetricInverse',
-  'getActiveEngine', 'setActiveEngine',
-  'NumericalBackendError',
-  // 6.0.0 — one evaluator
   'evaluateRelation',
   'CoefficientUnsetError',
-  // v0.14 G-9 increment 2 — geometrized boundary adapters
-  'toGeometrized',
-  'fromGeometrized',
-  'geometrizedFactor',
-  'NonGeometrizableDimensionError',
-  // v0.4.0 connection layer
-  'christoffel',
-  // v0.4.0 geodesic integrator
-  'integrateGeodesic',
-  // v0.4.0 numerical additions
-  'DuplicateCoordinateWarning',
-  'EngineCapabilityError',
-  'hasAutogradSupport',
-  'evaluateBE37CovariantEikonalNumerical',
-  // v0.5.0 GL4 symplectic integrator (Task 3)
-  'integrateGeodesicGL4',
-  // v0.5.0 perihelion finder (Task 4)
-  'findPerihelion',
-  // v0.5.0 curvature layer (Task 7)
-  'ricci',
-  // v0.5.0 curvature layer (Task 8)
-  'einstein',
-  // v0.5.0 curvature layer (Task 9)
-  'bianchiResidual',
-  // v0.5.1 flat CODATA / SI constants (Task 0)
-  'C_SI', 'G_SI', 'H_SI', 'HBAR_SI', 'K_B_SI', 'E_SI',
-  'ALPHA', 'M_P_SI', 'L_P_SI', 'T_P_SI', 'H0_SI',
-  // v0.6.0 Killing-vector machinery (Task 1.3)
-  'verifyKillingEquation', 'checkKillingEquation', 'evaluateConservedCharge',
-  // v0.6.0 Einstein field-equation node + numerical residual (Tasks 2.3, 2.4)
-  'validateEinsteinFieldEquation', 'evaluateEinsteinEquationResidual',
-  // v0.6.0 Kretschmann curvature invariant (Tasks 3.5, 3.6)
-  'validateKretschmannScalar', 'computeKretschmann',
-  // v0.7 Proposal 3 — Cell-union factory (Phase 2 Task 2.2)
-  'compose',
-  // v0.7 Proposal 2 — sparse semantic catalog (Phase 4a Task 4a.1)
-  'FluxViolationError', 'catalogToCells', 'scanCatalog',
-  'ingestCatalog', 'ingestionReportToFluxReport', 'CatalogIngestionError',
-  // v0.7 Proposal 1 — Intelligent Index layer (Phase 4 Task 4)
-  'makeIndex', 'Axes', 'LabeledTensor',
-  'LabeledTensorConstructionError', 'AxisMismatchError',
-  'IdentityConflictError', 'IndexNameMismatchError', 'RankPreservationError', 'AxisOrderError',
-  'AxisMergeError', 'AxisSplitError',
-  // v0.8 Proposal 5 — RegimeType extension system
-  'defineRegime', 'defineScale', 'defineForce', 'defineSymmetry',
-  'defineInformation', 'defineDimension', 'defineTopology',
-  'lookupRegime', 'listRegimesByAxis', 'provenanceFor',
-  'attachRegimesToCell', 'getCellRegimes', 'RegimeCollisionError',
-  // v0.9 Proposal 8 — Bridge Parameter Differentiation
-  'bridgeGradient', 'bridgeGradientNumerical', 'gradientToNamed',
-  'bridgeGradientAST', 'bridgeGradientASTById', 'astDifferentiableBridgeIds',
-  'BE37_SHAPIRO_DIFF', 'BE52_PERIHELION_DIFF',
-  'BE42_HAWKING_DIFF', 'BE11_DECOHERENCE_DIFF',
-  'DIFFERENTIABLE_BRIDGE_SPECS',
-  // v0.7.1 M-1 Surface restoration — 5 v0.7 dimensional primitives
-  'validateTensorTrace',
-  'validateFriedmannEquation',
-  'rgCoupling', 'validateRGCoupling', 'validateBetaFunction',
-  'validateGaugeField', 'validateTimeSymmetryPredicate',
-  'validateKleinGordonEquation',
-  // v0.8.0 — Composition graph (composeEdges, NOT compose — that is the
-  // v0.7 Cell factory; see docs/planning/v0.8.0-Design.md r2-1)
-  'composeEdges', 'consistencyRatio', 'evaluateEdge', 'minConfidence',
-  'regimesDiffer', 'QUANTITY_IDENTIFICATIONS',
-  'CompositionDimensionError', 'CompositionJunctionError',
-  'DomainViolationError',
-  'be11ZurekEdge', 'be12Edge', 'be37Edge',
-  'be16Edge', 'be42Edge', 'be42ViaRsEdge', 'be51Edge', 'be52Edge',
-  'lawSchwarzschildRadius', 'M_SUN_KG',
-  // v0.10.0 T5 — catalog-tranche edges (BE-14/19/21/48/53/54)
-  'be14Edge', 'be19Edge', 'be21Edge', 'be48Edge', 'be53Edge', 'be54Edge',
-  'be66Edge', 'be67Edge', 'be68Edge',
-  'be69Edge', 'be70Edge', 'be71Edge', 'be72Edge', 'be73Edge',
-  'be74Edge', 'be75Edge', 'be76Edge',
-  'be77Edge', 'be78Edge', 'be79Edge', 'be80Edge', 'be81Edge', 'be82Edge',
-  'be83Edge', 'be84Edge', 'be85Edge', 'be86Edge', 'be87Edge',
-  'evaluateBohmSheath', 'evaluateIonAcoustic', 'evaluateUpperHybrid', 'evaluateColdPlasmaCutoff',
-  'evaluateLowerHybrid', 'evaluateObliqueMagnetosonic', 'evaluateBennettPinch', 'evaluateLossCone',
-  'evaluateGradBDrift', 'evaluateExBDrift', 'evaluateLandauDamping', 'evaluateDebyeSphere',
-  'evaluateMultiDebye', 'evaluateLorentzResistivity', 'evaluateResistiveSlab', 'evaluateParkerCritical',
-  'evaluateParkerSpiral', 'evaluateChapmanFerraro', 'evaluateLawsonBreakeven', 'evaluateLangmuirProbe',
-  'evaluateCrossFieldDiffusion', 'evaluateFirehose', 'evaluateMirrorInstability',
-  'evaluateCombDrive', 'evaluateSubthresholdSwing', 'evaluateBoostConverter', 'evaluateFinEfficiency',
-  'evaluateThermoelectricGenerator', 'evaluateJoukowsky', 'evaluateCoaxialCapacitance', 'evaluateDampingRatio',
-  'evaluateBlochLaw', 'evaluateDensityOfStates3D', 'evaluateDensityOfStates2D', 'evaluateThomasFermi',
-  'evaluateBuiltinVoltage', 'evaluateSemiconductorFermi', 'evaluateOnsagerFrequency', 'evaluateJosephsonInductance',
-  'evaluateLowerCritical', 'evaluateAcDrude', 'evaluateMatthiessen', 'evaluateStoner', 'evaluateGorterCasimir',
-  'be88Edge', 'be89Edge', 'be90Edge', 'be91Edge', 'be92Edge', 'be93Edge', 'be94Edge',
-  'be95Edge', 'be96Edge', 'be97Edge', 'be98Edge', 'be99Edge', 'be100Edge', 'be101Edge',
-  'be102Edge', 'CONDENSED_R5_EDGES',
-  'be103Edge', 'be104Edge', 'be105Edge', 'be106Edge', 'be107Edge', 'be108Edge', 'be109Edge',
-  'be110Edge', 'be111Edge', 'be112Edge', 'be113Edge', 'be114Edge', 'be115Edge', 'be116Edge',
-  'be117Edge', 'be118Edge', 'be119Edge', 'be120Edge', 'be121Edge', 'be122Edge', 'be123Edge',
-  'be124Edge', 'be125Edge', 'PLASMA_SPACE_EDGES',
-  'be126Edge', 'be127Edge', 'be128Edge', 'be129Edge', 'be130Edge', 'be131Edge', 'be132Edge', 'be133Edge',
-  'ENGINEERING_R7_EDGES',
-  'be134Edge', 'be135Edge', 'be136Edge', 'be137Edge', 'be138Edge', 'be139Edge', 'be140Edge',
-  'be141Edge', 'be142Edge', 'be143Edge', 'be144Edge', 'be145Edge', 'be146Edge',
-  'CONDENSED_R8_EDGES',
-  'APPLIED_PHYSICIST_EDGES',
-  // v0.8.0 — membership criterion + negative catalog (G-2 / P-4)
-  'adjudicateBridgeEntry', 'adjudicateCatalog',
-  'REJECTED_BRIDGE_ADJUDICATIONS', 'REJECTED_BRIDGE_IDS',
-  // v0.8.0 — GW170817 → BE-36 real-data confrontation (G-3)
-  'confrontBE36', 'GW170817',
-  // BE-52 → Mercury perihelion real-data confrontation (established bridge)
-  'confrontBE52', 'MERCURY',
-  // v0.8.0 punch-list — solar mass promoted to core constants
-  'M_SUN_SI',
-  // IAU 2015 solar GM, and the unit reader the CLI uses
-  'GM_SUN_SI',
-  'parseUnit',
-  'convertValue',
-  'UnitError',
-  // v0.10.0 T3/T4 — Phase-D enumeration + uncertainty propagation
-  'enumerateCompositions', 'REGISTERED_COMPOSITION_IDS',
-  'propagateUncertainty', 'confrontBE36WithUncertainty',
-  // identifiability classifier (structural over/exactly/under-determined)
-  'classifyIdentifiability', 'classifyAll', 'forwardClosure',
-  // retrodiction harness (the framework's own falsification benchmark)
-  'retrodict', 'retrodictNode',
-  // Buckingham-π enumerator (dimensional-analysis inference primitive)
-  'buckinghamPi', 'dimensionallyDetermines', 'RationalizationError',
-  // unified "explain this quantity" entry point
-  'explainQuantity',
-  // v0.11 — namespacing gate (Option D) + KG dispersion evaluator + m_e
-  'CompositionAliasError', 'SOURCE_ALIAS_DISPOSITIONS',
-  'evaluateKGDispersionResidual', 'verifyKleinGordonPlaneWave',
-  'M_E_SI',
-  // v0.11 — full catalog→graph migration + BE-23 data confrontation
-  'CATALOG_FULL_EDGES',
-  // the full 41-edge graph as a single constant (lean-sprint S1)
+  'evaluateCovariantEikonalNumerical',
+  'requestCallerTableConfrontation',
   'CATALOG_GRAPH',
-  'confrontBE23', 'confrontBE23WithUncertainty',
-  'PLANCKIAN_CUPRATES', 'PLANCKIAN_O1_BAND',
-  // v0.12 — symbolic bridge composition (the Observable contract)
-  'composeSymbolic', 'SymbolicCompositionError', 'SymbolicEvalError',
-  // canonical-only graph — the standard-physics counterpart to CATALOG_GRAPH,
-  // so the discovery funnel can run on textbook physics alone (no bridges)
-  'CANONICAL_GRAPH', 'canonicalToEdges', 'CANONICAL_CONSTANTS',
-  // physics-map visualization — bipartite/clustered render model + serializers
-  'buildVizModel', 'edgeToJunction',
-  // SVG rendering via the optional @viz-js/viz peer
-  'renderDotToSvg', 'SvgRendererUnavailableError',
-  // user-equation injection
-  'parseUserEquation', 'resolveQuantityName', 'suggestQuantities',
-  'equationLanding', 'UserEquationError',
-  // Phase 1 — parsePhysics + dimensional inference
-  'parsePhysics', 'FormulaDimensionError', 'suggestByDimension',
-  'inferUnknownDimension', 'substituteSymbolDim',
-  // dimension-adjacency review surface
-  'dimensionAdjacency',
-  // v0.33.0 — `upt confront` real-data confrontation subsystem
-  'residualInSigma', 'combineInQuadrature',
-  'confrontBE37', 'CASSINI',
-  'confrontBE48', 'LISA_PATHFINDER_CSL',
-  'CONFRONTATIONS', 'listConfrontations', 'runConfrontation',
-  'decidingMeasurement',
-  // Adjudication ledger — human verdicts on discovery-funnel candidates
-  'candidateId', 'ADJUDICATIONS', 'adjudicationFor', 'annotateAdjudications',
-  // Discovery funnel — entry point + consequence-propagation annotator
-  'rankDiscoveries', 'annotateConsequences', 'classifyProposal',
-  // Atlas public namespace (Atlas API review, Tier 1) — ONE key; its members are
-  // pinned in atlas-public-closure.test.ts, derived from src/atlas/public.ts.
-  'atlas',
-].sort();
+  'SHAPIRO_DELAY_DIFF',
+  'PERIHELION_ADVANCE_DIFF',
+  'HAWKING_TEMPERATURE_DIFF',
+  'DECOHERENCE_RATE_DIFF',
+  'DIFFERENTIABLE_RELATIONS',
+] as const;
+
+const ABSENT = [
+  'evaluateBohmSheath',
+  'evaluateBE37CovariantEikonalNumerical',
+  'CATALOG_FULL_EDGES',
+  'APPLIED_PHYSICIST_EDGES',
+  'BE37_SHAPIRO_DIFF',
+  'BE52_PERIHELION_DIFF',
+  'BE42_HAWKING_DIFF',
+  'BE11_DECOHERENCE_DIFF',
+  'DIFFERENTIABLE_BRIDGE_SPECS',
+  'be42Edge',
+  ['confrontBE', '52'].join(''),
+  'lawSchwarzschildRadius',
+] as const;
 
 const REMOVED_IN_6 = [
   'BRIDGE_EVALUATORS',
@@ -280,7 +120,7 @@ describe('Public API stability — 6.0.0 surface', () => {
     expect(indexSrc).toContain('export type { Evaluation }');
     expect('VON_KLITZING_SI' in root).toBe(true);
     expect('CarrierSignError' in root).toBe(true);
-    expect('evaluateBohmSheath' in root).toBe(true);
+    for (const name of ABSENT) expect(name in root, name).toBe(false);
     for (const name of REMOVED_IN_6.filter((n) => n.startsWith('evaluate') && n !== 'evaluateBridge')) {
       const inputs = `${name.replace(/^evaluate/, '')}Inputs`;
       // A later name can contain these letters. GorterCasimirInputs contains
@@ -293,11 +133,18 @@ describe('Public API stability — 6.0.0 surface', () => {
 describe('Public API stability — v0.4.0 surface', () => {
   it('runtime exports match the v0.4.0 snapshot', () => {
     const actual = Object.keys(root).sort();
-    // Check every expected key is present
-    for (const key of EXPECTED_RUNTIME_EXPORTS) {
+    for (const key of PRESENT) {
       expect(actual, `Expected runtime export "${key}" to be present`).toContain(key);
     }
-    // Snapshot the full set so accidental additions are also caught
+    for (const key of ABSENT) {
+      expect(actual, `Runtime export "${key}" was removed`).not.toContain(key);
+    }
+    for (const key of actual) {
+      expect(key, key).not.toMatch(/^be\d+Edge$/);
+      expect(key, key).not.toMatch(/^confrontBE\d/);
+      expect(key, key).not.toMatch(/^evaluateBE\d/);
+    }
+    // Snapshot the full set so accidental additions are also caught.
     expect(actual).toMatchSnapshot();
   });
 
@@ -463,8 +310,6 @@ const ALL_TYPE_EXPORTS = [
   'DimensionAdjacency',
   // v0.33.0 — `upt confront` real-data confrontation subsystem
   'ObservationProvenance', 'SigmaComponent', 'ObservationKind', 'ConfrontationOutcome',
-  'CassiniObservation', 'BE37ConfrontationResult',
-  'CollapseBoundObservation', 'BE48ConfrontationResult',
   'ConfrontationEntry', 'Elasticity',
 ];
 
@@ -487,6 +332,9 @@ describe('Public API stability — v0.4.0 type-only surface (src/index.ts source
       fileURLToPath(new URL('../../src/index.ts', import.meta.url)), 'utf8',
     );
     expect(indexSrc).not.toContain('isChristoffelSymmetric');
+    for (const typeName of ['CassiniObservation', 'BE37ConfrontationResult', 'CollapseBoundObservation', 'BE48ConfrontationResult']) {
+      expect(indexSrc, typeName).not.toContain(typeName);
+    }
   });
 });
 

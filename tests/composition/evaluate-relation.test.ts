@@ -88,7 +88,7 @@ describe('evaluateRelation', () => {
     expect(accepted).toContain(55);
   });
 
-  it('returns the BCS gap and the Lorenz number for the edge-less closed forms', () => {
+  it('returns the BCS gap and Wiedemann–Franz conductivity for the closed forms', () => {
     const gap = evaluateRelation('be-62', { T_c_K: 7.2 });
     const eulerGamma = 0.5772156649015329;
     const expectedGap = (Math.PI / Math.exp(eulerGamma)) * K_B_SI * 7.2;
@@ -97,11 +97,15 @@ describe('evaluateRelation', () => {
       expect(Math.abs(gap.value - expectedGap) / expectedGap).toBeLessThan(1e-12);
       expect(gap.dimension).toMatchObject({ L: 2, M: 1, T: -2 });
     }
-    const lorenz = evaluateRelation('be-61', { sigma_S_per_m: 1, T_K: 300 });
+    // κ = L · σ · T. The stored reference at σ = 1e7, T = 300 is this product.
+    const sigma = 1;
+    const temperature = 300;
+    const lorenz = evaluateRelation('be-61', { sigma_S_per_m: sigma, T_K: temperature });
     const expectedLorenz = (Math.PI ** 2 / 3) * (K_B_SI / E_SI) ** 2;
+    const expectedKappa = expectedLorenz * sigma * temperature;
     expect(lorenz.kind).toBe('value');
     if (lorenz.kind === 'value') {
-      expect(Math.abs(lorenz.value - expectedLorenz) / expectedLorenz).toBeLessThan(1e-12);
+      expect(Math.abs(lorenz.value - expectedKappa) / expectedKappa).toBeLessThan(1e-12);
     }
   });
 });

@@ -13,7 +13,7 @@ export type BridgeEquationStatus =
   | 'highly-speculative'
   | 'invalid';
 
-/** An active status is every status except `invalid`. @public */
+/** An active status is every status except `invalid`. */
 export function isActiveStatus(
   s: BridgeEquationStatus,
 ): s is Exclude<BridgeEquationStatus, 'invalid'> {

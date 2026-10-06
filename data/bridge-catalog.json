@@ -213,12 +213,12 @@
         "Wikipedia \"Critical phenomena\" (cites the Hohenberg-Halperin nomenclature with model-H exponents x_η ≃ 0.068, z ≃ 3.068; WebFetch-confirmed 2026-05-06 Wave P-D R-D1)"
       ],
       "dependencies": [],
-      "dimensional_signature": "[area]",
+      "dimensional_signature": "[length]",
       "tractability_class": "numerical-tractable",
       "notes": "Tier-5 AST encoding landed 2026-05-11 (Wave Z-D, src/bridges/equations/be-15-emergence.ts) — encodes the Kawasaki-Gunton late-stage coarsening scaling-law reduction L(t)² = Γ · t as an exact algebraic relation. The full Model A Langevin equation (gradient flow + FDT-balanced δ-correlated noise + functional H[φ]) cannot be encoded in the scalar AST grammar (requires Dirac δ, functional δ-derivative, functional integration primitives — none currently in scope). The squared-length form L² = Γt is chosen over L = √(Γt) because the AST's '^' operator requires dimensionless exponents; the root lives in the numerical evaluator (same pattern as BE-17 squared invariant). Inferred dim: Γ [L²/T] · t [T] = [area] = [L²]. The Kawasaki-Gunton z=2 dynamic critical exponent distinguishes Model A from Model B (z≈3, L~(Γt)^{1/3}) and Model H (fluid corrections). OpenAI o3 Wave Z-D consultation (2026-05-11) confirmed Kawasaki-Gunton over equipartition (generic stat-mech, mislabels Model A) and FDT-amplitude (loses all dynamics). Refs: Hohenberg-Halperin 1977 RMP 49:435 (canonical critical-dynamics); Kawasaki-Gunton 1976 Phys.Rev.A 13:2294 (original L~√Γt derivation); Allen-Cahn 1979 Acta Metall. 27:1085; Bray 1994 Adv.Phys. 43:357 (canonical coarsening review). Status remains 'speculative' — encoding does NOT promote the bridge framing. Honest-claude scope: late-stage asymptotic only (RG corrections at early times and near criticality not captured); the full Langevin dynamics remains outside the AST. | Reformulated 2026-05-06 (Wave P-D R-D1, per Math iter-5 / Researcher iter-5 strategic pivot — complete bridges to canonical literature forms when one exists, rather than preserving R3-invalid). Replaced the conflated form ∂O_macro/∂t = F[{O_micro}] + η∇²O_macro + ζ(∂²S/∂O²) (LHS an observable rate, RHS F[{O_micro}] an RG-flow functional evolving a coupling along scale k rather than along time t — disjoint physical objects) with the canonical Hohenberg-Halperin Model A purely-dissipative gradient flow ∂φ/∂t = -Γ δH/δφ + ζ. The noise satisfies the fluctuation-dissipation correlator ⟨ζ(x,t) ζ(x',t')⟩ = 2 Γ k_B T δ(x-x') δ(t-t'), enforcing detailed balance toward exp(-H/k_B T). The Landau-Ginzburg Hamiltonian H = ∫d³x [½(∇φ)² + V(φ)] with polynomial V(φ) is the canonical reference (φ⁴ being the simplest case). WebFetch on Wikipedia \"Critical phenomena\" confirmed the Hohenberg-Halperin nomenclature; the explicit Model A Langevin equation and the FDT noise correlator follow standard textbook references (Chaikin-Lubensky 1995 *Principles of Condensed Matter Physics* Ch. 8; Goldenfeld 1992). Status set to 'speculative' (not 'established') because Model A itself is canonical condensed-matter physics but the *bridge framing* — treating Model A as the UPT microscale ↔ emergent bridge, i.e., committing to a particular slow-mode coarse-graining — is the speculative element. The original \"Universal\" framing is dropped: there is no single emergence equation that covers all coarse-grainings; Model B (conserved density), Model C (order parameter coupled to a conserved density), and Model H (fluid) each require their own BE entry. tractability_class: numerical-tractable — Model A is a stochastic PDE with established numerical methods (forward-Euler / stochastic-Heun with appropriate noise discretization). dimensional_signature null because it depends on the order parameter's units (set by V(φ) and the choice of φ). Honest-claude flag: WebFetch on the Hohenberg-Halperin RMP itself returned 403 (paywall); WebFetch on Wikipedia \"Critical phenomena\" confirmed only the nomenclature with one numerical example, and WebFetch on stochastic-quantization / TDGL pages was insufficient. The explicit Langevin form and FDT correlator follow standard textbook references and are not a transcription from a single WebFetched source. | Earlier history: status was 'invalid' (Wave N Tier C3, 2026-05-06, per Phys iter-4 IMPORTANT) until this commit completed the pivot. The R2 gap-spec (2026-05-04) had recorded the three-path requirement (Hohenberg-Halperin / Wetterich / Mori-Zwanzig); the canonical-form reformulation here selects Hohenberg-Halperin Model A as the canonical baseline.",
       "formalKey": "be-15",
       "dimension": {
-        "L": 2,
+        "L": 1,
         "M": 0,
         "T": 0,
         "I": 0,
@@ -883,7 +883,8 @@
         "Theta": 0,
         "N": 0,
         "J": 0
-      }
+      },
+      "scalarExpression": "k_B*temperature*ln_avg_exp_minus_betaW"
     },
     {
       "id": 30,
@@ -1853,16 +1854,16 @@
         "Hoyle & Narlikar 1995 *Rev. Mod. Phys.* 67:113 (cosmological action-at-a-distance; explicitly works through the absorber boundary condition in cosmological settings)"
       ],
       "dependencies": [],
-      "dimensional_signature": "[1]",
+      "dimensional_signature": "[L M T^-2 I^-1]",
       "encoded_form": "Dimensionless time-symmetry residual r_TS = (A_ret − A_adv)/(A_ret + A_adv) (a single scalar measuring deviation from retarded-advanced symmetry); reduced from the full Wheeler-Feynman half-retarded-plus-half-advanced field expression shown in formula_latex.",
       "tractability_class": "closed-form",
       "notes": "Encoded 2026-05-07 (Wave Z): Tier-5 AST encoding for the Wheeler-Feynman time-symmetry residual landed (src/bridges/equations/be-50-wheeler-feynman.ts). dimensional_signature null → '[1]'. The original Wave P-A canonical form A_μ(x) = (1/2)[A_μ^ret(x) + A_μ^adv(x)] is preserved in formula_latex; AST encodes OpenAI's reduction r_TS = (A_ret − A_adv)/(A_ret + A_adv) — the time-symmetry residual that vanishes identically (≡ 0) under the absorber boundary condition. Both A_ret and A_adv pinned to MAGNETIC_VECTOR_POTENTIAL dim {L:1, M:1, T:-2, I:-1} (V·s/m); the ratio is dimensionless. Honest-claude scope notes: the encoded scalar is a ratio (gauge-field dim cancels); the \"≡ 0\" identity-pin assumes the absorber boundary condition (any non-zero residual measures retrocausal-asymmetry violation); encoding pins the dimensional structure but does NOT bridge the absorber-theory claim to mainstream QFT. Status remains 'highly-speculative' (the absorber boundary condition is empirically untested in QFT). Gemini-Pro-confirmed second-opinion 2026-05-07: \"fundamentally algebraic and poses no representational challenges; maps directly and losslessly into the scalar AST\". | Reformulated 2026-05-06 (Wave P-A R-A4, per Math iter-5 / Researcher iter-5 strategic pivot — complete bridges to canonical literature forms when one exists, rather than preserving R3-invalid). Replaced the broken S = ∫ d⁴x [L_forward(φ_+) + L_backward(φ_-) + λφ_+ φ_- δ⁴(x − x_m)] action (variationally ill-posed at the δ⁴ single-point interaction — δ-function source terms in equations of motion are not finite-action solutions, boundary conditions for backward-evolving φ_- sector were unspecified) with the canonical Wheeler-Feynman 1945 absorber-theory form: the gauge field expressed as the half-retarded-plus-half-advanced symmetric sum A_μ(x) = (1/2)[A_μ^ret(x) + A_μ^adv(x)]. Reference verified canonical via WebFetch on the Wheeler-Feynman_absorber_theory Wikipedia article: \"the resulting field is E_tot(x,t) = Σ_n [E_n^ret(x,t) + E_n^adv(x,t)]/2\" (gauge-field analogue is A_μ form above). The action is then standard Maxwell + matter + interaction with this gauge-field expression. The retrocausal claim is that the **absorber boundary condition** — every emitted radiation is absorbed somewhere in the universe — makes the half-retarded-plus-half-advanced symmetric form physically equivalent to the standard retarded-only Maxwell formulation, per Wheeler & Feynman's original argument. Status remains 'highly-speculative' because the absorber boundary condition is empirically untested in QFT (it works in classical electrodynamics under the cosmological total-absorption assumption, but its quantum-field-theoretic extension — which is what UPT proposes — is conjectural). Cramer 1986 provides the canonical modern transactional-interpretation lineage; it remains a minority interpretation. The W-F form itself is rigorously defined, hence the reformulation lifts BE-50 from invalid to highly-speculative. tractability_class lifted from 'formally-divergent' to 'numerical-tractable' since the half-retarded-half-advanced gauge field is computable in concrete cases (Hoyle-Narlikar 1995 works through cosmological-absorber configurations). | Earlier history: previous form was the L_forward + L_backward + λφ_+ φ_- δ⁴(x-x_m) action (R3-invalid Wave L Tier E2, 2026-05-05, per Phys C8 iter-3). This commit completes the pivot to the canonical W-F form. | 2026-05-23 BRIDGE-PHYSICS-AUDIT S3 unknown<->unknown classification applied (per docs/architecture/archive/v0.7-physics-judgment-proposals.md S3): NOT-A-BRIDGE. LOW NOT-A-BRIDGE: time-symmetric retarded/advanced EM; single regime with time-reversal structure. The bridges array remains [unknown, unknown] as the structural marker for not actually a regime-spanning bridge. Future v0.8+ restructuring may move this entry to a separate LAW_EQUATIONS registry.",
       "formalKey": "be-50",
       "dimension": {
-        "L": 0,
-        "M": 0,
-        "T": 0,
-        "I": 0,
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": -1,
         "Theta": 0,
         "N": 0,
         "J": 0
@@ -6665,7 +6666,7 @@
       "catalogId": 48,
       "kind": "bridge",
       "label": "GRW localization rate λ_GRW = λ_0 (m/m_0)",
-      "expression": "1e-16 * (mass / 1.67e-27)",
+      "expression": "grw_lambda0*mass/grw_m0",
       "target": "grw-localization-rate",
       "sources": [
         "mass"
@@ -13674,7 +13675,7 @@
           "key": "A_Hz",
           "quantity": "arrhprefac",
           "symbol": "A_Hz",
-          "unit": "",
+          "unit": "Hz",
           "meaning": "arrhprefac"
         },
         {
@@ -13688,7 +13689,7 @@
           "key": "T_K",
           "quantity": "arrhwarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "arrhwarmth",
           "temperature": "absolute"
         }
@@ -13702,14 +13703,14 @@
           "key": "dG_J",
           "quantity": "eyringbarrier",
           "symbol": "dG_J",
-          "unit": "",
+          "unit": "J",
           "meaning": "eyringbarrier"
         },
         {
           "key": "T_K",
           "quantity": "eyringwarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "eyringwarmth",
           "temperature": "absolute"
         }
@@ -13730,7 +13731,7 @@
           "key": "T_K",
           "quantity": "vanthoffwarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "vanthoffwarmth",
           "temperature": "absolute"
         }
@@ -13751,7 +13752,7 @@
           "key": "T_K",
           "quantity": "gibbsisowarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "gibbsisowarmth",
           "temperature": "absolute"
         }
@@ -13765,7 +13766,7 @@
           "key": "E0_volts",
           "quantity": "nernstge0",
           "symbol": "E0_volts",
-          "unit": "",
+          "unit": "V",
           "meaning": "nernstge0"
         },
         {
@@ -13786,7 +13787,7 @@
           "key": "T_K",
           "quantity": "nernstgwarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "nernstgwarmth",
           "temperature": "absolute"
         }
@@ -13807,15 +13808,17 @@
           "key": "T1_K",
           "quantity": "clapintwarm1",
           "symbol": "T1_K",
-          "unit": "",
-          "meaning": "clapintwarm1"
+          "unit": "K",
+          "meaning": "clapintwarm1",
+          "temperature": "absolute"
         },
         {
           "key": "T2_K",
           "quantity": "clapintwarm2",
           "symbol": "T2_K",
-          "unit": "",
-          "meaning": "clapintwarm2"
+          "unit": "K",
+          "meaning": "clapintwarm2",
+          "temperature": "absolute"
         }
       ]
     },
@@ -13834,7 +13837,7 @@
           "key": "Psat_Pa",
           "quantity": "raoultsat",
           "symbol": "Psat_Pa",
-          "unit": "",
+          "unit": "Pa",
           "meaning": "raoultsat"
         }
       ]
@@ -13847,21 +13850,21 @@
           "key": "mu_Pa_s",
           "quantity": "prandtlmu",
           "symbol": "mu_Pa_s",
-          "unit": "",
+          "unit": "Pa*s",
           "meaning": "prandtlmu"
         },
         {
           "key": "cp_J_per_kg_K",
           "quantity": "prandtlcp",
           "symbol": "cp_J_per_kg_K",
-          "unit": "",
+          "unit": "J/(kg*K)",
           "meaning": "prandtlcp"
         },
         {
           "key": "k_W_per_m_K",
           "quantity": "prandtlk",
           "symbol": "k_W_per_m_K",
-          "unit": "",
+          "unit": "W/(m*K)",
           "meaning": "prandtlk"
         }
       ]
@@ -13874,28 +13877,28 @@
           "key": "rho_kg_per_m3",
           "quantity": "reynumrho",
           "symbol": "rho_kg_per_m3",
-          "unit": "",
+          "unit": "kg/m^3",
           "meaning": "reynumrho"
         },
         {
           "key": "v_m_per_s",
           "quantity": "reynumvel",
           "symbol": "v_m_per_s",
-          "unit": "",
+          "unit": "m/s",
           "meaning": "reynumvel"
         },
         {
           "key": "L_m",
           "quantity": "reynumlen",
           "symbol": "L_m",
-          "unit": "",
+          "unit": "m",
           "meaning": "reynumlen"
         },
         {
           "key": "mu_Pa_s",
           "quantity": "reynummu",
           "symbol": "mu_Pa_s",
-          "unit": "",
+          "unit": "Pa*s",
           "meaning": "reynummu"
         }
       ]
@@ -13908,21 +13911,21 @@
           "key": "h_W_per_m2_K",
           "quantity": "biotfilm",
           "symbol": "h_W_per_m2_K",
-          "unit": "",
+          "unit": "W/(m^2*K)",
           "meaning": "biotfilm"
         },
         {
           "key": "Lc_m",
           "quantity": "biotlength",
           "symbol": "Lc_m",
-          "unit": "",
+          "unit": "m",
           "meaning": "biotlength"
         },
         {
           "key": "k_W_per_m_K",
           "quantity": "biotk",
           "symbol": "k_W_per_m_K",
-          "unit": "",
+          "unit": "W/(m*K)",
           "meaning": "biotk"
         }
       ]
@@ -13935,21 +13938,21 @@
           "key": "h_W_per_m2_K",
           "quantity": "nusseltfilm",
           "symbol": "h_W_per_m2_K",
-          "unit": "",
+          "unit": "W/(m^2*K)",
           "meaning": "nusseltfilm"
         },
         {
           "key": "L_m",
           "quantity": "nusseltlen",
           "symbol": "L_m",
-          "unit": "",
+          "unit": "m",
           "meaning": "nusseltlen"
         },
         {
           "key": "k_W_per_m_K",
           "quantity": "nusseltk",
           "symbol": "k_W_per_m_K",
-          "unit": "",
+          "unit": "W/(m*K)",
           "meaning": "nusseltk"
         }
       ]
@@ -13962,21 +13965,21 @@
           "key": "mu_Pa_s",
           "quantity": "schmidtmu",
           "symbol": "mu_Pa_s",
-          "unit": "",
+          "unit": "Pa*s",
           "meaning": "schmidtmu"
         },
         {
           "key": "rho_kg_per_m3",
           "quantity": "schmidtrho",
           "symbol": "rho_kg_per_m3",
-          "unit": "",
+          "unit": "kg/m^3",
           "meaning": "schmidtrho"
         },
         {
           "key": "D_m2_per_s",
           "quantity": "schmidtdiff",
           "symbol": "D_m2_per_s",
-          "unit": "",
+          "unit": "m^2/s",
           "meaning": "schmidtdiff"
         }
       ]
@@ -13989,21 +13992,21 @@
           "key": "km_m_per_s",
           "quantity": "sherwoodkm",
           "symbol": "km_m_per_s",
-          "unit": "",
+          "unit": "m/s",
           "meaning": "sherwoodkm"
         },
         {
           "key": "L_m",
           "quantity": "sherwoodlen",
           "symbol": "L_m",
-          "unit": "",
+          "unit": "m",
           "meaning": "sherwoodlen"
         },
         {
           "key": "D_m2_per_s",
           "quantity": "sherwooddiff",
           "symbol": "D_m2_per_s",
-          "unit": "",
+          "unit": "m^2/s",
           "meaning": "sherwooddiff"
         }
       ]
@@ -14016,14 +14019,14 @@
           "key": "k_W_per_m_K",
           "quantity": "fourierslabk",
           "symbol": "k_W_per_m_K",
-          "unit": "",
+          "unit": "W/(m*K)",
           "meaning": "fourierslabk"
         },
         {
           "key": "T_L_K",
           "quantity": "fourierslabend",
           "symbol": "T_L_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "fourierslabend",
           "temperature": "absolute"
         },
@@ -14031,7 +14034,7 @@
           "key": "T_0_K",
           "quantity": "fourierslabstart",
           "symbol": "T_0_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "fourierslabstart",
           "temperature": "absolute"
         },
@@ -14039,7 +14042,7 @@
           "key": "L_m",
           "quantity": "fourierslablen",
           "symbol": "L_m",
-          "unit": "",
+          "unit": "m",
           "meaning": "fourierslablen"
         }
       ]
@@ -14052,14 +14055,14 @@
           "key": "rho_kg_per_m3",
           "quantity": "newtonrho",
           "symbol": "rho_kg_per_m3",
-          "unit": "",
+          "unit": "kg/m^3",
           "meaning": "newtonrho"
         },
         {
           "key": "c_J_per_kg_K",
           "quantity": "newtoncp",
           "symbol": "c_J_per_kg_K",
-          "unit": "",
+          "unit": "J/(kg*K)",
           "meaning": "newtoncp"
         },
         {
@@ -14073,28 +14076,28 @@
           "key": "h_W_per_m2_K",
           "quantity": "newtonfilm",
           "symbol": "h_W_per_m2_K",
-          "unit": "",
+          "unit": "W/(m^2*K)",
           "meaning": "newtonfilm"
         },
         {
           "key": "A_m2",
           "quantity": "newtonarea",
           "symbol": "A_m2",
-          "unit": "",
+          "unit": "m^2",
           "meaning": "newtonarea"
         },
         {
           "key": "t_s",
           "quantity": "newtontime",
           "symbol": "t_s",
-          "unit": "",
+          "unit": "s",
           "meaning": "newtontime"
         },
         {
           "key": "theta_difference_K",
           "quantity": "newtontheta0",
           "symbol": "theta_difference_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "newtontheta0"
         }
       ]
@@ -14127,7 +14130,7 @@
           "key": "T_K",
           "quantity": "jtcwarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "jtcwarmth",
           "temperature": "absolute"
         },
@@ -14135,21 +14138,21 @@
           "key": "dv_dT_m3_per_kg_K",
           "quantity": "jtcdvdt",
           "symbol": "dv_dT_m3_per_kg_K",
-          "unit": "",
+          "unit": "m^3/(kg*K)",
           "meaning": "jtcdvdt"
         },
         {
           "key": "v_m3_per_kg",
           "quantity": "jtcvolume",
           "symbol": "v_m3_per_kg",
-          "unit": "",
+          "unit": "m^3/kg",
           "meaning": "jtcvolume"
         },
         {
           "key": "cp_J_per_kg_K",
           "quantity": "jtcp",
           "symbol": "cp_J_per_kg_K",
-          "unit": "",
+          "unit": "J/(kg*K)",
           "meaning": "jtcp"
         }
       ]
@@ -14162,14 +14165,14 @@
           "key": "nu_Hz",
           "quantity": "planckfreq",
           "symbol": "nu_Hz",
-          "unit": "",
+          "unit": "Hz",
           "meaning": "planckfreq"
         },
         {
           "key": "T_K",
           "quantity": "planckwarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "planckwarmth",
           "temperature": "absolute"
         }
@@ -14208,14 +14211,14 @@
           "key": "nQ_per_m3",
           "quantity": "sackurquantum",
           "symbol": "nQ_per_m3",
-          "unit": "",
+          "unit": "m^-3",
           "meaning": "sackurquantum"
         },
         {
           "key": "n_per_m3",
           "quantity": "sackurdensity",
           "symbol": "n_per_m3",
-          "unit": "",
+          "unit": "m^-3",
           "meaning": "sackurdensity"
         }
       ]
@@ -14228,14 +14231,14 @@
           "key": "m_kg",
           "quantity": "sahamass",
           "symbol": "m_kg",
-          "unit": "",
+          "unit": "kg",
           "meaning": "sahamass"
         },
         {
           "key": "T_K",
           "quantity": "sahawarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "sahawarmth",
           "temperature": "absolute"
         },
@@ -14243,7 +14246,7 @@
           "key": "I_J",
           "quantity": "sahaion",
           "symbol": "I_J",
-          "unit": "",
+          "unit": "J",
           "meaning": "sahaion"
         }
       ]
@@ -14256,14 +14259,14 @@
           "key": "m_kg",
           "quantity": "richardsmass",
           "symbol": "m_kg",
-          "unit": "",
+          "unit": "kg",
           "meaning": "richardsmass"
         },
         {
           "key": "T_K",
           "quantity": "richardswarmth",
           "symbol": "T_K",
-          "unit": "",
+          "unit": "K",
           "meaning": "richardswarmth",
           "temperature": "absolute"
         },
@@ -14271,7 +14274,7 @@
           "key": "phi_J",
           "quantity": "richardsphi",
           "symbol": "phi_J",
-          "unit": "",
+          "unit": "J",
           "meaning": "richardsphi"
         }
       ]
@@ -14291,7 +14294,7 @@
           "key": "onsager_B_T",
           "quantity": "onsagerb0",
           "symbol": "onsager_B_T",
-          "unit": "",
+          "unit": "T",
           "meaning": "onsagerb0"
         }
       ]

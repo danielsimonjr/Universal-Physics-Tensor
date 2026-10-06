@@ -147,6 +147,8 @@ A bridge equation is a record in `data/bridge-catalog.json`. One engine evaluate
 
 - Read a bridge from `data/bridge-catalog.json`. Evaluate it with `evaluateRelation`. The quantity's dimension, default unit, aliases, and temperature kind come from `data/quantities.json`.
 - The specification writes up the 40 cross-domain bridges. A standard bridge is a catalog record and has no specification heading. ~~A standard record that already had a section keeps it.~~ Retracted: those write-ups are removed from Part I §II and Part II. Bridge Equations 164 through 170 stay under Black-body radiation, quantum statistics, and reciprocal transport. An `Evaluator:` link names the catalog record and `evaluateRelation`.
+- The fifteen `// source:` comments that stood on catalog entries now live in `docs/research/phase-1-source-comments.txt`. The quote checker reads that file.
+- Persona-session reports moved from `docs/dogfood/` to `docs/persona-sessions/`. A filename that ended in `-rN` now ends in `-session-N`. The three confrontation designs under `docs/superpowers/specs/` no longer put a bridge number in the filename. `docs/design/yang-mills-confrontation.md` is the same note that was `docs/design/be-53-yang-mills-confrontation.md`. Archive prompt filenames under `docs/architecture/archive/bridge-audit/` use `entry-N` instead of `be-N`. Sentences above this version that name the old paths are the record from before the move.
 - PhysJS pin `10e48f140c0e9fad3c50e5e5538124c52b3e732c`. Proof status is the vendored manifest. `formally-proved` is still derived from a reviewed `formalRef`.
 
 ## [7.0.0] - 2026-10-06

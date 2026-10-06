@@ -5,30 +5,33 @@
 import { describe, it, expect } from 'vitest';
 import { BRIDGE_EVALUATORS, evaluateBridge } from '../../src/bridges/evaluators.js';
 import { parseUnit } from '../../src/dimensional/units.js';
+import { quantityRecord } from '../../src/dimensional/quantity-registry.js';
+import { M_SUN_SI } from '../../src/core/constants.js';
 import { APPLIED_CASES } from '../../src/cases/index.js';
 
 describe('BRIDGE_EVALUATORS', () => {
-  it('covers the closed-form / spacetime bridges (16/42/51/52/55..125)', () => {
-    // The list that started at 51 is the record from before be-16 and be-42 evaluated by id.
-    // The list that stopped at 102 is the record from before BE-103..125.
-    expect([...BRIDGE_EVALUATORS.keys()].sort((a, b) => a - b)).toEqual([
-      16, 42, 51, 52, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76,
-      77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
-      101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
-      120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
-      134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
-    ]);
+  it('covers every catalog evaluator, and not a metadata-only id', () => {
+    // The list that stopped at 146 is the record from before ids 147–170.
+    const ids = [...BRIDGE_EVALUATORS.keys()].sort((a, b) => a - b);
+    expect(ids[0]).toBe(16);
+    expect(ids).toContain(42);
+    expect(ids).toContain(147);
+    expect(ids).toContain(170);
+    expect(ids).not.toContain(11);
+    expect(ids).not.toContain(29);
+    expect(ids).toHaveLength(120);
   });
 
   it('evaluateBridge(63, {mu_e:2}) → Chandrasekhar mass ≈ 1.44 M_⊙', () => {
-    const r = evaluateBridge(63, { mu_e: 2 }) as { M_Ch_solar: number };
-    expect(r.M_Ch_solar).toBeGreaterThan(1.3);
-    expect(r.M_Ch_solar).toBeLessThan(1.6);
+    const r = evaluateBridge(63, { mu_e: 2 }) as { value: number };
+    const solar = r.value / M_SUN_SI;
+    expect(solar).toBeGreaterThan(1.3);
+    expect(solar).toBeLessThan(1.6);
   });
 
-  it('evaluateBridge(55, {C:1}) → von Klitzing resistance', () => {
-    const r = evaluateBridge(55, { C: 1 }) as { R_H_ohm: number };
-    expect(r.R_H_ohm).toBeCloseTo(25812.807, 2);
+  it('evaluateBridge(55, {C:1}) → von Klitzing conductance, whose reciprocal is the resistance', () => {
+    const r = evaluateBridge(55, { C: 1 }) as { value: number };
+    expect(1 / r.value).toBeCloseTo(25812.807, 2);
   });
 
   it('throws on an id with no evaluator', () => {
@@ -57,7 +60,9 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_S_per_m$/, 'S/m'],
       [/_ohm_m$/, 'ohm*m'],
       [/_m2_per_Vs$/, 'm^2/(V·s)'],
+      [/_m3_per_kg_K$/, 'm^3/(kg*K)'],
       [/_m3_per_kg$/, 'm^3/kg'],
+      [/_m2_per_s$/, 'm^2/s'],
       [/_J_per_kg$/, 'J/kg'],
       [/_J_per_T$/, 'J/T'],
       [/_J_m2$/, 'J*m^2'],
@@ -111,7 +116,14 @@ describe('BRIDGE_EVALUATORS', () => {
       for (const p of parameters) {
         const expected = SUFFIX.find(([re]) => re.test(p.key))?.[1] ?? '';
         expect(p.unit, `${label} ${p.key}`).toBe(expected);
-        expect(p.temperature === 'absolute', `${label} ${p.key}`).toBe(expected === 'K');
+        const kind = quantityRecord(p.quantity)?.kind;
+        if (kind === 'absolute') {
+          expect(p.temperature, `${label} ${p.key}`).toBe('absolute');
+        } else if (kind === 'interval') {
+          expect(p.temperature, `${label} ${p.key}`).toBeUndefined();
+        } else {
+          expect(p.temperature === 'absolute', `${label} ${p.key}`).toBe(expected === 'K');
+        }
       }
     }
   });
@@ -157,6 +169,13 @@ describe('BRIDGE_EVALUATORS', () => {
       A_per_m2: 1e18, Ic_A: 1e-3, lambda_m: 1e-6, lambda0_m: 1e-7,
       tau_s: 1e-14, tau1_s: 1e-14, tau2_s: 2e-14, C_ohm_m_s: 1e-15,
       chi_P: 1, x: 0.2,
+      A_Hz: 1e13, Ea_J_per_mol: 5e4, dG_J: 1e-20, dH_J_per_mol: 4e4,
+      K: 2, E0_volts: 1.1, Q: 1, T1_K: 300, T2_K: 350, Psat_Pa: 1e5,
+      cp_J_per_kg_K: 4180, Lc_m: 0.1, D_m2_per_s: 1e-9, km_m_per_s: 1e-4,
+      T_L_K: 400, T_0_K: 300, c_J_per_kg_K: 4180, V_m3: 1e-3, t_s: 10,
+      theta_difference_K: 20, r: 8, gamma: 1.4, dv_dT_m3_per_kg_K: 1e-6,
+      v_m3_per_kg: 1e-3, nu_Hz: 1e14, wien_x: 4.5, nQ_per_m3: 1e32,
+      I_J: 2.18e-18, phi_J: 4e-19, L12: 3, onsager_B_T: 0,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
       const inputs = Object.fromEntries(spec.inputKeys.map((k) => [k, sample[k]]));

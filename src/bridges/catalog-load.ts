@@ -95,7 +95,7 @@ export function parseBridgeId(bridgeId: number | string): number {
   }
   const match = /^(?:be-)?(\d+)$/i.exec(bridgeId.trim());
   if (match === null) {
-    throw new RangeError(`parseBridgeId: '${bridgeId}' is not a catalog id`);
+    throw new TypeError(`parseBridgeId: '${bridgeId}' is not a catalog id`);
   }
   return Number(match[1]);
 }

@@ -61,11 +61,12 @@ const rowOf = (id: number) => {
 
 describe('S1.5 — the ten audited catalog rows', () => {
   it('registers 63 catalog rows and 54 graph edges', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(136);
+    expect(BRIDGE_EQUATIONS).toHaveLength(160);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
-    expect(CATALOG_GRAPH).toHaveLength(127);
+    // 127 is the record from before every catalog relation, including be-147..170, was a graph edge.
+    expect(CATALOG_GRAPH).toHaveLength(158);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 77 and 68 are the record from before be-88..102.
@@ -124,7 +125,7 @@ describe('S1.5 — row and edge cannot disagree', () => {
       CATALOG_GRAPH.some((e) => e.beId === id),
     );
     // BE-11 (two edges), 21, 37, 48, 51, 52, plus 55 and 59 once those seeds had edges.
-    expect(withEdges).toStrictEqual([11, 21, 37, 48, 51, 52, 55, 59]);
+    expect(withEdges).toStrictEqual([11, 21, 37, 48, 51, 52, 55, 58, 59]);
     for (const id of withEdges) {
       const edges = CATALOG_GRAPH.filter((e) => e.beId === id);
       for (const edge of edges) {

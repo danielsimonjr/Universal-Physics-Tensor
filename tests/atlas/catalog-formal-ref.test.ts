@@ -29,7 +29,7 @@ import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const artifact = JSON.parse(readFileSync(resolve(root, 'data/bridge-catalog.json'), 'utf-8')) as {
-  entries: Array<{ id: number; formalRef?: FormalRef }>;
+  entries: Array<{ id: number; formalKey?: string; formalRef?: FormalRef }>;
 };
 
 function tags(record: Parameters<typeof deriveEvidence>[0]): string[] {
@@ -37,32 +37,25 @@ function tags(record: Parameters<typeof deriveEvidence>[0]): string[] {
 }
 
 describe('catalog formalRef overlay', () => {
-  it('each overlay reference equals the committed catalog formalRef, including kind, url, and covers', () => {
+  it('stores a manifest key and does not store a formalRef', () => {
     expect(artifact.entries.length).toBe(BRIDGE_EQUATIONS.length);
-    for (const live of BRIDGE_EQUATIONS) {
-      const stored = artifact.entries.find((entry) => entry.id === live.id)?.formalRef ?? null;
-      const overlay = catalogFormalRef(live.id) ?? null;
-      expect(overlay, `be-${live.id}`).toEqual(stored);
-      expect(overlay?.kind, `be-${live.id} kind`).toBe(stored?.kind);
-      expect(overlay?.url, `be-${live.id} url`).toBe(stored?.url);
-      expect(overlay?.covers, `be-${live.id} covers`).toBe(stored?.covers);
+    expect(artifact.entries.some((entry) => entry.formalRef !== undefined)).toBe(false);
+    const withKey = artifact.entries.filter((entry) => entry.formalKey !== undefined);
+    const withoutKey = artifact.entries.filter((entry) => entry.formalKey === undefined);
+    expect(withKey.length).toBeGreaterThan(0);
+    expect(withoutKey.length).toBeGreaterThan(0);
+    for (const entry of withKey) {
+      const overlay = catalogFormalRef(entry.id);
+      expect(overlay, `be-${entry.id}`).toBeDefined();
+      expect(overlay?.system, `be-${entry.id}`).toBe('lean4-physjs');
+    }
+    for (const entry of withoutKey) {
+      expect(catalogFormalRef(entry.id), `be-${entry.id}`).toBeUndefined();
     }
   });
 
-  it('deriveEvidence of the overlay equals deriveEvidence of the committed reference', () => {
-    let differedFromCatalogPath = 0;
+  it('the catalog path keeps a bridge-kind reference and omits every other kind', () => {
     for (const live of BRIDGE_EQUATIONS) {
-      const stored = artifact.entries.find((entry) => entry.id === live.id)?.formalRef;
-      const overlay = catalogFormalRef(live.id);
-      const before = tags({
-        ...catalogEvidenceInput(live),
-        ...(stored !== undefined ? { formalRef: stored } : {}),
-      });
-      const after = tags({
-        ...catalogEvidenceInput(live),
-        ...(overlay !== undefined ? { formalRef: overlay } : {}),
-      });
-      expect(after, `be-${live.id}`).toEqual(before);
       const catalogPath = [...deriveEdgeEvidence(live.id)].sort();
       const fromInput = [
         ...deriveEvidenceForVerdict(
@@ -72,9 +65,15 @@ describe('catalog formalRef overlay', () => {
         ),
       ].sort();
       expect(catalogPath, `be-${live.id} catalog path`).toEqual(fromInput);
-      if (before.join('|') !== catalogPath.join('|')) differedFromCatalogPath += 1;
     }
-    expect(differedFromCatalogPath).toBeGreaterThan(0);
+    const property = catalogFormalRef(11);
+    expect(property?.kind).toBe('property');
+    const withProperty = tags({
+      ...catalogEvidenceInput(BRIDGE_EQUATIONS.find((entry) => entry.id === 11)!),
+      formalRef: property,
+    });
+    expect(withProperty).toContain('formally-proved-property');
+    expect([...deriveEdgeEvidence(11)]).not.toContain('formally-proved-property');
   });
 
   it('CONTROL: rewriting kind changes the tag set', () => {

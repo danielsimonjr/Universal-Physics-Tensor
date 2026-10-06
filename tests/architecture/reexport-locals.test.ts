@@ -34,6 +34,10 @@ const ONE_LOCAL = [
   'dim',
   'PHYSJS_COMMIT',
   'MASS_DENSITY',
+  // The second file was the citation-quote lexer reading a comment in
+  // src/bridges/index.ts as an export. That comment now lives in
+  // docs/research/phase-1-source-comments.txt, so this name is one local.
+  'BCS_GAP_RATIO',
 ] as const;
 
 function localDeclarations(graph: Graph): Map<string, string[]> {
@@ -67,12 +71,11 @@ describe('re-export locals', () => {
     expect(still).toEqual({});
   });
 
-  it('still reports getBridge, command, and BCS_GAP_RATIO in more than one file', () => {
-    // The walker is not vacant. These three stay more than one file:
-    // two real getBridge functions, the command registration, and the
-    // citation-quote lexer hit.
+  it('still reports getBridge and command in more than one file', () => {
+    // The walker is not vacant. These two stay more than one file:
+    // two real getBridge functions, and the command registration.
     const stayed: Record<string, string[]> = {};
-    for (const name of ['getBridge', 'command', 'BCS_GAP_RATIO'] as const) {
+    for (const name of ['getBridge', 'command'] as const) {
       const files = locals.get(name) ?? [];
       if (files.length < 2) stayed[name] = files;
     }

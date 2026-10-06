@@ -22,22 +22,16 @@
  * docstring's "regime attribute" language is descriptive, not computed.
  */
 import { describe, it, expect } from 'vitest';
-import * as quantities from '../../src/composition/quantities.js';
-import type { Quantity, RegimeAttributes } from '../../src/composition/index.js';
+import { allQuantities } from '../../src/composition/quantities.js';
+import type { RegimeAttributes } from '../../src/composition/index.js';
 import { placeQuantity, regimeKey } from '../../src/composition/bridge-prediction.js';
 
 const SCALES = ['quantum', 'mesoscopic', 'classical', 'cosmological'];
 const FORCES = ['gravitational', 'electromagnetic', 'weak', 'strong', 'emergent'];
 const INFORMATION = ['von-neumann', 'shannon', 'kolmogorov', 'discord'];
 
-const nodes = Object.entries(quantities).filter(
-  (e): e is [string, Quantity] =>
-    typeof e[1] === 'object' &&
-    e[1] !== null &&
-    'name' in (e[1] as object) &&
-    'attributes' in (e[1] as object),
-);
-const byName = new Map(nodes.map(([, q]) => [q.name, q]));
+const nodes = allQuantities();
+const byName = new Map(nodes.map((q) => [q.name, q]));
 
 function attrsOf(name: string): RegimeAttributes {
   const q = byName.get(name);
@@ -113,7 +107,7 @@ describe('generics invariant', () => {
 });
 
 describe('union validity — every stated axis value is within the RegimeAttributes unions', () => {
-  for (const [, q] of nodes) {
+  for (const q of nodes) {
     it(`${q.name}: attributes are within-union`, () => {
       const { scale, force, information } = q.attributes;
       if (scale !== undefined) expect(SCALES).toContain(scale);

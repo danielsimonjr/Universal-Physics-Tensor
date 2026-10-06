@@ -16,7 +16,7 @@ const FULLY = new Set(
 );
 
 function samples(names: readonly string[]): Record<string, number>[] {
-  const scales = [1, 2, 0.5, 0.25, 0.1, 3, 10, 300, 1e-3];
+  const scales = [1, 2, 0.5, 0.25, 0.1, 3, 4.5, 10, 300, 1e-3, 0];
   const out: Record<string, number>[] = [];
   for (const scale of scales) {
     const equal: Record<string, number> = {};

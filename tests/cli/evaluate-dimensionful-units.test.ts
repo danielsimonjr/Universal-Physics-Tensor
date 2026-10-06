@@ -34,18 +34,18 @@ describe('dimensionful bridge inputs keep their units', () => {
     expect(column.code, column.text).toBe(0);
     expect(labeled(column.text, 'I_m4')).toContain('[m^4]');
     expect(labeled(column.text, 'I_m4')).not.toContain('[dimensionless]');
-    expect(column.text).toContain('P_N = 4934.802200544679');
+    expect(column.text).toContain('value = 4934.802200544679');
 
     const withPower = await run(['evaluate', 'be-78', 'E_Pa=2e11', 'I_m4=1e-8m^4', 'L_m=2']);
     expect(withPower.code, withPower.text).toBe(0);
-    expect(withPower.text).toContain('P_N = 4934.802200544679');
+    expect(withPower.text).toContain('value = 4934.802200544679');
     expect(withPower.text).toMatch(/converted: 1e-8m\^4 → 1e-8 m\^4/);
 
     const area = await run(['evaluate', 'be-79', 'k_N_per_m=1', 'g0_m=1e-6', 'A_m2=1cm^2']);
     const areaBare = await run(['evaluate', 'be-79', 'k_N_per_m=1', 'g0_m=1e-6', 'A_m2=1e-4']);
     expect(area.code, area.text).toBe(0);
     expect(labeled(area.text, 'A_m2')).toContain('[m^2]');
-    expect(output(area.text, 'V_pi_V')).toBe(output(areaBare.text, 'V_pi_V'));
+    expect(output(area.text, 'value')).toBe(output(areaBare.text, 'value'));
 
     const film = await run([
       'evaluate',
@@ -65,28 +65,28 @@ describe('dimensionful bridge inputs keep their units', () => {
     ]);
     expect(film.code, film.text).toBe(0);
     expect(labeled(film.text, 'eps')).toContain('[F/m]');
-    expect(output(film.text, 'J_A_per_m2')).toBe(output(filmBare.text, 'J_A_per_m2'));
+    expect(output(film.text, 'value')).toBe(output(filmBare.text, 'value'));
 
     const diode = await run(['evaluate', 'be-82', 'I_s_A=1pA', 'V_volts=0.7', 'T_K=300']);
     const diodeBare = await run(['evaluate', 'be-82', 'I_s_A=1e-12', 'V_volts=0.7', 'T_K=300']);
     expect(diode.code, diode.text).toBe(0);
     expect(labeled(diode.text, 'I_s_A')).toContain('[A]');
-    expect(output(diode.text, 'I_A')).toBe(output(diodeBare.text, 'I_A'));
-    expect(output(diode.text, 'I_A')).toBeCloseTo(1e-12 * (Math.exp((E_SI * 0.7) / (K_B_SI * 300)) - 1), 8);
-    expect(output(diode.text, 'I_A')).toBeCloseTo(0.5747545691036854, 8);
+    expect(output(diode.text, 'value')).toBe(output(diodeBare.text, 'value'));
+    expect(output(diode.text, 'value')).toBeCloseTo(1e-12 * (Math.exp((E_SI * 0.7) / (K_B_SI * 300)) - 1), 8);
+    expect(output(diode.text, 'value')).toBeCloseTo(0.5747545691036854, 8);
 
     const sheet = await run(['evaluate', 'be-84', 'V_volts=1', 'I_A=1mA']);
     const sheetBare = await run(['evaluate', 'be-84', 'V_volts=1', 'I_A=0.001']);
     expect(sheet.code, sheet.text).toBe(0);
     expect(labeled(sheet.text, 'I_A')).toContain('[A]');
-    expect(output(sheet.text, 'R_s_ohm')).toBe(output(sheetBare.text, 'R_s_ohm'));
+    expect(output(sheet.text, 'value')).toBe(output(sheetBare.text, 'value'));
 
     const shot = await run(['evaluate', 'be-85', 'I_A=1uA']);
     const shotBare = await run(['evaluate', 'be-85', 'I_A=1e-6']);
     expect(shot.code, shot.text).toBe(0);
     expect(labeled(shot.text, 'I_A')).toContain('[A]');
-    expect(output(shot.text, 'S_I_A2_per_Hz')).toBe(output(shotBare.text, 'S_I_A2_per_Hz'));
-    expect(output(shot.text, 'S_I_A2_per_Hz')).toBe(2 * E_SI * 1e-6);
+    expect(output(shot.text, 'value')).toBe(output(shotBare.text, 'value'));
+    expect(output(shot.text, 'value')).toBe(2 * E_SI * 1e-6);
   });
 
   it('still rejects a unit of the wrong dimension', async () => {

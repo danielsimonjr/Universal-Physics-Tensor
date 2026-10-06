@@ -123,9 +123,9 @@ describe('one quantity name', () => {
 
     const milli = capture();
     expect(await runCli(['evaluate', 'be-58', 'T_K=10meV', 'R_ohm=1', '--json'], milli.io), err(milli)).toBe(0);
-    const noise = JSON.parse(out(milli)) as { result: { output: { S_V_V2_per_Hz: number } } };
+    const noise = JSON.parse(out(milli)) as { result: { output: { value: number } } };
     const expected = 4 * K_B_SI * ((10e-3 * E_SI) / K_B_SI);
-    expect(Math.abs(noise.result.output.S_V_V2_per_Hz - expected) / expected).toBeLessThan(1e-9);
+    expect(Math.abs(noise.result.output.value - expected) / expected).toBeLessThan(1e-9);
 
     const difference = capture();
     expect(
@@ -146,8 +146,8 @@ describe('one quantity name', () => {
         ),
         err(cap),
       ).toBe(0);
-      const body = JSON.parse(out(cap)) as { result: { output: { eta: number } } };
-      return body.result.output.eta;
+      const body = JSON.parse(out(cap)) as { result: { output: { value: number } } };
+      return body.result.output.value;
     };
     const glued = await fin('20W/m2K');
     const grouped = await fin('20W/(m^2*K)');

@@ -24,7 +24,8 @@ describe('proposeLinkCandidates — generator', () => {
     // before be-103..125. Those twenty-three edges are isolated too.
     // 1525 is the record from before be-126..133. Those eight edges are isolated too.
     // 1964 is the record from before be-134..146. Those thirteen edges are isolated too.
-    expect(cands.length).toBe(2518);
+    // 2518 is the record from before be-147..170.
+    expect(cands.length).toBe(4196);
   });
 
   it('the funnel narrows: most touch the core, fewer are same-kind', () => {
@@ -39,8 +40,9 @@ describe('proposeLinkCandidates — generator', () => {
     // The eleven new same-kind pairs are the tokens warmth (6), bandmass (3),
     // n3 (1), and scatter (1) among the new established edges. A shared token
     // is not an identification.
-    expect(core).toBe(2484);
-    expect(ck).toBe(665);
+    // 2484 and 665 are the record from before be-147..170.
+    expect(core).toBe(4162);
+    expect(ck).toBe(839);
     expect(ck).toBeLessThan(core); // the filters genuinely narrow
   });
 

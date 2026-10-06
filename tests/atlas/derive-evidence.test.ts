@@ -218,7 +218,7 @@ describe('adjudication precedence — THREE verdicts, from REAL catalog entries 
 
 describe('catalog rows derive from the artifacts they carry', () => {
   it('kind bridge is formally-proved, except an unadjudicated row, and a partial stays proposed or contradicted', () => {
-    expect(BRIDGE_EQUATIONS.length).toBe(136);
+    expect(BRIDGE_EQUATIONS.length).toBe(160);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125. 77 is the record from before be-88..102.

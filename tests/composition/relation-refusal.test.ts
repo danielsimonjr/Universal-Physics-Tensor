@@ -106,6 +106,7 @@ const CATALOG_RELATIONS: Readonly<Record<string, string>> = {
   'be-51': 'derivation',
   'be-52': 'derivation',
   'be-55': 'derivation',
+  'be-58': 'derivation',
   'be-59': 'derivation',
 };
 
@@ -166,7 +167,9 @@ describe('composition-table refusals', () => {
     }
   });
 
-  it('the nine catalog relations stay', () => {
+  it('the ten catalog relations stay', () => {
+    // Nine is the record from before an entry relation was copied onto the
+    // edge. be-58's entry relation is derivation.
     const recorded = Object.fromEntries(
       CATALOG_GRAPH.filter((item) => item.relation !== undefined).map((item) => [item.id, item.relation!.type]),
     );

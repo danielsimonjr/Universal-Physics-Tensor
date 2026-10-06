@@ -2,14 +2,13 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (31) — recognized monomial, prefactor recovered:
+  DERIVED (36) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.507e+0
     be-16                  +[k_B]  ×6.931e-1
     be-42-via-rs           +[ℏ,c,k_B]  ×7.958e-2
     law-schwarzschild-radius +[c,G]  ×2.000e+0
     be-21                  +[ℏ,k_B]  ×7.958e-2
     be-48                  +[ℏ,c]  ×7.026e-41  (empirical/tuned constant)
-    be-13                  +[]  ×4.000e+0
     be-15                  +[]  ×1.000e+0
     be-17                  +[]  ×1.000e+0
     be-20                  +[c,G]  ×3.979e-2
@@ -34,27 +33,31 @@ Deriving the bridge equations by dimensions
     be-136                 +[ℏ]  ×3.183e-1  (empirical/tuned constant)
     be-140                 +[ℏ,e]  ×1.592e-1
     be-141                 +[ℏ,e]  ×5.000e-1
+    be-165                 +[ℏ,c,k_B]  ×1.645e-1  (empirical/tuned constant)
+    be-56                  +[ℏ,c]  ×-4.112e-2  (empirical/tuned constant)
+    be-57                  +[ℏ,c,k_B]  ×1.592e-1
+    be-58                  +[k_B]  ×4.000e+0
+    be-61                  +[k_B,e]  ×3.290e+0  (empirical/tuned constant)
+    be-62                  +[k_B]  ×1.764e+0  (empirical/tuned constant)
 
   COEFFICIENT UNSET (0) — dimensional, and no sourced prefactor multiplies the monomial. The evaluator's 1 is that absence, not a recovered constant:
     
     (not a recovered prefactor, not a failed reconstruction, and not a free dimensionless group)
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 16) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-109, be-117, be-120, be-121, be-137
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 23) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-109, be-117, be-120, be-121, be-137, be-147, be-148, be-149, be-164, be-168, be-169, be-64
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
-  NOT A MONOMIAL (14) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
-    be-54, be-36, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115, be-130, be-144
+  NOT A MONOMIAL (25) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
+    be-19, be-54, be-13, be-23, be-36, be-41, be-47, be-49, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115, be-130, be-144, be-151, be-152, be-160, be-162, be-163
     (not a failed reconstruction of a monomial, and not a physical refutation)
 
-  OPEN (66) — irreducible free dimensionless group(s); by complexity:
+  OPEN (74) — irreducible free dimensionless group(s); by complexity:
     cplx=0  be-82
     cplx=1  be-11-zurek
     cplx=1  be-37
     cplx=1  be-52
-    cplx=1  be-19
     cplx=1  be-18
-    cplx=1  be-23
     cplx=1  be-24
     cplx=1  be-30
     cplx=1  be-38
@@ -85,6 +88,16 @@ Deriving the bridge equations by dimensions
     cplx=1  be-142
     cplx=1  be-143
     cplx=1  be-146
+    cplx=1  be-153
+    cplx=1  be-154
+    cplx=1  be-155
+    cplx=1  be-156
+    cplx=1  be-157
+    cplx=1  be-158
+    cplx=1  be-159
+    cplx=1  be-166
+    cplx=1  be-170
+    cplx=1  be-65
     cplx=2  be-11-master
     cplx=2  be-22
     cplx=2  be-25
@@ -103,16 +116,16 @@ Deriving the bridge equations by dimensions
     cplx=2  be-129
     cplx=2  be-138
     cplx=2  be-145
+    cplx=2  be-167
     cplx=3  be-53
     cplx=3  be-33
     cplx=3  be-45
     cplx=3  be-46
     cplx=3  be-131
+    cplx=3  be-161
     cplx=4  be-31
     cplx=4  be-34
-    cplx=4  be-41
-    cplx=4  be-49
     cplx=5  be-39
-    cplx=6  be-47
+    cplx=Infinity  be-150
 
   (derivability is ORTHOGONAL to credibility — see the priority command)

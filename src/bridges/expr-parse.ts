@@ -225,8 +225,52 @@ class Parser {
   }
 }
 
+/**
+ * `8*pi` is the constant `8pi`, and `ln(2)` is the constant `ln2`. A product
+ * flattens so the tree matches a flat canonical product of the same factors.
+ */
+function foldKnownConstants(node: ExprNode): ExprNode {
+  if (node.kind === 'transcendental') {
+    const arg = foldKnownConstants(node.arg);
+    if (node.fn === 'ln' && arg.kind === 'symbol' && arg.name === '2') return symbol('ln2');
+    return { kind: 'transcendental', fn: node.fn, arg };
+  }
+  if (node.kind === 'abs') return { kind: 'abs', arg: foldKnownConstants(node.arg) };
+  if (node.kind !== 'op') return node;
+  const args = node.args.map(foldKnownConstants);
+  if (node.op !== '*') return { kind: 'op', op: node.op, args };
+  const factors: ExprNode[] = [];
+  const push = (factor: ExprNode): void => {
+    if (factor.kind === 'op' && factor.op === '*') {
+      for (const inner of factor.args) push(inner);
+    } else {
+      factors.push(factor);
+    }
+  };
+  for (const arg of args) push(arg);
+  const merged: ExprNode[] = [];
+  for (let i = 0; i < factors.length; i++) {
+    const left = factors[i]!;
+    const right = factors[i + 1];
+    if (
+      right?.kind === 'symbol' &&
+      right.name === 'pi' &&
+      left.kind === 'symbol' &&
+      /^(?:2|4|8)$/.test(left.name) &&
+      `${left.name}pi` in CONSTANTS
+    ) {
+      merged.push(symbol(`${left.name}pi`));
+      i += 1;
+      continue;
+    }
+    merged.push(left);
+  }
+  if (merged.length === 1) return merged[0]!;
+  return { kind: 'op', op: '*', args: merged };
+}
+
 /** Parse a catalog expression into a sign-preserving `ExprNode`. */
 export function parseCatalogExpression(expression: string): ExprNode {
   const rewritten = rewriteCatalogHyphens(expression, formulaNames());
-  return new Parser(tokenize(rewritten)).parse();
+  return foldKnownConstants(new Parser(tokenize(rewritten)).parse());
 }
