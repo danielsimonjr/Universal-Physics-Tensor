@@ -146,7 +146,7 @@ A bridge equation is a record in `data/bridge-catalog.json`. One engine evaluate
 ### Migration
 
 - Read a bridge from `data/bridge-catalog.json`. Evaluate it with `evaluateRelation`. The quantity's dimension, default unit, aliases, and temperature kind come from `data/quantities.json`.
-- A cross-domain record has one specification section. A standard record that already had a section keeps it. BE-147 through BE-163 are catalog records and have no new section. BE-164 through BE-170 are written under Black-body radiation, quantum statistics, and reciprocal transport in Part II. An `Evaluator:` link names the catalog record and `evaluateRelation`.
+- The specification writes up the 40 cross-domain bridges. A standard bridge is a catalog record and has no specification heading. ~~A standard record that already had a section keeps it.~~ Retracted: those write-ups are removed from Part I §II and Part II. Bridge Equations 164 through 170 stay under Black-body radiation, quantum statistics, and reciprocal transport. An `Evaluator:` link names the catalog record and `evaluateRelation`.
 - PhysJS pin `10e48f140c0e9fad3c50e5e5538124c52b3e732c`. Proof status is the vendored manifest. `formally-proved` is still derived from a reviewed `formalRef`.
 
 ## [7.0.0] - 2026-10-06

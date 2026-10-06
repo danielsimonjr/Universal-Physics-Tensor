@@ -1,5 +1,9 @@
 # UPT Specification — Revision History
 
+## Cross-domain write-ups only
+
+- The specification writes up the 40 cross-domain bridges in `data/bridge-catalog.json`. A standard bridge stays a catalog record and has no heading in Part I §II or Part II. The sections that listed bridge-id ranges by round are current-state statements of that rule. §VI's tensor-index lists name the written-up ids. The living counts in the index, Part III, Part IV, Part V, and Part VI name those 40 write-ups. The entries below that say a living count of 44, 55, 58, 63, 66, or 77 equations are the record from before this removal.
+
 ## PhysJS #64 — BE-77 through BE-87
 
 - The live pin is `92f87257a1e3086a48cdc19fe4361cc1c5909d49`. Lean files stay `lean/<File>.lean`. Part-II adds Bridge Equations 77 through 87. Each is kind `bridge`. BE-83 reads `PhysJS.KelvinRelation.peltier_eq` along temperature and does not compose with BE-73. Four-point takes the radial `1/r` field as a premise. Reynolds takes matched wall slopes and `Pr = 1`. Living catalog counts now say 77 equations, IDs 11–87, and 41 established. The PhysJS #62 section below keeps pin `ee753df77bd5b29b7207443181606b6004bfcf6a` and is the record from before this pin.

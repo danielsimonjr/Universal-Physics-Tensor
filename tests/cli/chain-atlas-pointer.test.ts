@@ -9,7 +9,11 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-import { be16Edge, be42Edge } from '../../src/composition/edges/calibration.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
+
+const be16Edge = catalogEdge(catalogEdgeKey(16));
+const be42Edge = catalogEdge(catalogEdgeKey(42));
 import { composeEdges } from '../../src/composition/compose.js';
 
 const DESIGN_URL =

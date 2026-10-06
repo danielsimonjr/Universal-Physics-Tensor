@@ -4,14 +4,23 @@
  * @module composition/catalog-graph
  */
 
-import { catalogRelations } from '../bridges/catalog-load.js';
+import { catalogEntry, catalogRelations } from '../bridges/catalog-load.js';
 import { parseCatalogExpression } from '../bridges/expr-parse.js';
 import { evaluateCatalogRelation, relationHolds } from '../bridges/relation-eval.js';
 import type { BridgeEdge } from './edge.js';
 import { withBoundAliases } from './edge.js';
 import { quantityByName } from './quantities.js';
 
+function regimeFor(relation: ReturnType<typeof catalogRelations>[number]) {
+  const fromEntry = relation.catalogId === null ? undefined : catalogEntry(relation.catalogId)?.regime;
+  if (fromEntry !== undefined && relation.regime !== undefined && JSON.stringify(fromEntry) !== JSON.stringify(relation.regime)) {
+    throw new Error(`catalog ${relation.catalogId} regime disagrees with relation ${relation.id}`);
+  }
+  return fromEntry ?? relation.regime;
+}
+
 function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): BridgeEdge {
+  const regime = regimeFor(relation);
   const edge: BridgeEdge = {
     id: relation.id,
     beId: relation.catalogId,
@@ -31,7 +40,7 @@ function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): Bridg
     ...(relation.coefficientUnset === true ? { coefficientUnset: true } : {}),
     ...(relation.formulaFactors !== undefined ? { formulaFactors: relation.formulaFactors } : {}),
     ...(relation.relation !== undefined ? { relation: relation.relation } : {}),
-    ...(relation.regime !== undefined ? { regime: relation.regime } : {}),
+    ...(regime !== undefined ? { regime } : {}),
     ...(relation.conventions !== undefined ? { conventions: relation.conventions } : {}),
     ...(relation.counterexamples !== undefined ? { counterexamples: relation.counterexamples } : {}),
   };

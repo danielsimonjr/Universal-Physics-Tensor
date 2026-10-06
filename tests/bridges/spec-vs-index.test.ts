@@ -1,14 +1,11 @@
 /**
- * Specification sections follow the catalog filing.
+ * The specification writes up the cross-domain catalog records, and only those.
  *
- * A cross-domain record has exactly one Bridge Equation section. That
- * section carries the record's formula and the PhysJS theorem named by
- * `formalKey` (or states that no formalRef exists when the record has no
- * key). A standard record keeps a section only when that heading was
- * already in the specification at the baseline commit. A new standard
- * heading fails.
+ * The set of Bridge Equation headings equals the set of records whose `type`
+ * is `cross-domain`. Each of those sections carries the record's formula and
+ * the PhysJS theorem named by `formalKey` (or states that no formalRef exists
+ * when the record has no key). A standard record has no heading.
  */
-import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,9 +13,6 @@ import { describe, expect, it } from 'vitest';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '..', '..');
-
-/** Specification before this filing. Headings in that tree are the ones a standard record may keep. */
-const BASELINE = '8b47da58beed2d9442cabab6816cbe3f17d3521d';
 
 const ABSENT_FORMAL = /no PhysJS formalRef|There is no PhysJS|has no PhysJS formalRef|no formalRef|key is withheld/i;
 
@@ -36,16 +30,6 @@ interface ManifestEntry {
 
 function readSpec(name: 'Part-I.md' | 'Part-II.md'): string {
   return readFileSync(resolve(repoRoot, 'docs', 'specification', name), 'utf8');
-}
-
-function baselineSpec(): string {
-  const parts = ['Part-I.md', 'Part-II.md'].map((name) =>
-    execSync(`git show ${BASELINE}:docs/specification/${name}`, {
-      cwd: repoRoot,
-      encoding: 'utf8',
-    }),
-  );
-  return parts.join('\n');
 }
 
 export function bridgeHeadings(spec: string): Set<number> {
@@ -78,16 +62,16 @@ export function formulaInSection(formula: string, section: string): boolean {
   return collapsed(formula).length > 0 && collapsed(section).includes(collapsed(formula));
 }
 
-/** A standard heading is allowed when it is absent, or when the baseline specification already had it. */
-export function standardHeadingAllowed(
-  id: number,
-  current: ReadonlySet<number>,
-  baseline: ReadonlySet<number>,
+/** Headings and cross-domain ids are the same set. */
+export function headingsMatchFiling(
+  headings: ReadonlySet<number>,
+  crossDomainIds: readonly number[],
 ): boolean {
-  return !current.has(id) || baseline.has(id);
+  if (headings.size !== crossDomainIds.length) return false;
+  return crossDomainIds.every((id) => headings.has(id));
 }
 
-describe('specification sections follow the catalog filing', () => {
+describe('specification sections equal the cross-domain records', () => {
   const catalog = JSON.parse(
     readFileSync(resolve(repoRoot, 'data', 'bridge-catalog.json'), 'utf8'),
   ) as { entries: CatalogEntry[] };
@@ -98,11 +82,24 @@ describe('specification sections follow the catalog filing', () => {
   const spec = `${readSpec('Part-I.md')}\n${readSpec('Part-II.md')}`;
   const sections = bridgeSections(spec);
   const currentHeadings = bridgeHeadings(spec);
-  const previousHeadings = bridgeHeadings(baselineSpec());
+  const crossDomain = catalog.entries.filter((entry) => entry.type === 'cross-domain');
+  const standard = catalog.entries.filter((entry) => entry.type === 'standard');
 
-  it('every cross-domain record has one section whose formula and formalRef match the record', () => {
-    const crossDomain = catalog.entries.filter((entry) => entry.type === 'cross-domain');
+  it('the set of headings equals the set of cross-domain records', () => {
     expect(crossDomain.length).toBeGreaterThan(0);
+    expect(standard.length).toBeGreaterThan(0);
+    expect(
+      headingsMatchFiling(
+        currentHeadings,
+        crossDomain.map((entry) => entry.id),
+      ),
+    ).toBe(true);
+    for (const entry of standard) {
+      expect(currentHeadings.has(entry.id), `catalog id ${entry.id} is standard`).toBe(false);
+    }
+  });
+
+  it('every cross-domain section carries the record formula and formalRef', () => {
     for (const entry of crossDomain) {
       const hits = [...spec.matchAll(new RegExp(`\\*\\*Bridge Equation ${entry.id}:`, 'g'))];
       expect(hits, `catalog id ${entry.id} section count`).toHaveLength(1);
@@ -122,21 +119,13 @@ describe('specification sections follow the catalog filing', () => {
     }
   });
 
-  it('a standard record does not gain a specification heading', () => {
-    for (const entry of catalog.entries) {
-      if (entry.type !== 'standard') continue;
-      expect(
-        standardHeadingAllowed(entry.id, currentHeadings, previousHeadings),
-        `catalog id ${entry.id} is standard and its heading is not in the baseline specification`,
-      ).toBe(true);
-    }
-  });
-
-  it('rejects a standard heading the baseline specification does not contain', () => {
-    const baseline = new Set([11]);
-    expect(standardHeadingAllowed(12, new Set([12]), baseline)).toBe(false);
-    expect(standardHeadingAllowed(11, new Set([11]), baseline)).toBe(true);
-    expect(standardHeadingAllowed(147, new Set(), baseline)).toBe(true);
+  it('rejects a heading set that adds a standard id or drops a cross-domain id', () => {
+    const crossIds = crossDomain.map((entry) => entry.id);
+    const withStandard = new Set([...crossIds, standard[0]!.id]);
+    expect(headingsMatchFiling(withStandard, crossIds)).toBe(false);
+    const dropped = new Set(crossIds.slice(1));
+    expect(headingsMatchFiling(dropped, crossIds)).toBe(false);
+    expect(headingsMatchFiling(new Set(crossIds), crossIds)).toBe(true);
   });
 
   it('rejects a formula the section does not contain', () => {

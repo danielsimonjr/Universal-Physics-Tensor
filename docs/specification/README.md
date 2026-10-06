@@ -9,8 +9,8 @@ part carries status notes marking superseded or speculative content.
 
 | Part | File | Scope | Status |
 |---|---|---|---|
-| I | [Part-I.md](Part-I.md) | Theoretical foundation: the rank-6 catalog `Π`, framing commitment, consistency invariants, Bridge Equations 11–20 | Core; wave-revised |
-| II | [Part-II.md](Part-II.md) | Bridge-equation catalog BE-21–87 (§V is 21–50; §V-B is BE-51–54; §V-C is BE-55–87) + tensor-integration mapping | Core; writes up BE-21–87. The runtime catalog is the same 77 entries (ids 11–87); see Conventions |
+| I | [Part-I.md](Part-I.md) | Theoretical foundation: the rank-6 catalog `Π`, framing commitment, consistency invariants, and the cross-domain bridges in categories A–E | Core; wave-revised |
+| II | [Part-II.md](Part-II.md) | The remaining cross-domain bridge write-ups, plus the tensor-integration mapping | Core. The specification writes up the 40 cross-domain bridges in the catalog. A standard bridge has no heading here |
 | III | [Part-III.md](Part-III.md) | Algorithms + information-theoretic definitions (none of the §-numbered pseudocode algorithms are implemented) | Core; spec-only |
 | IV | [Part-IV.md](Part-IV.md) | Validation framework: experimental-validation roadmap (near/medium/long-term) + dimensional-validation protocol | Core; experimental targets aspirational |
 | V | [Part-V.md](Part-V.md) | Advanced mathematics: category theory, tensor networks, consistency matrix, experimental design (former §§XXI–XXII applications/risk essays → [`docs/essays/`](../essays/README.md)) | Core; largest + most speculative — read its status note first |
@@ -25,16 +25,14 @@ part carries status notes marking superseded or speculative content.
 
 ## Conventions
 
-- **Catalog count**: 77 bridge equations, IDs 11–87 with no gaps (41 established ·
-  33 speculative · 3 highly-speculative). Counted from each entry's `id` and
-  `status` in `src/bridges/index.ts` (`BRIDGE_EQUATIONS`). Parts I–II write up
-  BE-11–87. Part I is BE-11–20. Part II §V is BE-21–50, §V-B is BE-51–54, and
-  §V-C is BE-55–87. Entries 51 and 53–87 keep `source_part: 'III'` in that array;
-  BE-52 keeps `source_part: 'I'`. BE-1–10 are the implicit "diagonal"
-  laws (Schrödinger, Newton, Maxwell, Einstein, Standard Model) and are not
-  individually catalogued. Reviewed `formalRef`s use `lean4-physjs`
-  and name public PhysJS; the atlas and catalog counts are in `NOTES.md`, not in this catalog.
-  Kind `bridge` is the only kind that lights `formally-proved`. The catalog path passes that reference, except an unadjudicated row stays `proposed`. The ids and the partials are listed in `NOTES.md`.
+- **What the specification writes up**: the 40 cross-domain bridges in
+  `data/bridge-catalog.json`. A standard bridge is a catalog record and has no
+  heading in Parts I–II. BE-1–10 are the implicit diagonal laws (Schrödinger,
+  Newton, Maxwell, Einstein, Standard Model) and are not individually catalogued.
+  Status counts, the PhysJS pin, and the catalog size are in `NOTES.md`.
+  Reviewed `formalRef`s use `lean4-physjs` and name public PhysJS.
+  Kind `bridge` is the only kind that lights `formally-proved`. The catalog path
+  passes that reference, except an unadjudicated row stays `proposed`.
 - **Revision provenance**: the 2026-05 adversarial-review iterations
   ("Wave X Tier Y, per Reviewer Z") were relocated to
   [CHANGELOG.md](CHANGELOG.md) on 2026-06-10 so the spec reads as a clean

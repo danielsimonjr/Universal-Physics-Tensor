@@ -10,7 +10,10 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import * as evaluateCommand from '../../src/cli/commands/evaluate.js';
 import { propagateUncertainty } from '../../src/composition/uncertainty.js';
-import { be42Edge } from '../../src/composition/index.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
+
+const be42Edge = catalogEdge(catalogEdgeKey(42));
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 

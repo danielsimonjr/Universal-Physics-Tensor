@@ -5,7 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
 import { evaluateBridge } from '../../src/bridges/evaluators.js';
-import { BridgeEquations } from '../../src/bridges/bridge-equations.js';
+import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
 
 function capture() {
   const lines: string[] = [];
@@ -31,7 +31,9 @@ describe('upt evaluate be-42 returns a Hawking temperature', () => {
   it('the registry and the CLI both return a finite temperature', async () => {
     const mass = 1.989e30;
     const fromApi = evaluateBridge(42, { M_kg: mass }) as { value: number };
-    expect(fromApi.value).toBe(BridgeEquations.hawkingTemperature({ M_kg: mass }));
+    const fromRelation = evaluateRelation(42, { M_kg: mass });
+    expect(fromRelation.kind).toBe('value');
+    if (fromRelation.kind === 'value') expect(fromApi.value).toBe(fromRelation.value);
     expect(fromApi.value).toBeGreaterThan(0);
 
     const cli = capture();

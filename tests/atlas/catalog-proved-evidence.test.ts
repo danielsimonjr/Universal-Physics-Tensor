@@ -23,7 +23,11 @@ import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 import { adjudicateBridgeEntry } from '../../src/bridges/membership.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { composeEdges } from '../../src/composition/compose.js';
-import { be16Edge, be42Edge } from '../../src/composition/edges/calibration.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
+
+const be16Edge = catalogEdge(catalogEdgeKey(16));
+const be42Edge = catalogEdge(catalogEdgeKey(42));
 
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);

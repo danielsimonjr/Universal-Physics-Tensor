@@ -11,8 +11,12 @@ import {
   evaluateRelation,
   type Evaluation,
 } from '../../src/index.js';
-import { CANONICAL_GRAPH, be16Edge, be42Edge, be70Edge, evaluateEdge } from '../../src/composition/index.js';
-import { M_SUN_KG } from '../../src/composition/edges/calibration.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { CANONICAL_GRAPH, catalogEdge, evaluateEdge, M_SUN_KG } from '../../src/composition/index.js';
+
+const be16Edge = catalogEdge(catalogEdgeKey(16));
+const be42Edge = catalogEdge(catalogEdgeKey(42));
+const be70Edge = catalogEdge(catalogEdgeKey(70));
 
 const mu = 0.14;
 const T = 300;

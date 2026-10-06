@@ -14,7 +14,10 @@ import type { ExprNode } from '../../src/dimensional/validator.js';
 import { equals } from '../../src/dimensional/algebra.js';
 import { TensorInScalarOpError } from '../../src/dimensional/errors.js';
 import { evalExpr } from '../../src/composition/expr-eval.js';
-import { be33Edge } from '../../src/composition/index.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
+
+const be33Edge = catalogEdge(catalogEdgeKey(33));
 import {
   LENGTH,
   TEMPERATURE,

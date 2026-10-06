@@ -9,8 +9,11 @@ import { canonicalToEdges } from '../../src/composition/canonical-graph.js';
 import { CANONICAL_GRAPH } from '../../src/composition/canonical-graph.js';
 import { explainQuantity } from '../../src/composition/explain.js';
 import { evaluateEdge } from '../../src/composition/edge.js';
-import { be70Edge } from '../../src/composition/edges/applied-physicist.js';
-import { evaluateEinsteinRelation } from '../../src/bridges/be70-einstein-relation.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/catalog-graph.js';
+import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
+
+const be70Edge = catalogEdge(catalogEdgeKey(70));
 import { CarrierSignError, readCarrierSignPolicyCalls, resetCarrierSignPolicyCalls } from '../../src/bridges/carrier-sign.js';
 import type { CanonicalEquation } from '../../src/canonical/canonical-equation.js';
 import { CHARGE } from '../../src/dimensional/types.js';
@@ -111,8 +114,9 @@ describe('carrier charge and mobility share a sign on a positive product', () =>
     expect(readCarrierSignPolicyCalls()).toBe(1);
 
     resetCarrierSignPolicyCalls();
-    const diffusivity = evaluateEinsteinRelation({ mu_m2_per_Vs: -0.14, T_K: 300, q_C: -Q }).D_m2_per_s;
-    expect(diffusivity).toBeGreaterThan(0);
+    const diffusivity = evaluateRelation(catalogEdgeKey(70), { mu_m2_per_Vs: -0.14, T_K: 300, q_C: -Q });
+    expect(diffusivity.kind).toBe('value');
+    if (diffusivity.kind === 'value') expect(diffusivity.value).toBeGreaterThan(0);
     expect(readCarrierSignPolicyCalls()).toBe(1);
   });
 

@@ -22,7 +22,7 @@ Hyphenated quantity names are rewritten to underscores, longest first, before th
 
 ## Specification
 
-A cross-domain record has one section in the specification. The section's formula and formal reference agree with the record. A standard record does not gain a section. A section that already existed stays until its filing is decided.
+The specification writes up each cross-domain record and does not write up a standard record. The section's formula and formal reference agree with the record.
 
 ## Guard
 
