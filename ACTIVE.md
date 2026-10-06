@@ -20,7 +20,7 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
-- [ ] Bridge equations are data, and one engine evaluates them.
+- [x] Bridge equations are data, and one engine evaluates them.
   The tree has one TypeScript module per equation and one module per dogfood round. Lookup tables and identifiers are keyed to BE numbers. Synonym groups and temperature interval-versus-point are hand lists. PhysJS pin is `10cf71e9f1f460780f8620de7ba422df61e0949b`. `package.json` is 7.0.0. The closed round-9 content is not in the catalog.
 
 - [x] A Celsius difference is read as a point, `W/mK` and `kg/ms` take the prefix, litre/BTU/psi/kcal/torr/mmHg/centipoise are unknown, synonym spellings of one constant still print a number, and Carnot, the first law, and the Boltzmann factor throw "missing a finite input".
