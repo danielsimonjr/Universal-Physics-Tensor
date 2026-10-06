@@ -5796,7 +5796,7 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/numerical/covariant-eikonal.ts` - v0.5.0 BE-37 covariant-eikonal numerical evaluator.
+### `src/numerical/covariant-eikonal.ts` - Covariant-eikonal method, used by catalog relation be-37.
 
 **External Dependencies:**
 | Package | Import |
@@ -6695,7 +6695,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 351 |
 | Total Modules | 13 |
-| Total Lines of Code | 77080 |
+| Total Lines of Code | 77085 |
 | Total Exports | 2363 |
 | Total Re-exports | 1202 |
 | Total Classes | 64 |

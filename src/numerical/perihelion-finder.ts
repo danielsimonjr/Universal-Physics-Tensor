@@ -229,10 +229,11 @@ function bisectCubic(
  * change in `dr/dτ` is found.
  *
  * **Units.** Inherited from the supplied snapshots and `gInverseFn` — the
- * finder is metric-agnostic. For the canonical UPT BE-52 Schwarzschild use
- * case:
- *   - `snapshots[i].tau` — affine parameter in **seconds** (SI, BE-37 null
- *     normalization) or **proper-time seconds** (timelike geodesics).
+ * finder is metric-agnostic. For the perihelion method used by catalog
+ * relation be-52 on Schwarzschild:
+ *   - `snapshots[i].tau` — affine parameter in **seconds** (SI, the
+ *     covariant-eikonal method's null normalization, used by catalog
+ *     relation be-37) or **proper-time seconds** (timelike geodesics).
  *   - `snapshots[i].x` — 4-coordinate `(t, r, θ, φ)` in
  *     **(s, m, rad, rad)** (SI).
  *   - `snapshots[i].p` — covariant momentum (units depend on the

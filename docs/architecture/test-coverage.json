@@ -1,7 +1,7 @@
 {
   "metadata": {
     "totalSourceFiles": 351,
-    "totalTestFiles": 519,
+    "totalTestFiles": 521,
     "testedCount": 333,
     "untestedCount": 18,
     "coveragePercent": "94.9"
@@ -1117,6 +1117,7 @@
     "src/bridges/catalog-load.ts": [
       "tests/atlas/catalog-proved-evidence.test.ts",
       "tests/atlas/gr-spine-regime.test.ts",
+      "tests/bridges/catalog-filing-ledger.test.ts",
       "tests/bridges/catalog-reference-golden.test.ts",
       "tests/bridges/tensor-index.test.ts",
       "tests/canonical/carrier-sign.test.ts",
@@ -7006,7 +7007,8 @@
     ],
     "src/dimensional/natural-units.ts": [],
     "src/dimensional/quantity-registry.ts": [
-      "tests/bridges/evaluators.test.ts"
+      "tests/bridges/evaluators.test.ts",
+      "tests/dimensional/quantity-default-unit.test.ts"
     ],
     "src/dimensional/rg-flow.ts": [
       "tests/api/atlas-public-closure.test.ts",
@@ -9383,6 +9385,9 @@
       "src/bridges/catalog-adapter.ts",
       "src/core/tensor.ts",
       "src/core/types.ts"
+    ],
+    "tests/bridges/catalog-filing-ledger.test.ts": [
+      "src/bridges/catalog-load.ts"
     ],
     "tests/bridges/catalog-json.test.ts": [],
     "tests/bridges/catalog-physjs-import.test.ts": [],
@@ -15498,6 +15503,9 @@
       "src/dimensional/errors.ts"
     ],
     "tests/dimensional/part-viii-spec-vs-impl.test.ts": [],
+    "tests/dimensional/quantity-default-unit.test.ts": [
+      "src/dimensional/quantity-registry.ts"
+    ],
     "tests/dimensional/raise-lower.test.ts": [
       "src/dimensional/validator.ts",
       "src/dimensional/ast-types.ts",

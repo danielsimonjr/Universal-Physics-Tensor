@@ -27,7 +27,10 @@ part carries status notes marking superseded or speculative content.
 
 - **What the specification writes up**: the 40 cross-domain bridges in
   `data/bridge-catalog.json`. A standard bridge is a catalog record and has no
-  heading in Parts I–II. BE-1–10 are the implicit diagonal laws (Schrödinger,
+  heading in Parts I–II. The `type` field on the catalog is authoritative.
+  The human-readable ledger is
+  [`docs/architecture/bridge-type-classification.md`](../architecture/bridge-type-classification.md).
+  BE-1–10 are the implicit diagonal laws (Schrödinger,
   Newton, Maxwell, Einstein, Standard Model) and are not individually catalogued.
   Status counts, the PhysJS pin, and the catalog size are in `NOTES.md`.
   Reviewed `formalRef`s use `lean4-physjs` and name public PhysJS.

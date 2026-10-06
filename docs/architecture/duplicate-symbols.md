@@ -22,7 +22,7 @@ Every module under `src/cli/commands/` that is a command exports `command`. Help
 
 ### `MASS_DENSITY`
 
-`MASS_DENSITY` is `{ L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }` in `src/dimensional/types.ts`. be-20 and `src/composition/quantities/_dims.ts` re-export it, and the graph marks both `reExported`. The sentence that two files export it, and that five more files assign the same object, is the record from before this export. Those files were `be-20-vacuum-energy.ts`, `_dims.ts`, `catalog-tranche.ts`, `bridge-check.ts`, `friedmann-equation.ts`, `be-19-quantum-bounce.ts`, and `be-54-randall-sundrum-brane.ts`.
+`MASS_DENSITY` is `{ L: -3, M: 1, T: 0, I: 0, Theta: 0, N: 0, J: 0 }` in `src/dimensional/types.ts`. The sentence that be-20 and `src/composition/quantities/_dims.ts` re-export it, and that the graph marks both `reExported`, is the record from before the catalog engine. The sentence that two files export it, and that five more files assign the same object, is the record from before this export. Those files were `be-20-vacuum-energy.ts`, `_dims.ts`, `catalog-tranche.ts`, `bridge-check.ts`, `friedmann-equation.ts`, `be-19-quantum-bounce.ts`, and `be-54-randall-sundrum-brane.ts`.
 
 ### `canonicalJson` and `captureEnvironment`
 
@@ -40,7 +40,7 @@ These were one value reached through a second `export`. They are `export { … }
 | `EngineCapabilityError` | `src/numerical/errors.ts` | `src/numerical/tensor-engine.ts` |
 | `DEFAULT_SEARCH_BUDGET` | `src/composition/probe/types.ts` | `src/composition/probe/search-budget.ts` |
 | `IDENTITY_BOUND` | `src/atlas/error-algebra.ts` | `src/atlas/path-bound.ts` |
-| `M_PROTON_SI` | `src/core/constants.ts` | `src/bridges/be67-alfven-speed.ts` |
+| `M_PROTON_SI` | `src/core/constants.ts` | `src/bridges/index.ts`. The sentence that the re-export was `src/bridges/be67-alfven-speed.ts` is the record from before the catalog engine |
 | `evaluateMetricInverse` | `src/numerical/metric-inverse.ts` | `src/numerical/index.ts` |
 | `dim` | `src/dimensional/ast-builders.ts` | `src/canonical/entries/_l1-build.ts` |
 | `PHYSJS_COMMIT` | `src/atlas/physjs-entries.generated.ts` | `src/atlas/physjs-ref.ts` |
@@ -51,7 +51,7 @@ These were one value reached through a second `export`. They are `export { … }
 
 ### `BCS_GAP_RATIO`
 
-`src/bridges/be62-bcs-gap.ts` exports the constant. `src/bridges/confrontations.ts` quotes that line inside a citation object. The dependency-graph lexer records the quote as an export, and `unused-analysis.md` then lists it as unused. There is one constant.
+`BCS_GAP_RATIO` is defined in `src/core/constants.ts` and re-exported from `src/bridges/index.ts`. The sentence that `src/bridges/be62-bcs-gap.ts` exports the constant, and that `src/bridges/confrontations.ts` quotes that line, is the record from before the catalog engine. There is one constant.
 
 ## Withdrawn from the previous edition
 
@@ -64,7 +64,7 @@ These were one value reached through a second `export`. They are `export { … }
 | `src` TypeScript files | 479 | `dependency-graph.json` `metadata.totalFiles`, and `git ls-files` |
 | total exports | 3889 | `dependency-graph.json` `statistics.totalExports` |
 | total re-exports | 1939 | `dependency-graph.json` `statistics.totalReExports` |
-| names declared in more than one file, after `reExported` | 3 (`command`, `getBridge`, `BCS_GAP_RATIO`) | walk of `dependency-graph.json` described above |
+| names declared in more than one file, after `reExported` | The sentence that this cell is 3 (`command`, `getBridge`, `BCS_GAP_RATIO`) is the record from before the catalog engine. `BCS_GAP_RATIO` is defined in `src/core/constants.ts` | walk of `dependency-graph.json` described above |
 | of which the bodies differ or the lexer mis-read a quote | 3. The sentence that this cell is 4 (`command`, `MASS_DENSITY`, `canonicalJson`, `captureEnvironment`) plus `BCS_GAP_RATIO` is the record from before the JSON profiles and this export | source read |
 
 `repo_map.py` did not produce this edition. A later `repo_map.py check` against the old 1025/1982 claims would be checking a schema this tree no longer writes.

@@ -21,9 +21,9 @@
  * geodesic, given the covariant momenta `p_t` and `p_φ` (equatorial plane,
  * `p_θ = 0`).
  *
- * This is the arithmetic BE-37's production code (v0.5.0 Task 12) actually
- * performs at `covariant-eikonal.ts` lines 314–326; extracted here so
- * PC-1.5 bench harnesses measure the exact same computation.
+ * This is the arithmetic the covariant-eikonal method (used by catalog
+ * relation be-37) performs; extracted here so PC-1.5 bench harnesses
+ * measure the exact same computation.
  *
  * @param gInverse - Contravariant metric g^{μν} at the starting point, as a
  *   flat row-major `Float64Array(16)` indexed `gInverse[μ*4 + ν]` (v0.9.0 O-1).
@@ -31,7 +31,8 @@
  *   (index 15) are used (static equatorial metric, `p_θ = 0`).
  * @param p_t - Covariant time momentum (affine normalization; `< 0`).
  * @param p_phi - Covariant angular momentum (impact-parameter encoding;
- *   `= b * c` in BE-37's convention).
+ *   `= b * c` in the covariant-eikonal method's convention, used by
+ *   catalog relation be-37).
  * @returns `p_r < 0` (inward motion).
  * @throws RangeError if the null condition has no real solution at the
  *   given point (impact parameter too large for the geometry).
