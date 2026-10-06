@@ -19,7 +19,7 @@
  */
 
 import { K_B_SI, M_SUN_SI } from '../core/constants.js';
-import { FORMULA_NAMED } from '../dimensional/formula-names.js';
+import { FORMULA_NAMED, isTemperatureName } from '../dimensional/formula-names.js';
 import { quantityConventionUnit } from '../dimensional/unit-convention.js';
 import { naturalConstantOverrides, type UnitMode } from '../dimensional/natural-units.js';
 import { CONSTANTS as SYMBOLIC } from '../dimensional/symbolic-constants.js';
@@ -30,19 +30,19 @@ import {
   mathTsAgreedQuantity,
   parseUnit,
   unitConventionNotes,
+  unitTables,
   UnitError,
   type TemperatureReading,
 } from '../dimensional/units.js';
 import { callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError } from './formula-contract.js';
 import { parseFormulaPNode, type FormulaPNode } from './formula-dimension.js';
 
-/** Names that speak kelvin. A bare number is already kelvin. `t` is not here: a lowercase t is not this temperature. */
-const TEMPERATURE_BINDING_NAMES = new Set(['T', 'temperature', 'temp', 'T_K']);
-
 /**
  * A temperature binding speaks kelvin. An energy is `k_B T` (the joules
  * divided by `kB`). Any other dimension is refused. A bare number, a
  * temperature, and a name that is not a temperature are unchanged.
+ * The spelling list is {@link isTemperatureName}, the temperature group
+ * of the one synonym table. `t` is not in that group.
  * @internal
  */
 function alignTemperatureBinding(
@@ -52,7 +52,7 @@ function alignTemperatureBinding(
   kB: number = K_B_SI,
   declaredTemperature = false,
 ): BindingValue {
-  const slot = TEMPERATURE_BINDING_NAMES.has(name) || declaredTemperature;
+  const slot = isTemperatureName(name) || declaredTemperature;
   if (!slot || !read.dimensioned || equals(read.dimension, TEMPERATURE)) {
     return read;
   }
@@ -111,7 +111,7 @@ interface Qty {
 const NUMBER = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/;
 const NUMBER_UNIT = /^([+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)\s*(.*?)$/;
 const GLUED_NUMBER = /(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/g;
-const CELSIUS_OFFSET_K = 273.15;
+const CELSIUS_OFFSET_K = unitTables().celsiusOffsetK;
 
 function finite(raw: string, value: number): number {
   if (!Number.isFinite(value)) throw new UnitError(`'${raw}' is not a finite number`);

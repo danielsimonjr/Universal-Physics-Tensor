@@ -29,10 +29,13 @@
  *     path and no delta to measure.
  *   - Evaluator: the dimensional MONOMIAL gives the power law over the variable
  *     sources, times the baked constant factor. A fully-quantitative scalar
- *     AST that restates a catalog bridge, and whose extra factors are a closed
- *     dimensionless coefficient (ln 2, …), multiplies that coefficient in, so
- *     the number matches the catalog evaluator of the same law. A sourced
- *     prefactor from `canonicalPrefactor` multiplies as well. A dimensionless
+ *     AST whose extra factors are a closed dimensionless coefficient
+ *     (4π, ln 2, 8π/3, …) multiplies that coefficient on the Buckingham path,
+ *     including a minus sign. The sourced prefactor table owns the factor
+ *     for an AST that is intentionally constant-free, so that path does not
+ *     multiply the AST coefficient again. A null monomial, or a dimensionless
+ *     count, is evaluated from the AST, which already folded those leaves.
+ *     A sourced prefactor from `canonicalPrefactor` multiplies as well. A dimensionless
  *     group in `CANONICAL_GROUP_PREFACTORS` multiplies only when that input is
  *     present (`√γ` for sound speed). Absent, a dimensional entry with no
  *     sourced prefactor returns no number. That table is
@@ -205,20 +208,19 @@ function hasUnresolvedStub(node: ExprNode, governing: ReadonlySet<string>): bool
 /**
  * The closed dimensionless factor a fully-quantitative AST records in front of
  * its dimensional monomial. `undefined` when there is nothing to multiply
- * (no AST, not fully quantitative, a stub, a sum, or a factor of ±1).
+ * (no AST, not fully quantitative, a stub, a sum, a factor of +1, or a factor
+ * the sourced prefactor table already owns).
  */
 function recordedDimensionlessCoefficient(eq: CanonicalEquation): number | undefined {
-  // Only a declared restatement has a catalog evaluator to agree with. Other
-  // fully-quantitative coefficients stay out of this evaluator: folding
-  // 1/(32π²) into CE-rydberg-energy moved a pinned magnitude by 2.5 orders
-  // and is not the Landauer disagreement.
-  if (eq.restatesBridge === undefined) return undefined;
   if (eq.epistemicStatus !== 'fully-quantitative' || eq.scalarAst === undefined) return undefined;
+  // The table is the sourced multiplier for an AST that stays constant-free.
+  // Multiplying the AST as well would count that factor twice.
+  if (canonicalPrefactor(eq.id) !== undefined) return undefined;
   const governing = new Set(eq.dimensional.governing.map((g) => g.name));
   if (hasUnresolvedStub(eq.scalarAst, governing)) return undefined;
   const c = dimensionlessCoefficient(eq.scalarAst);
   if (c === undefined || !Number.isFinite(c) || c === 0) return undefined;
-  if (Math.abs(Math.abs(c) - 1) < 1e-12) return undefined;
+  if (Math.abs(c - 1) < 1e-12) return undefined;
   return c;
 }
 
@@ -396,8 +398,9 @@ function evaluateAstMonomial(
 /**
  * Build the evaluator for one canonical equation, keyed by its VARIABLE source
  * names. Variables carry the monomial exponent from `inputs`; constants
- * contribute a fixed baked factor. A fully-quantitative restatement multiplies
- * its recorded dimensionless coefficient and the sourced table prefactor.
+ * contribute a fixed baked factor. A fully-quantitative monomial multiplies
+ * its recorded dimensionless coefficient when the sourced table does not
+ * already own that factor, and multiplies the sourced table prefactor.
  * A fully-quantitative AST that names a dimensionless count, or whose
  * Buckingham monomial is null, is evaluated from that AST so the count and
  * the numeric leaves (6π) are not dropped. The edge applies the sign policy

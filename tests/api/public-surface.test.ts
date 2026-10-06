@@ -182,7 +182,7 @@ const EXPECTED_RUNTIME_EXPORTS = [
   // SVG rendering via the optional @viz-js/viz peer
   'renderDotToSvg', 'SvgRendererUnavailableError',
   // user-equation injection
-  'parseUserEquation', 'resolveToCatalogName', 'suggestQuantities',
+  'parseUserEquation', 'resolveQuantityName', 'suggestQuantities',
   'equationLanding', 'UserEquationError',
   // Phase 1 — parsePhysics + dimensional inference
   'parsePhysics', 'FormulaDimensionError', 'suggestByDimension',

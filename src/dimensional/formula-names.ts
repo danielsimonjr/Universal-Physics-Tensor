@@ -74,3 +74,126 @@ export const DIMENSION_RENAMES: readonly DimensionRename[] = [
   { symbol: 'm_1', dimension: MASS, name: 'mass' },
   { symbol: 'm_2', dimension: MASS, name: 'secondary-mass' },
 ];
+
+/**
+ * One quantity, under every spelling a caller may type.
+ *
+ * A group is not a pair of hubs. `T` and `temp` are the same temperature
+ * whether or not the word `temperature` is also present. `Th_K` and `Tc_K`
+ * are two temperatures and are not in the temperature group. This array is
+ * the only spelling list: the name table holds it by reference, and a
+ * temperature binding asks {@link isTemperatureName}.
+ *
+ * A dimension rename is a different fact. It applies only when the symbol
+ * carries that dimension, so a time coordinate named `T` stays `T`.
+ */
+export const SYNONYM_GROUPS: readonly (readonly string[])[] = [
+  ['magnetic-field', 'magnetic-flux-density'],
+  ['landauer-erasure-energy', 'erasure-energy'],
+  ['temperature', 'T', 'temp', 'T_K'],
+];
+
+const foldName = (s: string): string => s.replace(/_/g, '-');
+
+/** The group `name` belongs to, comparing `_` and `-` as the same character. */
+export function synonymGroup(name: string): readonly string[] | undefined {
+  const folded = foldName(name);
+  return SYNONYM_GROUPS.find((group) => group.some((member) => member === name || foldName(member) === folded));
+}
+
+/**
+ * True when `name` is a spelling of the temperature quantity.
+ * A declared kelvin unit is a separate fact the binding reader already has.
+ */
+export function isTemperatureName(name: string): boolean {
+  const group = synonymGroup(name);
+  return group !== undefined && group.includes('temperature');
+}
+
+/**
+ * Thrown when one quantity is bound under two spellings and the numbers differ.
+ * The formula is not run. The message names both spellings.
+ */
+export class SynonymDisagreementError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SynonymDisagreementError';
+  }
+}
+
+/** Spellings of one group that `values` actually binds. */
+function presentSpellings(group: readonly string[], values: Readonly<Record<string, number>>): string[] {
+  return Object.keys(values).filter((key) => group.some((member) => member === key || foldName(member) === foldName(key)));
+}
+
+/**
+ * Refuse two spellings of one quantity that carry different numbers.
+ * The message names the keys the caller typed.
+ */
+export function assertSynonymAgreement(values: Readonly<Record<string, number>>): void {
+  for (const group of SYNONYM_GROUPS) {
+    const present = presentSpellings(group, values);
+    if (present.length < 2) continue;
+    const first = values[present[0]!]!;
+    if (present.some((key) => values[key] !== first)) {
+      const shown = present.map((key) => `${key}=${values[key]}`).join(', ');
+      throw new SynonymDisagreementError(
+        `${present.join(' and ')} are one quantity and disagree (${shown})`,
+      );
+    }
+  }
+}
+
+/**
+ * Copy an agreed value onto every spelling in its group.
+ * A formula that names `T` and a formula that names `temperature` then read one binding.
+ */
+export function expandSynonymValues<T extends Record<string, number>>(values: T): T {
+  assertSynonymAgreement(values);
+  const out: Record<string, number> = { ...values };
+  for (const group of SYNONYM_GROUPS) {
+    const present = presentSpellings(group, values);
+    if (present.length === 0) continue;
+    const value = values[present[0]!]!;
+    for (const member of group) {
+      if (!Object.hasOwn(out, member)) out[member] = value;
+    }
+  }
+  return out as T;
+}
+
+/**
+ * The catalog or parameter name `name` means.
+ *
+ * A literal name wins, then an `_`/`-` swap, then an edge alias whose target
+ * is in `catalogNames`, then the member of {@link SYNONYM_GROUPS} that the
+ * catalog holds. `null` when none of those is in the catalog. `T` is
+ * temperature when that name is in the catalog; the pendulum period is named
+ * `period`, not `T`.
+ *
+ * @public
+ */
+export function resolveQuantityName(
+  name: string,
+  catalogNames: ReadonlySet<string>,
+  edgeAliases?: ReadonlyMap<string, string>,
+): string | null {
+  if (catalogNames.has(name)) return name;
+  const underToHyphen = name.replace(/_/g, '-');
+  if (underToHyphen !== name && catalogNames.has(underToHyphen)) return underToHyphen;
+  const hyphenToUnder = name.replace(/-/g, '_');
+  if (hyphenToUnder !== name && catalogNames.has(hyphenToUnder)) return hyphenToUnder;
+  if (edgeAliases !== undefined) {
+    const alias = edgeAliases.get(name) ?? edgeAliases.get(underToHyphen) ?? edgeAliases.get(hyphenToUnder);
+    if (alias !== undefined && catalogNames.has(alias)) return alias;
+  }
+  const group = synonymGroup(name);
+  if (group !== undefined) {
+    for (const member of group) {
+      if (catalogNames.has(member)) return member;
+      const folded = foldName(member);
+      if (folded !== member && catalogNames.has(folded)) return folded;
+    }
+  }
+  return null;
+}

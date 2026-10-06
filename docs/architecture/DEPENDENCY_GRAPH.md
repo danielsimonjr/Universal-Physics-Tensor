@@ -3144,6 +3144,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/units.js` | `unitConventionNotes, UnitError, TemperatureReading` | Import |
+| `../dimensional/formula-names.js` | `resolveQuantityName, synonymGroup, SynonymDisagreementError` | Import |
 | `../numerical/binding-value.js` | `readNamedBinding, NamedBindingSibling` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
@@ -4144,6 +4145,9 @@ The codebase is organized into the following modules:
 | `../../composition/discovery.js` | `DiscoveryOptions` | Import (type-only) |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 | `../../dimensional/units.js` | `UnitError` | Import |
+| `../../composition/canonical-graph.js` | `CANONICAL_GRAPH` | Import |
+| `../../composition/catalog-graph.js` | `CATALOG_GRAPH` | Import |
+| `../../dimensional/formula-names.js` | `assertSynonymAgreement, resolveQuantityName, SynonymDisagreementError` | Import |
 
 **Exports:**
 - Functions: `parseDiscoveryOpts`
@@ -4353,6 +4357,7 @@ The codebase is organized into the following modules:
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
 | `../errors.js` | `CliError, UsageError` | Import |
+| `../../dimensional/formula-names.js` | `expandSynonymValues, SynonymDisagreementError` | Import |
 | `../version.js` | `formulaParserLabel` | Import |
 | `../euler-guard.js` | `withParser` | Import |
 | `../eval-numbers.js` | `HBAR_TRUNCATION_NOTE, codataScope` | Import |
@@ -4405,7 +4410,8 @@ The codebase is organized into the following modules:
 | `../search-index.js` | `searchNameWords` | Import |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 | `../../dimensional/units.js` | `UnitError` | Import |
-| `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, rewriteInputKey, shareSynonyms, SynonymDisagreementError` | Import |
+| `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Import |
+| `../../dimensional/formula-names.js` | `assertSynonymAgreement, resolveQuantityName, SynonymDisagreementError` | Import |
 | `../../composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `../../composition/explain.js` | `formatQuantity` | Import |
 
@@ -4632,6 +4638,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../errors.js` | `CliError, EXIT_CHECK_FAILED, UsageError` | Import |
+| `../../dimensional/formula-names.js` | `assertSynonymAgreement, resolveQuantityName, SynonymDisagreementError` | Import |
 | `../output.js` | `emitJson` | Import |
 
 **Exports:**
@@ -5015,7 +5022,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./relations/domain-regimes.js` | `*` | Import |
-| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
+| `./index.js` | `explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge, lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding, analyzeUserEquation, resolveQuantityName, suggestQuantities, buckinghamPi, dimensionallyDetermines` | Re-export |
 | `./index.js` | `composeEdges` | Re-export |
 | `./composition/user-equation.js` | `formatConnectedSummary` | Re-export |
 | `./composition/bridge-analysis.js` | `bridgePriority, attemptDerivation, dimensionalFreedom, linkageMap, proposeLinkCandidates, proposeOrphanConnectors` | Re-export |
@@ -5087,6 +5094,8 @@ The codebase is organized into the following modules:
 | `./composition/composition-recovery.js` | `scanCompositionRecovery` | Re-export |
 | `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
 | `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding` | Re-export |
+| `./composition/evaluate-relation.js` | `resolveEvaluable` | Re-export |
+| `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
 | `./core/constants.js` | `C_SI, G_SI` | Re-export |
@@ -5101,7 +5110,7 @@ The codebase is organized into the following modules:
   ```text
   explainQuantity, CATALOG_GRAPH, CANONICAL_GRAPH, M_SUN_KG, composeSymbolic, be42Edge, be16Edge,
   lawSchwarzschildRadius, be42ViaRsEdge, format, buildVizModel, renderDotToSvg, equationLanding,
-  analyzeUserEquation, resolveToCatalogName, suggestQuantities, buckinghamPi, dimensionallyDetermines,
+  analyzeUserEquation, resolveQuantityName, suggestQuantities, buckinghamPi, dimensionallyDetermines,
   composeEdges, formatConnectedSummary, bridgePriority, attemptDerivation, dimensionalFreedom,
   linkageMap, proposeLinkCandidates, proposeOrphanConnectors, getFormulaParser, getFormulaParserKind,
   getFormulaDimensionChecker, parseDimensionSpec, predictMissingBridges, catalogFrontierAccount,
@@ -5136,8 +5145,9 @@ The codebase is organized into the following modules:
   AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
   ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
   kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding,
-  bindingInUnit, readNamedBinding, builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI,
-  G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
+  bindingInUnit, readNamedBinding, resolveEvaluable, SynonymDisagreementError,
+  builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction,
+  VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -5165,11 +5175,10 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
-| `../dimensional/formula-names.js` | `DIMENSION_RENAMES, DimensionRename` | Import |
+| `../dimensional/formula-names.js` | `DIMENSION_RENAMES, SYNONYM_GROUPS, SynonymDisagreementError, DimensionRename` | Import |
 
 **Exports:**
-- Classes: `SynonymDisagreementError`
-- Functions: `aliasesForTarget`, `rewriteInputKey`, `editDistance`, `synonymInCatalog`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
+- Functions: `aliasesForTarget`, `editDistance`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
 - Constants: `NAME_TABLE`
 
 ---
@@ -5285,7 +5294,8 @@ The codebase is organized into the following modules:
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalPrefactor` | Import |
 | `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `./aliases.js` | `NAME_TABLE` | Import |
-| `./user-equation.js` | `parseUserEquation, resolveToCatalogName` | Import |
+| `./user-equation.js` | `parseUserEquation` | Import |
+| `../dimensional/formula-names.js` | `resolveQuantityName` | Import |
 | `../numerical/formula-registry.js` | `getFormulaParser, parsePhysics` | Import |
 | `../numerical/formula-dimension.js` | `formulaSymbolDimension` | Import |
 | `../numerical/formula-contract.js` | `CompiledFormula` | Import (type-only) |
@@ -5985,13 +5995,18 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
+| `../dimensional/algebra.js` | `equals` | Import |
+| `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
+| `../dimensional/units.js` | `parseUnit` | Import |
+| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, EvaluatorSpec` | Import |
 | `./canonical-graph.js` | `CANONICAL_GRAPH` | Import |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./edge.js` | `CoefficientUnsetError, evaluateEdge, BridgeEdge` | Import |
 
 **Exports:**
-- Functions: `evaluateRelation`
+- Interfaces: `Evaluable`
+- Functions: `resolveEvaluable`, `evaluateRelation`
 
 ---
 
@@ -6207,7 +6222,8 @@ The codebase is organized into the following modules:
 | `./dimension-adjacency.js` | `dimensionAdjacency` | Re-export |
 | `./user-equation.js` | `UserEquation, EquationLanding` | Re-export |
 | `./user-equation.js` | `EquationAnalysis, EquationHint` | Re-export |
-| `./user-equation.js` | `parseUserEquation, resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError` | Re-export |
+| `./user-equation.js` | `parseUserEquation, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError` | Re-export |
+| `../dimensional/formula-names.js` | `resolveQuantityName, SynonymDisagreementError` | Re-export |
 
 **Exports:**
 - Re-exports:
@@ -6240,8 +6256,9 @@ The codebase is organized into the following modules:
   ComposeSymbolicOptions, composeSymbolic, SymbolicCompositionError, SymbolicEvalError, VizStatus,
   VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats, buildVizModel, edgeToJunction,
   renderDotToSvg, SvgRendererUnavailableError, DimensionAdjacency, dimensionAdjacency, UserEquation,
-  EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, resolveToCatalogName,
-  suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError
+  EquationLanding, EquationAnalysis, EquationHint, parseUserEquation, suggestQuantities,
+  suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError, resolveQuantityName,
+  SynonymDisagreementError
   ```
 
 
@@ -7192,7 +7209,8 @@ The codebase is organized into the following modules:
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/formula-names.js` | `formulaNameDimensions` | Import |
 | `../dimensional/natural-units.js` | `naturalNote, naturalPowers, UnitMode` | Import |
-| `./aliases.js` | `aliasesForTarget, editDistance, NAME_TABLE, rewriteInputKey, synonymInCatalog` | Import |
+| `./aliases.js` | `aliasesForTarget, editDistance` | Import |
+| `../dimensional/formula-names.js` | `resolveQuantityName` | Import |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./graph-viz.js` | `VizModel, VizJunction` | Import (type-only) |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
@@ -7203,13 +7221,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `UserEquationError`
 - Interfaces: `UserEquation`, `AnalyzeUserEquationOptions`, `EquationLanding`, `EquationHint`, `ShortBinding`, `EquationAnalysis`
-- Functions:
-
-  ```text
-  rewriteCatalogHyphens, hyphenSubtractHint, parseUserEquation, resolveToCatalogName,
-  suggestQuantities, suggestByDimension, equationLanding, formatConnectedSummary, analyzeUserEquation
-  ```
-
+- Functions: `rewriteCatalogHyphens`, `hyphenSubtractHint`, `parseUserEquation`, `suggestQuantities`, `suggestByDimension`, `equationLanding`, `formatConnectedSummary`, `analyzeUserEquation`
 
 ---
 
@@ -7691,9 +7703,10 @@ The codebase is organized into the following modules:
 | `../core/constants.js` | `C_SI, E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, N_A_SI` | Import |
 
 **Exports:**
+- Classes: `SynonymDisagreementError`
 - Interfaces: `FormulaName`, `DimensionRename`
-- Functions: `formulaNameDimensions`
-- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`, `DIMENSION_RENAMES`
+- Functions: `formulaNameDimensions`, `synonymGroup`, `isTemperatureName`, `assertSynonymAgreement`, `expandSynonymValues`, `resolveQuantityName`
+- Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`, `DIMENSION_RENAMES`, `SYNONYM_GROUPS`
 
 ---
 
@@ -8121,7 +8134,7 @@ The codebase is organized into the following modules:
 | `./composition/index.js` | `buildVizModel, edgeToJunction` | Re-export |
 | `./composition/index.js` | `VizStatus, VizJunction, VizCluster, VizOptions, VizModel, VizFilterStats` | Re-export |
 | `./composition/index.js` | `renderDotToSvg, SvgRendererUnavailableError` | Re-export |
-| `./composition/index.js` | `parseUserEquation, resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError` | Re-export |
+| `./composition/index.js` | `parseUserEquation, resolveQuantityName, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError` | Re-export |
 | `./composition/index.js` | `UserEquation, EquationLanding, EquationAnalysis, EquationHint` | Re-export |
 | `./numerical/formula-registry.js` | `parsePhysics` | Re-export |
 | `./numerical/formula-dimension.js` | `FormulaDimensionError` | Re-export |
@@ -8299,31 +8312,30 @@ The codebase is organized into the following modules:
   RetrodictionOptions, explainQuantity, DerivationExplanation, ExplainOptions, QuantityExplanation,
   composeSymbolic, SymbolicCompositionError, SymbolicEvalError, Observable, ComposeSymbolicOptions,
   buildVizModel, edgeToJunction, VizStatus, VizJunction, VizCluster, VizOptions, VizModel,
-  VizFilterStats, renderDotToSvg, SvgRendererUnavailableError, parseUserEquation,
-  resolveToCatalogName, suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation,
-  UserEquationError, UserEquation, EquationLanding, EquationAnalysis, EquationHint, parsePhysics,
-  FormulaDimensionError, ParsedPhysics, inferUnknownDimension, substituteSymbolDim,
-  dimensionAdjacency, DimensionAdjacency, confrontBE36WithUncertainty,
-  BE36ConfrontationWithUncertainty, buckinghamPi, dimensionallyDetermines, RationalizationError,
-  DimensionalVariable, PiGroup, BuckinghamVerdict, BuckinghamResult, DimensionalDeterminationResult,
-  CompositionAliasError, SOURCE_ALIAS_DISPOSITIONS, AliasDisposition, DispositionRequired,
-  evaluateKGDispersionResidual, verifyKleinGordonPlaneWave, KGDispersionResidualInput,
-  KGPlaneWaveVerifyInput, KGPlaneWaveVerifyResult, confrontBE23, confrontBE23WithUncertainty,
-  PLANCKIAN_CUPRATES, PLANCKIAN_O1_BAND, BE23ConfrontationResult, BE23ConfrontationWithUncertainty,
-  PlanckianObservation, CATALOG_FULL_EDGES, CATALOG_GRAPH, CANONICAL_GRAPH, canonicalToEdges,
-  CANONICAL_CONSTANTS, CANONICAL_EQUATIONS, CANONICAL_BY_ID, canonicalById, canonicalByDomain,
-  partneredBridgeIds, bridgesWithoutCanonicalPartner, canonicalToLaw, seedCanonicalLaws,
-  CANONICAL_TENSOR_CONFIG, CanonicalEquation, CanonicalDomain, EpistemicStatus, CanonicalForms,
-  FieldEquationNode, normalForm, structurallyEqual, classifyLinkage, scanLinkages, LinkageResult,
-  RecoveryOutcome, candidateId, ADJUDICATIONS, adjudicationFor, annotateAdjudications,
-  AdjudicationVerdict, CandidateAdjudication, AnnotatedCandidate, annotateConsequences,
-  classifyProposal, ConsequenceAnnotatedCandidate, ConsequenceSignal, ConsequenceEvidence,
-  describeGrounding, CandidateGrounding, rankDiscoveries, VettedCandidate, residualInSigma,
-  combineInQuadrature, consistencyComparison, ConsistencyComparison, ObservationProvenance,
-  SigmaComponent, ObservationKind, ConfrontationOutcome, ConfrontationDataHandling,
-  ConfrontationPreprocessing, ConfrontationIndependence, SourceRef, SourceRefs, confrontBE37, CASSINI,
-  CassiniObservation, BE37ConfrontationResult, confrontBE51, VLBI_LAMBERT_2009,
-  VLBIDeflectionObservation, BE51ConfrontationResult, oneLoopCoefficientStatement,
+  VizFilterStats, renderDotToSvg, SvgRendererUnavailableError, parseUserEquation, resolveQuantityName,
+  suggestQuantities, suggestByDimension, equationLanding, analyzeUserEquation, UserEquationError,
+  UserEquation, EquationLanding, EquationAnalysis, EquationHint, parsePhysics, FormulaDimensionError,
+  ParsedPhysics, inferUnknownDimension, substituteSymbolDim, dimensionAdjacency, DimensionAdjacency,
+  confrontBE36WithUncertainty, BE36ConfrontationWithUncertainty, buckinghamPi,
+  dimensionallyDetermines, RationalizationError, DimensionalVariable, PiGroup, BuckinghamVerdict,
+  BuckinghamResult, DimensionalDeterminationResult, CompositionAliasError, SOURCE_ALIAS_DISPOSITIONS,
+  AliasDisposition, DispositionRequired, evaluateKGDispersionResidual, verifyKleinGordonPlaneWave,
+  KGDispersionResidualInput, KGPlaneWaveVerifyInput, KGPlaneWaveVerifyResult, confrontBE23,
+  confrontBE23WithUncertainty, PLANCKIAN_CUPRATES, PLANCKIAN_O1_BAND, BE23ConfrontationResult,
+  BE23ConfrontationWithUncertainty, PlanckianObservation, CATALOG_FULL_EDGES, CATALOG_GRAPH,
+  CANONICAL_GRAPH, canonicalToEdges, CANONICAL_CONSTANTS, CANONICAL_EQUATIONS, CANONICAL_BY_ID,
+  canonicalById, canonicalByDomain, partneredBridgeIds, bridgesWithoutCanonicalPartner,
+  canonicalToLaw, seedCanonicalLaws, CANONICAL_TENSOR_CONFIG, CanonicalEquation, CanonicalDomain,
+  EpistemicStatus, CanonicalForms, FieldEquationNode, normalForm, structurallyEqual, classifyLinkage,
+  scanLinkages, LinkageResult, RecoveryOutcome, candidateId, ADJUDICATIONS, adjudicationFor,
+  annotateAdjudications, AdjudicationVerdict, CandidateAdjudication, AnnotatedCandidate,
+  annotateConsequences, classifyProposal, ConsequenceAnnotatedCandidate, ConsequenceSignal,
+  ConsequenceEvidence, describeGrounding, CandidateGrounding, rankDiscoveries, VettedCandidate,
+  residualInSigma, combineInQuadrature, consistencyComparison, ConsistencyComparison,
+  ObservationProvenance, SigmaComponent, ObservationKind, ConfrontationOutcome,
+  ConfrontationDataHandling, ConfrontationPreprocessing, ConfrontationIndependence, SourceRef,
+  SourceRefs, confrontBE37, CASSINI, CassiniObservation, BE37ConfrontationResult, confrontBE51,
+  VLBI_LAMBERT_2009, VLBIDeflectionObservation, BE51ConfrontationResult, oneLoopCoefficientStatement,
   OneLoopCoefficientStatement, OneLoopCoefficientSign, requestYangMillsConfrontation,
   MeasuredCouplingRow, RunningProcedure, RunningProcedureRecord, YangMillsConfrontationRequest,
   YangMillsConfrontationRefusal, YangMillsConfrontationHit, YangMillsConfrontationResult,
@@ -8392,13 +8404,13 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `K_B_SI, M_SUN_SI` | Import |
-| `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
+| `../dimensional/formula-names.js` | `FORMULA_NAMED, isTemperatureName` | Import |
 | `../dimensional/unit-convention.js` | `quantityConventionUnit` | Import |
 | `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, Dimension` | Import |
-| `../dimensional/units.js` | `convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
+| `../dimensional/units.js` | `convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, unitTables, UnitError, TemperatureReading` | Import |
 | `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
 | `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
@@ -9320,13 +9332,13 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 484 |
 | Total Modules | 13 |
-| Total Lines of Code | 104242 |
-| Total Exports | 3874 |
-| Total Re-exports | 1859 |
+| Total Lines of Code | 104533 |
+| Total Exports | 3881 |
+| Total Re-exports | 1862 |
 | Total Classes | 63 |
-| Total Interfaces | 629 |
-| Total Functions | 897 |
-| Total Type Guards | 5 |
+| Total Interfaces | 630 |
+| Total Functions | 900 |
+| Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 591 |
 | Runtime Circular Deps | 0 |

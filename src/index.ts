@@ -765,7 +765,7 @@ export { renderDotToSvg, SvgRendererUnavailableError } from './composition/index
 // the map as a connected 'user' junction (with a "did you mean?" hint).
 export {
   parseUserEquation,
-  resolveToCatalogName,
+  resolveQuantityName,
   suggestQuantities,
   suggestByDimension,
   equationLanding,

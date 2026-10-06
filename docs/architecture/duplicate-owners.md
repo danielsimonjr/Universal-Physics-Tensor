@@ -10,9 +10,9 @@ The live list of a second owner for a concept the integration design assigned on
 
 ## Hits
 
-`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.
+`function isTemperatureName` is defined only in `src/dimensional/formula-names.ts`. `alignTemperatureBinding` is called only from `readNamedBinding`. `TEMPERATURE_BINDING_NAMES` is not a second list.
 
-`function editDistance` is defined only in `src/composition/aliases.ts`. `FORMULA_ALIASES`, `ENTRY_TARGET_ALIASES`, and `QUANTITY_SYNONYMS` are not separate tables.
+`function resolveQuantityName` and `SYNONYM_GROUPS` are defined only in `src/dimensional/formula-names.ts`. `function editDistance` is defined only in `src/composition/aliases.ts`. `resolveToCatalogName`, `rewriteInputKey`, `formulaSpellings`, and `synonymInCatalog` are not separate resolvers.
 
 `assertSameCarrierSign` is called only from `applyCarrierSignPolicy`. The BE-70 domain does not call `sameCarrierSign`. No second owner.
 

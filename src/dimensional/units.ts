@@ -14,7 +14,17 @@
  * An exact symbol wins over a prefix: `T` is the tesla and `Ts` is a
  * terasecond; `G` is the gauss and `GPa` is a gigapascal. A glued positive
  * exponent is that power when the letters are already a unit, so `K2` and
- * `K²` are `K^2`. An unknown token that ends in a digit stays unknown.
+ * `K²` are `K^2`.
+ *
+ * A token with no separator is one factor when the whole token is an exact
+ * unit or a prefix plus a unit, with an optional exponent. That reading
+ * wins, so `ms` stays a millisecond, `mm` a millimetre, `mK` a millikelvin,
+ * and `Ts` a terasecond. Otherwise the token is a product of such factors
+ * when exactly one split exists: `m2K` is `m^2·K`, `Vs` is `V·s`, and
+ * `cm^2/Vs` is `cm^2/(V·s)`. Zero splits are an unknown unit. Two or more
+ * splits name each reading and are refused (`mAs` is milliampere·second or
+ * metre·ampere·second). An unknown token that ends in a digit stays unknown
+ * when it is not that product.
  * `AU` is the same exact metre count as `au`. `Msun` is `M_SUN_SI` kilograms; `Msun_iau` is
  * `GM_SUN_SI / G_SI`. `myr` is a milliyear because `m` is the SI prefix.
  * `eV` takes an SI prefix, so `GeV` is 10⁹ eV in joules. `nat` is the
@@ -113,51 +123,103 @@ const PREFIXES: ReadonlyMap<string, number> = new Map([
 ]);
 
 function parseSymbol(sym: string): readonly [number, Dimension] {
+  const parsed = trySymbol(sym);
+  if (parsed !== null) return parsed;
+  throw new UnitError(`unknown unit '${sym}'`);
+}
+
+function trySymbol(sym: string): readonly [number, Dimension] | null {
   const exact = UNITS.get(sym);
   if (exact !== undefined) return [exact[0], exact[1]];
   for (const [p, f] of PREFIXES) {
-    if (!sym.startsWith(p)) continue;
+    if (!sym.startsWith(p) || sym.length === p.length) continue;
     const base = UNITS.get(sym.slice(p.length));
     if (base !== undefined && base[2]) return [f * base[0], base[1]];
   }
-  throw new UnitError(`unknown unit '${sym}'`);
+  return null;
+}
+
+interface FactorReading {
+  readonly base: string;
+  readonly exp: number;
+  readonly scale: number;
+  readonly dim: Dimension;
+}
+
+/** One factor, or null when `token` is not exactly one unit with an optional exponent. */
+function tryOneFactor(token: string): FactorReading | null {
+  let base = token;
+  let exp = 1;
+  const caret = /^(.+)\^([+-]?\d+)$/.exec(token);
+  if (caret !== null) {
+    base = caret[1]!;
+    exp = Number(caret[2]);
+  } else {
+    const uni = /^(.*?)([¹²³])$/.exec(token);
+    const superExp = uni === null ? undefined : SUPERSCRIPT[uni[2]!];
+    if (uni !== null && superExp !== undefined && uni[1]!.length > 0) {
+      base = uni[1]!;
+      exp = superExp;
+    } else {
+      const glued = /^(.*?)([1-9]\d*)$/.exec(token);
+      if (glued !== null && glued[1]!.length > 0 && trySymbol(glued[1]!) !== null) {
+        base = glued[1]!;
+        exp = Number(glued[2]);
+      }
+    }
+  }
+  const parsed = trySymbol(base);
+  if (parsed === null || !Number.isFinite(exp)) return null;
+  return { base, exp, scale: parsed[0], dim: parsed[1] };
+}
+
+function formatReading(factors: readonly FactorReading[]): string {
+  return factors.map((factor) => (factor.exp === 1 ? factor.base : `${factor.base}^${factor.exp}`)).join('·');
+}
+
+/** Every way to split `token` into one or more factors. A one-factor token is included. */
+function segmentations(token: string): FactorReading[][] {
+  const ways: FactorReading[][][] = Array.from({ length: token.length + 1 }, () => []);
+  ways[0]!.push([]);
+  for (let i = 0; i < token.length; i++) {
+    if (ways[i]!.length === 0) continue;
+    for (let j = i + 1; j <= token.length; j++) {
+      const factor = tryOneFactor(token.slice(i, j));
+      if (factor === null) continue;
+      for (const prev of ways[i]!) ways[j]!.push([...prev, factor]);
+    }
+  }
+  const unique = new Map<string, FactorReading[]>();
+  for (const way of ways[token.length]!) unique.set(formatReading(way), way);
+  return [...unique.values()];
+}
+
+/**
+ * Factors of one token. A token that is exactly one factor is that factor
+ * and is not also split. Any other token must have exactly one segmentation.
+ */
+function readFactorToken(token: string): readonly FactorReading[] {
+  const single = tryOneFactor(token);
+  if (single !== null) return [single];
+  const ways = segmentations(token).filter((way) => way.length > 1);
+  if (ways.length === 0) throw new UnitError(`unknown unit '${token}'`);
+  if (ways.length > 1) {
+    throw new UnitError(`'${token}' is ambiguous: ${ways.map(formatReading).join(' or ')}`);
+  }
+  return ways[0]!;
 }
 
 const SUPERSCRIPT: Readonly<Record<string, number>> = { '¹': 1, '²': 2, '³': 3 };
 
-/**
- * A factor is `symbol`, `symbol^n`, `symbol²`, or `symbol` with a glued
- * positive exponent (`K2` is K²). The glued form is read only when the
- * letters are already a unit, so an unknown token stays unknown.
- */
-function factorExponent(factor: string): { base: string; exp: number } {
-  const caret = /^([^\^]+)(?:\^([+-]?\d+))?$/.exec(factor);
-  if (caret !== null && caret[2] !== undefined) return { base: caret[1]!, exp: Number(caret[2]) };
-  const uni = /^(.*?)([¹²³])$/.exec(factor);
-  const superExp = uni === null ? undefined : SUPERSCRIPT[uni[2]!];
-  if (uni !== null && superExp !== undefined && uni[1]!.length > 0) return { base: uni[1]!, exp: superExp };
-  const glued = /^(.*?)([1-9]\d*)$/.exec(factor);
-  if (glued !== null && glued[1]!.length > 0) {
-    try {
-      parseSymbol(glued[1]!);
-      return { base: glued[1]!, exp: Number(glued[2]) };
-    } catch (e) {
-      if (!(e instanceof UnitError)) throw e;
-    }
-  }
-  if (caret === null) throw new UnitError(`cannot read unit factor '${factor}'`);
-  return { base: caret[1]!, exp: 1 };
-}
-
 function parseFactors(text: string, sign: 1 | -1): { scale: number; dim: Dimension } {
   let scale = 1;
   let dim = DIMENSIONLESS;
-  for (const f of text.split(/[*·\s]+/).filter((x) => x.length > 0)) {
-    const { base, exp } = factorExponent(f);
-    const n = sign * exp;
-    const [s, d] = parseSymbol(base);
-    scale *= s ** n;
-    dim = multiply(dim, power(d, n));
+  for (const token of text.split(/[*·\s]+/).filter((part) => part.length > 0)) {
+    for (const factor of readFactorToken(token)) {
+      const n = sign * factor.exp;
+      scale *= factor.scale ** n;
+      dim = multiply(dim, power(factor.dim, n));
+    }
   }
   return { scale, dim };
 }

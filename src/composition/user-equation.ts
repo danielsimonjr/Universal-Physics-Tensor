@@ -26,7 +26,8 @@ import { CONSTANT_SPELLINGS } from '../dimensional/dimension-spec.js';
 import { CONSTANTS } from '../dimensional/symbolic-constants.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { naturalNote, naturalPowers, type UnitMode } from '../dimensional/natural-units.js';
-import { aliasesForTarget, editDistance, NAME_TABLE, rewriteInputKey, synonymInCatalog } from './aliases.js';
+import { aliasesForTarget, editDistance } from './aliases.js';
+import { resolveQuantityName } from '../dimensional/formula-names.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import type { VizModel, VizJunction } from './graph-viz.js';
 import type { Dimension } from '../dimensional/types.js';
@@ -213,36 +214,13 @@ export async function parseUserEquation(
   );
   // An all-constant right-hand side (the Planck length) is an equation about a catalog quantity
   // only when its target is one; otherwise it names nothing to check (persona finding W5).
-  const targetIsCatalog = names !== undefined && resolveToCatalogName(target, names) !== null;
+  const targetIsCatalog = names !== undefined && resolveQuantityName(target, names) !== null;
   if (sources.length === 0 && !targetIsCatalog) {
     throw new UserEquationError(
       `no source quantities in '${rhs}' (only constants/numbers?)`,
     );
   }
   return { target, sources, text: rewritten.trim() };
-}
-
-/**
- * Resolve a user symbol to a catalog quantity name: the literal name first, then
- * the `_`→`-` and `-`→`_` swaps, then a formula spelling or a synonym pair in
- * {@link NAME_TABLE}, against `catalogNames`. Returns `null` if none match.
- * `T` is temperature in every CE formula that uses it; the pendulum period is
- * named `period`, not `T`, in this catalog.
- *
- * @public
- */
-export function resolveToCatalogName(
-  name: string,
-  catalogNames: ReadonlySet<string>,
-): string | null {
-  if (catalogNames.has(name)) return name;
-  const underToHyphen = name.replace(/_/g, '-');
-  if (underToHyphen !== name && catalogNames.has(underToHyphen)) return underToHyphen;
-  const hyphenToUnder = name.replace(/-/g, '_');
-  if (hyphenToUnder !== name && catalogNames.has(hyphenToUnder)) return hyphenToUnder;
-  const alias = NAME_TABLE.formulaSpellings[name];
-  if (alias !== undefined && catalogNames.has(alias)) return alias;
-  return synonymInCatalog(name, catalogNames);
 }
 
 /** Normalize for comparison: lowercase, `_`/`-` unified. */
@@ -489,14 +467,14 @@ export async function analyzeUserEquation(
     n.length === 1 && catalogNames.has(n) ? n : null;
   const resolveCatalog = (n: string): string | null => {
     if (!bindShort && literalShort(n) !== null) return null;
-    return resolveToCatalogName(n, catalogNames);
+    return resolveQuantityName(n, catalogNames);
   };
   // Evaluate keys are aliases of this target's sources. `R` is reflectance
   // on radiation-pressure and is not a global name.
   const aliasMap = aliasesForTarget(CATALOG_GRAPH, resolveCatalog(eq.target) ?? '');
   const resolve = (n: string): string | null => {
     if (!bindShort && literalShort(n) !== null) return null;
-    return rewriteInputKey(n, aliasMap, catalogNames) ?? resolveToCatalogName(n, catalogNames);
+    return resolveQuantityName(n, catalogNames, aliasMap);
   };
 
   // dims for parsePhysics: physics constants carry their REAL dimensions; matched

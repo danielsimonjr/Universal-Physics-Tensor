@@ -2149,6 +2149,19 @@
           "args": [
             {
               "kind": "symbol",
+              "name": "4pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
               "name": "epsilon_0",
               "dim": {
                 "L": -3,
@@ -3904,6 +3917,19 @@
           "args": [
             {
               "kind": "symbol",
+              "name": "4pi",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
               "name": "epsilon_0",
               "dim": {
                 "L": -3,
@@ -4005,17 +4031,36 @@
           ]
         },
         {
-          "kind": "symbol",
-          "name": "m_e",
-          "dim": {
-            "L": 0,
-            "M": 1,
-            "T": 0,
-            "I": 0,
-            "Theta": 0,
-            "N": 0,
-            "J": 0
-          }
+          "kind": "op",
+          "op": "*",
+          "args": [
+            {
+              "kind": "symbol",
+              "name": "2",
+              "dim": {
+                "L": 0,
+                "M": 0,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            },
+            {
+              "kind": "symbol",
+              "name": "m_e",
+              "dim": {
+                "L": 0,
+                "M": 1,
+                "T": 0,
+                "I": 0,
+                "Theta": 0,
+                "N": 0,
+                "J": 0
+              }
+            }
+          ]
         }
       ]
     }

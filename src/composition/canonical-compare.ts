@@ -33,7 +33,8 @@ import { evalExpr } from './expr-eval.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalPrefactor } from './canonical-prefactors.js';
 import { formulaNameDimensions } from '../dimensional/formula-names.js';
 import { NAME_TABLE } from './aliases.js';
-import { parseUserEquation, resolveToCatalogName } from './user-equation.js';
+import { parseUserEquation } from './user-equation.js';
+import { resolveQuantityName } from '../dimensional/formula-names.js';
 import { getFormulaParser, parsePhysics } from '../numerical/formula-registry.js';
 import { formulaSymbolDimension } from '../numerical/formula-dimension.js';
 import type { CompiledFormula } from '../numerical/formula-contract.js';
@@ -617,9 +618,9 @@ export async function compareUserEquation(
   // dimensional check see one formula.
   const eq = await parseUserEquation(equation, catalogNames);
   const resolved = new Map(
-    eq.sources.map((s) => [s, declined(s) ? s : (resolveToCatalogName(s, catalogNames) ?? s)]),
+    eq.sources.map((s) => [s, declined(s) ? s : (resolveQuantityName(s, catalogNames) ?? s)]),
   );
-  const target = declined(eq.target) ? eq.target : (resolveToCatalogName(eq.target, catalogNames) ?? eq.target);
+  const target = declined(eq.target) ? eq.target : (resolveQuantityName(eq.target, catalogNames) ?? eq.target);
   const dims: Record<string, Dimension> = {};
   for (const [name, c] of Object.entries(CONSTANTS)) dims[name] = c.dim;
   for (const [s, r] of resolved) {

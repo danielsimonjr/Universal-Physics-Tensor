@@ -21,6 +21,11 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { CliError, EXIT_CHECK_FAILED, UsageError } from '../errors.js';
+import {
+  assertSynonymAgreement,
+  resolveQuantityName,
+  SynonymDisagreementError,
+} from '../../dimensional/formula-names.js';
 import { emitJson } from '../output.js';
 
 const FLAGS: FlagSpec[] = [
@@ -118,6 +123,12 @@ export function parseAt(
       throw new CliError(`upt ${command}: '${a.token}' is not a finite number. ${(e as Error).message}`);
     }
   }
+  try {
+    assertSynonymAgreement(point);
+  } catch (e) {
+    if (e instanceof SynonymDisagreementError) throw new CliError(`upt ${command}: ${e.message}`);
+    throw e;
+  }
   return point;
 }
 
@@ -143,6 +154,7 @@ export function resolveAtPoint(
     for (const i of r.inequalities) if (!groups.has(i.group)) groups.set(i.group, { [i.group]: 1 });
   }
   const byNormal = new Map([...groups.keys()].map((k) => [normalizeGroup(k), k]));
+  const named = new Set<string>([...groups.keys(), ...[...groups.values()].flatMap((e) => Object.keys(e))]);
   // A zero exponent does not enter the product: two records can key the same
   // group with and without an extra `c: 0`, and that must not block derivation.
   const used = (e: Readonly<Record<string, number>>) => Object.keys(e).filter((n) => e[n] !== 0);
@@ -150,9 +162,11 @@ export function resolveAtPoint(
   const values: Record<string, number> = {};
   const unknown: string[] = [];
   for (const [key, value] of Object.entries(point)) {
-    const group = byNormal.get(normalizeGroup(key));
-    values[group ?? key] = value;
-    if (group === undefined && !parameters.has(key)) unknown.push(key);
+    const resolved = resolveQuantityName(key, named) ?? key;
+    const group = byNormal.get(normalizeGroup(resolved)) ?? byNormal.get(normalizeGroup(key));
+    const stored = group ?? resolved;
+    values[stored] = value;
+    if (group === undefined && !parameters.has(stored) && !parameters.has(key)) unknown.push(key);
   }
   for (const [key, exponents] of groups) {
     if (key in values) continue;

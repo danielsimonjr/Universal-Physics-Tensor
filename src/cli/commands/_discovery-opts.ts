@@ -15,6 +15,13 @@ import { CliError, UsageError } from '../errors.js';
 import type { DiscoveryOptions } from '../../composition/discovery.js';
 import { readNamedBinding } from '../../numerical/binding-value.js';
 import { UnitError } from '../../dimensional/units.js';
+import { CANONICAL_GRAPH } from '../../composition/canonical-graph.js';
+import { CATALOG_GRAPH } from '../../composition/catalog-graph.js';
+import {
+  assertSynonymAgreement,
+  resolveQuantityName,
+  SynonymDisagreementError,
+} from '../../dimensional/formula-names.js';
 
 export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions {
   const opts: { maxOrdersOfMagnitude?: number; groundTruth?: Record<string, number> } = {};
@@ -46,13 +53,14 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
     }
   }
   const siblings = pairs.map((p) => ({ name: p.name, raw: p.raw }));
+  const rawValues: Record<string, number> = {};
   for (const p of pairs) {
     try {
       const read = readNamedBinding(p.name, p.raw, { siblings });
       if (!Number.isFinite(read.value)) {
         throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
       }
-      gt[p.name] = read.value;
+      rawValues[p.name] = read.value;
     } catch (e) {
       if (e instanceof UsageError) throw e;
       if (e instanceof UnitError && /is a temperature/.test(e.message)) {
@@ -60,6 +68,19 @@ export function parseDiscoveryOpts(flags: ParsedArgs['flags']): DiscoveryOptions
       }
       throw new UsageError(`upt: --anchor expects k=v with a finite numeric value, got "${p.pair}".`);
     }
+  }
+  try {
+    assertSynonymAgreement(rawValues);
+  } catch (e) {
+    if (e instanceof SynonymDisagreementError) throw new CliError(`upt: ${e.message}`);
+    throw e;
+  }
+  const quantityNames = new Set(
+    [...CATALOG_GRAPH, ...CANONICAL_GRAPH].flatMap((edge) => [edge.target.name, ...edge.sources.map((s) => s.name)]),
+  );
+  for (const [name, value] of Object.entries(rawValues)) {
+    const key = resolveQuantityName(name, quantityNames) ?? name;
+    gt[key] = value;
   }
   if (Object.keys(gt).length) opts.groundTruth = gt;
 

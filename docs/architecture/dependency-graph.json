@@ -4,7 +4,7 @@
     "version": "6.1.0",
     "totalFiles": 484,
     "totalModules": 13,
-    "totalExports": 3874
+    "totalExports": 3881
   },
   "entryPoints": [
     {
@@ -9873,6 +9873,14 @@
             ]
           },
           {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "resolveQuantityName",
+              "synonymGroup",
+              "SynonymDisagreementError"
+            ]
+          },
+          {
             "file": "../numerical/binding-value.js",
             "imports": [
               "readNamedBinding",
@@ -13907,6 +13915,26 @@
             "imports": [
               "UnitError"
             ]
+          },
+          {
+            "file": "../../composition/canonical-graph.js",
+            "imports": [
+              "CANONICAL_GRAPH"
+            ]
+          },
+          {
+            "file": "../../composition/catalog-graph.js",
+            "imports": [
+              "CATALOG_GRAPH"
+            ]
+          },
+          {
+            "file": "../../dimensional/formula-names.js",
+            "imports": [
+              "assertSynonymAgreement",
+              "resolveQuantityName",
+              "SynonymDisagreementError"
+            ]
           }
         ],
         "exports": [
@@ -14596,6 +14624,13 @@
             ]
           },
           {
+            "file": "../../dimensional/formula-names.js",
+            "imports": [
+              "expandSynonymValues",
+              "SynonymDisagreementError"
+            ]
+          },
+          {
             "file": "../version.js",
             "imports": [
               "formulaParserLabel"
@@ -14798,8 +14833,14 @@
             "imports": [
               "aliasesForTarget",
               "nearQuantityNames",
-              "rewriteInputKey",
-              "shareSynonyms",
+              "shareSynonyms"
+            ]
+          },
+          {
+            "file": "../../dimensional/formula-names.js",
+            "imports": [
+              "assertSynonymAgreement",
+              "resolveQuantityName",
               "SynonymDisagreementError"
             ]
           },
@@ -15623,6 +15664,14 @@
               "CliError",
               "EXIT_CHECK_FAILED",
               "UsageError"
+            ]
+          },
+          {
+            "file": "../../dimensional/formula-names.js",
+            "imports": [
+              "assertSynonymAgreement",
+              "resolveQuantityName",
+              "SynonymDisagreementError"
             ]
           },
           {
@@ -16783,7 +16832,7 @@
               "renderDotToSvg",
               "equationLanding",
               "analyzeUserEquation",
-              "resolveToCatalogName",
+              "resolveQuantityName",
               "suggestQuantities",
               "buckinghamPi",
               "dimensionallyDetermines"
@@ -17386,6 +17435,20 @@
             "reExport": true
           },
           {
+            "file": "./composition/evaluate-relation.js",
+            "imports": [
+              "resolveEvaluable"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "./dimensional/formula-names.js",
+            "imports": [
+              "SynonymDisagreementError"
+            ],
+            "reExport": true
+          },
+          {
             "file": "./numerical/formula-dimension.js",
             "imports": [
               "builtinFormulaDimensionChecker"
@@ -17453,7 +17516,7 @@
           "renderDotToSvg",
           "equationLanding",
           "analyzeUserEquation",
-          "resolveToCatalogName",
+          "resolveQuantityName",
           "suggestQuantities",
           "buckinghamPi",
           "dimensionallyDetermines",
@@ -17588,6 +17651,8 @@
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
+          "resolveEvaluable",
+          "SynonymDisagreementError",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "C_SI",
@@ -17652,7 +17717,7 @@
           "renderDotToSvg",
           "equationLanding",
           "analyzeUserEquation",
-          "resolveToCatalogName",
+          "resolveQuantityName",
           "suggestQuantities",
           "buckinghamPi",
           "dimensionallyDetermines",
@@ -17825,6 +17890,8 @@
           "readBinding",
           "bindingInUnit",
           "readNamedBinding",
+          "resolveEvaluable",
+          "SynonymDisagreementError",
           "builtinFormulaDimensionChecker",
           "missingEvaluatorMessage",
           "C_SI",
@@ -17888,6 +17955,8 @@
             "file": "../dimensional/formula-names.js",
             "imports": [
               "DIMENSION_RENAMES",
+              "SYNONYM_GROUPS",
+              "SynonymDisagreementError",
               "DimensionRename"
             ]
           }
@@ -17895,22 +17964,14 @@
         "exports": [
           "NAME_TABLE",
           "aliasesForTarget",
-          "rewriteInputKey",
           "editDistance",
-          "synonymInCatalog",
           "nearQuantityNames",
           "shareSynonyms",
-          "collapseSynonymGovernors",
-          "SynonymDisagreementError"
-        ],
-        "classes": [
-          "SynonymDisagreementError"
+          "collapseSynonymGovernors"
         ],
         "functions": [
           "aliasesForTarget",
-          "rewriteInputKey",
           "editDistance",
-          "synonymInCatalog",
           "nearQuantityNames",
           "shareSynonyms",
           "collapseSynonymGovernors"
@@ -18299,8 +18360,13 @@
           {
             "file": "./user-equation.js",
             "imports": [
-              "parseUserEquation",
-              "resolveToCatalogName"
+              "parseUserEquation"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "resolveQuantityName"
             ]
           },
           {
@@ -21448,11 +21514,36 @@
         "nodeDependencies": [],
         "internalDependencies": [
           {
+            "file": "../dimensional/algebra.js",
+            "imports": [
+              "equals"
+            ]
+          },
+          {
+            "file": "../dimensional/bridge-check.js",
+            "imports": [
+              "EXPECTED_DIMENSION_BY_BRIDGE"
+            ]
+          },
+          {
             "file": "../dimensional/types.js",
             "imports": [
               "Dimension"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "../dimensional/units.js",
+            "imports": [
+              "parseUnit"
+            ]
+          },
+          {
+            "file": "../bridges/evaluators.js",
+            "imports": [
+              "BRIDGE_EVALUATORS",
+              "EvaluatorSpec"
+            ]
           },
           {
             "file": "./canonical-graph.js",
@@ -21476,9 +21567,14 @@
           }
         ],
         "exports": [
+          "resolveEvaluable",
           "evaluateRelation"
         ],
+        "interfaces": [
+          "Evaluable"
+        ],
         "functions": [
+          "resolveEvaluable",
           "evaluateRelation"
         ]
       },
@@ -22433,12 +22529,19 @@
             "file": "./user-equation.js",
             "imports": [
               "parseUserEquation",
-              "resolveToCatalogName",
               "suggestQuantities",
               "suggestByDimension",
               "equationLanding",
               "analyzeUserEquation",
               "UserEquationError"
+            ],
+            "reExport": true
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "resolveQuantityName",
+              "SynonymDisagreementError"
             ],
             "reExport": true
           }
@@ -22595,12 +22698,13 @@
           "SvgRendererUnavailableError",
           "dimensionAdjacency",
           "parseUserEquation",
-          "resolveToCatalogName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
           "analyzeUserEquation",
           "UserEquationError",
+          "resolveQuantityName",
+          "SynonymDisagreementError",
           "Quantity",
           "RegimeAttributes",
           "BridgeEdge",
@@ -22826,12 +22930,13 @@
           "EquationAnalysis",
           "EquationHint",
           "parseUserEquation",
-          "resolveToCatalogName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
           "analyzeUserEquation",
-          "UserEquationError"
+          "UserEquationError",
+          "resolveQuantityName",
+          "SynonymDisagreementError"
         ]
       },
       "src/composition/mathts-scalar-symbols.ts": {
@@ -26545,10 +26650,13 @@
             "file": "./aliases.js",
             "imports": [
               "aliasesForTarget",
-              "editDistance",
-              "NAME_TABLE",
-              "rewriteInputKey",
-              "synonymInCatalog"
+              "editDistance"
+            ]
+          },
+          {
+            "file": "../dimensional/formula-names.js",
+            "imports": [
+              "resolveQuantityName"
             ]
           },
           {
@@ -26595,7 +26703,6 @@
           "rewriteCatalogHyphens",
           "hyphenSubtractHint",
           "parseUserEquation",
-          "resolveToCatalogName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
@@ -26618,7 +26725,6 @@
           "rewriteCatalogHyphens",
           "hyphenSubtractHint",
           "parseUserEquation",
-          "resolveToCatalogName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
@@ -28047,20 +28153,36 @@
           "MU0_SI",
           "FORMULA_NAMED",
           "DIMENSION_RENAMES",
-          "formulaNameDimensions"
+          "SYNONYM_GROUPS",
+          "formulaNameDimensions",
+          "synonymGroup",
+          "isTemperatureName",
+          "assertSynonymAgreement",
+          "expandSynonymValues",
+          "resolveQuantityName",
+          "SynonymDisagreementError"
+        ],
+        "classes": [
+          "SynonymDisagreementError"
         ],
         "interfaces": [
           "FormulaName",
           "DimensionRename"
         ],
         "functions": [
-          "formulaNameDimensions"
+          "formulaNameDimensions",
+          "synonymGroup",
+          "isTemperatureName",
+          "assertSynonymAgreement",
+          "expandSynonymValues",
+          "resolveQuantityName"
         ],
         "constants": [
           "EPS0_SI",
           "MU0_SI",
           "FORMULA_NAMED",
-          "DIMENSION_RENAMES"
+          "DIMENSION_RENAMES",
+          "SYNONYM_GROUPS"
         ]
       },
       "src/dimensional/fresh-label.ts": {
@@ -30266,7 +30388,7 @@
             "file": "./composition/index.js",
             "imports": [
               "parseUserEquation",
-              "resolveToCatalogName",
+              "resolveQuantityName",
               "suggestQuantities",
               "suggestByDimension",
               "equationLanding",
@@ -31269,7 +31391,7 @@
           "renderDotToSvg",
           "SvgRendererUnavailableError",
           "parseUserEquation",
-          "resolveToCatalogName",
+          "resolveQuantityName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
@@ -32077,7 +32199,7 @@
           "renderDotToSvg",
           "SvgRendererUnavailableError",
           "parseUserEquation",
-          "resolveToCatalogName",
+          "resolveQuantityName",
           "suggestQuantities",
           "suggestByDimension",
           "equationLanding",
@@ -32371,7 +32493,8 @@
           {
             "file": "../dimensional/formula-names.js",
             "imports": [
-              "FORMULA_NAMED"
+              "FORMULA_NAMED",
+              "isTemperatureName"
             ]
           },
           {
@@ -32420,6 +32543,7 @@
               "mathTsAgreedQuantity",
               "parseUnit",
               "unitConventionNotes",
+              "unitTables",
               "UnitError",
               "TemperatureReading"
             ]
@@ -35112,15 +35236,15 @@
   "statistics": {
     "totalTypeScriptFiles": 484,
     "totalModules": 13,
-    "totalLinesOfCode": 104242,
-    "totalExports": 3874,
+    "totalLinesOfCode": 104533,
+    "totalExports": 3881,
     "totalClasses": 63,
-    "totalInterfaces": 629,
-    "totalFunctions": 897,
-    "totalTypeGuards": 5,
+    "totalInterfaces": 630,
+    "totalFunctions": 900,
+    "totalTypeGuards": 6,
     "totalEnums": 0,
-    "totalConstants": 1068,
-    "totalReExports": 1859,
+    "totalConstants": 1069,
+    "totalReExports": 1862,
     "totalTypeOnlyImports": 591,
     "runtimeCircularDeps": 0,
     "typeOnlyCircularDeps": 0,

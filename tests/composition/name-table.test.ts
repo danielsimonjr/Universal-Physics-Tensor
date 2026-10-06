@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { nearQuantityNames, shareSynonyms } from '../../src/composition/aliases.js';
-import { resolveToCatalogName } from '../../src/composition/user-equation.js';
+import { resolveQuantityName } from '../../src/dimensional/formula-names.js';
 
 describe('optimal string alignment resolves a one-edit transposition', () => {
   it('resolves lenght to length and leaves a two-edit typo unresolved', () => {
@@ -29,14 +29,14 @@ describe('Landauer spellings are one quantity', () => {
   });
 
   it('resolves either spelling to the one the catalog actually has', () => {
-    expect(resolveToCatalogName('erasure-energy', new Set(['landauer-erasure-energy']))).toBe(
+    expect(resolveQuantityName('erasure-energy', new Set(['landauer-erasure-energy']))).toBe(
       'landauer-erasure-energy',
     );
-    expect(resolveToCatalogName('landauer-erasure-energy', new Set(['erasure-energy']))).toBe(
+    expect(resolveQuantityName('landauer-erasure-energy', new Set(['erasure-energy']))).toBe(
       'erasure-energy',
     );
     expect(
-      resolveToCatalogName('erasure-energy', new Set(['erasure-energy', 'landauer-erasure-energy'])),
+      resolveQuantityName('erasure-energy', new Set(['erasure-energy', 'landauer-erasure-energy'])),
     ).toBe('erasure-energy');
   });
 });

@@ -9,6 +9,13 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   PROMISING (merges disconnected physics, unlocks quantities, stays consistent):
+    hubble-distance ≟ classical-electron-radius          [[length]]  score 6
+        unlocks: hubble-distance
+        [consequence: novel-consequence]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: novel (unadjudicated) · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: hubble-distance and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, classical-electron-radius · needs a stated force regime for: hubble-distance, classical-electron-radius · needs a consequence that re-derives a known law]
+        [observation: measure hubble-distance and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     hubble-distance ≟ compton-wavelength-full            [[length]]  score 6
         unlocks: hubble-distance
         [consequence: novel-consequence]
@@ -247,13 +254,6 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: height and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: height · needs a stated scale regime for: height, classical-electron-radius · needs a stated force regime for: height, classical-electron-radius · needs a consequence that re-derives a known law]
         [observation: measure height and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
-    hubble-distance ≟ classical-electron-radius          [[length]]  score 6
-        unlocks: hubble-distance
-        [consequence: inconclusive]
-        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
-        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
-        [to make it testable — premise: hubble-distance and classical-electron-radius are the same physical quantity, not only both [length] · needs a representative magnitude for: hubble-distance · needs a stated scale regime for: hubble-distance, classical-electron-radius · needs a stated force regime for: hubble-distance, classical-electron-radius · needs a consequence that re-derives a known law]
-        [observation: measure hubble-distance and classical-electron-radius in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     length ≟ classical-electron-radius                   [[length]]  score 6
         unlocks: length
         [consequence: inconclusive]
@@ -405,22 +405,22 @@ Discovery — link candidates VETTED through the inference suite  [source: canon
 
   MAGNITUDE-CLASH (representative values differ by > N orders — a falsifier):
     bohr-radius ≟ compton-wavelength-full                ~61.7 orders apart  (anchor-derived)
-    classical-electron-radius ≟ bohr-radius              ~3.2 orders apart  (anchor-derived)
-    classical-electron-radius ≟ compton-wavelength-full  ~58.5 orders apart  (anchor-derived)
-    erasure-energy ≟ rydberg-energy                      ~15.1 orders apart  (anchor-derived)
-    free-energy-difference ≟ rydberg-energy              ~14.9 orders apart  (anchor-derived)
+    classical-electron-radius ≟ bohr-radius              ~4.3 orders apart  (anchor-derived)
+    classical-electron-radius ≟ compton-wavelength-full  ~57.4 orders apart  (anchor-derived)
+    erasure-energy ≟ rydberg-energy                      ~12.6 orders apart  (anchor-derived)
+    free-energy-difference ≟ rydberg-energy              ~12.4 orders apart  (anchor-derived)
     mass ≟ planck-mass                                   ~38.0 orders apart  (anchor-derived)
     peak-wavelength ≟ bohr-radius                        ~14.9 orders apart  (anchor-derived)
-    peak-wavelength ≟ classical-electron-radius          ~18.1 orders apart  (anchor-derived)
+    peak-wavelength ≟ classical-electron-radius          ~19.2 orders apart  (anchor-derived)
     planck-length ≟ bohr-radius                          ~24.5 orders apart
-    planck-length ≟ classical-electron-radius            ~21.3 orders apart  (anchor-derived)
+    planck-length ≟ classical-electron-radius            ~20.2 orders apart  (anchor-derived)
     planck-length ≟ compton-wavelength                   ~23.2 orders apart
     planck-length ≟ compton-wavelength-full              ~37.2 orders apart  (anchor-derived)
     planck-length ≟ peak-wavelength                      ~39.5 orders apart  (anchor-derived)
     radius ≟ bohr-radius                                 ~13.7 orders apart  (anchor-derived)
-    radius ≟ classical-electron-radius                   ~16.9 orders apart  (anchor-derived)
+    radius ≟ classical-electron-radius                   ~18.0 orders apart  (anchor-derived)
     radius ≟ planck-length                               ~38.3 orders apart  (anchor-derived)
-    rest-energy ≟ rydberg-energy                         ~62.4 orders apart  (anchor-derived)
+    rest-energy ≟ rydberg-energy                         ~64.9 orders apart  (anchor-derived)
 
   SUBSUMING (generic ≟ specialization — tautological, barred from promising):
     distance ≟ hubble-distance                           [[length]]

@@ -25,10 +25,13 @@ import { UnitError } from '../../dimensional/units.js';
 import {
   aliasesForTarget,
   nearQuantityNames,
-  rewriteInputKey,
   shareSynonyms,
-  SynonymDisagreementError,
 } from '../../composition/aliases.js';
+import {
+  assertSynonymAgreement,
+  resolveQuantityName,
+  SynonymDisagreementError,
+} from '../../dimensional/formula-names.js';
 import { CANONICAL_GROUP_PREFACTORS } from '../../composition/canonical-prefactors.js';
 import { formatQuantity } from '../../composition/explain.js';
 
@@ -210,7 +213,7 @@ function rebind(
   graphNames: ReadonlySet<string>,
 ): string[] | Record<string, number> {
   const rewrite = (key: string): string => {
-    const hit = rewriteInputKey(key, aliases, graphNames);
+    const hit = resolveQuantityName(key, graphNames, aliases);
     if (hit === null) {
       throw new CliError(
         `upt explain: '${key}' did not resolve to a quantity. ` +
@@ -264,7 +267,7 @@ async function run(ctx: CommandCtx): Promise<number> {
   for (const group of CANONICAL_GROUP_PREFACTORS) {
     if (edgeIds.has(group.id)) inputNames.add(group.group);
   }
-  let resolvedTarget = api.resolveToCatalogName(target, names);
+  let resolvedTarget = resolveQuantityName(target, names);
   if (resolvedTarget === null) {
     const near = nearQuantityNames(target, names);
     // A single token one edit from exactly one quantity is that quantity.
@@ -296,6 +299,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   const aliases = aliasesForTarget(graph, resolvedTarget);
   const parsed = parseKnown(rest);
   for (const note of parsed.notes) ctx.err(note);
+  if (!Array.isArray(parsed.known)) {
+    try {
+      assertSynonymAgreement(parsed.known);
+    } catch (e) {
+      if (e instanceof SynonymDisagreementError) throw new CliError(`upt explain: ${e.message}`);
+      throw e;
+    }
+  }
   const rebound = rebind(parsed.known, aliases, inputNames);
   const known = shareSynonyms(rebound, names);
   let x;

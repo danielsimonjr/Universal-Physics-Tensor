@@ -11,6 +11,7 @@ import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
 import { CliError, UsageError } from '../errors.js';
+import { expandSynonymValues, SynonymDisagreementError } from '../../dimensional/formula-names.js';
 import { formulaParserLabel } from '../version.js';
 import { withParser } from '../euler-guard.js';
 import { HBAR_TRUNCATION_NOTE, codataScope } from '../eval-numbers.js';
@@ -62,7 +63,12 @@ function parseScope(
       throw new CliError(`upt eval: '${a.assignment}' is not a finite number or a known unit. ${msg}`);
     }
   }
-  return { scope, notes };
+  try {
+    return { scope: expandSynonymValues(scope), notes };
+  } catch (e) {
+    if (e instanceof SynonymDisagreementError) throw new CliError(`upt eval: ${e.message}`);
+    throw e;
+  }
 }
 
 const HELP = `upt eval "<formula>" name=value ...

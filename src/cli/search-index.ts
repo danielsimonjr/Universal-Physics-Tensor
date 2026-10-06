@@ -2,7 +2,7 @@
  * The word index behind `upt search`, shared with `upt explain`'s NOT COVERED answer (audit I5).
  *
  * It indexes every registry the CLI exposes by WORD: names, ids, symbols, genuine aliases
- * (`resolveToCatalogName`) and catalog-bridge descriptions. An equal dimension is never a match: a
+ * (`resolveQuantityName`) and catalog-bridge descriptions. An equal dimension is never a match: a
  * radius is not a wavelength, and angular frequency is not frequency, even where the two share a
  * dimension.
  *
@@ -349,7 +349,7 @@ export function matchEveryWord(
   const quantityNames = new Set(index.filter((e) => e.kind === 'quantity').map((e) => e.id));
   const aliasTargets = new Map<string, string>();
   for (const q of significant) {
-    const resolved = api.resolveToCatalogName(q, quantityNames);
+    const resolved = api.resolveQuantityName(q, quantityNames);
     if (resolved !== null && resolved !== q) aliasTargets.set(resolved, q);
   }
 

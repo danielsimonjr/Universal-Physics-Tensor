@@ -246,11 +246,11 @@ export type { UserEquation, EquationLanding } from './user-equation.js';
 export type { EquationAnalysis, EquationHint } from './user-equation.js';
 export {
   parseUserEquation,
-  resolveToCatalogName,
   suggestQuantities,
   suggestByDimension,
   equationLanding,
   analyzeUserEquation,
   UserEquationError,
 } from './user-equation.js';
+export { resolveQuantityName, SynonymDisagreementError } from '../dimensional/formula-names.js';
 // formatConnectedSummary stays internal — CLI reaches it via cli-api.

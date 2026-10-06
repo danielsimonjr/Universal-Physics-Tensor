@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] One name resolver, one unit grammar, one evaluable id, and scalar-AST prefactors that match the stated formula.
+  `upt eval` keeps `T=300` when `temperature=400` is also set and prints a value. `erasure-energy` does not resolve as an explain input. `--sigma T_K=10eV` rejects the energy. `W/m2K` and `cm^2/Vs` are unknown units. `evaluateRelation('be-62')` throws unknown id. The point-charge field recovers `q/(ε₀ r²)`.
+  Done: one `resolveQuantityName` over one synonym-group list. The unit grammar accepts a unique juxtaposition and rejects an ambiguous one. `resolveEvaluable` is what `upt evaluate` calls. Each canonical equality's dimensionless factor is the AST factor times the sourced table, and the point-charge field is `q/(4π ε₀ r²)`.
+
 - [x] Release 6.1.0.
   Published npm is 6.0.0. The pin and the #421 fixes are on this tree. `package.json` is 6.0.0.
   Done: `package.json` is 6.1.0. The catalog JSON, the atlas JSON, and the architecture dependency graph carry 6.1.0. The Part VIII check requires 6.1.0. The annotated tag is the publish step after this commit is on master.

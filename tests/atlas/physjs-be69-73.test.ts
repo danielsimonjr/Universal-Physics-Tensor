@@ -31,7 +31,8 @@ import { evaluateKelvinPeltier } from '../../src/bridges/be73-kelvin-peltier.js'
 import { evaluateTolmanEhrenfest } from '../../src/bridges/be68-tolman-ehrenfest.js';
 import { K_B_SI } from '../../src/core/constants.js';
 import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
-import { aliasesForTarget, rewriteInputKey } from '../../src/composition/aliases.js';
+import { aliasesForTarget } from '../../src/composition/aliases.js';
+import { resolveQuantityName } from '../../src/dimensional/formula-names.js';
 import { matchingCatalogEdges } from '../../src/composition/canonical-compare.js';
 import { composeEdges } from '../../src/composition/compose.js';
 import { CompositionJunctionError } from '../../src/composition/edge.js';
@@ -160,13 +161,13 @@ describe('PhysJS proofs for be-69 through be-73', () => {
     expect(evaluateKelvinPeltier({ S_V_per_K: 2e-4, T_K: 300 }).Pi_V).toBeCloseTo(0.06, 12);
     const names = new Set(CATALOG_GRAPH.flatMap((edge) => [edge.target.name, ...edge.sources.map((source) => source.name)]));
     const fast = aliasesForTarget(CATALOG_GRAPH, 'fast-magnetosonic-speed');
-    expect(rewriteInputKey('cs_m_per_s', fast, names)).toBe('sound-speed');
-    expect(rewriteInputKey('B_T', fast, names)).toBe('magnetic-flux-density');
+    expect(resolveQuantityName('cs_m_per_s', names, fast)).toBe('sound-speed');
+    expect(resolveQuantityName('B_T', names, fast)).toBe('magnetic-flux-density');
     const ratio = aliasesForTarget(CATALOG_GRAPH, 'gravitational-frequency-ratio');
-    expect(rewriteInputKey('g1', ratio, names)).toBe('redshift-metric-g00-1');
-    expect(rewriteInputKey('g_00', ratio, names)).toBeNull();
+    expect(resolveQuantityName('g1', names, ratio)).toBe('redshift-metric-g00-1');
+    expect(resolveQuantityName('g_00', names, ratio)).toBeNull();
     const tolman = aliasesForTarget(CATALOG_GRAPH, 'tolman-invariant');
-    expect(rewriteInputKey('g_00', tolman, names)).toBe('metric-g00');
+    expect(resolveQuantityName('g_00', names, tolman)).toBe('metric-g00');
     expect(
       matchingCatalogEdges('fast-magnetosonic-speed', ['sound-speed', 'magnetic-flux-density', 'plasma-mass-density']).map(
         (edge) => edge.id,

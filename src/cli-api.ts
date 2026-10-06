@@ -34,7 +34,7 @@ export {
   renderDotToSvg,
   equationLanding,
   analyzeUserEquation,
-  resolveToCatalogName,
+  resolveQuantityName,
   suggestQuantities,
   buckinghamPi,
   dimensionallyDetermines,
@@ -247,6 +247,8 @@ export {
  * @internal
  */
 export { readBinding, bindingInUnit, readNamedBinding } from './numerical/binding-value.js';
+export { resolveEvaluable } from './composition/evaluate-relation.js';
+export { SynonymDisagreementError } from './dimensional/formula-names.js';
 
 /**
  * Builtin dimension checker for `upt eval`.

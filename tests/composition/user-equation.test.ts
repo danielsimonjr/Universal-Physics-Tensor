@@ -9,7 +9,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   parseUserEquation,
-  resolveToCatalogName,
   suggestQuantities,
   suggestByDimension,
   equationLanding,
@@ -18,6 +17,7 @@ import {
   rewriteCatalogHyphens,
   UserEquationError,
 } from '../../src/composition/user-equation.js';
+import { resolveQuantityName } from '../../src/dimensional/formula-names.js';
 import {
   LENGTH, MASS, TIME, VELOCITY, ACCELERATION, ENERGY, FREQUENCY, ENTROPY, AREA,
 } from '../../src/dimensional/types.js';
@@ -104,24 +104,24 @@ describe('W2: catalog kebabs are identifiers, not subtraction', () => {
   });
 });
 
-describe('resolveToCatalogName', () => {
+describe('resolveQuantityName', () => {
   const names = new Set(['photon-energy', 'impact_parameter', 'mass', 'temperature']);
   it('matches a literal name', () => {
-    expect(resolveToCatalogName('mass', names)).toBe('mass');
-    expect(resolveToCatalogName('photon-energy', names)).toBe('photon-energy');
-    expect(resolveToCatalogName('impact_parameter', names)).toBe('impact_parameter');
+    expect(resolveQuantityName('mass', names)).toBe('mass');
+    expect(resolveQuantityName('photon-energy', names)).toBe('photon-energy');
+    expect(resolveQuantityName('impact_parameter', names)).toBe('impact_parameter');
   });
 
   it('L4: latex T resolves to temperature when temperature is in the catalog', () => {
-    expect(resolveToCatalogName('T', names)).toBe('temperature');
-    expect(resolveToCatalogName('T', new Set(['mass']))).toBeNull();
+    expect(resolveQuantityName('T', names)).toBe('temperature');
+    expect(resolveQuantityName('T', new Set(['mass']))).toBeNull();
   });
   it('matches via the _<->- swap (both directions)', () => {
-    expect(resolveToCatalogName('photon_energy', names)).toBe('photon-energy');
-    expect(resolveToCatalogName('impact-parameter', names)).toBe('impact_parameter');
+    expect(resolveQuantityName('photon_energy', names)).toBe('photon-energy');
+    expect(resolveQuantityName('impact-parameter', names)).toBe('impact_parameter');
   });
   it('returns null for an unmatched name', () => {
-    expect(resolveToCatalogName('unknown-thing', names)).toBeNull();
+    expect(resolveQuantityName('unknown-thing', names)).toBeNull();
   });
 });
 
