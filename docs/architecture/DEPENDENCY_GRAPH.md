@@ -39,12 +39,12 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 72 files
-- **bridges**: 134 files
+- **bridges**: 136 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
 - **root**: 1 file
-- **composition**: 97 files
+- **composition**: 99 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -2320,6 +2320,49 @@ The codebase is organized into the following modules:
 - Classes: `CatalogIngestionError`
 - Interfaces: `CatalogEntryStatus`, `CatalogIngestionReport`
 - Functions: `catalogToCells`, `scanCatalog`, `ingestCatalog`, `ingestionReportToFluxReport`
+
+---
+
+### `src/bridges/condensed-r8-catalog.ts` - Catalog rows for BE-134 through BE-146.
+
+**Exports:**
+- Constants: `CONDENSED_R8_CATALOG_ROWS`
+
+---
+
+### `src/bridges/condensed-r8.ts` - BE-134 through BE-146 — condensed-matter closed forms.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `E_SI, H_SI, HBAR_SI, K_B_SI` | Import |
+| `../dimensional/formula-names.js` | `EPS0_SI` | Import |
+
+**Exports:**
+- Interfaces:
+
+  ```text
+  BlochLawInputs, BlochLawResult, DensityOfStates3DInputs, DensityOfStates3DResult,
+  DensityOfStates2DInputs, DensityOfStates2DResult, ThomasFermiInputs, ThomasFermiResult,
+  BuiltinVoltageInputs, BuiltinVoltageResult, SemiconductorFermiInputs, SemiconductorFermiResult,
+  OnsagerFrequencyInputs, OnsagerFrequencyResult, JosephsonInductanceInputs,
+  JosephsonInductanceResult, LowerCriticalInputs, LowerCriticalResult, AcDrudeInputs, AcDrudeResult,
+  MatthiessenInputs, MatthiessenResult, StonerInputs, StonerResult, GorterCasimirInputs,
+  GorterCasimirResult
+  ```
+
+- Functions:
+
+  ```text
+  evaluateBlochLaw, blochLandeMoment, evaluateDensityOfStates3D, dos3dOneSpin,
+  evaluateDensityOfStates2D, dos2dValley, evaluateThomasFermi, thomasFermiFlat,
+  evaluateBuiltinVoltage, builtinWithoutLog, evaluateSemiconductorFermi, fermiHalfOffset,
+  evaluateOnsagerFrequency, onsagerWithoutTwoPi, evaluateJosephsonInductance, josephsonWithoutTwo,
+  evaluateLowerCritical, lowerCriticalWithoutFourPi, evaluateAcDrude, acDrudeWithoutDc,
+  evaluateMatthiessen, matthiessenSingle, evaluateStoner, stonerTwoBubbles, evaluateGorterCasimir,
+  gorterExponentTwo
+  ```
+
 
 ---
 
@@ -5915,6 +5958,30 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/edges/condensed-r8.ts` - Composition edges for BE-134 through BE-146.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../../bridges/condensed-r8.js` | `evaluateAcDrude, evaluateBlochLaw, evaluateBuiltinVoltage, evaluateDensityOfStates2D, evaluateDensityOfStates3D, evaluateGorterCasimir, evaluateJosephsonInductance, evaluateLowerCritical, evaluateMatthiessen, evaluateOnsagerFrequency, evaluateSemiconductorFermi, evaluateStoner, evaluateThomasFermi` | Import |
+| `../edge.js` | `withBoundAliases, BridgeEdge` | Import |
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../quantities.js` | `acdrudeBandmassQ, acdrudeConductQ, acdrudeN3Q, acdrudeRadianQ, acdrudeScatterQ, blochlawDeficitQ, blochlawDstiffQ, blochlawMubQ, blochlawWarmthQ, blochlawZetaQ, builtinAcceptorQ, builtinDonorQ, builtinNiQ, builtinVbiQ, builtinWarmthQ, dos2dBandmassQ, dos2dStatesQ, dos3dAbscissaQ, dos3dBandmassQ, dos3dStatesQ, fermioffsetElecmassQ, fermioffsetHolemassQ, fermioffsetMuoffQ, fermioffsetWarmthQ, gortercasNsQ, gortercasTcQ, gortercasWarmthQ, josephsonlHenryQ, josephsonlIcQ, lowercritBc1Q, lowercritPenQ, lowercritXiQ, matthsumScatter1Q, matthsumScatter2Q, matthsumScatterQ, onsagerkKareaQ, onsagerkOrbitQ, stonerchiEnhancedQ, stonerchiIgQ, stonerchiPauliQ, tfscreenChemicalQ, tfscreenK2Q, tfscreenN3Q` | Import |
+
+**Exports:**
+- Constants:
+
+  ```text
+  be134Edge, be135Edge, be136Edge, be137Edge, be138Edge, be139Edge, be140Edge, be141Edge, be142Edge,
+  be143Edge, be144Edge, be145Edge, be146Edge, CONDENSED_R8_EDGES
+  ```
+
+
+---
+
 ### `src/composition/edges/engineering-r7.ts` - Composition edges for BE-126 through BE-133.
 
 **Internal Dependencies:**
@@ -6987,6 +7054,31 @@ The codebase is organized into the following modules:
   ambegaokarProductQ, bcsQuarticQ, bcsHeatJumpQ, conductionDosQ, valenceDosQ, massActionGapQ,
   massActionTemperatureQ, massActionDensityQ, lstStaticQ, lstInfinityQ, lstRatioQ, bktStiffnessQ,
   bktTemperatureQ, landauerTransmissionQ, landauerChannelConductanceQ
+  ```
+
+
+---
+
+### `src/composition/quantities/condensed-r8.ts` - Quantity nodes for BE-134 through BE-146.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS, ENERGY, LENGTH, MASS, TEMPERATURE, TIME` | Import |
+
+**Exports:**
+- Constants:
+
+  ```text
+  blochlawMubQ, blochlawZetaQ, blochlawWarmthQ, blochlawDstiffQ, blochlawDeficitQ, dos3dBandmassQ,
+  dos3dAbscissaQ, dos3dStatesQ, dos2dBandmassQ, dos2dStatesQ, tfscreenN3Q, tfscreenChemicalQ,
+  tfscreenK2Q, builtinWarmthQ, builtinAcceptorQ, builtinDonorQ, builtinNiQ, builtinVbiQ,
+  fermioffsetWarmthQ, fermioffsetHolemassQ, fermioffsetElecmassQ, fermioffsetMuoffQ, onsagerkKareaQ,
+  onsagerkOrbitQ, josephsonlIcQ, josephsonlHenryQ, lowercritPenQ, lowercritXiQ, lowercritBc1Q,
+  acdrudeN3Q, acdrudeBandmassQ, acdrudeScatterQ, acdrudeRadianQ, acdrudeConductQ, matthsumScatter1Q,
+  matthsumScatter2Q, matthsumScatterQ, stonerchiPauliQ, stonerchiIgQ, stonerchiEnhancedQ,
+  gortercasWarmthQ, gortercasTcQ, gortercasNsQ
   ```
 
 
@@ -9239,7 +9331,7 @@ graph TD
         N8[be102-landauer-conductance]
         N9[be11-decoherence-confrontation]
         N10[be21-kss-confrontation]
-        N11[...129 more]
+        N11[...131 more]
     end
 
     subgraph Canonical
@@ -9279,7 +9371,7 @@ graph TD
         N33[audit-coverage]
         N34[axes]
         N35[axis-audit]
-        N36[...92 more]
+        N36[...94 more]
     end
 
     subgraph Core
@@ -9366,17 +9458,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 484 |
+| Total TypeScript Files | 488 |
 | Total Modules | 13 |
-| Total Lines of Code | 104896 |
-| Total Exports | 3987 |
+| Total Lines of Code | 106274 |
+| Total Exports | 4071 |
 | Total Re-exports | 1969 |
 | Total Classes | 63 |
-| Total Interfaces | 630 |
-| Total Functions | 900 |
+| Total Interfaces | 656 |
+| Total Functions | 926 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 591 |
+| Type-only Imports | 594 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 
