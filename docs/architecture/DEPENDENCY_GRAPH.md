@@ -39,12 +39,12 @@ This document provides a comprehensive dependency graph of all files, components
 The codebase is organized into the following modules:
 
 - **atlas**: 72 files
-- **bridges**: 136 files
+- **bridges**: 138 files
 - **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
 - **root**: 1 file
-- **composition**: 99 files
+- **composition**: 101 files
 - **core**: 11 files
 - **diff**: 3 files
 - **dimensional**: 36 files
@@ -3665,6 +3665,55 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/bridges/thermal-r9-catalog.ts` - Catalog rows for BE-147 through BE-170.
+
+**Exports:**
+- Constants: `THERMAL_R9_CATALOG_ROWS`
+
+---
+
+### `src/bridges/thermal-r9.ts` - BE-147 through BE-170 — thermal and chemical closed forms.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../core/constants.js` | `C_SI, E_SI, H_SI, HBAR_SI, K_B_SI, N_A_SI` | Import |
+
+**Exports:**
+- Interfaces:
+
+  ```text
+  ArrheniusInputs, ArrheniusResult, EyringInputs, EyringResult, VanTHoffInputs, VanTHoffResult,
+  GibbsIsothermInputs, GibbsIsothermResult, NernstGibbsInputs, NernstGibbsResult,
+  ClausiusClapeyronInputs, ClausiusClapeyronResult, RaoultInputs, RaoultResult, PrandtlInputs,
+  PrandtlResult, ReynoldsNumberInputs, ReynoldsNumberResult, BiotInputs, BiotResult, NusseltInputs,
+  NusseltResult, SchmidtInputs, SchmidtResult, SherwoodInputs, SherwoodResult,
+  FourierConductionInputs, FourierConductionResult, NewtonCoolingInputs, NewtonCoolingResult,
+  OttoInputs, OttoResult, JouleThomsonInputs, JouleThomsonResult, PlanckSpectrumInputs,
+  PlanckSpectrumResult, StefanBoltzmannResult, WienDisplacementInputs, WienDisplacementResult,
+  SackurTetrodeInputs, SackurTetrodeResult, SahaInputs, SahaResult, RichardsonDushmanInputs,
+  RichardsonDushmanResult, OnsagerReciprocityInputs, OnsagerReciprocityResult
+  ```
+
+- Functions:
+
+  ```text
+  evaluateArrhenius, arrheniusWithoutExp, evaluateEyring, eyringArrheniusMismatch, evaluateVanTHoff,
+  vantHoffWithoutT2, evaluateGibbsIsotherm, gibbsWithoutLog, evaluateNernstGibbs, nernstMolecular,
+  nernstWithoutLog, evaluateClausiusClapeyron, clapeyronSlopeNotIntegral, evaluateRaoult,
+  raoultWithoutMole, evaluatePrandtl, prandtlWithoutCp, evaluateReynoldsNumber, reynoldsPipeFactor,
+  evaluateBiot, biotFromVolume, biotLumpedThreshold, evaluateNusselt, nusseltWithoutLength,
+  evaluateSchmidt, schmidtLewis, evaluateSherwood, sherwoodWithoutLength, evaluateFourierConduction,
+  fourierWithoutMinus, evaluateNewtonCooling, newtonFlux, evaluateOtto, ottoWrongExponent,
+  evaluateJouleThomson, jouleThomsonBracket, evaluatePlanckSpectrum, planckOnePolarization,
+  evaluateStefanBoltzmann, stefanFromH, stefanWithout60, evaluateWienDisplacement,
+  evaluateSackurTetrode, sackurWithoutFiveHalves, evaluateSaha, sahaTimesTwo,
+  evaluateRichardsonDushman, richardsonReflected, evaluateOnsagerReciprocity, onsagerAntisymmetric
+  ```
+
+
+---
+
 ## Canonical Dependencies
 
 ### `src/canonical/canonical-equation.ts` - Canonical (textbook) physics equations — the ground-truth L-layer of the
@@ -6077,6 +6126,31 @@ The codebase is organized into the following modules:
 
 ---
 
+### `src/composition/edges/thermal-r9.ts` - Composition edges for BE-147 through BE-170.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../../dimensional/validator.js` | `ExprNode` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
+| `../../bridges/thermal-r9.js` | `evaluateArrhenius, evaluateBiot, evaluateClausiusClapeyron, evaluateEyring, evaluateFourierConduction, evaluateGibbsIsotherm, evaluateJouleThomson, evaluateNernstGibbs, evaluateNewtonCooling, evaluateNusselt, evaluateOnsagerReciprocity, evaluateOtto, evaluatePlanckSpectrum, evaluatePrandtl, evaluateRaoult, evaluateReynoldsNumber, evaluateRichardsonDushman, evaluateSackurTetrode, evaluateSaha, evaluateSchmidt, evaluateSherwood, evaluateStefanBoltzmann, evaluateVanTHoff, evaluateWienDisplacement` | Import |
+| `../edge.js` | `withBoundAliases, BridgeEdge` | Import |
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../quantities.js` | `arrhbarrierQ, arrhprefacQ, arrhrateQ, arrhwarmthQ, biotfilmQ, biotkQ, biotlengthQ, biotratioQ, clapintlatentQ, clapintlnQ, clapintwarm1Q, clapintwarm2Q, eyringbarrierQ, eyringrateQ, eyringwarmthQ, fourierslabendQ, fourierslabfluxQ, fourierslabkQ, fourierslablenQ, fourierslabstartQ, gibbsisodGQ, gibbsisoKQ, gibbsisowarmthQ, jtcpQ, jtcdvdtQ, jtcmuQ, jtcvolumeQ, jtcwarmthQ, nernstgE0Q, nernstgEQ, nernstgQQ, nernstgnQ, nernstgwarmthQ, newtonareaQ, newtoncpQ, newtonfilmQ, newtonrhoQ, newtontheta0Q, newtonthetaQ, newtontimeQ, newtonvolQ, nusseltfilmQ, nusseltkQ, nusseltlenQ, nusseltratioQ, onsagerb0Q, onsagerl12Q, onsagerl21Q, ottogammaQ, ottoetaQ, ottoratioQ, planckfreqQ, planckuQ, planckwarmthQ, prandtlcpQ, prandtlkQ, prandtlmuQ, prandtlratioQ, raoultmoleQ, raoultsatQ, raoultvaporQ, reynumlenQ, reynummuQ, reynumratioQ, reynumrhoQ, reynumvelQ, richardsjQ, richardsmassQ, richardsphiQ, richardswarmthQ, sackurcountQ, sackurdensityQ, sackurentropyQ, sackurquantumQ, sahaconstQ, sahaionQ, sahamassQ, sahawarmthQ, schmidtdiffQ, schmidtmuQ, schmidtratioQ, schmidtrhoQ, sherwooddiffQ, sherwoodkmQ, sherwoodlenQ, sherwoodratioQ, stefansigmaQ, vanthoffenthalpyQ, vanthoffslopeQ, vanthoffwarmthQ, wienbQ, wienrootQ` | Import |
+
+**Exports:**
+- Constants:
+
+  ```text
+  be147Edge, be148Edge, be149Edge, be150Edge, be151Edge, be152Edge, be153Edge, be154Edge, be155Edge,
+  be156Edge, be157Edge, be158Edge, be159Edge, be160Edge, be161Edge, be162Edge, be163Edge, be164Edge,
+  be165Edge, be166Edge, be167Edge, be168Edge, be169Edge, be170Edge, THERMAL_R9_EDGES
+  ```
+
+
+---
+
 ### `src/composition/enumerate.ts` - Phase-D novel-candidate enumeration (v0.10.0 T3 — Part-IX §6's
 
 **Internal Dependencies:**
@@ -7238,6 +7312,36 @@ The codebase is organized into the following modules:
   totalMutualInformationQ, darwinismMagnitudeQ, fragmentCountQ, darwinismDecayExponentQ,
   fragmentMutualInformationQ, retardedFieldAmplitudeQ, advancedFieldAmplitudeQ, timeSymmetryResidualQ,
   timeSymmetricFieldAmplitudeQ
+  ```
+
+
+---
+
+### `src/composition/quantities/thermal-r9.ts` - Quantity nodes for BE-147 through BE-170.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../quantity.js` | `Quantity` | Import (type-only) |
+| `../../dimensional/types.js` | `DIMENSIONLESS, ENERGY, ENTROPY, FREQUENCY, LENGTH, MASS, MASS_DENSITY, TEMPERATURE, TIME, VELOCITY` | Import |
+
+**Exports:**
+- Constants:
+
+  ```text
+  arrhprefacQ, arrhbarrierQ, arrhwarmthQ, arrhrateQ, eyringbarrierQ, eyringwarmthQ, eyringrateQ,
+  vanthoffenthalpyQ, vanthoffwarmthQ, vanthoffslopeQ, gibbsisoKQ, gibbsisowarmthQ, gibbsisodGQ,
+  nernstgE0Q, nernstgnQ, nernstgQQ, nernstgwarmthQ, nernstgEQ, clapintlatentQ, clapintwarm1Q,
+  clapintwarm2Q, clapintlnQ, raoultmoleQ, raoultsatQ, raoultvaporQ, prandtlmuQ, prandtlcpQ, prandtlkQ,
+  prandtlratioQ, reynumrhoQ, reynumvelQ, reynumlenQ, reynummuQ, reynumratioQ, biotfilmQ, biotlengthQ,
+  biotkQ, biotratioQ, nusseltfilmQ, nusseltlenQ, nusseltkQ, nusseltratioQ, schmidtmuQ, schmidtrhoQ,
+  schmidtdiffQ, schmidtratioQ, sherwoodkmQ, sherwoodlenQ, sherwooddiffQ, sherwoodratioQ,
+  fourierslabkQ, fourierslabendQ, fourierslabstartQ, fourierslablenQ, fourierslabfluxQ, newtonrhoQ,
+  newtoncpQ, newtonvolQ, newtonfilmQ, newtonareaQ, newtontimeQ, newtontheta0Q, newtonthetaQ,
+  ottoratioQ, ottogammaQ, ottoetaQ, jtcdvdtQ, jtcvolumeQ, jtcwarmthQ, jtcpQ, jtcmuQ, planckfreqQ,
+  planckwarmthQ, planckuQ, stefansigmaQ, wienrootQ, wienbQ, sackurcountQ, sackurquantumQ,
+  sackurdensityQ, sackurentropyQ, sahamassQ, sahawarmthQ, sahaionQ, sahaconstQ, richardsmassQ,
+  richardswarmthQ, richardsphiQ, richardsjQ, onsagerl12Q, onsagerb0Q, onsagerl21Q
   ```
 
 
@@ -9382,7 +9486,7 @@ graph TD
         N8[be102-landauer-conductance]
         N9[be11-decoherence-confrontation]
         N10[be21-kss-confrontation]
-        N11[...131 more]
+        N11[...133 more]
     end
 
     subgraph Canonical
@@ -9422,7 +9526,7 @@ graph TD
         N33[audit-coverage]
         N34[axes]
         N35[axis-audit]
-        N36[...94 more]
+        N36[...96 more]
     end
 
     subgraph Core
@@ -9509,17 +9613,17 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 488 |
+| Total TypeScript Files | 492 |
 | Total Modules | 13 |
-| Total Lines of Code | 107236 |
-| Total Exports | 4265 |
+| Total Lines of Code | 109525 |
+| Total Exports | 4433 |
 | Total Re-exports | 2162 |
 | Total Classes | 63 |
-| Total Interfaces | 656 |
-| Total Functions | 928 |
+| Total Interfaces | 703 |
+| Total Functions | 978 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
-| Type-only Imports | 594 |
+| Type-only Imports | 597 |
 | Runtime Circular Deps | 0 |
 | Type-only Circular Deps | 0 |
 

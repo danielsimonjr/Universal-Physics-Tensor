@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 8.0.0
-  totalFiles: 488
+  totalFiles: 492
   totalModules: 13
-  totalExports: 4265
+  totalExports: 4433
 entryPoints:
   - file: src/index.ts
     type: main
@@ -8844,6 +8844,178 @@ modules:
       constants:
         - TENSOR_INDEX_PATTERN
         - TENSOR_INDEX_BY_CATEGORY
+    src/bridges/thermal-r9-catalog.ts:
+      description: Catalog rows for BE-147 through BE-170.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies: []
+      exports:
+        - THERMAL_R9_CATALOG_ROWS
+      constants:
+        - THERMAL_R9_CATALOG_ROWS
+    src/bridges/thermal-r9.ts:
+      description: BE-147 through BE-170 — thermal and chemical closed forms.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../core/constants.js
+          imports:
+            - C_SI
+            - E_SI
+            - H_SI
+            - HBAR_SI
+            - K_B_SI
+            - N_A_SI
+      exports:
+        - evaluateArrhenius
+        - arrheniusWithoutExp
+        - evaluateEyring
+        - eyringArrheniusMismatch
+        - evaluateVanTHoff
+        - vantHoffWithoutT2
+        - evaluateGibbsIsotherm
+        - gibbsWithoutLog
+        - evaluateNernstGibbs
+        - nernstMolecular
+        - nernstWithoutLog
+        - evaluateClausiusClapeyron
+        - clapeyronSlopeNotIntegral
+        - evaluateRaoult
+        - raoultWithoutMole
+        - evaluatePrandtl
+        - prandtlWithoutCp
+        - evaluateReynoldsNumber
+        - reynoldsPipeFactor
+        - evaluateBiot
+        - biotFromVolume
+        - biotLumpedThreshold
+        - evaluateNusselt
+        - nusseltWithoutLength
+        - evaluateSchmidt
+        - schmidtLewis
+        - evaluateSherwood
+        - sherwoodWithoutLength
+        - evaluateFourierConduction
+        - fourierWithoutMinus
+        - evaluateNewtonCooling
+        - newtonFlux
+        - evaluateOtto
+        - ottoWrongExponent
+        - evaluateJouleThomson
+        - jouleThomsonBracket
+        - evaluatePlanckSpectrum
+        - planckOnePolarization
+        - evaluateStefanBoltzmann
+        - stefanFromH
+        - stefanWithout60
+        - evaluateWienDisplacement
+        - evaluateSackurTetrode
+        - sackurWithoutFiveHalves
+        - evaluateSaha
+        - sahaTimesTwo
+        - evaluateRichardsonDushman
+        - richardsonReflected
+        - evaluateOnsagerReciprocity
+        - onsagerAntisymmetric
+      interfaces:
+        - ArrheniusInputs
+        - ArrheniusResult
+        - EyringInputs
+        - EyringResult
+        - VanTHoffInputs
+        - VanTHoffResult
+        - GibbsIsothermInputs
+        - GibbsIsothermResult
+        - NernstGibbsInputs
+        - NernstGibbsResult
+        - ClausiusClapeyronInputs
+        - ClausiusClapeyronResult
+        - RaoultInputs
+        - RaoultResult
+        - PrandtlInputs
+        - PrandtlResult
+        - ReynoldsNumberInputs
+        - ReynoldsNumberResult
+        - BiotInputs
+        - BiotResult
+        - NusseltInputs
+        - NusseltResult
+        - SchmidtInputs
+        - SchmidtResult
+        - SherwoodInputs
+        - SherwoodResult
+        - FourierConductionInputs
+        - FourierConductionResult
+        - NewtonCoolingInputs
+        - NewtonCoolingResult
+        - OttoInputs
+        - OttoResult
+        - JouleThomsonInputs
+        - JouleThomsonResult
+        - PlanckSpectrumInputs
+        - PlanckSpectrumResult
+        - StefanBoltzmannResult
+        - WienDisplacementInputs
+        - WienDisplacementResult
+        - SackurTetrodeInputs
+        - SackurTetrodeResult
+        - SahaInputs
+        - SahaResult
+        - RichardsonDushmanInputs
+        - RichardsonDushmanResult
+        - OnsagerReciprocityInputs
+        - OnsagerReciprocityResult
+      functions:
+        - evaluateArrhenius
+        - arrheniusWithoutExp
+        - evaluateEyring
+        - eyringArrheniusMismatch
+        - evaluateVanTHoff
+        - vantHoffWithoutT2
+        - evaluateGibbsIsotherm
+        - gibbsWithoutLog
+        - evaluateNernstGibbs
+        - nernstMolecular
+        - nernstWithoutLog
+        - evaluateClausiusClapeyron
+        - clapeyronSlopeNotIntegral
+        - evaluateRaoult
+        - raoultWithoutMole
+        - evaluatePrandtl
+        - prandtlWithoutCp
+        - evaluateReynoldsNumber
+        - reynoldsPipeFactor
+        - evaluateBiot
+        - biotFromVolume
+        - biotLumpedThreshold
+        - evaluateNusselt
+        - nusseltWithoutLength
+        - evaluateSchmidt
+        - schmidtLewis
+        - evaluateSherwood
+        - sherwoodWithoutLength
+        - evaluateFourierConduction
+        - fourierWithoutMinus
+        - evaluateNewtonCooling
+        - newtonFlux
+        - evaluateOtto
+        - ottoWrongExponent
+        - evaluateJouleThomson
+        - jouleThomsonBracket
+        - evaluatePlanckSpectrum
+        - planckOnePolarization
+        - evaluateStefanBoltzmann
+        - stefanFromH
+        - stefanWithout60
+        - evaluateWienDisplacement
+        - evaluateSackurTetrode
+        - sackurWithoutFiveHalves
+        - evaluateSaha
+        - sahaTimesTwo
+        - evaluateRichardsonDushman
+        - richardsonReflected
+        - evaluateOnsagerReciprocity
+        - onsagerAntisymmetric
   canonical:
     src/canonical/canonical-equation.ts:
       description: Canonical (textbook) physics equations — the ground-truth L-layer of the
@@ -15179,6 +15351,201 @@ modules:
         - be60Edge
         - be63Edge
         - PROVED_SEED_EDGES
+    src/composition/edges/thermal-r9.ts:
+      description: Composition edges for BE-147 through BE-170.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../../dimensional/validator.js
+          imports:
+            - ExprNode
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+        - file: ../../dimensional/symbolic-constants.js
+          imports:
+            - CONSTANTS
+        - file: ../../bridges/thermal-r9.js
+          imports:
+            - evaluateArrhenius
+            - evaluateBiot
+            - evaluateClausiusClapeyron
+            - evaluateEyring
+            - evaluateFourierConduction
+            - evaluateGibbsIsotherm
+            - evaluateJouleThomson
+            - evaluateNernstGibbs
+            - evaluateNewtonCooling
+            - evaluateNusselt
+            - evaluateOnsagerReciprocity
+            - evaluateOtto
+            - evaluatePlanckSpectrum
+            - evaluatePrandtl
+            - evaluateRaoult
+            - evaluateReynoldsNumber
+            - evaluateRichardsonDushman
+            - evaluateSackurTetrode
+            - evaluateSaha
+            - evaluateSchmidt
+            - evaluateSherwood
+            - evaluateStefanBoltzmann
+            - evaluateVanTHoff
+            - evaluateWienDisplacement
+        - file: ../edge.js
+          imports:
+            - withBoundAliases
+            - BridgeEdge
+        - file: ../quantity.js
+          imports:
+            - Quantity
+          typeOnly: true
+        - file: ../quantities.js
+          imports:
+            - arrhbarrierQ
+            - arrhprefacQ
+            - arrhrateQ
+            - arrhwarmthQ
+            - biotfilmQ
+            - biotkQ
+            - biotlengthQ
+            - biotratioQ
+            - clapintlatentQ
+            - clapintlnQ
+            - clapintwarm1Q
+            - clapintwarm2Q
+            - eyringbarrierQ
+            - eyringrateQ
+            - eyringwarmthQ
+            - fourierslabendQ
+            - fourierslabfluxQ
+            - fourierslabkQ
+            - fourierslablenQ
+            - fourierslabstartQ
+            - gibbsisodGQ
+            - gibbsisoKQ
+            - gibbsisowarmthQ
+            - jtcpQ
+            - jtcdvdtQ
+            - jtcmuQ
+            - jtcvolumeQ
+            - jtcwarmthQ
+            - nernstgE0Q
+            - nernstgEQ
+            - nernstgQQ
+            - nernstgnQ
+            - nernstgwarmthQ
+            - newtonareaQ
+            - newtoncpQ
+            - newtonfilmQ
+            - newtonrhoQ
+            - newtontheta0Q
+            - newtonthetaQ
+            - newtontimeQ
+            - newtonvolQ
+            - nusseltfilmQ
+            - nusseltkQ
+            - nusseltlenQ
+            - nusseltratioQ
+            - onsagerb0Q
+            - onsagerl12Q
+            - onsagerl21Q
+            - ottogammaQ
+            - ottoetaQ
+            - ottoratioQ
+            - planckfreqQ
+            - planckuQ
+            - planckwarmthQ
+            - prandtlcpQ
+            - prandtlkQ
+            - prandtlmuQ
+            - prandtlratioQ
+            - raoultmoleQ
+            - raoultsatQ
+            - raoultvaporQ
+            - reynumlenQ
+            - reynummuQ
+            - reynumratioQ
+            - reynumrhoQ
+            - reynumvelQ
+            - richardsjQ
+            - richardsmassQ
+            - richardsphiQ
+            - richardswarmthQ
+            - sackurcountQ
+            - sackurdensityQ
+            - sackurentropyQ
+            - sackurquantumQ
+            - sahaconstQ
+            - sahaionQ
+            - sahamassQ
+            - sahawarmthQ
+            - schmidtdiffQ
+            - schmidtmuQ
+            - schmidtratioQ
+            - schmidtrhoQ
+            - sherwooddiffQ
+            - sherwoodkmQ
+            - sherwoodlenQ
+            - sherwoodratioQ
+            - stefansigmaQ
+            - vanthoffenthalpyQ
+            - vanthoffslopeQ
+            - vanthoffwarmthQ
+            - wienbQ
+            - wienrootQ
+      exports:
+        - be147Edge
+        - be148Edge
+        - be149Edge
+        - be150Edge
+        - be151Edge
+        - be152Edge
+        - be153Edge
+        - be154Edge
+        - be155Edge
+        - be156Edge
+        - be157Edge
+        - be158Edge
+        - be159Edge
+        - be160Edge
+        - be161Edge
+        - be162Edge
+        - be163Edge
+        - be164Edge
+        - be165Edge
+        - be166Edge
+        - be167Edge
+        - be168Edge
+        - be169Edge
+        - be170Edge
+        - THERMAL_R9_EDGES
+      constants:
+        - be147Edge
+        - be148Edge
+        - be149Edge
+        - be150Edge
+        - be151Edge
+        - be152Edge
+        - be153Edge
+        - be154Edge
+        - be155Edge
+        - be156Edge
+        - be157Edge
+        - be158Edge
+        - be159Edge
+        - be160Edge
+        - be161Edge
+        - be162Edge
+        - be163Edge
+        - be164Edge
+        - be165Edge
+        - be166Edge
+        - be167Edge
+        - be168Edge
+        - be169Edge
+        - be170Edge
+        - THERMAL_R9_EDGES
     src/composition/enumerate.ts:
       description: Phase-D novel-candidate enumeration (v0.10.0 T3 — Part-IX §6's
       externalDependencies: []
@@ -19150,6 +19517,213 @@ modules:
         - advancedFieldAmplitudeQ
         - timeSymmetryResidualQ
         - timeSymmetricFieldAmplitudeQ
+    src/composition/quantities/thermal-r9.ts:
+      description: Quantity nodes for BE-147 through BE-170.
+      externalDependencies: []
+      nodeDependencies: []
+      internalDependencies:
+        - file: ../quantity.js
+          imports:
+            - Quantity
+          typeOnly: true
+        - file: ../../dimensional/types.js
+          imports:
+            - DIMENSIONLESS
+            - ENERGY
+            - ENTROPY
+            - FREQUENCY
+            - LENGTH
+            - MASS
+            - MASS_DENSITY
+            - TEMPERATURE
+            - TIME
+            - VELOCITY
+      exports:
+        - arrhprefacQ
+        - arrhbarrierQ
+        - arrhwarmthQ
+        - arrhrateQ
+        - eyringbarrierQ
+        - eyringwarmthQ
+        - eyringrateQ
+        - vanthoffenthalpyQ
+        - vanthoffwarmthQ
+        - vanthoffslopeQ
+        - gibbsisoKQ
+        - gibbsisowarmthQ
+        - gibbsisodGQ
+        - nernstgE0Q
+        - nernstgnQ
+        - nernstgQQ
+        - nernstgwarmthQ
+        - nernstgEQ
+        - clapintlatentQ
+        - clapintwarm1Q
+        - clapintwarm2Q
+        - clapintlnQ
+        - raoultmoleQ
+        - raoultsatQ
+        - raoultvaporQ
+        - prandtlmuQ
+        - prandtlcpQ
+        - prandtlkQ
+        - prandtlratioQ
+        - reynumrhoQ
+        - reynumvelQ
+        - reynumlenQ
+        - reynummuQ
+        - reynumratioQ
+        - biotfilmQ
+        - biotlengthQ
+        - biotkQ
+        - biotratioQ
+        - nusseltfilmQ
+        - nusseltlenQ
+        - nusseltkQ
+        - nusseltratioQ
+        - schmidtmuQ
+        - schmidtrhoQ
+        - schmidtdiffQ
+        - schmidtratioQ
+        - sherwoodkmQ
+        - sherwoodlenQ
+        - sherwooddiffQ
+        - sherwoodratioQ
+        - fourierslabkQ
+        - fourierslabendQ
+        - fourierslabstartQ
+        - fourierslablenQ
+        - fourierslabfluxQ
+        - newtonrhoQ
+        - newtoncpQ
+        - newtonvolQ
+        - newtonfilmQ
+        - newtonareaQ
+        - newtontimeQ
+        - newtontheta0Q
+        - newtonthetaQ
+        - ottoratioQ
+        - ottogammaQ
+        - ottoetaQ
+        - jtcdvdtQ
+        - jtcvolumeQ
+        - jtcwarmthQ
+        - jtcpQ
+        - jtcmuQ
+        - planckfreqQ
+        - planckwarmthQ
+        - planckuQ
+        - stefansigmaQ
+        - wienrootQ
+        - wienbQ
+        - sackurcountQ
+        - sackurquantumQ
+        - sackurdensityQ
+        - sackurentropyQ
+        - sahamassQ
+        - sahawarmthQ
+        - sahaionQ
+        - sahaconstQ
+        - richardsmassQ
+        - richardswarmthQ
+        - richardsphiQ
+        - richardsjQ
+        - onsagerl12Q
+        - onsagerb0Q
+        - onsagerl21Q
+      constants:
+        - arrhprefacQ
+        - arrhbarrierQ
+        - arrhwarmthQ
+        - arrhrateQ
+        - eyringbarrierQ
+        - eyringwarmthQ
+        - eyringrateQ
+        - vanthoffenthalpyQ
+        - vanthoffwarmthQ
+        - vanthoffslopeQ
+        - gibbsisoKQ
+        - gibbsisowarmthQ
+        - gibbsisodGQ
+        - nernstgE0Q
+        - nernstgnQ
+        - nernstgQQ
+        - nernstgwarmthQ
+        - nernstgEQ
+        - clapintlatentQ
+        - clapintwarm1Q
+        - clapintwarm2Q
+        - clapintlnQ
+        - raoultmoleQ
+        - raoultsatQ
+        - raoultvaporQ
+        - prandtlmuQ
+        - prandtlcpQ
+        - prandtlkQ
+        - prandtlratioQ
+        - reynumrhoQ
+        - reynumvelQ
+        - reynumlenQ
+        - reynummuQ
+        - reynumratioQ
+        - biotfilmQ
+        - biotlengthQ
+        - biotkQ
+        - biotratioQ
+        - nusseltfilmQ
+        - nusseltlenQ
+        - nusseltkQ
+        - nusseltratioQ
+        - schmidtmuQ
+        - schmidtrhoQ
+        - schmidtdiffQ
+        - schmidtratioQ
+        - sherwoodkmQ
+        - sherwoodlenQ
+        - sherwooddiffQ
+        - sherwoodratioQ
+        - fourierslabkQ
+        - fourierslabendQ
+        - fourierslabstartQ
+        - fourierslablenQ
+        - fourierslabfluxQ
+        - newtonrhoQ
+        - newtoncpQ
+        - newtonvolQ
+        - newtonfilmQ
+        - newtonareaQ
+        - newtontimeQ
+        - newtontheta0Q
+        - newtonthetaQ
+        - ottoratioQ
+        - ottogammaQ
+        - ottoetaQ
+        - jtcdvdtQ
+        - jtcvolumeQ
+        - jtcwarmthQ
+        - jtcpQ
+        - jtcmuQ
+        - planckfreqQ
+        - planckwarmthQ
+        - planckuQ
+        - stefansigmaQ
+        - wienrootQ
+        - wienbQ
+        - sackurcountQ
+        - sackurquantumQ
+        - sackurdensityQ
+        - sackurentropyQ
+        - sahamassQ
+        - sahawarmthQ
+        - sahaionQ
+        - sahaconstQ
+        - richardsmassQ
+        - richardswarmthQ
+        - richardsphiQ
+        - richardsjQ
+        - onsagerl12Q
+        - onsagerb0Q
+        - onsagerl21Q
     src/composition/quantities.ts:
       description: Centralized Quantity nodes — ONE object per canonical name (v0.11
       externalDependencies: []
@@ -25962,6 +26536,8 @@ dependencyGraph:
         - src/bridges/rhs-registry.ts
         - src/bridges/sensitivity.ts
         - src/bridges/tensor-index.ts
+        - src/bridges/thermal-r9-catalog.ts
+        - src/bridges/thermal-r9.ts
     - name: Canonical
       files:
         - src/canonical/canonical-equation.ts
@@ -26097,6 +26673,7 @@ dependencyGraph:
         - src/composition/edges/engineering-r7.ts
         - src/composition/edges/plasma-space.ts
         - src/composition/edges/proved-seeds.ts
+        - src/composition/edges/thermal-r9.ts
         - src/composition/enumerate.ts
         - src/composition/evaluate-relation.ts
         - src/composition/explain.ts
@@ -26149,6 +26726,7 @@ dependencyGraph:
         - src/composition/quantities/gravitation-cosmology.ts
         - src/composition/quantities/plasma-space.ts
         - src/composition/quantities/quantum.ts
+        - src/composition/quantities/thermal-r9.ts
         - src/composition/quantities.ts
         - src/composition/quantity.ts
         - src/composition/representative-values.ts
@@ -26265,18 +26843,18 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 488
+  totalTypeScriptFiles: 492
   totalModules: 13
-  totalLinesOfCode: 107236
-  totalExports: 4265
+  totalLinesOfCode: 109525
+  totalExports: 4433
   totalClasses: 63
-  totalInterfaces: 656
-  totalFunctions: 928
+  totalInterfaces: 703
+  totalFunctions: 978
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 1127
+  totalConstants: 1245
   totalReExports: 2162
-  totalTypeOnlyImports: 594
+  totalTypeOnlyImports: 597
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 0
