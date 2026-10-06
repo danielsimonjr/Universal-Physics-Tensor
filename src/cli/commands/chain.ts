@@ -20,7 +20,7 @@ const HELP = `upt chain
         Not a catalog command. The chain orchestrator stays internal.
         A chain is provisional: it is not written to the catalog, and it
         does not derive formally-proved. This command does not run the
-        orchestrator. be16Edge.confidence stays speculative. upt atlas be-16
+        orchestrator. The catalog edge for id 16 stays speculative. upt atlas be-16
         shows the kind-bridge formalRef. Those are different facts.
         The design is ${DESIGN_URL}.
         Exit 2.`;
@@ -28,7 +28,7 @@ const HELP = `upt chain
 const MESSAGE =
   'upt chain does not run the chain orchestrator. That function stays internal: ' +
   'a chain is provisional, it is not written to the catalog, and it does not ' +
-  'derive formally-proved. be16Edge.confidence stays speculative. ' +
+  'derive formally-proved. The catalog edge for id 16 stays speculative. ' +
   'upt atlas be-16 shows the kind-bridge formalRef. Those are different facts: ' +
   'a chain of proved steps stays provisional until Lean proves the chain. ' +
   `The design is ${DESIGN_URL}. ` +

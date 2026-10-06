@@ -179,7 +179,7 @@ function emitCatalogFormalRef(entry: CatalogEquation, wantJson: boolean, ctx: Co
   ctx.out('This command prints the stored catalog formalRef. It does not derive formally-proved from it.');
   if (entry.id === 16) {
     ctx.out(
-      'be16Edge.confidence is speculative. A chain through this equation stays provisional (upt chain). ' +
+      'The catalog edge for id 16 is speculative. A chain through this equation stays provisional (upt chain). ' +
         'composeEdges of be-42 with be-16 is highly-speculative. That grade is not this formalRef, ' +
         'and this formalRef does not make the chain formally-proved.',
     );

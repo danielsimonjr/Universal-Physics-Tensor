@@ -17,7 +17,7 @@ import { evalExpr } from '../../src/composition/expr-eval.js';
 import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
 import { catalogEdge } from '../../src/composition/index.js';
 
-const be33Edge = catalogEdge(catalogEdgeKey(33));
+const edge33 = catalogEdge(catalogEdgeKey(33));
 import {
   LENGTH,
   TEMPERATURE,
@@ -40,7 +40,7 @@ describe('validator `^` — symbolic exponent on a dimensionless base', () => {
   });
 
   it("the BE-33 faithful form ξ_0·(T/T_0)^(−1/z) validates to [length]", () => {
-    const r = validate(be33Edge.symbolic!);
+    const r = validate(edge33.symbolic!);
     expect(r.ok).toBe(true);
     expect(equals(r.inferredDimension!, LENGTH)).toBe(true);
     expect(r.violations).toEqual([]);
@@ -88,7 +88,7 @@ describe('evalExpr `^` — general exponent', () => {
 
   it('the BE-33 form evaluates (T/T_0)^(−1/z) matching the closed form', () => {
     // ξ_0·(T/T_0)^(−1/z), {ξ_0:1e-9, T:300, T_0:100, z:2} → 1e-9·3^(−0.5)
-    const v = evalExpr(be33Edge.symbolic!, {
+    const v = evalExpr(edge33.symbolic!, {
       'reference-correlation-length': 1e-9,
       temperature: 300,
       'reference-temperature': 100,

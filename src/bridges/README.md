@@ -18,7 +18,7 @@ Representative encodings (for orientation — not an exhaustive list):
 | 37 | Shapiro gravitational time delay | speculative | `[time]` | [`be-37-shapiro-delay.ts`](./equations/be-37-shapiro-delay.ts) |
 | 47 | BBN dark-sector-coupling Boltzmann ODE | speculative | `[L^-3 T^-1]` | [`be-47-bbn-dark-sector.ts`](./equations/be-47-bbn-dark-sector.ts) |
 
-> **v0.6.0 note — BE-20 re-encoding.** BE-20 (vacuum-fluctuation dark-energy coupling) was re-encoded in v0.6.0 to use the `CosmologicalConstantNode` AST kind (`BE20_COSMOLOGICAL_CONSTANT` in `be-20-vacuum-energy.ts`, typed against the v0.6.0 `cosmological-constant` node from `dimensional/stress-energy-validators.ts`).
+> **v0.6.0 note — BE-20 re-encoding.** BE-20 (vacuum-fluctuation dark-energy coupling) was re-encoded in v0.6.0 to use the `CosmologicalConstantNode` AST kind (the cosmological-constant node in `be-20-vacuum-energy.ts`, typed against the v0.6.0 `cosmological-constant` node from `dimensional/stress-energy-validators.ts`).
 
 The handful of bridges not AST-encoded (and known structural gaps) are tracked in the [Tier-5 encoding triage memo](../../docs/planning/Tier-5-Encoding-Triage.md).
 

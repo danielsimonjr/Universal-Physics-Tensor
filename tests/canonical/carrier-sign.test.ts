@@ -13,7 +13,7 @@ import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
 import { catalogEdge } from '../../src/composition/catalog-graph.js';
 import { evaluateRelation } from '../../src/composition/evaluate-relation.js';
 
-const be70Edge = catalogEdge(catalogEdgeKey(70));
+const edge70 = catalogEdge(catalogEdgeKey(70));
 import { CarrierSignError, readCarrierSignPolicyCalls, resetCarrierSignPolicyCalls } from '../../src/bridges/carrier-sign.js';
 import type { CanonicalEquation } from '../../src/canonical/canonical-equation.js';
 import { CHARGE } from '../../src/dimensional/types.js';
@@ -105,7 +105,7 @@ describe('carrier charge and mobility share a sign on a positive product', () =>
 
     resetCarrierSignPolicyCalls();
     expect(() =>
-      evaluateEdge(be70Edge, {
+      evaluateEdge(edge70, {
         'electrical-mobility': 0.14,
         'einstein-temperature': 300,
         'carrier-charge': -Q,

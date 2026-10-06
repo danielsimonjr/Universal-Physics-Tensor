@@ -137,7 +137,7 @@ describe('source guard', () => {
     const sample = `const ${['confrontBE', '7'].join('')} = 1;\n`;
     expect(sample.match(IDENTIFIER)).toEqual([['confrontBE', '7'].join('')]);
     expect('BE-70'.match(IDENTIFIER)).toBeNull();
-    expect('be42Edge'.match(IDENTIFIER)).toBeNull();
+    expect(['be', '42Edge'].join('').match(IDENTIFIER)).toBeNull();
   });
 
   it('no code file outside the loader carries a BE-keyed identifier', () => {

@@ -14,9 +14,9 @@ import {
 import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
 import { CANONICAL_GRAPH, catalogEdge, evaluateEdge, M_SUN_KG } from '../../src/composition/index.js';
 
-const be16Edge = catalogEdge(catalogEdgeKey(16));
-const be42Edge = catalogEdge(catalogEdgeKey(42));
-const be70Edge = catalogEdge(catalogEdgeKey(70));
+const edge16 = catalogEdge(catalogEdgeKey(16));
+const edge42 = catalogEdge(catalogEdgeKey(42));
+const edge70 = catalogEdge(catalogEdgeKey(70));
 
 const mu = 0.14;
 const T = 300;
@@ -37,22 +37,22 @@ describe('evaluateRelation', () => {
       'einstein-temperature': T,
       'carrier-charge': q,
     });
-    expect(byAlias).toEqual({ kind: 'value', value: expected, dimension: be70Edge.target.dim });
+    expect(byAlias).toEqual({ kind: 'value', value: expected, dimension: edge70.target.dim });
     expect(valueOf(byName)).toBe(expected);
-    expect(evaluateEdge(be70Edge, { mu_m2_per_Vs: mu, T_K: T, q_C: q })).toBe(expected);
+    expect(evaluateEdge(edge70, { mu_m2_per_Vs: mu, T_K: T, q_C: q })).toBe(expected);
     expect(() => evaluateRelation('be-70', { mu_m2_per_Vs: mu, T_K: T, q_C: -q })).toThrow(CarrierSignError);
   });
 
   it('evaluates be-16 and be-42 by id', () => {
     const landauer = evaluateRelation('be-16', { temperature: T });
     expect(valueOf(landauer) / (K_B_SI * T * Math.LN2)).toBeCloseTo(1, 12);
-    expect(landauer.kind === 'value' && landauer.dimension).toEqual(be16Edge.target.dim);
+    expect(landauer.kind === 'value' && landauer.dimension).toEqual(edge16.target.dim);
     expect(valueOf(evaluateRelation(16, { temperature_K: T }))).toBe(valueOf(landauer));
 
     const hawking = evaluateRelation('be-42', { mass: M_SUN_KG });
     expect(valueOf(hawking)).toBeGreaterThan(0);
     expect(valueOf(evaluateRelation(42, { M_kg: M_SUN_KG }))).toBe(valueOf(hawking));
-    expect(hawking.kind === 'value' && hawking.dimension).toEqual(be42Edge.target.dim);
+    expect(hawking.kind === 'value' && hawking.dimension).toEqual(edge42.target.dim);
   });
 
   it('records an unset coefficient and still throws it from evaluateEdge', () => {

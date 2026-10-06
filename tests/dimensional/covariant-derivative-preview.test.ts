@@ -37,7 +37,7 @@ describe('covariant-derivative preview (v0.4.0 building block)', () => {
 // ─── Task 17 [U]: BE-37 covariant-eikonal STRUCTURAL PREVIEW ────────────────
 //
 // Activates the first of two v0.3.5 it.todo entries for the connection layer.
-// evaluateBE37CovariantEikonalNumerical structurally assembles ∇_μ ∇^μ S via
+// evaluateCovariantEikonalNumerical structurally assembles ∇_μ ∇^μ S via
 // the new CovariantDerivativeNode + Task 12's lowering; the numerical eikonal
 // residual is 0 by null-wave-covector construction (this `it` passes in v0.4.0).
 //
@@ -54,7 +54,7 @@ describe('BE-37 covariant-eikonal preview (v0.4.0)', () => {
   });
 
   // v0.5.0 Task 11 [U]: BE-37 covariant-eikonal Shapiro cross-check ACTIVATED.
-  // Task 12 wired evaluateBE37CovariantEikonalNumerical to drive GL4 null-
+  // Task 12 wired evaluateCovariantEikonalNumerical to drive GL4 null-
   // geodesic integration on the canonical (x, p) state; shapiroDelaySec now
   // returns the real coord-time delay vs the flat-space straight-line ray.
   // I5 re-relaxation: original v0.4.0 tolerance ±1×10⁻⁴ relative on the

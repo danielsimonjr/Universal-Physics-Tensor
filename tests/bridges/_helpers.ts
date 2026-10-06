@@ -96,7 +96,7 @@ export function expectHasReformulationIssue(entry: BridgeEquationEntry): void {
  *
  * @example
  * it("RHS infers SI dimension '[1]' (round-trip pin)", () => {
- *   expectDimRoundTrip(BE22_TOPOLOGICAL_ENTANGLEMENT_RHS, '[1]');
+ *   expectDimRoundTrip(topologicalEntanglementRhs, '[1]');
  * });
  */
 export function expectDimRoundTrip(rhs: ExprNode, expectedSig: string): void {

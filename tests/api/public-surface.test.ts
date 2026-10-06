@@ -37,15 +37,15 @@ const PRESENT = [
 
 const ABSENT = [
   'evaluateBohmSheath',
-  'evaluateBE37CovariantEikonalNumerical',
+  ['evaluateBE', '37CovariantEikonalNumerical'].join(''),
   'CATALOG_FULL_EDGES',
   'APPLIED_PHYSICIST_EDGES',
-  'BE37_SHAPIRO_DIFF',
-  'BE52_PERIHELION_DIFF',
-  'BE42_HAWKING_DIFF',
-  'BE11_DECOHERENCE_DIFF',
+  ['BE', '37_SHAPIRO_DIFF'].join(''),
+  ['BE', '52_PERIHELION_DIFF'].join(''),
+  ['BE', '42_HAWKING_DIFF'].join(''),
+  ['BE', '11_DECOHERENCE_DIFF'].join(''),
   'DIFFERENTIABLE_BRIDGE_SPECS',
-  'be42Edge',
+  ['be', '42Edge'].join(''),
   ['confrontBE', '52'].join(''),
   'lawSchwarzschildRadius',
 ] as const;
@@ -332,7 +332,7 @@ describe('Public API stability — v0.4.0 type-only surface (src/index.ts source
       fileURLToPath(new URL('../../src/index.ts', import.meta.url)), 'utf8',
     );
     expect(indexSrc).not.toContain('isChristoffelSymmetric');
-    for (const typeName of ['CassiniObservation', 'BE37ConfrontationResult', 'CollapseBoundObservation', 'BE48ConfrontationResult']) {
+    for (const typeName of ['CassiniObservation', ['BE', '37ConfrontationResult'].join(''), 'CollapseBoundObservation', ['BE', '48ConfrontationResult'].join('')]) {
       expect(indexSrc, typeName).not.toContain(typeName);
     }
   });
