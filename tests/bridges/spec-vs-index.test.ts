@@ -1,111 +1,146 @@
 /**
- * Spec-markdown ↔ index consistency test.
+ * Specification sections follow the catalog filing.
  *
- * Closes the highest-leverage drift gap: the R0/R1/R2 audit fix loops
- * added "**Corrected on 2026-05-0X**" / "**R2 reformulation gap**"
- * blocks to the spec markdown, but the audit-fix tests assert only
- * against `BRIDGE_EQUATIONS` (the index TS array). Nothing reads the
- * markdown, so a future contributor could update the spec but forget
- * the index (or vice versa) and every audit-fix test would still pass.
- *
- * For each BE entry whose `notes` advertises a correction or
- * reformulation gap, parse the spec section (bounded by
- * `**Bridge Equation N:` / next `**Bridge Equation`), and assert that
- * the spec carries the same disposition marker the index claims.
- *
- * Source: test-analyzer F4.
+ * A cross-domain record has exactly one Bridge Equation section. That
+ * section carries the record's formula and the PhysJS theorem named by
+ * `formalKey` (or states that no formalRef exists when the record has no
+ * key). A standard record keeps a section only when that heading was
+ * already in the specification at the baseline commit. A new standard
+ * heading fails.
  */
-import { describe, it, expect } from 'vitest';
+import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
+import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '..', '..');
 
-const PART_BY_ID = (id: number): 'I' | 'II' => (id <= 20 ? 'I' : 'II');
+/** Specification before this filing. Headings in that tree are the ones a standard record may keep. */
+const BASELINE = '8b47da58beed2d9442cabab6816cbe3f17d3521d';
 
-function readSpec(part: 'I' | 'II'): string {
-  return readFileSync(
-    resolve(repoRoot, 'docs', 'specification', `Part-${part}.md`),
-    'utf-8',
+const ABSENT_FORMAL = /no PhysJS formalRef|There is no PhysJS|has no PhysJS formalRef|no formalRef|key is withheld/i;
+
+interface CatalogEntry {
+  id: number;
+  type: 'standard' | 'cross-domain';
+  formula_latex: string | null;
+  formalKey?: string;
+}
+
+interface ManifestEntry {
+  key: string;
+  theorem: string;
+}
+
+function readSpec(name: 'Part-I.md' | 'Part-II.md'): string {
+  return readFileSync(resolve(repoRoot, 'docs', 'specification', name), 'utf8');
+}
+
+function baselineSpec(): string {
+  const parts = ['Part-I.md', 'Part-II.md'].map((name) =>
+    execSync(`git show ${BASELINE}:docs/specification/${name}`, {
+      cwd: repoRoot,
+      encoding: 'utf8',
+    }),
   );
+  return parts.join('\n');
 }
 
-/** Extract section for `**Bridge Equation N:` up to the next bridge or category header. */
-function extractBridgeSection(spec: string, id: number): string | null {
-  const startRe = new RegExp(`\\*\\*Bridge Equation ${id}:`);
-  const m = startRe.exec(spec);
-  if (!m) return null;
-  const start = m.index;
-  // End at the next bridge equation header or a category header.
-  const tail = spec.slice(start + m[0].length);
-  const endRe = /\*\*Bridge Equation \d+:|^### Category /m;
-  const e = endRe.exec(tail);
-  const end = e ? start + m[0].length + e.index : spec.length;
-  return spec.slice(start, end);
+export function bridgeHeadings(spec: string): Set<number> {
+  const ids = new Set<number>();
+  for (const match of spec.matchAll(/\*\*Bridge Equation (\d+):/g)) {
+    ids.add(Number(match[1]));
+  }
+  return ids;
 }
 
-function normalize(s: string): string {
-  // Collapse whitespace and treat \\ as \ for cross-format substring match.
-  return s.replace(/\s+/g, ' ').replace(/\\\\/g, '\\').trim();
+export function bridgeSections(spec: string): Map<number, string> {
+  const matches = [...spec.matchAll(/\*\*Bridge Equation (\d+):/g)];
+  const sections = new Map<number, string>();
+  for (let i = 0; i < matches.length; i++) {
+    const id = Number(matches[i][1]);
+    const start = matches[i].index ?? 0;
+    const end = i + 1 < matches.length ? (matches[i + 1].index ?? spec.length) : spec.length;
+    const section = spec.slice(start, end);
+    const previous = sections.get(id);
+    sections.set(id, previous === undefined ? section : `${previous}\n${section}`);
+  }
+  return sections;
 }
 
-describe('spec markdown ↔ BRIDGE_EQUATIONS index consistency', () => {
-  it('every entry with an "Corrected on YYYY-MM-DD" notes block has a matching spec block', () => {
-    const specs = { I: readSpec('I'), II: readSpec('II') };
-    for (const e of BRIDGE_EQUATIONS) {
-      const m = /Corrected\s+on\s+(\d{4}-\d{2}-\d{2})/i.exec(e.notes) ||
-                /Corrected\s+(\d{4}-\d{2}-\d{2})/i.exec(e.notes);
-      if (!m) continue;
-      const date = m[1];
-      const part = PART_BY_ID(e.id);
-      const section = extractBridgeSection(specs[part], e.id);
-      expect(section, `BE-${e.id}: spec section not found in Part-${part}.md`).not.toBeNull();
-      const norm = normalize(section!);
-      // Spec uses `Corrected on YYYY-MM-DD` in the disposition block.
+function collapsed(value: string): string {
+  return value.replace(/\s+/g, '');
+}
+
+export function formulaInSection(formula: string, section: string): boolean {
+  return collapsed(formula).length > 0 && collapsed(section).includes(collapsed(formula));
+}
+
+/** A standard heading is allowed when it is absent, or when the baseline specification already had it. */
+export function standardHeadingAllowed(
+  id: number,
+  current: ReadonlySet<number>,
+  baseline: ReadonlySet<number>,
+): boolean {
+  return !current.has(id) || baseline.has(id);
+}
+
+describe('specification sections follow the catalog filing', () => {
+  const catalog = JSON.parse(
+    readFileSync(resolve(repoRoot, 'data', 'bridge-catalog.json'), 'utf8'),
+  ) as { entries: CatalogEntry[] };
+  const manifest = JSON.parse(
+    readFileSync(resolve(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf8'),
+  ) as { entries: ManifestEntry[] };
+  const theoremByKey = new Map(manifest.entries.map((entry) => [entry.key, entry.theorem]));
+  const spec = `${readSpec('Part-I.md')}\n${readSpec('Part-II.md')}`;
+  const sections = bridgeSections(spec);
+  const currentHeadings = bridgeHeadings(spec);
+  const previousHeadings = bridgeHeadings(baselineSpec());
+
+  it('every cross-domain record has one section whose formula and formalRef match the record', () => {
+    const crossDomain = catalog.entries.filter((entry) => entry.type === 'cross-domain');
+    expect(crossDomain.length).toBeGreaterThan(0);
+    for (const entry of crossDomain) {
+      const hits = [...spec.matchAll(new RegExp(`\\*\\*Bridge Equation ${entry.id}:`, 'g'))];
+      expect(hits, `catalog id ${entry.id} section count`).toHaveLength(1);
+      const section = sections.get(entry.id);
+      expect(section, `catalog id ${entry.id}`).toBeDefined();
       expect(
-        norm,
-        `BE-${e.id}: index notes claim "Corrected on ${date}" but spec section does not mention that date`,
-      ).toMatch(new RegExp(`Corrected\\s+on\\s+${date.replace(/-/g, '\\-')}`));
+        formulaInSection(entry.formula_latex ?? '', section ?? ''),
+        `catalog id ${entry.id} formula`,
+      ).toBe(true);
+      if (entry.formalKey === undefined) {
+        expect(section ?? '', `catalog id ${entry.id} has no formalRef`).toMatch(ABSENT_FORMAL);
+      } else {
+        const theorem = theoremByKey.get(entry.formalKey);
+        expect(theorem, `formalKey ${entry.formalKey}`).toBeDefined();
+        expect(section ?? '', `catalog id ${entry.id} formalRef`).toContain(theorem);
+      }
     }
   });
 
-  it('every entry with an "R2 reformulation gap" notes block has a matching spec block', () => {
-    const specs = { I: readSpec('I'), II: readSpec('II') };
-    for (const e of BRIDGE_EQUATIONS) {
-      if (!/R2\s+reformulation\s+gap/i.test(e.notes) &&
-          !/What would unblock a real fix/i.test(e.notes)) continue;
-      const part = PART_BY_ID(e.id);
-      const section = extractBridgeSection(specs[part], e.id);
-      expect(section, `BE-${e.id}: spec section not found in Part-${part}.md`).not.toBeNull();
-      const norm = normalize(section!);
+  it('a standard record does not gain a specification heading', () => {
+    for (const entry of catalog.entries) {
+      if (entry.type !== 'standard') continue;
       expect(
-        norm,
-        `BE-${e.id}: index notes claim R2 gap but spec section has no "R2 reformulation gap" or "What would unblock" block`,
-      ).toMatch(/R2 reformulation gap|What would unblock a real fix|What CANNOT be done/i);
+        standardHeadingAllowed(entry.id, currentHeadings, previousHeadings),
+        `catalog id ${entry.id} is standard and its heading is not in the baseline specification`,
+      ).toBe(true);
     }
   });
 
-  it('every populated dimensional_signature has a corresponding spec section that exists', () => {
-    // Lightweight presence-only sanity check: an index entry whose
-    // dimensional_signature has been populated must at least have a spec
-    // section in the right Part-{I,II}.md file (i.e., it was not
-    // hand-written for an entry that doesn't exist in the spec).
-    // Ids 11–20 are Part I. Every later id, including the Part-II §V-B
-    // and §V-C extensions, is Part II. `source_part` on the catalog row
-    // is not that file.
-    const specs = { I: readSpec('I'), II: readSpec('II') };
-    for (const e of BRIDGE_EQUATIONS) {
-      if (e.dimensional_signature === null) continue;
-      const part = PART_BY_ID(e.id);
-      const section = extractBridgeSection(specs[part], e.id);
-      expect(section, `BE-${e.id} (dimensional_signature populated): no spec section in Part-${part}.md`).not.toBeNull();
-      expect(
-        section,
-        `BE-${e.id}: spec section has no PhysJS proof-status block`,
-      ).toMatch(/\*\*Proof status as of \d{4}-\d{2}-\d{2}\.\*\*/);
-    }
+  it('rejects a standard heading the baseline specification does not contain', () => {
+    const baseline = new Set([11]);
+    expect(standardHeadingAllowed(12, new Set([12]), baseline)).toBe(false);
+    expect(standardHeadingAllowed(11, new Set([11]), baseline)).toBe(true);
+    expect(standardHeadingAllowed(147, new Set(), baseline)).toBe(true);
+  });
+
+  it('rejects a formula the section does not contain', () => {
+    expect(formulaInSection('E = mc^2', 'alt="E = mc"')).toBe(false);
+    expect(formulaInSection('E = mc^2', 'alt="E = mc^2"')).toBe(true);
   });
 });

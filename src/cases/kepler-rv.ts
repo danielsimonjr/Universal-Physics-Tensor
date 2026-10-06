@@ -16,7 +16,8 @@
  * @module cases/kepler-rv
  */
 import { C_SI, G_SI } from '../core/constants.js';
-import { evaluatePerihelionPrecession } from '../bridges/perihelion-precession.js';
+import { catalogRelations } from '../bridges/catalog-load.js';
+import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { check, requirePositive, type AppliedCase } from './types.js';
 
 const ID = 'case-kepler-rv';
@@ -142,7 +143,9 @@ export const KEPLER_RV_CASE: AppliedCase = {
     const K2b = (n13 * m * sinI) / Math.cbrt(total * total) / root;
     const rPeri = a * (1 - e);
     const weak = (G_SI * total) / (C_SI * C_SI * a);
-    const dphi = evaluatePerihelionPrecession({ M_kg: total, a_m: a, e, T_yr: P / JULIAN_YEAR_S }).dphi_rad_per_orbit;
+    const advance = catalogRelations().find((row) => row.target === 'perihelion-advance');
+    if (advance === undefined) throw new Error(`${ID}: the perihelion relation is not in the catalog`);
+    const dphi = evaluateCatalogRelation(advance, { mass: total, 'semi-major-axis': a, eccentricity: e });
     const misfit = (e * dphi * tObs) / P;
     return {
       outputs: {

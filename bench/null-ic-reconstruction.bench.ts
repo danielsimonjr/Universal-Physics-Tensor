@@ -3,7 +3,7 @@
  *
  * Measures the numerical sensitivity of BE-37's production null-IC
  * reconstruction (`reconstructNullPr` from `src/numerical/null-ic.ts`,
- * extracted from `be37-covariant-eikonal.ts:314-326`).
+ * extracted from `covariant-eikonal.ts:314-326`).
  *
  * 1000 perturbations of g^{tt} at the ±2e-15 relative scale (machine-epsilon
  * neighbourhood) probe whether the null-IC reconstruction's `Math.sqrt` is
@@ -20,7 +20,7 @@
  *   inverse that BE-37 uses internally.
  *
  * @see src/numerical/null-ic.ts  (reconstructNullPr — production code)
- * @see src/numerical/be37-covariant-eikonal.ts (calling site pre-extraction)
+ * @see src/numerical/covariant-eikonal.ts (calling site pre-extraction)
  * @see docs/architecture/archive/pc-1.5-shapiro-residual-floor.md
  */
 import { bench, describe } from 'vitest';

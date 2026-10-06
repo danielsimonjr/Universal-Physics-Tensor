@@ -69,21 +69,20 @@ const SENSITIVITY_EPISTEMICS =
   ' sensitivity (elasticity) ranks which input the prediction depends on most STRONGLY; ' +
   'it is NOT which input dominates the uncertainty budget (that needs input sigma).';
 
-function parseBridgeId(raw: string, via: 'flag' | 'positional'): number {
-  // Accept "be-37", "BE-37", or "37".
-  const m = /^(?:be-?)?(\d+)$/i.exec(raw.trim());
-  if (!m) {
+function parseSelection(api: CommandCtx['api'], raw: string, via: 'flag' | 'positional'): number {
+  try {
+    return api.parseBridgeId(raw);
+  } catch {
     throw new CliError(
       via === 'flag'
-        ? `upt confront: invalid --bridge='${raw}' (expected be-XX)`
-        : `upt confront: '${raw}' is not a bridge id (expected be-XX). A positional is not ignored.`,
+        ? `upt confront: invalid --bridge='${raw}' (expected be-<id>)`
+        : `upt confront: '${raw}' is not a bridge id (expected be-<id>). A positional is not ignored.`,
     );
   }
-  return Number(m[1]);
 }
 
 /** The bridge a positional id and/or `--bridge` select, or undefined for the full list. */
-function selectedBridgeId(args: CommandCtx['args']): number | undefined {
+function selectedBridgeId(api: CommandCtx['api'], args: CommandCtx['args']): number | undefined {
   if (args.positionals.length > 1) {
     throw new UsageError(
       `upt confront: unexpected extra arguments (${args.positionals.slice(1).join(', ')}). ` +
@@ -91,8 +90,8 @@ function selectedBridgeId(args: CommandCtx['args']): number | undefined {
     );
   }
   const flag = args.flags.get('bridge');
-  const fromFlag = flag && flag.length > 0 ? parseBridgeId(flag[flag.length - 1]!, 'flag') : undefined;
-  const fromPositional = args.positionals.length === 1 ? parseBridgeId(args.positionals[0]!, 'positional') : undefined;
+  const fromFlag = flag && flag.length > 0 ? parseSelection(api, flag[flag.length - 1]!, 'flag') : undefined;
+  const fromPositional = args.positionals.length === 1 ? parseSelection(api, args.positionals[0]!, 'positional') : undefined;
   if (fromFlag !== undefined && fromPositional !== undefined && fromFlag !== fromPositional) {
     throw new UsageError(
       `upt confront: positional be-${fromPositional} and --bridge=be-${fromFlag} name different bridges`,
@@ -199,7 +198,7 @@ function dataHandlingDistribution(outcomes: readonly Outcome[]) {
 
 async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
-  const bridgeId = selectedBridgeId(args);
+  const bridgeId = selectedBridgeId(api, args);
   const wantJson = args.flags.has('json');
   const wantSensitivity = args.flags.has('sensitivity');
   const wantFrontier = args.flags.has('frontier');
@@ -209,10 +208,10 @@ async function run(ctx: CommandCtx): Promise<number> {
     throw new CliError(`upt confront: invalid --rigor='${rigorTier}' (expected stringent|moderate|loose)`);
   }
 
-  if (bridgeId === 53) {
-    const refusal = api.requestYangMillsConfrontation({});
+  if (bridgeId !== undefined && api.catalogEntry(bridgeId)?.callerTable === true) {
+    const refusal = api.requestCallerTableConfrontation({});
     if (refusal.status !== 'refused') {
-      throw new CliError('upt confront: be-53 without a table and a running procedure did not refuse');
+      throw new CliError(`upt confront: catalog id ${bridgeId} without a table and a running procedure did not refuse`);
     }
     const missing = refusal.missing.join('; ');
     if (wantJson) {
@@ -220,7 +219,7 @@ async function run(ctx: CommandCtx): Promise<number> {
         {
           command: 'confront',
           result: {
-            bridgeId: 53,
+            bridgeId,
             status: 'refused',
             missing: refusal.missing,
             pass: false,
@@ -231,8 +230,8 @@ async function run(ctx: CommandCtx): Promise<number> {
         ctx.write,
       );
     } else {
-      out(`be-53 refused. Missing: ${missing}.`);
-      out('This is not a pass and not a fail. The catalog status of be-53 is unchanged.');
+      out(`catalog id ${bridgeId} refused. Missing: ${missing}.`);
+      out(`This is not a pass and not a fail. The catalog status of catalog id ${bridgeId} is unchanged.`);
     }
     return 1;
   }

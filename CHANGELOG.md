@@ -129,6 +129,26 @@ The Documented, Migration, Breaking, and Fixed notes that were already under thi
 - **A fully-quantitative count is an input of the canonical evaluator.** The evaluator was the Buckingham monomial. That monomial cannot see `N` in `P = N k_B T/V`, and it is null for perihelion, so `1-e²` and `6π` were dropped and the edge returned NaN. The same null monomial dropped `8π` from Hawking temperature and returned NaN for every other fully-quantitative product, quotient, or integer power, including Newton's gravitation. A `scalar-up-to-constant` stub, including Jarzynski, stays on the monomial. Issue #387.
 - **Explain, discovery anchors, and regime coordinates read an energy on a temperature name as k_B T.** The reading already lived in `upt eval`'s `parseScope` (`alignTemperatureBinding`). Explain stored `readNamedBinding`'s joules. Issue #386.
 
+## [8.0.0] - 2026-10-06
+
+A bridge equation is a record in `data/bridge-catalog.json`. One engine evaluates it. `package.json` is 8.0.0. This change does not tag and does not publish.
+
+~~`temperatureQuantityRole` classifies an interval by the words `change`, `difference`, `delta`, `interval`, `increment`, `drop`, or `rise` in the slot name.~~ Retracted: the role is the quantity registry's declared kind. `temperature-change` is an interval. `dT` is its own interval record and is not an alias of temperature.
+
+~~`SYNONYM_GROUPS` is a hand list.~~ Retracted: synonym groups are the aliases on the quantity registry.
+
+### Breaking
+
+- Per-equation modules, per-round edge modules, and the names `evaluateBE…`, `beNNEdge`, `confrontBE…`, and `CATALOG_FULL_EDGES` are removed. A bridge number is the `id` field of a catalog record. Evaluation is `evaluateRelation`. The numerical integrator is `evaluateCovariantEikonalNumerical`.
+- `upt evaluate` returns `{ value }` for the primary scalar. Extra keys that the old per-equation evaluators printed are not on that result.
+- Every catalog record has `type`: `standard` or `cross-domain`. The catalog schema is version 3. `derivedFrom` and `basis` stay absent until a derivation theorem is pinned.
+
+### Migration
+
+- Read a bridge from `data/bridge-catalog.json`. Evaluate it with `evaluateRelation`. The quantity's dimension, default unit, aliases, and temperature kind come from `data/quantities.json`.
+- A cross-domain record has one specification section. A standard record that already had a section keeps it. BE-147 through BE-163 are catalog records and have no new section. BE-164 through BE-170 are written under Black-body radiation, quantum statistics, and reciprocal transport in Part II. An `Evaluator:` link names the catalog record and `evaluateRelation`.
+- PhysJS pin `10e48f140c0e9fad3c50e5e5538124c52b3e732c`. Proof status is the vendored manifest. `formally-proved` is still derived from a reviewed `formalRef`.
+
 ## [7.0.0] - 2026-10-06
 
 Major release. `resolveToCatalogName` is removed from the public surface. Call `resolveQuantityName`. PhysJS pin `10cf71e9f1f460780f8620de7ba422df61e0949b` (PhysJS #68). The catalog adds BE-134 through BE-146. npm `6.0.0` remains the published release until the tag workflow. This change does not tag and does not publish.

@@ -14,7 +14,8 @@
  * @module cases/resistor-noise
  */
 import { H_SI, K_B_SI } from '../core/constants.js';
-import { evaluateJohnsonNyquist } from '../bridges/be58-johnson-nyquist.js';
+import { catalogRelations } from '../bridges/catalog-load.js';
+import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { adaptiveSimpson } from './quadrature.js';
 import { check, requirePositive, signedRelativeDifference, type AppliedCase } from './types.js';
 
@@ -161,8 +162,12 @@ export const RESISTOR_NOISE_CASE: AppliedCase = {
     if (!Number.isFinite(fLo) || fLo < 0 || fLo >= fHi) throw new Error(`${ID}: need 0 ≤ f_lo_Hz < f_hi_Hz (got ${fLo}, ${fHi})`);
     const B = fHi - fLo;
     const rEff = (R * Rin) / (R + Rin);
-    const S = evaluateJohnsonNyquist({ T_K: T, R_ohm: rEff }).S_V_V2_per_Hz;
-    const S0 = evaluateJohnsonNyquist({ T_K: T, R_ohm: R }).S_V_V2_per_Hz;
+    const noise = catalogRelations().find((row) => row.target === 'voltage-noise-density');
+    if (noise === undefined) throw new Error(`${ID}: the resistor-noise relation is not in the catalog`);
+    const spectral = (temperature: number, ohms: number): number =>
+      evaluateCatalogRelation(noise, { 'johnson-temperature': temperature, resistance: ohms });
+    const S = spectral(T, rEff);
+    const S0 = spectral(T, R);
     const vRms = Math.sqrt(S * B);
     const vParent = Math.sqrt(adaptiveSimpson((f) => parentDensity(f, T, rEff, C), fLo, fHi));
     const x = (H_SI * fHi) / (K_B_SI * T);

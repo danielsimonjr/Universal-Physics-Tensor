@@ -153,13 +153,6 @@ export {
   bridgeGradientASTById,
   astDifferentiableBridgeIds,
 } from './diff/bridge-ast-gradient.js';
-export {
-  BE37_SHAPIRO_DIFF,
-  BE52_PERIHELION_DIFF,
-  BE42_HAWKING_DIFF,
-  BE11_DECOHERENCE_DIFF,
-  DIFFERENTIABLE_BRIDGE_SPECS,
-} from './diff/bridge-specs.js';
 
 // Machine-readable bridge equation index — the 40+ catalogued equations.
 // `BridgeEquationEntry` is intentionally a different shape from the runtime
@@ -186,9 +179,7 @@ export {
   BCS_GAP_RATIO,
   LANE_EMDEN_OMEGA3,
   THOMSON_CROSS_SECTION_SI,
-  alfvenProtonOnlyDensity,
   M_PROTON_SI,
-  tolmanTemperatureAt,
   CarrierSignError,
 } from './bridges/index.js';
 /**
@@ -199,147 +190,6 @@ export {
 export { evaluateRelation, CoefficientUnsetError } from './composition/index.js';
 /** The result of {@link evaluateRelation}. A value carries a public `Dimension`. */
 export type { Evaluation } from './composition/index.js';
-/** Plasma and space closed forms, BE-103 through BE-125. Each stays that id's single numeric body. */
-export {
-  evaluateBohmSheath,
-  type BohmSheathInputs,
-  type BohmSheathResult,
-  evaluateIonAcoustic,
-  type IonAcousticInputs,
-  type IonAcousticResult,
-  evaluateUpperHybrid,
-  type UpperHybridInputs,
-  type UpperHybridResult,
-  evaluateColdPlasmaCutoff,
-  type ColdPlasmaCutoffInputs,
-  type ColdPlasmaCutoffResult,
-  evaluateLowerHybrid,
-  type LowerHybridInputs,
-  type LowerHybridResult,
-  evaluateObliqueMagnetosonic,
-  type ObliqueMagnetosonicInputs,
-  type ObliqueMagnetosonicResult,
-  evaluateBennettPinch,
-  type BennettPinchInputs,
-  type BennettPinchResult,
-  evaluateLossCone,
-  type LossConeInputs,
-  type LossConeResult,
-  evaluateGradBDrift,
-  type GradBDriftInputs,
-  type GradBDriftResult,
-  evaluateExBDrift,
-  type ExBDriftInputs,
-  type ExBDriftResult,
-  evaluateLandauDamping,
-  type LandauDampingInputs,
-  type LandauDampingResult,
-  evaluateDebyeSphere,
-  type DebyeSphereInputs,
-  type DebyeSphereResult,
-  evaluateMultiDebye,
-  type MultiDebyeInputs,
-  type MultiDebyeResult,
-  evaluateLorentzResistivity,
-  type LorentzResistivityInputs,
-  type LorentzResistivityResult,
-  evaluateResistiveSlab,
-  type ResistiveSlabInputs,
-  type ResistiveSlabResult,
-  evaluateParkerCritical,
-  type ParkerCriticalInputs,
-  type ParkerCriticalResult,
-  evaluateParkerSpiral,
-  type ParkerSpiralInputs,
-  type ParkerSpiralResult,
-  evaluateChapmanFerraro,
-  type ChapmanFerraroInputs,
-  type ChapmanFerraroResult,
-  evaluateLawsonBreakeven,
-  type LawsonBreakevenInputs,
-  type LawsonBreakevenResult,
-  evaluateLangmuirProbe,
-  type LangmuirProbeInputs,
-  type LangmuirProbeResult,
-  evaluateCrossFieldDiffusion,
-  type CrossFieldDiffusionInputs,
-  type CrossFieldDiffusionResult,
-  evaluateFirehose,
-  type FirehoseInputs,
-  type FirehoseResult,
-  evaluateMirrorInstability,
-  type MirrorInstabilityInputs,
-  type MirrorInstabilityResult,
-} from './bridges/index.js';
-/** Engineering closed forms, BE-126 through BE-133. Each stays that id's single numeric body. */
-export {
-  evaluateCombDrive,
-  type CombDriveInputs,
-  type CombDriveResult,
-  evaluateSubthresholdSwing,
-  type SubthresholdSwingInputs,
-  type SubthresholdSwingResult,
-  evaluateBoostConverter,
-  type BoostConverterInputs,
-  type BoostConverterResult,
-  evaluateFinEfficiency,
-  type FinEfficiencyInputs,
-  type FinEfficiencyResult,
-  evaluateThermoelectricGenerator,
-  type ThermoelectricGeneratorInputs,
-  type ThermoelectricGeneratorResult,
-  evaluateJoukowsky,
-  type JoukowskyInputs,
-  type JoukowskyResult,
-  evaluateCoaxialCapacitance,
-  type CoaxialCapacitanceInputs,
-  type CoaxialCapacitanceResult,
-  evaluateDampingRatio,
-  type DampingRatioInputs,
-  type DampingRatioResult,
-} from './bridges/index.js';
-/** Condensed-matter closed forms, BE-134 through BE-146. Each stays that id's single numeric body. */
-export {
-  evaluateBlochLaw,
-  type BlochLawInputs,
-  type BlochLawResult,
-  evaluateDensityOfStates3D,
-  type DensityOfStates3DInputs,
-  type DensityOfStates3DResult,
-  evaluateDensityOfStates2D,
-  type DensityOfStates2DInputs,
-  type DensityOfStates2DResult,
-  evaluateThomasFermi,
-  type ThomasFermiInputs,
-  type ThomasFermiResult,
-  evaluateBuiltinVoltage,
-  type BuiltinVoltageInputs,
-  type BuiltinVoltageResult,
-  evaluateSemiconductorFermi,
-  type SemiconductorFermiInputs,
-  type SemiconductorFermiResult,
-  evaluateOnsagerFrequency,
-  type OnsagerFrequencyInputs,
-  type OnsagerFrequencyResult,
-  evaluateJosephsonInductance,
-  type JosephsonInductanceInputs,
-  type JosephsonInductanceResult,
-  evaluateLowerCritical,
-  type LowerCriticalInputs,
-  type LowerCriticalResult,
-  evaluateAcDrude,
-  type AcDrudeInputs,
-  type AcDrudeResult,
-  evaluateMatthiessen,
-  type MatthiessenInputs,
-  type MatthiessenResult,
-  evaluateStoner,
-  type StonerInputs,
-  type StonerResult,
-  evaluateGorterCasimir,
-  type GorterCasimirInputs,
-  type GorterCasimirResult,
-} from './bridges/index.js';
 
 export type { EvaluatorSpec, EvaluatorParameter, ParameterAlternate, GeometryRole } from './bridges/evaluators.js';
 
@@ -547,7 +397,7 @@ export {
   DuplicateCoordinateWarning,
   EngineCapabilityError,
   hasAutogradSupport,
-  evaluateBE37CovariantEikonalNumerical,
+  evaluateCovariantEikonalNumerical,
   // v0.5.0 GL4 symplectic integrator
   integrateGeodesicGL4,
   // v0.5.0 perihelion finder (Task 4)
@@ -591,124 +441,23 @@ export {
   CompositionJunctionError,
   DomainViolationError,
   // Calibration edges (pre-registered CT-1/CT-1b/CT-2/CT-3 targets)
-  be11ZurekEdge,
-  be12Edge,
-  be16Edge,
-  be37Edge,
-  be42Edge,
-  be42ViaRsEdge,
-  be51Edge,
-  be52Edge,
-  lawSchwarzschildRadius,
   M_SUN_KG,
   // v0.10.0 T5 — catalog-tranche edges (BE-14/19/21/48/53/54)
-  be14Edge,
-  be19Edge,
-  be21Edge,
-  be48Edge,
-  be53Edge,
-  be54Edge,
 } from './composition/index.js';
 /** Composition edges for radiation pressure, the Alfvén speed, and Tolman–Ehrenfest. */
 export {
-  be66Edge,
-  be67Edge,
-  be68Edge,
-  be69Edge,
-  be70Edge,
-  be71Edge,
-  be72Edge,
-  be73Edge,
-  be74Edge,
-  be75Edge,
-  be76Edge,
-  be77Edge,
-  be78Edge,
-  be79Edge,
-  be80Edge,
-  be81Edge,
-  be82Edge,
-  be83Edge,
-  be84Edge,
-  be85Edge,
-  be86Edge,
-  be87Edge,
-  APPLIED_PHYSICIST_EDGES,
 } from './composition/index.js';
 /** Composition edges for the Fermi sea through Landauer conductance, BE-88 through BE-102. */
 export {
-  be88Edge,
-  be89Edge,
-  be90Edge,
-  be91Edge,
-  be92Edge,
-  be93Edge,
-  be94Edge,
-  be95Edge,
-  be96Edge,
-  be97Edge,
-  be98Edge,
-  be99Edge,
-  be100Edge,
-  be101Edge,
-  be102Edge,
-  CONDENSED_R5_EDGES,
 } from './composition/index.js';
 /** Composition edges for the Bohm sheath through the mirror threshold, BE-103 through BE-125. */
 export {
-  be103Edge,
-  be104Edge,
-  be105Edge,
-  be106Edge,
-  be107Edge,
-  be108Edge,
-  be109Edge,
-  be110Edge,
-  be111Edge,
-  be112Edge,
-  be113Edge,
-  be114Edge,
-  be115Edge,
-  be116Edge,
-  be117Edge,
-  be118Edge,
-  be119Edge,
-  be120Edge,
-  be121Edge,
-  be122Edge,
-  be123Edge,
-  be124Edge,
-  be125Edge,
-  PLASMA_SPACE_EDGES,
 } from './composition/index.js';
 /** Composition edges for the comb drive through the damping ratio, BE-126 through BE-133. */
 export {
-  be126Edge,
-  be127Edge,
-  be128Edge,
-  be129Edge,
-  be130Edge,
-  be131Edge,
-  be132Edge,
-  be133Edge,
-  ENGINEERING_R7_EDGES,
 } from './composition/index.js';
 /** Composition edges for the Bloch deficit through the Gorter–Casimir fraction, BE-134 through BE-146. */
 export {
-  be134Edge,
-  be135Edge,
-  be136Edge,
-  be137Edge,
-  be138Edge,
-  be139Edge,
-  be140Edge,
-  be141Edge,
-  be142Edge,
-  be143Edge,
-  be144Edge,
-  be145Edge,
-  be146Edge,
-  CONDENSED_R8_EDGES,
 } from './composition/index.js';
 export type {
   BridgeEdge,
@@ -734,24 +483,8 @@ export type {
 } from './bridges/membership.js';
 
 // v0.8.0 — GW170817 → BE-36 real-data confrontation (G-3)
-export {
-  confrontBE36,
-  GW170817,
-} from './bridges/be36-gw170817-confrontation.js';
-export type {
-  BE36ConfrontationResult,
-  GWSpeedObservation,
-} from './bridges/be36-gw170817-confrontation.js';
 
 // v0.28+ — Mercury perihelion → BE-52 real-data confrontation (established bridge)
-export {
-  confrontBE52,
-  MERCURY,
-} from './bridges/be52-mercury-confrontation.js';
-export type {
-  BE52ConfrontationResult,
-  PerihelionObservation,
-} from './bridges/be52-mercury-confrontation.js';
 
 // v0.10.0 — Phase-D enumeration + uncertainty propagation (T3/T4)
 export {
@@ -844,8 +577,6 @@ export { inferUnknownDimension, substituteSymbolDim } from './dimensional/dimens
 export { dimensionAdjacency } from './composition/index.js';
 export type { DimensionAdjacency } from './composition/index.js';
 
-export { confrontBE36WithUncertainty } from './bridges/be36-gw170817-confrontation.js';
-export type { BE36ConfrontationWithUncertainty } from './bridges/be36-gw170817-confrontation.js';
 
 // Buckingham-π enumerator (the principled primitive for the exactly-
 // determined case — build target 1 of the bridge-inference epistemics
@@ -885,24 +616,8 @@ export type {
 } from './numerical/klein-gordon.js';
 
 // v0.11 — BE-23 Planckian-dissipation data confrontation (2nd real-data check)
-export {
-  confrontBE23,
-  confrontBE23WithUncertainty,
-  PLANCKIAN_CUPRATES,
-  PLANCKIAN_O1_BAND,
-} from './bridges/be23-planckian-confrontation.js';
-export type {
-  BE23ConfrontationResult,
-  BE23ConfrontationWithUncertainty,
-  PlanckianObservation,
-} from './bridges/be23-planckian-confrontation.js';
 
-// v0.11 — full catalog→graph migration (41-edge graph; per-edge exports
-// stay at the composition barrel; the array is the root surface)
-export { CATALOG_FULL_EDGES } from './composition/index.js';
-
-// The full 41-edge composition graph as a single constant (single source
-// of truth — consumers no longer hand-rebuild the edge list)
+// The composition graph is the relation projection of the catalog.
 export { CATALOG_GRAPH } from './composition/index.js';
 
 // The standard-physics counterpart: the canonical L-layer projected into the
@@ -1008,160 +723,30 @@ export type {
 } from './bridges/observations/types.js';
 
 // BE-37 × Cassini — GR Shapiro-delay PPN-γ confrontation.
-export { confrontBE37, CASSINI } from './bridges/be37-cassini-confrontation.js';
-export type {
-  CassiniObservation,
-  BE37ConfrontationResult,
-} from './bridges/be37-cassini-confrontation.js';
 
 // BE-51 × VLBI — GR light-deflection PPN-γ confrontation (third classic GR test).
-export { confrontBE51, VLBI_LAMBERT_2009 } from './bridges/be51-lensing-confrontation.js';
-export type {
-  VLBIDeflectionObservation,
-  BE51ConfrontationResult,
-} from './bridges/be51-lensing-confrontation.js';
 
 // BE-53 — one-loop coefficient, and a confrontation only when the caller supplies both inputs.
-export { oneLoopCoefficientStatement } from './bridges/equations/be-53-yang-mills-beta.js';
-export type { OneLoopCoefficientStatement, OneLoopCoefficientSign } from './bridges/equations/be-53-yang-mills-beta.js';
-export { requestYangMillsConfrontation } from './bridges/be53-yang-mills-confrontation.js';
-export type {
-  MeasuredCouplingRow,
-  RunningProcedure,
-  RunningProcedureRecord,
-  YangMillsConfrontationRequest,
-  YangMillsConfrontationRefusal,
-  YangMillsConfrontationHit,
-  YangMillsConfrontationResult,
-} from './bridges/be53-yang-mills-confrontation.js';
+export { oneLoopCoefficientStatement } from './bridges/coefficient-statement.js';
+export type { OneLoopCoefficientStatement, OneLoopCoefficientSign } from './bridges/coefficient-statement.js';
 
 // BE-21 × QGP — KSS viscosity-bound confrontation (the "most perfect fluid").
-export { confrontBE21, KSS_BOUND, QGP_BMB19 } from './bridges/be21-kss-confrontation.js';
-export type {
-  QGPViscosityObservation,
-  BE21ConfrontationResult,
-} from './bridges/be21-kss-confrontation.js';
 
 // BE-35 × 3D Ising — conformal-bootstrap critical-exponent confrontation.
-export {
-  confrontBE35,
-  BOOTSTRAP_NU,
-  BOOTSTRAP_NU_SIGMA,
-  ISING_PELISSETTO_VICARI_2002,
-} from './bridges/be35-bootstrap-confrontation.js';
-export type {
-  IsingExponentObservation,
-  BE35ConfrontationResult,
-} from './bridges/be35-bootstrap-confrontation.js';
 
 // BE-11 × matter-wave interferometry — collisional-decoherence confrontation.
-export {
-  confrontBE11,
-  DECOHERENCE_EXPERIMENTAL_TOLERANCE,
-  COLLISIONAL_HORNBERGER_2003,
-} from './bridges/be11-decoherence-confrontation.js';
-export type {
-  CollisionalDecoherenceObservation,
-  BE11ConfrontationResult,
-} from './bridges/be11-decoherence-confrontation.js';
 
 // BE-55 × quantum-Hall universality — topological quantization confrontation.
-export {
-  confrontBE55,
-  QH_UNIVERSALITY_JANSSEN_2012,
-} from './bridges/be55-quantum-hall-confrontation.js';
-export type {
-  QHUniversalityObservation,
-  BE55ConfrontationResult,
-} from './bridges/be55-quantum-hall-confrontation.js';
 
 // BE-56 × Casimir force — quantum-vacuum-force confrontation.
-export {
-  confrontBE56,
-  CASIMIR_MOHIDEEN_ROY_1998,
-} from './bridges/be56-casimir-confrontation.js';
-export type {
-  CasimirAgreementObservation,
-  BE56ConfrontationResult,
-} from './bridges/be56-casimir-confrontation.js';
 
 // BE-58 × Johnson Noise Thermometry — fluctuation-dissipation confrontation.
-export {
-  confrontBE58,
-  K_B_CODATA_2014,
-  JNT_FLOWERS_JACOBS_2017,
-} from './bridges/be58-johnson-nyquist-confrontation.js';
-export type {
-  JNTObservation,
-  BE58ConfrontationResult,
-} from './bridges/be58-johnson-nyquist-confrontation.js';
 
 // Condensed-matter cluster (2026-07-05) — four established confrontations.
-export {
-  confrontBE59,
-  JOSEPHSON_UNIVERSALITY_BIPM,
-} from './bridges/be59-ac-josephson-confrontation.js';
-export type {
-  JosephsonUniversalityObservation,
-  BE59ConfrontationResult,
-} from './bridges/be59-ac-josephson-confrontation.js';
-export {
-  confrontBE60,
-  FQH_PLATEAU_TSUI_1982,
-} from './bridges/be60-fractional-qh-confrontation.js';
-export type {
-  FractionalQHObservation,
-  BE60ConfrontationResult,
-} from './bridges/be60-fractional-qh-confrontation.js';
-export {
-  confrontBE61,
-  LORENZ_SILVER_2023,
-} from './bridges/be61-wiedemann-franz-confrontation.js';
-export type {
-  LorenzNumberObservation,
-  BE61ConfrontationResult,
-} from './bridges/be61-wiedemann-franz-confrontation.js';
-export {
-  confrontBE62,
-  BCS_RATIO_TIN,
-} from './bridges/be62-bcs-gap-confrontation.js';
-export type {
-  BCSRatioObservation,
-  BE62ConfrontationResult,
-} from './bridges/be62-bcs-gap-confrontation.js';
 
 // Astrophysics cluster (2026-07-05) — three established confrontations.
-export {
-  confrontBE63,
-  WHITE_DWARF_MAX_MASS,
-} from './bridges/be63-chandrasekhar-mass-confrontation.js';
-export type {
-  WhiteDwarfMassObservation,
-  BE63ConfrontationResult,
-} from './bridges/be63-chandrasekhar-mass-confrontation.js';
-export {
-  confrontBE64,
-  EDDINGTON_RATIO_BRIGHT,
-} from './bridges/be64-eddington-luminosity-confrontation.js';
-export type {
-  EddingtonRatioObservation,
-  BE64ConfrontationResult,
-} from './bridges/be64-eddington-luminosity-confrontation.js';
-export {
-  confrontBE65,
-  MOLECULAR_CLOUD_FRAGMENT,
-} from './bridges/be65-jeans-mass-confrontation.js';
-export type {
-  CloudFragmentObservation,
-  BE65ConfrontationResult,
-} from './bridges/be65-jeans-mass-confrontation.js';
 
 // BE-48 × LISA-Pathfinder — GRW collapse-rate vs CSL upper bound.
-export { confrontBE48, LISA_PATHFINDER_CSL } from './bridges/be48-collapse-confrontation.js';
-export type {
-  CollapseBoundObservation,
-  BE48ConfrontationResult,
-} from './bridges/be48-collapse-confrontation.js';
 
 // Unified confrontation registry (be-23/36/37/48/52) — single lookup surface
 // for `upt confront`.

@@ -42,11 +42,11 @@ import { forwardClosure } from './identifiability.js';
 import { retrodict, forwardEvaluate } from './retrodiction.js';
 import { proposeLinkCandidates } from './bridge-analysis.js';
 import type { LinkCandidate } from './bridge-analysis.js';
-import { M_SUN_KG } from './edges/calibration.js';
+import { M_SUN_KG } from '../core/constants.js';
 import { REPRESENTATIVE_VALUES } from './representative-values.js';
 import type { RepresentativeValue } from './representative-values.js';
 import { conventionScaleToSI } from '../dimensional/unit-convention.js';
-import * as REGISTRY_QUANTITIES from './quantities.js';
+import { allQuantities } from './quantities.js';
 import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 import { format } from '../dimensional/algebra.js';
 
@@ -58,16 +58,9 @@ import { format } from '../dimensional/algebra.js';
 // by construction, not by a special case.
 /** The canonical quantity→attributes map (registry nodes + per-equation stamps).
  *  Exported for the axis-discrimination audit. @internal */
-export const REGISTRY_ATTRIBUTES_BY_NAME: ReadonlyMap<string, RegimeAttributes> = (() => {
-  const m = new Map<string, RegimeAttributes>();
-  for (const v of Object.values(REGISTRY_QUANTITIES)) {
-    if (v && typeof v === 'object' && 'name' in v && 'attributes' in v) {
-      const q = v as { name: string; attributes: RegimeAttributes };
-      m.set(q.name, q.attributes);
-    }
-  }
-  return m;
-})();
+export const REGISTRY_ATTRIBUTES_BY_NAME: ReadonlyMap<string, RegimeAttributes> = new Map(
+  allQuantities().map((quantity) => [quantity.name, quantity.attributes]),
+);
 
 // The axes the D1 regime-label gate compares are `GATE_AXES`, imported from the
 // `axes.ts` registry (`AXES.filter(gated)`) at the top of this module. Currently

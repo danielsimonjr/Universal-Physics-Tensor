@@ -1,0 +1,9743 @@
+{
+  "quantities": [
+    {
+      "id": "acdrude-bandmass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "acdrude-conduct",
+      "symbol": "Re \u03c3",
+      "dimension": {
+        "L": -3,
+        "M": -1,
+        "T": 3,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "acdrude-n3",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "acdrude-radian",
+      "symbol": "\u03c9",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "acdrude-scatter",
+      "symbol": "\u03c4",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "active-noise-energy",
+      "symbol": "\u03a3_active",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "advanced-field-amplitude",
+      "symbol": "A_adv",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "alfven-speed",
+      "symbol": "v_A",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ambegaokar-gap",
+      "symbol": "\u0394",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ambegaokar-product",
+      "symbol": "I_c R_n",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "anthropic-model-parameter",
+      "symbol": "\u03b1_anth",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "anthropic-probability",
+      "symbol": "P(\u039b)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "area-law-coefficient",
+      "symbol": "\u03b1",
+      "dimension": {
+        "L": -1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "area-moment",
+      "symbol": "I",
+      "dimension": {
+        "L": 4,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "attempt-frequency",
+      "symbol": "\u03bd\u2080",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "barrier-height",
+      "symbol": "V\u2212E",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "barrier-width",
+      "symbol": "L_barrier",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bcs-heat-jump",
+      "symbol": "\u0394C/C_n",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bcs-quartic",
+      "symbol": "\u03b6",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bennett-current",
+      "symbol": "I",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bennett-line-density",
+      "symbol": "N",
+      "dimension": {
+        "L": -1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bennett-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "biological-rate-correction",
+      "symbol": "f",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bkt-stiffness",
+      "symbol": "J",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bkt-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "blochlaw-deficit",
+      "symbol": "\u0394M",
+      "dimension": {
+        "L": -1,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "blochlaw-dstiff",
+      "symbol": "D",
+      "dimension": {
+        "L": 4,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "blochlaw-mub",
+      "symbol": "\u03bc_B",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "blochlaw-warmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "blochlaw-zeta",
+      "symbol": "\u03b6(3/2)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bohm-electron-temperature",
+      "symbol": "T_e",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "bohm-ion-mass",
+      "symbol": "m_i",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "bohm-ion-speed",
+      "symbol": "u_0",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "boost-duty",
+      "symbol": "D",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "boost-gain",
+      "symbol": "V_out/V_in",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "boundary-entanglement-entropy",
+      "symbol": "S_boundary",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann",
+        "force": "gravitational"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "boundary-length",
+      "symbol": "L(R)",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "brane-tension",
+      "symbol": "\u03c3",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "buckling-load",
+      "symbol": "P_cr",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "builtin-acceptor",
+      "symbol": "N_A",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "builtin-donor",
+      "symbol": "N_D",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "builtin-ni",
+      "symbol": "n_i",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "builtin-vbi",
+      "symbol": "V_{bi}",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "builtin-warmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "capacitance",
+      "symbol": "C",
+      "dimension": {
+        "L": -2,
+        "M": -1,
+        "T": 4,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "capacitor-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "capacitor-voltage-variance",
+      "symbol": "\u27e8v\u00b2\u27e9",
+      "dimension": {
+        "L": 4,
+        "M": 2,
+        "T": -6,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "carrier-charge",
+      "symbol": "q",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "signRole": "charge"
+    },
+    {
+      "id": "carrier-density",
+      "symbol": "n_e",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "electromagnetic",
+        "statistics": "fermionic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "causal-set-count-0",
+      "symbol": "N_0",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "causal-set-count-1",
+      "symbol": "N_1",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "causal-set-count-2",
+      "symbol": "N_2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "causal-set-count-3",
+      "symbol": "N_3",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "chern-number",
+      "symbol": "C",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "topology": "chern"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "child-carrier-mass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "child-gap",
+      "symbol": "d",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "child-langmuir-current",
+      "symbol": "J",
+      "dimension": {
+        "L": -2,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "child-voltage",
+      "symbol": "V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "clapeyron-slope",
+      "symbol": "dP/dT",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "clapeyron-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "coarsening-length",
+      "symbol": "L(t)",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "coax-inner",
+      "symbol": "a",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "coax-liner",
+      "symbol": "\u03b5",
+      "dimension": {
+        "L": -3,
+        "M": -1,
+        "T": 4,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "coax-outer",
+      "symbol": "b",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "coax-specific",
+      "symbol": "C'",
+      "dimension": {
+        "L": -3,
+        "M": -1,
+        "T": 4,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "color-number",
+      "symbol": "N_c",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "strong"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "column-length",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "comb-airgap",
+      "symbol": "g",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "comb-bias",
+      "symbol": "V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "comb-dielectric",
+      "symbol": "\u03b5",
+      "dimension": {
+        "L": -3,
+        "M": -1,
+        "T": 4,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "comb-finger-count",
+      "symbol": "n",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "comb-lateral",
+      "symbol": "F",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "comb-overlap",
+      "symbol": "h",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "composite-higgs-alpha",
+      "symbol": "\u03b1",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "composite-higgs-beta",
+      "symbol": "\u03b2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "composite-higgs-potential",
+      "symbol": "V",
+      "dimension": {
+        "L": 8,
+        "M": 4,
+        "T": -8,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "conditional-probability",
+      "symbol": "p(s\u0303|s)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "information": "shannon"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "conduction-dos",
+      "symbol": "N_c",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "cosmological-constant-curvature",
+      "symbol": "\u039b",
+      "dimension": {
+        "L": -2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational",
+        "symmetry": "poincare"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "cosmological-constant-dimensionless",
+      "symbol": "\u03bb",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "einstein-coupling-prefactor-squared",
+      "symbol": "(c\u2074/8\u03c0G)\u00b2",
+      "dimension": {
+        "L": 2,
+        "M": 2,
+        "T": -4,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "critical-density",
+      "symbol": "\u03c1_crit",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "cross-field-alpha",
+      "symbol": "\u03b1",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "cross-field-ratio",
+      "symbol": "D_\u22a5/D_\u2225",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "curie-density",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "curie-g-factor",
+      "symbol": "g",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "curie-magneton",
+      "symbol": "\u03bc_B",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "curie-spin",
+      "symbol": "S",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "curie-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "curie-weiss-susceptibility",
+      "symbol": "\u03c7",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "cutoff-cyclotron",
+      "symbol": "\u03c9_c",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "cutoff-plasma",
+      "symbol": "\u03c9_p",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "cutoff-r-frequency",
+      "symbol": "\u03c9_R",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "damping-dashpot",
+      "symbol": "c",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "damping-inertia",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "damping-spring",
+      "symbol": "k",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "damping-zeta",
+      "symbol": "\u03b6",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dark-fermion-mass",
+      "symbol": "m_dark",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak",
+        "statistics": "fermionic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dark-reaction-rate-coefficient",
+      "symbol": "\u27e8\u03c3v\u27e9_dark",
+      "dimension": {
+        "L": 3,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dark-species-density",
+      "symbol": "n_\u03c7",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "darwinism-decay-exponent",
+      "symbol": "\u03b2_QD",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "darwinism-magnitude",
+      "symbol": "\u03b1_QD",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-atom-count",
+      "symbol": "N",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-atom-density",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-cutoff-frequency",
+      "symbol": "\u03c9_D",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-heat-capacity",
+      "symbol": "C_V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "debye-sound-speed",
+      "symbol": "v_s",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-sphere-argument",
+      "symbol": "\u039b",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-sphere-density",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-sphere-length",
+      "symbol": "\u03bb_D",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "debye-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "debye-theta",
+      "symbol": "\u03b8_D",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "decoherence-rate",
+      "symbol": "\u0393_dec",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "defect-density",
+      "symbol": "n_defect",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "defect-rest-mass",
+      "symbol": "m_defect",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "deflection-angle",
+      "symbol": "\u03b1",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "diffusivity",
+      "symbol": "D",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "donor-acceptor-distance",
+      "symbol": "R",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dos2d-bandmass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dos2d-states",
+      "symbol": "g_2",
+      "dimension": {
+        "L": -4,
+        "M": -1,
+        "T": 2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dos3d-abscissa",
+      "symbol": "E",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dos3d-bandmass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dos3d-states",
+      "symbol": "g_3",
+      "dimension": {
+        "L": -5,
+        "M": -1,
+        "T": 2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dynamic-exponent-z",
+      "symbol": "z",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "symmetry": "conformal"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "dynamic-viscosity",
+      "symbol": "\u03bc",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "eccentricity",
+      "symbol": "e",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "effective-mass",
+      "symbol": "m*",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "electromagnetic",
+        "statistics": "fermionic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "effective-temperature",
+      "symbol": "T_eff",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic",
+        "force": "emergent"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "einstein-atom-count",
+      "symbol": "N",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "einstein-heat-capacity",
+      "symbol": "C_V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "einstein-solid-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "einstein-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "einstein-theta",
+      "symbol": "\u03b8_E",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "electrical-mobility",
+      "symbol": "\u03bc",
+      "dimension": {
+        "L": 0,
+        "M": -1,
+        "T": 2,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "signRole": "mobility"
+    },
+    {
+      "id": "entanglement-entropy-variation",
+      "symbol": "\u03b4S_EE",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landauer-erasure-energy",
+      "symbol": "E_min",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "information": "shannon"
+      },
+      "graphNode": true,
+      "aliases": [
+        "erasure-energy"
+      ]
+    },
+    {
+      "id": "exb-field",
+      "symbol": "B",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "exb-field-x",
+      "symbol": "E_x",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "exb-field-y",
+      "symbol": "E_y",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "exb-speed",
+      "symbol": "v_E",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "far-radius",
+      "symbol": "R_far",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fast-magnetosonic-speed",
+      "symbol": "|\u03c9/k|",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fermi-sea-density",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fermi-sea-mass",
+      "symbol": "m*",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fermi-wavevector",
+      "symbol": "k_F",
+      "dimension": {
+        "L": -1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fermioffset-elecmass",
+      "symbol": "m_e",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fermioffset-holemass",
+      "symbol": "m_h",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fermioffset-muoff",
+      "symbol": "\u0394E",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fermioffset-warmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "filling-fraction",
+      "symbol": "\u03bd",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "topology": "chern"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fin-adiabatic",
+      "symbol": "\u03b7",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fin-conductivity",
+      "symbol": "k",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "fin-convection",
+      "symbol": "h",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "fin-span",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fin-web",
+      "symbol": "t",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "firehose-beta-parallel",
+      "symbol": "\u03b2_\u2225",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "firehose-beta-perp",
+      "symbol": "\u03b2_\u22a5",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "firehose-margin",
+      "symbol": "\u03b2_\u2225\u2212\u03b2_\u22a5",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "flavor-number",
+      "symbol": "N_f",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "strong"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "foerster-radius",
+      "symbol": "R_0",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "four-point-current",
+      "symbol": "I",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "four-point-voltage",
+      "symbol": "V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fragment-count",
+      "symbol": "k",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fragment-mutual-information",
+      "symbol": "I(S:F_k)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "frequency",
+      "symbol": "f",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "fret-efficiency",
+      "symbol": "\u03b7",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gauge-coupling",
+      "symbol": "g",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "strong",
+        "symmetry": "gauge"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gl-kappa",
+      "symbol": "\u03ba",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gl-trial-factor",
+      "symbol": "1/\u03ba\u00b2\u22122",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gortercas-ns",
+      "symbol": "n_s/n",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gortercas-tc",
+      "symbol": "T_c",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "gortercas-warmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "gradb-charge",
+      "symbol": "q",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gradb-drift",
+      "symbol": "v_\u2207B",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gradb-field",
+      "symbol": "B",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gradb-gradient",
+      "symbol": "|\u2207B|",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gradb-mass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gradb-perp-speed",
+      "symbol": "v_\u22a5",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gravitational-frequency-ratio",
+      "symbol": "\u03bd1/\u03bd2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gravitational-wave-speed",
+      "symbol": "c_GW",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "grw-localization-rate",
+      "symbol": "\u03bb_GRW",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gw-photon-speed-ratio",
+      "symbol": "\u0394v/c",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "hall-conductance",
+      "symbol": "\u03c3_xy",
+      "dimension": {
+        "L": -2,
+        "M": -1,
+        "T": 3,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "hawking-temperature",
+      "symbol": "T_H",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "higgs-decay-constant",
+      "symbol": "f",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "higgs-field",
+      "symbol": "h",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "hubble-rate",
+      "symbol": "H",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "hubble-rate-squared",
+      "symbol": "H\u00b2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "impact-parameter",
+      "symbol": "b",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "incidence-angle",
+      "symbol": "\u03b8",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "inflation-hubble-energy",
+      "symbol": "H_inf",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "intrinsic-information",
+      "symbol": "ii",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "information": "shannon"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ion-acoustic-debye",
+      "symbol": "\u03bb_De",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ion-acoustic-frequency",
+      "symbol": "\u03c9",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ion-acoustic-sound",
+      "symbol": "c_s",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ion-acoustic-wavenumber",
+      "symbol": "k",
+      "dimension": {
+        "L": -1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "josephsonl-henry",
+      "symbol": "L_J",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "josephsonl-ic",
+      "symbol": "I_c",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "joukowsky-bore",
+      "symbol": "D",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "joukowsky-bulk",
+      "symbol": "K",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "joukowsky-closure",
+      "symbol": "\u0394v",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "joukowsky-jump",
+      "symbol": "\u0394p",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "joukowsky-rho",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "joukowsky-thk",
+      "symbol": "e_wall",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "joukowsky-wallmod",
+      "symbol": "E",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lambda-mass-density",
+      "symbol": "\u03c1_\u039b",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landau-gamma",
+      "symbol": "\u03b3",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landau-omega",
+      "symbol": "\u03c9",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landau-thermal",
+      "symbol": "v_t",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landau-wavenumber",
+      "symbol": "k",
+      "dimension": {
+        "L": -1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landauer-channel-conductance",
+      "symbol": "G",
+      "dimension": {
+        "L": -2,
+        "M": -1,
+        "T": 3,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landauer-transmission",
+      "symbol": "\u03a3 T_n",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "landscape-parameter",
+      "symbol": "\u039b_land",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lane-emden-omega-3",
+      "symbol": "\u03c9\u2083\u2070",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "specific-latent-heat",
+      "symbol": "L",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lawson-energy",
+      "symbol": "E",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lawson-product",
+      "symbol": "n\u03c4",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lawson-reactivity",
+      "symbol": "\u27e8\u03c3v\u27e9",
+      "dimension": {
+        "L": 3,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lawson-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "london-penetration-depth",
+      "symbol": "\u03bb_L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "electromagnetic",
+        "statistics": "fermionic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lorentz-charge-state",
+      "symbol": "Z",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lorentz-coulomb-log",
+      "symbol": "ln\u039b",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lorentz-mass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lorentz-resistivity",
+      "symbol": "\u03b7",
+      "dimension": {
+        "L": 3,
+        "M": 1,
+        "T": -3,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lorentz-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "loss-cone-mirror",
+      "symbol": "B_m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "loss-cone-pitch",
+      "symbol": "sin\u00b2\u03b8_lc",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "loss-cone-throat",
+      "symbol": "B_0",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lower-hybrid-electron-cyclotron",
+      "symbol": "\u03c9_ce",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lower-hybrid-frequency",
+      "symbol": "\u03c9_LH",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lower-hybrid-ion-cyclotron",
+      "symbol": "\u03c9_ci",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lower-hybrid-ion-plasma",
+      "symbol": "\u03c9_pi",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lowercrit-bc1",
+      "symbol": "B_{c1}",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lowercrit-pen",
+      "symbol": "\u03bb",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lowercrit-xi",
+      "symbol": "\u03be",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lst-infinity",
+      "symbol": "\u03b5(\u221e)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lst-ratio",
+      "symbol": "\u03c9_LO\u00b2/\u03c9_TO\u00b2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "lst-static",
+      "symbol": "\u03b5(0)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "magnetic-flux-density",
+      "symbol": "B",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "aliases": [
+        "magnetic-field"
+      ]
+    },
+    {
+      "id": "magnetic-pressure",
+      "symbol": "p_B",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "marginal-probability",
+      "symbol": "p(s\u0303)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "information": "shannon"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mass-action-density",
+      "symbol": "n_i",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mass-action-gap",
+      "symbol": "E_g",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mass-action-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "mass-density",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mass",
+      "symbol": "M",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "matthsum-scatter1",
+      "symbol": "\u03c4_1",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "matthsum-scatter2",
+      "symbol": "\u03c4_2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "matthsum-scatter",
+      "symbol": "\u03c4",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "max-efolds",
+      "symbol": "N_e_max",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mean-molecular-weight-per-electron",
+      "symbol": "\u03bc_e",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "measure-normalization",
+      "symbol": "A_norm",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "metric-g00",
+      "symbol": "g_00",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "microscopic-relaxation-time",
+      "symbol": "\u03c4_0",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "minimal-surface-area",
+      "symbol": "A(\u03b3)",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mirror-beta-perp",
+      "symbol": "\u03b2_\u22a5",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mirror-margin",
+      "symbol": "\u03b2_\u22a5(T_\u22a5/T_\u2225\u22121)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mirror-t-parallel",
+      "symbol": "T_\u2225",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "mirror-t-perp",
+      "symbol": "T_\u22a5",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "model-a-mobility",
+      "symbol": "\u0393",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "modular-hamiltonian-variation",
+      "symbol": "\u03b4\u27e8H_R\u27e9",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mond-acceleration-scale",
+      "symbol": "a_0",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mond-force",
+      "symbol": "F",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mott-gurney-current",
+      "symbol": "J",
+      "dimension": {
+        "L": -2,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mott-mobility",
+      "symbol": "\u03bc",
+      "dimension": {
+        "L": 0,
+        "M": -1,
+        "T": 2,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mott-permittivity",
+      "symbol": "\u03b5",
+      "dimension": {
+        "L": -3,
+        "M": -1,
+        "T": 4,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mott-thickness",
+      "symbol": "d",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mott-voltage",
+      "symbol": "V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "multi-debye-1",
+      "symbol": "\u03bb_1",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "multi-debye-2",
+      "symbol": "\u03bb_2",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "multi-debye-length",
+      "symbol": "\u03bb_D",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mutation-rate",
+      "symbol": "\u0393_mut",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "mesoscopic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "near-radius",
+      "symbol": "R_near",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "neutron-density",
+      "symbol": "n_n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newton-coupling-beta",
+      "symbol": "\u03b2_g",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newton-coupling-dimensionless",
+      "symbol": "g",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtonian-force",
+      "symbol": "F_N",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nucleon-yield-density",
+      "symbol": "Y",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nucleon-yield-rate",
+      "symbol": "dY/dt",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "oblique-alfven",
+      "symbol": "v_A",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "oblique-angle",
+      "symbol": "\u03b8",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "oblique-fast-speed",
+      "symbol": "v_+",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "oblique-sound",
+      "symbol": "c_s",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "onsagerk-karea",
+      "symbol": "A",
+      "dimension": {
+        "L": -2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "onsagerk-orbit",
+      "symbol": "F",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "parker-mass",
+      "symbol": "M",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "parker-radius",
+      "symbol": "r_c",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "parker-sound",
+      "symbol": "c_s",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pauli-density",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pauli-fermi-energy",
+      "symbol": "E_F",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pauli-magneton",
+      "symbol": "\u03bc_B",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pauli-susceptibility",
+      "symbol": "\u03c7_P",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "peltier-coefficient",
+      "symbol": "\u03a0",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "peltier-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "perihelion-advance",
+      "symbol": "\u0394\u03c6",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pipe-length",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pipe-pressure-drop",
+      "symbol": "\u0394P",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "kind": "interval",
+      "graphNode": true
+    },
+    {
+      "id": "pipe-radius",
+      "symbol": "R",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "planck-length",
+      "symbol": "\u2113_P",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "planck-mass-energy",
+      "symbol": "M_P(E)",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "planck-mass",
+      "symbol": "M_P",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "plasma-beta",
+      "symbol": "\u03b2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "plasma-mass-density",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "poiseuille-flow",
+      "symbol": "Q",
+      "dimension": {
+        "L": 3,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "poynting-flux",
+      "symbol": "I",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "probe-electron-mass",
+      "symbol": "m_e",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "probe-ion-mass",
+      "symbol": "m_i",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "probe-potential-ratio",
+      "symbol": "e\u03a6/kT",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "proper-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "proton-density",
+      "symbol": "n_p",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pull-in-area",
+      "symbol": "A",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pull-in-gap",
+      "symbol": "g_0",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pull-in-stiffness",
+      "symbol": "k",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "pull-in-voltage",
+      "symbol": "V_pi",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "quantum-correlation-length",
+      "symbol": "\u03be_quantum",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "quench-timescale",
+      "symbol": "\u03c4_Q",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "radiation-pressure",
+      "symbol": "P_n",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "redshift-metric-g00-1",
+      "symbol": "g_1",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "redshift-metric-g00-2",
+      "symbol": "g_2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reference-correlation-length",
+      "symbol": "\u03be_0",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reference-coupling",
+      "symbol": "\u03bb\u2080",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reference-mass",
+      "symbol": "m\u2080",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reference-temperature",
+      "symbol": "T_0",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "reflectance",
+      "symbol": "R",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reheating-temperature",
+      "symbol": "T_reh",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "relaxation-rate",
+      "symbol": "\u03b3_relax",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "rescaled-cosmological-constant",
+      "symbol": "\u039b",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "residual-resistivity",
+      "symbol": "\u03c1_0",
+      "dimension": {
+        "L": 3,
+        "M": 1,
+        "T": -3,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "resistivity",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": 3,
+        "M": 1,
+        "T": -3,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "retarded-field-amplitude",
+      "symbol": "A_ret",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ricci-scalar",
+      "symbol": "R",
+      "dimension": {
+        "L": -2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "gravitational",
+        "symmetry": "poincare"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "scalar-field-reference",
+      "symbol": "\u03c6\u2080",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "scalar-field-value",
+      "symbol": "\u03c6",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "schwarzschild-radius",
+      "symbol": "r_s",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "seebeck-coefficient",
+      "symbol": "S",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "seebeck-slope",
+      "symbol": "dS/dT",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": -2,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "semi-major-axis",
+      "symbol": "a",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "shapiro-delay",
+      "symbol": "\u0394t",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sheet-resistance",
+      "symbol": "R_s",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "shockley-current",
+      "symbol": "I",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "shockley-saturation",
+      "symbol": "I_s",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "shockley-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "shockley-voltage",
+      "symbol": "V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "shot-current",
+      "symbol": "I",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "shot-noise",
+      "symbol": "S_I",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "skin-friction",
+      "symbol": "C_f",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "slab-conductivity",
+      "symbol": "\u03c3",
+      "dimension": {
+        "L": -3,
+        "M": -1,
+        "T": 3,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "slab-time",
+      "symbol": "\u03c4",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "slab-width",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sm-reaction-rate-coefficient",
+      "symbol": "\u27e8\u03c3v\u27e9_SM",
+      "dimension": {
+        "L": 3,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sommerfeld-density",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sommerfeld-fermi-energy",
+      "symbol": "E_F",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sommerfeld-heat-capacity",
+      "symbol": "c_V",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "sommerfeld-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "sound-speed",
+      "symbol": "c_s",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "spatial-dimension",
+      "symbol": "d",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "specific-volume-change",
+      "symbol": "\u0394v",
+      "dimension": {
+        "L": 3,
+        "M": -1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "kind": "interval",
+      "graphNode": true
+    },
+    {
+      "id": "spin-density-squared",
+      "symbol": "S\u00b2_spin",
+      "dimension": {
+        "L": -2,
+        "M": 2,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "spiral-colatitude",
+      "symbol": "\u03b8",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "spiral-omega",
+      "symbol": "\u03a9",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "spiral-radial-speed",
+      "symbol": "v_r",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "spiral-radius",
+      "symbol": "r",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "spiral-ratio",
+      "symbol": "B_\u03c6/B_r",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "standoff-density",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "standoff-field",
+      "symbol": "B_E",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "standoff-sixth",
+      "symbol": "(R/R_E)^6",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "standoff-speed",
+      "symbol": "v",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "stanton-number",
+      "symbol": "St",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "static-exponent-nu",
+      "symbol": "\u03bd",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "symmetry": "conformal"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "stonerchi-enhanced",
+      "symbol": "\u03c7",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "stonerchi-ig",
+      "symbol": "I g",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "stonerchi-pauli",
+      "symbol": "\u03c7_P",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "stress-energy-trace",
+      "symbol": "T",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "subsystem-entanglement-entropy",
+      "symbol": "S(R)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "superposition-extent",
+      "symbol": "\u0394x",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "swampland-coefficient",
+      "symbol": "\u03b1_swamp",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "swampland-tower-mass",
+      "symbol": "m(\u03c6)",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "swing-decade",
+      "symbol": "S",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "swing-depletion",
+      "symbol": "C_d",
+      "dimension": {
+        "L": -2,
+        "M": -1,
+        "T": 4,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "swing-kelvin",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "swing-oxide",
+      "symbol": "C_ox",
+      "dimension": {
+        "L": -2,
+        "M": -1,
+        "T": 4,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "syk-coefficient",
+      "symbol": "\u03b1_SYK",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "system-environment-coupling",
+      "symbol": "\u03bb",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "tcc-correction-coefficient",
+      "symbol": "\u03b3_tcc",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "teg-figure",
+      "symbol": "Z",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "teg-optimum",
+      "symbol": "\u03b7",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "teg-sink",
+      "symbol": "T_c",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "teg-source",
+      "symbol": "T_h",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "kind": "absolute",
+      "graphNode": true,
+      "aliases": [
+        "T",
+        "temp",
+        "T_K"
+      ]
+    },
+    {
+      "id": "tensor-to-scalar-ratio",
+      "symbol": "r",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "tfscreen-chemical",
+      "symbol": "E_F",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "tfscreen-k2",
+      "symbol": "k_{TF}^2",
+      "dimension": {
+        "L": -2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "tfscreen-n3",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "thermal-de-broglie-wavelength",
+      "symbol": "\u03bb_T",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "thomson-coefficient",
+      "symbol": "\u03bc_T",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "thomson-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "time",
+      "symbol": "t",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": true
+    },
+    {
+      "id": "time-symmetric-field-amplitude",
+      "symbol": "A_TS",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "time-symmetry-residual",
+      "symbol": "r_TS",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "tolman-invariant",
+      "symbol": "T\u221a(\u2212g_00)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "topological-entanglement-entropy",
+      "symbol": "\u03b3",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann",
+        "topology": "z2"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "torsion-contraction-scalar",
+      "symbol": "T\u00b7T",
+      "dimension": {
+        "L": -4,
+        "M": 0,
+        "T": 2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "total-mutual-information",
+      "symbol": "I(S:E)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "transfer-efficiency",
+      "symbol": "\u03b5",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "cosmological"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "truncation-coefficient-a",
+      "symbol": "A",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "truncation-coefficient-b",
+      "symbol": "B",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "truncation-coefficient-c",
+      "symbol": "C",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "tunneling-mass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "upper-critical-field",
+      "symbol": "B_c2",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "upper-critical-length",
+      "symbol": "\u03be",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "upper-hybrid-density",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "upper-hybrid-field",
+      "symbol": "B",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "upper-hybrid-frequency",
+      "symbol": "\u03c9_UH",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "upper-hybrid-mass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "vacuum-expectation-value",
+      "symbol": "v_dark",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "valence-dos",
+      "symbol": "N_v",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "viscosity-entropy-ratio",
+      "symbol": "\u03b7/s",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "voltage",
+      "symbol": "V",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "weiss-temperature",
+      "symbol": "\u03b8",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "wormhole-cross-section-area",
+      "symbol": "A_wh",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "wormhole-entanglement-entropy",
+      "symbol": "S_ER",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "information": "von-neumann",
+        "force": "gravitational"
+      },
+      "kind": "absolute",
+      "graphNode": true
+    },
+    {
+      "id": "yang-mills-beta",
+      "symbol": "\u03b2(g)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "strong",
+        "symmetry": "gauge"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "youngs-modulus",
+      "symbol": "E",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "emergent"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "yukawa-coupling",
+      "symbol": "g_dark",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "weak"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "boltzmann-constant",
+      "symbol": "boltzmann-constant",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": false,
+      "aliases": [
+        "k_B",
+        "kB",
+        "boltzmann"
+      ]
+    },
+    {
+      "id": "specific-heat",
+      "symbol": "specific-heat",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "graphNode": false,
+      "aliases": [
+        "specific-heat-capacity"
+      ]
+    },
+    {
+      "id": "temperature-change",
+      "symbol": "temperature-change",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "kind": "interval",
+      "graphNode": false
+    },
+    {
+      "id": "dT",
+      "symbol": "dT",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "kind": "interval",
+      "graphNode": false
+    },
+    {
+      "id": "delta-T",
+      "symbol": "delta-T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "kind": "interval",
+      "graphNode": false
+    },
+    {
+      "id": "temperature_change",
+      "symbol": "temperature_change",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "kind": "interval",
+      "graphNode": false
+    },
+    {
+      "id": "deltaT",
+      "symbol": "deltaT",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {},
+      "kind": "interval",
+      "graphNode": false
+    },
+    {
+      "id": "arrhprefac",
+      "symbol": "A",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "arrhbarrier",
+      "symbol": "E_a",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": -1,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "arrhwarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "arrhrate",
+      "symbol": "k",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "eyringbarrier",
+      "symbol": "\u0394G^\u2021",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "eyringwarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "eyringrate",
+      "symbol": "k",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "vanthoffenthalpy",
+      "symbol": "\u0394H\u00b0",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": -1,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "vanthoffwarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "vanthoffslope",
+      "symbol": "d\\\\ln K/dT",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gibbsisok",
+      "symbol": "K",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "gibbsisowarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "gibbsisodg",
+      "symbol": "\u0394G\u00b0",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": -1,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nernstge0",
+      "symbol": "E\u00b0",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nernstgn",
+      "symbol": "n",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nernstgq",
+      "symbol": "Q",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nernstgwarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "nernstge",
+      "symbol": "E",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "clapintlatent",
+      "symbol": "\u0394H",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": -1,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "clapintwarm1",
+      "symbol": "T_1",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "clapintwarm2",
+      "symbol": "T_2",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "clapintln",
+      "symbol": "\\\\ln(P_2/P_1)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "raoultmole",
+      "symbol": "x",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "raoultsat",
+      "symbol": "P^*",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "raoultvapor",
+      "symbol": "P",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "prandtlmu",
+      "symbol": "\u03bc",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "prandtlcp",
+      "symbol": "c_p",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "prandtlk",
+      "symbol": "k",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "prandtlratio",
+      "symbol": "Pr",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reynumrho",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reynumvel",
+      "symbol": "v",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reynumlen",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reynummu",
+      "symbol": "\u03bc",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "reynumratio",
+      "symbol": "Re",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "biotfilm",
+      "symbol": "h",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "biotlength",
+      "symbol": "L_c",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "biotk",
+      "symbol": "k",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "biotratio",
+      "symbol": "Bi",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nusseltfilm",
+      "symbol": "h",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nusseltlen",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nusseltk",
+      "symbol": "k",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "nusseltratio",
+      "symbol": "Nu",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "schmidtmu",
+      "symbol": "\u03bc",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "schmidtrho",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "schmidtdiff",
+      "symbol": "D",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "schmidtratio",
+      "symbol": "Sc",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sherwoodkm",
+      "symbol": "k_m",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sherwoodlen",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sherwooddiff",
+      "symbol": "D",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sherwoodratio",
+      "symbol": "Sh",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fourierslabk",
+      "symbol": "k",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fourierslabend",
+      "symbol": "T(L)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "fourierslabstart",
+      "symbol": "T(0)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "fourierslablen",
+      "symbol": "L",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "fourierslabflux",
+      "symbol": "q",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtonrho",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtoncp",
+      "symbol": "c",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtonvol",
+      "symbol": "V",
+      "dimension": {
+        "L": 3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtonfilm",
+      "symbol": "h",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtonarea",
+      "symbol": "A",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtontime",
+      "symbol": "t",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "newtontheta0",
+      "symbol": "\u03b8(0)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "interval"
+    },
+    {
+      "id": "newtontheta",
+      "symbol": "\u03b8(t)",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "ottoratio",
+      "symbol": "r",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ottogamma",
+      "symbol": "\u03b3",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "ottoeta",
+      "symbol": "\u03b7",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "jtcdvdt",
+      "symbol": "(\u2202v/\u2202T)_p",
+      "dimension": {
+        "L": 3,
+        "M": -1,
+        "T": 0,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "jtcvolume",
+      "symbol": "v",
+      "dimension": {
+        "L": 3,
+        "M": -1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "jtcwarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "jtcp",
+      "symbol": "c_p",
+      "dimension": {
+        "L": 2,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "jtcmu",
+      "symbol": "\u03bc_{JT}",
+      "dimension": {
+        "L": 1,
+        "M": -1,
+        "T": 2,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "planckfreq",
+      "symbol": "\u03bd",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "planckwarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "plancku",
+      "symbol": "u_\u03bd",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -1,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "stefansigma",
+      "symbol": "\u03c3",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -4,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "wienroot",
+      "symbol": "x",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "wienb",
+      "symbol": "b",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "sackurcount",
+      "symbol": "N",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sackurquantum",
+      "symbol": "n_Q",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sackurdensity",
+      "symbol": "n",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sackurentropy",
+      "symbol": "S",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sahamass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sahawarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "sahaion",
+      "symbol": "I",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "sahaconst",
+      "symbol": "K",
+      "dimension": {
+        "L": -3,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "richardsmass",
+      "symbol": "m",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "richardswarmth",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "richardsphi",
+      "symbol": "\u03c6",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "richardsj",
+      "symbol": "J",
+      "dimension": {
+        "L": -2,
+        "M": 0,
+        "T": 0,
+        "I": 1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "onsagerl12",
+      "symbol": "L_{12}",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "onsagerb0",
+      "symbol": "B",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": -2,
+        "I": -1,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "onsagerl21",
+      "symbol": "L_{21}",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "plate-separation",
+      "symbol": "d",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "casimir-pressure",
+      "symbol": "P",
+      "dimension": {
+        "L": -1,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "unruh-acceleration",
+      "symbol": "a",
+      "dimension": {
+        "L": 1,
+        "M": 0,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "unruh-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "gravitational"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "johnson-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "resistance",
+      "symbol": "R",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "voltage-noise-density",
+      "symbol": "S_V",
+      "dimension": {
+        "L": 4,
+        "M": 2,
+        "T": -5,
+        "I": -2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "electrical-conductivity",
+      "symbol": "\u03c3",
+      "dimension": {
+        "L": -3,
+        "M": -1,
+        "T": 3,
+        "I": 2,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "wiedemann-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "thermal-conductivity",
+      "symbol": "\u03ba",
+      "dimension": {
+        "L": 1,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": -1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "critical-temperature",
+      "symbol": "T_c",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "electromagnetic"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "gap-energy",
+      "symbol": "\u0394",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -2,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "quantum",
+        "force": "electromagnetic"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "accretor-mass",
+      "symbol": "M",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "eddington-luminosity",
+      "symbol": "L",
+      "dimension": {
+        "L": 2,
+        "M": 1,
+        "T": -3,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "jeans-temperature",
+      "symbol": "T",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 1,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true,
+      "kind": "absolute"
+    },
+    {
+      "id": "jeans-density",
+      "symbol": "\u03c1",
+      "dimension": {
+        "L": -3,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "mean-molecular-weight",
+      "symbol": "\u03bc",
+      "dimension": {
+        "L": 0,
+        "M": 0,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    },
+    {
+      "id": "jeans-mass",
+      "symbol": "M_J",
+      "dimension": {
+        "L": 0,
+        "M": 1,
+        "T": 0,
+        "I": 0,
+        "Theta": 0,
+        "N": 0,
+        "J": 0
+      },
+      "attributes": {
+        "scale": "classical",
+        "force": "gravitational"
+      },
+      "graphNode": true
+    }
+  ]
+}

@@ -285,10 +285,15 @@ export function signOwnerHits(root: string): string[] {
   if (/assertSameCarrierSign\s*\(/.test(withoutDef)) {
     hits.push('assertSameCarrierSign is called outside applyCarrierSignPolicy');
   }
-  const domain = readFileSync(join(root, 'src/composition/edges/applied-physicist.ts'), 'utf8');
-  if (/sameCarrierSign\s*\(/.test(domain)) hits.push('the BE-70 domain calls sameCarrierSign');
-  const einstein = readFileSync(join(root, 'src/bridges/be70-einstein-relation.ts'), 'utf8');
-  if (/assertSameCarrierSign\s*\(/.test(einstein)) hits.push('evaluateEinsteinRelation calls assertSameCarrierSign');
+  const files: string[] = [];
+  walkTs(join(root, 'src'), files);
+  for (const file of files) {
+    const rel = relative(root, file).replaceAll('\\', '/');
+    if (rel === 'src/bridges/carrier-sign.ts') continue;
+    const text = readFileSync(file, 'utf8');
+    if (/assertSameCarrierSign\s*\(/.test(text)) hits.push(`${rel} calls assertSameCarrierSign`);
+    if (/sameCarrierSign\s*\(/.test(text)) hits.push(`${rel} calls sameCarrierSign`);
+  }
   const graph = readFileSync(join(root, 'src/composition/canonical-graph.ts'), 'utf8');
   if (/assertCarrierProductSign\s*\(/.test(graph)) hits.push('canonical-graph calls assertCarrierProductSign');
   if (/magnitudeBase\s*\(/.test(graph)) hits.push('canonical-graph calls magnitudeBase');
@@ -315,7 +320,7 @@ export function renderDuplicateOwners(root: string): string {
       : names.map((hit) => `- ${hit}`).join('\n') + '\n';
   const signBody =
     signs.length === 0
-      ? '`assertSameCarrierSign` is called only from `applyCarrierSignPolicy`. The BE-70 domain does not call `sameCarrierSign`. No second owner.\n'
+      ? '`assertSameCarrierSign` is called only from `applyCarrierSignPolicy`. No second owner.\n'
       : signs.map((hit) => `- ${hit}`).join('\n') + '\n';
   const prefactorBody =
     prefactors.length === 0
@@ -323,7 +328,7 @@ export function renderDuplicateOwners(root: string): string {
       : prefactors.map((hit) => `- ${hit}`).join('\n') + '\n';
   const bridgeBody =
     bridges.length === 0
-      ? '`BRIDGE_EQUATIONS` is the projection of `registerBridge`. No hand-maintained catalog literal.\n'
+      ? '`BRIDGE_EQUATIONS` is the projection of the catalog file. No hand-maintained catalog literal.\n'
       : bridges.map((hit) => `- ${hit}`).join('\n') + '\n';
   const jsonBody =
     json.length === 0

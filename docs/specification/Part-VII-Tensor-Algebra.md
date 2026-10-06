@@ -105,7 +105,7 @@ For v0.2.0, `role` is structural metadata; it does not change validator behavior
 
 ## §VII.9 Worked example — BE-17 Einstein-Cartan torsion-spin contraction
 
-See `src/bridges/equations/be-17-einstein-cartan.ts` post-v0.2.0 for the canonical structural encoding. Sketch:
+Catalog record 17 in `data/bridge-catalog.json` holds the equation. The sketch below is the torsion-spin contraction:
 
 ```typescript
 const T_lower = tsym('T_torsion', [

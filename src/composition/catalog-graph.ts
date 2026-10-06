@@ -1,72 +1,75 @@
 /**
- * The composition graph is the edge projection of `registerBridge`.
- * 83 is the record from before be-103..125. 68 is the record from before
- * be-88..102.
+ * The composition graph is the relation projection of the bridge catalog.
  *
  * @module composition/catalog-graph
  */
 
+import { catalogRelations } from '../bridges/catalog-load.js';
+import { parseCatalogExpression } from '../bridges/expr-parse.js';
+import { evaluateCatalogRelation, relationHolds } from '../bridges/relation-eval.js';
 import type { BridgeEdge } from './edge.js';
-import { bridgeRegistry, registerBridge } from '../bridges/registry.js';
-import {
-  be11ZurekEdge,
-  be12Edge,
-  be16Edge,
-  be37Edge,
-  be42Edge,
-  be42ViaRsEdge,
-  be51Edge,
-  be52Edge,
-  lawSchwarzschildRadius,
-} from './edges/calibration.js';
-import {
-  be14Edge,
-  be19Edge,
-  be21Edge,
-  be48Edge,
-  be53Edge,
-  be54Edge,
-} from './edges/catalog-tranche.js';
-import { CATALOG_FULL_EDGES } from './edges/catalog-full.js';
-import { PROVED_SEED_EDGES } from './edges/proved-seeds.js';
-import { APPLIED_PHYSICIST_EDGES } from './edges/applied-physicist.js';
-import { CONDENSED_R5_EDGES } from './edges/condensed-r5.js';
-import { PLASMA_SPACE_EDGES } from './edges/plasma-space.js';
-import { ENGINEERING_R7_EDGES } from './edges/engineering-r7.js';
-import { CONDENSED_R8_EDGES } from './edges/condensed-r8.js';
+import { withBoundAliases } from './edge.js';
+import { quantityByName } from './quantities.js';
 
-/**
- * Every registered `BridgeEdge`, in registration order. 83 is the record
- * from before be-103..125. 68 is the record from before be-88..102.
- *
- * @public
- */
-const EDGE_ROWS: readonly BridgeEdge[] = [
-  be11ZurekEdge,
-  be12Edge,
-  be16Edge,
-  be37Edge,
-  be42Edge,
-  be42ViaRsEdge,
-  be51Edge,
-  be52Edge,
-  lawSchwarzschildRadius,
-  be14Edge,
-  be19Edge,
-  be21Edge,
-  be48Edge,
-  be53Edge,
-  be54Edge,
-  ...CATALOG_FULL_EDGES,
-  ...PROVED_SEED_EDGES,
-  ...APPLIED_PHYSICIST_EDGES,
-  ...CONDENSED_R5_EDGES,
-  ...PLASMA_SPACE_EDGES,
-  ...ENGINEERING_R7_EDGES,
-  ...CONDENSED_R8_EDGES,
-];
+function buildEdge(relation: ReturnType<typeof catalogRelations>[number]): BridgeEdge {
+  const edge: BridgeEdge = {
+    id: relation.id,
+    beId: relation.catalogId,
+    kind: relation.kind,
+    label: relation.label,
+    sources: relation.sources.map((name) => quantityByName(name)),
+    ...(Object.keys(relation.aliases).length > 0 ? { aliases: relation.aliases } : {}),
+    target: quantityByName(relation.target),
+    confidence: relation.confidence,
+    domain: {
+      description: relation.domain,
+      predicate: (inputs) => relationHolds(relation, inputs),
+    },
+    evaluate: (inputs) => evaluateCatalogRelation(relation, inputs),
+    symbolic: parseCatalogExpression(relation.expression),
+    citation: relation.citation,
+    ...(relation.coefficientUnset === true ? { coefficientUnset: true } : {}),
+    ...(relation.formulaFactors !== undefined ? { formulaFactors: relation.formulaFactors } : {}),
+    ...(relation.relation !== undefined ? { relation: relation.relation } : {}),
+    ...(relation.regime !== undefined ? { regime: relation.regime } : {}),
+    ...(relation.conventions !== undefined ? { conventions: relation.conventions } : {}),
+    ...(relation.counterexamples !== undefined ? { counterexamples: relation.counterexamples } : {}),
+  };
+  return withBoundAliases(edge);
+}
 
-for (const edge of EDGE_ROWS) registerBridge({ edge });
+/** Every catalog relation as a graph edge, in catalog order. @public */
+export const CATALOG_GRAPH: readonly BridgeEdge[] = catalogRelations().map(buildEdge);
 
-/** The edge projection of `registerBridge`. @public */
-export const CATALOG_GRAPH: readonly BridgeEdge[] = bridgeRegistry.edges() as unknown as readonly BridgeEdge[];
+const BY_ID = new Map(CATALOG_GRAPH.map((edge) => [edge.id, edge]));
+
+/** The catalog edge with this graph id. */
+export function catalogEdge(id: string): BridgeEdge {
+  const edge = BY_ID.get(id);
+  if (edge === undefined) throw new Error(`catalogEdge: no edge '${id}'`);
+  return edge;
+}
+
+/** The two composition demonstrations the CLI prints. */
+export function demonstrationEdges(): {
+  readonly hawking: BridgeEdge;
+  readonly landauer: BridgeEdge;
+  readonly schwarzschild: BridgeEdge;
+  readonly hawkingViaRadius: BridgeEdge;
+} {
+  const hawking = catalogRelations().find(
+    (row) => row.target === 'hawking-temperature' && row.sources.length === 1 && row.sources[0] === 'mass',
+  );
+  const landauer = catalogRelations().find((row) => row.target === 'landauer-erasure-energy');
+  const via = catalogRelations().find((row) => row.target === 'hawking-temperature' && row.sources.includes('schwarzschild-radius'));
+  const law = catalogRelations().find((row) => row.kind === 'law' && row.target === 'schwarzschild-radius');
+  if (hawking === undefined || landauer === undefined || via === undefined || law === undefined) {
+    throw new Error('demonstrationEdges: a demonstration relation is missing');
+  }
+  return {
+    hawking: catalogEdge(hawking.id),
+    landauer: catalogEdge(landauer.id),
+    schwarzschild: catalogEdge(law.id),
+    hawkingViaRadius: catalogEdge(via.id),
+  };
+}

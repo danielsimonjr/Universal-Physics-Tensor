@@ -1,12 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "UPT Bridge Catalog Artifact",
-  "description": "Versioned JSON projection of src/bridges/index.ts BRIDGE_EQUATIONS plus the discovery review surfaces (v2, P10: confrontations + adjudications). The TypeScript sources are authoritative; regenerate with `npm run catalog:json`.",
+  "description": "The bridge catalog. data/bridge-catalog.json is the source. type is required on every record. derivedFrom and basis are absent until a derivation theorem is pinned. formalRef is derived from formalKey and is not stored. npm run catalog:json checks the file.",
   "type": "object",
   "required": ["schemaVersion", "packageVersion", "count", "entries", "confrontations", "adjudications"],
   "properties": {
     "$schema": { "type": "string" },
-    "schemaVersion": { "const": 2 },
+    "schemaVersion": { "const": 3 },
     "packageVersion": { "type": "string" },
     "count": { "type": "integer", "minimum": 1 },
     "confrontations": {
@@ -41,6 +41,7 @@
         "type": "object",
         "required": [
           "id",
+          "type",
           "name",
           "category",
           "category_name",
@@ -56,6 +57,13 @@
         ],
         "properties": {
           "id": { "type": "integer", "minimum": 11 },
+          "type": { "enum": ["standard", "cross-domain"] },
+          "derivedFrom": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Direct derivation imports. Absent until a derivation theorem is pinned."
+          },
+          "basis": { "const": true },
           "name": { "type": "string", "minLength": 1 },
           "category": { "type": "string" },
           "category_name": { "type": "string" },

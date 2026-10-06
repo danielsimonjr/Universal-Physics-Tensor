@@ -109,20 +109,20 @@ describe('v030-additive-semver-minor-bump (TENSOR-RULE)', () => {
   // v0.3.1 audit fix: previously this rule was satisfied by an orphan-anchor
   // JSDoc comment in this file; the rule had no real test backing. The two
   // assertions below give the rule a concrete runtime check.
-  it('package.json version is 7.0.0', () => {
+  it('package.json version is 8.0.0', () => {
     // v0.6.1 hygiene: original regex pinned /^0\.5\./ which went stale at
     // v0.6.0, then /^0\./ while the line stayed pre-1.0. 1.0.0 is the major
     // for the breaking parser change. v1.0.0 was tagged and never published.
     // 1.0.1, 1.0.2, and 1.0.3 are published. 1.0.4 was the previous package
     // version and was not tagged. 2.0.0, 2.0.1, 3.0.0, 3.1.0, and 4.0.0 are
     // published. 5.0.0 is published. 6.0.0 is published. 6.1.0 is the record
-    // from before this bump. 7.0.0 is this package version. The annotated
-    // tag is created on the merge commit after this change. A 0.x version
-    // fails this check.
+    // from before the 7.0.0 bump. 7.0.0 is the record from before this bump.
+    // 8.0.0 is this package version. The annotated tag is created on the
+    // merge commit after this change. A 0.x version fails this check.
     const pkg = JSON.parse(
       readFileSync(resolve(__dirname, '../../package.json'), 'utf-8'),
     ) as { version: string };
-    expect(pkg.version).toBe('7.0.0');
+    expect(pkg.version).toBe('8.0.0');
     expect(pkg.version).not.toMatch(/^0\./);
   });
 

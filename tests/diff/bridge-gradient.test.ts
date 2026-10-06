@@ -21,11 +21,11 @@ import {
   type BridgeDiffSpec,
 } from '../../src/diff/bridge-gradient.js';
 import {
-  BE37_SHAPIRO_DIFF,
-  BE52_PERIHELION_DIFF,
-  BE42_HAWKING_DIFF,
-  BE11_DECOHERENCE_DIFF,
-  DIFFERENTIABLE_BRIDGE_SPECS,
+  SHAPIRO_DELAY_DIFF,
+  PERIHELION_ADVANCE_DIFF,
+  HAWKING_TEMPERATURE_DIFF,
+  DECOHERENCE_RATE_DIFF,
+  DIFFERENTIABLE_RELATIONS,
 } from '../../src/diff/bridge-specs.js';
 import { MathTSEngine } from '../../src/numerical/mathts-engine.js';
 import { hasAutogradSupport } from '../../src/numerical/tensor-engine.js';
@@ -37,7 +37,7 @@ import { EngineCapabilityError } from '../../src/numerical/errors.js';
 
 describe('BridgeDiffSpec — shape', () => {
   it('every shipped spec has bridgeId, name, paramNames, defaults, evaluate', () => {
-    for (const spec of DIFFERENTIABLE_BRIDGE_SPECS) {
+    for (const spec of DIFFERENTIABLE_RELATIONS) {
       expect(spec.bridgeId).toMatch(/^BE-\d+$/);
       expect(typeof spec.name).toBe('string');
       expect(spec.paramNames.length).toBeGreaterThan(0);
@@ -46,20 +46,20 @@ describe('BridgeDiffSpec — shape', () => {
   });
 
   it('BE-37 Shapiro spec uses verified field names (M_kg, R_far_m, R_near_m)', () => {
-    expect([...BE37_SHAPIRO_DIFF.paramNames]).toEqual(['M_kg', 'R_far_m', 'R_near_m']);
+    expect([...SHAPIRO_DELAY_DIFF.paramNames]).toEqual(['M_kg', 'R_far_m', 'R_near_m']);
   });
 
   it('BE-52 Perihelion spec includes T_yr in defaults (non-differentiable)', () => {
-    expect(BE52_PERIHELION_DIFF.defaults).toEqual({ T_yr: 1 });
+    expect(PERIHELION_ADVANCE_DIFF.defaults).toEqual({});
   });
 
   it('BE-42 Hawking has single-param tensor (M_kg only)', () => {
-    expect(BE42_HAWKING_DIFF.paramNames).toHaveLength(1);
-    expect(BE42_HAWKING_DIFF.paramNames[0]).toBe('M_kg');
+    expect(HAWKING_TEMPERATURE_DIFF.paramNames).toHaveLength(1);
+    expect(HAWKING_TEMPERATURE_DIFF.paramNames[0]).toBe('M_kg');
   });
 
   it('BE-11 Decoherence uses verified field names (gamma0_per_s, lambda, lambda0)', () => {
-    expect([...BE11_DECOHERENCE_DIFF.paramNames]).toEqual(['gamma0_per_s', 'lambda', 'lambda0']);
+    expect([...DECOHERENCE_RATE_DIFF.paramNames]).toEqual(['gamma0_per_s', 'lambda', 'lambda0']);
   });
 });
 
@@ -93,13 +93,13 @@ describe('bridgeGradient — graceful degradation when AD absent', () => {
 
   it('throws EngineCapabilityError when engine lacks AD support', async () => {
     await expect(
-      bridgeGradient(BE42_HAWKING_DIFF, noADEngine, { M_kg: 1.989e30 }),
+      bridgeGradient(HAWKING_TEMPERATURE_DIFF, noADEngine, { M_kg: 1.989e30 }),
     ).rejects.toThrow(EngineCapabilityError);
   });
 
   it('error message identifies the missing capability (engineName + missingMethod)', async () => {
     try {
-      await bridgeGradient(BE42_HAWKING_DIFF, noADEngine, { M_kg: 1e30 });
+      await bridgeGradient(HAWKING_TEMPERATURE_DIFF, noADEngine, { M_kg: 1e30 });
       expect.fail('Should have thrown');
     } catch (e) {
       expect(e).toBeInstanceOf(EngineCapabilityError);
@@ -134,7 +134,7 @@ describe('bridgeGradient — MathTSEngine AD limitation (P8 honest scope)', () =
     // This is the "Float64 AD won't trace bridges" honest limitation
     // (MathTSEngine shares it — see the next describe block).
     await expect(
-      bridgeGradient(BE42_HAWKING_DIFF, engine, { M_kg: 1.989e30 }),
+      bridgeGradient(HAWKING_TEMPERATURE_DIFF, engine, { M_kg: 1.989e30 }),
     ).rejects.toThrow();
   });
 });
@@ -162,13 +162,13 @@ describe('bridgeGradient — param validation', () => {
 
   it('throws TypeError when a required paramName is missing from params', async () => {
     await expect(
-      bridgeGradient(BE37_SHAPIRO_DIFF, mockEngine, { M_kg: 1e30 } as Record<string, number>),
+      bridgeGradient(SHAPIRO_DELAY_DIFF, mockEngine, { M_kg: 1e30 } as Record<string, number>),
     ).rejects.toThrow(/missing or non-numeric param/);
   });
 
   it('throws TypeError when a paramName has non-numeric value', async () => {
     await expect(
-      bridgeGradient(BE37_SHAPIRO_DIFF, mockEngine, {
+      bridgeGradient(SHAPIRO_DELAY_DIFF, mockEngine, {
         M_kg: 1e30,
         R_far_m: 'not a number',
         R_near_m: 1e6,
@@ -182,7 +182,7 @@ describe('gradientToNamed — unpack helper', () => {
 
   it('unpacks a 1-D gradient tensor into a named record', () => {
     const grad = engine.fromNested([1.0, 2.0, 3.0], [3]);
-    const named = gradientToNamed(BE37_SHAPIRO_DIFF, grad, engine);
+    const named = gradientToNamed(SHAPIRO_DELAY_DIFF, grad, engine);
     expect(named).toEqual({
       M_kg: 1.0,
       R_far_m: 2.0,
@@ -192,7 +192,7 @@ describe('gradientToNamed — unpack helper', () => {
 
   it('respects paramNames order', () => {
     const grad = engine.fromNested([10, 20, 30], [3]);
-    const named = gradientToNamed(BE11_DECOHERENCE_DIFF, grad, engine);
+    const named = gradientToNamed(DECOHERENCE_RATE_DIFF, grad, engine);
     expect(named.gamma0_per_s).toBe(10);
     expect(named.lambda).toBe(20);
     expect(named.lambda0).toBe(30);
@@ -202,7 +202,7 @@ describe('gradientToNamed — unpack helper', () => {
     // BE-37 Shapiro has 3 paramNames; a length-2 gradient would silently leave
     // R_near_m = undefined without the guard.
     const tooShort = engine.fromNested([1.0, 2.0], [2]);
-    expect(() => gradientToNamed(BE37_SHAPIRO_DIFF, tooShort, engine)).toThrow(
+    expect(() => gradientToNamed(SHAPIRO_DELAY_DIFF, tooShort, engine)).toThrow(
       /length/i,
     );
   });
@@ -224,7 +224,7 @@ describe('gradientToNamed — unpack helper', () => {
 describe('bridgeGradientNumerical — analytic cross-checks', () => {
   it('BE-42 Hawking: dT_H/dM matches analytic -T_H/M (T_H ∝ 1/M)', () => {
     const M = 1.989e30;
-    const { value, gradient } = bridgeGradientNumerical(BE42_HAWKING_DIFF, { M_kg: M });
+    const { value, gradient } = bridgeGradientNumerical(HAWKING_TEMPERATURE_DIFF, { M_kg: M });
 
     // T_H = ℏc³/(8πGM k_B) ⇒ dT_H/dM = -ℏc³/(8πG k_B M²) = -T_H/M (exact).
     const analytic = -value / M;
@@ -235,7 +235,7 @@ describe('bridgeGradientNumerical — analytic cross-checks', () => {
 
   it('BE-11 Decoherence: multi-param gradient matches analytic (γ = γ₀(λ/λ₀)²)', () => {
     const params = { gamma0_per_s: 1, lambda: 2, lambda0: 1 };
-    const { value, gradient } = bridgeGradientNumerical(BE11_DECOHERENCE_DIFF, params);
+    const { value, gradient } = bridgeGradientNumerical(DECOHERENCE_RATE_DIFF, params);
 
     const { gamma0_per_s: g0, lambda: l, lambda0: l0 } = params;
     // ∂γ/∂γ₀ = (λ/λ₀)²; ∂γ/∂λ = 2γ₀λ/λ₀²; ∂γ/∂λ₀ = -2γ₀λ²/λ₀³.
@@ -246,30 +246,30 @@ describe('bridgeGradientNumerical — analytic cross-checks', () => {
   });
 
   it('returns gradient keyed by every paramName, in the spec order', () => {
-    const { gradient } = bridgeGradientNumerical(BE37_SHAPIRO_DIFF, {
+    const { gradient } = bridgeGradientNumerical(SHAPIRO_DELAY_DIFF, {
       M_kg: 1.989e30,
       R_far_m: 1.496e11,
       R_near_m: 6.96e8,
     });
-    expect(Object.keys(gradient)).toEqual([...BE37_SHAPIRO_DIFF.paramNames]);
+    expect(Object.keys(gradient)).toEqual([...SHAPIRO_DELAY_DIFF.paramNames]);
     for (const v of Object.values(gradient)) expect(Number.isFinite(v)).toBe(true);
   });
 
   it('throws on a missing / non-finite param (same contract as bridgeGradient)', () => {
     expect(() =>
-      bridgeGradientNumerical(BE37_SHAPIRO_DIFF, { M_kg: 1e30 } as Record<string, number>),
+      bridgeGradientNumerical(SHAPIRO_DELAY_DIFF, { M_kg: 1e30 } as Record<string, number>),
     ).toThrow(/missing or non-finite param/);
   });
 
   it('throws on a NaN param (typeof NaN === "number" used to slip through)', () => {
     expect(() =>
-      bridgeGradientNumerical(BE42_HAWKING_DIFF, { M_kg: NaN }),
+      bridgeGradientNumerical(HAWKING_TEMPERATURE_DIFF, { M_kg: NaN }),
     ).toThrow(/non-finite param/);
   });
 
   it('throws on a non-positive relStep (would collapse the FD denominator)', () => {
     expect(() =>
-      bridgeGradientNumerical(BE42_HAWKING_DIFF, { M_kg: 1.989e30 }, { relStep: 0 }),
+      bridgeGradientNumerical(HAWKING_TEMPERATURE_DIFF, { M_kg: 1.989e30 }, { relStep: 0 }),
     ).toThrow(/relStep must be a positive finite number/);
   });
 });
@@ -284,7 +284,7 @@ describe('bridgeGradientNumerical — analytic cross-checks', () => {
 describe('bridgeGradient — plain-JS bridges are not AD-traceable (MathTSEngine)', () => {
   it('throws even with MathTSEngine (tape cannot trace plain-JS)', async () => {
     await expect(
-      bridgeGradient(BE42_HAWKING_DIFF, new MathTSEngine(), { M_kg: 1.989e30 }),
+      bridgeGradient(HAWKING_TEMPERATURE_DIFF, new MathTSEngine(), { M_kg: 1.989e30 }),
     ).rejects.toThrow();
   });
 });
@@ -295,7 +295,7 @@ describe('bridgeGradient — plain-JS bridges are not AD-traceable (MathTSEngine
 
 describe('bridge evaluators (sanity — confirms struct-arg signatures)', () => {
   it('BE-37 Shapiro returns a finite positive number for Sun-scale params', () => {
-    const result = BE37_SHAPIRO_DIFF.evaluate({
+    const result = SHAPIRO_DELAY_DIFF.evaluate({
       M_kg: 1.989e30,
       R_far_m: 1.496e11,
       R_near_m: 6.96e8,
@@ -305,7 +305,7 @@ describe('bridge evaluators (sanity — confirms struct-arg signatures)', () => 
   });
 
   it('BE-52 Perihelion returns Mercury-consistent ~43 arcsec/century via dphi_rad', () => {
-    const result = BE52_PERIHELION_DIFF.evaluate({
+    const result = PERIHELION_ADVANCE_DIFF.evaluate({
       M_kg: 1.989e30,
       a_m: 5.7909e10,
       e: 0.20563,
@@ -318,14 +318,14 @@ describe('bridge evaluators (sanity — confirms struct-arg signatures)', () => 
   });
 
   it('BE-42 Hawking returns nanokelvin-scale for solar-mass BH', () => {
-    const result = BE42_HAWKING_DIFF.evaluate({ M_kg: 1.989e30 });
+    const result = HAWKING_TEMPERATURE_DIFF.evaluate({ M_kg: 1.989e30 });
     // T_H(M_sun) ≈ 6e-8 K — sanity check.
     expect(result).toBeGreaterThan(1e-9);
     expect(result).toBeLessThan(1e-6);
   });
 
   it('BE-11 Decoherence returns gamma0 * (lambda/lambda0)^2', () => {
-    const result = BE11_DECOHERENCE_DIFF.evaluate({
+    const result = DECOHERENCE_RATE_DIFF.evaluate({
       gamma0_per_s: 1.0,
       lambda: 2.0,
       lambda0: 1.0,

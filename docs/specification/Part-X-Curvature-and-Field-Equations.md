@@ -201,7 +201,7 @@ Every `ExprNode` union member of §X.2–§X.5 has numerical lowering in
 `src/numerical/` (reference engine: `Float64ReferenceEngine`; optional
 `MathTSEngine` via the subpath import). The §X.6 predicate families are
 **symbolically validated only** — their numerical content lives in the
-per-bridge evaluators (`src/bridges/equations/be-NN-*.ts`), which is
+catalog expression, evaluated by `evaluateRelation`, which is
 deliberate: the predicates pin structure and dimensions; bridges own the
 physics numerics. `klein-gordon-equation` has a free-field
 dispersion-relation evaluator (`src/numerical/klein-gordon.ts`:

@@ -2,7 +2,7 @@
 
 > **Status note:** This document catalogs Bridge Equations 21-76 (BE-21–50 from the original spec catalog; BE-51–54 in §V-B; BE-55–76 in §V-C). Equations span a wide range of physical credibility: some (e.g., Eq 21 AdS/CMT; Eq 26 WKB tunneling; Eq 35 conformal bootstrap; Eqs 55–76) are established results from mainstream physics; others (e.g., Eq 25 consciousness, Eq 42 firewall, Eq 46 multiverse, Eq 50 retrocausal QFT) are highly speculative. Each equation should carry a **Status** line indicating this; where one is missing, treat the equation as unvalidated. Several equations have known issues flagged in their Status notes (Eqs 22, 23, 24, 25, 31, 37, 38, 50). The mathematical formulations reproduced here are drawn from the literature (where cited) or are original proposals; formal citations are being retroactively added — see the Part-VI conclusion for the current citation-completeness status.
 
-> **Spec-scope note (catalog count):** The specification catalogs **77 bridge equations, IDs 11–87** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-87: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–87). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05, BE-66–68 are written up in §V-C, BE-69–73 are the PhysJS #57 rows in that same section, and BE-74–76 are the PhysJS #62 rows, and BE-77–87 are the PhysJS #64 rows. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **115 entries, IDs 11–125**. The sentence that names 77 entries, IDs 11–87, is the record from before BE-88–102. The sentence that names 92 entries, IDs 11–102, is the record from before BE-103–125. BE-88–102 are the PhysJS #65 rows. BE-103–125 are the PhysJS #66 rows in §V-C. Entries 51 and 53–87 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C, prose that says "58 equations" / "IDs 11–68" is the record from before BE-69–73, and prose that says "63 equations" / "IDs 11–73" is the record from before BE-74–76. Status distribution across the 66-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 30 established · 33 speculative · 3 highly-speculative · 0 invalid.
+> **Spec-scope note (catalog count):** The specification catalogs **77 bridge equations, IDs 11–87** (Part-I §II covers BE-11–BE-20; this Part-II covers BE-21–BE-87: §V is BE-21–50, §V-B is BE-51–54, §V-C is BE-55–87). The original spec catalog was 40 bridges (IDs 11–50). BE-51 (gravitational lensing — Eddington 1919 weak-field deflection) and BE-52 (Mercury perihelion precession — Einstein 1915) were added in v0.4.0 as GR-foundation bridges, and BE-53 (Yang-Mills one-loop β-function) and BE-54 (Randall-Sundrum brane cosmology) were added in the v0.7 BE-X re-encoding sprint. BE-55–65 were added to the runtime catalog on 2026-07-05, BE-66–68 are written up in §V-C, BE-69–73 are the PhysJS #57 rows in that same section, and BE-74–76 are the PhysJS #62 rows, and BE-77–87 are the PhysJS #64 rows. The shipped codebase catalog is `src/bridges/index.ts`, `BRIDGE_EQUATIONS`, **115 entries, IDs 11–125**. The sentence that names 77 entries, IDs 11–87, is the record from before BE-88–102. The sentence that names 92 entries, IDs 11–102, is the record from before BE-103–125. BE-88–102 are the PhysJS #65 rows. BE-103–125 are the PhysJS #66 rows in §V-C. Entries 51 and 53–87 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. The wave-note history now lives in `docs/specification/CHANGELOG.md`; prose there that says "40 bridges" / "IDs 11–50" refers to the original pre-v0.4.0 spec catalog, prose that says "44 bridges" / "IDs 11–54" refers to the write-up before §V-C, prose that says "58 equations" / "IDs 11–68" is the record from before BE-69–73, and prose that says "63 equations" / "IDs 11–73" is the record from before BE-74–76. Status distribution across the 66-entry catalog, counted from each entry's `status` in `BRIDGE_EQUATIONS`: 30 established · 33 speculative · 3 highly-speculative · 0 invalid. The sentence that the shipped catalog is `src/bridges/index.ts` with 115 entries, IDs 11–125, is the record from before the catalog file `data/bridge-catalog.json`. BE-147–163 are catalog records and have no heading in this part. BE-164–170 are written under Black-body radiation, quantum statistics, and reciprocal transport.
 
 ## V. Extended Catalog of Bridging Equations (21-50)
 
@@ -16,6 +16,8 @@
 - **Context**: Holographic duality between strongly correlated electrons and gravitational systems
 - **Linked Formulas**: AdS/CFT correspondence, Fermi liquid theory
 - **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Cfrac%7B%5Ceta%7D%7Bs%7D%20%3D%20%5Cfrac%7B%5Chbar%7D%7B4%5Cpi%20k_B%7D" alt="\frac{\eta}{s} = \frac{\hbar}{4\pi k_B}" />
 
 <img src="https://i.upmath.me/svg/G_R(%5Comega%2Ck)%20%3D%20-i%20%5Clim_%7Br%20%5Cto%20%5Cinfty%7D%20r%5E%7B2%5CDelta-d%7D%20%5Cleft(%5Cfrac%7Bg%5E%7Brr%7D%7D%7B%5Csqrt%7Bg%5E%7Btt%7D%7D%7D%5Cright)%20%5Cfrac%7B%5Cpartial_r%20%5Cphi(r%2C%5Comega%2Ck)%7D%7B%5Cphi_0(%5Comega%2Ck)%7D" alt="G_R(\omega,k) = -i \lim_{r \to \infty} r^{2\Delta-d} \left(\frac{g^{rr}}{\sqrt{g^{tt}}}\right) \frac{\partial_r \phi(r,\omega,k)}{\phi_0(\omega,k)}" />
 
@@ -34,7 +36,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.ToricCode.toric`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/ToricCode.lean) states that four anyons of quantum dimension 1 have D = 2 and γ = ln 2. The Kitaev–Preskill theorem is missing in Mathlib. The lemma is not a quantum-gravity boundary.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-22-topological-entanglement.ts`](../../src/bridges/equations/be-22-topological-entanglement.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 22, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: Speculative. **Reformulated 2026-05-05** to the canonical Kitaev-Preskill / Levin-Wen single-subsystem form (PRL 96:110404, 110405; 2006). The originally-stated three-term form `S_topo = -γ + α log(ξ/a) + β(T/T_c)^ν log(A_boundary/ℓ_P²)` had two unresolvable defects: (1) at finite temperature, topological order is destroyed (γ → 0 typically), making the `β(T/T_c)^ν` extension ill-defined as a TEE correction; (2) the `log(A_boundary/ℓ_P²)` factor reintroduces area-law scaling into a quantity that is, by construction, the area-law-*subtracted* constant part — those terms were not derivable from any standard TEE construction and have been removed. The Kitaev-Preskill formula itself is established in condensed-matter literature; the "QG link" framing — using TEE as a probe of gravitational entanglement — remains original to this catalog and is not in either Kitaev-Preskill or Levin-Wen, hence the preserved `speculative` status.
 - **Context**: Connects topological phases to quantum error correction in gravity
@@ -104,7 +106,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is Φ_max, the integrated information under the minimum information partition.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-25-iit-phi.ts`](../../src/bridges/equations/be-25-iit-phi.ts) — the **live** BE-25 encoding (the IIT Φ_max form; `dimensional_signature: '[1]'`, since Φ is dimensionless / measured in bits when log₂ is used). The earlier module [`src/bridges/equations/be-25-orch-or.ts`](../../src/bridges/equations/be-25-orch-or.ts) is **archived**: it encodes the dropped Penrose-Hameroff `t_OR` form, is no longer load-bearing for any BE-25 dimensional claim under the IIT Φ_max reformulation, and is preserved only with an archive banner for historical traceability. The archived module has been removed from `EXPECTED_DIMENSION_BY_BRIDGE` and from the round-trip catalog test. (Note: Φ_max is exponential in system size, so the encoding is tractable only for small substrates — see the **Tractability** note below.)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 25, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)) — the **live** BE-25 encoding (the IIT Φ_max form; `dimensional_signature: '[1]'`, since Φ is dimensionless / measured in bits when log₂ is used). The earlier module [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 25, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)) is **archived**: it encodes the dropped Penrose-Hameroff `t_OR` form, is no longer load-bearing for any BE-25 dimensional claim under the IIT Φ_max reformulation, and is preserved only with an archive banner for historical traceability. The archived module has been removed from `EXPECTED_DIMENSION_BY_BRIDGE` and from the round-trip catalog test. (Note: Φ_max is exponential in system size, so the encoding is tractable only for small substrates — see the **Tractability** note below.)
 
 - **Status**: Speculative (IIT canonical and calculable; bridge framing speculative). **Reformulated 2026-05-06.** Replaced the Tegmark-falsified Penrose-Hameroff Orch-OR form `t_OR = ℏ/(Δm c² Δx/ℓ_P)` — which combined a non-Penrose `Δx/ℓ_P` factor (Penrose's canonical gravitational self-energy is `E_G ~ G(Δm)²/Δx`) with a microtubule-coherence mechanism that Tegmark (*Phys. Rev. E* 61, 4194 (2000); arXiv:quant-ph/9907009) falsified by ~10 orders of magnitude (decoherence ~10⁻¹³ s vs. neural processing ~10⁻³ s at biological temperature) — with the canonical **Integrated Information Theory (Tononi) Φ_max** form: irreducibility of a system's cause-effect structure under the minimum information partition (MIP), with intrinsic information `ii(s,s̃) = p(s̃|s) log₂[p(s̃|s)/p(s̃)]`. The "consciousness ↔ *quantum* information" framing is dropped in favor of "consciousness ↔ information integration": IIT is substrate-agnostic, calculable for small systems (Oizumi-Albantakis-Tononi 2014, IIT 3.0; Albantakis et al. 2023, IIT 4.0, arXiv:2212.14787), and consistent with the Tegmark-decoherence rebuttal (no claim about microtubule quantum coherence). **Important — downstream excisions retained:** Part-IV §12.3, Part-V §21.2.2, and Part-VI §28.2 were excised because BE-25 was Penrose-Hameroff. Those excisions are **not restored** under this IIT reformulation: the original sections were tied to the Penrose-Hameroff cosmic-consciousness / clinical-applications framings, and IIT-based clinical applications (e.g., perturbational complexity index PCI in disorders of consciousness — Casali et al. 2013 *Sci. Transl. Med.* 5:198ra105) are an active research area outside UPT's current scope. See `tests/bridges/be-25-reformulation.test.ts` for the reformulation pin.
 - **Context**: Integrated Information Theory (IIT, Tononi) Φ_max — substrate-agnostic measure of integrated information. Consistent with the Tegmark-decoherence rebuttal of Penrose-Hameroff Orch-OR (IIT makes no claim about quantum coherence).
@@ -134,7 +136,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the WKB mutation-rate integral.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-26-dna-tunneling.ts`](../../src/bridges/equations/be-26-dna-tunneling.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 26, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: **Speculative** (WKB formula canonical, biological-relevance bridge framing speculative; the prior 'established' label was inconsistent with the predictive gap below). The WKB tunneling rate formula itself is standard quantum mechanics (Gamow 1928; Landau-Lifshitz QM Section 50) and remains canonical literature. The application to DNA base-pair tautomerization via proton tunneling is a real research area (Loewdin 1963) with ongoing debate about biological relevance. **Known issue:** the bare WKB rate `Γ_WKB` with reasonable barrier parameters overshoots observed mutation rates (~10⁻⁸-10⁻¹⁰ /bp/replication) by 2-4 orders of magnitude; the `f(T, pH, EM)` prefactor silently absorbs the dominant biological-mechanism corrections — polymerase proofreading (~10⁻⁵) and mismatch repair (MMR, ~10²) — without which the formula is not predictive of biological mutation rates. A defensible BE-26 must either (a) factor `f = f_proofreading × f_repair × f_environment` explicitly, or (b) replace tunneling-as-mutation-mechanism with the mainstream replication-error / polymerase-fidelity model. The status reflects the bridge framing's speculative element — the WKB formula stands; the claim that DNA mutations are dominantly tunneling-driven does not, as written.
 - **Context**: Proton tunneling in base pair tautomerization
@@ -207,6 +209,8 @@ where the second exponential includes gravitational work contributions:
 - **Context**: How spacetime emerges from quantum entanglement (FLM first-law / linear-response form)
 - **Mathematical Formulation**:
 
+<img src="https://i.upmath.me/svg/%5Cdelta%20S_%7B%5Ctext%7BEE%7D%7D%28R%29%20%3D%20%5Cdelta%20%5Clangle%20H_R%20%5Crangle" alt="\delta S_{\text{EE}}(R) = \delta \langle H_R \rangle" />
+
 <img src="https://i.upmath.me/svg/%5Cdelta%20S_%7B%5Ctext%7BEE%7D%7D(R)%20%3D%20%5Clangle%20%5Cdelta%20H_R%20%5Crangle" alt="\delta S_{\text{EE}}(R) = \langle \delta H_R \rangle" />
 
 where:
@@ -219,6 +223,8 @@ where:
 **Bridge Equation 31: Causal Set - Continuum Limit**
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the Benincasa–Dowker d = 4 discrete Ricci scalar.
+
+<img src="https://i.upmath.me/svg/R%28p%29%20%3D%20%5Cfrac%7B4%7D%7B%5Csqrt%7B6%7D%7D%20%5Cell_P%5E%7B-2%7D%20%5Cleft%5B1%20%2B%20N_0%28p%29%20-%209%20N_1%28p%29%20%2B%2016%20N_2%28p%29%20-%208%20N_3%28p%29%5Cright%5D%20%5Cquad%20%28d%3D4%29" alt="R(p) = \frac{4}{\sqrt{6}} \ell_P^{-2} \left[1 + N_0(p) - 9 N_1(p) + 16 N_2(p) - 8 N_3(p)\right] \quad (d=4)" />
 
 - **Status**: Speculative. Benincasa-Dowker (arXiv:1001.2725) established discrete-to-continuum limits for causal set action and Ricci scalar. **Reformulated 2026-05-05:** replaced the originally-stated `R = (2/√π)(N/V^{2/4} - k_1 - k_2(ρ²ℓ_P⁴)^{1/4})` form — which contained both a `V^{2/4}→V^{1/2}` typo and a dimensional mismatch in the `(ρ²ℓ_P⁴)^{1/4}` term against Ricci-scalar dimensions `[L^{-2}]` — with the canonical Benincasa-Dowker d=4 inclusion-exclusion formula. The published Benincasa-Dowker (2010 *Phys. Rev. Lett.* 104:181301) form is additive (no sprinkling-density division). Status remains *speculative* because (a) the d≠4 generalization requires re-deriving coefficients and (b) using BD's discrete Ricci scalar as a *bridge equation* between causal-set discreteness and continuum spacetime — i.e., committing to causal-set dynamics as UPT's microstructure — is original to this catalog and is not in BD itself.
 - **Context**: Discrete to continuous spacetime transition
@@ -279,7 +285,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.KibbleZurek.exponent`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/KibbleZurek.lean) is the freeze-out power only. The lemma does not include the Boltzmann factor and does not repair the missing 1/a^d.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-34-kibble-zurek.ts`](../../src/bridges/equations/be-34-kibble-zurek.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 34, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: Established extension. The Kibble-Zurek defect density n ~ (tau_Q/tau_0)^(-d nu / (1 + z nu)) is established (Kibble 1976; Zurek 1985). The added exp(-m_defect c^2 / (k_B T_reh)) suppression for curved spacetime / reheating is a phenomenological extension not derived from the cited mechanism. **Temperature-scale issue:** the relevant temperature for defect-formation Boltzmann suppression is the symmetry-breaking / critical temperature T_c at the phase transition, not the (typically higher) reheating temperature T_reh. Using T_reh would weaken the suppression relative to the correct T_c scale. The displayed formula includes the explicit `1/a^d` prefactor; with `1/a^d` in front, the LHS dimensions `[L]^(-d)` are recovered.
 - **Context**: Defect formation during cosmological phase transitions
@@ -298,7 +304,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Crossing.antisymmetry`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Crossing.lean) states that g(u, v) − g(v, u) is the negation of the swap. The lemma is not the infinite sum over (Δ, ℓ), and catalog membership stays not-a-bridge.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-35-conformal-bootstrap.ts`](../../src/bridges/equations/be-35-conformal-bootstrap.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 35, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: Established. The conformal bootstrap crossing-symmetry equation is well established in CFT and has produced rigorous bounds on critical exponents for the 3D Ising model and other theories (Rattazzi-Rychkov-Tonni-Vichi 2008, arXiv:0807.0004; Poland-Rychkov-Vichi 2018 review arXiv:1805.04405).
 - **Context**: Constrains possible conformal field theories
@@ -327,7 +333,7 @@ where u and v are cross-ratios and g_{Δ,ℓ} is the conformal block of an excha
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the GW170817 graviton-speed bound |c_GW − c|/c ≤ 10^{−15}.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-36-gw-speed-bound.ts`](../../src/bridges/equations/be-36-gw-speed-bound.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 36, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: Speculative. **Reformulated 2026-05-06** from the bespoke hybrid linear blend `F = F_N μ(a/a_0) + F_DM (1 − μ(a/a_0))` (not in any published MOND literature) to the canonical Bekenstein 2004 TeVeS (Tensor-Vector-Scalar gravity) framing, and then **AST-encoded 2026-05-07** to the operationally-checkable **GW170817 graviton-speed bound** `|c_GW − c|/c ≤ 10⁻¹⁵`. The TeVeS action `S = S_g + S_φ + S_A + S_matter` (three dynamical fields — metric, scalar, timelike vector) is operator-valued and admits no clean scalar AST encoding without committing to a specific bulk geometry; the dimensionless GW170817 ratio is the AST-encodable scalar that the bridge now carries. TeVeS is preserved as the *bridge framing* (see "Framing context" below). The relationship to BE-38 is preserved: BE-38 covers the non-relativistic Milgrom `μ(x) = x/√(1+x²)` form; BE-36 covers the relativistic-completion framing — different physical content, complementary not duplicative.
 - **Context**: GW170817 graviton-speed bound — the 2017 binary-neutron-star merger detection (Abbott et al. 2017 *ApJ Lett.* 848:L13; ~1.7 s gravitational-wave / gamma-ray arrival difference over ~40 Mpc) constrains the graviton propagation speed to `|c_GW − c|/c ≲ 10⁻¹⁵`. This strongly constrains TeVeS-class theories, which generically predict `c_GW ≠ c` from the timelike-vector field's contribution to the dispersion relation.
@@ -346,7 +352,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.Shapiro.radial_integral`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Shapiro.lean) is the radial integral (2GM/c³) ln(R_far/R_near). The lemma is not the impact-parameter formula and it is not the Cassini measurement.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-37-shapiro-delay.ts`](../../src/bridges/equations/be-37-shapiro-delay.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 37, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: **Speculative** (Shapiro delay canonical and experimentally confirmed; bridge framing speculative). **Reformulated 2026-05-11.** The previous BE-37 was the variable-speed-of-light (VSL) ansatz `c(t) = c_0[1 + ε(t/t_P)^n exp(-t/t_c)]`, dispositioned **R3-invalid** in the R3 audit (2026-05-05) because it fails the Ellis-Uzan 2005 operational-meaningfulness critique (only dimensionless ratios of constants are measurable; a bare `c(t)` is a relabeling of the unit system over time, not physics) and is not derived from any of the three non-equivalent canonical VSL formulations (Albrecht-Magueijo 1999, Moffat 1993, Barrow 1999). The reformulation move is **not** to pick one of those three (each fails Ellis-Uzan independently) but to replace VSL entirely with the canonical operationally-meaningful **Shapiro gravitational time delay** — the standard general-relativistic "effective-c" effect that *does* survive Ellis-Uzan. Status is `speculative` (not `established`) because Shapiro delay itself is canonical and Cassini-confirmed, but the *bridge framing* — treating Shapiro delay as the UPT "modified-light-propagation" bridge — is the speculative element.
 - **Context**: Shapiro gravitational time delay — coordinate-time delay of light passing near a massive body. The canonical operationally-meaningful "effective-c" effect that survives the Ellis-Uzan 2005 critique of vacuum `c(t,x)`-variation. (Light always travels at `c` locally; the delay arises from integrated path-length / coordinate-time effects in curved spacetime — it is NOT a "varying c" in any fundamental sense.)
@@ -375,7 +381,7 @@ References: Shapiro 1964 *Phys. Rev. Lett.* 13:789 (original prediction); Bertot
 
 <img src="https://i.upmath.me/svg/F%20%3D%20F_N%20%5Ccdot%20%5Cnu(z)%2C%20%5Cquad%20z%20%3D%20%5Cfrac%7BF_N%7D%7Bm%20a_0%7D%2C%20%5Cquad%20%5Cnu(z)%20%3D%20%5Csqrt%7B%5Cfrac%7B1%20%2B%20%5Csqrt%7B1%20%2B%204%2Fz%5E2%7D%7D%7B2%7D%7D" alt="F = F_N \cdot \nu(z), \quad z = \frac{F_N}{m a_0}, \quad \nu(z) = \sqrt{\frac{1 + \sqrt{1 + 4/z^2}}{2}}" />
 
-> **Tier-5 AST encoding**: BE-38 is encoded in the explicit ν-form `F = F_N · ν(z)` with `z = F_N/(m a_0)` and `ν(z) = √[(1+√(1+4/z²))/2]`, equivalent to the implicit form `F = F_N · μ⁻¹(a/a_0)` with `μ(x) = x/√(1+x²)`. The two forms are mathematically equivalent (Famaey-McGaugh 2012 *Living Rev. Relativity* 15:10); the explicit ν-form is directly computable in closed form and avoids the implicit `μ⁻¹` lookup. Limits: `z → ∞` (Newtonian) gives `ν → 1, F → F_N`; `z → 0` (deep-MOND) gives `ν ~ 1/√z, F → √(m · F_N · a_0)`. At `z = 1e-6`, `ν` is about 1000; `√(2/z)` is about 1414 and is not this limit. AST module: `src/bridges/equations/be-38-mond.ts`. Encoding test bracket-checks: Newtonian limit, deep-MOND limit, golden-ratio identity at `z = 1` (`F = F_N · √φ ≈ 1.272 F_N`), and direct cross-derivation against the implicit μ-relation `μ(a/a_0)·a = a_N` to machine precision.
+> **Tier-5 AST encoding**: BE-38 is encoded in the explicit ν-form `F = F_N · ν(z)` with `z = F_N/(m a_0)` and `ν(z) = √[(1+√(1+4/z²))/2]`, equivalent to the implicit form `F = F_N · μ⁻¹(a/a_0)` with `μ(x) = x/√(1+x²)`. The two forms are mathematically equivalent (Famaey-McGaugh 2012 *Living Rev. Relativity* 15:10); the explicit ν-form is directly computable in closed form and avoids the implicit `μ⁻¹` lookup. Limits: `z → ∞` (Newtonian) gives `ν → 1, F → F_N`; `z → 0` (deep-MOND) gives `ν ~ 1/√z, F → √(m · F_N · a_0)`. At `z = 1e-6`, `ν` is about 1000; `√(2/z)` is about 1414 and is not this limit. AST module: catalog record 38 in `data/bridge-catalog.json`. Encoding test bracket-checks: Newtonian limit, deep-MOND limit, golden-ratio identity at `z = 1` (`F = F_N · √φ ≈ 1.272 F_N`), and direct cross-derivation against the implicit μ-relation `μ(a/a_0)·a = a_N` to machine precision.
 
 where:
 
@@ -434,7 +440,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the swampland distance-conjecture mass tower.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-41-swampland.ts`](../../src/bridges/equations/be-41-swampland.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 41, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: Speculative. Swampland conjecture from string theory (Vafa, arXiv:hep-th/0509212). Active research; not confirmed.
 - **Context**: Constraints on effective field theories from quantum gravity
@@ -457,6 +463,8 @@ where:
 - **Status**: Highly speculative. Firewall paradox is unresolved. The specific "complement principle" formulation here is not a standard result; the decomposition |psi> = a|smooth> + b|firewall> is a tautological superposition without physics content unless f(observer, protocol) is independently specified.
 - **Context**: Black hole information without firewalls
 - **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/T_H%20%3D%20%5Cfrac%7B%5Chbar%20c%5E3%7D%7B8%5Cpi%20G%20M%20k_B%7D" alt="T_H = \frac{\hbar c^3}{8\pi G M k_B}" />
 
 <img src="https://i.upmath.me/svg/%7C%5Cpsi%5Crangle_%7B%5Ctext%7Btotal%7D%7D%20%3D%20%5Calpha%7C%5Ctext%7Bsmooth%7D%5Crangle_%7B%5Ctext%7Bhorizon%7D%7D%20%2B%20%5Cbeta%7C%5Ctext%7Bfirewall%7D%5Crangle_%7B%5Ctext%7Bhorizon%7D%7D" alt="|\psi\rangle_{\text{total}} = \alpha|\text{smooth}\rangle_{\text{horizon}} + \beta|\text{firewall}\rangle_{\text{horizon}}" />
 
@@ -539,7 +547,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the dark-sector transfer term in the light-element abundance equation.
 
-> **AST encoding (Tier 5):** [`src/bridges/equations/be-47-bbn-dark-sector.ts`](../../src/bridges/equations/be-47-bbn-dark-sector.ts)
+> **AST encoding (Tier 5):** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 47, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts))
 
 - **Status**: Speculative extension on top of an established base. Standard BBN Boltzmann rate equations are well-established (Wagoner, Fowler & Hoyle 1967, ApJ 148:3 (foundational BBN); Wagoner 1969, ApJS 18:247 (BBN network update); Kawano 1992 code; Pitrou-Coc-Uzan-Vangioni 2018 review, Phys. Rep. 754:1). The dark-sector coupling term `⟨σv⟩_dark n_χ² ε_transfer` is a novel extension for light-element abundance modification by dark matter interactions (cf. Pospelov 2008; Boehm-Dolan-McCabe 2013).
 - **Context**: Dark matter effects on light element abundances
@@ -619,7 +627,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Deflection.line_integral`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Deflection.lean) states that the given integrand integrates to 4GM/(b c²) at γ = 1. The lemma is not a geodesic.
 
-> **Evaluator:** [`src/bridges/gravitational-lensing.ts`](../../src/bridges/gravitational-lensing.ts) (`evaluateGravitationalLensing`)
+> **Evaluator:** catalog record 51 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. Deflection of light by a point mass under the weak-field (post-Newtonian) approximation. Eddington's 1919 eclipse expedition confirmed GR's prediction of ~1.75 arcsec for a grazing solar ray — double the Newtonian value — to within the measurement precision of the time (Dyson, Eddington & Davidson 1920 *Phil. Trans. R. Soc.* A 220:291; Einstein 1915 *Preuss. Akad. Wiss.* 844; Carroll 2004 *Spacetime and Geometry* §8.5; Will 2014 *Living Rev. Relativity* 17:4, arXiv:1403.7377).
 - **Context**: Bridges Newtonian gravity ↔ general relativity; first observational confirmation of spacetime curvature by mass
@@ -641,7 +649,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. The missing piece is the Einstein 1915 perihelion advance Δφ = 6πGM/(a(1 − e²)c²).
 
-> **Evaluator:** [`src/bridges/perihelion-precession.ts`](../../src/bridges/perihelion-precession.ts) (`evaluatePerihelionPrecession`)
+> **Evaluator:** catalog record 52 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. GR prediction of anomalous perihelion advance per orbit. Einstein's 1915 calculation reproduced Mercury's observed ~43 arcsec/century excess precession (beyond Newtonian + planetary perturbations) — the first successful quantitative GR test, predating the 1919 eclipse expedition (Einstein 1915 *Preuss. Akad. Wiss.* 831; Le Verrier 1859; Carroll 2004 *Spacetime and Geometry* §7.4; Will 2014 *Living Rev. Relativity* 17:4, arXiv:1403.7377).
 - **Context**: Bridges Newtonian gravity ↔ general relativity; bound-orbit (timelike geodesic) counterpart to BE-51's null-geodesic test
@@ -663,7 +671,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.YangMills.b0_pos_iff_nf_le`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/YangMills.lean) states that b₀ > 0 if and only if N_f ≤ 16 for SU(3). Nested [`PhysJS.YangMills.alphaRun_hasDerivAt`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/YangMills.lean) is the one-loop solution and is not the reference. The lemma is not a running procedure past one loop.
 
-> **AST encoding:** [`src/bridges/equations/be-53-yang-mills-beta.ts`](../../src/bridges/equations/be-53-yang-mills-beta.ts) (`BetaFunctionNode`, single-coupling form)
+> **AST encoding:** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 53, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)) (`BetaFunctionNode`, single-coupling form)
 
 - **Status**: Established. One-loop renormalization-group running of the non-Abelian gauge coupling in Yang-Mills theory; Nobel Prize in Physics 2004 (Gross & Wilczek 1973 *Phys. Rev. Lett.* 30:1343; Politzer 1973 *Phys. Rev. Lett.* 30:1346; Peskin & Schroeder 1995 §16).
 - **Context**: Bridges quantum ↔ classical regimes via RG flow; structural dual of BE-39's asymptotic-safety NGFP — BE-53's UV fixed point sits at `g* = 0` (asymptotic freedom) rather than at a non-Gaussian point, demonstrating that the `BetaFunctionNode` primitive is flow-direction-agnostic
@@ -685,7 +693,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.RandallSundrum.brane_friedmann`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/RandallSundrum.lean) states H² = (8πG/3) ρ (1 + ρ/(2σ)) + Λ/3 for σ ≠ 0. The equality is not derived from the five-dimensional Einstein equation. Nested [`PhysJS.RandallSundrum.flat_friedmann`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/RandallSundrum.lean) is not the reference.
 
-> **AST encoding:** [`src/bridges/equations/be-54-randall-sundrum-brane.ts`](../../src/bridges/equations/be-54-randall-sundrum-brane.ts) (`FriedmannEquationNode`, `variant: 'brane'`)
+> **AST encoding:** [`data/bridge-catalog.json`](../../data/bridge-catalog.json) (catalog record 54, evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)) (`FriedmannEquationNode`, `variant: 'brane'`)
 
 - **Status**: Speculative. Real, self-consistent extra-dimensional framework (RS II single-brane model), but experimentally unconstrained (Randall-Sundrum 1999 *Phys. Rev. Lett.* 83:4690, arXiv:hep-ph/9905221; Binétruy-Deffayet-Ellwanger-Langlois 2000 *Phys. Lett.* B 477:285, arXiv:hep-th/9910219; Maartens-Koyama 2010 *Living Rev. Relativity* 13:5, arXiv:1004.3962).
 - **Context**: Bridges quantum ↔ cosmological regimes: the brane tension `σ` is set by the 5D Planck/AdS scale, so the high-density correction is a quantum-gravity effect on classical cosmology — the same Category-E framing as BE-19 (LQC) and BE-20 (vacuum energy)
@@ -711,7 +719,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.QuantumHall.reciprocal`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/QuantumHall.lean) states that for a nonzero integer `C` and `e ≠ 0`, `σ_xy = C e²/h`, `R_H = h/(C e²)`, and `R_K = h/e²`, so `σ_xy R_H = 1` and `R_H = R_K/C`. The shifted index `C+1` is a different conductance. Replacing `e²` by `e` fails the product when `e ≠ 1`. The lemma is not TKNN.
 
-> **Evaluator:** [`src/bridges/be55-quantum-hall.ts`](../../src/bridges/be55-quantum-hall.ts) (`evaluateQuantumHall`)
+> **Evaluator:** catalog record 55 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The Hall conductance of a two-dimensional electron gas in a strong magnetic field is quantized in integer multiples of `e²/h`. `C` is the TKNN/Chern integer of the filled bands (Thouless, Kohmoto, Nightingale & den Nijs 1982). von Klitzing, Dorda & Pepper 1980 (Nobel Prize 1985). The catalog records the quantization as the derivation's result.
 - **Context**: Bridges a topological invariant to an electrical-transport observable, and populates the catalog's Topology axis. The bridges tuple is `quantum` → `classical`.
@@ -742,7 +750,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. PhysJS main at that commit has no Casimir file. The missing piece is the mode sum that produces `π²/240`. Units give `F/A = C ℏ c / d⁴` and do not fix `C = −π²/240`. That unfixed constant is not a Lean derivation-step at this pin.
 
-> **Evaluator:** [`src/bridges/be56-casimir.ts`](../../src/bridges/be56-casimir.ts) (`evaluateCasimir`)
+> **Evaluator:** catalog record 56 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. Two neutral parallel conducting plates in vacuum attract because the boundary conditions restrict the electromagnetic vacuum modes between them. Casimir 1948. The ideal formula is perfect conductors at zero temperature. Lamoreaux 1997 reported agreement at about 5 percent, and Mohideen & Roy 1998 at about 1 percent, both after corrections. The catalog records the confrontation as systematics-dominated agreement with the corrected theory, and as a consistency record whose printed difference is 0.
 - **Context**: Bridges the quantum vacuum to a classical macroscopic force. The bridges tuple is `quantum` → `classical`.
@@ -772,7 +780,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. [`PhysJS.HawkingUnruh.dictionary`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/HawkingUnruh.lean) is the catalog formalRef on BE-42. It names BE-57 and states `T_U(a) = ℏ a / (2π c k_B)` together with `T_U(c⁴/(4 G M)) = T_H(M)`. `T_U(c⁴/(2 G M))` is not `T_H(M)`. The lemma is not the Unruh effect as a theorem about the Rindler wedge. Units give `T = C ℏ a / (c k_B)`. `C = 1/(2π)` is not fixed by units, and that monomial is not a derivation-step on this id.
 
-> **Evaluator:** [`src/bridges/be57-unruh.ts`](../../src/bridges/be57-unruh.ts) (`evaluateUnruh`)
+> **Evaluator:** catalog record 57 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established on the theoretical formula. A uniformly accelerated observer in the Minkowski vacuum perceives a thermal bath at the Unruh temperature. Fulling 1973, Davies 1975, Unruh 1976. The catalog has no confrontation: laboratory accelerations give `T ≈ 4×10⁻²⁰ K` at `1 g`, which the notes call unmeasurable, and analog-gravity results are called indirect. No analog dataset is among the three references.
 - **Context**: Bridges proper acceleration to a temperature, with the same `2π` that BE-42 uses for surface gravity. The bridges tuple is `quantum` → `classical`. The catalog dependency is BE-42. BE-57 does not receive a second key for the BE-42 cross-check.
@@ -802,7 +810,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `limit`. [`PhysJS.JohnsonNyquist.tendsto_classical`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/JohnsonNyquist.lean) states that `S_V = 4 k_B T R` is the `ω → 0⁺` limit of the quantum parent `S_V^q(ω) = 4 R ℏ ω / (exp(ℏ ω / (k_B T)) − 1)`, for `k_B T > 0` and `ℏ ≠ 0`. The same expression with `+ 1` in the denominator does not tend to `4 k_B T R`. The lemma is not the fluctuation–dissipation theorem. The parent is a premise. Units do not derive the exponential.
 
-> **Evaluator:** [`src/bridges/be58-johnson-nyquist.ts`](../../src/bridges/be58-johnson-nyquist.ts) (`evaluateJohnsonNyquist`)
+> **Evaluator:** catalog record 58 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. A resistor in thermal equilibrium generates a fluctuating voltage whose one-sided power spectral density is fixed by `R` and `T`. Johnson 1928 measured it. Nyquist 1928 derived `S_V = 4 k_B T R` from the second law, transmission-line mode counting, and equipartition. The catalog comment says that reading Nyquist's classical formula as the `h f ≪ k_B T` limit of his Planck-weighted formula is this repository's gloss. Flowers-Jacobs et al. 2017 determined `k_B` by Johnson noise thermometry. The catalog notes record the factor 4 as confirmed, and `NOTES.md` records a printed difference of 0 for the consistency record.
 - **Context**: Bridges thermal fluctuation to electrical dissipation. BE-27 is the catalog's speculative active-matter violation of the fluctuation–dissipation theorem. BE-58 is the theorem that entry names. The bridges tuple is `quantum` → `classical`. The catalog dependency is BE-27.
@@ -835,7 +843,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.Josephson.frequency_eq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Josephson.lean) states `f = (2e/h) V`, `K_J = 2e/h`, and `f = K_J V`. Clearing `h` recovers `2e`. The factor 2 is the Cooper-pair charge, taken as a premise. Replacing `2e` by `e` fails. The lemma is not the tunneling Hamiltonian.
 
-> **Evaluator:** [`src/bridges/be59-ac-josephson.ts`](../../src/bridges/be59-ac-josephson.ts) (`evaluateACJosephson`)
+> **Evaluator:** catalog record 59 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. A Josephson junction biased at a DC voltage `V` emits radiation at `f = K_J V`. Josephson 1962 (Nobel Prize 1973). The catalog comment records that the 1962 letter was not read (paywalled) and that the 1973 Nobel Lecture states the phase relation and a frequency `2eV/h`. Shapiro 1963 measured the constant-voltage steps. With BE-55 and BE-58 this entry is the catalog's quantum metrology triangle. The confrontation is universality of the Josephson volt, and is not a test of the post-2019 value of `K_J`. The catalog notes state that scale as about `1×10⁻¹⁰`. The confrontation file records a conservative bound of `1×10⁻⁹` and says the best comparisons reach about `1×10⁻¹⁰` to `1×10⁻¹¹`.
 - **Context**: Bridges a macroscopic phase of a Cooper-pair condensate to a frequency. The bridges tuple is `quantum` → `classical`. The catalog dependencies are BE-55 and BE-58.
@@ -866,7 +874,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.Laughlin.filling_fraction`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Laughlin.lean) states that for nonzero integers `p` and `q`, with `ν = p/q`, `σ_xy = ν e²/h` and `R_xy = R_K/ν = (q/p) h/e²`. The charge and `h` are not assumed nonzero. Oddness of `q` is the Laughlin selection rule and is not this identity. The lemma is not the Laughlin wavefunction, and it is not the quasiparticle charge `e/3`.
 
-> **Evaluator:** [`src/bridges/be60-fractional-qh.ts`](../../src/bridges/be60-fractional-qh.ts) (`evaluateFractionalQH`)
+> **Evaluator:** catalog record 60 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. At filling `ν = p/q` the Hall conductance is `ν e²/h`. Tsui, Störmer & Gossard 1982 (Nobel Prize 1998) measured the fractional plateaux. Laughlin 1983 described the incompressible fluid. de-Picciotto et al. 1997 measured the quasiparticle charge `e/3` by shot noise. The catalog says the empirical content of the confrontation is the fraction, `R_xy = 3 R_K` at `ν = 1/3`, and not the post-2019 value of `R_K`.
 - **Context**: Bridges a fractional filling of a correlated electron liquid to a Hall conductance. The integer effect is BE-55. The bridges tuple is `quantum` → `classical`. The catalog dependency is BE-55. At `ν = 1` the formula is the integer plateau `C = 1`.
@@ -896,7 +904,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Sommerfeld.integral_eq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Sommerfeld.lean) states that `∫_ℝ x² exp(x) / (1 + exp(x))² dx = π²/3`. The integrand is even, so the integral over the positive half-line is half of `π²/3`. Claiming the half-line equals `π²/3` fails. The lemma is not the transport law that identifies the Lorenz number with that integral. Units give `L = C (k_B/e)²` and do not give `C = π²/3`.
 
-> **Evaluator:** [`src/bridges/be61-wiedemann-franz.ts`](../../src/bridges/be61-wiedemann-franz.ts) (`evaluateWiedemannFranz`)
+> **Evaluator:** catalog record 61 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established, as a consistency statement with a degenerate-limit caveat. The ratio of thermal conductivity to electrical conductivity in a metal is `L_0 T`, with the Sommerfeld Lorenz number `L_0 = (π²/3)(k_B/e)²`. Wiedemann & Franz 1853 stated the empirical proportionality. The catalog context dates Sommerfeld's derivation to 1927. The references line dates the free-electron paper to 1928 *Z. Phys.* 47:1. This section uses the references line for the citation and does not resolve the year. The catalog context states `L_0 ≈ 2.44×10⁻⁸ W·Ω·K⁻²`. The references record copper at `0 °C` near `2.23×10⁻⁸`, about 9 percent below `L_0`, and silver at low temperature recovering `L_0`. The catalog notes say the statistics tag was removed. `NOTES.md` records that the observed Lorenz number in this confrontation is the predicted constant by construction, so the record cannot show a discrepancy, and that the printed difference is 0.
 - **Context**: Bridges charge transport and heat transport by the same carriers at the Fermi surface. The bridges tuple is `quantum` → `classical`.
@@ -928,7 +936,7 @@ where:
 
 > **Proof status as of 2026-10-01.** There is no PhysJS formalRef for this catalog id at pin `2e09357f9674bc60b60b378155a1623c27dc7b04`. PhysJS main at that commit has no BCS file. The missing piece is the weak-coupling gap equation whose root is `2π exp(−γ)`. The decimal `3.528` is that root. The ratio is dimensionless, and units do not choose it. That number is not a Lean derivation-step at this pin.
 
-> **Evaluator:** [`src/bridges/be62-bcs-gap.ts`](../../src/bridges/be62-bcs-gap.ts) (`evaluateBCSGap`)
+> **Evaluator:** catalog record 62 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established, as a weak-coupling consistency statement. BCS theory predicts `2Δ(0)/(k_B T_c) = 2π exp(−γ)`, with `γ` the Euler–Mascheroni constant, and `Δ(0) = 1.764 k_B T_c`. Bardeen, Cooper & Schrieffer 1957 (Nobel Prize 1972). The catalog `formula_latex` writes the Euler factor as `e^{γ}` in the denominator. In this specification that factor is `\exp(−γ)`, and `e` remains the elementary charge. The module computes `(2π) / exp(γ)`. The confrontation compares the weak-coupling class (tin near `3.5`, aluminium near `3.4`, agreement bound `0.05`) with the ideal ratio. Carbotte 1990 records lead near `4.3` in strong coupling. The catalog notes say the statistics tag was removed. `NOTES.md` records a printed difference of `−0.787%` for the consistency record.
 - **Context**: Bridges the zero-temperature gap to the critical temperature. The bridges tuple is `quantum` → `classical`.
@@ -960,7 +968,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.Chandrasekhar.prefactor`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Chandrasekhar.lean) states that with `n = ρ/(μ_e m_u)`, `p_F = ℏ (3π² n)^{1/3}`, and `P = (1/4) n p_F c`, the pressure is `P = K_ρ ρ^{4/3}`, and for the `n = 3` Lane–Emden scale the central density cancels, leaving `M = (ω₃⁰ √(3π)/2) (ℏ c/G)^{3/2} (μ_e m_u)^{−2}`. `ω₃⁰` stays symbolic. The decimal `2.01824` is not in the theorem. `√π/2` in place of `√(3π)/2` fails when `ω₃⁰ ≠ 0`, and dropping `ω₃⁰` fails when `ω₃⁰ ≠ 1`. The lemma is not stellar rotation or magnetic support.
 
-> **Evaluator:** [`src/bridges/be63-chandrasekhar-mass.ts`](../../src/bridges/be63-chandrasekhar-mass.ts) (`evaluateChandrasekharMass`)
+> **Evaluator:** catalog record 63 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established, as an upper-bound consistency statement. The maximum mass of a white dwarf supported by electron degeneracy pressure is the Chandrasekhar mass. Chandrasekhar 1931 (Nobel Prize 1983). The catalog context states `≈ 1.44 M_⊙` at `μ_e = 2`. The evaluator notes state `≈ 1.456 M_⊙` at `μ_e = 2` under the module's atomic-mass constant. The confrontation uses an observed white-dwarf maximum of about `1.35 M_⊙` and an agreement bound `0.12`. `NOTES.md` records a printed difference of `−7.27%`. Super-Chandrasekhar supernovae in the catalog references reach about `2.4–2.8 M_⊙` with rotation or magnetic support. Both reviewers marked the tight reading yellow.
 - **Context**: Bridges quantum degeneracy pressure to a gravitational stellar-structure limit. The bridges tuple is `quantum` → `classical`.
@@ -991,7 +999,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Eddington.balance_iff`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Eddington.lean) states that, for `r > 0`, `σ_T > 0`, and `c > 0`, `L σ_T / (4π r² c) = G M m_p / r²` if and only if `L = 4π G M m_p c / σ_T`. The Thomson force and the gravitational force are premises. Twice that luminosity fails the same balance when the constants in the formula are positive. The lemma is not a claim that the luminosity is a hard cap. Once both forces are inverse-square, the `r²` cancellation is the lemma. Units do not say the balance is a maximum.
 
-> **Evaluator:** [`src/bridges/be64-eddington-luminosity.ts`](../../src/bridges/be64-eddington-luminosity.ts) (`evaluateEddingtonLuminosity`)
+> **Evaluator:** catalog record 64 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established, as a spherical-symmetry scale with a super-Eddington caveat. The luminosity at which radiation pressure on ionized hydrogen balances gravity is the Eddington luminosity. Eddington 1926. The catalog context states `L_Edd ≈ 1.26×10³¹ W · (M/M_⊙)`. The evaluator notes state `≈ 1.257×10³¹ W` per solar mass. The catalog records that most accreting sources respect this scale and that super-Eddington sources exist, including the ultraluminous X-ray pulsar of Bachetti et al. 2014. `NOTES.md` records a printed difference of 0 for the consistency record. The reviewers split on calling the scale tight, and the catalog resolved that split as consistency with the caveat.
 - **Context**: Bridges a gravitational mass to a radiative luminosity through the Thomson cross-section. The bridges tuple is `quantum` → `classical`.
@@ -1027,7 +1035,7 @@ where:
 
 > **Proof status as of 2026-10-01.** Kind is `derivation-step`. [`PhysJS.Jeans.mass_eq`](https://github.com/danielsimonjr/PhysJS/blob/2e09357f9674bc60b60b378155a1623c27dc7b04/PhysJS/Jeans.lean) derives the encoded mass from the virial convention `3 M k T / (μ m_u) = 3 G M² / (5 R)` and `M = 4π R³ ρ / 3`, with positive parameters. The catalog writes that `k` as `k_B`. Replacing `5` by `3` fails. The lemma is not the virial theorem. Units give the monomial `M ∼ (k_B T / (G μ m_u))^{3/2} ρ^{−1/2}`. The `5` and the `3/(4π)` are not fixed by units.
 
-> **Evaluator:** [`src/bridges/be65-jeans-mass.ts`](../../src/bridges/be65-jeans-mass.ts) (`evaluateJeansMass`)
+> **Evaluator:** catalog record 65 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established, as an order-of-magnitude collapse scale. The critical mass above which a self-gravitating gas cloud collapses against thermal pressure is the Jeans mass. Jeans 1902. The numerical factor `5` is convention-dependent, which the catalog notes, the confrontation, and the Lean negative control all record. The confrontation evaluates dense-core conditions `T = 10 K`, `ρ ≈ 3.8×10⁻¹⁶ kg/m³`, `μ = 2.3`, against an observed core mass of `1 M_⊙`, with fractional agreement `1.5`. The module comment says the agreement is a factor of a few. A bound of `1.5` places the lower edge below zero, so a non-negative observed mass cannot fail the low side of this record. `NOTES.md` records a printed difference of `−43.7%` and states that the `±150%` reading of this bound accepts any observed value from `0` to `4.44 M_⊙`. Turbulence, magnetic fields, and rotation are named in the confrontation and are not in the formula.
 - **Context**: Bridges thermal pressure to gravitational collapse. The bridges tuple is `quantum` → `classical`. The catalog comment records that a neutron-star maximum mass was deferred and is not BE-66 in this catalog.
@@ -1058,7 +1066,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.RadiationPressure.pressure_eq`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/RadiationPressure.lean) states `P_n = (I/c)(1+R) cos²θ`. `R = 0`, `θ = 0` is `I/c` and `R = 1`, `θ = 0` is `2I/c`. A single cosine is not that pressure when `cos θ` is neither 0 nor 1. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. Buckingham on `{P, I, c}` still leaves `C = f(1,1)` unfixed; the theorem is the opaque split, not that monomial. The lemma is not the Maxwell stress tensor and not the Eddington luminosity. [`PhysJS.Eddington.wrong_dictionary_factor_two`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/Eddington.lean) doubles a luminosity. That factor of 2 is not the mirror factor.
 
-> **Evaluator:** [`src/bridges/be66-radiation-pressure.ts`](../../src/bridges/be66-radiation-pressure.ts) (`evaluateRadiationPressure`)
+> **Evaluator:** catalog record 66 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established as a textbook beam-pressure law. The edge confidence stays `established`. The catalog equation is `P_n = (I/c)(1+R) cos²θ`. `R = 0` and `θ = 0` is `I/c`. `R = 1` and `θ = 0` is `2I/c`.
 - **Context**: Bridges an optical intensity to a continuum pressure. The bridges tuple is `optics` → `continuum`. Category D selects the field-unification component. The tuple does not. BE-64's encoded force uses factor 1. This row is not the Eddington luminosity.
@@ -1090,7 +1098,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.AlfvenSpeed.speed_eq`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/AlfvenSpeed.lean) states that one transverse monochromatic polarization along a uniform field has phase speed `|ω/k| = B/√(μ0 ρ)` for `B > 0`, `μ0 > 0`, `ρ > 0`, and `k ≠ 0`. `ρ` is the total mass density. Proton-only `n m_p` is a different density when electrons contribute. Inserting tesla and the SI density into `B/√(4πρ)` is not the SI speed. A factor `C ≠ 1` is not the catalog speed. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The lemma is not a kinetic dispersion relation.
 
-> **Evaluator:** [`src/bridges/be67-alfven-speed.ts`](../../src/bridges/be67-alfven-speed.ts) (`evaluateAlfvenSpeed`, `alfvenProtonOnlyDensity`)
+> **Evaluator:** catalog record 67 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established as the ideal-MHD phase speed. The edge confidence stays `established`. The default density is the total mass density.
 - **Context**: Bridges a fluid mass density to a plasma wave speed. The bridges tuple is `fluid` → `plasma`. Category D selects the field-unification component. `CE-plasma-frequency` is not this speed.
@@ -1120,7 +1128,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.TolmanEhrenfest.hydrostatic_constant`](https://github.com/danielsimonjr/PhysJS/blob/d917fa328039d19c3659f74ea73569effb3ed4fb/PhysJS/TolmanEhrenfest.lean) states that on a static interval with `g_00 < 0`, hydrostatic balance and the equilibrium Gibbs relation give `T √(−g_00)` equal at the endpoints. The 1930 writing `T √g_44` agrees when `g_44 = −g_00`. `Real.sqrt g_00 = 0` when `g_00 < 0`, so the product without the minus is 0. `d ln T = 0` is not `g dr/c²`. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The lemma is not a horizon temperature and not `PhysJS.HawkingUnruh.dictionary`. `T ‖ξ‖ = const` is out of scope. The hydrostatic equation is not derived from `∇_μ T^{μν} = 0`, and the Gibbs relation is not derived from an equation of state.
 
-> **Evaluator:** [`src/bridges/be68-tolman-ehrenfest.ts`](../../src/bridges/be68-tolman-ehrenfest.ts) (`evaluateTolmanEhrenfest`, `tolmanTemperatureAt`)
+> **Evaluator:** catalog record 68 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established as the static equilibrium gradient. The edge confidence stays `established`. Not a horizon temperature.
 - **Context**: Bridges a gravitational metric component to a thermodynamic temperature. The bridges tuple is `gravitation` → `thermodynamics`. Category I selects the information-geometry component, with BE-57 and BE-63–65. That shared component does not admit a chain through BE-42. The proper temperature is not `hawking-temperature` and is not `temperature`.
@@ -1150,7 +1158,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`: the theorem states the catalogued equation, and the covers line still begins with derivation-step. The catalog path passes this reference, so catalog evidence and edge evidence include `formally-proved`. [`PhysJS.FastMagnetosonic.speed_eq`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/FastMagnetosonic.lean) states that a monochromatic compressional polarization perpendicular to a uniform field has phase speed `|ω/k| = √(c_s² + B²/(μ0 ρ))` for `μ0 > 0`, `ρ > 0`, and `k ≠ 0`. `c_s = 0` recovers `B/√(μ0 ρ)`, the Alfvén value of a different polarization. That recovery is not BE-67. `√(c_s² + v_A²)` is not `c_s`, not `v_A`, and not `c_s + v_A` when the other speed is nonzero. The nested theorem `PhysJS.FastMagnetosonic.perpendicular_of_dispersion` is the quartic at `k_∥ = 0` and is not the formalRef. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The linearized equations are hypotheses. The lemma is not a kinetic dispersion relation and not the oblique fast mode.
 
-> **Evaluator:** [`src/bridges/be69-fast-magnetosonic.ts`](../../src/bridges/be69-fast-magnetosonic.ts) (`evaluateFastMagnetosonic`)
+> **Evaluator:** catalog record 69 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established as the perpendicular fast phase speed. The edge confidence stays `established`. The target is `fast-magnetosonic-speed`, not `alfven-speed`.
 - **Context**: Bridges a fluid sound speed to a plasma wave speed. The bridges tuple is `fluid` → `plasma`, the same tuple as BE-67. The tuple does not identify the two speeds.
@@ -1179,7 +1187,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`. [`PhysJS.EinsteinRelation.diffusion_eq`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/EinsteinRelation.lean) states that a nonzero field at which the drift flux `μ n E` cancels the diffusion flux `D dn/dx`, on the Boltzmann profile `n = n_ref exp(−q V/(k_B T))`, gives `D = μ k_B T / q`. Dropping `q` fails when `q ≠ 1`. The force-mobility writing needs `μ_force = μ/q`. Stokes–Einstein and the Fermi-liquid form are different equations. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be70-einstein-relation.ts`](../../src/bridges/be70-einstein-relation.ts) (`evaluateEinsteinRelation`)
+> **Evaluator:** catalog record 70 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `μ` is the electrical mobility.
 - **Context**: Bridges a kinetic mobility to an electromagnetic carrier charge. The bridges tuple is `kinetic` → `electromagnetic`.
@@ -1208,7 +1216,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`. [`PhysJS.Clapeyron.slope_eq`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/Clapeyron.lean) states that where the specific Gibbs energies agree and each phase obeys `dg = −s dT + v dP`, `dP/dT = (s2−s1)/(v2−v1)`. With `L = T (s2−s1)`, `T ≠ 0`, and `Δv ≠ 0`, `dP/dT = L/(T Δv)`. The entropy slope is that companion reading. It is not a second formalRef. Dropping `T` fails when `T ≠ 1`. Replacing `Δv` by one phase volume fails when the other volume is nonzero. The ideal-gas integrated vapor-pressure law is not this slope. The Gibbs differential is a hypothesis, not a Legendre transform. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be71-clapeyron.ts`](../../src/bridges/be71-clapeyron.ts) (`evaluateClapeyron`)
+> **Evaluator:** catalog record 71 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `L` is specific latent heat, joules per kilogram.
 - **Context**: Bridges thermodynamics to a continuum coexistence curve. The bridges tuple is `thermodynamics` → `continuum`. Category J selects the quantum-classical component. The tuple does not.
@@ -1237,7 +1245,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`. This is not BE-68. [`PhysJS.GravitationalRedshift.frequency_ratio`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/GravitationalRedshift.lean) states that two static observers of one coordinate period, with `ν √(−g_00) = 1/Δt` and `g_00 < 0`, have `ν1/ν2 = √(−g2)/√(−g1) = √(g2/g1)`. If the Tolman products also agree, then `T1/T2 = ν1/ν2`. Neither factor is derived from the other. Equal temperatures on `g_00 = −1` and `g_00 = −4` are not a Tolman equilibrium, while the frequency ratio is 2. The nested theorem `PhysJS.GravitationalRedshift.tolman_same_ratio` is not the formalRef. The lemma is not `PhysJS.TolmanEhrenfest.hydrostatic_constant`, not a horizon temperature, and not `PhysJS.HawkingUnruh.dictionary`. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be72-gravitational-redshift.ts`](../../src/bridges/be72-gravitational-redshift.ts) (`evaluateGravitationalRedshift`)
+> **Evaluator:** catalog record 72 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. The quantities are `redshift-metric-g00-1`, `redshift-metric-g00-2`, and `gravitational-frequency-ratio`. They are not `metric-g00`, `proper-temperature`, or `tolman-invariant`.
 - **Context**: Bridges a gravitational metric component to a radiation frequency. The bridges tuple is `gravitation` → `radiation`. Category I is the same component as BE-68. That shared component is not a composition.
@@ -1265,7 +1273,7 @@ where:
 
 > **Proof status as of 2026-10-03.** Kind is `bridge`. [`PhysJS.KelvinRelation.peltier_eq`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/KelvinRelation.lean) states that for the linear fluxes `J_e` and `J_q`, the open-circuit Seebeck coefficient `S = E/∇T` and the isothermal Peltier coefficient `Π = J_q/J_e` satisfy `Π = S T` when `L12 = L21`. That equality is `ThermoelectricOnsager.onsager`, a structure field naming microscopic reversibility, not an axiom. Without it the two coefficients disagree. The first Thomson relation `μ = T dS/dT` is not this equation, and neither is a measured thermopower. The linear fluxes are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be73-kelvin-peltier.ts`](../../src/bridges/be73-kelvin-peltier.ts) (`evaluateKelvinPeltier`)
+> **Evaluator:** catalog record 73 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. Onsager reciprocity is not a numeric input.
 - **Context**: Bridges a thermal gradient to an electrical flux. The bridges tuple is `thermal` → `electrical`.
@@ -1294,7 +1302,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.MagneticPressure.pressure_eq`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/MagneticPressure.lean) states that a linear inductor with `dU/dI = L I` and `U(0) = 0` stores `U = (L/2) I²`. A long solenoid with `B = μ0 n I` and flux linkage `Λ = (n ℓ) B A` has `L = μ0 n² V`. At fixed current the battery supplies `I ΔΛ`. The stored energy rises by half of that, and the difference is the mechanical work `p ΔV`, so `p = B²/(2 μ0)`. Homogeneity in `B` and `μ0` gives `p = C B²/μ0` with `C` unfixed. `C = 1` is the battery work per volume, not this pressure. Not a kinetic pressure, and not a Lagrangian derivation of the Maxwell stress tensor. Ampere's law, the flux linkage, and the quasistatic work balance are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be74-magnetic-pressure.ts`](../../src/bridges/be74-magnetic-pressure.ts) (`evaluateMagneticPressure`)
+> **Evaluator:** catalog record 74 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. The factor 2 is in the evaluator. Units fix `p ∝ B²/μ0` and do not fix the 2.
 - **Context**: Bridges an electromagnetic field to a continuum pressure. The bridges tuple is `electromagnetic` → `continuum`. Category D is the same component as BE-66, BE-67, and BE-69.
@@ -1323,7 +1331,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.LondonPenetration.depth_eq`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/LondonPenetration.lean) states that on `B(x) = B0 exp(−x/λ)` with `λ > 0`, Ampere's law `j = −(1/μ0) dB/dx` and the London equation `dj/dx = −(n e²/m) B` give `λ = √(m/(μ0 n e²))`. `e` is the elementary charge. The dimension matrix of `{m, μ0, n, e}` admits both that monomial and `μ0 e²/m`, so units do not choose. Those lengths disagree when `n (μ0 e²/m)³ ≠ 1`. The growing exponential is not the screened field. Replacing `e` by `2e` at the same `n` and `m` fails, and dropping the square on `e` fails when `e ≠ 1`. A factor `C ≠ 1` is not this depth. Not the classical skin depth. The London equation and Ampere's law are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be75-london-penetration.ts`](../../src/bridges/be75-london-penetration.ts) (`evaluateLondonPenetration`)
+> **Evaluator:** catalog record 75 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `e` is `E_SI`, not an input and not Euler's number.
 - **Context**: Bridges a carrier to a screened length. The bridges tuple is `quantum` → `classical`. Category F is the same component as BE-73. The sources are the existing quantities `effective-mass` and `carrier-density`.
@@ -1353,7 +1361,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.PlasmaBeta.beta_eq`](https://github.com/danielsimonjr/PhysJS/blob/ee753df77bd5b29b7207443181606b6004bfcf6a/lean/PlasmaBeta.lean) states `β = p_gas / p_B` where `p_B` is `PhysJS.MagneticPressure.pressure_eq`, so `β = p_gas / (B²/(2 μ0)) = 2 μ0 p_gas / B²`. The ideal-gas closure `p_gas = n k_B T` gives `β = 2 μ0 n k_B T / B²`. `B ≠ 0`. Using `B²/μ0` in place of the magnetic pressure is a different ratio. The constant 1 is dimensionless and is not this beta when the ratio is not 1. A factor `C ≠ 1` is not this beta. Dropping `p = n k_B T` fails. Not a unique monomial, and not a plasma-β inequality. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`. The file imports `lean.MagneticPressure`.
 
-> **Evaluator:** [`src/bridges/be76-plasma-beta.ts`](../../src/bridges/be76-plasma-beta.ts) (`evaluatePlasmaBeta`)
+> **Evaluator:** catalog record 76 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. The composition edge is the ratio `β = n k_B T / p_B`. Substituting Bridge Equation 74 recovers the factor 2.
 - **Context**: Bridges a fluid pressure to a magnetic pressure. The bridges tuple is `fluid` → `plasma`. Category D is the same component as BE-74. `composeEdges` of BE-74 into this edge meets on `magnetic-pressure`. The reverse order has no junction. `upt regime plasma` stays the vacuous registration: this equation is not a plasma-β inequality.
@@ -1385,7 +1393,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.HagenPoiseuille.flow_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/HagenPoiseuille.lean) states that steady axisymmetric Newtonian flow with `d/dr (r du/dr) = (G/μ) r`, centerline slope 0, and no-slip `u(R) = 0` integrates to `u = (G/(4μ))(r²−R²)`. With `G = −ΔP/L` the flux `Q = ∫ u 2π r dr` is `π R⁴ ΔP/(8 μ L)`. Darcy's definition of that profile gives `f_D Re = 64`. The same wall shear with the Fanning normalization is 16. A factor other than 8 is not this flux. Not a square duct. The axial balance, no-slip, and the Darcy definitions are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be77-hagen-poiseuille.ts`](../../src/bridges/be77-hagen-poiseuille.ts) (`evaluateHagenPoiseuille`)
+> **Evaluator:** catalog record 77 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. The evaluator returns the flux. The Darcy product is part of the theorem and is not a second catalog equation.
 - **Context**: Bridges a fluid pressure drop to a continuum flux. The bridges tuple is `fluid` → `continuum`. Category D is the same component as BE-74 and BE-76.
@@ -1399,7 +1407,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.EulerBuckling.critical_load`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/EulerBuckling.lean) states that the Euler–Bernoulli balance `y'' = −ω² y` with `ω² = P/(E I)` and pinned ends `y(0) = y(L) = 0` has the eigenfunction `sin(π x/L)` at `P = π² E I/L²`, and every nontrivial solution has `ω L = n π` for a nonzero integer `n`, so the load is at least that value. The clamped-free column is `π² E I/(4 L²)`. That factor is not the pinned load. Not read off from units. The beam equation is a hypothesis. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be78-euler-buckling.ts`](../../src/bridges/be78-euler-buckling.ts) (`evaluateEulerBuckling`)
+> **Evaluator:** catalog record 78 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: Bridges a continuum beam to a mechanical load. The bridges tuple is `continuum` → `mechanical`.
@@ -1413,7 +1421,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.PullIn.pull_in_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/PullIn.lean) states that `C = ε0 A/g` has `dC/dg = −ε0 A/g²`. Equilibrium of a linear spring against the coenergy force is `k(g0−g) = ε0 A V²/(2 g²)`, so `V²` is proportional to `(g0−g) g²`. The derivative `2 g0 g − 3 g²` vanishes only at `g = 0` and `g = 2 g0/3`, and the second derivative at the fold is `−2 g0`. Substituting the gap gives `V_pi² = 8 k g0³/(27 ε0 A)`. `g = g0/2` is not the fold. Not a fringing field. The parallel-plate law and the quasi-static balance are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be79-pull-in.ts`](../../src/bridges/be79-pull-in.ts) (`evaluatePullIn`)
+> **Evaluator:** catalog record 79 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `ε0` is `EPS0_SI`.
 - **Context**: Bridges an electromagnetic gap force to a continuum spring. The bridges tuple is `electromagnetic` → `continuum`.
@@ -1427,7 +1435,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.MottGurney.current_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/MottGurney.lean) states that drift `J = q n μ E` and Poisson `dE/dx = q n/ε` give `E dE/dx = J/(ε μ)`. With `E(0) = 0` the integral is `E²/2 = J x/(ε μ)`. The nonnegative root integrated from 0 to `d` is `J = (9/8) ε μ V²/d³`. A factor other than `9/8` is not this current. Not Child–Langmuir. Drift, Poisson, and the injecting contact are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be80-mott-gurney.ts`](../../src/bridges/be80-mott-gurney.ts) (`evaluateMottGurney`)
+> **Evaluator:** catalog record 80 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `ε` is an input, not necessarily `ε0`.
 - **Context**: Bridges an electromagnetic field to a condensed-matter current. The bridges tuple is `electromagnetic` → `condensed`.
@@ -1441,7 +1449,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ChildLangmuir.current_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ChildLangmuir.lean) states that collisionless energy `(1/2) m v² = e φ`, `J = ρ v`, and Poisson `φ'' = ρ/ε0` give a current independent of `x` only for `φ ∝ x^{4/3}`. The profile `φ = V (x/d)^{4/3}` has `φ(0) = 0`, `φ(d) = V`, and cathode field 0, and for `x > 0` its current is `J = (4 ε0/9) sqrt(2 e/m) V^{3/2}/d²`. `e` is the elementary charge. The Mott–Gurney exponent does not cancel. Poisson is not claimed at `x = 0`. Not a drift-only solid. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be81-child-langmuir.ts`](../../src/bridges/be81-child-langmuir.ts) (`evaluateChildLangmuir`)
+> **Evaluator:** catalog record 81 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `e` is `E_SI`, not an input and not Euler's number. `ε0` is `EPS0_SI`.
 - **Context**: Bridges an electromagnetic vacuum gap to a current. The bridges tuple is `electromagnetic` → `vacuum`.
@@ -1455,11 +1463,13 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ShockleyDiode.shockley_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ShockleyDiode.lean) states that quasi-equilibrium multiplies the equilibrium flux by `exp(e V/(η k_B T))`. Ideality 1 sets `η = 1`. Detailed balance sets the reverse flux equal to the forward flux at `V = 0`, and low injection keeps that reverse flux under bias. The net current is `I = I_s (exp(e V/(k_B T)) − 1)`. Zero bias carries zero current. Ideality 2 is not this current when `e V ≠ 0`. `e` is the elementary charge. Not a diffusion-length ODE. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be82-shockley-diode.ts`](../../src/bridges/be82-shockley-diode.ts) (`evaluateShockleyDiode`)
+> **Evaluator:** catalog record 82 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. Euler's number is written `exp`.
 - **Context**: Bridges an electromagnetic bias to a condensed-matter current. The bridges tuple is `electromagnetic` → `condensed`.
 - **Mathematical Formulation**: `I = I_s (exp(e V/(k_B T)) − 1)`.
+
+<img src="https://i.upmath.me/svg/I%20%3D%20I_s%20%5Cleft%28%5Cexp%5Cleft%28%5Cfrac%7Be%20V%7D%7Bk_B%20T%7D%5Cright%29%20-%201%5Cright%29" alt="I = I_s \left(\exp\left(\frac{e V}{k_B T}\right) - 1\right)" />
 - **Dimensions**: The catalog signature is `[I]`.
 - **Domain**: `I_s` and `V` finite, `T ≠ 0`. Ideality is 1.
 - **References**: Quasi-equilibrium, detailed balance at zero bias, and low injection are the hypotheses of `PhysJS.ShockleyDiode.shockley_eq`.
@@ -1469,11 +1479,13 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.Thomson.thomson_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/Thomson.lean) states that the Kelvin relation `Π(t) = S(t) t`, which is `PhysJS.KelvinRelation.peltier_eq` read along temperature, and the Thomson split `μ = dΠ/dT − S`, give `μ = T dS/dT` by the product rule. `dΠ/dT` is not `μ` when `S T ≠ 0`. Not a second copy of `Π = S T`. The functional Kelvin relation and the Thomson split are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`. The file reads the Kelvin relation along temperature. The catalog dependency is Bridge Equation 73. The quantities do not meet, so the edges do not compose.
 
-> **Evaluator:** [`src/bridges/be83-thomson.ts`](../../src/bridges/be83-thomson.ts) (`evaluateThomsonCoefficient`)
+> **Evaluator:** catalog record 83 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `dS/dT` is an input, not a sampled difference of `S`.
 - **Context**: Bridges a thermal slope to an electrical coefficient. The bridges tuple is `thermal` → `electrical`. Category F is the same component as BE-73. This is the first Thomson relation. Search for the Thomson coefficient names this row. It does not name BE-73.
 - **Mathematical Formulation**: `μ_T = T dS/dT`.
+
+<img src="https://i.upmath.me/svg/%5Cmu_T%20%3D%20T%20%5Cfrac%7B%5Cmathrm%7Bd%7DS%7D%7B%5Cmathrm%7Bd%7DT%7D" alt="\mu_T = T \frac{\mathrm{d}S}{\mathrm{d}T}" />
 - **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1 Theta^-1]`.
 - **Domain**: `T` and `dS/dT` finite.
 - **References**: `PhysJS.Thomson.thomson_eq` reads `PhysJS.KelvinRelation.peltier_eq` along temperature. The Thomson split is a hypothesis.
@@ -1483,7 +1495,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.FourPoint.sheet_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/FourPoint.lean) states that on an infinite sheet the radial field of a point current is `(I R_s)/(2 π r)`, and the potential drop is the integral of `1/r`. Probes at `0`, `s`, `2s`, and `3s`, with current in at `0` and out at `3s`, each contribute `(I R_s/(2 π)) ln 2` on the inner pair. Superposition gives `R_s = (π/ln 2)(V/I)`. A sink at `4s` gives `2π/ln 3` instead. Not `PhysJS.Crossing.antisymmetry`. The Laplace field and linear superposition are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be84-four-point.ts`](../../src/bridges/be84-four-point.ts) (`evaluateFourPointSheet`)
+> **Evaluator:** catalog record 84 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. The spacing `s` cancels.
 - **Context**: Bridges an electromagnetic probe pair to a condensed-matter sheet. The bridges tuple is `electromagnetic` → `condensed`. Not the conformal crossing BE-35.
@@ -1497,7 +1509,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ShotNoise.shot_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ShotNoise.lean) states that in a window of length `T` the count `N` has mean `(I/e) T`, and the Poisson premise is `Var(N) = mean(N)`. Charge `e` scales the variance by `e²` and the windowed current divides by `T`, so `Var(I) = e I/T`. The one-sided bandwidth of that window is `Δf = 1/(2 T)`, and `S_I = 2 e I`. The two-sided bandwidth `Δf = 1/T` gives `e I`. `e` is the elementary charge. Not a Fourier theorem and not Johnson–Nyquist. The Poisson variance and the one-sided convention are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be85-shot-noise.ts`](../../src/bridges/be85-shot-noise.ts) (`evaluateShotNoise`)
+> **Evaluator:** catalog record 85 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. The formula is linear in `I`.
 - **Context**: Bridges a quantum count to a classical current spectrum. The bridges tuple is `quantum` → `classical`. Category H is the same component as BE-58. This is not the Johnson–Nyquist factor 4.
@@ -1511,7 +1523,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.ReynoldsAnalogy.reynolds_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/ReynoldsAnalogy.lean) states that wall fluxes `τ = μ du/dy` and `q = k dT/dy`, with `C_f = τ/(ρ U²/2)`, `h = q/ΔT`, `St = h/(ρ U c_p)`, and `Pr = μ c_p/k`, satisfy `St Pr = C_f/2` when the normalized wall gradients agree. That common slope is the equal-diffusivity hypothesis. At `Pr = 1`, `St = C_f/2`. `Pr ≠ 1` with nonzero skin friction is not this equality. Not a Nusselt correlation. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be86-reynolds-analogy.ts`](../../src/bridges/be86-reynolds-analogy.ts) (`evaluateReynoldsAnalogy`)
+> **Evaluator:** catalog record 86 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`. `Pr` and the wall slopes are not inputs.
 - **Context**: Bridges a fluid skin friction to a thermal Stanton number. The bridges tuple is `fluid` → `thermal`.
@@ -1525,11 +1537,13 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.CapacitorNoise.noise_eq`](https://github.com/danielsimonjr/PhysJS/blob/92f87257a1e3086a48cdc19fe4361cc1c5909d49/lean/CapacitorNoise.lean) states that `dU/dV = C V` and `U(0) = 0` integrate to `U = (C/2) V²`. The normalized Boltzmann weight of that energy is the Gaussian of mean 0 and variance `k_B T/C`, because the partition function is the Gaussian integral. The mean square on that law is `⟨v²⟩ = k_B T/C`, and `(C/2)` of it is `(1/2) k_B T`. `(3/2) k_B T/C` is not this variance. Dropping the energy half replaces it by `k_B T/(2 C)`. Not three kinetic degrees of freedom. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be87-capacitor-noise.ts`](../../src/bridges/be87-capacitor-noise.ts) (`evaluateCapacitorNoise`)
+> **Evaluator:** catalog record 87 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: Bridges a thermal energy to an electrical variance. The bridges tuple is `thermal` → `electrical`. Category H is the same component as BE-70.
 - **Mathematical Formulation**: `⟨v²⟩ = k_B T / C`.
+
+<img src="https://i.upmath.me/svg/%5Clangle%20v%5E2%20%5Crangle%20%3D%20%5Cfrac%7Bk_B%20T%7D%7BC%7D" alt="\langle v^2 \rangle = \frac{k_B T}{C}" />
 - **Dimensions**: The catalog signature is `[L^4 M^2 T^-6 I^-2]`.
 - **Domain**: `T` finite, `C > 0`. The energy is one quadratic term.
 - **References**: `U = (C/2) V²` and the Boltzmann weight of that term are the hypotheses of `PhysJS.CapacitorNoise.noise_eq`.
@@ -1540,7 +1554,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.FermiSea.fermi_sea`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/FermiSea.lean) states that two spin states times the sphere (4π/3) k_F³/(2π)³ give n, so k_F³ = 3 π² n and the nonnegative root is k_F = (3 π² n)^{1/3}. The isotropic parabola E = ℏ² k²/(2 m*) is E_F at k_F. Its first derivative is v_F = ℏ k_F/m*, and ℏ⁻² times the second derivative is 1/m*. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be88-fermi-sea.ts`](../../src/bridges/be88-fermi-sea.ts) (`evaluateFermiSea`)
+> **Evaluator:** catalog record 88 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: two spin states times the sphere (4π/3) k_F³/(2π)³ give n, so k_F³ = 3 π² n and the nonnegative root is k_F = (3 π² n)^{1/3}. The isotropic parabola E = ℏ² k²/(2 m*) is E_F at k_F. Its first derivative is v_F = ℏ k_F/m*, and ℏ⁻² times the second derivative is 1/m*. One spin is k_F³ = 6 π² n. Not a lattice band. The band, the two-spin count, and T = 0 are hypotheses
@@ -1554,7 +1568,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.DebyeCutoff.debye_cutoff`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/DebyeCutoff.lean) states that three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be89-debye-cutoff.ts`](../../src/bridges/be89-debye-cutoff.ts) (`evaluateDebyeCutoff`)
+> **Evaluator:** catalog record 89 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: three acoustic branches filling 3n states, 3·(4π/3) k_D³/(2π)³ = 3n, give k_D³ = 6 π² n. A linear branch ω_D = v_s k_D is ω_D = v_s (6 π² n)^{1/3}. Equating the three-branch sum to n gives k_D³ = 2 π² n. The branch count and the common speed are hypotheses
@@ -1568,7 +1582,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.DebyeHeat.debye_heat`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/DebyeHeat.lean) states that the mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity. The phonon integral, the extension to infinity, and π⁴/15 are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be90-debye-heat.ts`](../../src/bridges/be90-debye-heat.ts) (`evaluateDebyeHeat`)
+> **Evaluator:** catalog record 90 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the mode integral ∫₀^{ω_D} 9 N ω²/ω_D³ dω = 3 N. The Debye energy with the integral extended to infinity is the hypothesis U = 9 N k_B T (T/θ_D)³ I, and I = π⁴/15 is a hypothesis, not an evaluation of ∫ x³/(exp(x)−1) dx. Nine times π⁴/15 is 3 π⁴/5, and U = A T⁴ differentiates to C_V = (12 π⁴/5) N k_B (T/θ_D)³. The energy prefactor 3 π⁴/5 is not the heat capacity. The phonon integral, the extension to infinity, and π⁴/15 are hypotheses
@@ -1582,7 +1596,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.EinsteinSolid.einstein_heat`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/EinsteinSolid.lean) states that three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be91-einstein-solid.ts`](../../src/bridges/be91-einstein-solid.ts) (`evaluateEinsteinSolid`)
+> **Evaluator:** catalog record 91 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: three Planck oscillators per atom, each of energy k_B θ_E/(exp(θ_E/T)−1), differentiate to C_V = 3 N k_B (θ_E/T)² exp(θ_E/T)/(exp(θ_E/T)−1)². The zero-point k_B θ_E/2 is constant. The kernel x² e^x/(e^x−1)² tends to 1 as x → 0⁺, so the high-temperature limit is 3 N k_B. One oscillator tends to N k_B. Three oscillators and the Einstein spectrum are hypotheses
@@ -1596,7 +1610,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.SommerfeldHeat.electronic_heat`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/SommerfeldHeat.lean) states that the Sommerfeld energy correction δU = (π²/6) (k_B T)² g(E_F) is a hypothesis, and its temperature derivative is c_V = (π²/3) k_B² T g(E_F). PhysJS.FermiSea.dos_factor is g(E_F) = (3/2) n/E_F for a √E density, so c_V = (π²/2) n k_B² T/E_F. A flat density g = n/E_F leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be92-sommerfeld-heat.ts`](../../src/bridges/be92-sommerfeld-heat.ts) (`evaluateSommerfeldHeat`)
+> **Evaluator:** catalog record 92 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the Sommerfeld energy correction δU = (π²/6) (k_B T)² g(E_F) is a hypothesis, and its temperature derivative is c_V = (π²/3) k_B² T g(E_F). PhysJS.FermiSea.dos_factor is g(E_F) = (3/2) n/E_F for a √E density, so c_V = (π²/2) n k_B² T/E_F. A flat density g = n/E_F leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61
@@ -1610,7 +1624,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.CurieWeiss.curie_weiss`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/CurieWeiss.lean) states that linear response χ k_B T = μ₀ n (g μ_B)² ⟨S_z²⟩ with the high-temperature moment ⟨S_z²⟩ = S(S+1)/3 gives the Curie constant C = μ₀ n g² μ_B² S(S+1)/(3 k_B). Equal weights on m = ±1/2 give 1/4 = S(S+1)/3 at S = 1/2. Mean field B_eff = B + λ M with θ = C λ/μ₀ gives χ = C/(T−θ). θ = 0 is C/T. A classical moment uses μ²/3. The second moment and the mean-field shift are hypotheses. Not an su(2) derivation. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be93-curie-weiss.ts`](../../src/bridges/be93-curie-weiss.ts) (`evaluateCurieWeiss`)
+> **Evaluator:** catalog record 93 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: linear response χ k_B T = μ₀ n (g μ_B)² ⟨S_z²⟩ with the high-temperature moment ⟨S_z²⟩ = S(S+1)/3 gives the Curie constant C = μ₀ n g² μ_B² S(S+1)/(3 k_B). Equal weights on m = ±1/2 give 1/4 = S(S+1)/3 at S = 1/2. Mean field B_eff = B + λ M with θ = C λ/μ₀ gives χ = C/(T−θ). θ = 0 is C/T. A classical moment uses μ²/3. The second moment and the mean-field shift are hypotheses. Not an su(2) derivation
@@ -1624,7 +1638,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.PauliParamagnetism.pauli`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/PauliParamagnetism.lean) states that the Zeeman imbalance M = μ_B² g(E_F) B is a hypothesis, and χ_P = μ₀ M/B is μ₀ μ_B² g(E_F). PhysJS.FermiSea.dos_factor supplies g(E_F) = (3/2) n/E_F, so χ_P = μ₀ μ_B² (3 n)/(2 E_F). A flat density leaves the factor 1. Not Landau diamagnetism. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be94-pauli-paramagnetism.ts`](../../src/bridges/be94-pauli-paramagnetism.ts) (`evaluatePauliParamagnetism`)
+> **Evaluator:** catalog record 94 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the Zeeman imbalance M = μ_B² g(E_F) B is a hypothesis, and χ_P = μ₀ M/B is μ₀ μ_B² g(E_F). PhysJS.FermiSea.dos_factor supplies g(E_F) = (3/2) n/E_F, so χ_P = μ₀ μ_B² (3 n)/(2 E_F). A flat density leaves the factor 1. Not Landau diamagnetism
@@ -1638,7 +1652,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.GinzburgLandau.type_boundary`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/GinzburgLandau.lean) states that in the normalization with gradient coefficient 1/κ², quartic (1/2)(1−f²)², and field B², the density at κ² = 1/2 is (√2 f' − a f)² + (B + (1−f²)/√2)² minus √2 times the derivative of a(1−f²). Vanishing squares and equal endpoints make that wall integral zero. A trial profile with that critical integral has energy (1/κ² − 2) times the gradient integral: negative when κ > 1/√2, zero at κ = 1/√2, and positive when κ < 1/√2. The positive side is this trial, not every minimizer. The GL density and the profile are hypotheses. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be95-ginzburg-landau.ts`](../../src/bridges/be95-ginzburg-landau.ts) (`evaluateGinzburgLandau`)
+> **Evaluator:** catalog record 95 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: in the normalization with gradient coefficient 1/κ², quartic (1/2)(1−f²)², and field B², the density at κ² = 1/2 is (√2 f' − a f)² + (B + (1−f²)/√2)² minus √2 times the derivative of a(1−f²). Vanishing squares and equal endpoints make that wall integral zero. A trial profile with that critical integral has energy (1/κ² − 2) times the gradient integral: negative when κ > 1/√2, zero at κ = 1/√2, and positive when κ < 1/√2. The positive side is this trial, not every minimizer. The GL density and the profile are hypotheses
@@ -1652,7 +1666,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.UpperCritical.critical_field`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/UpperCritical.lean) states that the linearized GL instability sets the Landau-level ground energy ℏ q B/(2 m*) of charge q = 2e equal to |α| = ℏ²/(2 m* ξ²). That level is a hypothesis, not the spectrum of the covariant Laplacian. The field is B = ℏ/(2 e ξ²). With Φ₀ = h/(2e) and h = 2 π ℏ this is B_c2 = Φ₀/(2 π ξ²). Charge e instead of 2e is a different field. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be96-upper-critical.ts`](../../src/bridges/be96-upper-critical.ts) (`evaluateUpperCritical`)
+> **Evaluator:** catalog record 96 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the linearized GL instability sets the Landau-level ground energy ℏ q B/(2 m*) of charge q = 2e equal to |α| = ℏ²/(2 m* ξ²). That level is a hypothesis, not the spectrum of the covariant Laplacian. The field is B = ℏ/(2 e ξ²). With Φ₀ = h/(2e) and h = 2 π ℏ this is B_c2 = Φ₀/(2 π ξ²). Charge e instead of 2e is a different field
@@ -1666,7 +1680,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.AmbegaokarBaratoff.ambegaokar_baratoff`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/AmbegaokarBaratoff.lean) states that the chain rule along E = Δ cosh t pulls the coherence-factor integrand back to sech t for t > 0. ∫₀^T sech = arctan(sinh T), and the limit T → ∞ is π/2. The tunnel Hamiltonian at zero temperature and identical gaps is the hypothesis that e I_c R_n is Δ times that improper integral, so I_c R_n = π Δ/(2 e). A coefficient other than π/2 fails. Not the finite-temperature tanh factor. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be97-ambegaokar-baratoff.ts`](../../src/bridges/be97-ambegaokar-baratoff.ts) (`evaluateAmbegaokarBaratoff`)
+> **Evaluator:** catalog record 97 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the chain rule along E = Δ cosh t pulls the coherence-factor integrand back to sech t for t > 0. ∫₀^T sech = arctan(sinh T), and the limit T → ∞ is π/2. The tunnel Hamiltonian at zero temperature and identical gaps is the hypothesis that e I_c R_n is Δ times that improper integral, so I_c R_n = π Δ/(2 e). A coefficient other than π/2 fails. Not the finite-temperature tanh factor
@@ -1680,7 +1694,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.BcsJump.heat_jump`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/BcsJump.lean) states that the weak-coupling excess free energy F = N(0) (T−T_c)/T_c · Δ² + 7 ζ N(0)/(16 π² T_c²) · Δ⁴ is a hypothesis, with k_B = 1. Its minimum is −α₀² (T−T_c)²/(4 β), and −T ∂²F/∂T² at T_c is ΔC = T_c α₀²/(2 β) = 8 π² N(0) T_c/(7 ζ). The normal heat capacity C_n = (2 π²/3) N(0) T_c is the both-spin Sommerfeld value, a hypothesis. The ratio is 12/(7 ζ). ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio. Not 2π exp(−γ). The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be98-bcs-jump.ts`](../../src/bridges/be98-bcs-jump.ts) (`evaluateBcsJump`)
+> **Evaluator:** catalog record 98 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the weak-coupling excess free energy F = N(0) (T−T_c)/T_c · Δ² + 7 ζ N(0)/(16 π² T_c²) · Δ⁴ is a hypothesis, with k_B = 1. Its minimum is −α₀² (T−T_c)²/(4 β), and −T ∂²F/∂T² at T_c is ΔC = T_c α₀²/(2 β) = 8 π² N(0) T_c/(7 ζ). The normal heat capacity C_n = (2 π²/3) N(0) T_c is the both-spin Sommerfeld value, a hypothesis. The ratio is 12/(7 ζ). ζ is the quartic coefficient, not a series evaluation. One spin in C_n misses the ratio. Not 2π exp(−γ)
@@ -1694,7 +1708,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.MassAction.mass_action`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/MassAction.lean) states that the Boltzmann tails n = N_c exp(−(E_c−μ)/(k_B T)) and p = N_v exp(−(μ−E_v)/(k_B T)), with E_g = E_c − E_v, multiply to N_c N_v exp(−E_g/(k_B T)). That product is the square of n_i = √(N_c N_v) exp(−E_g/(2 k_B T)). Dropping the 2 in the exponent is a different density. The tails are hypotheses. Not a Fermi–Dirac integral. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be99-mass-action.ts`](../../src/bridges/be99-mass-action.ts) (`evaluateMassAction`)
+> **Evaluator:** catalog record 99 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the Boltzmann tails n = N_c exp(−(E_c−μ)/(k_B T)) and p = N_v exp(−(μ−E_v)/(k_B T)), with E_g = E_c − E_v, multiply to N_c N_v exp(−E_g/(k_B T)). That product is the square of n_i = √(N_c N_v) exp(−E_g/(2 k_B T)). Dropping the 2 in the exponent is a different density. The tails are hypotheses. Not a Fermi–Dirac integral
@@ -1708,7 +1722,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.LyddaneSachsTeller.lst`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/LyddaneSachsTeller.lean) states that the undamped oscillator ε(ω) = ε(∞) + S/(ω_TO² − ω²) has a zero at ω_LO, which fixes S, and ε(0) is the same function at zero frequency. The ratio is ω_LO²/ω_TO² = ε(0)/ε(∞). The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be100-lyddane-sachs-teller.ts`](../../src/bridges/be100-lyddane-sachs-teller.ts) (`evaluateLyddaneSachsTeller`)
+> **Evaluator:** catalog record 100 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the undamped oscillator ε(ω) = ε(∞) + S/(ω_TO² − ω²) has a zero at ω_LO, which fixes S, and ε(0) is the same function at zero frequency. The ratio is ω_LO²/ω_TO² = ε(0)/ε(∞). The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis
@@ -1722,7 +1736,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.BktJump.bkt_jump`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/BktJump.lean) states that the phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be101-bkt-jump.ts`](../../src/bridges/be101-bkt-jump.ts) (`evaluateBktJump`)
+> **Evaluator:** catalog record 101 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the phase gradient of a θ = φ vortex integrates to π J ln(R/a) between the core and radius R. The entropy hypothesis is the area of core positions, S = k_B ln((R/a)²) = 2 k_B ln(R/a). The free energy E − T S vanishes at a radius past the core only when k_B T = π J/2. Circumference entropy unbinds at π J. J is the stiffness in the vortex energy. Not the renormalization-group flow
@@ -1736,7 +1750,7 @@ where:
 
 > **Proof status as of 2026-10-04.** Kind is `bridge`. [`PhysJS.LandauerConductance.conductance_eq`](https://github.com/danielsimonjr/PhysJS/blob/03e8bb77c952f720bdd2730af2afc6a7f2d36243/lean/LandauerConductance.lean) states that a one-dimensional mode of speed v in a length L has density of states L/(h v) per spin, and the flux times v/L cancels to 1/h. Current is spin · e · (Σ T_n) · (1/h) · Δμ with spin = 2 and Δμ = e V, so G = (2 e²/h) Σ T_n. One spin is e²/h. The transmissions and the bias window are hypotheses. Not the Hall conductance and not Landauer erasure. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/be102-landauer-conductance.ts`](../../src/bridges/be102-landauer-conductance.ts) (`evaluateLandauerConductance`)
+> **Evaluator:** catalog record 102 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: a one-dimensional mode of speed v in a length L has density of states L/(h v) per spin, and the flux times v/L cancels to 1/h. Current is spin · e · (Σ T_n) · (1/h) · Δμ with spin = 2 and Δμ = e V, so G = (2 e²/h) Σ T_n. One spin is e²/h. The transmissions and the bias window are hypotheses. Not the Hall conductance and not Landauer erasure
@@ -1750,7 +1764,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.BohmSheath.cold_bohm_threshold`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/BohmSheath.lean) states that cold ions, with n_i(φ) = n0 / sqrt(1 − 2 e φ/(m u0²)) and Boltzmann electrons, have edge slopes whose ratio is at least 1 only when u0² ≥ k_B T_e / m_i. The sound-speed root is the non-negative one. γ_i = 3, from p ∝ n³, is the nested warmSound object and is not γ_i = 5/3. Not a kinetic sheath. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateBohmSheath`)
+> **Evaluator:** catalog record 103 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: cold ions, with n_i(φ) = n0 / sqrt(1 − 2 e φ/(m u0²)) and Boltzmann electrons, have edge slopes whose ratio is at least 1 only when u0² ≥ k_B T_e / m_i. The sound-speed root is the non-negative one. γ_i = 3, from p ∝ n³, is the nested warmSound object and is not γ_i = 5/3. Not a kinetic sheath
@@ -1764,7 +1778,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.IonAcoustic.dispersion_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/IonAcoustic.lean) states that cold ions, continuity, ion momentum, and Poisson with Boltzmann electrons inside Poisson give ω² = k² c_s² / (1 + k² λ_De²), with c_s² = k_B T_e / m_i and λ_De² = ε0 k_B T_e / (n0 e²), for k ≠ 0. Warm ions and a kinetic dispersion are not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateIonAcoustic`)
+> **Evaluator:** catalog record 104 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: cold ions, continuity, ion momentum, and Poisson with Boltzmann electrons inside Poisson give ω² = k² c_s² / (1 + k² λ_De²), with c_s² = k_B T_e / m_i and λ_De² = ε0 k_B T_e / (n0 e²), for k ≠ 0. Warm ions and a kinetic dispersion are not this row
@@ -1778,7 +1792,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.UpperHybrid.upper_hybrid_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/UpperHybrid.lean) states that cold electrons, B along z, and the ansatz Ex = E0 cos(ω t), vx = vx0 sin(ω t), vy = vy0 cos(ω t), with charge −e and ∂Ex/∂t = n e vx / ε0, give ω² = n e²/(ε0 m) + (e B/m)². Not a cyclotron monomial and not ω_pe alone. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateUpperHybrid`)
+> **Evaluator:** catalog record 105 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: cold electrons, B along z, and the ansatz Ex = E0 cos(ω t), vx = vx0 sin(ω t), vy = vy0 cos(ω t), with charge −e and ∂Ex/∂t = n e vx / ε0, give ω² = n e²/(ε0 m) + (e B/m)². Not a cyclotron monomial and not ω_pe alone
@@ -1792,7 +1806,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ColdPlasmaCutoff.cutoff_R`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ColdPlasmaCutoff.lean) states that the cold Stix index n_R² = 1 − ω_p²/(ω(ω − ω_c)) is a hypothesis. Vanishing n is ω(ω − ω_c) = ω_p². For ω_c ≥ 0 the nonnegative root is ω_R = (ω_c + sqrt(ω_c² + 4 ω_p²))/2. The L root and the whistler limit are nested. The Stix dielectric is not re-derived. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateColdPlasmaCutoff`)
+> **Evaluator:** catalog record 106 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the cold Stix index n_R² = 1 − ω_p²/(ω(ω − ω_c)) is a hypothesis. Vanishing n is ω(ω − ω_c) = ω_p². For ω_c ≥ 0 the nonnegative root is ω_R = (ω_c + sqrt(ω_c² + 4 ω_p²))/2. The L root and the whistler limit are nested. The Stix dielectric is not re-derived
@@ -1806,7 +1820,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LowerHybrid.lower_hybrid_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LowerHybrid.lean) states that cold singly charged fluids satisfy ω_pe²/ω_ce² = ω_pi²/(ω_ci ω_ce). The ordered balance 1 + ω_pi²/(ω_ci ω_ce) = ω_pi²/ω² is a hypothesis and gives ω² = 1/(1/ω_pi² + 1/(ω_ci ω_ce)). Dropping the leading 1 is a separate hypothesis and leaves ω² = ω_ci ω_ce. Not a cyclotron monomial. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLowerHybrid`)
+> **Evaluator:** catalog record 107 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: cold singly charged fluids satisfy ω_pe²/ω_ce² = ω_pi²/(ω_ci ω_ce). The ordered balance 1 + ω_pi²/(ω_ci ω_ce) = ω_pi²/ω² is a hypothesis and gives ω² = 1/(1/ω_pi² + 1/(ω_ci ω_ce)). Dropping the leading 1 is a separate hypothesis and leaves ω² = ω_ci ω_ce. Not a cyclotron monomial
@@ -1820,7 +1834,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ObliqueMagnetosonic.phase_speed_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ObliqueMagnetosonic.lean) states that the be-69 quartic with k_∥ = k cos θ is a hypothesis. The phase-speed squares are ½[c_s² + v_A² ± sqrt((c_s² + v_A²)² − 4 c_s² v_A² cos²θ)] for c_s², v_A² ≥ 0. At θ = π/2 the fast root is c_s² + v_A² and the slow root is 0, the perpendicular values and not a second proof of that polarization. At θ = 0 the roots are the larger and smaller of c_s² and v_A². The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateObliqueMagnetosonic`)
+> **Evaluator:** catalog record 108 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the be-69 quartic with k_∥ = k cos θ is a hypothesis. The phase-speed squares are ½[c_s² + v_A² ± sqrt((c_s² + v_A²)² − 4 c_s² v_A² cos²θ)] for c_s², v_A² ≥ 0. At θ = π/2 the fast root is c_s² + v_A² and the slow root is 0, the perpendicular values and not a second proof of that polarization. At θ = 0 the roots are the larger and smaller of c_s² and v_A²
@@ -1834,7 +1848,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.BennettPinch.bennett_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/BennettPinch.lean) states that a steady z-pinch with B = μ0 I/(2 π r), dI/dr = 2 π r j, and dp/dr = −j B cancels off the axis in d/dr[π r² p + μ0 I²/(8 π)]. Differentiability through the axis is a hypothesis. With I(0) = 0 and p(R) = 0 the fundamental theorem gives μ0 I(R)²/(8 π) = ∫₀^R 2 π r p dr. Equal temperatures are the nested equalTemperature object. The single-population current uses ∫ p dA = N k_B T and is not that hydrogenic current. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateBennettPinch`)
+> **Evaluator:** catalog record 109 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: a steady z-pinch with B = μ0 I/(2 π r), dI/dr = 2 π r j, and dp/dr = −j B cancels off the axis in d/dr[π r² p + μ0 I²/(8 π)]. Differentiability through the axis is a hypothesis. With I(0) = 0 and p(R) = 0 the fundamental theorem gives μ0 I(R)²/(8 π) = ∫₀^R 2 π r p dr. Equal temperatures are the nested equalTemperature object. The single-population current uses ∫ p dA = N k_B T and is not that hydrogenic current
@@ -1848,7 +1862,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LossCone.loss_cone_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LossCone.lean) states that μ = m v_⊥²/(2 B) and the kinetic energy are constant along a field line. Parallel speed vanishes at the mirror, so sin² θ_lc = B0/Bm = 1/R_m with R_m = Bm/B0. Pitch-angle scattering is not this statement. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLossCone`)
+> **Evaluator:** catalog record 110 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: μ = m v_⊥²/(2 B) and the kinetic energy are constant along a field line. Parallel speed vanishes at the mirror, so sin² θ_lc = B0/Bm = 1/R_m with R_m = Bm/B0. Pitch-angle scattering is not this statement
@@ -1862,7 +1876,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.GradBDrift.drift_magnitude`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/GradBDrift.lean) states that μ = m v_⊥²/(2 B) and the grad-B speed μ |∇B|/(q B) give m v_⊥² |∇B|/(2 q B²). Vacuum low-β curvature uses κ = |∇B|/B, so the curvature speed is m v_∥² |∇B|/(q B²) and the sum is m (v_∥² + v_⊥²/2) |∇B|/(q B²). High-β curvature, where κ ≠ |∇B|/B, is a different vector for m ≠ 0. q is the signed charge. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateGradBDrift`)
+> **Evaluator:** catalog record 111 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: μ = m v_⊥²/(2 B) and the grad-B speed μ |∇B|/(q B) give m v_⊥² |∇B|/(2 q B²). Vacuum low-β curvature uses κ = |∇B|/B, so the curvature speed is m v_∥² |∇B|/(q B²) and the sum is m (v_∥² + v_⊥²/2) |∇B|/(q B²). High-β curvature, where κ ≠ |∇B|/B, is a different vector for m ≠ 0. q is the signed charge
@@ -1876,7 +1890,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ExBDrift.drift_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ExBDrift.lean) states that steady q E + q v × B = 0 with B along z gives v_x = E_y/B and v_y = −E_x/B for q ≠ 0 and B ≠ 0. The opposite charge has the same solution. Not a finite-Larmor-radius drift. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateExBDrift`)
+> **Evaluator:** catalog record 112 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: steady q E + q v × B = 0 with B along z gives v_x = E_y/B and v_y = −E_x/B for q ≠ 0 and B ≠ 0. The opposite charge has the same solution. Not a finite-Larmor-radius drift
@@ -1890,7 +1904,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LandauDamping.damping_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LandauDamping.lean) states that the Maxwellian f = n/(v_t sqrt(2π)) exp(−v²/(2 v_t²)) has slope −(v/v_t²) f. The residue formula γ = (π ω³/(2 n k²)) (∂f/∂v)|_{ω/k} is a hypothesis, not a contour integral, and gives γ = −sqrt(π/8) ω (ω/(k v_t))³ exp(−ω²/(2 k² v_t²)). Bohm–Gross is the nested bohmGross object and does not replace ω by ω_p in this prefactor. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLandauDamping`)
+> **Evaluator:** catalog record 113 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the Maxwellian f = n/(v_t sqrt(2π)) exp(−v²/(2 v_t²)) has slope −(v/v_t²) f. The residue formula γ = (π ω³/(2 n k²)) (∂f/∂v)|_{ω/k} is a hypothesis, not a contour integral, and gives γ = −sqrt(π/8) ω (ω/(k v_t))³ exp(−ω²/(2 k² v_t²)). Bohm–Gross is the nested bohmGross object and does not replace ω by ω_p in this prefactor
@@ -1904,7 +1918,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.DebyeSphere.coulomb_argument`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/DebyeSphere.lean) states that N_D = (4π/3) n λ_D³. The Rutherford b_90 = e²/(4π ε0 μ v_rel²), at (1/2) μ v_rel² = (3/2) k_B T, is e²/(12 π ε0 k_B T). Then Λ = λ_D/b_90 = 12 π n λ_D³ = 9 N_D. The one-species Debye length is an input. The angular integral and ln Λ are not evaluated. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateDebyeSphere`)
+> **Evaluator:** catalog record 114 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: N_D = (4π/3) n λ_D³. The Rutherford b_90 = e²/(4π ε0 μ v_rel²), at (1/2) μ v_rel² = (3/2) k_B T, is e²/(12 π ε0 k_B T). Then Λ = λ_D/b_90 = 12 π n λ_D³ = 9 N_D. The one-species Debye length is an input. The angular integral and ln Λ are not evaluated
@@ -1918,7 +1932,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.MultiDebye.debye_two`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/MultiDebye.lean) states that two linearized Boltzmann responses and Poisson give 1/λ_D² = 1/λ₁² + 1/λ₂², with λ_s² = ε0 k_B T_s/(n_s q_s²). Dropping a responding species leaves a different length. The one-species length is not restated. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateMultiDebye`)
+> **Evaluator:** catalog record 115 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: two linearized Boltzmann responses and Poisson give 1/λ_D² = 1/λ₁² + 1/λ₂², with λ_s² = ε0 k_B T_s/(n_s q_s²). Dropping a responding species leaves a different length. The one-species length is not restated
@@ -1932,7 +1946,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LorentzResistivity.resistivity_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LorentzResistivity.lean) states that σ_tr = 4π b0² ln Λ is a hypothesis, with b0 = Z e²/(4π ε0 m v²). At v_T² = 2 k_B T/m, ν(v_T) = n_i Z² e⁴ ln Λ √2 / (16 π ε0² √m (k_B T √(k_B T))). The conductivity moment σ = (8/√π) n_e e²/(m ν(v_T)) is a hypothesis, not the Gaussian integral. With n_e = Z n_i it gives η = (π √(2π)/8) Z e² √m ln Λ / ((4π ε0)² (k_B T √(k_B T))). The typed reference closure is nested. The Spitzer–Härm factor 0.51 is not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLorentzResistivity`)
+> **Evaluator:** catalog record 116 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: σ_tr = 4π b0² ln Λ is a hypothesis, with b0 = Z e²/(4π ε0 m v²). At v_T² = 2 k_B T/m, ν(v_T) = n_i Z² e⁴ ln Λ √2 / (16 π ε0² √m (k_B T √(k_B T))). The conductivity moment σ = (8/√π) n_e e²/(m ν(v_T)) is a hypothesis, not the Gaussian integral. With n_e = Z n_i it gives η = (π √(2π)/8) Z e² √m ln Λ / ((4π ε0)² (k_B T √(k_B T))). The typed reference closure is nested. The Spitzer–Härm factor 0.51 is not this row
@@ -1946,7 +1960,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ResistiveSlab.decay_time`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ResistiveSlab.lean) states that η_m = 1/(μ0 σ) and ∂B/∂t = η_m ∂²B/∂x² are hypotheses. The slab mode B0 sin(π x/L) exp(−t/τ) decays at τ = μ0 σ L²/π². A denominator 4π is not π². Rm and the Lundquist number are the nested lundquist object. Not the Reynolds analogy. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateResistiveSlab`)
+> **Evaluator:** catalog record 117 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: η_m = 1/(μ0 σ) and ∂B/∂t = η_m ∂²B/∂x² are hypotheses. The slab mode B0 sin(π x/L) exp(−t/τ) decays at τ = μ0 σ L²/π². A denominator 4π is not π². Rm and the Lundquist number are the nested lundquist object. Not the Reynolds analogy
@@ -1960,7 +1974,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ParkerCritical.critical_radius`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ParkerCritical.lean) states that an isothermal spherical wind factors as (v − c_s²/v) dv = (2 c_s²/r − G M/r²) dr. The critical point is both factors vanishing: v² = c_s² and r_c = G M/(2 c_s²). The 2 is spherical divergence. A vanishing coefficient alone does not force the geometric side to vanish. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateParkerCritical`)
+> **Evaluator:** catalog record 118 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: an isothermal spherical wind factors as (v − c_s²/v) dv = (2 c_s²/r − G M/r²) dr. The critical point is both factors vanishing: v² = c_s² and r_c = G M/(2 c_s²). The 2 is spherical divergence. A vanishing coefficient alone does not force the geometric side to vanish
@@ -1974,7 +1988,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ParkerSpiral.spiral_ratio`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ParkerSpiral.lean) states that B_φ/B_r = r sinθ dφ/dr and the frozen-in angle dφ/dr = −Ω/v_r give B_φ/B_r = −Ω r sinθ/v_r. sinθ is a real parameter. Dropping the sign is a different spiral. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateParkerSpiral`)
+> **Evaluator:** catalog record 119 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: B_φ/B_r = r sinθ dφ/dr and the frozen-in angle dφ/dr = −Ω/v_r give B_φ/B_r = −Ω r sinθ/v_r. sinθ is a real parameter. Dropping the sign is a different spiral
@@ -1988,7 +2002,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ChapmanFerraro.standoff_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/ChapmanFerraro.lean) states that a doubled dipole B_mp = 2 B_E (R_E/r)³ is a hypothesis. Ram balance ρ v² = B_mp²/(2 μ0) at K = 1 gives (R/R_E)⁶ = 2 B_E²/(μ0 ρ v²). Specular 2 ρ v² replaces the numerator 2 by 1. Magnetic pressure is an input, not a proof of be-74. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateChapmanFerraro`)
+> **Evaluator:** catalog record 120 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: a doubled dipole B_mp = 2 B_E (R_E/r)³ is a hypothesis. Ram balance ρ v² = B_mp²/(2 μ0) at K = 1 gives (R/R_E)⁶ = 2 B_E²/(μ0 ρ v²). Specular 2 ρ v² replaces the numerator 2 by 1. Magnetic pressure is an input, not a proof of be-74
@@ -2002,7 +2016,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LawsonBreakeven.breakeven_eq`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LawsonBreakeven.lean) states that a 50–50 Maxwellian DT mix, with bremsstrahlung neglected, has fusion power (n² ⟨σv⟩/4) E and thermal power 3 n k_B T/τ. Breakeven gives n τ = 12 k_B T/(⟨σv⟩ E). The 12 is 4 × 3, not either factor alone. The Maxwellian average is not computed, and this is not an evaluated triple product. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLawsonBreakeven`)
+> **Evaluator:** catalog record 121 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: a 50–50 Maxwellian DT mix, with bremsstrahlung neglected, has fusion power (n² ⟨σv⟩/4) E and thermal power 3 n k_B T/τ. Breakeven gives n τ = 12 k_B T/(⟨σv⟩ E). The 12 is 4 × 3, not either factor alone. The Maxwellian average is not computed, and this is not an evaluated triple product
@@ -2016,7 +2030,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.LangmuirProbe.floating_potential`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/LangmuirProbe.lean) states that Γ_e = n0 exp(e Φ/(k_B T)) sqrt(k_B T/(2 π m_e)). Equating it to the Bohm ion flux gives e Φ/(k_B T) = (1/2) ln(2 π m_e/m_i) − 1/2. The ion flux is the nested bohmFlux object. Not Child–Langmuir. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateLangmuirProbe`)
+> **Evaluator:** catalog record 122 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: Γ_e = n0 exp(e Φ/(k_B T)) sqrt(k_B T/(2 π m_e)). Equating it to the Bohm ion flux gives e Φ/(k_B T) = (1/2) ln(2 π m_e/m_i) − 1/2. The ion flux is the nested bohmFlux object. Not Child–Langmuir
@@ -2030,7 +2044,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.CrossFieldDiffusion.diffusion_ratio`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/CrossFieldDiffusion.lean) states that q E + q v × B − m v/τ = 0, with μ = q τ/m and α = μ B, solves to v_x = μ (E_x + α E_y)/(1+α²) and v_y = μ (E_y − α E_x)/(1+α²). Einstein's relation D = μ k_B T/q on μ and on μ/(1+α²), the same relation as be-70 and not re-proved here, gives D_⊥/D_∥ = 1/(1+ω_c² τ²) for E along x. The ratio is even in the sign of ω_c. Bohm's 1/16 equals this ratio only when α² = 15. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateCrossFieldDiffusion`)
+> **Evaluator:** catalog record 123 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: q E + q v × B − m v/τ = 0, with μ = q τ/m and α = μ B, solves to v_x = μ (E_x + α E_y)/(1+α²) and v_y = μ (E_y − α E_x)/(1+α²). Einstein's relation D = μ k_B T/q on μ and on μ/(1+α²), the same relation as be-70 and not re-proved here, gives D_⊥/D_∥ = 1/(1+ω_c² τ²) for E along x. The ratio is even in the sign of ω_c. Bohm's 1/16 equals this ratio only when α² = 15
@@ -2044,7 +2058,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.Firehose.firehose_threshold`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/Firehose.lean) states that the CGL root ω² = (k_∥²/ρ) (B²/μ0 + p_⊥ − p_∥) is a hypothesis. It is negative iff p_∥ − p_⊥ > B²/μ0. With β = 2 μ0 p/B², the be-76 definition and not the solenoid hypotheses of beta_eq, the threshold is β_∥ − β_⊥ > 2. The CGL closure is not derived. be-76 does not prove this inequality. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateFirehose`)
+> **Evaluator:** catalog record 124 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the CGL root ω² = (k_∥²/ρ) (B²/μ0 + p_⊥ − p_∥) is a hypothesis. It is negative iff p_∥ − p_⊥ > B²/μ0. With β = 2 μ0 p/B², the be-76 definition and not the solenoid hypotheses of beta_eq, the threshold is β_∥ − β_⊥ > 2. The CGL closure is not derived. be-76 does not prove this inequality
@@ -2058,7 +2072,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.MirrorInstability.mirror_threshold`](https://github.com/danielsimonjr/PhysJS/blob/d519c2c6504e7fbbd2cf6932f9e52981ce595a0f/lean/MirrorInstability.lean) states that the mirror threshold β_⊥ (T_⊥/T_∥ − 1) > 1 is a hypothesis, equivalent to T_⊥/T_∥ − 1 > 1/β_⊥, with β = 2 μ0 p/B². A beta that omits the 2 replaces 1/β by 2/β. The temperature ratio is not the temperature difference. The kinetic integral is not evaluated. Not the loss cone and not a proof of be-76. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/plasma-space.ts`](../../src/bridges/plasma-space.ts) (`evaluateMirrorInstability`)
+> **Evaluator:** catalog record 125 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the mirror threshold β_⊥ (T_⊥/T_∥ − 1) > 1 is a hypothesis, equivalent to T_⊥/T_∥ − 1 > 1/β_⊥, with β = 2 μ0 p/B². A beta that omits the 2 replaces 1/β by 2/β. The temperature ratio is not the temperature difference. The kinetic integral is not evaluated. Not the loss cone and not a proof of be-76
@@ -2072,7 +2086,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.CombDrive.force_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/CombDrive.lean) states that both sidewalls give C = 2 n ε h x / g. Voltage-controlled coenergy (1/2) C V² has lateral force (1/2) V² dC/dx, so the sidewall 2 and the coenergy 1/2 cancel and F = n ε h V² / g. One sidewall leaves the 1/2. Not the normal pull-in of be-79. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateCombDrive`)
+> **Evaluator:** catalog record 126 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: both sidewalls give C = 2 n ε h x / g. Voltage-controlled coenergy (1/2) C V² has lateral force (1/2) V² dC/dx, so the sidewall 2 and the coenergy 1/2 cancel and F = n ε h V² / g. One sidewall leaves the 1/2. Not the normal pull-in of be-79
@@ -2086,7 +2100,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.SubthresholdSwing.swing_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/SubthresholdSwing.lean) states that ln(I2/I1) = e (ψ2 − ψ1)/(k_B T) and the capacitive divider ψ2 − ψ1 = C_ox/(C_ox + C_d) (Vg2 − Vg1). One decade, I2/I1 = 10, gives S = ln(10) (k_B T/e) (1 + C_d/C_ox). Dropping C_d is not the swing when C_d ≠ 0. Not the ideal diode of be-82. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateSubthresholdSwing`)
+> **Evaluator:** catalog record 127 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: ln(I2/I1) = e (ψ2 − ψ1)/(k_B T) and the capacitive divider ψ2 − ψ1 = C_ox/(C_ox + C_d) (Vg2 − Vg1). One decade, I2/I1 = 10, gives S = ln(10) (k_B T/e) (1 + C_d/C_ox). Dropping C_d is not the swing when C_d ≠ 0. Not the ideal diode of be-82
@@ -2100,7 +2114,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.BoostConverter.boost_ratio`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/BoostConverter.lean) states that ideal continuous-conduction volt-second balance Vin D + (Vin − Vout)(1 − D) = 0 gives Vout/Vin = 1/(1 − D) for D ≠ 1. No real duty equals both this ratio and the buck ratio D. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateBoostConverter`)
+> **Evaluator:** catalog record 128 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: ideal continuous-conduction volt-second balance Vin D + (Vin − Vout)(1 − D) = 0 gives Vout/Vin = 1/(1 − D) for D ≠ 1. No real duty equals both this ratio and the buck ratio D
@@ -2114,7 +2128,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.FinEfficiency.efficiency_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/FinEfficiency.lean) states that θ'' = m² θ, an adiabatic tip θ'(L) = 0, and θ(0) = θ_b give θ(x) = θ_b cosh(m(L − x))/cosh(m L). Base Fourier heat over h P L θ_b is η = tanh(m L)/(m L) when m² = h P/(k A). A rectangle with P/A = 2/t gives m = √(2 h/(k t)). One face is not that m. tanh is not 1, so this is not an infinite fin. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateFinEfficiency`)
+> **Evaluator:** catalog record 129 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: θ'' = m² θ, an adiabatic tip θ'(L) = 0, and θ(0) = θ_b give θ(x) = θ_b cosh(m(L − x))/cosh(m L). Base Fourier heat over h P L θ_b is η = tanh(m L)/(m L) when m² = h P/(k A). A rectangle with P/A = 2/t gives m = √(2 h/(k t)). One face is not that m. tanh is not 1, so this is not an infinite fin
@@ -2128,7 +2142,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.ThermoelectricGenerator.efficiency_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/ThermoelectricGenerator.lean) states that hot-junction heat is Q = S Th I − I² R/2 − K ΔT with ΔT = Tc − Th, and load power is P = I (S (Th − Tc) − I R). The Joule 1/2 and the 2 in P' are derivatives. Stationarity P' Q = P Q' at I = S Δ/(R (1 + m)), with m = √(1 + Z Tm), Z = S²/(R K), Δ = Th − Tc, and Tm = (Th + Tc)/2, gives η = (1 − Tc/Th) (m − 1)/(m + Tc/Th). Matched load m = 1 is not stationary when Z Tm ≠ 0. The Carnot factor alone is not this efficiency. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateThermoelectricGenerator`)
+> **Evaluator:** catalog record 130 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: hot-junction heat is Q = S Th I − I² R/2 − K ΔT with ΔT = Tc − Th, and load power is P = I (S (Th − Tc) − I R). The Joule 1/2 and the 2 in P' are derivatives. Stationarity P' Q = P Q' at I = S Δ/(R (1 + m)), with m = √(1 + Z Tm), Z = S²/(R K), Δ = Th − Tc, and Tm = (Th + Tc)/2, gives η = (1 − Tc/Th) (m − 1)/(m + Tc/Th). Matched load m = 1 is not stationary when Z Tm ≠ 0. The Carnot factor alone is not this efficiency
@@ -2142,7 +2156,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.Joukowsky.joukowsky_eq`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/Joukowsky.lean) states that the momentum jump −c Δv + Δp/ρ = 0 is Δp = ρ c Δv. Fluid compressibility dρ/ρ = dp/K and thin-wall hoop strain dA/A = dp D/(E e_wall) give c = √(K/ρ) / √(1 + (K/E)(D/e_wall)). Mass on the same front is the separate statement c² = Δp/Δρ and is not required for the pressure jump. ρ (Δv)² is not ρ c Δv when c ≠ Δv. Dropping the wall term is the rigid-pipe speed. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateJoukowsky`)
+> **Evaluator:** catalog record 131 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the momentum jump −c Δv + Δp/ρ = 0 is Δp = ρ c Δv. Fluid compressibility dρ/ρ = dp/K and thin-wall hoop strain dA/A = dp D/(E e_wall) give c = √(K/ρ) / √(1 + (K/E)(D/e_wall)). Mass on the same front is the separate statement c² = Δp/Δρ and is not required for the pressure jump. ρ (Δv)² is not ρ c Δv when c ≠ Δv. Dropping the wall term is the rigid-pipe speed
@@ -2156,7 +2170,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.CoaxialCapacitance.capacitance_per_length`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/CoaxialCapacitance.lean) states that the coaxial field λ/(2 π ε r) integrates to ΔV = (λ/(2 π ε)) ln(b/a), so C' = λ/ΔV = 2 π ε / ln(b/a). Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateCoaxialCapacitance`)
+> **Evaluator:** catalog record 132 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: the coaxial field λ/(2 π ε r) integrates to ΔV = (λ/(2 π ε)) ln(b/a), so C' = λ/ΔV = 2 π ε / ln(b/a). Dropping 2 π is not this capacitance. Not a parallel-plate ε A/d
@@ -2170,7 +2184,7 @@ where:
 
 > **Proof status as of 2026-10-05.** Kind is `bridge`. [`PhysJS.DampingRatio.damping_ratio`](https://github.com/danielsimonjr/PhysJS/blob/8515c621d1c6e6d31c2eea4467181eb85d58234b/lean/DampingRatio.lean) states that m ẍ + c ẋ + k x = 0 has ω = √(k/m) and linear coefficient c/m = 2 ζ ω, so ζ = c / (2 √(k m)). For c ≥ 0 the discriminant (c/m)² − 4 (k/m) vanishes iff ζ = 1. Dropping the 2 is not this ratio. √(k/m) is not ζ. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/engineering-r7.ts`](../../src/bridges/engineering-r7.ts) (`evaluateDampingRatio`)
+> **Evaluator:** catalog record 133 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: m ẍ + c ẋ + k x = 0 has ω = √(k/m) and linear coefficient c/m = 2 ζ ω, so ζ = c / (2 √(k m)). For c ≥ 0 the discriminant (c/m)² − 4 (k/m) vanishes iff ζ = 1. Dropping the 2 is not this ratio. √(k/m) is not ζ
@@ -2184,7 +2198,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.BlochLaw.bloch_law`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/BlochLaw.lean) states that one Bohr magneton per magnon gives ΔM = μ_B ζ(3/2) (k_B T/(4 π D))^{3/2}. ζ(3/2) is a hypothesis and is not evaluated. g μ_B at g = 2 is not that moment. The nested `heisenberg_fraction` object is not this reference. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateBlochLaw`)
+> **Evaluator:** catalog record 134 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: Quadratic magnons and one Bohr magneton per magnon give ΔM = μ_B ζ(3/2) (k_B T/(4 π D))^{3/2}. ζ(3/2) is an input.
@@ -2198,7 +2212,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.DensityOfStates3D.dos_3d`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/DensityOfStates3D.lean) states that two spins and E = ℏ² k²/(2 m) give g(E) = (1/(2 π²)) (2 m/ℏ²)^{3/2} √E. One spin replaces 1/(2 π²) by 1/(4 π²). The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateDensityOfStates3D`)
+> **Evaluator:** catalog record 135 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: Both spins, one isotropic parabola, per volume per energy.
@@ -2212,7 +2226,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.DensityOfStates2D.dos_2d`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/DensityOfStates2D.lean) states that two spins in the disk give g = m/(π ℏ²), independent of E. A valley factor other than 1 is not this density. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateDensityOfStates2D`)
+> **Evaluator:** catalog record 136 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: Both spins, one valley, per area.
@@ -2226,7 +2240,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.ThomasFermi.thomas_fermi`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/ThomasFermi.lean) states that k_TF² = (e²/ε0) (3 n)/(2 E_F). A flat density leaves the factor 1. Not the classical Debye length. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateThomasFermi`)
+> **Evaluator:** catalog record 137 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: e is the elementary charge. The catalog value is k_TF².
@@ -2240,7 +2254,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.BuiltinVoltage.builtin_voltage`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/BuiltinVoltage.lean) states that V_bi = (k_B T/e) ln(N_A N_D/n_i²). Not the ideal diode of be-82. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateBuiltinVoltage`)
+> **Evaluator:** catalog record 138 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: e is the elementary charge. The logarithm is the catalog value.
@@ -2254,7 +2268,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.SemiconductorFermi.fermi_level`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/SemiconductorFermi.lean) states both E_F − (E_c+E_v)/2 = (3/4) k_B T ln(m_h*/m_e*) and E_c − E_F = k_B T ln(N_c/N_D). The edge value is the intrinsic offset. Dropping the 3/2 leaves 1/2. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateSemiconductorFermi`)
+> **Evaluator:** catalog record 139 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: The 3/4 is half of 3/2. The extrinsic energy is on the same result.
@@ -2268,7 +2282,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.OnsagerFrequency.onsager_frequency`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/OnsagerFrequency.lean) states that γ cancels and F = ℏ A/(2 π e), with Δ(1/B) = 1/F. e is the elementary charge. F has the dimension of a magnetic field. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateOnsagerFrequency`)
+> **Evaluator:** catalog record 140 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: The Maslov index shifts the intercept and does not change F.
@@ -2282,7 +2296,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.JosephsonInductance.inductance_eq`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/JosephsonInductance.lean) states that at φ = 0, L_J = ℏ/(2 e I_c). A phase with cos φ ≠ 1 is not this inductance. Not the frequency of be-59. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateJosephsonInductance`)
+> **Evaluator:** catalog record 141 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: e is the elementary charge. Φ₀ = h/(2 e) gives the same inductance.
@@ -2296,7 +2310,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.LowerCritical.lower_critical`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/LowerCritical.lean) states that B_c1 = (Φ₀/(4 π λ²)) ln(λ/ξ), with Φ₀ = h/(2 e). Not be-96. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateLowerCritical`)
+> **Evaluator:** catalog record 142 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: The core cutoff is a hypothesis. e is the elementary charge.
@@ -2310,7 +2324,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.AcDrude.ac_drude`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/AcDrude.lean) states that Re σ = σ₀/(1 + ω² τ²), with σ₀ = n e² τ/m. Dropping the DC 1 is not this conductivity. Not be-123. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateAcDrude`)
+> **Evaluator:** catalog record 143 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: e is the elementary charge. The edge value is Re σ.
@@ -2324,7 +2338,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Matthiessen.matthiessen`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/Matthiessen.lean) states that 1/τ = 1/τ₁ + 1/τ₂ and ρ = ρ₁ + ρ₂. One lifetime is not the parallel sum. The edge value is τ. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateMatthiessen`)
+> **Evaluator:** catalog record 144 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: Independent Poisson processes. The resistivity sum is the same rate with one Drude factor.
@@ -2338,7 +2352,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Stoner.stoner`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/Stoner.lean) states that χ = χ_P/(1 − I g(E_F)) for |I g(E_F)| < 1. The first two bubbles are not the closed form. χ_P is be-94 and is not re-proved. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateStoner`)
+> **Evaluator:** catalog record 145 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: The pole is the same formula as I g(E_F) = 1.
@@ -2352,7 +2366,7 @@ where:
 
 > **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.GorterCasimir.gorter_casimir`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/GorterCasimir.lean) states that the exponent 4 is a hypothesis and n_s/n = 1 − (T/T_c)^4. The London depth at that fraction is on the same result and is not a second proof of be-75. The exponent 2 is not 4 when the reduced temperature is neither 0 nor 1. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
 
-> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateGorterCasimir`)
+> **Evaluator:** catalog record 146 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
 
 - **Status**: Established. The edge confidence stays `established`.
 - **Context**: The edge value is n_s/n. λ(T) is the other field.
@@ -2361,6 +2375,207 @@ where:
 - **Domain**: T_c > 0 and 0 ≤ T < T_c. The depth also needs λ(0) > 0.
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.GorterCasimir.gorter_casimir`.
 - **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+## Black-body radiation, quantum statistics, and reciprocal transport
+
+These equations link thermal radiation to quantum electromagnetism, an entropy to the thermal wavelength, an ionization constant to that wavelength, a thermionic current to a quantum phase-space factor, and a transport coefficient to its transpose. A textbook relation that stays inside one field is a catalog record and has no heading here.
+
+**Bridge Equation 164: Planck spectrum**
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.PlanckSpectrum.planck_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/PlanckSpectrum.lean) states that the Bose factor `1/(exp(x) − 1) = Σ_{n≥1} exp(−n x)` is proved, and that the mode density `8 π ν²/c³` for two polarizations is a hypothesis. Their product is `u (exp(hν/k_B T) − 1) c³ = 8 π h ν³`. The frequency integral is a different record. One polarization is not this density. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** catalog record 164 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Spectral energy density of a black-body, thermal radiation joined to quantum electromagnetism. A bare `h` is Planck's constant. Euler's number is `\exp`.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/u%20%28%5Cexp%28h%5Cnu%2Fk_B%20T%29%20-%201%29%20c%5E3%20%3D%208%20%5Cpi%20h%20%5Cnu%5E3" alt="u (\exp(h\nu/k_B T) - 1) c^3 = 8 \pi h \nu^3" />
+
+where:
+
+- `u` is the spectral energy density per frequency
+- `ν` is the frequency and `T` is the absolute temperature
+- `h` is Planck's constant, `c` is the speed of light, and `k_B` is Boltzmann's constant
+- the factor `8π` counts two polarizations
+
+**Dimensions**: The catalog signature is `[L^-1 M T^-1]`.
+
+**Domain**: `ν > 0` and `T > 0`. One polarization is outside this statement.
+
+**References**:
+
+- The hypotheses named above are the hypotheses of `PhysJS.PlanckSpectrum.planck_eq`.
+
+**Rationale**: The catalog value is the product of the mode density and the Bose factor.
+
+**Bridge Equation 165: Stefan–Boltzmann constant**
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.StefanBoltzmann.stefan_boltzmann_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/StefanBoltzmann.lean) states that `∫_0^∞ x³/(exp(x) − 1) dx = π⁴/15`, from `Σ n^{−4} = π⁴/90` and `Γ(4) = 6`. The hemisphere integrals give the factor `c/4`. With `h = 2 π ℏ`, `σ = π² k_B⁴/(60 ℏ³ c²) = 2 π⁵ k_B⁴/(15 h³ c²)`. The mode density `8π` is the hypothesis of the Planck spectrum, not re-proved here. This value is not a radiometer measurement. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** catalog record 165 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The constant in the radiated flux, obtained by integrating the Planck spectrum. The flux law that takes `σ` as an input is not this record.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/%5Csigma%20%3D%20%5Cpi%5E2%20k_B%5E4%20%2F%20%2860%20%5Chbar%5E3%20c%5E2%29" alt="\sigma = \pi^2 k_B^4 / (60 \hbar^3 c^2)" />
+
+where:
+
+- `σ` is the Stefan–Boltzmann constant
+- `k_B` is Boltzmann's constant, `ℏ` is the reduced Planck constant, and `c` is the speed of light
+- the `60` is the Bose integral together with the hemisphere factor
+
+**Dimensions**: The catalog signature is `[M T^-3 Theta^-4]`.
+
+**Domain**: No variable input. The integral's `60` is part of the value. A rounded display of the same constant is not this record.
+
+**References**:
+
+- The hypotheses named above are the hypotheses of `PhysJS.StefanBoltzmann.stefan_boltzmann_eq`.
+
+**Rationale**: The catalog value is that exact quotient.
+
+**Bridge Equation 166: Wien displacement constant**
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.WienDisplacement.wien_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/WienDisplacement.lean) states that `spectral(x) = x⁵/(exp(x) − 1)` has derivative zero for `x > 0` exactly when `5 − x = 5 exp(−x)`. That equation has a unique positive root and the root lies in `(4, 5)`. The decimal is not evaluated. `x = 0` is an extraneous root. The displacement constant is `b k_B x = h c`. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** catalog record 166 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The constant in `λ T = b`, thermal radiation joined to quantum electromagnetism. `x` is an input. The wavelength law that takes `b` as an input is not this record.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/b%20k_B%20x%20%3D%20h%20c" alt="b k_B x = h c" />
+
+where:
+
+- `b` is the Wien displacement constant
+- `x` is the positive root of `5 − x = 5 exp(−x)`
+- `h` is Planck's constant, `c` is the speed of light, and `k_B` is Boltzmann's constant
+
+**Dimensions**: The catalog signature is `[L Theta]`.
+
+**Domain**: `4 < x < 5`. The values `0`, `4`, and `5` are outside the domain. The decimal root is not evaluated.
+
+**References**:
+
+- The hypotheses named above are the hypotheses of `PhysJS.WienDisplacement.wien_eq`.
+
+**Rationale**: The catalog value is `h c / (k_B x)` at that root.
+
+**Bridge Equation 167: Sackur–Tetrode entropy**
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.SackurTetrode.sackur_tetrode`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/SackurTetrode.lean) states that `n_Q = λ_T^{−3}` uses `PhysJS.ThermalDeBroglie.wavelength_eq` and is not re-proved here. Stirling `ln N! = N ln N − N` is a hypothesis, and `U = (3/2) N k_B T` is equipartition. They give `S = N k_B (ln(n_Q/n) + 5/2)`. The Stirling series is not this statement. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** catalog record 167 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The entropy of a monatomic ideal gas, thermodynamics joined to the thermal wavelength. `n_Q` is an input.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/S%20%3D%20N%20k_B%20%28%5Cln%28n_Q%2Fn%29%20%2B%205%2F2%29" alt="S = N k_B (\ln(n_Q/n) + 5/2)" />
+
+where:
+
+- `S` is the entropy and `N` is the particle number
+- `n_Q` is the quantum concentration and `n` is the number density
+- `k_B` is Boltzmann's constant
+- the `5/2` is equipartition plus the Stirling term
+
+**Dimensions**: The catalog signature is `[entropy]`.
+
+**Domain**: `n_Q > 0` and `n > 0`. Stirling here is `ln N! = N ln N − N`, not the series.
+
+**References**:
+
+- The hypotheses named above are the hypotheses of `PhysJS.SackurTetrode.sackur_tetrode`. `n_Q` uses `PhysJS.ThermalDeBroglie.wavelength_eq`.
+
+**Rationale**: The catalog value is that entropy. The thermal wavelength is an input.
+
+**Bridge Equation 168: Saha ionization constant**
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Saha.saha_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/Saha.lean) states that the thermal factor is `PhysJS.ThermalDeBroglie.wavelength_eq`, so `K = (2 π m k_B T/h²)^{3/2} exp(−I/(k_B T))`. The electron statistical weight `2` and the internal partition functions are not in this statement. The thermal wavelength is not re-proved. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** catalog record 168 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The ionization constant, chemistry joined to the thermal wavelength.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/K%20%3D%20%282%5Cpi%20m%20k_B%20T%2Fh%5E2%29%5E%7B3%2F2%7D%20%5Cexp%28-I%2F%28k_B%20T%29%29" alt="K = (2\pi m k_B T/h^2)^{3/2} \exp(-I/(k_B T))" />
+
+where:
+
+- `K` is the ionization constant
+- `m` is the electron mass, `I` is the ionization energy, and `T` is the absolute temperature
+- `h` is Planck's constant and `k_B` is Boltzmann's constant
+
+**Dimensions**: The catalog signature is `[L^-3]`.
+
+**Domain**: `m > 0` and `T > 0`. The electron weight `2` is not in this statement.
+
+**References**:
+
+- The hypotheses named above are the hypotheses of `PhysJS.Saha.saha_eq`.
+
+**Rationale**: The catalog value is that constant. The thermal wavelength is not re-derived.
+
+**Bridge Equation 169: Richardson–Dushman current**
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.RichardsonDushman.richardson_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/RichardsonDushman.lean) states that `∫_a^∞ exp(−c x) dx = exp(−c a)/c` is proved. The current is the hypothesis `4 π m e/h³` times one factor `k_B T` from each tail, so `J h³ exp(φ/(k_B T)) = 4 π m e k_B² T²`. Here `e` is the elementary charge. The Boltzmann tail replaces Fermi–Dirac. The reflection coefficient is `1`. A reflection of `1/2` is a different number. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** catalog record 169 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Thermionic current density, emission joined to a quantum phase-space factor. A bare `e` is the elementary charge.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/J%20h%5E3%20%5Cexp%28%5Cvarphi%2F%28k_B%20T%29%29%20%3D%204%20%5Cpi%20m%20e%20k_B%5E2%20T%5E2" alt="J h^3 \exp(\varphi/(k_B T)) = 4 \pi m e k_B^2 T^2" />
+
+where:
+
+- `J` is the current density and `φ` is the work function
+- `m` is the electron mass and `T` is the absolute temperature
+- `e` is the elementary charge, `h` is Planck's constant, and `k_B` is Boltzmann's constant
+
+**Dimensions**: The catalog signature is `[L^-2 I]`.
+
+**Domain**: `T > 0`. The reflection coefficient is `1`.
+
+**References**:
+
+- The hypotheses named above are the hypotheses of `PhysJS.RichardsonDushman.richardson_eq`.
+
+**Rationale**: The catalog value is that current. Fermi–Dirac statistics are not this tail.
+
+**Bridge Equation 170: Onsager reciprocity**
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.OnsagerReciprocity.onsager_eq`](https://github.com/danielsimonjr/PhysJS/blob/10e48f140c0e9fad3c50e5e5538124c52b3e732c/lean/OnsagerReciprocity.lean) states that the mixed partials of `Φ = ½ L11 X1² + L12 X1 X2 + ½ L22 X2²` are both `L12`, so `L12 = L21`. The thermoelectric instance applies `PhysJS.KelvinRelation.peltier_eq` and does not re-prove `Π = S T`. An antisymmetric cross term produces no entropy. The magnetic case `L12(B) = L21(−B)` is not this row. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** catalog record 170 in [`data/bridge-catalog.json`](../../data/bridge-catalog.json), evaluated by [`evaluateRelation`](../../src/composition/evaluate-relation.ts)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Equality of the cross coefficients, nonequilibrium thermodynamics joined to linear transport. The catalog value is `L12` when the equality holds.
+- **Mathematical Formulation**:
+
+<img src="https://i.upmath.me/svg/L_%7B12%7D%20%3D%20L_%7B21%7D" alt="L_{12} = L_{21}" />
+
+where:
+
+- `L12` and `L21` are the cross coefficients of a linear flux law
+- the equality is the statement at zero magnetic field
+
+**Dimensions**: The catalog signature is `[1]`.
+
+**Domain**: `B = 0`. The antisymmetric statement `L12(B) = L21(−B)` is not this row.
+
+**References**:
+
+- The hypotheses named above are the hypotheses of `PhysJS.OnsagerReciprocity.onsager_eq`.
+
+**Rationale**: The catalog value is `L12` under that equality.
 
 **Open candidates, unproved.** These two statements have no bridge id and no `formalRef`.
 

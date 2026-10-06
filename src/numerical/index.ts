@@ -38,12 +38,12 @@ export { DuplicateCoordinateWarning } from '../dimensional/errors.js';
 export { evaluateMetricInverse } from './metric-inverse.js';
 /** @public */
 export {
-  evaluateBE37CovariantEikonalNumerical,
-} from './be37-covariant-eikonal.js';
+  evaluateCovariantEikonalNumerical,
+} from './covariant-eikonal.js';
 export type {
-  BE37CovariantEikonalInputs,
-  BE37CovariantEikonalResult,
-} from './be37-covariant-eikonal.js';
+  CovariantEikonalInputs,
+  CovariantEikonalResult,
+} from './covariant-eikonal.js';
 
 /** @public — v0.5.0 GL4 symplectic integrator. */
 export { integrateGeodesicGL4 } from './gl4-integrator.js';

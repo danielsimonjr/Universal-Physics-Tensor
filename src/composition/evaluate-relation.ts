@@ -13,6 +13,7 @@ import { EXPECTED_DIMENSION_BY_BRIDGE } from '../dimensional/bridge-check.js';
 import type { Dimension } from '../dimensional/types.js';
 import { parseUnit } from '../dimensional/units.js';
 import { BRIDGE_EVALUATORS, type EvaluatorSpec } from '../bridges/evaluators.js';
+import { catalogEdgeKey, parseBridgeId } from '../bridges/catalog-load.js';
 import { CANONICAL_GRAPH } from './canonical-graph.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { CoefficientUnsetError, evaluateEdge, type BridgeEdge } from './edge.js';
@@ -52,9 +53,13 @@ function sourcesFinite(edge: BridgeEdge, bindings: Readonly<Record<string, numbe
 }
 
 function idOf(id: string | number): { key: string; numeric: number | undefined } {
-  if (typeof id === 'number') return { key: `be-${id}`, numeric: id };
-  const match = /^be-(\d+)$/.exec(id);
-  return { key: id, numeric: match === null ? undefined : Number(match[1]) };
+  if (typeof id === 'number') return { key: catalogEdgeKey(id), numeric: id };
+  try {
+    const numeric = parseBridgeId(id);
+    return { key: catalogEdgeKey(numeric), numeric };
+  } catch {
+    return { key: id, numeric: undefined };
+  }
 }
 
 /**
