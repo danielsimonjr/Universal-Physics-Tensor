@@ -1,12 +1,13 @@
 
-Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (123-bridge)]
-  anchored core: the clusters holding at least one of the 82 established-confidence edge(s) of the 114 in this graph
+Link candidates — cross-cluster quantities sharing a dimension  [source: catalog (136-bridge)]
+  anchored core: the clusters holding at least one of the 95 established-confidence edge(s) of the 127 in this graph
 ⚠ a coincidence-heavy REVIEW SURFACE, NOT discovered bridges. Same dimension is a
   weak signal; each needs a physicist to accept or (far more often) reject.
 
-  funnel:  1964 total  →  1930 touch the anchored core  →  654 also same-kind
+  funnel:  2518 total  →  2484 touch the anchored core  →  665 also same-kind
 
   same-kind + core-touching (the least-implausible set):
+    acdrude-scatter ≟ matthsum-scatter                       [scatter]
     active-noise-energy ≟ inflation-hubble-energy            [energy]
     active-noise-energy ≟ lawson-energy                      [energy]
     active-noise-energy ≟ pauli-fermi-energy                 [energy]
@@ -34,6 +35,9 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     bkt-temperature ≟ bohm-electron-temperature              [temperature]
     bkt-temperature ≟ lawson-temperature                     [temperature]
     bkt-temperature ≟ lorentz-temperature                    [temperature]
+    blochlaw-warmth ≟ builtin-warmth                         [warmth]
+    blochlaw-warmth ≟ fermioffset-warmth                     [warmth]
+    blochlaw-warmth ≟ gortercas-warmth                       [warmth]
     bohm-electron-temperature ≟ bennett-temperature          [temperature]
     bohm-electron-temperature ≟ lawson-temperature           [temperature]
     bohm-electron-temperature ≟ lorentz-temperature          [temperature]
@@ -56,6 +60,8 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     boundary-length ≟ quantum-correlation-length             [length]
     boundary-length ≟ reference-correlation-length           [length]
     boundary-length ≟ upper-critical-length                  [length]
+    builtin-warmth ≟ fermioffset-warmth                      [warmth]
+    builtin-warmth ≟ gortercas-warmth                        [warmth]
     capacitor-temperature ≟ bennett-temperature              [temperature]
     capacitor-temperature ≟ bkt-temperature                  [temperature]
     capacitor-temperature ≟ bohm-electron-temperature        [temperature]
@@ -191,6 +197,9 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     defect-rest-mass ≟ reference-mass                        [mass]
     defect-rest-mass ≟ swampland-tower-mass                  [mass]
     defect-rest-mass ≟ upper-hybrid-mass                     [mass]
+    dos2d-bandmass ≟ acdrude-bandmass                        [bandmass]
+    dos3d-bandmass ≟ acdrude-bandmass                        [bandmass]
+    dos3d-bandmass ≟ dos2d-bandmass                          [bandmass]
     effective-mass ≟ bohm-ion-mass                           [mass]
     effective-mass ≟ child-carrier-mass                      [mass]
     effective-mass ≟ fermi-sea-mass                          [mass]
@@ -277,6 +286,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     fermi-sea-mass ≟ probe-electron-mass                     [mass]
     fermi-sea-mass ≟ probe-ion-mass                          [mass]
     fermi-sea-mass ≟ upper-hybrid-mass                       [mass]
+    fermioffset-warmth ≟ gortercas-warmth                    [warmth]
     foerster-radius ≟ parker-radius                          [radius]
     foerster-radius ≟ pipe-radius                            [radius]
     foerster-radius ≟ spiral-radius                          [radius]
@@ -605,6 +615,7 @@ Link candidates — cross-cluster quantities sharing a dimension  [source: catal
     temperature ≟ sommerfeld-temperature                     [temperature]
     temperature ≟ thomson-temperature                        [temperature]
     temperature ≟ weiss-temperature                          [temperature]
+    tfscreen-n3 ≟ acdrude-n3                                 [n3]
     thomson-temperature ≟ bennett-temperature                [temperature]
     thomson-temperature ≟ bkt-temperature                    [temperature]
     thomson-temperature ≟ bohm-electron-temperature          [temperature]

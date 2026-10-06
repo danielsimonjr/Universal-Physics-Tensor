@@ -871,7 +871,7 @@ flowchart LR
     q_remaining_nuclei(["remaining-nuclei"]):::qty
     j_CE_radioactive_decay --> q_remaining_nuclei
   end
-  subgraph cl_iso["isolated (90)"]
+  subgraph cl_iso["isolated (103)"]
     direction LR
     j_be_100["BE-100"]:::law
     q_lst_static(["lst-static"]):::qty
@@ -1154,11 +1154,110 @@ flowchart LR
     q_damping_inertia --> j_be_133
     q_damping_zeta(["damping-zeta"]):::qty
     j_be_133 --> q_damping_zeta
+    j_be_134["BE-134"]:::law
+    q_blochlaw_mub(["blochlaw-mub"]):::qty
+    q_blochlaw_mub --> j_be_134
+    q_blochlaw_zeta(["blochlaw-zeta"]):::qty
+    q_blochlaw_zeta --> j_be_134
+    q_blochlaw_warmth(["blochlaw-warmth"]):::qty
+    q_blochlaw_warmth --> j_be_134
+    q_blochlaw_dstiff(["blochlaw-dstiff"]):::qty
+    q_blochlaw_dstiff --> j_be_134
+    q_blochlaw_deficit(["blochlaw-deficit"]):::qty
+    j_be_134 --> q_blochlaw_deficit
+    j_be_135["BE-135"]:::law
+    q_dos3d_bandmass(["dos3d-bandmass"]):::qty
+    q_dos3d_bandmass --> j_be_135
+    q_dos3d_abscissa(["dos3d-abscissa"]):::qty
+    q_dos3d_abscissa --> j_be_135
+    q_dos3d_states(["dos3d-states"]):::qty
+    j_be_135 --> q_dos3d_states
+    j_be_136["BE-136"]:::law
+    q_dos2d_bandmass(["dos2d-bandmass"]):::qty
+    q_dos2d_bandmass --> j_be_136
+    q_dos2d_states(["dos2d-states"]):::qty
+    j_be_136 --> q_dos2d_states
+    j_be_137["BE-137"]:::law
+    q_tfscreen_n3(["tfscreen-n3"]):::qty
+    q_tfscreen_n3 --> j_be_137
+    q_tfscreen_chemical(["tfscreen-chemical"]):::qty
+    q_tfscreen_chemical --> j_be_137
+    q_tfscreen_k2(["tfscreen-k2"]):::qty
+    j_be_137 --> q_tfscreen_k2
+    j_be_138["BE-138"]:::law
+    q_builtin_warmth(["builtin-warmth"]):::qty
+    q_builtin_warmth --> j_be_138
+    q_builtin_acceptor(["builtin-acceptor"]):::qty
+    q_builtin_acceptor --> j_be_138
+    q_builtin_donor(["builtin-donor"]):::qty
+    q_builtin_donor --> j_be_138
+    q_builtin_ni(["builtin-ni"]):::qty
+    q_builtin_ni --> j_be_138
+    q_builtin_vbi(["builtin-vbi"]):::qty
+    j_be_138 --> q_builtin_vbi
+    j_be_139["BE-139"]:::law
+    q_fermioffset_warmth(["fermioffset-warmth"]):::qty
+    q_fermioffset_warmth --> j_be_139
+    q_fermioffset_holemass(["fermioffset-holemass"]):::qty
+    q_fermioffset_holemass --> j_be_139
+    q_fermioffset_elecmass(["fermioffset-elecmass"]):::qty
+    q_fermioffset_elecmass --> j_be_139
+    q_fermioffset_muoff(["fermioffset-muoff"]):::qty
+    j_be_139 --> q_fermioffset_muoff
     j_be_14["BE-14"]:::speculative
     q_minimal_surface_area(["minimal-surface-area"]):::qty
     q_minimal_surface_area --> j_be_14
     q_boundary_entanglement_entropy(["boundary-entanglement-entropy"]):::qty
     j_be_14 --> q_boundary_entanglement_entropy
+    j_be_140["BE-140"]:::law
+    q_onsagerk_karea(["onsagerk-karea"]):::qty
+    q_onsagerk_karea --> j_be_140
+    q_onsagerk_orbit(["onsagerk-orbit"]):::qty
+    j_be_140 --> q_onsagerk_orbit
+    j_be_141["BE-141"]:::law
+    q_josephsonl_ic(["josephsonl-ic"]):::qty
+    q_josephsonl_ic --> j_be_141
+    q_josephsonl_henry(["josephsonl-henry"]):::qty
+    j_be_141 --> q_josephsonl_henry
+    j_be_142["BE-142"]:::law
+    q_lowercrit_pen(["lowercrit-pen"]):::qty
+    q_lowercrit_pen --> j_be_142
+    q_lowercrit_xi(["lowercrit-xi"]):::qty
+    q_lowercrit_xi --> j_be_142
+    q_lowercrit_bc1(["lowercrit-bc1"]):::qty
+    j_be_142 --> q_lowercrit_bc1
+    j_be_143["BE-143"]:::law
+    q_acdrude_n3(["acdrude-n3"]):::qty
+    q_acdrude_n3 --> j_be_143
+    q_acdrude_bandmass(["acdrude-bandmass"]):::qty
+    q_acdrude_bandmass --> j_be_143
+    q_acdrude_scatter(["acdrude-scatter"]):::qty
+    q_acdrude_scatter --> j_be_143
+    q_acdrude_radian(["acdrude-radian"]):::qty
+    q_acdrude_radian --> j_be_143
+    q_acdrude_conduct(["acdrude-conduct"]):::qty
+    j_be_143 --> q_acdrude_conduct
+    j_be_144["BE-144"]:::law
+    q_matthsum_scatter1(["matthsum-scatter1"]):::qty
+    q_matthsum_scatter1 --> j_be_144
+    q_matthsum_scatter2(["matthsum-scatter2"]):::qty
+    q_matthsum_scatter2 --> j_be_144
+    q_matthsum_scatter(["matthsum-scatter"]):::qty
+    j_be_144 --> q_matthsum_scatter
+    j_be_145["BE-145"]:::law
+    q_stonerchi_pauli(["stonerchi-pauli"]):::qty
+    q_stonerchi_pauli --> j_be_145
+    q_stonerchi_ig(["stonerchi-ig"]):::qty
+    q_stonerchi_ig --> j_be_145
+    q_stonerchi_enhanced(["stonerchi-enhanced"]):::qty
+    j_be_145 --> q_stonerchi_enhanced
+    j_be_146["BE-146"]:::law
+    q_gortercas_warmth(["gortercas-warmth"]):::qty
+    q_gortercas_warmth --> j_be_146
+    q_gortercas_tc(["gortercas-tc"]):::qty
+    q_gortercas_tc --> j_be_146
+    q_gortercas_ns(["gortercas-ns"]):::qty
+    j_be_146 --> q_gortercas_ns
     j_be_17["BE-17"]:::speculative
     q_einstein_coupling_prefactor_squared(["einstein-coupling-prefactor-squared"]):::qty
     q_einstein_coupling_prefactor_squared --> j_be_17

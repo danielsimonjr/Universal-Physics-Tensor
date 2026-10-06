@@ -41,7 +41,11 @@
  * be-102 is the record from before that pin. PhysJS #67 adds be-126 through
  * be-133. The sentence that the pin is
  * `d519c2c6504e7fbbd2cf6932f9e52981ce595a0f` and that the table stops at
- * be-125 is the record from before that pin.
+ * be-125 is the record from before that pin. PhysJS #68 adds be-134 through
+ * be-146. The sentence that the pin is
+ * `8515c621d1c6e6d31c2eea4467181eb85d58234b` and that the table stops at
+ * be-133 is the record from before that pin. That ingestion adds
+ * `heisenberg_fraction`.
  *
  * @module atlas/physjs-ref
  */
@@ -101,6 +105,7 @@ const NESTED_FIELDS = [
   'referenceResistivity',
   'lundquist',
   'bohmFlux',
+  'heisenberg_fraction',
 ] as const;
 
 type NestedField = (typeof NESTED_FIELDS)[number];
@@ -184,6 +189,8 @@ interface PhysjsEntry {
   readonly lundquist?: PhysjsNestedStatement;
   /** BE-122. Bohm ion flux. Not the floating potential. */
   readonly bohmFlux?: PhysjsNestedStatement;
+  /** BE-134. D = 2 J S a² and M(0) = μ_B S/a³. Not the Bloch deficit. */
+  readonly heisenberg_fraction?: PhysjsNestedStatement;
 }
 
 /** The vendored manifest, as this module compares it. @internal */
@@ -347,6 +354,19 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
   'be-131',
   'be-132',
   'be-133',
+  'be-134',
+  'be-135',
+  'be-136',
+  'be-137',
+  'be-138',
+  'be-139',
+  'be-140',
+  'be-141',
+  'be-142',
+  'be-143',
+  'be-144',
+  'be-145',
+  'be-146',
 ]);
 
 /**

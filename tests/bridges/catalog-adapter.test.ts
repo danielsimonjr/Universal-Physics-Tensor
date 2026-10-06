@@ -72,8 +72,11 @@ describe('catalogToCells', () => {
     // 34 is the record from before be-74..76.
     // BE-88, BE-97, and BE-102 are quantum → condensed, so they are submittable.
     // The other twelve of BE-88..102 are not PhysicalScale. 36 is the record from before those three.
+    // BE-134, BE-135, BE-136, BE-139, BE-144, and BE-145 name quantum, so they
+    // are submittable. The other seven of BE-134..146 are not PhysicalScale.
+    // 39 is the record from before those six.
     const cells = catalogToCells(BRIDGE_EQUATIONS);
-    expect(cells).toHaveLength(39);
+    expect(cells).toHaveLength(45);
   });
 
   it('assigns id as "BE-{number}" matching the catalog id field', () => {
@@ -111,7 +114,8 @@ describe('scanCatalog', () => {
     expect(report.entries).toHaveLength(BRIDGE_EQUATIONS.length);
     // Updated 2026-05-24 (parallel-agent dispatch): 42 → 44 after adding
     // BE-53 (Yang-Mills β) AND BE-54 (Randall-Sundrum).
-    expect(report.entries).toHaveLength(123);
+    expect(report.entries).toHaveLength(136);
+    // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
@@ -139,7 +143,9 @@ describe('scanCatalog', () => {
     // BE-75 is quantum → classical and is submitted.
     // Twelve of BE-88..102 have no PhysicalScale axis. 41 is the record from before those twelve.
     // 76 is the record from before be-126..133. Those eight tuples are not PhysicalScale.
-    expect(report.unsubmitted).toHaveLength(84);
+    // 84 is the record from before be-134..146. BE-137, BE-138, BE-140, BE-141,
+    // BE-142, BE-143, and BE-146 name neither quantum nor classical.
+    expect(report.unsubmitted).toHaveLength(91);
     // 53 is the record from before be-103..125. Those twenty-three tuples are fluid → plasma.
   });
 
@@ -150,8 +156,10 @@ describe('scanCatalog', () => {
     // Updated 2026-06-11 (v0.8.0 Phase 4): 22 → 23 after the BE-42
     // adjudication reversal to ['gravity','quantum'].
     // BE-88, BE-97, and BE-102 are quantum → condensed. 36 is the record from before those three.
+    // BE-134, BE-135, BE-136, BE-139, BE-144, and BE-145 name quantum.
+    // 39 is the record from before those six.
     const report = scanCatalog(BRIDGE_EQUATIONS);
-    expect(report.submitted).toHaveLength(39);
+    expect(report.submitted).toHaveLength(45);
   });
 
   it('does NOT throw on a malformed entry', () => {
@@ -232,8 +240,10 @@ describe('ingestCatalog', () => {
     // BE-54 landed; was 20 after the 2026-05-23 BRIDGE-PHYSICS-AUDIT §3
     // naming pass).
     // BE-88, BE-97, and BE-102 are quantum → condensed. 36 is the record from before those three.
+    // BE-134, BE-135, BE-136, BE-139, BE-144, and BE-145 name quantum.
+    // 39 is the record from before those six.
     const cells = tensor.populatedCells().filter((c) => c.kind === 'bridge');
-    expect(cells).toHaveLength(39);
+    expect(cells).toHaveLength(45);
   });
 
   it('throws CatalogIngestionError on any Rule 1 error AND leaves tensor untouched', () => {

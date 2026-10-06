@@ -60,6 +60,9 @@ describe('audit I3 — explain names its source', () => {
 });
 
 describe('audit I3 — the discovery ground truth', () => {
+  // Four catalog discovers. The funnel is 2518 candidates. On the CI runner
+  // one discover is about 20s, so four no longer finish in the 60s global
+  // timeout. 60s is the record from before BE-134 through BE-146.
   it('discover prints the default anchor, and an --anchor override replaces it', async () => {
     const def = await run(['discover']);
     expect(def.stdout).toMatch(/\[source: catalog \(/);
@@ -75,7 +78,7 @@ describe('audit I3 — the discovery ground truth', () => {
     const jd = await json(['discover']);
     expect(jd.anchor.groundTruth.isDefault).toBe(true);
     expect(Math.abs(jd.anchor.groundTruth.values.mass / SOLAR_MASS_KG - 1)).toBeLessThan(1e-3);
-  });
+  }, 180_000);
 
   it('discover --derive prints the anchor too', async () => {
     const r = await run(['discover', '--derive', '--source=canonical']);
@@ -83,6 +86,8 @@ describe('audit I3 — the discovery ground truth', () => {
     expect(r.stdout).toMatch(/anchor: mass=[0-9.e+]+ \(the default/);
   });
 
+  // One catalog discover, then ground. Locally that is about 29s. On the CI
+  // runner one discover is about 20s, so the 60s global timeout has no margin.
   it('ground prints the source and anchor of the funnel it re-ran', async () => {
     const pair = (await json(['discover'])).result[0] as { a: string; b: string };
     const r = await run(['ground', pair.a, pair.b]);
@@ -92,7 +97,7 @@ describe('audit I3 — the discovery ground truth', () => {
     const j = await json(['ground', pair.a, pair.b, '--anchor=mass=2e30']);
     expect(j.source).toBe('catalog');
     expect(j.anchor.groundTruth).toEqual({ values: { mass: 2e30 }, isDefault: false });
-  });
+  }, 180_000);
 
   it('map shows the ground truth only when --proposed ran the funnel', async () => {
     const plain = await json(['map']);

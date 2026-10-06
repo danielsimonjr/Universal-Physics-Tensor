@@ -20,6 +20,11 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Pin PhysJS `10cf71e9f1f460780f8620de7ba422df61e0949b` and register BE-134 through BE-146.
+  The catalog stops at BE-133. PhysJS #68 proves the thirteen condensed-matter equations from the round-8 dogfood. `package.json` is 6.1.0. `resolveToCatalogName` is already gone from the public surface.
+  The pin, the thirteen catalog rows, their evaluators, and their edges are not in this tree. The version is not 7.0.0.
+  Done: the manifest commit is that sha. The catalog is 136 rows, ids 11–146, 100 established. The graph has 127 edges. Ninety-four rows derive `formally-proved`. `evaluateRelation('be-134')` returns the magnetization deficit. The Fermi edge returns the intrinsic offset. The Matthiessen edge returns the parallel lifetime. The Gorter–Casimir edge returns `n_s/n`. A Landé factor of 2, a dropped 2π, a dropped 4π, and exponent 2 are different numbers. The composed-pair golden is 16129 ordered pairs and 22 composed pairs. `package.json` is 7.0.0. `resolveQuantityName` replaces `resolveToCatalogName`. The tag is not this task.
+
 - [x] One name resolver, one unit grammar, one evaluable id, and scalar-AST prefactors that match the stated formula.
   `upt eval` keeps `T=300` when `temperature=400` is also set and prints a value. `erasure-energy` does not resolve as an explain input. `--sigma T_K=10eV` rejects the energy. `W/m2K` and `cm^2/Vs` are unknown units. `evaluateRelation('be-62')` throws unknown id. The point-charge field recovers `q/(ε₀ r²)`.
   Done: one `resolveQuantityName` over one synonym-group list. The unit grammar accepts a unique juxtaposition and rejects an ambiguous one. `resolveEvaluable` is what `upt evaluate` calls. Each canonical equality's dimensionless factor is the AST factor times the sourced table, and the point-charge field is `q/(4π ε₀ r²)`.

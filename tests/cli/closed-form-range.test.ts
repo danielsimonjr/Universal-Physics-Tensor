@@ -17,7 +17,8 @@ describe('formatClosedFormRange', () => {
   });
 
   it('reads the live evaluator registry', () => {
-    expect(closedFormRangeLabel()).toBe('BE-16/42/51/52/55..133');
+    expect(closedFormRangeLabel()).toBe('BE-16/42/51/52/55..146');
+    // BE-16/42/51/52/55..133 is the record from before be-134..146.
     // BE-16/42/51/52/55..125 is the record from before be-126..133.
     // BE-51/52/55..102 is the record from before be-103..125.
     // BE-51/52/55..87 is the record from before be-88..102.

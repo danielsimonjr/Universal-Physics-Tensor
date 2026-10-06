@@ -2,7 +2,7 @@
 Deriving the bridge equations by dimensions
 (form by dimensions; the constant is recovered by matching the evaluator)
 
-  DERIVED (27) — recognized monomial, prefactor recovered:
+  DERIVED (31) — recognized monomial, prefactor recovered:
     be-12                  +[ℏ,k_B]  ×2.507e+0
     be-16                  +[k_B]  ×6.931e-1
     be-42-via-rs           +[ℏ,c,k_B]  ×7.958e-2
@@ -30,20 +30,24 @@ Deriving the bridge equations by dimensions
     be-101                 +[k_B]  ×1.571e+0  (empirical/tuned constant)
     be-103                 +[k_B]  ×1.000e+0
     be-118                 +[G]  ×5.000e-1
+    be-135                 +[ℏ]  ×1.433e-1  (empirical/tuned constant)
+    be-136                 +[ℏ]  ×3.183e-1  (empirical/tuned constant)
+    be-140                 +[ℏ,e]  ×1.592e-1
+    be-141                 +[ℏ,e]  ×5.000e-1
 
   COEFFICIENT UNSET (0) — dimensional, and no sourced prefactor multiplies the monomial. The evaluator's 1 is that absence, not a recovered constant:
     
     (not a recovered prefactor, not a failed reconstruction, and not a free dimensionless group)
 
-  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 15) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
-    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-109, be-117, be-120, be-121
+  DIMENSIONAL-RECONSTRUCTION MISMATCH (DECOY, 16) — a set of constants closes the dimensions, but its monomial does not reproduce the evaluator:
+    be-42, be-51, be-14, be-27, be-43, be-67, be-75, be-76, be-81, be-92, be-94, be-109, be-117, be-120, be-121, be-137
     (NOT a physical refutation: the evaluator and any confrontation of these bridges stand as they are)
 
-  NOT A MONOMIAL (13) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
-    be-54, be-36, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115, be-130
+  NOT A MONOMIAL (14) — the encoded formula adds dimensionful terms, so it is not a proportionality. A monomial reconstruction does not apply:
+    be-54, be-36, be-50, be-40, be-69, be-93, be-105, be-106, be-107, be-108, be-112, be-115, be-130, be-144
     (not a failed reconstruction of a monomial, and not a physical refutation)
 
-  OPEN (59) — irreducible free dimensionless group(s); by complexity:
+  OPEN (66) — irreducible free dimensionless group(s); by complexity:
     cplx=0  be-82
     cplx=1  be-11-zurek
     cplx=1  be-37
@@ -76,6 +80,11 @@ Deriving the bridge equations by dimensions
     cplx=1  be-128
     cplx=1  be-132
     cplx=1  be-133
+    cplx=1  be-134
+    cplx=1  be-139
+    cplx=1  be-142
+    cplx=1  be-143
+    cplx=1  be-146
     cplx=2  be-11-master
     cplx=2  be-22
     cplx=2  be-25
@@ -92,6 +101,8 @@ Deriving the bridge equations by dimensions
     cplx=2  be-125
     cplx=2  be-126
     cplx=2  be-129
+    cplx=2  be-138
+    cplx=2  be-145
     cplx=3  be-53
     cplx=3  be-33
     cplx=3  be-45

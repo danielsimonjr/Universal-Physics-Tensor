@@ -1,12 +1,12 @@
   [discovery options: max-orders=4; anchor={mass=1.989e+30}]
 
-Discovery — link candidates VETTED through the inference suite  [source: catalog (123-bridge)]
+Discovery — link candidates VETTED through the inference suite  [source: catalog (136-bridge)]
   anchor: mass=1.989e+30 (from --anchor)
 ⚠ a REVIEW SURFACE: `promising` means "worth a physicist's minute", not "true".
   Each candidate hypothesises an identification a≡b and tests its consequences.
 
-  funnel:  1964 candidates  →  17 promising  ·  943 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  984 axis-clash
-  readiness of the 17 promising: 0 mechanism-tested · 0 data-tested · 16 without magnitude evidence · 15 with axis unresolved · 0 with an entailed consequence
+  funnel:  2518 candidates  →  25 promising  ·  1307 inert  ·  20 magnitude-clash  ·  0 contradictory (numerically falsified)  ·  1166 axis-clash
+  readiness of the 25 promising: 0 mechanism-tested · 0 data-tested · 24 without magnitude evidence · 23 with axis unresolved · 0 with an entailed consequence
   promising ≠ evidence: promotion to a bridge needs a mechanism and a falsifiable prediction.
 
   PROMISING (merges disconnected physics, unlocks quantities, stays consistent):
@@ -66,6 +66,13 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [readiness — structure: merges components, unlocks 1 · kind: same-kind · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: landauer-erasure-energy and sommerfeld-fermi-energy are the same physical quantity, not two quantities of one kind · needs a representative magnitude for: sommerfeld-fermi-energy · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
         [observation: measure landauer-erasure-energy and sommerfeld-fermi-energy in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    mass ≟ dos2d-bandmass                                [[mass]]  score 7
+        unlocks: dos2d-bandmass, dos2d-states
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 2 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: mass and dos2d-bandmass are the same physical quantity, not only both [mass] · needs a representative magnitude for: dos2d-bandmass · needs a stated scale regime for: mass · needs a stated force regime for: mass · needs a consequence that re-derives a known law]
+        [observation: measure mass and dos2d-bandmass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     grw-localization-rate ≟ frequency                    [[frequency]]  score 6
         unlocks: frequency
         [consequence: inconclusive]
@@ -73,6 +80,20 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: grw-localization-rate and frequency are the same physical quantity, not only both [frequency] · needs a representative magnitude for: frequency · needs a stated scale regime for: frequency · needs a stated force regime for: grw-localization-rate, frequency · needs a consequence that re-derives a known law]
         [observation: measure grw-localization-rate and frequency in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    landauer-erasure-energy ≟ dos3d-abscissa             [[energy]]  score 6
+        unlocks: dos3d-abscissa
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and dos3d-abscissa are the same physical quantity, not only both [energy] · needs a representative magnitude for: dos3d-abscissa · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and dos3d-abscissa in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    landauer-erasure-energy ≟ fermioffset-muoff          [[energy]]  score 6
+        unlocks: fermioffset-muoff
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and fermioffset-muoff are the same physical quantity, not only both [energy] · needs a representative magnitude for: fermioffset-muoff · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and fermioffset-muoff in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     landauer-erasure-energy ≟ higgs-decay-constant       [[energy]]  score 6
         unlocks: higgs-decay-constant
         [consequence: inconclusive]
@@ -94,6 +115,20 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: landauer-erasure-energy and mass-action-gap are the same physical quantity, not only both [energy] · needs a representative magnitude for: mass-action-gap · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
         [observation: measure landauer-erasure-energy and mass-action-gap in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    landauer-erasure-energy ≟ tfscreen-chemical          [[energy]]  score 6
+        unlocks: tfscreen-chemical
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: landauer-erasure-energy and tfscreen-chemical are the same physical quantity, not only both [energy] · needs a representative magnitude for: tfscreen-chemical · needs a stated scale regime for: landauer-erasure-energy · needs a stated force regime for: landauer-erasure-energy · needs a consequence that re-derives a known law]
+        [observation: measure landauer-erasure-energy and tfscreen-chemical in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    mass ≟ acdrude-bandmass                              [[mass]]  score 6
+        unlocks: acdrude-bandmass
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: mass and acdrude-bandmass are the same physical quantity, not only both [mass] · needs a representative magnitude for: acdrude-bandmass · needs a stated scale regime for: mass · needs a stated force regime for: mass · needs a consequence that re-derives a known law]
+        [observation: measure mass and acdrude-bandmass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     mass ≟ damping-inertia                               [[mass]]  score 6
         unlocks: damping-inertia
         [consequence: inconclusive]
@@ -101,6 +136,27 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
         [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
         [to make it testable — premise: mass and damping-inertia are the same physical quantity, not only both [mass] · needs a representative magnitude for: damping-inertia · needs a stated scale regime for: mass · needs a stated force regime for: mass · needs a consequence that re-derives a known law]
         [observation: measure mass and damping-inertia in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    mass ≟ dos3d-bandmass                                [[mass]]  score 6
+        unlocks: dos3d-bandmass
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: mass and dos3d-bandmass are the same physical quantity, not only both [mass] · needs a representative magnitude for: dos3d-bandmass · needs a stated scale regime for: mass · needs a stated force regime for: mass · needs a consequence that re-derives a known law]
+        [observation: measure mass and dos3d-bandmass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    mass ≟ fermioffset-elecmass                          [[mass]]  score 6
+        unlocks: fermioffset-elecmass
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: mass and fermioffset-elecmass are the same physical quantity, not only both [mass] · needs a representative magnitude for: fermioffset-elecmass · needs a stated scale regime for: mass · needs a stated force regime for: mass · needs a consequence that re-derives a known law]
+        [observation: measure mass and fermioffset-elecmass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
+    mass ≟ fermioffset-holemass                          [[mass]]  score 6
+        unlocks: fermioffset-holemass
+        [consequence: inconclusive]
+        [grounding — passed: numerical-consistency · gaps: magnitude (no representative value), axis (regime attributes unresolved), consequence: inconclusive · ceiling: no mechanism/data test]
+        [readiness — structure: merges components, unlocks 1 · kind: dimension-only · independent falsifiers survived: none (abstained: magnitude, axis, consequence) · mechanism: none · data: none]
+        [to make it testable — premise: mass and fermioffset-holemass are the same physical quantity, not only both [mass] · needs a representative magnitude for: fermioffset-holemass · needs a stated scale regime for: mass · needs a stated force regime for: mass · needs a consequence that re-derives a known law]
+        [observation: measure mass and fermioffset-holemass in one system that defines both: the identification predicts equal values within uncertainty. If no system defines both, it has no observable content yet.]
     mass ≟ scalar-field-reference                        [[mass]]  score 6
         unlocks: scalar-field-reference
         [consequence: inconclusive]
@@ -185,6 +241,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
   AXIS-CLASH (stated scale/force labels differ: a regime-label prior, not a physical test):
     active-noise-energy ≟ ambegaokar-gap                 force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     active-noise-energy ≟ bkt-stiffness                  force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    active-noise-energy ≟ dos3d-abscissa                 force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    active-noise-energy ≟ fermioffset-muoff              force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     active-noise-energy ≟ higgs-decay-constant           force: emergent ≠ weak; scale: mesoscopic ≠ quantum
     active-noise-energy ≟ higgs-field                    force: emergent ≠ weak; scale: mesoscopic ≠ quantum
     active-noise-energy ≟ inflation-hubble-energy        force: emergent ≠ gravitational; scale: mesoscopic ≠ cosmological
@@ -193,10 +251,12 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     active-noise-energy ≟ pauli-fermi-energy             force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     active-noise-energy ≟ planck-mass-energy             force: emergent ≠ gravitational; scale: mesoscopic ≠ quantum
     active-noise-energy ≟ sommerfeld-fermi-energy        force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    active-noise-energy ≟ tfscreen-chemical              force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     area-law-coefficient ≟ bennett-line-density          scale: quantum ≠ classical
     area-law-coefficient ≟ fermi-wavevector              scale: quantum ≠ classical
     area-law-coefficient ≟ ion-acoustic-wavenumber       scale: quantum ≠ classical
     area-law-coefficient ≟ landau-wavenumber             scale: quantum ≠ classical
+    attempt-frequency ≟ acdrude-radian                   scale: quantum ≠ classical
     attempt-frequency ≟ cutoff-cyclotron                 scale: quantum ≠ classical
     attempt-frequency ≟ cutoff-plasma                    scale: quantum ≠ classical
     attempt-frequency ≟ cutoff-r-frequency               scale: quantum ≠ classical
@@ -213,11 +273,14 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     barrier-height ≟ active-noise-energy                 scale: quantum ≠ mesoscopic
     barrier-height ≟ ambegaokar-gap                      scale: quantum ≠ classical
     barrier-height ≟ bkt-stiffness                       scale: quantum ≠ classical
+    barrier-height ≟ dos3d-abscissa                      scale: quantum ≠ classical
+    barrier-height ≟ fermioffset-muoff                   scale: quantum ≠ classical
     barrier-height ≟ inflation-hubble-energy             scale: quantum ≠ cosmological
     barrier-height ≟ lawson-energy                       scale: quantum ≠ classical
     barrier-height ≟ mass-action-gap                     scale: quantum ≠ classical
     barrier-height ≟ pauli-fermi-energy                  scale: quantum ≠ classical
     barrier-height ≟ sommerfeld-fermi-energy             scale: quantum ≠ classical
+    barrier-height ≟ tfscreen-chemical                   scale: quantum ≠ classical
     barrier-width ≟ child-gap                            scale: quantum ≠ classical
     barrier-width ≟ coax-inner                           scale: quantum ≠ classical
     barrier-width ≟ coax-outer                           scale: quantum ≠ classical
@@ -230,6 +293,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     barrier-width ≟ ion-acoustic-debye                   scale: quantum ≠ classical
     barrier-width ≟ joukowsky-bore                       scale: quantum ≠ classical
     barrier-width ≟ joukowsky-thk                        scale: quantum ≠ classical
+    barrier-width ≟ lowercrit-pen                        scale: quantum ≠ classical
+    barrier-width ≟ lowercrit-xi                         scale: quantum ≠ classical
     barrier-width ≟ mott-thickness                       scale: quantum ≠ classical
     barrier-width ≟ multi-debye-1                        scale: quantum ≠ classical
     barrier-width ≟ multi-debye-2                        scale: quantum ≠ classical
@@ -257,6 +322,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     boundary-length ≟ ion-acoustic-debye                 scale: quantum ≠ classical
     boundary-length ≟ joukowsky-bore                     scale: quantum ≠ classical
     boundary-length ≟ joukowsky-thk                      scale: quantum ≠ classical
+    boundary-length ≟ lowercrit-pen                      scale: quantum ≠ classical
+    boundary-length ≟ lowercrit-xi                       scale: quantum ≠ classical
     boundary-length ≟ mott-thickness                     scale: quantum ≠ classical
     boundary-length ≟ multi-debye-1                      scale: quantum ≠ classical
     boundary-length ≟ multi-debye-2                      scale: quantum ≠ classical
@@ -272,6 +339,10 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     brane-tension ≟ plasma-mass-density                  force: gravitational ≠ electromagnetic
     brane-tension ≟ standoff-density                     force: gravitational ≠ electromagnetic
     buckling-load ≟ comb-lateral                         force: emergent ≠ electromagnetic
+    carrier-density ≟ acdrude-n3                         scale: quantum ≠ classical
+    carrier-density ≟ builtin-acceptor                   scale: quantum ≠ classical
+    carrier-density ≟ builtin-donor                      scale: quantum ≠ classical
+    carrier-density ≟ builtin-ni                         scale: quantum ≠ classical
     carrier-density ≟ conduction-dos                     scale: quantum ≠ classical
     carrier-density ≟ curie-density                      scale: quantum ≠ classical
     carrier-density ≟ dark-species-density               scale: quantum ≠ cosmological
@@ -284,18 +355,24 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     carrier-density ≟ pauli-density                      scale: quantum ≠ classical
     carrier-density ≟ proton-density                     scale: quantum ≠ cosmological
     carrier-density ≟ sommerfeld-density                 scale: quantum ≠ classical
+    carrier-density ≟ tfscreen-n3                        scale: quantum ≠ classical
     carrier-density ≟ upper-hybrid-density               scale: quantum ≠ classical
     carrier-density ≟ valence-dos                        scale: quantum ≠ classical
     clapeyron-slope ≟ sommerfeld-heat-capacity           force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ bennett-temperature          force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ bkt-temperature              force: emergent ≠ electromagnetic
+    clapeyron-temperature ≟ blochlaw-warmth              force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ bohm-electron-temperature    force: emergent ≠ electromagnetic
+    clapeyron-temperature ≟ builtin-warmth               force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ capacitor-temperature        force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ curie-temperature            force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ debye-temperature            force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ debye-theta                  force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ einstein-solid-temperature   force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ einstein-theta               force: emergent ≠ electromagnetic
+    clapeyron-temperature ≟ fermioffset-warmth           force: emergent ≠ electromagnetic
+    clapeyron-temperature ≟ gortercas-tc                 force: emergent ≠ electromagnetic
+    clapeyron-temperature ≟ gortercas-warmth             force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ lawson-temperature           force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ lorentz-temperature          force: emergent ≠ electromagnetic
     clapeyron-temperature ≟ mass-action-temperature      force: emergent ≠ electromagnetic
@@ -326,6 +403,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     coarsening-length ≟ joukowsky-bore                   force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     coarsening-length ≟ joukowsky-thk                    force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     coarsening-length ≟ london-penetration-depth         force: emergent ≠ electromagnetic; scale: mesoscopic ≠ quantum
+    coarsening-length ≟ lowercrit-pen                    force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    coarsening-length ≟ lowercrit-xi                     force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     coarsening-length ≟ mott-thickness                   force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     coarsening-length ≟ multi-debye-1                    force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     coarsening-length ≟ multi-debye-2                    force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
@@ -351,6 +430,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     column-length ≟ ion-acoustic-debye                   force: emergent ≠ electromagnetic
     column-length ≟ joukowsky-bore                       force: emergent ≠ electromagnetic
     column-length ≟ joukowsky-thk                        force: emergent ≠ electromagnetic
+    column-length ≟ lowercrit-pen                        force: emergent ≠ electromagnetic
+    column-length ≟ lowercrit-xi                         force: emergent ≠ electromagnetic
     column-length ≟ mott-thickness                       force: emergent ≠ electromagnetic
     column-length ≟ multi-debye-1                        force: emergent ≠ electromagnetic
     column-length ≟ multi-debye-2                        force: emergent ≠ electromagnetic
@@ -360,6 +441,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     column-length ≟ slab-width                           force: emergent ≠ electromagnetic
     column-length ≟ spiral-radius                        force: emergent ≠ electromagnetic
     column-length ≟ upper-critical-length                force: emergent ≠ electromagnetic
+    cosmological-constant-curvature ≟ onsagerk-karea     force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    cosmological-constant-curvature ≟ tfscreen-k2        force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     critical-density ≟ joukowsky-rho                     force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     critical-density ≟ lambda-mass-density               scale: quantum ≠ cosmological
     critical-density ≟ plasma-mass-density               force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -367,14 +450,21 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     dark-fermion-mass ≟ active-noise-energy              force: weak ≠ emergent; scale: quantum ≠ mesoscopic
     dark-fermion-mass ≟ ambegaokar-gap                   force: weak ≠ electromagnetic; scale: quantum ≠ classical
     dark-fermion-mass ≟ bkt-stiffness                    force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    dark-fermion-mass ≟ dos3d-abscissa                   force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    dark-fermion-mass ≟ fermioffset-muoff                force: weak ≠ electromagnetic; scale: quantum ≠ classical
     dark-fermion-mass ≟ inflation-hubble-energy          force: weak ≠ gravitational; scale: quantum ≠ cosmological
     dark-fermion-mass ≟ lawson-energy                    force: weak ≠ electromagnetic; scale: quantum ≠ classical
     dark-fermion-mass ≟ mass-action-gap                  force: weak ≠ electromagnetic; scale: quantum ≠ classical
     dark-fermion-mass ≟ pauli-fermi-energy               force: weak ≠ electromagnetic; scale: quantum ≠ classical
     dark-fermion-mass ≟ planck-mass-energy               force: weak ≠ gravitational
     dark-fermion-mass ≟ sommerfeld-fermi-energy          force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    dark-fermion-mass ≟ tfscreen-chemical                force: weak ≠ electromagnetic; scale: quantum ≠ classical
     dark-reaction-rate-coefficient ≟ lawson-reactivity   scale: cosmological ≠ classical
     dark-reaction-rate-coefficient ≟ poiseuille-flow     scale: cosmological ≠ classical
+    dark-species-density ≟ acdrude-n3                    scale: cosmological ≠ classical
+    dark-species-density ≟ builtin-acceptor              scale: cosmological ≠ classical
+    dark-species-density ≟ builtin-donor                 scale: cosmological ≠ classical
+    dark-species-density ≟ builtin-ni                    scale: cosmological ≠ classical
     dark-species-density ≟ conduction-dos                scale: cosmological ≠ classical
     dark-species-density ≟ curie-density                 scale: cosmological ≠ classical
     dark-species-density ≟ debye-atom-density            scale: cosmological ≠ classical
@@ -383,12 +473,18 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     dark-species-density ≟ mass-action-density           scale: cosmological ≠ classical
     dark-species-density ≟ pauli-density                 scale: cosmological ≠ classical
     dark-species-density ≟ sommerfeld-density            scale: cosmological ≠ classical
+    dark-species-density ≟ tfscreen-n3                   scale: cosmological ≠ classical
     dark-species-density ≟ upper-hybrid-density          scale: cosmological ≠ classical
     dark-species-density ≟ valence-dos                   scale: cosmological ≠ classical
+    defect-rest-mass ≟ acdrude-bandmass                  scale: cosmological ≠ classical
     defect-rest-mass ≟ bohm-ion-mass                     scale: cosmological ≠ classical
     defect-rest-mass ≟ child-carrier-mass                scale: cosmological ≠ classical
     defect-rest-mass ≟ damping-inertia                   scale: cosmological ≠ classical
+    defect-rest-mass ≟ dos2d-bandmass                    scale: cosmological ≠ classical
+    defect-rest-mass ≟ dos3d-bandmass                    scale: cosmological ≠ classical
     defect-rest-mass ≟ fermi-sea-mass                    scale: cosmological ≠ classical
+    defect-rest-mass ≟ fermioffset-elecmass              scale: cosmological ≠ classical
+    defect-rest-mass ≟ fermioffset-holemass              scale: cosmological ≠ classical
     defect-rest-mass ≟ gradb-mass                        scale: cosmological ≠ classical
     defect-rest-mass ≟ lorentz-mass                      scale: cosmological ≠ classical
     defect-rest-mass ≟ parker-mass                       scale: cosmological ≠ classical
@@ -414,6 +510,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     donor-acceptor-distance ≟ joukowsky-bore             scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ joukowsky-thk              scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ london-penetration-depth   scale: mesoscopic ≠ quantum
+    donor-acceptor-distance ≟ lowercrit-pen              scale: mesoscopic ≠ classical
+    donor-acceptor-distance ≟ lowercrit-xi               scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ mott-thickness             scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ multi-debye-1              scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ multi-debye-2              scale: mesoscopic ≠ classical
@@ -427,10 +525,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     donor-acceptor-distance ≟ slab-width                 scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ spiral-radius              scale: mesoscopic ≠ classical
     donor-acceptor-distance ≟ upper-critical-length      scale: mesoscopic ≠ classical
+    effective-mass ≟ acdrude-bandmass                    scale: quantum ≠ classical
     effective-mass ≟ bohm-ion-mass                       scale: quantum ≠ classical
     effective-mass ≟ child-carrier-mass                  scale: quantum ≠ classical
     effective-mass ≟ damping-inertia                     scale: quantum ≠ classical
+    effective-mass ≟ dos2d-bandmass                      scale: quantum ≠ classical
+    effective-mass ≟ dos3d-bandmass                      scale: quantum ≠ classical
     effective-mass ≟ fermi-sea-mass                      scale: quantum ≠ classical
+    effective-mass ≟ fermioffset-elecmass                scale: quantum ≠ classical
+    effective-mass ≟ fermioffset-holemass                scale: quantum ≠ classical
     effective-mass ≟ gradb-mass                          scale: quantum ≠ classical
     effective-mass ≟ lorentz-mass                        scale: quantum ≠ classical
     effective-mass ≟ parker-mass                         scale: quantum ≠ classical
@@ -440,7 +543,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     effective-mass ≟ upper-hybrid-mass                   scale: quantum ≠ classical
     effective-temperature ≟ bennett-temperature          force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ bkt-temperature              force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    effective-temperature ≟ blochlaw-warmth              force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ bohm-electron-temperature    force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    effective-temperature ≟ builtin-warmth               force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ capacitor-temperature        force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ clapeyron-temperature        scale: mesoscopic ≠ classical
     effective-temperature ≟ curie-temperature            force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
@@ -449,6 +554,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     effective-temperature ≟ einstein-solid-temperature   force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ einstein-temperature         force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ einstein-theta               force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    effective-temperature ≟ fermioffset-warmth           force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    effective-temperature ≟ gortercas-tc                 force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
+    effective-temperature ≟ gortercas-warmth             force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ lawson-temperature           force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ lorentz-temperature          force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     effective-temperature ≟ mass-action-temperature      force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
@@ -482,6 +590,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     far-radius ≟ ion-acoustic-debye                      force: gravitational ≠ electromagnetic
     far-radius ≟ joukowsky-bore                          force: gravitational ≠ electromagnetic
     far-radius ≟ joukowsky-thk                           force: gravitational ≠ electromagnetic
+    far-radius ≟ lowercrit-pen                           force: gravitational ≠ electromagnetic
+    far-radius ≟ lowercrit-xi                            force: gravitational ≠ electromagnetic
     far-radius ≟ mott-thickness                          force: gravitational ≠ electromagnetic
     far-radius ≟ multi-debye-1                           force: gravitational ≠ electromagnetic
     far-radius ≟ multi-debye-2                           force: gravitational ≠ electromagnetic
@@ -508,6 +618,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     foerster-radius ≟ joukowsky-bore                     scale: mesoscopic ≠ classical
     foerster-radius ≟ joukowsky-thk                      scale: mesoscopic ≠ classical
     foerster-radius ≟ london-penetration-depth           scale: mesoscopic ≠ quantum
+    foerster-radius ≟ lowercrit-pen                      scale: mesoscopic ≠ classical
+    foerster-radius ≟ lowercrit-xi                       scale: mesoscopic ≠ classical
     foerster-radius ≟ mott-thickness                     scale: mesoscopic ≠ classical
     foerster-radius ≟ multi-debye-1                      scale: mesoscopic ≠ classical
     foerster-radius ≟ multi-debye-2                      scale: mesoscopic ≠ classical
@@ -538,6 +650,7 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     gravitational-wave-speed ≟ sound-speed               force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     gravitational-wave-speed ≟ spiral-radial-speed       force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     gravitational-wave-speed ≟ standoff-speed            force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    grw-localization-rate ≟ acdrude-radian               scale: quantum ≠ classical
     grw-localization-rate ≟ cutoff-cyclotron             scale: quantum ≠ classical
     grw-localization-rate ≟ cutoff-plasma                scale: quantum ≠ classical
     grw-localization-rate ≟ cutoff-r-frequency           scale: quantum ≠ classical
@@ -555,16 +668,23 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     grw-localization-rate ≟ upper-hybrid-frequency       scale: quantum ≠ classical
     higgs-decay-constant ≟ ambegaokar-gap                force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-decay-constant ≟ bkt-stiffness                 force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    higgs-decay-constant ≟ dos3d-abscissa                force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    higgs-decay-constant ≟ fermioffset-muoff             force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-decay-constant ≟ lawson-energy                 force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-decay-constant ≟ mass-action-gap               force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-decay-constant ≟ pauli-fermi-energy            force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-decay-constant ≟ sommerfeld-fermi-energy       force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    higgs-decay-constant ≟ tfscreen-chemical             force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-field ≟ ambegaokar-gap                         force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-field ≟ bkt-stiffness                          force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    higgs-field ≟ dos3d-abscissa                         force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    higgs-field ≟ fermioffset-muoff                      force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-field ≟ lawson-energy                          force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-field ≟ mass-action-gap                        force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-field ≟ pauli-fermi-energy                     force: weak ≠ electromagnetic; scale: quantum ≠ classical
     higgs-field ≟ sommerfeld-fermi-energy                force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    higgs-field ≟ tfscreen-chemical                      force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    hubble-rate ≟ acdrude-radian                         force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     hubble-rate ≟ cutoff-cyclotron                       force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     hubble-rate ≟ cutoff-plasma                          force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     hubble-rate ≟ cutoff-r-frequency                     force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
@@ -595,6 +715,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     impact-parameter ≟ ion-acoustic-debye                force: gravitational ≠ electromagnetic
     impact-parameter ≟ joukowsky-bore                    force: gravitational ≠ electromagnetic
     impact-parameter ≟ joukowsky-thk                     force: gravitational ≠ electromagnetic
+    impact-parameter ≟ lowercrit-pen                     force: gravitational ≠ electromagnetic
+    impact-parameter ≟ lowercrit-xi                      force: gravitational ≠ electromagnetic
     impact-parameter ≟ mott-thickness                    force: gravitational ≠ electromagnetic
     impact-parameter ≟ multi-debye-1                     force: gravitational ≠ electromagnetic
     impact-parameter ≟ multi-debye-2                     force: gravitational ≠ electromagnetic
@@ -609,12 +731,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     impact-parameter ≟ upper-critical-length             force: gravitational ≠ electromagnetic
     inflation-hubble-energy ≟ ambegaokar-gap             force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     inflation-hubble-energy ≟ bkt-stiffness              force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    inflation-hubble-energy ≟ dos3d-abscissa             force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    inflation-hubble-energy ≟ fermioffset-muoff          force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     inflation-hubble-energy ≟ higgs-decay-constant       force: gravitational ≠ weak; scale: cosmological ≠ quantum
     inflation-hubble-energy ≟ higgs-field                force: gravitational ≠ weak; scale: cosmological ≠ quantum
     inflation-hubble-energy ≟ lawson-energy              force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     inflation-hubble-energy ≟ mass-action-gap            force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     inflation-hubble-energy ≟ pauli-fermi-energy         force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     inflation-hubble-energy ≟ sommerfeld-fermi-energy    force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    inflation-hubble-energy ≟ tfscreen-chemical          force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     lambda-mass-density ≟ joukowsky-rho                  force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     lambda-mass-density ≟ plasma-mass-density            force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     lambda-mass-density ≟ standoff-density               force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
@@ -630,6 +755,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     london-penetration-depth ≟ ion-acoustic-debye        scale: quantum ≠ classical
     london-penetration-depth ≟ joukowsky-bore            scale: quantum ≠ classical
     london-penetration-depth ≟ joukowsky-thk             scale: quantum ≠ classical
+    london-penetration-depth ≟ lowercrit-pen             scale: quantum ≠ classical
+    london-penetration-depth ≟ lowercrit-xi              scale: quantum ≠ classical
     london-penetration-depth ≟ mott-thickness            scale: quantum ≠ classical
     london-penetration-depth ≟ multi-debye-1             scale: quantum ≠ classical
     london-penetration-depth ≟ multi-debye-2             scale: quantum ≠ classical
@@ -646,12 +773,17 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     mass-density ≟ joukowsky-rho                         force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     mass-density ≟ plasma-mass-density                   force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
     mass-density ≟ standoff-density                      force: gravitational ≠ electromagnetic; scale: cosmological ≠ classical
+    microscopic-relaxation-time ≟ acdrude-scatter        scale: quantum ≠ classical
+    microscopic-relaxation-time ≟ matthsum-scatter       scale: quantum ≠ classical
+    microscopic-relaxation-time ≟ matthsum-scatter1      scale: quantum ≠ classical
+    microscopic-relaxation-time ≟ matthsum-scatter2      scale: quantum ≠ classical
     microscopic-relaxation-time ≟ slab-time              scale: quantum ≠ classical
     minimal-surface-area ≟ pull-in-area                  force: gravitational ≠ electromagnetic
     minimal-surface-area ≟ wormhole-cross-section-area   scale: classical ≠ quantum
     model-a-mobility ≟ diffusivity                       force: emergent ≠ electromagnetic; scale: mesoscopic ≠ classical
     mond-force ≟ buckling-load                           force: gravitational ≠ emergent
     mond-force ≟ comb-lateral                            force: gravitational ≠ electromagnetic
+    mutation-rate ≟ acdrude-radian                       scale: mesoscopic ≠ classical
     mutation-rate ≟ cutoff-cyclotron                     scale: mesoscopic ≠ classical
     mutation-rate ≟ cutoff-plasma                        scale: mesoscopic ≠ classical
     mutation-rate ≟ cutoff-r-frequency                   scale: mesoscopic ≠ classical
@@ -683,6 +815,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     near-radius ≟ ion-acoustic-debye                     force: gravitational ≠ electromagnetic
     near-radius ≟ joukowsky-bore                         force: gravitational ≠ electromagnetic
     near-radius ≟ joukowsky-thk                          force: gravitational ≠ electromagnetic
+    near-radius ≟ lowercrit-pen                          force: gravitational ≠ electromagnetic
+    near-radius ≟ lowercrit-xi                           force: gravitational ≠ electromagnetic
     near-radius ≟ mott-thickness                         force: gravitational ≠ electromagnetic
     near-radius ≟ multi-debye-1                          force: gravitational ≠ electromagnetic
     near-radius ≟ multi-debye-2                          force: gravitational ≠ electromagnetic
@@ -695,6 +829,10 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     near-radius ≟ slab-width                             force: gravitational ≠ electromagnetic
     near-radius ≟ spiral-radius                          force: gravitational ≠ electromagnetic
     near-radius ≟ upper-critical-length                  force: gravitational ≠ electromagnetic
+    neutron-density ≟ acdrude-n3                         scale: cosmological ≠ classical
+    neutron-density ≟ builtin-acceptor                   scale: cosmological ≠ classical
+    neutron-density ≟ builtin-donor                      scale: cosmological ≠ classical
+    neutron-density ≟ builtin-ni                         scale: cosmological ≠ classical
     neutron-density ≟ conduction-dos                     scale: cosmological ≠ classical
     neutron-density ≟ curie-density                      scale: cosmological ≠ classical
     neutron-density ≟ debye-atom-density                 scale: cosmological ≠ classical
@@ -703,10 +841,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     neutron-density ≟ mass-action-density                scale: cosmological ≠ classical
     neutron-density ≟ pauli-density                      scale: cosmological ≠ classical
     neutron-density ≟ sommerfeld-density                 scale: cosmological ≠ classical
+    neutron-density ≟ tfscreen-n3                        scale: cosmological ≠ classical
     neutron-density ≟ upper-hybrid-density               scale: cosmological ≠ classical
     neutron-density ≟ valence-dos                        scale: cosmological ≠ classical
     newtonian-force ≟ buckling-load                      force: gravitational ≠ emergent
     newtonian-force ≟ comb-lateral                       force: gravitational ≠ electromagnetic
+    nucleon-yield-density ≟ acdrude-n3                   scale: cosmological ≠ classical
+    nucleon-yield-density ≟ builtin-acceptor             scale: cosmological ≠ classical
+    nucleon-yield-density ≟ builtin-donor                scale: cosmological ≠ classical
+    nucleon-yield-density ≟ builtin-ni                   scale: cosmological ≠ classical
     nucleon-yield-density ≟ conduction-dos               scale: cosmological ≠ classical
     nucleon-yield-density ≟ curie-density                scale: cosmological ≠ classical
     nucleon-yield-density ≟ debye-atom-density           scale: cosmological ≠ classical
@@ -715,6 +858,7 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     nucleon-yield-density ≟ mass-action-density          scale: cosmological ≠ classical
     nucleon-yield-density ≟ pauli-density                scale: cosmological ≠ classical
     nucleon-yield-density ≟ sommerfeld-density           scale: cosmological ≠ classical
+    nucleon-yield-density ≟ tfscreen-n3                  scale: cosmological ≠ classical
     nucleon-yield-density ≟ upper-hybrid-density         scale: cosmological ≠ classical
     nucleon-yield-density ≟ valence-dos                  scale: cosmological ≠ classical
     pipe-length ≟ child-gap                              force: emergent ≠ electromagnetic
@@ -728,6 +872,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     pipe-length ≟ ion-acoustic-debye                     force: emergent ≠ electromagnetic
     pipe-length ≟ joukowsky-bore                         force: emergent ≠ electromagnetic
     pipe-length ≟ joukowsky-thk                          force: emergent ≠ electromagnetic
+    pipe-length ≟ lowercrit-pen                          force: emergent ≠ electromagnetic
+    pipe-length ≟ lowercrit-xi                           force: emergent ≠ electromagnetic
     pipe-length ≟ mott-thickness                         force: emergent ≠ electromagnetic
     pipe-length ≟ multi-debye-1                          force: emergent ≠ electromagnetic
     pipe-length ≟ multi-debye-2                          force: emergent ≠ electromagnetic
@@ -751,6 +897,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     pipe-radius ≟ ion-acoustic-debye                     force: emergent ≠ electromagnetic
     pipe-radius ≟ joukowsky-bore                         force: emergent ≠ electromagnetic
     pipe-radius ≟ joukowsky-thk                          force: emergent ≠ electromagnetic
+    pipe-radius ≟ lowercrit-pen                          force: emergent ≠ electromagnetic
+    pipe-radius ≟ lowercrit-xi                           force: emergent ≠ electromagnetic
     pipe-radius ≟ mott-thickness                         force: emergent ≠ electromagnetic
     pipe-radius ≟ multi-debye-1                          force: emergent ≠ electromagnetic
     pipe-radius ≟ multi-debye-2                          force: emergent ≠ electromagnetic
@@ -773,6 +921,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     planck-length ≟ joukowsky-bore                       force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-length ≟ joukowsky-thk                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-length ≟ london-penetration-depth             force: gravitational ≠ electromagnetic
+    planck-length ≟ lowercrit-pen                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-length ≟ lowercrit-xi                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-length ≟ mott-thickness                       force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-length ≟ multi-debye-1                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-length ≟ multi-debye-2                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -784,10 +934,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     planck-length ≟ slab-width                           force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-length ≟ spiral-radius                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-length ≟ upper-critical-length                force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass ≟ acdrude-bandmass                       force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ bohm-ion-mass                          force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ child-carrier-mass                     force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ damping-inertia                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass ≟ dos2d-bandmass                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass ≟ dos3d-bandmass                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ fermi-sea-mass                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass ≟ fermioffset-elecmass                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass ≟ fermioffset-holemass                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ gradb-mass                             force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ lorentz-mass                           force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass ≟ parker-mass                            force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -796,16 +951,21 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     planck-mass ≟ upper-hybrid-mass                      force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass-energy ≟ ambegaokar-gap                  force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass-energy ≟ bkt-stiffness                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass-energy ≟ dos3d-abscissa                  force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass-energy ≟ fermioffset-muoff               force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass-energy ≟ higgs-decay-constant            force: gravitational ≠ weak
     planck-mass-energy ≟ higgs-field                     force: gravitational ≠ weak
     planck-mass-energy ≟ lawson-energy                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass-energy ≟ mass-action-gap                 force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass-energy ≟ pauli-fermi-energy              force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     planck-mass-energy ≟ sommerfeld-fermi-energy         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    planck-mass-energy ≟ tfscreen-chemical               force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     poiseuille-flow ≟ lawson-reactivity                  force: emergent ≠ electromagnetic
     proper-temperature ≟ bennett-temperature             force: gravitational ≠ electromagnetic
     proper-temperature ≟ bkt-temperature                 force: gravitational ≠ electromagnetic
+    proper-temperature ≟ blochlaw-warmth                 force: gravitational ≠ electromagnetic
     proper-temperature ≟ bohm-electron-temperature       force: gravitational ≠ electromagnetic
+    proper-temperature ≟ builtin-warmth                  force: gravitational ≠ electromagnetic
     proper-temperature ≟ capacitor-temperature           force: gravitational ≠ electromagnetic
     proper-temperature ≟ clapeyron-temperature           force: gravitational ≠ emergent
     proper-temperature ≟ curie-temperature               force: gravitational ≠ electromagnetic
@@ -814,6 +974,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     proper-temperature ≟ einstein-solid-temperature      force: gravitational ≠ electromagnetic
     proper-temperature ≟ einstein-temperature            force: gravitational ≠ electromagnetic
     proper-temperature ≟ einstein-theta                  force: gravitational ≠ electromagnetic
+    proper-temperature ≟ fermioffset-warmth              force: gravitational ≠ electromagnetic
+    proper-temperature ≟ gortercas-tc                    force: gravitational ≠ electromagnetic
+    proper-temperature ≟ gortercas-warmth                force: gravitational ≠ electromagnetic
     proper-temperature ≟ lawson-temperature              force: gravitational ≠ electromagnetic
     proper-temperature ≟ lorentz-temperature             force: gravitational ≠ electromagnetic
     proper-temperature ≟ mass-action-temperature         force: gravitational ≠ electromagnetic
@@ -827,6 +990,10 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     proper-temperature ≟ teg-source                      force: gravitational ≠ electromagnetic
     proper-temperature ≟ thomson-temperature             force: gravitational ≠ electromagnetic
     proper-temperature ≟ weiss-temperature               force: gravitational ≠ electromagnetic
+    proton-density ≟ acdrude-n3                          scale: cosmological ≠ classical
+    proton-density ≟ builtin-acceptor                    scale: cosmological ≠ classical
+    proton-density ≟ builtin-donor                       scale: cosmological ≠ classical
+    proton-density ≟ builtin-ni                          scale: cosmological ≠ classical
     proton-density ≟ conduction-dos                      scale: cosmological ≠ classical
     proton-density ≟ curie-density                       scale: cosmological ≠ classical
     proton-density ≟ debye-atom-density                  scale: cosmological ≠ classical
@@ -835,6 +1002,7 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     proton-density ≟ mass-action-density                 scale: cosmological ≠ classical
     proton-density ≟ pauli-density                       scale: cosmological ≠ classical
     proton-density ≟ sommerfeld-density                  scale: cosmological ≠ classical
+    proton-density ≟ tfscreen-n3                         scale: cosmological ≠ classical
     proton-density ≟ upper-hybrid-density                scale: cosmological ≠ classical
     proton-density ≟ valence-dos                         scale: cosmological ≠ classical
     quantum-correlation-length ≟ child-gap               scale: quantum ≠ classical
@@ -849,6 +1017,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     quantum-correlation-length ≟ ion-acoustic-debye      scale: quantum ≠ classical
     quantum-correlation-length ≟ joukowsky-bore          scale: quantum ≠ classical
     quantum-correlation-length ≟ joukowsky-thk           scale: quantum ≠ classical
+    quantum-correlation-length ≟ lowercrit-pen           scale: quantum ≠ classical
+    quantum-correlation-length ≟ lowercrit-xi            scale: quantum ≠ classical
     quantum-correlation-length ≟ mott-thickness          scale: quantum ≠ classical
     quantum-correlation-length ≟ multi-debye-1           scale: quantum ≠ classical
     quantum-correlation-length ≟ multi-debye-2           scale: quantum ≠ classical
@@ -860,6 +1030,10 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     quantum-correlation-length ≟ slab-width              scale: quantum ≠ classical
     quantum-correlation-length ≟ spiral-radius           scale: quantum ≠ classical
     quantum-correlation-length ≟ upper-critical-length   scale: quantum ≠ classical
+    quench-timescale ≟ acdrude-scatter                   scale: cosmological ≠ classical
+    quench-timescale ≟ matthsum-scatter                  scale: cosmological ≠ classical
+    quench-timescale ≟ matthsum-scatter1                 scale: cosmological ≠ classical
+    quench-timescale ≟ matthsum-scatter2                 scale: cosmological ≠ classical
     quench-timescale ≟ slab-time                         scale: cosmological ≠ classical
     radiation-pressure ≟ pipe-pressure-drop              force: electromagnetic ≠ emergent
     radiation-pressure ≟ youngs-modulus                  force: electromagnetic ≠ emergent
@@ -875,6 +1049,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reference-correlation-length ≟ ion-acoustic-debye    scale: quantum ≠ classical
     reference-correlation-length ≟ joukowsky-bore        scale: quantum ≠ classical
     reference-correlation-length ≟ joukowsky-thk         scale: quantum ≠ classical
+    reference-correlation-length ≟ lowercrit-pen         scale: quantum ≠ classical
+    reference-correlation-length ≟ lowercrit-xi          scale: quantum ≠ classical
     reference-correlation-length ≟ mott-thickness        scale: quantum ≠ classical
     reference-correlation-length ≟ multi-debye-1         scale: quantum ≠ classical
     reference-correlation-length ≟ multi-debye-2         scale: quantum ≠ classical
@@ -886,10 +1062,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reference-correlation-length ≟ slab-width            scale: quantum ≠ classical
     reference-correlation-length ≟ spiral-radius         scale: quantum ≠ classical
     reference-correlation-length ≟ upper-critical-length scale: quantum ≠ classical
+    reference-mass ≟ acdrude-bandmass                    scale: quantum ≠ classical
     reference-mass ≟ bohm-ion-mass                       scale: quantum ≠ classical
     reference-mass ≟ child-carrier-mass                  scale: quantum ≠ classical
     reference-mass ≟ damping-inertia                     scale: quantum ≠ classical
+    reference-mass ≟ dos2d-bandmass                      scale: quantum ≠ classical
+    reference-mass ≟ dos3d-bandmass                      scale: quantum ≠ classical
     reference-mass ≟ fermi-sea-mass                      scale: quantum ≠ classical
+    reference-mass ≟ fermioffset-elecmass                scale: quantum ≠ classical
+    reference-mass ≟ fermioffset-holemass                scale: quantum ≠ classical
     reference-mass ≟ gradb-mass                          scale: quantum ≠ classical
     reference-mass ≟ lorentz-mass                        scale: quantum ≠ classical
     reference-mass ≟ parker-mass                         scale: quantum ≠ classical
@@ -898,7 +1079,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reference-mass ≟ upper-hybrid-mass                   scale: quantum ≠ classical
     reference-temperature ≟ bennett-temperature          scale: quantum ≠ classical
     reference-temperature ≟ bkt-temperature              scale: quantum ≠ classical
+    reference-temperature ≟ blochlaw-warmth              scale: quantum ≠ classical
     reference-temperature ≟ bohm-electron-temperature    scale: quantum ≠ classical
+    reference-temperature ≟ builtin-warmth               scale: quantum ≠ classical
     reference-temperature ≟ capacitor-temperature        scale: quantum ≠ classical
     reference-temperature ≟ clapeyron-temperature        scale: quantum ≠ classical
     reference-temperature ≟ curie-temperature            scale: quantum ≠ classical
@@ -907,6 +1090,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reference-temperature ≟ einstein-solid-temperature   scale: quantum ≠ classical
     reference-temperature ≟ einstein-temperature         scale: quantum ≠ classical
     reference-temperature ≟ einstein-theta               scale: quantum ≠ classical
+    reference-temperature ≟ fermioffset-warmth           scale: quantum ≠ classical
+    reference-temperature ≟ gortercas-tc                 scale: quantum ≠ classical
+    reference-temperature ≟ gortercas-warmth             scale: quantum ≠ classical
     reference-temperature ≟ lawson-temperature           scale: quantum ≠ classical
     reference-temperature ≟ lorentz-temperature          scale: quantum ≠ classical
     reference-temperature ≟ mass-action-temperature      scale: quantum ≠ classical
@@ -924,7 +1110,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reference-temperature ≟ weiss-temperature            scale: quantum ≠ classical
     reheating-temperature ≟ bennett-temperature          scale: cosmological ≠ classical
     reheating-temperature ≟ bkt-temperature              scale: cosmological ≠ classical
+    reheating-temperature ≟ blochlaw-warmth              scale: cosmological ≠ classical
     reheating-temperature ≟ bohm-electron-temperature    scale: cosmological ≠ classical
+    reheating-temperature ≟ builtin-warmth               scale: cosmological ≠ classical
     reheating-temperature ≟ capacitor-temperature        scale: cosmological ≠ classical
     reheating-temperature ≟ clapeyron-temperature        scale: cosmological ≠ classical
     reheating-temperature ≟ curie-temperature            scale: cosmological ≠ classical
@@ -933,6 +1121,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reheating-temperature ≟ einstein-solid-temperature   scale: cosmological ≠ classical
     reheating-temperature ≟ einstein-temperature         scale: cosmological ≠ classical
     reheating-temperature ≟ einstein-theta               scale: cosmological ≠ classical
+    reheating-temperature ≟ fermioffset-warmth           scale: cosmological ≠ classical
+    reheating-temperature ≟ gortercas-tc                 scale: cosmological ≠ classical
+    reheating-temperature ≟ gortercas-warmth             scale: cosmological ≠ classical
     reheating-temperature ≟ lawson-temperature           scale: cosmological ≠ classical
     reheating-temperature ≟ lorentz-temperature          scale: cosmological ≠ classical
     reheating-temperature ≟ mass-action-temperature      scale: cosmological ≠ classical
@@ -948,20 +1139,32 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     reheating-temperature ≟ thomson-temperature          scale: cosmological ≠ classical
     reheating-temperature ≟ tolman-invariant             scale: cosmological ≠ classical
     reheating-temperature ≟ weiss-temperature            scale: cosmological ≠ classical
+    ricci-scalar ≟ onsagerk-karea                        force: gravitational ≠ electromagnetic
+    ricci-scalar ≟ tfscreen-k2                           force: gravitational ≠ electromagnetic
+    scalar-field-reference ≟ acdrude-bandmass            scale: quantum ≠ classical
     scalar-field-reference ≟ bohm-ion-mass               scale: quantum ≠ classical
     scalar-field-reference ≟ child-carrier-mass          scale: quantum ≠ classical
     scalar-field-reference ≟ damping-inertia             scale: quantum ≠ classical
+    scalar-field-reference ≟ dos2d-bandmass              scale: quantum ≠ classical
+    scalar-field-reference ≟ dos3d-bandmass              scale: quantum ≠ classical
     scalar-field-reference ≟ fermi-sea-mass              scale: quantum ≠ classical
+    scalar-field-reference ≟ fermioffset-elecmass        scale: quantum ≠ classical
+    scalar-field-reference ≟ fermioffset-holemass        scale: quantum ≠ classical
     scalar-field-reference ≟ gradb-mass                  scale: quantum ≠ classical
     scalar-field-reference ≟ lorentz-mass                scale: quantum ≠ classical
     scalar-field-reference ≟ parker-mass                 scale: quantum ≠ classical
     scalar-field-reference ≟ probe-electron-mass         scale: quantum ≠ classical
     scalar-field-reference ≟ probe-ion-mass              scale: quantum ≠ classical
     scalar-field-reference ≟ upper-hybrid-mass           scale: quantum ≠ classical
+    scalar-field-value ≟ acdrude-bandmass                scale: quantum ≠ classical
     scalar-field-value ≟ bohm-ion-mass                   scale: quantum ≠ classical
     scalar-field-value ≟ child-carrier-mass              scale: quantum ≠ classical
     scalar-field-value ≟ damping-inertia                 scale: quantum ≠ classical
+    scalar-field-value ≟ dos2d-bandmass                  scale: quantum ≠ classical
+    scalar-field-value ≟ dos3d-bandmass                  scale: quantum ≠ classical
     scalar-field-value ≟ fermi-sea-mass                  scale: quantum ≠ classical
+    scalar-field-value ≟ fermioffset-elecmass            scale: quantum ≠ classical
+    scalar-field-value ≟ fermioffset-holemass            scale: quantum ≠ classical
     scalar-field-value ≟ gradb-mass                      scale: quantum ≠ classical
     scalar-field-value ≟ lorentz-mass                    scale: quantum ≠ classical
     scalar-field-value ≟ parker-mass                     scale: quantum ≠ classical
@@ -982,6 +1185,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     schwarzschild-radius ≟ ion-acoustic-debye            force: gravitational ≠ electromagnetic
     schwarzschild-radius ≟ joukowsky-bore                force: gravitational ≠ electromagnetic
     schwarzschild-radius ≟ joukowsky-thk                 force: gravitational ≠ electromagnetic
+    schwarzschild-radius ≟ lowercrit-pen                 force: gravitational ≠ electromagnetic
+    schwarzschild-radius ≟ lowercrit-xi                  force: gravitational ≠ electromagnetic
     schwarzschild-radius ≟ mott-thickness                force: gravitational ≠ electromagnetic
     schwarzschild-radius ≟ multi-debye-1                 force: gravitational ≠ electromagnetic
     schwarzschild-radius ≟ multi-debye-2                 force: gravitational ≠ electromagnetic
@@ -1010,6 +1215,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     semi-major-axis ≟ ion-acoustic-debye                 force: gravitational ≠ electromagnetic
     semi-major-axis ≟ joukowsky-bore                     force: gravitational ≠ electromagnetic
     semi-major-axis ≟ joukowsky-thk                      force: gravitational ≠ electromagnetic
+    semi-major-axis ≟ lowercrit-pen                      force: gravitational ≠ electromagnetic
+    semi-major-axis ≟ lowercrit-xi                       force: gravitational ≠ electromagnetic
     semi-major-axis ≟ mott-thickness                     force: gravitational ≠ electromagnetic
     semi-major-axis ≟ multi-debye-1                      force: gravitational ≠ electromagnetic
     semi-major-axis ≟ multi-debye-2                      force: gravitational ≠ electromagnetic
@@ -1022,6 +1229,10 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     semi-major-axis ≟ slab-width                         force: gravitational ≠ electromagnetic
     semi-major-axis ≟ spiral-radius                      force: gravitational ≠ electromagnetic
     semi-major-axis ≟ upper-critical-length              force: gravitational ≠ electromagnetic
+    shapiro-delay ≟ acdrude-scatter                      force: gravitational ≠ electromagnetic
+    shapiro-delay ≟ matthsum-scatter                     force: gravitational ≠ electromagnetic
+    shapiro-delay ≟ matthsum-scatter1                    force: gravitational ≠ electromagnetic
+    shapiro-delay ≟ matthsum-scatter2                    force: gravitational ≠ electromagnetic
     shapiro-delay ≟ slab-time                            force: gravitational ≠ electromagnetic
     sm-reaction-rate-coefficient ≟ lawson-reactivity     scale: cosmological ≠ classical
     sm-reaction-rate-coefficient ≟ poiseuille-flow       scale: cosmological ≠ classical
@@ -1047,6 +1258,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     superposition-extent ≟ ion-acoustic-debye            scale: quantum ≠ classical
     superposition-extent ≟ joukowsky-bore                scale: quantum ≠ classical
     superposition-extent ≟ joukowsky-thk                 scale: quantum ≠ classical
+    superposition-extent ≟ lowercrit-pen                 scale: quantum ≠ classical
+    superposition-extent ≟ lowercrit-xi                  scale: quantum ≠ classical
     superposition-extent ≟ mott-thickness                scale: quantum ≠ classical
     superposition-extent ≟ multi-debye-1                 scale: quantum ≠ classical
     superposition-extent ≟ multi-debye-2                 scale: quantum ≠ classical
@@ -1058,10 +1271,15 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     superposition-extent ≟ slab-width                    scale: quantum ≠ classical
     superposition-extent ≟ spiral-radius                 scale: quantum ≠ classical
     superposition-extent ≟ upper-critical-length         scale: quantum ≠ classical
+    swampland-tower-mass ≟ acdrude-bandmass              scale: quantum ≠ classical
     swampland-tower-mass ≟ bohm-ion-mass                 scale: quantum ≠ classical
     swampland-tower-mass ≟ child-carrier-mass            scale: quantum ≠ classical
     swampland-tower-mass ≟ damping-inertia               scale: quantum ≠ classical
+    swampland-tower-mass ≟ dos2d-bandmass                scale: quantum ≠ classical
+    swampland-tower-mass ≟ dos3d-bandmass                scale: quantum ≠ classical
     swampland-tower-mass ≟ fermi-sea-mass                scale: quantum ≠ classical
+    swampland-tower-mass ≟ fermioffset-elecmass          scale: quantum ≠ classical
+    swampland-tower-mass ≟ fermioffset-holemass          scale: quantum ≠ classical
     swampland-tower-mass ≟ gradb-mass                    scale: quantum ≠ classical
     swampland-tower-mass ≟ lorentz-mass                  scale: quantum ≠ classical
     swampland-tower-mass ≟ parker-mass                   scale: quantum ≠ classical
@@ -1070,7 +1288,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     swampland-tower-mass ≟ upper-hybrid-mass             scale: quantum ≠ classical
     temperature ≟ bennett-temperature                    force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ bkt-temperature                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    temperature ≟ blochlaw-warmth                        force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ bohm-electron-temperature              force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    temperature ≟ builtin-warmth                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ capacitor-temperature                  force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ clapeyron-temperature                  force: gravitational ≠ emergent; scale: quantum ≠ classical
     temperature ≟ curie-temperature                      force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -1079,6 +1299,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     temperature ≟ einstein-solid-temperature             force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ einstein-temperature                   force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ einstein-theta                         force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    temperature ≟ fermioffset-warmth                     force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    temperature ≟ gortercas-tc                           force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
+    temperature ≟ gortercas-warmth                       force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ lawson-temperature                     force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ lorentz-temperature                    force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     temperature ≟ mass-action-temperature                force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
@@ -1107,6 +1330,8 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     thermal-wavelength ≟ ion-acoustic-debye              scale: quantum ≠ classical
     thermal-wavelength ≟ joukowsky-bore                  scale: quantum ≠ classical
     thermal-wavelength ≟ joukowsky-thk                   scale: quantum ≠ classical
+    thermal-wavelength ≟ lowercrit-pen                   scale: quantum ≠ classical
+    thermal-wavelength ≟ lowercrit-xi                    scale: quantum ≠ classical
     thermal-wavelength ≟ mott-thickness                  scale: quantum ≠ classical
     thermal-wavelength ≟ multi-debye-1                   scale: quantum ≠ classical
     thermal-wavelength ≟ multi-debye-2                   scale: quantum ≠ classical
@@ -1120,7 +1345,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     thermal-wavelength ≟ upper-critical-length           scale: quantum ≠ classical
     tolman-invariant ≟ bennett-temperature               force: gravitational ≠ electromagnetic
     tolman-invariant ≟ bkt-temperature                   force: gravitational ≠ electromagnetic
+    tolman-invariant ≟ blochlaw-warmth                   force: gravitational ≠ electromagnetic
     tolman-invariant ≟ bohm-electron-temperature         force: gravitational ≠ electromagnetic
+    tolman-invariant ≟ builtin-warmth                    force: gravitational ≠ electromagnetic
     tolman-invariant ≟ capacitor-temperature             force: gravitational ≠ electromagnetic
     tolman-invariant ≟ clapeyron-temperature             force: gravitational ≠ emergent
     tolman-invariant ≟ curie-temperature                 force: gravitational ≠ electromagnetic
@@ -1129,6 +1356,9 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     tolman-invariant ≟ einstein-solid-temperature        force: gravitational ≠ electromagnetic
     tolman-invariant ≟ einstein-temperature              force: gravitational ≠ electromagnetic
     tolman-invariant ≟ einstein-theta                    force: gravitational ≠ electromagnetic
+    tolman-invariant ≟ fermioffset-warmth                force: gravitational ≠ electromagnetic
+    tolman-invariant ≟ gortercas-tc                      force: gravitational ≠ electromagnetic
+    tolman-invariant ≟ gortercas-warmth                  force: gravitational ≠ electromagnetic
     tolman-invariant ≟ lawson-temperature                force: gravitational ≠ electromagnetic
     tolman-invariant ≟ lorentz-temperature               force: gravitational ≠ electromagnetic
     tolman-invariant ≟ mass-action-temperature           force: gravitational ≠ electromagnetic
@@ -1142,11 +1372,16 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     tolman-invariant ≟ teg-source                        force: gravitational ≠ electromagnetic
     tolman-invariant ≟ thomson-temperature               force: gravitational ≠ electromagnetic
     tolman-invariant ≟ weiss-temperature                 force: gravitational ≠ electromagnetic
+    tunneling-mass ≟ acdrude-bandmass                    scale: quantum ≠ classical
     tunneling-mass ≟ bohm-ion-mass                       scale: quantum ≠ classical
     tunneling-mass ≟ child-carrier-mass                  scale: quantum ≠ classical
     tunneling-mass ≟ damping-inertia                     scale: quantum ≠ classical
     tunneling-mass ≟ defect-rest-mass                    scale: quantum ≠ cosmological
+    tunneling-mass ≟ dos2d-bandmass                      scale: quantum ≠ classical
+    tunneling-mass ≟ dos3d-bandmass                      scale: quantum ≠ classical
     tunneling-mass ≟ fermi-sea-mass                      scale: quantum ≠ classical
+    tunneling-mass ≟ fermioffset-elecmass                scale: quantum ≠ classical
+    tunneling-mass ≟ fermioffset-holemass                scale: quantum ≠ classical
     tunneling-mass ≟ gradb-mass                          scale: quantum ≠ classical
     tunneling-mass ≟ lorentz-mass                        scale: quantum ≠ classical
     tunneling-mass ≟ parker-mass                         scale: quantum ≠ classical
@@ -1156,11 +1391,14 @@ Discovery — link candidates VETTED through the inference suite  [source: catal
     vacuum-expectation-value ≟ active-noise-energy       force: weak ≠ emergent; scale: quantum ≠ mesoscopic
     vacuum-expectation-value ≟ ambegaokar-gap            force: weak ≠ electromagnetic; scale: quantum ≠ classical
     vacuum-expectation-value ≟ bkt-stiffness             force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    vacuum-expectation-value ≟ dos3d-abscissa            force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    vacuum-expectation-value ≟ fermioffset-muoff         force: weak ≠ electromagnetic; scale: quantum ≠ classical
     vacuum-expectation-value ≟ inflation-hubble-energy   force: weak ≠ gravitational; scale: quantum ≠ cosmological
     vacuum-expectation-value ≟ lawson-energy             force: weak ≠ electromagnetic; scale: quantum ≠ classical
     vacuum-expectation-value ≟ mass-action-gap           force: weak ≠ electromagnetic; scale: quantum ≠ classical
     vacuum-expectation-value ≟ pauli-fermi-energy        force: weak ≠ electromagnetic; scale: quantum ≠ classical
     vacuum-expectation-value ≟ sommerfeld-fermi-energy   force: weak ≠ electromagnetic; scale: quantum ≠ classical
+    vacuum-expectation-value ≟ tfscreen-chemical         force: weak ≠ electromagnetic; scale: quantum ≠ classical
     wormhole-cross-section-area ≟ pull-in-area           force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     wormhole-entanglement-entropy ≟ debye-heat-capacity  force: gravitational ≠ electromagnetic; scale: quantum ≠ classical
     wormhole-entanglement-entropy ≟ einstein-heat-capacity force: gravitational ≠ electromagnetic; scale: quantum ≠ classical

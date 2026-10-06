@@ -146,6 +146,24 @@ export {
   ENGINEERING_R7_EDGES,
 } from './edges/engineering-r7.js';
 
+/** Composition edges for the Bloch deficit through the Gorter–Casimir fraction, BE-134 through BE-146. */
+export {
+  be134Edge,
+  be135Edge,
+  be136Edge,
+  be137Edge,
+  be138Edge,
+  be139Edge,
+  be140Edge,
+  be141Edge,
+  be142Edge,
+  be143Edge,
+  be144Edge,
+  be145Edge,
+  be146Edge,
+  CONDENSED_R8_EDGES,
+} from './edges/condensed-r8.js';
+
 export {
   be11Edge,
   be13Edge,

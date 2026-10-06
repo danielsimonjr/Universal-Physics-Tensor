@@ -121,7 +121,8 @@ describe('formalRef kind — formally-proved is a bridge only', () => {
       }),
     ];
     // 57 is the record from before be-77..87 each added a catalog formalRef.
-    expect(refs.length).toBe(114);
+    expect(refs.length).toBe(127);
+    // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.
     for (const ref of refs) {

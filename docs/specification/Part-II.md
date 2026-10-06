@@ -2180,6 +2180,188 @@ where:
 - **References**: The hypotheses named above are the hypotheses of `PhysJS.DampingRatio.damping_ratio`.
 - **Rationale**: The catalog value is the statement in the proof-status paragraph.
 
+**Bridge Equation 134: Bloch magnon deficit** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.BlochLaw.bloch_law`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/BlochLaw.lean) states that one Bohr magneton per magnon gives ΔM = μ_B ζ(3/2) (k_B T/(4 π D))^{3/2}. ζ(3/2) is a hypothesis and is not evaluated. g μ_B at g = 2 is not that moment. The nested `heisenberg_fraction` object is not this reference. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateBlochLaw`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Quadratic magnons and one Bohr magneton per magnon give ΔM = μ_B ζ(3/2) (k_B T/(4 π D))^{3/2}. ζ(3/2) is an input.
+- **Mathematical Formulation**: `\Delta M = \mu_B \zeta(3/2) (k_B T/(4 \pi D))^{3/2}`.
+- **Dimensions**: The catalog signature is `[L^-1 I]`.
+- **Domain**: D > 0 and T ≥ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.BlochLaw.bloch_law`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 135: Three-dimensional density of states** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.DensityOfStates3D.dos_3d`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/DensityOfStates3D.lean) states that two spins and E = ℏ² k²/(2 m) give g(E) = (1/(2 π²)) (2 m/ℏ²)^{3/2} √E. One spin replaces 1/(2 π²) by 1/(4 π²). The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateDensityOfStates3D`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Both spins, one isotropic parabola, per volume per energy.
+- **Mathematical Formulation**: `g(E) = (1/(2\pi^2)) (2m/\hbar^2)^{3/2} \sqrt{E}`.
+- **Dimensions**: The catalog signature is `[L^-5 M^-1 T^2]`.
+- **Domain**: m > 0 and E ≥ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.DensityOfStates3D.dos_3d`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 136: Two-dimensional density of states** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.DensityOfStates2D.dos_2d`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/DensityOfStates2D.lean) states that two spins in the disk give g = m/(π ℏ²), independent of E. A valley factor other than 1 is not this density. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateDensityOfStates2D`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Both spins, one valley, per area.
+- **Mathematical Formulation**: `g = m/(\pi \hbar^2)`.
+- **Dimensions**: The catalog signature is `[L^-4 M^-1 T^2]`.
+- **Domain**: m ≠ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.DensityOfStates2D.dos_2d`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 137: Thomas–Fermi wavevector squared** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.ThomasFermi.thomas_fermi`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/ThomasFermi.lean) states that k_TF² = (e²/ε0) (3 n)/(2 E_F). A flat density leaves the factor 1. Not the classical Debye length. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateThomasFermi`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: e is the elementary charge. The catalog value is k_TF².
+- **Mathematical Formulation**: `k_{TF}^2 = (e^2/\varepsilon_0) (3 n)/(2 E_F)`.
+- **Dimensions**: The catalog signature is `[L^-2]`.
+- **Domain**: E_F > 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.ThomasFermi.thomas_fermi`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 138: Built-in voltage** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.BuiltinVoltage.builtin_voltage`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/BuiltinVoltage.lean) states that V_bi = (k_B T/e) ln(N_A N_D/n_i²). Not the ideal diode of be-82. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateBuiltinVoltage`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: e is the elementary charge. The logarithm is the catalog value.
+- **Mathematical Formulation**: `V_{bi} = (k_B T/e) \ln(N_A N_D/n_i^2)`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-3 I^-1]`.
+- **Domain**: N_A > 0, N_D > 0, and n_i > 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.BuiltinVoltage.builtin_voltage`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 139: Semiconductor Fermi offset** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.SemiconductorFermi.fermi_level`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/SemiconductorFermi.lean) states both E_F − (E_c+E_v)/2 = (3/4) k_B T ln(m_h*/m_e*) and E_c − E_F = k_B T ln(N_c/N_D). The edge value is the intrinsic offset. Dropping the 3/2 leaves 1/2. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateSemiconductorFermi`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The 3/4 is half of 3/2. The extrinsic energy is on the same result.
+- **Mathematical Formulation**: `E_F - (E_c+E_v)/2 = (3/4) k_B T \ln(m_h^*/m_e^*)`.
+- **Dimensions**: The catalog signature is `[energy]`.
+- **Domain**: T ≠ 0 and both masses are positive. The extrinsic field also needs N_c > 0 and N_D > 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.SemiconductorFermi.fermi_level`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 140: Onsager frequency** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.OnsagerFrequency.onsager_frequency`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/OnsagerFrequency.lean) states that γ cancels and F = ℏ A/(2 π e), with Δ(1/B) = 1/F. e is the elementary charge. F has the dimension of a magnetic field. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateOnsagerFrequency`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The Maslov index shifts the intercept and does not change F.
+- **Mathematical Formulation**: `F = \hbar A/(2 \pi e)`.
+- **Dimensions**: The catalog signature is `[M T^-2 I^-1]`.
+- **Domain**: A is finite.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.OnsagerFrequency.onsager_frequency`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 141: Josephson inductance** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.JosephsonInductance.inductance_eq`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/JosephsonInductance.lean) states that at φ = 0, L_J = ℏ/(2 e I_c). A phase with cos φ ≠ 1 is not this inductance. Not the frequency of be-59. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateJosephsonInductance`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: e is the elementary charge. Φ₀ = h/(2 e) gives the same inductance.
+- **Mathematical Formulation**: `L_J = \hbar/(2 e I_c)`.
+- **Dimensions**: The catalog signature is `[L^2 M T^-2 I^-2]`.
+- **Domain**: I_c ≠ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.JosephsonInductance.inductance_eq`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 142: Lower critical field** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.LowerCritical.lower_critical`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/LowerCritical.lean) states that B_c1 = (Φ₀/(4 π λ²)) ln(λ/ξ), with Φ₀ = h/(2 e). Not be-96. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateLowerCritical`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The core cutoff is a hypothesis. e is the elementary charge.
+- **Mathematical Formulation**: `B_{c1} = (\Phi_0/(4\pi \lambda^2)) \ln(\lambda/\xi)`.
+- **Dimensions**: The catalog signature is `[M T^-2 I^-1]`.
+- **Domain**: 0 < ξ < λ.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.LowerCritical.lower_critical`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 143: AC Drude conductivity** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.AcDrude.ac_drude`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/AcDrude.lean) states that Re σ = σ₀/(1 + ω² τ²), with σ₀ = n e² τ/m. Dropping the DC 1 is not this conductivity. Not be-123. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateAcDrude`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: e is the elementary charge. The edge value is Re σ.
+- **Mathematical Formulation**: `\mathrm{Re}\,\sigma = \sigma_0/(1+\omega^2\tau^2)`.
+- **Dimensions**: The catalog signature is `[L^-3 M^-1 T^3 I^2]`.
+- **Domain**: τ > 0 and m ≠ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.AcDrude.ac_drude`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 144: Matthiessen lifetime** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Matthiessen.matthiessen`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/Matthiessen.lean) states that 1/τ = 1/τ₁ + 1/τ₂ and ρ = ρ₁ + ρ₂. One lifetime is not the parallel sum. The edge value is τ. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateMatthiessen`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: Independent Poisson processes. The resistivity sum is the same rate with one Drude factor.
+- **Mathematical Formulation**: `1/\tau = 1/\tau_1 + 1/\tau_2`.
+- **Dimensions**: The catalog signature is `[time]`.
+- **Domain**: τ₁ ≠ 0, τ₂ ≠ 0, and 1/τ₁ + 1/τ₂ ≠ 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Matthiessen.matthiessen`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 145: Stoner susceptibility** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.Stoner.stoner`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/Stoner.lean) states that χ = χ_P/(1 − I g(E_F)) for |I g(E_F)| < 1. The first two bubbles are not the closed form. χ_P is be-94 and is not re-proved. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateStoner`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The pole is the same formula as I g(E_F) = 1.
+- **Mathematical Formulation**: `\chi = \chi_P/(1 - I g(E_F))`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: |I g(E_F)| < 1.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.Stoner.stoner`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
+**Bridge Equation 146: Gorter–Casimir fraction** *(Category F: Condensed Matter - High Energy Bridges)*
+
+> **Proof status as of 2026-10-06.** Kind is `bridge`. [`PhysJS.GorterCasimir.gorter_casimir`](https://github.com/danielsimonjr/PhysJS/blob/10cf71e9f1f460780f8620de7ba422df61e0949b/lean/GorterCasimir.lean) states that the exponent 4 is a hypothesis and n_s/n = 1 − (T/T_c)^4. The London depth at that fraction is on the same result and is not a second proof of be-75. The exponent 2 is not 4 when the reduced temperature is neither 0 nor 1. The proof is complete. The axioms are propext, Classical.choice, and Quot.sound. The covers line still begins with derivation-step. Catalog evidence and edge evidence include `formally-proved`.
+
+> **Evaluator:** [`src/bridges/condensed-r8.ts`](../../src/bridges/condensed-r8.ts) (`evaluateGorterCasimir`)
+
+- **Status**: Established. The edge confidence stays `established`.
+- **Context**: The edge value is n_s/n. λ(T) is the other field.
+- **Mathematical Formulation**: `n_s/n = 1 - (T/T_c)^4`.
+- **Dimensions**: The catalog signature is `[1]`.
+- **Domain**: T_c > 0 and 0 ≤ T < T_c. The depth also needs λ(0) > 0.
+- **References**: The hypotheses named above are the hypotheses of `PhysJS.GorterCasimir.gorter_casimir`.
+- **Rationale**: The catalog value is the statement in the proof-status paragraph.
+
 **Open candidates, unproved.** These two statements have no bridge id and no `formalRef`.
 
 - **Landau diamagnetism.** `χ_L = −χ_P / 3` for free electrons in three dimensions. No Lean theorem in the pinned PhysJS manifest states it. It is not BE-94. BE-94 is the Pauli spin susceptibility.
@@ -2192,7 +2374,7 @@ These additional equations fill crucial gaps in the tensor structure according t
 
 ### 6.1 Tensor Index Assignment
 
-Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. The sentence that ids 51–102 take the pattern of their category is the record from before BE-103 through BE-125. Ids 103–125 take the pattern of category D. The sentence that the field-unification list stops at 125 is the record from before BE-126 through BE-133. Ids 126–133 take the pattern of category D. No new pattern is introduced.
+Each bridge equation type maps to specific tensor components. The component is the catalog **category cluster**: the letter on `BRIDGE_EQUATIONS`, via [`src/bridges/tensor-index.ts`](../../src/bridges/tensor-index.ts). The `bridges` tuple does not select it. That tuple is advisory. Three rows already in the original lists disagree with their tuple and stay with the cluster: BE-34 (`quantum` → `cosmological`, category J, quantum-classical component), BE-39 (`quantum` → `classical`, category L, field-unification component), and BE-48 (`quantum` → `classical`, category O, emergence component). The formula's tensor rank and its `dimensional_signature` do not open a further component. BE-13 is the scalar trace of a rank-2 equation and stays with category B. BE-17's encoded form is a scalar contraction of a rank-3 torsion tensor and stays with category D. BE-11 and BE-48 both carry `[frequency]` and do not share a component. The six patterns below are the patterns those clusters already use for ids 11–50. The original parentheticals stopped at id 50. Ids 51–102 take the pattern of their category. The sentence that stopped at id 87 is the record from before BE-88 through BE-102. The sentence that ids 51–102 take the pattern of their category is the record from before BE-103 through BE-125. Ids 103–125 take the pattern of category D. The sentence that the field-unification list stops at 125 is the record from before BE-126 through BE-133. Ids 126–133 take the pattern of category D. The sentence that the scale-transition list stops at 102 is the record from before BE-134 through BE-146. Ids 134–146 take the pattern of category F. No new pattern is introduced.
 
 1. **Quantum-Classical Bridges (11-12, 33-35, 56, 71)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bquantum%7D%2C%5Ctext%7Bclassical%7D%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{quantum},\text{classical},\gamma,\delta,\epsilon,\zeta}" />
@@ -2206,7 +2388,7 @@ Each bridge equation type maps to specific tensor components. The component is t
 4. **Field Unification (17-18, 36-41, 53, 66-67, 69, 74, 76-79, 81, 86, 103-133)**:
    <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Calpha%2C%5Ctext%7Bforce%7D_i%2C%5Ctext%7Bsymmetry%7D%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\alpha,\text{force}_i,\text{symmetry},\delta,\epsilon,\zeta}" />
    Categories D, K, and L. The force slot and the symmetry slot are the occupied indices.
-5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84, 88-102)**:
+5. **Scale Transitions (19-26, 54, 55, 59-62, 73, 75, 80, 82-84, 88-102, 134-146)**:
    Off-diagonal elements <img src="https://i.upmath.me/svg/%5Cboldsymbol%7B%5CPi%7D%5E%7B%5Ctext%7Bscale%7D_i%2C%5Ctext%7Bscale%7D_j%2C%5Cgamma%2C%5Cdelta%2C%5Cepsilon%2C%5Czeta%7D" alt="\boldsymbol{\Pi}^{\text{scale}_i,\text{scale}_j,\gamma,\delta,\epsilon,\zeta}" />
    Categories E, F, and G. The scale pair stays symbolic. The cluster's domains are not one pair: quantum–cosmological, quantum–condensed-matter, condensed-matter–holography, quantum–biological.
 6. **Cosmological Puzzles (45-47)**:
