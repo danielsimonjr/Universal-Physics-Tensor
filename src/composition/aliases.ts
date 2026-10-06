@@ -3,37 +3,35 @@
  *
  * An evaluator key (`I_W_per_m2`) and the graph source (`poynting-flux`)
  * are the edge's `aliases`. A shared hyphen token is not nearness.
- * Quantity synonyms, formula spellings, comparison targets, and
- * structural-hash renames live in {@link NAME_TABLE}.
+ * Quantity synonyms, comparison targets, and structural-hash renames
+ * live in {@link NAME_TABLE}. Spelling resolution is `resolveQuantityName`.
  *
  * @module composition/aliases
  */
 import type { BridgeEdge } from './edge.js';
-import { DIMENSION_RENAMES, type DimensionRename } from '../dimensional/formula-names.js';
+import {
+  DIMENSION_RENAMES,
+  SYNONYM_GROUPS,
+  SynonymDisagreementError,
+  type DimensionRename,
+} from '../dimensional/formula-names.js';
 
 /**
  * The one name table.
  *
- * A synonym pair is one quantity. A formula spelling resolves when the long
- * name is in the catalog. A comparison target is a name an entry answers to
- * besides its frozen target word. `speed` answers for the sound-speed
- * equation in a comparison and is not a synonym of `sound-speed`. A dimension
- * rename applies only for that dimension, so a time coordinate named `T`
- * stays `T`.
+ * Synonym groups are {@link SYNONYM_GROUPS}: the same array, not a copy.
+ * A comparison target is a name an entry answers to besides its frozen
+ * target word. `speed` answers for the sound-speed equation in a comparison
+ * and is not a synonym of `sound-speed`. A dimension rename applies only
+ * for that dimension, so a time coordinate named `T` stays `T`.
+ * Spelling resolution is `resolveQuantityName`, not a second table.
  */
 export const NAME_TABLE: {
-  readonly synonyms: readonly (readonly [string, string])[];
-  readonly formulaSpellings: Readonly<Record<string, string>>;
+  readonly synonyms: readonly (readonly string[])[];
   readonly canonicalTargets: Readonly<Record<string, readonly string[]>>;
   readonly dimensionRenames: readonly DimensionRename[];
 } = {
-  synonyms: [
-    ['magnetic-field', 'magnetic-flux-density'],
-    ['landauer-erasure-energy', 'erasure-energy'],
-  ],
-  formulaSpellings: {
-    T: 'temperature',
-  },
+  synonyms: SYNONYM_GROUPS,
   canonicalTargets: {
     'CE-schwarzschild-radius': ['schwarzschild-radius'],
     // The equation's quantity is sound-speed. A formula written for speed, with
@@ -69,22 +67,6 @@ export function aliasesForTarget(
 }
 
 /**
- * The graph name `key` means, or null when it is neither a graph name nor
- * an alias of one on this target.
- */
-export function rewriteInputKey(
-  key: string,
-  aliases: ReadonlyMap<string, string>,
-  graphNames: ReadonlySet<string>,
-): string | null {
-  if (graphNames.has(key)) return key;
-  const hyphen = key.replace(/_/g, '-');
-  if (graphNames.has(hyphen)) return hyphen;
-  const hit = aliases.get(key) ?? aliases.get(hyphen);
-  return hit !== undefined && graphNames.has(hit) ? hit : null;
-}
-
-/**
  * Optimal string alignment distance. An adjacent transposition is one edit,
  * so `lenght` and `length` are distance 1. Resolution accepts distance ≤ 1.
  * A longer cutoff, and containment, stay a suggestion rank.
@@ -107,22 +89,6 @@ export function editDistance(a: string, b: string): number {
     [prev2, prev, curr] = [prev, curr, prev2];
   }
   return prev[n]!;
-}
-
-/**
- * The catalog member of a synonym pair `name` belongs to, or null when
- * `name` is not one of a pair the catalog holds.
- */
-export function synonymInCatalog(name: string, catalogNames: ReadonlySet<string>): string | null {
-  const folded = name.replace(/_/g, '-');
-  for (const pair of NAME_TABLE.synonyms) {
-    if (!pair.includes(name) && !pair.includes(folded)) continue;
-    if (catalogNames.has(name)) return name;
-    if (catalogNames.has(folded)) return folded;
-    const other = pair.find((n) => catalogNames.has(n));
-    if (other !== undefined) return other;
-  }
-  return null;
 }
 
 const fold = (s: string): string => s.toLowerCase().replace(/_/g, '-');
@@ -151,21 +117,21 @@ export function shareSynonyms(
 ): string[] | Record<string, number> {
   if (Array.isArray(known)) {
     let out = known;
-    for (const pair of NAME_TABLE.synonyms) {
-      const hit = pair.filter((n) => out.includes(n));
+    for (const group of NAME_TABLE.synonyms) {
+      const hit = group.filter((n) => out.includes(n));
       if (hit.length === 0) continue;
-      const extra = pair.filter((n) => graphNames.has(n) && !out.includes(n));
+      const extra = group.filter((n) => graphNames.has(n) && !out.includes(n));
       if (extra.length > 0) out = [...out, ...extra];
     }
     return out;
   }
   const out: Record<string, number> = { ...known };
   let added = false;
-  for (const pair of NAME_TABLE.synonyms) {
-    const hit = pair.filter((n) => Object.hasOwn(known, n));
+  for (const group of NAME_TABLE.synonyms) {
+    const hit = group.filter((n) => Object.hasOwn(known, n));
     if (hit.length !== 1) continue;
     const source = hit[0]!;
-    for (const n of pair) {
+    for (const n of group) {
       if (graphNames.has(n) && !Object.hasOwn(out, n)) {
         out[n] = known[source]!;
         added = true;
@@ -176,19 +142,7 @@ export function shareSynonyms(
 }
 
 /**
- * Thrown when one quantity is bound under two synonym spellings and the
- * numbers differ. The formula is not run. The message names both spellings.
- * @internal
- */
-export class SynonymDisagreementError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'SynonymDisagreementError';
-  }
-}
-
-/**
- * One name per synonym pair in a governing set.
+ * One name per synonym group in a governing set.
  *
  * Copying the value onto the other name lets either spelling evaluate.
  * Both names are the same quantity, so Buckingham must see one of them.
@@ -202,8 +156,8 @@ export function collapseSynonymGovernors(
   values: Readonly<Record<string, number>> | null,
 ): string[] {
   const drop = new Set<string>();
-  for (const pair of NAME_TABLE.synonyms) {
-    const present = pair.filter((n) => names.includes(n));
+  for (const group of NAME_TABLE.synonyms) {
+    const present = group.filter((n) => names.includes(n));
     if (present.length < 2) continue;
     if (values !== null) {
       const nums = present.map((n) => values[n]);

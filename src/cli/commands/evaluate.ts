@@ -74,7 +74,9 @@ function resolveInputs(api: CommandCtx['api'], label: string, parameters: readon
   try {
     return api.resolveEvaluatorInputs(parameters, args);
   } catch (e) {
-    if (e instanceof api.UnitError) throw new CliError(`upt evaluate: ${label}: ${e.message}`);
+    if (e instanceof api.UnitError || e instanceof api.SynonymDisagreementError) {
+      throw new CliError(`upt evaluate: ${label}: ${e.message}`);
+    }
     throw e;
   }
 }
@@ -267,22 +269,27 @@ function parseUncertainty(
   const sigma: Record<string, number> = {};
   for (const a of sigmaArgs) {
     const m = /^([^=]+)=(.+)$/.exec(a);
-    if (m !== null && !(m[1]! in inputs)) {
-      throw new CliError(`upt evaluate: --sigma '${m[1]}' is not one of the inputs given (${Object.keys(inputs).join(', ')})`);
+    const given = m?.[1];
+    const key = given === undefined ? undefined : (api.resolveQuantityName(given, new Set(Object.keys(inputs))) ?? given);
+    if (m !== null && (key === undefined || !(key in inputs))) {
+      throw new CliError(`upt evaluate: --sigma '${given}' is not one of the inputs given (${Object.keys(inputs).join(', ')})`);
     }
-    // A σ is a difference: a σ in degC takes no 273.15 offset.
+    // A σ is a difference: a σ in degC takes no 273.15 offset. The value is read
+    // by the same binding reader as the input, so an energy on a kelvin slot is k_B T.
     let u = NaN;
-    if (m !== null) {
-      const p = spec.parameters.find((x) => x.key === m[1])!;
+    if (m !== null && key !== undefined) {
+      const p = spec.parameters.find((x) => x.key === key)!;
       try {
-        u = api.bindingInUnit(m[2]!, p.unit, 'difference').value;
+        u = api.readNamedBinding(given!, m[2]!, { reading: 'difference', declaredUnit: p.unit }).value;
       } catch (e) {
         if (!(e instanceof api.UnitError)) throw e;
         if (!/is not a (finite )?number/.test(e.message)) throw new CliError(`upt evaluate: --sigma '${a}': ${e.message}`);
       }
     }
-    if (m === null || !Number.isFinite(u) || u < 0) throw new CliError(`upt evaluate: --sigma '${a}' is not key=<finite u ≥ 0>`);
-    sigma[m[1]!] = u;
+    if (m === null || key === undefined || !Number.isFinite(u) || u < 0) {
+      throw new CliError(`upt evaluate: --sigma '${a}' is not key=<finite u ≥ 0>`);
+    }
+    sigma[key] = u;
   }
   const corr = new Map<string, number>();
   for (const a of corrArgs) {
@@ -518,21 +525,27 @@ async function run(ctx: CommandCtx): Promise<number> {
     );
   }
   const id = Number(m[1]);
-  const spec = api.BRIDGE_EVALUATORS.get(id);
-  if (spec === undefined) {
+  let found: ReturnType<typeof api.resolveEvaluable>;
+  try {
+    found = api.resolveEvaluable(id);
+  } catch {
     throw new CliError(api.missingEvaluatorMessage(id));
   }
+  if (found.evaluator === undefined) {
+    throw new CliError(api.missingEvaluatorMessage(id));
+  }
+  const spec = found.evaluator;
   const { inputs, resolved } = resolveInputs(api, `be-${spec.bridgeId}`, spec.parameters, rest);
 
   let result: unknown;
   try {
-    result = api.evaluateBridge(id, inputs);
+    result = spec.run(inputs);
   } catch (e) {
     // unknown-id / missing-input / out-of-range → bad value, exit 1 (documented contract).
     throw new CliError((e as Error).message);
   }
 
-  const u = uncertaintyOf(ctx, spec, inputs, (i) => api.evaluateBridge(id, i) as Record<string, unknown>, NOT_INCLUDED);
+  const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i) as Record<string, unknown>, NOT_INCLUDED);
   const domainNote = weakFieldDomainNote(api, id, inputs);
   const formulaNote = id === 65 ? JEANS_FORMULA_NOTE : undefined;
   const hbarNote = id === 56 ? HBAR_TRUNCATION_NOTE : undefined;

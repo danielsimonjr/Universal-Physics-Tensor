@@ -550,7 +550,7 @@ async function run(ctx: CommandCtx): Promise<number> {
     const depth = depthRaw === undefined ? 1 : Number(depthRaw);
     if (!Number.isInteger(depth) || depth < 1 || depth > 10) throw new CliError(`upt map: --depth=${depthRaw} must be an integer from 1 to 10`);
     const known = new Set(wholeGraph.flatMap((e) => [...e.sources.map((q) => q.name), e.target.name]));
-    const name = api.resolveToCatalogName(around, known);
+    const name = api.resolveQuantityName(around, known);
     if (name === null) {
       const near = api.suggestQuantities(around, known);
       throw new CliError(

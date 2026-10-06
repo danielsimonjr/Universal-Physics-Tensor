@@ -48,13 +48,15 @@ describe('canonical audit G-closures', () => {
     expect(text.stdout).toMatch(/CE-wien\s+\+\[ℏ,c,k_B\]\s+×1\.265e\+0\s+\(empirical\/tuned constant\)/);
     expect(text.stdout).toMatch(/CE-planck-einstein\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
     expect(text.stdout).toMatch(/CE-de-broglie\s+\+\[ℏ\]\s+×6\.283e\+0$/m);
-    expect(text.stdout).toMatch(/DERIVED \(73\)/);
+    expect(text.stdout).toMatch(/DERIVED \(72\)/);
     expect(text.stdout).toMatch(/COEFFICIENT UNSET \(6\)/);
     // Hawking, light deflection, perihelion, and Bekenstein–Hawking were OPEN
     // because a null monomial evaluated to NaN, so the audit had no samples.
     // The evaluator is the AST. The only closure the search accepts does not
-    // reproduce it, so those four are DECOY and OPEN is 19.
-    expect(text.stdout).toMatch(/DECOY, 11\)/);
+    // reproduce it. The point-charge field is the same shape once its
+    // evaluator multiplies 1/(4π): the closure does not reproduce that factor.
+    // Those five are DECOY and OPEN is 19.
+    expect(text.stdout).toMatch(/DECOY, 12\)/);
     expect(text.stdout).toMatch(
       /CE-hawking-temperature, CE-light-deflection, CE-perihelion-precession, CE-bekenstein-hawking/,
     );

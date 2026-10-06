@@ -5,7 +5,7 @@
  * Audit §14 I5. `explain schrodinger-equation` failed because the name was a
  * model, not a quantity, and its suggestions were edit-distance neighbours.
  * This command searches every registry the CLI exposes by WORD: names, ids,
- * symbols, genuine aliases (`resolveToCatalogName`) and catalog-bridge
+ * symbols, genuine aliases (`resolveQuantityName`) and catalog-bridge
  * descriptions. An equal dimension is never a match: a radius is not a
  * wavelength, and angular frequency is not frequency, even where the two share
  * a dimension.

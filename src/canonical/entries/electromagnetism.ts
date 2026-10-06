@@ -221,10 +221,14 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     name: 'Point-charge electric field (Coulomb field)',
     domain: 'electromagnetism',
     formula_latex: 'E = q / (4\\pi \\varepsilon_0 r^2)',
-    epistemicStatus: 'scalar-up-to-constant',
+    epistemicStatus: 'fully-quantitative',
     scalarAst: op('/', [
       sym('charge', CHARGE),
-      op('*', [sym('epsilon_0', PERMITTIVITY), pow(sym('r', LENGTH), '2')]),
+      op('*', [
+        sym('4pi', DIMENSIONLESS),
+        sym('epsilon_0', PERMITTIVITY),
+        pow(sym('r', LENGTH), '2'),
+      ]),
     ]),
     regime: { scale: 'classical', force: 'electromagnetic' },
     assumptions: ['point charge', 'vacuum', 'electrostatic'],

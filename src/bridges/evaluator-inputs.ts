@@ -11,6 +11,11 @@
  * @module bridges/evaluator-inputs
  */
 import { unitConventionNotes, UnitError, type TemperatureReading } from '../dimensional/units.js';
+import {
+  resolveQuantityName,
+  synonymGroup,
+  SynonymDisagreementError,
+} from '../dimensional/formula-names.js';
 import { readNamedBinding, type NamedBindingSibling } from '../numerical/binding-value.js';
 import type { EvaluatorParameter } from './evaluators.js';
 
@@ -45,8 +50,9 @@ function convert(
   raw: string,
   reading: TemperatureReading,
   siblings: readonly NamedBindingSibling[],
+  givenName: string,
 ): { value: number; note?: string } {
-  const read = readNamedBinding(p.key, raw, { reading, siblings, declaredUnit: p.unit });
+  const read = readNamedBinding(givenName, raw, { reading, siblings, declaredUnit: p.unit });
   if (!read.dimensioned) return { value: read.value };
   const offset = /degC|°C/.test(raw) && reading === 'absolute' ? ' (absolute: + 273.15)' : /degC|°C/.test(raw) ? ' (a difference: no offset)' : '';
   const base = `${raw.trim()} → ${show(read.value)} ${p.unit || '(dimensionless)'}${offset}${unitAside(raw)}`;
@@ -66,6 +72,7 @@ export function resolveEvaluatorInputs(
   const inputs: Record<string, number> = {};
   const resolved: ResolvedInput[] = [];
   const known = parameters.flatMap((p) => [p.key, ...(p.alternates ?? []).map((a) => a.key)]);
+  const parameterNames = new Set(parameters.map((p) => p.key));
   const siblings: NamedBindingSibling[] = args.map((arg) => {
     const [key, raw] = splitArg(arg);
     return { name: key, raw };
@@ -74,23 +81,35 @@ export function resolveEvaluatorInputs(
     const [key, raw] = splitArg(arg);
     const direct = parameters.find((p) => p.key === key);
     const viaAlt = parameters.find((p) => (p.alternates ?? []).some((a) => a.key === key));
-    const p = direct ?? viaAlt;
+    const viaName = direct === undefined && viaAlt === undefined ? resolveQuantityName(key, parameterNames) : null;
+    const viaSynonym = viaName === null ? undefined : parameters.find((p) => p.key === viaName);
+    const p = direct ?? viaAlt ?? viaSynonym;
     if (p === undefined) throw new UnitError(`'${key}' is not an input here; the inputs are: ${known.join(', ')}`);
     const earlier = resolved.find((r) => r.key === p.key);
+    const c = convert(p, raw, 'absolute', siblings, key);
+    const alt = direct === undefined && viaAlt !== undefined ? p.alternates!.find((a) => a.key === key)! : undefined;
+    const value = alt === undefined ? c.value : c.value * alt.toKey;
     if (earlier !== undefined) {
+      const earlierName = earlier.via ?? earlier.key;
+      const group = synonymGroup(key);
+      const synonymRepeat =
+        group !== undefined && earlierName !== key && group.includes(earlierName) && group.includes(key);
+      if (synonymRepeat && earlier.value === value) continue;
+      if (synonymRepeat) {
+        throw new SynonymDisagreementError(
+          `${earlierName} and ${key} are one quantity and disagree (${earlierName}=${earlier.value}, ${key}=${value})`,
+        );
+      }
       const throughAlternate = direct === undefined || earlier.via !== undefined;
       throw new UnitError(`'${p.key}' is given twice${throughAlternate ? ' (once through an alternate)' : ''}`);
     }
-    const c = convert(p, raw, 'absolute', siblings);
-    const alt = direct === undefined ? p.alternates!.find((a) => a.key === key)! : undefined;
-    const value = alt === undefined ? c.value : c.value * alt.toKey;
     inputs[p.key] = value;
     resolved.push({
       key: p.key,
       value,
       unit: p.unit,
       given: raw,
-      ...(alt === undefined ? {} : { via: key }),
+      ...(alt !== undefined || viaSynonym !== undefined ? { via: key } : {}),
       ...(alt !== undefined
         ? { note: `${key}=${raw.trim()} is ${alt.meaning}; ${p.key} = ${alt.toKey} × ${show(c.value)} = ${show(value)} ${p.unit}` }
         : c.note === undefined

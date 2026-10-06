@@ -34,7 +34,6 @@ export {
   renderDotToSvg,
   equationLanding,
   analyzeUserEquation,
-  resolveToCatalogName,
   suggestQuantities,
   buckinghamPi,
   dimensionallyDetermines,
@@ -247,6 +246,12 @@ export {
  * @internal
  */
 export { readBinding, bindingInUnit, readNamedBinding } from './numerical/binding-value.js';
+/** The catalog or parameter name a spelling means. The commands call this, not a second table. */
+export { resolveQuantityName } from './index.js';
+/** The edge and the closed-form evaluator for an id. An evaluator with no edge is not unknown. */
+export { resolveEvaluable } from './composition/evaluate-relation.js';
+/** Two spellings of one quantity were given different numbers. The formula is not run. */
+export { SynonymDisagreementError } from './dimensional/formula-names.js';
 
 /**
  * Builtin dimension checker for `upt eval`.

@@ -44,63 +44,104 @@ function braceBody(source: string, name: string): string | null {
   return null;
 }
 
-/** Files other than the owner, and calls of `alignTemperatureBinding` outside `readNamedBinding`. */
+/** The temperature spelling check, and calls of `alignTemperatureBinding` outside `readNamedBinding`. */
 export function temperatureOwnerHits(root: string): string[] {
   const files: string[] = [];
   walkTs(join(root, 'src'), files);
   const hits: string[] = [];
-  const owner = 'src/numerical/binding-value.ts';
+  const owner = 'src/dimensional/formula-names.ts';
+  const reader = 'src/numerical/binding-value.ts';
+  const definitions: string[] = [];
   for (const file of files) {
     const rel = relative(root, file).replaceAll('\\', '/');
     const text = readFileSync(file, 'utf8');
-    if (rel !== owner) {
-      if (text.includes('alignTemperatureBinding') || text.includes('TEMPERATURE_BINDING_NAMES')) {
-        hits.push(`${rel} names the temperature reader`);
+    if (text.includes('TEMPERATURE_BINDING_NAMES')) hits.push(`${rel} still names TEMPERATURE_BINDING_NAMES`);
+    if (/function\s+isTemperatureName\s*\(/.test(text)) definitions.push(rel);
+    if (rel === reader) {
+      const body = braceBody(text, 'readNamedBinding');
+      if (body === null || !body.includes('alignTemperatureBinding(')) {
+        hits.push('readNamedBinding does not call alignTemperatureBinding');
       }
-      continue;
+      const stripped = body === null ? text : text.replace(body, '');
+      const withoutDef = stripped.replace(/function\s+alignTemperatureBinding\s*\(/, 'function alignTemperatureBinding ');
+      if (/alignTemperatureBinding\s*\(/.test(withoutDef)) {
+        hits.push('alignTemperatureBinding is called outside readNamedBinding');
+      }
+      if (!text.includes('isTemperatureName(')) hits.push(`${reader} does not call isTemperatureName`);
+    } else if (text.includes('alignTemperatureBinding')) {
+      hits.push(`${rel} names the temperature reader`);
     }
-    if (!text.includes('TEMPERATURE_BINDING_NAMES')) {
-      hits.push(`${owner} does not define TEMPERATURE_BINDING_NAMES`);
-    }
-    const body = braceBody(text, 'readNamedBinding');
-    if (body === null || !body.includes('alignTemperatureBinding(')) {
-      hits.push('readNamedBinding does not call alignTemperatureBinding');
-    }
-    const stripped = body === null ? text : text.replace(body, '');
-    const withoutDef = stripped.replace(/function\s+alignTemperatureBinding\s*\(/, 'function alignTemperatureBinding ');
-    if (/alignTemperatureBinding\s*\(/.test(withoutDef)) {
-      hits.push('alignTemperatureBinding is called outside readNamedBinding');
-    }
+  }
+  if (definitions.length !== 1 || definitions[0] !== owner) {
+    hits.push(
+      definitions.length === 0
+        ? 'no function isTemperatureName'
+        : `function isTemperatureName is defined in ${definitions.join(', ')}`,
+    );
   }
   return hits;
 }
 
 const SEPARATE_NAME_TABLES = ['FORMULA_ALIASES', 'ENTRY_TARGET_ALIASES', 'QUANTITY_SYNONYMS'] as const;
+const DELETED_RESOLVERS = ['resolveToCatalogName', 'rewriteInputKey', 'formulaSpellings', 'synonymInCatalog'] as const;
 
 /**
- * A second `function editDistance`, or one of the name tables that aliases.ts
- * replaced. The owner is `src/composition/aliases.ts`.
+ * A second `function editDistance`, a second name resolver, or one of the
+ * name tables that the synonym groups replaced.
+ * `resolveQuantityName` and `SYNONYM_GROUPS` live in `src/dimensional/formula-names.ts`.
+ * `editDistance` lives in `src/composition/aliases.ts`.
  */
 export function nameTableOwnerHits(root: string): string[] {
   const files: string[] = [];
   walkTs(join(root, 'src'), files);
   const hits: string[] = [];
-  const definitions: string[] = [];
+  const distances: string[] = [];
+  const resolvers: string[] = [];
+  const groups: string[] = [];
   for (const file of files) {
     const rel = relative(root, file).replaceAll('\\', '/');
     const text = readFileSync(file, 'utf8');
     for (const name of SEPARATE_NAME_TABLES) {
       if (new RegExp(`\\b${name}\\b`).test(text)) hits.push(`${rel} still names ${name}`);
     }
-    if (/function\s+editDistance\s*\(/.test(text)) definitions.push(rel);
+    for (const name of DELETED_RESOLVERS) {
+      if (new RegExp(`\\b${name}\\b`).test(text)) hits.push(`${rel} still names ${name}`);
+    }
+    if (/function\s+editDistance\s*\(/.test(text)) distances.push(rel);
+    if (/function\s+resolveQuantityName\s*\(/.test(text)) resolvers.push(rel);
+    if (/export\s+const\s+SYNONYM_GROUPS\b/.test(text)) groups.push(rel);
   }
-  const owner = 'src/composition/aliases.ts';
-  if (definitions.length !== 1 || definitions[0] !== owner) {
+  const distanceOwner = 'src/composition/aliases.ts';
+  const nameOwner = 'src/dimensional/formula-names.ts';
+  if (distances.length !== 1 || distances[0] !== distanceOwner) {
     hits.push(
-      definitions.length === 0
+      distances.length === 0
         ? 'no function editDistance'
-        : `function editDistance is defined in ${definitions.join(', ')}`,
+        : `function editDistance is defined in ${distances.join(', ')}`,
     );
+  }
+  if (resolvers.length !== 1 || resolvers[0] !== nameOwner) {
+    hits.push(
+      resolvers.length === 0
+        ? 'no function resolveQuantityName'
+        : `function resolveQuantityName is defined in ${resolvers.join(', ')}`,
+    );
+  }
+  if (groups.length !== 1 || groups[0] !== nameOwner) {
+    hits.push(
+      groups.length === 0
+        ? 'no SYNONYM_GROUPS'
+        : `SYNONYM_GROUPS is defined in ${groups.join(', ')}`,
+    );
+  }
+  const aliasesPath = join(root, 'src/composition/aliases.ts');
+  if (!existsSync(aliasesPath)) {
+    hits.push('NAME_TABLE.synonyms is not SYNONYM_GROUPS');
+    return hits;
+  }
+  const aliases = readFileSync(aliasesPath, 'utf8');
+  if (!aliases.includes('synonyms: SYNONYM_GROUPS')) {
+    hits.push('NAME_TABLE.synonyms is not SYNONYM_GROUPS');
   }
   return hits;
 }
@@ -266,11 +307,11 @@ export function renderDuplicateOwners(root: string): string {
   const density = massDensityHits(root);
   const temperatureBody =
     temperature.length === 0
-      ? '`alignTemperatureBinding` and `TEMPERATURE_BINDING_NAMES` occur only in `src/numerical/binding-value.ts`. `readNamedBinding` is the only caller. No second owner.\n'
+      ? '`function isTemperatureName` is defined only in `src/dimensional/formula-names.ts`. `alignTemperatureBinding` is called only from `readNamedBinding`. `TEMPERATURE_BINDING_NAMES` is not a second list.\n'
       : temperature.map((hit) => `- ${hit}`).join('\n') + '\n';
   const nameBody =
     names.length === 0
-      ? '`function editDistance` is defined only in `src/composition/aliases.ts`. `FORMULA_ALIASES`, `ENTRY_TARGET_ALIASES`, and `QUANTITY_SYNONYMS` are not separate tables.\n'
+      ? '`function resolveQuantityName` and `SYNONYM_GROUPS` are defined only in `src/dimensional/formula-names.ts`. `function editDistance` is defined only in `src/composition/aliases.ts`. `resolveToCatalogName`, `rewriteInputKey`, `formulaSpellings`, and `synonymInCatalog` are not separate resolvers.\n'
       : names.map((hit) => `- ${hit}`).join('\n') + '\n';
   const signBody =
     signs.length === 0

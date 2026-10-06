@@ -70,10 +70,11 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     name: 'Classical electron radius',
     domain: 'quantum',
     formula_latex: 'r_e = e^2 / (4\\pi \\varepsilon_0 m_e c^2)',
-    epistemicStatus: 'scalar-up-to-constant',
+    epistemicStatus: 'fully-quantitative',
     scalarAst: op('/', [
       pow(sym('e', CHARGE), '2'),
       op('*', [
+        sym('4pi', DIMENSIONLESS),
         sym('epsilon_0', PERMITTIVITY),
         sym('m_e', MASS),
         pow(sym('c', VELOCITY), '2'),
@@ -93,10 +94,10 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     name: 'Bohr magneton',
     domain: 'quantum',
     formula_latex: '\\mu_B = e \\hbar / (2 m_e)',
-    epistemicStatus: 'scalar-up-to-constant',
+    epistemicStatus: 'fully-quantitative',
     scalarAst: op('/', [
       op('*', [sym('e', CHARGE), sym('hbar', ACTION)]),
-      sym('m_e', MASS),
+      op('*', [sym('2', DIMENSIONLESS), sym('m_e', MASS)]),
     ]),
     regime: { scale: 'quantum', force: 'electromagnetic' },
     assumptions: ['electron magnetic-moment scale'],

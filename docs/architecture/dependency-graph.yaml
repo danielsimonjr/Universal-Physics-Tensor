@@ -3,7 +3,7 @@ metadata:
   version: 6.1.0
   totalFiles: 484
   totalModules: 13
-  totalExports: 3874
+  totalExports: 3881
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6700,6 +6700,11 @@ modules:
             - unitConventionNotes
             - UnitError
             - TemperatureReading
+        - file: ../dimensional/formula-names.js
+          imports:
+            - resolveQuantityName
+            - synonymGroup
+            - SynonymDisagreementError
         - file: ../numerical/binding-value.js
           imports:
             - readNamedBinding
@@ -9532,6 +9537,17 @@ modules:
         - file: ../../dimensional/units.js
           imports:
             - UnitError
+        - file: ../../composition/canonical-graph.js
+          imports:
+            - CANONICAL_GRAPH
+        - file: ../../composition/catalog-graph.js
+          imports:
+            - CATALOG_GRAPH
+        - file: ../../dimensional/formula-names.js
+          imports:
+            - assertSynonymAgreement
+            - resolveQuantityName
+            - SynonymDisagreementError
       exports:
         - parseDiscoveryOpts
       functions:
@@ -9942,6 +9958,10 @@ modules:
           imports:
             - CliError
             - UsageError
+        - file: ../../dimensional/formula-names.js
+          imports:
+            - expandSynonymValues
+            - SynonymDisagreementError
         - file: ../version.js
           imports:
             - formulaParserLabel
@@ -10059,8 +10079,11 @@ modules:
           imports:
             - aliasesForTarget
             - nearQuantityNames
-            - rewriteInputKey
             - shareSynonyms
+        - file: ../../dimensional/formula-names.js
+          imports:
+            - assertSynonymAgreement
+            - resolveQuantityName
             - SynonymDisagreementError
         - file: ../../composition/canonical-prefactors.js
           imports:
@@ -10548,6 +10571,11 @@ modules:
             - CliError
             - EXIT_CHECK_FAILED
             - UsageError
+        - file: ../../dimensional/formula-names.js
+          imports:
+            - assertSynonymAgreement
+            - resolveQuantityName
+            - SynonymDisagreementError
         - file: ../output.js
           imports:
             - emitJson
@@ -11306,7 +11334,6 @@ modules:
             - renderDotToSvg
             - equationLanding
             - analyzeUserEquation
-            - resolveToCatalogName
             - suggestQuantities
             - buckinghamPi
             - dimensionallyDetermines
@@ -11693,6 +11720,18 @@ modules:
             - bindingInUnit
             - readNamedBinding
           reExport: true
+        - file: ./index.js
+          imports:
+            - resolveQuantityName
+          reExport: true
+        - file: ./composition/evaluate-relation.js
+          imports:
+            - resolveEvaluable
+          reExport: true
+        - file: ./dimensional/formula-names.js
+          imports:
+            - SynonymDisagreementError
+          reExport: true
         - file: ./numerical/formula-dimension.js
           imports:
             - builtinFormulaDimensionChecker
@@ -11739,7 +11778,6 @@ modules:
         - renderDotToSvg
         - equationLanding
         - analyzeUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - buckinghamPi
         - dimensionallyDetermines
@@ -11874,6 +11912,9 @@ modules:
         - readBinding
         - bindingInUnit
         - readNamedBinding
+        - resolveQuantityName
+        - resolveEvaluable
+        - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - C_SI
@@ -11937,7 +11978,6 @@ modules:
         - renderDotToSvg
         - equationLanding
         - analyzeUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - buckinghamPi
         - dimensionallyDetermines
@@ -12110,6 +12150,9 @@ modules:
         - readBinding
         - bindingInUnit
         - readNamedBinding
+        - resolveQuantityName
+        - resolveEvaluable
+        - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
         - C_SI
@@ -12157,24 +12200,19 @@ modules:
         - file: ../dimensional/formula-names.js
           imports:
             - DIMENSION_RENAMES
+            - SYNONYM_GROUPS
+            - SynonymDisagreementError
             - DimensionRename
       exports:
         - NAME_TABLE
         - aliasesForTarget
-        - rewriteInputKey
         - editDistance
-        - synonymInCatalog
         - nearQuantityNames
         - shareSynonyms
         - collapseSynonymGovernors
-        - SynonymDisagreementError
-      classes:
-        - SynonymDisagreementError
       functions:
         - aliasesForTarget
-        - rewriteInputKey
         - editDistance
-        - synonymInCatalog
         - nearQuantityNames
         - shareSynonyms
         - collapseSynonymGovernors
@@ -12413,7 +12451,9 @@ modules:
         - file: ./user-equation.js
           imports:
             - parseUserEquation
-            - resolveToCatalogName
+        - file: ../dimensional/formula-names.js
+          imports:
+            - resolveQuantityName
         - file: ../numerical/formula-registry.js
           imports:
             - getFormulaParser
@@ -14576,10 +14616,23 @@ modules:
       externalDependencies: []
       nodeDependencies: []
       internalDependencies:
+        - file: ../dimensional/algebra.js
+          imports:
+            - equals
+        - file: ../dimensional/bridge-check.js
+          imports:
+            - EXPECTED_DIMENSION_BY_BRIDGE
         - file: ../dimensional/types.js
           imports:
             - Dimension
           typeOnly: true
+        - file: ../dimensional/units.js
+          imports:
+            - parseUnit
+        - file: ../bridges/evaluators.js
+          imports:
+            - BRIDGE_EVALUATORS
+            - EvaluatorSpec
         - file: ./canonical-graph.js
           imports:
             - CANONICAL_GRAPH
@@ -14592,8 +14645,12 @@ modules:
             - evaluateEdge
             - BridgeEdge
       exports:
+        - resolveEvaluable
         - evaluateRelation
+      interfaces:
+        - Evaluable
       functions:
+        - resolveEvaluable
         - evaluateRelation
     src/composition/explain.ts:
       description: "\"Explain this quantity\" — the unified entry point over the three"
@@ -15232,12 +15289,16 @@ modules:
         - file: ./user-equation.js
           imports:
             - parseUserEquation
-            - resolveToCatalogName
             - suggestQuantities
             - suggestByDimension
             - equationLanding
             - analyzeUserEquation
             - UserEquationError
+          reExport: true
+        - file: ../dimensional/formula-names.js
+          imports:
+            - resolveQuantityName
+            - SynonymDisagreementError
           reExport: true
       exports:
         - regimesDiffer
@@ -15391,12 +15452,13 @@ modules:
         - SvgRendererUnavailableError
         - dimensionAdjacency
         - parseUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - suggestByDimension
         - equationLanding
         - analyzeUserEquation
         - UserEquationError
+        - resolveQuantityName
+        - SynonymDisagreementError
         - Quantity
         - RegimeAttributes
         - BridgeEdge
@@ -15621,12 +15683,13 @@ modules:
         - EquationAnalysis
         - EquationHint
         - parseUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - suggestByDimension
         - equationLanding
         - analyzeUserEquation
         - UserEquationError
+        - resolveQuantityName
+        - SynonymDisagreementError
     src/composition/mathts-scalar-symbols.ts:
       description: Scalar leaves of an `ExprNode`, read from a MathTS AST.
       externalDependencies: []
@@ -18440,9 +18503,9 @@ modules:
           imports:
             - aliasesForTarget
             - editDistance
-            - NAME_TABLE
-            - rewriteInputKey
-            - synonymInCatalog
+        - file: ../dimensional/formula-names.js
+          imports:
+            - resolveQuantityName
         - file: ./catalog-graph.js
           imports:
             - CATALOG_GRAPH
@@ -18468,7 +18531,6 @@ modules:
         - rewriteCatalogHyphens
         - hyphenSubtractHint
         - parseUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - suggestByDimension
         - equationLanding
@@ -18488,7 +18550,6 @@ modules:
         - rewriteCatalogHyphens
         - hyphenSubtractHint
         - parseUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - suggestByDimension
         - equationLanding
@@ -19493,17 +19554,32 @@ modules:
         - MU0_SI
         - FORMULA_NAMED
         - DIMENSION_RENAMES
+        - SYNONYM_GROUPS
         - formulaNameDimensions
+        - synonymGroup
+        - isTemperatureName
+        - assertSynonymAgreement
+        - expandSynonymValues
+        - resolveQuantityName
+        - SynonymDisagreementError
+      classes:
+        - SynonymDisagreementError
       interfaces:
         - FormulaName
         - DimensionRename
       functions:
         - formulaNameDimensions
+        - synonymGroup
+        - isTemperatureName
+        - assertSynonymAgreement
+        - expandSynonymValues
+        - resolveQuantityName
       constants:
         - EPS0_SI
         - MU0_SI
         - FORMULA_NAMED
         - DIMENSION_RENAMES
+        - SYNONYM_GROUPS
     src/dimensional/fresh-label.ts:
       description: Shared deterministic fresh-label utility used by both metric.ts (raise/lower)
       externalDependencies: []
@@ -21081,12 +21157,15 @@ modules:
         - file: ./composition/index.js
           imports:
             - parseUserEquation
-            - resolveToCatalogName
             - suggestQuantities
             - suggestByDimension
             - equationLanding
             - analyzeUserEquation
             - UserEquationError
+          reExport: true
+        - file: ./composition/index.js
+          imports:
+            - resolveQuantityName
           reExport: true
         - file: ./composition/index.js
           imports:
@@ -21853,12 +21932,12 @@ modules:
         - renderDotToSvg
         - SvgRendererUnavailableError
         - parseUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - suggestByDimension
         - equationLanding
         - analyzeUserEquation
         - UserEquationError
+        - resolveQuantityName
         - parsePhysics
         - FormulaDimensionError
         - inferUnknownDimension
@@ -22660,12 +22739,12 @@ modules:
         - renderDotToSvg
         - SvgRendererUnavailableError
         - parseUserEquation
-        - resolveToCatalogName
         - suggestQuantities
         - suggestByDimension
         - equationLanding
         - analyzeUserEquation
         - UserEquationError
+        - resolveQuantityName
         - UserEquation
         - EquationLanding
         - EquationAnalysis
@@ -22914,6 +22993,7 @@ modules:
         - file: ../dimensional/formula-names.js
           imports:
             - FORMULA_NAMED
+            - isTemperatureName
         - file: ../dimensional/unit-convention.js
           imports:
             - quantityConventionUnit
@@ -22944,6 +23024,7 @@ modules:
             - mathTsAgreedQuantity
             - parseUnit
             - unitConventionNotes
+            - unitTables
             - UnitError
             - TemperatureReading
         - file: ./formula-contract.js
@@ -24867,15 +24948,15 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 484
   totalModules: 13
-  totalLinesOfCode: 104242
-  totalExports: 3874
+  totalLinesOfCode: 104538
+  totalExports: 3881
   totalClasses: 63
-  totalInterfaces: 629
-  totalFunctions: 897
-  totalTypeGuards: 5
+  totalInterfaces: 630
+  totalFunctions: 900
+  totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 1068
-  totalReExports: 1859
+  totalConstants: 1069
+  totalReExports: 1862
   totalTypeOnlyImports: 591
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
