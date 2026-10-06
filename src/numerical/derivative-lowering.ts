@@ -67,7 +67,8 @@ type LowerNodeRecur = (
  *
  * v0.3.5/v0.4.0 scope: `of` is a tensor-symbol or metric-tensor.
  * ∂_μ(of) adds the wrtIndex as a trailing axis — the result shape is
- * [...ofShape, N], NOT ofShape. (For BE-37, `of` = the scalar S is
+ * [...ofShape, N], NOT ofShape. (For the covariant-eikonal method, used
+ * by catalog relation be-37, `of` = the scalar S is
  * rank-0, so ∂_μ S is the rank-1 wave covector k_μ, shape [N].)
  *
  * Three numericalForm dispatches: 'symbolic' (caller-supplied

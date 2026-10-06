@@ -1,5 +1,5 @@
 /**
- * v0.5.0 BE-37 covariant-eikonal numerical evaluator.
+ * Covariant-eikonal method, used by catalog relation be-37.
  *
  * Provides `evaluateCovariantEikonalNumerical`, which encodes the
  * covariant-eikonal equation
@@ -41,7 +41,7 @@ const c_SI = C_SI;
 const c2_SI = c_SI * c_SI;
 
 /**
- * Input parameters for the BE-37 covariant-eikonal evaluator.
+ * Input parameters for the covariant-eikonal method, used by catalog relation be-37.
  * @public
  */
 export interface CovariantEikonalInputs {
@@ -186,7 +186,7 @@ function buildDgInverseFn(
 }
 
 /**
- * v0.5.0 BE-37 covariant-eikonal numerical evaluator.
+ * Covariant-eikonal method, used by catalog relation be-37.
  *
  * Returns:
  *  - `eikonalResidual`: the computed relative residual of g^μν p_μ p_ν on the

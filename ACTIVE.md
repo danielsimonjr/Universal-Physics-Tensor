@@ -20,8 +20,8 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
-- [ ] Bridge equations are data, and one engine evaluates them.
-  The tree has one TypeScript module per equation and one module per dogfood round. Lookup tables and identifiers are keyed to BE numbers. Synonym groups and temperature interval-versus-point are hand lists. PhysJS pin is `10cf71e9f1f460780f8620de7ba422df61e0949b`. `package.json` is 7.0.0. The closed round-9 content is not in the catalog.
+- [x] Bridge equations are data, and one engine evaluates them.
+  Done: catalog records are `data/bridge-catalog.json`. One engine evaluates them through `evaluateRelation` and `src/bridges/catalog-load.ts`. The quantity registry is `data/quantities.json`. The source guard is `tests/architecture/source-guard.test.ts`. The specification writes up cross-domain records only. `package.json` is 8.0.0. The PhysJS pin is `10e48f140c0e9fad3c50e5e5538124c52b3e732c`.
 
 - [x] A Celsius difference is read as a point, `W/mK` and `kg/ms` take the prefix, litre/BTU/psi/kcal/torr/mmHg/centipoise are unknown, synonym spellings of one constant still print a number, and Carnot, the first law, and the Boltzmann factor throw "missing a finite input".
   `temperature-change=10degC` on sensible heat is 1183567 instead of 41800. `parseUnit('W/mK').scale` is 1000. `parseUnit('L')` throws. `k_B=1` beside `boltzmann-constant=2` prints a number. `evaluateRelation('CE-carnot-efficiency')` throws. Issues 434–438.

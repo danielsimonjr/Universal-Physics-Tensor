@@ -284,14 +284,17 @@ export function solveGL4Stage(
  *
  * **Units.** The integrator is metric-agnostic — units follow the units of
  * the supplied `gInverseFn` and `initialState`. For UPT's canonical SI
- * Schwarzschild applications (BE-37 Shapiro delay, BE-52 Mercury):
+ * Schwarzschild applications (the covariant-eikonal method used by
+ * catalog relation be-37, and the perihelion method used by catalog
+ * relation be-52):
  *   - `initialState.x` — `(t, r, θ, φ)` in **(s, m, rad, rad)** (SI).
  *   - `initialState.p` — covariant 4-momentum `p_μ = g_μν v^ν` in
  *     **(J·s, kg·m, kg·m², kg·m²)** under the affine normalization
  *     `p_t = −c²` used by `evaluateCovariantEikonalNumerical`.
  *   - `tauMax` — affine-parameter (proper-time for timelike, coordinate-
  *     time-like for the null normalization) extent in **seconds** under
- *     the BE-37 convention; **dimensionless** if the caller chose
+ *     the covariant-eikonal method's convention (catalog relation be-37);
+ *     **dimensionless** if the caller chose
  *     geometric units. The integrator does not enforce a choice.
  *   - `domainMinRadius` — radial coordinate lower bound in the same length
  *     units as `initialState.x[1]` (typically **metres** for SI).

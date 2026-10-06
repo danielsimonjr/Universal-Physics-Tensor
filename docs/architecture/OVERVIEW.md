@@ -4,7 +4,7 @@
 
 ## What Is This?
 
-Universal Physics Tensor (UPT) is a **TypeScript dimensional-analyzer and bridge-equation library** for exploring unified physics through tensor formalism. The library provides machine-readable encoding of 92 bridge equations (ids 11–102) that connect distinct physics regimes (quantum to classical, gravity to gauge, thermodynamics to information theory). A layered computational backend can validate, symbolically analyze, and numerically evaluate those equations. Where the same concept is implemented more than once, the reading is `INTEGRATION_MAP.md`.
+Universal Physics Tensor (UPT) is a **TypeScript dimensional-analyzer and bridge-equation library** for exploring unified physics through tensor formalism. The library provides a machine-readable catalog of bridge equations in `data/bridge-catalog.json` that connect distinct physics regimes (quantum to classical, gravity to gauge, thermodynamics to information theory). A layered computational backend can validate, symbolically analyze, and numerically evaluate those equations. `evaluateRelation` is that evaluation. Where the same concept is implemented more than once, the reading is `INTEGRATION_MAP.md`. The counts are `NOTES.md`.
 
 The library serves two audiences. Researchers want to query the bridge-equation catalog and catch dimensional errors in novel formulations. Implementors want to evaluate tensor contractions numerically, compute Christoffel symbols, or integrate geodesics in an arbitrary Lorentzian manifold.
 
@@ -14,7 +14,7 @@ The library serves two audiences. Researchers want to query the bridge-equation 
 
 Four goals govern every design choice in UPT:
 
-1. **Bridges drive the work.** The 92 bridge equations in `src/bridges/` are the scientific core. Tooling, tests, and new capabilities exist to serve the catalog, not the other way around. A new feature earns its place by enabling or improving a bridge encoding.
+1. **Bridges drive the work.** The catalog records in `data/bridge-catalog.json` are the scientific core. Tooling, tests, and new capabilities exist to serve the catalog, not the other way around. A new feature earns its place by enabling or improving a bridge record.
 
 2. **MathTS first-class.** `@danielsimonjr/mathts-tensor` is the numerical backend. The `TensorEngine` interface is the seam. `MathTSEngine` is the engine class, and the MathTS packages are required dependencies. The selection is a deliberate signal about the dependency shape of the ecosystem, not a performance claim.
 
@@ -50,21 +50,21 @@ UPT is organized into five conceptual layers that build on each other:
 │  SI Dimension algebra (multiply / divide / power / format)   │
 ├──────────────────────────────────────────────────────────────┤
 │  Layer 1: Bridge Catalog                                     │
-│  BRIDGE_EQUATIONS (92 entries, ids 11–102) + evaluators      │
-│  modules (be-*.ts) + BridgeEquationEntry metadata type +     │
+│  data/bridge-catalog.json + catalog-load.ts +                │
+│  evaluateRelation + BridgeEquationEntry +                    │
 │  membership criterion / negative catalog                     │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-A bridge equation module at Layer 1 builds AST nodes at Layer 2 and validates them with the dimensional algebra. The module optionally raises/lowers indices using Layer 3 metric primitives, and Layer 4 can evaluate the module numerically. Layer 5 (the curvature / general-relativity layer) is built on top of Layers 2–4. Its curvature node kinds are `ExprNode` members with their own validators and lowering arms. Its integrators reuse the same Christoffel-closure convention as the Layer-4 RK4 solver. Callers who only want catalog metadata (status, known issues, references) never touch layers 2–5.
+A catalog record at Layer 1 is parsed into AST nodes at Layer 2 and checked with the dimensional algebra. A named numerical method can use Layer 3 metric primitives, and Layer 4 can evaluate that method. Layer 5 (the curvature / general-relativity layer) is built on top of Layers 2–4. Its curvature node kinds are `ExprNode` members with their own validators and lowering arms. Its integrators reuse the same Christoffel-closure convention as the Layer-4 RK4 solver. Callers who only want catalog metadata (status, known issues, references) never touch layers 2–5.
 
-Beside the layers sits a **composition graph** (`src/composition/`). The graph holds bridges as `BridgeEdge` objects over `Quantity` endpoints, composable via `composeEdges`. The pre-registered calibration edges include the first diagonal-law edge, `lawSchwarzschildRadius`. Its first derived result (CT-1) chains BE-42∘BE-16 to E_min(M) = ℏc³ln2/(8πGM). Catalog membership is computable (`src/bridges/membership.ts` + the `src/bridges/rejected.ts` negative catalog — see `v0.8.0-catalog-adjudication.md`), and GW170817 vs. BE-36 is a real-data confrontation. The graph has **83 edges** (`CATALOG_GRAPH`). The graph also has:
+Beside the layers sits a **composition graph** (`src/composition/`). `CATALOG_GRAPH` in `src/composition/catalog-graph.ts` holds each catalog relation as a `BridgeEdge` over `Quantity` endpoints, composable via `composeEdges`. Catalog membership is computable (`src/bridges/membership.ts` + the `src/bridges/rejected.ts` negative catalog — see `v0.8.0-catalog-adjudication.md`). The graph also has:
 
 - a Phase-D candidate enumerator (`enumerateCompositions`);
 - first-order uncertainty propagation (`propagateUncertainty`);
-- a name-collision namespacing gate (`CompositionAliasError` + `SOURCE_ALIAS_DISPOSITIONS` over 131 centralized `Quantity` nodes in `quantities.ts`).
+- a name-collision namespacing gate (`CompositionAliasError` + `SOURCE_ALIAS_DISPOSITIONS`). Graph quantities are projected from `data/quantities.json` by `src/composition/quantities.ts`.
 
-BE-23 vs. cuprate Planckian dissipation is another data confrontation. The 92-bridge catalog (83 graph edges) is validated against the **canonical L-layer** (`src/canonical/`, 109 equations). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** of 19 (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` + the per-bridge `be*-confrontation.ts` evaluators carry the spine.
+The catalog is checked against the **canonical L-layer** (`src/canonical/`). The L-layer is the textbook ground truth that the catalog's bridges are checked against. The real-data confrontations form an **evidence spine** (`upt confront` / `upt coverage`). `src/bridges/confrontations.ts` projects that spine from the catalog. The counts are `NOTES.md`. The sentence that each confrontation was its own module is the record from before the catalog engine.
 
 ---
 

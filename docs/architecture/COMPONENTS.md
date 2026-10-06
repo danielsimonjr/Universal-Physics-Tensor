@@ -101,7 +101,7 @@ UPT follows a layered architecture. The TypeScript files under `src/` fall into 
 
 ### `BRIDGE_EQUATIONS` array (`src/bridges/index.ts`)
 
-The 58-entry catalog array of `BridgeEquationEntry` objects. Each entry carries: `id` (11–68), `name`, `category` / `category_name`, `bridges` (the two bridged regimes), `status` (`established` / `speculative` / `highly-speculative` / `invalid`), and `context` (1–2 sentence summary). The entry carries `formula_latex`, `source_part`, `known_issues`, `references`, `dependencies` (ids of other bridge entries explicitly referenced), `dimensional_signature` (null for entries without a dimensional encoding), and `tractability_class`. The array is the source of truth for catalog metadata; per-bridge evaluator modules supplement it with runnable code.
+The catalog array of `BridgeEquationEntry` objects, projected from `data/bridge-catalog.json`. Counts are `NOTES.md`. Each entry carries: `id`, `name`, `category` / `category_name`, `bridges` (the two bridged regimes), `status` (`established` / `speculative` / `highly-speculative` / `invalid`), and `context` (1–2 sentence summary). The entry carries `formula_latex`, `source_part`, `known_issues`, `references`, `dependencies` (ids of other bridge entries explicitly referenced), `dimensional_signature`, and `tractability_class`. The JSON file is the source of truth. This array is a projection. `evaluateRelation` evaluates a record.
 
 ### `BridgeEquationEntry` type (`src/bridges/index.ts`)
 
@@ -115,23 +115,9 @@ Discriminated string union types for the `status`, severity, and fixability fiel
 
 Classifies how computationally tractable a bridge equation is: `'closed-form'` (O(1) algebraic evaluation), `'numerical-tractable'` (polynomial-time algorithm), `'numerical-asymptotic'` (diverging asymptotic series), `'formally-divergent'` (not Turing-computable, e.g. cosmological constant), `'undefined'` (not yet classified).
 
-### Per-bridge evaluator modules (`src/bridges/equations/be-*.ts`)
+### Catalog engine (`src/bridges/catalog-load.ts`, `src/bridges/evaluators.ts`, `src/bridges/relation-eval.ts`)
 
-Every catalogued bridge (all 58, IDs 11–68) has an evaluator — see `docs/architecture/bridge-coverage-audit.md`. BE-11…50 and BE-53/54 live in `src/bridges/equations/be-*.ts`; BE-51/52 live in `src/bridges/gravitational-lensing.ts` / `perihelion-precession.ts`; BE-55…68 live in `src/bridges/be55…be68-*.ts`. Each `equations/be-*.ts` module exports:
-- **RHS AST constant** — the `ExprNode` tree for the right-hand side (all modules; 31 also export the LHS tree).
-- **`validate*Dimensions(): DimensionValidationReport`** — calls `validateEquation(LHS, RHS)` and returns `{ ok, lhsDim, rhsDim }`. BE-22, BE-32, BE-35, BE-50 and BE-53 export no such helper.
-- **`evaluate*(inputs): number`** — a synchronous plain-JS evaluator over a typed inputs interface. BE-37 also exports the async `evaluateBE37EikonalNumerical()`, the only evaluator in `equations/` that calls `evaluateNumerical()`.
-- **Typed inputs interface** — e.g., `DecoherenceRateInputs`, `HawkingTemperatureInputs`; only BE-11, BE-37 and BE-42 export one.
-
-The modules do not share a base class; the pattern is by convention. See `ARCHITECTURE.md §Bridge Catalog Architecture` for the full per-module pattern.
-
-### `BridgeEquations` facade (`src/bridges/bridge-equations.ts`)
-
-A root-level convenience object gathering every per-bridge `evaluate*()` function under readable method names — e.g. `BridgeEquations.decoherenceRate({...})` (BE-11), `.hawkingTemperature({ M_kg })` (BE-42). Each method is a 1:1 pass-through to the existing pure evaluator (no new physics). TypeScript infers the per-method input/return types structurally, adding exactly one runtime export as a result. The archived BE-25 OrchOR is excluded (BE-25 maps to the live IIT `intrinsicInformation`); BE-51 and BE-52 map to `gravitationalLensing` and `perihelionPrecession`.
-
-### `evaluateGravitationalLensing` / `evaluatePerihelionPrecession` (`src/bridges/index.ts` re-export)
-
-The GR bridge evaluators for BE-51 and BE-52, defined in `gravitational-lensing.ts` and `perihelion-precession.ts` and re-exported from the main index. Both are synchronous, take typed input bundles and return typed result objects. Lensing takes `{ M_kg, b_m }` (lensing mass, impact parameter) and returns the deflection angle in radians and arc-seconds. Perihelion takes `{ M_kg, a_m, e, T_yr }` (central mass, semi-major axis, eccentricity, orbital period) and returns the advance per orbit and per century.
+`catalog-load.ts` reads `data/bridge-catalog.json`. `BRIDGE_EVALUATORS` in `evaluators.ts` is the input contract of each catalog evaluator, projected from that file. `run` evaluates the relation expression. It does not switch on a catalog id. `evaluateRelation` is the public evaluation. `BRIDGE_RHS_BY_ID` in `rhs-registry.ts` is the expression tree of each primary relation. The covariant-eikonal method lives in `src/numerical/covariant-eikonal.ts` and is used by catalog relation be-37. The sentence that each equation was a module under `src/bridges/equations/` is the record from before the catalog engine.
 
 ### `adjudicateBridgeEntry` / `adjudicateCatalog` (`src/bridges/membership.ts`)
 
@@ -141,25 +127,17 @@ The computable bridge-membership criterion has two cases. *A bridge is an edge w
 
 The negative catalog — entries adjudicated NOT-A-BRIDGE with per-id reasons: BE-28, BE-29, BE-32, BE-35, BE-40. BE-42 (Hawking temperature) is adjudicated a bridge (`['gravity','quantum']`); BE-44/46/50 are contested/unadjudicated. Full disposition: `docs/architecture/v0.8.0-catalog-adjudication.md`.
 
-### `confrontBE36` / `GW170817` (`src/bridges/be36-gw170817-confrontation.ts`)
-
-The GW170817 multi-messenger observation (`GW170817`, a `GWSpeedObservation` constant) confronted against the BE-36 GW-speed bound. Returns a `BE36ConfrontationResult`. Re-exported from `src/index.ts`. `confrontBE36WithUncertainty` adds a first-order 1σ on both bounds (`upperBoundSigma`, `lowerBoundSigma`), computed inline from the observational timing uncertainty (Δt = 1.74±0.05 s).
-
-### `confrontBE23` / `PLANCKIAN_CUPRATES` (`src/bridges/be23-planckian-confrontation.ts`)
-
-The BE-23 real-data confrontation: SYK Planckian dissipation against the overdoped-cuprate aggregate of Legros et al. 2019 (`PLANCKIAN_CUPRATES`, a `PlanckianObservation` constant; `PLANCKIAN_O1_BAND` is the O(1) acceptance band). Honest-aggregate encoding — no fabricated per-material table. `confrontBE23` returns a `BE23ConfrontationResult`; `confrontBE23WithUncertainty` adds first-order uncertainty propagation, computed inline. All re-exported from `src/index.ts`.
-
 ### `CONFRONTATIONS` / `runConfrontation` / `listConfrontations` (`src/bridges/confrontations.ts`)
 
-The confront / evidence-spine registry — the unified home for every real-data confrontation, wrapping the per-bridge `be*-confrontation.ts` modules behind one normalized `ConfrontationOutcome` shape. `runConfrontation(bridgeId)` runs one confrontation by id (`undefined` if unregistered); `listConfrontations()` returns every entry in ascending bridge-id order. `DATA_CONFRONTED_IDS` (`src/bridges/confrontation-coverage.ts`) projects this registry's keyset — the single source of truth for "how many bridges are data-confronted" (19; `node bin/upt.mjs coverage --json` reports it as `byTier['data-confronted']`). Confrontations are deliberately ORTHOGONAL to the discovery funnel — this module never imports `discovery.ts`. Surfaced by `upt confront [--bridge=be-XX] [--json] [--sensitivity]` (`src/cli/commands/confront.ts`).
+The confront / evidence-spine registry. Each confrontation is a catalog record. This module projects that record into a `ConfrontationOutcome`. `runConfrontation(bridgeId)` runs one confrontation by id (`undefined` if unregistered); `listConfrontations()` returns every entry in catalog order. `DATA_CONFRONTED_IDS` (`src/bridges/confrontation-coverage.ts`) projects this registry's keyset. The count is `NOTES.md`. Confrontations are deliberately ORTHOGONAL to the discovery funnel — this module never imports `discovery.ts`. Surfaced by `upt confront` (`src/cli/commands/confront.ts`). The sentence that each confrontation was its own module under `src/bridges/` is the record from before the catalog engine.
 
 ### `ConfrontationOutcome` / `ObservationProvenance` / `residualInSigma` / `combineInQuadrature` (`src/bridges/observations/types.ts`)
 
 The typed observation layer every confrontation module returns into. `ConfrontationOutcome` is discriminated on `kind` (`'value' | 'upper-bound' | 'consistency' | 'table'`), so each confrontation carries only the fields it can honestly populate. No confrontation carries a fabricated placeholder for a bound-only or consistency-only result. Every observation carries a mandatory `ObservationProvenance` (citation, year, ISO retrieval date, optional caveat note); the `upper-bound` arm carries an optional `caveat` field (e.g. BE-36's one-sided-pass note, surfaced in the `upt confront` summary line itself, not just the provenance). `residualInSigma(predicted, observed, sigma)` and `combineInQuadrature(components)` (root-sum-square over named `SigmaComponent`s) are the shared statistics primitives every confrontation module calls.
 
-### Per-bridge confrontation modules (`src/bridges/be*-confrontation.ts`)
+### Catalog confrontations
 
-Nineteen confrontations exist. Each confrontation recomputes a bridge's own prediction. Each confrontation confronts that prediction against an independently-sourced observation:
+Each confrontation recomputes a bridge's own prediction and confronts that prediction against an independently-sourced observation. The records live in `data/bridge-catalog.json` and are projected by `src/bridges/confrontations.ts`:
 
 - be-11 × collisional decoherence (Hornberger 2003)
 - be-21 × quark-gluon-plasma KSS bound (Bernhard-Moreland-Bass 2019)
@@ -205,9 +183,9 @@ The composition operator — chains compatible edges into a derived edge, checki
 
 Compares a composed chain's prediction against an independent direct route and returns the dimensionless ratio.
 
-### Centralized quantity nodes (`src/composition/quantities.ts` barrel + `quantities/` modules)
+### Graph quantity nodes (`src/composition/quantities.ts`)
 
-The home of every graph endpoint: **131** `Quantity` constants (`export const *Q: Quantity`), one object per canonical name, with name uniqueness pinned by `tests/composition/quantities.test.ts`. Naming judgments are recorded at each definition where the physics differs from an existing node. For example, BE-23/BE-26 carrier/proton masses are `effective-mass` / `tunneling-mass`, not the gravitational `mass`. Internal: the edge files consume the nodes. The composition barrel does not re-export them. The definitions are grouped by physics domain in `quantities/{quantum,gravitation-cosmology,fields,condensed-matter,common}.ts`, with shared dimension aliases in `quantities/_dims.ts`. Each node's consuming `catalog-*` edge file classifies the node. `quantities.ts` is a barrel re-exporting all five. The cross-cutting unit-convention banner (GeV-vs-J and bits-vs-nats heterogeneity) stays in the barrel docstring.
+Every graph endpoint is a projection of `data/quantities.json` through `src/dimensional/quantity-registry.ts`. `quantities.ts` builds one `Quantity` object per registry row whose `graphNode` is true. Name uniqueness is pinned by `tests/composition/quantities.test.ts`. The sentence that the nodes were hand constants under `src/composition/quantities/` is the record from before the registry.
 
 ### `enumerateCompositions(...)` (`src/composition/enumerate.ts`)
 
@@ -275,31 +253,9 @@ The ledger changes no verdict, score, or funnel count. `describeGrounding(candid
 
 The surface barrel for the namespacing-gate symbols (`CompositionAliasError`, `SOURCE_ALIAS_DISPOSITIONS`, `AliasDisposition`, `DispositionRequired`) — keeps `src/index.ts` one-import-per-area while the implementations live in `edge.ts` / `compose.ts` / `enumerate.ts`.
 
-### Calibration edges (`src/composition/edges/calibration.ts`)
-
-Pre-registered edges for the calibration targets:
-
-- `be16Edge` (Landauer)
-- `be42Edge` / `be42ViaRsEdge` (Hawking T)
-- `be51Edge` (lensing)
-- `be52Edge` (perihelion)
-- `be12Edge` (thermal de Broglie)
-- `be11ZurekEdge` (Zurek decoherence)
-- `be37Edge` (Shapiro delay)
-
-`lawSchwarzschildRadius` is a **diagonal-law edge**: same-regime endpoints, a law rather than a bridge under the membership criterion. The `M_SUN_KG` anchor constant is an alias of `M_SUN_SI` from `core/constants.ts`. The CT-1 target derives E_min(M) = ℏc³ln2/(8πGM) from the BE-42∘BE-16 chain. CT-3 derives the Zurek decoherence scaling from BE-12∘BE-11.
-
-### Catalog-tranche edges (`src/composition/edges/catalog-tranche.ts`)
-
-Six catalog-backed edges wrap existing validated evaluators: `be14Edge`, `be19Edge`, `be21Edge` (KSS, a nullary edge), `be48Edge` (GRW localization), `be53Edge`, and `be54Edge`. Each edge carries value pins, domain tests, and a catalog-status drift guard.
-
-### Catalog-full edges (`src/composition/edges/catalog-full.ts`)
-
-26 further edges (`CATALOG_FULL_EDGES`), one per catalog bridge. BE-11 is among them and also has `be11ZurekEdge`. Each wraps an existing validated catalog evaluator (the catalog stays authoritative) and carries a first-class validity domain mirroring what the wrapped evaluator enforces. No edges exist for the NOT-A-BRIDGE entries BE-28, BE-29, BE-32, and BE-35 (per `rejected.ts`). BE-40 is also not-a-bridge and is a proved-seed law edge, outside `CATALOG_FULL_EDGES`. BE-44 is skipped honestly: its evaluator takes a `number[]` news-sample array, incompatible with the scalar-Record edge contract. Proved-seed edges add BE-40, BE-55, BE-59, BE-60, and BE-63. The catalog ids with no edge are 28, 29, 32, 35, 44, 56, 57, 58, 61, 62, 64, and 65.
-
 ### Assembled graph (`src/composition/catalog-graph.ts`)
 
-`CATALOG_GRAPH` — the 9 calibration + 6 catalog-tranche + 26 catalog-full + 5 proved-seed + 3 applied-physicist edges assembled once into a single `readonly BridgeEdge[]`. The result is the public 49-edge graph. The CLI reads it through the `cli-api` barrel (`src/cli/graphs.ts`). The composition test suites import it directly, rather than each rebuilding the edge list from its constituent imports.
+`CATALOG_GRAPH` is every catalog relation, projected once into a `readonly BridgeEdge[]`. The edge id, the expression, the domain, and the evaluation all come from the catalog record. The CLI reads the graph through the `cli-api` barrel (`src/cli/graphs.ts`). The sentence that the graph was assembled from files under `src/composition/edges/` is the record from before the catalog engine. The count of edges is `NOTES.md`.
 
 ---
 
@@ -836,24 +792,20 @@ src/index.ts
   ├── src/core/tensor.ts          (UniversalTensor)
   ├── src/core/types.ts           (PhysicalConstants)
   ├── src/core/constants.ts       (flat *_SI constants)
-  ├── src/composition/index.ts    (composeEdges, BridgeEdge, calibration + tranche +
-  │                                catalog-full edges, CATALOG_FULL_EDGES,
-  │                                enumerateCompositions, propagateUncertainty)
+  ├── src/composition/index.ts    (composeEdges, BridgeEdge, CATALOG_GRAPH,
+  │                                evaluateRelation, enumerateCompositions,
+  │                                propagateUncertainty)
   ├── src/composition/compose-surface.ts  (CompositionAliasError,
   │                                SOURCE_ALIAS_DISPOSITIONS)
   ├── src/bridges/membership.ts   (adjudicateBridgeEntry, adjudicateCatalog,
   │                                REJECTED_BRIDGE_*)
-  ├── src/bridges/be36-gw170817-confrontation.ts  (confrontBE36, GW170817,
-  │                                confrontBE36WithUncertainty)
-  ├── src/bridges/be23-planckian-confrontation.ts (confrontBE23, PLANCKIAN_CUPRATES)
+  ├── src/bridges/confrontations.ts (CONFRONTATIONS, runConfrontation)
   ├── src/numerical/klein-gordon.ts  (evaluateKGDispersionResidual,
   │                                verifyKleinGordonPlaneWave)
-  ├── src/bridges/index.ts        (BRIDGE_EQUATIONS, evaluateGravitationalLensing,
-  │                                evaluatePerihelionPrecession, catalog types)
-  │     └── src/bridges/equations/be-*.ts
-  │           ├── src/dimensional/validator.ts  (ExprNode, validate, validateEquation)
-  │           ├── src/dimensional/types.ts      (Dimension constants)
-  │           └── src/numerical/index.ts        (evaluateNumerical — BE-37 only)
+  ├── src/bridges/index.ts        (BRIDGE_EQUATIONS, catalog types)
+  │     └── src/bridges/catalog-load.ts  (data/bridge-catalog.json)
+  ├── src/bridges/evaluators.ts   (BRIDGE_EVALUATORS, projected from the catalog)
+  ├── src/numerical/covariant-eikonal.ts (evaluateCovariantEikonalNumerical)
   ├── src/dimensional/validator.ts  (ExprNode, validate, validateEquation,
   │                                  validateInverseMetricPair, ValidationResult)
   ├── src/dimensional/types.ts      (Dimension, named constants)

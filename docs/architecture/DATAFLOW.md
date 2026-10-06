@@ -311,7 +311,7 @@ import { BRIDGE_EQUATIONS } from 'universal-physics-tensor';
    Caller uses metadata (no dimensional or numerical layer touched)
 ```
 
-The catalog is a static array — no async, no computation. `dimensional_signature` is typed `string | null`, and every catalog entry carries a string, including the bridges that have no AST encoding in `src/bridges/equations/`. For every encoded entry the string is `format()` of the inferred dimension, pinned by `tests/bridges/dimensional-signature-catalog.test.ts`.
+The catalog is `data/bridge-catalog.json`. `dimensional_signature` is a string on every catalog entry. The sentence that the catalog was a static array, and that some bridges had no AST encoding under `src/bridges/equations/`, is the record from before the catalog engine. `tests/bridges/dimensional-signature-catalog.test.ts` pins the signature against the record.
 
 Two derived views sit beside the array. `adjudicateCatalog()` applies the bridge-membership criterion, with the `rejected.ts` negative catalog as overlay. The function returns a `CatalogAdjudicationReport`: bridge ids grouped by verdict into `bridges`, `notABridges` and `unadjudicated`. The per-entry `BridgeVerdict` comes from `adjudicateBridgeEntry()`. `data/bridge-catalog.json` is the generated JSON artifact (`npm run catalog:json`).
 

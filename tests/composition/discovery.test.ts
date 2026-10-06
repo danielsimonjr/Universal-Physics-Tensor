@@ -93,6 +93,23 @@ describe('vetLinkCandidate — controlled verdicts', () => {
     expect(r.score).toBeLessThan(0);
   });
 
+  it('an identification outside the anchor closure keeps a base inconsistency', () => {
+    // t is already over-determined from x. p and q are not reachable from x,
+    // so identifying them cannot clear or create that inconsistency.
+    const edges = [
+      edge('e1', ['x'], 't', (i) => i['x'] * 2),
+      edge('e2', ['x'], 't', (i) => i['x'] * 3),
+      edge('e3', ['p'], 'r', (i) => i['p']),
+    ];
+    const r = vetLinkCandidate(edges, cand('p', 'q'), {
+      groundTruth: { x: 1 },
+      ...noBase,
+    });
+    expect(r.numericallyConsistent).toBe(false);
+    expect(r.inconsistentNodes).toContain('t');
+    expect(r.verdict).toBe('contradictory');
+  });
+
   it('INERT: consistent but a and b are already in one component', () => {
     const edges = [
       edge('e1', ['x'], 'a', (i) => i['x'] * 2),

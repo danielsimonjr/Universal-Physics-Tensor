@@ -116,7 +116,7 @@ bridges. They are the whole list. Adding one is a change to this note.
 
 | Definition | Where the tree already uses it |
 |---|---|
-| `h = 2π ℏ` | `CONSTANTS.h` and `CONSTANTS.hbar` in `src/dimensional/symbolic-constants.ts`. Catalog record 12 displays both writings of one thermal wavelength. The quantity registry supplies the dimension and the default unit. |
+| `h = 2π ℏ` | `CONSTANTS.h` and `CONSTANTS.hbar` in `src/dimensional/symbolic-constants.ts`. Catalog record 12 displays both writings of one thermal wavelength. The quantity registry supplies the dimension. |
 | `μ₀ = 1/(ε₀ c²)` | The Alfvén, fast-magnetosonic, and magnetic-pressure records in `data/bridge-catalog.json` build `μ₀` as that quotient. The generic engine evaluates the record. |
 | `Φ₀ = h/(2e) = π ℏ / e` | The Josephson and critical-field covers lines. `e` in that formula is the elementary charge. |
 | `exp` is the exponential | A displayed `e^{γ}` is `exp(γ)`. Euler's number is written `exp(1)`. |

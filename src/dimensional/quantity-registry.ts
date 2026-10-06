@@ -25,7 +25,6 @@ export interface QuantityRecord {
   readonly attributes: Readonly<Record<string, string>>;
   readonly kind?: QuantityKind;
   readonly aliases?: readonly string[];
-  readonly defaultUnit?: string;
   readonly signRole?: SignRole;
   readonly graphNode: boolean;
 }

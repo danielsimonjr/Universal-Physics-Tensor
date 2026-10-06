@@ -197,7 +197,7 @@ The shared type is `CarrierSignError` (`src/bridges/carrier-sign.ts:18-22`). `ap
 | `sameCarrierSign` | `carrier-sign.ts:26-28` | boolean, product ≥ 0. `assertSameCarrierSign` uses it when both values are finite |
 | `applyCarrierSignPolicy` | `carrier-sign.ts:79` | one policy. A monomial odd in both `charge` and `carrier-mobility` rejects opposite signs. An explicit pair is that check for the Einstein relation. Inputs the scalar AST is even in become absolute values |
 
-A canonical edge calls the policy once, in `toEdge` (`canonical-graph.ts:479`), and then `makeEvaluate`. `evaluateEdge` calls that edge function, so explain and a direct `edge.evaluate` are the same call. BE-70 calls the policy once inside `evaluateEinsteinRelation` (`be70-einstein-relation.ts:62`). The edge domain (`applied-physicist.ts:355-363`) checks that μ and q are finite and that T and q are nonzero. It does not check the sign. Hall and cyclotron stay signed. Plasma frequency and Larmor radius stay positive magnitudes. Conductivity says `charge and carrier-mobility must have the same sign`. Einstein says `electrical-mobility (mu_m2_per_Vs) and carrier-charge (q_C) must have the same sign`. The sentence that BE-70 is checked twice, and that the Einstein message names `mu_m2_per_Vs` and `q_C` without the quantities, is the record from before this policy. Decision 8 puts that one call on the evaluator. The table in section 6 still names `evaluateEdge`, which is the recommendation that measurement made.
+A canonical edge calls the policy once, in `toEdge` (`canonical-graph.ts:539`), inside the edge's `evaluate`. `evaluateEdge` calls that edge function, so explain and a direct `edge.evaluate` are the same call. A catalog relation calls the policy once inside `evaluateCatalogRelation` (`relation-eval.ts:95`). The relation's `holds` string is the domain. Hall and cyclotron stay signed. Plasma frequency and Larmor radius stay positive magnitudes. Conductivity says `charge and carrier-mobility must have the same sign`. Einstein says `electrical-mobility (mu_m2_per_Vs) and carrier-charge (q_C) must have the same sign`. The sentence that BE-70 is checked twice, and that the Einstein message names `mu_m2_per_Vs` and `q_C` without the quantities, is the record from before this policy. The sentence that the catalog call lived in `evaluateEinsteinRelation` (`be70-einstein-relation.ts`) and that the edge domain lived in `applied-physicist.ts` is the record from before the catalog engine. Decision 8 puts that one call on the evaluator. The table in section 6 still names `evaluateEdge`, which is the recommendation that measurement made.
 
 ### Coefficients and prefactors
 
@@ -209,7 +209,7 @@ A second table, `CANONICAL_GROUP_PREFACTORS`, holds a dimensionless group the nu
 
 `attemptDerivation` returns `coefficient-unset` without comparing values when that flag is set (`bridge-analysis.ts:233-235`). Explain of that row prints no recovered number and says the factor is unset. The sentence that explain still prints the monomial times 1 is the record from before this deletion.
 
-Catalog closed forms bake their factors inside each `be*.ts` evaluator. They do not read `canonicalPrefactor`. `upt eval` uses the CODATA scope in `src/cli/eval-numbers.ts` and does not read that table either.
+Catalog closed forms bake their factors inside the relation expression in `data/bridge-catalog.json`. They do not read `canonicalPrefactor`. The sentence that those factors lived inside each `be*.ts` evaluator is the record from before the catalog engine. `upt eval` uses the CODATA scope in `src/cli/eval-numbers.ts` and does not read that table either.
 
 `formulaShape` (`src/composition/formula-shape.ts`) classifies a sum of dimensionful terms. Audit uses it. The formally-proved filter reads the Lean kind, not this classification (`NOTES.md`).
 
@@ -220,10 +220,10 @@ A catalog id is a number on `BridgeEquationEntry`. The string form `be-<n>` is t
 | Layer | Object | File | Joined by `getBridge`? |
 |---|---|---|---|
 | Catalog row | `BRIDGE_EQUATIONS` | `src/bridges/index.ts` | yes (`src/composition/descriptor.ts`) |
-| RHS AST | `BRIDGE_RHS_BY_ID` | `src/bridges/rhs-registry.ts` (42 ids: 11–50, 53, 54, per the file header at `index.ts:18`) | yes |
-| CLI evaluator | `BRIDGE_EVALUATORS` | `src/bridges/evaluators.ts` (50 ids) | no |
-| Facade | `BridgeEquations.*` | `src/bridges/bridge-equations.ts` | no |
-| Graph edge | `BridgeEdge` in `CATALOG_GRAPH` | `src/composition/catalog-graph.ts` and `src/composition/edges/` | yes, by `beId` |
+| RHS AST | `BRIDGE_RHS_BY_ID` | `src/bridges/rhs-registry.ts`. The parenthetical count of 42 ids is the record from before the catalog engine. The live count is `NOTES.md` | yes |
+| CLI evaluator | `BRIDGE_EVALUATORS` | `src/bridges/evaluators.ts`. The parenthetical count of 50 ids is the record from before the catalog engine. The live count is `NOTES.md` | no |
+| Public evaluation | `evaluateRelation` | `src/bridges/relation-eval.ts`. The sentence that a `BridgeEquations` object lived in `src/bridges/bridge-equations.ts` is the record from before the catalog engine | no |
+| Graph edge | `BridgeEdge` in `CATALOG_GRAPH` | `src/composition/catalog-graph.ts`. The sentence that edges also lived under `src/composition/edges/` is the record from before the catalog engine | yes, by `beId` |
 | Canonical equation | `CanonicalEquation`, optional `restatesBridge` | `src/canonical/` | no |
 | Formal reference | `catalogFormalRef(n)` | `src/atlas/catalog-formal-ref.ts` | no. The catalog row type has no `formalRef` field |
 | Atlas bridge | `AtlasBridge` | `src/atlas/families.ts` and the three families | no. `getBridge` takes a numeric catalog id |
@@ -235,19 +235,19 @@ A catalog id is a number on `BridgeEquationEntry`. The string form `be-<n>` is t
 - catalog row in `src/bridges/index.ts` (speculative)
 - RHS in the registry
 - `BRIDGE_EVALUATORS` includes 16. `evaluateRelation('be-16', { temperature: 300 })` is the public call. The sentence that there was no `BRIDGE_EVALUATORS` entry, and that the call was `BridgeEquations.landauerEnergy`, is the record from before the 6.0.0 surface.
-- `be16Edge` in `src/composition/edges/calibration.ts`
+- the graph edge is catalog relation `be-16`, projected by `src/composition/catalog-graph.ts`. The sentence that the edge was `be16Edge` in `src/composition/edges/calibration.ts` is the record from before the catalog engine.
 - `CE-landauer` with `restatesBridge: '16'` in `src/canonical/entries/thermo-nuclear-cosmo.ts`
 - `catalogFormalRef(16)`
 
-The canonical target is `erasure-energy` (`src/canonical/entries/thermo-nuclear-cosmo.ts:99`, `restatesBridge: '16'` at line 120). The graph quantity is `landauer-erasure-energy` (`src/composition/quantities/common.ts:126-127`). `src/composition/canonical-compare.ts:208-209` records that split.
+The canonical target is `erasure-energy` (`src/canonical/entries/thermo-nuclear-cosmo.ts:99`, `restatesBridge: '16'` at line 120). The graph quantity is `landauer-erasure-energy`, a row of `data/quantities.json` projected by `src/composition/quantities.ts`. The sentence that the graph quantity was a hand constant in `src/composition/quantities/common.ts` is the record from before the registry. `targetThroughRestatedBridge` in `src/composition/canonical-compare.ts` records that split.
 
-`be-83` (Thomson): catalog row, `BRIDGE_EVALUATORS` entry, `be83Edge` with aliases (`src/composition/edges/applied-physicist.ts`), `catalogFormalRef(83)`, no RHS in `BRIDGE_RHS_BY_ID`. The edge's `kind` is `law`. The catalog row's dependency on be-73 is a different fact from whether the edges compose.
+`be-83` (Thomson): catalog row, `BRIDGE_EVALUATORS` entry, catalog relation `be-83` (kind `law`) in `CATALOG_GRAPH`, a primary-relation expression in `BRIDGE_RHS_BY_ID`, and `catalogFormalRef(83)`. The sentence that the edge was `be83Edge` in `src/composition/edges/applied-physicist.ts`, and that the id had no RHS, is the record from before the catalog engine. The catalog row's dependency on be-73 is a different fact from whether the edges compose.
 
 `ab-spring-lc`: atlas bridge with `physjsFormalRef('ab-spring-lc')` (`src/atlas/oscillators/bridges-exact.ts`). It is not a catalog row and not a `CATALOG_GRAPH` edge (`src/composition/not-composable-seeds.ts`).
 
 ### `MASS_DENSITY`
 
-`MASS_DENSITY` is `{L:-3, M:1, T:0, I:0, Theta:0, N:0, J:0}` in `src/dimensional/types.ts`. It is not a row of `NAMED_DIMENSIONS`, so `format()` does not gain a name. be-20 and `src/composition/quantities/_dims.ts` re-export that binding. The Friedmann validator, bridge 20's expected dimension, the vacuum-energy left-hand side, the loop-quantum density, the brane density, and the FLRW `rho` parameter use it. The sentence that seven files assign the same object, and that the graph reports be-20 and `_dims.ts` as two exports, is the record from before this export. Those seven files were `be-20-vacuum-energy.ts`, `_dims.ts`, `catalog-tranche.ts`, `bridge-check.ts`, `friedmann-equation.ts`, `be-19-quantum-bounce.ts`, and `be-54-randall-sundrum-brane.ts`. `BE54_DENSITY.dim` and `PARAM_DIM.rho` were the same exponents without the name, and they now name this export. The live scan is `docs/architecture/duplicate-owners.md`.
+`MASS_DENSITY` is `{L:-3, M:1, T:0, I:0, Theta:0, N:0, J:0}` in `src/dimensional/types.ts`. It is not a row of `NAMED_DIMENSIONS`, so `format()` does not gain a name. `src/dimensional/friedmann-equation.ts` and `src/numerical/spacetime-metrics.ts` import that binding. The sentence that be-20 and `src/composition/quantities/_dims.ts` re-export it is the record from before the catalog engine. The sentence that seven files assign the same object, and that the graph reports be-20 and `_dims.ts` as two exports, is the record from before this export. Those seven files were `be-20-vacuum-energy.ts`, `_dims.ts`, `catalog-tranche.ts`, `bridge-check.ts`, `friedmann-equation.ts`, `be-19-quantum-bounce.ts`, and `be-54-randall-sundrum-brane.ts`. `BE54_DENSITY.dim` and `PARAM_DIM.rho` were the same exponents without the name. The live scan is `docs/architecture/duplicate-owners.md`.
 
 ### `canonicalJson` and `captureEnvironment`
 
@@ -335,7 +335,7 @@ Ten atlas bridges carry `physjsFormalRef('ab-…')` on the bridge object. The ot
 
 `docs:deps` records `export * as <name> from` as an internal dependency, the same way it records `export * from`. `unused-analysis.md` lists 0 unused files. `src/index.ts:1144` is the namespace facade `MEMORY.md` describes, and the dependency graph records that edge. The `./atlas` package subpath points at `src/atlas/index.ts`, which is the larger internal barrel. Two entry shapes, one implementation. The live duplicate-owner list is `docs/architecture/duplicate-owners.md`. The map does not copy its rows.
 
-The same generator lists `BCS_GAP_RATIO` as an export of `src/bridges/confrontations.ts`. The only occurrence there is a quote string at `confrontations.ts:661`. The real export is `src/bridges/be62-bcs-gap.ts:23`. That unused-export row is a lexer false positive.
+The sentence that the same generator lists `BCS_GAP_RATIO` as an export of `src/bridges/confrontations.ts`, that the only occurrence there is a quote at `confrontations.ts:661`, and that the real export is `src/bridges/be62-bcs-gap.ts`, is the record from before the catalog engine. The constant is defined in `src/core/constants.ts` and re-exported from `src/bridges/index.ts`.
 
 ### Re-export shims
 
@@ -351,23 +351,21 @@ These files name a symbol whose body lives elsewhere. Each of the assign-and-ree
 | `src/numerical/index.ts` | `evaluateMetricInverse` from `metric-inverse.ts` |
 | `src/composition/probe/search-budget.ts` | `DEFAULT_SEARCH_BUDGET` from `types.ts` |
 | `src/atlas/path-bound.ts` | `IDENTITY_BOUND` from `error-algebra.ts` |
-| `src/bridges/be67-alfven-speed.ts` | `M_PROTON_SI` from `core/constants.ts` |
+| `src/bridges/index.ts` | `M_PROTON_SI` from `core/constants.ts` |
 | `src/canonical/entries/_l1-build.ts` | `dim` from `dimensional/ast-builders.ts` |
 | `src/atlas/physjs-ref.ts` | `PHYSJS_COMMIT` from `physjs-entries.generated.ts` |
-| `src/bridges/equations/be-20-vacuum-energy.ts` | `MASS_DENSITY` from `dimensional/types.ts` |
-| `src/composition/quantities/_dims.ts` | `MASS_DENSITY` from `dimensional/types.ts` |
 
-`tests/atlas/relations-shim.test.ts` checks the relations move. The shims are cycle breaks and public-surface stability, not a second physics implementation.
+`tests/atlas/relations-shim.test.ts` checks the relations move. The shims are cycle breaks and public-surface stability, not a second physics implementation. The sentence that `src/bridges/be67-alfven-speed.ts`, `src/bridges/equations/be-20-vacuum-energy.ts`, and `src/composition/quantities/_dims.ts` were rows of this table is the record from before the catalog engine. `M_PROTON_SI` and `BCS_GAP_RATIO` are defined in `src/core/constants.ts`. `MASS_DENSITY` is defined in `src/dimensional/types.ts`.
 
 ### Names the graph reports as locally declared in more than one file
 
-A walk of `dependency-graph.json` that skips each file's `reExported` list reports 3 names. `command` is 28 command modules. `getBridge` is `src/atlas/bridge-record.ts` and `src/composition/descriptor.ts`. `BCS_GAP_RATIO` is `src/bridges/be62-bcs-gap.ts` and a citation quote in `src/bridges/confrontations.ts`. The sentence that this list is 16 names, and the later walk that still listed `MASS_DENSITY`, `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM`, `regimeHolds`, `DimensionMismatchError`, `EngineCapabilityError`, `DEFAULT_SEARCH_BUDGET`, `IDENTITY_BOUND`, `M_PROTON_SI`, `evaluateMetricInverse`, `dim`, and `PHYSJS_COMMIT` as two files, is the record from before the re-exports. `canonicalJson` and `captureEnvironment` left an earlier list when both moved to `src/composition/canonical-json.ts`. Classification of the three that remain:
+The sentence that a walk of `dependency-graph.json` reports 3 names, and that `BCS_GAP_RATIO` is `src/bridges/be62-bcs-gap.ts` and a citation quote in `src/bridges/confrontations.ts`, is the record from before the catalog engine. `command` is the command modules. `getBridge` is `src/atlas/bridge-record.ts` and `src/composition/descriptor.ts`. `BCS_GAP_RATIO` is defined in `src/core/constants.ts`. The sentence that this list is 16 names, and the later walk that still listed `MASS_DENSITY`, `COMPOSITION_TABLE`, `composeRelation`, `NO_COMPOSITE_CLAIM`, `regimeHolds`, `DimensionMismatchError`, `EngineCapabilityError`, `DEFAULT_SEARCH_BUDGET`, `IDENTITY_BOUND`, `M_PROTON_SI`, `evaluateMetricInverse`, `dim`, and `PHYSJS_COMMIT` as two files, is the record from before the re-exports. `canonicalJson` and `captureEnvironment` left an earlier list when both moved to `src/composition/canonical-json.ts`. Classification of the names that paragraph counted:
 
 | Name | Files | Reading |
 |---|---|---|
 | `command` | 28 command modules | registration convention |
 | `getBridge` | `bridge-record.ts` and `descriptor.ts` | two functions |
-| `BCS_GAP_RATIO` | confrontations quote and `be62-bcs-gap.ts` | parser false positive plus one real constant |
+| `BCS_GAP_RATIO` | `src/core/constants.ts` | one constant. The sentence that a confrontations quote and `be62-bcs-gap.ts` were the two files is the record from before the catalog engine |
 
 `duplicate-symbols.md` previously said 5 names, 383 `src` files, and `totalSourceFiles` 1025. The 383/1025 figures are not in the current `dependency-graph.json` (`totalFiles` 471, `totalExports` 3553). `repo_map.py` is not in this repository; that file was corrected from this reading, not regenerated by `repo_map.py`.
 

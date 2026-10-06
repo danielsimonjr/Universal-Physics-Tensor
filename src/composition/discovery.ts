@@ -336,6 +336,13 @@ interface DiscoveryContext {
   readonly comps: ReadonlyMap<string, string>;
   /** `forwardClosure(edges, anchor, baseIdents)` — base determinable set. */
   readonly closureBase: ReadonlySet<string>;
+  /**
+   * Retrodiction of the anchor with no hypothesized identification.
+   * An identification of two quantities outside {@link closureBase} cannot
+   * fire, so that candidate's numeric report is this one.
+   */
+  readonly baseNumericallyConsistent: boolean;
+  readonly baseInconsistentNodes: readonly string[];
 }
 
 /** Resolve options and compute the candidate-invariant discovery state once.
@@ -347,6 +354,7 @@ function buildDiscoveryContext(
   const baseIdents = opts.identifications ?? QUANTITY_IDENTIFICATIONS;
   const groundTruth = opts.groundTruth ?? ANCHOR_DEFAULT;
   const anchor = Object.keys(groundTruth);
+  const baseReport = retrodict(edges, groundTruth, { identifications: baseIdents });
   return {
     baseIdents,
     groundTruth,
@@ -366,6 +374,11 @@ function buildDiscoveryContext(
     ),
     comps: quantityComponents(edges, baseIdents),
     closureBase: forwardClosure(edges, anchor, baseIdents),
+    baseNumericallyConsistent: baseReport.allConsistent,
+    baseInconsistentNodes: baseReport.results
+      .filter((r) => r.outcome === 'inconsistent')
+      .map((r) => r.target)
+      .sort(),
   };
 }
 
@@ -385,9 +398,9 @@ export function vetLinkCandidate(
 
 /**
  * The per-candidate vetting body, given pre-computed candidate-invariant
- * `ctx`. Only the hypothesis-augmented closure and retrodiction are genuinely
- * per-candidate; the anchor magnitudes, base components, and base closure come
- * from `ctx`.
+ * `ctx`. The hypothesis-augmented closure is per-candidate. Retrodiction is
+ * per-candidate only when an endpoint is already in the anchor closure;
+ * otherwise the identification cannot fire and the base report stands.
  *
  * @internal
  */
@@ -407,6 +420,8 @@ function vetInContext(
     comps,
     closureBase,
     attributesByName,
+    baseNumericallyConsistent,
+    baseInconsistentNodes,
   } = ctx;
 
   // Magnitude gate: an INDEPENDENT falsifier the single-anchor graph can't make.
@@ -525,12 +540,20 @@ function vetInContext(
     .sort();
 
   // Numeric: retrodiction must stay all-consistent under the hypothesis.
-  const report = retrodict(edges, groundTruth, { identifications: withHyp });
-  const numericallyConsistent = report.allConsistent;
-  const inconsistentNodes = report.results
-    .filter((r) => r.outcome === 'inconsistent')
-    .map((r) => r.target)
-    .sort();
+  // Neither endpoint in the anchor closure means the identification cannot
+  // fire, so the report is the base one. A copy, because a caller may sort it.
+  const touchesClosure = closureBase.has(candidate.a) || closureBase.has(candidate.b);
+  const report = touchesClosure
+    ? retrodict(edges, groundTruth, { identifications: withHyp })
+    : undefined;
+  const numericallyConsistent = report === undefined ? baseNumericallyConsistent : report.allConsistent;
+  const inconsistentNodes =
+    report === undefined
+      ? [...baseInconsistentNodes]
+      : report.results
+          .filter((r) => r.outcome === 'inconsistent')
+          .map((r) => r.target)
+          .sort();
 
   // Verdict precedence: a magnitude clash is the most decisive, most
   // interpretable falsification, checked before the graph contradiction;

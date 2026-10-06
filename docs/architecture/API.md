@@ -555,13 +555,12 @@ This layer holds the composition graph (`src/composition/`), the computable brid
 - **`consistencyRatio(...)`** — compare a composed chain against an independent route.
 - **`minConfidence(...)`** / **`QUANTITY_IDENTIFICATIONS`** — confidence combination and quantity-identification table used by `composeEdges`.
 - **`CompositionDimensionError`** / **`CompositionJunctionError`** / **`DomainViolationError`** — error classes for incompatible compositions.
-- **Calibration edges** — `be16Edge`, `be42Edge`, `be42ViaRsEdge`, `be51Edge`, `be52Edge`, `lawSchwarzschildRadius` (the first diagonal-law edge), and the `M_SUN_KG` anchor constant, plus `be12Edge`, `be11ZurekEdge` (CT-3), and `be37Edge` (CT-4). The CT-1 target derives E_min(M) = ℏc³ln2/(8πGM) from BE-42∘BE-16.
-- **Catalog edges** — the tranche `be14Edge`/`be19Edge`/`be21Edge`/`be48Edge`/`be53Edge`/`be54Edge` is individually on the root surface. The `CATALOG_FULL_EDGES` array adds 26 more edges: the array is on the root surface, and the per-edge exports stay at the composition barrel. The assembled `CATALOG_GRAPH` is 83 edges. The sentence that stopped at 46 edges is the record from before the later tranches. See `INTEGRATION_MAP.md`. See [§11](#phase-cd-analysis-namespacing-gate-and-related-exports).
+- **Catalog graph** — `CATALOG_GRAPH` is every catalog relation, projected by `src/composition/catalog-graph.ts`. `evaluateRelation` evaluates a record. The sentence that named edge constants lived in files under `src/composition/edges/` is the record from before the catalog engine. See `INTEGRATION_MAP.md`. See [§11](#phase-cd-analysis-namespacing-gate-and-related-exports).
 
 ```typescript
-import { composeEdges, be42Edge, be16Edge } from 'universal-physics-tensor';
+import { CATALOG_GRAPH, evaluateRelation } from 'universal-physics-tensor';
 
-const eMinOfM = composeEdges(be42Edge, be16Edge);  // M → T_H → E_min
+const landauer = evaluateRelation('be-16', { temperature: 300 });
 ```
 
 ### Membership criterion + negative catalog (`src/bridges/membership*.ts`, `rejected.ts`)
@@ -570,12 +569,13 @@ const eMinOfM = composeEdges(be42Edge, be16Edge);  // M → T_H → E_min
 - **`adjudicateCatalog(...)`** — whole-catalog adjudication; returns a `CatalogAdjudicationReport`.
 - **`REJECTED_BRIDGE_ADJUDICATIONS`** / **`REJECTED_BRIDGE_IDS`** — the negative catalog: BE-28/29/32/35/40 adjudicated NOT-A-BRIDGE with reasons. BE-42 is adjudicated a bridge (`['gravity','quantum']`); BE-44/46/50 are unadjudicated. See `docs/architecture/v0.8.0-catalog-adjudication.md`.
 
-### GW170817 confrontation (`src/bridges/be36-gw170817-confrontation.ts`)
+### Catalog confrontations (`src/bridges/confrontations.ts`)
 
-- **`confrontBE36(...)`** — confronts the BE-36 GW-speed bound with a `GWSpeedObservation`; returns a `BE36ConfrontationResult`.
-- **`GW170817`** — the multi-messenger observation constant (the first real-data record in the codebase).
+- **`runConfrontation(bridgeId)`** — runs the confrontation recorded for that catalog id, or returns `undefined`.
+- **`listConfrontations()`** — every confrontation, in catalog order.
+- The GW-speed comparison and the Planckian-dissipation comparison are catalog records. The sentence that each lived in its own module under `src/bridges/` is the record from before the catalog engine.
 
-Type-only additions: `Quantity`, `RegimeAttributes`, `BridgeEdge`, `EdgeConfidence`, `ValidityDomain`, `ComposeOptions`, `QuantityIdentification`, `BridgeVerdict`, `CatalogAdjudicationReport`, `RejectedBridgeAdjudication`, `BE36ConfrontationResult`, `GWSpeedObservation`.
+Type-only additions: `Quantity`, `RegimeAttributes`, `BridgeEdge`, `EdgeConfidence`, `ValidityDomain`, `ComposeOptions`, `QuantityIdentification`, `BridgeVerdict`, `CatalogAdjudicationReport`, `RejectedBridgeAdjudication`, `ConfrontationOutcome`.
 
 ---
 
@@ -587,7 +587,7 @@ Everything in this section is `@public` and re-exported from `src/index.ts` unle
 
 - **`enumerateCompositions(...)`** — the Phase-D candidate enumerator: walks all ordered edge pairs, attempts composition, and returns an `EnumerationReport` of `CompositionCandidate`s (`all`, split into `registered` vs. `novel` against `REGISTERED_COMPOSITION_IDS`) and the alias collisions held at the gate (`requiresDisposition`, typed `DispositionRequired`). Junction and dimension refusals are skipped, not reported.
 - **`propagateUncertainty(...)`** — first-order uncertainty propagation via a central-difference Jacobian over an edge's transfer function; returns an `UncertaintyResult`. Works on composed edges for free.
-- **`confrontBE36WithUncertainty(...)`** — GW170817 confrontation with propagated observational uncertainty (returns `BE36ConfrontationWithUncertainty`).
+- **`runConfrontation(bridgeId)`** — the catalog confrontation for that id. The sentence that `confrontBE36WithUncertainty` was its own export is the record from before the catalog engine.
 - **`classifyIdentifiability(edges, known, target, opts?)`** / **`classifyAll(...)`** / **`forwardClosure(...)`** — the structural identifiability classifier. Counts a target's independent derivations from a known-quantity set. Returns an `IdentifiabilityResult` with an `IdentifiabilityVerdict`: `under-determined` / `exactly-determined` / `over-determined` / `given`. The over-determined surplus are falsifiable consistency constraints. Structural, not parametric; honors `QUANTITY_IDENTIFICATIONS`; excludes circular self-support. Types: `IdentifiabilityVerdict`, `IdentifiabilityResult`, `IdentifiabilityOptions`.
 - **`retrodict(edges, groundTruth, opts?)`** / **`retrodictNode(...)`** — the retrodiction harness (the framework's own falsification benchmark). Masks each over-determined node, recomputes it via every independent derivation from `groundTruth` values, and scores the spread (`consistent` / `inconsistent` / `single` / `unrecoverable`; headline `allConsistent`). Optional `references` add external-value scoring. Pass bar pre-registered (spread ≤ 1e-6). Types: `RetrodictionOutcome`, `RetrodictionPrediction`, `RetrodictionResult`, `RetrodictionReport`, `RetrodictionOptions`.
 - **`explainQuantity(edges, target, known, opts?)`** — the unified entry point. It synthesizes the three primitives above into one `QuantityExplanation`, which holds:
@@ -601,9 +601,9 @@ Everything in this section is `@public` and re-exported from `src/index.ts` unle
    `known` may be a name list (structural + dimensional only) or values (adds recovery + consistency); `extraDimensions` declares dims for non-graph knowns (raw `G`, `c`, …). Types: `QuantityExplanation`, `DerivationExplanation`, `ExplainOptions`.
 
 ```typescript
-import { enumerateCompositions, CATALOG_FULL_EDGES } from 'universal-physics-tensor';
+import { enumerateCompositions, CATALOG_GRAPH } from 'universal-physics-tensor';
 
-const report = enumerateCompositions(CATALOG_FULL_EDGES);
+const report = enumerateCompositions(CATALOG_GRAPH);
 // report.all / report.registered / report.novel / report.requiresDisposition
 ```
 
@@ -612,15 +612,15 @@ const report = enumerateCompositions(CATALOG_FULL_EDGES);
 - **`CompositionAliasError`** — thrown by `composeEdges` when both operands carry a same-named source quantity and no disposition is recorded.
 - **`SOURCE_ALIAS_DISPOSITIONS`** — the reviewable registry of per-composition `AliasDisposition`s (`'shared'` or `{renameSecond}` with input remap); `composeEdges(…, { aliases })` is the per-call escape hatch.
 - Type-only: `AliasDisposition`, `DispositionRequired`.
-- The 131 centralized `Quantity` node constants live in `src/composition/quantities/`, and the `quantities.ts` barrel re-exports them. They are `@internal`: the edge files consume them, and they are not on the composition barrel or the root surface.
+- Graph quantity nodes are projected from `data/quantities.json` by `src/composition/quantities.ts`. They are not on the root surface. The sentence that they were hand constants under `src/composition/quantities/` is the record from before the registry.
 
 ### Klein-Gordon dispersion evaluator
 
 - **`evaluateKGDispersionResidual(input)`** / **`verifyKleinGordonPlaneWave(input)`** — plane-wave-sector dispersion check ω² = c²k² + (mc²/ℏ)². Types: `KGDispersionResidualInput`, `KGPlaneWaveVerifyInput`, `KGPlaneWaveVerifyResult`.
 
-### BE-23 Planckian data confrontation
+### Planckian data confrontation
 
-- **`confrontBE23(...)`** / **`confrontBE23WithUncertainty(...)`** — BE-23 SYK Planckian dissipation vs. the overdoped-cuprate aggregate (Legros et al. 2019). Constants: `PLANCKIAN_CUPRATES` (a `PlanckianObservation`), `PLANCKIAN_O1_BAND`. Result types: `BE23ConfrontationResult`, `BE23ConfrontationWithUncertainty`.
+The Planckian-dissipation comparison is a catalog confrontation projected by `src/bridges/confrontations.ts`. `runConfrontation` returns that record's outcome. The sentence that the comparison was `confrontBE23` in its own module is the record from before the catalog engine.
 
 ### Internal flat-metric types
 
@@ -810,69 +810,18 @@ const be36 = runConfrontation(36); // ConfrontationOutcome | undefined
 
 Type-only: `ConfrontationEntry` (`bridgeId`, `title`, `kind`, `run()`).
 
-### Per-bridge confrontations
+### Catalog confrontations
 
-Each wraps a bridge's own evaluator/formula against an independently-sourced
-observation. All are `@public` and individually re-exported from
-`src/index.ts` (in addition to being reachable via the unified registry
-above).
-
-| Bridge | Function | Observation constant | Kind |
-|---|---|---|---|
-| BE-52 (Mercury perihelion) | `confrontBE52` | `MERCURY` | value |
-| BE-37 (Shapiro delay) | `confrontBE37` | `CASSINI` | value |
-| BE-48 (GRW collapse rate) | `confrontBE48` | `LISA_PATHFINDER_CSL` | upper-bound |
-| BE-51 (light deflection) | `confrontBE51` | `VLBI_LAMBERT_2009` | value |
-| BE-21 (KSS viscosity bound) | `confrontBE21` | `KSS_BOUND`, `QGP_BMB19` | consistency |
-| BE-35 (conformal bootstrap) | `confrontBE35` | `BOOTSTRAP_NU`, `BOOTSTRAP_NU_SIGMA`, `ISING_PELISSETTO_VICARI_2002` | value |
-| BE-11 (collisional decoherence) | `confrontBE11` | `DECOHERENCE_EXPERIMENTAL_TOLERANCE`, `COLLISIONAL_HORNBERGER_2003` | consistency |
-| BE-36 (GW speed, GW170817) | `confrontBE36` / `confrontBE36WithUncertainty` | `GW170817` | upper-bound |
-| BE-23 (Planckian dissipation) | `confrontBE23` / `confrontBE23WithUncertainty` | `PLANCKIAN_CUPRATES`, `PLANCKIAN_O1_BAND` | value |
-| BE-55 (quantum Hall universality) | `confrontBE55` | `QH_UNIVERSALITY_JANSSEN_2012` | consistency |
-| BE-56 (Casimir force) | `confrontBE56` | `CASIMIR_MOHIDEEN_ROY_1998` | consistency |
-| BE-58 (Johnson-Nyquist noise) | `confrontBE58` | `JNT_FLOWERS_JACOBS_2017`, `K_B_CODATA_2014` | value |
-| BE-59 (AC Josephson universality) | `confrontBE59` | `JOSEPHSON_UNIVERSALITY_BIPM` | consistency |
-| BE-60 (fractional quantum Hall plateau) | `confrontBE60` | `FQH_PLATEAU_TSUI_1982` | consistency |
-| BE-61 (Wiedemann-Franz Lorenz number) | `confrontBE61` | `LORENZ_SILVER_2023` | consistency |
-| BE-62 (BCS gap ratio) | `confrontBE62` | `BCS_RATIO_TIN` | consistency |
-| BE-63 (Chandrasekhar mass) | `confrontBE63` | `WHITE_DWARF_MAX_MASS` | consistency |
-| BE-64 (Eddington luminosity) | `confrontBE64` | `EDDINGTON_RATIO_BRIGHT` | consistency |
-| BE-65 (Jeans mass) | `confrontBE65` | `MOLECULAR_CLOUD_FRAGMENT` | consistency |
-
-BE-36 and BE-23 predate the unified `ConfrontationOutcome` shape. Their native
-result types — `BE36ConfrontationResult`, `BE23ConfrontationResult`, etc. —
-stay the direct return type of their own `confront*` functions. The registry
-above adapts those types to `ConfrontationOutcome` internally. Both bridges
-are already documented in [§10](#composition--membership--confrontation-layer) and
-[§11](#phase-cd-analysis-namespacing-gate-and-related-exports).
-
-Each of the other seventeen confrontation functions' own result type is also
-`@public` and exported:
-
-- `BE52ConfrontationResult`/`PerihelionObservation`
-- `BE37ConfrontationResult`/`CassiniObservation`
-- `BE51ConfrontationResult`/`VLBIDeflectionObservation`
-- `BE48ConfrontationResult`/`CollapseBoundObservation`
-- `BE21ConfrontationResult`/`QGPViscosityObservation`
-- `BE35ConfrontationResult`/`IsingExponentObservation`
-- `BE11ConfrontationResult`/`CollisionalDecoherenceObservation`
-- `BE55ConfrontationResult`/`QHUniversalityObservation`
-- `BE56ConfrontationResult`/`CasimirAgreementObservation`
-- `BE58ConfrontationResult`/`JNTObservation`
-- `BE59ConfrontationResult`/`JosephsonUniversalityObservation`
-- `BE60ConfrontationResult`/`FractionalQHObservation`
-- `BE61ConfrontationResult`/`LorenzNumberObservation`
-- `BE62ConfrontationResult`/`BCSRatioObservation`
-- `BE63ConfrontationResult`/`WhiteDwarfMassObservation`
-- `BE64ConfrontationResult`/`EddingtonRatioObservation`
-- `BE65ConfrontationResult`/`CloudFragmentObservation`
+Each confrontation is a record in `data/bridge-catalog.json`, projected by
+`src/bridges/confrontations.ts`. `runConfrontation(id)` returns that record's
+outcome. There is no per-bridge `confront*` export. The sentence that each
+confrontation was its own function and its own module is the record from
+before the catalog engine.
 
 ```typescript
-import { confrontBE52, MERCURY } from 'universal-physics-tensor';
+import { runConfrontation } from 'universal-physics-tensor';
 
-const result = confrontBE52();
-// result.predicted_arcsec_per_century / result.observed_arcsec_per_century
-// result.residual_in_sigma / result.withinObserved
+const result = runConfrontation(52);
 ```
 
 ### Deciding-measurement elasticity (`src/bridges/sensitivity.ts`)

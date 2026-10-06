@@ -21623,7 +21623,7 @@
         ]
       },
       "src/numerical/covariant-eikonal.ts": {
-        "description": "v0.5.0 BE-37 covariant-eikonal numerical evaluator.",
+        "description": "Covariant-eikonal method, used by catalog relation be-37.",
         "externalDependencies": [
           {
             "package": "universal-physics-tensor",
@@ -24109,7 +24109,7 @@
   "statistics": {
     "totalTypeScriptFiles": 351,
     "totalModules": 13,
-    "totalLinesOfCode": 77057,
+    "totalLinesOfCode": 77085,
     "totalExports": 2363,
     "totalClasses": 64,
     "totalInterfaces": 433,

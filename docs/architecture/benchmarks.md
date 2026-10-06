@@ -87,11 +87,12 @@ Run date: 2026-05-17.
 Machine: the dev box (Windows 11, vitest bench v4.1.4 tinybench).  
 Physical scenario: solar grazing ray — M_sun = 1.989e30 kg, R_near = 1.0e9 m, R_far = 1.5e11 m (~1 AU).
 
-**F1 note:** This run benches two functions.
+**F1 note:** This run benches two functions. The two paths named below are the record from before the catalog engine. The method that remains is the covariant-eikonal method, `evaluateCovariantEikonalNumerical` in `src/numerical/covariant-eikonal.ts`, used by catalog relation be-37.
 
 1. `evaluateBE37EikonalNumerical` (`src/bridges/equations/be-37-shapiro-delay.ts`) is the actual
-   RK4 Shapiro-delay evaluator (4096 fixed steps, no arguments, scenario hardcoded internally).
-   This evaluator is the primary AST→lowering→engine roundtrip baseline.
+   RK4 Shapiro-delay evaluator (4096 fixed steps, no arguments, scenario hardcoded internally)
+   of that dated run.
+   This evaluator is the primary AST→lowering→engine roundtrip baseline of that run.
 
 2. `evaluateBE37CovariantEikonalNumerical` (`src/numerical/be37-covariant-eikonal.ts`) was
    benched in this run while it was a structural preview. That preview returned

@@ -49,7 +49,7 @@ import { EngineCapabilityError } from '../numerical/errors.js';
  * @public
  */
 export interface BridgeDiffSpec<Input> {
-  /** Bridge identifier (e.g., 'BE-37'). Used in error messages. */
+  /** Catalog id used in error messages (for example the relation that uses the covariant-eikonal method). */
   readonly bridgeId: string;
   /** Display name (e.g., 'Shapiro time delay'). */
   readonly name: string;
