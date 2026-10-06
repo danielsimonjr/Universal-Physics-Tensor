@@ -112,3 +112,16 @@ import lean.LangmuirProbe
 import lean.CrossFieldDiffusion
 import lean.Firehose
 import lean.MirrorInstability
+import lean.AcDrude
+import lean.BlochLaw
+import lean.BuiltinVoltage
+import lean.DensityOfStates2D
+import lean.DensityOfStates3D
+import lean.GorterCasimir
+import lean.JosephsonInductance
+import lean.LowerCritical
+import lean.Matthiessen
+import lean.OnsagerFrequency
+import lean.SemiconductorFermi
+import lean.Stoner
+import lean.ThomasFermi
