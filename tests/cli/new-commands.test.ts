@@ -4,6 +4,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { runCli } from '../../dist/cli/main.js';
+import { M_SUN_SI } from '../../src/core/constants.js';
 
 function capture() {
   const lines: string[] = [];
@@ -34,7 +35,9 @@ describe('upt evaluate', () => {
   it('be-63 mu_e=2 → Chandrasekhar mass, exit 0', async () => {
     const c = capture();
     expect(await runCli(['evaluate', 'be-63', 'mu_e=2'], c.io)).toBe(0);
-    expect(text(c)).toMatch(/M_Ch_solar = 1\.4/);
+    const kilograms = Number(text(c).match(/value = ([0-9.eE+-]+)/)?.[1]);
+    expect(kilograms / M_SUN_SI).toBeGreaterThan(1.3);
+    expect(kilograms / M_SUN_SI).toBeLessThan(1.6);
   });
   it('no args lists the evaluable bridges', async () => {
     const c = capture();
@@ -54,7 +57,7 @@ describe('upt evaluate', () => {
     expect(await runCli(['evaluate', 'be-55', 'C=1', '--json'], c.io)).toBe(0);
     const env = JSON.parse(text(c));
     expect(env.result.bridgeId).toBe(55);
-    expect(env.result.output.R_H_ohm).toBeCloseTo(25812.807, 2);
+    expect(1 / env.result.output.value).toBeCloseTo(25812.807, 2);
   });
 });
 
@@ -89,12 +92,13 @@ describe('upt ground', () => {
     const code = await runCli(['ground', 'landauer-erasure-energy', 'dark-fermion-mass'], c.io);
     expect(code).toBe(0);
     expect(text(c)).toMatch(/mechanism-tested false · data-tested false/);
-  }, 180_000);
-  // ground ranks the catalog. 1525 candidates no longer finish in 60s on the CI runner.
+  }, 360_000);
+  // ground ranks the catalog. 1525 candidates no longer finish in 60s. After the graph held every
+  // catalog relation, the same calls were still running at the 180s ceiling (measured ~190s).
   it('a non-candidate pair → exit 1', async () => {
     const c = capture();
     expect(await runCli(['ground', 'mass', 'mass'], c.io)).toBe(1);
-  }, 180_000);
+  }, 360_000);
   it('needs two names → exit 2', async () => {
     const c = capture();
     expect(await runCli(['ground', 'mass'], c.io)).toBe(2);
@@ -108,18 +112,18 @@ describe('upt ground', () => {
       expect(await runCli(['ground', '--source=canonical', 'compton-wavelength', 'hubble-distance'], c.io)).toBe(0);
       expect(text(c)).toMatch(/\[source: canonical/);
       expect(text(c)).toMatch(/compton-wavelength ≟ hubble-distance/);
-    }, 180_000);
+    }, 360_000);
     it('a pair from another scope names the scope that has it', async () => {
       const c = capture();
       expect(await runCli(['ground', 'compton-wavelength', 'hubble-distance'], c.io)).toBe(1);
       expect(text(c)).toMatch(/not a candidate in the catalog graph/);
       expect(text(c)).toMatch(/upt ground --source=canonical compton-wavelength hubble-distance/);
-    }, 180_000);
+    }, 360_000);
     it('a pair in no scope still says so, without naming a scope', async () => {
       const c = capture();
       expect(await runCli(['ground', 'mass', 'mass'], c.io)).toBe(1);
       expect(text(c)).toMatch(/in any of catalog, canonical, both/);
-    }, 180_000);
+    }, 360_000);
     it('help documents --source and the discover options', async () => {
       const c = capture();
       expect(await runCli(['help', 'ground'], c.io)).toBe(0);

@@ -71,38 +71,9 @@ export interface UserEquation {
 /** Upper bound on user `--equation` text to keep hint computation bounded. */
 const MAX_USER_EQUATION_LEN = 8192;
 
-/** Escape a string for use inside a {@link RegExp} character class / pattern. */
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-/**
- * Rewrite catalog kebab-case names (`planck-length`) to underscored forms
- * (`planck_length`) in a formula string so the parser does not treat `-` as
- * subtraction (persona finding W2). Longest match first so
- * `hawking-temperature` wins over `temperature`. Names without a hyphen are
- * left alone. Pure.
- *
- * @internal
- */
-export function rewriteCatalogHyphens(
-  text: string,
-  catalogNames: ReadonlySet<string> | Iterable<string>,
-): string {
-  const names = [...catalogNames]
-    .filter((n) => n.includes('-'))
-    .sort((a, b) => b.length - a.length || a.localeCompare(b));
-  let out = text;
-  for (const name of names) {
-    const underscored = name.replace(/-/g, '_');
-    // Not a word-char on either side — keeps `planck-length` from eating into
-    // `fooplanck-length` / `planck-lengthbar`, and leaves arithmetic `a-b` alone
-    // when `a-b` is not a catalog name.
-    const re = new RegExp(`(?<![A-Za-z0-9_])${escapeRegExp(name)}(?![A-Za-z0-9_])`, 'g');
-    out = out.replace(re, underscored);
-  }
-  return out;
-}
+import { rewriteCatalogHyphens } from '../dimensional/hyphen-names.js';
+/** Rewrite a catalog hyphenated name to underscores before the expression parse. */
+export { rewriteCatalogHyphens };
 
 /**
  * When a subtract/dimension error still names a hyphenated token that is a

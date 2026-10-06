@@ -288,7 +288,7 @@ export function solveGL4Stage(
  *   - `initialState.x` — `(t, r, θ, φ)` in **(s, m, rad, rad)** (SI).
  *   - `initialState.p` — covariant 4-momentum `p_μ = g_μν v^ν` in
  *     **(J·s, kg·m, kg·m², kg·m²)** under the affine normalization
- *     `p_t = −c²` used by `evaluateBE37CovariantEikonalNumerical`.
+ *     `p_t = −c²` used by `evaluateCovariantEikonalNumerical`.
  *   - `tauMax` — affine-parameter (proper-time for timelike, coordinate-
  *     time-like for the null normalization) extent in **seconds** under
  *     the BE-37 convention; **dimensionless** if the caller chose

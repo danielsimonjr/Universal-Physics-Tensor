@@ -26,12 +26,13 @@ describe('upt explain <bridge-id> redirect', () => {
     expect(text).not.toMatch(/closed-form/i);
   });
 
-  it('be-57 (closed-form, NOT confronted): notes closed-form + no data confrontation, exit 0', async () => {
+  it('be-57 (not confronted): notes the bridge and that it has no data confrontation, exit 0', async () => {
     const cap = capture();
     const code = await runCli(['explain', 'be-57'], cap.io);
     expect(code).toBe(0);
     const text = cap.lines.join('');
-    expect(text).toMatch(/closed-form|evaluator/i);
+    expect(text).toMatch(/bridge equation/);
+    expect(text).toMatch(/no committed data confrontation/);
     // be-57 Unruh is deferred — it must NOT falsely advertise a confrontation
     expect(text).not.toMatch(/confront be-57/);
   });

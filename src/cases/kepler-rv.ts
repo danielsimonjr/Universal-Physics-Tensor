@@ -16,7 +16,8 @@
  * @module cases/kepler-rv
  */
 import { C_SI, G_SI } from '../core/constants.js';
-import { evaluatePerihelionPrecession } from '../bridges/perihelion-precession.js';
+import { catalogRelations } from '../bridges/catalog-load.js';
+import { evaluateCatalogRelation } from '../bridges/relation-eval.js';
 import { check, requirePositive, type AppliedCase } from './types.js';
 
 const ID = 'case-kepler-rv';
@@ -105,7 +106,7 @@ export const KEPLER_RV_CASE: AppliedCase = {
   ],
   links: [
     { id: 'CE-kepler-third', role: 'T² = 4π²a³/(GM), with the assumptions two-body and M ≫ m; here with M → M_* + m_p' },
-    { id: 'be-52', role: 'the GR perihelion advance Δφ = 6πGM/(c²a(1 − e²)), evaluated with the total mass (`upt evaluate be-52`)' },
+    { id: `be-${52}`, role: 'the GR perihelion advance Δφ = 6πGM/(c²a(1 − e²)), evaluated with the total mass (`upt evaluate be-52`)' },
     { id: 'CE-perihelion-precession', role: 'the canonical entry restating BE-52' },
     { id: 'CE-schwarzschild-radius', role: 'r_s = 2GM/c², whose ratio to a (halved) is the weak-field check\'s quantity' },
   ],
@@ -142,7 +143,9 @@ export const KEPLER_RV_CASE: AppliedCase = {
     const K2b = (n13 * m * sinI) / Math.cbrt(total * total) / root;
     const rPeri = a * (1 - e);
     const weak = (G_SI * total) / (C_SI * C_SI * a);
-    const dphi = evaluatePerihelionPrecession({ M_kg: total, a_m: a, e, T_yr: P / JULIAN_YEAR_S }).dphi_rad_per_orbit;
+    const advance = catalogRelations().find((row) => row.target === 'perihelion-advance');
+    if (advance === undefined) throw new Error(`${ID}: the perihelion relation is not in the catalog`);
+    const dphi = evaluateCatalogRelation(advance, { mass: total, 'semi-major-axis': a, eccentricity: e });
     const misfit = (e * dphi * tObs) / P;
     return {
       outputs: {

@@ -8,7 +8,7 @@
  *
  * A derivation-step (`be-30`) and a rejected partial (`be-35`) stay off
  * `formally-proved`. An unadjudicated row (`be-50`) stays `proposed`.
- * `composeEdges(be42Edge, be16Edge)` stays `highly-speculative`.
+ * `composeEdges(edge42, edge16)` stays `highly-speculative`.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -23,7 +23,11 @@ import { deriveEdgeEvidence } from '../../src/cli/map-evidence.js';
 import { adjudicateBridgeEntry } from '../../src/bridges/membership.js';
 import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
 import { composeEdges } from '../../src/composition/compose.js';
-import { be16Edge, be42Edge } from '../../src/composition/edges/calibration.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
+
+const edge16 = catalogEdge(catalogEdgeKey(16));
+const edge42 = catalogEdge(catalogEdgeKey(42));
 
 function row(id: number) {
   const entry = BRIDGE_EQUATIONS.find((candidate) => candidate.id === id);
@@ -85,8 +89,8 @@ describe('catalog and edge evidence for a manifest-checked formalRef', () => {
   });
 
   it('a chain through be-16 keeps the weaker grade', () => {
-    expect(be16Edge.confidence).toBe('speculative');
-    expect(composeEdges(be42Edge, be16Edge).confidence).toBe('highly-speculative');
+    expect(edge16.confidence).toBe('speculative');
+    expect(composeEdges(edge42, edge16).confidence).toBe('highly-speculative');
     expect(edgeTags(42)).not.toContain('formally-proved');
     expect(edgeTags(16)).toContain('formally-proved');
   });

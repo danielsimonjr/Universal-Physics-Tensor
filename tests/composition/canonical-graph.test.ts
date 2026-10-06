@@ -21,7 +21,7 @@ import {
 import { rankDiscoveries } from '../../src/composition/discovery.js';
 import { CANONICAL_EQUATIONS, CANONICAL_BY_ID } from '../../src/canonical/registry.js';
 import type { CanonicalEquation } from '../../src/canonical/canonical-equation.js';
-import { M_SUN_KG } from '../../src/composition/edges/calibration.js';
+import { M_SUN_KG } from '../../src/core/constants.js';
 import { G_SI, C_SI } from '../../src/core/constants.js';
 import { MASS, LENGTH, DIMENSIONLESS } from '../../src/dimensional/types.js';
 

@@ -278,7 +278,7 @@ describe('validateFriedmannEquation — symmetry failures', () => {
 
 describe('FriedmannEquationNode as BE-19 LQC structural encoding', () => {
   it("encodes H² = (8πG/3)·ρ·(1 − ρ/ρ_crit) as variant: 'lqc' and validates", () => {
-    // Mirrors what BE19_LQC_FRIEDMANN_STRUCTURAL (to be exported from
+    // Mirrors what the LQC Friedmann structural form (to be exported from
     // src/bridges/equations/be-19-quantum-bounce.ts) will look like.
     const node: FriedmannEquationNode = {
       kind: 'friedmann-equation',

@@ -140,12 +140,13 @@ async function run(ctx: CommandCtx): Promise<number> {
   const { args, api, out } = ctx;
   const doSimplify = args.flags.has('simplify');
   const isJson = args.flags.has('json');
+  const demo = api.demonstrationEdges();
   const chains = [
-    { first: api.be42Edge, second: api.be16Edge, label: 'CT-1  (be-42 ∘ be-16, via hawking-temperature ≡ temperature)' },
+    { first: demo.hawking, second: demo.landauer, label: 'CT-1  (Hawking temperature composed with Landauer erasure, via temperature)' },
     {
-      first: api.lawSchwarzschildRadius,
-      second: api.be42ViaRsEdge,
-      label: 'CT-1b (law-r_s ∘ be-42-via-rs, name-match junction)',
+      first: demo.schwarzschild,
+      second: demo.hawkingViaRadius,
+      label: 'CT-1b (Schwarzschild radius composed with Hawking temperature, name-match junction)',
     },
   ];
 

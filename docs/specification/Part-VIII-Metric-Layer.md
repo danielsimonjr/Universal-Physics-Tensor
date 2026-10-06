@@ -117,7 +117,7 @@ When an `IndexLabelCollisionError` originates from a tensor-product whose call-s
 
 ## §VIII.8 Worked example — BE-37 Shapiro gravitational time-delay
 
-The canonical structural encoding lives in `src/bridges/equations/be-37-shapiro-delay.ts` as the v0.3.0 ADDITIVE companion to the v0.2.1 scalar Shapiro-delay form. The structural form expresses the **null-geodesic eikonal in curved spacetime** `g^μν (∂_μ S)(∂_ν S) = 0`; the v0.2.1 scalar `Δt = (2GM/c³) · ln(R_far/R_near)` is the integrated first-order solution of this equation in the weak-field Schwarzschild metric and is retained as the numerical-evaluator surface.
+Catalog record 37 in `data/bridge-catalog.json` holds the equation. The structural form below is the v0.3.0 companion to the v0.2.1 scalar Shapiro-delay form. The structural form expresses the **null-geodesic eikonal in curved spacetime** `g^μν (∂_μ S)(∂_ν S) = 0`; the v0.2.1 scalar `Δt = (2GM/c³) · ln(R_far/R_near)` is the integrated first-order solution of this equation in the weak-field Schwarzschild metric and is retained as the numerical-evaluator surface.
 
 ```typescript
 import { tsym, contract } from '../../dimensional/tensor.js';

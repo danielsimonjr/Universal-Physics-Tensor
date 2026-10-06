@@ -32,16 +32,37 @@ import { runCli } from '../../dist/cli/main.js';
 
 import {
   BRIDGE_EQUATIONS,
-  BE37_REGIME,
-  BE51_REGIME,
-  BE52_REGIME,
-  GR_SPINE_CONFRONTATION_POINTS,
+  catalogRegime,
+  SPINE_CONFRONTATION_POINTS,
 } from '../../src/bridges/index.js';
-import { be37Edge, be51Edge, be52Edge } from '../../src/composition/edges/calibration.js';
+import { catalogConfrontations, catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
 import { regimeHolds } from '../../src/atlas/regime.js';
 import type { Regime } from '../../src/atlas/types.js';
 import { C_SI, G_SI, M_SUN_SI } from '../../src/core/constants.js';
-import { MERCURY } from '../../src/bridges/be52-mercury-confrontation.js';
+
+function regime(id: number): Regime {
+  const found = catalogRegime(id);
+  if (found === undefined) throw new Error(`catalog ${id} has no regime`);
+  return found;
+}
+
+const regime37 = regime(37);
+const regime51 = regime(51);
+const regime52 = regime(52);
+const edge37 = catalogEdge(catalogEdgeKey(37));
+const edge51 = catalogEdge(catalogEdgeKey(51));
+const edge52 = catalogEdge(catalogEdgeKey(52));
+
+const mercuryInputs = catalogConfrontations().find((row) => row.catalogId === 52)?.prediction?.inputs;
+if (mercuryInputs === undefined) throw new Error('catalog 52 has no prediction inputs');
+/** Orbital period is the NASA fact-sheet year used to build the v/c bound. It is not an input of the advance formula. */
+const MERCURY = {
+  central_mass_kg: mercuryInputs.mass,
+  semi_major_axis_m: mercuryInputs['semi-major-axis'],
+  eccentricity: mercuryInputs.eccentricity,
+  period_yr: 0.2408467,
+};
 
 /** `PiGroup.formula` keys the regimes are stated in. */
 const WEAK_FIELD = 'r_s · r^-1';
@@ -90,16 +111,16 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
       BRIDGE_EQUATIONS.find((e) => e.id === id)?.regime;
     // Identity, not deep equality: the edge carries the row's object, so there
     // is no second copy that could drift.
-    expect(row(37)).toBe(be37Edge.regime);
-    expect(row(51)).toBe(be51Edge.regime);
-    expect(row(52)).toBe(be52Edge.regime);
-    expect(row(37)).toBe(BE37_REGIME);
-    expect(row(51)).toBe(BE51_REGIME);
-    expect(row(52)).toBe(BE52_REGIME);
+    expect(row(37)).toBe(edge37.regime);
+    expect(row(51)).toBe(edge51.regime);
+    expect(row(52)).toBe(edge52.regime);
+    expect(row(37)).toBe(regime37);
+    expect(row(51)).toBe(regime51);
+    expect(row(52)).toBe(regime52);
   });
 
   it('all three are stated in the same two groups, traceable to the dimension matrix', () => {
-    for (const regime of [BE37_REGIME, BE51_REGIME, BE52_REGIME]) {
+    for (const regime of [regime37, regime51, regime52]) {
       expect(regime.family).toBe('gr-weak-field');
       expect(Object.keys(regime.groupDefinitions).sort()).toEqual(
         [WEAK_FIELD, SLOW_MOTION].sort(),
@@ -116,11 +137,11 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
     it('be-37 and be-51: r_s/r at the solar limb, 2GM_sun/(c^2 R_sun)', () => {
       const limb = schwarzschildRadius(M_SUN_SI) / SOLAR_RADIUS_M;
       expect(limb).toBeCloseTo(4.2463e-6, 10);
-      expect(BE37_REGIME.inequalities).toHaveLength(1);
-      expect(BE37_REGIME.inequalities[0]?.group).toBe(WEAK_FIELD);
-      expect(BE37_REGIME.inequalities[0]?.bound).toBe(limb);
-      expect(BE51_REGIME.inequalities).toHaveLength(1);
-      expect(BE51_REGIME.inequalities[0]?.bound).toBe(limb);
+      expect(regime37.inequalities).toHaveLength(1);
+      expect(regime37.inequalities[0]?.group).toBe(WEAK_FIELD);
+      expect(regime37.inequalities[0]?.bound).toBe(limb);
+      expect(regime51.inequalities).toHaveLength(1);
+      expect(regime51.inequalities[0]?.bound).toBe(limb);
     });
 
     it('be-52: r_s/r and v/c at Mercury perihelion, from (M, a, e, T)', () => {
@@ -134,9 +155,9 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
       // IAU nominal GM☉, recomputed independently as 6.419934159745687e-8.
       expect(rsOverR).toBeCloseTo(6.4199e-8, 12);
       expect(v_p / C_SI).toBeCloseTo(1.9672e-4, 8);
-      expect(BE52_REGIME.inequalities).toHaveLength(2);
-      expect(BE52_REGIME.inequalities[0]?.bound).toBe(rsOverR);
-      expect(BE52_REGIME.inequalities[1]?.bound).toBe(v_p / C_SI);
+      expect(regime52.inequalities).toHaveLength(2);
+      expect(regime52.inequalities[0]?.bound).toBe(rsOverR);
+      expect(regime52.inequalities[1]?.bound).toBe(v_p / C_SI);
     });
 
     it('NO bound is a measurement precision — none of them is a sigma', () => {
@@ -144,7 +165,7 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
       // its VLBI counterpart 1.2e-4, and Clemence sigma/observed = 1.0438e-2
       // must appear nowhere as a bound, nor as any square root of one.
       const forbidden = [2.3e-5, 1.2e-4, 0.45 / 43.11];
-      const bounds = [BE37_REGIME, BE51_REGIME, BE52_REGIME].flatMap((r) =>
+      const bounds = [regime37, regime51, regime52].flatMap((r) =>
         r.inequalities.map((i) => i.bound),
       );
       for (const b of bounds) {
@@ -159,7 +180,7 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
       // A citation in a display string is how an invented number acquires the
       // appearance of provenance. Bounds here are arithmetic; they cite
       // geometry, not literature.
-      const aliases = [BE37_REGIME, BE51_REGIME, BE52_REGIME].flatMap((r) =>
+      const aliases = [regime37, regime51, regime52].flatMap((r) =>
         r.inequalities.map((i) => i.alias ?? ''),
       );
       for (const alias of aliases) {
@@ -170,20 +191,20 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
 
   describe('regimeHolds at each confrontation\'s own inputs', () => {
     it('be-37 — weak field holds at the solar limb', () => {
-      const check = regimeHolds(BE37_REGIME, GR_SPINE_CONFRONTATION_POINTS[37] ?? {});
+      const check = regimeHolds(regime37, SPINE_CONFRONTATION_POINTS[37] ?? {});
       expect(check.ok).toBe(true); // tri-state: `true`, never truthiness
       expect(check.violated).toEqual([]);
       expect(check.unchecked).toEqual([]);
     });
 
     it('be-51 — weak field holds at its own solar-limb baseline', () => {
-      const check = regimeHolds(BE51_REGIME, GR_SPINE_CONFRONTATION_POINTS[51] ?? {});
+      const check = regimeHolds(regime51, SPINE_CONFRONTATION_POINTS[51] ?? {});
       expect(check.ok).toBe(true);
       expect(check.unchecked).toEqual([]);
     });
 
     it('be-52 — both inequalities hold at Mercury perihelion', () => {
-      const check = regimeHolds(BE52_REGIME, GR_SPINE_CONFRONTATION_POINTS[52] ?? {});
+      const check = regimeHolds(regime52, SPINE_CONFRONTATION_POINTS[52] ?? {});
       expect(check.ok).toBe(true);
       expect(check.violated).toEqual([]);
       expect(check.unchecked).toEqual([]);
@@ -194,17 +215,17 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
       // acquired a slow-motion inequality would either pass or fail here
       // instead of being indifferent, and a relativistic v/c is the value that
       // would expose it.
-      const withVelocity = { ...(GR_SPINE_CONFRONTATION_POINTS[37] ?? {}), [SLOW_MOTION]: 0.99 };
-      const check = regimeHolds(BE37_REGIME, withVelocity);
+      const withVelocity = { ...(SPINE_CONFRONTATION_POINTS[37] ?? {}), [SLOW_MOTION]: 0.99 };
+      const check = regimeHolds(regime37, withVelocity);
       expect(check.ok).toBe(true);
       expect(check.violated).toEqual([]);
-      expect(BE37_REGIME.inequalities.map((i) => i.group)).not.toContain(SLOW_MOTION);
-      expect(BE51_REGIME.inequalities.map((i) => i.group)).not.toContain(SLOW_MOTION);
+      expect(regime37.inequalities.map((i) => i.group)).not.toContain(SLOW_MOTION);
+      expect(regime51.inequalities.map((i) => i.group)).not.toContain(SLOW_MOTION);
     });
 
     it('be-52 with only the field supplied is `unknown`, NOT a pass', () => {
-      const check = regimeHolds(BE52_REGIME, {
-        [WEAK_FIELD]: GR_SPINE_CONFRONTATION_POINTS[52]?.[WEAK_FIELD] as number,
+      const check = regimeHolds(regime52, {
+        [WEAK_FIELD]: SPINE_CONFRONTATION_POINTS[52]?.[WEAK_FIELD] as number,
       });
       expect(check.ok).toBe('unknown');
       expect(check.violated).toEqual([]);
@@ -213,36 +234,36 @@ describe('S2.5 — the GR spine gains regimes and changes no number', () => {
   });
 
   describe('the inequalities themselves — inside, on, outside', () => {
-    const bound = BE37_REGIME.inequalities[0]?.bound as number;
+    const bound = regime37.inequalities[0]?.bound as number;
 
     it('just inside → true', () => {
-      expect(regimeHolds(BE37_REGIME, { [WEAK_FIELD]: bound * (1 - 1e-12) }).ok).toBe(true);
+      expect(regimeHolds(regime37, { [WEAK_FIELD]: bound * (1 - 1e-12) }).ok).toBe(true);
     });
 
     it('exactly ON the bound → true, because the op is `<=`', () => {
       // Load-bearing: the bound IS the confrontation's own operating point, so
       // a strict `<` here would put every one of these confrontations outside
       // its own claimed regime.
-      expect(regimeHolds(BE37_REGIME, { [WEAK_FIELD]: bound }).ok).toBe(true);
+      expect(regimeHolds(regime37, { [WEAK_FIELD]: bound }).ok).toBe(true);
     });
 
     it('just outside → false, and names the group', () => {
-      const check = regimeHolds(BE37_REGIME, { [WEAK_FIELD]: bound * (1 + 1e-12) });
+      const check = regimeHolds(regime37, { [WEAK_FIELD]: bound * (1 + 1e-12) });
       expect(check.ok).toBe(false);
       expect(check.violated.map((i) => i.group)).toEqual([WEAK_FIELD]);
     });
 
     it('a stronger field than Mercury samples violates be-52', () => {
-      const check = regimeHolds(BE52_REGIME, {
-        ...(GR_SPINE_CONFRONTATION_POINTS[52] ?? {}),
-        [WEAK_FIELD]: (GR_SPINE_CONFRONTATION_POINTS[52]?.[WEAK_FIELD] as number) * 1.000001,
+      const check = regimeHolds(regime52, {
+        ...(SPINE_CONFRONTATION_POINTS[52] ?? {}),
+        [WEAK_FIELD]: (SPINE_CONFRONTATION_POINTS[52]?.[WEAK_FIELD] as number) * 1.000001,
       });
       expect(check.ok).toBe(false);
       expect(check.violated.map((i) => i.group)).toEqual([WEAK_FIELD]);
     });
 
     it('a supplied-nothing point is `unknown`, NOT a pass', () => {
-      const check = regimeHolds(BE52_REGIME, {});
+      const check = regimeHolds(regime52, {});
       expect(check.ok).toBe('unknown');
       expect(check.violated).toEqual([]);
       expect(check.unchecked).toHaveLength(2);

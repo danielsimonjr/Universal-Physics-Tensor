@@ -36,14 +36,15 @@ export { DuplicateCoordinateWarning } from '../dimensional/errors.js';
  * @public
  */
 export { evaluateMetricInverse } from './metric-inverse.js';
-/** @public */
+/** Integrate the covariant eikonal on a numerical grid. @public */
 export {
-  evaluateBE37CovariantEikonalNumerical,
-} from './be37-covariant-eikonal.js';
+  evaluateCovariantEikonalNumerical,
+} from './covariant-eikonal.js';
+/** Inputs and the result of the covariant eikonal integrator. */
 export type {
-  BE37CovariantEikonalInputs,
-  BE37CovariantEikonalResult,
-} from './be37-covariant-eikonal.js';
+  CovariantEikonalInputs,
+  CovariantEikonalResult,
+} from './covariant-eikonal.js';
 
 /** @public — v0.5.0 GL4 symplectic integrator. */
 export { integrateGeodesicGL4 } from './gl4-integrator.js';

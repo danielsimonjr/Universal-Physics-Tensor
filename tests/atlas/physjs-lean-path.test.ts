@@ -81,8 +81,9 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
     expect(leanFiles.has('lean/LondonPenetration.lean')).toBe(true);
     expect(leanFiles.has('lean/PlasmaBeta.lean')).toBe(true);
     expect([...leanFiles].every((path) => /^lean\/[^/]+\.lean$/.test(path))).toBe(true);
+    // 130 is the record from before the thermal Lean files at pin 10e48f14.
     // 60 is the record from before PhysJS #64 added the eleven Lean files.
-    expect(leanFiles.size).toBe(130);
+    expect(leanFiles.size).toBe(154);
     // 117 is the record from before PhysJS #68 added the thirteen Lean files.
     // 109 is the record from before be-126..133.
     // 86 is the record from before be-103..125. 71 is the record from before PhysJS #65.
@@ -90,8 +91,9 @@ describe('PhysJS permalinks name the lean/ tree at the pin', () => {
 
   it('every formalRef URL is a file in that tree', () => {
     const urls = emittedUrls();
+    // 127 is the record from before be-147..170 each added a catalog formalRef.
     // 57 is the record from before be-77..87 each added a catalog formalRef.
-    expect(urls.length).toBe(127);
+    expect(urls.length).toBe(151);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125. 68 is the record from before be-88..102.

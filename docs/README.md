@@ -6,15 +6,15 @@ Index of this repository's documents. A count that moves is recorded in `NOTES.m
 
 Eleven parts. The reader's map, including which claims are speculative, is [`specification/README.md`](specification/README.md).
 
-- **[Part I](specification/Part-I.md)** — foundation, and Bridge Equations 11–20.
-- **[Part II](specification/Part-II.md)** — Bridge Equations 21–65.
+- **[Part I](specification/Part-I.md)** — foundation, and the cross-domain bridges in categories A–E.
+- **[Part II](specification/Part-II.md)** — the remaining cross-domain bridge write-ups.
 - **[Part III](specification/Part-III.md)** — algorithms and information-theoretic definitions. The numbered pseudocode remains a specification.
 - **[Part IV](specification/Part-IV.md)** — validation pathways.
 - **[Part V](specification/Part-V.md)** — advanced mathematics. Read its status note first.
 - **[Part VI](specification/Part-VI.md)** — implementation framing and the Status-Promotion Protocol.
 - **[Parts VII–XI](specification/README.md)** — tensor algebra, the metric layer, composition, curvature and field equations, and proposed equations (Part XI is non-normative).
 
-The runtime catalog is `BRIDGE_EQUATIONS` in `src/bridges/index.ts`: 63 entries, ids 11–73, 27 established, 33 speculative, 3 highly-speculative. Parts I–II write up those ids. Part II §V-C is BE-55–73. Entries 51 and 53–73 keep `source_part: 'III'`; BE-52 keeps `source_part: 'I'`. Re-count from the array. `NOTES.md` is the rolling note.
+The catalog is `data/bridge-catalog.json`. The specification writes up the cross-domain bridges. A standard bridge is a catalog record and has no heading in Parts I–II. The count is in `NOTES.md`.
 
 ## Atlas, roadmap, and formal references
 

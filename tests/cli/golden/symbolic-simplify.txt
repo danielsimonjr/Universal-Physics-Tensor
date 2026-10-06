@@ -2,7 +2,7 @@
 Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
 (the Observable contract: composed AST, dimensionally validated + numerically evaluable)
 
-  ● CT-1  (be-42 ∘ be-16, via hawking-temperature ≡ temperature)
+  ● CT-1  (Hawking temperature composed with Landauer erasure, via temperature)
       composed:   landauer-erasure-energy(mass) = k_B·(hbar·c^3 / (8pi·G·mass·k_B))·ln2
       simplified: landauer-erasure-energy(mass) = ((hbar·c^3·ln2 / 8pi) / mass) / G
       latex:      \text{landauer-erasure-energy}(\mathrm{mass}) = \frac{\frac{\frac{\hbar \cdot {c}^{3} \cdot \ln 2}{8\pi}}{\mathrm{mass}}}{G}
@@ -17,7 +17,7 @@ Symbolic bridge composition — composing the SYMBOLIC forms, not just numbers
       value @ mass = M_sun:  5.9031e-31  (= composed, [energy])
       confidence: highly-speculative. This chain stays provisional. upt atlas be-16 shows the kind-bridge formalRef; that page is not this grade.
 
-  ● CT-1b (law-r_s ∘ be-42-via-rs, name-match junction)
+  ● CT-1b (Schwarzschild radius composed with Hawking temperature, name-match junction)
       composed:   hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))
       simplified: hawking-temperature(mass) = hbar·c / (4pi·k_B·(2·G·mass / c^2))  (unchanged — minimal, MathTS absent, or not reducible here)
       latex:      \text{hawking-temperature}(\mathrm{mass}) = \frac{\hbar \cdot c}{4\pi \cdot k_{\mathrm{B}} \cdot \frac{2 \cdot G \cdot \mathrm{mass}}{{c}^{2}}}

@@ -172,10 +172,10 @@ if (rhs16 === undefined) throw new Error('catalog 16 has no right-hand side');
 
 describe('runChainPipeline regime gate', () => {
   it('does not block a confirmation whose domains differ', () => {
-    const producer = edge('be-55', [q('particle-mass', MASS)], q('m', MASS), sym('m', MASS), {
+    const producer = edge('be-55', [q('particle-mass', MASS)], q('mass', MASS), sym('mass', MASS), {
       beId: 63,
     });
-    const consumer = edge('be-12', [q('m', MASS)], q('wavelength', LENGTH), rhs12, { beId: 12 });
+    const consumer = edge('be-12', [q('mass', MASS)], q('wavelength', LENGTH), rhs12, { beId: 12 });
     expect(joinRegimeMismatch(producer, consumer)?.reasons).toEqual([
       'domain: information-geometry ≠ quantum-classical',
     ]);
@@ -185,10 +185,10 @@ describe('runChainPipeline regime gate', () => {
   });
 
   it('does not block a restatement whose domains differ', () => {
-    const producer = edge('be-21', [q('seed', TEMPERATURE)], q('T', TEMPERATURE), sym('T', TEMPERATURE), {
+    const producer = edge('be-21', [q('seed', TEMPERATURE)], q('temperature', TEMPERATURE), sym('temperature', TEMPERATURE), {
       beId: 63,
     });
-    const consumer = edge('be-27', [q('T', TEMPERATURE)], q('erasure-energy', ENERGY), rhs16, {
+    const consumer = edge('be-27', [q('temperature', TEMPERATURE)], q('erasure-energy', ENERGY), rhs16, {
       beId: 12,
     });
     expect(joinRegimeMismatch(producer, consumer)?.kind).toBe('rejected: regime mismatch');

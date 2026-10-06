@@ -26,7 +26,7 @@
  * @module canonical/entries/fluids-waves
  */
 import type { CanonicalEquation } from '../canonical-equation.js';
-import { sym } from '../../bridges/equations/_be-helpers.js';
+import { sym } from '../../dimensional/ast-builders.js';
 import {
   MASS,
   VELOCITY,

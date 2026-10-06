@@ -115,17 +115,18 @@ export function weakFieldDomainNote(
   if (!(mass > 0) || !Number.isFinite(mass)) return undefined;
   const rs = (2 * api.G_SI * mass) / (api.C_SI * api.C_SI);
   if (!(rs > 0) || !Number.isFinite(rs)) return undefined;
-  if (bridgeId === 51) {
+  const notice = api.primaryRelation(bridgeId)?.notice;
+  if (notice === 'weak-field-impact') {
     const b = inputs.b_m;
     if (b > 0 && b <= 10 * rs) {
       return (
         `WARNING: weak-field formula α = 4GM/(b c²) assumes b ≫ r_s = 2GM/c² ` +
-        `(be-51's graph domain requires b ≥ 10 r_s). Here b = ${b} m and r_s = ${rs} m ` +
+        `(the graph domain requires b ≥ 10 r_s). Here b = ${b} m and r_s = ${rs} m ` +
         `(b/r_s = ${b / rs}). The number above is that formula anyway; it is not the strong-field deflection.`
       );
     }
   }
-  if (bridgeId === 52) {
+  if (notice === 'weak-field-periapsis') {
     const a = inputs.a_m;
     const e = inputs.e;
     if (a > 0 && e >= 0 && e < 1) {
@@ -133,7 +134,7 @@ export function weakFieldDomainNote(
       if (peri <= 10 * rs) {
         return (
           `WARNING: weak-field formula for the perihelion advance assumes periapsis a(1−e) ≫ r_s = 2GM/c² ` +
-          `(the same 10 r_s cut as be-51's graph domain). Here a(1−e) = ${peri} m and r_s = ${rs} m ` +
+          `(the same 10 r_s cut). Here a(1−e) = ${peri} m and r_s = ${rs} m ` +
           `(a(1−e)/r_s = ${peri / rs}). The number above is that formula anyway.`
         );
       }
@@ -519,13 +520,14 @@ async function run(ctx: CommandCtx): Promise<number> {
   const appliedCase = api.APPLIED_CASES.get(target.toLowerCase());
   if (appliedCase !== undefined) return runCase(ctx, appliedCase, rest);
 
-  const m = /^be-(\d+)$/i.exec(target);
-  if (!m) {
+  let id: number;
+  try {
+    id = api.parseBridgeId(target);
+  } catch {
     throw new UsageError(
-      `upt evaluate: '${target}' is not a bridge id (be-NN) or a case (${[...api.APPLIED_CASES.keys()].join(', ')}). See \`upt help\`.`,
+      `upt evaluate: '${target}' is not a bridge id (be-<id>) or a case (${[...api.APPLIED_CASES.keys()].join(', ')}). See \`upt help\`.`,
     );
   }
-  const id = Number(m[1]);
   let found: ReturnType<typeof api.resolveEvaluable>;
   try {
     found = api.resolveEvaluable(id);
@@ -548,8 +550,9 @@ async function run(ctx: CommandCtx): Promise<number> {
 
   const u = uncertaintyOf(ctx, spec, inputs, (i) => spec.run(i) as Record<string, unknown>, NOT_INCLUDED);
   const domainNote = weakFieldDomainNote(api, id, inputs);
-  const formulaNote = id === 65 ? JEANS_FORMULA_NOTE : undefined;
-  const hbarNote = id === 56 ? HBAR_TRUNCATION_NOTE : undefined;
+  const notice = api.primaryRelation(id)?.notice;
+  const formulaNote = notice === 'jeans-formula' ? JEANS_FORMULA_NOTE : undefined;
+  const hbarNote = notice === 'hbar-truncation' ? HBAR_TRUNCATION_NOTE : undefined;
 
   if (args.flags.has('json')) {
     emitJson(

@@ -94,7 +94,7 @@ describe('commands cite GitHub, not a repository path', () => {
   it('upt confront prints each source file as a GitHub URL', async () => {
     const cap = capture();
     expect(await runCli(['confront', 'be-52'], cap.io)).toBe(0);
-    assertCited(cap.text(), 'src/bridges/be52-mercury-confrontation.ts');
+    assertCited(cap.text(), 'data/confrontation-sources.md');
   });
 
   it('upt atlas names the witness artifact and the test as URLs', async () => {

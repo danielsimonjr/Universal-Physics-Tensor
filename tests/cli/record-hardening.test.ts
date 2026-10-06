@@ -160,7 +160,9 @@ describe('named constant tables', () => {
       }
     }
     expect(checked).toBeGreaterThanOrEqual(10);
-    expect(tables['bridges/be58-johnson-nyquist-confrontation'].values.K_B_CODATA_2014).toBe(1.38064852e-23);
+    // The Johnson-noise confrontation module's K_B_CODATA_2014 row is the record from before
+    // that module was deleted. Case constants are the module-export tables the walk still finds.
+    expect(tables['cases/brownian-sphere'].values.G_STANDARD).toBe(9.80665);
   });
 
   it('replay names the table and the key that changed', async () => {
@@ -219,6 +221,8 @@ describe('static attribution', () => {
     cpSync(join(repo, 'bin', 'upt.mjs'), join(copy, 'bin', 'upt.mjs'));
     cpSync(join(repo, 'package.json'), join(copy, 'package.json'));
     symlinkSync(join(repo, 'node_modules'), join(copy, 'node_modules'));
+    // The catalog and the quantity registry are read from data/ beside dist.
+    symlinkSync(join(repo, 'data'), join(copy, 'data'), 'junction');
     const constants = join(copy, 'dist', 'core', 'constants.js');
     const before = readFileSync(constants, 'utf8');
     const after = before.replace('export const K_B_SI = 1.380649e-23;', 'export const K_B_SI = 1.38e-23;');

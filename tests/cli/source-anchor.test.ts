@@ -60,7 +60,7 @@ describe('audit I3 — explain names its source', () => {
 });
 
 describe('audit I3 — the discovery ground truth', () => {
-  // Four catalog discovers. The funnel is 2518 candidates. On the CI runner
+  // Four catalog discovers. The funnel is 4196 candidates. 2518 is the record from before be-147..170. On the CI runner
   // one discover is about 20s, so four no longer finish in the 60s global
   // timeout. 60s is the record from before BE-134 through BE-146.
   it('discover prints the default anchor, and an --anchor override replaces it', async () => {

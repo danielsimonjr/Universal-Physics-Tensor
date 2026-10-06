@@ -116,8 +116,8 @@ bridges. They are the whole list. Adding one is a change to this note.
 
 | Definition | Where the tree already uses it |
 |---|---|
-| `h = 2π ℏ` | `CONSTANTS.h` and `CONSTANTS.hbar` in `src/dimensional/symbolic-constants.ts`. BE-12 displays both writings of one thermal wavelength. |
-| `μ₀ = 1/(ε₀ c²)` | The Alfvén, fast-magnetosonic, and magnetic-pressure ASTs build `μ₀` as that quotient (`src/composition/edges/applied-physicist.ts`). |
+| `h = 2π ℏ` | `CONSTANTS.h` and `CONSTANTS.hbar` in `src/dimensional/symbolic-constants.ts`. Catalog record 12 displays both writings of one thermal wavelength. The quantity registry supplies the dimension and the default unit. |
+| `μ₀ = 1/(ε₀ c²)` | The Alfvén, fast-magnetosonic, and magnetic-pressure records in `data/bridge-catalog.json` build `μ₀` as that quotient. The generic engine evaluates the record. |
 | `Φ₀ = h/(2e) = π ℏ / e` | The Josephson and critical-field covers lines. `e` in that formula is the elementary charge. |
 | `exp` is the exponential | A displayed `e^{γ}` is `exp(γ)`. Euler's number is written `exp(1)`. |
 
@@ -238,13 +238,13 @@ derivation theorem, stays unmarked.
 
 ## Catalog and schema
 
-Three optional fields on a catalog entry. The JSON schema stays
-`schemaVersion` 2 while the fields are optional. A consumer that ignores
-unknown fields keeps working. Making any of them required is a
-`schemaVersion` bump and is not this proposal.
+`type` is required on every catalog record. The JSON schema is
+`schemaVersion` 3. `derivedFrom` and `basis` stay off the record until a
+derivation theorem is pinned. A consumer that ignores unknown fields still
+reads a record that carries `type`.
 
-`BridgeEquationEntry` is a public type. The fields are optional on that
-type. Existing object literals stay valid. This note does not add them.
+`CatalogEntry` carries `type`. `derivedFrom` and `basis` are optional on
+that type. `basis: false` is not a state the record carries.
 
 | Field | Type | Who writes it |
 |---|---|---|
@@ -550,10 +550,11 @@ False friends a latex scan picks up and this table leaves out:
    `derivedFrom`?
 9. **Direct proofs.** Does the equation theorem stay beside the derivation
    theorem, as this note says, or does a pinned derivation replace it?
-10. **Schema.** Do the three fields stay optional at `schemaVersion` 2,
-    and does the manifest stay `physjs-bridge-manifest/v1` with one new
-    nested object? Is `derivedFrom` the `be-<n>` key, rather than the
-    integer spelling `dependencies` already uses?
+10. **Schema.** `type` is required at `schemaVersion` 3. Do `derivedFrom`
+    and `basis` stay optional, and does the manifest stay
+    `physjs-bridge-manifest/v1` with one new nested object? Is `derivedFrom`
+    the `be-<n>` key, rather than the integer spelling `dependencies`
+    already uses?
 11. **Avogadro.** Confirm that Avogadro's number and the Faraday constant
     stay outside the linking-constant graph until a catalog formula
     displays them.
@@ -563,18 +564,14 @@ False friends a latex scan picks up and this table leaves out:
 No public name is added or removed by this note. `package.json` is
 unchanged.
 
-When the fields ship, `BridgeEquationEntry` gains three optional
-properties. That is an additive change to a public type. Callers that
-construct entries omit the properties. Callers that read them must treat
-absence as unclassified, not as a default `type` or a default
-`basis: false`. No existing function changes its arguments or its return
-type. `deriveEvidence`, `catalogEvidenceInput`, and the evidence tags are
-unchanged, because a derivation is a reduction and a reduction lights no
-tag.
+`CatalogEntry` requires `type` and leaves `derivedFrom` and `basis`
+optional. A reader treats a missing `derivedFrom` or `basis` as unclassified.
+A missing `type` is a rejected record. `deriveEvidence`, `catalogEvidenceInput`,
+and the evidence tags are unchanged, because a derivation is a reduction and
+a reduction lights no tag. `type` does not light a tag.
 
-The catalog JSON gains the same optional properties. `schemaVersion`
-stays 2. A required field, or a consumer that must reject a file without
-the fields, is `schemaVersion` 3 and is a later decision.
+The catalog file is `data/bridge-catalog.json` at `schemaVersion` 3.
+`derivedFrom` and `basis` remain optional in that schema.
 
 No new CLI command is part of this note. A report file is the output.
 If a later task exports a TypeScript type for the report, that export is

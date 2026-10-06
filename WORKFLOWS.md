@@ -90,7 +90,7 @@ Use this section only when a reference has `system: 'lean4-physlib'`. The live r
    measured axioms in the `formalRef`.
 4. Commit the probe, the captured output and the record together.
 
-## Adding or changing a `// source:` comment in `src/bridges/index.ts`
+## Adding or changing a `// source:` comment in `docs/research/phase-1-source-comments.txt`
 
 1. Quote the source verbatim and give the page or equation. Label everything else as this
    repository's.

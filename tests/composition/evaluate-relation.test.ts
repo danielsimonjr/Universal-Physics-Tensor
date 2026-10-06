@@ -11,8 +11,12 @@ import {
   evaluateRelation,
   type Evaluation,
 } from '../../src/index.js';
-import { CANONICAL_GRAPH, be16Edge, be42Edge, be70Edge, evaluateEdge } from '../../src/composition/index.js';
-import { M_SUN_KG } from '../../src/composition/edges/calibration.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { CANONICAL_GRAPH, catalogEdge, evaluateEdge, M_SUN_KG } from '../../src/composition/index.js';
+
+const edge16 = catalogEdge(catalogEdgeKey(16));
+const edge42 = catalogEdge(catalogEdgeKey(42));
+const edge70 = catalogEdge(catalogEdgeKey(70));
 
 const mu = 0.14;
 const T = 300;
@@ -33,22 +37,22 @@ describe('evaluateRelation', () => {
       'einstein-temperature': T,
       'carrier-charge': q,
     });
-    expect(byAlias).toEqual({ kind: 'value', value: expected, dimension: be70Edge.target.dim });
+    expect(byAlias).toEqual({ kind: 'value', value: expected, dimension: edge70.target.dim });
     expect(valueOf(byName)).toBe(expected);
-    expect(evaluateEdge(be70Edge, { mu_m2_per_Vs: mu, T_K: T, q_C: q })).toBe(expected);
+    expect(evaluateEdge(edge70, { mu_m2_per_Vs: mu, T_K: T, q_C: q })).toBe(expected);
     expect(() => evaluateRelation('be-70', { mu_m2_per_Vs: mu, T_K: T, q_C: -q })).toThrow(CarrierSignError);
   });
 
   it('evaluates be-16 and be-42 by id', () => {
     const landauer = evaluateRelation('be-16', { temperature: T });
     expect(valueOf(landauer) / (K_B_SI * T * Math.LN2)).toBeCloseTo(1, 12);
-    expect(landauer.kind === 'value' && landauer.dimension).toEqual(be16Edge.target.dim);
+    expect(landauer.kind === 'value' && landauer.dimension).toEqual(edge16.target.dim);
     expect(valueOf(evaluateRelation(16, { temperature_K: T }))).toBe(valueOf(landauer));
 
     const hawking = evaluateRelation('be-42', { mass: M_SUN_KG });
     expect(valueOf(hawking)).toBeGreaterThan(0);
     expect(valueOf(evaluateRelation(42, { M_kg: M_SUN_KG }))).toBe(valueOf(hawking));
-    expect(hawking.kind === 'value' && hawking.dimension).toEqual(be42Edge.target.dim);
+    expect(hawking.kind === 'value' && hawking.dimension).toEqual(edge42.target.dim);
   });
 
   it('records an unset coefficient and still throws it from evaluateEdge', () => {
@@ -84,7 +88,7 @@ describe('evaluateRelation', () => {
     expect(accepted).toContain(55);
   });
 
-  it('returns the BCS gap and the Lorenz number for the edge-less closed forms', () => {
+  it('returns the BCS gap and Wiedemann–Franz conductivity for the closed forms', () => {
     const gap = evaluateRelation('be-62', { T_c_K: 7.2 });
     const eulerGamma = 0.5772156649015329;
     const expectedGap = (Math.PI / Math.exp(eulerGamma)) * K_B_SI * 7.2;
@@ -93,11 +97,15 @@ describe('evaluateRelation', () => {
       expect(Math.abs(gap.value - expectedGap) / expectedGap).toBeLessThan(1e-12);
       expect(gap.dimension).toMatchObject({ L: 2, M: 1, T: -2 });
     }
-    const lorenz = evaluateRelation('be-61', { sigma_S_per_m: 1, T_K: 300 });
+    // κ = L · σ · T. The stored reference at σ = 1e7, T = 300 is this product.
+    const sigma = 1;
+    const temperature = 300;
+    const lorenz = evaluateRelation('be-61', { sigma_S_per_m: sigma, T_K: temperature });
     const expectedLorenz = (Math.PI ** 2 / 3) * (K_B_SI / E_SI) ** 2;
+    const expectedKappa = expectedLorenz * sigma * temperature;
     expect(lorenz.kind).toBe('value');
     if (lorenz.kind === 'value') {
-      expect(Math.abs(lorenz.value - expectedLorenz) / expectedLorenz).toBeLessThan(1e-12);
+      expect(Math.abs(lorenz.value - expectedKappa) / expectedKappa).toBeLessThan(1e-12);
     }
   });
 });

@@ -3,8 +3,9 @@ import { validate } from '../../src/dimensional/validator.js';
 import { tsym } from '../../src/dimensional/tensor.js';
 import { metric, pderiv } from '../../src/dimensional/metric.js';
 import { DIMENSIONLESS } from '../../src/dimensional/types.js';
-import { evaluateBE37CovariantEikonalNumerical } from '../../src/numerical/index.js';
-import { evaluateShapiroDelay } from '../../src/bridges/equations/be-37-shapiro-delay.js';
+import { evaluateCovariantEikonalNumerical } from '../../src/numerical/index.js';
+import { catalogRelations } from '../../src/bridges/catalog-load.js';
+import { evaluateCatalogRelation } from '../../src/bridges/relation-eval.js';
 
 const LENGTH = { L: 1, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 
@@ -36,14 +37,14 @@ describe('covariant-derivative preview (v0.4.0 building block)', () => {
 // ─── Task 17 [U]: BE-37 covariant-eikonal STRUCTURAL PREVIEW ────────────────
 //
 // Activates the first of two v0.3.5 it.todo entries for the connection layer.
-// evaluateBE37CovariantEikonalNumerical structurally assembles ∇_μ ∇^μ S via
+// evaluateCovariantEikonalNumerical structurally assembles ∇_μ ∇^μ S via
 // the new CovariantDerivativeNode + Task 12's lowering; the numerical eikonal
 // residual is 0 by null-wave-covector construction (this `it` passes in v0.4.0).
 //
 // [v0.4.0 structural-preview only; Shapiro deferred to v0.5.0]
 describe('BE-37 covariant-eikonal preview (v0.4.0)', () => {
   it('structural form ∇_μ ∇^μ S validates (free indices: empty)', async () => {
-    const result = await evaluateBE37CovariantEikonalNumerical({
+    const result = await evaluateCovariantEikonalNumerical({
       M_kg: 1.989e30, R_far_m: 1e11, R_near_m: 6.96e8,
     });
     // Eikonal residual = 0 (null wave-covector construction):
@@ -53,7 +54,7 @@ describe('BE-37 covariant-eikonal preview (v0.4.0)', () => {
   });
 
   // v0.5.0 Task 11 [U]: BE-37 covariant-eikonal Shapiro cross-check ACTIVATED.
-  // Task 12 wired evaluateBE37CovariantEikonalNumerical to drive GL4 null-
+  // Task 12 wired evaluateCovariantEikonalNumerical to drive GL4 null-
   // geodesic integration on the canonical (x, p) state; shapiroDelaySec now
   // returns the real coord-time delay vs the flat-space straight-line ray.
   // I5 re-relaxation: original v0.4.0 tolerance ±1×10⁻⁴ relative on the
@@ -65,8 +66,14 @@ describe('BE-37 covariant-eikonal preview (v0.4.0)', () => {
     const M_kg = 1.989e30;
     // Closed-form (2GM/c³)·ln(R_far/R_near) for radial null geodesic; Task 12's
     // GL4 integrator reproduces this same form at the default b_m = 0.
-    const closedFormDelaySec = evaluateShapiroDelay({ M_kg, R_far_m: 1e11, R_near_m: 6.96e8 });
-    const geodesic = await evaluateBE37CovariantEikonalNumerical({
+    const shapiro = catalogRelations().find((row) => row.sources.includes('far-radius'));
+    if (shapiro === undefined) throw new Error('the Shapiro relation is not in the catalog');
+    const closedFormDelaySec = evaluateCatalogRelation(shapiro, {
+      mass: M_kg,
+      'far-radius': 1e11,
+      'near-radius': 6.96e8,
+    });
+    const geodesic = await evaluateCovariantEikonalNumerical({
       M_kg, R_far_m: 1e11, R_near_m: 6.96e8,
     });
     const relErr = Math.abs(geodesic.shapiroDelaySec - closedFormDelaySec)

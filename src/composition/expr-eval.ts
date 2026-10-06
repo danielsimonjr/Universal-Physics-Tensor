@@ -24,6 +24,7 @@ import { createScalarBuilder, ScalarBuildError } from '@danielsimonjr/mathts-exp
 import { evaluateScalar, ScalarEvalError } from '@danielsimonjr/mathts-functions';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CONSTANTS, piMultipleValue } from '../dimensional/symbolic-constants.js';
+import { FORMULA_NAMED } from '../dimensional/formula-names.js';
 
 /** A scalar `ExprNode` could not be evaluated (unsupported arm / unresolved
  *  leaf / non-finite result). @public */
@@ -66,6 +67,11 @@ function scopeFor(
     const constant = CONSTANTS[name];
     if (constant !== undefined) {
       scope[name] = constant.value;
+      continue;
+    }
+    const named = FORMULA_NAMED.find((row) => row.name === name);
+    if (named !== undefined) {
+      scope[name] = named.value;
       continue;
     }
     const pi = piMultipleValue(name);

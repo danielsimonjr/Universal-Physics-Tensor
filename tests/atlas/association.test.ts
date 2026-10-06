@@ -11,9 +11,8 @@ import { ASSOCIATIONS, associationFor } from '../../src/atlas/association.js';
 import { ADJUDICATIONS } from '../../src/composition/adjudication.js';
 import { CATALOG_GRAPH } from '../../src/composition/index.js';
 import { buildVizModel } from '../../src/composition/graph-viz.js';
-import * as quantities from '../../src/composition/quantities.js';
+import { allQuantities } from '../../src/composition/quantities.js';
 import { CANONICAL_EQUATIONS } from '../../src/canonical/registry.js';
-import type { Quantity } from '../../src/composition/index.js';
 
 const decoys = ADJUDICATIONS.filter((a) => a.verdict === 'decoy');
 
@@ -56,11 +55,7 @@ describe('every seeded name resolves to a real quantity', () => {
   // canonical-equation targets/governing variables (src/canonical/entries/),
   // not `Quantity` nodes. The funnel draws from both, so the resolution set is
   // the UNION. Checking the composition registry alone would fail 5 of 7.
-  const compositionNames = new Set(
-    Object.values(quantities)
-      .filter((q): q is Quantity => typeof q === 'object' && q !== null && 'name' in q && 'dim' in q)
-      .map((q) => q.name),
-  );
+  const compositionNames = new Set(allQuantities().map((quantity) => quantity.name));
   const canonicalNames = new Set(
     CANONICAL_EQUATIONS.flatMap((e) => [
       e.dimensional.target.name,

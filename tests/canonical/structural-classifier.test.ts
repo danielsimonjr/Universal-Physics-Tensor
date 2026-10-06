@@ -101,13 +101,13 @@ describe('structural classifier', () => {
     expect('id' in result).toBe(false);
   });
 
-  it('a canonical the registry pre-declared, with no catalog right-hand side, is still a restatement', () => {
-    // Bridges 51 and 52 have no entry in BRIDGE_RHS_BY_ID. The restatement
-    // is the registry's `restatesBridge`, not a second catalog row.
-    expect(BRIDGE_RHS_BY_ID.has(51)).toBe(false);
+  it('a pre-declared restatement stays a restatement when the catalog expression matches', () => {
     const ce = canonicalById('CE-light-deflection');
     expect(ce?.restatesBridge).toBe('51');
     expect(ce?.scalarAst).toBeDefined();
+    const rhs = BRIDGE_RHS_BY_ID.get(51);
+    expect(rhs).toBeDefined();
+    expect(normalForm(ce!.scalarAst!)).toBe(normalForm(rhs!));
 
     const result = matchChain(ce!.scalarAst!, ['law-schwarzschild-radius', 'be-51']);
 

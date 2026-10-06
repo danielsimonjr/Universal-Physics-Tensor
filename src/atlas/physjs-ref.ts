@@ -51,6 +51,7 @@
  */
 
 import type { FormalRef, FormalRefKind } from './types.js';
+import { catalogEdgeKey } from '../bridges/catalog-load.js';
 import {
   PHYSJS_COMMIT,
   PHYSJS_MATHLIB,
@@ -271,103 +272,11 @@ function physjsStatementUrl(theorem: string): string {
  * The PhysJS covers line still begins with `derivation-step`.
  * The kind is bridge because that equation is the theorem.
  */
-const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
-  'be-12',
-  'be-16',
-  'be-21',
-  'be-27',
-  'be-33',
-  'be-37',
-  'be-40',
-  'be-43',
-  'be-50',
-  'be-54',
-  'be-55',
-  'be-59',
-  'be-60',
-  'be-63',
-  'be-66',
-  'be-67',
-  'be-68',
-  'be-69',
-  'be-70',
-  'be-71',
-  'be-72',
-  'be-73',
-  'be-74',
-  'be-75',
-  'be-76',
-  'be-77',
-  'be-78',
-  'be-79',
-  'be-80',
-  'be-81',
-  'be-82',
-  'be-83',
-  'be-84',
-  'be-85',
-  'be-86',
-  'be-87',
-  'be-88',
-  'be-89',
-  'be-90',
-  'be-91',
-  'be-92',
-  'be-93',
-  'be-94',
-  'be-95',
-  'be-96',
-  'be-97',
-  'be-98',
-  'be-99',
-  'be-100',
-  'be-101',
-  'be-102',
-  'be-103',
-  'be-104',
-  'be-105',
-  'be-106',
-  'be-107',
-  'be-108',
-  'be-109',
-  'be-110',
-  'be-111',
-  'be-112',
-  'be-113',
-  'be-114',
-  'be-115',
-  'be-116',
-  'be-117',
-  'be-118',
-  'be-119',
-  'be-120',
-  'be-121',
-  'be-122',
-  'be-123',
-  'be-124',
-  'be-125',
-  'be-126',
-  'be-127',
-  'be-128',
-  'be-129',
-  'be-130',
-  'be-131',
-  'be-132',
-  'be-133',
-  'be-134',
-  'be-135',
-  'be-136',
-  'be-137',
-  'be-138',
-  'be-139',
-  'be-140',
-  'be-141',
-  'be-142',
-  'be-143',
-  'be-144',
-  'be-145',
-  'be-146',
-]);
+const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set(
+  [
+    12, 16, 21, 27, 33, 37, 40, 43, 50, 54, 55, 59, 60, 63, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
+  ].map((id) => catalogEdgeKey(id)),
+);
 
 /**
  * Atlas keys are bridges. A catalog key whose theorem states the catalogued
@@ -377,7 +286,7 @@ const CATALOG_EQUATION_KEYS: ReadonlySet<string> = new Set([
 function formalRefKind(key: string, covers: string): FormalRefKind | undefined {
   if (key.startsWith('ab-')) return 'bridge';
   if (CATALOG_EQUATION_KEYS.has(key)) return 'bridge';
-  if (key === 'be-28') return 'property';
+  if (key === catalogEdgeKey(28)) return 'property';
   const word = covers.split(':')[0];
   if (
     word === 'property' ||

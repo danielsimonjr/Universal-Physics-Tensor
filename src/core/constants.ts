@@ -72,6 +72,30 @@ export const H0_SI = 67.4e3 / 3.0857e22;
  */
 export const M_SUN_SI = 1.989e30;
 
+/** Solar mass in kilograms. The same value as {@link M_SUN_SI}. */
+export const M_SUN_KG = M_SUN_SI;
+
+/** von Klitzing constant R_K = h/e² (ohm). */
+export const VON_KLITZING_SI = H_SI / (E_SI * E_SI);
+
+/** Josephson constant K_J = 2e/h (Hz/V). */
+export const JOSEPHSON_CONSTANT_SI = (2 * E_SI) / H_SI;
+
+/** Lorenz number L = (π²/3) (k_B/e)² (W Ω K⁻²). */
+export const LORENZ_NUMBER_SI = (Math.PI ** 2 / 3) * (K_B_SI / E_SI) ** 2;
+
+/** Euler-Mascheroni constant γ. */
+const EULER_GAMMA = 0.5772156649015329;
+
+/** Weak-coupling BCS gap ratio 2Δ(0)/(k_B T_c) = 2π e^{−γ}. */
+export const BCS_GAP_RATIO = (2 * Math.PI) / Math.exp(EULER_GAMMA);
+
+/** Lane-Emden n=3 dimensionless radius used by the white-dwarf mass. */
+export const LANE_EMDEN_OMEGA3 = 2.01824;
+
+/** Thomson cross section (m²). */
+export const THOMSON_CROSS_SECTION_SI = 6.6524587321e-29;
+
 /**
  * Nominal solar gravitational parameter (GM)☉ (m³ s⁻²), IAU 2015 Resolution B3.
  *

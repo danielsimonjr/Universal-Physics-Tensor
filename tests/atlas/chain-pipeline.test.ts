@@ -72,13 +72,13 @@ if (rhs12 === undefined) throw new Error('catalog 12 has no right-hand side');
 const massIdentity = edge(
   'be-55',
   [q('particle-mass', MASS)],
-  q('m', MASS),
-  sym('m', MASS),
+  q('mass', MASS),
+  sym('mass', MASS),
 );
 
 const catalogShape = edge(
   'be-12',
-  [q('m', MASS)],
+  [q('mass', MASS)],
   q('wavelength', LENGTH),
   rhs12,
 );

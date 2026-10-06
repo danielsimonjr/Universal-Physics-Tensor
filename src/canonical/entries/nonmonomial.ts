@@ -22,7 +22,7 @@
  * @module canonical/entries/nonmonomial
  */
 import type { CanonicalEquation } from '../canonical-equation.js';
-import { sym } from '../../bridges/equations/_be-helpers.js';
+import { sym } from '../../dimensional/ast-builders.js';
 import { DIMENSIONLESS, TIME } from '../../dimensional/types.js';
 import { dim, op, pow, l1 } from './_l1-build.js';
 

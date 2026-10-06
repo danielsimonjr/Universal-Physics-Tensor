@@ -96,17 +96,18 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
     // composed edge, so a newly DERIVED relation would fail it. It passes.
     const bearing = CATALOG_GRAPH.filter((e) => e.relation !== undefined).map((e) => e.id);
     expect([...bearing].sort()).toEqual(
-      ['be-11-zurek', 'be-11-master', 'be-21', 'be-37', 'be-48', 'be-51', 'be-52', 'be-55', 'be-59'].sort(),
+      ['be-11-zurek', 'be-11-master', 'be-21', 'be-37', 'be-48', 'be-51', 'be-52', 'be-55', 'be-58', 'be-59'].sort(),
     );
+    // 127 is the record from before every catalog relation, including be-147..170, was an edge.
     // 57 is the record from before be-77..87.
-    expect(CATALOG_GRAPH.length).toBe(127);
+    expect(CATALOG_GRAPH.length).toBe(158);
     // 114 is the record from before be-134..146.
     // 106 is the record from before be-126..133.
     // 83 is the record from before be-103..125.
     // 68 is the record from before be-88..102.
   });
 
-  it('reproduces the golden snapshot of all 16129 ordered pairs', () => {
+  it('reproduces the golden snapshot of all 24964 ordered pairs', () => {
     // evaluateAtOnes was refreshed when HBAR_SI became H_SI/(2π). Pair structure was not.
     const live = snapshotAllPairs(CATALOG_GRAPH, composeEdges);
     expect(live.length).toBe(GOLDEN.length);
@@ -117,7 +118,8 @@ describe('S1.2b — the existing catalog composes EXACTLY as it did before', () 
 
   it('the golden is a real proof, not a vacuous one (it has composable pairs)', () => {
     // 3249 = 57² is the record from before be-77..87. 68² = 4624.
-    expect(GOLDEN.length).toBe(16129);
+    // 16129 = 127² is the record from before every catalog relation was an edge.
+    expect(GOLDEN.length).toBe(24964);
     // 12996 is the record from before be-134..146. Composed pairs stay 22.
     // 11236 is the record from before be-126..133. Composed pairs stay 22.
     // 6889 = 83² is the record from before be-103..125. 4624 = 68² is the record from before be-88..102.

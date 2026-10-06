@@ -1,0 +1,155 @@
+// The `// source:` comments that stood on catalog entries in src/bridges/index.ts.
+// tools/citation-quote-check/check.ts reads this file.
+
+id: 11,
+  // source: Breuer & Petruccione, "The Theory of Open Quantum Systems" (OUP 2002;
+  // checked on search snippets of pp. 116, 136 and 146 only, no full text) -
+  // the Born-Markov derivation of the Markovian master equation: the reduced
+  // density matrix is the partial trace over the environment (p. 116), under
+  // the condition that the bath correlation time is small compared to the
+  // relaxation time (p. 136, in section 3.3.1 "Weak-coupling Limit"); the book
+  // later calls that condition "obviously a weak-coupling condition" (p. 146).
+  // The type 'coarse-graining' is THIS repository's classification of the
+  // partial trace; the book frames the derivation as a limit. Cited by work and
+  // topic: the section numbers in this row's references[] were not re-verified
+  // against an edition in hand.
+
+id: 21,
+  // source: Kovtun, Son & Starinets 2005 Phys. Rev. Lett. 94:111601
+  // (arXiv:hep-th/0405231) - they compute eta through Kubo's formula and the
+  // low-energy graviton absorption cross section of the dual black brane
+  // (eqs. 5-7, 14). Their eq. (16) shows that in N=4 SYM the first
+  // finite-coupling (string) correction RAISES eta/s above hbar/(4 pi k_B).
+  // Typing the relation as an exact
+  // derivation within the Einstein-gravity limit is THIS repository's
+  // classification.
+
+id: 21,
+  // source: Kovtun, Son & Starinets 2005, eq. (1): eta/s = hbar/(4 pi k_B)
+  // ~ 6.08e-13 K s, stated with hbar and k_B restored, for theories with
+  // gravity duals; they CONJECTURE ("We speculate") that it is a lower bound
+  // for relativistic QFTs at finite temperature and zero chemical potential.
+  // This row's saturating value 6.078e-13 K.s is that SI value, so the unit
+  // system is load-bearing for the NUMBER rather than decorative.
+
+id: 35,
+  // source: Rattazzi, Rychkov, Tonni & Vichi 2008 JHEP 0812:031
+  // (arXiv:0807.0004) and Poland, Rychkov & Vichi 2019 Rev. Mod. Phys.
+  // 91:015002 - crossing symmetry equates the s-channel and t-channel
+  // conformal-block decompositions of ONE four-point function (the s-/t-channel
+  // names are Poland et al.'s, Sec. III.I). Typing this as 'exact-equivalence'
+  // is THIS repository's classification. Poland et al. (Sec. II) call the
+  // crossing relation "a consistency condition on the CFT data"; Rattazzi et al.
+  // (Sec. 4) call it "a set of crossing symmetry constraints for the function
+  // g(u, v)". The swap (u, v) -> (v, u) is its own inverse by construction.
+
+id: 35,
+  // source: the in-repo adjudication registry, reason quoted verbatim (pinned by
+  // tests/bridges/overlay-registry-quote.test.ts). The witness is that registry
+  // entry, which is a checkable artifact in this tree.
+
+id: 37,
+  // source: Shapiro 1964 Phys. Rev. Lett. 13:789 - he derives the round-trip
+  // excess delay (eq. 1), a proper-time difference from the flat-space value,
+  // from the Schwarzschild solution. Eq. (1) is linear in the gravitational
+  // radius r0 = GM/c^2; he neglects the change-in-path contribution as second
+  // order. This row's
+  // one-way coordinate-time log form (2GM/c^3) ln(R_far/R_near) is THIS
+  // repository's simplification of it, not Shapiro's formula.
+  // NOT typed 'approximation': that member REQUIRES an ApproximationBound with
+  // a Lipschitz K, a delta and a machine horizon, and no such bound is sourced
+  // for the post-Newtonian truncation. The weak-field validity already lives in
+  // be37Edge's 'domain'. Inventing K and delta to reach the more flattering
+  // type is exactly the fabrication this overlay exists to prevent.
+
+id: 48,
+  // source: Bassi & Ghirardi 2003 Phys. Rep. 379:257 (review of GRW 1986 and
+  // CSL; Ghirardi, Pearle & Rimini 1990 Phys. Rev. A 42:78 is the CSL paper,
+  // metadata only). The linear amplification lambda_0 (m/m_0) is the GRW/QMSL
+  // centre-of-mass rate lambda_macro = N lambda_micro (review §6.4), with
+  // N = m/m_0 THIS repository's identification; it is derived, not fitted. In
+  // CSL the macroscopic rate is gamma D_0 n_out instead (review §8.3). The SPECULATIVE
+  // element is the bridge framing (that objective collapse happens at all),
+  // which this row's 'status' already carries; the overlay does not touch
+  // 'status'.
+
+id: 51,
+  // source: Einstein 1915 Preuss. Akad. Wiss. 831 (the perihelion paper, which
+  // announces the doubled deflection, 1.7", on p. 834; pp. 844-847 are the
+  // field-equations paper; Einstein worked by successive approximation), and
+  // Carroll, "Spacetime and Geometry" (not seen). That alpha = 4GM/(b c^2)
+  // follows from Schwarzschild null geodesics at first order in GM/(b c^2) is
+  // THIS repository's statement. NOT typed 'approximation' - see BE-37: no Lipschitz K / delta /
+  // machine horizon is sourced for the post-Newtonian truncation, and the type
+  // demands all three.
+
+id: 52,
+  // source: Einstein 1915 Preuss. Akad. Wiss. 831-839, eqs. (13)-(14):
+  // epsilon = 3 pi alpha/(a(1-e^2)), obtained by SUCCESSIVE APPROXIMATION of
+  // his field equations (Schwarzschild's exact solution came in 1916). Einstein
+  // defines alpha only as a constant fixed by the Sun's mass (p. 833);
+  // alpha = 2GM/c^2, which gives Delta phi = 6 pi GM/(a(1-e^2) c^2), is THIS
+  // repository's identification. The transformation below describes the
+  // standard textbook route through the Schwarzschild orbit equation, not
+  // Einstein's. Carroll's lecture notes (gr-qc/9712019, eq. 7.56) give the
+  // apsidal frequency omega_a = 3(GM)^(3/2)/(c^2 (1-e^2) r^(5/2)) and refer to
+  // Weinberg for the derivation; converting omega_a to Delta phi per orbit with
+  // Kepler's third law is THIS repository's step. NOT typed 'approximation',
+  // for the BE-37 reason.
+
+id: 55,
+  // source: Thouless, Kohmoto, Nightingale & den Nijs 1982 Phys. Rev. Lett.
+  // 49:405 (abstract checked; full text not accessed). The abstract says "The
+  // Kubo formula is written in a form that makes apparent the quantization when
+  // the Fermi energy lies in a gap." The 2016 Nobel scientific background (§4)
+  // states the result as sigma_H = n e^2/h with n an integer (its eq. 9), writes
+  // sigma_H as a sum over Landau levels of Berry-curvature integrals (its eq. 10),
+  // each equal to a first Chern number C1 (its eq. 13, where n labels the Landau
+  // level), and says "the relation to the mathematics of fibre bundles was
+  // established" later by Avron, Seiler & Simon 1983 and Kohmoto 1985. The
+  // quantization is the derivation's result, not an ansatz.
+
+id: 55,
+  // source: von Klitzing, Dorda & Pepper 1980 Phys. Rev. Lett. 45:494 (full text
+  // read by two model checks) report the
+  // quantized Hall RESISTANCE in SI ohms, as R_H = alpha^-1 mu0 c / 2i (eq. 4).
+  // sigma_xy = C e^2/h itself has the same form in Gaussian units; what is SI
+  // here is this row's values in ohms and siemens, so the unit system is
+  // load-bearing for the numbers.
+
+id: 58,
+  // source: Nyquist 1928 Phys. Rev. 32:110 - S_V = 4 k_B T R is derived from the
+  // second law, transmission-line mode counting and equipartition (eq. 1).
+  // Nyquist then gives the Planck-weighted form as eq. (8). Reading eq. (1) as
+  // the h f << k_B T limit of eq. (8) is THIS repository's gloss.
+  // The limit is stated in 'transformation' rather than typed 'approximation',
+  // because no Lipschitz K / delta / machine horizon for the h f / k_B T
+  // truncation is sourced.
+
+id: 58,
+  // source: Nyquist 1928, eq. (1): E^2 d nu = 4 R k T d nu. The paper gives no
+  // unit for E, R, k or T; it states frequency in "cycles per second" (p. 112).
+  // Reading it in SI (R in ohms, S_V in V^2/Hz) is this repository's choice. Its
+  // frequencies run over positive values (it integrates from 0 to
+  // infinity), consistent with a one-sided spectrum, though it does not
+  // discuss the choice. NOTE: the LOAD-BEARING convention here is the
+  // one-sided-vs-two-sided PSD choice, which is what makes the prefactor 4
+  // rather than 2. 'Conventions' has no field for it, so it is recorded in
+  // 'transformation' above and reported as an overlay gap rather than forced
+  // into 'fourierNormalization', which means something else.
+
+id: 59,
+  // source: Josephson 1962 Phys. Lett. 1:251 (paywalled; NOT read, so this
+  // attribution is unverified). His 1973 Nobel Lecture states the phase relation
+  // d(Delta phi)/dt = 2eV/hbar (eq. 4) and, after eq. (5), "a periodically
+  // varying current at a frequency 2eV/h". That the factor
+  // 2e is the Cooper-pair charge is the standard reading.
+
+id: 59,
+  // source: BIPM, "The International System of Units (SI)", 9th edition (2019;
+  // checked in version 4.01), which fixes e and h exactly. The Brochure states
+  // neither K_J = 2e/h nor its SI value; it mentions only the abrogated
+  // conventional K_J-90 = 483 597.9 GHz/V. Given K_J = 2e/h (Josephson, above),
+  // K_J is exact in SI (483597.848416984... GHz/V; 483597.8484 is that value
+  // rounded) because e and h are fixed. That inference is THIS repository's.
+

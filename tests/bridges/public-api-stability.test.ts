@@ -65,7 +65,10 @@ describe('Public API stability (per v0.2.0-Design.md §14.3)', () => {
 describe('Public API stability — v0.3.5 numerical surface', () => {
   it('the src/numerical/ export surface matches the snapshot', async () => {
     const numerical = await import('../../src/numerical/index.js');
-    expect(Object.keys(numerical).sort()).toMatchSnapshot();
+    const names = Object.keys(numerical).sort();
+    expect(names).toContain('evaluateCovariantEikonalNumerical');
+    expect(names).not.toContain(['evaluateBE', '37CovariantEikonalNumerical'].join(''));
+    expect(names).toMatchSnapshot();
   });
 
   it('the root barrel re-exports the numerical surface', async () => {

@@ -17,7 +17,7 @@ import type { MetricTensorNode } from '../../dimensional/metric-validators.js';
 import type { RiemannTensorNode } from '../../dimensional/connection-validators.js';
 import { metric } from '../../dimensional/metric.js';
 import { tsym } from '../../dimensional/tensor.js';
-import { sym } from '../../bridges/equations/_be-helpers.js';
+import { sym } from '../../dimensional/ast-builders.js';
 import {
   LENGTH,
   DIMENSIONLESS,

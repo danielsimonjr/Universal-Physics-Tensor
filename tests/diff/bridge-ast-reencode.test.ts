@@ -31,17 +31,29 @@ describe('BE-37 Shapiro — faithful ln(R_far/R_near) re-encoding', () => {
   const pref = (2 * G * M) / c ** 3;
 
   it.runIf(peerPresent)('value matches (2GM/c³)·ln(R_far/R_near)', async () => {
-    const { value } = await bridgeGradientASTById('BE-37', 'R_far', { M, R_far, R_near });
+    const { value } = await bridgeGradientASTById('BE-37', 'far-radius', {
+      mass: M,
+      'far-radius': R_far,
+      'near-radius': R_near,
+    });
     expect(relErr(value, pref * Math.log(R_far / R_near))).toBeLessThan(1e-9);
   });
 
   it.runIf(peerPresent)('∂Δt/∂R_far = (2GM/c³)/R_far — exact, exposed by the re-encoding', async () => {
-    const { gradient } = await bridgeGradientASTById('BE-37', 'R_far', { M, R_far, R_near });
+    const { gradient } = await bridgeGradientASTById('BE-37', 'far-radius', {
+      mass: M,
+      'far-radius': R_far,
+      'near-radius': R_near,
+    });
     expect(relErr(gradient, pref / R_far)).toBeLessThan(1e-9);
   });
 
   it.runIf(peerPresent)('∂Δt/∂R_near = −(2GM/c³)/R_near', async () => {
-    const { gradient } = await bridgeGradientASTById('BE-37', 'R_near', { M, R_far, R_near });
+    const { gradient } = await bridgeGradientASTById('BE-37', 'near-radius', {
+      mass: M,
+      'far-radius': R_far,
+      'near-radius': R_near,
+    });
     expect(relErr(gradient, -pref / R_near)).toBeLessThan(1e-9);
   });
 });
@@ -56,21 +68,27 @@ describe('BE-34 Kibble-Zurek — faithful exp(−mc²/k_B T_reh) re-encoding', (
   const arg = (m_defect * c * c) / (kB * T_reh);
 
   it.runIf(peerPresent)('∂n/∂T_reh = n·arg/T_reh — exact (m_defect, c, k_B, T_reh now exposed)', async () => {
-    const { value, gradient } = await bridgeGradientASTById('BE-34', 'T_reh', {
-      tau_Q,
-      tau_0,
-      m_defect,
-      T_reh,
+    const { value, gradient } = await bridgeGradientASTById('BE-34', 'reheating-temperature', {
+      'quench-timescale': tau_Q,
+      'microscopic-relaxation-time': tau_0,
+      'spatial-dimension': 1,
+      'static-exponent-nu': 1,
+      'dynamic-exponent-z': 1,
+      'defect-rest-mass': m_defect,
+      'reheating-temperature': T_reh,
     });
     expect(relErr(gradient, (value * arg) / T_reh)).toBeLessThan(1e-9);
   });
 
   it.runIf(peerPresent)('∂n/∂m_defect = −n·(c²/(k_B T_reh)) (Boltzmann mass-suppression slope)', async () => {
-    const { value, gradient } = await bridgeGradientASTById('BE-34', 'm_defect', {
-      tau_Q,
-      tau_0,
-      m_defect,
-      T_reh,
+    const { value, gradient } = await bridgeGradientASTById('BE-34', 'defect-rest-mass', {
+      'quench-timescale': tau_Q,
+      'microscopic-relaxation-time': tau_0,
+      'spatial-dimension': 1,
+      'static-exponent-nu': 1,
+      'dynamic-exponent-z': 1,
+      'defect-rest-mass': m_defect,
+      'reheating-temperature': T_reh,
     });
     expect(relErr(gradient, -value * ((c * c) / (kB * T_reh)))).toBeLessThan(1e-9);
   });

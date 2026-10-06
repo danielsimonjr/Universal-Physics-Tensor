@@ -20,7 +20,7 @@
  * @module canonical/entries/statistical-mechanics
  */
 import type { CanonicalEquation } from '../canonical-equation.js';
-import { sym } from '../../bridges/equations/_be-helpers.js';
+import { sym } from '../../dimensional/ast-builders.js';
 import { MASS, VELOCITY, ENERGY, TEMPERATURE } from '../../dimensional/types.js';
 import { dim, op, l1 } from './_l1-build.js';
 

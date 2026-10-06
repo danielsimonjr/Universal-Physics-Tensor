@@ -9,8 +9,18 @@
  */
 
 import type { Dimension } from './types.js';
-import { CHARGE, DIMENSIONLESS, LENGTH, MASS, TEMPERATURE } from './types.js';
-import { C_SI, E_SI, FARADAY_SI, M_E_SI, M_PROTON_SI, N_A_SI } from '../core/constants.js';
+import { CHARGE, DIMENSIONLESS, FREQUENCY, LENGTH, MASS, TEMPERATURE } from './types.js';
+import {
+  C_SI,
+  E_SI,
+  FARADAY_SI,
+  LANE_EMDEN_OMEGA3,
+  M_E_SI,
+  M_PROTON_SI,
+  N_A_SI,
+  THOMSON_CROSS_SECTION_SI,
+} from '../core/constants.js';
+import { allQuantityRecords, quantityRecord, synonymGroupsFromRegistry } from './quantity-registry.js';
 
 const PERMITTIVITY: Dimension = { L: -3, M: -1, T: 4, I: 2, Theta: 0, N: 0, J: 0 };
 /** μ₀ = 1/(ε₀ c²), [M L T⁻² I⁻²]. */
@@ -19,6 +29,8 @@ const PERMEABILITY: Dimension = { L: 1, M: 1, T: -2, I: -2, Theta: 0, N: 0, J: 0
 const PER_AMOUNT: Dimension = { L: 0, M: 0, T: 0, I: 0, Theta: 0, N: -1, J: 0 };
 /** Faraday constant — charge per amount, [T I N⁻¹]. */
 const FARADAY: Dimension = { L: 0, M: 0, T: 1, I: 1, Theta: 0, N: -1, J: 0 };
+/** Thomson cross-section — area. */
+const AREA: Dimension = { L: 2, M: 0, T: 0, I: 0, Theta: 0, N: 0, J: 0 };
 
 /** Vacuum permittivity, the same CODATA value `CONSTANTS.epsilon_0` holds. */
 export const EPS0_SI = 8.8541878128e-12;
@@ -49,6 +61,12 @@ export const FORMULA_NAMED: readonly FormulaName[] = [
   { name: 'F', dim: FARADAY, value: FARADAY_SI },
   { name: 'curvature_k', dim: DIMENSIONLESS, value: 0 },
   { name: 'scale_factor', dim: LENGTH, value: 1 },
+  { name: 'sigma_T', dim: AREA, value: THOMSON_CROSS_SECTION_SI },
+  { name: 'lane_emden_omega_3', dim: DIMENSIONLESS, value: LANE_EMDEN_OMEGA3 },
+  // GRW mass amplification: λ = λ₀ · (m / m₀), with λ₀ a rate and m₀ a mass.
+  // The two numbers are the catalog expression's, so the rate is unchanged.
+  { name: 'grw_lambda0', dim: FREQUENCY, value: 1e-16 },
+  { name: 'grw_m0', dim: MASS, value: 1.67e-27 },
 ];
 
 /** Name → dimension for the formula overlay. Does not override a catalog entry. @internal */
@@ -89,16 +107,23 @@ export const DIMENSION_RENAMES: readonly DimensionRename[] = [
  * A dimension rename is a different fact. It applies only when the symbol
  * carries that dimension, so a time coordinate named `T` stays `T`.
  */
-export const SYNONYM_GROUPS: readonly (readonly string[])[] = [
-  ['magnetic-field', 'magnetic-flux-density'],
-  ['landauer-erasure-energy', 'erasure-energy'],
-  ['temperature', 'T', 'temp', 'T_K'],
-  // One Boltzmann scale. `k_B` does not fold onto `kB` (`_` becomes `-`), so both are members.
-  ['boltzmann-constant', 'k_B', 'kB', 'boltzmann'],
-  ['specific-heat', 'specific-heat-capacity'],
-];
+/** Synonym groups projected from the quantity registry's aliases. */
+export const SYNONYM_GROUPS: readonly (readonly string[])[] = synonymGroupsFromRegistry();
 
 const foldName = (s: string): string => s.replace(/_/g, '-');
+
+const QUANTITY_IDS = new Set(allQuantityRecords().map((row) => row.id));
+
+/**
+ * The registry id for `name`, or for the same spelling with `_` written as `-`.
+ * A short symbol that is not an id stays unresolved. Dimension is not consulted.
+ */
+export function quantityIdForSpelling(name: string): string | undefined {
+  if (QUANTITY_IDS.has(name)) return name;
+  const hyphen = foldName(name);
+  if (hyphen !== name && QUANTITY_IDS.has(hyphen)) return hyphen;
+  return undefined;
+}
 
 /** The group `name` belongs to, comparing `_` and `-` as the same character. */
 export function synonymGroup(name: string): readonly string[] | undefined {
@@ -115,24 +140,15 @@ export function isTemperatureName(name: string): boolean {
   return group !== undefined && group.includes('temperature');
 }
 
-const INTERVAL_WORD = /(?:^|[-_])(?:change|difference|delta|interval|increment|drop|rise)(?:$|[-_])/i;
-const DIFFERENTIAL = /^(?:d|Δ)T(?:$|[-_\d])|^delta[-_]?T(?:$|[-_\d])/i;
-
 /**
  * Whether an affine temperature on this quantity is an interval or a point.
  *
- * A difference slot is a hyphen or underscore token
- * `change`, `difference`, `delta`, `interval`, `increment`, `drop`, or `rise`,
- * or a differential `dT`, `ΔT`, `deltaT`, or `delta-T`. `temperature-change`
- * and `dT` are intervals. `T`, `T1`, `T2`, and `hot-reservoir-temperature`
- * are points. The offset is the only thing this changes.
+ * The registry declares `kind`. An interval is a difference. A name the
+ * registry does not declare is an absolute point. The spelling of the name
+ * is not the role.
  */
 export function temperatureQuantityRole(name: string): 'absolute' | 'difference' {
-  const folded = name.trim();
-  const hyphen = folded.replace(/_/g, '-');
-  if (DIFFERENTIAL.test(folded) || DIFFERENTIAL.test(hyphen)) return 'difference';
-  if (INTERVAL_WORD.test(folded) || INTERVAL_WORD.test(hyphen)) return 'difference';
-  return 'absolute';
+  return quantityRecord(name)?.kind === 'interval' ? 'difference' : 'absolute';
 }
 
 /**

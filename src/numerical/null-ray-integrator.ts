@@ -3,7 +3,7 @@
  * geodesics. Used by `src/bridges/equations/be-37-shapiro-delay.ts` (the
  * closed-form bridge encoding); the v0.5.0 covariant-eikonal path uses
  * the symplectic `integrateGeodesicGL4` instead (see
- * `src/numerical/be37-covariant-eikonal.ts`). The fixed steps are MathTS
+ * `src/numerical/covariant-eikonal.ts`). The fixed steps are MathTS
  * `solveODESystem` with `dt` set. Operates on plain `number[]` state
  * vectors, no TensorEngine dependency.
  *

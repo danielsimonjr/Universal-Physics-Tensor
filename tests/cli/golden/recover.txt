@@ -3,16 +3,17 @@ Bridge↔canonical recovery — validating bridges against standard physics
 ⚠ structural match is "same relation UP TO a dimensionless factor"; that factor
   may itself be physically substantive (e.g. ⟨e^-βW⟩). A review surface.
 
-  206 non-unrelated links  →  3 restates-canonical  ·  0 recovers  ·  203 dimensional-only
+  618 non-unrelated links  →  4 restates-canonical  ·  0 recovers  ·  614 dimensional-only
 
   RESTATES-CANONICAL (the bridge IS the canonical law — F4: NOT a discovery):
     CE-hawking-temperature     ≡ bridge 42 (recovery exact, err 0e+0)
+    CE-light-deflection        ≡ bridge 51 (recovery exact, err 0e+0)
     CE-landauer                ≡ bridge 16 (recovery exact, err 0e+0)
     CE-jarzynski               ≡ bridge 29 (recovery exact, err 0e+0)
 
-  (203 dimensional-only: same dimension, different form. Run `upt canonical` for the registry.)
+  (614 dimensional-only: same dimension, different form. Run `upt canonical` for the registry.)
 
 Composition-derived recovery — a chain of two symbolic edges
   Compared up to a dimensionless factor. Dimensionful cancellation is not applied.
   A chain is never restates-canonical.
-  19 pairs examined, 0 structural matches.
+  23 pairs examined, 0 structural matches.

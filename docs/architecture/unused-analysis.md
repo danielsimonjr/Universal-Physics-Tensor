@@ -7,13 +7,14 @@
 
 ## Summary
 
-- **Potentially unused files**: 0
-- **Potentially unused exports**: 74
+- **Potentially unused files**: 1
+- **Potentially unused exports**: 80
 
 ## Potentially Unused Files
 
 These files are not imported by any other file in the codebase:
 
+- `src/composition/not-composable-seeds.ts`
 
 ## Potentially Unused Exports
 
@@ -47,9 +48,22 @@ These exports are not imported by any other file in the codebase:
 
 - `POSTER_5_IDENTIFICATION_NOTE` (constant)
 
-### `src/bridges/confrontations.ts`
+### `src/bridges/evaluators.ts`
 
-- `BCS_GAP_RATIO` (constant)
+- `bindRelationInputs` (function)
+
+### `src/bridges/holds.ts`
+
+- `rewriteHoldsNames` (function)
+
+### `src/bridges/registry.ts`
+
+- `registerBridge` (function)
+- `bridgeRegistry` (constant)
+
+### `src/bridges/relation-eval.ts`
+
+- `solveCatalogRelation` (function)
 
 ### `src/cases/brownian-sphere.ts`
 
@@ -132,13 +146,9 @@ These exports are not imported by any other file in the codebase:
 - `sha256` (constant)
 - `argvFingerprint` (constant)
 
-### `src/composition/edges/proved-seeds.ts`
+### `src/composition/bridge-analysis.ts`
 
-- `be40Edge` (constant)
-- `be55Edge` (constant)
-- `be59Edge` (constant)
-- `be60Edge` (constant)
-- `be63Edge` (constant)
+- `anchoringDistance` (function)
 
 ### `src/composition/frontier-account.ts`
 
@@ -147,6 +157,20 @@ These exports are not imported by any other file in the codebase:
 ### `src/composition/probe/study.ts`
 
 - `exprToInfix` (function)
+
+### `src/composition/quantities.ts`
+
+- `temperatureQ` (constant)
+- `massQ` (constant)
+
+### `src/core/constants.ts`
+
+- `GM_SUN_SOURCE` (constant)
+
+### `src/dimensional/constants.ts`
+
+- `G` (constant)
+- `e` (constant)
 
 ### `src/dimensional/unit-convention.ts`
 
@@ -162,6 +186,7 @@ These exports are not imported by any other file in the codebase:
 
 ### `src/numerical/spacetime-metrics.ts`
 
+- `metricParams` (function)
 - `METRIC_SIGNATURE` (constant)
 - `METRIC_SIGNATURE_NOTE` (constant)
 

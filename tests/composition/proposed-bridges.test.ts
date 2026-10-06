@@ -124,7 +124,7 @@ describe('epistemic firewall', () => {
     deriveProposedBridges();
     expect(BRIDGE_EQUATIONS).toBe(ref); // same array reference
     expect(JSON.stringify(BRIDGE_EQUATIONS)).toBe(before); // unchanged content
-    expect(BRIDGE_EQUATIONS).toHaveLength(136);
+    expect(BRIDGE_EQUATIONS).toHaveLength(160);
     // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.
@@ -278,7 +278,7 @@ describe('PROPOSED_BRIDGES surface (catalog field-shape, separate registry)', ()
   });
 
   it('is NOT the catalog — BRIDGE_EQUATIONS stays the faithful 44', () => {
-    expect(BRIDGE_EQUATIONS).toHaveLength(136);
+    expect(BRIDGE_EQUATIONS).toHaveLength(160);
     // 123 is the record from before be-134..146.
     // 92 is the record from before be-103..125.
     // 77 is the record from before be-88..102.

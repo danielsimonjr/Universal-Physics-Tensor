@@ -75,8 +75,10 @@ describe('catalogToCells', () => {
     // BE-134, BE-135, BE-136, BE-139, BE-144, and BE-145 name quantum, so they
     // are submittable. The other seven of BE-134..146 are not PhysicalScale.
     // 39 is the record from before those six.
+    // BE-164 through BE-169 name a PhysicalScale, so they are submittable.
+    // 45 is the record from before those six. BE-170 does not.
     const cells = catalogToCells(BRIDGE_EQUATIONS);
-    expect(cells).toHaveLength(45);
+    expect(cells).toHaveLength(51);
   });
 
   it('assigns id as "BE-{number}" matching the catalog id field', () => {
@@ -114,7 +116,7 @@ describe('scanCatalog', () => {
     expect(report.entries).toHaveLength(BRIDGE_EQUATIONS.length);
     // Updated 2026-05-24 (parallel-agent dispatch): 42 → 44 after adding
     // BE-53 (Yang-Mills β) AND BE-54 (Randall-Sundrum).
-    expect(report.entries).toHaveLength(136);
+    expect(report.entries).toHaveLength(160);
     // 123 is the record from before be-134..146.
     // 115 is the record from before be-126..133.
     // 92 is the record from before be-103..125.
@@ -145,7 +147,8 @@ describe('scanCatalog', () => {
     // 76 is the record from before be-126..133. Those eight tuples are not PhysicalScale.
     // 84 is the record from before be-134..146. BE-137, BE-138, BE-140, BE-141,
     // BE-142, BE-143, and BE-146 name neither quantum nor classical.
-    expect(report.unsubmitted).toHaveLength(91);
+    // BE-147 through BE-163 and BE-170 name no PhysicalScale. 91 is the record from before those eighteen.
+    expect(report.unsubmitted).toHaveLength(109);
     // 53 is the record from before be-103..125. Those twenty-three tuples are fluid → plasma.
   });
 
@@ -159,7 +162,8 @@ describe('scanCatalog', () => {
     // BE-134, BE-135, BE-136, BE-139, BE-144, and BE-145 name quantum.
     // 39 is the record from before those six.
     const report = scanCatalog(BRIDGE_EQUATIONS);
-    expect(report.submitted).toHaveLength(45);
+    // BE-164 through BE-169 name a PhysicalScale. 45 is the record from before those six.
+    expect(report.submitted).toHaveLength(51);
   });
 
   it('does NOT throw on a malformed entry', () => {
@@ -243,7 +247,8 @@ describe('ingestCatalog', () => {
     // BE-134, BE-135, BE-136, BE-139, BE-144, and BE-145 name quantum.
     // 39 is the record from before those six.
     const cells = tensor.populatedCells().filter((c) => c.kind === 'bridge');
-    expect(cells).toHaveLength(45);
+    // BE-164 through BE-169 name a PhysicalScale. 45 is the record from before those six.
+    expect(cells).toHaveLength(51);
   });
 
   it('throws CatalogIngestionError on any Rule 1 error AND leaves tensor untouched', () => {

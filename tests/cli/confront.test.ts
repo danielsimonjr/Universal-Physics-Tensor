@@ -59,7 +59,7 @@ describe('upt confront', () => {
     expect(code).toBe(0);
     const text = cap.lines.join('');
     expect(text).toMatch(/sensitivity \(elasticity, strongest dependence, not uncertainty budget\)/);
-    expect(text).toMatch(/central_mass_kg:/);
+    expect(text).toMatch(/mass:/);
     expect(text).not.toMatch(/uncertainty budget\).*dominates/i);
   });
 
@@ -285,7 +285,7 @@ describe('upt confront <be-NN> — the id explain prints', () => {
     expect(text).toMatch(/running procedure/);
     expect(text).not.toMatch(/residual/i);
     expect(text).toMatch(/not a pass and not a fail/);
-    expect(text).toMatch(/catalog status of be-53 is unchanged/);
+    expect(text).toMatch(/catalog status of catalog id 53 is unchanged/);
   });
 
   it('be-53 --json is the same refusal and has no residual field', async () => {

@@ -129,6 +129,30 @@ The Documented, Migration, Breaking, and Fixed notes that were already under thi
 - **A fully-quantitative count is an input of the canonical evaluator.** The evaluator was the Buckingham monomial. That monomial cannot see `N` in `P = N k_B T/V`, and it is null for perihelion, so `1-e²` and `6π` were dropped and the edge returned NaN. The same null monomial dropped `8π` from Hawking temperature and returned NaN for every other fully-quantitative product, quotient, or integer power, including Newton's gravitation. A `scalar-up-to-constant` stub, including Jarzynski, stays on the monomial. Issue #387.
 - **Explain, discovery anchors, and regime coordinates read an energy on a temperature name as k_B T.** The reading already lived in `upt eval`'s `parseScope` (`alignTemperatureBinding`). Explain stored `readNamedBinding`'s joules. Issue #386.
 
+## [8.0.0] - 2026-10-06
+
+A bridge equation is a record in `data/bridge-catalog.json`. One engine evaluates it. `package.json` is 8.0.0. This change does not tag and does not publish.
+
+~~`temperatureQuantityRole` classifies an interval by the words `change`, `difference`, `delta`, `interval`, `increment`, `drop`, or `rise` in the slot name.~~ Retracted: the role is the quantity registry's declared kind. `temperature-change` is an interval. `dT` is its own interval record and is not an alias of temperature.
+
+~~`SYNONYM_GROUPS` is a hand list.~~ Retracted: synonym groups are the aliases on the quantity registry.
+
+### Breaking
+
+- Per-equation modules, per-round edge modules, and the names `evaluateBE…`, `beNNEdge`, `confrontBE…`, and `CATALOG_FULL_EDGES` are removed. A bridge number is the `id` field of a catalog record. Evaluation is `evaluateRelation`. The numerical integrator is `evaluateCovariantEikonalNumerical`.
+- `upt evaluate` returns `{ value }` for the primary scalar. Extra keys that the old per-equation evaluators printed are not on that result.
+- Every catalog record has `type`: `standard` or `cross-domain`. The catalog schema is version 3. `derivedFrom` and `basis` stay absent until a derivation theorem is pinned.
+
+### Migration
+
+- Read a bridge from `data/bridge-catalog.json`. Evaluate it with `evaluateRelation`. The quantity's dimension, default unit, aliases, and temperature kind come from `data/quantities.json`.
+- The specification writes up the 40 cross-domain bridges. A standard bridge is a catalog record and has no specification heading. ~~A standard record that already had a section keeps it.~~ Retracted: those write-ups are removed from Part I §II and Part II. Bridge Equations 164 through 170 stay under Black-body radiation, quantum statistics, and reciprocal transport. An `Evaluator:` link names the catalog record and `evaluateRelation`.
+- The fifteen `// source:` comments that stood on catalog entries now live in `docs/research/phase-1-source-comments.txt`. The quote checker reads that file.
+- Persona-session reports moved from `docs/dogfood/` to `docs/persona-sessions/`. A filename that ended in `-rN` now ends in `-session-N`. The three confrontation designs under `docs/superpowers/specs/` no longer put a bridge number in the filename. `docs/design/yang-mills-confrontation.md` is the same note that was `docs/design/be-53-yang-mills-confrontation.md`. Archive prompt filenames under `docs/architecture/archive/bridge-audit/` use `entry-N` instead of `be-N`. Sentences above this version that name the old paths are the record from before the move.
+- PhysJS pin `10e48f140c0e9fad3c50e5e5538124c52b3e732c`. Proof status is the vendored manifest. `formally-proved` is still derived from a reviewed `formalRef`.
+- The architecture coverage table counts `tests/bridges/catalog-reference-golden.test.ts`. Re-exported catalog symbols carry a JSDoc summary. The README and ROADMAP status spans are restamped from the catalog: 160 entries, 158 edges, 152 bridges, and 40 counted references that do not light `formally-proved`.
+- The 126 numeric master goldens are the relation `reference` values. Under vitest, 114 match bitwise and 12 differ by one unit in the last place (relative error below 1e-15): ids 14, 43, 56, 69, 74, 90, 94, 109, 115, 116, 117, and 120. be-12 at mass 1 and temperature 300 stays `4.107369998431901e-24`. be-142 had no master before-value. Thermal rows 147–170 have no master before-value; be-164 and be-165 are the two that differ by one unit in the last place, and the other 22 match bitwise. A temperature shifted by 1 K on be-12 moves the value by more than one part in a thousand.
+
 ## [7.0.0] - 2026-10-06
 
 Major release. `resolveToCatalogName` is removed from the public surface. Call `resolveQuantityName`. PhysJS pin `10cf71e9f1f460780f8620de7ba422df61e0949b` (PhysJS #68). The catalog adds BE-134 through BE-146. npm `6.0.0` remains the published release until the tag workflow. This change does not tag and does not publish.

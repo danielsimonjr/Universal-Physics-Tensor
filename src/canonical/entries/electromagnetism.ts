@@ -18,7 +18,7 @@
  * @module canonical/entries/electromagnetism
  */
 import type { CanonicalEquation } from '../canonical-equation.js';
-import { sym } from '../../bridges/equations/_be-helpers.js';
+import { sym } from '../../dimensional/ast-builders.js';
 import {
   MASS,
   VELOCITY,

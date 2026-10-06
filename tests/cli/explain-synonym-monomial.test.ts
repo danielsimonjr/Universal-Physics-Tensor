@@ -135,7 +135,7 @@ describe('a magnetic synonym is one Buckingham variable', () => {
       names,
     );
     expect(() => explainQuantity(CANONICAL_GRAPH, 'cyclotron-frequency', known as Record<string, number>)).toThrow(
-      /magnetic-field and magnetic-flux-density are one quantity and disagree/,
+      /magnetic-flux-density and magnetic-field are one quantity and disagree/,
     );
 
     const cap = capture();

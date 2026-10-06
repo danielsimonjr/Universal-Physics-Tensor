@@ -1,96 +1,72 @@
 /**
- * v0.8.0 Phase 5 (P-2) — committed JSON catalog artifact ↔ live
- * catalog drift guard.
- *
- * `data/bridge-catalog.json` is the physicist-facing review surface.
- * This test fails whenever the TypeScript catalog changes without
- * re-running `npm run catalog:json` — same discipline as the
- * spec↔index guard. Schema checks are hand-rolled (no new runtime
- * deps) against data/bridge-catalog.schema.json's requirements.
+ * The catalog file is the source. Every record carries a filing, a
+ * formalKey resolves in the vendored manifest, and a relation names a
+ * record or null. A record with the filing removed fails the same checks.
  */
-import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { catalogFormalRef } from '../../src/atlas/catalog-formal-ref.js';
-import { BRIDGE_EQUATIONS } from '../../src/bridges/index.js';
-import { listConfrontations } from '../../src/bridges/confrontations.js';
-import { ADJUDICATIONS } from '../../src/composition/adjudication.js';
+import { fileURLToPath } from 'node:url';
+import { describe, expect, it } from 'vitest';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const artifact = JSON.parse(
-  readFileSync(
-    resolve(here, '../../data/bridge-catalog.json'),
-    'utf-8',
-  ),
-) as {
+const repoRoot = resolve(here, '..', '..');
+
+interface CatalogEntry {
+  id: number;
+  type?: string;
+  formalKey?: string;
+  basis?: boolean;
+  derivedFrom?: unknown;
+}
+
+interface CatalogFile {
   schemaVersion: number;
   packageVersion: string;
   count: number;
-  entries: Array<Record<string, unknown>>;
-  confrontations: Array<Record<string, unknown>>;
-  adjudications: Array<Record<string, unknown>>;
-};
+  entries: CatalogEntry[];
+  relations: Array<{ id: string; catalogId: number | null }>;
+}
 
-describe('data/bridge-catalog.json — committed artifact integrity (P-2)', () => {
-  it('schemaVersion 2, count matches the live catalog', () => {
-    expect(artifact.schemaVersion).toBe(2);
-    expect(artifact.count).toBe(BRIDGE_EQUATIONS.length);
-    expect(artifact.entries).toHaveLength(BRIDGE_EQUATIONS.length);
+function problems(catalog: CatalogFile, packageVersion: string, keys: ReadonlySet<string>): string[] {
+  const errors: string[] = [];
+  if (catalog.schemaVersion !== 3) errors.push('schema');
+  if (catalog.packageVersion !== packageVersion) errors.push('package');
+  if (catalog.count !== catalog.entries.length) errors.push('count');
+  const ids = new Set(catalog.entries.map((entry) => entry.id));
+  for (const entry of catalog.entries) {
+    if (entry.type !== 'standard' && entry.type !== 'cross-domain') errors.push(`type ${entry.id}`);
+    if (entry.formalKey !== undefined && !keys.has(entry.formalKey)) errors.push(`formalKey ${entry.id}`);
+    if (entry.basis !== undefined && entry.basis !== true) errors.push(`basis ${entry.id}`);
+    if (entry.derivedFrom !== undefined && !Array.isArray(entry.derivedFrom)) errors.push(`derivedFrom ${entry.id}`);
+  }
+  for (const relation of catalog.relations) {
+    if (relation.catalogId !== null && !ids.has(relation.catalogId)) errors.push(`relation ${relation.id}`);
+  }
+  return errors;
+}
+
+describe('data/bridge-catalog.json', () => {
+  const catalog = JSON.parse(
+    readFileSync(resolve(repoRoot, 'data', 'bridge-catalog.json'), 'utf8'),
+  ) as CatalogFile;
+  const pkg = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf8')) as { version: string };
+  const manifest = JSON.parse(
+    readFileSync(resolve(repoRoot, 'formal', 'physjs', 'manifest.json'), 'utf8'),
+  ) as { entries: Array<{ key: string }> };
+  const keys = new Set(manifest.entries.map((entry) => entry.key));
+
+  it('is schema 3, matches the package version, and every record has a filing', () => {
+    expect(problems(catalog, pkg.version, keys)).toEqual([]);
+    expect(catalog.entries.length).toBeGreaterThan(0);
   });
 
-  it('FRESHNESS: committed confrontations + adjudications deep-equal the live registries (v2 discovery surfaces)', () => {
-    const liveConfrontations = listConfrontations().map((e) => ({
-      bridgeId: e.bridgeId,
-      title: e.title,
-      kind: e.kind,
-      outcome: e.run(),
-    }));
-    expect(artifact.confrontations).toEqual(
-      JSON.parse(JSON.stringify(liveConfrontations)),
-    );
-    expect(artifact.adjudications).toEqual(
-      JSON.parse(JSON.stringify(ADJUDICATIONS)),
-    );
-  });
-
-  it('entry ids and order match the live catalog exactly', () => {
-    expect(artifact.entries.map((e) => e['id'])).toEqual(
-      BRIDGE_EQUATIONS.map((e) => e.id),
-    );
-  });
-
-  it('every entry satisfies the schema requirements (hand-rolled checks)', () => {
-    const STATUSES = new Set([
-      'established',
-      'speculative',
-      'highly-speculative',
-      'invalid',
-    ]);
-    for (const e of artifact.entries) {
-      expect(typeof e['id']).toBe('number');
-      expect(typeof e['name']).toBe('string');
-      expect(Array.isArray(e['bridges'])).toBe(true);
-      expect(e['bridges']).toHaveLength(2);
-      expect(STATUSES.has(e['status'] as string)).toBe(true);
-      expect(Array.isArray(e['references'])).toBe(true);
-      expect(Array.isArray(e['dependencies'])).toBe(true);
-    }
-  });
-
-  it('FRESHNESS: committed entries deep-equal the live catalog joined with the overlay (re-run npm run catalog:json after catalog edits)', () => {
-    // The catalog row does not store formalRef. The artifact still does:
-    // the overlay is joined after id, which is where the committed file
-    // carries it. JSON round-trip so undefined-vs-absent normalizes.
-    const live = JSON.parse(
-      JSON.stringify(
-        BRIDGE_EQUATIONS.map((entry) => {
-          const { id, ...rest } = entry;
-          const formalRef = catalogFormalRef(id);
-          return formalRef === undefined ? { id, ...rest } : { id, formalRef, ...rest };
-        }),
+  it('rejects a record whose filing was removed', () => {
+    const broken: CatalogFile = {
+      ...catalog,
+      entries: catalog.entries.map((entry, index) =>
+        index === 0 ? { ...entry, type: undefined } : entry,
       ),
-    );
-    expect(artifact.entries).toEqual(live);
+    };
+    expect(problems(broken, pkg.version, keys).some((error) => error.startsWith('type'))).toBe(true);
   });
 });

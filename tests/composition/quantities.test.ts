@@ -5,16 +5,10 @@
  * distinct-object pairs).
  */
 import { describe, it, expect } from 'vitest';
-import * as quantities from '../../src/composition/quantities.js';
+import { allQuantities } from '../../src/composition/quantities.js';
 import type { Quantity } from '../../src/composition/index.js';
 
-const nodes = Object.entries(quantities).filter(
-  (e): e is [string, Quantity] =>
-    typeof e[1] === 'object' &&
-    e[1] !== null &&
-    'name' in (e[1] as object) &&
-    'dim' in (e[1] as object),
-);
+const nodes: [string, Quantity][] = allQuantities().map((q) => [q.name, q]);
 
 describe('centralized Quantity registry (v0.11 criterion 6)', () => {
   it('exports at least the 30 unique nodes from the centralization', () => {
@@ -43,9 +37,11 @@ describe('centralized Quantity registry (v0.11 criterion 6)', () => {
     }
   });
 
-  it('edge modules consume the central nodes (no local twins): be48 and be42 share THE mass object', async () => {
-    const { be42Edge } = await import('../../src/composition/edges/calibration.js');
-    const { be48Edge } = await import('../../src/composition/edges/catalog-tranche.js');
-    expect(be48Edge.sources[0]).toBe(be42Edge.sources[0]); // massQ identity
+  it('catalog edges share THE mass object', async () => {
+    const { catalogEdge } = await import('../../src/composition/catalog-graph.js');
+    const { catalogEdgeKey } = await import('../../src/bridges/catalog-load.js');
+    const hawking = catalogEdge(catalogEdgeKey(42));
+    const collapse = catalogEdge(catalogEdgeKey(48));
+    expect(collapse.sources[0]).toBe(hawking.sources[0]);
   });
 });

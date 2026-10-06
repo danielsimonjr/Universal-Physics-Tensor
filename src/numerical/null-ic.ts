@@ -1,7 +1,7 @@
 /**
  * Null initial-condition (null-IC) reconstruction helper (v0.6.0 Phase 1, Task 1.5).
  *
- * Extracted from `be37-covariant-eikonal.ts` (lines 314–326) so that PC-1.5
+ * Extracted from `covariant-eikonal.ts` (lines 314–326) so that PC-1.5
  * bench harnesses measure the **actual production reconstruction** rather than
  * a toy approximation.
  *
@@ -22,7 +22,7 @@
  * `p_θ = 0`).
  *
  * This is the arithmetic BE-37's production code (v0.5.0 Task 12) actually
- * performs at `be37-covariant-eikonal.ts` lines 314–326; extracted here so
+ * performs at `covariant-eikonal.ts` lines 314–326; extracted here so
  * PC-1.5 bench harnesses measure the exact same computation.
  *
  * @param gInverse - Contravariant metric g^{μν} at the starting point, as a

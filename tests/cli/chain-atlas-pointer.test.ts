@@ -2,14 +2,18 @@
  * `upt chain` points at a document a published tarball can open, and the
  * Landauer edge's speculative grade points at the atlas formalRef.
  *
- * The command still does not run the pipeline. `be16Edge.confidence` stays
- * `speculative`. `composeEdges(be42Edge, be16Edge)` stays `highly-speculative`
+ * The command still does not run the pipeline. `edge16.confidence` stays
+ * `speculative`. `composeEdges(edge42, edge16)` stays `highly-speculative`
  * and is not `formally-proved`.
  */
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { runCli } from '../../src/cli/main.js';
-import { be16Edge, be42Edge } from '../../src/composition/edges/calibration.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
+
+const edge16 = catalogEdge(catalogEdgeKey(16));
+const edge42 = catalogEdge(catalogEdgeKey(42));
 import { composeEdges } from '../../src/composition/compose.js';
 
 const DESIGN_URL =
@@ -43,13 +47,13 @@ describe('chain pointer and Landauer confidence', () => {
   });
 
   it('keeps the edge speculative and points the atlas page at that grade', async () => {
-    expect(be16Edge.confidence).toBe('speculative');
-    expect(composeEdges(be42Edge, be16Edge).confidence).toBe('highly-speculative');
+    expect(edge16.confidence).toBe('speculative');
+    expect(composeEdges(edge42, edge16).confidence).toBe('highly-speculative');
     const cap = capture();
     expect(await runCli(['atlas', 'be-16'], cap.io)).toBe(0);
     const text = cap.lines.join('');
     expect(text).toContain('kind: bridge');
-    expect(text).toMatch(/be16Edge\.confidence is speculative/);
+    expect(text).toMatch(/catalog edge for id 16 is speculative/);
     expect(text).toMatch(/upt chain/);
     expect(text).toMatch(/not formally-proved|does not derive formally-proved/);
   });

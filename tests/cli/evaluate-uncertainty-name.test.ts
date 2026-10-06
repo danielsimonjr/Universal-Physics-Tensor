@@ -10,7 +10,10 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import * as evaluateCommand from '../../src/cli/commands/evaluate.js';
 import { propagateUncertainty } from '../../src/composition/uncertainty.js';
-import { be42Edge } from '../../src/composition/index.js';
+import { catalogEdgeKey } from '../../src/bridges/catalog-load.js';
+import { catalogEdge } from '../../src/composition/index.js';
+
+const edge42 = catalogEdge(catalogEdgeKey(42));
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -51,7 +54,7 @@ describe('CLI evaluator uncertainty', () => {
   });
 
   it('the graph-layer function is still the public one', () => {
-    const result = propagateUncertainty(be42Edge, { mass: 1.989e30 }, { mass: 1e24 });
+    const result = propagateUncertainty(edge42, { mass: 1.989e30 }, { mass: 1e24 });
     expect(result.sigma).toBeGreaterThan(0);
     expect(result).not.toHaveProperty('contributions');
   });

@@ -1,6 +1,6 @@
 /**
  * The citation quote check: a MECHANICAL check of the `// source:` comments in
- * `src/bridges/index.ts` against the downloaded source texts. It re-judges no wording.
+ * `docs/research/phase-1-source-comments.txt` against the downloaded source texts. It re-judges no wording.
  *
  * Every quoted span and every page, equation or section locator in those comments is a claim in
  * `docs/research/phase-1-citation-claims.json`. For each claim the check runs exact string tests:
@@ -161,7 +161,7 @@ const LOCATOR =
   /(?<![A-Za-z])(?:pp?\.\s*\d+(?:\s*(?:[-–]|,|and)\s*\d+)*|[Ee]qs?\.\s*(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?)(?:\s*(?:[-–]|,)\s*(?:\(\d+(?:\.\d+)?\)|\d+(?:\.\d+)?))*|Sec\.\s*[0-9IVX]+(?:\.[0-9IVX]+)*|section\s+\d+(?:\.\d+)*)|§\s*\d+(?:\.\d+)*/g;
 
 /**
- * The quoted spans and locators of every `// source:` comment in `src/bridges/index.ts`, keyed
+ * The quoted spans and locators of every `// source:` comment in the source-comment file, keyed
  * `BE-<id>/<n>`. A comment runs from its `// source:` line to the next line that is not a comment.
  * A double quote right after a digit is read as arc seconds (1.7"), not as a quotation mark.
  */
@@ -494,7 +494,7 @@ function main(argv: readonly string[]): number {
   const manifestPath = join(root, 'docs/research/phase-1-citation-claims.json');
   const manifestText = readFileSync(manifestPath, 'utf8');
   const manifest = JSON.parse(manifestText) as Manifest;
-  const tokens = extractCommentTokens(readFileSync(join(root, 'src/bridges/index.ts'), 'utf8'));
+  const tokens = extractCommentTokens(readFileSync(join(root, 'docs/research/phase-1-source-comments.txt'), 'utf8'));
 
   const out: string[] = [];
   const problems: string[] = [];
