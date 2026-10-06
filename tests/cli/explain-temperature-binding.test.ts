@@ -282,14 +282,15 @@ describe('explain temperature bindings', () => {
     expect(() => parseSweep(api, 'temperature=1m:2m:2')).toThrow(/temperature/);
   });
 
-  it('prefers a bare boltzmann-constant, and ignores one that is not J/K', () => {
-    const preferred = readNamedBinding('temperature', '10eV', {
-      siblings: [
-        { name: 'boltzmann-constant', raw: String(2 * K_B_SI) },
-        { name: 'k_B', raw: '2' },
-      ],
-    });
-    expect(preferred.value).toBeCloseTo((10 * E_SI) / (2 * K_B_SI), 8);
+  it('refuses two Boltzmann spellings that disagree, and ignores one that is not J/K', () => {
+    expect(() =>
+      readNamedBinding('temperature', '10eV', {
+        siblings: [
+          { name: 'boltzmann-constant', raw: String(2 * K_B_SI) },
+          { name: 'k_B', raw: '2' },
+        ],
+      }),
+    ).toThrow(/disagree/);
     const ignored = readNamedBinding('temperature', '10eV', {
       siblings: [
         { name: 'boltzmann-constant', raw: '10eV' },

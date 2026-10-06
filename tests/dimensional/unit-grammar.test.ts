@@ -9,7 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { equals, multiply } from '../../src/dimensional/algebra.js';
-import { parseUnit, unitTables, UnitError } from '../../src/dimensional/units.js';
+import { convertValue, parseUnit, unitTables, UnitError } from '../../src/dimensional/units.js';
 import type { Dimension } from '../../src/dimensional/types.js';
 
 const { units, prefixes } = unitTables();
@@ -119,8 +119,8 @@ describe('unit juxtaposition grammar', () => {
     for (const left of lefts) {
       for (const right of bases) {
         const token = `${left}${right}`;
-        if (token === 'degC' || token === '°C') {
-          expect(parseUnit(token).affine).toBe('celsius');
+        if (token === 'degC' || token === '°C' || token === 'degF' || token === '°F') {
+          expect(parseUnit(token).affine).toBe(token.endsWith('C') ? 'celsius' : 'fahrenheit');
           continue;
         }
         const single = oneFactor(token);
@@ -185,5 +185,63 @@ describe('unit juxtaposition grammar', () => {
     expect(parseUnit('min').scale).toBe(60);
     expect(parseUnit('Pa').scale).toBe(1);
     expect(parseUnit('keV').scale).toBeCloseTo(1.602176634e-16, 24);
+  });
+
+  it('a prefixed factor inside a compound competes with a heterogeneous product', () => {
+    const baseOf: Record<string, string> = { L: 'm', M: 'kg', T: 's', I: 'A', Theta: 'K', N: 'mol', J: 'cd' };
+    const si = (dim: Dimension): string => {
+      const parts: string[] = [];
+      for (const key of Object.keys(baseOf) as (keyof Dimension)[]) {
+        const exp = dim[key];
+        if (exp === 0) continue;
+        const unit = baseOf[key]!;
+        parts.push(exp === 1 ? unit : `${unit}^${exp}`);
+      }
+      return parts.length === 0 ? '1' : parts.join('*');
+    };
+    let competed = 0;
+    for (const prefix of prefixes.keys()) {
+      if (!units.has(prefix)) continue;
+      for (const [symbol, spec] of units) {
+        if (!spec[2] || symbol === prefix) continue;
+        const token = `${prefix}${symbol}`;
+        const prefixed = oneFactor(token);
+        const left = oneFactor(prefix);
+        const right = oneFactor(symbol);
+        if (prefixed === null || left === null || right === null) continue;
+        expectFactor(token, prefixed);
+        expect(() => parseUnit(`W/${token}`), `W/${token}`).toThrow(/ambiguous/);
+        const productDim = multiply(left.dim, right.dim);
+        const productScale = left.scale * right.scale;
+        const watt = parseUnit('W');
+        const prefixedCompound = multiply(watt.dim, powerDim(prefixed.dim, -1));
+        const productCompound = multiply(watt.dim, powerDim(productDim, -1));
+        if (equals(prefixed.dim, productDim)) {
+          expect(() => convertValue(`1W/${token}`, si(prefixedCompound)), token).toThrow(/ambiguous/);
+        } else {
+          const prefTarget = si(prefixedCompound);
+          const prodTarget = si(productCompound);
+          close(
+            convertValue(`1W/${token}`, prefTarget).value,
+            watt.scale / prefixed.scale / parseUnit(prefTarget).scale,
+          );
+          close(
+            convertValue(`1W/${token}`, prodTarget).value,
+            watt.scale / productScale / parseUnit(prodTarget).scale,
+          );
+        }
+        competed += 1;
+      }
+    }
+    expect(competed).toBeGreaterThan(0);
+    expect(() => parseUnit('W/mK')).toThrow(/mK/);
+    expect(() => parseUnit('W/mK')).toThrow(/m·K/);
+    expect(() => parseUnit('kg/ms')).toThrow(/ambiguous/);
+    expect(convertValue('401W/mK', 'W/(m*K)').value).toBeCloseTo(401, 9);
+    expect(convertValue('1kg/ms', 'Pa*s').value).toBeCloseTo(1, 9);
+    expect(convertValue('1kg/ms', 'kg/s').value).toBeCloseTo(1000, 6);
+    expect(parseUnit('mm/s').scale).toBeCloseTo(1e-3, 12);
+    expect(() => parseUnit('mPas')).toThrow(/mPa·s/);
+    expect(() => parseUnit('mPas')).toThrow(/m·Pa·s/);
   });
 });

@@ -38,6 +38,19 @@ export interface Evaluable {
   readonly evaluator?: EvaluatorSpec;
 }
 
+/** Every source is present and finite, under its name or an alias. */
+function sourcesFinite(edge: BridgeEdge, bindings: Readonly<Record<string, number>>): boolean {
+  for (const source of edge.sources) {
+    const keys = [source.name, ...(edge.aliases?.[source.name] ?? [])];
+    const present = keys.some((key) => {
+      const value = bindings[key];
+      return value !== undefined && Number.isFinite(value);
+    });
+    if (!present) return false;
+  }
+  return true;
+}
+
 function idOf(id: string | number): { key: string; numeric: number | undefined } {
   if (typeof id === 'number') return { key: `be-${id}`, numeric: id };
   const match = /^be-(\d+)$/.exec(id);
@@ -115,6 +128,8 @@ function closedFormEvaluation(
  * Binding keys are the edge's quantity names or its aliases.
  * A missing input, a domain failure, and a sign failure throw.
  * An unset coefficient returns `{ kind: 'unset', formula }` and no number.
+ * A complete finite input whose closed form is not finite (a dropped factor,
+ * a singularity) is the same unset result, not a missing input.
  *
  * @public
  */
@@ -127,6 +142,7 @@ export function evaluateRelation(
     try {
       const value = evaluateEdge(found.edge, { ...bindings });
       if (!Number.isFinite(value)) {
+        if (sourcesFinite(found.edge, bindings)) return { kind: 'unset', formula: found.edge.label };
         throw new Error(`evaluateRelation: ${found.edge.id} is missing a finite input`);
       }
       return { kind: 'value', value, dimension: found.edge.target.dim };

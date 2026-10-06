@@ -4,7 +4,7 @@
     "version": "7.0.0",
     "totalFiles": 488,
     "totalModules": 13,
-    "totalExports": 4071
+    "totalExports": 4073
   },
   "entryPoints": [
     {
@@ -9995,7 +9995,8 @@
             "imports": [
               "resolveQuantityName",
               "synonymGroup",
-              "SynonymDisagreementError"
+              "SynonymDisagreementError",
+              "temperatureQuantityRole"
             ]
           },
           {
@@ -18789,6 +18790,12 @@
               "CANONICAL_GROUP_PREFACTORS",
               "canonicalGroupPrefactor",
               "canonicalPrefactor"
+            ]
+          },
+          {
+            "file": "./expr-eval.js",
+            "imports": [
+              "evalExpr"
             ]
           }
         ],
@@ -28743,6 +28750,7 @@
           "formulaNameDimensions",
           "synonymGroup",
           "isTemperatureName",
+          "temperatureQuantityRole",
           "assertSynonymAgreement",
           "expandSynonymValues",
           "resolveQuantityName",
@@ -28759,6 +28767,7 @@
           "formulaNameDimensions",
           "synonymGroup",
           "isTemperatureName",
+          "temperatureQuantityRole",
           "assertSynonymAgreement",
           "expandSynonymValues",
           "resolveQuantityName"
@@ -29549,6 +29558,7 @@
         "exports": [
           "unitConventionNotes",
           "parseUnit",
+          "affineAbsoluteOffsetK",
           "convertValue",
           "mathTsAgreedQuantity",
           "unitDimension",
@@ -29564,6 +29574,7 @@
         "functions": [
           "unitConventionNotes",
           "parseUnit",
+          "affineAbsoluteOffsetK",
           "convertValue",
           "mathTsAgreedQuantity",
           "unitDimension",
@@ -33257,7 +33268,10 @@
             "file": "../dimensional/formula-names.js",
             "imports": [
               "FORMULA_NAMED",
-              "isTemperatureName"
+              "assertSynonymAgreement",
+              "isTemperatureName",
+              "synonymGroup",
+              "temperatureQuantityRole"
             ]
           },
           {
@@ -33302,11 +33316,11 @@
           {
             "file": "../dimensional/units.js",
             "imports": [
+              "affineAbsoluteOffsetK",
               "convertValue",
               "mathTsAgreedQuantity",
               "parseUnit",
               "unitConventionNotes",
-              "unitTables",
               "UnitError",
               "TemperatureReading"
             ]
@@ -36003,11 +36017,11 @@
   "statistics": {
     "totalTypeScriptFiles": 488,
     "totalModules": 13,
-    "totalLinesOfCode": 106274,
-    "totalExports": 4071,
+    "totalLinesOfCode": 106610,
+    "totalExports": 4073,
     "totalClasses": 63,
     "totalInterfaces": 656,
-    "totalFunctions": 926,
+    "totalFunctions": 928,
     "totalTypeGuards": 6,
     "totalEnums": 0,
     "totalConstants": 1127,

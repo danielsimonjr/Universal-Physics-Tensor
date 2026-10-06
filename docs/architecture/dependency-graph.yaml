@@ -3,7 +3,7 @@ metadata:
   version: 7.0.0
   totalFiles: 488
   totalModules: 13
-  totalExports: 4071
+  totalExports: 4073
 entryPoints:
   - file: src/index.ts
     type: main
@@ -6809,6 +6809,7 @@ modules:
             - resolveQuantityName
             - synonymGroup
             - SynonymDisagreementError
+            - temperatureQuantityRole
         - file: ../numerical/binding-value.js
           imports:
             - readNamedBinding
@@ -12788,6 +12789,9 @@ modules:
             - CANONICAL_GROUP_PREFACTORS
             - canonicalGroupPrefactor
             - canonicalPrefactor
+        - file: ./expr-eval.js
+          imports:
+            - evalExpr
       exports:
         - CANONICAL_CONSTANTS
         - CANONICAL_GRAPH
@@ -20071,6 +20075,7 @@ modules:
         - formulaNameDimensions
         - synonymGroup
         - isTemperatureName
+        - temperatureQuantityRole
         - assertSynonymAgreement
         - expandSynonymValues
         - resolveQuantityName
@@ -20084,6 +20089,7 @@ modules:
         - formulaNameDimensions
         - synonymGroup
         - isTemperatureName
+        - temperatureQuantityRole
         - assertSynonymAgreement
         - expandSynonymValues
         - resolveQuantityName
@@ -20630,6 +20636,7 @@ modules:
       exports:
         - unitConventionNotes
         - parseUnit
+        - affineAbsoluteOffsetK
         - convertValue
         - mathTsAgreedQuantity
         - unitDimension
@@ -20642,6 +20649,7 @@ modules:
       functions:
         - unitConventionNotes
         - parseUnit
+        - affineAbsoluteOffsetK
         - convertValue
         - mathTsAgreedQuantity
         - unitDimension
@@ -23671,7 +23679,10 @@ modules:
         - file: ../dimensional/formula-names.js
           imports:
             - FORMULA_NAMED
+            - assertSynonymAgreement
             - isTemperatureName
+            - synonymGroup
+            - temperatureQuantityRole
         - file: ../dimensional/unit-convention.js
           imports:
             - quantityConventionUnit
@@ -23698,11 +23709,11 @@ modules:
             - Dimension
         - file: ../dimensional/units.js
           imports:
+            - affineAbsoluteOffsetK
             - convertValue
             - mathTsAgreedQuantity
             - parseUnit
             - unitConventionNotes
-            - unitTables
             - UnitError
             - TemperatureReading
         - file: ./formula-contract.js
@@ -25630,11 +25641,11 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 488
   totalModules: 13
-  totalLinesOfCode: 106274
-  totalExports: 4071
+  totalLinesOfCode: 106610
+  totalExports: 4073
   totalClasses: 63
   totalInterfaces: 656
-  totalFunctions: 926
+  totalFunctions: 928
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 1127

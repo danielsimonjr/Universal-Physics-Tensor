@@ -3187,7 +3187,7 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../dimensional/units.js` | `unitConventionNotes, UnitError, TemperatureReading` | Import |
-| `../dimensional/formula-names.js` | `resolveQuantityName, synonymGroup, SynonymDisagreementError` | Import |
+| `../dimensional/formula-names.js` | `resolveQuantityName, synonymGroup, SynonymDisagreementError, temperatureQuantityRole` | Import |
 | `../numerical/binding-value.js` | `readNamedBinding, NamedBindingSibling` | Import |
 | `./evaluators.js` | `EvaluatorParameter` | Import (type-only) |
 
@@ -5384,6 +5384,7 @@ The codebase is organized into the following modules:
 | `../dimensional/algebra.js` | `equals` | Import |
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor` | Import |
+| `./expr-eval.js` | `evalExpr` | Import |
 
 **Exports:**
 - Functions: `canonicalToEdges`
@@ -7817,7 +7818,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `SynonymDisagreementError`
 - Interfaces: `FormulaName`, `DimensionRename`
-- Functions: `formulaNameDimensions`, `synonymGroup`, `isTemperatureName`, `assertSynonymAgreement`, `expandSynonymValues`, `resolveQuantityName`
+- Functions: `formulaNameDimensions`, `synonymGroup`, `isTemperatureName`, `temperatureQuantityRole`, `assertSynonymAgreement`, `expandSynonymValues`, `resolveQuantityName`
 - Constants: `EPS0_SI`, `MU0_SI`, `FORMULA_NAMED`, `DIMENSION_RENAMES`, `SYNONYM_GROUPS`
 
 ---
@@ -8069,7 +8070,7 @@ The codebase is organized into the following modules:
 **Exports:**
 - Classes: `UnitError`
 - Interfaces: `ParsedUnit`
-- Functions: `unitConventionNotes`, `parseUnit`, `convertValue`, `mathTsAgreedQuantity`, `unitDimension`, `unitTables`
+- Functions: `unitConventionNotes`, `parseUnit`, `affineAbsoluteOffsetK`, `convertValue`, `mathTsAgreedQuantity`, `unitDimension`, `unitTables`
 
 ---
 
@@ -8532,13 +8533,13 @@ The codebase is organized into the following modules:
 | File | Imports | Type |
 |------|---------|------|
 | `../core/constants.js` | `K_B_SI, M_SUN_SI` | Import |
-| `../dimensional/formula-names.js` | `FORMULA_NAMED, isTemperatureName` | Import |
+| `../dimensional/formula-names.js` | `FORMULA_NAMED, assertSynonymAgreement, isTemperatureName, synonymGroup, temperatureQuantityRole` | Import |
 | `../dimensional/unit-convention.js` | `quantityConventionUnit` | Import |
 | `../dimensional/natural-units.js` | `naturalConstantOverrides, UnitMode` | Import |
 | `../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../dimensional/algebra.js` | `divide, equals, format, multiply, power` | Import |
 | `../dimensional/types.js` | `DIMENSIONLESS, ENERGY, MASS, TEMPERATURE, Dimension` | Import |
-| `../dimensional/units.js` | `convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, unitTables, UnitError, TemperatureReading` | Import |
+| `../dimensional/units.js` | `affineAbsoluteOffsetK, convertValue, mathTsAgreedQuantity, parseUnit, unitConventionNotes, UnitError, TemperatureReading` | Import |
 | `./formula-contract.js` | `callBuiltinFunction, EULER_NUMBER_ERROR, FormulaError` | Import |
 | `./formula-dimension.js` | `parseFormulaPNode, FormulaPNode` | Import |
 
@@ -9460,12 +9461,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 488 |
 | Total Modules | 13 |
-| Total Lines of Code | 106274 |
-| Total Exports | 4071 |
+| Total Lines of Code | 106610 |
+| Total Exports | 4073 |
 | Total Re-exports | 1969 |
 | Total Classes | 63 |
 | Total Interfaces | 656 |
-| Total Functions | 926 |
+| Total Functions | 928 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 594 |

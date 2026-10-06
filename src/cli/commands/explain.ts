@@ -101,6 +101,7 @@ function parseKnown(args: readonly string[]): { known: string[] | Record<string,
     try {
       read = readNamedBinding(a.name, a.raw, { siblings });
     } catch (e) {
+      if (e instanceof SynonymDisagreementError) throw new CliError(`upt explain: ${e.message}`);
       if (e instanceof UnitError && /is a temperature/.test(e.message)) {
         throw new CliError(`upt explain: '${a.assignment}' is not a temperature. ${e.message}`);
       }

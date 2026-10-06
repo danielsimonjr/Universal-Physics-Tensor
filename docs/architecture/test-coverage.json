@@ -17349,6 +17349,7 @@
       "tests/dimensional/bridge-derivation-audit.test.ts",
       "tests/dimensional/symbolic-exponent.test.ts",
       "tests/fixtures/confrontation-golden.test.ts",
+      "tests/numerical/binding-value.test.ts",
       "tests/tensor.test.ts"
     ],
     "src/dimensional/fresh-label.ts": [
@@ -36887,7 +36888,8 @@
       "src/core/constants.ts",
       "src/dimensional/types.ts",
       "src/dimensional/units.ts",
-      "src/numerical/binding-value.ts"
+      "src/numerical/binding-value.ts",
+      "src/dimensional/formula-names.ts"
     ],
     "tests/numerical/christoffel-flat-indexing.test.ts": [
       "src/numerical/christoffel-flat.ts"

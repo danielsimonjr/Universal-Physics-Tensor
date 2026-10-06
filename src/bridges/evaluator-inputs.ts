@@ -15,6 +15,7 @@ import {
   resolveQuantityName,
   synonymGroup,
   SynonymDisagreementError,
+  temperatureQuantityRole,
 } from '../dimensional/formula-names.js';
 import { readNamedBinding, type NamedBindingSibling } from '../numerical/binding-value.js';
 import type { EvaluatorParameter } from './evaluators.js';
@@ -54,7 +55,17 @@ function convert(
 ): { value: number; note?: string } {
   const read = readNamedBinding(givenName, raw, { reading, siblings, declaredUnit: p.unit });
   if (!read.dimensioned) return { value: read.value };
-  const offset = /degC|°C/.test(raw) && reading === 'absolute' ? ' (absolute: + 273.15)' : /degC|°C/.test(raw) ? ' (a difference: no offset)' : '';
+  const celsius = /degC|°C/.test(raw);
+  const fahrenheit = /degF|°F/.test(raw);
+  const offset = celsius && reading === 'absolute'
+    ? ' (absolute: + 273.15)'
+    : celsius
+      ? ' (a difference: no offset)'
+      : fahrenheit && reading === 'absolute'
+        ? ' (absolute: (degF − 32) × 5/9 + 273.15)'
+        : fahrenheit
+          ? ' (a difference: × 5/9, no offset)'
+          : '';
   const base = `${raw.trim()} → ${show(read.value)} ${p.unit || '(dimensionless)'}${offset}${unitAside(raw)}`;
   const temperature = read.notes.find((note) => note.includes('k_B T'));
   return { value: read.value, note: temperature === undefined ? base : `${base}. ${temperature}` };
@@ -86,7 +97,7 @@ export function resolveEvaluatorInputs(
     const p = direct ?? viaAlt ?? viaSynonym;
     if (p === undefined) throw new UnitError(`'${key}' is not an input here; the inputs are: ${known.join(', ')}`);
     const earlier = resolved.find((r) => r.key === p.key);
-    const c = convert(p, raw, 'absolute', siblings, key);
+    const c = convert(p, raw, temperatureQuantityRole(key), siblings, key);
     const alt = direct === undefined && viaAlt !== undefined ? p.alternates!.find((a) => a.key === key)! : undefined;
     const value = alt === undefined ? c.value : c.value * alt.toKey;
     if (earlier !== undefined) {
