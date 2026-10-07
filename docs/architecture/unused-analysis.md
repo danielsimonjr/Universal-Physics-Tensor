@@ -8,7 +8,7 @@
 ## Summary
 
 - **Potentially unused files**: 1
-- **Potentially unused exports**: 80
+- **Potentially unused exports**: 81
 
 ## Potentially Unused Files
 
@@ -149,6 +149,10 @@ These exports are not imported by any other file in the codebase:
 ### `src/composition/bridge-analysis.ts`
 
 - `anchoringDistance` (function)
+
+### `src/composition/evaluate-relation.ts`
+
+- `MissingInputError` (class)
 
 ### `src/composition/frontier-account.ts`
 
