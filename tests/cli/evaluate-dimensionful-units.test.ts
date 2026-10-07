@@ -23,7 +23,8 @@ function labeled(text: string, key: string): string {
 }
 
 function output(text: string, key: string): number {
-  const match = new RegExp(`${key} = ([^\\n]+)`).exec(text);
+  // The result line is `<output name> [unit] = N`; the output name is the evaluator's target, not `value`.
+  const match = new RegExp(key === 'value' ? '\\] = ([^\\n]+)' : `${key} = ([^\\n]+)`).exec(text);
   if (match === null) throw new Error(`no ${key} in:\n${text}`);
   return Number(match[1]);
 }
@@ -34,11 +35,11 @@ describe('dimensionful bridge inputs keep their units', () => {
     expect(column.code, column.text).toBe(0);
     expect(labeled(column.text, 'I_m4')).toContain('[m^4]');
     expect(labeled(column.text, 'I_m4')).not.toContain('[dimensionless]');
-    expect(column.text).toContain('value = 4934.802200544679');
+    expect(column.text).toMatch(/\] = 4934\.802200544679/);
 
     const withPower = await run(['evaluate', 'be-78', 'E_Pa=2e11', 'I_m4=1e-8m^4', 'L_m=2']);
     expect(withPower.code, withPower.text).toBe(0);
-    expect(withPower.text).toContain('value = 4934.802200544679');
+    expect(withPower.text).toMatch(/\] = 4934\.802200544679/);
     expect(withPower.text).toMatch(/converted: 1e-8m\^4 → 1e-8 m\^4/);
 
     const area = await run(['evaluate', 'be-79', 'k_N_per_m=1', 'g0_m=1e-6', 'A_m2=1cm^2']);

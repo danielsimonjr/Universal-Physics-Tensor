@@ -12,8 +12,14 @@ import { equals } from '../dimensional/algebra.js';
 import { EXPECTED_DIMENSION_BY_BRIDGE } from '../dimensional/bridge-check.js';
 import type { Dimension } from '../dimensional/types.js';
 import { parseUnit } from '../dimensional/units.js';
-import { BRIDGE_EVALUATORS, type EvaluatorSpec } from '../bridges/evaluators.js';
-import { catalogEdgeKey, parseBridgeId } from '../bridges/catalog-load.js';
+import {
+  BRIDGE_EVALUATORS,
+  sourceOfParameter,
+  type EvaluatorSpec,
+} from '../bridges/evaluators.js';
+import { catalogEdgeKey, parseBridgeId, primaryRelation } from '../bridges/catalog-load.js';
+import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
+import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
 import { CANONICAL_GRAPH } from './canonical-graph.js';
 import { CATALOG_GRAPH } from './catalog-graph.js';
 import { CoefficientUnsetError, evaluateEdge, type BridgeEdge } from './edge.js';
@@ -37,6 +43,100 @@ export interface Evaluable {
   readonly id: string;
   readonly edge?: BridgeEdge;
   readonly evaluator?: EvaluatorSpec;
+}
+
+/**
+ * The output of a closed-form evaluator: the quantity it computes and that
+ * quantity's dimension. An evaluator with no catalog dimension (a closed form
+ * with no AST) names no dimension.
+ */
+export function evaluatorOutput(spec: EvaluatorSpec): { readonly name: string; readonly dimension?: Dimension } {
+  const relation = primaryRelation(spec.bridgeId);
+  const dimension = EXPECTED_DIMENSION_BY_BRIDGE.get(spec.bridgeId);
+  return {
+    name: relation?.target ?? 'value',
+    ...(dimension === undefined ? {} : { dimension }),
+  };
+}
+
+/**
+ * Names a canonical id may be bound under besides its sources: the equation's
+ * governing names (a registered constant may be overridden), its formula
+ * factors, and a bound dimensionless group such as `gamma`.
+ */
+function canonicalNames(id: string): string[] {
+  const equation = CANONICAL_EQUATIONS.find((candidate) => candidate.id === id);
+  return [
+    ...(equation?.dimensional.governing.map((g) => g.name) ?? []),
+    ...CANONICAL_GROUP_PREFACTORS.filter((group) => group.id === id).map((group) => group.group),
+  ];
+}
+
+/** A required input is absent. It is not a physically bad value. */
+export class MissingInputError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'MissingInputError';
+  }
+}
+
+/**
+ * Check `bindings` against the id's declared inputs and return the record the
+ * evaluation reads: a declared alternate is converted onto its key, an unknown
+ * key and a non-number are refused, and an absent input is named before any
+ * domain check can blame the physics.
+ */
+function checkBindings(found: Evaluable, bindings: Readonly<Record<string, number>>): Record<string, number> {
+  const parameters = found.evaluator?.parameters ?? [];
+  const edge = found.edge;
+  const relation = found.evaluator === undefined ? undefined : primaryRelation(found.evaluator.bridgeId);
+  const sourceNames = edge?.sources.map((source) => source.name) ?? [];
+  const aliasNames = edge === undefined ? [] : Object.values(edge.aliases ?? {}).flat();
+  const accepted = new Set<string>([
+    ...sourceNames,
+    ...(edge === undefined ? [] : Object.keys(edge.formulaFactors ?? {})),
+    ...(found.evaluator === undefined ? canonicalNames(found.id) : []),
+    ...aliasNames,
+    ...parameters.flatMap((p) => [p.key, p.quantity, ...(p.alternates ?? []).map((a) => a.key)]),
+  ]);
+  const listed = parameters.length > 0 ? parameters.map((p) => p.key) : sourceNames;
+  const out: Record<string, number> = { ...bindings };
+  for (const [key, value] of Object.entries(bindings)) {
+    if (!accepted.has(key)) {
+      throw new Error(`${found.id}: '${key}' is not an input; the inputs are: ${listed.join(', ')}`);
+    }
+    if (typeof value !== 'number') {
+      throw new TypeError(`${found.id}: ${key} must be a number, got ${typeof value}`);
+    }
+  }
+  for (const p of parameters) {
+    for (const alt of p.alternates ?? []) {
+      if (!Object.hasOwn(out, alt.key)) continue;
+      if (Object.hasOwn(out, p.key)) {
+        throw new Error(`${found.id}: '${p.key}' is given twice (once through the alternate '${alt.key}')`);
+      }
+      out[p.key] = out[alt.key]! * alt.toKey;
+      delete out[alt.key];
+    }
+  }
+  if (edge !== undefined) {
+    const missing: string[] = [];
+    for (const source of edge.sources) {
+      const keys = [source.name, ...(edge.aliases?.[source.name] ?? [])];
+      if (keys.some((key) => Object.hasOwn(out, key))) continue;
+      const owner =
+        relation === undefined ? undefined : parameters.find((p) => sourceOfParameter(relation, p) === source.name);
+      if (relation !== undefined && owner === undefined) continue;
+      if (owner?.optional === true) continue;
+      missing.push(owner?.key ?? source.name);
+    }
+    if (missing.length > 0) {
+      throw new MissingInputError(
+        `${found.id}: missing input ${missing.map((key) => `'${key}'`).join(', ')}; the inputs are: ${listed.join(', ')}`,
+      );
+    }
+  }
+  return out;
 }
 
 /** Every source is present and finite, under its name or an alias. */
@@ -143,11 +243,12 @@ export function evaluateRelation(
   bindings: Readonly<Record<string, number>>,
 ): Evaluation {
   const found = resolveEvaluable(id);
+  const checked = checkBindings(found, bindings);
   if (found.edge !== undefined) {
     try {
-      const value = evaluateEdge(found.edge, { ...bindings });
+      const value = evaluateEdge(found.edge, { ...checked });
       if (!Number.isFinite(value)) {
-        if (sourcesFinite(found.edge, bindings)) return { kind: 'unset', formula: found.edge.label };
+        if (sourcesFinite(found.edge, checked)) return { kind: 'unset', formula: found.edge.label };
         throw new Error(`evaluateRelation: ${found.edge.id} is missing a finite input`);
       }
       return { kind: 'value', value, dimension: found.edge.target.dim };
@@ -158,5 +259,5 @@ export function evaluateRelation(
     throw error;
     }
   }
-  return closedFormEvaluation(found.evaluator!, bindings);
+  return closedFormEvaluation(found.evaluator!, checked);
 }

@@ -11481,13 +11481,6 @@
           "symbol": "e",
           "unit": "",
           "meaning": "orbital eccentricity, 0 ≤ e < 1"
-        },
-        {
-          "key": "T_yr",
-          "quantity": "orbital period",
-          "symbol": "T",
-          "unit": "yr",
-          "meaning": "in Julian years (365.25 d); used only for the per-century conversion"
         }
       ]
     },

@@ -1479,7 +1479,7 @@ The codebase is organized into the following modules:
 
 **Exports:**
 - Interfaces: `ParameterAlternate`, `EvaluatorParameter`, `EvaluatorSpec`
-- Functions: `bindRelationInputs`, `missingEvaluatorMessage`, `evaluateBridge`
+- Functions: `sourceOfParameter`, `unusedInputKeys`, `bindRelationInputs`, `missingEvaluatorMessage`, `evaluateBridge`
 - Constants: `BRIDGE_EVALUATORS`
 
 ---
@@ -2455,6 +2455,7 @@ The codebase is organized into the following modules:
 | `../command.js` | `registerCommand, Command, CommandCtx` | Import |
 | `../flag-help.js` | `commandHelp, JSON_FLAG` | Import |
 | `../output.js` | `emitJson` | Import |
+| `../expr-print.js` | `siUnitOf` | Import |
 | `../errors.js` | `UsageError` | Import |
 | `../errors.js` | `CliError` | Import |
 | `../../cli-api.js` | `AppliedCase, CaseResult, EvaluatorParameter` | Import (type-only) |
@@ -3170,7 +3171,8 @@ The codebase is organized into the following modules:
 | `./numerical/spacetime-metrics.js` | `curvatureReport, kerrEquatorialCircular, kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId` | Re-export |
 | `./numerical/binding-value.js` | `readBinding, bindingInUnit, readNamedBinding` | Re-export |
 | `./index.js` | `resolveQuantityName` | Re-export |
-| `./composition/evaluate-relation.js` | `resolveEvaluable` | Re-export |
+| `./composition/evaluate-relation.js` | `evaluatorOutput, resolveEvaluable` | Re-export |
+| `./bridges/evaluators.js` | `unusedInputKeys` | Re-export |
 | `./dimensional/formula-names.js` | `SynonymDisagreementError` | Re-export |
 | `./numerical/formula-dimension.js` | `builtinFormulaDimensionChecker` | Re-export |
 | `./bridges/evaluators.js` | `missingEvaluatorMessage` | Re-export |
@@ -3221,9 +3223,9 @@ The codebase is organized into the following modules:
   AppliedTransport, AtlasBridge, RegimeInequality, Witness, MissingLipschitzError, AtlasModel,
   ModelId, catalogFormalRef, scanCompositionRecovery, curvatureReport, kerrEquatorialCircular,
   kerrGeodesic, kerrTurningPointOrbit, schwarzschildCircularOrbit, type MetricId, readBinding,
-  bindingInUnit, readNamedBinding, resolveQuantityName, resolveEvaluable, SynonymDisagreementError,
-  builtinFormulaDimensionChecker, missingEvaluatorMessage, C_SI, G_SI, BridgeEdge, VizJunction,
-  VizModel, EvidenceTag, RelationType, EquationAnalysis
+  bindingInUnit, readNamedBinding, resolveQuantityName, evaluatorOutput, resolveEvaluable,
+  unusedInputKeys, SynonymDisagreementError, builtinFormulaDimensionChecker, missingEvaluatorMessage,
+  C_SI, G_SI, BridgeEdge, VizJunction, VizModel, EvidenceTag, RelationType, EquationAnalysis
   ```
 
 
@@ -3731,15 +3733,18 @@ The codebase is organized into the following modules:
 | `../dimensional/bridge-check.js` | `EXPECTED_DIMENSION_BY_BRIDGE` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `../dimensional/units.js` | `parseUnit` | Import |
-| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, EvaluatorSpec` | Import |
-| `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId` | Import |
+| `../bridges/evaluators.js` | `BRIDGE_EVALUATORS, sourceOfParameter, EvaluatorSpec` | Import |
+| `../bridges/catalog-load.js` | `catalogEdgeKey, parseBridgeId, primaryRelation` | Import |
+| `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
+| `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
 | `./canonical-graph.js` | `CANONICAL_GRAPH` | Import |
 | `./catalog-graph.js` | `CATALOG_GRAPH` | Import |
 | `./edge.js` | `CoefficientUnsetError, evaluateEdge, BridgeEdge` | Import |
 
 **Exports:**
+- Classes: `MissingInputError`
 - Interfaces: `Evaluable`
-- Functions: `resolveEvaluable`, `evaluateRelation`
+- Functions: `evaluatorOutput`, `resolveEvaluable`, `evaluateRelation`
 
 ---
 
@@ -6705,12 +6710,12 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77376 |
-| Total Exports | 2364 |
-| Total Re-exports | 1202 |
-| Total Classes | 64 |
+| Total Lines of Code | 77530 |
+| Total Exports | 2370 |
+| Total Re-exports | 1204 |
+| Total Classes | 65 |
 | Total Interfaces | 433 |
-| Total Functions | 722 |
+| Total Functions | 725 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
 | Type-only Imports | 498 |

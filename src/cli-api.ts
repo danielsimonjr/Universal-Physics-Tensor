@@ -250,7 +250,9 @@ export { readBinding, bindingInUnit, readNamedBinding } from './numerical/bindin
 /** The catalog or parameter name a spelling means. The commands call this, not a second table. */
 export { resolveQuantityName } from './index.js';
 /** The edge and the closed-form evaluator for an id. An evaluator with no edge is not unknown. */
-export { resolveEvaluable } from './composition/evaluate-relation.js';
+export { evaluatorOutput, resolveEvaluable } from './composition/evaluate-relation.js';
+/** The required inputs of an evaluator that no relation source reads. They do not change the value. */
+export { unusedInputKeys } from './bridges/evaluators.js';
 /** Two spellings of one quantity were given different numbers. The formula is not run. */
 export { SynonymDisagreementError } from './dimensional/formula-names.js';
 

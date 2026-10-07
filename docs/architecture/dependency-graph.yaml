@@ -3,7 +3,7 @@ metadata:
   version: 8.0.0
   totalFiles: 352
   totalModules: 13
-  totalExports: 2364
+  totalExports: 2370
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3575,6 +3575,8 @@ modules:
             - relationHolds
       exports:
         - BRIDGE_EVALUATORS
+        - sourceOfParameter
+        - unusedInputKeys
         - bindRelationInputs
         - missingEvaluatorMessage
         - evaluateBridge
@@ -3583,6 +3585,8 @@ modules:
         - EvaluatorParameter
         - EvaluatorSpec
       functions:
+        - sourceOfParameter
+        - unusedInputKeys
         - bindRelationInputs
         - missingEvaluatorMessage
         - evaluateBridge
@@ -5587,6 +5591,9 @@ modules:
         - file: ../output.js
           imports:
             - emitJson
+        - file: ../expr-print.js
+          imports:
+            - siUnitOf
         - file: ../errors.js
           imports:
             - UsageError
@@ -7316,7 +7323,12 @@ modules:
           reExport: true
         - file: ./composition/evaluate-relation.js
           imports:
+            - evaluatorOutput
             - resolveEvaluable
+          reExport: true
+        - file: ./bridges/evaluators.js
+          imports:
+            - unusedInputKeys
           reExport: true
         - file: ./dimensional/formula-names.js
           imports:
@@ -7503,7 +7515,9 @@ modules:
         - bindingInUnit
         - readNamedBinding
         - resolveQuantityName
+        - evaluatorOutput
         - resolveEvaluable
+        - unusedInputKeys
         - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
@@ -7741,7 +7755,9 @@ modules:
         - bindingInUnit
         - readNamedBinding
         - resolveQuantityName
+        - evaluatorOutput
         - resolveEvaluable
+        - unusedInputKeys
         - SynonymDisagreementError
         - builtinFormulaDimensionChecker
         - missingEvaluatorMessage
@@ -8811,11 +8827,19 @@ modules:
         - file: ../bridges/evaluators.js
           imports:
             - BRIDGE_EVALUATORS
+            - sourceOfParameter
             - EvaluatorSpec
         - file: ../bridges/catalog-load.js
           imports:
             - catalogEdgeKey
             - parseBridgeId
+            - primaryRelation
+        - file: ../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
+        - file: ./canonical-prefactors.js
+          imports:
+            - CANONICAL_GROUP_PREFACTORS
         - file: ./canonical-graph.js
           imports:
             - CANONICAL_GRAPH
@@ -8828,11 +8852,16 @@ modules:
             - evaluateEdge
             - BridgeEdge
       exports:
+        - evaluatorOutput
         - resolveEvaluable
         - evaluateRelation
+        - MissingInputError
+      classes:
+        - MissingInputError
       interfaces:
         - Evaluable
       functions:
+        - evaluatorOutput
         - resolveEvaluable
         - evaluateRelation
     src/composition/explain.ts:
@@ -16721,17 +16750,17 @@ dependencyGraph:
 statistics:
   totalTypeScriptFiles: 352
   totalModules: 13
-  totalLinesOfCode: 77376
-  totalExports: 2364
-  totalClasses: 64
+  totalLinesOfCode: 77530
+  totalExports: 2370
+  totalClasses: 65
   totalInterfaces: 433
-  totalFunctions: 722
+  totalFunctions: 725
   totalTypeGuards: 6
   totalEnums: 0
   totalConstants: 377
-  totalReExports: 1202
+  totalReExports: 1204
   totalTypeOnlyImports: 498
   runtimeCircularDeps: 0
   typeOnlyCircularDeps: 0
   unusedFilesCount: 1
-  unusedExportsCount: 80
+  unusedExportsCount: 81

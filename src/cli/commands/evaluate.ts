@@ -10,6 +10,7 @@ import type { FlagSpec } from '../args.js';
 import { registerCommand, type Command, type CommandCtx } from '../command.js';
 import { commandHelp, JSON_FLAG } from '../flag-help.js';
 import { emitJson } from '../output.js';
+import { siUnitOf } from '../expr-print.js';
 import { UsageError } from '../errors.js';
 import { CliError } from '../errors.js';
 import type { AppliedCase, CaseResult, EvaluatorParameter } from '../../cli-api.js';
@@ -53,7 +54,8 @@ const HELP = `upt evaluate <be-NN | case-id> key=value[unit] ...
         alternate (major_axis_m for a_m) is converted exactly and said so.
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_⊙
               (ideal degenerate gas, with m_u and M_⊙ = 1.989e30 kg)
-              upt evaluate be-55 C=1      → quantum Hall R_H = von Klitzing constant
+              upt evaluate be-55 C=1      → quantum Hall σ_xy = e²/h in siemens (R_H = 1/σ_xy = h/e²,
+                                            the von Klitzing constant)
         With no bridge id, lists the evaluable bridges and their declared inputs.
         --sigma key=u (repeatable) gives an input's standard uncertainty;
         --corr a,b=rho its correlation. Propagated to first order (GUM law,
@@ -554,6 +556,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   const formulaNote = notice === 'jeans-formula' ? JEANS_FORMULA_NOTE : undefined;
   const hbarNote = notice === 'hbar-truncation' ? HBAR_TRUNCATION_NOTE : undefined;
 
+  const outputDescriptor = api.evaluatorOutput(spec);
+  const outputLabel = {
+    name: outputDescriptor.name,
+    ...(outputDescriptor.dimension === undefined ? {} : { unit: siUnitOf(outputDescriptor.dimension) }),
+  };
+  const unused = api.unusedInputKeys(spec);
   if (args.flags.has('json')) {
     emitJson(
       {
@@ -563,7 +571,12 @@ async function run(ctx: CommandCtx): Promise<number> {
           inputs,
           parameters: spec.parameters,
           conversions: conversionsOf(resolved),
-          output: result,
+          output: {
+            ...(result as Record<string, unknown>),
+            name: outputLabel.name,
+            ...(outputLabel.unit === undefined ? {} : { unit: outputLabel.unit, dimension: outputDescriptor.dimension }),
+          },
+          ...(unused.length === 0 ? {} : { unusedInputs: unused }),
           ...(domainNote === undefined ? {} : { domainNote }),
           ...(formulaNote === undefined ? {} : { formulaNote }),
           ...(hbarNote === undefined ? {} : { hbarNote }),
@@ -577,7 +590,12 @@ async function run(ctx: CommandCtx): Promise<number> {
   out(`\n● be-${id}  ${spec.name}`);
   printInputs(out, spec.parameters, inputs, resolved);
   for (const [k, v] of Object.entries(result as Record<string, unknown>)) {
-    out(`  ${k} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
+    const label =
+      k === 'value' ? (outputLabel.unit === undefined ? outputLabel.name : `${outputLabel.name} [${outputLabel.unit}]`) : k;
+    out(`  ${label} = ${typeof v === 'number' ? v : JSON.stringify(v)}`);
+  }
+  for (const key of unused) {
+    out(`  note: ${key} is required and does not enter the value; the closed form does not use it, so changing it changes nothing`);
   }
   if (domainNote !== undefined) out(`  ${domainNote}`);
   if (formulaNote !== undefined) out(`  ${formulaNote}`);

@@ -300,7 +300,8 @@ Flags:
         alternate (major_axis_m for a_m) is converted exactly and said so.
         e.g.  upt evaluate be-63 mu_e=2   → Chandrasekhar mass ≈ 1.456 M_⊙
               (ideal degenerate gas, with m_u and M_⊙ = 1.989e30 kg)
-              upt evaluate be-55 C=1      → quantum Hall R_H = von Klitzing constant
+              upt evaluate be-55 C=1      → quantum Hall σ_xy = e²/h in siemens (R_H = 1/σ_xy = h/e²,
+                                            the von Klitzing constant)
         With no bridge id, lists the evaluable bridges and their declared inputs.
         --sigma key=u (repeatable) gives an input's standard uncertainty;
         --corr a,b=rho its correlation. Propagated to first order (GUM law,

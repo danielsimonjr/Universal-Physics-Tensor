@@ -35,7 +35,7 @@ describe('upt evaluate', () => {
   it('be-63 mu_e=2 → Chandrasekhar mass, exit 0', async () => {
     const c = capture();
     expect(await runCli(['evaluate', 'be-63', 'mu_e=2'], c.io)).toBe(0);
-    const kilograms = Number(text(c).match(/value = ([0-9.eE+-]+)/)?.[1]);
+    const kilograms = Number(text(c).match(/\] = ([0-9.eE+-]+)/)?.[1]);
     expect(kilograms / M_SUN_SI).toBeGreaterThan(1.3);
     expect(kilograms / M_SUN_SI).toBeLessThan(1.6);
   });

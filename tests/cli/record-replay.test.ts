@@ -77,7 +77,7 @@ describe('upt --record', () => {
     });
     expect(entries[1].result.stderr).toMatch(/finite/);
     expect(entries[2].result.stderr).toMatch(/'abc' is not a number/);
-    expect(entries[0].result.stdout).toMatch(/value = 1\.6567788e-17/);
+    expect(entries[0].result.stdout).toMatch(/voltage-noise-density \[[^\]]*\] = 1\.6567788e-17/);
   });
 
   it('hashes each stream (checked here by an independent SHA-256)', () => {
@@ -225,8 +225,8 @@ describe('upt --replay', () => {
     expect(first.differences[0]).toMatchObject({
       stream: 'stdout',
       firstDifferingLine: line,
-      recorded: '  value = 1.6567789e-17',
-      replayed: '  value = 1.6567788e-17',
+      recorded: '  voltage-noise-density [kg^2*m^4/(s^5*A^2)] = 1.6567789e-17',
+      replayed: '  voltage-noise-density [kg^2*m^4/(s^5*A^2)] = 1.6567788e-17',
     });
     expect(first.integrity).toEqual([
       'recorded stdout does not match its recorded stdoutSha256',
