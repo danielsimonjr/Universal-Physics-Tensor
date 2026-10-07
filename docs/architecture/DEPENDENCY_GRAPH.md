@@ -40,7 +40,7 @@ The codebase is organized into the following modules:
 
 - **atlas**: 72 files
 - **bridges**: 22 files
-- **canonical**: 20 files
+- **canonical**: 19 files
 - **cases**: 9 files
 - **cli**: 55 files
 - **root**: 1 file
@@ -1680,13 +1680,6 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/canonical/domains.ts` - The validity domain of a canonical equation, as a condition over its source
-
-**Exports:**
-- Constants: `CANONICAL_DOMAINS`
-
----
-
 ### `src/canonical/entries/_l1-build.ts` - Shared builders for L1 (scalar-AST) canonical entries. Keeps the entry files
 
 **Internal Dependencies:**
@@ -2794,6 +2787,11 @@ The codebase is organized into the following modules:
 
 ### `src/cli/conventions.ts` - Convention lines the CLI prints beside a comparison.
 
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../canonical/registry.js` | `canonicalById` | Import |
+
 **Exports:**
 - Functions: `canonicalCheckFailed`, `conventionLines`
 - Constants: `JEANS_FORMULA_NOTE`
@@ -3255,6 +3253,7 @@ The codebase is organized into the following modules:
 | `./edge.js` | `BridgeEdge` | Import (type-only) |
 | `../dimensional/formula-names.js` | `DIMENSION_RENAMES, SYNONYM_GROUPS, synonymDisagreement, DimensionRename` | Import |
 | `../dimensional/quantity-registry.js` | `foldName` | Import |
+| `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 
 **Exports:**
 - Functions: `aliasesForTarget`, `editDistance`, `nearQuantityNames`, `shareSynonyms`, `collapseSynonymGovernors`
@@ -3405,7 +3404,6 @@ The codebase is organized into the following modules:
 | `../dimensional/validator.js` | `ExprNode` | Import (type-only) |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor` | Import |
 | `./expr-eval.js` | `evalExpr` | Import |
-| `../canonical/domains.js` | `CANONICAL_DOMAINS` | Import |
 | `../bridges/holds.js` | `HoldsError, holds` | Import |
 | `../bridges/expr-parse.js` | `formulaNames, formulaScope` | Import |
 
@@ -3433,7 +3431,12 @@ The codebase is organized into the following modules:
 
 ---
 
-### `src/composition/canonical-prefactors.ts` - Exact prefactors for canonical equations that `src/canonical` records only
+### `src/composition/canonical-prefactors.ts` - Sourced prefactors of canonical equations, projected from the entries.
+
+**Internal Dependencies:**
+| File | Imports | Type |
+|------|---------|------|
+| `../canonical/registry.js` | `CANONICAL_EQUATIONS` | Import |
 
 **Exports:**
 - Interfaces: `CanonicalPrefactor`, `CanonicalGroupPrefactor`
@@ -3762,6 +3765,7 @@ The codebase is organized into the following modules:
 | `./retrodiction.js` | `retrodictNode` | Import |
 | `../dimensional/types.js` | `Dimension` | Import (type-only) |
 | `./canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
+| `../canonical/registry.js` | `canonicalById` | Import |
 | `../dimensional/buckingham.js` | `DimensionalDeterminationResult` | Import (type-only) |
 | `../dimensional/buckingham.js` | `dimensionallyDetermines` | Import |
 | `./aliases.js` | `collapseSynonymGovernors` | Import |
@@ -6601,10 +6605,10 @@ graph TD
     subgraph Canonical
         N12[canonical-equation]
         N13[dimensional-fields]
-        N14[domains]
-        N15[_l1-build]
-        N16[atomic]
-        N17[...15 more]
+        N14[_l1-build]
+        N15[atomic]
+        N16[condensed-matter]
+        N17[...14 more]
     end
 
     subgraph Cases
@@ -6694,13 +6698,16 @@ graph TD
     N9 --> N10
     N12 --> N50
     N13 --> N50
+    N14 --> N12
+    N14 --> N50
+    N14 --> N47
+    N14 --> N13
     N15 --> N12
-    N15 --> N50
     N15 --> N47
-    N15 --> N13
+    N15 --> N14
     N16 --> N12
     N16 --> N47
-    N16 --> N15
+    N16 --> N14
     N18 --> N39
     N19 --> N39
     N20 --> N18
@@ -6711,9 +6718,6 @@ graph TD
     N21 --> N9
     N22 --> N39
     N26 --> N24
-    N26 --> N30
-    N27 --> N26
-    N27 --> N30
 ```
 
 ---
@@ -6722,13 +6726,13 @@ graph TD
 
 | Category | Count |
 |----------|-------|
-| Total TypeScript Files | 352 |
+| Total TypeScript Files | 351 |
 | Total Modules | 13 |
-| Total Lines of Code | 77651 |
-| Total Exports | 2380 |
+| Total Lines of Code | 77618 |
+| Total Exports | 2379 |
 | Total Re-exports | 1207 |
 | Total Classes | 66 |
-| Total Interfaces | 436 |
+| Total Interfaces | 438 |
 | Total Functions | 728 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |

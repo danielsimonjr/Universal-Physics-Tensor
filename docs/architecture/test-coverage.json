@@ -1,15 +1,14 @@
 {
   "metadata": {
-    "totalSourceFiles": 352,
-    "totalTestFiles": 532,
+    "totalSourceFiles": 351,
+    "totalTestFiles": 533,
     "testedCount": 334,
-    "untestedCount": 18,
-    "coveragePercent": "94.9"
+    "untestedCount": 17,
+    "coveragePercent": "95.2"
   },
   "untestedFiles": [
     "src/bridges/catalog-types.ts",
     "src/bridges/holds.ts",
-    "src/canonical/domains.ts",
     "src/cases/quadrature.ts",
     "src/cli/commands/_atlas-route.ts",
     "src/cli/commands/_discovery-opts.ts",
@@ -1460,7 +1459,6 @@
     "src/canonical/dimensional-fields.ts": [
       "tests/canonical/dimensional-fields.test.ts"
     ],
-    "src/canonical/domains.ts": [],
     "src/canonical/entries/_l1-build.ts": [
       "tests/composition/gr-formula-compare.test.ts"
     ],
@@ -1553,6 +1551,7 @@
       "tests/canonical/linkage.test.ts",
       "tests/canonical/nonmonomial.test.ts",
       "tests/canonical/numeric-prefactor.test.ts",
+      "tests/canonical/one-record.test.ts",
       "tests/canonical/quantity-names.test.ts",
       "tests/canonical/registry.test.ts",
       "tests/canonical/relativity.test.ts",
@@ -4649,6 +4648,7 @@
       "tests/tensor.test.ts"
     ],
     "src/composition/aliases.ts": [
+      "tests/canonical/one-record.test.ts",
       "tests/cli/explain-synonym-monomial.test.ts",
       "tests/composition/name-table.test.ts"
     ],
@@ -4820,6 +4820,7 @@
     ],
     "src/composition/canonical-prefactors.ts": [
       "tests/atlas/canonical-links.test.ts",
+      "tests/canonical/one-record.test.ts",
       "tests/composition/canonical-prefactors.test.ts",
       "tests/composition/persona-retest-compare.test.ts",
       "tests/composition/scalar-prefactor-consistency.test.ts"
@@ -9923,6 +9924,11 @@
       "src/composition/expr-eval.ts",
       "src/canonical/registry.ts",
       "src/core/constants.ts"
+    ],
+    "tests/canonical/one-record.test.ts": [
+      "src/canonical/registry.ts",
+      "src/composition/canonical-prefactors.ts",
+      "src/composition/aliases.ts"
     ],
     "tests/canonical/quantity-names.test.ts": [
       "src/canonical/registry.ts",

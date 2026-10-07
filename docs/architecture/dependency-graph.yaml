@@ -1,9 +1,9 @@
 metadata:
   name: universal-physics-tensor
   version: 8.0.0
-  totalFiles: 352
+  totalFiles: 351
   totalModules: 13
-  totalExports: 2380
+  totalExports: 2379
 entryPoints:
   - file: src/index.ts
     type: main
@@ -3961,6 +3961,8 @@ modules:
       exports: []
       interfaces:
         - CanonicalForms
+        - SourcedPrefactor
+        - SourcedGroupPrefactor
         - CanonicalEquation
     src/canonical/dimensional-fields.ts:
       description: Compute the L0 dimensional fields of a canonical entry FROM the Buckingham-π
@@ -3979,15 +3981,6 @@ modules:
         - dimensionalFields
       functions:
         - dimensionalFields
-    src/canonical/domains.ts:
-      description: The validity domain of a canonical equation, as a condition over its source
-      externalDependencies: []
-      nodeDependencies: []
-      internalDependencies: []
-      exports:
-        - CANONICAL_DOMAINS
-      constants:
-        - CANONICAL_DOMAINS
     src/canonical/entries/_l1-build.ts:
       description: Shared builders for L1 (scalar-AST) canonical entries. Keeps the entry files
       externalDependencies: []
@@ -6336,7 +6329,10 @@ modules:
       description: Convention lines the CLI prints beside a comparison.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../canonical/registry.js
+          imports:
+            - canonicalById
       exports:
         - JEANS_FORMULA_NOTE
         - canonicalCheckFailed
@@ -7808,6 +7804,9 @@ modules:
         - file: ../dimensional/quantity-registry.js
           imports:
             - foldName
+        - file: ../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
       exports:
         - NAME_TABLE
         - aliasesForTarget
@@ -8151,9 +8150,6 @@ modules:
         - file: ./expr-eval.js
           imports:
             - evalExpr
-        - file: ../canonical/domains.js
-          imports:
-            - CANONICAL_DOMAINS
         - file: ../bridges/holds.js
           imports:
             - HoldsError
@@ -8199,10 +8195,13 @@ modules:
         - captureEnvironment
         - captureEnvironment
     src/composition/canonical-prefactors.ts:
-      description: Exact prefactors for canonical equations that `src/canonical` records only
+      description: Sourced prefactors of canonical equations, projected from the entries.
       externalDependencies: []
       nodeDependencies: []
-      internalDependencies: []
+      internalDependencies:
+        - file: ../canonical/registry.js
+          imports:
+            - CANONICAL_EQUATIONS
       exports:
         - CANONICAL_PREFACTORS
         - CANONICAL_GROUP_PREFACTORS
@@ -8898,6 +8897,9 @@ modules:
         - file: ./canonical-prefactors.js
           imports:
             - CANONICAL_GROUP_PREFACTORS
+        - file: ../canonical/registry.js
+          imports:
+            - canonicalById
         - file: ../dimensional/buckingham.js
           imports:
             - DimensionalDeterminationResult
@@ -16505,7 +16507,6 @@ dependencyGraph:
       files:
         - src/canonical/canonical-equation.ts
         - src/canonical/dimensional-fields.ts
-        - src/canonical/domains.ts
         - src/canonical/entries/_l1-build.ts
         - src/canonical/entries/atomic.ts
         - src/canonical/entries/condensed-matter.ts
@@ -16782,16 +16783,16 @@ dependencyGraph:
         - src/relations/regime.ts
         - src/relations/types.ts
 statistics:
-  totalTypeScriptFiles: 352
+  totalTypeScriptFiles: 351
   totalModules: 13
-  totalLinesOfCode: 77651
-  totalExports: 2380
+  totalLinesOfCode: 77618
+  totalExports: 2379
   totalClasses: 66
-  totalInterfaces: 436
+  totalInterfaces: 438
   totalFunctions: 728
   totalTypeGuards: 6
   totalEnums: 0
-  totalConstants: 380
+  totalConstants: 379
   totalReExports: 1207
   totalTypeOnlyImports: 497
   runtimeCircularDeps: 0
