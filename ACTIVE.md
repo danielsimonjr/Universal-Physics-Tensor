@@ -20,6 +20,18 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] A catalog evaluator may return extra outputs beside its `value`.
+  `upt evaluate be-88` returns k_F only; the Fermi energy and velocity, the conduction edge above E_F, the Matthiessen resistivity, the London depth λ(T), and Mercury's precession per century are not returned, and be-139's `Nc_per_m3` and `ND_per_m3` are required inputs that change nothing. Issues 451, 479.
+  Done: `outputs` on an evaluator record (`name`, `unit`, `meaning`, `expression`, optional `requires`), evaluated over the parameter keys, the constants and `value`; `T_yr` is an optional be-52 parameter; `unusedInputKeys` counts a parameter an output reads. `tests/bridges/evaluator-extra-outputs.test.ts` failed 4 of 6 before the change. Filed after the first edit, not before it.
+
+- [x] The dogfood process records the persona rotation and a report template.
+  Issue 348 asks that the process doc and template name the rotation. No such doc existed under `docs/`.
+  Done: `docs/persona-sessions/README.md` holds the six-persona rotation, the per-round rules and the template; `NOTES.md` holds which persona ran last and which is next.
+
+- [x] `upt explain` accepts a registered constant as an input that must agree with the registry.
+  `upt explain peak-wavelength b=2.9e-3 temperature=5800 --source=canonical` exits 1 with "did not resolve to a quantity"; so do `wien-constant` and `sigma_sb` where they are not a governing variable. Issue 473.
+  Done: a constant within 0.5% of the registry value is accepted and not rebound, a different value is refused naming the registered one, an unknown name still fails. `tests/cli/explain-constants.test.ts` failed 4 of 6 before the change. Filed after the first edit, not before it.
+
 - [x] `CE-bernoulli` is the total pressure `P + ρ v²/2 + ρ g h`, and the frozen criterion 3 corpus is re-pinned to it.
   `evaluateRelation('CE-bernoulli', { density: 1000, 'flow-velocity': 2, 'gravitational-acceleration': 9.81, height: 1, 'static-pressure': 1e5 })` returns `kind: 'unset'` because the scalar AST drops the `½` on the dynamic term. The corpus pins that expression. Issue 470.
   Done: the AST carries a `0.5` factor on the `ρ v²` term and the entry is `fully-quantitative`. The example returns 111810 Pa. `bun run atlas:c3-export` re-pinned `docs/research/criterion3/corpus.json` and `freeze.json`: only the Bernoulli expression, the pinned commit, the `src/canonical` tree hash, and the corpus sha256 changed. The owner authorized the re-pin on 2026-10-07.

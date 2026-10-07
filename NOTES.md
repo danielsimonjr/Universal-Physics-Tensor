@@ -9,6 +9,10 @@ nothing validates prose and the next reader cannot tell.
 
 ---
 
+## As of 2026-10-07
+
+- **Persona rotation.** The rotation and the report template are `docs/persona-sessions/README.md`. The last recorded round is session 16, acoustics and continuum mechanics (position 6 of 6). The next round starts the list again at the condensed-matter physicist. Issue 348.
+
 ## As of 2026-10-06
 
 - **PhysJS pin `10e48f140c0e9fad3c50e5e5538124c52b3e732c`, package version 8.0.0.** The catalog file `data/bridge-catalog.json` is schema 3 and holds 160 records, ids 11–170: 124 established, 33 speculative, 3 highly-speculative. Filing is 120 standard and 40 cross-domain. Relations are 158, evaluators 120, confrontations 19. The vendored manifest has 151 entries. `type` is required. `derivedFrom` and `basis` are absent. The specification writes up the 40 cross-domain bridges. A standard bridge is a catalog record and has no specification heading. This change does not tag and does not publish. The sentence that the pin is `10cf71e9f1f460780f8620de7ba422df61e0949b`, that `package.json` is 7.0.0, and that the catalog is 136 rows, ids 11–146, is the record from before this file.

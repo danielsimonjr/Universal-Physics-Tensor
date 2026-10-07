@@ -96,11 +96,26 @@ export interface CatalogEvaluatorParameter {
   readonly optional?: true;
 }
 
+/**
+ * A second number the same record returns beside its `value`. The expression
+ * reads evaluator parameter keys, the constants, and `value`.
+ */
+export interface CatalogEvaluatorOutput {
+  /** The result key, with its unit as a suffix (`E_F_J`). */
+  readonly name: string;
+  readonly unit: string;
+  readonly meaning: string;
+  readonly expression: string;
+  /** Optional parameter keys this output needs. It is left out when one is not given. */
+  readonly requires?: readonly string[];
+}
+
 /** The input contract of one catalog evaluator. */
 export interface CatalogEvaluator {
   readonly catalogId: number;
   readonly name: string;
   readonly parameters: readonly CatalogEvaluatorParameter[];
+  readonly outputs?: readonly CatalogEvaluatorOutput[];
 }
 
 /** One committed data confrontation of a catalog record. */

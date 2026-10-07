@@ -11481,6 +11481,26 @@
           "symbol": "e",
           "unit": "",
           "meaning": "orbital eccentricity, 0 ≤ e < 1"
+        },
+        {
+          "key": "T_yr",
+          "quantity": "orbital period",
+          "symbol": "T",
+          "unit": "yr",
+          "meaning": "orbital period in Julian years, > 0; only for the per-century output",
+          "sign": "positive",
+          "optional": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "precession_arcsec_per_century",
+          "unit": "arcsec/century",
+          "meaning": "Δφ per orbit times orbits per century, in arcseconds",
+          "expression": "value*100/T_yr*180*3600/pi",
+          "requires": [
+            "T_yr"
+          ]
         }
       ]
     },
@@ -12205,6 +12225,20 @@
           "symbol": "m*",
           "unit": "kg",
           "meaning": "isotropic band mass"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "E_F_J",
+          "unit": "J",
+          "meaning": "Fermi energy ħ²k_F²/(2 m*)",
+          "expression": "hbar^2*value^2/(2*m_kg)"
+        },
+        {
+          "name": "v_F_m_per_s",
+          "unit": "m/s",
+          "meaning": "Fermi velocity ħ k_F/m*",
+          "expression": "hbar*value/m_kg"
         }
       ]
     },
@@ -13567,6 +13601,14 @@
           "unit": "m^-3",
           "meaning": "donor density, > 0"
         }
+      ],
+      "outputs": [
+        {
+          "name": "Ec_minus_EF_J",
+          "unit": "J",
+          "meaning": "conduction edge above the Fermi level, k_B T ln(N_c/N_D)",
+          "expression": "k_B*T_K*ln(Nc_per_m3/ND_per_m3)"
+        }
       ]
     },
     {
@@ -13681,6 +13723,14 @@
           "unit": "ohm*m*s",
           "meaning": "ρ_i = C/τ_i"
         }
+      ],
+      "outputs": [
+        {
+          "name": "rho_ohm_m",
+          "unit": "ohm*m",
+          "meaning": "resistivity ρ = C/τ₁ + C/τ₂",
+          "expression": "C_ohm_m_s/tau1_s + C_ohm_m_s/tau2_s"
+        }
       ]
     },
     {
@@ -13729,6 +13779,14 @@
           "symbol": "λ(0)",
           "unit": "m",
           "meaning": "London depth at T = 0, > 0"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lambda_m",
+          "unit": "m",
+          "meaning": "London depth λ(T) = λ(0)/√(n_s/n)",
+          "expression": "lambda0_m/sqrt(value)"
         }
       ]
     },

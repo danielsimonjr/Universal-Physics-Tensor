@@ -4919,6 +4919,7 @@
           "CatalogReference",
           "CatalogRelation",
           "CatalogEvaluatorParameter",
+          "CatalogEvaluatorOutput",
           "CatalogEvaluator",
           "CatalogConfrontation",
           "CatalogFile"
@@ -5087,10 +5088,17 @@
           {
             "file": "./catalog-types.js",
             "imports": [
+              "CatalogEvaluatorOutput",
               "CatalogEvaluatorParameter",
               "CatalogRelation"
             ],
             "typeOnly": true
+          },
+          {
+            "file": "./expr-parse.js",
+            "imports": [
+              "evaluateFormula"
+            ]
           },
           {
             "file": "./relation-eval.js",
@@ -8329,6 +8337,12 @@
             "file": "../../dimensional/units.js",
             "imports": [
               "UnitError"
+            ]
+          },
+          {
+            "file": "../../dimensional/symbolic-constants.js",
+            "imports": [
+              "CONSTANTS"
             ]
           },
           {
@@ -24196,10 +24210,10 @@
   "statistics": {
     "totalTypeScriptFiles": 352,
     "totalModules": 13,
-    "totalLinesOfCode": 77607,
+    "totalLinesOfCode": 77687,
     "totalExports": 2372,
     "totalClasses": 66,
-    "totalInterfaces": 433,
+    "totalInterfaces": 434,
     "totalFunctions": 725,
     "totalTypeGuards": 6,
     "totalEnums": 0,
