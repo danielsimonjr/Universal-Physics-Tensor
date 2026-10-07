@@ -242,6 +242,7 @@ function parsePrimary(p: Parser, env: Env): number | boolean {
       if (tok.v === 'integer') return Number.isInteger(arg);
       if (tok.v === 'sqrt') return Math.sqrt(arg);
       if (tok.v === 'abs') return Math.abs(arg);
+      if (tok.v === 'exp') return Math.exp(arg);
       throw new HoldsError(`unknown predicate ${tok.v}`);
     }
     if (Object.hasOwn(env.values, tok.v)) return env.values[tok.v]!;

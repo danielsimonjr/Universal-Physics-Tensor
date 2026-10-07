@@ -12,6 +12,7 @@ import type {
   CatalogConfrontation,
   CatalogEntry,
   CatalogEvaluator,
+  CatalogEvaluatorParameter,
   CatalogFile,
   CatalogRelation,
 } from './catalog-types.js';
@@ -27,7 +28,49 @@ function loadFile(): CatalogFile {
   return file;
 }
 
-const CATALOG = loadFile();
+/**
+ * The validity clause a parameter's sign states, in the relation's own source
+ * name. An absolute temperature is nonnegative unless the parameter says `any`.
+ */
+function signClause(parameter: CatalogEvaluatorParameter, source: string): string | undefined {
+  const sign = parameter.sign ?? (parameter.temperature === 'absolute' ? 'nonnegative' : undefined);
+  if (sign === 'positive') return `${source} > 0`;
+  if (sign === 'nonnegative') return `${source} >= 0`;
+  return undefined;
+}
+
+/**
+ * Add the sign clauses the evaluator parameters state to the relation they
+ * evaluate. The validity domain is derived from the flags, so a new bridge
+ * that flags its inputs cannot leave the domain behind. A clause the record
+ * already states is not repeated.
+ */
+function deriveDomains(file: CatalogFile): CatalogFile {
+  const relations = file.relations.map((relation) => {
+    if (relation.catalogId === null) return relation;
+    const evaluator = file.evaluators.find((row) => row.catalogId === relation.catalogId);
+    if (evaluator === undefined) return relation;
+    const clauses: string[] = [];
+    for (const parameter of evaluator.parameters) {
+      const source =
+        relation.sources.find((name) => name === parameter.key || (relation.aliases[name] ?? []).includes(parameter.key)) ??
+        (relation.sources.includes(parameter.quantity) ? parameter.quantity : undefined);
+      if (source === undefined) continue;
+      const clause = signClause(parameter, source);
+      if (clause !== undefined && !relation.holds.includes(clause)) clauses.push(clause);
+    }
+    if (clauses.length === 0) return relation;
+    const stated = relation.holds.trim() === 'true' ? '' : `${relation.holds} && `;
+    return {
+      ...relation,
+      holds: `${stated}${clauses.join(' && ')}`,
+      domain: relation.domain === '' ? clauses.join(', ') : `${relation.domain}; ${clauses.join(', ')}`,
+    };
+  });
+  return { ...file, relations };
+}
+
+const CATALOG = deriveDomains(loadFile());
 
 /** The loaded catalog. */
 export function bridgeCatalog(): CatalogFile {

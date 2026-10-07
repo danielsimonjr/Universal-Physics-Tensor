@@ -7610,8 +7610,8 @@
           "theta"
         ]
       },
-      "holds": "finite(poynting-flux) &&\n      poynting-flux >= 0 &&\n      finite(reflectance) &&\n      reflectance >= 0 &&\n      reflectance <= 1 &&\n      finite(incidence-angle)",
-      "domain": "I ≥ 0, R on [0, 1], θ finite; transmission 0",
+      "holds": "finite(poynting-flux) &&\n      poynting-flux >= 0 &&\n      finite(reflectance) &&\n      reflectance >= 0 &&\n      reflectance <= 1 &&\n      finite(incidence-angle) && incidence-angle >= 0 && incidence-angle < pi / 2",
+      "domain": "I ≥ 0, R on [0, 1], θ finite; transmission 0; incidence-angle >= 0 && incidence-angle < pi / 2",
       "confidence": "established",
       "citation": "OpenStax University Physics Volume 2, https://openstax.org/books/university-physics-volume-2/pages/16-4-momentum-and-radiation-pressure (absorber I/c, reflector 2I/c). The (1+R) cos²θ factor is this catalog's assembly.",
       "reference": {
@@ -8435,17 +8435,17 @@
           "thetaD_K"
         ]
       },
-      "holds": "finite(debye-atom-count) && debye-atom-count > 0 &&\n      finite(debye-temperature) && debye-temperature > 0 &&\n      finite(debye-theta) && debye-theta > 0",
-      "domain": "N > 0, T > 0, θ_D > 0; I = π⁴/15 is assumed",
+      "holds": "finite(debye-atom-count) && debye-atom-count > 0 &&\n      finite(debye-temperature) && debye-temperature > 0 &&\n      finite(debye-theta) && debye-theta > 0 && 10 * debye-temperature <= debye-theta",
+      "domain": "N > 0, T > 0, θ_D > 0; I = π⁴/15 is assumed; 10 * debye-temperature <= debye-theta",
       "confidence": "established",
       "citation": "PhysJS.DebyeHeat.debye_heat. I = π⁴/15 is a hypothesis, not an evaluation of the Bose integral. The energy prefactor 3 π⁴/5 is not the heat capacity.",
       "reference": {
         "inputs": {
           "debye-atom-count": 2,
-          "debye-temperature": 300,
-          "debye-theta": 1
+          "debye-temperature": 1,
+          "debye-theta": 10
         },
-        "value": 1.7429614230859777e-13
+        "value": 6.4554126780962135e-24
       }
     },
     {
@@ -8507,8 +8507,8 @@
           "E_F_J"
         ]
       },
-      "holds": "finite(sommerfeld-density) && sommerfeld-density > 0 &&\n      finite(sommerfeld-temperature) && sommerfeld-temperature > 0 &&\n      finite(sommerfeld-fermi-energy) && sommerfeld-fermi-energy > 0",
-      "domain": "n > 0, T > 0, E_F > 0; δU is a hypothesis; √E density",
+      "holds": "finite(sommerfeld-density) && sommerfeld-density > 0 &&\n      finite(sommerfeld-temperature) && sommerfeld-temperature > 0 &&\n      finite(sommerfeld-fermi-energy) && sommerfeld-fermi-energy > 0 && 10 * k_B * sommerfeld-temperature <= sommerfeld-fermi-energy",
+      "domain": "n > 0, T > 0, E_F > 0; δU is a hypothesis; √E density; 10 * k_B * sommerfeld-temperature <= sommerfeld-fermi-energy",
       "confidence": "established",
       "citation": "PhysJS.SommerfeldHeat.electronic_heat. A flat density leaves π²/3. Not the Wiedemann–Franz law and not a second proof of be-61.",
       "reference": {
@@ -8555,8 +8555,8 @@
           "theta_K"
         ]
       },
-      "holds": "finite(curie-density) && curie-density > 0 &&\n      finite(curie-g-factor) &&\n      finite(curie-spin) && curie-spin >= 0 &&\n      finite(curie-magneton) && curie-magneton > 0 &&\n      finite(curie-temperature) && finite(weiss-temperature) &&\n      curie-temperature !== weiss-temperature",
-      "domain": "n > 0, μ_B > 0, spin ≥ 0, T ≠ θ; second moment and mean field are hypotheses",
+      "holds": "finite(curie-density) && curie-density > 0 &&\n      finite(curie-g-factor) &&\n      finite(curie-spin) && curie-spin >= 0 &&\n      finite(curie-magneton) && curie-magneton > 0 &&\n      finite(curie-temperature) && finite(weiss-temperature) &&\n      curie-temperature !== weiss-temperature && curie-temperature > weiss-temperature",
+      "domain": "n > 0, μ_B > 0, spin ≥ 0, T ≠ θ; second moment and mean field are hypotheses; curie-temperature > weiss-temperature",
       "confidence": "established",
       "citation": "PhysJS.CurieWeiss.curie_weiss. θ = 0 is C/T. Not an su(2) derivation. The second moment and the mean-field shift are hypotheses.",
       "reference": {
@@ -8565,10 +8565,10 @@
           "curie-g-factor": 2,
           "curie-spin": 2,
           "curie-magneton": 1,
-          "curie-temperature": 100,
-          "weiss-temperature": 200
+          "curie-temperature": 200,
+          "weiss-temperature": 100
         },
-        "value": -7281428152238865
+        "value": 7281428152238865
       }
     },
     {
@@ -8771,8 +8771,8 @@
           "eps_inf"
         ]
       },
-      "holds": "finite(lst-static) && finite(lst-infinity) && lst-infinity !== 0",
-      "domain": "ε(∞) ≠ 0; no damping is a hypothesis",
+      "holds": "finite(lst-static) && finite(lst-infinity) && lst-infinity !== 0 && lst-static >= lst-infinity",
+      "domain": "ε(∞) ≠ 0; no damping is a hypothesis; lst-static >= lst-infinity",
       "confidence": "established",
       "citation": "PhysJS.LyddaneSachsTeller.lst. The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis.",
       "reference": {
@@ -9091,8 +9091,8 @@
           "Bm_T"
         ]
       },
-      "holds": "loss-cone-mirror !== 0",
-      "domain": "Bm ≠ 0",
+      "holds": "loss-cone-mirror !== 0 && loss-cone-throat <= loss-cone-mirror",
+      "domain": "Bm ≠ 0; loss-cone-throat <= loss-cone-mirror",
       "confidence": "established",
       "citation": "PhysJS.LossCone.loss_cone_eq. Pitch-angle scattering is not this statement.",
       "reference": {
@@ -9316,12 +9316,12 @@
       "citation": "PhysJS.LorentzResistivity.resistivity_eq. σ_tr = 4π b0² ln Λ and the conductivity moment are hypotheses. The typed reference closure is nested.",
       "reference": {
         "inputs": {
-          "lorentz-charge-state": -1.602176634e-19,
+          "lorentz-charge-state": 1,
           "lorentz-coulomb-log": 2,
           "lorentz-temperature": 300,
           "lorentz-mass": 1
         },
-        "value": -2.453505313378033e-06
+        "value": 15313575677686.691
       }
     },
     {
@@ -9518,16 +9518,16 @@
           "m_i_kg"
         ]
       },
-      "holds": "probe-electron-mass > 0 && probe-ion-mass > 0",
-      "domain": "masses positive",
+      "holds": "probe-electron-mass > 0 && probe-ion-mass > 0 && probe-ion-mass > probe-electron-mass",
+      "domain": "masses positive; probe-ion-mass > probe-electron-mass",
       "confidence": "established",
       "citation": "PhysJS.LangmuirProbe.floating_potential. The ion flux is the nested bohmFlux object. Not Child–Langmuir.",
       "reference": {
         "inputs": {
           "probe-electron-mass": 1,
-          "probe-ion-mass": 1
+          "probe-ion-mass": 1836
         },
-        "value": 0.41893853320467267
+        "value": -3.338733752385545
       }
     },
     {
@@ -9720,15 +9720,15 @@
           "D"
         ]
       },
-      "holds": "finite(boost-duty) && boost-duty !== 1",
-      "domain": "D ≠ 1",
+      "holds": "finite(boost-duty) && boost-duty !== 1 && boost-duty >= 0 && boost-duty < 1",
+      "domain": "D ≠ 1; boost-duty >= 0 && boost-duty < 1",
       "confidence": "established",
       "citation": "PhysJS.BoostConverter.boost_ratio. Volt-second balance. No real duty equals both this ratio and the buck ratio D.",
       "reference": {
         "inputs": {
-          "boost-duty": 2
+          "boost-duty": 0.5
         },
-        "value": -1
+        "value": 2
       }
     },
     {
@@ -9795,8 +9795,8 @@
           "Z_per_K"
         ]
       },
-      "holds": "!(!finite(teg-source) || teg-source === 0) && !(!finite(teg-sink) || !finite(teg-figure)) && !((1 + teg-figure * ((teg-source + teg-sink) / 2)) < 0) && sqrt((1 + teg-figure * ((teg-source + teg-sink) / 2))) + teg-sink / teg-source !== 0",
-      "domain": "T_h ≠ 0, 1 + Z T_m ≥ 0, and the denominator ≠ 0",
+      "holds": "!(!finite(teg-source) || teg-source === 0) && !(!finite(teg-sink) || !finite(teg-figure)) && !((1 + teg-figure * ((teg-source + teg-sink) / 2)) < 0) && sqrt((1 + teg-figure * ((teg-source + teg-sink) / 2))) + teg-sink / teg-source !== 0 && teg-sink <= teg-source",
+      "domain": "T_h ≠ 0, 1 + Z T_m ≥ 0, and the denominator ≠ 0; teg-sink <= teg-source",
       "confidence": "established",
       "citation": "PhysJS.ThermoelectricGenerator.efficiency_eq. Matched load m = 1 is not stationary when Z T_m ≠ 0. The Carnot factor alone is not this efficiency.",
       "reference": {
@@ -10579,8 +10579,8 @@
           "Psat_Pa"
         ]
       },
-      "holds": "finite(raoultsat) && raoultsat > 0",
-      "domain": "P* > 0",
+      "holds": "finite(raoultsat) && raoultsat > 0 && raoultmole >= 0 && raoultmole <= 1",
+      "domain": "P* > 0; raoultmole >= 0 && raoultmole <= 1",
       "confidence": "established",
       "citation": "PhysJS.Raoult.raoult_eq. Not a second proof of the Gibbs isotherm.",
       "reference": {
@@ -10928,8 +10928,8 @@
           "gamma"
         ]
       },
-      "holds": "finite(ottoratio) && ottoratio > 0 && finite(ottogamma) && ottogamma > 1",
-      "domain": "r > 0 and γ > 1",
+      "holds": "finite(ottoratio) && ottoratio > 0 && finite(ottogamma) && ottogamma > 1 && ottoratio > 1",
+      "domain": "r > 0 and γ > 1; ottoratio > 1",
       "confidence": "established",
       "citation": "PhysJS.Otto.otto_eq. The exponent γ−1 is not 1−γ.",
       "reference": {
@@ -11045,15 +11045,15 @@
           "wien_x"
         ]
       },
-      "holds": "finite(wienroot) && wienroot > 4 && wienroot < 5",
-      "domain": "4 < x < 5",
+      "holds": "finite(wienroot) && wienroot > 4 && wienroot < 5 && abs((5 - wienroot) - 5 * exp(-wienroot)) < 0.00001",
+      "domain": "4 < x < 5; abs((5 - wienroot) - 5 * exp(-wienroot)) < 0.00001",
       "confidence": "established",
       "citation": "PhysJS.WienDisplacement.wien_eq. The decimal root is not evaluated.",
       "reference": {
         "inputs": {
-          "wienroot": 4.5
+          "wienroot": 4.965114231744276
         },
-        "value": 0.003197281950008741
+        "value": 0.0028977719551851727
       }
     },
     {
@@ -11079,8 +11079,8 @@
           "n_per_m3"
         ]
       },
-      "holds": "finite(sackurquantum) && sackurquantum > 0 && finite(sackurdensity) && sackurdensity > 0",
-      "domain": "n_Q > 0 and n > 0",
+      "holds": "finite(sackurquantum) && sackurquantum > 0 && finite(sackurdensity) && sackurdensity > 0 && 10 * sackurdensity <= sackurquantum",
+      "domain": "n_Q > 0 and n > 0; 10 * sackurdensity <= sackurquantum",
       "confidence": "established",
       "citation": "PhysJS.SackurTetrode.sackur_tetrode. Stirling is ln N! = N ln N − N.",
       "reference": {
@@ -11901,7 +11901,8 @@
           "quantity": "number density",
           "symbol": "n",
           "unit": "m^-3",
-          "meaning": "ideal-gas number density"
+          "meaning": "ideal-gas number density",
+          "sign": "nonnegative"
         },
         {
           "key": "T_K",
@@ -11916,7 +11917,8 @@
           "quantity": "magnetic pressure",
           "symbol": "p_B",
           "unit": "Pa",
-          "meaning": "B²/(2 μ0), not B²/μ0; nonzero"
+          "meaning": "B²/(2 μ0), not B²/μ0; nonzero",
+          "sign": "positive"
         }
       ]
     },
@@ -11944,14 +11946,16 @@
           "quantity": "dynamic viscosity",
           "symbol": "μ",
           "unit": "Pa*s",
-          "meaning": "Newtonian viscosity, nonzero"
+          "meaning": "Newtonian viscosity, nonzero",
+          "sign": "positive"
         },
         {
           "key": "L_m",
           "quantity": "pipe length",
           "symbol": "L",
           "unit": "m",
-          "meaning": "pipe length, nonzero"
+          "meaning": "pipe length, nonzero",
+          "sign": "positive"
         }
       ]
     },
@@ -12081,7 +12085,8 @@
           "quantity": "saturation current",
           "symbol": "I_s",
           "unit": "A",
-          "meaning": "saturation current in amperes"
+          "meaning": "saturation current in amperes",
+          "sign": "positive"
         },
         {
           "key": "V_volts",
@@ -12150,7 +12155,8 @@
           "quantity": "current",
           "symbol": "I",
           "unit": "A",
-          "meaning": "current in the Poisson mean, amperes; one-sided 2 e I"
+          "meaning": "current in the Poisson mean, amperes; one-sided 2 e I",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -12163,7 +12169,8 @@
           "quantity": "skin friction",
           "symbol": "C_f",
           "unit": "",
-          "meaning": "already normalized by ρ U²/2; Pr = 1 and matched slopes are hypotheses"
+          "meaning": "already normalized by ρ U²/2; Pr = 1 and matched slopes are hypotheses",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -12360,7 +12367,8 @@
           "symbol": "θ",
           "unit": "K",
           "meaning": "mean-field shift; zero is the Curie law",
-          "temperature": "absolute"
+          "temperature": "absolute",
+          "sign": "any"
         }
       ]
     },
@@ -12439,7 +12447,8 @@
           "quantity": "quartic coefficient",
           "symbol": "ζ",
           "unit": "",
-          "meaning": "GL quartic coefficient, not a series"
+          "meaning": "GL quartic coefficient, not a series",
+          "sign": "positive"
         }
       ]
     },
@@ -12466,7 +12475,8 @@
           "quantity": "gap",
           "symbol": "E_g",
           "unit": "J",
-          "meaning": "E_c − E_v"
+          "meaning": "E_c − E_v",
+          "sign": "positive"
         },
         {
           "key": "T_K",
@@ -12494,7 +12504,8 @@
           "quantity": "high-frequency dielectric constant",
           "symbol": "ε(∞)",
           "unit": "",
-          "meaning": "nonzero"
+          "meaning": "nonzero",
+          "sign": "positive"
         }
       ]
     },
@@ -12520,7 +12531,8 @@
           "quantity": "transmission sum",
           "symbol": "Σ T_n",
           "unit": "",
-          "meaning": "two spins; not the Hall conductance"
+          "meaning": "two spins; not the Hall conductance",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -12541,7 +12553,8 @@
           "quantity": "ion mass",
           "symbol": "m_i",
           "unit": "kg",
-          "meaning": "ion mass"
+          "meaning": "ion mass",
+          "sign": "positive"
         }
       ]
     },
@@ -12561,14 +12574,16 @@
           "quantity": "sound speed",
           "symbol": "c_s",
           "unit": "m/s",
-          "meaning": "c_s² = k_B T_e / m_i"
+          "meaning": "c_s² = k_B T_e / m_i",
+          "sign": "nonnegative"
         },
         {
           "key": "lambda_De_m",
           "quantity": "Debye length",
           "symbol": "λ_De",
           "unit": "m",
-          "meaning": "one-species electron Debye length"
+          "meaning": "one-species electron Debye length",
+          "sign": "positive"
         }
       ]
     },
@@ -12581,7 +12596,8 @@
           "quantity": "density",
           "symbol": "n",
           "unit": "m^-3",
-          "meaning": "electron density"
+          "meaning": "electron density",
+          "sign": "nonnegative"
         },
         {
           "key": "B_T",
@@ -12595,7 +12611,8 @@
           "quantity": "mass",
           "symbol": "m",
           "unit": "kg",
-          "meaning": "electron mass"
+          "meaning": "electron mass",
+          "sign": "positive"
         }
       ]
     },
@@ -12615,7 +12632,8 @@
           "quantity": "plasma frequency",
           "symbol": "ω_p",
           "unit": "rad/s",
-          "meaning": "plasma frequency"
+          "meaning": "plasma frequency",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -12628,7 +12646,8 @@
           "quantity": "ion plasma frequency",
           "symbol": "ω_pi",
           "unit": "rad/s",
-          "meaning": "ion plasma frequency"
+          "meaning": "ion plasma frequency",
+          "sign": "nonnegative"
         },
         {
           "key": "omega_ci_rad_s",
@@ -12655,14 +12674,16 @@
           "quantity": "sound speed",
           "symbol": "c_s",
           "unit": "m/s",
-          "meaning": "sound speed"
+          "meaning": "sound speed",
+          "sign": "nonnegative"
         },
         {
           "key": "v_A_m_per_s",
           "quantity": "Alfvén speed",
           "symbol": "v_A",
           "unit": "m/s",
-          "meaning": "Alfvén speed"
+          "meaning": "Alfvén speed",
+          "sign": "nonnegative"
         },
         {
           "key": "theta_rad",
@@ -12703,14 +12724,16 @@
           "quantity": "throat field",
           "symbol": "B0",
           "unit": "T",
-          "meaning": "field at the throat"
+          "meaning": "field at the throat",
+          "sign": "nonnegative"
         },
         {
           "key": "Bm_T",
           "quantity": "mirror field",
           "symbol": "Bm",
           "unit": "T",
-          "meaning": "field at the mirror"
+          "meaning": "field at the mirror",
+          "sign": "positive"
         }
       ]
     },
@@ -12723,21 +12746,24 @@
           "quantity": "mass",
           "symbol": "m",
           "unit": "kg",
-          "meaning": "particle mass"
+          "meaning": "particle mass",
+          "sign": "positive"
         },
         {
           "key": "v_perp_m_per_s",
           "quantity": "perpendicular speed",
           "symbol": "v_⊥",
           "unit": "m/s",
-          "meaning": "speed perpendicular to B"
+          "meaning": "speed perpendicular to B",
+          "sign": "nonnegative"
         },
         {
           "key": "gradB_T_per_m",
           "quantity": "field gradient",
           "symbol": "|∇B|",
           "unit": "T/m",
-          "meaning": "magnitude of the gradient"
+          "meaning": "magnitude of the gradient",
+          "sign": "nonnegative"
         },
         {
           "key": "q_C",
@@ -12805,7 +12831,8 @@
           "quantity": "thermal speed",
           "symbol": "v_t",
           "unit": "m/s",
-          "meaning": "thermal speed in the Maxwellian"
+          "meaning": "thermal speed in the Maxwellian",
+          "sign": "positive"
         }
       ]
     },
@@ -12818,14 +12845,16 @@
           "quantity": "density",
           "symbol": "n",
           "unit": "m^-3",
-          "meaning": "number density"
+          "meaning": "number density",
+          "sign": "positive"
         },
         {
           "key": "lambda_D_m",
           "quantity": "Debye length",
           "symbol": "λ_D",
           "unit": "m",
-          "meaning": "one-species Debye length, an input"
+          "meaning": "one-species Debye length, an input",
+          "sign": "positive"
         }
       ]
     },
@@ -12838,14 +12867,16 @@
           "quantity": "first Debye length",
           "symbol": "λ_1",
           "unit": "m",
-          "meaning": "species 1"
+          "meaning": "species 1",
+          "sign": "positive"
         },
         {
           "key": "lambda_2_m",
           "quantity": "second Debye length",
           "symbol": "λ_2",
           "unit": "m",
-          "meaning": "species 2"
+          "meaning": "species 2",
+          "sign": "positive"
         }
       ]
     },
@@ -12858,14 +12889,16 @@
           "quantity": "ion charge state",
           "symbol": "Z",
           "unit": "",
-          "meaning": "ion charge state"
+          "meaning": "ion charge state",
+          "sign": "positive"
         },
         {
           "key": "ln_Lambda",
           "quantity": "Coulomb logarithm",
           "symbol": "ln Λ",
           "unit": "",
-          "meaning": "Coulomb logarithm, a hypothesis inside the transport cross section"
+          "meaning": "Coulomb logarithm, a hypothesis inside the transport cross section",
+          "sign": "positive"
         },
         {
           "key": "T_K",
@@ -12880,7 +12913,8 @@
           "quantity": "mass",
           "symbol": "m",
           "unit": "kg",
-          "meaning": "mass in ν(v_T); the electron mass in the Lorentz collision"
+          "meaning": "mass in ν(v_T); the electron mass in the Lorentz collision",
+          "sign": "positive"
         }
       ]
     },
@@ -12893,14 +12927,16 @@
           "quantity": "conductivity",
           "symbol": "σ",
           "unit": "S/m",
-          "meaning": "conductivity"
+          "meaning": "conductivity",
+          "sign": "positive"
         },
         {
           "key": "L_m",
           "quantity": "slab width",
           "symbol": "L",
           "unit": "m",
-          "meaning": "slab width"
+          "meaning": "slab width",
+          "sign": "positive"
         }
       ]
     },
@@ -12913,14 +12949,16 @@
           "quantity": "sound speed",
           "symbol": "c_s",
           "unit": "m/s",
-          "meaning": "isothermal sound speed"
+          "meaning": "isothermal sound speed",
+          "sign": "positive"
         },
         {
           "key": "M_kg",
           "quantity": "stellar mass",
           "symbol": "M",
           "unit": "kg",
-          "meaning": "central mass"
+          "meaning": "central mass",
+          "sign": "positive"
         }
       ]
     },
@@ -13002,14 +13040,16 @@
           "quantity": "reactivity",
           "symbol": "⟨σv⟩",
           "unit": "m^3/s",
-          "meaning": "Maxwellian average, not computed here"
+          "meaning": "Maxwellian average, not computed here",
+          "sign": "nonnegative"
         },
         {
           "key": "E_J",
           "quantity": "fusion energy",
           "symbol": "E",
           "unit": "J",
-          "meaning": "energy released per reaction"
+          "meaning": "energy released per reaction",
+          "sign": "positive"
         }
       ]
     },
@@ -13022,14 +13062,16 @@
           "quantity": "electron mass",
           "symbol": "m_e",
           "unit": "kg",
-          "meaning": "electron mass"
+          "meaning": "electron mass",
+          "sign": "positive"
         },
         {
           "key": "m_i_kg",
           "quantity": "ion mass",
           "symbol": "m_i",
           "unit": "kg",
-          "meaning": "ion mass"
+          "meaning": "ion mass",
+          "sign": "positive"
         }
       ]
     },
@@ -13042,7 +13084,8 @@
           "quantity": "Hall parameter",
           "symbol": "α",
           "unit": "",
-          "meaning": "α = μ B"
+          "meaning": "α = μ B",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -13055,14 +13098,16 @@
           "quantity": "parallel beta",
           "symbol": "β_∥",
           "unit": "",
-          "meaning": "β = 2 μ0 p / B²"
+          "meaning": "β = 2 μ0 p / B²",
+          "sign": "nonnegative"
         },
         {
           "key": "beta_perp",
           "quantity": "perpendicular beta",
           "symbol": "β_⊥",
           "unit": "",
-          "meaning": "the be-76 definition"
+          "meaning": "the be-76 definition",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -13075,7 +13120,8 @@
           "quantity": "perpendicular beta",
           "symbol": "β_⊥",
           "unit": "",
-          "meaning": "β = 2 μ0 p / B²; the kinetic integral is a hypothesis"
+          "meaning": "β = 2 μ0 p / B²; the kinetic integral is a hypothesis",
+          "sign": "nonnegative"
         },
         {
           "key": "T_perp_K",
@@ -13111,14 +13157,16 @@
           "quantity": "permittivity",
           "symbol": "ε",
           "unit": "F/m",
-          "meaning": "permittivity of the gap"
+          "meaning": "permittivity of the gap",
+          "sign": "positive"
         },
         {
           "key": "h_m",
           "quantity": "thickness",
           "symbol": "h",
           "unit": "m",
-          "meaning": "finger thickness"
+          "meaning": "finger thickness",
+          "sign": "positive"
         },
         {
           "key": "V_volts",
@@ -13133,7 +13181,8 @@
           "symbol": "g",
           "unit": "m",
           "meaning": "gap, ≠ 0",
-          "geometry": "separation"
+          "geometry": "separation",
+          "sign": "positive"
         }
       ]
     },
@@ -13154,14 +13203,16 @@
           "quantity": "depletion capacitance",
           "symbol": "C_d",
           "unit": "F",
-          "meaning": "depletion capacitance"
+          "meaning": "depletion capacitance",
+          "sign": "positive"
         },
         {
           "key": "Cox_F",
           "quantity": "oxide capacitance",
           "symbol": "C_ox",
           "unit": "F",
-          "meaning": "oxide capacitance, ≠ 0"
+          "meaning": "oxide capacitance, ≠ 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13208,7 +13259,8 @@
           "quantity": "length",
           "symbol": "L",
           "unit": "m",
-          "meaning": "fin length, ≠ 0"
+          "meaning": "fin length, ≠ 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13237,7 +13289,8 @@
           "quantity": "figure of merit",
           "symbol": "Z",
           "unit": "K^-1",
-          "meaning": "Z = S²/(R K)"
+          "meaning": "Z = S²/(R K)",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -13279,7 +13332,8 @@
           "symbol": "D",
           "unit": "m",
           "meaning": "internal diameter",
-          "geometry": "diameter"
+          "geometry": "diameter",
+          "sign": "positive"
         },
         {
           "key": "wall_m",
@@ -13299,7 +13353,8 @@
           "quantity": "permittivity",
           "symbol": "ε",
           "unit": "F/m",
-          "meaning": "insulator permittivity, ≠ 0"
+          "meaning": "insulator permittivity, ≠ 0",
+          "sign": "positive"
         },
         {
           "key": "a_m",
@@ -13328,7 +13383,8 @@
           "quantity": "damping coefficient",
           "symbol": "c",
           "unit": "kg/s",
-          "meaning": "viscous coefficient"
+          "meaning": "viscous coefficient",
+          "sign": "nonnegative"
         },
         {
           "key": "k_N_per_m",
@@ -13410,7 +13466,8 @@
           "quantity": "band mass",
           "symbol": "m",
           "unit": "kg",
-          "meaning": "band mass, ≠ 0"
+          "meaning": "band mass, ≠ 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13423,7 +13480,8 @@
           "quantity": "carrier density",
           "symbol": "n",
           "unit": "m^-3",
-          "meaning": "carrier density"
+          "meaning": "carrier density",
+          "sign": "positive"
         },
         {
           "key": "EF_J",
@@ -13520,7 +13578,8 @@
           "quantity": "orbit area",
           "symbol": "A",
           "unit": "m^-2",
-          "meaning": "extremal Fermi-surface area"
+          "meaning": "extremal Fermi-surface area",
+          "sign": "nonnegative"
         }
       ]
     },
@@ -13533,7 +13592,8 @@
           "quantity": "critical current",
           "symbol": "I_c",
           "unit": "A",
-          "meaning": "critical current, ≠ 0"
+          "meaning": "critical current, ≠ 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13566,14 +13626,16 @@
           "quantity": "carrier density",
           "symbol": "n",
           "unit": "m^-3",
-          "meaning": "carrier density"
+          "meaning": "carrier density",
+          "sign": "positive"
         },
         {
           "key": "m_kg",
           "quantity": "band mass",
           "symbol": "m",
           "unit": "kg",
-          "meaning": "band mass, ≠ 0"
+          "meaning": "band mass, ≠ 0",
+          "sign": "positive"
         },
         {
           "key": "tau_s",
@@ -13600,14 +13662,16 @@
           "quantity": "first lifetime",
           "symbol": "τ₁",
           "unit": "s",
-          "meaning": "first lifetime, ≠ 0"
+          "meaning": "first lifetime, ≠ 0",
+          "sign": "positive"
         },
         {
           "key": "tau2_s",
           "quantity": "second lifetime",
           "symbol": "τ₂",
           "unit": "s",
-          "meaning": "second lifetime, ≠ 0"
+          "meaning": "second lifetime, ≠ 0",
+          "sign": "positive"
         },
         {
           "key": "C_ohm_m_s",
@@ -13676,21 +13740,23 @@
           "quantity": "arrhprefac",
           "symbol": "A_Hz",
           "unit": "Hz",
-          "meaning": "arrhprefac"
+          "meaning": "pre-exponential frequency factor, > 0",
+          "sign": "positive"
         },
         {
           "key": "Ea_J_per_mol",
           "quantity": "arrhbarrier",
           "symbol": "Ea_J_per_mol",
-          "unit": "",
-          "meaning": "arrhbarrier"
+          "unit": "J/mol",
+          "meaning": "molar activation energy",
+          "sign": "any"
         },
         {
           "key": "T_K",
           "quantity": "arrhwarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "arrhwarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         }
       ]
@@ -13704,14 +13770,15 @@
           "quantity": "eyringbarrier",
           "symbol": "dG_J",
           "unit": "J",
-          "meaning": "eyringbarrier"
+          "meaning": "free energy of activation per molecule",
+          "sign": "any"
         },
         {
           "key": "T_K",
           "quantity": "eyringwarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "eyringwarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         }
       ]
@@ -13724,15 +13791,16 @@
           "key": "dH_J_per_mol",
           "quantity": "vanthoffenthalpy",
           "symbol": "dH_J_per_mol",
-          "unit": "",
-          "meaning": "vanthoffenthalpy"
+          "unit": "J/mol",
+          "meaning": "molar reaction enthalpy (ΔH)",
+          "sign": "any"
         },
         {
           "key": "T_K",
           "quantity": "vanthoffwarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "vanthoffwarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         }
       ]
@@ -13746,14 +13814,14 @@
           "quantity": "gibbsisok",
           "symbol": "K",
           "unit": "",
-          "meaning": "gibbsisok"
+          "meaning": "equilibrium constant, > 0"
         },
         {
           "key": "T_K",
           "quantity": "gibbsisowarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "gibbsisowarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         }
       ]
@@ -13767,28 +13835,28 @@
           "quantity": "nernstge0",
           "symbol": "E0_volts",
           "unit": "V",
-          "meaning": "nernstge0"
+          "meaning": "standard electrode potential"
         },
         {
           "key": "n",
           "quantity": "nernstgn",
           "symbol": "n",
           "unit": "",
-          "meaning": "nernstgn"
+          "meaning": "electrons transferred"
         },
         {
           "key": "Q",
           "quantity": "nernstgq",
           "symbol": "Q",
           "unit": "",
-          "meaning": "nernstgq"
+          "meaning": "reaction quotient, > 0"
         },
         {
           "key": "T_K",
           "quantity": "nernstgwarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "nernstgwarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         }
       ]
@@ -13801,15 +13869,16 @@
           "key": "dH_J_per_mol",
           "quantity": "clapintlatent",
           "symbol": "dH_J_per_mol",
-          "unit": "",
-          "meaning": "clapintlatent"
+          "unit": "J/mol",
+          "meaning": "molar reaction enthalpy (ΔH)",
+          "sign": "any"
         },
         {
           "key": "T1_K",
           "quantity": "clapintwarm1",
           "symbol": "T1_K",
           "unit": "K",
-          "meaning": "clapintwarm1",
+          "meaning": "first temperature, > 0",
           "temperature": "absolute"
         },
         {
@@ -13817,7 +13886,7 @@
           "quantity": "clapintwarm2",
           "symbol": "T2_K",
           "unit": "K",
-          "meaning": "clapintwarm2",
+          "meaning": "second temperature, > 0",
           "temperature": "absolute"
         }
       ]
@@ -13831,14 +13900,14 @@
           "quantity": "raoultmole",
           "symbol": "x",
           "unit": "",
-          "meaning": "raoultmole"
+          "meaning": "mole fraction of the solvent, 0 ≤ x ≤ 1"
         },
         {
           "key": "Psat_Pa",
           "quantity": "raoultsat",
           "symbol": "Psat_Pa",
           "unit": "Pa",
-          "meaning": "raoultsat"
+          "meaning": "pure-component saturation pressure, > 0"
         }
       ]
     },
@@ -13851,21 +13920,24 @@
           "quantity": "prandtlmu",
           "symbol": "mu_Pa_s",
           "unit": "Pa*s",
-          "meaning": "prandtlmu"
+          "meaning": "dynamic viscosity, > 0",
+          "sign": "positive"
         },
         {
           "key": "cp_J_per_kg_K",
           "quantity": "prandtlcp",
           "symbol": "cp_J_per_kg_K",
           "unit": "J/(kg*K)",
-          "meaning": "prandtlcp"
+          "meaning": "specific heat capacity at constant pressure, > 0",
+          "sign": "positive"
         },
         {
           "key": "k_W_per_m_K",
           "quantity": "prandtlk",
           "symbol": "k_W_per_m_K",
           "unit": "W/(m*K)",
-          "meaning": "prandtlk"
+          "meaning": "thermal conductivity, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13878,28 +13950,31 @@
           "quantity": "reynumrho",
           "symbol": "rho_kg_per_m3",
           "unit": "kg/m^3",
-          "meaning": "reynumrho"
+          "meaning": "mass density, > 0",
+          "sign": "positive"
         },
         {
           "key": "v_m_per_s",
           "quantity": "reynumvel",
           "symbol": "v_m_per_s",
           "unit": "m/s",
-          "meaning": "reynumvel"
+          "meaning": "flow speed"
         },
         {
           "key": "L_m",
           "quantity": "reynumlen",
           "symbol": "L_m",
           "unit": "m",
-          "meaning": "reynumlen"
+          "meaning": "characteristic length, > 0",
+          "sign": "positive"
         },
         {
           "key": "mu_Pa_s",
           "quantity": "reynummu",
           "symbol": "mu_Pa_s",
           "unit": "Pa*s",
-          "meaning": "reynummu"
+          "meaning": "dynamic viscosity, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13912,21 +13987,24 @@
           "quantity": "biotfilm",
           "symbol": "h_W_per_m2_K",
           "unit": "W/(m^2*K)",
-          "meaning": "biotfilm"
+          "meaning": "convective film coefficient, > 0",
+          "sign": "positive"
         },
         {
           "key": "Lc_m",
           "quantity": "biotlength",
           "symbol": "Lc_m",
           "unit": "m",
-          "meaning": "biotlength"
+          "meaning": "characteristic length, > 0",
+          "sign": "positive"
         },
         {
           "key": "k_W_per_m_K",
           "quantity": "biotk",
           "symbol": "k_W_per_m_K",
           "unit": "W/(m*K)",
-          "meaning": "biotk"
+          "meaning": "thermal conductivity, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13939,21 +14017,24 @@
           "quantity": "nusseltfilm",
           "symbol": "h_W_per_m2_K",
           "unit": "W/(m^2*K)",
-          "meaning": "nusseltfilm"
+          "meaning": "convective film coefficient, > 0",
+          "sign": "positive"
         },
         {
           "key": "L_m",
           "quantity": "nusseltlen",
           "symbol": "L_m",
           "unit": "m",
-          "meaning": "nusseltlen"
+          "meaning": "characteristic length, > 0",
+          "sign": "positive"
         },
         {
           "key": "k_W_per_m_K",
           "quantity": "nusseltk",
           "symbol": "k_W_per_m_K",
           "unit": "W/(m*K)",
-          "meaning": "nusseltk"
+          "meaning": "thermal conductivity, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13966,21 +14047,24 @@
           "quantity": "schmidtmu",
           "symbol": "mu_Pa_s",
           "unit": "Pa*s",
-          "meaning": "schmidtmu"
+          "meaning": "dynamic viscosity, > 0",
+          "sign": "positive"
         },
         {
           "key": "rho_kg_per_m3",
           "quantity": "schmidtrho",
           "symbol": "rho_kg_per_m3",
           "unit": "kg/m^3",
-          "meaning": "schmidtrho"
+          "meaning": "mass density, > 0",
+          "sign": "positive"
         },
         {
           "key": "D_m2_per_s",
           "quantity": "schmidtdiff",
           "symbol": "D_m2_per_s",
           "unit": "m^2/s",
-          "meaning": "schmidtdiff"
+          "meaning": "diffusivity, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -13993,21 +14077,24 @@
           "quantity": "sherwoodkm",
           "symbol": "km_m_per_s",
           "unit": "m/s",
-          "meaning": "sherwoodkm"
+          "meaning": "mass-transfer coefficient, > 0",
+          "sign": "positive"
         },
         {
           "key": "L_m",
           "quantity": "sherwoodlen",
           "symbol": "L_m",
           "unit": "m",
-          "meaning": "sherwoodlen"
+          "meaning": "characteristic length, > 0",
+          "sign": "positive"
         },
         {
           "key": "D_m2_per_s",
           "quantity": "sherwooddiff",
           "symbol": "D_m2_per_s",
           "unit": "m^2/s",
-          "meaning": "sherwooddiff"
+          "meaning": "diffusivity, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -14020,14 +14107,15 @@
           "quantity": "fourierslabk",
           "symbol": "k_W_per_m_K",
           "unit": "W/(m*K)",
-          "meaning": "fourierslabk"
+          "meaning": "thermal conductivity, > 0",
+          "sign": "positive"
         },
         {
           "key": "T_L_K",
           "quantity": "fourierslabend",
           "symbol": "T_L_K",
           "unit": "K",
-          "meaning": "fourierslabend",
+          "meaning": "temperature at x = L",
           "temperature": "absolute"
         },
         {
@@ -14035,7 +14123,7 @@
           "quantity": "fourierslabstart",
           "symbol": "T_0_K",
           "unit": "K",
-          "meaning": "fourierslabstart",
+          "meaning": "temperature at x = 0",
           "temperature": "absolute"
         },
         {
@@ -14043,7 +14131,8 @@
           "quantity": "fourierslablen",
           "symbol": "L_m",
           "unit": "m",
-          "meaning": "fourierslablen"
+          "meaning": "characteristic length, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -14056,49 +14145,55 @@
           "quantity": "newtonrho",
           "symbol": "rho_kg_per_m3",
           "unit": "kg/m^3",
-          "meaning": "newtonrho"
+          "meaning": "mass density, > 0",
+          "sign": "positive"
         },
         {
           "key": "c_J_per_kg_K",
           "quantity": "newtoncp",
           "symbol": "c_J_per_kg_K",
           "unit": "J/(kg*K)",
-          "meaning": "newtoncp"
+          "meaning": "specific heat capacity, > 0",
+          "sign": "positive"
         },
         {
           "key": "V_m3",
           "quantity": "newtonvol",
           "symbol": "V_m3",
-          "unit": "",
-          "meaning": "newtonvol"
+          "unit": "m^3",
+          "meaning": "body volume, > 0",
+          "sign": "positive"
         },
         {
           "key": "h_W_per_m2_K",
           "quantity": "newtonfilm",
           "symbol": "h_W_per_m2_K",
           "unit": "W/(m^2*K)",
-          "meaning": "newtonfilm"
+          "meaning": "convective film coefficient, > 0",
+          "sign": "positive"
         },
         {
           "key": "A_m2",
           "quantity": "newtonarea",
           "symbol": "A_m2",
           "unit": "m^2",
-          "meaning": "newtonarea"
+          "meaning": "surface area, > 0",
+          "sign": "positive"
         },
         {
           "key": "t_s",
           "quantity": "newtontime",
           "symbol": "t_s",
           "unit": "s",
-          "meaning": "newtontime"
+          "meaning": "elapsed time, ≥ 0",
+          "sign": "nonnegative"
         },
         {
           "key": "theta_difference_K",
           "quantity": "newtontheta0",
           "symbol": "theta_difference_K",
           "unit": "K",
-          "meaning": "newtontheta0"
+          "meaning": "initial temperature excess over the surroundings"
         }
       ]
     },
@@ -14111,14 +14206,14 @@
           "quantity": "ottoratio",
           "symbol": "r",
           "unit": "",
-          "meaning": "ottoratio"
+          "meaning": "compression ratio, > 1"
         },
         {
           "key": "gamma",
           "quantity": "ottogamma",
           "symbol": "gamma",
           "unit": "",
-          "meaning": "ottogamma"
+          "meaning": "heat-capacity ratio, > 1"
         }
       ]
     },
@@ -14131,7 +14226,7 @@
           "quantity": "jtcwarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "jtcwarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         },
         {
@@ -14139,21 +14234,22 @@
           "quantity": "jtcdvdt",
           "symbol": "dv_dT_m3_per_kg_K",
           "unit": "m^3/(kg*K)",
-          "meaning": "jtcdvdt"
+          "meaning": "∂v/∂T at constant pressure"
         },
         {
           "key": "v_m3_per_kg",
           "quantity": "jtcvolume",
           "symbol": "v_m3_per_kg",
           "unit": "m^3/kg",
-          "meaning": "jtcvolume"
+          "meaning": "specific volume"
         },
         {
           "key": "cp_J_per_kg_K",
           "quantity": "jtcp",
           "symbol": "cp_J_per_kg_K",
           "unit": "J/(kg*K)",
-          "meaning": "jtcp"
+          "meaning": "specific heat capacity at constant pressure, > 0",
+          "sign": "positive"
         }
       ]
     },
@@ -14166,14 +14262,14 @@
           "quantity": "planckfreq",
           "symbol": "nu_Hz",
           "unit": "Hz",
-          "meaning": "planckfreq"
+          "meaning": "frequency, > 0"
         },
         {
           "key": "T_K",
           "quantity": "planckwarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "planckwarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         }
       ]
@@ -14192,7 +14288,7 @@
           "quantity": "wienroot",
           "symbol": "wien_x",
           "unit": "",
-          "meaning": "wienroot"
+          "meaning": "the positive root of (5 − x) = 5 exp(−x), in (4, 5)"
         }
       ]
     },
@@ -14205,21 +14301,22 @@
           "quantity": "sackurcount",
           "symbol": "N",
           "unit": "",
-          "meaning": "sackurcount"
+          "meaning": "number of particles",
+          "sign": "nonnegative"
         },
         {
           "key": "nQ_per_m3",
           "quantity": "sackurquantum",
           "symbol": "nQ_per_m3",
           "unit": "m^-3",
-          "meaning": "sackurquantum"
+          "meaning": "quantum concentration, > 0"
         },
         {
           "key": "n_per_m3",
           "quantity": "sackurdensity",
           "symbol": "n_per_m3",
           "unit": "m^-3",
-          "meaning": "sackurdensity"
+          "meaning": "number density, > 0"
         }
       ]
     },
@@ -14232,14 +14329,14 @@
           "quantity": "sahamass",
           "symbol": "m_kg",
           "unit": "kg",
-          "meaning": "sahamass"
+          "meaning": "particle mass, > 0"
         },
         {
           "key": "T_K",
           "quantity": "sahawarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "sahawarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         },
         {
@@ -14247,7 +14344,7 @@
           "quantity": "sahaion",
           "symbol": "I_J",
           "unit": "J",
-          "meaning": "sahaion"
+          "meaning": "ionization energy"
         }
       ]
     },
@@ -14260,14 +14357,14 @@
           "quantity": "richardsmass",
           "symbol": "m_kg",
           "unit": "kg",
-          "meaning": "richardsmass"
+          "meaning": "particle mass, > 0"
         },
         {
           "key": "T_K",
           "quantity": "richardswarmth",
           "symbol": "T_K",
           "unit": "K",
-          "meaning": "richardswarmth",
+          "meaning": "absolute temperature, ≥ 0",
           "temperature": "absolute"
         },
         {
@@ -14275,7 +14372,7 @@
           "quantity": "richardsphi",
           "symbol": "phi_J",
           "unit": "J",
-          "meaning": "richardsphi"
+          "meaning": "work function"
         }
       ]
     },
@@ -14288,14 +14385,14 @@
           "quantity": "onsagerl12",
           "symbol": "L12",
           "unit": "",
-          "meaning": "onsagerl12"
+          "meaning": "Onsager cross coefficient L12"
         },
         {
           "key": "onsager_B_T",
           "quantity": "onsagerb0",
           "symbol": "onsager_B_T",
           "unit": "T",
-          "meaning": "onsagerb0"
+          "meaning": "magnetic field, must be 0"
         }
       ]
     }

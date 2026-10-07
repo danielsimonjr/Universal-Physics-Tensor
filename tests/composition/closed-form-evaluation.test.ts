@@ -16,7 +16,8 @@ const FULLY = new Set(
 );
 
 function samples(names: readonly string[]): Record<string, number>[] {
-  const scales = [1, 2, 0.5, 0.25, 0.1, 3, 4.5, 10, 300, 1e-3, 0];
+  // 4.965114231744276 is the root of (5 - x) = 5 exp(-x); a relation that states a regime inequality needs spread values.
+  const scales = [1, 2, 0.5, 0.25, 0.1, 3, 4.5, 10, 300, 1e-3, 0, 4.965114231744276];
   const out: Record<string, number>[] = [];
   for (const scale of scales) {
     const equal: Record<string, number> = {};
@@ -24,14 +25,18 @@ function samples(names: readonly string[]): Record<string, number>[] {
     const reversed: Record<string, number> = {};
     const negative: Record<string, number> = {};
     const alternating: Record<string, number> = {};
+    const spread: Record<string, number> = {};
+    const spreadReversed: Record<string, number> = {};
     names.forEach((name, index) => {
       equal[name] = scale;
       varied[name] = (scale * (index + 1)) / (names.length + 1);
       reversed[name] = (scale * (names.length - index)) / (names.length + 1);
       negative[name] = -scale;
       alternating[name] = scale * (index % 2 === 0 ? 1 : -1);
+      spread[name] = scale * 100 ** index;
+      spreadReversed[name] = scale * 100 ** (names.length - 1 - index);
     });
-    out.push(equal, varied, reversed, negative, alternating);
+    out.push(equal, varied, reversed, negative, alternating, spread, spreadReversed);
   }
   return out;
 }

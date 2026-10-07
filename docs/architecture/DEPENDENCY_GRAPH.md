@@ -1385,7 +1385,7 @@ The codebase is organized into the following modules:
 **Internal Dependencies:**
 | File | Imports | Type |
 |------|---------|------|
-| `./catalog-types.js` | `CatalogConfrontation, CatalogEntry, CatalogEvaluator, CatalogFile, CatalogRelation` | Import (type-only) |
+| `./catalog-types.js` | `CatalogConfrontation, CatalogEntry, CatalogEvaluator, CatalogEvaluatorParameter, CatalogFile, CatalogRelation` | Import (type-only) |
 
 **Exports:**
 - Functions:
@@ -6695,7 +6695,7 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 351 |
 | Total Modules | 13 |
-| Total Lines of Code | 77085 |
+| Total Lines of Code | 77138 |
 | Total Exports | 2363 |
 | Total Re-exports | 1202 |
 | Total Classes | 64 |

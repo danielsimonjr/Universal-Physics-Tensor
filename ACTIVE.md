@@ -20,6 +20,10 @@ The owner removed every human-reviewer gate on 2026-10-01. The gates removed are
 
 ## Open tasks, easiest first
 
+- [x] Catalog validity domains are derived from the parameter flags, and a regime inequality is stated where a formula has one.
+  A temperature input documented as absolute accepts a negative value on be-82, be-87, be-127, and be-130. Duty, diameter, viscosity, density, mass, and heat-transfer inputs accept an unphysical sign on the engineering, plasma, condensed-matter, and thermal records. be-110 accepts a mirror ratio above 1, be-122 an ion lighter than the electron, be-93 a point below the Weiss temperature, be-90 and be-92 a point outside the Debye and Sommerfeld limits, be-167 the degenerate regime, and be-166 a non-root in (4, 5). Issues 447, 449, 452, 453, 463, 467, 482.
+  Done: each evaluator parameter carries a `sign`, and `src/bridges/catalog-load.ts` appends that clause to the relation it evaluates. An absolute temperature is nonnegative unless it says `any`. The regime inequalities are in the records. `tests/bridges/catalog-domains.test.ts` pairs each rejected point with an accepted control.
+
 - [x] Bridge equations are data, and one engine evaluates them.
   Done: catalog records are `data/bridge-catalog.json`. One engine evaluates them through `evaluateRelation` and `src/bridges/catalog-load.ts`. The quantity registry is `data/quantities.json`. The source guard is `tests/architecture/source-guard.test.ts`. The specification writes up cross-domain records only. `package.json` is 8.0.0. The PhysJS pin is `10e48f140c0e9fad3c50e5e5538124c52b3e732c`.
 
