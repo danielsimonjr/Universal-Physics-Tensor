@@ -8442,10 +8442,10 @@
       "reference": {
         "inputs": {
           "debye-atom-count": 2,
-          "debye-temperature": 300,
-          "debye-theta": 1
+          "debye-temperature": 1,
+          "debye-theta": 10
         },
-        "value": 1.7429614230859777e-13
+        "value": 6.4554126780962135e-24
       }
     },
     {
@@ -8565,10 +8565,10 @@
           "curie-g-factor": 2,
           "curie-spin": 2,
           "curie-magneton": 1,
-          "curie-temperature": 100,
-          "weiss-temperature": 200
+          "curie-temperature": 200,
+          "weiss-temperature": 100
         },
-        "value": -7281428152238865
+        "value": 7281428152238865
       }
     },
     {
@@ -8771,8 +8771,8 @@
           "eps_inf"
         ]
       },
-      "holds": "finite(lst-static) && finite(lst-infinity) && lst-infinity !== 0 && lst-static > lst-infinity",
-      "domain": "ε(∞) ≠ 0; no damping is a hypothesis; lst-static > lst-infinity",
+      "holds": "finite(lst-static) && finite(lst-infinity) && lst-infinity !== 0 && lst-static >= lst-infinity",
+      "domain": "ε(∞) ≠ 0; no damping is a hypothesis; lst-static >= lst-infinity",
       "confidence": "established",
       "citation": "PhysJS.LyddaneSachsTeller.lst. The unsquared frequency ratio fails when ω_LO ≠ ω_TO. No damping is a hypothesis.",
       "reference": {
@@ -9316,12 +9316,12 @@
       "citation": "PhysJS.LorentzResistivity.resistivity_eq. σ_tr = 4π b0² ln Λ and the conductivity moment are hypotheses. The typed reference closure is nested.",
       "reference": {
         "inputs": {
-          "lorentz-charge-state": -1.602176634e-19,
+          "lorentz-charge-state": 1,
           "lorentz-coulomb-log": 2,
           "lorentz-temperature": 300,
           "lorentz-mass": 1
         },
-        "value": -2.453505313378033e-06
+        "value": 15313575677686.691
       }
     },
     {
@@ -9525,9 +9525,9 @@
       "reference": {
         "inputs": {
           "probe-electron-mass": 1,
-          "probe-ion-mass": 1
+          "probe-ion-mass": 1836
         },
-        "value": 0.41893853320467267
+        "value": -3.338733752385545
       }
     },
     {
@@ -9726,9 +9726,9 @@
       "citation": "PhysJS.BoostConverter.boost_ratio. Volt-second balance. No real duty equals both this ratio and the buck ratio D.",
       "reference": {
         "inputs": {
-          "boost-duty": 2
+          "boost-duty": 0.5
         },
-        "value": -1
+        "value": 2
       }
     },
     {
@@ -11051,9 +11051,9 @@
       "citation": "PhysJS.WienDisplacement.wien_eq. The decimal root is not evaluated.",
       "reference": {
         "inputs": {
-          "wienroot": 4.5
+          "wienroot": 4.965114231744276
         },
-        "value": 0.003197281950008741
+        "value": 0.0028977719551851727
       }
     },
     {

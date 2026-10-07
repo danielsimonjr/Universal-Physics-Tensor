@@ -101,6 +101,8 @@ describe('BRIDGE_EVALUATORS', () => {
       [/_volts$/, 'V'],
       [/_yr$/, 'yr'],
       [/_Hz$/, 'Hz'],
+      [/_J_per_mol$/, 'J/mol'],
+      [/_m3$/, 'm^3'],
       [/_C$/, 'C'],
       [/_A$/, 'A'],
       [/_F$/, 'F'],
@@ -141,7 +143,7 @@ describe('BRIDGE_EVALUATORS', () => {
       R_m: 0.01, deltaP_Pa: 1000, mu_Pa_s: 0.001, L_m: 1,
       E_Pa: 2e11, I_m4: 1e-8, k_N_per_m: 1, g0_m: 1e-6, A_m2: 1e-6,
       eps: 8.8541878128e-12, I_s_A: 1e-12, dS_dT_V_per_K2: 1e-6,
-      N: 1, v_m_per_s: 1e3, thetaD_K: 200, thetaE_K: 200, E_F_J: 1e-18,
+      N: 1, v_m_per_s: 1e3, thetaD_K: 4000, thetaE_K: 200, E_F_J: 1e-18,
       g: 2, spin: 0.5, muB_J_per_T: 9.274e-24, theta_K: 10, kappa: 1,
       xi_m: 1e-7, Delta_J: 1e-22, zeta: 1, N_c_per_m3: 1e25, N_v_per_m3: 1e25,
       E_g_J: 1e-19, eps_static: 10, eps_inf: 2, J_J: 1e-21, sum_Tn: 1,
@@ -174,7 +176,7 @@ describe('BRIDGE_EVALUATORS', () => {
       cp_J_per_kg_K: 4180, Lc_m: 0.1, D_m2_per_s: 1e-9, km_m_per_s: 1e-4,
       T_L_K: 400, T_0_K: 300, c_J_per_kg_K: 4180, V_m3: 1e-3, t_s: 10,
       theta_difference_K: 20, r: 8, gamma: 1.4, dv_dT_m3_per_kg_K: 1e-6,
-      v_m3_per_kg: 1e-3, nu_Hz: 1e14, wien_x: 4.5, nQ_per_m3: 1e32,
+      v_m3_per_kg: 1e-3, nu_Hz: 1e14, wien_x: 4.965114231744276, nQ_per_m3: 1e32,
       I_J: 2.18e-18, phi_J: 4e-19, L12: 3, onsager_B_T: 0,
     };
     for (const [id, spec] of BRIDGE_EVALUATORS) {
