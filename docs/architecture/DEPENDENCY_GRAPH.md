@@ -1474,7 +1474,8 @@ The codebase is organized into the following modules:
 | `../dimensional/formula-names.js` | `FORMULA_NAMED` | Import |
 | `./catalog-load.js` | `primaryRelation` | Import |
 | `./catalog-load.js` | `catalogEvaluators` | Import |
-| `./catalog-types.js` | `CatalogEvaluatorParameter, CatalogRelation` | Import (type-only) |
+| `./catalog-types.js` | `CatalogEvaluatorOutput, CatalogEvaluatorParameter, CatalogRelation` | Import (type-only) |
+| `./expr-parse.js` | `evaluateFormula` | Import |
 | `./relation-eval.js` | `evaluateCatalogRelation, relationHolds` | Import |
 
 **Exports:**
@@ -2484,6 +2485,7 @@ The codebase is organized into the following modules:
 | `../search-index.js` | `searchNameWords` | Import |
 | `../../numerical/binding-value.js` | `readNamedBinding` | Import |
 | `../../dimensional/units.js` | `UnitError` | Import |
+| `../../dimensional/symbolic-constants.js` | `CONSTANTS` | Import |
 | `../../composition/aliases.js` | `aliasesForTarget, nearQuantityNames, shareSynonyms` | Import |
 | `../../dimensional/formula-names.js` | `assertSynonymAgreement, resolveQuantityName, SynonymDisagreementError` | Import |
 | `../../composition/canonical-prefactors.js` | `CANONICAL_GROUP_PREFACTORS` | Import |
@@ -6712,11 +6714,11 @@ graph TD
 |----------|-------|
 | Total TypeScript Files | 352 |
 | Total Modules | 13 |
-| Total Lines of Code | 77607 |
+| Total Lines of Code | 77687 |
 | Total Exports | 2372 |
 | Total Re-exports | 1205 |
 | Total Classes | 66 |
-| Total Interfaces | 433 |
+| Total Interfaces | 434 |
 | Total Functions | 725 |
 | Total Type Guards | 6 |
 | Total Enums | 0 |
