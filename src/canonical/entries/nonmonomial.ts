@@ -119,6 +119,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-photoelectric',
+      holds: 'planck-constant * photon-frequency >= work-function && work-function >= 0',
       name: 'Photoelectric equation',
       domain: 'quantum',
       formula_latex: 'K_{\\max} = h f - W',
@@ -141,6 +142,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-carnot-efficiency',
+      holds: 'cold-reservoir-temperature >= 0 && hot-reservoir-temperature > 0 && cold-reservoir-temperature <= hot-reservoir-temperature',
       name: 'Carnot efficiency',
       domain: 'thermodynamics',
       formula_latex: '\\eta = 1 - \\tfrac{T_c}{T_h}',
@@ -198,6 +200,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-lorentz-factor',
+      holds: 'abs(velocity) < speed-of-light',
       name: 'Lorentz factor',
       domain: 'mechanics', // SR precedent — matches CE-mass-energy's domain
       formula_latex: '\\gamma = \\left(1 - \\tfrac{v^2}{c^2}\\right)^{-1/2}',
@@ -230,6 +233,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-compton-shift',
+      holds: 'scattering-angle >= 0 && scattering-angle <= pi',
       name: 'Compton shift',
       domain: 'quantum',
       formula_latex: '\\Delta\\lambda = \\tfrac{h}{m_e c}(1 - \\cos\\theta)',
@@ -260,6 +264,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-rydberg-formula',
+      holds: 'integer(lower-level-n) && integer(upper-level-n) && lower-level-n >= 1 && upper-level-n > lower-level-n',
       name: 'Rydberg formula',
       domain: 'quantum',
       formula_latex: '\\tfrac{1}{\\lambda} = R\\left(\\tfrac{1}{n_1^2} - \\tfrac{1}{n_2^2}\\right)',
@@ -287,6 +292,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-snell-law',
+      holds: 'incident-index > 0 && angle-of-incidence >= 0 && angle-of-incidence <= pi / 2 && angle-of-refraction > 0 && angle-of-refraction <= pi / 2',
       name: "Snell's law",
       domain: 'electromagnetism', // optics
       formula_latex: 'n_2 = n_1 \\sin\\theta_1 / \\sin\\theta_2', // solved for n2
@@ -313,6 +319,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-malus-law',
+      holds: 'incident-intensity >= 0',
       name: "Malus's law",
       domain: 'electromagnetism',
       formula_latex: 'I = I_0 \\cos^2\\theta',
@@ -373,6 +380,7 @@ export const NONMONOMIAL: readonly CanonicalEquation[] = [
     ],
     {
       id: 'CE-boltzmann-entropy',
+      holds: 'microstate-count >= 1',
       name: 'Boltzmann entropy',
       domain: 'statistical',
       formula_latex: 'S = k_B \ln W',

@@ -124,6 +124,12 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'speed', dim: VELOCITY },
   ], {
     id: 'CE-stokes-drag',
+    prefactor: {
+      value: 6 * Math.PI,
+      quote: String.raw`\zeta = 6 \pi \, \eta \, r,`,
+      locator: "Wikipedia, 'Einstein relation (kinetic theory)', revision 1353047788, wikitext line 77",
+    },
+    holds: 'viscosity > 0 && radius > 0',
     name: "Stokes' drag",
     domain: 'mechanics',
     formula_latex: 'F_d = 6\\pi \\eta r v',
@@ -143,6 +149,7 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'wavelength', dim: LENGTH },
   ], {
     id: 'CE-wave-speed',
+    holds: 'frequency > 0 && wavelength > 0',
     name: 'Wave relation (v = fλ)',
     domain: 'mechanics',
     formula_latex: 'v = f \\lambda',
@@ -161,6 +168,15 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'density', dim: DENSITY },
   ], {
     id: 'CE-sound-speed',
+    targetAliases: ['speed'],
+    groupPrefactor: {
+      group: 'gamma',
+      coefficient: 1,
+      exponent: 0.5,
+      quote: String.raw`c = \sqrt{\gamma \cdot {p \over \rho}},`,
+      locator: "Wikipedia, 'Speed of sound', revision 1373106219, wikitext line 142",
+    },
+    holds: 'pressure >= 0 && density > 0',
     name: 'Speed of sound in a fluid',
     domain: 'mechanics',
     formula_latex: 'c = \\sqrt{\\gamma P / \\rho}',
@@ -195,6 +211,7 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'velocity-gradient', dim: FREQUENCY },
   ], {
     id: 'CE-shear-stress',
+    holds: 'dynamic-viscosity > 0',
     name: 'Shear stress (Newtonian fluid)',
     domain: 'mechanics',
     formula_latex: '\\tau = \\mu (dv/dy)',
@@ -213,6 +230,12 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'droplet-radius', dim: LENGTH },
   ], {
     id: 'CE-laplace-pressure',
+    prefactor: {
+      value: 2,
+      quote: String.raw`\Delta p = \frac{2 \gamma}{R}.`,
+      locator: "Wikipedia, 'Young–Laplace equation', revision 1350190310, wikitext line 40",
+    },
+    holds: 'surface-tension >= 0 && droplet-radius > 0',
     name: 'Laplace pressure (surface tension)',
     domain: 'mechanics',
     formula_latex: '\\Delta P = 2\\gamma / r',
@@ -231,6 +254,12 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'flow-velocity', dim: VELOCITY },
   ], {
     id: 'CE-dynamic-pressure',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`q = \frac{1}{2}\rho\, u^2`,
+      locator: "Wikipedia, 'Dynamic pressure', revision 1323192083, wikitext line 6",
+    },
+    holds: 'density >= 0',
     name: 'Dynamic pressure',
     domain: 'mechanics',
     formula_latex: 'q = \\tfrac{1}{2} \\rho v^2',
@@ -255,6 +284,11 @@ export const FLUIDS_WAVES: readonly CanonicalEquation[] = [
     { name: 'amplitude', dim: LENGTH },
   ], {
     id: 'CE-oscillator-energy',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`E = K + U = \tfrac12 k A^2.`,
+      locator: "Wikipedia, 'Simple harmonic motion', revision 1347475303, wikitext line 80",
+    },
     name: 'Harmonic oscillator energy',
     domain: 'mechanics',
     formula_latex: 'E = \\tfrac{1}{2} k A^2',

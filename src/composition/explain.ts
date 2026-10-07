@@ -33,6 +33,7 @@ import type { RetrodictionResult } from './retrodiction.js';
 import { retrodictNode } from './retrodiction.js';
 import type { Dimension } from '../dimensional/types.js';
 import { CANONICAL_GROUP_PREFACTORS } from './canonical-prefactors.js';
+import { canonicalById } from '../canonical/registry.js';
 
 /**
  * Text form of a recovered quantity: 15 significant digits, the precision an
@@ -295,12 +296,6 @@ function monomialWithFactors(
   return merged;
 }
 
-/** Textbook factors the unit monomial is not. Disclosure, not a formalRef. */
-const UNSET_FACTOR: Readonly<Record<string, string>> = {
-  'CE-fermi-energy': 'The standard factor (1/2)(3π²)^{2/3} is unset.',
-  'CE-fermi-velocity': 'The standard factor (3π²)^{1/3} is unset.',
-  'CE-debye-frequency': 'The standard factor (6π²)^{1/3} is unset.',
-};
 
 function buildSummary(
   target: string,
@@ -602,7 +597,7 @@ export function explainQuantity(
     unsetEdge === undefined || groupBound
       ? undefined
       : 'The factor is unset.' +
-        (UNSET_FACTOR[unsetEdge.id] !== undefined ? ` ${UNSET_FACTOR[unsetEdge.id]}` : '');
+        (canonicalById(unsetEdge.id)?.unsetFactorNote !== undefined ? ` ${canonicalById(unsetEdge.id)!.unsetFactorNote}` : '');
 
   const coefficient: QuantityExplanation['coefficient'] =
     unsetEdge !== undefined && !groupBound

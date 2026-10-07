@@ -37,6 +37,13 @@ const l0 = (
     | 'references'
     | 'partnerBridges'
     | 'restatesBridge'
+    | 'holds'
+    | 'prefactor'
+    | 'groupPrefactor'
+    | 'unsetFactorNote'
+    | 'conventionNote'
+    | 'conventionGroup'
+    | 'targetAliases'
   >,
 ): CanonicalEquation => ({
   epistemicStatus: 'dimensional',
@@ -47,6 +54,12 @@ const l0 = (
 export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   l0({
     id: 'CE-pendulum-period',
+    prefactor: {
+      value: 2 * Math.PI,
+      quote: String.raw`T_0 = 2\pi\sqrt{\frac \ell g}`,
+      locator: "Wikipedia, 'Pendulum (mechanics)', revision 1374595895, wikitext line 171",
+    },
+    holds: 'length > 0 && gravity > 0',
     name: 'Pendulum period',
     domain: 'mechanics',
     formula_latex: 'T = 2\\pi\\sqrt{L/g}',
@@ -65,6 +78,12 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-kepler-third',
+    prefactor: {
+      value: 2 * Math.PI,
+      quote: String.raw`\frac{a^3}{T^2} = \frac{G(M + m)}{4\pi^2} \approx \frac{GM}{4\pi^2}`,
+      locator: "Wikipedia, 'Kepler's laws of planetary motion', revision 1376360196, wikitext line 232",
+    },
+    holds: 'semi-major-axis > 0 && mass > 0',
     name: "Kepler's third law",
     domain: 'gravitation',
     formula_latex: 'T^2 = 4\\pi^2 a^3/(GM)',
@@ -84,6 +103,13 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-schwarzschild-radius',
+    targetAliases: ['schwarzschild-radius'],
+    prefactor: {
+      value: 2,
+      quote: String.raw`Schwarzschild radius{{br}}<math display="inline">\frac{2GM}{c^2}</math>`,
+      locator: "Wikipedia, 'Schwarzschild radius', revision 1373854769, wikitext line 25",
+    },
+    holds: 'mass > 0',
     name: 'Schwarzschild radius',
     domain: 'general-relativity',
     formula_latex: 'r_s = 2GM/c^2',
@@ -103,6 +129,12 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-string-wave-speed',
+    prefactor: {
+      value: 1,
+      quote: String.raw`v=\sqrt{T\over\mu},`,
+      locator: "Wikipedia, 'String vibration', revision 1306385524, wikitext line 40",
+    },
+    holds: 'tension >= 0 && linear-density > 0',
     name: 'Wave speed on a string',
     domain: 'mechanics',
     formula_latex: 'v = \\sqrt{F/\\mu}',
@@ -121,6 +153,11 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-planck-length',
+    prefactor: {
+      value: 1,
+      quote: String.raw`<math>l_\text{P} = \sqrt{\frac{\hbar G}{c^3}}</math>`,
+      locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 77",
+    },
     name: 'Planck length',
     domain: 'quantum',
     formula_latex: '\\ell_P = \\sqrt{\\hbar G/c^3}',
@@ -140,6 +177,11 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-planck-mass',
+    prefactor: {
+      value: 1,
+      quote: String.raw`<math>m_\text{P} = \sqrt{\frac{\hbar c}{G}}</math>`,
+      locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 82",
+    },
     name: 'Planck mass',
     domain: 'quantum',
     formula_latex: 'm_P = \\sqrt{\\hbar c/G}',
@@ -159,6 +201,11 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-planck-time',
+    prefactor: {
+      value: 1,
+      quote: String.raw`<math>t_\text{P} = \sqrt{\frac{\hbar G}{c^5}}</math>`,
+      locator: "Wikipedia, 'Planck units', revision 1375441167, wikitext line 87",
+    },
     name: 'Planck time',
     domain: 'quantum',
     formula_latex: 't_P = \\sqrt{\\hbar G/c^5}',
@@ -178,6 +225,14 @@ export const DIMENSIONAL_CLASSICS: readonly CanonicalEquation[] = [
   }),
   l0({
     id: 'CE-compton-wavelength',
+    targetAliases: ['reduced-compton-wavelength'],
+    conventionGroup: 'compton-wavelength',
+    conventionNote: 'CE-compton-wavelength is the reduced wavelength λ̄ = ħ/(m c), prefactor checked. CE-compton-wavelength-full is λ = h/(m c). The Compton-shift entry uses h/(m c) (1−cos θ). h does not alias ħ.',
+    prefactor: {
+      value: 1,
+      quote: String.raw`\lambda\!\!\!\bar{} = \frac{\lambda}{2 \pi} = \frac{\hbar}{m c},`,
+      locator: "Wikipedia, 'Compton wavelength', revision 1376812882, wikitext line 13",
+    },
     name: 'Reduced Compton wavelength',
     domain: 'quantum',
     formula_latex: '\\bar{\\lambda}_C = \\hbar/(mc)',

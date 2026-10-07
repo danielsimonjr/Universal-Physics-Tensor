@@ -16,13 +16,14 @@ import {
   type DimensionRename,
 } from '../dimensional/formula-names.js';
 import { foldName } from '../dimensional/quantity-registry.js';
+import { CANONICAL_EQUATIONS } from '../canonical/registry.js';
 
 /**
  * The one name table.
  *
  * Synonym groups are {@link SYNONYM_GROUPS}: the same array, not a copy.
  * A comparison target is a name an entry answers to besides its frozen
- * target word. `speed` answers for the sound-speed equation in a comparison
+ * target word, projected from each entry's `targetAliases`. `speed` answers for the sound-speed equation in a comparison
  * and is not a synonym of `sound-speed`. A dimension rename applies only
  * for that dimension, so a time coordinate named `T` stays `T`.
  * Spelling resolution is `resolveQuantityName`, not a second table.
@@ -33,16 +34,10 @@ export const NAME_TABLE: {
   readonly dimensionRenames: readonly DimensionRename[];
 } = {
   synonyms: SYNONYM_GROUPS,
-  canonicalTargets: {
-    'CE-schwarzschild-radius': ['schwarzschild-radius'],
-    // The equation's quantity is sound-speed. A formula written for speed, with
-    // pressure and density, is still this law. speed is not a synonym of sound-speed.
-    'CE-sound-speed': ['speed'],
-    // The L0 id keeps the catalog name. The reduced name is the same entry.
-    // The non-reduced entry also answers to that catalog name when the formula uses h.
-    'CE-compton-wavelength': ['reduced-compton-wavelength'],
-    'CE-compton-wavelength-full': ['compton-wavelength'],
-  },
+  canonicalTargets: Object.fromEntries(
+    CANONICAL_EQUATIONS.flatMap((e) => (e.targetAliases === undefined ? [] : [[e.id, e.targetAliases]])),
+  ),
+
   dimensionRenames: DIMENSION_RENAMES,
 };
 

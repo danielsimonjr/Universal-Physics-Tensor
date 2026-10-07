@@ -76,7 +76,6 @@ import { equals } from '../dimensional/algebra.js';
 import type { ExprNode } from '../dimensional/validator.js';
 import { CANONICAL_GROUP_PREFACTORS, canonicalGroupPrefactor, canonicalPrefactor } from './canonical-prefactors.js';
 import { evalExpr } from './expr-eval.js';
-import { CANONICAL_DOMAINS } from '../canonical/domains.js';
 import { HoldsError, holds } from '../bridges/holds.js';
 import { formulaNames, formulaScope } from '../bridges/expr-parse.js';
 
@@ -145,7 +144,7 @@ const PERMISSIVE_DOMAIN: ValidityDomain = {
  * the permissive domain when none is stated. An unbound name is a violation.
  */
 function domainOf(eq: CanonicalEquation, sourceNames: readonly string[]): ValidityDomain {
-  const text = CANONICAL_DOMAINS[eq.id];
+  const text = eq.holds;
   if (text === undefined) return PERMISSIVE_DOMAIN;
   return {
     description: text,

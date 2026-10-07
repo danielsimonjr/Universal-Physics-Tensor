@@ -123,6 +123,11 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'voltage', dim: VOLTAGE },
   ], {
     id: 'CE-capacitor-energy',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`W = \frac{1}{2}CV^2`,
+      locator: "Wikipedia, 'Capacitor', revision 1375788837, wikitext line 137",
+    },
     name: 'Capacitor stored energy',
     domain: 'electromagnetism',
     formula_latex: 'U = \\tfrac{1}{2} C V^2',
@@ -141,6 +146,11 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'current', dim: CURRENT },
   ], {
     id: 'CE-inductor-energy',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`\tfrac{1}{2} L\,I^2`,
+      locator: "Wikipedia, 'Inductance', revision 1372308482, wikitext line 109",
+    },
     name: 'Inductor stored energy',
     domain: 'electromagnetism',
     formula_latex: 'U = \\tfrac{1}{2} L I^2',
@@ -160,6 +170,11 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'distance', dim: LENGTH },
   ], {
     id: 'CE-magnetic-field-wire',
+    prefactor: {
+      value: 1 / (2 * Math.PI),
+      quote: String.raw`B = \frac{\mu_0I}{2\pi x}`,
+      locator: "Wikipedia, 'Magnetic field', revision 1375215267, wikitext line 876",
+    },
     name: 'Magnetic field of a long straight wire',
     domain: 'electromagnetism',
     formula_latex: 'B = \\mu_0 I / (2\\pi r)',
@@ -241,6 +256,11 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'capacitance', dim: CAPACITANCE },
   ], {
     id: 'CE-lc-resonance',
+    prefactor: {
+      value: 1,
+      quote: String.raw`\omega_0 = \frac{1}{\sqrt{LC}},`,
+      locator: "Wikipedia, 'LC circuit', revision 1350658867, wikitext line 66",
+    },
     name: 'LC resonant angular frequency',
     domain: 'electromagnetism',
     formula_latex: '\\omega_0 = 1/\\sqrt{L C}',
@@ -360,6 +380,11 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'speed-of-light', dim: VELOCITY },
   ], {
     id: 'CE-larmor-power',
+    prefactor: {
+      value: 1 / (6 * Math.PI),
+      quote: String.raw`\frac{q^2 a^2}{6 \pi \varepsilon_0 c^3}`,
+      locator: "Wikipedia, 'Larmor formula', revision 1352376843, wikitext line 9",
+    },
     name: 'Larmor radiated power',
     domain: 'electromagnetism',
     formula_latex: 'P = q^2 a^2 / (6\\pi \\varepsilon_0 c^3)',
@@ -378,6 +403,11 @@ export const ELECTROMAGNETISM: readonly CanonicalEquation[] = [
     { name: 'electric-field', dim: ELECTRIC_FIELD },
   ], {
     id: 'CE-field-energy-density',
+    prefactor: {
+      value: 0.5,
+      quote: String.raw`u = \frac{\varepsilon}{2} \mathbf{E}^2 + \frac{1}{2 \mu} \mathbf{B}^2`,
+      locator: "Wikipedia, 'Energy density', revision 1366889538, wikitext line 81",
+    },
     name: 'Electric-field energy density',
     domain: 'electromagnetism',
     formula_latex: 'u = \\tfrac{1}{2} \\varepsilon_0 E^2',

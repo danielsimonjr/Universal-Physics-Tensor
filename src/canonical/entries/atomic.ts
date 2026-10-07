@@ -41,6 +41,7 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     { name: 'hbar', dim: ACTION },
   ], {
     id: 'CE-rydberg-energy',
+    conventionNote: 'the Rydberg latex is E_R = m_e e^4 / (32 π² ε0² ħ²), which is m e^4 / (8 ε0² h²). The prefactor is in the scalar AST.',
     name: 'Rydberg energy',
     domain: 'quantum',
     formula_latex: 'E_R = m_e e^4 / (32 \\pi^2 \\varepsilon_0^2 \\hbar^2)',
@@ -128,6 +129,7 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     { name: 'p', dim: MOMENTUM },
   ], {
     id: 'CE-de-broglie',
+    holds: 'p > 0',
     name: 'de Broglie wavelength',
     domain: 'quantum',
     formula_latex: '\\lambda = h/p',
@@ -172,6 +174,9 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     { name: 'c', dim: VELOCITY },
   ], {
     id: 'CE-compton-wavelength-full',
+    targetAliases: ['compton-wavelength'],
+    conventionGroup: 'compton-wavelength',
+    conventionNote: 'CE-compton-wavelength is the reduced wavelength λ̄ = ħ/(m c), prefactor checked. CE-compton-wavelength-full is λ = h/(m c). The Compton-shift entry uses h/(m c) (1−cos θ). h does not alias ħ.',
     name: 'Compton wavelength',
     domain: 'quantum',
     formula_latex: '\\lambda_C = h/(mc)',
@@ -190,6 +195,11 @@ export const ATOMIC: readonly CanonicalEquation[] = [
     { name: 'classical-electron-radius', dim: LENGTH },
   ], {
     id: 'CE-thomson-cross-section',
+    prefactor: {
+      value: (8 * Math.PI) / 3,
+      quote: String.raw`\sigma_\text{t} = \frac{8\pi} 3 \left(\frac{q^2}{4\pi\varepsilon_0 mc^2}\right)^2 = \frac{8\pi} 3 {r}^2 = \frac{8 \pi}{3} \left(\alpha \lambda\!\!\!\bar{}_\text{c}\right)^2 ,`,
+      locator: "Wikipedia, 'Thomson scattering', revision 1348001870, wikitext line 31",
+    },
     name: 'Thomson scattering cross-section',
     domain: 'quantum',
     formula_latex: '\\sigma_T = (8\\pi/3) r_e^2',

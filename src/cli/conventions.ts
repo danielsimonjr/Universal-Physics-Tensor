@@ -5,13 +5,14 @@
  * @internal
  */
 
-const COMPTON_PAIR = new Set(['CE-compton-wavelength', 'CE-compton-wavelength-full']);
+import { canonicalById } from '../canonical/registry.js';
 
 /**
- * A factor or form difference is a failed check, except the Compton pair:
- * both entries answer to `compton-wavelength` and differ by 2π, so a formula
- * that agrees with one of them has matched that convention. The other
- * difference is still printed. A formula that matches neither still fails.
+ * A factor or form difference is a failed check, except within a convention
+ * group: entries that share `conventionGroup` are one law under different
+ * conventions (the two Compton wavelengths differ by 2π), so a formula that
+ * agrees with one of them has matched that convention. The other difference
+ * is still printed. A formula that matches none of a group still fails.
  * @internal
  */
 export function canonicalCheckFailed(
@@ -19,40 +20,23 @@ export function canonicalCheckFailed(
 ): boolean {
   const hard = comparisons.filter((c) => c.kind === 'factor' || c.kind === 'form');
   if (hard.length === 0) return false;
-  const agreed = comparisons.some((c) => COMPTON_PAIR.has(c.id) && c.kind === 'agrees');
-  return !(agreed && hard.every((c) => COMPTON_PAIR.has(c.id)));
+  const agreedGroups = new Set(
+    comparisons.filter((c) => c.kind === 'agrees').map((c) => canonicalById(c.id)?.conventionGroup).filter((g) => g !== undefined),
+  );
+  return !hard.every((c) => {
+    const group = canonicalById(c.id)?.conventionGroup;
+    return group !== undefined && agreedGroups.has(group);
+  });
 }
 
-/** One line per convention a listed comparison is ambiguous about. @internal */
+/** One line per convention note the listed entries carry; a note two entries share prints once. @internal */
 export function conventionLines(ids: readonly string[]): string[] {
-  const has = new Set(ids);
   const lines: string[] = [];
-  if (has.has('CE-compton-wavelength') || has.has('CE-compton-wavelength-full')) {
-    lines.push(
-      'convention: CE-compton-wavelength is the reduced wavelength λ̄ = ħ/(m c), prefactor checked. ' +
-        'CE-compton-wavelength-full is λ = h/(m c). The Compton-shift entry uses h/(m c) (1−cos θ). h does not alias ħ.',
-    );
-  }
-  if (has.has('CE-rydberg-energy')) {
-    lines.push(
-      'convention: the Rydberg latex is E_R = m_e e^4 / (32 π² ε0² ħ²), which is m e^4 / (8 ε0² h²). The prefactor is in the scalar AST.',
-    );
-  }
-  if (has.has('CE-gravitational-potential-energy')) {
-    lines.push(
-      'convention: gravitational potential energy is U = −G m1 m2/r. The minus is in the scalar AST; a positive formula differs by the factor −1.',
-    );
-  }
-  if (has.has('CE-hooke-law')) {
-    lines.push(
-      "convention: Hooke's law is F = −kx. The minus is in the scalar AST; a positive formula differs by the factor −1.",
-    );
-  }
-  if (has.has('CE-einstein-field-eq')) {
-    lines.push(
-      'convention: the Einstein-equation metric node is mostly-plus (−,+,+,+), the same signature as upt metric. ' +
-        'The 8π is in the scalar AST, so a comparison checks it.',
-    );
+  for (const id of ids) {
+    const note = canonicalById(id)?.conventionNote;
+    if (note === undefined) continue;
+    const line = `convention: ${note}`;
+    if (!lines.includes(line)) lines.push(line);
   }
   return lines;
 }
