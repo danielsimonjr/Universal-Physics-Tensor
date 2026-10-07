@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DomainViolationError } from '../../src/composition/edge.js';
-import { evaluateRelation, evaluatorOutput, unusedInputKeys } from '../../src/composition/evaluate-relation.js';
-import { BRIDGE_EVALUATORS } from '../../src/bridges/evaluators.js';
+import { evaluateRelation, evaluatorOutput } from '../../src/composition/evaluate-relation.js';
+import { BRIDGE_EVALUATORS, unusedInputKeys } from '../../src/bridges/evaluators.js';
 import { siUnitOf } from '../../src/cli/expr-print.js';
 import { runCli } from '../../dist/cli/main.js';
 

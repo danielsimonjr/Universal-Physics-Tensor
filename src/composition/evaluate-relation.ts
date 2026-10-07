@@ -15,7 +15,6 @@ import { parseUnit } from '../dimensional/units.js';
 import {
   BRIDGE_EVALUATORS,
   sourceOfParameter,
-  unusedInputKeys,
   type EvaluatorSpec,
 } from '../bridges/evaluators.js';
 import { catalogEdgeKey, parseBridgeId, primaryRelation } from '../bridges/catalog-load.js';
@@ -45,8 +44,6 @@ export interface Evaluable {
   readonly edge?: BridgeEdge;
   readonly evaluator?: EvaluatorSpec;
 }
-
-export { unusedInputKeys };
 
 /**
  * The output of a closed-form evaluator: the quantity it computes and that
